@@ -1,0 +1,4 @@
+EXPORTS
+    ; VC funcname           = BCB funcname
+    DisplayChart_AAoI_2D    = _DisplayChart_AAoI_2D
+

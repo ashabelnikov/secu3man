@@ -1,0 +1,110 @@
+Microsoft Developer Studio Workspace File, Format Version 6.00
+# WARNING: DO NOT EDIT OR DELETE THIS WORKSPACE FILE!
+
+###############################################################################
+
+Project: "MIdesk"="..\MIdesk\MIdesk.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name uicore
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "ParamDesk"="..\ParamDesk\ParamDesk.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name uicore
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "about"="..\about\about.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "iocore"="..\io-core\iocore.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "secu3man"=".\secu3man.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name about
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name iocore
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name MIdesk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name ParamDesk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name uicore
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "uicore"="..\ui-core\uicore.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Global:
+
+Package=<5>
+{{{
+}}}
+
+Package=<3>
+{{{
+}}}
+
+###############################################################################
+

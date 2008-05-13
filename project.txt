@@ -1,0 +1,8 @@
+
+         SECU-3 Manager open source software
+
+IDE used: Microsoft Visual Studio 6.0 & Borlad C++ Builder 5.0
+
+(C) Shabelnikov Technology 2007. Ukraine, Gorlovka. 
+http://secu-3.narod.ru e-mail: secu-3@narod.ru
+ 

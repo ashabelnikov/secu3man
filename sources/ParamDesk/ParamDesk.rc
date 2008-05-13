@@ -1,0 +1,394 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 195
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
+                    TCS_OWNERDRAWFIXED,4,16,175,166
+    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,15,2,151,11
+END
+
+IDD_PD_STARTER_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_STARTER_OFF_RPM_EDIT,22,39,46,16,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,72,38,13,17
+    CONTROL         "Spin1",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,72,90,13,17
+    LTEXT           "Обороты перехода с пусковой карты УОЗ",
+                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
+    LTEXT           "Обороты при достижении которых стартер будет авт. выключен",
+                    IDC_PD_STARTER_OFF_RPM_CAPTION,21,18,119,20
+    LTEXT           "мин-1",IDC_PD_STARTER_OFF_RPM_UNIT,89,41,25,13
+    LTEXT           "мин-1",IDC_PD_STARTER_SMAP_ABANDON_RPM_UNIT,89,92,25,13
+END
+
+IDD_PD_ANGLES_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_ANGLES_MIN_ANGLE_EDIT,30,25,47,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,31,66,47,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,31,109,47,15,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,81,24,11,16
+    CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,82,64,11,17
+    CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,82,108,12,16
+    LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,27,14,
+                    102,9
+    LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,27,54,
+                    96,9
+    LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,30,97,
+                    90,10
+    LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,101,25,26,11
+    LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,101,67,26,11
+    LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,100,111,26,11
+END
+
+IDD_PD_FUNSET_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,28,23,35,16,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_PRESS_SWING_EDIT,28,65,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    COMBOBOX        IDC_PD_FUNSET_BENZIN_MAPS_COMBO,22,99,90,82,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PD_FUNSET_GAS_MAPS_COMBO,22,130,90,87,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Spin1",IDC_PD_FUNSET_MAP_GRAD_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,67,22,14,17
+    CONTROL         "Spin1",IDC_PD_FUNSET_PRESS_SWING_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,68,64,13,17
+    LTEXT           "Наклон шкалы расхода воздуха",
+                    IDC_PD_FUNSET_MAP_GRAD_CAPTION,18,11,110,9
+    LTEXT           "Перепад давления при максимуме открытия  дросселя",
+                    IDC_PD_FUNSET_PRESS_SWING_CAPTION,17,46,122,16
+    LTEXT           "кПа",IDC_PD_FUNSET_MAP_GRAD_UNIT,88,25,21,13
+    LTEXT           "кПа",IDC_PD_FUNSET_PRESS_SWING_UNIT,87,68,21,13
+    LTEXT           "Набор таблиц для бензина",
+                    IDC_PD_FUNSET_BENZIN_MAPS_COMBO_CAPTION,20,88,103,9
+    LTEXT           "Набор таблиц для газа",
+                    IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,22,118,103,9
+END
+
+IDD_PD_IDLREG_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_NEG_EDIT,87,27,30,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_POS_EDIT,20,27,30,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,26,69,39,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,26,108,39,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "коэффициенты регулятора",IDC_PD_IDLREG_FACTORS_CAPTION,
+                    23,13,113,11
+    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,67,27,13,17
+    LTEXT           "-",IDC_PD_IDLREG_FACTOR_NEG_CAPTION,135,26,13,17
+    LTEXT           "Целевое значение оборотов",
+                    IDC_PD_IDLREG_GOAL_RPM_CAPTION,23,57,108,10
+    LTEXT           "Зона нечувствительности ",
+                    IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,23,96,103,10
+    LTEXT           "мин-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,85,71,25,13
+    LTEXT           "мин-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,85,111,25,13
+    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_POS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,52,27,12,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_NEG_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,120,27,11,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_GOAL_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,68,69,11,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,68,108,11,16
+    CONTROL         "Использовать регулятор",IDC_PD_IDLREG_USE_REGULATOR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,135,104,12
+END
+
+IDD_PD_CARBUR_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,29,25,45,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,29,79,46,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,79,25,13,18
+    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,80,78,13,18
+    LTEXT           "Нижний порог ЭПХХ",
+                    IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,22,14,98,10
+    LTEXT           "Верхний порог ЭПХХ",
+                    IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,21,66,101,10
+    CONTROL         "Инверсия концевика карбюратора",
+                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,29,118,88,19
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,97,81,25,
+                    13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,96,27,25,
+                    13
+END
+
+IDD_PD_TEMPER_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,30,51,19,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,80,50,19,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Порог включения вентилятора",
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,16,16,119,11
+    LTEXT           "Порог выключения вентилятора",
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,65,116,9
+    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,88,30,14,19
+    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,88,80,14,19
+    CONTROL         "Использовать датчик температуры охлаждающей жидкости",
+                    IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+    LTEXT           "°С",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,33,18,14
+    LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PARAMETERS_DESK, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 176
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 188
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_PD_FUNSET_PAGE DLGINIT
+BEGIN
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0030, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0031, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0032, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0033, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0034, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0035, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0036, 
+    IDC_PD_FUNSET_BENZIN_MAPS_COMBO, 0x403, 2, 0
+0x0037, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0030, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0031, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0032, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0033, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0034, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0035, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0036, 
+    IDC_PD_FUNSET_GAS_MAPS_COMBO, 0x403, 2, 0
+0x0037, 
+    0
+END
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\ParamDesk.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "\0"
+            VALUE "CompanyName", "Shabelnikov Technology\0"
+            VALUE "FileDescription", "ParamDesk DLL\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "ParamDesk\0"
+            VALUE "LegalCopyright", "Copyright (C) Shabelnikov Technology 2008\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "ParamDesk.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "ParamDesk Dynamic Link Library\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_TAB_CTRL_BITMAPS    BITMAP  DISCARDABLE     "res\\tab_ctrl_bitmaps.bmp"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\ParamDesk.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
