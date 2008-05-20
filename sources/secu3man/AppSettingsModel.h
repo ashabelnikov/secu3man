@@ -3,25 +3,14 @@
 
 #include <string>
 #include <vector>
+#include "common/unicodesupport.h"
 
-/*
-//данные которые представляются диалогом параметров
-struct Options
-{
-  std::wstring  optPortName;      
-  DWORD         optBaudRateApplication;
-  DWORD         optBaudRateBootloader;
-  float         optMAPCurveSlope;  //kPa/V
-  float         optMAPCurveOffset; //Volts
-};
-*/
-
-
+//хранит и сохраняет/загружает данные 
 class CAppSettingsModel  
 {
 public:
 	std::vector<DWORD> m_AllowableBaudRates;
-	std::vector<std::wstring> m_AllowablePorts;
+	std::vector<_TSTRING> m_AllowablePorts;
 
     ////////////////////////////////////////////////////
     CString GetINIFileFullName(void);
@@ -38,19 +27,17 @@ public:
 	const CString m_Name_MAPCurveOffset;
 
     //данные которые хранятся в INI-файле
-	std::wstring m_optPortName;      
+	_TSTRING m_optPortName;      
 	DWORD m_optBaudRateApplication;
 	DWORD m_optBaudRateBootloader;
 	float m_optMAPCurveSlope;  //kPa/V
 	float m_optMAPCurveOffset; //Volts
     ////////////////////////////////////////////////////
 
-
 	CAppSettingsModel();
 	virtual ~CAppSettingsModel();
 
   private:
     bool CheckAllowableBaudRate(DWORD baud); 
-
 };
 

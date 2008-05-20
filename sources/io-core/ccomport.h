@@ -11,6 +11,8 @@
 #include <string>
 #include "NumericConv.h"
 
+#include "common/unicodesupport.h"
+
 
 #ifndef _CCOMPORT_
 #define _CCOMPORT_
@@ -21,7 +23,7 @@ class AFX_EXT_CLASS CComPort
 private:  //local variables
 	bool            m_bPortReady;
     HANDLE          m_hCom;         //хендл порта как файла
-	std::wstring    m_sComPort;     //имя файла - порта
+	_TSTRING        m_sComPort;     //имя файла - порта
     DCB             m_dcb;          //describes a COM port
     COMMTIMEOUTS    m_CommTimeouts;
 	UINT            dwInQueue;      //размер буфера приемника
@@ -32,14 +34,14 @@ private:  //local variables
 	void _LoadDefaultTimeouts(void);
 
 public:   //public functions
-    CComPort(const std::wstring&,UINT,UINT);        //конструктор
+    CComPort(const _TSTRING&,UINT,UINT);        //конструктор
     CComPort(int,UINT,UINT);
     ~CComPort();                        //деструктор
 	void   Set9bitState(BOOL state);    
 	
 	BOOL   Initialize(DWORD,BYTE,BYTE); //инициализация порта
 	BOOL   Initialize(DWORD,BYTE,BYTE,char,char);
-	BOOL   Initialize(const std::wstring& i_sComPort,DWORD,BYTE,BYTE,char,char);
+	BOOL   Initialize(const _TSTRING& i_sComPort,DWORD,BYTE,BYTE,char,char);
 
 
     VOID   Terminate();                 //закрытие порта 
@@ -89,9 +91,9 @@ public:   //public functions
 
 	class xInitialize
 	{
-		std::wstring m_detail_str;       //string that contain details about exception
+		_TSTRING m_detail_str;       //string that contain details about exception
 	public: 
-		xInitialize(const std::wstring& str) : m_detail_str(str){};
+		xInitialize(const _TSTRING& str) : m_detail_str(str){};
 		LPCTSTR GetDetailStr(void) const 
 		{
 			return m_detail_str.c_str(); //save details

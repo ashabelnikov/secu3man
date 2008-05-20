@@ -139,7 +139,7 @@ void CParamMonTabController::StartCollectingInitialData(void)
 //m_operation_state = 0 для запуска
 bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
-  static std::vector<std::wstring> fn_names; //Achtung! singleton.
+  static std::vector<_TSTRING> fn_names; //Achtung! singleton.
   static std::vector<int> fn_indexes;        //Achtung! singleton.
 
   const FnNameDat* fn_data = NULL;

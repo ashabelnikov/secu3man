@@ -27,7 +27,7 @@ void CComPort::_LoadDefaultTimeouts(void)
 
 
 //конструктор
-CComPort::CComPort(const std::wstring& sComPort,UINT dwInQueuep,UINT dwOutQueuep)
+CComPort::CComPort(const _TSTRING& sComPort,UINT dwInQueuep,UINT dwOutQueuep)
 {
 	m_sComPort = sComPort;
 	m_bPortReady = FALSE;
@@ -187,7 +187,7 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit)
 //
 // инициализация COM порта
 //
-BOOL CComPort::Initialize(const std::wstring& i_sComPort,DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
+BOOL CComPort::Initialize(const _TSTRING& i_sComPort,DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
 {			
   m_sComPort = i_sComPort;
   return Initialize(baud,parity,stopbit,Dtr,Rts);

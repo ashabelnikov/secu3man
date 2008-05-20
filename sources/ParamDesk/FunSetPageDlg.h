@@ -9,6 +9,7 @@
 
 #include <vector>
 #include "ParamPageEvents.h"
+#include "common/unicodesupport.h"
 
 class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -21,7 +22,7 @@ public:
 	bool IsEnabled(void);
 
 	void FillCBByFunNames(void);
-	std::vector<std::wstring>& AccessFunNames(void) { return m_fun_names;}
+	std::vector<_TSTRING>& AccessFunNames(void) { return m_fun_names;}
 
 	void GetValues(SECU3IO::FunSetPar* o_values);
     void SetValues(const SECU3IO::FunSetPar* i_values);
@@ -47,7 +48,7 @@ public:
 // Implementation
 protected:
 	SECU3IO::FunSetPar m_params;
-	std::vector<std::wstring> m_fun_names;
+	std::vector<_TSTRING> m_fun_names;
 	BOOL m_enabled;
 
 	// Generated message map functions

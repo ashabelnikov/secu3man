@@ -289,7 +289,7 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
 
 
 //”станавливает имена семейств характеристик
-void CParamDeskDlg::SetFunctionsNames(const std::vector<std::wstring>& i_names)
+void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
   m_pFunSetPageDlg->AccessFunNames() = i_names;
   m_pFunSetPageDlg->FillCBByFunNames();

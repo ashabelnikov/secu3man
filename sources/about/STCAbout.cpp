@@ -54,8 +54,8 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
 
   wsprintf(szWindowClass,_T("%s%d"),_T("STC_about"),i_pParent);
 
-  wcscpy(d_about.about_product,product);
-  wcscpy(d_about.about_description,description);
+  _tcscpy(d_about.about_product,product);
+  _tcscpy(d_about.about_description,description);
 
   GetObject(hWindowBitmap,sizeof(BITMAP),&bm);
 
@@ -201,7 +201,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  //draw title
 	  SetTextColor(hdc,RGB(40,250,50));
       SelectObject(hdc,fntTitle.m_hObject);
-	  TextOut(hdc,25,12,d_about.about_product,wcslen(d_about.about_product));
+	  TextOut(hdc,25,12,d_about.about_product,_tcslen(d_about.about_product));
       //draw description
       SelectObject(hdc,fntDescr.m_hObject);
 	  SetTextColor(hdc,RGB(250,240,250));

@@ -51,7 +51,7 @@ CAppSettingsModel::CAppSettingsModel()
   { 
     CString str;	  
     str.Format(_T("COM%d"),i);	
-    m_AllowablePorts.push_back(std::wstring(str));	 
+    m_AllowablePorts.push_back(_TSTRING(str));	 
   }
 }
 
@@ -104,7 +104,8 @@ bool CAppSettingsModel::ReadSettings(void)
   
   //-----------------------------------------
   GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("9600"),readed_str,255,IniFileName);
-  i_val = _wtoi(readed_str);
+  i_val = _ttoi(readed_str);
+
   if (!CheckAllowableBaudRate(i_val))
   {
     status = false;
@@ -117,7 +118,8 @@ bool CAppSettingsModel::ReadSettings(void)
 
   //-----------------------------------------
   GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("9600"),readed_str,255,IniFileName);
-  i_val = _wtoi(readed_str);
+  i_val = _ttoi(readed_str);
+
   if (!CheckAllowableBaudRate(i_val))
   {
     status = false;
@@ -131,7 +133,7 @@ bool CAppSettingsModel::ReadSettings(void)
 
   //-----------------------------------------
   GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveSlope,_T("1.0"),readed_str,255,IniFileName);
-  result = swscanf(readed_str,_T("%f"),&f_val);
+  result = _stscanf(readed_str,_T("%f"),&f_val);
   if (result==0)
   {
     status = false;
@@ -144,7 +146,7 @@ bool CAppSettingsModel::ReadSettings(void)
 
   //-----------------------------------------
   GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveOffset,_T("1.0"),readed_str,255,IniFileName);
-  result = swscanf(readed_str,_T("%f"),&f_val);
+  result = _stscanf(readed_str,_T("%f"),&f_val);
   if (result==0)
   {
     status = false;

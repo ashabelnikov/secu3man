@@ -1,17 +1,16 @@
 
 #pragma once
 
+#include <map>
 #include "ITabController.h"
 #include "ParamMonTabDlg.h"
 #include "CommunicationManager.h"
+#include "StatusBarManager.h"
 #include "io-core/ControlApp.h"
 #include "io-core/ControlAppAdapter.h"
-#include "StatusBarManager.h"
-#include "common/ObjectTimer.h"
-
-#include <map>
-
 #include "io-core/ufcodes.h"
+#include "common/ObjectTimer.h"
+#include "common/unicodesupport.h"
 
 
 class CParamMonTabController : public ITabController, private IAPPEventHandler 

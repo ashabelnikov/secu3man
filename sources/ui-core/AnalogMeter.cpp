@@ -283,7 +283,7 @@ void CAnalogMeter::DrawScale()
       m_nFontHeight = (int)((double)m_nFontHeight * scale);
       m_fontValue.DeleteObject() ;
       if(!m_fontValue.CreateFont (m_nFontHeight, 0, 0, 0, 400,
-        false, false, 0, ANSI_CHARSET,
+        false, false, 0, RUSSIAN_CHARSET,
         OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
         DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
         return;

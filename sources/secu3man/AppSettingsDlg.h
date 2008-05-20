@@ -4,10 +4,10 @@
 #include "ui-core/editex.h"
 #include "ui-core/spinbuttonctrlex.h"
 #include "IAppSettingsDlg.h"
+#include "common/unicodesupport.h"
 
 class CAppSettingsDlg : public CDialog, public IAppSettingsDlg 
 {
-
 //////////////////Interface//////////////////////////
 public:
 
@@ -22,7 +22,7 @@ public:
 	 } 
    }
    
-   virtual void FillCtrlsWithAllowablePorts(std::vector<std::wstring> i_AllowablePorts)
+   virtual void FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts)
    {
 	 for(size_t i = 0; i < i_AllowablePorts.size(); i++)
 	 {
@@ -31,7 +31,7 @@ public:
    }
 
    //"Set" methods (model => view data transfer)
-   virtual void SetPortName(std::wstring i_PortName)
+   virtual void SetPortName(_TSTRING i_PortName)
    {
      int result = m_port_selection_combo.FindString(-1,i_PortName.c_str());
 	 if (result!=LB_ERR)
@@ -70,25 +70,25 @@ public:
    }
    
    //"Get" methods (view => model data transfer)
-   virtual std::wstring GetPortName(void) 
+   virtual _TSTRING GetPortName(void) 
    {
      CString str;
      m_port_selection_combo.GetLBText(m_port_number,str);
-	 return std::wstring(str);
+	 return _TSTRING(str);
    }
 
    virtual DWORD GetBaudRateApplication(void) 
    {
      CString str;
 	 m_app_baudrate_selection_combo.GetLBText(m_app_baudrate,str);
-     return _wtoi(str);
+     return _ttoi(str);
    }
 
    virtual DWORD GetBaudRateBootloader(void) 
    {
      CString str;
 	 m_bl_baudrate_selection_combo.GetLBText(m_bl_baudrate,str);
-     return _wtoi(str);     
+     return _ttoi(str);  
    }
 
    virtual float GetMAPCurveSlope(void) 

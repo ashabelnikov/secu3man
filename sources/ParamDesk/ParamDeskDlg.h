@@ -2,15 +2,15 @@
 #pragma once
 
 #include "resource.h"
+#include <vector>
+
 #include "ui-core/TabController.h"
 #include "ui-core/UpdatableDialog.h"
-
 #include "FunSetPageDlg.h"
 #include "IParamDeskView.h"
-
 #include "ui-core/ITabControllerEvent.h"
+#include "common/unicodesupport.h"
 
-#include <vector>
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -34,8 +34,8 @@ public:
 	virtual bool SetValues(BYTE i_descriptor, const void* i_values);
 	virtual bool GetValues(BYTE i_descriptor, void* o_values);
 
-	virtual void SetFunctionsNames(const std::vector<std::wstring>& i_names);
-	virtual const std::vector<std::wstring>& GetFunctionsNames(void) { return m_pFunSetPageDlg->AccessFunNames();}
+	virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
+	virtual const std::vector<_TSTRING>& GetFunctionsNames(void) { return m_pFunSetPageDlg->AccessFunNames();}
 
     virtual BYTE GetCurrentDescriptor(void); 
 
