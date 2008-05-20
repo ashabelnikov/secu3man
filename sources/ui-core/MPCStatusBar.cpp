@@ -237,7 +237,8 @@ void MPCStatusBar::RemovePane(int nPaneID)
 {
 	SetRedraw(FALSE);
 	CWnd * pwnd = NULL;
-	for( int i = 0; i < m_aPans.GetSize(); i++ )
+  int i; 
+	for( i = 0; i < m_aPans.GetSize(); i++ )
 	{
 		if( m_aPans[i]->m_nPaneID == nPaneID )
 		{
