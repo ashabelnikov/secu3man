@@ -10,6 +10,7 @@
 
 class IParamDeskView  
 {
+public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
   virtual void Enable(bool enable) = 0;                                 //разрешить/запретить представление 

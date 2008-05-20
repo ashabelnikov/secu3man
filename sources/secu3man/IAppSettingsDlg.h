@@ -31,7 +31,7 @@ public:
    virtual void setFunctionOnCancel(EventHandler OnCancel) = 0;
    virtual void setFunctionOnActivate(EventHandler OnOk) = 0;
 
-   virtual ShowDialog(void) = 0;
+   virtual int ShowDialog(void) = 0;
 };
 
 
