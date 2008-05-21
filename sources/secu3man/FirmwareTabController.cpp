@@ -13,6 +13,7 @@
 
 #include "common/FastDelegate.h"
 #include "FirmwareTabDlg.h"
+#include "io-core/FirmwareDataMediator.h"
 
 using namespace fastdelegate;
 
@@ -533,6 +534,10 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size)
 
     f.Read(p_data,size);
     f.Close();	   
+
+	//вычисляем контрольную сумму и сохраняем ее в массив с прошивкой
+    CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(p_data);
+
 	return true; //подтверждение пользователя
   }
   else
