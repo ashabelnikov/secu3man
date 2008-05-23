@@ -132,7 +132,7 @@ bool CAppSettingsModel::ReadSettings(void)
 
 
   //-----------------------------------------
-  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveSlope,_T("1.0"),readed_str,255,IniFileName);
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveSlope,_T("20.9"),readed_str,255,IniFileName);
   result = _stscanf(readed_str,_T("%f"),&f_val);
   if (result==0)
   {
@@ -145,7 +145,7 @@ bool CAppSettingsModel::ReadSettings(void)
   }
 
   //-----------------------------------------
-  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveOffset,_T("1.0"),readed_str,255,IniFileName);
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveOffset,_T("0.44"),readed_str,255,IniFileName);
   result = _stscanf(readed_str,_T("%f"),&f_val);
   if (result==0)
   {

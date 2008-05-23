@@ -13,7 +13,7 @@ public:
 
    static bool   Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte);
    static bool   Hex8ToBin(const BYTE* i_hex_number,BYTE* o_byte);
-   static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word);
+   static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word,bool i_signed  = false);
 
    inline static BYTE HTOD(BYTE h) 
    {

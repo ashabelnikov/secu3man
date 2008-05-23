@@ -94,12 +94,13 @@ bool CNumericConv::Bin8ToHex(const BYTE i_byte,std::string& o_hex_number)
 }
 
 
-bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word)
+bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = false*/)
 {
-   if (o_word==NULL) 
-	   return false;
+  if (o_word==NULL) 
+    return false;
 
-   BYTE lo,hi;
+  BYTE lo,hi;
+  int word;
   if (isxdigit(i_buf[0])&&isxdigit(i_buf[1])&&isxdigit(i_buf[2])&&isxdigit(i_buf[3]))
   {
     if (false==Hex8ToBin(i_buf,&hi))
@@ -108,7 +109,10 @@ bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word)
     if (false==Hex8ToBin(i_buf+2,&lo))
 		return false;
 
-	*o_word = MAKEWORD(lo,hi);
+    word = MAKEWORD(lo,hi);
+
+	//если число знаковое и отрицательное то делаем его отрицательным
+    *o_word = (i_signed && word > 0x7FFF) ? -(0x10000 - word) : word;
     return true;
   }
     return false;

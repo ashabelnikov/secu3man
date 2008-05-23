@@ -221,9 +221,9 @@ bool CControlApp::Parse_SENSOR_DAT(BYTE* raw_packet)
  m_SensorDat.temperat = FromTemperatureSensor(temperature);
  raw_packet+=4;  
 
- //Текущий УОЗ 
+ //Текущий УОЗ (число со знаком)
  int adv_angle = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&adv_angle))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&adv_angle,true))
      return false;
  m_SensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
  raw_packet+=4;  
@@ -315,23 +315,23 @@ bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
  if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
- //Минимальный, допустимый УОЗ 
- int  min_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle))
-     return false;
- raw_packet+=4;  
- m_AnglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
-
- //Максимальный, допустимый УОЗ
+ //Максимальный, допустимый УОЗ (число со знаком)
  int max_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&max_angle))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&max_angle,true))
      return false;
  raw_packet+=4;
  m_AnglesPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
- //Октан-коррекция УОЗ 
+ //Минимальный, допустимый УОЗ (число со знаком)
+ int  min_angle;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle,true))
+     return false;
+ raw_packet+=4;  
+ m_AnglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
+
+ //Октан-коррекция УОЗ (число со знаком)
  int angle_corr;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&angle_corr))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&angle_corr,true))
      return false;
  raw_packet+=4;  
  m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
@@ -391,16 +391,16 @@ bool CControlApp::Parse_IDLREG_PAR(BYTE* raw_packet)
  raw_packet+=1;  
 
 
- //Коэффициент регулятора при  положительной ошибке 
+ //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac1))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac1,true))
      return false;
  raw_packet+=4;
  m_IdlRegPar.ifac1 = ((float)ifac1) / ANGLE_MULTIPLAYER;
 
- //Коэффициент регулятора при  отрицательной ошибке
+ //Коэффициент регулятора при  отрицательной ошибке (число со знаком)
  int ifac2;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac2))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac2,true))
      return false;
  raw_packet+=4;
  m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLAYER;
@@ -462,16 +462,16 @@ bool CControlApp::Parse_TEMPER_PAR(BYTE* raw_packet)
  //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной 
  //дискретами АЦП (как измеренное значение прямо с датчика)
 
- //Порог включения вентилятора
+ //Порог включения вентилятора (число со знаком)
  int vent_on = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_on))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_on,true))
      return false;
  raw_packet+=4;
  m_TemperPar.vent_on = FromTemperatureSensor(vent_on);
 
- //Порог выключения вентилятора 
+ //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off,true))
      return false;
  raw_packet+=4;
  m_TemperPar.vent_off = FromTemperatureSensor(vent_off);
@@ -860,8 +860,8 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 {
-  CNumericConv::Bin4ToHex(packet_data->fn_benzin,m_outgoing_packet);
-  CNumericConv::Bin4ToHex(packet_data->fn_gas,m_outgoing_packet);
+  CNumericConv::Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
+  CNumericConv::Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
   unsigned char map_gradient = CNumericConv::Round((packet_data->map_grad / m_map_sensor_gradient) / m_adc_discrete);
   CNumericConv::Bin8ToHex(map_gradient,m_outgoing_packet);
   int press_swing = CNumericConv::Round((packet_data->press_swing / m_map_sensor_gradient) / m_adc_discrete);
