@@ -203,6 +203,7 @@ bool CControlApp::Parse_SENSOR_DAT(BYTE* raw_packet)
  int pressure = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&pressure))
      return false;
+
  float pressure_in_volts = (((float)pressure) * m_adc_discrete);
  m_SensorDat.pressure = (pressure_in_volts + m_map_sensor_offset) * m_map_sensor_gradient;
  raw_packet+=4;  
