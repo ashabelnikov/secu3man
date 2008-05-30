@@ -18,7 +18,7 @@
 #define MAP_SENSOR_OFFSET   0.45f     //Вольт
 #define MAP_SENSOR_GRADIENT 20.5f     //кПа/Вольт  
 #define ADC_DISCRETE        0.0025f   //Вольт 
-#define ANGLE_MULTIPLAYER   40.0f     //коэффициент масштабирования углов поворота коленвала  
+#define ANGLE_MULTIPLAYER   32.0f     //коэффициент масштабирования углов поворота коленвала  
 
 
 using namespace SECU3IO;
