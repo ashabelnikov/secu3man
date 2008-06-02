@@ -99,7 +99,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
   m_map_grad_edit.SetLimitText(4);
   m_map_grad_edit.SetDecimalPlaces(2);
   m_map_grad_edit.SetMode(CEditEx::MODE_FLOAT);
-  m_map_grad_spin.SetRangeAndDelta(0.25,25.0f,0.125f);
+  m_map_grad_spin.SetRangeAndDelta(0.25f,13.0f,0.25f);
 	
   m_press_swing_spin.SetBuddy(&m_press_swing_edit);
   m_press_swing_edit.SetLimitText(4);

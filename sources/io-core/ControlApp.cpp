@@ -849,10 +849,10 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
 {
-  int min_angle = CNumericConv::Round(packet_data->min_angle * m_angle_multiplier);
-  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
   int max_angle = CNumericConv::Round(packet_data->max_angle * m_angle_multiplier);
   CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
+  int min_angle = CNumericConv::Round(packet_data->min_angle * m_angle_multiplier);
+  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
   int angle_corr = CNumericConv::Round(packet_data->angle_corr * m_angle_multiplier);
   CNumericConv::Bin16ToHex(angle_corr,m_outgoing_packet);
   m_outgoing_packet+= '\r';
