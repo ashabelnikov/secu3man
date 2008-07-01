@@ -109,6 +109,10 @@ SOURCE=.\MIDeskDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\RSDeskDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -122,11 +126,19 @@ SOURCE=.\IMIView.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\IRSView.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\MIDeskDlg.h
 # End Source File
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\RSDeskDlg.h
 # End Source File
 # Begin Source File
 

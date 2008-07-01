@@ -49,6 +49,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
 
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
+  m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));
 
   CWnd* pParent = AfxGetApp()->m_pMainWnd;
 
@@ -279,30 +280,69 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
 	break;
 	
     case PPS_BEFORE_READ_MONITOR_DATA: //в этот режим мы попадаем только один раз
-	  if (i_descriptor!=SENSOR_DAT)
+
+	  if (!m_view->GetRawSensorsCheckState())
 	  {
-        m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+        //--чекбокс сказал нам что мы в режиме панели приборов--
+	    if (i_descriptor!=SENSOR_DAT)
+		{
+          m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+		}
+	    else
+		{
+          //устанавливаем значения приборов, разрешаем их и переходим в основной режим
+	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
+          bool state = m_comm->m_pControlApp->GetOnlineStatus();
+	      m_view->m_MIDeskDlg.Enable(state);
+	      m_packet_processing_state = PPS_READ_MONITOR_DATA;
+		}
 	  }
 	  else
 	  {
-        //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-	    m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
-        bool state = m_comm->m_pControlApp->GetOnlineStatus();
-	    m_view->m_MIDeskDlg.Enable(state);
-	    m_packet_processing_state = PPS_READ_MONITOR_DATA;
+        //--чекбокс сказал нам что мы в режиме "сырых" значений--
+	    if (i_descriptor!=ADCRAW_DAT)
+		{
+          m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!		  		
+		}
+	    else
+		{
+          //устанавливаем значения приборов, разрешаем их и переходим в основной режим
+	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(i_packet_data)); 	
+          bool state = m_comm->m_pControlApp->GetOnlineStatus();
+	      m_view->m_RSDeskDlg.Enable(state);
+	      m_packet_processing_state = PPS_READ_MONITOR_DATA;
+		}
 	  }
+
 	break;
 
 	case PPS_READ_MONITOR_DATA:  //получение данных для монитора
-	  if (i_descriptor!=SENSOR_DAT)
+	  if (!m_view->GetRawSensorsCheckState())
 	  {
-        m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+        //--чекбокс сказал нам что мы в режиме панели приборов--
+	    if (i_descriptor!=SENSOR_DAT)
+		{
+          m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+		}
+	    else
+		{
+	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
+		}
 	  }
 	  else
 	  {
-	    m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
+        //--чекбокс сказал нам что мы в режиме "сырых" значений--
+	    if (i_descriptor!=ADCRAW_DAT)
+		{
+          m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!		  		
+		}
+	    else
+		{
+	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(i_packet_data)); 	
+		}	
 	  }
-	break;	
+	break;
+	
 	}//switch
 }
 
@@ -325,6 +365,7 @@ void CParamMonTabController::OnConnection(const bool i_online)
   if (i_online==false) //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигурация 
   {
     m_view->m_MIDeskDlg.Enable(i_online);
+	m_view->m_RSDeskDlg.Enable(i_online);
     m_view->m_ParamDeskDlg.Enable(i_online);
   }
 
@@ -348,4 +389,24 @@ void CParamMonTabController::OnParamDeskChangesTimer(void)
 
     m_parameters_changed = false; //обработали событие - сбрасываем признак
   }
+}
+
+
+//Событие от чекбокса переключающего режим мониторинга (приборы/сырые данные)
+void CParamMonTabController::OnRawSensorsCheckBox(void)
+{
+  bool state = m_view->GetRawSensorsCheckState();
+
+  if (state)
+  {//показывать сырые значения (прячем панель приборов и показываем панель сырых значений)
+  m_view->m_MIDeskDlg.ShowWindow(SW_HIDE);
+  m_view->m_RSDeskDlg.ShowWindow(SW_SHOW); 
+  m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
+  }
+  else
+  {//показывать панель приборов (прячем панель сырых значений и показываем панел приборов)
+  m_view->m_MIDeskDlg.ShowWindow(SW_SHOW);
+  m_view->m_RSDeskDlg.ShowWindow(SW_HIDE);  
+  m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
+  }  
 }

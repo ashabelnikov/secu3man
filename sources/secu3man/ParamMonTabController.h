@@ -59,6 +59,8 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 	void StartReadingNecessaryParameters(void);   
 	//////////////////////////////////////////////////////
 
+	void OnRawSensorsCheckBox(void);
+
   private:
     int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
 	int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен

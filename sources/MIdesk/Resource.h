@@ -17,4 +17,24 @@
 #define IDC_MI_DWELL_ANGLE              2013
 #define IDC_MI_TEMPERATURE              2014
 #define IDD_MEAS_INSTRUMENT_DESK        2015
+#define IDD_RAW_SENSORS_DESK            2016
+#define IDC_RS_MAP_VALUE                2017
+#define IDC_RS_MAP_UNIT                 2018
+#define IDC_RS_MAP_CAPTION              2019
+#define IDC_RS_UBAT_VALUE               2020
+#define IDC_RS_UBAT_CAPTION             2021
+#define IDC_RS_UBAT_UNIT                2022
+#define IDC_RS_TEMP_VALUE               2023
+#define IDC_RS_TEMP_CAPTION             2024
+#define IDC_RS_TEMP_UNIT                2025
 
+// Next default values for new objects
+// 
+#ifdef APSTUDIO_INVOKED
+#ifndef APSTUDIO_READONLY_SYMBOLS
+#define _APS_NEXT_RESOURCE_VALUE        2026
+#define _APS_NEXT_COMMAND_VALUE         40001
+#define _APS_NEXT_CONTROL_VALUE         1003
+#define _APS_NEXT_SYMED_VALUE           101
+#endif
+#endif

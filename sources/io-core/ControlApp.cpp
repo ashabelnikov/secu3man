@@ -483,6 +483,94 @@ bool CControlApp::Parse_TEMPER_PAR(BYTE* raw_packet)
  return true;
 }
 
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_ADCRAW_DAT(BYTE* raw_packet)
+{
+ if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
+   return false;
+
+ //MAP sensor
+ signed int map = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&map,true))
+     return false;
+ raw_packet+=4;
+ m_RawSensDat.map_value = map * m_adc_discrete;
+
+ //напряжение бортовой сети
+ signed int ubat = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ubat,true))
+     return false;
+ raw_packet+=4;
+ m_RawSensDat.ubat_value = ubat * m_adc_discrete;
+
+ //температура ОЖ (ДТОЖ)
+ signed int temp = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&temp,true))
+     return false;
+ raw_packet+=4;
+ m_RawSensDat.temp_value = temp * m_adc_discrete;
+
+ if (*raw_packet!='\r')
+	 return false;
+
+ return true;
+}
+
+
+//-----------------------------------------------------------------------
+//note: for more information see AVR120 application note.
+bool CControlApp::Parse_ADCCOR_PAR(BYTE* raw_packet)
+{
+ if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дескриптора
+   return false;
+
+ signed int map_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&map_adc_factor,true))
+     return false;
+ raw_packet+=4;
+ m_ADCCompenPar.map_adc_factor = ((float)map_adc_factor) / 16384;
+
+ signed long map_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&map_adc_correction))
+     return false;
+ raw_packet+=8;
+ m_ADCCompenPar.map_adc_correction = -CNumericConv::Round( ((((float)map_adc_correction)/16384) - 0.5) / m_ADCCompenPar.map_adc_factor);
+ m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //в вольты 
+
+
+ signed int ubat_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ubat_adc_factor,true))
+     return false;
+ raw_packet+=4;
+ m_ADCCompenPar.ubat_adc_factor = ((float)ubat_adc_factor) / 16384;
+
+ signed long ubat_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&ubat_adc_correction))
+     return false;
+
+ raw_packet+=8;
+ m_ADCCompenPar.ubat_adc_correction = -CNumericConv::Round( ((((float)ubat_adc_correction)/16384.0) - 0.5) / ((float)m_ADCCompenPar.ubat_adc_factor));
+ m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты 
+ 
+ signed int temp_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&temp_adc_factor,true))
+     return false;
+ raw_packet+=4;
+ m_ADCCompenPar.temp_adc_factor = ((float)temp_adc_factor) / 16384;
+
+ signed long temp_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&temp_adc_correction))
+     return false;
+ raw_packet+=8;
+ m_ADCCompenPar.temp_adc_correction = -CNumericConv::Round( ((((float)temp_adc_correction)/16384) - 0.5) / m_ADCCompenPar.temp_adc_factor);
+ m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты 
+
+ if (*raw_packet!='\r')
+	 return false;
+
+ return true;
+}
+
 
 //-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
@@ -561,6 +649,22 @@ bool CControlApp::ParsePackets()
 			   break; //пакет успешно разобран по составляющим
 			 }
 			 continue; //пакет не прошел сурового отбора нашим жюри :-)
+
+		 case ADCRAW_DAT:					 
+			 if (Parse_ADCRAW_DAT(raw_packet))
+			 {
+	           m_pEventHandler->OnPacketReceived(descriptor,&m_RawSensDat);		
+			   break; 
+			 }
+			 continue; 
+		 case ADCCOR_PAR:
+			 if (Parse_ADCCOR_PAR(raw_packet))
+			 {
+	           m_pEventHandler->OnPacketReceived(descriptor,&m_ADCCompenPar);		
+			   break;
+			 }
+			 continue;
+
          default:
              continue;
 		}//switch        
@@ -726,6 +830,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor)
 	  case STARTR_PAR: 
       case FNNAME_DAT:
 	  case SENSOR_DAT:
+      case ADCRAW_DAT:
+      case ADCCOR_PAR: 
 		return true;
       default:
 		return false;
@@ -767,6 +873,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 		  break;
 	  case STARTR_PAR: 
 		  Build_STARTR_PAR((StartrPar*)i_packet_data);
+		  break;
+      case ADCCOR_PAR:
+		  Build_ADCCOR_PAR((ADCCompenPar*)i_packet_data);
 		  break;
       default:
 		  return false; //invalid descriptor
@@ -867,6 +976,29 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
   CNumericConv::Bin8ToHex(map_gradient,m_outgoing_packet);
   int press_swing = CNumericConv::Round((packet_data->press_swing / m_map_sensor_gradient) / m_adc_discrete);
   CNumericConv::Bin16ToHex(press_swing,m_outgoing_packet);
+  m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
+{
+  signed int map_adc_factor = packet_data->map_adc_factor * 16384;
+  CNumericConv::Bin16ToHex(map_adc_factor,m_outgoing_packet);
+  signed long map_correction_d = packet_data->map_adc_correction / m_adc_discrete; //переводим из вольтов в дискреты АЦП
+  signed long map_adc_correction = 16384 * (0.5f - map_correction_d * packet_data->map_adc_factor);
+  CNumericConv::Bin32ToHex(map_adc_correction,m_outgoing_packet);
+
+  signed int ubat_adc_factor = packet_data->ubat_adc_factor * 16384;
+  CNumericConv::Bin16ToHex(ubat_adc_factor,m_outgoing_packet);
+  signed long ubat_correction_d = packet_data->ubat_adc_correction / m_adc_discrete; //переводим из вольтов в дискреты АЦП
+  signed long ubat_adc_correction = 16384 * (0.5f - ubat_correction_d * packet_data->ubat_adc_factor);
+  CNumericConv::Bin32ToHex(ubat_adc_correction,m_outgoing_packet);
+
+  signed int temp_adc_factor = packet_data->temp_adc_factor * 16384;
+  CNumericConv::Bin16ToHex(temp_adc_factor,m_outgoing_packet);
+  signed long temp_correction_d = packet_data->temp_adc_correction / m_adc_discrete; //переводим из вольтов в дискреты АЦП
+  signed long temp_adc_correction = 16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor);
+  CNumericConv::Bin32ToHex(temp_adc_correction,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 

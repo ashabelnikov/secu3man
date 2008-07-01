@@ -26,10 +26,10 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 195
+IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
                     TCS_OWNERDRAWFIXED,4,16,175,166
@@ -200,6 +200,56 @@ BEGIN
     LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
 END
 
+IDD_PD_ADCCOMPEN_PAGE DIALOG DISCARDABLE  0, 0, 175, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT,10,26,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT,95,26,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT,10,70,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT,96,70,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT,10,113,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT,96,113,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT,60,28,34,12
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT,146,24,
+                    25,20
+    CTEXT           "Датчик абсолютного давления",
+                    IDC_PD_ADCCOMPEN_MAP_CAPTION,13,12,122,11
+    CTEXT           "Напряжение бортовой сети",IDC_PD_ADCCOMPEN_UBAT_CAPTION,
+                    12,56,122,11
+    CTEXT           "Датчик температуры ОЖ",IDC_PD_ADCCOMPEN_TEMP_CAPTION,16,
+                    100,122,11
+    LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT,60,72,34,12
+    LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT,60,116,34,12
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT,145,69,
+                    25,19
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT,145,
+                    111,25,18
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,46,26,11,16
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,131,25,11,
+                    16
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,70,11,
+                    16
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,11,
+                    16
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,113,11,
+                    16
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,113,
+                    11,16
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -214,7 +264,15 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 176
         TOPMARGIN, 7
-        BOTTOMMARGIN, 188
+        BOTTOMMARGIN, 184
+    END
+
+    IDD_PD_ADCCOMPEN_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 168
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 151
     END
 END
 #endif    // APSTUDIO_INVOKED

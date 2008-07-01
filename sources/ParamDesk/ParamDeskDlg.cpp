@@ -19,6 +19,7 @@
 #include "IdlRegPageDlg.h" 
 #include "FunSetPageDlg.h" 
 #include "TemperPageDlg.h"
+#include "ADCCompenPageDlg.h"
 
 #include "io-core/ufcodes.h" 
 #include "io-core/SECU3IO.h"
@@ -73,6 +74,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/)
 
   m_pCarburPageDlg = new CCarburPageDlg();
   m_pCarburPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+  m_pADCCompenPageDlg = new CADCCompenPageDlg();
+  m_pADCCompenPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 
@@ -86,6 +90,7 @@ CParamDeskDlg::~CParamDeskDlg()
   delete m_pFunSetPageDlg;		 
   delete m_pTemperPageDlg;		  
   delete m_pCarburPageDlg;
+  delete m_pADCCompenPageDlg;
 }
 
 
@@ -133,6 +138,7 @@ BOOL CParamDeskDlg::OnInitDialog()
   m_tab_control.AddPage("Функции",m_pFunSetPageDlg,3);
   m_tab_control.AddPage("Температура",m_pTemperPageDlg,4);
   m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5);
+  m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6);
 	
   //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
   //уже использует обработчики сообщений!
@@ -167,6 +173,8 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
      return TEMPER_PAR;
     case 5:	
      return CARBUR_PAR;	
+    case 6:	
+     return ADCCOR_PAR;	
     default:
      return 0; //invalid case
   }
@@ -208,6 +216,7 @@ void CParamDeskDlg::Enable(bool enable)
   m_pFunSetPageDlg->Enable(enable);
   m_pTemperPageDlg->Enable(enable);
   m_pCarburPageDlg->Enable(enable);
+  m_pADCCompenPageDlg->Enable(enable);
   if (::IsWindow(m_hWnd))
     UpdateDialogControls(this,TRUE);
 
@@ -245,6 +254,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
 	case STARTR_PAR:
       m_pStarterPageDlg->SetValues((StartrPar*)i_values);
       break;
+	case ADCCOR_PAR:
+      m_pADCCompenPageDlg->SetValues((ADCCompenPar*)i_values);
+      break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      
     default:
@@ -277,6 +289,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
       break;
 	case STARTR_PAR:
       m_pStarterPageDlg->GetValues((StartrPar*)o_values);
+      break;
+	case ADCCOR_PAR:
+      m_pADCCompenPageDlg->GetValues((ADCCompenPar*)o_values);
       break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      

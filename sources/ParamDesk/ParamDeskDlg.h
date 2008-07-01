@@ -73,12 +73,13 @@ protected:
 //	int m_lastSel;
 	BOOL m_enabled;
 
-    class CStarterPageDlg* m_pStarterPageDlg;		 
-    class CAnglesPageDlg*  m_pAnglesPageDlg;		 
-    class CIdlRegPageDlg*  m_pIdlRegPageDlg; 
-    class CFunSetPageDlg*  m_pFunSetPageDlg;		 
-    class CTemperPageDlg*  m_pTemperPageDlg;		  
-    class CCarburPageDlg*  m_pCarburPageDlg;
+    class CStarterPageDlg*   m_pStarterPageDlg;		 
+    class CAnglesPageDlg*    m_pAnglesPageDlg;		 
+    class CIdlRegPageDlg*    m_pIdlRegPageDlg; 
+    class CFunSetPageDlg*    m_pFunSetPageDlg;		 
+    class CTemperPageDlg*    m_pTemperPageDlg;		  
+    class CCarburPageDlg*    m_pCarburPageDlg;
+	class CADCCompenPageDlg* m_pADCCompenPageDlg;
 
 	// Generated message map functions
 	//{{AFX_MSG(CParamDeskDlg)

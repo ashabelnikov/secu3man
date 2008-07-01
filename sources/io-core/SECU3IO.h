@@ -83,4 +83,21 @@ struct TemperPar
   float  vent_off;
 };
 
+struct ADCCompenPar
+{
+  float  map_adc_factor;      //коэффициент передаточной погрешности
+  float  map_adc_correction;  //сдвиг в вольтах
+  float  ubat_adc_factor;
+  float  ubat_adc_correction;
+  float  temp_adc_factor;
+  float  temp_adc_correction;
+};
+
+struct RawSensDat
+ {
+  float map_value;
+  float ubat_value; 
+  float temp_value;
+ };
+
 };

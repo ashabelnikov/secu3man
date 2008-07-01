@@ -14,6 +14,8 @@ public:
    static bool   Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte);
    static bool   Hex8ToBin(const BYTE* i_hex_number,BYTE* o_byte);
    static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word,bool i_signed  = false);
+   static bool   Hex32ToBin(const BYTE* i_hex_number,signed long *o_dword);
+   static bool   Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword);
 
    inline static BYTE HTOD(BYTE h) 
    {
@@ -35,10 +37,17 @@ public:
    static bool   Bin8ToHex(const BYTE i_byte,std::string& o_hex_number);
    static bool   Bin16ToHex(const int i_word,BYTE* o_hex_number);
    static bool   Bin16ToHex(const int i_word,std::string& o_hex_number);
+   static bool   Bin32ToHex(const unsigned long i_dword,std::string& o_hex_number);
+   static bool   Bin32ToHex(const signed long i_dword,std::string& o_hex_number);
+
 
    //для правильного преобразования в целые числа (округление)
    static int Round(float  x) { return (int)((x) + 0.5f - (float)((x) < 0)); }
    static int Round(double x) { return (int)((x) + 0.5 - (double)((x) < 0)); }
+
+private:
+	static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);
+
 };
 
 #endif //_NUMERICCONV_

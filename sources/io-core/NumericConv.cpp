@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "NumericConv.h"
 #include "ctype.h"
+#include "windows.h"
 
 
 //Конвертирует массив шестнадцатерично заданных чисел (два ASCII символа представляют один байт) в массив бинарно
@@ -118,6 +119,50 @@ bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = f
     return false;
 }
 
+
+
+bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword)
+{
+  if (o_dword==NULL) 
+    return false;
+
+  BYTE b0,b1,b2,b3;
+  if (isxdigit(i_buf[0])&&isxdigit(i_buf[1])&&isxdigit(i_buf[2])&&isxdigit(i_buf[3])&&
+	  isxdigit(i_buf[4])&&isxdigit(i_buf[5])&&isxdigit(i_buf[6])&&isxdigit(i_buf[7]))
+  {
+    if (false==Hex8ToBin(i_buf,&b3))
+		return false;
+
+    if (false==Hex8ToBin(i_buf+2,&b2))
+		return false;
+
+    if (false==Hex8ToBin(i_buf+4,&b1))
+		return false;
+
+    if (false==Hex8ToBin(i_buf+6,&b0))
+		return false;
+
+
+    WORD hi = MAKEWORD(b2,b3);
+    WORD lo = MAKEWORD(b0,b1);
+
+	*o_dword = MAKELONG(lo,hi);
+
+    return true;
+  }
+    return false;
+}
+
+bool CNumericConv::Hex32ToBin(const BYTE* i_hex_number,signed long *o_dword)
+{
+  return CNumericConv::_Hex32ToBin(i_hex_number,(unsigned long*)o_dword);
+}
+
+bool CNumericConv::Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword)
+{
+  return CNumericConv::_Hex32ToBin(i_hex_number,(unsigned long*)o_dword);
+}
+
 bool CNumericConv::Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte)
 {
 	if (isxdigit(i_hex_number))
@@ -146,6 +191,20 @@ bool CNumericConv::Bin16ToHex(const int i_word,std::string& o_hex_number)
   Bin8ToHex(HIBYTE(((WORD)i_word)),o_hex_number);
   Bin8ToHex(LOBYTE(((WORD)i_word)),o_hex_number);
  return true;
+}
+
+bool CNumericConv::Bin32ToHex(const unsigned long i_dword,std::string& o_hex_number)
+{
+  Bin8ToHex(HIBYTE(HIWORD(i_dword)),o_hex_number);
+  Bin8ToHex(LOBYTE(HIWORD(i_dword)),o_hex_number);
+  Bin8ToHex(HIBYTE(LOWORD(i_dword)),o_hex_number);
+  Bin8ToHex(LOBYTE(LOWORD(i_dword)),o_hex_number);
+  return true;
+}
+
+bool CNumericConv::Bin32ToHex(const signed long i_dword,std::string& o_hex_number)
+{
+  return CNumericConv::Bin32ToHex((unsigned long)i_dword,o_hex_number);
 }
 
 bool CNumericConv::Bin4ToHex(const BYTE i_byte,std::string& o_hex_number)

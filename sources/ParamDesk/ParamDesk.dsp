@@ -165,6 +165,14 @@ SOURCE=.\tab_ctrl_bitmaps.bmp
 # PROP Default_Filter ""
 # Begin Source File
 
+SOURCE=.\ADCCompenPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\ADCCompenPageDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\AnglesPageDlg.cpp
 # End Source File
 # Begin Source File

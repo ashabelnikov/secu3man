@@ -10,12 +10,16 @@
 #include "stdafx.h"
 #include "secu3man.h"
 #include "ParamMonTabDlg.h"
+#include "common/FastDelegate.h"
+
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+using namespace fastdelegate;
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamMonModePageDlg dialog
@@ -34,7 +38,7 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CParamMonTabDlg)
-	// NOTE: the ClassWizard will add DDX and DDV calls here
+  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
   //}}AFX_DATA_MAP
 }
 
@@ -46,7 +50,8 @@ LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
   //{{AFX_MSG_MAP(CParamMonTabDlg)
-  //}}AFX_MSG_MAP
+	ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -57,25 +62,36 @@ BOOL CParamMonTabDlg::OnInitDialog()
   CDialog::OnInitDialog();
 	
   m_MIDeskDlg.Create(CMIDeskDlg::IDD,this);
-  m_MIDeskDlg.MoveWindow(280,0,427,319);
+  m_MIDeskDlg.MoveWindow(280,0,427,312);
   m_MIDeskDlg.ShowWindow(SW_SHOWNORMAL);
   m_MIDeskDlg.Show(true);
 //  m_MIDeskDlg.Enable(false);
+
+  m_RSDeskDlg.Create(CRSDeskDlg::IDD,this);
+  m_RSDeskDlg.MoveWindow(280,0,427,312);
+  m_RSDeskDlg.ShowWindow(SW_HIDE);
+  m_RSDeskDlg.Show(true);
 
   m_ParamDeskDlg.Create(CParamDeskDlg::IDD,this);
   m_ParamDeskDlg.SetTitle("Параметры в EEPROM:");
   m_ParamDeskDlg.ShowWindow(SW_SHOWNORMAL);
  // m_ParamDeskDlg.Enable(true);
   m_ParamDeskDlg.Show(true);
-
- /* std::vector<std::wstring> v;    SHOULD BE REMOVED!!!
-
-  v.push_back(_T("qwerty"));
-  v.push_back(_T("asdfgh"));
-  v.push_back(_T("zxcvbn"));
-
-  m_ParamDeskDlg.SetFunctionsNames(v);*/
 	
   return TRUE;  // return TRUE unless you set the focus to a control
                 // EXCEPTION: OCX Property Pages should return FALSE
 }
+
+void CParamMonTabDlg::OnPmShowRawSensors() 
+{//делегируем обработку события чекбокса	
+  if (m_OnRawSensorsCheck)
+	m_OnRawSensorsCheck();  
+}
+
+
+bool CParamMonTabDlg::GetRawSensorsCheckState(void)
+{
+  int check = m_raw_sensors_check.GetCheck();
+  return (check==BST_CHECKED) ? true : false;
+}
+

@@ -46,6 +46,8 @@ private:
    SECU3IO::IdlRegPar m_IdlRegPar;
    SECU3IO::CarburPar m_CarburPar;
    SECU3IO::TemperPar m_TemperPar;
+   SECU3IO::ADCCompenPar m_ADCCompenPar;
+   SECU3IO::RawSensDat m_RawSensDat;
 
    CComPort*    m_p_port;
    HANDLE       m_hThread;
@@ -92,6 +94,9 @@ private:
    bool Parse_IDLREG_PAR(BYTE* raw_packet);
    bool Parse_CARBUR_PAR(BYTE* raw_packet);
    bool Parse_TEMPER_PAR(BYTE* raw_packet);
+   bool Parse_ADCRAW_DAT(BYTE* raw_packet);
+   bool Parse_ADCCOR_PAR(BYTE* raw_packet);
+
 
    //сборщики пакетов
    void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -100,6 +105,7 @@ private:
    void Build_TEMPER_PAR(SECU3IO::TemperPar* packet_data);
    void Build_ANGLES_PAR(SECU3IO::AnglesPar* packet_data);
    void Build_FUNSET_PAR(SECU3IO::FunSetPar* packet_data);
+   void Build_ADCCOR_PAR(SECU3IO::ADCCompenPar* packet_data);
   
 public:
    bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
