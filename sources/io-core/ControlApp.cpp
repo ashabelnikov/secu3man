@@ -15,11 +15,15 @@
 #include "ufcodes.h"
 
 
-#define MAP_SENSOR_OFFSET   0.45f     //Вольт
-#define MAP_SENSOR_GRADIENT 20.5f     //кПа/Вольт  
-#define ADC_DISCRETE        0.0025f   //Вольт 
+#define MAP_SENSOR_OFFSET   0.547f    //Вольт
+#define MAP_SENSOR_GRADIENT 20.9f     //кПа/Вольт  
+#define ADC_DISCRETE        0.0025f   //Вольт
+ 
 #define ANGLE_MULTIPLAYER   32.0f     //коэффициент масштабирования углов поворота коленвала  
 
+#define MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER  64
+#define UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER 400
+#define TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER 4
 
 using namespace SECU3IO;
 
@@ -204,22 +208,25 @@ bool CControlApp::Parse_SENSOR_DAT(BYTE* raw_packet)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&pressure))
      return false;
 
- float pressure_in_volts = (((float)pressure) * m_adc_discrete);
- m_SensorDat.pressure = (pressure_in_volts + m_map_sensor_offset) * m_map_sensor_gradient;
+//float pressure_in_volts = (((float)pressure) * m_adc_discrete);
+//m_SensorDat.pressure = (pressure_in_volts + m_map_sensor_offset) * m_map_sensor_gradient;
+ m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
  raw_packet+=4;  
 
  //напряжение бортовой сети
  int voltage = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&voltage))
      return false;
- m_SensorDat.voltage = ((float)voltage) * m_adc_discrete; 
+//m_SensorDat.voltage = ((float)voltage) * m_adc_discrete; 
+ m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER;
  raw_packet+=4;  
 
  //Температура охлаждающей жидкости
  int temperature = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&temperature))
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&temperature,true))
      return false;
- m_SensorDat.temperat = FromTemperatureSensor(temperature);
+//m_SensorDat.temperat = FromTemperatureSensor(temperature);
+ m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
  raw_packet+=4;  
 
  //Текущий УОЗ (число со знаком)
@@ -346,7 +353,7 @@ bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
 {
- if (strlen((char*)raw_packet)!=11)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -360,18 +367,20 @@ bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
  raw_packet+=2;
 
  //Наклон шкалы ДАД (давление в дискретах АЦП)
- unsigned char map_gradient = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&map_gradient))
+ int map_gradient = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&map_gradient))
      return false;
  raw_packet+=2;  
- m_FunSetPar.map_grad = (((float)map_gradient) * m_adc_discrete) * m_map_sensor_gradient;  //пользователю удобно обозревать и редактировать наклон когда он а кПа
+//m_FunSetPar.map_grad = (((float)map_gradient) * m_adc_discrete) * m_map_sensor_gradient;  //пользователю удобно обозревать и редактировать наклон когда он а кПа
+ m_FunSetPar.map_grad = ((float)map_gradient) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Перепад давления между атмосферным и максимальным
  int pressure_swing = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&pressure_swing))
      return false;
  raw_packet+=4;  
- m_FunSetPar.press_swing = (((float)pressure_swing) * m_adc_discrete) * m_map_sensor_gradient;
+//m_FunSetPar.press_swing = (((float)pressure_swing) * m_adc_discrete) * m_map_sensor_gradient;
+ m_FunSetPar.press_swing = ((float)pressure_swing) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  if (*raw_packet!='\r')
 	 return false;
@@ -468,14 +477,16 @@ bool CControlApp::Parse_TEMPER_PAR(BYTE* raw_packet)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_on,true))
      return false;
  raw_packet+=4;
- m_TemperPar.vent_on = FromTemperatureSensor(vent_on);
+//m_TemperPar.vent_on = FromTemperatureSensor(vent_on);
+ m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER; 
 
  //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off,true))
      return false;
  raw_packet+=4;
- m_TemperPar.vent_off = FromTemperatureSensor(vent_off);
+//m_TemperPar.vent_off = FromTemperatureSensor(vent_off);
+ m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER; 
 
  if (*raw_packet!='\r')
 	 return false;
@@ -686,9 +697,6 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 
   DWORD actual_received;
   actual_received = 0;
-
-  //bool online_state = false;  
-  //bool first_call_of_OnConnection = false;
   
   while(1) 
   {
@@ -699,19 +707,11 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 
 	  pEventHandler = p_capp->m_pEventHandler;
 	  ASSERT(pEventHandler); //перед тем как обрабатывать пакеты, необходимо приаттачить обработчик событий
-  //    if (!first_call_of_OnConnection)
-	//  {
-//	    first_call_of_OnConnection = true;
-  //      pEventHandler->OnConnection(online_state);	  
-	//  }
-
 
 	  //читаем блок данных
 	  p_port->RecvBlock(read_buf,RAW_BYTES_TO_READ_MAX,&actual_received);
 	  read_buf[actual_received] = 0;
 	  
-//    int j=0; while(read_buf[j]!=0){if (read_buf[j]=='\r')  printf("\n");else  printf("%c",read_buf[j]);j++;}
-
 	  //парсим данные и пытаемся выделить пакеты
 	  p_capp->SplitPackets(read_buf);
 
@@ -810,7 +810,6 @@ void CControlApp::SwitchOn(bool state)
 
 	  if (m_pEventHandler)
 	    m_pEventHandler->OnConnection(false);	  
-//	  	  m_force_notify_about_connection = true;
 	}
 }
 
@@ -948,9 +947,11 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 {
   CNumericConv::Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
-  int vent_on = ToTemperatureSensor(packet_data->vent_on);
+//int vent_on = ToTemperatureSensor(packet_data->vent_on);
+  int vent_on = CNumericConv::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
   CNumericConv::Bin16ToHex(vent_on,m_outgoing_packet);
-  int vent_off = ToTemperatureSensor(packet_data->vent_off);
+//int vent_off = ToTemperatureSensor(packet_data->vent_off);
+  int vent_off = CNumericConv::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
   CNumericConv::Bin16ToHex(vent_off,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
@@ -972,9 +973,9 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 {
   CNumericConv::Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
   CNumericConv::Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
-  unsigned char map_gradient = CNumericConv::Round((packet_data->map_grad / m_map_sensor_gradient) / m_adc_discrete);
-  CNumericConv::Bin8ToHex(map_gradient,m_outgoing_packet);
-  int press_swing = CNumericConv::Round((packet_data->press_swing / m_map_sensor_gradient) / m_adc_discrete);
+  unsigned int map_gradient = CNumericConv::Round(packet_data->map_grad * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  CNumericConv::Bin16ToHex(map_gradient,m_outgoing_packet);
+  int press_swing = CNumericConv::Round(packet_data->press_swing * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
   CNumericConv::Bin16ToHex(press_swing,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
