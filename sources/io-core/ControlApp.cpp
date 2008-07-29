@@ -370,7 +370,7 @@ bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
  int map_gradient = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&map_gradient))
      return false;
- raw_packet+=2;  
+ raw_packet+=4;  
 //m_FunSetPar.map_grad = (((float)map_gradient) * m_adc_discrete) * m_map_sensor_gradient;  //пользователю удобно обозревать и редактировать наклон когда он а кѕа
  m_FunSetPar.map_grad = ((float)map_gradient) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
