@@ -51,6 +51,7 @@ LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
   //{{AFX_MSG_MAP(CParamMonTabDlg)
 	ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
+	ON_WM_CLOSE()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -95,3 +96,10 @@ bool CParamMonTabDlg::GetRawSensorsCheckState(void)
   return (check==BST_CHECKED) ? true : false;
 }
 
+
+void CParamMonTabDlg::OnClose() 
+{
+	// TODO: Add your message handler code here and/or call default
+	
+//	CDialog::OnClose();
+}

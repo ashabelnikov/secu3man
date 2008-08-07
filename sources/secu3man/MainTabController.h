@@ -21,6 +21,7 @@ class CMainTabController  : public ITabControllerEvent
     virtual void OnSelchangeTabctl(void); 
     virtual void OnSelchangingTabctl(void); 
 
+	virtual ITabController* GetActiveController() const;
     
   private:
 	std::vector<ITabController*> m_controllers_list;

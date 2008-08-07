@@ -12,6 +12,9 @@
 #include "ChildViewManager.h"
 #include "resource.h"
 
+using namespace fastdelegate;
+
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -23,7 +26,7 @@ CMainFrameManager::CMainFrameManager()
 
 CMainFrameManager::~CMainFrameManager()
 {
-  delete m_pChildViewManager;
+  delete m_pChildViewManager; 
   //do not delete m_pMainFrame!
 }
 
@@ -52,5 +55,13 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
 
   m_pChildViewManager->OnAfterCreate();
 
+  m_pMainFrame->setFunctionOnClose(MakeDelegate(this,&CMainFrameManager::OnClose));
+
   return true;
+}
+
+
+bool CMainFrameManager::OnClose(void)
+{
+ return m_pChildViewManager->OnClose();
 }

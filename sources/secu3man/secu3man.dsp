@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib kernel32.lib /nologo /entry:"" /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
+# ADD LINK32 midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib kernel32.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "secu3man - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib /nologo /entry:"" /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
+# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
 
 !ENDIF 
 
@@ -112,10 +112,6 @@ SOURCE=.\ChildView.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ChildViewController.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\ChildViewManager.cpp
 # End Source File
 # Begin Source File
@@ -141,10 +137,6 @@ SOURCE=.\FirmwareTabDlg.cpp
 # Begin Source File
 
 SOURCE=.\MainFrame.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameController.cpp
 # End Source File
 # Begin Source File
 
@@ -209,10 +201,6 @@ SOURCE=.\ChildView.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ChildViewController.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ChildViewManager.h
 # End Source File
 # Begin Source File
@@ -246,10 +234,6 @@ SOURCE=.\ITabController.h
 # Begin Source File
 
 SOURCE=.\MainFrame.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameController.h
 # End Source File
 # Begin Source File
 

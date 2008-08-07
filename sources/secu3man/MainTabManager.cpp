@@ -104,3 +104,16 @@ void CMainTabManager::OnAfterCreate(void)
   rect.bottom-=0; 
   m_tab_control.MoveWindow(rect);
 }
+
+bool CMainTabManager::OnClose(void)
+{  
+  std::vector<ITabController*>& list = m_MainTabController.GetControllersList();
+
+  for (size_t i = 0; i < list.size(); i++)
+  {
+    if (list[i]->OnClose()==false)
+      return false;
+  }
+  //return m_MainTabController.GetActiveController()->OnClose();  
+  return true;
+}

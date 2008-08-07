@@ -3,11 +3,13 @@
 
 #include "ChildView.h"
 #include "StatusBarManager.h"
+#include "common/FastDelegate.h"
 
 class CMainFrame : public CFrameWnd
 {
 	
 public:
+	typedef fastdelegate::FastDelegate0<bool> EventHandler;
 	CMainFrame();
 	virtual ~CMainFrame();
 
@@ -31,13 +33,21 @@ public:
 	CChildView*  m_pwndView;
     void SetView(CChildView* i_pChildView) {m_pwndView = i_pChildView;};
 
+    //устанавливают обработчики событий
+    virtual void setFunctionOnClose(EventHandler OnClose);
+
+
 // Generated message map functions
 protected:
 	//{{AFX_MSG(CMainFrame)
 	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
+	afx_msg void OnClose();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+private:
+	EventHandler m_OnClose;
 };
 
 /////////////////////////////////////////////////////////////////////////////

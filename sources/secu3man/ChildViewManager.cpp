@@ -50,3 +50,8 @@ void CChildViewManager::OnAfterCreate(void)
 {
   m_pMainTabManager->OnAfterCreate();
 }
+
+bool CChildViewManager::OnClose(void)
+{
+ return m_pMainTabManager->OnClose();
+}

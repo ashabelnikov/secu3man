@@ -57,3 +57,9 @@ void CMainTabController::OnSelchangingTabctl(void)
  ASSERT(m_pTabController);
  m_controllers_list[m_pTabController->GetCurSel()]->OnDeactivate();
 } 
+
+
+ITabController* CMainTabController::GetActiveController() const
+{
+return m_controllers_list[m_pTabController->GetCurSel()];
+}

@@ -13,6 +13,7 @@ class CFirmwareTabDlg : public CTabDialog
 {
 public:
    typedef fastdelegate::FastDelegate0<> EventHandler;
+   typedef fastdelegate::FastDelegate0<bool> EventResult;
 
 
 // Construction
@@ -35,6 +36,9 @@ public:
 	void EnableBLItems(bool enable);
 	bool IsBLItemsEnabled(void) {return m_is_bl_items_available;};
 
+	void SetFWInformationText(CString i_text);
+	CString GetFWInformationText(void);
+
 
 // Dialog Data
 	//{{AFX_DATA(CFirmwareTabDlg)
@@ -44,6 +48,7 @@ public:
 	CButton	m_view_temp_map_btn;
 	CButton	m_view_start_map_btn;
 	CButton	m_view_idle_map_btn;
+	CEdit   m_fw_information_edit;
 	//}}AFX_DATA
 
 
@@ -87,7 +92,11 @@ protected:
     afx_msg void OnReadFlashToFile();
     afx_msg void OnWriteFlashFromFile();
 	afx_msg void OnUpdateBLStartedEmergency(CCmdUI* pCmdUI);
-	afx_msg void OnFirmwareSupportBlStartedEmergency();
+	afx_msg void OnFirmwareSupportBlStartedEmergency();	
+	afx_msg void OnOpenFlashFromFile();
+	afx_msg void OnSaveFlashToFile();
+	afx_msg void OnChangeFirmwareSupportFwInformation();
+    afx_msg void OnUpdateFirmwareControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -97,6 +106,10 @@ public: //события от меню
     void setOnWriteEepromFromFile(EventHandler OnFunction) {m_OnWriteEepromFromFile = OnFunction;};
     void setOnReadFlashToFile(EventHandler OnFunction) {m_OnReadFlashToFile = OnFunction;};
     void setOnWriteFlashFromFile(EventHandler OnFunction) {m_OnWriteFlashFromFile = OnFunction;};
+	void setOnOpenFlashFromFile(EventHandler OnFunction) {m_OnOpenFlashFromFile = OnFunction;}
+	void setOnFWInformationTextChanged(EventHandler OnFunction) {m_OnFWInformationTextChanged = OnFunction;}
+	void setOnSaveFlashToFile(EventHandler OnFunction) {m_OnSaveFlashToFile = OnFunction;}
+	void setIsFirmwareOpened(EventResult IsFunction) {m_IsFirmwareOpened = IsFunction;}
 
 public: //события от кнопок и чекбоксов
     void setOnBLStartedEmergency(EventHandler OnFunction) {m_OnBLStartedEmergency = OnFunction;}
@@ -108,8 +121,20 @@ private:
     EventHandler m_OnReadFlashToFile;
     EventHandler m_OnWriteFlashFromFile;
 	EventHandler m_OnBLStartedEmergency;
+	EventHandler m_OnOpenFlashFromFile;
+	EventHandler m_OnSaveFlashToFile;
+	EventHandler m_OnFWInformationTextChanged;
+	EventResult  m_IsFirmwareOpened;
 
 private:
+    bool IsFirmwareOpened(void) 
+	{
+	  if (m_IsFirmwareOpened)
+        return m_IsFirmwareOpened();
+	  return false; 
+	};
+
+
 	bool m_is_bl_started_emergency_available;
 	bool m_is_bl_items_available;
 

@@ -9,6 +9,7 @@
 #include "io-core/BootLoaderAdapter.h"
 #include "StatusBarManager.h"
 
+class CFirmwareDataMediator;
 
 class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler 
 {
@@ -20,6 +21,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     CFirmwareTabDlg*  m_view;
 	CCommunicationManager* m_comm;
 	CStatusBarManager*  m_sbar;
+	CFirmwareDataMediator* m_fwdm;
 
     CControlAppAdapter* m_pAppAdapter;
     CBootLoaderAdapter* m_pBldAdapter;
@@ -27,6 +29,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     //from ITabController
     virtual void OnActivate(void);
 	virtual void OnDeactivate(void);
+	virtual bool OnClose(void);
+
 
 	//from IAPPEventHandler:
     virtual void OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data);
@@ -46,6 +50,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     bool LoadEEPROMFromFile(BYTE* p_data, const int size);
     bool LoadFLASHFromFile(BYTE* p_data, const int size);
 
+    void SetViewFirmwareValues(void);
 
 	///////////context menu event handlers/////////////////////
     void OnBootLoaderInfo(void);
@@ -53,7 +58,11 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     void OnWriteEepromFromFile(void);
     void OnReadFlashToFile(void);
     void OnWriteFlashFromFile(void);
+	void OnOpenFlashFromFile(void);
+	void OnSaveFlashToFile(void);
+	void OnFWInformationTextChanged(void);
 	///////////////////////////////////////////////////////////
+	bool IsFirmwareOpened(void);
     void OnBLStartedEmergency(void);
 
   private: //функции - обертки

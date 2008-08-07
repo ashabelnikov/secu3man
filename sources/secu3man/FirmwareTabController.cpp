@@ -47,6 +47,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_pBldAdapter = new CBootLoaderAdapter(this);
   m_pBldAdapter->Create(pParent);
 
+  m_fwdm = new CFirmwareDataMediator(); 
+
   //устанавливаем делегаты (обработчики событий от представлени€)
   m_view->setOnBootLoaderInfo(MakeDelegate(this,&CFirmwareTabController::OnBootLoaderInfo));
   m_view->setOnReadEepromToFile(MakeDelegate(this,&CFirmwareTabController::OnReadEepromToFile));
@@ -54,6 +56,11 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnReadFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnReadFlashToFile));
   m_view->setOnWriteFlashFromFile(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashFromFile));
   m_view->setOnBLStartedEmergency(MakeDelegate(this,&CFirmwareTabController::OnBLStartedEmergency));
+  m_view->setOnOpenFlashFromFile(MakeDelegate(this,&CFirmwareTabController::OnOpenFlashFromFile));
+  m_view->setOnFWInformationTextChanged(MakeDelegate(this,&CFirmwareTabController::OnFWInformationTextChanged));
+  m_view->setOnSaveFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnSaveFlashToFile));
+  m_view->setIsFirmwareOpened(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
+
 
 }
 
@@ -61,6 +68,7 @@ CFirmwareTabController::~CFirmwareTabController()
 {
   delete m_pAppAdapter;
   delete m_pBldAdapter;
+  delete m_fwdm;
 }
 
   
@@ -90,6 +98,7 @@ void CFirmwareTabController::OnActivate(void)
  m_comm->m_pControlApp->SwitchOn(true); //true
  m_comm->m_pBootLoader->SwitchOn(false);
 
+ SetViewFirmwareValues();
 }
 
 void CFirmwareTabController::OnDeactivate(void)
@@ -411,6 +420,10 @@ void CFirmwareTabController::OnWriteFlashFromFile(void)
   if (!result)
 	  return; //cancel
 
+  //вычисл€ем контрольную сумму и сохран€ем ее в массив с прошивкой. Ёто необходимо например когда
+  //мы записываем свеже скомпилированную прошивку, котора€ может не содержать контрольной суммы
+  CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(m_bl_data);
+
   ASSERT(m_comm);
 
   //запускаем бутлоадер по команде из приложени€ (если нет флага что он запущен вручную) 	
@@ -470,6 +483,7 @@ void CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size)
 	  AfxMessageBox(szError);
       return;
     }
+	
     f.Write(p_data,size);
     f.Close();	     	  	  
 	return;
@@ -530,13 +544,10 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size)
       return false;
     }
 
-    //TODO: ƒобавть проверку на размер файла (его размер должен соответствовать размеру EEPROM)
+    //TODO: ƒобавть проверку на размер файла (его размер должен соответствовать переданному size!!!)
 
     f.Read(p_data,size);
     f.Close();	   
-
-	//вычисл€ем контрольную сумму и сохран€ем ее в массив с прошивкой
-    CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(p_data);
 
 	return true; //подтверждение пользовател€
   }
@@ -601,4 +612,82 @@ bool CFirmwareTabController::ExitBootLoader(void)
   //Ќа будущее: ≈сли бутлоадер запущен аварийно и закончилась операци€ записи прошивки (работающей прошивки :-)),
   //то из него можно выйти... Ќо это по желанию пользовател€. ј вообще удобства в этом - практичеки нет.  
   return true; 
+}
+
+
+//Ёта функци€ вызываетс€ при выходе из прложени€. Ёта функци€ может запретить выход, если вернет false 
+bool CFirmwareTabController::OnClose(void)
+{
+  bool modified = m_fwdm->IsModified();
+  if (modified)
+  {
+   int result = AfxMessageBox(_T("ѕрошивка была изменена. ’отите сохранить?"),MB_YESNOCANCEL);
+   if (result==IDCANCEL)
+   {
+     return false; //пользователь отменил выход из приложени€
+   }
+   if (result==IDNO)
+   {
+     return true; //пользователь решил выйти без сохранен€
+   }
+   if (result==IDYES)
+   { //необходимо сохранить данные!
+     OnSaveFlashToFile();
+     return true;
+   }  
+  }
+
+  //данные не были изменены - разрешаем выход из приложени€
+  return true;
+}
+
+
+void CFirmwareTabController::OnOpenFlashFromFile(void)
+{
+  bool result;
+  BYTE buff[65536];
+  
+  //!!! без вычислени€ и записи контрольной суммы в буфер
+  result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE);
+  if (result) //user OK?
+  {
+   m_fwdm->LoadBytes(buff);
+  
+   SetViewFirmwareValues();
+  }
+
+}
+
+void CFirmwareTabController::OnSaveFlashToFile(void)
+{
+  BYTE buff[65536];
+ 
+  m_fwdm->StoreBytes(buff);
+
+  //вычисл€ем контрольную сумму и сохран€ем ее в массив с прошивкой	
+  CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(buff);
+
+  SaveFLASHToFile(buff,CBootLoader::FLASH_TOTAL_SIZE);
+
+  //данные были успешно сохранены - можно сбрасывать признак модификации
+  m_fwdm->ResetModified();
+}
+
+void CFirmwareTabController::OnFWInformationTextChanged(void)
+{
+  CString string = m_view->GetFWInformationText();
+  m_fwdm->SetSignatureInfo(_TSTRING(string));
+}
+
+bool CFirmwareTabController::IsFirmwareOpened()
+{
+  return m_fwdm->IsLoaded();
+}
+
+void CFirmwareTabController::SetViewFirmwareValues(void)
+{
+  if (m_fwdm->IsLoaded()==false)
+	return;
+  CString string = m_fwdm->GetSignatureInfo().c_str();
+  m_view->SetFWInformationText(string);
 }

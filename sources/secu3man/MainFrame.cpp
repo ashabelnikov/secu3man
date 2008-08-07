@@ -12,11 +12,6 @@
 
 #include "MainFrame.h"
 
-//#include "ui-core/TabController.h"
-//#include "StatusBarManager.h"
-//#include "FirmwareTabDlg.h"
-//#include "ParamMonTabDlg.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -32,7 +27,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
   //{{AFX_MSG_MAP(CMainFrame)
   ON_WM_CREATE()
   ON_WM_SETFOCUS()
-  //}}AFX_MSG_MAP
+	ON_WM_CLOSE()
+	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 
@@ -110,4 +106,17 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
 }
 
 
+void CMainFrame::setFunctionOnClose(EventHandler OnClose)
+{
+  m_OnClose = OnClose;
+}
 
+void CMainFrame::OnClose() 
+{
+  bool result = true;
+  if (m_OnClose) 
+    result = m_OnClose();
+	
+  if (result)
+    CFrameWnd::OnClose();
+}

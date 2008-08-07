@@ -53,6 +53,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, m_view_temp_map_btn);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_START_MAP, m_view_start_map_btn);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, m_view_idle_map_btn);
+  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_INFORMATION,m_fw_information_edit);
   //}}AFX_DATA_MAP
 }
 
@@ -83,6 +84,9 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_COMMAND(IDM_READ_FLASH_TO_FILE, OnReadFlashToFile)
   ON_COMMAND(IDM_WRITE_FLASH_FROM_FILE, OnWriteFlashFromFile)
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnUpdateBLStartedEmergency)
+	ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnFirmwareSupportBlStartedEmergency)
+  ON_COMMAND(IDM_OPEN_FLASH, OnOpenFlashFromFile)	
+  ON_COMMAND(IDM_SAVE_FLASH, OnSaveFlashToFile)	
   ON_UPDATE_COMMAND_UI(IDM_WRITE_FLASH, OnUpdatePopupMenu_bl)
   ON_UPDATE_COMMAND_UI(IDM_SAVE_FLASH, OnUpdatePopupMenu_file)
   ON_UPDATE_COMMAND_UI(IDM_READ_FLASH_TO_FILE, OnUpdatePopupMenu_bl)  
@@ -90,7 +94,8 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_UPDATE_COMMAND_UI(IDM_READ_EEPROM_TO_FILE, OnUpdatePopupMenu_bl)
   ON_UPDATE_COMMAND_UI(IDM_WRITE_EEPROM_FROM_FILE, OnUpdatePopupMenu_bl)
   ON_UPDATE_COMMAND_UI(IDM_READ_BOOTLOADER_SIGNATURE, OnUpdatePopupMenu_bl)
-	ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnFirmwareSupportBlStartedEmergency)
+	ON_EN_CHANGE(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnChangeFirmwareSupportFwInformation)
+  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnUpdateFirmwareControls)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -109,6 +114,9 @@ BOOL CFirmwareTabDlg::OnInitDialog()
   m_ContextMenuManager.Attach(this);
 
   SetTimer(TIMER_ID,250,NULL);
+
+  //в коде прошивки выдолено ограниченное количество байтов для строки иныормации
+  m_fw_information_edit.SetLimitText(48);
 
   UpdateDialogControls(this,TRUE);
   return TRUE;  // return TRUE unless you set the focus to a control
@@ -142,7 +150,7 @@ void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI)
 
 void CFirmwareTabDlg::OnUpdatePopupMenu_file(CCmdUI* pCmdUI) 
 {
-  pCmdUI->Enable(FALSE);
+  pCmdUI->Enable(TRUE);
   pCmdUI->SetCheck(FALSE);	
 }
 
@@ -366,4 +374,47 @@ void CFirmwareTabDlg::OnFirmwareSupportBlStartedEmergency()
 {
   if (m_OnBLStartedEmergency)
     m_OnBLStartedEmergency(); 	
+}
+
+void CFirmwareTabDlg::OnOpenFlashFromFile()
+{
+  if (m_OnOpenFlashFromFile)
+    m_OnOpenFlashFromFile();
+}
+
+void CFirmwareTabDlg::OnSaveFlashToFile()
+{
+  if (m_OnSaveFlashToFile)
+    m_OnSaveFlashToFile();
+}
+
+
+void CFirmwareTabDlg::SetFWInformationText(CString i_text)
+{
+  m_fw_information_edit.SetWindowText(i_text);
+}
+
+CString CFirmwareTabDlg::GetFWInformationText(void)
+{
+  CString o_text;
+  m_fw_information_edit.GetWindowText(o_text);
+  return o_text;
+}
+
+void CFirmwareTabDlg::OnChangeFirmwareSupportFwInformation() 
+{
+  // TODO: If this is a RICHEDIT control, the control will not
+  // send this notification unless you override the CDialog::OnInitDialog()
+  // function and call CRichEditCtrl().SetEventMask()
+  // with the ENM_CHANGE flag ORed into the mask.
+	
+  if (m_OnFWInformationTextChanged)
+	m_OnFWInformationTextChanged();	
+}
+
+//обновляет контроллы состояние которых зависит от того - открыта прошивка или нет
+void CFirmwareTabDlg::OnUpdateFirmwareControls(CCmdUI* pCmdUI)
+{
+  bool enabled = IsFirmwareOpened(); 
+  pCmdUI->Enable(enabled ? TRUE : FALSE);
 }

@@ -53,6 +53,7 @@ protected:
 	//{{AFX_MSG(CParamMonTabDlg)
 	virtual BOOL OnInitDialog();
 	afx_msg void OnPmShowRawSensors();
+	afx_msg void OnClose();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

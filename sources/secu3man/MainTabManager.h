@@ -23,9 +23,12 @@ public:
     
     bool Init(CChildView* i_pChildView);
 	void OnAfterCreate(void);
+	virtual bool OnClose(void);
 
 	CMainTabManager();
 	virtual ~CMainTabManager();
+
+    
 
 };
 

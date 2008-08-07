@@ -410,3 +410,9 @@ void CParamMonTabController::OnRawSensorsCheckBox(void)
   m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
   }  
 }
+
+
+bool CParamMonTabController::OnClose(void)
+{
+  return true;
+}

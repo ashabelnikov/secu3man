@@ -34,6 +34,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
     //появление/закрытие вкладки параметров и монитора
     virtual void OnActivate(void);
 	virtual void OnDeactivate(void);
+	virtual bool OnClose(void);
 
 	//from IAPPEventHandler:
     virtual void OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data);
