@@ -1,4 +1,7 @@
 EXPORTS
     ; VC funcname           = BCB funcname
-    DisplayChart_AAoI_2D    = _DisplayChart_AAoI_2D
+    Chart2DCreate           = _Chart2DCreate
+    Chart2DUpdate           = _Chart2DUpdate
+    Chart2DSetOnChange      = _Chart2DSetOnChange
+    Chart2DSetOnClose       = _Chart2DSetOnClose
 

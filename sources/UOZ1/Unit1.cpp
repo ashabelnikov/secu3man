@@ -15,19 +15,24 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TForm1 *Form1;
+
+bool RemoveInstanceByHWND(HWND hWnd);
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
         , aai_min(0.0f), aai_max(0.0f)
+        , m_pOnChange(NULL)
+        , m_pOnClose(NULL)
+        , m_param_on_change(NULL)
+        , m_param_on_close(NULL)
 {
   setval  = 0;
   val_n   = 0;
-  v_count = 0;
-  u_title = "";
+  count_of_function_points = 0;
+  chart_title_text = "";
   original_function  = NULL;
   modified_function  = NULL;
-  close_flag = NULL;
 }
 //---------------------------------------------------------------------------
 
@@ -49,6 +54,8 @@ void __fastcall TForm1::Chart1ClickSeries(TCustomChart *Sender,
 void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
+  if ((m_pOnChange) && (setval))
+    m_pOnChange(m_param_on_change);
   setval = 0;
 }
 //---------------------------------------------------------------------------
@@ -80,11 +87,13 @@ void TForm1::DataPrepare()
   Chart1->LeftAxis->Minimum = aai_min - range / 20;
 
   Chart1->Title->Text->Clear();
-  Chart1->Title->Text->Add(u_title);
-  for(int i = 0; i < v_count; i++)
+  Chart1->Title->Text->Add(chart_title_text);
+  Chart1->LeftAxis->Title->Caption = x_axis_title;
+
+  for(int i = 0; i < count_of_function_points; i++)
   {
-    as.sprintf("%d",u_slots[i]);
-    Series1->Add(u_values[i],as,clAqua);
+    as.sprintf("%d",horizontal_axis_grid_values[i]);
+    Series1->Add(original_function[i],as,clAqua);
     Series2->Add(modified_function[i],as,clRed);
   }
 }
@@ -92,14 +101,26 @@ void TForm1::DataPrepare()
 
 void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
 {
-  *close_flag = 0;
+   if (m_pOnClose)
+     m_pOnClose(m_param_on_close);
    setval  = 0;
    val_n   = 0;
-   v_count = 0;
-   u_title = "";
+   count_of_function_points = 0;
+   chart_title_text = "";
    original_function = NULL;
    modified_function = NULL;
-   close_flag = NULL;
+   RemoveInstanceByHWND(Handle);
 }
 //---------------------------------------------------------------------------
 
+void TForm1::SetOnChange(EventHandler i_pOnChange,void* i_param)
+{
+  m_pOnChange = i_pOnChange;
+  m_param_on_change = i_param;
+}
+
+void TForm1::SetOnClose(EventHandler i_pOnClose,void* i_param)
+{
+  m_pOnClose = i_pOnClose;
+  m_param_on_close = i_param;
+}

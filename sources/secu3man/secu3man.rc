@@ -63,9 +63,6 @@ BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
                     WS_TABSTOP,117,90,96,18
-    LISTBOX         IDC_FIRMWARE_SUPPORT_FUNSET_LIST,22,92,87,73,LBS_SORT | 
-                    LBS_NOINTEGRALHEIGHT | LBS_DISABLENOSCROLL | WS_VSCROLL | 
-                    WS_TABSTOP
     CONTROL         "Карта УОЗ на ХХ",IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
                     WS_TABSTOP,117,109,96,18
@@ -75,17 +72,25 @@ BEGIN
     CONTROL         "Темпер. коррекция",IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
                     WS_TABSTOP,117,148,96,18
-    GROUPBOX        "Семейства характеристик",IDC_STATIC,15,75,214,100
+    GROUPBOX        "Семейства характеристик",
+                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,15,75,214,100
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,108,33,118,16,
                     ES_AUTOHSCROLL
     CTEXT           "Дополнительная информация о прошивке:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,16,31,86,18
-    LTEXT           "CRC16: 16EF/16EF",IDC_STATIC,153,15,72,14,0,
-                    WS_EX_STATICEDGE
+                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,16,33,86,18
+    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,72,14,
+                    0,WS_EX_STATICEDGE
     CONTROL         "Boot loader запущен аварийно (установлена перемычка)",
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,98,190,122,
                     21
+    CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    19,90,93,83,WS_EX_LEFTSCROLLBAR
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,16,133,12,ES_READONLY | 
+                    NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,227,14,8,15
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 233, 170
@@ -240,6 +245,8 @@ BEGIN
     IDS_CONN_CONNECTED      "connected"
     IDS_CONN_DISCONNECTED   "disconnected"
     IDS_CONN_BOOTLOADER     "boot loader"
+    IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW "Импортровать даннае из другой прошивки..."
+    IDS_IMPORT_FW_DATA_FROM_SECU3 "Импортировать данные непосредственно из SECU-3"
 END
 
 #endif    // Russian resources

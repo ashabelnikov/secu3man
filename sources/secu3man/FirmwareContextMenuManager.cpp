@@ -61,6 +61,15 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
 
+  str.LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,str);	
+
+  str.LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,str);	
+
+  ///////////////////////////////////////////////////////////////////////////
+  m_ParentMenu.AppendMenu(MF_SEPARATOR);
+
   str.LoadString(IDS_READ_FLASH_TO_FILE);
   m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH_TO_FILE,str);
   m_bl_menu_items_IDs.push_back(IDM_READ_FLASH_TO_FILE);

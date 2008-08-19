@@ -33,6 +33,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_sbar(NULL)
 , m_pAppAdapter(NULL)
 , m_pBldAdapter(NULL)
+, m_current_funset_index(-1)
+, m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
 {
   m_view = i_view;
   m_comm = i_comm;
@@ -60,8 +62,13 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnFWInformationTextChanged(MakeDelegate(this,&CFirmwareTabController::OnFWInformationTextChanged));
   m_view->setOnSaveFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnSaveFlashToFile));
   m_view->setIsFirmwareOpened(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
-
-
+  m_view->setOnMapChanged(MakeDelegate(this,&CFirmwareTabController::OnMapChanged));
+  m_view->setOnFunSetSelectionChanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetSelectionChanged));
+  m_view->setOnFunSetNamechanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetNamechanged));  
+  m_view->setOnImportDataFromAnotherFW(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromAnotherFW));
+  m_view->setOnImportDataFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromSECU3));
+  m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
+  m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
 }
 
 CFirmwareTabController::~CFirmwareTabController()
@@ -98,13 +105,16 @@ void CFirmwareTabController::OnActivate(void)
  m_comm->m_pControlApp->SwitchOn(true); //true
  m_comm->m_pBootLoader->SwitchOn(false);
 
- SetViewFirmwareValues();
+ m_modification_check_timer.SetTimer(this,&CFirmwareTabController::OnModificationCheckTimer,250);
+
+ SetViewFirmwareValues(); 
 }
 
 void CFirmwareTabController::OnDeactivate(void)
 {
   m_pAppAdapter->SwitchOn(false); 
   m_sbar->SetInformationText(_T(""));
+  m_modification_check_timer.KillTimer();
 }
 
 
@@ -209,15 +219,10 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
 {
   //////////////////////////////////////////////////////////////////////
   if (opcode == CBootLoader::BL_OP_EXIT) //неиспользуется когда бутлоадер запущен аварийно
-  {
-    // m_sbar->SetInformationText("Программа запущена.");
-
+  {    
     //вновь активируем коммуникационный контроллер приложения
     m_comm->m_pControlApp->SwitchOn(true);
-    m_comm->m_pBootLoader->SwitchOn(false);  
-   
-    //m_view->EnableBLItems(true);
-    //m_view->EnableBLStartedEmergency(true);
+    m_comm->m_pBootLoader->SwitchOn(false);     
   }
   //////////////////////////////////////////////////////////////////////
   if (opcode == CBootLoader::BL_OP_READ_SIGNATURE) 
@@ -289,7 +294,24 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     if (status==1)
     { 	
  	  m_sbar->SetInformationText("Прошивка успешно прочитана!");
-      SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
+	  if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
+	  {
+		SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
+	  }
+	  else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
+	  {
+	   PrepareOnLoadFLASH(m_bl_data,_T(""));
+	  }
+	  else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
+	  {
+	   m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
+	   m_fwdm->StoreBytes(m_bl_data);
+	   PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+	  }
+	  else
+	  {
+	    ASSERT(0); //what is it?
+	  }
     }
     else 
     {
@@ -399,6 +421,12 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
 
 void CFirmwareTabController::OnReadFlashToFile(void)
 {
+  m_bl_read_flash_mode = MODE_RD_FLASH_TO_FILE;
+  _OnReadFlashToFile();
+}
+
+void CFirmwareTabController::_OnReadFlashToFile(void)
+{
   //запускаем бутлоадер по команде из приложения 	
   StartBootLoader(); 
 
@@ -413,6 +441,7 @@ void CFirmwareTabController::OnReadFlashToFile(void)
   m_sbar->SetProgressPos(0);
 }
 
+
 void CFirmwareTabController::OnWriteFlashFromFile(void)
 {
   bool result = LoadFLASHFromFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
@@ -420,9 +449,16 @@ void CFirmwareTabController::OnWriteFlashFromFile(void)
   if (!result)
 	  return; //cancel
 
+  StartWritingOfFLASHFromBuff(m_bl_data);
+}
+
+
+
+void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
+{
   //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой. Это необходимо например когда
   //мы записываем свеже скомпилированную прошивку, которая может не содержать контрольной суммы
-  CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(m_bl_data);
+  CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(io_buff);
 
   ASSERT(m_comm);
 
@@ -434,13 +470,11 @@ void CFirmwareTabController::OnWriteFlashFromFile(void)
   m_comm->m_pBootLoader->SwitchOn(true);  
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_bl_data,CBootLoader::FLASH_APP_SECTION_SIZE);
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,CBootLoader::FLASH_APP_SECTION_SIZE);
 
   m_sbar->ShowProgressBar(true);
   m_sbar->SetProgressPos(0); 
 }
-
-
 
 void CFirmwareTabController::SaveEEPROMToFile(const BYTE* p_data, const int size)
 {
@@ -467,9 +501,11 @@ void CFirmwareTabController::SaveEEPROMToFile(const BYTE* p_data, const int size
 }
 
 
-void CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size)
+bool CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size, CString* o_file_name /* = NULL*/, bool calculate_and_place_crc16/* = false*/)
 {
-  HANDLE   hFile=0;    
+  HANDLE   hFile=0;
+  BYTE *save_buff = NULL;
+
   static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
   CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
   if (save.DoModal()==IDOK)
@@ -481,15 +517,26 @@ void CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size)
     {
       ex.GetErrorMessage(szError, 1024);
 	  AfxMessageBox(szError);
-      return;
+      return false; //ошибка - данные не сохранены
     }
+
+    save_buff = new BYTE[size];
+	memcpy(save_buff,p_data,size);
 	
-    f.Write(p_data,size);
-    f.Close();	     	  	  
-	return;
+	//вычисляем контрольную сумму и сохраняем ее в массив с прошивкой	
+	if (calculate_and_place_crc16)
+      CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(save_buff);	
+
+    f.Write(save_buff,size);
+    f.Close();	 
+	delete save_buff;
+
+	if (o_file_name!=NULL)
+	  *o_file_name = save.GetFileName();
+	return true; //подтверждение пользователя
   }
   else
-	return;
+	return false; //отказ пользователя
 }
 
 
@@ -525,7 +572,7 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
 
 
 //мы заранее знаем размер файла с FLASH
-bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size)
+bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CString* o_file_name /* = NULL*/)
 {
   HANDLE   hFile=0;    
   static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
@@ -547,7 +594,9 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size)
     //TODO: Добавть проверку на размер файла (его размер должен соответствовать переданному size!!!)
 
     f.Read(p_data,size);
-    f.Close();	   
+    f.Close();
+	if (o_file_name!=NULL)
+	  *o_file_name = open.GetFileName();
 
 	return true; //подтверждение пользователя
   }
@@ -615,30 +664,54 @@ bool CFirmwareTabController::ExitBootLoader(void)
 }
 
 
-//Эта функция вызывается при выходе из прложения. Эта функция может запретить выход, если вернет false 
-bool CFirmwareTabController::OnClose(void)
+bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 {
-  bool modified = m_fwdm->IsModified();
+ bool modified = m_fwdm->IsModified();
   if (modified)
   {
    int result = AfxMessageBox(_T("Прошивка была изменена. Хотите сохранить?"),MB_YESNOCANCEL);
    if (result==IDCANCEL)
    {
-     return false; //пользователь отменил выход из приложения
+     return false; //пользователь отменил действие
    }
    if (result==IDNO)
    {
-     return true; //пользователь решил выйти без сохраненя
+     return true; //пользователь решил продолжить без сохраненя
    }
    if (result==IDYES)
-   { //необходимо сохранить данные!
+   { //необходимо сохранить данные! (и продолжить)
      OnSaveFlashToFile();
      return true;
    }  
   }
-
-  //данные не были изменены - разрешаем выход из приложения
+  //данные не были изменены - продолжение без вопросов
   return true;
+}
+
+
+//Эта функция вызывается при выходе из прложения. Эта функция может запретить выход, если вернет false 
+bool CFirmwareTabController::OnClose(void)
+{  
+  return CheckChangesAskAndSaveFirmware();
+}
+
+
+void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name)
+{   
+   m_fwdm->LoadBytes(i_buff);
+   if (i_file_name!=_T(""))  
+     m_fwdm->SetFWFileName(_TSTRING(i_file_name));  
+   else
+   {
+     CString string;
+	 SYSTEMTIME time;
+     GetLocalTime(&time);
+	 string.Format(_T("FW%02u%02u%02u-%02u%02u%04u.bin"),
+		 time.wHour,time.wMinute,time.wSecond,time.wDay,time.wMonth,time.wYear);
+     m_fwdm->SetFWFileName(_TSTRING(string));     
+   }
+
+   SetViewFirmwareValues();    
 }
 
 
@@ -646,31 +719,50 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
 {
   bool result;
   BYTE buff[65536];
+  CString opened_file_name = _T("");
   
+  bool is_continue = CheckChangesAskAndSaveFirmware();
+ 
+  if (!is_continue)
+    return;  //пользователь передумал
+ 
   //!!! без вычисления и записи контрольной суммы в буфер
-  result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE);
+  result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name);
   if (result) //user OK?
   {
-   m_fwdm->LoadBytes(buff);
-  
-   SetViewFirmwareValues();
+   PrepareOnLoadFLASH(buff,_TSTRING(opened_file_name));
   }
-
 }
 
 void CFirmwareTabController::OnSaveFlashToFile(void)
 {
   BYTE buff[65536];
+  CString opened_file_name = _T("");
  
   m_fwdm->StoreBytes(buff);
 
-  //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой	
-  CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(buff);
+  //в случае подтверждения пользователя, также будует 
+  //вычислена контрольная сумма и сохранена в массив с прошивкой	
+  bool result = SaveFLASHToFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name,true);
+  if (result)
+  {
+    //контрольная сумма была сохранена только вмассив с прошивкий которая сохранялась,
+    //так как сохранение было подтверждено, то теперь можно обновить и массив с активной прошивкой
+    m_fwdm->CalculateAndPlaceFirmwareCRC();
 
-  SaveFLASHToFile(buff,CBootLoader::FLASH_TOTAL_SIZE);
+    //данные были успешно сохранены - можно сбрасывать признак модификации
+    m_fwdm->ResetModified();
 
-  //данные были успешно сохранены - можно сбрасывать признак модификации
-  m_fwdm->ResetModified();
+	//после сохранения "Save As" обновляем имя открытого файла
+	m_fwdm->SetFWFileName(_TSTRING(opened_file_name));
+	m_view->SetFirmwareName(m_fwdm->GetFWFileName());
+
+	//устанавливаем значения только в графики
+	SetViewChartsValues();
+    m_view->UpdateOpenedCharts(); 
+
+    m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+  }
 }
 
 void CFirmwareTabController::OnFWInformationTextChanged(void)
@@ -684,10 +776,136 @@ bool CFirmwareTabController::IsFirmwareOpened()
   return m_fwdm->IsLoaded();
 }
 
+
+//эта функция не обновляе графики, нужно еще вызывать UpdateOpenedCharts()!  
+void CFirmwareTabController::SetViewChartsValues(void)
+{
+  if (m_current_funset_index==-1)
+    return;
+  m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(false),false);
+  m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(true),true);
+
+  m_fwdm->GetIdleMap(m_current_funset_index,m_view->GetIdleMap(false),false);
+  m_fwdm->GetIdleMap(m_current_funset_index,m_view->GetIdleMap(true),true);
+
+  m_fwdm->GetWorkMap(m_current_funset_index,m_view->GetWorkMap(false),false);
+  m_fwdm->GetWorkMap(m_current_funset_index,m_view->GetWorkMap(true),true);
+
+  m_fwdm->GetTempMap(m_current_funset_index,m_view->GetTempMap(false),false);
+  m_fwdm->GetTempMap(m_current_funset_index,m_view->GetTempMap(true),true);
+}
+
+
 void CFirmwareTabController::SetViewFirmwareValues(void)
 {
   if (m_fwdm->IsLoaded()==false)
 	return;
+
   CString string = m_fwdm->GetSignatureInfo().c_str();
   m_view->SetFWInformationText(string);
+
+  SetViewChartsValues();  
+
+  std::vector<_TSTRING> funset_names = m_fwdm->GetFunctionsSetNames();  
+  m_view->SetFunSetListBox(funset_names);
+
+  m_view->UpdateOpenedCharts();
+
+  //если было выделение в списке, то восстанавлваем его
+  m_view->SetFunSetListBoxSelection(m_current_funset_index);
+
+  m_view->SetFirmwareName(m_fwdm->GetFWFileName());
+
+  m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+}
+
+
+//вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен. 
+//В этом случае данная функция может выхываться и при закрытой вкладке.
+void CFirmwareTabController::OnMapChanged(int i_type)
+{
+	switch(i_type)
+	{
+	case TYPE_MAP_DA_START:
+		ASSERT(m_current_funset_index!=-1);
+        m_fwdm->SetStartMap(m_current_funset_index,m_view->GetStartMap(false)); 
+		break;
+	case TYPE_MAP_DA_IDLE:
+		ASSERT(m_current_funset_index!=-1);
+        m_fwdm->SetIdleMap(m_current_funset_index,m_view->GetIdleMap(false)); 
+		break;
+    case TYPE_MAP_DA_WORK:
+		ASSERT(m_current_funset_index!=-1);
+        m_fwdm->SetWorkMap(m_current_funset_index,m_view->GetWorkMap(false)); 
+		break;
+    case TYPE_MAP_DA_TEMP_CORR:
+		ASSERT(m_current_funset_index!=-1);
+        m_fwdm->SetTempMap(m_current_funset_index,m_view->GetTempMap(false)); 
+		break;
+	}
+}
+
+//Состояние выделения в списке семейств характеристик изменилось.
+// i_selected_index = -1 if there are no selected item
+void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
+{
+  m_current_funset_index = i_selected_index;
+  
+  if (m_current_funset_index != -1)
+  { //только если в списке выбрано
+    SetViewChartsValues(); 
+	m_view->UpdateOpenedCharts();
+  }
+}
+
+void CFirmwareTabController::OnFunSetNamechanged(int i_index_of_item, CString i_new_name)
+{
+  m_fwdm->SetFunctionsSetName(i_index_of_item,_TSTRING(i_new_name));
+}
+
+void CFirmwareTabController::OnModificationCheckTimer(void)
+{
+  bool modified = m_fwdm->IsModified();
+  m_view->SetModified(modified);
+}
+
+
+void CFirmwareTabController::OnReadFlashFromSECU(void)
+{
+ //I don't like "copy/paste" paradigm of programming... 
+ m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_FOR_LOAD;
+ _OnReadFlashToFile();  
+}
+
+void CFirmwareTabController::OnWriteFlashToSECU(void)
+{ 
+  m_fwdm->StoreBytes(m_bl_data);  
+  StartWritingOfFLASHFromBuff(m_bl_data);  
+}
+
+void CFirmwareTabController::OnImportDataFromAnotherFW()
+{
+  bool result;
+  BYTE buff[65536];
+  CString opened_file_name = _T("");
+  
+  bool is_continue = CheckChangesAskAndSaveFirmware();
+ 
+  if (!is_continue)
+    return;  //пользователь передумал
+ 
+  //!!! без вычисления и записи контрольной суммы в буфер
+  result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name);
+  if (result) //user OK?
+  {
+    m_fwdm->LoadDataBytesFromAnotherFirmware(buff);
+	m_fwdm->StoreBytes(m_bl_data); 
+	PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+  }
+}
+
+void CFirmwareTabController::OnImportDataFromSECU3(void)
+{
+  m_bl_read_flash_mode = MODE_RD_FLASH_FOR_IMPORT_DATA;
+  _OnReadFlashToFile();
 }

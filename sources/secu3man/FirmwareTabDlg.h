@@ -6,6 +6,17 @@
 
 #pragma once
 
+enum EMapTypes
+{
+  TYPE_MAP_DA_START = 0,
+  TYPE_MAP_DA_IDLE,
+  TYPE_MAP_DA_WORK,
+  TYPE_MAP_DA_TEMP_CORR
+};
+
+
+
+
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 
@@ -14,7 +25,8 @@ class CFirmwareTabDlg : public CTabDialog
 public:
    typedef fastdelegate::FastDelegate0<> EventHandler;
    typedef fastdelegate::FastDelegate0<bool> EventResult;
-
+   typedef fastdelegate::FastDelegate1<int> EventWithCode;
+   typedef fastdelegate::FastDelegate2<int,CString> EventWithCodeAndString;
 
 // Construction
 public:
@@ -39,23 +51,60 @@ public:
 	void SetFWInformationText(CString i_text);
 	CString GetFWInformationText(void);
 
+	float* GetStartMap(bool i_original) 
+	{
+	  if (i_original)
+		return m_start_map_original;
+	  else
+        return m_start_map_active;
+	}
+
+	float* GetIdleMap(bool i_original) 
+	{
+	  if (i_original)
+		return m_idle_map_original;
+	  else
+        return m_idle_map_active;
+	}
+
+	float* GetWorkMap(bool i_original) 
+	{
+	  if (i_original)
+		return &m_work_map_original[0][0];
+	  else
+        return &m_work_map_active[0][0];
+	}
+
+	float* GetTempMap(bool i_original) 
+	{
+	  if (i_original)
+		return m_temp_map_original;
+	  else
+        return m_temp_map_active;
+	}
+
+	void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
+	void SetFunSetListBoxSelection(int i_selected_index);
+	void SetFirmwareName(_TSTRING i_name);
+	void SetModified(bool i_modified);
+	void SetFirmwareCRCs(unsigned int crc_stored_in_fw, unsigned int actual_crc_of_fw);
+
+	void UpdateOpenedCharts(void);
 
 // Dialog Data
 	//{{AFX_DATA(CFirmwareTabDlg)
 	enum { IDD = IDD_FIRMWARE_SUPPORT };
+	CListCtrl	m_funset_listbox;
 	CButton	m_bl_started_emergency;
 	CButton	m_view_work_map_btn;
 	CButton	m_view_temp_map_btn;
 	CButton	m_view_start_map_btn;
 	CButton	m_view_idle_map_btn;
 	CEdit   m_fw_information_edit;
+	CEdit m_fw_name;
+	CStatic m_fw_crc;
+	CStatic m_modification_flag;
 	//}}AFX_DATA
-
-
-    int m_work_map_chart_state;
-    int m_temp_map_chart_state;
-    int m_start_map_chart_state;
-    int m_idle_map_chart_state;
 
 	virtual LPCTSTR GetDialogID(void) const;
 
@@ -75,6 +124,7 @@ protected:
 	afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
 	afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePopupMenu_file(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePopupMenu_file1(CCmdUI* pCmdUI);
 	afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
 	afx_msg void OnFirmwareSupportViewStartMap();
 	afx_msg void OnFirmwareSupportViewIdleMap();
@@ -97,6 +147,12 @@ protected:
 	afx_msg void OnSaveFlashToFile();
 	afx_msg void OnChangeFirmwareSupportFwInformation();
     afx_msg void OnUpdateFirmwareControls(CCmdUI* pCmdUI);
+	afx_msg void OnChangeFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnEndLabelEditFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnImportDataFromAnotherFW();
+	afx_msg void OnReadFlashFromSECU();
+	afx_msg void OnWriteFlashToSECU();
+	afx_msg void OnImportDataFromSECU3();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -110,23 +166,58 @@ public: //события от меню
 	void setOnFWInformationTextChanged(EventHandler OnFunction) {m_OnFWInformationTextChanged = OnFunction;}
 	void setOnSaveFlashToFile(EventHandler OnFunction) {m_OnSaveFlashToFile = OnFunction;}
 	void setIsFirmwareOpened(EventResult IsFunction) {m_IsFirmwareOpened = IsFunction;}
+	void setOnMapChanged(EventWithCode OnFunction) {m_OnMapChanged = OnFunction;}
+	void setOnFunSetSelectionChanged(EventWithCode OnFunction) {m_OnFunSetSelectionChanged = OnFunction;}
+	void setOnFunSetNamechanged(EventWithCodeAndString OnFunction) {m_OnFunSetNamechanged = OnFunction;}
+	void setOnImportDataFromAnotherFW(EventHandler OnFunction) {m_OnImportDataFromAnotherFW = OnFunction;}	
+	void setOnReadFlashFromSECU(EventHandler OnFunction) {m_OnReadFlashFromSECU = OnFunction;}
+	void setOnWriteFlashToSECU(EventHandler OnFunction) {m_OnWriteFlashToSECU = OnFunction;}
+	void setOnImportDataFromSECU3(EventHandler OnFunction) {m_OnImportDataFromSECU3 = OnFunction;}
+
 
 public: //события от кнопок и чекбоксов
     void setOnBLStartedEmergency(EventHandler OnFunction) {m_OnBLStartedEmergency = OnFunction;}
 
-private:
-    EventHandler m_OnBootLoaderInfo;
-    EventHandler m_OnReadEepromToFile;
-    EventHandler m_OnWriteEepromFromFile;
-    EventHandler m_OnReadFlashToFile;
-    EventHandler m_OnWriteFlashFromFile;
-	EventHandler m_OnBLStartedEmergency;
-	EventHandler m_OnOpenFlashFromFile;
-	EventHandler m_OnSaveFlashToFile;
-	EventHandler m_OnFWInformationTextChanged;
-	EventResult  m_IsFirmwareOpened;
+public: //for C functions
+	EventWithCode m_OnMapChanged;
+	EventWithCode m_OnFunSetSelectionChanged;
+    int m_work_map_chart_state;
+    int m_temp_map_chart_state;
+    int m_start_map_chart_state;
+    int m_idle_map_chart_state;
 
 private:
+    HWND m_start_map_wnd_handle;
+    HWND m_idle_map_wnd_handle;
+    HWND m_work_map_wnd_handle;
+    HWND m_temp_map_wnd_handle;
+
+
+    EventHandler  m_OnBootLoaderInfo;
+    EventHandler  m_OnReadEepromToFile;
+    EventHandler  m_OnWriteEepromFromFile;
+    EventHandler  m_OnReadFlashToFile;
+    EventHandler  m_OnWriteFlashFromFile;
+	EventHandler  m_OnBLStartedEmergency;
+	EventHandler  m_OnOpenFlashFromFile;
+	EventHandler  m_OnSaveFlashToFile;
+	EventHandler  m_OnFWInformationTextChanged;
+	EventResult   m_IsFirmwareOpened;
+	EventWithCodeAndString m_OnFunSetNamechanged; 
+	EventHandler  m_OnImportDataFromAnotherFW;
+	EventHandler  m_OnReadFlashFromSECU;
+	EventHandler  m_OnWriteFlashToSECU;
+	EventHandler  m_OnImportDataFromSECU3;
+
+	static void __cdecl OnChangeStartMap(void* i_param);
+    static void __cdecl OnCloseStartMap(void* i_param);
+	static void __cdecl OnChangeIdleMap(void* i_param);
+    static void __cdecl OnCloseIdleMap(void* i_param);
+	static void __cdecl OnChangeWorkMap(void* i_param);
+    static void __cdecl OnCloseWorkMap(void* i_param);
+	static void __cdecl OnChangeTempMap(void* i_param);
+    static void __cdecl OnCloseTempMap(void* i_param);
+
     bool IsFirmwareOpened(void) 
 	{
 	  if (m_IsFirmwareOpened)
@@ -134,9 +225,22 @@ private:
 	  return false; 
 	};
 
-
 	bool m_is_bl_started_emergency_available;
 	bool m_is_bl_items_available;
 
+
+	///////////////////////////////////////////////////////
+    float m_start_map_active[16];
+    float m_start_map_original[16];
+
+    float m_idle_map_active[16];
+    float m_idle_map_original[16];
+
+    float m_work_map_active[16][16];
+    float m_work_map_original[16][16];
+	
+    float m_temp_map_active[16];
+    float m_temp_map_original[16];
+	///////////////////////////////////////////////////////
 };
 

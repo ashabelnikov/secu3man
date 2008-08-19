@@ -8,6 +8,7 @@
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/BootLoaderAdapter.h"
 #include "StatusBarManager.h"
+#include "common/ObjectTimer.h"
 
 class CFirmwareDataMediator;
 
@@ -46,11 +47,18 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 
     CString GenerateErrorStr(void);
 	void SaveEEPROMToFile(const BYTE* p_data, const int size);
-	void SaveFLASHToFile(const BYTE* p_data, const int size);
+	bool SaveFLASHToFile(const BYTE* p_data, const int size, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
     bool LoadEEPROMFromFile(BYTE* p_data, const int size);
-    bool LoadFLASHFromFile(BYTE* p_data, const int size);
+    bool LoadFLASHFromFile(BYTE* p_data, const int size, CString* o_file_name = NULL);
 
+	bool CheckChangesAskAndSaveFirmware(void);
     void SetViewFirmwareValues(void);
+	void SetViewChartsValues(void);
+
+	void PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name);
+	void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff);
+
+	void _OnReadFlashToFile(void);
 
 	///////////context menu event handlers/////////////////////
     void OnBootLoaderInfo(void);
@@ -60,10 +68,20 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     void OnWriteFlashFromFile(void);
 	void OnOpenFlashFromFile(void);
 	void OnSaveFlashToFile(void);
+	void OnImportDataFromAnotherFW(void);
+	void OnReadFlashFromSECU(void);
+	void OnWriteFlashToSECU(void);
+	void OnImportDataFromSECU3(void);
+
 	void OnFWInformationTextChanged(void);
+	void OnMapChanged(int i_type);
+	void OnFunSetSelectionChanged(int i_selected_index);
+	void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
 	///////////////////////////////////////////////////////////
 	bool IsFirmwareOpened(void);
     void OnBLStartedEmergency(void);
+
+	void OnModificationCheckTimer(void);
 
   private: //функции - обертки
 	bool IsBLStartedEmergency(void);
@@ -73,5 +91,17 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   private:
 	BYTE m_bl_data[65536];	 
 	bool m_bl_started_emergency;
+	int  m_current_funset_index;
+	CObjectTimer<CFirmwareTabController> m_modification_check_timer;
+
+
+    enum EReadFlashMode
+	{
+	 MODE_RD_FLASH_TO_FILE,
+     MODE_RD_FLASH_TO_BUFF_FOR_LOAD,
+     MODE_RD_FLASH_FOR_IMPORT_DATA
+	};
+
+	int  m_bl_read_flash_mode;
 };
 

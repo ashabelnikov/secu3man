@@ -1,4 +1,8 @@
 EXPORTS
     ; VC funcname           = BCB funcname
-    DisplayChart_AAoI_3D    = _DisplayChart_AAoI_3D
+    Chart3DCreate           = _Chart3DCreate
+    Chart3DUpdate           = _Chart3DUpdate
+    Chart3DSetOnChange      = _Chart3DSetOnChange
+    Chart3DSetOnClose       = _Chart3DSetOnClose
+
 

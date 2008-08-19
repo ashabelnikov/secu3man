@@ -14,8 +14,16 @@
 namespace DLL
 {
   //глобальная таблица функций из DLL
-  DisplayChart_UOZ1_Addr  DisplayChart_UOZ1 = NULL;
-  DisplayChart_UOZ2_Addr  DisplayChart_UOZ2 = NULL;
+  UOZ1_Chart2DCreate_Addr        UOZ1_Chart2DCreate = NULL;
+  UOZ1_Chart2DUpdate_Addr        UOZ1_Chart2DUpdate = NULL;
+  UOZ1_Chart2DSetOnChange_Addr   UOZ1_Chart2DSetOnChange = NULL;
+  UOZ1_Chart2DSetOnClose_Addr    UOZ1_Chart2DSetOnClose = NULL;
+
+  UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate = NULL;
+  UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate = NULL;
+  UOZ2_Chart3DSetOnChange_Addr   UOZ2_Chart3DSetOnChange = NULL;
+  UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose = NULL;
+	
   //---------------------------------------------------------
 
   //Заполняет таблицу функций (загружает необходимые библиотеки и получает адреса функций, сохраняя их в таблицу)
@@ -29,20 +37,56 @@ namespace DLL
     if (hModule==NULL)
 	{
 	  AfxMessageBox(_T("Can't load library UOZ1.dll"),MB_OK|MB_ICONSTOP);
-	  DisplayChart_UOZ1 = NULL; 
+	  UOZ1_Chart2DCreate = NULL; 
+	  UOZ1_Chart2DUpdate = NULL;
+	  UOZ1_Chart2DSetOnChange = NULL;
+	  UOZ1_Chart2DSetOnClose = NULL;
 	  status = false;
 	}
     else
 	{
-      addr = GetProcAddress(hModule,"DisplayChart_AAoI_2D");
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart2DCreate");
       if (addr==NULL)
 	  {
 	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
-	    DisplayChart_UOZ1 = NULL;
+	    UOZ1_Chart2DCreate = NULL;
 	    status = false;
 	  }
       else
-        DisplayChart_UOZ1 = (DisplayChart_UOZ1_Addr)addr;
+        UOZ1_Chart2DCreate = (UOZ1_Chart2DCreate_Addr)addr;
+
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart2DUpdate");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ1_Chart2DUpdate = NULL;
+	    status = false;
+	  }
+      else
+        UOZ1_Chart2DUpdate = (UOZ1_Chart2DUpdate_Addr)addr;	
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart2DSetOnChange");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ1_Chart2DSetOnChange = NULL;
+	    status = false;
+	  }
+      else
+        UOZ1_Chart2DSetOnChange = (UOZ1_Chart2DSetOnChange_Addr)addr;	
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart2DSetOnClose");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ1_Chart2DSetOnClose = NULL;
+	    status = false;
+	  }
+      else
+        UOZ1_Chart2DSetOnClose = (UOZ1_Chart2DSetOnClose_Addr)addr;	
+      //-------------------------------------------------------------------------- 
 	}
 
 
@@ -51,20 +95,56 @@ namespace DLL
     if (hModule==NULL)
 	{
   	  AfxMessageBox(_T("Can't load library UOZ2.dll"),MB_OK|MB_ICONSTOP);
-	  DisplayChart_UOZ2 = NULL;
+	  UOZ2_Chart3DCreate = NULL; 
+	  UOZ2_Chart3DUpdate = NULL;
+	  UOZ2_Chart3DSetOnChange = NULL;
+	  UOZ2_Chart3DSetOnClose = NULL;
 	  status = false;
 	}
     else
 	{
-      addr = GetProcAddress(hModule,"DisplayChart_AAoI_3D");
-	  if (addr==NULL)
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart3DCreate");
+      if (addr==NULL)
 	  {
 	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
-	    DisplayChart_UOZ2 = NULL;
+	    UOZ2_Chart3DCreate = NULL;
 	    status = false;
 	  }
       else
-	    DisplayChart_UOZ2 = (DisplayChart_UOZ2_Addr)addr;
+        UOZ2_Chart3DCreate = (UOZ2_Chart3DCreate_Addr)addr;
+
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart3DUpdate");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ2_Chart3DUpdate = NULL;
+	    status = false;
+	  }
+      else
+        UOZ2_Chart3DUpdate = (UOZ2_Chart3DUpdate_Addr)addr;	
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart3DSetOnChange");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ2_Chart3DSetOnChange = NULL;
+	    status = false;
+	  }
+      else
+        UOZ2_Chart3DSetOnChange = (UOZ2_Chart3DSetOnChange_Addr)addr;	
+      //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart3DSetOnClose");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ2_Chart3DSetOnClose = NULL;
+	    status = false;
+	  }
+      else
+        UOZ2_Chart3DSetOnClose = (UOZ2_Chart3DSetOnClose_Addr)addr;	
+      //--------------------------------------------------------------------------       
 	}
 
   return status;

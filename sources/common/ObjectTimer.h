@@ -50,7 +50,9 @@ template<class T> class CObjectTimer
     void KillTimer(void)
 	{
 	  ::KillTimer(NULL,m_timer_id);
-      g_object_timer_instance_map.erase(m_timer_id);  
+	  if (!g_object_timer_instance_map.empty())
+	    if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())	  
+          g_object_timer_instance_map.erase(m_timer_id);  	 
 	}
 
 	//эта функция принимает на входе адрес функции-члена: void T::Function(void)

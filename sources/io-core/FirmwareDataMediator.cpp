@@ -33,7 +33,6 @@ typedef struct
 }F_data;
 
 
-#pragma pack(1)
 //описывает параметры системы
 typedef struct
 {
@@ -71,7 +70,6 @@ typedef struct
 
 #define FW_SIGNATURE_INFO_SIZE 48
 
-#pragma pack(1)
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
@@ -94,6 +92,13 @@ typedef struct
 
 //адрес дополнительных параметров
 #define FIRMWARE_DATA_START (DEFPARAM_START-sizeof(FirmwareData))
+
+//---два нижних определения необходимы для экспорта/импорта данных между прошивками--
+//стартовый адрес всех данных прошивки в байтах
+#define FIRMWARE_ALL_DATA_START (FIRMWARE_DATA_START)
+//размер всех данных прошивки без учета байтов контрольной суммы прошивки
+#define FIRMWARE_ALL_DATA_SIZE  ( (sizeof(F_data)*TABLES_NUMBER) + sizeof(params) + sizeof(FirmwareData))  
+
 
 
 CFirmwareDataMediator::CFirmwareDataMediator()
@@ -118,7 +123,7 @@ void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* io_data)
 }
 
 
-void CFirmwareDataMediator::LoadBytes(BYTE* i_bytes)
+void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
 {
   ASSERT(i_bytes);
   memset(m_bytes_active,0x00,m_firmware_size);
@@ -153,7 +158,8 @@ _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
   BYTE* addr = &m_bytes_active[FIRMWARE_DATA_START];
   memcpy(raw_string,addr,FW_SIGNATURE_INFO_SIZE);  
   TCHAR string[256];
-  CharToOem(raw_string,string);
+  /*CharToOem(raw_string,string);*/
+  OemToChar(raw_string,string);
   return _TSTRING(string);
 }
 
@@ -162,6 +168,239 @@ void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
   char raw_string[256];
   memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
   BYTE* addr = &m_bytes_active[FIRMWARE_DATA_START];
-  OemToChar(i_string.c_str(),raw_string);
+  /*OemToChar(i_string.c_str(),raw_string);*/
+  CharToOem(i_string.c_str(),raw_string);
   memcpy(addr,raw_string,FW_SIGNATURE_INFO_SIZE);    
+}
+
+
+void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(o_values);
+
+  if (i_original)	  
+	p_bytes = m_bytes_original;
+  else
+    p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < F_STR_POINTS; i++ )
+    o_values[i] = ((float)p_maps[i_index].f_str[i]) / 2.0f;
+
+}
+
+void CFirmwareDataMediator::SetStartMap(int i_index,float* i_values)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(i_values);
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < F_STR_POINTS; i++ )
+	p_maps[i_index].f_str[i] = CNumericConv::Round((i_values[i]*2.0f));
+}
+
+void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_original /* = false */)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(o_values);
+
+  if (i_original)	  
+	p_bytes = m_bytes_original;
+  else
+    p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < F_IDL_POINTS; i++ )
+    o_values[i] = ((float)p_maps[i_index].f_idl[i]) / 2.0f;
+
+}
+
+void CFirmwareDataMediator::SetIdleMap(int i_index,float* i_values)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(i_values);
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < F_IDL_POINTS; i++ )
+	p_maps[i_index].f_idl[i] = CNumericConv::Round((i_values[i]*2.0f));
+}
+
+std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
+{
+  std::vector<_TSTRING> names(TABLES_NUMBER);
+
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;  
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+
+  for (int i = 0; i < TABLES_NUMBER; i++)
+  {         
+    char raw_string[256];
+    memset(raw_string,0,F_NAME_SIZE+1);
+    BYTE* addr = p_maps[i].name; 
+    memcpy(raw_string,addr,F_NAME_SIZE);  
+    TCHAR string[256];
+    OemToChar(raw_string,string);
+	names[i] = string;
+  }
+
+return names;
+}
+
+
+void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name)
+{
+  if (i_index >= TABLES_NUMBER)       
+    return;
+
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL; 
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+ 
+
+  char raw_string[256];
+  memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);  
+  CharToOem(i_new_name.c_str(),raw_string);
+  memcpy(p_maps[i_index].name,raw_string,F_NAME_SIZE);     
+}
+
+void CFirmwareDataMediator::SetFWFileName(const _TSTRING i_fw_file_name)
+{
+  m_fw_file_name = i_fw_file_name;
+}
+
+_TSTRING CFirmwareDataMediator::GetFWFileName(void)
+{
+  return m_fw_file_name;
+}
+
+
+unsigned int CFirmwareDataMediator::CalculateCRC16OfActiveFirmware(void)
+{
+  unsigned short crc_16 = crc16(m_bytes_active,CODE_SIZE);
+  return crc_16;
+}
+
+unsigned int CFirmwareDataMediator::GetCRC16StoredInActiveFirmware(void)
+{
+ unsigned short* crc_16_addr = (unsigned short*)(&m_bytes_active[CODE_CRC_ADDR]);
+ return *crc_16_addr;
+}
+
+void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(void)
+{
+  CalculateAndPlaceFirmwareCRC(m_bytes_active);  
+}
+
+void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes)
+{
+ if (false==IsLoaded())
+   return; //некуда загружать...
+ memcpy(m_bytes_active + FIRMWARE_ALL_DATA_START,i_source_bytes + FIRMWARE_ALL_DATA_START,FIRMWARE_ALL_DATA_SIZE);
+ /*???memcpy(m_bytes_original + FIRMWARE_ALL_DATA_START,i_source_bytes + FIRMWARE_ALL_DATA_START,FIRMWARE_ALL_DATA_SIZE);*/
+}
+
+void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original /* = false*/)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(o_values);
+
+  if (i_original)	  
+	p_bytes = m_bytes_original;
+  else
+    p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+  {
+	_char *p = &(p_maps[i_index].f_wrk[0][0]);
+	o_values[i] = ((float) *(p + i)) / 2.0f;
+  }
+}
+
+void CFirmwareDataMediator::SetWorkMap(int i_index, float* i_values)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(i_values);
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
+  {
+    _char *p = &(p_maps[i_index].f_wrk[0][0]);
+	*(p + i) = CNumericConv::Round((i_values[i]*2.0f));
+  }	
+}
+
+void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_original /* = false */)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(o_values);
+
+  if (i_original)	  
+	p_bytes = m_bytes_original;
+  else
+    p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  
+  for (int i = 0; i < F_TMP_POINTS; i++ )
+    o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / 4.0f;
+
+}
+
+void CFirmwareDataMediator::SetTempMap(int i_index,float* i_values)
+{
+  BYTE* p_bytes = NULL;
+  F_data* p_maps = NULL;
+  ASSERT(i_values);
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес начала таблиц семейств характеристик
+  p_maps = (F_data*)(p_bytes + TABLES_START); 
+   
+  for (int i = 0; i < F_TMP_POINTS; i++ )
+	p_maps[i_index].f_tmp[i] = CNumericConv::Round((i_values[i]*4.0f));
 }

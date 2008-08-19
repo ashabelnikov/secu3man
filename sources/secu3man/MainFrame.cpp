@@ -27,8 +27,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
   //{{AFX_MSG_MAP(CMainFrame)
   ON_WM_CREATE()
   ON_WM_SETFOCUS()
-	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
+  ON_WM_CLOSE()
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 

@@ -13,6 +13,9 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
+
+typedef void (__cdecl *EventHandler)(void* i_param);
+
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
@@ -63,17 +66,25 @@ __published:	// IDE-managed Components
           TShiftState Shift, int X, int Y);
         void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift,
           int X, int Y);
-        void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
         void __fastcall CheckBox1Click(TObject *Sender);
         void __fastcall CheckBox2Click(TObject *Sender);
+        void __fastcall OnCloseForm(TObject *Sender, TCloseAction &Action);
+public:
+        void SetOnChange(EventHandler i_pOnChange,void* i_param);
+        void SetOnClose(EventHandler i_pOnClose,void* i_param);
 private:	// User declarations
+        //адрес функции которая будет вызываться после изменения данных
+        EventHandler m_pOnChange;
+        void* m_param_on_change;
+
+        EventHandler m_pOnClose;
+        void* m_param_on_close;
 public:		// User declarations
         int         count_x;
         int         count_z;
         int         u_slots[1024];
         AnsiString  u_title;
         AnsiString  x_title;
-        int         *close_flag;
         float       *modified_function;
         float       *original_function;
         int         airflow;
@@ -95,7 +106,5 @@ public:		// User declarations
         void FillChart(bool dir,int cm);
         void HideAllSeries(void);
 };
-//---------------------------------------------------------------------------
-extern PACKAGE TForm1 *Form1;
 //---------------------------------------------------------------------------
 #endif

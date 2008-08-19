@@ -14,10 +14,16 @@
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
-TForm1 *Form1;
+
+bool RemoveInstanceByHWND(HWND hWnd);
+
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
         : TForm(Owner)
+        , m_pOnChange(NULL)
+        , m_pOnClose(NULL)
+        , m_param_on_change(NULL)
+        , m_param_on_close(NULL)
 {
 }
 //---------------------------------------------------------------------------
@@ -44,14 +50,16 @@ void TForm1::DataPrepare()
 
   Chart1->Chart3DPercent = 29;
   FillChart(0,0);
+
+  CheckBox1Click(NULL);
 }
 //---------------------------------------------------------------------------
 
 //get item from oroginal function
 float TForm1::GetItem_o(int z, int x)
 {
-  if (x >= count_z) return 0.0f;
-  if (z >= count_x) return 0.0f;
+  if (z >= count_z) return 0.0f;
+  if (x >= count_x) return 0.0f;
   int i  = (count_z - 1) - z;
   return *(original_function + ((i * count_x) + x));
 }
@@ -63,7 +71,7 @@ float TForm1::GetItem_m(int z, int x)
   if (z >= count_z) return 0.0f;
   if (x >= count_x) return 0.0f;
   int i  = (count_z - 1) - z;
-  return *(modified_function + ((i * count_z) + x));
+  return *(modified_function + ((i * count_x) + x));
 }
 //---------------------------------------------------------------------------
 
@@ -145,6 +153,8 @@ void __fastcall TForm1::Chart1ClickSeries(TCustomChart *Sender,
 void __fastcall TForm1::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
+  if ((m_pOnChange) && (setval))
+    m_pOnChange(m_param_on_change);
   setval = 0;
 }
 //---------------------------------------------------------------------------
@@ -164,11 +174,6 @@ void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift,
 }
 //---------------------------------------------------------------------------
 
-void __fastcall TForm1::FormClose(TObject *Sender, TCloseAction &Action)
-{
-  *close_flag = 0;
-}
-//---------------------------------------------------------------------------
 
 void __fastcall TForm1::CheckBox1Click(TObject *Sender)
 {
@@ -249,8 +254,7 @@ void TForm1::FillChart(bool dir,int cm)
       as.sprintf("%d",u_slots[i]);
       if (cm)
       {
-//      Chart1->Series[k]->Add(GetItem(j,i),as,clBlue);
-        Chart1->Series[k + count_z]->Add(GetItem_m(j,i),as,col[j]);
+        Chart1->Series[k + count_z]->Add(GetItem_m(j,i),as,TColor(col[j]));
       }
       else
       {
@@ -284,5 +288,27 @@ void TForm1::HideAllSeries(void)
     Chart1->Series[i]->Active = false;
 }
 
+//---------------------------------------------------------------------------
+void TForm1::SetOnChange(EventHandler i_pOnChange,void* i_param)
+{
+  m_pOnChange = i_pOnChange;
+  m_param_on_change = i_param;
+}
+
+//---------------------------------------------------------------------------
+void TForm1::SetOnClose(EventHandler i_pOnClose,void* i_param)
+{
+  m_pOnClose = i_pOnClose;
+  m_param_on_close = i_param;
+}
+
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::OnCloseForm(TObject *Sender, TCloseAction &Action)
+{
+   if (m_pOnClose)
+     m_pOnClose(m_param_on_close);
+   RemoveInstanceByHWND(Handle);
+}
 //---------------------------------------------------------------------------
 
