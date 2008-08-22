@@ -102,10 +102,10 @@ BEGIN
                     UDS_ARROWKEYS | UDS_HOTTRACK,67,22,14,17
     CONTROL         "Spin1",IDC_PD_FUNSET_PRESS_SWING_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,68,64,13,17
-    LTEXT           "Наклон шкалы расхода воздуха",
+    LTEXT           "Нижнее значение давления",
                     IDC_PD_FUNSET_MAP_GRAD_CAPTION,18,11,110,9
-    LTEXT           "Перепад давления при максимуме открытия  дросселя",
-                    IDC_PD_FUNSET_PRESS_SWING_CAPTION,17,46,122,16
+    LTEXT           "Верхнее значение давления",
+                    IDC_PD_FUNSET_PRESS_SWING_CAPTION,18,52,122,8
     LTEXT           "кПа",IDC_PD_FUNSET_MAP_GRAD_UNIT,88,25,21,13
     LTEXT           "кПа",IDC_PD_FUNSET_PRESS_SWING_UNIT,87,68,21,13
     LTEXT           "Набор таблиц для бензина",

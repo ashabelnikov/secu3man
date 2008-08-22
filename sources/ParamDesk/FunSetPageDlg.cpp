@@ -99,13 +99,13 @@ BOOL CFunSetPageDlg::OnInitDialog()
   m_map_grad_edit.SetLimitText(4);
   m_map_grad_edit.SetDecimalPlaces(2);
   m_map_grad_edit.SetMode(CEditEx::MODE_FLOAT);
-  m_map_grad_spin.SetRangeAndDelta(0.25f,13.0f,0.25f);
+  m_map_grad_spin.SetRangeAndDelta(0.25f,105.0f,0.25f);
 	
   m_press_swing_spin.SetBuddy(&m_press_swing_edit);
   m_press_swing_edit.SetLimitText(4);
   m_press_swing_edit.SetDecimalPlaces(2);
   m_press_swing_edit.SetMode(CEditEx::MODE_FLOAT);
-  m_press_swing_spin.SetRangeAndDelta(0.25,50.0f,0.25f);
+  m_press_swing_spin.SetRangeAndDelta(0.25,105.0f,0.25f);
 
   FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
   UpdateData(FALSE);  //инициализируем контроллы диалога данными    

@@ -88,7 +88,8 @@ void TForm1::DataPrepare()
 
   Chart1->Title->Text->Clear();
   Chart1->Title->Text->Add(chart_title_text);
-  Chart1->LeftAxis->Title->Caption = x_axis_title;
+  //Chart1->LeftA ->Title->Caption = y_axis_title;
+  Chart1->BottomAxis->Title->Caption = x_axis_title;
 
   for(int i = 0; i < count_of_function_points; i++)
   {

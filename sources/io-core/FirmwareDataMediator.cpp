@@ -386,7 +386,7 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
    
   
   for (int i = 0; i < F_TMP_POINTS; i++ )
-    o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / 4.0f;
+    o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / 2.0f;
 
 }
 
@@ -402,5 +402,5 @@ void CFirmwareDataMediator::SetTempMap(int i_index,float* i_values)
   p_maps = (F_data*)(p_bytes + TABLES_START); 
    
   for (int i = 0; i < F_TMP_POINTS; i++ )
-	p_maps[i_index].f_tmp[i] = CNumericConv::Round((i_values[i]*4.0f));
+	p_maps[i_index].f_tmp[i] = CNumericConv::Round((i_values[i]*2.0f));
 }
