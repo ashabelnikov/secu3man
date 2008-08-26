@@ -58,7 +58,7 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
@@ -111,18 +111,6 @@ BEGIN
                     17
     LTEXT           "Скорость COM-порта (Boot loader):",IDC_STATIC,131,50,86,
                     17
-    EDITTEXT        IDC_APP_SETTINGS_MAP_SLOPPING_EDIT,26,101,42,17,
-                    ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MAP_SLOPPING_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,70,100,12,17
-    EDITTEXT        IDC_APP_SETTINGS_MAP_OFFSET_EDIT,25,132,42,16,
-                    ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MAP_OFFSET_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS,69,132,12,16
-    LTEXT           "Наклон кривой используемого ДАД (кПа/В)",IDC_STATIC,87,
-                    99,74,26
-    LTEXT           "Смещение кривой используемого ДАД (В)",IDC_STATIC,87,
-                    131,94,21
 END
 
 
@@ -245,8 +233,14 @@ BEGIN
     IDS_CONN_CONNECTED      "connected"
     IDS_CONN_DISCONNECTED   "disconnected"
     IDS_CONN_BOOTLOADER     "boot loader"
-    IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW "Импортровать даннае из другой прошивки..."
-    IDS_IMPORT_FW_DATA_FROM_SECU3 "Импортировать данные непосредственно из SECU-3"
+    IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW 
+                            "Импортровать даннае из другой прошивки..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_IMPORT_FW_DATA_FROM_SECU3 
+                            "Импортировать данные непосредственно из SECU-3"
 END
 
 #endif    // Russian resources
@@ -307,8 +301,8 @@ END
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_CONN_CONNECTED      ICON    DISCARDABLE     "res\\connected.ico"
 IDR_MAINFRAME           ICON    DISCARDABLE     "res\\secu3man.ico"
+IDI_CONN_CONNECTED      ICON    DISCARDABLE     "res\\connected.ico"
 IDI_CONN_DISCONNECTED   ICON    DISCARDABLE     "res\\disconnected.ico"
 IDI_CONN_BOOTLOADER     ICON    DISCARDABLE     "res\\bootload.ico"
 

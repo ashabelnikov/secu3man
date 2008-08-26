@@ -23,15 +23,11 @@ public:
 	const CString m_Name_PortName;
 	const CString m_Name_BaudRateApplication;
 	const CString m_Name_BaudRateBootloader;
-	const CString m_Name_MAPCurveSlope;
-	const CString m_Name_MAPCurveOffset;
 
     //данные которые хранятся в INI-файле
 	_TSTRING m_optPortName;      
 	DWORD m_optBaudRateApplication;
 	DWORD m_optBaudRateBootloader;
-	float m_optMAPCurveSlope;  //kPa/V
-	float m_optMAPCurveOffset; //Volts
     ////////////////////////////////////////////////////
 
 	CAppSettingsModel();

@@ -189,6 +189,14 @@ SOURCE=.\CarburPageDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\CKPSPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CKPSPageDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\FunSetPageDlg.cpp
 # End Source File
 # Begin Source File

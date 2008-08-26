@@ -70,7 +70,6 @@ protected:
 
 // Implementation
 protected:
-//	int m_lastSel;
 	BOOL m_enabled;
 
     class CStarterPageDlg*   m_pStarterPageDlg;		 
@@ -80,6 +79,7 @@ protected:
     class CTemperPageDlg*    m_pTemperPageDlg;		  
     class CCarburPageDlg*    m_pCarburPageDlg;
 	class CADCCompenPageDlg* m_pADCCompenPageDlg;
+	class CCKPSPageDlg*      m_pCKPSPageDlg;
 
 	// Generated message map functions
 	//{{AFX_MSG(CParamDeskDlg)

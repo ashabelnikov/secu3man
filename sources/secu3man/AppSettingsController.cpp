@@ -46,8 +46,6 @@ void CAppSettingsController::OnOk(void)
   m_pModel->m_optPortName = m_pView->GetPortName();
   m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
   m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
-  m_pModel->m_optMAPCurveSlope = m_pView->GetMAPCurveSlope();
-  m_pModel->m_optMAPCurveOffset = m_pView->GetMAPCurveOffset();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -64,6 +62,4 @@ void CAppSettingsController::OnActivate(void)
   m_pView->SetPortName(m_pModel->m_optPortName);
   m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
   m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
-  m_pView->SetMAPCurveSlope(m_pModel->m_optMAPCurveSlope);
-  m_pView->SetMAPCurveOffset(m_pModel->m_optMAPCurveOffset);
 }

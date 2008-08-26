@@ -58,16 +58,6 @@ public:
 	   //m_bl_baudrate_selection_combo.SetCurSel(result); 
 	   m_bl_baudrate = result;
    }
-
-   virtual void SetMAPCurveSlope(float i_slope) 
-   {
-     m_map_slopping = i_slope;
-   }
-
-   virtual void SetMAPCurveOffset(float i_offset) 
-   {
-     m_map_offset = i_offset;
-   }
    
    //"Get" methods (view => model data transfer)
    virtual _TSTRING GetPortName(void) 
@@ -90,17 +80,7 @@ public:
 	 m_bl_baudrate_selection_combo.GetLBText(m_bl_baudrate,str);
      return _ttoi(str);  
    }
-
-   virtual float GetMAPCurveSlope(void) 
-   {
-     return m_map_slopping;
-   }
-
-   virtual float GetMAPCurveOffset(void) 
-   {
-     return m_map_offset;
-   } 
-
+   
    virtual void setFunctionOnOk(EventHandler OnOk)
    {
      m_OnOk = OnOk;
@@ -135,14 +115,8 @@ public:
 	//{{AFX_DATA(CAppSettingsDlg)
 	enum { IDD = IDD_APP_SETTINGS };
 	CComboBox	m_port_selection_combo;
-	CSpinButtonCtrlEx	m_map_slopping_spin;
-	CEditEx	m_map_slopping_edit;
-	CSpinButtonCtrlEx	m_map_offset_spin;
-	CEditEx	m_map_offset_edit;
 	CComboBox	m_bl_baudrate_selection_combo;
 	CComboBox	m_app_baudrate_selection_combo;
-	float	m_map_offset;
-	float	m_map_slopping;
 	int		m_app_baudrate;
 	int		m_bl_baudrate;
 	int		m_port_number;

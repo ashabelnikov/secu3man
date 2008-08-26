@@ -22,8 +22,8 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CFunSetPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 {
-  m_params.map_grad = 4.5f;
-  m_params.press_swing = 10.0f;
+  m_params.map_lower_pressure = 4.5f;
+  m_params.map_upper_pressure = 10.0f;
   m_params.fn_benzin = 0;
   m_params.fn_gas = 1;
   //{{AFX_DATA_INIT(CFunSetPageDlg)
@@ -48,8 +48,8 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_map_grad_edit);
   //}}AFX_DATA_MAP
 
-  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_grad);
-  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.press_swing);
+  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
+  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
   DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
   DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_params.fn_gas);
 }

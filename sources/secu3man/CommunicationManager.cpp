@@ -109,8 +109,6 @@ bool CCommunicationManager::Init(void)
 	status = false;
   }
 
-  m_pControlApp->SetSettings(m_pSettings->m_pModel->m_optMAPCurveOffset,m_pSettings->m_pModel->m_optMAPCurveSlope);
-
   //оповещаем объекта слушателя об изменении настроек
   if (m_OnSettingsChanged) 
 	m_OnSettingsChanged();

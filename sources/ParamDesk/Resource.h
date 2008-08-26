@@ -2,7 +2,6 @@
 // Microsoft Developer Studio generated include file.
 // Used by ParamDesk.rc
 //
-
 #define IDD_PARAMETERS_DESK             3000
 #define IDC_PD_TAB_CTRL                 3001
 #define IDD_PD_STARTER_PAGE             3002
@@ -102,14 +101,24 @@
 #define IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN 3096
 #define IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN 3097
 #define IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN 3098
+#define IDD_PD_CKPS_PAGE                3099
+#define IDC_PD_CKPS_NEGFRONT_RADIOBOX   3100
+#define IDC_PD_CKPS_POSFRONT_RADIOBOX   3101
+#define IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX 3102
+#define IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL 3103
+#define IDC_PD_CKPS_FRONT_GROUPBOX      3104
+#define IDC_PD_CKPS_IGNITION_COGS_EDIT  3105
+#define IDC_PD_CKPS_IGNITION_COGS_SPIN  3106
+#define IDC_PD_CKPS_IGNITION_COGS_UNIT  3107
+#define IDC_PD_SAVE_BUTTON              3108
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        102
+#define _APS_NEXT_RESOURCE_VALUE        103
 #define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1017
+#define _APS_NEXT_CONTROL_VALUE         3109
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

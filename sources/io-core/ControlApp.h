@@ -48,6 +48,7 @@ private:
    SECU3IO::TemperPar m_TemperPar;
    SECU3IO::ADCCompenPar m_ADCCompenPar;
    SECU3IO::RawSensDat m_RawSensDat;
+   SECU3IO::CKPSPar m_CKPSPar;
 
    CComPort*    m_p_port;
    HANDLE       m_hThread;
@@ -69,9 +70,6 @@ private:
    std::string  m_outgoing_packet;     //используется для формирования пакетов
    int          m_packets_parse_state; //хранит состояние конечного автомата используемого для отделения пакетов
 
-
-   float        m_map_sensor_offset;
-   float        m_map_sensor_gradient;
    float        m_adc_discrete;
    float        m_angle_multiplier;
 
@@ -80,9 +78,7 @@ private:
    int  SplitPackets(BYTE*);
    bool ParsePackets();
    BOOL SetPacketsTimer(int timeout);
-   bool IsValidDescriptor(const BYTE descriptor);
-   float FromTemperatureSensor(int temperature_adc);
-   int ToTemperatureSensor(float celsius_temperature);
+   bool IsValidDescriptor(const BYTE descriptor);   
 
 
    //парсеры отдельных пакетов (тех пакетов которые принимаются от SECU-3)
@@ -96,6 +92,7 @@ private:
    bool Parse_TEMPER_PAR(BYTE* raw_packet);
    bool Parse_ADCRAW_DAT(BYTE* raw_packet);
    bool Parse_ADCCOR_PAR(BYTE* raw_packet);
+   bool Parse_CKPS_PAR(BYTE* raw_packet);
 
 
    //сборщики пакетов
@@ -106,6 +103,7 @@ private:
    void Build_ANGLES_PAR(SECU3IO::AnglesPar* packet_data);
    void Build_FUNSET_PAR(SECU3IO::FunSetPar* packet_data);
    void Build_ADCCOR_PAR(SECU3IO::ADCCompenPar* packet_data);
+   void Build_CKPS_PAR(SECU3IO::CKPSPar* packet_data);
   
 public:
    bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
@@ -114,16 +112,12 @@ public:
    bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
    bool ChangeContext(const BYTE i_new_descriptor);
    bool StartBootLoader();
-   void SetEventHandler(IAPPEventHandler* i_pEventHandler); 
-    
-   void SetSettings(float i_map_sensor_offset, float i_map_sensor_gradient);
+   void SetEventHandler(IAPPEventHandler* i_pEventHandler);        
 
    bool GetOnlineStatus(void) 
    {
      return m_online_state;
    }
-
-
 
    static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 

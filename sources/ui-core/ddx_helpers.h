@@ -7,3 +7,4 @@
 
 void  DDX_HELPERS_API DDX_Check_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value );
 void DDX_HELPERS_API  DDX_CBIndex_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& index);
+void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value);

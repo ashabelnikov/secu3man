@@ -29,8 +29,6 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_BaudRateApplication(_T("Application_baud_rate"))
 , m_Name_BaudRateBootloader(_T("Boot_loader_baud_rate")) 
 , m_Name_PortName(_T("COM_port"))
-, m_Name_MAPCurveSlope(_T("MAP_curve_slope"))
-, m_Name_MAPCurveOffset(_T("MAP_curve_offset"))
 {
 
   //заполняем базу данных допустимых скоростей для COM-порта
@@ -96,7 +94,7 @@ bool CAppSettingsModel::ReadSettings(void)
   bool status = true;
   TCHAR readed_str[1024];
 
-  int i_val = 0, result;  float f_val = 0;
+  int i_val = 0;  float f_val = 0;
 
   //-----------------------------------------
   GetPrivateProfileString(m_Name_Options_Section,m_Name_PortName,_T("COM1"),readed_str,255,IniFileName);
@@ -130,33 +128,6 @@ bool CAppSettingsModel::ReadSettings(void)
     m_optBaudRateBootloader = i_val;     
   }
 
-
-  //-----------------------------------------
-  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveSlope,_T("20.9"),readed_str,255,IniFileName);
-  result = _stscanf(readed_str,_T("%f"),&f_val);
-  if (result==0)
-  {
-    status = false;
-	m_optMAPCurveSlope = 1.0;
-  }
-  else
-  {
-    m_optMAPCurveSlope = f_val;     
-  }
-
-  //-----------------------------------------
-  GetPrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveOffset,_T("0.44"),readed_str,255,IniFileName);
-  result = _stscanf(readed_str,_T("%f"),&f_val);
-  if (result==0)
-  {
-    status = false;
-	m_optMAPCurveOffset = 1.0;
-  }
-  else
-  {
-    m_optMAPCurveOffset = f_val;     
-  }
-
   return status;
 }
 
@@ -182,13 +153,5 @@ bool CAppSettingsModel::WriteSettings(void)
   write_str.Format(_T("%d"),m_optBaudRateBootloader);
   WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,write_str,IniFileName);
  
-  //-----------------------------------------
-  write_str.Format(_T("%0.2f"),m_optMAPCurveSlope);
-  WritePrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveSlope,write_str,IniFileName);
-
-  //-----------------------------------------
-  write_str.Format(_T("%0.2f"),m_optMAPCurveOffset);
-  WritePrivateProfileString(m_Name_Options_Section,m_Name_MAPCurveOffset,write_str,IniFileName);
-
   return status;
 }

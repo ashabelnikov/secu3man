@@ -16,15 +16,11 @@ public:
    virtual void SetPortName(_TSTRING i_PortName) = 0;
    virtual void SetBaudRateApplication(DWORD i_app_baud) = 0;
    virtual void SetBaudRateBootloader(DWORD i_bl_baud) = 0;
-   virtual void SetMAPCurveSlope(float i_slope) = 0;
-   virtual void SetMAPCurveOffset(float i_offset) = 0;
    
    //"Get" - получение данных представления
    virtual _TSTRING GetPortName(void) = 0;
    virtual DWORD GetBaudRateApplication(void) = 0;
    virtual DWORD GetBaudRateBootloader(void) = 0;
-   virtual float GetMAPCurveSlope(void) = 0;
-   virtual float GetMAPCurveOffset(void) = 0;  
 
    //устанавливают обработчики событий
    virtual void setFunctionOnOk(EventHandler OnOk) = 0;

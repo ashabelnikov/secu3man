@@ -25,7 +25,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 	m_params.ifac1 = 1.0f;
 	m_params.ifac2 = 1.0f;
 	m_params.MINEFR = 10;
-	m_params.idl_turns = 850;
+	m_params.idling_rpm = 850;
 	m_params.idl_regul = 0;
 	//{{AFX_DATA_INIT(CIdlRegPageDlg)
 		// NOTE: the ClassWizard will add member initialization here
@@ -54,7 +54,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 
     m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
 	m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);   
-	DDX_Text(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idl_turns);
+	DDX_Text(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
 	DDX_Text(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
 	DDX_Check_UCHAR(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
 }

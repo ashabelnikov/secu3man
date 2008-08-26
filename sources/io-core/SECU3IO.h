@@ -54,8 +54,8 @@ struct FunSetPar
 {
   unsigned char fn_benzin;
   unsigned char fn_gas;
-  float map_grad;
-  float press_swing;
+  float map_lower_pressure;
+  float map_upper_pressure;
 };
 
 struct IdlRegPar
@@ -65,7 +65,7 @@ struct IdlRegPar
   float  ifac1;
   float  ifac2;
   int  MINEFR;
-  int  idl_turns;
+  int  idling_rpm;
 };
 
 
@@ -98,6 +98,13 @@ struct RawSensDat
   float map_value;
   float ubat_value; 
   float temp_value;
+ };
+
+struct CKPSPar
+ {
+ unsigned char ckps_edge_type;
+ unsigned char ckps_cogs_btdc;
+ unsigned char ckps_ignit_cogs;
  };
 
 };

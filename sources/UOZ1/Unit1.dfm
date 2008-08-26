@@ -68,6 +68,7 @@ object Form1: TForm1
     LeftAxis.Automatic = False
     LeftAxis.AutomaticMaximum = False
     LeftAxis.AutomaticMinimum = False
+    LeftAxis.ExactDateTime = False
     LeftAxis.Maximum = 60
     LeftAxis.Minimum = -17.5
     LeftAxis.Title.Caption = '׃־ַ (דנאה.)'

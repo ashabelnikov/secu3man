@@ -32,8 +32,9 @@ EXSTYLE WS_EX_STATICEDGE
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
-                    TCS_OWNERDRAWFIXED,4,16,175,166
-    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,15,2,151,11
+                    TCS_OWNERDRAWFIXED,4,17,175,166
+    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
+    PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
 END
 
 IDD_PD_STARTER_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
@@ -332,6 +333,53 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PD_CKPS_PAGE DIALOG DISCARDABLE  0, 0, 183, 150
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,27,109,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,77,104,92,29
+    CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,63,109,11,16
+    CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON,44,31,74,12
+    CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON,44,44,79,14
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,34,
+                    CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
+                    131,44
+    LTEXT           "Кол-во зубьев до в.м.т.",
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,78,83,89,9
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_PD_CKPS_PAGE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 176
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 143
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

@@ -20,6 +20,7 @@
 #include "FunSetPageDlg.h" 
 #include "TemperPageDlg.h"
 #include "ADCCompenPageDlg.h"
+#include "CKPSPageDlg.h"
 
 #include "io-core/ufcodes.h" 
 #include "io-core/SECU3IO.h"
@@ -45,13 +46,8 @@ using namespace fastdelegate;
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/)
 : CUpdatableDialog(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
-//, m_lastSel(0)
 , m_enabled(FALSE)
-{
-  //{{AFX_DATA_INIT(CParamDeskDlg)
-	// NOTE: the ClassWizard will add member initialization here
-  //}}AFX_DATA_INIT
-   
+{   
   //создаем image list для TabCtrl
   m_pImgList = new CImageList(); 
   m_pImgList->Create((LPCTSTR)IDB_TAB_CTRL_BITMAPS,16,4,TAB_CTRL_BITMAPS_COLOR_MASK);
@@ -77,6 +73,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/)
 
   m_pADCCompenPageDlg = new CADCCompenPageDlg();
   m_pADCCompenPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+  m_pCKPSPageDlg = new CCKPSPageDlg();
+  m_pCKPSPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 
@@ -91,6 +90,7 @@ CParamDeskDlg::~CParamDeskDlg()
   delete m_pTemperPageDlg;		  
   delete m_pCarburPageDlg;
   delete m_pADCCompenPageDlg;
+  delete m_pCKPSPageDlg;
 }
 
 
@@ -139,15 +139,13 @@ BOOL CParamDeskDlg::OnInitDialog()
   m_tab_control.AddPage("Температура",m_pTemperPageDlg,4);
   m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5);
   m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6);
+  m_tab_control.AddPage("ДПКВ",m_pCKPSPageDlg,7);
 	
   //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
   //уже использует обработчики сообщений!
 
   //this будет получать события от Tab control-а и делегировать их указанным обработчикам
-  m_tab_control.SetEventListener(this);  
-
-  //выбираем ранее выбранную вкладку
- // m_tab_control.SetCurSel(m_lastSel);
+  m_tab_control.SetEventListener(this);   
 
   //устанавливаем предыдущее значение (разрешены вкладки или нет)
   m_tab_control.EnableItem(-1,m_enabled ? true : false);
@@ -175,6 +173,8 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
      return CARBUR_PAR;	
     case 6:	
      return ADCCOR_PAR;	
+    case 7:	
+     return CKPS_PAR;	
     default:
      return 0; //invalid case
   }
@@ -182,10 +182,7 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
 
 
 void CParamDeskDlg::OnDestroy() 
-{
-  //запоминаем какая вкладка была выбрана
-  //m_lastSel = m_tab_control.GetCurSel();
-
+{  
   CDialog::OnDestroy();	  
 }
 
@@ -217,6 +214,7 @@ void CParamDeskDlg::Enable(bool enable)
   m_pTemperPageDlg->Enable(enable);
   m_pCarburPageDlg->Enable(enable);
   m_pADCCompenPageDlg->Enable(enable);
+  m_pCKPSPageDlg->Enable(enable);
   if (::IsWindow(m_hWnd))
     UpdateDialogControls(this,TRUE);
 
@@ -257,6 +255,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
 	case ADCCOR_PAR:
       m_pADCCompenPageDlg->SetValues((ADCCompenPar*)i_values);
       break;
+	case CKPS_PAR:
+      m_pCKPSPageDlg->SetValues((CKPSPar*)i_values);
+      break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      
     default:
@@ -292,6 +293,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
       break;
 	case ADCCOR_PAR:
       m_pADCCompenPageDlg->GetValues((ADCCompenPar*)o_values);
+      break;
+    case CKPS_PAR:
+      m_pCKPSPageDlg->GetValues((CKPSPar*)o_values);
       break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      
