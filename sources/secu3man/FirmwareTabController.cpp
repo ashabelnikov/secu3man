@@ -481,6 +481,7 @@ void CFirmwareTabController::SaveEEPROMToFile(const BYTE* p_data, const int size
   HANDLE   hFile=0;    
   static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
   CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+  save.m_ofn.lpstrDefExt = _T("BIN");
   if (save.DoModal()==IDOK)
   {          
     CFile f;   
@@ -508,6 +509,7 @@ bool CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size,
 
   static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
   CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+  save.m_ofn.lpstrDefExt = _T("BIN");
   if (save.DoModal()==IDOK)
   {          
     CFile f;   

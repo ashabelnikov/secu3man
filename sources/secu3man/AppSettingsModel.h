@@ -35,5 +35,6 @@ public:
 
   private:
     bool CheckAllowableBaudRate(DWORD baud); 
+    TCHAR m_current_directory[MAX_PATH+1]; //директория из которой было запущено приложение
 };
 

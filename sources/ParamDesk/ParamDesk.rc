@@ -262,9 +262,9 @@ BEGIN
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,63,109,11,16
     CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON,44,31,74,12
+                    BS_AUTORADIOBUTTON,48,46,74,12
     CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON,44,44,79,14
+                    BS_AUTORADIOBUTTON | WS_GROUP,48,31,79,14
     COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,34,
                     CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,

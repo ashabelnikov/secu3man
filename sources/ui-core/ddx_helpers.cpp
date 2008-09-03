@@ -41,7 +41,7 @@ void DDX_HELPERS_API DDX_CBIndex_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& inde
 
 void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value )
 {
-  BOOL b_value;
+  int b_value;
   if (pDX->m_bSaveAndValidate)
   {
     DDX_Radio(pDX, nIDC, b_value);	

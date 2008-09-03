@@ -51,6 +51,11 @@ CAppSettingsModel::CAppSettingsModel()
     str.Format(_T("COM%d"),i);	
     m_AllowablePorts.push_back(_TSTRING(str));	 
   }
+
+  _tcscpy(m_current_directory,_T(""));
+
+    //определение тек. директории  
+  GetCurrentDirectory(MAX_PATH,m_current_directory);
 }
 
 CAppSettingsModel::~CAppSettingsModel()
@@ -62,13 +67,9 @@ CAppSettingsModel::~CAppSettingsModel()
 //возвращает полное имя INI-файла
 CString CAppSettingsModel::GetINIFileFullName(void)
 {
-  TCHAR current_directory[MAX_PATH+1];
-
-  //определение тек. директории  
-  if (!GetCurrentDirectory(MAX_PATH,current_directory))
+  CString directory(m_current_directory);
+  if (directory.IsEmpty())
      return _T("");
-  
-  CString directory(current_directory);
 
   CString last_char = directory.Right(1);
   if (last_char != _T("\\")) //если корневой каталог, то '\' уже есть

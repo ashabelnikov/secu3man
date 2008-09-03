@@ -712,14 +712,20 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   while(1) 
   {
 	  WaitForSingleObject(p_capp->m_hAwakeEvent,INFINITE); //sleep if need
-
+ 
+	  //если порт не открыт, то для того чтобы не грузить процессор, засыпаем
+	  //на 100мс в каждом цикле
+	  if (p_port->GetHandle()==INVALID_HANDLE_VALUE)
+        Sleep(100);
+	 
 	  if (p_capp->m_is_thread_must_exit)
-		  break;  //поступила команда завершения работы потока
+		break;  //поступила команда завершения работы потока
 
 	  pEventHandler = p_capp->m_pEventHandler;
 	  ASSERT(pEventHandler); //перед тем как обрабатывать пакеты, необходимо приаттачить обработчик событий
 
 	  //читаем блок данных
+	  actual_received = 0;
 	  p_port->RecvBlock(read_buf,RAW_BYTES_TO_READ_MAX,&actual_received);
 	  read_buf[actual_received] = 0;
 	  
