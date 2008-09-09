@@ -246,6 +246,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
   m_ParamDeskDlg.Create(CParamDeskDlg::IDD,this);
   m_ParamDeskDlg.SetPosition(390,10);	
   m_ParamDeskDlg.SetTitle("Резервные параметры:");
+  m_ParamDeskDlg.ShowSaveButton(false);
   m_ParamDeskDlg.ShowWindow(SW_SHOWNORMAL);
 
   m_ContextMenuManager.Attach(this);
@@ -448,6 +449,11 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
   //I know it is dirty hack, but... :-) 	
   UpdateDialogControls(this,TRUE);
   CDialog::OnTimer(nIDEvent);
+  
+  //обновляем состояние (если нужно)
+  bool pd_enable = IsFirmwareOpened();
+  if (m_ParamDeskDlg.IsEnabled()!=pd_enable)
+    m_ParamDeskDlg.Enable(pd_enable);
 }
 
 void CFirmwareTabDlg::OnDestroy() 

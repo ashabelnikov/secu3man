@@ -50,6 +50,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
   m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));
+  m_view->m_ParamDeskDlg.SetOnSaveButton(MakeDelegate(this,&CParamMonTabController::OnPDSaveButton));
 
   CWnd* pParent = AfxGetApp()->m_pMainWnd;
 
@@ -260,6 +261,18 @@ bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descri
 //hurrah!!! получен пакет от SECU-3
 void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data)
 {
+  //особый случай: пришел пакет с нотификацонным кодом
+  if (i_descriptor == OP_COMP_NC)
+  {
+   const OPCompNc* p_ndata = (OPCompNc*)(i_packet_data);
+   switch(p_ndata->opcode)
+   {
+    case OPCODE_EEPROM_PARAM_SAVE:
+     m_sbar->SetInformationText("Параметры были сохранены.");
+     return;
+   }		
+  }
+
   //обработка приходящих пакетов в зависимости от текущего режима
   switch(m_packet_processing_state)
   {
@@ -415,4 +428,14 @@ void CParamMonTabController::OnRawSensorsCheckBox(void)
 bool CParamMonTabController::OnClose(void)
 {
   return true;
+}
+
+//Нажали кнопку сохранения параметров - надо послать команду сохранения
+//в SECU-3
+void CParamMonTabController::OnPDSaveButton()
+{
+ m_sbar->SetInformationText("Сохранение параметров...");
+ OPCompNc packet_data;
+ packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
+ m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
 }

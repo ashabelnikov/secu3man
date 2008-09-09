@@ -107,4 +107,11 @@ struct CKPSPar
  unsigned char ckps_ignit_cogs;
  };
 
+struct OPCompNc //спользуется если надо просто принять или послать определенный код
+{
+ unsigned char opcode;
+};
+
+#define OPCODE_EEPROM_PARAM_SAVE 1
+
 };

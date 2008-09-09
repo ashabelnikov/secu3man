@@ -29,7 +29,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
                     TCS_OWNERDRAWFIXED,4,17,175,166
@@ -258,19 +258,21 @@ BEGIN
     EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,27,109,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
-                    IDC_PD_CKPS_IGNITION_COGS_UNIT,77,104,92,29
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,77,104,92,29,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,63,109,11,16
     CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON,48,46,74,12
+                    BS_AUTORADIOBUTTON,48,50,74,12
     CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,48,31,79,14
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,34,
-                    CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+                    BS_AUTORADIOBUTTON | WS_GROUP,48,32,79,14
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,53,
+                    CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_GROUP | 
+                    WS_TABSTOP
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
-                    131,44
+                    131,51
     LTEXT           "Кол-во зубьев до в.м.т.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,78,83,89,9
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,78,83,89,9,NOT 
+                    WS_GROUP
 END
 
 

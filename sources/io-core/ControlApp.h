@@ -18,6 +18,15 @@
 #define _CONTROLAPP_
 
 
+#define ADC_DISCRETE        0.0025f   //Вольт
+ 
+#define ANGLE_MULTIPLAYER   32.0f     //коэффициент масштабирования углов поворота коленвала  
+
+#define MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER  64
+#define UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER 400
+#define TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER 4
+
+
 #define RAW_BYTES_BUFFER_SIZE  8192
 #define RAW_BYTES_TO_READ_MAX  32
 
@@ -49,6 +58,7 @@ private:
    SECU3IO::ADCCompenPar m_ADCCompenPar;
    SECU3IO::RawSensDat m_RawSensDat;
    SECU3IO::CKPSPar m_CKPSPar;
+   SECU3IO::OPCompNc m_OPCompNc;
 
    CComPort*    m_p_port;
    HANDLE       m_hThread;
@@ -93,6 +103,7 @@ private:
    bool Parse_ADCRAW_DAT(BYTE* raw_packet);
    bool Parse_ADCCOR_PAR(BYTE* raw_packet);
    bool Parse_CKPS_PAR(BYTE* raw_packet);
+   bool Parse_OP_COMP_NC(BYTE* raw_packet);
 
 
    //сборщики пакетов
@@ -104,6 +115,7 @@ private:
    void Build_FUNSET_PAR(SECU3IO::FunSetPar* packet_data);
    void Build_ADCCOR_PAR(SECU3IO::ADCCompenPar* packet_data);
    void Build_CKPS_PAR(SECU3IO::CKPSPar* packet_data);
+   void Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data);
   
 public:
    bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);

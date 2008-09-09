@@ -2,6 +2,9 @@
 #include "FirmwareDataMediator.h"
 #include "CRC16.h"
 #include "BootLoader.h"
+#include "SECU3IO.h"
+#include "ufcodes.h"
+#include "ControlApp.h"    //should be removed - it is nearly unnecessary!
 
 
 typedef unsigned short _uint;
@@ -418,3 +421,203 @@ void CFirmwareDataMediator::SetTempMap(int i_index,float* i_values)
   for (int i = 0; i < F_TMP_POINTS; i++ )
 	p_maps[i_index].f_tmp[i] = CNumericConv::Round((i_values[i]*2.0f));
 }
+
+bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_values)
+{
+  using namespace SECU3IO;
+
+  BYTE* p_bytes = NULL;
+  params* p_params = NULL; 
+  p_bytes = m_bytes_active; 
+  //получаем адрес структуры дефаултных параметров
+  p_params = (params*)(p_bytes + DEFPARAM_START);
+
+  //TODO: Remove these copy/paste! (conversions should be implemented in functions, as certain class)
+  switch(i_descriptor)
+  {
+    case TEMPER_PAR:
+		{
+        TemperPar* p_in = (TemperPar*)i_values; 
+	    p_params->tmp_use  = p_in->tmp_use;
+	    p_params->vent_on  = CNumericConv::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+        p_params->vent_off = CNumericConv::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		}      
+       break;
+	case CARBUR_PAR:
+		{
+        CarburPar* p_in = (CarburPar*)i_values;
+		p_params->ephh_hit    = p_in->ephh_hit;
+        p_params->ephh_lot    = p_in->ephh_lot;
+		p_params->carb_invers = p_in->carb_invers;
+		}
+      break;
+	case IDLREG_PAR: 
+		{
+		IdlRegPar* p_in = (IdlRegPar*)i_values;
+	    p_params->idl_regul  = p_in->idl_regul;
+		p_params->idling_rpm = p_in->idling_rpm;
+		p_params->MINEFR     = p_in->MINEFR;
+		p_params->ifac1      = CNumericConv::Round(p_in->ifac1 * ANGLE_MULTIPLAYER);
+		p_params->ifac2      = CNumericConv::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);	  
+		}
+      break;
+	case ANGLES_PAR:
+		{
+        AnglesPar* p_in = (AnglesPar*)i_values;
+		p_params->angle_corr = CNumericConv::Round(p_in->angle_corr * ANGLE_MULTIPLAYER); 
+        p_params->max_angle  = CNumericConv::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
+		p_params->min_angle  = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);	  
+		}
+      break;
+	case FUNSET_PAR:
+	  	{
+		FunSetPar* p_in = (FunSetPar*)i_values;
+		p_params->fn_benzin = p_in->fn_benzin;
+		p_params->fn_gas    = p_in->fn_gas;
+		p_params->map_lower_pressure = CNumericConv::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->map_upper_pressure = CNumericConv::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		}
+      break;
+	case STARTR_PAR:
+		{
+        StartrPar* p_in = (StartrPar*)i_values;             
+        p_params->starter_off  = p_in->starter_off ;
+		p_params->smap_abandon = p_in->smap_abandon;
+		}
+      break;
+	case ADCCOR_PAR:
+		{
+        ADCCompenPar* p_in = (ADCCompenPar*)i_values;
+        p_params->map_adc_factor      = CNumericConv::Round(p_in->map_adc_factor * 16384);
+        //-------------------------------------------------------------------------
+        signed long map_correction_d  = CNumericConv::Round((-p_in->map_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->map_adc_correction  = CNumericConv::Round(16384 * (0.5f - map_correction_d * p_in->map_adc_factor));		
+        //-------------------------------------------------------------------------
+
+		p_params->temp_adc_factor     = CNumericConv::Round(p_in->temp_adc_factor * 16384);
+        //-------------------------------------------------------------------------
+        signed long temp_correction_d = CNumericConv::Round((-p_in->temp_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->temp_adc_correction = CNumericConv::Round(16384 * (0.5f - temp_correction_d * p_in->temp_adc_factor));
+        //-------------------------------------------------------------------------
+
+        p_params->ubat_adc_factor     = CNumericConv::Round(p_in->ubat_adc_factor * 16384);
+        //-------------------------------------------------------------------------
+        signed long ubat_correction_d = CNumericConv::Round((-p_in->ubat_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->ubat_adc_correction = CNumericConv::Round(16384 * (0.5f - ubat_correction_d * p_in->ubat_adc_factor));
+        //-------------------------------------------------------------------------
+		}
+      break;
+	case CKPS_PAR:
+		{
+        CKPSPar* p_in = (CKPSPar*)i_values; 
+		p_params->ckps_cogs_btdc  = p_in->ckps_cogs_btdc;
+        p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
+		p_params->ckps_edge_type  = p_in->ckps_edge_type;
+		}
+      break;						      
+    default:
+      return false; //неизвестный или неподдерживаемый дескриптор
+  }//switch 
+  
+  return true;
+}
+
+bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
+{
+  using namespace SECU3IO;
+
+  BYTE* p_bytes = NULL;
+  params* p_params = NULL; 
+  p_bytes = m_bytes_active; 
+  //получаем адрес структуры дефаултных параметров
+  p_params = (params*)(p_bytes + DEFPARAM_START);
+
+  //TODO: Remove these copy/paste! (conversions should be implemented in functions, as certain class)
+  switch(i_descriptor)
+  {
+    case TEMPER_PAR:
+		{
+        TemperPar* p_out = (TemperPar*)o_values; 
+	    p_out->tmp_use  = p_params->tmp_use;
+	    p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+        p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+		}
+      break;
+	case CARBUR_PAR:
+		{
+        CarburPar* p_out = (CarburPar*)o_values;
+		p_out->ephh_hit    = p_params->ephh_hit;
+        p_out->ephh_lot    = p_params->ephh_lot;
+		p_out->carb_invers = p_params->carb_invers;
+		}
+      break;
+	case IDLREG_PAR: 
+		{
+		IdlRegPar* p_out = (IdlRegPar*)o_values;
+	    p_out->idl_regul  = p_params->idl_regul;
+		p_out->idling_rpm = p_params->idling_rpm;
+		p_out->MINEFR     = p_params->MINEFR;
+		p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLAYER;
+		p_out->ifac2      = ((float)p_params->ifac2) / ANGLE_MULTIPLAYER;
+		}
+      break;
+	case ANGLES_PAR:
+		{
+        AnglesPar* p_out = (AnglesPar*)o_values;
+		p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLAYER; 
+        p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLAYER;
+		p_out->min_angle  = ((float)p_params->min_angle)  / ANGLE_MULTIPLAYER;
+		}
+      break;
+	case FUNSET_PAR:
+		{
+		FunSetPar* p_out = (FunSetPar*)o_values;
+		p_out->fn_benzin = p_params->fn_benzin;
+		p_out->fn_gas    = p_params->fn_gas;
+		p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+		p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+		}
+      break;
+	case STARTR_PAR:
+		{
+        StartrPar* p_out = (StartrPar*)o_values;             
+        p_out->starter_off = p_params->starter_off;
+		p_out->smap_abandon = p_params->smap_abandon;
+		}
+      break;
+	case ADCCOR_PAR:
+		{
+		ADCCompenPar* p_out = (ADCCompenPar*)o_values;
+		p_out->map_adc_factor      = ((float)p_params->map_adc_factor) / 16384;
+        //-------------------------------------------------------------------------
+		p_out->map_adc_correction  = ((((float)p_params->map_adc_correction)/16384.0f) - 0.5f) / p_out->map_adc_factor;
+        p_out->map_adc_correction*=ADC_DISCRETE; //в вольты 
+        //-------------------------------------------------------------------------
+
+        p_out->temp_adc_factor     = ((float)p_params->temp_adc_factor) / 16384;
+        //-------------------------------------------------------------------------
+		p_out->temp_adc_correction = ((((float)p_params->temp_adc_correction)/16384.0f) - 0.5f) / p_out->temp_adc_factor;
+        p_out->temp_adc_correction*=ADC_DISCRETE; //в вольты 
+        //-------------------------------------------------------------------------
+
+        p_out->ubat_adc_factor     = ((float)p_params->ubat_adc_factor) / 16384; 
+        //-------------------------------------------------------------------------
+		p_out->ubat_adc_correction = ((((float)p_params->ubat_adc_correction)/16384.0f) - 0.5f) / p_out->ubat_adc_factor;
+        p_out->ubat_adc_correction*=ADC_DISCRETE; //в вольты 
+        //-------------------------------------------------------------------------
+		}
+      break;
+    case CKPS_PAR:
+		{
+        CKPSPar* p_out = (CKPSPar*)o_values; 
+		p_out->ckps_cogs_btdc  = p_params->ckps_cogs_btdc;
+        p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
+		p_out->ckps_edge_type  = p_params->ckps_edge_type;
+		}
+      break;					      
+    default:
+      return false; //неизвестный или неподдерживаемый дескриптор
+  }//switch        
+
+  return true;
+}        

@@ -60,7 +60,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 
 	void _OnReadFlashToFile(void);
 
-	///////////context menu event handlers/////////////////////
+	///////////context menu and other event handlers/////////////////////
     void OnBootLoaderInfo(void);
     void OnReadEepromToFile(void);
     void OnWriteEepromFromFile(void);
@@ -82,6 +82,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     void OnBLStartedEmergency(void);
 
 	void OnModificationCheckTimer(void);
+	void OnParamDeskTabActivate(void);
+    void OnParamDeskChangeInTab(void);
 
   private: //функции - обертки
 	bool IsBLStartedEmergency(void);
@@ -103,5 +105,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	};
 
 	int  m_bl_read_flash_mode;
+	int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
 };
 

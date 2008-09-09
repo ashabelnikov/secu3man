@@ -60,6 +60,10 @@ class AFX_EXT_CLASS CFirmwareDataMediator
 
 	//-----------------------------------------------------------------------
 
+    bool SetDefParamValues(BYTE i_descriptor, const void* i_values);   //загнать указанные резервн.парам. в прошивку
+    bool GetDefParamValues(BYTE i_descriptor, void* o_values);         //извлечь указанные резервн.парам. из прошивки
+
+	//-----------------------------------------------------------------------
 
   private:
     const size_t m_firmware_size;

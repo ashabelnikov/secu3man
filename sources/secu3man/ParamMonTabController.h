@@ -61,6 +61,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 	//////////////////////////////////////////////////////
 
 	void OnRawSensorsCheckBox(void);
+	void OnPDSaveButton(void);
 
   private:
     int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA

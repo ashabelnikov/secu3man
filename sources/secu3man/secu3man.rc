@@ -58,7 +58,7 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
@@ -74,11 +74,11 @@ BEGIN
                     WS_TABSTOP,117,148,96,18
     GROUPBOX        "Семейства характеристик",
                     IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,15,75,214,100
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,108,33,118,16,
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,108,33,122,16,
                     ES_AUTOHSCROLL
     CTEXT           "Дополнительная информация о прошивке:",
                     IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,16,33,86,18
-    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,72,14,
+    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,77,14,
                     0,WS_EX_STATICEDGE
     CONTROL         "Boot loader запущен аварийно (установлена перемычка)",
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",

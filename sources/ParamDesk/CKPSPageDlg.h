@@ -61,7 +61,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnSelchangePdCogsBTDCCombo();
 	afx_msg void OnChangePdIgnitionCogsEdit();
-	afx_msg void OnClickedPdFrontRadio();
+	afx_msg void OnClickedPdPosFrontRadio();
+	afx_msg void OnClickedPdNegFrontRadio();
 
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG

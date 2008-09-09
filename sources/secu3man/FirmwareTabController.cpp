@@ -35,6 +35,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_pBldAdapter(NULL)
 , m_current_funset_index(-1)
 , m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
+, m_lastSel(0)
 {
   m_view = i_view;
   m_comm = i_comm;
@@ -69,6 +70,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnImportDataFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromSECU3));
   m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
   m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
+
+  m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
+  m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
 }
 
 CFirmwareTabController::~CFirmwareTabController()
@@ -90,7 +94,8 @@ void CFirmwareTabController::OnSettingsChanged(void)
 
 void CFirmwareTabController::OnActivate(void)
 {
-  //AfxMessageBox(_T("CFirmwareTabController::OnActivate"));
+  //выбираем ранее выбранную вкладку на панели параметров	
+  bool result = m_view->m_ParamDeskDlg.SetCurSel(m_lastSel);
 
  //////////////////////////////////////////////////////////////////
  //устанавливаем обработчики событий специфичные для контекста программы в котором работает контроллер
@@ -115,6 +120,8 @@ void CFirmwareTabController::OnDeactivate(void)
   m_pAppAdapter->SwitchOn(false); 
   m_sbar->SetInformationText(_T(""));
   m_modification_check_timer.KillTimer();
+  //запоминаем номер последней выбранной вкладки на панели параметров
+  m_lastSel = m_view->m_ParamDeskDlg.GetCurSel();
 }
 
 
@@ -779,7 +786,7 @@ bool CFirmwareTabController::IsFirmwareOpened()
 }
 
 
-//эта функция не обновляе графики, нужно еще вызывать UpdateOpenedCharts()!  
+//эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!  
 void CFirmwareTabController::SetViewChartsValues(void)
 {
   if (m_current_funset_index==-1)
@@ -819,6 +826,12 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
   m_view->SetFirmwareName(m_fwdm->GetFWFileName());
 
   m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+
+  m_view->m_ParamDeskDlg.SetFunctionsNames(funset_names);
+  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  BYTE paramdata[256];
+  m_fwdm->GetDefParamValues(descriptor,paramdata);
+  m_view->m_ParamDeskDlg.SetValues(descriptor,paramdata);
 }
 
 
@@ -910,4 +923,21 @@ void CFirmwareTabController::OnImportDataFromSECU3(void)
 {
   m_bl_read_flash_mode = MODE_RD_FLASH_FOR_IMPORT_DATA;
   _OnReadFlashToFile();
+}
+
+void CFirmwareTabController::OnParamDeskTabActivate(void)
+{
+  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  BYTE paramdata[256];
+  m_fwdm->GetDefParamValues(descriptor,paramdata);
+  m_view->m_ParamDeskDlg.SetValues(descriptor,paramdata);
+}
+
+//from ParamDesk
+void CFirmwareTabController::OnParamDeskChangeInTab(void)
+{
+  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  BYTE paramdata[256];
+  m_view->m_ParamDeskDlg.GetValues(descriptor,paramdata);  
+  m_fwdm->SetDefParamValues(descriptor,paramdata);
 }

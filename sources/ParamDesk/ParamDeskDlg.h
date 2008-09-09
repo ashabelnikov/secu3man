@@ -28,8 +28,10 @@ public:
 	void GetTitle(CString& o_str);
 
 	//----------interface implementation---------------------------
+	virtual bool IsEnabled(void) { return m_enabled ? true : false;};
     virtual void Enable(bool enable);
     virtual void Show(bool show);
+    virtual void ShowSaveButton(bool i_show);
 
 	virtual bool SetValues(BYTE i_descriptor, const void* i_values);
 	virtual bool GetValues(BYTE i_descriptor, void* o_values);
@@ -41,6 +43,7 @@ public:
 
 	virtual void SetOnTabActivate(EventHandler OnTabActivate) {m_OnTabActivate = OnTabActivate;}
 	virtual void SetOnChangeInTab(EventHandler OnChangeInTab) {m_OnChangeInTab = OnChangeInTab;}
+    virtual void SetOnSaveButton(EventHandler OnSaveButton)   {m_OnSaveButton  = OnSaveButton;}
 
 	//!!!
 	virtual bool SetCurSel(int sel) { return m_tab_control.SetCurSel(sel);};
@@ -53,6 +56,7 @@ public:
 	enum { IDD = IDD_PARAMETERS_DESK };
 	CStatic	m_pd_title;
 	CTabController	m_tab_control;
+	CButton m_save_button;
 	//}}AFX_DATA
 
 
@@ -67,6 +71,7 @@ protected:
 
     EventHandler m_OnTabActivate;
     EventHandler m_OnChangeInTab;
+	EventHandler m_OnSaveButton;
 
 // Implementation
 protected:
@@ -86,6 +91,7 @@ protected:
 	virtual BOOL OnInitDialog();
 	afx_msg void OnDestroy();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+	afx_msg void OnSaveButton();
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

@@ -13,10 +13,12 @@ class IParamDeskView
 public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
+  virtual bool IsEnabled(void) = 0;
   virtual void Enable(bool enable) = 0;                                 //разрешить/запретить представление 
   virtual void Show(bool show) = 0;                                     //показать/спрятать контент представления
   virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //загнать данные в представление
   virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //извлечь данные из представления 
+  virtual void ShowSaveButton(bool i_show) = 0;
 
   //установка/получение имен семейств характеристик (для вкладки FunSet...)
   //вектор содержит набор имен семейств характеристик хранимых в прошивке SECU-3
@@ -27,6 +29,7 @@ public:
 
   virtual void SetOnTabActivate(EventHandler OnTabActivate) = 0; //обработцик будет вызываться при появлении вкладки
   virtual void SetOnChangeInTab(EventHandler OnChangeInTab) = 0; //обработчик будет вызываться при изменении пользователем данных вкладки
+  virtual void SetOnSaveButton(EventHandler OnSaveButton) = 0; //обработчик будет вызываться при нажатии кнопки "сохранить"
 
   //вызывать только для активной панели!!!
   virtual bool SetCurSel(int sel) = 0;

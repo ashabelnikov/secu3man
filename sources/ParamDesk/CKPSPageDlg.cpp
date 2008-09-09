@@ -58,8 +58,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, CDialog)
   //{{AFX_MSG_MAP(CCKPSPageDlg)
   ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnSelchangePdCogsBTDCCombo)
   ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangePdIgnitionCogsEdit)
-  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnClickedPdFrontRadio)
-  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnClickedPdFrontRadio)
+  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnClickedPdPosFrontRadio)
+  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnClickedPdNegFrontRadio)
 
   ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX,OnUpdateControls)
   ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnUpdateControls)
@@ -91,6 +91,7 @@ BOOL CCKPSPageDlg::OnInitDialog()
 	
 
   m_ignition_cogs_edit.SetLimitText(2);
+  m_ignition_cogs_edit.SetDecimalPlaces(2);
   m_ignition_cogs_spin.SetBuddy(&m_ignition_cogs_edit);
   m_ignition_cogs_spin.SetRangeAndDelta(1,55,1);
 
@@ -116,11 +117,20 @@ void CCKPSPageDlg::OnChangePdIgnitionCogsEdit()
   OnChangeNotify();     
 }
 
-void CCKPSPageDlg::OnClickedPdFrontRadio()
-{
+void CCKPSPageDlg::OnClickedPdPosFrontRadio()
+{  
+  m_ckps_negfront_radio.SetCheck(0);  
   UpdateData();		
   OnChangeNotify();     
 }
+
+void CCKPSPageDlg::OnClickedPdNegFrontRadio()
+{  
+  m_ckps_posfront_radio.SetCheck(0);
+  UpdateData();		
+  OnChangeNotify();     
+}
+
 
 //разрешение/запрещение контроллов (всех поголовно)
 void CCKPSPageDlg::Enable(bool enable)
@@ -162,6 +172,11 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
   ASSERT(i_values);
   memcpy(&m_params,i_values,sizeof(SECU3IO::CKPSPar));
   m_params.ckps_cogs_btdc-=m_teeth_before_tdc_start;
+   
+  //устанавливаем состояние контлоллов фронта ДПКВ
+  m_ckps_posfront_radio.SetCheck(m_params.ckps_edge_type);
+  m_ckps_negfront_radio.SetCheck(~m_params.ckps_edge_type);
+
   UpdateData(FALSE); //копируем данные из переменных в диалог
 }
 

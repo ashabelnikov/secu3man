@@ -100,6 +100,7 @@ void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
   //{{AFX_DATA_MAP(CParamDeskDlg)
   DDX_Control(pDX, IDC_PARAMETERS_DESK_TITLE, m_pd_title);
   DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
+  DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
   //}}AFX_DATA_MAP
 }
 
@@ -109,6 +110,8 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
   ON_WM_DESTROY()
   ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
   ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
+  ON_BN_CLICKED(IDC_PD_SAVE_BUTTON,OnSaveButton)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -313,4 +316,15 @@ void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
   m_pFunSetPageDlg->AccessFunNames() = i_names;
   m_pFunSetPageDlg->FillCBByFunNames();
 }
+
+void CParamDeskDlg::OnSaveButton()
+{
+  if (m_OnSaveButton)
+    m_OnSaveButton();
+}
+
+void CParamDeskDlg::ShowSaveButton(bool i_show)
+{
+  m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
+};
 
