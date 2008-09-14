@@ -160,7 +160,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
       _T("Arial"));
 
 	  fntTitle.CreateFont(
-      15,                        // nHeight
+      14,                        // nHeight
       0,                         // nWidth
       0,                         // nEscapement
       0,                         // nOrientation
