@@ -171,6 +171,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_NAME,m_fw_name);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG, m_modification_flag);
+  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, m_prog_only_code_checkbox);
 	//}}AFX_DATA_MAP
 }
 
@@ -232,6 +233,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_COMMAND(IDM_WRITE_FLASH,OnWriteFlashToSECU)
   
   ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_SECU3, OnUpdatePopupMenu_bl)
+  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
     	
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -304,6 +306,13 @@ void CFirmwareTabDlg::OnUpdatePopupMenu_file1(CCmdUI* pCmdUI)
 void CFirmwareTabDlg::OnUpdateBLStartedEmergency(CCmdUI* pCmdUI)
 {
   BOOL enable = m_is_bl_started_emergency_available ? TRUE : FALSE;
+  pCmdUI->Enable(enable);
+}
+
+
+void CFirmwareTabDlg::OnUpdateProgOnlyCode(CCmdUI* pCmdUI)
+{
+  BOOL enable = m_is_bl_items_available ? TRUE : FALSE;
   pCmdUI->Enable(enable);
 }
 
@@ -674,4 +683,9 @@ void CFirmwareTabDlg::OnImportDataFromSECU3()
 {
   if (m_OnImportDataFromSECU3)
     m_OnImportDataFromSECU3();
+}
+
+bool CFirmwareTabDlg::IsProgrammeOnlyCode(void)
+{
+  return m_prog_only_code_checkbox.GetCheck() ? true : false;
 }

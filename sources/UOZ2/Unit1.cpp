@@ -24,6 +24,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
         , m_pOnClose(NULL)
         , m_param_on_change(NULL)
         , m_param_on_close(NULL)
+        , m_air_flow_position(0)
 {
 }
 //---------------------------------------------------------------------------
@@ -33,7 +34,7 @@ void TForm1::DataPrepare()
   HideAllSeries();
   CheckBox2->Enabled = false;
   TrackBar1->Max = count_z - 1;
-  SetAirFlow(0);
+  SetAirFlow(m_air_flow_position);
   MakeOneVisible(airflow);
   ShowPoints(true);
   setval = 0;
@@ -99,7 +100,8 @@ void TForm1::SetAirFlow(int flow)
 
 void __fastcall TForm1::TrackBar1Change(TObject *Sender)
 {
-  SetAirFlow(TrackBar1->Position);
+  m_air_flow_position = TrackBar1->Position;
+  SetAirFlow(m_air_flow_position);
   setval = 0;
   val_n  = 0;
 }

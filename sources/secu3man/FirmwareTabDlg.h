@@ -91,6 +91,8 @@ public:
 
 	void UpdateOpenedCharts(void);
 
+	bool IsProgrammeOnlyCode(void);
+
 // Dialog Data
 	//{{AFX_DATA(CFirmwareTabDlg)
 	enum { IDD = IDD_FIRMWARE_SUPPORT };
@@ -100,6 +102,7 @@ public:
 	CButton	m_view_temp_map_btn;
 	CButton	m_view_start_map_btn;
 	CButton	m_view_idle_map_btn;
+	CButton m_prog_only_code_checkbox;
 	CEdit   m_fw_information_edit;
 	CEdit m_fw_name;
 	CStatic m_fw_crc;
@@ -153,6 +156,7 @@ protected:
 	afx_msg void OnReadFlashFromSECU();
 	afx_msg void OnWriteFlashToSECU();
 	afx_msg void OnImportDataFromSECU3();
+	afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 

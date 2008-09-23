@@ -90,7 +90,8 @@ public:
 	  FLASH_PAGE_SIZE = 128,         //размер страницы памяти программ в байтах
 	  FLASH_TOTAL_SIZE = 16384,      //общий размер памяти программ микроконтроллера
 	  FLASH_BL_SECTION_SIZE = 512,   //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
-	  FLASH_APP_SECTION_SIZE = FLASH_TOTAL_SIZE - FLASH_BL_SECTION_SIZE
+	  FLASH_APP_SECTION_SIZE = FLASH_TOTAL_SIZE - FLASH_BL_SECTION_SIZE,
+	  FLASH_ONLY_CODE_SIZE = 0x32F0  //размер кода без данных, которые в конце 
 	};
 
 	enum //список поддерживаемых команд

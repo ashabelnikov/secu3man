@@ -82,7 +82,7 @@ BEGIN
                     0,WS_EX_STATICEDGE
     CONTROL         "Boot loader запущен аварийно (установлена перемычка)",
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
-                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,98,190,122,
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,190,122,
                     21
     CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
                     LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
@@ -91,6 +91,9 @@ BEGIN
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,16,133,12,ES_READONLY | 
                     NOT WS_BORDER,WS_EX_STATICEDGE
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,232,14,8,15
+    CONTROL         "Прошивать только код (без данных)",
+                    IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 233, 170

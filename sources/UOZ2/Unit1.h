@@ -92,6 +92,7 @@ public:		// User declarations
         int         val_n;
         float       aai_min;
         float       aai_max;
+        int         m_air_flow_position;
 
         __fastcall TForm1(TComponent* Owner);
         void DataPrepare();

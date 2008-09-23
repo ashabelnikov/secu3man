@@ -477,7 +477,12 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   m_comm->m_pBootLoader->SwitchOn(true);  
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,CBootLoader::FLASH_APP_SECTION_SIZE);
+  //Если установлен режим прошивки только кода (без данных), то указываем соответствующий размер кода
+  int code_size = CBootLoader::FLASH_APP_SECTION_SIZE;
+  if (m_view->IsProgrammeOnlyCode())
+    code_size = CBootLoader::FLASH_ONLY_CODE_SIZE;
+
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,code_size);
 
   m_sbar->ShowProgressBar(true);
   m_sbar->SetProgressPos(0); 
