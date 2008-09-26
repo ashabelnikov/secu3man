@@ -37,6 +37,11 @@ del secu3man\release\*.* /Q
 del secu3man\*.ncb
 del secu3man\*.plg
 
+del fwimpexp\debug\*.* /Q
+del fwimpexp\release\*.* /Q
+del fwimpexp\*.ncb
+del fwimpexp\*.plg
+
 del UOZ1\*.obj /Q
 del UOZ2\*.obj /Q
 
