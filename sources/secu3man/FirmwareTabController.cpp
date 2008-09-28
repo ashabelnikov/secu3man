@@ -14,6 +14,7 @@
 #include "common/FastDelegate.h"
 #include "FirmwareTabDlg.h"
 #include "io-core/FirmwareDataMediator.h"
+#include "FWImpExp/MPSZImpExpController.h"
 
 using namespace fastdelegate;
 
@@ -70,6 +71,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnImportDataFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromSECU3));
   m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
   m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
+  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
+  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
 
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
@@ -945,4 +948,25 @@ void CFirmwareTabController::OnParamDeskChangeInTab(void)
   BYTE paramdata[256];
   m_view->m_ParamDeskDlg.GetValues(descriptor,paramdata);  
   m_fwdm->SetDefParamValues(descriptor,paramdata);
+}
+
+void CFirmwareTabController::OnImportMapsFromMPSZ(void)
+{
+  FWMapsDataHolder data;
+  MPSZImportController import(&data);
+  m_fwdm->GetMapsData(&data);
+  int result = import.DoImport();
+  if (result == IDOK)
+  {
+   m_fwdm->SetMapsData(&data);
+   SetViewFirmwareValues();
+  }
+}
+
+void CFirmwareTabController::OnExportMapsToMPSZ(void)
+{
+  FWMapsDataHolder data;
+  MPSZExportController export(&data);
+  m_fwdm->GetMapsData(&data);
+  export.DoExport();
 }

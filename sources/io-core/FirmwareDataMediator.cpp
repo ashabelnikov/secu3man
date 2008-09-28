@@ -5,6 +5,7 @@
 #include "SECU3IO.h"
 #include "ufcodes.h"
 #include "ControlApp.h"    //should be removed - it is nearly unnecessary!
+#include "FirmwareMapsDataHolder.h"
 
 
 typedef unsigned short _uint;
@@ -17,14 +18,6 @@ typedef unsigned char  _uchar;
 
 //этот файл содержит платформенно ориентированные фрагменты кода
 #pragma pack(1)
-
-//определ€ем количество узлов интерпол€ции дл€ каждой функции
-#define F_WRK_POINTS_F         16  
-#define F_WRK_POINTS_L         16  
-#define F_TMP_POINTS           16
-#define F_STR_POINTS           16                            
-#define F_IDL_POINTS           16     
-#define F_NAME_SIZE            16
 
 typedef struct 
 {
@@ -97,9 +90,6 @@ typedef struct
 #define BOOT_START 0x3E00
 #define CODE_CRC_ADDR (BOOT_START-sizeof(unsigned short))
 #define CODE_SIZE (BOOT_START-sizeof(unsigned short)) //размер кода прошивки без учета байтов контрольной суммы
-
-//количество наборов характеристик хранимых в пам€ти программ
-#define TABLES_NUMBER          8   
 
 //адрес массива таблиц - семейств характеристик
 #define TABLES_START (CODE_CRC_ADDR-(sizeof(F_data)*TABLES_NUMBER))
@@ -211,7 +201,7 @@ void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_orig
 
 }
 
-void CFirmwareDataMediator::SetStartMap(int i_index,float* i_values)
+void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
 {
   BYTE* p_bytes = NULL;
   F_data* p_maps = NULL;
@@ -247,7 +237,7 @@ void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_origi
 
 }
 
-void CFirmwareDataMediator::SetIdleMap(int i_index,float* i_values)
+void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
 {
   BYTE* p_bytes = NULL;
   F_data* p_maps = NULL;
@@ -368,7 +358,7 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
   }
 }
 
-void CFirmwareDataMediator::SetWorkMap(int i_index, float* i_values)
+void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
 {
   BYTE* p_bytes = NULL;
   F_data* p_maps = NULL;
@@ -407,7 +397,7 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
 
 }
 
-void CFirmwareDataMediator::SetTempMap(int i_index,float* i_values)
+void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
 {
   BYTE* p_bytes = NULL;
   F_data* p_maps = NULL;
@@ -621,3 +611,30 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 
   return true;
 }        
+
+//выдает все таблицы в одной структуре
+void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
+{
+  std::vector<_TSTRING> names = GetFunctionsSetNames();
+  for(int i = 0; i < TABLES_NUMBER; i++)
+  {
+   GetStartMap(i,op_fwd->maps[i].f_str);
+   GetIdleMap(i,op_fwd->maps[i].f_idl);
+   GetWorkMap(i,op_fwd->maps[i].f_wrk);
+   GetTempMap(i,op_fwd->maps[i].f_tmp);
+   op_fwd->maps[i].name = names[i];
+  }
+}
+
+void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
+{
+  for(int i = 0; i < TABLES_NUMBER; i++)
+  {
+   SetStartMap(i,ip_fwd->maps[i].f_str);
+   SetIdleMap(i,ip_fwd->maps[i].f_idl);
+   SetWorkMap(i,ip_fwd->maps[i].f_wrk);
+   SetTempMap(i,ip_fwd->maps[i].f_tmp);
+   SetFunctionsSetName(i,ip_fwd->maps[i].name);
+  }
+}
+

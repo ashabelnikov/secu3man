@@ -238,6 +238,10 @@ BEGIN
     IDS_CONN_BOOTLOADER     "boot loader"
     IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW 
                             "»мпортровать даннае из другой прошивки..."
+    IDS_IMPORT_IMPORT_FROM_MPSZ "»мпортировать таблицы из MPSZ-ZH" 
+    IDS_IMPORT_POPUP_MENU "»мпорт данных"
+    IDS_EXPORT_POPUP_MENU "Ёкспорт данных"                    
+    IDS_EXPORT_EXPORT_TO_MPSZ "Ёкспортировать таблицы в MPSZ-ZH"    
 END
 
 STRINGTABLE DISCARDABLE 

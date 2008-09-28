@@ -157,6 +157,8 @@ protected:
 	afx_msg void OnWriteFlashToSECU();
 	afx_msg void OnImportDataFromSECU3();
 	afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
+	afx_msg void OnImportMapsFromMPSZ();
+	afx_msg void OnExportMapsToMPSZ();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -177,7 +179,8 @@ public: //события от меню
 	void setOnReadFlashFromSECU(EventHandler OnFunction) {m_OnReadFlashFromSECU = OnFunction;}
 	void setOnWriteFlashToSECU(EventHandler OnFunction) {m_OnWriteFlashToSECU = OnFunction;}
 	void setOnImportDataFromSECU3(EventHandler OnFunction) {m_OnImportDataFromSECU3 = OnFunction;}
-
+	void setOnImportMapsFromMPSZ(EventHandler OnFunction) {m_OnImportMapsFromMPSZ = OnFunction;}
+	void setOnExportMapsToMPSZ(EventHandler OnFunction) {m_OnExportMapsToMPSZ = OnFunction;}
 
 public: //события от кнопок и чекбоксов
     void setOnBLStartedEmergency(EventHandler OnFunction) {m_OnBLStartedEmergency = OnFunction;}
@@ -212,6 +215,8 @@ private:
 	EventHandler  m_OnReadFlashFromSECU;
 	EventHandler  m_OnWriteFlashToSECU;
 	EventHandler  m_OnImportDataFromSECU3;
+	EventHandler  m_OnImportMapsFromMPSZ;
+	EventHandler  m_OnExportMapsToMPSZ;
 
 	static void __cdecl OnChangeStartMap(void* i_param);
     static void __cdecl OnCloseStartMap(void* i_param);

@@ -43,9 +43,28 @@ void CFirmwareModeContextMenuManager::Attach(CWnd* pWnd)
 void CFirmwareModeContextMenuManager::CreateContent(void)
 {
   CString str;
+
+  ///////////////////////////////////////////////////////////////////////////
+  //Popup menu "»мпорт данных"
+  m_ImportMenu.CreatePopupMenu();
+  str.LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ);
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,str);
+
+  str.LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW);
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,str);	
+
+  str.LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3);
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,str);	
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  //Popup menu "Ёкспорт данных"
+  m_ExportMenu.CreatePopupMenu();
+  str.LoadString(IDS_EXPORT_EXPORT_TO_MPSZ);
+  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_MPSZ,str);
+  ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.CreatePopupMenu();
   
-  ///////////////////////////////////////////////////////////////////////////
   str.LoadString(IDS_READ_FLASH);
   m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH,str);	
 
@@ -60,13 +79,11 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
 
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
+  str.LoadString(IDS_IMPORT_POPUP_MENU);
+  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ImportMenu.m_hMenu,str);
 
-  str.LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,str);	
-
-  str.LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,str);	
-
+  str.LoadString(IDS_EXPORT_POPUP_MENU);
+  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ExportMenu.m_hMenu,str);
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
 

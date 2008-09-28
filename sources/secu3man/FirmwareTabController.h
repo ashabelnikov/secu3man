@@ -72,6 +72,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	void OnReadFlashFromSECU(void);
 	void OnWriteFlashToSECU(void);
 	void OnImportDataFromSECU3(void);
+	void OnImportMapsFromMPSZ(void);
+	void OnExportMapsToMPSZ(void);
 
 	void OnFWInformationTextChanged(void);
 	void OnMapChanged(int i_type);

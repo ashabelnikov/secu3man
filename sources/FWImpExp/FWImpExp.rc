@@ -13,6 +13,71 @@
 #undef APSTUDIO_READONLY_SYMBOLS
 
 /////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAP_IMPEXP DIALOGEX 0, 0, 381, 196
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "description"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,318,34,50,20
+    PUSHBUTTON      "Cancel",IDCANCEL,318,63,50,21
+    CONTROL         "List1",IDC_MAP_IMPEXP_CURRENT_FWD_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    17,30,112,115,WS_EX_LEFTSCROLLBAR
+    CONTROL         "List2",IDC_MAP_IMPEXP_OTHER_FWD_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    179,30,133,118,WS_EX_LEFTSCROLLBAR
+    PUSHBUTTON      "<>",IDC_MAP_IMPEXP_EXCHANGE_BUTTON,136,44,37,20
+    CONTROL         "пуск",IDC_MAP_IMPEXP_STARTMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,70,163,33,15
+    CONTROL         "ХХ",IDC_MAP_IMPEXP_IDLEMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,117,164,34,12
+    CONTROL         "рабочая",IDC_MAP_IMPEXP_WORKMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,164,164,44,13
+    CONTROL         "темп.корр.",IDC_MAP_IMPEXP_TEMPMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,219,163,63,14
+    LTEXT           "Static",IDC_MAP_IMPEXP_CURRENT_FWD_TITLE,20,17,139,12
+    LTEXT           "Static",IDC_MAP_IMPEXP_OTHER_FWD_TITLE,183,18,176,12
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_MAP_IMPEXP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 374
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 189
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
 #if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
@@ -100,59 +165,6 @@ BEGIN
 END
 
 #endif    // !_MAC
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_MAP_IMPEXP DIALOGEX 0, 0, 381, 196
-STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
-CAPTION "description"
-FONT 8, "MS Sans Serif"
-BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,319,27,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,319,44,50,14
-    CONTROL         "List1",IDC_MAP_IMPEXP_CURRENT_FWD_LIST,"SysListView32",
-                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    17,30,112,115,WS_EX_LEFTSCROLLBAR
-    CONTROL         "List2",IDC_MAP_IMPEXP_OTHER_FWD_LIST,"SysListView32",
-                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    201,30,103,118,WS_EX_LEFTSCROLLBAR
-    PUSHBUTTON      "<>",IDC_MAP_IMPEXP_EXCHANGE_BUTTON,148,44,37,20
-    CONTROL         "пуск",IDC_MAP_IMPEXP_STARTMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,70,163,33,15
-    CONTROL         "ХХ",IDC_MAP_IMPEXP_IDLEMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,117,164,34,12
-    CONTROL         "рабочая",IDC_MAP_IMPEXP_WORKMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,164,164,44,13
-    CONTROL         "темп. корр.",IDC_MAP_IMPEXP_TEMPMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,222,163,63,14
-    LTEXT           "Static",IDC_MAP_IMPEXP_CURRENT_FWD_TITLE,20,17,121,12
-    LTEXT           "Static",IDC_MAP_IMPEXP_OTHER_FWD_TITLE,204,17,101,12
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
-BEGIN
-    IDD_MAP_IMPEXP, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 374
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 189
-    END
-END
-#endif    // APSTUDIO_INVOKED
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

@@ -3,6 +3,7 @@
 //In the Output category of the Link tab in the Project Settings dialog box, 
 //set the Entry Point Symbol to wWinMainCRTStartup. 
 
+#include <string>
 
 #ifdef _UNICODE
 	typedef std::wstring _TSTRING;

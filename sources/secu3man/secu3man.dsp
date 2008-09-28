@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib kernel32.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
+# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "secu3man - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
+# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
 
 !ENDIF 
 

@@ -234,6 +234,11 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   
   ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_SECU3, OnUpdatePopupMenu_bl)
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
+  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_MPSZ, OnUpdatePopupMenu_file1)
+  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_MPSZ, OnUpdatePopupMenu_file1)
+
+  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
+  ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
     	
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -688,4 +693,16 @@ void CFirmwareTabDlg::OnImportDataFromSECU3()
 bool CFirmwareTabDlg::IsProgrammeOnlyCode(void)
 {
   return m_prog_only_code_checkbox.GetCheck() ? true : false;
+}
+
+void CFirmwareTabDlg::OnImportMapsFromMPSZ()
+{
+  if (m_OnImportMapsFromMPSZ)
+    m_OnImportMapsFromMPSZ();
+}
+
+void CFirmwareTabDlg::OnExportMapsToMPSZ()
+{
+  if (m_OnExportMapsToMPSZ)
+    m_OnExportMapsToMPSZ();
 }

@@ -92,6 +92,9 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name uicore
     End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name FWImpExp
+    End Project Dependency
 }}}
 
 ###############################################################################

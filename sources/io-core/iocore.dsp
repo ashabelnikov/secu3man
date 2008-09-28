@@ -177,6 +177,10 @@ SOURCE=.\FirmwareDataMediator.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\FirmwareMapsDataHolder.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\NumericConv.h
 # End Source File
 # Begin Source File
