@@ -118,6 +118,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
   BYTE symbol = 0;  //для принятия символа '<' 
   BYTE raw[2048];   //хватит с запасом для любой меги
   BYTE t_buf[1024];
+  BYTE fw_buf[65536];
 
   while(1) 
   {
@@ -134,30 +135,48 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 	  {
 	   //========================================================================================= 
 	   case BL_OP_READ_FLASH:    //чтение FLASH
+		   {
+		   if (p_boot->m_opdata.size==0)
+		   { //попытка выполнения безсмысленной операции 
+		    ASSERT(0);
+		    break;
+		   } 
+
 		   p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
 		   symbol     = 0;
 		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
 		   block_size = FLASH_PAGE_SIZE * 2;
-		   current    = 0;
+		   current    = 0;         
 
-		   k = p_boot->m_opdata.size;
-           i = k % FLASH_PAGE_SIZE;
-		   j = k / FLASH_PAGE_SIZE;  //количество страниц
+           int end_size = p_boot->m_opdata.addr + p_boot->m_opdata.size;
 
-		   if (i > 0)
-			   ++j;
+		   //сколько байтов нехватает от начала страницы до стартового адреса
+		   int bottom_offset = p_boot->m_opdata.addr % FLASH_PAGE_SIZE;
+		   
+		   /*//сколько байтов нехватает от конечного адреса до конца страницы
+		   int top_overhead  = (end_size % FLASH_PAGE_SIZE) ? FLASH_PAGE_SIZE - (end_size % FLASH_PAGE_SIZE) : 0;*/
 
-		   total_size = j * (block_size + 1 + 2);   //1 byte - '<' + 2 bytes - CS
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   int page_start = (p_boot->m_opdata.addr / FLASH_PAGE_SIZE);
+		   int page_end = (end_size / FLASH_PAGE_SIZE) + ((end_size % FLASH_PAGE_SIZE)!=0) - 1; 
 
+		   int count_of_pages = (page_end - page_start) + 1;
 
-		   for(i = 0; i < j; i++) //цикл: количество страниц
+		   total_size = count_of_pages * (block_size + 1 + 2);   //1 byte - '<' + 2 bytes - CS
+		   pEventHandler->OnUpdateUI(opcode,total_size,current);		   
+                                            
+		   for(j = 0,i = page_start; i <= page_end; i++) //цикл: количество страниц
 		   {
-             if (false == p_boot->FLASH_ReadOnePage(i,p_boot->m_opdata.data+(i*FLASH_PAGE_SIZE),total_size,&current))
-				 break; //ошибка!
+             if (false == p_boot->FLASH_ReadOnePage(i,fw_buf+(j*FLASH_PAGE_SIZE),total_size,&current))
+			   break; //ошибка!
 		   }//for
+
+		   //Временный буфер содержит прочитанные страницы (данные этих страниц обрамляют реальные данные), 
+		   //теперь необходимо сохранить данные соответствующие конкретным адресам
+           memcpy(p_boot->m_opdata.data,fw_buf + bottom_offset,p_boot->m_opdata.size);
+
 		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
-	       p_boot->m_opdata.opcode = 0; 	   
+		   p_boot->m_opdata.opcode = 0; 	   
+		   }
 		   break;
 
 	   //========================================================================================= 
@@ -569,9 +588,10 @@ bool CBootLoader::IsOpcodeValid(const int opcode)
 //Запускает указанную операцию на выполнение. Эта функция не блокирует вызвавший ее поток, а только 
 //инициализирует данные, запускает выполнение операции и сразу возвращает управление.
 // io_data - буфер для чтения/записи данных 
-// i_size  - размер данных в буфере 
+// i_size  - размер данных
+// i_addr  - адрес для чтения/записи
 //Return: Операция запущена на выполнение успешно - true, иначе - false
-bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size)
+bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size, int i_addr /*= 0*/)
 {
     if (true==m_work_stoped) 
 		return false;
@@ -591,6 +611,7 @@ bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size)
 	m_opdata.opcode = opcode;
 	m_opdata.data   = io_data;     
 	m_opdata.size   = i_size;
+	m_opdata.addr   = i_addr; 
 
 	m_ErrorCode = 0;
 	SetEvent(m_hAwakeEvent);       //выводим поток из спячки - настало время поработать :-)

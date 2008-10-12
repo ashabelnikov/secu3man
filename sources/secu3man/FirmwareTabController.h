@@ -93,7 +93,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	bool ExitBootLoader(void);
 
   private:
-	BYTE m_bl_data[65536];	 
+	BYTE m_bl_data[65536];
+	BYTE m_code_for_merge_with_overhead[65536];
 	bool m_bl_started_emergency;
 	int  m_current_funset_index;
 	CObjectTimer<CFirmwareTabController> m_modification_check_timer;
@@ -103,7 +104,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	{
 	 MODE_RD_FLASH_TO_FILE,
      MODE_RD_FLASH_TO_BUFF_FOR_LOAD,
-     MODE_RD_FLASH_FOR_IMPORT_DATA
+     MODE_RD_FLASH_FOR_IMPORT_DATA,
+	 MODE_RD_FLASH_TO_BUFF_MERGE_DATA
 	};
 
 	int  m_bl_read_flash_mode;

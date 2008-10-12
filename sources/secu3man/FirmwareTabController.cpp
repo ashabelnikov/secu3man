@@ -227,146 +227,170 @@ CString CFirmwareTabController::GenerateErrorStr(void)
 
 void CFirmwareTabController::OnEnd(const int opcode,const int status)
 {
+ switch(opcode)
+ { 
   //////////////////////////////////////////////////////////////////////
-  if (opcode == CBootLoader::BL_OP_EXIT) //неиспользуется когда бутлоадер запущен аварийно
+  case CBootLoader::BL_OP_EXIT: //неиспользуется когда бутлоадер запущен аварийно
   {    
-    //вновь активируем коммуникационный контроллер приложения
-    m_comm->m_pControlApp->SwitchOn(true);
-    m_comm->m_pBootLoader->SwitchOn(false);     
-  }
-  //////////////////////////////////////////////////////////////////////
-  if (opcode == CBootLoader::BL_OP_READ_SIGNATURE) 
-  {
-    if (status==1)
-    {
-      m_bl_data[CBootLoader::BL_SIGNATURE_STR_LEN] = 0;
-      m_sbar->SetInformationText(m_bl_data);
-    }
-    else 
-    {
-	  m_sbar->SetInformationText(GenerateErrorStr());
-    }
-
-    //ждем пока не выполнится предыдущая операция
-    while(!m_comm->m_pBootLoader->IsIdle());
-
-    //Achtung! Почти рекурсия
-    ExitBootLoader();
-
-    Sleep(250);
-    m_sbar->ShowProgressBar(false);
+   //вновь активируем коммуникационный контроллер приложения
+   m_comm->m_pControlApp->SwitchOn(true);
+   m_comm->m_pBootLoader->SwitchOn(false); 
+   break;
   }
 
   //////////////////////////////////////////////////////////////////////
-  else if (opcode == CBootLoader::BL_OP_READ_EEPROM)
+  case CBootLoader::BL_OP_READ_SIGNATURE: 
   {
-    if (status==1)
-    { //OK
-      m_sbar->SetInformationText("EEPROM успешно прочитано!");
-      SaveEEPROMToFile(m_bl_data,CBootLoader::EEPROM_SIZE);
-    }
-    else 
-    {
-	  m_sbar->SetInformationText(GenerateErrorStr());
-    }
+   if (status==1)
+   {
+    m_bl_data[CBootLoader::BL_SIGNATURE_STR_LEN] = 0;
+    m_sbar->SetInformationText(m_bl_data);
+   }
+   else 
+   {
+    m_sbar->SetInformationText(GenerateErrorStr());
+   }
 
-    //ждем пока не выполнится предыдущая операция
-    while(!m_comm->m_pBootLoader->IsIdle());
+   //ждем пока не выполнится предыдущая операция
+   while(!m_comm->m_pBootLoader->IsIdle());
 
-    //Achtung! Почти рекурсия
-    ExitBootLoader();
+   //Achtung! Почти рекурсия
+   ExitBootLoader();
 
-    Sleep(250);
-    m_sbar->ShowProgressBar(false);
+   Sleep(250);
+   m_sbar->ShowProgressBar(false);
+   break;
   }
+
   //////////////////////////////////////////////////////////////////////
-  else if (opcode == CBootLoader::BL_OP_WRITE_EEPROM)
+  case CBootLoader::BL_OP_READ_EEPROM:
   {
-    if (status==1) 
-      m_sbar->SetInformationText("EEPROM успешно записано!");
-    else 
-    {
-	  m_sbar->SetInformationText(GenerateErrorStr());
-    }
+   if (status==1)
+   { //OK
+    m_sbar->SetInformationText("EEPROM успешно прочитано!");
+    SaveEEPROMToFile(m_bl_data,CBootLoader::EEPROM_SIZE);
+   }
+   else 
+   {
+	m_sbar->SetInformationText(GenerateErrorStr());
+   }
+
+   //ждем пока не выполнится предыдущая операция
+   while(!m_comm->m_pBootLoader->IsIdle());
+
+   //Achtung! Почти рекурсия
+   ExitBootLoader();
+
+   Sleep(250);
+   m_sbar->ShowProgressBar(false);
+   break;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  case CBootLoader::BL_OP_WRITE_EEPROM:
+  {
+   if (status==1) 
+    m_sbar->SetInformationText("EEPROM успешно записано!");
+   else 
+   {
+	m_sbar->SetInformationText(GenerateErrorStr());
+   }
   
-    //ждем пока не выполнится предыдущая операция
-    while(!m_comm->m_pBootLoader->IsIdle());
+   //ждем пока не выполнится предыдущая операция
+   while(!m_comm->m_pBootLoader->IsIdle());
 
-    //Achtung! Почти рекурсия
-    ExitBootLoader();
+   //Achtung! Почти рекурсия
+   ExitBootLoader();
   
-    Sleep(250);
-    m_sbar->ShowProgressBar(false);
+   Sleep(250);
+   m_sbar->ShowProgressBar(false);
+   break;
   }
+
   //////////////////////////////////////////////////////////////////////
-  else if (opcode == CBootLoader::BL_OP_READ_FLASH)
+  case CBootLoader::BL_OP_READ_FLASH:
   {
-    if (status==1)
-    { 	
- 	  m_sbar->SetInformationText("Прошивка успешно прочитана!");
-	  if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
-	  {
-		SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
-	  }
-	  else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
-	  {
-	   PrepareOnLoadFLASH(m_bl_data,_T(""));
-	  }
-	  else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
-	  {
-	   m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
-	   m_fwdm->StoreBytes(m_bl_data);
-	   PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
-	  }
-	  else
-	  {
-	    ASSERT(0); //what is it?
-	  }
-    }
-    else 
-    {
-	  m_sbar->SetInformationText(GenerateErrorStr());
-    }
+   if (status==1)
+   { 	
+ 	m_sbar->SetInformationText("Прошивка успешно прочитана!");
+	if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
+	{
+	 SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
+	}
+	else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
+	{
+	 PrepareOnLoadFLASH(m_bl_data,_T(""));
+	}
+	else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
+	{
+	 m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
+	 m_fwdm->StoreBytes(m_bl_data);
+	 PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+	}
+	else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
+	{	     
+     //ждем пока не выполнится предыдущая операция
+     while(!m_comm->m_pBootLoader->IsIdle());
 
-    //ждем пока не выполнится предыдущая операция
-    while(!m_comm->m_pBootLoader->IsIdle());
+     //закончилось чтение данных. Теперь необходимо объединить прочитанные данные с данными для записи,
+     //обновить контрольную сумму и запустить процесс программирования FLASH. 
+	 memcpy(m_code_for_merge_with_overhead + CBootLoader::FLASH_ONLY_CODE_SIZE,m_bl_data,CBootLoader::FLASH_ONLY_OVERHEAD_SIZE);	   
+     CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(m_code_for_merge_with_overhead);
 
-    //Achtung! Почти рекурсия
-    ExitBootLoader();
+     Sleep(250);
+	 m_sbar->SetProgressPos(0);
+	 m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_code_for_merge_with_overhead,CBootLoader::FLASH_APP_SECTION_SIZE);		  
+	 break; //не выходим из бутлоадера!
+	}
+	else
+	{
+	 ASSERT(0); //what is it?
+	}
+   }
+   else 
+   {
+	m_sbar->SetInformationText(GenerateErrorStr());
+   }
+    	
+   //Achtung! Почти рекурсия
+   ExitBootLoader();
 
-    Sleep(250);
-    m_sbar->ShowProgressBar(false);
+   Sleep(250);	
+   m_sbar->ShowProgressBar(false);
+   break;
   }
+
   //////////////////////////////////////////////////////////////////////
-  else if (opcode == CBootLoader::BL_OP_WRITE_FLASH)
+  case CBootLoader::BL_OP_WRITE_FLASH:
   {
-    if (status==1) 
-      m_sbar->SetInformationText("Прошивка успешно записана!");
-    else 
-    {
-	  m_sbar->SetInformationText(GenerateErrorStr());
-    }
+   if (status==1) 
+    m_sbar->SetInformationText("Прошивка успешно записана!");
+   else 
+   {
+	m_sbar->SetInformationText(GenerateErrorStr());
+   }
   
-    //ждем пока не выполнится предыдущая операция
-    while(!m_comm->m_pBootLoader->IsIdle());
+   //ждем пока не выполнится предыдущая операция
+   while(!m_comm->m_pBootLoader->IsIdle());
 
-    //Achtung! Почти рекурсия
-    ExitBootLoader();
+   //Achtung! Почти рекурсия
+   ExitBootLoader();
 
-    Sleep(250);
-    m_sbar->ShowProgressBar(false);
+   Sleep(250);
+   m_sbar->ShowProgressBar(false);
+   break;
   }
   //////////////////////////////////////////////////////////////////////
+ }//switch
 
-  if (m_bl_started_emergency)
-  {
-    m_view->EnableBLItems(true);
-    m_view->EnableBLStartedEmergency(true);
+ if (m_bl_started_emergency)
+ {
+  m_view->EnableBLItems(true);
+  m_view->EnableBLStartedEmergency(true);
 
-    m_comm->m_pControlApp->SwitchOn(true);
-    m_comm->m_pBootLoader->SwitchOn(false);  
+  m_comm->m_pControlApp->SwitchOn(true);
+  m_comm->m_pBootLoader->SwitchOn(false);  
   }
-
 }   
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -479,13 +503,26 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   m_comm->m_pControlApp->SwitchOn(false);
   m_comm->m_pBootLoader->SwitchOn(true);  
 
-  //операция не блокирует поток - стековые переменные ей передавать нельзя!
-  //Если установлен режим прошивки только кода (без данных), то указываем соответствующий размер кода
-  int code_size = CBootLoader::FLASH_APP_SECTION_SIZE;
+  //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
   if (m_view->IsProgrammeOnlyCode())
-    code_size = CBootLoader::FLASH_ONLY_CODE_SIZE;
-
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,code_size);
+  {
+   //Мы программируем только код, одако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
+   //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать. 	  
+   m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
+ 
+   //сохраняем данные для того чтобы позже объединить их с прочитанными "верхними" данными
+   memset(m_code_for_merge_with_overhead,0,CBootLoader::FLASH_APP_SECTION_SIZE);
+   memcpy(m_code_for_merge_with_overhead,io_buff,CBootLoader::FLASH_ONLY_CODE_SIZE);
+	  
+   //операция не блокирует поток - стековые переменные ей передавать нельзя!
+   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data,
+	   CBootLoader::FLASH_ONLY_OVERHEAD_SIZE, //размер данных сверху над кодом программы
+	   CBootLoader::FLASH_ONLY_CODE_SIZE);    //адрес начала "верхних" данных
+  }
+  else
+  {//все очень просто
+    m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,CBootLoader::FLASH_APP_SECTION_SIZE);
+  }
 
   m_sbar->ShowProgressBar(true);
   m_sbar->SetProgressPos(0); 

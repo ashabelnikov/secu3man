@@ -49,6 +49,7 @@ private:
    { 
      int   opcode;
 	 BYTE* data;
+	 int   addr;
 	 int   size;
    }m_opdata;
 
@@ -66,8 +67,10 @@ public:
     bool IsStoped(void) {return m_work_stoped;};
 
 	bool Terminate(void);
+
     //starts the specified operation
-    bool StartOperation(const int opcode,BYTE* io_data,int i_size); 
+	//!!! i_addr используется только при чтении FLASH
+    bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0); 
 
  
 	inline bool IsIdle(void) const {return (m_ThreadBusy)?false:true;};
@@ -90,8 +93,12 @@ public:
 	  FLASH_PAGE_SIZE = 128,         //размер страницы памяти программ в байтах
 	  FLASH_TOTAL_SIZE = 16384,      //общий размер памяти программ микроконтроллера
 	  FLASH_BL_SECTION_SIZE = 512,   //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
-	  FLASH_APP_SECTION_SIZE = FLASH_TOTAL_SIZE - FLASH_BL_SECTION_SIZE,
-	  FLASH_ONLY_CODE_SIZE = 0x32F0  //размер кода без данных, которые в конце 
+	  FLASH_APP_SECTION_SIZE = FLASH_TOTAL_SIZE - FLASH_BL_SECTION_SIZE, //часть прошивки кроме бутлоадера
+	  FLASH_ONLY_CODE_SIZE = 0x32F0,  //размер кода без данных, которые в конце
+
+	  //часть прошивки располагающаяся после кода программы и перед бутлоадером. Сюда входят пустое пространство, данные 
+	  //и контрольная сумма прошивки.
+	  FLASH_ONLY_OVERHEAD_SIZE = FLASH_APP_SECTION_SIZE - FLASH_ONLY_CODE_SIZE
 	};
 
 	enum //список поддерживаемых команд
