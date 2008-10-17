@@ -351,7 +351,10 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
    {
 	m_sbar->SetInformationText(GenerateErrorStr());
    }
-    	
+
+   //ждем пока не выполнится предыдущая операция
+   while(!m_comm->m_pBootLoader->IsIdle());
+   
    //Achtung! Почти рекурсия
    ExitBootLoader();
 

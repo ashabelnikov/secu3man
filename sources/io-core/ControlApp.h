@@ -46,19 +46,25 @@ class AFX_EXT_CLASS CControlApp
 {
 
 private:
+	enum {PENDING_PACKETS_QUEUE_SIZE = 32};
 
-   SECU3IO::SensorDat m_SensorDat;
-   SECU3IO::FnNameDat m_FnNameDat;
-   SECU3IO::StartrPar m_StartrPar; 
-   SECU3IO::AnglesPar m_AnglesPar;
-   SECU3IO::FunSetPar m_FunSetPar;
-   SECU3IO::IdlRegPar m_IdlRegPar;
-   SECU3IO::CarburPar m_CarburPar;
-   SECU3IO::TemperPar m_TemperPar;
-   SECU3IO::ADCCompenPar m_ADCCompenPar;
-   SECU3IO::RawSensDat m_RawSensDat;
-   SECU3IO::CKPSPar m_CKPSPar;
-   SECU3IO::OPCompNc m_OPCompNc;
+  struct SECU3Packet
+	{
+    SECU3IO::SensorDat m_SensorDat;
+    SECU3IO::FnNameDat m_FnNameDat;
+    SECU3IO::StartrPar m_StartrPar; 
+    SECU3IO::AnglesPar m_AnglesPar;
+    SECU3IO::FunSetPar m_FunSetPar;
+    SECU3IO::IdlRegPar m_IdlRegPar;
+    SECU3IO::CarburPar m_CarburPar;
+    SECU3IO::TemperPar m_TemperPar;
+    SECU3IO::ADCCompenPar m_ADCCompenPar;
+    SECU3IO::RawSensDat m_RawSensDat;
+    SECU3IO::CKPSPar m_CKPSPar;
+	SECU3IO::OPCompNc m_OPCompNc;
+	}m_pending_packets[PENDING_PACKETS_QUEUE_SIZE];
+
+   int m_pending_packets_index;
 
    CComPort*    m_p_port;
    HANDLE       m_hThread;
@@ -90,6 +96,8 @@ private:
    BOOL SetPacketsTimer(int timeout);
    bool IsValidDescriptor(const BYTE descriptor);   
 
+   SECU3Packet& EndPendingPacket(void);
+   SECU3Packet& PendingPacket(void);
 
    //парсеры отдельных пакетов (тех пакетов которые принимаются от SECU-3)
    bool Parse_SENSOR_DAT(BYTE* raw_packet);

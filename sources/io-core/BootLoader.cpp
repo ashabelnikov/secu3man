@@ -164,7 +164,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 		   total_size = count_of_pages * (block_size + 1 + 2);   //1 byte - '<' + 2 bytes - CS
 		   pEventHandler->OnUpdateUI(opcode,total_size,current);		   
                                             
-		   for(j = 0,i = page_start; i <= page_end; i++) //цикл: количество страниц
+		   for(j = 0,i = page_start; i <= page_end; i++,j++) //цикл: количество страниц
 		   {
              if (false == p_boot->FLASH_ReadOnePage(i,fw_buf+(j*FLASH_PAGE_SIZE),total_size,&current))
 			   break; //ошибка!
