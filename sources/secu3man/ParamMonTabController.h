@@ -37,7 +37,8 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 	virtual bool OnClose(void);
 
 	//from IAPPEventHandler:
-    virtual void OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data);
+    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+           void _OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
     virtual void OnConnection(const bool i_online);
 
 	void OnSettingsChanged(void);

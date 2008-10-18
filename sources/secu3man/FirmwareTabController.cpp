@@ -129,7 +129,7 @@ void CFirmwareTabController::OnDeactivate(void)
 
 
 /////////////////////////////////////////////////////////////////////////////////
-void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data)
+void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
 }
 

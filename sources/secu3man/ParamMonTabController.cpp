@@ -169,7 +169,7 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
 		 
 		//данные в SECU хранятся в виде ASCII, их надо преобразовать в UNICODE
 		TCHAR name_string[256];
-		OemToChar(fn_data->name.c_str(),name_string);
+		OemToChar(fn_data->name,name_string);
 		fn_names[fn_data->index] = name_string;
 
 	    fn_indexes.push_back(fn_data->index);
@@ -188,7 +188,7 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
 	  fn_data = (FnNameDat*)i_packet_data;
           
   	  TCHAR name_string[256];
-	  OemToChar(fn_data->name.c_str(),name_string);
+	  OemToChar(fn_data->name,name_string);
 	  fn_names[fn_data->index] = name_string;
 
 	  fn_indexes.push_back(fn_data->index);
@@ -257,14 +257,28 @@ bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descri
   return false; //КА продолжает работу...
 }
 
-
 //hurrah!!! получен пакет от SECU-3
-void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data)
+void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
+{
+  SECU3IO::SECU3Packet m_recepted_packet;
+
+  //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
+  m_comm->m_pControlApp->EnterCriticalSection();
+  memcpy(&m_recepted_packet,ip_packet,sizeof(SECU3IO::SECU3Packet));
+  m_comm->m_pControlApp->LeaveCriticalSection();
+
+  //дальше работаем с безопасной копией данных
+  _OnPacketReceived(i_descriptor,&m_recepted_packet);
+}
+
+
+//вспомогательная функция
+void CParamMonTabController::_OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
   //особый случай: пришел пакет с нотификацонным кодом
   if (i_descriptor == OP_COMP_NC)
   {
-   const OPCompNc* p_ndata = (OPCompNc*)(i_packet_data);
+   const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
    switch(p_ndata->opcode)
    {
     case OPCODE_EEPROM_PARAM_SAVE:
@@ -277,12 +291,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
   switch(m_packet_processing_state)
   {
     case PPS_COLLECT_INITIAL_DATA:  //инициализация данными из SECU-3	
-	  if (CollectInitialDataFromSECU(i_descriptor,i_packet_data))
+	  if (CollectInitialDataFromSECU(i_descriptor,ip_packet))
 	    StartReadingNecessaryParameters();
 	break;
 
 	case PPS_READ_NECESSARY_PARAMETERS:  //чтение указанных параметров
-	  if (ReadNecessaryParametersFromSECU(i_descriptor,i_packet_data))
+	  if (ReadNecessaryParametersFromSECU(i_descriptor,ip_packet))
 	  {
 	    m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
 
@@ -304,7 +318,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
 	    else
 		{
           //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
+	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(ip_packet)); 	
           bool state = m_comm->m_pControlApp->GetOnlineStatus();
 	      m_view->m_MIDeskDlg.Enable(state);
 	      m_packet_processing_state = PPS_READ_MONITOR_DATA;
@@ -320,7 +334,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
 	    else
 		{
           //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(i_packet_data)); 	
+	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(ip_packet)); 	
           bool state = m_comm->m_pControlApp->GetOnlineStatus();
 	      m_view->m_RSDeskDlg.Enable(state);
 	      m_packet_processing_state = PPS_READ_MONITOR_DATA;
@@ -339,7 +353,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
 		}
 	    else
 		{
-	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(i_packet_data)); 	
+	      m_view->m_MIDeskDlg.SetValues((SensorDat*)(ip_packet)); 	
 		}
 	  }
 	  else
@@ -351,7 +365,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, const voi
 		}
 	    else
 		{
-	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(i_packet_data)); 	
+	      m_view->m_RSDeskDlg.SetValues((RawSensDat*)(ip_packet)); 	
 		}	
 	  }
 	break;

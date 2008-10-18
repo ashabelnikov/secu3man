@@ -35,7 +35,7 @@ class IAPPEventHandler
 {
 public:
   //event handlers
-  virtual void OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data) = 0;
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet) = 0;
   virtual void OnConnection(const bool i_online) = 0;
 };
 
@@ -44,28 +44,16 @@ public:
 class CComPort;
 class AFX_EXT_CLASS CControlApp  
 {
-
 private:
-	enum {PENDING_PACKETS_QUEUE_SIZE = 32};
+   typedef CRITICAL_SECTION CSECTION;
 
-  struct SECU3Packet
-	{
-    SECU3IO::SensorDat m_SensorDat;
-    SECU3IO::FnNameDat m_FnNameDat;
-    SECU3IO::StartrPar m_StartrPar; 
-    SECU3IO::AnglesPar m_AnglesPar;
-    SECU3IO::FunSetPar m_FunSetPar;
-    SECU3IO::IdlRegPar m_IdlRegPar;
-    SECU3IO::CarburPar m_CarburPar;
-    SECU3IO::TemperPar m_TemperPar;
-    SECU3IO::ADCCompenPar m_ADCCompenPar;
-    SECU3IO::RawSensDat m_RawSensDat;
-    SECU3IO::CKPSPar m_CKPSPar;
-	SECU3IO::OPCompNc m_OPCompNc;
-	}m_pending_packets[PENDING_PACKETS_QUEUE_SIZE];
+   enum {PENDING_PACKETS_QUEUE_SIZE = 256};
 
+   SECU3IO::SECU3Packet m_recepted_packet;
+   SECU3IO::SECU3Packet m_pending_packets[PENDING_PACKETS_QUEUE_SIZE];
    int m_pending_packets_index;
 
+   CSECTION*    mp_csection; //объект критической секции
    CComPort*    m_p_port;
    HANDLE       m_hThread;
    DWORD        m_ThreadId;
@@ -96,8 +84,8 @@ private:
    BOOL SetPacketsTimer(int timeout);
    bool IsValidDescriptor(const BYTE descriptor);   
 
-   SECU3Packet& EndPendingPacket(void);
-   SECU3Packet& PendingPacket(void);
+   SECU3IO::SECU3Packet& EndPendingPacket(void);
+   SECU3IO::SECU3Packet& PendingPacket(void);
 
    //парсеры отдельных пакетов (тех пакетов которые принимаются от SECU-3)
    bool Parse_SENSOR_DAT(BYTE* raw_packet);
@@ -132,7 +120,10 @@ public:
    bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
    bool ChangeContext(const BYTE i_new_descriptor);
    bool StartBootLoader();
-   void SetEventHandler(IAPPEventHandler* i_pEventHandler);        
+   void SetEventHandler(IAPPEventHandler* i_pEventHandler); 
+   CSECTION* GetSyncObject(void);
+   inline void EnterCriticalSection(void);
+   inline void LeaveCriticalSection(void);
 
    bool GetOnlineStatus(void) 
    {

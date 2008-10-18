@@ -29,10 +29,10 @@ END_MESSAGE_MAP()
 
 
 //////////////////////Thread side/////////////////////////////////////
-void CControlAppAdapter::OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data)
+void CControlAppAdapter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
   if (IsWindow(m_hWnd) && m_switch_on)
-    PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)i_packet_data);	  
+    PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)ip_packet);	  
 }
 
 void CControlAppAdapter::OnConnection(const bool i_online)
@@ -59,7 +59,7 @@ LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
   if (!m_switch_on) 
     return 0;
   ASSERT(m_destination_handler);
-  m_destination_handler->OnPacketReceived((BYTE)wParam,(void*)lParam);
+  m_destination_handler->OnPacketReceived((BYTE)wParam,(SECU3IO::SECU3Packet*)lParam);
   return 0;
 }
 

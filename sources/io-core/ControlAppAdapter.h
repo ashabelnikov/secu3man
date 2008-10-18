@@ -40,7 +40,7 @@ class AFX_EXT_CLASS CControlAppAdapter : public CWnd, public IAPPEventHandler
 
 
   	  //from IAPPEventHandler, called by thread:
-	  virtual void OnPacketReceived(const BYTE i_descriptor, const void* i_packet_data);
+	  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
 	  virtual void OnConnection(const bool i_online);
 
   protected:

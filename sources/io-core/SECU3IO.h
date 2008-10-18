@@ -33,7 +33,7 @@ namespace SECU3IO
  {
   unsigned char tables_num;
   unsigned char index;
-  std::string   name;
+  char   name[64];
  };
 
  struct StartrPar
@@ -113,5 +113,22 @@ struct OPCompNc //спользуется если надо просто принять или послать определенный 
 };
 
 #define OPCODE_EEPROM_PARAM_SAVE 1
+
+union SECU3Packet
+{
+  SECU3IO::SensorDat    m_SensorDat;
+  SECU3IO::FnNameDat    m_FnNameDat;
+  SECU3IO::StartrPar    m_StartrPar; 
+  SECU3IO::AnglesPar    m_AnglesPar;
+  SECU3IO::FunSetPar    m_FunSetPar;
+  SECU3IO::IdlRegPar    m_IdlRegPar;
+  SECU3IO::CarburPar    m_CarburPar;
+  SECU3IO::TemperPar    m_TemperPar;
+  SECU3IO::ADCCompenPar m_ADCCompenPar;
+  SECU3IO::RawSensDat   m_RawSensDat;
+  SECU3IO::CKPSPar      m_CKPSPar;
+  SECU3IO::OPCompNc     m_OPCompNc;
+};
+
 
 };

@@ -25,26 +25,32 @@ CControlApp::CControlApp()
 , m_online_state(false)
 , m_force_notify_about_connection(false)
 , m_pending_packets_index(0)
+, m_p_port(NULL)
+, m_hThread(NULL)
+, m_ThreadId(0)
+, m_hAwakeEvent(NULL)
+, m_is_thread_must_exit(false)
+, m_uart_speed(CBR_9600)
+, m_ingoing_packet("")
+, m_packets_parse_state(0)
+, m_hTimer(NULL)
+, m_outgoing_packet("")
+, mp_csection(NULL)
 {
-  m_p_port      = NULL;
-  m_hThread     = NULL;
-  m_ThreadId    = 0;
-  m_hAwakeEvent = NULL;
-  m_is_thread_must_exit = false;
-  m_uart_speed  = CBR_9600;
-
-  m_Packets = new Packets(50);
-
-  m_ingoing_packet  = "";
-  m_packets_parse_state = 0;
-  m_hTimer      = NULL;
-  m_outgoing_packet = "";
+ m_Packets = new Packets(50);
+ memset(&m_recepted_packet,0,sizeof(SECU3Packet));
+ memset(&m_pending_packets,0,sizeof(SECU3Packet) * PENDING_PACKETS_QUEUE_SIZE);
+ 
+ mp_csection = new CSECTION;
+ InitializeCriticalSection(GetSyncObject());
 }
 
 //-----------------------------------------------------------------------
 CControlApp::~CControlApp()
 {
-	delete m_Packets;
+  delete m_Packets;
+  DeleteCriticalSection(GetSyncObject());
+  delete mp_csection;
 }
 
 
@@ -167,7 +173,7 @@ int CControlApp::SplitPackets(BYTE* i_buff)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_SENSOR_DAT(BYTE* raw_packet)
 {
- SECU3IO::SensorDat& m_SensorDat = PendingPacket().m_SensorDat;
+ SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
  if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -236,7 +242,7 @@ bool CControlApp::Parse_SENSOR_DAT(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FNNAME_DAT(BYTE* raw_packet)
 {
- SECU3IO::FnNameDat& m_FnNameDat = PendingPacket().m_FnNameDat;
+ SECU3IO::FnNameDat& m_FnNameDat = m_recepted_packet.m_FnNameDat;
 
  if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
  {
@@ -259,7 +265,7 @@ bool CControlApp::Parse_FNNAME_DAT(BYTE* raw_packet)
      return false;
  *p = 0;
 
- m_FnNameDat.name = (char*)raw_packet;
+ strcpy(m_FnNameDat.name,(const char*)raw_packet);
 
  return true;
 }
@@ -268,7 +274,7 @@ bool CControlApp::Parse_FNNAME_DAT(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_STARTR_PAR(BYTE* raw_packet)
 {
- SECU3IO::StartrPar& m_StartrPar = PendingPacket().m_StartrPar;
+ SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
 
  if (strlen((char*)raw_packet)!=9)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -293,7 +299,7 @@ bool CControlApp::Parse_STARTR_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
 {
- SECU3IO::AnglesPar& m_AnglesPar = PendingPacket().m_AnglesPar;
+ SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
 
  if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -328,7 +334,7 @@ bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
 {
- SECU3IO::FunSetPar& m_FunSetPar = PendingPacket().m_FunSetPar;
+ SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
 
  if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -367,7 +373,7 @@ bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_IDLREG_PAR(BYTE* raw_packet)
 {
- SECU3IO::IdlRegPar& m_IdlRegPar = PendingPacket().m_IdlRegPar; 
+ SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar; 
 
  if (strlen((char*)raw_packet)!=18)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -411,7 +417,7 @@ bool CControlApp::Parse_IDLREG_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
 {
- SECU3IO::CarburPar& m_CarburPar = PendingPacket().m_CarburPar;
+ SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
 
  if (strlen((char*)raw_packet)!=10)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -440,7 +446,7 @@ bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_TEMPER_PAR(BYTE* raw_packet)
 {
- SECU3IO::TemperPar& m_TemperPar = PendingPacket().m_TemperPar;
+ SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
 
  if (strlen((char*)raw_packet)!=10)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -476,7 +482,7 @@ bool CControlApp::Parse_TEMPER_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_ADCRAW_DAT(BYTE* raw_packet)
 {
- SECU3IO::RawSensDat& m_RawSensDat = PendingPacket().m_RawSensDat;
+ SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
 
  if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
    return false;
@@ -513,7 +519,7 @@ bool CControlApp::Parse_ADCRAW_DAT(BYTE* raw_packet)
 //note: for more information see AVR120 application note.
 bool CControlApp::Parse_ADCCOR_PAR(BYTE* raw_packet)
 {
-SECU3IO::ADCCompenPar& m_ADCCompenPar = PendingPacket().m_ADCCompenPar; 
+SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar; 
 
 if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дескриптора
    return false;
@@ -567,7 +573,7 @@ if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дес
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_CKPS_PAR(BYTE* raw_packet)
 {
- SECU3IO::CKPSPar& m_CKPSPar = PendingPacket().m_CKPSPar;
+ SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
 
  if (strlen((char*)raw_packet)!=6)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -598,7 +604,7 @@ bool CControlApp::Parse_CKPS_PAR(BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_OP_COMP_NC(BYTE* raw_packet)
 {
- SECU3IO::OPCompNc& m_OPCompNc = PendingPacket().m_OPCompNc;
+ SECU3IO::OPCompNc& m_OPCompNc = m_recepted_packet.m_OPCompNc;
 
  if (strlen((char*)raw_packet)!=2)  //размер пакета без сигнального символа, дескриптора
 	 return false;
@@ -637,94 +643,73 @@ bool CControlApp::ParsePackets()
 		{
 		 case TEMPER_PAR:
 			 if (Parse_TEMPER_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_TemperPar);		
-			   break;
-			 }
-			 continue;
+			   break; //пакет успешно разобран по составл€ющим
+			 continue;//пакет не прошел сурового отбора нашим жюри :-)
 		 case CARBUR_PAR: 
 			 if (Parse_CARBUR_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_CarburPar);		
 			   break;
-			 }
 			 continue;
 		 case IDLREG_PAR: 
 			 if (Parse_IDLREG_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_IdlRegPar);		
 			   break;
-			 }
 			 continue;
 		 case ANGLES_PAR:
 			 if (Parse_ANGLES_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_AnglesPar);		
 			   break;
-			 }
 			 continue;
 		 case FUNSET_PAR:
 			 if (Parse_FUNSET_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_FunSetPar);		
 			   break;
-			 }
 			 continue;
 		 case STARTR_PAR:
 			 if (Parse_STARTR_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_StartrPar);		
 			   break;
-			 }
 			 continue;
 		 case FNNAME_DAT:
 			 if (Parse_FNNAME_DAT(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_FnNameDat);		
 			   break;
-			 }
 			 continue;
 		 case SENSOR_DAT:					 
 			 if (Parse_SENSOR_DAT(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_SensorDat);		
-			   break; //пакет успешно разобран по составл€ющим
-			 }
-			 continue; //пакет не прошел сурового отбора нашим жюри :-)
-
+			   break; 
+			 continue; 
 		 case ADCRAW_DAT:					 
 			 if (Parse_ADCRAW_DAT(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_RawSensDat);		
 			   break; 
-			 }
 			 continue; 
 		 case ADCCOR_PAR:
 			 if (Parse_ADCCOR_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_ADCCompenPar);		
 			   break;
-			 }
 			 continue;
 		 case CKPS_PAR:
 			 if (Parse_CKPS_PAR(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_CKPSPar);		
 			   break;
-			 }
 			 continue;
          case OP_COMP_NC:
 			 if (Parse_OP_COMP_NC(raw_packet))
-			 {
-	           m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket().m_OPCompNc);		
 			   break;
-			 }
 			 continue;
 
          default:
              continue;
 		}//switch        
 
+        
+		////////////////////////////////////////////////////////////////////////////
+		__try
+		{
+		 EnterCriticalSection();
+	 	 memcpy(&PendingPacket(),&m_recepted_packet,sizeof(SECU3Packet));
+		}		
+		__finally
+		{
+		 LeaveCriticalSection();
+		}
+		////////////////////////////////////////////////////////////////////////////
+
+		//так как все возможные структуры данных пакетов собраны в union, то нам достаточно оперировать
+		//только адресом union.
+        m_pEventHandler->OnPacketReceived(descriptor,&EndPendingPacket());		
   	    status = true;
 	}//for
 
@@ -1084,9 +1069,9 @@ void CControlApp::SetEventHandler(IAPPEventHandler* i_pEventHandler)
 };
 
 //-----------------------------------------------------------------------
-CControlApp::SECU3Packet& CControlApp::EndPendingPacket(void)
+SECU3Packet& CControlApp::EndPendingPacket(void)
 {
-  CControlApp::SECU3Packet& packet = m_pending_packets[m_pending_packets_index];
+  SECU3IO::SECU3Packet& packet = m_pending_packets[m_pending_packets_index];
   m_pending_packets_index++;
   if (m_pending_packets_index >= PENDING_PACKETS_QUEUE_SIZE)
     m_pending_packets_index = 0;
@@ -1094,11 +1079,30 @@ CControlApp::SECU3Packet& CControlApp::EndPendingPacket(void)
 }
 
 //-----------------------------------------------------------------------
-CControlApp::SECU3Packet& CControlApp::PendingPacket(void)
+SECU3Packet& CControlApp::PendingPacket(void)
 {	
-  return m_pending_packets[m_pending_packets_index];
+ return m_pending_packets[m_pending_packets_index];
 }
 
 //-----------------------------------------------------------------------
+//for external use
+CControlApp::CSECTION* CControlApp::GetSyncObject(void)
+{
+ ASSERT(mp_csection);
+ return mp_csection;
+}
 
+//-----------------------------------------------------------------------
+inline void CControlApp::EnterCriticalSection(void)
+{
+ ::EnterCriticalSection(GetSyncObject());
+}
+
+//-----------------------------------------------------------------------
+inline void CControlApp::LeaveCriticalSection(void)
+{
+ ::LeaveCriticalSection(GetSyncObject());
+}
+
+//-----------------------------------------------------------------------
 
