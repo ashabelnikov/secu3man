@@ -31,13 +31,11 @@ BEGIN_MESSAGE_MAP(CBootLoaderAdapter,CWnd)
 END_MESSAGE_MAP()
 
 //////////////////////Thread side////////////////////////////////////
-void CBootLoaderAdapter::OnUpdateUI(const int opcode,const int total,const int current)
+void CBootLoaderAdapter::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 {
   if (IsWindow(m_hWnd))
   {
-    //achtung! dirty hack! ))), see delete!!!
-    poolUpdateUI* pool = new poolUpdateUI(opcode, total, current); 
-    PostMessage(WM_THREAD_ON_UPDATE_UI,(WPARAM)pool,0);
+   PostMessage(WM_THREAD_ON_UPDATE_UI,(WPARAM)ip_data,0);
   }
 }
 
@@ -57,10 +55,11 @@ void CBootLoaderAdapter::OnEnd(const int opcode,const int status)
 /////////////////////Application side////////////////////////////////
 LRESULT CBootLoaderAdapter::msgOnUpdateUI(WPARAM wParam, LPARAM lParam)
 {
-  poolUpdateUI* pool = reinterpret_cast<poolUpdateUI*>(wParam);
-  m_destination_handler->OnUpdateUI(pool->opcode,pool->total,pool->current);
-  if (pool)
-    delete pool; //hack! 
+  poolUpdateUI* p_data = reinterpret_cast<poolUpdateUI*>(wParam);
+  ASSERT(p_data);
+  if (NULL==p_data)
+    return 0; //what is this?
+  m_destination_handler->OnUpdateUI(p_data);
   return 0;
 }
 

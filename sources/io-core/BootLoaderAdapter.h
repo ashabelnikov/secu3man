@@ -28,7 +28,7 @@ class AFX_EXT_CLASS CBootLoaderAdapter  : public CWnd, public IBLDEventHandler
   private:
     IBLDEventHandler* m_destination_handler;
 
-	virtual void OnUpdateUI(const int opcode,const int total,const int current);  
+	virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);  
     virtual void OnBegin(const int opcode,const int status);
     virtual void OnEnd(const int opcode,const int status);    
 
@@ -38,16 +38,6 @@ class AFX_EXT_CLASS CBootLoaderAdapter  : public CWnd, public IBLDEventHandler
 	afx_msg LRESULT msgOnBegin(WPARAM wParam, LPARAM lParam);
 	afx_msg LRESULT msgOnEnd(WPARAM wParam, LPARAM lParam);
 
-	DECLARE_MESSAGE_MAP();
-
-    struct poolUpdateUI
-	{
-	  poolUpdateUI(int i_opcode,int i_total,int i_current)
-	  : opcode(i_opcode), total(i_total), current(i_current){};
-  	  const int opcode;
-	  const int total;
-	  const int current;
-	};
-
+	DECLARE_MESSAGE_MAP();    
 };
 

@@ -18,9 +18,21 @@
 class AFX_EXT_CLASS IBLDEventHandler
 {
 public:
+	struct poolUpdateUI
+	{
+	 void Set(int i_opcode,int i_total,int i_current)
+	 {
+      opcode  = i_opcode;
+ 	  total   = i_total;
+ 	  current = i_current;
+	 }
+	 int opcode;
+	 int total;
+	 int current;
+	};
 
    //Обработчики событий - пользователь этого класса толжен обязательно перегрузить эти функции!
-   virtual void OnUpdateUI(const int opcode,const int total,const int current) = 0;  
+   virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data) = 0;  
    virtual void OnBegin(const int opcode, const int status) = 0;
    virtual void OnEnd(const int opcode, const int status) = 0;    
 
@@ -43,6 +55,14 @@ private:
    bool      m_work_stoped;
    DWORD     m_uart_speed;
 
+   enum {PENDING_DATA_QUEUE_SIZE = 256};
+   struct PendingData
+   {
+	IBLDEventHandler::poolUpdateUI m_update_ui;
+   }m_pending_data[PENDING_DATA_QUEUE_SIZE];
+
+   int m_current_pending_data_index;
+
    IBLDEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IBLDEventHandler)
       
    struct  //сохраняет данные необходимые для выполнения операции
@@ -55,6 +75,10 @@ private:
 
    bool IsOpcodeValid(const int opcode);
    bool FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* current);
+
+   void EventHandler_OnUpdateUI(const int i_opcode,const int i_total,const int i_current);
+   void EventHandler_OnBegin(const int i_opcode, const int i_status);
+   void EventHandler_OnEnd(const int i_opcode, const int i_status);
 
 public:
 	bool Initialize(CComPort* p_port, const DWORD uart_seed);
@@ -71,7 +95,6 @@ public:
     //starts the specified operation
 	//!!! i_addr используется только при чтении FLASH
     bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0); 
-
  
 	inline bool IsIdle(void) const {return (m_ThreadBusy)?false:true;};
 

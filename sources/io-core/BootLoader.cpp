@@ -18,17 +18,17 @@
 //-----------------------------------------------------------------------
 CBootLoader::CBootLoader()
 : m_pEventHandler(NULL)
+, m_p_port(NULL)
+, m_hThread(NULL)
+, m_ThreadId(0)
+, m_hAwakeEvent(NULL)
+, m_ErrorCode(0)
+, m_ThreadBusy(false)
+, m_is_thread_must_exit(false)
+, m_work_stoped(true)
+, m_uart_speed(CBR_9600)
+, m_current_pending_data_index(0)
 {
-  m_p_port      = NULL;
-  m_hThread     = NULL;
-  m_ThreadId    = 0;
-  m_hAwakeEvent = NULL;
-  m_ErrorCode   = 0; 
-
-  m_ThreadBusy  = false;
-  m_is_thread_must_exit = false;
-  m_work_stoped = true;
-  m_uart_speed  = CBR_9600;
 }
 
 //-----------------------------------------------------------------------
@@ -66,7 +66,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
 	return false; //нет смысла продолжать дальше
   }
 
-  m_pEventHandler->OnUpdateUI(m_opdata.opcode,total_size,++(*current));  //1 байт получен
+  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,++(*current));  //1 байт получен
 
   if (!m_p_port->RecvBlock(t_buf,block_size))  //приняли очередную страницу
   {
@@ -75,7 +75,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
   }
 
   (*current)+=block_size;
-  m_pEventHandler->OnUpdateUI(m_opdata.opcode,total_size,*current); //очередная страница принята
+  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current); //очередная страница принята
 
   if (!CNumericConv::HexArrayToBin(t_buf,o_buf,FLASH_PAGE_SIZE))
   {
@@ -90,7 +90,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
   }
 
   *current+=2;
-  m_pEventHandler->OnUpdateUI(m_opdata.opcode,total_size,*current);  //страница принята
+  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current);  //страница принята
 
   if (!CNumericConv::Hex8ToBin(t_buf,&t_byte))   //t_buf -> symbol
   {
@@ -112,7 +112,6 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 {
   CBootLoader* p_boot = (CBootLoader*)lpParameter;
   CComPort* p_port = p_boot->m_p_port;
-  IBLDEventHandler* pEventHandler = NULL;
   int opcode = 0, i = 0, j = 0, k = 0; 
   int block_size,total_size,current;
   BYTE symbol = 0;  //для принятия символа '<' 
@@ -126,9 +125,6 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
 	  if (p_boot->m_is_thread_must_exit)
 		  break;  //поступила команда завершения работы потока
-
-      pEventHandler = p_boot->m_pEventHandler;
-      ASSERT(pEventHandler); //перед тем как посылать/обрабатывать команды, необходимо приаттачить обработчик событий! 
 
 	  opcode = p_boot->m_opdata.opcode;
 	  switch(opcode)  //обработка команд
@@ -144,7 +140,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
 		   p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
 		   symbol     = 0;
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
 		   block_size = FLASH_PAGE_SIZE * 2;
 		   current    = 0;         
 
@@ -162,7 +158,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 		   int count_of_pages = (page_end - page_start) + 1;
 
 		   total_size = count_of_pages * (block_size + 1 + 2);   //1 byte - '<' + 2 bytes - CS
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);		   
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);		   
                                             
 		   for(j = 0,i = page_start; i <= page_end; i++,j++) //цикл: количество страниц
 		   {
@@ -174,7 +170,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 		   //теперь необходимо сохранить данные соответствующие конкретным адресам
            memcpy(p_boot->m_opdata.data,fw_buf + bottom_offset,p_boot->m_opdata.size);
 
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 		   p_boot->m_opdata.opcode = 0; 	   
 		   }
 		   break;
@@ -183,7 +179,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
        case BL_OP_WRITE_FLASH:   //запись FLASH
 		   p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
 		   symbol     = 0;
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
 		   block_size = FLASH_PAGE_SIZE * 2;
 		   current    = 0;
 		   int incomplete_page_bytes;
@@ -202,7 +198,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			   total_size+= (block_size + 1 + 2);
 		   }
            
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 
 
 		   for(i = 0; i < total_page_number; i++) //цикл: количество страниц
@@ -237,7 +233,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
              p_port->SendASCII((char*)raw); //послали данные страницы 
 			 
 			 current+=block_size;
-	  	     pEventHandler->OnUpdateUI(opcode,total_size,current);  //была передана страница
+	  	     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);  //была передана страница
 			
 			 //теперь будем принимать сигнальный символ и два символа контрольной суммы
 			 //теперь необходимо получить данные
@@ -253,7 +249,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			   break; //нет смысла продолжать дальше
 			 }
 
-	 	     pEventHandler->OnUpdateUI(opcode,total_size,++current);  //1 байт получен
+	 	     p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);  //1 байт получен
 
  		     if (!p_port->RecvBlock(raw,2))  //CS
 			 {
@@ -262,7 +258,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			 }
 
 		     current+=2;
-		     pEventHandler->OnUpdateUI(opcode,total_size,current);   //2 байта получено
+		     p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);   //2 байта получено
 
 			 if (!CNumericConv::Hex8ToBin(raw,&symbol))
 			 {
@@ -278,7 +274,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
 		   }//for
 
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 	       p_boot->m_opdata.opcode = 0; 	   
 		   break;
 
@@ -290,8 +286,8 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 		   total_size = (EEPROM_SIZE*2)+1+2;   //1 byte - '<' + 2 bytes - CS
 		   current    = 0;
 
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
            p_port->SendASCII("!J"); //чтение
 		   if (!p_port->RecvByte(&symbol))
 		   {
@@ -304,7 +300,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			   goto finish_read_eeprom;
 		   }
 
-		   pEventHandler->OnUpdateUI(opcode,total_size,++current);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
 
             for(i = 0; i < EEPROM_RD_BLOCKS; i++) //принимаем данные по блокам
 			{			   
@@ -314,7 +310,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 				   goto finish_read_eeprom;//часть данных потеряна - нет смысла продолжать дальше
 			   }
 			   current+=block_size;
-			   pEventHandler->OnUpdateUI(opcode,total_size,current);
+			   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 			}//for
 
             if (!CNumericConv::HexArrayToBin(raw,p_boot->m_opdata.data,EEPROM_SIZE))
@@ -323,7 +319,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 				goto finish_read_eeprom;
 			}
 
-			pEventHandler->OnUpdateUI(opcode,total_size,current);
+			p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 
 		    if (!p_port->RecvBlock(raw,2))  //CS
 			{
@@ -332,7 +328,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			}
 
 		    current+=2;
-		    pEventHandler->OnUpdateUI(opcode,total_size,current);
+		    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 
             if (!CNumericConv::Hex8ToBin(raw,&symbol))
 			{
@@ -344,7 +340,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 			   p_boot->m_ErrorCode = BL_ERROR_CHKSUM;
 
 finish_read_eeprom:
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 	       p_boot->m_opdata.opcode = 0; 	   
 		   break;
 
@@ -356,8 +352,8 @@ finish_read_eeprom:
 		   total_size = (EEPROM_SIZE*2)+1+2;   //1 byte - '<' + 2 bytes - CS
 		   current    = 0;
 
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
            p_port->SendASCII("!W");  //запись
 
 		   //сконвертировали байты в HEX-символы
@@ -373,7 +369,7 @@ finish_read_eeprom:
 				  k++;
 				}
 			   current+=block_size;
-			   pEventHandler->OnUpdateUI(opcode,total_size,current);
+			   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 			}//for
 
            //принимаем ответ
@@ -389,7 +385,7 @@ finish_read_eeprom:
 			  goto finish_write_eeprom;
 			}
 
-		    pEventHandler->OnUpdateUI(opcode,total_size,++current);
+		    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
 
 		    if (!p_port->RecvBlock(raw,2))  //CS
 			{
@@ -398,7 +394,7 @@ finish_read_eeprom:
 			}
 
 		    current+=2;
-		    pEventHandler->OnUpdateUI(opcode,total_size,current);
+		    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 
             if (!CNumericConv::Hex8ToBin(raw,&symbol))
 			{
@@ -410,7 +406,7 @@ finish_read_eeprom:
 		 	  p_boot->m_ErrorCode = BL_ERROR_CHKSUM;
 
 finish_write_eeprom:
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 	       p_boot->m_opdata.opcode = 0; //сброс кода операции	   
 		   break;
 
@@ -421,8 +417,8 @@ finish_write_eeprom:
 		   symbol = 0;
 		   total_size = BL_SIGNATURE_STR_LEN+1; //1 byte - '<'
 		   current    = 0;
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
            p_port->SendASCII("!I");
 		   if (!p_port->RecvByte(&symbol))
 		   {
@@ -435,16 +431,16 @@ finish_write_eeprom:
 		   }
 		   else
 		   {
-		    pEventHandler->OnUpdateUI(opcode,total_size,++current);
+		    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current);
 
 		    if (!p_port->RecvBlock(p_boot->m_opdata.data,BL_SIGNATURE_STR_LEN))
 			   p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
 
 			current+=BL_SIGNATURE_STR_LEN;
-			pEventHandler->OnUpdateUI(opcode,total_size,current);
+			p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 		   }
 finish_read_signature:
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 	       p_boot->m_opdata.opcode = 0; 	   
 		   break;
 
@@ -454,8 +450,8 @@ finish_read_signature:
 		   symbol = 0;
 		   total_size = 1+1; //1 byte - '<', 1 byte - '@'
 		   current    = 0;
-		   pEventHandler->OnBegin(p_boot->m_opdata.opcode,true);
-		   pEventHandler->OnUpdateUI(opcode,total_size,current);
+		   p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
+		   p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
 		   //посылаем команду
            p_port->SendASCII("!T");
 		   //принимаем и анализируем ответ
@@ -471,7 +467,7 @@ finish_read_signature:
 		   }
 		   else
 		   {
-	 	     pEventHandler->OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии первого байта
+	 	    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии первого байта
 		   }
            
 		   symbol = 0;
@@ -487,11 +483,11 @@ finish_read_signature:
 		   }
 		   else
 		   {
-	 	     pEventHandler->OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии второго байта
+	 	    p_boot->EventHandler_OnUpdateUI(opcode,total_size,++current); //рапортуем о принятии второго байта
 		   }
 
 finish_exit:
-		   pEventHandler->OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
+		   p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
 	       p_boot->m_opdata.opcode = 0; 	   
 		   break;
 
@@ -655,3 +651,37 @@ void CBootLoader::SwitchOn(bool state)
 }
 
 //-----------------------------------------------------------------------
+void CBootLoader::EventHandler_OnUpdateUI(const int i_opcode, const int i_total, const int i_current)
+{
+ ASSERT(m_pEventHandler);
+ if (NULL==m_pEventHandler)
+  return;
+ m_pending_data[m_current_pending_data_index].m_update_ui.Set(i_opcode,i_total,i_current);
+ //посылка сообщения
+ m_pEventHandler->OnUpdateUI(&m_pending_data[m_current_pending_data_index].m_update_ui); 
+ //для следующего сообщения новый индекс
+ m_current_pending_data_index++;
+ if (m_current_pending_data_index >= PENDING_DATA_QUEUE_SIZE)
+  m_current_pending_data_index = 0;
+}
+
+//-----------------------------------------------------------------------
+void CBootLoader::EventHandler_OnBegin(const int i_opcode, const int i_status)
+{ //заглушка
+ ASSERT(m_pEventHandler);
+ if (NULL==m_pEventHandler)
+  return;
+ m_pEventHandler->OnBegin(i_opcode,i_status);
+}
+
+//-----------------------------------------------------------------------
+void CBootLoader::EventHandler_OnEnd(const int i_opcode, const int i_status)
+{ //заглушка
+ ASSERT(m_pEventHandler);
+ if (NULL==m_pEventHandler)
+  return;
+ m_pEventHandler->OnEnd(i_opcode, i_status);
+}
+
+//-----------------------------------------------------------------------
+

@@ -38,7 +38,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
     virtual void OnConnection(const bool i_online);
 
 	//from IBLDEventHandler
-    virtual void OnUpdateUI(const int opcode,const int total,const int current);  
+    virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);  
     virtual void OnBegin(const int opcode,const int status);
     virtual void OnEnd(const int opcode,const int status);    
 

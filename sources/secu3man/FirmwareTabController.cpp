@@ -177,13 +177,14 @@ void CFirmwareTabController::OnConnection(const bool i_online)
 
 
 /////////////////////////////////////////////////////////////////////////////////
-void CFirmwareTabController::OnUpdateUI(const int opcode,const int total,const int current)
+void CFirmwareTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 {
-	if (opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
-	{
-	  m_sbar->SetProgressRange(0,total);
-	  m_sbar->SetProgressPos(current);
-	}
+ ASSERT(ip_data);
+ if (ip_data->opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
+ {
+  m_sbar->SetProgressRange(0,ip_data->total);
+  m_sbar->SetProgressPos(ip_data->current);
+ }
 }
 
 void CFirmwareTabController::OnBegin(const int opcode,const int status)
