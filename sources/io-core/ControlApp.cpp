@@ -1086,7 +1086,7 @@ SECU3Packet& CControlApp::PendingPacket(void)
 
 //-----------------------------------------------------------------------
 //for external use
-CControlApp::CSECTION* CControlApp::GetSyncObject(void)
+inline CControlApp::CSECTION* CControlApp::GetSyncObject(void)
 {
  ASSERT(mp_csection);
  return mp_csection;

@@ -262,10 +262,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
 {
   SECU3IO::SECU3Packet m_recepted_packet;
 
+  ////////////////////////////////////////////////////////////////////////
   //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
   m_comm->m_pControlApp->EnterCriticalSection();
   memcpy(&m_recepted_packet,ip_packet,sizeof(SECU3IO::SECU3Packet));
   m_comm->m_pControlApp->LeaveCriticalSection();
+  ////////////////////////////////////////////////////////////////////////
 
   //дальше работаем с безопасной копией данных
   _OnPacketReceived(i_descriptor,&m_recepted_packet);

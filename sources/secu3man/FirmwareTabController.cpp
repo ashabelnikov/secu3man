@@ -131,6 +131,7 @@ void CFirmwareTabController::OnDeactivate(void)
 /////////////////////////////////////////////////////////////////////////////////
 void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
+ //not used now.
 }
 
 void CFirmwareTabController::OnConnection(const bool i_online)
@@ -180,6 +181,15 @@ void CFirmwareTabController::OnConnection(const bool i_online)
 void CFirmwareTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 {
  ASSERT(ip_data);
+ IBLDEventHandler::poolUpdateUI data;
+
+ /////////////////////////////////////////////////////////////
+ //эксклюзивный доступ
+ m_comm->m_pBootLoader->EnterCriticalSection();
+ data = *ip_data; 
+ m_comm->m_pBootLoader->LeaveCriticalSection();
+ /////////////////////////////////////////////////////////////
+
  if (ip_data->opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
  {
   m_sbar->SetProgressRange(0,ip_data->total);

@@ -26,6 +26,14 @@ public:
  	  total   = i_total;
  	  current = i_current;
 	 }
+
+	 void operator=(poolUpdateUI& i_other)
+	 {
+      opcode  = i_other.opcode;
+ 	  total   = i_other.total;
+ 	  current = i_other.current;
+	 }
+
 	 int opcode;
 	 int total;
 	 int current;
@@ -39,48 +47,15 @@ public:
 };
 
 
-
 class CComPort;
 class AFX_EXT_CLASS CBootLoader  
 {
-private:
-   CComPort* m_p_port;
-   HANDLE    m_hThread;
-   HANDLE    m_hAwakeEvent;
-   DWORD     m_ThreadId;
-   bool      m_ThreadBusy;
-   int       m_ErrorCode; 
-
-   bool      m_is_thread_must_exit;
-   bool      m_work_stoped;
-   DWORD     m_uart_speed;
-
-   enum {PENDING_DATA_QUEUE_SIZE = 256};
-   struct PendingData
-   {
-	IBLDEventHandler::poolUpdateUI m_update_ui;
-   }m_pending_data[PENDING_DATA_QUEUE_SIZE];
-
-   int m_current_pending_data_index;
-
-   IBLDEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IBLDEventHandler)
-      
-   struct  //сохраняет данные необходимые для выполнения операции
-   { 
-     int   opcode;
-	 BYTE* data;
-	 int   addr;
-	 int   size;
-   }m_opdata;
-
-   bool IsOpcodeValid(const int opcode);
-   bool FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* current);
-
-   void EventHandler_OnUpdateUI(const int i_opcode,const int i_total,const int i_current);
-   void EventHandler_OnBegin(const int i_opcode, const int i_status);
-   void EventHandler_OnEnd(const int i_opcode, const int i_status);
-
 public:
+	typedef CRITICAL_SECTION CSECTION;
+
+	CBootLoader();
+    virtual ~CBootLoader();
+
 	bool Initialize(CComPort* p_port, const DWORD uart_seed);
 	void SetEventHandler(IBLDEventHandler* i_pEventHandler) 
 	{ 
@@ -101,10 +76,16 @@ public:
 	inline HANDLE    GetThreadHandle(void) const {return m_hThread;}
 	inline DWORD     GetThreadId(void) const     {return m_ThreadId;}
 	inline CComPort* GetPortHandle(void) const   {return m_p_port;}
-	inline int       GetLastError() const {return m_ErrorCode;}
+	inline int       GetLastError() const        {return m_ErrorCode;}
+
+	inline CSECTION* GetSyncObject(void) const;
+    inline void EnterCriticalSection(void) const;
+    inline void LeaveCriticalSection(void) const;
 
 	//возвращает true если все ОК
-	inline int       Status(void) const {return ((m_ErrorCode==0)?true:false);}     
+	inline int Status(void) const {return ((m_ErrorCode==0)?true:false);}     
+
+	static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
 	enum {BL_SIGNATURE_STR_LEN = 24};
 	enum {EEPROM_SIZE = 512};         //size of EEPROM
@@ -141,12 +122,46 @@ public:
 	  BL_ERROR_WRONG_DATA = 3
 	};
 
-	static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
-
 	class xThread {};
 
-	CBootLoader();
-    virtual ~CBootLoader();
+private:   
+
+   CSECTION* mp_csection;
+   CComPort* m_p_port;
+   HANDLE    m_hThread;
+   HANDLE    m_hAwakeEvent;
+   DWORD     m_ThreadId;
+   bool      m_ThreadBusy;
+   int       m_ErrorCode; 
+
+   bool      m_is_thread_must_exit;
+   bool      m_work_stoped;
+   DWORD     m_uart_speed;
+
+   enum {PENDING_DATA_QUEUE_SIZE = 256};
+   struct PendingData
+   {
+	IBLDEventHandler::poolUpdateUI m_update_ui;
+   }m_pending_data[PENDING_DATA_QUEUE_SIZE];
+
+   int m_current_pending_data_index;
+
+   IBLDEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IBLDEventHandler)
+      
+   struct  //сохраняет данные необходимые для выполнения операции
+   { 
+     int   opcode;
+	 BYTE* data;
+	 int   addr;
+	 int   size;
+   }m_opdata;
+
+   bool IsOpcodeValid(const int opcode);
+   bool FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* current);
+
+   void EventHandler_OnUpdateUI(const int i_opcode,const int i_total,const int i_current);
+   void EventHandler_OnBegin(const int i_opcode, const int i_status);
+   void EventHandler_OnEnd(const int i_opcode, const int i_status);
 };
 
 #endif //_BOOTLOADER_

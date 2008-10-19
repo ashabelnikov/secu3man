@@ -40,12 +40,33 @@ public:
 };
 
 
-
 class CComPort;
 class AFX_EXT_CLASS CControlApp  
-{
-private:
+{  
+public:
    typedef CRITICAL_SECTION CSECTION;
+
+   CControlApp();
+   virtual ~CControlApp();
+
+   bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
+   bool Terminate(void);
+   void SwitchOn(bool state);
+   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
+   bool ChangeContext(const BYTE i_new_descriptor);
+   bool StartBootLoader();
+   void SetEventHandler(IAPPEventHandler* i_pEventHandler); 
+   inline CSECTION* GetSyncObject(void);
+   inline void EnterCriticalSection(void);
+   inline void LeaveCriticalSection(void);
+   inline bool GetOnlineStatus(void) { return m_online_state; }
+
+   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
+
+   class xThread {};
+
+private:
+   typedef std::vector<std::string> Packets;
 
    enum {PENDING_PACKETS_QUEUE_SIZE = 256};
 
@@ -67,15 +88,15 @@ private:
 
    bool         m_is_thread_must_exit;
 
-   typedef      std::vector<std::string> Packets;
+   Packets*     m_Packets;               //хранит списик выделенных пакетов
+   std::string  m_ingoing_packet;        //используется для выделения одного пакета
+   std::string  m_outgoing_packet;       //используется для формирования пакетов
+   int          m_packets_parse_state;   //хранит состояние конечного автомата используемого для отделения пакетов
 
-   Packets*     m_Packets;      //хранит списик выделенных пакетов
-   std::string  m_ingoing_packet;       //используется для выделения одного пакета
-   std::string  m_outgoing_packet;     //используется для формирования пакетов
-   int          m_packets_parse_state; //хранит состояние конечного автомата используемого для отделения пакетов
-
-   float        m_adc_discrete;
-   float        m_angle_multiplier;
+   float   m_adc_discrete;
+   float   m_angle_multiplier;
+   bool    m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
+   bool    m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
 
    //helper
    void SwitchOnThread(bool state);
@@ -101,8 +122,7 @@ private:
    bool Parse_CKPS_PAR(BYTE* raw_packet);
    bool Parse_OP_COMP_NC(BYTE* raw_packet);
 
-
-   //сборщики пакетов
+   //сборщики отдельных пакетов
    void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
    void Build_IDLREG_PAR(SECU3IO::IdlRegPar* packet_data);
    void Build_STARTR_PAR(SECU3IO::StartrPar* packet_data);
@@ -111,37 +131,7 @@ private:
    void Build_FUNSET_PAR(SECU3IO::FunSetPar* packet_data);
    void Build_ADCCOR_PAR(SECU3IO::ADCCompenPar* packet_data);
    void Build_CKPS_PAR(SECU3IO::CKPSPar* packet_data);
-   void Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data);
-  
-public:
-   bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
-   bool Terminate(void);
-   void SwitchOn(bool state);
-   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
-   bool ChangeContext(const BYTE i_new_descriptor);
-   bool StartBootLoader();
-   void SetEventHandler(IAPPEventHandler* i_pEventHandler); 
-   CSECTION* GetSyncObject(void);
-   inline void EnterCriticalSection(void);
-   inline void LeaveCriticalSection(void);
-
-   bool GetOnlineStatus(void) 
-   {
-     return m_online_state;
-   }
-
-   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
-
-   class xThread {};
-
-   CControlApp();
-   virtual ~CControlApp();
-
-private:
-
-   bool m_online_state;  //хранит текущее состояние (онлайн или оффлайн)
-   bool m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
-    
+   void Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data);    
 };
 
 #endif //_CONTROLAPP_

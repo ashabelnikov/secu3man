@@ -28,12 +28,17 @@ CBootLoader::CBootLoader()
 , m_work_stoped(true)
 , m_uart_speed(CBR_9600)
 , m_current_pending_data_index(0)
+, mp_csection(NULL)
 {
+ mp_csection = new CSECTION;
+ InitializeCriticalSection(GetSyncObject());
 }
 
 //-----------------------------------------------------------------------
 CBootLoader::~CBootLoader()
 {
+ DeleteCriticalSection(GetSyncObject());
+ delete mp_csection;
 }
 
 //-----------------------------------------------------------------------
@@ -656,7 +661,19 @@ void CBootLoader::EventHandler_OnUpdateUI(const int i_opcode, const int i_total,
  ASSERT(m_pEventHandler);
  if (NULL==m_pEventHandler)
   return;
- m_pending_data[m_current_pending_data_index].m_update_ui.Set(i_opcode,i_total,i_current);
+
+ ////////////////////////////////////////////////////////////////////////////
+ __try
+ {
+  EnterCriticalSection();
+  m_pending_data[m_current_pending_data_index].m_update_ui.Set(i_opcode,i_total,i_current);
+ }		
+ __finally
+ {
+  LeaveCriticalSection();
+ }
+ ////////////////////////////////////////////////////////////////////////////
+
  //посылка сообщения
  m_pEventHandler->OnUpdateUI(&m_pending_data[m_current_pending_data_index].m_update_ui); 
  //для следующего сообщения новый индекс
@@ -684,4 +701,23 @@ void CBootLoader::EventHandler_OnEnd(const int i_opcode, const int i_status)
 }
 
 //-----------------------------------------------------------------------
+//for external use
+inline CBootLoader::CSECTION* CBootLoader::GetSyncObject(void) const
+{
+ ASSERT(mp_csection);
+ return mp_csection;
+}
 
+//-----------------------------------------------------------------------
+inline void CBootLoader::EnterCriticalSection(void) const
+{
+ ::EnterCriticalSection(GetSyncObject());
+}
+
+//-----------------------------------------------------------------------
+inline void CBootLoader::LeaveCriticalSection(void) const
+{
+ ::LeaveCriticalSection(GetSyncObject());
+}
+
+//-----------------------------------------------------------------------
