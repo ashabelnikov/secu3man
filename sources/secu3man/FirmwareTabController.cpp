@@ -190,10 +190,10 @@ void CFirmwareTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
  m_comm->m_pBootLoader->LeaveCriticalSection();
  /////////////////////////////////////////////////////////////
 
- if (ip_data->opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
+ if (data.opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
  {
-  m_sbar->SetProgressRange(0,ip_data->total);
-  m_sbar->SetProgressPos(ip_data->current);
+  m_sbar->SetProgressRange(0,data.total);
+  m_sbar->SetProgressPos(data.current);
  }
 }
 
@@ -709,6 +709,7 @@ bool CFirmwareTabController::StartBootLoader(void)
   if (!m_bl_started_emergency)
   {
 	bool result = m_comm->m_pControlApp->StartBootLoader(); 
+	Sleep(10);
 	return result;
   }
 
