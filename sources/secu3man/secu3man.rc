@@ -58,7 +58,7 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
@@ -228,7 +228,7 @@ BEGIN
     IDS_WRITE_FLASH         "Записать FLASH в SECU-3"
     IDS_READ_FLASH_TO_FILE  "Прочитать FLASH из SECU-3 в файл..."
     IDS_WRITE_FLASH_FROM_FILE "Записать FLASH в SECU-3 из файла..."
-    IDS_READ_EEPROM_TO_FILE "Прочиать EEPROM в файл..."
+    IDS_READ_EEPROM_TO_FILE "Прочитать EEPROM в файл..."
     IDS_WRITE_EEPROM_FROM_FILE "Записать EEPROM из файла..."
     IDS_OPEN_FLASH          "Открыть FLASH из файла..."
     IDS_SAVE_FLASH          "Сохранить FLASH в файл..."
@@ -237,17 +237,21 @@ BEGIN
     IDS_CONN_DISCONNECTED   "disconnected"
     IDS_CONN_BOOTLOADER     "boot loader"
     IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW 
-                            "Импортровать даннае из другой прошивки..."
-    IDS_IMPORT_IMPORT_FROM_MPSZ "Импортировать таблицы из MPSZ-ZH" 
-    IDS_IMPORT_POPUP_MENU "Импорт данных"
-    IDS_EXPORT_POPUP_MENU "Экспорт данных"                    
-    IDS_EXPORT_EXPORT_TO_MPSZ "Экспортировать таблицы в MPSZ-ZH"    
+                            "Импортировать данные из другой прошивки..."
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_IMPORT_FW_DATA_FROM_SECU3 
                             "Импортировать данные непосредственно из SECU-3"
+    IDS_IMPORT_IMPORT_FROM_MPSZ "Импортировать таблицы из MPSZ-ZH"
+    IDS_IMPORT_POPUP_MENU   "Импорт данных"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_EXPORT_POPUP_MENU   "Экспорт данных"
+    IDS_EXPORT_EXPORT_TO_MPSZ "Экспортировать таблицы в MPSZ-ZH"
 END
 
 #endif    // Russian resources

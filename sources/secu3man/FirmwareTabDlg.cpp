@@ -367,7 +367,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
  if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_idle_map_chart_state = 1;
-	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,s,16,(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Карата УОЗ на холостом ходу");	  
+	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,s,16,(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Карта УОЗ на холостом ходу");	  
 	DLL::UOZ1_Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
 	DLL::UOZ1_Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
   }
