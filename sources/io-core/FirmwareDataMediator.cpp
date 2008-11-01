@@ -583,7 +583,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 		p_out->fn_gas    = p_params->fn_gas;
 		p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 		p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-		p_out->map_curve_offset = ((float)p_params->map_curve_offset) / ADC_DISCRETE;
+		p_out->map_curve_offset = ((float)p_params->map_curve_offset) * ADC_DISCRETE;
         p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE * 128.0f);
 		}
       break;
