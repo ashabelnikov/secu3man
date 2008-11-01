@@ -64,10 +64,17 @@ typedef struct
   _uchar ckps_cogs_btdc;
   _uchar ckps_ignit_cogs;
 
+  _int angle_dec_spead;
+  _int angle_inc_spead;  
+  _int idlreg_min_angle;
+  _int idlreg_max_angle;
+  _uint map_curve_offset;
+  _uint map_curve_gradient;
+
   //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
   //новых версий прошивок с более старыми версиями. При добавлении новых данных
   //в структуру, необходимо расходовать эти байты.
-  _uchar reserved[24];
+  _uchar reserved[12];
 
   _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -448,7 +455,9 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		p_params->idling_rpm = p_in->idling_rpm;
 		p_params->MINEFR     = p_in->MINEFR;
 		p_params->ifac1      = CNumericConv::Round(p_in->ifac1 * ANGLE_MULTIPLAYER);
-		p_params->ifac2      = CNumericConv::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);	  
+		p_params->ifac2      = CNumericConv::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);
+		p_params->idlreg_min_angle = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
+		p_params->idlreg_max_angle = CNumericConv::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
 		}
       break;
 	case ANGLES_PAR:
@@ -456,7 +465,9 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
         AnglesPar* p_in = (AnglesPar*)i_values;
 		p_params->angle_corr = CNumericConv::Round(p_in->angle_corr * ANGLE_MULTIPLAYER); 
         p_params->max_angle  = CNumericConv::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
-		p_params->min_angle  = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);	  
+		p_params->min_angle  = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
+		p_params->angle_dec_spead = CNumericConv::Round(p_in->dec_spead * ANGLE_MULTIPLAYER);
+		p_params->angle_inc_spead = CNumericConv::Round(p_in->inc_spead * ANGLE_MULTIPLAYER);
 		}
       break;
 	case FUNSET_PAR:
@@ -466,6 +477,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		p_params->fn_gas    = p_in->fn_gas;
 		p_params->map_lower_pressure = CNumericConv::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
 		p_params->map_upper_pressure = CNumericConv::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->map_curve_offset = CNumericConv::Round(p_in->map_curve_offset / ADC_DISCRETE);
+		p_params->map_curve_gradient = CNumericConv::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE);
 		}
       break;
 	case STARTR_PAR:
@@ -549,6 +562,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 		p_out->MINEFR     = p_params->MINEFR;
 		p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLAYER;
 		p_out->ifac2      = ((float)p_params->ifac2) / ANGLE_MULTIPLAYER;
+		p_out->min_angle  = ((float)p_params->idlreg_min_angle) / ANGLE_MULTIPLAYER;
+        p_out->max_angle  = ((float)p_params->idlreg_max_angle) / ANGLE_MULTIPLAYER;
 		}
       break;
 	case ANGLES_PAR:
@@ -556,7 +571,9 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
         AnglesPar* p_out = (AnglesPar*)o_values;
 		p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLAYER; 
         p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLAYER;
-		p_out->min_angle  = ((float)p_params->min_angle)  / ANGLE_MULTIPLAYER;
+		p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLAYER;
+		p_out->dec_spead = ((float)p_params->angle_dec_spead)  / ANGLE_MULTIPLAYER;
+		p_out->inc_spead = ((float)p_params->angle_inc_spead)  / ANGLE_MULTIPLAYER;
 		}
       break;
 	case FUNSET_PAR:
@@ -566,6 +583,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 		p_out->fn_gas    = p_params->fn_gas;
 		p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 		p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+		p_out->map_curve_offset = ((float)p_params->map_curve_offset) / ADC_DISCRETE;
+        p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE * 128.0f);
 		}
       break;
 	case STARTR_PAR:
