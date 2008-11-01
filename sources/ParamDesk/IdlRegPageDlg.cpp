@@ -27,6 +27,9 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 	m_params.MINEFR = 10;
 	m_params.idling_rpm = 850;
 	m_params.idl_regul = 0;
+    m_params.min_angle = -15.0f;
+	m_params.max_angle = 30.0f;
+
 	//{{AFX_DATA_INIT(CIdlRegPageDlg)
 		// NOTE: the ClassWizard will add member initialization here
 	//}}AFX_DATA_INIT
@@ -50,10 +53,16 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_factor_neg_edit);
 	DDX_Control(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN, m_dead_band_rpm_spin);
 	DDX_Control(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_dead_band_rpm_edit);
+	DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, m_restriction_min_edit);
+	DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_SPIN, m_restriction_min_spin);
+	DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_restriction_max_edit);
+	DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_SPIN, m_restriction_max_spin);
 	//}}AFX_DATA_MAP
 
     m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
 	m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);   
+    m_restriction_min_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, m_params.min_angle);
+	m_restriction_max_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_params.max_angle);   
 	DDX_Text(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
 	DDX_Text(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
 	DDX_Check_UCHAR(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
@@ -62,11 +71,13 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CIdlRegPageDlg, CDialog)
 	//{{AFX_MSG_MAP(CIdlRegPageDlg)
-	ON_EN_CHANGE(IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, OnChangePdIdlregDeadBandRpmEdit)
-	ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_NEG_EDIT, OnChangePdIdlregFactorNegEdit)
-	ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_POS_EDIT, OnChangePdIdlregFactorPosEdit)
-	ON_EN_CHANGE(IDC_PD_IDLREG_GOAL_RPM_EDIT, OnChangePdIdlregGoalRpmEdit)
-	ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnPdIdlregUseRegulator)
+	ON_EN_CHANGE(IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_NEG_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_POS_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_IDLREG_GOAL_RPM_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, OnChangeData)
+	ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnChangeData)
 
 	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -90,6 +101,15 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, CDialog)
 
 	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_REGULATOR,OnUpdateControls)
 
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MAX_SPIN,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTIONS_CAPTION,OnUpdateControls)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -126,40 +146,28 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 	m_goal_rpm_spin.SetBuddy(&m_goal_rpm_edit);
     m_goal_rpm_spin.SetRangeAndDelta(250,1800,5);
 	
+	m_restriction_min_spin.SetBuddy(&m_restriction_min_edit);
+	m_restriction_min_edit.SetLimitText(4);
+    m_restriction_min_edit.SetDecimalPlaces(2);
+    m_restriction_min_edit.SetMode(CEditEx::MODE_FLOAT);
+    m_restriction_min_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
+
+	m_restriction_max_spin.SetBuddy(&m_restriction_max_edit);
+	m_restriction_max_edit.SetLimitText(4);
+    m_restriction_max_edit.SetDecimalPlaces(2);
+    m_restriction_max_edit.SetMode(CEditEx::MODE_FLOAT);
+    m_restriction_max_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
+
 	UpdateData(FALSE);
     UpdateDialogControls(this,TRUE);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CIdlRegPageDlg::OnChangePdIdlregDeadBandRpmEdit() 
+void CIdlRegPageDlg::OnChangeData() 
 {
   UpdateData();	
   OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  		  
-}
-
-void CIdlRegPageDlg::OnChangePdIdlregFactorNegEdit() 
-{
-  UpdateData();	
-  OnChangeNotify();   		  
-}
-
-void CIdlRegPageDlg::OnChangePdIdlregFactorPosEdit() 
-{
-  UpdateData();		
-  OnChangeNotify();   		  
-}
-
-void CIdlRegPageDlg::OnChangePdIdlregGoalRpmEdit() 
-{
-  UpdateData();			
-  OnChangeNotify();   		  
-}
-
-void CIdlRegPageDlg::OnPdIdlregUseRegulator() 
-{
-  UpdateData();				
-  OnChangeNotify();   		  
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

@@ -9,8 +9,6 @@
 
 
 //Представление данных передаваемых между SECU и менеджером
-#include <string>
-
 #pragma once
 
 namespace SECU3IO
@@ -47,6 +45,8 @@ struct AnglesPar
   float  max_angle;
   float  min_angle;
   float  angle_corr;
+  float  dec_spead;
+  float  inc_spead;
 };
 
 
@@ -56,6 +56,8 @@ struct FunSetPar
   unsigned char fn_gas;
   float map_lower_pressure;
   float map_upper_pressure;
+  float map_curve_offset;
+  float map_curve_gradient;
 };
 
 struct IdlRegPar
@@ -66,6 +68,8 @@ struct IdlRegPar
   float  ifac2;
   int  MINEFR;
   int  idling_rpm;
+  float min_angle;
+  float max_angle;
 };
 
 

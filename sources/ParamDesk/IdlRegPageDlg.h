@@ -34,6 +34,10 @@ public:
 	CEditEx	m_factor_neg_edit;
 	CSpinButtonCtrlEx	m_dead_band_rpm_spin;
 	CEditEx	m_dead_band_rpm_edit;
+	CSpinButtonCtrlEx	m_restriction_min_spin;
+	CEditEx	m_restriction_min_edit;
+	CSpinButtonCtrlEx	m_restriction_max_spin;
+	CEditEx	m_restriction_max_edit;
 	//}}AFX_DATA
 
 // Overrides
@@ -51,12 +55,7 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(CIdlRegPageDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnChangePdIdlregDeadBandRpmEdit();
-	afx_msg void OnChangePdIdlregFactorNegEdit();
-	afx_msg void OnChangePdIdlregFactorPosEdit();
-	afx_msg void OnChangePdIdlregGoalRpmEdit();
-	afx_msg void OnPdIdlregUseRegulator();
-
+	afx_msg void OnChangeData();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

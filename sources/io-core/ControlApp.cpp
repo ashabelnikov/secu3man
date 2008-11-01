@@ -301,7 +301,7 @@ bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
 {
  SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
 
- if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
@@ -325,6 +325,20 @@ bool CControlApp::Parse_ANGLES_PAR(BYTE* raw_packet)
  raw_packet+=4;  
  m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
 
+ //Скорость уменьшения УОЗ (число со знаком)
+ int dec_spead;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&dec_spead,true))
+     return false;
+ raw_packet+=4;
+ m_AnglesPar.dec_spead = ((float)dec_spead) / m_angle_multiplier;
+
+//Скорость увеличения УОЗ (число со знаком)
+ int inc_spead;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&inc_spead,true))
+     return false;
+ raw_packet+=4;
+ m_AnglesPar.inc_spead = ((float)inc_spead) / m_angle_multiplier;
+
  if (*raw_packet!='\r')
 	 return false;
 
@@ -336,7 +350,7 @@ bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
 
- if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -363,6 +377,20 @@ bool CControlApp::Parse_FUNSET_PAR(BYTE* raw_packet)
  raw_packet+=4;  
  m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
+ //Смещение кривой ДАД
+ int map_curve_offset = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_offset))
+     return false;
+ raw_packet+=4;   
+ m_FunSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
+
+//Наклон кривой ДАД
+ int map_curve_gradient = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_gradient))
+     return false;
+ raw_packet+=4;   
+ m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
+
  if (*raw_packet!='\r')
 	 return false;
 
@@ -375,7 +403,7 @@ bool CControlApp::Parse_IDLREG_PAR(BYTE* raw_packet)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar; 
 
- if (strlen((char*)raw_packet)!=18)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
  //признак использования регулятора
@@ -407,6 +435,20 @@ bool CControlApp::Parse_IDLREG_PAR(BYTE* raw_packet)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_IdlRegPar.idling_rpm))
      return false;
  raw_packet+=4;
+
+//Минимальный УОЗ (число со знаком)
+ int min_angle;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle,true))
+     return false;
+ raw_packet+=4;
+ m_IdlRegPar.min_angle = ((float)min_angle) / m_angle_multiplier;
+
+//Максимальный УОЗ (число со знаком)
+ int max_angle;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&max_angle,true))
+     return false;
+ raw_packet+=4;
+ m_IdlRegPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
  if (*raw_packet!='\r')
 	 return false;
@@ -969,14 +1011,20 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
   CNumericConv::Bin4ToHex(packet_data->idl_regul,m_outgoing_packet);
 
-  int ifac1 =  CNumericConv::Round((packet_data->ifac1 * ANGLE_MULTIPLAYER));
+  int ifac1 =  CNumericConv::Round((packet_data->ifac1 * m_angle_multiplier));
   CNumericConv::Bin16ToHex(ifac1,m_outgoing_packet);
 
-  int ifac2 = CNumericConv::Round((packet_data->ifac2 * ANGLE_MULTIPLAYER));
+  int ifac2 = CNumericConv::Round((packet_data->ifac2 * m_angle_multiplier));
   CNumericConv::Bin16ToHex(ifac2,m_outgoing_packet);
 
   CNumericConv::Bin16ToHex(packet_data->MINEFR,m_outgoing_packet);
   CNumericConv::Bin16ToHex(packet_data->idling_rpm,m_outgoing_packet);
+
+  int min_angle = CNumericConv::Round((packet_data->min_angle * m_angle_multiplier));
+  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
+  int max_angle = CNumericConv::Round((packet_data->max_angle * m_angle_multiplier));
+  CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
+
   m_outgoing_packet+= '\r';
 }
 
@@ -1008,6 +1056,10 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
   CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
   int angle_corr = CNumericConv::Round(packet_data->angle_corr * m_angle_multiplier);
   CNumericConv::Bin16ToHex(angle_corr,m_outgoing_packet);
+  int dec_spead = CNumericConv::Round(packet_data->dec_spead * m_angle_multiplier);
+  CNumericConv::Bin16ToHex(dec_spead,m_outgoing_packet);
+  int inc_spead = CNumericConv::Round(packet_data->inc_spead * m_angle_multiplier);
+  CNumericConv::Bin16ToHex(inc_spead,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 
@@ -1020,6 +1072,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
   CNumericConv::Bin16ToHex(map_lower_pressure,m_outgoing_packet);
   int map_upper_pressure = CNumericConv::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
   CNumericConv::Bin16ToHex(map_upper_pressure,m_outgoing_packet);
+  int map_curve_offset = CNumericConv::Round(packet_data->map_curve_offset / m_adc_discrete);
+  CNumericConv::Bin16ToHex(map_curve_offset,m_outgoing_packet);
+  int map_curve_gradient = CNumericConv::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete );
+  CNumericConv::Bin16ToHex(map_curve_gradient,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 

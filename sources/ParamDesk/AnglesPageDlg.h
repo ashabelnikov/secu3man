@@ -29,9 +29,14 @@ public:
 	CSpinButtonCtrlEx	m_min_angle_spin;
 	CSpinButtonCtrlEx	m_max_angle_spin;
 	CSpinButtonCtrlEx	m_correction_spin;
+	CSpinButtonCtrlEx	m_decrease_spead_spin;
+	CSpinButtonCtrlEx	m_increase_spead_spin;
 	CEditEx	m_min_angle_edit;
 	CEditEx	m_max_angle_edit;
 	CEditEx	m_correction_edit;
+	CEditEx	m_decrease_spead_edit;
+	CEditEx	m_increase_spead_edit;
+	
 	//}}AFX_DATA
 
 // Overrides
@@ -48,9 +53,7 @@ protected:
 	
 	// Generated message map functions
 	//{{AFX_MSG(CAnglesPageDlg)
-	afx_msg void OnChangePdAnglesMinAngleEdit();
-	afx_msg void OnChangePdAnglesMaxAngleEdit();
-	afx_msg void OnChangePdAnglesCorrectionEdit();
+	afx_msg void OnChangeData();
 	virtual BOOL OnInitDialog();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG

@@ -26,6 +26,8 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
   m_params.map_upper_pressure = 10.0f;
   m_params.fn_benzin = 0;
   m_params.fn_gas = 1;
+  m_params.map_curve_offset = 0.547f;
+  m_params.map_curve_gradient = 20.9f;
   //{{AFX_DATA_INIT(CFunSetPageDlg)
 	// NOTE: the ClassWizard will add member initialization here
   //}}AFX_DATA_INIT
@@ -46,10 +48,16 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_press_swing_edit);
   DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_SPIN, m_map_grad_spin);
   DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_map_grad_edit);
+  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_map_curve_offset_edit);
+  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_SPIN, m_map_curve_offset_spin);
+  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_map_curve_gradient_edit);
+  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_SPIN, m_map_curve_gradient_spin);
   //}}AFX_DATA_MAP
 
   m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
   m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
+  m_map_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_params.map_curve_offset);
+  m_map_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_params.map_curve_gradient);
   DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
   DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_params.fn_gas);
 }
@@ -57,10 +65,12 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CFunSetPageDlg, CDialog)
   //{{AFX_MSG_MAP(CFunSetPageDlg)
-  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnSelchangePdFunsetBenzinMapsCombo)
-  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnSelchangePdFunsetGasMapsCombo)
-  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangePdFunsetMapGradEdit)
-  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangePdFunsetPressSwingEdit)
+  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnChangeData)
+  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnChangeData)
+  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangeData)
+  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangeData)
+  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET_EDIT, OnChangeData)
+  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, OnChangeData)
 
   ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControls)
   ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControls)
@@ -78,6 +88,17 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, CDialog)
   ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_MAPS_COMBO,OnUpdateControls)
   ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,OnUpdateControls)
 
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_EDIT,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_SPIN,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_CAPTION,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_UNIT,OnUpdateControls)
+
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_SPIN,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_CAPTION,OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_UNIT,OnUpdateControls)
+
+  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR_GROUP,OnUpdateControls)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -107,6 +128,18 @@ BOOL CFunSetPageDlg::OnInitDialog()
   m_press_swing_edit.SetMode(CEditEx::MODE_FLOAT);
   m_press_swing_spin.SetRangeAndDelta(0.25,105.0f,0.25f);
 
+  m_map_curve_offset_spin.SetBuddy(&m_map_curve_offset_edit);
+  m_map_curve_offset_edit.SetLimitText(5);
+  m_map_curve_offset_edit.SetDecimalPlaces(3);
+  m_map_curve_offset_edit.SetMode(CEditEx::MODE_FLOAT);
+  m_map_curve_offset_spin.SetRangeAndDelta(0.0f,5.0f,0.0025f);
+
+  m_map_curve_gradient_spin.SetBuddy(&m_map_curve_gradient_edit);
+  m_map_curve_gradient_edit.SetLimitText(5);
+  m_map_curve_gradient_edit.SetDecimalPlaces(3);
+  m_map_curve_gradient_edit.SetMode(CEditEx::MODE_FLOAT);
+  m_map_curve_gradient_spin.SetRangeAndDelta(1.0f,150.0f,0.01f);
+
   FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
   UpdateData(FALSE);  //инициализируем контроллы диалога данными    
   UpdateDialogControls(this,TRUE);
@@ -115,29 +148,10 @@ BOOL CFunSetPageDlg::OnInitDialog()
 	            // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-
-void CFunSetPageDlg::OnSelchangePdFunsetBenzinMapsCombo() 
+void CFunSetPageDlg::OnChangeData() 
 {
   UpdateData();
   OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  		
-}
-
-void CFunSetPageDlg::OnSelchangePdFunsetGasMapsCombo() 
-{
-  UpdateData();	
-  OnChangeNotify();     
-}
-
-void CFunSetPageDlg::OnChangePdFunsetMapGradEdit() 
-{
-  UpdateData();	
-  OnChangeNotify();     
-}
-
-void CFunSetPageDlg::OnChangePdFunsetPressSwingEdit() 
-{
-  UpdateData();		
-  OnChangeNotify();     
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -153,7 +167,6 @@ bool CFunSetPageDlg::IsEnabled(void)
 {
   return (m_enabled) ? true : false;
 }
-
 
 
 //TODO: Если будет необходимость использовать режим сортировки, то для корректного

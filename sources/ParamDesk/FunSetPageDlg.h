@@ -36,6 +36,10 @@ public:
 	CEditEx	m_press_swing_edit;
 	CSpinButtonCtrlEx	m_map_grad_spin;
 	CEditEx	m_map_grad_edit;
+	CSpinButtonCtrlEx	m_map_curve_offset_spin;
+	CEditEx	m_map_curve_offset_edit;
+	CSpinButtonCtrlEx	m_map_curve_gradient_spin;
+	CEditEx	m_map_curve_gradient_edit;
 	//}}AFX_DATA
 
 // Overrides
@@ -54,11 +58,7 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(CFunSetPageDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnSelchangePdFunsetBenzinMapsCombo();
-	afx_msg void OnSelchangePdFunsetGasMapsCombo();
-	afx_msg void OnChangePdFunsetMapGradEdit();
-	afx_msg void OnChangePdFunsetPressSwingEdit();
-
+	afx_msg void OnChangeData();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

@@ -24,6 +24,8 @@ CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
     m_params.max_angle = 60.0f;
 	m_params.min_angle = -15.0f;
 	m_params.angle_corr = 0.0f;
+	m_params.dec_spead = 3.0f;
+	m_params.inc_spead = 3.0f;
 
     //{{AFX_DATA_INIT(CAnglesPageDlg)
 	//}}AFX_DATA_INIT
@@ -44,19 +46,27 @@ void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PD_ANGLES_MIN_ANGLE_EDIT, m_min_angle_edit);
 	DDX_Control(pDX, IDC_PD_ANGLES_MAX_ANGLE_EDIT, m_max_angle_edit);
 	DDX_Control(pDX, IDC_PD_ANGLES_CORRECTION_EDIT, m_correction_edit);
+	DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, m_decrease_spead_edit);
+	DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, m_increase_spead_edit);
+	DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_SPIN, m_decrease_spead_spin);
+	DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_SPIN, m_increase_spead_spin);
 	//}}AFX_DATA_MAP
 
 	m_max_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MAX_ANGLE_EDIT, m_params.max_angle);
 	m_min_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MIN_ANGLE_EDIT, m_params.min_angle);
 	m_correction_edit.DDX_Value(pDX, IDC_PD_ANGLES_CORRECTION_EDIT, m_params.angle_corr);
+    m_decrease_spead_edit.DDX_Value(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, m_params.dec_spead);
+    m_increase_spead_edit.DDX_Value(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, m_params.inc_spead);
 }
 
 
 BEGIN_MESSAGE_MAP(CAnglesPageDlg, CDialog)
 	//{{AFX_MSG_MAP(CAnglesPageDlg)
-	ON_EN_CHANGE(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnChangePdAnglesMinAngleEdit)
-	ON_EN_CHANGE(IDC_PD_ANGLES_MAX_ANGLE_EDIT, OnChangePdAnglesMaxAngleEdit)
-	ON_EN_CHANGE(IDC_PD_ANGLES_CORRECTION_EDIT, OnChangePdAnglesCorrectionEdit)
+	ON_EN_CHANGE(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_ANGLES_MAX_ANGLE_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_ANGLES_CORRECTION_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, OnChangeData)
 
 	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnUpdateControls)
 	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MIN_ANGLE_SPIN, OnUpdateControls)
@@ -72,6 +82,18 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, CDialog)
 	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_SPIN, OnUpdateControls)
 	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_CAPTION, OnUpdateControls)
 	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_UNIT, OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_SPIN, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_UNIT, OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_SPIN, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION, OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_UNIT, OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ANGLE_SPEAD_GROUP, OnUpdateControls)
 
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -109,6 +131,17 @@ BOOL CAnglesPageDlg::OnInitDialog()
     m_correction_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_correction_spin.SetRangeAndDelta(-30.0f,30.0f,0.25f);
 
+	m_decrease_spead_spin.SetBuddy(&m_decrease_spead_edit);
+	m_decrease_spead_edit.SetLimitText(4);
+    m_decrease_spead_edit.SetDecimalPlaces(2);
+    m_decrease_spead_edit.SetMode(CEditEx::MODE_FLOAT);
+    m_decrease_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
+
+	m_increase_spead_spin.SetBuddy(&m_increase_spead_edit);
+	m_increase_spead_edit.SetLimitText(4);
+    m_increase_spead_edit.SetDecimalPlaces(2);
+    m_increase_spead_edit.SetMode(CEditEx::MODE_FLOAT);
+    m_increase_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
 
 	UpdateData(FALSE);
 	UpdateDialogControls(this,TRUE);
@@ -116,22 +149,10 @@ BOOL CAnglesPageDlg::OnInitDialog()
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CAnglesPageDlg::OnChangePdAnglesMinAngleEdit() 
+void CAnglesPageDlg::OnChangeData() 
 {
   UpdateData();	
   OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
-}
-
-void CAnglesPageDlg::OnChangePdAnglesMaxAngleEdit() 
-{
-  UpdateData();			
-  OnChangeNotify();
-}
-
-void CAnglesPageDlg::OnChangePdAnglesCorrectionEdit() 
-{
-  UpdateData();			
-  OnChangeNotify();
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
