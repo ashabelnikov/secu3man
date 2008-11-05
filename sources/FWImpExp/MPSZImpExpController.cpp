@@ -155,10 +155,27 @@ MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
 }
 
 int MPSZExportController::DoExport(void)
-{   
-   static TCHAR BASED_CODE szFilter[] = _T("MPSZ Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||");
-   CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+{	
+  //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
+  class CFileDialogEx : public CFileDialog
+  {
+   public:
+    CFileDialogEx() : CFileDialog(FALSE,_T("mpx"),NULL,NULL,
+	    _T("MPSZ Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||"),NULL) {};
+    virtual ~CFileDialogEx() {};
+
+   protected:
+    virtual void OnTypeChange( )
+    {
+     if (m_ofn.nFilterIndex==1)
+      m_ofn.lpstrDefExt = _T("mpx");
  
+     if (m_ofn.nFilterIndex==2)
+ 	  m_ofn.lpstrDefExt = _T("mpz");
+    }
+  };
+
+  CFileDialogEx save;
   if (save.DoModal()==IDOK)
   {    
 	MPSZFileDataIO::EFileTypes type;
