@@ -299,6 +299,10 @@ void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name
 
   //получаем адрес начала таблиц семейств характеристик
   p_maps = (F_data*)(p_bytes + TABLES_START); 
+
+  //дополняем строку пробелами, так чтобы если длина строки меньше F_NAME_SIZE, 
+  //остальные символы были пробелами
+  i_new_name+= _T("                "); 
  
 
   char raw_string[256];

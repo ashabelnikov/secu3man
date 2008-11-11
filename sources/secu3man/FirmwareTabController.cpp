@@ -758,7 +758,7 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 }
 
 
-//Эта функция вызывается при выходе из прложения. Эта функция может запретить выход, если вернет false 
+//Эта функция вызывается при выходе из приложения. Эта функция может запретить выход, если вернет false 
 bool CFirmwareTabController::OnClose(void)
 {  
   return CheckChangesAskAndSaveFirmware();
