@@ -67,10 +67,7 @@ void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift,
   if (setval)
   {
     v = Series2->YScreenToValue(Y);
-    if (v > aai_max)  v = aai_max;
-    if (v < aai_min) v = aai_min;
-    modified_function[val_n] = v;
-    Series2->YValue[val_n] = v;
+    RestrictAndSetValue(val_n, v);
   }
 }
 //---------------------------------------------------------------------------
@@ -125,3 +122,35 @@ void TForm1::SetOnClose(EventHandler i_pOnClose,void* i_param)
   m_pOnClose = i_pOnClose;
   m_param_on_close = i_param;
 }
+
+//---------------------------------------------------------------------------
+void TForm1::RestrictAndSetValue(int index, double v)
+{
+  if (v > aai_max)  v = aai_max;
+  if (v < aai_min) v = aai_min;
+  modified_function[index] = v;
+  Series2->YValue[index] = v;
+}
+
+void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
+{
+ for (int i = 0; i < 16; i++ )
+   {
+   RestrictAndSetValue(i, Series2->YValue[i] + 0.5);
+   }
+  if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+}
+//---------------------------------------------------------------------------
+
+void __fastcall TForm1::ButtonAngleDownClick(TObject *Sender)
+{
+  for (int i = 0; i < 16; i++ )
+    {
+    RestrictAndSetValue(i, Series2->YValue[i] - 0.5);
+    }
+  if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+}
+//---------------------------------------------------------------------------
+

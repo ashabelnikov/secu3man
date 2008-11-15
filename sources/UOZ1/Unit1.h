@@ -12,6 +12,7 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
+#include <Buttons.hpp>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 
@@ -22,6 +23,8 @@ __published:	// IDE-managed Components
         TChart *Chart1;
         TLineSeries *Series1;
         TLineSeries *Series2;
+        TBitBtn *ButtonAngleUp;
+        TBitBtn *ButtonAngleDown;
         void __fastcall Chart1ClickSeries(TCustomChart *Sender,
           TChartSeries *Series, int ValueIndex, TMouseButton Button,
           TShiftState Shift, int X, int Y);
@@ -30,20 +33,11 @@ __published:	// IDE-managed Components
         void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift,
           int X, int Y);
         void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
+        void __fastcall ButtonAngleUpClick(TObject *Sender);
+        void __fastcall ButtonAngleDownClick(TObject *Sender);
 public:
        void SetOnChange(EventHandler i_pOnChange,void* i_param);
        void SetOnClose(EventHandler i_pOnClose,void* i_param);
-private:	// User declarations
-        bool setval;
-        int  val_n;
-
-        //адрес функции которая будет вызываться после изменения данных
-        EventHandler m_pOnChange;
-        void* m_param_on_change;
-
-        EventHandler m_pOnClose;
-        void* m_param_on_close;
-        
 public:		// User declarations
         float aai_min;
         float aai_max;
@@ -56,5 +50,18 @@ public:		// User declarations
 
         __fastcall TForm1(TComponent* Owner);
         void DataPrepare();
+
+private:	// User declarations
+        bool setval;
+        int  val_n;
+
+        //адрес функции которая будет вызываться после изменения данных
+        EventHandler m_pOnChange;
+        void* m_param_on_change;
+
+        EventHandler m_pOnClose;
+        void* m_param_on_close;
+
+        void RestrictAndSetValue(int index, double v);
 };
 #endif

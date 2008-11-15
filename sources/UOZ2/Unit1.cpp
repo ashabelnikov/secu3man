@@ -168,10 +168,7 @@ void __fastcall TForm1::Chart1MouseMove(TObject *Sender, TShiftState Shift,
   if (setval)
   {
     v = Chart1->Series[airflow + count_z]->YScreenToValue(Y);
-    if (v > aai_max) v = aai_max;
-    if (v < aai_min) v = aai_min;
-    SetItem(airflow,val_n,v);
-    Chart1->Series[airflow + count_z]->YValue[val_n] = v;
+    RestrictAndSetValue(val_n, v);
   }
 }
 //---------------------------------------------------------------------------
@@ -187,6 +184,10 @@ void __fastcall TForm1::CheckBox1Click(TObject *Sender)
     TrackBar1->Enabled = false;
     CheckBox2->Enabled = true;
     CheckBox2Click(NULL);
+    ButtonAngleUp->Enabled = false;
+    ButtonAngleDown->Enabled = false;
+    ButtonAngleUp->Visible = false;
+    ButtonAngleDown->Visible = false;
   }
   else
   {
@@ -196,6 +197,10 @@ void __fastcall TForm1::CheckBox1Click(TObject *Sender)
     TrackBar1->Enabled = true;
     CheckBox2->Enabled = false;
     FillChart(0,0);
+    ButtonAngleUp->Enabled = true;
+    ButtonAngleDown->Enabled = true;
+    ButtonAngleUp->Visible = true;
+    ButtonAngleDown->Visible = true;
   }
 }
 //---------------------------------------------------------------------------
@@ -312,5 +317,37 @@ void __fastcall TForm1::OnCloseForm(TObject *Sender, TCloseAction &Action)
      m_pOnClose(m_param_on_close);
    RemoveInstanceByHWND(Handle);
 }
+
+//---------------------------------------------------------------------------
+void TForm1::RestrictAndSetValue(int index, double v)
+{
+  if (v > aai_max) v = aai_max;
+  if (v < aai_min) v = aai_min;
+  SetItem(airflow,index, v);
+  Chart1->Series[airflow + count_z]->YValue[index] = v;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
+{
+ for (int i = 0; i < 16; i++ )
+   {
+   RestrictAndSetValue(i, Chart1->Series[airflow + count_z]->YValue[i] + 0.5);
+   }
+ if (m_pOnChange)
+   m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ButtonAngleDownClick(TObject *Sender)
+{
+ for (int i = 0; i < 16; i++ )
+   {
+   RestrictAndSetValue(i, Chart1->Series[airflow + count_z]->YValue[i] - 0.5);
+   }
+ if (m_pOnChange)
+   m_pOnChange(m_param_on_change);
+}
+
 //---------------------------------------------------------------------------
 

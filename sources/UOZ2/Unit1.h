@@ -13,6 +13,7 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
+#include <Buttons.hpp>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 
@@ -58,6 +59,8 @@ __published:	// IDE-managed Components
         TLineSeries *Series31;
         TLineSeries *Series32;
         TCheckBox *CheckBox2;
+        TBitBtn *ButtonAngleUp;
+        TBitBtn *ButtonAngleDown;
         void __fastcall TrackBar1Change(TObject *Sender);
         void __fastcall Chart1ClickSeries(TCustomChart *Sender,
           TChartSeries *Series, int ValueIndex, TMouseButton Button,
@@ -69,16 +72,12 @@ __published:	// IDE-managed Components
         void __fastcall CheckBox1Click(TObject *Sender);
         void __fastcall CheckBox2Click(TObject *Sender);
         void __fastcall OnCloseForm(TObject *Sender, TCloseAction &Action);
+        void __fastcall ButtonAngleUpClick(TObject *Sender);
+        void __fastcall ButtonAngleDownClick(TObject *Sender);
 public:
         void SetOnChange(EventHandler i_pOnChange,void* i_param);
         void SetOnClose(EventHandler i_pOnClose,void* i_param);
-private:	// User declarations
-        //адрес функции которая будет вызываться после изменения данных
-        EventHandler m_pOnChange;
-        void* m_param_on_change;
 
-        EventHandler m_pOnClose;
-        void* m_param_on_close;
 public:		// User declarations
         int         count_x;
         int         count_z;
@@ -106,6 +105,16 @@ public:		// User declarations
         void MakeAllVisible(void);
         void FillChart(bool dir,int cm);
         void HideAllSeries(void);
+
+private:	// User declarations
+        //адрес функции которая будет вызываться после изменения данных
+        EventHandler m_pOnChange;
+        void* m_param_on_change;
+
+        EventHandler m_pOnClose;
+        void* m_param_on_close;
+
+        void RestrictAndSetValue(int index, double v);
 };
 //---------------------------------------------------------------------------
 #endif
