@@ -15,6 +15,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "HexUtils"="..\HexUtils\HexUtils.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "MIdesk"="..\MIdesk\MIdesk.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -94,6 +106,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name FWImpExp
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name HexUtils
     End Project Dependency
 }}}
 

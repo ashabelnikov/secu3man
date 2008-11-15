@@ -15,6 +15,7 @@
 #include "FirmwareTabDlg.h"
 #include "io-core/FirmwareDataMediator.h"
 #include "FWImpExp/MPSZImpExpController.h"
+#include "HexUtils/readhex.h"
 
 using namespace fastdelegate;
 
@@ -640,10 +641,13 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
 
 
 //мы заранее знаем размер файла с FLASH
+//p_data - буфер для чтения данных
+//size  - размер данных для чтения
+//o_file_name - указатель на строку в которую будет сохранено имя файла
 bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CString* o_file_name /* = NULL*/)
 {
   HANDLE   hFile=0;    
-  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
+  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
   CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
   CString cs;
 
@@ -656,12 +660,58 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
     {
       ex.GetErrorMessage(szError, 1024);
 	  AfxMessageBox(szError);
-      return false;
+      return false; //ошибка
     }
 
-    //TODO: Добавть проверку на размер файла (его размер должен соответствовать переданному size!!!)
+	//----------------------------------------------------------------------------
+	if (open.GetFileExt()==_T("hex") || open.GetFileExt()==_T("a90"))
+	{
+     int hex_file_length = f.GetLength();
+	 if (hex_file_length > 262144)
+	 {
+	  AfxMessageBox(_T("Файл слишком большого размера! Извините."));
+	  f.Close();
+	  return false; //ошибка
+	 }
 
-    f.Read(p_data,size);
+     BYTE* p_hex_buff = new BYTE[hex_file_length]; 
+ 	 f.Read(p_hex_buff, hex_file_length);
+	 size_t bin_size = 0;
+     EReadHexStatus status = HexUtils_ConvertHexToBin(p_hex_buff,hex_file_length,p_data,bin_size);
+	 delete p_hex_buff;
+
+	 switch(status)
+	 {
+	  case RH_INCORRECT_CHKSUM:
+       AfxMessageBox(_T("Ошибка в контрольной сумме HEX-файла. Операция прервана."));
+	   f.Close();
+       return false; //ошибка
+
+      default: 
+	  case RH_UNEXPECTED_SYMBOL:	   
+       AfxMessageBox(_T("Неожиданный символ или структура HEX-файла нарушена. Операция прервана."));
+	   f.Close();
+       return false; //ошибка
+
+      case RH_SUCCESS:
+       break;
+	 }
+
+	}
+	else //если у файла расширение bin или нет расширения или оно другое, то по умолчанию bin 
+    {
+     if (f.GetLength() != size)
+	 {
+      CString string;
+	  string.Format(_T("Неправильный размер файла прошивки. Размер должен быть %d байт."),size);
+	  AfxMessageBox(string);
+	  f.Close();
+	  return false; //ошибка
+	 }
+	 f.Read(p_data,size);
+	}
+	//----------------------------------------------------------------------------
+
     f.Close();
 	if (o_file_name!=NULL)
 	  *o_file_name = open.GetFileName();
