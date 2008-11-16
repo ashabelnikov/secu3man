@@ -78,6 +78,7 @@ struct CarburPar
   int  ephh_lot;
   int  ephh_hit;
   unsigned char carb_invers;
+  float epm_ont; //порог включения ЭМР
 };
 
 struct TemperPar

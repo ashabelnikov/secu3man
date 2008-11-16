@@ -27,8 +27,10 @@ public:
 	CButton	m_inverse_throttle_switch;
 	CSpinButtonCtrlEx	m_shutoff_lo_threshold_spin;
 	CSpinButtonCtrlEx	m_shutoff_hi_threshold_spin;
+	CSpinButtonCtrlEx	m_epm_on_threshold_spin;
 	CEditEx	m_shutoff_lo_threshold_edit;
 	CEditEx	m_shutoff_hi_threshold_edit;
+	CEditEx	m_epm_on_threshold_edit;
 	//}}AFX_DATA
 
 // Overrides
@@ -46,9 +48,7 @@ protected:
 	// Generated message map functions
 	//{{AFX_MSG(CCarburPageDlg)
 	virtual BOOL OnInitDialog();
-	afx_msg void OnChangePdCarburShutoffHiThresholdEdit();
-	afx_msg void OnChangePdCarburShutoffLoThresholdEdit();
-	afx_msg void OnPdCarburInverseSwitch();
+	afx_msg void OnChangeData();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()

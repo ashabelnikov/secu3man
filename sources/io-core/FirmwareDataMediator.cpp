@@ -71,10 +71,12 @@ typedef struct
   _uint map_curve_offset;
   _uint map_curve_gradient;
 
+  _int epm_on_threshold;
+
   //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
   //новых версий прошивок с более старыми версиями. При добавлении новых данных
   //в структуру, необходимо расходовать эти байты.
-  _uchar reserved[12];
+  _uchar reserved[10];
 
   _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -450,6 +452,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		p_params->ephh_hit    = p_in->ephh_hit;
         p_params->ephh_lot    = p_in->ephh_lot;
 		p_params->carb_invers = p_in->carb_invers;
+		p_params->epm_on_threshold = CNumericConv::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
 		}
       break;
 	case IDLREG_PAR: 
@@ -556,6 +559,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 		p_out->ephh_hit    = p_params->ephh_hit;
         p_out->ephh_lot    = p_params->ephh_lot;
 		p_out->carb_invers = p_params->carb_invers;
+		p_out->epm_ont =  ((float)p_params->epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 		}
       break;
 	case IDLREG_PAR: 

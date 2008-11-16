@@ -25,6 +25,7 @@ CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
     m_params.ephh_lot = 1250;
 	m_params.ephh_hit = 1500;
 	m_params.carb_invers = 0;
+	m_params.epm_ont = 6.25f;
 
 	//{{AFX_DATA_INIT(CCarburPageDlg)
 	//}}AFX_DATA_INIT
@@ -42,21 +43,26 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_inverse_throttle_switch);
 	DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN, m_shutoff_lo_threshold_spin);
 	DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN, m_shutoff_hi_threshold_spin);
+	DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN, m_epm_on_threshold_spin);
+
 	DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_shutoff_lo_threshold_edit);
 	DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_shutoff_hi_threshold_edit);	
+	DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_epm_on_threshold_edit);	
 	//}}AFX_DATA_MAP
 
     DDX_Text(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
 	DDX_Text(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
     DDX_Check_UCHAR(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_params.carb_invers);
+	DDX_Text(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_params.epm_ont);
 }
 
 
 BEGIN_MESSAGE_MAP(CCarburPageDlg, CDialog)
 	//{{AFX_MSG_MAP(CCarburPageDlg)
-	ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, OnChangePdCarburShutoffHiThresholdEdit)
-	ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, OnChangePdCarburShutoffLoThresholdEdit)
-	ON_BN_CLICKED(IDC_PD_CARBUR_INVERSE_SWITCH, OnPdCarburInverseSwitch)
+	ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, OnChangeData)
+	ON_EN_CHANGE(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, OnChangeData)
+	ON_BN_CLICKED(IDC_PD_CARBUR_INVERSE_SWITCH, OnChangeData)
 
 	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,OnUpdateControls)
 	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,OnUpdateControls)
@@ -69,6 +75,11 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, CDialog)
 	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,OnUpdateControls)
 
 	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_INVERSE_SWITCH,OnUpdateControls)
+
+	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,OnUpdateControls)
+	ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,OnUpdateControls)
 
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
@@ -94,28 +105,22 @@ BOOL CCarburPageDlg::OnInitDialog()
 	m_shutoff_hi_threshold_edit.SetLimitText(4);
 	m_shutoff_hi_threshold_spin.SetBuddy(&m_shutoff_hi_threshold_edit);
 	m_shutoff_hi_threshold_spin.SetRangeAndDelta(250,7500,10);
+
+	m_epm_on_threshold_edit.SetLimitText(4);
+	m_epm_on_threshold_edit.SetDecimalPlaces(2);
+	m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
+    m_epm_on_threshold_edit.SetMode(CEditEx::MODE_FLOAT);
+	m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
 	
 	UpdateDialogControls(this,TRUE);
 	return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CCarburPageDlg::OnChangePdCarburShutoffHiThresholdEdit() 
+void CCarburPageDlg::OnChangeData() 
 {
   UpdateData();	
   OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  
-}
-
-void CCarburPageDlg::OnChangePdCarburShutoffLoThresholdEdit() 
-{
-  UpdateData();			
-  OnChangeNotify();   
-}
-
-void CCarburPageDlg::OnPdCarburInverseSwitch() 
-{
-  UpdateData();			
-  OnChangeNotify();   
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

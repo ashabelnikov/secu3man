@@ -641,7 +641,7 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
 
 
 //мы заранее знаем размер файла с FLASH
-//p_data - буфер для чтения данных
+//p_data - буфер для чтения данных. Должен быть не меньше чем 64кБ 
 //size  - размер данных для чтения
 //o_file_name - указатель на строку в которую будет сохранено имя файла
 bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CString* o_file_name /* = NULL*/)
