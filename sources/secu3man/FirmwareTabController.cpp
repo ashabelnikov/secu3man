@@ -38,6 +38,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_current_funset_index(-1)
 , m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
 , m_lastSel(0)
+, m_bl_started_emergency(false)
 {
   m_view = i_view;
   m_comm = i_comm;
@@ -351,8 +352,11 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
 
      Sleep(250);
 	 m_sbar->SetProgressPos(0);
-	 m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_code_for_merge_with_overhead,CBootLoader::FLASH_APP_SECTION_SIZE);		  
-	 break; //íå âûõîäèì èç áóòëîàäåðà!
+	 m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_code_for_merge_with_overhead,CBootLoader::FLASH_APP_SECTION_SIZE);		  	 	 
+
+	 //ÍÅ ÂÛÕÎÄÈÌ ÈÇ ÁÓÒËÎÀÄÅÐÀ È ÍÅ ÄÅÀÊÒÈÂÈÐÓÅÌ ÊÎÌÌÓÍÈÊÀÖÈÎÍÍÛÉ ÊÎÍÒÐÎËËÅÐ, òàê êàê äîëæíà 
+	 //âûïîëíèòñÿ çàïóùåííàÿ îïåðàöèÿ.
+	 return; 
 	}
 	else
 	{
@@ -398,6 +402,8 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   //////////////////////////////////////////////////////////////////////
  }//switch
 
+ //åñëè áóòëîàäåð áûë çàïóùåí àâàðèéíî, òî àêòèâèðóåì êîììóíèêàöèîííûé 
+ //êîíòðîëëåð ïðèëîæåíèÿ.  À çà÷åì???  TODO.
  if (m_bl_started_emergency)
  {
   m_view->EnableBLItems(true);

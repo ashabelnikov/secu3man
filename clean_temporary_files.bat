@@ -42,6 +42,11 @@ del fwimpexp\release\*.* /Q
 del fwimpexp\*.ncb
 del fwimpexp\*.plg
 
+del hexutils\debug\*.* /Q
+del hexutils\release\*.* /Q
+del hexutils\*.ncb
+del hexutils\*.plg
+
 del UOZ1\*.obj /Q
 del UOZ2\*.obj /Q
 
