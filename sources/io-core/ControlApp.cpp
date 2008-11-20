@@ -461,7 +461,7 @@ bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
 
- if (strlen((char*)raw_packet)!=10)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
  //Нижний порог ЭПХХ 
@@ -478,6 +478,13 @@ bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CarburPar.carb_invers))
      return false;
  raw_packet+=1;  
+
+ //Порог разрежения ЭМР
+ int epm_on_threshold = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&epm_on_threshold,true))
+     return false;
+ raw_packet+=4;
+ m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  if (*raw_packet!='\r')
 	 return false;
@@ -1003,6 +1010,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
   CNumericConv::Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
   CNumericConv::Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
   CNumericConv::Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
+  int epm_on_threshold = CNumericConv::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  CNumericConv::Bin16ToHex(epm_on_threshold,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 
