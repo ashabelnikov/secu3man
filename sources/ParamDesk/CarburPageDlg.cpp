@@ -50,10 +50,10 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_epm_on_threshold_edit);	
 	//}}AFX_DATA_MAP
 
-    DDX_Text(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
-	DDX_Text(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
+    m_shutoff_lo_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
+	m_shutoff_hi_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
     DDX_Check_UCHAR(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_params.carb_invers);
-	DDX_Text(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_params.epm_ont);
+	m_epm_on_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_params.epm_ont);
 }
 
 
@@ -106,9 +106,9 @@ BOOL CCarburPageDlg::OnInitDialog()
 	m_shutoff_hi_threshold_spin.SetBuddy(&m_shutoff_hi_threshold_edit);
 	m_shutoff_hi_threshold_spin.SetRangeAndDelta(250,7500,10);
 
+	m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
 	m_epm_on_threshold_edit.SetLimitText(4);
 	m_epm_on_threshold_edit.SetDecimalPlaces(2);
-	m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
     m_epm_on_threshold_edit.SetMode(CEditEx::MODE_FLOAT);
 	m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
 	

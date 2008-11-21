@@ -63,8 +63,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 	m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);   
     m_restriction_min_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, m_params.min_angle);
 	m_restriction_max_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_params.max_angle);   
-	DDX_Text(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
-	DDX_Text(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
+	m_goal_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
+	m_dead_band_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
 	DDX_Check_UCHAR(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
 }
 
@@ -139,6 +139,7 @@ BOOL CIdlRegPageDlg::OnInitDialog()
     m_factor_neg_spin.SetRangeAndDelta(0.0f,10.0f,0.01f);
 
 	m_dead_band_rpm_edit.SetLimitText(3);
+	m_dead_band_rpm_edit.SetDecimalPlaces(3);
 	m_dead_band_rpm_spin.SetBuddy(&m_dead_band_rpm_edit);
 	m_dead_band_rpm_spin.SetRangeAndDelta(0,500,1);
 

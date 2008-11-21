@@ -42,8 +42,8 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_starter_off_rpm_edit);
 	//}}AFX_DATA_MAP
 
-	DDX_Text(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
-	DDX_Text(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
+	m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
+	m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
 }
 
 
