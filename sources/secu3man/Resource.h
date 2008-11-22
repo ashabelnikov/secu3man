@@ -73,13 +73,14 @@
 #define IDS_EXPORT_POPUP_MENU           4064
 #define IDM_EXPORT_EXPORT_TO_MPSZ       4065
 #define IDS_EXPORT_EXPORT_TO_MPSZ       4066
-
+#define IDD_CHECK_ENGINE                4067
+#define IDD_KNOCK_CHANNEL               4068
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        4067
+#define _APS_NEXT_RESOURCE_VALUE        4069
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         4300
 #define _APS_NEXT_SYMED_VALUE           101

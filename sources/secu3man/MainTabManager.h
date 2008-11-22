@@ -15,9 +15,13 @@ public:
 
     class CParamMonTabController* m_pParamMonTabController;
     class CFirmwareTabController* m_pFirmwareTabController;
+	class CCheckEngineTabController* m_pCheckEngineTabController;
+	class CKnockChannelTabController* m_pKnockChannelTabController;
 
     class CParamMonTabDlg* m_pParamMonTabDlg;
     class CFirmwareTabDlg* m_pFirmwareTabDlg;
+	class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
+	class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
 
 	CChildView* m_pParent;
     

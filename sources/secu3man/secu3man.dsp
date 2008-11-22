@@ -108,6 +108,14 @@ SOURCE=.\AppSettingsModel.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\CheckEngineTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\CheckEngineTabDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ChildView.cpp
 # End Source File
 # Begin Source File
@@ -133,6 +141,14 @@ SOURCE=.\FirmwareTabController.cpp
 # Begin Source File
 
 SOURCE=.\FirmwareTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockChannelTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockChannelTabDlg.cpp
 # End Source File
 # Begin Source File
 
@@ -197,6 +213,14 @@ SOURCE=.\AppSettingsModel.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\CheckEngineTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\CheckEngineTabDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ChildView.h
 # End Source File
 # Begin Source File
@@ -230,6 +254,14 @@ SOURCE=.\IAppSettingsDlg.h
 # Begin Source File
 
 SOURCE=.\ITabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockChannelTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockChannelTabDlg.h
 # End Source File
 # Begin Source File
 

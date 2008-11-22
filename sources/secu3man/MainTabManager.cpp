@@ -13,9 +13,13 @@
 
 #include "ParamMonTabController.h"
 #include "FirmwareTabController.h"
+#include "CheckEngineTabController.h"
+#include "KnockChannelTabController.h"
 
 #include "ParamMonTabDlg.h"
 #include "FirmwareTabDlg.h"
+#include "CheckEngineTabDlg.h"
+#include "KnockChannelTabDlg.h"
 
 #include "secu3man.h"
 
@@ -31,8 +35,12 @@ CMainTabManager::CMainTabManager()
 , m_pParent(NULL)
 , m_pParamMonTabController(NULL)
 , m_pFirmwareTabController(NULL)
+, m_pCheckEngineTabController(NULL)
+, m_pKnockChannelTabController(NULL)
 , m_pParamMonTabDlg(NULL)
 , m_pFirmwareTabDlg(NULL)
+, m_pCheckEngineTabDlg(NULL)
+, m_pKnockChannelTabDlg(NULL)
 {
 
 }
@@ -47,9 +55,13 @@ CMainTabManager::~CMainTabManager()
 
   delete m_pParamMonTabController;
   delete m_pFirmwareTabController;
+  delete m_pCheckEngineTabController;
+  delete m_pKnockChannelTabController;
 
   delete m_pParamMonTabDlg;
   delete m_pFirmwareTabDlg;
+  delete m_pCheckEngineTabDlg;
+  delete m_pKnockChannelTabDlg;
 }
 
 bool CMainTabManager::Init(CChildView* i_pChildView)
@@ -88,6 +100,18 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 
   m_MainTabController.AddTabController(m_pFirmwareTabController);
   m_tab_control.AddPage("Данные прошивки",m_pFirmwareTabDlg,1);	
+
+  m_pCheckEngineTabDlg = new CCheckEngineTabDlg(); //view
+  m_pCheckEngineTabController = new CCheckEngineTabController(m_pCheckEngineTabDlg, p_comm, p_sbar);
+
+  m_MainTabController.AddTabController(m_pCheckEngineTabController);
+  m_tab_control.AddPage("Check Engine",m_pCheckEngineTabDlg,2);
+
+  m_pKnockChannelTabDlg = new CKnockChannelTabDlg(); //view
+  m_pKnockChannelTabController = new CKnockChannelTabController(m_pKnockChannelTabDlg, p_comm, p_sbar);
+
+  m_MainTabController.AddTabController(m_pKnockChannelTabController);
+  m_tab_control.AddPage("Настройка ДД",m_pKnockChannelTabDlg,3);
 
   //необходимо выбрать любую вкладку вызвать OnActivate для открытой вкладки.
  // m_MainTabController.OnSelchangeTabctl();
