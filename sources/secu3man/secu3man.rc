@@ -116,6 +116,31 @@ BEGIN
                     17
 END
 
+IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 434, 205
+STYLE WS_CHILD | WS_VISIBLE
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "List1",IDC_CHECK_ENGINE_ERRORS_LIST,"SysListView32",
+                    LVS_REPORT | WS_BORDER | WS_TABSTOP,53,17,344,80
+    PUSHBUTTON      "ѕ–ќ„»“ј“№ сохраненные ошибки",
+                    IDC_CHECK_ENGINE_READ_ERRORS_BUTTON,59,118,102,28,
+                    BS_MULTILINE
+    PUSHBUTTON      "«јѕ»—ј“№ сохраненные ошибки",
+                    IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON,179,118,101,28,
+                    BS_MULTILINE
+    CONTROL         "—читывать ошибки в реальном времени",
+                    IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,120,97,
+                    22
+    LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,154,347,32
+END
+
+IDD_KNOCK_CHANNEL DIALOG DISCARDABLE  0, 0, 325, 158
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -147,6 +172,22 @@ BEGIN
         RIGHTMARGIN, 226
         TOPMARGIN, 7
         BOTTOMMARGIN, 163
+    END
+
+    IDD_CHECK_ENGINE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 427
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 198
+    END
+
+    IDD_KNOCK_CHANNEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 318
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 151
     END
 END
 #endif    // APSTUDIO_INVOKED
@@ -266,51 +307,6 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Dialog
-//
-
-IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 344, 169
-STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif"
-BEGIN
-END
-
-IDD_KNOCK_CHANNEL DIALOG DISCARDABLE  0, 0, 325, 158
-STYLE WS_CHILD
-FONT 8, "MS Sans Serif"
-BEGIN
-END
-
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// DESIGNINFO
-//
-
-#ifdef APSTUDIO_INVOKED
-GUIDELINES DESIGNINFO DISCARDABLE 
-BEGIN
-    IDD_CHECK_ENGINE, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 337
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 162
-    END
-
-    IDD_KNOCK_CHANNEL, DIALOG
-    BEGIN
-        LEFTMARGIN, 7
-        RIGHTMARGIN, 318
-        TOPMARGIN, 7
-        BOTTOMMARGIN, 151
-    END
-END
-#endif    // APSTUDIO_INVOKED
-
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -434,6 +430,7 @@ END
 //
 
 IDB_MAIN_TAB_CTRL_BITMAPS BITMAP  DISCARDABLE     "res\\tab_ctrl_bitmaps.bmp"
+IDB_CHECK_ENGINE_LIST_ICONS BITMAP  DISCARDABLE     "res\\ce_list_icons.bmp"
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

@@ -321,6 +321,10 @@ SOURCE=.\res\bootload.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\ce_list_icons.bmp
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\connected.ico
 # End Source File
 # Begin Source File

@@ -15,6 +15,8 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
   //{{AFX_DATA_INIT(CCheckEngineTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
   //}}AFX_DATA_INIT
+
+  m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));
 }
 
 
@@ -22,6 +24,8 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
 {
   CDialog::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CCheckEngineTabDlg)  
+  DDX_Control(pDX, IDC_CHECK_ENGINE_QUICK_HELP, m_quick_help_text);
+  DDX_Control(pDX, IDC_CHECK_ENGINE_ERRORS_LIST, m_errors_list);
   //}}AFX_DATA_MAP
 }
 
@@ -44,6 +48,28 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 		
+
+  m_quick_help_text.SetWindowText("\
+    Режим считывания ошибок в реальном времени позволяет видеть возникающие\
+ и исчезающие ошибки. Это полезно для выяснения причины возникновения конкретной\
+ ошибки. \n    В список сохраненных ошибок попадают все когда-либо\
+ (даже еднократно) возникавшие ошибки.");
+
+  m_errors_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);	
+
+  //устанавливаем картинки состояния для чекбоксов...
+  m_errors_list.SetImageList(&m_image_list,LVSIL_STATE);
+
+  m_errors_list.InsertColumn(0,_T("Состояние"),LVCFMT_LEFT,70);
+  m_errors_list.InsertColumn(1,_T("Описание ошибки"),LVCFMT_LEFT,450);
+
+
+  /////////////////////////////////////////////////
+  m_errors_list.InsertItem(0,_T(""));
+  m_errors_list.SetItemText(0,1,_T("Error"));
+  m_errors_list.SetCheck(0,TRUE);
+  /////////////////////////////////////////////////
+
   return TRUE;  // return TRUE unless you set the focus to a control
                 // EXCEPTION: OCX Property Pages should return FALSE
 }

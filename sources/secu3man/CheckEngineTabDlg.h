@@ -15,6 +15,9 @@ public:
 // Dialog Data
 	//{{AFX_DATA(CCheckEngineTabDlg)
 	enum { IDD = IDD_CHECK_ENGINE };
+	CStatic m_quick_help_text;
+	CListCtrl m_errors_list;
+	CImageList m_image_list;
 	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;
