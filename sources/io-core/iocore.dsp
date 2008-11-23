@@ -161,6 +161,10 @@ SOURCE=.\ccomport.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ce_errors.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ControlApp.h
 # End Source File
 # Begin Source File
