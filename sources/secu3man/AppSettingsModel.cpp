@@ -43,7 +43,10 @@ CAppSettingsModel::CAppSettingsModel()
   m_AllowableBaudRates.push_back(CBR_56000);
   m_AllowableBaudRates.push_back(CBR_57600);
   m_AllowableBaudRates.push_back(CBR_115200);
+  m_AllowableBaudRates.push_back(    230400);
+  m_AllowableBaudRates.push_back(    250000);
   m_AllowableBaudRates.push_back(CBR_256000);
+
 
   //заполняем базу данных допустимых COM-портов
   for(int i = 1; i < 256; i++)
