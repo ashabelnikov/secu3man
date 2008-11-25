@@ -1,5 +1,6 @@
 rem NOTE: This file created for MSVC 6.0
 CD sources
+msdev.com hexutils\hexutils.dsw /MAKE "hexutils - RELEASE" /REBULD 
 msdev.com about\about.dsw /MAKE "about - RELEASE" /REBUILD
 msdev.com io-core\iocore.dsw /MAKE "iocore - RELEASE" /REBUILD
 msdev.com ui-core\uicore.dsw /MAKE "uicore - RELEASE" /REBUILD
