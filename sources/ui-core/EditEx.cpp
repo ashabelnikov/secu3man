@@ -17,7 +17,7 @@ static char THIS_FILE[] = __FILE__;
 
 
 CEditEx::CEditEx()
-: m_mode(MODE_INT)
+: m_mode(MODE_STRING)
 , m_DecimalPlaces(4)
 {
 }
@@ -143,7 +143,11 @@ void CEditEx::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
     case MODE_HEX:
 	  result = OnChar_hex(nChar, nRepCnt, nFlags);
 	  break;
-	}
+
+    case MODE_STRING:
+      result = true; //there are no filtering for string
+      break;
+  }
 
   if (result)
     CEdit::OnChar(nChar, nRepCnt, nFlags);
@@ -174,6 +178,9 @@ bool CEditEx::GetValue(float& o_value)
       result = _stscanf(s, _T("%x"), &i_value);
 	  o_value = (float)i_value;
 	  break;
+
+    default:
+      ASSERT(0);
   }
 
   return (result == 1);
@@ -198,6 +205,9 @@ bool CEditEx::SetValue(float i_value)
       s.Format(_T("%0*x"),m_DecimalPlaces,(int)i_value);
 	  s.MakeUpper();
 	  break;
+
+    default:
+      ASSERT(0);
   }
 
   SetWindowText(s);
