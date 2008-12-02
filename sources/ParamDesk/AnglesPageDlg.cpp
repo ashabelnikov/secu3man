@@ -20,6 +20,11 @@ static char THIS_FILE[] = __FILE__;
 CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CAnglesPageDlg::IDD, pParent)
 	, m_enabled(FALSE)
+    , m_max_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+	, m_min_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+	, m_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+    , m_decrease_spead_edit(CEditEx::MODE_FLOAT)
+    , m_increase_spead_edit(CEditEx::MODE_FLOAT)
 {
     m_params.max_angle = 60.0f;
 	m_params.min_angle = -15.0f;
@@ -116,31 +121,26 @@ BOOL CAnglesPageDlg::OnInitDialog()
 	m_min_angle_spin.SetBuddy(&m_min_angle_edit);
 	m_min_angle_edit.SetLimitText(4);
     m_min_angle_edit.SetDecimalPlaces(2);
-    m_min_angle_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_min_angle_spin.SetRangeAndDelta(-15.0f,60.0f,0.25f);
 
 	m_max_angle_spin.SetBuddy(&m_max_angle_edit);
 	m_max_angle_edit.SetLimitText(4);
     m_max_angle_edit.SetDecimalPlaces(2);
-    m_max_angle_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_max_angle_spin.SetRangeAndDelta(-15.0f,60.0f,0.25f);
 	
 	m_correction_spin.SetBuddy(&m_correction_edit);
 	m_correction_edit.SetLimitText(4);
     m_correction_edit.SetDecimalPlaces(2);
-    m_correction_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_correction_spin.SetRangeAndDelta(-30.0f,30.0f,0.25f);
 
 	m_decrease_spead_spin.SetBuddy(&m_decrease_spead_edit);
 	m_decrease_spead_edit.SetLimitText(4);
     m_decrease_spead_edit.SetDecimalPlaces(2);
-    m_decrease_spead_edit.SetMode(CEditEx::MODE_FLOAT);
     m_decrease_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
 
 	m_increase_spead_spin.SetBuddy(&m_increase_spead_edit);
 	m_increase_spead_edit.SetLimitText(4);
     m_increase_spead_edit.SetDecimalPlaces(2);
-    m_increase_spead_edit.SetMode(CEditEx::MODE_FLOAT);
     m_increase_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
 
 	UpdateData(FALSE);

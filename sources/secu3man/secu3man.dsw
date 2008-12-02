@@ -57,6 +57,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "PropGrid"="..\PropGrid\PropGrid.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name uicore
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "about"="..\about\about.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -109,6 +124,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name HexUtils
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name PropGrid
     End Project Dependency
 }}}
 

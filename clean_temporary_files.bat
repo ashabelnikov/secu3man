@@ -47,6 +47,11 @@ del hexutils\release\*.* /Q
 del hexutils\*.ncb
 del hexutils\*.plg
 
+del propgrid\debug\*.* /Q
+del propgrid\release\*.* /Q
+del propgrid\*.ncb
+del propgrid\*.plg
+
 del UOZ1\*.obj /Q
 del UOZ2\*.obj /Q
 

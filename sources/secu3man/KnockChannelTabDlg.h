@@ -1,6 +1,7 @@
 
 #include "ui-core/TabDialog.h"
 #include "resource.h"
+#include "propgrid/propertygrid.h"
 
 #pragma once
 
@@ -28,11 +29,14 @@ public:
 
 // Implementation
 protected:
+	CPropertyGrid m_ctrlGrid;
 
 	// Generated message map functions
 	//{{AFX_MSG(CKnockChannelTabDlg)
 	virtual BOOL OnInitDialog();	
 	afx_msg void OnClose();
+	afx_msg LRESULT OnItemChanged(WPARAM, LPARAM);
+	afx_msg void OnUpdatePropertyGrid(CCmdUI* pCmdUI);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

@@ -21,6 +21,9 @@ static char THIS_FILE[] = __FILE__;
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CCarburPageDlg::IDD, pParent)
 	, m_enabled(FALSE)
+    , m_shutoff_lo_threshold_edit(CEditEx::MODE_INT)
+	, m_shutoff_hi_threshold_edit(CEditEx::MODE_INT)
+	, m_epm_on_threshold_edit(CEditEx::MODE_FLOAT)
 {
     m_params.ephh_lot = 1250;
 	m_params.ephh_hit = 1500;
@@ -109,7 +112,6 @@ BOOL CCarburPageDlg::OnInitDialog()
 	m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
 	m_epm_on_threshold_edit.SetLimitText(4);
 	m_epm_on_threshold_edit.SetDecimalPlaces(2);
-    m_epm_on_threshold_edit.SetMode(CEditEx::MODE_FLOAT);
 	m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
 	
 	UpdateDialogControls(this,TRUE);

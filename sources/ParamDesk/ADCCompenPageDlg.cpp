@@ -21,6 +21,13 @@ static char THIS_FILE[] = __FILE__;
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CADCCompenPageDlg::IDD, pParent)
 , m_enabled(FALSE)
+, m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ubat_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ubat_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_temp_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_temp_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+
 {
   m_params.map_adc_factor = 1.0f;
   m_params.map_adc_correction = 0.0f;
@@ -123,37 +130,31 @@ BOOL CADCCompenPageDlg::OnInitDialog()
 	m_map_factor_spin.SetBuddy(&m_map_factor_edit);
 	m_map_factor_edit.SetLimitText(6);
     m_map_factor_edit.SetDecimalPlaces(3);
-    m_map_factor_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_map_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
 
 	m_map_correction_spin.SetBuddy(&m_map_correction_edit);
 	m_map_correction_edit.SetLimitText(6);
     m_map_correction_edit.SetDecimalPlaces(4);
-    m_map_correction_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_map_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
 
 	m_ubat_factor_spin.SetBuddy(&m_ubat_factor_edit);
 	m_ubat_factor_edit.SetLimitText(6);
     m_ubat_factor_edit.SetDecimalPlaces(3);
-    m_ubat_factor_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_ubat_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
 
 	m_ubat_correction_spin.SetBuddy(&m_ubat_correction_edit);
 	m_ubat_correction_edit.SetLimitText(6);
     m_ubat_correction_edit.SetDecimalPlaces(4);
-    m_ubat_correction_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_ubat_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
 
 	m_temp_factor_spin.SetBuddy(&m_temp_factor_edit);
 	m_temp_factor_edit.SetLimitText(6);
     m_temp_factor_edit.SetDecimalPlaces(3);
-    m_temp_factor_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_temp_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
 
 	m_temp_correction_spin.SetBuddy(&m_temp_correction_edit);
 	m_temp_correction_edit.SetLimitText(6);
     m_temp_correction_edit.SetDecimalPlaces(4);
-    m_temp_correction_edit.SetMode(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED);
     m_temp_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
 
 	UpdateData(FALSE);

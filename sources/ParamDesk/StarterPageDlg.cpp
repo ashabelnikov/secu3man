@@ -20,11 +20,13 @@ static char THIS_FILE[] = __FILE__;
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CStarterPageDlg::IDD, pParent)
 	, m_enabled(FALSE)
+	, m_starter_off_rpm_edit(CEditEx::MODE_INT)
+	, m_smap_abandon_rpm_edit(CEditEx::MODE_INT)
 {
 	//{{AFX_DATA_INIT(CStarterPageDlg)
 	//}}AFX_DATA_INIT
     m_params.starter_off  = 600;
-	m_params.smap_abandon = 700;	
+	m_params.smap_abandon = 700;
 }
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
@@ -83,7 +85,7 @@ BOOL CStarterPageDlg::OnInitDialog()
 	m_smap_abandon_rpm_spin.SetBuddy(&m_smap_abandon_rpm_edit);
 	m_smap_abandon_rpm_spin.SetRangeAndDelta(40,1000,10);
 
-	m_smap_abandon_rpm_edit.SetLimitText(4);
+	m_smap_abandon_rpm_edit.SetLimitText(4);	
 	m_starter_off_rpm_spin.SetBuddy(&m_starter_off_rpm_edit);
     m_starter_off_rpm_spin.SetRangeAndDelta(40,1000,10);
 

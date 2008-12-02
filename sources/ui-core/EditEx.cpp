@@ -16,8 +16,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CEditEx::CEditEx()
-: m_mode(MODE_STRING)
+CEditEx::CEditEx(int i_mode /* = MODE_STRING*/)
+: m_mode(i_mode)
 , m_DecimalPlaces(4)
 {
 }

@@ -21,6 +21,12 @@ static char THIS_FILE[] = __FILE__;
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CIdlRegPageDlg::IDD, pParent)
 	, m_enabled(FALSE)
+    , m_factor_pos_edit(CEditEx::MODE_FLOAT)
+	, m_factor_neg_edit(CEditEx::MODE_FLOAT)
+    , m_restriction_min_edit(CEditEx::MODE_FLOAT)
+	, m_restriction_max_edit(CEditEx::MODE_FLOAT)
+	, m_goal_rpm_edit(CEditEx::MODE_INT)
+	, m_dead_band_rpm_edit(CEditEx::MODE_INT)
 {
 	m_params.ifac1 = 1.0f;
 	m_params.ifac2 = 1.0f;
@@ -129,13 +135,11 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 	m_factor_pos_spin.SetBuddy(&m_factor_pos_edit);
 	m_factor_pos_edit.SetLimitText(5);
     m_factor_pos_edit.SetDecimalPlaces(2);
-    m_factor_pos_edit.SetMode(CEditEx::MODE_FLOAT);
     m_factor_pos_spin.SetRangeAndDelta(0.0f,10.0f,0.01f);
 
 	m_factor_neg_spin.SetBuddy(&m_factor_neg_edit);
 	m_factor_neg_edit.SetLimitText(5);
     m_factor_neg_edit.SetDecimalPlaces(2);
-    m_factor_neg_edit.SetMode(CEditEx::MODE_FLOAT);
     m_factor_neg_spin.SetRangeAndDelta(0.0f,10.0f,0.01f);
 
 	m_dead_band_rpm_edit.SetLimitText(3);
@@ -150,13 +154,11 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 	m_restriction_min_spin.SetBuddy(&m_restriction_min_edit);
 	m_restriction_min_edit.SetLimitText(4);
     m_restriction_min_edit.SetDecimalPlaces(2);
-    m_restriction_min_edit.SetMode(CEditEx::MODE_FLOAT);
     m_restriction_min_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
 
 	m_restriction_max_spin.SetBuddy(&m_restriction_max_edit);
 	m_restriction_max_edit.SetLimitText(4);
     m_restriction_max_edit.SetDecimalPlaces(2);
-    m_restriction_max_edit.SetMode(CEditEx::MODE_FLOAT);
     m_restriction_max_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
 
 	UpdateData(FALSE);

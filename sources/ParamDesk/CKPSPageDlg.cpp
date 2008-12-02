@@ -22,6 +22,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CCKPSPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_teeth_before_tdc_start(18)
+, m_ignition_cogs_edit(CEditEx::MODE_INT)
 {
   m_params.ckps_cogs_btdc = 20;
   m_params.ckps_edge_type = 0;

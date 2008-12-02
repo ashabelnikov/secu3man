@@ -4,7 +4,7 @@
 class AFX_EXT_CLASS CEditEx : public CEdit
 {
 public:
-	CEditEx();
+	CEditEx(int i_mode = MODE_STRING);
 	virtual ~CEditEx();
 
 
