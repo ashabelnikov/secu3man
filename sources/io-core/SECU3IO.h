@@ -79,6 +79,9 @@ struct CarburPar
   int  ephh_hit;
   unsigned char carb_invers;
   float epm_ont; //порог включения ЭМР
+  int  ephh_lot_g;
+  int  ephh_hit_g;
+  float shutoff_delay; //задержка выключения клапана
 };
 
 struct TemperPar

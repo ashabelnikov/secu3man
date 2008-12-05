@@ -461,15 +461,15 @@ bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
 
- if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=24)  //размер пакета без сигнального символа, дескриптора
 	 return false;
 
- //Нижний порог ЭПХХ 
+ //Нижний порог ЭПХХ (бензин)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_lot))
      return false;
  raw_packet+=4;
 
- //Верхний порог ЭПХХ 
+ //Верхний порог ЭПХХ (бензин)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_hit))
      return false;
  raw_packet+=4;
@@ -486,6 +486,25 @@ bool CControlApp::Parse_CARBUR_PAR(BYTE* raw_packet)
  raw_packet+=4;
  m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
+
+//Нижний порог ЭПХХ (газ) 
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_lot_g))
+     return false;
+ raw_packet+=4;
+
+ //Верхний порог ЭПХХ (газ) 
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_hit_g))
+     return false;
+ raw_packet+=4;
+
+ //Задержка выключения клапана ЭПХХ
+ unsigned char shutoff_delay;
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&shutoff_delay))
+     return false;
+ raw_packet+=2;
+ m_CarburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
+
+ 
  if (*raw_packet!='\r')
 	 return false;
 
@@ -1012,6 +1031,10 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
   CNumericConv::Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
   int epm_on_threshold = CNumericConv::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
   CNumericConv::Bin16ToHex(epm_on_threshold,m_outgoing_packet);
+  CNumericConv::Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
+  CNumericConv::Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
+  unsigned char shutoff_delay = CNumericConv::Round(packet_data->shutoff_delay * 100.0f);
+  CNumericConv::Bin8ToHex(shutoff_delay,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 

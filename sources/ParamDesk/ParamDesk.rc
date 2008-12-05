@@ -200,40 +200,69 @@ BEGIN
                     17
 END
 
-IDD_PD_CARBUR_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
+IDD_PD_CARBUR_PAGE DIALOG DISCARDABLE  0, 0, 175, 158
 STYLE WS_CHILD
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,29,16,45,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,13,20,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,29,53,46,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,93,21,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,79,16,13,18
+                    WS_TABSTOP,43,20,13,18
     CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,80,52,13,18
-    LTEXT           "Нижний порог ЭПХХ",
-                    IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,22,5,98,10
-    LTEXT           "Верхний порог ЭПХХ",
-                    IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,21,40,101,10
+                    WS_TABSTOP,124,20,13,18
+    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,
+                    10,33,10
+    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,
+                    10,34,10
     CONTROL         "Инверсия концевика карбюратора",
                     IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,29,76,88,19
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,97,55,25,
+                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
+                    22,13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
                     13
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,96,18,25,
-                    13
-    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,31,119,46,18,
+    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,82,118,11,18
+                    WS_TABSTOP,93,130,11,18
     LTEXT           "Порог включения ЭМР",
-                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,23,106,101,10
+                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
     LTEXT           "Разряжение (кПа)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
-                    99,118,48,17
+                    110,130,48,17
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,14,64,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,64,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,45,64,13,18
+    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
+                    WS_TABSTOP,122,64,13,18
+    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,
+                    54,33,10
+    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,
+                    94,54,34,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,137,66,
+                    22,13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,65,
+                    22,13
+    GROUPBOX        "Пороги ЭПХХ для бензина",
+                    IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
+    GROUPBOX        "Пороги ЭПХХ для газа",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,6,
+                    47,159,40
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,45,98,11,18
+    LTEXT           "Задержка выкл. клап.",
+                    IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,5,88,79,10
+    LTEXT           "сек.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
 END
 
 IDD_PD_TEMPER_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
@@ -326,7 +355,7 @@ BEGIN
     CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP,48,32,79,14
     COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,53,
-                    CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_GROUP | 
+                    CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_GROUP | 
                     WS_TABSTOP
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
                     131,51
@@ -355,6 +384,11 @@ BEGIN
     IDD_PD_ANGLES_PAGE, DIALOG
     BEGIN
         RIGHTMARGIN, 169
+    END
+
+    IDD_PD_CARBUR_PAGE, DIALOG
+    BEGIN
+        RIGHTMARGIN, 166
     END
 
     IDD_PD_ADCCOMPEN_PAGE, DIALOG

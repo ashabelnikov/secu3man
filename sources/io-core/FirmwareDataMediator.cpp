@@ -73,10 +73,14 @@ typedef struct
 
   _int epm_on_threshold;
 
+  _uint  ephh_lot_g;                     //нижний порог ЭПХХ (газ)
+  _uint  ephh_hit_g;                     //верхний порог ЭПХХ (газ)
+  _uchar shutoff_delay;                  //задержка выключения клапана
+
   //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
   //новых версий прошивок с более старыми версиями. При добавлении новых данных
   //в структуру, необходимо расходовать эти байты.
-  _uchar reserved[10];
+  _uchar reserved[5];
 
   _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -453,6 +457,9 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
         p_params->ephh_lot    = p_in->ephh_lot;
 		p_params->carb_invers = p_in->carb_invers;
 		p_params->epm_on_threshold = CNumericConv::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->ephh_hit_g  = p_in->ephh_hit_g;
+        p_params->ephh_lot_g  = p_in->ephh_lot_g;
+		p_params->shutoff_delay = CNumericConv::Round(p_in->shutoff_delay * 100); //переводим в десятки мс
 		}
       break;
 	case IDLREG_PAR: 
@@ -560,6 +567,9 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
         p_out->ephh_lot    = p_params->ephh_lot;
 		p_out->carb_invers = p_params->carb_invers;
 		p_out->epm_ont =  ((float)p_params->epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+		p_out->ephh_hit_g  = p_params->ephh_hit_g;
+        p_out->ephh_lot_g  = p_params->ephh_lot_g;
+		p_out->shutoff_delay = ((float)p_params->shutoff_delay) / 100.0f; //переводим в секунды
 		}
       break;
 	case IDLREG_PAR: 

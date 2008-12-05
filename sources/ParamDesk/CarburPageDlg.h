@@ -28,9 +28,15 @@ public:
 	CSpinButtonCtrlEx	m_shutoff_lo_threshold_spin;
 	CSpinButtonCtrlEx	m_shutoff_hi_threshold_spin;
 	CSpinButtonCtrlEx	m_epm_on_threshold_spin;
+	CSpinButtonCtrlEx	m_shutoff_lo_threshold_spin_g;
+	CSpinButtonCtrlEx	m_shutoff_hi_threshold_spin_g;
+	CSpinButtonCtrlEx	m_shutoff_delay_spin;
 	CEditEx	m_shutoff_lo_threshold_edit;
 	CEditEx	m_shutoff_hi_threshold_edit;
 	CEditEx	m_epm_on_threshold_edit;
+	CEditEx	m_shutoff_lo_threshold_edit_g;
+	CEditEx	m_shutoff_hi_threshold_edit_g;
+	CEditEx	m_shutoff_delay_edit;
 	//}}AFX_DATA
 
 // Overrides
