@@ -31,6 +31,8 @@ __fastcall TForm1::TForm1(TComponent* Owner)
   val_n   = 0;
   count_of_function_points = 0;
   chart_title_text = "";
+  x_axis_title = "";
+  y_axis_title = "";
   original_function  = NULL;
   modified_function  = NULL;
 }
@@ -85,7 +87,7 @@ void TForm1::DataPrepare()
 
   Chart1->Title->Text->Clear();
   Chart1->Title->Text->Add(chart_title_text);
-  //Chart1->LeftA ->Title->Caption = y_axis_title;
+  Chart1->LeftAxis->Title->Caption = y_axis_title;
   Chart1->BottomAxis->Title->Caption = x_axis_title;
 
   for(int i = 0; i < count_of_function_points; i++)

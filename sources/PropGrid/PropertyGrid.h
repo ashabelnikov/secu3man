@@ -152,6 +152,9 @@ public:
   void ExpandSection(HSECTION hs, bool expand);
   bool IsSectionCollapsed(HSECTION hs);
 
+  bool GetFocusedItemID(HITEM&) const;
+  void SetEditable(bool i_editable);
+
 protected:
   class CItem
   {

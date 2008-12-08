@@ -45,6 +45,7 @@ public:		// User declarations
         int         horizontal_axis_grid_values[1024];
         AnsiString  chart_title_text;
         AnsiString  x_axis_title;
+        AnsiString  y_axis_title;
         float       *original_function;
         float       *modified_function;
 

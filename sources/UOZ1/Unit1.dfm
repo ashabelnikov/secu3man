@@ -1,6 +1,6 @@
 object Form1: TForm1
-  Left = 293
-  Top = 245
+  Left = 267
+  Top = 127
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Редактирование карт УОЗ'

@@ -342,7 +342,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
  if ((!m_start_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_start_map_chart_state = 1;
-	m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,s,16,(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Пусковая карта УОЗ");	  
+	m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,s,16,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Пусковая карта УОЗ");	  
 	DLL::UOZ1_Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
 	DLL::UOZ1_Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
   }
@@ -367,7 +367,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
  if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_idle_map_chart_state = 1;
-	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,s,16,(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Карта УОЗ на холостом ходу");	  
+	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,s,16,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Карта УОЗ на холостом ходу");	  
 	DLL::UOZ1_Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
 	DLL::UOZ1_Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
   }
@@ -391,7 +391,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
  if ((!m_work_map_chart_state)&&(DLL::UOZ2_Chart3DCreate))	 
   {
     m_work_map_chart_state = 1;
-    m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),s,16,16,-15.0,55.0,(LPCTSTR)"Обороты (min-1)",(LPCTSTR)"Рабочая карта УОЗ");		
+    m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),s,16,16,-15.0,55.0,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"Рабочая карта УОЗ");		
 	DLL::UOZ2_Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
 	DLL::UOZ2_Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
   }
@@ -415,7 +415,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
  if ((!m_temp_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_temp_map_chart_state = 1;
-	m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,s,16,(LPCTSTR)"Температура °C",(LPCTSTR)"Карта коррекции УОЗ по температуре охлаждающей жидкости");	  
+	m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,s,16,(LPCTSTR)"Температура °C",(LPCTSTR)"УОЗ (град.)",(LPCTSTR)"Карта коррекции УОЗ по температуре охлаждающей жидкости");	  
 	DLL::UOZ1_Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
 	DLL::UOZ1_Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
   }

@@ -2,11 +2,13 @@
 #include "ui-core/TabDialog.h"
 #include "resource.h"
 #include "propgrid/propertygrid.h"
+#include "propgrid/custom/btncheckbox.h"
 
 #pragma once
 
 class CKnockChannelTabDlg : public CTabDialog
 {
+	typedef CTabDialog Super;
 // Construction
 public:
 	CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor   
@@ -30,13 +32,15 @@ public:
 // Implementation
 protected:
 	CPropertyGrid m_ctrlGrid;
+	CBtnCheckBox m_item_attenuator_table_showhide;
+	HITEM m_item_attenuator_table_showhide_item;
 
 	// Generated message map functions
 	//{{AFX_MSG(CKnockChannelTabDlg)
-	virtual BOOL OnInitDialog();	
-	afx_msg void OnClose();
+	virtual BOOL OnInitDialog();		
 	afx_msg LRESULT OnItemChanged(WPARAM, LPARAM);
 	afx_msg void OnUpdatePropertyGrid(CCmdUI* pCmdUI);
+	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

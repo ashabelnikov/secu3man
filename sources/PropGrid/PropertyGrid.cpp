@@ -1,7 +1,7 @@
 //
 // PropertyGrid.cpp : implementation file
 //
-// 30 December 2008. Changes which brought by Alexey Shabelnikov:
+// 30 November 2008. Changes which brought by Alexey Shabelnikov:
 //    - Added support of HEX format;
 //    - Support for spin button control (Inplace edit).
 
@@ -2387,4 +2387,32 @@ void CPropertyGrid::EditFocusedItem()
       assert(false);
     }
   }
+}
+
+
+bool CPropertyGrid::GetFocusedItemID(HITEM& o_item_id) const
+{
+ if (m_focused_item==-1)
+  return false; //there are no focused item
+
+ CItem* pItem = FindItem(m_focused_item);  
+ if (pItem!=NULL)
+ {
+  o_item_id = pItem->m_id;  
+  return true; 
+ }
+ return false; //error: there are no such item. 
+}
+
+//will change editable flag for all items and update grid
+void CPropertyGrid::SetEditable(bool i_editable)
+{
+ for (vector<CSection>::iterator it = m_sections.begin(); it != m_sections.end(); ++it)
+ {
+  for (vector<CItem>::iterator it2 = it->m_items.begin(); it2 != it->m_items.end(); ++it2)
+  {
+   it2->m_editable = i_editable;
+  }
+ }
+ Invalidate();
 }

@@ -196,5 +196,17 @@ SOURCE=.\StdAfx.h
 SOURCE=.\res\PropGrid.rc2
 # End Source File
 # End Group
+# Begin Group "Custom"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Custom\BtnCheckbox.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Custom\BtnCheckbox.h
+# End Source File
+# End Group
 # End Target
 # End Project

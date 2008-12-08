@@ -3,7 +3,7 @@
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 
-typedef HWND (__cdecl *UOZ1_Chart2DCreate_Addr) (float *original_function, float *modified_function,float aai_min,float aai_max,int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR chart_title);
+typedef HWND (__cdecl *UOZ1_Chart2DCreate_Addr) (float *original_function, float *modified_function,float aai_min,float aai_max,int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title);
 typedef void (__cdecl *UOZ1_Chart2DUpdate_Addr) (HWND hWnd, float *original_function, float *modified_function);
 typedef void (__cdecl *UOZ1_Chart2DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
 typedef void (__cdecl *UOZ1_Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
