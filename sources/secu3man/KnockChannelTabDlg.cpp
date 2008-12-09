@@ -13,6 +13,7 @@
 #include <vector>
 #include "propgrid/custom/btncheckbox.h"
 #include "common/FastDelegate.h"
+#include "DLLLinkedFunctions.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,12 +24,51 @@ static char THIS_FILE[] = __FILE__;
 using namespace std;
 using namespace fastdelegate;
 
+
+
+
+void __cdecl CKnockChannelTabDlg::OnChangeAttenuatorTable(void* i_param)
+{
+ CKnockChannelTabDlg* _this = static_cast<CKnockChannelTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what is the fuck?
+  return;
+ }
+
+ 
+}
+
+void __cdecl CKnockChannelTabDlg::OnCloseAttenuatorTable(void* i_param)
+{
+ CKnockChannelTabDlg* _this = static_cast<CKnockChannelTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what is the fuck?
+  return;
+ }
+ _this->m_attenuator_table_state = 0;
+ _this->m_item_attenuator_table_showhide.SetButtonState(false);
+}
+
+
+
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 {
   //{{AFX_DATA_INIT(CKnockChannelTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
   //}}AFX_DATA_INIT
+
+  m_attenuator_table_state = 0;
+  m_attenuator_table_wnd_handle = NULL;
+ 
+  int rpm = 200;
+  for(size_t i = 0; i < 128; i++)
+  {
+   m_attenuator_table_slots[i] = rpm;
+   rpm+=60;
+  }
 }
 
 
@@ -99,7 +139,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
   m_item_attenuator_table_showhide.SetCheckedText(_T("Закрыть"));
   m_item_attenuator_table_showhide.SetUncheckedText(_T("Редактировать"));
-  m_item_attenuator_table_showhide_item = m_ctrlGrid.AddCustomItem(hs, "Точка перекл. аттенюатора", &m_item_attenuator_table_showhide);
+  m_item_attenuator_table_showhide_item = m_ctrlGrid.AddCustomItem(hs, "Настройка аттенюатора", &m_item_attenuator_table_showhide);
 	
   m_ctrlGrid.SetFocusDisabled(false);
   m_ctrlGrid.SetEditable(true);
@@ -120,7 +160,34 @@ LRESULT CKnockChannelTabDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
 {
   if (wParam == m_item_attenuator_table_showhide_item)
   {
-  
+   _OnShowHideAttenuatorGainTable();
   }
   return 0;
+}
+
+
+
+void CKnockChannelTabDlg::_OnShowHideAttenuatorGainTable(void)
+{
+ float m1[128];memset(m1,0,128*sizeof(float));
+ float m2[128];memset(m2,0,128*sizeof(float));
+
+ //если кнопку "выключили" то закрываем окно редактора
+ if (!m_item_attenuator_table_showhide.IsButtonPressed())
+ {
+  ::SendMessage(m_attenuator_table_wnd_handle,WM_CLOSE,0,0); 
+  return;
+ }
+
+ if ((!m_attenuator_table_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ {
+  m_attenuator_table_state = 1;	
+  m_attenuator_table_wnd_handle = DLL::UOZ1_Chart2DCreate(m1,m2,0.0f,63,m_attenuator_table_slots,128,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"Константа коэфф. усиления",(LPCTSTR)"Настройка кривой усиления аттенюатора");	  
+  DLL::UOZ1_Chart2DSetOnChange(m_attenuator_table_wnd_handle,OnChangeAttenuatorTable,this);
+  DLL::UOZ1_Chart2DSetOnClose(m_attenuator_table_wnd_handle,OnCloseAttenuatorTable,this);
+ }
+ else
+ {
+  ::SetFocus(m_attenuator_table_wnd_handle);
+ }		
 }

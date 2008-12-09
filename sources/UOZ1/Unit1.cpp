@@ -136,7 +136,7 @@ void TForm1::RestrictAndSetValue(int index, double v)
 
 void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
 {
- for (int i = 0; i < 16; i++ )
+ for (int i = 0; i < count_of_function_points; i++ )
    {
    RestrictAndSetValue(i, Series2->YValue[i] + 0.5);
    }
@@ -147,7 +147,7 @@ void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
 
 void __fastcall TForm1::ButtonAngleDownClick(TObject *Sender)
 {
-  for (int i = 0; i < 16; i++ )
+  for (int i = 0; i < count_of_function_points; i++ )
     {
     RestrictAndSetValue(i, Series2->YValue[i] - 0.5);
     }

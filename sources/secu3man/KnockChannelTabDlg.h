@@ -34,7 +34,8 @@ protected:
 	CPropertyGrid m_ctrlGrid;
 	CBtnCheckBox m_item_attenuator_table_showhide;
 	HITEM m_item_attenuator_table_showhide_item;
-
+	
+	void _OnShowHideAttenuatorGainTable(void);
 	// Generated message map functions
 	//{{AFX_MSG(CKnockChannelTabDlg)
 	virtual BOOL OnInitDialog();		
@@ -43,4 +44,15 @@ protected:
 	afx_msg void OnDestroy();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
+
+private:
+
+    static void __cdecl OnChangeAttenuatorTable(void* i_param);
+    static void __cdecl OnCloseAttenuatorTable(void* i_param);
+
+    int m_attenuator_table_state;
+	HWND m_attenuator_table_wnd_handle;
+	int m_attenuator_table_slots[128];
+
+
 };
