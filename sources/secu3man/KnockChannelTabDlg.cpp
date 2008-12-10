@@ -183,6 +183,7 @@ void CKnockChannelTabDlg::_OnShowHideAttenuatorGainTable(void)
  {
   m_attenuator_table_state = 1;	
   m_attenuator_table_wnd_handle = DLL::UOZ1_Chart2DCreate(m1,m2,0.0f,63,m_attenuator_table_slots,128,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"Константа коэфф. усиления",(LPCTSTR)"Настройка кривой усиления аттенюатора");	  
+  DLL::UOZ1_Chart2DSetMarksVisible(m_attenuator_table_wnd_handle,1,false); //прячем надписи над узловыми точками функции
   DLL::UOZ1_Chart2DSetOnChange(m_attenuator_table_wnd_handle,OnChangeAttenuatorTable,this);
   DLL::UOZ1_Chart2DSetOnClose(m_attenuator_table_wnd_handle,OnCloseAttenuatorTable,this);
  }

@@ -18,6 +18,7 @@ namespace DLL
   UOZ1_Chart2DUpdate_Addr        UOZ1_Chart2DUpdate = NULL;
   UOZ1_Chart2DSetOnChange_Addr   UOZ1_Chart2DSetOnChange = NULL;
   UOZ1_Chart2DSetOnClose_Addr    UOZ1_Chart2DSetOnClose = NULL;
+  UOZ1_Chart2DSetMarksVisible_Addr UOZ1_Chart2DSetMarksVisible = NULL;
 
   UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate = NULL;
   UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate = NULL;
@@ -41,6 +42,7 @@ namespace DLL
 	  UOZ1_Chart2DUpdate = NULL;
 	  UOZ1_Chart2DSetOnChange = NULL;
 	  UOZ1_Chart2DSetOnClose = NULL;
+	  UOZ1_Chart2DSetMarksVisible = NULL;
 	  status = false;
 	}
     else
@@ -87,6 +89,16 @@ namespace DLL
       else
         UOZ1_Chart2DSetOnClose = (UOZ1_Chart2DSetOnClose_Addr)addr;	
       //-------------------------------------------------------------------------- 
+      addr = GetProcAddress(hModule,"Chart2DSetMarksVisible");
+      if (addr==NULL)
+	  {
+	    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);	
+	    UOZ1_Chart2DSetMarksVisible = NULL;
+	    status = false;
+	  }
+      else
+        UOZ1_Chart2DSetMarksVisible = (UOZ1_Chart2DSetMarksVisible_Addr)addr;	
+      //-------------------------------------------------------------------------- 	
 	}
 
 

@@ -24,6 +24,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
 }
 
 std::map<HWND,TForm*> g_form_instances;
@@ -121,6 +122,22 @@ void __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param
  if (NULL==pForm1)
    return;
  pForm1->SetOnClose(i_pOnClose,i_param);
+}
+
+void __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+   return;
+ switch(i_series_index)
+ {
+ case 0:
+   pForm1->Series1->Marks->Visible = i_visible;
+   break;
+ case 1:
+   pForm1->Series2->Marks->Visible = i_visible;
+   break;
+ }
 }
 
 //---------------------------------------------------------------------------
