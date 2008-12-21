@@ -81,6 +81,7 @@
 #define IDC_CHECK_ENGINE_QUICK_HELP     4076
 #define IDB_CHECK_ENGINE_LIST_ICONS     4077
 #define IDC_PROPERTY_GRID               4078
+#define IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON 4079
 
 // Next default values for new objects
 // 
@@ -88,7 +89,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        4200
 #define _APS_NEXT_COMMAND_VALUE         4300
-#define _APS_NEXT_CONTROL_VALUE         4400
+#define _APS_NEXT_CONTROL_VALUE         4401
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

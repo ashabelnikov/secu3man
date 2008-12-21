@@ -116,6 +116,10 @@ SOURCE=.\CRC16.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\EEPROMDataMediator.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\FirmwareDataMediator.cpp
 # End Source File
 # Begin Source File
@@ -174,6 +178,10 @@ SOURCE=.\ControlAppAdapter.h
 # Begin Source File
 
 SOURCE=.\CRC16.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\EEPROMDataMediator.h
 # End Source File
 # Begin Source File
 

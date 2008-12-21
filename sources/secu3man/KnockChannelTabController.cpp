@@ -9,6 +9,9 @@
 
 #include "stdafx.h"
 #include "KnockChannelTabController.h"
+#include "common\fastdelegate.h"
+
+using namespace fastdelegate;
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -29,6 +32,8 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
   m_view = i_view;
   m_comm = i_comm;
   m_sbar = i_sbar;
+
+  m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
 }
 
 
@@ -50,3 +55,9 @@ bool CKnockChannelTabController::OnClose(void)
 {
   return true;
 }
+
+void CKnockChannelTabController::OnSaveParameters(void)
+{
+
+}
+

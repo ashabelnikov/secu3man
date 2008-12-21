@@ -77,6 +77,7 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
   Super::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CKnockChannelTabDlg) 
   DDX_Control(pDX, IDC_PROPERTY_GRID, m_ctrlGrid);
+  DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);
   //}}AFX_DATA_MAP
 }
 
@@ -91,6 +92,7 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
 	ON_WM_DESTROY()
 	ON_MESSAGE(WM_PG_ITEMCHANGED, OnItemChanged)
     ON_UPDATE_COMMAND_UI(IDC_PROPERTY_GRID, OnUpdatePropertyGrid)
+	ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -191,4 +193,11 @@ void CKnockChannelTabDlg::_OnShowHideAttenuatorGainTable(void)
  {
   ::SetFocus(m_attenuator_table_wnd_handle);
  }		
+}
+
+
+void CKnockChannelTabDlg::OnSaveParameters(void)
+{
+ if (m_OnSaveParameters)
+  m_OnSaveParameters();
 }

@@ -27,4 +27,6 @@ class CKnockChannelTabController : public ITabController
     virtual void OnActivate(void);
 	virtual void OnDeactivate(void);
 	virtual bool OnClose(void);
+
+	void OnSaveParameters(void);
 };

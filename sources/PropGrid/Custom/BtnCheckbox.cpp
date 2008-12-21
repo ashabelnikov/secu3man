@@ -96,20 +96,20 @@ bool CBtnCheckBox::IsButtonPressed(void) const
 void CBtnCheckBox::SetButtonState(bool i_state)
 {
  m_nButtonPushed = i_state;
- if (NULL!=m_pGrid)
+ if (NULL!=m_pGrid && ::IsWindow(m_pGrid->m_hWnd))
    m_pGrid->Invalidate();    
 }
 
 void CBtnCheckBox::SetCheckedText(const CString &i_text)
 {
  m_checked_text = i_text;
- if (NULL!=m_pGrid)
+ if (NULL!=m_pGrid && ::IsWindow(m_pGrid->m_hWnd))
    m_pGrid->Invalidate();    
 }
 
 void CBtnCheckBox::SetUncheckedText(const CString &i_text)
 {
  m_unchecked_text = i_text;
- if (NULL!=m_pGrid)
+ if (NULL!=m_pGrid && ::IsWindow(m_pGrid->m_hWnd))
    m_pGrid->Invalidate();    
 }
