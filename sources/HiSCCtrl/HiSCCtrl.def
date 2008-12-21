@@ -1,0 +1,6 @@
+; HiSCCtrl.def : Declares the module parameters for the DLL.
+
+LIBRARY      "HiSCCtrl"
+DESCRIPTION  'HiSCCtrl Windows Dynamic Link Library'
+
+EXPORTS

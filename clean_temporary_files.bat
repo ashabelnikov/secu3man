@@ -52,6 +52,11 @@ del propgrid\release\*.* /Q
 del propgrid\*.ncb
 del propgrid\*.plg
 
+del hiscctrl\debug\*.* /Q
+del hiscctrl\release\*.* /Q
+del hiscctrl\*.ncb
+del hiscctrl\*.plg
+
 del UOZ1\*.obj /Q
 del UOZ2\*.obj /Q
 

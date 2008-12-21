@@ -27,6 +27,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "HiSCCtrl"="..\HiSCCtrl\HiSCCtrl.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "MIdesk"="..\MIdesk\MIdesk.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -127,6 +139,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name PropGrid
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name HiSCCtrl
     End Project Dependency
 }}}
 
