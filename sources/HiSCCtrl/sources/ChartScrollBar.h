@@ -23,7 +23,7 @@
 
 class CChartAxis;
 
-class CChartScrollBar : public CScrollBar
+class AFX_EXT_CLASS CChartScrollBar : public CScrollBar
 {
 public:
 	CChartScrollBar(CChartAxis* pParentAxis);

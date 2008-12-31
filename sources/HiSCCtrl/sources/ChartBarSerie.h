@@ -24,7 +24,7 @@
 #include "ChartGradient.h"
 #include <list>
 
-class CChartBarSerie : public CChartSerie
+class AFX_EXT_CLASS CChartBarSerie : public CChartSerie
 {
 public:
 	CChartBarSerie(CChartCtrl* pParent);

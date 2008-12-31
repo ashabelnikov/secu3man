@@ -37,7 +37,7 @@ class CChartGrid;
 class CChartSerie;
 class CChartAxisLabel;
     
-class CChartAxis : public CChartObject  
+class AFX_EXT_CLASS CChartAxis : public CChartObject  
 {
 	friend CChartCtrl;
 	friend CChartGrid;

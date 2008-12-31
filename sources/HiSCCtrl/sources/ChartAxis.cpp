@@ -136,7 +136,7 @@ int CChartAxis::ClipMargin(CRect ControlRect,CRect& MarginRect,CDC* pDC)
 
 	CSize TickSize = GetLargestTick(pDC);
 	CSize LabelSize = m_pAxisLabel->GetSize(pDC);
-
+	
 	if (m_bIsHorizontal)
 	{
 		if (!m_bAutoMargin)
@@ -1115,8 +1115,20 @@ CSize CChartAxis::GetLargestTick(CDC* pDC)
 		{
 		case atStandard:
 			{
-				int MaxChars = abs( (int)log10(fabs(m_MaxValue) )) + 1;
-    			int MinChars = abs( (int)log10(fabs(m_MinValue) )) + 1;
+				int MaxChars = abs( (int)log10(fabs(m_MaxValue) )) + 1;			
+				int MinChars = 0;
+
+				try
+				{					
+				 if (m_MinValue == .0)
+				   throw double();
+				 MinChars = abs( (int)log10(fabs(m_MinValue) )) + 1;
+				}
+				catch(double) 
+				{			
+				 MinChars = 0;
+				}		
+
     			if (m_MinValue<0)
     				MinChars++;
     			if (m_MaxValue<0)

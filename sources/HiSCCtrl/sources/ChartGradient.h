@@ -29,7 +29,7 @@ enum EGradientType
 	gtVerticalDouble
 };
 
-class CChartGradient
+class AFX_EXT_CLASS CChartGradient
 {
 public:
 	CChartGradient();

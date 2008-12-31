@@ -99,7 +99,17 @@ void CChartScrollBar::Refresh()
 	{
 		dStep = (AxisMax - AxisMin) / 10.0;
 		iTotalSteps = (int)ceil((SeriesMax - SeriesMin)/dStep);
-		iCurrentStep = (int)(iTotalSteps * ((AxisMin - SeriesMin)/(SeriesMax-SeriesMin)));
+		try
+		{
+         double divisor = SeriesMax-SeriesMin;
+		 if (divisor == .0)
+			throw double();
+		 iCurrentStep = (int)(iTotalSteps * ((AxisMin - SeriesMin)/divisor));
+		}
+		catch(double) 
+		{			
+		 iCurrentStep = 0;
+		}		
 	}
 
 	SCROLLINFO info;

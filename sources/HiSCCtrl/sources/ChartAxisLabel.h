@@ -32,7 +32,7 @@
 
 class CChartAxis;
 
-class CChartAxisLabel : public CChartObject  
+class AFX_EXT_CLASS CChartAxisLabel : public CChartObject  
 {
 	friend CChartAxis;
 

@@ -31,7 +31,7 @@
 
 class CChartCtrl;
 
-class CChartObject  
+class AFX_EXT_CLASS CChartObject  
 {
 	friend CChartCtrl;
 

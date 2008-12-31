@@ -32,7 +32,7 @@
 #include "ChartString.h"
 
 
-class CChartTitle : public CChartObject  
+class AFX_EXT_CLASS CChartTitle : public CChartObject  
 {
 	friend CChartCtrl;
 

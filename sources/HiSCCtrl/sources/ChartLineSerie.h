@@ -29,7 +29,7 @@
 #include "ChartSerie.h"
 
 
-class CChartLineSerie : public CChartSerie  
+class AFX_EXT_CLASS CChartLineSerie : public CChartSerie  
 {
 public:
 	int  GetPenStyle() const        { return m_iPenStyle; }

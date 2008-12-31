@@ -41,7 +41,7 @@
 /////////////////////////////////////////////////////////////////////////////
 // CChartCtrl window
 
-class CChartCtrl : public CWnd
+class AFX_EXT_CLASS CChartCtrl : public CWnd
 {
 
 public:

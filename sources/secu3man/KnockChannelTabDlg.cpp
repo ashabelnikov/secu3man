@@ -15,6 +15,8 @@
 #include "common/FastDelegate.h"
 #include "DLLLinkedFunctions.h"
 
+#include "HiSCCtrl/sources/ChartPointsSerie.h"
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -55,6 +57,7 @@ void __cdecl CKnockChannelTabDlg::OnCloseAttenuatorTable(void* i_param)
 
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
+, mp_RTChart(NULL)
 {
   //{{AFX_DATA_INIT(CKnockChannelTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
@@ -77,7 +80,7 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
   Super::DoDataExchange(pDX);
   //{{AFX_DATA_MAP(CKnockChannelTabDlg) 
   DDX_Control(pDX, IDC_PROPERTY_GRID, m_ctrlGrid);
-  DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);
+  DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);  
   //}}AFX_DATA_MAP
 }
 
@@ -107,6 +110,20 @@ void CKnockChannelTabDlg::OnUpdatePropertyGrid(CCmdUI* pCmdUI)
 BOOL CKnockChannelTabDlg::OnInitDialog() 
 {
   Super::OnInitDialog();
+
+
+  mp_RTChart = new CChartCtrl();
+  CRect rect;
+  GetDlgItem(IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
+  ScreenToClient(rect);
+  mp_RTChart->Create(this,rect,IDC_KNOCK_CHANNEL_REALTIME_CHART);
+ 
+  CChartPointsSerie* pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
+
+  pPointSerie->AddPoint(4,7);
+  pPointSerie->AddPoint(6,3);
+  pPointSerie->AddPoint(2,8);
+  pPointSerie->AddPoint(5,4);
 
   HSECTION hs = m_ctrlGrid.AddSection("Параметры");
 
@@ -155,6 +172,7 @@ void CKnockChannelTabDlg::OnDestroy()
 {
   Super::OnDestroy();
   m_ctrlGrid.ResetContents();
+  delete mp_RTChart;
 }
 
 

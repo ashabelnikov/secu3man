@@ -38,7 +38,7 @@ class CChartLegend;
 
 
 
-class CChartSerie : public CChartObject  
+class AFX_EXT_CLASS CChartSerie : public CChartObject  
 {
 	friend CChartCtrl;
 	friend CChartLegend;

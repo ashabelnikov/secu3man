@@ -4,6 +4,7 @@
 #include "propgrid/propertygrid.h"
 #include "propgrid/custom/btncheckbox.h"
 #include "common\fastdelegate.h"
+#include "HiSCCtrl/sources/ChartCtrl.h"
 
 #pragma once
 
@@ -26,6 +27,7 @@ public:
 	//{{AFX_DATA(CKnockChannelTabDlg)
 	enum { IDD = IDD_KNOCK_CHANNEL };
 	CButton m_param_save_button;
+	CChartCtrl* mp_RTChart;
 	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;

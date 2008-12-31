@@ -28,7 +28,7 @@
 
 #include "ChartSerie.h"
 
-class CChartPointsSerie : public CChartSerie  
+class AFX_EXT_CLASS CChartPointsSerie : public CChartSerie  
 {
 public:
 	enum PointType

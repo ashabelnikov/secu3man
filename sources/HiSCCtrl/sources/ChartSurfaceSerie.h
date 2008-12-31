@@ -28,7 +28,7 @@
 
 #include "ChartSerie.h"
 
-class CChartSurfaceSerie : public CChartSerie  
+class AFX_EXT_CLASS CChartSurfaceSerie : public CChartSerie  
 {
 public:
 	CChartSurfaceSerie(CChartCtrl* pParent);
