@@ -189,8 +189,8 @@ LRESULT CKnockChannelTabDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
 
 void CKnockChannelTabDlg::_OnShowHideAttenuatorGainTable(void)
 {
- float m1[128];memset(m1,0,128*sizeof(float));
- float m2[128];memset(m2,0,128*sizeof(float));
+ static float m1[128];memset(m1,0,128*sizeof(float));
+ static float m2[128];memset(m2,0,128*sizeof(float));
 
  //если кнопку "выключили" то закрываем окно редактора
  if (!m_item_attenuator_table_showhide.IsButtonPressed())

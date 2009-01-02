@@ -81,7 +81,8 @@ bool CControlApp::Terminate(void)
 	if (!CloseHandle(m_hAwakeEvent))
 		status = false;
 
-    CancelWaitableTimer(m_hTimer);
+	if (NULL!=m_hTimer)
+      CancelWaitableTimer(m_hTimer);
 
 	if (!CloseHandle(m_hTimer))
 		status = false;
@@ -910,7 +911,11 @@ void CControlApp::SwitchOn(bool state)
 	{ //остановить работу
       SwitchOnThread(false);
 	  Sleep(CNumericConv::Round(ms_need_for_one_byte*5));
-	  CancelWaitableTimer(m_hTimer);
+
+	  //без этой проверки под Windows 98 возникает "Abnormal program termination"
+	  //Странное поведение CancelWaitableTimer() с нулевым хэндлом???
+	  if (NULL!=m_hTimer) 
+	    CancelWaitableTimer(m_hTimer);
 
 	  if (m_pEventHandler)
 	    m_pEventHandler->OnConnection(false);	  

@@ -109,7 +109,9 @@ void CSecu3manApp::OnAppSettings()
 
   if (result==IDOK)
   {
+    BeginWaitCursor();
     m_pCommunicationManager->Init();
+	EndWaitCursor();
   }
 }
 
