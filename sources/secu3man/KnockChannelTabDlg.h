@@ -1,10 +1,9 @@
 
 #include "ui-core/TabDialog.h"
 #include "resource.h"
-#include "propgrid/propertygrid.h"
-#include "propgrid/custom/btncheckbox.h"
 #include "common\fastdelegate.h"
 #include "HiSCCtrl/sources/ChartCtrl.h"
+#include "ParamDesk/KnockPageDlg.h"
 
 #pragma once
 
@@ -28,6 +27,7 @@ public:
 	enum { IDD = IDD_KNOCK_CHANNEL };
 	CButton m_param_save_button;
 	CChartCtrl* mp_RTChart;
+	CKnockPageDlg m_knock_parameters;
 	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;
@@ -40,31 +40,15 @@ public:
 	//}}AFX_VIRTUAL
 
 // Implementation
-protected:
-	CPropertyGrid m_ctrlGrid;
-	CBtnCheckBox m_item_attenuator_table_showhide;
-	HITEM m_item_attenuator_table_showhide_item;
-	
-	void _OnShowHideAttenuatorGainTable(void);
+protected:	
 	// Generated message map functions
 	//{{AFX_MSG(CKnockChannelTabDlg)
 	virtual BOOL OnInitDialog();		
-	afx_msg LRESULT OnItemChanged(WPARAM, LPARAM);
-	afx_msg void OnUpdatePropertyGrid(CCmdUI* pCmdUI);
 	afx_msg void OnDestroy();
 	afx_msg void OnSaveParameters();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
 private:
-    EventHandler  m_OnSaveParameters;
-
-    static void __cdecl OnChangeAttenuatorTable(void* i_param);
-    static void __cdecl OnCloseAttenuatorTable(void* i_param);
-
-    int m_attenuator_table_state;
-	HWND m_attenuator_table_wnd_handle;
-	int m_attenuator_table_slots[128];
-
-
+    EventHandler  m_OnSaveParameters;  
 };

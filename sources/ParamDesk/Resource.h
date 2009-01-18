@@ -153,12 +153,14 @@
 #define IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT 3148
 #define IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP 3149
 #define IDC_PD_CARBUR_SHUTOFF_GAS_GROUP 3150
+#define IDD_PD_KNOCK_PAGE               3151
+#define IDC_PROPERTY_GRID               3152
 
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        103
+#define _APS_NEXT_RESOURCE_VALUE        104
 #define _APS_NEXT_COMMAND_VALUE         40001
 #define _APS_NEXT_CONTROL_VALUE         3112
 #define _APS_NEXT_SYMED_VALUE           101

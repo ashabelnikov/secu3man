@@ -125,7 +125,32 @@ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
 }
 
 //------------------------------------------------------------------------
+void __cdecl CFirmwareTabDlg::OnChangeAttenuatorTable(void* i_param)
+{
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what is the fuck?
+  return;
+ }
 
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_ATTENUATOR); 
+}
+
+//------------------------------------------------------------------------
+void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
+{
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what is the fuck?
+  return;
+ }
+ _this->m_attenuator_map_chart_state = 0;
+}
+
+//------------------------------------------------------------------------
 
 
 
@@ -137,23 +162,32 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CFirmwareTabDlg::IDD, pParent)	
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
+, m_ParamDeskDlg(NULL, true) //<-- используем вкладку параметров детонации
 {
   //{{AFX_DATA_INIT(CFirmwareTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
   //}}AFX_DATA_INIT
   m_ContextMenuManager.CreateContent();
 
-  m_work_map_chart_state  = 0;
-  m_temp_map_chart_state  = 0;
-  m_start_map_chart_state = 0;
-  m_idle_map_chart_state  = 0;
+  m_work_map_chart_state   = 0;
+  m_temp_map_chart_state   = 0;
+  m_start_map_chart_state  = 0;
+  m_idle_map_chart_state   = 0;
+  m_attenuator_map_chart_state = 0;
 
 
   m_start_map_wnd_handle = NULL;
   m_idle_map_wnd_handle  = NULL;
   m_work_map_wnd_handle  = NULL;
   m_temp_map_wnd_handle  = NULL;
-
+  m_attenuator_map_wnd_handle = NULL;
+ 
+  int rpm = 200;
+  for(size_t i = 0; i < 128; i++)
+  {
+   m_attenuator_table_slots[i] = rpm;
+   rpm+=60;
+  }
 }
 
 
@@ -172,6 +206,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG, m_modification_flag);
   DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, m_prog_only_code_checkbox);
+  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,m_view_attenuator_map_btn);
 	//}}AFX_DATA_MAP
 }
 
@@ -194,6 +229,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, OnUpdateFirmwareSupportViewIdleMap)
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP, OnUpdateFirmwareSupportViewWorkMap)
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, OnUpdateFirmwareSupportViewTempMap)
+  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareSupportViewAttenuatorMap)
   ON_WM_TIMER()
   ON_WM_DESTROY()
   ON_COMMAND(IDM_READ_BOOTLOADER_SIGNATURE, OnBootLoaderInfo)
@@ -240,6 +276,8 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
   ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
     	
+  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareControls)
+  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -458,6 +496,15 @@ void CFirmwareTabDlg::OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI)
   pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );	
 }
 
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI)
+{
+  bool opened = IsFirmwareOpened(); 
+  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
+  pCmdUI->Enable(enable);
+  pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );	
+}
+
+
 void CFirmwareTabDlg::OnTimer(UINT nIDEvent) 
 {
   //I know it is dirty hack, but... :-) 	
@@ -591,6 +638,8 @@ void CFirmwareTabDlg::UpdateOpenedCharts(void)
     DLL::UOZ2_Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));	 
   if (m_temp_map_chart_state)
     DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));	 
+  if (m_attenuator_map_chart_state)
+    DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));	 
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -705,4 +754,27 @@ void CFirmwareTabDlg::OnExportMapsToMPSZ()
 {
   if (m_OnExportMapsToMPSZ)
     m_OnExportMapsToMPSZ();
+}
+
+void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_attenuator_map_wnd_handle,WM_CLOSE,0,0); 
+  return;
+ }
+
+ if ((!m_attenuator_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ {
+  m_attenuator_map_chart_state = 1;	
+  m_attenuator_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,(LPCTSTR)"Обороты (мин-1)",(LPCTSTR)"Константа коэфф. усиления",(LPCTSTR)"Настройка кривой усиления аттенюатора");	  
+  DLL::UOZ1_Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1,false); //прячем надписи над узловыми точками функции
+  DLL::UOZ1_Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable,this);
+  DLL::UOZ1_Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable,this);
+ }
+ else
+ {
+  ::SetFocus(m_attenuator_map_wnd_handle);
+ }	
 }

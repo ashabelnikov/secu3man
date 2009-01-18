@@ -207,6 +207,14 @@ SOURCE=.\Custom\BtnCheckbox.cpp
 
 SOURCE=.\Custom\BtnCheckbox.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\Custom\CustValSelector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Custom\CustValSelector.h
+# End Source File
 # End Group
 # End Target
 # End Project

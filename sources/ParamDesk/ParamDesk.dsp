@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 ../../libraries/uicore.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
+# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "ParamDesk - Win32 Debug"
 
@@ -79,7 +79,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ../../libraries/uicore.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
+# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
 
 !ENDIF 
 
@@ -210,6 +210,14 @@ SOURCE=.\IdlRegPageDlg.cpp
 # Begin Source File
 
 SOURCE=.\IdlRegPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\KnockPageDlg.h
 # End Source File
 # Begin Source File
 

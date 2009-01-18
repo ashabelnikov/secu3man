@@ -11,7 +11,8 @@ enum EMapTypes
   TYPE_MAP_DA_START = 0,
   TYPE_MAP_DA_IDLE,
   TYPE_MAP_DA_WORK,
-  TYPE_MAP_DA_TEMP_CORR
+  TYPE_MAP_DA_TEMP_CORR,
+  TYPE_MAP_ATTENUATOR
 };
 
 
@@ -83,6 +84,14 @@ public:
         return m_temp_map_active;
 	}
 
+    float* GetAttenuatorMap(bool i_original) 
+	{
+	  if (i_original)
+		return m_attenuator_map_original;
+	  else
+        return m_attenuator_map_active;
+	}
+
 	void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
 	void SetFunSetListBoxSelection(int i_selected_index);
 	void SetFirmwareName(_TSTRING i_name);
@@ -103,6 +112,7 @@ public:
 	CButton	m_view_start_map_btn;
 	CButton	m_view_idle_map_btn;
 	CButton m_prog_only_code_checkbox;
+	CButton m_view_attenuator_map_btn;
 	CEdit   m_fw_information_edit;
 	CEdit m_fw_name;
 	CStatic m_fw_crc;
@@ -137,6 +147,7 @@ protected:
 	afx_msg void OnUpdateFirmwareSupportViewIdleMap(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFirmwareSupportViewWorkMap(CCmdUI* pCmdUI);
 	afx_msg void OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI);
+	afx_msg void OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI);
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnDestroy();
     afx_msg void OnBootLoaderInfo();
@@ -159,6 +170,7 @@ protected:
 	afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
 	afx_msg void OnImportMapsFromMPSZ();
 	afx_msg void OnExportMapsToMPSZ();
+	afx_msg void OnFirmwareSupportViewAttenuatorMap();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -192,12 +204,16 @@ public: //for C functions
     int m_temp_map_chart_state;
     int m_start_map_chart_state;
     int m_idle_map_chart_state;
+    int m_attenuator_map_chart_state;
 
 private:
     HWND m_start_map_wnd_handle;
     HWND m_idle_map_wnd_handle;
     HWND m_work_map_wnd_handle;
     HWND m_temp_map_wnd_handle;
+	HWND m_attenuator_map_wnd_handle;
+
+	int m_attenuator_table_slots[128];
 
 
     EventHandler  m_OnBootLoaderInfo;
@@ -226,6 +242,9 @@ private:
     static void __cdecl OnCloseWorkMap(void* i_param);
 	static void __cdecl OnChangeTempMap(void* i_param);
     static void __cdecl OnCloseTempMap(void* i_param);
+    static void __cdecl OnChangeAttenuatorTable(void* i_param);
+    static void __cdecl OnCloseAttenuatorTable(void* i_param);
+
 
     bool IsFirmwareOpened(void) 
 	{
@@ -250,6 +269,9 @@ private:
 	
     float m_temp_map_active[16];
     float m_temp_map_original[16];
+
+	float m_attenuator_map_active[128];
+	float m_attenuator_map_original[128];
 	///////////////////////////////////////////////////////
 };
 

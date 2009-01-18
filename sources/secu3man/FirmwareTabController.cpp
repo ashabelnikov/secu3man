@@ -905,6 +905,9 @@ bool CFirmwareTabController::IsFirmwareOpened()
 //эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!  
 void CFirmwareTabController::SetViewChartsValues(void)
 {
+  m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(false),false);
+  m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(true),true);
+
   if (m_current_funset_index==-1)
     return;
   m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(false),false);
@@ -972,6 +975,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
     case TYPE_MAP_DA_TEMP_CORR:
 		ASSERT(m_current_funset_index!=-1);
         m_fwdm->SetTempMap(m_current_funset_index,m_view->GetTempMap(false)); 
+		break;
+    case TYPE_MAP_ATTENUATOR:
+		m_fwdm->SetAttenuatorMap(m_view->GetAttenuatorMap(false));
 		break;
 	}
 }

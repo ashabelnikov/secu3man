@@ -77,21 +77,34 @@ typedef struct
   _uint  ephh_hit_g;                     //верхний порог Ёѕ’’ (газ)
   _uchar shutoff_delay;                  //задержка выключени€ клапана
 
+
+  //--knock 
+  _uchar knock_use_knock_channel;     //признак использовани€ канала детенации
+  _uchar knock_bpf_frequency;         //центральна€ частота полосового фильтра
+  _int   knock_k_wnd_begin_angle;     //начало детонационного окна (градусы)
+  _int   knock_k_wnd_end_angle;       //конец детонационного окна (градусы)
+  //--/knock
+
+
   //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
   //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
   //в структуру, необходимо расходовать эти байты.
-  _uchar reserved[5];
+  _uchar reserved[24];
 
   _ushort crc;                           //контрольна€ сумма данных этой структуры (дл€ проверки корректности данных после считывани€ из EEPROM)  
 }params;
 
 
 #define FW_SIGNATURE_INFO_SIZE 48
+#define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
   _uchar fw_signature_info[FW_SIGNATURE_INFO_SIZE];
+
+  //таблица усилени€ аттенюатора (зависимость от оборотов).
+  _uchar attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; 
 
   //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
   //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
@@ -531,7 +544,18 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
         p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
 		p_params->ckps_edge_type  = p_in->ckps_edge_type;
 		}
-      break;						      
+      break;
+	case KNOCK_PAR:  
+		{
+        KnockPar* p_in = (KnockPar*)i_values; 
+		p_params->knock_use_knock_channel = p_in->knock_use_knock_channel;
+		p_params->knock_k_wnd_begin_angle = CNumericConv::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLAYER);
+		p_params->knock_k_wnd_end_angle = CNumericConv::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLAYER);
+		ASSERT(p_in->knock_bpf_frequency >= 0.0f);
+		p_params->knock_bpf_frequency = CNumericConv::Round(p_in->knock_bpf_frequency);		
+		}
+      break;
+
     default:
       return false; //неизвестный или неподдерживаемый дескриптор
   }//switch 
@@ -641,7 +665,17 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
         p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
 		p_out->ckps_edge_type  = p_params->ckps_edge_type;
 		}
-      break;					      
+      break;	
+	case KNOCK_PAR:  
+		{
+        KnockPar* p_out = (KnockPar*)o_values; 
+		p_out->knock_use_knock_channel = p_params->knock_use_knock_channel;
+		p_out->knock_k_wnd_begin_angle = ((float)p_params->knock_k_wnd_begin_angle) / ANGLE_MULTIPLAYER;
+		p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLAYER;
+		p_out->knock_bpf_frequency = p_params->knock_bpf_frequency;
+		}
+      break;
+	  
     default:
       return false; //неизвестный или неподдерживаемый дескриптор
   }//switch        
@@ -672,6 +706,47 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
    SetWorkMap(i,ip_fwd->maps[i].f_wrk);
    SetTempMap(i,ip_fwd->maps[i].f_tmp);
    SetFunctionsSetName(i,ip_fwd->maps[i].name);
+  }
+}
+
+
+void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)
+{
+  BYTE* p_bytes = NULL;
+  FirmwareData* p_fw_data = NULL;
+  ASSERT(o_values);
+  if (!o_values)
+    return;
+
+  if (i_original)	  
+	p_bytes = m_bytes_original;
+  else
+    p_bytes = m_bytes_active; 
+
+  //получаем адрес структуры дополнительных данных
+  p_fw_data = (FirmwareData*)(p_bytes + FIRMWARE_DATA_START); 
+
+  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
+   o_values[i] = p_fw_data->attenuator_table[i];
+}
+
+void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
+{
+  BYTE* p_bytes = NULL;
+  FirmwareData* p_fw_data = NULL;
+  ASSERT(i_values);
+  if (!i_values)
+    return;
+
+  p_bytes = m_bytes_active; 
+
+  //получаем адрес структуры дополнительных данных
+  p_fw_data = (FirmwareData*)(p_bytes + FIRMWARE_DATA_START); 
+
+  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
+  {
+   ASSERT(i_values[i] >= 0.0f);
+   p_fw_data->attenuator_table[i] = (_uchar)CNumericConv::Round(i_values[i]);
   }
 }
 

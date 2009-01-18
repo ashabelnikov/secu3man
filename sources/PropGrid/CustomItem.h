@@ -4,6 +4,8 @@
 class ICustomItem
 {
 public:
+  ICustomItem() : m_pGrid(NULL) {}
+
   // basic required stuff
   virtual CPropertyGrid::EEditMode GetEditMode() = 0;
   virtual void DrawItem(CDC& dc, CRect rc, bool focused) = 0;

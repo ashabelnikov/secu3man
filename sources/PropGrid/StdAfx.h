@@ -41,4 +41,9 @@
 //{{AFX_INSERT_LOCATION}}
 // Microsoft Visual C++ will insert additional declarations immediately before the previous line.
 
+#if (_MSC_VER <1300) 
+ #pragma warning( disable : 4786 ) // : identifier was truncated to '255' characters in the debug information
+#endif
+
+
 #endif // !defined(AFX_STDAFX_H__48E276F6_1ACF_45FF_9139_C3AA01473B0F__INCLUDED_)

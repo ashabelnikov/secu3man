@@ -20,7 +20,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CUpdatableDialog, public IParamDeskVi
 {
 // Construction
 public:
-	CParamDeskDlg(CWnd* pParent = NULL);   // standard constructor
+	CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);   // standard constructor
 	virtual ~CParamDeskDlg();
 
 	void SetPosition(int x_pos, int y_pos);
@@ -76,6 +76,7 @@ protected:
 // Implementation
 protected:
 	BOOL m_enabled;
+	const bool m_show_knock_page;
 
     class CStarterPageDlg*   m_pStarterPageDlg;		 
     class CAnglesPageDlg*    m_pAnglesPageDlg;		 
@@ -85,6 +86,7 @@ protected:
     class CCarburPageDlg*    m_pCarburPageDlg;
 	class CADCCompenPageDlg* m_pADCCompenPageDlg;
 	class CCKPSPageDlg*      m_pCKPSPageDlg;
+	class CKnockPageDlg*     m_pKnockPageDlg;
 
 	// Generated message map functions
 	//{{AFX_MSG(CParamDeskDlg)

@@ -58,22 +58,22 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,117,90,96,18
+                    WS_TABSTOP,117,73,96,18
     CONTROL         "Карта УОЗ на ХХ",IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,117,109,96,18
+                    WS_TABSTOP,117,92,96,18
     CONTROL         "Рабочая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,117,128,96,18
+                    WS_TABSTOP,117,111,96,18
     CONTROL         "Темпер. коррекция",IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,117,148,96,18
+                    WS_TABSTOP,117,131,96,18
     GROUPBOX        "Семейства характеристик",
-                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,15,75,214,100
+                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,15,58,214,100
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,108,33,122,16,
                     ES_AUTOHSCROLL
     CTEXT           "Дополнительная информация о прошивке:",
@@ -87,13 +87,16 @@ BEGIN
     CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
                     LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
                     LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    19,90,93,83,WS_EX_LEFTSCROLLBAR
+                    19,73,93,83,WS_EX_LEFTSCROLLBAR
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,16,133,12,ES_READONLY | 
                     NOT WS_BORDER,WS_EX_STATICEDGE
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,232,14,8,15
     CONTROL         "Прошивать только код (без данных)",
                     IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
+    CONTROL         "Настройка аттенюатора",
+                    IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 233, 170
@@ -139,8 +142,6 @@ IDD_KNOCK_CHANNEL DIALOG DISCARDABLE  0, 0, 490, 200
 STYLE WS_CHILD
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "",IDC_PROPERTY_GRID,"Static",SS_BLACKFRAME | SS_NOTIFY | 
-                    SS_SUNKEN,24,42,197,119
     PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,
                     19
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",

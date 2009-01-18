@@ -21,6 +21,7 @@
 #include "TemperPageDlg.h"
 #include "ADCCompenPageDlg.h"
 #include "CKPSPageDlg.h"
+#include "KnockPageDlg.h"
 
 #include "io-core/ufcodes.h" 
 #include "io-core/SECU3IO.h"
@@ -43,10 +44,11 @@ using namespace fastdelegate;
 // CParamDeskDlg dialog
 
 
-CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/)
+CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
 : CUpdatableDialog(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
 , m_enabled(FALSE)
+, m_show_knock_page(i_show_knock_page)
 {   
   //создаем image list для TabCtrl
   m_pImgList = new CImageList(); 
@@ -76,6 +78,12 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/)
 
   m_pCKPSPageDlg = new CCKPSPageDlg();
   m_pCKPSPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+  if (m_show_knock_page)
+  {
+   m_pKnockPageDlg = new CKnockPageDlg();
+   m_pKnockPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+  }
 }
 
 
@@ -91,6 +99,8 @@ CParamDeskDlg::~CParamDeskDlg()
   delete m_pCarburPageDlg;
   delete m_pADCCompenPageDlg;
   delete m_pCKPSPageDlg;
+  if (m_show_knock_page)  
+    delete m_pKnockPageDlg;
 }
 
 
@@ -143,6 +153,8 @@ BOOL CParamDeskDlg::OnInitDialog()
   m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5);
   m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6);
   m_tab_control.AddPage("ДПКВ",m_pCKPSPageDlg,7);
+  if (m_show_knock_page)
+   m_tab_control.AddPage("Детонация",m_pKnockPageDlg,8);
 	
   //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
   //уже использует обработчики сообщений!
@@ -178,6 +190,8 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
      return ADCCOR_PAR;	
     case 7:	
      return CKPS_PAR;	
+    case 8:	
+     return KNOCK_PAR;	
     default:
      return 0; //invalid case
   }
@@ -218,6 +232,8 @@ void CParamDeskDlg::Enable(bool enable)
   m_pCarburPageDlg->Enable(enable);
   m_pADCCompenPageDlg->Enable(enable);
   m_pCKPSPageDlg->Enable(enable);
+  if (m_show_knock_page)
+   m_pKnockPageDlg->Enable(enable);
   if (::IsWindow(m_hWnd))
     UpdateDialogControls(this,TRUE);
 
@@ -261,6 +277,11 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
 	case CKPS_PAR:
       m_pCKPSPageDlg->SetValues((CKPSPar*)i_values);
       break;
+	case KNOCK_PAR:
+      if (!m_show_knock_page)
+       return false;
+      m_pKnockPageDlg->SetValues((KnockPar*)i_values);
+      break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      
     default:
@@ -299,6 +320,11 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
       break;
     case CKPS_PAR:
       m_pCKPSPageDlg->GetValues((CKPSPar*)o_values);
+      break;
+    case KNOCK_PAR:
+      if (!m_show_knock_page)
+       return false;
+      m_pKnockPageDlg->GetValues((KnockPar*)o_values);
       break;
 	case FNNAME_DAT:     
     case SENSOR_DAT:					      

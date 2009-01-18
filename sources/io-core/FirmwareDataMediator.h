@@ -7,7 +7,7 @@
 #include <vector>
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке 
-//(памяти программ микроконтроллера), а так же для хранения этих данных.
+//(памяти программ микроконтроллера), а также для хранения этих данных.
 
 class AFX_EXT_CLASS CFirmwareDataMediator
 {
@@ -55,6 +55,9 @@ class AFX_EXT_CLASS CFirmwareDataMediator
 
 	void SetFWFileName(const _TSTRING i_fw_file_name);
 	_TSTRING GetFWFileName(void);
+
+	void GetAttenuatorMap(float* o_values, bool i_original = false);
+	void SetAttenuatorMap(const float* i_values);
 
     unsigned int CalculateCRC16OfActiveFirmware(void);
 	unsigned int GetCRC16StoredInActiveFirmware(void);

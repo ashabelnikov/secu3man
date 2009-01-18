@@ -11,7 +11,6 @@ CBtnCheckBox::CBtnCheckBox(void)
 , m_nButtonPushed(0)
 , m_state(0)
 {
- m_pGrid = NULL; //member of the base class
 }
 
 CPropertyGrid::EEditMode CBtnCheckBox::GetEditMode()

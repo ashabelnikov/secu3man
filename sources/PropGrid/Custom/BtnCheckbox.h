@@ -1,7 +1,14 @@
+/****************************************************************
+ *
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
+ *  Microprocessors systems - design & programming.
+ *
+ *****************************************************************/
+
 #pragma once
 #include "..\CustomItem.h"
 
-#include <string>
 
 class AFX_EXT_CLASS CBtnCheckBox : public ICustomItem
 {
