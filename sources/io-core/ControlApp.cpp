@@ -690,6 +690,47 @@ bool CControlApp::Parse_OP_COMP_NC(BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_KNOCK_PAR(BYTE* raw_packet)
+{
+ SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
+
+ if (strlen((char*)raw_packet)!=12)  //размер пакета без сигнального символа, дескриптора
+	 return false;
+
+ //Разрешен/запрещен 
+ if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_KnockPar.knock_use_knock_channel))
+     return false;
+ raw_packet+=1;  
+
+
+ //Частота ПФ
+ unsigned char knock_bpf_frequency;
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_bpf_frequency))
+     return false;
+ m_KnockPar.knock_bpf_frequency = knock_bpf_frequency;
+ raw_packet+=2;
+
+ //Начало фазового окна
+ int  knock_k_wnd_begin_angle;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k_wnd_begin_angle,true))
+     return false;
+ m_KnockPar.knock_k_wnd_begin_angle = ((float)knock_k_wnd_begin_angle) / m_angle_multiplier;
+ raw_packet+=4;
+
+ //Конец фазового окна
+ int  knock_k_wnd_end_angle;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k_wnd_end_angle,true))
+     return false;
+ m_KnockPar.knock_k_wnd_end_angle = ((float)knock_k_wnd_end_angle) / m_angle_multiplier;
+ raw_packet+=4;
+
+ if (*raw_packet!='\r')
+	 return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -756,6 +797,10 @@ bool CControlApp::ParsePackets()
 			 continue;
          case OP_COMP_NC:
 			 if (Parse_OP_COMP_NC(raw_packet))
+			   break;
+			 continue;
+		 case KNOCK_PAR:
+			 if (Parse_KNOCK_PAR(raw_packet))
 			   break;
 			 continue;
 
@@ -942,6 +987,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor)
       case ADCCOR_PAR: 
       case CKPS_PAR:
       case OP_COMP_NC:
+      case KNOCK_PAR: 
 		return true;
       default:
 		return false;
@@ -992,6 +1038,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 		  break;
       case OP_COMP_NC:
           Build_OP_COMP_NC((OPCompNc*)i_packet_data);
+		  break;
+      case KNOCK_PAR:
+		  Build_KNOCK_PAR((KnockPar*)i_packet_data);
 		  break;
 
       default:
@@ -1145,6 +1194,19 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
   CNumericConv::Bin4ToHex(packet_data->ckps_edge_type,m_outgoing_packet);
   CNumericConv::Bin8ToHex(packet_data->ckps_cogs_btdc,m_outgoing_packet);
   CNumericConv::Bin8ToHex(packet_data->ckps_ignit_cogs,m_outgoing_packet);
+  m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
+{
+  CNumericConv::Bin4ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
+  unsigned char knock_bpf_frequency = (unsigned char)packet_data->knock_bpf_frequency;
+  CNumericConv::Bin8ToHex(knock_bpf_frequency,m_outgoing_packet);
+  int knock_k_wnd_begin_angle = CNumericConv::Round(packet_data->knock_k_wnd_begin_angle * m_angle_multiplier);
+  CNumericConv::Bin16ToHex(knock_k_wnd_begin_angle,m_outgoing_packet);
+  int knock_k_wnd_end_angle = CNumericConv::Round(packet_data->knock_k_wnd_end_angle * m_angle_multiplier);
+  CNumericConv::Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 
