@@ -553,7 +553,7 @@ bool CControlApp::Parse_ADCRAW_DAT(BYTE* raw_packet)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
 
- if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=17)  //размер пакета без сигнального символа, дескриптора
    return false;
 
  //MAP sensor
@@ -576,6 +576,13 @@ bool CControlApp::Parse_ADCRAW_DAT(BYTE* raw_packet)
      return false;
  raw_packet+=4;
  m_RawSensDat.temp_value = temp * m_adc_discrete;
+
+ //Уровень сигнала детонации
+ signed int knock = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock,true))
+     return false;
+ raw_packet+=4;
+ m_RawSensDat.knock_value = knock * m_adc_discrete;
 
  if (*raw_packet!='\r')
 	 return false;

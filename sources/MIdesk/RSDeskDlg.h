@@ -21,18 +21,22 @@ public:
 	float m_map_value;
 	float m_ubat_value;
 	float m_temp_value;
+	float m_knock_value;
 
 	CStatic m_map_field;
 	CStatic m_ubat_field;
 	CStatic m_temp_field;
+	CStatic m_knock_field;
 
 	CStatic m_map_caption;
 	CStatic m_ubat_caption;
 	CStatic m_temp_caption;
+	CStatic m_knock_caption;
 
 	CStatic m_map_unit;
 	CStatic m_ubat_unit;
 	CStatic m_temp_unit;
+	CStatic m_knock_unit;
     
 	//}}AFX_DATA
 

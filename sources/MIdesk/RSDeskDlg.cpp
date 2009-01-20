@@ -29,6 +29,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 	m_map_value  = 0.0f;
 	m_ubat_value = 0.0f;
 	m_temp_value = 0.0f;
+	m_knock_value = 0.0f;
 
 	//{{AFX_DATA_INIT(CRSDeskDlg)
 		// NOTE: the ClassWizard will add member initialization here
@@ -44,18 +45,22 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_field);
 	DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_field);
 	DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_field);
+	DDX_Control(pDX, IDC_RS_KNOCK_VALUE, m_knock_field);
 
 	DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_caption);
 	DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_caption);
 	DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_caption);
+	DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_caption);
 	
 	DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_unit);
 	DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_unit);
 	DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_unit);
+	DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_unit);
 
     DDX_Text(pDX,IDC_RS_MAP_VALUE,m_map_value);
     DDX_Text(pDX,IDC_RS_UBAT_VALUE,m_ubat_value);
     DDX_Text(pDX,IDC_RS_TEMP_VALUE,m_temp_value);	
+    DDX_Text(pDX,IDC_RS_KNOCK_VALUE,m_knock_value);	
 	//}}AFX_DATA_MAP
 }
 
@@ -88,14 +93,17 @@ void CRSDeskDlg::Enable(bool enable)
   m_map_field.EnableWindow(b_enable);
   m_ubat_field.EnableWindow(b_enable);
   m_temp_field.EnableWindow(b_enable);
+  m_knock_field.EnableWindow(b_enable);
 
   m_map_caption.EnableWindow(b_enable);
   m_ubat_caption.EnableWindow(b_enable);
   m_temp_caption.EnableWindow(b_enable);
+  m_knock_caption.EnableWindow(b_enable);
 
   m_map_unit.EnableWindow(b_enable);
   m_ubat_unit.EnableWindow(b_enable);
   m_temp_unit.EnableWindow(b_enable);
+  m_knock_unit.EnableWindow(b_enable);
 }
 
 void CRSDeskDlg::Show(bool show)
@@ -104,14 +112,17 @@ void CRSDeskDlg::Show(bool show)
  m_map_field.ShowWindow(sw);
  m_ubat_field.ShowWindow(sw);
  m_temp_field.ShowWindow(sw);
+ m_knock_field.ShowWindow(sw);
 
  m_map_caption.ShowWindow(sw);
  m_ubat_caption.ShowWindow(sw);
  m_temp_caption.ShowWindow(sw);
+ m_knock_caption.ShowWindow(sw);
 
  m_map_unit.ShowWindow(sw);
  m_ubat_unit.ShowWindow(sw);
  m_temp_unit.ShowWindow(sw);
+ m_knock_unit.ShowWindow(sw);
 }
 
 using namespace SECU3IO;
@@ -121,6 +132,7 @@ void CRSDeskDlg::SetValues(const RawSensDat* i_values)
   m_map_value = i_values->map_value;
   m_ubat_value = i_values->ubat_value;
   m_temp_value = i_values->temp_value;
+  m_knock_value = i_values->knock_value;
   UpdateData(FALSE);
 }
 
@@ -130,4 +142,5 @@ void CRSDeskDlg::GetValues(RawSensDat* o_values)
   o_values->map_value = m_map_value;
   o_values->ubat_value = m_ubat_value;
   o_values->temp_value = m_temp_value;
+  o_values->knock_value = m_knock_value;
 }

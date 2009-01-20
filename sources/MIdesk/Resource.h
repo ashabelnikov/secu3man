@@ -27,6 +27,9 @@
 #define IDC_RS_TEMP_VALUE               2023
 #define IDC_RS_TEMP_CAPTION             2024
 #define IDC_RS_TEMP_UNIT                2025
+#define IDC_RS_KNOCK_VALUE              2026
+#define IDC_RS_KNOCK_CAPTION            2027
+#define IDC_RS_KNOCK_UNIT               2028
 
 // Next default values for new objects
 // 

@@ -106,6 +106,7 @@ struct RawSensDat
   float map_value;
   float ubat_value; 
   float temp_value;
+  float knock_value;
  };
 
 struct CKPSPar
