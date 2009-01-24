@@ -21,7 +21,7 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
     m_params.knock_use_knock_channel = 0;
 	m_params.knock_bpf_frequency = 40;
 	m_params.knock_k_wnd_begin_angle = 0.0f;
-	m_params.knock_k_wnd_end_angle = 25.0f;
+	m_params.knock_k_wnd_end_angle = 48.0f;
 	
 	//{{AFX_DATA_INIT(CKnockPageDlg)
 	//}}AFX_DATA_INIT
@@ -70,20 +70,20 @@ BOOL CKnockPageDlg::OnInitDialog()
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex1;
   ex1.m_decimal_places = 2;
   ex1.m_spin = true;
-  ex1.m_delta = 0.1;
+  ex1.m_delta = 6.0;
   ex1.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
-  ex1.m_lower = -15;
-  ex1.m_upper = 25;
+  ex1.m_lower = -12.0;
+  ex1.m_upper = 54.0;
   ex1.m_limit_text = 6;
   m_knock_k_wnd_begin_angle_item = m_ctrlGrid.AddDoubleItem(hs, "Начало фазового окна", m_params.knock_k_wnd_begin_angle,"%g°",true,false,-1,&ex1);
   //-----------------------------------------------------------------
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex2;
   ex2.m_decimal_places = 2;
   ex2.m_spin = true;
-  ex2.m_delta = 0.1;
+  ex2.m_delta = 6.0;
   ex2.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
-  ex2.m_lower = -15;
-  ex2.m_upper = 25;
+  ex2.m_lower = -12.0;
+  ex2.m_upper = 54.0;
   ex2.m_limit_text = 6;
   m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, "Конец фазового окна", m_params.knock_k_wnd_end_angle,"%g°",true,false,-1,&ex2);
   //-----------------------------------------------------------------  
