@@ -2,15 +2,16 @@
 #pragma once
 
 #include "ITabController.h"
-#include "CommunicationManager.h"
 #include "io-core/ControlApp.h"
 #include "io-core/BootLoader.h"
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/BootLoaderAdapter.h"
-#include "StatusBarManager.h"
 #include "common/ObjectTimer.h"
 
 class CFirmwareDataMediator;
+class CFirmwareTabDlg;
+class CCommunicationManager;
+class CStatusBarManager;
 
 class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler 
 {
@@ -23,9 +24,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	CCommunicationManager* m_comm;
 	CStatusBarManager*  m_sbar;
 	CFirmwareDataMediator* m_fwdm;
-
-    CControlAppAdapter* m_pAppAdapter;
-    CBootLoaderAdapter* m_pBldAdapter;
 
     //from ITabController
     virtual void OnActivate(void);

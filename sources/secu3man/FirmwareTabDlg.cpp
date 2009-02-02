@@ -8,7 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "resource.h"
 #include "FirmwareTabDlg.h"
 #include "FirmwareContextMenuManager.h"
 #include "DLLLinkedFunctions.h"

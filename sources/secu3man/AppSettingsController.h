@@ -3,6 +3,10 @@
 
 #include "IAppSettingsDlg.h"
 
+
+class IAppSettingsDlg;
+class CAppSettingsModel;
+
 class CAppSettingsController  
 {
 IAppSettingsDlg* m_pView; 

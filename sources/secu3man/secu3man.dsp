@@ -253,6 +253,10 @@ SOURCE=.\IAppSettingsDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ISECU3man.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ITabController.h
 # End Source File
 # Begin Source File

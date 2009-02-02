@@ -25,7 +25,7 @@ CBootLoader::CBootLoader()
 , m_ErrorCode(0)
 , m_ThreadBusy(false)
 , m_is_thread_must_exit(false)
-, m_work_stoped(true)
+, m_work_state(false) //контроллер не работает
 , m_uart_speed(CBR_9600)
 , m_current_pending_data_index(0)
 , mp_csection(NULL)
@@ -594,7 +594,7 @@ bool CBootLoader::IsOpcodeValid(const int opcode)
 //Return: Операция запущена на выполнение успешно - true, иначе - false
 bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size, int i_addr /*= 0*/)
 {
-    if (true==m_work_stoped) 
+    if (false==m_work_state) 
 		return false;
 
 	if (m_ThreadBusy)              //не закончена обработка предыдущей команды ?
@@ -645,12 +645,12 @@ void CBootLoader::SwitchOn(bool state)
 	  timeouts.WriteTotalTimeoutConstant   = 200;
       timeouts.WriteTotalTimeoutMultiplier = 200;
 	  m_p_port->SetTimeouts(&timeouts);	   
-	  m_work_stoped = false;
+	  m_work_state = true;
 	  Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
    }
    else
    {
-    m_work_stoped = true;
+    m_work_state = false;
 	Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
    }
 }

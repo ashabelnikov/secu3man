@@ -8,16 +8,21 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "ISECU3Man.h"
 #include "CommunicationManager.h"
 #include "io-core/CComPort.h"
 #include "io-core/Bootloader.h"
+#include "io-core/LogWriter.h"
+#include "AppSettingsModel.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
+
+
+#define EHKEY _T("CommManager")
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -31,20 +36,25 @@ CCommunicationManager::CCommunicationManager()
 , m_send_buff_size(32768)
 , m_pSettings(NULL)  //external!
 , m_OnSettingsChanged(NULL)
+, m_pAppAdapter(NULL)
+, m_pBldAdapter(NULL)
 {
-  m_pSettings = (static_cast<CSecu3manApp*>(AfxGetApp()))->m_pAppSettingsManager;
+  m_pSettings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager();
 
-  m_pComPort = new CComPort(_T("COM1"),m_recv_buff_size,m_send_buff_size);
-
+  m_pComPort    = new CComPort(_T("COM1"),m_recv_buff_size,m_send_buff_size);
   m_pBootLoader = new CBootLoader();
-  m_pControlApp = new CControlApp();
+  m_pControlApp = new CControlApp();  
+  m_pAppAdapter = new CControlAppAdapter();  
+  m_pBldAdapter = new CBootLoaderAdapter();
 }
 
 CCommunicationManager::~CCommunicationManager()
 {
   delete m_pComPort;
   delete m_pBootLoader;
-  delete m_pControlApp;
+  delete m_pControlApp;  
+  delete m_pAppAdapter;
+  delete m_pBldAdapter;
 }
 
 
@@ -65,6 +75,8 @@ bool CCommunicationManager::Init(void)
   ASSERT(m_pSettings);  //ты забыл меня инициализировать!
   ASSERT(m_pBootLoader);
   ASSERT(m_pControlApp);
+  ASSERT(m_pAppAdapter);
+  ASSERT(m_pBldAdapter);
 
   bool status = true;
 
@@ -109,9 +121,110 @@ bool CCommunicationManager::Init(void)
 	status = false;
   }
 
+  m_pControlApp->SetEventHandler(m_pAppAdapter);
+  m_pBootLoader->SetEventHandler(m_pBldAdapter);
+
   //оповещаем объекта слушателя об изменении настроек
   if (m_OnSettingsChanged) 
 	m_OnSettingsChanged();
 
   return status;
 }
+
+void CCommunicationManager::OnAfterCreate(void)
+{
+  CWnd* pParent = AfxGetApp()->m_pMainWnd;
+  VERIFY(m_pAppAdapter->Create(pParent));
+  VERIFY(m_pBldAdapter->Create(pParent));
+}
+
+//активирование указанного коммуникационного контроллера или деактивирование всех контроллеров
+void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = false */)
+{
+ switch(i_cntr)
+ {
+  case OP_ACTIVATE_APPLICATION:
+   if (false==m_pControlApp->GetWorkState() || i_force_reinit)
+   {
+    m_pControlApp->SwitchOn(true); 
+    m_pBootLoader->SwitchOn(false);
+   }       
+   else
+   {
+   //все контроллеры в активном состоянии?
+   _ASSERTE(false==m_pBootLoader->GetWorkState()); 
+   }
+   break;
+
+  case OP_ACTIVATE_BOOTLOADER:
+   if (false==m_pBootLoader->GetWorkState() || i_force_reinit)
+   {
+   m_pControlApp->SwitchOn(false); 
+   m_pBootLoader->SwitchOn(true); 
+   }
+   else
+   {
+   //все контроллеры в активном состоянии?
+   _ASSERTE(false==m_pControlApp->GetWorkState()); 
+   }
+   break;
+   
+  case OP_DEACTIVATE_ALL: //deactivate all 
+   m_pControlApp->SwitchOn(false); 
+   m_pBootLoader->SwitchOn(false); 
+   break;
+
+  default:
+   _ASSERTE(0);
+   break;
+ }
+}
+
+void CCommunicationManager::SetOnSettingsChanged(EventHandler OnSettingsChanged) 
+{
+ m_OnSettingsChanged = OnSettingsChanged;
+}
+
+///////////////////Управление записью логов/////////////////////
+
+void CCommunicationManager::OnStartLogWriting(void)
+{
+  //Активируем записывающий механизм и подключаемся к потоку данных
+  _TSTRING full_path_to_folder;
+
+  CAppSettingsModel* settings = m_pSettings->m_pModel;
+
+  if (!settings->m_optUseAppFolder)
+    full_path_to_folder = settings->m_optLogFilesFolder;
+  else
+    full_path_to_folder = settings->GetAppDirectory();
+  
+  _TSTRING full_file_name;
+
+  bool result = m_logwriter.BeginLogging(full_path_to_folder, &full_file_name);
+  if (false==result)
+  {
+   CString  string;
+   string.Format(_T("Не могу начать запись лога в файл: %s\n\
+Возможно этот файл защищен от записи или уже открыт другой программой."), full_file_name.c_str());
+   AfxMessageBox(string,MB_OK | MB_ICONSTOP);
+   return;
+  }
+
+  m_pAppAdapter->AddEventHandler(&m_logwriter, EHKEY);
+}
+
+void CCommunicationManager::OnStopLogWriting(void)
+{
+  //Отключаемся от потока данных и деактивируем записывающий механизм	 
+  m_pAppAdapter->RemoveEventHandler(EHKEY);
+  m_logwriter.EndLogging();
+}
+
+bool CCommunicationManager::IsLoggingInProcess(void)
+{
+  //записывающий механизм активен ?
+  return m_logwriter.IsLoggingInProcess(); 
+}
+
+////////////////////////////////////////////////////////////////

@@ -8,10 +8,11 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
 #include "AppSettingsModel.h"
 
 #include <algorithm>
+
+#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
 
 
 #ifdef _DEBUG
@@ -29,6 +30,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_BaudRateApplication(_T("Application_baud_rate"))
 , m_Name_BaudRateBootloader(_T("Boot_loader_baud_rate")) 
 , m_Name_PortName(_T("COM_port"))
+, m_Name_LogFilesFolder(_T("LogFilesFolder"))
+, m_Name_UseAppFolder(_T("UseAppFolder"))
 {
 
   //заполняем базу данных допустимых скоростей для COM-порта
@@ -67,9 +70,7 @@ CAppSettingsModel::~CAppSettingsModel()
 
 }
 
-
-//возвращает полное имя INI-файла
-CString CAppSettingsModel::GetINIFileFullName(void)
+CString CAppSettingsModel::GetINIFileFullName(void) const
 {
   CString directory(m_current_directory);
   if (directory.IsEmpty())
@@ -82,7 +83,11 @@ CString CAppSettingsModel::GetINIFileFullName(void)
   return directory + AfxGetApp()->m_pszExeName + _T(".ini");
 }
 
-//проверяет указанное значение скорости на соответствие стандарту
+CString CAppSettingsModel::GetAppDirectory(void) const
+{
+ return m_current_directory;
+}
+
 bool CAppSettingsModel::CheckAllowableBaudRate(DWORD baud)
 {
   std::vector<DWORD>::iterator it;
@@ -92,7 +97,6 @@ bool CAppSettingsModel::CheckAllowableBaudRate(DWORD baud)
   return false; //invalid baud rate
 }
 
-//чтение настроек из INI-файла
 bool CAppSettingsModel::ReadSettings(void)
 {
   CString IniFileName = GetINIFileFullName();
@@ -133,10 +137,28 @@ bool CAppSettingsModel::ReadSettings(void)
     m_optBaudRateBootloader = i_val;     
   }
 
+  //-----------------------------------------
+  CString def_value = m_current_directory;
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,def_value,readed_str,MAX_PATH,IniFileName);
+  m_optLogFilesFolder = readed_str;  
+
+  //-----------------------------------------
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("0"),readed_str,255,IniFileName);
+  i_val = _ttoi(readed_str);
+
+  if (i_val != 0 && i_val != 1)
+  {
+    status = false;
+	m_optUseAppFolder = 0;
+  }
+  else
+  {
+    m_optUseAppFolder = i_val;     
+  }
+
   return status;
 }
 
-//запись настроек в INI-файл
 bool CAppSettingsModel::WriteSettings(void)
 {
   CString IniFileName = GetINIFileFullName();
@@ -158,5 +180,13 @@ bool CAppSettingsModel::WriteSettings(void)
   write_str.Format(_T("%d"),m_optBaudRateBootloader);
   WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,write_str,IniFileName);
  
+  //-----------------------------------------
+  write_str = m_optLogFilesFolder;
+  WritePrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,write_str,IniFileName);
+
+  //-----------------------------------------
+  write_str.Format(_T("%d"),(int)m_optUseAppFolder);
+  WritePrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,write_str,IniFileName);
+
   return status;
 }

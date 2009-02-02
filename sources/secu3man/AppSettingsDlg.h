@@ -81,6 +81,26 @@ public:
      return _ttoi(str);  
    }
    
+   virtual void SetLogFilesFolder(const CString& i_folder)
+   {
+    m_log_files_folder = i_folder;
+   }
+
+   virtual CString GetLogFilesFolder(void) const
+   {
+    return m_log_files_folder; 
+   }
+
+   virtual void SetUseAppFolder(bool i_use)
+   {
+    m_use_app_folder = i_use;
+   }
+
+   virtual bool GetUseAppFolder(void) const
+   {
+	return m_use_app_folder ? true : false;
+   }
+
    virtual void setFunctionOnOk(EventHandler OnOk)
    {
      m_OnOk = OnOk;
@@ -117,9 +137,14 @@ public:
 	CComboBox	m_port_selection_combo;
 	CComboBox	m_bl_baudrate_selection_combo;
 	CComboBox	m_app_baudrate_selection_combo;
+	CEdit       m_log_files_folder_edit;
+	CButton     m_log_files_folder_button;
+	CButton     m_use_app_folder_button;
 	int		m_app_baudrate;
 	int		m_bl_baudrate;
 	int		m_port_number;
+    CString m_log_files_folder;
+	int     m_use_app_folder;
 	//}}AFX_DATA
 
 
@@ -138,6 +163,8 @@ protected:
 	virtual BOOL OnInitDialog();
 	virtual void OnCancel();
 	virtual void OnOK();
+	afx_msg void OnAppSettingsLogfolderButton();
+	afx_msg void OnAppSettingsLogfolderUseappfolder();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 };

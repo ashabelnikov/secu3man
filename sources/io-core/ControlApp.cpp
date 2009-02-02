@@ -36,6 +36,7 @@ CControlApp::CControlApp()
 , m_hTimer(NULL)
 , m_outgoing_packet("")
 , mp_csection(NULL)
+, m_work_state(false)
 {
  m_Packets = new Packets(50);
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -979,6 +980,8 @@ void CControlApp::SwitchOn(bool state)
 	  if (m_pEventHandler)
 	    m_pEventHandler->OnConnection(false);	  
 	}
+
+	m_work_state = state; //сохраняем состояние для последующего использования
 }
 
 //-----------------------------------------------------------------------

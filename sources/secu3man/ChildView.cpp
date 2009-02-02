@@ -8,13 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
 #include "ChildView.h"
-//#include "ui-core/TabController.h"
-
-//#include "FirmwareTabDlg.h"
-//#include "ParamMonTabDlg.h"
-
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

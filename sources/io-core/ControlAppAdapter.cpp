@@ -28,16 +28,36 @@ BEGIN_MESSAGE_MAP(CControlAppAdapter,CWnd)
 END_MESSAGE_MAP()
 
 
+//////////////////////////////////////////////////////////////////////
+CControlAppAdapter::CControlAppAdapter() 
+: m_switch_on(true)
+, m_switch_on_thread_side(false)
+{ 
+ //na	  
+}
+
+
+CControlAppAdapter::~CControlAppAdapter() 
+{
+ //na
+}
+
+BOOL CControlAppAdapter::Create(CWnd* pParentWnd)
+{
+ ASSERT(pParentWnd);		
+ return CWnd::Create(NULL,_T("CControlApp_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
+}
+
 //////////////////////Thread side/////////////////////////////////////
 void CControlAppAdapter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
-  if (IsWindow(m_hWnd) && m_switch_on)
+  if (IsWindow(m_hWnd) && m_switch_on_thread_side)
     PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)ip_packet);	  
 }
 
 void CControlAppAdapter::OnConnection(const bool i_online)
 {
-  if (IsWindow(m_hWnd) && m_switch_on)
+  if (IsWindow(m_hWnd) && m_switch_on_thread_side)
     PostMessage(WM_THREAD_ON_CONNECTON,i_online,0);	  
 }
 
@@ -47,20 +67,58 @@ LRESULT CControlAppAdapter::msgOnConnection(WPARAM wParam, LPARAM lParam)
 {
   //мы не должны "засыпать" получателя пакетами если он "выключил нас", а выключить он нас мог
   //еще тогда когда в очереди сообщений были сообщения для него.
-  if (!m_switch_on) 
+  if (!m_switch_on_thread_side) 
     return 0;
-  ASSERT(m_destination_handler);
-  m_destination_handler->OnConnection(wParam ? true : false);  
-  return 0;
+  
+ ObserversIterator it;
+ for(it = m_observers.begin(); it != m_observers.end(); ++it)
+ {
+  IAPPEventHandler* p_observer = (*it).second; 
+  _ASSERTE(p_observer);
+  p_observer->OnConnection(wParam ? true : false);  
+ }
+ return 0;
 }
 
 LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
 {
-  if (!m_switch_on) 
+  if (!m_switch_on_thread_side) 
     return 0;
-  ASSERT(m_destination_handler);
-  m_destination_handler->OnPacketReceived((BYTE)wParam,(SECU3IO::SECU3Packet*)lParam);
-  return 0;
+  
+ ObserversIterator it;
+ for(it = m_observers.begin(); it != m_observers.end(); ++it)
+ {
+  IAPPEventHandler* p_observer = (*it).second; 
+  _ASSERTE(p_observer);
+  p_observer->OnPacketReceived((BYTE)wParam,(SECU3IO::SECU3Packet*)lParam); 
+ }
+ return 0;
 }
 
 //////////////////////////////////////////////////////////////////////
+bool CControlAppAdapter::AddEventHandler(IAPPEventHandler* i_pEventHandler, const _TSTRING &i_observer_key)
+{
+  m_observers[i_observer_key] = i_pEventHandler;
+  _UpdateInternalState();
+  return true;
+}
+
+bool CControlAppAdapter::RemoveEventHandler(const _TSTRING &i_observer_key)
+{
+  if (m_observers.find(i_observer_key)==m_observers.end())
+    return false; //неверный ключ
+  m_observers.erase(i_observer_key);
+  _UpdateInternalState();
+  return true;
+}
+
+void CControlAppAdapter::SwitchOn(bool state)
+{
+  m_switch_on = state;
+  _UpdateInternalState();
+}
+
+void CControlAppAdapter::_UpdateInternalState(void)
+{
+ m_switch_on_thread_side = m_switch_on && m_observers.size() > 0;
+}

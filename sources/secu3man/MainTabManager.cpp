@@ -8,8 +8,10 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "MainTabManager.h"
 #include "resource.h"
+#include "ISECU3Man.h"
+#include "MainTabManager.h"
+#include "MainFrameManager.h"
 
 #include "ParamMonTabController.h"
 #include "FirmwareTabController.h"
@@ -20,9 +22,6 @@
 #include "FirmwareTabDlg.h"
 #include "CheckEngineTabDlg.h"
 #include "KnockChannelTabDlg.h"
-
-#include "secu3man.h"
-
 
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -42,7 +41,7 @@ CMainTabManager::CMainTabManager()
 , m_pCheckEngineTabDlg(NULL)
 , m_pKnockChannelTabDlg(NULL)
 {
-
+ //na
 }
 
 CMainTabManager::~CMainTabManager()
@@ -81,12 +80,9 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   m_tab_control.SetEventListener(&m_MainTabController); //контроллер будет принимать сообщения от View
   m_MainTabController.SetTabController(&m_tab_control); //set View
 
-
-  CSecu3manApp* p_app = static_cast<CSecu3manApp*>(AfxGetApp());
-
-  ASSERT(p_app);
-  CCommunicationManager* p_comm = p_app->m_pCommunicationManager;
-  CStatusBarManager*     p_sbar = &p_app->m_pMainFrameManager->m_StatusBarManager;
+  
+  CCommunicationManager* p_comm = ISECU3Man::GetSECU3Man()->GetCommunicationManager();
+  CStatusBarManager*     p_sbar = &ISECU3Man::GetSECU3Man()->GetMainFrameManager()->m_StatusBarManager;
 
   //создаем контроллеры вкладок и наполняем Tab control вкладками
   m_pParamMonTabDlg = new CParamMonTabDlg(); //view
@@ -113,8 +109,6 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   m_MainTabController.AddTabController(m_pKnockChannelTabController);
   m_tab_control.AddPage("Настройка ДД",m_pKnockChannelTabDlg,3);
 
-  //необходимо выбрать любую вкладку вызвать OnActivate для открытой вкладки.
- // m_MainTabController.OnSelchangeTabctl();
   m_tab_control.SetCurSel(0);
 
   return true;

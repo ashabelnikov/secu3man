@@ -8,8 +8,6 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
-
 #include "MainFrame.h"
 
 #ifdef _DEBUG
@@ -39,11 +37,12 @@ CMainFrame::CMainFrame()
 : m_wnd_initial_size(725,450)
 , m_pwndView(NULL)
 {
-  // TODO: add member initialization code here	
+ //na	
 }
 
 CMainFrame::~CMainFrame()
 {
+ //na
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)

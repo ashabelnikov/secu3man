@@ -9,21 +9,14 @@
 class AFX_EXT_CLASS CBootLoaderAdapter  : public CWnd, public IBLDEventHandler
 {
   public:
-    CBootLoaderAdapter(IBLDEventHandler* i_destination_handler)
-    : m_destination_handler(i_destination_handler)
-	{ 
-	  ASSERT(i_destination_handler);	  
-	};
-
-	virtual ~CBootLoaderAdapter() {};
+    CBootLoaderAdapter();
+	virtual ~CBootLoaderAdapter();
 
     //невидимое окно необходимо нам только для того чтобы посылать самим себе сообщения!
-    BOOL Create(CWnd* pParentWnd)
-	{
-      ASSERT(pParentWnd);		
-	  return CWnd::Create(NULL,_T("CBootLoader_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
-	}
+    BOOL Create(CWnd* pParentWnd);
 
+	//установка обработчика событий
+	void SetEventHandler(IBLDEventHandler* ip_destination_handler);
 
   private:
     IBLDEventHandler* m_destination_handler;

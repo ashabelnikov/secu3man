@@ -30,6 +30,26 @@ BEGIN_MESSAGE_MAP(CBootLoaderAdapter,CWnd)
   ON_MESSAGE(WM_THREAD_ON_END, msgOnEnd)
 END_MESSAGE_MAP()
 
+
+CBootLoaderAdapter::CBootLoaderAdapter()
+: m_destination_handler(NULL)
+{ 
+ //na
+}
+
+CBootLoaderAdapter::~CBootLoaderAdapter() 
+{
+ //na
+}
+
+
+BOOL CBootLoaderAdapter::Create(CWnd* pParentWnd)
+{
+ ASSERT(pParentWnd);		
+ return CWnd::Create(NULL,_T("CBootLoader_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
+}
+
+
 //////////////////////Thread side////////////////////////////////////
 void CBootLoaderAdapter::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 {
@@ -78,3 +98,8 @@ LRESULT CBootLoaderAdapter::msgOnEnd(WPARAM wParam, LPARAM lParam)
 
 //////////////////////////////////////////////////////////////////////
 
+void CBootLoaderAdapter::SetEventHandler(IBLDEventHandler* ip_destination_handler)
+{
+ ASSERT(ip_destination_handler);
+ m_destination_handler = ip_destination_handler;
+}

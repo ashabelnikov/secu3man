@@ -320,6 +320,7 @@ bool CComPort::SetDTR(bool state)
   else
  	m_dcb.fDtrControl = DTR_CONTROL_DISABLE;
 	  
+   //TODO: maybe use of EscapeCommFunction() will be more suitable?
    return SetCommState(m_hCom,&m_dcb);
 }
                
@@ -332,6 +333,7 @@ bool CComPort::SetRTS(bool state)
   else
  	m_dcb.fRtsControl = RTS_CONTROL_DISABLE;
 	  
+   //TODO: maybe use of EscapeCommFunction() will be more suitable?
    return SetCommState(m_hCom,&m_dcb);
 }
                 
@@ -339,6 +341,7 @@ bool CComPort::SetRTS(bool state)
 //
 bool CComPort::SetTXD(bool state)
 {
+   //TODO: maybe use of EscapeCommFunction() will be more suitable?
    if (state) 
 	   return SetCommBreak(m_hCom);
    else

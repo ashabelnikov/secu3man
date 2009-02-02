@@ -63,7 +63,7 @@ public:
 	};
 
 	void SwitchOn(bool state);
-    bool IsStoped(void) {return m_work_stoped;};
+    bool GetWorkState(void) {return m_work_state;};
 
 	bool Terminate(void);
 
@@ -135,7 +135,7 @@ private:
    int       m_ErrorCode; 
 
    bool      m_is_thread_must_exit;
-   bool      m_work_stoped;
+   bool      m_work_state;
    DWORD     m_uart_speed;
 
    enum {PENDING_DATA_QUEUE_SIZE = 256};

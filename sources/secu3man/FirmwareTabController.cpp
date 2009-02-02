@@ -8,7 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "resource.h"
 #include "FirmwareTabController.h"
 
 #include "common/FastDelegate.h"
@@ -16,6 +16,8 @@
 #include "io-core/FirmwareDataMediator.h"
 #include "FWImpExp/MPSZImpExpController.h"
 #include "HexUtils/readhex.h"
+#include "CommunicationManager.h"
+#include "StatusBarManager.h"
 
 using namespace fastdelegate;
 
@@ -25,6 +27,9 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+
+#define EHKEY _T("FirmwareCntr")
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -33,8 +38,6 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
-, m_pAppAdapter(NULL)
-, m_pBldAdapter(NULL)
 , m_current_funset_index(-1)
 , m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
 , m_lastSel(0)
@@ -43,15 +46,6 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view = i_view;
   m_comm = i_comm;
   m_sbar = i_sbar;
-
-  CWnd* pParent = AfxGetApp()->m_pMainWnd;
-
-  m_pAppAdapter = new CControlAppAdapter(this);
-  m_pAppAdapter->Create(pParent);
-
-
-  m_pBldAdapter = new CBootLoaderAdapter(this);
-  m_pBldAdapter->Create(pParent);
 
   m_fwdm = new CFirmwareDataMediator(); 
 
@@ -81,9 +75,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 }
 
 CFirmwareTabController::~CFirmwareTabController()
-{
-  delete m_pAppAdapter;
-  delete m_pBldAdapter;
+{  
   delete m_fwdm;
 }
 
@@ -92,8 +84,7 @@ CFirmwareTabController::~CFirmwareTabController()
 void CFirmwareTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->m_pControlApp->SwitchOn(true);
- m_comm->m_pBootLoader->SwitchOn(false);  
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 }
 
 
@@ -103,17 +94,14 @@ void CFirmwareTabController::OnActivate(void)
   bool result = m_view->m_ParamDeskDlg.SetCurSel(m_lastSel);
 
  //////////////////////////////////////////////////////////////////
- //устанавливаем обработчики событий специфичные для контекста программы в котором работает контроллер
- m_comm->m_pControlApp->SetEventHandler(m_pAppAdapter); 
- m_comm->m_pBootLoader->SetEventHandler(m_pBldAdapter); 
+ //подключаем контроллер к потоку данных идущих от SECU-3
+ m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
+ m_comm->m_pBldAdapter->SetEventHandler(this); 
  m_comm->SetOnSettingsChanged(MakeDelegate(this,&CFirmwareTabController::OnSettingsChanged)); 
  //////////////////////////////////////////////////////////////////
 
- m_pAppAdapter->SwitchOn(true); 
-
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->m_pControlApp->SwitchOn(true); //true
- m_comm->m_pBootLoader->SwitchOn(false);
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
  m_modification_check_timer.SetTimer(this,&CFirmwareTabController::OnModificationCheckTimer,250);
 
@@ -122,7 +110,8 @@ void CFirmwareTabController::OnActivate(void)
 
 void CFirmwareTabController::OnDeactivate(void)
 {
-  m_pAppAdapter->SwitchOn(false); 
+  //отключаемся от потока данных
+  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY); 
   m_sbar->SetInformationText(_T(""));
   m_modification_check_timer.KillTimer();
   //запоминаем номер последней выбранной вкладки на панели параметров
@@ -156,7 +145,7 @@ void CFirmwareTabController::OnConnection(const bool i_online)
   }
   else
   { //перешли в оффлайн
-    if (m_comm->m_pBootLoader->IsStoped()) //разрешаем чекбокс только если мы в оффлайне сразу после онлайна 
+    if (!m_comm->m_pBootLoader->GetWorkState()) //разрешаем чекбокс только если мы в оффлайне сразу после онлайна 
 	  m_view->EnableBLStartedEmergency(true);
 
 	//в оффлайне состояние элементов меню связанных с бутлоадером зависит от состояния чекбокса
@@ -171,7 +160,7 @@ void CFirmwareTabController::OnConnection(const bool i_online)
 
   //если бутлоадер активен (выполняется выбранная из меню операция), то будем отображать именно 
   //иконку бутлоадера 
-  if (!m_comm->m_pBootLoader->IsStoped()) 
+  if (m_comm->m_pBootLoader->GetWorkState()) 
     state = CStatusBarManager::STATE_BOOTLOADER;
 
   m_sbar->SetConnectionState(state);
@@ -246,8 +235,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_EXIT: //неиспользуется когда бутлоадер запущен аварийно
   {    
    //вновь активируем коммуникационный контроллер приложения
-   m_comm->m_pControlApp->SwitchOn(true);
-   m_comm->m_pBootLoader->SwitchOn(false); 
+   m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
    break;
   }
 
@@ -409,9 +397,8 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   m_view->EnableBLItems(true);
   m_view->EnableBLStartedEmergency(true);
 
-  m_comm->m_pControlApp->SwitchOn(true);
-  m_comm->m_pBootLoader->SwitchOn(false);  
-  }
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ }
 }   
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -423,8 +410,7 @@ void CFirmwareTabController::OnBootLoaderInfo(void)
   StartBootLoader(); 
 
   //активируем коммуникационный контроллер бутлоадера
-  m_comm->m_pControlApp->SwitchOn(false);
-  m_comm->m_pBootLoader->SwitchOn(true);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE,m_bl_data,0);
@@ -440,8 +426,7 @@ void CFirmwareTabController::OnReadEepromToFile(void)
   StartBootLoader(); 
 
   //активируем коммуникационный контроллер бутлоадера
-  m_comm->m_pControlApp->SwitchOn(false);
-  m_comm->m_pBootLoader->SwitchOn(true);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM,m_bl_data,0);
@@ -464,8 +449,7 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
   StartBootLoader(); 
 
   //активируем коммуникационный контроллер бутлоадера
-  m_comm->m_pControlApp->SwitchOn(false);
-  m_comm->m_pBootLoader->SwitchOn(true);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM,m_bl_data,0);
@@ -486,8 +470,7 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
   StartBootLoader(); 
 
   //активируем коммуникационный контроллер бутлоадера
-  m_comm->m_pControlApp->SwitchOn(false);
-  m_comm->m_pBootLoader->SwitchOn(true);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
@@ -521,8 +504,7 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   StartBootLoader(); 
 
   //активируем коммуникационный контроллер бутлоадера
-  m_comm->m_pControlApp->SwitchOn(false);
-  m_comm->m_pBootLoader->SwitchOn(true);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
   //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
   if (m_view->IsProgrammeOnlyCode())

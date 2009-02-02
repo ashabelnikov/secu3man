@@ -8,8 +8,8 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
 #include "AppSettingsController.h"
+#include "AppSettingsModel.h"
 
 
 #ifdef _DEBUG
@@ -46,6 +46,8 @@ void CAppSettingsController::OnOk(void)
   m_pModel->m_optPortName = m_pView->GetPortName();
   m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
   m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
+  m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
+  m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -62,4 +64,6 @@ void CAppSettingsController::OnActivate(void)
   m_pView->SetPortName(m_pModel->m_optPortName);
   m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
   m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
+  m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
+  m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
 }

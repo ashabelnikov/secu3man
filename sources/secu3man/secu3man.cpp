@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "secu3man.h"
+#include "resource.h"
 
 #include "MainFrame.h"
 #include "about/secu-3about.h"
@@ -31,6 +32,10 @@ BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
   //{{AFX_MSG_MAP(CSecu3manApp)
     ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
 	ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
+	ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
+	ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
+	ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
+	ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -66,6 +71,8 @@ BOOL CSecu3manApp::InitInstance()
 
   AfxEnableControlContainer();
 
+  CoInitialize(NULL);
+
   #ifdef _AFXDLL
     Enable3dControls();		    // Call this when using MFC in a shared DLL
   #else
@@ -87,6 +94,8 @@ BOOL CSecu3manApp::InitInstance()
   m_pMainFrameManager = new CMainFrameManager();
   m_pMainFrameManager->Init(m_pMainWnd);
 
+  //дурацкий метод надо вызвать после создания главного окна...
+  m_pCommunicationManager->OnAfterCreate();
   return TRUE;
 }
 
@@ -125,4 +134,41 @@ int CSecu3manApp::ExitInstance()
   m_pCommunicationManager->Terminate();
 
   return CWinApp::ExitInstance();
+}
+
+
+void CSecu3manApp::OnAppBeginLog()
+{
+ m_pCommunicationManager->OnStartLogWriting();
+}
+
+void CSecu3manApp::OnAppEndLog()
+{
+ m_pCommunicationManager->OnStopLogWriting();
+}
+
+
+void CSecu3manApp::OnUpdateOnAppBeginLog(CCmdUI* pCmdUI)
+{
+  pCmdUI->Enable(m_pCommunicationManager->IsLoggingInProcess() ? FALSE : TRUE);
+}
+
+void CSecu3manApp::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
+{
+  pCmdUI->Enable(m_pCommunicationManager->IsLoggingInProcess() ? TRUE : FALSE);
+}
+
+CAppSettingsManager* CSecu3manApp::GetAppSettingsManager(void) const
+{
+ return m_pAppSettingsManager;
+}
+
+CCommunicationManager* CSecu3manApp::GetCommunicationManager(void) const
+{
+ return m_pCommunicationManager;
+}
+
+CMainFrameManager* CSecu3manApp::GetMainFrameManager(void) const
+{
+ return m_pMainFrameManager;
 }

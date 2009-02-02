@@ -60,6 +60,7 @@ public:
    inline void EnterCriticalSection(void);
    inline void LeaveCriticalSection(void);
    inline bool GetOnlineStatus(void) { return m_online_state; }
+   inline bool GetWorkState(void) { return m_work_state; };
 
    static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
@@ -97,6 +98,7 @@ private:
    float   m_angle_multiplier;
    bool    m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
    bool    m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
+   bool    m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn(); 
 
    //helper
    void SwitchOnThread(bool state);

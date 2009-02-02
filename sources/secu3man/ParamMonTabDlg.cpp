@@ -8,7 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "resource.h"
 #include "ParamMonTabDlg.h"
 #include "common/FastDelegate.h"
 

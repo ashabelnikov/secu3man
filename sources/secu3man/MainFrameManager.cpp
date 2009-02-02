@@ -8,9 +8,9 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MainFrameManager.h"
 #include "ChildViewManager.h"
-#include "resource.h"
 
 using namespace fastdelegate;
 

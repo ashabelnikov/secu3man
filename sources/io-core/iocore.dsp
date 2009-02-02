@@ -136,6 +136,10 @@ SOURCE=.\iocore.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\LogWriter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\NumericConv.cpp
 # End Source File
 # Begin Source File
@@ -190,6 +194,10 @@ SOURCE=.\FirmwareDataMediator.h
 # Begin Source File
 
 SOURCE=.\FirmwareMapsDataHolder.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LogWriter.h
 # End Source File
 # Begin Source File
 

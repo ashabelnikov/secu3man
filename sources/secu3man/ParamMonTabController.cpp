@@ -8,13 +8,16 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "resource.h"
+#include "ParamMonTabDlg.h"
 #include "ParamMonTabController.h"
 #include "common/FastDelegate.h"
+#include "io-core/ufcodes.h"
+#include "CommunicationManager.h"
+#include "StatusBarManager.h"
+
 #include <map>
 #include <algorithm>
-
-#include "io-core/ufcodes.h"
 
 
 using namespace fastdelegate;
@@ -27,6 +30,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+#define EHKEY _T("ParamMonCntr")
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -35,7 +40,6 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
-, m_pAdapter(NULL)
 , m_operation_state(-1)
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
@@ -51,27 +55,19 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
   m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));
   m_view->m_ParamDeskDlg.SetOnSaveButton(MakeDelegate(this,&CParamMonTabController::OnPDSaveButton));
-
-  CWnd* pParent = AfxGetApp()->m_pMainWnd;
-
-  //адаптер будет синхронизировать вызовы приходящие из потока с данным контроллером
-  m_pAdapter = new CControlAppAdapter(this);
-  m_pAdapter->Create(pParent);
-
 }
 
 
 CParamMonTabController::~CParamMonTabController()
 {
-  delete m_pAdapter;
+ //na  
 }
 
 //изменились настройки программы!
 void CParamMonTabController::OnSettingsChanged(void)
 {
   //включаем необходимый для данного контекста коммуникационный контроллер
-  m_comm->m_pControlApp->SwitchOn(true);
-  m_comm->m_pBootLoader->SwitchOn(false);  
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);   
 }
 
 //from ParamDesk
@@ -95,16 +91,13 @@ void CParamMonTabController::OnActivate(void)
   bool result = m_view->m_ParamDeskDlg.SetCurSel(m_lastSel);
 
   //////////////////////////////////////////////////////////////////
-  //устанавливаем обработчики событий специфичные для контекста программы в котором работает контроллер
-  m_comm->m_pControlApp->SetEventHandler(m_pAdapter); 
+  //Подключаем контроллер к потоку данных от SECU-3
+  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
   m_comm->SetOnSettingsChanged(MakeDelegate(this,&CParamMonTabController::OnSettingsChanged)); 
   //////////////////////////////////////////////////////////////////
  
-  m_pAdapter->SwitchOn(true); 
-
   //включаем необходимый для данного контекста коммуникационный контроллер
-  m_comm->m_pControlApp->SwitchOn(true);
-  m_comm->m_pBootLoader->SwitchOn(false);
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
   //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
   m_pd_changes_timer.SetTimer(this,&CParamMonTabController::OnParamDeskChangesTimer,500);
@@ -116,7 +109,7 @@ void CParamMonTabController::OnActivate(void)
 //from MainTabController
 void CParamMonTabController::OnDeactivate(void)
 {
-  m_pAdapter->SwitchOn(false); 
+  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
 
   //таймер работает только если мы находимся в контексте "параметров и монитора"
   m_pd_changes_timer.KillTimer(); 

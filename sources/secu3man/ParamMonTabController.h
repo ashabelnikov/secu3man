@@ -3,15 +3,15 @@
 
 #include <map>
 #include "ITabController.h"
-#include "ParamMonTabDlg.h"
-#include "CommunicationManager.h"
-#include "StatusBarManager.h"
 #include "io-core/ControlApp.h"
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/ufcodes.h"
 #include "common/ObjectTimer.h"
 #include "common/unicodesupport.h"
 
+class CParamMonTabDlg;
+class CCommunicationManager;
+class CStatusBarManager;
 
 class CParamMonTabController : public ITabController, private IAPPEventHandler 
 {
@@ -22,8 +22,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   private:
     CParamMonTabDlg*  m_view;
 	CCommunicationManager* m_comm;
-	CStatusBarManager*  m_sbar;
-    CControlAppAdapter* m_pAdapter;
+	CStatusBarManager*  m_sbar;    
 	
 	CObjectTimer<CParamMonTabController> m_pd_changes_timer;
 

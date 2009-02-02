@@ -8,8 +8,11 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
+#include "resource.h"
+#include "AppSettingsDlg.h"
 #include "AppSettingsManager.h"
+#include "AppSettingsModel.h"
+#include "AppSettingsController.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -38,4 +41,22 @@ CAppSettingsManager::~CAppSettingsManager()
  delete m_pModel;
  delete m_pController;
  delete m_pDialog;
+}
+
+bool CAppSettingsManager::ReadSettings(void) const
+{
+  ASSERT(m_pModel);
+  return m_pModel->ReadSettings();
+}
+
+bool CAppSettingsManager::WriteSettings(void) const
+{
+ ASSERT(m_pModel);
+ return m_pModel->WriteSettings();
+}
+
+int CAppSettingsManager::ShowDialog(void) const
+{ //делегируем вызов контроллеру...
+ ASSERT(m_pController);
+ return m_pController->ShowDialog(); 
 }

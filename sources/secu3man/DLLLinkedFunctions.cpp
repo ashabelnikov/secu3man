@@ -8,7 +8,6 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "secu3man.h"
 #include "DLLLinkedFunctions.h"
 
 namespace DLL
