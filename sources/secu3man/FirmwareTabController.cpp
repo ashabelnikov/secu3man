@@ -106,6 +106,11 @@ void CFirmwareTabController::OnActivate(void)
  m_modification_check_timer.SetTimer(this,&CFirmwareTabController::OnModificationCheckTimer,250);
 
  SetViewFirmwareValues(); 
+
+ //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
+ //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
+ bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ OnConnection(online_status);
 }
 
 void CFirmwareTabController::OnDeactivate(void)

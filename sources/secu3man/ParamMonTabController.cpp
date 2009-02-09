@@ -102,8 +102,10 @@ void CParamMonTabController::OnActivate(void)
   //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
   m_pd_changes_timer.SetTimer(this,&CParamMonTabController::OnParamDeskChangesTimer,500);
 
-  //запускаем процесс инициализации данными из SECU 
-  StartCollectingInitialData();
+ //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
+ //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
+ bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ OnConnection(online_status);
 }
 
 //from MainTabController

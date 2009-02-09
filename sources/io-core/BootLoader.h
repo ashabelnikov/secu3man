@@ -62,7 +62,7 @@ public:
 	  m_pEventHandler = i_pEventHandler;
 	};
 
-	void SwitchOn(bool state);
+	void SwitchOn(bool state, bool i_force_reinit = false);
     bool GetWorkState(void) {return m_work_state;};
 
 	bool Terminate(void);

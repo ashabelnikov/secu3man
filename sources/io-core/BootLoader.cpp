@@ -621,38 +621,41 @@ bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size, int 
 } 
 
 //-----------------------------------------------------------------------
-void CBootLoader::SwitchOn(bool state)
+void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 {
-	COMMTIMEOUTS timeouts;
-	float ms_need_for_one_byte; 
-	
-    //кол-во мс необходимое для приема/передачи одного байта	
-	ms_need_for_one_byte = CComPort::ms_need_for_one_byte_8N1(m_uart_speed); 
+   COMMTIMEOUTS timeouts;
+   float ms_need_for_one_byte; 
+
+   if (m_work_state==state && false==i_force_reinit)
+     return;
+
+   //кол-во мс необходимое для приема/передачи одного байта	
+   ms_need_for_one_byte = CComPort::ms_need_for_one_byte_8N1(m_uart_speed); 
 
    if (state)
    {
-      //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты) 
-      m_p_port->Purge();
+    //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты) 
+    m_p_port->Purge();
 
-	  m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
-	  m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с бутлоадером своя скорость
-	  m_p_port->SetState();
+	m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
+	m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с бутлоадером своя скорость
+	m_p_port->SetState();
    
-	  //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
-	  timeouts.ReadIntervalTimeout         = 200; 
-	  timeouts.ReadTotalTimeoutMultiplier  = 200;
-      timeouts.ReadTotalTimeoutConstant    = 200; 
-	  timeouts.WriteTotalTimeoutConstant   = 200;
-      timeouts.WriteTotalTimeoutMultiplier = 200;
-	  m_p_port->SetTimeouts(&timeouts);	   
-	  m_work_state = true;
-	  Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
-   }
-   else
-   {
-    m_work_state = false;
+	//теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
+	timeouts.ReadIntervalTimeout         = 200; 
+	timeouts.ReadTotalTimeoutMultiplier  = 200;
+    timeouts.ReadTotalTimeoutConstant    = 200; 
+	timeouts.WriteTotalTimeoutConstant   = 200;
+    timeouts.WriteTotalTimeoutMultiplier = 200;
+	m_p_port->SetTimeouts(&timeouts);	   	 
 	Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
    }
+   else
+   {    
+	Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
+   }
+
+   m_work_state = state;
 }
 
 //-----------------------------------------------------------------------

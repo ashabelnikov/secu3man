@@ -51,7 +51,7 @@ public:
 
    bool Initialize(CComPort* p_port, const DWORD uart_seed, const DWORD);
    bool Terminate(void);
-   void SwitchOn(bool state);
+   void SwitchOn(bool state, bool i_force_reinit = false);
    bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
    bool ChangeContext(const BYTE i_new_descriptor);
    bool StartBootLoader();

@@ -141,37 +141,23 @@ void CCommunicationManager::OnAfterCreate(void)
 //активирование указанного коммуникационного контроллера или деактивирование всех контроллеров
 void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = false */)
 {
+ _ASSERTE(!(m_pControlApp->GetWorkState() && m_pBootLoader->GetWorkState()));
+ 
  switch(i_cntr)
  {
   case OP_ACTIVATE_APPLICATION:
-   if (false==m_pControlApp->GetWorkState() || i_force_reinit)
-   {
-    m_pControlApp->SwitchOn(true); 
-    m_pBootLoader->SwitchOn(false);
-   }       
-   else
-   {
-   //все контроллеры в активном состоянии?
-   _ASSERTE(false==m_pBootLoader->GetWorkState()); 
-   }
+   m_pBootLoader->SwitchOn(false, i_force_reinit);
+   m_pControlApp->SwitchOn(true, i_force_reinit); 
    break;
 
   case OP_ACTIVATE_BOOTLOADER:
-   if (false==m_pBootLoader->GetWorkState() || i_force_reinit)
-   {
-   m_pControlApp->SwitchOn(false); 
-   m_pBootLoader->SwitchOn(true); 
-   }
-   else
-   {
-   //все контроллеры в активном состоянии?
-   _ASSERTE(false==m_pControlApp->GetWorkState()); 
-   }
+   m_pControlApp->SwitchOn(false, i_force_reinit); 
+   m_pBootLoader->SwitchOn(true, i_force_reinit); 
    break;
    
   case OP_DEACTIVATE_ALL: //deactivate all 
-   m_pControlApp->SwitchOn(false); 
-   m_pBootLoader->SwitchOn(false); 
+   m_pControlApp->SwitchOn(false, i_force_reinit); 
+   m_pBootLoader->SwitchOn(false, i_force_reinit); 
    break;
 
   default:

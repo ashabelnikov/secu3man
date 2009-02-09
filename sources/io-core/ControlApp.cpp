@@ -936,16 +936,19 @@ BOOL CControlApp::SetPacketsTimer(int timeout)
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SwitchOn(bool state)
+void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 {
 	COMMTIMEOUTS timeouts;
 	float ms_need_for_one_byte; 
-	
+
+	if (m_work_state==state && false==i_force_reinit)
+	  return;
+
     //кол-во мс необходимое для приема/передачи одного байта	
 	ms_need_for_one_byte = CComPort::ms_need_for_one_byte_8N1(m_uart_speed);
 
 	if (state)
-	{ //возобновить работу
+	{ //возобновить работу	  	  
       //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты) 
       m_p_port->Purge();
 
@@ -965,7 +968,7 @@ void CControlApp::SwitchOn(bool state)
 	  Sleep(CNumericConv::Round(ms_need_for_one_byte*5));
 	  m_force_notify_about_connection = true;
       SwitchOnThread(true);
-	  SetPacketsTimer(m_dat_packet_timeout);
+	  SetPacketsTimer(m_dat_packet_timeout);	  
 	}
 	else
 	{ //остановить работу
