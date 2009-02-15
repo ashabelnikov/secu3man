@@ -140,11 +140,14 @@ int CSecu3manApp::ExitInstance()
 void CSecu3manApp::OnAppBeginLog()
 {
  m_pCommunicationManager->OnStartLogWriting();
+ if (m_pCommunicationManager->IsLoggingInProcess())
+  m_pMainFrameManager->m_StatusBarManager.SetLoggerState(CStatusBarManager::LOG_STATE_WRITING);
 }
 
 void CSecu3manApp::OnAppEndLog()
 {
  m_pCommunicationManager->OnStopLogWriting();
+ m_pMainFrameManager->m_StatusBarManager.SetLoggerState(CStatusBarManager::LOG_STATE_STOPPED);
 }
 
 

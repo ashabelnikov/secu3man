@@ -25,6 +25,7 @@ static UINT indicators[] =
 CStatusBarManager::CStatusBarManager()
 : m_pParentWnd(NULL)
 , m_CurrentConnectionState(STATE_OFFLINE)
+, m_LogWrIcon(NULL)
 {
   for(int i = 0; i < 3; i++)
   {
@@ -61,6 +62,7 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
   m_ConnIcons[0] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_CONNECTED));
   m_ConnIcons[1] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_DISCONNECTED));
   m_ConnIcons[2] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_BOOTLOADER));
+  m_LogWrIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE));
 
   m_ConnStrings[0].LoadString(IDS_CONN_CONNECTED);
   m_ConnStrings[1].LoadString(IDS_CONN_DISCONNECTED);
@@ -124,6 +126,12 @@ void CStatusBarManager::AddContent(void)
   idx = m_wndStatusBar.CommandToIndex(ID_MSB_INDICATOR_EMPTY);
   m_wndStatusBar.SetPaneWidth(idx,10);
   m_wndStatusBar.SetPaneStyle(idx, m_wndStatusBar.GetPaneStyle(idx) | SBPS_NOBORDERS );
+
+  //иконка индицирующая статус записи логов
+  m_wndStatusBar.AddIndicator(7,ID_MSB_INDICATOR_LOGWR);
+  idx = m_wndStatusBar.CommandToIndex(ID_MSB_INDICATOR_LOGWR);
+  m_wndStatusBar.SetPaneWidth(idx,16);
+  m_wndStatusBar.SetPaneStyle(idx, SBPS_NORMAL);
 
   //дальше расположены: CAP, NUM, SCRL
 }
@@ -202,4 +210,21 @@ void CStatusBarManager::SetInformationText(const CString& i_text)
 {
   int idx = m_wndStatusBar.CommandToIndex(ID_SEPARATOR);
   m_wndStatusBar.SetPaneText(idx,i_text); 
+}
+
+//Устанавливает текущую иконку и текст (состояние соединения)
+void CStatusBarManager::SetLoggerState(int i_state)
+{	
+  int idx_icon = m_wndStatusBar.CommandToIndex(ID_MSB_INDICATOR_LOGWR);  
+  CStatusBarCtrl& status = m_wndStatusBar.GetStatusBarCtrl();
+
+  switch(i_state)
+  {
+    case LOG_STATE_WRITING:
+      status.SetIcon(idx_icon,m_LogWrIcon);
+	  break;
+    case LOG_STATE_STOPPED:
+      status.SetIcon(idx_icon,NULL);
+	  break;
+  }
 }

@@ -385,6 +385,7 @@ IDR_MAINFRAME           ICON    DISCARDABLE     "res\\secu3man.ico"
 IDI_CONN_CONNECTED      ICON    DISCARDABLE     "res\\connected.ico"
 IDI_CONN_DISCONNECTED   ICON    DISCARDABLE     "res\\disconnected.ico"
 IDI_CONN_BOOTLOADER     ICON    DISCARDABLE     "res\\bootload.ico"
+IDI_LOGWR_WRITE         ICON    DISCARDABLE     "res\\logwriting.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

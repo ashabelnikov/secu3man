@@ -337,6 +337,10 @@ SOURCE=.\res\disconnected.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\res\logwriting.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\res\secu3man.ico
 # End Source File
 # Begin Source File

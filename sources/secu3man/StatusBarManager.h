@@ -19,13 +19,18 @@ class CStatusBarManager
 	void ShowProgressBar(bool show);
 	void SetProgressRange(short nLower, short nUpper);
 	void SetProgressPos(int nPos);
+	void SetLoggerState(int i_state);
+
 
 	enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3 };
+
+	enum { LOG_STATE_WRITING, LOG_STATE_STOPPED};
 
   protected:
 	CWnd* m_pParentWnd;
 	MPCStatusBar  m_wndStatusBar;
 	HICON   m_ConnIcons[3];
+	HICON   m_LogWrIcon;
 	CString m_ConnStrings[3];
 	int m_CurrentConnectionState;
 };
