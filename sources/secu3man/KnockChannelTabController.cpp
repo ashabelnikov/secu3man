@@ -19,6 +19,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+#define EHKEY _T("KnockChanCntr")
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -39,16 +41,73 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 
 CKnockChannelTabController::~CKnockChannelTabController()
 {  
+ //na
+}
+
+//изменились настройки программы!
+void CKnockChannelTabController::OnSettingsChanged(void)
+{
+  //включаем необходимый для данного контекста коммуникационный контроллер
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
 }
 
 //from MainTabController
 void CKnockChannelTabController::OnActivate(void)
 {
+ m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
+ m_comm->SetOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
+
+ //включаем необходимый для данного контекста коммуникационный контроллер
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+
+ //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
+ //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
+ bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ OnConnection(online_status);
 }
 
 //from MainTabController
 void CKnockChannelTabController::OnDeactivate(void)
 {
+ m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
+ m_sbar->SetInformationText(_T(""));
+}
+
+void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
+{
+ SECU3IO::SECU3Packet m_recepted_packet;
+
+ ////////////////////////////////////////////////////////////////////////
+ //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
+ m_comm->m_pControlApp->EnterCriticalSection();
+ memcpy(&m_recepted_packet,ip_packet,sizeof(SECU3IO::SECU3Packet));
+ m_comm->m_pControlApp->LeaveCriticalSection();
+  ////////////////////////////////////////////////////////////////////////
+
+ //дальше работаем с безопасной копией данных
+ _OnPacketReceived(i_descriptor,&m_recepted_packet);
+}
+
+void CKnockChannelTabController::_OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
+{
+
+}
+
+void CKnockChannelTabController::OnConnection(const bool i_online)
+{
+ int state;
+  ASSERT(m_sbar);
+
+  if (i_online) //перешли в онлайн
+  {
+	state = CStatusBarManager::STATE_ONLINE;
+  }
+  else
+  {
+	state = CStatusBarManager::STATE_OFFLINE;  
+  }
+ 
+  m_sbar->SetConnectionState(state);
 }
 
 bool CKnockChannelTabController::OnClose(void)

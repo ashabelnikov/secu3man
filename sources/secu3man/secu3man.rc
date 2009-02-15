@@ -63,7 +63,7 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "ѕускова€ карта ”ќ«",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
@@ -132,23 +132,27 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,48,124,161,9
 END
 
-IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 434, 205
+IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 434, 221
 STYLE WS_CHILD | WS_VISIBLE
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "List1",IDC_CHECK_ENGINE_ERRORS_LIST,"SysListView32",
-                    LVS_REPORT | WS_BORDER | WS_TABSTOP,53,17,344,80
+                    LVS_REPORT | WS_BORDER | WS_TABSTOP,53,34,356,102
     PUSHBUTTON      "ѕ–ќ„»“ј“№ сохраненные ошибки",
-                    IDC_CHECK_ENGINE_READ_ERRORS_BUTTON,59,118,102,28,
+                    IDC_CHECK_ENGINE_READ_ERRORS_BUTTON,59,144,102,28,
                     BS_MULTILINE
     PUSHBUTTON      "«јѕ»—ј“№ сохраненные ошибки",
-                    IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON,179,118,101,28,
+                    IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON,179,144,101,28,
                     BS_MULTILINE
     CONTROL         "—читывать ошибки в реальном времени",
                     IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX,"Button",
-                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,120,97,
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
-    LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,154,347,32
+    LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
+    PUSHBUTTON      "”становить все",IDC_CHECK_ENGINE_LIST_SETALL_BUTTON,52,
+                    13,65,16
+    PUSHBUTTON      "—бросить все",IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON,135,
+                    13,65,16
 END
 
 IDD_KNOCK_CHANNEL DIALOG DISCARDABLE  0, 0, 490, 200
@@ -203,7 +207,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 427
         TOPMARGIN, 7
-        BOTTOMMARGIN, 198
+        BOTTOMMARGIN, 214
     END
 
     IDD_KNOCK_CHANNEL, DIALOG

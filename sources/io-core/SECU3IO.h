@@ -123,6 +123,7 @@ struct OPCompNc //спользуется если надо просто принять или послать определенный 
 };
 
 #define OPCODE_EEPROM_PARAM_SAVE 1
+#define OPCODE_CE_SAVE_ERRORS    2
 
 
 struct KnockPar
@@ -133,6 +134,11 @@ struct KnockPar
  float knock_k_wnd_end_angle;          
 };
 
+
+struct CEErrors
+{
+ DWORD flags;
+};
 
 //таблица перекодировки кода частоты ПФ в частоту
 static float hip9011_gain_frequences[64] = 
@@ -164,6 +170,7 @@ union SECU3Packet
   SECU3IO::CKPSPar      m_CKPSPar;
   SECU3IO::OPCompNc     m_OPCompNc;
   SECU3IO::KnockPar     m_KnockPar;
+  SECU3IO::CEErrors     m_CEErrors;
 };
 
 

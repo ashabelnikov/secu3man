@@ -746,6 +746,46 @@ bool CControlApp::Parse_KNOCK_PAR(BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_CE_ERR_CODES(BYTE* raw_packet)
+{
+ SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
+
+ if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+	 return false;
+
+ int flags = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
+     return false;
+ m_CEErrors.flags = flags;
+ raw_packet+=4;
+
+ if (*raw_packet!='\r')
+	 return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_CE_SAVED_ERR(BYTE* raw_packet)
+{
+ SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
+
+ if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+	 return false;
+
+ int flags = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
+     return false;
+ m_CEErrors.flags = flags;
+ raw_packet+=4;
+
+ if (*raw_packet!='\r')
+	 return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -817,6 +857,14 @@ bool CControlApp::ParsePackets()
 		 case KNOCK_PAR:
 			 if (Parse_KNOCK_PAR(raw_packet))
 			   break;
+			 continue;
+         case CE_ERR_CODES: 
+             if (Parse_CE_ERR_CODES(raw_packet))
+               break;
+			 continue;
+         case CE_SAVED_ERR: 
+             if (Parse_CE_SAVED_ERR(raw_packet))
+               break;
 			 continue;
 
          default:
@@ -1008,6 +1056,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor)
       case CKPS_PAR:
       case OP_COMP_NC:
       case KNOCK_PAR: 
+      case CE_ERR_CODES:
+	  case CE_SAVED_ERR:	  
 		return true;
       default:
 		return false;
@@ -1062,6 +1112,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
       case KNOCK_PAR:
 		  Build_KNOCK_PAR((KnockPar*)i_packet_data);
 		  break;
+      case CE_SAVED_ERR:
+		  Build_CE_SAVED_ERR((CEErrors*)i_packet_data);
+          break;
 
       default:
 		  return false; //invalid descriptor
@@ -1234,6 +1287,13 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
 void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 {
   CNumericConv::Bin4ToHex(packet_data->opcode,m_outgoing_packet);
+  m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
+{
+  CNumericConv::Bin16ToHex(packet_data->flags, m_outgoing_packet);
   m_outgoing_packet+= '\r';
 }
 

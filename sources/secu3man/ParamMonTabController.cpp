@@ -67,7 +67,7 @@ CParamMonTabController::~CParamMonTabController()
 void CParamMonTabController::OnSettingsChanged(void)
 {
   //включаем необходимый для данного контекста коммуникационный контроллер
-  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);   
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
 }
 
 //from ParamDesk

@@ -11,7 +11,7 @@
 #include "common/unicodesupport.h"
 
 
-class CKnockChannelTabController : public ITabController 
+class CKnockChannelTabController : public ITabController, private IAPPEventHandler  
 {
   public:
 	CKnockChannelTabController(CKnockChannelTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
@@ -23,6 +23,13 @@ class CKnockChannelTabController : public ITabController
 	CStatusBarManager*  m_sbar;
     CControlAppAdapter* m_pAdapter;
 	
+	//from IAPPEventHandler:
+    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+           void _OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+    virtual void OnConnection(const bool i_online);
+
+    void OnSettingsChanged(void);
+
     //появление/закрытие вкладки Check Engine
     virtual void OnActivate(void);
 	virtual void OnDeactivate(void);

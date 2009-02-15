@@ -143,7 +143,7 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optLogFilesFolder = readed_str;  
 
   //-----------------------------------------
-  GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("0"),readed_str,255,IniFileName);
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("1"),readed_str,255,IniFileName);
   i_val = _ttoi(readed_str);
 
   if (i_val != 0 && i_val != 1)

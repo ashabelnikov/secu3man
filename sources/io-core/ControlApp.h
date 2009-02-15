@@ -124,6 +124,9 @@ private:
    bool Parse_CKPS_PAR(BYTE* raw_packet);
    bool Parse_OP_COMP_NC(BYTE* raw_packet);
    bool Parse_KNOCK_PAR(BYTE* raw_packet);
+   bool Parse_CE_ERR_CODES(BYTE* raw_packet);
+   bool Parse_CE_SAVED_ERR(BYTE* raw_packet);
+
 
    //сборщики отдельных пакетов
    void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -136,6 +139,7 @@ private:
    void Build_CKPS_PAR(SECU3IO::CKPSPar* packet_data);
    void Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data);    
    void Build_KNOCK_PAR(SECU3IO::KnockPar* packet_data);
+   void Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data);
 };
 
 #endif //_CONTROLAPP_
