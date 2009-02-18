@@ -5,12 +5,23 @@
 #include "common/unicodesupport.h"
 #include <map>
 
+
+//этот интерфейс должен реализовываться классом-обработчиком событий
+class IAPPEventHandler
+{
+public:
+  //event handlers
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet) = 0;
+  virtual void OnConnection(const bool i_online) = 0;
+};
+
+
 ////////////////////////////////////////////////////////////////////////
 
 //Этот адаптер необходим для разрешения проблемы вызова MFC функций из "неродного" потока
 
 //ACHTUNG! CWnd должен наследоваться первым, иначе класс будет неправильно работать!
-class AFX_EXT_CLASS CControlAppAdapter : public CWnd, public IAPPEventHandler
+class AFX_EXT_CLASS CControlAppAdapter : public CWnd, public IAPPThreadEventHandler
 {
   public:
 	  CControlAppAdapter();	  
@@ -41,7 +52,7 @@ class AFX_EXT_CLASS CControlAppAdapter : public CWnd, public IAPPEventHandler
 
       Observers m_observers;                //список обозревателей событий      
 	  bool m_switch_on;
-	  bool m_switch_on_thread_side;
+	  volatile bool m_switch_on_thread_side;
 
       inline void _UpdateInternalState(void);
 

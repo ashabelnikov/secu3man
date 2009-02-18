@@ -31,18 +31,18 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
 {
  if (i_descriptor==SENSOR_DAT)
  {
- ASSERT(m_out_handle);
- SensorDat *p_sensors = reinterpret_cast<SensorDat*>(ip_packet);
+  ASSERT(m_out_handle);
+  SensorDat *p_sensors = reinterpret_cast<SensorDat*>(ip_packet);
 
- SYSTEMTIME time;
- ::GetLocalTime(&time);
+  SYSTEMTIME time;
+  ::GetLocalTime(&time);
 
- //используем ASCII версию, файл не должен быть юникодным
- //"hh:mm:ss.ms", ms - сотые доли секунды  
- fprintf(m_out_handle,"%02d:%02d:%02d.%02d,",time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
+  //используем ASCII версию, файл не должен быть юникодным
+  //"hh:mm:ss.ms", ms - сотые доли секунды  
+  fprintf(m_out_handle,"%02d:%02d:%02d.%02d,",time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
- fprintf(m_out_handle,"%04d,%0.2f,%0.2f,%0.2f,%0.2f,%0.2f,%02d,%01d,%01d,%01d\r\n",
-	                   p_sensors->frequen,
+  fprintf(m_out_handle,"%04d,%0.2f,%0.2f,%0.2f,%0.2f,%0.2f,%02d,%01d,%01d,%01d\r\n",
+ 	                   p_sensors->frequen,
 					   p_sensors->adv_angle,
 					   p_sensors->pressure,
 					   p_sensors->voltage,
@@ -87,7 +87,13 @@ bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_nam
 void LogWriter::EndLogging(void)
 {
  //закрываем файл
- fclose(m_out_handle); 
+ if (m_out_handle)
+ {  
+  fclose(m_out_handle); 
+ }
+ else
+  _ASSERTE(0); 
+
  m_is_busy = false;
 }
 

@@ -85,12 +85,22 @@ LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
   if (!m_switch_on_thread_side) 
     return 0;
   
+  //WARNING! object in stack!
+  SECU3IO::SECU3Packet recepted_packet;
+
+  ////////////////////////////////////////////////////////////////////////
+  //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
+  EnterCriticalSection();
+  memcpy(&recepted_packet,(SECU3IO::SECU3Packet*)lParam,sizeof(SECU3IO::SECU3Packet));
+  LeaveCriticalSection();
+  ////////////////////////////////////////////////////////////////////////
+
  ObserversIterator it;
  for(it = m_observers.begin(); it != m_observers.end(); ++it)
  {
   IAPPEventHandler* p_observer = (*it).second; 
   _ASSERTE(p_observer);
-  p_observer->OnPacketReceived((BYTE)wParam,(SECU3IO::SECU3Packet*)lParam); 
+  p_observer->OnPacketReceived((BYTE)wParam, &recepted_packet); 
  }
  return 0;
 }

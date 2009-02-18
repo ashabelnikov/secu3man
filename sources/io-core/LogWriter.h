@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "ControlApp.h"
+#include "ControlAppAdapter.h"
 #include "common/unicodesupport.h"
 
 
@@ -26,7 +26,7 @@ public:
 public:
 
   //через эти обработчики данные поступают в механизм записи
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);          
   virtual void OnConnection(const bool i_online);
 
 private:

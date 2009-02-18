@@ -24,8 +24,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
     CControlAppAdapter* m_pAdapter;
 	
 	//from IAPPEventHandler:
-    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
-           void _OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
     virtual void OnConnection(const bool i_online);
 
     void OnSettingsChanged(void);

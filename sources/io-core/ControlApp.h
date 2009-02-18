@@ -31,12 +31,32 @@
 #define RAW_BYTES_TO_READ_MAX  32
 
 //этот интерфейс должен реализовываться классом-обработчиком событий
-class IAPPEventHandler
+class IAPPThreadEventHandler
 {
+  typedef CRITICAL_SECTION CSECTION;
 public:
+  IAPPThreadEventHandler() : mp_sync_object(NULL) {}; 
+
   //event handlers
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet) = 0;
   virtual void OnConnection(const bool i_online) = 0;
+
+protected:
+  void EnterCriticalSection(void)
+  {
+   _ASSERTE(mp_sync_object);
+   ::EnterCriticalSection(mp_sync_object);
+  };
+
+  void LeaveCriticalSection(void)
+  {
+   _ASSERTE(mp_sync_object);
+   ::LeaveCriticalSection(mp_sync_object);
+  };
+
+private:
+  friend class CControlApp;
+  CSECTION* mp_sync_object;
 };
 
 
@@ -45,6 +65,7 @@ class AFX_EXT_CLASS CControlApp
 {  
 public:
    typedef CRITICAL_SECTION CSECTION;
+   typedef IAPPThreadEventHandler EventHandler; 
 
    CControlApp();
    virtual ~CControlApp();
@@ -55,7 +76,7 @@ public:
    bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
    bool ChangeContext(const BYTE i_new_descriptor);
    bool StartBootLoader();
-   void SetEventHandler(IAPPEventHandler* i_pEventHandler); 
+   void SetEventHandler(EventHandler* i_pEventHandler); 
    inline CSECTION* GetSyncObject(void);
    inline void EnterCriticalSection(void);
    inline void LeaveCriticalSection(void);
@@ -85,7 +106,7 @@ private:
    DWORD        m_dat_packet_timeout;
    HANDLE       m_hTimer;
 
-   IAPPEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IAPPEventHandler)
+   EventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IAPPEventHandler)
 
    volatile bool m_is_thread_must_exit;
 

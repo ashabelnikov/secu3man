@@ -101,21 +101,6 @@ void CCheckEngineTabController::OnDeactivate(void)
 
 void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
- SECU3IO::SECU3Packet m_recepted_packet;
-
- ////////////////////////////////////////////////////////////////////////
- //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
- m_comm->m_pControlApp->EnterCriticalSection();
- memcpy(&m_recepted_packet,ip_packet,sizeof(SECU3IO::SECU3Packet));
- m_comm->m_pControlApp->LeaveCriticalSection();
-  ////////////////////////////////////////////////////////////////////////
-
- //дальше работаем с безопасной копией данных
- _OnPacketReceived(i_descriptor,&m_recepted_packet);
-}
-
-void CCheckEngineTabController::_OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
-{
   //особый случай: пришел пакет с нотификацонным кодом
   if (i_descriptor == OP_COMP_NC)
   {

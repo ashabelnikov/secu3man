@@ -19,6 +19,8 @@
 using namespace fastdelegate;
 
 #define EHKEY _T("LogWriter")
+#define MFKEY _T("MFCntr")
+
 
 MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager, 
 	                  CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager, 
@@ -34,7 +36,8 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
  _ASSERTE(i_pStatusBarManager); 
  _ASSERTE(i_pLogWriter);
  _ASSERTE(ip_view);
- _SetDelegates(); 
+ _SetDelegates();
+ m_pCommunicationManager->m_pAppAdapter->AddEventHandler(this, MFKEY);
 }
 
 void MainFrameController::_SetDelegates(void)
@@ -109,12 +112,12 @@ void MainFrameController::OnAppEndLog()
 
 bool MainFrameController::IsBeginLoggingAllowed(void)
 {
- return !m_pLogWriter->IsLoggingInProcess();
+ return !m_pLogWriter->IsLoggingInProcess() && m_pCommunicationManager->m_pControlApp->GetOnlineStatus();
 }
 
 bool MainFrameController::IsEndLoggingAllowed(void)
 {
- return m_pLogWriter->IsLoggingInProcess();
+ return m_pLogWriter->IsLoggingInProcess() && m_pCommunicationManager->m_pControlApp->GetOnlineStatus();
 }
 
 void MainFrameController::SetView(CMainFrame* ip_view)
@@ -123,4 +126,19 @@ void MainFrameController::SetView(CMainFrame* ip_view)
  mp_view = ip_view;
  _SetDelegates();
 }
+
+void MainFrameController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
+{
+ //na
+}
+
+void MainFrameController::OnConnection(const bool i_online)
+{
+ if (false==i_online)
+ {
+  if (m_pLogWriter->IsLoggingInProcess())
+   OnAppEndLog(); //прекращаем запись лога при потере коннекта
+ }
+}
+
 

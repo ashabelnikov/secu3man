@@ -899,7 +899,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 {
   CControlApp* p_capp = (CControlApp*)lpParameter;
   CComPort* p_port = p_capp->m_p_port;
-  IAPPEventHandler* pEventHandler; 
+  EventHandler* pEventHandler; 
   BYTE read_buf[RAW_BYTES_TO_READ_MAX+1];
 
   DWORD actual_received = 0;
@@ -1296,9 +1296,10 @@ void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SetEventHandler(IAPPEventHandler* i_pEventHandler) 
+void CControlApp::SetEventHandler(EventHandler* i_pEventHandler) 
 { 
   m_pEventHandler = i_pEventHandler;
+  m_pEventHandler->mp_sync_object = GetSyncObject(); //link to synchronization object
 };
 
 //-----------------------------------------------------------------------

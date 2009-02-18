@@ -255,23 +255,6 @@ bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descri
 //hurrah!!! получен пакет от SECU-3
 void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
-  SECU3IO::SECU3Packet m_recepted_packet;
-
-  ////////////////////////////////////////////////////////////////////////
-  //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
-  m_comm->m_pControlApp->EnterCriticalSection();
-  memcpy(&m_recepted_packet,ip_packet,sizeof(SECU3IO::SECU3Packet));
-  m_comm->m_pControlApp->LeaveCriticalSection();
-  ////////////////////////////////////////////////////////////////////////
-
-  //дальше работаем с безопасной копией данных
-  _OnPacketReceived(i_descriptor,&m_recepted_packet);
-}
-
-
-//вспомогательная функция
-void CParamMonTabController::_OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
-{
   //особый случай: пришел пакет с нотификацонным кодом
   if (i_descriptor == OP_COMP_NC)
   {

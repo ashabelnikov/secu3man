@@ -33,8 +33,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
 	void _GetErrorsFromList(SECU3IO::CEErrors* op_errors);
 	
 	//from IAPPEventHandler:
-    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
-           void _OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
     virtual void OnConnection(const bool i_online);
 
 

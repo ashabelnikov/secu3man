@@ -1,13 +1,15 @@
 
 #pragma once
 
+#include "io-core\ControlAppAdapter.h"
+
 class CMainFrame;
 class CCommunicationManager;
 class CAppSettingsManager;
 class CStatusBarManager;
 class LogWriter;
 
-class MainFrameController
+class MainFrameController : public IAPPEventHandler
 {
  public:
   MainFrameController(CCommunicationManager* i_pCommunicationManager, 
@@ -17,6 +19,10 @@ class MainFrameController
   ~MainFrameController();
 
   void SetView(CMainFrame* ip_view);
+
+  //from IAPPEventHandler
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
+  virtual void OnConnection(const bool i_online);
 
  private:
   //from view
