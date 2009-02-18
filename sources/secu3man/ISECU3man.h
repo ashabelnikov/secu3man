@@ -12,6 +12,7 @@
 class CAppSettingsManager;
 class CCommunicationManager;
 class CMainFrameManager;
+class LogWriter;
 
 class ISECU3Man
 {
@@ -26,4 +27,5 @@ public:
   virtual CAppSettingsManager*    GetAppSettingsManager(void) const = 0;
   virtual CCommunicationManager*  GetCommunicationManager(void) const = 0;
   virtual CMainFrameManager*      GetMainFrameManager(void) const = 0; 
+  virtual LogWriter*              GetLogWriter(void) const = 0;
 };

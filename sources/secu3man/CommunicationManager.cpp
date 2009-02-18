@@ -22,8 +22,6 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 
-#define EHKEY _T("CommManager")
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -63,7 +61,6 @@ bool CCommunicationManager::Terminate(void)
   //завершаем работу контроллеров интерфейсов
   m_pControlApp->Terminate();
   m_pBootLoader->Terminate();
-
   m_pComPort->Terminate();
 
   return true;
@@ -166,51 +163,7 @@ void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = fa
  }
 }
 
-void CCommunicationManager::SetOnSettingsChanged(EventHandler OnSettingsChanged) 
+void CCommunicationManager::setOnSettingsChanged(EventHandler i_OnSettingsChanged) 
 {
- m_OnSettingsChanged = OnSettingsChanged;
+ m_OnSettingsChanged = i_OnSettingsChanged;
 }
-
-///////////////////Управление записью логов/////////////////////
-
-void CCommunicationManager::OnStartLogWriting(void)
-{
-  //Активируем записывающий механизм и подключаемся к потоку данных
-  _TSTRING full_path_to_folder;
-
-  CAppSettingsModel* settings = m_pSettings->m_pModel;
-
-  if (!settings->m_optUseAppFolder)
-    full_path_to_folder = settings->m_optLogFilesFolder;
-  else
-    full_path_to_folder = settings->GetAppDirectory();
-  
-  _TSTRING full_file_name;
-
-  bool result = m_logwriter.BeginLogging(full_path_to_folder, &full_file_name);
-  if (false==result)
-  {
-   CString  string;
-   string.Format(_T("Не могу начать запись лога в файл: %s\n\
-Возможно этот файл защищен от записи или уже открыт другой программой."), full_file_name.c_str());
-   AfxMessageBox(string,MB_OK | MB_ICONSTOP);
-   return;
-  }
-
-  m_pAppAdapter->AddEventHandler(&m_logwriter, EHKEY);
-}
-
-void CCommunicationManager::OnStopLogWriting(void)
-{
-  //Отключаемся от потока данных и деактивируем записывающий механизм	 
-  m_pAppAdapter->RemoveEventHandler(EHKEY);
-  m_logwriter.EndLogging();
-}
-
-bool CCommunicationManager::IsLoggingInProcess(void)
-{
-  //записывающий механизм активен ?
-  return m_logwriter.IsLoggingInProcess(); 
-}
-
-////////////////////////////////////////////////////////////////

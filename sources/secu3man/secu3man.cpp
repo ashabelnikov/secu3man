@@ -17,6 +17,7 @@
 #include "MainFrameManager.h"
 #include "io-core/ccomport.h"
 #include "CommunicationManager.h"
+#include "io-core/logwriter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -38,6 +39,8 @@ CSecu3manApp::CSecu3manApp()
 {
   m_pAppSettingsManager = new CAppSettingsManager();
   m_pCommunicationManager = new CCommunicationManager();
+  m_pLogWriter = new LogWriter();
+  m_pMainFrameManager = new CMainFrameManager();
 }
 
 CSecu3manApp::~CSecu3manApp()
@@ -45,6 +48,7 @@ CSecu3manApp::~CSecu3manApp()
   delete m_pMainFrameManager;
   delete m_pAppSettingsManager;
   delete m_pCommunicationManager;
+  delete m_pLogWriter;
 
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -79,8 +83,7 @@ BOOL CSecu3manApp::InitInstance()
   //инициализируем коммуникационный менеджер
   m_pCommunicationManager->Init();
 
-  //инициализируем менеджер главного окна
-  m_pMainFrameManager = new CMainFrameManager();
+  //инициализируем менеджер главного окна  
   m_pMainFrameManager->Init(m_pMainWnd);
 
   //дурацкий метод надо вызвать после создания главного окна...
@@ -117,4 +120,9 @@ CCommunicationManager* CSecu3manApp::GetCommunicationManager(void) const
 CMainFrameManager* CSecu3manApp::GetMainFrameManager(void) const
 {
  return m_pMainFrameManager;
+}
+
+LogWriter* CSecu3manApp::GetLogWriter(void) const
+{
+ return m_pLogWriter;
 }

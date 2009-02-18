@@ -79,7 +79,7 @@ void CCheckEngineTabController::OnActivate(void)
  m_view->EnableRWButtons(true);
 
  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
- m_comm->SetOnSettingsChanged(MakeDelegate(this,&CCheckEngineTabController::OnSettingsChanged));
+ m_comm->setOnSettingsChanged(MakeDelegate(this,&CCheckEngineTabController::OnSettingsChanged));
 
  m_real_time_errors_mode = false;
 

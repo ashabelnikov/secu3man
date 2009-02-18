@@ -29,7 +29,7 @@ CMainFrameManager::CMainFrameManager()
 
  ISECU3Man* p_secu3man = ISECU3Man::GetSECU3Man();
  m_pMainFrameController = new MainFrameController(p_secu3man->GetCommunicationManager(),
-  p_secu3man->GetAppSettingsManager(), m_pStatusBarManager, m_pMainFrame);
+  p_secu3man->GetAppSettingsManager(), m_pStatusBarManager, p_secu3man->GetLogWriter(), m_pMainFrame);
 }
 
 CMainFrameManager::~CMainFrameManager()

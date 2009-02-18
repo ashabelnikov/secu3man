@@ -13,20 +13,27 @@
 #include "common\fastdelegate.h"
 #include "about\secu-3about.h"
 #include "CommunicationManager.h"
+#include "io-core\logwriter.h"
+#include "AppSettingsModel.h"
 
 using namespace fastdelegate;
 
+#define EHKEY _T("LogWriter")
+
 MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager, 
 	                  CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager, 
-					  CMainFrame* ip_view /* = NULL*/)
+					  LogWriter* i_pLogWriter, CMainFrame* ip_view /* = NULL*/)
 : m_pCommunicationManager(i_pCommunicationManager)
 , m_pAppSettingsManager(i_pAppSettingsManager)
 , m_pStatusBarManager(i_pStatusBarManager)
+, m_pLogWriter(i_pLogWriter)
 , mp_view(ip_view)
 {
  _ASSERTE(i_pCommunicationManager); 
  _ASSERTE(i_pAppSettingsManager); 
  _ASSERTE(i_pStatusBarManager); 
+ _ASSERTE(i_pLogWriter);
+ _ASSERTE(ip_view);
  _SetDelegates(); 
 }
 
@@ -66,25 +73,48 @@ void MainFrameController::OnAppSettings()
 
 void MainFrameController::OnAppBeginLog()
 {
- m_pCommunicationManager->OnStartLogWriting();
- if (m_pCommunicationManager->IsLoggingInProcess())
-  m_pStatusBarManager->SetLoggerState(CStatusBarManager::LOG_STATE_WRITING);
+ //Активируем записывающий механизм и подключаемся к потоку данных
+ _TSTRING full_path_to_folder;
+
+ CAppSettingsModel* settings = m_pAppSettingsManager->m_pModel;
+
+ if (!settings->m_optUseAppFolder)
+  full_path_to_folder = settings->m_optLogFilesFolder;
+ else
+  full_path_to_folder = settings->GetAppDirectory();
+  
+ _TSTRING full_file_name;
+
+ bool result = m_pLogWriter->BeginLogging(full_path_to_folder, &full_file_name);
+ if (false==result)
+ {
+  CString  string;
+  string.Format(_T("Не могу начать запись лога в файл: %s\n\
+Возможно этот файл защищен от записи или уже открыт другой программой."), full_file_name.c_str());
+  AfxMessageBox(string,MB_OK | MB_ICONSTOP);
+  return;
+ }
+
+ m_pCommunicationManager->m_pAppAdapter->AddEventHandler(m_pLogWriter, EHKEY);
+ m_pStatusBarManager->SetLoggerState(CStatusBarManager::LOG_STATE_WRITING);
 }
 
 void MainFrameController::OnAppEndLog()
 {
- m_pCommunicationManager->OnStopLogWriting();
+ //Отключаемся от потока данных и деактивируем записывающий механизм	 
+ m_pCommunicationManager->m_pAppAdapter->RemoveEventHandler(EHKEY);
+ m_pLogWriter->EndLogging();
  m_pStatusBarManager->SetLoggerState(CStatusBarManager::LOG_STATE_STOPPED);
 }
 
 bool MainFrameController::IsBeginLoggingAllowed(void)
 {
- return !m_pCommunicationManager->IsLoggingInProcess();
+ return !m_pLogWriter->IsLoggingInProcess();
 }
 
 bool MainFrameController::IsEndLoggingAllowed(void)
 {
- return m_pCommunicationManager->IsLoggingInProcess();
+ return m_pLogWriter->IsLoggingInProcess();
 }
 
 void MainFrameController::SetView(CMainFrame* ip_view)
@@ -93,3 +123,4 @@ void MainFrameController::SetView(CMainFrame* ip_view)
  mp_view = ip_view;
  _SetDelegates();
 }
+

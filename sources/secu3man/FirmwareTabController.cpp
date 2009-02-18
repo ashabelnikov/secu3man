@@ -97,7 +97,7 @@ void CFirmwareTabController::OnActivate(void)
  //подключаем контроллер к потоку данных идущих от SECU-3
  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
  m_comm->m_pBldAdapter->SetEventHandler(this); 
- m_comm->SetOnSettingsChanged(MakeDelegate(this,&CFirmwareTabController::OnSettingsChanged)); 
+ m_comm->setOnSettingsChanged(MakeDelegate(this,&CFirmwareTabController::OnSettingsChanged)); 
  //////////////////////////////////////////////////////////////////
 
  //включаем необходимый для данного контекста коммуникационный контроллер

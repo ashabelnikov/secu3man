@@ -9,8 +9,6 @@
 #include "common/unicodesupport.h"
 #include "io-core/controlappadapter.h"
 #include "io-core/bootloaderadapter.h"
-#include "io-core/logwriter.h"
-
 
 
 class CCommunicationManager  
@@ -18,46 +16,31 @@ class CCommunicationManager
   public:
     typedef fastdelegate::FastDelegate0<> EventHandler;
     
-
 	CCommunicationManager();
 	virtual ~CCommunicationManager();
 
     bool Init(void);
 	void OnAfterCreate(void);
 	bool Terminate(void);
-	void SetOnSettingsChanged(EventHandler OnSettingsChanged);
+	void setOnSettingsChanged(EventHandler i_OnSettingsChanged);
 
     enum
 	{
      OP_ACTIVATE_APPLICATION,
      OP_ACTIVATE_BOOTLOADER,	
      OP_DEACTIVATE_ALL
-	};
-
-	
+	};	
 	//включение указанного коммуникационного контроллера. Если контроллер уже включен,
 	//то функция ничего не делает. Для принудительной переинициализации контроллера необходимо
 	//установить флаг i_force_reinit в true.
 	void SwitchOn(size_t i_cntr, bool i_force_reinit = false);
-
-	////////Все что касается записи логов//////////////
-	//Возвращает true,если идет процесс записи лога  
-	bool IsLoggingInProcess(void);	
-
-	//Вызов этой функции приводит к началу записи лога
-	void OnStartLogWriting(void);
-
-	//Вызов этой функции приводит к завершению записи лога
-	void OnStopLogWriting(void);
-	///////////////////////////////////////////////////
-
+	
     CAppSettingsManager* m_pSettings;
     CComPort*            m_pComPort;
     CBootLoader*         m_pBootLoader;
     CControlApp*         m_pControlApp;
 	CControlAppAdapter*  m_pAppAdapter;
-	CBootLoaderAdapter*  m_pBldAdapter;
-	LogWriter            m_logwriter;
+	CBootLoaderAdapter*  m_pBldAdapter;	
     ///////////////////////////////////////////////////
 
   private:

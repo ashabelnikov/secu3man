@@ -55,7 +55,7 @@ void CKnockChannelTabController::OnSettingsChanged(void)
 void CKnockChannelTabController::OnActivate(void)
 {
  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
- m_comm->SetOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
+ m_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);

@@ -93,7 +93,7 @@ void CParamMonTabController::OnActivate(void)
   //////////////////////////////////////////////////////////////////
   //Подключаем контроллер к потоку данных от SECU-3
   m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
-  m_comm->SetOnSettingsChanged(MakeDelegate(this,&CParamMonTabController::OnSettingsChanged)); 
+  m_comm->setOnSettingsChanged(MakeDelegate(this,&CParamMonTabController::OnSettingsChanged)); 
   //////////////////////////////////////////////////////////////////
  
   //включаем необходимый для данного контекста коммуникационный контроллер

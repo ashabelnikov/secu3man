@@ -19,6 +19,7 @@
 class CAppSettingsManager;
 class CCommunicationManager;
 class CMainFrameManager;
+class LogWriter;
 
 /////////////////////////////////////////////////////////////////////////////
 
@@ -36,14 +37,17 @@ public:
   //from ISECU3Man
   virtual CAppSettingsManager*    GetAppSettingsManager(void) const;
   virtual CCommunicationManager*  GetCommunicationManager(void) const;
-  virtual CMainFrameManager*      GetMainFrameManager(void) const; 
+  virtual CMainFrameManager*      GetMainFrameManager(void) const;
+  virtual LogWriter*              GetLogWriter(void) const;
+
 
   DECLARE_MESSAGE_MAP()
 
 private:
-  CMainFrameManager* m_pMainFrameManager;
-  CAppSettingsManager* m_pAppSettingsManager;
+  CMainFrameManager*     m_pMainFrameManager;
+  CAppSettingsManager*   m_pAppSettingsManager;
   CCommunicationManager* m_pCommunicationManager;
+  LogWriter*             m_pLogWriter; 
 };
 
 /////////////////////////////////////////////////////////////////////////////

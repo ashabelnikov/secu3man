@@ -33,11 +33,12 @@ CTabController::CTabController()
 , m_pEventHandler(NULL)
 , m_hResourceModule(NULL)
 {
-  m_hResourceModule = AfxGetInstanceHandle();
+ //na
 }
 
 CTabController::~CTabController()
 { 
+ //na
 }
 
 CTabController::TabPageData* CTabController::GetItemData(int item) const
@@ -135,6 +136,9 @@ bool CTabController::Create(CWnd* pParentWnd,const CRect& rect,UINT nID,const bo
 {
   if (FALSE == CTabCtrl::Create(m_style,rect ,pParentWnd,nID))
     return false;
+
+  if (NULL==m_hResourceModule)
+    m_hResourceModule = AfxGetInstanceHandle();
 
   m_msg_reflect = (i_msg_reflect) ? FALSE : TRUE; //отражать сообщения родительскому окну или нет?
   return true;

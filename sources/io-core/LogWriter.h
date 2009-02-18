@@ -8,6 +8,7 @@
 class AFX_EXT_CLASS LogWriter : public IAPPEventHandler
 {
 public:
+
  LogWriter();
  virtual ~LogWriter();
 
@@ -29,6 +30,10 @@ public:
   virtual void OnConnection(const bool i_online);
 
 private:
+
+  //хэндл файла в который идет запись
   FILE* m_out_handle;
+
+  //true - идет процесс записи, false - солдат спит, а служба идет. 
   bool  m_is_busy;
 };
