@@ -9,12 +9,15 @@
 
 #include "stdafx.h"
 #include "MainFrame.h"
+#include "resource.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
+
+#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
@@ -26,6 +29,12 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
   ON_WM_CREATE()
   ON_WM_SETFOCUS()
   ON_WM_CLOSE()
+  ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
+  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
+  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
+  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
+  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
+  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -104,10 +113,44 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
   return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
-
-void CMainFrame::setFunctionOnClose(EventHandler OnClose)
+void CMainFrame::SetView(CChildView* i_pChildView) 
 {
-  m_OnClose = OnClose;
+ m_pwndView = i_pChildView;
+}
+
+void CMainFrame::setOnClose(EventResult i_OnClose)
+{
+  m_OnClose = i_OnClose;
+}
+
+void CMainFrame::setOnAppAbout(EventHandler i_OnFunction) 
+{
+ m_OnAppAbout = i_OnFunction;
+}
+
+void CMainFrame::setOnAppSettings(EventHandler i_OnFunction) 
+{
+ m_OnAppSettings = i_OnFunction;
+}
+
+void CMainFrame::setOnAppBeginLog(EventHandler i_OnFunction) 
+{
+ m_OnAppBeginLog = i_OnFunction;
+}
+
+void CMainFrame::setOnAppEndLog(EventHandler i_OnFunction) 
+{
+ m_OnAppEndLog = i_OnFunction;
+}
+
+void CMainFrame::setIsBeginLoggingAllowed(EventResult i_OnFunction) 
+{
+ m_IsBeginLoggingAllowed = i_OnFunction;
+}
+
+void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction) 
+{
+ m_IsEndLoggingAllowed = i_OnFunction;
 }
 
 void CMainFrame::OnClose() 
@@ -119,3 +162,44 @@ void CMainFrame::OnClose()
   if (result)
     CFrameWnd::OnClose();
 }
+
+void CMainFrame::OnAppAbout()
+{
+ if (m_OnAppAbout)
+  m_OnAppAbout();
+}
+
+void CMainFrame::OnAppSettings()
+{
+ if (m_OnAppSettings)
+  m_OnAppSettings();
+}
+
+void CMainFrame::OnAppBeginLog()
+{
+ if (m_OnAppBeginLog)
+  m_OnAppBeginLog();
+}
+
+void CMainFrame::OnAppEndLog()
+{
+ if (m_OnAppEndLog)
+  m_OnAppEndLog();
+}
+
+void CMainFrame::OnUpdateOnAppBeginLog(CCmdUI* pCmdUI)
+{
+ BOOL enable = FALSE;
+ if (m_IsBeginLoggingAllowed)
+  enable = m_IsBeginLoggingAllowed();
+ pCmdUI->Enable(enable);
+}
+
+void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
+{
+ BOOL enable = FALSE;
+ if (m_IsEndLoggingAllowed)
+  enable = m_IsEndLoggingAllowed();
+ pCmdUI->Enable(enable);
+}
+

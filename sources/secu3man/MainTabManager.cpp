@@ -82,7 +82,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 
   
   CCommunicationManager* p_comm = ISECU3Man::GetSECU3Man()->GetCommunicationManager();
-  CStatusBarManager*     p_sbar = &ISECU3Man::GetSECU3Man()->GetMainFrameManager()->m_StatusBarManager;
+  CStatusBarManager*     p_sbar = ISECU3Man::GetSECU3Man()->GetMainFrameManager()->m_pStatusBarManager;
 
   //создаем контроллеры вкладок и наполняем Tab control вкладками
   m_pParamMonTabDlg = new CParamMonTabDlg(); //view

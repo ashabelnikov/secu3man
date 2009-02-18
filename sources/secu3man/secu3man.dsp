@@ -156,6 +156,10 @@ SOURCE=.\MainFrame.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\MainFrameController.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrameManager.cpp
 # End Source File
 # Begin Source File
@@ -270,6 +274,10 @@ SOURCE=.\KnockChannelTabDlg.h
 # Begin Source File
 
 SOURCE=.\MainFrame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrameController.h
 # End Source File
 # Begin Source File
 

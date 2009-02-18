@@ -12,7 +12,6 @@
 #include "resource.h"
 
 #include "MainFrame.h"
-#include "about/secu-3about.h"
 #include "AppSettingsDlg.h"
 #include "DLLLinkedFunctions.h"
 #include "MainFrameManager.h"
@@ -25,18 +24,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecu3manApp
 
 BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
-  //{{AFX_MSG_MAP(CSecu3manApp)
-    ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
-	ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
-	ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
-	ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
-	ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
-	ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
-	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -99,34 +88,13 @@ BOOL CSecu3manApp::InitInstance()
   return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecu3manApp message handlers
-
-void CSecu3manApp::OnAppAbout()
-{
-  DisplayAbout(this->m_pMainWnd);
-}
-
 BOOL CSecu3manApp::OnIdle(LONG lCount) 
 {	
   return CWinApp::OnIdle(lCount);
 }
 
-void CSecu3manApp::OnAppSettings() 
-{
-  int result = m_pAppSettingsManager->ShowDialog();
-
-  if (result==IDOK)
-  {
-    BeginWaitCursor();
-    m_pCommunicationManager->Init();
-	EndWaitCursor();
-  }
-}
-
 int CSecu3manApp::ExitInstance() 
-{	
-  
+{	  
   //сохраняем настройки
   m_pAppSettingsManager->WriteSettings();
 
@@ -134,31 +102,6 @@ int CSecu3manApp::ExitInstance()
   m_pCommunicationManager->Terminate();
 
   return CWinApp::ExitInstance();
-}
-
-
-void CSecu3manApp::OnAppBeginLog()
-{
- m_pCommunicationManager->OnStartLogWriting();
- if (m_pCommunicationManager->IsLoggingInProcess())
-  m_pMainFrameManager->m_StatusBarManager.SetLoggerState(CStatusBarManager::LOG_STATE_WRITING);
-}
-
-void CSecu3manApp::OnAppEndLog()
-{
- m_pCommunicationManager->OnStopLogWriting();
- m_pMainFrameManager->m_StatusBarManager.SetLoggerState(CStatusBarManager::LOG_STATE_STOPPED);
-}
-
-
-void CSecu3manApp::OnUpdateOnAppBeginLog(CCmdUI* pCmdUI)
-{
-  pCmdUI->Enable(m_pCommunicationManager->IsLoggingInProcess() ? FALSE : TRUE);
-}
-
-void CSecu3manApp::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
-{
-  pCmdUI->Enable(m_pCommunicationManager->IsLoggingInProcess() ? TRUE : FALSE);
 }
 
 CAppSettingsManager* CSecu3manApp::GetAppSettingsManager(void) const

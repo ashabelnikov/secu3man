@@ -8,21 +8,19 @@
 
 class CMainFrame;
 class CChildViewManager;
+class MainFrameController;
 
 class CMainFrameManager  
 {
-  public:
-	CMainFrame* m_pMainFrame;	
+ public:
+  CMainFrameManager();
+  virtual ~CMainFrameManager();
 
-	CChildViewManager* m_pChildViewManager;
-	CStatusBarManager  m_StatusBarManager;
+  bool Init(CWnd* &o_pMainWnd);
+  virtual bool OnClose(void);
 
-    bool Init(CWnd* &o_pMainWnd);
-
-	CMainFrameManager();
-	virtual ~CMainFrameManager();
-
-
-	virtual bool OnClose(void);
+  CMainFrame* m_pMainFrame;	//view 
+  MainFrameController* m_pMainFrameController; //controller
+  CChildViewManager* m_pChildViewManager;
+  CStatusBarManager* m_pStatusBarManager;
 };
-

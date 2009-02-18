@@ -902,8 +902,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   IAPPEventHandler* pEventHandler; 
   BYTE read_buf[RAW_BYTES_TO_READ_MAX+1];
 
-  DWORD actual_received;
-  actual_received = 0;
+  DWORD actual_received = 0;
   
   while(1) 
   {
@@ -973,7 +972,6 @@ BOOL CControlApp::SetPacketsTimer(int timeout)
   static LARGE_INTEGER liDueTime;
   liDueTime.QuadPart = timeout;      //время в милисекундах
   liDueTime.QuadPart*=-10000;        //в одной мс 10000 интервалов по 100нс
-
 
   return SetWaitableTimer(m_hTimer,     // handle to timer
 	                      &liDueTime,   // timer due time

@@ -9,45 +9,55 @@ class CMainFrame : public CFrameWnd
 {
 	
 public:
-	typedef fastdelegate::FastDelegate0<bool> EventHandler;
+	typedef fastdelegate::FastDelegate0<> EventHandler;
+	typedef fastdelegate::FastDelegate0<bool> EventResult;
 	CMainFrame();
 	virtual ~CMainFrame();
 
-protected: 
-	DECLARE_DYNAMIC(CMainFrame)
-	CSize m_wnd_initial_size;
-
-public:
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMainFrame)
 	virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
 	virtual BOOL OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo);
-	//}}AFX_VIRTUAL
 
 #ifdef _DEBUG
 	virtual void AssertValid() const;
 	virtual void Dump(CDumpContext& dc) const;
 #endif
 	
-public:	
-	CChildView*  m_pwndView;
-    void SetView(CChildView* i_pChildView) {m_pwndView = i_pChildView;};
+    void SetView(CChildView* i_pChildView);
 
     //устанавливают обработчики событий
-    virtual void setFunctionOnClose(EventHandler OnClose);
+    virtual void setOnClose(EventResult i_OnClose);
+	void setOnAppAbout(EventHandler i_OnFunction);
+	void setOnAppSettings(EventHandler i_OnFunction);
+	void setOnAppBeginLog(EventHandler i_OnFunction);
+	void setOnAppEndLog(EventHandler i_OnFunction);
+	void setIsBeginLoggingAllowed(EventResult i_OnFunction);
+	void setIsEndLoggingAllowed(EventResult i_OnFunction);
 
+	CChildView*  m_pwndView;
 
-// Generated message map functions
 protected:
-	//{{AFX_MSG(CMainFrame)
-	afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
+	DECLARE_DYNAMIC(CMainFrame)
+	CSize m_wnd_initial_size;
+
+	afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
 	afx_msg void OnClose();
-	//}}AFX_MSG
+    afx_msg void OnAppAbout();
+    afx_msg void OnAppSettings();
+    afx_msg void OnAppBeginLog();
+    afx_msg void OnAppEndLog();
+    afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
+    afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
 	DECLARE_MESSAGE_MAP()
 
 private:
-	EventHandler m_OnClose;
+	EventResult  m_OnClose;
+	EventHandler m_OnAppAbout;
+	EventHandler m_OnAppSettings;
+	EventHandler m_OnAppBeginLog;
+	EventHandler m_OnAppEndLog;
+	EventResult  m_IsBeginLoggingAllowed;
+	EventResult  m_IsEndLoggingAllowed;
 };
 
 /////////////////////////////////////////////////////////////////////////////

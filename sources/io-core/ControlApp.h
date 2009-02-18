@@ -87,7 +87,7 @@ private:
 
    IAPPEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IAPPEventHandler)
 
-   bool         m_is_thread_must_exit;
+   volatile bool m_is_thread_must_exit;
 
    Packets*     m_Packets;               //хранит списик выделенных пакетов
    std::string  m_ingoing_packet;        //используется для выделения одного пакета

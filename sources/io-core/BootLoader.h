@@ -134,7 +134,7 @@ private:
    bool      m_ThreadBusy;
    int       m_ErrorCode; 
 
-   bool      m_is_thread_must_exit;
+   volatile bool m_is_thread_must_exit;
    bool      m_work_state;
    DWORD     m_uart_speed;
 
