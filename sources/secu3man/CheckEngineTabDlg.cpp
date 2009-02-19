@@ -11,6 +11,7 @@
 #include "resource.h"
 #include "CheckEngineTabDlg.h"
 #include "common\unicodesupport.h"
+#include "ui-core\HeaderCtrlEx.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,12 +27,15 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CCheckEngineTabDlg::IDD, pParent)
 , m_all_enabled(true)
 , m_rw_buttons_enabled(true)
+, m_header_ctrl(new CHeaderCtrlEx())
 {
   //{{AFX_DATA_INIT(CCheckEngineTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
   //}}AFX_DATA_INIT
 
   m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));
+  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT); 
+  m_normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
 }
 
 
@@ -73,6 +77,7 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, CDialog)
     ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
     ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnUpdateControls)
     ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnUpdateControls)
+    ON_NOTIFY(NM_CUSTOMDRAW, IDC_CHECK_ENGINE_ERRORS_LIST, OnCustomdrawList)
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -101,6 +106,9 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
   SetTimer(TIMER_ID,250,NULL);
 
   ResetErrorsList();
+
+  m_header_ctrl->Init(m_errors_list.GetHeaderCtrl());
+  m_header_ctrl->SetTextColor(m_gray_text_color);
   
   UpdateDialogControls(this,TRUE);
   return TRUE;  // return TRUE unless you set the focus to a control
@@ -169,6 +177,7 @@ bool CCheckEngineTabDlg::GetErrorState(size_t i_id) const
 void CCheckEngineTabDlg::EnableAll(bool i_enable)
 {
  m_all_enabled = i_enable; //remember state 
+ m_header_ctrl->SetTextColor(m_all_enabled ? m_normal_text_color : m_gray_text_color);
 }
 
 void CCheckEngineTabDlg::EnableRWButtons(bool i_enable)
@@ -216,3 +225,32 @@ void CCheckEngineTabDlg::OnListClearAllErrors()
  if (m_OnListClearAllErrors)
   m_OnListClearAllErrors(); 
 }
+
+void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
+{
+ NMLVCUSTOMDRAW* pLVCD = reinterpret_cast<NMLVCUSTOMDRAW*>( pNMHDR );
+
+ // Take the default processing unless we set this to something else below.
+ *pResult = 0;
+
+ // First thing - check the draw stage. If it's the control's prepaint
+ // stage, then tell Windows we want messages for every item.
+ if ( CDDS_PREPAINT == pLVCD->nmcd.dwDrawStage )
+ {
+  *pResult = CDRF_NOTIFYITEMDRAW;
+ }
+ else if ( CDDS_ITEMPREPAINT == pLVCD->nmcd.dwDrawStage )
+ {
+  // This is the prepaint stage for an item. Here's where we set the
+  // item's text color. Our return value will tell Windows to draw the
+  // item itself, but it will use the new color we set here.
+                      
+  // Store the color back in the NMLVCUSTOMDRAW struct.
+  if (false==m_all_enabled)
+   pLVCD->clrText = m_gray_text_color;
+
+  // Tell Windows to paint the control itself.
+  *pResult = CDRF_DODEFAULT;
+ }
+}
+

@@ -108,6 +108,10 @@ SOURCE=.\EditEx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\HeaderCtrlEx.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LEDIndicator.cpp
 # End Source File
 # Begin Source File
@@ -178,6 +182,10 @@ SOURCE=.\ddx_helpers.h
 # Begin Source File
 
 SOURCE=.\EditEx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\HeaderCtrlEx.h
 # End Source File
 # Begin Source File
 

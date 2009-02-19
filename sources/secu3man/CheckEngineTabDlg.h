@@ -3,8 +3,11 @@
 #include "common/fastdelegate.h"
 #include "common\unicodesupport.h"
 #include <map>
+#include <memory>
 
 #pragma once
+
+class CHeaderCtrlEx;
 
 class CCheckEngineTabDlg : public CTabDialog
 {
@@ -44,7 +47,7 @@ public:
 	CButton m_read_saved_button;
 	CButton m_write_saved_button;
 	CButton m_list_set_all_button;
-	CButton m_list_clear_all_button;
+	CButton m_list_clear_all_button;	
 	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;
@@ -72,7 +75,7 @@ protected:
 	afx_msg void OnTimer(UINT nIDEvent);
 	afx_msg void OnListSetAllErrors();
 	afx_msg void OnListClearAllErrors();
-
+	afx_msg void OnCustomdrawList(NMHDR*, LRESULT*);
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -91,4 +94,9 @@ private:
 
 	bool m_all_enabled;
 	bool m_rw_buttons_enabled;
+
+	COLORREF m_gray_text_color;
+	COLORREF m_normal_text_color;
+
+	std::auto_ptr<CHeaderCtrlEx> m_header_ctrl;
 };
