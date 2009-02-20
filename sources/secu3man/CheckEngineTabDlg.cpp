@@ -29,15 +29,10 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 , m_rw_buttons_enabled(true)
 , m_header_ctrl(new CHeaderCtrlEx())
 {
-  //{{AFX_DATA_INIT(CCheckEngineTabDlg)
-	// NOTE: the ClassWizard will add member initialization here
-  //}}AFX_DATA_INIT
-
-  m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));
-  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT); 
-  m_normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
+ m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));
+ m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT); 
+ m_normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
 }
-
 
 void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -61,24 +56,24 @@ LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, CDialog)
   //{{AFX_MSG_MAP(CCheckEngineTabDlg)	
-	ON_WM_CLOSE()
-	ON_WM_DESTROY()
-	ON_WM_TIMER()
-	ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
-	ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnReadSavedErrors)
-	ON_BN_CLICKED(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
-	ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnListSetAllErrors)
-	ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnListClearAllErrors)
+  ON_WM_CLOSE()
+  ON_WM_DESTROY()
+  ON_WM_TIMER()
+  ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
+  ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnReadSavedErrors)
+  ON_BN_CLICKED(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
+  ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnListSetAllErrors)
+  ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnListClearAllErrors)
 
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_QUICK_HELP, OnUpdateControls)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_ERRORS_LIST, OnUpdateControls)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnUpdateControls)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnUpdateRWButtons)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnUpdateControls)
-    ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnUpdateControls)
-    ON_NOTIFY(NM_CUSTOMDRAW, IDC_CHECK_ENGINE_ERRORS_LIST, OnCustomdrawList)
-	//}}AFX_MSG_MAP
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_QUICK_HELP, OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_ERRORS_LIST, OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnUpdateRWButtons)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnUpdateControls)
+  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnUpdateControls)
+  ON_NOTIFY(NM_CUSTOMDRAW, IDC_CHECK_ENGINE_ERRORS_LIST, OnCustomdrawList)
+  //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -98,7 +93,7 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
   m_errors_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);	
 
   //устанавливаем картинки состояния для чекбоксов...
-  m_errors_list.SetImageList(&m_image_list,LVSIL_STATE);
+  m_errors_list.SetImageList(&m_image_list, LVSIL_STATE);
 
   m_errors_list.InsertColumn(0,_T("Состояние"),LVCFMT_LEFT,70);
   m_errors_list.InsertColumn(1,_T("Описание ошибки"),LVCFMT_LEFT,450);
@@ -233,24 +228,45 @@ void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
  // Take the default processing unless we set this to something else below.
  *pResult = 0;
 
- // First thing - check the draw stage. If it's the control's prepaint
- // stage, then tell Windows we want messages for every item.
+ bool is_enabled = ::IsWindowEnabled(m_errors_list.m_hWnd);
+
+ // If this is the beginning of the control's paint cycle, request
+ // notifications for each item.
  if ( CDDS_PREPAINT == pLVCD->nmcd.dwDrawStage )
  {
   *pResult = CDRF_NOTIFYITEMDRAW;
  }
  else if ( CDDS_ITEMPREPAINT == pLVCD->nmcd.dwDrawStage )
  {
-  // This is the prepaint stage for an item. Here's where we set the
-  // item's text color. Our return value will tell Windows to draw the
-  // item itself, but it will use the new color we set here.
-                      
-  // Store the color back in the NMLVCUSTOMDRAW struct.
-  if (false==m_all_enabled)
+  // This is the pre-paint stage for an item.  We need to make another
+  // request to be notified during the post-paint stage.
+  if (!is_enabled)
    pLVCD->clrText = m_gray_text_color;
-
-  // Tell Windows to paint the control itself.
-  *pResult = CDRF_DODEFAULT;
+  *pResult = CDRF_NOTIFYPOSTPAINT;
  }
+ else if ( CDDS_ITEMPOSTPAINT == pLVCD->nmcd.dwDrawStage )
+ {  		
+  int    nItem = static_cast<int>( pLVCD->nmcd.dwItemSpec );
+  LVITEM rItem;
+  ZeroMemory (&rItem, sizeof(LVITEM) );
+  rItem.mask  = LVIF_IMAGE | LVIF_STATE;
+  rItem.iItem = nItem;    
+  rItem.stateMask = 0xFFFF;     // get all state flags
+  m_errors_list.GetItem ( &rItem );
+
+  CDC*  pDC = CDC::FromHandle ( pLVCD->nmcd.hdc );
+  // Get the rect that holds the item's icon.
+  CRect rcIcon;
+  m_errors_list.GetItemRect ( nItem, &rcIcon, LVIR_BOUNDS );
+  UINT nStateImageMask = rItem.state & LVIS_STATEIMAGEMASK;
+  int nImage = (nStateImageMask >> 12) - 1;
+  
+  //TODO: What is the magic number - 2?
+  DrawState(pDC->m_hDC,NULL,NULL,(LPARAM)m_image_list.ExtractIcon(nImage), 0, 
+	  rcIcon.left+2, rcIcon.top, rcIcon.Width(), rcIcon.Height(),
+	  DST_ICON| (is_enabled ? 0 : DSS_DISABLED));
+    
+  *pResult = CDRF_DODEFAULT;
+ }	
 }
 
