@@ -24,12 +24,12 @@ static char THIS_FILE[]=__FILE__;
 CFirmwareModeContextMenuManager::CFirmwareModeContextMenuManager(CWnd* pWnd /*= NULL*/)
 : m_pWnd(pWnd)
 {
-
+ //na
 }
 
 CFirmwareModeContextMenuManager::~CFirmwareModeContextMenuManager()
 {
-
+ //na
 }
 
 void CFirmwareModeContextMenuManager::Attach(CWnd* pWnd)

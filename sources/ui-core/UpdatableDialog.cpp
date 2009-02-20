@@ -18,26 +18,30 @@ static char THIS_FILE[] = __FILE__;
 
 CUpdatableDialog::CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
 : CDialog(nIDTemplate, pParentWnd)
+, m_bDoIdle(TRUE)
 {
+ //na
 }
-
 
 BOOL CUpdatableDialog::PreTranslateMessage(MSG* pMsg) 
 {
-  static BOOL bDoIdle = TRUE;
-
+  //Этот дурацкий код нужен для работы акселераторов, иначе они не будут работать в диалогах!
+  HACCEL hAccel = ((CFrameWnd*)AfxGetApp()->m_pMainWnd)->m_hAccelTable;
+  if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel,pMsg)))
+    return TRUE;
+  
   MSG msg;
-  if(!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) && bDoIdle)
+  if(!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) && m_bDoIdle)
   {
     //вызывается один раз только когда нет сообщений в очереди
     UpdateDialogControls(this,TRUE); 
-	bDoIdle = FALSE;
+	m_bDoIdle = FALSE;
   }
   else
   {
     if(AfxGetApp()->IsIdleMessage(pMsg) && pMsg->message != 0x3FC)
 	{
-	  bDoIdle = TRUE;
+	  m_bDoIdle = TRUE;
 	}
   }
 	

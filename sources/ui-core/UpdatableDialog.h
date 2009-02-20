@@ -30,6 +30,10 @@ class AFX_EXT_CLASS CUpdatableDialog : public CDialog
 	CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
 
 	//здесь будет грязный хак! 
-	virtual BOOL PreTranslateMessage(MSG* pMsg); 
+	virtual BOOL PreTranslateMessage(MSG* pMsg);
+	
+  private:
+	BOOL m_bDoIdle;
+
 };
 

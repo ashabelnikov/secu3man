@@ -30,13 +30,13 @@ IDR_MAINFRAME MENU PRELOAD DISCARDABLE
 BEGIN
     POPUP "&File"
     BEGIN
-        MENUITEM "E&xit",                       ID_APP_EXIT
+        MENUITEM "E&xit    Ctrl + Q",           ID_APP_EXIT
     END
     MENUITEM "Параметры",                   ID_APP_SETTINGS
     POPUP "Запись лога"
     BEGIN
-        MENUITEM "Начать запись",               ID_APP_BEGIN_LOG
-        MENUITEM "Закончить запись",            ID_APP_END_LOG
+        MENUITEM "Начать запись         Ctrl + B", ID_APP_BEGIN_LOG
+        MENUITEM "Закончить запись   Ctrl + E", ID_APP_END_LOG
     END
     POPUP "&Help"
     BEGIN
@@ -394,16 +394,10 @@ IDI_LOGWR_WRITE         ICON    DISCARDABLE     "res\\logwriting.ico"
 
 IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
 BEGIN
-    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
-    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
-    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
-    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
-    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
-    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
-    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
-    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
-    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    "B",            ID_APP_BEGIN_LOG,       VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_APP_END_LOG,         VIRTKEY, CONTROL, NOINVERT
+    "O",            IDM_OPEN_FLASH,         VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
 END
 
 
