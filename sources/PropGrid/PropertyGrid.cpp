@@ -2404,6 +2404,22 @@ bool CPropertyGrid::GetFocusedItemID(HITEM& o_item_id) const
  return false; //error: there are no such item. 
 }
 
+
+bool CPropertyGrid::IsFocusedItemEnabled(void) const
+{
+ if (m_focused_item==-1)
+  return false; //there are no focused item
+
+ CItem* pItem = FindItem(m_focused_item);  
+ if (pItem!=NULL)
+ {
+  return pItem->m_editable; //is editable?
+ }
+
+ return false; //error: there are no such item. 
+}
+
+
 //will change editable flag for all items and update grid
 void CPropertyGrid::SetEditable(bool i_editable)
 {

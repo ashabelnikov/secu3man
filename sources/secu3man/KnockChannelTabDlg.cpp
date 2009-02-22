@@ -24,10 +24,12 @@ static char THIS_FILE[] = __FILE__;
 using namespace std;
 using namespace fastdelegate;
 
+#define TIMER_ID 0
 
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 , mp_RTChart(NULL)
+, m_all_enabled(true)
 {
   //{{AFX_DATA_INIT(CKnockChannelTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
@@ -54,6 +56,8 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
   //{{AFX_MSG_MAP(CKnockChannelTabDlg)	
 	ON_WM_DESTROY()	
 	ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
+	ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
+	ON_WM_TIMER()
 	//}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -65,10 +69,14 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 {
   Super::OnInitDialog();
 
-  m_knock_parameters.Create(CKnockPageDlg::IDD,this);
-  m_knock_parameters.SetWindowPos(NULL,50,60,0,0,SWP_NOZORDER|SWP_NOSIZE);
-  m_knock_parameters.ShowWindow(SW_SHOWNORMAL);
+  //создаем диалог с параметрами ДД
+  m_knock_parameters_dlg.Create(CKnockPageDlg::IDD,this);
+  m_knock_parameters_dlg.SetWindowPos(NULL,44,60,0,0,SWP_NOZORDER|SWP_NOSIZE);
+  m_knock_parameters_dlg.ShowWindow(SW_SHOWNORMAL);
 
+  SetTimer(TIMER_ID,250,NULL);
+
+  //Инициализируем построитель функций
   mp_RTChart = new CChartCtrl();
   CRect rect;
   GetDlgItem(IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
@@ -92,10 +100,29 @@ void CKnockChannelTabDlg::OnDestroy()
 {
   Super::OnDestroy();  
   delete mp_RTChart;
+  KillTimer(TIMER_ID);
 }
 
 void CKnockChannelTabDlg::OnSaveParameters(void)
 {
  if (m_OnSaveParameters)
   m_OnSaveParameters();
+}
+
+void CKnockChannelTabDlg::EnableAll(bool i_enable)
+{
+ m_all_enabled = i_enable; //remember state 
+ UpdateDialogControls(this,TRUE);
+}
+
+void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI) 
+{
+ pCmdUI->Enable(m_all_enabled);  
+}
+
+void CKnockChannelTabDlg::OnTimer(UINT nIDEvent) 
+{
+  //dirty hack
+  UpdateDialogControls(this,TRUE);
+  Super::OnTimer(nIDEvent);  
 }

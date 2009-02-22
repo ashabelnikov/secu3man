@@ -153,6 +153,9 @@ public:
   bool IsSectionCollapsed(HSECTION hs);
 
   bool GetFocusedItemID(HITEM&) const;
+  //returns true if currently focused item is enabled, otherwise false. 
+  //If there no focused item, this function will return false.
+  bool IsFocusedItemEnabled(void) const;
   void SetEditable(bool i_editable);
 
 protected:

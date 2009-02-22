@@ -40,8 +40,7 @@ void CCustValSelector::DrawItem(CDC& dc, CRect rc, bool focused)
     // for propert clean up
     CFont* pOldFont = dc.SelectObject(m_pGrid->GetFontBold());
 
-
-	if (IsLeftBoundReached())
+	if (IsLeftBoundReached() || !m_pGrid->IsFocusedItemEnabled())
      dc.SetTextColor(color_disabled);
 	else
      dc.SetTextColor(color_normal);
@@ -55,7 +54,7 @@ void CCustValSelector::DrawItem(CDC& dc, CRect rc, bool focused)
     dc.DrawText("<", rc1, DT_CENTER|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX);
 
 
-    if (IsRightBoundReached())
+    if (IsRightBoundReached() || !m_pGrid->IsFocusedItemEnabled())
      dc.SetTextColor(color_disabled);
 	else
      dc.SetTextColor(color_normal);
