@@ -112,6 +112,10 @@ SOURCE=.\HeaderCtrlEx.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\HotKeysToCmdRouter.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LEDIndicator.cpp
 # End Source File
 # Begin Source File
@@ -161,6 +165,14 @@ SOURCE=.\UpdatableDialog.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\WndSubclasser.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\WndSubclasser.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\XBrowseForFolder.cpp
 # End Source File
 # End Group
@@ -186,6 +198,10 @@ SOURCE=.\EditEx.h
 # Begin Source File
 
 SOURCE=.\HeaderCtrlEx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\HotKeysToCmdRouter.h
 # End Source File
 # Begin Source File
 

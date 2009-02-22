@@ -12,6 +12,7 @@
 #include "FirmwareTabDlg.h"
 #include "FirmwareContextMenuManager.h"
 #include "DLLLinkedFunctions.h"
+#include "ui-core\HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -163,6 +164,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_ParamDeskDlg(NULL, true) //<-- используем вкладку параметров детонации
+, m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
   //{{AFX_DATA_INIT(CFirmwareTabDlg)
 	// NOTE: the ClassWizard will add member initialization here
@@ -277,7 +279,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
   ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
     	
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareControls)
-  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)
+  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)  
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -300,6 +302,9 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
   //в коде прошивки выдолено ограниченное количество байтов для строки иныормации
   m_fw_information_edit.SetLimitText(48);  
+
+  m_hot_keys_supplier->Init(this);
+  _RegisterHotKeys();
 
   UpdateDialogControls(this,TRUE);
   return TRUE;  // return TRUE unless you set the focus to a control
@@ -514,13 +519,14 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
   //обновляем состояние (если нужно)
   bool pd_enable = IsFirmwareOpened();
   if (m_ParamDeskDlg.IsEnabled()!=pd_enable)
-    m_ParamDeskDlg.Enable(pd_enable);
+    m_ParamDeskDlg.Enable(pd_enable);  
 }
 
 void CFirmwareTabDlg::OnDestroy() 
 {
   CDialog::OnDestroy();
-  KillTimer(TIMER_ID);		
+  KillTimer(TIMER_ID);	
+  m_hot_keys_supplier->Close();
 }
 
 //делегаты
@@ -777,4 +783,10 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  {
   ::SetFocus(m_attenuator_map_wnd_handle);
  }	
+}
+
+void CFirmwareTabDlg::_RegisterHotKeys(void)
+{
+ m_hot_keys_supplier->RegisterCommand(IDM_OPEN_FLASH, 'O', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_SAVE_FLASH, 'S', MOD_CONTROL);
 }

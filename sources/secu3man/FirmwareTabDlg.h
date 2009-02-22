@@ -15,7 +15,7 @@ enum EMapTypes
   TYPE_MAP_ATTENUATOR
 };
 
-
+class CHotKeysToCmdRouter;
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -170,7 +170,7 @@ protected:
 	afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
 	afx_msg void OnImportMapsFromMPSZ();
 	afx_msg void OnExportMapsToMPSZ();
-	afx_msg void OnFirmwareSupportViewAttenuatorMap();
+	afx_msg void OnFirmwareSupportViewAttenuatorMap();			  
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -207,6 +207,9 @@ public: //for C functions
     int m_attenuator_map_chart_state;
 
 private:
+	void _RegisterHotKeys(void);
+	std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
+
     HWND m_start_map_wnd_handle;
     HWND m_idle_map_wnd_handle;
     HWND m_work_map_wnd_handle;
