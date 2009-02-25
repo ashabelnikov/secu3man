@@ -162,7 +162,7 @@ BEGIN
     PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,
                     19
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,241,16,224,144
+                    SS_BLACKFRAME | NOT WS_VISIBLE,241,16,224,71
     CONTROL         "функция от оборотов",IDC_KNOCK_CHANNEL_NOISE_FROM_SPEED,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,257,167,102,12
     CONTROL         "функция от времени",IDC_KNOCK_CHANNEL_NOISE_FROM_TIME,

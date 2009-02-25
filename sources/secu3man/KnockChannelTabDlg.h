@@ -7,6 +7,9 @@
 
 #pragma once
 
+#define NUMBER 100
+
+
 class CKnockChannelTabDlg : public CTabDialog
 {
 	typedef CTabDialog Super;
@@ -21,6 +24,8 @@ public:
 	void setOnSaveParameters(EventHandler OnFunction) {m_OnSaveParameters = OnFunction;}
 
 	void EnableAll(bool i_enable);
+
+	void AppendPoint(float value); 
 
 public:
 
@@ -56,4 +61,7 @@ protected:
 private:
     EventHandler  m_OnSaveParameters;  
 	bool m_all_enabled;
+
+	double YValues[NUMBER];
+	double XValues[NUMBER];
 };

@@ -13,6 +13,7 @@
 #include "KnockChannelTabDlg.h"
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
+#include <math.h>
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -139,6 +140,10 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
 	  else
 	  {
 	   /*m_view->m_MIDeskDlg.SetValues((SensorDat*)(ip_packet)); 	*/
+       //SensorDat* p_sensors = (SensorDat*)ip_packet; 
+	   static float angle = .0; 
+	   m_view->AppendPoint((sin(angle)*1.2)+2.0);
+	   angle+=0.2;
 	  }
 	  break;	
 	}//switch

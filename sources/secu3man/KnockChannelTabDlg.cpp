@@ -12,6 +12,7 @@
 #include "KnockChannelTabDlg.h"
 #include "common/FastDelegate.h"
 #include "DLLLinkedFunctions.h"
+#include <math.h>
 
 #include "HiSCCtrl/sources/ChartPointsSerie.h"
 
@@ -64,6 +65,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CKnockChannelTabDlg message handlers
 
+CChartPointsSerie* pPointSerie;
 
 BOOL CKnockChannelTabDlg::OnInitDialog() 
 {
@@ -83,14 +85,45 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
   ScreenToClient(rect);
   mp_RTChart->Create(this,rect,IDC_KNOCK_CHANNEL_REALTIME_CHART);
  
-  CChartPointsSerie* pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
+  pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
 
-  pPointSerie->AddPoint(4,7);
-  pPointSerie->AddPoint(6,3);
-  pPointSerie->AddPoint(2,8);
-  pPointSerie->AddPoint(5,4);
+ 
+COLORREF BackColor = RGB(0,50,0);
+COLORREF GridColor = RGB(0,180,0);
+COLORREF TextColor = RGB(0,180,0);
+COLORREF SerieColor = RGB(250,250,180);
 
-  
+
+// Specifies a sunken border for the control
+mp_RTChart->SetEdgeType(EDGE_SUNKEN);
+
+// Sets the color of the border and the back color
+mp_RTChart->SetBorderColor(TextColor);
+mp_RTChart->SetBackColor(BackColor);
+
+// Sets the min and max values of the bottom and left axis to -15 -> 15
+mp_RTChart->GetBottomAxis()->SetMinMax(0,10);
+mp_RTChart->GetLeftAxis()->SetMinMax(0,5);
+
+//Sets the color of the different elements of the bottom axis
+mp_RTChart->GetBottomAxis()->SetColor(TextColor);
+mp_RTChart->GetBottomAxis()->SetTextColor(TextColor);
+mp_RTChart->GetBottomAxis()->GetGrid()->SetColor(GridColor);
+
+// Sets the color of the different elements of the left axis
+mp_RTChart->GetLeftAxis()->SetColor(TextColor);
+mp_RTChart->GetLeftAxis()->SetTextColor(TextColor);
+mp_RTChart->GetLeftAxis()->GetGrid()->SetColor(GridColor);
+mp_RTChart->GetLeftAxis()->SetTickIncrement(false, 1.0);
+
+// Change the color of the line series
+pPointSerie->SetColor(SerieColor);
+
+  for (int i = 0; i < NUMBER; i++)
+  {	  
+  XValues[i] = i * (10.0 / NUMBER);
+  }
+
   return TRUE;  // return TRUE unless you set the focus to a control
                 // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -125,4 +158,21 @@ void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
   //dirty hack
   UpdateDialogControls(this,TRUE);
   Super::OnTimer(nIDEvent);  
+}
+
+
+void CKnockChannelTabDlg::AppendPoint(float value)
+{
+ size_t c = pPointSerie->GetPointsCount();
+
+ for (int i = 0; i < (NUMBER -1); i++)
+   YValues[i] = YValues[i+1];  
+
+ YValues[NUMBER - 1] = value;
+
+ if (c!=NUMBER)
+  pPointSerie->SetPoints(&XValues[(NUMBER-1)-c],&YValues[(NUMBER-1)-c], c+1);
+ else
+  pPointSerie->SetPoints(XValues,YValues,NUMBER);
+
 }
