@@ -4,6 +4,7 @@
 #include "common\fastdelegate.h"
 #include "HiSCCtrl/sources/ChartCtrl.h"
 #include "ParamDesk/KnockPageDlg.h"
+#include "ui-core\OScopeCtrl.h"
 
 #pragma once
 
@@ -35,6 +36,7 @@ public:
 	CButton m_param_save_button;
 	CChartCtrl* mp_RTChart;
 	CKnockPageDlg m_knock_parameters_dlg;
+	COScopeCtrl m_OScopeCtrl;
 	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;

@@ -128,6 +128,10 @@ SOURCE=.\MPCStatusBar.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\OScopeCtrl.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\ProgressCtrlEx.cpp
 # End Source File
 # Begin Source File
@@ -218,6 +222,10 @@ SOURCE=.\MPCLogoPane.h
 # Begin Source File
 
 SOURCE=.\MPCStatusBar.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\OScopeCtrl.h
 # End Source File
 # Begin Source File
 

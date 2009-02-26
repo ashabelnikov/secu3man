@@ -94,6 +94,7 @@
 #define IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON 4091
 #define ID_MSB_INDICATOR_LOGWR          4092
 #define IDI_LOGWR_WRITE                 4093
+#define IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER 4094
 
 // Next default values for new objects
 // 
@@ -101,7 +102,7 @@
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        4203
 #define _APS_NEXT_COMMAND_VALUE         4302
-#define _APS_NEXT_CONTROL_VALUE         4412
+#define _APS_NEXT_CONTROL_VALUE         4413
 #define _APS_NEXT_SYMED_VALUE           101
 #endif
 #endif

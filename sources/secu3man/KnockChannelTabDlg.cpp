@@ -124,6 +124,27 @@ pPointSerie->SetColor(SerieColor);
   XValues[i] = i * (10.0 / NUMBER);
   }
 
+
+//////////////////////////////////////////////////////////////////////////
+  {
+  CRect rect;
+  GetDlgItem(IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect) ;
+  ScreenToClient(rect) ;
+
+  // create the control
+
+  m_OScopeCtrl.Create(WS_VISIBLE | WS_CHILD, rect, this) ; 
+
+  // customize the control
+
+  m_OScopeCtrl.SetRange(0.0, 5.0, 1) ;
+  m_OScopeCtrl.SetYUnits("Volts") ;
+  m_OScopeCtrl.SetXUnits("Samples, grid 1x4") ;
+  m_OScopeCtrl.SetBackgroundColor(RGB(0, 0, 64)) ;
+  m_OScopeCtrl.SetGridColor(RGB(192, 192, 255)) ;
+  m_OScopeCtrl.SetPlotColor(RGB(255, 255, 255)) ;
+  }
+
   return TRUE;  // return TRUE unless you set the focus to a control
                 // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -163,7 +184,7 @@ void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
 
 void CKnockChannelTabDlg::AppendPoint(float value)
 {
- size_t c = pPointSerie->GetPointsCount();
+ /*size_t c = pPointSerie->GetPointsCount();
 
  for (int i = 0; i < (NUMBER -1); i++)
    YValues[i] = YValues[i+1];  
@@ -174,5 +195,7 @@ void CKnockChannelTabDlg::AppendPoint(float value)
   pPointSerie->SetPoints(&XValues[(NUMBER-1)-c],&YValues[(NUMBER-1)-c], c+1);
  else
   pPointSerie->SetPoints(XValues,YValues,NUMBER);
+*/
 
+ m_OScopeCtrl.AppendPoint(value);
 }
