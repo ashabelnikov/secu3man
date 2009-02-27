@@ -123,11 +123,8 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
        m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
 	  }
 	  else
-	  {
-       //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-	  /* m_view->m_MIDeskDlg.SetValues((SensorDat*)(ip_packet)); 	
-       bool state = m_comm->m_pControlApp->GetOnlineStatus();
-	   m_view->m_MIDeskDlg.Enable(state);*/
+	  {       
+       _HandleSample((SensorDat*)(ip_packet), true);
 	   m_packet_processing_state = PPS_READ_MONITOR_DATA;
 	  }
 	  break;
@@ -138,12 +135,8 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
        m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
 	  }
 	  else
-	  {
-	   /*m_view->m_MIDeskDlg.SetValues((SensorDat*)(ip_packet)); 	*/
-       //SensorDat* p_sensors = (SensorDat*)ip_packet; 
-	   static float angle = .0; 
-	   m_view->AppendPoint((sin(angle)*1.2)+2.0);
-	   angle+=0.2;
+	  {	   
+       _HandleSample((SensorDat*)(ip_packet), false);	   
 	  }
 	  break;	
 	}//switch
@@ -246,3 +239,14 @@ void CKnockChannelTabController::OnParamsChangesTimer(void)
   }
 }
 
+void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time)
+{
+ //добавляем новое значение в осциллограф
+ m_view->AppendPoint(p_packet->knock_k);
+
+ //-----------------------------------
+ /*std::vector<float> v;
+ for(int i = 0; i < 128; i++)
+   v.push_back((sin(((float)i)/10.0)*2) + 2.5);
+ m_view->SetRPMKnockSignal(v);*/
+}

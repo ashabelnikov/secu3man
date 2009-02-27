@@ -8,8 +8,7 @@
 
 #pragma once
 
-#define NUMBER 100
-
+class CChartPointsSerie;
 
 class CKnockChannelTabDlg : public CTabDialog
 {
@@ -17,53 +16,44 @@ class CKnockChannelTabDlg : public CTabDialog
 public:
 	typedef fastdelegate::FastDelegate0<> EventHandler;
 
-
-// Construction
-public:
 	CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor  
 	
-	void setOnSaveParameters(EventHandler OnFunction) {m_OnSaveParameters = OnFunction;}
+	void setOnSaveParameters(EventHandler OnFunction);
 
 	void EnableAll(bool i_enable);
 
+	//Добавляет новую выборку в осциллограф
 	void AppendPoint(float value); 
 
-public:
+	//Установка значений функции для графика который показывает зависимость сигнала от оборотов
+	void SetRPMKnockSignal(const std::vector<float> &i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CKnockChannelTabDlg)
+	enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
 	enum { IDD = IDD_KNOCK_CHANNEL };
-	CButton m_param_save_button;
-	CChartCtrl* mp_RTChart;
-	CKnockPageDlg m_knock_parameters_dlg;
-	COScopeCtrl m_OScopeCtrl;
-	//}}AFX_DATA
 
    virtual LPCTSTR GetDialogID(void) const;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CKnockChannelTabDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
+   CKnockPageDlg m_knock_parameters_dlg;
 protected:	
-	// Generated message map functions
-	//{{AFX_MSG(CKnockChannelTabDlg)
-	virtual BOOL OnInitDialog();		
-	afx_msg void OnDestroy();
-	afx_msg void OnSaveParameters();
-	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-	afx_msg void OnTimer(UINT nIDEvent);
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+   virtual BOOL OnInitDialog();		
+   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+   afx_msg void OnDestroy();
+   afx_msg void OnSaveParameters();
+   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+   afx_msg void OnTimer(UINT nIDEvent);
+   DECLARE_MESSAGE_MAP()
+
+        
+   void _InitializeOscilloscopeControl(void);
+   void _InitializeRPMKnockSignalControl(void);
+
+   CButton  m_param_save_button;
+   CChartCtrl* mp_RTChart;
+   CChartPointsSerie* m_pPointSerie;
+   CChartLineSerie* m_pLineSerie;
+   COScopeCtrl m_OScopeCtrl;
 
 private:
     EventHandler  m_OnSaveParameters;  
 	bool m_all_enabled;
-
-	double YValues[NUMBER];
-	double XValues[NUMBER];
 };

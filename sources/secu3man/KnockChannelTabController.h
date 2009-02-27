@@ -49,6 +49,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 
     void StartReadingNecessaryParameters(void); 
     bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
+	void _HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time);
 
     int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
 	int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен

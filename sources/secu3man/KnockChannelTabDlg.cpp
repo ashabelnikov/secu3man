@@ -15,6 +15,7 @@
 #include <math.h>
 
 #include "HiSCCtrl/sources/ChartPointsSerie.h"
+#include "HiSCCtrl/sources/ChartLineSerie.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -31,35 +32,30 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 , mp_RTChart(NULL)
 , m_all_enabled(true)
+, m_pPointSerie(NULL)
+, m_pLineSerie(NULL)
 {
-  //{{AFX_DATA_INIT(CKnockChannelTabDlg)
-	// NOTE: the ClassWizard will add member initialization here
-  //}}AFX_DATA_INIT
-  
+ //na  
 }
 
 
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
-  Super::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CKnockChannelTabDlg) 
-  DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);  
-  //}}AFX_DATA_MAP
+ Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);  
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 {
-  return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD; 
 }
 
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
-  //{{AFX_MSG_MAP(CKnockChannelTabDlg)	
-	ON_WM_DESTROY()	
-	ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
-	ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
-	ON_WM_TIMER()
-	//}}AFX_MSG_MAP
+ ON_WM_DESTROY()	
+ ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
+ ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
+ ON_WM_TIMER()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -69,92 +65,31 @@ CChartPointsSerie* pPointSerie;
 
 BOOL CKnockChannelTabDlg::OnInitDialog() 
 {
-  Super::OnInitDialog();
+ Super::OnInitDialog();
 
-  //создаем диалог с параметрами ДД
-  m_knock_parameters_dlg.Create(CKnockPageDlg::IDD,this);
-  m_knock_parameters_dlg.SetWindowPos(NULL,44,60,0,0,SWP_NOZORDER|SWP_NOSIZE);
-  m_knock_parameters_dlg.ShowWindow(SW_SHOWNORMAL);
+ //создаем диалог с параметрами ДД
+ m_knock_parameters_dlg.Create(CKnockPageDlg::IDD,this);
+ m_knock_parameters_dlg.SetWindowPos(NULL,44,60,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ m_knock_parameters_dlg.ShowWindow(SW_SHOWNORMAL);
 
-  SetTimer(TIMER_ID,250,NULL);
+ SetTimer(TIMER_ID,250,NULL);
 
-  //Инициализируем построитель функций
-  mp_RTChart = new CChartCtrl();
-  CRect rect;
-  GetDlgItem(IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
-  ScreenToClient(rect);
-  mp_RTChart->Create(this,rect,IDC_KNOCK_CHANNEL_REALTIME_CHART);
- 
-  pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
+ //Инициализируем построитель функций
+ _InitializeRPMKnockSignalControl();
 
- 
-COLORREF BackColor = RGB(0,50,0);
-COLORREF GridColor = RGB(0,180,0);
-COLORREF TextColor = RGB(0,180,0);
-COLORREF SerieColor = RGB(250,250,180);
+ //инициализируем осциллограф
+ _InitializeOscilloscopeControl();
 
-
-// Specifies a sunken border for the control
-mp_RTChart->SetEdgeType(EDGE_SUNKEN);
-
-// Sets the color of the border and the back color
-mp_RTChart->SetBorderColor(TextColor);
-mp_RTChart->SetBackColor(BackColor);
-
-// Sets the min and max values of the bottom and left axis to -15 -> 15
-mp_RTChart->GetBottomAxis()->SetMinMax(0,10);
-mp_RTChart->GetLeftAxis()->SetMinMax(0,5);
-
-//Sets the color of the different elements of the bottom axis
-mp_RTChart->GetBottomAxis()->SetColor(TextColor);
-mp_RTChart->GetBottomAxis()->SetTextColor(TextColor);
-mp_RTChart->GetBottomAxis()->GetGrid()->SetColor(GridColor);
-
-// Sets the color of the different elements of the left axis
-mp_RTChart->GetLeftAxis()->SetColor(TextColor);
-mp_RTChart->GetLeftAxis()->SetTextColor(TextColor);
-mp_RTChart->GetLeftAxis()->GetGrid()->SetColor(GridColor);
-mp_RTChart->GetLeftAxis()->SetTickIncrement(false, 1.0);
-
-// Change the color of the line series
-pPointSerie->SetColor(SerieColor);
-
-  for (int i = 0; i < NUMBER; i++)
-  {	  
-  XValues[i] = i * (10.0 / NUMBER);
-  }
-
-
-//////////////////////////////////////////////////////////////////////////
-  {
-  CRect rect;
-  GetDlgItem(IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect) ;
-  ScreenToClient(rect) ;
-
-  // create the control
-
-  m_OScopeCtrl.Create(WS_VISIBLE | WS_CHILD, rect, this) ; 
-
-  // customize the control
-
-  m_OScopeCtrl.SetRange(0.0, 5.0, 1) ;
-  m_OScopeCtrl.SetYUnits("Volts") ;
-  m_OScopeCtrl.SetXUnits("Samples, grid 1x4") ;
-  m_OScopeCtrl.SetBackgroundColor(RGB(0, 0, 64)) ;
-  m_OScopeCtrl.SetGridColor(RGB(192, 192, 255)) ;
-  m_OScopeCtrl.SetPlotColor(RGB(255, 255, 255)) ;
-  }
-
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+ return TRUE;  // return TRUE unless you set the focus to a control
+               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 
 void CKnockChannelTabDlg::OnDestroy() 
 {
-  Super::OnDestroy();  
-  delete mp_RTChart;
-  KillTimer(TIMER_ID);
+ Super::OnDestroy();  
+ delete mp_RTChart;
+ KillTimer(TIMER_ID);
 }
 
 void CKnockChannelTabDlg::OnSaveParameters(void)
@@ -176,26 +111,79 @@ void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CKnockChannelTabDlg::OnTimer(UINT nIDEvent) 
 {
-  //dirty hack
-  UpdateDialogControls(this,TRUE);
-  Super::OnTimer(nIDEvent);  
+ //dirty hack
+ UpdateDialogControls(this,TRUE);
+ Super::OnTimer(nIDEvent);  
 }
 
 
 void CKnockChannelTabDlg::AppendPoint(float value)
 {
- /*size_t c = pPointSerie->GetPointsCount();
-
- for (int i = 0; i < (NUMBER -1); i++)
-   YValues[i] = YValues[i+1];  
-
- YValues[NUMBER - 1] = value;
-
- if (c!=NUMBER)
-  pPointSerie->SetPoints(&XValues[(NUMBER-1)-c],&YValues[(NUMBER-1)-c], c+1);
- else
-  pPointSerie->SetPoints(XValues,YValues,NUMBER);
-*/
-
  m_OScopeCtrl.AppendPoint(value);
+}
+
+
+void CKnockChannelTabDlg::SetRPMKnockSignal(const std::vector<float> &i_values)
+{
+ _ASSERTE(i_values.size()==RPM_KNOCK_SIGNAL_POINTS);
+ mp_RTChart->EnableRefresh(false);
+ for(size_t i = 0; i < i_values.size(); i++)
+ {
+  m_pPointSerie->SetYPointValue(i, i_values[i]);
+  m_pLineSerie->SetYPointValue(i, i_values[i]);
+ }
+ mp_RTChart->EnableRefresh(true);
+}
+
+void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
+{
+ //Инициализируем построитель функций
+ mp_RTChart = new CChartCtrl();
+ CRect rect;
+ GetDlgItem(IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_RTChart->Create(this,rect,IDC_KNOCK_CHANNEL_REALTIME_CHART);
+
+ m_pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
+ m_pLineSerie = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
+
+ m_pLineSerie->SetColor(RGB(80,80,200));
+
+ int rpm = 200;
+ int rpm_step = 60;
+ // Sets the min and max values of the bottom and left axis.
+ mp_RTChart->GetBottomAxis()->SetMinMax(rpm, rpm + (rpm_step * RPM_KNOCK_SIGNAL_POINTS));
+ mp_RTChart->GetLeftAxis()->SetMinMax(0,5.0); 
+
+ for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
+  {	  
+  m_pPointSerie->AddPoint(rpm,0.0);
+  m_pLineSerie->AddPoint(rpm,0.0);
+  rpm+=rpm_step;
+  }
+}
+
+
+//инициализация осциллографа
+void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
+{
+ CRect rect;
+ GetDlgItem(IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect) ;
+ ScreenToClient(rect) ;
+
+ // create the control
+ m_OScopeCtrl.Create(WS_VISIBLE | WS_CHILD, rect, this) ; 
+
+ // customize the control
+ m_OScopeCtrl.SetRange(0.0, 5.0, 1) ;
+ m_OScopeCtrl.SetYUnits("Volts") ;
+ m_OScopeCtrl.SetXUnits("Samples, grid 1x4") ;
+ m_OScopeCtrl.SetBackgroundColor(RGB(0, 0, 64)) ;
+ m_OScopeCtrl.SetGridColor(RGB(192, 192, 255)) ;
+ m_OScopeCtrl.SetPlotColor(RGB(255, 255, 255)) ;
+}
+
+void CKnockChannelTabDlg::setOnSaveParameters(EventHandler OnFunction) 
+{
+ m_OnSaveParameters = OnFunction;
 }
