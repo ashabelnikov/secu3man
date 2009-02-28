@@ -15,8 +15,13 @@ class CMainFrameManager
  public:
   CMainFrameManager();
   virtual ~CMainFrameManager();
-
+  
+  //Создает пустое главное окно и возвращает указатель не него
+  CMainFrame* GreateMainWindow(void);
+  
+  //инициализирует содержимое окна и дочерние контроллеры
   bool Init(CWnd* &o_pMainWnd);
+
   virtual bool OnClose(void);
 
   CMainFrame* m_pMainFrame;	//view 

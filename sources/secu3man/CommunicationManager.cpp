@@ -118,21 +118,21 @@ bool CCommunicationManager::Init(void)
 	status = false;
   }
 
+  //Инициализруем адаптеры коммуникационных контроллеров
+  CWnd* pParent = AfxGetApp()->m_pMainWnd;
+  VERIFY(m_pAppAdapter->Create(pParent));
+  VERIFY(m_pBldAdapter->Create(pParent));
+
+  //Связываем адаптеры с коммуникационными контроллерами
   m_pControlApp->SetEventHandler(m_pAppAdapter);
   m_pBootLoader->SetEventHandler(m_pBldAdapter);
 
-  //оповещаем объекта слушателя об изменении настроек
+  //оповещаем объекта слушателя об изменении настроек. Получатель этого оповещения должен активировать
+  //необходимый ему коммуникационный контроллер.
   if (m_OnSettingsChanged) 
 	m_OnSettingsChanged();
 
   return status;
-}
-
-void CCommunicationManager::OnAfterCreate(void)
-{
-  CWnd* pParent = AfxGetApp()->m_pMainWnd;
-  VERIFY(m_pAppAdapter->Create(pParent));
-  VERIFY(m_pBldAdapter->Create(pParent));
 }
 
 //активирование указанного коммуникационного контроллера или деактивирование всех контроллеров

@@ -80,14 +80,16 @@ BOOL CSecu3manApp::InitInstance()
   //читаем настройки
   m_pAppSettingsManager->ReadSettings();
  
+  //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
+  //дальнейшая инициализация.
+  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
+
   //инициализируем коммуникационный менеджер
   m_pCommunicationManager->Init();
 
-  //инициализируем менеджер главного окна  
+  //Инициализируем содержимое главного окна (дочерние контроллеры).  
   m_pMainFrameManager->Init(m_pMainWnd);
 
-  //дурацкий метод надо вызвать после создания главного окна...
-  m_pCommunicationManager->OnAfterCreate();
   return TRUE;
 }
 

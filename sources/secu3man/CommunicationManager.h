@@ -19,8 +19,7 @@ class CCommunicationManager
 	CCommunicationManager();
 	virtual ~CCommunicationManager();
 
-    bool Init(void);
-	void OnAfterCreate(void);
+    bool Init(void);	
 	bool Terminate(void);
 	void setOnSettingsChanged(EventHandler i_OnSettingsChanged);
 

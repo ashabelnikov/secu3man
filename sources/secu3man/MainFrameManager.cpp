@@ -40,15 +40,22 @@ CMainFrameManager::~CMainFrameManager()
   //do not delete m_pMainFrame!
 }
 
-bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
-{    
+
+CMainFrame* CMainFrameManager::GreateMainWindow(void)
+{
+  _ASSERTE(m_pMainFrame);
   // create and load the frame with its resources
   m_pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,NULL,NULL);
 
   HICON  hFrameIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
   m_pMainFrame->SetIcon(hFrameIcon,TRUE);
 
-  o_pMainWnd = m_pMainFrame;
+  return m_pMainFrame;
+}
+
+bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
+{    
+  _ASSERTE(m_pMainFrame);
 
   //инициализируем менеджер StatusBar-a
   m_pStatusBarManager->Create(m_pMainFrame);
