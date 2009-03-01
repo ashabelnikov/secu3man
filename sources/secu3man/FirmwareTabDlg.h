@@ -49,6 +49,9 @@ public:
 	void EnableBLItems(bool enable);
 	bool IsBLItemsEnabled(void) {return m_is_bl_items_available;};
 
+	void EnableAppItems(bool enable);
+	bool IsAppItemsEnabled(void) {return m_is_app_items_available;};
+
 	void SetFWInformationText(CString i_text);
 	CString GetFWInformationText(void);
 
@@ -138,6 +141,7 @@ protected:
 	afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePopupMenu_file(CCmdUI* pCmdUI);
 	afx_msg void OnUpdatePopupMenu_file1(CCmdUI* pCmdUI);
+	afx_msg void OnUpdatePopupMenu_app(CCmdUI* pCmdUI);
 	afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
 	afx_msg void OnFirmwareSupportViewStartMap();
 	afx_msg void OnFirmwareSupportViewIdleMap();
@@ -170,7 +174,8 @@ protected:
 	afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
 	afx_msg void OnImportMapsFromMPSZ();
 	afx_msg void OnExportMapsToMPSZ();
-	afx_msg void OnFirmwareSupportViewAttenuatorMap();			  
+	afx_msg void OnFirmwareSupportViewAttenuatorMap();		
+	afx_msg void OnWirmwareInfo();
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
 
@@ -193,6 +198,7 @@ public: //события от меню
 	void setOnImportDataFromSECU3(EventHandler OnFunction) {m_OnImportDataFromSECU3 = OnFunction;}
 	void setOnImportMapsFromMPSZ(EventHandler OnFunction) {m_OnImportMapsFromMPSZ = OnFunction;}
 	void setOnExportMapsToMPSZ(EventHandler OnFunction) {m_OnExportMapsToMPSZ = OnFunction;}
+	void setOnFirmwareInfo(EventHandler OnFunction) {m_OnFirmwareInfo = OnFunction;}
 
 public: //события от кнопок и чекбоксов
     void setOnBLStartedEmergency(EventHandler OnFunction) {m_OnBLStartedEmergency = OnFunction;}
@@ -236,6 +242,7 @@ private:
 	EventHandler  m_OnImportDataFromSECU3;
 	EventHandler  m_OnImportMapsFromMPSZ;
 	EventHandler  m_OnExportMapsToMPSZ;
+	EventHandler  m_OnFirmwareInfo;
 
 	static void __cdecl OnChangeStartMap(void* i_param);
     static void __cdecl OnCloseStartMap(void* i_param);
@@ -258,6 +265,7 @@ private:
 
 	bool m_is_bl_started_emergency_available;
 	bool m_is_bl_items_available;
+	bool m_is_app_items_available;
 
 
 	///////////////////////////////////////////////////////

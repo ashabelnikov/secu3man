@@ -71,6 +71,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	void OnImportDataFromSECU3(void);
 	void OnImportMapsFromMPSZ(void);
 	void OnExportMapsToMPSZ(void);
+	void OnWirmwareInfo(void);
 
 	void OnFWInformationTextChanged(void);
 	void OnMapChanged(int i_type);

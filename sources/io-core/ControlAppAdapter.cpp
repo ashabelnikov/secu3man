@@ -44,7 +44,9 @@ CControlAppAdapter::~CControlAppAdapter()
 
 BOOL CControlAppAdapter::Create(CWnd* pParentWnd)
 {
- ASSERT(pParentWnd);		
+ ASSERT(pParentWnd);	
+ if (::IsWindow(m_hWnd))
+  return TRUE; //уже создано - ничего не делаем
  return CWnd::Create(NULL,_T("CControlApp_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
 }
 

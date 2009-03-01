@@ -123,7 +123,7 @@ private:
 
    //helper
    void SwitchOnThread(bool state);
-   int  SplitPackets(BYTE*);
+   int  SplitPackets(BYTE*, size_t i_size);
    bool ParsePackets();
    BOOL SetPacketsTimer(int timeout);
    bool IsValidDescriptor(const BYTE descriptor);   
@@ -147,6 +147,7 @@ private:
    bool Parse_KNOCK_PAR(BYTE* raw_packet);
    bool Parse_CE_ERR_CODES(BYTE* raw_packet);
    bool Parse_CE_SAVED_ERR(BYTE* raw_packet);
+   bool Parse_FWINFO_DAT(BYTE* raw_packet);
 
 
    //сборщики отдельных пакетов

@@ -319,6 +319,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Ёкспорт данных"
     IDS_EXPORT_EXPORT_TO_MPSZ "Ёкспортировать таблицы в MPSZ-ZH"
+    IDS_READ_FW_SIGNATURE_INFO "»нформаци€ о прошивке"
 END
 
 #endif    // Russian resources

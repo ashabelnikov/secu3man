@@ -163,6 +163,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CFirmwareTabDlg::IDD, pParent)	
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
+, m_is_app_items_available(false)
 , m_ParamDeskDlg(NULL, true) //<-- используем вкладку параметров детонации
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -280,6 +281,9 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
     	
   ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareControls)
   ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)  
+
+  ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnWirmwareInfo)
+  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -348,6 +352,13 @@ void CFirmwareTabDlg::OnUpdatePopupMenu_file1(CCmdUI* pCmdUI)
 {
   bool opened = IsFirmwareOpened();
   pCmdUI->Enable(opened ? TRUE : FALSE);
+  pCmdUI->SetCheck(FALSE);	
+}
+
+void CFirmwareTabDlg::OnUpdatePopupMenu_app(CCmdUI* pCmdUI)
+{
+  bool enable = m_is_app_items_available; 
+  pCmdUI->Enable(enable ? TRUE : FALSE);
   pCmdUI->SetCheck(FALSE);	
 }
 
@@ -577,11 +588,22 @@ void CFirmwareTabDlg::EnableBLItems(bool enable)
 
   //если меню отображается в текущий момент, то не смотря на то что элементы запрещены, 
   //прорисовка останется старой (недоделка Microsoft?). Короче говоря делаем это сами
-  for(size_t i = 0; i < m_ContextMenuManager.m_bl_menu_items_IDs.size(); i++)
-  {
-    UINT state = enable ? MF_ENABLED : MF_GRAYED;
-    m_ContextMenuManager.m_ParentMenu.EnableMenuItem(m_ContextMenuManager.m_bl_menu_items_IDs[i],state);
-  }
+  m_ContextMenuManager.EnableBLMenuItems(enable);
+}
+
+//разрешает/запрещает элементы меню связанные с приложением
+void CFirmwareTabDlg::EnableAppItems(bool enable)
+{
+  m_is_app_items_available = enable;
+
+  if (!::IsWindow(this->m_hWnd))
+    return;
+
+  UpdateDialogControls(this,TRUE);
+
+  //если меню отображается в текущий момент, то не смотря на то что элементы запрещены, 
+  //прорисовка останется старой (недоделка Microsoft?). Короче говоря делаем это сами
+  m_ContextMenuManager.EnableAppMenuItems(enable);
 }
 
 //от чекбокса...
@@ -783,6 +805,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  {
   ::SetFocus(m_attenuator_map_wnd_handle);
  }	
+}
+
+void CFirmwareTabDlg::OnWirmwareInfo()
+{
+ if (m_OnFirmwareInfo)
+  m_OnFirmwareInfo();
 }
 
 void CFirmwareTabDlg::_RegisterHotKeys(void)

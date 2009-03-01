@@ -111,6 +111,10 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
   m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_BOOTLOADER_SIGNATURE,str);
   m_bl_menu_items_IDs.push_back(IDM_READ_BOOTLOADER_SIGNATURE);
 
+  str.LoadString(IDS_READ_FW_SIGNATURE_INFO);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FW_SIGNATURE_INFO,str);
+  m_app_menu_items_IDs.push_back(IDM_READ_FW_SIGNATURE_INFO);
+
 }
 
 //показывает контекстное меню
@@ -120,6 +124,23 @@ void CFirmwareModeContextMenuManager::TrackPopupMenu(int x, int y)
   m_ParentMenu.TrackPopupMenu(TPM_LEFTALIGN,x,y,m_pWnd);			   			 			
 }
 
+void CFirmwareModeContextMenuManager::EnableBLMenuItems(bool i_enable)
+{
+ for(size_t i = 0; i < m_bl_menu_items_IDs.size(); i++)
+ {
+  UINT state = i_enable ? MF_ENABLED : MF_GRAYED;
+  m_ParentMenu.EnableMenuItem(m_bl_menu_items_IDs[i],state);
+ }
+}
+
+void CFirmwareModeContextMenuManager::EnableAppMenuItems(bool i_enable)
+{
+ for(size_t i = 0; i < m_app_menu_items_IDs.size(); i++)
+ {
+  UINT state = i_enable ? MF_ENABLED : MF_GRAYED;
+  m_ParentMenu.EnableMenuItem(m_app_menu_items_IDs[i],state);
+ }
+}
 
 //This method should be called when a pop-up menu is about to become active
 void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu) 

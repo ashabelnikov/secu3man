@@ -93,6 +93,8 @@
 #define ID_MSB_INDICATOR_LOGWR          4092
 #define IDI_LOGWR_WRITE                 4093
 #define IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER 4094
+#define IDM_READ_FW_SIGNATURE_INFO      4095
+#define IDS_READ_FW_SIGNATURE_INFO      4096
 
 // Next default values for new objects
 // 

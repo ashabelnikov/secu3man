@@ -135,39 +135,43 @@ bool CControlApp::Initialize(CComPort* p_port,const DWORD uart_speed, const DWOR
 //-----------------------------------------------------------------------
 //m_Packets будут содержаться обнаруженные пакеты
 //Return: кол-во обнаруженых пакетов
-int CControlApp::SplitPackets(BYTE* i_buff)
+int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 {
-	m_Packets->clear();
+ m_Packets->clear();
 
-	BYTE* p = i_buff;
-   
-	while(*p!=0)
+ BYTE* p = i_buff;
+
+ //Пакет(ы) содержит 0x0 символы. 	
+ _ASSERTE((!memchr(i_buff, '\0', i_size)) && "0x0 characters are not allowed in SECU-3 packets.\
+ Please, check firmware code for this problem.");
+    
+ while(*p!=0)
+ {
+  switch(m_packets_parse_state) //я люблю автоматное программирование...
+  {
+   case 0:       //search '@'
+	if (*p=='@')
 	{
-		switch(m_packets_parse_state) //я люблю автоматное программирование...
-		{
-		case 0:       //search '@'
-		 if (*p=='@')
-		 {
-		   m_ingoing_packet+=*p;
-		   m_packets_parse_state = 1;
-		 }
-		 break;        
-		case 1:       //wait '\r'
-		 if (*p=='\r')
-		 {
-		   m_ingoing_packet+=*p;
-		   m_Packets->push_back(m_ingoing_packet);
-		   m_ingoing_packet = "";
-		   m_packets_parse_state = 0;
-		 }
-		 else
-		 {
-		   m_ingoing_packet+=*p;			
-		 }
-		 break;		
-		}//switch
-    ++p;
-	}; 
+	 m_ingoing_packet+=*p;
+	 m_packets_parse_state = 1;
+	}
+	break; 
+   case 1:       //wait '\r'
+	if (*p=='\r')
+	{
+	 m_ingoing_packet+=*p;
+	 m_Packets->push_back(m_ingoing_packet);
+	 m_ingoing_packet = "";
+	 m_packets_parse_state = 0;
+	}
+	else
+	{
+	 m_ingoing_packet+=*p;			
+	}
+	break;		
+  }//switch
+  ++p;
+ }; 
 
  return m_Packets->size();  
 }
@@ -786,6 +790,27 @@ bool CControlApp::Parse_CE_SAVED_ERR(BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_FWINFO_DAT(BYTE* raw_packet)
+{
+ SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
+
+ if (strlen((char*)raw_packet)!=(FW_SIGNATURE_INFO_SIZE+1))  //размер пакета без сигнального символа, дескриптора
+ {
+  return false;
+ }
+
+ //строка с информацией
+ char* p;
+ if (NULL==(p = strchr((char*)raw_packet,'\r')))
+     return false;
+ *p = 0;
+
+ strcpy(m_FWInfoDat.info,(const char*)raw_packet);
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -866,6 +891,10 @@ bool CControlApp::ParsePackets()
              if (Parse_CE_SAVED_ERR(raw_packet))
                break;
 			 continue;
+         case FWINFO_DAT:
+			 if (Parse_FWINFO_DAT(raw_packet))
+               break;
+			 continue;
 
          default:
              continue;
@@ -925,9 +954,9 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 	  read_buf[actual_received] = 0;
 	  
 	  //парсим данные и пытаемся выделить пакеты
-	  p_capp->SplitPackets(read_buf);
+	  p_capp->SplitPackets(read_buf, actual_received);
 
-	  //проводим грамматический разбор каждого пакета
+	  //проводим разбор каждого пакета
       if (true==p_capp->ParsePackets()) //хотя бы один пакет обработан успешно ?
 	  {	  	  
 	    p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer
@@ -945,7 +974,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 		{
 	      p_capp->m_online_state = false;
 	      pEventHandler->OnConnection(p_capp->m_online_state);	  
-		  p_capp->m_force_notify_about_connection = false;
+		  p_capp->m_force_notify_about_connection = false;          
 		}
         p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer
 	  }
@@ -1055,7 +1084,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor)
       case OP_COMP_NC:
       case KNOCK_PAR: 
       case CE_ERR_CODES:
-	  case CE_SAVED_ERR:	  
+	  case CE_SAVED_ERR:
+      case FWINFO_DAT: 		   
 		return true;
       default:
 		return false;

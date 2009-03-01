@@ -18,6 +18,8 @@
 #include "HexUtils/readhex.h"
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
+#include "io-core\SECU3IO.h"
+#include "io-core\ufcodes.h"
 
 using namespace fastdelegate;
 
@@ -69,6 +71,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
   m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
   m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
+  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnWirmwareInfo));
 
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
@@ -110,7 +113,7 @@ void CFirmwareTabController::OnActivate(void)
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
- OnConnection(online_status);
+ OnConnection(online_status); 	
 }
 
 void CFirmwareTabController::OnDeactivate(void)
@@ -127,14 +130,22 @@ void CFirmwareTabController::OnDeactivate(void)
 /////////////////////////////////////////////////////////////////////////////////
 void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
- //not used now.
+ if (i_descriptor == FWINFO_DAT)
+ { //приняли пакет с сигнатурной информацией о прошивке
+  SECU3IO::FWInfoDat* p_packet = (SECU3IO::FWInfoDat*)ip_packet; 
+  char raw_string[256];
+  memset(raw_string, 0, 256);  
+  memcpy(raw_string, p_packet->info, SECU3IO::FW_SIGNATURE_INFO_SIZE);  
+  TCHAR string[256];
+  OemToChar(raw_string, string);
+  m_sbar->SetInformationText(string);
+ }
 }
 
 void CFirmwareTabController::OnConnection(const bool i_online)
 {
   int state;
   ASSERT(m_sbar);
-
 
   if (i_online) //перешли в онлайн
   {
@@ -147,6 +158,8 @@ void CFirmwareTabController::OnConnection(const bool i_online)
 	//если мы перешли в онлайн, то убираем чекбокс - пользователь нас обманывает:
 	//он указал что бутлоадер запущен аварийно и в тоже время запущен Application 
 	m_view->SetBLStartedEmergency(false);
+
+	m_view->EnableAppItems(true);
   }
   else
   { //перешли в оффлайн
@@ -160,7 +173,9 @@ void CFirmwareTabController::OnConnection(const bool i_online)
 	if (enable)
 	  state = CStatusBarManager::STATE_BOOTLOADER; //чтобы иконка бутлоадера не пропадала после завершения операции
 	else
-	  state = CStatusBarManager::STATE_OFFLINE;  
+	  state = CStatusBarManager::STATE_OFFLINE; 
+	
+	m_view->EnableAppItems(false);
   }
 
   //если бутлоадер активен (выполняется выбранная из меню операция), то будем отображать именно 
@@ -1070,4 +1085,13 @@ void CFirmwareTabController::OnExportMapsToMPSZ(void)
   MPSZExportController export(&data);
   m_fwdm->GetMapsData(&data);
   export.DoExport();
+}
+
+//Пользователь захотел получить информацию о пршивке из SECU-3
+void CFirmwareTabController::OnWirmwareInfo(void)
+{
+ m_sbar->SetInformationText("Чтение информации о прошивке...");
+ SECU3IO::OPCompNc packet_data;
+ packet_data.opcode = OPCODE_READ_FW_SIG_INFO;
+ m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
 }
