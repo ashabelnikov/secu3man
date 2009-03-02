@@ -101,6 +101,7 @@ private:
    HANDLE       m_hThread;
    DWORD        m_ThreadId;
    HANDLE       m_hAwakeEvent;
+   HANDLE       m_hSleepEvent; 
 
    DWORD        m_uart_speed;
    DWORD        m_dat_packet_timeout;

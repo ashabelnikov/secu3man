@@ -29,6 +29,7 @@ CControlApp::CControlApp()
 , m_hThread(NULL)
 , m_ThreadId(0)
 , m_hAwakeEvent(NULL)
+, m_hSleepEvent(NULL)
 , m_is_thread_must_exit(false)
 , m_uart_speed(CBR_9600)
 , m_ingoing_packet("")
@@ -82,6 +83,9 @@ bool CControlApp::Terminate(void)
  if (!CloseHandle(m_hAwakeEvent))
   status = false;
 
+ if (!CloseHandle(m_hSleepEvent))
+  status = false;
+
  if (NULL!=m_hTimer)
   CancelWaitableTimer(m_hTimer);
 
@@ -103,6 +107,12 @@ bool CControlApp::Initialize(CComPort* p_port,const DWORD uart_speed, const DWOR
 
  m_hAwakeEvent = CreateEvent(NULL,TRUE,FALSE,NULL);  //manual reset, nonsignaled state!
  if (m_hAwakeEvent==NULL)
+ {
+  return false;        //event creation error
+ }
+
+ m_hSleepEvent = CreateEvent(NULL,TRUE,FALSE,NULL);  //manual reset, nonsignaled state!
+ if (m_hSleepEvent==NULL)
  {
   return false;        //event creation error
  }
@@ -928,6 +938,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   
  while(1) 
  {
+  SetEvent(p_capp->m_hSleepEvent);
   WaitForSingleObject(p_capp->m_hAwakeEvent,INFINITE); //sleep if need
  
   //если порт не открыт, то для того чтобы не грузить процессор, засыпаем
@@ -984,7 +995,13 @@ void CControlApp::SwitchOnThread(bool state)
  if (state)
   SetEvent(m_hAwakeEvent);    //активизация работы потока немедленно
  else
+ {
   ResetEvent(m_hAwakeEvent);  //поток заснет и не будет отнимать процессорное время
+
+  //Необходимо дождатся подтверждения того что работа потока остановлена
+  ResetEvent(m_hSleepEvent);
+  WaitForSingleObject(m_hSleepEvent,2500);
+ }
 }
 
 
