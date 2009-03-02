@@ -32,7 +32,7 @@ BEGIN
     BEGIN
         MENUITEM "E&xit    Ctrl + Q",           ID_APP_EXIT
     END
-    MENUITEM "Параметры",                   ID_APP_SETTINGS
+    MENUITEM "Настройки",                   ID_APP_SETTINGS
     POPUP "Запись лога"
     BEGIN
         MENUITEM "Начать запись         Ctrl + B", ID_APP_BEGIN_LOG
@@ -319,6 +319,10 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Экспорт данных"
     IDS_EXPORT_EXPORT_TO_MPSZ "Экспортировать таблицы в MPSZ-ZH"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке"
 END
 

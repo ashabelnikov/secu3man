@@ -115,8 +115,8 @@ private:
    std::string  m_outgoing_packet;       //используется для формирования пакетов
    int          m_packets_parse_state;   //хранит состояние конечного автомата используемого для отделения пакетов
 
-   float   m_adc_discrete;
-   float   m_angle_multiplier;
+   const float   m_adc_discrete;
+   const float   m_angle_multiplier;
    bool    m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
    bool    m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
    bool    m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn(); 
@@ -126,28 +126,28 @@ private:
    int  SplitPackets(BYTE*, size_t i_size);
    bool ParsePackets();
    BOOL SetPacketsTimer(int timeout);
-   bool IsValidDescriptor(const BYTE descriptor);   
+   bool IsValidDescriptor(const BYTE descriptor) const;   
 
    SECU3IO::SECU3Packet& EndPendingPacket(void);
    SECU3IO::SECU3Packet& PendingPacket(void);
 
    //парсеры отдельных пакетов (тех пакетов которые принимаются от SECU-3)
-   bool Parse_SENSOR_DAT(BYTE* raw_packet);
-   bool Parse_FNNAME_DAT(BYTE* raw_packet);
-   bool Parse_STARTR_PAR(BYTE* raw_packet);
-   bool Parse_ANGLES_PAR(BYTE* raw_packet);
-   bool Parse_FUNSET_PAR(BYTE* raw_packet);
-   bool Parse_IDLREG_PAR(BYTE* raw_packet);
-   bool Parse_CARBUR_PAR(BYTE* raw_packet);
-   bool Parse_TEMPER_PAR(BYTE* raw_packet);
-   bool Parse_ADCRAW_DAT(BYTE* raw_packet);
-   bool Parse_ADCCOR_PAR(BYTE* raw_packet);
-   bool Parse_CKPS_PAR(BYTE* raw_packet);
-   bool Parse_OP_COMP_NC(BYTE* raw_packet);
-   bool Parse_KNOCK_PAR(BYTE* raw_packet);
-   bool Parse_CE_ERR_CODES(BYTE* raw_packet);
-   bool Parse_CE_SAVED_ERR(BYTE* raw_packet);
-   bool Parse_FWINFO_DAT(BYTE* raw_packet);
+   bool Parse_SENSOR_DAT(const BYTE* raw_packet);
+   bool Parse_FNNAME_DAT(const BYTE* raw_packet);
+   bool Parse_STARTR_PAR(const BYTE* raw_packet);
+   bool Parse_ANGLES_PAR(const BYTE* raw_packet);
+   bool Parse_FUNSET_PAR(const BYTE* raw_packet);
+   bool Parse_IDLREG_PAR(const BYTE* raw_packet);
+   bool Parse_CARBUR_PAR(const BYTE* raw_packet);
+   bool Parse_TEMPER_PAR(const BYTE* raw_packet);
+   bool Parse_ADCRAW_DAT(const BYTE* raw_packet);
+   bool Parse_ADCCOR_PAR(const BYTE* raw_packet);
+   bool Parse_CKPS_PAR(const BYTE* raw_packet);
+   bool Parse_OP_COMP_NC(const BYTE* raw_packet);
+   bool Parse_KNOCK_PAR(const BYTE* raw_packet);
+   bool Parse_CE_ERR_CODES(const BYTE* raw_packet);
+   bool Parse_CE_SAVED_ERR(const BYTE* raw_packet);
+   bool Parse_FWINFO_DAT(const BYTE* raw_packet);
 
 
    //сборщики отдельных пакетов
