@@ -38,7 +38,7 @@ CControlApp::CControlApp()
 , mp_csection(NULL)
 , m_work_state(false)
 {
- m_Packets = new Packets(50);
+ m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
  memset(&m_pending_packets,0,sizeof(SECU3Packet) * PENDING_PACKETS_QUEUE_SIZE);
  
@@ -49,7 +49,7 @@ CControlApp::CControlApp()
 //-----------------------------------------------------------------------
 CControlApp::~CControlApp()
 {
-  delete m_Packets;
+  delete m_pPackets;
   DeleteCriticalSection(GetSyncObject());
   delete mp_csection;
 }
@@ -137,7 +137,8 @@ bool CControlApp::Initialize(CComPort* p_port,const DWORD uart_speed, const DWOR
 //Return: кол-во обнаруженых пакетов
 int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 {
- m_Packets->clear();
+ ASSERT(m_pPackets);
+ m_pPackets->clear();
 
  BYTE* p = i_buff;
 
@@ -160,7 +161,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 	if (*p=='\r')
 	{
 	 m_ingoing_packet+=*p;
-	 m_Packets->push_back(m_ingoing_packet);
+	 m_pPackets->push_back(m_ingoing_packet);
 	 m_ingoing_packet = "";
 	 m_packets_parse_state = 0;
 	}
@@ -173,7 +174,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
   ++p;
  }; 
 
- return m_Packets->size();  
+ return m_pPackets->size();  
 }
 
 //-----------------------------------------------------------------------
@@ -818,8 +819,8 @@ bool CControlApp::ParsePackets()
 	bool status = false;  
 	BYTE descriptor = 0;
 
-
-	for(it = m_Packets->begin(); it!=m_Packets->end(); ++it)
+	ASSERT(m_pPackets);
+	for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
 	{	
 		BYTE* raw_packet = (unsigned char*)it->c_str();
 		if (*raw_packet!='@')
@@ -900,7 +901,7 @@ bool CControlApp::ParsePackets()
              continue;
 		}//switch        
 
-        
+
 		////////////////////////////////////////////////////////////////////////////
 		__try
 		{

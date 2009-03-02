@@ -110,7 +110,7 @@ private:
 
    volatile bool m_is_thread_must_exit;
 
-   Packets*     m_Packets;               //хранит списик выделенных пакетов
+   Packets*     m_pPackets;              //хранит списик выделенных пакетов
    std::string  m_ingoing_packet;        //используется для выделения одного пакета
    std::string  m_outgoing_packet;       //используется для формирования пакетов
    int          m_packets_parse_state;   //хранит состояние конечного автомата используемого для отделения пакетов

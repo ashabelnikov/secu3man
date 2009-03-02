@@ -56,25 +56,25 @@ CMainFrame::~CMainFrame()
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
-  if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
-	return -1;
+ if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
+  return -1;
 
-  return 0;
+ return 0;
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
-  if( !CFrameWnd::PreCreateWindow(cs) )
-	return FALSE;
+ if( !CFrameWnd::PreCreateWindow(cs) )
+  return FALSE;
  
-  //устанавливаем необходимый размер главного окна
-  cs.cx = m_wnd_initial_size.cx;
-  cs.cy = m_wnd_initial_size.cy;
+ //устанавливаем необходимый размер главного окна
+ cs.cx = m_wnd_initial_size.cx;
+ cs.cy = m_wnd_initial_size.cy;
 
-  cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
-  cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
-  cs.lpszClass = AfxRegisterWndClass(0);
-  return TRUE;
+ cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+ cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
+ cs.lpszClass = AfxRegisterWndClass(0);
+ return TRUE;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -97,20 +97,20 @@ void CMainFrame::Dump(CDumpContext& dc) const
 // CMainFrame message handlers
 void CMainFrame::OnSetFocus(CWnd* pOldWnd)
 {
-  // forward focus to the view window
-  ASSERT(m_pwndView);
+ // forward focus to the view window
+ if (m_pwndView)
   m_pwndView->SetFocus();
 }
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
-  // let the view have first crack at the command
-  ASSERT(m_pwndView);
-  if (m_pwndView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-	return TRUE;
+ // let the view have first crack at the command
+ ASSERT(m_pwndView);
+ if (m_pwndView && m_pwndView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
+  return TRUE;
 
-  // otherwise, do default handling
-  return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
+ // otherwise, do default handling
+ return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
 void CMainFrame::SetView(CChildView* i_pChildView) 
@@ -155,12 +155,12 @@ void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction)
 
 void CMainFrame::OnClose() 
 {
-  bool result = true;
-  if (m_OnClose) 
-    result = m_OnClose();
+ bool result = true;
+ if (m_OnClose) 
+  result = m_OnClose();
 	
-  if (result)
-    CFrameWnd::OnClose();
+ if (result)
+  CFrameWnd::OnClose();
 }
 
 void CMainFrame::OnAppAbout()
