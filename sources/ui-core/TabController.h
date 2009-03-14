@@ -50,25 +50,18 @@ public:
 	CTabController();
 	virtual ~CTabController();
     bool Create(CWnd* pParentWnd,const CRect& rect,UINT nID,const bool);
-    void AddPage(CString name,CTabDialog* pPageDlg);
-    void AddPage(CString name,CTabDialog* pPageDlg,const int nImage);
+    int AddPage(CString name,CTabDialog* pPageDlg);
+    int AddPage(CString name,CTabDialog* pPageDlg,const int nImage);
 	void SetStyle(const DWORD style);
     bool SetCurSel(UINT iNewTab);            // set tab (fail if disabled)
 
 	void EnableItem(int ITab, bool enable);
-
-
+	void Init();
 
 	void SetEventListener(ITabControllerEvent* i_listener) 
 	{
 	  ASSERT(i_listener); m_pEventHandler = i_listener;
 	}
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CTabController)
-	//}}AFX_VIRTUAL
-
 
 	// Generated message map functions
 protected:

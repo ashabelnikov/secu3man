@@ -22,6 +22,7 @@
 #include "ADCCompenPageDlg.h"
 #include "CKPSPageDlg.h"
 #include "KnockPageDlg.h"
+#include "MiscPageDlg.h"
 
 #include "io-core/ufcodes.h" 
 #include "io-core/SECU3IO.h"
@@ -50,79 +51,79 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_enabled(FALSE)
 , m_show_knock_page(i_show_knock_page)
 {   
-  //создаем image list для TabCtrl
-  m_pImgList = new CImageList(); 
-  m_pImgList->Create((LPCTSTR)IDB_TAB_CTRL_BITMAPS,16,4,TAB_CTRL_BITMAPS_COLOR_MASK);
+ //создаем image list для TabCtrl
+ m_pImgList = new CImageList(); 
+ m_pImgList->Create((LPCTSTR)IDB_TAB_CTRL_BITMAPS,16,4,TAB_CTRL_BITMAPS_COLOR_MASK);
 
-  //их надо создать только один раз
-  m_pStarterPageDlg = new CStarterPageDlg();
-  m_pStarterPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ //их надо создать только один раз
+ m_pStarterPageDlg = new CStarterPageDlg();
+ m_pStarterPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pAnglesPageDlg = new CAnglesPageDlg();		 
-  m_pAnglesPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pAnglesPageDlg = new CAnglesPageDlg();		 
+ m_pAnglesPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pIdlRegPageDlg = new CIdlRegPageDlg();	  
-  m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pIdlRegPageDlg = new CIdlRegPageDlg();	  
+ m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pFunSetPageDlg = new CFunSetPageDlg();		 
-  m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pFunSetPageDlg = new CFunSetPageDlg();		 
+ m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pTemperPageDlg = new CTemperPageDlg();		  
-  m_pTemperPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pTemperPageDlg = new CTemperPageDlg();		  
+ m_pTemperPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pCarburPageDlg = new CCarburPageDlg();
-  m_pCarburPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pCarburPageDlg = new CCarburPageDlg();
+ m_pCarburPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pADCCompenPageDlg = new CADCCompenPageDlg();
-  m_pADCCompenPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pADCCompenPageDlg = new CADCCompenPageDlg();
+ m_pADCCompenPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  m_pCKPSPageDlg = new CCKPSPageDlg();
-  m_pCKPSPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ m_pCKPSPageDlg = new CCKPSPageDlg();
+ m_pCKPSPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
-  if (m_show_knock_page)
-  {
-   m_pKnockPageDlg = new CKnockPageDlg();
-   m_pKnockPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
-  }
+ if (m_show_knock_page)
+ {
+  m_pKnockPageDlg = new CKnockPageDlg();
+  m_pKnockPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+ }
+
+ m_pMiscPageDlg = new CMiscPageDlg();
+ m_pMiscPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 
 CParamDeskDlg::~CParamDeskDlg()
 {  
-  delete m_pImgList;	
+ delete m_pImgList;	
 
-  delete m_pStarterPageDlg; 		 
-  delete m_pAnglesPageDlg; 		 
-  delete m_pIdlRegPageDlg;	  
-  delete m_pFunSetPageDlg;		 
-  delete m_pTemperPageDlg;		  
-  delete m_pCarburPageDlg;
-  delete m_pADCCompenPageDlg;
-  delete m_pCKPSPageDlg;
-  if (m_show_knock_page)  
-    delete m_pKnockPageDlg;
+ delete m_pStarterPageDlg; 		 
+ delete m_pAnglesPageDlg; 		 
+ delete m_pIdlRegPageDlg;	  
+ delete m_pFunSetPageDlg;		 
+ delete m_pTemperPageDlg;		  
+ delete m_pCarburPageDlg;
+ delete m_pADCCompenPageDlg;
+ delete m_pCKPSPageDlg;
+ if (m_show_knock_page)  
+  delete m_pKnockPageDlg;
+ delete m_pMiscPageDlg;
 }
 
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
-  CDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CParamDeskDlg)
-  DDX_Control(pDX, IDC_PARAMETERS_DESK_TITLE, m_pd_title);
-  DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
-  DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
-  //}}AFX_DATA_MAP
+ CDialog::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_PARAMETERS_DESK_TITLE, m_pd_title);
+ DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
+ DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
 }
 
 
 BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
-  //{{AFX_MSG_MAP(CParamDeskDlg)
-  ON_WM_DESTROY()
-  ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
-  ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
-  ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
-  ON_BN_CLICKED(IDC_PD_SAVE_BUTTON,OnSaveButton)
-  //}}AFX_MSG_MAP
+ ON_WM_DESTROY()
+ ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
+ ON_BN_CLICKED(IDC_PD_SAVE_BUTTON,OnSaveButton)
 END_MESSAGE_MAP()
 
 
@@ -133,224 +134,218 @@ END_MESSAGE_MAP()
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CParamDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
-  pCmdUI->Enable(m_enabled);
+ pCmdUI->Enable(m_enabled);
 }
 
 BOOL CParamDeskDlg::OnInitDialog() 
 {
-  CDialog::OnInitDialog();
+ CDialog::OnInitDialog();
 	
-  m_tab_control.SetStyle(WS_VISIBLE | WS_CHILD | TCS_OWNERDRAWFIXED/*| TCS_VERTICAL | TCS_BOTTOM*/);
-  m_tab_control.SetImageList(m_pImgList);
-  m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
+ m_tab_control.SetStyle(WS_VISIBLE | WS_CHILD | TCS_OWNERDRAWFIXED/*| TCS_VERTICAL | TCS_BOTTOM*/);
+ m_tab_control.SetImageList(m_pImgList);
+ m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
+ m_tab_control.Init();
 	
-  //наполняем Tab control вкладками	
-  m_tab_control.AddPage("Запуск",m_pStarterPageDlg,0);
-  m_tab_control.AddPage("УОЗ",m_pAnglesPageDlg,1);	
-  m_tab_control.AddPage("ХХ",m_pIdlRegPageDlg,2);
-  m_tab_control.AddPage("Функции",m_pFunSetPageDlg,3);
-  m_tab_control.AddPage("Температура",m_pTemperPageDlg,4);
-  m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5);
-  m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6);
-  m_tab_control.AddPage("ДПКВ",m_pCKPSPageDlg,7);
-  if (m_show_knock_page)
-   m_tab_control.AddPage("Детонация",m_pKnockPageDlg,8);
+ m_tab_descriptors.clear();
+ //наполняем Tab control вкладками	
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Запуск",m_pStarterPageDlg,0), STARTR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("УОЗ",m_pAnglesPageDlg,1), ANGLES_PAR));	
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("ХХ",m_pIdlRegPageDlg,2), IDLREG_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Функции",m_pFunSetPageDlg,3), FUNSET_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Температура",m_pTemperPageDlg,4), TEMPER_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5), CARBUR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
+ if (m_show_knock_page)
+  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Прочее",m_pMiscPageDlg,7), MISCEL_PAR));
 	
-  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
-  //уже использует обработчики сообщений!
+ //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
+ //уже использует обработчики сообщений!
 
-  //this будет получать события от Tab control-а и делегировать их указанным обработчикам
-  m_tab_control.SetEventListener(this);   
+ //this будет получать события от Tab control-а и делегировать их указанным обработчикам
+ m_tab_control.SetEventListener(this);   
 
-  //устанавливаем предыдущее значение (разрешены вкладки или нет)
-  m_tab_control.EnableItem(-1,m_enabled ? true : false);
+ //устанавливаем предыдущее значение (разрешены вкладки или нет)
+ m_tab_control.EnableItem(-1,m_enabled ? true : false);
 
-  UpdateDialogControls(this,TRUE);
-  return TRUE;  // return TRUE unless you set the focus to a control
+ UpdateDialogControls(this,TRUE);
+ return TRUE;  // return TRUE unless you set the focus to a control
 	            // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 BYTE CParamDeskDlg::GetCurrentDescriptor(void)
 {
-  switch(m_tab_control.GetCurSel())
-  {
-    case 0:	
-     return STARTR_PAR;
-    case 1:	
-     return ANGLES_PAR;
-    case 2:	
-     return IDLREG_PAR;
-    case 3:	
-     return FUNSET_PAR;
-    case 4:	
-     return TEMPER_PAR;
-    case 5:	
-     return CARBUR_PAR;	
-    case 6:	
-     return ADCCOR_PAR;	
-    case 7:	
-     return CKPS_PAR;	
-    case 8:	
-     return KNOCK_PAR;	
-    default:
-     return 0; //invalid case
-  }
+ int selection = m_tab_control.GetCurSel();
+ if (m_tab_descriptors.find(selection)==m_tab_descriptors.end())
+ {
+  ASSERT(0); //unexpected selection index!
+  return 0;
+ }
+ 
+ return m_tab_descriptors[selection];
 }
 
 
 void CParamDeskDlg::OnDestroy() 
 {  
-  CDialog::OnDestroy();	  
+ CDialog::OnDestroy();	  
 }
 
 void CParamDeskDlg::SetPosition(int x_pos, int y_pos)
 {
-  SetWindowPos(NULL,x_pos,y_pos,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ SetWindowPos(NULL,x_pos,y_pos,0,0,SWP_NOZORDER|SWP_NOSIZE);
 }
 
 void CParamDeskDlg::SetTitle(const CString& i_str)
 {
-  m_pd_title.SetWindowText(i_str);
+ m_pd_title.SetWindowText(i_str);
 }
 
 void CParamDeskDlg::GetTitle(CString& o_str)
 {
-  m_pd_title.GetWindowText(o_str);
+ m_pd_title.GetWindowText(o_str);
 }
-
-
 
 //разрешение/запрещение
 void CParamDeskDlg::Enable(bool enable)
 {
-  m_enabled = (enable) ? TRUE : FALSE;
-  m_pStarterPageDlg->Enable(enable);		 
-  m_pAnglesPageDlg->Enable(enable);
-  m_pIdlRegPageDlg->Enable(enable);
-  m_pFunSetPageDlg->Enable(enable);
-  m_pTemperPageDlg->Enable(enable);
-  m_pCarburPageDlg->Enable(enable);
-  m_pADCCompenPageDlg->Enable(enable);
-  m_pCKPSPageDlg->Enable(enable);
-  if (m_show_knock_page)
-   m_pKnockPageDlg->Enable(enable);
-  if (::IsWindow(m_hWnd))
-    UpdateDialogControls(this,TRUE);
+ m_enabled = (enable) ? TRUE : FALSE;
+ m_pStarterPageDlg->Enable(enable);		 
+ m_pAnglesPageDlg->Enable(enable);
+ m_pIdlRegPageDlg->Enable(enable);
+ m_pFunSetPageDlg->Enable(enable);
+ m_pTemperPageDlg->Enable(enable);
+ m_pCarburPageDlg->Enable(enable);
+ m_pADCCompenPageDlg->Enable(enable);
+ m_pCKPSPageDlg->Enable(enable);
+ if (m_show_knock_page)
+  m_pKnockPageDlg->Enable(enable);
+ m_pMiscPageDlg->Enable(enable);
 
-  m_tab_control.EnableItem(-1,enable); //all items  
+ if (::IsWindow(m_hWnd))
+  UpdateDialogControls(this,TRUE);
+
+ m_tab_control.EnableItem(-1,enable); //all items  
 }
 
 //спрятать/показать все
 void CParamDeskDlg::Show(bool show)
 {
-  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
-  m_tab_control.ShowWindow(nCmdShow);
+ int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
+ m_tab_control.ShowWindow(nCmdShow);
 }
 
 // Устанавливает данные указанной вкладки, вкладка определяется дескриптором
 bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
 {
-  using namespace SECU3IO;
-  switch(i_descriptor)
-  {
-    case TEMPER_PAR:
-      m_pTemperPageDlg->SetValues((TemperPar*)i_values);
-      break;
-	case CARBUR_PAR:
-	  m_pCarburPageDlg->SetValues((CarburPar*)i_values);
-      break;
-	case IDLREG_PAR: 
-	  m_pIdlRegPageDlg->SetValues((IdlRegPar*)i_values);
-      break;
-	case ANGLES_PAR:
-	  m_pAnglesPageDlg->SetValues((AnglesPar*)i_values);
-      break;
-	case FUNSET_PAR:
-	  m_pFunSetPageDlg->SetValues((FunSetPar*)i_values);
-      break;
-	case STARTR_PAR:
-      m_pStarterPageDlg->SetValues((StartrPar*)i_values);
-      break;
-	case ADCCOR_PAR:
-      m_pADCCompenPageDlg->SetValues((ADCCompenPar*)i_values);
-      break;
-	case CKPS_PAR:
-      m_pCKPSPageDlg->SetValues((CKPSPar*)i_values);
-      break;
-	case KNOCK_PAR:
-      if (!m_show_knock_page)
-       return false;
-      m_pKnockPageDlg->SetValues((KnockPar*)i_values);
-      break;
-	case FNNAME_DAT:     
-    case SENSOR_DAT:					      
-    default:
-      return false; //неизвестный или неподдерживаемый дескриптор
-  }//switch 
+ using namespace SECU3IO;
+ switch(i_descriptor)
+ {
+  case TEMPER_PAR:
+   m_pTemperPageDlg->SetValues((TemperPar*)i_values);
+   break;
+  case CARBUR_PAR:
+   m_pCarburPageDlg->SetValues((CarburPar*)i_values);
+   break;
+  case IDLREG_PAR: 
+   m_pIdlRegPageDlg->SetValues((IdlRegPar*)i_values);
+   break;
+  case ANGLES_PAR:
+   m_pAnglesPageDlg->SetValues((AnglesPar*)i_values);
+   break;
+  case FUNSET_PAR:
+   m_pFunSetPageDlg->SetValues((FunSetPar*)i_values);
+   break;
+  case STARTR_PAR:
+   m_pStarterPageDlg->SetValues((StartrPar*)i_values);
+   break;
+  case ADCCOR_PAR:
+   m_pADCCompenPageDlg->SetValues((ADCCompenPar*)i_values);
+   break;
+  case CKPS_PAR:
+   m_pCKPSPageDlg->SetValues((CKPSPar*)i_values);
+   break;
+  case KNOCK_PAR:
+   if (!m_show_knock_page)
+    return false;
+   m_pKnockPageDlg->SetValues((KnockPar*)i_values);
+   break;
+  case MISCEL_PAR:
+   m_pMiscPageDlg->SetValues((MiscelPar*)i_values);
+   break;
+  case FNNAME_DAT:     
+  case SENSOR_DAT:					      
+  default:
+   return false; //неизвестный или неподдерживаемый дескриптор
+ }//switch 
   
-  return true;
+ return true;
 }
 
 // Получает данные из указанной вкладки, вкладка определяется дескриптором
 bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
 {
-  using namespace SECU3IO;
-  switch(i_descriptor)
-  {
-    case TEMPER_PAR:
-      m_pTemperPageDlg->GetValues((TemperPar*)o_values);
-      break;
-	case CARBUR_PAR:
-	  m_pCarburPageDlg->GetValues((CarburPar*)o_values);
-      break;
-	case IDLREG_PAR: 
-	  m_pIdlRegPageDlg->GetValues((IdlRegPar*)o_values);
-      break;
-	case ANGLES_PAR:
-	  m_pAnglesPageDlg->GetValues((AnglesPar*)o_values);
-      break;
-	case FUNSET_PAR:
-	  m_pFunSetPageDlg->GetValues((FunSetPar*)o_values);
-      break;
-	case STARTR_PAR:
-      m_pStarterPageDlg->GetValues((StartrPar*)o_values);
-      break;
-	case ADCCOR_PAR:
-      m_pADCCompenPageDlg->GetValues((ADCCompenPar*)o_values);
-      break;
-    case CKPS_PAR:
-      m_pCKPSPageDlg->GetValues((CKPSPar*)o_values);
-      break;
-    case KNOCK_PAR:
-      if (!m_show_knock_page)
-       return false;
-      m_pKnockPageDlg->GetValues((KnockPar*)o_values);
-      break;
-	case FNNAME_DAT:     
-    case SENSOR_DAT:					      
-    default:
-      return false; //неизвестный или неподдерживаемый дескриптор
-  }//switch        
+ using namespace SECU3IO;
+ switch(i_descriptor)
+ {
+  case TEMPER_PAR:
+   m_pTemperPageDlg->GetValues((TemperPar*)o_values);
+   break;
+  case CARBUR_PAR:
+   m_pCarburPageDlg->GetValues((CarburPar*)o_values);
+   break;
+  case IDLREG_PAR: 
+   m_pIdlRegPageDlg->GetValues((IdlRegPar*)o_values);
+   break;
+  case ANGLES_PAR:
+   m_pAnglesPageDlg->GetValues((AnglesPar*)o_values);
+   break;
+  case FUNSET_PAR:
+   m_pFunSetPageDlg->GetValues((FunSetPar*)o_values);
+   break;
+  case STARTR_PAR:
+   m_pStarterPageDlg->GetValues((StartrPar*)o_values);
+   break;
+  case ADCCOR_PAR:
+   m_pADCCompenPageDlg->GetValues((ADCCompenPar*)o_values);
+   break;
+  case CKPS_PAR:
+   m_pCKPSPageDlg->GetValues((CKPSPar*)o_values);
+   break;
+  case KNOCK_PAR:
+   if (!m_show_knock_page)
+    return false;
+   m_pKnockPageDlg->GetValues((KnockPar*)o_values);
+   break;
+  case MISCEL_PAR:
+   m_pMiscPageDlg->GetValues((MiscelPar*)o_values);
+   break;
+  case FNNAME_DAT:     
+  case SENSOR_DAT:					      
+  default:
+   return false; //неизвестный или неподдерживаемый дескриптор
+ }//switch        
 
-  return true;
+ return true;
 }
 
 
 //Устанавливает имена семейств характеристик
 void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
-  m_pFunSetPageDlg->AccessFunNames() = i_names;
-  m_pFunSetPageDlg->FillCBByFunNames();
+ m_pFunSetPageDlg->AccessFunNames() = i_names;
+ m_pFunSetPageDlg->FillCBByFunNames();
 }
 
 void CParamDeskDlg::OnSaveButton()
 {
-  if (m_OnSaveButton)
-    m_OnSaveButton();
+ if (m_OnSaveButton)
+  m_OnSaveButton();
 }
 
 void CParamDeskDlg::ShowSaveButton(bool i_show)
 {
-  m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
-};
+ m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
+}
 

@@ -221,6 +221,14 @@ SOURCE=.\KnockPageDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\MiscPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MiscPageDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\StarterPageDlg.cpp
 # End Source File
 # Begin Source File

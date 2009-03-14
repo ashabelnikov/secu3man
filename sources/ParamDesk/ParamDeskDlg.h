@@ -2,6 +2,7 @@
 #pragma once
 
 #include "resource.h"
+#include <map>
 #include <vector>
 
 #include "ui-core/TabController.h"
@@ -77,6 +78,8 @@ protected:
 protected:
 	BOOL m_enabled;
 	const bool m_show_knock_page;
+	typedef std::map<int,unsigned> TabDescriptor; 
+	TabDescriptor m_tab_descriptors;
 
     class CStarterPageDlg*   m_pStarterPageDlg;		 
     class CAnglesPageDlg*    m_pAnglesPageDlg;		 
@@ -87,6 +90,7 @@ protected:
 	class CADCCompenPageDlg* m_pADCCompenPageDlg;
 	class CCKPSPageDlg*      m_pCKPSPageDlg;
 	class CKnockPageDlg*     m_pKnockPageDlg;
+	class CMiscPageDlg*      m_pMiscPageDlg;
 
 	// Generated message map functions
 	//{{AFX_MSG(CParamDeskDlg)

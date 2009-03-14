@@ -94,11 +94,13 @@ typedef struct
   _int   knock_k_wnd_end_angle;       //конец детонационного окна (градусы)
   //--/knock
 
+  _uint  uart_divisor;               //делитель для соответствующей скорости UART-a
+  _uchar uart_period_t_ms;           //период посылки пакетов в десятках миллисекунд
 
   //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
   //новых версий прошивок с более старыми версиями. При добавлении новых данных
   //в структуру, необходимо расходовать эти байты.
-  _uchar reserved[24];
+  _uchar reserved[21];
 
   _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -564,6 +566,24 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		p_params->knock_bpf_frequency = CNumericConv::Round(p_in->knock_bpf_frequency);		
 		}
       break;
+	case MISCEL_PAR:
+		{
+        MiscelPar* p_in = (MiscelPar*)i_values; 
+
+        int divisor = 0; 
+        for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
+         if (SECU3IO::secu3_allowable_uart_divisors[i].first == p_in->baud_rate)
+          divisor = SECU3IO::secu3_allowable_uart_divisors[i].second;
+        if (0==divisor)
+		{
+         secu3_allowable_uart_divisors[0].second;
+         ASSERT(0);
+		}
+
+	    p_params->uart_divisor = divisor;
+        p_params->uart_period_t_ms = p_in->period_ms / 10;
+		}
+      break;
 
     default:
       return false; //неизвестный или неподдерживаемый дескриптор
@@ -682,6 +702,20 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 		p_out->knock_k_wnd_begin_angle = ((float)p_params->knock_k_wnd_begin_angle) / ANGLE_MULTIPLAYER;
 		p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLAYER;
 		p_out->knock_bpf_frequency = p_params->knock_bpf_frequency;
+		}
+      break;
+    case MISCEL_PAR:
+		{
+		MiscelPar* p_out = (MiscelPar*)o_values; 
+
+        int baud_rate = 0;
+        for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
+         if (SECU3IO::secu3_allowable_uart_divisors[i].second == p_params->uart_divisor)
+          baud_rate = SECU3IO::secu3_allowable_uart_divisors[i].first;
+        ASSERT(baud_rate);
+
+		p_out->baud_rate = baud_rate;
+        p_out->period_ms = p_params->uart_period_t_ms * 10;
 		}
       break;
 	  

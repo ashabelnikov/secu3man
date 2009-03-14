@@ -1092,6 +1092,6 @@ void CFirmwareTabController::OnWirmwareInfo(void)
 {
  m_sbar->SetInformationText("Чтение информации о прошивке...");
  SECU3IO::OPCompNc packet_data;
- packet_data.opcode = OPCODE_READ_FW_SIG_INFO;
+ packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
 }

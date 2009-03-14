@@ -149,6 +149,7 @@ private:
    bool Parse_CE_ERR_CODES(const BYTE* raw_packet);
    bool Parse_CE_SAVED_ERR(const BYTE* raw_packet);
    bool Parse_FWINFO_DAT(const BYTE* raw_packet);
+   bool Parse_MISCEL_PAR(const BYTE* raw_packet);
 
 
    //сборщики отдельных пакетов
@@ -163,6 +164,7 @@ private:
    void Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data);    
    void Build_KNOCK_PAR(SECU3IO::KnockPar* packet_data);
    void Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data);
+   void Build_MISCEL_PAR(SECU3IO::MiscelPar* packet_data);
 };
 
 #endif //_CONTROLAPP_

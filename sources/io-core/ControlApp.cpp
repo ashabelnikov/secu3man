@@ -813,6 +813,44 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet)
  return true;
 }
 
+
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
+{
+ SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
+
+ if (strlen((char*)raw_packet)!=7)  //размер пакета без сигнального символа, дескриптора
+  return false;
+
+ //Делитель для UART-а
+ int divisor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &divisor))
+  return false;
+ raw_packet+=4;  
+
+ m_MiscPar.baud_rate = 0;
+
+ for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
+  if (SECU3IO::secu3_allowable_uart_divisors[i].second == divisor)
+    m_MiscPar.baud_rate = SECU3IO::secu3_allowable_uart_divisors[i].first;
+
+  ASSERT(m_MiscPar.baud_rate);
+
+ //Период посылки пакетов в десятках миллисекунд
+ unsigned char period_t_ms = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&period_t_ms))
+  return false;
+ raw_packet+=2;
+
+ m_MiscPar.period_ms = period_t_ms * 10;
+
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
+
+
 //-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
@@ -896,6 +934,10 @@ bool CControlApp::ParsePackets()
     continue;
    case FWINFO_DAT:	
 	if (Parse_FWINFO_DAT(raw_packet))
+     break;
+	continue;
+   case MISCEL_PAR:	
+	if (Parse_MISCEL_PAR(raw_packet))
      break;
 	continue;
 
@@ -1095,7 +1137,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case KNOCK_PAR: 
   case CE_ERR_CODES:
   case CE_SAVED_ERR:
-  case FWINFO_DAT: 		   
+  case FWINFO_DAT: 	
+  case MISCEL_PAR:	   
    return true;
   default:
    return false;
@@ -1152,7 +1195,10 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
   case CE_SAVED_ERR:
    Build_CE_SAVED_ERR((CEErrors*)i_packet_data);
    break;
- 
+  case MISCEL_PAR:
+   Build_MISCEL_PAR((MiscelPar*)i_packet_data);
+   break;
+   
   default:
    return false; //invalid descriptor
   }//switch
@@ -1331,6 +1377,26 @@ void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 {
  CNumericConv::Bin16ToHex(packet_data->flags, m_outgoing_packet);
+ m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
+{
+ int divisor = 0; 
+ for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
+  if (SECU3IO::secu3_allowable_uart_divisors[i].first == packet_data->baud_rate)
+    divisor = SECU3IO::secu3_allowable_uart_divisors[i].second;
+
+ if (0==divisor)
+ {
+  secu3_allowable_uart_divisors[0].second;
+  ASSERT(0);
+ }
+
+ CNumericConv::Bin16ToHex(divisor, m_outgoing_packet);
+ unsigned char perid_ms = packet_data->period_ms / 10;
+ CNumericConv::Bin8ToHex(perid_ms, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

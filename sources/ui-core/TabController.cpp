@@ -150,7 +150,7 @@ void CTabController::SetStyle(const DWORD style)
 }
 
 //добавление вкладки, !!! ВНИЗУ смотреть похожую функцию !!!
-void CTabController::AddPage(CString name,CTabDialog* pPageDlg)
+int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
 {
   TabPageData* pPageData = new TabPageData;
   pPageData->pDialogClass = pPageDlg;
@@ -162,13 +162,14 @@ void CTabController::AddPage(CString name,CTabDialog* pPageDlg)
   if (NULL==hrsrc)
   {
    AfxMessageBox(_T("Resource not found!")); 
-   return;
+   return -1;  //error
   }
 
   HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc);
   if (NULL==hglb)
   {
-   return;
+   AfxMessageBox(_T("Resource load failed!")); 
+   return -1;  //error
   } 
   pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb); 
  
@@ -180,11 +181,11 @@ void CTabController::AddPage(CString name,CTabDialog* pPageDlg)
    CreateTabPage();
   }
 
-  m_tab_item_index++;
+  return m_tab_item_index++;
 }
 
 //!!! ВВЕРХУ смотреть похожую функцию !!!
-void CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
+int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
 {
   TabPageData* pPageData = new TabPageData;
   pPageData->pDialogClass = pPageDlg;
@@ -196,13 +197,14 @@ void CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
   if (NULL==hrsrc)
   {
    AfxMessageBox(_T("Resource not found!")); 
-   return;
+   return -1; //error
   }
 
   HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc); 
   if (NULL==hglb)
   {
-   return;
+   AfxMessageBox(_T("Resource load failed!")); 
+   return -1; //error
   } 
 
   pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb); 
@@ -216,7 +218,7 @@ void CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
    CreateTabPage();
   }
 
-  m_tab_item_index++;
+  return m_tab_item_index++;
 }
 
 
@@ -546,4 +548,9 @@ void CTabController::EnableItem(int iTab, bool enable)
 
   //Tab control should be repainted!
   Invalidate();
+}
+
+void CTabController::Init()
+{
+ m_tab_item_index = 0;
 }
