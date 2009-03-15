@@ -12,7 +12,7 @@
 #include "ui-core/ITabControllerEvent.h"
 #include "common/unicodesupport.h"
 
-
+class CHotKeysToCmdRouter;
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
@@ -98,6 +98,16 @@ protected:
 	afx_msg void OnDestroy();
 	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
 	afx_msg void OnSaveButton();
+	afx_msg void OnHK_STARTR_PAR();
+	afx_msg void OnHK_ANGLES_PAR();
+	afx_msg void OnHK_IDLREG_PAR();
+	afx_msg void OnHK_FUNSET_PAR();
+	afx_msg void OnHK_TEMPER_PAR();
+	afx_msg void OnHK_CARBUR_PAR();
+	afx_msg void OnHK_ADCCOR_PAR();
+	afx_msg void OnHK_CKPS_PAR();
+	afx_msg void OnHK_KNOCK_PAR(); // <--optional
+	afx_msg void OnHK_MISCEL_PAR();
 
 	//}}AFX_MSG
 	DECLARE_MESSAGE_MAP()
@@ -108,6 +118,10 @@ private:
 	virtual void OnSelchangingTabctl(void) {};
 
 	void OnChangeInTab(void) { if (m_OnChangeInTab) m_OnChangeInTab(); }
+
+	int _GetTabIndex(unsigned i_descriptor);
+	void _RegisterHotKeys(void);
+	std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 
 };
 

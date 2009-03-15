@@ -26,6 +26,7 @@
 
 #include "io-core/ufcodes.h" 
 #include "io-core/SECU3IO.h"
+#include "ui-core\HotKeysToCmdRouter.h"
 
 #include "common/FastDelegate.h"
 
@@ -50,6 +51,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_pImgList(NULL)
 , m_enabled(FALSE)
 , m_show_knock_page(i_show_knock_page)
+, m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {   
  //создаем image list для TabCtrl
  m_pImgList = new CImageList(); 
@@ -124,6 +126,21 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
  ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
  ON_BN_CLICKED(IDC_PD_SAVE_BUTTON,OnSaveButton)
+
+#define ON_COMMAND_HK_XXX(x)\
+ ON_COMMAND(ID_PD_ACTIVATE_##x, OnHK_##x)
+
+ ON_COMMAND_HK_XXX(STARTR_PAR)
+ ON_COMMAND_HK_XXX(ANGLES_PAR)
+ ON_COMMAND_HK_XXX(IDLREG_PAR)
+ ON_COMMAND_HK_XXX(FUNSET_PAR)
+ ON_COMMAND_HK_XXX(TEMPER_PAR)
+ ON_COMMAND_HK_XXX(CARBUR_PAR)
+ ON_COMMAND_HK_XXX(ADCCOR_PAR)
+ ON_COMMAND_HK_XXX(CKPS_PAR)
+ ON_COMMAND_HK_XXX(KNOCK_PAR)
+ ON_COMMAND_HK_XXX(MISCEL_PAR)
+
 END_MESSAGE_MAP()
 
 
@@ -148,17 +165,17 @@ BOOL CParamDeskDlg::OnInitDialog()
 	
  m_tab_descriptors.clear();
  //наполняем Tab control вкладками	
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Запуск",m_pStarterPageDlg,0), STARTR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("УОЗ",m_pAnglesPageDlg,1), ANGLES_PAR));	
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("ХХ",m_pIdlRegPageDlg,2), IDLREG_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Функции",m_pFunSetPageDlg,3), FUNSET_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Температура",m_pTemperPageDlg,4), TEMPER_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Карбюратор",m_pCarburPageDlg,5), CARBUR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("1:Запуск",m_pStarterPageDlg,0), STARTR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("2:УОЗ",m_pAnglesPageDlg,1), ANGLES_PAR));	
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("3:ХХ",m_pIdlRegPageDlg,2), IDLREG_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("4:Функции",m_pFunSetPageDlg,3), FUNSET_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("5:Температура",m_pTemperPageDlg,4), TEMPER_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("6:Карбюратор",m_pCarburPageDlg,5), CARBUR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("7:Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("8:ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
  if (m_show_knock_page)
-  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("Прочее",m_pMiscPageDlg,7), MISCEL_PAR));
+  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("9:Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("10:Прочее",m_pMiscPageDlg,7), MISCEL_PAR));
 	
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
  //уже использует обработчики сообщений!
@@ -168,6 +185,9 @@ BOOL CParamDeskDlg::OnInitDialog()
 
  //устанавливаем предыдущее значение (разрешены вкладки или нет)
  m_tab_control.EnableItem(-1,m_enabled ? true : false);
+
+ m_hot_keys_supplier->Init(this);
+ _RegisterHotKeys();
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -190,6 +210,7 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
 void CParamDeskDlg::OnDestroy() 
 {  
  CDialog::OnDestroy();	  
+ m_hot_keys_supplier->Close();
 }
 
 void CParamDeskDlg::SetPosition(int x_pos, int y_pos)
@@ -348,4 +369,54 @@ void CParamDeskDlg::ShowSaveButton(bool i_show)
 {
  m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
 }
+
+int CParamDeskDlg::_GetTabIndex(unsigned i_descriptor)
+{
+ TabDescriptor::const_iterator it = m_tab_descriptors.begin();
+ for (; it != m_tab_descriptors.end(); ++it)
+ {
+  if ((*it).second == i_descriptor)
+   return (*it).first;
+ }
+ ASSERT(0);
+ return -1;
+}
+
+
+void CParamDeskDlg::_RegisterHotKeys(void)
+{
+#define RegisterHK(d,k) m_hot_keys_supplier->RegisterCommand(ID_PD_ACTIVATE_##d, k, 0);
+
+ RegisterHK(STARTR_PAR, VK_F1);
+ RegisterHK(ANGLES_PAR, VK_F2);
+ RegisterHK(IDLREG_PAR, VK_F3);
+ RegisterHK(FUNSET_PAR, VK_F4);
+ RegisterHK(TEMPER_PAR, VK_F5);
+ RegisterHK(CARBUR_PAR, VK_F6);
+ RegisterHK(ADCCOR_PAR, VK_F7);
+ RegisterHK(CKPS_PAR,   VK_F8);
+ if (m_show_knock_page) 
+  RegisterHK(KNOCK_PAR,  VK_F9);
+ RegisterHK(MISCEL_PAR, VK_F10);
+}
+
+#define OnHK_XXX(x)\
+void CParamDeskDlg::OnHK_##x()\
+{\
+ if (!m_enabled)\
+  return;\
+ m_tab_control.SetCurSel(_GetTabIndex(##x));\
+}
+
+OnHK_XXX(STARTR_PAR)
+OnHK_XXX(ANGLES_PAR)
+OnHK_XXX(IDLREG_PAR)
+OnHK_XXX(FUNSET_PAR)
+OnHK_XXX(TEMPER_PAR)
+OnHK_XXX(CARBUR_PAR)
+OnHK_XXX(ADCCOR_PAR)
+OnHK_XXX(CKPS_PAR)
+OnHK_XXX(KNOCK_PAR)
+OnHK_XXX(MISCEL_PAR)
+
 

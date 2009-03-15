@@ -16,7 +16,7 @@ NOTE:
  - define _USE_SETWINDOWLONGPTR if you want to use SetWindowLongPtr() instead SetWindowLong().
 */
 
-class CWndSubclasser
+class AFX_EXT_CLASS CWndSubclasser
 {
 public:
   CWndSubclasser();
