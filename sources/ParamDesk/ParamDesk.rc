@@ -387,7 +387,7 @@ BEGIN
                     UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,85,87,11,17
     LTEXT           "Период передачи пакетов с данными",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,34,66,119,20
-    LTEXT           "мин-1",IDC_PD_MISC_PACKET_PERIOD_UNIT,102,90,25,13
+    LTEXT           "мс",IDC_PD_MISC_PACKET_PERIOD_UNIT,102,90,25,13
 END
 
 
