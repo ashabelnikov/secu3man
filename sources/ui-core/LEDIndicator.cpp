@@ -84,8 +84,11 @@ void CLEDIndicator::OnPaint()
 
 void CLEDIndicator::SetState(bool state)
 {
+ if (state!=m_state)
+  { //avoid stupid redrawing if state is already equal to m_state
   m_state = state;
   InvalidateRect(NULL,TRUE);
+  }
 }
 
 bool CLEDIndicator::GetState(void)

@@ -2,6 +2,8 @@
 #pragma once
 
 #include "resource.h"
+#include "common/ObjectTimer.h"
+
 #include "MITachometer.h"
 #include "MIPressure.h"
 #include "MIVoltmeter.h"
@@ -20,24 +22,10 @@
 
 class AFX_EXT_CLASS CMIDeskDlg : public CDialog, public IMIView
 {
-// Construction
 public:
 	CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
 
-// Dialog Data
-	//{{AFX_DATA(CMIDeskDlg)
 	enum { IDD = IDD_MEAS_INSTRUMENT_DESK };
-	CMITachometer	m_tachometer;
-	CMIPressure     m_pressure;
-	CMIVoltmeter    m_voltmeter;
-	CMIDwellAngle   m_dwell_angle;
-    CMITemperature  m_temperature;
-
-	CMIAirFlow      m_air_flow;
-	CMIGasValve     m_gas_valve;
-	CMIThrottleGate m_throttle_gate;
-    CMIShutoffValve m_shutoff_valve;
-	//}}AFX_DATA
 
    //--------interface implementation---------------
 	virtual void Show(bool show);
@@ -46,22 +34,29 @@ public:
     virtual void GetValues(SECU3IO::SensorDat* o_values);
    //-----------------------------------------------
 
-
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CMIDeskDlg)
-	protected:
+protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual BOOL OnInitDialog(); //activate
+	afx_msg void OnDestroy();    //deactivate
+	DECLARE_MESSAGE_MAP()
+
+    void OnUpdateTimer(void);
 
 // Implementation
-protected:
+private:
+	CMITachometer	m_tachometer;
+	CMIPressure     m_pressure;
+	CMIVoltmeter    m_voltmeter;
+	CMIDwellAngle   m_dwell_angle;
+	CMITemperature  m_temperature;
 
-	// Generated message map functions
-	//{{AFX_MSG(CMIDeskDlg)
-	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+	CMIAirFlow      m_air_flow;
+	CMIGasValve     m_gas_valve;
+	CMIThrottleGate m_throttle_gate;
+	CMIShutoffValve m_shutoff_valve;
+
+	SECU3IO::SensorDat m_values;
+	CObjectTimer<CMIDeskDlg> m_update_timer;
 };
 
 /////////////////////////////////////////////////////////////////////////////
