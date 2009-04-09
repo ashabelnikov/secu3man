@@ -674,14 +674,15 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
 	//----------------------------------------------------------------------------
 	if (open.GetFileExt()==_T("hex") || open.GetFileExt()==_T("a90"))
 	{
-     int hex_file_length = f.GetLength();
-	 if (hex_file_length > 262144)
+     ULONGLONG ulonglong_size = f.GetLength();
+	 if (ulonglong_size > 262144)
 	 {
 	  AfxMessageBox(_T("Файл слишком большого размера! Извините."));
 	  f.Close();
 	  return false; //ошибка
 	 }
 
+	 int hex_file_length = static_cast<int>(ulonglong_size);
      BYTE* p_hex_buff = new BYTE[hex_file_length]; 
  	 f.Read(p_hex_buff, hex_file_length);
 	 size_t bin_size = 0;

@@ -181,7 +181,7 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
   if (!m_ctrlGrid.SetItemValue(m_knock_k_wnd_end_angle_item,knock_k_wnd_end_angle))
    status = false;
 
-  size_t knock_bpf_frequency = m_params.knock_bpf_frequency;
+  size_t knock_bpf_frequency = CNumericConv::Round(m_params.knock_bpf_frequency);
   m_freq_selector.SetSelectedIndex(knock_bpf_frequency);
 
   ASSERT(status);

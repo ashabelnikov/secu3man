@@ -66,11 +66,13 @@ BOOL CSecu3manApp::InitInstance()
 
   CoInitialize(NULL);
 
+#if (_MSC_VER <1300)
   #ifdef _AFXDLL
     Enable3dControls();		    // Call this when using MFC in a shared DLL
   #else
     Enable3dControlsStatic();	// Call this when linking to MFC statically
   #endif
+#endif
 
   SetRegistryKey(_T("SECU-3 Manager"));
 

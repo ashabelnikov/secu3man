@@ -198,8 +198,9 @@ protected:
     void ValidateChanges();
   };
 
-  /* VC6.0 bug, uncomment this line if need!
-  friend bool item_alpha_sort(std::vector<CPropertyGrid::CItem>::iterator it1, std::vector<CPropertyGrid::CItem>::iterator it2);*/
+#if (_MSC_VER >=1300) //under VC6 I had a compilation error!
+  friend bool item_alpha_sort(std::vector<CPropertyGrid::CItem>::iterator it1, std::vector<CPropertyGrid::CItem>::iterator it2);
+#endif
 
   class CSection
   {
