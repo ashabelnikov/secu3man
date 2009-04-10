@@ -14,6 +14,7 @@
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
 #include <math.h>
+#include <numeric>
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -48,6 +49,8 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 
   m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
   m_view->m_knock_parameters_dlg.setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
+
+  _InitializeRPMKnockFunctionBuffer();
 }
 
 
@@ -237,6 +240,11 @@ void CKnockChannelTabController::OnParamsChangesTimer(void)
 
     m_parameters_changed = false; //обработали событие - сбрасываем признак
   }
+
+  //перекачиваем данные из буфера в график на представлении
+  std::vector<float> values;
+  _PerformAverageOfRPMKnockFunctionValues(values);
+  m_view->SetRPMKnockSignal(values);
 }
 
 void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time)
@@ -244,9 +252,46 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  //добавляем новое значение в осциллограф
  m_view->AppendPoint(p_packet->knock_k);
 
- //-----------------------------------
- /*std::vector<float> v;
- for(int i = 0; i < 128; i++)
-   v.push_back((sin(((float)i)/10.0)*2) + 2.5);
- m_view->SetRPMKnockSignal(v);*/
+ //обновляем новым значением буфер функции сигнала ДД от оборотов
+ //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
+ //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
+ //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом. 
+ int index_unchecked = (p_packet->frequen - 200) / 60;
+ if (index_unchecked < 0)
+  index_unchecked = 0;	 
+ if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))
+  index_unchecked = (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1);
+ size_t index = (size_t)index_unchecked;
+
+ if (m_rpm_knock_signal[index].size() < RPM_KNOCK_SAMPLES_PER_POINT)
+   m_rpm_knock_signal[index].push_back(p_packet->knock_k);
+ else
+ {
+  size_t &ii = m_rpm_knock_signal_ii[index];
+  m_rpm_knock_signal[index][ii] = p_packet->knock_k;
+  ii = ii < (RPM_KNOCK_SAMPLES_PER_POINT - 1) ? ii + 1 : 0;
+ }
+ 
 }
+
+void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function)
+{
+ o_function.clear();
+ std::vector<std::vector<float> >::const_iterator it = m_rpm_knock_signal.begin();
+ for(; it != m_rpm_knock_signal.end(); ++it)
+ {
+  float value = std::accumulate((it)->begin(), (it)->end(), 0.f);
+  value = it->size() ? value / it->size() : 0; //avoid divide by zero!
+  o_function.push_back(value);
+ }
+}
+
+void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(void)
+{
+ for(size_t i = 0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
+ {
+  m_rpm_knock_signal.push_back(std::vector<float>());   
+  m_rpm_knock_signal_ii.push_back(0);
+ }
+}
+

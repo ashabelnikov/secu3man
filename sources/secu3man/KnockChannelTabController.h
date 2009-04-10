@@ -51,8 +51,17 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
     bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
 	void _HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time);
 
+	void _PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function);
+	void _InitializeRPMKnockFunctionBuffer(void);
+
     int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
 	int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен
 	bool m_parameters_changed;       //этот флаг устанавливается параметров ДД и сбрасывается после посылки измененных данных в SECU
 	CObjectTimer<CKnockChannelTabController> m_params_changes_timer;
+
+    //Буфер содержащий значения функции сигнала детонации от оборотов. Каждое значение функции
+	//может состоять из множества (но ограниченного) значений для усреднения.
+	enum {RPM_KNOCK_SAMPLES_PER_POINT = 16};
+	std::vector<std::vector<float> > m_rpm_knock_signal;
+	std::vector<size_t> m_rpm_knock_signal_ii;
 };
