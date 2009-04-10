@@ -256,7 +256,7 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
  //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
  //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом. 
- int index_unchecked = (p_packet->frequen - 200) / 60;
+ int index_unchecked = CNumericConv::Round(p_packet->frequen - 200.0) / 60.0;
  if (index_unchecked < 0)
   index_unchecked = 0;	 
  if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))
