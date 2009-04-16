@@ -8,6 +8,7 @@
 
 #include "stdafx.h"
 #include "HotKeysToCmdRouter.h"
+#include "HotKeysManager.h"
 #include <map>
 
 
@@ -18,11 +19,14 @@ CHotKeysToCmdRouter::CHotKeysToCmdRouter()
  TCHAR string[256];
  _ultot(id, string, 16);
  m_thread_id_string = string;
+
+ HotKeysManager::GetInstance()->_AddRouter(this);
 }
 
 CHotKeysToCmdRouter::~CHotKeysToCmdRouter()
 {
  Close(); //удаляем и чистим все!
+ HotKeysManager::GetInstance()->_RemoveRouter(this);
 }
 
 bool CHotKeysToCmdRouter::Close(void)
@@ -89,7 +93,13 @@ bool CHotKeysToCmdRouter::RegisterCommand(UINT i_command_id, UINT i_vk, UINT i_f
  }
 
  if (m_hot_key_map.find(nIDHotKey)==m_hot_key_map.end())
-  m_hot_key_map.insert(HotKeyMap::value_type(nIDHotKey, i_command_id));
+ {
+  HotKeyInfo info;
+  info.m_id_command = i_command_id;
+  info.m_fsModifiers = i_fsModifiers;
+  info.m_vk = i_vk;
+  m_hot_key_map.insert(HotKeyMap::value_type(nIDHotKey, info));
+ }
 
 	//m_hot_key_map
  return true;
@@ -99,7 +109,7 @@ CHotKeysToCmdRouter::HotKeyMap::iterator CHotKeysToCmdRouter::_FindCommandID(UIN
 {
  for(HotKeyMap::iterator it = m_hot_key_map.begin(); it != m_hot_key_map.end(); ++it)
  {
-  if ((*it).second == i_command_id)
+  if ((*it).second.m_id_command == i_command_id)
    return it;
  }
  return m_hot_key_map.end();
@@ -141,7 +151,7 @@ bool CHotKeysToCmdRouter::UnregisterAllCommands()
 
  while(!m_hot_key_map.empty())
  {
-  if (!UnregisterCommand(m_hot_key_map.begin()->second))
+  if (!UnregisterCommand(m_hot_key_map.begin()->second.m_id_command))
    result = false;
  }
  
@@ -158,7 +168,7 @@ switch(uMsg)
 	if(CWnd::GetActiveWindow()==AfxGetMainWnd())   
     {    
      //send message as it from menu
-     mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam],0),NULL);       
+     mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam].m_id_command,0),NULL);       
     }
    }
    else
@@ -168,3 +178,4 @@ switch(uMsg)
  
  return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
 }
+

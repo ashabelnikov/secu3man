@@ -87,6 +87,7 @@ void CKnockChannelTabController::OnActivate(void)
 //from MainTabController
 void CKnockChannelTabController::OnDeactivate(void)
 {
+ m_params_changes_timer.KillTimer();
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));
 }

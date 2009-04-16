@@ -42,12 +42,13 @@ protected:
 	afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
 	afx_msg void OnSetFocus(CWnd *pOldWnd);
 	afx_msg void OnClose();
-    afx_msg void OnAppAbout();
-    afx_msg void OnAppSettings();
-    afx_msg void OnAppBeginLog();
-    afx_msg void OnAppEndLog();
-    afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
-    afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
+        afx_msg void OnAppAbout();
+        afx_msg void OnAppSettings();
+        afx_msg void OnAppBeginLog();
+        afx_msg void OnAppEndLog();
+        afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
+        afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
+        afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized );
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -58,6 +59,9 @@ private:
 	EventHandler m_OnAppEndLog;
 	EventResult  m_IsBeginLoggingAllowed;
 	EventResult  m_IsEndLoggingAllowed;
+
+        //?????? ????????? ???????? ????: ??????? ??? ?????????
+	bool m_active;
 };
 
 /////////////////////////////////////////////////////////////////////////////

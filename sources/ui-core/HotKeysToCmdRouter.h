@@ -12,6 +12,8 @@
 #include "..\common\unicodesupport.h"
 #include <map>
 
+class HotKeysManager;
+
 //¬нимание! ќбъект должен создаватьс€ только с использованием heap! 
 class AFX_EXT_CLASS CHotKeysToCmdRouter : private CWndSubclasser
 {
@@ -44,11 +46,20 @@ public:
   bool UnregisterAllCommands();
 
 private:
+  friend HotKeysManager;
+
   //from CWndSubclasser
   virtual LRESULT WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-  //<ID-шка гор€чей клавиши, ID-шка команды дл€ WM_COMMNAND>
-  typedef std::map<int, UINT> HotKeyMap;
+  struct HotKeyInfo
+  {
+   UINT m_id_command; //ID-шка команды дл€ WM_COMMNAND
+   UINT m_fsModifiers;
+   UINT m_vk;
+  }; 
+
+  //<ID-шка гор€чей клавиши, info>
+  typedef std::map<int, HotKeyInfo> HotKeyMap;
   HotKeyMap::iterator _FindCommandID(UINT i_command_id);
 
   //pointer to original window

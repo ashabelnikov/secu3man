@@ -8,8 +8,9 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "MainFrame.h"
 #include "resource.h"
+#include "MainFrame.h"
+#include "ui-core\HotKeysManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -35,6 +36,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
   ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
   ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
   ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
+  ON_WM_ACTIVATE()
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
@@ -45,6 +47,7 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_wnd_initial_size(725,450)
 , m_pwndView(NULL)
+, m_active(false)
 {
  //na	
 }
@@ -202,4 +205,18 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
   enable = m_IsEndLoggingAllowed();
  pCmdUI->Enable(enable);
 }
+
+void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+{
+ if (nState == WA_INACTIVE && m_active)
+ {
+  HotKeysManager::GetInstance()->DeactivateAllHotKeys();
+  m_active = false; 
+ }
+ else
+ {
+  HotKeysManager::GetInstance()->ActivateAllHotKeys();
+  m_active = true;
+ }
+} 
 
