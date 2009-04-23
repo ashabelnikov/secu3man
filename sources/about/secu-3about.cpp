@@ -20,6 +20,6 @@ void ABOUT_API DisplayAbout(CWnd* i_pParent)
 	  hInstance,
 	  (LPCTSTR)IDB_BITMAP0001,
 	  (LPCTSTR)IDR_RGN0001,
-	  _T("SECU-3 Manager v1.0. Build [")__DATE__ _T("]"),
+	  _T("SECU-3 Manager v2.0. Build [")__DATE__ _T("]"),
 	  _T("(c) Shabelnikov Technology. UA, Gorlovka city\r\nICQ: 405-791-931, http://secu-3.narod.ru\r\n             ...alone from strange world...\r\n"));
 }
