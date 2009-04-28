@@ -57,6 +57,9 @@ void CMIAirFlow::SetValue(float value)
   if ((value > m_upLimit)|| (value < m_loLimit))
 	return;
 
+  if (m_progress.GetPos()==((int)value))
+    return; //avoid flickering
+
   CString cs;
   cs.Format(_T("%02d"),(int)value); 
   m_progress.SetPos((int)value);
