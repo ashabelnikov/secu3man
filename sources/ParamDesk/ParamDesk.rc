@@ -354,13 +354,12 @@ BEGIN
                     BS_AUTORADIOBUTTON,48,50,74,12
     CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP,48,32,79,14
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,46,53,
-                    CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_GROUP | 
-                    WS_TABSTOP
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,47,71,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_GROUP | WS_TABSTOP
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
                     131,51
     LTEXT           "Кол-во зубьев до в.м.т.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,78,83,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,79,83,89,9,NOT 
                     WS_GROUP
 END
 

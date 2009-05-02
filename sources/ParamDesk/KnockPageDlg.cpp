@@ -70,7 +70,7 @@ BOOL CKnockPageDlg::OnInitDialog()
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex1;
   ex1.m_decimal_places = 2;
   ex1.m_spin = true;
-  ex1.m_delta = 6.0;
+  ex1.m_delta = 1.0; //шаг
   ex1.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
   ex1.m_lower = -12.0;
   ex1.m_upper = 54.0;
@@ -80,7 +80,7 @@ BOOL CKnockPageDlg::OnInitDialog()
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex2;
   ex2.m_decimal_places = 2;
   ex2.m_spin = true;
-  ex2.m_delta = 6.0;
+  ex2.m_delta = 1.0; //шаг
   ex2.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
   ex2.m_lower = -12.0;
   ex2.m_upper = 54.0;
