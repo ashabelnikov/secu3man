@@ -173,17 +173,32 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
 
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
 {
- m_cogs_numbers.push_back(std::make_pair(18,_TSTRING(_T("18 (60-2)"))));
- m_cogs_numbers.push_back(std::make_pair(19,_TSTRING(_T("19 (60-2)"))));
- m_cogs_numbers.push_back(std::make_pair(20,_TSTRING(_T("20 (60-2)"))));
- m_cogs_numbers.push_back(std::make_pair(21,_TSTRING(_T("21 (60-2)"))));
- m_cogs_numbers.push_back(std::make_pair(22,_TSTRING(_T("22 (60-2)"))));
+ m_cogs_numbers.push_back(std::make_pair(1,_TSTRING(_T("1"))));
+ m_cogs_numbers.push_back(std::make_pair(2,_TSTRING(_T("2"))));
+ m_cogs_numbers.push_back(std::make_pair(3,_TSTRING(_T("3"))));
+ m_cogs_numbers.push_back(std::make_pair(4,_TSTRING(_T("4"))));
+ m_cogs_numbers.push_back(std::make_pair(5,_TSTRING(_T("5"))));
+ m_cogs_numbers.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+ m_cogs_numbers.push_back(std::make_pair(7,_TSTRING(_T("7"))));
+ m_cogs_numbers.push_back(std::make_pair(8,_TSTRING(_T("8"))));
+ m_cogs_numbers.push_back(std::make_pair(9,_TSTRING(_T("9"))));
+ m_cogs_numbers.push_back(std::make_pair(10,_TSTRING(_T("10"))));
+ m_cogs_numbers.push_back(std::make_pair(11,_TSTRING(_T("11"))));
+ m_cogs_numbers.push_back(std::make_pair(12,_TSTRING(_T("12"))));
+ m_cogs_numbers.push_back(std::make_pair(13,_TSTRING(_T("13"))));
+ m_cogs_numbers.push_back(std::make_pair(14,_TSTRING(_T("14"))));
+ m_cogs_numbers.push_back(std::make_pair(15,_TSTRING(_T("15"))));
+ m_cogs_numbers.push_back(std::make_pair(16,_TSTRING(_T("16"))));
+ m_cogs_numbers.push_back(std::make_pair(17,_TSTRING(_T("17"))));
+ m_cogs_numbers.push_back(std::make_pair(18,_TSTRING(_T("18"))));
+ m_cogs_numbers.push_back(std::make_pair(19,_TSTRING(_T("19"))));
+ m_cogs_numbers.push_back(std::make_pair(20,_TSTRING(_T("20"))));
+ m_cogs_numbers.push_back(std::make_pair(21,_TSTRING(_T("21"))));
+ m_cogs_numbers.push_back(std::make_pair(22,_TSTRING(_T("22"))));
+ m_cogs_numbers.push_back(std::make_pair(23,_TSTRING(_T("23"))));
+ m_cogs_numbers.push_back(std::make_pair(24,_TSTRING(_T("24"))));
+ m_cogs_numbers.push_back(std::make_pair(25,_TSTRING(_T("25"))));
 
- m_cogs_numbers.push_back(std::make_pair(10,_TSTRING(_T("10 (36-1)"))));
- m_cogs_numbers.push_back(std::make_pair(11,_TSTRING(_T("11 (36-1)"))));
- m_cogs_numbers.push_back(std::make_pair(12,_TSTRING(_T("12 (36-1)"))));
- m_cogs_numbers.push_back(std::make_pair(13,_TSTRING(_T("13 (36-1)"))));
- m_cogs_numbers.push_back(std::make_pair(14,_TSTRING(_T("14 (36-1)"))));
 
  m_teeth_before_tdc_combo.ResetContent();
  for(size_t i = 0; i < m_cogs_numbers.size(); i++)
