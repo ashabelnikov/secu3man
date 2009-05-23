@@ -89,25 +89,25 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   m_pParamMonTabController = new CParamMonTabController(m_pParamMonTabDlg, p_comm, p_sbar);
 
   m_MainTabController.AddTabController(m_pParamMonTabController);
-  m_tab_control.AddPage("Параметры и монитор",m_pParamMonTabDlg,0);
+  m_tab_control.AddPage(MLL::LoadString(IDS_TAB_PARAMETERS_AND_MONOTOR),m_pParamMonTabDlg,0);
 
   m_pFirmwareTabDlg = new CFirmwareTabDlg(); //view
   m_pFirmwareTabController = new CFirmwareTabController(m_pFirmwareTabDlg, p_comm, p_sbar);
 
   m_MainTabController.AddTabController(m_pFirmwareTabController);
-  m_tab_control.AddPage("Данные прошивки",m_pFirmwareTabDlg,1);	
+  m_tab_control.AddPage(MLL::LoadString(IDS_TAB_FIRMWARE_DATA),m_pFirmwareTabDlg,1);	
 
   m_pCheckEngineTabDlg = new CCheckEngineTabDlg(); //view
   m_pCheckEngineTabController = new CCheckEngineTabController(m_pCheckEngineTabDlg, p_comm, p_sbar);
 
   m_MainTabController.AddTabController(m_pCheckEngineTabController);
-  m_tab_control.AddPage("Check Engine",m_pCheckEngineTabDlg,2);
+  m_tab_control.AddPage(MLL::LoadString(IDS_TAB_CHECK_ENGINE),m_pCheckEngineTabDlg,2);
 
   m_pKnockChannelTabDlg = new CKnockChannelTabDlg(); //view
   m_pKnockChannelTabController = new CKnockChannelTabController(m_pKnockChannelTabDlg, p_comm, p_sbar);
 
   m_MainTabController.AddTabController(m_pKnockChannelTabController);
-  m_tab_control.AddPage("Настройка ДД",m_pKnockChannelTabDlg,3);
+  m_tab_control.AddPage(MLL::LoadString(IDS_TAB_KNOCK_SETTINGS),m_pKnockChannelTabDlg,3);
 
   m_tab_control.SetCurSel(0);
 

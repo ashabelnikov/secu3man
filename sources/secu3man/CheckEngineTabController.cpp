@@ -49,10 +49,10 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
   m_view->setOnListClearAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListClearAllErrors)); 
   //наполняем карту которая будет содержать ошибки отображаемые в списке. Номер бита закодированной ошибки
   //одновременно выступает ключом в этой карте и ID-шкой для идентификации элементов списка.
-  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_CKPS_MALFUNCTION, _T("Сбои в работе ДПКВ - ошибки синхронизации")));
-  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_PARAM_BROKEN, _T("Параметры в EEPROM повреждены (СRС)")));
-  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_PROGRAM_CODE_BROKEN, _T("Код прошивки поврежден (СRС)")));
-  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, _T("Процессор детонации не отвечает")));
+  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_CKPS_MALFUNCTION, MLL::GetString(IDS_ECUERROR_CKPS_MALFUNCTION)));
+  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_PARAM_BROKEN, MLL::GetString(IDS_ECUERROR_EEPROM_PARAM_BROKEN)));
+  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_PROGRAM_CODE_BROKEN, MLL::GetString(IDS_ECUERROR_PROGRAM_CODE_BROKEN)));
+  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, MLL::GetString(IDS_ECUERROR_KSP_CHIP_FAILED)));
 }
 
 
@@ -108,7 +108,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    switch(p_ndata->opcode)
    {
     case OPCODE_CE_SAVE_ERRORS: //Посланные ранее коды ошибок были сохранены в EEPROM
-     m_sbar->SetInformationText("Коды ошибок были успешно сохранены!");
+     m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_SAVED_SUCCESSFULLY));
      return;
    }		
   }
@@ -122,7 +122,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
  if (i_descriptor == CE_SAVED_ERR)
  { //приняли ошибки прочитанные из EEPROM
   CEErrors* errors = reinterpret_cast<CEErrors*>(ip_packet);
-  m_sbar->SetInformationText("Сохраненные коды ошибок успешно прочитаны!");
+  m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_READ_SUCCESSFULLY));
   _SetErrorsToList(errors); 
  }
 }
@@ -184,7 +184,7 @@ void CCheckEngineTabController::OnRealTimeErrors(void)
 //и передать их в менеджер (чек боксы в списке)
 void CCheckEngineTabController::OnReadSavedErrors(void) 
 {
- m_sbar->SetInformationText("Чтение кодов ошибок из EEPROM...");
+ m_sbar->SetInformationText(MLL::LoadString(IDS_READING_ERROR_CODES_FROM_EEPROM));
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_CE_SAVE_ERRORS;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
@@ -194,7 +194,7 @@ void CCheckEngineTabController::OnReadSavedErrors(void)
 //После получения паета SECU-3 сохранит коды ошибок в EEPROM.
 void CCheckEngineTabController::OnWriteSavedErrors(void) 
 {
- m_sbar->SetInformationText("Запись кодов ошибок в EEPROM...");
+ m_sbar->SetInformationText(MLL::LoadString(IDS_WRITING_ERROR_CODES_TO_EEPROM));
  CEErrors packet_data;
  _GetErrorsFromList(&packet_data);
  m_comm->m_pControlApp->SendPacket(CE_SAVED_ERR,&packet_data);

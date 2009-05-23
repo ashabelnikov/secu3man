@@ -82,21 +82,16 @@ END_MESSAGE_MAP()
 BOOL CCheckEngineTabDlg::OnInitDialog() 
 {
   CDialog::OnInitDialog();
-		
-
-  m_quick_help_text.SetWindowText("\
-    Режим считывания ошибок в реальном времени позволяет видеть возникающие\
- и исчезающие ошибки. Это полезно для выяснения причины возникновения конкретной\
- ошибки. \n    В список сохраненных ошибок попадают все когда-либо\
- (даже единократно) возникавшие ошибки.");
+	
+  m_quick_help_text.SetWindowText(MLL::LoadString(IDS_CEPAGE_QUICK_HELP_TEXT));
 
   m_errors_list.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_CHECKBOXES | LVS_EX_GRIDLINES);	
 
   //устанавливаем картинки состояния для чекбоксов...
   m_errors_list.SetImageList(&m_image_list, LVSIL_STATE);
 
-  m_errors_list.InsertColumn(0,_T("Состояние"),LVCFMT_LEFT,70);
-  m_errors_list.InsertColumn(1,_T("Описание ошибки"),LVCFMT_LEFT,450);
+  m_errors_list.InsertColumn(0,MLL::LoadString(IDS_CEPAGE_ERROR_STATE),LVCFMT_LEFT,70);
+  m_errors_list.InsertColumn(1,MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION),LVCFMT_LEFT,450);
 
   SetTimer(TIMER_ID,250,NULL);
 

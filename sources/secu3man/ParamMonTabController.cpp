@@ -146,7 +146,7 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
   {
     case 0: //пытаемся добится от SECU-3 чтобы оно посылало пакеты с информацией о семействах характеристик
 	{///////////
-      m_sbar->SetInformationText("Чтение конфигурации..."); 
+	  m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_CONFIGURATION)); 
 
 	  if (i_descriptor!=FNNAME_DAT)
 	  {
@@ -225,7 +225,7 @@ void CParamMonTabController::StartReadingNecessaryParameters(void)
 //m_operation_state = 0 для запуска
 bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
-  m_sbar->SetInformationText("Чтение параметров..."); 
+  m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_PARAMS)); 
 
   switch(m_operation_state)
   {
@@ -242,7 +242,7 @@ bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descri
            
 	    //процесс инициализации окончен
         m_operation_state = -1; //останов КА - операции выполнены
- 	    m_sbar->SetInformationText("Готово.");
+		m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
         return true; //операции выполнены
 	  }
 	}	
@@ -262,7 +262,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    switch(p_ndata->opcode)
    {
     case OPCODE_EEPROM_PARAM_SAVE:
-     m_sbar->SetInformationText("Параметры были сохранены.");
+     m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
      return;
    }		
   }
@@ -428,7 +428,7 @@ bool CParamMonTabController::OnClose(void)
 //в SECU-3
 void CParamMonTabController::OnPDSaveButton()
 {
- m_sbar->SetInformationText("Сохранение параметров...");
+ m_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_PARAMS));
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);

@@ -287,6 +287,20 @@ STRINGTABLE DISCARDABLE
 BEGIN
     AFX_IDS_SCRESTORE       "Restore the window to normal size"
     AFX_IDS_SCTASKLIST      "Activate Task List"
+    IDS_SELECT_FOLDER_FOR_LOG_FILES "Выбор каталога для лог-файлов"
+    IDS_ECUERROR_CKPS_MALFUNCTION "Сбои в работе ДПКВ - ошибки синхронизации"
+    IDS_ECUERROR_EEPROM_PARAM_BROKEN "Параметры в EEPROM повреждены (СRС)"
+    IDS_ECUERROR_PROGRAM_CODE_BROKEN "Код прошивки поврежден (СRС)"
+    IDS_ECUERROR_KSP_CHIP_FAILED "Процессор детонации не отвечает"
+    IDS_ERROR_CODES_SAVED_SUCCESSFULLY "Коды ошибок были успешно сохранены!"
+    IDS_ERROR_CODES_READ_SUCCESSFULLY 
+                            "Сохраненные коды ошибок успешно прочитаны!"
+    IDS_READING_ERROR_CODES_FROM_EEPROM "Чтение кодов ошибок из EEPROM..."
+    IDS_WRITING_ERROR_CODES_TO_EEPROM "Запись кодов ошибок в EEPROM..."
+    IDS_CEPAGE_QUICK_HELP_TEXT 
+                            "    Режим считывания ошибок в реальном времени позволяет видеть возникающие и исчезающие ошибки. Это полезно для выяснения причины возникновения конкретной ошибки. \n    В список сохраненных ошибок попадают все когда-либо (даже единократно) возникавшие ошибки."
+    IDS_CEPAGE_ERROR_STATE  "Состояние"
+    IDS_CEPAGE_ERROR_DESCRIPTION "Описание ошибки"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -324,6 +338,69 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FW_READING_SIGNATURE "Чтение сигнатуры..."
+    IDS_FW_READING_EEPROM   "Чтение EEPROM..."
+    IDS_FW_WRITING_EEPROM   "Запись EEPROM..."
+    IDS_FW_READING_FW       "Чтение прошивки..."
+    IDS_FW_WRITING_FW       "Запись прошивки..."
+    IDS_BL_ERROR_NOANSWER   "Ошибка: Нет ответа!"
+    IDS_BL_ERROR_CRC        "Ошибка: Контрольная сумма не совпадает!"
+    IDS_BL_ERROR_WRONG_DATA "Ошибка: Некорректные данные!"
+    IDS_FW_EEPROM_READ_SUCCESSFULLY "EEPROM успешно прочитано!"
+    IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY "EEPROM успешно записано!"
+    IDS_FW_FW_READ_SUCCESSFULLY "Прошивка успешно прочитана!"
+    IDS_FW_FW_WRITTEN_SUCCESSFULLY "Прошивка успешно записана!"
+    IDS_FW_FILE_IS_TOO_BIG  "Файл слишком большого размера! Извините."
+    IDS_FW_HEX_FILE_CRC_ERROR 
+                            "Ошибка в контрольной сумме HEX-файла. Операция прервана."
+    IDS_FW_HEX_FILE_STRUCTURE_ERROR 
+                            "Неожиданный символ или структура HEX-файла нарушена. Операция прервана."
+    IDS_FW_WRONG_FW_FILE_SIZE 
+                            "Неправильный размер файла прошивки. Размер должен быть %d байт."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FW_MODIFICATION_WARNING "Прошивка была изменена. Хотите сохранить?"
+    IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
+    IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
+    IDS_FW_START_MAP        "Пусковая карта УОЗ"
+    IDS_FW_MAPS_ADVANGLE_UNIT "УОЗ (град.)"
+    IDS_FW_MAPS_RPM_UNIT    "Обороты (мин-1)"
+    IDS_FW_IDLE_MAP         "Карта УОЗ на холостом ходу"
+    IDS_FW_WORK_MAP         "Рабочая карта УОЗ"
+    IDS_FW_MAPS_TEMPERATURE_UNIT "Температура °C"
+    IDS_FW_TEMPCORR_MAP     "Карта коррекции УОЗ по температуре охлаждающей жидкости"
+    IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
+    IDS_FW_ATTENUATOR_MAP   "Настройка кривой усиления аттенюатора"
+    IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Параметры были сохранены."
+    IDS_KC_READING_PARAMETERS "Чтение параметров ДД..."
+    IDS_KC_READY            "Готово."
+    IDS_KC_WRITING_PARAMETERS "Сохранение параметров ДД..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CANT_START_LOG_WRITING 
+                            "Не могу начать запись лога в файл: %s\n Возможно этот файл защищен от записи или уже открыт другой программой."
+    IDS_TAB_PARAMETERS_AND_MONOTOR "Параметры и монитор"
+    IDS_TAB_FIRMWARE_DATA   "Данные прошивки"
+    IDS_TAB_CHECK_ENGINE    "Check Engine"
+    IDS_TAB_KNOCK_SETTINGS  "Настройка ДД"
+    IDS_PM_READING_CONFIGURATION "Чтение конфигурации..."
+    IDS_PM_READING_PARAMS   "Чтение параметров..."
+    IDS_PM_READY            "Готово."
+    IDS_PM_PARAMS_HAS_BEEN_SAVED "Параметры были сохранены."
+    IDS_PM_WRITING_PARAMS   "Сохранение параметров..."
+    IDS_PM_EEPROM_PARAMETERS "Параметры в EEPROM:"
+    IDS_APP_TITLE           "SECU-3 Manager"
+    IDS_STATUS_BAR_LOGO     "SECU-3"
+    IDS_KC_OSCILLOSCOPE_V_UNIT "Volts"
+    IDS_KC_OSCILLOSCOPE_H_UNIT "Samples, grid 1x4"
 END
 
 #endif    // Russian resources

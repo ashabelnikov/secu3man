@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MITemperature.h"
 
 #ifdef _DEBUG
@@ -35,10 +36,10 @@ void CMITemperature::Create(void)
   m_meter.SetRange (-40.0, 120.0) ;
   m_meter.SetLabelsDecimals(1) ;
   m_meter.SetValueDecimals(1) ;
-  m_meter.SetTitle("Температура") ;
+  m_meter.SetTitle(MLL::LoadString(IDS_MI_TEMPERATURE_TITLE)) ;
   m_meter.SetFontScale(80);    
   m_meter.SetColor(meter_value,RGB(10,80,255));
-  m_meter.SetUnit("°C");
+  m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
   m_meter.SetTickNumber(16);
   m_meter.AddAlertZone(-40,50,RGB(130,130,180));
   m_meter.AddAlertZone(50,100,RGB(120,120,120));

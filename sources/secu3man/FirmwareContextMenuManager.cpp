@@ -42,77 +42,52 @@ void CFirmwareModeContextMenuManager::Attach(CWnd* pWnd)
 //Fill menu with items and submenus
 void CFirmwareModeContextMenuManager::CreateContent(void)
 {
-  CString str;
-
   ///////////////////////////////////////////////////////////////////////////
   //Popup menu "»мпорт данных"
-  m_ImportMenu.CreatePopupMenu();
-  str.LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ);
-  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,str);
-
-  str.LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW);
-  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,str);	
-
-  str.LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3);
-  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,str);	
-
+  m_ImportMenu.CreatePopupMenu();  
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ));  
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW));	
+  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3));	
 
   ///////////////////////////////////////////////////////////////////////////
   //Popup menu "Ёкспорт данных"
   m_ExportMenu.CreatePopupMenu();
-  str.LoadString(IDS_EXPORT_EXPORT_TO_MPSZ);
-  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_MPSZ,str);
+  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_MPSZ,MLL::LoadString(IDS_EXPORT_EXPORT_TO_MPSZ));
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.CreatePopupMenu();
   
-  str.LoadString(IDS_READ_FLASH);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH,str);	
-
-  str.LoadString(IDS_WRITE_FLASH);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH,str);	
-
-  str.LoadString(IDS_OPEN_FLASH);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_OPEN_FLASH,str);	
-
-  str.LoadString(IDS_SAVE_FLASH);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_SAVE_FLASH,str);	
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH,MLL::LoadString(IDS_READ_FLASH));	
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH,MLL::LoadString(IDS_WRITE_FLASH));	 
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_OPEN_FLASH,MLL::LoadString(IDS_OPEN_FLASH));	  
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_SAVE_FLASH,MLL::LoadString(IDS_SAVE_FLASH));	
 
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
-  str.LoadString(IDS_IMPORT_POPUP_MENU);
-  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ImportMenu.m_hMenu,str);
-
-  str.LoadString(IDS_EXPORT_POPUP_MENU);
-  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ExportMenu.m_hMenu,str);
+  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ImportMenu.m_hMenu,MLL::LoadString(IDS_IMPORT_POPUP_MENU));
+  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING,(UINT)m_ExportMenu.m_hMenu,MLL::LoadString(IDS_EXPORT_POPUP_MENU));
   ///////////////////////////////////////////////////////////////////////////
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
 
-  str.LoadString(IDS_READ_FLASH_TO_FILE);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH_TO_FILE,str);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH_TO_FILE,MLL::LoadString(IDS_READ_FLASH_TO_FILE));
   m_bl_menu_items_IDs.push_back(IDM_READ_FLASH_TO_FILE);
 
-  str.LoadString(IDS_WRITE_FLASH_FROM_FILE);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH_FROM_FILE,str);
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH_FROM_FILE,MLL::LoadString(IDS_WRITE_FLASH_FROM_FILE));
   m_bl_menu_items_IDs.push_back(IDM_WRITE_FLASH_FROM_FILE);
 
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
-
-  str.LoadString(IDS_READ_EEPROM_TO_FILE);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_EEPROM_TO_FILE,str);	
+ 
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_EEPROM_TO_FILE,MLL::LoadString(IDS_READ_EEPROM_TO_FILE));	
   m_bl_menu_items_IDs.push_back(IDM_READ_EEPROM_TO_FILE);
-
-  str.LoadString(IDS_WRITE_EEPROM_FROM_FILE);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_EEPROM_FROM_FILE,str);
+  
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_EEPROM_FROM_FILE,MLL::LoadString(IDS_WRITE_EEPROM_FROM_FILE));
   m_bl_menu_items_IDs.push_back(IDM_WRITE_EEPROM_FROM_FILE);
 
   m_ParentMenu.AppendMenu(MF_SEPARATOR);
-
-  str.LoadString(IDS_READ_BOOTLOADER_SIGNATURE);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_BOOTLOADER_SIGNATURE,str);
+  
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_BOOTLOADER_SIGNATURE,MLL::LoadString(IDS_READ_BOOTLOADER_SIGNATURE));
   m_bl_menu_items_IDs.push_back(IDM_READ_BOOTLOADER_SIGNATURE);
-
-  str.LoadString(IDS_READ_FW_SIGNATURE_INFO);
-  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FW_SIGNATURE_INFO,str);
+  
+  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FW_SIGNATURE_INFO,MLL::LoadString(IDS_READ_FW_SIGNATURE_INFO));
   m_app_menu_items_IDs.push_back(IDM_READ_FW_SIGNATURE_INFO);
 
 }

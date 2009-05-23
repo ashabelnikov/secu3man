@@ -72,7 +72,7 @@ void CHeaderCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
  // Draw the items text using the text color red.
  COLORREF crOldColor = ::SetTextColor(lpDrawItemStruct->hDC, m_text_color);
- ::DrawText(lpDrawItemStruct->hDC, lpBuffer, strlen(lpBuffer), 
+ ::DrawText(lpDrawItemStruct->hDC, lpBuffer, _tcsclen(lpBuffer), 
 		&lpDrawItemStruct->rcItem, DT_SINGLELINE|DT_VCENTER|DT_CENTER);
  ::SetTextColor(lpDrawItemStruct->hDC, crOldColor);
 }

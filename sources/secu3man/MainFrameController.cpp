@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MainFrameController.h"
 #include "MainFrame.h"
 #include "common\fastdelegate.h"
@@ -92,8 +93,7 @@ void MainFrameController::OnAppBeginLog()
  if (false==result)
  {
   CString  string;
-  string.Format(_T("Не могу начать запись лога в файл: %s\n\
-Возможно этот файл защищен от записи или уже открыт другой программой."), full_file_name.c_str());
+  string.Format(MLL::LoadString(IDS_CANT_START_LOG_WRITING), full_file_name.c_str());
   AfxMessageBox(string,MB_OK | MB_ICONSTOP);
   return;
  }

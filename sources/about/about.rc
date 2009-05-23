@@ -118,6 +118,18 @@ IDB_BITMAP0001          BITMAP  DISCARDABLE     "res\\about0001.BMP"
 //
 
 IDR_RGN0001             RGN     DISCARDABLE     "res\\about0001.rgn"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_SOFTWARE_INFO       "SECU-3 Manager v2.0. Build [%s]"
+    IDS_AUTHOR_INFO         "(c) Shabelnikov Technology. UA, Gorlovka city\r\nICQ: 405-791-931, http://secu-3.narod.ru\r\n             ...alone from strange world...\r\n"
+END
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

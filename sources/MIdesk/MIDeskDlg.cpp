@@ -8,9 +8,9 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "ui-core\AnalogMeterCtrl.h"
 #include "MIDeskDlg.h"
-#include "resource.h"
 #include "io-core/NumericConv.h"
 
 #ifdef _DEBUG

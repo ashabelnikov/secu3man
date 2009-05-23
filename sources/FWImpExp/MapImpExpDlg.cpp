@@ -287,7 +287,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
    CLIP_DEFAULT_PRECIS,       // nClipPrecision
    DEFAULT_QUALITY,           // nQuality
    DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
-   "Arial"));                 // lpszFacename
+   _T("Arial")));             // lpszFacename
 
 
   m_exchange_button.SetFont(&font);

@@ -30,14 +30,14 @@
 #define IDC_RS_KNOCK_VALUE              2026
 #define IDC_RS_KNOCK_CAPTION            2027
 #define IDC_RS_KNOCK_UNIT               2028
+#define IDS_MI_VOLTAGE_TITLE            2029
+#define IDS_MI_VOLTAGE_UNIT             2030
+#define IDS_MI_TEMPERATURE_TITLE        2031
+#define IDS_MI_TEMPERATURE_UNIT         2032
+#define IDS_MI_TACHOMETER_TITLE         2033
+#define IDS_MI_TACHOMETER_UNIT          2034
+#define IDS_MI_PRESSURE_TITLE           2035
+#define IDS_MI_PRESSURE_UNIT            2036
+#define IDS_MI_ADVANGLE_TITLE           2037
+#define IDS_MI_ADVANGLE_UNIT            2038
 
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        2026
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1003
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif

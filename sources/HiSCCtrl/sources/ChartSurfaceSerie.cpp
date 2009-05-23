@@ -199,5 +199,5 @@ void CChartSurfaceSerie::SetHorizontal(bool bHoriz)
 
 void CChartSurfaceSerie::SetSeriesOrdering(SeriesOrdering newOrdering)
 {
-	TRACE("Can't change the series ordering of a surface series.");
+	TRACE(_T("Can't change the series ordering of a surface series."));
 }

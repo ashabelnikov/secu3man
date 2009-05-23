@@ -171,15 +171,11 @@
 #define ID_PD_ACTIVATE_ADCCOR_PAR       3166
 #define ID_PD_ACTIVATE_CKPS_PAR         3167
 #define ID_PD_ACTIVATE_KNOCK_PAR        3168
-#define ID_PD_ACTIVATE_MISCEL_PAR       3169 
+#define ID_PD_ACTIVATE_MISCEL_PAR       3169
+#define IDS_PD_KNOCK_PARAMETERS         3170
+#define IDS_PD_KNOCK_ENABLE_KC          3171
+#define IDS_PD_KNOCK_BEGIN_KWND         3172
+#define IDS_PD_KNOCK_END_KWND           3173
+#define IDS_PD_KNOCK_BPF_UNIT           3174
+#define IDS_PD_KNOCK_BPF_FREQ           3175
 
-// Next default values for new objects
-// 
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NEXT_RESOURCE_VALUE        3400
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         3300
-#define _APS_NEXT_SYMED_VALUE           101
-#endif
-#endif

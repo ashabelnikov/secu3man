@@ -48,21 +48,7 @@ struct MPSZMapsDataHolder
   }
  };
 
- std::vector<_TSTRING> GetListOfNames(void) const
- {
-  std::vector<_TSTRING> list;
-  for (int i = 0; i < m_actual_sets_num; i++)
-	if (maps[i].name!=_T(""))
-      list.push_back(maps[i].name);
-	else
-	{ //искусственное имя
-    TCHAR name[32];
-    _stprintf(name,_T("<Без имени %d>"),i+1); 
-	list.push_back(_TSTRING(name));
-	}
-  return list;
- };
-
+ std::vector<_TSTRING> GetListOfNames(void) const;
 };
 
 

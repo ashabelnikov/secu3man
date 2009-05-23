@@ -73,6 +73,23 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CANT_LOAD_THIS_FILE "Не знаю как загрузить этот файл, извините!"
+    IDS_MAP_NO_NAME         "<Без имени %d>"
+    IDS_SECU3_CURRENT_FW    "SECU-3 Текущая прошивка"
+    IDS_MPSZ_FW_FILE        "MPSZ %s"
+    IDS_IMPORT_MPSZ_TABLES  "Импорт таблиц из MPSZ"
+    IDS_CANT_SAVE_THIS_FILE "Не знаю как сохранить этот файл, извините!"
+    IDS_EXPORT_MPSZ_TABLES  "Экспорт таблиц в MPSZ"
+END
+
 #endif    // Russian resources
 /////////////////////////////////////////////////////////////////////////////
 

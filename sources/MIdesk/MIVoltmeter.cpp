@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MIVoltmeter.h"
 
 #ifdef _DEBUG
@@ -35,10 +36,10 @@ void CMIVoltmeter::Create(void)
   m_meter.SetRange (2.0, 18.0) ;
   m_meter.SetLabelsDecimals(1) ;
   m_meter.SetValueDecimals(2) ;
-  m_meter.SetTitle("Напряжение") ;
+  m_meter.SetTitle(MLL::LoadString(IDS_MI_VOLTAGE_TITLE)) ;
   m_meter.SetFontScale(80);    
   m_meter.SetColor(meter_value,RGB(10,80,255));
-  m_meter.SetUnit("Bольт");
+  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
   m_meter.SetTickNumber(16);
   m_meter.AddAlertZone(2.0,10.0,RGB(230,130,130));
   m_meter.AddAlertZone(10.0,15.0,RGB(120,200,120));

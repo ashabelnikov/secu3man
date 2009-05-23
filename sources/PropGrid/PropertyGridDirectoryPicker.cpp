@@ -11,7 +11,7 @@
 
 #define BIF_NEWDIALOGSTYLE 0x0040
 
-_TSTRING CPropertyGridDirectoryPicker::m_strTitle = "Choose a directory";
+_TSTRING CPropertyGridDirectoryPicker::m_strTitle = _T("Choose a directory");
 
 CPropertyGridDirectoryPicker::CPropertyGridDirectoryPicker()
 {
@@ -38,7 +38,7 @@ int CALLBACK CPropertyGridDirectoryPicker::BrowseCallbackProc(HWND hwnd,UINT uMs
 
 bool CPropertyGridDirectoryPicker::PickDirectory(_TSTRING &directory, HWND hwnd)
 {
-  char pszBuffer[MAX_PATH];
+  TCHAR pszBuffer[MAX_PATH];
   pszBuffer[0] = '\0';
 
   // Gets the Shell's default allocator
@@ -72,7 +72,7 @@ bool CPropertyGridDirectoryPicker::PickDirectory(_TSTRING &directory, HWND hwnd)
   }
 
   // get the result
-  if (strlen(pszBuffer) != 0)
+  if (_tcslen(pszBuffer) != 0)
   {
     directory = pszBuffer;
     return TRUE;

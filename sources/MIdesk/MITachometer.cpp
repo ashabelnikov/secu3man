@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MITachometer.h"
 
 #ifdef _DEBUG
@@ -36,10 +37,10 @@ void CMITachometer::Create(void)
   m_meter.SetRange (0, 8000.0) ;
   m_meter.SetLabelsDecimals(0) ;
   m_meter.SetValueDecimals(0) ;
-  m_meter.SetTitle("Обороты") ;
+  m_meter.SetTitle(MLL::LoadString(IDS_MI_TACHOMETER_TITLE)) ;
   m_meter.SetFontScale(80);    
   m_meter.SetColor(meter_value,RGB(10,80,255));
-  m_meter.SetUnit("мин-1");
+  m_meter.SetUnit(MLL::LoadString(IDS_MI_TACHOMETER_UNIT));
   m_meter.SetTickNumber(16);
   m_meter.AddAlertZone(0,4000,RGB(100,255,100));
   m_meter.AddAlertZone(4000,6000,RGB(255,255,100));

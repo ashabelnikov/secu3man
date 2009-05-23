@@ -19,7 +19,7 @@ public:
   virtual void OnLButtonUp(CRect rc, CPoint pt) {}
 
   // in-place edit
-  virtual _TSTRING GetStringForInPlaceEdit() { return ""; }
+  virtual _TSTRING GetStringForInPlaceEdit() { return _T(""); }
   virtual bool OnItemEdited(_TSTRING strNewValue) { return false; }
 
   // dropdown edit

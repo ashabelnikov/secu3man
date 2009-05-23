@@ -54,12 +54,12 @@ CPropertyGrid::CPropertyGrid()
   m_rect_button = CRect(0,0,0,0);
   m_ptLast = CPoint(0,0);
 
-  m_strTrue = "True";
-  m_strFalse = "False";
-  m_strDate = "Date";
-  m_strTime = "Time";
-  m_strUndefined = "";
-  m_strEmpty = "";
+  m_strTrue = _T("True");
+  m_strFalse = _T("False");
+  m_strDate = _T("Date");
+  m_strTime = _T("Time");
+  m_strUndefined = _T("");
+  m_strEmpty = _T("");
 
   m_clrBack = GetSysColor(COLOR_WINDOW);
   m_clrShade = GetSysColor(COLOR_3DFACE);
@@ -864,7 +864,7 @@ void CPropertyGrid::InitControl()
     }
     else
     {
-      m_fntNormal.CreatePointFont(85, "Tahoma");
+      m_fntNormal.CreatePointFont(85, _T("Tahoma"));
       m_fntNormal.GetLogFont(&lf);
       lf.lfWeight = FW_BOLD;
       m_fntBold.CreateFontIndirect(&lf);
@@ -884,7 +884,7 @@ void CPropertyGrid::InitControl()
   // try to get some strings
   if (m_strOk.empty())
   {
-    m_strOk = "OK";
+    m_strOk = _T("OK");
     if (GetParent() && GetParent()->GetDlgItem(IDOK))
     {
       CString strOk;
@@ -894,7 +894,7 @@ void CPropertyGrid::InitControl()
   }
   if (m_strCancel.empty())
   {
-    m_strCancel = "Cancel";
+    m_strCancel = _T("Cancel");
     if (GetParent() && GetParent()->GetDlgItem(IDCANCEL))
     {
       CString strCancel;
@@ -1283,15 +1283,15 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
     case IT_TEXT:
       {
         size_t j;
-        for (;( j = strValue.find( "\r\n" )) != _TSTRING::npos;)
-          strValue.replace( j, 2, "¶");
+        for (;( j = strValue.find( _T("\r\n") )) != _TSTRING::npos;)
+          strValue.replace( j, 2, _T("¶"));
         break;
       }
 
     case IT_INTEGER:
       {
         CString strTemp;
-        _TSTRING strFormat = "%d";
+        _TSTRING strFormat = _T("%d");
         if (it->m_options.size() && !it->m_options.front().empty()) strFormat = it->m_options.front();
         strTemp.Format(strFormat.c_str(), it->m_nValue);
         strValue = LPCTSTR(strTemp);
@@ -1302,7 +1302,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
 	case IT_HEX:
 	  {
 		CString strTemp;
-		_TSTRING strFormat = "%x";
+		_TSTRING strFormat = _T("%x");
 		if (it->m_options.size() && !it->m_options.front().empty()) strFormat = it->m_options.front();
 		strTemp.Format(strFormat.c_str(), it->m_nValue);
 		strValue = LPCTSTR(strTemp);
@@ -1313,7 +1313,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
     case IT_DOUBLE:
       {
         CString strTemp;
-        _TSTRING strFormat = "%g";
+        _TSTRING strFormat = _T("%g");
         if (it->m_options.size() && !it->m_options.front().empty()) strFormat = it->m_options.front();
         strTemp.Format(strFormat.c_str(), it->m_dValue);
         strValue = LPCTSTR(strTemp);
@@ -1380,7 +1380,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
 
         // update the text
         CString strTemp;
-        strTemp.Format("%d; %d; %d", GetRValue(it->m_clrValue), GetGValue(it->m_clrValue), GetBValue(it->m_clrValue));
+        strTemp.Format(_T("%d; %d; %d"), GetRValue(it->m_clrValue), GetGValue(it->m_clrValue), GetBValue(it->m_clrValue));
         strValue = LPCTSTR(strTemp);
         modified = (it->m_clrValue != it->m_clrValue_old);
         break;
@@ -1389,7 +1389,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
     case IT_FONT:
       {
         CString strTemp;
-        strTemp.Format("%s; %dpt", it->m_lfValue.lfFaceName, -MulDiv(it->m_lfValue.lfHeight, 72, dc.GetDeviceCaps(LOGPIXELSY)));
+        strTemp.Format(_T("%s; %dpt"), it->m_lfValue.lfFaceName, -MulDiv(it->m_lfValue.lfHeight, 72, dc.GetDeviceCaps(LOGPIXELSY)));
         strValue = LPCTSTR(strTemp);
         modified = (memcmp(&it->m_lfValue, &it->m_lfValue_old, sizeof(LOGFONT))!=0);
         break;
@@ -1698,7 +1698,7 @@ void CPropertyGrid::OnLButtonUp(UINT nFlags, CPoint point)
             if (!pItem->m_undefined)
             {
               CString strTemp;
-              strTemp.Format("%d", pItem->m_nValue);
+              strTemp.Format(_T("%d"), pItem->m_nValue);
               strValue = LPCTSTR(strTemp);
             }
           }
@@ -1707,7 +1707,7 @@ void CPropertyGrid::OnLButtonUp(UINT nFlags, CPoint point)
 			if (!pItem->m_undefined)
 			{
 			  CString strTemp;
-			  strTemp.Format("%x", pItem->m_nValue);
+			  strTemp.Format(_T("%x"), pItem->m_nValue);
 			  strValue = LPCTSTR(strTemp);
 			}
 		  }
@@ -1716,7 +1716,7 @@ void CPropertyGrid::OnLButtonUp(UINT nFlags, CPoint point)
             if (!pItem->m_undefined)
             {
               CString strTemp;
-              strTemp.Format("%g", pItem->m_dValue);
+              strTemp.Format(_T("%g"), pItem->m_dValue);
               strValue = LPCTSTR(strTemp);
             }
           }
@@ -2205,7 +2205,7 @@ LRESULT CPropertyGrid::OnEditChanged(WPARAM wParam, LPARAM lParam)
   {
     if (pItem->m_type == IT_STRING)
     {
-      pItem->m_strValue = _TSTRING((char*)wParam);
+      pItem->m_strValue = _TSTRING((TCHAR*)wParam);
       pItem->m_undefined = false;
       GetOwner()->SendMessage(WM_PG_ITEMCHANGED, pItem->m_id);
       DeleteEditControl();
@@ -2213,9 +2213,9 @@ LRESULT CPropertyGrid::OnEditChanged(WPARAM wParam, LPARAM lParam)
     }
     else if (pItem->m_type == IT_INTEGER)
     {
-      if (strlen((char*)wParam))
+      if (_tcslen((TCHAR*)wParam))
       {
-        pItem->m_nValue = atoi((char*)wParam);
+        pItem->m_nValue = _ttoi((TCHAR*)wParam);
         pItem->m_undefined = false;
         GetOwner()->SendMessage(WM_PG_ITEMCHANGED, pItem->m_id);
       }
@@ -2224,9 +2224,9 @@ LRESULT CPropertyGrid::OnEditChanged(WPARAM wParam, LPARAM lParam)
     }
 	else if (pItem->m_type == IT_HEX)
 	{
-	  if (strlen((char*)wParam))
+	  if (_tcslen((TCHAR*)wParam))
 	  {
-		_stscanf((char*)wParam, _T("%x"), &pItem->m_nValue);
+		_stscanf((TCHAR*)wParam, _T("%x"), &pItem->m_nValue);
 		pItem->m_undefined = false;
 		GetOwner()->SendMessage(WM_PG_ITEMCHANGED, pItem->m_id);
 	  }
@@ -2235,9 +2235,9 @@ LRESULT CPropertyGrid::OnEditChanged(WPARAM wParam, LPARAM lParam)
 	}
     else if (pItem->m_type == IT_DOUBLE)
     {
-      if (strlen((char*)wParam))
+      if (_tcslen((TCHAR*)wParam))
       {
-        pItem->m_dValue = atof((char*)wParam);
+        pItem->m_dValue = _tcstod((TCHAR*)wParam, NULL);
         pItem->m_undefined = false;
         GetOwner()->SendMessage(WM_PG_ITEMCHANGED, pItem->m_id);
       }
@@ -2246,7 +2246,7 @@ LRESULT CPropertyGrid::OnEditChanged(WPARAM wParam, LPARAM lParam)
     }
     else if (pItem->m_type == IT_CUSTOM)
     {
-      if (pItem->m_pCustom->OnItemEdited(_TSTRING((char*)wParam)))
+      if (pItem->m_pCustom->OnItemEdited(_TSTRING((TCHAR*)wParam)))
         GetOwner()->SendMessage(WM_PG_ITEMCHANGED, pItem->m_id);
       DeleteEditControl();
       Invalidate();
@@ -2297,9 +2297,9 @@ void CPropertyGrid::EditFocusedItem()
       dlg.SetWindowTitle(pItem->m_name.c_str());
       dlg.SetFont(&m_fntNormal);
       CString strValue = pItem->m_strValue.c_str();
-      dlg.AddDlgControl("EDIT", pItem->m_strValue.c_str(), STYLE_EDIT|WS_VSCROLL|WS_HSCROLL|ES_AUTOHSCROLL|ES_AUTOVSCROLL|ES_LEFT|ES_MULTILINE|ES_WANTRETURN, EXSTYLE_EDIT, CRect(7, 7, 200, 100), (void*) &strValue);
-      dlg.AddDlgControl("BUTTON", m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(56, 106, 106, 120), NULL, IDOK); 
-      dlg.AddDlgControl("BUTTON", m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(110, 106, 160, 120), NULL, IDCANCEL); 
+      dlg.AddDlgControl(_T("EDIT"), pItem->m_strValue.c_str(), STYLE_EDIT|WS_VSCROLL|WS_HSCROLL|ES_AUTOHSCROLL|ES_AUTOVSCROLL|ES_LEFT|ES_MULTILINE|ES_WANTRETURN, EXSTYLE_EDIT, CRect(7, 7, 200, 100), (void*) &strValue);
+      dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(56, 106, 106, 120), NULL, IDOK); 
+      dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(110, 106, 160, 120), NULL, IDCANCEL); 
       if (dlg.DoModal() == IDOK)
       {
         pItem->m_strValue = LPCTSTR(strValue);
@@ -2316,12 +2316,12 @@ void CPropertyGrid::EditFocusedItem()
       dlg.SetFont(&m_fntNormal);
       COleDateTime dtValueDate = pItem->m_dtValue;
       CTime dtValueTime(pItem->m_dtValue.GetYear(), pItem->m_dtValue.GetMonth(), pItem->m_dtValue.GetDay(), pItem->m_dtValue.GetHour(), pItem->m_dtValue.GetMinute(), pItem->m_dtValue.GetSecond());
-      dlg.AddDlgControl("STATIC", m_strDate.c_str(), STYLE_STATIC, EXSTYLE_STATIC, CRect(7, 3, 60, 12));
-      dlg.AddDlgControl("STATIC", m_strTime.c_str(), STYLE_STATIC, EXSTYLE_STATIC, CRect(67, 3, 120, 12));
-      dlg.AddDlgControl("SysDateTimePick32", "", STYLE_DATETIMEPICKER|DTS_SHORTDATEFORMAT, EXSTYLE_DATETIMEPICKER, CRect(7, 13, 60, 26), (void*) &dtValueDate);
-      dlg.AddDlgControl("SysDateTimePick32", "", STYLE_DATETIMEPICKER|DTS_TIMEFORMAT , EXSTYLE_DATETIMEPICKER, CRect(67, 13, 120, 26), (void*) &dtValueTime);
-      dlg.AddDlgControl("BUTTON", m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(7, 37, 60, 51), NULL, IDOK); 
-      dlg.AddDlgControl("BUTTON", m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(67, 37, 120, 51), NULL, IDCANCEL); 
+      dlg.AddDlgControl(_T("STATIC"), m_strDate.c_str(), STYLE_STATIC, EXSTYLE_STATIC, CRect(7, 3, 60, 12));
+      dlg.AddDlgControl(_T("STATIC"), m_strTime.c_str(), STYLE_STATIC, EXSTYLE_STATIC, CRect(67, 3, 120, 12));
+      dlg.AddDlgControl(_T("SysDateTimePick32"), _T(""), STYLE_DATETIMEPICKER|DTS_SHORTDATEFORMAT, EXSTYLE_DATETIMEPICKER, CRect(7, 13, 60, 26), (void*) &dtValueDate);
+      dlg.AddDlgControl(_T("SysDateTimePick32"), _T(""), STYLE_DATETIMEPICKER|DTS_TIMEFORMAT , EXSTYLE_DATETIMEPICKER, CRect(67, 13, 120, 26), (void*) &dtValueTime);
+      dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(7, 37, 60, 51), NULL, IDOK); 
+      dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(67, 37, 120, 51), NULL, IDCANCEL); 
       if (dlg.DoModal() == IDOK)
       {
         pItem->m_dtValue.SetDateTime(dtValueDate.GetYear(), dtValueDate.GetMonth(), dtValueDate.GetDay(),

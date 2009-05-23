@@ -52,7 +52,7 @@ int MPSZImportController::DoImport(void)
 	bool result = m_mpsz_io.Load(m_mpsz_file_name,type);  
 	if (!result)
 	{
-	  AfxMessageBox(_T("Не знаю как загрузить этот файл, извините!"),MB_OK|MB_ICONWARNING);
+	  AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
       return IDCANCEL; 
 	}
   }
@@ -73,6 +73,7 @@ bool MPSZImportController::IsExchangeButtonAllowed(void)
 
 MPSZImportController::~MPSZImportController()
 {
+ delete mp_view; //avoid memory leak
 }
 
 void MPSZImportController::OnOkPressed(void)
@@ -94,7 +95,7 @@ void MPSZImportController::OnExchangePressed(void)
   else
   { //если строка пустая, то генерируем "искусcтвенное" имя
     TCHAR name[32];
-    _stprintf(name,_T("<Без имени %d>"),other_sel+1); 	
+    _stprintf(name,MLL::GetString(IDS_MAP_NO_NAME).c_str(),other_sel+1); 	
 	mp_fwd->maps[current_sel].name = name; 
   }
 
@@ -115,15 +116,15 @@ void MPSZImportController::OnExchangePressed(void)
 //модальное окно активировалось - проводим его инициализацию
 void MPSZImportController::OnViewActivate(void)
 {
-  mp_view->SetFWDCurrentListTitle(_T("SECU-3 Текущая прошивка"));
+  mp_view->SetFWDCurrentListTitle(MLL::GetString(IDS_SECU3_CURRENT_FW));
   CString title;
-  title.Format(_T("MPSZ %s"),m_mpsz_file_name.c_str());
+  title.Format(MLL::GetString(IDS_MPSZ_FW_FILE).c_str(),m_mpsz_file_name.c_str());
   mp_view->SetFWDOtherListTitle(_TSTRING(title));
 
   mp_view->SetFWDFlag(FLAG_TEMP_MAP,false);
   mp_view->EnableFWDFlag(FLAG_TEMP_MAP,false);
   mp_view->SetExchangeButtonCaption(_T("<"));
-  mp_view->SetWindowText(_T("Импорт таблиц из MPSZ"));
+  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
 
   mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
   std::vector<_TSTRING> strings = m_mpsz_io.GetData().GetListOfNames();
@@ -204,7 +205,7 @@ int MPSZExportController::DoExport(void)
      bool result = m_mpsz_io.Save(m_mpsz_file_name,type);  
      if (!result)
 	 {
-       AfxMessageBox(_T("Не знаю как сохранить этот файл, извините!"),MB_OK|MB_ICONWARNING);
+	   AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
        return IDCANCEL; 
 	 }
 	}
@@ -225,6 +226,7 @@ bool MPSZExportController::IsExchangeButtonAllowed(void)
 
 MPSZExportController::~MPSZExportController()
 {
+ delete mp_view; //avoid memory leak
 }
 
 void MPSZExportController::OnOkPressed(void)
@@ -259,15 +261,15 @@ void MPSZExportController::OnExchangePressed(void)
 //модальное окно активировалось - проводим его инициализацию
 void MPSZExportController::OnViewActivate(void)
 {
-  mp_view->SetFWDCurrentListTitle(_T("SECU-3 Текущая прошивка"));
+  mp_view->SetFWDCurrentListTitle(MLL::GetString(IDS_SECU3_CURRENT_FW));
   CString title;
-  title.Format(_T("MPSZ %s"),m_mpsz_file_name.c_str());
+  title.Format(MLL::GetString(IDS_MPSZ_FW_FILE).c_str(),m_mpsz_file_name.c_str());
   mp_view->SetFWDOtherListTitle(_TSTRING(title));
 
   mp_view->SetFWDFlag(FLAG_TEMP_MAP,false);
   mp_view->EnableFWDFlag(FLAG_TEMP_MAP,false);
   mp_view->SetExchangeButtonCaption(_T(">"));
-  mp_view->SetWindowText(_T("Экспорт таблиц в MPSZ"));
+  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));
 
   mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
   std::vector<_TSTRING> strings = m_mpsz_io.GetData().GetListOfNames();

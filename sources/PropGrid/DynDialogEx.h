@@ -77,20 +77,20 @@ public:
     LPRECT pRect = NULL,
     void *pData = NULL,
     UINT nID = 0);
-  virtual UINT AddDlgControl(LPCSTR lpszClassName,
+  virtual UINT AddDlgControl(LPCTSTR lpszClassName,
     LPCTSTR lpszCaption,
     DWORD dwStyle,
     DWORD dwExtendedStyle,
     LPRECT pRect = NULL,
     void *pData = NULL,
     UINT nID = 0);
-  virtual UINT AddSubclassedDlgControl(LPCSTR lpszClassName,
+  virtual UINT AddSubclassedDlgControl(LPCTSTR lpszClassName,
     LPCTSTR lpszCaption,
     DWORD dwStyle,
     DWORD dwExtendedStyle,
     LPRECT pRect = NULL,
     UINT nID = 0);
-  void SetWindowTitle(LPCSTR lpszCaption);
+  void SetWindowTitle(LPCTSTR lpszCaption);
   void SetFont(CFont *pFont);
   CFont *GetFont();
   void SetFontSize(WORD wSize);

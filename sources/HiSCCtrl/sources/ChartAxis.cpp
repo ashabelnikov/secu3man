@@ -474,7 +474,7 @@ void CChartAxis::SetMinMax(double Minimum, double Maximum)
 {
 	if (Minimum > Maximum)
 	{
-		TRACE("Maximum axis value must be > minimum axis value");
+		TRACE(_T("Maximum axis value must be > minimum axis value"));
 		return;
 	}
 
@@ -603,7 +603,7 @@ void CChartAxis::SetZoomMinMax(double Minimum, double Maximum)
 
 	if (Minimum > Maximum)
 	{
-		TRACE("Maximum axis value must be > minimum axis value");
+		TRACE(_T("Maximum axis value must be > minimum axis value"));
 		return;
 	}
 

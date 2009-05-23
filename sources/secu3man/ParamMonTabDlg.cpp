@@ -62,11 +62,10 @@ BOOL CParamMonTabDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 	
-  m_MIDeskDlg.Create(CMIDeskDlg::IDD,this);
+  m_MIDeskDlg.Create(CMIDeskDlg::IDD, this);
   m_MIDeskDlg.MoveWindow(280,0,427,312);
   m_MIDeskDlg.ShowWindow(SW_SHOWNORMAL);
   m_MIDeskDlg.Show(true);
-//  m_MIDeskDlg.Enable(false);
 
   m_RSDeskDlg.Create(CRSDeskDlg::IDD,this);
   m_RSDeskDlg.MoveWindow(280,0,427,312);
@@ -74,9 +73,8 @@ BOOL CParamMonTabDlg::OnInitDialog()
   m_RSDeskDlg.Show(true);
 
   m_ParamDeskDlg.Create(CParamDeskDlg::IDD,this);
-  m_ParamDeskDlg.SetTitle("Параметры в EEPROM:");
+  m_ParamDeskDlg.SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
   m_ParamDeskDlg.ShowWindow(SW_SHOWNORMAL);
- // m_ParamDeskDlg.Enable(true);
   m_ParamDeskDlg.Show(true);
 	
   return TRUE;  // return TRUE unless you set the focus to a control

@@ -111,7 +111,7 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
 	BOOL bRet = XBrowseForFolder(m_hWnd,
 								 lpszInitial,
 								 -1,
-								 _T("Выбор каталога для лог-файлов"),
+								 MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
 								 szFolder,
 								 sizeof(szFolder)/sizeof(TCHAR)-2,
 								 bEditBox);

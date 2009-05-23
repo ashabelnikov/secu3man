@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MIDwellAngle.h"
 
 #ifdef _DEBUG
@@ -35,10 +36,10 @@ void CMIDwellAngle::Create(void)
   m_meter.SetRange (-15.0, 65.0) ;
   m_meter.SetLabelsDecimals(1) ;
   m_meter.SetValueDecimals(2) ;
-  m_meter.SetTitle("”гол опережени€") ;
+  m_meter.SetTitle(MLL::LoadString(IDS_MI_ADVANGLE_TITLE)) ;
   m_meter.SetFontScale(80);    
   m_meter.SetColor(meter_value,RGB(10,80,255));
-  m_meter.SetUnit("град.");
+  m_meter.SetUnit(MLL::LoadString(IDS_MI_ADVANGLE_UNIT));
   m_meter.SetTickNumber(16);
   m_meter.AddAlertZone(-15,0,RGB(180,130,130));
   m_meter.AddAlertZone(0,45,RGB(220,220,120));

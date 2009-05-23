@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MPSZFileDataIO.h"
 #include "io-core/NumericConv.h"  //note: for Round() and only!
 #include <vector>
@@ -48,6 +49,22 @@ private:
    std::vector<MPSZDataBase*> garbage_list;
 };
 
+
+/////////////////////////////////////////////////////////////////////////////////////
+std::vector<_TSTRING> MPSZMapsDataHolder::GetListOfNames(void) const
+ {
+  std::vector<_TSTRING> list;
+  for (int i = 0; i < m_actual_sets_num; i++)
+	if (maps[i].name!=_T(""))
+      list.push_back(maps[i].name);
+	else
+	{ //искусственное имя
+    TCHAR name[32];
+    _stprintf(name,MLL::GetString(IDS_MAP_NO_NAME).c_str(),i+1); 
+	list.push_back(_TSTRING(name));
+	}
+  return list;
+ };
 
 /////////////////////////////////////////////////////////////////////////////////////
 bool MPSZFileDataIO::Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type)
@@ -131,6 +148,7 @@ struct MPXStructure
  MPXStructure* p_raws = (MPXStructure*)ip_rawdata;
  int i,j;
 
+ USES_CONVERSION;
  //вытягиваем имена наборов характеристик
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {  
@@ -138,7 +156,7 @@ struct MPXStructure
   memset(raw_str,0,32);
   for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
 	  raw_str[j] = HIBYTE(p_raws->names[i][j]);
-  op_data->maps[i].name = raw_str;
+  op_data->maps[i].name = A2T(raw_str); 
  }
   
  //104 - дибильное магическое число 
@@ -187,12 +205,13 @@ struct MPXStructure
  MPXStructure* p_raws = (MPXStructure*)op_rawdata;
  int i,j;
 
+ USES_CONVERSION;
  //засовываем имена наборов характеристик
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {  
   char raw_str[32];
   memset(raw_str,0,32);
-  strcpy(raw_str,ip_data->maps[i].name.c_str());
+  strcpy(raw_str,T2A(const_cast<TCHAR*>(ip_data->maps[i].name.c_str())));
   for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
 	p_raws->names[i][j] = MAKEWORD(0,raw_str[j]);
  }
@@ -256,11 +275,12 @@ struct MPZStructure
  for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
    op_data->maps[i].f_str[j] = (p_raws->str[j]) / 2.0f;
 
+ USES_CONVERSION;
  char raw_str[32];
  memset(raw_str,0,32);
  for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
    raw_str[j] = p_raws->name[j];
- op_data->maps[i].name = raw_str;
+ op_data->maps[i].name = A2T(raw_str);
 
  //вытягиваем карту ХХ
  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
@@ -300,9 +320,10 @@ struct MPZStructure
    p_raws->str[j] = CNumericConv::Round((ip_data->maps[i].f_str[j]) * 2.0f);
 
  //засовываем fucking имя
+ USES_CONVERSION;
  char raw_str[32];
  memset(raw_str,0,32);
- strcpy(raw_str,ip_data->maps[i].name.c_str()); 
+ strcpy(raw_str,T2A(const_cast<TCHAR*>(ip_data->maps[i].name.c_str()))); 
  for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++) //копируем только определенное кол-во символов
    p_raws->name[j] = raw_str[j];
 

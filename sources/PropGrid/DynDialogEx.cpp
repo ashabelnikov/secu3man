@@ -130,7 +130,7 @@ int CDynDialogEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 
     // Can do better???
     memset(&LogFont, 0x00, sizeof(LogFont));
-    strncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
+    _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
     LogFont.lfHeight = 8;
 
     m_pFont = new CFont;
@@ -205,29 +205,30 @@ int CDynDialogEx::DoModal()
   }
   else {
     // Can do better???
-    strncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
+    _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
     LogFont.lfHeight = 8;
   }
 
+  USES_CONVERSION;
   //Prework for setting font in dialog...
-  int cWC = MultiByteToWideChar(CP_ACP, 0, LogFont.lfFaceName, -1, NULL, 0);
+  WCHAR *szFontName_w = T2W(LogFont.lfFaceName);
+  int cWC = wcslen(szFontName_w);
   int nFontNameLen = cWC + 1;
   WCHAR *szFontName = new WCHAR[nFontNameLen];
-  // Copy the string
-  MultiByteToWideChar(CP_ACP, 0, LogFont.lfFaceName, -1, (LPWSTR) szFontName, cWC);
+  wcscpy(szFontName, szFontName_w);
   szFontName[cWC] = 0;
   nFontNameLen = (cWC) * sizeof(WCHAR);
-
+ 
   if (m_wFontSize == 0) {
     m_wFontSize = (unsigned short)LogFont.lfHeight;
   }
 
   //Prework for setting caption in dialog...
-  cWC = MultiByteToWideChar(CP_ACP, 0, m_strCaption, -1, NULL, 0);
+  WCHAR *szBoxCaption_w = T2W(m_strCaption.GetBuffer(1));
+  cWC = wcslen(szBoxCaption_w);
   int szBoxLen = cWC + 1;
   WCHAR *szBoxCaption = new WCHAR[szBoxLen];
-  // Copy the string
-  MultiByteToWideChar(CP_ACP, 0, m_strCaption, -1, (LPWSTR) szBoxCaption, cWC);
+  wcscpy(szBoxCaption, szBoxCaption_w);
   szBoxCaption[cWC] = 0;
   szBoxLen = (cWC) * sizeof(WCHAR);
 
@@ -428,7 +429,7 @@ UINT CDynDialogEx::AddDlgControl(DLGITEMTEMPLATECONTROLS TypeControl,
   return nRet;
 }
 
-UINT CDynDialogEx::AddDlgControl(LPCSTR lpszClassName,
+UINT CDynDialogEx::AddDlgControl(LPCTSTR lpszClassName,
                                  LPCTSTR lpszCaption,
                                  DWORD dwStyle,
                                  DWORD dwExtendedStyle,
@@ -465,7 +466,7 @@ UINT CDynDialogEx::AddDlgControl(LPCSTR lpszClassName,
   return nRet;
 }
 
-UINT CDynDialogEx::AddSubclassedDlgControl(LPCSTR lpszClassName,
+UINT CDynDialogEx::AddSubclassedDlgControl(LPCTSTR lpszClassName,
                                            LPCTSTR lpszCaption,
                                            DWORD dwStyle,
                                            DWORD dwExtendedStyle,
@@ -516,7 +517,7 @@ void CDynDialogEx::AddSystemButtons()
 
 }
 
-void CDynDialogEx::SetWindowTitle(LPCSTR lpszCaption)
+void CDynDialogEx::SetWindowTitle(LPCTSTR lpszCaption)
 {
   m_strCaption = lpszCaption;
 }

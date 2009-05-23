@@ -63,9 +63,9 @@ BOOL CKnockPageDlg::OnInitDialog()
 {
   Super::OnInitDialog();
 
-  HSECTION hs = m_ctrlGrid.AddSection("Параметры");
+  HSECTION hs = m_ctrlGrid.AddSection(MLL::GetString(IDS_PD_KNOCK_PARAMETERS));
   //-----------------------------------------------------------------
-  m_knock_use_knock_channel_item = m_ctrlGrid.AddBoolItem(hs, "Разрешить контроль детонации", m_params.knock_use_knock_channel);
+  m_knock_use_knock_channel_item = m_ctrlGrid.AddBoolItem(hs, MLL::GetString(IDS_PD_KNOCK_ENABLE_KC), m_params.knock_use_knock_channel);
   //-----------------------------------------------------------------
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex1;
   ex1.m_decimal_places = 2;
@@ -75,7 +75,7 @@ BOOL CKnockPageDlg::OnInitDialog()
   ex1.m_lower = -12.0;
   ex1.m_upper = 54.0;
   ex1.m_limit_text = 6;
-  m_knock_k_wnd_begin_angle_item = m_ctrlGrid.AddDoubleItem(hs, "Начало фазового окна", m_params.knock_k_wnd_begin_angle,"%g°",true,false,-1,&ex1);
+  m_knock_k_wnd_begin_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_BEGIN_KWND), m_params.knock_k_wnd_begin_angle,_T("%g°"),true,false,-1,&ex1);
   //-----------------------------------------------------------------
   CPropertyGridInPlaceEdit::InplaceEditParamsEx ex2;
   ex2.m_decimal_places = 2;
@@ -85,7 +85,7 @@ BOOL CKnockPageDlg::OnInitDialog()
   ex2.m_lower = -12.0;
   ex2.m_upper = 54.0;
   ex2.m_limit_text = 6;
-  m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, "Конец фазового окна", m_params.knock_k_wnd_end_angle,"%g°",true,false,-1,&ex2);
+  m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND), m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
   //-----------------------------------------------------------------  
   vector<_TSTRING> bpf_freqs;
   for (size_t i = 0; i < 64; i++) //заполняем комбо бокс частот ПФ
@@ -96,8 +96,8 @@ BOOL CKnockPageDlg::OnInitDialog()
   }
   m_freq_selector.SetValuesList(bpf_freqs);
   m_freq_selector.SetSelectedIndex(CNumericConv::Round(m_params.knock_bpf_frequency));
-  m_freq_selector.SetUnitString(_T("кГц"));
-  m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs, _T("Частота ПФ"), &m_freq_selector);
+  m_freq_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
+  m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), &m_freq_selector);
   //-----------------------------------------------------------------
 
   		

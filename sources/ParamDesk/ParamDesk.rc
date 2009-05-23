@@ -514,6 +514,22 @@ BEGIN
     0
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PD_KNOCK_PARAMETERS "Параметры"
+    IDS_PD_KNOCK_ENABLE_KC  "Разрешить контроль детонации"
+    IDS_PD_KNOCK_BEGIN_KWND "Начало фазового окна"
+    IDS_PD_KNOCK_END_KWND   "Конец фазового окна"
+    IDS_PD_KNOCK_BPF_UNIT   "кГц"
+    IDS_PD_KNOCK_BPF_FREQ   "Частота ПФ"
+END
+
 #endif    // Russian resources
 /////////////////////////////////////////////////////////////////////////////
 

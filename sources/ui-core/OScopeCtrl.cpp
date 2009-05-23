@@ -55,8 +55,8 @@ COScopeCtrl::COScopeCtrl()
   m_brushBack.CreateSolidBrush(m_crBackColor) ;
 
   // public member variables, can be set directly 
-  m_strXUnitsString.Format("Samples") ;  // can also be set with SetXUnits
-  m_strYUnitsString.Format("Y units") ;  // can also be set with SetYUnits
+  m_strXUnitsString.Format(_T("Samples")) ;  // can also be set with SetXUnits
+  m_strYUnitsString.Format(_T("Y units")) ;  // can also be set with SetYUnits
 
   // protected bitmaps to restore the memory DC's
   m_pbitmapOldGrid = NULL ;
@@ -260,13 +260,13 @@ void COScopeCtrl::InvalidateCtrl()
                        OUT_DEFAULT_PRECIS, 
                        CLIP_DEFAULT_PRECIS,
                        DEFAULT_QUALITY, 
-                       DEFAULT_PITCH|FF_SWISS, "Arial") ;
+                       DEFAULT_PITCH|FF_SWISS, _T("Arial")) ;
   yUnitFont.CreateFont (14, 0, 900, 0, 300,
                        FALSE, FALSE, 0, ANSI_CHARSET,
                        OUT_DEFAULT_PRECIS, 
                        CLIP_DEFAULT_PRECIS,
                        DEFAULT_QUALITY, 
-                       DEFAULT_PITCH|FF_SWISS, "Arial") ;
+                       DEFAULT_PITCH|FF_SWISS, _T("Arial")) ;
   
   // grab the horizontal font
   oldFont = m_dcGrid.SelectObject(&axisFont) ;
@@ -274,12 +274,12 @@ void COScopeCtrl::InvalidateCtrl()
   // y max
   m_dcGrid.SetTextColor (m_crGridColor) ;
   m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP) ;
-  strTemp.Format ("%.*lf", m_nYDecimals, m_dUpperLimit) ;
+  strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dUpperLimit) ;
   m_dcGrid.TextOut (m_rectPlot.left-4, m_rectPlot.top, strTemp) ;
 
   // y min
   m_dcGrid.SetTextAlign (TA_RIGHT|TA_BASELINE) ;
-  strTemp.Format ("%.*lf", m_nYDecimals, m_dLowerLimit) ;
+  strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dLowerLimit) ;
   m_dcGrid.TextOut (m_rectPlot.left-4, m_rectPlot.bottom, strTemp) ;
 
   // x min
@@ -288,7 +288,7 @@ void COScopeCtrl::InvalidateCtrl()
 
   // x max
   m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP) ;
-  strTemp.Format ("%d", m_nPlotWidth/m_nShiftPixels) ; 
+  strTemp.Format (_T("%d"), m_nPlotWidth/m_nShiftPixels) ; 
   m_dcGrid.TextOut (m_rectPlot.right, m_rectPlot.bottom+4, strTemp) ;
 
   // x units

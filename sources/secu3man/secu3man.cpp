@@ -74,7 +74,7 @@ BOOL CSecu3manApp::InitInstance()
   #endif
 #endif
 
-  SetRegistryKey(_T("SECU-3 Manager"));
+  SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
 
   //подгружаем функции из динамически связываемых DLL
   DLL::LoadDLLsAndLinkToFunctions(); 

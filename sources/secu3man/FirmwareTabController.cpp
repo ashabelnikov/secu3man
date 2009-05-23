@@ -211,18 +211,18 @@ void CFirmwareTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 void CFirmwareTabController::OnBegin(const int opcode,const int status)
 {
   if (opcode == CBootLoader::BL_OP_READ_SIGNATURE)
-    m_sbar->SetInformationText("Чтение сигнатуры...");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_SIGNATURE));
   if (opcode == CBootLoader::BL_OP_READ_EEPROM)
-    m_sbar->SetInformationText("Чтение EEPROM...");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_EEPROM));
   if (opcode == CBootLoader::BL_OP_WRITE_EEPROM)
-    m_sbar->SetInformationText("Запись EEPROM...");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_EEPROM));
   if (opcode == CBootLoader::BL_OP_READ_FLASH)
-    m_sbar->SetInformationText("Чтение прошивки...");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW));
   if (opcode == CBootLoader::BL_OP_WRITE_FLASH)
-    m_sbar->SetInformationText("Запись прошивки...");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_FW));
   if (opcode == CBootLoader::BL_OP_EXIT)
   {
-    //m_sbar->SetInformationText("Выход из BL...");  
+    //Exiting from boot loader...
   }
 
   m_view->EnableBLItems(false);
@@ -235,11 +235,11 @@ CString CFirmwareTabController::GenerateErrorStr(void)
   switch(m_comm->m_pBootLoader->GetLastError())
   {
   case CBootLoader::BL_ERROR_NOANSWER:
-	return CString("Ошибка: Нет ответа!");
+	return MLL::LoadString(IDS_BL_ERROR_NOANSWER);
   case CBootLoader::BL_ERROR_CHKSUM:
-	return CString("Ошибка: Контрольная сумма не совпадает!");
+	return MLL::LoadString(IDS_BL_ERROR_CRC);
   case CBootLoader::BL_ERROR_WRONG_DATA:
-    return CString("Ошибка: Некорректные данные!");
+	return MLL::LoadString(IDS_BL_ERROR_WRONG_DATA);
   }
  ASSERT(0); //что за ошибка?
  return CString(_T(""));
@@ -288,7 +288,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { //OK
-    m_sbar->SetInformationText("EEPROM успешно прочитано!");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
     SaveEEPROMToFile(m_bl_data,CBootLoader::EEPROM_SIZE);
    }
    else 
@@ -311,7 +311,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_WRITE_EEPROM:
   {
    if (status==1) 
-    m_sbar->SetInformationText("EEPROM успешно записано!");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
    else 
    {
 	m_sbar->SetInformationText(GenerateErrorStr());
@@ -333,7 +333,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { 	
- 	m_sbar->SetInformationText("Прошивка успешно прочитана!");
+	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_READ_SUCCESSFULLY));
 	if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
 	{
 	 SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
@@ -391,7 +391,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_WRITE_FLASH:
   {
    if (status==1) 
-    m_sbar->SetInformationText("Прошивка успешно записана!");
+    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_WRITTEN_SUCCESSFULLY));
    else 
    {
 	m_sbar->SetInformationText(GenerateErrorStr());
@@ -676,8 +676,8 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
 	{
      ULONGLONG ulonglong_size = f.GetLength();
 	 if (ulonglong_size > 262144)
-	 {
-	  AfxMessageBox(_T("Файл слишком большого размера! Извините."));
+	 {      
+	  AfxMessageBox(MLL::LoadString(IDS_FW_FILE_IS_TOO_BIG));
 	  f.Close();
 	  return false; //ошибка
 	 }
@@ -691,16 +691,16 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
 
 	 switch(status)
 	 {
-	  case RH_INCORRECT_CHKSUM:
-       AfxMessageBox(_T("Ошибка в контрольной сумме HEX-файла. Операция прервана."));
+	 case RH_INCORRECT_CHKSUM:		      
+	   AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_CRC_ERROR));
 	   f.Close();
-       return false; //ошибка
+       return false; //ошибка		
 
       default: 
-	  case RH_UNEXPECTED_SYMBOL:	   
-       AfxMessageBox(_T("Неожиданный символ или структура HEX-файла нарушена. Операция прервана."));
+	  case RH_UNEXPECTED_SYMBOL:	   		  
+	   AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_STRUCTURE_ERROR));
 	   f.Close();
-       return false; //ошибка
+       return false; //ошибка		 
 
       case RH_SUCCESS:
        break;
@@ -712,7 +712,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
      if (f.GetLength() != size)
 	 {
       CString string;
-	  string.Format(_T("Неправильный размер файла прошивки. Размер должен быть %d байт."),size);
+	  string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
 	  AfxMessageBox(string);
 	  f.Close();
 	  return false; //ошибка
@@ -797,7 +797,7 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
  bool modified = m_fwdm->IsModified();
   if (modified)
   {
-   int result = AfxMessageBox(_T("Прошивка была изменена. Хотите сохранить?"),MB_YESNOCANCEL);
+   int result = AfxMessageBox(MLL::LoadString(IDS_FW_MODIFICATION_WARNING), MB_YESNOCANCEL);
    if (result==IDCANCEL)
    {
      return false; //пользователь отменил действие
@@ -1091,7 +1091,7 @@ void CFirmwareTabController::OnExportMapsToMPSZ(void)
 //Пользователь захотел получить информацию о пршивке из SECU-3
 void CFirmwareTabController::OnWirmwareInfo(void)
 {
- m_sbar->SetInformationText("Чтение информации о прошивке...");
+ m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW_SIGNATURE));
  SECU3IO::OPCompNc packet_data;
  packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);

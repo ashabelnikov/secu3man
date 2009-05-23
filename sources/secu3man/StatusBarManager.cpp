@@ -83,7 +83,7 @@ void CStatusBarManager::AddContent(void)
   m_wndStatusBar.SetPaneWidth(idx,80);
   m_wndStatusBar.SetPaneStyle(idx, m_wndStatusBar.GetPaneStyle(idx) | SBPS_NOBORDERS );
   MPCLogoPane* pLogo = new MPCLogoPane;
-  pLogo->Create(_T("SECU-3"),WS_CHILD|WS_VISIBLE,&m_wndStatusBar,ID_MSB_INDICATOR_LOGO);
+  pLogo->Create(MLL::LoadString(IDS_STATUS_BAR_LOGO),WS_CHILD|WS_VISIBLE,&m_wndStatusBar,ID_MSB_INDICATOR_LOGO);
   pLogo->SetLogoFont(_T("Arial"), 18);
   m_wndStatusBar.AddControl(pLogo,ID_MSB_INDICATOR_LOGO);
 

@@ -102,6 +102,26 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_VOLTAGE_TITLE    "Напряжение"
+    IDS_MI_VOLTAGE_UNIT     "Вольт"
+    IDS_MI_TEMPERATURE_TITLE "Температура"
+    IDS_MI_TEMPERATURE_UNIT "°C"
+    IDS_MI_TACHOMETER_TITLE "Обороты"
+    IDS_MI_TACHOMETER_UNIT  "мин-1"
+    IDS_MI_PRESSURE_TITLE   "Абсолютное давление"
+    IDS_MI_PRESSURE_UNIT    "кПа"
+    IDS_MI_ADVANGLE_TITLE   "Угол опережения"
+    IDS_MI_ADVANGLE_UNIT    "град."
+END
+
 #endif    // Russian resources
 /////////////////////////////////////////////////////////////////////////////
 

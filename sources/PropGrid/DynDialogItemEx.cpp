@@ -229,7 +229,7 @@ BEGIN_MESSAGE_MAP(CDynDialogItemEx, CWnd)
   //}}AFX_MSG_MAP
 END_MESSAGE_MAP()
 
-char* CDynDialogItemEx::GetClassNameByType(DLGITEMTEMPLATECONTROLS TypeControl)
+TCHAR* CDynDialogItemEx::GetClassNameByType(DLGITEMTEMPLATECONTROLS TypeControl)
 {
   switch(TypeControl) {
 case BUTTON:
@@ -274,7 +274,7 @@ case COMBOBOXEX:
   return _T("");
 }
 
-DLGITEMTEMPLATECONTROLS CDynDialogItemEx::GetClassTypeByName(LPCSTR lpszClassName)
+DLGITEMTEMPLATECONTROLS CDynDialogItemEx::GetClassTypeByName(LPCTSTR lpszClassName)
 {
   if (memcmp(lpszClassName, _T("BUTTON"), 6) == 0) {
     return BUTTON;
@@ -363,7 +363,7 @@ UINT CDynDialogItemEx::InitDialogItem(DLGITEMTEMPLATECONTROLS TypeControl,
   return m_ControlID;
 }
 
-UINT CDynDialogItemEx::InitDialogItem(LPCSTR lpszClassName,
+UINT CDynDialogItemEx::InitDialogItem(LPCTSTR lpszClassName,
                                       DWORD dwStyle,
                                       DWORD dwExtendedStyle,
                                       LPRECT pRect,
@@ -465,16 +465,11 @@ PBYTE CDynDialogItemEx::FillBufferWithItemTemplate(BYTE *pdest)
   pdest += sizeof(WORD);
 
   // transfer the caption even when it is an empty string
-  WCHAR*  pchCaption;
-  int     nChars, nActualChars;
-
-  nChars = m_strCaption.GetLength() + 1;
-  pchCaption = new WCHAR[nChars];
-  nActualChars = MultiByteToWideChar(CP_ACP, 0, m_strCaption, -1, pchCaption, nChars);
-  ASSERT(nActualChars > 0);
+  USES_CONVERSION;
+  WCHAR* pchCaption = T2W(m_strCaption.GetBuffer(1)); 
+  int nActualChars = wcslen(pchCaption) + 1; //include terminate symbol
   memcpy(pdest, pchCaption, nActualChars * sizeof(WCHAR));
   pdest += nActualChars * sizeof(WCHAR);
-  delete pchCaption;
 
   *(WORD*)pdest = 0;  // How many bytes in data for control
   pdest += sizeof(WORD);

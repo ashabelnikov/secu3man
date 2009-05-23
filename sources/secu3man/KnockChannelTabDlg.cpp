@@ -176,8 +176,8 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
 
  // customize the control
  m_OScopeCtrl.SetRange(0.0, 5.0, 1) ;
- m_OScopeCtrl.SetYUnits("Volts") ;
- m_OScopeCtrl.SetXUnits("Samples, grid 1x4") ;
+ m_OScopeCtrl.SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ m_OScopeCtrl.SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  m_OScopeCtrl.SetBackgroundColor(RGB(0, 0, 64)) ;
  m_OScopeCtrl.SetGridColor(RGB(192, 192, 255)) ;
  m_OScopeCtrl.SetPlotColor(RGB(255, 255, 255)) ;

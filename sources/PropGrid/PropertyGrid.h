@@ -101,15 +101,15 @@ public:
   HITEM AddCustomItem(HSECTION section, _TSTRING name, ICustomItem* pItem, bool editable = true, HITEM after = -1);
   HITEM AddStringItem(HSECTION section, _TSTRING name, _TSTRING value, bool editable = true, HITEM after = -1);
   HITEM AddTextItem(HSECTION section, _TSTRING name, _TSTRING value, bool editable = true, HITEM after = -1);
-  HITEM AddIntegerItem(HSECTION section, _TSTRING name, int value, _TSTRING format = "", bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
-  HITEM AddHexItem(HSECTION section, _TSTRING name, int value, _TSTRING format = "", bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
-  HITEM AddDoubleItem(HSECTION section, _TSTRING name, double value, _TSTRING format = "", bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
+  HITEM AddIntegerItem(HSECTION section, _TSTRING name, int value, _TSTRING format = _T(""), bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
+  HITEM AddHexItem(HSECTION section, _TSTRING name, int value, _TSTRING format = _T(""), bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
+  HITEM AddDoubleItem(HSECTION section, _TSTRING name, double value, _TSTRING format = _T(""), bool editable = true, bool undefined = false, HITEM after = -1, const CPropertyGridInPlaceEdit::InplaceEditParamsEx* ip_ex_params = NULL);
   HITEM AddComboItem(HSECTION section, _TSTRING name, const std::vector<_TSTRING>& values, int cur, bool editable = true, bool undefined = false, HITEM after = -1);
   HITEM AddBoolItem(HSECTION section, _TSTRING name, bool value, bool editable = true, bool undefined = false, HITEM after = -1);
-  HITEM AddDateItem(HSECTION section, _TSTRING name, COleDateTime value, _TSTRING format = "", bool editable = true, bool undefined = false, HITEM after = -1);
-  HITEM AddDateTimeItem(HSECTION section, _TSTRING name, COleDateTime value, _TSTRING format = "", bool editable = true, bool undefined = false, HITEM after = -1);
-  HITEM AddFileItem(HSECTION section, _TSTRING name, _TSTRING value, _TSTRING filter = "", bool editable = true, HITEM after = -1);
-  HITEM AddFolderItem(HSECTION section, _TSTRING name, _TSTRING value, _TSTRING title = "", bool editable = true, HITEM after = -1);
+  HITEM AddDateItem(HSECTION section, _TSTRING name, COleDateTime value, _TSTRING format = _T(""), bool editable = true, bool undefined = false, HITEM after = -1);
+  HITEM AddDateTimeItem(HSECTION section, _TSTRING name, COleDateTime value, _TSTRING format = _T(""), bool editable = true, bool undefined = false, HITEM after = -1);
+  HITEM AddFileItem(HSECTION section, _TSTRING name, _TSTRING value, _TSTRING filter = _T(""), bool editable = true, HITEM after = -1);
+  HITEM AddFolderItem(HSECTION section, _TSTRING name, _TSTRING value, _TSTRING title = _T(""), bool editable = true, HITEM after = -1);
   HITEM AddColorItem(HSECTION section, _TSTRING name, COLORREF value, bool editable = true, bool undefined = false, HITEM after = -1);
   HITEM AddFontItem(HSECTION section, _TSTRING name, LOGFONT value, bool editable = true, bool undefined = false, HITEM after = -1);
 

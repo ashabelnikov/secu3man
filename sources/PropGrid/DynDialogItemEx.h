@@ -42,7 +42,7 @@ public:
     UINT nID = 0,
     BOOL bSubclassed = FALSE,
     void	*pData = NULL);
-  UINT InitDialogItem(LPCSTR lpszClassName,
+  UINT InitDialogItem(LPCTSTR lpszClassName,
     DWORD dwStyle,
     DWORD dwExtendedStyle,
     LPRECT pRect,
@@ -75,7 +75,7 @@ public:
   CString GetClassName()							{return m_strClassName;}		
 
 protected:
-  DLGITEMTEMPLATECONTROLS GetClassTypeByName(LPCSTR lpszClassName);
+  DLGITEMTEMPLATECONTROLS GetClassTypeByName(LPCTSTR lpszClassName);
 
   CString						m_strClassName;
   DLGITEMTEMPLATECONTROLS	m_eTypeControl;
@@ -91,7 +91,7 @@ protected:
 protected:
   BOOL IsDataMemberPointerToWnd();
   BSTR GetRuntimeLicense(CString &strControlName);
-  char* GetClassNameByType(DLGITEMTEMPLATECONTROLS TypeControl);
+  TCHAR* GetClassNameByType(DLGITEMTEMPLATECONTROLS TypeControl);
 
   //{{AFX_MSG(CDynDialogItemEx)
   // NOTE - the ClassWizard will add and remove member functions here.

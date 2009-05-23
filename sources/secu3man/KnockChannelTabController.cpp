@@ -101,7 +101,7 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
    switch(p_ndata->opcode)
    {
     case OPCODE_EEPROM_PARAM_SAVE:
-     m_sbar->SetInformationText("Параметры были сохранены.");
+	 m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
      return;
    }		
   }
@@ -182,7 +182,7 @@ void CKnockChannelTabController::StartReadingNecessaryParameters(void)
 //m_operation_state = 0 для запуска
 bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
-  m_sbar->SetInformationText("Чтение параметров ДД..."); 
+  m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_PARAMETERS)); 
 
   switch(m_operation_state)
   {
@@ -198,7 +198,7 @@ bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_de
            
 	    //процесс инициализации окончен
         m_operation_state = -1; //останов КА - операции выполнены
- 	    m_sbar->SetInformationText("Готово.");
+		m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
         return true; //операции выполнены
 	  }
 	}	
@@ -216,7 +216,7 @@ bool CKnockChannelTabController::OnClose(void)
 
 void CKnockChannelTabController::OnSaveParameters(void)
 {
- m_sbar->SetInformationText("Сохранение параметров ДД...");
+ m_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
