@@ -20,7 +20,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title,LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title,LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
@@ -69,7 +69,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 }
 
 //---------------------------------------------------------------------------
-HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
  TForm1* pForm1;
  pForm1 = new TForm1((TComponent *)NULL);

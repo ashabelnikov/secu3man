@@ -383,9 +383,7 @@ void CFirmwareTabDlg::EnableBLStartedEmergency(bool enable)
 
 //-----------------------------------------------------------------------------------------------
 void CFirmwareTabDlg::OnFirmwareSupportViewStartMap() 
-{
- int s[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800}; 
-    
+{      
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_start_map_btn.GetCheck()==BST_UNCHECKED)
  {
@@ -396,7 +394,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
  if ((!m_start_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_start_map_chart_state = 1;
-	m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,s,16,
+	m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
 		MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
 		MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
 		MLL::GetString(IDS_FW_START_MAP).c_str());	  
@@ -412,8 +410,6 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
 //-----------------------------------------------------------------------------------------------
 void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap() 
 {
- int s[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; 
-
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_idle_map_btn.GetCheck()==BST_UNCHECKED)
  {
@@ -424,7 +420,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
  if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_idle_map_chart_state = 1;
-	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,s,16,
+	m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,SECU3IO::idle_map_rpm_slots,16,
 		MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
 		MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
 		MLL::GetString(IDS_FW_IDLE_MAP).c_str());
@@ -439,8 +435,6 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
 
 void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap() 
 {
- int s[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; 
-	 
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_work_map_btn.GetCheck()==BST_UNCHECKED)
  {
@@ -451,7 +445,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
  if ((!m_work_map_chart_state)&&(DLL::UOZ2_Chart3DCreate))	 
   {
     m_work_map_chart_state = 1;
-    m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),s,16,16,-15.0,55.0,
+    m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),SECU3IO::work_map_rpm_slots,16,16,-15.0,55.0,
 		MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
 		MLL::GetString(IDS_FW_WORK_MAP).c_str());
 	DLL::UOZ2_Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
@@ -465,8 +459,6 @@ void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
 
 void CFirmwareTabDlg::OnFirmwareSupportViewTempMap() 
 {	
- int s[16] = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120}; 
-
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_temp_map_btn.GetCheck()==BST_UNCHECKED)
  {
@@ -477,7 +469,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
  if ((!m_temp_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
   {
     m_temp_map_chart_state = 1;
-	m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,s,16,
+	m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_rpm_slots,16,
 		MLL::GetString(IDS_FW_MAPS_TEMPERATURE_UNIT).c_str(),
 		MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
 		MLL::GetString(IDS_FW_TEMPCORR_MAP).c_str());

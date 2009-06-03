@@ -20,7 +20,7 @@
 #pragma hdrstop
 extern "C"
 {
-  HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
+  HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
   void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
   void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
   void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
@@ -72,7 +72,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 
 //original_function и modified_function - адреса двухмерных массивов содержащих
 //значения функций
-HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
 {
   TForm1 *pForm1 = new TForm1((TComponent *)NULL);
   pForm1->count_x    = x_count_of_points;
