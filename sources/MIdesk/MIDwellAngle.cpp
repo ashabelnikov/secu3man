@@ -71,6 +71,9 @@ void CMIDwellAngle::Enable(bool enable)
   m_meter.SetState(meter_grid, enable);
   m_meter.SetState(meter_labels, enable);
   m_meter.SetState(meter_unit, enable);
+  COLORREF bk_color;
+  m_meter.GetColor(meter_bground, &bk_color);
+  m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
 
   m_meter.Redraw();
 }
