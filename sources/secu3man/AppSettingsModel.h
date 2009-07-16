@@ -12,6 +12,9 @@ public:
 	std::vector<DWORD> m_AllowableBaudRates;
 	std::vector<_TSTRING> m_AllowablePorts;
 
+	//<UIstring, SepSymbol>
+	std::vector<std::pair<_TSTRING, char> > m_AllowaleCSVSepSymbols;
+
 	CAppSettingsModel();
 	virtual ~CAppSettingsModel();
 
@@ -37,6 +40,7 @@ public:
 	const CString m_Name_BaudRateBootloader;
 	const CString m_Name_LogFilesFolder;
 	const CString m_Name_UseAppFolder;
+	const CString m_Name_CSVSepSymbol;
 
     //данные которые хранятся в INI-файле
 	_TSTRING m_optPortName;      
@@ -44,11 +48,14 @@ public:
 	DWORD m_optBaudRateBootloader;
 	CString m_optLogFilesFolder;
 	bool  m_optUseAppFolder;
+	char  m_optCSVSepSymbol;
     ////////////////////////////////////////////////////
 
   private:
 	//проверяет указанное значение скорости на соответствие стандарту
     bool CheckAllowableBaudRate(DWORD baud);
+
+	bool CheckAllowableCSVSepSymbol(char i_symbol);
 
 	//директория из которой было запущено приложение
     TCHAR m_current_directory[MAX_PATH+1]; 

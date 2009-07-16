@@ -69,6 +69,10 @@ void MainFrameController::OnAppSettings()
 
  if (result==IDOK)
  {
+  //уведомляем логгер об изменениях в настройках.
+  CAppSettingsModel* settings = m_pAppSettingsManager->m_pModel;
+  m_pLogWriter->SetSeparatingSymbol(settings->m_optCSVSepSymbol); 
+
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
   mp_view->EndWaitCursor();
@@ -81,6 +85,9 @@ void MainFrameController::OnAppBeginLog()
  _TSTRING full_path_to_folder;
 
  CAppSettingsModel* settings = m_pAppSettingsManager->m_pModel;
+
+ //устнанавливаем разделительный символ для CSV-файла указанный в настройках
+ m_pLogWriter->SetSeparatingSymbol(settings->m_optCSVSepSymbol); 
 
  if (!settings->m_optUseAppFolder)
   full_path_to_folder = settings->m_optLogFilesFolder;

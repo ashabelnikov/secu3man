@@ -12,6 +12,8 @@ public:
 
    virtual void FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates) = 0;
    virtual void FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts) = 0;
+   virtual void FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<_TSTRING, char> >  i_AllowableCSVSepSymbols) = 0;
+
 
    //"Set" - установка данных представления
    virtual void SetPortName(_TSTRING i_PortName) = 0;
@@ -19,6 +21,8 @@ public:
    virtual void SetBaudRateBootloader(DWORD i_bl_baud) = 0;
    virtual void SetLogFilesFolder(const CString& i_folder) = 0;
    virtual void SetUseAppFolder(bool i_use) = 0;
+   virtual void SetCSVSepSymbol(size_t i_index) = 0;
+
    
    //"Get" - получение данных представления
    virtual _TSTRING GetPortName(void) = 0;
@@ -26,6 +30,8 @@ public:
    virtual DWORD GetBaudRateBootloader(void) = 0;
    virtual CString GetLogFilesFolder(void) const = 0;
    virtual bool GetUseAppFolder(void) const = 0;
+   virtual size_t GetCSVSepSymbol(void) = 0;
+
 
 
    //устанавливают обработчики событий

@@ -48,6 +48,9 @@ void CAppSettingsController::OnOk(void)
   m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
   m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
   m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
+
+  size_t index = m_pView->GetCSVSepSymbol();
+  m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -61,9 +64,15 @@ void CAppSettingsController::OnActivate(void)
   ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));  
   m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
   m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);
+  m_pView->FillCtrlsWithAllowableCSVSepSymbols(m_pModel->m_AllowaleCSVSepSymbols);
   m_pView->SetPortName(m_pModel->m_optPortName);
   m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
   m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
   m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
   m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
+
+  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size(); 
+  for(size_t i = 0; i < count; i++)
+	if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
+      m_pView->SetCSVSepSymbol(i);
 }

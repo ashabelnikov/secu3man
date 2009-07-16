@@ -23,6 +23,9 @@ public:
  //Возвращает true, если в текущий момент идет запись 
  bool IsLoggingInProcess(void);
 
+ //Separating symbol for CSV 
+ void SetSeparatingSymbol(char i_sep_symbol);
+
 public:
 
   //через эти обработчики данные поступают в механизм записи
@@ -36,4 +39,7 @@ private:
 
   //true - идет процесс записи, false - солдат спит, а служба идет. 
   bool  m_is_busy;
+
+  char m_csv_separating_symbol;
+  char m_csv_data_template[1024];
 };

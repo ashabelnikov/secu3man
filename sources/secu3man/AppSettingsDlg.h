@@ -30,6 +30,17 @@ public:
 	 }
    }
 
+   virtual void FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<_TSTRING, char> >  i_AllowableCSVSepSymbols)
+   {
+	 for(size_t i = 0; i < i_AllowableCSVSepSymbols.size(); i++)
+	 {
+	  int index = m_log_csv_sepsymbol_combo.AddString(i_AllowableCSVSepSymbols[i].first.c_str());
+	  ASSERT(index != LB_ERR);
+      m_log_csv_sepsymbol_combo.SetItemData(index, i); 
+	 }
+   }
+
+
    //"Set" methods (model => view data transfer)
    virtual void SetPortName(_TSTRING i_PortName)
    {
@@ -57,6 +68,21 @@ public:
 	 if (result!=LB_ERR)
 	   //m_bl_baudrate_selection_combo.SetCurSel(result); 
 	   m_bl_baudrate = result;
+   }
+
+   virtual void SetCSVSepSymbol(size_t i_index)
+   {
+     int count = m_log_csv_sepsymbol_combo.GetCount();
+	 for (int i = 0; i < count; i++)
+	 {
+	  size_t index = m_log_csv_sepsymbol_combo.GetItemData(i);
+	  if (index == i_index)
+	  { //found!
+       m_log_csv_sepsymbol_index = i; 
+	   return;
+	  }
+	 }
+	 ASSERT(0); //WTF...
    }
    
    //"Get" methods (view => model data transfer)
@@ -101,6 +127,11 @@ public:
 	return m_use_app_folder ? true : false;
    }
 
+   virtual size_t GetCSVSepSymbol(void) 
+   {
+	 return m_log_csv_sepsymbol_combo.GetItemData(m_log_csv_sepsymbol_index); 
+   }
+
    virtual void setFunctionOnOk(EventHandler OnOk)
    {
      m_OnOk = OnOk;
@@ -137,6 +168,7 @@ public:
 	CComboBox	m_port_selection_combo;
 	CComboBox	m_bl_baudrate_selection_combo;
 	CComboBox	m_app_baudrate_selection_combo;
+	CComboBox   m_log_csv_sepsymbol_combo;
 	CEdit       m_log_files_folder_edit;
 	CButton     m_log_files_folder_button;
 	CButton     m_use_app_folder_button;
@@ -145,6 +177,7 @@ public:
 	int		m_port_number;
     CString m_log_files_folder;
 	int     m_use_app_folder;
+	int     m_log_csv_sepsymbol_index;
 	//}}AFX_DATA
 
 

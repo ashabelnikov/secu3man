@@ -63,7 +63,7 @@ END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
@@ -104,7 +104,7 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
 END
 
-IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 233, 158
+IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 233, 185
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Настройки"
 FONT 8, "MS Sans Serif"
@@ -130,6 +130,10 @@ BEGIN
     CONTROL         "Использовать каталог программы",
                     IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,48,124,161,9
+    COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,23,148,67,52,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "CSV сивол-разделитель",
+                    IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_LABEL,96,150,97,10
 END
 
 IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 434, 221
@@ -197,7 +201,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 226
         TOPMARGIN, 7
-        BOTTOMMARGIN, 151
+        BOTTOMMARGIN, 178
     END
 
     IDD_CHECK_ENGINE, DIALOG
@@ -287,6 +291,11 @@ STRINGTABLE DISCARDABLE
 BEGIN
     AFX_IDS_SCRESTORE       "Restore the window to normal size"
     AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке"
     IDS_SELECT_FOLDER_FOR_LOG_FILES "Выбор каталога для лог-файлов"
     IDS_ECUERROR_CKPS_MALFUNCTION "Сбои в работе ДПКВ - ошибки синхронизации"
     IDS_ECUERROR_EEPROM_PARAM_BROKEN "Параметры в EEPROM повреждены (СRС)"
@@ -301,6 +310,9 @@ BEGIN
                             "    Режим считывания ошибок в реальном времени позволяет видеть возникающие и исчезающие ошибки. Это полезно для выяснения причины возникновения конкретной ошибки. \n    В список сохраненных ошибок попадают все когда-либо (даже единократно) возникавшие ошибки."
     IDS_CEPAGE_ERROR_STATE  "Состояние"
     IDS_CEPAGE_ERROR_DESCRIPTION "Описание ошибки"
+    IDS_FW_READING_SIGNATURE "Чтение сигнатуры..."
+    IDS_FW_READING_EEPROM   "Чтение EEPROM..."
+    IDS_FW_WRITING_EEPROM   "Запись EEPROM..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -337,14 +349,6 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке"
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
-    IDS_FW_READING_SIGNATURE "Чтение сигнатуры..."
-    IDS_FW_READING_EEPROM   "Чтение EEPROM..."
-    IDS_FW_WRITING_EEPROM   "Запись EEPROM..."
     IDS_FW_READING_FW       "Чтение прошивки..."
     IDS_FW_WRITING_FW       "Запись прошивки..."
     IDS_BL_ERROR_NOANSWER   "Ошибка: Нет ответа!"
@@ -361,13 +365,13 @@ BEGIN
                             "Неожиданный символ или структура HEX-файла нарушена. Операция прервана."
     IDS_FW_WRONG_FW_FILE_SIZE 
                             "Неправильный размер файла прошивки. Размер должен быть %d байт."
+    IDS_FW_MODIFICATION_WARNING "Прошивка была изменена. Хотите сохранить?"
+    IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
+    IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_FW_MODIFICATION_WARNING "Прошивка была изменена. Хотите сохранить?"
-    IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
-    IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
     IDS_FW_START_MAP        "Пусковая карта УОЗ"
     IDS_FW_MAPS_ADVANGLE_UNIT "УОЗ (град.)"
     IDS_FW_MAPS_RPM_UNIT    "Обороты (мин-1)"
@@ -381,14 +385,14 @@ BEGIN
     IDS_KC_READING_PARAMETERS "Чтение параметров ДД..."
     IDS_KC_READY            "Готово."
     IDS_KC_WRITING_PARAMETERS "Сохранение параметров ДД..."
-END
-
-STRINGTABLE DISCARDABLE 
-BEGIN
     IDS_CANT_START_LOG_WRITING 
                             "Не могу начать запись лога в файл: %s\n Возможно этот файл защищен от записи или уже открыт другой программой."
     IDS_TAB_PARAMETERS_AND_MONOTOR "Параметры и монитор"
     IDS_TAB_FIRMWARE_DATA   "Данные прошивки"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_TAB_CHECK_ENGINE    "Check Engine"
     IDS_TAB_KNOCK_SETTINGS  "Настройка ДД"
     IDS_PM_READING_CONFIGURATION "Чтение конфигурации..."

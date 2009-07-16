@@ -14,10 +14,15 @@
 
 using namespace SECU3IO;
 
+const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
+const char cCSVDataTemplateString[] = "%c%%04d%c%%0.2f%c%%0.2f%c%%0.2f%c%%0.2f%c%%0.2f%c%%02d%c%%01d%c%%01d%c%%01d\r\n";
+
 LogWriter::LogWriter()
 : m_is_busy(false)
 , m_out_handle(NULL)
+, m_csv_separating_symbol(',')
 {
+ SetSeparatingSymbol(m_csv_separating_symbol);
 }
 
 LogWriter::~LogWriter()
@@ -39,9 +44,9 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
 
   //используем ASCII версию, файл не должен быть юникодным
   //"hh:mm:ss.ms", ms - сотые доли секунды  
-  fprintf(m_out_handle,"%02d:%02d:%02d.%02d,",time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
+  fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
-  fprintf(m_out_handle,"%04d,%0.2f,%0.2f,%0.2f,%0.2f,%0.2f,%02d,%01d,%01d,%01d\r\n",
+  fprintf(m_out_handle, m_csv_data_template,
  	                   p_sensors->frequen,
 					   p_sensors->adv_angle,
 					   p_sensors->pressure,
@@ -101,4 +106,10 @@ void LogWriter::EndLogging(void)
 bool LogWriter::IsLoggingInProcess(void)
 {
  return m_is_busy;
+}
+
+void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
+{
+ int x = m_csv_separating_symbol = i_sep_symbol;
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x);
 }

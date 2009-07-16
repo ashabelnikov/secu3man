@@ -32,6 +32,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_PortName(_T("COM_port"))
 , m_Name_LogFilesFolder(_T("LogFilesFolder"))
 , m_Name_UseAppFolder(_T("UseAppFolder"))
+, m_Name_CSVSepSymbol(_T("CSVSeparatingSymbol"))
 {
 
   //заполняем базу данных допустимых скоростей для COM-порта
@@ -63,6 +64,12 @@ CAppSettingsModel::CAppSettingsModel()
 
     //определение тек. директории  
   GetCurrentDirectory(MAX_PATH,m_current_directory);
+
+  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
+  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\";\"  semicolon")), ';'));
+  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\":\"  colon")),     ':'));
+  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"+\"  plus")),      '+'));
+  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"-\"  minus")),     '-'));
 }
 
 CAppSettingsModel::~CAppSettingsModel()
@@ -96,6 +103,17 @@ bool CAppSettingsModel::CheckAllowableBaudRate(DWORD baud)
     return true;
   return false; //invalid baud rate
 }
+
+
+bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
+{
+ size_t count = m_AllowaleCSVSepSymbols.size();
+ for(size_t i = 0; i < count; i++)
+  if (i_symbol == m_AllowaleCSVSepSymbols[i].second)
+    return true;
+ return false;
+}
+
 
 bool CAppSettingsModel::ReadSettings(void)
 {
@@ -156,6 +174,20 @@ bool CAppSettingsModel::ReadSettings(void)
     m_optUseAppFolder = i_val;     
   }
 
+ //-----------------------------------------  
+  GetPrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,_T("44"),readed_str,255,IniFileName);
+  i_val = _ttoi(readed_str);
+
+  if (!CheckAllowableCSVSepSymbol(i_val))
+  {
+    status = false;
+	m_optCSVSepSymbol = 44; //comma by default
+  }
+  else
+  {
+    m_optCSVSepSymbol = i_val;     
+  }
+
   return status;
 }
 
@@ -187,6 +219,10 @@ bool CAppSettingsModel::WriteSettings(void)
   //-----------------------------------------
   write_str.Format(_T("%d"),(int)m_optUseAppFolder);
   WritePrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,write_str,IniFileName);
+
+  //-----------------------------------------
+  write_str.Format(_T("%d"),(int)m_optCSVSepSymbol);
+  WritePrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,write_str,IniFileName);
 
   return status;
 }

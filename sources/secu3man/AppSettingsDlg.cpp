@@ -32,6 +32,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 	m_app_baudrate = -1;
 	m_bl_baudrate = -1;
 	m_port_number = -1;
+	m_log_csv_sepsymbol_index = -1;
 	m_log_files_folder = _T("");
 	m_use_app_folder = 0;
 	//}}AFX_DATA_INIT
@@ -45,6 +46,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_selection_combo);
 	DDX_Control(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate_selection_combo);
 	DDX_Control(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate_selection_combo);
+	DDX_Control(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_combo);
 
 	DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder_edit);
 	DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_BUTTON, m_log_files_folder_button);
@@ -53,6 +55,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 	DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
 	DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
 	DDX_CBIndex(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
+	DDX_CBIndex(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_index);
 
 	DDX_Text(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder);
 	DDX_Check(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder);
