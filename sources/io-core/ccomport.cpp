@@ -153,6 +153,13 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
   m_dcb.StopBits      = stopbit;
   m_dcb.fAbortOnError = FALSE;
 
+  //disable hardware and XON/XOFF flow control 
+  m_dcb.fOutxCtsFlow = FALSE;
+  m_dcb.fOutxDsrFlow = FALSE;
+  m_dcb.fDsrSensitivity = FALSE;
+  m_dcb.fOutX = FALSE;
+  m_dcb.fInX = FALSE;
+
   //производим если надо нач. установку линий готовности 
   if (Dtr==0) 
    m_dcb.fDtrControl   = DTR_CONTROL_DISABLE; 
