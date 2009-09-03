@@ -27,6 +27,7 @@ namespace SECU3IO
   unsigned char gas;                                  //состо€ние газового клапана 
   unsigned char air_flow;                             //расход воздуха
   unsigned char ephh_valve;                           //состо€ние клапана Ёѕ’’
+  unsigned char epm_valve;                            //состо€ние клапана Ёћ– 
   float knock_k;                                      //уровень сигнала детонации (усредненный за врем€ фазового окна)
  };
  

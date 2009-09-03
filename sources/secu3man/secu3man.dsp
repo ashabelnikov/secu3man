@@ -256,6 +256,10 @@ SOURCE=.\StatusBarManager.cpp
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
+# Begin Source File
+
+SOURCE=.\TabControllersCommunicator.cpp
+# End Source File
 # End Group
 # Begin Group "Header Files"
 
@@ -379,6 +383,10 @@ SOURCE=.\StatusBarManager.h
 # Begin Source File
 
 SOURCE=.\StdAfx.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllersCommunicator.h
 # End Source File
 # Begin Source File
 

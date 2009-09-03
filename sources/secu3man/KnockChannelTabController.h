@@ -37,6 +37,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 	//события
 	void OnSaveParameters(void);
 	void OnParametersChange(void);
+	void OnCopyToAttenuatorTable(void);
 
 	void OnParamsChangesTimer(void);
 

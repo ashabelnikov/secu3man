@@ -169,6 +169,9 @@ BEGIN
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,16,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,130,246,60
+    PUSHBUTTON      "Копировать в таблицу аттенюатора",
+                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,130,16,86,23,
+                    BS_MULTILINE
 END
 
 

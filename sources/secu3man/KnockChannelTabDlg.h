@@ -19,6 +19,7 @@ public:
 	CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor  
 	
 	void setOnSaveParameters(EventHandler OnFunction);
+	void setOnCopyToAttenuatorTable(EventHandler OnFunction);
 
 	void EnableAll(bool i_enable);
 
@@ -27,6 +28,8 @@ public:
 
 	//Установка значений функции для графика который показывает зависимость сигнала от оборотов
 	void SetRPMKnockSignal(const std::vector<float> &i_values);
+
+	void EnableCopyToAttenuatorTableButton(bool i_enable);
 
 	enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
 	enum { IDD = IDD_KNOCK_CHANNEL };
@@ -39,7 +42,9 @@ protected:
    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
    afx_msg void OnDestroy();
    afx_msg void OnSaveParameters();
+   afx_msg void OnCopyToAttenuatorTable();
    afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+   afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
    afx_msg void OnTimer(UINT nIDEvent);
    DECLARE_MESSAGE_MAP()
 
@@ -52,8 +57,11 @@ protected:
    CChartPointsSerie* m_pPointSerie;
    CChartLineSerie* m_pLineSerie;
    COScopeCtrl m_OScopeCtrl;
+   CButton m_copy_to_attenuator_table_button;
 
 private:
-    EventHandler  m_OnSaveParameters;  
+    EventHandler  m_OnSaveParameters; 
+	EventHandler  m_OnCopyToAttenuatorTable;
 	bool m_all_enabled;
+	bool m_copy_to_attenuator_table_button_state;
 };

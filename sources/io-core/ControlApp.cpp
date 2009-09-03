@@ -191,7 +191,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
- if (strlen((char*)raw_packet)!=30)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=31)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //частота вращения двигателя
@@ -254,6 +254,11 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
   return false; 
  m_SensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
  raw_packet+=4;   
+
+ //Состояние клапана ЭМР 
+ if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.epm_valve))
+  return false;
+ raw_packet+=1;  
 
  if (*raw_packet!='\r')
   return false;

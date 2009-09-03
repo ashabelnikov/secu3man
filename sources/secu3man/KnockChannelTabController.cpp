@@ -13,6 +13,8 @@
 #include "KnockChannelTabDlg.h"
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
+#include "FirmwareTabController.h"
+#include "TabControllersCommunicator.h"
 #include <math.h>
 #include <numeric>
 
@@ -49,6 +51,7 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 
   m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
   m_view->m_knock_parameters_dlg.setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
+  m_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
 
   _InitializeRPMKnockFunctionBuffer();
 }
@@ -82,6 +85,11 @@ void CKnockChannelTabController::OnActivate(void)
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
+
+ //запрещаем кнопку если прошивка не открыта на вкладке "Данные прошивки"
+ CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
+ m_view->EnableCopyToAttenuatorTableButton(p_controller->IsFirmwareOpened());
 }
 
 //from MainTabController
@@ -295,4 +303,20 @@ void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(void)
   m_rpm_knock_signal_ii.push_back(0);
  }
 }
+
+void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
+{
+ CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
+ (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
+
+ std::vector<float> values;
+  _PerformAverageOfRPMKnockFunctionValues(values);
+
+ float array[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
+ for(size_t i = 0; i < values.size(); i++)
+   array[i] = values[i];
+
+ p_controller->SetAttenuatorMap(array);
+}
+
 

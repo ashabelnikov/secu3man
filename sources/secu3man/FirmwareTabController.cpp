@@ -20,6 +20,7 @@
 #include "StatusBarManager.h"
 #include "io-core\SECU3IO.h"
 #include "io-core\ufcodes.h"
+#include "TabControllersCommunicator.h"
 
 using namespace fastdelegate;
 
@@ -75,6 +76,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
+
+  //register controller!
+  TabControllersCommunicator::GetInstance()->AddReference(this, TCC_FIRMWARE_TAB_CONTROLLER);
 }
 
 CFirmwareTabController::~CFirmwareTabController()
@@ -1096,3 +1100,11 @@ void CFirmwareTabController::OnWirmwareInfo(void)
  packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
 }
+
+void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
+{
+ m_fwdm->SetAttenuatorMap(i_values);
+ SetViewChartsValues();
+ m_view->UpdateOpenedCharts();
+}
+

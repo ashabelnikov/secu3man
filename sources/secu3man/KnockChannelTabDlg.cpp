@@ -34,6 +34,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_all_enabled(true)
 , m_pPointSerie(NULL)
 , m_pLineSerie(NULL)
+, m_copy_to_attenuator_table_button_state(true)
 {
  //na  
 }
@@ -42,7 +43,8 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,m_param_save_button);  
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, m_param_save_button);  
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -55,6 +57,8 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()	
  ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
  ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
+ ON_BN_CLICKED(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
+ ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnUpdateCopyToAttenuatorTable)
  ON_WM_TIMER()
 END_MESSAGE_MAP()
 
@@ -69,7 +73,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  //создаем диалог с параметрами ДД
  m_knock_parameters_dlg.Create(CKnockPageDlg::IDD,this);
- m_knock_parameters_dlg.SetWindowPos(NULL,44,60,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ m_knock_parameters_dlg.SetWindowPos(NULL,44,65,0,0,SWP_NOZORDER|SWP_NOSIZE);
  m_knock_parameters_dlg.ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID,250,NULL);
@@ -107,6 +111,11 @@ void CKnockChannelTabDlg::EnableAll(bool i_enable)
 void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI) 
 {
  pCmdUI->Enable(m_all_enabled);  
+}
+
+void CKnockChannelTabDlg::OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI) 
+{
+ pCmdUI->Enable(m_all_enabled && m_copy_to_attenuator_table_button_state);  
 }
 
 void CKnockChannelTabDlg::OnTimer(UINT nIDEvent) 
@@ -186,4 +195,20 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
 void CKnockChannelTabDlg::setOnSaveParameters(EventHandler OnFunction) 
 {
  m_OnSaveParameters = OnFunction;
+}
+
+void CKnockChannelTabDlg::setOnCopyToAttenuatorTable(EventHandler OnFunction)
+{
+ m_OnCopyToAttenuatorTable = OnFunction;
+}
+
+void CKnockChannelTabDlg::OnCopyToAttenuatorTable()
+{
+ if (m_OnCopyToAttenuatorTable)
+  m_OnCopyToAttenuatorTable();
+}
+
+void CKnockChannelTabDlg::EnableCopyToAttenuatorTableButton(bool i_enable)
+{
+ m_copy_to_attenuator_table_button_state = i_enable;
 }

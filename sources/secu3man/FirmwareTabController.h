@@ -19,6 +19,10 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
 	virtual ~CFirmwareTabController();
 
+	bool IsFirmwareOpened(void);
+
+	void SetAttenuatorMap(const float* i_values);
+
   private:
     CFirmwareTabDlg*  m_view;
 	CCommunicationManager* m_comm;
@@ -77,8 +81,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 	void OnMapChanged(int i_type);
 	void OnFunSetSelectionChanged(int i_selected_index);
 	void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
-	///////////////////////////////////////////////////////////
-	bool IsFirmwareOpened(void);
+	///////////////////////////////////////////////////////////	
     void OnBLStartedEmergency(void);
 
 	void OnModificationCheckTimer(void);
