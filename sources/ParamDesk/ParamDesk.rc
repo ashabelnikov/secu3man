@@ -604,7 +604,7 @@ BEGIN
     BEGIN
         BLOCK "040904b0"
         BEGIN
-            VALUE "Comments", "\0"
+            VALUE "Comments", "Dialog for editing main SECU-3 parameters\0"
             VALUE "CompanyName", "Shabelnikov Technology\0"
             VALUE "FileDescription", "ParamDesk DLL\0"
             VALUE "FileVersion", "1, 0, 0, 1\0"

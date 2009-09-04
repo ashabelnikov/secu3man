@@ -312,9 +312,12 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  std::vector<float> values;
   _PerformAverageOfRPMKnockFunctionValues(values);
 
+ //ratio_factor - показывает во сколько раз диапазон по вертикальной оси таблицы аттенюатора
+ //шире диапазона по вертикальной оси на графике напряжения (верхний график на вкладке ДД). 
+ float ratio_factor = 64.0f / 5.0f;
  float array[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  for(size_t i = 0; i < values.size(); i++)
-   array[i] = values[i];
+   array[i] = values[i] * ratio_factor; //масштабирует
 
  p_controller->SetAttenuatorMap(array);
 }
