@@ -68,7 +68,10 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   ASSERT(i_pChildView);
   m_pParent = i_pChildView;
   m_pImgList = new CImageList(); 
-  m_pImgList->Create((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS,16,4,MAIN_TAB_CTRL_BITMAPS_COLOR_MASK);
+  m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+  CBitmap bitmap;
+  bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS);
+  m_pImgList->Add(&bitmap, MAIN_TAB_CTRL_BITMAPS_COLOR_MASK);
 
   CRect rect(0,0,300,200);
 
