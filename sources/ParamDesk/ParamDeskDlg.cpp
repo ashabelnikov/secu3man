@@ -178,7 +178,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("8:ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
  if (m_show_knock_page)
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("9:Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("10:Прочее",m_pMiscPageDlg,7), MISCEL_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("10:Прочее",m_pMiscPageDlg,9), MISCEL_PAR));
 	
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
  //уже использует обработчики сообщений!
