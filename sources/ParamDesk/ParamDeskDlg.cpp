@@ -174,7 +174,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("4:Функции",m_pFunSetPageDlg,3), FUNSET_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("5:Температура",m_pTemperPageDlg,4), TEMPER_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("6:Карбюратор",m_pCarburPageDlg,5), CARBUR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("7:Компенсация погрешностей АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("7:Компенc.погрешн.АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("8:ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
  if (m_show_knock_page)
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("9:Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
