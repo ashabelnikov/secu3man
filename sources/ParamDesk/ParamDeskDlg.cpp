@@ -55,7 +55,10 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 {   
  //создаем image list для TabCtrl
  m_pImgList = new CImageList(); 
- m_pImgList->Create((LPCTSTR)IDB_TAB_CTRL_BITMAPS,16,4,TAB_CTRL_BITMAPS_COLOR_MASK);
+ m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
+ CBitmap bitmap;
+ bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS);
+ m_pImgList->Add(&bitmap, TAB_CTRL_BITMAPS_COLOR_MASK);
 
  //их надо создать только один раз
  m_pStarterPageDlg = new CStarterPageDlg();
