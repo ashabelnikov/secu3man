@@ -154,5 +154,51 @@ void __fastcall TForm1::ButtonAngleDownClick(TObject *Sender)
   if (m_pOnChange)
     m_pOnChange(m_param_on_change);
 }
+
+//---------------------------------------------------------------------------
+//size - can be 1, 2, 3
+float TForm1::Smoothing(int size, int index, int lower_bound, int upper_bound, float data[])
+{
+ float sum = 0;
+ int count = 0;
+ for(int i = -size; i <= size; ++i)
+ {
+  int current_index = index + i;
+  if ((current_index >= lower_bound) && (current_index <= upper_bound))
+  {
+  sum+=data[current_index];
+  count++;
+  }
+ }
+ if (count)
+   return sum / count;
+ else
+   return 0;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Smoothing3xClick(TObject *Sender)
+{
+ for (int i = 0; i < count_of_function_points; i++ )
+ {
+  modified_function[i] = Smoothing(1, i, 0, count_of_function_points - 1, modified_function);
+  Series2->YValue[i] = modified_function[i];
+ }
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm1::Smoothing5xClick(TObject *Sender)
+{
+ for (int i = 0; i < count_of_function_points; i++ )
+ {
+  modified_function[i] = Smoothing(2, i, 0, count_of_function_points - 1, modified_function);
+  Series2->YValue[i] = modified_function[i];
+ }
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
 //---------------------------------------------------------------------------
 

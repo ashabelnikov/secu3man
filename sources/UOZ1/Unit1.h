@@ -25,6 +25,8 @@ __published:	// IDE-managed Components
         TLineSeries *Series2;
         TBitBtn *ButtonAngleUp;
         TBitBtn *ButtonAngleDown;
+        TButton *Smoothing3x;
+        TButton *Smoothing5x;
         void __fastcall Chart1ClickSeries(TCustomChart *Sender,
           TChartSeries *Series, int ValueIndex, TMouseButton Button,
           TShiftState Shift, int X, int Y);
@@ -35,6 +37,8 @@ __published:	// IDE-managed Components
         void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
         void __fastcall ButtonAngleUpClick(TObject *Sender);
         void __fastcall ButtonAngleDownClick(TObject *Sender);
+        void __fastcall Smoothing3xClick(TObject *Sender);
+        void __fastcall Smoothing5xClick(TObject *Sender);
 public:
        void SetOnChange(EventHandler i_pOnChange,void* i_param);
        void SetOnClose(EventHandler i_pOnClose,void* i_param);
@@ -64,5 +68,6 @@ private:	// User declarations
         void* m_param_on_close;
 
         void RestrictAndSetValue(int index, double v);
+        float Smoothing(int size, int index, int lower_bound, int upper_bound, float data[]);
 };
 #endif

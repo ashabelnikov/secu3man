@@ -228,4 +228,22 @@ object Form1: TForm1
       0202020202FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
       0000}
   end
+  object Smoothing3x: TButton
+    Left = 592
+    Top = 248
+    Width = 25
+    Height = 25
+    Caption = '3x'
+    TabOrder = 3
+    OnClick = Smoothing3xClick
+  end
+  object Smoothing5x: TButton
+    Left = 592
+    Top = 280
+    Width = 25
+    Height = 25
+    Caption = '5x'
+    TabOrder = 4
+    OnClick = Smoothing5xClick
+  end
 end
