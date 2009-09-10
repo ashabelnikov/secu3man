@@ -212,10 +212,6 @@ SOURCE=.\res\about0001.BMP
 # End Group
 # Begin Source File
 
-SOURCE=.\about0001.rgn
-# End Source File
-# Begin Source File
-
 SOURCE=.\res\about0001.rgn
 # End Source File
 # End Target

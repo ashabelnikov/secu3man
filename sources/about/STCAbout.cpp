@@ -139,7 +139,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
       hCloseButton = CreateWindowEx(NULL,_T("button"),_T("close"),
                 WS_CHILD | WS_VISIBLE,
-                103,66,45,16,hWnd,(HMENU)1200,
+                280,186,45,16,hWnd,(HMENU)1200,
 				d_about.hInstance,NULL);
 
 
@@ -201,11 +201,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	  //draw title
 	  SetTextColor(hdc,RGB(40,250,50));
       SelectObject(hdc,fntTitle.m_hObject);
-	  TextOut(hdc,25,12,d_about.about_product,_tcslen(d_about.about_product));
+	  TextOut(hdc,195,16,d_about.about_product,_tcslen(d_about.about_product));
       //draw description
       SelectObject(hdc,fntDescr.m_hObject);
 	  SetTextColor(hdc,RGB(250,240,250));
-	  DrawText(hdc,d_about.about_description,-1,CRect(25,30,230,70),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
+	  SetBkMode(hdc, TRANSPARENT);
+	  DrawText(hdc,d_about.about_description,-1,CRect(203,45,433,170),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
 
       EndPaint(hWnd,&pt); 
 	  break;
