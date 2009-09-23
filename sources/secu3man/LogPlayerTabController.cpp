@@ -37,6 +37,16 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
  m_view = i_view;
  m_comm = i_comm;
  m_sbar = i_sbar;
+
+#define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
+ m_time_factors.insert(_IV(0, _T("4:1"), 0.25f));
+ m_time_factors.insert(_IV(1, _T("3:1"), 0.33f));
+ m_time_factors.insert(_IV(2, _T("2:1"), 0.50f));
+ m_time_factors.insert(_IV(3, _T("1:1"), 1.00f));
+ m_time_factors.insert(_IV(4, _T("1:2"), 2.00f));
+ m_time_factors.insert(_IV(5, _T("1:3"), 3.00f));
+ m_time_factors.insert(_IV(6, _T("1:4"), 4.00f));
+#undef _IV
 }
 
 
@@ -69,6 +79,14 @@ void CLogPlayerTabController::OnActivate(void)
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
+
+
+ std::vector<_TSTRING> tf_content;
+ for(size_t i = 0; i < m_time_factors.size(); ++i)
+  tf_content.push_back(m_time_factors[i].first.c_str()); 
+ m_view->FillTimeFactorCombo(tf_content);
+
+ m_view->SetTimeFactor(3); //1:1
 }
 
 //from MainTabController

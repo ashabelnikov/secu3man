@@ -34,6 +34,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   private:
 
+	//<factor id, <name, value> >
+	std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;	
 };
 
 
