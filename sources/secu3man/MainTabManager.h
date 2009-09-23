@@ -17,11 +17,13 @@ public:
     class CFirmwareTabController* m_pFirmwareTabController;
 	class CCheckEngineTabController* m_pCheckEngineTabController;
 	class CKnockChannelTabController* m_pKnockChannelTabController;
+	class CLogPlayerTabController* m_pLogPlayerTabController;
 
     class CParamMonTabDlg* m_pParamMonTabDlg;
     class CFirmwareTabDlg* m_pFirmwareTabDlg;
 	class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
 	class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
+	class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
 
 	CChildView* m_pParent;
     

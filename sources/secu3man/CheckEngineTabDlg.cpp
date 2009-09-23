@@ -25,8 +25,8 @@ static char THIS_FILE[] = __FILE__;
 
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CCheckEngineTabDlg::IDD, pParent)
-, m_all_enabled(true)
-, m_rw_buttons_enabled(true)
+, m_all_enabled(false)
+, m_rw_buttons_enabled(false)
 , m_header_ctrl(new CHeaderCtrlEx())
 {
  m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));

@@ -17,11 +17,13 @@
 #include "FirmwareTabController.h"
 #include "CheckEngineTabController.h"
 #include "KnockChannelTabController.h"
+#include "LogPlayerTabController.h"
 
 #include "ParamMonTabDlg.h"
 #include "FirmwareTabDlg.h"
 #include "CheckEngineTabDlg.h"
 #include "KnockChannelTabDlg.h"
+#include "LogPlayerTabDlg.h"
 
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -36,10 +38,12 @@ CMainTabManager::CMainTabManager()
 , m_pFirmwareTabController(NULL)
 , m_pCheckEngineTabController(NULL)
 , m_pKnockChannelTabController(NULL)
+, m_pLogPlayerTabController(NULL)
 , m_pParamMonTabDlg(NULL)
 , m_pFirmwareTabDlg(NULL)
 , m_pCheckEngineTabDlg(NULL)
 , m_pKnockChannelTabDlg(NULL)
+, m_pLogPlayerTabDlg(NULL)
 {
  //na
 }
@@ -56,11 +60,13 @@ CMainTabManager::~CMainTabManager()
   delete m_pFirmwareTabController;
   delete m_pCheckEngineTabController;
   delete m_pKnockChannelTabController;
+  delete m_pLogPlayerTabController;
 
   delete m_pParamMonTabDlg;
   delete m_pFirmwareTabDlg;
   delete m_pCheckEngineTabDlg;
   delete m_pKnockChannelTabDlg;
+  delete m_pLogPlayerTabDlg;
 }
 
 bool CMainTabManager::Init(CChildView* i_pChildView)
@@ -111,6 +117,12 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 
   m_MainTabController.AddTabController(m_pKnockChannelTabController);
   m_tab_control.AddPage(MLL::LoadString(IDS_TAB_KNOCK_SETTINGS),m_pKnockChannelTabDlg,3);
+
+  m_pLogPlayerTabDlg = new CLogPlayerTabDlg(); //view
+  m_pLogPlayerTabController = new CLogPlayerTabController(m_pLogPlayerTabDlg, p_comm, p_sbar);
+
+  m_MainTabController.AddTabController(m_pLogPlayerTabController);
+  m_tab_control.AddPage(MLL::LoadString(IDS_TAB_LOG_PLAYER),m_pLogPlayerTabDlg,4);
 
   m_tab_control.SetCurSel(0);
 

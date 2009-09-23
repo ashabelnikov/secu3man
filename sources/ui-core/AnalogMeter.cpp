@@ -28,6 +28,8 @@ CAnalogMeter::CAnalogMeter()
 : m_dLimitAngleDeg(145)
 , m_nGridLineWidth(1)
 , m_fontType(_T("Times New Roman"))
+, m_pbitmapOldGrid(NULL)
+, m_pbitmapOldNeedle(NULL)
 {
   m_dPI = 4.0 * atan(1.0);  // for trig calculations
   
@@ -87,9 +89,11 @@ CAnalogMeter::CAnalogMeter()
 
 CAnalogMeter::~CAnalogMeter()
 {
-  m_dcGrid.SelectObject(m_pbitmapOldGrid);
+  if (m_pbitmapOldGrid)
+    m_dcGrid.SelectObject(m_pbitmapOldGrid);
   m_dcGrid.DeleteDC(); 
-  m_dcNeedle.SelectObject(m_pbitmapOldNeedle);
+  if (m_pbitmapOldNeedle)
+    m_dcNeedle.SelectObject(m_pbitmapOldNeedle);
   m_dcNeedle.DeleteDC(); 
   m_bitmapGrid.DeleteObject();
   m_bitmapNeedle.DeleteObject();

@@ -21,9 +21,10 @@ public:
   {
 #define SIZE 1024
    TCHAR buffer[SIZE];
-   HINSTANCE hInst = GetModuleBaseAddress();
-   int size = SIZE * sizeof(TCHAR); 
-   ::LoadString(hInst, i_id, buffer, size);
+   HINSTANCE hInst = GetModuleBaseAddress();   
+   int real_size = ::LoadString(hInst, i_id, buffer, SIZE);
+   ASSERT(real_size < (SIZE - 1));
+   ASSERT(real_size);
    return _TSTRING(buffer);	
 #undef SIZE
   }

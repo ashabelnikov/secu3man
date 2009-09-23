@@ -213,6 +213,14 @@ SOURCE=.\KnockChannelTabDlg.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\LogPlayerTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\LogPlayerTabDlg.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\MainFrame.cpp
 # End Source File
 # Begin Source File
@@ -335,6 +343,14 @@ SOURCE=.\KnockChannelTabController.h
 # Begin Source File
 
 SOURCE=.\KnockChannelTabDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LogPlayerTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LogPlayerTabDlg.h
 # End Source File
 # Begin Source File
 

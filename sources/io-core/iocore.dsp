@@ -194,6 +194,10 @@ SOURCE=.\iocore.rc
 # End Source File
 # Begin Source File
 
+SOURCE=.\LogReader.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\LogWriter.cpp
 # End Source File
 # Begin Source File
@@ -252,6 +256,10 @@ SOURCE=.\FirmwareDataMediator.h
 # Begin Source File
 
 SOURCE=.\FirmwareMapsDataHolder.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\LogReader.h
 # End Source File
 # Begin Source File
 
