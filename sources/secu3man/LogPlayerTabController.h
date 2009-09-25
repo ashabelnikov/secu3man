@@ -9,6 +9,7 @@
 class CLogPlayerTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
+class LogReader;
 
 class CLogPlayerTabController : public ITabController, private IAPPEventHandler 
 {
@@ -32,10 +33,14 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
 	void OnSettingsChanged(void);
 
+    void OnOpenFileButton(void);
+
   private:
 
 	//<factor id, <name, value> >
-	std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;	
+	std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;
+
+	std::auto_ptr<LogReader> mp_log_reader;
 };
 
 

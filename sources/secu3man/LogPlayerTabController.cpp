@@ -15,6 +15,7 @@
 #include "io-core/ufcodes.h"
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
+#include "io-core/LogReader.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -32,6 +33,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
+, mp_log_reader(new LogReader)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -47,6 +49,9 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
  m_time_factors.insert(_IV(5, _T("1:3"), 3.00f));
  m_time_factors.insert(_IV(6, _T("1:4"), 4.00f));
 #undef _IV
+
+ //устанавливаем делегаты (обработчики событий от представления)
+ m_view->setOnOpenFileButton(MakeDelegate(this,&CLogPlayerTabController::OnOpenFileButton));
 }
 
 
@@ -130,4 +135,23 @@ void CLogPlayerTabController::OnConnection(const bool i_online)
 bool CLogPlayerTabController::OnClose(void)
 {
  return true;
+}
+
+void CLogPlayerTabController::OnOpenFileButton(void)
+{
+ /*LogReader::FileError error_id;
+ VERIFY(mp_log_reader->OpenFile(_T("C:\\eeee"), error_id));
+
+ size_t count = mp_log_reader->GetCount();
+ 
+ for(size_t i = 0; i < count; i++)
+ {
+  SECU3IO::SensorDat d;
+  SYSTEMTIME t;
+  bool r = mp_log_reader->GetRecord(t, &d);
+
+  mp_log_reader->Next(); 
+
+	 __asm nop;
+ }*/
 }

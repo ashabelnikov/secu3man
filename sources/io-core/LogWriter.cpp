@@ -15,7 +15,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c%%04d%c%%0.2f%c%%0.2f%c%%0.2f%c%%0.2f%c%%0.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
+const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
 
 LogWriter::LogWriter()
 : m_is_busy(false)
