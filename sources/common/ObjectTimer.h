@@ -61,6 +61,11 @@ template<class T> class CObjectTimer
       msgHandler = i_function;
 	}
 
+    inline void SetMsgHandler(T* ip_this, msgHandlerType i_function)
+	{
+      msgHandler = i_function;
+      m_pDispatcher = ip_this;
+	}
 
   private:
     msgHandlerType msgHandler;

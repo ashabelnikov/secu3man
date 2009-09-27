@@ -44,6 +44,8 @@ void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_PREV_BUTTON, m_prev_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_FILE_NAME_INDICATOR, m_file_indicator);
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_INDICATOR, m_position_indicator);
+ DDX_Control(pDX, IDC_LOG_PLAYER_OPEN_FILE_BUTTON, m_open_file_button);
+ DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
 }
 
 LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
@@ -254,3 +256,9 @@ void CLogPlayerTabDlg::setOnSliderMoved(EventHScroll i_callback)
 {
  m_on_slider_moved = i_callback; 
 }
+
+void CLogPlayerTabDlg::SetOpenFileButtonText(const _TSTRING& i_text)
+{
+ m_open_file_button.SetWindowText(i_text.c_str());
+}
+

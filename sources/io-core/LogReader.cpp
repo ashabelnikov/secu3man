@@ -87,6 +87,9 @@ bool LogReader::CloseFile(void)
 {
  if (m_file_handle)
  {
+  m_record_count = 0;
+  m_record_size = 0;
+  m_current_record = 0;
   int result = fclose(m_file_handle);
   m_file_handle = NULL;
   return (result == 0); 
@@ -185,4 +188,14 @@ void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
  sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x);
+}
+
+bool LogReader::IsNextPossible(void) const
+{
+ return (m_current_record + 1) < m_record_count;
+}
+
+bool LogReader::IsPrevPossible(void) const
+{
+ return m_current_record > 0;
 }

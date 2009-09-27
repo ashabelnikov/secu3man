@@ -43,6 +43,10 @@ public:
 
 	//Separating symbol for CSV 
 	void SetSeparatingSymbol(char i_sep_symbol);
+
+    //проверка на начало/конец
+    bool IsNextPossible(void) const;
+    bool IsPrevPossible(void) const;
 private:
    
 	_TSTRING m_file_name;         //имя открытого файла

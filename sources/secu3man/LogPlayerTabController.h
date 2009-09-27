@@ -4,7 +4,7 @@
 #include "ITabController.h"
 #include "common/unicodesupport.h"
 #include "io-core/ControlAppAdapter.h"
-
+#include "common/ObjectTimer.h"
 
 class CLogPlayerTabDlg;
 class CCommunicationManager;
@@ -32,8 +32,14 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
     virtual void OnConnection(const bool i_online);
 
 	void OnSettingsChanged(void);
-
     void OnOpenFileButton(void);
+	void OnPlayButton(void);
+	void OnNextButton(void);
+	void OnPrevButton(void);
+	void OnTimeFactorCombo(size_t i_factor_code);
+	void OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos);
+
+    void OnTimer(void);
 
   private:
 
@@ -41,6 +47,10 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 	std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;
 
 	std::auto_ptr<LogReader> mp_log_reader;
+
+    CObjectTimer<CLogPlayerTabController> m_timer;
+
+    float m_position;
 };
 
 

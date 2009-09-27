@@ -26,6 +26,8 @@ public:
 	void EnableNextButton(bool i_enable);
 	void EnablePrevButton(bool i_enable);
 
+    void SetOpenFileButtonText(const _TSTRING& i_text);
+
 	//slider
 	void SetSliderPosition(unsigned long i_position);
 	unsigned long GetSliderPosition(void) const;
@@ -72,6 +74,7 @@ private:
    CButton m_play_button;
    CButton m_next_button;
    CButton m_prev_button;
+   CButton m_open_file_button;
    CSliderCtrl m_slider;
    CStatic m_file_indicator;
    CStatic m_position_indicator;

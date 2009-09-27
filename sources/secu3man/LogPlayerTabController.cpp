@@ -34,6 +34,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
 , m_comm(NULL)
 , m_sbar(NULL)
 , mp_log_reader(new LogReader)
+, m_position(.0f)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -52,6 +53,13 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
 
  //устанавливаем делегаты (обработчики событий от представления)
  m_view->setOnOpenFileButton(MakeDelegate(this,&CLogPlayerTabController::OnOpenFileButton));
+ m_view->setOnPlayButton(MakeDelegate(this,&CLogPlayerTabController::OnPlayButton));
+ m_view->setOnNextButton(MakeDelegate(this,&CLogPlayerTabController::OnNextButton));
+ m_view->setOnPrevButton(MakeDelegate(this,&CLogPlayerTabController::OnPrevButton));
+ m_view->setOnTimeFactorCombo(MakeDelegate(this,&CLogPlayerTabController::OnTimeFactorCombo));
+ m_view->setOnSliderMoved(MakeDelegate(this,&CLogPlayerTabController::OnSliderMoved));
+
+ m_timer.SetMsgHandler(this, &CLogPlayerTabController::OnTimer);
 }
 
 
@@ -139,19 +147,94 @@ bool CLogPlayerTabController::OnClose(void)
 
 void CLogPlayerTabController::OnOpenFileButton(void)
 {
- /*LogReader::FileError error_id;
- VERIFY(mp_log_reader->OpenFile(_T("C:\\eeee"), error_id));
-
- size_t count = mp_log_reader->GetCount();
- 
- for(size_t i = 0; i < count; i++)
+ if (mp_log_reader->IsOpened())
  {
-  SECU3IO::SensorDat d;
-  SYSTEMTIME t;
-  bool r = mp_log_reader->GetRecord(t, &d);
+  //TODO:
+  mp_log_reader->CloseFile();
+     
+  m_view->SetFileIndicator(_T(""));
+  m_view->SetOpenFileButtonText(_T("Открыть файл"));
+  m_view->m_MIDeskDlg.Enable(false);
+  m_view->SetSliderPosition(0
+      );
+  m_timer.KillTimer();
+  return;
+ }
 
-  mp_log_reader->Next(); 
+ HANDLE   hFile = NULL;    
+ static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE, NULL, NULL, NULL, szFilter, NULL);
+  
+ if (open.DoModal() != IDOK)
+  return; //пользователь передумал
+       
+ LogReader::FileError error_id;
+ bool result = mp_log_reader->OpenFile(open.GetFileName().GetBuffer(0), error_id);
+ if (false==result)
+ {
+  if (error_id==LogReader::FE_OPEN) 
+   AfxMessageBox(_T("Не могу открыть указанный файл!"));
+  else if (error_id==LogReader::FE_FORMAT)
+  {
+   AfxMessageBox(_T("Некорректный формат файла!"));  
+  }
+  else
+   ASSERT(0);
 
-	 __asm nop;
- }*/
+  mp_log_reader->CloseFile();
+  return; //не можем продолжать, так как произошла ошибка
+ }
+
+ m_view->SetOpenFileButtonText(_T("Закрыть"));
+
+ CString string;
+ string.Format(_T("%s\n%d записей"),open.GetFileName(),mp_log_reader->GetCount());
+ m_view->SetFileIndicator(string.GetBuffer(0));
+
+////////////////////////////////////////////////////////////////
+ m_view->m_MIDeskDlg.Enable(true);
+ m_view->SetSliderRange(0, mp_log_reader->GetCount());
+ m_position = 0;
+ m_view->SetSliderPosition(m_position);
+
+ m_timer.SetTimer(80);
+}
+
+
+void CLogPlayerTabController::OnPlayButton(void)
+{
+}
+
+void CLogPlayerTabController::OnNextButton(void)
+{
+}
+
+void CLogPlayerTabController::OnPrevButton(void)
+{
+}
+
+void CLogPlayerTabController::OnTimeFactorCombo(size_t i_factor_code)
+{
+}
+
+void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos)
+{
+}
+
+void CLogPlayerTabController::OnTimer(void)
+{
+ if (!mp_log_reader->IsNextPossible())
+ {
+ m_timer.KillTimer();
+ return;
+ }
+
+ SECU3IO::SensorDat d;
+ SYSTEMTIME t;
+ bool r = mp_log_reader->GetRecord(t, &d);
+ m_view->m_MIDeskDlg.SetValues(&d);
+ mp_log_reader->Next();
+
+ m_view->SetSliderPosition((unsigned long)m_position);
+ m_position+=1.0f;
 }
