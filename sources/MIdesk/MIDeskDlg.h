@@ -34,6 +34,9 @@ public:
     virtual void GetValues(SECU3IO::SensorDat* o_values);
    //-----------------------------------------------
 
+    //установка периода обновления в миллисекундах
+    void SetUpdatePeriod(unsigned int i_period);
+
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
 	virtual BOOL OnInitDialog(); //activate
@@ -57,6 +60,8 @@ private:
 
 	SECU3IO::SensorDat m_values;
 	CObjectTimer<CMIDeskDlg> m_update_timer;
+    unsigned int m_ubdate_period;
+    bool m_was_initialized;
 };
 
 /////////////////////////////////////////////////////////////////////////////

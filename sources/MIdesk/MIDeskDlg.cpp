@@ -25,6 +25,8 @@ static char THIS_FILE[] = __FILE__;
 
 CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CMIDeskDlg::IDD, pParent)
+, m_ubdate_period(100)
+, m_was_initialized(false)
 {
 //na	
 }
@@ -75,8 +77,9 @@ BOOL CMIDeskDlg::OnInitDialog()
 
  Enable(false);
 
- m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, 100);
+ m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_ubdate_period);
 
+ m_was_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -84,6 +87,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 
 void CMIDeskDlg::OnDestroy() 
 {
+ m_was_initialized = false;
  CDialog::OnDestroy();
  m_update_timer.KillTimer();
 }
@@ -137,6 +141,8 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
 
 void CMIDeskDlg::OnUpdateTimer(void)
 {
+ if (!m_was_initialized)
+   return; 
  m_tachometer.SetValue((float)m_values.frequen);
  m_pressure.SetValue(m_values.pressure);
  m_voltmeter.SetValue(m_values.voltage);
@@ -146,4 +152,11 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_throttle_gate.SetValue(m_values.carb);
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetValue(m_values.temperat);
+}
+
+void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
+{
+ m_ubdate_period = i_period;
+ if (m_was_initialized)
+   m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_ubdate_period);
 }

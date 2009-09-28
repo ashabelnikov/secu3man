@@ -107,6 +107,7 @@ void CLogPlayerTabController::OnDeactivate(void)
 {
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));
+ m_timer.KillTimer();
 }
 
 //hurrah!!! получен пакет от SECU-3
@@ -196,6 +197,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  m_view->SetSliderRange(0, mp_log_reader->GetCount());
  m_position = 0;
  m_view->SetSliderPosition(m_position);
+ m_view->m_MIDeskDlg.SetUpdatePeriod(40);
 
  m_timer.SetTimer(80);
 }
