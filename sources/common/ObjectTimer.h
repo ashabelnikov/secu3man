@@ -21,8 +21,8 @@ template<class T> class CObjectTimer
   public:
     typedef void (T::*msgHandlerType) (void);
 
-	CObjectTimer(T* ip) : m_pDispatcher(ip), msgHandler(NULL) {};
-	CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL) {};
+	CObjectTimer(T* ip) : m_pDispatcher(ip), msgHandler(NULL), m_interval_ms(0) {};
+	CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0) {};
 
 	//при удалении очередного объекта-таймера мапа становится меньше на один элемент
 	virtual ~CObjectTimer() 
@@ -36,6 +36,7 @@ template<class T> class CObjectTimer
       SetMsgHandler(i_function);
       m_pDispatcher = object;
       SetTimer(interval);
+      m_interval_ms = interval;
 	};
 
     //запускать таймер этой функцией можно только если предварительно в конструктор был передан 
@@ -44,6 +45,7 @@ template<class T> class CObjectTimer
 	{
 	  m_timer_id = ::SetTimer(NULL,0,interval,(TIMERPROC)&TimerProc);
       g_object_timer_instance_map[m_timer_id] = this;
+      m_interval_ms = interval;
 	}
 
     //убивать таймер этой функцией 
@@ -61,11 +63,18 @@ template<class T> class CObjectTimer
       msgHandler = i_function;
 	}
 
+    //версия функции которая принимает адрес обьекта и адрес функции
     inline void SetMsgHandler(T* ip_this, msgHandlerType i_function)
 	{
-      msgHandler = i_function;
       m_pDispatcher = ip_this;
+      msgHandler = i_function;
 	}
+
+    //возвращает текущий период таймера
+    int GetPeriod(void) const
+    {
+      return m_interval_ms;
+    }
 
   private:
     msgHandlerType msgHandler;

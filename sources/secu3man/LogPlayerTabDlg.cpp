@@ -262,3 +262,12 @@ void CLogPlayerTabDlg::SetOpenFileButtonText(const _TSTRING& i_text)
  m_open_file_button.SetWindowText(i_text.c_str());
 }
 
+bool CLogPlayerTabDlg::GetNextButtonState(void) const
+{
+ return m_next_button_state;
+}
+
+bool CLogPlayerTabDlg::GetPrevButtonState(void) const
+{
+ return m_prev_button_state;
+}

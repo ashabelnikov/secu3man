@@ -25,6 +25,8 @@ public:
 
 	void EnableNextButton(bool i_enable);
 	void EnablePrevButton(bool i_enable);
+    bool GetNextButtonState(void) const;
+    bool GetPrevButtonState(void) const;
 
     void SetOpenFileButtonText(const _TSTRING& i_text);
 

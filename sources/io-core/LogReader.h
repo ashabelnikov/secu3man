@@ -28,7 +28,7 @@ public:
 	bool IsOpened(void) const;
 
 	//получает данные из текущей записи
-	bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat *op_data);
+	bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data);
 
 	//ѕеремещение к следующей записи
 	//возвращает false если достигнут конец записей
@@ -47,6 +47,10 @@ public:
     //проверка на начало/конец
     bool IsNextPossible(void) const;
     bool IsPrevPossible(void) const;
+
+    //¬озвращает текущую позицию
+    unsigned long GetCurPos(void) const;
+
 private:
    
 	_TSTRING m_file_name;         //им€ открытого файла
