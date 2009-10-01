@@ -27,52 +27,53 @@ CAppSettingsController::CAppSettingsController(IAppSettingsDlg* i_pView, CAppSet
 : m_pView(i_pView)
 , m_pModel(i_pModel)
 {
-  ASSERT(m_pView);
-  m_pView->setFunctionOnOk(MakeDelegate(this,&CAppSettingsController::OnOk));
-  m_pView->setFunctionOnCancel(MakeDelegate(this,&CAppSettingsController::OnCancel));
-  m_pView->setFunctionOnActivate(MakeDelegate(this,&CAppSettingsController::OnActivate));
-
+ ASSERT(m_pView);
+ m_pView->setFunctionOnOk(MakeDelegate(this,&CAppSettingsController::OnOk));
+ m_pView->setFunctionOnCancel(MakeDelegate(this,&CAppSettingsController::OnCancel));
+ m_pView->setFunctionOnActivate(MakeDelegate(this,&CAppSettingsController::OnActivate));
 }
 
 CAppSettingsController::~CAppSettingsController()
 {
-
+ //na
 }
 
 void CAppSettingsController::OnOk(void)
 {
-  //сохраняем данные из представления в модель
-  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
-  m_pModel->m_optPortName = m_pView->GetPortName();
-  m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
-  m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
-  m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
-  m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
+ //сохраняем данные из представления в модель
+ ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
+ m_pModel->m_optPortName = m_pView->GetPortName();
+ m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
+ m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
+ m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
+ m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
+ m_pModel->m_optMIDeskUpdatePeriod = m_pView->GetMIDeskUpdatePeriod();
 
-  size_t index = m_pView->GetCSVSepSymbol();
-  m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
+ size_t index = m_pView->GetCSVSepSymbol();
+ m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
 }
 
 void CAppSettingsController::OnCancel(void)
 {
-  //При нажатии на Cancel ничего не делаем (не трогаем модель!)
+ //При нажатии на Cancel ничего не делаем (не трогаем модель!)
 }
 
 void CAppSettingsController::OnActivate(void)
 {
-  //перекачиваем данные из модели в представление
-  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));  
-  m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
-  m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);
-  m_pView->FillCtrlsWithAllowableCSVSepSymbols(m_pModel->m_AllowaleCSVSepSymbols);
-  m_pView->SetPortName(m_pModel->m_optPortName);
-  m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
-  m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
-  m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
-  m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
+ //перекачиваем данные из модели в представление
+ ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));  
+ m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
+ m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);
+ m_pView->FillCtrlsWithAllowableCSVSepSymbols(m_pModel->m_AllowaleCSVSepSymbols);
+ m_pView->SetPortName(m_pModel->m_optPortName);
+ m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
+ m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
+ m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
+ m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
+ m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod);
 
-  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size(); 
-  for(size_t i = 0; i < count; i++)
-	if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
-      m_pView->SetCSVSepSymbol(i);
+ size_t count = m_pModel->m_AllowaleCSVSepSymbols.size(); 
+ for(size_t i = 0; i < count; i++)
+  if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
+   m_pView->SetCSVSepSymbol(i);
 }

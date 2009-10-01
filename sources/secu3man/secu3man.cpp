@@ -18,6 +18,7 @@
 #include "io-core/ccomport.h"
 #include "CommunicationManager.h"
 #include "io-core/logwriter.h"
+#include "AppSettingsManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

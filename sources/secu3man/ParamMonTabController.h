@@ -12,17 +12,19 @@
 class CParamMonTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
+class ISettingsData;
 
 class CParamMonTabController : public ITabController, private IAPPEventHandler 
 {
   public:
-	CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
+	CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
 	virtual ~CParamMonTabController();
 
   private:
     CParamMonTabDlg*  m_view;
 	CCommunicationManager* m_comm;
-	CStatusBarManager*  m_sbar;    
+	CStatusBarManager*  m_sbar;  
+    ISettingsData* mp_settings;
 	
 	CObjectTimer<CParamMonTabController> m_pd_changes_timer;
 

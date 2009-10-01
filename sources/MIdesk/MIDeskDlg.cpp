@@ -25,7 +25,7 @@ static char THIS_FILE[] = __FILE__;
 
 CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CMIDeskDlg::IDD, pParent)
-, m_ubdate_period(100)
+, m_update_period(100)
 , m_was_initialized(false)
 {
 //na	
@@ -77,7 +77,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 
  Enable(false);
 
- m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_ubdate_period);
+ m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_update_period);
 
  m_was_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -156,7 +156,10 @@ void CMIDeskDlg::OnUpdateTimer(void)
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
 {
- m_ubdate_period = i_period;
+ m_update_period = i_period;
  if (m_was_initialized)
-   m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_ubdate_period);
+ {
+  m_update_timer.KillTimer();
+  m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_update_period);
+ }
 }

@@ -21,8 +21,8 @@ template<class T> class CObjectTimer
   public:
     typedef void (T::*msgHandlerType) (void);
 
-	CObjectTimer(T* ip) : m_pDispatcher(ip), msgHandler(NULL), m_interval_ms(0) {};
-	CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0) {};
+	CObjectTimer(T* ip) : m_pDispatcher(ip), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
+	CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
 
 	//при удалении очередного объекта-таймера мапа становится меньше на один элемент
 	virtual ~CObjectTimer() 
@@ -43,7 +43,12 @@ template<class T> class CObjectTimer
 	//указатель на объект и была вызвана функция SetMsgHandler() для установки обработчика
     void SetTimer(int interval)
 	{
+      ASSERT(m_timer_id == 0);
+      if (m_timer_id != 0)
+       return; //already installed!
+
 	  m_timer_id = ::SetTimer(NULL,0,interval,(TIMERPROC)&TimerProc);
+      ASSERT(m_timer_id); //failed to set timer!
       g_object_timer_instance_map[m_timer_id] = this;
       m_interval_ms = interval;
 	}
@@ -52,9 +57,14 @@ template<class T> class CObjectTimer
     void KillTimer(void)
 	{
 	  ::KillTimer(NULL,m_timer_id);
-	  if (!g_object_timer_instance_map.empty())
-	    if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())	  
-          g_object_timer_instance_map.erase(m_timer_id);  	 
+      if (!g_object_timer_instance_map.empty())
+      {
+	   if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())	  
+        g_object_timer_instance_map.erase(m_timer_id);  	 
+       else
+        ASSERT(m_timer_id == 0); //timer id is non-zero but we can not find it in map!
+      }
+      m_timer_id = 0; //indicate that we reset the timer
 	}
 
 	//эта функция принимает на входе адрес функции-члена: void T::Function(void)

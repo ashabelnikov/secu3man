@@ -4,15 +4,12 @@
 class CAppSettingsModel;
 class CAppSettingsDlg;
 class CAppSettingsController;
+class ISettingsData;
 
 
 class CAppSettingsManager  
 {
 public:
-
-    CAppSettingsModel* m_pModel;
-	CAppSettingsController* m_pController;
-	CAppSettingsDlg* m_pDialog;
 
 	CAppSettingsManager();
 	virtual ~CAppSettingsManager();
@@ -25,5 +22,16 @@ public:
 
 	//показать диалог параметров
 	int ShowDialog(void) const;
+
+    //возвражает интерфейс к данным настроек программы только дл€ чтени€
+    ISettingsData* GetSettings(void) const;
+    
+    //¬озвращает указатель на модель с данными настроек программы
+    CAppSettingsModel* GetModel(void) const;
+
+private:
+    CAppSettingsModel* m_pModel;
+	CAppSettingsController* m_pController;
+	CAppSettingsDlg* m_pDialog;
 };
 

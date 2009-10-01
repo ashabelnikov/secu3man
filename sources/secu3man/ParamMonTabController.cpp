@@ -15,6 +15,7 @@
 #include "io-core/ufcodes.h"
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
+#include "ISettingsData.h"
 
 #include <map>
 #include <algorithm>
@@ -36,7 +37,7 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar)
+CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
@@ -50,6 +51,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
   m_view = i_view;
   m_comm = i_comm;
   m_sbar = i_sbar;
+  mp_settings = ip_settings;
 
   m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
   m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
@@ -67,7 +69,8 @@ CParamMonTabController::~CParamMonTabController()
 void CParamMonTabController::OnSettingsChanged(void)
 {
   //включаем необходимый для данного контекста коммуникационный контроллер
-  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
+  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
+  m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
 
 //from ParamDesk
@@ -89,6 +92,7 @@ void CParamMonTabController::OnActivate(void)
 {
   //выбираем ранее выбранную вкладку на панели параметров	
   bool result = m_view->m_ParamDeskDlg.SetCurSel(m_lastSel);
+  m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 
   //////////////////////////////////////////////////////////////////
   //Подключаем контроллер к потоку данных от SECU-3

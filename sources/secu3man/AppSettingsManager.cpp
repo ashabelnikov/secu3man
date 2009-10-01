@@ -60,3 +60,14 @@ int CAppSettingsManager::ShowDialog(void) const
  ASSERT(m_pController);
  return m_pController->ShowDialog(); 
 }
+
+ISettingsData* CAppSettingsManager::GetSettings(void) const
+{
+ return m_pModel;
+}
+
+CAppSettingsModel* CAppSettingsManager::GetModel(void) const
+{
+ return m_pModel;
+}
+

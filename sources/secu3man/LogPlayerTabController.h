@@ -11,17 +11,19 @@ class CLogPlayerTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
 class LogReader;
+class ISettingsData;
 
 class CLogPlayerTabController : public ITabController, private IAPPEventHandler 
 {
   public:
-	CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
+	CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
 	virtual ~CLogPlayerTabController();
 
   private:
     CLogPlayerTabDlg*  m_view;
 	CCommunicationManager* m_comm;
-	CStatusBarManager*  m_sbar;    
+	CStatusBarManager*  m_sbar;   
+    ISettingsData* mp_settings;
 	
     //появление/закрытие вкладки параметров и монитора
     virtual void OnActivate(void);

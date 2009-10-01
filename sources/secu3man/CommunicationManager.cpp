@@ -8,12 +8,13 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "ISECU3Man.h"
+#include "AppSettingsManager.h"
 #include "CommunicationManager.h"
 #include "io-core/CComPort.h"
 #include "io-core/Bootloader.h"
 #include "io-core/LogWriter.h"
-#include "AppSettingsModel.h"
+#include "ISECU3Man.h"
+#include "ISettingsData.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -37,7 +38,7 @@ CCommunicationManager::CCommunicationManager()
 , m_pAppAdapter(NULL)
 , m_pBldAdapter(NULL)
 {
-  m_pSettings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager();
+  m_pSettings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager()->GetSettings();
 
   m_pComPort    = new CComPort(_T("COM1"),m_recv_buff_size,m_send_buff_size);
   m_pBootLoader = new CBootLoader();
@@ -88,7 +89,7 @@ bool CCommunicationManager::Init(void)
   try
   {
     //на скорость переданную в эту функцию не нужно обращать внимания (она будет установлена конкретным контроллером интрерфейса)
-	m_pComPort->Initialize(_TSTRING(m_pSettings->m_pModel->m_optPortName),9600,NOPARITY,ONESTOPBIT,0,1);
+	m_pComPort->Initialize(_TSTRING(m_pSettings->GetPortName()),9600,NOPARITY,ONESTOPBIT,0,1);
   }
   catch(CComPort::xInitialize e)
   {
@@ -101,7 +102,7 @@ bool CCommunicationManager::Init(void)
 
   //инициализируем контроллеры интерфейсов
   try 
-  { m_pControlApp->Initialize(m_pComPort,m_pSettings->m_pModel->m_optBaudRateApplication,500);
+  { m_pControlApp->Initialize(m_pComPort,m_pSettings->GetBaudRateApplication(),500);
   }
   catch(CControlApp::xThread)
   {
@@ -110,7 +111,7 @@ bool CCommunicationManager::Init(void)
   }
 
   try
-  { m_pBootLoader->Initialize(m_pComPort,m_pSettings->m_pModel->m_optBaudRateBootloader);
+  { m_pBootLoader->Initialize(m_pComPort,m_pSettings->GetBaudRateBootloader());
   }
   catch (CBootLoader::xThread)
   {

@@ -12,6 +12,7 @@
 #include "ISECU3Man.h"
 #include "MainTabManager.h"
 #include "MainFrameManager.h"
+#include "AppSettingsManager.h"
 
 #include "ParamMonTabController.h"
 #include "FirmwareTabController.h"
@@ -92,10 +93,11 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   
   CCommunicationManager* p_comm = ISECU3Man::GetSECU3Man()->GetCommunicationManager();
   CStatusBarManager*     p_sbar = ISECU3Man::GetSECU3Man()->GetMainFrameManager()->m_pStatusBarManager;
+  ISettingsData*         p_settings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager()->GetSettings();
 
   //создаем контроллеры вкладок и наполняем Tab control вкладками
   m_pParamMonTabDlg = new CParamMonTabDlg(); //view
-  m_pParamMonTabController = new CParamMonTabController(m_pParamMonTabDlg, p_comm, p_sbar);
+  m_pParamMonTabController = new CParamMonTabController(m_pParamMonTabDlg, p_comm, p_sbar, p_settings);
 
   m_MainTabController.AddTabController(m_pParamMonTabController);
   m_tab_control.AddPage(MLL::LoadString(IDS_TAB_PARAMETERS_AND_MONOTOR),m_pParamMonTabDlg,0);
@@ -119,7 +121,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
   m_tab_control.AddPage(MLL::LoadString(IDS_TAB_KNOCK_SETTINGS),m_pKnockChannelTabDlg,3);
 
   m_pLogPlayerTabDlg = new CLogPlayerTabDlg(); //view
-  m_pLogPlayerTabController = new CLogPlayerTabController(m_pLogPlayerTabDlg, p_comm, p_sbar);
+  m_pLogPlayerTabController = new CLogPlayerTabController(m_pLogPlayerTabDlg, p_comm, p_sbar, p_settings);
 
   m_MainTabController.AddTabController(m_pLogPlayerTabController);
   m_tab_control.AddPage(MLL::LoadString(IDS_TAB_LOG_PLAYER),m_pLogPlayerTabDlg,4);

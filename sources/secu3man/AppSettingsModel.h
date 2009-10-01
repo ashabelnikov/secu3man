@@ -4,10 +4,14 @@
 #include <string>
 #include <vector>
 #include "common/unicodesupport.h"
+#include "ISettingsData.h"
+
+class CAppSettingsController;
 
 //хранит и сохраняет/загружает данные 
-class CAppSettingsModel  
+class CAppSettingsModel : public ISettingsData 
 {
+ friend CAppSettingsController;
 public:
 	std::vector<DWORD> m_AllowableBaudRates;
 	std::vector<_TSTRING> m_AllowablePorts;
@@ -23,10 +27,6 @@ public:
 	//запущена программа.
     CString GetINIFileFullName(void) const;
 
-	//Возвращает полный путь к каталогу из которого было запущено приложение
-	//(каталог который был текущим на момент вызва конструктора этого класса)
-	CString GetAppDirectory(void) const;
-
     //чтение настроек из INI-файла
     bool ReadSettings(void);
     
@@ -41,7 +41,24 @@ public:
 	const CString m_Name_LogFilesFolder;
 	const CString m_Name_UseAppFolder;
 	const CString m_Name_CSVSepSymbol;
+    const CString m_Name_MIDeskUpdatePeriod;
 
+
+    //ISettingsData
+    virtual const _TSTRING& GetPortName(void) const;   
+    virtual DWORD GetBaudRateApplication(void) const;
+    virtual DWORD GetBaudRateBootloader(void) const;
+    virtual const CString& GetLogFilesFolder(void) const;
+    virtual bool  GetUseAppFolder(void) const;
+    virtual char  GetCSVSepSymbol(void) const;
+    virtual int   GetMIDeskUpdatePeriod(void) const;
+	//Возвращает полный путь к каталогу из которого было запущено приложение
+	//(каталог который был текущим на момент вызва конструктора этого класса)
+	virtual CString GetAppDirectory(void) const;
+
+    ////////////////////////////////////////////////////
+
+  private:
     //данные которые хранятся в INI-файле
 	_TSTRING m_optPortName;      
 	DWORD m_optBaudRateApplication;
@@ -49,9 +66,8 @@ public:
 	CString m_optLogFilesFolder;
 	bool  m_optUseAppFolder;
 	char  m_optCSVSepSymbol;
-    ////////////////////////////////////////////////////
+    int   m_optMIDeskUpdatePeriod;
 
-  private:
 	//проверяет указанное значение скорости на соответствие стандарту
     bool CheckAllowableBaudRate(DWORD baud);
 

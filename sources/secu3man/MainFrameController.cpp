@@ -13,9 +13,10 @@
 #include "MainFrame.h"
 #include "common\fastdelegate.h"
 #include "about\secu-3about.h"
+#include "AppSettingsManager.h"
 #include "CommunicationManager.h"
 #include "io-core\logwriter.h"
-#include "AppSettingsModel.h"
+#include "ISettingsData.h"
 
 using namespace fastdelegate;
 
@@ -70,8 +71,8 @@ void MainFrameController::OnAppSettings()
  if (result==IDOK)
  {
   //уведомляем логгер об изменениях в настройках.
-  CAppSettingsModel* settings = m_pAppSettingsManager->m_pModel;
-  m_pLogWriter->SetSeparatingSymbol(settings->m_optCSVSepSymbol); 
+  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+  m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 
 
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
@@ -84,13 +85,13 @@ void MainFrameController::OnAppBeginLog()
  //Активируем записывающий механизм и подключаемся к потоку данных
  _TSTRING full_path_to_folder;
 
- CAppSettingsModel* settings = m_pAppSettingsManager->m_pModel;
+ ISettingsData* settings = m_pAppSettingsManager->GetSettings();
 
  //устнанавливаем разделительный символ для CSV-файла указанный в настройках
- m_pLogWriter->SetSeparatingSymbol(settings->m_optCSVSepSymbol); 
+ m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 
 
- if (!settings->m_optUseAppFolder)
-  full_path_to_folder = settings->m_optLogFilesFolder;
+ if (!settings->GetUseAppFolder())
+  full_path_to_folder = settings->GetLogFilesFolder();
  else
   full_path_to_folder = settings->GetAppDirectory();
   

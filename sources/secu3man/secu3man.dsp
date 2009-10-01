@@ -334,6 +334,10 @@ SOURCE=.\ISECU3man.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\ISettingsData.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\ITabController.h
 # End Source File
 # Begin Source File

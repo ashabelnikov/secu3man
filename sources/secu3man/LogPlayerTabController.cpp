@@ -16,6 +16,7 @@
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
 #include "io-core/LogReader.h"
+#include "ISettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -41,7 +42,7 @@ static unsigned long CalcPeriod(SYSTEMTIME &i_time1, SYSTEMTIME &i_time2)
 }
 
 
-CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar)
+CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
@@ -55,6 +56,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
  m_view = i_view;
  m_comm = i_comm;
  m_sbar = i_sbar;
+ mp_settings = ip_settings;
 
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
@@ -90,7 +92,8 @@ CLogPlayerTabController::~CLogPlayerTabController()
 void CLogPlayerTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
+ m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
 
 
@@ -111,13 +114,14 @@ void CLogPlayerTabController::OnActivate(void)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
 
-
  std::vector<_TSTRING> tf_content;
  for(size_t i = 0; i < m_time_factors.size(); ++i)
   tf_content.push_back(m_time_factors[i].first.c_str()); 
  m_view->FillTimeFactorCombo(tf_content);
 
  m_view->SetTimeFactor(m_current_time_factor);
+
+ m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
 
 //from MainTabController
@@ -203,8 +207,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  string.Format(_T("%s\n%d записей"),open.GetFileName(),mp_log_reader->GetCount());
  m_view->SetFileIndicator(string.GetBuffer(0));
 
- m_view->m_MIDeskDlg.Enable(true);
- m_view->m_MIDeskDlg.SetUpdatePeriod(40);
+ m_view->m_MIDeskDlg.Enable(true); 
  m_view->EnableAll(true);
 
  //инициализируем логику плеера и начинаем сразу проигрывать

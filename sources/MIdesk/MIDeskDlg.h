@@ -60,7 +60,7 @@ private:
 
 	SECU3IO::SensorDat m_values;
 	CObjectTimer<CMIDeskDlg> m_update_timer;
-    unsigned int m_ubdate_period;
+    unsigned int m_update_period;
     bool m_was_initialized;
 };
 

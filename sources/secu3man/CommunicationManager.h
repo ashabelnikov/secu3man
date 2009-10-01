@@ -4,12 +4,12 @@
 #include "io-core/ccomport.h"
 #include "io-core/BootLoader.h"
 #include "io-core/ControlApp.h"
-#include "AppSettingsManager.h"
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
 #include "io-core/controlappadapter.h"
 #include "io-core/bootloaderadapter.h"
 
+class ISettingsData;
 
 class CCommunicationManager  
 {
@@ -34,7 +34,7 @@ class CCommunicationManager
 	//установить флаг i_force_reinit в true.
 	void SwitchOn(size_t i_cntr, bool i_force_reinit = false);
 	
-    CAppSettingsManager* m_pSettings;
+    ISettingsData*       m_pSettings;
     CComPort*            m_pComPort;
     CBootLoader*         m_pBootLoader;
     CControlApp*         m_pControlApp;
