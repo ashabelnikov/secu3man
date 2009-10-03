@@ -26,7 +26,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
 BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
 END_MESSAGE_MAP()
 
@@ -38,19 +37,18 @@ CSecu3manApp::CSecu3manApp()
 , m_pAppSettingsManager(NULL)
 , m_pCommunicationManager(NULL)
 {
-  m_pAppSettingsManager = new CAppSettingsManager();
-  m_pCommunicationManager = new CCommunicationManager();
-  m_pLogWriter = new LogWriter();
-  m_pMainFrameManager = new CMainFrameManager();
+ m_pAppSettingsManager = new CAppSettingsManager();
+ m_pCommunicationManager = new CCommunicationManager();
+ m_pLogWriter = new LogWriter();
+ m_pMainFrameManager = new CMainFrameManager();
 }
 
 CSecu3manApp::~CSecu3manApp()
 {
-  delete m_pMainFrameManager;
-  delete m_pAppSettingsManager;
-  delete m_pCommunicationManager;
-  delete m_pLogWriter;
-
+ delete m_pMainFrameManager;
+ delete m_pAppSettingsManager;
+ delete m_pCommunicationManager;
+ delete m_pLogWriter;
 }
 /////////////////////////////////////////////////////////////////////////////
 // The one and only CSecu3manApp object
@@ -62,54 +60,53 @@ CSecu3manApp theApp;
 
 BOOL CSecu3manApp::InitInstance()
 {
+ AfxEnableControlContainer();
 
-  AfxEnableControlContainer();
-
-  CoInitialize(NULL);
+ CoInitialize(NULL);
 
 #if (_MSC_VER <1300)
-  #ifdef _AFXDLL
-    Enable3dControls();		    // Call this when using MFC in a shared DLL
-  #else
-    Enable3dControlsStatic();	// Call this when linking to MFC statically
-  #endif
+ #ifdef _AFXDLL
+  Enable3dControls();		    // Call this when using MFC in a shared DLL
+ #else
+  Enable3dControlsStatic();	// Call this when linking to MFC statically
+ #endif
 #endif
 
-  SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
+ SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
 
-  //подгружаем функции из динамически связываемых DLL
-  DLL::LoadDLLsAndLinkToFunctions(); 
+ //подгружаем функции из динамически связываемых DLL
+ DLL::LoadDLLsAndLinkToFunctions(); 
   
-  //читаем настройки
-  m_pAppSettingsManager->ReadSettings();
+ //читаем настройки
+ m_pAppSettingsManager->ReadSettings();
  
-  //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
-  //дальнейшая инициализация.
-  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
+ //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
+ //дальнейшая инициализация.
+ m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
 
-  //инициализируем коммуникационный менеджер
-  m_pCommunicationManager->Init();
+ //инициализируем коммуникационный менеджер
+ m_pCommunicationManager->Init();
 
-  //Инициализируем содержимое главного окна (дочерние контроллеры).  
-  m_pMainFrameManager->Init(m_pMainWnd);
+ //Инициализируем содержимое главного окна (дочерние контроллеры).  
+ m_pMainFrameManager->Init(m_pMainWnd);
 
-  return TRUE;
+ return TRUE;
 }
 
 BOOL CSecu3manApp::OnIdle(LONG lCount) 
 {	
-  return CWinApp::OnIdle(lCount);
+ return CWinApp::OnIdle(lCount);
 }
 
 int CSecu3manApp::ExitInstance() 
 {	  
-  //сохраняем настройки
-  m_pAppSettingsManager->WriteSettings();
+ //сохраняем настройки
+ m_pAppSettingsManager->WriteSettings();
 
-  //завершение работы менеджера коммуникаций
-  m_pCommunicationManager->Terminate();
+ //завершение работы менеджера коммуникаций
+ m_pCommunicationManager->Terminate();
 
-  return CWinApp::ExitInstance();
+ return CWinApp::ExitInstance();
 }
 
 CAppSettingsManager* CSecu3manApp::GetAppSettingsManager(void) const

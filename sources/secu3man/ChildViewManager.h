@@ -1,24 +1,24 @@
 
 #pragma once
 
-#include "ChildView.h"
-#include "MainFrame.h"
+#include <memory>
 
-#include "MainTabManager.h"
+class CChildView;
+class CMainFrame;
+class CMainTabManager;
 
 class CChildViewManager  
 {
-public:
-    CChildView  m_wndView;
+ public:
+  CChildViewManager();
+  virtual ~CChildViewManager();
 
-	CMainTabManager* m_pMainTabManager;
+  bool Init(CMainFrame* i_pMainFrame);
 
-	bool Init(CMainFrame* i_pMainFrame);
-	void OnAfterCreate(void);
+  void OnAfterCreate(void);
+  virtual bool OnClose(void);
 
-	CChildViewManager();
-	virtual ~CChildViewManager();
-
-	virtual bool OnClose(void);
+ private:
+  std::auto_ptr<CMainTabManager> mp_MainTabManager;
+  std::auto_ptr<CChildView> mp_wndView;
 };
-

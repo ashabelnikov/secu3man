@@ -13,9 +13,11 @@
 #include "ChildViewManager.h"
 #include "MainFrameController.h"
 #include "ISECU3man.h"
+#include "MainFrame.h"
+#include "StatusBarManager.h"
+#include "common/FastDelegate.h"
 
 using namespace fastdelegate;
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -34,49 +36,51 @@ CMainFrameManager::CMainFrameManager()
 
 CMainFrameManager::~CMainFrameManager()
 {
-  delete m_pChildViewManager; 
-  delete m_pMainFrameController;
-  delete m_pStatusBarManager;
-  //do not delete m_pMainFrame!
+ delete m_pChildViewManager; 
+ delete m_pMainFrameController;
+ delete m_pStatusBarManager;
+ //do not delete m_pMainFrame!
 }
-
 
 CMainFrame* CMainFrameManager::GreateMainWindow(void)
 {
-  _ASSERTE(m_pMainFrame);
-  // create and load the frame with its resources
-  m_pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,NULL,NULL);
+ _ASSERTE(m_pMainFrame);
+ // create and load the frame with its resources
+ m_pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,NULL,NULL);
 
-  HICON  hFrameIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-  m_pMainFrame->SetIcon(hFrameIcon,TRUE);
+ HICON  hFrameIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+ m_pMainFrame->SetIcon(hFrameIcon,TRUE);
 
-  return m_pMainFrame;
+ return m_pMainFrame;
 }
 
 bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
 {    
-  _ASSERTE(m_pMainFrame);
+ _ASSERTE(m_pMainFrame);
 
-  //инициализируем менеджер StatusBar-a
-  m_pStatusBarManager->Create(m_pMainFrame);
-  m_pStatusBarManager->AddContent();
+ //инициализируем менеджер StatusBar-a
+ m_pStatusBarManager->Create(m_pMainFrame);
+ m_pStatusBarManager->AddContent();
 
-  //инициализируем иерархию менеджеров UI
-  m_pChildViewManager->Init(m_pMainFrame);
+ //инициализируем иерархию менеджеров UI
+ m_pChildViewManager->Init(m_pMainFrame);
 
  // The one and only window has been initialized, so show and update it.
-  m_pMainFrame->ShowWindow(SW_SHOW);
-  m_pMainFrame->UpdateWindow();
+ m_pMainFrame->ShowWindow(SW_SHOW);
+ m_pMainFrame->UpdateWindow();
 
-  m_pMainFrame->setOnClose(MakeDelegate(this,&CMainFrameManager::OnClose));
+ m_pMainFrame->setOnClose(MakeDelegate(this,&CMainFrameManager::OnClose));
 
-  m_pChildViewManager->OnAfterCreate();
-
-  return true;
+ m_pChildViewManager->OnAfterCreate();
+ return true;
 }
-
 
 bool CMainFrameManager::OnClose(void)
 {//спрашиваем у остальных - можно ли закрывать программу
  return m_pChildViewManager->OnClose();
+}
+ 
+CStatusBarManager* CMainFrameManager::GetStatusBarManager(void) const
+{
+ return m_pStatusBarManager;
 }

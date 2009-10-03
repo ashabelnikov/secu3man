@@ -9,49 +9,45 @@
 
 #include "stdafx.h"
 #include "ChildViewManager.h"
-
 #include "MainTabManager.h"
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+#include "ChildView.h"
+#include "MainFrame.h"
 
 CChildViewManager::CChildViewManager()
+: mp_wndView(new CChildView)
+, mp_MainTabManager(new CMainTabManager)
 {
-  m_pMainTabManager = new CMainTabManager;
+ //na   
 }
 
 CChildViewManager::~CChildViewManager()
 {
-  delete m_pMainTabManager;
-  m_pMainTabManager = NULL;
+ //na
 }
 
 bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
 {
-  ASSERT(i_pMainFrame);
-  ASSERT(m_pMainTabManager);
-  // create a view to occupy the client area of the frame
-  if (!m_wndView.Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-	CRect(0, 0, 0, 0), i_pMainFrame, AFX_IDW_PANE_FIRST, NULL))
-  {
-	TRACE0("Failed to create view window\n");
-	return false;
-  }
+ ASSERT(i_pMainFrame);
+ ASSERT(mp_MainTabManager.get());
+ // create a view to occupy the client area of the frame
+ if (!mp_wndView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
+  CRect(0, 0, 0, 0), i_pMainFrame, AFX_IDW_PANE_FIRST, NULL))
+ {
+  TRACE0("Failed to create view window\n");
+  return false;
+ }
 
-  i_pMainFrame->SetView(&m_wndView);
-
-  m_pMainTabManager->Init(&m_wndView);
-
-  return true;
+ i_pMainFrame->SetView(mp_wndView.get());
+ mp_MainTabManager->Init(mp_wndView.get());
+ return true;
 }
 
 void CChildViewManager::OnAfterCreate(void)
 {
-  m_pMainTabManager->OnAfterCreate();
+ mp_MainTabManager->OnAfterCreate();
 }
 
 bool CChildViewManager::OnClose(void)
 {
- return m_pMainTabManager->OnClose();
+ return mp_MainTabManager->OnClose();
 }

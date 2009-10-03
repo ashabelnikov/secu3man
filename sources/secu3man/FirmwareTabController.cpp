@@ -21,6 +21,7 @@
 #include "io-core\SECU3IO.h"
 #include "io-core\ufcodes.h"
 #include "TabControllersCommunicator.h"
+#include "ParamDesk/ParamDeskDlg.h"
 
 using namespace fastdelegate;
 
@@ -74,8 +75,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
   m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
   m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnWirmwareInfo));
 
-  m_view->m_ParamDeskDlg.SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
-  m_view->m_ParamDeskDlg.SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
+  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
+  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
 
   //register controller!
   TabControllersCommunicator::GetInstance()->AddReference(this, TCC_FIRMWARE_TAB_CONTROLLER);
@@ -98,7 +99,7 @@ void CFirmwareTabController::OnSettingsChanged(void)
 void CFirmwareTabController::OnActivate(void)
 {
   //выбираем ранее выбранную вкладку на панели параметров	
-  bool result = m_view->m_ParamDeskDlg.SetCurSel(m_lastSel);
+  bool result = m_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
  //////////////////////////////////////////////////////////////////
  //подключаем контроллер к потоку данных идущих от SECU-3
@@ -127,7 +128,7 @@ void CFirmwareTabController::OnDeactivate(void)
   m_sbar->SetInformationText(_T(""));
   m_modification_check_timer.KillTimer();
   //запоминаем номер последней выбранной вкладки на панели параметров
-  m_lastSel = m_view->m_ParamDeskDlg.GetCurSel();
+  m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
 }
 
 
@@ -953,11 +954,11 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
 
   m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
 
-  m_view->m_ParamDeskDlg.SetFunctionsNames(funset_names);
-  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  m_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
+  BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
   BYTE paramdata[256];
   m_fwdm->GetDefParamValues(descriptor,paramdata);
-  m_view->m_ParamDeskDlg.SetValues(descriptor,paramdata);
+  m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 }
 
 
@@ -1056,18 +1057,18 @@ void CFirmwareTabController::OnImportDataFromSECU3(void)
 
 void CFirmwareTabController::OnParamDeskTabActivate(void)
 {
-  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
   BYTE paramdata[256];
   m_fwdm->GetDefParamValues(descriptor,paramdata);
-  m_view->m_ParamDeskDlg.SetValues(descriptor,paramdata);
+  m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 }
 
 //from ParamDesk
 void CFirmwareTabController::OnParamDeskChangeInTab(void)
 {
-  BYTE descriptor = m_view->m_ParamDeskDlg.GetCurrentDescriptor();
+  BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
   BYTE paramdata[256];
-  m_view->m_ParamDeskDlg.GetValues(descriptor,paramdata);  
+  m_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);  
   m_fwdm->SetDefParamValues(descriptor,paramdata);
 }
 

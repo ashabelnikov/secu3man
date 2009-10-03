@@ -9,11 +9,14 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include <math.h>
 #include "KnockChannelTabDlg.h"
 #include "common/FastDelegate.h"
 #include "DLLLinkedFunctions.h"
-#include <math.h>
+#include "ParamDesk/KnockPageDlg.h"
+#include "ui-core\OScopeCtrl.h"
 
+#include "HiSCCtrl/sources/ChartCtrl.h"
 #include "HiSCCtrl/sources/ChartPointsSerie.h"
 #include "HiSCCtrl/sources/ChartLineSerie.h"
 
@@ -31,6 +34,8 @@ using namespace fastdelegate;
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 , mp_RTChart(NULL)
+, mp_knock_parameters_dlg(new CKnockPageDlg())
+, mp_OScopeCtrl(new COScopeCtrl())
 , m_all_enabled(true)
 , m_pPointSerie(NULL)
 , m_pLineSerie(NULL)
@@ -72,9 +77,9 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  Super::OnInitDialog();
 
  //создаем диалог с параметрами ДД
- m_knock_parameters_dlg.Create(CKnockPageDlg::IDD,this);
- m_knock_parameters_dlg.SetWindowPos(NULL,44,65,0,0,SWP_NOZORDER|SWP_NOSIZE);
- m_knock_parameters_dlg.ShowWindow(SW_SHOWNORMAL);
+ mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD,this);
+ mp_knock_parameters_dlg->SetWindowPos(NULL,44,65,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID,250,NULL);
 
@@ -128,7 +133,7 @@ void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
 
 void CKnockChannelTabDlg::AppendPoint(float value)
 {
- m_OScopeCtrl.AppendPoint(value);
+ mp_OScopeCtrl->AppendPoint(value);
 }
 
 
@@ -181,15 +186,15 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
  ScreenToClient(rect) ;
 
  // create the control
- m_OScopeCtrl.Create(WS_VISIBLE | WS_CHILD, rect, this) ; 
+ mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this) ; 
 
  // customize the control
- m_OScopeCtrl.SetRange(0.0, 5.0, 1) ;
- m_OScopeCtrl.SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
- m_OScopeCtrl.SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- m_OScopeCtrl.SetBackgroundColor(RGB(0, 0, 64)) ;
- m_OScopeCtrl.SetGridColor(RGB(192, 192, 255)) ;
- m_OScopeCtrl.SetPlotColor(RGB(255, 255, 255)) ;
+ mp_OScopeCtrl->SetRange(0.0, 5.0, 1) ;
+ mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 64)) ;
+ mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255)) ;
+ mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255)) ;
 }
 
 void CKnockChannelTabDlg::setOnSaveParameters(EventHandler OnFunction) 

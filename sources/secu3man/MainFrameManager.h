@@ -1,14 +1,10 @@
 
 #pragma once
 
-
-#include "ChildView.h"
-#include "MainFrame.h"
-#include "ChildViewManager.h"
-
 class CMainFrame;
 class CChildViewManager;
 class MainFrameController;
+class CStatusBarManager;
 
 class CMainFrameManager  
 {
@@ -22,10 +18,14 @@ class CMainFrameManager
   //инициализирует содержимое окна и дочерние контроллеры
   bool Init(CWnd* &o_pMainWnd);
 
+  //возвращает менеджер статусной строки (в нижней части главного окна)
+  CStatusBarManager* GetStatusBarManager(void) const;
+
+ private:
   virtual bool OnClose(void);
 
-  CMainFrame* m_pMainFrame;	//view 
   MainFrameController* m_pMainFrameController; //controller
-  CChildViewManager* m_pChildViewManager;
   CStatusBarManager* m_pStatusBarManager;
+  CChildViewManager* m_pChildViewManager;
+  CMainFrame* m_pMainFrame;	//view 
 };

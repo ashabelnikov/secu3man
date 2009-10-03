@@ -8,6 +8,9 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
+#include <math.h>
+#include <numeric>
 #include "KnockChannelTabController.h"
 #include "common\fastdelegate.h"
 #include "KnockChannelTabDlg.h"
@@ -15,8 +18,7 @@
 #include "StatusBarManager.h"
 #include "FirmwareTabController.h"
 #include "TabControllersCommunicator.h"
-#include <math.h>
-#include <numeric>
+#include "ParamDesk/KnockPageDlg.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -44,16 +46,16 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 {
-  //инициализируем указатели на вспомогательные объекты
-  m_view = i_view;
-  m_comm = i_comm;
-  m_sbar = i_sbar;
+ //инициализируем указатели на вспомогательные объекты
+ m_view = i_view;
+ m_comm = i_comm;
+ m_sbar = i_sbar;
 
-  m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
-  m_view->m_knock_parameters_dlg.setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
-  m_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
+ m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
+ m_view->mp_knock_parameters_dlg->setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
+ m_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
 
-  _InitializeRPMKnockFunctionBuffer();
+ _InitializeRPMKnockFunctionBuffer();
 }
 
 
@@ -65,8 +67,8 @@ CKnockChannelTabController::~CKnockChannelTabController()
 //изменились настройки программы!
 void CKnockChannelTabController::OnSettingsChanged(void)
 {
-  //включаем необходимый для данного контекста коммуникационный контроллер
-  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
+ //включаем необходимый для данного контекста коммуникационный контроллер
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
 }
 
 //from MainTabController
@@ -103,55 +105,55 @@ void CKnockChannelTabController::OnDeactivate(void)
 void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
  //особый случай: пришел пакет с нотификацонным кодом
-  if (i_descriptor == OP_COMP_NC)
+ if (i_descriptor == OP_COMP_NC)
+ {
+  const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
+  switch(p_ndata->opcode)
   {
-   const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
-   switch(p_ndata->opcode)
+   case OPCODE_EEPROM_PARAM_SAVE:
+   m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
+   return;
+  }		
+ }
+
+ //обработка приходящих пакетов в зависимости от текущего режима
+ switch(m_packet_processing_state)
+ {
+  case PPS_READ_NECESSARY_PARAMETERS:  //чтение указанных параметров
+   if (ReadNecessaryParametersFromSECU(i_descriptor,ip_packet))
    {
-    case OPCODE_EEPROM_PARAM_SAVE:
-	 m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
-     return;
-   }		
-  }
+    m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
 
-  //обработка приходящих пакетов в зависимости от текущего режима
-  switch(m_packet_processing_state)
-  {
-	case PPS_READ_NECESSARY_PARAMETERS:  //чтение указанных параметров
-	  if (ReadNecessaryParametersFromSECU(i_descriptor,ip_packet))
-	  {
-	    m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
-
-	    //конфигурация прочитана - можно разрешать панели
-        bool state = m_comm->m_pControlApp->GetOnlineStatus();
-        m_view->m_knock_parameters_dlg.Enable(state);
-		m_view->EnableAll(state);
-	  }
-	  break;
+    //конфигурация прочитана - можно разрешать панели
+    bool state = m_comm->m_pControlApp->GetOnlineStatus();
+    m_view->mp_knock_parameters_dlg->Enable(state);
+	m_view->EnableAll(state);
+   }
+   break;
 	
-    case PPS_BEFORE_READ_MONITOR_DATA: //в этот режим мы попадаем только один раз
-	  if (i_descriptor!=default_context)
-	  {
-       m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
-	  }
-	  else
-	  {       
-       _HandleSample((SensorDat*)(ip_packet), true);
-	   m_packet_processing_state = PPS_READ_MONITOR_DATA;
-	  }
-	  break;
+  case PPS_BEFORE_READ_MONITOR_DATA: //в этот режим мы попадаем только один раз
+   if (i_descriptor!=default_context)
+   {
+    m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
+   }
+   else
+   {       
+    _HandleSample((SensorDat*)(ip_packet), true);
+	m_packet_processing_state = PPS_READ_MONITOR_DATA;
+   }
+   break;
 
-	case PPS_READ_MONITOR_DATA:  //получение данных для монитора       
-	  if (i_descriptor!=default_context)
-	  {
-       m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
-	  }
-	  else
-	  {	   
-       _HandleSample((SensorDat*)(ip_packet), false);	   
-	  }
-	  break;	
-	}//switch
+  case PPS_READ_MONITOR_DATA:  //получение данных для монитора       
+   if (i_descriptor!=default_context)
+   {
+    m_comm->m_pControlApp->ChangeContext(default_context); //!!!		  		
+   }
+   else
+   {	   
+    _HandleSample((SensorDat*)(ip_packet), false);	   
+   }
+   break;	
+ }//switch
 }
 
 void CKnockChannelTabController::OnConnection(const bool i_online)
@@ -171,7 +173,7 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
  
  if (i_online==false) 
  { //здесь только запрещаем, разрешим в другом месте после выполнения подготовительных операций
-  m_view->m_knock_parameters_dlg.Enable(i_online);
+  m_view->mp_knock_parameters_dlg->Enable(i_online);
   m_view->EnableAll(i_online);
  }
 
@@ -180,46 +182,44 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
 
 void CKnockChannelTabController::StartReadingNecessaryParameters(void) 
 {
-  m_comm->m_pControlApp->ChangeContext(kparams_context);  //change context!	  
-  m_packet_processing_state = PPS_READ_NECESSARY_PARAMETERS;
-  m_operation_state = 0;
+ m_comm->m_pControlApp->ChangeContext(kparams_context);  //change context!	  
+ m_packet_processing_state = PPS_READ_NECESSARY_PARAMETERS;
+ m_operation_state = 0;
 }
-
 
 //возвращает true когда работа автомата завершена
 //m_operation_state = 0 для запуска
 bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
-  m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_PARAMETERS)); 
+ m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_PARAMETERS)); 
 
-  switch(m_operation_state)
+ switch(m_operation_state)
+ {
+  case 0:  //ожидаем пакета с указанными нами параметрами
   {
-    case 0:  //ожидаем пакета с указанными нами параметрами
-	{
-      if (i_descriptor!=kparams_context)
-	  {
-        m_comm->m_pControlApp->ChangeContext(kparams_context);	//!!!	  		  
-	  }
-	  else
-	  {//тот что надо!
-	    m_view->m_knock_parameters_dlg.SetValues((SECU3IO::KnockPar*)i_packet_data);
+   if (i_descriptor!=kparams_context)
+   {
+    m_comm->m_pControlApp->ChangeContext(kparams_context);	//!!!	  		  
+   }
+   else
+   {//тот что надо!
+    m_view->mp_knock_parameters_dlg->SetValues((SECU3IO::KnockPar*)i_packet_data);
            
-	    //процесс инициализации окончен
-        m_operation_state = -1; //останов КА - операции выполнены
-		m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
-        return true; //операции выполнены
-	  }
-	}	
-    break;
-  }//switch
+    //процесс инициализации окончен
+    m_operation_state = -1; //останов КА - операции выполнены
+	m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
+    return true; //операции выполнены
+   }
+  }	
+  break;
+ }//switch
 
-  return false; //КА продолжает работу...
+ return false; //КА продолжает работу...
 }
-
 
 bool CKnockChannelTabController::OnClose(void)
 {
-  return true;
+ return true;
 }
 
 void CKnockChannelTabController::OnSaveParameters(void)
@@ -232,28 +232,28 @@ void CKnockChannelTabController::OnSaveParameters(void)
 
 void CKnockChannelTabController::OnParametersChange(void)
 {
-  m_parameters_changed = true;
+ m_parameters_changed = true;
 }
 
 //передача пакетов с параметрами в SECU будет происходить не чаще чем вызов этого обработчика
 void CKnockChannelTabController::OnParamsChangesTimer(void)
 { 
-  if (m_parameters_changed)
-  {
-    //получаем данные от view и сохраняем их во временный буфер 
-    SECU3IO::KnockPar packet_data;   
-    m_view->m_knock_parameters_dlg.GetValues(&packet_data);
+ if (m_parameters_changed)
+ {
+  //получаем данные от view и сохраняем их во временный буфер 
+  SECU3IO::KnockPar packet_data;   
+  m_view->mp_knock_parameters_dlg->GetValues(&packet_data);
 
-    //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
-    m_comm->m_pControlApp->SendPacket(kparams_context, &packet_data);
+  //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
+  m_comm->m_pControlApp->SendPacket(kparams_context, &packet_data);
 
-    m_parameters_changed = false; //обработали событие - сбрасываем признак
-  }
+  m_parameters_changed = false; //обработали событие - сбрасываем признак
+ }
 
-  //перекачиваем данные из буфера в график на представлении
-  std::vector<float> values;
-  _PerformAverageOfRPMKnockFunctionValues(values);
-  m_view->SetRPMKnockSignal(values);
+ //перекачиваем данные из буфера в график на представлении
+ std::vector<float> values;
+ _PerformAverageOfRPMKnockFunctionValues(values);
+ m_view->SetRPMKnockSignal(values);
 }
 
 void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time)
@@ -280,7 +280,6 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
   m_rpm_knock_signal[index][ii] = p_packet->knock_k;
   ii = ii < (RPM_KNOCK_SAMPLES_PER_POINT - 1) ? ii + 1 : 0;
  }
- 
 }
 
 void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function)
@@ -321,5 +320,3 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
 
  p_controller->SetAttenuatorMap(array);
 }
-
-

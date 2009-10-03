@@ -17,21 +17,19 @@ typedef void (__cdecl *UOZ2_Chart3DSetOnClose_Addr) (HWND hWnd, EventHandler i_p
 
 namespace DLL
 {
-  ///////////////////////////////////////////////////////////////////
-  extern UOZ1_Chart2DCreate_Addr        UOZ1_Chart2DCreate;
-  extern UOZ1_Chart2DUpdate_Addr        UOZ1_Chart2DUpdate;
-  extern UOZ1_Chart2DSetOnChange_Addr   UOZ1_Chart2DSetOnChange;
-  extern UOZ1_Chart2DSetOnClose_Addr    UOZ1_Chart2DSetOnClose;
-  extern UOZ1_Chart2DSetMarksVisible_Addr UOZ1_Chart2DSetMarksVisible;
+ ///////////////////////////////////////////////////////////////////
+ extern UOZ1_Chart2DCreate_Addr        UOZ1_Chart2DCreate;
+ extern UOZ1_Chart2DUpdate_Addr        UOZ1_Chart2DUpdate;
+ extern UOZ1_Chart2DSetOnChange_Addr   UOZ1_Chart2DSetOnChange;
+ extern UOZ1_Chart2DSetOnClose_Addr    UOZ1_Chart2DSetOnClose;
+ extern UOZ1_Chart2DSetMarksVisible_Addr UOZ1_Chart2DSetMarksVisible;
 
-  extern UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate;
-  extern UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate;
-  extern UOZ2_Chart3DSetOnChange_Addr   UOZ2_Chart3DSetOnChange;
-  extern UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose;
+ extern UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate;
+ extern UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate;
+ extern UOZ2_Chart3DSetOnChange_Addr   UOZ2_Chart3DSetOnChange;
+ extern UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose;
 
-  ///////////////////////////////////////////////////////////////////
+ ///////////////////////////////////////////////////////////////////
 
-  bool LoadDLLsAndLinkToFunctions(void);
+ bool LoadDLLsAndLinkToFunctions(void);
 };
-
-

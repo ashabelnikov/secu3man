@@ -6,7 +6,7 @@
 #include <string>
 
 #ifdef _UNICODE
-	typedef std::wstring _TSTRING;
+ typedef std::wstring _TSTRING;
 #else
-	typedef std::string  _TSTRING;
+ typedef std::string  _TSTRING;
 #endif

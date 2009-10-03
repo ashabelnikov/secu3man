@@ -17,6 +17,7 @@
 #include "CommunicationManager.h"
 #include "io-core\logwriter.h"
 #include "ISettingsData.h"
+#include "StatusBarManager.h"
 
 using namespace fastdelegate;
 

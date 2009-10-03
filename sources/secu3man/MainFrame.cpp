@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MainFrame.h"
+#include "ChildView.h"
 #include "ui-core\HotKeysManager.h"
 
 #ifdef _DEBUG
@@ -26,20 +27,17 @@ static char THIS_FILE[] = __FILE__;
 IMPLEMENT_DYNAMIC(CMainFrame, CFrameWnd)
 
 BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
-  //{{AFX_MSG_MAP(CMainFrame)
-  ON_WM_CREATE()
-  ON_WM_SETFOCUS()
-  ON_WM_CLOSE()
-  ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
-  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
-  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
-  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
-  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
-  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
-  ON_WM_ACTIVATE()
-  //}}AFX_MSG_MAP
+ ON_WM_CREATE()
+ ON_WM_SETFOCUS()
+ ON_WM_CLOSE()
+ ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
+ ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
+ ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
+ ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
+ ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
+ ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
+ ON_WM_ACTIVATE()
 END_MESSAGE_MAP()
-
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame construction/destruction
@@ -86,12 +84,12 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 #ifdef _DEBUG
 void CMainFrame::AssertValid() const
 {
-  CFrameWnd::AssertValid();
+ CFrameWnd::AssertValid();
 }
 
 void CMainFrame::Dump(CDumpContext& dc) const
 {
-  CFrameWnd::Dump(dc);
+ CFrameWnd::Dump(dc);
 }
 
 #endif //_DEBUG
@@ -123,7 +121,7 @@ void CMainFrame::SetView(CChildView* i_pChildView)
 
 void CMainFrame::setOnClose(EventResult i_OnClose)
 {
-  m_OnClose = i_OnClose;
+ m_OnClose = i_OnClose;
 }
 
 void CMainFrame::setOnAppAbout(EventHandler i_OnFunction) 
@@ -219,4 +217,3 @@ void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
   m_active = true;
  }
 } 
-

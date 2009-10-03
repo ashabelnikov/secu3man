@@ -1,40 +1,41 @@
 
 #pragma once
 
-#include "ui-core/TabController.h"
-#include "ChildView.h"
-#include "MainTabController.h"
+#include <memory> //std::auto_ptr<>
+
+class CChildView;
+class CMainTabController;
+class CTabController;
 
 class CMainTabManager  
 {
-public:
-	CTabController m_tab_control;
-	CImageList* m_pImgList;
+ public:
+  CMainTabManager();
+  virtual ~CMainTabManager();  
+   
+  bool Init(CChildView* i_pChildView);
+  void OnAfterCreate(void);
+  virtual bool OnClose(void);
 
-	CMainTabController m_MainTabController; 
+ private:
+  //контроллеры вкладок
+  class CParamMonTabController* m_pParamMonTabController;
+  class CFirmwareTabController* m_pFirmwareTabController;
+  class CCheckEngineTabController* m_pCheckEngineTabController;
+  class CKnockChannelTabController* m_pKnockChannelTabController;
+  class CLogPlayerTabController* m_pLogPlayerTabController;
 
-    class CParamMonTabController* m_pParamMonTabController;
-    class CFirmwareTabController* m_pFirmwareTabController;
-	class CCheckEngineTabController* m_pCheckEngineTabController;
-	class CKnockChannelTabController* m_pKnockChannelTabController;
-	class CLogPlayerTabController* m_pLogPlayerTabController;
+  //диалоги вкладок
+  class CParamMonTabDlg* m_pParamMonTabDlg;
+  class CFirmwareTabDlg* m_pFirmwareTabDlg;
+  class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
+  class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
+  class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
 
-    class CParamMonTabDlg* m_pParamMonTabDlg;
-    class CFirmwareTabDlg* m_pFirmwareTabDlg;
-	class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
-	class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
-	class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
+ private:
+  std::auto_ptr<CMainTabController> mp_MainTabController; 
+  std::auto_ptr<CTabController> mp_tab_control;
 
-	CChildView* m_pParent;
-    
-    bool Init(CChildView* i_pChildView);
-	void OnAfterCreate(void);
-	virtual bool OnClose(void);
-
-	CMainTabManager();
-	virtual ~CMainTabManager();
-
-    
-
+  CChildView* m_pParent;
+  CImageList* m_pImgList;
 };
-

@@ -7,7 +7,7 @@ class ITabController;
 
 class TabControllersCommunicator
 {
-   TabControllersCommunicator();
+  TabControllersCommunicator();
 
  public:
   ~TabControllersCommunicator();

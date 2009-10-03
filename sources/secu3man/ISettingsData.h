@@ -11,13 +11,13 @@
 //из обычных мест в коде программы
 class ISettingsData
 {
-public:
- virtual const _TSTRING& GetPortName(void) const = 0;   
- virtual DWORD GetBaudRateApplication(void) const = 0;
- virtual DWORD GetBaudRateBootloader(void) const = 0;
- virtual const CString& GetLogFilesFolder(void) const = 0;
- virtual bool  GetUseAppFolder(void) const = 0;
- virtual char  GetCSVSepSymbol(void) const = 0;
- virtual int   GetMIDeskUpdatePeriod(void) const = 0;
- virtual CString GetAppDirectory(void) const = 0;
+ public:
+  virtual const _TSTRING& GetPortName(void) const = 0;   
+  virtual DWORD GetBaudRateApplication(void) const = 0;
+  virtual DWORD GetBaudRateBootloader(void) const = 0;
+  virtual const CString& GetLogFilesFolder(void) const = 0;
+  virtual bool  GetUseAppFolder(void) const = 0;
+  virtual char  GetCSVSepSymbol(void) const = 0;
+  virtual int   GetMIDeskUpdatePeriod(void) const = 0;
+  virtual CString GetAppDirectory(void) const = 0;
 };

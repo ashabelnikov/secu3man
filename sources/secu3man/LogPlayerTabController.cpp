@@ -17,6 +17,7 @@
 #include "StatusBarManager.h"
 #include "io-core/LogReader.h"
 #include "ISettingsData.h"
+#include "MIDesk/MIDeskDlg.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -93,7 +94,7 @@ void CLogPlayerTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
- m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
 
 
@@ -121,7 +122,7 @@ void CLogPlayerTabController::OnActivate(void)
 
  m_view->SetTimeFactor(m_current_time_factor);
 
- m_view->m_MIDeskDlg.SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
 
 //from MainTabController
@@ -207,7 +208,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  string.Format(_T("%s\n%d записей"),open.GetFileName(),mp_log_reader->GetCount());
  m_view->SetFileIndicator(string.GetBuffer(0));
 
- m_view->m_MIDeskDlg.Enable(true); 
+ m_view->mp_MIDeskDlg->Enable(true); 
  m_view->EnableAll(true);
 
  //инициализируем логику плеера и начинаем сразу проигрывать
@@ -370,7 +371,7 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
  }
 
  //обновляем приборы, а также обновляем позицию слайдера, если нужно
- m_view->m_MIDeskDlg.SetValues(&current_record.second);
+ m_view->mp_MIDeskDlg->SetValues(&current_record.second);
  if (i_set_slider)
   m_view->SetSliderPosition(position);
 
@@ -417,7 +418,7 @@ void CLogPlayerTabController::_ClosePlayer(void)
 {
  m_view->SetFileIndicator(_T(""));
  m_view->SetOpenFileButtonText(_T("Открыть файл"));
- m_view->m_MIDeskDlg.Enable(false);
+ m_view->mp_MIDeskDlg->Enable(false);
  m_view->SetSliderPosition(0);
  m_view->EnableAll(false);
  m_timer.KillTimer(); 

@@ -9,9 +9,11 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "ParamMonTabDlg.h"
 #include "common/FastDelegate.h"
-
+#include "ParamMonTabDlg.h"
+#include "MIDesk/MIDeskDlg.h"
+#include "MIDesk/RSDeskDlg.h"
+#include "ParamDesk/ParamDeskDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -21,83 +23,75 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace fastdelegate;
 
-/////////////////////////////////////////////////////////////////////////////
-// CParamMonModePageDlg dialog
-
+BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
+ ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
+ ON_WM_CLOSE()
+END_MESSAGE_MAP()
 
 CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CParamMonTabDlg::IDD, pParent)
+, mp_MIDeskDlg(new CMIDeskDlg())
+, mp_RSDeskDlg(new CRSDeskDlg())
+, mp_ParamDeskDlg(new CParamDeskDlg())
 {
-  //{{AFX_DATA_INIT(CParamMonTabDlg)
-	// NOTE: the ClassWizard will add member initialization here
-  //}}AFX_DATA_INIT
+ //na
 }
-
 
 void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 {
-  CDialog::DoDataExchange(pDX);
-  //{{AFX_DATA_MAP(CParamMonTabDlg)
-  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
-  //}}AFX_DATA_MAP
+ CDialog::DoDataExchange(pDX);
+ DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
 }
 
 LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 {
-  return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD; 
 }
-
-
-BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
-  //{{AFX_MSG_MAP(CParamMonTabDlg)
-	ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
-	ON_WM_CLOSE()
-	//}}AFX_MSG_MAP
-END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamMonTabDlg message handlers
 
 BOOL CParamMonTabDlg::OnInitDialog() 
 {
-  CDialog::OnInitDialog();
+ CDialog::OnInitDialog();
 	
-  m_MIDeskDlg.Create(CMIDeskDlg::IDD, this);
-  m_MIDeskDlg.MoveWindow(280,0,427,312);
-  m_MIDeskDlg.ShowWindow(SW_SHOWNORMAL);
-  m_MIDeskDlg.Show(true);
+ mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
+ mp_MIDeskDlg->MoveWindow(280,0,427,312);
+ mp_MIDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_MIDeskDlg->Show(true);
 
-  m_RSDeskDlg.Create(CRSDeskDlg::IDD,this);
-  m_RSDeskDlg.MoveWindow(280,0,427,312);
-  m_RSDeskDlg.ShowWindow(SW_HIDE);
-  m_RSDeskDlg.Show(true);
+ mp_RSDeskDlg->Create(CRSDeskDlg::IDD,this);
+ mp_RSDeskDlg->MoveWindow(280,0,427,312);
+ mp_RSDeskDlg->ShowWindow(SW_HIDE);
+ mp_RSDeskDlg->Show(true);
 
-  m_ParamDeskDlg.Create(CParamDeskDlg::IDD,this);
-  m_ParamDeskDlg.SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
-  m_ParamDeskDlg.ShowWindow(SW_SHOWNORMAL);
-  m_ParamDeskDlg.Show(true);
+ mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
+ mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_ParamDeskDlg->Show(true);
 	
-  return TRUE;  // return TRUE unless you set the focus to a control
-                // EXCEPTION: OCX Property Pages should return FALSE
+ return TRUE;  // return TRUE unless you set the focus to a control
+               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CParamMonTabDlg::OnPmShowRawSensors() 
 {//делегируем обработку события чекбокса	
-  if (m_OnRawSensorsCheck)
-	m_OnRawSensorsCheck();  
+ if (m_OnRawSensorsCheck)
+  m_OnRawSensorsCheck();  
 }
-
 
 bool CParamMonTabDlg::GetRawSensorsCheckState(void)
 {
-  int check = m_raw_sensors_check.GetCheck();
-  return (check==BST_CHECKED) ? true : false;
+ int check = m_raw_sensors_check.GetCheck();
+ return (check==BST_CHECKED) ? true : false;
 }
-
 
 void CParamMonTabDlg::OnClose() 
 {
-	// TODO: Add your message handler code here and/or call default
-	
-//	CDialog::OnClose();
+ //CDialog::OnClose();
+}
+
+void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
+{
+ m_OnRawSensorsCheck = i_Function;
 }

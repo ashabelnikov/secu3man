@@ -13,6 +13,7 @@
 #include "FirmwareContextMenuManager.h"
 #include "DLLLinkedFunctions.h"
 #include "ui-core\HotKeysToCmdRouter.h"
+#include "ParamDesk/ParamDeskDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -164,13 +165,11 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
-, m_ParamDeskDlg(NULL, true) //<-- используем вкладку параметров детонации
+, mp_ParamDeskDlg(new CParamDeskDlg(NULL, true)) //<-- используем вкладку параметров детонации
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
+, mp_ContextMenuManager(new CFirmwareModeContextMenuManager())
 {
-  //{{AFX_DATA_INIT(CFirmwareTabDlg)
-	// NOTE: the ClassWizard will add member initialization here
-  //}}AFX_DATA_INIT
-  m_ContextMenuManager.CreateContent();
+  mp_ContextMenuManager->CreateContent();
 
   m_work_map_chart_state   = 0;
   m_temp_map_chart_state   = 0;
@@ -294,13 +293,13 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 {
   CDialog::OnInitDialog();
 	
-  m_ParamDeskDlg.Create(CParamDeskDlg::IDD,this);
-  m_ParamDeskDlg.SetPosition(390,10);	
-  m_ParamDeskDlg.SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
-  m_ParamDeskDlg.ShowSaveButton(false);
-  m_ParamDeskDlg.ShowWindow(SW_SHOWNORMAL);
+  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+  mp_ParamDeskDlg->SetPosition(390,10);	
+  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
+  mp_ParamDeskDlg->ShowSaveButton(false);
+  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
 
-  m_ContextMenuManager.Attach(this);
+  mp_ContextMenuManager->Attach(this);
 
   SetTimer(TIMER_ID,250,NULL);
 
@@ -317,12 +316,12 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
 void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
 {
-  m_ContextMenuManager.TrackPopupMenu(point.x, point.y);	
+ mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);	
 }
 
 void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu) 
 {
-  m_ContextMenuManager.OnInitMenuPopup(pMenu, nIndex, bSysMenu);
+  mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 
@@ -532,8 +531,8 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
   
   //обновляем состояние (если нужно)
   bool pd_enable = IsFirmwareOpened();
-  if (m_ParamDeskDlg.IsEnabled()!=pd_enable)
-    m_ParamDeskDlg.Enable(pd_enable);  
+  if (mp_ParamDeskDlg->IsEnabled()!=pd_enable)
+    mp_ParamDeskDlg->Enable(pd_enable);  
 }
 
 void CFirmwareTabDlg::OnDestroy() 
@@ -591,7 +590,7 @@ void CFirmwareTabDlg::EnableBLItems(bool enable)
 
   //если меню отображается в текущий момент, то не смотря на то что элементы запрещены, 
   //прорисовка останется старой (недоделка Microsoft?). Короче говоря делаем это сами
-  m_ContextMenuManager.EnableBLMenuItems(enable);
+  mp_ContextMenuManager->EnableBLMenuItems(enable);
 }
 
 //разрешает/запрещает элементы меню связанные с приложением
@@ -606,7 +605,7 @@ void CFirmwareTabDlg::EnableAppItems(bool enable)
 
   //если меню отображается в текущий момент, то не смотря на то что элементы запрещены, 
   //прорисовка останется старой (недоделка Microsoft?). Короче говоря делаем это сами
-  m_ContextMenuManager.EnableAppMenuItems(enable);
+  mp_ContextMenuManager->EnableAppMenuItems(enable);
 }
 
 //от чекбокса...

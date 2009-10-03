@@ -11,13 +11,11 @@
 #include "AppSettingsController.h"
 #include "AppSettingsModel.h"
 
-
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
-
 
 using namespace fastdelegate;
 
@@ -76,4 +74,10 @@ void CAppSettingsController::OnActivate(void)
  for(size_t i = 0; i < count; i++)
   if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
    m_pView->SetCSVSepSymbol(i);
+}
+
+int CAppSettingsController::ShowDialog(void) 
+{
+ ASSERT(m_pView);	
+ return m_pView->ShowDialog(); 
 }

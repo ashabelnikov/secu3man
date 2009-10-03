@@ -31,16 +31,16 @@ void TabControllersCommunicator::AddReference(ITabController* ip_controller, int
 {
  std::map<int, ITabController*>::const_iterator it = m_references.find(i_key);
  if (it==m_references.end())
-   m_references.insert(std::make_pair(i_key, ip_controller));
+  m_references.insert(std::make_pair(i_key, ip_controller));
  else
-   ASSERT(0);
+  ASSERT(0);
 }
   
 ITabController* TabControllersCommunicator::GetReference(int i_key)
 {
  std::map<int, ITabController*>::const_iterator it = m_references.find(i_key);
  if (it!=m_references.end())
-	 return (*it).second;
+  return (*it).second;
 
  return NULL;
 }

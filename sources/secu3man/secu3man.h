@@ -13,7 +13,6 @@
 	#error include 'stdafx.h' before including this file for PCH
 #endif
 
-
 #include "ISECU3man.h"
 
 class CAppSettingsManager;
@@ -25,8 +24,8 @@ class LogWriter;
 
 class CSecu3manApp : public CWinApp, public ISECU3Man 
 {
-public:
-   CSecu3manApp();
+ public:
+  CSecu3manApp();
   ~CSecu3manApp();
 
   //MFC stuff :-)
@@ -40,10 +39,9 @@ public:
   virtual CMainFrameManager*      GetMainFrameManager(void) const;
   virtual LogWriter*              GetLogWriter(void) const;
 
-
   DECLARE_MESSAGE_MAP()
 
-private:
+ private:
   CMainFrameManager*     m_pMainFrameManager;
   CAppSettingsManager*   m_pAppSettingsManager;
   CCommunicationManager* m_pCommunicationManager;

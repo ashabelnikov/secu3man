@@ -11,6 +11,7 @@
 #include "resource.h"
 #include "LogPlayerTabDlg.h"
 #include "common/FastDelegate.h"
+#include "MIDesk/MIDeskDlg.h"
 
 #include <limits>
 
@@ -28,6 +29,7 @@ using namespace fastdelegate;
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CLogPlayerTabDlg::IDD, pParent)
+, mp_MIDeskDlg(new CMIDeskDlg())
 , m_next_button_state(false)
 , m_prev_button_state(false)
 , m_all_enabled(false)
@@ -73,10 +75,10 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
 	
- m_MIDeskDlg.Create(CMIDeskDlg::IDD, this);
- m_MIDeskDlg.MoveWindow(280,0,427,312);
- m_MIDeskDlg.ShowWindow(SW_SHOWNORMAL);
- m_MIDeskDlg.Show(true);
+ mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
+ mp_MIDeskDlg->MoveWindow(280,0,427,312);
+ mp_MIDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_MIDeskDlg->Show(true);
 
  UpdateDialogControls(this,TRUE);	
  return TRUE;

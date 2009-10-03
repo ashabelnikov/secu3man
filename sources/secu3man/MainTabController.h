@@ -2,29 +2,35 @@
 #pragma once
 
 #include <vector>
-#include "ITabController.h"
 #include "ui-core/ITabControllerEvent.h"
-#include "ui-core/TabController.h"
+
+class CTabController;
+class ITabController;
 
 class CMainTabController  : public ITabControllerEvent
 {
-  public:
-	CMainTabController();
-	virtual ~CMainTabController();
+ public:
+  CMainTabController();
+  virtual ~CMainTabController();
 
-    void AddTabController(ITabController* i_pCntr);
-    std::vector<ITabController*>& GetControllersList(void);
-	void SetTabController(CTabController* i_pTabController) { m_pTabController = i_pTabController;}
+  //добавляет контроллер
+  void AddTabController(ITabController* i_pCntr);
+   
+  //возвращает список контроллеров
+  std::vector<ITabController*>& GetControllersList(void);
 
-    CTabController* m_pTabController;
-
-    virtual void OnSelchangeTabctl(void); 
-    virtual void OnSelchangingTabctl(void); 
-
-	virtual ITabController* GetActiveController() const;
+  //Привязка к Tab-контролу
+  void SetTabController(CTabController* i_pTabController);
+  
+  //возвращает контроллер активной вкладки
+  virtual ITabController* GetActiveController() const;
+   
+ private:
+  //ITabControllerEvent imp.
+  virtual void OnSelchangeTabctl(void); 
+  virtual void OnSelchangingTabctl(void); 
     
-  private:
-	std::vector<ITabController*> m_controllers_list;
-
+ private:
+  std::vector<ITabController*> m_controllers_list;
+  CTabController* m_pTabController;
 };
-

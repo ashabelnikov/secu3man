@@ -13,8 +13,7 @@
 
 class MLL //Multy Language Layer
 {
-
-public:
+ public:
 
   //std version
   static _TSTRING GetString(UINT i_id)
@@ -35,7 +34,7 @@ public:
    return GetString(i_id).c_str();
   }
 
-private:
+ private:
   // returns the HMODULE that contains this function
   static HMODULE GetModuleBaseAddress()
   {
@@ -45,4 +44,3 @@ private:
   }
 
 };
-

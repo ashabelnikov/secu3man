@@ -8,7 +8,6 @@
  ****************************************************************/
 #pragma once
 
-
 class CAppSettingsManager;
 class CCommunicationManager;
 class CMainFrameManager;
@@ -16,7 +15,7 @@ class LogWriter;
 
 class ISECU3Man
 {
-public:
+ public:
   static ISECU3Man* GetSECU3Man()
   {
    ISECU3Man* p_application = (dynamic_cast<ISECU3Man*>(AfxGetApp()));

@@ -1,67 +1,68 @@
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "common\fastdelegate.h"
-#include "HiSCCtrl/sources/ChartCtrl.h"
-#include "ParamDesk/KnockPageDlg.h"
-#include "ui-core\OScopeCtrl.h"
-
 #pragma once
 
+#include <memory>
+#include <vector>
+#include "ui-core/TabDialog.h"
+#include "common\fastdelegate.h"
+
 class CChartPointsSerie;
+class CChartLineSerie;
+class CKnockPageDlg;
+class CChartCtrl;
+class COScopeCtrl;
 
 class CKnockChannelTabDlg : public CTabDialog
 {
-	typedef CTabDialog Super;
-public:
-	typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef CTabDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
 
-	CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor  
+ public:
+  CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor  
+  enum { IDD = IDD_KNOCK_CHANNEL };
+  virtual LPCTSTR GetDialogID(void) const;
 	
-	void setOnSaveParameters(EventHandler OnFunction);
-	void setOnCopyToAttenuatorTable(EventHandler OnFunction);
+  void setOnSaveParameters(EventHandler OnFunction);
+  void setOnCopyToAttenuatorTable(EventHandler OnFunction);
 
-	void EnableAll(bool i_enable);
+  void EnableAll(bool i_enable);
 
-	//Добавляет новую выборку в осциллограф
-	void AppendPoint(float value); 
+  //Добавляет новую выборку в осциллограф
+  void AppendPoint(float value); 
 
-	//Установка значений функции для графика который показывает зависимость сигнала от оборотов
-	void SetRPMKnockSignal(const std::vector<float> &i_values);
+  //Установка значений функции для графика который показывает зависимость сигнала от оборотов
+  void SetRPMKnockSignal(const std::vector<float> &i_values);
 
-	void EnableCopyToAttenuatorTableButton(bool i_enable);
+  void EnableCopyToAttenuatorTableButton(bool i_enable);
 
-	enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
-	enum { IDD = IDD_KNOCK_CHANNEL };
+  enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
 
-   virtual LPCTSTR GetDialogID(void) const;
+  std::auto_ptr<CKnockPageDlg> mp_knock_parameters_dlg;
 
-   CKnockPageDlg m_knock_parameters_dlg;
-protected:	
-   virtual BOOL OnInitDialog();		
-   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-   afx_msg void OnDestroy();
-   afx_msg void OnSaveParameters();
-   afx_msg void OnCopyToAttenuatorTable();
-   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-   afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
-   afx_msg void OnTimer(UINT nIDEvent);
-   DECLARE_MESSAGE_MAP()
+ protected:	
+  virtual BOOL OnInitDialog();		
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+  afx_msg void OnDestroy();
+  afx_msg void OnSaveParameters();
+  afx_msg void OnCopyToAttenuatorTable();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
+  afx_msg void OnTimer(UINT nIDEvent);
+  DECLARE_MESSAGE_MAP()
+      
+  void _InitializeOscilloscopeControl(void);
+  void _InitializeRPMKnockSignalControl(void);
 
-        
-   void _InitializeOscilloscopeControl(void);
-   void _InitializeRPMKnockSignalControl(void);
+ private:
+  CButton  m_param_save_button;
+  CChartCtrl* mp_RTChart;
+  CChartPointsSerie* m_pPointSerie;
+  CChartLineSerie* m_pLineSerie;
+  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
+  CButton m_copy_to_attenuator_table_button;
 
-   CButton  m_param_save_button;
-   CChartCtrl* mp_RTChart;
-   CChartPointsSerie* m_pPointSerie;
-   CChartLineSerie* m_pLineSerie;
-   COScopeCtrl m_OScopeCtrl;
-   CButton m_copy_to_attenuator_table_button;
-
-private:
-    EventHandler  m_OnSaveParameters; 
-	EventHandler  m_OnCopyToAttenuatorTable;
-	bool m_all_enabled;
-	bool m_copy_to_attenuator_table_button_state;
+  EventHandler  m_OnSaveParameters; 
+  EventHandler  m_OnCopyToAttenuatorTable;
+  bool m_all_enabled;
+  bool m_copy_to_attenuator_table_button_state;
 };

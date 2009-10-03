@@ -15,92 +15,91 @@ class ISettingsData;
 
 class CLogPlayerTabController : public ITabController, private IAPPEventHandler 
 {
-  public:
-	CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
-	virtual ~CLogPlayerTabController();
+ public:
+  CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
+  virtual ~CLogPlayerTabController();
 
-  private:
-    CLogPlayerTabDlg*  m_view;
-	CCommunicationManager* m_comm;
-	CStatusBarManager*  m_sbar;   
-    ISettingsData* mp_settings;
-	
-    //появление/закрытие вкладки параметров и монитора
-    virtual void OnActivate(void);
-	virtual void OnDeactivate(void);
-	virtual bool OnClose(void);
+ private:	
+  //появление/закрытие вкладки параметров и монитора
+  virtual void OnActivate(void);
+  virtual void OnDeactivate(void);
+  virtual bool OnClose(void);
 
-	//from IAPPEventHandler:
-    virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
-    virtual void OnConnection(const bool i_online);
+  //from IAPPEventHandler:
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
+  virtual void OnConnection(const bool i_online);
 
-    //от представления (диалога)
-	void OnSettingsChanged(void);
-    void OnOpenFileButton(void);
-	void OnPlayButton(void);
-	void OnNextButton(void);
-	void OnPrevButton(void);
-	void OnTimeFactorCombo(size_t i_factor_code);
-	void OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos);
+  //от представления (диалога)
+  void OnSettingsChanged(void);
+  void OnOpenFileButton(void);
+  void OnPlayButton(void);
+  void OnNextButton(void);
+  void OnPrevButton(void);
+  void OnTimeFactorCombo(size_t i_factor_code);
+  void OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos);
 
-    //от таймера
-    void OnTimer(void);
+  //от таймера
+  void OnTimer(void);
 
-  private:
-    //вспомогательные функции
-    void _GoNext(void);
-    void _GoBack(void);
-    void _GetRecord(void);
-    unsigned long _GetAveragedPeriod(void);
+ private:
+  //вспомогательные функции
+  void _GoNext(void);
+  void _GoBack(void);
+  void _GetRecord(void);
+  unsigned long _GetAveragedPeriod(void);
     
-    enum EDirection
-    {
-     DIR_NEXT,
-     DIR_PREV,
-     DIR_NA    
-    };
+  enum EDirection
+  {
+   DIR_NEXT,
+   DIR_PREV,
+   DIR_NA    
+  };
 
-    void _ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider = true);
+  void _ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider = true);
 
-    //начало/остановка проигрывания
-    void _Play(bool i_play);    
+  //начало/остановка проигрывания
+  void _Play(bool i_play);    
 
-    //инициализация плеера
-    void _InitPlayer(void);
+  //инициализация плеера
+  void _InitPlayer(void);
 
-    //прекращение работы плеера
-    void _ClosePlayer(void);
+  //прекращение работы плеера
+  void _ClosePlayer(void);
 
-  private:
+ private:
+  CLogPlayerTabDlg*  m_view;
+  CCommunicationManager* m_comm;
+  CStatusBarManager*  m_sbar;   
+  ISettingsData* mp_settings;
 
-	//<factor id, <name, value> >
-	std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;
+  //<factor id, <name, value> >
+  std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;
 
-    //отвечает за итерироване по записям, которые находятся в файле
-	std::auto_ptr<LogReader> mp_log_reader;
+  //отвечает за итерироване по записям, которые находятся в файле
+  std::auto_ptr<LogReader> mp_log_reader;
 
-    CObjectTimer<CLogPlayerTabController> m_timer;
+  CObjectTimer<CLogPlayerTabController> m_timer;
 
-    //хранит последние периоды ежду записями для усреднения
-    std::deque<unsigned long> m_last_perionds;
+  //хранит последние периоды ежду записями для усреднения
+  std::deque<unsigned long> m_last_perionds;
 
-    //хранят предыдушую и текушую записи 
-    typedef std::pair<SYSTEMTIME, SECU3IO::SensorDat> RECORD_INFO;
-    RECORD_INFO m_prev_record;
-    RECORD_INFO m_curr_record;
+  //хранят предыдушую и текушую записи 
+  typedef std::pair<SYSTEMTIME, SECU3IO::SensorDat> RECORD_INFO;
+  RECORD_INFO m_prev_record;
+  RECORD_INFO m_curr_record;
 
-    //сохраняет период таймера на время работы со слайдером
-    unsigned long m_period_before_tracking;
+  //сохраняет период таймера на время работы со слайдером
+  unsigned long m_period_before_tracking;
 
-    //true - если в данный момент происходит работа со слайдером
-    bool m_now_tracking;
+  //true - если в данный момент происходит работа со слайдером
+  bool m_now_tracking;
 
-    //true - если в данный момент происходит проигрывание, false - если пауза
-    bool m_playing;
+  //true - если в данный момент происходит проигрывание, false - если пауза
+  bool m_playing;
   
-    //хранит последнее направление перемещения по записям
-    EDirection m_last_direction; 
+  //хранит последнее направление перемещения по записям
+  EDirection m_last_direction; 
 
-    //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
-    size_t m_current_time_factor;
+  //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
+  size_t m_current_time_factor;
 };
