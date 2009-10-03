@@ -189,12 +189,12 @@ bool CAppSettingsModel::ReadSettings(void)
 
  //-----------------------------------------  
  GetPrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,_T("40"),readed_str,255,IniFileName);
- if (_stscanf(readed_str, _T("%d"), &i_val) == 1 && i_val > 0)
+ if (_stscanf(readed_str, _T("%d"), &i_val) == 1 && i_val >= 0)
   m_optMIDeskUpdatePeriod = i_val;
  else
  { //error
   status = false;
-  m_optCSVSepSymbol = 40; 
+  m_optMIDeskUpdatePeriod = 40; 
  }
 
  return status;
