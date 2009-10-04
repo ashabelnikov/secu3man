@@ -30,8 +30,10 @@ class CLogPlayerTabDlg : public CTabDialog
 
   void EnableNextButton(bool i_enable);
   void EnablePrevButton(bool i_enable);
-  bool GetNextButtonState(void) const;
-  bool GetPrevButtonState(void) const;
+  void EnablePlayButton(bool i_enable);
+  bool IsNextButtonEnabled(void) const;
+  bool IsPrevButtonEnabled(void) const;
+  bool IsPlayButtonEnabled(void) const;
 
   void SetOpenFileButtonText(const _TSTRING& i_text);
 	
@@ -39,6 +41,12 @@ class CLogPlayerTabDlg : public CTabDialog
   void SetSliderPosition(unsigned long i_position);
   unsigned long GetSliderPosition(void) const;
   void SetSliderRange(unsigned long i_begin, unsigned long i_end);
+  void EnableSlider(bool i_enable);
+  bool IsSliderEnabled(void) const;
+  unsigned long GetSliderLineSize(void) const;
+  void SetSliderLineSize(unsigned long i_line_size);
+  unsigned long GetSliderPageSize(void) const;
+  void SetSliderPageSize(unsigned long i_page_size);
 
   //indicators
   void SetFileIndicator(const _TSTRING& i_string);
@@ -63,6 +71,8 @@ class CLogPlayerTabDlg : public CTabDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateNextButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePrevButton(CCmdUI* pCmdUI);
+  afx_msg void OnUpdatePlayButton(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateSlider(CCmdUI* pCmdUI);
   afx_msg void OnOpenFileButton();
   afx_msg void OnPlayButton();
   afx_msg void OnNextButton();
@@ -83,6 +93,8 @@ private:
 
   bool m_next_button_state;
   bool m_prev_button_state;
+  bool m_play_button_state;
+  bool m_slider_state;
   bool m_all_enabled;
 
   EventHandler m_on_play_button;

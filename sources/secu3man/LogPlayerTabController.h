@@ -66,6 +66,15 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //прекращение работы плеера
   void _ClosePlayer(void);
 
+  //вывод текущей записи на приборы и обновление индикатора времени
+  void _DisplayCurrentRecord(void);
+  
+  //разрешение/запрещение кнопок в зависимости от текущего положения
+  void _UpdateButtons(void);
+
+  //Переустанавливет период таймера, если нужно
+  void _UpdateTimerPeriod(bool i_set_timer);
+
  private:
   CLogPlayerTabDlg*  m_view;
   CCommunicationManager* m_comm;
@@ -96,9 +105,6 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   //true - если в данный момент происходит проигрывание, false - если пауза
   bool m_playing;
-  
-  //хранит последнее направление перемещения по записям
-  EDirection m_last_direction; 
 
   //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
   size_t m_current_time_factor;

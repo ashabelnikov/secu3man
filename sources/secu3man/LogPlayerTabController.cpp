@@ -16,6 +16,7 @@
 #include "CommunicationManager.h"
 #include "StatusBarManager.h"
 #include "io-core/LogReader.h"
+#include "io-core/NumericConv.h"
 #include "ISettingsData.h"
 #include "MIDesk/MIDeskDlg.h"
 
@@ -211,9 +212,12 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  m_view->mp_MIDeskDlg->Enable(true); 
  m_view->EnableAll(true);
 
- //инициализируем логику плеера и начинаем сразу проигрывать
- _InitPlayer();
- _Play(true);
+  //инициализируем логику плеера и начинаем сразу проигрывать
+ if (mp_log_reader->GetCount() > 0)
+ {
+  _InitPlayer();
+  _Play(true);
+ }
  ////////////////////////////////////////////////////////////////
 }
 
@@ -246,26 +250,58 @@ void CLogPlayerTabController::OnTimeFactorCombo(size_t i_factor_code)
 
 void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos)
 {
+#define _END_TRACKING() m_now_tracking = true; \
+    m_period_before_tracking = m_timer.GetPeriod();\
+    m_timer.KillTimer();
+
  switch(i_nSBCode)
  {
   case TB_ENDTRACK:
    m_now_tracking = false;
    if (m_playing)
-     m_timer.SetTimer(m_period_before_tracking);
+    m_timer.SetTimer(m_period_before_tracking);
+   break;
+
+  case TB_BOTTOM:
+  case TB_TOP:
+   {
+   _END_TRACKING();
+   int count = ((int)m_view->GetSliderPosition()) - (int)mp_log_reader->GetCurPos();  
+   for(size_t i = 0; i < abs(count); ++i)
+    _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
+   }
+   break;
+
+  case TB_PAGEDOWN:
+  case TB_PAGEUP:
+   {
+    _END_TRACKING();
+    int count = m_view->GetSliderPageSize();   
+    for(size_t i = 0; i < count; ++i)
+     _ProcessOneRecord(false, i_nSBCode==TB_PAGEDOWN ? DIR_NEXT : DIR_PREV, false);
+   }
+   break;
+
+  case TB_LINEDOWN:
+  case TB_LINEUP:
+   {
+    _END_TRACKING();
+    int count = m_view->GetSliderLineSize();   
+    for(size_t i = 0; i < count; ++i)
+     _ProcessOneRecord(false, i_nSBCode==TB_LINEDOWN ? DIR_NEXT : DIR_PREV, false);
+   }
    break;
 
   case TB_THUMBPOSITION:
   case TB_THUMBTRACK:
-   m_now_tracking = true; 
-   m_period_before_tracking = m_timer.GetPeriod();
-   m_timer.KillTimer();
-
+   _END_TRACKING();
    int count = (int)i_nPos - (int)mp_log_reader->GetCurPos();  
    for(size_t i = 0; i < abs(count); ++i)
     _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
 
    break;
  }
+#undef _END_TRACKING
 }
 
 void CLogPlayerTabController::OnTimer(void)
@@ -279,44 +315,32 @@ void CLogPlayerTabController::OnTimer(void)
   return;
  }
 
- unsigned long position = mp_log_reader->GetCurPos();
  _ProcessOneRecord(true, DIR_NEXT);
- m_view->SetSliderPosition(position);
 }
 
 void CLogPlayerTabController::_GoNext(void)
 { 
- if (m_last_direction == DIR_PREV)
-  std::swap(m_curr_record, m_prev_record);
- m_last_direction = DIR_NEXT;
-
+ //вычисляем период и добавляем его в очередь спереди
  unsigned long period = CalcPeriod(m_prev_record.first, m_curr_record.first);
- //добавляем о очередь спереди
  m_last_perionds.push_front(period);
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
    m_last_perionds.pop_back(); 
  
- mp_log_reader->Next();
  m_prev_record = m_curr_record;
 }
 
 void CLogPlayerTabController::_GoBack(void)
 {
- if (m_last_direction == DIR_NEXT)
-  std::swap(m_curr_record, m_prev_record);
- m_last_direction = DIR_PREV;
-
- unsigned long period = CalcPeriod(m_curr_record.first, m_prev_record.first);
  //добавляем о очередь cзади
+ unsigned long period = CalcPeriod(m_curr_record.first, m_prev_record.first);
  m_last_perionds.push_back(period);
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
    m_last_perionds.pop_front(); 
  
- mp_log_reader->Prev();
  m_prev_record = m_curr_record; 
 }
 
@@ -340,12 +364,20 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
   return 0; //нет выборок
 }
 
-
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
- RECORD_INFO current_record = m_curr_record;
- unsigned long position = mp_log_reader->GetCurPos();
+if (i_direction == DIR_NEXT)
+  mp_log_reader->Next();  
+ else if (i_direction == DIR_PREV)
+  mp_log_reader->Prev();
+ else
+ {
+  ASSERT(0);
+  return;
+ }
 
+ _GetRecord();
+ 
  if (i_direction == DIR_NEXT)
   _GoNext();  
  else if (i_direction == DIR_PREV)
@@ -356,11 +388,19 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
   return;
  }
 
- _GetRecord();
- unsigned long period = _GetAveragedPeriod();
+ _UpdateTimerPeriod(i_set_timer);
+ _DisplayCurrentRecord();
+ _UpdateButtons();
 
- //учитываем фактор времени
- period = period * m_time_factors[m_current_time_factor].second; 
+ if (i_set_slider)
+  m_view->SetSliderPosition(mp_log_reader->GetCurPos());
+}
+
+void CLogPlayerTabController::_UpdateTimerPeriod(bool i_set_timer)
+{
+ //Вычисляем средний период. Учитываем фактор времени
+ unsigned long period = _GetAveragedPeriod();
+ period = CNumericConv::Round(((float)period) * m_time_factors[m_current_time_factor].second); 
 
  //перезапускаем таймер если нужно. Если новый период отличается от старого
  //меньше чем на 10%, то не перезапускаем таймер 
@@ -369,25 +409,6 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
   m_timer.KillTimer();
   m_timer.SetTimer(period);  
  }
-
- //обновляем приборы, а также обновляем позицию слайдера, если нужно
- m_view->mp_MIDeskDlg->SetValues(&current_record.second);
- if (i_set_slider)
-  m_view->SetSliderPosition(position);
-
- //выводим время записи
- CString string;
- string.Format(_T("%02d:%02d:%02d.%02d"), 
-     current_record.first.wHour,
-     current_record.first.wMinute,
-     current_record.first.wSecond,
-     current_record.first.wMilliseconds / 10);
- m_view->SetPositionIndicator(string.GetBuffer(0));
-
- if (m_view->GetNextButtonState()!=mp_log_reader->IsNextPossible())
-  m_view->EnableNextButton(mp_log_reader->IsNextPossible());
- if (m_view->GetPrevButtonState()!=mp_log_reader->IsPrevPossible())
-  m_view->EnablePrevButton(mp_log_reader->IsPrevPossible());
 }
 
 void CLogPlayerTabController::_Play(bool i_play)
@@ -403,15 +424,13 @@ void CLogPlayerTabController::_Play(bool i_play)
 
 void CLogPlayerTabController::_InitPlayer(void)
 {
+ m_view->EnableSlider(mp_log_reader->GetCount() > 1);
  m_view->SetSliderRange(0, mp_log_reader->GetCount());
- m_view->SetSliderPosition(0);
- m_last_direction = DIR_NA;
+ m_view->SetSliderPosition(mp_log_reader->GetCurPos()); 
  _GetRecord();
+ _DisplayCurrentRecord();
+ _UpdateButtons();
  m_prev_record = m_curr_record;
- if (m_view->GetNextButtonState()!=mp_log_reader->IsNextPossible())
-  m_view->EnableNextButton(mp_log_reader->IsNextPossible());
- if (m_view->GetPrevButtonState()!=mp_log_reader->IsPrevPossible())
-  m_view->EnablePrevButton(mp_log_reader->IsPrevPossible());
 }
 
 void CLogPlayerTabController::_ClosePlayer(void)
@@ -424,4 +443,30 @@ void CLogPlayerTabController::_ClosePlayer(void)
  m_timer.KillTimer(); 
  mp_log_reader->CloseFile();     
  m_view->SetPositionIndicator(_T(""));
+}
+
+void CLogPlayerTabController::_DisplayCurrentRecord(void)
+{
+ //обновляем приборы, а также обновляем позицию слайдера, если нужно
+ m_view->mp_MIDeskDlg->SetValues(&m_curr_record.second);
+
+ //выводим время записи
+ CString string;
+ string.Format(_T("%05d    %02d:%02d:%02d.%02d"), 
+     mp_log_reader->GetCurPos() + 1,
+     m_curr_record.first.wHour,
+     m_curr_record.first.wMinute,
+     m_curr_record.first.wSecond,
+     m_curr_record.first.wMilliseconds / 10);
+ m_view->SetPositionIndicator(string.GetBuffer(0));
+}
+
+void CLogPlayerTabController::_UpdateButtons(void)
+{
+ if (m_view->IsNextButtonEnabled()!=mp_log_reader->IsNextPossible())
+  m_view->EnableNextButton(mp_log_reader->IsNextPossible());
+ if (m_view->IsPrevButtonEnabled()!=mp_log_reader->IsPrevPossible())
+  m_view->EnablePrevButton(mp_log_reader->IsPrevPossible());
+ if (m_view->IsPlayButtonEnabled()!=mp_log_reader->IsNextPossible())
+  m_view->EnablePlayButton(mp_log_reader->IsNextPossible());
 }

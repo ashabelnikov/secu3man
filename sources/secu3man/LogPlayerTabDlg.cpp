@@ -32,6 +32,8 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , m_next_button_state(false)
 , m_prev_button_state(false)
+, m_play_button_state(false)
+, m_slider_state(false)
 , m_all_enabled(false)
 {
  //todo
@@ -59,8 +61,8 @@ BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, CDialog)
  ON_WM_CLOSE()
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PREV_BUTTON, OnUpdatePrevButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_NEXT_BUTTON, OnUpdateNextButton)
- ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PLAY_BUTTON, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_POSITION_SLIDER, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PLAY_BUTTON, OnUpdatePlayButton)
+ ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_POSITION_SLIDER, OnUpdateSlider)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_TEXT, OnUpdateControls)
  ON_BN_CLICKED(IDC_LOG_PLAYER_OPEN_FILE_BUTTON, OnOpenFileButton)
@@ -184,6 +186,16 @@ void CLogPlayerTabDlg::OnUpdatePrevButton(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_prev_button_state && m_all_enabled);  
 }
 
+void CLogPlayerTabDlg::OnUpdatePlayButton(CCmdUI* pCmdUI) 
+{
+ pCmdUI->Enable(m_play_button_state && m_all_enabled);  
+}
+
+void CLogPlayerTabDlg::OnUpdateSlider(CCmdUI* pCmdUI) 
+{
+ pCmdUI->Enable(m_slider_state && m_all_enabled);  
+}
+
 void CLogPlayerTabDlg::EnableAll(bool i_enable)
 {
  m_all_enabled = i_enable;
@@ -264,12 +276,54 @@ void CLogPlayerTabDlg::SetOpenFileButtonText(const _TSTRING& i_text)
  m_open_file_button.SetWindowText(i_text.c_str());
 }
 
-bool CLogPlayerTabDlg::GetNextButtonState(void) const
+bool CLogPlayerTabDlg::IsNextButtonEnabled(void) const
 {
  return m_next_button_state;
 }
 
-bool CLogPlayerTabDlg::GetPrevButtonState(void) const
+bool CLogPlayerTabDlg::IsPrevButtonEnabled(void) const
 {
  return m_prev_button_state;
+}
+
+void CLogPlayerTabDlg::EnablePlayButton(bool i_enable)
+{
+ m_play_button_state = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+bool CLogPlayerTabDlg::IsPlayButtonEnabled(void) const
+{
+ return m_play_button_state;
+}
+
+void CLogPlayerTabDlg::EnableSlider(bool i_enable)
+{
+ m_slider_state = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+bool CLogPlayerTabDlg::IsSliderEnabled(void) const
+{
+ return m_slider_state;
+}
+
+unsigned long CLogPlayerTabDlg::GetSliderLineSize(void) const
+{
+ return m_slider.GetLineSize();
+}
+
+void CLogPlayerTabDlg::SetSliderLineSize(unsigned long i_line_size)
+{
+ m_slider.SetLineSize(i_line_size);
+}
+
+unsigned long CLogPlayerTabDlg::GetSliderPageSize(void) const
+{
+ return m_slider.GetPageSize();
+}
+
+void CLogPlayerTabDlg::SetSliderPageSize(unsigned long i_page_size)
+{
+ m_slider.SetPageSize(i_page_size);
 }
