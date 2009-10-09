@@ -8,6 +8,7 @@
 class CMIDeskDlg;
 class CRSDeskDlg;
 class CParamDeskDlg;
+class CHotKeysToCmdRouter;
 
 // CParamMonModePageDlg dialog
 class CParamMonTabDlg : public CTabDialog
@@ -31,9 +32,15 @@ class CParamMonTabDlg : public CTabDialog
   virtual BOOL OnInitDialog();
   afx_msg void OnPmShowRawSensors();
   afx_msg void OnClose();
+  afx_msg void OnDestroy();
+  afx_msg void OnMaximizeWindow();
+  afx_msg void OnMinimizeWindow();
   DECLARE_MESSAGE_MAP()
 
   EventHandler m_OnRawSensorsCheck;
   CButton m_raw_sensors_check;
+
+  void _RegisterHotKeys(void);
+  std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 };
 

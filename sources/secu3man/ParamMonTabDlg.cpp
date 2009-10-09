@@ -14,6 +14,7 @@
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/ParamDeskDlg.h"
+#include "ui-core/HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -26,6 +27,9 @@ using namespace fastdelegate;
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
  ON_WM_CLOSE()
+ ON_WM_DESTROY()
+ ON_COMMAND(IDM_PM_MAXIMIZE_WINDOW, OnMaximizeWindow)	
+ ON_COMMAND(IDM_PM_MINIMIZE_WINDOW, OnMinimizeWindow)	
 END_MESSAGE_MAP()
 
 CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
@@ -33,6 +37,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
+, m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
  //na
 }
@@ -69,6 +74,9 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
  mp_ParamDeskDlg->Show(true);
+
+ m_hot_keys_supplier->Init(this);
+ _RegisterHotKeys();
 	
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -94,4 +102,26 @@ void CParamMonTabDlg::OnClose()
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 {
  m_OnRawSensorsCheck = i_Function;
+}
+
+void CParamMonTabDlg::OnDestroy() 
+{
+ CDialog::OnDestroy();  	
+ m_hot_keys_supplier->Close();
+}
+
+void CParamMonTabDlg::OnMaximizeWindow()
+{
+ //int x_resolution = ::GetSystemMetrics(SM_CXFULLSCREEN);
+ //int y_resolution = ::GetSystemMetrics(SM_CYFULLSCREEN);
+}
+
+void CParamMonTabDlg::OnMinimizeWindow()
+{
+}
+
+void CParamMonTabDlg::_RegisterHotKeys(void)
+{ //Ctrl + F = maximaze, Ctrl + M = minimaze
+ m_hot_keys_supplier->RegisterCommand(IDM_PM_MAXIMIZE_WINDOW, 'F', MOD_CONTROL); 
+ m_hot_keys_supplier->RegisterCommand(IDM_PM_MINIMIZE_WINDOW, 'M', MOD_CONTROL);
 }
