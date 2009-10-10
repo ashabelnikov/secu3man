@@ -164,8 +164,7 @@ void CMainTabManager::OnFullScreen(bool i_what)
  m_pParent->GetClientRect(rect); 
  mp_tab_control->MoveWindow(rect); //ресайзим таб контрол
 
- //оповещаем контроллеры вкладок о включении/выключении полноэкранного режима
- std::vector<ITabController*>& list = mp_MainTabController->GetControllersList();
- for (size_t i = 0; i < list.size(); i++) 
-  list[i]->OnFullScreen(i_what, rect);        
+ //оповещаем контроллер активной вкладки о включении/выключении полноэкранного режима
+ ASSERT(mp_MainTabController->GetActiveController());
+ mp_MainTabController->GetActiveController()->OnFullScreen(i_what, rect); 
 }

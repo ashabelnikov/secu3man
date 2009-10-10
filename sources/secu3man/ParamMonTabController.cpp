@@ -435,10 +435,10 @@ void CParamMonTabController::OnPDSaveButton()
 
 void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- if (i_what)
- {
- }
- else
- {
- }
+ //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
+ //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
+ //вкладку к нужному размеру.   
+
+ if (i_what) 
+  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height()); 
 }

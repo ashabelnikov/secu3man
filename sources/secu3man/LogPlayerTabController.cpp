@@ -172,12 +172,17 @@ bool CLogPlayerTabController::OnClose(void)
 
 bool CLogPlayerTabController::OnAskFullScreen(void)
 {
- return false;
+ return true;
 }
 
 void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- //na
+ //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
+ //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
+ //вкладку к нужному размеру.   
+
+ if (i_what) 
+  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height()); 
 }
 
 void CLogPlayerTabController::OnOpenFileButton(void)
