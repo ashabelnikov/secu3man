@@ -170,6 +170,16 @@ bool CLogPlayerTabController::OnClose(void)
  return true;
 }
 
+bool CLogPlayerTabController::OnAskFullScreen(void)
+{
+ return false;
+}
+
+void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+{
+ //na
+}
+
 void CLogPlayerTabController::OnOpenFileButton(void)
 {
  if (mp_log_reader->IsOpened())

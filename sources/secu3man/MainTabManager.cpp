@@ -137,9 +137,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 void CMainTabManager::OnAfterCreate(void)
 {
  CRect rect;
- m_pParent->GetClientRect(rect);
- rect.right-=0;
- rect.bottom-=0; 
+ m_pParent->GetClientRect(rect); 
  mp_tab_control->MoveWindow(rect);
 }
 
@@ -152,4 +150,22 @@ bool CMainTabManager::OnClose(void)
    return false;
  }    
  return true;
+}
+
+bool CMainTabManager::OnAskFullScreen(void)
+{   
+ ASSERT(mp_MainTabController->GetActiveController()); 
+ return mp_MainTabController->GetActiveController()->OnAskFullScreen();
+}
+
+void CMainTabManager::OnFullScreen(bool i_what)
+{
+ CRect rect;
+ m_pParent->GetClientRect(rect); 
+ mp_tab_control->MoveWindow(rect); //ресайзим таб контрол
+
+ //оповещаем контроллеры вкладок о включении/выключении полноэкранного режима
+ std::vector<ITabController*>& list = mp_MainTabController->GetControllersList();
+ for (size_t i = 0; i < list.size(); i++) 
+  list[i]->OnFullScreen(i_what, rect);        
 }

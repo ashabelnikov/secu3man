@@ -418,6 +418,11 @@ bool CParamMonTabController::OnClose(void)
  return true;
 }
 
+bool CParamMonTabController::OnAskFullScreen(void)
+{
+ return true;
+}
+
 //Ќажали кнопку сохранени€ параметров - надо послать команду сохранени€
 //в SECU-3
 void CParamMonTabController::OnPDSaveButton()
@@ -426,4 +431,14 @@ void CParamMonTabController::OnPDSaveButton()
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
+}
+
+void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+{
+ if (i_what)
+ {
+ }
+ else
+ {
+ }
 }

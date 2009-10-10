@@ -18,6 +18,7 @@
 #include "io-core\logwriter.h"
 #include "ISettingsData.h"
 #include "StatusBarManager.h"
+#include "ui-core\HotKeysManager.h"
 
 using namespace fastdelegate;
 
@@ -33,6 +34,8 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
 , m_pStatusBarManager(i_pStatusBarManager)
 , m_pLogWriter(i_pLogWriter)
 , mp_view(ip_view)
+, m_active(false)
+, m_full_screen_mode(false)
 {
  _ASSERTE(i_pCommunicationManager); 
  _ASSERTE(i_pAppSettingsManager); 
@@ -53,6 +56,8 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppEndLog(MakeDelegate(this,&MainFrameController::OnAppEndLog));
  mp_view->setIsBeginLoggingAllowed(MakeDelegate(this,&MainFrameController::IsBeginLoggingAllowed));
  mp_view->setIsEndLoggingAllowed(MakeDelegate(this,&MainFrameController::IsEndLoggingAllowed));
+ mp_view->setOnActivate(MakeDelegate(this,&MainFrameController::OnActivate));
+ mp_view->setOnFullScreen(MakeDelegate(this,&MainFrameController::OnFullScreen));
 }
 
 MainFrameController::~MainFrameController()
@@ -150,4 +155,42 @@ void MainFrameController::OnConnection(const bool i_online)
  }
 }
 
+bool MainFrameController::OnFullScreen()
+{
+ if (!m_full_screen_mode)
+ {
+  mp_view->GetWindowRect(m_last_wnd_rect);
+  CRect rect = _GetScreenRect();
+  mp_view->MoveWindow(rect.left,rect.top,rect.Width(), rect.Height());     
+  m_full_screen_mode = true;
+ }
+ else
+ {
+  mp_view->MoveWindow(m_last_wnd_rect.left,m_last_wnd_rect.top,
+      m_last_wnd_rect.Width(), m_last_wnd_rect.Height()); 
+  m_full_screen_mode = false;
+ }
+ return m_full_screen_mode;
+}
 
+void MainFrameController::OnActivate(bool i_state)
+{
+ if (i_state && m_active)
+ {
+  HotKeysManager::GetInstance()->DeactivateAllHotKeys();
+  m_active = false; 
+ }
+ else
+ {
+  HotKeysManager::GetInstance()->ActivateAllHotKeys();
+  m_active = true;
+ }
+}
+
+CRect MainFrameController::_GetScreenRect(void) const
+{
+ CDC* pDC = mp_view->GetDC();
+ int x_resolution = pDC->GetDeviceCaps(HORZRES);
+ int y_resolution = pDC->GetDeviceCaps(VERTRES);
+ return CRect(0, 0, x_resolution, y_resolution);
+}

@@ -27,7 +27,10 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   //появление/закрытие вкладки Check Engine
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
+
   virtual bool OnClose(void);
+  virtual bool OnAskFullScreen(void);
+  virtual void OnFullScreen(bool i_what, const CRect& i_rect);
 
   //события
   void OnSaveParameters(void);

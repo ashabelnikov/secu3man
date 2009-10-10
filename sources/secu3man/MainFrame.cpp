@@ -11,7 +11,6 @@
 #include "resource.h"
 #include "MainFrame.h"
 #include "ChildView.h"
-#include "ui-core\HotKeysManager.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -34,8 +33,10 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
+ ON_COMMAND(ID_FULL_SCREEN, OnFullScreen)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
+ ON_UPDATE_COMMAND_UI(ID_FULL_SCREEN, OnUpdateOnFullScreen)
  ON_WM_ACTIVATE()
 END_MESSAGE_MAP()
 
@@ -45,7 +46,6 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_wnd_initial_size(725,450)
 , m_pwndView(NULL)
-, m_active(false)
 {
  //na	
 }
@@ -124,6 +124,26 @@ void CMainFrame::setOnClose(EventResult i_OnClose)
  m_OnClose = i_OnClose;
 }
 
+void CMainFrame::setOnAskFullScreen(EventResult i_OnAskFullScreen)
+{
+ m_OnAskFullScreen = i_OnAskFullScreen;
+}
+
+void CMainFrame::setOnFullScreen(EventResult i_OnFullScreen)
+{
+ m_OnFullScreen = i_OnFullScreen;
+}
+
+void CMainFrame::setOnFullScreenNotify(EventHandler1 i_OnFullScreenNotify)
+{
+ m_OnFullScreenNotify = i_OnFullScreenNotify;
+}
+
+void CMainFrame::setOnActivate(EventHandler1 i_OnActivate)
+{
+ m_OnActivate = i_OnActivate;
+}
+
 void CMainFrame::setOnAppAbout(EventHandler i_OnFunction) 
 {
  m_OnAppAbout = i_OnFunction;
@@ -157,7 +177,7 @@ void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction)
 void CMainFrame::OnClose() 
 {
  bool result = true;
- if (m_OnClose) 
+ if (m_OnClose)
   result = m_OnClose();
 	
  if (result)
@@ -206,14 +226,26 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
 
 void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
 {
- if (nState == WA_INACTIVE && m_active)
- {
-  HotKeysManager::GetInstance()->DeactivateAllHotKeys();
-  m_active = false; 
- }
- else
- {
-  HotKeysManager::GetInstance()->ActivateAllHotKeys();
-  m_active = true;
- }
+ ASSERT(m_OnActivate); 
+ if (m_OnActivate)
+  m_OnActivate(nState == WA_INACTIVE);
 } 
+
+void CMainFrame::OnFullScreen()
+{
+ bool what = false;
+ if (m_OnFullScreen)
+  what = m_OnFullScreen();
+
+ if (m_OnFullScreenNotify)
+  m_OnFullScreenNotify(what);
+}
+
+void CMainFrame::OnUpdateOnFullScreen(CCmdUI* pCmdUI)
+{
+ bool enable = false;
+ if (m_OnAskFullScreen)
+  enable = m_OnAskFullScreen();
+
+ pCmdUI->Enable(enable);
+}

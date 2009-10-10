@@ -42,6 +42,7 @@ BEGIN
     BEGIN
         MENUITEM "&About SECU-3 Manager...",    ID_APP_ABOUT
     END
+    MENUITEM "Полноэкранный режим Ctrl + F", ID_FULL_SCREEN
 END
 
 
@@ -516,6 +517,7 @@ IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE
 BEGIN
     "B",            ID_APP_BEGIN_LOG,       VIRTKEY, CONTROL, NOINVERT
     "E",            ID_APP_END_LOG,         VIRTKEY, CONTROL, NOINVERT
+    "F",            ID_FULL_SCREEN,         VIRTKEY, CONTROL, NOINVERT
     "O",            IDM_OPEN_FLASH,         VIRTKEY, CONTROL, NOINVERT
     "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
 END

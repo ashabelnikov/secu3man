@@ -51,3 +51,13 @@ bool CChildViewManager::OnClose(void)
 {
  return mp_MainTabManager->OnClose();
 }
+
+bool CChildViewManager::OnAskFullScreen(void)
+{
+ return mp_MainTabManager->OnAskFullScreen();
+}
+
+void CChildViewManager::OnFullScreen(bool i_what)
+{
+ mp_MainTabManager->OnFullScreen(i_what);
+}

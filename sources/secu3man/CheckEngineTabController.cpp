@@ -162,6 +162,16 @@ bool CCheckEngineTabController::OnClose(void)
  return true;
 }
 
+bool CCheckEngineTabController::OnAskFullScreen(void)
+{
+ return false;
+}
+
+void CCheckEngineTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+{
+ //na
+}
+
 //посльзователь "дернул" чек бокс "—читывать ошибки в реальном времени".
 void CCheckEngineTabController::OnRealTimeErrors(void) 
 {

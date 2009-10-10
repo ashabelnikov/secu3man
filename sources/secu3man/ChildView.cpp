@@ -21,18 +21,18 @@ static char THIS_FILE[] = __FILE__;
 
 CChildView::CChildView()
 {
+ //na
 }
 
 CChildView::~CChildView()
 {
+ //na
 }
 
 BEGIN_MESSAGE_MAP(CChildView,CWnd )
-  //{{AFX_MSG_MAP(CChildView)
-  ON_WM_PAINT()
-  ON_WM_SHOWWINDOW()
-  ON_WM_SIZE()
-  //}}AFX_MSG_MAP
+ ON_WM_PAINT()
+ ON_WM_SHOWWINDOW()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 
@@ -41,52 +41,52 @@ END_MESSAGE_MAP()
 
 BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
 {
-  if (!CWnd::PreCreateWindow(cs))
-	return FALSE;
+ if (!CWnd::PreCreateWindow(cs))
+  return FALSE;
 
-  cs.dwExStyle |= WS_EX_CLIENTEDGE;
-  cs.style &= ~WS_BORDER;
-  cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
-	  ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW+1), NULL);
+ cs.dwExStyle |= WS_EX_CLIENTEDGE;
+ cs.style &= ~WS_BORDER;
+ cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
+  ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW+1), NULL);
 
-  return TRUE;
+ return TRUE;
 }
 
 void CChildView::OnPaint() 
 {
-  CPaintDC dc(this); // device context for painting		
-  // Do not call CWnd::OnPaint() for painting messages
+ CPaintDC dc(this); // device context for painting		
+ // Do not call CWnd::OnPaint() for painting messages
 }
 
 
 BOOL CChildView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {	
-  BOOL result = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
-  return result;
+ BOOL result = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+ return result;
 }
 
 void CChildView::PostNcDestroy() 
 {
-  CWnd::PostNcDestroy();
+ CWnd::PostNcDestroy();
 }
 
 
 void CChildView::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType) 
 {	
-  CWnd::CalcWindowRect(lpClientRect, nAdjustType);
+ CWnd::CalcWindowRect(lpClientRect, nAdjustType);
 }
 
 void CChildView::OnShowWindow(BOOL bShow, UINT nStatus) 
 {
-  CWnd::OnShowWindow(bShow, nStatus);		 
+ CWnd::OnShowWindow(bShow, nStatus);		 
 }
 
 void CChildView::PreSubclassWindow() 
 {
-  CWnd::PreSubclassWindow();
+ CWnd::PreSubclassWindow();
 }
 
 void CChildView::OnSize(UINT nType, int cx, int cy) 
 {
-  CWnd::OnSize(nType, cx, cy);	
+ CWnd::OnSize(nType, cx, cy);	
 }

@@ -16,7 +16,10 @@ class CChildViewManager
   bool Init(CMainFrame* i_pMainFrame);
 
   void OnAfterCreate(void);
+
   virtual bool OnClose(void);
+  virtual bool OnAskFullScreen(void);
+  virtual void OnFullScreen(bool i_what);
 
  private:
   std::auto_ptr<CMainTabManager> mp_MainTabManager;

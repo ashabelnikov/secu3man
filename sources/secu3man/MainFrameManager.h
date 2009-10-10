@@ -19,11 +19,9 @@ class CMainFrameManager
   bool Init(CWnd* &o_pMainWnd);
 
   //возвращает менеджер статусной строки (в нижней части главного окна)
-  CStatusBarManager* GetStatusBarManager(void) const;
+  CStatusBarManager* GetStatusBarManager(void) const;  
 
  private:
-  virtual bool OnClose(void);
-
   MainFrameController* m_pMainFrameController; //controller
   CStatusBarManager* m_pStatusBarManager;
   CChildViewManager* m_pChildViewManager;

@@ -828,6 +828,15 @@ bool CFirmwareTabController::OnClose(void)
   return CheckChangesAskAndSaveFirmware();
 }
 
+bool CFirmwareTabController::OnAskFullScreen(void)
+{
+ return false;
+}
+
+void CFirmwareTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+{
+ //na
+}
 
 void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name)
 {   

@@ -222,6 +222,16 @@ bool CKnockChannelTabController::OnClose(void)
  return true;
 }
 
+bool CKnockChannelTabController::OnAskFullScreen(void)
+{
+ return false;
+}
+
+void CKnockChannelTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+{
+ //na
+}
+
 void CKnockChannelTabController::OnSaveParameters(void)
 {
  m_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));

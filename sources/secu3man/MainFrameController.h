@@ -30,9 +30,13 @@ class MainFrameController : public IAPPEventHandler
   void OnAppSettings();
   void OnAppBeginLog();
   void OnAppEndLog();
+  void OnActivate(bool i_state);
+  bool OnFullScreen();
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
-  
+    
+  CRect _GetScreenRect(void) const;
+
   //You have to call this function before using of this controller! 
   void _SetDelegates(void);
 
@@ -41,4 +45,11 @@ class MainFrameController : public IAPPEventHandler
   CAppSettingsManager*   m_pAppSettingsManager;
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
+
+   //true, если главное окно активно (запоминает последнее состояние)
+  bool m_active;
+  //true, если установлен полноэкранный режим
+  bool m_full_screen_mode;
+  //запоминает размеры и позицию окна перед переходом в полноэкранный режим
+  CRect m_last_wnd_rect;
 };

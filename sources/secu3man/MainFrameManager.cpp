@@ -69,17 +69,14 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
  m_pMainFrame->ShowWindow(SW_SHOW);
  m_pMainFrame->UpdateWindow();
 
- m_pMainFrame->setOnClose(MakeDelegate(this,&CMainFrameManager::OnClose));
+ m_pMainFrame->setOnClose(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnClose));
+ m_pMainFrame->setOnAskFullScreen(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnAskFullScreen));
+ m_pMainFrame->setOnFullScreenNotify(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnFullScreen));
 
  m_pChildViewManager->OnAfterCreate();
  return true;
 }
 
-bool CMainFrameManager::OnClose(void)
-{//спрашиваем у остальных - можно ли закрывать программу
- return m_pChildViewManager->OnClose();
-}
- 
 CStatusBarManager* CMainFrameManager::GetStatusBarManager(void) const
 {
  return m_pStatusBarManager;

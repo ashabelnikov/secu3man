@@ -15,7 +15,10 @@ class CMainTabManager
    
   bool Init(CChildView* i_pChildView);
   void OnAfterCreate(void);
+
   virtual bool OnClose(void);
+  virtual bool OnAskFullScreen(void);
+  virtual void OnFullScreen(bool i_what);
 
  private:
   //контроллеры вкладок
