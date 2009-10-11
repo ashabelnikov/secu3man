@@ -11,7 +11,6 @@
 #include "HotKeysManager.h"
 #include <map>
 
-
 CHotKeysToCmdRouter::CHotKeysToCmdRouter()
 : mp_OriginalWnd(NULL)
 {
@@ -34,7 +33,7 @@ bool CHotKeysToCmdRouter::Close(void)
  bool result = true;
 
  if (!Clear()) //отсоединяемся от окна
-   result = false;
+  result = false;
 
  //удаляем все зарегистрированные горячие клавиши.
  if (!UnregisterAllCommands())
@@ -101,7 +100,6 @@ bool CHotKeysToCmdRouter::RegisterCommand(UINT i_command_id, UINT i_vk, UINT i_f
   m_hot_key_map.insert(HotKeyMap::value_type(nIDHotKey, info));
  }
 
-	//m_hot_key_map
  return true;
 }
 
@@ -130,7 +128,7 @@ bool CHotKeysToCmdRouter::UnregisterCommand(UINT i_command_id)
  HotKeyMap::iterator it;
  while((it = _FindCommandID(i_command_id)) != m_hot_key_map.end()) 
  {
-   is_command_exist = true;
+  is_command_exist = true;
   //нашли ID-шку в базе данных. Надо снять с регистрации горячую клавишу
   if (!UnregisterHotKey(mp_OriginalWnd->m_hWnd, (*it).first))
    result = false;
@@ -160,12 +158,12 @@ bool CHotKeysToCmdRouter::UnregisterAllCommands()
 
 LRESULT CHotKeysToCmdRouter::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
-switch(uMsg)
+ switch(uMsg)
  {
   case WM_HOTKEY: 
    if (m_hot_key_map.find(wParam)!=m_hot_key_map.end())
    {
-	if(CWnd::GetActiveWindow()==AfxGetMainWnd())   
+    if(CWnd::GetActiveWindow()==AfxGetMainWnd())   
     {    
      //send message as it from menu
      mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam].m_id_command,0),NULL);       
@@ -178,4 +176,3 @@ switch(uMsg)
  
  return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
 }
-

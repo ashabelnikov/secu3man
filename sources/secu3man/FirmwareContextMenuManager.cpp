@@ -38,7 +38,6 @@ void CFirmwareModeContextMenuManager::Attach(CWnd* pWnd)
  m_pWnd = pWnd;
 }
 
-
 //Fill menu with items and submenus
 void CFirmwareModeContextMenuManager::CreateContent(void)
 {

@@ -38,7 +38,6 @@ void CMainTabController::AddTabController(ITabController* i_pCntr)
  m_controllers_list.push_back(i_pCntr);
 }
 
-
 std::vector<ITabController*>& CMainTabController::GetControllersList(void)
 {
  return m_controllers_list;
@@ -58,7 +57,6 @@ void CMainTabController::OnSelchangingTabctl(void)
  m_controllers_list[m_pTabController->GetCurSel()]->OnDeactivate();
 } 
 
-
 ITabController* CMainTabController::GetActiveController() const
 {
  int selected_index = m_pTabController->GetCurSel();
@@ -70,4 +68,3 @@ void CMainTabController::SetTabController(CTabController* i_pTabController)
 { 
  m_pTabController = i_pTabController;
 }
-

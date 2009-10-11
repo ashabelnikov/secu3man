@@ -7,36 +7,28 @@
 // Enum Types
 enum MeterMemberEnum
 {
-  meter_title,   //заголовок (название прибора)
-  meter_needle,  //стрелка
-  meter_grid,    //деления шкалы  
-  meter_value,   //числовое значение отображаемое внизу
-  meter_labels,  //подписи напротив каждого деления 
-  meter_unit,    //единицы измерения
-  meter_bground, //фон
+ meter_title,   //заголовок (название прибора)
+ meter_needle,  //стрелка
+ meter_grid,    //деления шкалы  
+ meter_value,   //числовое значение отображаемое внизу
+ meter_labels,  //подписи напротив каждого деления 
+ meter_unit,    //единицы измерения
+ meter_bground, //фон
 };
 
 /////////////////////////////////////////////////////////////////////////////
 // CAnalogMeter command target
 class AFX_EXT_CLASS CAnalogMeter 
 {   
-public:
+ public:
   CAnalogMeter() ;
   virtual ~CAnalogMeter();
 
-
-private:
-  double DegToRad(double deg);
-  void DrawPie(const CRect& Bounds,double start_value, double end_value, COLORREF color);
-  void DrawGrid(const CRect& Bounds);
-  void DrawChord(const CRect& Bounds);
-
-// Operations
-public:
+ // Operations
+ public:
   void ShowMeter(CDC *pDC, CRect rectBorder);
   virtual void UpdateNeedle(CDC *pDC, double dPos);
   
-
   void SetColor(enum MeterMemberEnum meter_member, COLORREF Color);
   void SetState(enum MeterMemberEnum meter_member, bool State);
   void SetRange(double dMin, double dMax);
@@ -68,8 +60,17 @@ public:
   double  GetNeedlePos(void) {return m_dNeedlePos;};
   void    SetTickNumber(int number) { m_nTickNumber = number;};
 
-  // Implementation
-protected:
+ protected:
+  bool m_boolUseBitmaps;
+  bool m_boolForceRedraw;
+
+ // Implementation
+ private:
+  double DegToRad(double deg);
+  void DrawPie(const CRect& Bounds,double start_value, double end_value, COLORREF color);
+  void DrawGrid(const CRect& Bounds);
+  void DrawChord(const CRect& Bounds);
+
   void DrawScale();
   void DrawNeedle();
   void ShowMeterImage(CDC *pDC);
@@ -99,9 +100,6 @@ protected:
   COLORREF m_colorLabels;
   COLORREF m_colorBGround;
 
-  bool m_boolUseBitmaps ;
-  bool m_boolForceRedraw;
-
   int m_nFontScale;
   int m_nLabelsDecimals;
   int m_nValueDecimals;
@@ -120,7 +118,6 @@ protected:
   int m_nGridLineWidth;
   int m_nTickNumber;
   
-
   double m_dPI;
   double m_dLimitAngleDeg;
   double m_dLimitAngleRad;
@@ -135,7 +132,6 @@ protected:
   CDC     m_dcGrid;
   CBitmap m_bitmapGrid;
   CBitmap *m_pbitmapOldGrid;
-
   
   CDC     m_dcNeedle ;
   CBitmap m_bitmapNeedle;
@@ -158,8 +154,7 @@ protected:
   CPen    m_PenN_Needle;
   CBrush  m_BrushN_Needle;
   CPen    m_PenN_BGround;
-  CBrush  m_BrushN_BGround;
- 
+  CBrush  m_BrushN_BGround; 
 };
 
 /////////////////////////////////////////////////////////////////////////////

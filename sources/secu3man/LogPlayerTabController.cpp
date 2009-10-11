@@ -29,10 +29,8 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-
 #define QUEUE_SIZE 32   //размер очереди для усреднения периода
 #define EHKEY _T("LogPlayerCntr")
-
 
 //Сравнивает только милисекунды и секунды
 //возвращает разницу в миллисекундах.
@@ -42,7 +40,6 @@ static unsigned long CalcPeriod(SYSTEMTIME &i_time1, SYSTEMTIME &i_time2)
  unsigned long ms2 = (i_time2.wSecond * 1000) + i_time2.wMilliseconds;
  return (ms1 <= ms2) ? (ms2 - ms1) : (60000 - ms1) + ms2;
 }
-
 
 CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : m_view(NULL)
@@ -84,7 +81,6 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
  m_timer.SetMsgHandler(this, &CLogPlayerTabController::OnTimer);
 }
 
-
 CLogPlayerTabController::~CLogPlayerTabController()
 {
  //na  
@@ -97,7 +93,6 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 }
-
 
 //from MainTabController
 void CLogPlayerTabController::OnActivate(void)
@@ -163,7 +158,6 @@ void CLogPlayerTabController::OnConnection(const bool i_online)
  
  m_sbar->SetConnectionState(state);
 }
-
 
 bool CLogPlayerTabController::OnClose(void)
 {
@@ -341,7 +335,7 @@ void CLogPlayerTabController::_GoNext(void)
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
-   m_last_perionds.pop_back(); 
+  m_last_perionds.pop_back(); 
  
  m_prev_record = m_curr_record;
 }
@@ -354,7 +348,7 @@ void CLogPlayerTabController::_GoBack(void)
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
-   m_last_perionds.pop_front(); 
+  m_last_perionds.pop_front(); 
  
  m_prev_record = m_curr_record; 
 }
@@ -381,7 +375,7 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
-if (i_direction == DIR_NEXT)
+ if (i_direction == DIR_NEXT)
   mp_log_reader->Next();  
  else if (i_direction == DIR_PREV)
   mp_log_reader->Prev();

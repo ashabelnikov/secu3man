@@ -99,7 +99,6 @@ void CLogPlayerTabDlg::FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_strin
   ASSERT(index != LB_ERR);
   m_time_factor_combo.SetItemData(index, std::distance(i_factor_strings.begin(), it));
  }
-
 }
 
 size_t CLogPlayerTabDlg::GetTimeFactor(void) const

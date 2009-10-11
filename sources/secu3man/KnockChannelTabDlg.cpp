@@ -44,7 +44,6 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
  //na  
 }
 
-
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
@@ -57,7 +56,6 @@ LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
  return (LPCTSTR)IDD; 
 }
 
-
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()	
  ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
@@ -69,8 +67,6 @@ END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CKnockChannelTabDlg message handlers
-
-CChartPointsSerie* pPointSerie;
 
 BOOL CKnockChannelTabDlg::OnInitDialog() 
 {
@@ -92,7 +88,6 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
-
 
 void CKnockChannelTabDlg::OnDestroy() 
 {
@@ -130,12 +125,10 @@ void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
  Super::OnTimer(nIDEvent);  
 }
 
-
 void CKnockChannelTabDlg::AppendPoint(float value)
 {
  mp_OScopeCtrl->AppendPoint(value);
 }
-
 
 void CKnockChannelTabDlg::SetRPMKnockSignal(const std::vector<float> &i_values)
 {
@@ -170,13 +163,12 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  mp_RTChart->GetLeftAxis()->SetMinMax(0,5.0); 
 
  for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
-  {	  
+ {	  
   m_pPointSerie->AddPoint(rpm,0.0);
   m_pLineSerie->AddPoint(rpm,0.0);
   rpm+=rpm_step;
-  }
+ }
 }
-
 
 //инициализация осциллографа
 void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)

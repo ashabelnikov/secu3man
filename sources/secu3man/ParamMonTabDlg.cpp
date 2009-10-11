@@ -95,4 +95,3 @@ void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 {
  m_OnRawSensorsCheck = i_Function;
 }
-

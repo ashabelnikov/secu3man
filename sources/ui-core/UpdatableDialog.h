@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 /*--------------------------------------------------------------------------------------
 
 Если пронаследоваться от этого класса то в немодальном диалоге будет работать механизм
@@ -24,16 +23,13 @@ virtual BOOL IsIdleMessage(MSG* pMsg)
 
 class AFX_EXT_CLASS CUpdatableDialog : public CDialog
 {
-  // Construction
-  public:
-    // standard constructor
-	CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+ public:
+  CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
 
-	//здесь будет грязный хак! 
-	virtual BOOL PreTranslateMessage(MSG* pMsg);
+ protected:
+  //здесь будет грязный хак! 
+  virtual BOOL PreTranslateMessage(MSG* pMsg);
 	
-  private:
-	BOOL m_bDoIdle;
-
+ private:
+  BOOL m_bDoIdle;
 };
-

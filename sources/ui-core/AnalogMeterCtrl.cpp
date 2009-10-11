@@ -21,17 +21,16 @@ static char THIS_FILE[] = __FILE__;
 
 CAnalogMeterCtrl::CAnalogMeterCtrl()
 {
+ //na
 }
 
 CAnalogMeterCtrl::~CAnalogMeterCtrl()
 {
+ //na
 }
 
-
 BEGIN_MESSAGE_MAP(CAnalogMeterCtrl, CStatic)
-	//{{AFX_MSG_MAP(CAnalogMeterCtrl)
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+ ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -39,16 +38,22 @@ END_MESSAGE_MAP()
 
 void CAnalogMeterCtrl::OnPaint() 
 {
-  CPaintDC dc(this); // device context for painting
-  CRect rectClient ;
+ CPaintDC dc(this); // device context for painting
+ CRect rectClient ;
 	
-  GetClientRect (&rectClient);	
-  ShowMeter (&dc, rectClient) ;
-  // Do not call CStatic::OnPaint() for painting messages
+ GetClientRect (&rectClient);	
+ ShowMeter (&dc, rectClient) ;
+ // Do not call CStatic::OnPaint() for painting messages
 }
 
 void CAnalogMeterCtrl::UpdateNeedle(double dPos)
 {
-  CClientDC dc(this);
-  CAnalogMeter::UpdateNeedle(&dc, dPos);
+ CClientDC dc(this);
+ CAnalogMeter::UpdateNeedle(&dc, dPos);
+}
+
+void CAnalogMeterCtrl::Redraw(void)
+{
+ m_boolForceRedraw = true;   
+ Invalidate();
 }

@@ -3,12 +3,7 @@
 //      are changed infrequently
 //
 
-#if !defined(AFX_STDAFX_H__F9E51F2A_B0B2_409A_BBAA_F7647D934514__INCLUDED_)
-#define AFX_STDAFX_H__F9E51F2A_B0B2_409A_BBAA_F7647D934514__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
 
@@ -20,7 +15,6 @@
 #include <afxodlgs.h>       // MFC OLE dialog classes
 #include <afxdisp.h>        // MFC Automation classes
 #endif // _AFX_NO_OLE_SUPPORT
-
 
 #ifndef _AFX_NO_DB_SUPPORT
 #include <afxdb.h>			// MFC ODBC database classes
@@ -37,11 +31,6 @@
 
 #include <Afxmt.h>
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
-
 #if (_MSC_VER <1300) 
  #pragma warning( disable : 4786 ) // : identifier was truncated to '255' characters in the debug information
 #endif
-
-#endif // !defined(AFX_STDAFX_H__F9E51F2A_B0B2_409A_BBAA_F7647D934514__INCLUDED_)

@@ -14,7 +14,6 @@
 
 #pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
 
-
 #ifdef _DEBUG
 #undef THIS_FILE
 static char THIS_FILE[]=__FILE__;
@@ -103,7 +102,6 @@ bool CAppSettingsModel::CheckAllowableBaudRate(DWORD baud)
  return false; //invalid baud rate
 }
 
-
 bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
 {
  size_t count = m_AllowaleCSVSepSymbols.size();
@@ -112,7 +110,6 @@ bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
    return true;
  return false;
 }
-
 
 bool CAppSettingsModel::ReadSettings(void)
 {

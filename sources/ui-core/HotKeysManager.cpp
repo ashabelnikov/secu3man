@@ -59,7 +59,7 @@ void HotKeysManager::DeactivateAllHotKeys(void)
   ASSERT(p_router);
 
   if (p_router->mp_OriginalWnd)
-    RegisterOneRouter(p_router, false);
+   RegisterOneRouter(p_router, false);
  }
 }
 
@@ -71,7 +71,7 @@ void HotKeysManager::ActivateAllHotKeys(void)
   CHotKeysToCmdRouter* p_router = *it;
   ASSERT(p_router);  
   if (p_router->mp_OriginalWnd) //if window was not created, hot keys also would be not created! 
-    RegisterOneRouter(p_router, true);
+   RegisterOneRouter(p_router, true);
  }
 }
 

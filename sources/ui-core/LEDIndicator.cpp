@@ -22,23 +22,20 @@ CLEDIndicator::CLEDIndicator()
 : m_state(false)
 , m_rectWidth(2)
 {
-  m_rectColor = RGB(0,0,0);
-  m_onColor   = RGB(255,255,30);
-  m_offColor  = RGB(10,10,10);
+ m_rectColor = RGB(0,0,0);
+ m_onColor   = RGB(255,255,30);
+ m_offColor  = RGB(10,10,10);
 
-
-  ActuateColors();
+ ActuateColors();
 }
 
 CLEDIndicator::~CLEDIndicator()
 {
+ //na
 }
 
-
 BEGIN_MESSAGE_MAP(CLEDIndicator, CStatic)
-	//{{AFX_MSG_MAP(CLEDIndicator)
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+ ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -46,116 +43,113 @@ END_MESSAGE_MAP()
 
 void CLEDIndicator::OnPaint() 
 {
-  CPaintDC dc(this); // device context for painting
+ CPaintDC dc(this); // device context for painting
 	
-  CRect rc;
-  GetClientRect(&rc);
+ CRect rc;
+ GetClientRect(&rc);
 
-  CBrush* pBrushOld = NULL;
-  CPen* pPenOld = NULL;
+ CBrush* pBrushOld = NULL;
+ CPen* pPenOld = NULL;
 
-  if (IsWindowEnabled())
-  {
-    if(m_rectPen.m_hObject)
-      pPenOld = dc.SelectObject(&m_rectPen);
+ if (IsWindowEnabled())
+ {
+  if(m_rectPen.m_hObject)
+   pPenOld = dc.SelectObject(&m_rectPen);
 
-    if (m_state)
-	{ //ON
-      if(m_onBrush.m_hObject)
-        pBrushOld = dc.SelectObject(&m_onBrush);
-	}
-    else
-	{ //OFF
-      if(m_offBrush.m_hObject)
-        pBrushOld = dc.SelectObject(&m_offBrush);
-	}
-  dc.RoundRect(rc,CPoint(rc.Width(),rc.Height()));
+  if (m_state)
+  { //ON
+   if(m_onBrush.m_hObject)
+    pBrushOld = dc.SelectObject(&m_onBrush);
   }
+  else
+  { //OFF
+   if(m_offBrush.m_hObject)
+    pBrushOld = dc.SelectObject(&m_offBrush);
+  }
+  dc.RoundRect(rc,CPoint(rc.Width(),rc.Height()));
+ }
   	
+ // old pen / brush
+ if (pPenOld)
+  dc.SelectObject(pPenOld);
+ if (pBrushOld)
+  dc.SelectObject(pBrushOld);
 
-  // old pen / brush
-  if (pPenOld)
-    dc.SelectObject(pPenOld);
-  if (pBrushOld)
-    dc.SelectObject(pBrushOld);
-
-  // Do not call CStatic::OnPaint() for painting messages
+ // Do not call CStatic::OnPaint() for painting messages
 }
 
 void CLEDIndicator::SetState(bool state)
 {
  if (state!=m_state)
-  { //avoid stupid redrawing if state is already equal to m_state
+ { //avoid stupid redrawing if state is already equal to m_state
   m_state = state;
   InvalidateRect(NULL,TRUE);
-  }
+ }
 }
 
 bool CLEDIndicator::GetState(void)
 {
-  return m_state;
+ return m_state;
 }
 
 void CLEDIndicator::ActuateColors()
 {
-  if(m_rectPen.m_hObject)
-    m_rectPen.DeleteObject();
+ if(m_rectPen.m_hObject)
+  m_rectPen.DeleteObject();
 
-  if(m_rectPen.m_hObject == NULL)
-    m_rectPen.CreatePen(PS_SOLID, m_rectWidth, m_rectColor);
+ if(m_rectPen.m_hObject == NULL)
+  m_rectPen.CreatePen(PS_SOLID, m_rectWidth, m_rectColor);
 
-  if(m_onBrush.m_hObject) 
-    m_onBrush.DeleteObject();
+ if(m_onBrush.m_hObject) 
+  m_onBrush.DeleteObject();
 
-  if(m_onBrush.m_hObject == NULL) 
-    m_onBrush.CreateSolidBrush(m_onColor);
+ if(m_onBrush.m_hObject == NULL) 
+  m_onBrush.CreateSolidBrush(m_onColor);
 
-  if(m_offBrush.m_hObject) 
-    m_offBrush.DeleteObject();
+ if(m_offBrush.m_hObject) 
+  m_offBrush.DeleteObject();
 
-  if(m_offBrush.m_hObject == NULL) 
-    m_offBrush.CreateSolidBrush(m_offColor);
+ if(m_offBrush.m_hObject == NULL) 
+  m_offBrush.CreateSolidBrush(m_offColor);
 }
-
 
 //////////////////////////////////////////////////////
 void CLEDIndicator::SetColor(enum LEDMemberEnum led_member, COLORREF Color)
 {
-  switch(led_member)
-  {
+ switch(led_member)
+ {
   case led_rect:
-    m_rectColor = Color;
-    break;
+   m_rectColor = Color;
+   break;
 
   case led_on:
-    m_onColor = Color;
-    break;
+   m_onColor = Color;
+   break;
 
   case led_off:
-    m_offColor = Color;
-    break;
-  }
+   m_offColor = Color;
+   break;
+ }
 
-  // set pen/brush colors
-  ActuateColors();
+ // set pen/brush colors
+ ActuateColors();
 }
-
 
 //////////////////////////////////////////////////////
 void CLEDIndicator::GetColor(enum LEDMemberEnum led_member, COLORREF* pColor)
 {
-  switch(led_member)
-  {
+ switch(led_member)
+ {
   case led_rect:
-    *pColor = m_rectColor;
-    break;
+   *pColor = m_rectColor;
+   break;
 
   case led_on:
-    *pColor = m_onColor;
-    break;
+   *pColor = m_onColor;
+   break;
 
   case led_off:
-    *pColor = m_offColor;
-    break;
-  }
+   *pColor = m_offColor;
+   break;
  }
+}

@@ -57,7 +57,6 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, MLL::GetString(IDS_ECUERROR_KSP_CHIP_FAILED)));
 }
 
-
 CCheckEngineTabController::~CCheckEngineTabController()
 {  
  //na
@@ -190,7 +189,6 @@ void CCheckEngineTabController::OnRealTimeErrors(void)
   m_comm->m_pControlApp->ChangeContext(default_context);    
  }
 }
-
 
 //Посылка команды которая заставит SECU-3 прочитать коды ошибок из EEPROM 
 //и передать их в менеджер (чек боксы в списке)

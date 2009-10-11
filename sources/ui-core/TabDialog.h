@@ -5,19 +5,16 @@
 
 class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog 
 {
-	typedef CUpdatableDialog Super;
+  typedef CUpdatableDialog Super;
 
-  public:
-  	CTabDialog(UINT nIDTemplate, CWnd* pParentWnd);
+ public:
+  CTabDialog(UINT nIDTemplate, CWnd* pParentWnd);
+  virtual ~CTabDialog();
 
-	//возвращает идентификатор диалога
-	virtual LPCTSTR GetDialogID(void) const = 0;
+  //возвращает идентификатор диалога
+  virtual LPCTSTR GetDialogID(void) const = 0;
 
-	virtual ~CTabDialog();
-
-	//диалоговые вкладки в Tab-контроле нельзя закрывать по IDOK или IDCANCEL
-	void OnOK();
-	void OnCancel();
+  //диалоговые вкладки в Tab-контроле нельзя закрывать по IDOK или IDCANCEL
+  void OnOK();
+  void OnCancel();
 };
-
-

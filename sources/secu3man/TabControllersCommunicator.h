@@ -22,6 +22,5 @@ class TabControllersCommunicator
   std::map<int, ITabController*> m_references;
 };
 
-
 //identifiers of tab controllers
 #define TCC_FIRMWARE_TAB_CONTROLLER 1

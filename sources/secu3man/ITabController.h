@@ -1,7 +1,6 @@
 
 #pragma once
 
-
 //через этот интерфейс главный контроллер управляет контроллерами вкладок (Tab control) 
 class ITabController  
 {

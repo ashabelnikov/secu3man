@@ -19,7 +19,6 @@ class CHotKeysToCmdRouter;
 class CFirmwareModeContextMenuManager;
 class CParamDeskDlg;
 
-
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 

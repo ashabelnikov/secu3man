@@ -12,7 +12,7 @@
 
 //---------------------------------------------------------
 #ifdef _DEBUG  //'identifier' : identifier was truncated in the debug information
-  #pragma warning (disable: 4786)  
+ #pragma warning (disable: 4786)  
 #endif
 #include <atlconv.h>
 #include "common\LangLayer.h"

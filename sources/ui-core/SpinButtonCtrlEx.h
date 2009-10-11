@@ -5,7 +5,7 @@
 
 class AFX_EXT_CLASS CSpinButtonCtrlEx : public CSpinButtonCtrl
 {
-public:
+ public:
   CSpinButtonCtrlEx();
   virtual ~CSpinButtonCtrlEx();
 	
@@ -15,19 +15,18 @@ public:
   void SetRangeAndDelta(double lower, double upper, double delta);
   void GetRangeAndDelta(double &lower, double& upper, double& delta);
 	
-protected:
+ protected:
   void InitSpinButtonCtrl();
   void SetIntegerPos(double pos);
   void SetBuddyValue(double value);
 
-protected:
+ protected:
   virtual void PreSubclassWindow();
-
   afx_msg BOOL OnDeltapos (NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg int OnCreate(LPCREATESTRUCT lpCreateStruct);
   DECLARE_MESSAGE_MAP()
 
-protected:
+ private:
   UINT   m_IntRange;
   double m_MinVal;
   double m_MaxVal;

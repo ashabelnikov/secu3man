@@ -7,10 +7,10 @@ class CHotKeysToCmdRouter;
 
 class AFX_EXT_CLASS HotKeysManager
 {
-  HotKeysManager();
+  HotKeysManager(); //закрытый конструктор!
 
-public:
- ~HotKeysManager();
+ public:
+  ~HotKeysManager();
 
  static HotKeysManager* GetInstance(void);
 
@@ -21,7 +21,6 @@ private:
  friend CHotKeysToCmdRouter;
  void _AddRouter(CHotKeysToCmdRouter* ip_router);
  void _RemoveRouter(CHotKeysToCmdRouter* ip_router);
-
 
  bool RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_register);
 

@@ -3,9 +3,7 @@
 
 class AFX_EXT_CLASS ITabControllerEvent  
 {
-public:
+ public:
   virtual void OnSelchangeTabctl(void) = 0; 
-  virtual void OnSelchangingTabctl(void) = 0; 
-
+  virtual void OnSelchangingTabctl(void) = 0;
 };
-

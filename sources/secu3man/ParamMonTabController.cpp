@@ -56,7 +56,6 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
  m_view->mp_ParamDeskDlg->SetOnSaveButton(MakeDelegate(this,&CParamMonTabController::OnPDSaveButton));
 }
 
-
 CParamMonTabController::~CParamMonTabController()
 {
  //na  
@@ -122,7 +121,6 @@ void CParamMonTabController::OnDeactivate(void)
  m_sbar->SetInformationText(_T(""));
 }
 
-
 void CParamMonTabController::StartCollectingInitialData(void) 
 {
  m_comm->m_pControlApp->ChangeContext(FNNAME_DAT); //change context!
@@ -130,7 +128,6 @@ void CParamMonTabController::StartCollectingInitialData(void)
  m_packet_processing_state = PPS_COLLECT_INITIAL_DATA;
  m_operation_state = 0;
 }
-
 
 //возвращает true когда работа автомата завершена
 //m_operation_state = 0 для запуска
@@ -218,7 +215,6 @@ void CParamMonTabController::StartReadingNecessaryParameters(void)
  m_packet_processing_state = PPS_READ_NECESSARY_PARAMETERS;
  m_operation_state = 0;
 }
-
 
 //возвращает true когда работа автомата завершена
 //m_operation_state = 0 для запуска
@@ -392,7 +388,6 @@ void CParamMonTabController::OnParamDeskChangesTimer(void)
   m_parameters_changed = false; //обработали событие - сбрасываем признак
  }
 }
-
 
 //Событие от чекбокса переключающего режим мониторинга (приборы/сырые данные)
 void CParamMonTabController::OnRawSensorsCheckBox(void)

@@ -17,10 +17,9 @@ class HotKeysManager;
 //Внимание! Объект должен создаваться только с использованием heap! 
 class AFX_EXT_CLASS CHotKeysToCmdRouter : private CWndSubclasser
 {
-
-public:
- CHotKeysToCmdRouter();
- virtual ~CHotKeysToCmdRouter();
+ public:
+  CHotKeysToCmdRouter();
+  virtual ~CHotKeysToCmdRouter();
 
   //Eсли Init() не вызван, то роутинг не осуществляется. Каждому вызову Init() должен
   //соответствовать вызов Close().
@@ -45,7 +44,7 @@ public:
   //Удаление (снятие с регистрации) всех зарегистрированных горячих клавиш.
   bool UnregisterAllCommands();
 
-private:
+ private:
   friend HotKeysManager;
 
   //from CWndSubclasser
@@ -70,4 +69,3 @@ private:
 
   _TSTRING m_thread_id_string;
 };
-

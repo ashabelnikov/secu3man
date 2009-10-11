@@ -15,26 +15,23 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 CTabDialog::CTabDialog(UINT nIDTemplate, CWnd* pParentWnd)
 : Super(nIDTemplate,pParentWnd)
 {
-
+ //na
 }
 
 CTabDialog::~CTabDialog()
 {
-
+ //na
 }
 
 void CTabDialog::OnOK()
 {
-  UpdateData(); //for DDX/DDV
+ UpdateData(); //for DDX/DDV
 } 
 
 void CTabDialog::OnCancel()
 {
-} 
+ //na
+}

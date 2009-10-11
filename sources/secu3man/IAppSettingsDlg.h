@@ -14,7 +14,6 @@ class IAppSettingsDlg
   virtual void FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts) = 0;
   virtual void FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<_TSTRING, char> >  i_AllowableCSVSepSymbols) = 0;
 
-
   //"Set" - установка данных представления
   virtual void SetPortName(_TSTRING i_PortName) = 0;
   virtual void SetBaudRateApplication(DWORD i_app_baud) = 0;
@@ -23,7 +22,6 @@ class IAppSettingsDlg
   virtual void SetUseAppFolder(bool i_use) = 0;
   virtual void SetCSVSepSymbol(size_t i_index) = 0;
   virtual void SetMIDeskUpdatePeriod(int i_period) = 0;
-
    
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
@@ -33,7 +31,6 @@ class IAppSettingsDlg
   virtual bool GetUseAppFolder(void) const = 0;
   virtual size_t GetCSVSepSymbol(void) = 0;
   virtual int GetMIDeskUpdatePeriod(void) = 0;
-
 
   //устанавливают обработчики событий
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;

@@ -16,30 +16,25 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 /////////////////////////////////////////////////////////////////////////////
-// Cpp
 
 CProgressCtrlEx::CProgressCtrlEx()
 {
+ //na
 }
 
 CProgressCtrlEx::~CProgressCtrlEx()
 {
+ //na
 }
 
-
 BEGIN_MESSAGE_MAP(CProgressCtrlEx, CProgressCtrl)
-	//{{AFX_MSG_MAP(Cpp)
-	ON_WM_PAINT()
-	//}}AFX_MSG_MAP
+ ON_WM_PAINT()
 END_MESSAGE_MAP()
-
-/////////////////////////////////////////////////////////////////////////////
-// Cpp message handlers
 
 void CProgressCtrlEx::OnPaint() 
 { 
-  if (IsWindowEnabled())
-	CProgressCtrl::OnPaint();
-  else
-	CPaintDC dc(this); // device context for painting
+ if (IsWindowEnabled())
+  CProgressCtrl::OnPaint();
+ else
+  CPaintDC dc(this); // device context for painting
 }

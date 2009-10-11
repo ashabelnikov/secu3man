@@ -10,7 +10,7 @@
 #pragma once
 
 #ifndef __AFXWIN_H__
-	#error include 'stdafx.h' before including this file for PCH
+ #error include 'stdafx.h' before including this file for PCH
 #endif
 
 #include "ISECU3man.h"
@@ -39,6 +39,7 @@ class CSecu3manApp : public CWinApp, public ISECU3Man
   virtual CMainFrameManager*      GetMainFrameManager(void) const;
   virtual LogWriter*              GetLogWriter(void) const;
 
+ protected:
   DECLARE_MESSAGE_MAP()
 
  private:

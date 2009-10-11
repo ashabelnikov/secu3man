@@ -18,7 +18,7 @@ NOTE:
 
 class AFX_EXT_CLASS CWndSubclasser
 {
-public:
+ public:
   CWndSubclasser();
   virtual ~CWndSubclasser(void);
   bool Subclass(HWND hWnd);
@@ -28,13 +28,11 @@ public:
   LRESULT Default(WPARAM wParam, LPARAM lParam);
   CWnd* GetWnd() {return CWnd::FromHandle(_hWnd);}
 
-protected:
+ protected:
   virtual LRESULT WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam);
   HWND _hWnd; //referred window
 
-private:
+ private:
   LPVOID _token;
   bool _bCleared;
 };
-
-

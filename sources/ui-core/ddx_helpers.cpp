@@ -11,45 +11,45 @@
 
 void DDX_HELPERS_API DDX_Check_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value )
 {
-  BOOL b_value;
-  if (pDX->m_bSaveAndValidate)
-  {
-    DDX_Check(pDX, nIDC, b_value);	
-	value = (b_value) ? 1 : 0;
-  }
-  else
-  {
-	b_value = (value) ? TRUE : FALSE;
-    DDX_Check(pDX, nIDC, b_value);	
-  }
+ BOOL b_value;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_Check(pDX, nIDC, b_value);	
+  value = (b_value) ? 1 : 0;
+ }
+ else
+ {
+  b_value = (value) ? TRUE : FALSE;
+  DDX_Check(pDX, nIDC, b_value);	
+ }
 }
 
 void DDX_HELPERS_API DDX_CBIndex_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& index)
 {
-  int i_index;
-  if (pDX->m_bSaveAndValidate)
-  {
-    DDX_CBIndex(pDX, nIDC, i_index);	
-	index = (UCHAR)i_index;
-  }
-  else
-  {
-	i_index = (int)index;
-    DDX_CBIndex(pDX, nIDC, i_index);	
-  }
+ int i_index;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_CBIndex(pDX, nIDC, i_index);	
+  index = (UCHAR)i_index;
+ }
+ else
+ {
+  i_index = (int)index;
+  DDX_CBIndex(pDX, nIDC, i_index);	
+ }
 }
 
 void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value )
 {
-  int b_value;
-  if (pDX->m_bSaveAndValidate)
-  {
-    DDX_Radio(pDX, nIDC, b_value);	
-	value = (b_value) ? 1 : 0;
-  }
-  else
-  {
-	b_value = (value) ? TRUE : FALSE;
-    DDX_Radio(pDX, nIDC, b_value);	
-  }
+ int b_value;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_Radio(pDX, nIDC, b_value);	
+  value = (b_value) ? 1 : 0;
+ }
+ else
+ {
+  b_value = (value) ? TRUE : FALSE;
+  DDX_Radio(pDX, nIDC, b_value);	
+ }
 }

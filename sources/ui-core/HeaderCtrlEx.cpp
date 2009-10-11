@@ -9,7 +9,6 @@
 #include "StdAfx.h"
 #include "HeaderCtrlEx.h"
 
-
 /////////////////////////////////////////////////////////////////////////////
 // CHeaderCtrlEx
 
@@ -23,11 +22,8 @@ CHeaderCtrlEx::~CHeaderCtrlEx()
  //na
 }
 
-
-BEGIN_MESSAGE_MAP(CHeaderCtrlEx, CHeaderCtrl)
-		
+BEGIN_MESSAGE_MAP(CHeaderCtrlEx, CHeaderCtrl)		
 END_MESSAGE_MAP()
-
 
 BOOL CHeaderCtrlEx::Init(CHeaderCtrl *pHeader)
 {	

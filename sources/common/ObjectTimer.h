@@ -10,11 +10,9 @@
 
 #include <map>
 
-
 //эта глобалная переменная необходима для передачи в обработчики правильного this, выбор элементов
 //производится по идентификатору таймера, каждый элемент содержит указатель на CObjectTimer 
 static std::map<int,void*> g_object_timer_instance_map;
-
 
 template<class T> class CObjectTimer  
 {

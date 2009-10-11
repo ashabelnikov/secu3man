@@ -29,11 +29,9 @@ CAppSettingsManager::CAppSettingsManager()
 , m_pController(NULL)
 , m_pDialog(NULL)
 {
-
  m_pModel = new CAppSettingsModel();
  m_pDialog = new CAppSettingsDlg(); //View
  m_pController = new CAppSettingsController(m_pDialog,m_pModel); 
-
 }
 
 CAppSettingsManager::~CAppSettingsManager()
@@ -70,4 +68,3 @@ CAppSettingsModel* CAppSettingsManager::GetModel(void) const
 {
  return m_pModel;
 }
-

@@ -18,7 +18,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-
 CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CAppSettingsDlg::IDD, pParent)
 , m_OnOk(NULL)
@@ -34,7 +33,6 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_use_app_folder = 0;
  m_midesk_update_period = 40;
 }
-
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -86,7 +84,6 @@ BOOL CAppSettingsDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
-
 
 void CAppSettingsDlg::OnCancel() 
 {

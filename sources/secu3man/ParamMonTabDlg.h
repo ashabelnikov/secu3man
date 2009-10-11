@@ -36,4 +36,3 @@ class CParamMonTabDlg : public CTabDialog
   EventHandler m_OnRawSensorsCheck;
   CButton m_raw_sensors_check;
 };
-
