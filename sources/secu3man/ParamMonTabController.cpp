@@ -436,4 +436,7 @@ void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 
  if (i_what) 
   m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height()); 
+
+ m_view->MakePDFloating(i_what);
+ m_view->EnlargeMonitor(i_what);
 }

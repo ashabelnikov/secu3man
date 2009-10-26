@@ -12,6 +12,7 @@
 #include "ui-core\AnalogMeterCtrl.h"
 #include "MIDeskDlg.h"
 #include "io-core/NumericConv.h"
+#include "MIHelpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,29 +20,31 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+BEGIN_MESSAGE_MAP(CMIDeskDlg, CDialog)
+ ON_WM_DESTROY()
+END_MESSAGE_MAP()
+
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog
-
 
 CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CMIDeskDlg::IDD, pParent)
 , m_update_period(100)
 , m_was_initialized(false)
 {
-//na	
+ //na	
 }
-
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  CDialog::DoDataExchange(pDX);
 
  //Аналоговые приборы
- DDX_Control(pDX, IDC_MI_TACHOMETER, m_tachometer.m_meter);
- DDX_Control(pDX, IDC_MI_MAP, m_pressure.m_meter);
- DDX_Control(pDX, IDC_MI_VOLTMETER, m_voltmeter.m_meter);
- DDX_Control(pDX, IDC_MI_DWELL_ANGLE, m_dwell_angle.m_meter);
- DDX_Control(pDX, IDC_MI_TEMPERATURE, m_temperature.m_meter);
+ m_tachometer.DDX_Controls(pDX, IDC_MI_TACHOMETER);
+ m_pressure.DDX_Controls(pDX, IDC_MI_MAP);
+ m_voltmeter.DDX_Controls(pDX, IDC_MI_VOLTMETER);
+ m_dwell_angle.DDX_Controls(pDX, IDC_MI_DWELL_ANGLE);
+ m_temperature.DDX_Controls(pDX, IDC_MI_TEMPERATURE);
 
  //Булевские приборы (лампочка)
  m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
@@ -51,11 +54,6 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  //расход воздуха
  m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);	
 }
-
-
-BEGIN_MESSAGE_MAP(CMIDeskDlg, CDialog)
-	ON_WM_DESTROY()
-END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg message handlers
@@ -83,7 +81,6 @@ BOOL CMIDeskDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
-
 
 void CMIDeskDlg::OnDestroy() 
 {
@@ -142,7 +139,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
 void CMIDeskDlg::OnUpdateTimer(void)
 {
  if (!m_was_initialized)
-   return; 
+  return; 
  m_tachometer.SetValue((float)m_values.frequen);
  m_pressure.SetValue(m_values.pressure);
  m_voltmeter.SetValue(m_values.voltage);
@@ -162,4 +159,27 @@ void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
   m_update_timer.KillTimer();
   m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_update_period);
  }
+}
+
+void CMIDeskDlg::Resize(const CRect& i_rect)
+{
+ //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
+ CRect old_rect; 
+ float Xf, Yf;
+ GetWindowRect(old_rect);
+ MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
+
+ //изменяем размеры окна
+ MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
+
+ //ресайзим контроллы
+ m_tachometer.Scale(Xf, Yf);
+ m_pressure.Scale(Xf, Yf);
+ m_voltmeter.Scale(Xf, Yf);
+ m_dwell_angle.Scale(Xf, Yf);
+ m_gas_valve.Scale(Xf, Yf);
+ m_shutoff_valve.Scale(Xf, Yf);
+ m_throttle_gate.Scale(Xf, Yf);
+ m_air_flow.Scale(Xf, Yf);
+ m_temperature.Scale(Xf, Yf);
 }

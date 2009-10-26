@@ -55,8 +55,8 @@ IDD_PARAMETERS_AND_MONITOR DIALOG DISCARDABLE  0, 0, 428, 222
 STYLE WS_CHILD | WS_VISIBLE
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через несколько секунд после прекращения редактирования",
-                    IDC_STATIC,11,194,222,20
+    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
+                    IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,234,199,157,10

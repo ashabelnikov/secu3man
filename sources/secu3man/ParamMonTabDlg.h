@@ -25,8 +25,13 @@ class CParamMonTabDlg : public CTabDialog
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
 
+  void MakePDFloating(bool i_floating);
+  void EnlargeMonitor(bool i_enlarge);
+
  // Implementation
  protected:
+  void _ResizeRect(const CRect& i_external, CRect& io_victim);
+
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnPmShowRawSensors();
@@ -35,4 +40,9 @@ class CParamMonTabDlg : public CTabDialog
 
   EventHandler m_OnRawSensorsCheck;
   CButton m_raw_sensors_check;
+  CStatic m_save_note_text;
+
+  CRect m_original_mi_rect;
+  CRect m_original_rs_rect;
+  CPoint m_original_check_pos;
 };

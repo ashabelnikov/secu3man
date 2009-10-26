@@ -11,58 +11,46 @@
 
 class AFX_EXT_CLASS CRSDeskDlg : public CDialog, public IRSView
 {
-// Construction
-public:
-	CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
-
-// Dialog Data
-	//{{AFX_DATA(CRSDeskDlg)
-	enum { IDD = IDD_RAW_SENSORS_DESK };
-	float m_map_value;
-	float m_ubat_value;
-	float m_temp_value;
-	float m_knock_value;
-
-	CStatic m_map_field;
-	CStatic m_ubat_field;
-	CStatic m_temp_field;
-	CStatic m_knock_field;
-
-	CStatic m_map_caption;
-	CStatic m_ubat_caption;
-	CStatic m_temp_caption;
-	CStatic m_knock_caption;
-
-	CStatic m_map_unit;
-	CStatic m_ubat_unit;
-	CStatic m_temp_unit;
-	CStatic m_knock_unit;
+ public:
+  CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
+  enum { IDD = IDD_RAW_SENSORS_DESK };
     
-	//}}AFX_DATA
+  //--------interface implementation---------------
+  virtual void Show(bool show);
+  virtual void Enable(bool enable);
+  virtual void SetValues(const SECU3IO::RawSensDat* i_values);
+  virtual void GetValues(SECU3IO::RawSensDat* o_values);
+  //-----------------------------------------------
 
-   //--------interface implementation---------------
-	virtual void Show(bool show);
-	virtual void Enable(bool enable);
-    virtual void SetValues(const SECU3IO::RawSensDat* i_values);
-    virtual void GetValues(SECU3IO::RawSensDat* o_values);
-   //-----------------------------------------------
+  //изменение размеров окна
+  void Resize(const CRect& i_rect);
 
+  // Implementation
+ protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+  virtual BOOL OnInitDialog();
+  DECLARE_MESSAGE_MAP()
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CRSDeskDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+ private:
+  float m_map_value;
+  float m_ubat_value;
+  float m_temp_value;
+  float m_knock_value;
 
-// Implementation
-protected:
+  CStatic m_map_field;
+  CStatic m_ubat_field;
+  CStatic m_temp_field;
+  CStatic m_knock_field;
 
-	// Generated message map functions
-	//{{AFX_MSG(CRSDeskDlg)
-	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  CStatic m_map_caption;
+  CStatic m_ubat_caption;
+  CStatic m_temp_caption;
+  CStatic m_knock_caption;
+
+  CStatic m_map_unit;
+  CStatic m_ubat_unit;
+  CStatic m_temp_unit;
+  CStatic m_knock_unit;
 };
 
 /////////////////////////////////////////////////////////////////////////////

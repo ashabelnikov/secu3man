@@ -9,13 +9,11 @@
 
 #pragma once
 
-
 class IRSView  
 {
-  public:
-	virtual void Show(bool show) = 0;                                //показать/спрятать контент представления
-	virtual void Enable(bool enable) = 0;                            //разрешение/запрещение представления
-    virtual void SetValues(const SECU3IO::RawSensDat* i_values) = 0; //загоняет данные в представление
-    virtual void GetValues(SECU3IO::RawSensDat* o_values) = 0;       //извлекает данные из представления	
+ public:
+  virtual void Show(bool show) = 0;                                //показать/спрятать контент представления
+  virtual void Enable(bool enable) = 0;                            //разрешение/запрещение представления
+  virtual void SetValues(const SECU3IO::RawSensDat* i_values) = 0; //загоняет данные в представление
+  virtual void GetValues(SECU3IO::RawSensDat* o_values) = 0;       //извлекает данные из представления	
 };
-

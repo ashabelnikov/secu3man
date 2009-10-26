@@ -9,6 +9,7 @@
 
 #include "stdafx.h"
 #include "MIAirFlow.h"
+#include "MIHelpers.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -24,93 +25,107 @@ CMIAirFlow::CMIAirFlow()
 : m_loLimit(0.0f)
 , m_upLimit(16.0f)
 {
-
+ //na
 }
 
 CMIAirFlow::~CMIAirFlow()
 {
-
+ //na
 }
-
 
 void CMIAirFlow::DDX_Controls(CDataExchange* pDX, int nIDC_progress, int nIDC_digits, int nIDC_caption )
 {
-  DDX_Control(pDX, nIDC_progress, m_progress);
-  DDX_Control(pDX, nIDC_digits, m_digits);
-  DDX_Control(pDX, nIDC_caption, m_caption);
+ DDX_Control(pDX, nIDC_progress, m_progress);
+ DDX_Control(pDX, nIDC_digits, m_digits);
+ DDX_Control(pDX, nIDC_caption, m_caption);
 }
-
 
 void CMIAirFlow::Create()
 {
-  m_progress.SetRange((int)m_loLimit,(int)m_upLimit);
-  m_progress.SetPos(0);
-  m_digits.SetWindowText(_T("00"));
+ m_progress.SetRange((int)m_loLimit,(int)m_upLimit);
+ m_progress.SetPos(0);
+ m_digits.SetWindowText(_T("00"));
 
-  Enable(m_prev_enable);
+ Enable(m_prev_enable);
 }
-
 
 //--------------------interface-----------------------
 void CMIAirFlow::SetValue(float value)
 {
-  if ((value > m_upLimit)|| (value < m_loLimit))
-	return;
+ if ((value > m_upLimit)|| (value < m_loLimit))
+  return;
 
-  if (m_progress.GetPos()==((int)value))
-    return; //avoid flickering
+ if (m_progress.GetPos()==((int)value))
+  return; //avoid flickering
 
-  CString cs;
-  cs.Format(_T("%02d"),(int)value); 
-  m_progress.SetPos((int)value);
-  m_digits.SetWindowText(cs);
+ CString cs;
+ cs.Format(_T("%02d"),(int)value); 
+ m_progress.SetPos((int)value);
+ m_digits.SetWindowText(cs);
 }
 
 float CMIAirFlow::GetValue(void)
 {
-  return (float)m_progress.GetPos();
+ return (float)m_progress.GetPos();
 }
 	
 void CMIAirFlow::Show(bool show)
 { 
-  BOOL enable = ((show) ? TRUE : FALSE);
-  m_progress.ShowWindow(enable);
-  m_digits.ShowWindow(enable);
-  m_caption.ShowWindow(enable);
+ BOOL enable = ((show) ? TRUE : FALSE);
+ m_progress.ShowWindow(enable);
+ m_digits.ShowWindow(enable);
+ m_caption.ShowWindow(enable);
 }
 	
 void CMIAirFlow::Enable(bool enable)
 {
-  BOOL b_enable = ((enable) ? TRUE : FALSE);
-  m_progress.EnableWindow(b_enable);
-  m_digits.EnableWindow(b_enable); 
-  m_caption.EnableWindow(b_enable); 
-  m_progress.Invalidate();
+ BOOL b_enable = ((enable) ? TRUE : FALSE);
+ m_progress.EnableWindow(b_enable);
+ m_digits.EnableWindow(b_enable); 
+ m_caption.EnableWindow(b_enable); 
+ m_progress.Invalidate();
 
-  m_prev_enable = enable;
+ m_prev_enable = enable;
 }
 	
 bool CMIAirFlow::IsVisible(void)
 {
-  BOOL state = m_progress.IsWindowVisible();
-  return  ((state) ? TRUE : FALSE);
+ BOOL state = m_progress.IsWindowVisible();
+ return  ((state) ? TRUE : FALSE);
 }
 	
 bool CMIAirFlow::IsEnabled(void)
 {
-  BOOL state = m_progress.IsWindowEnabled();
-  return  ((state) ? TRUE : FALSE);
+ BOOL state = m_progress.IsWindowEnabled();
+ return  ((state) ? TRUE : FALSE);
 }	
 	
 void CMIAirFlow::SetLimits(float loLimit, float upLimit)
 {
-  m_loLimit = loLimit;
-  m_upLimit = upLimit;
-  m_progress.SetRange((int)loLimit,(int)upLimit);
+ m_loLimit = loLimit;
+ m_upLimit = upLimit;
+ m_progress.SetRange((int)loLimit,(int)upLimit);
 }
 	
 void CMIAirFlow::SetTicks(int number)
 {
-  //not used
+ //not used
 }
 //----------------------------------------------------
+
+void CMIAirFlow::Scale(float i_x_factor, float i_y_factor)
+{
+ CRect rect; 
+
+ rect = MIHelpers::GetChildWndRect(&m_progress);
+ MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_progress.MoveWindow(rect); 
+
+ rect = MIHelpers::GetChildWndRect(&m_digits);
+ MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_digits.MoveWindow(rect); 
+
+ rect = MIHelpers::GetChildWndRect(&m_caption);
+ MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_caption.MoveWindow(rect); 
+}

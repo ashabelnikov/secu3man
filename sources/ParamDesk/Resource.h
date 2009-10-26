@@ -178,4 +178,4 @@
 #define IDS_PD_KNOCK_END_KWND           3173
 #define IDS_PD_KNOCK_BPF_UNIT           3174
 #define IDS_PD_KNOCK_BPF_FREQ           3175
-
+#define IDD_PARAMETERS_DESK_FLOATING    3176

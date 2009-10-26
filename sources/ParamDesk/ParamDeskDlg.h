@@ -54,7 +54,7 @@ public:
 
 // Dialog Data
 	//{{AFX_DATA(CParamDeskDlg)
-	enum { IDD = IDD_PARAMETERS_DESK };
+	enum { IDD = IDD_PARAMETERS_DESK,  IDD_F = IDD_PARAMETERS_DESK_FLOATING};
 	CStatic	m_pd_title;
 	CTabController	m_tab_control;
 	CButton m_save_button;

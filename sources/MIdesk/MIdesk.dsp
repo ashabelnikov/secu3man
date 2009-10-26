@@ -194,6 +194,10 @@ SOURCE=.\MIDeskDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\MIHelpers.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Resource.h
 # End Source File
 # Begin Source File
@@ -218,11 +222,7 @@ SOURCE=.\res\MIdesk.rc2
 # PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\MeasInstrument.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MeasInstrument.h
+SOURCE=.\IMeasInstrument.h
 # End Source File
 # Begin Source File
 
