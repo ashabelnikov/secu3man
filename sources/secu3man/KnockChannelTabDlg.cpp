@@ -31,6 +31,8 @@ using namespace fastdelegate;
 
 #define TIMER_ID 0
 
+const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
+
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 , mp_RTChart(NULL)

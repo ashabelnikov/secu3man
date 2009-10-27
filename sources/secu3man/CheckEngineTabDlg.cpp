@@ -23,6 +23,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_ID 0
 
+const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;
+
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CCheckEngineTabDlg::IDD, pParent)
 , m_all_enabled(false)

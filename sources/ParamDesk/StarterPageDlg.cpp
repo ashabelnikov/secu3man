@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "StarterPageDlg.h"
 
 #ifdef _DEBUG
@@ -16,6 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CStarterPageDlg::IDD, pParent)

@@ -8,9 +8,8 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "RSDeskDlg.h"
 #include "resource.h"
-#include "io-core/NumericConv.h"
+#include "RSDeskDlg.h"
 #include "MIHelpers.h"
 
 #ifdef _DEBUG
@@ -21,6 +20,8 @@ static char THIS_FILE[] = __FILE__;
 
 BEGIN_MESSAGE_MAP(CRSDeskDlg, CDialog)
 END_MESSAGE_MAP()
+
+const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
 
 /////////////////////////////////////////////////////////////////////////////
 // CRSDeskDlg dialog

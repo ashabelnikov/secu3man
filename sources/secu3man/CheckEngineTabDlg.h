@@ -1,11 +1,11 @@
 
-#include "ui-core/TabDialog.h"
-#include "common/fastdelegate.h"
-#include "common\unicodesupport.h"
+#pragma once
+
 #include <map>
 #include <memory>
-
-#pragma once
+#include "common/fastdelegate.h"
+#include "common/unicodesupport.h"
+#include "ui-core/TabDialog.h"
 
 class CHeaderCtrlEx;
 
@@ -16,7 +16,7 @@ class CCheckEngineTabDlg : public CTabDialog
 
  public:
   CCheckEngineTabDlg(CWnd* pParent = NULL);   // standard constructor   
-  enum { IDD = IDD_CHECK_ENGINE };
+  static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
   void setOnRealTimeErrors(EventHandler OnFunction) {m_OnRealTimeErrors = OnFunction;}

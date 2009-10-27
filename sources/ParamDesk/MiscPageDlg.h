@@ -1,15 +1,13 @@
 
 #pragma once
 
+#include <vector>
+#include "common/unicodesupport.h"
+#include "io-core/SECU3IO.h"
+#include "ParamPageEvents.h"
 #include "ui-core/TabDialog.h"
-#include "resource.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/EditEx.h"
-#include "io-core/SECU3IO.h"
-
-#include <vector>
-#include "ParamPageEvents.h"
-#include "common/unicodesupport.h"
 
 class CMiscPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -27,7 +25,8 @@ public:
 
 	void FillUARTSpeedComboBox(const BRCType& i_baudrates);
 
-	enum { IDD = IDD_PD_MISC_PAGE };	
+	static const UINT IDD;	
+
 	CStatic     m_uart_speed_label;
 	CComboBox	m_uart_speed_combo;
 

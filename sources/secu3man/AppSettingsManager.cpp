@@ -8,7 +8,6 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "resource.h"
 #include "AppSettingsDlg.h"
 #include "AppSettingsManager.h"
 #include "AppSettingsModel.h"

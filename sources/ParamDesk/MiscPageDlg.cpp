@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MiscPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -17,6 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CMiscPageDlg::IDD, pParent)

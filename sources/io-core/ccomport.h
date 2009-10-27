@@ -9,10 +9,7 @@
 
 #include <windows.h>
 #include <string>
-#include "NumericConv.h"
-
 #include "common/unicodesupport.h"
-
 
 #ifndef _CCOMPORT_
 #define _CCOMPORT_

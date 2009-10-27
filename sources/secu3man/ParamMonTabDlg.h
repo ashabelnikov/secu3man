@@ -15,7 +15,7 @@ class CParamMonTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
   CParamMonTabDlg(CWnd* pParent = NULL);   // standard constructor   
-  enum { IDD = IDD_PARAMETERS_AND_MONITOR };
+  static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
   bool GetRawSensorsCheckState(void);

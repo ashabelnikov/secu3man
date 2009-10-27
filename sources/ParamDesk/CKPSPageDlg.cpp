@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "CKPSPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -19,6 +20,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CCKPSPageDlg::IDD, pParent)

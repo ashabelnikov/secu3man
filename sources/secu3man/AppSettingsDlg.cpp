@@ -18,6 +18,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CAppSettingsDlg::IDD = IDD_APP_SETTINGS;
+
 CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CAppSettingsDlg::IDD, pParent)
 , m_OnOk(NULL)

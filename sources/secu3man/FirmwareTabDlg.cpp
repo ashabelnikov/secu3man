@@ -152,11 +152,10 @@ void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
 
 //------------------------------------------------------------------------
 
-
+const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
 
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
-
 
 CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CFirmwareTabDlg::IDD, pParent)	

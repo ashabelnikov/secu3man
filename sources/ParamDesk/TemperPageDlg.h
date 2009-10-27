@@ -1,13 +1,11 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
-
 #include "ParamPageEvents.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/TabDialog.h"
 
 class CTemperPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -22,15 +20,13 @@ public:
 	void GetValues(SECU3IO::TemperPar* o_values);
     void SetValues(const SECU3IO::TemperPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CTemperPageDlg)
-	enum { IDD = IDD_PD_TEMPER_PAGE };
+	static const UINT IDD;
+
 	CButton	m_use_temp_sensor;
 	CSpinButtonCtrlEx	m_vent_on_threshold_spin;
 	CSpinButtonCtrlEx	m_vent_off_threshold_spin;
 	CEditEx	m_vent_off_threshold_edit;
 	CEditEx	m_vent_on_threshold_edit;
-	//}}AFX_DATA
 
 // Overrides
 	// ClassWizard generated virtual function overrides

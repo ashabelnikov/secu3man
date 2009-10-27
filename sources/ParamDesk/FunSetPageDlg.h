@@ -1,15 +1,13 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
-#include "io-core/SECU3IO.h"
-
 #include <vector>
-#include "ParamPageEvents.h"
 #include "common/unicodesupport.h"
+#include "io-core/SECU3IO.h"
+#include "ParamPageEvents.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/TabDialog.h"
 
 class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -27,9 +25,8 @@ public:
 	void GetValues(SECU3IO::FunSetPar* o_values);
     void SetValues(const SECU3IO::FunSetPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CFunSetPageDlg)
-	enum { IDD = IDD_PD_FUNSET_PAGE };
+	static const UINT IDD;
+
 	CComboBox	m_gas_maps_combo;
 	CComboBox	m_benzin_maps_combo;
 	CSpinButtonCtrlEx	m_press_swing_spin;
@@ -40,7 +37,6 @@ public:
 	CEditEx	m_map_curve_offset_edit;
 	CSpinButtonCtrlEx	m_map_curve_gradient_spin;
 	CEditEx	m_map_curve_gradient_edit;
-	//}}AFX_DATA
 
 // Overrides
 	// ClassWizard generated virtual function overrides

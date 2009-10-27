@@ -1,8 +1,6 @@
 
 #pragma once
 
-#include "resource.h"
-
 #include "io-core\SECU3IO.h"
 #include "IRSView.h"
 
@@ -13,7 +11,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CDialog, public IRSView
 {
  public:
   CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
-  enum { IDD = IDD_RAW_SENSORS_DESK };
+  static const UINT IDD;
     
   //--------interface implementation---------------
   virtual void Show(bool show);

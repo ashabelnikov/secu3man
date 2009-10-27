@@ -40,11 +40,6 @@ public:
    static bool   Bin32ToHex(const unsigned long i_dword,std::string& o_hex_number);
    static bool   Bin32ToHex(const signed long i_dword,std::string& o_hex_number);
 
-
-   //для правильного преобразования в целые числа (округление)
-   static int Round(float  x) { return (int)((x) + 0.5f - (float)((x) < 0)); }
-   static int Round(double x) { return (int)((x) + 0.5 - (double)((x) < 0)); }
-
 private:
 	static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);
 

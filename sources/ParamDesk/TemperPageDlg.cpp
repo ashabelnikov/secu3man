@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "TemperPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -17,6 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CTemperPageDlg::IDD = IDD_PD_TEMPER_PAGE;
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CTemperPageDlg::IDD, pParent)

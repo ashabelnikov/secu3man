@@ -1,16 +1,15 @@
 
 #pragma once
 
-#include "resource.h"
 #include <map>
 #include <vector>
 
-#include "ui-core/TabController.h"
-#include "ui-core/UpdatableDialog.h"
+#include "common/unicodesupport.h"
 #include "FunSetPageDlg.h"
 #include "IParamDeskView.h"
 #include "ui-core/ITabControllerEvent.h"
-#include "common/unicodesupport.h"
+#include "ui-core/TabController.h"
+#include "ui-core/UpdatableDialog.h"
 
 class CHotKeysToCmdRouter;
 
@@ -52,14 +51,12 @@ public:
 
     //-------------------------------------------------------------
 
-// Dialog Data
-	//{{AFX_DATA(CParamDeskDlg)
-	enum { IDD = IDD_PARAMETERS_DESK,  IDD_F = IDD_PARAMETERS_DESK_FLOATING};
+    static UINT IDD;
+    static UINT IDD_F;
+
 	CStatic	m_pd_title;
 	CTabController	m_tab_control;
 	CButton m_save_button;
-	//}}AFX_DATA
-
 
 // Overrides
 	// ClassWizard generated virtual function overrides

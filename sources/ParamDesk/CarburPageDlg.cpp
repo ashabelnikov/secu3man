@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "CarburPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -17,6 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CCarburPageDlg::IDD = IDD_PD_CARBUR_PAGE;
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CCarburPageDlg::IDD, pParent)

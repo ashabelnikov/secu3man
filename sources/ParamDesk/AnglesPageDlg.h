@@ -1,14 +1,11 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
 #include "ParamPageEvents.h"
-
+#include "ui-core/TabDialog.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/EditEx.h"
 
 class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -23,9 +20,8 @@ public:
 	void GetValues(SECU3IO::AnglesPar* o_values);
     void SetValues(const SECU3IO::AnglesPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CAnglesPageDlg)
-	enum { IDD = IDD_PD_ANGLES_PAGE };
+	static const UINT IDD;
+
 	CSpinButtonCtrlEx	m_min_angle_spin;
 	CSpinButtonCtrlEx	m_max_angle_spin;
 	CSpinButtonCtrlEx	m_correction_spin;
@@ -35,9 +31,7 @@ public:
 	CEditEx	m_max_angle_edit;
 	CEditEx	m_correction_edit;
 	CEditEx	m_decrease_spead_edit;
-	CEditEx	m_increase_spead_edit;
-	
-	//}}AFX_DATA
+	CEditEx	m_increase_spead_edit;	
 
 // Overrides
 	// ClassWizard generated virtual function overrides

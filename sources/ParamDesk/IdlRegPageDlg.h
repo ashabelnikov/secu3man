@@ -1,13 +1,11 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
-
 #include "ParamPageEvents.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/TabDialog.h"
 
 class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -22,9 +20,8 @@ public:
 	void GetValues(SECU3IO::IdlRegPar* o_values);
     void SetValues(const SECU3IO::IdlRegPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CIdlRegPageDlg)
-	enum { IDD = IDD_PD_IDLREG_PAGE };
+	static const UINT IDD;
+
 	CButton	m_use_regulator;
 	CSpinButtonCtrlEx	m_goal_rpm_spin;
 	CEditEx	m_goal_rpm_edit;
@@ -37,8 +34,7 @@ public:
 	CSpinButtonCtrlEx	m_restriction_min_spin;
 	CEditEx	m_restriction_min_edit;
 	CSpinButtonCtrlEx	m_restriction_max_spin;
-	CEditEx	m_restriction_max_edit;
-	//}}AFX_DATA
+	CEditEx	m_restriction_max_edit;	
 
 // Overrides
 	// ClassWizard generated virtual function overrides

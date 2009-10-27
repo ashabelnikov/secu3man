@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
+#include "common/fastdelegate.h"
 #include "ui-core/TabDialog.h"
-#include "common\fastdelegate.h"
 
 class CChartPointsSerie;
 class CChartLineSerie;
@@ -19,7 +19,7 @@ class CKnockChannelTabDlg : public CTabDialog
 
  public:
   CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor  
-  enum { IDD = IDD_KNOCK_CHANNEL };
+  static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 	
   void setOnSaveParameters(EventHandler OnFunction);

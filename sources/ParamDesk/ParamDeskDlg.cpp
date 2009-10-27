@@ -11,6 +11,7 @@
 
 #include "stdafx.h"
 #include <map>
+#include "resource.h"
 #include "ParamDeskDlg.h"
 
 #include "StarterPageDlg.h" 
@@ -45,6 +46,8 @@ using namespace fastdelegate;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
+UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
+UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
 
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
 : CUpdatableDialog(CParamDeskDlg::IDD, pParent)

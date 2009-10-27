@@ -1,13 +1,11 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
 #include "io-core/SECU3IO.h"
-#include "propgrid/propertygrid.h"
-#include "propgrid/custom/CustValSelector.h"
-
 #include "ParamPageEvents.h"
+#include "propgrid/custom/CustValSelector.h"
+#include "propgrid/propertygrid.h"
+#include "ui-core/TabDialog.h"
 
 class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -23,10 +21,7 @@ public:
 	void GetValues(SECU3IO::KnockPar* o_values);
     void SetValues(const SECU3IO::KnockPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CKnockPageDlg)
-	enum { IDD = IDD_PD_KNOCK_PAGE };
-	//}}AFX_DATA
+	static const UINT IDD;
 
 // Overrides
 	// ClassWizard generated virtual function overrides

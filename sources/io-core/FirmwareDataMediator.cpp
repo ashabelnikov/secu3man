@@ -9,13 +9,13 @@
 
 #include "stdafx.h"
 #include "FirmwareDataMediator.h"
-#include "CRC16.h"
 #include "BootLoader.h"
+#include "CRC16.h"
+#include "ControlApp.h"    //should be removed - it is nearly unnecessary!
+#include "common\MathHelpers.h"
+#include "FirmwareMapsDataHolder.h"
 #include "SECU3IO.h"
 #include "ufcodes.h"
-#include "ControlApp.h"    //should be removed - it is nearly unnecessary!
-#include "FirmwareMapsDataHolder.h"
-
 
 typedef unsigned short _uint;
 typedef signed short   _int;
@@ -23,7 +23,6 @@ typedef unsigned short _ushort;
 typedef signed long    _long;
 typedef signed char    _char;
 typedef unsigned char  _uchar;
-
 
 //этот файл содержит платформенно ориентированные фрагменты кода
 #pragma pack(1)
@@ -251,7 +250,7 @@ void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
    
   
   for (int i = 0; i < F_STR_POINTS; i++ )
-	p_maps[i_index].f_str[i] = CNumericConv::Round((i_values[i]*2.0f));
+	p_maps[i_index].f_str[i] = MathHelpers::Round((i_values[i]*2.0f));
 }
 
 void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_original /* = false */)
@@ -287,7 +286,7 @@ void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
    
   
   for (int i = 0; i < F_IDL_POINTS; i++ )
-	p_maps[i_index].f_idl[i] = CNumericConv::Round((i_values[i]*2.0f));
+	p_maps[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*2.0f));
 }
 
 std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
@@ -414,7 +413,7 @@ void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
   for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
   {
     _char *p = &(p_maps[i_index].f_wrk[0][0]);
-	*(p + i) = CNumericConv::Round((i_values[i]*2.0f));
+	*(p + i) = MathHelpers::Round((i_values[i]*2.0f));
   }	
 }
 
@@ -450,7 +449,7 @@ void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
   p_maps = (F_data*)(p_bytes + TABLES_START); 
    
   for (int i = 0; i < F_TMP_POINTS; i++ )
-	p_maps[i_index].f_tmp[i] = CNumericConv::Round((i_values[i]*2.0f));
+	p_maps[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*2.0f));
 }
 
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_values)
@@ -470,8 +469,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		{
         TemperPar* p_in = (TemperPar*)i_values; 
 	    p_params->tmp_use  = p_in->tmp_use;
-	    p_params->vent_on  = CNumericConv::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-        p_params->vent_off = CNumericConv::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+	    p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+        p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
 		}      
        break;
 	case CARBUR_PAR:
@@ -480,10 +479,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		p_params->ephh_hit    = p_in->ephh_hit;
         p_params->ephh_lot    = p_in->ephh_lot;
 		p_params->carb_invers = p_in->carb_invers;
-		p_params->epm_on_threshold = CNumericConv::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->epm_on_threshold = MathHelpers::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
 		p_params->ephh_hit_g  = p_in->ephh_hit_g;
         p_params->ephh_lot_g  = p_in->ephh_lot_g;
-		p_params->shutoff_delay = CNumericConv::Round(p_in->shutoff_delay * 100); //переводим в десятки мс
+		p_params->shutoff_delay = MathHelpers::Round(p_in->shutoff_delay * 100); //переводим в десятки мс
 		}
       break;
 	case IDLREG_PAR: 
@@ -492,20 +491,20 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 	    p_params->idl_regul  = p_in->idl_regul;
 		p_params->idling_rpm = p_in->idling_rpm;
 		p_params->MINEFR     = p_in->MINEFR;
-		p_params->ifac1      = CNumericConv::Round(p_in->ifac1 * ANGLE_MULTIPLAYER);
-		p_params->ifac2      = CNumericConv::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);
-		p_params->idlreg_min_angle = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
-		p_params->idlreg_max_angle = CNumericConv::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
+		p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLAYER);
+		p_params->ifac2      = MathHelpers::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);
+		p_params->idlreg_min_angle = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
+		p_params->idlreg_max_angle = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
 		}
       break;
 	case ANGLES_PAR:
 		{
         AnglesPar* p_in = (AnglesPar*)i_values;
-		p_params->angle_corr = CNumericConv::Round(p_in->angle_corr * ANGLE_MULTIPLAYER); 
-        p_params->max_angle  = CNumericConv::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
-		p_params->min_angle  = CNumericConv::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
-		p_params->angle_dec_spead = CNumericConv::Round(p_in->dec_spead * ANGLE_MULTIPLAYER);
-		p_params->angle_inc_spead = CNumericConv::Round(p_in->inc_spead * ANGLE_MULTIPLAYER);
+		p_params->angle_corr = MathHelpers::Round(p_in->angle_corr * ANGLE_MULTIPLAYER); 
+        p_params->max_angle  = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
+		p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
+		p_params->angle_dec_spead = MathHelpers::Round(p_in->dec_spead * ANGLE_MULTIPLAYER);
+		p_params->angle_inc_spead = MathHelpers::Round(p_in->inc_spead * ANGLE_MULTIPLAYER);
 		}
       break;
 	case FUNSET_PAR:
@@ -513,10 +512,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		FunSetPar* p_in = (FunSetPar*)i_values;
 		p_params->fn_benzin = p_in->fn_benzin;
 		p_params->fn_gas    = p_in->fn_gas;
-		p_params->map_lower_pressure = CNumericConv::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-		p_params->map_upper_pressure = CNumericConv::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-		p_params->map_curve_offset = CNumericConv::Round(p_in->map_curve_offset / ADC_DISCRETE);
-		p_params->map_curve_gradient = CNumericConv::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE);
+		p_params->map_lower_pressure = MathHelpers::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->map_upper_pressure = MathHelpers::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+		p_params->map_curve_offset = MathHelpers::Round(p_in->map_curve_offset / ADC_DISCRETE);
+		p_params->map_curve_gradient = MathHelpers::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE);
 		}
       break;
 	case STARTR_PAR:
@@ -529,22 +528,22 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 	case ADCCOR_PAR:
 		{
         ADCCompenPar* p_in = (ADCCompenPar*)i_values;
-        p_params->map_adc_factor      = CNumericConv::Round(p_in->map_adc_factor * 16384);
+        p_params->map_adc_factor      = MathHelpers::Round(p_in->map_adc_factor * 16384);
         //-------------------------------------------------------------------------
-        signed long map_correction_d  = CNumericConv::Round((-p_in->map_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-        p_params->map_adc_correction  = CNumericConv::Round(16384 * (0.5f - map_correction_d * p_in->map_adc_factor));		
-        //-------------------------------------------------------------------------
-
-		p_params->temp_adc_factor     = CNumericConv::Round(p_in->temp_adc_factor * 16384);
-        //-------------------------------------------------------------------------
-        signed long temp_correction_d = CNumericConv::Round((-p_in->temp_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-        p_params->temp_adc_correction = CNumericConv::Round(16384 * (0.5f - temp_correction_d * p_in->temp_adc_factor));
+        signed long map_correction_d  = MathHelpers::Round((-p_in->map_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->map_adc_correction  = MathHelpers::Round(16384 * (0.5f - map_correction_d * p_in->map_adc_factor));		
         //-------------------------------------------------------------------------
 
-        p_params->ubat_adc_factor     = CNumericConv::Round(p_in->ubat_adc_factor * 16384);
+		p_params->temp_adc_factor     = MathHelpers::Round(p_in->temp_adc_factor * 16384);
         //-------------------------------------------------------------------------
-        signed long ubat_correction_d = CNumericConv::Round((-p_in->ubat_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
-        p_params->ubat_adc_correction = CNumericConv::Round(16384 * (0.5f - ubat_correction_d * p_in->ubat_adc_factor));
+        signed long temp_correction_d = MathHelpers::Round((-p_in->temp_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * p_in->temp_adc_factor));
+        //-------------------------------------------------------------------------
+
+        p_params->ubat_adc_factor     = MathHelpers::Round(p_in->ubat_adc_factor * 16384);
+        //-------------------------------------------------------------------------
+        signed long ubat_correction_d = MathHelpers::Round((-p_in->ubat_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
+        p_params->ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * p_in->ubat_adc_factor));
         //-------------------------------------------------------------------------
 		}
       break;
@@ -560,10 +559,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 		{
         KnockPar* p_in = (KnockPar*)i_values; 
 		p_params->knock_use_knock_channel = p_in->knock_use_knock_channel;
-		p_params->knock_k_wnd_begin_angle = CNumericConv::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLAYER);
-		p_params->knock_k_wnd_end_angle = CNumericConv::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLAYER);
+		p_params->knock_k_wnd_begin_angle = MathHelpers::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLAYER);
+		p_params->knock_k_wnd_end_angle = MathHelpers::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLAYER);
 		ASSERT(p_in->knock_bpf_frequency >= 0.0f);
-		p_params->knock_bpf_frequency = CNumericConv::Round(p_in->knock_bpf_frequency);		
+		p_params->knock_bpf_frequency = MathHelpers::Round(p_in->knock_bpf_frequency);		
 		}
       break;
 	case MISCEL_PAR:
@@ -789,7 +788,7 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
   for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
   {
    ASSERT(i_values[i] >= 0.0f);
-   p_fw_data->attenuator_table[i] = (_uchar)CNumericConv::Round(i_values[i]);
+   p_fw_data->attenuator_table[i] = (_uchar)MathHelpers::Round(i_values[i]);
   }
 }
 

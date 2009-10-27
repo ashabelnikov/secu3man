@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "IdlRegPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -17,6 +18,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CIdlRegPageDlg::IDD, pParent)

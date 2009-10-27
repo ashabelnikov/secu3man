@@ -12,13 +12,13 @@
 #include "LogPlayerTabDlg.h"
 #include "LogPlayerTabController.h"
 #include "common/FastDelegate.h"
-#include "io-core/ufcodes.h"
+#include "common/MathHelpers.h"
 #include "CommunicationManager.h"
-#include "StatusBarManager.h"
+#include "io-core/ufcodes.h"
 #include "io-core/LogReader.h"
-#include "io-core/NumericConv.h"
 #include "ISettingsData.h"
 #include "MIDesk/MIDeskDlg.h"
+#include "StatusBarManager.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -409,7 +409,7 @@ void CLogPlayerTabController::_UpdateTimerPeriod(bool i_set_timer)
 {
  //Вычисляем средний период. Учитываем фактор времени
  unsigned long period = _GetAveragedPeriod();
- period = CNumericConv::Round(((float)period) * m_time_factors[m_current_time_factor].second); 
+ period = MathHelpers::Round(((float)period) * m_time_factors[m_current_time_factor].second); 
 
  //перезапускаем таймер если нужно. Если новый период отличается от старого
  //меньше чем на 10%, то не перезапускаем таймер 

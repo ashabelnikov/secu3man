@@ -10,9 +10,8 @@
 #include <windows.h>
 #include <vector>
 #include <string>
-#include "types.h"
-#include "NumericConv.h"
 #include "SECU3IO.h"
+#include "types.h"
 
 #ifndef _CONTROLAPP_
 #define _CONTROLAPP_

@@ -1,10 +1,9 @@
 
 #pragma once
 
-#include "ui-core/editex.h"
-#include "ui-core/spinbuttonctrlex.h"
-#include "IAppSettingsDlg.h"
 #include "common/unicodesupport.h"
+#include "IAppSettingsDlg.h"
+#include "ui-core/editex.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 
@@ -12,7 +11,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
 {
  public:
   CAppSettingsDlg(CWnd* pParent = NULL);   // standard constructor
-  enum { IDD = IDD_APP_SETTINGS };
+  static const UINT IDD;
 
  //////////////////Interface//////////////////////////
   virtual void FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates);

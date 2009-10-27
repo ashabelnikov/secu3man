@@ -12,8 +12,9 @@
 #include <windows.h>
 #include "ControlApp.h"
 #include "ccomport.h"
+#include "common\MathHelpers.h"
+#include "NumericConv.h"
 #include "ufcodes.h"
-
 
 using namespace SECU3IO;
 
@@ -1090,14 +1091,14 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
    
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
   timeouts.ReadIntervalTimeout = 0; 
-  timeouts.ReadTotalTimeoutMultiplier = CNumericConv::Round(ms_need_for_one_byte * 2);
+  timeouts.ReadTotalTimeoutMultiplier = MathHelpers::Round(ms_need_for_one_byte * 2);
   timeouts.ReadTotalTimeoutConstant = 1; 
 
   timeouts.WriteTotalTimeoutConstant = 500;
-  timeouts.WriteTotalTimeoutMultiplier = CNumericConv::Round(ms_need_for_one_byte * 5);
+  timeouts.WriteTotalTimeoutMultiplier = MathHelpers::Round(ms_need_for_one_byte * 5);
   m_p_port->SetTimeouts(&timeouts);	
 
-  Sleep(CNumericConv::Round(ms_need_for_one_byte*5));
+  Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
   m_force_notify_about_connection = true;
   SwitchOnThread(true);
   SetPacketsTimer(m_dat_packet_timeout);	  
@@ -1105,7 +1106,7 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
  else
  { //остановить работу
   SwitchOnThread(false);
-  Sleep(CNumericConv::Round(ms_need_for_one_byte*5));
+  Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
  
   //без этой проверки под Windows 98 возникает "Abnormal program termination"
   //Странное поведение CancelWaitableTimer() с нулевым хэндлом???
@@ -1244,11 +1245,11 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  CNumericConv::Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
- int epm_on_threshold = CNumericConv::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int epm_on_threshold = MathHelpers::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(epm_on_threshold,m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
- unsigned char shutoff_delay = CNumericConv::Round(packet_data->shutoff_delay * 100.0f);
+ unsigned char shutoff_delay = MathHelpers::Round(packet_data->shutoff_delay * 100.0f);
  CNumericConv::Bin8ToHex(shutoff_delay,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
@@ -1258,18 +1259,18 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
  CNumericConv::Bin4ToHex(packet_data->idl_regul,m_outgoing_packet);
 
- int ifac1 =  CNumericConv::Round((packet_data->ifac1 * m_angle_multiplier));
+ int ifac1 =  MathHelpers::Round((packet_data->ifac1 * m_angle_multiplier));
  CNumericConv::Bin16ToHex(ifac1,m_outgoing_packet);
 
- int ifac2 = CNumericConv::Round((packet_data->ifac2 * m_angle_multiplier));
+ int ifac2 = MathHelpers::Round((packet_data->ifac2 * m_angle_multiplier));
  CNumericConv::Bin16ToHex(ifac2,m_outgoing_packet);
 
  CNumericConv::Bin16ToHex(packet_data->MINEFR,m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->idling_rpm,m_outgoing_packet);
 
- int min_angle = CNumericConv::Round((packet_data->min_angle * m_angle_multiplier));
+ int min_angle = MathHelpers::Round((packet_data->min_angle * m_angle_multiplier));
  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
- int max_angle = CNumericConv::Round((packet_data->max_angle * m_angle_multiplier));
+ int max_angle = MathHelpers::Round((packet_data->max_angle * m_angle_multiplier));
  CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
 
  m_outgoing_packet+= '\r';
@@ -1287,9 +1288,9 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 {
  CNumericConv::Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
- int vent_on = CNumericConv::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(vent_on,m_outgoing_packet);
- int vent_off = CNumericConv::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(vent_off,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
@@ -1297,15 +1298,15 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
 {
- int max_angle = CNumericConv::Round(packet_data->max_angle * m_angle_multiplier);
+ int max_angle = MathHelpers::Round(packet_data->max_angle * m_angle_multiplier);
  CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
- int min_angle = CNumericConv::Round(packet_data->min_angle * m_angle_multiplier);
+ int min_angle = MathHelpers::Round(packet_data->min_angle * m_angle_multiplier);
  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
- int angle_corr = CNumericConv::Round(packet_data->angle_corr * m_angle_multiplier);
+ int angle_corr = MathHelpers::Round(packet_data->angle_corr * m_angle_multiplier);
  CNumericConv::Bin16ToHex(angle_corr,m_outgoing_packet);
- int dec_spead = CNumericConv::Round(packet_data->dec_spead * m_angle_multiplier);
+ int dec_spead = MathHelpers::Round(packet_data->dec_spead * m_angle_multiplier);
  CNumericConv::Bin16ToHex(dec_spead,m_outgoing_packet);
- int inc_spead = CNumericConv::Round(packet_data->inc_spead * m_angle_multiplier);
+ int inc_spead = MathHelpers::Round(packet_data->inc_spead * m_angle_multiplier);
  CNumericConv::Bin16ToHex(inc_spead,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
@@ -1315,13 +1316,13 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 {
  CNumericConv::Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
- unsigned int map_lower_pressure = CNumericConv::Round(packet_data->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ unsigned int map_lower_pressure = MathHelpers::Round(packet_data->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(map_lower_pressure,m_outgoing_packet);
- int map_upper_pressure = CNumericConv::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int map_upper_pressure = MathHelpers::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(map_upper_pressure,m_outgoing_packet);
- int map_curve_offset = CNumericConv::Round(packet_data->map_curve_offset / m_adc_discrete);
+ int map_curve_offset = MathHelpers::Round(packet_data->map_curve_offset / m_adc_discrete);
  CNumericConv::Bin16ToHex(map_curve_offset,m_outgoing_packet);
- int map_curve_gradient = CNumericConv::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete );
+ int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete );
  CNumericConv::Bin16ToHex(map_curve_gradient,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
@@ -1329,22 +1330,22 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
 {
- signed int map_adc_factor = CNumericConv::Round(packet_data->map_adc_factor * 16384);
+ signed int map_adc_factor = MathHelpers::Round(packet_data->map_adc_factor * 16384);
  CNumericConv::Bin16ToHex(map_adc_factor,m_outgoing_packet);
- signed long map_correction_d = CNumericConv::Round((-packet_data->map_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long map_adc_correction = CNumericConv::Round(16384 * (0.5f - map_correction_d * packet_data->map_adc_factor));
+ signed long map_correction_d = MathHelpers::Round((-packet_data->map_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long map_adc_correction = MathHelpers::Round(16384 * (0.5f - map_correction_d * packet_data->map_adc_factor));
  CNumericConv::Bin32ToHex(map_adc_correction,m_outgoing_packet);
 
- signed int ubat_adc_factor = CNumericConv::Round(packet_data->ubat_adc_factor * 16384);
+ signed int ubat_adc_factor = MathHelpers::Round(packet_data->ubat_adc_factor * 16384);
  CNumericConv::Bin16ToHex(ubat_adc_factor,m_outgoing_packet);
- signed long ubat_correction_d = CNumericConv::Round((-packet_data->ubat_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long ubat_adc_correction = CNumericConv::Round(16384 * (0.5f - ubat_correction_d * packet_data->ubat_adc_factor));
+ signed long ubat_correction_d = MathHelpers::Round((-packet_data->ubat_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * packet_data->ubat_adc_factor));
  CNumericConv::Bin32ToHex(ubat_adc_correction,m_outgoing_packet);
 
- signed int temp_adc_factor = CNumericConv::Round(packet_data->temp_adc_factor * 16384);
+ signed int temp_adc_factor = MathHelpers::Round(packet_data->temp_adc_factor * 16384);
  CNumericConv::Bin16ToHex(temp_adc_factor,m_outgoing_packet);
- signed long temp_correction_d = CNumericConv::Round((-packet_data->temp_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
- signed long temp_adc_correction = CNumericConv::Round(16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor));
+ signed long temp_correction_d = MathHelpers::Round((-packet_data->temp_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor));
  CNumericConv::Bin32ToHex(temp_adc_correction,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
@@ -1364,9 +1365,9 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  CNumericConv::Bin4ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
  unsigned char knock_bpf_frequency = (unsigned char)packet_data->knock_bpf_frequency;
  CNumericConv::Bin8ToHex(knock_bpf_frequency,m_outgoing_packet);
- int knock_k_wnd_begin_angle = CNumericConv::Round(packet_data->knock_k_wnd_begin_angle * m_angle_multiplier);
+ int knock_k_wnd_begin_angle = MathHelpers::Round(packet_data->knock_k_wnd_begin_angle * m_angle_multiplier);
  CNumericConv::Bin16ToHex(knock_k_wnd_begin_angle,m_outgoing_packet);
- int knock_k_wnd_end_angle = CNumericConv::Round(packet_data->knock_k_wnd_end_angle * m_angle_multiplier);
+ int knock_k_wnd_end_angle = MathHelpers::Round(packet_data->knock_k_wnd_end_angle * m_angle_multiplier);
  CNumericConv::Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }

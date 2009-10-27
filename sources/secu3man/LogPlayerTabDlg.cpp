@@ -9,11 +9,10 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include <limits>
 #include "LogPlayerTabDlg.h"
 #include "common/FastDelegate.h"
 #include "MIDesk/MIDeskDlg.h"
-
-#include <limits>
 
 using namespace std;
 
@@ -26,6 +25,8 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 using namespace fastdelegate;
+
+const UINT CLogPlayerTabDlg::IDD = IDD_LOG_PLAYER;
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CLogPlayerTabDlg::IDD, pParent)

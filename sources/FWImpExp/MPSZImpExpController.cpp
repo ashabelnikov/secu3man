@@ -8,13 +8,13 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MPSZImpExpController.h"
 #include "MapImpExpDlg.h"
 #include "common/FastDelegate.h"
 #include "MPSZFileDataIO.h"
 
 using namespace fastdelegate;
-
 
 MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
 : mp_view(NULL)

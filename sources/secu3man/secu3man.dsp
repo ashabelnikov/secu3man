@@ -378,10 +378,6 @@ SOURCE=.\MainTabManager.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\common\ObjectTimer.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\ParamMonTabController.h
 # End Source File
 # Begin Source File

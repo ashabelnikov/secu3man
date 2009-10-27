@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include "resource.h"
 #include "common/ObjectTimer.h"
 
 #include "MITachometer.h"
@@ -24,7 +23,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CDialog, public IMIView
 {
  public:
   CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
-  enum { IDD = IDD_MEAS_INSTRUMENT_DESK };
+  static const UINT IDD;
 
   //--------interface implementation---------------
   virtual void Show(bool show);

@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "ui-core/TabDialog.h"
 #include "common/FastDelegate.h"
+#include "ui-core/TabDialog.h"
 
 class CMIDeskDlg;
 
@@ -16,7 +16,7 @@ class CLogPlayerTabDlg : public CTabDialog
 
  public:
   CLogPlayerTabDlg(CWnd* pParent = NULL);  
-  enum { IDD = IDD_LOG_PLAYER };
+  static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
   //Time factor combo box

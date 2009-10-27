@@ -11,14 +11,15 @@
 #include "resource.h"
 #include <math.h>
 #include <numeric>
-#include "KnockChannelTabController.h"
 #include "common\fastdelegate.h"
-#include "KnockChannelTabDlg.h"
+#include "common\MathHelpers.h"
 #include "CommunicationManager.h"
-#include "StatusBarManager.h"
 #include "FirmwareTabController.h"
-#include "TabControllersCommunicator.h"
+#include "KnockChannelTabController.h"
+#include "KnockChannelTabDlg.h"
 #include "ParamDesk/KnockPageDlg.h"
+#include "StatusBarManager.h"
+#include "TabControllersCommunicator.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -275,7 +276,7 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
  //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
  //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом. 
- int index_unchecked = CNumericConv::Round((p_packet->frequen - 200.f) / 60.f);
+ int index_unchecked = MathHelpers::Round((p_packet->frequen - 200.f) / 60.f);
  if (index_unchecked < 0)
   index_unchecked = 0;	 
  if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))

@@ -9,10 +9,10 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "ui-core\AnalogMeterCtrl.h"
 #include "MIDeskDlg.h"
-#include "io-core/NumericConv.h"
+#include "common\MathHelpers.h"
 #include "MIHelpers.h"
+#include "ui-core\AnalogMeterCtrl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -23,6 +23,8 @@ static char THIS_FILE[] = __FILE__;
 BEGIN_MESSAGE_MAP(CMIDeskDlg, CDialog)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
+
+const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog
@@ -125,7 +127,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
 
 void CMIDeskDlg::GetValues(SensorDat* o_values)
 {
- o_values->frequen = CNumericConv::Round(m_tachometer.GetValue());
+ o_values->frequen = MathHelpers::Round(m_tachometer.GetValue());
  o_values->pressure = m_pressure.GetValue();
  o_values->voltage = m_voltmeter.GetValue();
  o_values->adv_angle = m_dwell_angle.GetValue();

@@ -1,11 +1,9 @@
 
 #pragma once
 
-#include "resource.h"
-#include "common/FastDelegate.h"
 #include <vector>
+#include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
-
 
 //типы флажков определ€ющих какие данные перемещать
 enum EFWDFlags
@@ -16,7 +14,6 @@ enum EFWDFlags
   FLAG_TEMP_MAP,
   FLAG_NR_OF_FLAGS
 };
-
 
 //"”льтра-тонкое"  представление ;-)
 class CMapImpExpDlg : public CDialog
@@ -56,16 +53,15 @@ public:
 	void EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable);
 	void SetExchangeButtonCaption(const _TSTRING& i_text);
 
-    // Dialog Data
-	//{{AFX_DATA(CMapImpExpDlg)
-	enum { IDD = IDD_MAP_IMPEXP };
+	static const UINT IDD;
+
 	CButton	m_exchange_button;
 	CListCtrl	m_other_fwd_list;
 	CListCtrl	m_current_fwd_list;
 	CString	m_current_fwd_title_string;
 	CString	m_other_fwd_title_string;	
-	//}}AFX_DATA
-	BOOL    m_fwd_flags[FLAG_NR_OF_FLAGS];
+
+    BOOL    m_fwd_flags[FLAG_NR_OF_FLAGS];
 	CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];
 
 

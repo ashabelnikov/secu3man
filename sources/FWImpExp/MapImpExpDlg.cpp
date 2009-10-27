@@ -8,9 +8,9 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "MapImpExpDlg.h"
-
+#include "resource.h"
 #include "io-core/SECU3IO.h"
+#include "MapImpExpDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -18,9 +18,10 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
+
 /////////////////////////////////////////////////////////////////////////////
 // CMapImpExpDlg dialog
-
 
 CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
 	: CDialog(CMapImpExpDlg::IDD, pParent)

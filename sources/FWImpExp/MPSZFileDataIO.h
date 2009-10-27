@@ -9,8 +9,8 @@
 
 #pragma once
 
-#include "common/unicodesupport.h"
 #include <vector>
+#include "common/unicodesupport.h"
 
 //Абстракции над данными таблиц MPSZ
 

@@ -8,6 +8,7 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include "resource.h"
 #include "AnglesPageDlg.h"
 
 #ifdef _DEBUG
@@ -16,6 +17,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
 
 CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
 	: CTabDialog(CAnglesPageDlg::IDD, pParent)

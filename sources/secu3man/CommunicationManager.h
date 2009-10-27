@@ -1,13 +1,13 @@
 
 #pragma once
 
-#include "io-core/ccomport.h"
-#include "io-core/BootLoader.h"
-#include "io-core/ControlApp.h"
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
-#include "io-core/controlappadapter.h"
+#include "io-core/BootLoader.h"
 #include "io-core/bootloaderadapter.h"
+#include "io-core/ccomport.h"
+#include "io-core/ControlApp.h"
+#include "io-core/controlappadapter.h"
 
 class ISettingsData;
 

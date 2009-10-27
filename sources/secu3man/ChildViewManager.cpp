@@ -8,10 +8,10 @@
  ****************************************************************/
 
 #include "stdafx.h"
-#include "ChildViewManager.h"
-#include "MainTabManager.h"
 #include "ChildView.h"
+#include "ChildViewManager.h"
 #include "MainFrame.h"
+#include "MainTabManager.h"
 
 CChildViewManager::CChildViewManager()
 : mp_wndView(new CChildView)

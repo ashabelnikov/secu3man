@@ -1,11 +1,10 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/TabDialog.h"
 
 #include <vector>
 #include "ParamPageEvents.h"
@@ -23,7 +22,7 @@ public:
 	void GetValues(SECU3IO::CKPSPar* o_values);
     void SetValues(const SECU3IO::CKPSPar* i_values);
 
-	enum { IDD = IDD_PD_CKPS_PAGE };
+	static const UINT IDD;
 
 protected:
 	virtual void DoDataExchange(CDataExchange* pDX);

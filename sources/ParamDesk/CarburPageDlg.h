@@ -1,12 +1,11 @@
 
 #pragma once
 
-#include "ui-core/TabDialog.h"
-#include "resource.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
 #include "ParamPageEvents.h"
+#include "ui-core/TabDialog.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/EditEx.h"
 
 class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -21,9 +20,8 @@ public:
 	void GetValues(SECU3IO::CarburPar* o_values);
     void SetValues(const SECU3IO::CarburPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CCarburPageDlg)
-	enum { IDD = IDD_PD_CARBUR_PAGE };
+	static const UINT IDD;
+
 	CButton	m_inverse_throttle_switch;
 	CSpinButtonCtrlEx	m_shutoff_lo_threshold_spin;
 	CSpinButtonCtrlEx	m_shutoff_hi_threshold_spin;
@@ -36,8 +34,7 @@ public:
 	CEditEx	m_epm_on_threshold_edit;
 	CEditEx	m_shutoff_lo_threshold_edit_g;
 	CEditEx	m_shutoff_hi_threshold_edit_g;
-	CEditEx	m_shutoff_delay_edit;
-	//}}AFX_DATA
+	CEditEx	m_shutoff_delay_edit;	
 
 // Overrides
 	// ClassWizard generated virtual function overrides

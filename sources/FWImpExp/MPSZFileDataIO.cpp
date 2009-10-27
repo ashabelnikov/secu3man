@@ -10,9 +10,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MPSZFileDataIO.h"
-#include "io-core/NumericConv.h"  //note: for Round() and only!
+#include "common\MathHelpers.h"
 #include <vector>
-
 
 /////////////////////////////////////////////////////////////////////////////////////
 //фабрика объектов для типов файлов таблиц MPSZ
@@ -221,14 +220,14 @@ struct MPXStructure
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
   for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
-    p_raws->idle_and_start[i][j] = MAKEWORD(0,(104 - CNumericConv::Round(ip_data->maps[i].f_str[j] * 2.0f)));
+    p_raws->idle_and_start[i][j] = MAKEWORD(0,(104 - MathHelpers::Round(ip_data->maps[i].f_str[j] * 2.0f)));
  } 
 
  //засовываем карту ХХ (при этом не затираем пусковую карту)
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
   for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
-	p_raws->idle_and_start[i][j] = MAKEWORD((56 - CNumericConv::Round(ip_data->maps[i].f_idl[j] * 2.0f)), HIBYTE(p_raws->idle_and_start[i][j]));    
+	p_raws->idle_and_start[i][j] = MAKEWORD((56 - MathHelpers::Round(ip_data->maps[i].f_idl[j] * 2.0f)), HIBYTE(p_raws->idle_and_start[i][j]));    
  } 
 
  //засовываем рабочую карту
@@ -238,7 +237,7 @@ struct MPXStructure
    for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
    {
      for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-	   p_raws->work[i][j][f] = MAKEWORD(0,(104 - CNumericConv::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f)));
+	   p_raws->work[i][j][f] = MAKEWORD(0,(104 - MathHelpers::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f)));
    }
  } 
 }
@@ -312,12 +311,12 @@ struct MPZStructure
  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
  {
   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
-	p_raws->work[j][f] = CNumericConv::Round((ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
+	p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
  }
   
  //засовываем пусковую карту 
  for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
-   p_raws->str[j] = CNumericConv::Round((ip_data->maps[i].f_str[j]) * 2.0f);
+   p_raws->str[j] = MathHelpers::Round((ip_data->maps[i].f_str[j]) * 2.0f);
 
  //засовываем fucking имя
  USES_CONVERSION;
@@ -329,7 +328,7 @@ struct MPZStructure
 
  //засовываем карту ХХ
  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
-   p_raws->idl[j] = CNumericConv::Round((ip_data->maps[i].f_idl[j]) * 2.0f);
+   p_raws->idl[j] = MathHelpers::Round((ip_data->maps[i].f_idl[j]) * 2.0f);
 
 }
 

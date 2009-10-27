@@ -3,8 +3,8 @@
 
 #include <vector>
 #include <memory>
-#include "ui-core/TabDialog.h"
 #include "common/FastDelegate.h"
+#include "ui-core/TabDialog.h"
 
 enum EMapTypes
 {
@@ -32,7 +32,7 @@ class CFirmwareTabDlg : public CTabDialog
  public:
   CFirmwareTabDlg(CWnd* pParent = NULL);   // standard constructor
 
-  enum { IDD = IDD_FIRMWARE_SUPPORT };
+  static const UINT IDD;
 
   virtual LPCTSTR GetDialogID(void) const;
 	

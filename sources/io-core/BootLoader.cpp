@@ -10,10 +10,11 @@
 #include "stdafx.h"
 #include "BootLoader.h"
 #include "ccomport.h"
+#include "common\MathHelpers.h"
+#include "NumericConv.h"
 
 #define EEPROM_RD_BLOCKS 8   //количество блоков чтения EEPROM,число должно быть степенью двойки
 #define EEPROM_WR_BLOCKS 16  //количество блоков записи EEPROM,число должно быть степенью двойки
-
 
 //-----------------------------------------------------------------------
 CBootLoader::CBootLoader()
@@ -648,11 +649,11 @@ void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 	timeouts.WriteTotalTimeoutConstant   = 200;
     timeouts.WriteTotalTimeoutMultiplier = 200;
 	m_p_port->SetTimeouts(&timeouts);	   	 
-	Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
+	Sleep(MathHelpers::Round(ms_need_for_one_byte * 5));
    }
    else
    {    
-	Sleep(CNumericConv::Round(ms_need_for_one_byte * 5));
+	Sleep(MathHelpers::Round(ms_need_for_one_byte * 5));
    }
 
    m_work_state = state;

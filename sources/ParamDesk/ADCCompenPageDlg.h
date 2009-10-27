@@ -1,11 +1,10 @@
 
 #pragma once
 
+#include "io-core/SECU3IO.h"
 #include "ui-core/TabDialog.h"
-#include "resource.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/EditEx.h"
-#include "io-core/SECU3IO.h"
 
 #include "ParamPageEvents.h"
 
@@ -22,9 +21,8 @@ public:
 	void GetValues(SECU3IO::ADCCompenPar* o_values);
     void SetValues(const SECU3IO::ADCCompenPar* i_values);
 
-// Dialog Data
-	//{{AFX_DATA(CADCCompenPageDlg)
-	enum { IDD = IDD_PD_ADCCOMPEN_PAGE };
+	static const UINT IDD;
+
 	CSpinButtonCtrlEx	m_map_factor_spin;
 	CSpinButtonCtrlEx	m_map_correction_spin;
 	CEditEx	m_map_factor_edit;
@@ -39,9 +37,7 @@ public:
 	CSpinButtonCtrlEx	m_temp_correction_spin;
 	CEditEx	m_temp_factor_edit;
 	CEditEx	m_temp_correction_edit;
-	
-	//}}AFX_DATA
-
+		
 // Overrides
 	// ClassWizard generated virtual function overrides
 	//{{AFX_VIRTUAL(CADCCompenPageDlg)

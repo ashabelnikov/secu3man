@@ -10,10 +10,11 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "common/FastDelegate.h"
-#include "ParamMonTabDlg.h"
+#include "common/MathHelpers.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/ParamDeskDlg.h"
+#include "ParamMonTabDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -27,6 +28,8 @@ BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
  ON_WM_CLOSE()
 END_MESSAGE_MAP()
+
+const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
 
 CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CParamMonTabDlg::IDD, pParent)
@@ -156,8 +159,8 @@ void CParamMonTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
  float Yf = ((float)i_external.Height()) / io_victim.Height(); 
  float factor = min(Xf, Yf);
  //масштабируем
- io_victim.right = (io_victim.Width() * factor);
- io_victim.bottom = (io_victim.Height() * factor);
+ io_victim.right = MathHelpers::Round((io_victim.Width() * factor));
+ io_victim.bottom = MathHelpers::Round((io_victim.Height() * factor));
  io_victim.left = 0;
  io_victim.top = 0;
  //центрируем

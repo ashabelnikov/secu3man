@@ -1,7 +1,8 @@
 
 #include "stdafx.h"
+#include "resource.h"
 #include "KnockPageDlg.h"
-#include "io-core/numericconv.h"
+#include "common/MathHelpers.h"
 
 #include <vector>
 
@@ -14,6 +15,7 @@ using namespace std;
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CKnockPageDlg::IDD = IDD_PD_KNOCK_PAGE;
 
 CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 	: Super(CKnockPageDlg::IDD, pParent)	
@@ -21,10 +23,7 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
     m_params.knock_use_knock_channel = 0;
 	m_params.knock_bpf_frequency = 40;
 	m_params.knock_k_wnd_begin_angle = 0.0f;
-	m_params.knock_k_wnd_end_angle = 48.0f;
-	
-	//{{AFX_DATA_INIT(CKnockPageDlg)
-	//}}AFX_DATA_INIT
+	m_params.knock_k_wnd_end_angle = 48.0f;	
 }
 
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
@@ -95,7 +94,7 @@ BOOL CKnockPageDlg::OnInitDialog()
    bpf_freqs.push_back(_TSTRING(string));
   }
   m_freq_selector.SetValuesList(bpf_freqs);
-  m_freq_selector.SetSelectedIndex(CNumericConv::Round(m_params.knock_bpf_frequency));
+  m_freq_selector.SetSelectedIndex(MathHelpers::Round(m_params.knock_bpf_frequency));
   m_freq_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
   m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), &m_freq_selector);
   //-----------------------------------------------------------------
@@ -181,7 +180,7 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
   if (!m_ctrlGrid.SetItemValue(m_knock_k_wnd_end_angle_item,knock_k_wnd_end_angle))
    status = false;
 
-  size_t knock_bpf_frequency = CNumericConv::Round(m_params.knock_bpf_frequency);
+  size_t knock_bpf_frequency = MathHelpers::Round(m_params.knock_bpf_frequency);
   m_freq_selector.SetSelectedIndex(knock_bpf_frequency);
 
   ASSERT(status);
