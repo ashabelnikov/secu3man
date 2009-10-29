@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_FULL_SCREEN, OnUpdateOnFullScreen)
- ON_WM_ACTIVATE()
+ ON_WM_ACTIVATEAPP()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -224,11 +224,11 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
  pCmdUI->Enable(enable);
 }
 
-void CMainFrame::OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized)
+void CMainFrame::OnActivateApp(BOOL bActive, HTASK hTask)
 {
  ASSERT(m_OnActivate); 
  if (m_OnActivate)
-  m_OnActivate(nState == WA_INACTIVE);
+  m_OnActivate(bActive == TRUE);
 } 
 
 void CMainFrame::OnFullScreen()

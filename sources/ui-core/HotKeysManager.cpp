@@ -13,6 +13,7 @@
 #include <algorithm>
 
 HotKeysManager::HotKeysManager()
+: m_active(false)
 {
 //na
 }
@@ -61,6 +62,7 @@ void HotKeysManager::DeactivateAllHotKeys(void)
   if (p_router->mp_OriginalWnd)
    RegisterOneRouter(p_router, false);
  }
+ m_active = false;
 }
 
 void HotKeysManager::ActivateAllHotKeys(void)
@@ -73,6 +75,7 @@ void HotKeysManager::ActivateAllHotKeys(void)
   if (p_router->mp_OriginalWnd) //if window was not created, hot keys also would be not created! 
    RegisterOneRouter(p_router, true);
  }
+ m_active = true;
 }
 
 //Производит регистрацию/антиригистрацию всех горячих клавиш указанного роутера.
@@ -103,4 +106,9 @@ bool HotKeysManager::RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_re
  }
 
  return result; 
+}
+
+bool HotKeysManager::IsActive(void) const
+{
+ return m_active;
 }

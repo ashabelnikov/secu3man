@@ -12,17 +12,21 @@ class AFX_EXT_CLASS HotKeysManager
  public:
   ~HotKeysManager();
 
- static HotKeysManager* GetInstance(void);
+  static HotKeysManager* GetInstance(void);
 
- void DeactivateAllHotKeys(void);
- void ActivateAllHotKeys(void);
+  void DeactivateAllHotKeys(void);
+  void ActivateAllHotKeys(void);
 
-private:
- friend CHotKeysToCmdRouter;
- void _AddRouter(CHotKeysToCmdRouter* ip_router);
- void _RemoveRouter(CHotKeysToCmdRouter* ip_router);
+  bool IsActive(void) const;
 
- bool RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_register);
+ private:
+  friend CHotKeysToCmdRouter;
+  void _AddRouter(CHotKeysToCmdRouter* ip_router);
+  void _RemoveRouter(CHotKeysToCmdRouter* ip_router);
 
- std::vector<CHotKeysToCmdRouter*> m_hk_routers;
+  bool RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_register);
+
+  std::vector<CHotKeysToCmdRouter*> m_hk_routers;
+
+  bool m_active;
 };

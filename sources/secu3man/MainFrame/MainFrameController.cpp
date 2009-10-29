@@ -35,7 +35,6 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
 , m_pStatusBarManager(i_pStatusBarManager)
 , m_pLogWriter(i_pLogWriter)
 , mp_view(ip_view)
-, m_active(false)
 , m_full_screen_mode(false)
 {
  _ASSERTE(i_pCommunicationManager); 
@@ -176,16 +175,11 @@ bool MainFrameController::OnFullScreen()
 
 void MainFrameController::OnActivate(bool i_state)
 {
- if (i_state && m_active)
- {
+ if (false==i_state && true==HotKeysManager::GetInstance()->IsActive())
   HotKeysManager::GetInstance()->DeactivateAllHotKeys();
-  m_active = false; 
- }
- else
- {
+
+ if (true==i_state && false==HotKeysManager::GetInstance()->IsActive())
   HotKeysManager::GetInstance()->ActivateAllHotKeys();
-  m_active = true;
- }
 }
 
 CRect MainFrameController::_GetScreenRect(void) const

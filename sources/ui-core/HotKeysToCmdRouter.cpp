@@ -163,7 +163,11 @@ LRESULT CHotKeysToCmdRouter::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
   case WM_HOTKEY: 
    if (m_hot_key_map.find(wParam)!=m_hot_key_map.end())
    {
-    if(CWnd::GetActiveWindow()==AfxGetMainWnd())   
+    DWORD wnd_pid = 0, this_pid = ::GetCurrentProcessId();
+    HWND hwnd = ::GetActiveWindow();
+    ::GetWindowThreadProcessId(hwnd, &wnd_pid);
+    //не посылаем сообщение если активно окно из другого процесса
+    if(wnd_pid==this_pid)   
     {    
      //send message as it from menu
      mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam].m_id_command,0),NULL);       

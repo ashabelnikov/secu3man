@@ -45,9 +45,7 @@ class MainFrameController : public IAPPEventHandler
   CAppSettingsManager*   m_pAppSettingsManager;
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
-
-   //true, если главное окно активно (запоминает последнее состояние)
-  bool m_active;
+   
   //true, если установлен полноэкранный режим
   bool m_full_screen_mode;
   //запоминает размеры и позицию окна перед переходом в полноэкранный режим

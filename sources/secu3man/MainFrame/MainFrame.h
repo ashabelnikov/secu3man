@@ -52,7 +52,7 @@ protected:
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnFullScreen();
   afx_msg void OnUpdateOnFullScreen(CCmdUI* pCmdUI);
-  afx_msg void OnActivate(UINT nState, CWnd* pWndOther, BOOL bMinimized );
+  afx_msg void OnActivateApp(BOOL bActive, HTASK hTask);
   DECLARE_MESSAGE_MAP()
 
 private:
