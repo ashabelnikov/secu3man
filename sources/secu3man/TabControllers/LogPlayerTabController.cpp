@@ -200,10 +200,10 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  if (false==result)
  {
   if (error_id==LogReader::FE_OPEN) 
-   AfxMessageBox(_T("Не могу открыть указанный файл!"));
+   AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
   else if (error_id==LogReader::FE_FORMAT)
   {
-   AfxMessageBox(_T("Некорректный формат файла!"));  
+   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));  
   }
   else
    ASSERT(0);
@@ -213,10 +213,10 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  }
 
  ////////////////////////////////////////////////////////////////
- m_view->SetOpenFileButtonText(_T("Закрыть"));
+ m_view->SetOpenFileButtonText(MLL::GetString(IDS_LP_CLOSE_FILE));
 
  CString string;
- string.Format(_T("%s\n%d записей"),open.GetFileName(),mp_log_reader->GetCount());
+ string.Format(MLL::LoadString(IDS_LP_FILE_INFO_FMT_STRING),open.GetFileName(),mp_log_reader->GetCount());
  m_view->SetFileIndicator(string.GetBuffer(0));
 
  m_view->mp_MIDeskDlg->Enable(true); 
@@ -276,8 +276,8 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_TOP:
    {
    _END_TRACKING();
-   int count = ((int)m_view->GetSliderPosition()) - (int)mp_log_reader->GetCurPos();  
-   for(size_t i = 0; i < abs(count); ++i)
+   long count = ((long)m_view->GetSliderPosition()) - (long)mp_log_reader->GetCurPos();  
+   for(long i = 0; i < abs(count); ++i)
     _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
    }
    break;
@@ -286,8 +286,8 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_PAGEUP:
    {
     _END_TRACKING();
-    int count = m_view->GetSliderPageSize();   
-    for(size_t i = 0; i < count; ++i)
+    unsigned long count = m_view->GetSliderPageSize();   
+    for(unsigned long i = 0; i < count; ++i)
      _ProcessOneRecord(false, i_nSBCode==TB_PAGEDOWN ? DIR_NEXT : DIR_PREV, false);
    }
    break;
@@ -296,8 +296,8 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_LINEUP:
    {
     _END_TRACKING();
-    int count = m_view->GetSliderLineSize();   
-    for(size_t i = 0; i < count; ++i)
+    unsigned long count = m_view->GetSliderLineSize();   
+    for(unsigned long i = 0; i < count; ++i)
      _ProcessOneRecord(false, i_nSBCode==TB_LINEDOWN ? DIR_NEXT : DIR_PREV, false);
    }
    break;
@@ -305,8 +305,8 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_THUMBPOSITION:
   case TB_THUMBTRACK:
    _END_TRACKING();
-   int count = (int)i_nPos - (int)mp_log_reader->GetCurPos();  
-   for(size_t i = 0; i < abs(count); ++i)
+   long count = (int)i_nPos - (int)mp_log_reader->GetCurPos();  
+   for(long i = 0; i < abs(count); ++i)
     _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
 
    break;
@@ -414,7 +414,7 @@ void CLogPlayerTabController::_UpdateTimerPeriod(bool i_set_timer)
 
  //перезапускаем таймер если нужно. Если новый период отличается от старого
  //меньше чем на 10%, то не перезапускаем таймер 
- if ((i_set_timer) && (abs(m_timer.GetPeriod() - period) > (period / 10)))
+ if ((i_set_timer) && ((unsigned long)abs(m_timer.GetPeriod() - (int)period) > (period / 10)))
  {    
   m_timer.KillTimer();
   m_timer.SetTimer(period);  
@@ -446,7 +446,7 @@ void CLogPlayerTabController::_InitPlayer(void)
 void CLogPlayerTabController::_ClosePlayer(void)
 {
  m_view->SetFileIndicator(_T(""));
- m_view->SetOpenFileButtonText(_T("Открыть файл"));
+ m_view->SetOpenFileButtonText(MLL::GetString(IDS_LP_OPEN_FILE));
  m_view->mp_MIDeskDlg->Enable(false);
  m_view->SetSliderPosition(0);
  m_view->EnableAll(false);

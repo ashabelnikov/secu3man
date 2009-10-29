@@ -173,3 +173,9 @@
 #define IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN 4172
 #define ID_FULL_SCREEN                  4173
 #define IDC_PM_SAVE_NOTE_TEXT           4174
+#define IDS_LP_CANT_OPEN_FILE           4175
+#define IDS_LP_INCORRECT_FILE_FORMAT    4176
+#define IDS_LP_CLOSE_FILE               4177
+#define IDS_LP_FILE_INFO_FMT_STRING     4178
+#define IDS_LP_OPEN_FILE                4179
+

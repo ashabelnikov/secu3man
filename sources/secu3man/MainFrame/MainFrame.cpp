@@ -224,7 +224,7 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
  pCmdUI->Enable(enable);
 }
 
-void CMainFrame::OnActivateApp(BOOL bActive, HTASK hTask)
+void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
  ASSERT(m_OnActivate); 
  if (m_OnActivate)
