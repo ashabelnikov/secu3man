@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /G4 /MD /W3 /GR /GX /Ot /Oi /I "../" /D "NDEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G4 /MD /W3 /GR /GX /Ot /Oi /I "../" /I "../secu3man/" /D "NDEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /I /../" " /c
 # SUBTRACT CPP /Ox /Og /Os
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /G4 /MDd /W3 /Gm /GR /GX /ZI /Od /I "../" /D "_DEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G4 /MDd /W3 /Gm /GR /GX /ZI /Od /I "../" /I "../secu3man/" /D "_DEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -99,7 +99,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G4 /MDd /W3 /Gm /GR /GX /ZI /Od /I "../" /D "_DEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /G4 /MDd /W3 /Gm /GR /GX /ZI /Od /I "../" /D "_AFXDLL" /D "_DEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G4 /MDd /W3 /Gm /GR /GX /ZI /Od /I "../" /I "../secu3man/" /D "_AFXDLL" /D "_DEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -127,7 +127,7 @@ LINK32=link.exe
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G4 /MD /W3 /GR /GX /Ot /Oi /I "../" /D "NDEBUG" /D "_MBCS" /D "_AFXDLL" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
 # SUBTRACT BASE CPP /Ox /Og /Os
-# ADD CPP /nologo /G4 /MD /W3 /GR /GX /Ot /Oi /I "../" /D "_MBCS" /D "_AFXDLL" /D "NDEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G4 /MD /W3 /GR /GX /Ot /Oi /I "../" /I "../secu3man/" /D "_MBCS" /D "_AFXDLL" /D "NDEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /c
 # SUBTRACT CPP /Ox /Og /Os
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
@@ -148,270 +148,12 @@ LINK32=link.exe
 # Name "secu3man - Win32 Debug"
 # Name "secu3man - Win32 UnicodeDebug"
 # Name "secu3man - Win32 UnicodeRelease"
-# Begin Group "Source Files"
-
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
-# Begin Source File
-
-SOURCE=.\AppSettingsController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsModel.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CheckEngineTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CheckEngineTabDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ChildView.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ChildViewManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CommunicationManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\DLLLinkedFunctions.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareContextMenuManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareTabDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockChannelTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockChannelTabDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LogPlayerTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\LogPlayerTabDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrame.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainTabManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamMonTabController.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamMonTabDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\secu3man.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\secu3man.rc
-# End Source File
-# Begin Source File
-
-SOURCE=.\StatusBarManager.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\StdAfx.cpp
-# ADD CPP /Yc"stdafx.h"
-# End Source File
-# Begin Source File
-
-SOURCE=.\TabControllersCommunicator.cpp
-# End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\AppSettingsController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AppSettingsModel.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CheckEngineTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CheckEngineTabDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ChildView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ChildViewManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CommunicationManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\DLLLinkedFunctions.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareContextMenuManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\FirmwareTabDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\IAppSettingsDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ISECU3man.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ISettingsData.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ITabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockChannelTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockChannelTabDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LogPlayerTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\LogPlayerTabDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrame.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainFrameManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MainTabManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamMonTabController.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamMonTabDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Resource.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\secu3man.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\StatusBarManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\StdAfx.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\TabControllersCommunicator.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\common\UnicodeSupport.h
-# End Source File
-# End Group
 # Begin Group "Resource Files"
 
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
+# Begin Group "res"
+
+# PROP Default_Filter ""
 # Begin Source File
 
 SOURCE=.\res\bootload.ico
@@ -444,9 +186,300 @@ SOURCE=.\res\secu3man.rc2
 
 SOURCE=.\res\tab_ctrl_bitmaps.bmp
 # End Source File
+# End Group
 # Begin Source File
 
-SOURCE=.\res\Toolbar.bmp
+SOURCE=.\Resources\res\bootload.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\res\connected.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\res\disconnected.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\res\logwriting.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\res\secu3man.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\secu3man.rc
+# End Source File
+# End Group
+# Begin Group "MainFrame"
+
+# PROP Default_Filter "h;cpp;hpp"
+# Begin Source File
+
+SOURCE=.\MainFrame\ChildView.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\ChildView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\ChildViewManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\ChildViewManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrame.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrame.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrameController.cpp
+# ADD CPP /Yu
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrameController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrameManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\MainFrameManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\StatusBarManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\MainFrame\StatusBarManager.h
+# End Source File
+# End Group
+# Begin Group "Settings"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsModel.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\AppSettingsModel.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\IAppSettingsDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Settings\ISettingsData.h
+# End Source File
+# End Group
+# Begin Group "TabControllers"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\TabControllers\CheckEngineTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\CheckEngineTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\FirmwareTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\FirmwareTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\KnockChannelTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\KnockChannelTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\LogPlayerTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\LogPlayerTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\ParamMonTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\ParamMonTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\TabControllersCommunicator.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\TabControllersCommunicator.h
+# End Source File
+# End Group
+# Begin Group "TabDialogs"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\TabDialogs\CheckEngineTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\CheckEngineTabDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\FirmwareContextMenuManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\FirmwareContextMenuManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\FirmwareTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\FirmwareTabDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\KnockChannelTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\KnockChannelTabDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\LogPlayerTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\LogPlayerTabDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\ParamMonTabDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\ParamMonTabDlg.h
+# End Source File
+# End Group
+# Begin Group "TabsManagement"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\TabsManagement\ITabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabsManagement\MainTabController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabsManagement\MainTabController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabsManagement\MainTabManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabsManagement\MainTabManager.h
+# End Source File
+# End Group
+# Begin Group "Application"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Application\CommunicationManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\CommunicationManager.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\DLLLinkedFunctions.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\DLLLinkedFunctions.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\ISECU3man.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\secu3man.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\secu3man.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\StdAfx.cpp
+# ADD CPP /Yc
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\StdAfx.h
 # End Source File
 # End Group
 # End Target
