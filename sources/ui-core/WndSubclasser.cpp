@@ -122,7 +122,6 @@ LRESULT CWndSubclasser::Call(LPVOID token)
   return CallWindowProc(g_prcmap[pPrms->hWnd], pPrms->hWnd, pPrms->uMsg, pPrms->wParam, pPrms->lParam);
 	
  CWndSubclasser* pWS = *pPrms->i;
- //PWndSubclasser pKeep(pWS);
  pPrms->i++; // the nextime Call is called, will process the next in list
  pPrms->prevtoken = pWS->_token; //save for later
  pWS->_token = token; //remember for Defauklt calling
