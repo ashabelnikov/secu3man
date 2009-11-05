@@ -61,13 +61,11 @@ BOOL CParamMonTabDlg::OnInitDialog()
  CDialog::OnInitDialog();
 	
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->MoveWindow(280,0,427,312);
- mp_MIDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_MIDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
- mp_RSDeskDlg->Create(CRSDeskDlg::IDD,this);
- mp_RSDeskDlg->MoveWindow(280,0,427,312);
- mp_RSDeskDlg->ShowWindow(SW_HIDE);
+ mp_RSDeskDlg->Create(CRSDeskDlg::IDD, this);
+ mp_RSDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
  mp_RSDeskDlg->Show(true);
 
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);

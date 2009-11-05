@@ -410,6 +410,14 @@ SOURCE=.\TabDialogs\LogPlayerTabDlg.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\TabDialogs\LPControlPanelDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabDialogs\LPControlPanelDlg.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\TabDialogs\ParamMonTabDlg.cpp
 # End Source File
 # Begin Source File

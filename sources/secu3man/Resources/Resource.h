@@ -178,4 +178,5 @@
 #define IDS_LP_CLOSE_FILE               4177
 #define IDS_LP_FILE_INFO_FMT_STRING     4178
 #define IDS_LP_OPEN_FILE                4179
+#define IDD_LOG_PLAYER_CONTROL_PANEL    4180
 
