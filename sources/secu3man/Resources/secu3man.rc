@@ -28,9 +28,9 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
 IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
 BEGIN
-    POPUP "&File"
+    POPUP "Программа"
     BEGIN
-        MENUITEM "E&xit    Ctrl + Q",           ID_APP_EXIT
+        MENUITEM "Выход    Ctrl + Q",           ID_APP_EXIT
     END
     MENUITEM "Настройки",                   ID_APP_SETTINGS
     POPUP "Запись лога"

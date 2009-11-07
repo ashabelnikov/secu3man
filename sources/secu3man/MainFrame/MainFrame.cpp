@@ -10,6 +10,8 @@
 #include "stdafx.h"
 #include "Resources\resource.h"
 #include "MainFrame.h"
+
+#include <vector>
 #include "ChildView.h"
 
 #ifdef _DEBUG
@@ -46,6 +48,7 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_wnd_initial_size(725,450)
 , m_pwndView(NULL)
+, m_bDoIdle(TRUE)
 {
  //na	
 }
@@ -61,6 +64,27 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
   return -1;
 
  return 0;
+}
+
+//хак:
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg) 
+{  
+ MSG msg;
+ if(!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) && m_bDoIdle)
+ {
+  //этот код вызывается ТОЛЬКО один раз и ТОЛЬКО когда нет сообщений в очереди  
+  if (_UpdateTopLevelMainMenu())
+   DrawMenuBar(); //redraw menu
+
+  m_bDoIdle = FALSE; //запоминаем что уже вызвали 
+ }
+ else
+ {
+  if(AfxGetApp()->IsIdleMessage(pMsg) && pMsg->message != 0x3FC)
+   m_bDoIdle = TRUE;  
+ }
+
+ return CFrameWnd::PreTranslateMessage(pMsg);
 }
 
 BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
@@ -187,7 +211,7 @@ void CMainFrame::OnClose()
 void CMainFrame::OnAppAbout()
 {
  if (m_OnAppAbout)
-  m_OnAppAbout();
+  m_OnAppAbout(); 
 }
 
 void CMainFrame::OnAppSettings()
@@ -228,7 +252,7 @@ void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
  ASSERT(m_OnActivate); 
  if (m_OnActivate)
-  m_OnActivate(bActive == TRUE);
+  m_OnActivate(bActive == TRUE); 
 } 
 
 void CMainFrame::OnFullScreen()
@@ -238,7 +262,7 @@ void CMainFrame::OnFullScreen()
   what = m_OnFullScreen();
 
  if (m_OnFullScreenNotify)
-  m_OnFullScreenNotify(what);
+  m_OnFullScreenNotify(what);  
 }
 
 void CMainFrame::OnUpdateOnFullScreen(CCmdUI* pCmdUI)
@@ -248,4 +272,45 @@ void CMainFrame::OnUpdateOnFullScreen(CCmdUI* pCmdUI)
   enable = m_OnAskFullScreen();
 
  pCmdUI->Enable(enable);
+}
+
+//Стандартный вызов ON_UPDATE_COMMAND_UI запрещает элементы меню, но не делает их grayed.
+//Чтобы все таки запрещенные элементы меню выглядели как grayed, нужно вызывать эту функцию
+//Note: эта функция не перерисовывает меню.
+//Возвращает true - если произошли изменения и нужно перерисовать меню, иначе false
+bool CMainFrame::_UpdateTopLevelMainMenu(void)
+{
+ CMenu* pMenu = this->GetMenu();
+ std::vector<UINT> old_menu_state;
+
+ //remember old states of all menu items
+ {
+  int menu_items_count = pMenu->GetMenuItemCount();
+  for(int i = 0; i < menu_items_count; ++i)  
+   old_menu_state.push_back(pMenu->GetMenuState(pMenu->GetMenuItemID(i),MF_BYCOMMAND));   
+ }
+
+ //Perform update
+ CCmdUI ui;
+ ui.m_nIndexMax = pMenu->GetMenuItemCount();
+ ui.m_pMenu = pMenu;
+ for (ui.m_nIndex = 0; ui.m_nIndex < ui.m_nIndexMax; ui.m_nIndex++) 
+ {
+  ui.m_nID = pMenu->GetMenuItemID(ui.m_nIndex);
+  ui.DoUpdate(this, m_bAutoMenuEnable);
+ }
+ 
+ //Check: do we need to redraw menu?
+ { 
+  int menu_items_count = pMenu->GetMenuItemCount();
+  for(int i = 0; i < menu_items_count; ++i)
+  {
+   UINT old_s = old_menu_state[i];
+   UINT new_s = pMenu->GetMenuState(pMenu->GetMenuItemID(i),MF_BYCOMMAND);
+   if (old_s!=new_s)   
+    return true; //caller should redraw main menu   
+  }
+ }
+ //nothing changed: redraw is not needed
+ return false;
 }

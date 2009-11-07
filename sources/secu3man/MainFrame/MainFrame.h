@@ -10,7 +10,7 @@ class CMainFrame : public CFrameWnd
  typedef fastdelegate::FastDelegate0<> EventHandler;
  typedef fastdelegate::FastDelegate0<bool> EventResult;
  typedef fastdelegate::FastDelegate1<bool> EventHandler1; 
-	
+
  public:
   CMainFrame();
   virtual ~CMainFrame();
@@ -41,6 +41,7 @@ class CMainFrame : public CFrameWnd
 protected:
   DECLARE_DYNAMIC(CMainFrame)
 
+  virtual BOOL PreTranslateMessage(MSG* pMsg); 
   afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
   afx_msg void OnSetFocus(CWnd *pOldWnd);
   afx_msg void OnClose();
@@ -56,6 +57,8 @@ protected:
   DECLARE_MESSAGE_MAP()
 
 private:
+  bool _UpdateTopLevelMainMenu(void);
+
   EventResult  m_OnClose;
   EventHandler m_OnAppAbout;
   EventHandler m_OnAppSettings;
@@ -70,6 +73,7 @@ private:
  
   CChildView*  m_pwndView;
   const CSize m_wnd_initial_size; 
+  BOOL m_bDoIdle;
 };
 
 /////////////////////////////////////////////////////////////////////////////
