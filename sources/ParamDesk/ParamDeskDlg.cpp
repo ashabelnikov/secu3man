@@ -160,7 +160,7 @@ BOOL CParamDeskDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
 	
- m_tab_control.SetStyle(WS_VISIBLE | WS_CHILD | TCS_OWNERDRAWFIXED/*| TCS_VERTICAL | TCS_BOTTOM*/);
+ //контрол создан через ресурсы и стили описаны в ресурсах.
  m_tab_control.SetImageList(m_pImgList);
  m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
  m_tab_control.Init();

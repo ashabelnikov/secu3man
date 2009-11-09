@@ -35,7 +35,6 @@ BEGIN_MESSAGE_MAP(CChildView,CWnd )
  ON_WM_SIZE()
 END_MESSAGE_MAP()
 
-
 /////////////////////////////////////////////////////////////////////////////
 // CChildView message handlers
 

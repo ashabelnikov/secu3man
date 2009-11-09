@@ -105,7 +105,7 @@ void CTabController::CreateTabPage(void)
   return; //предотвращаем повторное создание вкладки
 
  ASSERT(pPageData);
- BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate,(CWnd*)this);	  
+ BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this);	  
 
  if (0==result)
  {

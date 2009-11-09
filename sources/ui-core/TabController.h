@@ -18,17 +18,32 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   CTabController();
   virtual ~CTabController();
 
+  //Устанавливает модуль, который содержит ресурсы необходимые для работы контролла.
   void SetResourceModule(HMODULE hModule);
-  void SetMsgReflection(BOOL reflect);
-  bool Create(CWnd* pParentWnd,const CRect& rect,UINT nID,const bool);
-  int  AddPage(CString name,CTabDialog* pPageDlg);
-  int  AddPage(CString name,CTabDialog* pPageDlg,const int nImage);
-  void SetStyle(const DWORD style);
-  bool SetCurSel(UINT iNewTab);            // set tab (fail if disabled)
 
+  //Если reflect - true, то сообщения будут перепосылаться родительскому окну,
+  //иначе - нет.
+  void SetMsgReflection(BOOL reflect);
+
+  //использовать этот метод только совместно с Create() - перед вызовом. 
+  //Иначе он не будет иметь эффекта!
+  void SetStyle(const DWORD style);
+  bool Create(CWnd* pParentWnd, const CRect& rect, UINT nID, const bool);
+
+  //Добавление вкладок
+  int  AddPage(CString name, CTabDialog* pPageDlg);
+  int  AddPage(CString name, CTabDialog* pPageDlg, const int nImage);
+
+  // set tab (fail if disabled)
+  bool SetCurSel(UINT iNewTab);
+
+  //Разрешение/запрещение указанной вкладки
   void EnableItem(int ITab, bool enable);
+
+  //Инициализация. Обязательно нужно вызвать перед началом работы!
   void Init(void);
 
+  //Установка обработчика событий. Смотрите описание ITabControllerEvent.
   void SetEventListener(ITabControllerEvent* i_listener); 
 
  protected:
@@ -66,8 +81,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   HMODULE m_hResourceModule;
   ITabControllerEvent* m_pEventHandler;
 
-  int  m_tab_item_index;
-  BOOL m_msg_reflect;
+  int   m_tab_item_index;
+  BOOL  m_msg_reflect;
   DWORD m_style;
   int   m_tcmn;
 };

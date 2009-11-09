@@ -89,7 +89,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 
  CRect rect(0,0,300,200);
 
- mp_tab_control->SetStyle(WS_VISIBLE | WS_CHILD  | TCS_BOTTOM | TCS_OWNERDRAWFIXED);
+ mp_tab_control->SetStyle(WS_VISIBLE | WS_CHILD | WS_TABSTOP | TCS_BOTTOM | TCS_OWNERDRAWFIXED);
  mp_tab_control->SetResourceModule(::GetModuleHandle(NULL));
  VERIFY(mp_tab_control->Create(i_pChildView, rect, IDC_MAIN_TAB_CTRL, false));
  mp_tab_control->SetImageList(m_pImgList);
