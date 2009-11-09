@@ -55,17 +55,27 @@ IDD_PARAMETERS_AND_MONITOR DIALOG DISCARDABLE  0, 0, 428, 222
 STYLE WS_CHILD | WS_VISIBLE
 FONT 8, "MS Sans Serif"
 BEGIN
-    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
-                    IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,234,199,157,10
+    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
+                    IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE WS_CHILD | WS_VISIBLE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,15,133,14,ES_READONLY | 
+                    NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,77,14,
+                    0,WS_EX_STATICEDGE
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,103,34,127,16,
+                    ES_AUTOHSCROLL
+    CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    19,70,93,83,WS_EX_LEFTSCROLLBAR
     CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
                     WS_TABSTOP,120,70,96,18
@@ -78,31 +88,21 @@ BEGIN
     CONTROL         "Темпер. коррекция",IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
                     WS_TABSTOP,120,135,96,18
-    GROUPBOX        "Семейства характеристик",
-                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,103,34,127,16,
-                    ES_AUTOHSCROLL
-    CTEXT           "Дополнительная информация о прошивке:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
-    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,77,14,
-                    0,WS_EX_STATICEDGE
+    CONTROL         "Настройка аттенюатора",
+                    IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
+    CONTROL         "Прошивать только код (без данных)",
+                    IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
     CONTROL         "Boot loader запущен аварийно (установлена перемычка)",
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,190,122,
                     21
-    CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
-                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    19,70,93,83,WS_EX_LEFTSCROLLBAR
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,15,133,14,ES_READONLY | 
-                    NOT WS_BORDER,WS_EX_STATICEDGE
+    GROUPBOX        "Семейства характеристик",
+                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
+    CTEXT           "Дополнительная информация о прошивке:",
+                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
-    CONTROL         "Прошивать только код (без данных)",
-                    IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
-                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
-    CONTROL         "Настройка аттенюатора",
-                    IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 245, 225
@@ -110,34 +110,34 @@ STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Настройки"
 FONT 8, "MS Sans Serif"
 BEGIN
-    DEFPUSHBUTTON   "OK",IDOK,188,7,50,14
-    PUSHBUTTON      "Cancel",IDCANCEL,188,24,50,14
+    COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION_COMBO,24,30,65,139,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     COMBOBOX        IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO,24,69,65,
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     COMBOBOX        IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO,133,69,65,
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    COMBOBOX        IDC_APP_SETTINGS_PORT_SELECTION_COMBO,24,30,65,139,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Выбор COM-порта:",IDC_STATIC,24,18,77,9
-    LTEXT           "Скорость COM-порта (Application):",IDC_STATIC,24,51,98,
-                    17
-    LTEXT           "Скорость COM-порта (Boot loader):",IDC_STATIC,131,50,86,
-                    17
     EDITTEXT        IDC_APP_SETTINGS_LOGFOLDER_EDITBOX,22,117,176,14,
                     ES_AUTOHSCROLL
     PUSHBUTTON      "...",IDC_APP_SETTINGS_LOGFOLDER_BUTTON,202,117,15,14
-    LTEXT           "Путь для записи логов (например C:\\SECU-3\\logs ):",
-                    IDC_APP_SETTINGS_LOGFOLDER_LABEL,23,105,184,10
     CONTROL         "Использовать каталог программы",
                     IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,48,135,161,9
     COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,23,159,67,52,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,40,194,43,17,
+                    ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,188,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,188,24,50,14
+    LTEXT           "Выбор COM-порта:",IDC_STATIC,24,18,77,9
+    LTEXT           "Скорость COM-порта (Application):",IDC_STATIC,24,51,98,
+                    17
+    LTEXT           "Скорость COM-порта (Boot loader):",IDC_STATIC,131,50,86,
+                    17
+    LTEXT           "Путь для записи логов (например C:\\SECU-3\\logs ):",
+                    IDC_APP_SETTINGS_LOGFOLDER_LABEL,23,105,184,10
     LTEXT           "CSV сивол-разделитель",
                     IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_LABEL,96,161,97,10
     GROUPBOX        "Логи",IDC_STATIC,14,92,217,94
-    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,40,194,43,17,
-                    ES_AUTOHSCROLL
     CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS,86,193,18,18
     LTEXT           "Период обновления панели приборов (ms)",IDC_STATIC,112,
@@ -148,6 +148,10 @@ IDD_CHECK_ENGINE DIALOG DISCARDABLE  0, 0, 434, 221
 STYLE WS_CHILD | WS_VISIBLE
 FONT 8, "MS Sans Serif"
 BEGIN
+    PUSHBUTTON      "Установить все",IDC_CHECK_ENGINE_LIST_SETALL_BUTTON,52,
+                    13,65,16
+    PUSHBUTTON      "Сбросить все",IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON,135,
+                    13,65,16
     CONTROL         "List1",IDC_CHECK_ENGINE_ERRORS_LIST,"SysListView32",
                     LVS_REPORT | WS_BORDER | WS_TABSTOP,53,34,356,102
     PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",
@@ -161,10 +165,6 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
     LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
-    PUSHBUTTON      "Установить все",IDC_CHECK_ENGINE_LIST_SETALL_BUTTON,52,
-                    13,65,16
-    PUSHBUTTON      "Сбросить все",IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON,135,
-                    13,65,16
 END
 
 IDD_KNOCK_CHANNEL DIALOG DISCARDABLE  0, 0, 490, 218
@@ -173,13 +173,13 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,
                     19
+    PUSHBUTTON      "Копировать в таблицу аттенюатора",
+                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,130,16,86,23,
+                    BS_MULTILINE
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,16,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,130,246,60
-    PUSHBUTTON      "Копировать в таблицу аттенюатора",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,130,16,86,23,
-                    BS_MULTILINE
 END
 
 IDD_LOG_PLAYER DIALOG DISCARDABLE  0, 0, 428, 222
@@ -196,17 +196,17 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Открыть файл",IDC_LOG_PLAYER_OPEN_FILE_BUTTON,4,38,69,
                     24
-    CONTROL         "Slider1",IDC_LOG_PLAYER_POSITION_SLIDER,
-                    "msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,
-                    5,117,152,19
     COMBOBOX        IDC_LOG_PLAYER_TIME_FACTOR_COMBO,94,47,56,86,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    LTEXT           "Фактор времени:",IDC_LOG_PLAYER_TIME_FACTOR_TEXT,92,35,
-                    71,8
-    PUSHBUTTON      ">|",IDC_LOG_PLAYER_NEXT_BUTTON,106,78,28,22
     PUSHBUTTON      "|<",IDC_LOG_PLAYER_PREV_BUTTON,24,78,28,22
     CONTROL         ">",IDC_LOG_PLAYER_PLAY_BUTTON,"Button",BS_AUTOCHECKBOX | 
                     BS_PUSHLIKE | WS_TABSTOP,68,78,28,22
+    PUSHBUTTON      ">|",IDC_LOG_PLAYER_NEXT_BUTTON,106,78,28,22
+    CONTROL         "Slider1",IDC_LOG_PLAYER_POSITION_SLIDER,
+                    "msctls_trackbar32",TBS_BOTH | TBS_NOTICKS | WS_TABSTOP,
+                    5,117,152,19
+    LTEXT           "Фактор времени:",IDC_LOG_PLAYER_TIME_FACTOR_TEXT,92,35,
+                    71,8
     CTEXT           "",IDC_LOG_PLAYER_POSITION_INDICATOR,19,143,122,10
     CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,3,6,146,19
 END

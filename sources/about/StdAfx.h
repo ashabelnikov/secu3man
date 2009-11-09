@@ -12,7 +12,6 @@
 #include <afxdisp.h>        // MFC Automation classes
 #endif // _AFX_NO_OLE_SUPPORT
 
-
 #ifndef _AFX_NO_DB_SUPPORT
 #include <afxdb.h>			// MFC ODBC database classes
 #endif // _AFX_NO_DB_SUPPORT
@@ -32,4 +31,3 @@
 #endif
 #include <atlconv.h>
 #include "common\LangLayer.h"
-

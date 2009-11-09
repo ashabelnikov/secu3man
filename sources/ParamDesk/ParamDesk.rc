@@ -29,12 +29,12 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
+    PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
                     TCS_OWNERDRAWFIXED,4,17,175,166
     CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
-    PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
 END
 
 IDD_PARAMETERS_DESK_FLOATING DIALOG DISCARDABLE  0, 0, 187, 191
@@ -42,10 +42,10 @@ STYLE WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Параметры"
 FONT 8, "MS Sans Serif"
 BEGIN
+    PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
                     TCS_OWNERDRAWFIXED,4,17,175,166
     CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
-    PUSHBUTTON      "Сохранить",IDC_PD_SAVE_BUTTON,5,2,41,12
 END
 
 IDD_PD_STARTER_PAGE DIALOG DISCARDABLE  0, 0, 155, 158
@@ -57,10 +57,10 @@ BEGIN
     EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,72,38,13,17
+                    UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
     CONTROL         "Spin1",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,72,90,13,17
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,
+                    17
     LTEXT           "Обороты перехода с пусковой карты УОЗ",
                     IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
     LTEXT           "Обороты при достижении которых стартер будет авт. выключен",
@@ -77,14 +77,18 @@ BEGIN
                     ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,91,26,28,15,ES_AUTOHSCROLL | 
                     ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEAD_EDIT,12,73,29,15,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
+                    ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,31,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,45,24,11,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
     CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,124,24,11,17
+                    UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
     CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,82,117,12,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,82,117,12,16
     LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,
                     72,9
     LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,
@@ -94,16 +98,12 @@ BEGIN
     LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
-    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEAD_EDIT,12,73,29,15,
-                    ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
-                    ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,45,72,11,16
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
+                    16
     CONTROL         "Spin2",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,124,72,11,17
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,
+                    17
     LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,
                     72,9
     LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,
@@ -123,6 +123,10 @@ BEGIN
     EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,11,25,35,16,ES_AUTOHSCROLL | 
                     ES_READONLY
     EDITTEXT        IDC_PD_FUNSET_PRESS_SWING_EDIT,88,25,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET_EDIT,11,68,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT_EDIT,88,68,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
     COMBOBOX        IDC_PD_FUNSET_BENZIN_MAPS_COMBO,22,104,90,82,
                     CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
@@ -144,10 +148,6 @@ BEGIN
                     IDC_PD_FUNSET_BENZIN_MAPS_COMBO_CAPTION,20,93,103,9
     LTEXT           "Набор таблиц для газа",
                     IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,22,122,103,9
-    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET_EDIT,11,68,35,16,
-                    ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT_EDIT,88,68,35,16,
-                    ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_FUNSET_CURVE_OFFSET_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,50,68,11,16
     CONTROL         "Spin1",IDC_PD_FUNSET_CURVE_GRADIENT_SPIN,
@@ -170,10 +170,16 @@ BEGIN
                     ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_FACTOR_POS_EDIT,88,17,30,18,ES_AUTOHSCROLL | 
                     ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,15,50,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,88,50,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,26,83,39,18,ES_AUTOHSCROLL | 
                     ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,26,118,39,18,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Использовать регулятор",IDC_PD_IDLREG_USE_REGULATOR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
     LTEXT           "коэффициенты регулятора",IDC_PD_IDLREG_FACTORS_CAPTION,
                     23,5,113,9
     LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
@@ -192,12 +198,6 @@ BEGIN
                     UDS_ARROWKEYS | UDS_HOTTRACK,68,83,11,16
     CONTROL         "Spin1",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,68,118,11,16
-    CONTROL         "Использовать регулятор",IDC_PD_IDLREG_USE_REGULATOR,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
-    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,88,50,30,18,
-                    ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,15,50,30,18,
-                    ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "пределы регулирования",
                     IDC_PD_IDLREG_RESTRICTIONS_CAPTION,28,38,113,9
     LTEXT           "мин.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,50,19,17
@@ -219,42 +219,44 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,93,21,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,43,20,13,18
-    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,124,20,13,18
-    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,
-                    10,33,10
-    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,
-                    10,34,10
-    CONTROL         "Инверсия концевика карбюратора",
-                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
-                    22,13
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
-                    13
-    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
-                    ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,93,130,11,18
-    LTEXT           "Порог включения ЭМР",
-                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
-    LTEXT           "Разряжение (кПа)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
-                    110,130,48,17
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,14,64,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,64,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Инверсия концевика карбюратора",
+                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
+    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,43,20,13,
+                    18
+    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,20,13,
+                    18
+    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,
+                    10,33,10
+    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,
+                    10,34,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
+                    22,13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
+                    13
+    CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,93,130,11,
+                    18
+    LTEXT           "Порог включения ЭМР",
+                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
+    LTEXT           "Разряжение (кПа)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
+                    110,130,48,17
     CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,45,64,13,18
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,64,13,
+                    18
     CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,122,64,13,18
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,122,64,13,
+                    18
     LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,
                     54,33,10
     LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,
@@ -267,10 +269,8 @@ BEGIN
                     IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
     GROUPBOX        "Пороги ЭПХХ для газа",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,6,
                     47,159,40
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
-                    ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,45,98,11,18
+                    UDS_ARROWKEYS | UDS_HOTTRACK,45,98,11,18
     LTEXT           "Задержка выкл. клап.",
                     IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,5,88,79,10
     LTEXT           "сек.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
@@ -284,19 +284,19 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,80,50,19,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Использовать датчик температуры охлаждающей жидкости",
+                    IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
     LTEXT           "Порог включения вентилятора",
                     IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,16,16,119,11
     LTEXT           "Порог выключения вентилятора",
                     IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,65,116,9
     CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,88,30,14,19
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,30,14,
+                    19
     CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | 
-                    WS_TABSTOP,88,80,14,19
-    CONTROL         "Использовать датчик температуры охлаждающей жидкости",
-                    IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,80,14,
+                    19
     LTEXT           "°С",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,33,18,14
     LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
 END
@@ -307,21 +307,38 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT,10,26,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,46,26,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT,95,26,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,131,25,11,
+                    16
     EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT,10,70,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,70,11,
+                    16
     EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT,96,70,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,11,
+                    16
     EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT,10,113,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,113,11,
+                    16
     EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT,96,113,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,113,
+                    11,16
+    CTEXT           "Датчик абсолютного давления",
+                    IDC_PD_ADCCOMPEN_MAP_CAPTION,13,12,122,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT,60,28,34,12
     LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT,146,24,
                     25,20
-    CTEXT           "Датчик абсолютного давления",
-                    IDC_PD_ADCCOMPEN_MAP_CAPTION,13,12,122,11
     CTEXT           "Напряжение бортовой сети",IDC_PD_ADCCOMPEN_UBAT_CAPTION,
                     12,56,122,11
     CTEXT           "Датчик температуры ОЖ",IDC_PD_ADCCOMPEN_TEMP_CAPTION,16,
@@ -332,41 +349,24 @@ BEGIN
                     25,19
     LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT,145,
                     111,25,18
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,46,26,11,16
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,131,25,11,
-                    16
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,70,11,
-                    16
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,11,
-                    16
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,113,11,
-                    16
-    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,113,
-                    11,16
 END
 
 IDD_PD_CKPS_PAGE DIALOG DISCARDABLE  0, 0, 183, 150
 STYLE WS_CHILD
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,48,32,79,14
+    CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,48,50,74,12
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,47,71,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,27,109,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,77,104,92,29,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,63,109,11,16
-    CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON,48,50,74,12
-    CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP,48,32,79,14
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,47,71,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_GROUP | WS_TABSTOP
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
                     131,51
     LTEXT           "Кол-во зубьев до в.м.т.",
@@ -379,7 +379,7 @@ STYLE WS_CHILD
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_PROPERTY_GRID,"Static",SS_BLACKFRAME | SS_NOTIFY | 
-                    SS_SUNKEN,1,17,169,101
+                    SS_SUNKEN | WS_TABSTOP,1,17,169,101
 END
 
 IDD_PD_MISC_PAGE DIALOG DISCARDABLE  0, 0, 192, 126
@@ -389,12 +389,12 @@ BEGIN
     COMBOBOX        IDC_PD_MISC_UART_SPEED_COMBO,33,40,70,82,
                     CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
                     WS_TABSTOP
-    LTEXT           "Скорость передачи данных (бод)",
-                    IDC_PD_MISC_UART_SPEED_COMBO_CAPTION,31,29,115,9
     EDITTEXT        IDC_PD_MISC_PACKET_PERIOD_EDIT,35,87,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Скорость передачи данных (бод)",
+                    IDC_PD_MISC_UART_SPEED_COMBO_CAPTION,31,29,115,9
     CONTROL         "Spin1",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP,85,87,11,17
+                    UDS_ARROWKEYS | UDS_HOTTRACK,85,87,11,17
     LTEXT           "Период передачи пакетов с данными",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,34,66,119,20
     LTEXT           "мс",IDC_PD_MISC_PACKET_PERIOD_UNIT,102,90,25,13
