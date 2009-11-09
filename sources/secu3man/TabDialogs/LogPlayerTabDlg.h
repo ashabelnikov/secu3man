@@ -8,6 +8,7 @@
 
 class CLPControlPanelDlg;
 class CMIDeskDlg;
+class COScopeCtrl;
 
 class CLogPlayerTabDlg : public CTabDialog
 {
@@ -18,12 +19,19 @@ class CLogPlayerTabDlg : public CTabDialog
 
   void EnlargeMonitor(bool i_enlarge);
 
+  void AppendKnockValue(double i_value, bool i_reverse);
+  void ResetKnockOscilloscope(void);
+
  public:
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CLPControlPanelDlg> mp_LPPanelDlg;
+
+  //additional: for displaying of knock
+  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   
  protected:
   void _ResizeRect(const CRect& i_external, CRect& io_victim);
+  void _InitializeOscilloscopeControl(void);
 
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);

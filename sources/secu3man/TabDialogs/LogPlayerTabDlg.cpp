@@ -15,6 +15,7 @@
 #include "common\MathHelpers.h"
 #include "LPControlPanelDlg.h"
 #include "MIDesk\MIDeskDlg.h"
+#include "ui-core\OScopeCtrl.h"
 
 using namespace std;
 
@@ -35,6 +36,7 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CLogPlayerTabDlg::IDD, pParent)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
+, mp_OScopeCtrl(new COScopeCtrl())
 {
  //todo
 }
@@ -59,6 +61,9 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
 
  mp_LPPanelDlg->Create(CLPControlPanelDlg::IDD, this);
  mp_LPPanelDlg->SetWindowPos(NULL,0,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+
+ //инициализируем осциллограф
+ _InitializeOscilloscopeControl();
 
  UpdateDialogControls(this,TRUE);	
  return TRUE;
@@ -99,3 +104,33 @@ void CLogPlayerTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
  CPoint center_victim = io_victim.CenterPoint();
  io_victim.OffsetRect(center_external - center_victim);
 }
+
+//инициализация осциллографа для сигнала ДД
+void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
+{
+ CRect rect;
+ GetDlgItem(IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
+ // create the control
+ mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this); 
+
+ // customize the control
+ mp_OScopeCtrl->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255));
+ mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));
+}
+
+void CLogPlayerTabDlg::AppendKnockValue(double i_value, bool i_reverse)
+{
+ mp_OScopeCtrl->AppendPoint(i_value, i_reverse);
+}
+
+void CLogPlayerTabDlg::ResetKnockOscilloscope(void)
+{
+ mp_OScopeCtrl->Reset();
+}
+

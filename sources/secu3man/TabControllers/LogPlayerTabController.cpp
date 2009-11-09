@@ -402,7 +402,7 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
  }
 
  _UpdateTimerPeriod(i_set_timer);
- _DisplayCurrentRecord();
+ _DisplayCurrentRecord(i_direction);
  _UpdateButtons();
 
  if (i_set_slider)
@@ -441,7 +441,7 @@ void CLogPlayerTabController::_InitPlayer(void)
  m_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount());
  m_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos()); 
  _GetRecord();
- _DisplayCurrentRecord();
+ _DisplayCurrentRecord(DIR_NEXT);
  _UpdateButtons();
  m_prev_record = m_curr_record;
 }
@@ -456,9 +456,10 @@ void CLogPlayerTabController::_ClosePlayer(void)
  m_timer.KillTimer(); 
  mp_log_reader->CloseFile();     
  m_view->mp_LPPanelDlg->SetPositionIndicator(_T(""));
+ m_view->ResetKnockOscilloscope();
 }
 
-void CLogPlayerTabController::_DisplayCurrentRecord(void)
+void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 {
  //обновляем приборы, а также обновляем позицию слайдера, если нужно
  m_view->mp_MIDeskDlg->SetValues(&m_curr_record.second);
@@ -472,6 +473,9 @@ void CLogPlayerTabController::_DisplayCurrentRecord(void)
      m_curr_record.first.wSecond,
      m_curr_record.first.wMilliseconds / 10);
  m_view->mp_LPPanelDlg->SetPositionIndicator(string.GetBuffer(0));
+
+ //выводим сигнал ДД
+ m_view->AppendKnockValue(m_curr_record.second.knock_k, i_direction == DIR_PREV);
 }
 
 void CLogPlayerTabController::_UpdateButtons(void)

@@ -70,7 +70,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   void _ClosePlayer(void);
 
   //вывод текущей записи на приборы и обновление индикатора времени
-  void _DisplayCurrentRecord(void);
+  void _DisplayCurrentRecord(EDirection i_direction);
   
   //разрешение/запрещение кнопок в зависимости от текущего положения
   void _UpdateButtons(void);

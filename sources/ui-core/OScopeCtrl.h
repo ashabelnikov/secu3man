@@ -7,18 +7,24 @@
 #ifndef __OScopeCtrl_H__
 #define __OScopeCtrl_H__
 
+#include <deque>
+
 /////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl window
 
 class AFX_EXT_CLASS COScopeCtrl : public CWnd
 {
-// Construction
 public:
   COScopeCtrl();
+  virtual ~COScopeCtrl();
 
-// Attributes
-public:
-  double AppendPoint(double dNewPoint);
+  virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
+
+  //Use for add new point
+  //dNewPoint - value of new point 
+  //i_left - if true, then point will be added from left side (reverse)
+  void AppendPoint(double dNewPoint, bool i_reverse = false);
+
   void SetRange(double dLower, double dUpper, int nDecimalPlaces=1);
   void SetXUnits(CString string);
   void SetYUnits(CString string);
@@ -26,50 +32,30 @@ public:
   void SetPlotColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
   void InvalidateCtrl();
-  void DrawPoint();
+  void DrawPoint(bool i_reverse);
   void Reset();
 
-  // Operations
-public:
+//Implementation
+protected:
+  size_t _GetPtCount(void);
+  // Generated message map functions
+  afx_msg void OnPaint();
+  afx_msg void OnSize(UINT nType, int cx, int cy); 
+  DECLARE_MESSAGE_MAP()
 
-// Overrides
-  // ClassWizard generated virtual function overrides
-  //{{AFX_VIRTUAL(COScopeCtrl)
-  public:
-  virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID=NULL);
-  //}}AFX_VIRTUAL
-
-// Implementation
-public:
-  int m_nShiftPixels;          // amount to shift with each new point 
+private:
+  const int m_nShiftPixels;    // amount to shift with each new point 
   int m_nYDecimals;
 
   CString m_strXUnitsString;
   CString m_strYUnitsString;
 
-  COLORREF m_crBackColor;        // background color
-  COLORREF m_crGridColor;        // grid color
-  COLORREF m_crPlotColor;        // data color  
-  
+  COLORREF m_crBackColor;      // background color
+  COLORREF m_crGridColor;      // grid color
+  COLORREF m_crPlotColor;      // data color  
+
   double m_dCurrentPosition;   // current position
   double m_dPreviousPosition;  // previous position
-
-  virtual ~COScopeCtrl();
-
-  // Generated message map functions
-protected:
-  //{{AFX_MSG(COScopeCtrl)
-  afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy); 
-  //}}AFX_MSG
-  DECLARE_MESSAGE_MAP()
-
-  int m_nHalfShiftPixels;
-  int m_nPlotShiftPixels;
-  int m_nClientHeight;
-  int m_nClientWidth;
-  int m_nPlotHeight;
-  int m_nPlotWidth;
 
   double m_dLowerLimit;        // lower bounds
   double m_dUpperLimit;        // upper bounds
@@ -87,7 +73,11 @@ protected:
   CBitmap *m_pbitmapOldPlot;
   CBitmap m_bitmapGrid;
   CBitmap m_bitmapPlot;
-
+  
+  //stores values of all points  
+  std::deque<double> m_points;
+  //stores point position, used for correct scrolling
+  size_t m_point_position;  
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -1,7 +1,9 @@
-//Author Mark C. Malburg.  
+//Based on code of author Mark C. Malburg.  
 //http://www.codeproject.com/KB/miscctrl/oscope.aspx
 //Some modifications by A. Shabelnikov:
 //  - Additional check added to avoid overflow range error in log10().
+//  - Control adapted to work in bidirectional mode
+//  - Code clean up
 
 // OScopeCtrl.cpp : implementation file//
 
@@ -13,479 +15,487 @@
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
-static char THIS_FILE[] = __FILE__ ;
+static char THIS_FILE[] = __FILE__;
 #endif
+
+BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
+ ON_WM_PAINT()
+ ON_WM_SIZE()
+END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl
 COScopeCtrl::COScopeCtrl()
+: m_point_position(0)
+// m_nShiftPixels determines how much the plot shifts (in terms of pixels)
+// with the addition of a new data point
+, m_nShiftPixels(4)
 {
-  // since plotting is based on a LineTo for each new point
-  // we need a starting point (i.e. a "previous" point)
-  // use 0.0 as the default first point.
-  // these are public member variables, and can be changed outside
-  // (after construction).  Therefore m_perviousPosition could be set to
-  // a more appropriate value prior to the first call to SetPosition.
-  m_dPreviousPosition =   0.0 ;
+ // since plotting is based on a LineTo for each new point
+ // we need a starting point (i.e. a "previous" point)
+ // use 0.0 as the default first point.
+ // these are public member variables, and can be changed outside
+ // (after construction).  Therefore m_perviousPosition could be set to
+ // a more appropriate value prior to the first call to SetPosition.
+ m_dPreviousPosition = 0.0;
 
-  // public variable for the number of decimal places on the y axis
-  m_nYDecimals = 3 ;
+ // public variable for the number of decimal places on the y axis
+ m_nYDecimals = 3;
 
-  // set some initial values for the scaling until "SetRange" is called.
-  // these are protected varaibles and must be set with SetRange
-  // in order to ensure that m_dRange is updated accordingly
-  m_dLowerLimit = -10.0 ;
-  m_dUpperLimit =  10.0 ;
-  m_dRange      =  m_dUpperLimit - m_dLowerLimit ;   // protected member variable
+ // set some initial values for the scaling until "SetRange" is called.
+ // these are protected varaibles and must be set with SetRange
+ // in order to ensure that m_dRange is updated accordingly
+ m_dLowerLimit = -10.0;
+ m_dUpperLimit =  10.0;
+ m_dRange      =  m_dUpperLimit - m_dLowerLimit;
 
-  // m_nShiftPixels determines how much the plot shifts (in terms of pixels) 
-  // with the addition of a new data point
-  m_nShiftPixels     = 4 ;
-  m_nHalfShiftPixels = m_nShiftPixels/2 ;                     // protected
-  m_nPlotShiftPixels = m_nShiftPixels + m_nHalfShiftPixels ;  // protected
+ // background, grid and data colors
+ // these are public variables and can be set directly
+ m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
+ m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
+ m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
+ 
+ m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
+ m_brushBack.CreateSolidBrush(m_crBackColor);
 
-  // background, grid and data colors
-  // these are public variables and can be set directly
-  m_crBackColor  = RGB(  0,   0,   0) ;  // see also SetBackgroundColor
-  m_crGridColor  = RGB(  0, 255, 255) ;  // see also SetGridColor
-  m_crPlotColor  = RGB(255, 255, 255) ;  // see also SetPlotColor
+ m_strXUnitsString.Format(_T("Samples"));  // can also be set with SetXUnits
+ m_strYUnitsString.Format(_T("Y units"));  // can also be set with SetYUnits
 
-  // protected variables
-  m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor) ;
-  m_brushBack.CreateSolidBrush(m_crBackColor) ;
-
-  // public member variables, can be set directly 
-  m_strXUnitsString.Format(_T("Samples")) ;  // can also be set with SetXUnits
-  m_strYUnitsString.Format(_T("Y units")) ;  // can also be set with SetYUnits
-
-  // protected bitmaps to restore the memory DC's
-  m_pbitmapOldGrid = NULL ;
-  m_pbitmapOldPlot = NULL ;
-
-}  // COScopeCtrl
+ // bitmaps to restore the memory DC's
+ m_pbitmapOldGrid = NULL;
+ m_pbitmapOldPlot = NULL;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 COScopeCtrl::~COScopeCtrl()
 {
-  // just to be picky restore the bitmaps for the two memory dc's
-  // (these dc's are being destroyed so there shouldn't be any leaks)
-  if (m_pbitmapOldGrid != NULL)
-    m_dcGrid.SelectObject(m_pbitmapOldGrid) ;  
-  if (m_pbitmapOldPlot != NULL)
-    m_dcPlot.SelectObject(m_pbitmapOldPlot) ;  
-
-} // ~COScopeCtrl
-
-
-BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
-  //{{AFX_MSG_MAP(COScopeCtrl)
-  ON_WM_PAINT()
-  ON_WM_SIZE()
-  //}}AFX_MSG_MAP
-END_MESSAGE_MAP()
-
+ // just to be picky restore the bitmaps for the two memory dc's
+ // (these dc's are being destroyed so there shouldn't be any leaks)
+ if (m_pbitmapOldGrid != NULL)
+  m_dcGrid.SelectObject(m_pbitmapOldGrid);  
+ if (m_pbitmapOldPlot != NULL)
+  m_dcPlot.SelectObject(m_pbitmapOldPlot);  
+}
 
 /////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl message handlers
 
 /////////////////////////////////////////////////////////////////////////////
-BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, 
-                         CWnd* pParentWnd, UINT nID) 
+BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) 
 {
-  BOOL result ;
-  static CString className = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW) ;
+ BOOL result;
+ static CString className = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW);
 
-  result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, 
-                          className, NULL, dwStyle, 
+ result = CWnd::CreateEx(WS_EX_CLIENTEDGE | WS_EX_STATICEDGE, className, NULL, dwStyle,
                           rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top,
-                          pParentWnd->GetSafeHwnd(), (HMENU)nID) ;
-  if (result != 0)
-    InvalidateCtrl() ;
+                          pParentWnd->GetSafeHwnd(), (HMENU)nID);
+ if (result != 0)
+  InvalidateCtrl();
 
-  return result ;
-
-} // Create
+ return result;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetRange(double dLower, double dUpper, int nDecimalPlaces)
 {
-  ASSERT(dUpper > dLower) ;
+ ASSERT(dUpper > dLower);
 
-  m_dLowerLimit     = dLower;
-  m_dUpperLimit     = dUpper ;
-  m_nYDecimals      = nDecimalPlaces ;
-  m_dRange          = m_dUpperLimit - m_dLowerLimit ;
-  m_dVerticalFactor = (double)m_nPlotHeight / m_dRange ; 
+ m_dLowerLimit     = dLower;
+ m_dUpperLimit     = dUpper;
+ m_nYDecimals      = nDecimalPlaces;
+ m_dRange          = m_dUpperLimit - m_dLowerLimit;
+ m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
   
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetRange
-
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetXUnits(CString string)
 {
-  m_strXUnitsString = string ;
-
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetXUnits
+ m_strXUnitsString = string;
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetYUnits(CString string)
 {
-  m_strYUnitsString = string ;
-
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetYUnits
+ m_strYUnitsString = string;
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetGridColor(COLORREF color)
 {
-  m_crGridColor = color ;
-
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetGridColor
-
+ m_crGridColor = color;
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetPlotColor(COLORREF color)
 {
-  m_crPlotColor = color ;
-
-  m_penPlot.DeleteObject() ;
-  m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor) ;
-
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetPlotColor
-
+ m_crPlotColor = color;
+ m_penPlot.DeleteObject();
+ m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetBackgroundColor(COLORREF color)
 {
-  m_crBackColor = color ;
-
-  m_brushBack.DeleteObject() ;
-  m_brushBack.CreateSolidBrush(m_crBackColor) ;
-
-  // clear out the existing garbage, re-start with a clean plot
-  InvalidateCtrl() ;
-
-}  // SetBackgroundColor
+ m_crBackColor = color;
+ m_brushBack.DeleteObject();
+ m_brushBack.CreateSolidBrush(m_crBackColor);
+ // clear out the existing garbage, re-start with a clean plot
+ InvalidateCtrl();
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::InvalidateCtrl()
 {
-  // There is a lot of drawing going on here - particularly in terms of 
-  // drawing the grid.  Don't panic, this is all being drawn (only once)
-  // to a bitmap.  The result is then BitBlt'd to the control whenever needed.
-  int i ;
-  int nCharacters ;
-  int nTopGridPix, nMidGridPix, nBottomGridPix ;
+ // There is a lot of drawing going on here - particularly in terms of 
+ // drawing the grid.  Don't panic, this is all being drawn (only once)
+ // to a bitmap.  The result is then BitBlt'd to the control whenever needed.
+ int i;
+ int nCharacters;
+ int nTopGridPix, nMidGridPix, nBottomGridPix;
 
-  CPen *oldPen ;
-  CPen solidPen(PS_SOLID, 0, m_crGridColor) ;
-  CFont axisFont, yUnitFont, *oldFont ;
-  CString strTemp ;
+ CPen *oldPen;
+ CPen solidPen(PS_SOLID, 0, m_crGridColor);
+ CFont axisFont, yUnitFont, *oldFont;
+ CString strTemp;
 
-  // in case we haven't established the memory dc's
-  CClientDC dc(this) ;  
+ // in case we haven't established the memory dc's
+ CClientDC dc(this);  
 
-  // if we don't have one yet, set up a memory dc for the grid
-  if (m_dcGrid.GetSafeHdc() == NULL)
-  {
-    m_dcGrid.CreateCompatibleDC(&dc) ;
-    m_bitmapGrid.CreateCompatibleBitmap(&dc, m_nClientWidth, m_nClientHeight) ;
-    m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid) ;
-  }
+ // if we don't have one yet, set up a memory dc for the grid
+ if (m_dcGrid.GetSafeHdc() == NULL)
+ {
+  m_dcGrid.CreateCompatibleDC(&dc);
+  m_bitmapGrid.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
+  m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid);
+ }
   
-  m_dcGrid.SetBkColor (m_crBackColor) ;
+ m_dcGrid.SetBkColor (m_crBackColor);
 
-  // fill the grid background
-  m_dcGrid.FillRect(m_rectClient, &m_brushBack) ;
+ // fill the grid background
+ m_dcGrid.FillRect(m_rectClient, &m_brushBack);
 
-  // draw the plot rectangle:
-  // determine how wide the y axis scaling values are
-  nCharacters = abs((int)log10(fabs(m_dUpperLimit))) ;
+ // draw the plot rectangle:
+ // determine how wide the y axis scaling values are
+ nCharacters = abs((int)log10(fabs(m_dUpperLimit))) ;
   
-  //avoid overflow range error (crash), when m_dLowerLimit is zero.
-  double log10ll = (m_dLowerLimit!=.0) ? log10(fabs(m_dLowerLimit)) : log10ll = .0;  
-  nCharacters = max(nCharacters, abs((int)log10ll)) ;
+ //avoid overflow range error (crash), when m_dLowerLimit is zero.
+ double log10ll = (m_dLowerLimit!=.0) ? log10(fabs(m_dLowerLimit)) : log10ll = .0;  
+ nCharacters = max(nCharacters, abs((int)log10ll));
 
-  // add the units digit, decimal point and a minus sign, and an extra space
-  // as well as the number of decimal places to display
-  nCharacters = nCharacters + 4 + m_nYDecimals ;  
+ // add the units digit, decimal point and a minus sign, and an extra space
+ // as well as the number of decimal places to display
+ nCharacters = nCharacters + 4 + m_nYDecimals;  
 
-  // adjust the plot rectangle dimensions
-  // assume 6 pixels per character (this may need to be adjusted)
-  m_rectPlot.left = m_rectClient.left + 6*(nCharacters) ;
-  m_nPlotWidth    = m_rectPlot.Width() ;
+ // adjust the plot rectangle dimensions
+ // assume 6 pixels per character (this may need to be adjusted)
+ m_rectPlot.left = m_rectClient.left + 6*(nCharacters);
+  
+ // draw the plot rectangle
+ oldPen = m_dcGrid.SelectObject (&solidPen);
+ m_dcGrid.MoveTo (m_rectPlot.left, m_rectPlot.top);
+ m_dcGrid.LineTo (m_rectPlot.right+1, m_rectPlot.top);
+ m_dcGrid.LineTo (m_rectPlot.right+1, m_rectPlot.bottom+1);
+ m_dcGrid.LineTo (m_rectPlot.left, m_rectPlot.bottom+1);
+ m_dcGrid.LineTo (m_rectPlot.left, m_rectPlot.top);
+ m_dcGrid.SelectObject (oldPen);
 
-  // draw the plot rectangle
-  oldPen = m_dcGrid.SelectObject (&solidPen) ; 
-  m_dcGrid.MoveTo (m_rectPlot.left, m_rectPlot.top) ;
-  m_dcGrid.LineTo (m_rectPlot.right+1, m_rectPlot.top) ;
-  m_dcGrid.LineTo (m_rectPlot.right+1, m_rectPlot.bottom+1) ;
-  m_dcGrid.LineTo (m_rectPlot.left, m_rectPlot.bottom+1) ;
-  m_dcGrid.LineTo (m_rectPlot.left, m_rectPlot.top) ;
-  m_dcGrid.SelectObject (oldPen) ; 
+ // draw the dotted lines,
+ // use SetPixel instead of a dotted pen - this allows for a
+ // finer dotted line and a more "technical" look
+ nMidGridPix    = (m_rectPlot.top + m_rectPlot.bottom)/2;
+ nTopGridPix    = nMidGridPix - m_rectPlot.Height() / 4;
+ nBottomGridPix = nMidGridPix + m_rectPlot.Height() / 4;
 
-  // draw the dotted lines, 
-  // use SetPixel instead of a dotted pen - this allows for a 
-  // finer dotted line and a more "technical" look
-  nMidGridPix    = (m_rectPlot.top + m_rectPlot.bottom)/2 ;
-  nTopGridPix    = nMidGridPix - m_nPlotHeight/4 ;
-  nBottomGridPix = nMidGridPix + m_nPlotHeight/4 ;
+ for (i=m_rectPlot.left; i<m_rectPlot.right; i+=4)
+ {
+  m_dcGrid.SetPixel (i, nTopGridPix,    m_crGridColor);
+  m_dcGrid.SetPixel (i, nMidGridPix,    m_crGridColor);
+  m_dcGrid.SetPixel (i, nBottomGridPix, m_crGridColor);
+ }
 
-  for (i=m_rectPlot.left; i<m_rectPlot.right; i+=4)
-  {
-    m_dcGrid.SetPixel (i, nTopGridPix,    m_crGridColor) ;
-    m_dcGrid.SetPixel (i, nMidGridPix,    m_crGridColor) ;
-    m_dcGrid.SetPixel (i, nBottomGridPix, m_crGridColor) ;
-  }
-
-  // create some fonts (horizontal and vertical)
-  // use a height of 14 pixels and 300 weight 
-  // (these may need to be adjusted depending on the display)
-  axisFont.CreateFont (14, 0, 0, 0, 300,
+ // create some fonts (horizontal and vertical)
+ // use a height of 14 pixels and 300 weight 
+ // (these may need to be adjusted depending on the display)
+ axisFont.CreateFont (14, 0, 0, 0, 300,
                        FALSE, FALSE, 0, ANSI_CHARSET,
-                       OUT_DEFAULT_PRECIS, 
+                       OUT_DEFAULT_PRECIS,
                        CLIP_DEFAULT_PRECIS,
-                       DEFAULT_QUALITY, 
-                       DEFAULT_PITCH|FF_SWISS, _T("Arial")) ;
-  yUnitFont.CreateFont (14, 0, 900, 0, 300,
+                       DEFAULT_QUALITY,
+                       DEFAULT_PITCH|FF_SWISS, _T("Arial"));
+ yUnitFont.CreateFont (14, 0, 900, 0, 300,
                        FALSE, FALSE, 0, ANSI_CHARSET,
-                       OUT_DEFAULT_PRECIS, 
+                       OUT_DEFAULT_PRECIS,
                        CLIP_DEFAULT_PRECIS,
-                       DEFAULT_QUALITY, 
-                       DEFAULT_PITCH|FF_SWISS, _T("Arial")) ;
+                       DEFAULT_QUALITY,
+                       DEFAULT_PITCH|FF_SWISS, _T("Arial"));
   
-  // grab the horizontal font
-  oldFont = m_dcGrid.SelectObject(&axisFont) ;
+ // grab the horizontal font
+ oldFont = m_dcGrid.SelectObject(&axisFont);
   
-  // y max
-  m_dcGrid.SetTextColor (m_crGridColor) ;
-  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP) ;
-  strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dUpperLimit) ;
-  m_dcGrid.TextOut (m_rectPlot.left-4, m_rectPlot.top, strTemp) ;
+ // y max
+ m_dcGrid.SetTextColor (m_crGridColor);
+ m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
+ strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dUpperLimit);
+ m_dcGrid.TextOut (m_rectPlot.left - 4, m_rectPlot.top, strTemp);
 
-  // y min
-  m_dcGrid.SetTextAlign (TA_RIGHT|TA_BASELINE) ;
-  strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dLowerLimit) ;
-  m_dcGrid.TextOut (m_rectPlot.left-4, m_rectPlot.bottom, strTemp) ;
+ // y min
+ m_dcGrid.SetTextAlign (TA_RIGHT|TA_BASELINE);
+ strTemp.Format (_T("%.*lf"), m_nYDecimals, m_dLowerLimit);
+ m_dcGrid.TextOut (m_rectPlot.left - 4, m_rectPlot.bottom, strTemp);
 
-  // x min
-  m_dcGrid.SetTextAlign (TA_LEFT|TA_TOP) ;
-  m_dcGrid.TextOut (m_rectPlot.left, m_rectPlot.bottom+4, "0") ;
+ // x min
+ m_dcGrid.SetTextAlign (TA_LEFT|TA_TOP);
+ m_dcGrid.TextOut (m_rectPlot.left, m_rectPlot.bottom + 4, "0");
 
-  // x max
-  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP) ;
-  strTemp.Format (_T("%d"), m_nPlotWidth/m_nShiftPixels) ; 
-  m_dcGrid.TextOut (m_rectPlot.right, m_rectPlot.bottom+4, strTemp) ;
+ // x max
+ m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
+ strTemp.Format (_T("%d"), _GetPtCount()); 
+ m_dcGrid.TextOut (m_rectPlot.right, m_rectPlot.bottom + 4, strTemp);
 
-  // x units
-  m_dcGrid.SetTextAlign (TA_CENTER|TA_TOP) ;
-  m_dcGrid.TextOut ((m_rectPlot.left+m_rectPlot.right)/2, 
-                    m_rectPlot.bottom+4, m_strXUnitsString) ;
+ // x units
+ m_dcGrid.SetTextAlign (TA_CENTER|TA_TOP);
+ m_dcGrid.TextOut ((m_rectPlot.left + m_rectPlot.right) / 2,
+                    m_rectPlot.bottom + 4, m_strXUnitsString);
 
-  // restore the font
-  m_dcGrid.SelectObject(oldFont) ;
+ // restore the font
+ m_dcGrid.SelectObject(oldFont);
 
-  // y units
-  oldFont = m_dcGrid.SelectObject(&yUnitFont) ;
-  m_dcGrid.SetTextAlign (TA_CENTER|TA_BASELINE) ;
-  m_dcGrid.TextOut ((m_rectClient.left+m_rectPlot.left)/2, 
-                    (m_rectPlot.bottom+m_rectPlot.top)/2, m_strYUnitsString) ;
-  m_dcGrid.SelectObject(oldFont) ;
+ // y units
+ oldFont = m_dcGrid.SelectObject(&yUnitFont);
+ m_dcGrid.SetTextAlign (TA_CENTER|TA_BASELINE);
+ m_dcGrid.TextOut ((m_rectClient.left + m_rectPlot.left) / 2,
+                    (m_rectPlot.bottom + m_rectPlot.top) / 2, m_strYUnitsString);
+ m_dcGrid.SelectObject(oldFont);
 
-  // at this point we are done filling the the grid bitmap, 
-  // no more drawing to this bitmap is needed until the setting are changed
+ // at this point we are done filling the the grid bitmap, 
+ // no more drawing to this bitmap is needed until the setting are changed
   
-  // if we don't have one yet, set up a memory dc for the plot
-  if (m_dcPlot.GetSafeHdc() == NULL)
-  {
-    m_dcPlot.CreateCompatibleDC(&dc) ;
-    m_bitmapPlot.CreateCompatibleBitmap(&dc, m_nClientWidth, m_nClientHeight) ;
-    m_pbitmapOldPlot = m_dcPlot.SelectObject(&m_bitmapPlot) ;
-  }
+ // if we don't have one yet, set up a memory dc for the plot
+ if (m_dcPlot.GetSafeHdc() == NULL)
+ {
+  m_dcPlot.CreateCompatibleDC(&dc);
+  m_bitmapPlot.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
+  m_pbitmapOldPlot = m_dcPlot.SelectObject(&m_bitmapPlot);
+ }
 
-  // make sure the plot bitmap is cleared
-  m_dcPlot.SetBkColor (m_crBackColor) ;
-  m_dcPlot.FillRect(m_rectClient, &m_brushBack) ;
+ // make sure the plot bitmap is cleared
+ m_dcPlot.SetBkColor (m_crBackColor);
+ m_dcPlot.FillRect(m_rectClient, &m_brushBack);
 
-  // finally, force the plot area to redraw
-  InvalidateRect(m_rectClient) ;
-
-} // InvalidateCtrl
-
+ // finally, force the plot area to redraw
+ InvalidateRect(m_rectClient);
+}
 
 /////////////////////////////////////////////////////////////////////////////
-double COScopeCtrl::AppendPoint(double dNewPoint)
+void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 {
-  // append a data point to the plot
-  // return the previous point
+ ASSERT(_GetPtCount() != 0);
+ size_t MaxPointIndex = _GetPtCount() - 1;
 
-  double dPrevious ;
+ //select default direction
+ if (m_points.empty())
+  m_point_position = i_reverse ? MaxPointIndex : 0;
   
-  dPrevious = m_dCurrentPosition ;
-  m_dCurrentPosition = dNewPoint ;
-  DrawPoint() ;
+ if (!i_reverse)
+ {
+  if (m_points.size())
+   m_dPreviousPosition = m_points.back();
 
-  Invalidate() ;
+  m_points.push_back(dNewPoint);
+  //restrict size of queue
+  if (m_points.size() > MaxPointIndex)
+   m_points.pop_front();
 
-  return dPrevious ;
+  if (m_point_position > 0)
+  {
+   m_point_position--;  
+   return;
+  }
+ }
+ else
+ {
+  if (m_points.size())
+   m_dPreviousPosition = m_points.front();
 
-} // AppendPoint
+  m_points.push_front(dNewPoint);
+  //restrict size of queue
+  if (m_points.size() > MaxPointIndex)
+   m_points.pop_back();
+
+  if (m_point_position < MaxPointIndex)
+  {
+   m_point_position++;
+   return;
+  }
+ }
+   
+ m_dCurrentPosition = dNewPoint;
+ DrawPoint(i_reverse);
+ Invalidate();
+}
  
 ////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::OnPaint() 
 {
-  CPaintDC dc(this) ;  // device context for painting
-  CDC memDC ;
-  CBitmap memBitmap ;
-  CBitmap* oldBitmap ; // bitmap originally found in CMemDC
+ CPaintDC dc(this);  // device context for painting
+ CDC memDC;
+ CBitmap memBitmap;
+ CBitmap* oldBitmap; // bitmap originally found in CMemDC
 
-  // no real plotting work is performed here, 
-  // just putting the existing bitmaps on the client
+ // no real plotting work is performed here,
+ // just putting the existing bitmaps on the client
 
-  // to avoid flicker, establish a memory dc, draw to it 
-  // and then BitBlt it to the client
-  memDC.CreateCompatibleDC(&dc) ;
-  memBitmap.CreateCompatibleBitmap(&dc, m_nClientWidth, m_nClientHeight) ;
-  oldBitmap = (CBitmap *)memDC.SelectObject(&memBitmap) ;
+ // to avoid flicker, establish a memory dc, draw to it
+ // and then BitBlt it to the client
+ memDC.CreateCompatibleDC(&dc);
+ memBitmap.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
+ oldBitmap = (CBitmap *)memDC.SelectObject(&memBitmap);
 
-  if (memDC.GetSafeHdc() != NULL)
-  {
-    // first drop the grid on the memory dc
-    memDC.BitBlt(0, 0, m_nClientWidth, m_nClientHeight, 
-                 &m_dcGrid, 0, 0, SRCCOPY) ;
-    // now add the plot on top as a "pattern" via SRCPAINT.
-    // works well with dark background and a light plot
-    memDC.BitBlt(0, 0, m_nClientWidth, m_nClientHeight, 
-                 &m_dcPlot, 0, 0, SRCPAINT) ;  //SRCPAINT
-    // finally send the result to the display
-    dc.BitBlt(0, 0, m_nClientWidth, m_nClientHeight, 
-              &memDC, 0, 0, SRCCOPY) ;
-  }
+ if (memDC.GetSafeHdc() != NULL)
+ {
+  // first drop the grid on the memory dc
+  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
+               &m_dcGrid, 0, 0, SRCCOPY);
+  // now add the plot on top as a "pattern" via SRCPAINT.
+  // works well with dark background and a light plot
+  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
+               &m_dcPlot, 0, 0, SRCPAINT);  //SRCPAINT
+  // finally send the result to the display
+  dc.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
+            &memDC, 0, 0, SRCCOPY);
+ }
 
-  memDC.SelectObject(oldBitmap) ;
-
-} // OnPaint
+ memDC.SelectObject(oldBitmap);
+}
 
 /////////////////////////////////////////////////////////////////////////////
-void COScopeCtrl::DrawPoint()
+void COScopeCtrl::DrawPoint(bool i_reverse)
 {
-  // this does the work of "scrolling" the plot to the left
-  // and appending a new data point all of the plotting is 
-  // directed to the memory based bitmap associated with m_dcPlot
-  // the will subsequently be BitBlt'd to the client in OnPaint
+ // this does the work of "scrolling" the plot to the left
+ // and appending a new data point all of the plotting is 
+ // directed to the memory based bitmap associated with m_dcPlot
+ // the will subsequently be BitBlt'd to the client in OnPaint
   
-  int currX, prevX, currY, prevY ;
+ int currX, prevX, currY, prevY;
+ int nHalfShiftPixels, nPlotShiftPixels, nShiftPixels;
 
-  CPen *oldPen ;
-  CRect rectCleanUp ;
+ CPen *oldPen;
+ CRect rectCleanUp;
 
-  if (m_dcPlot.GetSafeHdc() != NULL)
-  {
-    // shift the plot by BitBlt'ing it to itself 
-    // note: the m_dcPlot covers the entire client
-    //       but we only shift bitmap that is the size 
-    //       of the plot rectangle
-    // grab the right side of the plot (exluding m_nShiftPixels on the left)
-    // move this grabbed bitmap to the left by m_nShiftPixels
+ if (m_dcPlot.GetSafeHdc() != NULL)
+ {
+  nShiftPixels = i_reverse ? -m_nShiftPixels : m_nShiftPixels;
+  nHalfShiftPixels = nShiftPixels / 2;
+  nPlotShiftPixels = nShiftPixels + nHalfShiftPixels;
 
-    m_dcPlot.BitBlt(m_rectPlot.left, m_rectPlot.top+1, 
-                    m_nPlotWidth, m_nPlotHeight, &m_dcPlot, 
-                    m_rectPlot.left+m_nShiftPixels, m_rectPlot.top+1, 
-                    SRCCOPY) ;
+  // shift the plot by BitBlt'ing it to itself
+  // note: the m_dcPlot covers the entire client
+  //       but we only shift bitmap that is the size
+  //       of the plot rectangle
+  // grab the right side of the plot (excluding nShiftPixels on the left/right)
+  // move this grabbed bitmap to the left/right by nShiftPixels
 
-    // establish a rectangle over the right side of plot
-    // which now needs to be cleaned up proir to adding the new point
-    rectCleanUp = m_rectPlot ;
-    rectCleanUp.left  = rectCleanUp.right - m_nShiftPixels ;
+  m_dcPlot.BitBlt(m_rectPlot.left, m_rectPlot.top + 1,
+                  m_rectPlot.Width(), m_rectPlot.Height(), &m_dcPlot,
+                  m_rectPlot.left + nShiftPixels, m_rectPlot.top + 1,
+                  SRCCOPY);
 
-    // fill the cleanup area with the background
-    m_dcPlot.FillRect(rectCleanUp, &m_brushBack) ;
+  // establish a rectangle over the right side of plot
+  // which now needs to be cleaned up prior to adding the new point
+  rectCleanUp = m_rectPlot;
 
-    // draw the next line segement
+  if (!i_reverse)
+   rectCleanUp.left  = rectCleanUp.right - nShiftPixels;
+  else
+   rectCleanUp.right  = rectCleanUp.left - nShiftPixels;
 
-    // grab the plotting pen
-    oldPen = m_dcPlot.SelectObject(&m_penPlot) ;
+  // fill the cleanup area with the background
+  m_dcPlot.FillRect(rectCleanUp, &m_brushBack);
 
-    // move to the previous point
-    prevX = m_rectPlot.right-m_nPlotShiftPixels ;
-    prevY = m_rectPlot.bottom - 
-            (long)((m_dPreviousPosition - m_dLowerLimit) * m_dVerticalFactor) ;
-    m_dcPlot.MoveTo (prevX, prevY) ;
+  // draw the next line segment
 
-    // draw to the current point
-    currX = m_rectPlot.right-m_nHalfShiftPixels ;
-    currY = m_rectPlot.bottom -
-            (long)((m_dCurrentPosition - m_dLowerLimit) * m_dVerticalFactor) ;
-    m_dcPlot.LineTo (currX, currY) ;
+  // grab the plotting pen
+  oldPen = m_dcPlot.SelectObject(&m_penPlot);
 
-    // restore the pen 
-    m_dcPlot.SelectObject(oldPen) ;
+  // move to the previous point
+  if (!i_reverse)
+   prevX = m_rectPlot.right - nPlotShiftPixels;
+  else
+   prevX = m_rectPlot.left - nPlotShiftPixels;
 
-    // if the data leaks over the upper or lower plot boundaries
-    // fill the upper and lower leakage with the background
-    // this will facilitate clipping on an as needed basis
-    // as opposed to always calling IntersectClipRect
-    if ((prevY <= m_rectPlot.top) || (currY <= m_rectPlot.top))
-      m_dcPlot.FillRect(CRect(prevX, m_rectClient.top, currX+1, m_rectPlot.top+1), &m_brushBack) ;
-    if ((prevY >= m_rectPlot.bottom) || (currY >= m_rectPlot.bottom))
-      m_dcPlot.FillRect(CRect(prevX, m_rectPlot.bottom+1, currX+1, m_rectClient.bottom+1), &m_brushBack) ;
+  prevY = m_rectPlot.bottom -
+          (long)((m_dPreviousPosition - m_dLowerLimit) * m_dVerticalFactor);
 
-    // store the current point for connection to the next point
-    m_dPreviousPosition = m_dCurrentPosition ;
+  m_dcPlot.MoveTo (prevX, prevY);
 
-  }
+  // draw to the current point
+  if (!i_reverse)
+   currX = m_rectPlot.right - nHalfShiftPixels;
+  else
+   currX = m_rectPlot.left - nHalfShiftPixels;
 
-} // end DrawPoint
+  currY = m_rectPlot.bottom -
+          (long)((m_dCurrentPosition - m_dLowerLimit) * m_dVerticalFactor);
+  m_dcPlot.LineTo (currX, currY);
+
+  // restore the pen
+  m_dcPlot.SelectObject(oldPen);
+
+  // if the data leaks over the upper or lower plot boundaries
+  // fill the upper and lower leakage with the background
+  // this will facilitate clipping on an as needed basis
+  // as opposed to always calling IntersectClipRect
+  if ((prevY <= m_rectPlot.top) || (currY <= m_rectPlot.top))
+   m_dcPlot.FillRect(CRect(prevX, m_rectClient.top, currX + 1, m_rectPlot.top + 1), &m_brushBack);
+  if ((prevY >= m_rectPlot.bottom) || (currY >= m_rectPlot.bottom))
+   m_dcPlot.FillRect(CRect(prevX, m_rectPlot.bottom + 1, currX + 1, m_rectClient.bottom + 1), &m_brushBack);
+ }
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::OnSize(UINT nType, int cx, int cy) 
 {
-  CWnd::OnSize(nType, cx, cy) ;
+ CWnd::OnSize(nType, cx, cy);
 
-  // NOTE: OnSize automatically gets called during the setup of the control
+ // NOTE: OnSize automatically gets called during the setup of the control
   
-  GetClientRect(m_rectClient) ;
+ GetClientRect(m_rectClient);
 
-  // set some member variables to avoid multiple function calls
-  m_nClientHeight = m_rectClient.Height() ;
-  m_nClientWidth  = m_rectClient.Width() ;
+ // the "left" coordinate and "width" will be modified in 
+ // InvalidateCtrl to be based on the width of the y axis scaling
+ m_rectPlot.left   = 20;
+ m_rectPlot.top    = 10;
+ m_rectPlot.right  = m_rectClient.right - 10;
+ m_rectPlot.bottom = m_rectClient.bottom - 25;
 
-  // the "left" coordinate and "width" will be modified in 
-  // InvalidateCtrl to be based on the width of the y axis scaling
-  m_rectPlot.left   = 20 ;  
-  m_rectPlot.top    = 10 ;
-  m_rectPlot.right  = m_rectClient.right-10 ;
-  m_rectPlot.bottom = m_rectClient.bottom-25 ;
-
-  // set some member variables to avoid multiple function calls
-  m_nPlotHeight = m_rectPlot.Height() ;
-  m_nPlotWidth  = m_rectPlot.Width() ;
-
-  // set the scaling factor for now, this can be adjusted 
-  // in the SetRange functions
-  m_dVerticalFactor = (double)m_nPlotHeight / m_dRange ; 
-
-} // OnSize
-
+ // set the scaling factor for now, this can be adjusted 
+ // in the SetRange functions
+ m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
+}
 
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::Reset()
 {
-  // to clear the existing data (in the form of a bitmap)
-  // simply invalidate the entire control
-  InvalidateCtrl() ;
+ m_point_position = 0;
+ m_points.clear();
+ m_dPreviousPosition = 0.0;
+ // to clear the existing data (in the form of a bitmap)
+ // simply invalidate the entire control
+ InvalidateCtrl();
+}
+
+size_t COScopeCtrl::_GetPtCount(void)
+{
+ return m_rectPlot.Width() / m_nShiftPixels;
 }
