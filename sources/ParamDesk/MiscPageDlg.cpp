@@ -10,7 +10,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MiscPageDlg.h"
-#include "ui-core/ddx_helpers.h"
+#include "ui-core\ddx_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -19,6 +19,19 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
+
+BEGIN_MESSAGE_MAP(CMiscPageDlg, CDialog)
+ ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_SPIN, OnUpdateControls)
+END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 : CTabDialog(CMiscPageDlg::IDD, pParent)
@@ -51,20 +64,6 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
 }
 
-
-BEGIN_MESSAGE_MAP(CMiscPageDlg, CDialog)
- ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
- ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO, OnUpdateControls)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_UNIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_SPIN, OnUpdateControls)
-END_MESSAGE_MAP()
-
 /////////////////////////////////////////////////////////////////////////////
 // CCKPSPageDlg message handlers
 
@@ -74,16 +73,16 @@ void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-void CMiscPageDlg::OnChangeData() 
+void CMiscPageDlg::OnChangeData()
 {
- UpdateData();	
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  		  
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-BOOL CMiscPageDlg::OnInitDialog() 
+BOOL CMiscPageDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
-	
+
  m_packet_period_edit.SetLimitText(3);
  m_packet_period_edit.SetDecimalPlaces(3);
  m_packet_period_spin.SetBuddy(&m_packet_period_edit);
@@ -94,9 +93,8 @@ BOOL CMiscPageDlg::OnInitDialog()
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
  FillUARTSpeedComboBox(br); //инициализируем комбо бокс
 
- UpdateData(FALSE);  //инициализируем контроллы диалога данными    
+ UpdateData(FALSE);  //инициализируем контроллы диалога данными   
  UpdateDialogControls(this,TRUE);
-
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -104,7 +102,7 @@ BOOL CMiscPageDlg::OnInitDialog()
 //разрешение/запрещение контроллов (всех поголовно)
 void CMiscPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;  
+ m_enabled = (enable) ? TRUE : FALSE;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }
@@ -121,14 +119,14 @@ void CMiscPageDlg::GetValues(SECU3IO::MiscelPar* o_values)
  ASSERT(o_values);
  UpdateData(TRUE); //копируем данные из диалога в переменные
  m_params.baud_rate = _GetBRFromComboBoxByIndex(m_uart_speed_cb_index);
- memcpy(o_values,&m_params,sizeof(SECU3IO::MiscelPar));  
+ memcpy(o_values,&m_params, sizeof(SECU3IO::MiscelPar));
 }
 
 //эту функцию необходимо использовать когда надо занести данные в диалог
 void CMiscPageDlg::SetValues(const SECU3IO::MiscelPar* i_values)
 {
  ASSERT(i_values);
- memcpy(&m_params,i_values,sizeof(SECU3IO::MiscelPar));  
+ memcpy(&m_params,i_values, sizeof(SECU3IO::MiscelPar));
  m_uart_speed_cb_index = _GetIndexFromComboBoxByBR(m_params.baud_rate);
  UpdateData(FALSE); //копируем данные из переменных в диалог
 }

@@ -2,55 +2,40 @@
 #pragma once
 
 #include <string>
-#include "io-core/SECU3IO.h"
+#include "io-core\SECU3IO.h"
 #include "ParamPageEvents.h"
-#include "ui-core/EditEx.h"
-#include "ui-core/SpinButtonCtrlEx.h"
-#include "ui-core/TabDialog.h"
+#include "ui-core\EditEx.h"
+#include "ui-core\SpinButtonCtrlEx.h"
+#include "ui-core\TabDialog.h"
 
 class CStarterPageDlg : public CTabDialog, public ParamPageEvents
 {
-// Construction
-public:
-	CStarterPageDlg(CWnd* pParent = NULL);   // standard constructor
+ public:
+  CStarterPageDlg(CWnd* pParent = NULL);   // standard constructor
+  virtual LPCTSTR GetDialogID(void) const;
+  static const UINT IDD;
 
-	virtual LPCTSTR GetDialogID(void) const;
-    void Enable(bool enable);
-	bool IsEnabled(void);
+  void Enable(bool enable);
+  bool IsEnabled(void);
 
-	void GetValues(SECU3IO::StartrPar* o_values);
-    void SetValues(const SECU3IO::StartrPar* i_values);
+  void GetValues(SECU3IO::StartrPar* o_values);
+  void SetValues(const SECU3IO::StartrPar* i_values);
 
-	static const UINT IDD;
+ // Implementation
+ protected:
+  virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
+  virtual BOOL OnInitDialog();
+  afx_msg void OnChangePdStarterOffRpmEdit();
+  afx_msg void OnChangePdStarterSmapAbandonRpmEdit();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  DECLARE_MESSAGE_MAP()
 
-	CSpinButtonCtrlEx	m_smap_abandon_rpm_spin;
-	CSpinButtonCtrlEx	m_starter_off_rpm_spin;
-	CEditEx	m_smap_abandon_rpm_edit;
-	CEditEx	m_starter_off_rpm_edit;
+ private:
+  SECU3IO::StartrPar m_params;
+  BOOL m_enabled;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CStarterPageDlg)
-	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
-
-// Implementation
-protected:
-	SECU3IO::StartrPar m_params;
-	BOOL m_enabled;
-
-
-	// Generated message map functions
-	//{{AFX_MSG(CStarterPageDlg)
-	virtual BOOL OnInitDialog();
-	afx_msg void OnChangePdStarterOffRpmEdit();
-	afx_msg void OnChangePdStarterSmapAbandonRpmEdit();
-
-	afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-
-	//}}AFX_MSG
-	DECLARE_MESSAGE_MAP()
+  CSpinButtonCtrlEx m_smap_abandon_rpm_spin;
+  CSpinButtonCtrlEx m_starter_off_rpm_spin;
+  CEditEx m_smap_abandon_rpm_edit;
+  CEditEx m_starter_off_rpm_edit;
 };
-
-

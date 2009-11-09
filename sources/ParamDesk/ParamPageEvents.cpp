@@ -23,10 +23,21 @@ static char THIS_FILE[]=__FILE__;
 ParamPageEvents::ParamPageEvents()
 : m_OnChange(NULL)
 {
-
+ //empty
 }
 
 ParamPageEvents::~ParamPageEvents()
 {
+ //empty
+}
 
+void ParamPageEvents::setFunctionOnChange(EventHandler OnChange)
+{
+ m_OnChange = OnChange;
+}
+
+void ParamPageEvents::OnChangeNotify(void)
+{
+ if (m_OnChange)  //call only if handler present!
+  m_OnChange();
 }

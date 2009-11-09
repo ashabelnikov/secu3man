@@ -11,7 +11,6 @@
 #include <afxdisp.h>        // MFC Automation classes
 #endif // _AFX_NO_OLE_SUPPORT
 
-
 #ifndef _AFX_NO_DB_SUPPORT
 #include <afxdb.h>			// MFC ODBC database classes
 #endif // _AFX_NO_DB_SUPPORT
@@ -29,8 +28,7 @@
 
 //--------------------------------------------------------
 //#ifdef _DEBUG  //'identifier' : identifier was truncated in the debug information
-  #pragma warning (disable: 4786)  
+ #pragma warning (disable: 4786)  
 //#endif
 #include <atlconv.h>
 #include "common\LangLayer.h"
-

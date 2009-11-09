@@ -10,33 +10,33 @@
 #pragma warning (disable:C4786)
 
 #include "stdafx.h"
-#include <map>
 #include "resource.h"
 #include "ParamDeskDlg.h"
 
-#include "StarterPageDlg.h" 
-#include "CarburPageDlg.h" 
-#include "AnglesPageDlg.h" 
-#include "IdlRegPageDlg.h" 
-#include "FunSetPageDlg.h" 
-#include "TemperPageDlg.h"
+#include <map>
+
+//вкладки
 #include "ADCCompenPageDlg.h"
+#include "AnglesPageDlg.h" 
+#include "CarburPageDlg.h" 
 #include "CKPSPageDlg.h"
+#include "FunSetPageDlg.h" 
+#include "IdlRegPageDlg.h" 
 #include "KnockPageDlg.h"
 #include "MiscPageDlg.h"
+#include "StarterPageDlg.h" 
+#include "TemperPageDlg.h"
 
-#include "io-core/ufcodes.h" 
-#include "io-core/SECU3IO.h"
+#include "common\FastDelegate.h"
+#include "io-core\SECU3IO.h"
+#include "io-core\ufcodes.h" 
 #include "ui-core\HotKeysToCmdRouter.h"
-
-#include "common/FastDelegate.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
 static char THIS_FILE[] = __FILE__;
 #endif
-
 
 #define TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -98,7 +98,6 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
  m_pMiscPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
-
 CParamDeskDlg::~CParamDeskDlg()
 {  
  delete m_pImgList;	
@@ -116,7 +115,6 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pMiscPageDlg;
 }
 
-
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  CDialog::DoDataExchange(pDX);
@@ -124,7 +122,6 @@ void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
  DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
 }
-
 
 BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
  ON_WM_DESTROY()
@@ -148,7 +145,6 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
  ON_COMMAND_HK_XXX(MISCEL_PAR)
 
 END_MESSAGE_MAP()
-
 
 
 /////////////////////////////////////////////////////////////////////////////
@@ -197,7 +193,7 @@ BOOL CParamDeskDlg::OnInitDialog()
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-	            // EXCEPTION: OCX Property Pages should return FALSE
+	           // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 BYTE CParamDeskDlg::GetCurrentDescriptor(void)
@@ -211,7 +207,6 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
  
  return m_tab_descriptors[selection];
 }
-
 
 void CParamDeskDlg::OnDestroy() 
 {  
@@ -254,6 +249,11 @@ void CParamDeskDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 
  m_tab_control.EnableItem(-1,enable); //all items  
+}
+
+bool CParamDeskDlg::IsEnabled(void) 
+{ 
+ return m_enabled ? true : false;
 }
 
 //спрятать/показать все
@@ -357,7 +357,6 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
  return true;
 }
 
-
 //Устанавливает имена семейств характеристик
 void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
@@ -365,10 +364,32 @@ void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
  m_pFunSetPageDlg->FillCBByFunNames();
 }
 
+const std::vector<_TSTRING>& CParamDeskDlg::GetFunctionsNames(void) 
+{ 
+ return m_pFunSetPageDlg->AccessFunNames();
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)
   m_OnSaveButton();
+}
+
+void CParamDeskDlg::OnSelchangeTabctl(void) 
+{ 
+ if (m_OnTabActivate) 
+  m_OnTabActivate();
+} 
+
+void CParamDeskDlg::OnSelchangingTabctl(void) 
+{
+ //empty
+}
+
+void CParamDeskDlg::OnChangeInTab(void) 
+{ 
+ if (m_OnChangeInTab) 
+  m_OnChangeInTab();
 }
 
 void CParamDeskDlg::ShowSaveButton(bool i_show)
@@ -388,6 +409,30 @@ int CParamDeskDlg::_GetTabIndex(unsigned i_descriptor)
  return -1;
 }
 
+void CParamDeskDlg::SetOnTabActivate(EventHandler OnTabActivate) 
+{
+ m_OnTabActivate = OnTabActivate;
+}
+
+void CParamDeskDlg::SetOnChangeInTab(EventHandler OnChangeInTab) 
+{
+ m_OnChangeInTab = OnChangeInTab;
+}
+
+void CParamDeskDlg::SetOnSaveButton(EventHandler OnSaveButton)
+{
+ m_OnSaveButton  = OnSaveButton;
+}
+
+bool CParamDeskDlg::SetCurSel(int sel)
+{
+ return m_tab_control.SetCurSel(sel);
+}
+
+int CParamDeskDlg::GetCurSel(void) 
+{
+ return m_tab_control.GetCurSel();
+}
 
 void CParamDeskDlg::_RegisterHotKeys(void)
 {
@@ -424,5 +469,3 @@ OnHK_XXX(ADCCOR_PAR)
 OnHK_XXX(CKPS_PAR)
 OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
-
-
