@@ -46,6 +46,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   //Установка обработчика событий. Смотрите описание ITabControllerEvent.
   void SetEventListener(ITabControllerEvent* i_listener); 
 
+  CTabDialog* GetCurrentPage(void) const;
+
  protected:
   // Generated message map functions
   afx_msg BOOL OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
@@ -75,7 +77,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   TabPageData* GetItemData(int item) const;
   void CreateTabPage(void);
   void DestroyTabPage(void);
-  void CalculatePageRect(int nItem,CRect& o_rect);
+  void CalculatePageRect(int nItem, CRect& o_rect);
 
   CTabDialog*  mp_CurDlg;
   HMODULE m_hResourceModule;

@@ -543,3 +543,8 @@ void CTabController::SetResourceModule(HMODULE hModule)
 {
  m_hResourceModule = hModule;
 }
+
+CTabDialog* CTabController::GetCurrentPage(void) const
+{
+ return mp_CurDlg;
+}

@@ -7,6 +7,7 @@ class AFX_EXT_CLASS CDialogWithAccelerators : public CDialog
  typedef CDialog Super;
 
  public:
+  CDialogWithAccelerators(); //modeless
   CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
 
  protected:

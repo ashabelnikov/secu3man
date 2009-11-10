@@ -15,6 +15,11 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+CDialogWithAccelerators::CDialogWithAccelerators()
+{
+ //empty
+}
+
 CDialogWithAccelerators::CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
 : Super(nIDTemplate, pParentWnd)
 {

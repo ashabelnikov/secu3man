@@ -130,12 +130,6 @@ void CMainFrame::OnSetFocus(CWnd* pOldWnd)
 
 BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO* pHandlerInfo)
 {
- // let the view have first crack at the command
- ASSERT(m_pwndView);
- if (m_pwndView && m_pwndView->OnCmdMsg(nID, nCode, pExtra, pHandlerInfo))
-  return TRUE;
-
- // otherwise, do default handling
  return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 

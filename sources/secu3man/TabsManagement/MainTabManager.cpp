@@ -87,7 +87,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
  bitmap.LoadBitmap((LPCTSTR)IDB_MAIN_TAB_CTRL_BITMAPS);
  m_pImgList->Add(&bitmap, MAIN_TAB_CTRL_BITMAPS_COLOR_MASK);
 
- CRect rect(0,0,300,200);
+ CRect rect(0, 0, 300, 200);
 
  mp_tab_control->SetStyle(WS_VISIBLE | WS_CHILD | WS_TABSTOP | TCS_BOTTOM | TCS_OWNERDRAWFIXED);
  mp_tab_control->SetResourceModule(::GetModuleHandle(NULL));
@@ -166,6 +166,14 @@ void CMainTabManager::OnFullScreen(bool i_what)
  CRect rect;
  m_pParent->GetClientRect(rect); 
  mp_tab_control->MoveWindow(rect); //ресайзим таб контрол
+
+ //Запрещаем таб-контрол на всемя пока окно развернуто на весь экран. При входе в полноэкранный режим
+ //ставим фокус на активную вкладку, при выходе, ставим фокус на таб-контрол.
+ mp_tab_control->EnableWindow(!i_what);
+ if (i_what==false)
+  mp_tab_control->SetFocus();
+ else
+  mp_tab_control->GetCurrentPage()->SetFocus(); 
 
  //оповещаем контроллер активной вкладки о включении/выключении полноэкранного режима
  ASSERT(mp_MainTabController->GetActiveController());

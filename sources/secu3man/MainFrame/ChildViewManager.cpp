@@ -31,12 +31,13 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
  ASSERT(i_pMainFrame);
  ASSERT(mp_MainTabManager.get());
  // create a view to occupy the client area of the frame
- if (!mp_wndView->Create(NULL, NULL, AFX_WS_DEFAULT_VIEW,
-  CRect(0, 0, 0, 0), i_pMainFrame, AFX_IDW_PANE_FIRST, NULL))
+ if (!mp_wndView->Create(i_pMainFrame))
  {
   TRACE0("Failed to create view window\n");
   return false;
  }
+ //Set standard ID for this window can be attached to framework.
+ mp_wndView->SetDlgCtrlID(AFX_IDW_PANE_FIRST);
 
  i_pMainFrame->SetView(mp_wndView.get());
  mp_MainTabManager->Init(mp_wndView.get());

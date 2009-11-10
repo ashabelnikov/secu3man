@@ -10,6 +10,9 @@
 #include "stdafx.h"
 #include "ChildView.h"
 
+//warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning( disable : 4800 )
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -21,84 +24,50 @@ static char THIS_FILE[] = __FILE__;
 
 CChildView::CChildView()
 {
- //na
+ //empty
 }
 
 CChildView::~CChildView()
 {
- //na
+ //empty
 }
 
-BEGIN_MESSAGE_MAP(CChildView,CWnd )
- ON_WM_PAINT()
- ON_WM_SHOWWINDOW()
- ON_WM_SIZE()
+BEGIN_MESSAGE_MAP(CChildView, Super)
+ //empty
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CChildView message handlers
-
-BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs) 
+//Создает диалог из шаблона в памяти.
+bool CChildView::Create(CWnd* ip_parent)
 {
- if (!CWnd::PreCreateWindow(cs))
-  return FALSE;
+ HGLOBAL hgbl;
+ LPDLGTEMPLATE lpdt;
+ LPWORD lpw;
+ LPWSTR lpwsz;
+ int nchar;
 
- cs.dwExStyle |= WS_EX_CLIENTEDGE;
- cs.dwExStyle |= WS_EX_CONTROLPARENT;
- cs.style &= ~WS_BORDER;  
- cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
-  ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW + 1), NULL);
+ hgbl = GlobalAlloc(GMEM_ZEROINIT, 1024);
+ ASSERT(hgbl);   
+ lpdt = (LPDLGTEMPLATE)GlobalLock(hgbl);
 
- return TRUE;
-}
+ // Define a dialog box.
+ lpdt->style = WS_VISIBLE | WS_CHILD;
+ lpdt->dwExtendedStyle = WS_EX_CONTROLPARENT | WS_EX_CLIENTEDGE;
+ lpdt->cdit = 0; // number of controls
+ lpdt->x  = 0;   //<--любые дефайлтные размеры,
+ lpdt->y  = 0;   //фреймворк потом подгонит размеры автоматически.
+ lpdt->cx = 0; 
+ lpdt->cy = 0;
 
-void CChildView::OnPaint() 
-{
- CPaintDC dc(this); // device context for painting		
- // Do not call CWnd::OnPaint() for painting messages
-}
+ lpw = (LPWORD) (lpdt + 1);
+ *lpw++ = 0;   // no menu
+ *lpw++ = 0;   // predefined dialog box class (by default)
 
-BOOL CChildView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
-{	
- BOOL result = CWnd::Create(lpszClassName, lpszWindowName, dwStyle, rect, pParentWnd, nID, pContext);
+ lpwsz = (LPWSTR) lpw;
+ nchar = 1 + MultiByteToWideChar (CP_ACP, 0, _T("View"), -1, lpwsz, 50);
+ lpw   += nchar;
+
+ GlobalUnlock(hgbl); 
+ BOOL result = CreateIndirect((LPDLGTEMPLATE) hgbl, ip_parent); 
+ GlobalFree(hgbl); 
  return result;
-}
-
-void CChildView::PostNcDestroy() 
-{
- CWnd::PostNcDestroy();
-}
-
-void CChildView::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType) 
-{	
- CWnd::CalcWindowRect(lpClientRect, nAdjustType);
-}
-
-void CChildView::OnShowWindow(BOOL bShow, UINT nStatus) 
-{
- CWnd::OnShowWindow(bShow, nStatus);		 
-}
-
-void CChildView::PreSubclassWindow() 
-{
- CWnd::PreSubclassWindow();
-}
-
-void CChildView::OnSize(UINT nType, int cx, int cy) 
-{
- CWnd::OnSize(nType, cx, cy);	
-}
-
-BOOL CChildView::PreTranslateMessage(MSG* pMsg) 
-{
- //Этот дурацкий код нужен для работы акселераторов, иначе IsDialogMessage() cъедает их!
- HACCEL hAccel = ((CFrameWnd*)AfxGetApp()->m_pMainWnd)->m_hAccelTable;
- if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel,pMsg)))
-  return TRUE;
-
- //для корректной работы TAB-stop-ов    
- if (IsDialogMessage(pMsg))
-  return TRUE;
-
- return CWnd::PreTranslateMessage(pMsg);
 }

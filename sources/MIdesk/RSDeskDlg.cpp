@@ -165,4 +165,6 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  _RESIZE(m_knock_unit);
 
 #undef _RESIZE
+
+ RedrawWindow();
 }

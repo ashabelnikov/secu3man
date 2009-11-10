@@ -184,4 +184,6 @@ void CMIDeskDlg::Resize(const CRect& i_rect)
  m_throttle_gate.Scale(Xf, Yf);
  m_air_flow.Scale(Xf, Yf);
  m_temperature.Scale(Xf, Yf);
+
+ RedrawWindow();
 }
