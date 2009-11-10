@@ -133,6 +133,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
  mp_tab_control->AddPage(MLL::LoadString(IDS_TAB_LOG_PLAYER),m_pLogPlayerTabDlg,4);
 
  mp_tab_control->SetCurSel(0);
+ mp_tab_control->SetFocus();
  return true;
 }
 
