@@ -1,14 +1,16 @@
 
 #pragma once
 
-#include "io-core\SECU3IO.h"
 #include "IRSView.h"
+#include "ui-core\DialogWithAccelerators.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CRSDeskDlg dialog
 
-class AFX_EXT_CLASS CRSDeskDlg : public CDialog, public IRSView
+class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
 {
+  typedef CModelessDialog Super;
+
  public:
   CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;

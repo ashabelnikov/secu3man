@@ -28,12 +28,12 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 
 IDR_MAINFRAME MENU PRELOAD DISCARDABLE 
 BEGIN
-    POPUP "Программа"
+    POPUP "&Программа"
     BEGIN
         MENUITEM "Выход    Ctrl + Q",           ID_APP_EXIT
     END
-    MENUITEM "Настройки",                   ID_APP_SETTINGS
-    POPUP "Запись лога"
+    MENUITEM "&Настройки",                  ID_APP_SETTINGS
+    POPUP "&Запись лога"
     BEGIN
         MENUITEM "Начать запись         Ctrl + B", ID_APP_BEGIN_LOG
         MENUITEM "Закончить запись   Ctrl + E", ID_APP_END_LOG
@@ -42,7 +42,7 @@ BEGIN
     BEGIN
         MENUITEM "&About SECU-3 Manager...",    ID_APP_ABOUT
     END
-    MENUITEM "Полноэкранный режим Ctrl + F", ID_FULL_SCREEN
+    MENUITEM "Полно&экранный режим Ctrl + F", ID_FULL_SCREEN
 END
 
 

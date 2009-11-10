@@ -1,26 +1,29 @@
 
 #pragma once
 
-#include "common/ObjectTimer.h"
-
-#include "MITachometer.h"
-#include "MIPressure.h"
-#include "MIVoltmeter.h"
-#include "MIDwellAngle.h"
-#include "MIAirFlow.h"
-#include "MIGasValve.h"
-#include "MIShutoffValve.h"
-#include "MIThrottleGate.h"
-#include "MITemperature.h"
-
-#include "io-core\SECU3IO.h"
+#include "common\ObjectTimer.h"
 #include "IMIView.h"
+#include "io-core\SECU3IO.h"
+
+#include "MIAirFlow.h"
+#include "MIDwellAngle.h"
+#include "MIGasValve.h"
+#include "MIPressure.h"
+#include "MIShutoffValve.h"
+#include "MITachometer.h"
+#include "MITemperature.h"
+#include "MIThrottleGate.h"
+#include "MIVoltmeter.h"
+
+#include "ui-core\DialogWithAccelerators.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog
 
-class AFX_EXT_CLASS CMIDeskDlg : public CDialog, public IMIView
+class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 {
+  typedef CModelessDialog Super;
+
  public:
   CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;

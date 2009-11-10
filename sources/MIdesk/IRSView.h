@@ -9,6 +9,11 @@
 
 #pragma once
 
+namespace SECU3IO
+{
+ struct RawSensDat;
+}
+
 class IRSView  
 {
  public:

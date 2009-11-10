@@ -6,9 +6,9 @@
 #include "common\FastDelegate.h"
 #include "ui-core\DialogWithAccelerators.h"
 
-class CLPControlPanelDlg : public CDialogWithAccelerators
+class CLPControlPanelDlg : public CModelessDialog
 {
-  typedef CDialogWithAccelerators Super;
+  typedef CModelessDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate1<size_t> EventWithCode;
   typedef fastdelegate::FastDelegate2<UINT, unsigned long> EventHScroll;

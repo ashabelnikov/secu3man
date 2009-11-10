@@ -10,6 +10,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIDeskDlg.h"
+
 #include "common\MathHelpers.h"
 #include "MIHelpers.h"
 #include "ui-core\AnalogMeterCtrl.h"
@@ -20,7 +21,7 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-BEGIN_MESSAGE_MAP(CMIDeskDlg, CDialog)
+BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
@@ -30,7 +31,7 @@ const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
 // CMIDeskDlg dialog
 
 CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CMIDeskDlg::IDD, pParent)
+: Super(CMIDeskDlg::IDD, pParent)
 , m_update_period(100)
 , m_was_initialized(false)
 {
@@ -39,7 +40,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
 
  //Аналоговые приборы
  m_tachometer.DDX_Controls(pDX, IDC_MI_TACHOMETER);
@@ -62,7 +63,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
 
 BOOL CMIDeskDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  //создаем приборы (оконные образы)
  m_tachometer.Create();
@@ -87,7 +88,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 void CMIDeskDlg::OnDestroy() 
 {
  m_was_initialized = false;
- CDialog::OnDestroy();
+ Super::OnDestroy();
  m_update_timer.KillTimer();
 }
 

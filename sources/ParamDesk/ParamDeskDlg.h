@@ -16,9 +16,9 @@ class CHotKeysToCmdRouter;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
-class AFX_EXT_CLASS CParamDeskDlg : public CUpdatableDialog, public IParamDeskView, private ITabControllerEvent
+class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IParamDeskView, private ITabControllerEvent
 {
- typedef CUpdatableDialog Super;
+ typedef CModelessUpdatableDialog Super;
 
  public:
   CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);

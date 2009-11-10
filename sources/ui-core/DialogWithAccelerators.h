@@ -14,3 +14,17 @@ class AFX_EXT_CLASS CDialogWithAccelerators : public CDialog
   //здесь будет грязный хак! 
   virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
+
+//Диалог с акселераторами который нельзя закрыть по IDOK или IDCANCEL
+class AFX_EXT_CLASS CModelessDialog : public CDialogWithAccelerators
+{
+ typedef CDialogWithAccelerators Super;
+
+ public:
+  CModelessDialog(); //modeless
+  CModelessDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+
+ protected:
+  virtual void OnOK();
+  virtual void OnCancel();
+};

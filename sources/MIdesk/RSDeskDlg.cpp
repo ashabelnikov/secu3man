@@ -10,6 +10,8 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "RSDeskDlg.h"
+
+#include "io-core\SECU3IO.h"
 #include "MIHelpers.h"
 
 #ifdef _DEBUG
@@ -27,7 +29,7 @@ const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
 // CRSDeskDlg dialog
 
 CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CRSDeskDlg::IDD, pParent)
+: Super(CRSDeskDlg::IDD, pParent)
 {
  m_map_value  = 0.0f;
  m_ubat_value = 0.0f;
@@ -37,7 +39,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 
 void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
 	
  DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_field);
  DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_field);
@@ -65,7 +67,7 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 
 BOOL CRSDeskDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 		
  Enable(false);
  UpdateData(FALSE);

@@ -35,3 +35,25 @@ BOOL CDialogWithAccelerators::PreTranslateMessage(MSG* pMsg)
   	
  return Super::PreTranslateMessage(pMsg);
 }
+
+CModelessDialog::CModelessDialog()
+{
+ //empty
+}
+
+CModelessDialog::CModelessDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
+: Super(nIDTemplate, pParentWnd)
+{
+ //empty
+}
+
+void CModelessDialog::OnOK()
+{
+ UpdateData(); //for DDX/DDV
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
+} 
+
+void CModelessDialog::OnCancel()
+{
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
+}

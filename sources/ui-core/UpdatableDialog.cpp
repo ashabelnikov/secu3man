@@ -15,6 +15,12 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+
+CUpdatableDialog::CUpdatableDialog()
+{
+ //empty
+}
+
 CUpdatableDialog::CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
 : Super(nIDTemplate, pParentWnd)
 , m_bDoIdle(TRUE)
@@ -45,4 +51,26 @@ BOOL CUpdatableDialog::PreTranslateMessage(MSG* pMsg)
  }
 	
  return Super::PreTranslateMessage(pMsg);
+}
+
+CModelessUpdatableDialog::CModelessUpdatableDialog()
+{
+ //empty
+}
+
+CModelessUpdatableDialog::CModelessUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
+: Super(nIDTemplate, pParentWnd)
+{
+ //empty
+}
+
+void CModelessUpdatableDialog::OnOK()
+{
+ UpdateData(); //for DDX/DDV
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
+} 
+
+void CModelessUpdatableDialog::OnCancel()
+{
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
 }

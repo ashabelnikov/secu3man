@@ -4,9 +4,9 @@
 #include "ui-core\DialogWithAccelerators.h"
 
 // CChildView window
-class CChildView : public CDialogWithAccelerators
+class CChildView : public CModelessDialog
 {
- typedef CDialogWithAccelerators Super;
+ typedef CModelessDialog Super;
 
  public:
   CChildView();
@@ -17,7 +17,7 @@ class CChildView : public CDialogWithAccelerators
 
   // Generated message map functions
  protected:
-  DECLARE_MESSAGE_MAP()
+  DECLARE_MESSAGE_MAP()  
 };
 
 /////////////////////////////////////////////////////////////////////////////

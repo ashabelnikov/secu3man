@@ -21,7 +21,6 @@ virtual BOOL IsIdleMessage(MSG* pMsg)
 
 ---------------------------------------------------------------------------------------*/
 
-
 // -  ласс добавл€ет акселераторы (из главного окна)
 // -  ласс добавл€ет возможность ON_UPDATE_COMMAND_UI
 class AFX_EXT_CLASS CUpdatableDialog : public CDialog
@@ -29,6 +28,7 @@ class AFX_EXT_CLASS CUpdatableDialog : public CDialog
  typedef CDialog Super;
 
  public:
+  CUpdatableDialog();
   CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
 
  protected:
@@ -37,4 +37,18 @@ class AFX_EXT_CLASS CUpdatableDialog : public CDialog
 	
  private:
   BOOL m_bDoIdle;
+};
+
+//CUpdatableDialog который нельз€ закрыть.
+class AFX_EXT_CLASS CModelessUpdatableDialog : public CUpdatableDialog
+{
+  typedef CUpdatableDialog Super;
+
+ public:
+  CModelessUpdatableDialog();
+  CModelessUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+
+ protected:
+  virtual void OnOK();
+  virtual void OnCancel();
 };
