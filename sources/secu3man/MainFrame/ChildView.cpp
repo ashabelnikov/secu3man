@@ -44,9 +44,10 @@ BOOL CChildView::PreCreateWindow(CREATESTRUCT& cs)
   return FALSE;
 
  cs.dwExStyle |= WS_EX_CLIENTEDGE;
- cs.style &= ~WS_BORDER;
+ cs.dwExStyle |= WS_EX_CONTROLPARENT;
+ cs.style &= ~WS_BORDER;  
  cs.lpszClass = AfxRegisterWndClass(CS_HREDRAW|CS_VREDRAW|CS_DBLCLKS, 
-  ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW+1), NULL);
+  ::LoadCursor(NULL, IDC_ARROW), HBRUSH(COLOR_WINDOW + 1), NULL);
 
  return TRUE;
 }
@@ -56,7 +57,6 @@ void CChildView::OnPaint()
  CPaintDC dc(this); // device context for painting		
  // Do not call CWnd::OnPaint() for painting messages
 }
-
 
 BOOL CChildView::Create(LPCTSTR lpszClassName, LPCTSTR lpszWindowName, DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext) 
 {	
@@ -68,7 +68,6 @@ void CChildView::PostNcDestroy()
 {
  CWnd::PostNcDestroy();
 }
-
 
 void CChildView::CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType) 
 {	
@@ -89,3 +88,13 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 {
  CWnd::OnSize(nType, cx, cy);	
 }
+
+//??? ?????????? ?????? TAB-stop-??
+BOOL CChildView::PreTranslateMessage(MSG* pMsg) 
+{  
+ if (IsDialogMessage(pMsg))
+  return TRUE;
+
+ return CWnd::PreTranslateMessage(pMsg);
+}
+

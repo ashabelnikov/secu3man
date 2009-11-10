@@ -12,11 +12,12 @@ class CChildView : public CWnd
       const RECT& rect, CWnd* pParentWnd, UINT nID, CCreateContext* pContext = NULL);
 
  protected:
+  virtual BOOL PreTranslateMessage(MSG* pMsg);
   virtual BOOL PreCreateWindow(CREATESTRUCT& cs);
   virtual void PostNcDestroy();
   virtual void CalcWindowRect(LPRECT lpClientRect, UINT nAdjustType = adjustBorder);
   virtual void PreSubclassWindow();
-
+ 
   // Generated message map functions
  protected:
   afx_msg void OnPaint();

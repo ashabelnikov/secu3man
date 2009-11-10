@@ -105,8 +105,8 @@ void CTabController::CreateTabPage(void)
   return; //предотвращаем повторное создание вкладки
 
  ASSERT(pPageData);
- BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this);	  
-
+ BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this->GetParent());
+ 
  if (0==result)
  {
   AfxMessageBox(_T("Error creating Tab control page dialog!"));
@@ -114,12 +114,16 @@ void CTabController::CreateTabPage(void)
  }
  
  CRect c_rc(0,0,0,0); 
- CalculatePageRect(selection,c_rc);
+ CalculatePageRect(selection, c_rc);
 
- pPageData->pDialogClass->MoveWindow(&c_rc);
- //подогнали размер диалога
- pPageData->pDialogClass->ShowWindow(SW_SHOWNORMAL);
+ //вкладка диалога находится в одной системе координат с таб-контроллом (у них общий parent!) 
+ CRect parent_rect;
+ GetWindowRect(parent_rect);
+ this->GetParent()->ScreenToClient(parent_rect);
+ c_rc.OffsetRect(parent_rect.left, parent_rect.top);
 
+ //подогнали размер диалога и сохранили указатель на текущий диалог
+ pPageData->pDialogClass->SetWindowPos(&wndTop, c_rc.left, c_rc.top, c_rc.Width(), c_rc.Height(), SWP_SHOWWINDOW);
  mp_CurDlg = pPageData->pDialogClass;
 }
 
