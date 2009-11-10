@@ -16,22 +16,23 @@ static char THIS_FILE[]=__FILE__;
 #endif
 
 CTabDialog::CTabDialog(UINT nIDTemplate, CWnd* pParentWnd)
-: Super(nIDTemplate,pParentWnd)
+: Super(nIDTemplate, pParentWnd)
 {
- //na
+ //empty
 }
 
 CTabDialog::~CTabDialog()
 {
- //na
+ //empty
 }
 
 void CTabDialog::OnOK()
 {
  UpdateData(); //for DDX/DDV
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
 } 
 
 void CTabDialog::OnCancel()
 {
- //na
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
 }

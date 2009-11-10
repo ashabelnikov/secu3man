@@ -22,7 +22,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
-BEGIN_MESSAGE_MAP(CCKPSPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnSelchangePdCogsBTDCCombo)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangePdIgnitionCogsEdit)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnClickedPdPosFrontRadio)
@@ -41,7 +41,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CCKPSPageDlg::IDD, pParent)
+: Super(CCKPSPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
 {
@@ -57,7 +57,7 @@ LPCTSTR CCKPSPageDlg::GetDialogID(void) const
 
 void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
 
  DDX_Control(pDX,IDC_PD_CKPS_FRONT_GROUPBOX, m_ckps_front_groupbox);
  DDX_Control(pDX,IDC_PD_CKPS_POSFRONT_RADIOBOX, m_ckps_posfront_radio);
@@ -85,7 +85,7 @@ void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CCKPSPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 
  m_ignition_cogs_edit.SetLimitText(2);
  m_ignition_cogs_edit.SetDecimalPlaces(2);

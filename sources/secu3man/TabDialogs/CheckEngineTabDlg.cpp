@@ -26,7 +26,7 @@ static char THIS_FILE[] = __FILE__;
 const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;
 
 CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CCheckEngineTabDlg::IDD, pParent)
+: Super(CCheckEngineTabDlg::IDD, pParent)
 , m_all_enabled(false)
 , m_rw_buttons_enabled(false)
 , m_header_ctrl(new CHeaderCtrlEx())
@@ -38,7 +38,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 
 void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_CHECK_ENGINE_QUICK_HELP, m_quick_help_text);
  DDX_Control(pDX, IDC_CHECK_ENGINE_ERRORS_LIST, m_errors_list);
  DDX_Control(pDX, IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, m_realtime_checkbox);
@@ -53,8 +53,7 @@ LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
  return (LPCTSTR)IDD; 
 }
 
-BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, CDialog)
- ON_WM_CLOSE()
+BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
@@ -78,7 +77,7 @@ END_MESSAGE_MAP()
 
 BOOL CCheckEngineTabDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_quick_help_text.SetWindowText(MLL::LoadString(IDS_CEPAGE_QUICK_HELP_TEXT));
 
@@ -181,14 +180,9 @@ void CCheckEngineTabDlg::OnUpdateRWButtons(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_rw_buttons_enabled && m_all_enabled);  
 }
 
-void CCheckEngineTabDlg::OnClose() 
-{	
- //CDialog::OnClose();
-}
-
 void CCheckEngineTabDlg::OnDestroy() 
 {
- CDialog::OnDestroy();
+ Super::OnDestroy();
  KillTimer(TIMER_ID);		
 }
 
@@ -196,7 +190,7 @@ void CCheckEngineTabDlg::OnTimer(UINT nIDEvent)
 {
  //dirty hack
  UpdateDialogControls(this,TRUE);
- CDialog::OnTimer(nIDEvent);  
+ Super::OnTimer(nIDEvent);  
 }
 
 void CCheckEngineTabDlg::OnListSetAllErrors()

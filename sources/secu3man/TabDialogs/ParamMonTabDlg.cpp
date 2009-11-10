@@ -25,15 +25,14 @@ static char THIS_FILE[] = __FILE__;
 
 using namespace fastdelegate;
 
-BEGIN_MESSAGE_MAP(CParamMonTabDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
- ON_WM_CLOSE()
 END_MESSAGE_MAP()
 
 const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
 
 CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CParamMonTabDlg::IDD, pParent)
+: Super(CParamMonTabDlg::IDD, pParent)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
@@ -43,7 +42,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 
 void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
  DDX_Control(pDX,IDC_PM_SAVE_NOTE_TEXT, m_save_note_text);
 }
@@ -58,7 +57,7 @@ LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 
 BOOL CParamMonTabDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
  mp_MIDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
@@ -87,11 +86,6 @@ bool CParamMonTabDlg::GetRawSensorsCheckState(void)
 {
  int check = m_raw_sensors_check.GetCheck();
  return (check==BST_CHECKED) ? true : false;
-}
-
-void CParamMonTabDlg::OnClose() 
-{
- //CDialog::OnClose();
 }
 
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)

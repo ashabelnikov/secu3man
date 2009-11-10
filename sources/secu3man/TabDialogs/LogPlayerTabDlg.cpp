@@ -29,11 +29,11 @@ using namespace fastdelegate;
 
 const UINT CLogPlayerTabDlg::IDD = IDD_LOG_PLAYER;
 
-BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, CDialog)
+BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
 END_MESSAGE_MAP()
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CLogPlayerTabDlg::IDD, pParent)
+: Super(CLogPlayerTabDlg::IDD, pParent)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , mp_OScopeCtrl(new COScopeCtrl())
@@ -43,7 +43,7 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX); 
+ Super::DoDataExchange(pDX); 
 }
 
 LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
@@ -53,7 +53,7 @@ LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
 
 BOOL CLogPlayerTabDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
  mp_MIDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);

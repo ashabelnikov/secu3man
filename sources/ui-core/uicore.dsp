@@ -162,6 +162,10 @@ SOURCE=.\ddx_helpers.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\DialogWithAccelerators.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\EditEx.cpp
 # End Source File
 # Begin Source File
@@ -256,6 +260,10 @@ SOURCE=.\AnalogMeterCtrl.h
 # Begin Source File
 
 SOURCE=.\ddx_helpers.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\DialogWithAccelerators.h
 # End Source File
 # Begin Source File
 

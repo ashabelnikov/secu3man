@@ -9,6 +9,8 @@
 
 class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CIdlRegPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;

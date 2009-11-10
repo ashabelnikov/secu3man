@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CCarburPageDlg::IDD = IDD_PD_CARBUR_PAGE;
 
-BEGIN_MESSAGE_MAP(CCarburPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, OnChangeData)
@@ -63,7 +63,7 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CCarburPageDlg::IDD, pParent)
+: Super(CCarburPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_shutoff_lo_threshold_edit(CEditEx::MODE_INT)
 , m_shutoff_hi_threshold_edit(CEditEx::MODE_INT)
@@ -88,7 +88,7 @@ LPCTSTR CCarburPageDlg::GetDialogID(void) const
 
 void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_inverse_throttle_switch);
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN, m_shutoff_lo_threshold_spin);
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN, m_shutoff_hi_threshold_spin);
@@ -128,7 +128,7 @@ void CCarburPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CCarburPageDlg::OnInitDialog()
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_shutoff_lo_threshold_edit.SetLimitText(4);
  m_shutoff_lo_threshold_spin.SetBuddy(&m_shutoff_lo_threshold_edit);

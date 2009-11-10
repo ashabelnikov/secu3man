@@ -50,7 +50,7 @@ UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
 UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
 
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
-: CUpdatableDialog(CParamDeskDlg::IDD, pParent)
+: Super(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
 , m_enabled(FALSE)
 , m_show_knock_page(i_show_knock_page)
@@ -117,13 +117,13 @@ CParamDeskDlg::~CParamDeskDlg()
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PARAMETERS_DESK_TITLE, m_pd_title);
  DDX_Control(pDX, IDC_PD_TAB_CTRL, m_tab_control);
  DDX_Control(pDX, IDC_PD_SAVE_BUTTON, m_save_button);
 }
 
-BEGIN_MESSAGE_MAP(CParamDeskDlg, CDialog)
+BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_WM_DESTROY()
  ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
@@ -158,7 +158,7 @@ void CParamDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CParamDeskDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  //контрол создан через ресурсы и стили описаны в ресурсах.
  m_tab_control.SetImageList(m_pImgList);
@@ -210,7 +210,7 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
 
 void CParamDeskDlg::OnDestroy() 
 {  
- CDialog::OnDestroy();	  
+ Super::OnDestroy();	  
  m_hot_keys_supplier->Close();
 }
 

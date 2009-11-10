@@ -21,8 +21,13 @@ virtual BOOL IsIdleMessage(MSG* pMsg)
 
 ---------------------------------------------------------------------------------------*/
 
+
+// - Класс добавляет акселераторы (из главного окна)
+// - Класс добавляет возможность ON_UPDATE_COMMAND_UI
 class AFX_EXT_CLASS CUpdatableDialog : public CDialog
 {
+ typedef CDialog Super;
+
  public:
   CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
 

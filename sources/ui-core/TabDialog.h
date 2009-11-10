@@ -3,6 +3,9 @@
 
 #include "UpdatableDialog.h"
 
+
+//Этот класс добавляет функциональность заключающуюся в том, чтобы диалог нельзя было
+//закрыть по IDOK или IDCANCEL.
 class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog 
 {
   typedef CUpdatableDialog Super;
@@ -15,6 +18,6 @@ class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog
   virtual LPCTSTR GetDialogID(void) const = 0;
 
   //диалоговые вкладки в Tab-контроле нельзя закрывать по IDOK или IDCANCEL
-  void OnOK();
-  void OnCancel();
+  virtual void OnOK();
+  virtual void OnCancel();
 };

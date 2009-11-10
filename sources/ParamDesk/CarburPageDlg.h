@@ -9,6 +9,8 @@
 
 class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CCarburPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;

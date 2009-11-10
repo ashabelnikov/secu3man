@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "common/FastDelegate.h"
-#include "ui-core/TabDialog.h"
+#include "common\FastDelegate.h"
+#include "ui-core\TabDialog.h"
 
 class CLPControlPanelDlg;
 class CMIDeskDlg;
@@ -12,6 +12,8 @@ class COScopeCtrl;
 
 class CLogPlayerTabDlg : public CTabDialog
 {
+  typedef CTabDialog Super;
+
  public:
   CLogPlayerTabDlg(CWnd* pParent = NULL);  
   static const UINT IDD;

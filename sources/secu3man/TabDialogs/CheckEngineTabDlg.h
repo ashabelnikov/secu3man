@@ -3,9 +3,9 @@
 
 #include <map>
 #include <memory>
-#include "common/fastdelegate.h"
-#include "common/unicodesupport.h"
-#include "ui-core/TabDialog.h"
+#include "common\fastdelegate.h"
+#include "common\unicodesupport.h"
+#include "ui-core\TabDialog.h"
 
 class CHeaderCtrlEx;
 

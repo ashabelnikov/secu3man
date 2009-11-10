@@ -7,7 +7,7 @@
  *****************************************************************/
 
 #include "stdafx.h"
-#include "UpdatableDialog.h"
+#include "DialogWithAccelerators.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -15,34 +15,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-CUpdatableDialog::CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
+CDialogWithAccelerators::CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParentWnd /* = NULL*/)
 : Super(nIDTemplate, pParentWnd)
-, m_bDoIdle(TRUE)
 {
  //empty
 }
 
-BOOL CUpdatableDialog::PreTranslateMessage(MSG* pMsg) 
+BOOL CDialogWithAccelerators::PreTranslateMessage(MSG* pMsg) 
 {
  //Этот дурацкий код нужен для работы акселераторов, иначе они не будут работать в диалогах!
  HACCEL hAccel = ((CFrameWnd*)AfxGetApp()->m_pMainWnd)->m_hAccelTable;
- if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel,pMsg)))
+ if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel, pMsg)))
   return TRUE;
-  
- MSG msg;
- if(!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) && m_bDoIdle)
- {
-  //вызывается один раз только когда нет сообщений в очереди
-  UpdateDialogControls(this,TRUE); 
-  m_bDoIdle = FALSE;
- }
- else
- {
-  if(AfxGetApp()->IsIdleMessage(pMsg) && pMsg->message != 0x3FC)
-  {
-   m_bDoIdle = TRUE;
-  }
- }
-	
+  	
  return Super::PreTranslateMessage(pMsg);
 }

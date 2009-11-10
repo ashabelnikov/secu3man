@@ -9,6 +9,8 @@
 
 class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CADCCompenPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;

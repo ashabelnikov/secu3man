@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CTemperPageDlg::IDD = IDD_PD_TEMPER_PAGE;
 
-BEGIN_MESSAGE_MAP(CTemperPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnChangePdTemperVentOnThresholdEdit)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnChangePdTemperVentOffThresholdEdit)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
@@ -39,7 +39,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CTemperPageDlg::IDD, pParent)
+: Super(CTemperPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
@@ -56,7 +56,7 @@ LPCTSTR CTemperPageDlg::GetDialogID(void) const
 
 void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_use_temp_sensor);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN, m_vent_on_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, m_vent_off_threshold_spin);
@@ -79,7 +79,7 @@ void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CTemperPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 		
  m_vent_on_threshold_spin.SetBuddy(&m_vent_on_threshold_edit);
  m_vent_on_threshold_edit.SetLimitText(4);

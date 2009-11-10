@@ -10,6 +10,8 @@
 
 class CStarterPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CStarterPageDlg(CWnd* pParent = NULL);   // standard constructor
   virtual LPCTSTR GetDialogID(void) const;

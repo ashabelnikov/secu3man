@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "common/FastDelegate.h"
-#include "ui-core/TabDialog.h"
+#include "common\FastDelegate.h"
+#include "ui-core\TabDialog.h"
 
 enum EMapTypes
 {
@@ -24,6 +24,7 @@ class CParamDeskDlg;
 
 class CFirmwareTabDlg : public CTabDialog
 {
+  typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate1<int> EventWithCode;

@@ -159,7 +159,7 @@ const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
 // CFirmwareTabDlg dialog
 
 CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CFirmwareTabDlg::IDD, pParent)	
+: Super(CFirmwareTabDlg::IDD, pParent)	
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
@@ -192,7 +192,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 
 void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FUNSET_LIST, m_funset_listbox);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, m_bl_started_emergency);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP, m_view_work_map_btn);
@@ -212,7 +212,7 @@ LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
  return (LPCTSTR)IDD; 
 }
 
-BEGIN_MESSAGE_MAP(CFirmwareTabDlg, CDialog)
+BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_WM_CONTEXTMENU()
  ON_UPDATE_COMMAND_UI(IDM_READ_FLASH, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_OPEN_FLASH, OnUpdatePopupMenu_file)
@@ -283,7 +283,7 @@ END_MESSAGE_MAP()
 
 BOOL CFirmwareTabDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(390,10);	
@@ -515,7 +515,7 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
 {
  //I know it is dirty hack, but... :-) 	
  UpdateDialogControls(this,TRUE);
- CDialog::OnTimer(nIDEvent);
+ Super::OnTimer(nIDEvent);
   
  //обновляем состояние (если нужно)
  bool pd_enable = IsFirmwareOpened();
@@ -525,7 +525,7 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
 
 void CFirmwareTabDlg::OnDestroy() 
 {
- CDialog::OnDestroy();
+ Super::OnDestroy();
  KillTimer(TIMER_ID);	
  m_hot_keys_supplier->Close();
 }

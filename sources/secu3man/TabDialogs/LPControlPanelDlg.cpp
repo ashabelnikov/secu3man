@@ -29,7 +29,7 @@ using namespace fastdelegate;
 const UINT CLPControlPanelDlg::IDD = IDD_LOG_PLAYER_CONTROL_PANEL;
 
 CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
-: CDialog(CLPControlPanelDlg::IDD, pParent)
+: Super(CLPControlPanelDlg::IDD, pParent)
 , m_next_button_state(false)
 , m_prev_button_state(false)
 , m_play_button_state(false)
@@ -41,7 +41,7 @@ CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
 
 void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_LOG_PLAYER_TIME_FACTOR_COMBO, m_time_factor_combo);
  DDX_Control(pDX, IDC_LOG_PLAYER_PLAY_BUTTON, m_play_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_NEXT_BUTTON, m_next_button);
@@ -52,8 +52,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
 }
 
-BEGIN_MESSAGE_MAP(CLPControlPanelDlg, CDialog)
- ON_WM_CLOSE()
+BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super) 
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PREV_BUTTON, OnUpdatePrevButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_NEXT_BUTTON, OnUpdateNextButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PLAY_BUTTON, OnUpdatePlayButton)
@@ -70,7 +69,7 @@ END_MESSAGE_MAP()
 
 BOOL CLPControlPanelDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  UpdateDialogControls(this,TRUE);	
  return TRUE;

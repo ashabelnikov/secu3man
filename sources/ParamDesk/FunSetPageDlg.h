@@ -11,6 +11,8 @@
 
 class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CFunSetPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;

@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
-BEGIN_MESSAGE_MAP(CFunSetPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangeData)
@@ -58,7 +58,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CFunSetPageDlg::IDD, pParent)
+: Super(CFunSetPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_map_grad_edit(CEditEx::MODE_FLOAT)
 , m_press_swing_edit(CEditEx::MODE_FLOAT)
@@ -81,7 +81,7 @@ LPCTSTR CFunSetPageDlg::GetDialogID(void) const
 
 void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_gas_maps_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_benzin_maps_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_SPIN, m_press_swing_spin);
@@ -112,7 +112,7 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CFunSetPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
  m_map_grad_edit.SetLimitText(4);

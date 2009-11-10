@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
 
-BEGIN_MESSAGE_MAP(CAnglesPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_MAX_ANGLE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_CORRECTION_EDIT, OnChangeData)
@@ -55,7 +55,7 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CAnglesPageDlg::IDD, pParent)
+: Super(CAnglesPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_max_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_min_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
@@ -77,7 +77,7 @@ LPCTSTR CAnglesPageDlg::GetDialogID(void) const
 
 void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_ANGLES_MIN_ANGLE_SPIN, m_min_angle_spin);
  DDX_Control(pDX, IDC_PD_ANGLES_MAX_ANGLE_SPIN, m_max_angle_spin);
  DDX_Control(pDX, IDC_PD_ANGLES_CORRECTION_SPIN, m_correction_spin);
@@ -107,7 +107,7 @@ void CAnglesPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CAnglesPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_min_angle_spin.SetBuddy(&m_min_angle_edit);
  m_min_angle_edit.SetLimitText(4);

@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
 
-BEGIN_MESSAGE_MAP(CIdlRegPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_NEG_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_POS_EDIT, OnChangeData)
@@ -63,7 +63,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CIdlRegPageDlg::IDD, pParent)
+: Super(CIdlRegPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_factor_pos_edit(CEditEx::MODE_FLOAT)
 , m_factor_neg_edit(CEditEx::MODE_FLOAT)
@@ -88,7 +88,7 @@ LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
 
 void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_use_regulator);
  DDX_Control(pDX, IDC_PD_IDLREG_GOAL_RPM_SPIN, m_goal_rpm_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_goal_rpm_edit);
@@ -123,7 +123,7 @@ void CIdlRegPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CIdlRegPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_factor_pos_spin.SetBuddy(&m_factor_pos_edit);
  m_factor_pos_edit.SetLimitText(5);

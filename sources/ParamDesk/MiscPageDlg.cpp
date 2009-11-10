@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
-BEGIN_MESSAGE_MAP(CMiscPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
 
@@ -34,7 +34,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CMiscPageDlg::IDD, pParent)
+: Super(CMiscPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT)
@@ -50,7 +50,7 @@ LPCTSTR CMiscPageDlg::GetDialogID(void) const
 
 void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
 
  DDX_Control(pDX,IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, m_uart_speed_label);
  DDX_Control(pDX,IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_combo);
@@ -81,7 +81,7 @@ void CMiscPageDlg::OnChangeData()
 
 BOOL CMiscPageDlg::OnInitDialog()
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 
  m_packet_period_edit.SetLimitText(3);
  m_packet_period_edit.SetDecimalPlaces(3);

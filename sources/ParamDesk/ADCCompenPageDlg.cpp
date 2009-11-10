@@ -20,7 +20,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
-BEGIN_MESSAGE_MAP(CADCCompenPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangePdMAPFactorEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnChangePdMAPCorrectionEdit)
 
@@ -54,7 +54,7 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CADCCompenPageDlg::IDD, pParent)
+: Super(CADCCompenPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
@@ -78,7 +78,7 @@ LPCTSTR CADCCompenPageDlg::GetDialogID(void) const
 
 void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN, m_map_factor_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN, m_map_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_map_factor_edit);
@@ -115,7 +115,7 @@ void CADCCompenPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CADCCompenPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 		
  m_map_factor_spin.SetBuddy(&m_map_factor_edit);
  m_map_factor_edit.SetLimitText(6);

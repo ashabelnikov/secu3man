@@ -12,6 +12,7 @@ class CRSDeskDlg;
 // CParamMonModePageDlg dialog
 class CParamMonTabDlg : public CTabDialog
 {
+  typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
   CParamMonTabDlg(CWnd* pParent = NULL);   // standard constructor   
@@ -35,7 +36,6 @@ class CParamMonTabDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnPmShowRawSensors();
-  afx_msg void OnClose();
   DECLARE_MESSAGE_MAP()
 
   EventHandler m_OnRawSensorsCheck;

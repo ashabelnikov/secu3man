@@ -3,10 +3,12 @@
 
 #include <memory>
 #include <vector>
-#include "common/FastDelegate.h"
+#include "common\FastDelegate.h"
+#include "ui-core\DialogWithAccelerators.h"
 
-class CLPControlPanelDlg : public CDialog
+class CLPControlPanelDlg : public CDialogWithAccelerators
 {
+  typedef CDialogWithAccelerators Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate1<size_t> EventWithCode;
   typedef fastdelegate::FastDelegate2<UINT, unsigned long> EventHScroll;

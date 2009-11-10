@@ -12,6 +12,8 @@
 
 class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   CCKPSPageDlg(CWnd* pParent = NULL);
   virtual LPCTSTR GetDialogID(void) const;

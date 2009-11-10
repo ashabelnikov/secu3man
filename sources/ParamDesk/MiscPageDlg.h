@@ -11,6 +11,8 @@
 
 class CMiscPageDlg : public CTabDialog, public ParamPageEvents
 {
+  typedef CTabDialog Super;
+
  public:
   typedef std::vector<int> BRCType;
 

@@ -3,8 +3,8 @@
 
 #include <memory>
 #include <vector>
-#include "common/fastdelegate.h"
-#include "ui-core/TabDialog.h"
+#include "common\fastdelegate.h"
+#include "ui-core\TabDialog.h"
 
 class CChartCtrl;
 class CChartLineSerie;

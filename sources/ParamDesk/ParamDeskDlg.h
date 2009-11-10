@@ -18,6 +18,8 @@ class CHotKeysToCmdRouter;
 
 class AFX_EXT_CLASS CParamDeskDlg : public CUpdatableDialog, public IParamDeskView, private ITabControllerEvent
 {
+ typedef CUpdatableDialog Super;
+
  public:
   CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);
   virtual ~CParamDeskDlg();

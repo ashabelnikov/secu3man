@@ -89,12 +89,16 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
  CWnd::OnSize(nType, cx, cy);	
 }
 
-//??? ?????????? ?????? TAB-stop-??
 BOOL CChildView::PreTranslateMessage(MSG* pMsg) 
-{  
+{
+ //Этот дурацкий код нужен для работы акселераторов, иначе IsDialogMessage() cъедает их!
+ HACCEL hAccel = ((CFrameWnd*)AfxGetApp()->m_pMainWnd)->m_hAccelTable;
+ if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel,pMsg)))
+  return TRUE;
+
+ //для корректной работы TAB-stop-ов    
  if (IsDialogMessage(pMsg))
   return TRUE;
 
  return CWnd::PreTranslateMessage(pMsg);
 }
-

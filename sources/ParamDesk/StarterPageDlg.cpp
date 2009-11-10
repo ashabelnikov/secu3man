@@ -19,7 +19,7 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
-BEGIN_MESSAGE_MAP(CStarterPageDlg, CDialog)
+BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangePdStarterOffRpmEdit)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangePdStarterSmapAbandonRpmEdit)
 	
@@ -35,7 +35,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, CDialog)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
-: CTabDialog(CStarterPageDlg::IDD, pParent)
+: Super(CStarterPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT)
@@ -51,7 +51,7 @@ LPCTSTR CStarterPageDlg::GetDialogID(void) const
 
 void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
 {
- CDialog::DoDataExchange(pDX);
+ Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN, m_smap_abandon_rpm_spin);
  DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_SPIN, m_starter_off_rpm_spin);
  DDX_Control(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_smap_abandon_rpm_edit);
@@ -72,7 +72,7 @@ void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 BOOL CStarterPageDlg::OnInitDialog() 
 {
- CDialog::OnInitDialog();
+ Super::OnInitDialog();
 	
  m_starter_off_rpm_edit.SetLimitText(4);
  m_smap_abandon_rpm_spin.SetBuddy(&m_smap_abandon_rpm_edit);
