@@ -63,7 +63,7 @@ bool CChildView::Create(CWnd* ip_parent)
  *lpw++ = 0;   // predefined dialog box class (by default)
 
  lpwsz = (LPWSTR) lpw;
- nchar = 1 + MultiByteToWideChar (CP_ACP, 0, _T("View"), -1, lpwsz, 50);
+ nchar = 1 + MultiByteToWideChar (CP_ACP, 0, "View", -1, lpwsz, 50);
  lpw   += nchar;
 
  GlobalUnlock(hgbl); 
