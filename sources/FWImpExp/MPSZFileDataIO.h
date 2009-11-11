@@ -10,7 +10,7 @@
 #pragma once
 
 #include <vector>
-#include "common/unicodesupport.h"
+#include "common\unicodesupport.h"
 
 //Абстракции над данными таблиц MPSZ
 
@@ -23,14 +23,13 @@
 
 #define MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE 1  //damn declaration
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
 struct MPSZMapsDataItem
 {
-  float f_str[MPSZ_START_MAP_SIZE];
-  float f_idl[MPSZ_IDLE_MAP_SIZE];
-  float f_wrk[MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F];
-  _TSTRING name;
+ float f_str[MPSZ_START_MAP_SIZE];
+ float f_idl[MPSZ_IDLE_MAP_SIZE];
+ float f_wrk[MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F];
+ _TSTRING name;
 };
 
 struct MPSZMapsDataHolder
@@ -51,37 +50,34 @@ struct MPSZMapsDataHolder
  std::vector<_TSTRING> GetListOfNames(void) const;
 };
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
 class MPSZFileDataIO
 {
-public:
-	MPSZFileDataIO()  {};
-   ~MPSZFileDataIO() {};
+ public:
+  MPSZFileDataIO()  {};
+  ~MPSZFileDataIO() {};
 
-   enum EFileTypes
-   {
+  enum EFileTypes
+  {
    FILE_TYPE_MPX = 0,
    FILE_TYPE_MPZ
-   };
+  };
 
-   bool Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type);
-   bool Save(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type);
-   const MPSZMapsDataHolder& GetData();
-   MPSZMapsDataHolder& GetDataLeft();
-   void SetActualSetsNumber(int i_number) { m_data.m_actual_sets_num = i_number;};
-   int GetActualSetsNumber(void) { return m_data.m_actual_sets_num;};
-   
-private:
-    MPSZMapsDataHolder m_data;
+  bool Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type);
+  bool Save(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type);
+  const MPSZMapsDataHolder& GetData();
+  MPSZMapsDataHolder& GetDataLeft();
+  void SetActualSetsNumber(int i_number) { m_data.m_actual_sets_num = i_number;};
+  int GetActualSetsNumber(void) { return m_data.m_actual_sets_num;};
+
+ private:
+  MPSZMapsDataHolder m_data;
 };
 
-
 /////////////////////////////////////////////////////////////////////////////////////////
-
 class MPSZDataBase
 {
-public:
+ public:
   MPSZDataBase() {};
   virtual ~MPSZDataBase() {};
 
@@ -90,23 +86,22 @@ public:
 
   //abstract -> bynary
   virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata) = 0;
-  
+
   virtual int GetRequiredRawSize(void)  = 0;
 
   virtual int GetActualSetsNumber(void) = 0;
 };
 
-
 class MPSZDataMPX_IO : public MPSZDataBase
 {
-public:
+ public:
   MPSZDataMPX_IO() {};
   virtual ~MPSZDataMPX_IO() {};
 
   enum
   {
-  ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
-  SIZE_OF_RAW_DATA   = 9216  
+   ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
+   SIZE_OF_RAW_DATA   = 9216  
   };
 
   //binary -> abstract
@@ -120,17 +115,16 @@ public:
   virtual int GetActualSetsNumber(void) {return ACTUAL_SETS_NUMBER;};
 };
 
-
 class MPSZDataMPZ_IO : public MPSZDataBase
 {
-public:
+ public:
   MPSZDataMPZ_IO() {};
   virtual ~MPSZDataMPZ_IO() {};
 
   enum
   {
-  ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE,
-  SIZE_OF_RAW_DATA   = 304  
+   ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE,
+   SIZE_OF_RAW_DATA   = 304  
   };
 
   virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);
