@@ -1,10 +1,9 @@
 
 #ifdef HEXUTILS_EXPORTS
-#define HEXUTILS_API __declspec(dllexport)
+ #define HEXUTILS_API __declspec(dllexport)
 #else
-#define HEXUTILS_API __declspec(dllimport)
+ #define HEXUTILS_API __declspec(dllimport)
 #endif
-
 
 enum EReadHexStatus
 {

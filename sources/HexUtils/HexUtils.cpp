@@ -1,3 +1,11 @@
+/****************************************************************
+ *
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2005. 
+ *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
+ *  Microprocessors systems - design & programming.
+ *
+ *****************************************************************/
+
 // HexUtils.cpp : Defines the initialization routines for the DLL.
 //
 
@@ -41,10 +49,7 @@ static char THIS_FILE[] = __FILE__;
 // CHexUtilsApp
 
 BEGIN_MESSAGE_MAP(CHexUtilsApp, CWinApp)
-	//{{AFX_MSG_MAP(CHexUtilsApp)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-		//    DO NOT EDIT what you see in these blocks of generated code!
-	//}}AFX_MSG_MAP
+ //empty
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -52,6 +57,7 @@ END_MESSAGE_MAP()
 
 CHexUtilsApp::CHexUtilsApp()
 {
+ //empty
 }
 
 /////////////////////////////////////////////////////////////////////////////
