@@ -22,6 +22,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   bool IsFirmwareOpened(void);
 
   void SetAttenuatorMap(const float* i_values);
+  void GetAttenuatorMap(float* o_values);
 
  private:
   //from ITabController

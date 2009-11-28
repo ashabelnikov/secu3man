@@ -10,7 +10,7 @@ class CCommunicationManager;
 class CKnockChannelTabDlg;
 class CStatusBarManager;
 
-class CKnockChannelTabController : public ITabController, private IAPPEventHandler  
+class CKnockChannelTabController : public ITabController, private IAPPEventHandler
 {
  public:
   CKnockChannelTabController(CKnockChannelTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
@@ -18,7 +18,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 
  private:	
   //from IAPPEventHandler:
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
   //настройки программы изменились
@@ -36,6 +36,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   void OnSaveParameters(void);
   void OnParametersChange(void);
   void OnCopyToAttenuatorTable(void);
+  void OnClearFunction(void);
 
   void OnParamsChangesTimer(void);
 
@@ -69,4 +70,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   enum {RPM_KNOCK_SAMPLES_PER_POINT = 16};
   std::vector<std::vector<float> > m_rpm_knock_signal;
   std::vector<size_t> m_rpm_knock_signal_ii;
+
+  //сохраняет желаемый уровень сигнала ДД когда контроллер деактивируется
+  float m_k_desired_level;
 };

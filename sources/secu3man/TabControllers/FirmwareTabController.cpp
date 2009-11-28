@@ -1089,3 +1089,9 @@ void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
  SetViewChartsValues();
  m_view->UpdateOpenedCharts();
 }
+
+void CFirmwareTabController::GetAttenuatorMap(float* o_values)
+{
+ ASSERT(o_values);
+ m_fwdm->GetAttenuatorMap(o_values, false); //<--NOTE: modified
+}

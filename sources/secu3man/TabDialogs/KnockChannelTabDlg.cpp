@@ -14,6 +14,7 @@
 #include <math.h>
 #include "Application\DLLLinkedFunctions.h"
 #include "common\FastDelegate.h"
+#include "common\MathHelpers.h"
 #include "HiSCCtrl\sources\ChartCtrl.h"
 #include "HiSCCtrl\sources\ChartPointsSerie.h"
 #include "HiSCCtrl\sources\ChartLineSerie.h"
@@ -31,6 +32,10 @@ using namespace fastdelegate;
 
 #define TIMER_ID 0
 
+#define K_SIG_MIN 0.0f
+#define K_SIG_MAX 5.0f
+#define LEVEL_SLIDER_POS_NUM 100
+
 const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
 
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
@@ -41,7 +46,9 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_all_enabled(true)
 , m_pPointSerie(NULL)
 , m_pLineSerie(NULL)
+, m_pLineSerieLevel(NULL)
 , m_copy_to_attenuator_table_button_state(true)
+, m_clear_function_button_state(true)
 {
  //na  
 }
@@ -51,6 +58,8 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, m_param_save_button);  
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, m_clear_function_button);
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER, m_level_slider);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -59,12 +68,15 @@ LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 }
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
- ON_WM_DESTROY()	
+ ON_WM_DESTROY()
  ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
  ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
  ON_BN_CLICKED(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
  ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnUpdateCopyToAttenuatorTable)
+ ON_BN_CLICKED(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnClearFunction)
+ ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnUpdateClearFunction)
  ON_WM_TIMER()
+ ON_WM_VSCROLL()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -76,7 +88,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  //создаем диалог с параметрами ДД
  mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD,this);
- mp_knock_parameters_dlg->SetWindowPos(NULL,44,65,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_parameters_dlg->SetWindowPos(NULL,30,110,0,0,SWP_NOZORDER|SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID,250,NULL);
@@ -93,7 +105,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
 void CKnockChannelTabDlg::OnDestroy() 
 {
- Super::OnDestroy();  
+ Super::OnDestroy();
  delete mp_RTChart;
  KillTimer(TIMER_ID);
 }
@@ -106,25 +118,30 @@ void CKnockChannelTabDlg::OnSaveParameters(void)
 
 void CKnockChannelTabDlg::EnableAll(bool i_enable)
 {
- m_all_enabled = i_enable; //remember state 
+ m_all_enabled = i_enable; //remember state
  UpdateDialogControls(this,TRUE);
 }
 
-void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI) 
+void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_all_enabled);  
+ pCmdUI->Enable(m_all_enabled);
 }
 
-void CKnockChannelTabDlg::OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI) 
+void CKnockChannelTabDlg::OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_all_enabled && m_copy_to_attenuator_table_button_state);  
+ pCmdUI->Enable(m_all_enabled && m_copy_to_attenuator_table_button_state);
 }
 
-void CKnockChannelTabDlg::OnTimer(UINT nIDEvent) 
+void CKnockChannelTabDlg::OnUpdateClearFunction(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_all_enabled && m_clear_function_button_state);
+}
+
+void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
 {
  //dirty hack
  UpdateDialogControls(this,TRUE);
- Super::OnTimer(nIDEvent);  
+ Super::OnTimer(nIDEvent);
 }
 
 void CKnockChannelTabDlg::AppendPoint(float value)
@@ -155,21 +172,34 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 
  m_pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
  m_pLineSerie = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
+ m_pLineSerieLevel = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
 
  m_pLineSerie->SetColor(RGB(80,80,200));
+ m_pLineSerieLevel->SetColor(RGB(50,200,0));
 
  int rpm = 200;
  int rpm_step = 60;
+
+ //первая точка линии желаемого уровня сигнала
+ m_pLineSerieLevel->AddPoint(rpm, 0);
+
  // Sets the min and max values of the bottom and left axis.
  mp_RTChart->GetBottomAxis()->SetMinMax(rpm, rpm + (rpm_step * RPM_KNOCK_SIGNAL_POINTS));
- mp_RTChart->GetLeftAxis()->SetMinMax(0,5.0); 
+ mp_RTChart->GetLeftAxis()->SetMinMax(K_SIG_MIN, K_SIG_MAX); 
 
  for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
  {	  
-  m_pPointSerie->AddPoint(rpm,0.0);
-  m_pLineSerie->AddPoint(rpm,0.0);
+  m_pPointSerie->AddPoint(rpm, 0.0);
+  m_pLineSerie->AddPoint(rpm, 0.0);
   rpm+=rpm_step;
  }
+
+ //вторая точка линии желаемого уровня сигнала
+ m_pLineSerieLevel->AddPoint(rpm, 0);
+
+ //инициализация слайдера и установка дефаултного значения уровня
+ m_level_slider.SetRange(0, LEVEL_SLIDER_POS_NUM);
+ SetDesiredLevel(K_SIG_MIN);
 }
 
 //инициализация осциллографа
@@ -183,7 +213,7 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
  mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this); 
 
  // customize the control
- mp_OScopeCtrl->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl->SetRange(K_SIG_MIN, K_SIG_MAX, 1);
  mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 64));
@@ -201,6 +231,11 @@ void CKnockChannelTabDlg::setOnCopyToAttenuatorTable(EventHandler OnFunction)
  m_OnCopyToAttenuatorTable = OnFunction;
 }
 
+void CKnockChannelTabDlg::setOnClearFunction(EventHandler OnFunction)
+{
+ m_OnClearFunction = OnFunction;
+}
+
 void CKnockChannelTabDlg::OnCopyToAttenuatorTable()
 {
  if (m_OnCopyToAttenuatorTable)
@@ -210,4 +245,70 @@ void CKnockChannelTabDlg::OnCopyToAttenuatorTable()
 void CKnockChannelTabDlg::EnableCopyToAttenuatorTableButton(bool i_enable)
 {
  m_copy_to_attenuator_table_button_state = i_enable;
+}
+
+void CKnockChannelTabDlg::EnableClearFunctionButton(bool i_enable)
+{
+ m_clear_function_button_state = i_enable;
+}
+
+void CKnockChannelTabDlg::OnClearFunction()
+{
+ if (m_OnClearFunction)
+  m_OnClearFunction();
+}
+
+static float SliderToLevel(int i_pos)
+{
+ float value = ((float)i_pos) / (((float)LEVEL_SLIDER_POS_NUM) / (K_SIG_MAX - K_SIG_MIN));
+ return K_SIG_MAX - value;
+}
+
+void CKnockChannelTabDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+{
+#define _SET_LEVEL(pos) \
+    m_pLineSerieLevel->SetYPointValue(0, SliderToLevel((pos))); \
+    m_pLineSerieLevel->SetYPointValue(1, SliderToLevel((pos)));
+
+ switch(nSBCode)
+ {
+  case TB_ENDTRACK:
+   break;
+
+  case TB_BOTTOM:
+  case TB_TOP:
+   _SET_LEVEL(m_level_slider.GetPos());
+   break;
+
+  case TB_PAGEDOWN:
+  case TB_PAGEUP:
+   _SET_LEVEL(m_level_slider.GetPos());
+   break;
+
+  case TB_LINEDOWN:
+  case TB_LINEUP:
+   _SET_LEVEL(m_level_slider.GetPos());
+   break;
+
+  case TB_THUMBPOSITION:
+  case TB_THUMBTRACK:
+   _SET_LEVEL(nPos);
+   break;
+ }
+ #undef _SET_LEVEL
+}
+
+void CKnockChannelTabDlg::SetDesiredLevel(float i_level)
+{
+ ASSERT(i_level <= K_SIG_MAX);
+ ASSERT(i_level >= K_SIG_MIN);
+ float factor = (((float)LEVEL_SLIDER_POS_NUM) / (K_SIG_MAX - K_SIG_MIN));
+ m_level_slider.SetPos(MathHelpers::Round((K_SIG_MAX - i_level) * factor));
+ m_pLineSerieLevel->SetYPointValue(0, i_level);
+ m_pLineSerieLevel->SetYPointValue(1, i_level);
+}
+
+float CKnockChannelTabDlg::GetDesiredLevel(void)
+{
+ return SliderToLevel(m_level_slider.GetPos());
 }

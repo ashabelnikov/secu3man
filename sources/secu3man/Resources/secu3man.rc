@@ -178,12 +178,20 @@ BEGIN
     PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,
                     19
     PUSHBUTTON      "Копировать в таблицу аттенюатора",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,130,16,86,23,
+                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,16,86,23,
                     BS_MULTILINE
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,225,16,245,105
+                    SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,225,130,246,60
+                    SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
+    PUSHBUTTON      "Очистить функцию",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,
+                    45,86,23,BS_MULTILINE
+    CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
+                    "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
+                    201,18,19,100
+    CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,
+                    255,7,183,10
+    CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
