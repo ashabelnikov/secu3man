@@ -336,10 +336,13 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  _PerformAverageOfRPMKnockFunctionValues(values);
 
  //проводим сглаживание функции
- float function[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
- std::copy(values.begin(), values.end(), function);
- float kernel[3] = {1, 1, 1}; //(маска свертки = 3)
- MathHelpers::Convolve1D(function, function, CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, kernel, 3);
+ float function_out[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
+ float function_inp[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
+ std::copy(values.begin(), values.end(), function_inp);
+#define K_SIZE 3
+ float kernel[K_SIZE] = {1.f/K_SIZE, 1.f/K_SIZE, 1.f/K_SIZE}; //сглаживающая маска свертки
+ MathHelpers::Convolve1D(function_inp, function_out, CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, kernel, K_SIZE);
+#undef K_SIZE
 
  //получили значение желаемого уровеня сигнала
  float level = m_view->GetDesiredLevel();
@@ -354,8 +357,12 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  for(size_t i =0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
  {
   //нашли во сколько раз нужно изменить коэфф. усиления
-  float correcting_gain = level / function[i];
-  
+  float correcting_gain;
+  if (function_out[i]!=0)
+    correcting_gain = level / function_out[i];
+  else
+    correcting_gain = SECU3IO::hip9011_attenuator_gains[0];
+
   //вычисляем новый коэффициент усиления
   size_t old_gain_index = MathHelpers::Round(array[i]);
   float new_gain = SECU3IO::hip9011_attenuator_gains[old_gain_index] * correcting_gain;

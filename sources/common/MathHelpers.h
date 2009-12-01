@@ -35,7 +35,7 @@ namespace MathHelpers
    // начинаем сворачивание от out[i_kernelSize-1] до out[i_dataSize-1] (последний)
    for(i = i_kernelSize-1; i < i_dataSize; ++i)
    {
-    op_out[i] = 0; //?????????????? 0 ?? ?????? ????????????
+    op_out[i] = 0;
     for(j = i, k = 0; k < i_kernelSize; --j, ++k)
      op_out[i] += ip_in[j] * ip_kernel[k];
    }
@@ -43,8 +43,8 @@ namespace MathHelpers
    // продолжаем сворачивание от out[0] до out[i_kernelSize-2]
    for(i = 0; i < i_kernelSize - 1; ++i)
    {
-    op_out[i] = 0; //?????????????? 0 ?? ?????? ????????????
-    for(j = i, k = 0; j >= 0; --j, ++k)
+    op_out[i] = 0;
+    for(j = i, k = 0; ((int)j) >= 0; --j, ++k)
      op_out[i] += ip_in[j] * ip_kernel[k];
    }
    return true;
