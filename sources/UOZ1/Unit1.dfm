@@ -74,6 +74,7 @@ object Form1: TForm1
     LeftAxis.Title.Caption = '׃־ַ (דנאה.)'
     Legend.Visible = False
     View3D = False
+    OnGetAxisLabel = Chart1GetAxisLabel
     TabOrder = 0
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp

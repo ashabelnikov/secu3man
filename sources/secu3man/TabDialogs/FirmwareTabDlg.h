@@ -236,6 +236,7 @@ class CFirmwareTabDlg : public CTabDialog
   static void __cdecl OnCloseTempMap(void* i_param);
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
+  static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
   bool IsFirmwareOpened(void) 
   {

@@ -156,7 +156,8 @@ namespace SECU3IO
 
 
  //таблица перекодировки кода частоты ПФ в частоту
- static float hip9011_gain_frequences[64] = 
+ const int GAIN_FREQUENCES_SIZE = 64;
+ static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] = 
  {
   01.22f,01.26f,01.31f,01.35f,01.40f,01.45f,01.51f,01.57f,
   01.63f,01.71f,01.78f,01.87f,01.96f,02.07f,02.18f,02.31f,
@@ -169,7 +170,8 @@ namespace SECU3IO
  }; 
 
  //таблица перекодировки кода коэфф. усиления аттенюатора в коэфф. усиления
- static float hip9011_attenuator_gains[64] = 
+ const int ATTENUATOR_LEVELS_SIZE = 64;
+ static float hip9011_attenuator_gains[ATTENUATOR_LEVELS_SIZE] = 
  {
   2.000f, 1.882f, 1.778f, 1.684f, 1.600f, 1.523f, 1.455f, 1.391f,
   1.333f, 1.280f, 1.231f, 1.185f, 1.143f, 1.063f, 1.000f, 0.944f,

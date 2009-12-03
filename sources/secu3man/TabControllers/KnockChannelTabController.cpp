@@ -370,7 +370,7 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
   //ищем ближайший коэффициент усиления с таблице коэффициентов усиления
   size_t new_gain_index = 0;
   float smaller_diff = FLT_MAX; 
-  for(size_t j = 0; j < 64; ++j)
+  for(size_t j = 0; j < SECU3IO::GAIN_FREQUENCES_SIZE; ++j)
   {
    float gain = SECU3IO::hip9011_attenuator_gains[j];
    float diff = fabs(gain - new_gain); 

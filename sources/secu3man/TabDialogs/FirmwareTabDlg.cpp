@@ -12,6 +12,7 @@
 #include "FirmwareTabDlg.h"
 
 #include "Application\DLLLinkedFunctions.h"
+#include "common\MathHelpers.h"
 #include "FirmwareContextMenuManager.h"
 #include "ParamDesk\ParamDeskDlg.h"
 #include "ui-core\HotKeysToCmdRouter.h"
@@ -149,6 +150,22 @@ void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
   return;
  }
  _this->m_attenuator_map_chart_state = 0;
+}
+
+//------------------------------------------------------------------------
+void __cdecl CFirmwareTabDlg::OnGetYAxisLabel(LPTSTR io_label_string, void* i_param)
+{
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //WTF?
+  return;
+ }
+
+ float value = _tcstod(io_label_string, NULL);
+ int i = MathHelpers::Round(value);
+ if (i >= 0 && i < SECU3IO::ATTENUATOR_LEVELS_SIZE)
+  _stprintf(io_label_string, _T("%0.3f"), SECU3IO::hip9011_attenuator_gains[i]);
 }
 
 //------------------------------------------------------------------------
@@ -784,9 +801,11 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
     MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
     MLL::GetString(IDS_FW_ATTENUATOR_MAP).c_str());
-  DLL::UOZ1_Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1,false); //пр€чем надписи над узловыми точками функции
-  DLL::UOZ1_Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable,this);
-  DLL::UOZ1_Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable,this);
+  DLL::UOZ1_Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1, false); //пр€чем надписи над узловыми точками функции
+  DLL::UOZ1_Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable, this);
+  DLL::UOZ1_Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
+  DLL::UOZ1_Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
+  DLL::UOZ1_Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
  }
  else
  {

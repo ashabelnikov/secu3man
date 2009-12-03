@@ -25,6 +25,8 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
+ void  __declspec(dllexport)  __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_string);
+ void  __declspec(dllexport)  __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
 }
 
 std::map<HWND,TForm*> g_form_instances;
@@ -95,15 +97,15 @@ void __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
    return;
-  //удаляем старые значения, а потом вновь заполняем серии
-  for (;pForm1->Series1->Count() > 0;)
-   pForm1->Series1->Delete(pForm1->Series1->Count()-1);
-  for (;pForm1->Series2->Count() > 0;)
-   pForm1->Series2->Delete(pForm1->Series2->Count()-1);
+ //удаляем старые значения, а потом вновь заполняем серии
+ for (;pForm1->Series1->Count() > 0;)
+  pForm1->Series1->Delete(pForm1->Series1->Count()-1);
+ for (;pForm1->Series2->Count() > 0;)
+  pForm1->Series2->Delete(pForm1->Series2->Count()-1);
 
-  pForm1->original_function   = original_function;
-  pForm1->modified_function   = modified_function;
-  pForm1->DataPrepare();
+ pForm1->original_function   = original_function;
+ pForm1->modified_function   = modified_function;
+ pForm1->DataPrepare();
 }
 
 //---------------------------------------------------------------------------
@@ -111,7 +113,7 @@ void __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_par
 {
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
-   return;
+  return;
  pForm1->SetOnChange(i_pOnChange, i_param);
 }
 
@@ -120,22 +122,51 @@ void __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param
 {
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
-   return;
+  return;
  pForm1->SetOnClose(i_pOnClose,i_param);
 }
 
+//---------------------------------------------------------------------------
 void __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible)
 {
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
-   return;
+  return;
  switch(i_series_index)
  {
- case 0:
+  case 0:
    pForm1->Series1->Marks->Visible = i_visible;
    break;
- case 1:
+  case 1:
    pForm1->Series2->Marks->Visible = i_visible;
+   break;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_string)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+  return;
+ switch(i_axis)
+ {
+  case 0: //Y
+   pForm1->Chart1->LeftAxis->AxisValuesFormat = i_format_string;
+   break;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+  return;
+ switch(i_axis)
+ {
+  case 0: //Y
+   pForm1->SetOnGetYAxisLabel(i_pOnGetAxisLabel, i_param);
    break;
  }
 }

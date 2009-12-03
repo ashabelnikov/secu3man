@@ -5,4 +5,5 @@ EXPORTS
     Chart2DSetOnChange      = _Chart2DSetOnChange
     Chart2DSetOnClose       = _Chart2DSetOnClose
     Chart2DSetMarksVisible  = _Chart2DSetMarksVisible  
-
+    Chart2DSetAxisValuesFormat = _Chart2DSetAxisValuesFormat
+    Chart2DSetOnGetAxisLabel = _Chart2DSetOnGetAxisLabel
