@@ -43,4 +43,10 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   HITEM m_knock_k_wnd_begin_angle_item;
   HITEM m_knock_k_wnd_end_angle_item;
   HITEM m_knock_bpf_frequency_item;
+
+  HITEM m_knock_retard_step_item;    //deg.
+  HITEM m_knock_advance_step_item;   //deg.
+  HITEM m_knock_max_retard_item;     //deg.
+  HITEM m_knock_threshold_item;      //in 0...100%
+  HITEM m_knock_recovery_delay_item; //in work cycles 
 };

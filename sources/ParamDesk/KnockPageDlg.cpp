@@ -29,7 +29,13 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
  m_params.knock_use_knock_channel = 0;
  m_params.knock_bpf_frequency = 40;
  m_params.knock_k_wnd_begin_angle = 0.0f;
- m_params.knock_k_wnd_end_angle = 48.0f;	
+ m_params.knock_k_wnd_end_angle = 48.0f;
+	
+ m_params.knock_retard_step = 4.0f;
+ m_params.knock_advance_step = 0.25f;
+ m_params.knock_max_retard = 16.0f;
+ m_params.knock_threshold = 3.0f;
+ m_params.knock_recovery_delay = 2;
 }
 
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
@@ -92,7 +98,58 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_freq_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
  m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), &m_freq_selector);
  //-----------------------------------------------------------------
- 		
+
+ CPropertyGridInPlaceEdit::InplaceEditParamsEx ex3;
+ ex3.m_decimal_places = 2;
+ ex3.m_spin = true;
+ ex3.m_delta = 0.25; //шаг
+ ex3.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
+ ex3.m_lower = 0.0;
+ ex3.m_upper = 20.0;
+ ex3.m_limit_text = 5;
+ m_knock_retard_step_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_RETARD_STEP), m_params.knock_retard_step,_T("%g°"),true,false,-1,&ex3);
+ //-----------------------------------------------------------------
+ CPropertyGridInPlaceEdit::InplaceEditParamsEx ex4;
+ ex4.m_decimal_places = 2;
+ ex4.m_spin = true;
+ ex4.m_delta = 0.02; //шаг
+ ex4.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
+ ex4.m_lower = 0.0;
+ ex4.m_upper = 5.0;
+ ex4.m_limit_text = 5;
+ m_knock_advance_step_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_ADVANCE_STEP), m_params.knock_advance_step,_T("%g°"),true,false,-1,&ex4);
+ //-----------------------------------------------------------------
+ CPropertyGridInPlaceEdit::InplaceEditParamsEx ex5;
+ ex5.m_decimal_places = 2;
+ ex5.m_spin = true;
+ ex5.m_delta = 0.25; //шаг
+ ex5.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
+ ex5.m_lower = 0.0;
+ ex5.m_upper = 25.0;
+ ex5.m_limit_text = 5;
+ m_knock_max_retard_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_MAX_RETARD), m_params.knock_max_retard,_T("%g°"),true,false,-1,&ex5);
+ //-----------------------------------------------------------------
+ CPropertyGridInPlaceEdit::InplaceEditParamsEx ex6;
+ ex6.m_decimal_places = 2;
+ ex6.m_spin = true;
+ ex6.m_delta = 0.01; //шаг
+ ex6.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
+ ex6.m_lower = 0.0;
+ ex6.m_upper = 5.0;
+ ex6.m_limit_text = 5;
+ m_knock_threshold_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_THRESHOLD), m_params.knock_threshold,_T("%gv"),true,false,-1,&ex6);
+ //-----------------------------------------------------------------
+ CPropertyGridInPlaceEdit::InplaceEditParamsEx ex7;
+ ex7.m_decimal_places = 2;
+ ex7.m_spin = true;
+ ex7.m_delta = 1; //шаг
+ ex7.m_mode = CEditEx::MODE_INT /*| CEditEx::MODE_SIGNED*/;
+ ex7.m_lower = 1;
+ ex7.m_upper = 99;
+ ex7.m_limit_text = 2;
+ m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_T("%dц"),true,false,-1,&ex7);
+ //-----------------------------------------------------------------
+
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -184,7 +241,12 @@ LRESULT CKnockPageDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
  if (wParam == m_knock_use_knock_channel_item ||
      wParam == m_knock_k_wnd_begin_angle_item ||
      wParam == m_knock_k_wnd_end_angle_item   ||
-     wParam == m_knock_bpf_frequency_item)
+     wParam == m_knock_bpf_frequency_item ||
+     wParam == m_knock_retard_step_item   ||
+     wParam == m_knock_advance_step_item  || 
+     wParam == m_knock_max_retard_item    ||
+     wParam == m_knock_threshold_item     ||
+     wParam == m_knock_recovery_delay_item)
  {
   OnChangeNotify();
  }

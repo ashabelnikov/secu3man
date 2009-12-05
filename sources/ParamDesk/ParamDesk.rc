@@ -386,10 +386,10 @@ END
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 143
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_PROPERTY_GRID,"Static",SS_BLACKFRAME | SS_NOTIFY | 
-                    SS_SUNKEN | WS_TABSTOP,1,17,169,101
+                    SS_SUNKEN | WS_TABSTOP,1,9,169,123
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -550,6 +550,11 @@ BEGIN
     IDS_PD_KNOCK_END_KWND   "Конец фазового окна"
     IDS_PD_KNOCK_BPF_UNIT   "кГц"
     IDS_PD_KNOCK_BPF_FREQ   "Частота ПФ"
+    IDS_PD_KNOCK_RETARD_STEP "Шаг смещения УОЗ"
+    IDS_PD_KNOCK_ADVANCE_STEP "Шаг восстан. УОЗ"
+    IDS_PD_KNOCK_MAX_RETARD "Макс. смещение УОЗ"
+    IDS_PD_KNOCK_THRESHOLD  "Порог детонации"
+    IDS_PD_KNOCK_RECOVERY_DELAY "Задержка восстан. УОЗ"
 END
 
 #endif    // Russian resources

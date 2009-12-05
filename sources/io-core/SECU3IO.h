@@ -133,7 +133,13 @@ namespace SECU3IO
   unsigned char knock_use_knock_channel;    
   float knock_bpf_frequency;     
   float knock_k_wnd_begin_angle;        
-  float knock_k_wnd_end_angle;          
+  float knock_k_wnd_end_angle;
+  
+  float knock_retard_step;
+  float knock_advance_step;
+  float knock_max_retard;
+  float knock_threshold; //? float vs int ?
+  int knock_recovery_delay;
  };
 
 
