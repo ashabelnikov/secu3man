@@ -36,6 +36,8 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
  m_params.knock_max_retard = 16.0f;
  m_params.knock_threshold = 3.0f;
  m_params.knock_recovery_delay = 2;
+
+ m_params.knock_int_time_const = 23; //300us
 }
 
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
@@ -87,7 +89,7 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND), m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
  //-----------------------------------------------------------------  
  vector<_TSTRING> bpf_freqs;
- for (size_t i = 0; i < 64; i++) //заполняем комбо бокс частот ПФ
+ for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
  { 
   CString string;
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
@@ -97,6 +99,18 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_freq_selector.SetSelectedIndex(MathHelpers::Round(m_params.knock_bpf_frequency));
  m_freq_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
  m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), &m_freq_selector);
+ //-----------------------------------------------------------------
+ vector<_TSTRING> int_conts;
+ for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
+ { 
+  CString string;
+  string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
+  int_conts.push_back(_TSTRING(string));
+ }
+ m_intt_selector.SetValuesList(int_conts);
+ m_intt_selector.SetSelectedIndex(m_params.knock_int_time_const);
+ m_intt_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_INT_TIME_UNIT));
+ m_knock_integrator_const_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), &m_intt_selector);
  //-----------------------------------------------------------------
 
  CPropertyGridInPlaceEdit::InplaceEditParamsEx ex3;
@@ -204,6 +218,9 @@ void CKnockPageDlg::GetValues(SECU3IO::KnockPar* o_values)
  size_t knock_bpf_frequency  = m_freq_selector.GetSelectedIndex();
  m_params.knock_bpf_frequency = (float)knock_bpf_frequency;
 
+ size_t int_time_constant  = m_intt_selector.GetSelectedIndex();
+ m_params.knock_int_time_const = (int)int_time_constant;
+
  ASSERT(status);
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::KnockPar));
@@ -233,6 +250,9 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  size_t knock_bpf_frequency = MathHelpers::Round(m_params.knock_bpf_frequency);
  m_freq_selector.SetSelectedIndex(knock_bpf_frequency);
 
+ size_t int_time_constant = (size_t)m_params.knock_int_time_const;
+ m_intt_selector.SetSelectedIndex(int_time_constant);
+
  ASSERT(status);
 }
 
@@ -242,6 +262,7 @@ LRESULT CKnockPageDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
      wParam == m_knock_k_wnd_begin_angle_item ||
      wParam == m_knock_k_wnd_end_angle_item   ||
      wParam == m_knock_bpf_frequency_item ||
+     wParam == m_knock_integrator_const_item ||
      wParam == m_knock_retard_step_item   ||
      wParam == m_knock_advance_step_item  || 
      wParam == m_knock_max_retard_item    ||

@@ -18,17 +18,17 @@ namespace SECU3IO
  //описывает все входы системы - их производные и интегральные величины
  struct SensorDat
  {
-  int frequen;                                        //частота вращения коленвала (усредненная)
-  float pressure;                                     //давление во впускном коллекторе (усредненное)
-  float voltage;                                      //напряжение бортовой сети (усредненное)
-  float temperat;                                     //температура охлаждающей жидкости (усредненная)
-  float adv_angle;                                    //текущий УОЗ
-  unsigned char carb;                                 //состояние концевика карбюратора 
-  unsigned char gas;                                  //состояние газового клапана 
-  unsigned char air_flow;                             //расход воздуха
-  unsigned char ephh_valve;                           //состояние клапана ЭПХХ
-  unsigned char epm_valve;                            //состояние клапана ЭМР 
-  float knock_k;                                      //уровень сигнала детонации (усредненный за время фазового окна)
+  int frequen;                          //частота вращения коленвала (усредненная)
+  float pressure;                       //давление во впускном коллекторе (усредненное)
+  float voltage;                        //напряжение бортовой сети (усредненное)
+  float temperat;                       //температура охлаждающей жидкости (усредненная)
+  float adv_angle;                      //текущий УОЗ
+  unsigned char carb;                   //состояние концевика карбюратора
+  unsigned char gas;                    //состояние газового клапана
+  unsigned char air_flow;               //расход воздуха
+  unsigned char ephh_valve;             //состояние клапана ЭПХХ
+  unsigned char epm_valve;              //состояние клапана ЭМР
+  float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
  };
  
  struct FnNameDat
@@ -40,8 +40,8 @@ namespace SECU3IO
 
  struct StartrPar
  {
-  int  starter_off;                                //порог выключения стартера (обороты)
-  int  smap_abandon;                               //обороты перехода с пусковой карты на рабочую   
+  int  starter_off;                     //порог выключения стартера (обороты)
+  int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую   
  };
  
  struct AnglesPar
@@ -81,10 +81,10 @@ namespace SECU3IO
   int  ephh_lot;
   int  ephh_hit;
   unsigned char carb_invers;
-  float epm_ont; //порог включения ЭМР
+  float epm_ont;                       //порог включения ЭМР
   int  ephh_lot_g;
   int  ephh_hit_g;
-  float shutoff_delay; //задержка выключения клапана
+  float shutoff_delay;                 //задержка выключения клапана
  };
 
  struct TemperPar
@@ -96,8 +96,8 @@ namespace SECU3IO
 
  struct ADCCompenPar
  {
-  float  map_adc_factor;      //коэффициент передаточной погрешности
-  float  map_adc_correction;  //сдвиг в вольтах
+  float  map_adc_factor;               //коэффициент передаточной погрешности
+  float  map_adc_correction;           //сдвиг в вольтах
   float  ubat_adc_factor;
   float  ubat_adc_correction;
   float  temp_adc_factor;
@@ -119,7 +119,7 @@ namespace SECU3IO
   unsigned char ckps_ignit_cogs;
  };
 
- struct OPCompNc //спользуется если надо просто принять или послать определенный код
+ struct OPCompNc                       //спользуется если надо просто принять или послать определенный код
  {
   unsigned char opcode;
  };
@@ -130,18 +130,18 @@ namespace SECU3IO
 
  struct KnockPar
  {
-  unsigned char knock_use_knock_channel;    
-  float knock_bpf_frequency;     
-  float knock_k_wnd_begin_angle;        
+  unsigned char knock_use_knock_channel;
+  float knock_bpf_frequency;
+  float knock_k_wnd_begin_angle;
   float knock_k_wnd_end_angle;
-  
+  int knock_int_time_const;
+
   float knock_retard_step;
   float knock_advance_step;
   float knock_max_retard;
   float knock_threshold; //? float vs int ?
   int knock_recovery_delay;
  };
-
 
  struct CEErrors
  {
@@ -156,14 +156,13 @@ namespace SECU3IO
 
  struct MiscelPar
  {
-  int baud_rate;  //скорость UART-a
-  int period_ms;   //период посылки пакетов мс.
+  int baud_rate;                       //скорость UART-a
+  int period_ms;                       //период посылки пакетов мс.
  };
-
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
- static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] = 
+ static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] =
  {
   01.22f,01.26f,01.31f,01.35f,01.40f,01.45f,01.51f,01.57f,
   01.63f,01.71f,01.78f,01.87f,01.96f,02.07f,02.18f,02.31f,
@@ -173,11 +172,11 @@ namespace SECU3IO
   06.64f,06.94f,07.27f,07.63f,08.02f,08.46f,08.95f,09.50f,
   10.12f,10.46f,10.83f,11.22f,11.65f,12.10f,12.60f,13.14f,
   13.72f,14.36f,15.07f,15.84f,16.71f,17.67f,18.76f,19.98f
- }; 
+ };
 
  //таблица перекодировки кода коэфф. усиления аттенюатора в коэфф. усиления
  const int ATTENUATOR_LEVELS_SIZE = 64;
- static float hip9011_attenuator_gains[ATTENUATOR_LEVELS_SIZE] = 
+ static float hip9011_attenuator_gains[ATTENUATOR_LEVELS_SIZE] =
  {
   2.000f, 1.882f, 1.778f, 1.684f, 1.600f, 1.523f, 1.455f, 1.391f,
   1.333f, 1.280f, 1.231f, 1.185f, 1.143f, 1.063f, 1.000f, 0.944f,
@@ -189,11 +188,22 @@ namespace SECU3IO
   0.148f, 0.143f, 0.138f, 0.133f, 0.129f, 0.125f, 0.118f, 0.111f
  };
 
+ //таблица перекодировки кода постоянной времени интегрирования в постоянную времени
+ //интегрирования
+ const int INTEGRATOR_LEVELS_SIZE = 32;
+ static float hip9011_integrator_const[INTEGRATOR_LEVELS_SIZE] =
+ {
+  40,  45,  50,  55,  60,  65,  70,   75,
+  80,  90,  100, 110, 120, 130, 140, 150,
+  160, 180, 200, 220, 240, 260, 280, 300,
+  320, 360, 400, 440, 480, 520, 560, 600
+ };
+
  //Это маленькая база данных хранящая скорости UART-a SECU-3 и соответствующие им делители.
  const int SECU3_ALLOWABLE_UART_DIVISORS_COUNT = 7;
  //<spead, divisor>
 #define _SD std::pair<int, int>
- static std::pair<int, int> secu3_allowable_uart_divisors[SECU3_ALLOWABLE_UART_DIVISORS_COUNT] = 
+ static std::pair<int, int> secu3_allowable_uart_divisors[SECU3_ALLOWABLE_UART_DIVISORS_COUNT] =
  {
   _SD(2400,   0x01A0),
   _SD(4800,   0x00CF),
@@ -205,12 +215,11 @@ namespace SECU3IO
  };
 #undef _SD
 
-
  union SECU3Packet
  {
   SECU3IO::SensorDat    m_SensorDat;
   SECU3IO::FnNameDat    m_FnNameDat;
-  SECU3IO::StartrPar    m_StartrPar; 
+  SECU3IO::StartrPar    m_StartrPar;
   SECU3IO::AnglesPar    m_AnglesPar;
   SECU3IO::FunSetPar    m_FunSetPar;
   SECU3IO::IdlRegPar    m_IdlRegPar;
@@ -226,9 +235,8 @@ namespace SECU3IO
   SECU3IO::MiscelPar    m_MiscelPar;
  };
 
-
  const int start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
- const int idle_map_rpm_slots[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; 
- const int work_map_rpm_slots[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; 
+ const int idle_map_rpm_slots[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
+ const int work_map_rpm_slots[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const int temp_map_rpm_slots[16] = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
 };

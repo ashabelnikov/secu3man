@@ -38,15 +38,17 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 
   CPropertyGrid m_ctrlGrid;
   CCustValSelector m_freq_selector;
+  CCustValSelector m_intt_selector;
 
   HITEM m_knock_use_knock_channel_item;
   HITEM m_knock_k_wnd_begin_angle_item;
   HITEM m_knock_k_wnd_end_angle_item;
   HITEM m_knock_bpf_frequency_item;
+  HITEM m_knock_integrator_const_item; //us
 
   HITEM m_knock_retard_step_item;    //deg.
   HITEM m_knock_advance_step_item;   //deg.
   HITEM m_knock_max_retard_item;     //deg.
   HITEM m_knock_threshold_item;      //in 0...100%
-  HITEM m_knock_recovery_delay_item; //in work cycles 
+  HITEM m_knock_recovery_delay_item; //in work cycles  
 };

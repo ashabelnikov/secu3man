@@ -725,7 +725,7 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
 {
  SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
 
- if (strlen((char*)raw_packet)!=12)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Разрешен/запрещен 
@@ -753,6 +753,13 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
   return false;
  m_KnockPar.knock_k_wnd_end_angle = ((float)knock_k_wnd_end_angle) / m_angle_multiplier;
  raw_packet+=4;
+
+ //Постоянная времени интегрирования
+ unsigned char knock_int_time_const;
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_int_time_const))
+  return false;
+ m_KnockPar.knock_int_time_const = knock_int_time_const;
+ raw_packet+=2;
 
  if (*raw_packet!='\r')
   return false;
@@ -1369,6 +1376,8 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  CNumericConv::Bin16ToHex(knock_k_wnd_begin_angle,m_outgoing_packet);
  int knock_k_wnd_end_angle = MathHelpers::Round(packet_data->knock_k_wnd_end_angle * m_angle_multiplier);
  CNumericConv::Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
+ unsigned char knock_int_time_const = (unsigned char)packet_data->knock_int_time_const;
+ CNumericConv::Bin8ToHex(knock_int_time_const, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 
