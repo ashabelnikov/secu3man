@@ -806,6 +806,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
   DLL::UOZ1_Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
   DLL::UOZ1_Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
   DLL::UOZ1_Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
+  DLL::UOZ1_Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
  }
  else
  {

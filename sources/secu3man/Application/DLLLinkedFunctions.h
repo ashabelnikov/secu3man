@@ -11,6 +11,7 @@ typedef void (__cdecl *UOZ1_Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_p
 typedef void (__cdecl *UOZ1_Chart2DSetMarksVisible_Addr) (HWND hWnd, int i_series_index, bool i_visible);
 typedef void (__cdecl *UOZ1_Chart2DSetAxisValuesFormat_Addr) (HWND hWnd, int i_axis, LPCTSTR i_format_string);
 typedef void (__cdecl *UOZ1_Chart2DSetOnGetAxisLabel_Addr) (HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
+typedef void (__cdecl *UOZ1_Chart2DInverseAxis_Addr) (HWND hWnd, int i_axis, bool i_inverted);
 
 typedef HWND (__cdecl *UOZ2_Chart3DCreate_Addr) (float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
 typedef void (__cdecl *UOZ2_Chart3DUpdate_Addr) (HWND hWnd, float *original_function, float *modified_function);
@@ -28,6 +29,7 @@ namespace DLL
  extern UOZ1_Chart2DSetMarksVisible_Addr UOZ1_Chart2DSetMarksVisible;
  extern UOZ1_Chart2DSetAxisValuesFormat_Addr UOZ1_Chart2DSetAxisValuesFormat;
  extern UOZ1_Chart2DSetOnGetAxisLabel_Addr UOZ1_Chart2DSetOnGetAxisLabel;
+ extern UOZ1_Chart2DInverseAxis_Addr   UOZ1_Chart2DInverseAxis;
 
  extern UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate;
  extern UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate;

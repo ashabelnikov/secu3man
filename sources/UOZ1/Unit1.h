@@ -77,6 +77,6 @@ class TForm1 : public TForm
   void* m_param_on_get_axis_label;
 
   void RestrictAndSetValue(int index, double v);
-  float Smoothing(int size, int index, int lower_bound, int upper_bound, float data[]);
+  void ShiftFunction(float i_value);
 };
 #endif

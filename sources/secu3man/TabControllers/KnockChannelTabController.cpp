@@ -335,14 +335,11 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
 
- //проводим сглаживание функции
+ //проводим сглаживание функции (скользящее окно 5 выборок)
  float function_out[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  float function_inp[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  std::copy(values.begin(), values.end(), function_inp);
-#define K_SIZE 3
- float kernel[K_SIZE] = {1.f/K_SIZE, 1.f/K_SIZE, 1.f/K_SIZE}; //сглаживающая маска свертки
- MathHelpers::Convolve1D(function_inp, function_out, CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, kernel, K_SIZE);
-#undef K_SIZE
+ VERIFY(MathHelpers::Smooth1D(function_inp, function_out, CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, 5));
 
  //получили значение желаемого уровеня сигнала
  float level = m_view->GetDesiredLevel();

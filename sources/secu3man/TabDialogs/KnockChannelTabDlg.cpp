@@ -129,12 +129,12 @@ void CKnockChannelTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CKnockChannelTabDlg::OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_all_enabled && m_copy_to_attenuator_table_button_state);
+ pCmdUI->Enable(/*m_all_enabled && */m_copy_to_attenuator_table_button_state);
 }
 
 void CKnockChannelTabDlg::OnUpdateClearFunction(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_all_enabled && m_clear_function_button_state);
+ pCmdUI->Enable(/*m_all_enabled && */m_clear_function_button_state);
 }
 
 void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)

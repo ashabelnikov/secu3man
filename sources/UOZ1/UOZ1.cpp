@@ -27,9 +27,10 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_string);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted);
 }
 
-std::map<HWND,TForm*> g_form_instances;
+std::map<HWND, TForm*> g_form_instances;
 
 //---------------------------------------------------------------------------
 bool RemoveInstanceByHWND(HWND hWnd)
@@ -140,6 +141,9 @@ void __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visibl
   case 1:
    pForm1->Series2->Marks->Visible = i_visible;
    break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetMarksVisible: Unsupported \"i_series_index\" argument!"), _T("Error"), MB_OK);
+   break;
  }
 }
 
@@ -154,6 +158,9 @@ void __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_
   case 0: //Y
    pForm1->Chart1->LeftAxis->AxisValuesFormat = i_format_string;
    break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetAxisValuesFormat: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
  }
 }
 
@@ -167,6 +174,26 @@ void __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pO
  {
   case 0: //Y
    pForm1->SetOnGetYAxisLabel(i_pOnGetAxisLabel, i_param);
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetOnGetAxisLabel: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+  return;
+ switch(i_axis)
+ {
+  case 0: //Y
+   pForm1->Chart1->LeftAxis->Inverted = i_inverted;
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetInverted: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
    break;
  }
 }

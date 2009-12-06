@@ -7,3 +7,4 @@ EXPORTS
     Chart2DSetMarksVisible  = _Chart2DSetMarksVisible  
     Chart2DSetAxisValuesFormat = _Chart2DSetAxisValuesFormat
     Chart2DSetOnGetAxisLabel = _Chart2DSetOnGetAxisLabel
+    Chart2DInverseAxis      = _Chart2DInverseAxis

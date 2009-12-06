@@ -10,6 +10,8 @@
 #include <vcl.h>
 #include <stdio.h>
 #include <tchar.h>
+#include <algorithm>
+#include "..\common\MathHelpers.h"
 #pragma hdrstop
 
 #include "Unit1.h"
@@ -147,10 +149,7 @@ void TForm1::RestrictAndSetValue(int index, double v)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
 {
- for (int i = 0; i < count_of_function_points; i++ )
- {
-  RestrictAndSetValue(i, Series2->YValue[i] + 0.5);
- }
+ ShiftFunction(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -158,43 +157,21 @@ void __fastcall TForm1::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::ButtonAngleDownClick(TObject *Sender)
 {
- for (int i = 0; i < count_of_function_points; i++ )
- {
-  RestrictAndSetValue(i, Series2->YValue[i] - 0.5);
- }
+ ShiftFunction(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
-//size - can be 1, 2, 3
-float TForm1::Smoothing(int size, int index, int lower_bound, int upper_bound, float data[])
-{
- float sum = 0;
- int count = 0;
- for(int i = -size; i <= size; ++i)
- {
-  int current_index = index + i;
-  if ((current_index >= lower_bound) && (current_index <= upper_bound))
-  {
-   sum+=data[current_index];
-   count++;
-  }
- }
- if (count)
-  return sum / count;
- else
-  return 0;
-}
-
-//---------------------------------------------------------------------------
 void __fastcall TForm1::Smoothing3xClick(TObject *Sender)
 {
+ float* p_source_function = new float[count_of_function_points];
+ std::copy(modified_function, modified_function + count_of_function_points, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, modified_function, count_of_function_points, 3);
+ delete[] p_source_function;
+
  for (int i = 0; i < count_of_function_points; i++ )
- {
-  modified_function[i] = Smoothing(1, i, 0, count_of_function_points - 1, modified_function);
   Series2->YValue[i] = modified_function[i];
- }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -202,11 +179,13 @@ void __fastcall TForm1::Smoothing3xClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm1::Smoothing5xClick(TObject *Sender)
 {
+ float* p_source_function = new float[count_of_function_points];
+ std::copy(modified_function, modified_function + count_of_function_points, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, modified_function, count_of_function_points, 5);
+ delete[] p_source_function;
+
  for (int i = 0; i < count_of_function_points; i++ )
- {
-  modified_function[i] = Smoothing(2, i, 0, count_of_function_points - 1, modified_function);
   Series2->YValue[i] = modified_function[i];
- }
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -227,5 +206,13 @@ void __fastcall TForm1::Chart1GetAxisLabel(TChartAxis *Sender,
  }
 }
 
+//---------------------------------------------------------------------------
+void __fastcall TForm1::ShiftFunction(float i_value)
+{
+ for (int i = 0; i < count_of_function_points; i++ )
+ {
+  RestrictAndSetValue(i, Series2->YValue[i] + i_value);
+ }
+}
 //---------------------------------------------------------------------------
 
