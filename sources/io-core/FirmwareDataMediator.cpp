@@ -85,6 +85,8 @@ typedef struct
  _uint  ephh_hit_g;                     //верхний порог ЭПХХ (газ)
  _uchar shutoff_delay;                  //задержка выключения клапана
 
+ _uint  uart_divisor;               //делитель для соответствующей скорости UART-a
+ _uchar uart_period_t_ms;           //период посылки пакетов в десятках миллисекунд
 
  //--knock 
  _uchar knock_use_knock_channel;     //признак использования канала детенации
@@ -92,15 +94,19 @@ typedef struct
  _int   knock_k_wnd_begin_angle;     //начало детонационного окна (градусы)
  _int   knock_k_wnd_end_angle;       //конец детонационного окна (градусы)
  _uchar knock_int_time_const;        //постоянная времени интегрирования (код)
- //--/knock
 
- _uint  uart_divisor;               //делитель для соответствующей скорости UART-a
- _uchar uart_period_t_ms;           //период посылки пакетов в десятках миллисекунд
+ _int knock_retard_step;             //шаг смещения УОЗ при детонации 
+ _int knock_advance_step;            //шаг восстановления УОЗ 
+ _int knock_max_retard;              //максимальное смещение УОЗ
+ _uint knock_threshold;              //порог детонации - напряжение
+ _uchar knock_recovery_delay;        //задержка восстановления УОЗ в рабочих циклах двигателя
+
+ //--/knock
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[20];
+ _uchar reserved[11];
 
  _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -552,6 +558,12 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     ASSERT(p_in->knock_bpf_frequency >= 0.0f);
     p_params->knock_bpf_frequency = MathHelpers::Round(p_in->knock_bpf_frequency);
     p_params->knock_int_time_const = p_in->knock_int_time_const;
+
+    p_params->knock_retard_step = MathHelpers::Round(p_in->knock_retard_step * ANGLE_MULTIPLAYER);
+    p_params->knock_advance_step = MathHelpers::Round(p_in->knock_advance_step * ANGLE_MULTIPLAYER);
+    p_params->knock_max_retard = MathHelpers::Round(p_in->knock_max_retard * ANGLE_MULTIPLAYER);
+    p_params->knock_threshold = MathHelpers::Round(p_in->knock_threshold / ADC_DISCRETE);
+    p_params->knock_recovery_delay = p_in->knock_recovery_delay;
    }
    break;
   case MISCEL_PAR:
@@ -691,6 +703,12 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLAYER;
      p_out->knock_bpf_frequency = p_params->knock_bpf_frequency;
      p_out->knock_int_time_const = p_params->knock_int_time_const;
+
+     p_out->knock_retard_step = ((float)p_params->knock_retard_step) / ANGLE_MULTIPLAYER;
+     p_out->knock_advance_step = ((float)p_params->knock_advance_step) / ANGLE_MULTIPLAYER;
+     p_out->knock_max_retard = ((float)p_params->knock_max_retard) / ANGLE_MULTIPLAYER;
+     p_out->knock_threshold = ((float)p_params->knock_threshold) * ADC_DISCRETE;
+     p_out->knock_recovery_delay = p_params->knock_recovery_delay;
     }
     break;
    case MISCEL_PAR:

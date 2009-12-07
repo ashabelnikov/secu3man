@@ -725,7 +725,7 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
 {
  SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
 
- if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=(14+18))  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Разрешен/запрещен 
@@ -759,6 +759,42 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
  if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_int_time_const))
   return false;
  m_KnockPar.knock_int_time_const = knock_int_time_const;
+ raw_packet+=2;
+
+ //-----------------
+ //Шаг смещения УОЗ при детонации
+ int knock_retard_step;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard_step,true))
+  return false;
+ m_KnockPar.knock_retard_step = ((float)knock_retard_step) / m_angle_multiplier;
+ raw_packet+=4;
+
+ //Шаг восстановления УОЗ
+ int knock_advance_step;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_advance_step,true))
+  return false;
+ m_KnockPar.knock_advance_step = ((float)knock_advance_step) / m_angle_multiplier;
+ raw_packet+=4;
+
+ //Максимальное смещение УОЗ
+ int knock_max_retard;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_max_retard,true))
+  return false;
+ m_KnockPar.knock_max_retard = ((float)knock_max_retard) / m_angle_multiplier;
+ raw_packet+=4;
+
+ //Порог детонации
+ int knock_threshold;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_threshold, false))
+  return false;
+ m_KnockPar.knock_threshold = ((float)knock_threshold) * m_adc_discrete;
+ raw_packet+=4;
+
+ //Задержка восстановления УОЗ
+ unsigned char knock_recovery_delay;
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_recovery_delay))
+  return false;
+ m_KnockPar.knock_recovery_delay = knock_recovery_delay;
  raw_packet+=2;
 
  if (*raw_packet!='\r')
@@ -1378,6 +1414,18 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  CNumericConv::Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
  unsigned char knock_int_time_const = (unsigned char)packet_data->knock_int_time_const;
  CNumericConv::Bin8ToHex(knock_int_time_const, m_outgoing_packet);
+
+ int knock_retard_step = MathHelpers::Round(packet_data->knock_retard_step * m_angle_multiplier);
+ CNumericConv::Bin16ToHex(knock_retard_step, m_outgoing_packet);
+ int knock_advance_step = MathHelpers::Round(packet_data->knock_advance_step * m_angle_multiplier);
+ CNumericConv::Bin16ToHex(knock_advance_step, m_outgoing_packet);
+ int knock_max_retard = MathHelpers::Round(packet_data->knock_max_retard * m_angle_multiplier);
+ CNumericConv::Bin16ToHex(knock_max_retard, m_outgoing_packet);
+ int knock_threshold = MathHelpers::Round(packet_data->knock_threshold / m_adc_discrete);
+ CNumericConv::Bin16ToHex(knock_threshold, m_outgoing_packet);
+ unsigned char knock_recovery_delay = (unsigned char)packet_data->knock_recovery_delay;
+ CNumericConv::Bin8ToHex(knock_recovery_delay, m_outgoing_packet);
+
  m_outgoing_packet+= '\r';
 }
 

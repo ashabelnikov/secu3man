@@ -1,10 +1,8 @@
 
-
 #pragma once
 
 #include "common/unicodesupport.h"
 #include <vector>
-
 
 //определяем количество узлов интерполяции для каждой функции
 #define F_WRK_POINTS_F         16  
@@ -25,9 +23,6 @@ struct SECU3FWMapsItem
   float f_tmp[F_TMP_POINTS];  // функция коррект. УОЗ по температуре
   _TSTRING name;              // имя набора характеристик
 };
-
-
-
 
 //Аппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
 struct FWMapsDataHolder

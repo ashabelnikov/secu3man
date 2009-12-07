@@ -34,7 +34,7 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
  m_params.knock_retard_step = 4.0f;
  m_params.knock_advance_step = 0.25f;
  m_params.knock_max_retard = 16.0f;
- m_params.knock_threshold = 3.0f;
+ m_params.knock_threshold = 2.5f;
  m_params.knock_recovery_delay = 2;
 
  m_params.knock_int_time_const = 23; //300us
@@ -148,10 +148,10 @@ BOOL CKnockPageDlg::OnInitDialog()
  ex6.m_spin = true;
  ex6.m_delta = 0.01; //шаг
  ex6.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
- ex6.m_lower = 0.0;
+ ex6.m_lower = 0.1;
  ex6.m_upper = 5.0;
  ex6.m_limit_text = 5;
- m_knock_threshold_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_THRESHOLD), m_params.knock_threshold,_T("%gv"),true,false,-1,&ex6);
+ m_knock_threshold_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_THRESHOLD), m_params.knock_threshold,_T("%g V"),true,false,-1,&ex6);
  //-----------------------------------------------------------------
  CPropertyGridInPlaceEdit::InplaceEditParamsEx ex7;
  ex7.m_decimal_places = 2;
@@ -161,7 +161,7 @@ BOOL CKnockPageDlg::OnInitDialog()
  ex7.m_lower = 1;
  ex7.m_upper = 99;
  ex7.m_limit_text = 2;
- m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_T("%dц"),true,false,-1,&ex7);
+ m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_T("%d циклов"),true,false,-1,&ex7);
  //-----------------------------------------------------------------
 
  UpdateDialogControls(this,TRUE);
@@ -221,6 +221,34 @@ void CKnockPageDlg::GetValues(SECU3IO::KnockPar* o_values)
  size_t int_time_constant  = m_intt_selector.GetSelectedIndex();
  m_params.knock_int_time_const = (int)int_time_constant;
 
+
+//-----------------------
+ double knock_retard_step;
+ if (!m_ctrlGrid.GetItemValue(m_knock_retard_step_item, knock_retard_step))
+  status = false;
+ m_params.knock_retard_step = (float)knock_retard_step;
+
+ double knock_advance_step;
+ if (!m_ctrlGrid.GetItemValue(m_knock_advance_step_item, knock_advance_step))
+  status = false;
+ m_params.knock_advance_step = (float)knock_advance_step;
+
+ double knock_max_retard;
+ if (!m_ctrlGrid.GetItemValue(m_knock_max_retard_item, knock_max_retard))
+  status = false;
+ m_params.knock_max_retard = (float)knock_max_retard;
+
+ double knock_threshold;
+ if (!m_ctrlGrid.GetItemValue(m_knock_threshold_item, knock_threshold))
+  status = false;
+ m_params.knock_threshold = (float)knock_threshold;
+ 
+ int knock_recovery_delay;
+ if (!m_ctrlGrid.GetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
+  status = false;
+ m_params.knock_recovery_delay = knock_recovery_delay;
+ //-----------------------
+
  ASSERT(status);
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::KnockPar));
@@ -252,6 +280,28 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
 
  size_t int_time_constant = (size_t)m_params.knock_int_time_const;
  m_intt_selector.SetSelectedIndex(int_time_constant);
+
+ //-----------------------
+ double knock_retard_step = m_params.knock_retard_step;
+ if (!m_ctrlGrid.SetItemValue(m_knock_retard_step_item, knock_retard_step))
+  status = false;
+ 
+ double knock_advance_step = m_params.knock_advance_step;
+ if (!m_ctrlGrid.SetItemValue(m_knock_advance_step_item, knock_advance_step))
+  status = false;
+
+ double knock_max_retard = m_params.knock_max_retard;
+ if (!m_ctrlGrid.SetItemValue(m_knock_max_retard_item, knock_max_retard))
+  status = false;
+ 
+ double knock_threshold = m_params.knock_threshold;
+ if (!m_ctrlGrid.SetItemValue(m_knock_threshold_item, knock_threshold))
+  status = false;
+ 
+ int knock_recovery_delay = m_params.knock_recovery_delay;
+ if (!m_ctrlGrid.SetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
+  status = false;
+ //-----------------------
 
  ASSERT(status);
 }

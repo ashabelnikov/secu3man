@@ -136,11 +136,11 @@ namespace SECU3IO
   float knock_k_wnd_end_angle;
   int knock_int_time_const;
 
-  float knock_retard_step;
-  float knock_advance_step;
-  float knock_max_retard;
-  float knock_threshold; //? float vs int ?
-  int knock_recovery_delay;
+  float knock_retard_step;    //шаг смещения УОЗ при детонации
+  float knock_advance_step;   //шаг восстановления УОЗ 
+  float knock_max_retard;     //максимальное смещение УОЗ 
+  float knock_threshold;      //в вольтах
+  int knock_recovery_delay;   //в рабочих циклах двигателя
  };
 
  struct CEErrors
