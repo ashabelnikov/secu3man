@@ -192,7 +192,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
- if (strlen((char*)raw_packet)!=31)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=35)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //частота вращения двигателя
@@ -260,6 +260,13 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.epm_valve))
   return false;
  raw_packet+=1;  
+
+ //Корректировка УОЗ при детонации
+ int knock_retard = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard, true))
+  return false; 
+ m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
+ raw_packet+=4;
 
  if (*raw_packet!='\r')
   return false;

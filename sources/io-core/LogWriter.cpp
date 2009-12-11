@@ -15,7 +15,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
+const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%5.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
 
 LogWriter::LogWriter()
 : m_is_busy(false)
@@ -47,17 +47,18 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
   fprintf(m_out_handle, m_csv_data_template,
- 	                   p_sensors->frequen,
-					   p_sensors->adv_angle,
-					   p_sensors->pressure,
-					   p_sensors->voltage,
-					   p_sensors->temperat,
-					   p_sensors->knock_k,
-					   (int)p_sensors->air_flow,
-					   (int)p_sensors->carb,
-					   (int)p_sensors->gas,
-					   (int)p_sensors->ephh_valve,
-					   (int)p_sensors->epm_valve);
+                        p_sensors->frequen,
+                        p_sensors->adv_angle,
+                        p_sensors->pressure,
+                        p_sensors->voltage,
+                        p_sensors->temperat,
+                        p_sensors->knock_k,
+                        p_sensors->knock_retard,
+                        (int)p_sensors->air_flow,
+                        (int)p_sensors->carb,
+                        (int)p_sensors->gas,
+                        (int)p_sensors->ephh_valve,
+                        (int)p_sensors->epm_valve);
  }
 }
 
@@ -112,5 +113,5 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x);
 }

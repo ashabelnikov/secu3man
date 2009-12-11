@@ -22,7 +22,7 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 11
+#define CSV_COUNT_DATA_VAL 12
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -30,7 +30,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -57,30 +57,30 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error)
   return false; //can not open file!
  }
 
-m_file_handle = f_handle;
+ m_file_handle = f_handle;
 
-char string[MAX_REC_BUF + 1];
-//определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
-int prev_lengh = -1, lengh = 0;
-unsigned long count = 0;
-while(fgets(string, MAX_REC_BUF, f_handle) != NULL)
-{
- lengh = strlen(string);
- if (prev_lengh != -1 && lengh != prev_lengh)
+ char string[MAX_REC_BUF + 1];
+ //определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
+ int prev_lengh = -1, lengh = 0;
+ unsigned long count = 0;
+ while(fgets(string, MAX_REC_BUF, f_handle) != NULL)
  {
-  o_error = FE_FORMAT;
-  return false;
+  lengh = strlen(string);
+  if (prev_lengh != -1 && lengh != prev_lengh)
+  {
+   o_error = FE_FORMAT;
+   return false;
+  }
+  prev_lengh = lengh;
+  ++count;
  }
- prev_lengh = lengh;
- ++count;
-}
-//save record count
-m_record_count = count;
-m_record_size = lengh;
-m_current_record = 0;
-o_error = FE_NA;
-fseek(m_file_handle, 0, SEEK_SET);
-return true;
+ //save record count
+ m_record_count = count;
+ m_record_size = lengh;
+ m_current_record = 0;
+ o_error = FE_NA;
+ fseek(m_file_handle, 0, SEEK_SET);
+ return true;
 }
 
 bool LogReader::CloseFile(void)
@@ -127,20 +127,21 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
  int frequen,carb,gas,air_flow,ephh_valve,epm_valve = 0;                           
- float pressure,voltage,temperat,adv_angle,knock_k; 
+ float pressure,voltage,temperat,adv_angle,knock_k, knock_retard; 
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
-		&frequen,
-		&adv_angle,
-		&pressure,
-		&voltage,
-		&temperat,
-		&knock_k,
-		&air_flow,
-		&carb,
-		&gas,
-		&ephh_valve,
-		&epm_valve);
+                &frequen,
+                &adv_angle,
+                &pressure,
+                &voltage,
+                &temperat,
+                &knock_k,
+                &knock_retard,
+                &air_flow,
+                &carb,
+                &gas,
+                &ephh_valve,
+                &epm_valve);
 
  if (result != CSV_COUNT_DATA_VAL)
   return false; 
@@ -150,6 +151,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.voltage = voltage;
  o_data.temperat = temperat;
  o_data.knock_k = knock_k;
+ o_data.knock_retard = knock_retard;
  o_data.air_flow = air_flow;
  o_data.carb = carb;
  o_data.gas = gas;
@@ -187,7 +189,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

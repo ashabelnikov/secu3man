@@ -29,6 +29,7 @@ namespace SECU3IO
   unsigned char ephh_valve;             //состояние клапана ЭПХХ
   unsigned char epm_valve;              //состояние клапана ЭМР
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
+  float knock_retard;                   //корректировка УОЗ при детонации
  };
  
  struct FnNameDat
