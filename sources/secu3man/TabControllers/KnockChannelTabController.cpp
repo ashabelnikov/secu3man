@@ -377,7 +377,10 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
     new_gain_index = j;
    }
   }
-  array[i] = new_gain_index; 
+
+  //Изменяем коэффициент усиления только для тех точек, для которых была получена статистика
+  if (m_rpm_knock_signal[i].size() > 0)
+    array[i] = new_gain_index; 
  }
 
  //устанавливаем обновленную таблицу аттенюатора
