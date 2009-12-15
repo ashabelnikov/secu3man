@@ -68,7 +68,7 @@ namespace MathHelpers
     return false;
 
    int j, k, k2 = i_kernel_size / 2;
-   for(int i = 0; i < i_data_size; ++i)
+   for(size_t i = 0; i < i_data_size; ++i)
    {
     op_out[i] = 0;
     T divisor = 0;

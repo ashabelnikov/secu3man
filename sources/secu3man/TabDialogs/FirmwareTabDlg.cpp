@@ -162,7 +162,7 @@ void __cdecl CFirmwareTabDlg::OnGetYAxisLabel(LPTSTR io_label_string, void* i_pa
   return;
  }
 
- float value = _tcstod(io_label_string, NULL);
+ float value = (float)_tcstod(io_label_string, NULL);
  int i = MathHelpers::Round(value);
  if (i >= 0 && i < SECU3IO::ATTENUATOR_LEVELS_SIZE)
   _stprintf(io_label_string, _T("%0.3f"), SECU3IO::hip9011_attenuator_gains[i]);
