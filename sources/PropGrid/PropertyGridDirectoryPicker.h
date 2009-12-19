@@ -11,13 +11,13 @@
 
 class CPropertyGridDirectoryPicker
 {
-public:
+ public:
   CPropertyGridDirectoryPicker();
   virtual ~CPropertyGridDirectoryPicker();
 
   static bool PickDirectory(_TSTRING&, HWND hwnd);
   static _TSTRING m_strTitle;
 
-protected:
+ protected:
   static int CALLBACK BrowseCallbackProc(HWND hwnd,UINT uMsg,LPARAM lp, LPARAM pData);
 };

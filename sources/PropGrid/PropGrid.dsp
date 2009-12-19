@@ -182,6 +182,10 @@ SOURCE=.\PropertyGridMonthCalCtrl.cpp
 # End Source File
 # Begin Source File
 
+SOURCE=.\PropertyGridSelector.cpp
+# End Source File
+# Begin Source File
+
 SOURCE=.\PropGrid.cpp
 # End Source File
 # Begin Source File
@@ -201,10 +205,6 @@ SOURCE=.\StdAfx.cpp
 # Begin Group "Header Files"
 
 # PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\CustomItem.h
-# End Source File
 # Begin Source File
 
 SOURCE=.\DynDialogEx.h
@@ -239,6 +239,10 @@ SOURCE=.\PropertyGridMonthCalCtrl.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\PropertyGridSelector.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Resource.h
 # End Source File
 # Begin Source File
@@ -252,26 +256,6 @@ SOURCE=.\StdAfx.h
 # Begin Source File
 
 SOURCE=.\res\PropGrid.rc2
-# End Source File
-# End Group
-# Begin Group "Custom"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\Custom\BtnCheckbox.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Custom\BtnCheckbox.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Custom\CustValSelector.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Custom\CustValSelector.h
 # End Source File
 # End Group
 # End Target

@@ -548,7 +548,7 @@ BEGIN
     IDS_PD_KNOCK_ENABLE_KC  "Разреш. контроль детон."
     IDS_PD_KNOCK_BEGIN_KWND "Начало фазового окна"
     IDS_PD_KNOCK_END_KWND   "Конец фазового окна"
-    IDS_PD_KNOCK_BPF_UNIT   "кГц"
+    IDS_PD_KNOCK_BPF_UNIT   " кГц"
     IDS_PD_KNOCK_BPF_FREQ   "Частота ПФ"
     IDS_PD_KNOCK_RETARD_STEP "Шаг смещения УОЗ"
     IDS_PD_KNOCK_ADVANCE_STEP "Шаг восстан. УОЗ"
@@ -556,7 +556,7 @@ BEGIN
     IDS_PD_KNOCK_THRESHOLD  "Порог детонации"
     IDS_PD_KNOCK_RECOVERY_DELAY "Задержка восстан. УОЗ"
     IDS_PD_KNOCK_INT_TIME_CONSTANT "Пост. врем. интегриров."
-    IDS_PD_KNOCK_INT_TIME_UNIT "мкс"
+    IDS_PD_KNOCK_INT_TIME_UNIT " мкс"
 END
 
 #endif    // Russian resources

@@ -3,7 +3,6 @@
 
 #include "io-core\SECU3IO.h"
 #include "ParamPageEvents.h"
-#include "propgrid\custom\CustValSelector.h"
 #include "propgrid\propertygrid.h"
 #include "ui-core\TabDialog.h"
 
@@ -36,9 +35,7 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::KnockPar m_params;
   BOOL m_enabled;
 
-  CPropertyGrid m_ctrlGrid;
-  CCustValSelector m_freq_selector;
-  CCustValSelector m_intt_selector;
+  CPropertyGrid m_ctrlGrid; 
 
   HITEM m_knock_use_knock_channel_item;
   HITEM m_knock_k_wnd_begin_angle_item;

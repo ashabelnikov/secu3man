@@ -75,7 +75,7 @@ namespace MathHelpers
     for(k = -k2; k <= k2; ++k)
     {
      j = (i + k);
-     if (j >= 0 && j < i_data_size)
+     if (j >= 0 && j < (int)i_data_size)
      {
       op_out[i]+= ip_in[j];
       divisor+= 1;

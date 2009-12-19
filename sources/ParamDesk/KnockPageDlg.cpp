@@ -5,6 +5,7 @@
 
 #include <vector>
 #include "common\MathHelpers.h"
+#include "propgrid\wm_messages.h"
 
 using namespace std;
 #pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
@@ -86,7 +87,8 @@ BOOL CKnockPageDlg::OnInitDialog()
  ex2.m_lower = -12.0;
  ex2.m_upper = 54.0;
  ex2.m_limit_text = 6;
- m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND), m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
+ m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND), 
+     m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
  //-----------------------------------------------------------------  
  vector<_TSTRING> bpf_freqs;
  for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
@@ -95,10 +97,9 @@ BOOL CKnockPageDlg::OnInitDialog()
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
   bpf_freqs.push_back(_TSTRING(string));
  }
- m_freq_selector.SetValuesList(bpf_freqs);
- m_freq_selector.SetSelectedIndex(MathHelpers::Round(m_params.knock_bpf_frequency));
- m_freq_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
- m_knock_bpf_frequency_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), &m_freq_selector);
+ m_knock_bpf_frequency_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), bpf_freqs, 
+     MathHelpers::Round(m_params.knock_bpf_frequency), MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
+
  //-----------------------------------------------------------------
  vector<_TSTRING> int_conts;
  for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
@@ -107,10 +108,8 @@ BOOL CKnockPageDlg::OnInitDialog()
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
   int_conts.push_back(_TSTRING(string));
  }
- m_intt_selector.SetValuesList(int_conts);
- m_intt_selector.SetSelectedIndex(m_params.knock_int_time_const);
- m_intt_selector.SetUnitString(MLL::GetString(IDS_PD_KNOCK_INT_TIME_UNIT));
- m_knock_integrator_const_item = m_ctrlGrid.AddCustomItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), &m_intt_selector);
+ m_knock_integrator_const_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), int_conts, 
+     m_params.knock_int_time_const, MLL::GetString(IDS_PD_KNOCK_INT_TIME_UNIT));
  //-----------------------------------------------------------------
 
  CPropertyGridInPlaceEdit::InplaceEditParamsEx ex3;
@@ -164,6 +163,8 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_T("%d циклов"),true,false,-1,&ex7);
  //-----------------------------------------------------------------
 
+ m_ctrlGrid.SetGutterWidth(180);
+
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -215,12 +216,15 @@ void CKnockPageDlg::GetValues(SECU3IO::KnockPar* o_values)
   status = false;
  m_params.knock_k_wnd_end_angle = (float)knock_k_wnd_end_angle;
 
- size_t knock_bpf_frequency  = m_freq_selector.GetSelectedIndex();
+ int knock_bpf_frequency;
+ if (!m_ctrlGrid.GetItemValue(m_knock_bpf_frequency_item,knock_bpf_frequency))
+   status = false;
  m_params.knock_bpf_frequency = (float)knock_bpf_frequency;
 
- size_t int_time_constant  = m_intt_selector.GetSelectedIndex();
- m_params.knock_int_time_const = (int)int_time_constant;
-
+ int int_time_constant;
+ if (!m_ctrlGrid.GetItemValue(m_knock_integrator_const_item,int_time_constant))
+     status = false;
+ m_params.knock_int_time_const = int_time_constant;
 
 //-----------------------
  double knock_retard_step;
@@ -275,11 +279,13 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  if (!m_ctrlGrid.SetItemValue(m_knock_k_wnd_end_angle_item,knock_k_wnd_end_angle))
   status = false;
 
- size_t knock_bpf_frequency = MathHelpers::Round(m_params.knock_bpf_frequency);
- m_freq_selector.SetSelectedIndex(knock_bpf_frequency);
+ int knock_bpf_frequency = MathHelpers::Round(m_params.knock_bpf_frequency);
+ if (!m_ctrlGrid.SetItemValue(m_knock_bpf_frequency_item, knock_bpf_frequency))
+     status = false;
 
- size_t int_time_constant = (size_t)m_params.knock_int_time_const;
- m_intt_selector.SetSelectedIndex(int_time_constant);
+ int int_time_constant = (size_t)m_params.knock_int_time_const;
+ if (!m_ctrlGrid.SetItemValue(m_knock_integrator_const_item, int_time_constant))
+     status = false;
 
  //-----------------------
  double knock_retard_step = m_params.knock_retard_step;

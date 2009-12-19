@@ -42,12 +42,14 @@
 //                      Workaround for bizzare "shrinking window" problem in CE
 //
 //         30 Dec 2008  Support for spin button control added (Alexey Shabelnikov)
+//         18 Dec 2008  UDS_ARROWKEYS style added
 //
 /////////////////////////////////////////////////////////////////////////////
 
 #include "stdafx.h"
 #include "TCHAR.h"
 #include "PropertyGridInPlaceEdit.h"
+#include "wm_messages.h"
 
 using namespace std;
 
@@ -57,85 +59,79 @@ using namespace std;
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CPropertyGridInPlaceEdit
-
 CPropertyGridInPlaceEdit::CPropertyGridInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID, _TSTRING sInitText, const InplaceEditParamsEx* ip_ex_params /*= NULL*/)
 {
-  m_sInitText     = sInitText.c_str();
-  m_bExitOnArrows = FALSE;
-  m_Rect = rect;  // For bizarre CE bug.
+ m_sInitText     = sInitText.c_str();
+ m_bExitOnArrows = FALSE;
+ m_Rect = rect;  // For bizarre CE bug.
 
-  DWORD dwEditStyle = /*WS_BORDER|*/WS_CHILD|/*WS_VISIBLE|*/ES_AUTOHSCROLL|dwStyle;
-  CRect edit_rect;
-  edit_rect = rect;
+ DWORD dwEditStyle = WS_CHILD|ES_AUTOHSCROLL|dwStyle;
+ CRect edit_rect;
+ edit_rect = rect;
 
-  if (NULL!=ip_ex_params && ip_ex_params->m_spin) 
-    edit_rect.right -= 20;
+ if (NULL!=ip_ex_params && ip_ex_params->m_spin)
+  edit_rect.right -= 20;
 
-  if (!Create(dwEditStyle, edit_rect, pParent, nID))
-    return;
+ if (!Create(dwEditStyle, edit_rect, pParent, nID))
+  return;
 
-  m_clrBack = GetSysColor(COLOR_WINDOW);
-  m_clrText = GetSysColor(COLOR_WINDOWTEXT);
-  m_Brush.CreateSolidBrush(m_clrBack);
+ m_clrBack = GetSysColor(COLOR_WINDOW);
+ m_clrText = GetSysColor(COLOR_WINDOWTEXT);
+ m_Brush.CreateSolidBrush(m_clrBack);
 
-  SetFont(pParent->GetFont());
+ SetFont(pParent->GetFont());
+ SetWindowText(m_sInitText);
+ SetFocus();
 
-  SetWindowText(m_sInitText);
-  SetFocus();
+ if (NULL!=ip_ex_params)
+ {
+  SetMode(ip_ex_params->m_mode);
+  SetDecimalPlaces(ip_ex_params->m_decimal_places);
+  if (ip_ex_params->m_limit_text!=-1)
+   SetLimitText(ip_ex_params->m_limit_text);
 
-
-  if (NULL!=ip_ex_params)
+  if (ip_ex_params->m_spin)
   {
-   SetMode(ip_ex_params->m_mode);
-   SetDecimalPlaces(ip_ex_params->m_decimal_places);
-   if (ip_ex_params->m_limit_text!=-1)
-    SetLimitText(ip_ex_params->m_limit_text);
+   CRect spin_rect;
+   spin_rect = rect;
+   spin_rect.left = spin_rect.right - 20;
+   m_spin.Create(WS_CHILD|WS_VISIBLE|UDS_ARROWKEYS, spin_rect, pParent, nID + 1);
+   m_spin.SetBuddy(this);
+   m_spin.SetRangeAndDelta(ip_ex_params->m_lower,ip_ex_params->m_upper,ip_ex_params->m_delta);
 
-   if (ip_ex_params->m_spin)
+   if (ip_ex_params->m_decimal_places!=-1)
    {
-    CRect spin_rect;
-    spin_rect = rect;
-    spin_rect.left = spin_rect.right - 20;
-    m_spin.Create(WS_CHILD|WS_VISIBLE|UDS_AUTOBUDDY, spin_rect, pParent, nID+1);
-    m_spin.SetBuddy(this);
-    m_spin.SetRangeAndDelta(ip_ex_params->m_lower,ip_ex_params->m_upper,ip_ex_params->m_delta);
-
-    if (ip_ex_params->m_decimal_places!=-1)
-    {
-	 float value;
-     GetValue(value);
-	 SetValue(value);
-	}
+    float value;
+    GetValue(value);
+    SetValue(value);
    }
   }
+ }
 
-  SetSel(0, -1);
-  SetSel(-1, 0);
+ SetSel(0, -1);
+ SetSel(-1, 0);
 }
 
 CPropertyGridInPlaceEdit::~CPropertyGridInPlaceEdit()
 {
+ //empty
 }
 
 void CPropertyGridInPlaceEdit::SetColors(COLORREF clrBack, COLORREF clrText)
 {
-  m_clrBack = clrBack;
-  m_clrText = clrText;
-  m_Brush.DeleteObject();
-  m_Brush.CreateSolidBrush(m_clrBack);
+ m_clrBack = clrBack;
+ m_clrText = clrText;
+ m_Brush.DeleteObject();
+ m_Brush.CreateSolidBrush(m_clrBack);
 }
 
 BEGIN_MESSAGE_MAP(CPropertyGridInPlaceEdit, CEdit)
-  //{{AFX_MSG_MAP(CPropertyGridInPlaceEdit)
-  ON_WM_KILLFOCUS()
-  ON_WM_CHAR()
-  ON_WM_KEYDOWN()
-  ON_WM_GETDLGCODE()
-  ON_WM_CREATE()
-  ON_WM_CTLCOLOR_REFLECT( )
-  //}}AFX_MSG_MAP
+ ON_WM_KILLFOCUS()
+ ON_WM_CHAR()
+ ON_WM_KEYDOWN()
+ ON_WM_GETDLGCODE()
+ ON_WM_CREATE()
+ ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
 
 ////////////////////////////////////////////////////////////////////////////
@@ -146,73 +142,73 @@ END_MESSAGE_MAP()
 //  b) m_bExitOnArrows == TRUE
 void CPropertyGridInPlaceEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
 {
-  if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
-    nChar == VK_DOWN  || nChar == VK_UP   ||
-    nChar == VK_RIGHT || nChar == VK_LEFT) &&
-    (m_bExitOnArrows || GetKeyState(VK_CONTROL) < 0))
-  {
-   GetParent()->SetFocus();
-   return;
-  }
+ if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
+      nChar == VK_DOWN  || nChar == VK_UP   ||
+      nChar == VK_RIGHT || nChar == VK_LEFT) &&
+     (m_bExitOnArrows || GetKeyState(VK_CONTROL) < 0))
+ {
+  GetParent()->SetFocus();
+  return;
+ }
 
-  Super::OnKeyDown(nChar, nRepCnt, nFlags);
+ Super::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
 // As soon as this edit loses focus, kill it.
 void CPropertyGridInPlaceEdit::OnKillFocus(CWnd* pNewWnd)
 {
-  Super::OnKillFocus(pNewWnd);
-  EndEdit();
+ Super::OnKillFocus(pNewWnd);
+ EndEdit();
 }
 
 void CPropertyGridInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
-  if (nChar == VK_TAB || nChar == VK_RETURN)
-  {
-    GetParent()->SetFocus();    // This will destroy this window
-    return;
-  }
-  if (nChar == VK_ESCAPE) 
-  {
-    CancelEdit();
-    return;
-  }
+ if (nChar == VK_TAB || nChar == VK_RETURN)
+ {
+  GetParent()->SetFocus();    // This will destroy this window
+  return;
+ }
+ if (nChar == VK_ESCAPE) 
+ {
+  CancelEdit();
+  return;
+ }
 
-  Super::OnChar(nChar, nRepCnt, nFlags);
+ Super::OnChar(nChar, nRepCnt, nFlags);
 
-  //// Resize edit control if needed
-  //
-  //// Get text extent
-  //CString str;
-  //GetWindowText( str );
+ //// Resize edit control if needed
+ //
+ //// Get text extent
+ //CString str;
+ //GetWindowText( str );
 
-  //// add some extra buffer
-  //str += _T("  ");
-  //
-  //CWindowDC dc(this);
-  //CFont *pFontDC = dc.SelectObject(GetFont());
-  //CSize size = dc.GetTextExtent( str );
-  //dc.SelectObject( pFontDC );
-  //   
-  //// Get client rect
-  //CRect ParentRect;
-  //GetParent()->GetClientRect( &ParentRect );
-  //
-  //// Check whether control needs to be resized
-  //// and whether there is space to grow
-  //if (size.cx > m_Rect.Width())
-  //{
-  //    if( size.cx + m_Rect.left < ParentRect.right )
-  //        m_Rect.right = m_Rect.left + size.cx;
-  //    else
-  //        m_Rect.right = ParentRect.right;
-  //    MoveWindow( &m_Rect );
-  //}
+ //// add some extra buffer
+ //str += _T("  ");
+ //
+ //CWindowDC dc(this);
+ //CFont *pFontDC = dc.SelectObject(GetFont());
+ //CSize size = dc.GetTextExtent( str );
+ //dc.SelectObject( pFontDC );
+ //   
+ //// Get client rect
+ //CRect ParentRect;
+ //GetParent()->GetClientRect( &ParentRect );
+ //
+ //// Check whether control needs to be resized
+ //// and whether there is space to grow
+ //if (size.cx > m_Rect.Width())
+ //{
+ //    if( size.cx + m_Rect.left < ParentRect.right )
+ //        m_Rect.right = m_Rect.left + size.cx;
+ //    else
+ //        m_Rect.right = ParentRect.right;
+ //    MoveWindow( &m_Rect );
+ //}
 }
 
 UINT CPropertyGridInPlaceEdit::OnGetDlgCode() 
 {
-  return DLGC_WANTALLKEYS;
+ return DLGC_WANTALLKEYS;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -221,10 +217,10 @@ UINT CPropertyGridInPlaceEdit::OnGetDlgCode()
 // Stoopid win95 accelerator key problem workaround - Matt Weagle.
 BOOL CPropertyGridInPlaceEdit::PreTranslateMessage(MSG* pMsg) 
 {
-  // Catch the Alt key so we don't choke if focus is going to an owner drawn button
-  if (pMsg->message == WM_SYSCHAR)
-    return TRUE;
-  return Super::PreTranslateMessage(pMsg);
+ // Catch the Alt key so we don't choke if focus is going to an owner drawn button
+ if (pMsg->message == WM_SYSCHAR)
+  return TRUE;
+ return Super::PreTranslateMessage(pMsg);
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -232,42 +228,42 @@ BOOL CPropertyGridInPlaceEdit::PreTranslateMessage(MSG* pMsg)
 
 void CPropertyGridInPlaceEdit::CancelEdit()
 {
-  // restore previous text
-  if (IsWindow(GetSafeHwnd()))
-  {
-    SetWindowText(m_sInitText);
-    SendMessage(WM_CLOSE, 0, 0);
-  }
+ // restore previous text
+ if (IsWindow(GetSafeHwnd()))
+ {
+  SetWindowText(m_sInitText);
+  SendMessage(WM_CLOSE, 0, 0);
+ }
 }
 
 void CPropertyGridInPlaceEdit::EndEdit()
 {
-  CString str;
+ CString str;
 
-  // EFW - BUG FIX - Clicking on a grid scroll bar in a derived class
-  // that validates input can cause this to get called multiple times
-  // causing assertions because the edit control goes away the first time.
-  static BOOL bAlreadyEnding = FALSE;
+ // EFW - BUG FIX - Clicking on a grid scroll bar in a derived class
+ // that validates input can cause this to get called multiple times
+ // causing assertions because the edit control goes away the first time.
+ static BOOL bAlreadyEnding = FALSE;
 
-  if(bAlreadyEnding)
-    return;
+ if(bAlreadyEnding)
+  return;
 
-  bAlreadyEnding = TRUE;
-  GetWindowText(str);
+ bAlreadyEnding = TRUE;
+ GetWindowText(str);
 
-  CWnd* pOwner = GetOwner();
-  if (pOwner)
-    pOwner->SendMessage(WM_PG_ENDLABELEDIT, (WPARAM) LPCTSTR(str), NULL );
+ CWnd* pOwner = GetOwner();
+ if (pOwner)
+  pOwner->SendMessage(WM_PG_ENDLABELEDIT, (WPARAM) LPCTSTR(str), NULL );
 
-  // Close this window (PostNcDestroy will delete this)
-  if (IsWindow(GetSafeHwnd()))
-    SendMessage(WM_CLOSE, 0, 0);
-  bAlreadyEnding = FALSE;
+ // Close this window (PostNcDestroy will delete this)
+ if (IsWindow(GetSafeHwnd()))
+  SendMessage(WM_CLOSE, 0, 0);
+ bAlreadyEnding = FALSE;
 }
 
 HBRUSH CPropertyGridInPlaceEdit::CtlColor ( CDC* pDC, UINT nCtlColor )
 {
-  pDC->SetTextColor(m_clrText);
-  pDC->SetBkColor(m_clrBack);
-  return m_Brush;
+ pDC->SetTextColor(m_clrText);
+ pDC->SetBkColor(m_clrBack);
+ return m_Brush;
 }
