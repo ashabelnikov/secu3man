@@ -2337,7 +2337,7 @@ void CPropertyGrid::_ActivateFocusedItem(void)
 
    if (pItem->m_type != IT_SELECTOR)
    {// create it - all except "selector"
-    m_control = new CPropertyGridInPlaceEdit(this, rc, WS_CHILD, 1000, strValue, &pItem->m_SpinEdExParams);
+    m_control = new CPropertyGridInPlaceEdit(this, rc, WS_CHILD, 0, strValue, &pItem->m_SpinEdExParams);
     CPropertyGridInPlaceEdit* pEdit = (CPropertyGridInPlaceEdit*)m_control;
     pEdit->SetColors(m_clrBack, m_clrText);
     pEdit->SetFont(&m_fntNormal);
