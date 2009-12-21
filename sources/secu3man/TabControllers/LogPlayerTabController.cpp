@@ -359,7 +359,12 @@ void CLogPlayerTabController::_GoBack(void)
 
 void CLogPlayerTabController::_GetRecord(void)
 {
- VERIFY(mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second));
+ bool status = mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second);
+ if (!status) 
+ {
+  AfxMessageBox(MLL::LoadString(IDS_LP_FILE_READ_ERROR), MB_OK);
+  _ClosePlayer(); //прекращаем проигрывание
+ }
 }
 
 unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
