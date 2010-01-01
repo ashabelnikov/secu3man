@@ -365,22 +365,26 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,48,32,79,14
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,46,20,79,14
     CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,48,50,74,12
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,27,81,47,71,
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,46,38,74,12
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,25,70,47,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,27,109,35,16,
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,25,97,35,16,
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
-                    IDC_PD_CKPS_IGNITION_COGS_UNIT,77,104,92,29,NOT WS_GROUP
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,75,92,92,29,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,63,109,11,16
-    GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,26,18,
-                    131,51
+                    UDS_ARROWKEYS | UDS_HOTTRACK,61,97,11,16
+    GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,24,6,131,
+                    51
     LTEXT           "Кол-во зубьев до в.м.т.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,79,83,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,77,71,89,9,NOT 
                     WS_GROUP
+    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,26,126,47,71,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Кол-во цилиндров двигателя",
+                    IDC_PD_CKPS_ENGINE_CYL_LABEL,78,127,89,17,NOT WS_GROUP
 END
 
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 143

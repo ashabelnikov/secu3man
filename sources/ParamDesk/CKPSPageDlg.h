@@ -29,6 +29,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
   afx_msg void OnSelchangePdCogsBTDCCombo();
+  afx_msg void OnSelchangePdEngineCylCombo();
   afx_msg void OnChangePdIgnitionCogsEdit();
   afx_msg void OnClickedPdPosFrontRadio();
   afx_msg void OnClickedPdNegFrontRadio();
@@ -39,9 +40,15 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   int  _GetCKPSTeethBTDCComboBoxSelection(void);
   void _SetCKPSTeethBTDCComboBoxSelection(int i_sel);
 
+  void _FillCKPSEngineCylComboBox(void);
+  int  _GetCKPSEngineCylComboBoxSelection(void);
+  void _SetCKPSEngineCylComboBoxSelection(int i_sel);
+
  private:
   //<cog number, UI name>
   std::vector<std::pair<int, _TSTRING> > m_cogs_numbers;
+  //<cylinders, UI name>
+  std::vector<std::pair<int, _TSTRING> > m_engine_cyls;
 
   SECU3IO::CKPSPar m_params;
   BOOL m_enabled;
@@ -52,6 +59,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
 
   CStatic m_teeth_before_tdc_label;
   CComboBox m_teeth_before_tdc_combo;
+  CComboBox m_engine_cyl_combo;
 
   CSpinButtonCtrlEx m_ignition_cogs_spin;
   CEditEx m_ignition_cogs_edit;

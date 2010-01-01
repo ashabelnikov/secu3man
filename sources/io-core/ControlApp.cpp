@@ -684,7 +684,7 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
 
- if (strlen((char*)raw_packet)!=6)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=8)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Тип фронта ДПКВ 
@@ -699,6 +699,11 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
 
  //Длительность импульса запуска коммутаторов в зубьях шкива
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_ignit_cogs))
+  return false;
+ raw_packet+=2;
+
+ //Кол-во цилиндров двигателя
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_engine_cyl))
   return false;
  raw_packet+=2;
 
@@ -1406,6 +1411,7 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  CNumericConv::Bin4ToHex(packet_data->ckps_edge_type,m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_cogs_btdc,m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_ignit_cogs,m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->ckps_engine_cyl,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

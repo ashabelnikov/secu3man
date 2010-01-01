@@ -85,8 +85,10 @@ typedef struct
  _uint  ephh_hit_g;                     //верхний порог ЭПХХ (газ)
  _uchar shutoff_delay;                  //задержка выключения клапана
 
- _uint  uart_divisor;               //делитель для соответствующей скорости UART-a
- _uchar uart_period_t_ms;           //период посылки пакетов в десятках миллисекунд
+ _uint  uart_divisor;                //делитель для соответствующей скорости UART-a
+ _uchar uart_period_t_ms;            //период посылки пакетов в десятках миллисекунд
+
+ _uchar ckps_engine_cyl;             //кол-во цилиндров двигателя 
 
  //--knock 
  _uchar knock_use_knock_channel;     //признак использования канала детенации
@@ -106,7 +108,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[11];
+ _uchar reserved[10];
 
  _ushort crc;                           //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
 }params;
@@ -547,6 +549,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->ckps_cogs_btdc  = p_in->ckps_cogs_btdc;
     p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
     p_params->ckps_edge_type  = p_in->ckps_edge_type;
+    p_params->ckps_engine_cyl = p_in->ckps_engine_cyl;
    }
    break;
   case KNOCK_PAR:  
@@ -693,6 +696,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->ckps_cogs_btdc  = p_params->ckps_cogs_btdc;
      p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
      p_out->ckps_edge_type  = p_params->ckps_edge_type;
+     p_out->ckps_engine_cyl = p_params->ckps_engine_cyl;
     }
     break;
    case KNOCK_PAR:

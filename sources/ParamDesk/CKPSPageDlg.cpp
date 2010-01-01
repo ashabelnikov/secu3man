@@ -24,6 +24,7 @@ const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnSelchangePdCogsBTDCCombo)
+ ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnSelchangePdEngineCylCombo)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangePdIgnitionCogsEdit)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnClickedPdNegFrontRadio)
@@ -34,7 +35,9 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
   
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,OnUpdateControls)
-  
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_LABEL,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_UNIT,OnUpdateControls)
@@ -65,6 +68,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 	
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL, m_teeth_before_tdc_label);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, m_teeth_before_tdc_combo);
+ DDX_Control(pDX,IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, m_engine_cyl_combo);
 
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_SPIN, m_ignition_cogs_spin);
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_EDIT, m_ignition_cogs_edit);
@@ -93,6 +97,7 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_ignition_cogs_spin.SetRangeAndDelta(1,55,1);
 
  _FillCKPSTeethBTDCComboBox(); //инициализируем комбо бокс числа зубьев до в.м.т.
+ _FillCKPSEngineCylComboBox(); //инициализируем комбо бокс цисла цилиндров двигателя.
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
  UpdateDialogControls(this,TRUE);
 
@@ -104,6 +109,12 @@ void CCKPSPageDlg::OnSelchangePdCogsBTDCCombo()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CCKPSPageDlg::OnSelchangePdEngineCylCombo()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents) 
 }
 
 void CCKPSPageDlg::OnChangePdIgnitionCogsEdit()
@@ -146,6 +157,7 @@ void CCKPSPageDlg::GetValues(SECU3IO::CKPSPar* o_values)
  ASSERT(o_values);
  UpdateData(TRUE); //копируем данные из диалога в переменные
  m_params.ckps_cogs_btdc = _GetCKPSTeethBTDCComboBoxSelection();
+ m_params.ckps_engine_cyl = _GetCKPSEngineCylComboBoxSelection();
  memcpy(o_values,&m_params, sizeof(SECU3IO::CKPSPar));
 }
 
@@ -155,8 +167,9 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::CKPSPar));
 
- //комбо бокс
+ //комбо боксы
  _SetCKPSTeethBTDCComboBoxSelection(m_params.ckps_cogs_btdc);
+ _SetCKPSEngineCylComboBoxSelection(m_params.ckps_engine_cyl);
 
  //устанавливаем состояние контлоллов фронта ДПКВ
  m_ckps_posfront_radio.SetCheck(m_params.ckps_edge_type);
@@ -167,6 +180,7 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
 
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
 {
+ m_cogs_numbers.clear();
  m_cogs_numbers.push_back(std::make_pair(1,_TSTRING(_T("1"))));
  m_cogs_numbers.push_back(std::make_pair(2,_TSTRING(_T("2"))));
  m_cogs_numbers.push_back(std::make_pair(3,_TSTRING(_T("3"))));
@@ -230,6 +244,57 @@ void CCKPSPageDlg::_SetCKPSTeethBTDCComboBoxSelection(int i_sel)
   if (m_teeth_before_tdc_combo.GetItemData(ii) == i)
   {
    m_teeth_before_tdc_combo.SetCurSel(ii);
+   return;
+  }
+ }
+ ASSERT(0);
+}
+
+void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
+{
+ m_engine_cyls.clear(); 
+ m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
+ m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
+ m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+ m_engine_cyls.push_back(std::make_pair(8,_TSTRING(_T("8"))));
+
+ m_engine_cyl_combo.ResetContent();
+ for(size_t i = 0; i < m_engine_cyls.size(); i++)
+ {
+  int index = m_engine_cyl_combo.AddString(m_engine_cyls[i].second.c_str());
+  if (index==CB_ERR)
+  {
+   ASSERT(0);
+   continue;
+  }
+  m_engine_cyl_combo.SetItemData(index, i);
+ }
+}
+
+int CCKPSPageDlg::_GetCKPSEngineCylComboBoxSelection(void)
+{
+ int index = m_engine_cyl_combo.GetCurSel();
+ if (index==CB_ERR)
+ {
+  ASSERT(0);
+  return 0;
+ }
+ int cyl_index = m_engine_cyl_combo.GetItemData(index);
+ return m_engine_cyls[cyl_index].first;
+}
+
+void CCKPSPageDlg::_SetCKPSEngineCylComboBoxSelection(int i_sel)
+{
+ for(size_t i = 0; i < m_engine_cyls.size(); i++)
+ {
+  if (m_engine_cyls[i].first != i_sel) //find index in conntainer for cog number
+   continue;
+  //find related index and select corresponding item
+  int count = m_engine_cyl_combo.GetCount();
+  for(int ii = 0; ii < count; ii++)
+  if (m_engine_cyl_combo.GetItemData(ii) == i)
+  {
+   m_engine_cyl_combo.SetCurSel(ii);
    return;
   }
  }
