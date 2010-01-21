@@ -626,7 +626,15 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
    return false;
   }
 
-  //TODO: ƒобавть проверку на размер файла (его размер должен соответствовать размеру EEPROM)
+  //ѕроверка на размер файла (его размер должен соответствовать размеру EEPROM)
+  if (f.GetLength()!=(DWORD)size)
+  {
+   CString string;
+   string.Format(MLL::LoadString(IDS_FW_WRONG_EE_FILE_SIZE), size);
+   AfxMessageBox(string);
+   f.Close();
+   return false;
+  }
  
   f.Read(p_data,size);
   f.Close();	   

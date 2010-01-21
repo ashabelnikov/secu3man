@@ -184,6 +184,7 @@
 #define IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER 4183
 #define IDS_LP_INCORRECT_FILE           4184
 #define IDS_LP_FILE_READ_ERROR          4184
+#define IDS_FW_WRONG_EE_FILE_SIZE       4185
 
 // Next default values for new objects
 // 

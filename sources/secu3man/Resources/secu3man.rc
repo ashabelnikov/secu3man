@@ -321,6 +321,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TAB_LOG_PLAYER      "Проигрыватель"
     IDS_LP_CANT_OPEN_FILE   "Не могу открыть указанный файл!"
+    IDS_FW_WRONG_EE_FILE_SIZE 
+                            "Неправильный размер файла EEPROM. Размер должен быть %d байт."
 END
 
 STRINGTABLE DISCARDABLE 
