@@ -192,7 +192,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
- if (strlen((char*)raw_packet)!=35)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=33)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //частота вращения двигателя
@@ -229,26 +229,6 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  m_SensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
  raw_packet+=4;  
 
- //Расход воздуха
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
-  return false;
- raw_packet+=2;  
-
- //Состояние клапана ЭПХХ 
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.ephh_valve))
-  return false;
- raw_packet+=1;  
-
- //Состояние дроссельной заслонки 
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.carb))
-  return false;
- raw_packet+=1;  
-
- //Состояние газового клапана 
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.gas))
-  return false;
- raw_packet+=1;  
-
  //Уровень детонации двигателя
  int knock_k = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k))
@@ -256,17 +236,31 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  m_SensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
  raw_packet+=4;   
 
- //Состояние клапана ЭМР 
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_SensorDat.epm_valve))
-  return false;
- raw_packet+=1;  
-
  //Корректировка УОЗ при детонации
  int knock_retard = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard, true))
   return false; 
  m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
  raw_packet+=4;
+
+ //Расход воздуха
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
+  return false;
+ raw_packet+=2;  
+
+ //Байт с флажками
+ unsigned char byte = 0; 
+ if (false == CNumericConv::Hex8ToBin(raw_packet,&byte))
+  return false;
+ raw_packet+=2;  
+
+ //Состояние клапана ЭПХХ, Состояние дроссельной заслонки, Состояние газового клапана
+ //Состояние клапана ЭМР, Состояние лампы "CE"
+ m_SensorDat.ephh_valve = (byte & (1 << 0)) != 0;
+ m_SensorDat.carb       = (byte & (1 << 1)) != 0;
+ m_SensorDat.gas        = (byte & (1 << 2)) != 0;
+ m_SensorDat.epm_valve  = (byte & (1 << 3)) != 0;
+ m_SensorDat.ce_state   = (byte & (1 << 4)) != 0;
 
  if (*raw_packet!='\r')
   return false;
