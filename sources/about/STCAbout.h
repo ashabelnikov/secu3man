@@ -7,4 +7,4 @@
  *              ICQ: 405-791-931
  ****************************************************************/
 
-void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgnName,LPCTSTR product, LPCTSTR description);
+void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgnName,LPCTSTR product, LPCTSTR description, bool splashScreen = false, int timeToShow = -1);

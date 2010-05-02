@@ -44,6 +44,9 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
  _ASSERTE(ip_view);
  _SetDelegates();
  m_pCommunicationManager->m_pAppAdapter->AddEventHandler(this, MFKEY);
+
+ //Show splash screen
+ DisplaySplash(1000);
 }
 
 void MainFrameController::_SetDelegates(void)

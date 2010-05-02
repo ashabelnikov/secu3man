@@ -17,9 +17,12 @@ struct About_data
  TCHAR about_description[1024];
  LPCTSTR  d_lprgnname;
  HINSTANCE hInstance;
+ BOOL showCloseButton;
+ BOOL modal;
+ int autoClose;
 }d_about; //singleton!
 
-
+#define AUTOCLOSE_TIMER_ID 1
 #define ABOUT_STC_RGN_RESOURCE_TYPE _T("RGN")
  
 static bool is_instance = false; //singleton :-)
@@ -29,7 +32,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 // ----------------------------------------------------------------------------------------
 // NOTE: Resource type of rgnName must be of type ABOUT_STC_RGN_RESOURCE_TYPE
 // ----------------------------------------------------------------------------------------
-void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgnName,LPCTSTR product, LPCTSTR description)
+void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgnName,LPCTSTR product, LPCTSTR description, bool splashScreen, int timeToShow)
 {
  static WNDCLASSEX wcex;
  TCHAR  szWindowClass[100];
@@ -43,6 +46,11 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
 
  d_about.d_lprgnname = rgnName;
  d_about.hInstance = i_hInstance;
+
+ //following parameters depends on splash screen mode
+ d_about.showCloseButton = splashScreen ? false : true;
+ d_about.modal = splashScreen ? false : true;
+ d_about.autoClose = splashScreen ? timeToShow : -1;
 
  hWindowBitmap = LoadBitmap(i_hInstance,bmpName);
  if (NULL==hWindowBitmap)
@@ -77,7 +85,7 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
  sx = (sx / 2) - bm.bmWidth / 2;
  sy = (sy / 2) - bm.bmHeight / 2;
 
- hWnd = CreateWindowEx(WS_EX_LEFT,
+ hWnd = CreateWindowEx(WS_EX_LEFT | WS_EX_TOPMOST,
 	          szWindowClass,
 	          _T("About"),
 			  WS_POPUP,
@@ -113,7 +121,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
  HRGN    hWindowRegion;
  static  CFont fntTitle;
  static  CFont fntDescr;
- static  HWND  hCloseButton;
+ static  HWND  hCloseButton = NULL;
  HDC     hdc;
  PAINTSTRUCT pt;
 	
@@ -137,11 +145,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    SetWindowRgn(hWnd,hWindowRegion,TRUE);
 
    hCloseButton = CreateWindowEx(NULL,_T("button"),_T("close"),
-                WS_CHILD | WS_VISIBLE,
+                WS_CHILD | (d_about.showCloseButton ? WS_VISIBLE : 0),
                 280,186,45,16,hWnd,(HMENU)IDC_BUTTON_CLOSE,
 				d_about.hInstance,NULL);
 
-   ::SetFocus(hCloseButton);
+   if (d_about.modal)
+    ::SetFocus(hCloseButton);
 
    fntDescr.CreateFont(
    12,                        // nHeight
@@ -176,6 +185,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    _T("Arial"));
 
    SendMessage(hCloseButton,WM_SETFONT,(LPARAM)fntDescr.m_hObject,TRUE);
+
+   if (d_about.autoClose > 0)
+     SetTimer(hWnd, AUTOCLOSE_TIMER_ID, d_about.autoClose, NULL);
    break;
   case WM_LBUTTONDOWN:
    SendMessage(hWnd,WM_NCLBUTTONDOWN,HTCAPTION,lParam); 		
@@ -191,8 +203,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    is_instance = false;
    break;
   case WM_KILLFOCUS:
-   if ((HWND)wParam!=hCloseButton)
-    SetFocus(hWnd);
+   if (d_about.modal) 
+    if ((HWND)wParam!=hCloseButton)
+     SetFocus(hWnd);
    break;
   case WM_PAINT:
    hdc = BeginPaint(hWnd,&pt);
@@ -208,6 +221,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    DrawText(hdc,d_about.about_description,-1,CRect(203,45,433,170),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
 
    EndPaint(hWnd,&pt); 
+   break;
+  case WM_TIMER:
+   ASSERT(KillTimer(hWnd, AUTOCLOSE_TIMER_ID));
+   DestroyWindow(hWnd);
    break;
   default:
    return DefWindowProc(hWnd, message, wParam, lParam);

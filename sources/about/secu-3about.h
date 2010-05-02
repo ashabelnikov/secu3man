@@ -6,3 +6,5 @@
 #endif
 
 void ABOUT_API DisplayAbout(CWnd* i_pParent);
+
+void ABOUT_API DisplaySplash(int timeToShow);
