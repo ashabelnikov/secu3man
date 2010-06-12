@@ -44,6 +44,18 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_CSVSepSymbol;
   const CString m_Name_MIDeskUpdatePeriod;
 
+  //позиции окон таблиц ”ќ«
+  const CString m_Name_WndSettings_Section;
+  const CString m_Name_StrtMapWnd_X;
+  const CString m_Name_StrtMapWnd_Y;
+  const CString m_Name_IdleMapWnd_X;
+  const CString m_Name_IdleMapWnd_Y;
+  const CString m_Name_WorkMapWnd_X;
+  const CString m_Name_WorkMapWnd_Y;
+  const CString m_Name_TempMapWnd_X;
+  const CString m_Name_TempMapWnd_Y;
+  const CString m_Name_AttenMapWnd_X;
+  const CString m_Name_AttenMapWnd_Y;
 
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;   
@@ -56,6 +68,9 @@ class CAppSettingsModel : public ISettingsData
   //¬озвращает полный путь к каталогу из которого было запущено приложение
   //(каталог который был текущим на момент вызва конструктора этого класса)
   virtual CString GetAppDirectory(void) const;
+  //позиции окон
+  virtual void SetWndSettings(const WndSettings& i_wndSettings);
+  virtual void GetWndSettings(WndSettings& o_wndSettings) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -67,6 +82,17 @@ class CAppSettingsModel : public ISettingsData
   bool  m_optUseAppFolder;
   char  m_optCSVSepSymbol;
   int   m_optMIDeskUpdatePeriod;
+
+  int m_optStrtMapWnd_X;
+  int m_optStrtMapWnd_Y;
+  int m_optIdleMapWnd_X;
+  int m_optIdleMapWnd_Y;
+  int m_optWorkMapWnd_X;
+  int m_optWorkMapWnd_Y;
+  int m_optTempMapWnd_X;
+  int m_optTempMapWnd_Y;
+  int m_optAttenMapWnd_X;
+  int m_optAttenMapWnd_Y;
 
   //провер€ет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);

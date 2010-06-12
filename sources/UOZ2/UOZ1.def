@@ -4,5 +4,6 @@ EXPORTS
     Chart3DUpdate           = _Chart3DUpdate
     Chart3DSetOnChange      = _Chart3DSetOnChange
     Chart3DSetOnClose       = _Chart3DSetOnClose
+    Chart3DShow             = _Chart3DShow
 
 

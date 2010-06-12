@@ -10,9 +10,12 @@
 #include "stdafx.h"
 #include "AppSettingsModel.h"
 
+#include <limits>
 #include <algorithm>
 
 #pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
+
+#undef max //avoid conflicts with C++
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -33,6 +36,19 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_UseAppFolder(_T("UseAppFolder"))
 , m_Name_CSVSepSymbol(_T("CSVSeparatingSymbol"))
 , m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
+//positions of windows 
+, m_Name_WndSettings_Section(_T("WndSettings"))
+, m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
+, m_Name_StrtMapWnd_Y(_T("StrtMapWnd_Y"))
+, m_Name_IdleMapWnd_X(_T("IdleMapWnd_X"))
+, m_Name_IdleMapWnd_Y(_T("IdleMapWnd_Y"))
+, m_Name_WorkMapWnd_X(_T("WorkMapWnd_X"))
+, m_Name_WorkMapWnd_Y(_T("WorkMapWnd_Y"))
+, m_Name_TempMapWnd_X(_T("TempMapWnd_X"))
+, m_Name_TempMapWnd_Y(_T("TempMapWnd_Y"))
+, m_Name_AttenMapWnd_X(_T("AttenMapWnd_X"))
+, m_Name_AttenMapWnd_Y(_T("AttenMapWnd_Y"))
+
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_600);
@@ -115,17 +131,17 @@ bool CAppSettingsModel::ReadSettings(void)
 {
  CString IniFileName = GetINIFileFullName();
  bool status = true;
- TCHAR readed_str[1024];
+ TCHAR read_str[1024];
 
  int i_val = 0;  float f_val = 0;
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_PortName,_T("COM1"),readed_str,255,IniFileName);
- m_optPortName = readed_str;     
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_PortName,_T("COM1"),read_str,255,IniFileName);
+ m_optPortName = read_str;     
  
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("9600"),readed_str,255,IniFileName);
- i_val = _ttoi(readed_str);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("9600"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
 
  if (!CheckAllowableBaudRate(i_val))
  {
@@ -138,8 +154,8 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("9600"),readed_str,255,IniFileName);
- i_val = _ttoi(readed_str);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("9600"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
 
  if (!CheckAllowableBaudRate(i_val))
  {
@@ -153,12 +169,12 @@ bool CAppSettingsModel::ReadSettings(void)
 
  //-----------------------------------------
  CString def_value = m_current_directory;
- GetPrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,def_value,readed_str,MAX_PATH,IniFileName);
- m_optLogFilesFolder = readed_str;  
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,def_value,read_str,MAX_PATH,IniFileName);
+ m_optLogFilesFolder = read_str;  
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("1"),readed_str,255,IniFileName);
- i_val = _ttoi(readed_str);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
 
  if (i_val != 0 && i_val != 1)
  {
@@ -171,8 +187,8 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------  
- GetPrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,_T("44"),readed_str,255,IniFileName);
- i_val = _ttoi(readed_str);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,_T("44"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
 
  if (!CheckAllowableCSVSepSymbol(i_val))
  {
@@ -185,14 +201,47 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------  
- GetPrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,_T("40"),readed_str,255,IniFileName);
- if (_stscanf(readed_str, _T("%d"), &i_val) == 1 && i_val >= 0)
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,_T("40"),read_str,255,IniFileName);
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0)
   m_optMIDeskUpdatePeriod = i_val;
  else
  { //error
   status = false;
   m_optMIDeskUpdatePeriod = 40; 
  }
+
+
+ //Positions of windows
+#define _GETWNDPOSITION(sectName, fldName, defVal) \
+ {\
+  std::vector<TCHAR> strDefVal(32);\
+  GetPrivateProfileString((sectName),m_Name_##fldName,_itot((defVal), &strDefVal[0], 10),read_str,255,IniFileName);\
+  i_val = _ttoi(read_str);\
+  if (i_val < -10000 || i_val > 10000)\
+  {\
+   status = false;\
+   m_opt##fldName = (defVal);\
+  }\
+  else\
+  {\
+   m_opt##fldName = i_val;\
+  }\
+ }
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, StrtMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, StrtMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdleMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdleMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, WorkMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, WorkMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, TempMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, TempMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_Y, std::numeric_limits<int>::max());
 
  return status;
 }
@@ -234,6 +283,39 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),(int)m_optMIDeskUpdatePeriod);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,write_str,IniFileName);
 
+ //Positions of windows
+ WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
+
+ write_str.Format(_T("%d"),m_optStrtMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_X,write_str,IniFileName);
+  
+ write_str.Format(_T("%d"),m_optStrtMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdleMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdleMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdleMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdleMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optWorkMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WorkMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optWorkMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WorkMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optTempMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TempMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optTempMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TempMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAttenMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AttenMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAttenMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AttenMapWnd_Y,write_str,IniFileName);
+
  return status;
 }
 
@@ -271,3 +353,32 @@ int  CAppSettingsModel::GetMIDeskUpdatePeriod(void) const
 {
  return m_optMIDeskUpdatePeriod;
 }
+
+void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
+{
+ m_optStrtMapWnd_X = i_wndSettings.m_StrtMapWnd_X;
+ m_optStrtMapWnd_Y = i_wndSettings.m_StrtMapWnd_Y;
+ m_optIdleMapWnd_X = i_wndSettings.m_IdleMapWnd_X;
+ m_optIdleMapWnd_Y = i_wndSettings.m_IdleMapWnd_Y;
+ m_optWorkMapWnd_X = i_wndSettings.m_WorkMapWnd_X;
+ m_optWorkMapWnd_Y = i_wndSettings.m_WorkMapWnd_Y;
+ m_optTempMapWnd_X = i_wndSettings.m_TempMapWnd_X;
+ m_optTempMapWnd_Y = i_wndSettings.m_TempMapWnd_Y;
+ m_optAttenMapWnd_X = i_wndSettings.m_AttenuatorMapWnd_X;
+ m_optAttenMapWnd_Y = i_wndSettings.m_AttenuatorMapWnd_Y;
+}
+
+void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
+{
+ o_wndSettings.m_StrtMapWnd_X = m_optStrtMapWnd_X;
+ o_wndSettings.m_StrtMapWnd_Y = m_optStrtMapWnd_Y;
+ o_wndSettings.m_IdleMapWnd_X = m_optIdleMapWnd_X;
+ o_wndSettings.m_IdleMapWnd_Y = m_optIdleMapWnd_Y;
+ o_wndSettings.m_WorkMapWnd_X = m_optWorkMapWnd_X;
+ o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd_Y;
+ o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd_X;
+ o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd_Y;
+ o_wndSettings.m_AttenuatorMapWnd_X = m_optAttenMapWnd_X;
+ o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd_Y;
+}
+

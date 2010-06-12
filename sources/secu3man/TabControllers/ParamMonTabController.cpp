@@ -36,21 +36,15 @@ static char THIS_FILE[]=__FILE__;
 #define EHKEY _T("ParamMonCntr")
 
 CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
-: m_view(NULL)
-, m_comm(NULL)
-, m_sbar(NULL)
+: m_view(i_view)
+, m_comm(i_comm)
+, m_sbar(i_sbar)
+, mp_settings(ip_settings)
 , m_operation_state(-1)
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 , m_lastSel(0)
-
-{
- //инициализируем указатели на вспомогательные объекты
- m_view = i_view;
- m_comm = i_comm;
- m_sbar = i_sbar;
- mp_settings = ip_settings;
-
+{ 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
  m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));

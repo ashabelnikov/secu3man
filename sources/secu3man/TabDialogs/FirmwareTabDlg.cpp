@@ -47,6 +47,10 @@ void __cdecl CFirmwareTabDlg::OnCloseStartMap(void* i_param)
   return;
  }
  _this->m_start_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_start_map_wnd_handle, TYPE_MAP_DA_START);
 }
 
 //------------------------------------------------------------------------
@@ -72,6 +76,10 @@ void __cdecl CFirmwareTabDlg::OnCloseIdleMap(void* i_param)
   return;
  }
  _this->m_idle_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
 }
 
 //------------------------------------------------------------------------
@@ -91,13 +99,17 @@ void __cdecl CFirmwareTabDlg::OnChangeWorkMap(void* i_param)
 //------------------------------------------------------------------------
 void __cdecl CFirmwareTabDlg::OnCloseWorkMap(void* i_param)
 {
-CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what is the fuck?
   return;
  }
  _this->m_work_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
 }
 
 //------------------------------------------------------------------------
@@ -124,6 +136,10 @@ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
   return;
  }
  _this->m_temp_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
 }
 
 //------------------------------------------------------------------------
@@ -150,6 +166,10 @@ void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
   return;
  }
  _this->m_attenuator_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
 }
 
 //------------------------------------------------------------------------
@@ -406,6 +426,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
     MLL::GetString(IDS_FW_START_MAP).c_str());	  
   DLL::UOZ1_Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+      m_OnOpenMapWnd(m_start_map_wnd_handle, TYPE_MAP_DA_START);
+
+  DLL::UOZ1_Chart2DShow(m_start_map_wnd_handle, true);
  }
  else
  {
@@ -432,6 +458,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
     MLL::GetString(IDS_FW_IDLE_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+      m_OnOpenMapWnd(m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
+
+  DLL::UOZ1_Chart2DShow(m_idle_map_wnd_handle, true);
  }
  else
  {
@@ -456,6 +488,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
 	MLL::GetString(IDS_FW_WORK_MAP).c_str());
   DLL::UOZ2_Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
   DLL::UOZ2_Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+      m_OnOpenMapWnd(m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
+
+  DLL::UOZ2_Chart3DShow(m_work_map_wnd_handle, true);
  }
  else
  {
@@ -481,6 +519,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
 	MLL::GetString(IDS_FW_TEMPCORR_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
+ 
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+      m_OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
+
+  DLL::UOZ1_Chart2DShow(m_temp_map_wnd_handle, true);
  }
  else
  {
@@ -807,6 +851,12 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
   DLL::UOZ1_Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
   DLL::UOZ1_Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
   DLL::UOZ1_Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
+
+  DLL::UOZ1_Chart2DShow(m_attenuator_map_wnd_handle, true);
  }
  else
  {
@@ -825,3 +875,155 @@ void CFirmwareTabDlg::_RegisterHotKeys(void)
  m_hot_keys_supplier->RegisterCommand(IDM_OPEN_FLASH, 'O', MOD_CONTROL);
  m_hot_keys_supplier->RegisterCommand(IDM_SAVE_FLASH, 'S', MOD_CONTROL);
 }
+
+void CFirmwareTabDlg::SetBLStartedEmergency(bool state)
+{ 
+ m_bl_started_emergency.SetCheck(state ? BST_CHECKED : BST_UNCHECKED);
+}
+
+bool CFirmwareTabDlg::IsBLStartedEmergencyEnabled(void)
+{
+ return m_is_bl_started_emergency_available;
+}
+
+bool CFirmwareTabDlg::IsBLItemsEnabled(void)
+{
+ return m_is_bl_items_available;
+}
+
+bool CFirmwareTabDlg::IsAppItemsEnabled(void) 
+{
+ return m_is_app_items_available;
+}
+
+float* CFirmwareTabDlg::GetStartMap(bool i_original) 
+{
+ if (i_original)
+  return m_start_map_original;
+ else
+  return m_start_map_active;
+}
+
+float* CFirmwareTabDlg::GetIdleMap(bool i_original) 
+{
+ if (i_original)
+  return m_idle_map_original;
+ else
+  return m_idle_map_active;
+}
+
+float* CFirmwareTabDlg::GetWorkMap(bool i_original) 
+{
+ if (i_original)
+  return &m_work_map_original[0][0];
+ else
+  return &m_work_map_active[0][0];
+}
+
+float* CFirmwareTabDlg::GetTempMap(bool i_original) 
+{
+ if (i_original)
+  return m_temp_map_original;
+ else
+  return m_temp_map_active;
+}
+
+float* CFirmwareTabDlg::GetAttenuatorMap(bool i_original) 
+{
+ if (i_original)
+  return m_attenuator_map_original;
+ else
+  return m_attenuator_map_active;
+}
+
+HWND CFirmwareTabDlg::GetMapWindow(int wndType)
+{
+ switch(wndType)
+ {
+ case TYPE_MAP_DA_START:
+  return m_start_map_chart_state ? m_start_map_wnd_handle : NULL;
+ case TYPE_MAP_DA_IDLE:
+  return m_idle_map_chart_state ? m_idle_map_wnd_handle : NULL;
+ case TYPE_MAP_DA_WORK:
+  return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
+ case TYPE_MAP_DA_TEMP_CORR:
+  return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
+ case TYPE_MAP_ATTENUATOR: 
+  return m_attenuator_map_wnd_handle ? m_attenuator_map_wnd_handle : NULL;
+ default:
+  return NULL;
+ }
+}
+
+bool CFirmwareTabDlg::IsFirmwareOpened(void) 
+{
+ if (m_IsFirmwareOpened)
+  return m_IsFirmwareOpened();
+ return false; 
+}
+
+void CFirmwareTabDlg::setOnBootLoaderInfo(EventHandler OnFunction)
+{m_OnBootLoaderInfo = OnFunction;}
+
+void CFirmwareTabDlg::setOnReadEepromToFile(EventHandler OnFunction)
+{m_OnReadEepromToFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnWriteEepromFromFile(EventHandler OnFunction)
+{m_OnWriteEepromFromFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnReadFlashToFile(EventHandler OnFunction)
+{m_OnReadFlashToFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnWriteFlashFromFile(EventHandler OnFunction)
+{m_OnWriteFlashFromFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnOpenFlashFromFile(EventHandler OnFunction)
+{m_OnOpenFlashFromFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnFWInformationTextChanged(EventHandler OnFunction)
+{m_OnFWInformationTextChanged = OnFunction;}
+
+void CFirmwareTabDlg::setOnSaveFlashToFile(EventHandler OnFunction)
+{m_OnSaveFlashToFile = OnFunction;}
+
+void CFirmwareTabDlg::setIsFirmwareOpened(EventResult IsFunction)
+{m_IsFirmwareOpened = IsFunction;}
+
+void CFirmwareTabDlg::setOnMapChanged(EventWithCode OnFunction)
+{m_OnMapChanged = OnFunction;}
+
+void CFirmwareTabDlg::setOnFunSetSelectionChanged(EventWithCode OnFunction)
+{m_OnFunSetSelectionChanged = OnFunction;}
+
+void CFirmwareTabDlg::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
+{m_OnFunSetNamechanged = OnFunction;}
+
+void CFirmwareTabDlg::setOnImportDataFromAnotherFW(EventHandler OnFunction)
+{m_OnImportDataFromAnotherFW = OnFunction;}	
+
+void CFirmwareTabDlg::setOnReadFlashFromSECU(EventHandler OnFunction)
+{m_OnReadFlashFromSECU = OnFunction;}
+
+void CFirmwareTabDlg::setOnWriteFlashToSECU(EventHandler OnFunction)
+{m_OnWriteFlashToSECU = OnFunction;}
+
+void CFirmwareTabDlg::setOnImportDataFromSECU3(EventHandler OnFunction)
+{m_OnImportDataFromSECU3 = OnFunction;}
+
+void CFirmwareTabDlg::setOnImportMapsFromMPSZ(EventHandler OnFunction)
+{m_OnImportMapsFromMPSZ = OnFunction;}
+
+void CFirmwareTabDlg::setOnExportMapsToMPSZ(EventHandler OnFunction)
+{m_OnExportMapsToMPSZ = OnFunction;}
+
+void CFirmwareTabDlg::setOnFirmwareInfo(EventHandler OnFunction)
+{m_OnFirmwareInfo = OnFunction;}
+
+void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
+{m_OnBLStartedEmergency = OnFunction;}
+
+void CFirmwareTabDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
+{ m_OnCloseMapWnd = OnFunction; }
+
+void CFirmwareTabDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
+{ m_OnOpenMapWnd = OnFunction; }

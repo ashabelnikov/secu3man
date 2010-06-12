@@ -8,6 +8,8 @@
  ****************************************************************/
 
 #include "stdafx.h"
+#include <limits>
+
 #include "Resources\resource.h"
 #include "FirmwareTabController.h"
 
@@ -22,8 +24,11 @@
 #include "ParamDesk\ParamDeskDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs\FirmwareTabDlg.h"
+#include "Settings\ISettingsData.h"
 
 using namespace fastdelegate;
+
+#undef max   //avoid conflicts with C++
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -38,19 +43,16 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar)
-: m_view(NULL)
-, m_comm(NULL)
-, m_sbar(NULL)
+CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
+: m_view(i_view)
+, m_comm(i_comm)
+, m_sbar(i_sbar)
+, mp_settings(ip_settings)
 , m_current_funset_index(-1)
 , m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
 , m_lastSel(0)
 , m_bl_started_emergency(false)
 {
- m_view = i_view;
- m_comm = i_comm;
- m_sbar = i_sbar;
-
  m_fwdm = new CFirmwareDataMediator(); 
 
  //устанавливаем делегаты (обработчики событий от представления)
@@ -74,6 +76,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnWirmwareInfo));
+ m_view->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
+ m_view->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
@@ -811,6 +815,13 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 //Эта функция вызывается при выходе из приложения. Эта функция может запретить выход, если вернет false 
 bool CFirmwareTabController::OnClose(void)
 {  
+ //сохраняем позиции открытых окон!
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
+
  return CheckChangesAskAndSaveFirmware();
 }
 
@@ -1102,4 +1113,78 @@ void CFirmwareTabController::GetAttenuatorMap(float* o_values)
 {
  ASSERT(o_values);
  m_fwdm->GetAttenuatorMap(o_values, false); //<--NOTE: modified
+}
+
+void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
+{
+ if (!i_hwnd)
+     return;
+
+ RECT rc;
+ GetWindowRect(i_hwnd, &rc);
+
+ WndSettings ws;
+ mp_settings->GetWndSettings(ws);
+
+ switch(i_mapType)
+ {
+ case TYPE_MAP_DA_START:
+     ws.m_StrtMapWnd_X = rc.left; 
+     ws.m_StrtMapWnd_Y = rc.top;
+     break;
+ case TYPE_MAP_DA_IDLE:
+     ws.m_IdleMapWnd_X = rc.left; 
+     ws.m_IdleMapWnd_Y = rc.top;
+     break;
+ case TYPE_MAP_DA_WORK:
+     ws.m_WorkMapWnd_X = rc.left; 
+     ws.m_WorkMapWnd_Y = rc.top;
+     break;
+ case TYPE_MAP_DA_TEMP_CORR: 
+     ws.m_TempMapWnd_X = rc.left; 
+     ws.m_TempMapWnd_Y = rc.top;
+     break;
+ case TYPE_MAP_ATTENUATOR:
+     ws.m_AttenuatorMapWnd_X = rc.left; 
+     ws.m_AttenuatorMapWnd_Y = rc.top;
+     break;
+ };
+
+ mp_settings->SetWndSettings(ws); 
+}
+
+
+void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
+{
+ if (!i_hwnd)
+     return;
+
+ WndSettings ws;
+ mp_settings->GetWndSettings(ws);
+
+ int X = 0, Y = 0;
+
+ switch(i_mapType)
+ {
+ case TYPE_MAP_DA_START:
+     X = ws.m_StrtMapWnd_X, Y = ws.m_StrtMapWnd_Y;
+     break;
+ case TYPE_MAP_DA_IDLE:
+     X = ws.m_IdleMapWnd_X, Y = ws.m_IdleMapWnd_Y;
+     break;
+ case TYPE_MAP_DA_WORK:
+     X = ws.m_WorkMapWnd_X, Y = ws.m_WorkMapWnd_Y;
+     break;
+ case TYPE_MAP_DA_TEMP_CORR: 
+     X = ws.m_TempMapWnd_X, Y = ws.m_TempMapWnd_Y;
+     break;
+ case TYPE_MAP_ATTENUATOR:
+     X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
+     break;
+ default:
+     return; //undefined case...
+ };
+
+ if (X != std::numeric_limits<int>::max() && Y != std::numeric_limits<int>::max())
+   SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

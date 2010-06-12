@@ -80,7 +80,7 @@ void MainFrameController::OnAppSettings()
  if (result==IDOK)
  {
   //уведомляем логгер об изменениях в настройках.
-  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
   m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 
 
   mp_view->BeginWaitCursor();
@@ -94,7 +94,7 @@ void MainFrameController::OnAppBeginLog()
  //Активируем записывающий механизм и подключаемся к потоку данных
  _TSTRING full_path_to_folder;
 
- ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
 
  //устнанавливаем разделительный символ для CSV-файла указанный в настройках
  m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 

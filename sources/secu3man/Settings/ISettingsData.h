@@ -7,6 +7,21 @@
  *              ICQ: 405-791-931
  ****************************************************************/
 
+//Holds windows's position data
+struct WndSettings
+{
+ int m_StrtMapWnd_X;
+ int m_StrtMapWnd_Y;
+ int m_IdleMapWnd_X;
+ int m_IdleMapWnd_Y;
+ int m_WorkMapWnd_X;
+ int m_WorkMapWnd_Y;
+ int m_TempMapWnd_X;
+ int m_TempMapWnd_Y;
+ int m_AttenuatorMapWnd_X;
+ int m_AttenuatorMapWnd_Y;
+};
+
 //интерфейс через который должен производится доступ к настройкам программы
 //из обычных мест в коде программы
 class ISettingsData
@@ -20,4 +35,7 @@ class ISettingsData
   virtual char  GetCSVSepSymbol(void) const = 0;
   virtual int   GetMIDeskUpdatePeriod(void) const = 0;
   virtual CString GetAppDirectory(void) const = 0;
+  //позиции окон
+  virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
+  virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;
 };

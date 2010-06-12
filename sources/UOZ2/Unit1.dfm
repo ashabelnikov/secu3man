@@ -51,7 +51,7 @@ object Form1: TForm1
     0000E7FF0000E7FF0000FBFF0000FDFB0000FE010000FE7B0000FEBF0000FEC3
     0000FEFF0000FC7F0000FEFF0000FFFF0000FFFF0000}
   OldCreateOrder = False
-  Position = poDesktopCenter
+  Position = poDefault
   OnClose = OnCloseForm
   PixelsPerInch = 96
   TextHeight = 13

@@ -28,6 +28,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_string);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted);
+ void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
 }
 
 std::map<HWND, TForm*> g_form_instances;
@@ -86,7 +87,6 @@ HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,fl
  pForm1->aai_max    = aai_max;
  //сохраняем значения сетки по горизонтальной оси
  memcpy(pForm1->horizontal_axis_grid_values,x_axis_grid_values,sizeof(int)*count_of_points);
- pForm1->Show();
  pForm1->DataPrepare();
  AddInstanceByHWND(pForm1->Handle,pForm1);
  return pForm1->Handle;
@@ -196,6 +196,19 @@ void __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted)
    MessageBox(hWnd, _T("Chart2DSetInverted: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
    break;
  }
+}
+
+void __cdecl Chart2DShow(HWND hWnd, int i_show)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+  return;
+ if (1 == i_show)
+   pForm1->Show();
+ else if  (0 == i_show)
+   pForm1->Hide();
+ else
+   MessageBox(hWnd, _T("Chart2DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
 }
 
 //---------------------------------------------------------------------------

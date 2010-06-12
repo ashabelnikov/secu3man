@@ -109,7 +109,7 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
  mp_tab_control->AddPage(MLL::LoadString(IDS_TAB_PARAMETERS_AND_MONOTOR),m_pParamMonTabDlg,0);
 
  m_pFirmwareTabDlg = new CFirmwareTabDlg(); //view
- m_pFirmwareTabController = new CFirmwareTabController(m_pFirmwareTabDlg, p_comm, p_sbar);
+ m_pFirmwareTabController = new CFirmwareTabController(m_pFirmwareTabDlg, p_comm, p_sbar, p_settings);
 
  mp_MainTabController->AddTabController(m_pFirmwareTabController);
  mp_tab_control->AddPage(MLL::LoadString(IDS_TAB_FIRMWARE_DATA),m_pFirmwareTabDlg,1);	

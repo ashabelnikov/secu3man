@@ -29,6 +29,7 @@ class CFirmwareTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate2<int,CString> EventWithCodeAndString;
+  typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
 
  public:
   CFirmwareTabDlg(CWnd* pParent = NULL);   // standard constructor
@@ -38,62 +39,28 @@ class CFirmwareTabDlg : public CTabDialog
   virtual LPCTSTR GetDialogID(void) const;
 	
   bool IsBLStartedEmergency(void);
-  void SetBLStartedEmergency(bool state)
-  { 
-   m_bl_started_emergency.SetCheck(state ? BST_CHECKED : BST_UNCHECKED);
-  };
+  void SetBLStartedEmergency(bool state);
 
   void EnableBLStartedEmergency(bool enable);
-  bool IsBLStartedEmergencyEnabled(void) {return m_is_bl_started_emergency_available;};
+  bool IsBLStartedEmergencyEnabled(void);
 
   void EnableBLItems(bool enable);
-  bool IsBLItemsEnabled(void) {return m_is_bl_items_available;};
+  bool IsBLItemsEnabled(void);
 
   void EnableAppItems(bool enable);
-  bool IsAppItemsEnabled(void) {return m_is_app_items_available;};
+  bool IsAppItemsEnabled(void);
 
   void SetFWInformationText(CString i_text);
   CString GetFWInformationText(void);
 
-  float* GetStartMap(bool i_original) 
-  {
-   if (i_original)
-	return m_start_map_original;
-   else
-    return m_start_map_active;
-  }
+  float* GetStartMap(bool i_original);
+  float* GetIdleMap(bool i_original);
+  float* GetWorkMap(bool i_original);
+  float* GetTempMap(bool i_original);
+  float* GetAttenuatorMap(bool i_original);
 
-  float* GetIdleMap(bool i_original) 
-  {
-   if (i_original)
-	return m_idle_map_original;
-   else
-    return m_idle_map_active;
-  }
-
-  float* GetWorkMap(bool i_original) 
-  {
-   if (i_original)
-	return &m_work_map_original[0][0];
-   else
-    return &m_work_map_active[0][0];
-  }
-
-  float* GetTempMap(bool i_original) 
-  {
-   if (i_original)
-	return m_temp_map_original;
-   else
-    return m_temp_map_active;
-  }
-
-  float* GetAttenuatorMap(bool i_original) 
-  {
-   if (i_original)
-	return m_attenuator_map_original;
-   else
-    return m_attenuator_map_active;
-  }
+  //returns NULL if corresponding window wasn't opened
+  HWND GetMapWindow(int wndType);
 
   void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
   void SetFunSetListBoxSelection(int i_selected_index);
@@ -108,27 +75,30 @@ class CFirmwareTabDlg : public CTabDialog
   std::auto_ptr<CFirmwareModeContextMenuManager> mp_ContextMenuManager;
 
  public: //установка обработчиков событий от меню
-  void setOnBootLoaderInfo(EventHandler OnFunction) {m_OnBootLoaderInfo = OnFunction;};
-  void setOnReadEepromToFile(EventHandler OnFunction) {m_OnReadEepromToFile = OnFunction;};
-  void setOnWriteEepromFromFile(EventHandler OnFunction) {m_OnWriteEepromFromFile = OnFunction;};
-  void setOnReadFlashToFile(EventHandler OnFunction) {m_OnReadFlashToFile = OnFunction;};
-  void setOnWriteFlashFromFile(EventHandler OnFunction) {m_OnWriteFlashFromFile = OnFunction;};
-  void setOnOpenFlashFromFile(EventHandler OnFunction) {m_OnOpenFlashFromFile = OnFunction;}
-  void setOnFWInformationTextChanged(EventHandler OnFunction) {m_OnFWInformationTextChanged = OnFunction;}
-  void setOnSaveFlashToFile(EventHandler OnFunction) {m_OnSaveFlashToFile = OnFunction;}
-  void setIsFirmwareOpened(EventResult IsFunction) {m_IsFirmwareOpened = IsFunction;}
-  void setOnMapChanged(EventWithCode OnFunction) {m_OnMapChanged = OnFunction;}
-  void setOnFunSetSelectionChanged(EventWithCode OnFunction) {m_OnFunSetSelectionChanged = OnFunction;}
-  void setOnFunSetNamechanged(EventWithCodeAndString OnFunction) {m_OnFunSetNamechanged = OnFunction;}
-  void setOnImportDataFromAnotherFW(EventHandler OnFunction) {m_OnImportDataFromAnotherFW = OnFunction;}	
-  void setOnReadFlashFromSECU(EventHandler OnFunction) {m_OnReadFlashFromSECU = OnFunction;}
-  void setOnWriteFlashToSECU(EventHandler OnFunction) {m_OnWriteFlashToSECU = OnFunction;}
-  void setOnImportDataFromSECU3(EventHandler OnFunction) {m_OnImportDataFromSECU3 = OnFunction;}
-  void setOnImportMapsFromMPSZ(EventHandler OnFunction) {m_OnImportMapsFromMPSZ = OnFunction;}
-  void setOnExportMapsToMPSZ(EventHandler OnFunction) {m_OnExportMapsToMPSZ = OnFunction;}
-  void setOnFirmwareInfo(EventHandler OnFunction) {m_OnFirmwareInfo = OnFunction;}
+  void setOnBootLoaderInfo(EventHandler OnFunction);
+  void setOnReadEepromToFile(EventHandler OnFunction);
+  void setOnWriteEepromFromFile(EventHandler OnFunction);
+  void setOnReadFlashToFile(EventHandler OnFunction);
+  void setOnWriteFlashFromFile(EventHandler OnFunction);
+  void setOnOpenFlashFromFile(EventHandler OnFunction);
+  void setOnFWInformationTextChanged(EventHandler OnFunction);
+  void setOnSaveFlashToFile(EventHandler OnFunction);
+  void setIsFirmwareOpened(EventResult IsFunction);
+  void setOnMapChanged(EventWithCode OnFunction);
+  void setOnFunSetSelectionChanged(EventWithCode OnFunction);
+  void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
+  void setOnImportDataFromAnotherFW(EventHandler OnFunction);
+  void setOnReadFlashFromSECU(EventHandler OnFunction);
+  void setOnWriteFlashToSECU(EventHandler OnFunction);
+  void setOnImportDataFromSECU3(EventHandler OnFunction);
+  void setOnImportMapsFromMPSZ(EventHandler OnFunction);
+  void setOnExportMapsToMPSZ(EventHandler OnFunction);
+  void setOnFirmwareInfo(EventHandler OnFunction);
   //... от кнопок и чек боксов
-  void setOnBLStartedEmergency(EventHandler OnFunction) {m_OnBLStartedEmergency = OnFunction;}
+  void setOnBLStartedEmergency(EventHandler OnFunction);
+
+  void setOnCloseMapWnd(EventWithHWND OnFunction);
+  void setOnOpenMapWnd(EventWithHWND OnFunction);
 
 // Implementation
  protected:
@@ -210,6 +180,8 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnImportMapsFromMPSZ;
   EventHandler  m_OnExportMapsToMPSZ;
   EventHandler  m_OnFirmwareInfo;
+  EventWithHWND m_OnCloseMapWnd;
+  EventWithHWND m_OnOpenMapWnd;
   
   //for C - functions
   int m_work_map_chart_state;
@@ -238,12 +210,7 @@ class CFirmwareTabDlg : public CTabDialog
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
-  bool IsFirmwareOpened(void) 
-  {
-   if (m_IsFirmwareOpened)
-    return m_IsFirmwareOpened();
-   return false; 
-  };
+  bool IsFirmwareOpened(void); 
 
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;

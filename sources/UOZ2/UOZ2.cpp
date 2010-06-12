@@ -24,6 +24,7 @@ extern "C"
   void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
   void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
   void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
+  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
 }
 
 std::map<HWND,TForm*> g_form_instances;
@@ -84,7 +85,6 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,co
   pForm1->aai_min    = aai_min;
   pForm1->aai_max    = aai_max;
   memcpy(pForm1->u_slots,x_axis_grid_values,sizeof(int)*x_count_of_points);
-  pForm1->Show();
   pForm1->DataPrepare();
   AddInstanceByHWND(pForm1->Handle,pForm1);
   return pForm1->Handle;
@@ -124,5 +124,17 @@ void __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param
  pForm1->SetOnClose(i_pOnClose,i_param);
 }
 
+void __cdecl Chart3DShow(HWND hWnd, int i_show)
+{
+ TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm1)
+  return;
+ if (1 == i_show)
+   pForm1->Show();
+ else if  (0 == i_show)
+   pForm1->Hide();
+ else
+   MessageBox(hWnd, _T("Chart2DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
+}
 //---------------------------------------------------------------------------
 
