@@ -56,6 +56,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_TempMapWnd_Y;
   const CString m_Name_AttenMapWnd_X;
   const CString m_Name_AttenMapWnd_Y;
+  const CString m_Name_MainFrmWnd_X;
+  const CString m_Name_MainFrmWnd_Y;
 
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;   
@@ -93,6 +95,8 @@ class CAppSettingsModel : public ISettingsData
   int m_optTempMapWnd_Y;
   int m_optAttenMapWnd_X;
   int m_optAttenMapWnd_Y;
+  int m_optMainFrmWnd_X;
+  int m_optMainFrmWnd_Y;
 
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);

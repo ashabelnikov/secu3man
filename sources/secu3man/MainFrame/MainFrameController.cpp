@@ -61,6 +61,8 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setIsEndLoggingAllowed(MakeDelegate(this,&MainFrameController::IsEndLoggingAllowed));
  mp_view->setOnActivate(MakeDelegate(this,&MainFrameController::OnActivate));
  mp_view->setOnFullScreen(MakeDelegate(this,&MainFrameController::OnFullScreen));
+ mp_view->addOnClose(MakeDelegate(this,&MainFrameController::OnClose));
+ mp_view->setOnGetInitialPos(MakeDelegate(this,&MainFrameController::OnGetInitialPos));
 }
 
 MainFrameController::~MainFrameController()
@@ -191,4 +193,31 @@ CRect MainFrameController::_GetScreenRect(void) const
  int x_resolution = pDC->GetDeviceCaps(HORZRES);
  int y_resolution = pDC->GetDeviceCaps(VERTRES);
  return CRect(0, 0, x_resolution, y_resolution);
+}
+
+bool MainFrameController::OnClose(void)
+{
+ ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ WndSettings ws;
+ settings->GetWndSettings(ws);
+
+ CRect rc;
+ mp_view->GetWindowRect(rc);
+ ws.m_MainFrmWnd_X = rc.left;
+ ws.m_MainFrmWnd_Y = rc.top;
+
+ //store last position of main window 
+ settings->SetWndSettings(ws);
+
+ return true;
+}
+
+void MainFrameController::OnGetInitialPos(CPoint& o_point)
+{
+ const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ WndSettings ws;
+ settings->GetWndSettings(ws);
+
+ //restore remembered position of main winwow
+ o_point.x = ws.m_MainFrmWnd_X, o_point.y = ws.m_MainFrmWnd_Y;
 }

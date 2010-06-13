@@ -34,6 +34,10 @@ class MainFrameController : public IAPPEventHandler
   bool OnFullScreen();
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
+  bool OnClose(void);
+
+  //called by VIEW at the startup for get desired window position
+  void OnGetInitialPos(CPoint& o_point); 
     
   CRect _GetScreenRect(void) const;
 

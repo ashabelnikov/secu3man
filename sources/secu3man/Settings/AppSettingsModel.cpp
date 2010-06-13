@@ -48,7 +48,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_TempMapWnd_Y(_T("TempMapWnd_Y"))
 , m_Name_AttenMapWnd_X(_T("AttenMapWnd_X"))
 , m_Name_AttenMapWnd_Y(_T("AttenMapWnd_Y"))
-
+, m_Name_MainFrmWnd_X(_T("MainFrmWnd_X"))
+, m_Name_MainFrmWnd_Y(_T("MainFrmWnd_Y"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_600);
@@ -243,6 +244,10 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_Y, std::numeric_limits<int>::max());
 
+ //Main frame window
+ _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_Y, std::numeric_limits<int>::max());
+
  return status;
 }
 
@@ -316,6 +321,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optAttenMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AttenMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optMainFrmWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optMainFrmWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_Y,write_str,IniFileName);
+
  return status;
 }
 
@@ -366,6 +377,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optTempMapWnd_Y = i_wndSettings.m_TempMapWnd_Y;
  m_optAttenMapWnd_X = i_wndSettings.m_AttenuatorMapWnd_X;
  m_optAttenMapWnd_Y = i_wndSettings.m_AttenuatorMapWnd_Y;
+ m_optMainFrmWnd_X = i_wndSettings.m_MainFrmWnd_X;
+ m_optMainFrmWnd_Y = i_wndSettings.m_MainFrmWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -380,5 +393,7 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd_Y;
  o_wndSettings.m_AttenuatorMapWnd_X = m_optAttenMapWnd_X;
  o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd_Y;
+ o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd_X;
+ o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd_Y;
 }
 

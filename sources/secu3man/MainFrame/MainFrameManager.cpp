@@ -70,7 +70,7 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
  m_pMainFrame->ShowWindow(SW_SHOW);
  m_pMainFrame->UpdateWindow();
 
- m_pMainFrame->setOnClose(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnClose));
+ m_pMainFrame->addOnClose(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnClose));
  m_pMainFrame->setOnAskFullScreen(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnAskFullScreen));
  m_pMainFrame->setOnFullScreenNotify(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnFullScreen));
 

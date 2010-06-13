@@ -11,6 +11,7 @@
 #include "Resources\resource.h"
 #include "MainFrame.h"
 
+#include <limits>
 #include <vector>
 #include "ChildView.h"
 
@@ -21,6 +22,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 #pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
+#undef max                        //avoid conflicts with C++
 
 /////////////////////////////////////////////////////////////////////////////
 // CMainFrame
@@ -92,6 +94,19 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
  if( !CFrameWnd::PreCreateWindow(cs) )
   return FALSE;
  
+ //устанавливаем позицию главного окна запомненную ранее, если это возможно
+ if (m_OnGetInitialPos)
+ {
+  CPoint point;
+  m_OnGetInitialPos(point);
+
+  if (point.x != std::numeric_limits<int>::max() && point.y != std::numeric_limits<int>::max())
+  {
+   cs.x = point.x;
+   cs.y = point.y;
+  }
+ }
+
  //устанавливаем необходимый размер главного окна
  cs.cx = m_wnd_initial_size.cx;
  cs.cy = m_wnd_initial_size.cy;
@@ -138,9 +153,9 @@ void CMainFrame::SetView(CChildView* i_pChildView)
  m_pwndView = i_pChildView;
 }
 
-void CMainFrame::setOnClose(EventResult i_OnClose)
+void CMainFrame::addOnClose(EventResult i_OnClose)
 {
- m_OnClose = i_OnClose;
+ m_OnClose.push_back(i_OnClose);
 }
 
 void CMainFrame::setOnAskFullScreen(EventResult i_OnAskFullScreen)
@@ -193,11 +208,19 @@ void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction)
  m_IsEndLoggingAllowed = i_OnFunction;
 }
 
+void CMainFrame::setOnGetInitialPos(EventHandler2 i_OnGetInitialPos)
+{
+ m_OnGetInitialPos = i_OnGetInitialPos;
+}
+
 void CMainFrame::OnClose() 
 {
  bool result = true;
- if (m_OnClose)
-  result = m_OnClose();
+
+ //все ли согласны с закрытием программы?
+ for (size_t i = 0; i < m_OnClose.size(); ++i)
+  if (m_OnClose[i] && !m_OnClose[i]())
+    result = false;
 	
  if (result)
   CFrameWnd::OnClose();

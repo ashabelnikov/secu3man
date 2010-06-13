@@ -1,6 +1,7 @@
 
 #pragma once
 
+#include <vector>
 #include "common/FastDelegate.h"
 
 class CChildView;
@@ -10,6 +11,7 @@ class CMainFrame : public CFrameWnd
  typedef fastdelegate::FastDelegate0<> EventHandler;
  typedef fastdelegate::FastDelegate0<bool> EventResult;
  typedef fastdelegate::FastDelegate1<bool> EventHandler1; 
+ typedef fastdelegate::FastDelegate1<CPoint&> EventHandler2; 
 
  public:
   CMainFrame();
@@ -26,7 +28,8 @@ class CMainFrame : public CFrameWnd
   void SetView(CChildView* i_pChildView);
 
   //устанавливают обработчики событий
-  void setOnClose(EventResult i_OnClose);
+  void setOnGetInitialPos(EventHandler2 i_OnGetInitialPos);
+  void addOnClose(EventResult i_OnClose);
   void setOnAppAbout(EventHandler i_OnFunction);
   void setOnAppSettings(EventHandler i_OnFunction);
   void setOnAppBeginLog(EventHandler i_OnFunction);
@@ -59,7 +62,8 @@ protected:
 private:
   bool _UpdateTopLevelMainMenu(void);
 
-  EventResult  m_OnClose;
+  EventHandler2 m_OnGetInitialPos;
+  std::vector<EventResult> m_OnClose;
   EventHandler m_OnAppAbout;
   EventHandler m_OnAppSettings;
   EventHandler m_OnAppBeginLog;
@@ -72,7 +76,7 @@ private:
   EventHandler1 m_OnActivate; 
  
   CChildView*  m_pwndView;
-  const CSize m_wnd_initial_size; 
+  const CSize m_wnd_initial_size;
   BOOL m_bDoIdle;
 };
 

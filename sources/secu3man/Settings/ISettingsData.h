@@ -20,6 +20,8 @@ struct WndSettings
  int m_TempMapWnd_Y;
  int m_AttenuatorMapWnd_X;
  int m_AttenuatorMapWnd_Y;
+ int m_MainFrmWnd_X;
+ int m_MainFrmWnd_Y;
 };
 
 //интерфейс через который должен производится доступ к настройкам программы
