@@ -394,6 +394,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_PROPERTY_GRID,"Static",SS_BLACKFRAME | SS_NOTIFY | 
                     SS_SUNKEN | WS_TABSTOP,1,9,169,123
+    LTEXT           "Enter: применение параметра Esc: отмена",IDC_STATIC,3,
+                    137,151,11
 END
 
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
@@ -463,7 +465,7 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 167
         TOPMARGIN, 7
-        BOTTOMMARGIN, 136
+        BOTTOMMARGIN, 143
     END
 
     IDD_PD_MISC_PAGE, DIALOG
@@ -561,6 +563,11 @@ BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY "Задержка восстан. УОЗ"
     IDS_PD_KNOCK_INT_TIME_CONSTANT "Пост. врем. интегриров."
     IDS_PD_KNOCK_INT_TIME_UNIT " мкс"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "циклов"
 END
 
 #endif    // Russian resources

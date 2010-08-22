@@ -73,6 +73,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnWriteFlashToSECU(void);
   void OnImportDataFromSECU3(void);
   void OnImportMapsFromMPSZ(void);
+  void OnImportDefParamsFromEEPROMFile();
   void OnExportMapsToMPSZ(void);
   void OnWirmwareInfo(void);
 

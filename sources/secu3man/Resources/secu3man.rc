@@ -387,6 +387,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Ёкспорт данных"
+    IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
+                            "»мпорт резервных параметров из файла EEPROM"
     IDS_EXPORT_EXPORT_TO_MPSZ "Ёкспортировать таблицы в MPSZ-ZH"
 END
 

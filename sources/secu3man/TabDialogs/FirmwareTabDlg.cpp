@@ -296,6 +296,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW, OnUpdatePopupMenu_file1)  
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,OnImportDataFromAnotherFW)
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_SECU3,OnImportDataFromSECU3)
+ ON_COMMAND(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnImportDefParamsFromEEPROMFile)
 
  ON_COMMAND(IDM_READ_FLASH,OnReadFlashFromSECU)
  ON_COMMAND(IDM_WRITE_FLASH,OnWriteFlashToSECU)
@@ -304,6 +305,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_MPSZ, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_MPSZ, OnUpdatePopupMenu_file1)
+ ON_UPDATE_COMMAND_UI(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnUpdatePopupMenu_file1)
 
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
  ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
@@ -823,6 +825,12 @@ void CFirmwareTabDlg::OnImportMapsFromMPSZ()
   m_OnImportMapsFromMPSZ();
 }
 
+void CFirmwareTabDlg::OnImportDefParamsFromEEPROMFile()
+{
+ if (m_OnImportDefParamsFromEEPROMFile)
+  m_OnImportDefParamsFromEEPROMFile();
+}
+
 void CFirmwareTabDlg::OnExportMapsToMPSZ()
 {
  if (m_OnExportMapsToMPSZ)
@@ -1001,17 +1009,20 @@ void CFirmwareTabDlg::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
 void CFirmwareTabDlg::setOnImportDataFromAnotherFW(EventHandler OnFunction)
 {m_OnImportDataFromAnotherFW = OnFunction;}	
 
-void CFirmwareTabDlg::setOnReadFlashFromSECU(EventHandler OnFunction)
-{m_OnReadFlashFromSECU = OnFunction;}
-
-void CFirmwareTabDlg::setOnWriteFlashToSECU(EventHandler OnFunction)
-{m_OnWriteFlashToSECU = OnFunction;}
-
 void CFirmwareTabDlg::setOnImportDataFromSECU3(EventHandler OnFunction)
 {m_OnImportDataFromSECU3 = OnFunction;}
 
 void CFirmwareTabDlg::setOnImportMapsFromMPSZ(EventHandler OnFunction)
 {m_OnImportMapsFromMPSZ = OnFunction;}
+
+void CFirmwareTabDlg::setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction)
+{m_OnImportDefParamsFromEEPROMFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnReadFlashFromSECU(EventHandler OnFunction)
+{m_OnReadFlashFromSECU = OnFunction;}
+
+void CFirmwareTabDlg::setOnWriteFlashToSECU(EventHandler OnFunction)
+{m_OnWriteFlashToSECU = OnFunction;}
 
 void CFirmwareTabDlg::setOnExportMapsToMPSZ(EventHandler OnFunction)
 {m_OnExportMapsToMPSZ = OnFunction;}

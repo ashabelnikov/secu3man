@@ -17,6 +17,7 @@
 #include "common\FastDelegate.h"
 #include "FWImpExp\MPSZImpExpController.h"
 #include "HexUtils\readhex.h"
+#include "io-core\EEPROMDataMediator.h"
 #include "io-core\FirmwareDataMediator.h"
 #include "io-core\SECU3IO.h"
 #include "io-core\ufcodes.h"
@@ -74,6 +75,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
  m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
+ m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnWirmwareInfo));
  m_view->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
@@ -1083,6 +1085,20 @@ void CFirmwareTabController::OnImportMapsFromMPSZ(void)
   m_fwdm->SetMapsData(&data);
   SetViewFirmwareValues();
  }
+}
+
+void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
+{
+ BYTE eeprom[CBootLoader::EEPROM_SIZE];
+ bool result = LoadEEPROMFromFile(eeprom, CBootLoader::EEPROM_SIZE);
+
+ if (!result)
+  return; //cancel
+
+ //TODO: проверка контрольной суммы загружаемых параметров и вывод предупреждения
+
+ m_fwdm->LoadDefParametersFromBuffer(eeprom + EEPROMDataMediator::GetDefParamsStartAddress());
+ SetViewFirmwareValues(); //Update!
 }
 
 void CFirmwareTabController::OnExportMapsToMPSZ(void)

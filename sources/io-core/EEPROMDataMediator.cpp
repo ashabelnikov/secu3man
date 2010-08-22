@@ -11,6 +11,10 @@
 #include "EEPROMDataMediator.h"
 #include "CRC16.h"
 
+//адрес структуры параметров в EEPROM
+#define EEPROM_PARAM_START     0x002
+
+
 EEPROMDataMediator::EEPROMDataMediator()
 {
 
@@ -18,4 +22,9 @@ EEPROMDataMediator::EEPROMDataMediator()
 
 EEPROMDataMediator::~EEPROMDataMediator()
 {
+}
+
+int EEPROMDataMediator::GetDefParamsStartAddress(void)
+{
+ return EEPROM_PARAM_START;
 }

@@ -92,6 +92,7 @@ class CFirmwareTabDlg : public CTabDialog
   void setOnWriteFlashToSECU(EventHandler OnFunction);
   void setOnImportDataFromSECU3(EventHandler OnFunction);
   void setOnImportMapsFromMPSZ(EventHandler OnFunction);
+  void setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction);
   void setOnExportMapsToMPSZ(EventHandler OnFunction);
   void setOnFirmwareInfo(EventHandler OnFunction);
   //... от кнопок и чек боксов
@@ -140,6 +141,7 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnImportDataFromSECU3();
   afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
   afx_msg void OnImportMapsFromMPSZ();
+  afx_msg void OnImportDefParamsFromEEPROMFile();
   afx_msg void OnExportMapsToMPSZ();
   afx_msg void OnFirmwareSupportViewAttenuatorMap();		
   afx_msg void OnWirmwareInfo();
@@ -178,6 +180,7 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnWriteFlashToSECU;
   EventHandler  m_OnImportDataFromSECU3;
   EventHandler  m_OnImportMapsFromMPSZ;
+  EventHandler  m_OnImportDefParamsFromEEPROMFile;
   EventHandler  m_OnExportMapsToMPSZ;
   EventHandler  m_OnFirmwareInfo;
   EventWithHWND m_OnCloseMapWnd;

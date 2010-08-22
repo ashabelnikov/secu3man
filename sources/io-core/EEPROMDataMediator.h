@@ -3,9 +3,11 @@
 
 //Аппаратно-независимая прослойка над данными EEPROM.
 
-class EEPROMDataMediator
+class AFX_EXT_CLASS EEPROMDataMediator
 {
   public:
      EEPROMDataMediator();
-	~EEPROMDataMediator();
+    ~EEPROMDataMediator();
+    
+     static int GetDefParamsStartAddress(void);
 };

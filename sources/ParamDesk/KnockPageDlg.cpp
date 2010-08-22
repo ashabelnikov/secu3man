@@ -160,7 +160,7 @@ BOOL CKnockPageDlg::OnInitDialog()
  ex7.m_lower = 1;
  ex7.m_upper = 99;
  ex7.m_limit_text = 2;
- m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_T("%d циклов"),true,false,-1,&ex7);
+ m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_TSTRING(_T("%d ")) + MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY_UNIT),true,false,-1,&ex7);
  //-----------------------------------------------------------------
 
  m_ctrlGrid.SetGutterWidth(180);

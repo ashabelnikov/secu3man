@@ -376,6 +376,13 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  /*???memcpy(m_bytes_original + FIRMWARE_ALL_DATA_START,i_source_bytes + FIRMWARE_ALL_DATA_START,FIRMWARE_ALL_DATA_SIZE);*/
 }
 
+void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
+{
+ if (false==IsLoaded())
+  return; //некуда загружать...
+ memcpy(m_bytes_active + DEFPARAM_START, i_source_bytes, sizeof(params)); 
+}
+
 void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original /* = false*/)
 {
  BYTE* p_bytes = NULL;
