@@ -4,4 +4,4 @@
 #define CRC_API __declspec(dllimport)
 #endif
 
-unsigned short CRC_API crc16(unsigned char *buf, unsigned short num);
+unsigned short CRC_API crc16(const unsigned char *buf, unsigned short num);

@@ -206,10 +206,6 @@ SOURCE=.\NumericConv.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\SECU3IO.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\StdAfx.cpp
 # ADD CPP /Yc"stdafx.h"
 # End Source File
@@ -272,6 +268,18 @@ SOURCE=.\NumericConv.h
 # Begin Source File
 
 SOURCE=.\Resource.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SECU3IO.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SECU3ParametersDef.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\SECU3Types.h
 # End Source File
 # Begin Source File
 

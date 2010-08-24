@@ -1,0 +1,102 @@
+/****************************************************************
+ *       SECU-3  - An open source, free engine control unit
+ *    Designed by Alexey A. Shabelnikov. Ukraine, Gorlovka 2010.
+ *       Microprocessors systems - design & programming.
+ *    contacts:
+ *              http://secu-3.narod.ru
+ *              ICQ: 405-791-931
+ ****************************************************************/
+
+#ifndef _SECU3_PARAMETERS_DEF_H_
+#define _SECU3_PARAMETERS_DEF_H_
+
+#include "SECU3Types.h"
+
+#pragma pack( push, enter_SECU3ParametersDef )
+#pragma pack(1) //<--SECU3
+
+namespace SECU3IO {
+
+using namespace SECU3Types;
+
+//описывает параметры системы
+typedef struct
+{
+ _uchar tmp_use;                        //признак комплектации ДТОЖ-ом
+ _uchar carb_invers;                    //инверсия концевика на карбюраторе
+ _uchar idl_regul;                      //поддерживать заданные обороты ХХ регулмрованием УОЗ
+ _uchar fn_benzin;                      //номер набора характеристик используемый для бензина
+ _uchar fn_gas;                         //номер набора характеристик используемый для газа
+ _uint  map_lower_pressure;             //нижнее значене ДАД по оси таблицы(кПа)
+ _uint  ephh_lot;                       //нижний порог ЭПХХ (мин-1)
+ _uint  ephh_hit;                       //верхний порог ЭПХХ (мин-1)
+ _uint  starter_off;                    //порог выключения стартера (мин-1)
+ _int   map_upper_pressure;             //верхнее значене ДАД по оси таблицы (кПа)
+ _uint  smap_abandon;                   //обороты перехода с пусковой карты на рабочую  (мин-1) 
+ _int   max_angle;                      //ограничение максимального УОЗ
+ _int   min_angle;                      //ограничение минимального УОЗ
+ _int   angle_corr;                     //октан-коррекция УОЗ    
+ _uint  idling_rpm;                     //заданные обороты ХХ для поддержания регулмрованием УОЗ   
+ _int   ifac1;                          //коэффициенты П-регулятора оборотов ХХ, для положительной и
+ _int   ifac2;                          //отрицательной ошибке соответственно.
+ _int   MINEFR;                         //зона нечувствительности регулятора (обороты)
+ _int   vent_on;                        //температура включения вентилятора
+ _int   vent_off;                       //температура выключения вентилятора  
+
+ _int  map_adc_factor;
+ _long map_adc_correction;
+ _int  ubat_adc_factor;
+ _long ubat_adc_correction;
+ _int  temp_adc_factor;
+ _long temp_adc_correction;
+  
+ _uchar ckps_edge_type;                
+ _uchar ckps_cogs_btdc;
+ _uchar ckps_ignit_cogs;
+
+ _int angle_dec_spead;
+ _int angle_inc_spead;  
+ _int idlreg_min_angle;
+ _int idlreg_max_angle;
+ _uint map_curve_offset;
+ _uint map_curve_gradient;
+
+ _int epm_on_threshold;
+
+ _uint  ephh_lot_g;                     //нижний порог ЭПХХ (газ)
+ _uint  ephh_hit_g;                     //верхний порог ЭПХХ (газ)
+ _uchar shutoff_delay;                  //задержка выключения клапана
+
+ _uint  uart_divisor;                //делитель для соответствующей скорости UART-a
+ _uchar uart_period_t_ms;            //период посылки пакетов в десятках миллисекунд
+
+ _uchar ckps_engine_cyl;             //кол-во цилиндров двигателя 
+
+ //--knock 
+ _uchar knock_use_knock_channel;     //признак использования канала детенации
+ _uchar knock_bpf_frequency;         //центральная частота полосового фильтра
+ _int   knock_k_wnd_begin_angle;     //начало детонационного окна (градусы)
+ _int   knock_k_wnd_end_angle;       //конец детонационного окна (градусы)
+ _uchar knock_int_time_const;        //постоянная времени интегрирования (код)
+
+ _int knock_retard_step;             //шаг смещения УОЗ при детонации 
+ _int knock_advance_step;            //шаг восстановления УОЗ 
+ _int knock_max_retard;              //максимальное смещение УОЗ
+ _uint knock_threshold;              //порог детонации - напряжение
+ _uchar knock_recovery_delay;        //задержка восстановления УОЗ в рабочих циклах двигателя
+
+ //--/knock
+
+ //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
+ //новых версий прошивок с более старыми версиями. При добавлении новых данных
+ //в структуру, необходимо расходовать эти байты.
+ _uchar reserved[10];
+
+ _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
+}params;
+
+} //SECU3IO
+
+#pragma pack( pop, enter_SECU3ParametersDef )
+
+#endif //_SECU3_PARAMETERS_DEF_H_

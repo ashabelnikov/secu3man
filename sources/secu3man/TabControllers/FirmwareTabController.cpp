@@ -1095,7 +1095,12 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
  if (!result)
   return; //cancel
 
- //TODO: проверка контрольной суммы загружаемых параметров и вывод предупреждения
+ //проверка контрольной суммы загружаемых параметров и вывод предупреждения
+ if (!EEPROMDataMediator::VerifyDefParamsCheckSum(eeprom))
+ {
+  if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
+   return; //user canceled
+ }
 
  m_fwdm->LoadDefParametersFromBuffer(eeprom + EEPROMDataMediator::GetDefParamsStartAddress());
  SetViewFirmwareValues(); //Update!
