@@ -10,6 +10,8 @@ enum EReadHexStatus
  RH_SUCCESS = 0,
  RH_INCORRECT_CHKSUM = 1,
  RH_UNEXPECTED_SYMBOL = 2,
+ RH_UNSUPPORTED_RECORD = 4,
+ RH_ADDRESS_EXCEDED = 5
 };
 
 // Intel HEX 80 не содержит адресов больше 0xFFFF поэтому подразумевается

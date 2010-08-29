@@ -15,22 +15,29 @@
  if ((hexbyte > 64)&&(hexbyte < 71))\
   hexbyte-=55;
 
+#define RECTP_DATA 0x00 //data record
+#define RECTP_EOF  0x01 //End Of file record
+#define RECTP_ESA  0x02 //Extended Segment Address record
+
+#define MAXIMUM_ADDRESS 0xFFFF
+
 EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size)
 {
  UCHAR  state = 0;
- UINT   d = 0;
+ UINT   d_ptr = 0;   //pointer to output buffer
  UCHAR  symbol;
- WORD   chksum;
+ WORD   chksum;      //accumulates calculated check sum
  UCHAR  datasize;
  UCHAR  datacount;
  WORD   raddr;
- UCHAR  rectp;
+ UCHAR  rectp;       //type of record (follows data bytes)
  UCHAR  lastb;
- WORD   maxaddr = 0;
- UCHAR  chkbyte;
+ WORD   maxaddr = 0; //maximum appeared address
+ UCHAR  chkbyte;     //byte with check sum at the end of record
+ UINT   written = 0; //number of bytes written into the output buffer
  int errflag = RH_SUCCESS;
 
- memset(op_buff, 0xFF, 0x10000); //забиваем буфер значениями 0xFF
+ memset(op_buff, 0xFF, MAXIMUM_ADDRESS + 1); //забиваем буфер значениями 0xFF
 
  for(size_t i = 0; i < i_size; i++)
  {
@@ -89,9 +96,9 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     symbol = symbol & 15;
     (*((UCHAR*)(&raddr)))|= symbol;
     chksum+=(*((UCHAR*)(&raddr)));
-    d = raddr;         //overwrite address
+    d_ptr = raddr;         //overwrite address
     state = 7;
-    break;  
+    break;
 
    case 7:
     HEXTONUM(symbol);
@@ -105,8 +112,12 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     symbol = symbol & 15;
     rectp|=symbol;
     chksum+=rectp;
+
+    if ((rectp != RECTP_DATA) && (rectp != RECTP_EOF) && (rectp != RECTP_ESA))
+      errflag|=RH_UNSUPPORTED_RECORD; //unsupported type of record encountered
+
     state = 9;
-    break; 
+    break;
 
    case 9:
     if (datacount == 0)
@@ -128,18 +139,32 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     lastb = lastb << 4;
     symbol = symbol & 15;
     symbol = lastb | symbol;
-    op_buff[d] = symbol;    //output
-    d++;
-    chksum+=symbol;
-    state = 9;
 
-    if(datacount==0)
+    if (rectp != RECTP_ESA)          //skip ESA records
     {
-     if(d > maxaddr)
+     if (d_ptr <= MAXIMUM_ADDRESS)
      {
-      maxaddr = d;
+      op_buff[d_ptr] = symbol;       //output
+      ++written;
      }
+     else
+     {
+      errflag|=RH_ADDRESS_EXCEDED;   //exceded maximum allowed address
+      return (EReadHexStatus)errflag;
+     }
+
+     if(datacount==0)                //if last byte of data written into the output buffer
+     {
+      if(d_ptr > maxaddr)            //find maximum appeared addres
+      {
+       maxaddr = d_ptr;
+      }
+     }
+
     }
+    chksum+=symbol;
+    ++d_ptr;
+    state = 9;
     break;
 
    case 11:
@@ -172,12 +197,12 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     if (symbol!=0x0A)
      errflag|=RH_UNEXPECTED_SYMBOL;
     state = 0; 
-    break;	 
+    break;
   }//switch     
   //--------------------------------------------------------------------------
  }//for
 
- o_size = maxaddr;   //сохраняем размер данных 
+ o_size = (0 == written) ? 0 : maxaddr + 1;   //сохраняем размер данных
 
  return (EReadHexStatus)errflag;  // 0 - если нет ошибок
 }
