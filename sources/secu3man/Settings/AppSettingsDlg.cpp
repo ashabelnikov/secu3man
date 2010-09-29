@@ -43,6 +43,8 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate_selection_combo);
  DDX_Control(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate_selection_combo);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_combo);
+ DDX_Control(pDX, IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, m_ecu_platform_selection_combo);
+ DDX_Control(pDX, IDC_APP_SETTINGS_LANG_SEL_COMBO, m_iface_lang_selection_combo);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder_edit);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_BUTTON, m_log_files_folder_button);
@@ -52,6 +54,9 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_index);
+ 
+ DDX_CBIndex(pDX, IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, m_ecu_platform_selection);
+ DDX_CBIndex(pDX, IDC_APP_SETTINGS_LANG_SEL_COMBO, m_iface_lang_selection);
 
  DDX_Text(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder);
  DDX_Check(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder);
@@ -158,6 +163,26 @@ void CAppSettingsDlg::FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<
   int index = m_log_csv_sepsymbol_combo.AddString(i_AllowableCSVSepSymbols[i].first.c_str());
   ASSERT(index != LB_ERR);
   m_log_csv_sepsymbol_combo.SetItemData(index, i); 
+ }
+}
+
+void CAppSettingsDlg::FillCtrlsWithAllowableInterfaceLanguages(std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > i_AllowableInterfaceLanguages)
+{
+ for(size_t i = 0; i < i_AllowableInterfaceLanguages.size(); ++i)
+ {
+  int index = m_iface_lang_selection_combo.AddString(i_AllowableInterfaceLanguages[i].first.first.c_str());
+  ASSERT(index != LB_ERR);
+  m_iface_lang_selection_combo.SetItemData(i_AllowableInterfaceLanguages[i].second, i); 
+ }
+}
+
+void CAppSettingsDlg::FillCtrlsWithAllowableECUPlatformTypes(std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > i_AllowableECUPlatformTypes)
+{
+ for(size_t i = 0; i < i_AllowableECUPlatformTypes.size(); ++i)
+ {
+  int index = m_ecu_platform_selection_combo.AddString(i_AllowableECUPlatformTypes[i].first.first.c_str());
+  ASSERT(index != LB_ERR);
+  m_ecu_platform_selection_combo.SetItemData(i_AllowableECUPlatformTypes[i].second, i); 
  }
 }
 
@@ -277,4 +302,44 @@ void CAppSettingsDlg::SetMIDeskUpdatePeriod(int i_period)
 int CAppSettingsDlg::GetMIDeskUpdatePeriod(void)
 {
  return m_midesk_update_period;
+}
+
+void CAppSettingsDlg::SetInterfaceLanguage(int i_iface_lang)
+{
+ int count = m_iface_lang_selection_combo.GetCount();
+ for (int i = 0; i < count; i++)
+ {
+  size_t id = m_iface_lang_selection_combo.GetItemData(i);
+  if (id == i_iface_lang)
+  { //found!
+   m_iface_lang_selection = i; 
+   return;
+  }
+ }
+ ASSERT(0); //WTF...
+}
+
+void CAppSettingsDlg::SetECUPlatformType(int i_platform_type)
+{
+ int count = m_ecu_platform_selection_combo.GetCount();
+ for (int i = 0; i < count; i++)
+ {
+  size_t id = m_ecu_platform_selection_combo.GetItemData(i);
+  if (id == i_platform_type)
+  { //found!
+   m_ecu_platform_selection = i; 
+   return;
+  }
+ }
+ ASSERT(0); //WTF...
+}
+
+int CAppSettingsDlg::GetInterfaceLanguage(void) const
+{
+ return m_iface_lang_selection_combo.GetItemData(m_iface_lang_selection); 
+}
+
+int CAppSettingsDlg::GetECUPlatformType(void) const
+{
+ return m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection); 
 }

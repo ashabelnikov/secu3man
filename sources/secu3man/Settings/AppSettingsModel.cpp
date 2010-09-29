@@ -36,6 +36,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_UseAppFolder(_T("UseAppFolder"))
 , m_Name_CSVSepSymbol(_T("CSVSeparatingSymbol"))
 , m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
+, m_Name_InterfaceLang(_T("InterfaceLanguage"))
+, m_Name_ECUPlatformType(_T("ECUPlatformType"))
 //positions of windows 
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -85,6 +87,13 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\":\"  colon")),     ':'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"+\"  plus")),      '+'));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\"-\"  minus")),     '-'));
+
+ m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("English")), _TSTRING(_T("english"))), IL_ENGLISH) );
+ m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Russian")), _TSTRING(_T("russian"))), IL_RUSSIAN) );
+
+ m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega16")), _TSTRING(_T("atmega16"))), EP_ATMEGA16) );
+ m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega32")), _TSTRING(_T("atmega32"))), EP_ATMEGA32) );
+ m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega64")), _TSTRING(_T("atmega64"))), EP_ATMEGA64) );
 }
 
 CAppSettingsModel::~CAppSettingsModel()
@@ -127,6 +136,31 @@ bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
    return true;
  return false;
 }
+
+bool CAppSettingsModel::CheckAllowableLanguage(const std::string& i_string, EInterLang& o_language_id)
+{
+ size_t count = m_AllowableLanguages.size();
+ for(size_t i = 0; i < count; ++i)
+  if (i_string == m_AllowableLanguages[i].first.second)
+  {
+   o_language_id = (EInterLang)m_AllowableLanguages[i].second; 
+   return true;
+  }
+ return false;
+}
+
+bool CAppSettingsModel::CheckAllowablePlatform(const std::string& i_string, EECUPlatform& o_platform_id)
+{
+ size_t count = m_AllowablePlatforms.size();
+ for(size_t i = 0; i < count; ++i)
+  if (i_string == m_AllowablePlatforms[i].first.second)
+  {
+   o_platform_id = (EECUPlatform)m_AllowablePlatforms[i].second; 
+   return true;
+  }
+ return false;
+}
+
 
 bool CAppSettingsModel::ReadSettings(void)
 {
@@ -211,6 +245,23 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optMIDeskUpdatePeriod = 40; 
  }
 
+ //-----------------------------------------  
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_InterfaceLang,m_AllowableLanguages[0].first.second.c_str(),read_str,255,IniFileName);
+
+ if (!CheckAllowableLanguage(read_str, m_optInterLang))
+ {
+  status = false;
+  m_optInterLang = (EInterLang)m_AllowableLanguages[0].second; //english by default
+ }
+
+ //-----------------------------------------  
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[0].first.second.c_str(),read_str,255,IniFileName);
+
+ if (!CheckAllowablePlatform(read_str, m_optECUPlatformType))
+ {
+  status = false;
+  m_optECUPlatformType = (EECUPlatform)m_AllowablePlatforms[0].second; //atmega16 by default
+ }
 
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
@@ -287,6 +338,20 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optMIDeskUpdatePeriod);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,write_str,IniFileName);
+
+ //-----------------------------------------
+ size_t i;
+ for(i = 0; i < m_AllowableLanguages.size(); ++i)
+  if (m_optInterLang == m_AllowableLanguages[i].second)
+   write_str = m_AllowableLanguages[i].first.second.c_str();
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_InterfaceLang,write_str,IniFileName);
+
+ //-----------------------------------------
+ for(i = 0; i < m_AllowablePlatforms.size(); ++i)
+  if (m_optECUPlatformType == m_AllowablePlatforms[i].second)
+   write_str = m_AllowablePlatforms[i].first.second.c_str();
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,write_str,IniFileName);
+
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -395,5 +460,15 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd_Y;
  o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd_X;
  o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd_Y;
+}
+
+EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const
+{
+ return m_optInterLang;
+}
+
+EECUPlatform CAppSettingsModel::GetECUPlatformType(void) const
+{
+ return m_optECUPlatformType;
 }
 

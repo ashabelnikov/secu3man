@@ -20,6 +20,12 @@ class CAppSettingsModel : public ISettingsData
   //<UIstring, SepSymbol>
   std::vector<std::pair<_TSTRING, char> > m_AllowaleCSVSepSymbols;
 
+  //<<UIString, INIString>, ID>
+  std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowableLanguages;
+
+  //<<UIString, INIString>, ID>
+  std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowablePlatforms;
+
   CAppSettingsModel();
   virtual ~CAppSettingsModel();
 
@@ -43,6 +49,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_UseAppFolder;
   const CString m_Name_CSVSepSymbol;
   const CString m_Name_MIDeskUpdatePeriod;
+  const CString m_Name_InterfaceLang;
+  const CString m_Name_ECUPlatformType;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -73,6 +81,9 @@ class CAppSettingsModel : public ISettingsData
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
   virtual void GetWndSettings(WndSettings& o_wndSettings) const;
+  //язык интерфейса и тип платформы
+  virtual EInterLang GetInterfaceLanguage(void) const;
+  virtual EECUPlatform GetECUPlatformType(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -84,6 +95,8 @@ class CAppSettingsModel : public ISettingsData
   bool  m_optUseAppFolder;
   char  m_optCSVSepSymbol;
   int   m_optMIDeskUpdatePeriod;
+  EInterLang m_optInterLang;
+  EECUPlatform m_optECUPlatformType;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;
@@ -101,6 +114,8 @@ class CAppSettingsModel : public ISettingsData
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);
   bool CheckAllowableCSVSepSymbol(char i_symbol);
+  bool CheckAllowableLanguage(const std::string& i_string, EInterLang& o_language_id);
+  bool CheckAllowablePlatform(const std::string& i_string, EECUPlatform& o_platform_id);
 
   //директория из которой было запущено приложение
   TCHAR m_current_directory[MAX_PATH+1]; 

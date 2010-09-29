@@ -49,6 +49,9 @@ void CAppSettingsController::OnOk(void)
 
  size_t index = m_pView->GetCSVSepSymbol();
  m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
+
+ m_pModel->m_optInterLang = (EInterLang)m_pView->GetInterfaceLanguage();
+ m_pModel->m_optECUPlatformType = (EECUPlatform)m_pView->GetECUPlatformType();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -63,6 +66,9 @@ void CAppSettingsController::OnActivate(void)
  m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
  m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);
  m_pView->FillCtrlsWithAllowableCSVSepSymbols(m_pModel->m_AllowaleCSVSepSymbols);
+ m_pView->FillCtrlsWithAllowableInterfaceLanguages(m_pModel->m_AllowableLanguages);
+ m_pView->FillCtrlsWithAllowableECUPlatformTypes(m_pModel->m_AllowablePlatforms);
+
  m_pView->SetPortName(m_pModel->m_optPortName);
  m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
  m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
@@ -74,6 +80,9 @@ void CAppSettingsController::OnActivate(void)
  for(size_t i = 0; i < count; i++)
   if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
    m_pView->SetCSVSepSymbol(i);
+
+ m_pView->SetInterfaceLanguage(m_pModel->m_optInterLang);
+ m_pView->SetECUPlatformType(m_pModel->m_optECUPlatformType);
 }
 
 int CAppSettingsController::ShowDialog(void) 

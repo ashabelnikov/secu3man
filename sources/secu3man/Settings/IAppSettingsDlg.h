@@ -13,6 +13,8 @@ class IAppSettingsDlg
   virtual void FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates) = 0;
   virtual void FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts) = 0;
   virtual void FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<_TSTRING, char> >  i_AllowableCSVSepSymbols) = 0;
+  virtual void FillCtrlsWithAllowableInterfaceLanguages(std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > i_AllowableInterfaceLanguages) = 0;
+  virtual void FillCtrlsWithAllowableECUPlatformTypes(std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > i_AllowableECUPlatformTypes) = 0;
 
   //"Set" - установка данных представления
   virtual void SetPortName(_TSTRING i_PortName) = 0;
@@ -22,6 +24,8 @@ class IAppSettingsDlg
   virtual void SetUseAppFolder(bool i_use) = 0;
   virtual void SetCSVSepSymbol(size_t i_index) = 0;
   virtual void SetMIDeskUpdatePeriod(int i_period) = 0;
+  virtual void SetInterfaceLanguage(int i_iface_lang) = 0;
+  virtual void SetECUPlatformType(int i_platform_type) = 0;
    
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
@@ -31,6 +35,8 @@ class IAppSettingsDlg
   virtual bool GetUseAppFolder(void) const = 0;
   virtual size_t GetCSVSepSymbol(void) = 0;
   virtual int GetMIDeskUpdatePeriod(void) = 0;
+  virtual int GetInterfaceLanguage(void) const = 0;
+  virtual int GetECUPlatformType(void) const = 0;
 
   //устанавливают обработчики событий
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;
