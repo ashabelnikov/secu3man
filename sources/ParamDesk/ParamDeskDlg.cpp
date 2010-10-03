@@ -167,17 +167,17 @@ BOOL CParamDeskDlg::OnInitDialog()
 	
  m_tab_descriptors.clear();
  //наполняем Tab control вкладками	
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("1:Запуск",m_pStarterPageDlg,0), STARTR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("2:УОЗ",m_pAnglesPageDlg,1), ANGLES_PAR));	
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("3:ХХ",m_pIdlRegPageDlg,2), IDLREG_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("4:Функции",m_pFunSetPageDlg,3), FUNSET_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("5:Температура",m_pTemperPageDlg,4), TEMPER_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("6:Карбюратор",m_pCarburPageDlg,5), CARBUR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("7:Компенc.погрешн.АЦП",m_pADCCompenPageDlg,6), ADCCOR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("8:ДПКВ",m_pCKPSPageDlg,7), CKPS_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_STARTR_PAR),m_pStarterPageDlg,0), STARTR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ANGLES_PAR),m_pAnglesPageDlg,1), ANGLES_PAR));	
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_IDLREG_PAR),m_pIdlRegPageDlg,2), IDLREG_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_FUNSET_PAR),m_pFunSetPageDlg,3), FUNSET_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_TEMPER_PAR),m_pTemperPageDlg,4), TEMPER_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CARBUR_PAR),m_pCarburPageDlg,5), CARBUR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ADCCOR_PAR),m_pADCCompenPageDlg,6), ADCCOR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CKPS_PAR),m_pCKPSPageDlg,7), CKPS_PAR));
  if (m_show_knock_page)
-  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("9:Детонация",m_pKnockPageDlg,8), KNOCK_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage("10:Прочее",m_pMiscPageDlg,9), MISCEL_PAR));
+  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_KNOCK_PAR),m_pKnockPageDlg,8), KNOCK_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_MISCEL_PAR),m_pMiscPageDlg,9), MISCEL_PAR));
 	
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
  //уже использует обработчики сообщений!

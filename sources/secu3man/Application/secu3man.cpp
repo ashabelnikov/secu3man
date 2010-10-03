@@ -19,6 +19,7 @@
 #include "MainFrame\MainFrameManager.h"
 #include "Settings\AppSettingsDlg.h"
 #include "Settings\AppSettingsManager.h"
+#include "Settings\ISettingsData.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -80,6 +81,17 @@ BOOL CSecu3manApp::InitInstance()
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
  
+ switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
+ {
+  case IL_ENGLISH:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
+  case IL_RUSSIAN:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
+ }
+
+
  //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
  //дальнейшая инициализация.
  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();

@@ -137,7 +137,7 @@ bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
  return false;
 }
 
-bool CAppSettingsModel::CheckAllowableLanguage(const std::string& i_string, EInterLang& o_language_id)
+bool CAppSettingsModel::CheckAllowableLanguage(const _TSTRING& i_string, EInterLang& o_language_id)
 {
  size_t count = m_AllowableLanguages.size();
  for(size_t i = 0; i < count; ++i)
@@ -149,7 +149,7 @@ bool CAppSettingsModel::CheckAllowableLanguage(const std::string& i_string, EInt
  return false;
 }
 
-bool CAppSettingsModel::CheckAllowablePlatform(const std::string& i_string, EECUPlatform& o_platform_id)
+bool CAppSettingsModel::CheckAllowablePlatform(const _TSTRING& i_string, EECUPlatform& o_platform_id)
 {
  size_t count = m_AllowablePlatforms.size();
  for(size_t i = 0; i < count; ++i)

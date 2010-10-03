@@ -465,7 +465,6 @@ BEGIN
         LEFTMARGIN, 7
         RIGHTMARGIN, 167
         TOPMARGIN, 7
-        BOTTOMMARGIN, 143
     END
 
     IDD_PD_MISC_PAGE, DIALOG
@@ -568,6 +567,16 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "циклов"
+    IDS_PD_TABNAME_STARTR_PAR       "1:Запуск"
+    IDS_PD_TABNAME_ANGLES_PAR       "2:УОЗ"
+    IDS_PD_TABNAME_IDLREG_PAR       "3:ХХ"
+    IDS_PD_TABNAME_FUNSET_PAR       "4:Функции"
+    IDS_PD_TABNAME_TEMPER_PAR       "5:Температура"
+    IDS_PD_TABNAME_CARBUR_PAR       "6:Карбюратор"
+    IDS_PD_TABNAME_ADCCOR_PAR       "7:Компенc.погрешн.АЦП"
+    IDS_PD_TABNAME_CKPS_PAR         "8:ДПКВ"
+    IDS_PD_TABNAME_KNOCK_PAR        "9:Детонация"
+    IDS_PD_TABNAME_MISCEL_PAR       "10:Прочее"
 END
 
 #endif    // Russian resources
@@ -582,6 +591,400 @@ END
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 191
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Save",IDC_PD_SAVE_BUTTON,5,2,41,12
+    CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
+                    TCS_OWNERDRAWFIXED | WS_TABSTOP,4,17,175,166
+    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
+END
+
+IDD_PARAMETERS_DESK_FLOATING DIALOGEX 0, 0, 187, 191
+STYLE WS_MINIMIZEBOX | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_CONTROLPARENT
+CAPTION "Parameters"
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Save",IDC_PD_SAVE_BUTTON,5,2,41,12
+    CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
+                    TCS_OWNERDRAWFIXED | WS_TABSTOP,4,17,175,166
+    CTEXT           "",IDC_PARAMETERS_DESK_TITLE,48,2,116,11
+END
+
+IDD_PD_STARTER_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_STARTER_OFF_RPM_EDIT,22,39,46,16,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
+    CONTROL         "Spin1",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,
+                    17
+    LTEXT           "RPM when switching from start map",
+                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
+    LTEXT           "RPM when starter will be turned off",
+                    IDC_PD_STARTER_OFF_RPM_CAPTION,21,18,119,20
+    LTEXT           "min-1",IDC_PD_STARTER_OFF_RPM_UNIT,89,41,25,13
+    LTEXT           "min-1",IDC_PD_STARTER_SMAP_ABANDON_RPM_UNIT,89,92,25,13
+END
+
+IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_ANGLES_MIN_ANGLE_EDIT,12,25,29,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,91,26,28,15,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEAD_EDIT,12,73,29,15,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,31,118,47,15,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
+    CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
+    CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,82,117,12,16
+    LTEXT           "Min. advance angle",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,
+                    14,72,9
+    LTEXT           "Max. advance angle",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,
+                    14,74,9
+    LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,30,
+                    106,90,10
+    LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
+    LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
+    LTEXT           "degg.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
+    CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
+                    16
+    CONTROL         "Spin2",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,
+                    17
+    LTEXT           "Decrease",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,
+                    9
+    LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,
+                    9
+    LTEXT           "degg./ cycl.",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,
+                    22,16
+    LTEXT           "degg./ cycl.",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,
+                    21,16
+    GROUPBOX        "Limitation of angle change speed",
+                    IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
+END
+
+IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,11,25,35,16,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_PRESS_SWING_EDIT,88,25,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET_EDIT,11,68,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT_EDIT,88,68,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    COMBOBOX        IDC_PD_FUNSET_BENZIN_MAPS_COMBO,22,104,90,82,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_TABSTOP
+    COMBOBOX        IDC_PD_FUNSET_GAS_MAPS_COMBO,22,134,90,87,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_TABSTOP
+    CONTROL         "Spin1",IDC_PD_FUNSET_MAP_GRAD_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,50,25,11,16
+    CONTROL         "Spin1",IDC_PD_FUNSET_PRESS_SWING_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,126,24,11,16
+    LTEXT           "Lower pressure value",IDC_PD_FUNSET_MAP_GRAD_CAPTION,8,
+                    5,63,17
+    LTEXT           "Upper pressure value",IDC_PD_FUNSET_PRESS_SWING_CAPTION,
+                    83,5,66,17
+    LTEXT           "kPa",IDC_PD_FUNSET_MAP_GRAD_UNIT,63,28,17,13
+    LTEXT           "kPa",IDC_PD_FUNSET_PRESS_SWING_UNIT,140,28,17,13
+    LTEXT           "Set of tables for gasoline",
+                    IDC_PD_FUNSET_BENZIN_MAPS_COMBO_CAPTION,20,93,103,9
+    LTEXT           "Set of tables for gas",
+                    IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,22,122,103,9
+    CONTROL         "Spin1",IDC_PD_FUNSET_CURVE_OFFSET_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,50,68,11,16
+    CONTROL         "Spin1",IDC_PD_FUNSET_CURVE_GRADIENT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,126,67,11,
+                    16
+    LTEXT           "Curve offset",IDC_PD_FUNSET_CURVE_OFFSET_CAPTION,8,55,
+                    63,9
+    LTEXT           "Curve gradient",IDC_PD_FUNSET_CURVE_GRADIENT_CAPTION,83,
+                    55,66,9
+    LTEXT           "V",IDC_PD_FUNSET_CURVE_OFFSET_UNIT,64,72,17,13
+    LTEXT           "kPa/V",IDC_PD_FUNSET_CURVE_GRADIENT_UNIT,140,70,25,13
+    GROUPBOX        "MAP",IDC_PD_FUNSET_MAP_SENSOR_GROUP,3,46,164,44
+END
+
+IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_NEG_EDIT,15,17,30,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_POS_EDIT,88,17,30,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,15,50,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,88,50,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,26,83,39,18,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,26,118,39,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Use regulator",IDC_PD_IDLREG_USE_REGULATOR,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
+    LTEXT           "regulator's factors",IDC_PD_IDLREG_FACTORS_CAPTION,23,5,
+                    113,9
+    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
+    LTEXT           "_",IDC_PD_IDLREG_FACTOR_NEG_CAPTION,63,16,13,17
+    LTEXT           "Goal RPM",IDC_PD_IDLREG_GOAL_RPM_CAPTION,23,71,108,10
+    LTEXT           "Dead band of RPM",IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,
+                    23,106,103,10
+    LTEXT           "min-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,85,85,25,13
+    LTEXT           "min-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,85,121,25,13
+    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_POS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,120,17,11,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_NEG_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,48,17,11,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_GOAL_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,68,83,11,16
+    CONTROL         "Spin1",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,68,118,11,16
+    LTEXT           "regulation limits",IDC_PD_IDLREG_RESTRICTIONS_CAPTION,
+                    28,38,113,9
+    LTEXT           "min.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,50,19,17
+    CONTROL         "Spin1",IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,50,11,
+                    16
+    CONTROL         "Spin1",IDC_PD_IDLREG_RESTRICTION_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,50,11,
+                    16
+    LTEXT           "max.",IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,133,50,20,
+                    17
+END
+
+IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,13,20,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,93,21,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,14,64,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,64,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Inversion of curburetor's trailer",
+                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
+    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,43,20,13,
+                    18
+    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,20,13,
+                    18
+    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,10,
+                    33,10
+    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,10,
+                    34,10
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
+                    22,13
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
+                    13
+    CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,93,130,11,
+                    18
+    LTEXT           "EPM switch on threshold",
+                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
+    LTEXT           "Discharge (kPa)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
+                    110,130,48,17
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,64,13,
+                    18
+    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,122,64,13,
+                    18
+    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,
+                    54,33,10
+    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,94,
+                    54,34,10
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,137,66,
+                    22,13
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,65,
+                    22,13
+    GROUPBOX        "FI thresholds for gasoline",
+                    IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
+    GROUPBOX        "FI thresholds for gas",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,
+                    6,47,159,40
+    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,45,98,11,18
+    LTEXT           "Valve turn off delay",
+                    IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,5,88,79,10
+    LTEXT           "sec.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
+END
+
+IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,30,51,19,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,80,50,19,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Use coolant temperature sensor",
+                    IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+    LTEXT           "Ventilator turn on threshold",
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,17,16,119,11
+    LTEXT           "Ventilator turn off threshold",
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,65,116,9
+    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,30,14,
+                    19
+    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,80,14,
+                    19
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,33,18,14
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
+END
+
+IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT,10,26,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,46,26,11,16
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT,95,26,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,131,25,11,
+                    16
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT,10,70,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,70,11,
+                    16
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT,96,70,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,70,11,
+                    16
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT,10,113,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,113,11,
+                    16
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT,96,113,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Spin1",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,113,
+                    11,16
+    CTEXT           "MAP sensor",IDC_PD_ADCCOMPEN_MAP_CAPTION,13,12,122,11
+    LTEXT           "factor",IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT,60,28,34,12
+    LTEXT           "corr.  (V)",IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT,146,24,
+                    25,20
+    CTEXT           "Voltage",IDC_PD_ADCCOMPEN_UBAT_CAPTION,12,56,122,11
+    CTEXT           "Coolant sensor",IDC_PD_ADCCOMPEN_TEMP_CAPTION,16,100,
+                    122,11
+    LTEXT           "factor",IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT,60,72,34,12
+    LTEXT           "factor",IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT,60,116,34,12
+    LTEXT           "corr.  (V)",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT,145,
+                    69,25,19
+    LTEXT           "corr.  (V)",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT,145,
+                    111,25,18
+END
+
+IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Falling",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,46,20,79,14
+    CONTROL         "Rising",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,46,38,74,12
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,25,70,47,71,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,25,97,35,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Duration of commutator's pulse driver in teeth of wheel",
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,75,92,92,29,NOT WS_GROUP
+    CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,61,97,11,16
+    GROUPBOX        "CKP sensor signal edge",IDC_PD_CKPS_FRONT_GROUPBOX,24,6,
+                    131,51
+    LTEXT           "Num. of teeth before t.d.c.",
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,77,71,89,9,NOT 
+                    WS_GROUP
+    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,26,126,47,71,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Number of engine cylinders",
+                    IDC_PD_CKPS_ENGINE_CYL_LABEL,78,127,89,17,NOT WS_GROUP
+END
+
+IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 143
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_PROPERTY_GRID,"Static",SS_BLACKFRAME | SS_NOTIFY | 
+                    SS_SUNKEN | WS_TABSTOP,1,9,169,123
+    LTEXT           "Enter: accept change   Esc: cancel",IDC_STATIC,3,135,
+                    151,11
+END
+
+IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    COMBOBOX        IDC_PD_MISC_UART_SPEED_COMBO,33,40,70,82,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
+                    WS_TABSTOP
+    EDITTEXT        IDC_PD_MISC_PACKET_PERIOD_EDIT,35,87,46,16,
+                    ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Data transmition speed (baud)",
+                    IDC_PD_MISC_UART_SPEED_COMBO_CAPTION,31,29,115,9
+    CONTROL         "Spin1",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,85,87,11,17
+    LTEXT           "Data packets transmition period",
+                    IDC_PD_MISC_PACKET_PERIOD_CAPTION,34,73,119,9
+    LTEXT           "ms",IDC_PD_MISC_PACKET_PERIOD_UNIT,102,90,25,13
+END
+
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
@@ -673,6 +1076,44 @@ END
 //
 
 IDB_TAB_CTRL_BITMAPS    BITMAP  DISCARDABLE     "res\\tab_ctrl_bitmaps.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PD_KNOCK_PARAMETERS "Parameters"
+    IDS_PD_KNOCK_ENABLE_KC  "Enable knock control"
+    IDS_PD_KNOCK_BEGIN_KWND "Phase window begin"
+    IDS_PD_KNOCK_END_KWND   "Phase window end"
+    IDS_PD_KNOCK_BPF_UNIT   "kHz"
+    IDS_PD_KNOCK_BPF_FREQ   "BPF frequency"
+    IDS_PD_KNOCK_RETARD_STEP "Angle displacement step"
+    IDS_PD_KNOCK_ADVANCE_STEP "Angle recovery step"
+    IDS_PD_KNOCK_MAX_RETARD "Max. angle displacement"
+    IDS_PD_KNOCK_THRESHOLD  "Knock threshold"
+    IDS_PD_KNOCK_RECOVERY_DELAY "Angle recovery delay"
+    IDS_PD_KNOCK_INT_TIME_CONSTANT "Integration time constant"
+    IDS_PD_KNOCK_INT_TIME_UNIT " us"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "cycles"
+    IDS_PD_TABNAME_STARTR_PAR       "1:Start"
+    IDS_PD_TABNAME_ANGLES_PAR       "2:Angle"
+    IDS_PD_TABNAME_IDLREG_PAR       "3:Idling"
+    IDS_PD_TABNAME_FUNSET_PAR       "4:Functions"
+    IDS_PD_TABNAME_TEMPER_PAR       "5:Temperature"
+    IDS_PD_TABNAME_CARBUR_PAR       "6:Carburetor"
+    IDS_PD_TABNAME_ADCCOR_PAR       "7:ADC errors corr."
+    IDS_PD_TABNAME_CKPS_PAR         "8:CKPS"
+    IDS_PD_TABNAME_KNOCK_PAR        "9:Knock"
+    IDS_PD_TABNAME_MISCEL_PAR       "10:Misc"
+END
+
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////
 

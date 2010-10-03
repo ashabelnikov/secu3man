@@ -103,6 +103,40 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 #pragma code_page(1252)
 #endif //_WIN32
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_MAP_IMPEXP DIALOGEX 0, 0, 381, 196
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "description"
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "Static",IDC_MAP_IMPEXP_CURRENT_FWD_TITLE,20,17,139,12
+    CONTROL         "List1",IDC_MAP_IMPEXP_CURRENT_FWD_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    17,30,112,115,WS_EX_LEFTSCROLLBAR
+    PUSHBUTTON      "<>",IDC_MAP_IMPEXP_EXCHANGE_BUTTON,136,44,37,20
+    LTEXT           "Static",IDC_MAP_IMPEXP_OTHER_FWD_TITLE,183,18,176,12
+    CONTROL         "List2",IDC_MAP_IMPEXP_OTHER_FWD_LIST,"SysListView32",
+                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
+                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
+                    179,30,133,118,WS_EX_LEFTSCROLLBAR
+    CONTROL         "start",IDC_MAP_IMPEXP_STARTMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,70,163,33,15
+    CONTROL         "idle",IDC_MAP_IMPEXP_IDLEMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,117,164,34,12
+    CONTROL         "work",IDC_MAP_IMPEXP_WORKMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,164,164,44,13
+    CONTROL         "temp.corr.",IDC_MAP_IMPEXP_TEMPMAP_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,219,163,63,14
+    DEFPUSHBUTTON   "OK",IDOK,318,34,50,20
+    PUSHBUTTON      "Cancel",IDCANCEL,318,63,50,21
+END
+
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -185,6 +219,23 @@ BEGIN
 END
 
 #endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CANT_LOAD_THIS_FILE "Don't know how to load this file, sorry!"
+    IDS_MAP_NO_NAME         "<noname %d>"
+    IDS_SECU3_CURRENT_FW    "SECU-3 Current firmware"
+    IDS_MPSZ_FW_FILE        "MPSZ %s"
+    IDS_IMPORT_MPSZ_TABLES  "Import tables from MPSZ"
+    IDS_CANT_SAVE_THIS_FILE "Don't know how to save this file, sorry!"
+    IDS_EXPORT_MPSZ_TABLES  "Export tables into MPSZ"
+END
 
 #endif    // English (U.S.) resources
 /////////////////////////////////////////////////////////////////////////////

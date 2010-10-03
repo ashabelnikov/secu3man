@@ -114,8 +114,8 @@ class CAppSettingsModel : public ISettingsData
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);
   bool CheckAllowableCSVSepSymbol(char i_symbol);
-  bool CheckAllowableLanguage(const std::string& i_string, EInterLang& o_language_id);
-  bool CheckAllowablePlatform(const std::string& i_string, EECUPlatform& o_platform_id);
+  bool CheckAllowableLanguage(const _TSTRING& i_string, EInterLang& o_language_id);
+  bool CheckAllowablePlatform(const _TSTRING& i_string, EECUPlatform& o_platform_id);
 
   //директория из которой было запущено приложение
   TCHAR m_current_directory[MAX_PATH+1]; 
