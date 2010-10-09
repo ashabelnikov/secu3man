@@ -28,13 +28,12 @@
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT"/>
     <MAINSOURCE value="UOZ1.bpf"/>
-    <INCLUDEPATH value="&quot;D:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\include;$(BCB)\include\vcl"/>
-    <LIBPATH value="&quot;D:\Program Files\Borland\CBuilder5\Projects\&quot;;$(BCB)\lib\obj;$(BCB)\lib"/>
+    <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
+    <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
-    <IDLCFLAGS value="-I&quot;D:\Program Files\Borland\CBuilder5\Projects\.&quot; -I$(BCB)\include 
-      -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
+    <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
     <CFLAG1 value="-WD -O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -VF -X- -a8 -b- -k- -vi -tWD 
       -tWM -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
@@ -74,35 +73,6 @@ OriginalFilename=UOZ1
 ProductName=SECU-3 Manager
 ProductVersion=1.0.0.0
 Comments=This DLL is part of SECU-3 project
-
-[HistoryLists\hlIncludePath]
-Count=1
-Item0=D:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\include;$(BCB)\include\vcl
-
-[HistoryLists\hlLibraryPath]
-Count=1
-Item0=D:\Program Files\Borland\CBuilder5\Projects\;$(BCB)\lib\obj;$(BCB)\lib
-
-[HistoryLists\hlDebugSourcePath]
-Count=1
-Item0=$(BCB)\source\vcl
-
-[HistoryLists\hlFinalOutputDir]
-Count=4
-Item0=../../binaries\
-Item1=../../binaries
-Item2=E:\SECU-3\SECU-3 Manager\output\
-Item3=E:\SECU-3\SECU-3 Manager\output
-
-[HistoryLists\hIBPIOutputDir]
-Count=7
-Item0=D:\SECU-3 Manager\libraries\
-Item1=..\..\libraries\
-Item2=../../libraries\
-Item3=C:\temp\libraries\
-Item4=../../libraries
-Item5=E:\SECU-3\SECU-3 Manager\lib\
-Item6=E:\SECU-3\SECU-3 Manager\lib
 
 [Debugging]
 DebugSourceDirs=$(BCB)\source\vcl
