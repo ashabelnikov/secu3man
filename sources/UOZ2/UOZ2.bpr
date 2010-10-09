@@ -5,7 +5,7 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="../../binaries\UOZ2.dll"/>
     <OBJFILES value="UOZ2.obj Unit1.obj"/>
-    <RESFILES value="UOZ2.res"/>
+    <RESFILES value="UOZ2.res resource.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value="UOZ1.def"/>
@@ -63,16 +63,16 @@ Locale=1033
 CodePage=1252
 
 [Version Info Keys]
-CompanyName=STc. Shabelnikov Technology
-FileDescription=3D Chart editor for SECU-2
+CompanyName=Shabelnikov Technology
+FileDescription=3D Chart editor for SECU-3
 FileVersion=1.0.0.0
-InternalName=EEROMEDIT
-LegalCopyright=STc
-LegalTrademarks=STc
-OriginalFilename=EEPROMEDIT
-ProductName=SECU-2  EEPROM  Editor
+InternalName=Chart3D
+LegalCopyright=(C) STc
+LegalTrademarks=SECU-3
+OriginalFilename=UOZ2
+ProductName=SECU-3 Manager
 ProductVersion=1.0.0.0
-Comments=I am soldier of fortune
+Comments=This DLL is part of SECU-3 project
 
 [HistoryLists\hlIncludePath]
 Count=1

@@ -1,0 +1,26 @@
+
+#include "resource.h"
+
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+stringtable
+{
+  IDS_EDITING_MAPS, "Редактирование карт"
+  IDS_LEFT_AXIS_TITLE, "УОЗ (град.)"
+  IDS_AIR_FLOW_LABEL_TEXT, "Расход воздуха:"
+  IDS_BACK_SIDE_VIEW_CB, "вид сзади"
+}
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+stringtable
+{
+  IDS_EDITING_MAPS, "Editing maps"
+  IDS_LEFT_AXIS_TITLE, "Advance angle (degg.)"
+  IDS_AIR_FLOW_LABEL_TEXT, "Air flow:"
+  IDS_BACK_SIDE_VIEW_CB, "back view"
+}
+

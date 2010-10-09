@@ -9,13 +9,14 @@
 
 #include <vcl.h>
 #include <windows.h>
-#include "Unit1.h"
 #include <mem.h>
 #include <ExtCtrls.hpp>
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
 #include <map>
+#include "Unit1.h"
+#include "resource.h"
 #pragma hdrstop
 
 extern "C"
@@ -29,9 +30,29 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted);
  void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
+ void  __declspec(dllexport)  __cdecl Chart2DSetLanguage(int i_language);
 }
 
 std::map<HWND, TForm*> g_form_instances;
+
+enum ELanguage
+{
+  IL_ENGLISH = 0,
+  IL_RUSSIAN = 1
+};
+
+HINSTANCE hInst = NULL;
+
+namespace MLL
+{
+ AnsiString LoadString(unsigned int id)
+ {
+  char string[1024 + 1];
+  ::LoadString(hInst, id, string, 1024);
+  return AnsiString(string);
+ }
+}
+
 
 //---------------------------------------------------------------------------
 bool RemoveInstanceByHWND(HWND hWnd)
@@ -69,6 +90,7 @@ TForm* GetInstanceByHWND(HWND hWnd)
 #pragma argsused
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 {
+ hInst = hinstDLL;
  return 1;
 }
 
@@ -85,6 +107,9 @@ HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,fl
  pForm1->modified_function   = modified_function;
  pForm1->aai_min    = aai_min;
  pForm1->aai_max    = aai_max;
+
+ pForm1->Caption = MLL::LoadString(IDS_EDITING_MAPS);
+
  //сохраняем значения сетки по горизонтальной оси
  memcpy(pForm1->horizontal_axis_grid_values,x_axis_grid_values,sizeof(int)*count_of_points);
  pForm1->DataPrepare();
@@ -198,6 +223,7 @@ void __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted)
  }
 }
 
+//---------------------------------------------------------------------------
 void __cdecl Chart2DShow(HWND hWnd, int i_show)
 {
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
@@ -209,6 +235,20 @@ void __cdecl Chart2DShow(HWND hWnd, int i_show)
    pForm1->Hide();
  else
    MessageBox(hWnd, _T("Chart2DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetLanguage(int i_language)
+{
+ switch(i_language)
+ {
+  case IL_ENGLISH:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
+  case IL_RUSSIAN:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
+ }
 }
 
 //---------------------------------------------------------------------------

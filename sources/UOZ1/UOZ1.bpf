@@ -2,6 +2,7 @@ USEUNIT("UOZ1.cpp");
 USEFORM("Unit1.cpp", Form1);
 USEDEF("UOZ1.def");
 USERES("UOZ1.res");
+USERC("resource.rc");
 //---------------------------------------------------------------------------
 This file is used by the project manager only and should be treated like the project file
 

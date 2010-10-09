@@ -22,12 +22,14 @@ namespace DLL
  UOZ1_Chart2DSetOnGetAxisLabel_Addr UOZ1_Chart2DSetOnGetAxisLabel = NULL;
  UOZ1_Chart2DInverseAxis_Addr   UOZ1_Chart2DInverseAxis = NULL;
  UOZ1_Chart2DShow_Addr          UOZ1_Chart2DShow = NULL;
+ UOZ1_Chart2DSetLanguage_Addr   UOZ1_Chart2DSetLanguage = NULL;
 
  UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate = NULL;
  UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate = NULL;
  UOZ2_Chart3DSetOnChange_Addr   UOZ2_Chart3DSetOnChange = NULL;
  UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose = NULL;
  UOZ2_Chart3DShow_Addr          UOZ2_Chart3DShow = NULL;
+ UOZ2_Chart3DSetLanguage_Addr   UOZ2_Chart3DSetLanguage = NULL;
 	
  //---------------------------------------------------------
 
@@ -51,6 +53,7 @@ namespace DLL
    UOZ1_Chart2DSetOnGetAxisLabel = NULL;
    UOZ1_Chart2DInverseAxis = NULL;
    UOZ1_Chart2DShow = NULL;
+   UOZ1_Chart2DSetLanguage = NULL;
    status = false;
   }
   else
@@ -146,6 +149,16 @@ namespace DLL
    else
     UOZ1_Chart2DShow = (UOZ1_Chart2DShow_Addr)addr;
    //--------------------------------------------------------------------------
+   addr = GetProcAddress(hModule,"Chart2DSetLanguage");
+   if (addr==NULL)
+   {
+    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);
+    UOZ1_Chart2DSetLanguage = NULL;
+    status = false;
+   }
+   else
+    UOZ1_Chart2DSetLanguage = (UOZ1_Chart2DSetLanguage_Addr)addr;
+   //--------------------------------------------------------------------------
   }
 
   hModule = LoadLibrary(_T("UOZ2.dll"));
@@ -157,7 +170,8 @@ namespace DLL
    UOZ2_Chart3DSetOnChange = NULL;
    UOZ2_Chart3DSetOnClose = NULL;
    UOZ2_Chart3DShow = NULL;
-   status = false;
+   UOZ2_Chart3DSetLanguage = NULL;
+  status = false;
   }
   else
   {
@@ -212,6 +226,16 @@ namespace DLL
    }
    else
     UOZ2_Chart3DShow = (UOZ2_Chart3DShow_Addr)addr;
+   //--------------------------------------------------------------------------
+   addr = GetProcAddress(hModule,"Chart3DSetLanguage");
+   if (addr==NULL)
+   {
+    AfxMessageBox(_T("Error: GetProcAddress"),MB_OK|MB_ICONSTOP);
+    UOZ2_Chart3DSetLanguage = NULL;
+    status = false;
+   }
+   else
+    UOZ2_Chart3DSetLanguage = (UOZ2_Chart3DSetLanguage_Addr)addr;
    //--------------------------------------------------------------------------
   }
 

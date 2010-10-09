@@ -81,6 +81,7 @@ BOOL CSecu3manApp::InitInstance()
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
  
+ //Локализация
  switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
  {
   case IL_ENGLISH:
@@ -88,8 +89,12 @@ BOOL CSecu3manApp::InitInstance()
    break;
   case IL_RUSSIAN:
    ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break;
+   break; 
  }
+ if (DLL::UOZ1_Chart2DSetLanguage)
+  DLL::UOZ1_Chart2DSetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
+ if (DLL::UOZ2_Chart3DSetLanguage)
+  DLL::UOZ2_Chart3DSetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
 
 
  //Создаем главное окно. Оно должно быть создано прежде чем будет произведена

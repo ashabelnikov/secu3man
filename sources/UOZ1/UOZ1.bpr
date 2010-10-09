@@ -5,7 +5,7 @@
     <VERSION value="BCB.05.03"/>
     <PROJECT value="../../binaries\UOZ1.dll"/>
     <OBJFILES value="UOZ1.obj Unit1.obj"/>
-    <RESFILES value="UOZ1.res"/>
+    <RESFILES value="UOZ1.res resource.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
     <DEFFILE value="UOZ1.def"/>
@@ -65,15 +65,15 @@ CodePage=1252
 
 [Version Info Keys]
 CompanyName=Shabelnikov Technology
-FileDescription=SECU-2 2D Chart editor 
+FileDescription=SECU-3 2D Chart editor 
 FileVersion=1.0.0.0
-InternalName=EEPROMEDITOR
+InternalName=Chart2D
 LegalCopyright=(C) STc
-LegalTrademarks=EEPROMEDITOR
-OriginalFilename=EEPROMEDITOR
-ProductName=SECU-2 EEPROM Editor
+LegalTrademarks=SECU-3
+OriginalFilename=UOZ1
+ProductName=SECU-3 Manager
 ProductVersion=1.0.0.0
-Comments=I am  soldier of fortune
+Comments=This DLL is part of SECU-3 project
 
 [HistoryLists\hlIncludePath]
 Count=1

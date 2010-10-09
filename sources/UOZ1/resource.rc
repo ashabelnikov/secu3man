@@ -1,0 +1,22 @@
+
+#include "resource.h"
+
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+stringtable
+{
+  IDS_EDITING_MAPS, "Редактирование карт"
+
+}
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+stringtable
+{
+  IDS_EDITING_MAPS, "Editing maps"
+
+}
+

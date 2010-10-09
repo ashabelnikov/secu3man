@@ -9,3 +9,4 @@ EXPORTS
     Chart2DSetOnGetAxisLabel = _Chart2DSetOnGetAxisLabel
     Chart2DInverseAxis      = _Chart2DInverseAxis
     Chart2DShow             = _Chart2DShow
+    Chart2DSetLanguage      = _Chart2DSetLanguage
