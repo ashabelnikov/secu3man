@@ -1,6 +1,5 @@
-//Based on code of author Mark C. Malburg.  
-//http://www.codeproject.com/KB/miscctrl/oscope.aspx
-//Some modifications by A. Shabelnikov:
+//Original code written by Mark C. Malburg
+//Some modifications by Alexey A. Shabelnikov:
 //  - Additional check added to avoid overflow range error in log10().
 //  - Control adapted to work in bidirectional mode
 //  - Code clean up

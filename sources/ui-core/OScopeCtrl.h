@@ -1,5 +1,5 @@
-//Author Mark C. Malburg.  
-//http://www.codeproject.com/KB/miscctrl/oscope.aspx
+//Original code written by Mark C. Malburg
+//Midified by Alexey A. Shabelnikov
 
 // OScopeCtrl.h : header file
 // 
