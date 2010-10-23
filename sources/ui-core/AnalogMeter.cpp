@@ -1,6 +1,7 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Original code written by Mark C. Malburg
+ *  Improved by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
