@@ -1,10 +1,23 @@
-/****************************************************************
- *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2005. 
- *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
- *  Microprocessors systems - design & programming.
- *
- *****************************************************************/
+/* Intel Hex to binary convertor
+   Copyright (C) 2005 Alexey A. Shabelnikov. Ukraine, Gorlovka
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+          ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
+          Microprocessors systems - design & programming.
+*/
 
 #include "stdafx.h"
 #include "readhex.h"
@@ -15,29 +28,30 @@
  if ((hexbyte > 64)&&(hexbyte < 71))\
   hexbyte-=55;
 
-#define RECTP_DATA 0x00 //data record
-#define RECTP_EOF  0x01 //End Of file record
-#define RECTP_ESA  0x02 //Extended Segment Address record
+#define RECTP_DATA 0x00                       //data record
+#define RECTP_EOF  0x01                       //End Of file record
+#define RECTP_ESA  0x02                       //Extended Segment Address record
 
-#define MAXIMUM_ADDRESS 0xFFFF
-
-EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size)
+EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size)
 {
- UCHAR  state = 0;
- UINT   d_ptr = 0;   //pointer to output buffer
- UCHAR  symbol;
- WORD   chksum;      //accumulates calculated check sum
- UCHAR  datasize;
- UCHAR  datacount;
- WORD   raddr;
- UCHAR  rectp;       //type of record (follows data bytes)
- UCHAR  lastb;
- WORD   maxaddr = 0; //maximum appeared address
- UCHAR  chkbyte;     //byte with check sum at the end of record
- UINT   written = 0; //number of bytes written into the output buffer
- int errflag = RH_SUCCESS;
+ UCHAR  state = 0;                            //for state machine
+ UINT   d_ptr = 0;                            //output buffer's iterator
+ UCHAR  symbol;                               //current symbol
+ WORD   chksum;                               //accumulates calculated check sum
+ UCHAR  datasize;                             //counter for record's data
+ UCHAR  datacount;                            //stores count of bytes in record
+ WORD   raddr;                                //stores read address field
+ UCHAR  rectp;                                //type of record (follows data bytes)
+ UCHAR  lastb;                                //stores previous HEX symbol
+ UINT   maxaddr = 0;                          //maximum appeared address
+ UCHAR  chkbyte;                              //byte with check sum at the end of record
+ UINT   written = 0;                          //number of bytes written into the output buffer
+ int errflag = RH_SUCCESS;                    //there are no errors at start
 
- memset(op_buff, 0xFF, MAXIMUM_ADDRESS + 1); //забиваем буфер значениями 0xFF
+ UINT esa = 0;                                //segment address
+ bool esa_read = false;
+
+ memset(op_buff, 0xFF, i_max_size);           //fill buffer with 0xFF values
 
  for(size_t i = 0; i < i_size; i++)
  {
@@ -45,21 +59,23 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
   //--------------------------------------------------------------------------
   switch(state)
   {
-   case 0:   
+   //check start code
+   case 0:
     if (symbol == ':')
     {
-     chksum = 0x0000;  
+     chksum = 0x0000;
      state = 1;
-    }    
+    }
+    esa_read = false;                         //ESA address is not initialized (esa variable)
     break;
 
+   //read count
    case 1:
     HEXTONUM(symbol);
-    symbol = symbol << 4; 
+    symbol = symbol << 4;
     datasize = symbol;
     state = 2;
     break;
-
    case 2:
     HEXTONUM(symbol);
     symbol = symbol & 15;
@@ -69,140 +85,141 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     state = 3;
     break;
 
+   //read address
    case 3:
     HEXTONUM(symbol);
     symbol = symbol << 4;
-    *((UCHAR*)(&raddr)+1)  = symbol;
+    raddr = ((WORD)symbol) << 8;
     state = 4;
     break;
-
    case 4:
     HEXTONUM(symbol);
-    symbol = symbol & 15;
-    (*((UCHAR*)(&raddr)+1))|=symbol;
-    chksum+=(*((UCHAR*)(&raddr)+1));
+    symbol = symbol & 0x0F;
+    raddr|= (((WORD)symbol) << 8);
+    chksum+= raddr >> 8;
     state = 5;
     break;
-
-   case 5: 
+   case 5:
     HEXTONUM(symbol);
-    symbol = symbol << 4;
-    (*((UCHAR*)(&raddr))) = symbol;
+    raddr|= symbol << 4;
     state = 6;
     break;
-
    case 6:
     HEXTONUM(symbol);
-    symbol = symbol & 15;
-    (*((UCHAR*)(&raddr)))|= symbol;
-    chksum+=(*((UCHAR*)(&raddr)));
-    d_ptr = raddr;         //overwrite address
+    raddr|= symbol & 0x0F;
+    chksum+= raddr & 0xFF;
+    d_ptr = ((UINT)raddr) + ((esa << 4) & 0xFFFF0); //overwrite address
     state = 7;
     break;
 
+   //read record type
    case 7:
     HEXTONUM(symbol);
-    symbol = symbol << 4;
-    rectp = symbol;
+    rectp = symbol << 4;
     state = 8;
     break;
-
    case 8:
     HEXTONUM(symbol);
-    symbol = symbol & 15;
-    rectp|=symbol;
+    rectp|=symbol & 0x0F;
     chksum+=rectp;
-
     if ((rectp != RECTP_DATA) && (rectp != RECTP_EOF) && (rectp != RECTP_ESA))
-      errflag|=RH_UNSUPPORTED_RECORD; //unsupported type of record encountered
-
+      errflag|=RH_UNSUPPORTED_RECORD;         //unsupported type of record encountered
     state = 9;
     break;
 
+   //read data
    case 9:
     if (datacount == 0)
     {
      state = 11;
-     i--;		  
+     --i;
     }
     else
     {
      lastb = symbol;
-     datacount--;
+     --datacount;
      state = 10;
     }
-    break; 
+    break;
 
    case 10:
-    HEXTONUM(symbol);//l 
-    HEXTONUM(lastb); //h
-    lastb = lastb << 4;
-    symbol = symbol & 15;
-    symbol = lastb | symbol;
+    HEXTONUM(symbol);//lo 
+    HEXTONUM(lastb); //hi
+    symbol = (lastb << 4) | (symbol & 0x0F);
 
-    if (rectp != RECTP_ESA)          //skip ESA records
+    if (rectp != RECTP_ESA)                   //skip ESA records
     {
-     if (d_ptr <= MAXIMUM_ADDRESS)
+     //check for address restriction
+     if (d_ptr < i_max_size)
      {
-      op_buff[d_ptr] = symbol;       //output
+      op_buff[d_ptr] = symbol;                //output
       ++written;
      }
      else
      {
-      errflag|=RH_ADDRESS_EXCEDED;   //exceded maximum allowed address
+      errflag|=RH_ADDRESS_EXCEDED;            //exceded maximum allowed address
       return (EReadHexStatus)errflag;
      }
 
-     if(datacount==0)                //if last byte of data written into the output buffer
+     if(datacount==0)                         //if last byte of data written into the output buffer
      {
-      if(d_ptr > maxaddr)            //find maximum appeared addres
-      {
+      if(d_ptr > maxaddr)                     //find maximum appeared addres
        maxaddr = d_ptr;
-      }
      }
-
     }
+    else
+    {                                         //save segment address
+     if (false==esa_read)
+     {
+       esa = (symbol << 8);
+       esa_read = true;
+     }
+     else
+     {
+       esa = (esa & 0xFF00) | symbol;
+
+       //The least significant hex digit of the segment address is always 0
+       if (symbol & 0x0F)
+        errflag|=RH_UNEXPECTED_SYMBOL;
+     }
+    }
+
     chksum+=symbol;
     ++d_ptr;
     state = 9;
     break;
 
+   //------read and compare check sum
    case 11:
     HEXTONUM(symbol);
-    symbol = symbol << 4;
-    chkbyte = symbol;
+    chkbyte = symbol << 4;
     state = 12;
     break;
-
    case 12:
     HEXTONUM(symbol);
-    symbol = symbol & 15;
-    chkbyte|=symbol;
-    symbol = (UCHAR)chksum;
-    symbol = (~symbol)+1;
-    if (chkbyte!=symbol) //check sum is not correct
-    { 
-     errflag|=RH_INCORRECT_CHKSUM;   
-    }
+    chkbyte|=symbol & 0xFF;
+    symbol = (~((UCHAR)chksum)) + 1;
+    if (chkbyte!=symbol)                      //check sum is not correct
+     errflag|=RH_INCORRECT_CHKSUM;
     state = 13;
     break;
 
+   //------read and check CR LF
    case 13:
     if (symbol!=0x0D)
      errflag|=RH_UNEXPECTED_SYMBOL;
     state = 14;
     break;
-
    case 14:
     if (symbol!=0x0A)
      errflag|=RH_UNEXPECTED_SYMBOL;
-    state = 0; 
+    state = 0;
     break;
-  }//switch     
+  }//switch
   //--------------------------------------------------------------------------
  }//for
 
- o_size = (0 == written) ? 0 : maxaddr + 1;   //сохраняем размер данных
+ o_size = (0 == written) ? 0 : maxaddr + 1;   //Save size of data
 
- return (EReadHexStatus)errflag;  // 0 - если нет ошибок
+ return (EReadHexStatus)errflag;  // return RH_SUCCESS - if there are no errors
 }

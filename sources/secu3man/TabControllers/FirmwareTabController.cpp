@@ -677,7 +677,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
   if (open.GetFileExt()==_T("hex") || open.GetFileExt()==_T("a90"))
   {
    ULONGLONG ulonglong_size = f.GetLength();
-   if (ulonglong_size > 262144)
+   if (ulonglong_size > 524288)
    {      
     AfxMessageBox(MLL::LoadString(IDS_FW_FILE_IS_TOO_BIG));
     f.Close();
@@ -688,7 +688,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
    BYTE* p_hex_buff = new BYTE[hex_file_length]; 
    f.Read(p_hex_buff, hex_file_length);
    size_t bin_size = 0;
-   EReadHexStatus status = HexUtils_ConvertHexToBin(p_hex_buff,hex_file_length,p_data,bin_size);
+   EReadHexStatus status = HexUtils_ConvertHexToBin(p_hex_buff,hex_file_length,p_data,bin_size, size);
    delete p_hex_buff;
 
    switch(status)
@@ -704,8 +704,20 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
 	 f.Close();
      return false; //ошибка		 
 
+    case RH_ADDRESS_EXCEDED:
+     break;
+
     case RH_SUCCESS:
      break;
+   }
+
+   if ((bin_size != size) || (status == RH_ADDRESS_EXCEDED))
+   {
+    CString string;
+    string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
+    AfxMessageBox(string);
+    f.Close();
+    return false; //ошибка   
    }
   }
   else //если у файла расширение bin или нет расширения или оно другое, то по умолчанию bin 
@@ -713,10 +725,10 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
    if (f.GetLength() != size)
    {
     CString string;
-	string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
-	AfxMessageBox(string);
-	f.Close();
-	return false; //ошибка
+    string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
+    AfxMessageBox(string);
+    f.Close();
+    return false; //ошибка
    }
    f.Read(p_data,size);
   }
