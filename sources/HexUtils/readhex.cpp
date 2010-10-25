@@ -31,6 +31,7 @@
 #define RECTP_DATA 0x00                       //data record
 #define RECTP_EOF  0x01                       //End Of file record
 #define RECTP_ESA  0x02                       //Extended Segment Address record
+#define RECTP_SSA  0x03                       //Start Segment Address record 
 
 EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size)
 {
@@ -122,7 +123,7 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     HEXTONUM(symbol);
     rectp|=symbol & 0x0F;
     chksum+=rectp;
-    if ((rectp != RECTP_DATA) && (rectp != RECTP_EOF) && (rectp != RECTP_ESA))
+    if ((rectp != RECTP_DATA) && (rectp != RECTP_EOF) && (rectp != RECTP_ESA) && (rectp != RECTP_SSA))
       errflag|=RH_UNSUPPORTED_RECORD;         //unsupported type of record encountered
     state = 9;
     break;
@@ -147,43 +148,45 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     HEXTONUM(lastb); //hi
     symbol = (lastb << 4) | (symbol & 0x0F);
 
-    if (rectp != RECTP_ESA)                   //skip ESA records
+    if (rectp != RECTP_SSA)                    //skip SSA records
     {
-     //check for address restriction
-     if (d_ptr < i_max_size)
+     if (rectp != RECTP_ESA)                   //skip ESA records
      {
-      op_buff[d_ptr] = symbol;                //output
-      ++written;
+      //check for address restriction
+      if (d_ptr < i_max_size)
+      {
+       op_buff[d_ptr] = symbol;                //output
+       ++written;
+      }
+      else
+      {
+       errflag|=RH_ADDRESS_EXCEDED;            //exceded maximum allowed address
+       return (EReadHexStatus)errflag;
+      }
+
+      if(datacount==0)                         //if last byte of data written into the output buffer
+      {
+       if(d_ptr > maxaddr)                     //find maximum appeared addres
+       maxaddr = d_ptr;
+      }
      }
      else
-     {
-      errflag|=RH_ADDRESS_EXCEDED;            //exceded maximum allowed address
-      return (EReadHexStatus)errflag;
-     }
-
-     if(datacount==0)                         //if last byte of data written into the output buffer
-     {
-      if(d_ptr > maxaddr)                     //find maximum appeared addres
-       maxaddr = d_ptr;
-     }
-    }
-    else
-    {                                         //save segment address
-     if (false==esa_read)
-     {
+     {                                         //save segment address
+      if (false==esa_read)
+      {
        esa = (symbol << 8);
        esa_read = true;
-     }
-     else
-     {
+      }
+      else
+      {
        esa = (esa & 0xFF00) | symbol;
 
        //The least significant hex digit of the segment address is always 0
        if (symbol & 0x0F)
         errflag|=RH_UNEXPECTED_SYMBOL;
+      }
      }
     }
-
     chksum+=symbol;
     ++d_ptr;
     state = 9;
