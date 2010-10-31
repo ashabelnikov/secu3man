@@ -669,9 +669,9 @@ BEGIN
                     14,74,9
     LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,30,
                     106,90,10
-    LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
-    LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
-    LTEXT           "degg.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
+    LTEXT           "degr.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
+    LTEXT           "degr.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
+    LTEXT           "degr.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
     CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
                     16
@@ -682,9 +682,9 @@ BEGIN
                     9
     LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,
                     9
-    LTEXT           "degg./ cycl.",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,
+    LTEXT           "degr./ cycl.",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,
                     22,16
-    LTEXT           "degg./ cycl.",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,
+    LTEXT           "degr./ cycl.",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,
                     21,16
     GROUPBOX        "Limitation of angle change speed",
                     IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
