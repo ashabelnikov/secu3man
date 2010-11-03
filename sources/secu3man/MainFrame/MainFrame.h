@@ -96,7 +96,6 @@ private:
   EventHandler1 m_OnActivate; 
  
   CChildView*  m_pwndView;
-  const CSize m_wnd_initial_size;
   BOOL m_bDoIdle;
 };
 

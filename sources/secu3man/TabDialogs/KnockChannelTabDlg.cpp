@@ -98,9 +98,13 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ CRect rect;
+ GetDlgItem(IDC_KNOCK_CHANNEL_PARAMETERS_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
  //создаем диалог с параметрами ДД
  mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD,this);
- mp_knock_parameters_dlg->SetWindowPos(NULL,30,110,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_parameters_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID,250,NULL);

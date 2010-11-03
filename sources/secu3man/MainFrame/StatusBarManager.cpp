@@ -21,9 +21,10 @@
 
 #include "stdafx.h"
 #include "Resources\resource.h"
+#include "common\DPIAware.h"
 #include "StatusBarManager.h"
-#include "ui-core/MPCLogoPane.h"
-#include "ui-core/MPCStatusBar.h"
+#include "ui-core\MPCLogoPane.h"
+#include "ui-core\MPCStatusBar.h"
 
 static UINT indicators[] =
 {
@@ -86,6 +87,7 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
 void CStatusBarManager::AddContent(void)
 {
  int idx = 0;
+ DPIAware dpia;
 
  //логотип SECU-3
  mp_wndStatusBar->AddIndicator(0,ID_MSB_INDICATOR_LOGO);
@@ -106,7 +108,7 @@ void CStatusBarManager::AddContent(void)
  //прогресс бар
  mp_wndStatusBar->AddIndicator(2,ID_MSB_INDICATOR_PROGRESS);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_PROGRESS);
- mp_wndStatusBar->SetPaneWidth(idx,80);
+ mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(80));
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
  CProgressCtrl* progress = new CProgressCtrl;
  progress->Create(WS_CHILD,CRect(0,0,0,0),mp_wndStatusBar.get(),ID_MSB_INDICATOR_PROGRESS);  
@@ -115,7 +117,7 @@ void CStatusBarManager::AddContent(void)
  //проценты
  mp_wndStatusBar->AddIndicator(3,ID_MSB_INDICATOR_PERCENT);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_PERCENT);
- mp_wndStatusBar->SetPaneWidth(idx,30);
+ mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(30));
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
 
  //иконка коннекта
@@ -127,7 +129,7 @@ void CStatusBarManager::AddContent(void)
  //текст коннекта
  mp_wndStatusBar->AddIndicator(5,ID_MSB_INDICATOR_CONNTXT);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_CONNTXT);
- mp_wndStatusBar->SetPaneWidth(idx,80);
+ mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(80));
  mp_wndStatusBar->SetPaneStyle(idx, SBPS_NORMAL);
 
  //немного пустого пространства

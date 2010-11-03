@@ -61,6 +61,10 @@ BEGIN
                     WS_TABSTOP,234,199,157,10
     LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
                     IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
+    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,0,0,147,156
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
@@ -105,6 +109,8 @@ BEGIN
     CTEXT           "Дополнительная информация о прошивке:",
                     IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
+                    262,10,164,176
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -183,23 +189,25 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,
+    PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,12,48,
                     19
     PUSHBUTTON      "Копировать в таблицу аттенюатора",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,16,86,23,
+                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
     PUSHBUTTON      "Очистить функцию",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,
-                    45,86,23,BS_MULTILINE
+                    41,86,23,BS_MULTILINE
     CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
     CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,
                     255,7,183,10
     CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
+    CONTROL         "",IDC_KNOCK_CHANNEL_PARAMETERS_FRAME,"Static",
+                    SS_BLACKFRAME,13,65,161,115
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
@@ -209,6 +217,10 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME,2,158,153,54
+    CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,4,0,145,138
 END
 
 IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 163, 155
@@ -512,6 +524,10 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,234,199,157,10
     LTEXT           "NOTE: SECU-3 automatically saves parameters after some time after stop editing ",
                     IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
+    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,0,0,147,156
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
@@ -557,6 +573,8 @@ BEGIN
     CTEXT           "Additional information about firmware:",
                     IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
+                    262,10,164,176
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -632,30 +650,36 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Save",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,16,48,19
+    PUSHBUTTON      "Save",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,12,48,19
     PUSHBUTTON      "Copy into attenuator table",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,16,86,23,
+                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
-    PUSHBUTTON      "Clear function",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,45,
+    PUSHBUTTON      "Clear function",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,41,
                     86,23,BS_MULTILINE
     CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
     CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,183,10
     CTEXT           "Signal from knock sensor:",IDC_STATIC,285,129,127,10
+    CONTROL         "",IDC_KNOCK_CHANNEL_PARAMETERS_FRAME,"Static",
+                    SS_BLACKFRAME,13,65,152,110
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME,2,158,153,54
+    CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,4,0,145,138
 END
 
 IDD_LOG_PLAYER_CONTROL_PANEL DIALOGEX 0, 0, 163, 155

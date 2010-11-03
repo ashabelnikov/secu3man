@@ -335,9 +335,13 @@ END_MESSAGE_MAP()
 BOOL CFirmwareTabDlg::OnInitDialog() 
 {
  Super::OnInitDialog();
+
+ CRect rect;
+ GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
 	
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
- mp_ParamDeskDlg->SetPosition(390,10);	
+ mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);	
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);

@@ -71,15 +71,22 @@ BOOL CParamMonTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 	
+ CRect rect;
+ GetDlgItem(IDC_PM_MIDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
  mp_RSDeskDlg->Create(CRSDeskDlg::IDD, this);
- mp_RSDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
+ mp_RSDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
  mp_RSDeskDlg->Show(true);
 
+ GetDlgItem(IDC_PM_PARAMDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
  mp_ParamDeskDlg->Show(true);

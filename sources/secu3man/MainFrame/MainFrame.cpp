@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resources\resource.h"
 #include "MainFrame.h"
+#include "common\DPIAware.h"
 
 #include <limits>
 #include <vector>
@@ -60,8 +61,7 @@ END_MESSAGE_MAP()
 // CMainFrame construction/destruction
 
 CMainFrame::CMainFrame()
-: m_wnd_initial_size(725,450)
-, m_pwndView(NULL)
+: m_pwndView(NULL)
 , m_bDoIdle(TRUE)
 {
  //na	
@@ -120,8 +120,9 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
  }
 
  //устанавливаем необходимый размер главного окна
- cs.cx = m_wnd_initial_size.cx;
- cs.cy = m_wnd_initial_size.cy;
+ DPIAware dpia;
+ cs.cx = dpia.ScaleX(730);
+ cs.cy = dpia.ScaleY(455);
 
  cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
  cs.dwExStyle &= ~WS_EX_CLIENTEDGE;

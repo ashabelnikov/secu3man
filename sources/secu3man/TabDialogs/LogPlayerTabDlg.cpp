@@ -66,13 +66,19 @@ LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
 BOOL CLogPlayerTabDlg::OnInitDialog() 
 {
  Super::OnInitDialog();
+
+ CRect rect;
+ GetDlgItem(IDC_LP_MIDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
 	
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->SetWindowPos(NULL,280,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
+ GetDlgItem(IDC_LP_LOGCONTROL_PANEL_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
  mp_LPPanelDlg->Create(CLPControlPanelDlg::IDD, this);
- mp_LPPanelDlg->SetWindowPos(NULL,0,0,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_LPPanelDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
 
  //инициализируем осциллограф
  _InitializeOscilloscopeControl();
