@@ -335,6 +335,10 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_MSB_INDICATOR_LOGWR  "log wr"
+    IDS_ECUERROR_KNOCK_DETECTED "Обнаруживалась детонация"
+    IDS_ECUERROR_MAP_SENSOR_FAIL "Поломка или неправильная работа ДАД"
+    IDS_ECUERROR_TEMP_SENSOR_FAIL "Поломка или неправильная работа ДТОЖ"
+    IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -877,6 +881,11 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_MSB_INDICATOR_LOGWR  "log wr"
+    IDS_ECUERROR_KNOCK_DETECTED "Detonation detected"
+    IDS_ECUERROR_MAP_SENSOR_FAIL "Breakage or wrong work of MAP sensor"
+    IDS_ECUERROR_TEMP_SENSOR_FAIL 
+                            "Breakage or wrong work of coolant temperature sensor"
+    IDS_ECUERROR_VOLT_SENSOR_FAIL "Abnormal board voltage"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -68,6 +68,10 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_PARAM_BROKEN, MLL::GetString(IDS_ECUERROR_EEPROM_PARAM_BROKEN)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_PROGRAM_CODE_BROKEN, MLL::GetString(IDS_ECUERROR_PROGRAM_CODE_BROKEN)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, MLL::GetString(IDS_ECUERROR_KSP_CHIP_FAILED)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KNOCK_DETECTED, MLL::GetString(IDS_ECUERROR_KNOCK_DETECTED)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_MAP_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_MAP_SENSOR_FAIL)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TEMP_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_TEMP_SENSOR_FAIL)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_VOLT_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_VOLT_SENSOR_FAIL)));
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()
