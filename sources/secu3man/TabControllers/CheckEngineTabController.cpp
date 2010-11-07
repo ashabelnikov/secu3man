@@ -64,14 +64,15 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_view->setOnListClearAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListClearAllErrors)); 
  //наполняем карту которая будет содержать ошибки отображаемые в списке. Номер бита закодированной ошибки
  //одновременно выступает ключом в этой карте и ID-шкой для идентификации элементов списка.
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_CKPS_MALFUNCTION, MLL::GetString(IDS_ECUERROR_CKPS_MALFUNCTION)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_PARAM_BROKEN, MLL::GetString(IDS_ECUERROR_EEPROM_PARAM_BROKEN)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_PROGRAM_CODE_BROKEN, MLL::GetString(IDS_ECUERROR_PROGRAM_CODE_BROKEN)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, MLL::GetString(IDS_ECUERROR_KSP_CHIP_FAILED)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KNOCK_DETECTED, MLL::GetString(IDS_ECUERROR_KNOCK_DETECTED)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_MAP_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_MAP_SENSOR_FAIL)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TEMP_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_TEMP_SENSOR_FAIL)));
- m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_VOLT_SENSOR_FAIL, MLL::GetString(IDS_ECUERROR_VOLT_SENSOR_FAIL)));
+ DWORD v = 0;
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_CKPS_MALFUNCTION, std::make_pair(MLL::GetString(IDS_ECUERROR_CKPS_MALFUNCTION), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_EEPROM_PARAM_BROKEN, std::make_pair(MLL::GetString(IDS_ECUERROR_EEPROM_PARAM_BROKEN), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_PROGRAM_CODE_BROKEN, std::make_pair(MLL::GetString(IDS_ECUERROR_PROGRAM_CODE_BROKEN), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KSP_CHIP_FAILED, std::make_pair(MLL::GetString(IDS_ECUERROR_KSP_CHIP_FAILED), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_KNOCK_DETECTED, std::make_pair(MLL::GetString(IDS_ECUERROR_KNOCK_DETECTED), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_MAP_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_MAP_SENSOR_FAIL), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TEMP_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_TEMP_SENSOR_FAIL), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_VOLT_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_VOLT_SENSOR_FAIL), v)));
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()
@@ -92,7 +93,7 @@ void CCheckEngineTabController::OnActivate(void)
  //заполняем список кодами ошибок
  ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
  for(; it != m_errors_ids.end(); ++it)
-  m_view->AppendErrorsList((*it).first, (*it).second, false);
+  m_view->AppendErrorsList((*it).first, (*it).second.first, false);
 
  m_view->EnableRWButtons(true);
 
@@ -246,12 +247,25 @@ void CCheckEngineTabController::OnListClearAllErrors(void)
 //Перекачивает битики кодов ошибок из структуры данных в чек боксы списка
 void CCheckEngineTabController::_SetErrorsToList(const CEErrors* ip_errors)
 {
- ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::iterator it = m_errors_ids.begin(); 
  for(; it != m_errors_ids.end(); ++it)
  {
   DWORD bit = 1 << ((*it).first);   
   bool state = ((bit & ip_errors->flags)!=0) ? true : false;
-  m_view->SetErrorState((*it).first, state); 
+
+  if (m_view->GetInertShow() && m_real_time_errors_mode)
+  {
+   DWORD current = ::GetTickCount();
+   if (state)
+    (*it).second.second = current; 
+
+   if ((current - (*it).second.second) < 500 )
+    m_view->SetErrorState((*it).first, 1); 
+   else
+    m_view->SetErrorState((*it).first, 0); 
+  }
+  else
+    m_view->SetErrorState((*it).first, state); 
  }
 }
 

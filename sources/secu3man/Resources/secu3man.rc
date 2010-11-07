@@ -182,6 +182,9 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
     LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
+    CONTROL         "Показывать ошибки с инертностью",
+                    IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,250,18,138,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -647,6 +650,9 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
     LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
+    CONTROL         "Show errors with inertness",
+                    IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,250,18,138,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218

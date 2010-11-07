@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resources\resource.h"
 #include "CheckEngineTabDlg.h"
+#include "common\DPIAware.h"
 #include "common\unicodesupport.h"
 #include "ui-core\HeaderCtrlEx.h"
 
@@ -54,6 +55,7 @@ void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CHECK_ENGINE_QUICK_HELP, m_quick_help_text);
  DDX_Control(pDX, IDC_CHECK_ENGINE_ERRORS_LIST, m_errors_list);
  DDX_Control(pDX, IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, m_realtime_checkbox);
+ DDX_Control(pDX, IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX, m_show_with_inertness);
  DDX_Control(pDX, IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, m_read_saved_button);
  DDX_Control(pDX, IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, m_write_saved_button);
  DDX_Control(pDX, IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, m_list_set_all_button);
@@ -77,6 +79,7 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_QUICK_HELP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_ERRORS_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX, OnUpdateInertnessCheckbox)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnUpdateRWButtons)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
  ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnUpdateControls)
@@ -98,7 +101,8 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  //устанавливаем картинки состояния для чекбоксов...
  m_errors_list.SetImageList(&m_image_list, LVSIL_STATE);
 
- m_errors_list.InsertColumn(0,MLL::LoadString(IDS_CEPAGE_ERROR_STATE),LVCFMT_LEFT,70);
+ DPIAware dpia;
+ m_errors_list.InsertColumn(0,MLL::LoadString(IDS_CEPAGE_ERROR_STATE),LVCFMT_LEFT,dpia.ScaleX(70));
  m_errors_list.InsertColumn(1,MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION),LVCFMT_LEFT,450);
 
  SetTimer(TIMER_ID,250,NULL);
@@ -170,6 +174,15 @@ bool CCheckEngineTabDlg::GetErrorState(size_t i_id) const
  return m_errors_list.GetCheck((*it).second); 
 }
 
+void CCheckEngineTabDlg::SetInertShow(bool i_inert)
+{
+ m_show_with_inertness.SetCheck(i_inert ? BST_CHECKED : BST_UNCHECKED);
+}
+
+bool CCheckEngineTabDlg::GetInertShow(void) const
+{
+ return m_show_with_inertness.GetCheck() == BST_CHECKED;
+}
 
 void CCheckEngineTabDlg::EnableAll(bool i_enable)
 {
@@ -185,6 +198,11 @@ void CCheckEngineTabDlg::EnableRWButtons(bool i_enable)
 void CCheckEngineTabDlg::OnUpdateControls(CCmdUI* pCmdUI) 
 {
  pCmdUI->Enable(m_all_enabled);  
+}
+
+void CCheckEngineTabDlg::OnUpdateInertnessCheckbox(CCmdUI* pCmdUI) 
+{
+ pCmdUI->Enable(m_all_enabled && BST_CHECKED == m_realtime_checkbox.GetCheck());  
 }
 
 void CCheckEngineTabDlg::OnUpdateRWButtons(CCmdUI* pCmdUI) 

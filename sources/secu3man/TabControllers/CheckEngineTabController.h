@@ -39,7 +39,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   virtual ~CCheckEngineTabController();
 
  private:
-  typedef std::map<size_t, _TSTRING> ErrorsIDContainer;
+  typedef std::map<size_t, std::pair<_TSTRING, DWORD> > ErrorsIDContainer;
 
   void _SetErrorsToList(const SECU3IO::CEErrors* ip_errors);
   void _GetErrorsFromList(SECU3IO::CEErrors* op_errors);

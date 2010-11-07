@@ -51,6 +51,8 @@ class CCheckEngineTabDlg : public CTabDialog
   void ResetErrorsList(void);
   void SetErrorState(size_t i_id, bool i_state);
   bool GetErrorState(size_t i_id) const;
+  void SetInertShow(bool i_inert);
+  bool GetInertShow(void) const;
 
   void EnableAll(bool i_enable);
   void EnableRWButtons(bool i_enable);
@@ -64,6 +66,7 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnReadSavedErrors();
   afx_msg void OnWriteSavedErrors();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI); 
+  afx_msg void OnUpdateInertnessCheckbox(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRWButtons(CCmdUI* pCmdUI);
   afx_msg void OnDestroy();
   afx_msg void OnTimer(UINT nIDEvent);
@@ -77,6 +80,7 @@ class CCheckEngineTabDlg : public CTabDialog
   CListCtrl m_errors_list;
   CImageList m_image_list;
   CButton m_realtime_checkbox;
+  CButton m_show_with_inertness;
   CButton m_read_saved_button;
   CButton m_write_saved_button;
   CButton m_list_set_all_button;
