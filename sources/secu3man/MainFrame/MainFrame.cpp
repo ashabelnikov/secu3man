@@ -119,10 +119,38 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
   }
  }
 
- //устанавливаем необходимый размер главного окна
+ //устанавливаем необходимый размер главного окна. Windows непонятным образо м масштабирует диалоги (непропорционально DPI), поэтому
+ //для каждого DPI подгоняем размеры
  DPIAware dpia;
- cs.cx = dpia.ScaleX(730);
- cs.cy = dpia.ScaleY(455);
+ switch(dpia.GetDPIX())
+ {
+  case 72:
+   cs.cx = dpia.ScaleX(965);
+   break;    
+  default:
+  case 96:
+   cs.cx = dpia.ScaleX(730); //OK
+   break;    
+  case 120:
+   cs.cx = dpia.ScaleX(765);
+   break;    
+  case 144:
+   cs.cx = dpia.ScaleX(795); //OK
+   break;    
+  case 192:
+   cs.cx = dpia.ScaleX(730);
+   break;    
+ }
+ switch(dpia.GetDPIY())
+ {
+  case 72:
+   cs.cy = dpia.ScaleY(580);
+   break;    
+  default:
+  case 96:
+   cs.cy = dpia.ScaleY(455);
+   break;    
+ }
 
  cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
  cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
