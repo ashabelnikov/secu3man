@@ -19,30 +19,10 @@
               email: secu-3@yandex.ru
 */
 
-#include "stdafx.h"
-#include "CRC16.h"
-#include "EEPROMDataMediator.h"
-#include "SECU3ParametersDef.h"
+#pragma once
 
-using namespace SECU3IO;
-using namespace SECU3IO::SECU3Types;
-
-#define EEPROM_PARAM_START (m_epp.m_param_start)
-
-EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)
-: m_epp(i_epp)
-{
- //empty
-}
-
-EEPROMDataMediator::~EEPROMDataMediator()
-{
- //empty
-}
-
-bool EEPROMDataMediator::VerifyDefParamsCheckSum(const BYTE* ip_eeprom_buffer)
-{
- _uint crc = crc16(ip_eeprom_buffer + EEPROM_PARAM_START, sizeof(params) - sizeof(_uint));
- const _uint* crc_addr = (_uint*)(&ip_eeprom_buffer[EEPROM_PARAM_START + sizeof(params) - sizeof(_uint)]);
- return (*crc_addr)==crc; //check it!
-}
+#if defined(IOCORE_EXPORTS)
+ #define IOCORE_API __declspec(dllexport)
+#else
+ #define IOCORE_API __declspec(dllimport)
+#endif

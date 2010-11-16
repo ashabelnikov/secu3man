@@ -22,22 +22,22 @@
 #include "stdafx.h"
 #include <limits>
 
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "FirmwareTabController.h"
 
-#include "Application\CommunicationManager.h"
-#include "common\FastDelegate.h"
-#include "FWImpExp\MPSZImpExpController.h"
-#include "HexUtils\readhex.h"
-#include "io-core\EEPROMDataMediator.h"
-#include "io-core\FirmwareDataMediator.h"
-#include "io-core\SECU3IO.h"
-#include "io-core\ufcodes.h"
-#include "MainFrame\StatusBarManager.h"
-#include "ParamDesk\ParamDeskDlg.h"
+#include "Application/CommunicationManager.h"
+#include "common/FastDelegate.h"
+#include "FWImpExp/MPSZImpExpController.h"
+#include "HexUtils/readhex.h"
+#include "io-core/EEPROMDataMediator.h"
+#include "io-core/FirmwareDataMediator.h"
+#include "io-core/SECU3IO.h"
+#include "io-core/ufcodes.h"
+#include "MainFrame/StatusBarManager.h"
+#include "ParamDesk/ParamDeskDlg.h"
 #include "TabControllersCommunicator.h"
-#include "TabDialogs\FirmwareTabDlg.h"
-#include "Settings\ISettingsData.h"
+#include "TabDialogs/FirmwareTabDlg.h"
+#include "Settings/ISettingsData.h"
 
 using namespace fastdelegate;
 
@@ -66,7 +66,18 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_lastSel(0)
 , m_bl_started_emergency(false)
 {
- m_fwdm = new CFirmwareDataMediator(); 
+ PlatformParamHolder holder(ip_settings->GetECUPlatformType());
+ m_fpp = holder.GetFlashParameters();
+ m_epp = holder.GetEepromParameters();
+ m_fwdm = new CFirmwareDataMediator(holder.GetFlashParameters());
+ ASSERT(m_fwdm);
+ m_edm = new EEPROMDataMediator(holder.GetEepromParameters());
+ ASSERT(m_edm);
+
+ m_bl_data = new BYTE[m_fpp.m_total_size + 1];
+ ASSERT(m_bl_data);
+ m_code_for_merge_with_overhead = new BYTE[m_fpp.m_total_size + 1];
+ ASSERT(m_code_for_merge_with_overhead);
 
  //устанавливаем делегаты (обработчики событий от представления)
  m_view->setOnBootLoaderInfo(MakeDelegate(this,&CFirmwareTabController::OnBootLoaderInfo));
@@ -103,6 +114,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 CFirmwareTabController::~CFirmwareTabController()
 {  
  delete m_fwdm;
+ delete m_edm;
+ delete m_bl_data;
+ delete m_code_for_merge_with_overhead;
 }
 
 //изменились настройки 
@@ -303,12 +317,12 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { //OK
-	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
-    SaveEEPROMToFile(m_bl_data,CBootLoader::EEPROM_SIZE);
+   	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
+    SaveEEPROMToFile(m_bl_data, m_epp.m_size);
    }
    else 
    {
-	m_sbar->SetInformationText(GenerateErrorStr());
+	   m_sbar->SetInformationText(GenerateErrorStr());
    }
 
    //ждем пока не выполнится предыдущая операция
@@ -326,10 +340,10 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_WRITE_EEPROM:
   {
    if (status==1) 
-	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
+	   m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
    else 
    {
-	m_sbar->SetInformationText(GenerateErrorStr());
+	   m_sbar->SetInformationText(GenerateErrorStr());
    }
   
    //ждем пока не выполнится предыдущая операция
@@ -348,47 +362,47 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { 	
-	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_READ_SUCCESSFULLY));
-	if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
-	{
-	 SaveFLASHToFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
-	}
-	else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
-	{
-	 PrepareOnLoadFLASH(m_bl_data,_T(""));
-	}
-	else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
-	{
-	 m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
-	 m_fwdm->StoreBytes(m_bl_data);
-	 PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
-	}
-	else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
-	{	     
+	   m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_READ_SUCCESSFULLY));
+	   if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
+    {
+	    SaveFLASHToFile(m_bl_data, m_fpp.m_total_size);
+    }
+    else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
+    {
+     PrepareOnLoadFLASH(m_bl_data,_T(""));
+    }
+    else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
+    {
+     m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
+     m_fwdm->StoreBytes(m_bl_data);
+     PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+    }
+    else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
+    {	     
      //ждем пока не выполнится предыдущая операция
      while(!m_comm->m_pBootLoader->IsIdle());
 
      //закончилось чтение данных. Теперь необходимо объединить прочитанные данные с данными для записи,
      //обновить контрольную сумму и запустить процесс программирования FLASH. 
-	 memcpy(m_code_for_merge_with_overhead + CBootLoader::FLASH_ONLY_CODE_SIZE,m_bl_data,CBootLoader::FLASH_ONLY_OVERHEAD_SIZE);	   
-     CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(m_code_for_merge_with_overhead);
+     memcpy(m_code_for_merge_with_overhead + m_fpp.m_only_code_size, m_bl_data, m_fpp.m_only_overhead_size);	   
+     m_fwdm->CalculateAndPlaceFirmwareCRC(m_code_for_merge_with_overhead);
 
      Sleep(250);
-	 m_sbar->SetProgressPos(0);
-	 m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_code_for_merge_with_overhead,CBootLoader::FLASH_APP_SECTION_SIZE);		  	 	 
+     m_sbar->SetProgressPos(0);
+     m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, m_code_for_merge_with_overhead, m_fpp.m_app_section_size);
 
-	 //НЕ ВЫХОДИМ ИЗ БУТЛОАДЕРА И НЕ ДЕАКТИВИРУЕМ КОММУНИКАЦИОННЫЙ КОНТРОЛЛЕР, так как должна 
-	 //выполнится запущенная операция.
-	 return; 
-	}
-	else
-	{
-	 ASSERT(0); //what is it?
-	}
+     //НЕ ВЫХОДИМ ИЗ БУТЛОАДЕРА И НЕ ДЕАКТИВИРУЕМ КОММУНИКАЦИОННЫЙ КОНТРОЛЛЕР, так как должна
+     //выполнится запущенная операция.
+     return;
+    }
+    else
+    {
+     ASSERT(0); //what is it?
+    }
    }
-   else 
+   else
    {
-	m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(GenerateErrorStr());
    }
 
    //ждем пока не выполнится предыдущая операция
@@ -409,7 +423,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_WRITTEN_SUCCESSFULLY));
    else 
    {
-	m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(GenerateErrorStr());
    }
   
    //ждем пока не выполнится предыдущая операция
@@ -470,7 +484,7 @@ void CFirmwareTabController::OnReadEepromToFile(void)
 
 void CFirmwareTabController::OnWriteEepromFromFile(void)
 {
- bool result = LoadEEPROMFromFile(m_bl_data,CBootLoader::EEPROM_SIZE);
+ bool result = LoadEEPROMFromFile(m_bl_data, m_epp.m_size);
 
  if (!result)
   return; //cancel
@@ -505,7 +519,7 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
+ m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data, m_fpp.m_total_size);
 
  m_sbar->ShowProgressBar(true);
  m_sbar->SetProgressPos(0);
@@ -513,7 +527,7 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
 
 void CFirmwareTabController::OnWriteFlashFromFile(void)
 {
- bool result = LoadFLASHFromFile(m_bl_data,CBootLoader::FLASH_TOTAL_SIZE);
+ bool result = LoadFLASHFromFile(m_bl_data, m_fpp.m_total_size);
 
  if (!result)
   return; //cancel
@@ -525,7 +539,7 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
 {
  //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой. Это необходимо например когда
  //мы записываем свеже скомпилированную прошивку, которая может не содержать контрольной суммы
- CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(io_buff);
+ m_fwdm->CalculateAndPlaceFirmwareCRC(io_buff);
 
  ASSERT(m_comm);
 
@@ -543,17 +557,17 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
  
   //сохраняем данные для того чтобы позже объединить их с прочитанными "верхними" данными
-  memset(m_code_for_merge_with_overhead,0,CBootLoader::FLASH_APP_SECTION_SIZE);
-  memcpy(m_code_for_merge_with_overhead,io_buff,CBootLoader::FLASH_ONLY_CODE_SIZE);
+  memset(m_code_for_merge_with_overhead,0, m_fpp.m_app_section_size);
+  memcpy(m_code_for_merge_with_overhead,io_buff, m_fpp.m_only_code_size);
 	  
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data,
-	   CBootLoader::FLASH_ONLY_OVERHEAD_SIZE, //размер данных сверху над кодом программы
-	   CBootLoader::FLASH_ONLY_CODE_SIZE);    //адрес начала "верхних" данных
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, m_bl_data,
+	   m_fpp.m_only_overhead_size, //размер данных сверху над кодом программы
+	   m_fpp.m_only_code_size);    //адрес начала "верхних" данных
  }
  else
  {//все очень просто
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff,CBootLoader::FLASH_APP_SECTION_SIZE);
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff, m_fpp.m_app_section_size);
  }
 
  m_sbar->ShowProgressBar(true);
@@ -606,11 +620,11 @@ bool CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size,
   }
 
   save_buff = new BYTE[size];
-  memcpy(save_buff,p_data,size);
+  memcpy(save_buff, p_data,size);
 	
   //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой	
   if (calculate_and_place_crc16)
-   CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(save_buff);	
+   m_fwdm->CalculateAndPlaceFirmwareCRC(save_buff);	
 
   f.Write(save_buff,size);
   f.Close();	 
@@ -705,16 +719,16 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
 
    switch(status)
    {
-	case RH_INCORRECT_CHKSUM:		      
-	 AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_CRC_ERROR));
-	 f.Close();
-     return false; //ошибка		
+    case RH_INCORRECT_CHKSUM:		      
+     AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_CRC_ERROR));
+     f.Close();
+     return false; //ошибка
 
-    default: 
-	 case RH_UNEXPECTED_SYMBOL:	   		  
-	 AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_STRUCTURE_ERROR));
-	 f.Close();
-     return false; //ошибка		 
+    default:
+     case RH_UNEXPECTED_SYMBOL:
+     AfxMessageBox(MLL::LoadString(IDS_FW_HEX_FILE_STRUCTURE_ERROR));
+     f.Close();
+     return false; //ошибка
 
     case RH_ADDRESS_EXCEDED:
      break;
@@ -882,7 +896,8 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
 void CFirmwareTabController::OnOpenFlashFromFile(void)
 {
  bool result;
- BYTE buff[65536];
+ std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
+ BYTE *buff = &buff_container[0];
  CString opened_file_name = _T("");
   
  bool is_continue = CheckChangesAskAndSaveFirmware();
@@ -890,7 +905,7 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
   return;  //пользователь передумал
  
  //!!! без вычисления и записи контрольной суммы в буфер
- result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name);
+ result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
  if (result) //user OK?
  {
   PrepareOnLoadFLASH(buff,_TSTRING(opened_file_name));
@@ -899,14 +914,15 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
 
 void CFirmwareTabController::OnSaveFlashToFile(void)
 {
- BYTE buff[65536];
+ std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
+ BYTE *buff = &buff_container[0];
  CString opened_file_name = _T("");
  
  m_fwdm->StoreBytes(buff);
 
  //в случае подтверждения пользователя, также будует 
  //вычислена контрольная сумма и сохранена в массив с прошивкой	
- bool result = SaveFLASHToFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name,true);
+ bool result = SaveFLASHToFile(buff, m_fpp.m_total_size, &opened_file_name,true);
  if (result)
  {
   //контрольная сумма была сохранена только вмассив с прошивкий которая сохранялась,
@@ -1057,7 +1073,8 @@ void CFirmwareTabController::OnWriteFlashToSECU(void)
 void CFirmwareTabController::OnImportDataFromAnotherFW()
 {
  bool result;
- BYTE buff[65536];
+ std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
+ BYTE *buff = &buff_container[0];
  CString opened_file_name = _T("");
   
  bool is_continue = CheckChangesAskAndSaveFirmware();
@@ -1066,7 +1083,7 @@ void CFirmwareTabController::OnImportDataFromAnotherFW()
   return;  //пользователь передумал
  
  //!!! без вычисления и записи контрольной суммы в буфер
- result  = LoadFLASHFromFile(buff,CBootLoader::FLASH_TOTAL_SIZE,&opened_file_name);
+ result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
  if (result) //user OK?
  {
   m_fwdm->LoadDataBytesFromAnotherFirmware(buff);
@@ -1113,20 +1130,21 @@ void CFirmwareTabController::OnImportMapsFromMPSZ(void)
 
 void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
 {
- BYTE eeprom[CBootLoader::EEPROM_SIZE];
- bool result = LoadEEPROMFromFile(eeprom, CBootLoader::EEPROM_SIZE);
+ std::vector<BYTE> eeprom_buffer(m_epp.m_size, 0x00);
+ BYTE *eeprom = &eeprom_buffer[0];
+ bool result = LoadEEPROMFromFile(eeprom, m_epp.m_size);
 
  if (!result)
   return; //cancel
 
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
- if (!EEPROMDataMediator::VerifyDefParamsCheckSum(eeprom))
+ if (!m_edm->VerifyDefParamsCheckSum(eeprom))
  {
   if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
- m_fwdm->LoadDefParametersFromBuffer(eeprom + EEPROMDataMediator::GetDefParamsStartAddress());
+ m_fwdm->LoadDefParametersFromBuffer(eeprom + m_epp.m_param_start);
  SetViewFirmwareValues(); //Update!
 }
 
@@ -1163,7 +1181,7 @@ void CFirmwareTabController::GetAttenuatorMap(float* o_values)
 void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 {
  if (!i_hwnd)
-     return;
+  return;
 
  RECT rc;
  GetWindowRect(i_hwnd, &rc);
@@ -1173,26 +1191,26 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 
  switch(i_mapType)
  {
- case TYPE_MAP_DA_START:
-     ws.m_StrtMapWnd_X = rc.left; 
-     ws.m_StrtMapWnd_Y = rc.top;
-     break;
- case TYPE_MAP_DA_IDLE:
-     ws.m_IdleMapWnd_X = rc.left; 
-     ws.m_IdleMapWnd_Y = rc.top;
-     break;
- case TYPE_MAP_DA_WORK:
-     ws.m_WorkMapWnd_X = rc.left; 
-     ws.m_WorkMapWnd_Y = rc.top;
-     break;
- case TYPE_MAP_DA_TEMP_CORR: 
-     ws.m_TempMapWnd_X = rc.left; 
-     ws.m_TempMapWnd_Y = rc.top;
-     break;
- case TYPE_MAP_ATTENUATOR:
-     ws.m_AttenuatorMapWnd_X = rc.left; 
-     ws.m_AttenuatorMapWnd_Y = rc.top;
-     break;
+  case TYPE_MAP_DA_START:
+   ws.m_StrtMapWnd_X = rc.left; 
+   ws.m_StrtMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_DA_IDLE:
+   ws.m_IdleMapWnd_X = rc.left; 
+   ws.m_IdleMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_DA_WORK:
+   ws.m_WorkMapWnd_X = rc.left; 
+   ws.m_WorkMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_DA_TEMP_CORR: 
+   ws.m_TempMapWnd_X = rc.left; 
+   ws.m_TempMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_ATTENUATOR:
+   ws.m_AttenuatorMapWnd_X = rc.left; 
+   ws.m_AttenuatorMapWnd_Y = rc.top;
+   break;
  };
 
  mp_settings->SetWndSettings(ws); 
@@ -1202,7 +1220,7 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
  if (!i_hwnd)
-     return;
+  return;
 
  WndSettings ws;
  mp_settings->GetWndSettings(ws);
@@ -1211,25 +1229,25 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 
  switch(i_mapType)
  {
- case TYPE_MAP_DA_START:
-     X = ws.m_StrtMapWnd_X, Y = ws.m_StrtMapWnd_Y;
-     break;
- case TYPE_MAP_DA_IDLE:
-     X = ws.m_IdleMapWnd_X, Y = ws.m_IdleMapWnd_Y;
-     break;
- case TYPE_MAP_DA_WORK:
-     X = ws.m_WorkMapWnd_X, Y = ws.m_WorkMapWnd_Y;
-     break;
- case TYPE_MAP_DA_TEMP_CORR: 
-     X = ws.m_TempMapWnd_X, Y = ws.m_TempMapWnd_Y;
-     break;
- case TYPE_MAP_ATTENUATOR:
-     X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
-     break;
- default:
-     return; //undefined case...
+  case TYPE_MAP_DA_START:
+   X = ws.m_StrtMapWnd_X, Y = ws.m_StrtMapWnd_Y;
+   break;
+  case TYPE_MAP_DA_IDLE:
+   X = ws.m_IdleMapWnd_X, Y = ws.m_IdleMapWnd_Y;
+   break;
+  case TYPE_MAP_DA_WORK:
+   X = ws.m_WorkMapWnd_X, Y = ws.m_WorkMapWnd_Y;
+   break;
+  case TYPE_MAP_DA_TEMP_CORR: 
+   X = ws.m_TempMapWnd_X, Y = ws.m_TempMapWnd_Y;
+   break;
+  case TYPE_MAP_ATTENUATOR:
+   X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
+   break;
+  default:
+   return; //undefined case...
  };
 
  if (X != std::numeric_limits<int>::max() && Y != std::numeric_limits<int>::max())
-   SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+  SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

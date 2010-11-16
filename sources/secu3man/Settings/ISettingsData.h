@@ -19,6 +19,10 @@
               email: secu-3@yandex.ru
 */
 
+#pragma once
+
+#include "io-core/PlatformParamHolder.h"  //only for EECUPlatform enum
+
 //Holds windows's position data
 struct WndSettings
 {
@@ -40,13 +44,6 @@ typedef enum EInterLang
 {
  IL_ENGLISH = 0,
  IL_RUSSIAN
-};
-
-typedef enum EECUPlatform
-{
- EP_ATMEGA16 = 0,
- EP_ATMEGA32,
- EP_ATMEGA64
 };
 
 //интерфейс через который должен производится доступ к настройкам программы

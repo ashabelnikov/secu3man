@@ -20,13 +20,16 @@
 */
 
 #include <windows.h>
+#include <vector>
+#include "iocore_api.h"
+#include "PlatformParamHolder.h"
 #include "types.h"
 
 #ifndef _BOOTLOADER_
 #define _BOOTLOADER_
 
 //для обработки событий при работе с бутлоадером необходимо наследоваться от этого класса
-class AFX_EXT_CLASS IBLDEventHandler
+class IOCORE_API IBLDEventHandler
 {
  public:
   struct poolUpdateUI
@@ -67,14 +70,11 @@ class AFX_EXT_CLASS CBootLoader
   CBootLoader();
   virtual ~CBootLoader();
 
+  void SetPlatformParameters(const PlatformParamHolder& i_pph);
   bool Initialize(CComPort* p_port, const DWORD uart_seed);
-  void SetEventHandler(IBLDEventHandler* i_pEventHandler) 
-  { 
-   m_pEventHandler = i_pEventHandler;
-  }
+  void SetEventHandler(IBLDEventHandler* i_pEventHandler);
 
   void SwitchOn(bool state, bool i_force_reinit = false);
-  bool GetWorkState(void) {return m_work_state;};
 
   bool Terminate(void);
 
@@ -82,39 +82,24 @@ class AFX_EXT_CLASS CBootLoader
   //!!! i_addr используется только при чтении FLASH
   bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0);
  
-  inline bool IsIdle(void) const {return (m_ThreadBusy)?false:true;};
-
-  inline HANDLE    GetThreadHandle(void) const {return m_hThread;}
-  inline DWORD     GetThreadId(void) const     {return m_ThreadId;}
-  inline CComPort* GetPortHandle(void) const   {return m_p_port;}
-  inline int       GetLastError() const        {return m_ErrorCode;}
+  inline bool GetWorkState(void) const;
+  inline bool IsIdle(void) const;
+  inline HANDLE GetThreadHandle(void) const;
+  inline DWORD GetThreadId(void) const;
+  inline CComPort* GetPortHandle(void) const;
+  inline int GetLastError() const;
+  //возвращает true если все ОК
+  inline int Status(void) const;     
 
   inline CSECTION* GetSyncObject(void) const;
   inline void EnterCriticalSection(void) const;
   inline void LeaveCriticalSection(void) const;
 
-  //возвращает true если все ОК
-  inline int Status(void) const {return ((m_ErrorCode==0)?true:false);}     
-
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
-
+ 
   enum {BL_SIGNATURE_STR_LEN = 24};
-  enum {EEPROM_SIZE = 512};         //size of EEPROM
   enum {EEPROM_WR_DELAY_MULTIPLIER = 3};
   enum {FLASH_PG_ERASE_DELAY = 30}; 
-
-  enum 
-  {
-   FLASH_PAGE_SIZE = 128,         //размер страницы памяти программ в байтах
-   FLASH_TOTAL_SIZE = 16384,      //общий размер памяти программ микроконтроллера
-   FLASH_BL_SECTION_SIZE = 512,   //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
-   FLASH_APP_SECTION_SIZE = FLASH_TOTAL_SIZE - FLASH_BL_SECTION_SIZE, //часть прошивки кроме бутлоадера
-   FLASH_ONLY_CODE_SIZE = 0x32F0,  //размер кода без данных, которые в конце
-
-   //часть прошивки располагающаяся после кода программы и перед бутлоадером. Сюда входят пустое пространство, данные 
-   //и контрольная сумма прошивки.
-   FLASH_ONLY_OVERHEAD_SIZE = FLASH_APP_SECTION_SIZE - FLASH_ONLY_CODE_SIZE
-  };
 
   enum //список поддерживаемых команд
   {
@@ -137,6 +122,9 @@ class AFX_EXT_CLASS CBootLoader
 
  private:
 
+  std::vector<BYTE> m_fw_buf;
+  PPFlashParam m_ppf;
+  PPEepromParam m_ppe;
   CSECTION* mp_csection;
   CComPort* m_p_port;
   HANDLE    m_hThread;

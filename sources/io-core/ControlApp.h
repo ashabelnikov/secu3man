@@ -22,6 +22,7 @@
 #include <windows.h>
 #include <vector>
 #include <string>
+#include "iocore_api.h"
 #include "SECU3IO.h"
 #include "types.h"
 
@@ -72,7 +73,7 @@ class IAPPThreadEventHandler
 
 
 class CComPort;
-class AFX_EXT_CLASS CControlApp  
+class IOCORE_API CControlApp  
 {  
  public:
   typedef CRITICAL_SECTION CSECTION;
@@ -127,11 +128,11 @@ class AFX_EXT_CLASS CControlApp
   std::string  m_outgoing_packet;       //используется для формирования пакетов
   int          m_packets_parse_state;   //хранит состояние конечного автомата используемого для отделения пакетов
 
-  const float   m_adc_discrete;
-  const float   m_angle_multiplier;
-  bool    m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
-  bool    m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
-  bool    m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn(); 
+  const float m_adc_discrete;
+  const float m_angle_multiplier;
+  bool m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
+  bool m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
+  bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn(); 
 
   //helper
   void SwitchOnThread(bool state);
@@ -161,7 +162,6 @@ class AFX_EXT_CLASS CControlApp
   bool Parse_CE_SAVED_ERR(const BYTE* raw_packet);
   bool Parse_FWINFO_DAT(const BYTE* raw_packet);
   bool Parse_MISCEL_PAR(const BYTE* raw_packet);
-
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);

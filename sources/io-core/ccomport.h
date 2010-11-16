@@ -21,13 +21,14 @@
 
 #include <windows.h>
 #include <string>
+#include "iocore_api.h"
 #include "common/unicodesupport.h"
 
 #ifndef _CCOMPORT_
 #define _CCOMPORT_
 
 //Класс для работы с COM - портом
-class AFX_EXT_CLASS CComPort 
+class IOCORE_API CComPort 
 {
  public:   //public functions
 
@@ -39,7 +40,6 @@ class AFX_EXT_CLASS CComPort
   BOOL   Initialize(DWORD,BYTE,BYTE); //инициализация порта
   BOOL   Initialize(DWORD,BYTE,BYTE,char,char);
   BOOL   Initialize(const _TSTRING& i_sComPort,DWORD,BYTE,BYTE,char,char);
-
 
   VOID   Terminate();                 //закрытие порта 
   bool   SendByte(unsigned char);     //передача одного ьайта

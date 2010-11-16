@@ -21,17 +21,18 @@
 
 #pragma once
 
-#include "BootLoader.h"
+#include "iocore_api.h"
 #include "common/unicodesupport.h"
+#include "PlatformParamHolder.h"
 #include <vector>
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке 
 //(памяти программ микроконтроллера), а также для хранения этих данных.
 
-class AFX_EXT_CLASS CFirmwareDataMediator
+class IOCORE_API CFirmwareDataMediator
 {
  public:
-  CFirmwareDataMediator();
+  CFirmwareDataMediator(const PPFlashParam& i_fpp);
  ~CFirmwareDataMediator();
 
   //загрузка байтов прошивки из указанного буфера
@@ -52,7 +53,7 @@ class AFX_EXT_CLASS CFirmwareDataMediator
   //после того как данные были успешно сохранены.
   void ResetModified(void);
 
-  static void CalculateAndPlaceFirmwareCRC(BYTE* io_data);
+  void CalculateAndPlaceFirmwareCRC(BYTE* io_data);
 
 	//-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
@@ -91,9 +92,10 @@ class AFX_EXT_CLASS CFirmwareDataMediator
   //-----------------------------------------------------------------------
 
  private:
+  PPFlashParam m_fpp;
   const size_t m_firmware_size;
-  BYTE m_bytes_active[CBootLoader::FLASH_TOTAL_SIZE + 1]; //байты прошивки (копия для модификации)
-  BYTE m_bytes_original[CBootLoader::FLASH_TOTAL_SIZE + 1]; //байты прошивки (копия для сравнения) 
+  BYTE* m_bytes_active;   //байты прошивки (копия для модификации)
+  BYTE* m_bytes_original; //байты прошивки (копия для сравнения) 
   bool m_is_opened;
   _TSTRING m_fw_file_name;
 };

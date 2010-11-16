@@ -21,10 +21,9 @@
 
 #include "stdafx.h"
 #include "FirmwareDataMediator.h"
-#include "BootLoader.h"
 #include "CRC16.h"
 #include "ControlApp.h"    //should be removed - it is nearly unnecessary!
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 #include "FirmwareMapsDataHolder.h"
 #include "SECU3IO.h"
 #include "SECU3ParametersDef.h"
@@ -64,7 +63,7 @@ typedef struct
 }FirmwareData;
 
 
-#define BOOT_START 0x3E00
+#define BOOT_START (m_fpp.m_app_section_size)
 #define CODE_CRC_ADDR (BOOT_START-sizeof(unsigned short))
 #define CODE_SIZE (BOOT_START-sizeof(unsigned short)) //размер кода прошивки без учета байтов контрольной суммы
 
@@ -85,24 +84,31 @@ typedef struct
 
 
 
-CFirmwareDataMediator::CFirmwareDataMediator()
-: m_firmware_size(CBootLoader::FLASH_TOTAL_SIZE)
+CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
+: m_firmware_size(i_fpp.m_total_size)
 , m_is_opened(false)
-{
+, m_fpp(i_fpp)
+{ 
+ m_bytes_active = new BYTE[m_fpp.m_total_size + 1];
+ ASSERT(m_bytes_active);
+ m_bytes_original = new BYTE[m_fpp.m_total_size + 1];
+ ASSERT(m_bytes_original);
+
  memset(m_bytes_active,0x00,m_firmware_size);
  memset(m_bytes_original,0x00,m_firmware_size);
 }
 
 CFirmwareDataMediator::~CFirmwareDataMediator()
 {
- //empty
+ delete m_bytes_active;
+ delete m_bytes_original;
 }
 
 //считает контрольную сумму и записывает результат по соответствующему адресу
 //io_data - массив байтов прошивки 
 void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* io_data)
 {
- unsigned short crc = crc16(io_data,CODE_SIZE);
+ unsigned short crc = crc16(io_data, CODE_SIZE);
  unsigned short* crc_addr = (unsigned short*)(&io_data[CODE_CRC_ADDR]);
  *crc_addr = crc; //сохранили контрольную сумму
 }
@@ -142,7 +148,6 @@ _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
  BYTE* addr = &m_bytes_active[FIRMWARE_DATA_START];
  memcpy(raw_string,addr,FW_SIGNATURE_INFO_SIZE);
  TCHAR string[256];
- /*CharToOem(raw_string,string);*/
  OemToChar(raw_string,string);
  return _TSTRING(string);
 }
@@ -152,7 +157,6 @@ void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
  char raw_string[256];
  memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
  BYTE* addr = &m_bytes_active[FIRMWARE_DATA_START];
- /*OemToChar(i_string.c_str(),raw_string);*/
  CharToOem(i_string.c_str(),raw_string);
  memcpy(addr,raw_string,FW_SIGNATURE_INFO_SIZE);
 }
@@ -305,7 +309,6 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  if (false==IsLoaded())
   return; //некуда загружать...
  memcpy(m_bytes_active + FIRMWARE_ALL_DATA_START,i_source_bytes + FIRMWARE_ALL_DATA_START,FIRMWARE_ALL_DATA_SIZE);
- /*???memcpy(m_bytes_original + FIRMWARE_ALL_DATA_START,i_source_bytes + FIRMWARE_ALL_DATA_START,FIRMWARE_ALL_DATA_SIZE);*/
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)

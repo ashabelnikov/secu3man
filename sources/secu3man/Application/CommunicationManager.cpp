@@ -47,7 +47,7 @@ CCommunicationManager::CCommunicationManager()
 {
  m_pSettings = ISECU3Man::GetSECU3Man()->GetAppSettingsManager()->GetSettings();
 
- m_pComPort    = new CComPort(_T("COM1"),m_recv_buff_size,m_send_buff_size);
+ m_pComPort    = new CComPort(_T("COM1"), m_recv_buff_size,m_send_buff_size);
  m_pBootLoader = new CBootLoader();
  m_pControlApp = new CControlApp();  
  m_pAppAdapter = new CControlAppAdapter();  
@@ -84,6 +84,8 @@ bool CCommunicationManager::Init(void)
  ASSERT(m_pBldAdapter);
 
  bool status = true;
+
+ m_pBootLoader->SetPlatformParameters(PlatformParamHolder(m_pSettings->GetECUPlatformType()));
 
  //останавливаем работу контроллеров интерфейсов, конкретный контроллер будет активирован
  //позже - в зависимости от текущего контекста программы

@@ -22,10 +22,11 @@
 #pragma once
 
 #include "common\unicodesupport.h"
+#include "iocore_api.h"
 #include "SECU3IO.h"
 
 //Все записи в файле должны иметь одинаковую длину!
-class AFX_EXT_CLASS LogReader
+class IOCORE_API LogReader
 {
  public:
   LogReader();

@@ -23,9 +23,9 @@
 
 #include "ControlAppAdapter.h"
 #include "common/unicodesupport.h"
+#include "iocore_api.h"
 
-
-class AFX_EXT_CLASS LogWriter : public IAPPEventHandler
+class IOCORE_API LogWriter : public IAPPEventHandler
 {
  public:
   LogWriter();

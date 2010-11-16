@@ -19,13 +19,14 @@
               email: secu-3@yandex.ru
 */
 
-#include "types.h"
 #include <string>
+#include "iocore_api.h"
+#include "types.h"
 
 #ifndef _NUMERICCONV_
 #define _NUMERICCONV_
 
-class AFX_EXT_CLASS CNumericConv  
+class IOCORE_API CNumericConv  
 {
  public:
   static bool   HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size);

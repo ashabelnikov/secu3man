@@ -21,17 +21,19 @@
 
 #pragma once
 
-#include "common\ObjectTimer.h"
-#include "io-core\BootLoader.h"
-#include "io-core\BootLoaderAdapter.h"
-#include "io-core\ControlApp.h"
-#include "io-core\ControlAppAdapter.h"
-#include "TabsManagement\ITabController.h"
+#include "common/ObjectTimer.h"
+#include "io-core/BootLoader.h"
+#include "io-core/BootLoaderAdapter.h"
+#include "io-core/ControlApp.h"
+#include "io-core/ControlAppAdapter.h"
+#include "io-core/PlatformParamHolder.h"
+#include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
 class CFirmwareDataMediator;
 class CFirmwareTabDlg;
 class CStatusBarManager;
+class EEPROMDataMediator;
 class ISettingsData;
 
 class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler 
@@ -116,14 +118,18 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   bool ExitBootLoader(void);
 
  private:
+  PPFlashParam  m_fpp;
+  PPEepromParam m_epp;
+
   CFirmwareTabDlg*  m_view;
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CFirmwareDataMediator* m_fwdm;
+  EEPROMDataMediator* m_edm;
   ISettingsData* mp_settings;
 
-  BYTE m_bl_data[65536];
-  BYTE m_code_for_merge_with_overhead[65536];
+  BYTE* m_bl_data;
+  BYTE* m_code_for_merge_with_overhead;
   bool m_bl_started_emergency;
   int  m_current_funset_index;
   CObjectTimer<CFirmwareTabController> m_modification_check_timer;
