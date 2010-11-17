@@ -32,6 +32,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //flash
    m_fp.m_page_size = 128;
    m_fp.m_total_size = 16384;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 512; //256 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    m_fp.m_only_code_size = 0x3260; //warning! change this constant if you changed flash data allingment
@@ -44,6 +45,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
   case EP_ATMEGA32:
    m_fp.m_page_size = 128;
    m_fp.m_total_size = 32768;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 1024; //512 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    m_fp.m_only_code_size = 0x7060; //warning! change this constant if you changed flash data allingment
@@ -56,6 +58,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
   case EP_ATMEGA64:
    m_fp.m_page_size = 256;
    m_fp.m_total_size = 65536;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 2048; //1024 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    m_fp.m_only_code_size = 0xEC60; //warning! change this constant if you changed flash data allingment
@@ -68,6 +71,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
   case EP_ATMEGA128:
    m_fp.m_page_size = 256;
    m_fp.m_total_size = 131072;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 2048; //1024 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    m_fp.m_only_code_size = 0x1EC60; //warning! change this constant if you changed flash data allingment

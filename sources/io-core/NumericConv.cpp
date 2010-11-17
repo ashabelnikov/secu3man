@@ -184,6 +184,16 @@ bool CNumericConv::Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte)
  return false;
 }
 
+bool CNumericConv::Bin12ToHex(const int i_12bit, BYTE* o_hex_number)
+{
+ if (o_hex_number==NULL) 
+  return false;
+
+ o_hex_number[0] = DTOH(i_12bit >> 8); //store 1st 4 bits
+ o_hex_number[1] = DTOH(i_12bit >> 4); //store 2nd 4 bits
+ o_hex_number[2] = DTOH(i_12bit);      //store 3rd 4 bits
+ return true;
+}
 
 bool CNumericConv::Bin16ToHex(const int i_word,BYTE* o_hex_number)
 {

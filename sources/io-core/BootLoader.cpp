@@ -62,16 +62,28 @@ CBootLoader::~CBootLoader()
 //n_page - номер страницы для чтения
 //o_buf  - буфер для помещения в него прочитаных данных (массив байтов)
 //total_size,current - для обновления UI
-bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* current)
+bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int* current)
 {
  BYTE t_buf[2048];
  BYTE t_byte = 0;
  int  block_size = FLASH_PAGE_SIZE * 2;
+ int index = 0;
 
- t_buf[0] = '!'; //!RNN
- t_buf[1] = 'R';
- CNumericConv::Bin8ToHex(n_page,&t_buf[2]); //добавили номер страницы (t_buf[2],t_buf[3])
- t_buf[4] = 0;  //завершили строку
+ t_buf[index++] = '!'; //!R
+ t_buf[index++] = 'R';
+
+ if (m_ppf.m_page_count <= 256) //NN
+ {
+  CNumericConv::Bin8ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3])
+  index+=2;
+ }
+ else //need NNN instead of NN
+ {
+  CNumericConv::Bin12ToHex(n_page, &t_buf[index]); //добавили номер страницы (t_buf[2],t_buf[3],t_buf[4])
+  index+=3;
+ }
+
+ t_buf[index++] = 0;  //завершили строку
  m_p_port->SendASCII((char*)t_buf);         //послали команду чтения страницы
 
  //теперь необходимо получить данные страницы
@@ -87,9 +99,9 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
   return false; //нет смысла продолжать дальше
  }
 
- EventHandler_OnUpdateUI(m_opdata.opcode,total_size,++(*current));  //1 байт получен
+ EventHandler_OnUpdateUI(m_opdata.opcode, total_size, ++(*current));  //1 байт получен
 
- if (!m_p_port->RecvBlock(t_buf,block_size))  //приняли очередную страницу
+ if (!m_p_port->RecvBlock(t_buf, block_size))  //приняли очередную страницу
  {
   m_ErrorCode = BL_ERROR_NOANSWER; 
   return false; //часть данных потеряна - нет смысла продолжать дальше
@@ -98,7 +110,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
  (*current)+=block_size;
  EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current); //очередная страница принята
 
- if (!CNumericConv::HexArrayToBin(t_buf,o_buf,FLASH_PAGE_SIZE))
+ if (!CNumericConv::HexArrayToBin(t_buf, o_buf, FLASH_PAGE_SIZE))
  {
   m_ErrorCode = BL_ERROR_WRONG_DATA;
   return false;
@@ -111,15 +123,15 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page,BYTE* o_buf,int total_size,int* c
  }
 
  *current+=2;
- EventHandler_OnUpdateUI(m_opdata.opcode,total_size,*current);  //страница принята
+ EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);  //страница принята
 
- if (!CNumericConv::Hex8ToBin(t_buf,&t_byte))   //t_buf -> symbol
+ if (!CNumericConv::Hex8ToBin(t_buf, &t_byte))   //t_buf -> symbol
  {
   m_ErrorCode = BL_ERROR_WRONG_DATA;
   return false;
  }
 
- if (CNumericConv::CheckSum_8_xor(o_buf,FLASH_PAGE_SIZE)!=t_byte) //проверяем контрольную сумму
+ if (CNumericConv::CheckSum_8_xor(o_buf, FLASH_PAGE_SIZE)!=t_byte) //проверяем контрольную сумму
  {
   m_ErrorCode = BL_ERROR_CHKSUM;
   return false; //контрольные суммы не совпадают
@@ -237,10 +249,21 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
       memcpy(t_buf, p_boot->m_opdata.data+(i*FLASH_PAGE_SIZE_S), FLASH_PAGE_SIZE_S);
      }
 
-     raw[0] = '!';	//!PNN - 4 байта
-     raw[1] = 'P';
-     CNumericConv::Bin8ToHex(i,&raw[2]); //добавили номер страницы NN
-     raw[4] = 0;
+     int index = 0;
+     raw[index++] = '!';	//!P
+     raw[index++] = 'P';
+     if (p_boot->m_ppf.m_page_count <= 256)
+     {
+      CNumericConv::Bin8ToHex(i, &raw[index]); //append page number NN
+      index+=2;
+     }
+     else //number of pages more than 256
+     {
+      CNumericConv::Bin12ToHex(i, &raw[index]); //append page number NNN
+      index+=3;
+     }
+
+     raw[index++] = 0;
      p_port->SendASCII((char*)raw); //послали команду записи страницы
 
      //теперь необходимо подождать завершения стирания страницы (несколько мс)
