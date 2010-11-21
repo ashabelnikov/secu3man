@@ -87,6 +87,11 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_MainFrmWnd_X;
   const CString m_Name_MainFrmWnd_Y;
 
+  //fixture settings
+  const CString m_Name_Fixtures_Section;
+  const CString m_Name_Tachometer_Max;
+  const CString m_Name_Pressure_Max;
+
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;   
   virtual DWORD GetBaudRateApplication(void) const;
@@ -104,6 +109,9 @@ class CAppSettingsModel : public ISettingsData
   //язык интерфейса и тип платформы
   virtual EInterLang GetInterfaceLanguage(void) const;
   virtual EECUPlatform GetECUPlatformType(void) const;
+  //fixtures's customization
+  virtual int GetTachometerMax(void) const;
+  virtual int GetPressureMax(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -117,6 +125,8 @@ class CAppSettingsModel : public ISettingsData
   int   m_optMIDeskUpdatePeriod;
   EInterLang m_optInterLang;
   EECUPlatform m_optECUPlatformType;
+  int m_optTachometerMax;
+  int m_optPressureMax;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

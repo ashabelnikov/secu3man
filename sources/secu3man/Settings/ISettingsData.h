@@ -65,4 +65,7 @@ class ISettingsData
   //язык интерфейса и тип платформы SECU-3  
   virtual EInterLang GetInterfaceLanguage(void) const = 0;
   virtual EECUPlatform GetECUPlatformType(void) const = 0;
+  //Fixtures's customization settings
+  virtual int GetTachometerMax(void) const = 0;
+  virtual int GetPressureMax(void) const = 0;
 };

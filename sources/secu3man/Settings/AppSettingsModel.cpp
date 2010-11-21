@@ -64,6 +64,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_AttenMapWnd_Y(_T("AttenMapWnd_Y"))
 , m_Name_MainFrmWnd_X(_T("MainFrmWnd_X"))
 , m_Name_MainFrmWnd_Y(_T("MainFrmWnd_Y"))
+//fixtures
+, m_Name_Fixtures_Section("Fixtures")
+, m_Name_Tachometer_Max(_T("Tachometer_Max"))
+, m_Name_Pressure_Max(_T("Pressure_Max"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_600);
@@ -312,6 +316,26 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_Y, std::numeric_limits<int>::max());
 
+ //-----------------------------------------  
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
+  m_optTachometerMax = i_val;
+ else
+ { //error
+  status = false;
+  m_optTachometerMax = 8000; 
+ }
+
+ //-----------------------------------------  
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,_T("110"),read_str,255,IniFileName);
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 500)
+  m_optPressureMax = i_val;
+ else
+ { //error
+  status = false;
+  m_optPressureMax = 110; 
+ }
+
  return status;
 }
 
@@ -405,6 +429,13 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optMainFrmWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_Y,write_str,IniFileName);
 
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optTachometerMax);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),(int)m_optPressureMax);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,write_str,IniFileName);
+
  return status;
 }
 
@@ -485,3 +516,12 @@ EECUPlatform CAppSettingsModel::GetECUPlatformType(void) const
  return m_optECUPlatformType;
 }
 
+int CAppSettingsModel::GetTachometerMax(void) const
+{
+ return m_optTachometerMax;
+}
+
+int CAppSettingsModel::GetPressureMax(void) const
+{
+ return m_optPressureMax;
+}
