@@ -109,6 +109,11 @@ bool CMITachometer::IsEnabled(void)
 	
 void CMITachometer::SetLimits(float loLimit, float upLimit)
 {
+ m_meter.ResetAlertZones();
+ m_meter.AddAlertZone(loLimit, upLimit * 0.5, RGB(100,255,100));
+ m_meter.AddAlertZone(upLimit * 0.5, upLimit * 0.75, RGB(255,255,100));
+ m_meter.AddAlertZone(upLimit * 0.75, upLimit, RGB(255,100,100));
+
  m_meter.SetRange(loLimit, upLimit);
 }
 	

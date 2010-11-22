@@ -74,6 +74,10 @@ void CParamMonTabController::OnSettingsChanged(void)
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ //обновляем диапазоны приборов
+ m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
+ m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ m_view->Invalidate();
 }
 
 //from ParamDesk
@@ -92,6 +96,9 @@ void CParamMonTabController::OnParamDeskChangeInTab(void)
 //from MainTabController
 void CParamMonTabController::OnActivate(void)
 {
+ m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
+ m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+
  //выбираем ранее выбранную вкладку на панели параметров	
  bool result = m_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());

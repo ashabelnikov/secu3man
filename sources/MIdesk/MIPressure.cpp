@@ -109,6 +109,11 @@ bool CMIPressure::IsEnabled(void)
 	
 void CMIPressure::SetLimits(float loLimit, float upLimit)
 {
+ m_meter.ResetAlertZones();
+ m_meter.AddAlertZone(loLimit, upLimit * 0.2727, RGB(180,130,130));
+ m_meter.AddAlertZone(upLimit * 0.2727, upLimit * 0.8181, RGB(120,200,120));
+ m_meter.AddAlertZone(upLimit * 0.8181, upLimit, RGB(180,130,130));
+
  m_meter.SetRange(loLimit, upLimit);
 }
 	

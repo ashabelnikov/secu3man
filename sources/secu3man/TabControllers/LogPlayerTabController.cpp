@@ -106,11 +106,19 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+
+ //обновляем диапазоны приборов
+ m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
+ m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ m_view->Invalidate();
 }
 
 //from MainTabController
 void CLogPlayerTabController::OnActivate(void)
 {
+ m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
+ m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3
  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 

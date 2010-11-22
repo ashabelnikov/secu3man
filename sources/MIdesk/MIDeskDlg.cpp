@@ -176,6 +176,16 @@ void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
  }
 }
 
+void CMIDeskDlg::SetTachometerMax(int i_max)
+{
+ m_tachometer.SetLimits(0, i_max);
+}
+
+void CMIDeskDlg::SetPressureMax(int i_max)
+{
+ m_pressure.SetLimits(10, i_max);
+}
+
 void CMIDeskDlg::Resize(const CRect& i_rect)
 {
  //на основе предыдущего размера окна высчитываем коэффициенты масштабирования

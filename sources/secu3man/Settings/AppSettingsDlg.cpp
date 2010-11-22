@@ -38,6 +38,8 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_OnCancel(NULL)
 , m_OnActivate(NULL)
 , m_midesk_update_period_edit(CEditEx::MODE_INT)
+, m_tachometer_max_edit(CEditEx::MODE_INT)
+, m_pressure_max_edit(CEditEx::MODE_INT)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
@@ -46,6 +48,8 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_log_files_folder = _T("");
  m_use_app_folder = 0;
  m_midesk_update_period = 40;
+ m_tachometer_max = 0;
+ m_pressure_max = 0;
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -76,6 +80,14 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN, m_midesk_update_period_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT, m_midesk_update_period_edit);
  m_midesk_update_period_edit.DDX_Value(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT, m_midesk_update_period);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN, m_tachometer_max_spin);
+ DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT, m_tachometer_max_edit);
+ m_tachometer_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT, m_tachometer_max);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_SPIN, m_pressure_max_spin);
+ DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max_edit);
+ m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
 }
 
 
@@ -92,6 +104,14 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_midesk_update_period_edit.SetLimitText(4);
  m_midesk_update_period_spin.SetBuddy(&m_midesk_update_period_edit);
  m_midesk_update_period_spin.SetRangeAndDelta(0,1000,10);
+
+ m_tachometer_max_edit.SetLimitText(5);
+ m_tachometer_max_spin.SetBuddy(&m_tachometer_max_edit);
+ m_tachometer_max_spin.SetRangeAndDelta(1000, 15000, 10);
+
+ m_pressure_max_edit.SetLimitText(5);
+ m_pressure_max_spin.SetBuddy(&m_pressure_max_edit);
+ m_pressure_max_spin.SetRangeAndDelta(50, 500, 10);
 
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том что мы готовы к приему данных
@@ -354,4 +374,24 @@ int CAppSettingsDlg::GetInterfaceLanguage(void) const
 int CAppSettingsDlg::GetECUPlatformType(void) const
 {
  return m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection); 
+}
+
+void CAppSettingsDlg::SetTachometerMax(int i_max)
+{
+ m_tachometer_max = i_max;
+}
+
+void CAppSettingsDlg::SetPressureMax(int i_max)
+{
+ m_pressure_max = i_max;
+}
+
+int CAppSettingsDlg::GetTachometerMax(void) const
+{
+ return m_tachometer_max;
+}
+
+int CAppSettingsDlg::GetPressureMax(void) const
+{
+ return m_pressure_max;
 }

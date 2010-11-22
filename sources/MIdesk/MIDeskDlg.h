@@ -58,6 +58,12 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //установка периода обновления в миллисекундах
   void SetUpdatePeriod(unsigned int i_period);
 
+  //Set maximum value of tachometer displayed on the fixture
+  void SetTachometerMax(int i_max);
+
+  //Set maximum value of pressure meter displayed on the fixture
+  void SetPressureMax(int i_max);
+
   //изменение размеров окна
   void Resize(const CRect& i_rect);
 
