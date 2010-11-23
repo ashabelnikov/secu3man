@@ -104,6 +104,7 @@ namespace SECU3IO
  struct TemperPar
  {
   unsigned char tmp_use;
+  unsigned char vent_pwm;
   float  vent_on;
   float  vent_off;
  };

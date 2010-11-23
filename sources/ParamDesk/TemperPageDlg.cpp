@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnChangePdTemperVentOnThresholdEdit)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnChangePdTemperVentOffThresholdEdit)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
+ ON_BN_CLICKED(IDC_PD_TEMPER_USE_VENT_PWM, OnPdTemperUseVentPwm)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN, OnUpdateControls)
@@ -48,6 +49,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
@@ -59,6 +61,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
  m_params.vent_on = 95.0f;
  m_params.vent_off = 98.0f;
  m_params.tmp_use = 1;
+ m_params.vent_pwm = 0;
 }
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
@@ -70,6 +73,7 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_use_temp_sensor);
+ DDX_Control(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_use_vent_pwm);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN, m_vent_on_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, m_vent_off_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_vent_off_threshold_edit);
@@ -78,6 +82,7 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  m_vent_on_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, m_params.vent_on);
  m_vent_off_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_params.vent_off);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
+ DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -122,6 +127,12 @@ void CTemperPageDlg::OnChangePdTemperVentOffThresholdEdit()
 }
 
 void CTemperPageDlg::OnPdTemperUseTempSensor()
+{
+ UpdateData();		
+ OnChangeNotify();
+}
+
+void CTemperPageDlg::OnPdTemperUseVentPwm()
 {
  UpdateData();		
  OnChangeNotify();

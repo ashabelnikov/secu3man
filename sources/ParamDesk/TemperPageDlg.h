@@ -49,6 +49,7 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnChangePdTemperVentOnThresholdEdit();
   afx_msg void OnChangePdTemperVentOffThresholdEdit();
   afx_msg void OnPdTemperUseTempSensor();
+  afx_msg void OnPdTemperUseVentPwm();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
@@ -57,6 +58,7 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   BOOL m_enabled;
 
   CButton m_use_temp_sensor;
+  CButton m_use_vent_pwm;
   CSpinButtonCtrlEx m_vent_on_threshold_spin;
   CSpinButtonCtrlEx m_vent_off_threshold_spin;
   CEditEx m_vent_off_threshold_edit;

@@ -556,11 +556,16 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
 
- if (strlen((char*)raw_packet)!=10)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=11)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.tmp_use))
+  return false;
+ raw_packet+=1;  
+
+  //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
+ if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.vent_pwm))
   return false;
  raw_packet+=1;  
 
@@ -1349,6 +1354,7 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 {
  CNumericConv::Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
+ CNumericConv::Bin4ToHex(packet_data->vent_pwm,m_outgoing_packet);
  int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(vent_on,m_outgoing_packet);
  int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);

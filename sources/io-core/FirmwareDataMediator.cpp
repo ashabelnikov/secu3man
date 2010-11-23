@@ -407,6 +407,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    {
     TemperPar* p_in = (TemperPar*)i_values; 
     p_params->tmp_use  = p_in->tmp_use;
+    p_params->vent_pwm = p_in->vent_pwm;
     p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
     p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
    }      
@@ -554,6 +555,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     {
      TemperPar* p_out = (TemperPar*)o_values;
      p_out->tmp_use  = p_params->tmp_use;
+     p_out->vent_pwm = p_params->vent_pwm;
      p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
      p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
     }

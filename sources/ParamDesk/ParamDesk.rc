@@ -285,27 +285,30 @@ END
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 155, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,30,51,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,26,51,19,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,80,50,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,69,50,19,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Использовать датчик температуры охлаждающей жидкости",
                     IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+                    BS_MULTILINE | WS_TABSTOP,28,97,116,27
     LTEXT           "Порог включения вентилятора",
-                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,16,16,119,11
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,16,12,119,11
     LTEXT           "Порог выключения вентилятора",
-                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,65,116,9
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,54,116,9
     CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,30,14,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,26,14,
                     19
     CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,80,14,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,69,14,
                     19
-    LTEXT           "°С",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,33,18,14
-    LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
+    LTEXT           "°С",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,29,18,14
+    LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,71,18,14
+    CONTROL         "Управлять вентилятором используя ШИМ",
+                    IDC_PD_TEMPER_USE_VENT_PWM,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,125,116,27
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
@@ -567,16 +570,16 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "циклов"
-    IDS_PD_TABNAME_STARTR_PAR       "1:Запуск"
-    IDS_PD_TABNAME_ANGLES_PAR       "2:УОЗ"
-    IDS_PD_TABNAME_IDLREG_PAR       "3:ХХ"
-    IDS_PD_TABNAME_FUNSET_PAR       "4:Функции"
-    IDS_PD_TABNAME_TEMPER_PAR       "5:Температура"
-    IDS_PD_TABNAME_CARBUR_PAR       "6:Карбюратор"
-    IDS_PD_TABNAME_ADCCOR_PAR       "7:Компенc.погрешн.АЦП"
-    IDS_PD_TABNAME_CKPS_PAR         "8:ДПКВ"
-    IDS_PD_TABNAME_KNOCK_PAR        "9:Детонация"
-    IDS_PD_TABNAME_MISCEL_PAR       "10:Прочее"
+    IDS_PD_TABNAME_STARTR_PAR "1:Запуск"
+    IDS_PD_TABNAME_ANGLES_PAR "2:УОЗ"
+    IDS_PD_TABNAME_IDLREG_PAR "3:ХХ"
+    IDS_PD_TABNAME_FUNSET_PAR "4:Функции"
+    IDS_PD_TABNAME_TEMPER_PAR "5:Температура"
+    IDS_PD_TABNAME_CARBUR_PAR "6:Карбюратор"
+    IDS_PD_TABNAME_ADCCOR_PAR "7:Компенc.погрешн.АЦП"
+    IDS_PD_TABNAME_CKPS_PAR "8:ДПКВ"
+    IDS_PD_TABNAME_KNOCK_PAR "9:Детонация"
+    IDS_PD_TABNAME_MISCEL_PAR "10:Прочее"
 END
 
 #endif    // Russian resources
@@ -857,25 +860,28 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,30,51,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,26,51,19,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,80,50,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,69,50,19,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Use coolant temperature sensor",
                     IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+                    BS_MULTILINE | WS_TABSTOP,28,97,116,27
     LTEXT           "Ventilator turn on threshold",
-                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,17,16,119,11
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,17,12,119,11
     LTEXT           "Ventilator turn off threshold",
-                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,65,116,9
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,54,116,9
     CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,30,14,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,26,14,
                     19
     CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,80,14,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,69,14,
                     19
-    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,33,18,14
-    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,82,18,14
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,29,18,14
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,71,18,14
+    CONTROL         "Control ventilator using PWM",
+                    IDC_PD_TEMPER_USE_VENT_PWM,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,125,116,27
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
@@ -1102,16 +1108,16 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_UNIT "cycles"
-    IDS_PD_TABNAME_STARTR_PAR       "1:Start"
-    IDS_PD_TABNAME_ANGLES_PAR       "2:Angle"
-    IDS_PD_TABNAME_IDLREG_PAR       "3:Idling"
-    IDS_PD_TABNAME_FUNSET_PAR       "4:Functions"
-    IDS_PD_TABNAME_TEMPER_PAR       "5:Temperature"
-    IDS_PD_TABNAME_CARBUR_PAR       "6:Carburetor"
-    IDS_PD_TABNAME_ADCCOR_PAR       "7:ADC errors corr."
-    IDS_PD_TABNAME_CKPS_PAR         "8:CKPS"
-    IDS_PD_TABNAME_KNOCK_PAR        "9:Knock"
-    IDS_PD_TABNAME_MISCEL_PAR       "10:Misc"
+    IDS_PD_TABNAME_STARTR_PAR "1:Start"
+    IDS_PD_TABNAME_ANGLES_PAR "2:Angle"
+    IDS_PD_TABNAME_IDLREG_PAR "3:Idling"
+    IDS_PD_TABNAME_FUNSET_PAR "4:Functions"
+    IDS_PD_TABNAME_TEMPER_PAR "5:Temperature"
+    IDS_PD_TABNAME_CARBUR_PAR "6:Carburetor"
+    IDS_PD_TABNAME_ADCCOR_PAR "7:ADC errors corr."
+    IDS_PD_TABNAME_CKPS_PAR "8:CKPS"
+    IDS_PD_TABNAME_KNOCK_PAR "9:Knock"
+    IDS_PD_TABNAME_MISCEL_PAR "10:Misc"
 END
 
 #endif    // English (U.S.) resources
