@@ -43,10 +43,10 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnUpdateVentOff)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, OnUpdateVentOff)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION, OnUpdateVentOff)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT, OnUpdateVentOff)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateControls)
@@ -89,6 +89,11 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
 void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_use_vent_pwm.GetCheck()!=BST_CHECKED);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -136,6 +141,7 @@ void CTemperPageDlg::OnPdTemperUseVentPwm()
 {
  UpdateData();		
  OnChangeNotify();
+ UpdateDialogControls(this,TRUE);
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

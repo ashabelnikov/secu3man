@@ -51,6 +51,7 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnPdTemperUseTempSensor();
   afx_msg void OnPdTemperUseVentPwm();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateVentOff(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
