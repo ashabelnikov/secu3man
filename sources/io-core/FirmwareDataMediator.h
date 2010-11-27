@@ -55,6 +55,10 @@ class IOCORE_API CFirmwareDataMediator
 
   void CalculateAndPlaceFirmwareCRC(BYTE* io_data);
 
+  //checks compatibility of specified firmware with this version of management software
+  //returns false if incompatible
+  bool CheckCompatibility(const BYTE* i_data) const;
+
 	//-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
   void SetSignatureInfo(_TSTRING i_string);

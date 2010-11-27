@@ -420,6 +420,7 @@ BEGIN
                             "Импортировать данные непосредственно из SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Импортировать таблицы из MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Импорт данных"
+    IDS_INCOMPATIBLE_FIRMWARE "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -898,6 +899,7 @@ BEGIN
     IDS_IMPORT_FW_DATA_FROM_SECU3 "Import data directly from SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Import tables from MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Import data"
+    IDS_INCOMPATIBLE_FIRMWARE "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
 END
 
 STRINGTABLE DISCARDABLE 

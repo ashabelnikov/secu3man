@@ -45,8 +45,9 @@ typedef struct
 }F_data;
 
 
-#define FW_SIGNATURE_INFO_SIZE 48
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
+#define FW_SIGNATURE_INFO_SIZE 48
+#define COIL_ON_TIME_LOOKUP_TABLE_SIZE 16
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
@@ -56,16 +57,25 @@ typedef struct
  //таблица усиления аттенюатора (зависимость от оборотов).
  _uchar attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; 
 
+ //lookup table containing accumulation time for ignition coils (dependence from voltage)
+ //таблица времени накопления энергии в катушках зажигания (зависимость от напряжения)
+ _uint coil_on_time[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+
+ //used for checking compatibility with management software. Holds size of all data stored in the firmware.
+ //Includes CRC size also.
+ _uint fw_data_size; 
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[128];  
+ _uchar reserved[94];  
 }FirmwareData;
 
 
+#define CODE_CRC_SIZE   sizeof(_uint) 
 #define BOOT_START (m_fpp.m_app_section_size)
-#define CODE_CRC_ADDR (BOOT_START-sizeof(unsigned short))
-#define CODE_SIZE (BOOT_START-sizeof(unsigned short)) //размер кода прошивки без учета байтов контрольной суммы
+#define CODE_CRC_ADDR (BOOT_START-CODE_CRC_SIZE)
+#define CODE_SIZE (BOOT_START-CODE_CRC_SIZE) //размер кода прошивки без учета байтов контрольной суммы
 
 //адрес массива таблиц - семейств характеристик
 #define TABLES_START (CODE_CRC_ADDR-(sizeof(F_data)*TABLES_NUMBER))
@@ -108,9 +118,21 @@ CFirmwareDataMediator::~CFirmwareDataMediator()
 //io_data - массив байтов прошивки 
 void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* io_data)
 {
- unsigned short crc = crc16(io_data, CODE_SIZE);
- unsigned short* crc_addr = (unsigned short*)(&io_data[CODE_CRC_ADDR]);
+ _uint crc = crc16(io_data, CODE_SIZE);
+ _uint* crc_addr = (_uint*)(&io_data[CODE_CRC_ADDR]);
  *crc_addr = crc; //сохранили контрольную сумму
+}
+
+bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data) const
+{
+ bool compatible = true;
+
+ FirmwareData* p_fwdata = (FirmwareData*)&i_data[FIRMWARE_DATA_START];
+
+ if ((FIRMWARE_ALL_DATA_SIZE + CODE_CRC_SIZE) != p_fwdata->fw_data_size)
+  compatible = false;
+
+ return compatible;
 }
 
 void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
@@ -289,13 +311,13 @@ _TSTRING CFirmwareDataMediator::GetFWFileName(void)
 
 unsigned int CFirmwareDataMediator::CalculateCRC16OfActiveFirmware(void)
 {
- unsigned short crc_16 = crc16(m_bytes_active,CODE_SIZE);
+ _uint crc_16 = crc16(m_bytes_active,CODE_SIZE);
  return crc_16;
 }
 
 unsigned int CFirmwareDataMediator::GetCRC16StoredInActiveFirmware(void)
 {
- unsigned short* crc_16_addr = (unsigned short*)(&m_bytes_active[CODE_CRC_ADDR]);
+ _uint* crc_16_addr = (_uint*)(&m_bytes_active[CODE_CRC_ADDR]);
  return *crc_16_addr;
 }
 

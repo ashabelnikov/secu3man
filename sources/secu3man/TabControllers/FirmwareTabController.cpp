@@ -281,7 +281,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
  switch(opcode)
  { 
   //////////////////////////////////////////////////////////////////////
-  case CBootLoader::BL_OP_EXIT: //неиспользуется когда бутлоадер запущен аварийно
+  case CBootLoader::BL_OP_EXIT: //не используется когда бутлоадер запущен аварийно
   {    
    //вновь активируем коммуникационный контроллер приложения
    m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
@@ -361,21 +361,25 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_READ_FLASH:
   {
    if (status==1)
-   { 	
-	   m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_READ_SUCCESSFULLY));
-	   if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
+   {
+    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_READ_SUCCESSFULLY));
+    if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_FILE)
     {
-	    SaveFLASHToFile(m_bl_data, m_fpp.m_total_size);
+     SaveFLASHToFile(m_bl_data, m_fpp.m_total_size);
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
     {
-     PrepareOnLoadFLASH(m_bl_data,_T(""));
+     if (_CheckCompatibilityAndAskUser(m_bl_data)) 
+      PrepareOnLoadFLASH(m_bl_data, _T(""));
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
     {
-     m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
-     m_fwdm->StoreBytes(m_bl_data);
-     PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+     if (_CheckCompatibilityAndAskUser(m_bl_data))
+     {
+      m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
+      m_fwdm->StoreBytes(m_bl_data);
+      PrepareOnLoadFLASH(m_bl_data, m_fwdm->GetFWFileName());
+     }
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
     {	     
@@ -523,6 +527,20 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
 
  m_sbar->ShowProgressBar(true);
  m_sbar->SetProgressPos(0);
+}
+
+bool CFirmwareTabController::_CheckCompatibilityAndAskUser(BYTE* i_buff)
+{
+ if (!i_buff)
+  return false;
+
+ if (!m_fwdm->CheckCompatibility(i_buff))
+ {
+  if (IDNO==AfxMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_FIRMWARE), MB_YESNO | MB_ICONEXCLAMATION))
+   return false; //aborted by user
+ }
+
+ return true; //compatible or/and user argee
 }
 
 void CFirmwareTabController::OnWriteFlashFromFile(void)
@@ -906,9 +924,9 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  
  //!!! без вычисления и записи контрольной суммы в буфер
  result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
- if (result) //user OK?
- {
-  PrepareOnLoadFLASH(buff,_TSTRING(opened_file_name));
+ if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
+ {  
+  PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
  }
 }
 
@@ -1084,11 +1102,11 @@ void CFirmwareTabController::OnImportDataFromAnotherFW()
  
  //!!! без вычисления и записи контрольной суммы в буфер
  result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
- if (result) //user OK?
+ if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
  {
   m_fwdm->LoadDataBytesFromAnotherFirmware(buff);
   m_fwdm->StoreBytes(m_bl_data); 
-  PrepareOnLoadFLASH(m_bl_data,m_fwdm->GetFWFileName());
+  PrepareOnLoadFLASH(m_bl_data, m_fwdm->GetFWFileName());
  }
 }
 

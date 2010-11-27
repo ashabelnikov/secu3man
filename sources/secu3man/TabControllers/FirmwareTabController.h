@@ -81,6 +81,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff);
 
   void _OnReadFlashToFile(void);
+  bool _CheckCompatibilityAndAskUser(BYTE* i_buff);
 
   ///////////context menu and other event handlers/////////////////////
   void OnBootLoaderInfo(void);
