@@ -191,11 +191,11 @@ void CStatusBarManager::ShowProgressBar(bool show)
 }
 
 //устанавливает диапазон для ProgressCtrl
-void CStatusBarManager::SetProgressRange(short nLower, short nUpper)
+void CStatusBarManager::SetProgressRange(int nLower, int nUpper)
 {
  MPCStatusBarPaneControlInfo* info = mp_wndStatusBar->GetPanControl(ID_MSB_INDICATOR_PROGRESS);
  ASSERT(info);
- ((CProgressCtrl*)info->m_hWnd)->SetRange(nLower, nUpper);
+ ((CProgressCtrl*)info->m_hWnd)->SetRange32(nLower, nUpper);
 }
 
 //устанавливает текущее значение для ProgressCtrl и текстовое значение

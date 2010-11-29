@@ -39,7 +39,7 @@ class CStatusBarManager
   void SetInformationText(const CString& i_text);
 	
   void ShowProgressBar(bool show);
-  void SetProgressRange(short nLower, short nUpper);
+  void SetProgressRange(int nLower, int nUpper);
   void SetProgressPos(int nPos);
   void SetLoggerState(int i_state);
 

@@ -235,7 +235,7 @@ void CFirmwareTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 
  if (data.opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
  {
-  m_sbar->SetProgressRange(0,data.total);
+  m_sbar->SetProgressRange(0, data.total);
   m_sbar->SetProgressPos(data.current);
  }
 }
