@@ -134,7 +134,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_press_swing_spin.SetBuddy(&m_press_swing_edit);
  m_press_swing_edit.SetLimitText(4);
  m_press_swing_edit.SetDecimalPlaces(2);
- m_press_swing_spin.SetRangeAndDelta(0.25,105.0f,0.25f);
+ m_press_swing_spin.SetRangeAndDelta(0.25,500.0f,0.25f);
 
  m_map_curve_offset_spin.SetBuddy(&m_map_curve_offset_edit);
  m_map_curve_offset_edit.SetLimitText(5);
