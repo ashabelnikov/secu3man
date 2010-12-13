@@ -24,7 +24,7 @@
 
 #define      P_16        0xA001   
 
-unsigned short CRC_API crc16(const unsigned char *buf, unsigned short num)
+unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num)
 {
 unsigned int i;
 unsigned short crc = 0xffff;
