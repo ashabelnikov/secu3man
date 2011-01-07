@@ -32,7 +32,8 @@ enum EMapTypes
  TYPE_MAP_DA_IDLE,
  TYPE_MAP_DA_WORK,
  TYPE_MAP_DA_TEMP_CORR,
- TYPE_MAP_ATTENUATOR
+ TYPE_MAP_ATTENUATOR,
+ TYPE_MAP_COILREGUL
 };
 
 class CHotKeysToCmdRouter;
@@ -78,6 +79,7 @@ class CFirmwareTabDlg : public CTabDialog
   float* GetWorkMap(bool i_original);
   float* GetTempMap(bool i_original);
   float* GetAttenuatorMap(bool i_original);
+  float* GetCoilRegulMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   HWND GetMapWindow(int wndType);
@@ -135,11 +137,14 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnFirmwareSupportViewIdleMap();
   afx_msg void OnFirmwareSupportViewWorkMap();
   afx_msg void OnFirmwareSupportViewTempMap();
+  afx_msg void OnFirmwareSupportViewAttenuatorMap();		
+  afx_msg void OnFirmwareSupportViewCoilRegulMap();		
   afx_msg void OnUpdateFirmwareSupportViewStartMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewWorkMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFirmwareSupportViewCoilRegulMap(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
   afx_msg void OnBootLoaderInfo();
@@ -163,8 +168,7 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnImportMapsFromMPSZ();
   afx_msg void OnImportDefParamsFromEEPROMFile();
   afx_msg void OnExportMapsToMPSZ();
-  afx_msg void OnFirmwareSupportViewAttenuatorMap();		
-  afx_msg void OnWirmwareInfo();
+  afx_msg void OnFirmwareInfo();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -176,6 +180,7 @@ class CFirmwareTabDlg : public CTabDialog
   CButton	m_view_idle_map_btn;
   CButton m_prog_only_code_checkbox;
   CButton m_view_attenuator_map_btn;
+  CButton m_view_coilregul_map_btn;
   CEdit   m_fw_information_edit;
   CEdit m_fw_name;
   CStatic m_fw_crc;
@@ -212,14 +217,16 @@ class CFirmwareTabDlg : public CTabDialog
   int m_start_map_chart_state;
   int m_idle_map_chart_state;
   int m_attenuator_map_chart_state;
+  int m_coilregul_map_chart_state;
  
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
   HWND m_work_map_wnd_handle;
   HWND m_temp_map_wnd_handle;
   HWND m_attenuator_map_wnd_handle;
+  HWND m_coilregul_map_wnd_handle;
    
-  int m_attenuator_table_slots[128];
+  float m_attenuator_table_slots[128];
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);
@@ -231,6 +238,8 @@ class CFirmwareTabDlg : public CTabDialog
   static void __cdecl OnCloseTempMap(void* i_param);
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
+  static void __cdecl OnChangeCoilRegulTable(void* i_param);
+  static void __cdecl OnCloseCoilRegulTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
   bool IsFirmwareOpened(void); 
@@ -254,6 +263,9 @@ class CFirmwareTabDlg : public CTabDialog
 
   float m_attenuator_map_active[128];
   float m_attenuator_map_original[128];
+
+  float m_coilregul_map_active[32];
+  float m_coilregul_map_original[32];
   ///////////////////////////////////////////////////////
 
   void _RegisterHotKeys(void);

@@ -31,6 +31,7 @@ namespace SECU3Types {
 typedef unsigned short _uint;           //uint16
 typedef signed short   _int;            // int16
 typedef signed long    _long;           // int32
+typedef unsigned long  _ulong;          //uint32
 typedef signed char    _char;           // int8
 typedef unsigned char  _uchar;          //uint8
 

@@ -38,6 +38,8 @@ struct WndSettings
  int m_AttenuatorMapWnd_Y;
  int m_MainFrmWnd_X;
  int m_MainFrmWnd_Y;
+ int m_CoilRegulMapWnd_X;
+ int m_CoilRegulMapWnd_Y;
 };
 
 typedef enum EInterLang

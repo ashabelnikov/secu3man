@@ -38,6 +38,7 @@ __fastcall TForm1::TForm1(TComponent* Owner)
  y_axis_title = "";
  original_function  = NULL;
  modified_function  = NULL;
+ horizontal_axis_values_format = "%.00f";  //integer
 }
 
 //---------------------------------------------------------------------------
@@ -94,7 +95,7 @@ void TForm1::DataPrepare()
 
  for(int i = 0; i < count_of_function_points; i++)
  {
-  as.sprintf("%d",horizontal_axis_grid_values[i]);
+  as.sprintf(horizontal_axis_values_format.c_str(), horizontal_axis_grid_values[i]);
   Series1->Add(original_function[i], as, clAqua);
   Series2->Add(modified_function[i], as, clRed);
  }

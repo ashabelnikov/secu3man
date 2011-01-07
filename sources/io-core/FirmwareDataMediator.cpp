@@ -47,7 +47,7 @@ typedef struct
 
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
 #define FW_SIGNATURE_INFO_SIZE 48
-#define COIL_ON_TIME_LOOKUP_TABLE_SIZE 16
+#define COIL_ON_TIME_LOOKUP_TABLE_SIZE 32
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
@@ -65,10 +65,14 @@ typedef struct
  //Includes CRC size also.
  _uint fw_data_size; 
 
+ //holds flags which give information about options were used to build firmware
+ //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
+ _ulong config;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[94];  
+ _uchar reserved[58];  
 }FirmwareData;
 
 
@@ -769,3 +773,39 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
  }
 }
 
+void CFirmwareDataMediator::GetCoilRegulMap(float* o_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ FirmwareData* p_fw_data = NULL;
+ ASSERT(o_values);
+ if (!o_values)
+  return;
+
+ if (i_original)	  
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ p_fw_data = (FirmwareData*)(p_bytes + FIRMWARE_DATA_START); 
+
+ for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
+  o_values[i] = (p_fw_data->coil_on_time[i] * 4.0) / 1000.0; //convert to ms, discrete = 4us
+}
+
+void CFirmwareDataMediator::SetCoilRegulMap(const float* i_values)
+{
+ BYTE* p_bytes = NULL;
+ FirmwareData* p_fw_data = NULL;
+ ASSERT(i_values);
+ if (!i_values)
+  return;
+
+ p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ p_fw_data = (FirmwareData*)(p_bytes + FIRMWARE_DATA_START);
+
+ for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
+  p_fw_data->coil_on_time[i] = (_uint)MathHelpers::Round((i_values[i] * 1000.0) / 4.0);
+}

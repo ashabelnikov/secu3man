@@ -50,7 +50,8 @@ class TForm1 : public TForm
   float aai_min;
   float aai_max;
   int   count_of_function_points;
-  int   horizontal_axis_grid_values[1024];
+  float horizontal_axis_grid_values[1024];
+  AnsiString  horizontal_axis_values_format;
   AnsiString  chart_title_text;
   AnsiString  x_axis_title;
   AnsiString  y_axis_title;

@@ -879,6 +879,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
  OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
  OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
+ OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_COILREGUL), TYPE_MAP_COILREGUL);
 
  return CheckChangesAskAndSaveFirmware();
 }
@@ -979,6 +980,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(false),false);
  m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(true),true);
 
+ m_fwdm->GetCoilRegulMap(m_view->GetCoilRegulMap(false),false);
+ m_fwdm->GetCoilRegulMap(m_view->GetCoilRegulMap(true),true);
+
  if (m_current_funset_index==-1)
   return;
  m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(false),false);
@@ -1047,6 +1051,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_ATTENUATOR:
    m_fwdm->SetAttenuatorMap(m_view->GetAttenuatorMap(false));
+   break;
+  case TYPE_MAP_COILREGUL:
+   m_fwdm->SetCoilRegulMap(m_view->GetCoilRegulMap(false));
    break;
  }
 }
@@ -1229,6 +1236,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_AttenuatorMapWnd_X = rc.left; 
    ws.m_AttenuatorMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_COILREGUL:
+   ws.m_CoilRegulMapWnd_X = rc.left; 
+   ws.m_CoilRegulMapWnd_Y = rc.top;
+   break;
  };
 
  mp_settings->SetWndSettings(ws); 
@@ -1261,6 +1272,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_ATTENUATOR:
    X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
+   break;
+  case TYPE_MAP_COILREGUL:
+   X = ws.m_CoilRegulMapWnd_X, Y = ws.m_CoilRegulMapWnd_Y;
    break;
   default:
    return; //undefined case...

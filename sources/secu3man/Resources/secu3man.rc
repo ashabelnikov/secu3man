@@ -111,6 +111,9 @@ BEGIN
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
     CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
                     262,10,164,176
+    CONTROL         "Настр. врем. накопления",
+                    IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,17,164,95,19
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -349,20 +352,22 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_MSB_INDICATOR_LOGWR  "log wr"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_ECUERROR_KNOCK_DETECTED "Обнаруживалась детонация"
     IDS_ECUERROR_MAP_SENSOR_FAIL "Поломка или неправильная работа ДАД"
     IDS_ECUERROR_TEMP_SENSOR_FAIL "Поломка или неправильная работа ДТОЖ"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
+    IDS_INCOMPATIBLE_FIRMWARE 
+                            "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_TAB_LOG_PLAYER      "Проигрыватель"
     IDS_LP_CANT_OPEN_FILE   "Не могу открыть указанный файл!"
-    IDS_FW_WRONG_EE_FILE_SIZE 
-                            "Неправильный размер файла EEPROM. Размер должен быть %d байт."
-    IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
-                            "Контрольная сумма не совпадает, возможно что параметры EEPROM повреждены. Желаете продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -372,6 +377,12 @@ BEGIN
     IDS_LP_FILE_INFO_FMT_STRING "%s\n%d записей"
     IDS_LP_OPEN_FILE        "Открыть файл"
     IDS_LP_FILE_READ_ERROR  "Произошла ошибка чтения данных.  Возможно что этот файл испорчен или был создан с использованием другой версии программного обеспечения. "
+    IDS_FW_WRONG_EE_FILE_SIZE 
+                            "Неправильный размер файла EEPROM. Размер должен быть %d байт."
+    IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
+                            "Импорт резервных параметров из файла EEPROM"
+    IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
+                            "Контрольная сумма не совпадает, возможно что параметры EEPROM повреждены. Желаете продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -420,14 +431,11 @@ BEGIN
                             "Импортировать данные непосредственно из SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Импортировать таблицы из MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Импорт данных"
-    IDS_INCOMPATIBLE_FIRMWARE "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Экспорт данных"
-    IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
-                            "Импорт резервных параметров из файла EEPROM"
     IDS_EXPORT_EXPORT_TO_MPSZ "Экспортировать таблицы в MPSZ-ZH"
 END
 
@@ -459,12 +467,15 @@ BEGIN
     IDS_FW_START_MAP        "Пусковая карта УОЗ"
     IDS_FW_MAPS_ADVANGLE_UNIT "УОЗ (град.)"
     IDS_FW_MAPS_RPM_UNIT    "Обороты (мин-1)"
+    IDS_FW_MAPS_VOLT_UNIT   "Вольты (B)"
     IDS_FW_IDLE_MAP         "Карта УОЗ на холостом ходу"
     IDS_FW_WORK_MAP         "Рабочая карта УОЗ"
     IDS_FW_MAPS_TEMPERATURE_UNIT "Температура °C"
     IDS_FW_TEMPCORR_MAP     "Карта коррекции УОЗ по температуре охлаждающей жидкости"
     IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
     IDS_FW_ATTENUATOR_MAP   "Настройка кривой усиления аттенюатора"
+    IDS_FW_MAPS_COILREGUL_UNIT "Время накопления (мс)"
+    IDS_FW_COILREGUL_MAP   "Настройка времени накопления энергии катушек зажигания"
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Параметры были сохранены."
     IDS_KC_READING_PARAMETERS "Чтение параметров ДД..."
     IDS_KC_READY            "Готово."
@@ -594,6 +605,9 @@ BEGIN
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
     CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
                     262,10,164,176
+    CONTROL         "Tune coil regulation",
+                    IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,15,164,95,19
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -899,7 +913,17 @@ BEGIN
     IDS_IMPORT_FW_DATA_FROM_SECU3 "Import data directly from SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Import tables from MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Import data"
-    IDS_INCOMPATIBLE_FIRMWARE "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ECUERROR_KNOCK_DETECTED "Detonation detected"
+    IDS_ECUERROR_MAP_SENSOR_FAIL "Breakage or wrong work of MAP sensor"
+    IDS_ECUERROR_TEMP_SENSOR_FAIL 
+                            "Breakage or wrong work of coolant temperature sensor"
+    IDS_ECUERROR_VOLT_SENSOR_FAIL "Abnormal board voltage"
+    IDS_INCOMPATIBLE_FIRMWARE 
+                            "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -911,11 +935,6 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     ID_MSB_INDICATOR_LOGWR  "log wr"
-    IDS_ECUERROR_KNOCK_DETECTED "Detonation detected"
-    IDS_ECUERROR_MAP_SENSOR_FAIL "Breakage or wrong work of MAP sensor"
-    IDS_ECUERROR_TEMP_SENSOR_FAIL 
-                            "Breakage or wrong work of coolant temperature sensor"
-    IDS_ECUERROR_VOLT_SENSOR_FAIL "Abnormal board voltage"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -970,12 +989,15 @@ BEGIN
     IDS_FW_START_MAP        "Start angle map"
     IDS_FW_MAPS_ADVANGLE_UNIT "Angle (degg.)"
     IDS_FW_MAPS_RPM_UNIT    "Speed (min-1)"
+    IDS_FW_MAPS_VOLT_UNIT   "Volts (V)"
     IDS_FW_IDLE_MAP         "Idle angle map"
     IDS_FW_WORK_MAP         "Work angle map"
     IDS_FW_MAPS_TEMPERATURE_UNIT "Temperature °C"
     IDS_FW_TEMPCORR_MAP     "Coolant temperature angle's correction map"
     IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
     IDS_FW_ATTENUATOR_MAP   "Tune attenuator curve of amplification"
+    IDS_FW_MAPS_COILREGUL_UNIT "Accumulation time (ms)"
+    IDS_FW_COILREGUL_MAP   "Tune accumulation time of ignition coils"
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Parameters has been saved."
     IDS_KC_READING_PARAMETERS "Reading KS parameters..."
     IDS_KC_READY            "Ready."

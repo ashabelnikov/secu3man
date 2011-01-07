@@ -21,7 +21,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title,LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const float *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title,LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
@@ -95,7 +95,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 }
 
 //---------------------------------------------------------------------------
-HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const int *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart2DCreate(float *original_function, float *modified_function, float aai_min, float aai_max, const float *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
  TForm1* pForm1;
  pForm1 = new TForm1((TComponent *)NULL);
@@ -111,9 +111,8 @@ HWND __cdecl Chart2DCreate(float *original_function, float *modified_function,fl
  pForm1->Caption = MLL::LoadString(IDS_EDITING_MAPS);
 
  //сохраняем значения сетки по горизонтальной оси
- memcpy(pForm1->horizontal_axis_grid_values,x_axis_grid_values,sizeof(int)*count_of_points);
- pForm1->DataPrepare();
- AddInstanceByHWND(pForm1->Handle,pForm1);
+ memcpy(pForm1->horizontal_axis_grid_values, x_axis_grid_values, sizeof(float) * count_of_points);
+ AddInstanceByHWND(pForm1->Handle, pForm1);
  return pForm1->Handle;
 }
 
@@ -123,14 +122,18 @@ void __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
    return;
- //удаляем старые значения, а потом вновь заполняем серии
- for (;pForm1->Series1->Count() > 0;)
-  pForm1->Series1->Delete(pForm1->Series1->Count()-1);
- for (;pForm1->Series2->Count() > 0;)
-  pForm1->Series2->Delete(pForm1->Series2->Count()-1);
 
- pForm1->original_function   = original_function;
- pForm1->modified_function   = modified_function;
+ if (original_function && modified_function)
+ {
+  //удаляем старые значения, а потом вновь заполняем серии
+  for (;pForm1->Series1->Count() > 0;)
+   pForm1->Series1->Delete(pForm1->Series1->Count()-1);
+  for (;pForm1->Series2->Count() > 0;)
+   pForm1->Series2->Delete(pForm1->Series2->Count()-1);
+
+  pForm1->original_function   = original_function;
+  pForm1->modified_function   = modified_function;
+ }
  pForm1->DataPrepare();
 }
 
@@ -182,6 +185,9 @@ void __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_
  {
   case 0: //Y
    pForm1->Chart1->LeftAxis->AxisValuesFormat = i_format_string;
+   break;
+  case 1: //X
+   pForm1->horizontal_axis_values_format = i_format_string;
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetAxisValuesFormat: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);

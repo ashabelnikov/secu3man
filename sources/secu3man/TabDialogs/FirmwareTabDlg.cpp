@@ -42,7 +42,7 @@ void __cdecl CFirmwareTabDlg::OnChangeStartMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
 
@@ -55,7 +55,7 @@ void __cdecl CFirmwareTabDlg::OnCloseStartMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
  _this->m_start_map_chart_state = 0;
@@ -71,7 +71,7 @@ void __cdecl CFirmwareTabDlg::OnChangeIdleMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
 
@@ -84,7 +84,7 @@ void __cdecl CFirmwareTabDlg::OnCloseIdleMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
  _this->m_idle_map_chart_state = 0;
@@ -100,7 +100,7 @@ void __cdecl CFirmwareTabDlg::OnChangeWorkMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
 
@@ -114,7 +114,7 @@ void __cdecl CFirmwareTabDlg::OnCloseWorkMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
  _this->m_work_map_chart_state = 0;
@@ -130,7 +130,7 @@ void __cdecl CFirmwareTabDlg::OnChangeTempMap(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
 
@@ -144,7 +144,7 @@ void __cdecl CFirmwareTabDlg::OnCloseTempMap(void* i_param)
 CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
  _this->m_temp_map_chart_state = 0;
@@ -160,7 +160,7 @@ void __cdecl CFirmwareTabDlg::OnChangeAttenuatorTable(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
 
@@ -174,7 +174,7 @@ void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
  CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
  if (!_this)
  {
-  ASSERT(0); //what is the fuck?
+  ASSERT(0); //what the fuck?
   return;
  }
  _this->m_attenuator_map_chart_state = 0;
@@ -182,6 +182,36 @@ void __cdecl CFirmwareTabDlg::OnCloseAttenuatorTable(void* i_param)
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CFirmwareTabDlg::OnChangeCoilRegulTable(void* i_param)
+{
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_COILREGUL); 
+}
+
+//------------------------------------------------------------------------
+void __cdecl CFirmwareTabDlg::OnCloseCoilRegulTable(void* i_param)
+{
+ CFirmwareTabDlg* _this = static_cast<CFirmwareTabDlg*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_coilregul_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_coilregul_map_wnd_handle, TYPE_MAP_COILREGUL);
 }
 
 //------------------------------------------------------------------------
@@ -223,14 +253,15 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
  m_start_map_chart_state  = 0;
  m_idle_map_chart_state   = 0;
  m_attenuator_map_chart_state = 0;
-
+ m_coilregul_map_chart_state = 0;
 
  m_start_map_wnd_handle = NULL;
  m_idle_map_wnd_handle  = NULL;
  m_work_map_wnd_handle  = NULL;
  m_temp_map_wnd_handle  = NULL;
  m_attenuator_map_wnd_handle = NULL;
- 
+ m_coilregul_map_wnd_handle = NULL;
+
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
  {
@@ -253,7 +284,8 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG, m_modification_flag);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, m_prog_only_code_checkbox);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,m_view_attenuator_map_btn);
+ DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, m_view_attenuator_map_btn);
+ DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION, m_view_coilregul_map_btn);
 }
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
@@ -270,11 +302,14 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, OnFirmwareSupportViewIdleMap)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP, OnFirmwareSupportViewWorkMap)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, OnFirmwareSupportViewTempMap)
+ ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)  
+ ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION, OnFirmwareSupportViewCoilRegulMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_START_MAP, OnUpdateFirmwareSupportViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, OnUpdateFirmwareSupportViewIdleMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP, OnUpdateFirmwareSupportViewWorkMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, OnUpdateFirmwareSupportViewTempMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareSupportViewAttenuatorMap)
+ ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION, OnUpdateFirmwareSupportViewCoilRegulMap)
  ON_WM_TIMER()
  ON_WM_DESTROY()
  ON_COMMAND(IDM_READ_BOOTLOADER_SIGNATURE, OnBootLoaderInfo)
@@ -322,10 +357,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
  ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
     	
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnUpdateFirmwareControls)
- ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)  
-
- ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnWirmwareInfo)
+ ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnFirmwareInfo)
  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
 END_MESSAGE_MAP()
 
@@ -444,6 +476,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
     MLL::GetString(IDS_FW_START_MAP).c_str());	  
   DLL::UOZ1_Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
+  DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
@@ -476,6 +509,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
     MLL::GetString(IDS_FW_IDLE_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
+  DLL::UOZ1_Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
@@ -537,6 +571,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
 	MLL::GetString(IDS_FW_TEMPCORR_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
+  DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
  
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
@@ -588,6 +623,14 @@ void CFirmwareTabDlg::OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );	
+}
+
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewCoilRegulMap(CCmdUI* pCmdUI)
+{
+ bool opened = IsFirmwareOpened(); 
+ BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );	
 }
 
 void CFirmwareTabDlg::OnTimer(UINT nIDEvent) 
@@ -731,6 +774,8 @@ void CFirmwareTabDlg::UpdateOpenedCharts(void)
   DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));	 
  if (m_attenuator_map_chart_state)
   DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));	 
+ if (m_coilregul_map_chart_state)
+  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));	 
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -858,7 +903,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_attenuator_map_wnd_handle,WM_CLOSE,0,0); 
+  ::SendMessage(m_attenuator_map_wnd_handle, WM_CLOSE, 0, 0); 
   return;
  }
 
@@ -875,6 +920,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
   DLL::UOZ1_Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
   DLL::UOZ1_Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
   DLL::UOZ1_Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
+  DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
@@ -888,7 +934,40 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  }	
 }
 
-void CFirmwareTabDlg::OnWirmwareInfo()
+void CFirmwareTabDlg::OnFirmwareSupportViewCoilRegulMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_coilregul_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_coilregul_map_wnd_handle, WM_CLOSE, 0, 0); 
+  return;
+ }
+
+ if ((!m_coilregul_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ {
+  m_coilregul_map_chart_state = 1;	
+  m_coilregul_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.0f, 16.0, SECU3IO::coilregul_map_slots, 32,
+    MLL::GetString(IDS_FW_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_FW_MAPS_COILREGUL_UNIT).c_str(),
+    MLL::GetString(IDS_FW_COILREGUL_MAP).c_str());
+  DLL::UOZ1_Chart2DSetAxisValuesFormat(m_coilregul_map_wnd_handle, 1, _T("%.01f"));
+  DLL::UOZ1_Chart2DSetOnChange(m_coilregul_map_wnd_handle, OnChangeCoilRegulTable, this);
+  DLL::UOZ1_Chart2DSetOnClose(m_coilregul_map_wnd_handle, OnCloseCoilRegulTable, this);
+  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_coilregul_map_wnd_handle, TYPE_MAP_COILREGUL);
+
+  DLL::UOZ1_Chart2DShow(m_coilregul_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_coilregul_map_wnd_handle);
+ }	
+}
+
+void CFirmwareTabDlg::OnFirmwareInfo()
 {
  if (m_OnFirmwareInfo)
   m_OnFirmwareInfo();
@@ -960,6 +1039,14 @@ float* CFirmwareTabDlg::GetAttenuatorMap(bool i_original)
   return m_attenuator_map_active;
 }
 
+float* CFirmwareTabDlg::GetCoilRegulMap(bool i_original) 
+{
+ if (i_original)
+  return m_coilregul_map_original;
+ else
+  return m_coilregul_map_active;
+}
+
 HWND CFirmwareTabDlg::GetMapWindow(int wndType)
 {
  switch(wndType)
@@ -974,6 +1061,8 @@ HWND CFirmwareTabDlg::GetMapWindow(int wndType)
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
  case TYPE_MAP_ATTENUATOR: 
   return m_attenuator_map_wnd_handle ? m_attenuator_map_wnd_handle : NULL;
+ case TYPE_MAP_COILREGUL: 
+  return m_coilregul_map_wnd_handle ? m_coilregul_map_wnd_handle : NULL;
  default:
   return NULL;
  }

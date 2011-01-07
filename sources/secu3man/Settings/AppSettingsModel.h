@@ -86,6 +86,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AttenMapWnd_Y;
   const CString m_Name_MainFrmWnd_X;
   const CString m_Name_MainFrmWnd_Y;
+  const CString m_Name_CoilRegulMapWnd_X;
+  const CString m_Name_CoilRegulMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -140,6 +142,8 @@ class CAppSettingsModel : public ISettingsData
   int m_optAttenMapWnd_Y;
   int m_optMainFrmWnd_X;
   int m_optMainFrmWnd_Y;
+  int m_optCoilRegulMapWnd_X;
+  int m_optCoilRegulMapWnd_Y;
 
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);
