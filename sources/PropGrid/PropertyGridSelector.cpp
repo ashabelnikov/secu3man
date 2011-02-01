@@ -3,7 +3,7 @@
  *    Designed by Alexey A. Shabelnikov. Ukraine, Gorlovka 2007.
  *       Microprocessors systems - design & programming.
  *    contacts:
- *              http://secu-3.narod.ru
+ *              http://secu-3.org
  *              ICQ: 405-791-931
  ****************************************************************/
 
