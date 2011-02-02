@@ -265,7 +265,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
  {
-  m_attenuator_table_slots[i] = rpm;
+  m_attenuator_table_slots[i] = (float)rpm;
   rpm+=60;
  }
 }

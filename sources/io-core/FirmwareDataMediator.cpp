@@ -790,7 +790,7 @@ void CFirmwareDataMediator::GetCoilRegulMap(float* o_values, bool i_original /* 
  p_fw_data = (FirmwareData*)(p_bytes + FIRMWARE_DATA_START); 
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fw_data->coil_on_time[i] * 4.0) / 1000.0; //convert to ms, discrete = 4us
+  o_values[i] = (p_fw_data->coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
 }
 
 void CFirmwareDataMediator::SetCoilRegulMap(const float* i_values)
