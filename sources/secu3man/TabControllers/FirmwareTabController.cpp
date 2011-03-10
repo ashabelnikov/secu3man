@@ -322,7 +322,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
    }
    else
    {
-	   m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(GenerateErrorStr());
    }
 
    //ждем пока не выполнится предыдущая операция
@@ -340,10 +340,10 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_WRITE_EEPROM:
   {
    if (status==1)
-	   m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
+    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
    else
    {
-	   m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(GenerateErrorStr());
    }
 
    //ждем пока не выполнится предыдущая операция
@@ -580,8 +580,8 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
 
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, m_bl_data,
-	   m_fpp.m_only_overhead_size, //размер данных сверху над кодом программы
-	   m_fpp.m_only_code_size);    //адрес начала "верхних" данных
+  m_fpp.m_only_overhead_size, //размер данных сверху над кодом программы
+  m_fpp.m_only_code_size);    //адрес начала "верхних" данных
  }
  else
  {//все очень просто
