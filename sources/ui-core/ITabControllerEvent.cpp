@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -22,10 +22,10 @@ static char THIS_FILE[]=__FILE__;
 
 ITabControllerEvent::ITabControllerEvent()
 {
-
+ //empty
 }
 
 ITabControllerEvent::~ITabControllerEvent()
 {
-
+ //empty
 }

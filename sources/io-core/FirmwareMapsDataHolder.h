@@ -25,15 +25,15 @@
 #include <vector>
 
 //определ€ем количество узлов интерпол€ции дл€ каждой функции
-#define F_WRK_POINTS_F         16  
-#define F_WRK_POINTS_L         16  
+#define F_WRK_POINTS_F         16
+#define F_WRK_POINTS_L         16
 #define F_TMP_POINTS           16
-#define F_STR_POINTS           16                            
-#define F_IDL_POINTS           16     
+#define F_STR_POINTS           16
+#define F_IDL_POINTS           16
 #define F_NAME_SIZE            16
 
 //количество наборов характеристик хранимых в пам€ти программ
-#define TABLES_NUMBER          8   
+#define TABLES_NUMBER          8
 
 struct SECU3FWMapsItem
 {

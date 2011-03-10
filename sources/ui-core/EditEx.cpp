@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -40,7 +40,7 @@ bool CEditEx::OnChar_int(UINT nChar, UINT nRepCnt, UINT nFlags)
  //если неразрешено вводить отрицательные числа, то пропускаем "-"
  if ((nChar == '-') && !(m_mode & MODE_SIGNED))
  {
-  return false;      
+  return false;
  }
 
  if(!(nChar >= '0' && nChar <= '9' || nChar == '-' || nChar == '\b'))
@@ -72,7 +72,7 @@ bool CEditEx::OnChar_float(UINT nChar, UINT nRepCnt, UINT nFlags)
  //если неразрешено вводить отрицательные числа, то пропускаем "-"
  if ((nChar == '-') && !(m_mode & MODE_SIGNED))
  {
-  return false;      
+  return false;
  }
 
  if(!(nChar >= '0' && nChar <= '9' || nChar == '.' || nChar == '-' || nChar == '\b'))
@@ -127,7 +127,7 @@ void CEditEx::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
  CString str;
  bool result = false;
-  
+
  switch(m_mode & MODE_MASK)
  {
   case MODE_INT:

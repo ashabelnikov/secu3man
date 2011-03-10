@@ -35,7 +35,7 @@ class TabControllersCommunicator
   static TabControllersCommunicator* GetInstance(void);
 
   void AddReference(ITabController* ip_controller, int i_key);
-  
+
   ITabController* GetReference(int i_key);
 
  private:

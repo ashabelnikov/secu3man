@@ -49,7 +49,7 @@ CComPort::CComPort(const _TSTRING& sComPort,UINT dwInQueuep,UINT dwOutQueuep)
 , m_hCom(INVALID_HANDLE_VALUE)
 {
  _LoadDefaultTimeouts();
-} 
+}
 
 //конструктор (указание порта через номер (1,2,3,4))
 CComPort::CComPort(int nComPort, UINT dwInQueuep, UINT dwOutQueuep)
@@ -70,7 +70,7 @@ CComPort::CComPort(int nComPort, UINT dwInQueuep, UINT dwOutQueuep)
 CComPort::~CComPort()
 {
  //na
-} 
+}
 
 //
 // инициализация COM порта (расширенная)
@@ -85,8 +85,8 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
 
  m_bPortReady = TRUE; // всё OK
 
- //Если с первой попытки порт открыть неудаеться по причине отказа в доступе, то 
- //делаем много попыток через равные промежутки времени.  
+ //Если с первой попытки порт открыть неудаеться по причине отказа в доступе, то
+ //делаем много попыток через равные промежутки времени.
  for(int i = 0; i < 10; i++)
  {
   m_hCom = CreateFile(m_sComPort.c_str(),GENERIC_READ | GENERIC_WRITE,
@@ -97,10 +97,10 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
 		      NULL);         // null template
   if (m_hCom!=INVALID_HANDLE_VALUE)
    break;
-     
+
   if (GetLastError()!=ERROR_ACCESS_DENIED)
    break; //для других случаев не делаем много попыток
-      
+
   Sleep(250);
  }
 
@@ -108,17 +108,17 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
  {
   m_bPortReady = FALSE;
   dwError = GetLastError();
-		
+
   // обработка ошибки
-  dwRC = FormatMessage( 
+  dwRC = FormatMessage(
    		    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
 			NULL,
 			dwError, //  из GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), 
+			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 			(LPTSTR) &lpMsgBuf,
 			0,
 			NULL);
-		
+
   if (dwRC && lpMsgBuf)
   {
    wsprintf(sMsg, _T("COM open failed: Port=%s Error=%d - %s"),m_sComPort.c_str(), dwError, lpMsgBuf);
@@ -132,7 +132,7 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
   if (dwRC && lpMsgBuf)
   {
    LocalFree( lpMsgBuf );
-  } // end if 
+  } // end if
  } // end if
 
  if (m_bPortReady)
@@ -165,24 +165,24 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
   m_dcb.StopBits      = stopbit;
   m_dcb.fAbortOnError = FALSE;
 
-  //disable hardware and XON/XOFF flow control 
+  //disable hardware and XON/XOFF flow control
   m_dcb.fOutxCtsFlow = FALSE;
   m_dcb.fOutxDsrFlow = FALSE;
   m_dcb.fDsrSensitivity = FALSE;
   m_dcb.fOutX = FALSE;
   m_dcb.fInX = FALSE;
 
-  //производим если надо нач. установку линий готовности 
-  if (Dtr==0) 
-   m_dcb.fDtrControl   = DTR_CONTROL_DISABLE; 
+  //производим если надо нач. установку линий готовности
+  if (Dtr==0)
+   m_dcb.fDtrControl   = DTR_CONTROL_DISABLE;
   else if (Dtr==1)
-   m_dcb.fDtrControl   = DTR_CONTROL_ENABLE; 			
-  if (Rts==0)         
-   m_dcb.fRtsControl   = RTS_CONTROL_DISABLE;    
+   m_dcb.fDtrControl   = DTR_CONTROL_ENABLE;
+  if (Rts==0)
+   m_dcb.fRtsControl   = RTS_CONTROL_DISABLE;
   else if (Rts==1)
-   m_dcb.fRtsControl   = RTS_CONTROL_ENABLE;    
+   m_dcb.fRtsControl   = RTS_CONTROL_ENABLE;
 
-		
+
   m_bPortReady = SetCommState(m_hCom, &m_dcb);
   if (!m_bPortReady)
   {
@@ -210,19 +210,19 @@ BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
 // инициализация COM порта
 //
 BOOL CComPort::Initialize(DWORD baud,BYTE parity,BYTE stopbit)
-{	                    //не изменяем сост. линий 
+{	                    //не изменяем сост. линий
  return Initialize(baud,parity,stopbit,-1,-1);
-} 
+}
 
 
 //
 // инициализация COM порта
 //
 BOOL CComPort::Initialize(const _TSTRING& i_sComPort,DWORD baud,BYTE parity,BYTE stopbit,char Dtr,char Rts)
-{			
+{
  m_sComPort = i_sComPort;
  return Initialize(baud,parity,stopbit,Dtr,Rts);
-} 
+}
 
 
 //
@@ -232,7 +232,7 @@ void CComPort::Terminate()
 {
  CloseHandle(m_hCom);
  m_hCom = INVALID_HANDLE_VALUE;
-}  
+}
 
 
 //
@@ -243,7 +243,7 @@ bool CComPort::SendByte(unsigned char byte)
 {
  DWORD  numwr;
  //записываем в порт 1 байт
- WriteFile(m_hCom,&byte,1,&numwr,NULL);  
+ WriteFile(m_hCom,&byte,1,&numwr,NULL);
  if (numwr!=1)
  {
   m_snd_err_num++;
@@ -252,7 +252,7 @@ bool CComPort::SendByte(unsigned char byte)
  else
  {
   return TRUE;     //Ok
- }//else 
+ }//else
 }
 
 //
@@ -264,10 +264,10 @@ bool CComPort::RecvByte(unsigned char* byte)
  DWORD numrd;
  if (!byte) return FALSE;   //плохой указатель
 
- //читаем из порта 1 байт 
+ //читаем из порта 1 байт
  ReadFile(m_hCom,byte,1,&numrd,NULL);
  if (numrd!=1)
- { 
+ {
   m_rcv_err_num++;
   return FALSE;   //error
  } //if
@@ -279,7 +279,7 @@ bool CComPort::RecvByte(unsigned char* byte)
 
 //
 // Передает блок данных через COM - порт
-// data     - адрес буфера с данными для передачи 
+// data     - адрес буфера с данными для передачи
 // datasize - размер данных в бувере (в байтах)
 // Return: TRUE - OK, FALSE - error
 bool CComPort::SendBlock(BYTE* data,UINT datasize)
@@ -288,21 +288,21 @@ bool CComPort::SendBlock(BYTE* data,UINT datasize)
  if (!data) return FALSE;   //плохой указатель
 
  //записываем в порт 1 байт
- WriteFile(m_hCom,data,datasize,&numwr,NULL);  
+ WriteFile(m_hCom,data,datasize,&numwr,NULL);
  if (numwr!=datasize)
- {   
+ {
   m_snd_err_num++;
  return FALSE;    //error
  }//if
  else
  {
   return TRUE;     //Ok
- }//else 
+ }//else
 }
 
 //
 // Передает блок данных через COM - порт
-// data     - адрес буфера для приема данных 
+// data     - адрес буфера для приема данных
 // datasize - размер данных для приема (в байтах)
 // Return: TRUE - OK, FALSE - error
 bool CComPort::RecvBlock(BYTE* data,UINT datasize)
@@ -310,10 +310,10 @@ bool CComPort::RecvBlock(BYTE* data,UINT datasize)
  DWORD numrd;
  if (!data) return FALSE;   //плохой указатель
 
- //читаем из порта указанное кол-во байт 
+ //читаем из порта указанное кол-во байт
  ReadFile(m_hCom,data,datasize,&numrd,NULL);
  if (numrd!=datasize)
- { 
+ {
   m_rcv_err_num++;
   return FALSE;   //error
  } //if
@@ -325,7 +325,7 @@ bool CComPort::RecvBlock(BYTE* data,UINT datasize)
 
 //Возвращает хендл порта
 //
-HANDLE CComPort::GetHandle(void) const        
+HANDLE CComPort::GetHandle(void) const
 {
  return m_hCom;
 }
@@ -338,11 +338,11 @@ bool CComPort::SetDTR(bool state)
   m_dcb.fDtrControl = DTR_CONTROL_ENABLE;
  else
   m_dcb.fDtrControl = DTR_CONTROL_DISABLE;
-	  
+
  //TODO: maybe use of EscapeCommFunction() will be more suitable?
  return SetCommState(m_hCom,&m_dcb);
 }
-               
+
 //уст. в указ. знач. линию RTS
 //
 bool CComPort::SetRTS(bool state)
@@ -351,50 +351,50 @@ bool CComPort::SetRTS(bool state)
   m_dcb.fRtsControl = RTS_CONTROL_ENABLE;
  else
   m_dcb.fRtsControl = RTS_CONTROL_DISABLE;
-	  
+
  //TODO: maybe use of EscapeCommFunction() will be more suitable?
  return SetCommState(m_hCom,&m_dcb);
 }
-                
+
 //уст. в указ. знач. линию TXD
 //
 bool CComPort::SetTXD(bool state)
 {
  //TODO: maybe use of EscapeCommFunction() will be more suitable?
- if (state) 
+ if (state)
   return SetCommBreak(m_hCom);
  else
   return ClearCommBreak(m_hCom);
-}                
+}
 
 void CComPort::Set9bitState(BOOL state)
 {
  if (state)
  {//9-й бит равен 1
   m_dcb.Parity =  SPACEPARITY;
-  SetCommState(m_hCom,&m_dcb);	
+  SetCommState(m_hCom,&m_dcb);
  }
  else
  {//9-й бит равен 0
   m_dcb.Parity =  MARKPARITY;
-  SetCommState(m_hCom,&m_dcb);	
+  SetCommState(m_hCom,&m_dcb);
  }
-}    
+}
 
 UINT CComPort::GetRecvErrNum(void) const
 {
- return m_rcv_err_num;                
+ return m_rcv_err_num;
 }
 
 UINT CComPort::GetSendErrNum(void) const
 {
- return m_snd_err_num;                
+ return m_snd_err_num;
 }
 
 void  CComPort::ResetPortErrors(void)
 {
- m_rcv_err_num = 0;                
- m_snd_err_num = 0;                
+ m_rcv_err_num = 0;
+ m_snd_err_num = 0;
 }
 
 
@@ -443,14 +443,14 @@ bool CComPort::SendASCII(const char* str)
 
 bool CComPort::GetState(DCB* o_dcb)
 {
- if (o_dcb) 
+ if (o_dcb)
   return false;
  return GetCommState(m_hCom, o_dcb);
 }
 
 bool CComPort::SetState(DCB* i_dcb)
 {
- if (i_dcb) 
+ if (i_dcb)
   return false;
  memcpy(&m_dcb,i_dcb,sizeof(DCB));
  return SetCommState(m_hCom, i_dcb);
@@ -463,7 +463,7 @@ bool CComPort::RecvBlock(BYTE* data,UINT datasize,DWORD* real_readed)
  if (!data) return FALSE;   //плохой указатель
  if (!real_readed) return false;
 
- //читаем из порта указанное кол-во байт 
+ //читаем из порта указанное кол-во байт
  ReadFile(m_hCom,data,datasize,real_readed,NULL);
  DWORD errors = 0;
  if (ClearCommError(m_hCom, &errors, NULL) && errors)

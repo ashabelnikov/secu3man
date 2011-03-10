@@ -28,8 +28,8 @@
 
 class CAppSettingsController;
 
-//хранит и сохраняет/загружает данные 
-class CAppSettingsModel : public ISettingsData 
+//хранит и сохраняет/загружает данные
+class CAppSettingsModel : public ISettingsData
 {
   friend CAppSettingsController;
 
@@ -56,7 +56,7 @@ class CAppSettingsModel : public ISettingsData
 
   //чтение настроек из INI-файла
   bool ReadSettings(void);
-    
+
   //запись настроек в INI-файл
   bool WriteSettings(void);
 
@@ -95,7 +95,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Pressure_Max;
 
   //ISettingsData
-  virtual const _TSTRING& GetPortName(void) const;   
+  virtual const _TSTRING& GetPortName(void) const;
   virtual DWORD GetBaudRateApplication(void) const;
   virtual DWORD GetBaudRateBootloader(void) const;
   virtual const CString& GetLogFilesFolder(void) const;
@@ -118,7 +118,7 @@ class CAppSettingsModel : public ISettingsData
 
  private:
   //данные которые хранятся в INI-файле
-  _TSTRING m_optPortName;      
+  _TSTRING m_optPortName;
   DWORD m_optBaudRateApplication;
   DWORD m_optBaudRateBootloader;
   CString m_optLogFilesFolder;
@@ -152,5 +152,5 @@ class CAppSettingsModel : public ISettingsData
   bool CheckAllowablePlatform(const _TSTRING& i_string, EECUPlatform& o_platform_id);
 
   //директория из которой было запущено приложение
-  TCHAR m_current_directory[MAX_PATH+1]; 
+  TCHAR m_current_directory[MAX_PATH+1];
 };

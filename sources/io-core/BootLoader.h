@@ -81,7 +81,7 @@ class AFX_EXT_CLASS CBootLoader
   //starts the specified operation
   //!!! i_addr используется только при чтении FLASH
   bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0);
- 
+
   inline bool GetWorkState(void) const;
   inline bool IsIdle(void) const;
   inline HANDLE GetThreadHandle(void) const;
@@ -89,17 +89,17 @@ class AFX_EXT_CLASS CBootLoader
   inline CComPort* GetPortHandle(void) const;
   inline int GetLastError() const;
   //возвращает true если все ОК
-  inline int Status(void) const;     
+  inline int Status(void) const;
 
   inline CSECTION* GetSyncObject(void) const;
   inline void EnterCriticalSection(void) const;
   inline void LeaveCriticalSection(void) const;
 
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
- 
+
   enum {BL_SIGNATURE_STR_LEN = 24};
   enum {EEPROM_WR_DELAY_MULTIPLIER = 3};
-  enum {FLASH_PG_ERASE_DELAY = 30}; 
+  enum {FLASH_PG_ERASE_DELAY = 30};
 
   enum //список поддерживаемых команд
   {

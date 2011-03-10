@@ -23,12 +23,12 @@ bool RemoveInstanceByHWND(HWND hWnd);
 
 //---------------------------------------------------------------------------
 __fastcall TForm1::TForm1(TComponent* Owner)
-        : TForm(Owner)
-        , aai_min(0.0f), aai_max(0.0f)
-        , m_pOnChange(NULL)
-        , m_pOnClose(NULL)
-        , m_param_on_change(NULL)
-        , m_param_on_close(NULL)
+: TForm(Owner)
+, aai_min(0.0f), aai_max(0.0f)
+, m_pOnChange(NULL)
+, m_pOnClose(NULL)
+, m_param_on_change(NULL)
+, m_param_on_close(NULL)
 {
  setval  = 0;
  val_n   = 0;

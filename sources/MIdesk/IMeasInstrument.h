@@ -21,7 +21,7 @@
 
 #pragma once
 
-class IMeasInstrument  
+class IMeasInstrument
 {
  public:
   IMeasInstrument() {};
@@ -44,7 +44,7 @@ class IMeasInstrument
   virtual bool IsVisible(void) = 0;
 
   //прибор разрешен или запрещен ?
-  virtual bool IsEnabled(void) = 0;	
+  virtual bool IsEnabled(void) = 0;
 
   //установка пределов измерения
   virtual void SetLimits(float loLimit, float upLimit) = 0;

@@ -55,7 +55,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   ::GetLocalTime(&time);
 
   //используем ASCII версию, файл не должен быть юникодным
-  //"hh:mm:ss.ms", ms - сотые доли секунды  
+  //"hh:mm:ss.ms", ms - сотые доли секунды
   fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
 
   fprintf(m_out_handle, m_csv_data_template,
@@ -82,7 +82,7 @@ void LogWriter::OnConnection(const bool i_online)
 
 bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_name /* = NULL*/)
 {
- //генерируем имя файла и открываем его 
+ //генерируем имя файла и открываем его
  SYSTEMTIME time;
  ::GetLocalTime(&time);
 
@@ -90,7 +90,7 @@ bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_nam
  CString string;
  //yyyy.mm.dd_hh.mm.ss.csv
  string.Format(_T("%04d.%02d.%02d_%02d.%02d.%02d.csv"),time.wYear,time.wMonth,time.wDay,time.wHour,time.wMinute,time.wSecond);
- 
+
  full_file_name += _T("\\");
  full_file_name += string;
  *o_full_file_name = full_file_name;
@@ -107,11 +107,11 @@ void LogWriter::EndLogging(void)
 {
  //закрываем файл
  if (m_out_handle)
- {  
-  fclose(m_out_handle); 
+ {
+  fclose(m_out_handle);
  }
  else
-  _ASSERTE(0); 
+  _ASSERTE(0);
 
  m_is_busy = false;
 }

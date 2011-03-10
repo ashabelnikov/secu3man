@@ -40,7 +40,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 	if (dwReason == DLL_PROCESS_ATTACH)
 	{
 		TRACE0("IOCORE.DLL Initializing!\n");
-		
+
 		// Extension DLL one-time initialization
 		if (!AfxInitExtensionModule(IocoreDLL, hInstance))
 			return 0;

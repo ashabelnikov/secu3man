@@ -44,16 +44,16 @@ typedef struct
  _uint  ephh_hit;                       //верхний порог ЭПХХ (мин-1)
  _uint  starter_off;                    //порог выключения стартера (мин-1)
  _int   map_upper_pressure;             //верхнее значене ДАД по оси таблицы (кПа)
- _uint  smap_abandon;                   //обороты перехода с пусковой карты на рабочую  (мин-1) 
+ _uint  smap_abandon;                   //обороты перехода с пусковой карты на рабочую  (мин-1)
  _int   max_angle;                      //ограничение максимального УОЗ
  _int   min_angle;                      //ограничение минимального УОЗ
- _int   angle_corr;                     //октан-коррекция УОЗ    
- _uint  idling_rpm;                     //заданные обороты ХХ для поддержания регулмрованием УОЗ   
+ _int   angle_corr;                     //октан-коррекция УОЗ
+ _uint  idling_rpm;                     //заданные обороты ХХ для поддержания регулмрованием УОЗ
  _int   ifac1;                          //коэффициенты П-регулятора оборотов ХХ, для положительной и
  _int   ifac2;                          //отрицательной ошибке соответственно.
  _int   MINEFR;                         //зона нечувствительности регулятора (обороты)
  _int   vent_on;                        //температура включения вентилятора
- _int   vent_off;                       //температура выключения вентилятора  
+ _int   vent_off;                       //температура выключения вентилятора
 
  _int  map_adc_factor;
  _long map_adc_correction;
@@ -61,13 +61,13 @@ typedef struct
  _long ubat_adc_correction;
  _int  temp_adc_factor;
  _long temp_adc_correction;
-  
- _uchar ckps_edge_type;                
+
+ _uchar ckps_edge_type;
  _uchar ckps_cogs_btdc;
  _uchar ckps_ignit_cogs;
 
  _int angle_dec_spead;
- _int angle_inc_spead;  
+ _int angle_inc_spead;
  _int idlreg_min_angle;
  _int idlreg_max_angle;
  _uint map_curve_offset;
@@ -82,17 +82,17 @@ typedef struct
  _uint  uart_divisor;                //делитель для соответствующей скорости UART-a
  _uchar uart_period_t_ms;            //период посылки пакетов в десятках миллисекунд
 
- _uchar ckps_engine_cyl;             //кол-во цилиндров двигателя 
+ _uchar ckps_engine_cyl;             //кол-во цилиндров двигателя
 
- //--knock 
+ //--knock
  _uchar knock_use_knock_channel;     //признак использования канала детенации
  _uchar knock_bpf_frequency;         //центральная частота полосового фильтра
  _int   knock_k_wnd_begin_angle;     //начало детонационного окна (градусы)
  _int   knock_k_wnd_end_angle;       //конец детонационного окна (градусы)
  _uchar knock_int_time_const;        //постоянная времени интегрирования (код)
 
- _int knock_retard_step;             //шаг смещения УОЗ при детонации 
- _int knock_advance_step;            //шаг восстановления УОЗ 
+ _int knock_retard_step;             //шаг смещения УОЗ при детонации
+ _int knock_advance_step;            //шаг восстановления УОЗ
  _int knock_max_retard;              //максимальное смещение УОЗ
  _uint knock_threshold;              //порог детонации - напряжение
  _uchar knock_recovery_delay;        //задержка восстановления УОЗ в рабочих циклах двигателя
@@ -106,7 +106,7 @@ typedef struct
  //в структуру, необходимо расходовать эти байты.
  _uchar reserved[9];
 
- _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)  
+ _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params;
 
 } //SECU3IO

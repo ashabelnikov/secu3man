@@ -48,7 +48,7 @@ int CListDynDialogEx::DoModal()
  return CDynDialogEx::DoModal();
 }
 
-void CListDynDialogEx::OnDblclkList() 
+void CListDynDialogEx::OnDblclkList()
 {
  CString strBuf;
  int nIndex = m_lstBox.GetCurSel();

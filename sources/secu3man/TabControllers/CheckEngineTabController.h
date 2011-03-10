@@ -32,7 +32,7 @@ class CCheckEngineTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
 
-class CCheckEngineTabController : public ITabController, private IAPPEventHandler 
+class CCheckEngineTabController : public ITabController, private IAPPEventHandler
 {
  public:
   CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
@@ -43,9 +43,9 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
 
   void _SetErrorsToList(const SECU3IO::CEErrors* ip_errors);
   void _GetErrorsFromList(SECU3IO::CEErrors* op_errors);
-	
+
   //from IAPPEventHandler:
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
   //появление/закрытие вкладки Check Engine
@@ -56,9 +56,9 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
 
-  void OnRealTimeErrors(void); 
-  void OnReadSavedErrors(void); 
-  void OnWriteSavedErrors(void); 
+  void OnRealTimeErrors(void);
+  void OnReadSavedErrors(void);
+  void OnWriteSavedErrors(void);
   void OnListSetAllErrors(void);
   void OnListClearAllErrors(void);
 

@@ -32,7 +32,7 @@ class IOCORE_API EEPROMDataMediator
  ~EEPROMDataMediator();
 
   //Calculates CRC16 of default parameters for given buffer with EEPROM
-  //ip_eeprom_buffer - contains EEPROM 
+  //ip_eeprom_buffer - contains EEPROM
   //return true - OK, false - check sum is invalid
   bool VerifyDefParamsCheckSum(const BYTE* ip_eeprom_buffer);
 

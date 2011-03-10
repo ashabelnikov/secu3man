@@ -88,11 +88,11 @@ BOOL CSecu3manApp::InitInstance()
  SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
 
  //подгружаем функции из динамически связываемых DLL
- DLL::LoadDLLsAndLinkToFunctions(); 
-  
+ DLL::LoadDLLsAndLinkToFunctions();
+
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
- 
+
  //Локализация
  switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
  {
@@ -101,7 +101,7 @@ BOOL CSecu3manApp::InitInstance()
    break;
   case IL_RUSSIAN:
    ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break; 
+   break;
  }
  if (DLL::UOZ1_Chart2DSetLanguage)
   DLL::UOZ1_Chart2DSetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
@@ -116,19 +116,19 @@ BOOL CSecu3manApp::InitInstance()
  //инициализируем коммуникационный менеджер
  m_pCommunicationManager->Init();
 
- //Инициализируем содержимое главного окна (дочерние контроллеры).  
+ //Инициализируем содержимое главного окна (дочерние контроллеры).
  m_pMainFrameManager->Init(m_pMainWnd);
 
  return TRUE;
 }
 
-BOOL CSecu3manApp::OnIdle(LONG lCount) 
-{	
+BOOL CSecu3manApp::OnIdle(LONG lCount)
+{
  return CWinApp::OnIdle(lCount);
 }
 
-int CSecu3manApp::ExitInstance() 
-{	  
+int CSecu3manApp::ExitInstance()
+{
  //сохраняем настройки
  m_pAppSettingsManager->WriteSettings();
 

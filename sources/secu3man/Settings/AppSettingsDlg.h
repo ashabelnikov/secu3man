@@ -27,7 +27,7 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 
-class CAppSettingsDlg : public CDialog, public IAppSettingsDlg 
+class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
 {
  public:
   CAppSettingsDlg(CWnd* pParent = NULL);   // standard constructor
@@ -50,9 +50,9 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetECUPlatformType(int i_platform_type);
   virtual void SetTachometerMax(int i_max);
   virtual void SetPressureMax(int i_max);
-   
+
   //"Get" methods (view => model data transfer)
-  virtual _TSTRING GetPortName(void); 
+  virtual _TSTRING GetPortName(void);
   virtual DWORD GetBaudRateApplication(void);
   virtual DWORD GetBaudRateBootloader(void);
   virtual int GetMIDeskUpdatePeriod(void);

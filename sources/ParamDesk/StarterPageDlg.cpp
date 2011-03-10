@@ -34,7 +34,7 @@ const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangePdStarterOffRpmEdit)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangePdStarterSmapAbandonRpmEdit)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_UNIT,OnUpdateControls)
@@ -43,7 +43,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_EDIT,OnUpdateControls)	
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_EDIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
@@ -58,7 +58,7 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
@@ -82,15 +82,15 @@ void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 /////////////////////////////////////////////////////////////////////////////
 // CStarterPageDlg message handlers
 
-BOOL CStarterPageDlg::OnInitDialog() 
+BOOL CStarterPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  m_starter_off_rpm_edit.SetLimitText(4);
  m_smap_abandon_rpm_spin.SetBuddy(&m_smap_abandon_rpm_edit);
  m_smap_abandon_rpm_spin.SetRangeAndDelta(40,1000,10);
 
- m_smap_abandon_rpm_edit.SetLimitText(4);	
+ m_smap_abandon_rpm_edit.SetLimitText(4);
  m_starter_off_rpm_spin.SetBuddy(&m_starter_off_rpm_edit);
  m_starter_off_rpm_spin.SetRangeAndDelta(40,1000,10);
 
@@ -100,22 +100,22 @@ BOOL CStarterPageDlg::OnInitDialog()
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CStarterPageDlg::OnChangePdStarterOffRpmEdit() 
+void CStarterPageDlg::OnChangePdStarterOffRpmEdit()
 {
  UpdateData();
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  		  
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-void CStarterPageDlg::OnChangePdStarterSmapAbandonRpmEdit() 
+void CStarterPageDlg::OnChangePdStarterSmapAbandonRpmEdit()
 {
- UpdateData();	
- OnChangeNotify();  		  
+ UpdateData();
+ OnChangeNotify();
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
 void CStarterPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;  
+ m_enabled = (enable) ? TRUE : FALSE;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }

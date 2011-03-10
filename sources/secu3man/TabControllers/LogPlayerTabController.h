@@ -33,13 +33,13 @@ class CStatusBarManager;
 class ISettingsData;
 class LogReader;
 
-class CLogPlayerTabController : public ITabController, private IAPPEventHandler 
+class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 {
  public:
   CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
   virtual ~CLogPlayerTabController();
 
- private:	
+ private:
   //появление/закрытие вкладки параметров и монитора
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
@@ -49,7 +49,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
 
   //from IAPPEventHandler:
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
   //от представления (диалога)
@@ -70,18 +70,18 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   void _GoBack(void);
   void _GetRecord(void);
   unsigned long _GetAveragedPeriod(void);
-    
+
   enum EDirection
   {
    DIR_NEXT,
    DIR_PREV,
-   DIR_NA    
+   DIR_NA
   };
 
   void _ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider = true);
 
   //начало/остановка проигрывания
-  void _Play(bool i_play);    
+  void _Play(bool i_play);
 
   //инициализация плеера
   void _InitPlayer(void);
@@ -91,7 +91,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   //вывод текущей записи на приборы и обновление индикатора времени
   void _DisplayCurrentRecord(EDirection i_direction);
-  
+
   //разрешение/запрещение кнопок в зависимости от текущего положения
   void _UpdateButtons(void);
 
@@ -101,7 +101,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
  private:
   CLogPlayerTabDlg*  m_view;
   CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;   
+  CStatusBarManager*  m_sbar;
   ISettingsData* mp_settings;
 
   //<factor id, <name, value> >
@@ -115,7 +115,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //хранит последние периоды ежду записями для усреднения
   std::deque<unsigned long> m_last_perionds;
 
-  //хранят предыдушую и текушую записи 
+  //хранят предыдушую и текушую записи
   typedef std::pair<SYSTEMTIME, SECU3IO::SensorDat> RECORD_INFO;
   RECORD_INFO m_prev_record;
   RECORD_INFO m_curr_record;

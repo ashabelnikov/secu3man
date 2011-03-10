@@ -41,7 +41,7 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
 
   void GetValues(SECU3IO::ADCCompenPar* o_values);
   void SetValues(const SECU3IO::ADCCompenPar* i_values);
-		
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support

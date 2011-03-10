@@ -9,7 +9,7 @@ class AFX_EXT_CLASS CHeaderCtrlEx : public CHeaderCtrl
 
   BOOL Init(CHeaderCtrl *pHeader);
 
-  void SetTextColor(COLORREF i_color); 
+  void SetTextColor(COLORREF i_color);
 
  protected:
   virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);

@@ -36,7 +36,7 @@
 #include "TabDialogs\ParamMonTabDlg.h"
 
 using namespace fastdelegate;
-using namespace std; 
+using namespace std;
 using namespace SECU3IO;
 
 #ifdef _DEBUG
@@ -56,7 +56,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 , m_lastSel(0)
-{ 
+{
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
  m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));
@@ -65,14 +65,14 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
 
 CParamMonTabController::~CParamMonTabController()
 {
- //na  
+ //na
 }
 
 //изменились настройки программы!
 void CParamMonTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  //обновляем диапазоны приборов
  m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
@@ -99,16 +99,16 @@ void CParamMonTabController::OnActivate(void)
  m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
 
- //выбираем ранее выбранную вкладку на панели параметров	
+ //выбираем ранее выбранную вкладку на панели параметров
  bool result = m_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
- m_comm->setOnSettingsChanged(MakeDelegate(this,&CParamMonTabController::OnSettingsChanged)); 
+ m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
+ m_comm->setOnSettingsChanged(MakeDelegate(this,&CParamMonTabController::OnSettingsChanged));
  //////////////////////////////////////////////////////////////////
- 
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
@@ -127,7 +127,7 @@ void CParamMonTabController::OnDeactivate(void)
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
 
  //таймер работает только если мы находимся в контексте "параметров и монитора"
- m_pd_changes_timer.KillTimer(); 
+ m_pd_changes_timer.KillTimer();
 
  //запоминаем номер последней выбранной вкладки на панели параметров
  m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
@@ -135,7 +135,7 @@ void CParamMonTabController::OnDeactivate(void)
  m_sbar->SetInformationText(_T(""));
 }
 
-void CParamMonTabController::StartCollectingInitialData(void) 
+void CParamMonTabController::StartCollectingInitialData(void)
 {
  m_comm->m_pControlApp->ChangeContext(FNNAME_DAT); //change context!
 
@@ -152,27 +152,27 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
 
  const FnNameDat* fn_data = NULL;
 
- //state machine 
+ //state machine
  switch(m_operation_state)
  {
   case 0: //пытаемся добится от SECU-3 чтобы оно посылало пакеты с информацией о семействах характеристик
-  {///////////	
-   m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_CONFIGURATION)); 
+  {///////////
+   m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_CONFIGURATION));
 
    if (i_descriptor!=FNNAME_DAT)
    {
-    m_comm->m_pControlApp->ChangeContext(FNNAME_DAT); //!!!		  
+    m_comm->m_pControlApp->ChangeContext(FNNAME_DAT); //!!!
    }
    else
    { //контроллер шлет информацию о семействах характеристик
-    m_operation_state = 1; 
-	 
+    m_operation_state = 1;
+
     fn_data = (FnNameDat*)i_packet_data;
-		 
+
     fn_names.clear();
     fn_indexes.clear();
     fn_names.resize(fn_data->tables_num);
-		 
+
     //данные в SECU хранятся в виде ASCII, их надо преобразовать в UNICODE
     TCHAR name_string[256];
     OemToChar(fn_data->name,name_string);
@@ -181,18 +181,18 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
     fn_indexes.push_back(fn_data->index);
    }
   }///////////
-  break;	
+  break;
 
   case 1: //принимает (продолжает принимать) и сохраняем информацию о всех семействах характеристик
   {///////////
    if (i_descriptor!=FNNAME_DAT)
    {
-    m_operation_state = 0;		  
-    break; 
+    m_operation_state = 0;
+    break;
    }
 
    fn_data = (FnNameDat*)i_packet_data;
-          
+
    TCHAR name_string[256];
    OemToChar(fn_data->name,name_string);
    fn_names[fn_data->index] = name_string;
@@ -215,16 +215,16 @@ bool CParamMonTabController::CollectInitialDataFromSECU(const BYTE i_descriptor,
     return true; //операции выполнены
    }
   }/////////
-  break;	
+  break;
  }//switch
 
  return false; //КА продолжает работу...
 }
 
-void CParamMonTabController::StartReadingNecessaryParameters(void) 
+void CParamMonTabController::StartReadingNecessaryParameters(void)
 {
  BYTE view_descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
- m_comm->m_pControlApp->ChangeContext(view_descriptor);  //change context!	  
+ m_comm->m_pControlApp->ChangeContext(view_descriptor);  //change context!
 
  m_packet_processing_state = PPS_READ_NECESSARY_PARAMETERS;
  m_operation_state = 0;
@@ -234,7 +234,7 @@ void CParamMonTabController::StartReadingNecessaryParameters(void)
 //m_operation_state = 0 для запуска
 bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
- m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_PARAMS)); 
+ m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_PARAMS));
 
  switch(m_operation_state)
  {
@@ -243,18 +243,18 @@ bool CParamMonTabController::ReadNecessaryParametersFromSECU(const BYTE i_descri
    BYTE view_descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
    if (i_descriptor!=view_descriptor)
    {
-    m_comm->m_pControlApp->ChangeContext(view_descriptor);	//!!!	  		  
+    m_comm->m_pControlApp->ChangeContext(view_descriptor);	//!!!
    }
    else
    {//тот что надо!
     m_view->mp_ParamDeskDlg->SetValues(i_descriptor,i_packet_data);
-           
+
     //процесс инициализации окончен
     m_operation_state = -1; //останов КА - операции выполнены
     m_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
     return true; //операции выполнены
    }
-  }	
+  }
   break;
  }//switch
 
@@ -273,13 +273,13 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    case OPCODE_EEPROM_PARAM_SAVE:
     m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;
-  }		
+  }
  }
 
  //обработка приходящих пакетов в зависимости от текущего режима
  switch(m_packet_processing_state)
  {
-  case PPS_COLLECT_INITIAL_DATA:  //инициализация данными из SECU-3	
+  case PPS_COLLECT_INITIAL_DATA:  //инициализация данными из SECU-3
    if (CollectInitialDataFromSECU(i_descriptor,ip_packet))
     StartReadingNecessaryParameters();
    break;
@@ -294,7 +294,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     m_view->mp_ParamDeskDlg->Enable(state);
    }
    break;
-	
+
   case PPS_BEFORE_READ_MONITOR_DATA: //в этот режим мы попадаем только один раз
 
    if (!m_view->GetRawSensorsCheckState())
@@ -302,12 +302,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     //--чекбокс сказал нам что мы в режиме панели приборов--
     if (i_descriptor!=SENSOR_DAT)
     {
-     m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+     m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!
     }
     else
     {
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-     m_view->mp_MIDeskDlg->SetValues((SensorDat*)(ip_packet)); 	
+     m_view->mp_MIDeskDlg->SetValues((SensorDat*)(ip_packet));
      bool state = m_comm->m_pControlApp->GetOnlineStatus();
      m_view->mp_MIDeskDlg->Enable(state);
      m_packet_processing_state = PPS_READ_MONITOR_DATA;
@@ -318,12 +318,12 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     //--чекбокс сказал нам что мы в режиме "сырых" значений--
     if (i_descriptor!=ADCRAW_DAT)
     {
-     m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!		  		
+     m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!
     }
     else
     {
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-     m_view->mp_RSDeskDlg->SetValues((RawSensDat*)(ip_packet)); 	
+     m_view->mp_RSDeskDlg->SetValues((RawSensDat*)(ip_packet));
      bool state = m_comm->m_pControlApp->GetOnlineStatus();
      m_view->mp_RSDeskDlg->Enable(state);
      m_packet_processing_state = PPS_READ_MONITOR_DATA;
@@ -337,11 +337,11 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     //--чекбокс сказал нам что мы в режиме панели приборов--
     if (i_descriptor!=SENSOR_DAT)
     {
-     m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!		  		
+     m_comm->m_pControlApp->ChangeContext(SENSOR_DAT); //!!!
     }
     else
     {
-     m_view->mp_MIDeskDlg->SetValues((SensorDat*)(ip_packet)); 	
+     m_view->mp_MIDeskDlg->SetValues((SensorDat*)(ip_packet));
     }
    }
    else
@@ -349,14 +349,14 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     //--чекбокс сказал нам что мы в режиме "сырых" значений--
     if (i_descriptor!=ADCRAW_DAT)
     {
-     m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!		  		
+     m_comm->m_pControlApp->ChangeContext(ADCRAW_DAT); //!!!
     }
     else
     {
-     m_view->mp_RSDeskDlg->SetValues((RawSensDat*)(ip_packet)); 	
-    }	
+     m_view->mp_RSDeskDlg->SetValues((RawSensDat*)(ip_packet));
+    }
    }
-   break;	
+   break;
  }//switch
 }
 
@@ -373,10 +373,10 @@ void CParamMonTabController::OnConnection(const bool i_online)
  }
  else
  {
-  state = CStatusBarManager::STATE_OFFLINE;  
- } 
- 
- if (i_online==false) //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигурация 
+  state = CStatusBarManager::STATE_OFFLINE;
+ }
+
+ if (i_online==false) //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигурация
  {
   m_view->mp_MIDeskDlg->Enable(i_online);
   m_view->mp_RSDeskDlg->Enable(i_online);
@@ -388,10 +388,10 @@ void CParamMonTabController::OnConnection(const bool i_online)
 
 //передача пакетов с параметрами в SECU будет происходить не чаще чем вызов этого обработчика
 void CParamMonTabController::OnParamDeskChangesTimer(void)
-{ 
+{
  if (m_parameters_changed)
  {
-  //получаем данные от view и сохраняем их во временный буфер 
+  //получаем данные от view и сохраняем их во временный буфер
   BYTE packet_data[1024];
   BYTE view_descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
   m_view->mp_ParamDeskDlg->GetValues(view_descriptor,packet_data);
@@ -411,15 +411,15 @@ void CParamMonTabController::OnRawSensorsCheckBox(void)
  if (state)
  {//показывать сырые значения (прячем панель приборов и показываем панель сырых значений)
   m_view->mp_MIDeskDlg->ShowWindow(SW_HIDE);
-  m_view->mp_RSDeskDlg->ShowWindow(SW_SHOW); 
+  m_view->mp_RSDeskDlg->ShowWindow(SW_SHOW);
   m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
  }
  else
  {//показывать панель приборов (прячем панель сырых значений и показываем панел приборов)
   m_view->mp_MIDeskDlg->ShowWindow(SW_SHOW);
-  m_view->mp_RSDeskDlg->ShowWindow(SW_HIDE);  
+  m_view->mp_RSDeskDlg->ShowWindow(SW_HIDE);
   m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
- }  
+ }
 }
 
 bool CParamMonTabController::OnClose(void)
@@ -446,10 +446,10 @@ void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
  //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
  //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
- //вкладку к нужному размеру.   
+ //вкладку к нужному размеру.
 
- if (i_what) 
-  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height()); 
+ if (i_what)
+  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
  m_view->MakePDFloating(i_what);
  m_view->EnlargeMonitor(i_what);

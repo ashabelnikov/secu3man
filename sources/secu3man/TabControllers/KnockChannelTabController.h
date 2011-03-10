@@ -37,7 +37,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   CKnockChannelTabController(CKnockChannelTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
   virtual ~CKnockChannelTabController();
 
- private:	
+ private:
   //from IAPPEventHandler:
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
@@ -68,7 +68,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
    PPS_READ_MONITOR_DATA = 2
   };
 
-  void StartReadingNecessaryParameters(void); 
+  void StartReadingNecessaryParameters(void);
   bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
   void _HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time);
 
@@ -79,7 +79,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CControlAppAdapter* m_pAdapter;
- 
+
  private:
   int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
   int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен

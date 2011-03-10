@@ -41,38 +41,38 @@ END_MESSAGE_MAP()
 
 
 //////////////////////////////////////////////////////////////////////
-CControlAppAdapter::CControlAppAdapter() 
+CControlAppAdapter::CControlAppAdapter()
 : m_switch_on(true)
 , m_switch_on_thread_side(false)
-{ 
- //na	  
+{
+ //na
 }
 
 
-CControlAppAdapter::~CControlAppAdapter() 
+CControlAppAdapter::~CControlAppAdapter()
 {
  //na
 }
 
 BOOL CControlAppAdapter::Create(CWnd* pParentWnd)
 {
- ASSERT(pParentWnd);	
+ ASSERT(pParentWnd);
  if (::IsWindow(m_hWnd))
   return TRUE; //уже создано - ничего не делаем
- return CWnd::Create(NULL,_T("CControlApp_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
+ return CWnd::Create(NULL,_T("CControlApp_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);
 }
 
 //////////////////////Thread side/////////////////////////////////////
 void CControlAppAdapter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
   if (IsWindow(m_hWnd) && m_switch_on_thread_side)
-    PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)ip_packet);	  
+    PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)ip_packet);
 }
 
 void CControlAppAdapter::OnConnection(const bool i_online)
 {
   if (IsWindow(m_hWnd) && m_switch_on_thread_side)
-    PostMessage(WM_THREAD_ON_CONNECTON,i_online,0);	  
+    PostMessage(WM_THREAD_ON_CONNECTON,i_online,0);
 }
 
 
@@ -81,29 +81,29 @@ LRESULT CControlAppAdapter::msgOnConnection(WPARAM wParam, LPARAM lParam)
 {
   //мы не должны "засыпать" получателя пакетами если он "выключил нас", а выключить он нас мог
   //еще тогда когда в очереди сообщений были сообщения для него.
-  if (!m_switch_on_thread_side) 
+  if (!m_switch_on_thread_side)
     return 0;
-  
+
  ObserversIterator it;
  for(it = m_observers.begin(); it != m_observers.end(); ++it)
  {
-  IAPPEventHandler* p_observer = (*it).second; 
+  IAPPEventHandler* p_observer = (*it).second;
   _ASSERTE(p_observer);
-  p_observer->OnConnection(wParam ? true : false);  
+  p_observer->OnConnection(wParam ? true : false);
  }
  return 0;
 }
 
 LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
 {
-  if (!m_switch_on_thread_side) 
+  if (!m_switch_on_thread_side)
     return 0;
-  
+
   //WARNING! object in stack!
   SECU3IO::SECU3Packet recepted_packet;
 
   ////////////////////////////////////////////////////////////////////////
-  //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса 
+  //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса
   EnterCriticalSection();
   memcpy(&recepted_packet,(SECU3IO::SECU3Packet*)lParam,sizeof(SECU3IO::SECU3Packet));
   LeaveCriticalSection();
@@ -112,9 +112,9 @@ LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
  ObserversIterator it;
  for(it = m_observers.begin(); it != m_observers.end(); ++it)
  {
-  IAPPEventHandler* p_observer = (*it).second; 
+  IAPPEventHandler* p_observer = (*it).second;
   _ASSERTE(p_observer);
-  p_observer->OnPacketReceived((BYTE)wParam, &recepted_packet); 
+  p_observer->OnPacketReceived((BYTE)wParam, &recepted_packet);
  }
  return 0;
 }

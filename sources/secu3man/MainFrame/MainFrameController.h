@@ -32,8 +32,8 @@ class LogWriter;
 class MainFrameController : public IAPPEventHandler
 {
  public:
-  MainFrameController(CCommunicationManager* i_pCommunicationManager, 
-                      CAppSettingsManager* i_pAppSettingsManager, 
+  MainFrameController(CCommunicationManager* i_pCommunicationManager,
+                      CAppSettingsManager* i_pAppSettingsManager,
                       CStatusBarManager* i_pStatusBarManager,
                       LogWriter* i_pLogWriter, CMainFrame* ip_view = NULL);
   ~MainFrameController();
@@ -57,11 +57,11 @@ class MainFrameController : public IAPPEventHandler
   bool OnClose(void);
 
   //called by VIEW at the startup for get desired window position
-  void OnGetInitialPos(CPoint& o_point); 
-    
+  void OnGetInitialPos(CPoint& o_point);
+
   CRect _GetScreenRect(void) const;
 
-  //You have to call this function before using of this controller! 
+  //You have to call this function before using of this controller!
   void _SetDelegates(void);
 
   CMainFrame*            mp_view;
@@ -69,7 +69,7 @@ class MainFrameController : public IAPPEventHandler
   CAppSettingsManager*   m_pAppSettingsManager;
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
-   
+
   //true, если установлен полноэкранный режим
   bool m_full_screen_mode;
   //запоминает размеры и позицию окна перед переходом в полноэкранный режим

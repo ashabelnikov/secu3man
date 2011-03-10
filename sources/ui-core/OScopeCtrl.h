@@ -2,7 +2,7 @@
 //Midified by Alexey A. Shabelnikov
 
 // OScopeCtrl.h : header file
-// 
+//
 
 #ifndef __OScopeCtrl_H__
 #define __OScopeCtrl_H__
@@ -14,14 +14,14 @@
 
 class AFX_EXT_CLASS COScopeCtrl : public CWnd
 {
-public:
+ public:
   COScopeCtrl();
   virtual ~COScopeCtrl();
 
   virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
 
   //Use for add new point
-  //dNewPoint - value of new point 
+  //dNewPoint - value of new point
   //i_left - if true, then point will be added from left side (reverse)
   void AppendPoint(double dNewPoint, bool i_reverse = false);
 
@@ -35,16 +35,16 @@ public:
   void DrawPoint(bool i_reverse);
   void Reset();
 
-//Implementation
-protected:
+ //Implementation
+ protected:
   size_t _GetPtCount(void);
   // Generated message map functions
   afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy); 
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
-private:
-  const int m_nShiftPixels;    // amount to shift with each new point 
+ private:
+  const int m_nShiftPixels;    // amount to shift with each new point
   int m_nYDecimals;
 
   CString m_strXUnitsString;
@@ -52,7 +52,7 @@ private:
 
   COLORREF m_crBackColor;      // background color
   COLORREF m_crGridColor;      // grid color
-  COLORREF m_crPlotColor;      // data color  
+  COLORREF m_crPlotColor;      // data color
 
   double m_dCurrentPosition;   // current position
   double m_dPreviousPosition;  // previous position
@@ -61,7 +61,7 @@ private:
   double m_dUpperLimit;        // upper bounds
   double m_dRange;
   double m_dVerticalFactor;
-  
+
   CRect  m_rectClient;
   CRect  m_rectPlot;
   CPen   m_penPlot;
@@ -73,11 +73,11 @@ private:
   CBitmap *m_pbitmapOldPlot;
   CBitmap m_bitmapGrid;
   CBitmap m_bitmapPlot;
-  
-  //stores values of all points  
+
+  //stores values of all points
   std::deque<double> m_points;
   //stores point position, used for correct scrolling
-  size_t m_point_position;  
+  size_t m_point_position;
 };
 
 /////////////////////////////////////////////////////////////////////////////

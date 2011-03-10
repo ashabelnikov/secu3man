@@ -55,11 +55,11 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
 {
  ///////////////////////////////////////////////////////////////////////////
  //Popup menu "Импорт данных"
- m_ImportMenu.CreatePopupMenu();  
- m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ));  
- m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW));	
+ m_ImportMenu.CreatePopupMenu();
+ m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ));
+ m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW));
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3));
- m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, MLL::LoadString(IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE));	
+ m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, MLL::LoadString(IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE));
 
 
  ///////////////////////////////////////////////////////////////////////////
@@ -68,11 +68,11 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_MPSZ,MLL::LoadString(IDS_EXPORT_EXPORT_TO_MPSZ));
  ///////////////////////////////////////////////////////////////////////////
  m_ParentMenu.CreatePopupMenu();
-  
- m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH,MLL::LoadString(IDS_READ_FLASH));	
- m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH,MLL::LoadString(IDS_WRITE_FLASH));	 
- m_ParentMenu.AppendMenu(MF_STRING,IDM_OPEN_FLASH,MLL::LoadString(IDS_OPEN_FLASH));	  
- m_ParentMenu.AppendMenu(MF_STRING,IDM_SAVE_FLASH,MLL::LoadString(IDS_SAVE_FLASH));	
+
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FLASH,MLL::LoadString(IDS_READ_FLASH));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_FLASH,MLL::LoadString(IDS_WRITE_FLASH));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_OPEN_FLASH,MLL::LoadString(IDS_OPEN_FLASH));
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_SAVE_FLASH,MLL::LoadString(IDS_SAVE_FLASH));
 
  ///////////////////////////////////////////////////////////////////////////
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
@@ -88,18 +88,18 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_bl_menu_items_IDs.push_back(IDM_WRITE_FLASH_FROM_FILE);
 
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
- 
- m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_EEPROM_TO_FILE,MLL::LoadString(IDS_READ_EEPROM_TO_FILE));	
+
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_EEPROM_TO_FILE,MLL::LoadString(IDS_READ_EEPROM_TO_FILE));
  m_bl_menu_items_IDs.push_back(IDM_READ_EEPROM_TO_FILE);
-  
+
  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_EEPROM_FROM_FILE,MLL::LoadString(IDS_WRITE_EEPROM_FROM_FILE));
  m_bl_menu_items_IDs.push_back(IDM_WRITE_EEPROM_FROM_FILE);
 
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
-  
+
  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_BOOTLOADER_SIGNATURE,MLL::LoadString(IDS_READ_BOOTLOADER_SIGNATURE));
  m_bl_menu_items_IDs.push_back(IDM_READ_BOOTLOADER_SIGNATURE);
-  
+
  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FW_SIGNATURE_INFO,MLL::LoadString(IDS_READ_FW_SIGNATURE_INFO));
  m_app_menu_items_IDs.push_back(IDM_READ_FW_SIGNATURE_INFO);
 }
@@ -108,7 +108,7 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
 void CFirmwareModeContextMenuManager::TrackPopupMenu(int x, int y)
 {
  ASSERT(m_pWnd);
- m_ParentMenu.TrackPopupMenu(TPM_LEFTALIGN,x,y,m_pWnd);			   			 			
+ m_ParentMenu.TrackPopupMenu(TPM_LEFTALIGN,x,y,m_pWnd);
 }
 
 void CFirmwareModeContextMenuManager::EnableBLMenuItems(bool i_enable)
@@ -130,7 +130,7 @@ void CFirmwareModeContextMenuManager::EnableAppMenuItems(bool i_enable)
 }
 
 //This method should be called when a pop-up menu is about to become active
-void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu) 
+void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
 {
  ASSERT(m_pWnd);
 
@@ -182,8 +182,8 @@ void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex,
   {
    // possibly a popup menu, route to first item of that popup
    state.m_pSubMenu = pMenu->GetSubMenu(state.m_nIndex);
-   if (state.m_pSubMenu == NULL || 
-	  (state.m_nID = state.m_pSubMenu->GetMenuItemID(0)) == 0 || state.m_nID == (UINT)-1)
+   if (state.m_pSubMenu == NULL ||
+    (state.m_nID = state.m_pSubMenu->GetMenuItemID(0)) == 0 || state.m_nID == (UINT)-1)
    {
     continue;       // first item of popup can't be routed to
    }

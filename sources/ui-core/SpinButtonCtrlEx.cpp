@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -82,7 +82,7 @@ void CSpinButtonCtrlEx::SetRangeAndDelta(double lower, double upper, double delt
  m_Delta = delta;
 
  // reversed min/max is not implemented, although it's probably easy
- ASSERT (m_MaxVal > m_MinVal); 
+ ASSERT (m_MaxVal > m_MinVal);
 
  //предотвращаем деление на 0
  if (m_Delta == 0.0)
@@ -108,7 +108,7 @@ void CSpinButtonCtrlEx::SetIntegerPos (double pos)
   return;
 
  int int_pos;
-	
+
  if (pos < m_MinVal)
   int_pos = 0;
  else if (pos > m_MaxVal)
@@ -134,7 +134,7 @@ void CSpinButtonCtrlEx::GetRangeAndDelta(double& lower, double& upper, double& d
 BOOL CSpinButtonCtrlEx::OnDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NM_UPDOWN* pUD = (NM_UPDOWN*)pNMHDR;
-	
+
  double value = GetPos () + m_Delta * pUD->iDelta;
  const bool can_wrap = (UDS_WRAP & GetStyle());
 
@@ -145,7 +145,7 @@ BOOL CSpinButtonCtrlEx::OnDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
    abs_eps = EPS;
 
   if (m_MinVal - value > abs_eps)
-  {  
+  {
    if(can_wrap)
 	value = m_MaxVal;
    else
@@ -156,9 +156,9 @@ BOOL CSpinButtonCtrlEx::OnDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
  {
   double abs_eps = fabs(EPS * max (value, m_MaxVal));
   if (abs_eps < EPS) abs_eps = EPS;
-		
+
   if (value - m_MaxVal > abs_eps)
-  {   		
+  {
    if(can_wrap)
     value = m_MinVal;
    else
@@ -169,23 +169,23 @@ BOOL CSpinButtonCtrlEx::OnDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
  SetBuddyValue (value);
 
  *pResult = 0;
- 
+
  return FALSE; // let parent process this notification too.
 }
 
 //-------------------------------------------------------------
-void CSpinButtonCtrlEx::PreSubclassWindow() 
+void CSpinButtonCtrlEx::PreSubclassWindow()
 {
  CSpinButtonCtrl::PreSubclassWindow();
  InitSpinButtonCtrl();
 }
 
 //-------------------------------------------------------------
-int CSpinButtonCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+int CSpinButtonCtrlEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
  if (CSpinButtonCtrl::OnCreate(lpCreateStruct) == -1)
-  return -1;	
- InitSpinButtonCtrl();	
+  return -1;
+ InitSpinButtonCtrl();
  return 0;
 }
 

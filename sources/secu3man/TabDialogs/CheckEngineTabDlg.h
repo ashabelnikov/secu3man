@@ -35,7 +35,7 @@ class CCheckEngineTabDlg : public CTabDialog
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CCheckEngineTabDlg(CWnd* pParent = NULL);   // standard constructor   
+  CCheckEngineTabDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
@@ -60,12 +60,12 @@ class CCheckEngineTabDlg : public CTabDialog
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual BOOL OnInitDialog();	
+  virtual BOOL OnInitDialog();
   afx_msg void OnClose();
   afx_msg void OnRealTimeErrorsCheckbox();
   afx_msg void OnReadSavedErrors();
   afx_msg void OnWriteSavedErrors();
-  afx_msg void OnUpdateControls(CCmdUI* pCmdUI); 
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInertnessCheckbox(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRWButtons(CCmdUI* pCmdUI);
   afx_msg void OnDestroy();
@@ -84,11 +84,11 @@ class CCheckEngineTabDlg : public CTabDialog
   CButton m_read_saved_button;
   CButton m_write_saved_button;
   CButton m_list_set_all_button;
-  CButton m_list_clear_all_button;	
+  CButton m_list_clear_all_button;
 
-  EventHandler  m_OnRealTimeErrors;  
-  EventHandler  m_OnReadSavedErrors;  
-  EventHandler  m_OnWriteSavedErrors;  
+  EventHandler  m_OnRealTimeErrors;
+  EventHandler  m_OnReadSavedErrors;
+  EventHandler  m_OnWriteSavedErrors;
   EventHandler  m_OnListSetAllErrors;
   EventHandler  m_OnListClearAllErrors;
 

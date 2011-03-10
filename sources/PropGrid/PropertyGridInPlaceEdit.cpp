@@ -7,12 +7,12 @@
 // CPropertyGridInPlaceEdit from http://www.codeguru.com/listview/edit_subitems.shtml
 //
 // This code may be used in compiled form in any way you desire. This
-// file may be redistributed unmodified by any means PROVIDING it is 
-// not sold for profit without the authors written consent, and 
-// providing that this notice and the authors name and all copyright 
-// notices remains intact. 
+// file may be redistributed unmodified by any means PROVIDING it is
+// not sold for profit without the authors written consent, and
+// providing that this notice and the authors name and all copyright
+// notices remains intact.
 //
-// An email letting me know how you are using it would be nice as well. 
+// An email letting me know how you are using it would be nice as well.
 //
 // This file is provided "as is" with no expressed or implied warranty.
 // The author accepts no liability for any damage/loss of business that
@@ -22,15 +22,15 @@
 //
 // History:
 //         10 May 1998  Uses GVN_ notifications instead of LVN_,
-//                      Sends notification messages to the parent, 
+//                      Sends notification messages to the parent,
 //                      instead of the parent's parent.
-//         15 May 1998  There was a problem when editing with the in-place editor, 
-//                      there arises a general protection fault in user.exe, with a 
+//         15 May 1998  There was a problem when editing with the in-place editor,
+//                      there arises a general protection fault in user.exe, with a
 //                      few qualifications:
 //                         (1) This only happens with owner-drawn buttons;
 //                         (2) This only happens in Win95
-//                         (3) This only happens if the handler for the button does not 
-//                             create a new window (even an AfxMessageBox will avoid the 
+//                         (3) This only happens if the handler for the button does not
+//                             create a new window (even an AfxMessageBox will avoid the
 //                             crash)
 //                         (4) This will not happen if Spy++ is running.
 //                      PreTranslateMessage was added to route messages correctly.
@@ -140,7 +140,7 @@ END_MESSAGE_MAP()
 // If an arrow key (or associated) is pressed, then exit if
 //  a) The Ctrl key was down, or
 //  b) m_bExitOnArrows == TRUE
-void CPropertyGridInPlaceEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags) 
+void CPropertyGridInPlaceEdit::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
  if ((nChar == VK_PRIOR || nChar == VK_NEXT ||
       nChar == VK_DOWN  || nChar == VK_UP   ||
@@ -168,7 +168,7 @@ void CPropertyGridInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
   GetParent()->SetFocus();    // This will destroy this window
   return;
  }
- if (nChar == VK_ESCAPE) 
+ if (nChar == VK_ESCAPE)
  {
   CancelEdit();
   return;
@@ -189,7 +189,7 @@ void CPropertyGridInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
  //CFont *pFontDC = dc.SelectObject(GetFont());
  //CSize size = dc.GetTextExtent( str );
  //dc.SelectObject( pFontDC );
- //   
+ //
  //// Get client rect
  //CRect ParentRect;
  //GetParent()->GetClientRect( &ParentRect );
@@ -206,7 +206,7 @@ void CPropertyGridInPlaceEdit::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
  //}
 }
 
-UINT CPropertyGridInPlaceEdit::OnGetDlgCode() 
+UINT CPropertyGridInPlaceEdit::OnGetDlgCode()
 {
  return DLGC_WANTALLKEYS;
 }
@@ -215,7 +215,7 @@ UINT CPropertyGridInPlaceEdit::OnGetDlgCode()
 // CPropertyGridInPlaceEdit overrides
 
 // Stoopid win95 accelerator key problem workaround - Matt Weagle.
-BOOL CPropertyGridInPlaceEdit::PreTranslateMessage(MSG* pMsg) 
+BOOL CPropertyGridInPlaceEdit::PreTranslateMessage(MSG* pMsg)
 {
  // Catch the Alt key so we don't choke if focus is going to an owner drawn button
  if (pMsg->message == WM_SYSCHAR)

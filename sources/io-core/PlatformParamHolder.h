@@ -31,7 +31,7 @@ struct PPFlashParam
  size_t m_bl_section_size; //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
  size_t m_app_section_size;//часть прошивки кроме бутлоадера
  size_t m_only_code_size;  //размер кода без данных, которые в конце
- //часть прошивки располагающаяся после кода программы и перед бутлоадером. Сюда входят пустое пространство, данные 
+ //часть прошивки располагающаяся после кода программы и перед бутлоадером. Сюда входят пустое пространство, данные
  //и контрольная сумма прошивки.
  size_t m_only_overhead_size;
 };
@@ -54,9 +54,9 @@ class IOCORE_API PlatformParamHolder
 {
  public:
   PlatformParamHolder(EECUPlatform i_platform);
-  
-  const PPEepromParam& GetEepromParameters(void) const; 
-  const PPFlashParam& GetFlashParameters(void) const; 
+
+  const PPEepromParam& GetEepromParameters(void) const;
+  const PPFlashParam& GetFlashParameters(void) const;
 
  private:
   PPEepromParam m_ep;

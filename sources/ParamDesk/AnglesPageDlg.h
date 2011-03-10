@@ -43,7 +43,7 @@ class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
   void SetValues(const SECU3IO::AnglesPar* i_values);
 
  // Implementation
- protected:	
+ protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();

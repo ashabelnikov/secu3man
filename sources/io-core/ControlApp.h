@@ -31,8 +31,8 @@
 
 
 #define ADC_DISCRETE        0.0025f   //Вольт
- 
-#define ANGLE_MULTIPLAYER   32.0f     //коэффициент масштабирования углов поворота коленвала  
+
+#define ANGLE_MULTIPLAYER   32.0f     //коэффициент масштабирования углов поворота коленвала
 
 #define MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER  64
 #define UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER 400
@@ -47,7 +47,7 @@ class IAPPThreadEventHandler
 {
   typedef CRITICAL_SECTION CSECTION;
  public:
-  IAPPThreadEventHandler() : mp_sync_object(NULL) {}; 
+  IAPPThreadEventHandler() : mp_sync_object(NULL) {};
 
   //event handlers
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet) = 0;
@@ -73,11 +73,11 @@ class IAPPThreadEventHandler
 
 
 class CComPort;
-class IOCORE_API CControlApp  
-{  
+class IOCORE_API CControlApp
+{
  public:
   typedef CRITICAL_SECTION CSECTION;
-  typedef IAPPThreadEventHandler EventHandler; 
+  typedef IAPPThreadEventHandler EventHandler;
 
   CControlApp();
   virtual ~CControlApp();
@@ -88,7 +88,7 @@ class IOCORE_API CControlApp
   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
   bool ChangeContext(const BYTE i_new_descriptor);
   bool StartBootLoader();
-  void SetEventHandler(EventHandler* i_pEventHandler); 
+  void SetEventHandler(EventHandler* i_pEventHandler);
   inline CSECTION* GetSyncObject(void);
   inline void EnterCriticalSection(void);
   inline void LeaveCriticalSection(void);
@@ -113,7 +113,7 @@ class IOCORE_API CControlApp
   HANDLE       m_hThread;
   DWORD        m_ThreadId;
   HANDLE       m_hAwakeEvent;
-  HANDLE       m_hSleepEvent; 
+  HANDLE       m_hSleepEvent;
 
   DWORD        m_uart_speed;
   DWORD        m_dat_packet_timeout;
@@ -132,14 +132,14 @@ class IOCORE_API CControlApp
   const float m_angle_multiplier;
   bool m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
   bool m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
-  bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn(); 
+  bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn();
 
   //helper
   void SwitchOnThread(bool state);
   int  SplitPackets(BYTE*, size_t i_size);
   bool ParsePackets();
   BOOL SetPacketsTimer(int timeout);
-  bool IsValidDescriptor(const BYTE descriptor) const;   
+  bool IsValidDescriptor(const BYTE descriptor) const;
 
   SECU3IO::SECU3Packet& EndPendingPacket(void);
   SECU3IO::SECU3Packet& PendingPacket(void);

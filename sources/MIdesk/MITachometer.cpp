@@ -50,14 +50,14 @@ void CMITachometer::Create(void)
  m_meter.SetLabelsDecimals(0);
  m_meter.SetValueDecimals(0);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TACHOMETER_TITLE));
- m_meter.SetFontScale(80);    
+ m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TACHOMETER_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(0,4000,RGB(100,255,100));
  m_meter.AddAlertZone(4000,6000,RGB(255,255,100));
  m_meter.AddAlertZone(6000,8000,RGB(255,100,100));
- m_meter.UpdateNeedle(0.0); 
+ m_meter.UpdateNeedle(0.0);
 }
 
 void CMITachometer::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -75,12 +75,12 @@ float CMITachometer::GetValue(void)
 {
  return (float)m_meter.GetNeedlePos();
 }
-	
+
 void CMITachometer::Show(bool show)
 {
  m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
-	
+
 void CMITachometer::Enable(bool enable)
 {
  m_meter.SetState(meter_needle, enable);
@@ -91,22 +91,22 @@ void CMITachometer::Enable(bool enable)
  COLORREF bk_color;
  m_meter.GetColor(meter_bground, &bk_color);
  m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
- 
+
  m_meter.Redraw();
 }
-	
+
 bool CMITachometer::IsVisible(void)
 {
  return (m_meter.IsWindowVisible()) ? true : false;
 }
-	
+
 bool CMITachometer::IsEnabled(void)
 {
  bool State = false;
  m_meter.GetState(meter_needle, &State);
  return State;
-}	
-	
+}
+
 void CMITachometer::SetLimits(float loLimit, float upLimit)
 {
  m_meter.ResetAlertZones();
@@ -116,7 +116,7 @@ void CMITachometer::SetLimits(float loLimit, float upLimit)
 
  m_meter.SetRange(loLimit, upLimit);
 }
-	
+
 void CMITachometer::SetTicks(int number)
 {
  m_meter.SetTickNumber(number);
@@ -127,5 +127,5 @@ void CMITachometer::Scale(float i_x_factor, float i_y_factor)
 {
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect); 
+ m_meter.MoveWindow(rect);
 }

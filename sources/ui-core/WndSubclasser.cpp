@@ -11,7 +11,7 @@
 
 //-----------------------------------------------------------
 namespace
-{	
+{
  typedef std::list<CWndSubclasser*> TLstpWndSubClasser;
  typedef std::map<HWND, TLstpWndSubClasser> TMapHwndLstSubClasser;
  typedef std::map<HWND, WNDPROC> TMapHwndOldProc;
@@ -27,7 +27,7 @@ namespace
   LPVOID prevtoken;
  };
 
- LRESULT CALLBACK SubWindowProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)  
+ LRESULT CALLBACK SubWindowProc(HWND hwnd,UINT uMsg,WPARAM wParam,LPARAM lParam)
  {
   TMapHwndLstSubClasser::iterator mapI = g_map.find(hwnd);
   ASSERT(mapI != g_map.end());
@@ -39,9 +39,9 @@ namespace
   TLstpWndSubClasser& lst = mapI->second;
   prms.i = lst.begin();
   prms.end = lst.end();
-  prms.hWnd = hwnd; 
-  prms.uMsg = uMsg; 
-  prms.wParam = wParam; 
+  prms.hWnd = hwnd;
+  prms.uMsg = uMsg;
+  prms.wParam = wParam;
   prms.lParam = lParam;
   prms.prevtoken = NULL;
 
@@ -79,12 +79,12 @@ bool CWndSubclasser::Subclass(HWND hWnd)
 #ifndef _USE_SETWINDOWLONGPTR
   oldPrc = (WNDPROC) GetWindowLong(hWnd, GWL_WNDPROC);
   SetWindowLong(hWnd, GWL_WNDPROC, (LONG)SubWindowProc);
-#else 
+#else
   oldPrc = (WNDPROC) GetWindowLongPtr(hWnd, GWL_WNDPROC);
   SetWindowLongPtr(hWnd, GWL_WNDPROC, (LONG_PTR)SubWindowProc);
 #endif
  }
-	
+
  return true;
 }
 
@@ -95,7 +95,7 @@ bool CWndSubclasser::Clear()
 
  TLstpWndSubClasser& lst = g_map[_hWnd];
  lst.remove(this);
-	
+
  if(lst.size() == 0)
  {
   g_map.erase(_hWnd);
@@ -115,12 +115,12 @@ bool CWndSubclasser::Clear()
 LRESULT CWndSubclasser::Call(LPVOID token)
 {
  SWndSubclasserParams* pPrms = (SWndSubclasserParams*)token;
-	
- if(pPrms->i == pPrms->end) 
-  //finished the list: just call the original window procedure. 
+
+ if(pPrms->i == pPrms->end)
+  //finished the list: just call the original window procedure.
   //This will go into AfxWndProc and hence in CWnd::OnWndMsg and into the message map.
   return CallWindowProc(g_prcmap[pPrms->hWnd], pPrms->hWnd, pPrms->uMsg, pPrms->wParam, pPrms->lParam);
-	
+
  CWndSubclasser* pWS = *pPrms->i;
  pPrms->i++; // the nextime Call is called, will process the next in list
  pPrms->prevtoken = pWS->_token; //save for later
@@ -128,10 +128,10 @@ LRESULT CWndSubclasser::Call(LPVOID token)
  LRESULT r=0;
  if(pPrms->uMsg == WM_NCDESTROY)
   pWS->_bCleared = true; //will not destroy yet
-	
- if(pWS->_bCleared) 
+
+ if(pWS->_bCleared)
   r = pWS->Default(); //skip a declared as "destroyed"
- else 
+ else
   r = pWS->WndProcSub(pPrms->uMsg, pPrms->wParam, pPrms->lParam); //just call the subproc
  pWS->_token = pPrms->prevtoken; //restore previous token (naw can return also from recursion)
  return r;
@@ -154,7 +154,7 @@ LRESULT CWndSubclasser::Default(WPARAM wParam, LPARAM lParam)
 {
  SWndSubclasserParams* pPrms = (SWndSubclasserParams*)_token;
  pPrms->wParam = wParam;  //modify parameters
- pPrms->lParam = lParam; 
+ pPrms->lParam = lParam;
  LRESULT r = Call(_token);//will process the next il list (if any)
  return r;
 }

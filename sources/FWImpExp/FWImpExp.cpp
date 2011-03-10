@@ -38,7 +38,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
  if (dwReason == DLL_PROCESS_ATTACH)
  {
   TRACE0("FWIMPEXP.DLL Initializing!\n");
-		
+
   if (!AfxInitExtensionModule(FWImpExpDLL, hInstance))
    return 0;
 

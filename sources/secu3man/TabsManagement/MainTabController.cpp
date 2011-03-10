@@ -61,13 +61,13 @@ void CMainTabController::OnSelchangeTabctl(void)
  ASSERT(m_pTabController);
  m_controllers_list[m_pTabController->GetCurSel()]->OnActivate();
 }
- 
+
 void CMainTabController::OnSelchangingTabctl(void)
 {
  ASSERT(m_controllers_list.size());
  ASSERT(m_pTabController);
  m_controllers_list[m_pTabController->GetCurSel()]->OnDeactivate();
-} 
+}
 
 ITabController* CMainTabController::GetActiveController() const
 {
@@ -76,7 +76,7 @@ ITabController* CMainTabController::GetActiveController() const
  return m_controllers_list[selected_index];
 }
 
-void CMainTabController::SetTabController(CTabController* i_pTabController) 
-{ 
+void CMainTabController::SetTabController(CTabController* i_pTabController)
+{
  m_pTabController = i_pTabController;
 }

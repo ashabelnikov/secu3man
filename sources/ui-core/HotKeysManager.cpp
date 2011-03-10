@@ -1,6 +1,6 @@
 /****************************************************************
 *
-*  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+*  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
 *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
 *  Microprocessors systems - design & programming.
 *
@@ -71,8 +71,8 @@ void HotKeysManager::ActivateAllHotKeys(void)
  for(; it != m_hk_routers.end(); ++it)
  {
   CHotKeysToCmdRouter* p_router = *it;
-  ASSERT(p_router);  
-  if (p_router->mp_OriginalWnd) //if window was not created, hot keys also would be not created! 
+  ASSERT(p_router);
+  if (p_router->mp_OriginalWnd) //if window was not created, hot keys also would be not created!
    RegisterOneRouter(p_router, true);
  }
  m_active = true;
@@ -101,11 +101,11 @@ bool HotKeysManager::RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_re
   else
   {
    BOOL status = RegisterHotKey(ip_router->mp_OriginalWnd->m_hWnd, (*it).first, (*it).second.m_fsModifiers, (*it).second.m_vk);
-   result = status ? true : false; 
+   result = status ? true : false;
   }
  }
 
- return result; 
+ return result;
 }
 
 bool HotKeysManager::IsActive(void) const

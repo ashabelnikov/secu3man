@@ -21,8 +21,8 @@
 
 #pragma once
 
-//через этот интерфейс главный контроллер управляет контроллерами вкладок (Tab control) 
-class ITabController  
+//через этот интерфейс главный контроллер управляет контроллерами вкладок (Tab control)
+class ITabController
 {
  public:
   virtual void OnActivate(void) = 0;

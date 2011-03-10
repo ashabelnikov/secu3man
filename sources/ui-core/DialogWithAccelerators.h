@@ -8,10 +8,10 @@ class AFX_EXT_CLASS CDialogWithAccelerators : public CDialog
 
  public:
   CDialogWithAccelerators(); //modeless
-  CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+  CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParentWnd = NULL );
 
  protected:
-  //здесь будет грязный хак! 
+  //здесь будет грязный хак!
   virtual BOOL PreTranslateMessage(MSG* pMsg);
 };
 
@@ -22,7 +22,7 @@ class AFX_EXT_CLASS CModelessDialog : public CDialogWithAccelerators
 
  public:
   CModelessDialog(); //modeless
-  CModelessDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+  CModelessDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );
 
  protected:
   virtual void OnOK();

@@ -36,7 +36,7 @@ class CStatusBarManager;
 class EEPROMDataMediator;
 class ISettingsData;
 
-class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler 
+class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler
 {
  public:
   CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
@@ -61,9 +61,9 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   virtual void OnConnection(const bool i_online);
 
   //from IBLDEventHandler
-  virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);  
+  virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);
   virtual void OnBegin(const int opcode,const int status);
-  virtual void OnEnd(const int opcode,const int status);    
+  virtual void OnEnd(const int opcode,const int status);
 
   void OnSettingsChanged(void);
 
@@ -106,7 +106,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  ///////////////////////////////////////////////////////////	
+  ///////////////////////////////////////////////////////////
   void OnBLStartedEmergency(void);
 
   void OnModificationCheckTimer(void);

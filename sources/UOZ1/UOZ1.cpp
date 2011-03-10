@@ -37,8 +37,8 @@ std::map<HWND, TForm*> g_form_instances;
 
 enum ELanguage
 {
-  IL_ENGLISH = 0,
-  IL_RUSSIAN = 1
+ IL_ENGLISH = 0,
+ IL_RUSSIAN = 1
 };
 
 HINSTANCE hInst = NULL;
@@ -121,7 +121,7 @@ void __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_
 {
  TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm1)
-   return;
+  return;
 
  if (original_function && modified_function)
  {
@@ -258,4 +258,3 @@ void __cdecl Chart2DSetLanguage(int i_language)
 }
 
 //---------------------------------------------------------------------------
-

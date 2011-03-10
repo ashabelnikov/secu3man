@@ -40,7 +40,7 @@ class CDynDialogItemEx : public CWnd
     DWORD dwStyle,
     DWORD dwExtendedStyle,
     LPRECT pRect,
-    LPCTSTR lpszCaption, 
+    LPCTSTR lpszCaption,
     UINT nID = 0,
     BOOL bSubclassed = FALSE,
     void *pData = NULL);
@@ -48,7 +48,7 @@ class CDynDialogItemEx : public CWnd
     DWORD dwStyle,
     DWORD dwExtendedStyle,
     LPRECT pRect,
-    LPCTSTR lpszCaption, 
+    LPCTSTR lpszCaption,
     UINT nID = 0,
     BOOL bSubclassed = FALSE,
     void *pData = NULL);

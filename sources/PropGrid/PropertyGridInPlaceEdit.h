@@ -7,12 +7,12 @@
 // Copyright (c) 1998-2002. All Rights Reserved.
 //
 // This code may be used in compiled form in any way you desire. This
-// file may be redistributed unmodified by any means PROVIDING it is 
-// not sold for profit without the authors written consent, and 
-// providing that this notice and the authors name and all copyright 
-// notices remains intact. 
+// file may be redistributed unmodified by any means PROVIDING it is
+// not sold for profit without the authors written consent, and
+// providing that this notice and the authors name and all copyright
+// notices remains intact.
 //
-// An email letting me know how you are using it would be nice as well. 
+// An email letting me know how you are using it would be nice as well.
 //
 // This file is provided "as is" with no expressed or implied warranty.
 // The author accepts no liability for any damage/loss of business that
@@ -57,13 +57,13 @@ class CPropertyGridInPlaceEdit : public CEditEx
   virtual ~CPropertyGridInPlaceEdit();
 
   void SetColors(COLORREF clrBack, COLORREF clrText);
-  
+
  protected:
   void CancelEdit();
   void EndEdit();
 
   // Generated message map functions
- protected:  
+ protected:
   virtual BOOL PreTranslateMessage(MSG* pMsg);
   afx_msg void OnKillFocus(CWnd* pNewWnd);
   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);

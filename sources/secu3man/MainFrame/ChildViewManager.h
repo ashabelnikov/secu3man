@@ -27,7 +27,7 @@ class CChildView;
 class CMainFrame;
 class CMainTabManager;
 
-class CChildViewManager  
+class CChildViewManager
 {
  public:
   CChildViewManager();

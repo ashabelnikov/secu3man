@@ -29,19 +29,19 @@
 
 //вкладки
 #include "ADCCompenPageDlg.h"
-#include "AnglesPageDlg.h" 
-#include "CarburPageDlg.h" 
+#include "AnglesPageDlg.h"
+#include "CarburPageDlg.h"
 #include "CKPSPageDlg.h"
-#include "FunSetPageDlg.h" 
-#include "IdlRegPageDlg.h" 
+#include "FunSetPageDlg.h"
+#include "IdlRegPageDlg.h"
 #include "KnockPageDlg.h"
 #include "MiscPageDlg.h"
-#include "StarterPageDlg.h" 
+#include "StarterPageDlg.h"
 #include "TemperPageDlg.h"
 
 #include "common\FastDelegate.h"
 #include "io-core\SECU3IO.h"
-#include "io-core\ufcodes.h" 
+#include "io-core\ufcodes.h"
 #include "ui-core\HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
@@ -67,9 +67,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_enabled(FALSE)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
-{   
+{
  //создаем image list для TabCtrl
- m_pImgList = new CImageList(); 
+ m_pImgList = new CImageList();
  m_pImgList->Create(16, 16, ILC_COLOR24|ILC_MASK, 0, 0);
  CBitmap bitmap;
  bitmap.LoadBitmap((LPCTSTR)IDB_TAB_CTRL_BITMAPS);
@@ -79,16 +79,16 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
  m_pStarterPageDlg = new CStarterPageDlg();
  m_pStarterPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pAnglesPageDlg = new CAnglesPageDlg();		 
+ m_pAnglesPageDlg = new CAnglesPageDlg();
  m_pAnglesPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pIdlRegPageDlg = new CIdlRegPageDlg();	  
+ m_pIdlRegPageDlg = new CIdlRegPageDlg();
  m_pIdlRegPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pFunSetPageDlg = new CFunSetPageDlg();		 
+ m_pFunSetPageDlg = new CFunSetPageDlg();
  m_pFunSetPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
- m_pTemperPageDlg = new CTemperPageDlg();		  
+ m_pTemperPageDlg = new CTemperPageDlg();
  m_pTemperPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 
  m_pCarburPageDlg = new CCarburPageDlg();
@@ -111,18 +111,18 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 }
 
 CParamDeskDlg::~CParamDeskDlg()
-{  
- delete m_pImgList;	
+{
+ delete m_pImgList;
 
- delete m_pStarterPageDlg; 		 
- delete m_pAnglesPageDlg; 		 
- delete m_pIdlRegPageDlg;	  
- delete m_pFunSetPageDlg;		 
- delete m_pTemperPageDlg;		  
+ delete m_pStarterPageDlg;
+ delete m_pAnglesPageDlg;
+ delete m_pIdlRegPageDlg;
+ delete m_pFunSetPageDlg;
+ delete m_pTemperPageDlg;
  delete m_pCarburPageDlg;
  delete m_pADCCompenPageDlg;
  delete m_pCKPSPageDlg;
- if (m_show_knock_page)  
+ if (m_show_knock_page)
   delete m_pKnockPageDlg;
  delete m_pMiscPageDlg;
 }
@@ -168,19 +168,19 @@ void CParamDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CParamDeskDlg::OnInitDialog() 
+BOOL CParamDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  //контрол создан через ресурсы и стили описаны в ресурсах.
  m_tab_control.SetImageList(m_pImgList);
  m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
  m_tab_control.Init();
-	
+
  m_tab_descriptors.clear();
- //наполняем Tab control вкладками	
+ //наполняем Tab control вкладками
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_STARTR_PAR),m_pStarterPageDlg,0), STARTR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ANGLES_PAR),m_pAnglesPageDlg,1), ANGLES_PAR));	
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ANGLES_PAR),m_pAnglesPageDlg,1), ANGLES_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_IDLREG_PAR),m_pIdlRegPageDlg,2), IDLREG_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_FUNSET_PAR),m_pFunSetPageDlg,3), FUNSET_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_TEMPER_PAR),m_pTemperPageDlg,4), TEMPER_PAR));
@@ -190,12 +190,12 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (m_show_knock_page)
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_KNOCK_PAR),m_pKnockPageDlg,8), KNOCK_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_MISCEL_PAR),m_pMiscPageDlg,9), MISCEL_PAR));
-	
- //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel 
+
+ //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
 
  //this будет получать события от Tab control-а и делегировать их указанным обработчикам
- m_tab_control.SetEventListener(this);   
+ m_tab_control.SetEventListener(this);
 
  //устанавливаем предыдущее значение (разрешены вкладки или нет)
  m_tab_control.EnableItem(-1,m_enabled ? true : false);
@@ -216,13 +216,13 @@ BYTE CParamDeskDlg::GetCurrentDescriptor(void)
   ASSERT(0); //unexpected selection index!
   return 0;
  }
- 
+
  return m_tab_descriptors[selection];
 }
 
-void CParamDeskDlg::OnDestroy() 
-{  
- Super::OnDestroy();	  
+void CParamDeskDlg::OnDestroy()
+{
+ Super::OnDestroy();
  m_hot_keys_supplier->Close();
 }
 
@@ -245,7 +245,7 @@ void CParamDeskDlg::GetTitle(CString& o_str)
 void CParamDeskDlg::Enable(bool enable)
 {
  m_enabled = (enable) ? TRUE : FALSE;
- m_pStarterPageDlg->Enable(enable);		 
+ m_pStarterPageDlg->Enable(enable);
  m_pAnglesPageDlg->Enable(enable);
  m_pIdlRegPageDlg->Enable(enable);
  m_pFunSetPageDlg->Enable(enable);
@@ -260,11 +260,11 @@ void CParamDeskDlg::Enable(bool enable)
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 
- m_tab_control.EnableItem(-1,enable); //all items  
+ m_tab_control.EnableItem(-1,enable); //all items
 }
 
-bool CParamDeskDlg::IsEnabled(void) 
-{ 
+bool CParamDeskDlg::IsEnabled(void)
+{
  return m_enabled ? true : false;
 }
 
@@ -287,7 +287,7 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case CARBUR_PAR:
    m_pCarburPageDlg->SetValues((CarburPar*)i_values);
    break;
-  case IDLREG_PAR: 
+  case IDLREG_PAR:
    m_pIdlRegPageDlg->SetValues((IdlRegPar*)i_values);
    break;
   case ANGLES_PAR:
@@ -313,12 +313,12 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case MISCEL_PAR:
    m_pMiscPageDlg->SetValues((MiscelPar*)i_values);
    break;
-  case FNNAME_DAT:     
-  case SENSOR_DAT:					      
+  case FNNAME_DAT:
+  case SENSOR_DAT:
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
- }//switch 
-  
+ }//switch
+
  return true;
 }
 
@@ -334,7 +334,7 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
   case CARBUR_PAR:
    m_pCarburPageDlg->GetValues((CarburPar*)o_values);
    break;
-  case IDLREG_PAR: 
+  case IDLREG_PAR:
    m_pIdlRegPageDlg->GetValues((IdlRegPar*)o_values);
    break;
   case ANGLES_PAR:
@@ -360,11 +360,11 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
   case MISCEL_PAR:
    m_pMiscPageDlg->GetValues((MiscelPar*)o_values);
    break;
-  case FNNAME_DAT:     
-  case SENSOR_DAT:					      
+  case FNNAME_DAT:
+  case SENSOR_DAT:
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
- }//switch        
+ }//switch
 
  return true;
 }
@@ -376,8 +376,8 @@ void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
  m_pFunSetPageDlg->FillCBByFunNames();
 }
 
-const std::vector<_TSTRING>& CParamDeskDlg::GetFunctionsNames(void) 
-{ 
+const std::vector<_TSTRING>& CParamDeskDlg::GetFunctionsNames(void)
+{
  return m_pFunSetPageDlg->AccessFunNames();
 }
 
@@ -387,20 +387,20 @@ void CParamDeskDlg::OnSaveButton()
   m_OnSaveButton();
 }
 
-void CParamDeskDlg::OnSelchangeTabctl(void) 
-{ 
- if (m_OnTabActivate) 
+void CParamDeskDlg::OnSelchangeTabctl(void)
+{
+ if (m_OnTabActivate)
   m_OnTabActivate();
-} 
+}
 
-void CParamDeskDlg::OnSelchangingTabctl(void) 
+void CParamDeskDlg::OnSelchangingTabctl(void)
 {
  //empty
 }
 
-void CParamDeskDlg::OnChangeInTab(void) 
-{ 
- if (m_OnChangeInTab) 
+void CParamDeskDlg::OnChangeInTab(void)
+{
+ if (m_OnChangeInTab)
   m_OnChangeInTab();
 }
 
@@ -421,12 +421,12 @@ int CParamDeskDlg::_GetTabIndex(unsigned i_descriptor)
  return -1;
 }
 
-void CParamDeskDlg::SetOnTabActivate(EventHandler OnTabActivate) 
+void CParamDeskDlg::SetOnTabActivate(EventHandler OnTabActivate)
 {
  m_OnTabActivate = OnTabActivate;
 }
 
-void CParamDeskDlg::SetOnChangeInTab(EventHandler OnChangeInTab) 
+void CParamDeskDlg::SetOnChangeInTab(EventHandler OnChangeInTab)
 {
  m_OnChangeInTab = OnChangeInTab;
 }
@@ -441,7 +441,7 @@ bool CParamDeskDlg::SetCurSel(int sel)
  return m_tab_control.SetCurSel(sel);
 }
 
-int CParamDeskDlg::GetCurSel(void) 
+int CParamDeskDlg::GetCurSel(void)
 {
  return m_tab_control.GetCurSel();
 }
@@ -458,7 +458,7 @@ void CParamDeskDlg::_RegisterHotKeys(void)
  RegisterHK(CARBUR_PAR, VK_F6);
  RegisterHK(ADCCOR_PAR, VK_F7);
  RegisterHK(CKPS_PAR,   VK_F8);
- if (m_show_knock_page) 
+ if (m_show_knock_page)
   RegisterHK(KNOCK_PAR,  VK_F9);
  RegisterHK(MISCEL_PAR, VK_F10);
 }

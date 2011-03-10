@@ -63,14 +63,14 @@ float CMIThrottleGate::GetValue(void)
  bool state = m_led.GetState();
  return ((state) ? 1.0f : 0.0f);
 }
-	
+
 void CMIThrottleGate::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
- m_led.ShowWindow(nCmdShow);  
+ m_led.ShowWindow(nCmdShow);
  m_caption.ShowWindow(nCmdShow);
 }
-	
+
 void CMIThrottleGate::Enable(bool enable)
 {
  int b_enable = (enable) ? TRUE : FALSE ;
@@ -80,24 +80,24 @@ void CMIThrottleGate::Enable(bool enable)
 
  m_prev_enable = enable;
 }
-	
+
 bool CMIThrottleGate::IsVisible(void)
 {
  BOOL state = m_led.IsWindowVisible();
  return ((state) ? true : false);
 }
-	
+
 bool CMIThrottleGate::IsEnabled(void)
 {
  BOOL state = m_led.IsWindowEnabled();
  return ((state) ? true : false);
-}	
-	
+}
+
 void CMIThrottleGate::SetLimits(float loLimit, float upLimit)
 {
  //not used by LED
 }
-	
+
 void CMIThrottleGate::SetTicks(int number)
 {
  //not used by LED
@@ -112,13 +112,13 @@ void CMIThrottleGate::DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_ca
 
 void CMIThrottleGate::Scale(float i_x_factor, float i_y_factor)
 {
- CRect rect; 
+ CRect rect;
 
  rect = MIHelpers::GetChildWndRect(&m_led);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_led.MoveWindow(rect); 
+ m_led.MoveWindow(rect);
 
  rect = MIHelpers::GetChildWndRect(&m_caption);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect); 
+ m_caption.MoveWindow(rect);
 }

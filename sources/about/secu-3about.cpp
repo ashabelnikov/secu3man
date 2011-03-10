@@ -35,7 +35,7 @@ void ABOUT_API DisplayAbout(CWnd* i_pParent)
  string.Format(templ, A2T(__DATE__)); //compiler uses only ASCII format...
 
  AboutStc(i_pParent, hInstance, (LPCTSTR)IDB_BITMAP0001, (LPCTSTR)IDR_RGN0001,
-	 string, MLL::LoadString(IDS_AUTHOR_INFO));
+  string, MLL::LoadString(IDS_AUTHOR_INFO));
 }
 
 //timeToshow - How long show splash screen, in milliseconds.
@@ -46,5 +46,5 @@ void ABOUT_API DisplaySplash(int timeToShow)
  string.Format(templ, A2T(__DATE__)); //compiler uses only ASCII format...
 
  AboutStc(CWnd::GetDesktopWindow(), hInstance, (LPCTSTR)IDB_BITMAP0001, (LPCTSTR)IDR_RGN0001,
-	 string, MLL::LoadString(IDS_AUTHOR_INFO), true, timeToShow);
+  string, MLL::LoadString(IDS_AUTHOR_INFO), true, timeToShow);
 }

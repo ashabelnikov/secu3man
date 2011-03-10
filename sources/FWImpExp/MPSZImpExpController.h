@@ -36,7 +36,7 @@ class AFX_EXT_CLASS MPSZImportController
 
   void OnOkPressed(void);
   void OnCancelPressed(void);
-  void OnExchangePressed(void); 
+  void OnExchangePressed(void);
   void OnViewActivate(void);
   bool IsExchangeButtonAllowed(void);
 

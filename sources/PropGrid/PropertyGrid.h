@@ -148,7 +148,7 @@ class AFX_EXT_CLASS CPropertyGrid : public CWnd
   bool IsSectionCollapsed(HSECTION hs);
 
   bool GetFocusedItemID(HITEM&) const;
-  //returns true if currently focused item is enabled, otherwise false. 
+  //returns true if currently focused item is enabled, otherwise false.
   //If there no focused item, this function will return false.
   bool IsFocusedItemEnabled(void) const;
   void SetEditable(bool i_editable);
@@ -172,7 +172,7 @@ class AFX_EXT_CLASS CPropertyGrid : public CWnd
     bool m_bValue;
     COleDateTime m_dtValue;
     COLORREF m_clrValue;
-    LOGFONT m_lfValue;    
+    LOGFONT m_lfValue;
 
     bool m_undefined_old;
     int m_nValue_old;
@@ -185,7 +185,7 @@ class AFX_EXT_CLASS CPropertyGrid : public CWnd
 
     CRect m_rcName;
     CRect m_rcValue;
-    
+
     //Additional field used for IT_SELECTOR
     _TSTRING m_unit;
 
@@ -296,7 +296,7 @@ private:
   CWnd* m_control;
   bool m_button_pushed;
   bool m_button_depressed;
-  bool m_value_clicked;  
+  bool m_value_clicked;
 
   HSECTION m_section_id;
   HITEM m_item_id;

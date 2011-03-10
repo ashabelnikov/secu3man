@@ -117,10 +117,10 @@ void CAnglesPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CAnglesPageDlg::OnInitDialog() 
+BOOL CAnglesPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  m_min_angle_spin.SetBuddy(&m_min_angle_edit);
  m_min_angle_edit.SetLimitText(4);
  m_min_angle_edit.SetDecimalPlaces(2);
@@ -130,7 +130,7 @@ BOOL CAnglesPageDlg::OnInitDialog()
  m_max_angle_edit.SetLimitText(4);
  m_max_angle_edit.SetDecimalPlaces(2);
  m_max_angle_spin.SetRangeAndDelta(-15.0f,60.0f,0.25f);
-	
+
  m_correction_spin.SetBuddy(&m_correction_edit);
  m_correction_edit.SetLimitText(4);
  m_correction_edit.SetDecimalPlaces(2);

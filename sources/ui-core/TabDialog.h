@@ -6,7 +6,7 @@
 
 //Этот класс добавляет функциональность заключающуюся в том, чтобы диалог нельзя было
 //закрыть по IDOK или IDCANCEL.
-class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog 
+class AFX_EXT_CLASS CTabDialog : public CUpdatableDialog
 {
   typedef CUpdatableDialog Super;
 

@@ -1,16 +1,16 @@
 // DynDialogItemEx.cpp: implementation of the CDynDialogItemEx class.
 //
-// Written by Marcel Scherpenisse 
+// Written by Marcel Scherpenisse
 //        mailto:Marcel_Scherpenisse@insad.nl
 //
 // This code may be used in compiled form in any way you desire. This
-// file may be redistributed unmodified by any means PROVIDING it is 
-// not sold for profit without the authors written consent, and 
-// providing that this notice and the authors name and all copyright 
-// notices remains intact. If the source code in this file is used in 
-// any commercial application then a statement along the lines of 
-// "Portions copyright (c) Marcel Scherpenisse, 2002" must be included in 
-// the startup banner, "About" box or printed documentation. An email 
+// file may be redistributed unmodified by any means PROVIDING it is
+// not sold for profit without the authors written consent, and
+// providing that this notice and the authors name and all copyright
+// notices remains intact. If the source code in this file is used in
+// any commercial application then a statement along the lines of
+// "Portions copyright (c) Marcel Scherpenisse, 2002" must be included in
+// the startup banner, "About" box or printed documentation. An email
 // letting me know that you are using it would be nice as well.
 //
 // This file is provided "as is" with no expressed or implied warranty.
@@ -57,17 +57,17 @@ CDynDialogEx::CDynDialogEx(CWnd* pParent /*=NULL*/)
 CDynDialogEx::~CDynDialogEx()
 {
  CDynDialogItemEx *pDynDialogItemEx = NULL;
- for (INT_PTR i = m_arrDlgItemPtr.GetSize() - 1; i >= 0; i--) 
+ for (INT_PTR i = m_arrDlgItemPtr.GetSize() - 1; i >= 0; i--)
  {
   pDynDialogItemEx = m_arrDlgItemPtr[i];
-  if (pDynDialogItemEx != NULL) 
+  if (pDynDialogItemEx != NULL)
   {
    delete pDynDialogItemEx;
    pDynDialogItemEx = NULL;
   }
  }
 
- if (m_bIsFontCreated) 
+ if (m_bIsFontCreated)
   delete m_pFont;
 }
 
@@ -91,7 +91,7 @@ void CDynDialogEx::DoDataExchange(CDataExchange* pDX)
  CDialog::DoDataExchange(pDX);
 
  CDynDialogItemEx *pDynDialogItemEx = NULL;
- for (INT_PTR i = m_arrDlgItemPtr.GetSize() - 1; i >= 0; i--) 
+ for (INT_PTR i = m_arrDlgItemPtr.GetSize() - 1; i >= 0; i--)
  {
   pDynDialogItemEx = m_arrDlgItemPtr[i];
   if (pDynDialogItemEx != NULL)
@@ -109,13 +109,13 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CDynDialogEx message handlers
 
-int CDynDialogEx::OnCreate(LPCREATESTRUCT lpCreateStruct) 
+int CDynDialogEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
  if (CDialog::OnCreate(lpCreateStruct) == -1)
   return -1;
 
  //if we have no font, create one here
- if (m_pFont == NULL) 
+ if (m_pFont == NULL)
  {
   LOGFONT LogFont;
 
@@ -135,11 +135,11 @@ int CDynDialogEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
  for (int i = 0; i < m_arrDlgItemPtr.GetSize(); i++)
  {
   pDynDialogItemEx = m_arrDlgItemPtr[i];
-  if (pDynDialogItemEx != NULL) 
+  if (pDynDialogItemEx != NULL)
   {
    if (!pDynDialogItemEx->IsDlgItemSubclassed())
    {
-    if (!pDynDialogItemEx->CreateEx(this))    
+    if (!pDynDialogItemEx->CreateEx(this))
      AfxMessageBox(_T("Failed to create DlgItem."));
     else if (pDynDialogItemEx->GetSafeHwnd() != NULL)
      pDynDialogItemEx->SetFont(m_pFont, FALSE);
@@ -150,7 +150,7 @@ int CDynDialogEx::OnCreate(LPCREATESTRUCT lpCreateStruct)
  return 0;
 }
 
-BOOL CDynDialogEx::OnInitDialog() 
+BOOL CDynDialogEx::OnInitDialog()
 {
  //Reposition all the controls on the dialog...
  CDynDialogItemEx *pDynDialogItemEx = NULL;
@@ -176,7 +176,7 @@ BOOL CDynDialogEx::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-int CDynDialogEx::DoModal() 
+int CDynDialogEx::DoModal()
 {
  //Do we need OK and Cancel buttons??
  if (m_bAddSystemButtons)
@@ -211,7 +211,7 @@ int CDynDialogEx::DoModal()
  wcscpy(szFontName, szFontName_w);
  szFontName[cWC] = 0;
  nFontNameLen = (cWC) * sizeof(WCHAR);
- 
+
  if (m_wFontSize == 0)
   m_wFontSize = (unsigned short)LogFont.lfHeight;
 
@@ -250,7 +250,7 @@ int CDynDialogEx::DoModal()
      int nItemLength = sizeof(DLGITEMTEMPLATE) + 3 * sizeof(WORD);
      nItemLength += (pDynDialogItemEx->GetCaptionLength() + 1) * sizeof(WCHAR);
 
-     if (i != m_DialogTemplate.cdit - 1) // the last control does not need extra bytes     
+     if (i != m_DialogTemplate.cdit - 1) // the last control does not need extra bytes
       nItemLength = (nItemLength + 3) & ~3;  // take into account gap so next control is DWORD aligned
 
      nBufferSize += nItemLength;
@@ -544,7 +544,7 @@ void CDynDialogEx::OnOK()
   CDialog::OnOK();
 }
 
-BOOL CDynDialogEx::OnCommand(WPARAM wParam, LPARAM lParam) 
+BOOL CDynDialogEx::OnCommand(WPARAM wParam, LPARAM lParam)
 {
  //wParam
  //The low-order word of wParam identifies the command ID of the menu item, control, or accelerator.
@@ -585,12 +585,12 @@ afx_msg LRESULT CDynDialogEx::OnHelpMsg(WPARAM wParam, LPARAM lParam)
  //lParam  <<-- Contains: (LPHELPINFO)lParam
  // >> typedef  struct  tagHELPINFO
  // {
- //  UINT     cbSize; 
- //  int      iContextType 
- //  int      iCtrlId; 
- //  HANDLE   hItemHandle; 
- //  DWORD    dwContextId; 
- //  POINT    MousePos; 
+ //  UINT     cbSize;
+ //  int      iContextType
+ //  int      iCtrlId;
+ //  HANDLE   hItemHandle;
+ //  DWORD    dwContextId;
+ //  POINT    MousePos;
  // } HELPINFO, FAR *LPHELPINFO;
 
  //

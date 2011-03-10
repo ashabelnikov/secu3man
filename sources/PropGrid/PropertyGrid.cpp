@@ -23,7 +23,7 @@
 using namespace std;
 
 //warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
-#pragma warning( disable : 4800 ) 
+#pragma warning( disable : 4800 )
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -43,7 +43,7 @@ CPropertyGrid::CPropertyGrid()
  m_resizing_gutter = false;
  m_button_pushed = false;
  m_button_depressed = false;
- m_value_clicked = false;  
+ m_value_clicked = false;
  m_scroll_enabled = false;
  m_draw_lines = true;
  m_shade_titles = true;
@@ -369,7 +369,7 @@ HITEM CPropertyGrid::AddItem(HSECTION hs, EItemType type, _TSTRING name, void* p
  item.m_editable = editable;
  item.m_undefined = undefined;
 
- // assign the value  
+ // assign the value
  if (type == IT_STRING || type == IT_TEXT || type == IT_FILE || type == IT_FOLDER) item.m_strValue = *(_TSTRING*)pValue;
  else if (type == IT_COMBO || type == IT_INTEGER || type == IT_HEX || type == IT_SELECTOR) item.m_nValue = *(int*)pValue;
  else if (type == IT_DOUBLE) item.m_dValue = *(double*)pValue;
@@ -400,7 +400,7 @@ HITEM CPropertyGrid::AddIntegerItem(HSECTION section, _TSTRING name, int value, 
 {
  HITEM it = AddItem(section, IT_INTEGER, name, &value, editable, undefined, after);
  CItem* pItem = FindItem(it);
- if (pItem) 
+ if (pItem)
  {
   pItem->m_options.push_back(format);
   if (NULL!=ip_ex_params)
@@ -413,7 +413,7 @@ HITEM CPropertyGrid::AddHexItem(HSECTION section, _TSTRING name, int value, _TST
 {
  HITEM it = AddItem(section, IT_HEX, name, &value, editable, undefined, after);
  CItem* pItem = FindItem(it);
- if (pItem) 
+ if (pItem)
  {
   pItem->m_options.push_back(format);
   if (NULL!=ip_ex_params)
@@ -494,9 +494,9 @@ HITEM CPropertyGrid::AddSelectorItem(HSECTION section, _TSTRING name, const std:
 {
  HITEM it = AddItem(section, IT_SELECTOR, name, &cur, editable, undefined, after);
  CItem* pItem = FindItem(it);
- if (pItem) 
+ if (pItem)
  {
-  pItem->m_options = values;  //store list of values - list of strings 
+  pItem->m_options = values;  //store list of values - list of strings
   pItem->m_unit = unit;       //Use m_strValue store unit (unit - e.g kHz)
  }
  return it;
@@ -1121,7 +1121,7 @@ void CPropertyGrid::OnPaint()
 
      // now draw text
      dcMem.SetTextColor(m_clrTitle);
-     dcMem.DrawText(it->m_title.c_str(), CRect(title_left+GetTextMargin(), title_top, w, title_top+m_line_height), DT_END_ELLIPSIS|DT_LEFT|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX); 
+     dcMem.DrawText(it->m_title.c_str(), CRect(title_left+GetTextMargin(), title_top, w, title_top+m_line_height), DT_END_ELLIPSIS|DT_LEFT|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX);
     }
 
     // next line
@@ -1269,7 +1269,7 @@ void CPropertyGrid::DrawItem(CDC& dc, int w, int x, int y, vector<CItem>::iterat
  // get back to normal text
  if (it->m_editable) dc.SetTextColor(m_clrEditable);
  else dc.SetTextColor(m_clrDisabled);
-  
+
  // modified flag
  bool modified = (it->m_strValue != it->m_strValue_old);
 
@@ -1550,7 +1550,7 @@ void CPropertyGrid::OnLButtonDblClk(UINT nFlags, CPoint point)
 }
 
 void CPropertyGrid::OnMouseMove(UINT nHitTest, CPoint point)
-{  
+{
  if (m_button_pushed)
  {
   m_button_depressed = m_rect_button.PtInRect(point)?true:false;
@@ -2107,8 +2107,8 @@ void CPropertyGrid::EditFocusedItem()
    dlg.SetFont(&m_fntNormal);
    CString strValue = pItem->m_strValue.c_str();
    dlg.AddDlgControl(_T("EDIT"), pItem->m_strValue.c_str(), STYLE_EDIT|WS_VSCROLL|WS_HSCROLL|ES_AUTOHSCROLL|ES_AUTOVSCROLL|ES_LEFT|ES_MULTILINE|ES_WANTRETURN, EXSTYLE_EDIT, CRect(7, 7, 200, 100), (void*) &strValue);
-   dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(56, 106, 106, 120), NULL, IDOK); 
-   dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(110, 106, 160, 120), NULL, IDCANCEL); 
+   dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(56, 106, 106, 120), NULL, IDOK);
+   dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(110, 106, 160, 120), NULL, IDCANCEL);
    if (dlg.DoModal() == IDOK)
    {
     pItem->m_strValue = LPCTSTR(strValue);
@@ -2129,8 +2129,8 @@ void CPropertyGrid::EditFocusedItem()
    dlg.AddDlgControl(_T("STATIC"), m_strTime.c_str(), STYLE_STATIC, EXSTYLE_STATIC, CRect(67, 3, 120, 12));
    dlg.AddDlgControl(_T("SysDateTimePick32"), _T(""), STYLE_DATETIMEPICKER|DTS_SHORTDATEFORMAT, EXSTYLE_DATETIMEPICKER, CRect(7, 13, 60, 26), (void*) &dtValueDate);
    dlg.AddDlgControl(_T("SysDateTimePick32"), _T(""), STYLE_DATETIMEPICKER|DTS_TIMEFORMAT , EXSTYLE_DATETIMEPICKER, CRect(67, 13, 120, 26), (void*) &dtValueTime);
-   dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(7, 37, 60, 51), NULL, IDOK); 
-   dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(67, 37, 120, 51), NULL, IDCANCEL); 
+   dlg.AddDlgControl(_T("BUTTON"), m_strOk.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(7, 37, 60, 51), NULL, IDOK);
+   dlg.AddDlgControl(_T("BUTTON"), m_strCancel.c_str(), STYLE_BUTTON, EXSTYLE_BUTTON, CRect(67, 37, 120, 51), NULL, IDCANCEL);
    if (dlg.DoModal() == IDOK)
    {
     pItem->m_dtValue.SetDateTime(dtValueDate.GetYear(), dtValueDate.GetMonth(), dtValueDate.GetDay(),
@@ -2193,13 +2193,13 @@ bool CPropertyGrid::GetFocusedItemID(HITEM& o_item_id) const
  if (m_focused_item==-1)
   return false; //there are no focused item
 
- CItem* pItem = FindItem(m_focused_item);  
+ CItem* pItem = FindItem(m_focused_item);
  if (pItem!=NULL)
  {
-  o_item_id = pItem->m_id;  
-  return true; 
+  o_item_id = pItem->m_id;
+  return true;
  }
- return false; //error: there are no such item. 
+ return false; //error: there are no such item.
 }
 
 bool CPropertyGrid::IsFocusedItemEnabled(void) const
@@ -2207,13 +2207,13 @@ bool CPropertyGrid::IsFocusedItemEnabled(void) const
  if (m_focused_item==-1)
   return false; //there are no focused item
 
- CItem* pItem = FindItem(m_focused_item);  
+ CItem* pItem = FindItem(m_focused_item);
  if (pItem!=NULL)
  {
   return pItem->m_editable; //is editable?
  }
 
- return false; //error: there are no such item. 
+ return false; //error: there are no such item.
 }
 
 //will change editable flag for all items and update grid
@@ -2301,16 +2301,16 @@ void CPropertyGrid::_ActivateFocusedItem(void)
     strValue = pItem->m_strValue;
    }
    else if (pItem->m_type == IT_INTEGER && !pItem->m_undefined)
-   {      
+   {
     CString strTemp;
     strTemp.Format(_T("%d"), pItem->m_nValue);
-    strValue = LPCTSTR(strTemp);        
+    strValue = LPCTSTR(strTemp);
    }
    else if (pItem->m_type == IT_HEX && !pItem->m_undefined)
-   {      
+   {
     CString strTemp;
     strTemp.Format(_T("%x"), pItem->m_nValue);
-    strValue = LPCTSTR(strTemp);        
+    strValue = LPCTSTR(strTemp);
    }
    else if (pItem->m_type == IT_DOUBLE && !pItem->m_undefined)
    {
@@ -2319,7 +2319,7 @@ void CPropertyGrid::_ActivateFocusedItem(void)
     strValue = LPCTSTR(strTemp);
    }
    else if (pItem->m_type == IT_SELECTOR)
-   {//selector!      
+   {//selector!
     m_control = new CPropertyGridSelector();
     CPropertyGridSelector* pSelector = (CPropertyGridSelector*)m_control;
     pSelector->Create(WS_CHILD, rc, this, 0);
@@ -2330,7 +2330,7 @@ void CPropertyGrid::_ActivateFocusedItem(void)
      pSelector->AddString(*it);
     if (!pItem->m_undefined)
      pSelector->SetCurSel(pItem->m_nValue);
-    pSelector->ShowWindow(SW_SHOW);   
+    pSelector->ShowWindow(SW_SHOW);
    }
    else
     assert(false);
@@ -2342,7 +2342,7 @@ void CPropertyGrid::_ActivateFocusedItem(void)
     pEdit->SetColors(m_clrBack, m_clrText);
     pEdit->SetFont(&m_fntNormal);
     pEdit->ShowWindow(SW_SHOW);
-   }  
+   }
   }
   else if (GetEditMode(*pItem) == EM_MODAL)
    EditFocusedItem();

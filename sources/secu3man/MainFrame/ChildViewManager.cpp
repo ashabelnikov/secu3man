@@ -30,7 +30,7 @@ CChildViewManager::CChildViewManager()
 : mp_wndView(new CChildView)
 , mp_MainTabManager(new CMainTabManager)
 {
- //na   
+ //na
 }
 
 CChildViewManager::~CChildViewManager()

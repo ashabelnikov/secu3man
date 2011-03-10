@@ -53,7 +53,7 @@ typedef enum EInterLang
 class ISettingsData
 {
  public:
-  virtual const _TSTRING& GetPortName(void) const = 0;   
+  virtual const _TSTRING& GetPortName(void) const = 0;
   virtual DWORD GetBaudRateApplication(void) const = 0;
   virtual DWORD GetBaudRateBootloader(void) const = 0;
   virtual const CString& GetLogFilesFolder(void) const = 0;
@@ -64,7 +64,7 @@ class ISettingsData
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;
-  //язык интерфейса и тип платформы SECU-3  
+  //язык интерфейса и тип платформы SECU-3
   virtual EInterLang GetInterfaceLanguage(void) const = 0;
   virtual EECUPlatform GetECUPlatformType(void) const = 0;
   //Fixtures's customization settings

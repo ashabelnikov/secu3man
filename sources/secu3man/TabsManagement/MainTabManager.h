@@ -27,12 +27,12 @@ class CChildView;
 class CMainTabController;
 class CTabController;
 
-class CMainTabManager  
+class CMainTabManager
 {
  public:
   CMainTabManager();
-  virtual ~CMainTabManager();  
-   
+  virtual ~CMainTabManager();
+
   bool Init(CChildView* i_pChildView);
   void OnAfterCreate(void);
 
@@ -56,7 +56,7 @@ class CMainTabManager
   class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
 
  private:
-  std::auto_ptr<CMainTabController> mp_MainTabController; 
+  std::auto_ptr<CMainTabController> mp_MainTabController;
   std::auto_ptr<CTabController> mp_tab_control;
 
   CChildView* m_pParent;

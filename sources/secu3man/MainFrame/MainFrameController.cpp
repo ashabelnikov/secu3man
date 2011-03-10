@@ -39,9 +39,9 @@ using namespace fastdelegate;
 #define MFKEY _T("MFCntr")
 
 
-MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager, 
-	                  CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager, 
-					  LogWriter* i_pLogWriter, CMainFrame* ip_view /* = NULL*/)
+MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager,
+                   CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager,
+                   LogWriter* i_pLogWriter, CMainFrame* ip_view /* = NULL*/)
 : m_pCommunicationManager(i_pCommunicationManager)
 , m_pAppSettingsManager(i_pAppSettingsManager)
 , m_pStatusBarManager(i_pStatusBarManager)
@@ -49,9 +49,9 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
 , mp_view(ip_view)
 , m_full_screen_mode(false)
 {
- _ASSERTE(i_pCommunicationManager); 
- _ASSERTE(i_pAppSettingsManager); 
- _ASSERTE(i_pStatusBarManager); 
+ _ASSERTE(i_pCommunicationManager);
+ _ASSERTE(i_pAppSettingsManager);
+ _ASSERTE(i_pStatusBarManager);
  _ASSERTE(i_pLogWriter);
  _ASSERTE(ip_view);
  _SetDelegates();
@@ -95,7 +95,7 @@ void MainFrameController::OnAppSettings()
  {
   //уведомляем логгер об изменениях в настройках.
   const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
-  m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 
+  m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol());
 
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
@@ -111,13 +111,13 @@ void MainFrameController::OnAppBeginLog()
  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
 
  //устнанавливаем разделительный символ для CSV-файла указанный в настройках
- m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol()); 
+ m_pLogWriter->SetSeparatingSymbol(settings->GetCSVSepSymbol());
 
  if (!settings->GetUseAppFolder())
   full_path_to_folder = settings->GetLogFilesFolder();
  else
   full_path_to_folder = settings->GetAppDirectory();
-  
+
  _TSTRING full_file_name;
 
  bool result = m_pLogWriter->BeginLogging(full_path_to_folder, &full_file_name);
@@ -135,7 +135,7 @@ void MainFrameController::OnAppBeginLog()
 
 void MainFrameController::OnAppEndLog()
 {
- //Отключаемся от потока данных и деактивируем записывающий механизм	 
+ //Отключаемся от потока данных и деактивируем записывающий механизм
  m_pCommunicationManager->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_pLogWriter->EndLogging();
  m_pStatusBarManager->SetLoggerState(CStatusBarManager::LOG_STATE_STOPPED);
@@ -178,13 +178,13 @@ bool MainFrameController::OnFullScreen()
  {
   mp_view->GetWindowRect(m_last_wnd_rect);
   CRect rect = _GetScreenRect();
-  mp_view->MoveWindow(rect.left,rect.top,rect.Width(), rect.Height());     
+  mp_view->MoveWindow(rect.left,rect.top,rect.Width(), rect.Height());
   m_full_screen_mode = true;
  }
  else
  {
   mp_view->MoveWindow(m_last_wnd_rect.left,m_last_wnd_rect.top,
-      m_last_wnd_rect.Width(), m_last_wnd_rect.Height()); 
+      m_last_wnd_rect.Width(), m_last_wnd_rect.Height());
   m_full_screen_mode = false;
  }
  return m_full_screen_mode;
@@ -218,7 +218,7 @@ bool MainFrameController::OnClose(void)
  ws.m_MainFrmWnd_X = rc.left;
  ws.m_MainFrmWnd_Y = rc.top;
 
- //store last position of main window 
+ //store last position of main window
  settings->SetWndSettings(ws);
 
  return true;

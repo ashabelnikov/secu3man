@@ -13,7 +13,7 @@ class ITabControllerEvent;
 class AFX_EXT_CLASS CTabController : public CTabCtrl
 {
   DECLARE_DYNAMIC(CTabController)
-	 
+
  public:
   CTabController();
   virtual ~CTabController();
@@ -25,7 +25,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   //иначе - нет.
   void SetMsgReflection(BOOL reflect);
 
-  //использовать этот метод только совместно с Create() - перед вызовом. 
+  //использовать этот метод только совместно с Create() - перед вызовом.
   //Иначе он не будет иметь эффекта!
   void SetStyle(const DWORD style);
   bool Create(CWnd* pParentWnd, const CRect& rect, UINT nID, const bool);
@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   void Init(void);
 
   //Установка обработчика событий. Смотрите описание ITabControllerEvent.
-  void SetEventListener(ITabControllerEvent* i_listener); 
+  void SetEventListener(ITabControllerEvent* i_listener);
 
   CTabDialog* GetCurrentPage(void) const;
 
@@ -56,7 +56,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
-  virtual BOOL IsTabEnabled(int iTab) const; 
+  virtual BOOL IsTabEnabled(int iTab) const;
   int NextEnabledTab(int iTab, BOOL bWrap);  // get next enabled tab
   int PrevEnabledTab(int iTab, BOOL bWrap);  // get prev enabled tab
 
@@ -66,11 +66,11 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
  private:
   class TabPageData
-  {		
+  {
    public:
-    TabPageData() : pDialogTemplate(NULL), pDialogClass(NULL) {};        
+    TabPageData() : pDialogTemplate(NULL), pDialogClass(NULL) {};
     DLGTEMPLATE* pDialogTemplate;
-    CTabDialog*  pDialogClass;	
+    CTabDialog*  pDialogClass;
     bool is_enabled;  //определяет текущее состояние Item-a
   };
 

@@ -49,8 +49,8 @@ CCommunicationManager::CCommunicationManager()
 
  m_pComPort    = new CComPort(_T("COM1"), m_recv_buff_size,m_send_buff_size);
  m_pBootLoader = new CBootLoader();
- m_pControlApp = new CControlApp();  
- m_pAppAdapter = new CControlAppAdapter();  
+ m_pControlApp = new CControlApp();
+ m_pAppAdapter = new CControlAppAdapter();
  m_pBldAdapter = new CBootLoaderAdapter();
 }
 
@@ -58,7 +58,7 @@ CCommunicationManager::~CCommunicationManager()
 {
  delete m_pComPort;
  delete m_pBootLoader;
- delete m_pControlApp;  
+ delete m_pControlApp;
  delete m_pAppAdapter;
  delete m_pBldAdapter;
 }
@@ -89,8 +89,8 @@ bool CCommunicationManager::Init(void)
 
  //останавливаем работу контроллеров интерфейсов, конкретный контроллер будет активирован
  //позже - в зависимости от текущего контекста программы
- m_pControlApp->SwitchOn(false); 
- m_pBootLoader->SwitchOn(false); 
+ m_pControlApp->SwitchOn(false);
+ m_pBootLoader->SwitchOn(false);
 
  //для того чтобы можно было применить новые настройки к порту, необходимо его заново открыть
  m_pComPort->Terminate();
@@ -106,11 +106,11 @@ bool CCommunicationManager::Init(void)
   AfxMessageBox(e.GetDetailStr());
   status = false;
  }
-  
+
  m_pComPort->Purge();
 
  //инициализируем контроллеры интерфейсов
- try 
+ try
  {
   m_pControlApp->Initialize(m_pComPort,m_pSettings->GetBaudRateApplication(),500);
  }
@@ -141,7 +141,7 @@ bool CCommunicationManager::Init(void)
 
  //оповещаем объекта слушателя об изменении настроек. Получатель этого оповещения должен активировать
  //необходимый ему коммуникационный контроллер.
- if (m_OnSettingsChanged) 
+ if (m_OnSettingsChanged)
   m_OnSettingsChanged();
 
  return status;
@@ -151,22 +151,22 @@ bool CCommunicationManager::Init(void)
 void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = false */)
 {
  _ASSERTE(!(m_pControlApp->GetWorkState() && m_pBootLoader->GetWorkState()));
- 
+
  switch(i_cntr)
  {
   case OP_ACTIVATE_APPLICATION:
    m_pBootLoader->SwitchOn(false, i_force_reinit);
-   m_pControlApp->SwitchOn(true, i_force_reinit); 
+   m_pControlApp->SwitchOn(true, i_force_reinit);
    break;
 
   case OP_ACTIVATE_BOOTLOADER:
-   m_pControlApp->SwitchOn(false, i_force_reinit); 
-   m_pBootLoader->SwitchOn(true, i_force_reinit); 
+   m_pControlApp->SwitchOn(false, i_force_reinit);
+   m_pBootLoader->SwitchOn(true, i_force_reinit);
    break;
-   
-  case OP_DEACTIVATE_ALL: //deactivate all 
-   m_pControlApp->SwitchOn(false, i_force_reinit); 
-   m_pBootLoader->SwitchOn(false, i_force_reinit); 
+
+  case OP_DEACTIVATE_ALL: //deactivate all
+   m_pControlApp->SwitchOn(false, i_force_reinit);
+   m_pBootLoader->SwitchOn(false, i_force_reinit);
    break;
 
   default:
@@ -175,7 +175,7 @@ void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = fa
  }
 }
 
-void CCommunicationManager::setOnSettingsChanged(EventHandler i_OnSettingsChanged) 
+void CCommunicationManager::setOnSettingsChanged(EventHandler i_OnSettingsChanged)
 {
  m_OnSettingsChanged = i_OnSettingsChanged;
 }

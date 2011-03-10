@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -36,12 +36,12 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CAnalogMeterCtrl message handlers
 
-void CAnalogMeterCtrl::OnPaint() 
+void CAnalogMeterCtrl::OnPaint()
 {
  CPaintDC dc(this); // device context for painting
  CRect rectClient ;
-	
- GetClientRect (&rectClient);	
+
+ GetClientRect (&rectClient);
  ShowMeter (&dc, rectClient) ;
  // Do not call CStatic::OnPaint() for painting messages
 }
@@ -54,6 +54,6 @@ void CAnalogMeterCtrl::UpdateNeedle(double dPos)
 
 void CAnalogMeterCtrl::Redraw(void)
 {
- m_boolForceRedraw = true;   
+ m_boolForceRedraw = true;
  Invalidate();
 }

@@ -54,7 +54,7 @@ class CMapImpExpDlg : public CDialog
   void setOnFWDOtherListNamechanged(EventWithCodeAndString OnFunction) {m_OnFWDOtherListNamechanged = OnFunction;};
   void setOnFWDOtherSelectionChanged(EventWithCode OnFunction) {m_OnFWDOtherSelectionChanged = OnFunction;};
   void setIsExchengeButtonAllowed(EventResult OnFunction) {m_IsExchengeButtonAllowed = OnFunction;};
-	
+
   void setOnOkButton(EventHandler OnFunction) {m_OnOkButton = OnFunction;};
   void setOnCancelButton(EventHandler OnFunction) {m_OnCancelButton = OnFunction;};
   void setOnActivate(EventHandler OnActivate) {m_OnActivate = OnActivate;};
@@ -94,7 +94,7 @@ class CMapImpExpDlg : public CDialog
   CListCtrl m_other_fwd_list;
   CListCtrl m_current_fwd_list;
   CString   m_current_fwd_title_string;
-  CString   m_other_fwd_title_string;	
+  CString   m_other_fwd_title_string;
 
   BOOL m_fwd_flags[FLAG_NR_OF_FLAGS];
   CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];

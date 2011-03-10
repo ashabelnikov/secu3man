@@ -20,8 +20,8 @@
 */
 
 //IF You use _UNICODE:
-//In the Output category of the Link tab in the Project Settings dialog box, 
-//set the Entry Point Symbol to wWinMainCRTStartup. 
+//In the Output category of the Link tab in the Project Settings dialog box,
+//set the Entry Point Symbol to wWinMainCRTStartup.
 
 #include <string>
 

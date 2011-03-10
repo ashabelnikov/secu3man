@@ -5,7 +5,7 @@
 // Enum Types
 enum LEDMemberEnum
 {
- led_rect,  //рамка 
+ led_rect,  //рамка
  led_on,    //включенное состояние
  led_off    //выключенное сщстояние
 };
@@ -42,7 +42,7 @@ class AFX_EXT_CLASS CLEDIndicator : public CStatic
   COLORREF m_rectColor;
 
   int m_rectWidth;
-  bool m_state;  
+  bool m_state;
 };
 
 /////////////////////////////////////////////////////////////////////////////

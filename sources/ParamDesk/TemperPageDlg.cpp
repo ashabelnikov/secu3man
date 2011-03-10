@@ -99,10 +99,10 @@ void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
 /////////////////////////////////////////////////////////////////////////////
 // CTemperPageDlg message handlers
 
-BOOL CTemperPageDlg::OnInitDialog() 
+BOOL CTemperPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-		
+
  m_vent_on_threshold_spin.SetBuddy(&m_vent_on_threshold_edit);
  m_vent_on_threshold_edit.SetLimitText(4);
  m_vent_on_threshold_edit.SetDecimalPlaces(2);
@@ -133,13 +133,13 @@ void CTemperPageDlg::OnChangePdTemperVentOffThresholdEdit()
 
 void CTemperPageDlg::OnPdTemperUseTempSensor()
 {
- UpdateData();		
+ UpdateData();
  OnChangeNotify();
 }
 
 void CTemperPageDlg::OnPdTemperUseVentPwm()
 {
- UpdateData();		
+ UpdateData();
  OnChangeNotify();
  UpdateDialogControls(this,TRUE);
 }

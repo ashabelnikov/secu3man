@@ -50,7 +50,7 @@ void CMIVoltmeter::Create(void)
  m_meter.SetLabelsDecimals(1) ;
  m_meter.SetValueDecimals(2) ;
  m_meter.SetTitle(MLL::LoadString(IDS_MI_VOLTAGE_TITLE)) ;
- m_meter.SetFontScale(80);    
+ m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
  m_meter.SetTickNumber(16);
@@ -60,7 +60,7 @@ void CMIVoltmeter::Create(void)
  m_meter.UpdateNeedle(0.0);
  m_meter.SetMeterSize(130);
 }
- 
+
 void CMIVoltmeter::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 {
  DDX_Control(pDX, nIDC_meter, m_meter);
@@ -76,12 +76,12 @@ float CMIVoltmeter::GetValue(void)
 {
  return (float)m_meter.GetNeedlePos();
 }
-	
+
 void CMIVoltmeter::Show(bool show)
 {
  m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
-	
+
 void CMIVoltmeter::Enable(bool enable)
 {
  m_meter.SetState(meter_needle, enable);
@@ -95,24 +95,24 @@ void CMIVoltmeter::Enable(bool enable)
 
  m_meter.Redraw();
 }
-	
+
 bool CMIVoltmeter::IsVisible(void)
 {
  return (m_meter.IsWindowVisible()) ? true : false;
 }
-	
+
 bool CMIVoltmeter::IsEnabled(void)
 {
  bool State = false;
  m_meter.GetState(meter_needle, &State);
  return State;
-}	
-	
+}
+
 void CMIVoltmeter::SetLimits(float loLimit, float upLimit)
 {
  m_meter.SetRange(loLimit, upLimit);
 }
-	
+
 void CMIVoltmeter::SetTicks(int number)
 {
  m_meter.SetTickNumber(number);
@@ -123,5 +123,5 @@ void CMIVoltmeter::Scale(float i_x_factor, float i_y_factor)
 {
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect); 
+ m_meter.MoveWindow(rect);
 }

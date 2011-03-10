@@ -48,7 +48,7 @@ class IAppSettingsDlg
   virtual void SetECUPlatformType(int i_platform_type) = 0;
   virtual void SetTachometerMax(int i_max) = 0;
   virtual void SetPressureMax(int i_max) = 0;
-   
+
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
   virtual DWORD GetBaudRateApplication(void) = 0;

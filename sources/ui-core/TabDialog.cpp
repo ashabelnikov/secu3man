@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -29,10 +29,10 @@ CTabDialog::~CTabDialog()
 void CTabDialog::OnOK()
 {
  UpdateData(); //for DDX/DDV
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
-} 
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
+}
 
 void CTabDialog::OnCancel()
 {
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть 
+ //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
 }

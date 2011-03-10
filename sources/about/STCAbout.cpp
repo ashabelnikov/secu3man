@@ -36,7 +36,7 @@ struct About_data
 
 #define AUTOCLOSE_TIMER_ID 1
 #define ABOUT_STC_RGN_RESOURCE_TYPE _T("RGN")
- 
+
 static bool is_instance = false; //singleton :-)
 
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
@@ -98,18 +98,18 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
  sy = (sy / 2) - bm.bmHeight / 2;
 
  hWnd = CreateWindowEx(WS_EX_LEFT | WS_EX_TOPMOST,
-	          szWindowClass,
-	          _T("About"),
-			  WS_POPUP,
-              sx,
-			  sy,
-			  bm.bmWidth,
-			  bm.bmHeight,
-			  i_pParent->m_hWnd,
-			  NULL,
-			  i_hInstance,
-			  NULL);
-	  
+          szWindowClass,
+          _T("About"),
+          WS_POPUP,
+          sx,
+          sy,
+          bm.bmWidth,
+          bm.bmHeight,
+          i_pParent->m_hWnd,
+          NULL,
+          i_hInstance,
+          NULL);
+
  if (hWnd == NULL)
  {
   AfxMessageBox(_T("Can't create window"),MB_OK | MB_ICONSTOP);
@@ -136,12 +136,12 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
  static  HWND  hCloseButton = NULL;
  HDC     hdc;
  PAINTSTRUCT pt;
-	
- switch (message) 
+
+ switch (message)
  {
-  case WM_CREATE:		 
+  case WM_CREATE:
    hResource = FindResource(d_about.hInstance,d_about.d_lprgnname,ABOUT_STC_RGN_RESOURCE_TYPE);
-   if (NULL==hResource) 
+   if (NULL==hResource)
     AfxMessageBox(_T("Can't find resource!"),MB_OK|MB_ICONSTOP);
 
    resPoints = LoadResource(d_about.hInstance,hResource);
@@ -159,7 +159,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    hCloseButton = CreateWindowEx(NULL,_T("button"),_T("close"),
                 WS_CHILD | (d_about.showCloseButton ? WS_VISIBLE : 0),
                 280,186,45,16,hWnd,(HMENU)IDC_BUTTON_CLOSE,
-				d_about.hInstance,NULL);
+                d_about.hInstance,NULL);
 
    if (d_about.modal)
     ::SetFocus(hCloseButton);
@@ -202,7 +202,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
      SetTimer(hWnd, AUTOCLOSE_TIMER_ID, d_about.autoClose, NULL);
    break;
   case WM_LBUTTONDOWN:
-   SendMessage(hWnd,WM_NCLBUTTONDOWN,HTCAPTION,lParam); 		
+   SendMessage(hWnd,WM_NCLBUTTONDOWN,HTCAPTION,lParam);
    break;
   case WM_COMMAND:
    if (LOWORD(wParam)==IDC_BUTTON_CLOSE)
@@ -215,7 +215,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    is_instance = false;
    break;
   case WM_KILLFOCUS:
-   if (d_about.modal) 
+   if (d_about.modal)
     if ((HWND)wParam!=hCloseButton)
      SetFocus(hWnd);
    break;
@@ -232,7 +232,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    SetBkMode(hdc, TRANSPARENT);
    DrawText(hdc,d_about.about_description,-1,CRect(203,45,433,170),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
 
-   EndPaint(hWnd,&pt); 
+   EndPaint(hWnd,&pt);
    break;
   case WM_TIMER:
    ASSERT(KillTimer(hWnd, AUTOCLOSE_TIMER_ID));

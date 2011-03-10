@@ -1,16 +1,16 @@
 // DynDialogItemEx.cpp: implementation of the CDynDialogItemEx class.
 //
-// Written by Marcel Scherpenisse 
+// Written by Marcel Scherpenisse
 //        mailto:Marcel_Scherpenisse@insad.nl
 //
 // This code may be used in compiled form in any way you desire. This
-// file may be redistributed unmodified by any means PROVIDING it is 
-// not sold for profit without the authors written consent, and 
-// providing that this notice and the authors name and all copyright 
-// notices remains intact. If the source code in this file is used in 
-// any commercial application then a statement along the lines of 
-// "Portions copyright (c) Marcel Scherpenisse, 2002" must be included in 
-// the startup banner, "About" box or printed documentation. An email 
+// file may be redistributed unmodified by any means PROVIDING it is
+// not sold for profit without the authors written consent, and
+// providing that this notice and the authors name and all copyright
+// notices remains intact. If the source code in this file is used in
+// any commercial application then a statement along the lines of
+// "Portions copyright (c) Marcel Scherpenisse, 2002" must be included in
+// the startup banner, "About" box or printed documentation. An email
 // letting me know that you are using it would be nice as well.
 //
 // This file is provided "as is" with no expressed or implied warranty.
@@ -97,7 +97,7 @@ WCHAR pwchPicClipPictureClip1LicenseKey[] =
  0x0032, 0x0046, 0x0034, 0x0039, 0x0046, 0x0042
 };
 
-/*04746E60CE4F11CDB23C0000C076FE*/                //(MS Tab Control - tabctl32.ocx) 
+/*04746E60CE4F11CDB23C0000C076FE*/                //(MS Tab Control - tabctl32.ocx)
 static WCHAR pwchTabDlgSSTab1LicenseKey[] =
 {
  0x0030, 0x0034, 0x0037, 0x0034, 0x0036, 0x0045,
@@ -107,7 +107,7 @@ static WCHAR pwchTabDlgSSTab1LicenseKey[] =
  0x0043, 0x0030, 0x0037, 0x0036, 0x0046, 0x0045
 };
 
-static _RuntimeLicense RuntimeLicenses[] = 
+static _RuntimeLicense RuntimeLicenses[] =
 {
  {_T("MCI.MMControl.1"), pwchMCIMMControl1LicenseKey, sizeof(pwchMCIMMControl1LicenseKey)},
  {_T("MSCOMMLib.MSComm.1"), pwchMSCOMMLibMSComm1LicenseKey, sizeof(pwchMSCOMMLibMSComm1LicenseKey)},
@@ -436,7 +436,7 @@ PBYTE CDynDialogItemEx::FillBufferWithItemTemplate(BYTE *pdest)
 
  // transfer the caption even when it is an empty string
  USES_CONVERSION;
- WCHAR* pchCaption = T2W(m_strCaption.GetBuffer(1)); 
+ WCHAR* pchCaption = T2W(m_strCaption.GetBuffer(1));
  int nActualChars = wcslen(pchCaption) + 1; //include terminate symbol
  memcpy(pdest, pchCaption, nActualChars * sizeof(WCHAR));
  pdest += nActualChars * sizeof(WCHAR);

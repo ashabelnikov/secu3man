@@ -45,11 +45,11 @@ END_MESSAGE_MAP()
 
 CBootLoaderAdapter::CBootLoaderAdapter()
 : m_destination_handler(NULL)
-{ 
+{
  //na
 }
 
-CBootLoaderAdapter::~CBootLoaderAdapter() 
+CBootLoaderAdapter::~CBootLoaderAdapter()
 {
  //na
 }
@@ -60,7 +60,7 @@ BOOL CBootLoaderAdapter::Create(CWnd* pParentWnd)
  ASSERT(pParentWnd);
  if (::IsWindow(m_hWnd))
   return TRUE; //уже создано - ничего не делаем
- return CWnd::Create(NULL,_T("CBootLoader_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);  
+ return CWnd::Create(NULL,_T("CBootLoader_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);
 }
 
 
@@ -75,13 +75,13 @@ void CBootLoaderAdapter::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 
 void CBootLoaderAdapter::OnBegin(const int opcode,const int status)
 {
-  if (IsWindow(m_hWnd))  
+  if (IsWindow(m_hWnd))
     PostMessage(WM_THREAD_ON_BEGIN,opcode,status);
 }
 
 void CBootLoaderAdapter::OnEnd(const int opcode,const int status)
 {
-  if (IsWindow(m_hWnd))  
+  if (IsWindow(m_hWnd))
     PostMessage(WM_THREAD_ON_END,opcode,status);
 }
 

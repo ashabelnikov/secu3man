@@ -131,14 +131,14 @@ void CPropertyGridSelector::OnPaint()
   m_rc_lbutton = rc, m_rc_rbutton = rc;
   m_rc_lbutton.right = m_rc_lbutton.left + m_rc_lbutton.Height(); //квадратная кнопочка
   m_rc_rbutton.left  = m_rc_rbutton.right - m_rc_rbutton.Height();
-  m_rcRect = CRect(m_rc_lbutton.right, rc.top, m_rc_rbutton.left, rc.bottom);   
+  m_rcRect = CRect(m_rc_lbutton.right, rc.top, m_rc_rbutton.left, rc.bottom);
  }
 
  // creation of brush and pen
  CBrush brush;
  brush.CreateSolidBrush(m_clrBack);
 
- // the dc  
+ // the dc
  CPaintDC dc(this);
  CBrush* pOldBrush = dc.SelectObject(&brush);
  CFont* pOldFont = dc.SelectObject(m_pFont);
@@ -155,22 +155,22 @@ void CPropertyGridSelector::OnPaint()
 
  //draw buttons
  COLORREF color_normal	= GetSysColor(COLOR_BTNTEXT);
- COLORREF color_disabled = GetSysColor(COLOR_GRAYTEXT);  
+ COLORREF color_disabled = GetSysColor(COLOR_GRAYTEXT);
 
  if (IsLeftBoundReached())
   dc.SetTextColor(color_disabled);
  else
   dc.SetTextColor(color_normal);
- // the left button  
+ // the left button
  dc.DrawFrameControl(m_rc_lbutton, DFC_BUTTON, DFCS_BUTTONPUSH|((m_lbutton_depressed && !IsLeftBoundReached())?DFCS_PUSHED:0));
- dc.DrawText("<", m_rc_lbutton, DT_CENTER|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX);  
+ dc.DrawText("<", m_rc_lbutton, DT_CENTER|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX);
 
  if (IsRightBoundReached())
   dc.SetTextColor(color_disabled);
  else
   dc.SetTextColor(color_normal);
- // the right button  
- dc.DrawFrameControl(m_rc_rbutton, DFC_BUTTON, DFCS_BUTTONPUSH|((m_rbutton_depressed && !IsRightBoundReached()) ? DFCS_PUSHED:0));  
+ // the right button
+ dc.DrawFrameControl(m_rc_rbutton, DFC_BUTTON, DFCS_BUTTONPUSH|((m_rbutton_depressed && !IsRightBoundReached()) ? DFCS_PUSHED:0));
  dc.DrawText(">", m_rc_rbutton, DT_LEFT|DT_SINGLELINE|DT_VCENTER|DT_NOPREFIX);
 }
 
@@ -307,7 +307,7 @@ bool CPropertyGridSelector::IsLeftBoundReached() const
 
 bool CPropertyGridSelector::IsRightBoundReached() const
 {
- if (0==m_Items.size()) 
+ if (0==m_Items.size())
   return true;
  return (m_nSelected >= static_cast<int>(m_Items.size()-1));
 }

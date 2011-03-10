@@ -34,7 +34,7 @@ class LogWriter;
 
 /////////////////////////////////////////////////////////////////////////////
 
-class CSecu3manApp : public CWinApp, public ISECU3Man 
+class CSecu3manApp : public CWinApp, public ISECU3Man
 {
  public:
   CSecu3manApp();
@@ -44,7 +44,7 @@ class CSecu3manApp : public CWinApp, public ISECU3Man
   virtual BOOL InitInstance();
   virtual BOOL OnIdle(LONG lCount);
   virtual int ExitInstance();
- 
+
   //from ISECU3Man
   virtual CAppSettingsManager*    GetAppSettingsManager(void) const;
   virtual CCommunicationManager*  GetCommunicationManager(void) const;
@@ -58,7 +58,7 @@ class CSecu3manApp : public CWinApp, public ISECU3Man
   CMainFrameManager*     m_pMainFrameManager;
   CAppSettingsManager*   m_pAppSettingsManager;
   CCommunicationManager* m_pCommunicationManager;
-  LogWriter*             m_pLogWriter; 
+  LogWriter*             m_pLogWriter;
 };
 
 /////////////////////////////////////////////////////////////////////////////

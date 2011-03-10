@@ -26,16 +26,16 @@ namespace MathHelpers
   //для правильного преобразования в целые числа (округление)
   //Округление в int
   template <class FPN>
-  inline int Round(FPN i_value) 
+  inline int Round(FPN i_value)
   {
-   return (int)((i_value) + 0.5f - (FPN)((i_value) < 0)); 
+   return (int)((i_value) + 0.5f - (FPN)((i_value) < 0));
   }
-  
+
   //Округление в указанный тип
   template <class ITN, class FPN>
-  inline ITN Round(FPN i_value) 
+  inline ITN Round(FPN i_value)
   {
-   return (ITN)((i_value) + 0.5f - (FPN)((i_value) < 0)); 
+   return (ITN)((i_value) + 0.5f - (FPN)((i_value) < 0));
   }
 
   //Свертка для одномерной функции.
@@ -65,11 +65,11 @@ namespace MathHelpers
     op_out[i] = 0;
     for(j = i, k = 0; ((int)j) >= 0; --j, ++k)
      op_out[i] += ip_in[j] * ip_kernel[k];
-   }   
+   }
    return true;
   }
 
-  //Сглаживание для одномерной функции методом скользящего среднего с симметричным наложением ядра 
+  //Сглаживание для одномерной функции методом скользящего среднего с симметричным наложением ядра
   //i_kernel_size - нечетное число! Например 1,3,5,7...
   template <class T>
   bool Smooth1D(T* ip_in, T* op_out, size_t i_data_size, size_t i_kernel_size)

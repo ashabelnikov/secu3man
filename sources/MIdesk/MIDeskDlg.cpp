@@ -47,7 +47,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_update_period(100)
 , m_was_initialized(false)
 {
- //na	
+ //na
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -67,16 +67,16 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_shutoff_valve.DDX_Controls(pDX, IDC_MI_SHUTOFF_VALVE, IDC_MI_SHUTOFF_VALVE_CAPTION);
 
  //расход воздуха
- m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);	
+ m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg message handlers
 
-BOOL CMIDeskDlg::OnInitDialog() 
+BOOL CMIDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  //создаем приборы (оконные образы)
  m_tachometer.Create();
  m_pressure.Create();
@@ -97,7 +97,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CMIDeskDlg::OnDestroy() 
+void CMIDeskDlg::OnDestroy()
 {
  m_was_initialized = false;
  Super::OnDestroy();
@@ -154,7 +154,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
 void CMIDeskDlg::OnUpdateTimer(void)
 {
  if (!m_was_initialized)
-  return; 
+  return;
  m_tachometer.SetValue((float)m_values.frequen);
  m_pressure.SetValue(m_values.pressure);
  m_voltmeter.SetValue(m_values.voltage);
@@ -189,7 +189,7 @@ void CMIDeskDlg::SetPressureMax(int i_max)
 void CMIDeskDlg::Resize(const CRect& i_rect)
 {
  //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
- CRect old_rect; 
+ CRect old_rect;
  float Xf, Yf;
  GetWindowRect(old_rect);
  MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);

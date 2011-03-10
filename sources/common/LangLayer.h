@@ -32,11 +32,11 @@ class MLL //Multy Language Layer
   {
 #define SIZE 1024
    TCHAR buffer[SIZE];
-   HINSTANCE hInst = GetModuleBaseAddress();   
+   HINSTANCE hInst = GetModuleBaseAddress();
    int real_size = ::LoadString(hInst, i_id, buffer, SIZE);
    ASSERT(real_size < (SIZE - 1));
    ASSERT(real_size);
-   return _TSTRING(buffer);	
+   return _TSTRING(buffer);
 #undef SIZE
   }
 

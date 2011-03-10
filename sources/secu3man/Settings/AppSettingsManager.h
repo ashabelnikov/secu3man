@@ -26,7 +26,7 @@ class CAppSettingsDlg;
 class CAppSettingsModel;
 class ISettingsData;
 
-class CAppSettingsManager  
+class CAppSettingsManager
 {
 public:
 
@@ -44,7 +44,7 @@ public:
 
  //возвражает интерфейс к данным настроек программы для чтения/записи
  ISettingsData* GetSettings(void) const;
-   
+
  //Возвращает указатель на модель с данными настроек программы
  CAppSettingsModel* GetModel(void) const;
 

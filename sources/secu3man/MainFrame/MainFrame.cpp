@@ -46,7 +46,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_CREATE()
  ON_WM_SETFOCUS()
  ON_WM_CLOSE()
- ON_COMMAND(ID_APP_ABOUT, OnAppAbout)		
+ ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
@@ -64,7 +64,7 @@ CMainFrame::CMainFrame()
 : m_pwndView(NULL)
 , m_bDoIdle(TRUE)
 {
- //na	
+ //na
 }
 
 CMainFrame::~CMainFrame()
@@ -81,21 +81,21 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 }
 
 //хак:
-BOOL CMainFrame::PreTranslateMessage(MSG* pMsg) 
-{  
+BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
+{
  MSG msg;
  if(!::PeekMessage(&msg, NULL, NULL, NULL, PM_NOREMOVE) && m_bDoIdle)
  {
-  //этот код вызываетс€ “ќЋ№ ќ один раз и “ќЋ№ ќ когда нет сообщений в очереди  
+  //этот код вызываетс€ “ќЋ№ ќ один раз и “ќЋ№ ќ когда нет сообщений в очереди
   if (_UpdateTopLevelMainMenu())
    DrawMenuBar(); //redraw menu
 
-  m_bDoIdle = FALSE; //запоминаем что уже вызвали 
+  m_bDoIdle = FALSE; //запоминаем что уже вызвали
  }
  else
  {
   if(AfxGetApp()->IsIdleMessage(pMsg) && pMsg->message != 0x3FC)
-   m_bDoIdle = TRUE;  
+   m_bDoIdle = TRUE;
  }
 
  return CFrameWnd::PreTranslateMessage(pMsg);
@@ -105,7 +105,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
 {
  if( !CFrameWnd::PreCreateWindow(cs) )
   return FALSE;
- 
+
  //устанавливаем позицию главного окна запомненную ранее, если это возможно
  if (m_OnGetInitialPos)
  {
@@ -126,30 +126,30 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
  {
   case 72:
    cs.cx = dpia.ScaleX(965);
-   break;    
+   break;
   default:
   case 96:
    cs.cx = dpia.ScaleX(730); //OK
-   break;    
+   break;
   case 120:
    cs.cx = dpia.ScaleX(765);
-   break;    
+   break;
   case 144:
    cs.cx = dpia.ScaleX(795); //OK
-   break;    
+   break;
   case 192:
    cs.cx = dpia.ScaleX(730);
-   break;    
+   break;
  }
  switch(dpia.GetDPIY())
  {
   case 72:
    cs.cy = dpia.ScaleY(580);
-   break;    
+   break;
   default:
   case 96:
    cs.cy = dpia.ScaleY(455);
-   break;    
+   break;
  }
 
  cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
@@ -189,7 +189,7 @@ BOOL CMainFrame::OnCmdMsg(UINT nID, int nCode, void* pExtra, AFX_CMDHANDLERINFO*
  return CFrameWnd::OnCmdMsg(nID, nCode, pExtra, pHandlerInfo);
 }
 
-void CMainFrame::SetView(CChildView* i_pChildView) 
+void CMainFrame::SetView(CChildView* i_pChildView)
 {
  m_pwndView = i_pChildView;
 }
@@ -219,32 +219,32 @@ void CMainFrame::setOnActivate(EventHandler1 i_OnActivate)
  m_OnActivate = i_OnActivate;
 }
 
-void CMainFrame::setOnAppAbout(EventHandler i_OnFunction) 
+void CMainFrame::setOnAppAbout(EventHandler i_OnFunction)
 {
  m_OnAppAbout = i_OnFunction;
 }
 
-void CMainFrame::setOnAppSettings(EventHandler i_OnFunction) 
+void CMainFrame::setOnAppSettings(EventHandler i_OnFunction)
 {
  m_OnAppSettings = i_OnFunction;
 }
 
-void CMainFrame::setOnAppBeginLog(EventHandler i_OnFunction) 
+void CMainFrame::setOnAppBeginLog(EventHandler i_OnFunction)
 {
  m_OnAppBeginLog = i_OnFunction;
 }
 
-void CMainFrame::setOnAppEndLog(EventHandler i_OnFunction) 
+void CMainFrame::setOnAppEndLog(EventHandler i_OnFunction)
 {
  m_OnAppEndLog = i_OnFunction;
 }
 
-void CMainFrame::setIsBeginLoggingAllowed(EventResult i_OnFunction) 
+void CMainFrame::setIsBeginLoggingAllowed(EventResult i_OnFunction)
 {
  m_IsBeginLoggingAllowed = i_OnFunction;
 }
 
-void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction) 
+void CMainFrame::setIsEndLoggingAllowed(EventResult i_OnFunction)
 {
  m_IsEndLoggingAllowed = i_OnFunction;
 }
@@ -254,7 +254,7 @@ void CMainFrame::setOnGetInitialPos(EventHandler2 i_OnGetInitialPos)
  m_OnGetInitialPos = i_OnGetInitialPos;
 }
 
-void CMainFrame::OnClose() 
+void CMainFrame::OnClose()
 {
  bool result = true;
 
@@ -262,7 +262,7 @@ void CMainFrame::OnClose()
  for (size_t i = 0; i < m_OnClose.size(); ++i)
   if (m_OnClose[i] && !m_OnClose[i]())
     result = false;
-	
+
  if (result)
   CFrameWnd::OnClose();
 }
@@ -270,7 +270,7 @@ void CMainFrame::OnClose()
 void CMainFrame::OnAppAbout()
 {
  if (m_OnAppAbout)
-  m_OnAppAbout(); 
+  m_OnAppAbout();
 }
 
 void CMainFrame::OnAppSettings()
@@ -309,10 +309,10 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
 
 void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
- ASSERT(m_OnActivate); 
+ ASSERT(m_OnActivate);
  if (m_OnActivate)
-  m_OnActivate(bActive == TRUE); 
-} 
+  m_OnActivate(bActive == TRUE);
+}
 
 void CMainFrame::OnFullScreen()
 {
@@ -321,7 +321,7 @@ void CMainFrame::OnFullScreen()
   what = m_OnFullScreen();
 
  if (m_OnFullScreenNotify)
-  m_OnFullScreenNotify(what);  
+  m_OnFullScreenNotify(what);
 }
 
 void CMainFrame::OnUpdateOnFullScreen(CCmdUI* pCmdUI)
@@ -345,29 +345,29 @@ bool CMainFrame::_UpdateTopLevelMainMenu(void)
  //remember old states of all menu items
  {
   int menu_items_count = pMenu->GetMenuItemCount();
-  for(int i = 0; i < menu_items_count; ++i)  
-   old_menu_state.push_back(pMenu->GetMenuState(pMenu->GetMenuItemID(i),MF_BYCOMMAND));   
+  for(int i = 0; i < menu_items_count; ++i)
+   old_menu_state.push_back(pMenu->GetMenuState(pMenu->GetMenuItemID(i),MF_BYCOMMAND));
  }
 
  //Perform update
  CCmdUI ui;
  ui.m_nIndexMax = pMenu->GetMenuItemCount();
  ui.m_pMenu = pMenu;
- for (ui.m_nIndex = 0; ui.m_nIndex < ui.m_nIndexMax; ui.m_nIndex++) 
+ for (ui.m_nIndex = 0; ui.m_nIndex < ui.m_nIndexMax; ui.m_nIndex++)
  {
   ui.m_nID = pMenu->GetMenuItemID(ui.m_nIndex);
   ui.DoUpdate(this, m_bAutoMenuEnable);
  }
- 
+
  //Check: do we need to redraw menu?
- { 
+ {
   int menu_items_count = pMenu->GetMenuItemCount();
   for(int i = 0; i < menu_items_count; ++i)
   {
    UINT old_s = old_menu_state[i];
    UINT new_s = pMenu->GetMenuState(pMenu->GetMenuItemID(i),MF_BYCOMMAND);
-   if (old_s!=new_s)   
-    return true; //caller should redraw main menu   
+   if (old_s!=new_s)
+    return true; //caller should redraw main menu
   }
  }
  //nothing changed: redraw is not needed

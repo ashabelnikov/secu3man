@@ -8,7 +8,7 @@ ON_UPDATE_COMMAND_UI. ƒл€ модальных диалогов можно использовать недокументирован
 WM_KICKIDLE или OnKickIdle()
 
 Ќа некоторых пратформах (например Pocket PC) может не быть сообщени€ 0x3FC и механизм
-станет работать не совсем корректно (с точки зрени€ производительности). ƒл€ устрании€ 
+станет работать не совсем корректно (с точки зрени€ производительности). ƒл€ устрании€
 проблемы необходимо добавить в класс пронаследованный от CWinApp следующий обработчик:
 
 virtual BOOL IsIdleMessage(MSG* pMsg)
@@ -29,12 +29,12 @@ class AFX_EXT_CLASS CUpdatableDialog : public CDialog
 
  public:
   CUpdatableDialog();
-  CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+  CUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );
 
  protected:
-  //здесь будет гр€зный хак! 
+  //здесь будет гр€зный хак!
   virtual BOOL PreTranslateMessage(MSG* pMsg);
-	
+
  private:
   BOOL m_bDoIdle;
 };
@@ -46,7 +46,7 @@ class AFX_EXT_CLASS CModelessUpdatableDialog : public CUpdatableDialog
 
  public:
   CModelessUpdatableDialog();
-  CModelessUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );      
+  CModelessUpdatableDialog(UINT nIDTemplate, CWnd* pParentWnd = NULL );
 
  protected:
   virtual void OnOK();

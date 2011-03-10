@@ -165,7 +165,7 @@ void __cdecl CFirmwareTabDlg::OnChangeAttenuatorTable(void* i_param)
  }
 
  if (_this->m_OnMapChanged)
-   _this->m_OnMapChanged(TYPE_MAP_ATTENUATOR); 
+   _this->m_OnMapChanged(TYPE_MAP_ATTENUATOR);
 }
 
 //------------------------------------------------------------------------
@@ -195,7 +195,7 @@ void __cdecl CFirmwareTabDlg::OnChangeCoilRegulTable(void* i_param)
  }
 
  if (_this->m_OnMapChanged)
-   _this->m_OnMapChanged(TYPE_MAP_COILREGUL); 
+   _this->m_OnMapChanged(TYPE_MAP_COILREGUL);
 }
 
 //------------------------------------------------------------------------
@@ -238,7 +238,7 @@ const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
 // CFirmwareTabDlg dialog
 
 CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
-: Super(CFirmwareTabDlg::IDD, pParent)	
+: Super(CFirmwareTabDlg::IDD, pParent)
 , m_is_bl_started_emergency_available(false)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
@@ -290,7 +290,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
@@ -302,7 +302,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, OnFirmwareSupportViewIdleMap)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP, OnFirmwareSupportViewWorkMap)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, OnFirmwareSupportViewTempMap)
- ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)  
+ ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP, OnFirmwareSupportViewAttenuatorMap)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION, OnFirmwareSupportViewCoilRegulMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_START_MAP, OnUpdateFirmwareSupportViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, OnUpdateFirmwareSupportViewIdleMap)
@@ -319,35 +319,35 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_WRITE_FLASH_FROM_FILE, OnWriteFlashFromFile)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnUpdateBLStartedEmergency)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnFirmwareSupportBlStartedEmergency)
- ON_COMMAND(IDM_OPEN_FLASH, OnOpenFlashFromFile)	
- ON_COMMAND(IDM_SAVE_FLASH, OnSaveFlashToFile)	
+ ON_COMMAND(IDM_OPEN_FLASH, OnOpenFlashFromFile)
+ ON_COMMAND(IDM_SAVE_FLASH, OnSaveFlashToFile)
  ON_EN_CHANGE(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnChangeFirmwareSupportFwInformation)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnUpdateFirmwareControls)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FUNSET_LIST, OnUpdateFirmwareControls)
- 
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL, OnUpdateFirmwareControls) 
+
+ ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL, OnUpdateFirmwareControls)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX, OnUpdateFirmwareControls)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_CRC, OnUpdateFirmwareControls)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_NAME, OnUpdateFirmwareControls)
 
  ON_UPDATE_COMMAND_UI(IDM_WRITE_FLASH, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_SAVE_FLASH, OnUpdatePopupMenu_file1)
- ON_UPDATE_COMMAND_UI(IDM_READ_FLASH_TO_FILE, OnUpdatePopupMenu_bl)  
- ON_UPDATE_COMMAND_UI(IDM_WRITE_FLASH_FROM_FILE, OnUpdatePopupMenu_bl)  
+ ON_UPDATE_COMMAND_UI(IDM_READ_FLASH_TO_FILE, OnUpdatePopupMenu_bl)
+ ON_UPDATE_COMMAND_UI(IDM_WRITE_FLASH_FROM_FILE, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_READ_EEPROM_TO_FILE, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_WRITE_EEPROM_FROM_FILE, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_READ_BOOTLOADER_SIGNATURE, OnUpdatePopupMenu_bl)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_FIRMWARE_SUPPORT_FUNSET_LIST, OnChangeFirmwareSupportFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_FIRMWARE_SUPPORT_FUNSET_LIST, OnEndLabelEditFirmwareSupportFunsetList)
 
- ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW, OnUpdatePopupMenu_file1)  
+ ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW, OnUpdatePopupMenu_file1)
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,OnImportDataFromAnotherFW)
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_SECU3,OnImportDataFromSECU3)
  ON_COMMAND(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnImportDefParamsFromEEPROMFile)
 
  ON_COMMAND(IDM_READ_FLASH,OnReadFlashFromSECU)
  ON_COMMAND(IDM_WRITE_FLASH,OnWriteFlashToSECU)
-  
+
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_SECU3, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_MPSZ, OnUpdatePopupMenu_file1)
@@ -356,7 +356,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
 
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
  ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
-    	
+
  ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnFirmwareInfo)
  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
 END_MESSAGE_MAP()
@@ -364,16 +364,16 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg message handlers
 
-BOOL CFirmwareTabDlg::OnInitDialog() 
+BOOL CFirmwareTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
  CRect rect;
  GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
-	
+
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
- mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);	
+ mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
@@ -383,7 +383,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  SetTimer(TIMER_ID,250,NULL);
 
  //в коде прошивки выдолено ограниченное количество байтов дл€ строки иныормации
- m_fw_information_edit.SetLimitText(48);  
+ m_fw_information_edit.SetLimitText(48);
 
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
@@ -393,20 +393,20 @@ BOOL CFirmwareTabDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point) 
+void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 {
- mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);	
+ mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
 }
 
-void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu) 
+void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
 {
  mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
 
-void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI)
 {
- //этот элемент должен быть разрешен только если бутлоадер доступен и прошивка открыта	
+ //этот элемент должен быть разрешен только если бутлоадер доступен и прошивка открыта
  if ((pCmdUI->m_nID==IDM_WRITE_FLASH) || (pCmdUI->m_nID==IDM_IMPORT_FW_DATA_FROM_SECU3))
  {
   BOOL enable = (m_is_bl_items_available && IsFirmwareOpened()) ? TRUE : FALSE;
@@ -416,28 +416,28 @@ void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI)
 
  BOOL enable = m_is_bl_items_available ? TRUE : FALSE;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck(FALSE);	
+ pCmdUI->SetCheck(FALSE);
 }
 
-void CFirmwareTabDlg::OnUpdatePopupMenu_file(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdatePopupMenu_file(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(TRUE);
- pCmdUI->SetCheck(FALSE);	
+ pCmdUI->SetCheck(FALSE);
 }
 
 //используетс€ дл€ элементов, состо€ние которых зависит от того - открыт файл прошивки или нет.
-void CFirmwareTabDlg::OnUpdatePopupMenu_file1(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdatePopupMenu_file1(CCmdUI* pCmdUI)
 {
  bool opened = IsFirmwareOpened();
  pCmdUI->Enable(opened ? TRUE : FALSE);
- pCmdUI->SetCheck(FALSE);	
+ pCmdUI->SetCheck(FALSE);
 }
 
 void CFirmwareTabDlg::OnUpdatePopupMenu_app(CCmdUI* pCmdUI)
 {
- bool enable = m_is_app_items_available; 
+ bool enable = m_is_app_items_available;
  pCmdUI->Enable(enable ? TRUE : FALSE);
- pCmdUI->SetCheck(FALSE);	
+ pCmdUI->SetCheck(FALSE);
 }
 
 void CFirmwareTabDlg::OnUpdateBLStartedEmergency(CCmdUI* pCmdUI)
@@ -458,22 +458,22 @@ void CFirmwareTabDlg::EnableBLStartedEmergency(bool enable)
 }
 
 //-----------------------------------------------------------------------------------------------
-void CFirmwareTabDlg::OnFirmwareSupportViewStartMap() 
-{      
+void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
+{
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_start_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_start_map_wnd_handle,WM_CLOSE,0,0); 
+  ::SendMessage(m_start_map_wnd_handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_start_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ if ((!m_start_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
  {
   m_start_map_chart_state = 1;
   m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_FW_START_MAP).c_str());	  
+    MLL::GetString(IDS_FW_START_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
   DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
@@ -487,20 +487,20 @@ void CFirmwareTabDlg::OnFirmwareSupportViewStartMap()
  else
  {
   ::SetFocus(m_start_map_wnd_handle);
- }		
+ }
 }
 
 //-----------------------------------------------------------------------------------------------
-void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap() 
+void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
 {
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_idle_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_idle_map_wnd_handle,WM_CLOSE,0,0); 
+  ::SendMessage(m_idle_map_wnd_handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
  {
   m_idle_map_chart_state = 1;
   m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,SECU3IO::idle_map_rpm_slots,16,
@@ -520,24 +520,24 @@ void CFirmwareTabDlg::OnFirmwareSupportViewIdleMap()
  else
  {
   ::SetFocus(m_idle_map_wnd_handle);
- }			
+ }
 }
 
-void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap() 
+void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
 {
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_work_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_work_map_wnd_handle,WM_CLOSE,0,0); 
+  ::SendMessage(m_work_map_wnd_handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_work_map_chart_state)&&(DLL::UOZ2_Chart3DCreate))	 
+ if ((!m_work_map_chart_state)&&(DLL::UOZ2_Chart3DCreate))
  {
   m_work_map_chart_state = 1;
   m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),SECU3IO::work_map_rpm_slots,16,16,-15.0,55.0,
     MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
-	MLL::GetString(IDS_FW_WORK_MAP).c_str());
+    MLL::GetString(IDS_FW_WORK_MAP).c_str());
   DLL::UOZ2_Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
   DLL::UOZ2_Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
 
@@ -553,26 +553,26 @@ void CFirmwareTabDlg::OnFirmwareSupportViewWorkMap()
  }
 }
 
-void CFirmwareTabDlg::OnFirmwareSupportViewTempMap() 
-{	
+void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
+{
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_temp_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_temp_map_wnd_handle,WM_CLOSE,0,0); 
+  ::SendMessage(m_temp_map_wnd_handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_temp_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ if ((!m_temp_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
  {
   m_temp_map_chart_state = 1;
   m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_rpm_slots,16,
     MLL::GetString(IDS_FW_MAPS_TEMPERATURE_UNIT).c_str(),
-	MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
-	MLL::GetString(IDS_FW_TEMPCORR_MAP).c_str());
+    MLL::GetString(IDS_FW_MAPS_ADVANGLE_UNIT).c_str(),
+    MLL::GetString(IDS_FW_TEMPCORR_MAP).c_str());
   DLL::UOZ1_Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
   DLL::UOZ1_Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
   DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
- 
+
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
       m_OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
@@ -582,73 +582,73 @@ void CFirmwareTabDlg::OnFirmwareSupportViewTempMap()
  else
  {
   ::SetFocus(m_temp_map_wnd_handle);
- }		
+ }
 }
 
-void CFirmwareTabDlg::OnUpdateFirmwareSupportViewStartMap(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewStartMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened && m_funset_listbox.GetSelectedCount();
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_start_map_chart_state) ? TRUE : FALSE );	
+ pCmdUI->SetCheck( (m_start_map_chart_state) ? TRUE : FALSE );
 }
 
-void CFirmwareTabDlg::OnUpdateFirmwareSupportViewIdleMap(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewIdleMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened && m_funset_listbox.GetSelectedCount();
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_idle_map_chart_state) ? TRUE : FALSE );	
+ pCmdUI->SetCheck( (m_idle_map_chart_state) ? TRUE : FALSE );
 }
 
-void CFirmwareTabDlg::OnUpdateFirmwareSupportViewWorkMap(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewWorkMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ2_Chart3DCreate!=NULL) && opened && m_funset_listbox.GetSelectedCount();
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_work_map_chart_state) ? TRUE : FALSE );		
+ pCmdUI->SetCheck( (m_work_map_chart_state) ? TRUE : FALSE );
 }
 
-void CFirmwareTabDlg::OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI) 
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened && m_funset_listbox.GetSelectedCount();
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );	
+ pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );
 }
 
 void CFirmwareTabDlg::OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );	
+ pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );
 }
 
 void CFirmwareTabDlg::OnUpdateFirmwareSupportViewCoilRegulMap(CCmdUI* pCmdUI)
 {
- bool opened = IsFirmwareOpened(); 
+ bool opened = IsFirmwareOpened();
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );	
+ pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );
 }
 
-void CFirmwareTabDlg::OnTimer(UINT nIDEvent) 
+void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
 {
- //I know it is dirty hack, but... :-) 	
+ //I know it is dirty hack, but... :-)
  UpdateDialogControls(this,TRUE);
  Super::OnTimer(nIDEvent);
-  
+
  //обновл€ем состо€ние (если нужно)
  bool pd_enable = IsFirmwareOpened();
  if (mp_ParamDeskDlg->IsEnabled()!=pd_enable)
-  mp_ParamDeskDlg->Enable(pd_enable);  
+  mp_ParamDeskDlg->Enable(pd_enable);
 }
 
-void CFirmwareTabDlg::OnDestroy() 
+void CFirmwareTabDlg::OnDestroy()
 {
  Super::OnDestroy();
- KillTimer(TIMER_ID);	
+ KillTimer(TIMER_ID);
  m_hot_keys_supplier->Close();
 }
 
@@ -698,7 +698,7 @@ void CFirmwareTabDlg::EnableBLItems(bool enable)
 
  UpdateDialogControls(this,TRUE);
 
- //если меню отображаетс€ в текущий момент, то не смотр€ на то что элементы запрещены, 
+ //если меню отображаетс€ в текущий момент, то не смотр€ на то что элементы запрещены,
  //прорисовка останетс€ старой (недоделка Microsoft?).  ороче говор€ делаем это сами
  mp_ContextMenuManager->EnableBLMenuItems(enable);
 }
@@ -713,16 +713,16 @@ void CFirmwareTabDlg::EnableAppItems(bool enable)
 
  UpdateDialogControls(this,TRUE);
 
- //если меню отображаетс€ в текущий момент, то не смотр€ на то что элементы запрещены, 
+ //если меню отображаетс€ в текущий момент, то не смотр€ на то что элементы запрещены,
  //прорисовка останетс€ старой (недоделка Microsoft?).  ороче говор€ делаем это сами
  mp_ContextMenuManager->EnableAppMenuItems(enable);
 }
 
 //от чекбокса...
-void CFirmwareTabDlg::OnFirmwareSupportBlStartedEmergency() 
+void CFirmwareTabDlg::OnFirmwareSupportBlStartedEmergency()
 {
  if (m_OnBLStartedEmergency)
-  m_OnBLStartedEmergency(); 	
+  m_OnBLStartedEmergency();
 }
 
 void CFirmwareTabDlg::OnOpenFlashFromFile()
@@ -749,41 +749,41 @@ CString CFirmwareTabDlg::GetFWInformationText(void)
  return o_text;
 }
 
-void CFirmwareTabDlg::OnChangeFirmwareSupportFwInformation() 
-{	
+void CFirmwareTabDlg::OnChangeFirmwareSupportFwInformation()
+{
  if (m_OnFWInformationTextChanged)
-  m_OnFWInformationTextChanged();	
+  m_OnFWInformationTextChanged();
 }
 
 //обновл€ет контроллы состо€ние которых зависит от того - открыта прошивка или нет
 void CFirmwareTabDlg::OnUpdateFirmwareControls(CCmdUI* pCmdUI)
 {
- bool enabled = IsFirmwareOpened(); 
+ bool enabled = IsFirmwareOpened();
  pCmdUI->Enable(enabled ? TRUE : FALSE);
 }
 
 void CFirmwareTabDlg::UpdateOpenedCharts(void)
 {
  if (m_start_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle,GetStartMap(true),GetStartMap(false));	 
+  DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle,GetStartMap(true),GetStartMap(false));
  if (m_idle_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_idle_map_wnd_handle,GetIdleMap(true),GetIdleMap(false));	 
+  DLL::UOZ1_Chart2DUpdate(m_idle_map_wnd_handle,GetIdleMap(true),GetIdleMap(false));
  if (m_work_map_chart_state)
-  DLL::UOZ2_Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));	 
+  DLL::UOZ2_Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));
  if (m_temp_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));	 
+  DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));
  if (m_attenuator_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));	 
+  DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
  if (m_coilregul_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));	 
+  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));
 }
 
 //изменилось выделение в спимке семейств характеристик
-void CFirmwareTabDlg::OnChangeFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CFirmwareTabDlg::OnChangeFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLISTVIEW *pnmv = (NM_LISTVIEW FAR *) pNMHDR;
-  
- if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED)) 
+
+ if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED))
  {
   //состо€ние выделени€ изменилось
   int selected_index = 0;
@@ -792,21 +792,21 @@ void CFirmwareTabDlg::OnChangeFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* 
   selected_index = m_funset_listbox.GetNextItem(-1, LVNI_SELECTED);
 
   if (m_OnFunSetSelectionChanged)
-   m_OnFunSetSelectionChanged(selected_index);     
+   m_OnFunSetSelectionChanged(selected_index);
  }
- 
+
  *pResult = 0;
 }
 
-void CFirmwareTabDlg::OnEndLabelEditFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CFirmwareTabDlg::OnEndLabelEditFirmwareSupportFunsetList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLVDISPINFO *pdi = (LV_DISPINFO FAR *) pNMHDR;
 
- if (pdi->item.mask == LVIF_TEXT) 
+ if (pdi->item.mask == LVIF_TEXT)
  {
   m_funset_listbox.SetItem(&pdi->item);
   if (m_OnFunSetNamechanged)
-   m_OnFunSetNamechanged(pdi->item.iItem,pdi->item.pszText); 
+   m_OnFunSetNamechanged(pdi->item.iItem,pdi->item.pszText);
  }
 }
 
@@ -815,7 +815,7 @@ void CFirmwareTabDlg::SetFunSetListBox(std::vector<_TSTRING> i_list_of_names)
  m_funset_listbox.DeleteAllItems();
  for (size_t i = 0; i < i_list_of_names.size(); i++)
  {
-  m_funset_listbox.InsertItem(i,i_list_of_names[i].c_str());	
+  m_funset_listbox.InsertItem(i,i_list_of_names[i].c_str());
  }
 }
 
@@ -864,7 +864,7 @@ void CFirmwareTabDlg::OnReadFlashFromSECU()
 }
 
 void CFirmwareTabDlg::OnWriteFlashToSECU()
-{	
+{
  if (m_OnWriteFlashToSECU)
   m_OnWriteFlashToSECU();
 }
@@ -903,13 +903,13 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_attenuator_map_wnd_handle, WM_CLOSE, 0, 0); 
+  ::SendMessage(m_attenuator_map_wnd_handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_attenuator_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ if ((!m_attenuator_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
  {
-  m_attenuator_map_chart_state = 1;	
+  m_attenuator_map_chart_state = 1;
   m_attenuator_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
     MLL::GetString(IDS_FW_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
@@ -931,7 +931,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewAttenuatorMap()
  else
  {
   ::SetFocus(m_attenuator_map_wnd_handle);
- }	
+ }
 }
 
 void CFirmwareTabDlg::OnFirmwareSupportViewCoilRegulMap()
@@ -939,13 +939,13 @@ void CFirmwareTabDlg::OnFirmwareSupportViewCoilRegulMap()
  //если кнопку "выключили" то закрываем окно редактора
  if (m_view_coilregul_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_coilregul_map_wnd_handle, WM_CLOSE, 0, 0); 
+  ::SendMessage(m_coilregul_map_wnd_handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_coilregul_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))	 
+ if ((!m_coilregul_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
  {
-  m_coilregul_map_chart_state = 1;	
+  m_coilregul_map_chart_state = 1;
   m_coilregul_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.0f, 16.0, SECU3IO::coilregul_map_slots, 32,
     MLL::GetString(IDS_FW_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_FW_MAPS_COILREGUL_UNIT).c_str(),
@@ -964,7 +964,7 @@ void CFirmwareTabDlg::OnFirmwareSupportViewCoilRegulMap()
  else
  {
   ::SetFocus(m_coilregul_map_wnd_handle);
- }	
+ }
 }
 
 void CFirmwareTabDlg::OnFirmwareInfo()
@@ -980,7 +980,7 @@ void CFirmwareTabDlg::_RegisterHotKeys(void)
 }
 
 void CFirmwareTabDlg::SetBLStartedEmergency(bool state)
-{ 
+{
  m_bl_started_emergency.SetCheck(state ? BST_CHECKED : BST_UNCHECKED);
 }
 
@@ -994,12 +994,12 @@ bool CFirmwareTabDlg::IsBLItemsEnabled(void)
  return m_is_bl_items_available;
 }
 
-bool CFirmwareTabDlg::IsAppItemsEnabled(void) 
+bool CFirmwareTabDlg::IsAppItemsEnabled(void)
 {
  return m_is_app_items_available;
 }
 
-float* CFirmwareTabDlg::GetStartMap(bool i_original) 
+float* CFirmwareTabDlg::GetStartMap(bool i_original)
 {
  if (i_original)
   return m_start_map_original;
@@ -1007,7 +1007,7 @@ float* CFirmwareTabDlg::GetStartMap(bool i_original)
   return m_start_map_active;
 }
 
-float* CFirmwareTabDlg::GetIdleMap(bool i_original) 
+float* CFirmwareTabDlg::GetIdleMap(bool i_original)
 {
  if (i_original)
   return m_idle_map_original;
@@ -1015,7 +1015,7 @@ float* CFirmwareTabDlg::GetIdleMap(bool i_original)
   return m_idle_map_active;
 }
 
-float* CFirmwareTabDlg::GetWorkMap(bool i_original) 
+float* CFirmwareTabDlg::GetWorkMap(bool i_original)
 {
  if (i_original)
   return &m_work_map_original[0][0];
@@ -1023,7 +1023,7 @@ float* CFirmwareTabDlg::GetWorkMap(bool i_original)
   return &m_work_map_active[0][0];
 }
 
-float* CFirmwareTabDlg::GetTempMap(bool i_original) 
+float* CFirmwareTabDlg::GetTempMap(bool i_original)
 {
  if (i_original)
   return m_temp_map_original;
@@ -1031,7 +1031,7 @@ float* CFirmwareTabDlg::GetTempMap(bool i_original)
   return m_temp_map_active;
 }
 
-float* CFirmwareTabDlg::GetAttenuatorMap(bool i_original) 
+float* CFirmwareTabDlg::GetAttenuatorMap(bool i_original)
 {
  if (i_original)
   return m_attenuator_map_original;
@@ -1039,7 +1039,7 @@ float* CFirmwareTabDlg::GetAttenuatorMap(bool i_original)
   return m_attenuator_map_active;
 }
 
-float* CFirmwareTabDlg::GetCoilRegulMap(bool i_original) 
+float* CFirmwareTabDlg::GetCoilRegulMap(bool i_original)
 {
  if (i_original)
   return m_coilregul_map_original;
@@ -1059,20 +1059,20 @@ HWND CFirmwareTabDlg::GetMapWindow(int wndType)
   return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
  case TYPE_MAP_DA_TEMP_CORR:
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
- case TYPE_MAP_ATTENUATOR: 
+ case TYPE_MAP_ATTENUATOR:
   return m_attenuator_map_wnd_handle ? m_attenuator_map_wnd_handle : NULL;
- case TYPE_MAP_COILREGUL: 
+ case TYPE_MAP_COILREGUL:
   return m_coilregul_map_wnd_handle ? m_coilregul_map_wnd_handle : NULL;
  default:
   return NULL;
  }
 }
 
-bool CFirmwareTabDlg::IsFirmwareOpened(void) 
+bool CFirmwareTabDlg::IsFirmwareOpened(void)
 {
  if (m_IsFirmwareOpened)
   return m_IsFirmwareOpened();
- return false; 
+ return false;
 }
 
 void CFirmwareTabDlg::setOnBootLoaderInfo(EventHandler OnFunction)
@@ -1112,7 +1112,7 @@ void CFirmwareTabDlg::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
 {m_OnFunSetNamechanged = OnFunction;}
 
 void CFirmwareTabDlg::setOnImportDataFromAnotherFW(EventHandler OnFunction)
-{m_OnImportDataFromAnotherFW = OnFunction;}	
+{m_OnImportDataFromAnotherFW = OnFunction;}
 
 void CFirmwareTabDlg::setOnImportDataFromSECU3(EventHandler OnFunction)
 {m_OnImportDataFromSECU3 = OnFunction;}

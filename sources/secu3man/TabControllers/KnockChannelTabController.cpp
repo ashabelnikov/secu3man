@@ -76,7 +76,7 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 
 
 CKnockChannelTabController::~CKnockChannelTabController()
-{  
+{
  //na
 }
 
@@ -191,7 +191,7 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
  }
  else
  {
-  state = CStatusBarManager::STATE_OFFLINE;  
+  state = CStatusBarManager::STATE_OFFLINE;
  }
 
  if (i_online==false)
@@ -273,7 +273,7 @@ void CKnockChannelTabController::OnParamsChangesTimer(void)
 {
  if (m_parameters_changed)
  {
-  //получаем данные от view и сохраняем их во временный буфер 
+  //получаем данные от view и сохраняем их во временный буфер
   SECU3IO::KnockPar packet_data;
   m_view->mp_knock_parameters_dlg->GetValues(&packet_data);
 
@@ -297,7 +297,7 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  //обновляем новым значением буфер функции сигнала ДД от оборотов
  //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
  //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
- //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом. 
+ //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом.
  int index_unchecked = MathHelpers::Round((p_packet->frequen - 200.f) / 60.f);
  if (index_unchecked < 0)
   index_unchecked = 0;
@@ -333,7 +333,7 @@ void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(void)
  m_rpm_knock_signal_ii.clear();
  for(size_t i = 0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
  {
-  m_rpm_knock_signal.push_back(std::vector<float>());   
+  m_rpm_knock_signal.push_back(std::vector<float>());
   m_rpm_knock_signal_ii.push_back(0);
  }
 }
@@ -343,7 +343,7 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
  (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
 
- //получили выборки усредненнго сигнала шума по оборотам 
+ //получили выборки усредненнго сигнала шума по оборотам
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
 
@@ -361,7 +361,7 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  p_controller->GetAttenuatorMap(array);
 
  //проводим расчет коэффициентов усиления и записываем их в таблицу аттенюатора
- //Коэфф. усиления для каждой выборки расчитывается исходя их разницы значения 
+ //Коэфф. усиления для каждой выборки расчитывается исходя их разницы значения
  //функции и значения желаемого уровня сигнала.
  for(size_t i =0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
  {
@@ -375,14 +375,14 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
   //вычисляем новый коэффициент усиления
   size_t old_gain_index = MathHelpers::Round(array[i]);
   float new_gain = SECU3IO::hip9011_attenuator_gains[old_gain_index] * correcting_gain;
-  
+
   //ищем ближайший коэффициент усиления с таблице коэффициентов усиления
   size_t new_gain_index = 0;
-  float smaller_diff = FLT_MAX; 
+  float smaller_diff = FLT_MAX;
   for(size_t j = 0; j < SECU3IO::GAIN_FREQUENCES_SIZE; ++j)
   {
    float gain = SECU3IO::hip9011_attenuator_gains[j];
-   float diff = fabs(gain - new_gain); 
+   float diff = fabs(gain - new_gain);
    if (diff < smaller_diff)
    {
     smaller_diff = diff;
@@ -392,7 +392,7 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
 
   //Изменяем коэффициент усиления только для тех точек, для которых была получена статистика
   if (m_rpm_knock_signal[i].size() > 0)
-    array[i] = (float)new_gain_index; 
+    array[i] = (float)new_gain_index;
  }
 
  //устанавливаем обновленную таблицу аттенюатора

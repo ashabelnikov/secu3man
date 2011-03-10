@@ -103,7 +103,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int
 
  if (!m_p_port->RecvBlock(t_buf, block_size))  //приняли очередную страницу
  {
-  m_ErrorCode = BL_ERROR_NOANSWER; 
+  m_ErrorCode = BL_ERROR_NOANSWER;
   return false; //часть данных потеряна - нет смысла продолжать дальше
  }
 
@@ -118,7 +118,7 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int
 
  if (!m_p_port->RecvBlock(t_buf,2))  //CS - два символа
  {
-  m_ErrorCode = BL_ERROR_NOANSWER;		   
+  m_ErrorCode = BL_ERROR_NOANSWER;
   return false;
  }
 
@@ -145,16 +145,16 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 {
  CBootLoader* p_boot = (CBootLoader*)lpParameter;
  CComPort* p_port = p_boot->m_p_port;
- int opcode = 0, i = 0, j = 0, k = 0; 
+ int opcode = 0, i = 0, j = 0, k = 0;
  int block_size,total_size,current;
- BYTE symbol = 0;  //для принятия символа '<' 
+ BYTE symbol = 0;  //для принятия символа '<'
  BYTE raw[2048];   //хватит с запасом для любой меги
  BYTE t_buf[1024];
  BYTE* fw_buf = &p_boot->m_fw_buf[0];
 #define FLASH_PAGE_SIZE_S (p_boot->m_ppf.m_page_size)
 #define EEPROM_SIZE_S (p_boot->m_ppe.m_size)
 
- while(1) 
+ while(1)
  {
   WaitForSingleObject(p_boot->m_hAwakeEvent, INFINITE); //sleep until enters a new command
 
@@ -164,53 +164,53 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
   opcode = p_boot->m_opdata.opcode;
   switch(opcode)  //обработка команд
   {
-   //========================================================================================= 
+   //=========================================================================================
    case BL_OP_READ_FLASH:    //чтение FLASH
    {
     if (p_boot->m_opdata.size==0)
-    { //попытка выполнения безсмысленной операции 
+    { //попытка выполнения безсмысленной операции
      ASSERT(0);
      break;
-    } 
+    }
 
     p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
     symbol     = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
     block_size = FLASH_PAGE_SIZE_S * 2;
-    current    = 0;         
+    current    = 0;
 
     int end_size = p_boot->m_opdata.addr + p_boot->m_opdata.size;
 
     //сколько байтов нехватает от начала страницы до стартового адреса
     int bottom_offset = p_boot->m_opdata.addr % FLASH_PAGE_SIZE_S;
-		   
+
     /*//сколько байтов нехватает от конечного адреса до конца страницы
     int top_overhead  = (end_size % FLASH_PAGE_SIZE) ? FLASH_PAGE_SIZE - (end_size % FLASH_PAGE_SIZE) : 0;*/
 
     int page_start = (p_boot->m_opdata.addr / FLASH_PAGE_SIZE_S);
-    int page_end = (end_size / FLASH_PAGE_SIZE_S) + ((end_size % FLASH_PAGE_SIZE_S)!=0) - 1; 
+    int page_end = (end_size / FLASH_PAGE_SIZE_S) + ((end_size % FLASH_PAGE_SIZE_S)!=0) - 1;
 
     int count_of_pages = (page_end - page_start) + 1;
 
     total_size = count_of_pages * (block_size + 1 + 2);   //1 byte - '<' + 2 bytes - CS
-    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);		   
-                                            
+    p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);
+
     for(j = 0,i = page_start; i <= page_end; i++,j++) //цикл: количество страниц
     {
      if (false == p_boot->FLASH_ReadOnePage(i,fw_buf+(j*FLASH_PAGE_SIZE_S),total_size,&current))
       break; //ошибка!
     }//for
 
-    //Временный буфер содержит прочитанные страницы (данные этих страниц обрамляют реальные данные), 
+    //Временный буфер содержит прочитанные страницы (данные этих страниц обрамляют реальные данные),
     //теперь необходимо сохранить данные соответствующие конкретным адресам
     memcpy(p_boot->m_opdata.data,fw_buf + bottom_offset,p_boot->m_opdata.size);
 
     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
-    p_boot->m_opdata.opcode = 0; 	   
+    p_boot->m_opdata.opcode = 0;
    }
    break;
 
-   //========================================================================================= 
+   //=========================================================================================
    case BL_OP_WRITE_FLASH:   //запись FLASH
     p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
     symbol = 0;
@@ -219,7 +219,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
     current = 0;
     int incomplete_page_bytes;
     int total_page_number;
-    
+
     incomplete_page_bytes = p_boot->m_opdata.size % FLASH_PAGE_SIZE_S; //количество байт в неполной странице (равен 0 если количество данных кратно размеру страницы)
     total_page_number = p_boot->m_opdata.size / FLASH_PAGE_SIZE_S;  //количество страниц
 
@@ -241,11 +241,11 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
      {//есть неполная страница и мы сейчас ее обрабатываем
       if (false == p_boot->FLASH_ReadOnePage(i, t_buf, total_size, &current))
        break;
-      //объединяем байты из прочитанной страницы с исходными байтами  
+      //объединяем байты из прочитанной страницы с исходными байтами
       memcpy(t_buf,p_boot->m_opdata.data+(i*FLASH_PAGE_SIZE_S), incomplete_page_bytes);
      }
      else
-     { //неполной страницы нету или мы до нее еще не дошли: копируем полную страницу с исходными байтами 			 
+     { //неполной страницы нету или мы до нее еще не дошли: копируем полную страницу с исходными байтами
       memcpy(t_buf, p_boot->m_opdata.data+(i*FLASH_PAGE_SIZE_S), FLASH_PAGE_SIZE_S);
      }
 
@@ -273,7 +273,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
      CNumericConv::BinToHexArray(t_buf, raw, FLASH_PAGE_SIZE_S);
      raw[block_size] = 0; //завершаем строку
 
-     p_port->SendASCII((char*)raw); //послали данные страницы 
+     p_port->SendASCII((char*)raw); //послали данные страницы
 
      current+=block_size;
      p_boot->EventHandler_OnUpdateUI(opcode,total_size,current);  //была передана страница
@@ -314,14 +314,14 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
       p_boot->m_ErrorCode = BL_ERROR_CHKSUM; //контрольная сумма не совпадает
       break;
      }
-    
+
     }//for
 
     p_boot->EventHandler_OnEnd(p_boot->m_opdata.opcode,p_boot->Status());
     p_boot->m_opdata.opcode = 0;
     break;
 
-   //========================================================================================= 
+   //=========================================================================================
    case BL_OP_READ_EEPROM:    //чтение EEPROM
     p_boot->m_ErrorCode = 0;  //перед выполнение новой команды необходимо сбросить ошибки
     symbol = 0;
@@ -336,7 +336,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
     {
      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
      goto finish_read_eeprom;  //ошибка принятия сигнального символа
-    }  
+    }
     if (symbol!='<')
     {
      p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
@@ -366,7 +366,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
     if (!p_port->RecvBlock(raw,2))  //CS
     {
-     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;		   
+     p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
      goto finish_read_eeprom;
     }
 
@@ -401,7 +401,7 @@ finish_read_eeprom:
 
     //сконвертировали байты в HEX-символы
     CNumericConv::BinToHexArray(p_boot->m_opdata.data, raw, EEPROM_SIZE_S);
-		
+
      k = 0;
     for(i = 0; i < EEPROM_WR_BLOCKS; i++) //передаем данные по блокам
     {
@@ -543,13 +543,13 @@ finish_exit:
 
 
 //-----------------------------------------------------------------------
-//каждому вызову Initialize должен соответствовать вызов этой функции 
+//каждому вызову Initialize должен соответствовать вызов этой функции
 bool CBootLoader::Terminate(void)
 {
  bool status = true;
  DWORD ExitCode;
  ExitCode = 0;
- 
+
  m_is_thread_must_exit = true;
  SetEvent(m_hAwakeEvent);       //выводим поток из спячки - проснется и сразу завершится
 
@@ -582,7 +582,7 @@ void CBootLoader::SetPlatformParameters(const PlatformParamHolder& i_pph)
 }
 
 //-----------------------------------------------------------------------
-//exception: xThread 
+//exception: xThread
 bool CBootLoader::Initialize(CComPort* p_port, const DWORD uart_seed)
 {
  if (!p_port)
@@ -633,9 +633,9 @@ bool CBootLoader::IsOpcodeValid(const int opcode)
 
 
 //-----------------------------------------------------------------------
-//Запускает указанную операцию на выполнение. Эта функция не блокирует вызвавший ее поток, а только 
+//Запускает указанную операцию на выполнение. Эта функция не блокирует вызвавший ее поток, а только
 //инициализирует данные, запускает выполнение операции и сразу возвращает управление.
-// io_data - буфер для чтения/записи данных 
+// io_data - буфер для чтения/записи данных
 // i_size  - размер данных
 // i_addr  - адрес для чтения/записи
 //Return: Операция запущена на выполнение успешно - true, иначе - false
@@ -665,7 +665,7 @@ bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size, int 
  SetEvent(m_hAwakeEvent);       //выводим поток из спячки - настало время поработать :-)
 
  return true;
-} 
+}
 
 //-----------------------------------------------------------------------
 void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
@@ -687,7 +687,7 @@ void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
   m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
   m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с бутлоадером своя скорость
   m_p_port->SetState();
- 
+
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
   timeouts.ReadIntervalTimeout         = 200;
   timeouts.ReadTotalTimeoutMultiplier  = 200;
@@ -715,7 +715,7 @@ bool CBootLoader::IsIdle(void) const
  return (m_ThreadBusy) ? false : true;
 }
 
-HANDLE CBootLoader::GetThreadHandle(void) const 
+HANDLE CBootLoader::GetThreadHandle(void) const
 {
  return m_hThread;
 }
@@ -738,7 +738,7 @@ int CBootLoader::GetLastError() const
 int CBootLoader::Status(void) const
 {
  return (m_ErrorCode==0) ? true : false;
-}     
+}
 
 //-----------------------------------------------------------------------
 void CBootLoader::EventHandler_OnUpdateUI(const int i_opcode, const int i_total, const int i_current)
@@ -752,7 +752,7 @@ void CBootLoader::EventHandler_OnUpdateUI(const int i_opcode, const int i_total,
  {
   EnterCriticalSection();
   m_pending_data[m_current_pending_data_index].m_update_ui.Set(i_opcode,i_total,i_current);
- }		
+ }
  __finally
  {
   LeaveCriticalSection();
@@ -760,7 +760,7 @@ void CBootLoader::EventHandler_OnUpdateUI(const int i_opcode, const int i_total,
  ////////////////////////////////////////////////////////////////////////////
 
  //посылка сообщения
- m_pEventHandler->OnUpdateUI(&m_pending_data[m_current_pending_data_index].m_update_ui); 
+ m_pEventHandler->OnUpdateUI(&m_pending_data[m_current_pending_data_index].m_update_ui);
  //для следующего сообщения новый индекс
  m_current_pending_data_index++;
  if (m_current_pending_data_index >= PENDING_DATA_QUEUE_SIZE)

@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -41,10 +41,10 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CLEDIndicator message handlers
 
-void CLEDIndicator::OnPaint() 
+void CLEDIndicator::OnPaint()
 {
  CPaintDC dc(this); // device context for painting
-	
+
  CRect rc;
  GetClientRect(&rc);
 
@@ -68,7 +68,7 @@ void CLEDIndicator::OnPaint()
   }
   dc.RoundRect(rc,CPoint(rc.Width(),rc.Height()));
  }
-  	
+
  // old pen / brush
  if (pPenOld)
   dc.SelectObject(pPenOld);
@@ -100,16 +100,16 @@ void CLEDIndicator::ActuateColors()
  if(m_rectPen.m_hObject == NULL)
   m_rectPen.CreatePen(PS_SOLID, m_rectWidth, m_rectColor);
 
- if(m_onBrush.m_hObject) 
+ if(m_onBrush.m_hObject)
   m_onBrush.DeleteObject();
 
- if(m_onBrush.m_hObject == NULL) 
+ if(m_onBrush.m_hObject == NULL)
   m_onBrush.CreateSolidBrush(m_onColor);
 
- if(m_offBrush.m_hObject) 
+ if(m_offBrush.m_hObject)
   m_offBrush.DeleteObject();
 
- if(m_offBrush.m_hObject == NULL) 
+ if(m_offBrush.m_hObject == NULL)
   m_offBrush.CreateSolidBrush(m_offColor);
 }
 

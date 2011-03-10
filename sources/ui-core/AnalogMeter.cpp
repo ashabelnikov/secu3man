@@ -1,7 +1,7 @@
  /****************************************************************
  *
  *  Original code written by Mark C. Malburg
- *  Improved by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Improved by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -12,7 +12,7 @@
 #include "AnalogMeter.h"
 
 //IF You use _UNICODE:
-//In the Output category of the Link tab in the Project Settings dialog box, 
+//In the Output category of the Link tab in the Project Settings dialog box,
 //set the Entry Point Symbol to wWinMainCRTStartup.
 
 #define ROUND(x) (int)((x) + 0.5 - (double)((x) < 0))
@@ -57,7 +57,7 @@ CAnalogMeter::CAnalogMeter()
  m_nValueDecimals = 1;
 
  m_nTickNumber = 20;
- 
+
  // switches
  m_swTitle   = true;
  m_swGrid    = true;
@@ -130,15 +130,15 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
   }
   m_nRectWidth  = m_rectDraw.Width();
   m_nRectHeight = m_rectDraw.Height();
-    
-  // if we already have a memory dc, destroy it 
+
+  // if we already have a memory dc, destroy it
   // (this occurs for a re-size of the meter)
   if (m_dcGrid.GetSafeHdc())
   {
    m_dcGrid.SelectObject(m_pbitmapOldGrid);
    m_dcGrid.DeleteDC();
    m_dcNeedle.SelectObject(m_pbitmapOldNeedle);
-   m_dcNeedle.DeleteDC(); 
+   m_dcNeedle.DeleteDC();
    m_bitmapGrid.DeleteObject();
    m_bitmapNeedle.DeleteObject();
   }
@@ -162,16 +162,16 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
    m_dcNeedle.m_hDC = pDC->m_hDC;
    m_dcNeedle.m_hAttribDC = pDC->m_hAttribDC;
   }
-  
+
   // draw the grid in to the "grid dc"
   DrawScale();
-  // draw the needle in the "needle dc" 
+  // draw the needle in the "needle dc"
   DrawNeedle();
- }  
+ }
  // display the new image, combining the needle with the grid
  if (m_boolUseBitmaps)
   ShowMeterImage(pDC);
-} 
+}
 
 //////////////////////////////////////////////////////
 void CAnalogMeter::UpdateNeedle(CDC *pDC, double dPos)
@@ -179,39 +179,39 @@ void CAnalogMeter::UpdateNeedle(CDC *pDC, double dPos)
  // if the needle hasn't changed, don't bother updating
  if (m_dNeedlePos == dPos)
   return;
- 
- // store the position in the member variable 
+
+ // store the position in the member variable
  // for availability elsewhere
  m_dNeedlePos = dPos;
 
- // do not support updates if we are not working with 
+ // do not support updates if we are not working with
  // bitmaps images
  if (!m_boolUseBitmaps)
   return;
-  
- // must have created the grid if we are going to 
- // update the needle (the needle locations are 
+
+ // must have created the grid if we are going to
+ // update the needle (the needle locations are
  // calculateed based on the grid)
  if (!m_dcGrid.GetSafeHdc())
   return;
 
  // draw the new needle image
  DrawNeedle();
-  
+
  // combine the needle with the grid and display the result
  if (m_boolUseBitmaps)
-  ShowMeterImage (pDC); 
-} 
+  ShowMeterImage (pDC);
+}
 
 //////////////////////////////////////////
-void CAnalogMeter::DrawScale() 
+void CAnalogMeter::DrawScale()
 {
  double   dTemp;
  CPen*    pPenOld;
  CBrush*  pBrushOld;
  CFont*   pFontOld;
  CString  tempString;
-  
+
  bool disable_title;
  bool disable_range;
  bool disable_unit;
@@ -256,7 +256,7 @@ void CAnalogMeter::DrawScale()
   disable_range = true;
   disable_unit  = true;
  }
- if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20)) 
+ if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20))
   return;
 
  // make a square
@@ -284,16 +284,16 @@ void CAnalogMeter::DrawScale()
      OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
      DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
     return;
-      
+
    tempString.Format(_T("%.*f"), m_nLabelsDecimals, m_dMinScale);
    int len1 = tempString.GetLength();
    tempString.Format(_T("%.*f"), m_nLabelsDecimals, m_dMaxScale);
    int len2 = tempString.GetLength();
 
-   if (len1 > len2) 
+   if (len1 > len2)
     width = len1;
-   else            
-    width = len2;       
+   else
+    width = len2;
 
    TEXTMETRIC TM;
    pFontOld = m_dcGrid.SelectObject(&m_fontValue);
@@ -320,7 +320,7 @@ void CAnalogMeter::DrawScale()
  // determine the angular scaling
  m_dLimitAngleRad = DegToRad(m_dLimitAngleDeg);
  m_dRadiansPerValue = (2.0*m_dLimitAngleRad)/(m_dMaxScale-m_dMinScale);
- 
+
  // determine the center point
  m_nCXPix = m_rectGfx.left + m_rectGfx.Width()/2;
  m_nCYPix = m_rectGfx.top  + m_rectGfx.Height()/2;
@@ -332,11 +332,11 @@ void CAnalogMeter::DrawScale()
  m_nLeftLimitXPix = ROUND(dTemp);
  dTemp = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad);
  m_nLeftLimitYPix = ROUND(dTemp);
- 
+
  dTemp = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad);
  m_nRightLimitXPix = ROUND(dTemp);
  m_nRightLimitYPix = m_nLeftLimitYPix;
-  
+
  // determine the placement of the current value text
  m_rectValue.left   = m_rectGfx.left  + 10;
  m_rectValue.top    = m_rectGfx.top   + 10;
@@ -348,7 +348,7 @@ void CAnalogMeter::DrawScale()
  m_rectMinValue.top    = m_rectGfx.bottom - m_rectGfx.Height()/5;
  m_rectMinValue.right  = m_rectGfx.left + m_rectGfx.Width()/2 + 1;
  m_rectMinValue.bottom = m_rectGfx.bottom - m_rectGfx.Height()/50;
- 
+
  // determine the placement of the maximum value
  m_rectMaxValue.right  = m_rectGfx.right - 1;
  m_rectMaxValue.top    = m_rectGfx.bottom - m_rectGfx.Height()/5;
@@ -370,11 +370,11 @@ void CAnalogMeter::DrawScale()
  //  draw grid        //
  ///////////////////////
  CRect Bounds(nLeftBoundX,nLeftBoundY,nRightBoundX,nRightBoundY);
-  
+
  DrawAlertZones(Bounds);
  DrawChord(Bounds);
  DrawGrid(Bounds);
-  
+
  // grab the font and set the text color
  pFontOld = m_dcGrid.SelectObject(&m_fontValue);
  m_dcGrid.SetTextColor((~m_colorLabels)&0xFFFFFF);
@@ -390,7 +390,7 @@ void CAnalogMeter::DrawScale()
   m_dcGrid.TextOut ((m_rectGfx.left+m_rectGfx.right)/2,
   m_rectGfx.top - 3, m_strTitle);
  }
-  
+
  if(!disable_unit && m_swUnit && m_strUnit != "")
  {
   // show the unit
@@ -403,18 +403,18 @@ void CAnalogMeter::DrawScale()
 
  // restore the font
  m_dcGrid.SelectObject(pFontOld);
-} 
+}
 
 //рисует центр прибора использу€ цвет фона
 void CAnalogMeter::DrawChord(const CRect& Bounds)
 {
  if(!m_swGrid)
   return;
-    
+
  CRect Circle = Bounds;
  CBrush*  pBrushOld = NULL;
  CPen* pPenOld = NULL;
- CBrush chord_brush; 
+ CBrush chord_brush;
  CPen   chord_pen;
 
  chord_brush.CreateSolidBrush((~m_colorBGround)&0xFFFFFF);
@@ -429,7 +429,7 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
  CPoint ptEnd(m_nLeftLimitXPix, m_nLeftLimitYPix);
 
  pBrushOld = m_dcGrid.SelectObject(&chord_brush);
- pPenOld = m_dcGrid.SelectObject(&chord_pen); 
+ pPenOld = m_dcGrid.SelectObject(&chord_pen);
  m_dcGrid.Chord(Circle,ptStart,ptEnd);
  m_dcGrid.SelectObject(pPenOld);
  m_dcGrid.SelectObject(pBrushOld);
@@ -438,12 +438,12 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
 void  CAnalogMeter::DrawAlertZones(const CRect& Bounds)
 {
  if(m_swGrid)
- {  
+ {
   //рисуем зоны
   std::vector<AlertZone*>::iterator it;
   for(it = m_AlertZones.begin(); it!=m_AlertZones.end(); ++it)
   {
-   DrawPie(Bounds,(*it)->start,(*it)->end,(*it)->color); 	 
+   DrawPie(Bounds,(*it)->start,(*it)->end,(*it)->color);
   }
  }
 }
@@ -465,16 +465,16 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
 
  if(m_BrushG_Grid.m_hObject)
   pBrushOld = m_dcGrid.SelectObject(&m_BrushG_Grid);
-      
+
  if(m_swGrid)
  {
   // arc
   m_dcGrid.Arc(Bounds.left,Bounds.top,Bounds.right+1,Bounds.bottom+1,
-     ROUND(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)), 
-	 ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)),
+     ROUND(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
+     ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)),
      m_nLeftLimitXPix, m_nLeftLimitYPix) ;
  }
-    
+
  if (m_nTickNumber%2)
   m_nTickNumber--;
 
@@ -485,19 +485,19 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
  int step_max = m_nTickNumber - (m_nTickNumber/2);
 
  for (tick = step_min; tick <= step_max; tick++)
- {		  	  
+ {
   //-------draw ticks ---------------
   dX = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
   dY = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
   if(m_swGrid) m_dcGrid.MoveTo(ROUND(dX), ROUND(dY)) ;
-  if (tick % 2) 
+  if (tick % 2)
    len = 1.0;    //short tick
-  else 
+  else
    len = 0.95;   //long tick
   dX = m_nCXPix + 0.92*len*m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
   dY = m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
   if(m_swGrid) m_dcGrid.LineTo(ROUND(dX), ROUND(dY)) ;
-	  	  
+
   if (!m_swLabels) //нужно ли рисовать подписи?
    continue;
 
@@ -507,7 +507,7 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    CString cs;
    cs.Format(_T("%.*f"),m_nLabelsDecimals,tick_value);
    TEXTMETRIC TM;
-  
+
    pFontOld = m_dcGrid.SelectObject(&m_fontValue);
    m_dcGrid.GetTextMetrics(&TM);
 
@@ -527,51 +527,51 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    m_dcGrid.SetBkMode(TRANSPARENT);
 
    if (tick==0)
-	ty=m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
+    ty=m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
 
    m_dcGrid.TextOut((int)tx,(int)ty,cs);
    m_dcGrid.SelectObject(pFontOld);
   }
-  //------------------------------------------------ 
+  //------------------------------------------------
 
   double step = ((double)(m_dMaxScale - m_dMinScale)) / ((double)m_nTickNumber);
-  tick_value+= step;	  
+  tick_value+= step;
  }
-    
+
  // old pen / brush
  if (pPenOld)
   m_dcGrid.SelectObject(pPenOld);
  if (pBrushOld)
-  m_dcGrid.SelectObject(pBrushOld);    
+  m_dcGrid.SelectObject(pBrushOld);
 }
 
 //рисует сегмент окружности с заданным цветом
 void CAnalogMeter::DrawPie(const CRect& Bounds,double start_value, double end_value, COLORREF color)
 {
- CBrush pie_brush; 
+ CBrush pie_brush;
  CPen   pie_pen;
  CBrush* pBrushOld;
  CPen* pPenOld;
 
- double DergeesPerValue = (2.0*m_dLimitAngleDeg)/(m_dMaxScale-m_dMinScale); 
-  
+ double DergeesPerValue = (2.0*m_dLimitAngleDeg)/(m_dMaxScale-m_dMinScale);
+
  double s_ang = DergeesPerValue*(start_value - (m_dMinScale));
  double e_ang = DergeesPerValue*(end_value - (m_dMinScale));
 
  double start_radian = DegToRad(m_dLimitAngleDeg - s_ang);
  double end_radian = DegToRad(e_ang-m_dLimitAngleDeg);
-   
+
  pie_brush.CreateSolidBrush(~(color)&0xFFFFFF);
  pie_pen.CreatePen(PS_NULL,0,~(color)&0xFFFFFF);
 
- pBrushOld = m_dcGrid.SelectObject(&pie_brush);	
- pPenOld = m_dcGrid.SelectObject(&pie_pen); 
+ pBrushOld = m_dcGrid.SelectObject(&pie_brush);
+ pPenOld = m_dcGrid.SelectObject(&pie_pen);
 
  m_dcGrid.Pie(Bounds.left,Bounds.top,Bounds.right+1,Bounds.bottom+1,
-     ROUND(m_nCXPix + m_nRadiusPix*sin(end_radian)), 
-	 ROUND(m_nCYPix - m_nRadiusPix*cos(end_radian)),
+     ROUND(m_nCXPix + m_nRadiusPix*sin(end_radian)),
+     ROUND(m_nCYPix - m_nRadiusPix*cos(end_radian)),
      ROUND(m_nCXPix - m_nRadiusPix*sin(start_radian)),
-	 ROUND(m_nCYPix - m_nRadiusPix*cos(start_radian)));
+     ROUND(m_nCYPix - m_nRadiusPix*cos(start_radian)));
 
  m_dcGrid.SelectObject(pPenOld);
  m_dcGrid.SelectObject(pBrushOld);
@@ -582,13 +582,13 @@ void CAnalogMeter::DrawNeedle()
 {
  CPoint  pPoints[6];
  CString tempString;
- CPen*   pPenOld; 
+ CPen*   pPenOld;
  CBrush* pBrushOld;
  CFont*  pFontOld;
  double  dAngleRad, dX, dY;
  double  dCosAngle, dSinAngle;
  bool    disable_value;
-  
+
  if (!m_dcNeedle.GetSafeHdc())
   return;
 
@@ -602,9 +602,9 @@ void CAnalogMeter::DrawNeedle()
 
   if(m_BrushN_BGround.m_hObject)
    pBrushOld = m_dcNeedle.SelectObject(&m_BrushN_BGround);
-     
+
   m_dcNeedle.Rectangle(m_rectDraw);
-     
+
   // old pen / brush
   if(pPenOld)
    m_dcGrid.SelectObject(pPenOld);
@@ -621,7 +621,7 @@ void CAnalogMeter::DrawNeedle()
  {
   disable_value = true;
  }
- if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20)) 
+ if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20))
   return;
 
  if(!disable_value && m_swValue)
@@ -632,7 +632,7 @@ void CAnalogMeter::DrawNeedle()
   m_dcNeedle.SetBkColor(RGB(0,0,0));
   tempString.Format(_T("%.*f"), m_nValueDecimals, m_dNeedlePos);
 
-  m_dcNeedle.TextOut((m_rectValue.right+m_rectValue.left)/2, 
+  m_dcNeedle.TextOut((m_rectValue.right+m_rectValue.left)/2,
       m_rectValue.bottom-m_nTextBaseSpacing, tempString);
 
   m_dcNeedle.SelectObject(pFontOld);
@@ -649,21 +649,21 @@ void CAnalogMeter::DrawNeedle()
  dY = m_nCYPix - m_nRadiusPix*dCosAngle;
  pPoints[0].x = ROUND(dX);
  pPoints[0].y = ROUND(dY);
- 
+
  // left base
  dX = m_nCXPix - m_nHalfBaseWidth*dCosAngle;
  dY = m_nCYPix - m_nHalfBaseWidth*dSinAngle;
  pPoints[1].x = ROUND(dX);
  pPoints[1].y = ROUND(dY);
- 
+
  // right base
  pPoints[2].x = m_nCXPix + (m_nCXPix-pPoints[1].x);
  pPoints[2].y = m_nCYPix + (m_nCYPix-pPoints[1].y);
- 
+
  // tip
  pPoints[3].x = pPoints[0].x;
  pPoints[3].y = pPoints[0].y;
- 
+
  // new pen / brush
  pPenOld   = NULL;
  pBrushOld = NULL;
@@ -672,18 +672,18 @@ void CAnalogMeter::DrawNeedle()
 
  if(m_BrushN_Needle.m_hObject)
   pBrushOld = m_dcNeedle.SelectObject(&m_BrushN_Needle);
-   
+
  if (m_swNeedle)
  {
   // draw the needle pointer
   m_dcNeedle.Polygon(pPoints, 4);
- 
+
   // draw circle at the bottom
   int r = (m_nRadiusPix/20);
   m_dcNeedle.Ellipse (m_nCXPix-m_nHalfBaseWidth-r, m_nCYPix-m_nHalfBaseWidth-r,
 	m_nCXPix+m_nHalfBaseWidth+1+r, m_nCYPix+m_nHalfBaseWidth+1+r);
  }
-   
+
  // old pen / brush
  if(pPenOld)
   m_dcGrid.SelectObject(pPenOld);
@@ -699,25 +699,25 @@ void CAnalogMeter::ShowMeterImage(CDC *pDC)
  CDC memDC;
  CBitmap memBitmap;
  CBitmap* oldBitmap; // bitmap originally found in CMemDC
-  
+
  // this function is only used when the needle and grid
  // have been drawn to bitmaps and they need to be combined
  // and sent to the destination
- if (!m_boolUseBitmaps)  
+ if (!m_boolUseBitmaps)
   return;
 
- // to avoid flicker, establish a memory dc, draw to it 
+ // to avoid flicker, establish a memory dc, draw to it
  // and then BitBlt it to the destination "pDC"
  memDC.CreateCompatibleDC(pDC);
  memBitmap.CreateCompatibleBitmap(pDC, m_nRectWidth, m_nRectHeight);
  oldBitmap = (CBitmap *)memDC.SelectObject(&memBitmap);
-  
+
  // make sure we have the bitmaps
  if (!m_dcGrid.GetSafeHdc())
-  return ;
+  return;
 
  if (!m_dcNeedle.GetSafeHdc())
-  return ;
+  return;
 
  if (memDC.GetSafeHdc() != NULL)
  {
@@ -726,11 +726,11 @@ void CAnalogMeter::ShowMeterImage(CDC *pDC)
   // merge the needle image with the grid
   memDC.BitBlt(0, 0, m_nRectWidth, m_nRectHeight, &m_dcNeedle, 0, 0, SRCINVERT);
   // copy the resulting bitmap to the destination
-  pDC->BitBlt(m_rectOwner.left, m_rectOwner.top, m_nRectWidth, m_nRectHeight, 
+  pDC->BitBlt(m_rectOwner.left, m_rectOwner.top, m_nRectWidth, m_nRectHeight,
       &memDC, 0, 0, SRCCOPY);
  }
-  
- memDC.SelectObject(oldBitmap);  
+
+ memDC.SelectObject(oldBitmap);
 } // end ShowMeterImage
 
 //////////////////////////////////////////////////////
@@ -742,46 +742,46 @@ void CAnalogMeter::ActuateColors()
  if(m_PenG_Grid.m_hObject == NULL)
   m_PenG_Grid.CreatePen(PS_SOLID, m_nGridLineWidth, (~m_colorGrid)&0xFFFFFF);
 
- if(m_BrushG_Grid.m_hObject) 
+ if(m_BrushG_Grid.m_hObject)
   m_BrushG_Grid.DeleteObject();
 
- if(m_BrushG_Grid.m_hObject == NULL) 
+ if(m_BrushG_Grid.m_hObject == NULL)
   m_BrushG_Grid.CreateSolidBrush((~m_colorGrid)&0xFFFFFF);
 
  if(m_PenG_BGround.m_hObject)
   m_PenG_BGround.DeleteObject();
 
- if(m_PenG_BGround.m_hObject == NULL) 
+ if(m_PenG_BGround.m_hObject == NULL)
   m_PenG_BGround.CreatePen(PS_SOLID, 1, (~m_colorBGround)&0xFFFFFF);
 
- if(m_BrushG_BGround.m_hObject) 
+ if(m_BrushG_BGround.m_hObject)
   m_BrushG_BGround.DeleteObject();
 
- if(m_BrushG_BGround.m_hObject == NULL) 
+ if(m_BrushG_BGround.m_hObject == NULL)
   m_BrushG_BGround.CreateSolidBrush((~m_colorBGround)&0xFFFFFF);
 
  if(m_PenN_Needle.m_hObject)
   m_PenN_Needle.DeleteObject();
 
- if(m_PenN_Needle.m_hObject == NULL) 
+ if(m_PenN_Needle.m_hObject == NULL)
   m_PenN_Needle.CreatePen(PS_SOLID, 0, (m_colorNeedle^m_colorBGround)&0xFFFFFF);
 
- if(m_BrushN_Needle.m_hObject) 
+ if(m_BrushN_Needle.m_hObject)
   m_BrushN_Needle.DeleteObject();
 
- if(m_BrushN_Needle.m_hObject == NULL) 
+ if(m_BrushN_Needle.m_hObject == NULL)
   m_BrushN_Needle.CreateSolidBrush((m_colorNeedle^m_colorBGround)&0xFFFFFF);
 
  if(m_PenN_BGround.m_hObject)
   m_PenN_BGround.DeleteObject();
 
- if(m_PenN_BGround.m_hObject == NULL) 
+ if(m_PenN_BGround.m_hObject == NULL)
   m_PenN_BGround.CreatePen(PS_SOLID, 0, RGB(0,0,0));
 
- if(m_BrushN_BGround.m_hObject) 
+ if(m_BrushN_BGround.m_hObject)
   m_BrushN_BGround.DeleteObject();
 
- if(m_BrushN_BGround.m_hObject == NULL) 
+ if(m_BrushN_BGround.m_hObject == NULL)
   m_BrushN_BGround.CreateSolidBrush(RGB(0,0,0));
 }
 
@@ -812,7 +812,7 @@ void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
 
   case meter_needle:
    m_swNeedle = State;
-   break; 
+   break;
  }
 }
 

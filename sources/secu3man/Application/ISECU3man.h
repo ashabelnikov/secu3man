@@ -33,11 +33,11 @@ class ISECU3Man
   {
    ISECU3Man* p_application = (dynamic_cast<ISECU3Man*>(AfxGetApp()));
    _ASSERTE(p_application);
-   return p_application; 
+   return p_application;
   };
 
   virtual CAppSettingsManager*    GetAppSettingsManager(void) const = 0;
   virtual CCommunicationManager*  GetCommunicationManager(void) const = 0;
-  virtual CMainFrameManager*      GetMainFrameManager(void) const = 0; 
+  virtual CMainFrameManager*      GetMainFrameManager(void) const = 0;
   virtual LogWriter*              GetLogWriter(void) const = 0;
 };

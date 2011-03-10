@@ -31,7 +31,7 @@
 using namespace SECU3IO;
 
 //-----------------------------------------------------------------------
-CControlApp::CControlApp() 
+CControlApp::CControlApp()
 : m_adc_discrete(ADC_DISCRETE)
 , m_angle_multiplier(ANGLE_MULTIPLAYER)
 , m_pEventHandler(NULL)
@@ -55,7 +55,7 @@ CControlApp::CControlApp()
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
  memset(&m_pending_packets,0,sizeof(SECU3Packet) * PENDING_PACKETS_QUEUE_SIZE);
- 
+
  mp_csection = new CSECTION;
  InitializeCriticalSection(GetSyncObject());
 }
@@ -70,7 +70,7 @@ CControlApp::~CControlApp()
 
 
 //-----------------------------------------------------------------------
-//каждому вызову Initialize должен соответствовать вызов этой функции 
+//каждому вызову Initialize должен соответствовать вызов этой функции
 bool CControlApp::Terminate(void)
 {
  bool status=true;
@@ -81,7 +81,7 @@ bool CControlApp::Terminate(void)
  SetEvent(m_hAwakeEvent);       //выводим поток из спячки - проснется и сразу завершится
 
  int i = 0;
- do  //а если он не хочет завершатся по хорошему, через некоторое время изнасилуем его... 
+ do  //а если он не хочет завершатся по хорошему, через некоторое время изнасилуем его...
  {
   if (i >= 20)
    break;
@@ -130,15 +130,15 @@ bool CControlApp::Initialize(CComPort* p_port,const DWORD uart_speed, const DWOR
   return false;        //event creation error
  }
 
- m_hThread = CreateThread(0,0,(LPTHREAD_START_ROUTINE)BackgroundProcess,(void*)this,0,&m_ThreadId);  
+ m_hThread = CreateThread(0,0,(LPTHREAD_START_ROUTINE)BackgroundProcess,(void*)this,0,&m_ThreadId);
  if (m_hThread==NULL)
  {
-  throw xThread();     
+  throw xThread();
   return false;        //thread creation error
  }
 
  m_is_thread_must_exit = false;
-  
+
  m_uart_speed = uart_speed;
  m_dat_packet_timeout = dat_packet_timeout;
 
@@ -164,10 +164,10 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 
  BYTE* p = i_buff;
 
- //Пакет(ы) содержит 0x0 символы. 	
+ //Пакет(ы) содержит 0x0 символы.
  _ASSERTE((!memchr(i_buff, '\0', i_size)) && "0x0 characters are not allowed in SECU-3 packets.\
  Please, check firmware code for this problem.");
-    
+
  while(*p!=0)
  {
   switch(m_packets_parse_state) //я люблю автоматное программирование...
@@ -178,7 +178,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 	 m_ingoing_packet+=*p;
 	 m_packets_parse_state = 1;
 	}
-	break; 
+	break;
    case 1:       //wait '\r'
 	if (*p=='\r')
 	{
@@ -189,14 +189,14 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 	}
 	else
 	{
-	 m_ingoing_packet+=*p;			
+	 m_ingoing_packet+=*p;
 	}
-	break;		
+	break;
   }//switch
   ++p;
- }; 
+ };
 
- return m_pPackets->size();  
+ return m_pPackets->size();
 }
 
 //-----------------------------------------------------------------------
@@ -210,61 +210,61 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  //частота вращения двигателя
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_SensorDat.frequen))
   return false;
- raw_packet+=4;  
- 
+ raw_packet+=4;
+
  //давление во впускном коллекторе
  int pressure = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&pressure))
   return false;
 
  m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;  
+ raw_packet+=4;
 
  //напряжение бортовой сети
  int voltage = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&voltage))
-  return false; 
+  return false;
  m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;  
+ raw_packet+=4;
 
  //Температура охлаждающей жидкости
  int temperature = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&temperature,true))
   return false;
  m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;  
+ raw_packet+=4;
 
  //Текущий УОЗ (число со знаком)
  int adv_angle = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&adv_angle,true))
   return false;
  m_SensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
- raw_packet+=4;  
+ raw_packet+=4;
 
  //Уровень детонации двигателя
  int knock_k = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k))
-  return false; 
+  return false;
  m_SensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
- raw_packet+=4;   
+ raw_packet+=4;
 
  //Корректировка УОЗ при детонации
  int knock_retard = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard, true))
-  return false; 
+  return false;
  m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
  raw_packet+=4;
 
  //Расход воздуха
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
   return false;
- raw_packet+=2;  
+ raw_packet+=2;
 
  //Байт с флажками
- unsigned char byte = 0; 
+ unsigned char byte = 0;
  if (false == CNumericConv::Hex8ToBin(raw_packet,&byte))
   return false;
- raw_packet+=2;  
+ raw_packet+=2;
 
  //Состояние клапана ЭПХХ, Состояние дроссельной заслонки, Состояние газового клапана
  //Состояние клапана ЭМР, Состояние лампы "CE"
@@ -294,12 +294,12 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
  //Общее кол-во наборов (семейств характеристик)
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FnNameDat.tables_num))
   return false;
- raw_packet+=2;  
+ raw_packet+=2;
 
  //номер этого набора характеристик
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FnNameDat.index))
   return false;
- raw_packet+=2;  
+ raw_packet+=2;
 
  //имя этого набора характеристик
  char* p;
@@ -321,15 +321,15 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet)
  if (strlen((char*)raw_packet)!=9)  //размер пакета без сигнального символа, дескриптора
   return false;
 
- //Обороты при которых стартер будет выключен 
+ //Обороты при которых стартер будет выключен
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_StartrPar.starter_off))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
 
  //Обороты перехода с пусковой карты
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
 
  if (*raw_packet!='\r')
   return false;
@@ -357,14 +357,14 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet)
  int  min_angle;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle,true))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
  m_AnglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
 
  //Октан-коррекция УОЗ (число со знаком)
  int angle_corr;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&angle_corr,true))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
  m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
 
  //Скорость уменьшения УОЗ (число со знаком)
@@ -409,28 +409,28 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
  int map_lower_pressure = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&map_lower_pressure))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
  m_FunSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Верхнее значение давления по оси ДАД
  int map_upper_pressure = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&map_upper_pressure))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
  m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Смещение кривой ДАД
  int map_curve_offset = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_offset))
   return false;
- raw_packet+=4;   
+ raw_packet+=4;
  m_FunSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
 
  //Наклон кривой ДАД
  int map_curve_gradient = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_gradient))
   return false;
- raw_packet+=4;   
+ raw_packet+=4;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
 
  if (*raw_packet!='\r')
@@ -443,7 +443,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
 {
- SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar; 
+ SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
 
  if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
   return false;
@@ -451,7 +451,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
  //признак использования регулятора
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_IdlRegPar.idl_regul))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
@@ -468,12 +468,12 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
  raw_packet+=4;
  m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLAYER;
 
- //Зона нечувствительности регулятора 
+ //Зона нечувствительности регулятора
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
   return false;
  raw_packet+=4;
 
- //Поддерживаемые обороты 
+ //Поддерживаемые обороты
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_IdlRegPar.idling_rpm))
   return false;
  raw_packet+=4;
@@ -516,10 +516,10 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=4;
 
- //Признак инверсии концевика карбюратора 
+ //Признак инверсии концевика карбюратора
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CarburPar.carb_invers))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
  //Порог разрежения ЭМР
  int epm_on_threshold = 0;
@@ -528,12 +528,12 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet)
  raw_packet+=4;
  m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
- //Нижний порог ЭПХХ (газ) 
+ //Нижний порог ЭПХХ (газ)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_lot_g))
   return false;
  raw_packet+=4;
 
- //Верхний порог ЭПХХ (газ) 
+ //Верхний порог ЭПХХ (газ)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_hit_g))
   return false;
  raw_packet+=4;
@@ -562,14 +562,14 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet)
  //Признак комплектации ДТОЖ (использования ДТОЖ)
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.tmp_use))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
   //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.vent_pwm))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
- //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной 
+ //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной
  //дискретами АЦП (как измеренное значение прямо с датчика)
 
  //Порог включения вентилятора (число со знаком)
@@ -577,14 +577,14 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet)
  if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_on,true))
   return false;
  raw_packet+=4;
- m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER; 
+ m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off,true))
   return false;
  raw_packet+=4;
- m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER; 
+ m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  if (*raw_packet!='\r')
   return false;
@@ -639,7 +639,7 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
 //note: for more information see AVR120 application note.
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
 {
- SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar; 
+ SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
 
  if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дескриптора
   return false;
@@ -655,7 +655,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=8;
  m_ADCCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.map_adc_factor;
- m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //в вольты 
+ m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //в вольты
 
  signed int ubat_adc_factor = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&ubat_adc_factor,true))
@@ -669,8 +669,8 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
 
  raw_packet+=8;
  m_ADCCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ubat_adc_factor;
- m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты 
- 
+ m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты
+
  signed int temp_adc_factor = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&temp_adc_factor,true))
   return false;
@@ -682,7 +682,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=8;
  m_ADCCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.temp_adc_factor;
- m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты 
+ m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
 
  if (*raw_packet!='\r')
   return false;
@@ -698,12 +698,12 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
  if (strlen((char*)raw_packet)!=8)  //размер пакета без сигнального символа, дескриптора
   return false;
 
- //Тип фронта ДПКВ 
+ //Тип фронта ДПКВ
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CKPSPar.ckps_edge_type))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
- //Количество зубьев до в.м.т. 
+ //Количество зубьев до в.м.т.
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_cogs_btdc))
   return false;
  raw_packet+=2;
@@ -735,7 +735,7 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet)
  //Код завершенной операции
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_OPCompNc.opcode))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
  if (*raw_packet!='\r')
   return false;
@@ -751,10 +751,10 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
  if (strlen((char*)raw_packet)!=(14+18))  //размер пакета без сигнального символа, дескриптора
   return false;
 
- //Разрешен/запрещен 
+ //Разрешен/запрещен
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_KnockPar.knock_use_knock_channel))
   return false;
- raw_packet+=1;  
+ raw_packet+=1;
 
  //Частота ПФ
  unsigned char knock_bpf_frequency;
@@ -898,7 +898,7 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
  int divisor = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet, &divisor))
   return false;
- raw_packet+=4;  
+ raw_packet+=4;
 
  m_MiscPar.baud_rate = 0;
 
@@ -928,19 +928,19 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
 bool CControlApp::ParsePackets()
 {
  Packets::iterator it;
- bool status = false;  
+ bool status = false;
  BYTE descriptor = 0;
 
  ASSERT(m_pPackets);
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
- {	
+ {
   const BYTE* raw_packet = (const BYTE*)it->c_str();
   if (*raw_packet!='@')
    continue;
   ++raw_packet;   //пропустили '@'
   if (*raw_packet==0)
    continue;
-  descriptor = *raw_packet; 
+  descriptor = *raw_packet;
   ++raw_packet;  //пропустили символ дескриптора
   switch(descriptor)
   {
@@ -948,11 +948,11 @@ bool CControlApp::ParsePackets()
     if (Parse_TEMPER_PAR(raw_packet))
 	 break; //пакет успешно разобран по составляющим
 	continue;//пакет не прошел сурового отбора нашим жюри :-)
-   case CARBUR_PAR: 
+   case CARBUR_PAR:
 	if (Parse_CARBUR_PAR(raw_packet))
 	 break;
 	continue;
-   case IDLREG_PAR: 
+   case IDLREG_PAR:
 	if (Parse_IDLREG_PAR(raw_packet))
 	 break;
 	continue;
@@ -972,14 +972,14 @@ bool CControlApp::ParsePackets()
 	if (Parse_FNNAME_DAT(raw_packet))
 	 break;
 	continue;
-   case SENSOR_DAT:					 
+   case SENSOR_DAT:
 	if (Parse_SENSOR_DAT(raw_packet))
-	 break; 
-	continue; 
-   case ADCRAW_DAT:					 
+	 break;
+	continue;
+   case ADCRAW_DAT:
 	if (Parse_ADCRAW_DAT(raw_packet))
-	 break; 
-	continue; 
+	 break;
+	continue;
    case ADCCOR_PAR:
     if (Parse_ADCCOR_PAR(raw_packet))
      break;
@@ -996,26 +996,26 @@ bool CControlApp::ParsePackets()
     if (Parse_KNOCK_PAR(raw_packet))
 	 break;
 	continue;
-   case CE_ERR_CODES: 
+   case CE_ERR_CODES:
     if (Parse_CE_ERR_CODES(raw_packet))
      break;
 	continue;
-   case CE_SAVED_ERR: 
+   case CE_SAVED_ERR:
     if (Parse_CE_SAVED_ERR(raw_packet))
      break;
     continue;
-   case FWINFO_DAT:	
+   case FWINFO_DAT:
 	if (Parse_FWINFO_DAT(raw_packet))
      break;
 	continue;
-   case MISCEL_PAR:	
+   case MISCEL_PAR:
 	if (Parse_MISCEL_PAR(raw_packet))
      break;
 	continue;
 
    default:
     continue;
-  }//switch        
+  }//switch
 
 
   ////////////////////////////////////////////////////////////////////////////
@@ -1023,16 +1023,16 @@ bool CControlApp::ParsePackets()
   {
    EnterCriticalSection();
    memcpy(&PendingPacket(),&m_recepted_packet,sizeof(SECU3Packet));
-  }		
+  }
   __finally
   {
    LeaveCriticalSection();
-  }	
+  }
   ////////////////////////////////////////////////////////////////////////////
 
   //так как все возможные структуры данных пакетов собраны в union, то нам достаточно оперировать
   //только адресом union.
-  m_pEventHandler->OnPacketReceived(descriptor, &EndPendingPacket());		
+  m_pEventHandler->OnPacketReceived(descriptor, &EndPendingPacket());
   status = true;
  }//for
 
@@ -1045,21 +1045,21 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 {
  CControlApp* p_capp = (CControlApp*)lpParameter;
  CComPort* p_port = p_capp->m_p_port;
- EventHandler* pEventHandler; 
+ EventHandler* pEventHandler;
  BYTE read_buf[RAW_BYTES_TO_READ_MAX+1];
 
  DWORD actual_received = 0;
-  
- while(1) 
+
+ while(1)
  {
   SetEvent(p_capp->m_hSleepEvent);
   WaitForSingleObject(p_capp->m_hAwakeEvent,INFINITE); //sleep if need
- 
+
   //если порт не открыт, то для того чтобы не грузить процессор, засыпаем
   //на 100мс в каждом цикле
   if (p_port->GetHandle()==INVALID_HANDLE_VALUE)
    Sleep(100);
-	 
+
   if (p_capp->m_is_thread_must_exit)
    break;  //поступила команда завершения работы потока
 
@@ -1070,18 +1070,18 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   actual_received = 0;
   p_port->RecvBlock(read_buf,RAW_BYTES_TO_READ_MAX,&actual_received);
   read_buf[actual_received] = 0;
-	  
+
   //парсим данные и пытаемся выделить пакеты
   p_capp->SplitPackets(read_buf, actual_received);
 
   //проводим разбор каждого пакета
-  if (true==p_capp->ParsePackets()) //хотя бы один пакет обработан успешно ?	
-  {	  	  
-   p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer	
+  if (true==p_capp->ParsePackets()) //хотя бы один пакет обработан успешно ?
+  {
+   p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer
    if ((p_capp->m_online_state==false)||(p_capp->m_force_notify_about_connection))  //мы были в оффлайне, надо известить пользователя о переходе в онлайн...
    {
     p_capp->m_online_state = true;
-    pEventHandler->OnConnection(p_capp->m_online_state);	  
+    pEventHandler->OnConnection(p_capp->m_online_state);
     p_capp->m_force_notify_about_connection = false; //updated
    }
   }
@@ -1091,8 +1091,8 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
    if ((p_capp->m_online_state==true)||(p_capp->m_force_notify_about_connection)) //мы были в онлайне... надо известить пользователя о переходе в оффлайн...
    {
     p_capp->m_online_state = false;
-    pEventHandler->OnConnection(p_capp->m_online_state);	  
-    p_capp->m_force_notify_about_connection = false;          
+    pEventHandler->OnConnection(p_capp->m_online_state);
+    p_capp->m_force_notify_about_connection = false;
    }
    p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer
   }
@@ -1138,49 +1138,49 @@ BOOL CControlApp::SetPacketsTimer(int timeout)
 void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 {
  COMMTIMEOUTS timeouts;
- float ms_need_for_one_byte; 
+ float ms_need_for_one_byte;
 
  if (m_work_state==state && false==i_force_reinit)
   return;
 
- //кол-во мс необходимое для приема/передачи одного байта	
+ //кол-во мс необходимое для приема/передачи одного байта
  ms_need_for_one_byte = CComPort::ms_need_for_one_byte_8N1(m_uart_speed);
 
  if (state)
- { //возобновить работу	  	  
-  //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты) 
+ { //возобновить работу
+  //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты)
   m_p_port->Purge();
 
   m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
   m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с приложением своя скорость
   m_p_port->SetState();
-   
+
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
-  timeouts.ReadIntervalTimeout = 0; 
+  timeouts.ReadIntervalTimeout = 0;
   timeouts.ReadTotalTimeoutMultiplier = MathHelpers::Round(ms_need_for_one_byte * 2);
-  timeouts.ReadTotalTimeoutConstant = 1; 
+  timeouts.ReadTotalTimeoutConstant = 1;
 
   timeouts.WriteTotalTimeoutConstant = 500;
   timeouts.WriteTotalTimeoutMultiplier = MathHelpers::Round(ms_need_for_one_byte * 5);
-  m_p_port->SetTimeouts(&timeouts);	
+  m_p_port->SetTimeouts(&timeouts);
 
   Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
   m_force_notify_about_connection = true;
   SwitchOnThread(true);
-  SetPacketsTimer(m_dat_packet_timeout);	  
+  SetPacketsTimer(m_dat_packet_timeout);
  }
  else
  { //остановить работу
   SwitchOnThread(false);
   Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
- 
+
   //без этой проверки под Windows 98 возникает "Abnormal program termination"
   //Странное поведение CancelWaitableTimer() с нулевым хэндлом???
-  if (NULL!=m_hTimer) 
+  if (NULL!=m_hTimer)
    CancelWaitableTimer(m_hTimer);
 
   if (m_pEventHandler)
-   m_pEventHandler->OnConnection(false);	  
+   m_pEventHandler->OnConnection(false);
  }
 
  m_work_state = state; //сохраняем состояние для последующего использования
@@ -1193,24 +1193,24 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
  switch(descriptor) //сравнение со всеми допустимыми дескрипторами
  {
   case CHANGEMODE:
-  case BOOTLOADER: 
-  case TEMPER_PAR: 
+  case BOOTLOADER:
+  case TEMPER_PAR:
   case CARBUR_PAR:
-  case IDLREG_PAR: 
-  case ANGLES_PAR: 
-  case FUNSET_PAR: 
-  case STARTR_PAR: 
+  case IDLREG_PAR:
+  case ANGLES_PAR:
+  case FUNSET_PAR:
+  case STARTR_PAR:
   case FNNAME_DAT:
   case SENSOR_DAT:
   case ADCRAW_DAT:
-  case ADCCOR_PAR: 
+  case ADCCOR_PAR:
   case CKPS_PAR:
   case OP_COMP_NC:
-  case KNOCK_PAR: 
+  case KNOCK_PAR:
   case CE_ERR_CODES:
   case CE_SAVED_ERR:
-  case FWINFO_DAT: 	
-  case MISCEL_PAR:	   
+  case FWINFO_DAT:
+  case MISCEL_PAR:
    return true;
   default:
    return false;
@@ -1229,27 +1229,27 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
  //формирование пакетов и их передача, WriteFile будет заблокирована пока не завершится ReadFile...
  switch(i_descriptor)
- { 
-  case BOOTLOADER: 
+ {
+  case BOOTLOADER:
    return StartBootLoader();         //no data need
   case CHANGEMODE:
    return ChangeContext(i_descriptor);  //no data need, only a descriptor
-  case TEMPER_PAR: 
+  case TEMPER_PAR:
    Build_TEMPER_PAR((TemperPar*)i_packet_data);
    break;
   case CARBUR_PAR:
    Build_CARBUR_PAR((CarburPar*)i_packet_data);
    break;
-  case IDLREG_PAR: 
+  case IDLREG_PAR:
    Build_IDLREG_PAR((IdlRegPar*)i_packet_data);
    break;
-  case ANGLES_PAR: 
+  case ANGLES_PAR:
    Build_ANGLES_PAR((AnglesPar*)i_packet_data);
    break;
-  case FUNSET_PAR: 
+  case FUNSET_PAR:
    Build_FUNSET_PAR((FunSetPar*)i_packet_data);
    break;
-  case STARTR_PAR: 
+  case STARTR_PAR:
    Build_STARTR_PAR((StartrPar*)i_packet_data);
    break;
   case ADCCOR_PAR:
@@ -1270,7 +1270,7 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
   case MISCEL_PAR:
    Build_MISCEL_PAR((MiscelPar*)i_packet_data);
    break;
-   
+
   default:
    return false; //invalid descriptor
   }//switch
@@ -1288,7 +1288,7 @@ bool CControlApp::ChangeContext(const BYTE i_new_descriptor)
 
  m_outgoing_packet+='!';
  m_outgoing_packet+= CHANGEMODE;
- m_outgoing_packet+= i_new_descriptor;  
+ m_outgoing_packet+= i_new_descriptor;
  m_outgoing_packet+= '\r';
  return m_p_port->SendASCII(m_outgoing_packet.c_str());   //посылаем команду изменения дескриптора
 }
@@ -1300,7 +1300,7 @@ bool CControlApp::StartBootLoader()
 
  m_outgoing_packet+='!';
  m_outgoing_packet+= BOOTLOADER;
- m_outgoing_packet+= 'l';  
+ m_outgoing_packet+= 'l';
  m_outgoing_packet+= '\r';
  return m_p_port->SendASCII(m_outgoing_packet.c_str());   //посылаем команду запуска бутлоадера
 }
@@ -1471,7 +1471,7 @@ void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 {
- int divisor = 0; 
+ int divisor = 0;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   if (SECU3IO::secu3_allowable_uart_divisors[i].first == packet_data->baud_rate)
     divisor = SECU3IO::secu3_allowable_uart_divisors[i].second;
@@ -1489,8 +1489,8 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SetEventHandler(EventHandler* i_pEventHandler) 
-{ 
+void CControlApp::SetEventHandler(EventHandler* i_pEventHandler)
+{
  m_pEventHandler = i_pEventHandler;
  m_pEventHandler->mp_sync_object = GetSyncObject(); //link to synchronization object
 };
@@ -1507,7 +1507,7 @@ SECU3Packet& CControlApp::EndPendingPacket(void)
 
 //-----------------------------------------------------------------------
 SECU3Packet& CControlApp::PendingPacket(void)
-{	
+{
  return m_pending_packets[m_pending_packets_index];
 }
 

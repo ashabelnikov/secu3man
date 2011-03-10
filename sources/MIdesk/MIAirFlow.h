@@ -24,7 +24,7 @@
 #include "IMeasInstrument.h"
 #include "ui-core\ProgressCtrlEx.h"
 
-class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument  
+class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument
 {
  public:
   CMIAirFlow();
@@ -40,7 +40,7 @@ class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument
   virtual void Show(bool show);
   virtual void Enable(bool enable);
   virtual bool IsVisible(void);
-  virtual bool IsEnabled(void);	
+  virtual bool IsEnabled(void);
   virtual void SetLimits(float loLimit, float upLimit);
   virtual void SetTicks(int number);
   //---------------------------------------
@@ -48,9 +48,9 @@ class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument
  private:
   CProgressCtrlEx m_progress;
   CStatic m_digits;
-  CStatic m_caption; 
+  CStatic m_caption;
   bool m_prev_enable;
 
   float m_loLimit;
-  float m_upLimit; 
+  float m_upLimit;
 };

@@ -4,15 +4,15 @@
 //Some changes made by A. Shabelnikov. 22/02/2009.
 
 /*
-Provide a way to sublass a window. 
-Override the virtual OnWndProcSub to process messages.	
-ex. if the subclasser is associateed to a CFrameWnd or CView, WM_NCDESTROY will cause 
-the deletion of the CFrameWnd or CView. However, there are other message on the stack 
-(for ex. WM_SYSCOMMAND) that still need to be processed. 
+Provide a way to sublass a window.
+Override the virtual OnWndProcSub to process messages.
+ex. if the subclasser is associateed to a CFrameWnd or CView, WM_NCDESTROY will cause
+the deletion of the CFrameWnd or CView. However, there are other message on the stack
+(for ex. WM_SYSCOMMAND) that still need to be processed.
 Alwaus allocate on the heap and manage with strong pointers
 
-NOTE: 
- - the object must be always on heap to keep track of message recursion. 
+NOTE:
+ - the object must be always on heap to keep track of message recursion.
  - define _USE_SETWINDOWLONGPTR if you want to use SetWindowLongPtr() instead SetWindowLong().
 */
 

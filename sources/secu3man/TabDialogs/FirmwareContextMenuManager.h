@@ -23,7 +23,7 @@
 
 #include <vector>
 
-class CFirmwareModeContextMenuManager  
+class CFirmwareModeContextMenuManager
 {
  public:
   CFirmwareModeContextMenuManager(CWnd* pWnd = NULL);
@@ -35,7 +35,7 @@ class CFirmwareModeContextMenuManager
   void EnableBLMenuItems(bool i_enable);
   void EnableAppMenuItems(bool i_enable);
 
-  //Надо вызывать когда окну приходит WM_INITMENUPOPUP 
+  //Надо вызывать когда окну приходит WM_INITMENUPOPUP
   void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 
  private:

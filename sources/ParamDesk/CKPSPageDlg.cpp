@@ -44,7 +44,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnUpdateControls)
-  
+
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_LABEL,OnUpdateControls)
@@ -77,7 +77,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_FRONT_GROUPBOX, m_ckps_front_groupbox);
  DDX_Control(pDX,IDC_PD_CKPS_POSFRONT_RADIOBOX, m_ckps_posfront_radio);
  DDX_Control(pDX,IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_ckps_negfront_radio);
-	
+
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL, m_teeth_before_tdc_label);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, m_teeth_before_tdc_combo);
  DDX_Control(pDX,IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, m_engine_cyl_combo);
@@ -99,7 +99,7 @@ void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CCKPSPageDlg::OnInitDialog() 
+BOOL CCKPSPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
@@ -126,19 +126,19 @@ void CCKPSPageDlg::OnSelchangePdCogsBTDCCombo()
 void CCKPSPageDlg::OnSelchangePdEngineCylCombo()
 {
  UpdateData();
- OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents) 
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
 void CCKPSPageDlg::OnChangePdIgnitionCogsEdit()
 {
- UpdateData();	
+ UpdateData();
  OnChangeNotify();
 }
 
 void CCKPSPageDlg::OnClickedPdPosFrontRadio()
 {
  m_ckps_negfront_radio.SetCheck(0);
- UpdateData();	
+ UpdateData();
  OnChangeNotify();
 }
 
@@ -264,7 +264,7 @@ void CCKPSPageDlg::_SetCKPSTeethBTDCComboBoxSelection(int i_sel)
 
 void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
 {
- m_engine_cyls.clear(); 
+ m_engine_cyls.clear();
  m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
  m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
  m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));

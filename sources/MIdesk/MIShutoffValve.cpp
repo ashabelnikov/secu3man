@@ -63,14 +63,14 @@ float CMIShutoffValve::GetValue(void)
  bool state = m_led.GetState();
  return ((state) ? 1.0f : 0.0f);
 }
-	
+
 void CMIShutoffValve::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
- m_led.ShowWindow(nCmdShow);  
+ m_led.ShowWindow(nCmdShow);
  m_caption.ShowWindow(nCmdShow);
 }
-	
+
 void CMIShutoffValve::Enable(bool enable)
 {
  BOOL b_enable = (enable) ? TRUE : FALSE;
@@ -80,24 +80,24 @@ void CMIShutoffValve::Enable(bool enable)
 
  m_prev_enable = enable;
 }
-	
+
 bool CMIShutoffValve::IsVisible(void)
 {
  BOOL state = m_led.IsWindowVisible();
  return ((state) ? true : false);
 }
-	
+
 bool CMIShutoffValve::IsEnabled(void)
 {
  BOOL state = m_led.IsWindowEnabled();
  return ((state) ? true : false);
-}	
-	
+}
+
 void CMIShutoffValve::SetLimits(float loLimit, float upLimit)
 {
  //not used by LED
 }
-	
+
 void CMIShutoffValve::SetTicks(int number)
 {
  //not used by LED
@@ -112,13 +112,13 @@ void CMIShutoffValve::DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_ca
 
 void CMIShutoffValve::Scale(float i_x_factor, float i_y_factor)
 {
- CRect rect; 
+ CRect rect;
 
  rect = MIHelpers::GetChildWndRect(&m_led);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_led.MoveWindow(rect); 
+ m_led.MoveWindow(rect);
 
  rect = MIHelpers::GetChildWndRect(&m_caption);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect); 
+ m_caption.MoveWindow(rect);
 }

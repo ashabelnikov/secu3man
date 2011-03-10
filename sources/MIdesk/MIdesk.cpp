@@ -39,7 +39,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
  if (dwReason == DLL_PROCESS_ATTACH)
  {
   TRACE0("MIDESK.DLL Initializing!\n");
-	
+
   // Extension DLL one-time initialization
   if (!AfxInitExtensionModule(MIdeskDLL, hInstance))
    return 0;

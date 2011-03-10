@@ -26,7 +26,7 @@
 #ifndef _NUMERICCONV_
 #define _NUMERICCONV_
 
-class IOCORE_API CNumericConv  
+class IOCORE_API CNumericConv
 {
  public:
   static bool   HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size);

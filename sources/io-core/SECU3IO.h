@@ -20,7 +20,7 @@
 */
 
 //Представление данных передаваемых между SECU и менеджером. Структуры данных представлены без привязки
-//к конкретной платформе - они абстрагированы 
+//к конкретной платформе - они абстрагированы
 #pragma once
 
 #include <utility>
@@ -42,9 +42,9 @@ namespace SECU3IO
   unsigned char epm_valve;              //состояние клапана ЭМР
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
-  unsigned char ce_state;               // !currently is not used! 
+  unsigned char ce_state;               // !currently is not used!
  };
- 
+
  struct FnNameDat
  {
   unsigned char tables_num;
@@ -55,9 +55,9 @@ namespace SECU3IO
  struct StartrPar
  {
   int  starter_off;                     //порог выключения стартера (обороты)
-  int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую   
+  int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую
  };
- 
+
  struct AnglesPar
  {
   float  max_angle;
@@ -122,7 +122,7 @@ namespace SECU3IO
  struct RawSensDat
  {
   float map_value;
-  float ubat_value; 
+  float ubat_value;
   float temp_value;
   float knock_value;
  };
@@ -153,8 +153,8 @@ namespace SECU3IO
   int knock_int_time_const;
 
   float knock_retard_step;    //шаг смещения УОЗ при детонации
-  float knock_advance_step;   //шаг восстановления УОЗ 
-  float knock_max_retard;     //максимальное смещение УОЗ 
+  float knock_advance_step;   //шаг восстановления УОЗ
+  float knock_max_retard;     //максимальное смещение УОЗ
   float knock_threshold;      //в вольтах
   int knock_recovery_delay;   //в рабочих циклах двигателя
  };
@@ -255,6 +255,6 @@ namespace SECU3IO
  const float idle_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const int work_map_rpm_slots[16]    = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const float temp_map_rpm_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
- const float coilregul_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f, 
+ const float coilregul_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
 };

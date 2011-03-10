@@ -6,7 +6,7 @@
 
 #include "dyndialogex.h"
 
-class CListDynDialogEx : public CDynDialogEx  
+class CListDynDialogEx : public CDynDialogEx
 {
  public:
   CListDynDialogEx(CWnd* pParent = NULL);

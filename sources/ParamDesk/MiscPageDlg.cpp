@@ -57,7 +57,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
@@ -105,7 +105,7 @@ BOOL CMiscPageDlg::OnInitDialog()
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
  FillUARTSpeedComboBox(br); //инициализируем комбо бокс
 
- UpdateData(FALSE);  //инициализируем контроллы диалога данными   
+ UpdateData(FALSE);  //инициализируем контроллы диалога данными
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE

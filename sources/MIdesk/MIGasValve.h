@@ -24,7 +24,7 @@
 #include "IMeasInstrument.h"
 #include "ui-core\LEDIndicator.h"
 
-class AFX_EXT_CLASS CMIGasValve : public IMeasInstrument  
+class AFX_EXT_CLASS CMIGasValve : public IMeasInstrument
 {
  public:
   CMIGasValve();
@@ -40,7 +40,7 @@ class AFX_EXT_CLASS CMIGasValve : public IMeasInstrument
   virtual void Show(bool show);
   virtual void Enable(bool enable);
   virtual bool IsVisible(void);
-  virtual bool IsEnabled(void);	
+  virtual bool IsEnabled(void);
   virtual void SetLimits(float loLimit, float upLimit);
   virtual void SetTicks(int number);
   //---------------------------------------

@@ -24,12 +24,12 @@
 #include "IMeasInstrument.h"
 #include "ui-core\LEDIndicator.h"
 
-class AFX_EXT_CLASS CMIShutoffValve : public IMeasInstrument  
+class AFX_EXT_CLASS CMIShutoffValve : public IMeasInstrument
 {
  public:
   CMIShutoffValve();
   virtual ~CMIShutoffValve();
-  
+
   void DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_caption);
 
   //-------interface-----------------------
@@ -40,7 +40,7 @@ class AFX_EXT_CLASS CMIShutoffValve : public IMeasInstrument
   virtual void Show(bool show);
   virtual void Enable(bool enable);
   virtual bool IsVisible(void);
-  virtual bool IsEnabled(void);	
+  virtual bool IsEnabled(void);
   virtual void SetLimits(float loLimit, float upLimit);
   virtual void SetTicks(int number);
   //---------------------------------------

@@ -28,24 +28,24 @@
 #define _CCOMPORT_
 
 //Класс для работы с COM - портом
-class IOCORE_API CComPort 
+class IOCORE_API CComPort
 {
  public:   //public functions
 
   CComPort(const _TSTRING&,UINT,UINT);//конструктор
   CComPort(int,UINT,UINT);
   ~CComPort();                        //деструктор
-  void   Set9bitState(BOOL state);    
-	
+  void   Set9bitState(BOOL state);
+
   BOOL   Initialize(DWORD,BYTE,BYTE); //инициализация порта
   BOOL   Initialize(DWORD,BYTE,BYTE,char,char);
   BOOL   Initialize(const _TSTRING& i_sComPort,DWORD,BYTE,BYTE,char,char);
 
-  VOID   Terminate();                 //закрытие порта 
+  VOID   Terminate();                 //закрытие порта
   bool   SendByte(unsigned char);     //передача одного ьайта
   bool   RecvByte(unsigned char*);    //прием одного байта
   bool   SendBlock(BYTE*,UINT);       //передача заданного кол-ва байт
-  bool   RecvBlock(BYTE*,UINT);       //прием заданного кол-ва байт 
+  bool   RecvBlock(BYTE*,UINT);       //прием заданного кол-ва байт
   bool   SendASCII(const char* str);
   HANDLE GetHandle(void) const;       //возвращает хендл порта
   bool   SetDTR(bool);                //уст. в указ. знач. линию DTR
@@ -61,11 +61,11 @@ class IOCORE_API CComPort
   bool   SetState(DCB* i_dcb);
   bool   RecvBlock(BYTE* data,UINT datasize,DWORD* real_readed);
 
-  //да, да - именно float т.к число может оказаться нецелым и потеря знаков после запятой будет являтся 
+  //да, да - именно float т.к число может оказаться нецелым и потеря знаков после запятой будет являтся
   //причиной ошибки в расчете времени необходимого для N байт.
   inline static float ms_need_for_one_byte_8N1(DWORD baud_rate)
   {
-   return ((1.0f / (((float)baud_rate) / 10.0f)) * 1000.0f); 
+   return ((1.0f / (((float)baud_rate) / 10.0f)) * 1000.0f);
   }
 
   inline DCB* AccessDCB(void)
@@ -88,7 +88,7 @@ class IOCORE_API CComPort
   class xInitialize
   {
    _TSTRING m_detail_str;       //string that contain details about exception
-   public: 
+   public:
     xInitialize(const _TSTRING& str) : m_detail_str(str){};
     LPCTSTR GetDetailStr(void) const
     {

@@ -31,7 +31,7 @@
 #define RECTP_DATA 0x00                       //data record
 #define RECTP_EOF  0x01                       //End Of file record
 #define RECTP_ESA  0x02                       //Extended Segment Address record
-#define RECTP_SSA  0x03                       //Start Segment Address record 
+#define RECTP_SSA  0x03                       //Start Segment Address record
 
 EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size)
 {
@@ -144,7 +144,7 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
     break;
 
    case 10:
-    HEXTONUM(symbol);//lo 
+    HEXTONUM(symbol);//lo
     HEXTONUM(lastb); //hi
     symbol = (lastb << 4) | (symbol & 0x0F);
 

@@ -70,7 +70,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_index);
- 
+
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, m_ecu_platform_selection);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_LANG_SEL_COMBO, m_iface_lang_selection);
 
@@ -97,7 +97,7 @@ BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
 END_MESSAGE_MAP()
 
 
-BOOL CAppSettingsDlg::OnInitDialog() 
+BOOL CAppSettingsDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
 
@@ -121,25 +121,25 @@ BOOL CAppSettingsDlg::OnInitDialog()
  OnAppSettingsLogfolderUseappfolder();
 
  return TRUE;  // return TRUE unless you set the focus to a control
-	           // EXCEPTION: OCX Property Pages should return FALSE
+               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CAppSettingsDlg::OnCancel() 
+void CAppSettingsDlg::OnCancel()
 {
  UpdateData();
  if (m_OnCancel) m_OnCancel();
   CDialog::OnCancel();
 }
 
-void CAppSettingsDlg::OnOK() 
+void CAppSettingsDlg::OnOK()
 {
  UpdateData();
- if (m_OnOk) m_OnOk();		
+ if (m_OnOk) m_OnOk();
   CDialog::OnOK();
 }
 
 //обзор каталога
-void CAppSettingsDlg::OnAppSettingsLogfolderButton() 
+void CAppSettingsDlg::OnAppSettingsLogfolderButton()
 {
  UpdateData();
  TCHAR szFolder[MAX_PATH*2] = { _T('\0') };
@@ -147,12 +147,12 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
  BOOL bEditBox = TRUE;
 
  BOOL bRet = XBrowseForFolder(m_hWnd,
-	 	 					 lpszInitial,
-							 -1,
-							 MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
-							 szFolder,
-							 sizeof(szFolder)/sizeof(TCHAR)-2,
-							 bEditBox);
+                              lpszInitial,
+                              -1,
+                              MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
+                              szFolder,
+                              sizeof(szFolder)/sizeof(TCHAR)-2,
+                              bEditBox);
 
  if (bRet)
  {
@@ -161,12 +161,12 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
  }
 }
 
-void CAppSettingsDlg::OnAppSettingsLogfolderUseappfolder() 
+void CAppSettingsDlg::OnAppSettingsLogfolderUseappfolder()
 {
  UpdateData();
  BOOL enable = m_use_app_folder ? FALSE : TRUE;
- m_log_files_folder_edit.EnableWindow(enable); 
- m_log_files_folder_button.EnableWindow(enable); 
+ m_log_files_folder_edit.EnableWindow(enable);
+ m_log_files_folder_button.EnableWindow(enable);
 }
 
 void CAppSettingsDlg::FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates)
@@ -177,7 +177,7 @@ void CAppSettingsDlg::FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_Allow
   str.Format(_T("%d"),i_AllowableBaudRates[i]);
   m_bl_baudrate_selection_combo.AddString(str);
   m_app_baudrate_selection_combo.AddString(str);
- } 
+ }
 }
 
 void CAppSettingsDlg::FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts)
@@ -194,7 +194,7 @@ void CAppSettingsDlg::FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<
  {
   int index = m_log_csv_sepsymbol_combo.AddString(i_AllowableCSVSepSymbols[i].first.c_str());
   ASSERT(index != LB_ERR);
-  m_log_csv_sepsymbol_combo.SetItemData(index, i); 
+  m_log_csv_sepsymbol_combo.SetItemData(index, i);
  }
 }
 
@@ -204,7 +204,7 @@ void CAppSettingsDlg::FillCtrlsWithAllowableInterfaceLanguages(std::vector<std::
  {
   int index = m_iface_lang_selection_combo.AddString(i_AllowableInterfaceLanguages[i].first.first.c_str());
   ASSERT(index != LB_ERR);
-  m_iface_lang_selection_combo.SetItemData(i_AllowableInterfaceLanguages[i].second, i); 
+  m_iface_lang_selection_combo.SetItemData(i_AllowableInterfaceLanguages[i].second, i);
  }
 }
 
@@ -214,19 +214,19 @@ void CAppSettingsDlg::FillCtrlsWithAllowableECUPlatformTypes(std::vector<std::pa
  {
   int index = m_ecu_platform_selection_combo.AddString(i_AllowableECUPlatformTypes[i].first.first.c_str());
   ASSERT(index != LB_ERR);
-  m_ecu_platform_selection_combo.SetItemData(i_AllowableECUPlatformTypes[i].second, i); 
+  m_ecu_platform_selection_combo.SetItemData(i_AllowableECUPlatformTypes[i].second, i);
  }
 }
 
 //"Set" methods (model => view data transfer)
-void CAppSettingsDlg::SetPortName(_TSTRING i_PortName) 
+void CAppSettingsDlg::SetPortName(_TSTRING i_PortName)
 {
  int result = m_port_selection_combo.FindString(-1,i_PortName.c_str());
  if (result!=LB_ERR)
   m_port_number = result;
 }
 
-void CAppSettingsDlg::SetBaudRateApplication(DWORD i_app_baud) 
+void CAppSettingsDlg::SetBaudRateApplication(DWORD i_app_baud)
 {
  CString str;
  str.Format(_T("%d"),i_app_baud);
@@ -235,7 +235,7 @@ void CAppSettingsDlg::SetBaudRateApplication(DWORD i_app_baud)
   m_app_baudrate = result;
 }
 
-void CAppSettingsDlg::SetBaudRateBootloader(DWORD i_bl_baud) 
+void CAppSettingsDlg::SetBaudRateBootloader(DWORD i_bl_baud)
 {
  CString str;
  str.Format(_T("%d"),i_bl_baud);
@@ -252,35 +252,35 @@ void CAppSettingsDlg::SetCSVSepSymbol(size_t i_index)
   size_t index = m_log_csv_sepsymbol_combo.GetItemData(i);
   if (index == i_index)
   { //found!
-   m_log_csv_sepsymbol_index = i; 
+   m_log_csv_sepsymbol_index = i;
    return;
   }
  }
  ASSERT(0); //WTF...
 }
-   
+
 //"Get" methods (view => model data transfer)
-_TSTRING CAppSettingsDlg::GetPortName(void) 
+_TSTRING CAppSettingsDlg::GetPortName(void)
 {
  CString str;
  m_port_selection_combo.GetLBText(m_port_number,str);
  return _TSTRING(str);
 }
 
-DWORD CAppSettingsDlg::GetBaudRateApplication(void) 
+DWORD CAppSettingsDlg::GetBaudRateApplication(void)
 {
  CString str;
  m_app_baudrate_selection_combo.GetLBText(m_app_baudrate,str);
  return _ttoi(str);
 }
 
-DWORD CAppSettingsDlg::GetBaudRateBootloader(void) 
+DWORD CAppSettingsDlg::GetBaudRateBootloader(void)
 {
  CString str;
  m_bl_baudrate_selection_combo.GetLBText(m_bl_baudrate,str);
- return _ttoi(str);  
+ return _ttoi(str);
 }
-   
+
 void CAppSettingsDlg::SetLogFilesFolder(const CString& i_folder)
 {
  m_log_files_folder = i_folder;
@@ -288,7 +288,7 @@ void CAppSettingsDlg::SetLogFilesFolder(const CString& i_folder)
 
 CString CAppSettingsDlg::GetLogFilesFolder(void) const
 {
- return m_log_files_folder; 
+ return m_log_files_folder;
 }
 
 void CAppSettingsDlg::SetUseAppFolder(bool i_use)
@@ -301,9 +301,9 @@ bool CAppSettingsDlg::GetUseAppFolder(void) const
  return m_use_app_folder ? true : false;
 }
 
-size_t CAppSettingsDlg::GetCSVSepSymbol(void) 
+size_t CAppSettingsDlg::GetCSVSepSymbol(void)
 {
- return m_log_csv_sepsymbol_combo.GetItemData(m_log_csv_sepsymbol_index); 
+ return m_log_csv_sepsymbol_combo.GetItemData(m_log_csv_sepsymbol_index);
 }
 
 void CAppSettingsDlg::setFunctionOnOk(EventHandler OnOk)
@@ -323,7 +323,7 @@ void CAppSettingsDlg::setFunctionOnActivate(EventHandler OnActivate)
 
 int CAppSettingsDlg::ShowDialog(void)
 {
- return DoModal();   
+ return DoModal();
 }
 
 void CAppSettingsDlg::SetMIDeskUpdatePeriod(int i_period)
@@ -344,7 +344,7 @@ void CAppSettingsDlg::SetInterfaceLanguage(int i_iface_lang)
   size_t id = m_iface_lang_selection_combo.GetItemData(i);
   if (id == i_iface_lang)
   { //found!
-   m_iface_lang_selection = i; 
+   m_iface_lang_selection = i;
    return;
   }
  }
@@ -359,7 +359,7 @@ void CAppSettingsDlg::SetECUPlatformType(int i_platform_type)
   size_t id = m_ecu_platform_selection_combo.GetItemData(i);
   if (id == i_platform_type)
   { //found!
-   m_ecu_platform_selection = i; 
+   m_ecu_platform_selection = i;
    return;
   }
  }
@@ -368,12 +368,12 @@ void CAppSettingsDlg::SetECUPlatformType(int i_platform_type)
 
 int CAppSettingsDlg::GetInterfaceLanguage(void) const
 {
- return m_iface_lang_selection_combo.GetItemData(m_iface_lang_selection); 
+ return m_iface_lang_selection_combo.GetItemData(m_iface_lang_selection);
 }
 
 int CAppSettingsDlg::GetECUPlatformType(void) const
 {
- return m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection); 
+ return m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection);
 }
 
 void CAppSettingsDlg::SetTachometerMax(int i_max)

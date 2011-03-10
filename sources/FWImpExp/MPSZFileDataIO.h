@@ -49,13 +49,13 @@ struct MPSZMapsDataHolder
  MPSZMapsDataItem maps[MPSZ_NUMBER_OF_MAPS];
  int m_actual_sets_num;
 
- MPSZMapsDataHolder() : m_actual_sets_num(0) 
+ MPSZMapsDataHolder() : m_actual_sets_num(0)
  {
   for(int i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
   {
-   memset(maps[i].f_str,0,sizeof(float) * MPSZ_START_MAP_SIZE); 
-   memset(maps[i].f_idl,0,sizeof(float) * MPSZ_IDLE_MAP_SIZE); 
-   memset(maps[i].f_wrk,0,sizeof(float) * MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F); 
+   memset(maps[i].f_str,0,sizeof(float) * MPSZ_START_MAP_SIZE);
+   memset(maps[i].f_idl,0,sizeof(float) * MPSZ_IDLE_MAP_SIZE);
+   memset(maps[i].f_wrk,0,sizeof(float) * MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F);
   }
  };
 
@@ -113,7 +113,7 @@ class MPSZDataMPX_IO : public MPSZDataBase
   enum
   {
    ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
-   SIZE_OF_RAW_DATA   = 9216  
+   SIZE_OF_RAW_DATA   = 9216
   };
 
   //binary -> abstract
@@ -136,7 +136,7 @@ class MPSZDataMPZ_IO : public MPSZDataBase
   enum
   {
    ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE,
-   SIZE_OF_RAW_DATA   = 304  
+   SIZE_OF_RAW_DATA   = 304
   };
 
   virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);

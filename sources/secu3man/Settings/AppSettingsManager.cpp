@@ -42,7 +42,7 @@ CAppSettingsManager::CAppSettingsManager()
 {
  m_pModel = new CAppSettingsModel();
  m_pDialog = new CAppSettingsDlg(); //View
- m_pController = new CAppSettingsController(m_pDialog,m_pModel); 
+ m_pController = new CAppSettingsController(m_pDialog,m_pModel);
 }
 
 CAppSettingsManager::~CAppSettingsManager()
@@ -67,7 +67,7 @@ bool CAppSettingsManager::WriteSettings(void) const
 int CAppSettingsManager::ShowDialog(void) const
 { //делегируем вызов контроллеру...
  ASSERT(m_pController);
- return m_pController->ShowDialog(); 
+ return m_pController->ShowDialog();
 }
 
 ISettingsData* CAppSettingsManager::GetSettings(void) const

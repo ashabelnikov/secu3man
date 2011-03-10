@@ -104,7 +104,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_SPIN, m_map_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_map_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_SPIN, m_map_curve_gradient_spin);
- 
+
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
  m_map_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_params.map_curve_offset);
@@ -122,15 +122,15 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CFunSetPageDlg::OnInitDialog() 
+BOOL CFunSetPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
  m_map_grad_edit.SetLimitText(4);
  m_map_grad_edit.SetDecimalPlaces(2);
  m_map_grad_spin.SetRangeAndDelta(0.25f,105.0f,0.25f);
-	
+
  m_press_swing_spin.SetBuddy(&m_press_swing_edit);
  m_press_swing_edit.SetLimitText(4);
  m_press_swing_edit.SetDecimalPlaces(2);
@@ -147,7 +147,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_gradient_spin.SetRangeAndDelta(1.0f,150.0f,0.01f);
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
- UpdateData(FALSE);  //инициализируем контроллы диалога данными    
+ UpdateData(FALSE);  //инициализируем контроллы диалога данными
  UpdateDialogControls(this,TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -187,7 +187,7 @@ void CFunSetPageDlg::FillCBByFunNames(void)
  //удаляем предыдущий контент
  m_benzin_maps_combo.ResetContent();
  m_gas_maps_combo.ResetContent();
-	  
+
  //добавляем новый контент
  for(size_t i = 0; i < m_fun_names.size(); i++)
  {
@@ -212,7 +212,7 @@ void CFunSetPageDlg::FillCBByFunNames(void)
 }
 
 std::vector<_TSTRING>& CFunSetPageDlg::AccessFunNames(void)
-{ 
+{
  return m_fun_names;
 }
 

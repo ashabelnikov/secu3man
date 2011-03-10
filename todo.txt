@@ -15,7 +15,7 @@ What to do in relation to SECU-3 manager software:
 4. Main window loses focus when user clicks into combobox of property grid.
 
 5. Add compatibility check of versions of EEPROM parameters and default parameters
-   (stored in the firmware). 
+   (stored in the firmware).
 
 6. Right round-up when editing parameters (EEPROM and default).
 

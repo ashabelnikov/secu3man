@@ -45,13 +45,13 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
 END_MESSAGE_MAP()
 
 CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
-: Super(CKnockPageDlg::IDD, pParent)	
+: Super(CKnockPageDlg::IDD, pParent)
 {
  m_params.knock_use_knock_channel = 0;
  m_params.knock_bpf_frequency = 40;
  m_params.knock_k_wnd_begin_angle = 0.0f;
  m_params.knock_k_wnd_end_angle = 48.0f;
-	
+
  m_params.knock_retard_step = 4.0f;
  m_params.knock_advance_step = 0.25f;
  m_params.knock_max_retard = 16.0f;
@@ -63,13 +63,13 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_PROPERTY_GRID, m_ctrlGrid);		
+ DDX_Control(pDX, IDC_PROPERTY_GRID, m_ctrlGrid);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ void CKnockPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CKnockPageDlg::OnInitDialog() 
+BOOL CKnockPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
@@ -107,28 +107,28 @@ BOOL CKnockPageDlg::OnInitDialog()
  ex2.m_lower = -12.0;
  ex2.m_upper = 54.0;
  ex2.m_limit_text = 6;
- m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND), 
+ m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND),
      m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
- //-----------------------------------------------------------------  
+ //-----------------------------------------------------------------
  vector<_TSTRING> bpf_freqs;
  for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
- { 
+ {
   CString string;
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
   bpf_freqs.push_back(_TSTRING(string));
  }
- m_knock_bpf_frequency_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), bpf_freqs, 
+ m_knock_bpf_frequency_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), bpf_freqs,
      MathHelpers::Round(m_params.knock_bpf_frequency), MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
 
  //-----------------------------------------------------------------
  vector<_TSTRING> int_conts;
  for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
- { 
+ {
   CString string;
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
   int_conts.push_back(_TSTRING(string));
  }
- m_knock_integrator_const_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), int_conts, 
+ m_knock_integrator_const_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), int_conts,
      m_params.knock_int_time_const, MLL::GetString(IDS_PD_KNOCK_INT_TIME_UNIT));
  //-----------------------------------------------------------------
 
@@ -190,16 +190,16 @@ BOOL CKnockPageDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CKnockPageDlg::OnChangeData() 
+void CKnockPageDlg::OnChangeData()
 {
- UpdateData();	
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
 void CKnockPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;  
+ m_enabled = (enable) ? TRUE : FALSE;
  if (::IsWindow(m_hWnd))
  {
   UpdateDialogControls(this,TRUE);
@@ -266,7 +266,7 @@ void CKnockPageDlg::GetValues(SECU3IO::KnockPar* o_values)
  if (!m_ctrlGrid.GetItemValue(m_knock_threshold_item, knock_threshold))
   status = false;
  m_params.knock_threshold = (float)knock_threshold;
- 
+
  int knock_recovery_delay;
  if (!m_ctrlGrid.GetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
   status = false;
@@ -311,7 +311,7 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  double knock_retard_step = m_params.knock_retard_step;
  if (!m_ctrlGrid.SetItemValue(m_knock_retard_step_item, knock_retard_step))
   status = false;
- 
+
  double knock_advance_step = m_params.knock_advance_step;
  if (!m_ctrlGrid.SetItemValue(m_knock_advance_step_item, knock_advance_step))
   status = false;
@@ -319,11 +319,11 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  double knock_max_retard = m_params.knock_max_retard;
  if (!m_ctrlGrid.SetItemValue(m_knock_max_retard_item, knock_max_retard))
   status = false;
- 
+
  double knock_threshold = m_params.knock_threshold;
  if (!m_ctrlGrid.SetItemValue(m_knock_threshold_item, knock_threshold))
   status = false;
- 
+
  int knock_recovery_delay = m_params.knock_recovery_delay;
  if (!m_ctrlGrid.SetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
   status = false;
@@ -340,7 +340,7 @@ LRESULT CKnockPageDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
      wParam == m_knock_bpf_frequency_item ||
      wParam == m_knock_integrator_const_item ||
      wParam == m_knock_retard_step_item   ||
-     wParam == m_knock_advance_step_item  || 
+     wParam == m_knock_advance_step_item  ||
      wParam == m_knock_max_retard_item    ||
      wParam == m_knock_threshold_item     ||
      wParam == m_knock_recovery_delay_item)

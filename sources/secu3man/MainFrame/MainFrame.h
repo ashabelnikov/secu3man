@@ -30,8 +30,8 @@ class CMainFrame : public CFrameWnd
 {
  typedef fastdelegate::FastDelegate0<> EventHandler;
  typedef fastdelegate::FastDelegate0<bool> EventResult;
- typedef fastdelegate::FastDelegate1<bool> EventHandler1; 
- typedef fastdelegate::FastDelegate1<CPoint&> EventHandler2; 
+ typedef fastdelegate::FastDelegate1<bool> EventHandler1;
+ typedef fastdelegate::FastDelegate1<CPoint&> EventHandler2;
 
  public:
   CMainFrame();
@@ -44,7 +44,7 @@ class CMainFrame : public CFrameWnd
   virtual void AssertValid() const;
   virtual void Dump(CDumpContext& dc) const;
 #endif
-	
+
   void SetView(CChildView* i_pChildView);
 
   //устанавливают обработчики событий
@@ -64,7 +64,7 @@ class CMainFrame : public CFrameWnd
 protected:
   DECLARE_DYNAMIC(CMainFrame)
 
-  virtual BOOL PreTranslateMessage(MSG* pMsg); 
+  virtual BOOL PreTranslateMessage(MSG* pMsg);
   afx_msg int  OnCreate(LPCREATESTRUCT lpCreateStruct);
   afx_msg void OnSetFocus(CWnd *pOldWnd);
   afx_msg void OnClose();
@@ -93,8 +93,8 @@ private:
   EventResult  m_OnAskFullScreen;
   EventResult  m_OnFullScreen;
   EventHandler1 m_OnFullScreenNotify;
-  EventHandler1 m_OnActivate; 
- 
+  EventHandler1 m_OnActivate;
+
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;
 };

@@ -59,9 +59,9 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 
  m_view->setOnRealTimeErrors(MakeDelegate(this,&CCheckEngineTabController::OnRealTimeErrors));
  m_view->setOnReadSavedErrors(MakeDelegate(this,&CCheckEngineTabController::OnReadSavedErrors));
- m_view->setOnWriteSavedErrors(MakeDelegate(this,&CCheckEngineTabController::OnWriteSavedErrors)); 
- m_view->setOnListSetAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListSetAllErrors)); 
- m_view->setOnListClearAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListClearAllErrors)); 
+ m_view->setOnWriteSavedErrors(MakeDelegate(this,&CCheckEngineTabController::OnWriteSavedErrors));
+ m_view->setOnListSetAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListSetAllErrors));
+ m_view->setOnListClearAllErrors(MakeDelegate(this,&CCheckEngineTabController::OnListClearAllErrors));
  //наполн€ем карту котора€ будет содержать ошибки отображаемые в списке. Ќомер бита закодированной ошибки
  //одновременно выступает ключом в этой карте и ID-шкой дл€ идентификации элементов списка.
  DWORD v = 0;
@@ -76,7 +76,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()
-{  
+{
  //na
 }
 
@@ -84,20 +84,20 @@ CCheckEngineTabController::~CCheckEngineTabController()
 void CCheckEngineTabController::OnSettingsChanged(void)
 {
  //включаем необходимый дл€ данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);   
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 }
 
 //from MainTabController
 void CCheckEngineTabController::OnActivate(void)
 {
  //заполн€ем список кодами ошибок
- ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::const_iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
   m_view->AppendErrorsList((*it).first, (*it).second.first, false);
 
  m_view->EnableRWButtons(true);
 
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
+ m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  m_comm->setOnSettingsChanged(MakeDelegate(this,&CCheckEngineTabController::OnSettingsChanged));
 
  m_real_time_errors_mode = false;
@@ -129,9 +129,9 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    case OPCODE_CE_SAVE_ERRORS: //ѕосланные ранее коды ошибок были сохранены в EEPROM
     m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_SAVED_SUCCESSFULLY));
     return;
-  }		
+  }
  }
- 
+
  if (i_descriptor == CE_ERR_CODES && m_real_time_errors_mode)
  { //пришел пакет содержащий коды ошибок (в реальном времени)
   CEErrors* errors = reinterpret_cast<CEErrors*>(ip_packet);
@@ -142,7 +142,7 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
  { //прин€ли ошибки прочитанные из EEPROM
   CEErrors* errors = reinterpret_cast<CEErrors*>(ip_packet);
   m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_READ_SUCCESSFULLY));
-  _SetErrorsToList(errors); 
+  _SetErrorsToList(errors);
  }
 }
 
@@ -156,18 +156,18 @@ void CCheckEngineTabController::OnConnection(const bool i_online)
  {
   state = CStatusBarManager::STATE_ONLINE;
   //≈сли установлен чекбокс режима реального времени, то мен€ем контекст
-  m_comm->m_pControlApp->ChangeContext(m_real_time_errors_mode ? CE_ERR_CODES : default_context);  
+  m_comm->m_pControlApp->ChangeContext(m_real_time_errors_mode ? CE_ERR_CODES : default_context);
   m_view->EnableAll(true);
  }
  else
  {
-  state = CStatusBarManager::STATE_OFFLINE;  
+  state = CStatusBarManager::STATE_OFFLINE;
  }
- 
- //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигураци€ 
- if (i_online==false) 
+
+ //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигураци€
+ if (i_online==false)
  {
-  m_view->EnableAll(false); 
+  m_view->EnableAll(false);
  }
 
  m_sbar->SetConnectionState(state);
@@ -190,7 +190,7 @@ void CCheckEngineTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 }
 
 //посльзователь "дернул" чек бокс "—читывать ошибки в реальном времени".
-void CCheckEngineTabController::OnRealTimeErrors(void) 
+void CCheckEngineTabController::OnRealTimeErrors(void)
 {
  bool checked  = m_view->GetRealTimeErrorsCheck();
  m_real_time_errors_mode = checked;
@@ -204,13 +204,13 @@ void CCheckEngineTabController::OnRealTimeErrors(void)
  else
  {
   //устанавливаем контекст по умолчанию
-  m_comm->m_pControlApp->ChangeContext(default_context);    
+  m_comm->m_pControlApp->ChangeContext(default_context);
  }
 }
 
-//ѕосылка команды котора€ заставит SECU-3 прочитать коды ошибок из EEPROM 
+//ѕосылка команды котора€ заставит SECU-3 прочитать коды ошибок из EEPROM
 //и передать их в менеджер (чек боксы в списке)
-void CCheckEngineTabController::OnReadSavedErrors(void) 
+void CCheckEngineTabController::OnReadSavedErrors(void)
 {
  m_sbar->SetInformationText(MLL::LoadString(IDS_READING_ERROR_CODES_FROM_EEPROM));
  OPCompNc packet_data;
@@ -220,7 +220,7 @@ void CCheckEngineTabController::OnReadSavedErrors(void)
 
 //„тение из списка состо€ни€ чек боксов и передача пакета с кодами ошибок в SECU-3.
 //ѕосле получени€ паета SECU-3 сохранит коды ошибок в EEPROM.
-void CCheckEngineTabController::OnWriteSavedErrors(void) 
+void CCheckEngineTabController::OnWriteSavedErrors(void)
 {
  m_sbar->SetInformationText(MLL::LoadString(IDS_WRITING_ERROR_CODES_TO_EEPROM));
  CEErrors packet_data;
@@ -231,41 +231,41 @@ void CCheckEngineTabController::OnWriteSavedErrors(void)
 //установка всех чек боксов в списке
 void CCheckEngineTabController::OnListSetAllErrors(void)
 {
- ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::const_iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
-  m_view->SetErrorState((*it).first, true); 
+  m_view->SetErrorState((*it).first, true);
 }
 
 //очистка всех чек боксов в списке
 void CCheckEngineTabController::OnListClearAllErrors(void)
 {
- ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::const_iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
-  m_view->SetErrorState((*it).first, false); 
+  m_view->SetErrorState((*it).first, false);
 }
 
 //ѕерекачивает битики кодов ошибок из структуры данных в чек боксы списка
 void CCheckEngineTabController::_SetErrorsToList(const CEErrors* ip_errors)
 {
- ErrorsIDContainer::iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
  {
-  DWORD bit = 1 << ((*it).first);   
+  DWORD bit = 1 << ((*it).first);
   bool state = ((bit & ip_errors->flags)!=0) ? true : false;
 
   if (m_view->GetInertShow() && m_real_time_errors_mode)
   {
    DWORD current = ::GetTickCount();
    if (state)
-    (*it).second.second = current; 
+    (*it).second.second = current;
 
    if ((current - (*it).second.second) < 500 )
-    m_view->SetErrorState((*it).first, 1); 
+    m_view->SetErrorState((*it).first, 1);
    else
-    m_view->SetErrorState((*it).first, 0); 
+    m_view->SetErrorState((*it).first, 0);
   }
   else
-    m_view->SetErrorState((*it).first, state); 
+    m_view->SetErrorState((*it).first, state);
  }
 }
 
@@ -273,11 +273,11 @@ void CCheckEngineTabController::_SetErrorsToList(const CEErrors* ip_errors)
 void CCheckEngineTabController::_GetErrorsFromList(SECU3IO::CEErrors* op_errors)
 {
  op_errors->flags = 0;
- ErrorsIDContainer::const_iterator it = m_errors_ids.begin(); 
+ ErrorsIDContainer::const_iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
  {
-  DWORD value = m_view->GetErrorState((*it).first) ? 0x00000001 : 0x00000000; 
-  DWORD bit = value << ((*it).first);   
+  DWORD value = m_view->GetErrorState((*it).first) ? 0x00000001 : 0x00000000;
+  DWORD bit = value << ((*it).first);
   op_errors->flags|= bit;
  }
 }

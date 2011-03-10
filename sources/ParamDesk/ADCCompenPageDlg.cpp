@@ -38,16 +38,16 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
 
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangePdUBATFactorEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnChangePdUBATCorrectionEdit)
-	
+
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnChangePdTEMPFactorEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnChangePdTEMPCorrectionEdit)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnUpdateControls)
 
@@ -57,10 +57,10 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT, OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT, OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT, OnUpdateControls)
 END_MESSAGE_MAP()
@@ -80,12 +80,12 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ubat_adc_factor = 1.0f;
  m_params.ubat_adc_correction = 0.0f;
  m_params.temp_adc_factor = 1.0f;
- m_params.temp_adc_correction = 0.0f; 
+ m_params.temp_adc_correction = 0.0f;
 }
 
 LPCTSTR CADCCompenPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
@@ -125,10 +125,10 @@ void CADCCompenPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 /////////////////////////////////////////////////////////////////////////////
 // CADCCompenPageDlg message handlers
 
-BOOL CADCCompenPageDlg::OnInitDialog() 
+BOOL CADCCompenPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-		
+
  m_map_factor_spin.SetBuddy(&m_map_factor_edit);
  m_map_factor_edit.SetLimitText(6);
  m_map_factor_edit.SetDecimalPlaces(3);

@@ -29,7 +29,7 @@ class MPCStatusBar;
 class CStatusBarManager
 {
  public:
-  CStatusBarManager(); 
+  CStatusBarManager();
   virtual ~CStatusBarManager();
 
   bool Create(CWnd* pParentWnd);
@@ -37,7 +37,7 @@ class CStatusBarManager
 
   void SetConnectionState(int i_State);
   void SetInformationText(const CString& i_text);
-	
+
   void ShowProgressBar(bool show);
   void SetProgressRange(int nLower, int nUpper);
   void SetProgressPos(int nPos);

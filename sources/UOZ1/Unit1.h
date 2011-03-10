@@ -20,7 +20,7 @@ typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
- __published:	// IDE-managed Components
+ __published:  // IDE-managed Components
   TChart *Chart1;
   TLineSeries *Series1;
   TLineSeries *Series2;
@@ -46,7 +46,7 @@ class TForm1 : public TForm
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
- public:		// User declarations
+ public:  // User declarations
   float aai_min;
   float aai_max;
   int   count_of_function_points;
@@ -61,7 +61,7 @@ class TForm1 : public TForm
   __fastcall TForm1(TComponent* Owner);
   void DataPrepare();
 
- private:	// User declarations
+ private:  // User declarations
   bool setval;
   int  val_n;
 

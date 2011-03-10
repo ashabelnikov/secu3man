@@ -42,7 +42,7 @@ namespace DLL
  UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose = NULL;
  UOZ2_Chart3DShow_Addr          UOZ2_Chart3DShow = NULL;
  UOZ2_Chart3DSetLanguage_Addr   UOZ2_Chart3DSetLanguage = NULL;
-	
+
  //---------------------------------------------------------
 
  //Заполняет таблицу функций (загружает необходимые библиотеки и получает адреса функций, сохраняя их в таблицу)
@@ -175,7 +175,7 @@ namespace DLL
 
   hModule = LoadLibrary(_T("UOZ2.dll"));
   if (hModule==NULL)
-  { 
+  {
    AfxMessageBox(_T("Can't load library UOZ2.dll"),MB_OK|MB_ICONSTOP);
    UOZ2_Chart3DCreate = NULL;
    UOZ2_Chart3DUpdate = NULL;

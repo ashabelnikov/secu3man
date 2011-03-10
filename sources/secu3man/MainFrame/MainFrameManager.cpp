@@ -49,7 +49,7 @@ CMainFrameManager::CMainFrameManager()
 
 CMainFrameManager::~CMainFrameManager()
 {
- delete m_pChildViewManager; 
+ delete m_pChildViewManager;
  delete m_pMainFrameController;
  delete m_pStatusBarManager;
  //do not delete m_pMainFrame!
@@ -68,7 +68,7 @@ CMainFrame* CMainFrameManager::GreateMainWindow(void)
 }
 
 bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
-{    
+{
  _ASSERTE(m_pMainFrame);
 
  //инициализируем менеджер StatusBar-a

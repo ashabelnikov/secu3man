@@ -34,7 +34,7 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   CKnockPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
-  
+
   void Enable(bool enable);
   bool IsEnabled(void);
 
@@ -55,7 +55,7 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::KnockPar m_params;
   BOOL m_enabled;
 
-  CPropertyGrid m_ctrlGrid; 
+  CPropertyGrid m_ctrlGrid;
 
   HITEM m_knock_use_knock_channel_item;
   HITEM m_knock_k_wnd_begin_angle_item;
@@ -67,5 +67,5 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   HITEM m_knock_advance_step_item;   //deg.
   HITEM m_knock_max_retard_item;     //deg.
   HITEM m_knock_threshold_item;      //voltage
-  HITEM m_knock_recovery_delay_item; //in work cycles  
+  HITEM m_knock_recovery_delay_item; //in work cycles
 };

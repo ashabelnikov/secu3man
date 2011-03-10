@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -42,7 +42,7 @@ CTabController::CTabController()
 }
 
 CTabController::~CTabController()
-{ 
+{
  //na
 }
 
@@ -50,8 +50,8 @@ CTabController::TabPageData* CTabController::GetItemData(int item) const
 {
  TCITEM tci;
  tci.mask = TCIF_PARAM;
- GetItem(item,&tci);    
- return reinterpret_cast<TabPageData*>(tci.lParam);	
+ GetItem(item,&tci);
+ return reinterpret_cast<TabPageData*>(tci.lParam);
 }
 
 void CTabController::CalculatePageRect(int nItem, CRect& o_rect)
@@ -61,33 +61,33 @@ void CTabController::CalculatePageRect(int nItem, CRect& o_rect)
  RECT c_rc, i_rc;
 
  //необходимо получить размер для вкладки
- GetClientRect(&c_rc); 
+ GetClientRect(&c_rc);
  GetItemRect(nItem,&i_rc);
 
  if ((style & TCS_BOTTOM) && !(style & TCS_VERTICAL)) //bottom
  {
-  c_rc.bottom-= (i_rc.bottom - i_rc.top) + m_tcmn;        
+  c_rc.bottom-= (i_rc.bottom - i_rc.top) + m_tcmn;
   c_rc.top+=m_tcmn;
   c_rc.right-=m_tcmn;
   c_rc.left+=m_tcmn;
  }
  if (!(style & TCS_BOTTOM) && (style & TCS_VERTICAL)) //left
- {  
-  c_rc.left+= (i_rc.right - i_rc.left) + m_tcmn;    
+ {
+  c_rc.left+= (i_rc.right - i_rc.left) + m_tcmn;
   c_rc.top+=m_tcmn;
   c_rc.bottom-=m_tcmn;
   c_rc.right-=m_tcmn;
  }
  if ((style & TCS_BOTTOM) && (style & TCS_VERTICAL)) //right
  {
-  c_rc.right-= (i_rc.right - i_rc.left) + m_tcmn;  
+  c_rc.right-= (i_rc.right - i_rc.left) + m_tcmn;
   c_rc.top+=m_tcmn;
   c_rc.left+=m_tcmn;
   c_rc.bottom-=m_tcmn;
  }
  if (!(style & TCS_BOTTOM) && !(style & TCS_VERTICAL))//top
  {
-  c_rc.top+= (i_rc.bottom - i_rc.top) + m_tcmn;    
+  c_rc.top+= (i_rc.bottom - i_rc.top) + m_tcmn;
   c_rc.left+=m_tcmn;
   c_rc.bottom-=m_tcmn;
   c_rc.right-=m_tcmn;
@@ -97,8 +97,8 @@ void CTabController::CalculatePageRect(int nItem, CRect& o_rect)
 
 void CTabController::CreateTabPage(void)
 {
- int selection = GetCurSel(); 
- 
+ int selection = GetCurSel();
+
  //создание окна вкладки и ее отображение
  TabPageData* pPageData = GetItemData(selection);
  if (::IsWindow(pPageData->pDialogClass->m_hWnd))
@@ -106,17 +106,17 @@ void CTabController::CreateTabPage(void)
 
  ASSERT(pPageData);
  BOOL result = pPageData->pDialogClass->CreateIndirect(pPageData->pDialogTemplate, this->GetParent());
- 
+
  if (0==result)
  {
   AfxMessageBox(_T("Error creating Tab control page dialog!"));
   return;
  }
- 
- CRect c_rc(0,0,0,0); 
+
+ CRect c_rc(0,0,0,0);
  CalculatePageRect(selection, c_rc);
 
- //вкладка диалога находится в одной системе координат с таб-контроллом (у них общий parent!) 
+ //вкладка диалога находится в одной системе координат с таб-контроллом (у них общий parent!)
  CRect parent_rect;
  GetWindowRect(parent_rect);
  this->GetParent()->ScreenToClient(parent_rect);
@@ -128,8 +128,8 @@ void CTabController::CreateTabPage(void)
 }
 
 void CTabController::DestroyTabPage(void)
-{  
- if (mp_CurDlg) 
+{
+ if (mp_CurDlg)
  {
   if (IsWindow(mp_CurDlg->m_hWnd)) //только если окно было создано (предотвращаем повторное закрытие окна)
    mp_CurDlg->DestroyWindow();
@@ -153,28 +153,28 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
 {
  TabPageData* pPageData = new TabPageData;
  pPageData->pDialogClass = pPageDlg;
-  
+
  pPageData->is_enabled = true; //by default - item has been enabled
 
  //создание шаблона диалога
  HRSRC hrsrc  = FindResource(m_hResourceModule,pPageDlg->GetDialogID(), RT_DIALOG);
  if (NULL==hrsrc)
  {
-  AfxMessageBox(_T("Resource not found!")); 
+  AfxMessageBox(_T("Resource not found!"));
   return -1;  //error
  }
 
  HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc);
  if (NULL==hglb)
  {
-  AfxMessageBox(_T("Resource load failed!")); 
+  AfxMessageBox(_T("Resource load failed!"));
   return -1;  //error
- } 
- pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb); 
- 
+ }
+ pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb);
+
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM,m_tab_item_index,name,0,(LPARAM)pPageData);
-   
+
  if (0 == m_tab_item_index)
  { //выбираем первую вкладку
   CreateTabPage();
@@ -188,31 +188,31 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
 {
  TabPageData* pPageData = new TabPageData;
  pPageData->pDialogClass = pPageDlg;
-  
+
  pPageData->is_enabled = true; //by default - item has been enabled
 
  //создание шаблона диалога
- HRSRC hrsrc  = FindResource(m_hResourceModule,pPageDlg->GetDialogID(), RT_DIALOG); 
+ HRSRC hrsrc  = FindResource(m_hResourceModule,pPageDlg->GetDialogID(), RT_DIALOG);
  if (NULL==hrsrc)
  {
-  AfxMessageBox(_T("Resource not found!")); 
+  AfxMessageBox(_T("Resource not found!"));
   return -1; //error
  }
 
- HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc); 
+ HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc);
  if (NULL==hglb)
  {
-  AfxMessageBox(_T("Resource load failed!")); 
+  AfxMessageBox(_T("Resource load failed!"));
   return -1; //error
- } 
+ }
 
- pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb); 
+ pPageData->pDialogTemplate = (DLGTEMPLATE*)LockResource(hglb);
 
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM|TCIF_IMAGE,m_tab_item_index,name,nImage,(LPARAM)pPageData);
-   
+
  if (0 == m_tab_item_index)
- {   	  
+ {
   //выбираем первую вкладку
   CreateTabPage();
  }
@@ -220,7 +220,7 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
  return m_tab_item_index++;
 }
 
-BOOL CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult) 
+BOOL CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 {
  //отображение выбранной вкладки вкладки
  CreateTabPage();
@@ -229,10 +229,10 @@ BOOL CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
   m_pEventHandler->OnSelchangeTabctl();
 
  *pResult = 0;
- return m_msg_reflect;  
+ return m_msg_reflect;
 }
 
-BOOL CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult) 
+BOOL CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 {
  // Figure out index of new tab we are about to go to, as opposed
  // to the current one we're at. Believe it or not, Windows doesn't
@@ -243,13 +243,13 @@ BOOL CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
  ScreenToClient(&htinfo.pt);
  int iNewTab = HitTest(&htinfo);
 
- if (iNewTab >= 0 && !IsTabEnabled(iNewTab))   
+ if (iNewTab >= 0 && !IsTabEnabled(iNewTab))
   *pResult = TRUE; // tab disabled: prevent selection
  else
  {
-  if (m_pEventHandler)	
+  if (m_pEventHandler)
    m_pEventHandler->OnSelchangingTabctl();
-	
+
   //удаление предыдущей вкладки
   DestroyTabPage();
   *pResult = 0;
@@ -271,38 +271,38 @@ void CTabController::OnSize( UINT nType, int cx, int cy )
 
  TabPageData* pItemData = NULL;
  pItemData = GetItemData(index);
- if (NULL == pItemData) 
+ if (NULL == pItemData)
   return;
 
  CalculatePageRect(index, rect);
- pItemData->pDialogClass->MoveWindow(rect);		
+ pItemData->pDialogClass->MoveWindow(rect);
 
  //позволяем родительскому классу тоже изменить размер
  CTabCtrl::OnSize(nType, cx, cy);
 }
 
-void CTabController::OnDestroy() 
+void CTabController::OnDestroy()
 {
  int item_count = CTabCtrl::GetItemCount();
 
  //удаляем объекты ассоциированные с вкладками Tab-контролом
  for(int i = 0; i < item_count; ++i)
- {  
+ {
   TabPageData* pItemData = NULL;
   pItemData = GetItemData(i);
-  if (NULL == pItemData) 
+  if (NULL == pItemData)
    continue;
 
-  delete pItemData;		
- }  
+  delete pItemData;
+ }
 
- CTabCtrl::OnDestroy();		
+ CTabCtrl::OnDestroy();
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
 void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
-{	
- CRect rect = lpDrawItemStruct->rcItem; 
+{
+ CRect rect = lpDrawItemStruct->rcItem;
  rect.DeflateRect(::GetSystemMetrics(SM_CXEDGE), ::GetSystemMetrics(SM_CYEDGE), ::GetSystemMetrics(SM_CXEDGE), 0);
 
  int tab_index = lpDrawItemStruct->itemID;
@@ -318,7 +318,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
  TC_ITEM item;
  item.mask = TCIF_TEXT |TCIF_IMAGE;
  item.pszText = label;
- item.cchTextMax = 63;  
+ item.cchTextMax = 63;
 
  if(!GetItem(tab_index,&item))
   return;  //---------------------------
@@ -348,7 +348,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   if (IsTabEnabled(tab_index))
    p_imagelist->Draw(p_dc, item.iImage, CPoint(rect.left,y_pos),ILD_TRANSPARENT);
   else
-  {	
+  {
    DrawState(p_dc->m_hDC,NULL,NULL,(LPARAM)p_imagelist->ExtractIcon(item.iImage),
      0,rect.left,y_pos,image_rect.Width(),image_rect.Height(),DST_ICON|DSS_DISABLED);
   }
@@ -370,7 +370,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   p_dc->SetTextColor(color_normal);
   if(selected)
    rect.top -= 3*::GetSystemMetrics(SM_CYEDGE);
-    
+
   p_dc->DrawText(label, rect, DT_SINGLELINE | DT_VCENTER | DT_CENTER);
  }
 
@@ -384,11 +384,11 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 //
 BOOL CTabController::PreTranslateMessage(MSG* pMsg)
 {
- if (pMsg->message == WM_KEYDOWN && (pMsg->wParam == VK_LEFT || pMsg->wParam == VK_RIGHT)) 
+ if (pMsg->message == WM_KEYDOWN && (pMsg->wParam == VK_LEFT || pMsg->wParam == VK_RIGHT))
  {
   int iNewTab = (pMsg->wParam == VK_LEFT) ?
-       PrevEnabledTab(GetCurSel(), FALSE) : 
-	   NextEnabledTab(GetCurSel(), FALSE);
+       PrevEnabledTab(GetCurSel(), FALSE) :
+       NextEnabledTab(GetCurSel(), FALSE);
   if (iNewTab >= 0)
    SetCurSel(iNewTab);
   return TRUE;
@@ -404,15 +404,15 @@ BOOL CTabController::PreTranslateMessage(MSG* pMsg)
 int CTabController::NextEnabledTab(int iCurrentTab, BOOL bWrap)
 {
  int nTabs = GetItemCount();
- for (int iTab = iCurrentTab+1; iTab != iCurrentTab; iTab++) 
+ for (int iTab = iCurrentTab+1; iTab != iCurrentTab; iTab++)
  {
-  if (iTab >= nTabs) 
+  if (iTab >= nTabs)
   {
    if (!bWrap)
     return -1;
    iTab = 0;
   }
-  if (IsTabEnabled(iTab)) 
+  if (IsTabEnabled(iTab))
    return iTab;
  }
  return -1;
@@ -425,22 +425,22 @@ int CTabController::NextEnabledTab(int iCurrentTab, BOOL bWrap)
 //
 int CTabController::PrevEnabledTab(int iCurrentTab, BOOL bWrap)
 {
- for (int iTab = iCurrentTab-1; iTab != iCurrentTab; iTab--) 
+ for (int iTab = iCurrentTab-1; iTab != iCurrentTab; iTab--)
  {
-  if (iTab < 0) 
+  if (iTab < 0)
   {
    if (!bWrap)
     return -1;
    iTab = GetItemCount() - 1;
   }
-  if (IsTabEnabled(iTab)) 
+  if (IsTabEnabled(iTab))
    return iTab;
  }
  return -1;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
-// Helper to set the active page, when moving backwards. Must simulate Windows 
+// Helper to set the active page, when moving backwards. Must simulate Windows
 // messages to tell parent I am changing the tab; SetCurSel does not do this!
 //
 // In normal operation, this fn will always succeed, because I don't call it
@@ -452,10 +452,10 @@ bool CTabController::SetCurSel(UINT iNewTab)
  //if (!IsTabEnabled(iNewTab))
   //return false;
 
- //===================================================================== 
- if (m_pEventHandler&&(!m_msg_reflect))  //если не поставить проверку !m_msg_reflect то хэндлер будет вызываться второй раз	
+ //=====================================================================
+ if (m_pEventHandler&&(!m_msg_reflect))  //если не поставить проверку !m_msg_reflect то хэндлер будет вызываться второй раз
   m_pEventHandler->OnSelchangingTabctl(); //Send event!
- //===================================================================== 
+ //=====================================================================
 
  // send the parent TCN_SELCHANGING
  NMHDR nmh;
@@ -464,16 +464,16 @@ bool CTabController::SetCurSel(UINT iNewTab)
  nmh.code = TCN_SELCHANGING;
 
  if (m_msg_reflect)
-  GetParent()->SendMessage(WM_NOTIFY, nmh.idFrom, (LPARAM)&nmh);  
+  GetParent()->SendMessage(WM_NOTIFY, nmh.idFrom, (LPARAM)&nmh);
 
  DestroyTabPage(); //удаление предыдущей вкладки
  int previos_selected_item = CTabCtrl::SetCurSel(iNewTab); //выбор новой вкладки
  CreateTabPage(); //отображение новой - выбранной вкладки
 
- //===================================================================== 
+ //=====================================================================
  if (m_pEventHandler&&(!m_msg_reflect))
   m_pEventHandler->OnSelchangeTabctl(); //Send event!
- //===================================================================== 
+ //=====================================================================
 
  // send to parent TCN_SELCHANGE
  nmh.code = TCN_SELCHANGE;
@@ -492,14 +492,14 @@ BOOL CTabController::IsTabEnabled(int iTab) const
 }
 
 //Achtung! Only Item, not a dialog incapsulated by item!
-//if iTab==-1, then all items will be enabled/disabled 
+//if iTab==-1, then all items will be enabled/disabled
 void CTabController::EnableItem(int iTab, bool enable)
 {
  int count_of_items = GetItemCount();
 
  if ((iTab >= count_of_items) && (iTab!=-1))
   return; //invalid iTab parameter!
-  
+
  if (iTab==-1) //implement changes for all items
  {
   for(int i = 0; i < count_of_items; i++)
@@ -511,7 +511,7 @@ void CTabController::EnableItem(int iTab, bool enable)
  else //concrete item
  {
   TabPageData* pPageData = GetItemData(iTab);
-  pPageData->is_enabled = enable;  
+  pPageData->is_enabled = enable;
  }
 
  //Tab control should be repainted!
@@ -520,7 +520,7 @@ void CTabController::EnableItem(int iTab, bool enable)
 
 void CTabController::SetStyle(const DWORD style)
 {
- m_style = style; 
+ m_style = style;
 }
 
 void CTabController::Init(void)
@@ -528,9 +528,9 @@ void CTabController::Init(void)
  m_tab_item_index = 0;
 }
 
-void CTabController::SetEventListener(ITabControllerEvent* i_listener) 
+void CTabController::SetEventListener(ITabControllerEvent* i_listener)
 {
- ASSERT(i_listener); 
+ ASSERT(i_listener);
  m_pEventHandler = i_listener;
 }
 

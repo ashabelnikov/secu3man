@@ -37,7 +37,7 @@ class CChildView : public CModelessDialog
 
   // Generated message map functions
  protected:
-  DECLARE_MESSAGE_MAP()  
+  DECLARE_MESSAGE_MAP()
 };
 
 /////////////////////////////////////////////////////////////////////////////

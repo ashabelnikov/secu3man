@@ -58,7 +58,7 @@ bool CChildView::Create(CWnd* ip_parent)
  int nchar;
 
  hgbl = GlobalAlloc(GMEM_ZEROINIT, 1024);
- ASSERT(hgbl);   
+ ASSERT(hgbl);
  lpdt = (LPDLGTEMPLATE)GlobalLock(hgbl);
 
  // Define a dialog box.
@@ -67,7 +67,7 @@ bool CChildView::Create(CWnd* ip_parent)
  lpdt->cdit = 0; // number of controls
  lpdt->x  = 0;   //<--любые дефайлтные размеры,
  lpdt->y  = 0;   //фреймворк потом подгонит размеры автоматически.
- lpdt->cx = 0; 
+ lpdt->cx = 0;
  lpdt->cy = 0;
 
  lpw = (LPWORD) (lpdt + 1);
@@ -78,8 +78,8 @@ bool CChildView::Create(CWnd* ip_parent)
  nchar = 1 + MultiByteToWideChar (CP_ACP, 0, "View", -1, lpwsz, 50);
  lpw   += nchar;
 
- GlobalUnlock(hgbl); 
- BOOL result = CreateIndirect((LPDLGTEMPLATE) hgbl, ip_parent); 
- GlobalFree(hgbl); 
+ GlobalUnlock(hgbl);
+ BOOL result = CreateIndirect((LPDLGTEMPLATE) hgbl, ip_parent);
+ GlobalFree(hgbl);
  return result;
 }

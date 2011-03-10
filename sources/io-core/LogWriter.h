@@ -39,16 +39,16 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Деактивирует механизм записи
   void EndLogging(void);
 
-  //Возвращает true, если в текущий момент идет запись 
+  //Возвращает true, если в текущий момент идет запись
   bool IsLoggingInProcess(void);
 
-  //Separating symbol for CSV 
+  //Separating symbol for CSV
   void SetSeparatingSymbol(char i_sep_symbol);
 
  public:
 
   //через эти обработчики данные поступают в механизм записи
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);          
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
  private:
@@ -56,7 +56,7 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //хэндл файла в который идет запись
   FILE* m_out_handle;
 
-  //true - идет процесс записи, false - солдат спит, а служба идет. 
+  //true - идет процесс записи, false - солдат спит, а служба идет.
   bool  m_is_busy;
 
   char m_csv_separating_symbol;

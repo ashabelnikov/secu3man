@@ -53,7 +53,7 @@ COScopeCtrl::COScopeCtrl()
  m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
  m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
  m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
- 
+
  m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
  m_brushBack.CreateSolidBrush(m_crBackColor);
 
@@ -71,16 +71,16 @@ COScopeCtrl::~COScopeCtrl()
  // just to be picky restore the bitmaps for the two memory dc's
  // (these dc's are being destroyed so there shouldn't be any leaks)
  if (m_pbitmapOldGrid != NULL)
-  m_dcGrid.SelectObject(m_pbitmapOldGrid);  
+  m_dcGrid.SelectObject(m_pbitmapOldGrid);
  if (m_pbitmapOldPlot != NULL)
-  m_dcPlot.SelectObject(m_pbitmapOldPlot);  
+  m_dcPlot.SelectObject(m_pbitmapOldPlot);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl message handlers
 
 /////////////////////////////////////////////////////////////////////////////
-BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID) 
+BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
  BOOL result;
  static CString className = AfxRegisterWndClass(CS_HREDRAW | CS_VREDRAW);
@@ -104,7 +104,7 @@ void COScopeCtrl::SetRange(double dLower, double dUpper, int nDecimalPlaces)
  m_nYDecimals      = nDecimalPlaces;
  m_dRange          = m_dUpperLimit - m_dLowerLimit;
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
-  
+
  // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
@@ -156,7 +156,7 @@ void COScopeCtrl::SetBackgroundColor(COLORREF color)
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::InvalidateCtrl()
 {
- // There is a lot of drawing going on here - particularly in terms of 
+ // There is a lot of drawing going on here - particularly in terms of
  // drawing the grid.  Don't panic, this is all being drawn (only once)
  // to a bitmap.  The result is then BitBlt'd to the control whenever needed.
  int i;
@@ -169,7 +169,7 @@ void COScopeCtrl::InvalidateCtrl()
  CString strTemp;
 
  // in case we haven't established the memory dc's
- CClientDC dc(this);  
+ CClientDC dc(this);
 
  // if we don't have one yet, set up a memory dc for the grid
  if (m_dcGrid.GetSafeHdc() == NULL)
@@ -178,7 +178,7 @@ void COScopeCtrl::InvalidateCtrl()
   m_bitmapGrid.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
   m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid);
  }
-  
+
  m_dcGrid.SetBkColor (m_crBackColor);
 
  // fill the grid background
@@ -187,19 +187,19 @@ void COScopeCtrl::InvalidateCtrl()
  // draw the plot rectangle:
  // determine how wide the y axis scaling values are
  nCharacters = abs((int)log10(fabs(m_dUpperLimit))) ;
-  
+
  //avoid overflow range error (crash), when m_dLowerLimit is zero.
- double log10ll = (m_dLowerLimit!=.0) ? log10(fabs(m_dLowerLimit)) : log10ll = .0;  
+ double log10ll = (m_dLowerLimit!=.0) ? log10(fabs(m_dLowerLimit)) : log10ll = .0;
  nCharacters = max(nCharacters, abs((int)log10ll));
 
  // add the units digit, decimal point and a minus sign, and an extra space
  // as well as the number of decimal places to display
- nCharacters = nCharacters + 4 + m_nYDecimals;  
+ nCharacters = nCharacters + 4 + m_nYDecimals;
 
  // adjust the plot rectangle dimensions
  // assume 6 pixels per character (this may need to be adjusted)
  m_rectPlot.left = m_rectClient.left + 6*(nCharacters);
-  
+
  // draw the plot rectangle
  oldPen = m_dcGrid.SelectObject (&solidPen);
  m_dcGrid.MoveTo (m_rectPlot.left, m_rectPlot.top);
@@ -224,7 +224,7 @@ void COScopeCtrl::InvalidateCtrl()
  }
 
  // create some fonts (horizontal and vertical)
- // use a height of 14 pixels and 300 weight 
+ // use a height of 14 pixels and 300 weight
  // (these may need to be adjusted depending on the display)
  axisFont.CreateFont (14, 0, 0, 0, 300,
                        FALSE, FALSE, 0, ANSI_CHARSET,
@@ -238,10 +238,10 @@ void COScopeCtrl::InvalidateCtrl()
                        CLIP_DEFAULT_PRECIS,
                        DEFAULT_QUALITY,
                        DEFAULT_PITCH|FF_SWISS, _T("Arial"));
-  
+
  // grab the horizontal font
  oldFont = m_dcGrid.SelectObject(&axisFont);
-  
+
  // y max
  m_dcGrid.SetTextColor (m_crGridColor);
  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
@@ -259,7 +259,7 @@ void COScopeCtrl::InvalidateCtrl()
 
  // x max
  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
- strTemp.Format (_T("%d"), _GetPtCount()); 
+ strTemp.Format (_T("%d"), _GetPtCount());
  m_dcGrid.TextOut (m_rectPlot.right, m_rectPlot.bottom + 4, strTemp);
 
  // x units
@@ -277,9 +277,9 @@ void COScopeCtrl::InvalidateCtrl()
                     (m_rectPlot.bottom + m_rectPlot.top) / 2, m_strYUnitsString);
  m_dcGrid.SelectObject(oldFont);
 
- // at this point we are done filling the the grid bitmap, 
+ // at this point we are done filling the the grid bitmap,
  // no more drawing to this bitmap is needed until the setting are changed
-  
+
  // if we don't have one yet, set up a memory dc for the plot
  if (m_dcPlot.GetSafeHdc() == NULL)
  {
@@ -305,7 +305,7 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
  //select default direction
  if (m_points.empty())
   m_point_position = i_reverse ? MaxPointIndex : 0;
-  
+
  if (!i_reverse)
  {
   if (m_points.size())
@@ -318,7 +318,7 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 
   if (m_point_position > 0)
   {
-   m_point_position--;  
+   m_point_position--;
    return;
   }
  }
@@ -338,14 +338,14 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
    return;
   }
  }
-   
+
  m_dCurrentPosition = dNewPoint;
  DrawPoint(i_reverse);
  Invalidate();
 }
- 
+
 ////////////////////////////////////////////////////////////////////////////
-void COScopeCtrl::OnPaint() 
+void COScopeCtrl::OnPaint()
 {
  CPaintDC dc(this);  // device context for painting
  CDC memDC;
@@ -382,10 +382,10 @@ void COScopeCtrl::OnPaint()
 void COScopeCtrl::DrawPoint(bool i_reverse)
 {
  // this does the work of "scrolling" the plot to the left
- // and appending a new data point all of the plotting is 
+ // and appending a new data point all of the plotting is
  // directed to the memory based bitmap associated with m_dcPlot
  // the will subsequently be BitBlt'd to the client in OnPaint
-  
+
  int currX, prevX, currY, prevY;
  int nHalfShiftPixels, nPlotShiftPixels, nShiftPixels;
 
@@ -463,22 +463,22 @@ void COScopeCtrl::DrawPoint(bool i_reverse)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-void COScopeCtrl::OnSize(UINT nType, int cx, int cy) 
+void COScopeCtrl::OnSize(UINT nType, int cx, int cy)
 {
  CWnd::OnSize(nType, cx, cy);
 
  // NOTE: OnSize automatically gets called during the setup of the control
-  
+
  GetClientRect(m_rectClient);
 
- // the "left" coordinate and "width" will be modified in 
+ // the "left" coordinate and "width" will be modified in
  // InvalidateCtrl to be based on the width of the y axis scaling
  m_rectPlot.left   = 20;
  m_rectPlot.top    = 10;
  m_rectPlot.right  = m_rectClient.right - 10;
  m_rectPlot.bottom = m_rectClient.bottom - 25;
 
- // set the scaling factor for now, this can be adjusted 
+ // set the scaling factor for now, this can be adjusted
  // in the SetRange functions
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
 }

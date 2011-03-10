@@ -54,7 +54,7 @@ void CAppSettingsController::OnOk(void)
  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
  m_pModel->m_optPortName = m_pView->GetPortName();
  m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
- m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader(); 
+ m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader();
  m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
  m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
  m_pModel->m_optMIDeskUpdatePeriod = m_pView->GetMIDeskUpdatePeriod();
@@ -77,7 +77,7 @@ void CAppSettingsController::OnCancel(void)
 void CAppSettingsController::OnActivate(void)
 {
  //перекачиваем данные из модели в представление
- ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));  
+ ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
  m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
  m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);
  m_pView->FillCtrlsWithAllowableCSVSepSymbols(m_pModel->m_AllowaleCSVSepSymbols);
@@ -86,12 +86,12 @@ void CAppSettingsController::OnActivate(void)
 
  m_pView->SetPortName(m_pModel->m_optPortName);
  m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
- m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader); 
+ m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader);
  m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
  m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
  m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod);
 
- size_t count = m_pModel->m_AllowaleCSVSepSymbols.size(); 
+ size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)
   if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
    m_pView->SetCSVSepSymbol(i);
@@ -103,8 +103,8 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetPressureMax(m_pModel->m_optPressureMax);
 }
 
-int CAppSettingsController::ShowDialog(void) 
+int CAppSettingsController::ShowDialog(void)
 {
- ASSERT(m_pView);	
- return m_pView->ShowDialog(); 
+ ASSERT(m_pView);
+ return m_pView->ShowDialog();
 }

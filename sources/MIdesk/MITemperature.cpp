@@ -50,7 +50,7 @@ void CMITemperature::Create(void)
  m_meter.SetLabelsDecimals(1) ;
  m_meter.SetValueDecimals(1) ;
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TEMPERATURE_TITLE)) ;
- m_meter.SetFontScale(80);    
+ m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
  m_meter.SetTickNumber(16);
@@ -75,12 +75,12 @@ float CMITemperature::GetValue(void)
 {
  return (float)m_meter.GetNeedlePos();
 }
-	
+
 void CMITemperature::Show(bool show)
 {
  m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
-	
+
 void CMITemperature::Enable(bool enable)
 {
  m_meter.SetState(meter_needle, enable);
@@ -94,33 +94,33 @@ void CMITemperature::Enable(bool enable)
 
  m_meter.Redraw();
 }
-	
+
 bool CMITemperature::IsVisible(void)
 {
  return (m_meter.IsWindowVisible()) ? true : false;
 }
-	
+
 bool CMITemperature::IsEnabled(void)
 {
  bool State = false;
  m_meter.GetState(meter_needle, &State);
  return State;
-}	
-	
+}
+
 void CMITemperature::SetLimits(float loLimit, float upLimit)
 {
  m_meter.SetRange(loLimit, upLimit);
 }
-	
+
 void CMITemperature::SetTicks(int number)
 {
  m_meter.SetTickNumber(number);
 }
 //----------------------------------------------------
- 
+
 void CMITemperature::Scale(float i_x_factor, float i_y_factor)
 {
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect); 
+ m_meter.MoveWindow(rect);
 }

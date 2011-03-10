@@ -107,16 +107,16 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN, m_epm_on_threshold_spin);
 
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_shutoff_lo_threshold_edit);
- DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_shutoff_hi_threshold_edit);	
- DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_epm_on_threshold_edit);	
+ DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_shutoff_hi_threshold_edit);
+ DDX_Control(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_epm_on_threshold_edit);
 
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G, m_shutoff_lo_threshold_spin_g);
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G, m_shutoff_hi_threshold_spin_g);
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN, m_shutoff_delay_spin);
 
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G, m_shutoff_lo_threshold_edit_g);
- DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G, m_shutoff_hi_threshold_edit_g);	
- DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT, m_shutoff_delay_edit);	
+ DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G, m_shutoff_hi_threshold_edit_g);
+ DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT, m_shutoff_delay_edit);
 
  m_shutoff_lo_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
  m_shutoff_hi_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
@@ -124,7 +124,7 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
  m_shutoff_lo_threshold_edit_g.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G, m_params.ephh_lot_g);
  m_shutoff_hi_threshold_edit_g.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G, m_params.ephh_hit_g);
  m_shutoff_delay_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT, m_params.shutoff_delay);
-    
+
  DDX_Check_UCHAR(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_params.carb_invers);
  m_epm_on_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_params.epm_ont);
 }
@@ -141,7 +141,7 @@ void CCarburPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 BOOL CCarburPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  m_shutoff_lo_threshold_edit.SetLimitText(4);
  m_shutoff_lo_threshold_spin.SetBuddy(&m_shutoff_lo_threshold_edit);
  m_shutoff_lo_threshold_spin.SetRangeAndDelta(250,7500,10);
@@ -154,7 +154,7 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_epm_on_threshold_edit.SetLimitText(4);
  m_epm_on_threshold_edit.SetDecimalPlaces(2);
  m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
-	
+
  m_shutoff_lo_threshold_edit_g.SetLimitText(4);
  m_shutoff_lo_threshold_spin_g.SetBuddy(&m_shutoff_lo_threshold_edit_g);
  m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,7500,10);

@@ -41,7 +41,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
-	
+
   void GetValues(SECU3IO::CKPSPar* o_values);
   void SetValues(const SECU3IO::CKPSPar* i_values);
 

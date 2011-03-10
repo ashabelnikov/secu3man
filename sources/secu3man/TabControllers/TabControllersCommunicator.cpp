@@ -25,7 +25,7 @@
 
 TabControllersCommunicator::TabControllersCommunicator()
 {
- //todo 
+ //todo
 }
 
 TabControllersCommunicator::~TabControllersCommunicator()
@@ -47,7 +47,7 @@ void TabControllersCommunicator::AddReference(ITabController* ip_controller, int
  else
   ASSERT(0);
 }
-  
+
 ITabController* TabControllersCommunicator::GetReference(int i_key)
 {
  std::map<int, ITabController*>::const_iterator it = m_references.find(i_key);

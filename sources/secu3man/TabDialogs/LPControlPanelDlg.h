@@ -34,8 +34,8 @@ class CLPControlPanelDlg : public CModelessDialog
   typedef fastdelegate::FastDelegate2<UINT, unsigned long> EventHScroll;
 
  public:
-  CLPControlPanelDlg(CWnd* pParent = NULL);  
-  static const UINT IDD;  
+  CLPControlPanelDlg(CWnd* pParent = NULL);
+  static const UINT IDD;
 
   //Time factor combo box
   void FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_strings);
@@ -54,7 +54,7 @@ class CLPControlPanelDlg : public CModelessDialog
   bool IsPlayButtonEnabled(void) const;
 
   void SetOpenFileButtonText(const _TSTRING& i_text);
-	
+
   //slider
   void SetSliderPosition(unsigned long i_position);
   unsigned long GetSliderPosition(void) const;
@@ -78,10 +78,10 @@ class CLPControlPanelDlg : public CModelessDialog
   void setOnOpenFileButton(EventHandler i_callback);
   void setOnTimeFactorCombo(EventWithCode i_callback);
   void setOnSliderMoved(EventHScroll i_callback);
-  
+
  protected:
   virtual BOOL OnInitDialog();
-  virtual void DoDataExchange(CDataExchange* pDX);  
+  virtual void DoDataExchange(CDataExchange* pDX);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateNextButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePrevButton(CCmdUI* pCmdUI);

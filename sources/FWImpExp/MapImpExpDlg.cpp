@@ -51,7 +51,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
 : Super(CMapImpExpDlg::IDD, pParent)
 {
  m_current_fwd_title_string = _T("");
- m_other_fwd_title_string = _T("");		
+ m_other_fwd_title_string = _T("");
  m_fwd_flags[FLAG_START_MAP] = FALSE;
  m_fwd_flags[FLAG_IDLE_MAP] = FALSE;
  m_fwd_flags[FLAG_WORK_MAP] = FALSE;
@@ -65,7 +65,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_OTHER_FWD_LIST, m_other_fwd_list);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CURRENT_FWD_LIST, m_current_fwd_list);
  DDX_Text(pDX, IDC_MAP_IMPEXP_CURRENT_FWD_TITLE, m_current_fwd_title_string);
- DDX_Text(pDX, IDC_MAP_IMPEXP_OTHER_FWD_TITLE, m_other_fwd_title_string);	
+ DDX_Text(pDX, IDC_MAP_IMPEXP_OTHER_FWD_TITLE, m_other_fwd_title_string);
 
  DDX_Check(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags[FLAG_START_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_IDLEMAP_FLAG, m_fwd_flags[FLAG_IDLE_MAP]);
@@ -99,19 +99,19 @@ void CMapImpExpDlg::OnUpdateExchangeButton(CCmdUI* pCmdUI)
  }
 }
 
-void CMapImpExpDlg::OnMapImpexpExchangeButton() 
+void CMapImpExpDlg::OnMapImpexpExchangeButton()
 {
  if (m_OnExchangeButton)
-  m_OnExchangeButton();	 	
+  m_OnExchangeButton();
 }
 
 //----------------------------------------------------------------------------
 //изменилось выделение в спимке семейств характеристик
-void CMapImpExpDlg::OnChangeFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CMapImpExpDlg::OnChangeFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLISTVIEW *pnmv = (NM_LISTVIEW FAR *) pNMHDR;
-  
- if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED)) 
+
+ if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED))
  {
   //состояние выделения изменилось
   int selected_index = 0;
@@ -120,21 +120,21 @@ void CMapImpExpDlg::OnChangeFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult)
   selected_index = m_current_fwd_list.GetNextItem(-1, LVNI_SELECTED);
 
   if (m_OnFWDCurrentSelectionChanged)
-   m_OnFWDCurrentSelectionChanged(selected_index);     
+   m_OnFWDCurrentSelectionChanged(selected_index);
  }
- 
+
  *pResult = 0;
 }
 
-void CMapImpExpDlg::OnEndLabelEditFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CMapImpExpDlg::OnEndLabelEditFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLVDISPINFO *pdi = (LV_DISPINFO FAR *) pNMHDR;
 
- if (pdi->item.mask == LVIF_TEXT) 
+ if (pdi->item.mask == LVIF_TEXT)
  {
   m_current_fwd_list.SetItem(&pdi->item);
   if (m_OnFWDCurrentListNamechanged)
-   m_OnFWDCurrentListNamechanged(pdi->item.iItem,pdi->item.pszText); 
+   m_OnFWDCurrentListNamechanged(pdi->item.iItem,pdi->item.pszText);
  }
 }
 
@@ -143,14 +143,14 @@ void CMapImpExpDlg::FillFWDCurrentList(std::vector<_TSTRING> i_list_of_names)
  m_current_fwd_list.DeleteAllItems();
  for (size_t i = 0; i < i_list_of_names.size(); i++)
  {
-  m_current_fwd_list.InsertItem(i,i_list_of_names[i].c_str());	
+  m_current_fwd_list.InsertItem(i,i_list_of_names[i].c_str());
  }
 }
 
 void CMapImpExpDlg::SetFWDCurrentListSelection(int i_selected_index)
 {
  if (i_selected_index!=-1)
-  m_current_fwd_list.SetItemState(i_selected_index, LVIS_SELECTED, LVIS_SELECTED);  
+  m_current_fwd_list.SetItemState(i_selected_index, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 int CMapImpExpDlg::GetFWDCurrentListSelection(void)
@@ -162,17 +162,17 @@ int CMapImpExpDlg::GetFWDCurrentListSelection(void)
 
 void CMapImpExpDlg::SetFWDCurrentListTitle(const _TSTRING& i_title)
 {
- m_current_fwd_title_string = i_title.c_str(); 
+ m_current_fwd_title_string = i_title.c_str();
  UpdateData(FALSE);
 }
 
 //----------------------------------------------------------------------------
 //изменилось выделение в спимке семейств характеристик
-void CMapImpExpDlg::OnChangeFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CMapImpExpDlg::OnChangeFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLISTVIEW *pnmv = (NM_LISTVIEW FAR *) pNMHDR;
-  
- if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED)) 
+
+ if (pnmv->uChanged == LVIF_STATE && (pnmv->uNewState & LVIS_SELECTED))
  {
   //состояние выделения изменилось
   int selected_index = 0;
@@ -181,21 +181,21 @@ void CMapImpExpDlg::OnChangeFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult)
   selected_index = m_other_fwd_list.GetNextItem(-1, LVNI_SELECTED);
 
   if (m_OnFWDOtherSelectionChanged)
-   m_OnFWDOtherSelectionChanged(selected_index);     
+   m_OnFWDOtherSelectionChanged(selected_index);
  }
- 
+
  *pResult = 0;
 }
 
-void CMapImpExpDlg::OnEndLabelEditFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult) 
+void CMapImpExpDlg::OnEndLabelEditFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult)
 {
  NMLVDISPINFO *pdi = (LV_DISPINFO FAR *) pNMHDR;
 
- if (pdi->item.mask == LVIF_TEXT) 
+ if (pdi->item.mask == LVIF_TEXT)
  {
   m_other_fwd_list.SetItem(&pdi->item);
   if (m_OnFWDOtherListNamechanged)
-   m_OnFWDOtherListNamechanged(pdi->item.iItem,pdi->item.pszText); 
+   m_OnFWDOtherListNamechanged(pdi->item.iItem,pdi->item.pszText);
  }
 }
 
@@ -204,14 +204,14 @@ void CMapImpExpDlg::FillFWDOtherList(std::vector<_TSTRING> i_list_of_names)
  m_other_fwd_list.DeleteAllItems();
  for (size_t i = 0; i < i_list_of_names.size(); i++)
  {
-  m_other_fwd_list.InsertItem(i,i_list_of_names[i].c_str());	
+  m_other_fwd_list.InsertItem(i,i_list_of_names[i].c_str());
  }
 }
 
 void CMapImpExpDlg::SetFWDOtherListSelection(int i_selected_index)
 {
  if (i_selected_index!=-1)
-  m_other_fwd_list.SetItemState(i_selected_index, LVIS_SELECTED, LVIS_SELECTED);  
+  m_other_fwd_list.SetItemState(i_selected_index, LVIS_SELECTED, LVIS_SELECTED);
 }
 
 int CMapImpExpDlg::GetFWDOtherListSelection(void)
@@ -246,28 +246,28 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
  m_fwd_flags_buttons[i_flag_type].EnableWindow(enable);
 }
 
-void CMapImpExpDlg::OnOK() 
+void CMapImpExpDlg::OnOK()
 {
- //Before closing dialog, notify controller    
+ //Before closing dialog, notify controller
  if (m_OnOkButton)
   m_OnOkButton();
-	
+
  Super::OnOK();
 }
 
-void CMapImpExpDlg::OnCancel() 
+void CMapImpExpDlg::OnCancel()
 {
- //Before closing dialog, notify controller    
+ //Before closing dialog, notify controller
  if (m_OnCancelButton)
-  m_OnCancelButton();	  
-	
+  m_OnCancelButton();
+
  Super::OnCancel();
 }
 
-BOOL CMapImpExpDlg::OnInitDialog() 
+BOOL CMapImpExpDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  if (m_OnActivate)
   m_OnActivate();
 

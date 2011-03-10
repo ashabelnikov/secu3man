@@ -22,24 +22,24 @@
 #include "stdafx.h"
 #include "CRC16.h"
 
-#define      P_16        0xA001   
+#define      P_16        0xA001
 
 unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num)
 {
-unsigned int i;
-unsigned short crc = 0xffff;
+ unsigned int i;
+ unsigned short crc = 0xffff;
 
-  while ( num-- )
-  { 
-    crc ^= *buf++;
-    i = 8;
-    do
-    { 
-      if ( crc & 1 )
-        crc = ( crc >> 1 ) ^ P_16;
-      else
-        crc >>= 1;
-    } while ( --i );
-  }
-  return( crc );
+ while ( num-- )
+ {
+  crc ^= *buf++;
+  i = 8;
+  do
+  {
+   if ( crc & 1 )
+    crc = ( crc >> 1 ) ^ P_16;
+   else
+    crc >>= 1;
+  } while ( --i );
+ }
+ return( crc );
 }

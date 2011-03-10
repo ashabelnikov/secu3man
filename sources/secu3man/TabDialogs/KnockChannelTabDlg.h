@@ -92,7 +92,7 @@ class CKnockChannelTabDlg : public CTabDialog
   CButton m_clear_function_button;
   CSliderCtrl m_level_slider;
 
-  EventHandler  m_OnSaveParameters; 
+  EventHandler  m_OnSaveParameters;
   EventHandler  m_OnCopyToAttenuatorTable;
   EventHandler  m_OnClearFunction;
   bool m_all_enabled;

@@ -50,7 +50,7 @@ void CMIDwellAngle::Create(void)
  m_meter.SetLabelsDecimals(1) ;
  m_meter.SetValueDecimals(2) ;
  m_meter.SetTitle(MLL::LoadString(IDS_MI_ADVANGLE_TITLE)) ;
- m_meter.SetFontScale(80);    
+ m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_ADVANGLE_UNIT));
  m_meter.SetTickNumber(16);
@@ -76,12 +76,12 @@ float CMIDwellAngle::GetValue(void)
 {
  return (float)m_meter.GetNeedlePos();
 }
-	
+
 void CMIDwellAngle::Show(bool show)
 {
  m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
-	
+
 void CMIDwellAngle::Enable(bool enable)
 {
  m_meter.SetState(meter_needle, enable);
@@ -95,24 +95,24 @@ void CMIDwellAngle::Enable(bool enable)
 
  m_meter.Redraw();
 }
-	
+
 bool CMIDwellAngle::IsVisible(void)
 {
  return (m_meter.IsWindowVisible()) ? true : false;
 }
-	
+
 bool CMIDwellAngle::IsEnabled(void)
 {
  bool State = false;
  m_meter.GetState(meter_needle, &State);
  return State;
-}	
-	
+}
+
 void CMIDwellAngle::SetLimits(float loLimit, float upLimit)
 {
  m_meter.SetRange(loLimit, upLimit);
 }
-	
+
 void CMIDwellAngle::SetTicks(int number)
 {
  m_meter.SetTickNumber(number);
@@ -123,5 +123,5 @@ void CMIDwellAngle::Scale(float i_x_factor, float i_y_factor)
 {
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect); 
+ m_meter.MoveWindow(rect);
 }

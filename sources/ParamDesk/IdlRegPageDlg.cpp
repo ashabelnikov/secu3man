@@ -50,7 +50,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTOR_NEG_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTOR_NEG_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTOR_NEG_CAPTION,OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_GOAL_RPM_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_GOAL_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_GOAL_RPM_CAPTION,OnUpdateControls)
@@ -62,7 +62,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_REGULATOR,OnUpdateControls)
-	
+
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,OnUpdateControls)
@@ -95,7 +95,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
@@ -116,9 +116,9 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_SPIN, m_restriction_max_spin);
 
  m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
- m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);   
+ m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
  m_restriction_min_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MIN_EDIT, m_params.min_angle);
- m_restriction_max_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_params.max_angle);   
+ m_restriction_max_edit.DDX_Value(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, m_params.max_angle);
  m_goal_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
  m_dead_band_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
  DDX_Check_UCHAR(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
@@ -133,10 +133,10 @@ void CIdlRegPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-BOOL CIdlRegPageDlg::OnInitDialog() 
+BOOL CIdlRegPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  m_factor_pos_spin.SetBuddy(&m_factor_pos_edit);
  m_factor_pos_edit.SetLimitText(5);
  m_factor_pos_edit.SetDecimalPlaces(2);
@@ -155,7 +155,7 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_goal_rpm_edit.SetLimitText(3);
  m_goal_rpm_spin.SetBuddy(&m_goal_rpm_edit);
  m_goal_rpm_spin.SetRangeAndDelta(250,1800,5);
-	
+
  m_restriction_min_spin.SetBuddy(&m_restriction_min_edit);
  m_restriction_min_edit.SetLimitText(4);
  m_restriction_min_edit.SetDecimalPlaces(2);
@@ -172,16 +172,16 @@ BOOL CIdlRegPageDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CIdlRegPageDlg::OnChangeData() 
+void CIdlRegPageDlg::OnChangeData()
 {
- UpdateData();	
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)  		  
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
 void CIdlRegPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;  
+ m_enabled = (enable) ? TRUE : FALSE;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }

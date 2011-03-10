@@ -52,7 +52,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
-	
+
  DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_field);
  DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_field);
  DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_field);
@@ -62,7 +62,7 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_caption);
  DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_caption);
  DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_caption);
-	
+
  DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_unit);
  DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_unit);
  DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_unit);
@@ -70,17 +70,17 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Text(pDX,IDC_RS_MAP_VALUE,m_map_value);
  DDX_Text(pDX,IDC_RS_UBAT_VALUE,m_ubat_value);
- DDX_Text(pDX,IDC_RS_TEMP_VALUE,m_temp_value);	
- DDX_Text(pDX,IDC_RS_KNOCK_VALUE,m_knock_value);	
+ DDX_Text(pDX,IDC_RS_TEMP_VALUE,m_temp_value);
+ DDX_Text(pDX,IDC_RS_KNOCK_VALUE,m_knock_value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CRSDeskDlg message handlers
 
-BOOL CRSDeskDlg::OnInitDialog() 
+BOOL CRSDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-		
+
  Enable(false);
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -149,7 +149,7 @@ void CRSDeskDlg::GetValues(RawSensDat* o_values)
 void CRSDeskDlg::Resize(const CRect& i_rect)
 {
  //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
- CRect old_rect; 
+ CRect old_rect;
  float Xf, Yf;
  GetWindowRect(old_rect);
  MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
@@ -161,7 +161,7 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
 #define _RESIZE(wnd)\
  rect = MIHelpers::GetChildWndRect(&wnd);\
  MIHelpers::ScaleRect(rect, Xf, Yf);\
- wnd.MoveWindow(rect); 
+ wnd.MoveWindow(rect);
 
  _RESIZE(m_map_field);
  _RESIZE(m_ubat_field);

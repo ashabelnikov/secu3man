@@ -39,7 +39,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
  if (dwReason == DLL_PROCESS_ATTACH)
  {
   TRACE0("PARAMDESK.DLL Initializing!\n");
-		
+
   // Extension DLL one-time initialization
   if (!AfxInitExtensionModule(ParamDeskDLL, hInstance))
    return 0;

@@ -61,16 +61,16 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CParamMonTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamMonTabDlg message handlers
 
-BOOL CParamMonTabDlg::OnInitDialog() 
+BOOL CParamMonTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
+
  CRect rect;
  GetDlgItem(IDC_PM_MIDESK_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
@@ -90,15 +90,15 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
  mp_ParamDeskDlg->Show(true);
-	
+
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CParamMonTabDlg::OnPmShowRawSensors() 
-{//делегируем обработку события чекбокса	
+void CParamMonTabDlg::OnPmShowRawSensors()
+{//делегируем обработку события чекбокса
  if (m_OnRawSensorsCheck)
-  m_OnRawSensorsCheck();  
+  m_OnRawSensorsCheck();
 }
 
 bool CParamMonTabDlg::GetRawSensorsCheckState(void)
@@ -115,10 +115,10 @@ void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 void CParamMonTabDlg::MakePDFloating(bool i_floating)
 {
  ///////////////////////////////////////////////////////////////
- //запоминаем номер последней выбранной вкладки 
+ //запоминаем номер последней выбранной вкладки
  int lastSel = mp_ParamDeskDlg->GetCurSel();
  ///////////////////////////////////////////////////////////////
-  
+
  mp_ParamDeskDlg->DestroyWindow();
  mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD,this);
  ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
@@ -135,19 +135,19 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
 {
  CRect rect;
  GetClientRect(rect);
- 
+
  if (i_enlarge)
  {
   mp_MIDeskDlg->GetWindowRect(m_original_mi_rect);
   ScreenToClient(m_original_mi_rect);
-  mp_RSDeskDlg->GetWindowRect(m_original_rs_rect); 
+  mp_RSDeskDlg->GetWindowRect(m_original_rs_rect);
   ScreenToClient(m_original_rs_rect);
   CRect check_rect;
   m_raw_sensors_check.GetWindowRect(check_rect);
   ScreenToClient(check_rect);
   rect.bottom-= check_rect.Height();
   m_raw_sensors_check.SetWindowPos(0,check_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!  
+  m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!
   CRect mi_rect = m_original_mi_rect;
   _ResizeRect(rect, mi_rect);
   mp_MIDeskDlg->Resize(mi_rect);
@@ -160,7 +160,7 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
  {
   m_raw_sensors_check.SetWindowPos(0,m_original_check_pos.x,m_original_check_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
   mp_MIDeskDlg->Resize(m_original_mi_rect);
-  mp_RSDeskDlg->Resize(m_original_rs_rect); 
+  mp_RSDeskDlg->Resize(m_original_rs_rect);
   m_save_note_text.ShowWindow(SW_SHOW);
  }
 }
@@ -168,7 +168,7 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
 void CParamMonTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
 {
  float Xf = ((float)i_external.Width()) / io_victim.Width();
- float Yf = ((float)i_external.Height()) / io_victim.Height(); 
+ float Yf = ((float)i_external.Height()) / io_victim.Height();
  float factor = min(Xf, Yf);
  //масштабируем
  io_victim.right = MathHelpers::Round((io_victim.Width() * factor));

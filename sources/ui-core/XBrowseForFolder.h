@@ -29,11 +29,11 @@
 
 XBROWSEFORFOLDER_API
 BOOL XBrowseForFolder(HWND hWnd,
-					  LPCTSTR lpszInitialFolder,
-					  int nFolder,
-					  LPCTSTR lpszCaption,
-					  LPTSTR lpszBuf,
-					  DWORD dwBufSize,
-					  BOOL bEditBox = FALSE);
+       LPCTSTR lpszInitialFolder,
+       int nFolder,
+       LPCTSTR lpszCaption,
+       LPTSTR lpszBuf,
+       DWORD dwBufSize,
+       BOOL bEditBox = FALSE);
 
 #endif //XBROWSEFORFOLDER_H

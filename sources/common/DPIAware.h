@@ -22,7 +22,7 @@
 #pragma once
 
 //Class for working with DPI-aware issues
-class DPIAware 
+class DPIAware
 {
  public:
   DPIAware() : m_initialized(false), m_dpiX(96), m_dpiY(96) { }
@@ -50,7 +50,7 @@ class DPIAware
    m_initialized = true;
   }
 
- private:  
+ private:
   bool m_initialized;
   int  m_dpiX;
   int  m_dpiY;

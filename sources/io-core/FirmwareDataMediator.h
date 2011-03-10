@@ -26,7 +26,7 @@
 #include "PlatformParamHolder.h"
 #include <vector>
 
-//Этот класс необходим для абстракции над форматом хранения данных в прошивке 
+//Этот класс необходим для абстракции над форматом хранения данных в прошивке
 //(памяти программ микроконтроллера), а также для хранения этих данных.
 
 class IOCORE_API CFirmwareDataMediator
@@ -39,11 +39,11 @@ class IOCORE_API CFirmwareDataMediator
   void LoadBytes(const BYTE* i_bytes);
   void LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes);
   void LoadDefParametersFromBuffer(const BYTE* i_source_bytes);
-	
+
   //сохранение байтов прошивки в указанный буфер
   void StoreBytes(BYTE* o_bytes);
 
-  //была ли прошивка изменена после последней загрузки 
+  //была ли прошивка изменена после последней загрузки
   bool IsModified(void);
 
   //возвращает true если прошивка загружена (есть что редактировать)
@@ -62,15 +62,15 @@ class IOCORE_API CFirmwareDataMediator
 	//-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
   void SetSignatureInfo(_TSTRING i_string);
-  
+
   void GetStartMap(int i_index, float* o_values, bool i_original = false);
-  void SetStartMap(int i_index,const float* i_values);	
+  void SetStartMap(int i_index,const float* i_values);
   void GetIdleMap(int i_index,  float* o_values, bool i_original = false);
-  void SetIdleMap(int i_index, const float* i_values);	
+  void SetIdleMap(int i_index, const float* i_values);
   void GetWorkMap(int i_index, float* o_values, bool i_original = false);
-  void SetWorkMap(int i_index, const float* i_values);	
+  void SetWorkMap(int i_index, const float* i_values);
   void GetTempMap(int i_index, float* o_values, bool i_original = false);
-  void SetTempMap(int i_index, const float* i_values);	
+  void SetTempMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
@@ -102,7 +102,7 @@ class IOCORE_API CFirmwareDataMediator
   PPFlashParam m_fpp;
   const size_t m_firmware_size;
   BYTE* m_bytes_active;   //байты прошивки (копия для модификации)
-  BYTE* m_bytes_original; //байты прошивки (копия для сравнения) 
+  BYTE* m_bytes_original; //байты прошивки (копия для сравнения)
   bool m_is_opened;
   _TSTRING m_fw_file_name;
 };

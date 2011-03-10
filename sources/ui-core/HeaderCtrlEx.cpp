@@ -1,6 +1,6 @@
 /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -22,18 +22,18 @@ CHeaderCtrlEx::~CHeaderCtrlEx()
  //na
 }
 
-BEGIN_MESSAGE_MAP(CHeaderCtrlEx, CHeaderCtrl)		
+BEGIN_MESSAGE_MAP(CHeaderCtrlEx, CHeaderCtrl)
 END_MESSAGE_MAP()
 
 BOOL CHeaderCtrlEx::Init(CHeaderCtrl *pHeader)
-{	
+{
  _ASSERTE(pHeader && pHeader->GetSafeHwnd());
  if (!SubclassWindow(pHeader->GetSafeHwnd()))
  {
   OutputDebugString(_T("Unable to subclass existing header!\n"));
   return FALSE;
  }
-		
+
  // Iterate through the items and attach the image list
  HDITEM hdi;
  ZeroMemory(&hdi,sizeof(HDITEM));
@@ -41,10 +41,10 @@ BOOL CHeaderCtrlEx::Init(CHeaderCtrl *pHeader)
  {
   GetItem(i, &hdi);
   hdi.fmt |=  HDF_OWNERDRAW;
-  hdi.mask |= HDI_FORMAT;   
+  hdi.mask |= HDI_FORMAT;
   SetItem( i, &hdi );
  }
-	
+
  return TRUE;
 }
 
@@ -68,8 +68,8 @@ void CHeaderCtrlEx::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
 
  // Draw the items text using the text color red.
  COLORREF crOldColor = ::SetTextColor(lpDrawItemStruct->hDC, m_text_color);
- ::DrawText(lpDrawItemStruct->hDC, lpBuffer, _tcsclen(lpBuffer), 
-		&lpDrawItemStruct->rcItem, DT_SINGLELINE|DT_VCENTER|DT_CENTER);
+ ::DrawText(lpDrawItemStruct->hDC, lpBuffer, _tcsclen(lpBuffer),
+  &lpDrawItemStruct->rcItem, DT_SINGLELINE|DT_VCENTER|DT_CENTER);
  ::SetTextColor(lpDrawItemStruct->hDC, crOldColor);
 }
 

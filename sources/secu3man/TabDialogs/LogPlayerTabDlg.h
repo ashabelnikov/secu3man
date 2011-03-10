@@ -35,7 +35,7 @@ class CLogPlayerTabDlg : public CTabDialog
   typedef CTabDialog Super;
 
  public:
-  CLogPlayerTabDlg(CWnd* pParent = NULL);  
+  CLogPlayerTabDlg(CWnd* pParent = NULL);
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
@@ -50,7 +50,7 @@ class CLogPlayerTabDlg : public CTabDialog
 
   //additional: for displaying of knock
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
-  
+
  protected:
   void _ResizeRect(const CRect& i_external, CRect& io_victim);
   void _InitializeOscilloscopeControl(void);

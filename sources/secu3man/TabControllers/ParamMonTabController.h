@@ -34,16 +34,16 @@ class CParamMonTabDlg;
 class CStatusBarManager;
 class ISettingsData;
 
-class CParamMonTabController : public ITabController, private IAPPEventHandler 
+class CParamMonTabController : public ITabController, private IAPPEventHandler
 {
  public:
   CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
   virtual ~CParamMonTabController();
 
- private:	
+ private:
   //события от панели параметров
-  void OnParamDeskTabActivate(void); 
-  void OnParamDeskChangeInTab(void);   
+  void OnParamDeskTabActivate(void);
+  void OnParamDeskChangeInTab(void);
 
   //появление/закрытие вкладки параметров и монитора
   virtual void OnActivate(void);
@@ -54,7 +54,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
 
   //from IAPPEventHandler:
-  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);           
+  virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
   void OnSettingsChanged(void);
@@ -72,10 +72,10 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 
   ////////////////////internal//////////////////////////
   bool CollectInitialDataFromSECU(const BYTE i_descriptor, const void* i_packet_data);
-  void StartCollectingInitialData(void); 
+  void StartCollectingInitialData(void);
   //////////////////////////////////////////////////////
   bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
-  void StartReadingNecessaryParameters(void);   
+  void StartReadingNecessaryParameters(void);
   //////////////////////////////////////////////////////
 
   void OnRawSensorsCheckBox(void);
@@ -84,7 +84,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
  private:
   CParamMonTabDlg*  m_view;
   CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;  
+  CStatusBarManager*  m_sbar;
   ISettingsData* mp_settings;
   CObjectTimer<CParamMonTabController> m_pd_changes_timer;
 

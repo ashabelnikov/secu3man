@@ -97,14 +97,14 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
 
 CLogPlayerTabController::~CLogPlayerTabController()
 {
- //na  
+ //na
 }
 
 //изменились настройки программы!
 void CLogPlayerTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true); 
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  m_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
 
  //обновляем диапазоны приборов
@@ -121,10 +121,10 @@ void CLogPlayerTabController::OnActivate(void)
 
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY); 
- m_comm->setOnSettingsChanged(MakeDelegate(this,&CLogPlayerTabController::OnSettingsChanged)); 
+ m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
+ m_comm->setOnSettingsChanged(MakeDelegate(this,&CLogPlayerTabController::OnSettingsChanged));
  //////////////////////////////////////////////////////////////////
- 
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
@@ -135,7 +135,7 @@ void CLogPlayerTabController::OnActivate(void)
 
  std::vector<_TSTRING> tf_content;
  for(size_t i = 0; i < m_time_factors.size(); ++i)
-  tf_content.push_back(m_time_factors[i].first.c_str()); 
+  tf_content.push_back(m_time_factors[i].first.c_str());
  m_view->mp_LPPanelDlg->FillTimeFactorCombo(tf_content);
 
  m_view->mp_LPPanelDlg->SetTimeFactor(m_current_time_factor);
@@ -163,7 +163,7 @@ void CLogPlayerTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
    case OPCODE_EEPROM_PARAM_SAVE:
     m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;
-  }		
+  }
  }
 }
 
@@ -174,10 +174,10 @@ void CLogPlayerTabController::OnConnection(const bool i_online)
  ASSERT(m_sbar);
 
  if (i_online) //перешли в онлайн
-  state = CStatusBarManager::STATE_ONLINE;	
+  state = CStatusBarManager::STATE_ONLINE;
  else
-  state = CStatusBarManager::STATE_OFFLINE;  
- 
+  state = CStatusBarManager::STATE_OFFLINE;
+
  m_sbar->SetConnectionState(state);
 }
 
@@ -195,10 +195,10 @@ void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
  //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
  //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
- //вкладку к нужному размеру.   
+ //вкладку к нужному размеру.
 
- if (i_what) 
-  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height()); 
+ if (i_what)
+  m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
  m_view->EnlargeMonitor(i_what);
 }
@@ -211,22 +211,22 @@ void CLogPlayerTabController::OnOpenFileButton(void)
   return;
  }
 
- HANDLE   hFile = NULL;    
+ HANDLE   hFile = NULL;
  static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
  CFileDialog open(TRUE, NULL, NULL, NULL, szFilter, NULL);
-  
+
  if (open.DoModal() != IDOK)
   return; //пользователь передумал
-       
+
  LogReader::FileError error_id;
  bool result = mp_log_reader->OpenFile(open.GetFileName().GetBuffer(0), error_id);
  if (false==result)
  {
-  if (error_id==LogReader::FE_OPEN) 
+  if (error_id==LogReader::FE_OPEN)
    AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
   else if (error_id==LogReader::FE_FORMAT)
   {
-   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));  
+   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));
   }
   else
    ASSERT(0);
@@ -242,7 +242,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  string.Format(MLL::LoadString(IDS_LP_FILE_INFO_FMT_STRING),open.GetFileName(),mp_log_reader->GetCount());
  m_view->mp_LPPanelDlg->SetFileIndicator(string.GetBuffer(0));
 
- m_view->mp_MIDeskDlg->Enable(true); 
+ m_view->mp_MIDeskDlg->Enable(true);
  m_view->mp_LPPanelDlg->EnableAll(true);
 
   //инициализируем логику плеера и начинаем сразу проигрывать
@@ -299,7 +299,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_TOP:
    {
    _END_TRACKING();
-   long count = ((long)m_view->mp_LPPanelDlg->GetSliderPosition()) - (long)mp_log_reader->GetCurPos();  
+   long count = ((long)m_view->mp_LPPanelDlg->GetSliderPosition()) - (long)mp_log_reader->GetCurPos();
    for(long i = 0; i < abs(count); ++i)
     _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
    }
@@ -309,7 +309,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_PAGEUP:
    {
     _END_TRACKING();
-    unsigned long count = m_view->mp_LPPanelDlg->GetSliderPageSize();   
+    unsigned long count = m_view->mp_LPPanelDlg->GetSliderPageSize();
     for(unsigned long i = 0; i < count; ++i)
      _ProcessOneRecord(false, i_nSBCode==TB_PAGEDOWN ? DIR_NEXT : DIR_PREV, false);
    }
@@ -319,7 +319,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_LINEUP:
    {
     _END_TRACKING();
-    unsigned long count = m_view->mp_LPPanelDlg->GetSliderLineSize();   
+    unsigned long count = m_view->mp_LPPanelDlg->GetSliderLineSize();
     for(unsigned long i = 0; i < count; ++i)
      _ProcessOneRecord(false, i_nSBCode==TB_LINEDOWN ? DIR_NEXT : DIR_PREV, false);
    }
@@ -328,7 +328,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_THUMBPOSITION:
   case TB_THUMBTRACK:
    _END_TRACKING();
-   long count = (int)i_nPos - (int)mp_log_reader->GetCurPos();  
+   long count = (int)i_nPos - (int)mp_log_reader->GetCurPos();
    for(long i = 0; i < abs(count); ++i)
     _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
 
@@ -352,15 +352,15 @@ void CLogPlayerTabController::OnTimer(void)
 }
 
 void CLogPlayerTabController::_GoNext(void)
-{ 
+{
  //вычисляем период и добавляем его в очередь спереди
  unsigned long period = CalcPeriod(m_prev_record.first, m_curr_record.first);
  m_last_perionds.push_front(period);
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
-  m_last_perionds.pop_back(); 
- 
+  m_last_perionds.pop_back();
+
  m_prev_record = m_curr_record;
 }
 
@@ -372,15 +372,15 @@ void CLogPlayerTabController::_GoBack(void)
 
  //ограничиваем размер очереди
  if (m_last_perionds.size() > QUEUE_SIZE)
-  m_last_perionds.pop_front(); 
- 
- m_prev_record = m_curr_record; 
+  m_last_perionds.pop_front();
+
+ m_prev_record = m_curr_record;
 }
 
 void CLogPlayerTabController::_GetRecord(void)
 {
  bool status = mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second);
- if (!status) 
+ if (!status)
  {
   AfxMessageBox(MLL::LoadString(IDS_LP_FILE_READ_ERROR), MB_OK);
   _ClosePlayer(); //прекращаем проигрывание
@@ -405,7 +405,7 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
  if (i_direction == DIR_NEXT)
-  mp_log_reader->Next();  
+  mp_log_reader->Next();
  else if (i_direction == DIR_PREV)
   mp_log_reader->Prev();
  else
@@ -415,9 +415,9 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
  }
 
  _GetRecord();
- 
+
  if (i_direction == DIR_NEXT)
-  _GoNext();  
+  _GoNext();
  else if (i_direction == DIR_PREV)
   _GoBack();
  else
@@ -438,14 +438,14 @@ void CLogPlayerTabController::_UpdateTimerPeriod(bool i_set_timer)
 {
  //Вычисляем средний период. Учитываем фактор времени
  unsigned long period = _GetAveragedPeriod();
- period = MathHelpers::Round(((float)period) * m_time_factors[m_current_time_factor].second); 
+ period = MathHelpers::Round(((float)period) * m_time_factors[m_current_time_factor].second);
 
  //перезапускаем таймер если нужно. Если новый период отличается от старого
- //меньше чем на 10%, то не перезапускаем таймер 
+ //меньше чем на 10%, то не перезапускаем таймер
  if ((i_set_timer) && ((unsigned long)abs(m_timer.GetPeriod() - (int)period) > (period / 10)))
- {    
+ {
   m_timer.KillTimer();
-  m_timer.SetTimer(period);  
+  m_timer.SetTimer(period);
  }
 }
 
@@ -464,7 +464,7 @@ void CLogPlayerTabController::_InitPlayer(void)
 {
  m_view->mp_LPPanelDlg->EnableSlider(mp_log_reader->GetCount() > 1);
  m_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount());
- m_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos()); 
+ m_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
  _GetRecord();
  _DisplayCurrentRecord(DIR_NEXT);
  _UpdateButtons();
@@ -478,8 +478,8 @@ void CLogPlayerTabController::_ClosePlayer(void)
  m_view->mp_MIDeskDlg->Enable(false);
  m_view->mp_LPPanelDlg->SetSliderPosition(0);
  m_view->mp_LPPanelDlg->EnableAll(false);
- m_timer.KillTimer(); 
- mp_log_reader->CloseFile();     
+ m_timer.KillTimer();
+ mp_log_reader->CloseFile();
  m_view->mp_LPPanelDlg->SetPositionIndicator(_T(""));
  m_view->ResetKnockOscilloscope();
 }
@@ -491,7 +491,7 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 
  //выводим время записи
  CString string;
- string.Format(_T("%05d    %02d:%02d:%02d.%02d"), 
+ string.Format(_T("%05d    %02d:%02d:%02d.%02d"),
      mp_log_reader->GetCurPos() + 1,
      m_curr_record.first.wHour,
      m_curr_record.first.wMinute,

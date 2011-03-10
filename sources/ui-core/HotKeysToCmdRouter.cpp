@@ -1,6 +1,6 @@
 /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -40,7 +40,7 @@ bool CHotKeysToCmdRouter::Close(void)
   result = false;
 
  mp_OriginalWnd = NULL;
- 
+
  return result;
 }
 
@@ -70,12 +70,12 @@ bool CHotKeysToCmdRouter::RegisterCommand(UINT i_command_id, UINT i_vk, UINT i_f
   ASSERT(0);
   return false;
  }
- 
- //<ThreadID> - <Command ID> - <Virtual key> - <fsModifiers> 
+
+ //<ThreadID> - <Command ID> - <Virtual key> - <fsModifiers>
  _TSTRING atom_name;
  TCHAR string[256];
- atom_name = m_thread_id_string + _T("-") + _itot(i_command_id, string, 10) + _T("-") + 
-	      _itot(i_vk, string, 16) + _T("-") + _itot(i_fsModifiers, string, 16);
+ atom_name = m_thread_id_string + _T("-") + _itot(i_command_id, string, 10) + _T("-") +
+        _itot(i_vk, string, 16) + _T("-") + _itot(i_fsModifiers, string, 16);
 
  int nIDHotKey = GlobalAddAtom(atom_name.c_str());
  if (0==nIDHotKey)
@@ -126,7 +126,7 @@ bool CHotKeysToCmdRouter::UnregisterCommand(UINT i_command_id)
 
  //ID-шек c кодом i_command_id в базе данных может быть больше одной, поэтому нам нужен цикл
  HotKeyMap::iterator it;
- while((it = _FindCommandID(i_command_id)) != m_hot_key_map.end()) 
+ while((it = _FindCommandID(i_command_id)) != m_hot_key_map.end())
  {
   is_command_exist = true;
   //нашли ID-шку в базе данных. Надо снять с регистрации горячую клавишу
@@ -136,7 +136,7 @@ bool CHotKeysToCmdRouter::UnregisterCommand(UINT i_command_id)
    result = false;
 
   //удаляем из базы данных
-  m_hot_key_map.erase(it);  
+  m_hot_key_map.erase(it);
  }
 
  //если были ошибки или команды нет в базе данных, то возвращаем false.
@@ -152,7 +152,7 @@ bool CHotKeysToCmdRouter::UnregisterAllCommands()
   if (!UnregisterCommand(m_hot_key_map.begin()->second.m_id_command))
    result = false;
  }
- 
+
  return result;
 }
 
@@ -160,23 +160,23 @@ LRESULT CHotKeysToCmdRouter::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  switch(uMsg)
  {
-  case WM_HOTKEY: 
+  case WM_HOTKEY:
    if (m_hot_key_map.find(wParam)!=m_hot_key_map.end())
    {
     DWORD wnd_pid = 0, this_pid = ::GetCurrentProcessId();
     HWND hwnd = ::GetActiveWindow();
     ::GetWindowThreadProcessId(hwnd, &wnd_pid);
     //не посылаем сообщение если активно окно из другого процесса
-    if(wnd_pid==this_pid)   
-    {    
+    if(wnd_pid==this_pid)
+    {
      //send message as it from menu
-     mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam].m_id_command,0),NULL);       
+     mp_OriginalWnd->SendMessage(WM_COMMAND,MAKELONG(m_hot_key_map[wParam].m_id_command,0),NULL);
     }
    }
    else
     ASSERT(0); //unregistered hot key
    break;
  }
- 
+
  return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
 }

@@ -28,7 +28,7 @@
 //заданных числел (unsigned char).
 //size - размер в байтах!!!
 bool CNumericConv::HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size)
-{  
+{
  int j=0;
  for(int i = 0; i < size; i++)
  {
@@ -48,7 +48,7 @@ bool CNumericConv::HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size)
 //≈сли шестнадцатеричное число содержит ошибки то возвращает false
 bool CNumericConv::Hex8ToBin(const BYTE* i_buf,BYTE* o_byte)
 {
- if ((i_buf==NULL)||(o_byte==NULL)) 
+ if ((i_buf==NULL)||(o_byte==NULL))
   return false;
  if (isxdigit(i_buf[0])&&(isxdigit(i_buf[1])))
  {
@@ -89,7 +89,7 @@ bool CNumericConv::BinToHexArray(const BYTE* i_buf, BYTE* o_buf, const int size)
 
 bool CNumericConv::Bin8ToHex(const BYTE i_byte,BYTE* o_hex_number)
 {
- if (o_hex_number==NULL) 
+ if (o_hex_number==NULL)
   return false;
 
  o_hex_number[0] = DTOH(i_byte >> 4); //store HI part
@@ -99,7 +99,7 @@ bool CNumericConv::Bin8ToHex(const BYTE i_byte,BYTE* o_hex_number)
 
 
 bool CNumericConv::Bin8ToHex(const BYTE i_byte,std::string& o_hex_number)
-{ 
+{
  o_hex_number+= DTOH(i_byte >> 4); //store HI part
  o_hex_number+= DTOH(i_byte);      //store LO part
  return true;
@@ -108,7 +108,7 @@ bool CNumericConv::Bin8ToHex(const BYTE i_byte,std::string& o_hex_number)
 
 bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = false*/)
 {
- if (o_word==NULL) 
+ if (o_word==NULL)
   return false;
 
  BYTE lo,hi;
@@ -134,7 +134,7 @@ bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = f
 
 bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword)
 {
- if (o_dword==NULL) 
+ if (o_dword==NULL)
   return false;
 
  BYTE b0,b1,b2,b3;
@@ -186,7 +186,7 @@ bool CNumericConv::Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte)
 
 bool CNumericConv::Bin12ToHex(const int i_12bit, BYTE* o_hex_number)
 {
- if (o_hex_number==NULL) 
+ if (o_hex_number==NULL)
   return false;
 
  o_hex_number[0] = DTOH(i_12bit >> 8); //store 1st 4 bits

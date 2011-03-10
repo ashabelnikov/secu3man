@@ -24,10 +24,10 @@
 #include <map>
 
 //эта глобалная переменная необходима для передачи в обработчики правильного this, выбор элементов
-//производится по идентификатору таймера, каждый элемент содержит указатель на CObjectTimer 
+//производится по идентификатору таймера, каждый элемент содержит указатель на CObjectTimer
 static std::map<int,void*> g_object_timer_instance_map;
 
-template<class T> class CObjectTimer  
+template<class T> class CObjectTimer
 {
  public:
   typedef void (T::*msgHandlerType) (void);
@@ -36,12 +36,12 @@ template<class T> class CObjectTimer
   CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
 
   //при удалении очередного объекта-таймера мапа становится меньше на один элемент
-  virtual ~CObjectTimer() 
+  virtual ~CObjectTimer()
   {
-   KillTimer();	
+   KillTimer();
   };
 
-  //устанавливает все необходимые параметры и запускает таймер 
+  //устанавливает все необходимые параметры и запускает таймер
   void SetTimer(T* object, msgHandlerType i_function, int interval)
   {
    SetMsgHandler(i_function);
@@ -50,7 +50,7 @@ template<class T> class CObjectTimer
    m_interval_ms = interval;
   };
 
-  //запускать таймер этой функцией можно только если предварительно в конструктор был передан 
+  //запускать таймер этой функцией можно только если предварительно в конструктор был передан
   //указатель на объект и была вызвана функция SetMsgHandler() для установки обработчика
   void SetTimer(int interval)
   {
@@ -64,14 +64,14 @@ template<class T> class CObjectTimer
    m_interval_ms = interval;
   }
 
-  //убивать таймер этой функцией 
+  //убивать таймер этой функцией
   void KillTimer(void)
   {
    ::KillTimer(NULL,m_timer_id);
    if (!g_object_timer_instance_map.empty())
-   { 
-    if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())	  
-     g_object_timer_instance_map.erase(m_timer_id);  	 
+   {
+    if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())
+     g_object_timer_instance_map.erase(m_timer_id);
     else
      ASSERT(m_timer_id == 0); //timer id is non-zero but we can not find it in map!
    }
@@ -98,28 +98,28 @@ template<class T> class CObjectTimer
   }
 
  private:
-    
+
   static inline VOID CALLBACK TimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
   {
    //welcome to hell :-D ... а кто сказал что в С++ есть делегаты!?
-   CObjectTimer* p_this = reinterpret_cast<CObjectTimer*>(g_object_timer_instance_map[idEvent]); 
+   CObjectTimer* p_this = reinterpret_cast<CObjectTimer*>(g_object_timer_instance_map[idEvent]);
    ASSERT(p_this);
    if (!p_this)  return;
 
    T *x = p_this->m_pDispatcher;
    ASSERT(x);
    if (!x) return;
-	  	  
+
    //делегируем выполнение операции указанному методу класса T, только если хендлер проинициализирован
    if (p_this->msgHandler!=NULL)
    {
-    (x->*(p_this->msgHandler))(); 	  
+    (x->*(p_this->msgHandler))();
    }
   };
 
  private: //internal data
   msgHandlerType msgHandler;
-  T*   m_pDispatcher; 
+  T*   m_pDispatcher;
   UINT_PTR m_timer_id;
   int  m_interval_ms;
 };

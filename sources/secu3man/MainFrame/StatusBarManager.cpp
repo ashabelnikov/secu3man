@@ -29,7 +29,7 @@
 static UINT indicators[] =
 {
  ID_SEPARATOR,           // status line indicator
- ID_INDICATOR_CAPS,      
+ ID_INDICATOR_CAPS,
  ID_INDICATOR_NUM,
  ID_INDICATOR_SCRL
 };
@@ -62,7 +62,7 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
 
  m_pParentWnd = pParentWnd;
 
- //создаем StatusBar и добавляем в него стандартные поля (индикаторы)  
+ //создаем StatusBar и добавляем в него стандартные поля (индикаторы)
  if (!mp_wndStatusBar->Create(pParentWnd,WS_CHILD|WS_VISIBLE|CBRS_BOTTOM,ID_MAIN_STATUS_BAR) ||
      !mp_wndStatusBar->SetIndicators(indicators,sizeof(indicators)/sizeof(UINT)))
  {
@@ -70,7 +70,7 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
   return false;      // fail to create
  }
 
- //подгружаем из ресурсов иконки и строки 
+ //подгружаем из ресурсов иконки и строки
  m_ConnIcons[0] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_CONNECTED));
  m_ConnIcons[1] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_DISCONNECTED));
  m_ConnIcons[2] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_BOOTLOADER));
@@ -111,7 +111,7 @@ void CStatusBarManager::AddContent(void)
  mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(80));
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
  CProgressCtrl* progress = new CProgressCtrl;
- progress->Create(WS_CHILD,CRect(0,0,0,0),mp_wndStatusBar.get(),ID_MSB_INDICATOR_PROGRESS);  
+ progress->Create(WS_CHILD,CRect(0,0,0,0),mp_wndStatusBar.get(),ID_MSB_INDICATOR_PROGRESS);
  mp_wndStatusBar->AddControl(progress,ID_MSB_INDICATOR_PROGRESS);
 
  //проценты
@@ -150,7 +150,7 @@ void CStatusBarManager::AddContent(void)
 
 //Устанавливает текущую иконку и текст (состояние соединения)
 void CStatusBarManager::SetConnectionState(int i_State)
-{	
+{
  int idx_icon = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_ICON);
  int idx_str =  mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_CONNTXT);
 
@@ -181,12 +181,12 @@ void CStatusBarManager::ShowProgressBar(bool show)
 {
  MPCStatusBarPaneControlInfo* info = mp_wndStatusBar->GetPanControl(ID_MSB_INDICATOR_PROGRESS);
  ASSERT(info);
- int nCmdShow = ((show) ? SW_SHOW : SW_HIDE);  
+ int nCmdShow = ((show) ? SW_SHOW : SW_HIDE);
  info->m_hWnd->ShowWindow(nCmdShow);
  if (nCmdShow == SW_HIDE)
  { //очищаем текстовое значение
   int idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_PERCENT);
-  mp_wndStatusBar->SetPaneText(idx,_T(""));  
+  mp_wndStatusBar->SetPaneText(idx,_T(""));
  }
 }
 
@@ -213,20 +213,20 @@ void CStatusBarManager::SetProgressPos(int nPos)
  int percents = ((100 * nPos) / (nUpper - nLower));
  CString str;
  str.Format(_T("%d%s"),percents,_T("%"));
- mp_wndStatusBar->SetPaneText(idx,str);  
+ mp_wndStatusBar->SetPaneText(idx,str);
 }
 
 //Устанавливает информационный текст
 void CStatusBarManager::SetInformationText(const CString& i_text)
 {
  int idx = mp_wndStatusBar->CommandToIndex(ID_SEPARATOR);
- mp_wndStatusBar->SetPaneText(idx,i_text); 
+ mp_wndStatusBar->SetPaneText(idx,i_text);
 }
 
 //Устанавливает текущую иконку и текст (состояние соединения)
 void CStatusBarManager::SetLoggerState(int i_state)
-{	
- int idx_icon = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_LOGWR);  
+{
+ int idx_icon = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_LOGWR);
  CStatusBarCtrl& status = mp_wndStatusBar->GetStatusBarCtrl();
 
  switch(i_state)

@@ -9,17 +9,17 @@ enum MeterMemberEnum
 {
  meter_title,   //заголовок (название прибора)
  meter_needle,  //стрелка
- meter_grid,    //деления шкалы  
+ meter_grid,    //деления шкалы
  meter_value,   //числовое значение отображаемое внизу
- meter_labels,  //подписи напротив каждого деления 
+ meter_labels,  //подписи напротив каждого деления
  meter_unit,    //единицы измерения
  meter_bground, //фон
 };
 
 /////////////////////////////////////////////////////////////////////////////
 // CAnalogMeter command target
-class AFX_EXT_CLASS CAnalogMeter 
-{   
+class AFX_EXT_CLASS CAnalogMeter
+{
  public:
   CAnalogMeter() ;
   virtual ~CAnalogMeter();
@@ -28,7 +28,7 @@ class AFX_EXT_CLASS CAnalogMeter
  public:
   void ShowMeter(CDC *pDC, CRect rectBorder);
   virtual void UpdateNeedle(CDC *pDC, double dPos);
-  
+
   void SetColor(enum MeterMemberEnum meter_member, COLORREF Color);
   void SetState(enum MeterMemberEnum meter_member, bool State);
   void SetRange(double dMin, double dMax);
@@ -37,7 +37,7 @@ class AFX_EXT_CLASS CAnalogMeter
   void SetValueDecimals(int nValueDecimals);
   void SetTitle(CString strTitle);
   void SetUnit(CString strUnit);
-  void SetGridLineWidth(int width) 
+  void SetGridLineWidth(int width)
   {
    m_nGridLineWidth = width;  // set pen/brush colors
    ActuateColors();
@@ -117,22 +117,22 @@ class AFX_EXT_CLASS CAnalogMeter
   int m_nFontHeight;
   int m_nGridLineWidth;
   int m_nTickNumber;
-  
+
   double m_dPI;
   double m_dLimitAngleDeg;
   double m_dLimitAngleRad;
   double m_dRadiansPerValue;
   double m_dNeedlePos;
-  double m_dMinScale; 
+  double m_dMinScale;
   double m_dMaxScale;
- 
+
   CString m_strTitle;
   CString m_strUnit;
 
   CDC     m_dcGrid;
   CBitmap m_bitmapGrid;
   CBitmap *m_pbitmapOldGrid;
-  
+
   CDC     m_dcNeedle ;
   CBitmap m_bitmapNeedle;
   CBitmap *m_pbitmapOldNeedle;
@@ -154,7 +154,7 @@ class AFX_EXT_CLASS CAnalogMeter
   CPen    m_PenN_Needle;
   CBrush  m_BrushN_Needle;
   CPen    m_PenN_BGround;
-  CBrush  m_BrushN_BGround; 
+  CBrush  m_BrushN_BGround;
 };
 
 /////////////////////////////////////////////////////////////////////////////

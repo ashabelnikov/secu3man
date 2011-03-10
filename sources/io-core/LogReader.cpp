@@ -104,7 +104,7 @@ bool LogReader::CloseFile(void)
   m_current_record = 0;
   int result = fclose(m_file_handle);
   m_file_handle = NULL;
-  return (result == 0); 
+  return (result == 0);
  }
  else
   return false;
@@ -126,7 +126,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
   return false;
 
  int result;
- //используем ASCII версию, файл не должен быть юникодным  
+ //используем ASCII версию, файл не должен быть юникодным
  int wHour, wMinute, wSecond, wMilliseconds;
 
  result = sscanf(string, cCSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
@@ -138,8 +138,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_time.wSecond = wSecond;
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
- int frequen,carb,gas,air_flow,ephh_valve,epm_valve = 0;                           
- float pressure,voltage,temperat,adv_angle,knock_k, knock_retard; 
+ int frequen,carb,gas,air_flow,ephh_valve,epm_valve = 0;
+ float pressure,voltage,temperat,adv_angle,knock_k, knock_retard;
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
@@ -156,7 +156,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
                 &epm_valve);
 
  if (result != CSV_COUNT_DATA_VAL)
-  return false; 
+  return false;
  o_data.frequen = frequen;
  o_data.adv_angle = adv_angle;
  o_data.pressure = pressure;

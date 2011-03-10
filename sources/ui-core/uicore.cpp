@@ -1,6 +1,6 @@
  /****************************************************************
  *
- *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008. 
+ *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
  *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
  *  Microprocessors systems - design & programming.
  *
@@ -26,7 +26,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
  if (dwReason == DLL_PROCESS_ATTACH)
  {
   TRACE0("UICORE.DLL Initializing!\n");
-	
+
   // Extension DLL one-time initialization
   if (!AfxInitExtensionModule(UicoreDLL, hInstance))
    return 0;

@@ -62,13 +62,13 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
 {
- //na  
+ //na
 }
 
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, m_param_save_button);  
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, m_param_save_button);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, m_clear_function_button);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER, m_level_slider);
@@ -76,7 +76,7 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
@@ -94,7 +94,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CKnockChannelTabDlg message handlers
 
-BOOL CKnockChannelTabDlg::OnInitDialog() 
+BOOL CKnockChannelTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
@@ -119,7 +119,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CKnockChannelTabDlg::OnDestroy() 
+void CKnockChannelTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  delete mp_RTChart;
@@ -201,10 +201,10 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 
  // Sets the min and max values of the bottom and left axis.
  mp_RTChart->GetBottomAxis()->SetMinMax(rpm, rpm + (rpm_step * RPM_KNOCK_SIGNAL_POINTS));
- mp_RTChart->GetLeftAxis()->SetMinMax(K_SIG_MIN, K_SIG_MAX); 
+ mp_RTChart->GetLeftAxis()->SetMinMax(K_SIG_MIN, K_SIG_MAX);
 
  for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
- {	  
+ {
   m_pPointSerie->AddPoint(rpm, 0.0);
   m_pLineSerie->AddPoint(rpm, 0.0);
   rpm+=rpm_step;
@@ -226,7 +226,7 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
  ScreenToClient(rect);
 
  // create the control
- mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this); 
+ mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this);
 
  // customize the control
  mp_OScopeCtrl->SetRange(K_SIG_MIN, K_SIG_MAX, 1);
@@ -237,7 +237,7 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
  mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));
 }
 
-void CKnockChannelTabDlg::setOnSaveParameters(EventHandler OnFunction) 
+void CKnockChannelTabDlg::setOnSaveParameters(EventHandler OnFunction)
 {
  m_OnSaveParameters = OnFunction;
 }

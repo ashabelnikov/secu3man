@@ -35,7 +35,7 @@ class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
   CIdlRegPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
-    
+
   void Enable(bool enable);
   bool IsEnabled(void);
 

@@ -37,7 +37,7 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
   CFunSetPageDlg(CWnd* pParent = NULL); // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
-    
+
   void Enable(bool enable);
   bool IsEnabled(void);
 

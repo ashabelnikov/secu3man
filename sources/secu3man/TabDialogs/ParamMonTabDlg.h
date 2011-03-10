@@ -35,7 +35,7 @@ class CParamMonTabDlg : public CTabDialog
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
-  CParamMonTabDlg(CWnd* pParent = NULL);   // standard constructor   
+  CParamMonTabDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 

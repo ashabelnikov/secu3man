@@ -20,7 +20,7 @@ typedef void (__cdecl *EventHandler)(void* i_param);
 //---------------------------------------------------------------------------
 class TForm1 : public TForm
 {
-__published:	// IDE-managed Components
+__published: // IDE-managed Components
         TChart *Chart1;
         TLineSeries *Series1;
         TLineSeries *Series2;
@@ -78,7 +78,7 @@ public:
         void SetOnChange(EventHandler i_pOnChange,void* i_param);
         void SetOnClose(EventHandler i_pOnClose,void* i_param);
 
-public:		// User declarations
+public: // User declarations
         int         count_x;
         int         count_z;
         int         u_slots[1024];
@@ -106,7 +106,7 @@ public:		// User declarations
         void FillChart(bool dir,int cm);
         void HideAllSeries(void);
 
-private:	// User declarations
+private: // User declarations
         //адрес функции которая будет вызываться после изменения данных
         EventHandler m_pOnChange;
         void* m_param_on_change;

@@ -36,7 +36,7 @@ MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
 {
  mp_view = new CMapImpExpDlg();
  ASSERT(mp_fwd);
- 
+
  //Назначаем обработчики событий от представления
  mp_view->setOnOkButton(MakeDelegate(this,&MPSZImportController::OnOkPressed));
  mp_view->setOnCancelButton(MakeDelegate(this,&MPSZImportController::OnCancelPressed));
@@ -46,26 +46,26 @@ MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
 }
 
 int MPSZImportController::DoImport(void)
-{   
+{
  static TCHAR BASED_CODE szFilter[] = _T("MPSZ Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||");
  CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
- 
+
  if (open.DoModal()==IDOK)
- {    
+ {
   MPSZFileDataIO::EFileTypes type;
   if (open.GetFileExt()==_T("mpx"))
    type = MPSZFileDataIO::FILE_TYPE_MPX;
   if (open.GetFileExt()==_T("mpz"))
    type = MPSZFileDataIO::FILE_TYPE_MPZ;
   else
-   type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx 
+   type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
 
   m_mpsz_file_name = _TSTRING(open.GetFileName());
-  bool result = m_mpsz_io.Load(m_mpsz_file_name,type);  
+  bool result = m_mpsz_io.Load(m_mpsz_file_name,type);
   if (!result)
   {
    AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
-   return IDCANCEL; 
+   return IDCANCEL;
   }
  }
  else
@@ -107,15 +107,15 @@ void MPSZImportController::OnExchangePressed(void)
  else
  { //если строка пустая, то генерируем "искусcтвенное" имя
   TCHAR name[32];
-  _stprintf(name,MLL::GetString(IDS_MAP_NO_NAME).c_str(),other_sel+1); 	
-  mp_fwd->maps[current_sel].name = name; 
+  _stprintf(name,MLL::GetString(IDS_MAP_NO_NAME).c_str(),other_sel+1);
+  mp_fwd->maps[current_sel].name = name;
  }
 
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  mp_view->SetFWDCurrentListSelection(current_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  memcpy(mp_fwd->maps[current_sel].f_str, m_mpsz_io.GetData().maps[other_sel].f_str,sizeof(float) * F_STR_POINTS); 
+  memcpy(mp_fwd->maps[current_sel].f_str, m_mpsz_io.GetData().maps[other_sel].f_str,sizeof(float) * F_STR_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
   memcpy(mp_fwd->maps[current_sel].f_idl, m_mpsz_io.GetData().maps[other_sel].f_idl,sizeof(float) * F_IDL_POINTS);
@@ -154,7 +154,7 @@ MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
 {
  mp_view = new CMapImpExpDlg();
  ASSERT(mp_fwd);
- 
+
  //Назначаем обработчики событий от представления
  mp_view->setOnOkButton(MakeDelegate(this,&MPSZExportController::OnOkPressed));
  mp_view->setOnCancelButton(MakeDelegate(this,&MPSZExportController::OnCancelPressed));
@@ -164,7 +164,7 @@ MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
 }
 
 int MPSZExportController::DoExport(void)
-{	
+{
  //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
  class CFileDialogEx : public CFileDialog
  {
@@ -178,7 +178,7 @@ int MPSZExportController::DoExport(void)
    {
     if (m_ofn.nFilterIndex==1)
      m_ofn.lpstrDefExt = _T("mpx");
- 
+
     if (m_ofn.nFilterIndex==2)
      m_ofn.lpstrDefExt = _T("mpz");
    }
@@ -186,7 +186,7 @@ int MPSZExportController::DoExport(void)
 
  CFileDialogEx save;
  if (save.DoModal()==IDOK)
- {    
+ {
   MPSZFileDataIO::EFileTypes type;
   if (save.GetFileExt()==_T("mpx"))
   {
@@ -200,21 +200,21 @@ int MPSZExportController::DoExport(void)
   }
   else
   {
-   type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx 
+   type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
    m_mpsz_io.SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
   }
-    
+
   //сохраняет имя файла выбранного пользователем для сохранения
   m_mpsz_file_name = _TSTRING(save.GetFileName());
 
   int id = mp_view->DoModal();
   if (id == IDOK)
   {
-   bool result = m_mpsz_io.Save(m_mpsz_file_name,type);  
+   bool result = m_mpsz_io.Save(m_mpsz_file_name,type);
    if (!result)
    {
     AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
-    return IDCANCEL; 
+    return IDCANCEL;
    }
   }
   return id;
@@ -254,9 +254,9 @@ void MPSZExportController::OnExchangePressed(void)
  m_mpsz_io.GetDataLeft().maps[other_sel].name = mp_fwd->maps[current_sel].name;
  mp_view->FillFWDOtherList(m_mpsz_io.GetData().GetListOfNames());
  mp_view->SetFWDOtherListSelection(other_sel);
-  
+
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_str, mp_fwd->maps[current_sel].f_str, sizeof(float) * F_STR_POINTS); 
+  memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_str, mp_fwd->maps[current_sel].f_str, sizeof(float) * F_STR_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
   memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_idl, mp_fwd->maps[current_sel].f_idl, sizeof(float) * F_IDL_POINTS);

@@ -16,9 +16,9 @@ class AFX_EXT_CLASS CEditEx : public CEdit
    MODE_HEX     = 0x00000008,
 
    MODE_SIGNED  = 0x00000100,   //несовместим с MODE_HEX
-   //--------------------------------------------------------- 
+   //---------------------------------------------------------
    MODE_MASK    = 0x000000FF   //для внутреннего использования
-  }; 
+  };
 
   inline void DDX_Value(CDataExchange *ipDX, int iIDC, float& ioValue)
   {
@@ -47,7 +47,7 @@ class AFX_EXT_CLASS CEditEx : public CEdit
   }
 
   inline void SetMode(DWORD i_mode)
-  { 	
+  {
    //нельзя использовать SIGNED для HEX
    ASSERT(!((i_mode & MODE_HEX) && (i_mode & MODE_SIGNED)));
    m_mode = i_mode;
@@ -106,7 +106,7 @@ void CEditEx::_DDX_Value(CDataExchange *ipDX, int iIDC, T& ioValue)
   }
  }
  else
- {        
+ {
   SetValue(ioValue);
  }
 }

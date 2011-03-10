@@ -42,7 +42,7 @@ static char THIS_FILE[]=__FILE__;
 CAppSettingsModel::CAppSettingsModel()
 : m_Name_Options_Section(_T("Options"))
 , m_Name_BaudRateApplication(_T("Application_baud_rate"))
-, m_Name_BaudRateBootloader(_T("Boot_loader_baud_rate")) 
+, m_Name_BaudRateBootloader(_T("Boot_loader_baud_rate"))
 , m_Name_PortName(_T("COM_port"))
 , m_Name_LogFilesFolder(_T("LogFilesFolder"))
 , m_Name_UseAppFolder(_T("UseAppFolder"))
@@ -50,7 +50,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
 , m_Name_InterfaceLang(_T("InterfaceLanguage"))
 , m_Name_ECUPlatformType(_T("ECUPlatformType"))
-//positions of windows 
+//positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
 , m_Name_StrtMapWnd_Y(_T("StrtMapWnd_Y"))
@@ -89,15 +89,15 @@ CAppSettingsModel::CAppSettingsModel()
 
  //заполняем базу данных допустимых COM-портов
  for(int i = 1; i < 256; i++)
- { 
-  CString str;	  
-  str.Format(_T("COM%d"),i);	
-  m_AllowablePorts.push_back(_TSTRING(str));	 
+ {
+  CString str;
+  str.Format(_T("COM%d"),i);
+  m_AllowablePorts.push_back(_TSTRING(str));
  }
 
  _tcscpy(m_current_directory,_T(""));
 
- //определение тек. директории  
+ //определение тек. директории
  GetCurrentDirectory(MAX_PATH,m_current_directory);
 
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
@@ -162,7 +162,7 @@ bool CAppSettingsModel::CheckAllowableLanguage(const _TSTRING& i_string, EInterL
  for(size_t i = 0; i < count; ++i)
   if (i_string == m_AllowableLanguages[i].first.second)
   {
-   o_language_id = (EInterLang)m_AllowableLanguages[i].second; 
+   o_language_id = (EInterLang)m_AllowableLanguages[i].second;
    return true;
   }
  return false;
@@ -174,7 +174,7 @@ bool CAppSettingsModel::CheckAllowablePlatform(const _TSTRING& i_string, EECUPla
  for(size_t i = 0; i < count; ++i)
   if (i_string == m_AllowablePlatforms[i].first.second)
   {
-   o_platform_id = (EECUPlatform)m_AllowablePlatforms[i].second; 
+   o_platform_id = (EECUPlatform)m_AllowablePlatforms[i].second;
    return true;
   }
  return false;
@@ -191,8 +191,8 @@ bool CAppSettingsModel::ReadSettings(void)
 
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_PortName,_T("COM1"),read_str,255,IniFileName);
- m_optPortName = read_str;     
- 
+ m_optPortName = read_str;
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("9600"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
@@ -204,7 +204,7 @@ bool CAppSettingsModel::ReadSettings(void)
  }
  else
  {
-  m_optBaudRateApplication = i_val;     
+  m_optBaudRateApplication = i_val;
  }
 
  //-----------------------------------------
@@ -218,13 +218,13 @@ bool CAppSettingsModel::ReadSettings(void)
  }
  else
  {
-  m_optBaudRateBootloader = i_val;     
+  m_optBaudRateBootloader = i_val;
  }
 
  //-----------------------------------------
  CString def_value = m_current_directory;
  GetPrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,def_value,read_str,MAX_PATH,IniFileName);
- m_optLogFilesFolder = read_str;  
+ m_optLogFilesFolder = read_str;
 
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("1"),read_str,255,IniFileName);
@@ -237,10 +237,10 @@ bool CAppSettingsModel::ReadSettings(void)
  }
  else
  {
-  m_optUseAppFolder = i_val;     
+  m_optUseAppFolder = i_val;
  }
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,_T("44"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
@@ -251,20 +251,20 @@ bool CAppSettingsModel::ReadSettings(void)
  }
  else
  {
-  m_optCSVSepSymbol = i_val;     
+  m_optCSVSepSymbol = i_val;
  }
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,_T("40"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0)
   m_optMIDeskUpdatePeriod = i_val;
  else
  { //error
   status = false;
-  m_optMIDeskUpdatePeriod = 40; 
+  m_optMIDeskUpdatePeriod = 40;
  }
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_InterfaceLang,m_AllowableLanguages[0].first.second.c_str(),read_str,255,IniFileName);
 
  if (!CheckAllowableLanguage(read_str, m_optInterLang))
@@ -273,7 +273,7 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optInterLang = (EInterLang)m_AllowableLanguages[0].second; //english by default
  }
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[0].first.second.c_str(),read_str,255,IniFileName);
 
  if (!CheckAllowablePlatform(read_str, m_optECUPlatformType))
@@ -321,24 +321,24 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, CoilRegulMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, CoilRegulMapWnd_Y, std::numeric_limits<int>::max());
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
   m_optTachometerMax = i_val;
  else
  { //error
   status = false;
-  m_optTachometerMax = 8000; 
+  m_optTachometerMax = 8000;
  }
 
- //-----------------------------------------  
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,_T("110"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 500)
   m_optPressureMax = i_val;
  else
  { //error
   status = false;
-  m_optPressureMax = 110; 
+  m_optPressureMax = 110;
  }
 
  return status;
@@ -348,15 +348,15 @@ bool CAppSettingsModel::WriteSettings(void)
 {
  CString IniFileName = GetINIFileFullName();
  bool status = true;
- CString write_str; 
+ CString write_str;
 
- //пересоздание секции (или создание заново)	
+ //пересоздание секции (или создание заново)
  WritePrivateProfileSection(m_Name_Options_Section,_T(""),IniFileName);
 
  //-----------------------------------------
  write_str = m_optPortName.c_str();
  WritePrivateProfileString(m_Name_Options_Section,m_Name_PortName,write_str,IniFileName);
-  
+
  //-----------------------------------------
  write_str.Format(_T("%d"),m_optBaudRateApplication);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,write_str,IniFileName);
@@ -364,7 +364,7 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),m_optBaudRateBootloader);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,write_str,IniFileName);
- 
+
  //-----------------------------------------
  write_str = m_optLogFilesFolder;
  WritePrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,write_str,IniFileName);
@@ -400,7 +400,7 @@ bool CAppSettingsModel::WriteSettings(void)
 
  write_str.Format(_T("%d"),m_optStrtMapWnd_X);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_X,write_str,IniFileName);
-  
+
  write_str.Format(_T("%d"),m_optStrtMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_Y,write_str,IniFileName);
 
@@ -454,33 +454,33 @@ const _TSTRING& CAppSettingsModel::GetPortName(void) const
 {
  return m_optPortName;
 }
-   
+
 DWORD CAppSettingsModel::GetBaudRateApplication(void) const
 {
  return m_optBaudRateApplication;
 }
 
-DWORD CAppSettingsModel::GetBaudRateBootloader(void) const 
+DWORD CAppSettingsModel::GetBaudRateBootloader(void) const
 {
  return m_optBaudRateBootloader;
 }
 
-const CString& CAppSettingsModel::GetLogFilesFolder(void) const 
+const CString& CAppSettingsModel::GetLogFilesFolder(void) const
 {
  return m_optLogFilesFolder;
 }
 
-bool CAppSettingsModel::GetUseAppFolder(void) const 
+bool CAppSettingsModel::GetUseAppFolder(void) const
 {
  return m_optUseAppFolder;
 }
 
-char CAppSettingsModel::GetCSVSepSymbol(void) const 
+char CAppSettingsModel::GetCSVSepSymbol(void) const
 {
  return m_optCSVSepSymbol;
 }
 
-int  CAppSettingsModel::GetMIDeskUpdatePeriod(void) const 
+int  CAppSettingsModel::GetMIDeskUpdatePeriod(void) const
 {
  return m_optMIDeskUpdatePeriod;
 }

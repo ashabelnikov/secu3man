@@ -64,7 +64,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
 }
 
-BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super) 
+BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PREV_BUTTON, OnUpdatePrevButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_NEXT_BUTTON, OnUpdateNextButton)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_PLAY_BUTTON, OnUpdatePlayButton)
@@ -79,11 +79,11 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_CBN_SELCHANGE(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnSelchangeTimeFactorCombo)
 END_MESSAGE_MAP()
 
-BOOL CLPControlPanelDlg::OnInitDialog() 
+BOOL CLPControlPanelDlg::OnInitDialog()
 {
  Super::OnInitDialog();
-	
- UpdateDialogControls(this,TRUE);	
+
+ UpdateDialogControls(this,TRUE);
  return TRUE;
 }
 
@@ -99,7 +99,7 @@ void CLPControlPanelDlg::FillTimeFactorCombo(std::vector<_TSTRING>& i_factor_str
 
 size_t CLPControlPanelDlg::GetTimeFactor(void) const
 {
- int index = m_time_factor_combo.GetCurSel(); 
+ int index = m_time_factor_combo.GetCurSel();
  return (index != LB_ERR ? m_time_factor_combo.GetItemData(index) : numeric_limits<size_t>::max());
 }
 
@@ -139,7 +139,7 @@ void CLPControlPanelDlg::EnablePrevButton(bool i_enable)
  m_prev_button_state = i_enable;
  UpdateDialogControls(this,TRUE);
 }
-	
+
 void CLPControlPanelDlg::SetSliderPosition(unsigned long i_position)
 {
  m_slider.SetPos(i_position);
@@ -166,29 +166,29 @@ void CLPControlPanelDlg::SetPositionIndicator(const _TSTRING& i_string)
  m_position_indicator.SetWindowText(i_string.c_str());
 }
 
-void CLPControlPanelDlg::OnUpdateControls(CCmdUI* pCmdUI) 
+void CLPControlPanelDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_all_enabled);  
+ pCmdUI->Enable(m_all_enabled);
 }
 
-void CLPControlPanelDlg::OnUpdateNextButton(CCmdUI* pCmdUI) 
+void CLPControlPanelDlg::OnUpdateNextButton(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_next_button_state && m_all_enabled);  
+ pCmdUI->Enable(m_next_button_state && m_all_enabled);
 }
 
-void CLPControlPanelDlg::OnUpdatePrevButton(CCmdUI* pCmdUI) 
+void CLPControlPanelDlg::OnUpdatePrevButton(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_prev_button_state && m_all_enabled);  
+ pCmdUI->Enable(m_prev_button_state && m_all_enabled);
 }
 
-void CLPControlPanelDlg::OnUpdatePlayButton(CCmdUI* pCmdUI) 
+void CLPControlPanelDlg::OnUpdatePlayButton(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_play_button_state && m_all_enabled);  
+ pCmdUI->Enable(m_play_button_state && m_all_enabled);
 }
 
-void CLPControlPanelDlg::OnUpdateSlider(CCmdUI* pCmdUI) 
+void CLPControlPanelDlg::OnUpdateSlider(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_slider_state && m_all_enabled);  
+ pCmdUI->Enable(m_slider_state && m_all_enabled);
 }
 
 void CLPControlPanelDlg::EnableAll(bool i_enable)
@@ -232,7 +232,7 @@ void CLPControlPanelDlg::OnSelchangeTimeFactorCombo()
  if (m_on_time_factor_combo)
  {
   size_t factor = GetTimeFactor();
-  m_on_time_factor_combo(factor); 
+  m_on_time_factor_combo(factor);
  }
 }
 
@@ -263,7 +263,7 @@ void CLPControlPanelDlg::setOnTimeFactorCombo(EventWithCode i_callback)
 
 void CLPControlPanelDlg::setOnSliderMoved(EventHScroll i_callback)
 {
- m_on_slider_moved = i_callback; 
+ m_on_slider_moved = i_callback;
 }
 
 void CLPControlPanelDlg::SetOpenFileButtonText(const _TSTRING& i_text)

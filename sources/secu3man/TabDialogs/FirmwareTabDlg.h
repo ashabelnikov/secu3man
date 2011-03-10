@@ -58,7 +58,7 @@ class CFirmwareTabDlg : public CTabDialog
   static const UINT IDD;
 
   virtual LPCTSTR GetDialogID(void) const;
-	
+
   bool IsBLStartedEmergency(void);
   void SetBLStartedEmergency(bool state);
 
@@ -137,8 +137,8 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnFirmwareSupportViewIdleMap();
   afx_msg void OnFirmwareSupportViewWorkMap();
   afx_msg void OnFirmwareSupportViewTempMap();
-  afx_msg void OnFirmwareSupportViewAttenuatorMap();		
-  afx_msg void OnFirmwareSupportViewCoilRegulMap();		
+  afx_msg void OnFirmwareSupportViewAttenuatorMap();
+  afx_msg void OnFirmwareSupportViewCoilRegulMap();
   afx_msg void OnUpdateFirmwareSupportViewStartMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewWorkMap(CCmdUI* pCmdUI);
@@ -153,7 +153,7 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnReadFlashToFile();
   afx_msg void OnWriteFlashFromFile();
   afx_msg void OnUpdateBLStartedEmergency(CCmdUI* pCmdUI);
-  afx_msg void OnFirmwareSupportBlStartedEmergency();	
+  afx_msg void OnFirmwareSupportBlStartedEmergency();
   afx_msg void OnOpenFlashFromFile();
   afx_msg void OnSaveFlashToFile();
   afx_msg void OnChangeFirmwareSupportFwInformation();
@@ -186,7 +186,7 @@ class CFirmwareTabDlg : public CTabDialog
   CStatic m_fw_crc;
   CStatic m_modification_flag;
 
- private: 
+ private:
   EventWithCode m_OnMapChanged;
   EventWithCode m_OnFunSetSelectionChanged;
   EventHandler  m_OnBootLoaderInfo;
@@ -199,7 +199,7 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnSaveFlashToFile;
   EventHandler  m_OnFWInformationTextChanged;
   EventResult   m_IsFirmwareOpened;
-  EventWithCodeAndString m_OnFunSetNamechanged; 
+  EventWithCodeAndString m_OnFunSetNamechanged;
   EventHandler  m_OnImportDataFromAnotherFW;
   EventHandler  m_OnReadFlashFromSECU;
   EventHandler  m_OnWriteFlashToSECU;
@@ -210,7 +210,7 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnFirmwareInfo;
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
-  
+
   //for C - functions
   int m_work_map_chart_state;
   int m_temp_map_chart_state;
@@ -218,14 +218,14 @@ class CFirmwareTabDlg : public CTabDialog
   int m_idle_map_chart_state;
   int m_attenuator_map_chart_state;
   int m_coilregul_map_chart_state;
- 
+
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
   HWND m_work_map_wnd_handle;
   HWND m_temp_map_wnd_handle;
   HWND m_attenuator_map_wnd_handle;
   HWND m_coilregul_map_wnd_handle;
-   
+
   float m_attenuator_table_slots[128];
 
   static void __cdecl OnChangeStartMap(void* i_param);
@@ -242,7 +242,7 @@ class CFirmwareTabDlg : public CTabDialog
   static void __cdecl OnCloseCoilRegulTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
-  bool IsFirmwareOpened(void); 
+  bool IsFirmwareOpened(void);
 
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;
@@ -257,7 +257,7 @@ class CFirmwareTabDlg : public CTabDialog
 
   float m_work_map_active[16][16];
   float m_work_map_original[16][16];
-	
+
   float m_temp_map_active[16];
   float m_temp_map_original[16];
 

@@ -62,7 +62,7 @@ class IOCORE_API LogReader
   //возвращает кол-во записей в файле
   unsigned long GetCount(void) const;
 
-  //Separating symbol for CSV 
+  //Separating symbol for CSV
   void SetSeparatingSymbol(char i_sep_symbol);
 
   //проверка на начало/конец
@@ -73,14 +73,14 @@ class IOCORE_API LogReader
   unsigned long GetCurPos(void) const;
 
  private:
-   
+
   _TSTRING m_file_name;         //имя открытого файла
   unsigned long m_record_count; //кол-во записей в файле
   FILE* m_file_handle;          //указатель на файл
 
   //номер текущей записи
   unsigned long m_current_record;
-  //кол-во символов в одной записи, включая символы перевода строки 
+  //кол-во символов в одной записи, включая символы перевода строки
   unsigned long m_record_size;
 
   char m_csv_separating_symbol;

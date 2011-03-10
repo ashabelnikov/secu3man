@@ -26,13 +26,13 @@
 class IAppSettingsDlg;
 class CAppSettingsModel;
 
-class CAppSettingsController  
+class CAppSettingsController
 {
  public:
   CAppSettingsController(IAppSettingsDlg* i_pView, CAppSettingsModel* i_pModel);
   virtual ~CAppSettingsController();
-	
-  int ShowDialog(void); 
+
+  int ShowDialog(void);
 
  private:
   void OnOk(void);
@@ -40,6 +40,6 @@ class CAppSettingsController
   void OnActivate(void);
 
  private:
-  IAppSettingsDlg* m_pView; 
+  IAppSettingsDlg* m_pView;
   CAppSettingsModel* m_pModel;
 };

@@ -8,13 +8,13 @@ class AFX_EXT_CLASS CSpinButtonCtrlEx : public CSpinButtonCtrl
  public:
   CSpinButtonCtrlEx();
   virtual ~CSpinButtonCtrlEx();
-	
+
   double GetPos();
   void   SetPos(double val);
 
   void SetRangeAndDelta(double lower, double upper, double delta);
   void GetRangeAndDelta(double &lower, double& upper, double& delta);
-	
+
  protected:
   void InitSpinButtonCtrl();
   void SetIntegerPos(double pos);

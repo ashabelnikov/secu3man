@@ -55,22 +55,22 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)
 {
- Super::DoDataExchange(pDX); 
+ Super::DoDataExchange(pDX);
 }
 
 LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
 {
- return (LPCTSTR)IDD; 
+ return (LPCTSTR)IDD;
 }
 
-BOOL CLogPlayerTabDlg::OnInitDialog() 
+BOOL CLogPlayerTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
  CRect rect;
  GetDlgItem(IDC_LP_MIDESK_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
-	
+
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
  mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
@@ -83,7 +83,7 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  //инициализируем осциллограф
  _InitializeOscilloscopeControl();
 
- UpdateDialogControls(this,TRUE);	
+ UpdateDialogControls(this,TRUE);
  return TRUE;
 }
 
@@ -91,11 +91,11 @@ void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge)
 {
  CRect rect;
  GetClientRect(rect);
- 
+
  if (i_enlarge)
  {
   mp_MIDeskDlg->GetWindowRect(m_original_mi_rect);
-  ScreenToClient(m_original_mi_rect);  
+  ScreenToClient(m_original_mi_rect);
   CRect cp_rect;
   mp_LPPanelDlg->GetWindowRect(cp_rect);
   rect.left+=cp_rect.Width();
@@ -110,7 +110,7 @@ void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge)
 void CLogPlayerTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
 {
  float Xf = ((float)i_external.Width()) / io_victim.Width();
- float Yf = ((float)i_external.Height()) / io_victim.Height(); 
+ float Yf = ((float)i_external.Height()) / io_victim.Height();
  float factor = min(Xf, Yf);
  //масштабируем
  io_victim.right = MathHelpers::Round((io_victim.Width() * factor));
@@ -131,7 +131,7 @@ void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
  ScreenToClient(rect);
 
  // create the control
- mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this); 
+ mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this);
 
  // customize the control
  mp_OScopeCtrl->SetRange(0.0, 5.0, 1);
