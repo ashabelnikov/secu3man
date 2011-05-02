@@ -360,6 +360,7 @@ BEGIN
     IDS_ECUERROR_MAP_SENSOR_FAIL "Поломка или неправильная работа ДАД"
     IDS_ECUERROR_TEMP_SENSOR_FAIL "Поломка или неправильная работа ДТОЖ"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
+    IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
     IDS_INCOMPATIBLE_FIRMWARE 
                             "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
 END
@@ -946,6 +947,7 @@ BEGIN
     IDS_ECUERROR_EEPROM_PARAM_BROKEN "EEPROM parameters is damaged (CRC)"
     IDS_ECUERROR_PROGRAM_CODE_BROKEN "Firmware code is damaged (CRC)"
     IDS_ECUERROR_KSP_CHIP_FAILED "Knock chip doesn't respond"
+    IDS_ECUERROR_COIL_REGULATION "Coil regulation"
     IDS_ERROR_CODES_SAVED_SUCCESSFULLY 
                             "Error codes were successfully written!"
     IDS_ERROR_CODES_READ_SUCCESSFULLY "Saved error codes successfully read!"

@@ -73,6 +73,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_MAP_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_MAP_SENSOR_FAIL), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TEMP_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_TEMP_SENSOR_FAIL), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_VOLT_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_VOLT_SENSOR_FAIL), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_COIL_REGULATION, std::make_pair(MLL::GetString(IDS_ECUERROR_COIL_REGULATION), v)));
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()

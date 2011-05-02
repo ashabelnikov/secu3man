@@ -210,6 +210,7 @@
 #define IDS_FW_MAPS_VOLT_UNIT 4208
 #define IDS_FW_MAPS_COILREGUL_UNIT 4209
 #define IDS_FW_COILREGUL_MAP 4210
+#define IDS_ECUERROR_COIL_REGULATION 4211
 
 // Next default values for new objects
 //
