@@ -92,7 +92,7 @@ void CStatusBarManager::AddContent(void)
  //логотип SECU-3
  mp_wndStatusBar->AddIndicator(0,ID_MSB_INDICATOR_LOGO);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_LOGO);
- mp_wndStatusBar->SetPaneWidth(idx,80);
+ mp_wndStatusBar->SetPaneWidth(idx,60);
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
  MPCLogoPane* pLogo = new MPCLogoPane;
  pLogo->Create(MLL::LoadString(IDS_STATUS_BAR_LOGO),WS_CHILD|WS_VISIBLE,mp_wndStatusBar.get(),ID_MSB_INDICATOR_LOGO);
@@ -101,7 +101,7 @@ void CStatusBarManager::AddContent(void)
 
  //информационное поле (используем ID_SEPARATOR)
  idx = mp_wndStatusBar->CommandToIndex(ID_SEPARATOR);
- mp_wndStatusBar->SetPaneWidth(idx,80);
+ mp_wndStatusBar->SetPaneWidth(idx, 80);
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
  mp_wndStatusBar->SetPaneText(idx,_T(" "));
 

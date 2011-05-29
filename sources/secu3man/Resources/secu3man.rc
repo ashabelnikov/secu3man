@@ -76,7 +76,7 @@ BEGIN
                     NOT WS_BORDER,WS_EX_STATICEDGE
     LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,77,14,
                     0,WS_EX_STATICEDGE
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,103,34,127,16,
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,34,129,16,
                     ES_AUTOHSCROLL
     CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
                     LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
@@ -106,14 +106,15 @@ BEGIN
                     21
     GROUPBOX        "Семейства характеристик",
                     IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
-    CTEXT           "Дополнительная информация о прошивке:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
+    CTEXT           "Доп. информ.\nо прошивке:",
+                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,56,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
     CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
                     262,10,164,176
     CONTROL         "Настр. врем. накопления",
                     IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,17,164,95,19
+    PUSHBUTTON      "Опц.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,34,22,17
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -570,7 +571,7 @@ BEGIN
                     NOT WS_BORDER,WS_EX_STATICEDGE
     LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,15,77,14,
                     0,WS_EX_STATICEDGE
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,103,34,127,16,
+    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,34,129,16,
                     ES_AUTOHSCROLL
     CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
                     LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
@@ -601,14 +602,15 @@ BEGIN
                     21
     GROUPBOX        "Families of characteristics",
                     IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
-    CTEXT           "Additional information about firmware:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,86,18
+    CTEXT           "Addit. inform.\nabout firmware:",
+                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,56,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
     CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
                     262,10,164,176
     CONTROL         "Tune coil regulation",
                     IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,15,164,95,19
+    PUSHBUTTON      "Opt.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,34,22,17
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182

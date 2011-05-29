@@ -167,7 +167,8 @@ namespace SECU3IO
  const int FW_SIGNATURE_INFO_SIZE = 48;
  struct FWInfoDat
  {
-  char   info[FW_SIGNATURE_INFO_SIZE];
+  char   info[FW_SIGNATURE_INFO_SIZE+1];  //one more byte for string's termination
+  DWORD  options;
  };
 
  struct MiscelPar
@@ -257,4 +258,23 @@ namespace SECU3IO
  const float temp_map_rpm_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
  const float coilregul_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
+
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 10;
+ //<bitnumber, name>
+#define _SD std::pair<int, TCHAR*>
+ static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
+ {
+  _SD(0, _T("COPT_ATMEGA16")),
+  _SD(1, _T("COPT_ATMEGA32")),
+  _SD(2, _T("COPT_ATMEGA64")),
+  _SD(3, _T("COPT_ATMEGA128")),
+  _SD(4, _T("COPT_VPSEM")),
+  _SD(5, _T("COPT_WHEEL_36_1")),
+  _SD(6, _T("COPT_INVERSE_IGN_OUTPUTS")),
+  _SD(7, _T("COPT_COIL_REGULATION")),
+  _SD(8, _T("COPT_COOLINGFAN_PWM")),
+  _SD(9, _T("COPT_REALTIME_TABLES"))
+ };
+#undef _SD
+
 };

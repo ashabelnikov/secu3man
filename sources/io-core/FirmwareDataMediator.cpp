@@ -187,6 +187,12 @@ void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
  memcpy(addr,raw_string,FW_SIGNATURE_INFO_SIZE);
 }
 
+DWORD CFirmwareDataMediator::GetFWOptions(void)
+{
+ BYTE* addr = &m_bytes_active[FIRMWARE_DATA_START];
+ FirmwareData* data= (FirmwareData*)addr;
+ return data->config;
+}
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
 {

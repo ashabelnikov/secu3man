@@ -100,7 +100,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
  m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
- m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnWirmwareInfo));
+ m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
+ m_view->setOnViewFWOptions(MakeDelegate(this,&CFirmwareTabController::OnViewFWOptions));
+ m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
  m_view->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
  m_view->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
 
@@ -167,12 +169,12 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
  if (i_descriptor == FWINFO_DAT)
  { //прин€ли пакет с сигнатурной информацией о прошивке
   SECU3IO::FWInfoDat* p_packet = (SECU3IO::FWInfoDat*)ip_packet;
-  char raw_string[256];
-  memset(raw_string, 0, 256);
-  memcpy(raw_string, p_packet->info, SECU3IO::FW_SIGNATURE_INFO_SIZE);
   TCHAR string[256];
-  OemToChar(raw_string, string);
+  OemToChar(p_packet->info, string);
   m_sbar->SetInformationText(string);
+
+  //display firmware options if present
+  _ShowFWOptions(p_packet->info, p_packet->options);
  }
 }
 
@@ -1182,12 +1184,22 @@ void CFirmwareTabController::OnExportMapsToMPSZ(void)
 }
 
 //ѕользователь захотел получить информацию о пршивке из SECU-3
-void CFirmwareTabController::OnWirmwareInfo(void)
+void CFirmwareTabController::OnFirmwareInfo(void)
 {
  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW_SIGNATURE));
  SECU3IO::OPCompNc packet_data;
  packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
+}
+
+void CFirmwareTabController::OnViewFWOptions(void)
+{
+ _ShowFWOptions(m_fwdm->GetSignatureInfo(), m_fwdm->GetFWOptions());
+}
+
+bool CFirmwareTabController::IsViewFWOptionsAvailable(void)
+{
+ return m_fwdm->GetFWOptions() > 0;
 }
 
 void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
@@ -1282,4 +1294,24 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 
  if (X != std::numeric_limits<int>::max() && Y != std::numeric_limits<int>::max())
   SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+}
+
+void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options)
+{
+ if (options!=0)
+ {
+  _TSTRING str_options;
+  str_options+=info;
+  if (info.size() > 0)
+   str_options+="\n\n";
+  for(size_t i = 0; i < SECU3IO::SECU3_COMPILE_OPTIONS_BITS_COUNT; ++i)
+  {
+   if(options & 1 << SECU3IO::secu3_compile_options_bits[i].first)
+   {
+    str_options+= SECU3IO::secu3_compile_options_bits[i].second;
+    str_options+="\n";
+   }
+  }
+  AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
+ }
 }

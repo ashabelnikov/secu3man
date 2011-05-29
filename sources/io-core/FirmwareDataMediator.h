@@ -59,9 +59,11 @@ class IOCORE_API CFirmwareDataMediator
   //returns false if incompatible
   bool CheckCompatibility(const BYTE* i_data) const;
 
-	//-----------------------------------------------------------------------
+  //-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
   void SetSignatureInfo(_TSTRING i_string);
+
+  DWORD GetFWOptions(void);
 
   void GetStartMap(int i_index, float* o_values, bool i_original = false);
   void SetStartMap(int i_index,const float* i_values);

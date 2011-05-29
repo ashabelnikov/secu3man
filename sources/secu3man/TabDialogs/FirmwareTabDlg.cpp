@@ -279,6 +279,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP, m_view_temp_map_btn);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_START_MAP, m_view_start_map_btn);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP, m_view_idle_map_btn);
+ DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, m_fw_options_btn);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_INFORMATION,m_fw_information_edit);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_NAME,m_fw_name);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
@@ -359,6 +360,9 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
 
  ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnFirmwareInfo)
  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
+
+ ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
+ ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnViewFWOptions)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -631,6 +635,14 @@ void CFirmwareTabDlg::OnUpdateFirmwareSupportViewCoilRegulMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );
+}
+
+void CFirmwareTabDlg::OnUpdateFirmwareSupportViewFWOptions(CCmdUI* pCmdUI)
+{
+ bool opened = IsFirmwareOpened();
+ bool available = m_IsViewFWOptionsAvailable && m_IsViewFWOptionsAvailable();
+ BOOL enable = opened && available;
+ pCmdUI->Enable(enable);
 }
 
 void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
@@ -973,6 +985,12 @@ void CFirmwareTabDlg::OnFirmwareInfo()
   m_OnFirmwareInfo();
 }
 
+void CFirmwareTabDlg::OnViewFWOptions()
+{
+ if (m_OnViewFWOptions)
+  m_OnViewFWOptions();
+}
+
 void CFirmwareTabDlg::_RegisterHotKeys(void)
 {
  m_hot_keys_supplier->RegisterCommand(IDM_OPEN_FLASH, 'O', MOD_CONTROL);
@@ -1134,6 +1152,12 @@ void CFirmwareTabDlg::setOnExportMapsToMPSZ(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setOnFirmwareInfo(EventHandler OnFunction)
 {m_OnFirmwareInfo = OnFunction;}
+
+void CFirmwareTabDlg::setOnViewFWOptions(EventHandler OnFunction)
+{m_OnViewFWOptions = OnFunction;}
+
+void CFirmwareTabDlg::setIsViewFWOptionsAvailable(EventResult OnFunction)
+{ m_IsViewFWOptionsAvailable = OnFunction;}
 
 void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 {m_OnBLStartedEmergency = OnFunction;}

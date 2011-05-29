@@ -871,16 +871,23 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet)
 {
  SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
 
- if (strlen((char*)raw_packet)!=(FW_SIGNATURE_INFO_SIZE+1))  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=(FW_SIGNATURE_INFO_SIZE+8+1))  //размер пакета без сигнального символа, дескриптора
   return false;
 
- //строка с информацией
- char* p;
- if (NULL==(p = strchr((char*)raw_packet,'\r')))
-  return false;
- *p = 0;
+ //строка с информацией 
+ strncpy(m_FWInfoDat.info,(const char*)raw_packet, FW_SIGNATURE_INFO_SIZE);
+ m_FWInfoDat.info[FW_SIGNATURE_INFO_SIZE] = 0;
+ raw_packet+=FW_SIGNATURE_INFO_SIZE;
 
- strcpy(m_FWInfoDat.info,(const char*)raw_packet);
+ //биты опций прошивки
+ DWORD options = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&options))
+  return false;
+ m_FWInfoDat.options = options;
+ raw_packet+=8;
+
+ if (*raw_packet!='\r')
+  return false;
 
  return true;
 }

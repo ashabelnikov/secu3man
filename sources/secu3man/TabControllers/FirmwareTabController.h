@@ -43,6 +43,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   virtual ~CFirmwareTabController();
 
   bool IsFirmwareOpened(void);
+  bool IsViewFWOptionsAvailable(void);
 
   void SetAttenuatorMap(const float* i_values);
   void GetAttenuatorMap(float* o_values);
@@ -82,6 +83,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 
   void _OnReadFlashToFile(void);
   bool _CheckCompatibilityAndAskUser(BYTE* i_buff);
+  void _ShowFWOptions(const _TSTRING& info, DWORD options);
 
   ///////////context menu and other event handlers/////////////////////
   void OnBootLoaderInfo(void);
@@ -98,8 +100,9 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnImportMapsFromMPSZ(void);
   void OnImportDefParamsFromEEPROMFile();
   void OnExportMapsToMPSZ(void);
-  void OnWirmwareInfo(void);
-
+  void OnFirmwareInfo(void);
+  void OnViewFWOptions(void);
+  
   void OnFWInformationTextChanged(void);
   void OnMapChanged(int i_type);
   void OnFunSetSelectionChanged(int i_selected_index);

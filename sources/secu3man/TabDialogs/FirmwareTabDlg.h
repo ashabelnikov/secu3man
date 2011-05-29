@@ -117,6 +117,8 @@ class CFirmwareTabDlg : public CTabDialog
   void setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction);
   void setOnExportMapsToMPSZ(EventHandler OnFunction);
   void setOnFirmwareInfo(EventHandler OnFunction);
+  void setOnViewFWOptions(EventHandler OnFunction);
+  void setIsViewFWOptionsAvailable(EventResult OnFunction);
   //... от кнопок и чек боксов
   void setOnBLStartedEmergency(EventHandler OnFunction);
 
@@ -145,6 +147,7 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnUpdateFirmwareSupportViewTempMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFirmwareSupportViewCoilRegulMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFirmwareSupportViewFWOptions(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
   afx_msg void OnBootLoaderInfo();
@@ -169,22 +172,24 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnImportDefParamsFromEEPROMFile();
   afx_msg void OnExportMapsToMPSZ();
   afx_msg void OnFirmwareInfo();
+  afx_msg void OnViewFWOptions();
   DECLARE_MESSAGE_MAP()
 
  private:
-  CListCtrl	m_funset_listbox;
-  CButton	m_bl_started_emergency;
-  CButton	m_view_work_map_btn;
-  CButton	m_view_temp_map_btn;
-  CButton	m_view_start_map_btn;
-  CButton	m_view_idle_map_btn;
-  CButton m_prog_only_code_checkbox;
-  CButton m_view_attenuator_map_btn;
-  CButton m_view_coilregul_map_btn;
-  CEdit   m_fw_information_edit;
-  CEdit m_fw_name;
-  CStatic m_fw_crc;
-  CStatic m_modification_flag;
+  CListCtrl m_funset_listbox;
+  CButton   m_bl_started_emergency;
+  CButton   m_view_work_map_btn;
+  CButton   m_view_temp_map_btn;
+  CButton   m_view_start_map_btn;
+  CButton   m_view_idle_map_btn;
+  CButton   m_prog_only_code_checkbox;
+  CButton   m_view_attenuator_map_btn;
+  CButton   m_view_coilregul_map_btn;
+  CButton   m_fw_options_btn;
+  CEdit     m_fw_information_edit;
+  CEdit     m_fw_name;
+  CStatic   m_fw_crc;
+  CStatic   m_modification_flag;
 
  private:
   EventWithCode m_OnMapChanged;
@@ -210,6 +215,8 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnFirmwareInfo;
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
+  EventHandler  m_OnViewFWOptions;
+  EventResult   m_IsViewFWOptionsAvailable;
 
   //for C - functions
   int m_work_map_chart_state;
