@@ -21,10 +21,10 @@
 
 #pragma once
 
-#include "io-core\SECU3IO.h"
+#include "io-core/SECU3IO.h"
 #include "ParamPageEvents.h"
-#include "propgrid\propertygrid.h"
-#include "ui-core\TabDialog.h"
+#include "propgrid/propertygrid.h"
+#include "ui-core/TabDialog.h"
 
 class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 {

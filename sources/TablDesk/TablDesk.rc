@@ -1,0 +1,352 @@
+//Microsoft Developer Studio generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+#ifdef _WIN32
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 96
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Пусковая карта УОЗ",IDC_TD_VIEW_START_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,
+                    6,96,18
+    CONTROL         "Карта УОЗ на ХХ",IDC_TD_VIEW_IDLE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,
+                    27,96,18
+    CONTROL         "Рабочая карта УОЗ",IDC_TD_VIEW_WORK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,
+                    49,96,18
+    CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,
+                    71,96,18
+END
+
+IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 134
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,217,
+                    100
+    CONTROL         "List1",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
+                    WS_EX_LEFTSCROLLBAR
+    CONTROL         "Пусковая карта УОЗ",IDC_TD_VIEW_START_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,15,96,18
+    CONTROL         "Карта УОЗ на ХХ",IDC_TD_VIEW_IDLE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,36,96,18
+    CONTROL         "Рабочая карта УОЗ",IDC_TD_VIEW_WORK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,58,96,18
+    CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,80,96,18
+    CONTROL         "Настр. врем. накопления",IDC_TD_VIEW_COIL_REGULATION,
+                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,7,
+                    110,95,19
+    CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,
+                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,
+                    110,95,19
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_TD_BUTTONS_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 107
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 89
+    END
+
+    IDD_TD_ALLTABLES_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 218
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MAPS_RPM_UNIT       "Обороты (мин-1)\n"
+    IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
+    IDS_START_MAP           "Пусковая карта УОЗ"
+    IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
+    IDS_WORK_MAP            "Рабочая карта УОЗ"
+    IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости"
+    IDS_MAPS_TEMPERATURE_UNIT "Температура °C"
+    IDS_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
+    IDS_ATTENUATOR_MAP      "Настройка кривой усиления аттенюатора"
+    IDS_MAPS_VOLT_UNIT      "Вольты (B)"
+    IDS_MAPS_COILREGUL_UNIT "Время накопления (мс)"
+    IDS_COILREGUL_MAP       "Настройка времени накопления энергии катушек зажигания"
+END
+
+#endif    // Russian resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 96
+STYLE WS_CHILD
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,
+                    6,96,18
+    CONTROL         "Idle angle map",IDC_TD_VIEW_IDLE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,
+                    28,96,18
+    CONTROL         "Work angle map",IDC_TD_VIEW_WORK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,
+                    49,96,18
+    CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,
+                    70,96,18
+END
+
+IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 134
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    GROUPBOX        "Families of characteristics",IDC_TD_MAP_GROUPBOX,3,3,
+                    217,100
+    CONTROL         "List1",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
+                    WS_EX_LEFTSCROLLBAR
+    CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,15,96,18
+    CONTROL         "Idle angle map",IDC_TD_VIEW_IDLE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,36,96,18
+    CONTROL         "Work angle map",IDC_TD_VIEW_WORK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,58,96,18
+    CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,80,96,18
+    CONTROL         "Tune coil regulation",IDC_TD_VIEW_COIL_REGULATION,
+                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,5,
+                    110,95,19
+    CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,110,95,19
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO DISCARDABLE 
+BEGIN
+    IDD_TD_BUTTONS_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 107
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 89
+    END
+
+    IDD_TD_ALLTABLES_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 218
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 127
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE DISCARDABLE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "#ifdef _WIN32\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#endif //_WIN32\r\n"
+    "#include ""res\\TablDesk.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+#ifndef _MAC
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904b0"
+        BEGIN
+            VALUE "Comments", "SECU-3 Tables desk\0"
+            VALUE "CompanyName", "Shabelnikov Technology\0"
+            VALUE "FileDescription", "TablDesk DLL\0"
+            VALUE "FileVersion", "1, 0, 0, 1\0"
+            VALUE "InternalName", "TablDesk\0"
+            VALUE "LegalCopyright", "Copyright (C) Shabelnikov Technology 2011\0"
+            VALUE "LegalTrademarks", "\0"
+            VALUE "OriginalFilename", "TablDesk.DLL\0"
+            VALUE "PrivateBuild", "\0"
+            VALUE "ProductName", "TablDesk Dynamic Link Library\0"
+            VALUE "ProductVersion", "1, 0, 0, 1\0"
+            VALUE "SpecialBuild", "\0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1200
+    END
+END
+
+#endif    // !_MAC
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MAPS_RPM_UNIT       "Speed (min-1)\n"
+    IDS_MAPS_ADVANGLE_UNIT  "Angle (degg.)"
+    IDS_START_MAP           "Start angle map"
+    IDS_IDLE_MAP            "Idle angle map"
+    IDS_WORK_MAP            "Work angle map"
+    IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map"
+    IDS_MAPS_TEMPERATURE_UNIT "Temperature °C"
+    IDS_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
+    IDS_ATTENUATOR_MAP      "Tune attenuator curve of amplification"
+    IDS_MAPS_VOLT_UNIT      "Volts (V)"
+    IDS_MAPS_COILREGUL_UNIT "Accumulation time (ms)"
+    IDS_COILREGUL_MAP       "Tune accumulation time of ignition coils"
+END
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#endif //_WIN32
+#include "res\TablDesk.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

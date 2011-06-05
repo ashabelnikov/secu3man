@@ -23,8 +23,8 @@
 
 #include <memory>
 #include <vector>
-#include "common\FastDelegate.h"
-#include "ui-core\TabDialog.h"
+#include "common/FastDelegate.h"
+#include "ui-core/TabDialog.h"
 
 class CLPControlPanelDlg;
 class CMIDeskDlg;

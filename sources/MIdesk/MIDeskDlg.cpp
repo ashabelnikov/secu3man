@@ -23,9 +23,9 @@
 #include "resource.h"
 #include "MIDeskDlg.h"
 
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 #include "MIHelpers.h"
-#include "ui-core\AnalogMeterCtrl.h"
+#include "ui-core/AnalogMeterCtrl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

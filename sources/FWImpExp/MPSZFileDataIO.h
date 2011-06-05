@@ -22,7 +22,7 @@
 #pragma once
 
 #include <vector>
-#include "common\unicodesupport.h"
+#include "common/unicodesupport.h"
 
 //Абстракции над данными таблиц MPSZ
 

@@ -20,9 +20,9 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "MainFrame.h"
-#include "common\DPIAware.h"
+#include "common/DPIAware.h"
 
 #include <limits>
 #include <vector>

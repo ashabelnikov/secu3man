@@ -24,7 +24,7 @@
 #include "MPSZFileDataIO.h"
 
 #include <vector>
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
 //фабрика объектов для типов файлов таблиц MPSZ

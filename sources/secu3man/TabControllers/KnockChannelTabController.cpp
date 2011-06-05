@@ -20,19 +20,19 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include <limits>
 #include <math.h>
 #include <numeric>
-#include "Application\CommunicationManager.h"
-#include "common\fastdelegate.h"
-#include "common\MathHelpers.h"
+#include "Application/CommunicationManager.h"
+#include "common/fastdelegate.h"
+#include "common/MathHelpers.h"
 #include "FirmwareTabController.h"
 #include "KnockChannelTabController.h"
-#include "MainFrame\StatusBarManager.h"
-#include "ParamDesk\KnockPageDlg.h"
+#include "MainFrame/StatusBarManager.h"
+#include "ParamDesk/KnockPageDlg.h"
 #include "TabControllersCommunicator.h"
-#include "TabDialogs\KnockChannelTabDlg.h"
+#include "TabDialogs/KnockChannelTabDlg.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;

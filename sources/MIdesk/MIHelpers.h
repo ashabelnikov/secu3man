@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 
 struct MIHelpers
 {

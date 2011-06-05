@@ -11,7 +11,7 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <algorithm>
-#include "..\common\MathHelpers.h"
+#include "../common/MathHelpers.h"
 #pragma hdrstop
 
 #include "Unit1.h"

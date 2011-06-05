@@ -56,7 +56,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /machine:I386
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
+# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib tabldesk.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "secu3man - Win32 Debug"
 
@@ -82,7 +82,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib hiscctrl.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
+# ADD LINK32 hiscctrl.lib tabldesk.lib kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "secu3man - Win32 UnicodeDebug"
 
@@ -109,7 +109,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib hiscctrl.lib /nologo /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib hiscctrl.lib /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
+# ADD LINK32 hiscctrl.lib kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib tabldesk.lib /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /debug /machine:I386 /out:"../../binaries/secu3man.exe" /pdbtype:sept /libpath:"../output" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "secu3man - Win32 UnicodeRelease"
 
@@ -138,7 +138,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib /nologo /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
-# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
+# ADD LINK32 kernel32.lib midesk.lib paramdesk.lib uicore.lib about.lib iocore.lib fwimpexp.lib hexutils.lib tabldesk.lib /nologo /entry:"wWinMainCRTStartup" /subsystem:windows /machine:I386 /out:"../../binaries/secu3man.exe" /libpath:"../lib/" /libpath:"../../libraries"
 
 !ENDIF 
 
@@ -459,14 +459,6 @@ SOURCE=.\Application\CommunicationManager.cpp
 # Begin Source File
 
 SOURCE=.\Application\CommunicationManager.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Application\DLLLinkedFunctions.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\Application\DLLLinkedFunctions.h
 # End Source File
 # Begin Source File
 

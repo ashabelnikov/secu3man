@@ -21,9 +21,9 @@
 
 #pragma once
 
-#include "common\ObjectTimer.h"
+#include "common/ObjectTimer.h"
 #include "IMIView.h"
-#include "io-core\SECU3IO.h"
+#include "io-core/SECU3IO.h"
 
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
@@ -35,7 +35,7 @@
 #include "MIThrottleGate.h"
 #include "MIVoltmeter.h"
 
-#include "ui-core\DialogWithAccelerators.h"
+#include "ui-core/DialogWithAccelerators.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog

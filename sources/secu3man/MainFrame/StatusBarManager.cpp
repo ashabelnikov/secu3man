@@ -20,11 +20,11 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
-#include "common\DPIAware.h"
+#include "Resources/resource.h"
+#include "common/DPIAware.h"
 #include "StatusBarManager.h"
-#include "ui-core\MPCLogoPane.h"
-#include "ui-core\MPCStatusBar.h"
+#include "ui-core/MPCLogoPane.h"
+#include "ui-core/MPCStatusBar.h"
 
 static UINT indicators[] =
 {

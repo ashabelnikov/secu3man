@@ -20,10 +20,10 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "MainFrameManager.h"
 
-#include "Application\ISECU3man.h"
+#include "Application/ISECU3man.h"
 #include "ChildViewManager.h"
 #include "common/FastDelegate.h"
 #include "MainFrameController.h"

@@ -20,19 +20,19 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "LogPlayerTabController.h"
 
-#include "Application\CommunicationManager.h"
-#include "common\FastDelegate.h"
-#include "common\MathHelpers.h"
-#include "io-core\LogReader.h"
-#include "io-core\ufcodes.h"
-#include "MainFrame\StatusBarManager.h"
-#include "MIDesk\MIDeskDlg.h"
-#include "Settings\ISettingsData.h"
-#include "TabDialogs\LogPlayerTabDlg.h"
-#include "TabDialogs\LPControlPanelDlg.h"
+#include "Application/CommunicationManager.h"
+#include "common/FastDelegate.h"
+#include "common/MathHelpers.h"
+#include "io-core/LogReader.h"
+#include "io-core/ufcodes.h"
+#include "MainFrame/StatusBarManager.h"
+#include "MIDesk/MIDeskDlg.h"
+#include "Settings/ISettingsData.h"
+#include "TabDialogs/LogPlayerTabDlg.h"
+#include "TabDialogs/LPControlPanelDlg.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;

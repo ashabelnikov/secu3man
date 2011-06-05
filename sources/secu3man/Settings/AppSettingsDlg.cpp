@@ -20,9 +20,9 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "AppSettingsDlg.h"
-#include "ui-core\XBrowseForFolder.h"
+#include "ui-core/XBrowseForFolder.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

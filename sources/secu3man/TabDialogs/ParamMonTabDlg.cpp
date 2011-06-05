@@ -20,14 +20,14 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "ParamMonTabDlg.h"
 
-#include "common\FastDelegate.h"
-#include "common\MathHelpers.h"
-#include "MIDesk\MIDeskDlg.h"
-#include "MIDesk\RSDeskDlg.h"
-#include "ParamDesk\ParamDeskDlg.h"
+#include "common/FastDelegate.h"
+#include "common/MathHelpers.h"
+#include "MIDesk/MIDeskDlg.h"
+#include "MIDesk/RSDeskDlg.h"
+#include "ParamDesk/ParamDeskDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

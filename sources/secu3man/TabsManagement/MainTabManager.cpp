@@ -20,28 +20,28 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "MainTabManager.h"
 
-#include "Application\ISECU3Man.h"
-#include "MainFrame\ChildView.h"
-#include "MainFrame\MainFrameManager.h"
+#include "Application/ISECU3Man.h"
+#include "MainFrame/ChildView.h"
+#include "MainFrame/MainFrameManager.h"
 #include "MainTabController.h"
 
-#include "TabControllers\CheckEngineTabController.h"
-#include "TabControllers\FirmwareTabController.h"
-#include "TabControllers\KnockChannelTabController.h"
-#include "TabControllers\LogPlayerTabController.h"
-#include "TabControllers\ParamMonTabController.h"
+#include "TabControllers/CheckEngineTabController.h"
+#include "TabControllers/FirmwareTabController.h"
+#include "TabControllers/KnockChannelTabController.h"
+#include "TabControllers/LogPlayerTabController.h"
+#include "TabControllers/ParamMonTabController.h"
 
-#include "TabDialogs\CheckEngineTabDlg.h"
-#include "TabDialogs\FirmwareTabDlg.h"
-#include "TabDialogs\KnockChannelTabDlg.h"
-#include "TabDialogs\LogPlayerTabDlg.h"
-#include "TabDialogs\ParamMonTabDlg.h"
+#include "TabDialogs/CheckEngineTabDlg.h"
+#include "TabDialogs/FirmwareTabDlg.h"
+#include "TabDialogs/KnockChannelTabDlg.h"
+#include "TabDialogs/LogPlayerTabDlg.h"
+#include "TabDialogs/ParamMonTabDlg.h"
 
-#include "Settings\AppSettingsManager.h"
-#include "ui-core\TabController.h"
+#include "Settings/AppSettingsManager.h"
+#include "ui-core/TabController.h"
 
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 

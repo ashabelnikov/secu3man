@@ -87,6 +87,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "TablDesk"="..\TablDesk\TablDesk.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "about"="..\about\about.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -145,6 +157,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name HiSCCtrl
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name TablDesk
     End Project Dependency
 }}}
 

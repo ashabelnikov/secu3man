@@ -23,8 +23,8 @@
 
 #include <memory>
 #include <vector>
-#include "common\FastDelegate.h"
-#include "ui-core\DialogWithAccelerators.h"
+#include "common/FastDelegate.h"
+#include "ui-core/DialogWithAccelerators.h"
 
 class CLPControlPanelDlg : public CModelessDialog
 {

@@ -40,6 +40,9 @@ del propgrid\*.plg
 del hiscctrl\*.ncb
 del hiscctrl\*.plg
 
+del tabldesk\*.ncb
+del tabldesk\*.plg
+
 del UOZ1\*.obj /Q
 del UOZ2\*.obj /Q
 

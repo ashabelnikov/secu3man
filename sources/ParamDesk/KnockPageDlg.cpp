@@ -24,8 +24,8 @@
 #include "KnockPageDlg.h"
 
 #include <vector>
-#include "common\MathHelpers.h"
-#include "propgrid\wm_messages.h"
+#include "common/MathHelpers.h"
+#include "propgrid/wm_messages.h"
 
 using namespace std;
 #pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)

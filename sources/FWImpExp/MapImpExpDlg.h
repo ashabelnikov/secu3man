@@ -22,8 +22,8 @@
 #pragma once
 
 #include <vector>
-#include "common\FastDelegate.h"
-#include "common\UnicodeSupport.h"
+#include "common/FastDelegate.h"
+#include "common/UnicodeSupport.h"
 
 //типы флажков определ€ющих какие данные перемещать
 enum EFWDFlags

@@ -23,7 +23,7 @@
 #include "resource.h"
 #include "RSDeskDlg.h"
 
-#include "io-core\SECU3IO.h"
+#include "io-core/SECU3IO.h"
 #include "MIHelpers.h"
 
 #ifdef _DEBUG

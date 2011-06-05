@@ -22,7 +22,7 @@
 #pragma once
 
 #include "IMeasInstrument.h"
-#include "ui-core\AnalogMeterCtrl.h"
+#include "ui-core/AnalogMeterCtrl.h"
 
 class AFX_EXT_CLASS CMIPressure : public IMeasInstrument
 {

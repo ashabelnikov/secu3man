@@ -20,14 +20,14 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "CheckEngineTabController.h"
 
-#include "Application\CommunicationManager.h"
-#include "common\FastDelegate.h"
-#include "io-core\ce_errors.h"
-#include "MainFrame\StatusBarManager.h"
-#include "TabDialogs\CheckEngineTabDlg.h"
+#include "Application/CommunicationManager.h"
+#include "common/FastDelegate.h"
+#include "io-core/ce_errors.h"
+#include "MainFrame/StatusBarManager.h"
+#include "TabDialogs/CheckEngineTabDlg.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

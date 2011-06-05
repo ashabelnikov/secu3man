@@ -79,28 +79,6 @@ BEGIN
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,34,129,16,
                     ES_AUTOHSCROLL
     PUSHBUTTON      "Опц.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,34,22,17
-    CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
-                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    19,70,93,83,WS_EX_LEFTSCROLLBAR
-    CONTROL         "Пусковая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,70,96,18
-    CONTROL         "Карта УОЗ на ХХ",IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,91,96,18
-    CONTROL         "Рабочая карта УОЗ",IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,113,96,18
-    CONTROL         "Темпер. коррекция",IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,135,96,18
-    CONTROL         "Настр. врем. накопления",
-                    IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,17,164,95,19
-    CONTROL         "Настройка аттенюатора",
-                    IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
     CONTROL         "Прошивать только код (без данных)",
                     IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
@@ -108,13 +86,13 @@ BEGIN
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,190,122,
                     21
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
-                    262,10,164,176
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,262,10,164,176
     CTEXT           "Доп. информ.\nо прошивке:",
                     IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,56,18
-    GROUPBOX        "Семейства характеристик",
-                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,12,57,214,128
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -361,9 +339,13 @@ BEGIN
     IDS_ECUERROR_MAP_SENSOR_FAIL "Поломка или неправильная работа ДАД"
     IDS_ECUERROR_TEMP_SENSOR_FAIL "Поломка или неправильная работа ДТОЖ"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
-    IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
     IDS_INCOMPATIBLE_FIRMWARE 
                             "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -466,18 +448,6 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_FW_START_MAP        "Пусковая карта УОЗ"
-    IDS_FW_MAPS_ADVANGLE_UNIT "УОЗ (град.)"
-    IDS_FW_MAPS_RPM_UNIT    "Обороты (мин-1)"
-    IDS_FW_MAPS_VOLT_UNIT   "Вольты (B)"
-    IDS_FW_IDLE_MAP         "Карта УОЗ на холостом ходу"
-    IDS_FW_WORK_MAP         "Рабочая карта УОЗ"
-    IDS_FW_MAPS_TEMPERATURE_UNIT "Температура °C"
-    IDS_FW_TEMPCORR_MAP     "Карта коррекции УОЗ по температуре охлаждающей жидкости"
-    IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
-    IDS_FW_ATTENUATOR_MAP   "Настройка кривой усиления аттенюатора"
-    IDS_FW_MAPS_COILREGUL_UNIT "Время накопления (мс)"
-    IDS_FW_COILREGUL_MAP   "Настройка времени накопления энергии катушек зажигания"
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Параметры были сохранены."
     IDS_KC_READING_PARAMETERS "Чтение параметров ДД..."
     IDS_KC_READY            "Готово."
@@ -574,29 +544,6 @@ BEGIN
     EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,34,129,16,
                     ES_AUTOHSCROLL
     PUSHBUTTON      "Opt.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,34,22,17
-    CONTROL         "List1",IDC_FIRMWARE_SUPPORT_FUNSET_LIST,"SysListView32",
-                    LVS_LIST | LVS_SINGLESEL | LVS_SHOWSELALWAYS | 
-                    LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
-                    19,70,93,83,WS_EX_LEFTSCROLLBAR
-    CONTROL         "Start angle map",IDC_FIRMWARE_SUPPORT_VIEW_START_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,70,96,18
-    CONTROL         "Idle angle map",IDC_FIRMWARE_SUPPORT_VIEW_IDLE_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,91,96,18
-    CONTROL         "Work angle map",IDC_FIRMWARE_SUPPORT_VIEW_WORK_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | 
-                    WS_TABSTOP,120,113,96,18
-    CONTROL         "Coolant temper. corr.",
-                    IDC_FIRMWARE_SUPPORT_VIEW_TEMP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    120,135,96,18
-    CONTROL         "Tune coil regulation",
-                    IDC_FIRMWARE_SUPPORT_VIEW_COIL_REGULATION,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,15,164,95,19
-    CONTROL         "Tune attenuator",
-                    IDC_FIRMWARE_SUPPORT_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,119,164,95,19
     CONTROL         "Program only code (without data)",
                     IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
@@ -604,13 +551,13 @@ BEGIN
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,190,122,
                     21
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME,
-                    262,10,164,176
-    GROUPBOX        "Families of characteristics",
-                    IDC_FIRMWARE_SUPPORT_MAP_GROUPBOX,13,58,217,100
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,262,10,164,176
     CTEXT           "Addit. inform.\nabout firmware:",
                     IDC_FIRMWARE_SUPPORT_FW_INFORMATION_LABEL,14,33,56,18
     LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
+                    NOT WS_VISIBLE,12,57,214,128
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 394, 182
@@ -949,7 +896,6 @@ BEGIN
     IDS_ECUERROR_EEPROM_PARAM_BROKEN "EEPROM parameters is damaged (CRC)"
     IDS_ECUERROR_PROGRAM_CODE_BROKEN "Firmware code is damaged (CRC)"
     IDS_ECUERROR_KSP_CHIP_FAILED "Knock chip doesn't respond"
-    IDS_ECUERROR_COIL_REGULATION "Coil regulation"
     IDS_ERROR_CODES_SAVED_SUCCESSFULLY 
                             "Error codes were successfully written!"
     IDS_ERROR_CODES_READ_SUCCESSFULLY "Saved error codes successfully read!"
@@ -962,6 +908,11 @@ BEGIN
     IDS_FW_READING_SIGNATURE "Reading signature..."
     IDS_FW_READING_EEPROM   "Reading EEPROM..."
     IDS_FW_WRITING_EEPROM   "Writing EEPROM..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_ECUERROR_COIL_REGULATION "Coil regulation"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -990,18 +941,6 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_FW_START_MAP        "Start angle map"
-    IDS_FW_MAPS_ADVANGLE_UNIT "Angle (degg.)"
-    IDS_FW_MAPS_RPM_UNIT    "Speed (min-1)"
-    IDS_FW_MAPS_VOLT_UNIT   "Volts (V)"
-    IDS_FW_IDLE_MAP         "Idle angle map"
-    IDS_FW_WORK_MAP         "Work angle map"
-    IDS_FW_MAPS_TEMPERATURE_UNIT "Temperature °C"
-    IDS_FW_TEMPCORR_MAP     "Coolant temperature angle's correction map"
-    IDS_FW_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
-    IDS_FW_ATTENUATOR_MAP   "Tune attenuator curve of amplification"
-    IDS_FW_MAPS_COILREGUL_UNIT "Accumulation time (ms)"
-    IDS_FW_COILREGUL_MAP   "Tune accumulation time of ignition coils"
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Parameters has been saved."
     IDS_KC_READING_PARAMETERS "Reading KS parameters..."
     IDS_KC_READY            "Ready."

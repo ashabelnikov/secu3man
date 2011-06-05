@@ -24,7 +24,7 @@
 #include <windows.h>
 #include "ControlApp.h"
 #include "ccomport.h"
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 #include "NumericConv.h"
 #include "ufcodes.h"
 

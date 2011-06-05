@@ -21,12 +21,12 @@
 
 #pragma once
 
-#include "common\ObjectTimer.h"
-#include "common\unicodesupport.h"
-#include "io-core\ControlApp.h"
-#include "io-core\ControlAppAdapter.h"
-#include "io-core\ufcodes.h"
-#include "TabsManagement\ITabController.h"
+#include "common/ObjectTimer.h"
+#include "common/unicodesupport.h"
+#include "io-core/ControlApp.h"
+#include "io-core/ControlAppAdapter.h"
+#include "io-core/ufcodes.h"
+#include "TabsManagement/ITabController.h"
 
 class CCheckEngineTabDlg;
 class CCommunicationManager;

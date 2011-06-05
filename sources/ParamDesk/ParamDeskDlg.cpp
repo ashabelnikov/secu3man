@@ -39,10 +39,10 @@
 #include "StarterPageDlg.h"
 #include "TemperPageDlg.h"
 
-#include "common\FastDelegate.h"
-#include "io-core\SECU3IO.h"
-#include "io-core\ufcodes.h"
-#include "ui-core\HotKeysToCmdRouter.h"
+#include "common/FastDelegate.h"
+#include "io-core/SECU3IO.h"
+#include "io-core/ufcodes.h"
+#include "ui-core/HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -226,9 +226,9 @@ void CParamDeskDlg::OnDestroy()
  m_hot_keys_supplier->Close();
 }
 
-void CParamDeskDlg::SetPosition(int x_pos, int y_pos)
+void CParamDeskDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
 {
- SetWindowPos(NULL,x_pos,y_pos,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ SetWindowPos(wnd_insert_after,x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
 }
 
 void CParamDeskDlg::SetTitle(const CString& i_str)

@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #include "BootLoader.h"
 #include "ccomport.h"
-#include "common\MathHelpers.h"
+#include "common/MathHelpers.h"
 #include "NumericConv.h"
 
 #define EEPROM_RD_BLOCKS 8   //количество блоков чтения EEPROM,число должно быть степенью двойки

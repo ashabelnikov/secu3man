@@ -37,6 +37,7 @@
 #include "ParamDesk/ParamDeskDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/FirmwareTabDlg.h"
+#include "TablDesk/TablesSetPanel.h"
 #include "Settings/ISettingsData.h"
 
 using namespace fastdelegate;
@@ -90,9 +91,6 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnFWInformationTextChanged(MakeDelegate(this,&CFirmwareTabController::OnFWInformationTextChanged));
  m_view->setOnSaveFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnSaveFlashToFile));
  m_view->setIsFirmwareOpened(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
- m_view->setOnMapChanged(MakeDelegate(this,&CFirmwareTabController::OnMapChanged));
- m_view->setOnFunSetSelectionChanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetSelectionChanged));
- m_view->setOnFunSetNamechanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetNamechanged));
  m_view->setOnImportDataFromAnotherFW(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromAnotherFW));
  m_view->setOnImportDataFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromSECU3));
  m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
@@ -103,8 +101,13 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
  m_view->setOnViewFWOptions(MakeDelegate(this,&CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
- m_view->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
- m_view->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
+
+ m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this,&CFirmwareTabController::OnMapChanged));
+ m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetSelectionChanged));
+ m_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetNamechanged));
+ m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
+ m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
+ m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
@@ -174,7 +177,7 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   m_sbar->SetInformationText(string);
 
   //display firmware options if present
-  _ShowFWOptions(p_packet->info, p_packet->options);
+  _ShowFWOptions(string, p_packet->options);
  }
 }
 
@@ -876,12 +879,12 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 bool CFirmwareTabController::OnClose(void)
 {
  //сохраняем позиции открытых окон!
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
- OnCloseMapWnd(m_view->GetMapWindow(TYPE_MAP_COILREGUL), TYPE_MAP_COILREGUL);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_COILREGUL), TYPE_MAP_COILREGUL);
 
  return CheckChangesAskAndSaveFirmware();
 }
@@ -959,7 +962,7 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
-  m_view->UpdateOpenedCharts();
+  m_view->mp_TablesPanel->UpdateOpenedCharts();
 
   m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
  }
@@ -979,25 +982,25 @@ bool CFirmwareTabController::IsFirmwareOpened()
 //эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!
 void CFirmwareTabController::SetViewChartsValues(void)
 {
- m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(false),false);
- m_fwdm->GetAttenuatorMap(m_view->GetAttenuatorMap(true),true);
+ m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false),false);
+ m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(true),true);
 
- m_fwdm->GetCoilRegulMap(m_view->GetCoilRegulMap(false),false);
- m_fwdm->GetCoilRegulMap(m_view->GetCoilRegulMap(true),true);
+ m_fwdm->GetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(false),false);
+ m_fwdm->GetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(true),true);
 
  if (m_current_funset_index==-1)
   return;
- m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(false),false);
- m_fwdm->GetStartMap(m_current_funset_index,m_view->GetStartMap(true),true);
+ m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false),false);
+ m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(true),true);
 
- m_fwdm->GetIdleMap(m_current_funset_index,m_view->GetIdleMap(false),false);
- m_fwdm->GetIdleMap(m_current_funset_index,m_view->GetIdleMap(true),true);
+ m_fwdm->GetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(false),false);
+ m_fwdm->GetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(true),true);
 
- m_fwdm->GetWorkMap(m_current_funset_index,m_view->GetWorkMap(false),false);
- m_fwdm->GetWorkMap(m_current_funset_index,m_view->GetWorkMap(true),true);
+ m_fwdm->GetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(false),false);
+ m_fwdm->GetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(true),true);
 
- m_fwdm->GetTempMap(m_current_funset_index,m_view->GetTempMap(false),false);
- m_fwdm->GetTempMap(m_current_funset_index,m_view->GetTempMap(true),true);
+ m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false),false);
+ m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1011,12 +1014,12 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  SetViewChartsValues();
 
  std::vector<_TSTRING> funset_names = m_fwdm->GetFunctionsSetNames();
- m_view->SetFunSetListBox(funset_names);
+ m_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
- m_view->UpdateOpenedCharts();
+ m_view->mp_TablesPanel->UpdateOpenedCharts();
 
  //если было выделение в списке, то восстанавлваем его
- m_view->SetFunSetListBoxSelection(m_current_funset_index);
+ m_view->mp_TablesPanel->SetFunSetListBoxSelection(m_current_funset_index);
 
  m_view->SetFirmwareName(m_fwdm->GetFWFileName());
 
@@ -1037,25 +1040,25 @@ void CFirmwareTabController::OnMapChanged(int i_type)
  {
   case TYPE_MAP_DA_START:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetStartMap(m_current_funset_index,m_view->GetStartMap(false));
+   m_fwdm->SetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIdleMap(m_current_funset_index,m_view->GetIdleMap(false));
+   m_fwdm->SetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetWorkMap(m_current_funset_index,m_view->GetWorkMap(false));
+   m_fwdm->SetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetTempMap(m_current_funset_index,m_view->GetTempMap(false));
+   m_fwdm->SetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false));
    break;
   case TYPE_MAP_ATTENUATOR:
-   m_fwdm->SetAttenuatorMap(m_view->GetAttenuatorMap(false));
+   m_fwdm->SetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false));
    break;
   case TYPE_MAP_COILREGUL:
-   m_fwdm->SetCoilRegulMap(m_view->GetCoilRegulMap(false));
+   m_fwdm->SetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(false));
    break;
  }
 }
@@ -1069,7 +1072,7 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
  if (m_current_funset_index != -1)
  { //только если в списке выбрано
   SetViewChartsValues();
-  m_view->UpdateOpenedCharts();
+  m_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
 
@@ -1206,7 +1209,7 @@ void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
 {
  m_fwdm->SetAttenuatorMap(i_values);
  SetViewChartsValues();
- m_view->UpdateOpenedCharts();
+ m_view->mp_TablesPanel->UpdateOpenedCharts();
 }
 
 void CFirmwareTabController::GetAttenuatorMap(float* o_values)
@@ -1257,7 +1260,6 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
  mp_settings->SetWndSettings(ws);
 }
 
-
 void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
  if (!i_hwnd)
@@ -1303,13 +1305,13 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options)
   _TSTRING str_options;
   str_options+=info;
   if (info.size() > 0)
-   str_options+="\n\n";
+   str_options+=_T("\n\n");
   for(size_t i = 0; i < SECU3IO::SECU3_COMPILE_OPTIONS_BITS_COUNT; ++i)
   {
    if(options & 1 << SECU3IO::secu3_compile_options_bits[i].first)
    {
     str_options+= SECU3IO::secu3_compile_options_bits[i].second;
-    str_options+="\n";
+    str_options+=_T("\n");
    }
   }
   AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);

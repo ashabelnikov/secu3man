@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ADCCompenPageDlg.h"
-#include "ui-core\ddx_helpers.h"
+#include "ui-core/ddx_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

@@ -22,7 +22,7 @@
 #pragma once
 
 #include "IRSView.h"
-#include "ui-core\DialogWithAccelerators.h"
+#include "ui-core/DialogWithAccelerators.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CRSDeskDlg dialog

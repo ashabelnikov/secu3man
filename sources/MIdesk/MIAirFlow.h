@@ -22,7 +22,7 @@
 #pragma once
 
 #include "IMeasInstrument.h"
-#include "ui-core\ProgressCtrlEx.h"
+#include "ui-core/ProgressCtrlEx.h"
 
 class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument
 {

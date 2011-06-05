@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "io-core\ControlAppAdapter.h"
+#include "io-core/ControlAppAdapter.h"
 
 class CMainFrame;
 class CCommunicationManager;

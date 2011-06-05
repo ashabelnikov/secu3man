@@ -20,14 +20,14 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "LogPlayerTabDlg.h"
 
-#include "common\FastDelegate.h"
-#include "common\MathHelpers.h"
+#include "common/FastDelegate.h"
+#include "common/MathHelpers.h"
 #include "LPControlPanelDlg.h"
-#include "MIDesk\MIDeskDlg.h"
-#include "ui-core\OScopeCtrl.h"
+#include "MIDesk/MIDeskDlg.h"
+#include "ui-core/OScopeCtrl.h"
 
 using namespace std;
 

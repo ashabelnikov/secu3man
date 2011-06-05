@@ -22,12 +22,12 @@
 #pragma once
 
 #include <map>
-#include "common\ObjectTimer.h"
-#include "common\unicodesupport.h"
-#include "io-core\ControlApp.h"
-#include "io-core\ControlAppAdapter.h"
-#include "io-core\ufcodes.h"
-#include "TabsManagement\ITabController.h"
+#include "common/ObjectTimer.h"
+#include "common/unicodesupport.h"
+#include "io-core/ControlApp.h"
+#include "io-core/ControlAppAdapter.h"
+#include "io-core/ufcodes.h"
+#include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
 class CParamMonTabDlg;

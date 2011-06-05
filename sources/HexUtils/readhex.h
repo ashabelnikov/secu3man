@@ -19,6 +19,8 @@
           Microprocessors systems - design & programming.
 */
 
+#pragma once
+
 #ifdef HEXUTILS_EXPORTS
  #define HEXUTILS_API __declspec(dllexport)
 #else

@@ -1,0 +1,6 @@
+; TablDesk.def : Declares the module parameters for the DLL.
+
+LIBRARY      "TablDesk"
+DESCRIPTION  'TablDesk Windows Dynamic Link Library'
+
+EXPORTS

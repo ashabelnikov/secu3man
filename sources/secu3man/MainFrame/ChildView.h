@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "ui-core\DialogWithAccelerators.h"
+#include "ui-core/DialogWithAccelerators.h"
 
 // CChildView window
 class CChildView : public CModelessDialog

@@ -24,7 +24,7 @@
 
 #include "ChildView.h"
 #include "MainFrame.h"
-#include "TabsManagement\MainTabManager.h"
+#include "TabsManagement/MainTabManager.h"
 
 CChildViewManager::CChildViewManager()
 : mp_wndView(new CChildView)

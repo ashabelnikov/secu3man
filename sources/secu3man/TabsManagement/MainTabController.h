@@ -22,7 +22,7 @@
 #pragma once
 
 #include <vector>
-#include "ui-core\ITabControllerEvent.h"
+#include "ui-core/ITabControllerEvent.h"
 
 class CTabController;
 class ITabController;

@@ -20,11 +20,11 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "CheckEngineTabDlg.h"
-#include "common\DPIAware.h"
-#include "common\unicodesupport.h"
-#include "ui-core\HeaderCtrlEx.h"
+#include "common/DPIAware.h"
+#include "common/unicodesupport.h"
+#include "ui-core/HeaderCtrlEx.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

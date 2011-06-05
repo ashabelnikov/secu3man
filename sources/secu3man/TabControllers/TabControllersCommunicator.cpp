@@ -21,7 +21,7 @@
 
 #include "stdafx.h"
 #include "TabControllersCommunicator.h"
-#include "TabsManagement\ITabController.h"
+#include "TabsManagement/ITabController.h"
 
 TabControllersCommunicator::TabControllersCommunicator()
 {

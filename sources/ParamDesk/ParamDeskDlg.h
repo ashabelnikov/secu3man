@@ -24,12 +24,12 @@
 #include <map>
 #include <vector>
 
-#include "common\unicodesupport.h"
+#include "common/unicodesupport.h"
 #include "FunSetPageDlg.h"
 #include "IParamDeskView.h"
-#include "ui-core\ITabControllerEvent.h"
-#include "ui-core\TabController.h"
-#include "ui-core\UpdatableDialog.h"
+#include "ui-core/ITabControllerEvent.h"
+#include "ui-core/TabController.h"
+#include "ui-core/UpdatableDialog.h"
 
 class CHotKeysToCmdRouter;
 
@@ -46,7 +46,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   static UINT IDD;
   static UINT IDD_F;
 
-  void SetPosition(int x_pos, int y_pos);
+  //note: wnd_insert_after parameter may be used to fix tab order!
+  void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
   void SetTitle(const CString& i_str);
   void GetTitle(CString& o_str);
 

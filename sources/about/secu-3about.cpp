@@ -24,7 +24,7 @@
 #include "secu-3about.h"
 
 #include "STCAbout.h"
-#include "..\common\unicodesupport.h"
+#include "../common/unicodesupport.h"
 
 extern HINSTANCE hInstance;  //DLLs hInstance
 

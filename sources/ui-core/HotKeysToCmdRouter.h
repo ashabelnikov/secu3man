@@ -9,7 +9,7 @@
 #pragma once
 
 #include "WndSubclasser.h"
-#include "..\common\unicodesupport.h"
+#include "../common/unicodesupport.h"
 #include <map>
 
 class HotKeysManager;

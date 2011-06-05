@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #include "MainTabController.h"
 #include "ITabController.h"
-#include "ui-core\TabController.h"
+#include "ui-core/TabController.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE

@@ -22,8 +22,8 @@
 #pragma once
 
 #include <memory>
-#include "common\FastDelegate.h"
-#include "ui-core\TabDialog.h"
+#include "common/FastDelegate.h"
+#include "ui-core/TabDialog.h"
 
 class CMIDeskDlg;
 class CParamDeskDlg;

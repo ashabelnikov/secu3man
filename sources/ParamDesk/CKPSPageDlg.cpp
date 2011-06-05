@@ -24,7 +24,7 @@
 #include "CKPSPageDlg.h"
 
 #include <algorithm>
-#include "ui-core\ddx_helpers.h"
+#include "ui-core/ddx_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

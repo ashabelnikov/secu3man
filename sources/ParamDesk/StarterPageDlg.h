@@ -22,11 +22,11 @@
 #pragma once
 
 #include <string>
-#include "io-core\SECU3IO.h"
+#include "io-core/SECU3IO.h"
 #include "ParamPageEvents.h"
-#include "ui-core\EditEx.h"
-#include "ui-core\SpinButtonCtrlEx.h"
-#include "ui-core\TabDialog.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/TabDialog.h"
 
 class CStarterPageDlg : public CTabDialog, public ParamPageEvents
 {

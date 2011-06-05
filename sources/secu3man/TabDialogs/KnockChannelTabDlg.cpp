@@ -20,18 +20,17 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "KnockChannelTabDlg.h"
 
 #include <math.h>
-#include "Application\DLLLinkedFunctions.h"
-#include "common\FastDelegate.h"
-#include "common\MathHelpers.h"
-#include "HiSCCtrl\sources\ChartCtrl.h"
-#include "HiSCCtrl\sources\ChartPointsSerie.h"
-#include "HiSCCtrl\sources\ChartLineSerie.h"
-#include "ParamDesk\KnockPageDlg.h"
-#include "ui-core\OScopeCtrl.h"
+#include "common/FastDelegate.h"
+#include "common/MathHelpers.h"
+#include "HiSCCtrl/sources/ChartCtrl.h"
+#include "HiSCCtrl/sources/ChartPointsSerie.h"
+#include "HiSCCtrl/sources/ChartLineSerie.h"
+#include "ParamDesk/KnockPageDlg.h"
+#include "ui-core/OScopeCtrl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW

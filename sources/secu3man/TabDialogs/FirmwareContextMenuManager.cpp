@@ -20,7 +20,7 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "FirmwareContextMenuManager.h"
 
 #ifdef _DEBUG

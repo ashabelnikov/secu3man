@@ -22,7 +22,7 @@
 #pragma once
 
 #include "IMeasInstrument.h"
-#include "ui-core\LEDIndicator.h"
+#include "ui-core/LEDIndicator.h"
 
 class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
 {

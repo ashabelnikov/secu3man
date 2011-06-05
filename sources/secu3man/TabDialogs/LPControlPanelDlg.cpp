@@ -20,11 +20,11 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "LPControlPanelDlg.h"
 
 #include <limits>
-#include "common\FastDelegate.h"
+#include "common/FastDelegate.h"
 
 using namespace std;
 

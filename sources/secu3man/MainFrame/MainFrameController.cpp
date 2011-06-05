@@ -20,18 +20,18 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "MainFrameController.h"
 
-#include "about\secu-3about.h"
-#include "Application\CommunicationManager.h"
-#include "common\fastdelegate.h"
-#include "io-core\logwriter.h"
+#include "about/secu-3about.h"
+#include "Application/CommunicationManager.h"
+#include "common/fastdelegate.h"
+#include "io-core/logwriter.h"
 #include "MainFrame.h"
-#include "Settings\AppSettingsManager.h"
-#include "Settings\ISettingsData.h"
+#include "Settings/AppSettingsManager.h"
+#include "Settings/ISettingsData.h"
 #include "StatusBarManager.h"
-#include "ui-core\HotKeysManager.h"
+#include "ui-core/HotKeysManager.h"
 
 using namespace fastdelegate;
 

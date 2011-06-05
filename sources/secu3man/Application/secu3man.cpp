@@ -21,17 +21,17 @@
 
 #include "stdafx.h"
 #include "secu3man.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 
 #include "CommunicationManager.h"
-#include "DLLLinkedFunctions.h"
-#include "io-core\ccomport.h"
-#include "io-core\logwriter.h"
-#include "MainFrame\MainFrame.h"
-#include "MainFrame\MainFrameManager.h"
-#include "Settings\AppSettingsDlg.h"
-#include "Settings\AppSettingsManager.h"
-#include "Settings\ISettingsData.h"
+#include "io-core/ccomport.h"
+#include "io-core/logwriter.h"
+#include "MainFrame/MainFrame.h"
+#include "MainFrame/MainFrameManager.h"
+#include "Settings/AppSettingsDlg.h"
+#include "Settings/AppSettingsManager.h"
+#include "Settings/ISettingsData.h"
+#include "TablDesk/DLLLinkedFunctions.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -87,13 +87,14 @@ BOOL CSecu3manApp::InitInstance()
 
  SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
 
- //подгружаем функции из динамически связываемых DLL
- DLL::LoadDLLsAndLinkToFunctions();
-
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
 
+ //подгружаем функции из динамически связываемых DLL (TablDesk)
+ DLL::LoadDLLsAndLinkToFunctions();
+
  //Локализация
+ DLL::SetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
  switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
  {
   case IL_ENGLISH:
@@ -103,11 +104,6 @@ BOOL CSecu3manApp::InitInstance()
    ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
    break;
  }
- if (DLL::UOZ1_Chart2DSetLanguage)
-  DLL::UOZ1_Chart2DSetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
- if (DLL::UOZ2_Chart3DSetLanguage)
-  DLL::UOZ2_Chart3DSetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
-
 
  //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
  //дальнейшая инициализация.

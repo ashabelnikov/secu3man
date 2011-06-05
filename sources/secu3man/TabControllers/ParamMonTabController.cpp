@@ -20,20 +20,20 @@
 */
 
 #include "stdafx.h"
-#include "Resources\resource.h"
+#include "Resources/resource.h"
 #include "ParamMonTabController.h"
 
 #include <map>
 #include <algorithm>
-#include "Application\CommunicationManager.h"
-#include "common\FastDelegate.h"
-#include "io-core\ufcodes.h"
-#include "MainFrame\StatusBarManager.h"
-#include "MIDesk\MIDeskDlg.h"
-#include "MIDesk\RSDeskDlg.h"
-#include "ParamDesk\ParamDeskDlg.h"
-#include "Settings\ISettingsData.h"
-#include "TabDialogs\ParamMonTabDlg.h"
+#include "Application/CommunicationManager.h"
+#include "common/FastDelegate.h"
+#include "io-core/ufcodes.h"
+#include "MainFrame/StatusBarManager.h"
+#include "MIDesk/MIDeskDlg.h"
+#include "MIDesk/RSDeskDlg.h"
+#include "ParamDesk/ParamDeskDlg.h"
+#include "Settings/ISettingsData.h"
+#include "TabDialogs/ParamMonTabDlg.h"
 
 using namespace fastdelegate;
 using namespace std;

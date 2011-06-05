@@ -21,7 +21,7 @@
 
 #pragma once
 
-#include "io-core\FirmwareMapsDataHolder.h"
+#include "io-core/FirmwareMapsDataHolder.h"
 #include "MPSZFileDataIO.h"
 
 class CMapImpExpDlg;

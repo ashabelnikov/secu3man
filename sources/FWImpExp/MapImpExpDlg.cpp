@@ -22,7 +22,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MapImpExpDlg.h"
-#include "io-core\SECU3IO.h"
+#include "io-core/SECU3IO.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
