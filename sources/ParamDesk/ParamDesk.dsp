@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /G4 /MD /W3 /GX /O2 /I "../" /D "NDEBUG" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G4 /MD /W3 /GX /O2 /I "../" /I "../paramdesk/" /D "NDEBUG" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "NDEBUG" /d "_AFXDLL"
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /I "../paramdesk/" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -98,7 +98,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "_DEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /I "../paramdesk/" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "_DEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -125,7 +125,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /G4 /MD /W3 /GX /O2 /I "../" /D "NDEBUG" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /FR /Yu"stdafx.h" /FD /c
-# ADD CPP /nologo /G4 /MD /W3 /GX /O2 /I "../" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "NDEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /FR /Yu"stdafx.h" /FD /c
+# ADD CPP /nologo /G4 /MD /W3 /GX /O2 /I "../" /I "../paramdesk/" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "NDEBUG" /D "_UNICODE" /D "WIN32" /D "_WINDOWS" /FR /Yu"stdafx.h" /FD /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x419 /d "NDEBUG" /d "_AFXDLL"
@@ -145,154 +145,150 @@ LINK32=link.exe
 # Name "ParamDesk - Win32 Debug"
 # Name "ParamDesk - Win32 UnicodeDebug"
 # Name "ParamDesk - Win32 UnicodeRelease"
-# Begin Group "Source Files"
+# Begin Group "Resource files"
 
-# PROP Default_Filter "cpp;c;cxx;rc;def;r;odl;idl;hpj;bat"
+# PROP Default_Filter ""
+# Begin Group "res"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\ParamDesk.cpp
+SOURCE=.\Resources\res\ParamDesk.rc2
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamDesk.def
+SOURCE=.\Resources\res\tab_ctrl_bitmaps.bmp
+# End Source File
+# End Group
+# Begin Source File
+
+SOURCE=.\Resources\ParamDesk.rc
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamDesk.rc
+SOURCE=.\Resources\Resource.h
+# End Source File
+# End Group
+# Begin Group "params"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\params\ADCCompenPageDlg.cpp
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamDeskDlg.cpp
+SOURCE=.\params\ADCCompenPageDlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\ParamPageEvents.cpp
+SOURCE=.\params\AnglesPageDlg.cpp
 # End Source File
+# Begin Source File
+
+SOURCE=.\params\AnglesPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\CarburPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\CarburPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\CKPSPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\CKPSPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\FunSetPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\FunSetPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\IdlRegPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\IdlRegPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\IParamDeskView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\KnockPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\KnockPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\MiscPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\MiscPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\ParamDesk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\ParamDeskDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\ParamDeskDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\ParamPageEvents.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\ParamPageEvents.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\StarterPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\StarterPageDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\TemperPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\params\TemperPageDlg.h
+# End Source File
+# End Group
+# Begin Group "tables"
+
+# PROP Default_Filter ""
+# End Group
 # Begin Source File
 
 SOURCE=.\StdAfx.cpp
-# ADD CPP /Yc"stdafx.h"
-# End Source File
-# End Group
-# Begin Group "Header Files"
-
-# PROP Default_Filter "h;hpp;hxx;hm;inl"
-# Begin Source File
-
-SOURCE=.\IParamDeskView.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamDeskDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\ParamPageEvents.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\Resource.h
+# ADD CPP /Yc
 # End Source File
 # Begin Source File
 
 SOURCE=.\StdAfx.h
 # End Source File
-# End Group
-# Begin Group "Resource Files"
-
-# PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
-# Begin Source File
-
-SOURCE=.\res\ParamDesk.rc2
-# End Source File
-# Begin Source File
-
-SOURCE=.\tab_ctrl_bitmaps.bmp
-# End Source File
-# End Group
-# Begin Group "Pages"
-
-# PROP Default_Filter ""
-# Begin Source File
-
-SOURCE=.\ADCCompenPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\ADCCompenPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\AnglesPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\AnglesPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CarburPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CarburPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\CKPSPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\CKPSPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\FunSetPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\FunSetPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\IdlRegPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\IdlRegPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\KnockPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\MiscPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\MiscPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\StarterPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\StarterPageDlg.h
-# End Source File
-# Begin Source File
-
-SOURCE=.\TemperPageDlg.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\TemperPageDlg.h
-# End Source File
-# End Group
 # End Target
 # End Project

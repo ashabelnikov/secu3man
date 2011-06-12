@@ -20,7 +20,7 @@
 */
 
 #include "stdafx.h"
-#include "resource.h"
+#include "Resources/resource.h"
 #include "AnglesPageDlg.h"
 
 #ifdef _DEBUG

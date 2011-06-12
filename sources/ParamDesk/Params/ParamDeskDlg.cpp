@@ -22,7 +22,7 @@
 #pragma warning (disable:C4786)
 
 #include "stdafx.h"
-#include "resource.h"
+#include "Resources/resource.h"
 #include "ParamDeskDlg.h"
 
 #include <map>
