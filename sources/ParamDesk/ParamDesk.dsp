@@ -242,10 +242,6 @@ SOURCE=.\params\MiscPageDlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\params\ParamDesk.cpp
-# End Source File
-# Begin Source File
-
 SOURCE=.\params\ParamDeskDlg.cpp
 # End Source File
 # Begin Source File
@@ -281,14 +277,22 @@ SOURCE=.\params\TemperPageDlg.h
 
 # PROP Default_Filter ""
 # End Group
+# Begin Group "Application"
+
+# PROP Default_Filter ""
 # Begin Source File
 
-SOURCE=.\StdAfx.cpp
+SOURCE=.\Application\ParamDesk.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Application\StdAfx.cpp
 # ADD CPP /Yc
 # End Source File
 # Begin Source File
 
-SOURCE=.\StdAfx.h
+SOURCE=.\Application\StdAfx.h
 # End Source File
+# End Group
 # End Target
 # End Project
