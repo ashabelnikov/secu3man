@@ -58,8 +58,8 @@ using namespace fastdelegate;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
-UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
-UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
+const UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
+const UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
 
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
 : Super(CParamDeskDlg::IDD, pParent)
@@ -273,6 +273,7 @@ void CParamDeskDlg::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
  m_tab_control.ShowWindow(nCmdShow);
+ this->ShowWindow(nCmdShow);
 }
 
 // Устанавливает данные указанной вкладки, вкладка определяется дескриптором

@@ -356,8 +356,3 @@ void CTablesSetPanel::setOnFunSetSelectionChanged(EventWithCode OnFunction)
 
 void CTablesSetPanel::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
 {m_OnFunSetNamechanged = OnFunction;}
-
-void CTablesSetPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
-{
- SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
-}

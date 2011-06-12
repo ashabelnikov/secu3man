@@ -36,7 +36,7 @@
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
-#include "ParamDesk/ParamDeskDlg.h"
+#include "ParamDesk/Params/ParamDeskDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/FirmwareTabDlg.h"
 #include "TablDesk/TablesSetPanel.h"

@@ -28,8 +28,9 @@
 class CMIDeskDlg;
 class CParamDeskDlg;
 class CRSDeskDlg;
+class CTablesDeskDlg;
 
-// CParamMonModePageDlg dialog
+// CParamMonTabDlg dialog
 class CParamMonTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
@@ -47,6 +48,7 @@ class CParamMonTabDlg : public CTabDialog
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
+  std::auto_ptr<CTablesDeskDlg> mp_TablesDeskDlg;
 
   void MakePDFloating(bool i_floating);
   void EnlargeMonitor(bool i_enlarge);
@@ -71,4 +73,5 @@ class CParamMonTabDlg : public CTabDialog
   CRect m_original_rs_rect;
   CPoint m_original_check_pos;
   CPoint m_original_button_pos;
+  bool floating;
 };

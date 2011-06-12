@@ -29,7 +29,7 @@
 #include "HiSCCtrl/sources/ChartCtrl.h"
 #include "HiSCCtrl/sources/ChartPointsSerie.h"
 #include "HiSCCtrl/sources/ChartLineSerie.h"
-#include "ParamDesk/KnockPageDlg.h"
+#include "ParamDesk/Params/KnockPageDlg.h"
 #include "ui-core/OScopeCtrl.h"
 
 #ifdef _DEBUG

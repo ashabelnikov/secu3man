@@ -24,7 +24,7 @@
 #include <vector>
 #include "common/unicodesupport.h"
 #include "io-core/SECU3IO.h"
-#include "ParamPageEvents.h"
+#include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"

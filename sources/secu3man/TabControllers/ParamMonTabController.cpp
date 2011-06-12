@@ -31,7 +31,7 @@
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
-#include "ParamDesk/ParamDeskDlg.h"
+#include "ParamDesk/Params/ParamDeskDlg.h"
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/ParamMonTabDlg.h"
 

@@ -22,7 +22,7 @@
 #pragma once
 
 #include "io-core/SECU3IO.h"
-#include "ParamPageEvents.h"
+#include "../common/ParamPageEvents.h" //because included externally
 #include "propgrid/propertygrid.h"
 #include "ui-core/TabDialog.h"
 

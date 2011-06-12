@@ -27,7 +27,8 @@
 #include "common/MathHelpers.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
-#include "ParamDesk/ParamDeskDlg.h"
+#include "ParamDesk/Params/ParamDeskDlg.h"
+#include "ParamDesk/Tables/TablesDeskDlg.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -49,6 +50,8 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
+, mp_TablesDeskDlg(new CTablesDeskDlg())
+, floating(false)
 {
  //na
 }
@@ -85,14 +88,25 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_RSDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
  mp_RSDeskDlg->Show(true);
 
+ bool check_state = GetEditTablesCheckState();
+
  GetDlgItem(IDC_PM_PARAMDESK_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
- mp_ParamDeskDlg->Show(true);
+ mp_ParamDeskDlg->Show(!check_state);
 
+ //create tables desk
+ GetDlgItem(IDC_PM_PARAMDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_TablesDeskDlg->Create(CTablesDeskDlg::IDD,this);
+ mp_TablesDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
+ mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
+ mp_TablesDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_TablesDeskDlg->Show(check_state);
+ 
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -105,6 +119,11 @@ void CParamMonTabDlg::OnPmShowRawSensors()
 
 void CParamMonTabDlg::OnPmEditTables()
 {//делегируем обработку события чекбокса
+ bool check_state = GetEditTablesCheckState();
+ if (false==floating)
+  mp_ParamDeskDlg->Show(!check_state);
+ mp_TablesDeskDlg->Show(check_state);
+
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
 }
@@ -133,9 +152,11 @@ void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
 
 void CParamMonTabDlg::MakePDFloating(bool i_floating)
 {
+ floating = i_floating;
  ///////////////////////////////////////////////////////////////
  //запоминаем номер последней выбранной вкладки
- int lastSel = mp_ParamDeskDlg->GetCurSel();
+ int lastSelPD = mp_ParamDeskDlg->GetCurSel();
+ int lastSelTD = mp_TablesDeskDlg->GetCurSel();
  ///////////////////////////////////////////////////////////////
 
  mp_ParamDeskDlg->DestroyWindow();
@@ -143,10 +164,28 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
- mp_ParamDeskDlg->Show(true);
+ if (i_floating)
+  mp_ParamDeskDlg->Show(true);
+ else
+  mp_ParamDeskDlg->Show(!GetEditTablesCheckState());
+
+ mp_TablesDeskDlg->DestroyWindow();
+ mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD,this);
+ ::SetClassLong(mp_TablesDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
+ mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
+ mp_TablesDeskDlg->ShowWindow(SW_SHOWNORMAL);
+
+ if (i_floating)
+ {
+  CRect rect;
+  mp_ParamDeskDlg->GetWindowRect(rect); 
+  mp_TablesDeskDlg->SetPosition(rect.right,rect.top,NULL);
+ }
+ mp_TablesDeskDlg->Show(GetEditTablesCheckState());
 
  ///////////////////////////////////////////////////////////////
- VERIFY(mp_ParamDeskDlg->SetCurSel(lastSel));
+ VERIFY(mp_ParamDeskDlg->SetCurSel(lastSelPD));
+ VERIFY(mp_TablesDeskDlg->SetCurSel(lastSelTD));
  ///////////////////////////////////////////////////////////////
 }
 

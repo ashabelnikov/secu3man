@@ -38,8 +38,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CTablesSetPanel(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
 
-  //note: use wnd_insert_after parameter to fix tab order!
-  void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
   void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
   void SetFunSetListBoxSelection(int i_selected_index);
 

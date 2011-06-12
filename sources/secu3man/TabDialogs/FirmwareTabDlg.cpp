@@ -25,7 +25,7 @@
 
 #include "common/MathHelpers.h"
 #include "FirmwareContextMenuManager.h"
-#include "ParamDesk/ParamDeskDlg.h"
+#include "ParamDesk/Params/ParamDeskDlg.h"
 #include "tabldesk/TablesSetPanel.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 

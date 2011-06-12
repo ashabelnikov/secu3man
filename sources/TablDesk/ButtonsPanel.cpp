@@ -25,8 +25,6 @@
 #include "DLLLinkedFunctions.h"
 #include "io-core/secu3io.h"
 
-//#include "common\MathHelpers.h"
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE
@@ -154,21 +152,24 @@ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
 
 //------------------------------------------------------------------------
 
+//const UINT CButtonsPanel::IDD = IDD_TD_BUTTONS_PANEL; //WTF?
+
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
 CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 : Super(dialog_id, pParent)
+, m_work_map_chart_state(0)
+, m_temp_map_chart_state(0)
+, m_start_map_chart_state(0)
+, m_idle_map_chart_state(0)
+, m_start_map_wnd_handle(NULL)
+, m_idle_map_wnd_handle(NULL)
+, m_work_map_wnd_handle(NULL)
+, m_temp_map_wnd_handle(NULL)
+, IDD(IDD_TD_BUTTONS_PANEL)
 {
- m_work_map_chart_state   = 0;
- m_temp_map_chart_state   = 0;
- m_start_map_chart_state  = 0;
- m_idle_map_chart_state   = 0;
-
- m_start_map_wnd_handle = NULL;
- m_idle_map_wnd_handle  = NULL;
- m_work_map_wnd_handle  = NULL;
- m_temp_map_wnd_handle  = NULL;
+ //empty
 }
 
 void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
@@ -459,3 +460,8 @@ void CButtonsPanel::setOnCloseMapWnd(EventWithHWND OnFunction)
 
 void CButtonsPanel::setOnOpenMapWnd(EventWithHWND OnFunction)
 { m_OnOpenMapWnd = OnFunction; }
+
+void CButtonsPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
+{
+ SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
+}

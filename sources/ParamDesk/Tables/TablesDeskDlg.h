@@ -25,7 +25,7 @@
 #include <vector>
 
 #include "common/unicodesupport.h"
-#include "IParamDeskView.h"
+#include "ITablesDeskView.h"
 #include "ui-core/ITabControllerEvent.h"
 #include "ui-core/TabController.h"
 #include "ui-core/UpdatableDialog.h"
@@ -35,15 +35,21 @@ class CHotKeysToCmdRouter;
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
 
-class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IParamDeskView, private ITabControllerEvent
+class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITablesDeskView, private ITabControllerEvent
 {
  typedef CModelessUpdatableDialog Super;
 
  public:
-  CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);
-  virtual ~CParamDeskDlg();
-  static const UINT IDD;
-  static const UINT IDD_F;
+  enum 
+  {
+   GASOLINE_TAB = 0,
+   GAS_TAB
+  };
+
+  CTablesDeskDlg(CWnd* pParent = NULL);
+  virtual ~CTablesDeskDlg();
+  static UINT IDD;
+  static UINT IDD_F;
 
   //note: wnd_insert_after parameter may be used to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
@@ -56,13 +62,11 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void Show(bool show);
   virtual void ShowSaveButton(bool i_show);
 
-  virtual bool SetValues(BYTE i_descriptor, const void* i_values);
-  virtual bool GetValues(BYTE i_descriptor, void* o_values);
+//  virtual bool SetValues(BYTE i_descriptor, const void* i_values);
+//  virtual bool GetValues(BYTE i_descriptor, void* o_values);
 
-  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
-  virtual const std::vector<_TSTRING>& GetFunctionsNames(void);
-
-  virtual BYTE GetCurrentDescriptor(void);
+//  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
+//  virtual const std::vector<_TSTRING>& GetFunctionsNames(void);
 
   virtual void SetOnTabActivate(EventHandler OnTabActivate);
   virtual void SetOnChangeInTab(EventHandler OnChangeInTab);
@@ -80,16 +84,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSaveButton();
-  afx_msg void OnHK_STARTR_PAR();
-  afx_msg void OnHK_ANGLES_PAR();
-  afx_msg void OnHK_IDLREG_PAR();
-  afx_msg void OnHK_FUNSET_PAR();
-  afx_msg void OnHK_TEMPER_PAR();
-  afx_msg void OnHK_CARBUR_PAR();
-  afx_msg void OnHK_ADCCOR_PAR();
-  afx_msg void OnHK_CKPS_PAR();
-  afx_msg void OnHK_KNOCK_PAR(); // <--optional
-  afx_msg void OnHK_MISCEL_PAR();
+  afx_msg void OnHK_GASOLINE_TAB();
+  afx_msg void OnHK_GAS_TAB();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -98,32 +94,20 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void OnSelchangingTabctl(void);
 
   void OnChangeInTab(void);
-  int  _GetTabIndex(unsigned i_descriptor);
   void _RegisterHotKeys(void);
 
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 
   //указатели на диалоги всех вкладок
-  class CStarterPageDlg*   m_pStarterPageDlg;
-  class CAnglesPageDlg*    m_pAnglesPageDlg;
-  class CIdlRegPageDlg*    m_pIdlRegPageDlg;
-  class CFunSetPageDlg*    m_pFunSetPageDlg;
-  class CTemperPageDlg*    m_pTemperPageDlg;
-  class CCarburPageDlg*    m_pCarburPageDlg;
-  class CADCCompenPageDlg* m_pADCCompenPageDlg;
-  class CCKPSPageDlg*      m_pCKPSPageDlg;
-  class CKnockPageDlg*     m_pKnockPageDlg; //<--optional
-  class CMiscPageDlg*      m_pMiscPageDlg;
+  class CTablesPageDlg*   m_pGasolinePageDlg;
+  class CTablesPageDlg*   m_pGasPageDlg;
 
-  CStatic m_pd_title;
+  CStatic m_td_title;
   CButton m_save_button;
   CTabController m_tab_control;
   CImageList* m_pImgList;
 
   BOOL m_enabled;
-  const bool m_show_knock_page;
-  typedef std::map<int,unsigned> TabDescriptor;
-  TabDescriptor m_tab_descriptors;
 
   //обработчики событий (делегаты)
   EventHandler m_OnTabActivate;

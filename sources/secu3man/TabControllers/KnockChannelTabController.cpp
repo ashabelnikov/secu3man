@@ -30,7 +30,7 @@
 #include "FirmwareTabController.h"
 #include "KnockChannelTabController.h"
 #include "MainFrame/StatusBarManager.h"
-#include "ParamDesk/KnockPageDlg.h"
+#include "ParamDesk/Params/KnockPageDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/KnockChannelTabDlg.h"
 

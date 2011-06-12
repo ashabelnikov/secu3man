@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
+# ADD LINK32 uicore.lib propgrid.lib tabldesk.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "ParamDesk - Win32 Debug"
 
@@ -71,7 +71,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MDd /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /D "_WINDLL" /D "_AFXDLL" /Yu"stdafx.h" /FD /GZ /c
-# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../" /I "../paramdesk/" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
+# ADD CPP /nologo /G4 /MDd /W3 /Gm /GX /ZI /Od /I "../paramdesk/" /I "../" /D "_DEBUG" /D "_MBCS" /D "_WINDLL" /D "_AFXDLL" /D "_AFXEXT" /D "WIN32" /D "_WINDOWS" /Yu"stdafx.h" /FD /GZ /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /win32
 # ADD BASE RSC /l 0x409 /d "_DEBUG" /d "_AFXDLL"
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
+# ADD LINK32 uicore.lib propgrid.lib tabldesk.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "ParamDesk - Win32 UnicodeDebug"
 
@@ -108,7 +108,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
-# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
+# ADD LINK32 uicore.lib propgrid.lib tabldesk.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/paramdesk.dll" /pdbtype:sept /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "ParamDesk - Win32 UnicodeRelease"
 
@@ -135,7 +135,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
-# ADD LINK32 ../../libraries/uicore.lib ../../libraries/propgrid.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
+# ADD LINK32 uicore.lib propgrid.lib tabldesk.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/paramdesk.dll" /libpath:"../../libraries"
 
 !ENDIF 
 
@@ -158,6 +158,10 @@ SOURCE=.\Resources\res\ParamDesk.rc2
 # Begin Source File
 
 SOURCE=.\Resources\res\tab_ctrl_bitmaps.bmp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Resources\res\tables_tab_ctrl_bitmaps.bmp
 # End Source File
 # End Group
 # Begin Source File
@@ -250,14 +254,6 @@ SOURCE=.\params\ParamDeskDlg.h
 # End Source File
 # Begin Source File
 
-SOURCE=.\params\ParamPageEvents.cpp
-# End Source File
-# Begin Source File
-
-SOURCE=.\params\ParamPageEvents.h
-# End Source File
-# Begin Source File
-
 SOURCE=.\params\StarterPageDlg.cpp
 # End Source File
 # Begin Source File
@@ -276,6 +272,26 @@ SOURCE=.\params\TemperPageDlg.h
 # Begin Group "tables"
 
 # PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\Tables\ITablesDeskView.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TablesDeskDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TablesDeskDlg.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TablesPageDlg.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TablesPageDlg.h
+# End Source File
 # End Group
 # Begin Group "Application"
 
@@ -292,6 +308,18 @@ SOURCE=.\Application\StdAfx.cpp
 # Begin Source File
 
 SOURCE=.\Application\StdAfx.h
+# End Source File
+# End Group
+# Begin Group "common"
+
+# PROP Default_Filter ""
+# Begin Source File
+
+SOURCE=.\common\ParamPageEvents.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\common\ParamPageEvents.h
 # End Source File
 # End Group
 # End Target
