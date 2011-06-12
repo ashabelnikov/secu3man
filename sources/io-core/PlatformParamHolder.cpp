@@ -98,3 +98,28 @@ const PPFlashParam& PlatformParamHolder::GetFlashParameters(void) const
 {
  return m_fp;
 }
+
+std::vector<int> PlatformParamHolder::GetFirmwareSizes(void)
+{
+ std::vector<int> sizes;
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  sizes.push_back(params.GetFlashParameters().m_total_size);
+ }
+ return sizes;
+}
+
+bool PlatformParamHolder::GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& o_platform)
+{
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  if (fwSize == params.GetFlashParameters().m_total_size)
+  {
+   o_platform = (EECUPlatform)i;
+   return true;
+  }
+ }
+ return false; //error
+}

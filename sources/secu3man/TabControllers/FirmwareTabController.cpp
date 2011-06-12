@@ -20,6 +20,7 @@
 */
 
 #include "stdafx.h"
+#include <algorithm>
 #include <limits>
 
 #include "Resources/resource.h"
@@ -28,6 +29,7 @@
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
 #include "FWImpExp/MPSZImpExpController.h"
+#include "FWImpExp/SECUImpExpController.h"
 #include "HexUtils/readhex.h"
 #include "io-core/EEPROMDataMediator.h"
 #include "io-core/FirmwareDataMediator.h"
@@ -96,8 +98,10 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
  m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
+ m_view->setOnImportMapsFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromSECU3));
  m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
+ m_view->setOnExportMapsToSECU3(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToSECU3));
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
  m_view->setOnViewFWOptions(MakeDelegate(this,&CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
@@ -550,7 +554,9 @@ bool CFirmwareTabController::_CheckCompatibilityAndAskUser(BYTE* i_buff)
 
 void CFirmwareTabController::OnWriteFlashFromFile(void)
 {
- bool result = LoadFLASHFromFile(m_bl_data, m_fpp.m_total_size);
+ std::vector<int> sizes;
+ sizes.push_back(m_fpp.m_total_size);
+ bool result = LoadFLASHFromFile(m_bl_data, sizes);
 
  if (!result)
   return; //cancel
@@ -703,12 +709,40 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
 //p_data - буфер для чтения данных. Должен быть не меньше чем 64кБ
 //size  - размер данных для чтения
 //o_file_name - указатель на строку в которую будет сохранено имя файла
-bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CString* o_file_name /* = NULL*/)
+namespace {
+   struct GenMessage
+   {
+    CString operator()(const std::vector<int>& sizes)
+    {
+     CString string;
+     CString size_str;
+     for(size_t i = 0; i < sizes.size(); ++i)
+     {
+      if ((sizes.size() - 1 == i) && (sizes.size() > 1))
+       size_str = size_str + _T(" ") + MLL::LoadString(IDS_FW_OR) + _T(" ");
+      else
+       if (0 != i)
+        size_str+=(", ");
+      CString value;
+      value.Format(_T("%d"), sizes[i]);
+      size_str+=(value);
+     }
+     string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size_str);
+     return string;
+    }
+   }; }
+bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title /*= NULL*/, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/, _TSTRING* o_file_path /*= NULL*/)
 {
  HANDLE   hFile=0;
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
  CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ if (i_title)
+  open.m_ofn.lpstrTitle = i_title->c_str();
  CString cs;
+
+ if (sizes.empty())
+  return false; //error
+ std::vector<int>::const_iterator p_size_max = std::max_element(sizes.begin(), sizes.end());
 
  if (open.DoModal()==IDOK)
  {
@@ -737,7 +771,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
    BYTE* p_hex_buff = new BYTE[hex_file_length];
    f.Read(p_hex_buff, hex_file_length);
    size_t bin_size = 0;
-   EReadHexStatus status = HexUtils_ConvertHexToBin(p_hex_buff,hex_file_length,p_data,bin_size, size);
+   EReadHexStatus status = HexUtils_ConvertHexToBin(p_hex_buff, hex_file_length, p_data, bin_size, *p_size_max);
    delete p_hex_buff;
 
    switch(status)
@@ -760,32 +794,40 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const int size, CSt
      break;
    }
 
-   if ((bin_size != size) || (status == RH_ADDRESS_EXCEDED))
+   //find appropriate size and check
+   std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), bin_size);
+   if ((p_size==sizes.end()) || (status == RH_ADDRESS_EXCEDED))
    {
-    CString string;
-    string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
-    AfxMessageBox(string);
+    AfxMessageBox(GenMessage()(sizes));
     f.Close();
     return false; //ошибка
    }
+
+   if (NULL != o_selected_size)
+    *o_selected_size = *p_size; //save selected size
   }
   else //если у файла расширение bin или нет расширения или оно другое, то по умолчанию bin
   {
-   if (f.GetLength() != size)
+   std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), f.GetLength());
+   if (p_size==sizes.end())
    {
-    CString string;
-    string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size);
-    AfxMessageBox(string);
+    AfxMessageBox(GenMessage()(sizes));
     f.Close();
     return false; //ошибка
    }
-   f.Read(p_data,size);
+   f.Read(p_data, *p_size);
+
+   if (NULL != o_selected_size)
+    *o_selected_size = *p_size; //save selected size
   }
   //----------------------------------------------------------------------------
 
   f.Close();
-  if (o_file_name!=NULL)
+  if (NULL != o_file_name)
    *o_file_name = open.GetFileName();
+
+  if (NULL != o_file_path)
+   *o_file_path = open.GetPathName();
 
   return true; //подтверждение пользователя
  }
@@ -922,14 +964,16 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  bool result;
  std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
  BYTE *buff = &buff_container[0];
- CString opened_file_name = _T("");
+ _TSTRING opened_file_name = _T("");
 
  bool is_continue = CheckChangesAskAndSaveFirmware();
  if (!is_continue)
   return;  //пользователь передумал
 
  //!!! без вычисления и записи контрольной суммы в буфер
- result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
+ std::vector<int> sizes;
+ sizes.push_back(m_fpp.m_total_size);
+ result  = LoadFLASHFromFile(buff, sizes, NULL, NULL, &opened_file_name);
  if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
  {
   PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
@@ -1102,21 +1146,28 @@ void CFirmwareTabController::OnWriteFlashToSECU(void)
 
 void CFirmwareTabController::OnImportDataFromAnotherFW()
 {
- bool result;
- std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
- BYTE *buff = &buff_container[0];
- CString opened_file_name = _T("");
-
  bool is_continue = CheckChangesAskAndSaveFirmware();
-
  if (!is_continue)
   return;  //пользователь передумал
 
+ bool result;
+ std::vector<int> sizes = PlatformParamHolder::GetFirmwareSizes();
+ std::vector<int>::const_iterator it = std::max_element(sizes.begin(), sizes.end());
+ std::vector<BYTE> buff_container((*it), 0);
+ BYTE *buff = &buff_container[0];
+ _TSTRING opened_file_name = _T("");
+ int selected_size = 0;
+
  //!!! без вычисления и записи контрольной суммы в буфер
- result  = LoadFLASHFromFile(buff, m_fpp.m_total_size, &opened_file_name);
+ result  = LoadFLASHFromFile(buff, sizes, NULL, &selected_size, &opened_file_name);
  if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
  {
-  m_fwdm->LoadDataBytesFromAnotherFirmware(buff);
+  EECUPlatform platform_id;
+  if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
+   return; //error
+  PlatformParamHolder params(platform_id);
+
+  m_fwdm->LoadDataBytesFromAnotherFirmware(buff, &params.GetFlashParameters());
   m_fwdm->StoreBytes(m_bl_data);
   PrepareOnLoadFLASH(m_bl_data, m_fwdm->GetFWFileName());
  }
@@ -1158,6 +1209,20 @@ void CFirmwareTabController::OnImportMapsFromMPSZ(void)
  }
 }
 
+void CFirmwareTabController::OnImportMapsFromSECU3(void)
+{
+ FWMapsDataHolder data;
+ SECU3ImportController import(&data);
+ import.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadFLASHFromFile));
+ m_fwdm->GetMapsData(&data);
+ int result = import.DoImport();
+ if (result == IDOK)
+ {
+  m_fwdm->SetMapsData(&data);
+  SetViewFirmwareValues();
+ }
+}
+
 void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
 {
  std::vector<BYTE> eeprom_buffer(m_epp.m_size, 0x00);
@@ -1182,6 +1247,15 @@ void CFirmwareTabController::OnExportMapsToMPSZ(void)
 {
  FWMapsDataHolder data;
  MPSZExportController export(&data);
+ m_fwdm->GetMapsData(&data);
+ export.DoExport();
+}
+
+void CFirmwareTabController::OnExportMapsToSECU3(void)
+{
+ FWMapsDataHolder data;
+ SECU3ExportController export(&data);
+ export.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadFLASHFromFile));
  m_fwdm->GetMapsData(&data);
  export.DoExport();
 }

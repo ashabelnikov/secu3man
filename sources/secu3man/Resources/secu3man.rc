@@ -415,12 +415,14 @@ BEGIN
                             "Импортировать данные непосредственно из SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Импортировать таблицы из MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Импорт данных"
+    IDS_IMPORT_IMPORT_FROM_SECU3 "Импортировать таблицы из SECU-3"
 END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Экспорт данных"
     IDS_EXPORT_EXPORT_TO_MPSZ "Экспортировать таблицы в MPSZ-ZH"
+    IDS_EXPORT_EXPORT_TO_SECU3 "Экспортировать таблицы в SECU-3"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -440,10 +442,11 @@ BEGIN
     IDS_FW_HEX_FILE_STRUCTURE_ERROR 
                             "Неожиданный символ или структура HEX-файла нарушена. Операция прервана."
     IDS_FW_WRONG_FW_FILE_SIZE 
-                            "Неправильный размер файла прошивки. Размер должен быть %d байт."
+                            "Неправильный размер файла прошивки. Размер должен быть %s байт."
     IDS_FW_MODIFICATION_WARNING "Прошивка была изменена. Хотите сохранить?"
     IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
     IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
+    IDS_FW_OR "или"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -863,6 +866,7 @@ BEGIN
     IDS_IMPORT_FW_DATA_FROM_SECU3 "Import data directly from SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Import tables from MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Import data"
+    IDS_IMPORT_IMPORT_FROM_SECU3 "Import tables from SECU-3"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -880,6 +884,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Export data"
     IDS_EXPORT_EXPORT_TO_MPSZ "Export tables into MPSZ-ZH"
+    IDS_EXPORT_EXPORT_TO_SECU3 "Export tables into SECU-3"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -932,11 +937,12 @@ BEGIN
     IDS_FW_HEX_FILE_STRUCTURE_ERROR 
                             "Unexpected symbol or structure of HEX-file is damaged. Operation aborted."
     IDS_FW_WRONG_FW_FILE_SIZE 
-                            "Wrong size of firmware file. Size must be %d bytes."
+                            "Wrong size of firmware file. Size must be %s bytes."
     IDS_FW_MODIFICATION_WARNING 
                             "Firmware was modified. Would you like to save it?"
     IDS_FW_READING_FW_SIGNATURE "Reading firmware information..."
     IDS_FW_RESERVE_PARAMETERS "Reserve parameters:"
+    IDS_FW_OR "or"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -20,6 +20,7 @@
 */
 
 #include "iocore_api.h"
+#include <vector>
 
 #pragma once
 
@@ -38,8 +39,8 @@ struct PPFlashParam
 
 struct PPEepromParam
 {
- size_t m_size;        //size of EEPROM
- size_t m_param_start; //адрес структуры параметров в EEPROM
+ size_t m_size;           //size of EEPROM
+ size_t m_param_start;    //адрес структуры параметров в EEPROM
 };
 
 typedef enum EECUPlatform
@@ -47,7 +48,8 @@ typedef enum EECUPlatform
  EP_ATMEGA16 = 0,
  EP_ATMEGA32,
  EP_ATMEGA64,
- EP_ATMEGA128
+ EP_ATMEGA128,
+ EP_NR_OF_PLATFORMS       //must be last!
 };
 
 class IOCORE_API PlatformParamHolder
@@ -57,6 +59,12 @@ class IOCORE_API PlatformParamHolder
 
   const PPEepromParam& GetEepromParameters(void) const;
   const PPFlashParam& GetFlashParameters(void) const;
+
+  //get list of all allowed sizes of firmware
+  static std::vector<int> GetFirmwareSizes(void);
+
+  //get platform ID by firmware size
+  static bool GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& o_platform);
 
  private:
   PPEepromParam m_ep;

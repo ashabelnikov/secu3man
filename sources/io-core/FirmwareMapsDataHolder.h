@@ -31,6 +31,8 @@
 #define F_STR_POINTS           16
 #define F_IDL_POINTS           16
 #define F_NAME_SIZE            16
+#define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
+#define COIL_ON_TIME_LOOKUP_TABLE_SIZE 32
 
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          8
@@ -48,6 +50,8 @@ struct SECU3FWMapsItem
 struct FWMapsDataHolder
 {
  SECU3FWMapsItem  maps[TABLES_NUMBER];
+ float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
+ float coilregul_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
  std::vector<_TSTRING> GetListOfNames(void)
  {

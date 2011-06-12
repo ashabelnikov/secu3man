@@ -22,9 +22,9 @@
 #pragma once
 
 #include "io-core/FirmwareMapsDataHolder.h"
-#include "MPSZFileDataIO.h"
 
 class CMapImpExpDlg;
+class MPSZFileDataIO;
 
 class AFX_EXT_CLASS MPSZImportController
 {
@@ -38,13 +38,15 @@ class AFX_EXT_CLASS MPSZImportController
   void OnCancelPressed(void);
   void OnExchangePressed(void);
   void OnViewActivate(void);
+  void OnCurrentListNameChanged(int item, CString text);
+  void OnOtherListNameChanged(int item, CString text);
   bool IsExchangeButtonAllowed(void);
 
  private:
-  CMapImpExpDlg* mp_view;
-  _TSTRING m_mpsz_file_name;
   FWMapsDataHolder* mp_fwd;
-  MPSZFileDataIO m_mpsz_io;
+  CMapImpExpDlg* mp_view;
+  MPSZFileDataIO* mp_mpsz_io;
+  _TSTRING m_mpsz_file_name;
 };
 
 class AFX_EXT_CLASS MPSZExportController
@@ -59,11 +61,13 @@ class AFX_EXT_CLASS MPSZExportController
   void OnCancelPressed(void);
   void OnExchangePressed(void);
   void OnViewActivate(void);
+  void OnCurrentListNameChanged(int item, CString text);
+  void OnOtherListNameChanged(int item, CString text);
   bool IsExchangeButtonAllowed(void);
 
  private:
-  CMapImpExpDlg* mp_view;
-  _TSTRING m_mpsz_file_name;
   FWMapsDataHolder* mp_fwd;
-  MPSZFileDataIO m_mpsz_io;
+  CMapImpExpDlg* mp_view;
+  MPSZFileDataIO* mp_mpsz_io;
+  _TSTRING m_mpsz_file_name;
 };

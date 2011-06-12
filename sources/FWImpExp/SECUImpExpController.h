@@ -18,3 +18,69 @@
               http://secu-3.org
               email: shabelnikov@secu-3.org
 */
+
+#pragma once
+
+#include <vector>
+#include "common/fastdelegate.h"
+
+class CFirmwareDataMediator;
+class CMapImpExpDlg;
+struct FWMapsDataHolder;
+
+class AFX_EXT_CLASS SECU3ImportController
+{
+  //<buffer, list_of_allowed_sizes, selected_size, filename, title, ret_value>
+  typedef fastdelegate::FastDelegate6<BYTE*, const std::vector<int>&, _TSTRING*, int*, _TSTRING*, _TSTRING*, bool> Delegate1;
+ public:
+  SECU3ImportController(FWMapsDataHolder* ip_fwd);
+  ~SECU3ImportController();
+
+  int  DoImport(void);
+
+  void OnOkPressed(void);
+  void OnCancelPressed(void);
+  void OnExchangePressed(void);
+  void OnViewActivate(void);
+  void OnCurrentListNameChanged(int item, CString text);
+  void OnOtherListNameChanged(int item, CString text);
+  bool IsExchangeButtonAllowed(void);
+
+  void setFileReader(Delegate1 delegate);
+
+ private:
+  FWMapsDataHolder* mp_fwd;
+  CMapImpExpDlg* mp_view;
+  CFirmwareDataMediator* m_fwdm;
+  _TSTRING m_secu3_file_name;
+  Delegate1 m_FileReader;
+};
+
+class AFX_EXT_CLASS SECU3ExportController
+{
+  //<buffer, list_of_allowed_sizes, selected_size, filename, title, file_path, ret_value>
+  typedef fastdelegate::FastDelegate6<BYTE*, const std::vector<int>&, _TSTRING*, int*, _TSTRING*, _TSTRING*, bool> Delegate1;
+ public:
+  SECU3ExportController(FWMapsDataHolder* ip_fwd);
+  ~SECU3ExportController();
+
+  int  DoExport(void);
+
+  void OnOkPressed(void);
+  void OnCancelPressed(void);
+  void OnExchangePressed(void);
+  void OnViewActivate(void);
+  void OnCurrentListNameChanged(int item, CString text);
+  void OnOtherListNameChanged(int item, CString text);
+  bool IsExchangeButtonAllowed(void);
+
+  void setFileReader(Delegate1 delegate);
+
+ private:
+  FWMapsDataHolder* mp_fwd;
+  CMapImpExpDlg* mp_view;
+  CFirmwareDataMediator* m_fwdm;
+  _TSTRING m_secu3_file_name;
+  _TSTRING m_secu3_file_path;
+  Delegate1 m_FileReader;
+};

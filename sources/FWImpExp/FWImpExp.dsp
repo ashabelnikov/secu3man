@@ -55,7 +55,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/FWImpExp.dll"
+# ADD LINK32 iocore.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/FWImpExp.dll" /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "FWImpExp - Win32 Debug"
 
@@ -81,7 +81,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/FWImpExp.dll" /pdbtype:sept
+# ADD LINK32 iocore.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/FWImpExp.dll" /pdbtype:sept /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "FWImpExp - Win32 UnicodeDebug"
 
@@ -108,7 +108,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/FWImpExp.dll" /pdbtype:sept
-# ADD LINK32 /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/FWImpExp.dll" /pdbtype:sept
+# ADD LINK32 iocore.lib /nologo /subsystem:windows /dll /debug /machine:I386 /out:"../../binaries/FWImpExp.dll" /pdbtype:sept /libpath:"../../libraries"
 
 !ELSEIF  "$(CFG)" == "FWImpExp - Win32 UnicodeRelease"
 
@@ -135,7 +135,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/FWImpExp.dll"
-# ADD LINK32 /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/FWImpExp.dll"
+# ADD LINK32 iocore.lib /nologo /subsystem:windows /dll /machine:I386 /out:"../../binaries/FWImpExp.dll" /libpath:"../../libraries"
 
 !ENDIF 
 

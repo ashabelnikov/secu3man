@@ -32,6 +32,8 @@ enum EFWDFlags
  FLAG_IDLE_MAP,
  FLAG_WORK_MAP,
  FLAG_TEMP_MAP,
+ FLAG_COILREG_MAP,  //separate
+ FLAG_ATTEN_MAP,    //separate
  FLAG_NR_OF_FLAGS
 };
 

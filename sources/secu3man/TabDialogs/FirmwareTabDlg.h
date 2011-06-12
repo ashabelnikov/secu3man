@@ -87,8 +87,10 @@ class CFirmwareTabDlg : public CTabDialog
   void setOnWriteFlashToSECU(EventHandler OnFunction);
   void setOnImportDataFromSECU3(EventHandler OnFunction);
   void setOnImportMapsFromMPSZ(EventHandler OnFunction);
+  void setOnImportMapsFromSECU3(EventHandler OnFunction);
   void setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction);
   void setOnExportMapsToMPSZ(EventHandler OnFunction);
+  void setOnExportMapsToSECU3(EventHandler OnFunction);
   void setOnFirmwareInfo(EventHandler OnFunction);
   void setOnViewFWOptions(EventHandler OnFunction);
   void setIsViewFWOptionsAvailable(EventResult OnFunction);
@@ -125,8 +127,10 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnImportDataFromSECU3();
   afx_msg void OnUpdateProgOnlyCode(CCmdUI* pCmdUI);
   afx_msg void OnImportMapsFromMPSZ();
+  afx_msg void OnImportMapsFromSECU3();
   afx_msg void OnImportDefParamsFromEEPROMFile();
   afx_msg void OnExportMapsToMPSZ();
+  afx_msg void OnExportMapsToSECU3();
   afx_msg void OnFirmwareInfo();
   afx_msg void OnViewFWOptions();
   DECLARE_MESSAGE_MAP()
@@ -155,8 +159,10 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnWriteFlashToSECU;
   EventHandler  m_OnImportDataFromSECU3;
   EventHandler  m_OnImportMapsFromMPSZ;
+  EventHandler  m_OnImportMapsFromSECU3;
   EventHandler  m_OnImportDefParamsFromEEPROMFile;
   EventHandler  m_OnExportMapsToMPSZ;
+  EventHandler  m_OnExportMapsToSECU3;
   EventHandler  m_OnFirmwareInfo;
   EventHandler  m_OnViewFWOptions;
   EventResult   m_IsFirmwareOpened;

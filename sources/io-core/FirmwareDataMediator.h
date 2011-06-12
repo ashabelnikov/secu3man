@@ -23,21 +23,21 @@
 
 #include "iocore_api.h"
 #include "common/unicodesupport.h"
-#include "PlatformParamHolder.h"
 #include <vector>
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке
 //(памяти программ микроконтроллера), а также для хранения этих данных.
-
+struct PPFlashParam;
 class IOCORE_API CFirmwareDataMediator
 {
+  class LocInfoProvider;
  public:
   CFirmwareDataMediator(const PPFlashParam& i_fpp);
  ~CFirmwareDataMediator();
 
   //загрузка байтов прошивки из указанного буфера
   void LoadBytes(const BYTE* i_bytes);
-  void LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes);
+  void LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes, const PPFlashParam* ip_fpp = NULL);
   void LoadDefParametersFromBuffer(const BYTE* i_source_bytes);
 
   //сохранение байтов прошивки в указанный буфер
@@ -100,8 +100,11 @@ class IOCORE_API CFirmwareDataMediator
 
   //-----------------------------------------------------------------------
 
+  const PPFlashParam& GetPlatformParams(void) const;
+
  private:
-  PPFlashParam m_fpp;
+  const std::auto_ptr<PPFlashParam> m_fpp;
+  const std::auto_ptr<LocInfoProvider> m_lip;
   const size_t m_firmware_size;
   BYTE* m_bytes_active;   //байты прошивки (копия для модификации)
   BYTE* m_bytes_original; //байты прошивки (копия для сравнения)

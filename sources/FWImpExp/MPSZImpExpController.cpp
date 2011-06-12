@@ -30,12 +30,14 @@
 using namespace fastdelegate;
 
 MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
-: mp_view(NULL)
-, mp_fwd(ip_fwd)
+: mp_fwd(ip_fwd)
+, mp_view(new CMapImpExpDlg())
+, mp_mpsz_io(new MPSZFileDataIO())
 , m_mpsz_file_name(_T(""))
 {
- mp_view = new CMapImpExpDlg();
  ASSERT(mp_fwd);
+ ASSERT(mp_view);
+ ASSERT(mp_mpsz_io);
 
  //Ќазначаем обработчики событий от представлени€
  mp_view->setOnOkButton(MakeDelegate(this,&MPSZImportController::OnOkPressed));
@@ -43,6 +45,8 @@ MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
  mp_view->setOnExchangeButton(MakeDelegate(this,&MPSZImportController::OnExchangePressed));
  mp_view->setOnActivate(MakeDelegate(this,&MPSZImportController::OnViewActivate));
  mp_view->setIsExchengeButtonAllowed(MakeDelegate(this,&MPSZImportController::IsExchangeButtonAllowed));
+ mp_view->setOnFWDCurrentListNamechanged(MakeDelegate(this,&MPSZImportController::OnCurrentListNameChanged));
+ mp_view->setOnFWDOtherListNamechanged(MakeDelegate(this,&MPSZImportController::OnOtherListNameChanged));
 }
 
 int MPSZImportController::DoImport(void)
@@ -61,7 +65,7 @@ int MPSZImportController::DoImport(void)
    type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширени€ или оно другое то по умолчанию mpx
 
   m_mpsz_file_name = _TSTRING(open.GetFileName());
-  bool result = m_mpsz_io.Load(m_mpsz_file_name,type);
+  bool result = mp_mpsz_io->Load(m_mpsz_file_name,type);
   if (!result)
   {
    AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
@@ -84,6 +88,7 @@ bool MPSZImportController::IsExchangeButtonAllowed(void)
 MPSZImportController::~MPSZImportController()
 {
  delete mp_view; //avoid memory leak
+ delete mp_mpsz_io;
 }
 
 void MPSZImportController::OnOkPressed(void)
@@ -102,8 +107,8 @@ void MPSZImportController::OnExchangePressed(void)
  int current_sel = mp_view->GetFWDCurrentListSelection();
  int other_sel   = mp_view->GetFWDOtherListSelection();
 
- if (m_mpsz_io.GetData().maps[other_sel].name!=_T(""))
-  mp_fwd->maps[current_sel].name = m_mpsz_io.GetData().maps[other_sel].name;
+ if (mp_mpsz_io->GetData().maps[other_sel].name!=_T(""))
+  mp_fwd->maps[current_sel].name = mp_mpsz_io->GetData().maps[other_sel].name;
  else
  { //если строка пуста€, то генерируем "искусcтвенное" им€
   TCHAR name[32];
@@ -115,13 +120,13 @@ void MPSZImportController::OnExchangePressed(void)
  mp_view->SetFWDCurrentListSelection(current_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  memcpy(mp_fwd->maps[current_sel].f_str, m_mpsz_io.GetData().maps[other_sel].f_str,sizeof(float) * F_STR_POINTS);
+  memcpy(mp_fwd->maps[current_sel].f_str, mp_mpsz_io->GetData().maps[other_sel].f_str,sizeof(float) * F_STR_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
-  memcpy(mp_fwd->maps[current_sel].f_idl, m_mpsz_io.GetData().maps[other_sel].f_idl,sizeof(float) * F_IDL_POINTS);
+  memcpy(mp_fwd->maps[current_sel].f_idl, mp_mpsz_io->GetData().maps[other_sel].f_idl,sizeof(float) * F_IDL_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
-  memcpy(mp_fwd->maps[current_sel].f_wrk, m_mpsz_io.GetData().maps[other_sel].f_wrk,sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+  memcpy(mp_fwd->maps[current_sel].f_wrk, mp_mpsz_io->GetData().maps[other_sel].f_wrk,sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -134,11 +139,16 @@ void MPSZImportController::OnViewActivate(void)
 
  mp_view->SetFWDFlag(FLAG_TEMP_MAP,false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP,false);
+ mp_view->SetFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
 
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
- std::vector<_TSTRING> strings = m_mpsz_io.GetData().GetListOfNames();
+ std::vector<_TSTRING> strings = mp_mpsz_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(strings);
 
  mp_view->SetFWDFlag(FLAG_START_MAP,true);
@@ -146,14 +156,26 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_WORK_MAP,true);
 }
 
+void MPSZImportController::OnCurrentListNameChanged(int item, CString text)
+{
+ mp_fwd->maps[item].name = text;
+}
+
+void MPSZImportController::OnOtherListNameChanged(int item, CString text)
+{
+ mp_mpsz_io->GetDataLeft().maps[item].name = text;
+}
+
 //////////////////////////////////////////////////////////////////////////////////////////
 MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
-: mp_view(NULL)
-, mp_fwd(ip_fwd)
+: mp_fwd(ip_fwd)
+, mp_view(new CMapImpExpDlg())
+, mp_mpsz_io(new MPSZFileDataIO())
 , m_mpsz_file_name(_T(""))
 {
- mp_view = new CMapImpExpDlg();
  ASSERT(mp_fwd);
+ ASSERT(mp_view);
+ ASSERT(mp_mpsz_io);
 
  //Ќазначаем обработчики событий от представлени€
  mp_view->setOnOkButton(MakeDelegate(this,&MPSZExportController::OnOkPressed));
@@ -161,6 +183,8 @@ MPSZExportController::MPSZExportController(FWMapsDataHolder* ip_fwd)
  mp_view->setOnExchangeButton(MakeDelegate(this,&MPSZExportController::OnExchangePressed));
  mp_view->setOnActivate(MakeDelegate(this,&MPSZExportController::OnViewActivate));
  mp_view->setIsExchengeButtonAllowed(MakeDelegate(this,&MPSZExportController::IsExchangeButtonAllowed));
+ mp_view->setOnFWDCurrentListNamechanged(MakeDelegate(this,&MPSZExportController::OnCurrentListNameChanged));
+ mp_view->setOnFWDOtherListNamechanged(MakeDelegate(this,&MPSZExportController::OnOtherListNameChanged));
 }
 
 int MPSZExportController::DoExport(void)
@@ -191,17 +215,17 @@ int MPSZExportController::DoExport(void)
   if (save.GetFileExt()==_T("mpx"))
   {
    type = MPSZFileDataIO::FILE_TYPE_MPX;
-   m_mpsz_io.SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
+   mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
   }
   else if (save.GetFileExt()==_T("mpz"))
   {
    type = MPSZFileDataIO::FILE_TYPE_MPZ;
-   m_mpsz_io.SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE);
+   mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE);
   }
   else
   {
    type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширени€ или оно другое то по умолчанию mpx
-   m_mpsz_io.SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
+   mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
   }
 
   //сохран€ет им€ файла выбранного пользователем дл€ сохранени€
@@ -210,7 +234,7 @@ int MPSZExportController::DoExport(void)
   int id = mp_view->DoModal();
   if (id == IDOK)
   {
-   bool result = m_mpsz_io.Save(m_mpsz_file_name,type);
+   bool result = mp_mpsz_io->Save(m_mpsz_file_name,type);
    if (!result)
    {
     AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
@@ -233,6 +257,7 @@ bool MPSZExportController::IsExchangeButtonAllowed(void)
 MPSZExportController::~MPSZExportController()
 {
  delete mp_view; //avoid memory leak
+ delete mp_mpsz_io;
 }
 
 void MPSZExportController::OnOkPressed(void)
@@ -251,18 +276,18 @@ void MPSZExportController::OnExchangePressed(void)
  int current_sel = mp_view->GetFWDCurrentListSelection();
  int other_sel   = mp_view->GetFWDOtherListSelection();
 
- m_mpsz_io.GetDataLeft().maps[other_sel].name = mp_fwd->maps[current_sel].name;
- mp_view->FillFWDOtherList(m_mpsz_io.GetData().GetListOfNames());
+ mp_mpsz_io->GetDataLeft().maps[other_sel].name = mp_fwd->maps[current_sel].name;
+ mp_view->FillFWDOtherList(mp_mpsz_io->GetData().GetListOfNames());
  mp_view->SetFWDOtherListSelection(other_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
-  memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_str, mp_fwd->maps[current_sel].f_str, sizeof(float) * F_STR_POINTS);
+  memcpy(mp_mpsz_io->GetDataLeft().maps[other_sel].f_str, mp_fwd->maps[current_sel].f_str, sizeof(float) * F_STR_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_IDLE_MAP))
-  memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_idl, mp_fwd->maps[current_sel].f_idl, sizeof(float) * F_IDL_POINTS);
+  memcpy(mp_mpsz_io->GetDataLeft().maps[other_sel].f_idl, mp_fwd->maps[current_sel].f_idl, sizeof(float) * F_IDL_POINTS);
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
-  memcpy(m_mpsz_io.GetDataLeft().maps[other_sel].f_wrk, mp_fwd->maps[current_sel].f_wrk, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+  memcpy(mp_mpsz_io->GetDataLeft().maps[other_sel].f_wrk, mp_fwd->maps[current_sel].f_wrk, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -275,14 +300,29 @@ void MPSZExportController::OnViewActivate(void)
 
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ 
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));
 
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
- std::vector<_TSTRING> strings = m_mpsz_io.GetData().GetListOfNames();
+ std::vector<_TSTRING> strings = mp_mpsz_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(strings);
 
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
+}
+
+void MPSZExportController::OnCurrentListNameChanged(int item, CString text)
+{
+ mp_fwd->maps[item].name = text;
+}
+
+void MPSZExportController::OnOtherListNameChanged(int item, CString text)
+{
+ mp_mpsz_io->GetDataLeft().maps[item].name = text;
 }

@@ -43,15 +43,23 @@ BEGIN
                     LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
                     179,30,133,118,WS_EX_LEFTSCROLLBAR
     CONTROL         "пуск",IDC_MAP_IMPEXP_STARTMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,70,163,33,15
+                    BS_AUTOCHECKBOX | WS_TABSTOP,20,165,33,13
     CONTROL         "ХХ",IDC_MAP_IMPEXP_IDLEMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,117,164,34,12
+                    BS_AUTOCHECKBOX | WS_TABSTOP,64,165,34,13
     CONTROL         "рабочая",IDC_MAP_IMPEXP_WORKMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,164,164,44,13
+                    BS_AUTOCHECKBOX | WS_TABSTOP,105,165,44,13
     CONTROL         "темп.корр.",IDC_MAP_IMPEXP_TEMPMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,219,163,63,14
+                    BS_AUTOCHECKBOX | WS_TABSTOP,157,165,63,13
     DEFPUSHBUTTON   "OK",IDOK,318,34,50,20
     PUSHBUTTON      "Cancel",IDCANCEL,318,63,50,21
+    CONTROL         "врем.накопл.",IDC_MAP_IMPEXP_COILREGUL_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,237,166,63,14
+    CONTROL         "аттенюатор",IDC_MAP_IMPEXP_ATTENUATOR_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,303,166,63,14
+    GROUPBOX        "Отдельные таблицы",IDC_MAP_IMPEXP_SEPTAB_GROUP,228,156,
+                    141,29
+    GROUPBOX        "Группа таблиц",IDC_MAP_IMPEXP_GRPTAB_GROUP,10,156,213,
+                    29
 END
 
 
@@ -85,9 +93,13 @@ BEGIN
     IDS_MAP_NO_NAME         "<Без имени %d>"
     IDS_SECU3_CURRENT_FW    "SECU-3 Текущая прошивка"
     IDS_MPSZ_FW_FILE        "MPSZ %s"
+    IDS_SECU3_FW_FILE       "SECU-3 %s"
     IDS_IMPORT_MPSZ_TABLES  "Импорт таблиц из MPSZ"
+    IDS_IMPORT_SECU3_TABLES "Импорт таблиц из SECU-3"
     IDS_CANT_SAVE_THIS_FILE "Не знаю как сохранить этот файл, извините!"
     IDS_EXPORT_MPSZ_TABLES  "Экспорт таблиц в MPSZ"
+    IDS_EXPORT_SECU3_TABLES  "Экспорт таблиц в SECU-3"
+    IDS_OPEN_FILE_FOR_EXPORT "Открыть файл для экспорта"
 END
 
 #endif    // Russian resources
@@ -125,15 +137,23 @@ BEGIN
                     LVS_EDITLABELS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,
                     179,30,133,118,WS_EX_LEFTSCROLLBAR
     CONTROL         "start",IDC_MAP_IMPEXP_STARTMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,70,163,33,15
+                    BS_AUTOCHECKBOX | WS_TABSTOP,20,165,33,13
     CONTROL         "idle",IDC_MAP_IMPEXP_IDLEMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,117,164,34,12
+                    BS_AUTOCHECKBOX | WS_TABSTOP,64,165,34,13
     CONTROL         "work",IDC_MAP_IMPEXP_WORKMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,164,164,44,13
+                    BS_AUTOCHECKBOX | WS_TABSTOP,105,165,44,13
     CONTROL         "temp.corr.",IDC_MAP_IMPEXP_TEMPMAP_FLAG,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,219,163,63,14
+                    BS_AUTOCHECKBOX | WS_TABSTOP,157,165,63,13
     DEFPUSHBUTTON   "OK",IDOK,318,34,50,20
     PUSHBUTTON      "Cancel",IDCANCEL,318,63,50,21
+    CONTROL         "coil regul.",IDC_MAP_IMPEXP_COILREGUL_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,237,166,63,14
+    CONTROL         "attenuator",IDC_MAP_IMPEXP_ATTENUATOR_FLAG,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,303,166,63,14
+    GROUPBOX        "Separate tables",IDC_MAP_IMPEXP_SEPTAB_GROUP,228,156,
+                    141,29
+    GROUPBOX        "For set of tables",IDC_MAP_IMPEXP_GRPTAB_GROUP,10,156,213,
+                    29
 END
 
 
@@ -232,9 +252,13 @@ BEGIN
     IDS_MAP_NO_NAME         "<noname %d>"
     IDS_SECU3_CURRENT_FW    "SECU-3 Current firmware"
     IDS_MPSZ_FW_FILE        "MPSZ %s"
+    IDS_SECU3_FW_FILE       "SECU-3 %s"
     IDS_IMPORT_MPSZ_TABLES  "Import tables from MPSZ"
+    IDS_IMPORT_SECU3_TABLES "Import tables from SECU-3"
     IDS_CANT_SAVE_THIS_FILE "Don't know how to save this file, sorry!"
     IDS_EXPORT_MPSZ_TABLES  "Export tables into MPSZ"
+    IDS_EXPORT_SECU3_TABLES  "Export tables into SECU-3"
+    IDS_OPEN_FILE_FOR_EXPORT "Open file for export"
 END
 
 #endif    // English (U.S.) resources
