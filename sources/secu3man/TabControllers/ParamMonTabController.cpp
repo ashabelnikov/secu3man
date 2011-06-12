@@ -60,6 +60,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
  m_view->setOnRawSensorsCheck(MakeDelegate(this,&CParamMonTabController::OnRawSensorsCheckBox));
+ m_view->setOnEditTablesCheck(MakeDelegate(this,&CParamMonTabController::OnEditTablesCheckBox));
  m_view->mp_ParamDeskDlg->SetOnSaveButton(MakeDelegate(this,&CParamMonTabController::OnPDSaveButton));
 }
 
@@ -420,6 +421,11 @@ void CParamMonTabController::OnRawSensorsCheckBox(void)
   m_view->mp_RSDeskDlg->ShowWindow(SW_HIDE);
   m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
  }
+}
+
+void CParamMonTabController::OnEditTablesCheckBox(void)
+{
+ //todo
 }
 
 bool CParamMonTabController::OnClose(void)

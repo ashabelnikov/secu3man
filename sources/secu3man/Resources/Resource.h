@@ -198,3 +198,5 @@
 #define IDM_EXPORT_EXPORT_TO_SECU3      4212
 #define IDS_EXPORT_EXPORT_TO_SECU3      4213
 #define IDS_FW_OR                       4214
+#define IDC_PM_EDIT_TABLES              4215
+

@@ -40,7 +40,9 @@ class CParamMonTabDlg : public CTabDialog
   virtual LPCTSTR GetDialogID(void) const;
 
   bool GetRawSensorsCheckState(void);
+  bool GetEditTablesCheckState(void);
   void setOnRawSensorsCheck(EventHandler i_Function);
+  void setOnEditTablesCheck(EventHandler i_Function);
 
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
@@ -56,13 +58,17 @@ class CParamMonTabDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnPmShowRawSensors();
+  afx_msg void OnPmEditTables();
   DECLARE_MESSAGE_MAP()
 
   EventHandler m_OnRawSensorsCheck;
+  EventHandler m_OnEditTablesCheck;
   CButton m_raw_sensors_check;
+  CButton m_edit_tables_check;
   CStatic m_save_note_text;
 
   CRect m_original_mi_rect;
   CRect m_original_rs_rect;
   CPoint m_original_check_pos;
+  CPoint m_original_button_pos;
 };

@@ -51,21 +51,24 @@ END
 // Dialog
 //
 
-IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 428, 222
+IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 222
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL        "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
+                    WS_TABSTOP,181,196,89,17
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,234,199,157,10
+                    BS_MULTILINE | WS_TABSTOP,311,197,163,15
     LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
-                    IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
+                    IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,0,238,172
+                    WS_VISIBLE,187,0,261,172
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,0,0,147,156
-END
+                    WS_VISIBLE,0,0,156,172
+    END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
@@ -520,19 +523,22 @@ END
 // Dialog
 //
 
-IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 428, 222
+IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 222
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL        "Edit tables",IDC_PM_EDIT_TABLES,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
+                    WS_TABSTOP,181,196,89,17
     CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,234,199,157,10
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,311,197,163,15
     LTEXT           "NOTE: SECU-3 automatically saves parameters after some time after stop editing ",
-                    IDC_PM_SAVE_NOTE_TEXT,11,194,222,20
+                    IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,0,238,172
+                    WS_VISIBLE,187,0,261,172
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,0,0,147,156
+                    WS_VISIBLE,0,0,147,172
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225

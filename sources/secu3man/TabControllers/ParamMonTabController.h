@@ -79,6 +79,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   //////////////////////////////////////////////////////
 
   void OnRawSensorsCheckBox(void);
+  void OnEditTablesCheckBox(void);
   void OnPDSaveButton(void);
 
  private:

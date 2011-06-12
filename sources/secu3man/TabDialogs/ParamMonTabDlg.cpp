@@ -39,6 +39,7 @@ using namespace fastdelegate;
 
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
+ ON_BN_CLICKED(IDC_PM_EDIT_TABLES, OnPmEditTables)
 END_MESSAGE_MAP()
 
 const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
@@ -56,6 +57,7 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
+ DDX_Control(pDX,IDC_PM_EDIT_TABLES,m_edit_tables_check);
  DDX_Control(pDX,IDC_PM_SAVE_NOTE_TEXT, m_save_note_text);
 }
 
@@ -101,15 +103,32 @@ void CParamMonTabDlg::OnPmShowRawSensors()
   m_OnRawSensorsCheck();
 }
 
+void CParamMonTabDlg::OnPmEditTables()
+{//делегируем обработку события чекбокса
+ if (m_OnEditTablesCheck)
+  m_OnEditTablesCheck();
+}
+
 bool CParamMonTabDlg::GetRawSensorsCheckState(void)
 {
  int check = m_raw_sensors_check.GetCheck();
  return (check==BST_CHECKED) ? true : false;
 }
 
+bool CParamMonTabDlg::GetEditTablesCheckState(void)
+{
+ int check = m_edit_tables_check.GetCheck();
+ return (check==BST_CHECKED) ? true : false;
+}
+
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 {
  m_OnRawSensorsCheck = i_Function;
+}
+
+void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
+{
+ m_OnEditTablesCheck = i_Function;
 }
 
 void CParamMonTabDlg::MakePDFloating(bool i_floating)
@@ -142,12 +161,19 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
   ScreenToClient(m_original_mi_rect);
   mp_RSDeskDlg->GetWindowRect(m_original_rs_rect);
   ScreenToClient(m_original_rs_rect);
+  
   CRect check_rect;
   m_raw_sensors_check.GetWindowRect(check_rect);
-  ScreenToClient(check_rect);
-  rect.bottom-= check_rect.Height();
+  ScreenToClient(check_rect); //check rect
+  CRect button_rect;
+  m_edit_tables_check.GetWindowRect(button_rect);
+  ScreenToClient(button_rect);//button rect 
+  rect.bottom-= max(check_rect.Height(), button_rect.Height());
   m_raw_sensors_check.SetWindowPos(0,check_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!
+  m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!  
+  m_edit_tables_check.SetWindowPos(0,button_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
+  m_original_button_pos = CPoint(button_rect.left, button_rect.top); //save it!
+
   CRect mi_rect = m_original_mi_rect;
   _ResizeRect(rect, mi_rect);
   mp_MIDeskDlg->Resize(mi_rect);
@@ -159,6 +185,7 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
  else
  {
   m_raw_sensors_check.SetWindowPos(0,m_original_check_pos.x,m_original_check_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
+  m_edit_tables_check.SetWindowPos(0,m_original_button_pos.x,m_original_button_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
   mp_MIDeskDlg->Resize(m_original_mi_rect);
   mp_RSDeskDlg->Resize(m_original_rs_rect);
   m_save_note_text.ShowWindow(SW_SHOW);
