@@ -23,16 +23,6 @@
 
 #include "common/FastDelegate.h"
 
-enum EMapTypes
-{
- TYPE_MAP_DA_START = 0,
- TYPE_MAP_DA_IDLE,
- TYPE_MAP_DA_WORK,
- TYPE_MAP_DA_TEMP_CORR,
- TYPE_MAP_ATTENUATOR, //used by derived classes
- TYPE_MAP_COILREGUL   //used by derived classes
-};
-
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
@@ -53,6 +43,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
   
+  //Read/Write access
   float* GetStartMap(bool i_original);
   float* GetIdleMap(bool i_original);
   float* GetWorkMap(bool i_original);

@@ -40,10 +40,11 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
  typedef CModelessUpdatableDialog Super;
 
  public:
+  //идентификаторы вкладок
   enum 
   {
-   GASOLINE_TAB = 0,
-   GAS_TAB
+   GASOLINE_TAB = 0,  //бензин
+   GAS_TAB            //газ
   };
 
   CTablesDeskDlg(CWnd* pParent = NULL);
@@ -61,20 +62,21 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void Enable(bool enable);
   virtual void Show(bool show);
   virtual void ShowSaveButton(bool i_show);
-
-//  virtual bool SetValues(BYTE i_descriptor, const void* i_values);
-//  virtual bool GetValues(BYTE i_descriptor, void* o_values);
-
-//  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
-//  virtual const std::vector<_TSTRING>& GetFunctionsNames(void);
-
-  virtual void SetOnTabActivate(EventHandler OnTabActivate);
-  virtual void SetOnChangeInTab(EventHandler OnChangeInTab);
-  virtual void SetOnSaveButton(EventHandler OnSaveButton);
+  //events
+  virtual void setOnMapChanged(EventWith2Codes OnFunction);
+  virtual void setOnCloseMapWnd(EventWithHWND OnFunction);
+  virtual void setOnOpenMapWnd(EventWithHWND OnFunction);
+  virtual void setOnTabActivate(EventHandler OnFunction);
+  virtual void setOnSaveButton(EventHandler OnFunction);
+  virtual void setOnChangeTablesSetName(EventWithCode OnFunction);
 
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
   virtual int GetCurSel(void);
+
+  virtual void SetTablesSetName(const _TSTRING& name);
+  virtual _TSTRING GetTablesSetName(void) const;
+  virtual float* GetMap(int i_mapType, bool i_original);
   //-------------------------------------------------------------
 
  // Implementation
@@ -89,30 +91,36 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   DECLARE_MESSAGE_MAP()
 
  private:
+  //events from CTablesPageDlg->CButtonsPanel
+  void OnMapChanged(int i_mapType);
+  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
+  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
+  //events from CTablesPageDlg
+  void OnChangeTablesSetName(void);
+
   // ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
   virtual void OnSelchangingTabctl(void);
 
-  void OnChangeInTab(void);
   void _RegisterHotKeys(void);
 
-  std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
+  //указатели на диалоги всех вкладок. ћы используем один диалог дл€ двух вкладок
+  class CTablesPageDlg* m_pPageDlg;
 
-  //указатели на диалоги всех вкладок
-  class CTablesPageDlg*   m_pGasolinePageDlg;
-  class CTablesPageDlg*   m_pGasPageDlg;
-
+  BOOL m_enabled;
   CStatic m_td_title;
   CButton m_save_button;
   CTabController m_tab_control;
   CImageList* m_pImgList;
-
-  BOOL m_enabled;
+  std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 
   //обработчики событий (делегаты)
+  EventWith2Codes m_OnMapChanged;
+  EventWithHWND m_OnCloseMapWnd;
+  EventWithHWND m_OnOpenMapWnd;
   EventHandler m_OnTabActivate;
-  EventHandler m_OnChangeInTab;
   EventHandler m_OnSaveButton;
+  EventWithCode m_OnChangeTablesSetName;
 };
 
 /////////////////////////////////////////////////////////////////////////////

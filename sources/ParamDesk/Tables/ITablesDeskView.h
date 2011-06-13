@@ -24,7 +24,7 @@
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
 
-//через этот интерфейс нужно общатся с панелью редактирования таблиц (представлением)
+//Интерфейс для взаимодействия с панелью редактирования таблиц (представлением)
 //Особенность: Любой из следующих методов интерфейса может быть вызван независимо
 //от того - видна вкладка или нет (кроме SetCurSel()).
 
@@ -32,24 +32,30 @@ class ITablesDeskView
 {
  public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate2<int, int> EventWith2Codes;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
+  typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
 
-  virtual bool IsEnabled(void) = 0;
-  virtual void Enable(bool enable) = 0;                                  //разрешить/запретить представление
-  virtual void Show(bool show) = 0;                                      //показать/спрятать контент представления
-//  virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0; //загнать данные в представление
-//  virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;       //извлечь данные из представления
-  virtual void ShowSaveButton(bool i_show) = 0;
+  //Common
+  virtual bool IsEnabled(void) = 0;                               //Возвращает true если представление разрешено
+  virtual void Enable(bool enable) = 0;                           //разрешить/запретить представление
+  virtual void Show(bool show) = 0;                               //показать/спрятать контент представления
+  virtual void ShowSaveButton(bool i_show) = 0;                   //показать/cпрятать кнопку "сохранить"
 
-  //установка/получение имен семейств характеристик
-  //вектор содержит набор имен семейств характеристик хранимых в прошивке SECU-3
-//  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names) = 0;
-//  virtual const std::vector<_TSTRING>& GetFunctionsNames(void) = 0;
+  //events
+  virtual void setOnMapChanged(EventWith2Codes OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
+  virtual void setOnCloseMapWnd(EventWithHWND OnFunction) = 0;    //обработцик будет вызываться при закрытии окна с таблицей
+  virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей
+  virtual void setOnTabActivate(EventHandler OnFunction) = 0;     //обработцик будет вызываться при появлении вкладки
+  virtual void setOnSaveButton(EventHandler OnFunction) = 0;      //обработчик будет вызываться при нажатии кнопки "сохранить"
+  virtual void setOnChangeTablesSetName(EventWithCode OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
 
-  virtual void SetOnTabActivate(EventHandler OnTabActivate) = 0;  //обработцик будет вызываться при появлении вкладки
-  virtual void SetOnChangeInTab(EventHandler OnChangeInTab) = 0;  //обработчик будет вызываться при изменении пользователем данных вкладки
-  virtual void SetOnSaveButton(EventHandler OnSaveButton) = 0;    //обработчик будет вызываться при нажатии кнопки "сохранить"
+  //Current selection of tab control. Вызывать только для активной панели!!!
+  virtual bool SetCurSel(int sel) = 0;                            //выбрать указанную вкладку по идентификатору (идентификатор - индекс)
+  virtual int GetCurSel(void) = 0;                                //получить идентификатор выбранной вкладки (идентификатор - индекс)
 
-  //вызывать только для активной панели!!!
-  virtual bool SetCurSel(int sel) = 0;
-  virtual int GetCurSel(void) = 0;
+  //Data access
+  virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 
+  virtual _TSTRING GetTablesSetName(void) const = 0;              //get name from edit box
+  virtual float* GetMap(int i_mapType, bool i_original) = 0;      //r/w access to specified table
 };

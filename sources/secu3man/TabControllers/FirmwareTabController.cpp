@@ -39,6 +39,7 @@
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/FirmwareTabDlg.h"
+#include "TablDesk/MapIds.h"
 #include "TablDesk/TablesSetPanel.h"
 #include "Settings/ISettingsData.h"
 

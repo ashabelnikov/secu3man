@@ -31,9 +31,14 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+using namespace fastdelegate;
+
 const UINT CTablesPageDlg::IDD = IDD_TD_TABLES_PAGE;
 
 BEGIN_MESSAGE_MAP(CTablesPageDlg, Super)
+ ON_EN_CHANGE(IDC_TD_TABLESSET_NAME_EDIT, OnChangeTablesSetName)
+ ON_UPDATE_COMMAND_UI(IDC_TD_TABLESSET_NAME_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_TD_TABLESSET_NAME_TITLE, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CTablesPageDlg::CTablesPageDlg(CWnd* pParent /*=NULL*/)
@@ -41,7 +46,7 @@ CTablesPageDlg::CTablesPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(FALSE)
 , mp_ButtonsPanel(new CButtonsPanel(0, NULL))
 {
-  //empty
+ mp_ButtonsPanel->setIsAllowed(MakeDelegate(this, &CTablesPageDlg::IsAllowed));
 }
 
 LPCTSTR CTablesPageDlg::GetDialogID(void) const
@@ -52,6 +57,7 @@ LPCTSTR CTablesPageDlg::GetDialogID(void) const
 void CTablesPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_TD_TABLESSET_NAME_EDIT, m_names_edit);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -72,13 +78,13 @@ BOOL CTablesPageDlg::OnInitDialog()
  ScreenToClient(rect);
 
  mp_ButtonsPanel->Create(mp_ButtonsPanel->IDD, this);
- mp_ButtonsPanel->SetPosition(rect.left, rect.top, NULL);
+ mp_ButtonsPanel->SetPosition(rect.left, rect.top, &m_names_edit);
  mp_ButtonsPanel->ShowWindow(SW_SHOW);
 
  UpdateData(FALSE);
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-	           // EXCEPTION: OCX Property Pages should return FALSE
+	              // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -95,14 +101,30 @@ bool CTablesPageDlg::IsEnabled(void)
  return (m_enabled) ? true : false;
 }
 
-/*
-//эту функцию необходимо использовать когда надо получить данные из диалога
-void CTablesPageDlg::GetValues(SECU3IO::StartrPar* o_values)
+//from CButtonsPanel
+bool CTablesPageDlg::IsAllowed(void)
 {
+ return m_enabled ? true : false;
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
-void CTablesPageDlg::SetValues(const SECU3IO::StartrPar* i_values)
+//from edit box
+void CTablesPageDlg::OnChangeTablesSetName()
 {
+ if (m_OnChangeTablesSetName())
+  m_OnChangeTablesSetName();
 }
-*/
+
+void CTablesPageDlg::SetTablesSetName(const _TSTRING& name)
+{
+ m_names_edit.SetWindowText(name.c_str());
+}
+
+_TSTRING CTablesPageDlg::GetTablesSetName(void) const
+{
+ CString str;
+ m_names_edit.GetWindowText(str);
+ return str;
+}
+
+void CTablesPageDlg::setOnChangeTablesSetName(EventHandler OnFunction)
+{ m_OnChangeTablesSetName = OnFunction; }

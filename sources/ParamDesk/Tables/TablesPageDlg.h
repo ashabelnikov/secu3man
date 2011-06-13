@@ -23,6 +23,7 @@
 
 #include <memory>
 #include <string>
+#include "common/fastdelegate.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/TabDialog.h"
 
@@ -31,26 +32,39 @@ class CButtonsPanel;
 class CTablesPageDlg : public CTabDialog, public ParamPageEvents
 {
   typedef CTabDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  CTablesPageDlg(CWnd* pParent = NULL);   // standard constructor
+  CTablesPageDlg(CWnd* pParent = NULL);            // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);
 
-  //void GetValues(SECU3IO::StartrPar* o_values);
-  //void SetValues(const SECU3IO::StartrPar* i_values);
+  void SetTablesSetName(const _TSTRING& name);
+  _TSTRING GetTablesSetName(void) const;
+
+  void setOnChangeTablesSetName(EventHandler OnFunction);
+
+  //CButtonsPanel
+  std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;
+
 
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnChangeTablesSetName();
   DECLARE_MESSAGE_MAP()
 
  private:
-  BOOL m_enabled;
-  std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;
+  EventHandler m_OnChangeTablesSetName;
+
+  //from CButtonsPanel
+  bool IsAllowed(void);
+
+  BOOL  m_enabled;
+  CEdit m_names_edit;
 };

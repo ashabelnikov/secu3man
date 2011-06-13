@@ -24,6 +24,7 @@
 #include "ButtonsPanel.h"
 #include "DLLLinkedFunctions.h"
 #include "io-core/secu3io.h"
+#include "MapIds.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -169,7 +170,14 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_temp_map_wnd_handle(NULL)
 , IDD(IDD_TD_BUTTONS_PANEL)
 {
- //empty
+ memset(m_start_map_active, 0, 16 * sizeof(float));
+ memset(m_start_map_original, 0, 16 * sizeof(float));
+ memset(m_idle_map_active, 0, 16 * sizeof(float));
+ memset(m_idle_map_original, 0, 16 * sizeof(float));
+ memset(m_work_map_active, 0, 16 * 16 * sizeof(float));
+ memset(m_work_map_original, 0, 16 * 16 * sizeof(float));
+ memset(m_temp_map_active, 0, 16 * sizeof(float));
+ memset(m_temp_map_original, 0, 16 * sizeof(float));
 }
 
 void CButtonsPanel::DoDataExchange(CDataExchange* pDX)

@@ -27,6 +27,8 @@
 
 #include <map>
 #include "common/FastDelegate.h"
+#include "TablDesk/ButtonsPanel.h"
+#include "TablDesk/MapIds.h"
 #include "TablesPageDlg.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 
@@ -61,18 +63,17 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
  m_pImgList->Add(&bitmap, TABLES_TAB_CTRL_BITMAPS_COLOR_MASK);
 
  //их надо создать только один раз
- m_pGasolinePageDlg = new CTablesPageDlg();
- m_pGasolinePageDlg->setFunctionOnChange(MakeDelegate(this, &CTablesDeskDlg::OnChangeInTab));
-
- m_pGasPageDlg = new CTablesPageDlg();
- m_pGasPageDlg->setFunctionOnChange(MakeDelegate(this, &CTablesDeskDlg::OnChangeInTab));
+ m_pPageDlg = new CTablesPageDlg();
+ m_pPageDlg->mp_ButtonsPanel->setOnMapChanged(MakeDelegate(this, &CTablesDeskDlg::OnMapChanged));
+ m_pPageDlg->mp_ButtonsPanel->setOnCloseMapWnd(MakeDelegate(this, &CTablesDeskDlg::OnCloseMapWnd));
+ m_pPageDlg->mp_ButtonsPanel->setOnOpenMapWnd(MakeDelegate(this, &CTablesDeskDlg::OnOpenMapWnd));
+ m_pPageDlg->setOnChangeTablesSetName(MakeDelegate(this, &CTablesDeskDlg::OnChangeTablesSetName));
 }
 
 CTablesDeskDlg::~CTablesDeskDlg()
 {
  delete m_pImgList;
- delete m_pGasolinePageDlg;
- delete m_pGasPageDlg;
+ delete m_pPageDlg;
 }
 
 void CTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -118,8 +119,8 @@ BOOL CTablesDeskDlg::OnInitDialog()
  m_tab_control.Init();
 
  //наполняем Tab control вкладками
- m_tab_control.AddPage(MLL::LoadString(IDS_TD_TABNAME_GASOLINE), m_pGasolinePageDlg, GASOLINE_TAB);
- m_tab_control.AddPage(MLL::LoadString(IDS_TD_TABNAME_GAS), m_pGasPageDlg, GAS_TAB);
+ m_tab_control.AddPage(MLL::LoadString(IDS_TD_TABNAME_GASOLINE), m_pPageDlg, GASOLINE_TAB);
+ m_tab_control.AddPage(MLL::LoadString(IDS_TD_TABNAME_GAS), m_pPageDlg, GAS_TAB);
 
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
@@ -136,12 +137,6 @@ BOOL CTablesDeskDlg::OnInitDialog()
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
-}
-
-void CTablesDeskDlg::OnDestroy()
-{
- Super::OnDestroy();
- m_hot_keys_supplier->Close();
 }
 
 void CTablesDeskDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
@@ -163,8 +158,7 @@ void CTablesDeskDlg::GetTitle(CString& o_str)
 void CTablesDeskDlg::Enable(bool enable)
 {
  m_enabled = (enable) ? TRUE : FALSE;
- m_pGasolinePageDlg->Enable(enable);
- m_pGasPageDlg->Enable(enable);
+ m_pPageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -184,57 +178,103 @@ void CTablesDeskDlg::Show(bool show)
  m_tab_control.ShowWindow(nCmdShow);
  this->ShowWindow(nCmdShow);
 }
-/*
-bool CTablesDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
-{
- using namespace SECU3IO;
- switch(i_descriptor)
- {
-  case TEMPER_PAR:
-   m_pTemperPageDlg->SetValues((TemperPar*)i_values);
-   break;
-  case MISCEL_PAR:
-   m_pMiscPageDlg->SetValues((MiscelPar*)i_values);
-   break;
-  case SENSOR_DAT:
-  default:
-   return false; //неизвестный или неподдерживаемый дескриптор
- }//switch
 
- return true;
+void CTablesDeskDlg::ShowSaveButton(bool i_show)
+{
+ m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
 }
 
-bool CTablesDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
+//------------------------------------------------------------------------
+void CTablesDeskDlg::OnMapChanged(int i_mapType)
 {
- using namespace SECU3IO;
- switch(i_descriptor)
- {
-  case TEMPER_PAR:
-   m_pTemperPageDlg->GetValues((TemperPar*)o_values);
-   break;
-  case MISCEL_PAR:
-   m_pMiscPageDlg->GetValues((MiscelPar*)o_values);
-   break;
-  case FNNAME_DAT:
-  default:
-   return false; //неизвестный или неподдерживаемый дескриптор
- }//switch
-
- return true;
-}*/
-
-/*
-//Устанавливает имена семейств характеристик
-void CTablesDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
-{
- //m_pFunSetPageDlg->AccessFunNames() = i_names;
- //m_pFunSetPageDlg->FillCBByFunNames();
+ if (m_OnMapChanged)
+  m_OnMapChanged(GetCurSel(), i_mapType);
 }
 
-const std::vector<_TSTRING>& CTablesDeskDlg::GetFunctionsNames(void)
+void CTablesDeskDlg::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 {
- return std::vector<_TSTRING>();//m_pFunSetPageDlg->AccessFunNames();
-}*/
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(i_hwnd, i_mapType);
+}
+
+void CTablesDeskDlg::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
+{
+ if (m_OnOpenMapWnd)
+  m_OnOpenMapWnd(i_hwnd, i_mapType);
+}
+
+void CTablesDeskDlg::OnChangeTablesSetName(void)
+{
+ if (m_OnChangeTablesSetName)
+  m_OnChangeTablesSetName(GetCurSel());
+}
+
+//------------------------------------------------------------------------
+void CTablesDeskDlg::setOnMapChanged(EventWith2Codes OnFunction)
+{ m_OnMapChanged = OnFunction; }
+
+void CTablesDeskDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
+{ m_OnCloseMapWnd = OnFunction; }
+
+void CTablesDeskDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
+{ m_OnOpenMapWnd = OnFunction; }
+
+void CTablesDeskDlg::setOnTabActivate(EventHandler OnFunction)
+{ m_OnTabActivate = OnFunction; }
+
+void CTablesDeskDlg::setOnSaveButton(EventHandler OnFunction)
+{ m_OnSaveButton  = OnFunction; }
+
+void CTablesDeskDlg::setOnChangeTablesSetName(EventWithCode OnFunction)
+{ m_OnChangeTablesSetName  = OnFunction; }
+
+bool CTablesDeskDlg::SetCurSel(int sel)
+{
+ return m_tab_control.SetCurSel(sel);
+}
+
+int CTablesDeskDlg::GetCurSel(void)
+{
+ return m_tab_control.GetCurSel();
+}
+
+void CTablesDeskDlg::SetTablesSetName(const _TSTRING& name)
+{
+ m_pPageDlg->SetTablesSetName(name);
+}
+
+_TSTRING CTablesDeskDlg::GetTablesSetName(void) const
+{
+ return m_pPageDlg->GetTablesSetName();
+}
+
+float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
+{
+ switch(i_mapType)
+ {
+  case TYPE_MAP_DA_START:
+   return m_pPageDlg->mp_ButtonsPanel->GetStartMap(i_original);
+
+  case TYPE_MAP_DA_IDLE:
+   return m_pPageDlg->mp_ButtonsPanel->GetIdleMap(i_original);
+
+  case TYPE_MAP_DA_WORK:
+   return m_pPageDlg->mp_ButtonsPanel->GetWorkMap(i_original);
+
+  case TYPE_MAP_DA_TEMP_CORR:
+   return m_pPageDlg->mp_ButtonsPanel->GetTempMap(i_original);
+
+  default:
+  return NULL;
+ }
+}
+
+//------------------------------------------------------------------------
+void CTablesDeskDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_hot_keys_supplier->Close();
+}
 
 void CTablesDeskDlg::OnSaveButton()
 {
@@ -253,42 +293,7 @@ void CTablesDeskDlg::OnSelchangingTabctl(void)
  //empty
 }
 
-void CTablesDeskDlg::OnChangeInTab(void)
-{
- if (m_OnChangeInTab)
-  m_OnChangeInTab();
-}
-
-void CTablesDeskDlg::ShowSaveButton(bool i_show)
-{
- m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
-}
-
-void CTablesDeskDlg::SetOnTabActivate(EventHandler OnTabActivate)
-{
- m_OnTabActivate = OnTabActivate;
-}
-
-void CTablesDeskDlg::SetOnChangeInTab(EventHandler OnChangeInTab)
-{
- m_OnChangeInTab = OnChangeInTab;
-}
-
-void CTablesDeskDlg::SetOnSaveButton(EventHandler OnSaveButton)
-{
- m_OnSaveButton  = OnSaveButton;
-}
-
-bool CTablesDeskDlg::SetCurSel(int sel)
-{
- return m_tab_control.SetCurSel(sel);
-}
-
-int CTablesDeskDlg::GetCurSel(void)
-{
- return m_tab_control.GetCurSel();
-}
-
+//------------------------------------------------------------------------
 void CTablesDeskDlg::_RegisterHotKeys(void)
 {
 #define RegisterHK(d,k) m_hot_keys_supplier->RegisterCommand(ID_TD_ACTIVATE_##d, k, MOD_CONTROL);

@@ -24,6 +24,7 @@
 #include "common/MathHelpers.h"
 #include "DLLLinkedFunctions.h"
 #include "io-core/secu3io.h"
+#include "MapIds.h"
 #include "TablesSetPanel.h"
 
 #ifdef _DEBUG
