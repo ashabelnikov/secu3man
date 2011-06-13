@@ -32,6 +32,8 @@
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
+#include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "PMTablesController.h"
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/ParamMonTabDlg.h"
 
@@ -56,6 +58,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* i_view, CCommuni
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 , m_lastSel(0)
+, mp_tabcntr(new CPMTablesController(i_view->mp_TablesDeskDlg.get()))
 {
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CParamMonTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CParamMonTabController::OnParamDeskChangeInTab));
@@ -97,6 +100,8 @@ void CParamMonTabController::OnParamDeskChangeInTab(void)
 //from MainTabController
 void CParamMonTabController::OnActivate(void)
 {
+ mp_tabcntr->OnActivate(); //activate child controller
+
  m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
 

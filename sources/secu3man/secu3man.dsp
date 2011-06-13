@@ -358,6 +358,14 @@ SOURCE=.\TabControllers\ParamMonTabController.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\TabControllers\PMTablesController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMTablesController.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\TabControllers\TabControllersCommunicator.cpp
 # End Source File
 # Begin Source File

@@ -31,6 +31,7 @@
 
 class CCommunicationManager;
 class CParamMonTabDlg;
+class CPMTablesController;
 class CStatusBarManager;
 class ISettingsData;
 
@@ -87,6 +88,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   ISettingsData* mp_settings;
+  std::auto_ptr<CPMTablesController> mp_tabcntr;
   CObjectTimer<CParamMonTabController> m_pd_changes_timer;
 
   int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
