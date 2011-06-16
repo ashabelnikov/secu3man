@@ -58,6 +58,7 @@ void CTablesPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_TD_TABLESSET_NAME_EDIT, m_names_edit);
+ DDX_Control(pDX, IDC_TD_MODIFICATION_FLAG, m_midification_flag);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -124,6 +125,11 @@ _TSTRING CTablesPageDlg::GetTablesSetName(void) const
  CString str;
  m_names_edit.GetWindowText(str);
  return str;
+}
+
+void CTablesPageDlg::SetModificationFlag(bool value)
+{
+ m_midification_flag.SetWindowText(value ? _T("*") : _T(" "));
 }
 
 void CTablesPageDlg::setOnChangeTablesSetName(EventHandler OnFunction)

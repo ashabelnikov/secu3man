@@ -45,6 +45,8 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
   void SetTablesSetName(const _TSTRING& name);
   _TSTRING GetTablesSetName(void) const;
 
+  void SetModificationFlag(bool value);
+
   void setOnChangeTablesSetName(EventHandler OnFunction);
 
   //CButtonsPanel
@@ -67,4 +69,5 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
 
   BOOL  m_enabled;
   CEdit m_names_edit;
+  CStatic m_midification_flag;
 };
