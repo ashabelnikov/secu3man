@@ -1158,8 +1158,8 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
   //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты)
   m_p_port->Purge();
 
-  m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
-  m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с приложением своя скорость
+  m_p_port->AccessDCB().fAbortOnError = FALSE;     //прекращение операции при ошибке
+  m_p_port->AccessDCB().BaudRate = m_uart_speed;   //для работы с приложением своя скорость
   m_p_port->SetState();
 
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
@@ -1171,7 +1171,7 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
   timeouts.WriteTotalTimeoutMultiplier = MathHelpers::Round(ms_need_for_one_byte * 5);
   m_p_port->SetTimeouts(&timeouts);
 
-  Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
+  Sleep(MathHelpers::Round(ms_need_for_one_byte * 5));
   m_force_notify_about_connection = true;
   SwitchOnThread(true);
   SetPacketsTimer(m_dat_packet_timeout);
@@ -1179,7 +1179,7 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
  else
  { //остановить работу
   SwitchOnThread(false);
-  Sleep(MathHelpers::Round(ms_need_for_one_byte*5));
+  Sleep(MathHelpers::Round(ms_need_for_one_byte * 5));
 
   //без этой проверки под Windows 98 возникает "Abnormal program termination"
   //Странное поведение CancelWaitableTimer() с нулевым хэндлом???

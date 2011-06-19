@@ -871,7 +871,7 @@ bool CFirmwareTabController::StartBootLoader(void)
  if (!m_bl_started_emergency)
  {
   bool result = m_comm->m_pControlApp->StartBootLoader();
-  Sleep(10);
+  Sleep(55); //обязательно нужно подождать не менее 50 мс, иначе будут вылазить посторонние символы при приеме данных от загрузчика
   return result;
  }
 

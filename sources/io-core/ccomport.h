@@ -32,20 +32,20 @@ class IOCORE_API CComPort
 {
  public:   //public functions
 
-  CComPort(const _TSTRING&,UINT,UINT);//конструктор
-  CComPort(int,UINT,UINT);
+  CComPort(const _TSTRING&, UINT, UINT);//конструктор
+  CComPort(int, UINT, UINT);
   ~CComPort();                        //деструктор
-  void   Set9bitState(BOOL state);
+  void   Set9bitState(bool state);
 
-  BOOL   Initialize(DWORD,BYTE,BYTE); //инициализация порта
-  BOOL   Initialize(DWORD,BYTE,BYTE,char,char);
-  BOOL   Initialize(const _TSTRING& i_sComPort,DWORD,BYTE,BYTE,char,char);
+  bool   Initialize(DWORD, BYTE, BYTE); //инициализация порта
+  bool   Initialize(DWORD, BYTE, BYTE, int, int);
+  bool   Initialize(const _TSTRING& i_sComPort, DWORD, BYTE, BYTE, int, int);
 
   VOID   Terminate();                 //закрытие порта
   bool   SendByte(unsigned char);     //передача одного ьайта
   bool   RecvByte(unsigned char*);    //прием одного байта
-  bool   SendBlock(BYTE*,UINT);       //передача заданного кол-ва байт
-  bool   RecvBlock(BYTE*,UINT);       //прием заданного кол-ва байт
+  bool   SendBlock(BYTE*, UINT);       //передача заданного кол-ва байт
+  bool   RecvBlock(BYTE*, UINT);       //прием заданного кол-ва байт
   bool   SendASCII(const char* str);
   HANDLE GetHandle(void) const;       //возвращает хендл порта
   bool   SetDTR(bool);                //уст. в указ. знач. линию DTR
@@ -54,62 +54,48 @@ class IOCORE_API CComPort
   UINT   GetRecvErrNum(void) const;
   UINT   GetSendErrNum(void) const;
   void   ResetPortErrors(void);
-  BOOL   Purge(const DWORD dwFlags = PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR) const;
-  BOOL   SetTimeouts(COMMTIMEOUTS* i_cto);
-  BOOL   GetTimeouts(COMMTIMEOUTS* o_cto);
+  bool   Purge(const DWORD dwFlags = PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR) const;
+  bool   SetTimeouts(COMMTIMEOUTS* i_cto);
+  bool   GetTimeouts(COMMTIMEOUTS* o_cto);
   bool   GetState(DCB* o_dcb);
   bool   SetState(DCB* i_dcb);
-  bool   RecvBlock(BYTE* data,UINT datasize,DWORD* real_readed);
+  bool   RecvBlock(BYTE* data, UINT datasize, DWORD* real_read);
 
   //да, да - именно float т.к число может оказаться нецелым и потеря знаков после запятой будет являтся
   //причиной ошибки в расчете времени необходимого для N байт.
-  inline static float ms_need_for_one_byte_8N1(DWORD baud_rate)
-  {
-   return ((1.0f / (((float)baud_rate) / 10.0f)) * 1000.0f);
-  }
+  static float ms_need_for_one_byte_8N1(DWORD baud_rate);
 
-  inline DCB* AccessDCB(void)
-  {
-   return &m_dcb;
-  }
+  inline DCB& AccessDCB(void);
 
-  inline BOOL SetState()
-  {
-   return SetCommState(m_hCom,&m_dcb);
-  }
+  inline bool SetState();
 
-  inline bool IsInitialized(void)
-  {
-   return ((m_hCom==INVALID_HANDLE_VALUE) ? false : true);
-  }
+  inline bool IsInitialized(void);
 
   enum { MAX_PORTS_ALLOWED = 32};
 
-  class xInitialize
+  class IOCORE_API xRuntimeError
   {
-   _TSTRING m_detail_str;       //string that contain details about exception
+    _TSTRING m_detail_str;       //string that contains details about exception
    public:
-    xInitialize(const _TSTRING& str) : m_detail_str(str){};
-    LPCTSTR GetDetailStr(void) const
-    {
-     return m_detail_str.c_str(); //save details
-    }
+    xRuntimeError(const _TSTRING& str);
+    LPCTSTR GetDetailStr(void) const;
   };
 
-  typedef xInitialize xSetTimeout;
-
+  typedef xRuntimeError xInitialize;
+  typedef xRuntimeError xSetTimeout;
+  
  private:
   void _LoadDefaultTimeouts(void);
 
-  bool            m_bPortReady;
-  HANDLE          m_hCom;         //хендл порта как файла
-  _TSTRING        m_sComPort;     //имя файла - порта
-  DCB             m_dcb;          //describes a COM port
-  COMMTIMEOUTS    m_CommTimeouts;
-  UINT            dwInQueue;      //размер буфера приемника
-  UINT            dwOutQueue;     //размер буфера передатчика
-  UINT            m_snd_err_num;  //хранит кол-во ошибок записи в порт
-  UINT            m_rcv_err_num;  //хранит кол-во ошибок чтения из порта
+  bool          m_bPortReady;
+  HANDLE        m_hCom;         //хендл порта как файла
+  _TSTRING      m_sComPort;     //имя файла - порта
+  DCB           m_dcb;          //describes a COM port
+  COMMTIMEOUTS  m_CommTimeouts; //timeouts
+  UINT          dwInQueue;      //размер буфера приемника
+  UINT          dwOutQueue;     //размер буфера передатчика
+  UINT          m_snd_err_num;  //хранит кол-во ошибок записи в порт
+  UINT          m_rcv_err_num;  //хранит кол-во ошибок чтения из порта
 };
 
 #endif  //_CCOMPORT_

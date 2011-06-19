@@ -467,9 +467,9 @@ finish_write_eeprom:
      p_boot->m_ErrorCode = BL_ERROR_NOANSWER;
      goto finish_read_signature; //нет смысла продолжать дальше
     }
-    if (symbol!='<')
+    if (symbol != '<')
     {
-     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;
+     p_boot->m_ErrorCode = BL_ERROR_WRONG_DATA;          
     }
     else
     {
@@ -684,8 +684,8 @@ void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
   //перед возобновлением работы необходимо установить параметры (сброс операции при ошибке и таймауты)
   m_p_port->Purge();
 
-  m_p_port->AccessDCB()->fAbortOnError = FALSE;     //прекращение операции при ошибке
-  m_p_port->AccessDCB()->BaudRate = m_uart_speed;   //для работы с бутлоадером своя скорость
+  m_p_port->AccessDCB().fAbortOnError = FALSE;     //прекращение операции при ошибке
+  m_p_port->AccessDCB().BaudRate = m_uart_speed;   //для работы с бутлоадером своя скорость
   m_p_port->SetState();
 
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)

@@ -98,7 +98,7 @@ bool CCommunicationManager::Init(void)
  try
  {
   //на скорость переданную в эту функцию не нужно обращать внимания (она будет установлена конкретным контроллером интрерфейса)
-  m_pComPort->Initialize(_TSTRING(m_pSettings->GetPortName()),9600,NOPARITY,ONESTOPBIT,0,1);
+  m_pComPort->Initialize(_TSTRING(m_pSettings->GetPortName()), 9600, NOPARITY, ONESTOPBIT, false, true);
  }
  catch(CComPort::xInitialize e)
  {
