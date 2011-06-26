@@ -71,17 +71,22 @@ CPMTablesController::~CPMTablesController()
   delete m_maps[i];
  for(i = 0; i < m_maps_flags.size(); ++i)
   delete m_maps_flags[i];
+
+ m_td_changes_timer.KillTimer();
 }
 
 void CPMTablesController::OnActivate(void)
 {
  _ClearAcquisitionFlags();
  mp_view->SetReadOnlyTablesSetName(true);
+
+ //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
+ m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);
 }
 
 void CPMTablesController::OnDeactivate(void)
 {
- //empty
+ m_td_changes_timer.KillTimer();
 }
 
 void CPMTablesController::Enable(bool state)
@@ -273,6 +278,11 @@ void CPMTablesController::OnSaveButton(void)
 }
 
 void CPMTablesController::OnChangeTablesSetName(int fuel_type)
+{
+ //todo
+}
+
+void CPMTablesController::OnTableDeskChangesTimer(void)
 {
  //todo
 }

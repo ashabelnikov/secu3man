@@ -22,6 +22,7 @@
 #pragma once
 
 #include <vector>
+#include "common/ObjectTimer.h"
 #include "PMControllerBase.h"
 
 class CCommunicationManager;
@@ -66,6 +67,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
  private:
   void _MoveMapsToCharts(int fuel_type, bool i_original);
   void OnDataCollected(void);
+  void OnTableDeskChangesTimer(void);
 
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
@@ -81,4 +83,5 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   std::vector<SECU3FWMapsItem*> m_maps_flags;
 
   bool m_valid_cache;
+  CObjectTimer<CPMTablesController> m_td_changes_timer;
 };
