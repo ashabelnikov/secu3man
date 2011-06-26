@@ -43,7 +43,8 @@ END_MESSAGE_MAP()
 
 CTablesPageDlg::CTablesPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CTablesPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
+, m_tsneb_readonly(false)
 , mp_ButtonsPanel(new CButtonsPanel(0, NULL))
 {
  mp_ButtonsPanel->setIsAllowed(MakeDelegate(this, &CTablesPageDlg::IsAllowed));
@@ -82,6 +83,8 @@ BOOL CTablesPageDlg::OnInitDialog()
  mp_ButtonsPanel->SetPosition(rect.left, rect.top, &m_names_edit);
  mp_ButtonsPanel->ShowWindow(SW_SHOW);
 
+ m_names_edit.SetReadOnly(m_tsneb_readonly);
+
  UpdateData(FALSE);
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -91,9 +94,15 @@ BOOL CTablesPageDlg::OnInitDialog()
 //разрешение/запрещение контроллов (всех поголовно)
 void CTablesPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
+}
+
+void CTablesPageDlg::SetReadOnlyTablesSetName(bool readonly)
+{
+ m_tsneb_readonly = readonly;
+ m_names_edit.SetReadOnly(readonly);
 }
 
 //что с контроллами?

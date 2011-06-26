@@ -41,6 +41,8 @@ class ITablesDeskView
   virtual void Enable(bool enable) = 0;                           //разрешить/запретить представление
   virtual void Show(bool show) = 0;                               //показать/спрятать контент представления
   virtual void ShowSaveButton(bool i_show) = 0;                   //показать/cпрятать кнопку "сохранить"
+  virtual void UpdateOpenedCharts(void) = 0;                      //update opened charts
+  virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
@@ -57,5 +59,5 @@ class ITablesDeskView
   //Data access
   virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 
   virtual _TSTRING GetTablesSetName(void) const = 0;              //get name from edit box
-  virtual float* GetMap(int i_mapType, bool i_original) = 0;      //r/w access to specified table
+  virtual float* GetMap(int i_mapType, bool i_original) = 0;      //r/w access to specified table  
 };

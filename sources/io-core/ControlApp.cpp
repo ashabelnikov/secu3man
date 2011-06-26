@@ -892,7 +892,6 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet)
  return true;
 }
 
-
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
 {
@@ -929,6 +928,72 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
  return true;
 }
 
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
+{
+ SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
+
+ int packet_size = strlen((char*)raw_packet);
+ if (packet_size < 7 || packet_size > 37)
+  return false;
+
+ //номер набора таблиц
+ if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_EditTabPar.tab_set_index))
+  return false;
+ raw_packet+=1;
+ if (m_EditTabPar.tab_set_index != ETTS_GASOLINE_SET && m_EditTabPar.tab_set_index != ETTS_GAS_SET)
+  return false;
+
+ //код таблицы в наборе
+ if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_EditTabPar.tab_id))
+  return false;
+ raw_packet+=1;
+
+ if (m_EditTabPar.tab_id != ETMT_STRT_MAP && m_EditTabPar.tab_id != ETMT_IDLE_MAP && m_EditTabPar.tab_id != ETMT_WORK_MAP &&
+     m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR)
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &address))
+  return false;
+ m_EditTabPar.address = address;
+ raw_packet+=2;
+
+ packet_size-=5;
+ if (packet_size % 2) // 1 byte in HEX is 2 symbols
+  return false;
+
+ if (m_EditTabPar.tab_id != ETMT_NAME_STR)
+ {
+  //фрагмент с данными (float)
+  size_t data_size = 0;
+  for(int i = 0; i < packet_size / 2; ++i)
+  {
+   signed char value;
+   if (false == CNumericConv::Hex8ToBin(raw_packet, (unsigned char*)&value))
+    return false;
+   m_EditTabPar.table_data[i] = ((float)value) / AA_MAPS_M_FACTOR;
+   raw_packet+=2;
+   ++data_size;
+  }
+  m_EditTabPar.data_size = data_size;
+ }
+ else
+ {
+  //фрагмент с данными (текстовая информация)
+  char *p = strchr((char*)raw_packet, '\r');
+  std::string raw_string((char*)raw_packet, ((BYTE*)p) - raw_packet);
+  OemToChar(raw_string.c_str(), m_EditTabPar.name_data);
+  raw_packet+=raw_string.size();
+  m_EditTabPar.data_size = raw_string.size();
+ }
+ 
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
 
 //-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
@@ -953,72 +1018,76 @@ bool CControlApp::ParsePackets()
   {
    case TEMPER_PAR:
     if (Parse_TEMPER_PAR(raw_packet))
-	 break; //пакет успешно разобран по составляющим
-	continue;//пакет не прошел сурового отбора нашим жюри :-)
+     break; //пакет успешно разобран по составляющим
+    continue;//пакет не прошел сурового отбора нашим жюри :-)
    case CARBUR_PAR:
-	if (Parse_CARBUR_PAR(raw_packet))
-	 break;
-	continue;
+    if (Parse_CARBUR_PAR(raw_packet))
+     break;
+    continue;
    case IDLREG_PAR:
-	if (Parse_IDLREG_PAR(raw_packet))
-	 break;
-	continue;
+    if (Parse_IDLREG_PAR(raw_packet))
+     break;
+    continue;
    case ANGLES_PAR:
     if (Parse_ANGLES_PAR(raw_packet))
-	 break;
-	continue;
+     break;
+    continue;
    case FUNSET_PAR:
-	if (Parse_FUNSET_PAR(raw_packet))
-	 break;
+    if (Parse_FUNSET_PAR(raw_packet))
+     break;
     continue;
    case STARTR_PAR:
-	if (Parse_STARTR_PAR(raw_packet))
-	 break;
-	continue;
+    if (Parse_STARTR_PAR(raw_packet))
+     break;
+    continue;
    case FNNAME_DAT:
-	if (Parse_FNNAME_DAT(raw_packet))
-	 break;
-	continue;
+    if (Parse_FNNAME_DAT(raw_packet))
+     break;
+    continue;
    case SENSOR_DAT:
-	if (Parse_SENSOR_DAT(raw_packet))
-	 break;
-	continue;
+    if (Parse_SENSOR_DAT(raw_packet))
+     break;
+    continue;
    case ADCRAW_DAT:
-	if (Parse_ADCRAW_DAT(raw_packet))
-	 break;
-	continue;
+    if (Parse_ADCRAW_DAT(raw_packet))
+     break;
+    continue;
    case ADCCOR_PAR:
     if (Parse_ADCCOR_PAR(raw_packet))
      break;
-	continue;
+    continue;
    case CKPS_PAR:
     if (Parse_CKPS_PAR(raw_packet))
-	 break;
-	continue;
+     break;
+    continue;
    case OP_COMP_NC:
     if (Parse_OP_COMP_NC(raw_packet))
-	 break;
-	continue;
+     break;
+    continue;
    case KNOCK_PAR:
     if (Parse_KNOCK_PAR(raw_packet))
-	 break;
-	continue;
+     break;
+    continue;
    case CE_ERR_CODES:
     if (Parse_CE_ERR_CODES(raw_packet))
      break;
-	continue;
+    continue;
    case CE_SAVED_ERR:
     if (Parse_CE_SAVED_ERR(raw_packet))
      break;
     continue;
    case FWINFO_DAT:
-	if (Parse_FWINFO_DAT(raw_packet))
+    if (Parse_FWINFO_DAT(raw_packet))
      break;
-	continue;
+    continue;
    case MISCEL_PAR:
-	if (Parse_MISCEL_PAR(raw_packet))
+    if (Parse_MISCEL_PAR(raw_packet))
      break;
-	continue;
+    continue;
+   case EDITAB_PAR:
+    if (Parse_EDITAB_PAR(raw_packet))
+     break;
+    continue;
 
    default:
     continue;
@@ -1134,11 +1203,11 @@ BOOL CControlApp::SetPacketsTimer(int timeout)
  liDueTime.QuadPart*=-10000;        //в одной мс 10000 интервалов по 100нс
 
  return SetWaitableTimer(m_hTimer,     // handle to timer
-	                     &liDueTime,   // timer due time
-	   				     1,            // period (лишь бы не 0)
-						 NULL,         // completion routine
-						 NULL,         // completion routine parameter
-						 0);           // resume state
+	                        &liDueTime,   // timer due time
+                         1,            // period (лишь бы не 0)
+                         NULL,         // completion routine
+                         NULL,         // completion routine parameter
+                         0);           // resume state
 }
 
 //-----------------------------------------------------------------------
@@ -1194,7 +1263,7 @@ void CControlApp::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 }
 
 //-----------------------------------------------------------------------
-//А вдруг на верхнем уровне иерархии кто нибуть решить использовать некорректные дескрипторы
+//А вдруг на верхнем уровне иерархии кто-нибудь решит использовать некорректные дескрипторы
 bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
 {
  switch(descriptor) //сравнение со всеми допустимыми дескрипторами
@@ -1218,6 +1287,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case CE_SAVED_ERR:
   case FWINFO_DAT:
   case MISCEL_PAR:
+  case EDITAB_PAR:
    return true;
   default:
    return false;
@@ -1276,6 +1346,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case MISCEL_PAR:
    Build_MISCEL_PAR((MiscelPar*)i_packet_data);
+   break;
+  case EDITAB_PAR:
+   Build_EDITAB_PAR((EditTabPar*)i_packet_data);
    break;
 
   default:
@@ -1492,6 +1565,22 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  CNumericConv::Bin16ToHex(divisor, m_outgoing_packet);
  unsigned char perid_ms = packet_data->period_ms / 10;
  CNumericConv::Bin8ToHex(perid_ms, m_outgoing_packet);
+ m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
+{
+ CNumericConv::Bin4ToHex(packet_data->tab_set_index, m_outgoing_packet);
+ CNumericConv::Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->address, m_outgoing_packet);
+
+ for(unsigned int i = 0; i < packet_data->data_size; ++i)
+ {
+  signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
+  CNumericConv::Bin8ToHex(value, m_outgoing_packet);
+ }
+
  m_outgoing_packet+= '\r';
 }
 

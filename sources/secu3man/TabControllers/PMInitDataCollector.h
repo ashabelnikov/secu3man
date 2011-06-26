@@ -26,24 +26,13 @@
 
 class CCommunicationManager;
 class CStatusBarManager;
-class CTablesDeskDlg;
-struct SECU3FWMapsItem;
-namespace SECU3IO {struct EditTabPar;}
 
-class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
+class CPMInitDataCollector : public CPMStateMachineState
 {
-  typedef CPMControllerBase<VIEW> Super;
+  typedef CPMStateMachineState Super;
  public:
-  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
-  virtual ~CPMTablesController();
-
-  //начало работы контроллера
-  void OnActivate(void);
-
-  //конец работы контроллера
-  void OnDeactivate(void);
-
-  virtual void Enable(bool state);
+  CPMInitDataCollector(CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
+  virtual ~CPMInitDataCollector();
 
   virtual void StartDataCollection(void);
 
@@ -51,34 +40,18 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   //возвращает true когда все данные прочитаны  
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data);
 
-  void InvalidateCache(void);
-  bool IsValidCache(void);
+  //obtain results
+  const std::vector<_TSTRING>& GetFNNames(void) const;
+  const DWORD& GetFWOptions(void) const;
 
  public:
   //Events from view
-  void OnMapChanged(int fuel_type, int i_mapType);
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  void OnTabActivate(void);
-  void OnSaveButton(void);
-  void OnChangeTablesSetName(int fuel_type);
 
  private:
-  void _MoveMapsToCharts(int fuel_type, bool i_original);
-  void OnDataCollected(void);
-
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
-  //кеш таблиц 
-  std::vector<SECU3FWMapsItem*> m_maps;
-
-  void _UpdateCache(const SECU3IO::EditTabPar* data); 
-
-  bool _IsCacheUpToDate(void);
-
-  void _ClearAcquisitionFlags(void);
-  std::vector<SECU3FWMapsItem*> m_maps_flags;
-
-  bool m_valid_cache;
+  std::vector<_TSTRING> fn_names;
+  std::vector<int> fn_indexes;
+  DWORD fw_options;
 };

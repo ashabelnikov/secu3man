@@ -56,9 +56,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL        "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",
+    CONTROL         "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_TABSTOP,181,196,89,17
+                    WS_DISABLED | WS_TABSTOP,181,196,89,17
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,311,197,163,15
@@ -68,7 +68,7 @@ BEGIN
                     WS_VISIBLE,187,0,261,172
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,0,0,156,172
-    END
+END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 441, 225
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
@@ -349,6 +349,8 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
+    IDS_PM_READING_FWC_OPTIONS   "Чтение опций прошивки..."
+    IDS_PM_READING_TABLES        "Чтение таблиц..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -529,9 +531,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL        "Edit tables",IDC_PM_EDIT_TABLES,"Button",
+    CONTROL         "Edit tables",IDC_PM_EDIT_TABLES,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_TABSTOP,181,196,89,17
+                    WS_DISABLED | WS_TABSTOP,181,196,89,17
     CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,
                     "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,311,197,163,15
     LTEXT           "NOTE: SECU-3 automatically saves parameters after some time after stop editing ",
@@ -874,6 +876,8 @@ BEGIN
     IDS_IMPORT_IMPORT_FROM_MPSZ "Import tables from MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Import data"
     IDS_IMPORT_IMPORT_FROM_SECU3 "Import tables from SECU-3"
+    IDS_PM_READING_FWC_OPTIONS "Reading firmware options..."
+    IDS_PM_READING_TABLES   "Reading tables..."
 END
 
 STRINGTABLE DISCARDABLE 

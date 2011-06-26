@@ -52,7 +52,7 @@ UINT CTablesDeskDlg::IDD_F = IDD_TABLES_DESK_FLOATING;
 CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CTablesDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
  //создаем image list для TabCtrl
@@ -267,6 +267,16 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   default:
   return NULL;
  }
+}
+
+void CTablesDeskDlg::UpdateOpenedCharts(void)
+{
+ m_pPageDlg->mp_ButtonsPanel->UpdateOpenedCharts();
+}
+
+void CTablesDeskDlg::SetReadOnlyTablesSetName(bool readonly)
+{
+ m_pPageDlg->SetReadOnlyTablesSetName(readonly);
 }
 
 //------------------------------------------------------------------------

@@ -62,6 +62,9 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void Enable(bool enable);
   virtual void Show(bool show);
   virtual void ShowSaveButton(bool i_show);
+  virtual void UpdateOpenedCharts(void);
+  virtual void SetReadOnlyTablesSetName(bool readonly);
+
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction);
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -107,7 +110,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   //указатели на диалоги всех вкладок. Мы используем один диалог для двух вкладок
   class CTablesPageDlg* m_pPageDlg;
 
-  BOOL m_enabled;
+  bool m_enabled;
   CStatic m_td_title;
   CButton m_save_button;
   CTabController m_tab_control;

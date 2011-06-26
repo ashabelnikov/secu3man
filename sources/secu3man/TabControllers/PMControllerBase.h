@@ -21,13 +21,44 @@
 
 #pragma once
 
-enum EMapTypes
+
+class CPMStateMachineState
 {
- TYPE_MAP_DA_START = 0,    //must be =0
- TYPE_MAP_DA_IDLE = 1,     //must be =1
- TYPE_MAP_DA_WORK = 2,     //must be =2
- TYPE_MAP_DA_TEMP_CORR = 3,//must be =3
- // 4, 5, 6, 7 - are reserved
- TYPE_MAP_ATTENUATOR = 8,  //must be =8. used by derived classes
- TYPE_MAP_COILREGUL = 9    //must be =9. used by derived classes
+ public:
+  CPMStateMachineState() : m_operation_state(0){}
+  virtual ~CPMStateMachineState() {}
+
+  virtual void StartDataCollection(void) = 0
+  {
+   m_operation_state = 0;
+  }
+
+  //Чтение всех необходимых данных после коннекта (конечный автомат)
+  //возвращает true когда все данные прочитаны  
+  virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data) = 0;
+
+ protected:
+  int  m_operation_state;
 };
+
+
+template <class T>
+class CPMControllerBase : public CPMStateMachineState
+{
+ public:
+  typedef T VIEW;
+
+  CPMControllerBase(T* ip_view) : mp_view(ip_view) {}
+  virtual ~CPMControllerBase() {}
+
+  //начало работы контроллера
+  virtual void OnActivate(void) = 0;
+
+  //конец работы контроллера
+  virtual void OnDeactivate(void) = 0;
+
+ protected:
+  T*  mp_view;       //view
+};
+
+

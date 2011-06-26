@@ -21,8 +21,7 @@
 
 #pragma once
 
-#include <map>
-#include "common/ObjectTimer.h"
+#include <vector>
 #include "common/unicodesupport.h"
 #include "io-core/ControlApp.h"
 #include "io-core/ControlAppAdapter.h"
@@ -30,7 +29,11 @@
 #include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
-class CParamMonTabDlg;
+class CParamMonTabDlg; //view
+class CPMInitDataCollector;
+class CPMMonitorController;
+class CPMParamsController;
+class CPMStateMachineState;
 class CPMTablesController;
 class CStatusBarManager;
 class ISettingsData;
@@ -42,10 +45,6 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   virtual ~CParamMonTabController();
 
  private:
-  //события от панели параметров
-  void OnParamDeskTabActivate(void);
-  void OnParamDeskChangeInTab(void);
-
   //появление/закрытие вкладки параметров и монитора
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
@@ -60,28 +59,12 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 
   void OnSettingsChanged(void);
 
-  //from m_pd_changes_timer
-  void OnParamDeskChangesTimer(void);
-
-  enum //Packet Processing States
-  {
-   PPS_COLLECT_INITIAL_DATA = 0,
-   PPS_READ_NECESSARY_PARAMETERS = 1,
-   PPS_BEFORE_READ_MONITOR_DATA = 2,
-   PPS_READ_MONITOR_DATA = 3
-  };
-
-  ////////////////////internal//////////////////////////
-  bool CollectInitialDataFromSECU(const BYTE i_descriptor, const void* i_packet_data);
-  void StartCollectingInitialData(void);
-  //////////////////////////////////////////////////////
-  bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
-  void StartReadingNecessaryParameters(void);
-  //////////////////////////////////////////////////////
-
+  //from "show raw sensors" check box
   void OnRawSensorsCheckBox(void);
+  //from "edit tables" check box
   void OnEditTablesCheckBox(void);
-  void OnPDSaveButton(void);
+
+  void OnPDRequestsDataCollection();
 
  private:
   CParamMonTabDlg*  m_view;
@@ -89,12 +72,17 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   CStatusBarManager*  m_sbar;
   ISettingsData* mp_settings;
   std::auto_ptr<CPMTablesController> mp_tabcntr;
-  CObjectTimer<CParamMonTabController> m_pd_changes_timer;
+  std::auto_ptr<CPMParamsController> mp_parcntr;
+  std::auto_ptr<CPMMonitorController> mp_moncntr;
+  std::auto_ptr<CPMInitDataCollector> mp_idccntr;
 
-  int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
-  int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен
-  int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
-  bool m_parameters_changed;       //этот флаг устанавливается при изменении на любой из вкладок параметров и сбрасывается после посылки измененных данных в SECU
+  void StartScenario(const std::vector<CPMStateMachineState*>& scenario);
+  //различные машины состояний (для разных сценариев)
+  std::vector<CPMStateMachineState*> m_scenario1;
+  std::vector<CPMStateMachineState*> m_scenario2;
+  std::vector<CPMStateMachineState*> m_scenario3;
+  std::vector<CPMStateMachineState*> m_scenario4;
+  //машина состояний
+  std::vector<CPMStateMachineState*> m_state_machine;
+  std::vector<CPMStateMachineState*>::iterator m_current_state;
 };
-
-

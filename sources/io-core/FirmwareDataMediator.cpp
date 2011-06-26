@@ -125,8 +125,8 @@ CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
  m_bytes_original = new BYTE[m_fpp->m_total_size + 1];
  ASSERT(m_bytes_original);
 
- memset(m_bytes_active,0x00,m_firmware_size);
- memset(m_bytes_original,0x00,m_firmware_size);
+ memset(m_bytes_active, 0x00, m_firmware_size);
+ memset(m_bytes_original, 0x00, m_firmware_size);
 }
 
 CFirmwareDataMediator::~CFirmwareDataMediator()
@@ -226,7 +226,7 @@ void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_orig
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_str[i]) / 2.0f;
+  o_values[i] = ((float)p_maps[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
@@ -241,7 +241,7 @@ void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  p_maps[i_index].f_str[i] = MathHelpers::Round((i_values[i]*2.0f));
+  p_maps[i_index].f_str[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_original /* = false */)
@@ -259,7 +259,7 @@ void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_origi
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_idl[i]) / 2.0f;
+  o_values[i] = ((float)p_maps[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
@@ -274,7 +274,7 @@ void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  p_maps[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*2.0f));
+  p_maps[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
@@ -392,7 +392,7 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _char *p = &(p_maps[i_index].f_wrk[0][0]);
-  o_values[i] = ((float) *(p + i)) / 2.0f;
+  o_values[i] = ((float) *(p + i)) / AA_MAPS_M_FACTOR;
  }
 }
 
@@ -410,7 +410,7 @@ void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _char *p = &(p_maps[i_index].f_wrk[0][0]);
-  *(p + i) = MathHelpers::Round((i_values[i]*2.0f));
+  *(p + i) = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
  }
 }
 
@@ -429,7 +429,7 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / 2.0f;
+  o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
@@ -444,7 +444,7 @@ void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
  p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  p_maps[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*2.0f));
+  p_maps[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_values)

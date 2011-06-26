@@ -162,6 +162,7 @@ class IOCORE_API CControlApp
   bool Parse_CE_SAVED_ERR(const BYTE* raw_packet);
   bool Parse_FWINFO_DAT(const BYTE* raw_packet);
   bool Parse_MISCEL_PAR(const BYTE* raw_packet);
+  bool Parse_EDITAB_PAR(const BYTE* raw_packet);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -176,6 +177,7 @@ class IOCORE_API CControlApp
   void Build_KNOCK_PAR(SECU3IO::KnockPar* packet_data);
   void Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data);
   void Build_MISCEL_PAR(SECU3IO::MiscelPar* packet_data);
+  void Build_EDITAB_PAR(SECU3IO::EditTabPar* packet_data);
 };
 
 #endif //_CONTROLAPP_

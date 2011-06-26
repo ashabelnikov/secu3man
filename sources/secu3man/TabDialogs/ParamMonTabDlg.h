@@ -45,6 +45,9 @@ class CParamMonTabDlg : public CTabDialog
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);
 
+  void EnableEditTablesCheck(bool enable);
+  bool GetEditTablesCheck(void);
+
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;

@@ -200,3 +200,6 @@
 #define IDS_FW_OR                       4214
 #define IDC_PM_EDIT_TABLES              4215
 #define IDS_PM_TABLES_IN_RAM            4216
+#define IDS_PM_READING_FWC_OPTIONS      4217
+#define IDS_PM_READING_TABLES           4218
+

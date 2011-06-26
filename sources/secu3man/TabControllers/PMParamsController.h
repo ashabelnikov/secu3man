@@ -22,26 +22,28 @@
 #pragma once
 
 #include <vector>
+#include "common/FastDelegate.h"
+#include "common/ObjectTimer.h"
 #include "PMControllerBase.h"
 
 class CCommunicationManager;
+class CParamDeskDlg;
 class CStatusBarManager;
-class CTablesDeskDlg;
-struct SECU3FWMapsItem;
-namespace SECU3IO {struct EditTabPar;}
 
-class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
+class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 {
   typedef CPMControllerBase<VIEW> Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
+
  public:
-  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
-  virtual ~CPMTablesController();
+  CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection);
+  virtual ~CPMParamsController();
 
   //начало работы контроллера
-  void OnActivate(void);
+  virtual void OnActivate(void);
 
   //конец работы контроллера
-  void OnDeactivate(void);
+  virtual void OnDeactivate(void);
 
   virtual void Enable(bool state);
 
@@ -51,34 +53,25 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   //возвращает true когда все данные прочитаны  
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data);
 
-  void InvalidateCache(void);
-  bool IsValidCache(void);
+  void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
 
  public:
   //Events from view
-  void OnMapChanged(int fuel_type, int i_mapType);
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  void OnTabActivate(void);
-  void OnSaveButton(void);
-  void OnChangeTablesSetName(int fuel_type);
+  void OnParamDeskTabActivate(void);
+  void OnParamDeskChangeInTab(void);
+  void OnPDSaveButton(void);
 
  private:
-  void _MoveMapsToCharts(int fuel_type, bool i_original);
-  void OnDataCollected(void);
+  //from m_pd_changes_timer
+  void OnParamDeskChangesTimer(void);
 
+  CObjectTimer<CPMParamsController> m_pd_changes_timer;
+ 
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
-  //кеш таблиц 
-  std::vector<SECU3FWMapsItem*> m_maps;
+  EventHandler m_RequestDataCollection;
 
-  void _UpdateCache(const SECU3IO::EditTabPar* data); 
-
-  bool _IsCacheUpToDate(void);
-
-  void _ClearAcquisitionFlags(void);
-  std::vector<SECU3FWMapsItem*> m_maps_flags;
-
-  bool m_valid_cache;
+  bool m_parameters_changed;       //этот флаг устанавливается при изменении на любой из вкладок параметров и сбрасывается после посылки измененных данных в SECU
+  int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
 };

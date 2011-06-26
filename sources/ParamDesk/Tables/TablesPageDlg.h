@@ -41,6 +41,7 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void SetReadOnlyTablesSetName(bool readonly);
 
   void SetTablesSetName(const _TSTRING& name);
   _TSTRING GetTablesSetName(void) const;
@@ -67,7 +68,8 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
   //from CButtonsPanel
   bool IsAllowed(void);
 
-  BOOL  m_enabled;
+  bool m_enabled;
+  bool m_tsneb_readonly;
   CEdit m_names_edit;
   CStatic m_midification_flag;
 };

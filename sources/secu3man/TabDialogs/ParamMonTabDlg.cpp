@@ -140,6 +140,16 @@ bool CParamMonTabDlg::GetEditTablesCheckState(void)
  return (check==BST_CHECKED) ? true : false;
 }
 
+void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
+{
+ m_edit_tables_check.EnableWindow(enable);
+}
+
+bool CParamMonTabDlg::GetEditTablesCheck(void)
+{
+ return m_edit_tables_check.GetCheck() == BST_CHECKED;
+}
+
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 {
  m_OnRawSensorsCheck = i_Function;

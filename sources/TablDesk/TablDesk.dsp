@@ -191,6 +191,10 @@ SOURCE=.\DLLLinkedFunctions.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\MapIds.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\Resource.h
 # End Source File
 # Begin Source File

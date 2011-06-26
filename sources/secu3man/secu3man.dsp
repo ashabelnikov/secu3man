@@ -358,6 +358,34 @@ SOURCE=.\TabControllers\ParamMonTabController.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\TabControllers\PMControllerBase.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMInitDataCollector.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMInitDataCollector.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMMonitorController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMMonitorController.h
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMParamsController.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\TabControllers\PMParamsController.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\TabControllers\PMTablesController.cpp
 # End Source File
 # Begin Source File

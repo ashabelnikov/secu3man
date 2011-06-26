@@ -209,7 +209,7 @@ BOOL CButtonsPanel::OnInitDialog()
 {
  Super::OnInitDialog();
 
- SetTimer(TIMER_ID,250,NULL);
+ SetTimer(TIMER_ID, 250, NULL);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control

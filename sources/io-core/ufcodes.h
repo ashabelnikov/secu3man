@@ -48,5 +48,6 @@
 #define   CE_SAVED_ERR 'x'
 #define   FWINFO_DAT   'y'
 #define   MISCEL_PAR   'z'
+#define   EDITAB_PAR   '{'
 
 #endif //_UFCODES_H_

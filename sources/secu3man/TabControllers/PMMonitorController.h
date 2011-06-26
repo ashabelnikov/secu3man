@@ -25,23 +25,24 @@
 #include "PMControllerBase.h"
 
 class CCommunicationManager;
+class CMIDeskDlg;
+class CRSDeskDlg;
 class CStatusBarManager;
-class CTablesDeskDlg;
-struct SECU3FWMapsItem;
-namespace SECU3IO {struct EditTabPar;}
+class ISettingsData;
 
-class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
+class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
 {
   typedef CPMControllerBase<VIEW> Super;
+  typedef CRSDeskDlg RSDVIEW;
  public:
-  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
-  virtual ~CPMTablesController();
+  CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
+  virtual ~CPMMonitorController();
 
   //начало работы контроллера
-  void OnActivate(void);
+  virtual void OnActivate(void);
 
   //конец работы контроллера
-  void OnDeactivate(void);
+  virtual void OnDeactivate(void);
 
   virtual void Enable(bool state);
 
@@ -51,34 +52,16 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   //возвращает true когда все данные прочитаны  
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data);
 
-  void InvalidateCache(void);
-  bool IsValidCache(void);
+  virtual void ShowRawSensors(bool show);
 
  public:
-  //Events from view
-  void OnMapChanged(int fuel_type, int i_mapType);
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  void OnTabActivate(void);
-  void OnSaveButton(void);
-  void OnChangeTablesSetName(int fuel_type);
+  //настройки программы изменились
+  void OnSettingsChanged(void);
 
  private:
-  void _MoveMapsToCharts(int fuel_type, bool i_original);
-  void OnDataCollected(void);
-
+  CRSDeskDlg* mp_rsdview;
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
-
-  //кеш таблиц 
-  std::vector<SECU3FWMapsItem*> m_maps;
-
-  void _UpdateCache(const SECU3IO::EditTabPar* data); 
-
-  bool _IsCacheUpToDate(void);
-
-  void _ClearAcquisitionFlags(void);
-  std::vector<SECU3FWMapsItem*> m_maps_flags;
-
-  bool m_valid_cache;
+  ISettingsData* mp_settings;
+  bool m_show_raw_sensors;
 };

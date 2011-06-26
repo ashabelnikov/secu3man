@@ -140,9 +140,10 @@ namespace SECU3IO
   unsigned char opcode;
  };
 
- const int OPCODE_EEPROM_PARAM_SAVE = 1;
- const int OPCODE_CE_SAVE_ERRORS    = 2;
- const int OPCODE_READ_FW_SIG_INFO  = 3;
+ const int OPCODE_EEPROM_PARAM_SAVE    = 1;
+ const int OPCODE_CE_SAVE_ERRORS       = 2;
+ const int OPCODE_READ_FW_SIG_INFO     = 3;
+ const int OPCODE_NEW_TABLSET_SELECTED = 4;
 
  struct KnockPar
  {
@@ -167,7 +168,7 @@ namespace SECU3IO
  const int FW_SIGNATURE_INFO_SIZE = 48;
  struct FWInfoDat
  {
-  char   info[FW_SIGNATURE_INFO_SIZE+1];  //one more byte for string's termination
+  char   info[FW_SIGNATURE_INFO_SIZE+1];  //*one more byte for string's termination
   DWORD  options;
  };
 
@@ -176,6 +177,27 @@ namespace SECU3IO
   int baud_rate;                       //скорость UART-a
   int period_ms;                       //период посылки пакетов мс.
  };
+
+ struct EditTabPar
+ {
+  unsigned char tab_set_index;         //номер набора таблиц
+  unsigned char tab_id;                //идентификатор таблицы(данных) в наборе
+  unsigned int address;                //адрес начала фрагмента данных в таблице
+  float table_data[32];                //фрагмент данных (не более 16-ти байт)
+  TCHAR name_data[32];                 //содержит текстовую информацию
+  unsigned int data_size;              //размер фрагмента данных
+ };
+
+ //Identifiers used in EditTabPar
+ const int ETTS_GASOLINE_SET = 0; //tables's set: petrol
+ const int ETTS_GAS_SET = 1;      //tables's set: gas
+ 
+ const int ETMT_STRT_MAP = 0; //start map
+ const int ETMT_IDLE_MAP = 1; //idle map
+ const int ETMT_WORK_MAP = 2; //work map
+ const int ETMT_TEMP_MAP = 3; //temp.corr. map
+ const int ETMT_NAME_STR = 4; //name of tables's set
+
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
@@ -250,6 +272,7 @@ namespace SECU3IO
   SECU3IO::CEErrors     m_CEErrors;
   SECU3IO::FWInfoDat    m_FWInfoDat;
   SECU3IO::MiscelPar    m_MiscelPar;
+  SECU3IO::EditTabPar   m_EditTabPar;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
@@ -277,4 +300,6 @@ namespace SECU3IO
  };
 #undef _SD
 
+ //scale factor for adv. angle maps (they are stored in integer format)
+ const float AA_MAPS_M_FACTOR = 2.0f;
 };
