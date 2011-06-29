@@ -65,7 +65,14 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void OnChangeTablesSetName(int fuel_type);
 
  private:
+  void _ResetModification(int fuel_type);
+  void _MoveMapToChart(int fuel_type, int i_mapType, bool i_original);
   void _MoveMapsToCharts(int fuel_type, bool i_original);
+  bool _CompareViewMap(int i_mapType, size_t size) const;
+  bool _IsModificationMade(void) const;
+  float* _GetMap(int fuel_type, int i_mapType, bool i_original);
+  void _SynchronizeMap(int fuel_type, int i_mapType);
+
   void OnDataCollected(void);
   void OnTableDeskChangesTimer(void);
 
@@ -73,7 +80,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   CStatusBarManager* mp_sbar;
 
   //кеш таблиц 
-  std::vector<SECU3FWMapsItem*> m_maps;
+  std::vector<SECU3FWMapsItem*> m_maps;  //current
+  std::vector<SECU3FWMapsItem*> m_omaps; //original
 
   void _UpdateCache(const SECU3IO::EditTabPar* data); 
 

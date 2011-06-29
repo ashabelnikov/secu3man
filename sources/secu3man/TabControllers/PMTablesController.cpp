@@ -42,6 +42,83 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
+//------------------------------ Helpful functions ----------------------------------
+bool CPMTablesController::_CompareViewMap(int i_mapType, size_t size) const
+{
+ return std::equal(mp_view->GetMap(i_mapType, false),
+                   mp_view->GetMap(i_mapType, false) + size,
+                   mp_view->GetMap(i_mapType, true));
+}
+
+float* CPMTablesController::_GetMap(int fuel_type, int i_mapType, bool i_original)
+{
+ switch(i_mapType)
+ {
+  case TYPE_MAP_DA_START:
+   return i_original ? m_omaps[fuel_type]->f_str : m_maps[fuel_type]->f_str;
+  case TYPE_MAP_DA_IDLE:
+   return i_original ? m_omaps[fuel_type]->f_idl : m_maps[fuel_type]->f_idl;
+  case TYPE_MAP_DA_WORK:  
+   return i_original ? m_omaps[fuel_type]->f_wrk : m_maps[fuel_type]->f_wrk;
+  case TYPE_MAP_DA_TEMP_CORR:
+   return i_original ? m_omaps[fuel_type]->f_tmp : m_maps[fuel_type]->f_tmp;
+ }
+ return NULL; //undefined type of map
+}
+
+namespace {
+size_t _GetMapSize(int i_mapType)
+{
+ switch(i_mapType)
+ {
+  case TYPE_MAP_DA_START:
+   return F_STR_POINTS;
+  case TYPE_MAP_DA_IDLE:
+   return F_IDL_POINTS;
+  case TYPE_MAP_DA_WORK:  
+   return F_WRK_POINTS_L * F_WRK_POINTS_F;
+  case TYPE_MAP_DA_TEMP_CORR:
+   return F_TMP_POINTS;
+ }
+ return 0; //undefined type of map
+}
+}
+
+void CPMTablesController::_MoveMapToChart(int fuel_type, int i_mapType, bool i_original)
+{
+ std::copy(_GetMap(fuel_type, i_mapType, i_original),
+  _GetMap(fuel_type, i_mapType, i_original) + _GetMapSize(i_mapType),
+  mp_view->GetMap(i_mapType, i_original));
+}
+
+void CPMTablesController::_MoveMapsToCharts(int fuel_type, bool i_original)
+{
+ _MoveMapToChart(fuel_type, TYPE_MAP_DA_START, i_original);
+ _MoveMapToChart(fuel_type, TYPE_MAP_DA_IDLE, i_original);
+ _MoveMapToChart(fuel_type, TYPE_MAP_DA_WORK, i_original);
+ _MoveMapToChart(fuel_type, TYPE_MAP_DA_TEMP_CORR, i_original);
+}
+
+void CPMTablesController::_ClearAcquisitionFlags(void)
+{
+ for(size_t i = 0; i < m_maps_flags.size(); ++i)
+ {
+  std::fill(m_maps_flags[i]->f_str, m_maps_flags[i]->f_str + F_STR_POINTS, .0f);
+  std::fill(m_maps_flags[i]->f_idl, m_maps_flags[i]->f_idl + F_IDL_POINTS, .0f);
+  std::fill(m_maps_flags[i]->f_wrk, m_maps_flags[i]->f_wrk + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
+  std::fill(m_maps_flags[i]->f_tmp, m_maps_flags[i]->f_tmp + F_TMP_POINTS, .0f);
+  m_maps_flags[i]->name = _T("");
+ }
+}
+
+void CPMTablesController::_ResetModification(int fuel_type)
+{
+ ASSERT(m_maps.size() == m_omaps.size());
+ for(size_t i = 0; i < m_maps.size(); ++i)
+  (*m_omaps[i]) = (*m_maps[i]);
+}
+
+//-----------------------------------------------------------------------------------
 CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
 : Super(ip_view)
 , mp_comm(ip_comm)
@@ -56,10 +133,13 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->setOnSaveButton(MakeDelegate(this, &CPMTablesController::OnSaveButton));
  mp_view->setOnChangeTablesSetName(MakeDelegate(this, &CPMTablesController::OnChangeTablesSetName));
 
- //карты
+ //карты (текущие)
  m_maps.push_back(new SECU3FWMapsItem);
  m_maps.push_back(new SECU3FWMapsItem);
- //флаги
+ //карты (оригинальные)
+ m_omaps.push_back(new SECU3FWMapsItem);
+ m_omaps.push_back(new SECU3FWMapsItem);
+ //флаги сбора информации
  m_maps_flags.push_back(new SECU3FWMapsItem);
  m_maps_flags.push_back(new SECU3FWMapsItem);
 }
@@ -69,6 +149,8 @@ CPMTablesController::~CPMTablesController()
  size_t i;
  for(i = 0; i < m_maps.size(); ++i)
   delete m_maps[i];
+ for(i = 0; i < m_omaps.size(); ++i)
+  delete m_omaps[i];
  for(i = 0; i < m_maps_flags.size(); ++i)
   delete m_maps_flags[i];
 
@@ -79,6 +161,8 @@ void CPMTablesController::OnActivate(void)
 {
  _ClearAcquisitionFlags();
  mp_view->SetReadOnlyTablesSetName(true);
+
+ mp_view->Enable(IsValidCache());
 
  //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
  m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);
@@ -99,17 +183,9 @@ void CPMTablesController::StartDataCollection(void)
  Super::StartDataCollection();
 }
 
-void CPMTablesController::_MoveMapsToCharts(int fuel_type, bool i_original)
-{
- int ft = fuel_type;
- std::copy(m_maps[ft]->f_str, m_maps[ft]->f_str + F_STR_POINTS, mp_view->GetMap(TYPE_MAP_DA_START, i_original));
- std::copy(m_maps[ft]->f_idl, m_maps[ft]->f_idl + F_IDL_POINTS, mp_view->GetMap(TYPE_MAP_DA_IDLE, i_original));
- std::copy(m_maps[ft]->f_wrk, m_maps[ft]->f_wrk + (F_WRK_POINTS_L * F_WRK_POINTS_F), mp_view->GetMap(TYPE_MAP_DA_WORK, i_original));
- std::copy(m_maps[ft]->f_tmp, m_maps[ft]->f_tmp + F_TMP_POINTS, mp_view->GetMap(TYPE_MAP_DA_TEMP_CORR, i_original));
-}
-
 void CPMTablesController::OnDataCollected(void)
 {
+ _ResetModification(mp_view->GetCurSel()); //original=current
  _MoveMapsToCharts(mp_view->GetCurSel(), false);
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
  mp_view->UpdateOpenedCharts();
@@ -168,20 +244,8 @@ bool CPMTablesController::IsValidCache(void)
  return m_valid_cache;
 }
 
-void CPMTablesController::_ClearAcquisitionFlags(void)
-{
- for(size_t i = 0; i < m_maps_flags.size(); ++i)
- {
-  std::fill(m_maps_flags[i]->f_str, m_maps_flags[i]->f_str + F_STR_POINTS, .0f);
-  std::fill(m_maps_flags[i]->f_idl, m_maps_flags[i]->f_idl + F_IDL_POINTS, .0f);
-  std::fill(m_maps_flags[i]->f_wrk, m_maps_flags[i]->f_wrk + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
-  std::fill(m_maps_flags[i]->f_tmp, m_maps_flags[i]->f_tmp + F_TMP_POINTS, .0f);
-  m_maps_flags[i]->name = _T("");
- }
-}
-
 namespace {
-void UpdateTable(float* map, float* flag, const EditTabPar* data)
+void UpdateMap(float* map, float* flag, const EditTabPar* data)
 {
  int address = data->address;
  for(int i = 0; i < data->data_size; ++i)
@@ -199,16 +263,16 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
  switch(data->tab_id)
  {
   case ETMT_STRT_MAP: //start map
-   UpdateTable(m_maps[tsi]->f_str, m_maps_flags[tsi]->f_str, data);
+   UpdateMap(m_maps[tsi]->f_str, m_maps_flags[tsi]->f_str, data);
    break;
   case ETMT_IDLE_MAP: //idle map
-   UpdateTable(m_maps[tsi]->f_idl, m_maps_flags[tsi]->f_idl, data);
+   UpdateMap(m_maps[tsi]->f_idl, m_maps_flags[tsi]->f_idl, data);
    break;
   case ETMT_WORK_MAP: //work map
-   UpdateTable(m_maps[tsi]->f_wrk, m_maps_flags[tsi]->f_wrk, data);
+   UpdateMap(m_maps[tsi]->f_wrk, m_maps_flags[tsi]->f_wrk, data);
    break;
   case ETMT_TEMP_MAP: //temp. corr. map
-   UpdateTable(m_maps[tsi]->f_tmp, m_maps_flags[tsi]->f_tmp, data);
+   UpdateMap(m_maps[tsi]->f_tmp, m_maps_flags[tsi]->f_tmp, data);
    break;
   case ETMT_NAME_STR: //name of set
    m_maps[tsi]->name = data->name_data;
@@ -221,7 +285,7 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
 }
 
 namespace {
-bool FindZero(float* array, size_t size)
+bool _FindZero(float* array, size_t size)
 {
  for(size_t i = 0; i < size; ++i)
   if (array[i] == .0f)
@@ -234,13 +298,13 @@ bool CPMTablesController::_IsCacheUpToDate(void)
  size_t tsi;
  for(tsi = 0; tsi < m_maps_flags.size(); ++tsi)
  {
-  if (!FindZero(m_maps_flags[tsi]->f_str, F_STR_POINTS))
+  if (!_FindZero(m_maps_flags[tsi]->f_str, F_STR_POINTS))
    return false;
-  if (!FindZero(m_maps_flags[tsi]->f_idl, F_IDL_POINTS))
+  if (!_FindZero(m_maps_flags[tsi]->f_idl, F_IDL_POINTS))
    return false;
-  if (!FindZero(m_maps_flags[tsi]->f_wrk, F_WRK_POINTS_L * F_WRK_POINTS_F))
+  if (!_FindZero(m_maps_flags[tsi]->f_wrk, F_WRK_POINTS_L * F_WRK_POINTS_F))
    return false;
-  if (!FindZero(m_maps_flags[tsi]->f_tmp, F_TMP_POINTS))
+  if (!_FindZero(m_maps_flags[tsi]->f_tmp, F_TMP_POINTS))
    return false;
   if (m_maps_flags[tsi]->name == _T(""))
    return false;
@@ -248,10 +312,73 @@ bool CPMTablesController::_IsCacheUpToDate(void)
  return true;
 }
 
+bool CPMTablesController::_IsModificationMade(void) const
+{
+ if (false==_CompareViewMap(TYPE_MAP_DA_START, _GetMapSize(TYPE_MAP_DA_START)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_DA_IDLE, _GetMapSize(TYPE_MAP_DA_IDLE)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_DA_WORK, _GetMapSize(TYPE_MAP_DA_WORK)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_DA_TEMP_CORR, _GetMapSize(TYPE_MAP_DA_TEMP_CORR)))
+  return true;
+ return false; //no modifications
+}
+
 //----------------------------------------------------------------
+void CPMTablesController::_SynchronizeMap(int fuel_type, int i_mapType)
+{
+ float* pMap = mp_view->GetMap(i_mapType, false); //<--current
+ size_t mapSize = _GetMapSize(i_mapType);
+
+ size_t index;
+ EditTabPar packet;
+ packet.data_size = 0;
+ int state = 0;
+ for(size_t a = 0; a < mapSize; ++a)
+ {
+  switch(state)
+  {
+   case 0:
+    if (pMap[a] != _GetMap(fuel_type, i_mapType, false)[a])
+    {
+     index = 0;
+     packet.tab_set_index = fuel_type;
+     packet.tab_id = i_mapType;
+     packet.address = a;
+     packet.table_data[index] = pMap[a];
+     packet.data_size = 1;
+     state = 1;
+    }
+    break;
+   case 1:
+    packet.table_data[index] = pMap[a];
+    if (pMap[a] != _GetMap(fuel_type, i_mapType, false)[a])
+     packet.data_size = index + 1;
+    break;
+  }
+
+  ++index;
+  if ((16==index || a==(mapSize-1)) && packet.data_size > 0)
+  {
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES));
+   state = 0;
+   mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
+   //transfer copied values from view into chache (save midification)
+   for(size_t i = 0; i < packet.data_size; ++i)
+    _GetMap(fuel_type, i_mapType, false)[packet.address + i] = pMap[packet.address + i];
+  }
+ }
+}
+
 void CPMTablesController::OnMapChanged(int fuel_type, int i_mapType)
 {
- //todo
+  mp_view->SetModificationFlag(!_CompareViewMap(i_mapType, _GetMapSize(i_mapType)));
+
+  //send to SECU-3 changed fragment(s)
+  _SynchronizeMap(fuel_type, i_mapType);
+
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
 }
 
 void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
@@ -270,6 +397,8 @@ void CPMTablesController::OnTabActivate(void)
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
  mp_view->UpdateOpenedCharts();
  mp_view->SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
+ //update modification flag if any of maps changed
+ mp_view->SetModificationFlag(_IsModificationMade());
 }
 
 void CPMTablesController::OnSaveButton(void)
@@ -279,7 +408,7 @@ void CPMTablesController::OnSaveButton(void)
 
 void CPMTablesController::OnChangeTablesSetName(int fuel_type)
 {
- //todo
+ //not used
 }
 
 void CPMTablesController::OnTableDeskChangesTimer(void)

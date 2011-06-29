@@ -351,6 +351,7 @@ BEGIN
     IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
     IDS_PM_READING_FWC_OPTIONS   "Чтение опций прошивки..."
     IDS_PM_READING_TABLES        "Чтение таблиц..."
+    IDS_PM_WRITING_TABLES        "Запись таблиц..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -878,6 +879,7 @@ BEGIN
     IDS_IMPORT_IMPORT_FROM_SECU3 "Import tables from SECU-3"
     IDS_PM_READING_FWC_OPTIONS "Reading firmware options..."
     IDS_PM_READING_TABLES   "Reading tables..."
+    IDS_PM_WRITING_TABLES   "Writing tables..."
 END
 
 STRINGTABLE DISCARDABLE 

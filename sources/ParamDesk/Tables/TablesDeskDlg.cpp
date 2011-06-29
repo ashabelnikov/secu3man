@@ -279,6 +279,11 @@ void CTablesDeskDlg::SetReadOnlyTablesSetName(bool readonly)
  m_pPageDlg->SetReadOnlyTablesSetName(readonly);
 }
 
+void CTablesDeskDlg::SetModificationFlag(bool value)
+{
+ m_pPageDlg->SetModificationFlag(value);
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnDestroy()
 {

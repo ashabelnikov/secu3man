@@ -119,6 +119,7 @@ void CParamMonTabController::OnActivate(void)
  mp_moncntr->OnActivate();
  mp_moncntr->ShowRawSensors(m_view->GetRawSensorsCheckState());
  mp_parcntr->OnActivate();
+ mp_tabcntr->InvalidateCache(); //<--делаем закешированные таблицы невалидными
  mp_tabcntr->OnActivate();
 
  //////////////////////////////////////////////////////////////////
