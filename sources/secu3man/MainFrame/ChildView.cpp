@@ -62,7 +62,7 @@ bool CChildView::Create(CWnd* ip_parent)
  lpdt = (LPDLGTEMPLATE)GlobalLock(hgbl);
 
  // Define a dialog box.
- lpdt->style = WS_VISIBLE | WS_CHILD;
+ lpdt->style = WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS;
  lpdt->dwExtendedStyle = WS_EX_CONTROLPARENT | WS_EX_CLIENTEDGE;
  lpdt->cdit = 0; // number of controls
  lpdt->x  = 0;   //<--любые дефайлтные размеры,

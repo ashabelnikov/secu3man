@@ -41,6 +41,7 @@ class ITablesDeskView
   virtual void Enable(bool enable) = 0;                           //разрешить/запретить представление
   virtual void Show(bool show) = 0;                               //показать/спрятать контент представления
   virtual void ShowSaveButton(bool i_show) = 0;                   //показать/cпрятать кнопку "сохранить"
+  virtual void ShowOpenedCharts(bool i_show) = 0;                 //show/hide opened charts
   virtual void UpdateOpenedCharts(void) = 0;                      //update opened charts
   virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
   virtual void SetModificationFlag(bool value) = 0;               //set/reset modification flag

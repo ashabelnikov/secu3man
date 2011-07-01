@@ -62,6 +62,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void Enable(bool enable);
   virtual void Show(bool show);
   virtual void ShowSaveButton(bool i_show);
+  virtual void ShowOpenedCharts(bool i_show);  
   virtual void UpdateOpenedCharts(void);
   virtual void SetReadOnlyTablesSetName(bool readonly);
   virtual void SetModificationFlag(bool value);

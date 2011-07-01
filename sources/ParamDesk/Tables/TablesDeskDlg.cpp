@@ -184,6 +184,23 @@ void CTablesDeskDlg::ShowSaveButton(bool i_show)
  m_save_button.ShowWindow(i_show ? SW_SHOW : SW_HIDE);
 }
 
+void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
+{
+ HWND hwnd;
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnMapChanged(int i_mapType)
 {
@@ -289,6 +306,7 @@ void CTablesDeskDlg::OnDestroy()
 {
  Super::OnDestroy();
  m_hot_keys_supplier->Close();
+ ShowOpenedCharts(false);
 }
 
 void CTablesDeskDlg::OnSaveButton()
