@@ -91,6 +91,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSaveButton();
+  afx_msg void OnSysCommand(UINT, LONG);
   afx_msg void OnHK_GASOLINE_TAB();
   afx_msg void OnHK_GAS_TAB();
   DECLARE_MESSAGE_MAP()

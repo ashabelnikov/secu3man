@@ -86,6 +86,7 @@ void CTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SYSCOMMAND()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_TAB_CTRL, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControls)
@@ -324,6 +325,13 @@ void CTablesDeskDlg::OnSelchangeTabctl(void)
 void CTablesDeskDlg::OnSelchangingTabctl(void)
 {
  //empty
+}
+
+void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
+{
+ Super::OnSysCommand(nID, lParam);
+ if (nID == SC_MINIMIZE)
+  SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 
 //------------------------------------------------------------------------

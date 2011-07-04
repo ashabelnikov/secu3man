@@ -80,6 +80,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSaveButton();
+  afx_msg void OnSysCommand(UINT, LONG);
   afx_msg void OnHK_STARTR_PAR();
   afx_msg void OnHK_ANGLES_PAR();
   afx_msg void OnHK_IDLREG_PAR();

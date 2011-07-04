@@ -171,16 +171,19 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  ///////////////////////////////////////////////////////////////
 
  mp_ParamDeskDlg->DestroyWindow();
- mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD,this);
+ mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD, this);
  ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE); 
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  if (i_floating)
+ {
+  mp_ParamDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE);
   mp_ParamDeskDlg->Show(true);
+ }
  else
   mp_ParamDeskDlg->Show(!GetEditTablesCheckState());
 
  mp_TablesDeskDlg->DestroyWindow();
- mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD,this);
+ mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD, this);
  ::SetClassLong(mp_TablesDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
  mp_TablesDeskDlg->ShowOpenedCharts(true);
@@ -189,7 +192,8 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  {
   CRect rect;
   mp_ParamDeskDlg->GetWindowRect(rect); 
-  mp_TablesDeskDlg->SetPosition(rect.right,rect.top,NULL);
+  mp_TablesDeskDlg->SetPosition(rect.right,rect.top, NULL);
+  mp_TablesDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE); 
  }
  mp_TablesDeskDlg->Show(GetEditTablesCheckState());
 

@@ -137,6 +137,7 @@ void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
 
 BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SYSCOMMAND()
  ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
@@ -403,6 +404,13 @@ void CParamDeskDlg::OnChangeInTab(void)
 {
  if (m_OnChangeInTab)
   m_OnChangeInTab();
+}
+
+void CParamDeskDlg::OnSysCommand(UINT nID, LONG lParam)
+{
+ Super::OnSysCommand(nID, lParam);
+ if (nID == SC_MINIMIZE)
+  SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 
 void CParamDeskDlg::ShowSaveButton(bool i_show)
