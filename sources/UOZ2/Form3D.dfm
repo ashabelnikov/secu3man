@@ -1,4 +1,4 @@
-object Form1: TForm1
+object Form3D: TForm3D
   Left = 375
   Top = 242
   Cursor = crHSplit

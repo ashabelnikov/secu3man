@@ -124,6 +124,8 @@ void CParamMonTabDlg::OnPmEditTables()
   mp_ParamDeskDlg->Show(!check_state);
  mp_TablesDeskDlg->Show(check_state);
  mp_TablesDeskDlg->ShowOpenedCharts(check_state);
+ if (check_state)
+  mp_TablesDeskDlg->MakeChartsChildren(floating);
 
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
@@ -144,21 +146,6 @@ bool CParamMonTabDlg::GetEditTablesCheckState(void)
 void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
 {
  m_edit_tables_check.EnableWindow(enable);
-}
-
-bool CParamMonTabDlg::GetEditTablesCheck(void)
-{
- return m_edit_tables_check.GetCheck() == BST_CHECKED;
-}
-
-void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
-{
- m_OnRawSensorsCheck = i_Function;
-}
-
-void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
-{
- m_OnEditTablesCheck = i_Function;
 }
 
 void CParamMonTabDlg::MakePDFloating(bool i_floating)
@@ -196,6 +183,7 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
   mp_TablesDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE); 
  }
  mp_TablesDeskDlg->Show(GetEditTablesCheckState());
+ mp_TablesDeskDlg->MakeChartsChildren(i_floating);
 
  ///////////////////////////////////////////////////////////////
  VERIFY(mp_ParamDeskDlg->SetCurSel(lastSelPD));
@@ -243,6 +231,16 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
   mp_RSDeskDlg->Resize(m_original_rs_rect);
   m_save_note_text.ShowWindow(SW_SHOW);
  }
+}
+
+void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
+{
+ m_OnRawSensorsCheck = i_Function;
+}
+
+void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
+{
+ m_OnEditTablesCheck = i_Function;
 }
 
 void CParamMonTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)

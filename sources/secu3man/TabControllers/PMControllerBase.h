@@ -21,27 +21,29 @@
 
 #pragma once
 
-
+//базовый класс дл€ классов представл€ющих состо€ние конечного автомата
 class CPMStateMachineState
 {
  public:
   CPMStateMachineState() : m_operation_state(0){}
   virtual ~CPMStateMachineState() {}
 
+  //Ќачало сбора данных
   virtual void StartDataCollection(void) = 0
   {
    m_operation_state = 0;
   }
 
   //„тение всех необходимых данных после коннекта (конечный автомат)
-  //возвращает true когда все данные прочитаны  
+  //возвращает true когда все данные прочитаны. Ёту функцию нужно вызывать дл€ каждого
+  //пакета полученного от SECU-3
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data) = 0;
 
  protected:
   int  m_operation_state;
 };
 
-
+//базовый класс дл€ контроллеров вкладки "ѕараметры и монитор"
 template <class T>
 class CPMControllerBase : public CPMStateMachineState
 {

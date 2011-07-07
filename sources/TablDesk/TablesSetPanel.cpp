@@ -167,7 +167,7 @@ BOOL CTablesSetPanel::OnInitDialog()
 void CTablesSetPanel::OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
- BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );
 }
@@ -175,7 +175,7 @@ void CTablesSetPanel::OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI)
 void CTablesSetPanel::OnUpdateViewCoilRegulMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
- BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && opened;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );
 }
@@ -191,9 +191,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
  if (m_attenuator_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
+  DLL::Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
  if (m_coilregul_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));
+  DLL::Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -254,26 +254,26 @@ void CTablesSetPanel::OnViewAttenuatorMap()
   return;
  }
 
- if ((!m_attenuator_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
+ if ((!m_attenuator_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_attenuator_map_chart_state = 1;
-  m_attenuator_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
+  m_attenuator_map_wnd_handle = DLL::Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
     MLL::GetString(IDS_ATTENUATOR_MAP).c_str());
-  DLL::UOZ1_Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1, false); //пр€чем надписи над узловыми точками функции
-  DLL::UOZ1_Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable, this);
-  DLL::UOZ1_Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
-  DLL::UOZ1_Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
-  DLL::UOZ1_Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
-  DLL::UOZ1_Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
-  DLL::UOZ1_Chart2DUpdate(m_attenuator_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1, false); //пр€чем надписи над узловыми точками функции
+  DLL::Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable, this);
+  DLL::Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
+  DLL::Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
+  DLL::Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
+  DLL::Chart2DUpdate(m_attenuator_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
 
-  DLL::UOZ1_Chart2DShow(m_attenuator_map_wnd_handle, true);
+  DLL::Chart2DShow(m_attenuator_map_wnd_handle, true);
  }
  else
  {
@@ -290,23 +290,23 @@ void CTablesSetPanel::OnViewCoilRegulMap()
   return;
  }
 
- if ((!m_coilregul_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
+ if ((!m_coilregul_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_coilregul_map_chart_state = 1;
-  m_coilregul_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.0f, 16.0, SECU3IO::coilregul_map_slots, 32,
+  m_coilregul_map_wnd_handle = DLL::Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.0f, 16.0, SECU3IO::coilregul_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COILREGUL_UNIT).c_str(),
     MLL::GetString(IDS_COILREGUL_MAP).c_str());
-  DLL::UOZ1_Chart2DSetAxisValuesFormat(m_coilregul_map_wnd_handle, 1, _T("%.01f"));
-  DLL::UOZ1_Chart2DSetOnChange(m_coilregul_map_wnd_handle, OnChangeCoilRegulTable, this);
-  DLL::UOZ1_Chart2DSetOnClose(m_coilregul_map_wnd_handle, OnCloseCoilRegulTable, this);
-  DLL::UOZ1_Chart2DUpdate(m_coilregul_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetAxisValuesFormat(m_coilregul_map_wnd_handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_coilregul_map_wnd_handle, OnChangeCoilRegulTable, this);
+  DLL::Chart2DSetOnClose(m_coilregul_map_wnd_handle, OnCloseCoilRegulTable, this);
+  DLL::Chart2DUpdate(m_coilregul_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_coilregul_map_wnd_handle, TYPE_MAP_COILREGUL);
 
-  DLL::UOZ1_Chart2DShow(m_coilregul_map_wnd_handle, true);
+  DLL::Chart2DShow(m_coilregul_map_wnd_handle, true);
  }
  else
  {

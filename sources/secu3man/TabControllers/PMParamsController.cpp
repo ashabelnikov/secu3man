@@ -75,27 +75,9 @@ void CPMParamsController::OnDeactivate(void)
  m_lastSel = mp_view->GetCurSel();
 }
 
-void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
-{
- mp_view->SetFunctionsNames(i_names);
-}
-
 void CPMParamsController::Enable(bool state)
 {
  mp_view->Enable(state);
-}
-
-//from view
-void CPMParamsController::OnParamDeskTabActivate(void)
-{
- //после появления новой вкладки необходимо прочитать для нее параметры из SECU
- m_RequestDataCollection();
-}
-
-//from view
-void CPMParamsController::OnParamDeskChangeInTab(void)
-{
- m_parameters_changed = true;
 }
 
 void CPMParamsController::StartDataCollection(void)
@@ -136,28 +118,46 @@ bool CPMParamsController::CollectData(const BYTE i_descriptor, const void* i_pac
  return false; //КА продолжает работу...
 }
 
-//передача пакетов с параметрами в SECU будет происходить не чаще чем вызов этого обработчика
-void CPMParamsController::OnParamDeskChangesTimer(void)
+void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
- if (m_parameters_changed)
- {
-  //получаем данные от view и сохраняем их во временный буфер
-  BYTE packet_data[1024];
-  BYTE view_descriptor = mp_view->GetCurrentDescriptor();
-  mp_view->GetValues(view_descriptor, packet_data);
-
-  //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
-  mp_comm->m_pControlApp->SendPacket(view_descriptor,packet_data);
-
-  m_parameters_changed = false; //обработали событие - сбрасываем признак
- }
+ mp_view->SetFunctionsNames(i_names);
 }
 
-//Нажали кнопку сохранения параметров - надо послать команду сохранения в SECU-3
+//from view. Очередная вкладка активировалась
+void CPMParamsController::OnParamDeskTabActivate(void)
+{
+ //после появления новой вкладки необходимо прочитать для нее параметры из SECU
+ m_RequestDataCollection();
+}
+
+//from view. Данные на вкладке изменились
+void CPMParamsController::OnParamDeskChangeInTab(void)
+{
+ m_parameters_changed = true;
+}
+
+//from view. Нажали кнопку сохранения параметров - надо послать команду сохранения в SECU-3
 void CPMParamsController::OnPDSaveButton()
 {
  mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_PARAMS));
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+}
+
+//передача пакетов с параметрами в SECU будет происходить не чаще чем вызов этого обработчика
+void CPMParamsController::OnParamDeskChangesTimer(void)
+{
+ if (m_parameters_changed)
+ {
+  //получаем данные от view и сохраняем их во временный буфер
+  SECU3Packet packet_data;
+  BYTE view_descriptor = mp_view->GetCurrentDescriptor();
+  mp_view->GetValues(view_descriptor, &packet_data);
+
+  //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
+  mp_comm->m_pControlApp->SendPacket(view_descriptor, &packet_data);
+
+  m_parameters_changed = false; //обработали событие - сбрасываем признак
+ }
 }

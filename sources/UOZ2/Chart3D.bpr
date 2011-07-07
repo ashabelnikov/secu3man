@@ -3,13 +3,13 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value="../../binaries\UOZ1.dll"/>
-    <OBJFILES value="UOZ1.obj Unit1.obj"/>
-    <RESFILES value="UOZ1.res resource.res"/>
+    <PROJECT value="../../binaries\Chart3D.dll"/>
+    <OBJFILES value="Chart3D.obj Form3D.obj"/>
+    <RESFILES value="Chart3D.res resource.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
-    <DEFFILE value="UOZ1.def"/>
-    <RESDEPEN value="$(RESFILES) Unit1.dfm"/>
+    <DEFFILE value="Chart3D.def"/>
+    <RESDEPEN value="$(RESFILES) Form3D.dfm"/>
     <LIBFILES value=""/>
     <LIBRARIES value="Tee50.lib Vcl50.lib"/>
     <SPARELIBS value="Vcl50.lib Tee50.lib"/>
@@ -27,15 +27,14 @@
     <LINKER value="tlink32"/>
     <USERDEFINES value=""/>
     <SYSDEFINES value="NO_STRICT"/>
-    <MAINSOURCE value="UOZ1.bpf"/>
+    <MAINSOURCE value="Chart3D.bpf"/>
     <INCLUDEPATH value="$(BCB)\include;$(BCB)\include\vcl"/>
     <LIBPATH value="$(BCB)\lib\obj;$(BCB)\lib"/>
     <WARNINGS value="-w-par"/>
   </MACROS>
   <OPTIONS>
     <IDLCFLAGS value="-I$(BCB)\include -I$(BCB)\include\vcl -src_suffix cpp -boa"/>
-    <CFLAG1 value="-WD -O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -VF -X- -a8 -b- -k- -vi -tWD 
-      -tWM -c"/>
+    <CFLAG1 value="-WD -O2 -H=$(BCB)\lib\vcl50.csm -Hc -Vx -Ve -X- -a8 -b- -k- -vi -tWD -tWM -c"/>
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
@@ -64,12 +63,12 @@ CodePage=1252
 
 [Version Info Keys]
 CompanyName=Shabelnikov Technology
-FileDescription=SECU-3 2D Chart editor 
+FileDescription=3D Chart editor for SECU-3
 FileVersion=1.0.0.0
-InternalName=Chart2D
+InternalName=Chart3D
 LegalCopyright=(C) STc
 LegalTrademarks=SECU-3
-OriginalFilename=UOZ1
+OriginalFilename=Chart3D
 ProductName=SECU-3 Manager
 ProductVersion=1.0.0.0
 Comments=This DLL is part of SECU-3 project

@@ -55,23 +55,19 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 
   void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
 
- public:
+ private:
   //Events from view
   void OnParamDeskTabActivate(void);
   void OnParamDeskChangeInTab(void);
   void OnPDSaveButton(void);
-
- private:
   //from m_pd_changes_timer
   void OnParamDeskChangesTimer(void);
 
-  CObjectTimer<CPMParamsController> m_pd_changes_timer;
- 
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
+  CObjectTimer<CPMParamsController> m_pd_changes_timer; 
   EventHandler m_RequestDataCollection;
-
   bool m_parameters_changed;       //этот флаг устанавливается при изменении на любой из вкладок параметров и сбрасывается после посылки измененных данных в SECU
   int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
 };

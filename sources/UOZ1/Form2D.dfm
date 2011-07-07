@@ -1,4 +1,4 @@
-object Form1: TForm1
+object Form2D: TForm2D
   Left = 267
   Top = 127
   BorderIcons = [biSystemMenu, biMinimize]

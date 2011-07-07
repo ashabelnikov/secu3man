@@ -1,12 +1,25 @@
-/****************************************************************
- *               SECU-3  - engine control unit
- *    Designed by Aleksey Shabelnikov. Ukraine, Gorlovka 2007.
- *    STc - Microprocessors systems: design & programming
- *    contacts:
- *              shabelnikov-stc@mail.ru
- *              ICQ: 405-791-931
- ****************************************************************/
+/* SECU-3  - An open source, free engine control unit
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
 
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+              http://secu-3.org
+              email: shabelnikov@secu-3.org
+*/
+
+#include <map>
 #include <vcl.h>
 #include <windows.h>
 #include <mem.h>
@@ -14,10 +27,10 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
-#include <map>
-#include "Unit1.h"
+#include "Form3D.h"
 #include "resource.h"
 #pragma hdrstop
+
 extern "C"
 {
  HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
@@ -26,6 +39,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart3DSetLanguage(int i_language);
+ void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
 }
 
 std::map<HWND,TForm*> g_form_instances;
@@ -95,70 +109,80 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //значения функций
 HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
 {
- TForm1 *pForm1 = new TForm1((TComponent *)NULL);
- pForm1->count_x    = x_count_of_points;
- pForm1->count_z    = z_count_of_points;
- pForm1->u_title    = chart_title;
- pForm1->modified_function = modified_function;
- pForm1->original_function = original_function;
- pForm1->x_title    = x_axis_title;
- pForm1->aai_min    = aai_min;
- pForm1->aai_max    = aai_max;
+ TForm3D *pForm = new TForm3D((TComponent *)NULL);
+ pForm->count_x = x_count_of_points;
+ pForm->count_z = z_count_of_points;
+ pForm->u_title = chart_title;
+ pForm->modified_function = modified_function;
+ pForm->original_function = original_function;
+ pForm->x_title = x_axis_title;
+ pForm->aai_min = aai_min;
+ pForm->aai_max = aai_max;
 
- pForm1->Caption = MLL::LoadString(IDS_EDITING_MAPS);
- pForm1->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
- pForm1->Label2->Caption = MLL::LoadString(IDS_AIR_FLOW_LABEL_TEXT);
- pForm1->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
+ pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
+ pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
+ pForm->Label2->Caption = MLL::LoadString(IDS_AIR_FLOW_LABEL_TEXT);
+ pForm->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
 
- memcpy(pForm1->u_slots,x_axis_grid_values,sizeof(int)*x_count_of_points);
- pForm1->DataPrepare();
- AddInstanceByHWND(pForm1->Handle,pForm1);
- return pForm1->Handle;
+ memcpy(pForm->u_slots, x_axis_grid_values, sizeof(int) * x_count_of_points);
+ pForm->DataPrepare();
+ AddInstanceByHWND(pForm->Handle, pForm);
+ return pForm->Handle;
 }
 
 //---------------------------------------------------------------------------
 void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function)
 {
- TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm1)
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
   return;
 
  //удаляем старые значения, а потом вновь заполняем серии
- for(int i = 0; i < pForm1->Chart1->SeriesList->Count; i++)
-  for (;pForm1->Chart1->Series[i]->Count() > 0;)
-   pForm1->Chart1->Series[i]->Delete(pForm1->Chart1->Series[i]->Count()-1);
+ for(int i = 0; i < pForm->Chart1->SeriesList->Count; i++)
+  for (;pForm->Chart1->Series[i]->Count() > 0;)
+   pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);
 
- pForm1->original_function   = original_function;
- pForm1->modified_function   = modified_function;
- pForm1->DataPrepare();
+ pForm->original_function = original_function;
+ pForm->modified_function = modified_function;
+ pForm->DataPrepare();
 }
 //---------------------------------------------------------------------------
 void __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param)
 {
- TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm1)
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
   return;
- pForm1->SetOnChange(i_pOnChange, i_param);
+ pForm->SetOnChange(i_pOnChange, i_param);
 }
 
 //---------------------------------------------------------------------------
 void __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param)
 {
- TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm1)
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
   return;
- pForm1->SetOnClose(i_pOnClose,i_param);
+ pForm->SetOnClose(i_pOnClose,i_param);
 }
 
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetOnWndActivation(i_pOnWndActivation, i_param);
+}
+
+//---------------------------------------------------------------------------
 void __cdecl Chart3DShow(HWND hWnd, int i_show)
 {
- TForm1* pForm1 = static_cast<TForm1*>(GetInstanceByHWND(hWnd));
- if (NULL==pForm1)
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
   return;
  if (1 == i_show)
-  pForm1->Show();
+  pForm->Show();
  else if  (0 == i_show)
-  pForm1->Hide();
+  pForm->Hide();
  else
   MessageBox(hWnd, _T("Chart2DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
 }

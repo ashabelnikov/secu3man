@@ -50,16 +50,6 @@ CPMInitDataCollector::~CPMInitDataCollector()
  //empty
 }
 
-const std::vector<_TSTRING>& CPMInitDataCollector::GetFNNames(void) const
-{
- return fn_names;
-}
-
-const DWORD& CPMInitDataCollector::GetFWOptions(void) const
-{
- return fw_options;
-}
-
 void CPMInitDataCollector::StartDataCollection(void)
 {
  mp_comm->m_pControlApp->ChangeContext(FNNAME_DAT); //change context!
@@ -154,4 +144,14 @@ bool CPMInitDataCollector::CollectData(const BYTE i_descriptor, const void* i_pa
  }//switch
 
  return false; //КА продолжает работу...
+}
+
+const std::vector<_TSTRING>& CPMInitDataCollector::GetFNNames(void) const
+{
+ return fn_names;
+}
+
+const DWORD& CPMInitDataCollector::GetFWOptions(void) const
+{
+ return fw_options;
 }

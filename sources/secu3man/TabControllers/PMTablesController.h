@@ -55,7 +55,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void InvalidateCache(void);
   bool IsValidCache(void);
 
- public:
+ private:
   //Events from view
   void OnMapChanged(int fuel_type, int i_mapType);
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
@@ -65,31 +65,34 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void OnChangeTablesSetName(int fuel_type);
 
  private:
-  void _ResetModification(int fuel_type);
+  //helpful methods
+  bool _CompareViewMap(int i_mapType, size_t size) const;
+  float* _GetMap(int fuel_type, int i_mapType, bool i_original);
   void _MoveMapToChart(int fuel_type, int i_mapType, bool i_original);
   void _MoveMapsToCharts(int fuel_type, bool i_original);
-  bool _CompareViewMap(int i_mapType, size_t size) const;
+  void _ClearAcquisitionFlags(void);
+  void _ResetModification(int fuel_type);
+
+  void _UpdateCache(const SECU3IO::EditTabPar* data); 
+  bool _IsCacheUpToDate(void);
   bool _IsModificationMade(void) const;
-  float* _GetMap(int fuel_type, int i_mapType, bool i_original);
   void _SynchronizeMap(int fuel_type, int i_mapType);
 
+  //tables's data collected 
   void OnDataCollected(void);
+  //from timer
   void OnTableDeskChangesTimer(void);
 
+ private:
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
   //кеш таблиц 
   std::vector<SECU3FWMapsItem*> m_maps;  //current
   std::vector<SECU3FWMapsItem*> m_omaps; //original
-
-  void _UpdateCache(const SECU3IO::EditTabPar* data); 
-
-  bool _IsCacheUpToDate(void);
-
-  void _ClearAcquisitionFlags(void);
+  //флаги описывающие состояние сбора информации по таблицам
   std::vector<SECU3FWMapsItem*> m_maps_flags;
 
-  bool m_valid_cache;
+  bool m_valid_cache; //признак валидного кеша (данные в менеджере соответствуют данным в SECU-3)
   CObjectTimer<CPMTablesController> m_td_changes_timer;
 };

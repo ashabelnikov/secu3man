@@ -66,6 +66,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void UpdateOpenedCharts(void);
   virtual void SetReadOnlyTablesSetName(bool readonly);
   virtual void SetModificationFlag(bool value);
+  virtual void MakeChartsChildren(bool children);
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction);
@@ -101,18 +102,21 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   void OnMapChanged(int i_mapType);
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  //events from CTablesPageDlg
+  void OnWndActivation(HWND i_hwnd, long cmd);
+ //events from CTablesPageDlg
   void OnChangeTablesSetName(void);
 
   // ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
   virtual void OnSelchangingTabctl(void);
 
+  void _MakeWindowChild(HWND hwnd, bool child);
   void _RegisterHotKeys(void);
-
+ 
   //указатели на диалоги всех вкладок. Мы используем один диалог для двух вкладок
   class CTablesPageDlg* m_pPageDlg;
 
+  bool m_children_charts;
   bool m_enabled;
   CStatic m_td_title;
   CButton m_save_button;

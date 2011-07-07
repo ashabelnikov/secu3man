@@ -43,8 +43,8 @@ del hiscctrl\*.plg
 del tabldesk\*.ncb
 del tabldesk\*.plg
 
-del UOZ1\*.obj /Q
-del UOZ2\*.obj /Q
+del Chart2D\*.obj /Q
+del Chart3D\*.obj /Q
 
 cd..
 

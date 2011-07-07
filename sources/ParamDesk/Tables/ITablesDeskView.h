@@ -45,6 +45,7 @@ class ITablesDeskView
   virtual void UpdateOpenedCharts(void) = 0;                      //update opened charts
   virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
   virtual void SetModificationFlag(bool value) = 0;               //set/reset modification flag
+  virtual void MakeChartsChildren(bool children) = 0;             //make charts children to "parameters and monitor" window
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц

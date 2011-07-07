@@ -54,6 +54,7 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 , m_pImgList(NULL)
 , m_enabled(false)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
+, m_children_charts(false)
 {
  //создаем image list для TabCtrl
  m_pImgList = new CImageList();
@@ -68,6 +69,7 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
  m_pPageDlg->mp_ButtonsPanel->setOnCloseMapWnd(MakeDelegate(this, &CTablesDeskDlg::OnCloseMapWnd));
  m_pPageDlg->mp_ButtonsPanel->setOnOpenMapWnd(MakeDelegate(this, &CTablesDeskDlg::OnOpenMapWnd));
  m_pPageDlg->setOnChangeTablesSetName(MakeDelegate(this, &CTablesDeskDlg::OnChangeTablesSetName));
+ m_pPageDlg->mp_ButtonsPanel->setOnWndActivation(MakeDelegate(this, &CTablesDeskDlg::OnWndActivation));
 }
 
 CTablesDeskDlg::~CTablesDeskDlg()
@@ -103,12 +105,6 @@ END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
 // CTablesDeskDlg message handlers
-
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
-void CTablesDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
-{
- pCmdUI->Enable(m_enabled);
-}
 
 BOOL CTablesDeskDlg::OnInitDialog()
 {
@@ -155,6 +151,11 @@ void CTablesDeskDlg::GetTitle(CString& o_str)
  m_td_title.GetWindowText(o_str);
 }
 
+bool CTablesDeskDlg::IsEnabled(void)
+{
+ return m_enabled ? true : false;
+}
+
 //разрешение/запрещение
 void CTablesDeskDlg::Enable(bool enable)
 {
@@ -165,11 +166,6 @@ void CTablesDeskDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 
  m_tab_control.EnableItem(-1, enable); //all items
-}
-
-bool CTablesDeskDlg::IsEnabled(void)
-{
- return m_enabled ? true : false;
 }
 
 //спрятать/показать все
@@ -202,29 +198,33 @@ void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
 }
 
-//------------------------------------------------------------------------
-void CTablesDeskDlg::OnMapChanged(int i_mapType)
+void CTablesDeskDlg::UpdateOpenedCharts(void)
 {
- if (m_OnMapChanged)
-  m_OnMapChanged(GetCurSel(), i_mapType);
+ m_pPageDlg->mp_ButtonsPanel->UpdateOpenedCharts();
 }
 
-void CTablesDeskDlg::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
+void CTablesDeskDlg::SetReadOnlyTablesSetName(bool readonly)
 {
- if (m_OnCloseMapWnd)
-  m_OnCloseMapWnd(i_hwnd, i_mapType);
+ m_pPageDlg->SetReadOnlyTablesSetName(readonly);
 }
 
-void CTablesDeskDlg::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
+void CTablesDeskDlg::SetModificationFlag(bool value)
 {
- if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(i_hwnd, i_mapType);
+ m_pPageDlg->SetModificationFlag(value);
 }
 
-void CTablesDeskDlg::OnChangeTablesSetName(void)
+void CTablesDeskDlg::MakeChartsChildren(bool children)
 {
- if (m_OnChangeTablesSetName)
-  m_OnChangeTablesSetName(GetCurSel());
+ m_children_charts = children;
+ HWND hwnd;
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
+ _MakeWindowChild(hwnd, children);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
+ _MakeWindowChild(hwnd, children);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
+ _MakeWindowChild(hwnd, children);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
+ _MakeWindowChild(hwnd, children);
 }
 
 //------------------------------------------------------------------------
@@ -246,6 +246,7 @@ void CTablesDeskDlg::setOnSaveButton(EventHandler OnFunction)
 void CTablesDeskDlg::setOnChangeTablesSetName(EventWithCode OnFunction)
 { m_OnChangeTablesSetName  = OnFunction; }
 
+//------------------------------------------------------------------------
 bool CTablesDeskDlg::SetCurSel(int sel)
 {
  return m_tab_control.SetCurSel(sel);
@@ -287,21 +288,6 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
  }
 }
 
-void CTablesDeskDlg::UpdateOpenedCharts(void)
-{
- m_pPageDlg->mp_ButtonsPanel->UpdateOpenedCharts();
-}
-
-void CTablesDeskDlg::SetReadOnlyTablesSetName(bool readonly)
-{
- m_pPageDlg->SetReadOnlyTablesSetName(readonly);
-}
-
-void CTablesDeskDlg::SetModificationFlag(bool value)
-{
- m_pPageDlg->SetModificationFlag(value);
-}
-
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnDestroy()
 {
@@ -310,12 +296,59 @@ void CTablesDeskDlg::OnDestroy()
  ShowOpenedCharts(false);
 }
 
+//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+void CTablesDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
+}
+
 void CTablesDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)
   m_OnSaveButton();
 }
 
+void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
+{
+ Super::OnSysCommand(nID, lParam);
+ if (nID == SC_MINIMIZE)
+  SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+}
+
+//------------------------------------------------------------------------
+void CTablesDeskDlg::OnMapChanged(int i_mapType)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(GetCurSel(), i_mapType);
+}
+
+void CTablesDeskDlg::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
+{
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(i_hwnd, i_mapType);
+}
+
+void CTablesDeskDlg::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
+{
+ _MakeWindowChild(i_hwnd, m_children_charts);
+ 
+ if (m_OnOpenMapWnd)
+  m_OnOpenMapWnd(i_hwnd, i_mapType);
+}
+
+void CTablesDeskDlg::OnWndActivation(HWND i_hwnd, long cmd)
+{
+ if (m_children_charts && cmd == SC_MINIMIZE && NULL != i_hwnd)
+  CWnd::FromHandle(i_hwnd)->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+}
+
+void CTablesDeskDlg::OnChangeTablesSetName(void)
+{
+ if (m_OnChangeTablesSetName)
+  m_OnChangeTablesSetName(GetCurSel());
+}
+
+//------------------------------------------------------------------------
 void CTablesDeskDlg::OnSelchangeTabctl(void)
 {
  if (m_OnTabActivate)
@@ -327,14 +360,20 @@ void CTablesDeskDlg::OnSelchangingTabctl(void)
  //empty
 }
 
-void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
+//------------------------------------------------------------------------
+void CTablesDeskDlg::_MakeWindowChild(HWND hwnd, bool child)
 {
- Super::OnSysCommand(nID, lParam);
- if (nID == SC_MINIMIZE)
-  SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+ if (hwnd)
+ {
+  if (child)
+   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_CHILD | WS_CLIPSIBLINGS);
+  else
+   CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD | WS_CLIPSIBLINGS, 0);
+
+  CWnd::FromHandle(hwnd)->SetParent(child ? this->GetParent() : NULL);
+ }
 }
 
-//------------------------------------------------------------------------
 void CTablesDeskDlg::_RegisterHotKeys(void)
 {
 #define RegisterHK(d,k) m_hot_keys_supplier->RegisterCommand(ID_TD_ACTIVATE_##d, k, MOD_CONTROL);

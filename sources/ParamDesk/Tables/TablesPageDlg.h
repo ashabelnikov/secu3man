@@ -53,7 +53,6 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
   //CButtonsPanel
   std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;
 
-
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
@@ -63,10 +62,11 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
-  EventHandler m_OnChangeTablesSetName;
-
   //from CButtonsPanel
   bool IsAllowed(void);
+
+ private:
+  EventHandler m_OnChangeTablesSetName;
 
   bool m_enabled;
   bool m_tsneb_readonly;

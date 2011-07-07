@@ -42,35 +42,37 @@ class CParamMonTabDlg : public CTabDialog
 
   bool GetRawSensorsCheckState(void);
   bool GetEditTablesCheckState(void);
-  void setOnRawSensorsCheck(EventHandler i_Function);
-  void setOnEditTablesCheck(EventHandler i_Function);
 
   void EnableEditTablesCheck(bool enable);
-  bool GetEditTablesCheck(void);
+
+  void MakePDFloating(bool i_floating);
+  void EnlargeMonitor(bool i_enlarge);
+
+  void setOnRawSensorsCheck(EventHandler i_Function);
+  void setOnEditTablesCheck(EventHandler i_Function);
 
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
   std::auto_ptr<CTablesDeskDlg> mp_TablesDeskDlg;
 
-  void MakePDFloating(bool i_floating);
-  void EnlargeMonitor(bool i_enlarge);
-
  // Implementation
  protected:
-  void _ResizeRect(const CRect& i_external, CRect& io_victim);
-
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnPmShowRawSensors();
   afx_msg void OnPmEditTables();
   DECLARE_MESSAGE_MAP()
 
-  EventHandler m_OnRawSensorsCheck;
-  EventHandler m_OnEditTablesCheck;
+ private:
+  void _ResizeRect(const CRect& i_external, CRect& io_victim);
+
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;
   CStatic m_save_note_text;
+
+  EventHandler m_OnRawSensorsCheck;
+  EventHandler m_OnEditTablesCheck;
 
   CRect m_original_mi_rect;
   CRect m_original_rs_rect;

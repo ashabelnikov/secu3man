@@ -138,7 +138,7 @@ void __cdecl CButtonsPanel::OnChangeTempMap(void* i_param)
 //------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnCloseTempMap(void* i_param)
 {
-CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
  if (!_this)
  {
   ASSERT(0); //what the fuck?
@@ -149,6 +149,62 @@ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
+}
+
+void __cdecl CButtonsPanel::OnWndActivationStartMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_start_map_wnd_handle, cmd);
+}
+
+void __cdecl CButtonsPanel::OnWndActivationIdleMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_idle_map_wnd_handle, cmd);
+}
+
+void __cdecl CButtonsPanel::OnWndActivationWorkMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_work_map_wnd_handle, cmd);
+}
+
+void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -226,22 +282,23 @@ void CButtonsPanel::OnViewStartMap()
   return;
  }
 
- if ((!m_start_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
+ if ((!m_start_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_start_map_chart_state = 1;
-  m_start_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
+  m_start_map_wnd_handle = DLL::Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_START_MAP).c_str());
-  DLL::UOZ1_Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
-  DLL::UOZ1_Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
-  DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_start_map_wnd_handle, OnWndActivationStartMap,this);
+  DLL::Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
+  DLL::Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
+  DLL::Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_start_map_wnd_handle, TYPE_MAP_DA_START);
 
-  DLL::UOZ1_Chart2DShow(m_start_map_wnd_handle, true);
+  DLL::Chart2DShow(m_start_map_wnd_handle, true);
  }
  else
  {
@@ -259,22 +316,23 @@ void CButtonsPanel::OnViewIdleMap()
   return;
  }
 
- if ((!m_idle_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
+ if ((!m_idle_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_idle_map_chart_state = 1;
-  m_idle_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,SECU3IO::idle_map_rpm_slots,16,
+  m_idle_map_wnd_handle = DLL::Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,SECU3IO::idle_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str());
-  DLL::UOZ1_Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
-  DLL::UOZ1_Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
-  DLL::UOZ1_Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_idle_map_wnd_handle,OnWndActivationIdleMap,this);
+  DLL::Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
+  DLL::Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
+  DLL::Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
 
-  DLL::UOZ1_Chart2DShow(m_idle_map_wnd_handle, true);
+  DLL::Chart2DShow(m_idle_map_wnd_handle, true);
  }
  else
  {
@@ -291,20 +349,21 @@ void CButtonsPanel::OnViewWorkMap()
   return;
  }
 
- if ((!m_work_map_chart_state)&&(DLL::UOZ2_Chart3DCreate))
+ if ((!m_work_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_work_map_chart_state = 1;
-  m_work_map_wnd_handle = DLL::UOZ2_Chart3DCreate(GetWorkMap(true),GetWorkMap(false),SECU3IO::work_map_rpm_slots,16,16,-15.0,55.0,
+  m_work_map_wnd_handle = DLL::Chart3DCreate(GetWorkMap(true),GetWorkMap(false),SECU3IO::work_map_rpm_slots,16,16,-15.0,55.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
-  DLL::UOZ2_Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
-  DLL::UOZ2_Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
+  DLL::Chart3DSetOnWndActivation(m_work_map_wnd_handle, OnWndActivationWorkMap, this);
+  DLL::Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
+  DLL::Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
 
-  DLL::UOZ2_Chart3DShow(m_work_map_wnd_handle, true);
+  DLL::Chart3DShow(m_work_map_wnd_handle, true);
  }
  else
  {
@@ -321,22 +380,23 @@ void CButtonsPanel::OnViewTempMap()
   return;
  }
 
- if ((!m_temp_map_chart_state)&&(DLL::UOZ1_Chart2DCreate))
+ if ((!m_temp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_temp_map_chart_state = 1;
-  m_temp_map_wnd_handle = DLL::UOZ1_Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_rpm_slots,16,
+  m_temp_map_wnd_handle = DLL::Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORR_MAP).c_str());
-  DLL::UOZ1_Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
-  DLL::UOZ1_Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
-  DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_temp_map_wnd_handle,OnWndActivationTempMap,this);
+  DLL::Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
+  DLL::Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
+  DLL::Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
 
-  DLL::UOZ1_Chart2DShow(m_temp_map_wnd_handle, true);
+  DLL::Chart2DShow(m_temp_map_wnd_handle, true);
  }
  else
  {
@@ -347,7 +407,7 @@ void CButtonsPanel::OnViewTempMap()
 void CButtonsPanel::OnUpdateViewStartMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
- BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && allowed;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_start_map_chart_state) ? TRUE : FALSE );
 }
@@ -355,7 +415,7 @@ void CButtonsPanel::OnUpdateViewStartMap(CCmdUI* pCmdUI)
 void CButtonsPanel::OnUpdateViewIdleMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
- BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && allowed;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_idle_map_chart_state) ? TRUE : FALSE );
 }
@@ -363,7 +423,7 @@ void CButtonsPanel::OnUpdateViewIdleMap(CCmdUI* pCmdUI)
 void CButtonsPanel::OnUpdateViewWorkMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
- BOOL enable = (DLL::UOZ2_Chart3DCreate!=NULL) && allowed;
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_work_map_chart_state) ? TRUE : FALSE );
 }
@@ -371,7 +431,7 @@ void CButtonsPanel::OnUpdateViewWorkMap(CCmdUI* pCmdUI)
 void CButtonsPanel::OnUpdateViewTempMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
- BOOL enable = (DLL::UOZ1_Chart2DCreate!=NULL) && allowed;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );
 }
@@ -392,13 +452,13 @@ void CButtonsPanel::OnDestroy()
 void CButtonsPanel::UpdateOpenedCharts(void)
 {
  if (m_start_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_start_map_wnd_handle,GetStartMap(true),GetStartMap(false));
+  DLL::Chart2DUpdate(m_start_map_wnd_handle,GetStartMap(true),GetStartMap(false));
  if (m_idle_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_idle_map_wnd_handle,GetIdleMap(true),GetIdleMap(false));
+  DLL::Chart2DUpdate(m_idle_map_wnd_handle,GetIdleMap(true),GetIdleMap(false));
  if (m_work_map_chart_state)
-  DLL::UOZ2_Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));
+  DLL::Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));
  if (m_temp_map_chart_state)
-  DLL::UOZ1_Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));
+  DLL::Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)
@@ -473,3 +533,6 @@ void CButtonsPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=
 {
  SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
 }
+
+void CButtonsPanel::setOnWndActivation(EventWithHWNDLong OnFunction)
+{ m_OnWndActivation = OnFunction; }

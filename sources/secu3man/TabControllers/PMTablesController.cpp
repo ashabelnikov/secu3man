@@ -157,6 +157,7 @@ CPMTablesController::~CPMTablesController()
  m_td_changes_timer.KillTimer();
 }
 
+//----------------------------------------------------------------
 void CPMTablesController::OnActivate(void)
 {
  _ClearAcquisitionFlags();
@@ -181,15 +182,6 @@ void CPMTablesController::Enable(bool state)
 void CPMTablesController::StartDataCollection(void)
 {
  Super::StartDataCollection();
-}
-
-void CPMTablesController::OnDataCollected(void)
-{
- _ResetModification(mp_view->GetCurSel()); //original=current
- _MoveMapsToCharts(mp_view->GetCurSel(), false);
- _MoveMapsToCharts(mp_view->GetCurSel(), true);
- mp_view->UpdateOpenedCharts();
- mp_view->SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
 }
 
 bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_packet_data)
@@ -244,6 +236,7 @@ bool CPMTablesController::IsValidCache(void)
  return m_valid_cache;
 }
 
+//----------------------------------------------------------------
 namespace {
 void UpdateMap(float* map, float* flag, const EditTabPar* data)
 {
@@ -325,7 +318,6 @@ bool CPMTablesController::_IsModificationMade(void) const
  return false; //no modifications
 }
 
-//----------------------------------------------------------------
 void CPMTablesController::_SynchronizeMap(int fuel_type, int i_mapType)
 {
  float* pMap = mp_view->GetMap(i_mapType, false); //<--current
@@ -371,14 +363,15 @@ void CPMTablesController::_SynchronizeMap(int fuel_type, int i_mapType)
  }
 }
 
+//----------------------------------------------------------------
 void CPMTablesController::OnMapChanged(int fuel_type, int i_mapType)
 {
-  mp_view->SetModificationFlag(!_CompareViewMap(i_mapType, _GetMapSize(i_mapType)));
+ mp_view->SetModificationFlag(!_CompareViewMap(i_mapType, _GetMapSize(i_mapType)));
 
-  //send to SECU-3 changed fragment(s)
-  _SynchronizeMap(fuel_type, i_mapType);
+ //send to SECU-3 changed fragment(s)
+ _SynchronizeMap(fuel_type, i_mapType);
 
-  mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
 }
 
 void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
@@ -409,6 +402,16 @@ void CPMTablesController::OnSaveButton(void)
 void CPMTablesController::OnChangeTablesSetName(int fuel_type)
 {
  //not used
+}
+
+//----------------------------------------------------------------
+void CPMTablesController::OnDataCollected(void)
+{
+ _ResetModification(mp_view->GetCurSel()); //original=current
+ _MoveMapsToCharts(mp_view->GetCurSel(), false);
+ _MoveMapsToCharts(mp_view->GetCurSel(), true);
+ mp_view->UpdateOpenedCharts();
+ mp_view->SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
 }
 
 void CPMTablesController::OnTableDeskChangesTimer(void)

@@ -38,6 +38,9 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
   CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CPMMonitorController();
 
+  //настройки программы изменились
+  void OnSettingsChanged(void);
+
   //начало работы контроллера
   virtual void OnActivate(void);
 
@@ -53,10 +56,6 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data);
 
   virtual void ShowRawSensors(bool show);
-
- public:
-  //настройки программы изменились
-  void OnSettingsChanged(void);
 
  private:
   CRSDeskDlg* mp_rsdview;

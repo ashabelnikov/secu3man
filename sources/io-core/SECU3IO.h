@@ -300,6 +300,17 @@ namespace SECU3IO
  };
 #undef _SD
 
+const int COPT_ATMEGA16 = 0;
+const int COPT_ATMEGA32 = 1;
+const int COPT_ATMEGA64 = 2;
+const int COPT_ATMEGA128 = 3;
+const int COPT_VPSEM = 4;
+const int COPT_WHEEL_36_1 = 5;
+const int COPT_INVERSE_IGN_OUTPUTS = 6;
+const int COPT_COIL_REGULATION = 7;
+const int COPT_COOLINGFAN_PWM = 8;
+const int COPT_REALTIME_TABLES = 9;
+
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;
 };

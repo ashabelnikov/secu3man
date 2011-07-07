@@ -57,6 +57,14 @@ CPMMonitorController::~CPMMonitorController()
  //empty
 }
 
+void CPMMonitorController::OnSettingsChanged(void)
+{
+ mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ //обновляем диапазоны приборов
+ mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
+ mp_view->SetPressureMax(mp_settings->GetPressureMax());
+}
+
 void CPMMonitorController::OnActivate(void)
 {
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
@@ -73,23 +81,6 @@ void CPMMonitorController::Enable(bool state)
 {
  mp_view->Enable(state);
  mp_rsdview->Enable(state);
-}
-
-void CPMMonitorController::ShowRawSensors(bool show)
-{
- if (show)
- {//показывать сырые значения (прячем панель приборов и показываем панель сырых значений)
-  mp_view->ShowWindow(SW_HIDE);
-  mp_rsdview->ShowWindow(SW_SHOW);
-  StartDataCollection(); //reset finite state machine
- }
- else
- {//показывать панель приборов (прячем панель сырых значений и показываем панел приборов)
-  mp_view->ShowWindow(SW_SHOW);
-  mp_rsdview->ShowWindow(SW_HIDE);
-  StartDataCollection(); //reset finite state machine
- }
- m_show_raw_sensors = show;
 }
 
 void CPMMonitorController::StartDataCollection(void)
@@ -155,10 +146,19 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
  return false; //КА продолжает работу...
 }
 
-void CPMMonitorController::OnSettingsChanged(void)
+void CPMMonitorController::ShowRawSensors(bool show)
 {
- mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
- //обновляем диапазоны приборов
- mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
- mp_view->SetPressureMax(mp_settings->GetPressureMax());
+ if (show)
+ {//показывать сырые значения (прячем панель приборов и показываем панель "сырых" значений)
+  mp_view->ShowWindow(SW_HIDE);
+  mp_rsdview->ShowWindow(SW_SHOW);
+  StartDataCollection(); //reset finite state machine
+ }
+ else
+ {//показывать панель приборов (прячем панель "сырых" значений и показываем панель приборов)
+  mp_view->ShowWindow(SW_SHOW);
+  mp_rsdview->ShowWindow(SW_HIDE);
+  StartDataCollection(); //reset finite state machine
+ }
+ m_show_raw_sensors = show;
 }

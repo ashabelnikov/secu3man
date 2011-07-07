@@ -32,6 +32,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
+  typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
 
  public:
   CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL);   // standard constructor
@@ -57,6 +58,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void setOnCloseMapWnd(EventWithHWND OnFunction);
   void setOnOpenMapWnd(EventWithHWND OnFunction); 
   void setIsAllowed(EventResult IsFunction);
+  void setOnWndActivation(EventWithHWNDLong OnFunction); 
 
 // Implementation
  protected:
@@ -81,6 +83,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
   EventResult   m_IsAllowed;
+  EventWithHWNDLong m_OnWndActivation;
 
  private:
   CButton   m_view_work_map_btn;
@@ -97,6 +100,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnChangeTempMap(void* i_param);
   static void __cdecl OnCloseTempMap(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
+  static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationTempMap(void* i_param, long cmd);
 
   ///////////////////////////////////////////////////////
   int m_work_map_chart_state;

@@ -44,14 +44,11 @@ class CPMInitDataCollector : public CPMStateMachineState
   const std::vector<_TSTRING>& GetFNNames(void) const;
   const DWORD& GetFWOptions(void) const;
 
- public:
-  //Events from view
-
  private:
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
   std::vector<_TSTRING> fn_names;
   std::vector<int> fn_indexes;
-  DWORD fw_options;
+  DWORD fw_options; //биты опций прошивки
 };

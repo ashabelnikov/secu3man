@@ -26,23 +26,25 @@
 namespace DLL
 {
  //глобальная таблица функций из DLL
- UOZ1_Chart2DCreate_Addr        UOZ1_Chart2DCreate = NULL;
- UOZ1_Chart2DUpdate_Addr        UOZ1_Chart2DUpdate = NULL;
- UOZ1_Chart2DSetOnChange_Addr   UOZ1_Chart2DSetOnChange = NULL;
- UOZ1_Chart2DSetOnClose_Addr    UOZ1_Chart2DSetOnClose = NULL;
- UOZ1_Chart2DSetMarksVisible_Addr UOZ1_Chart2DSetMarksVisible = NULL;
- UOZ1_Chart2DSetAxisValuesFormat_Addr UOZ1_Chart2DSetAxisValuesFormat = NULL;
- UOZ1_Chart2DSetOnGetAxisLabel_Addr UOZ1_Chart2DSetOnGetAxisLabel = NULL;
- UOZ1_Chart2DInverseAxis_Addr   UOZ1_Chart2DInverseAxis = NULL;
- UOZ1_Chart2DShow_Addr          UOZ1_Chart2DShow = NULL;
- UOZ1_Chart2DSetLanguage_Addr   UOZ1_Chart2DSetLanguage = NULL;
+ Chart2DCreate_Addr              Chart2DCreate = NULL;
+ Chart2DUpdate_Addr              Chart2DUpdate = NULL;
+ Chart2DSetOnChange_Addr         Chart2DSetOnChange = NULL;
+ Chart2DSetOnClose_Addr          Chart2DSetOnClose = NULL;
+ Chart2DSetMarksVisible_Addr     Chart2DSetMarksVisible = NULL;
+ Chart2DSetAxisValuesFormat_Addr Chart2DSetAxisValuesFormat = NULL;
+ Chart2DSetOnGetAxisLabel_Addr   Chart2DSetOnGetAxisLabel = NULL;
+ Chart2DInverseAxis_Addr         Chart2DInverseAxis = NULL;
+ Chart2DShow_Addr                Chart2DShow = NULL;
+ Chart2DSetLanguage_Addr         Chart2DSetLanguage = NULL;
+ Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation = NULL;
 
- UOZ2_Chart3DCreate_Addr        UOZ2_Chart3DCreate = NULL;
- UOZ2_Chart3DUpdate_Addr        UOZ2_Chart3DUpdate = NULL;
- UOZ2_Chart3DSetOnChange_Addr   UOZ2_Chart3DSetOnChange = NULL;
- UOZ2_Chart3DSetOnClose_Addr    UOZ2_Chart3DSetOnClose = NULL;
- UOZ2_Chart3DShow_Addr          UOZ2_Chart3DShow = NULL;
- UOZ2_Chart3DSetLanguage_Addr   UOZ2_Chart3DSetLanguage = NULL;
+ Chart3DCreate_Addr              Chart3DCreate = NULL;
+ Chart3DUpdate_Addr              Chart3DUpdate = NULL;
+ Chart3DSetOnChange_Addr         Chart3DSetOnChange = NULL;
+ Chart3DSetOnClose_Addr          Chart3DSetOnClose = NULL;
+ Chart3DShow_Addr                Chart3DShow = NULL;
+ Chart3DSetLanguage_Addr         Chart3DSetLanguage = NULL;
+ Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
 
  //---------------------------------------------------------
  //загружает одну функцию
@@ -75,53 +77,57 @@ namespace DLL
   hModule = LoadLibrary(_T("UOZ1.dll"));
   if (hModule==NULL)
   {
-   AfxMessageBox(_T("Can't load library UOZ1.dll"),MB_OK|MB_ICONSTOP);
-   UOZ1_Chart2DCreate = NULL;
-   UOZ1_Chart2DUpdate = NULL;
-   UOZ1_Chart2DSetOnChange = NULL;
-   UOZ1_Chart2DSetOnClose = NULL;
-   UOZ1_Chart2DSetMarksVisible = NULL;
-   UOZ1_Chart2DSetAxisValuesFormat = NULL;
-   UOZ1_Chart2DSetOnGetAxisLabel = NULL;
-   UOZ1_Chart2DInverseAxis = NULL;
-   UOZ1_Chart2DShow = NULL;
-   UOZ1_Chart2DSetLanguage = NULL;
+   AfxMessageBox(_T("Can't load library Chart2D.dll"), MB_OK|MB_ICONSTOP);
+   Chart2DCreate = NULL;
+   Chart2DUpdate = NULL;
+   Chart2DSetOnChange = NULL;
+   Chart2DSetOnClose = NULL;
+   Chart2DSetMarksVisible = NULL;
+   Chart2DSetAxisValuesFormat = NULL;
+   Chart2DSetOnGetAxisLabel = NULL;
+   Chart2DInverseAxis = NULL;
+   Chart2DShow = NULL;
+   Chart2DSetLanguage = NULL;
+   Chart2DSetOnWndActivation = NULL;
    status = false;
   }
   else
   {
-   LoadFunction(hModule, UOZ1_Chart2DCreate, "Chart2DCreate", status);
-   LoadFunction(hModule, UOZ1_Chart2DUpdate, "Chart2DUpdate", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetOnChange, "Chart2DSetOnChange", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetOnClose, "Chart2DSetOnClose", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetMarksVisible, "Chart2DSetMarksVisible", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetAxisValuesFormat, "Chart2DSetAxisValuesFormat", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetOnGetAxisLabel, "Chart2DSetOnGetAxisLabel", status);
-   LoadFunction(hModule, UOZ1_Chart2DInverseAxis, "Chart2DInverseAxis", status);
-   LoadFunction(hModule, UOZ1_Chart2DShow, "Chart2DShow", status);
-   LoadFunction(hModule, UOZ1_Chart2DSetLanguage, "Chart2DSetLanguage", status);
+   LoadFunction(hModule, Chart2DCreate, "Chart2DCreate", status);
+   LoadFunction(hModule, Chart2DUpdate, "Chart2DUpdate", status);
+   LoadFunction(hModule, Chart2DSetOnChange, "Chart2DSetOnChange", status);
+   LoadFunction(hModule, Chart2DSetOnClose, "Chart2DSetOnClose", status);
+   LoadFunction(hModule, Chart2DSetMarksVisible, "Chart2DSetMarksVisible", status);
+   LoadFunction(hModule, Chart2DSetAxisValuesFormat, "Chart2DSetAxisValuesFormat", status);
+   LoadFunction(hModule, Chart2DSetOnGetAxisLabel, "Chart2DSetOnGetAxisLabel", status);
+   LoadFunction(hModule, Chart2DInverseAxis, "Chart2DInverseAxis", status);
+   LoadFunction(hModule, Chart2DShow, "Chart2DShow", status);
+   LoadFunction(hModule, Chart2DSetLanguage, "Chart2DSetLanguage", status);
+   LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
   }
 
   hModule = LoadLibrary(_T("UOZ2.dll"));
   if (hModule==NULL)
   {
-   AfxMessageBox(_T("Can't load library UOZ2.dll"),MB_OK|MB_ICONSTOP);
-   UOZ2_Chart3DCreate = NULL;
-   UOZ2_Chart3DUpdate = NULL;
-   UOZ2_Chart3DSetOnChange = NULL;
-   UOZ2_Chart3DSetOnClose = NULL;
-   UOZ2_Chart3DShow = NULL;
-   UOZ2_Chart3DSetLanguage = NULL;
-  status = false;
+   AfxMessageBox(_T("Can't load library Chart3D.dll"), MB_OK|MB_ICONSTOP);
+   Chart3DCreate = NULL;
+   Chart3DUpdate = NULL;
+   Chart3DSetOnChange = NULL;
+   Chart3DSetOnClose = NULL;
+   Chart3DShow = NULL;
+   Chart3DSetLanguage = NULL;
+   Chart3DSetOnWndActivation = NULL;
+   status = false;
   }
   else
   {
-   LoadFunction(hModule, UOZ2_Chart3DCreate, "Chart3DCreate", status);
-   LoadFunction(hModule, UOZ2_Chart3DUpdate, "Chart3DUpdate", status);
-   LoadFunction(hModule, UOZ2_Chart3DSetOnChange, "Chart3DSetOnChange", status);
-   LoadFunction(hModule, UOZ2_Chart3DSetOnClose, "Chart3DSetOnClose", status);
-   LoadFunction(hModule, UOZ2_Chart3DShow, "Chart3DShow", status);
-   LoadFunction(hModule, UOZ2_Chart3DSetLanguage, "Chart3DSetLanguage", status);
+   LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
+   LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
+   LoadFunction(hModule, Chart3DSetOnChange, "Chart3DSetOnChange", status);
+   LoadFunction(hModule, Chart3DSetOnClose, "Chart3DSetOnClose", status);
+   LoadFunction(hModule, Chart3DShow, "Chart3DShow", status);
+   LoadFunction(hModule, Chart3DSetLanguage, "Chart3DSetLanguage", status);
+   LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);
   }
 
   return status;
@@ -129,10 +135,10 @@ namespace DLL
 
  void SetLanguage(int language)
  {
-  if (UOZ1_Chart2DSetLanguage)
-   DLL::UOZ1_Chart2DSetLanguage(language);
-  if (UOZ2_Chart3DSetLanguage)
-   DLL::UOZ2_Chart3DSetLanguage(language);
+  if (Chart2DSetLanguage)
+   DLL::Chart2DSetLanguage(language);
+  if (Chart3DSetLanguage)
+   DLL::Chart3DSetLanguage(language);
  }
 
 };//namespace

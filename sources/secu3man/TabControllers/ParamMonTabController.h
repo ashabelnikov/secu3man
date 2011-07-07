@@ -29,54 +29,58 @@
 #include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
-class CParamMonTabDlg; //view
-class CPMInitDataCollector;
-class CPMMonitorController;
-class CPMParamsController;
-class CPMStateMachineState;
-class CPMTablesController;
+class CParamMonTabDlg;      //view
+class CPMInitDataCollector; //sub-controller
+class CPMMonitorController; //sub-controller
+class CPMParamsController;  //sub-controller
+class CPMStateMachineState; //sub-controller
+class CPMTablesController;  //sub-controller
 class CStatusBarManager;
 class ISettingsData;
 
 class CParamMonTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CParamMonTabController(CParamMonTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
+  CParamMonTabController(CParamMonTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CParamMonTabController();
 
  private:
+  //called when settings are being changed
+  void OnSettingsChanged(void);
+  
   //появление/закрытие вкладки параметров и монитора
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
-
-  virtual bool OnClose(void);
-  virtual bool OnAskFullScreen(void);
-  virtual void OnFullScreen(bool i_what, const CRect& i_rect);
-
+    
   //from IAPPEventHandler:
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
-  void OnSettingsChanged(void);
-
-  //from "show raw sensors" check box
-  void OnRawSensorsCheckBox(void);
-  //from "edit tables" check box
-  void OnEditTablesCheckBox(void);
-
+  //form main form
+  virtual bool OnClose(void);
+  virtual bool OnAskFullScreen(void);
+  virtual void OnFullScreen(bool i_what, const CRect& i_rect);
+  
+  //from view
+  void OnRawSensorsCheckBox(void);  //from "show raw sensors" check box  
+  void OnEditTablesCheckBox(void);  //from "edit tables" check box
+  
+  //from CPMParamsController sub-controller
   void OnPDRequestsDataCollection();
 
  private:
-  CParamMonTabDlg*  m_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
+  CParamMonTabDlg*  mp_view;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
-  std::auto_ptr<CPMTablesController> mp_tabcntr;
-  std::auto_ptr<CPMParamsController> mp_parcntr;
-  std::auto_ptr<CPMMonitorController> mp_moncntr;
-  std::auto_ptr<CPMInitDataCollector> mp_idccntr;
 
-  void StartScenario(const std::vector<CPMStateMachineState*>& scenario);
+  //sub-controllers
+  std::auto_ptr<CPMInitDataCollector> mp_idccntr;
+  std::auto_ptr<CPMMonitorController> mp_moncntr;
+  std::auto_ptr<CPMParamsController> mp_parcntr;
+  std::auto_ptr<CPMTablesController> mp_tabcntr;
+
+  void _StartScenario(const std::vector<CPMStateMachineState*>& scenario);
   //различные машины состояний (для разных сценариев)
   std::vector<CPMStateMachineState*> m_scenario1;
   std::vector<CPMStateMachineState*> m_scenario2;
