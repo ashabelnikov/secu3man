@@ -373,7 +373,7 @@ void __fastcall TForm3D::WndProc(Messages::TMessage &Message)
 {
  TForm::WndProc(Message);
 
- if (m_pOnWndActivation)
+ if (Message.Msg == WM_SYSCOMMAND && m_pOnWndActivation)
   m_pOnWndActivation(m_param_on_wnd_activation, Message.WParam);
 }
 
