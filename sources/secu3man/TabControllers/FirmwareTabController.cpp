@@ -958,6 +958,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
  }
 
  SetViewFirmwareValues();
+ m_view->mp_TablesPanel->EnableCoilRegulation((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COIL_REGULATION)) > 0);
 }
 
 void CFirmwareTabController::OnOpenFlashFromFile(void)

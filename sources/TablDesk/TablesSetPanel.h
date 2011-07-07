@@ -49,6 +49,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   virtual void UpdateOpenedCharts(void);
 
+  void EnableCoilRegulation(bool enable);
+
  public: //установка обработчиков событий
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
@@ -83,6 +85,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseCoilRegulTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
+  bool m_coilreg_enabled;
   int m_attenuator_map_chart_state;
   int m_coilregul_map_chart_state;
 

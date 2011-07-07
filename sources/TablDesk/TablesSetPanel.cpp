@@ -118,6 +118,7 @@ const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
 CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 : Super(CTablesSetPanel::IDD, pParent)
+, m_coilreg_enabled(false)
 {
  m_attenuator_map_chart_state = 0;
  m_coilregul_map_chart_state = 0;
@@ -159,7 +160,7 @@ BOOL CTablesSetPanel::OnInitDialog()
 {
  Super::OnInitDialog();
 
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -176,7 +177,7 @@ void CTablesSetPanel::OnUpdateViewCoilRegulMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_coilreg_enabled);
  pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -194,6 +195,13 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
  if (m_coilregul_map_chart_state)
   DLL::Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));
+}
+
+void CTablesSetPanel::EnableCoilRegulation(bool enable)
+{
+ m_coilreg_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //изменилось выделение в спимке семейств характеристик

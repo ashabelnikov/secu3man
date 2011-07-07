@@ -383,6 +383,11 @@ const std::vector<_TSTRING>& CParamDeskDlg::GetFunctionsNames(void)
  return m_pFunSetPageDlg->AccessFunNames();
 }
 
+void CParamDeskDlg::EnableIgnitionCogs(bool enable)
+{
+ m_pCKPSPageDlg->EnableIgnitionCogs(enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

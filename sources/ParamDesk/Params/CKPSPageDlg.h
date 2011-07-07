@@ -45,6 +45,8 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::CKPSPar* o_values);
   void SetValues(const SECU3IO::CKPSPar* i_values);
 
+  void EnableIgnitionCogs(bool enable);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
@@ -54,6 +56,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnClickedPdPosFrontRadio();
   afx_msg void OnClickedPdNegFrontRadio();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateIgnitionCogs(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);
@@ -71,7 +74,8 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   std::vector<std::pair<int, _TSTRING> > m_engine_cyls;
 
   SECU3IO::CKPSPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
+  bool m_igncogs_enabled;
 
   CStatic m_ckps_front_groupbox;
   CButton m_ckps_posfront_radio;

@@ -79,7 +79,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void SetViewChartsValues(void);
 
   void PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name);
-  void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff);
+  void StartWritingOfFLASHFromBuff(BYTE* io_buff);
 
   void _OnReadFlashToFile(void);
   bool _CheckCompatibilityAndAskUser(BYTE* i_buff);

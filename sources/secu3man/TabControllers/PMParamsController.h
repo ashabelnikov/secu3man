@@ -55,6 +55,9 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 
   void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
 
+  //применение опций прошивки
+  void ApplyFWOptions(DWORD opt);
+
  private:
   //Events from view
   void OnParamDeskTabActivate(void);

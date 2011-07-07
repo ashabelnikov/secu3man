@@ -38,27 +38,28 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnSelchangePdCogsBTDCCombo)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnSelchangePdEngineCylCombo)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangePdIgnitionCogsEdit)
- ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnClickedPdPosFrontRadio)
- ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnClickedPdNegFrontRadio)
+ ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
+ ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_LABEL,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_LABEL, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_SPIN, OnUpdateIgnitionCogs)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnUpdateIgnitionCogs)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_UNIT, OnUpdateIgnitionCogs)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
 , m_enabled(FALSE)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
+, m_igncogs_enabled(false)
 {
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
@@ -87,7 +88,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_UNIT, m_ignition_cogs_label);
 
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
- DDX_Radio_UCHAR(pDX,IDC_PD_CKPS_NEGFRONT_RADIOBOX,m_params.ckps_edge_type);
+ DDX_Radio_UCHAR(pDX,IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -97,6 +98,11 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_igncogs_enabled);
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -188,6 +194,13 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
  m_ckps_negfront_radio.SetCheck(~m_params.ckps_edge_type);
 
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CCKPSPageDlg::EnableIgnitionCogs(bool enable)
+{
+ m_igncogs_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)

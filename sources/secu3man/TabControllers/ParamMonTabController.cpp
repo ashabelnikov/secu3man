@@ -164,7 +164,8 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   if ((*m_current_state) == mp_idccntr.get())
   {
    mp_view->EnableEditTablesCheck((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0);
-   mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames());  
+   mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames()); 
+   mp_parcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
   }
   //Завершилось чтение параметров
   else if ((*m_current_state) == mp_parcntr.get())

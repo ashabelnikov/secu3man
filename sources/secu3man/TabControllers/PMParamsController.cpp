@@ -123,6 +123,11 @@ void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names
  mp_view->SetFunctionsNames(i_names);
 }
 
+void CPMParamsController::ApplyFWOptions(DWORD opt)
+{
+ mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_COIL_REGULATION)));
+}
+
 //from view. Очередная вкладка активировалась
 void CPMParamsController::OnParamDeskTabActivate(void)
 {
