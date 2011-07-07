@@ -191,7 +191,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
 void CParamMonTabController::OnConnection(const bool i_online)
 {
  int state;
- ASSERT(m_sbar);
+ ASSERT(mp_sbar);
 
  if (i_online) //перешли в онлайн
  {

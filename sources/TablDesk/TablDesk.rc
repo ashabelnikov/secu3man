@@ -110,7 +110,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_MAPS_RPM_UNIT       "Обороты (мин-1)\n"
+    IDS_MAPS_RPM_UNIT       "Обороты (мин-1)"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_START_MAP           "Пусковая карта УОЗ"
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
@@ -309,7 +309,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_MAPS_RPM_UNIT       "Speed (min-1)\n"
+    IDS_MAPS_RPM_UNIT       "Speed (min-1)"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degg.)"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"

@@ -74,7 +74,7 @@ namespace DLL
   HMODULE hModule;
   bool status = true;
 
-  hModule = LoadLibrary(_T("UOZ1.dll"));
+  hModule = LoadLibrary(_T("Chart2D.dll"));
   if (hModule==NULL)
   {
    AfxMessageBox(_T("Can't load library Chart2D.dll"), MB_OK|MB_ICONSTOP);
@@ -106,7 +106,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
   }
 
-  hModule = LoadLibrary(_T("UOZ2.dll"));
+  hModule = LoadLibrary(_T("Chart3D.dll"));
   if (hModule==NULL)
   {
    AfxMessageBox(_T("Can't load library Chart3D.dll"), MB_OK|MB_ICONSTOP);
