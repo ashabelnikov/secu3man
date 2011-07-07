@@ -37,6 +37,7 @@ namespace DLL
  Chart2DShow_Addr                Chart2DShow = NULL;
  Chart2DSetLanguage_Addr         Chart2DSetLanguage = NULL;
  Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation = NULL;
+ Chart2DEnable_Addr              Chart2DEnable = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -45,6 +46,7 @@ namespace DLL
  Chart3DShow_Addr                Chart3DShow = NULL;
  Chart3DSetLanguage_Addr         Chart3DSetLanguage = NULL;
  Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
+ Chart3DEnable_Addr              Chart3DEnable = NULL;
 
  //---------------------------------------------------------
  //загружает одну функцию
@@ -89,6 +91,7 @@ namespace DLL
    Chart2DShow = NULL;
    Chart2DSetLanguage = NULL;
    Chart2DSetOnWndActivation = NULL;
+   Chart2DEnable = NULL;
    status = false;
   }
   else
@@ -104,6 +107,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DShow, "Chart2DShow", status);
    LoadFunction(hModule, Chart2DSetLanguage, "Chart2DSetLanguage", status);
    LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
+   LoadFunction(hModule, Chart2DEnable, "Chart2DEnable", status);
   }
 
   hModule = LoadLibrary(_T("Chart3D.dll"));
@@ -117,6 +121,7 @@ namespace DLL
    Chart3DShow = NULL;
    Chart3DSetLanguage = NULL;
    Chart3DSetOnWndActivation = NULL;
+   Chart3DEnable = NULL;
    status = false;
   }
   else
@@ -128,6 +133,7 @@ namespace DLL
    LoadFunction(hModule, Chart3DShow, "Chart3DShow", status);
    LoadFunction(hModule, Chart3DSetLanguage, "Chart3DSetLanguage", status);
    LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);
+   LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
   }
 
   return status;

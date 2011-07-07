@@ -44,6 +44,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart2DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool enable);
 }
 
 std::map<HWND, TForm*> g_form_instances;
@@ -279,3 +280,13 @@ void __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActiva
 }
 
 //---------------------------------------------------------------------------
+void __cdecl Chart2DEnable(HWND hWnd, bool enable)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->Enable(enable);
+}
+
+//---------------------------------------------------------------------------
+

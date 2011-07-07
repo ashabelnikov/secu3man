@@ -202,6 +202,8 @@ void CTablesSetPanel::EnableCoilRegulation(bool enable)
  m_coilreg_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+ if (m_coilregul_map_chart_state && ::IsWindow(m_coilregul_map_wnd_handle))
+  DLL::Chart2DEnable(m_coilregul_map_wnd_handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик

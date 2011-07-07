@@ -44,6 +44,7 @@ namespace DLL
  typedef void (__cdecl *Chart2DShow_Addr) (HWND hWnd, int i_show);
  typedef void (__cdecl *Chart2DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart2DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
+ typedef void (__cdecl *Chart2DEnable_Addr)(HWND hWnd, bool enable);
 
  typedef HWND (__cdecl *Chart3DCreate_Addr) (float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
  typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, float *original_function, float *modified_function);
@@ -52,6 +53,7 @@ namespace DLL
  typedef void (__cdecl *Chart3DShow_Addr) (HWND hWnd, int i_show);
  typedef void (__cdecl *Chart3DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart3DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
+ typedef void (__cdecl *Chart3DEnable_Addr)(HWND hWnd, bool enable);
 
  ///////////////////////////////////////////////////////////////////
  extern Chart2DCreate_Addr              Chart2DCreate;
@@ -65,6 +67,7 @@ namespace DLL
  extern Chart2DShow_Addr                Chart2DShow;
  extern Chart2DSetLanguage_Addr         Chart2DSetLanguage;
  extern Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation;
+ extern Chart2DEnable_Addr              Chart2DEnable;
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;
@@ -73,6 +76,7 @@ namespace DLL
  extern Chart3DShow_Addr                Chart3DShow;
  extern Chart3DSetLanguage_Addr         Chart3DSetLanguage;
  extern Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation;
+ extern Chart3DEnable_Addr              Chart3DEnable;
 
  //Set language
  DLLLF_API void SetLanguage(int language);

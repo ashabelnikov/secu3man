@@ -40,6 +40,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart3DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
 }
 
 std::map<HWND,TForm*> g_form_instances;
@@ -201,3 +202,13 @@ void __cdecl Chart3DSetLanguage(int i_language)
 }
 
 //---------------------------------------------------------------------------
+void __cdecl Chart3DEnable(HWND hWnd, bool enable)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->Enable(enable);
+}
+
+//---------------------------------------------------------------------------
+

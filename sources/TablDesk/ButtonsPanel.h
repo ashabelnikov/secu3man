@@ -76,6 +76,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
+  void _EnableCharts(bool enable);
+
   //may be overloaded to change behaviour
   virtual bool IsAllowed(void);
 
@@ -86,10 +88,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   EventWithHWNDLong m_OnWndActivation;
 
  private:
-  CButton   m_view_work_map_btn;
-  CButton   m_view_temp_map_btn;
-  CButton   m_view_start_map_btn;
-  CButton   m_view_idle_map_btn;
+  CButton m_view_work_map_btn;
+  CButton m_view_temp_map_btn;
+  CButton m_view_start_map_btn;
+  CButton m_view_idle_map_btn;
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);
@@ -105,6 +107,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationTempMap(void* i_param, long cmd);
 
+  int m_charts_enabled;
   ///////////////////////////////////////////////////////
   int m_work_map_chart_state;
   int m_temp_map_chart_state;

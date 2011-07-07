@@ -43,8 +43,20 @@ del hiscctrl\*.plg
 del tabldesk\*.ncb
 del tabldesk\*.plg
 
-del Chart2D\*.obj /Q
-del Chart3D\*.obj /Q
+del Chart2D\*.obj  /Q
+del Chart2D\*.~h   /Q
+del Chart2D\*.~cpp /Q
+del Chart2D\*.~def /Q
+del Chart2D\*.~bpr /Q
+del Chart2D\*.~bpf /Q
+del Chart2D\*.res  /Q
+del Chart3D\*.obj  /Q
+del Chart3D\*.~h   /Q
+del Chart3D\*.~cpp /Q
+del Chart3D\*.~def /Q
+del Chart3D\*.~bpr /Q
+del Chart3D\*.~bpf /Q
+del Chart3D\*.res  /Q
 
 cd..
 

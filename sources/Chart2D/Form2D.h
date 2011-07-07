@@ -72,6 +72,8 @@ class TForm2D : public TForm
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
 
+  void Enable(bool enable);
+
  public: //properties
   int   count_of_function_points;
   float aai_min;

@@ -7,3 +7,5 @@ EXPORTS
   Chart3DShow               = _Chart3DShow
   Chart3DSetLanguage        = _Chart3DSetLanguage
   Chart3DSetOnWndActivation = _Chart3DSetOnWndActivation
+  Chart3DEnable             = _Chart3DEnable
+

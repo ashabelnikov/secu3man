@@ -34,6 +34,8 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_ID 0
 
+#pragma warning( disable : 4800 ) // : 'int' : forcing value to bool 'true' or 'false' (performance warning)
+
 void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -224,6 +226,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_idle_map_wnd_handle(NULL)
 , m_work_map_wnd_handle(NULL)
 , m_temp_map_wnd_handle(NULL)
+, m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
@@ -440,6 +443,7 @@ void CButtonsPanel::OnTimer(UINT nIDEvent)
 {
  //I know it is dirty hack, but... :-)
  UpdateDialogControls(this,TRUE);
+ _EnableCharts(IsAllowed());
  Super::OnTimer(nIDEvent);
 }
 
@@ -452,13 +456,13 @@ void CButtonsPanel::OnDestroy()
 void CButtonsPanel::UpdateOpenedCharts(void)
 {
  if (m_start_map_chart_state)
-  DLL::Chart2DUpdate(m_start_map_wnd_handle,GetStartMap(true),GetStartMap(false));
+  DLL::Chart2DUpdate(m_start_map_wnd_handle, GetStartMap(true), GetStartMap(false));
  if (m_idle_map_chart_state)
-  DLL::Chart2DUpdate(m_idle_map_wnd_handle,GetIdleMap(true),GetIdleMap(false));
+  DLL::Chart2DUpdate(m_idle_map_wnd_handle, GetIdleMap(true), GetIdleMap(false));
  if (m_work_map_chart_state)
-  DLL::Chart3DUpdate(m_work_map_wnd_handle,GetWorkMap(true),GetWorkMap(false));
+  DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state)
-  DLL::Chart2DUpdate(m_temp_map_wnd_handle,GetTempMap(true),GetTempMap(false));
+  DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)
@@ -508,6 +512,26 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
  default:
   return NULL;
  }
+}
+
+void CButtonsPanel::_EnableCharts(bool enable)
+{
+ if (m_charts_enabled != (int)enable)
+ {
+  if (m_start_map_chart_state && ::IsWindow(m_start_map_wnd_handle))
+   DLL::Chart2DEnable(m_start_map_wnd_handle, enable && IsAllowed());
+
+  if (m_idle_map_chart_state && ::IsWindow(m_idle_map_wnd_handle))
+   DLL::Chart2DEnable(m_idle_map_wnd_handle, enable && IsAllowed());
+
+  if (m_work_map_chart_state && ::IsWindow(m_work_map_wnd_handle))
+   DLL::Chart3DEnable(m_work_map_wnd_handle, enable && IsAllowed());
+
+  if (m_temp_map_chart_state && ::IsWindow(m_temp_map_wnd_handle))
+   DLL::Chart2DEnable(m_temp_map_wnd_handle, enable && IsAllowed());
+ }
+
+ m_charts_enabled = enable;
 }
 
 bool CButtonsPanel::IsAllowed(void)

@@ -109,6 +109,18 @@ void TForm2D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_par
 }
 
 //---------------------------------------------------------------------------
+void TForm2D::Enable(bool enable)
+{
+ Series1->Active = enable;
+ Series2->Active = enable;
+ Smoothing3x->Enabled = enable;
+ Smoothing5x->Enabled = enable;
+ ButtonAngleUp->Enabled = enable;
+ ButtonAngleDown->Enabled = enable;
+ Chart1->Enabled = enable;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::Chart1ClickSeries(TCustomChart *Sender,
       TChartSeries *Series, int ValueIndex, TMouseButton Button,
       TShiftState Shift, int X, int Y)

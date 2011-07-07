@@ -11,3 +11,4 @@ EXPORTS
   Chart2DShow                = _Chart2DShow
   Chart2DSetLanguage         = _Chart2DSetLanguage
   Chart2DSetOnWndActivation  = _Chart2DSetOnWndActivation
+  Chart2DEnable              = _Chart2DEnable

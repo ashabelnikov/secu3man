@@ -102,6 +102,8 @@ class TForm3D : public TForm
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
 
+  void Enable(bool enable);
+
  public: //Properties
   int count_x;
   int count_z;

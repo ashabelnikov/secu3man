@@ -110,6 +110,29 @@ void TForm3D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_par
 }
 
 //---------------------------------------------------------------------------
+void TForm3D::Enable(bool enable)
+{
+ if (false==enable)
+ {
+  for (int i = 0; i < 32; i++ )
+   Chart1->Series[i]->Active = false;
+ }
+ else
+  DataPrepare();
+
+ Chart1->Enabled = enable;
+ Label1->Enabled = enable;
+ Label2->Enabled = enable;
+ TrackBar1->Enabled = enable;
+ CheckBox1->Enabled = enable;
+ CheckBox2->Enabled = enable && CheckBox1->Checked;
+ ButtonAngleUp->Enabled = enable;
+ ButtonAngleDown->Enabled = enable;
+ if (CheckBox1->Checked)
+  Chart1->Visible = enable;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
 {
  m_air_flow_position = TrackBar1->Position;
