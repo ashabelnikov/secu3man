@@ -388,6 +388,11 @@ void CParamDeskDlg::EnableIgnitionCogs(bool enable)
  m_pCKPSPageDlg->EnableIgnitionCogs(enable);
 }
 
+void CParamDeskDlg::EnableUseVentPwm(bool enable)
+{
+ m_pTemperPageDlg->EnableUseVentPwm(enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

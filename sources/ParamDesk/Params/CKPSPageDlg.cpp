@@ -57,7 +57,7 @@ END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
 , m_igncogs_enabled(false)
 {

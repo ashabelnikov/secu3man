@@ -49,12 +49,13 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT, OnUpdateVentOff)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateUseVentPwm)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CTemperPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
+, m_use_vent_pwm_enabled(false)
 , m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 {
@@ -94,6 +95,11 @@ void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_use_vent_pwm.GetCheck()!=BST_CHECKED);
+}
+
+void CTemperPageDlg::OnUpdateUseVentPwm(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_use_vent_pwm_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -149,7 +155,7 @@ void CTemperPageDlg::Enable(bool enable)
 {
  m_enabled = (enable) ? TRUE : FALSE;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
@@ -172,4 +178,11 @@ void CTemperPageDlg::SetValues(const SECU3IO::TemperPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::TemperPar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CTemperPageDlg::EnableUseVentPwm(bool enable)
+{
+ m_use_vent_pwm_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }

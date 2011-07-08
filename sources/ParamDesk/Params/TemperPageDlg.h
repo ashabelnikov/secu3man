@@ -42,6 +42,8 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::TemperPar* o_values);
   void SetValues(const SECU3IO::TemperPar* i_values);
 
+  void EnableUseVentPwm(bool enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
@@ -52,11 +54,13 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnPdTemperUseVentPwm();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateVentOff(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseVentPwm(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::TemperPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
+  bool m_use_vent_pwm_enabled;
 
   CButton m_use_temp_sensor;
   CButton m_use_vent_pwm;

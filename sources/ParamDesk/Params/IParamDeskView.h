@@ -45,6 +45,7 @@ class IParamDeskView
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names) = 0;
   virtual const std::vector<_TSTRING>& GetFunctionsNames(void) = 0;
   virtual void EnableIgnitionCogs(bool enable) = 0;
+  virtual void EnableUseVentPwm(bool enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
 

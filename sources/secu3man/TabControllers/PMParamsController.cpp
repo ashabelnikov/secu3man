@@ -126,6 +126,7 @@ void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names
 void CPMParamsController::ApplyFWOptions(DWORD opt)
 {
  mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_COIL_REGULATION)));
+ mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
 }
 
 //from view. Очередная вкладка активировалась
