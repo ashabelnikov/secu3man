@@ -393,6 +393,11 @@ void CParamDeskDlg::EnableUseVentPwm(bool enable)
  m_pTemperPageDlg->EnableUseVentPwm(enable);
 }
 
+void CParamDeskDlg::SetCrankType(int type)
+{
+ m_pCKPSPageDlg->SetCrankType(type);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

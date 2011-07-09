@@ -60,6 +60,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
 , m_igncogs_enabled(false)
+, m_crank_type(-1)
 {
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
@@ -183,7 +184,7 @@ void CCKPSPageDlg::GetValues(SECU3IO::CKPSPar* o_values)
 void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
 {
  ASSERT(i_values);
- memcpy(&m_params,i_values, sizeof(SECU3IO::CKPSPar));
+ memcpy(&m_params, i_values, sizeof(SECU3IO::CKPSPar));
 
  //комбо боксы
  _SetCKPSTeethBTDCComboBoxSelection(m_params.ckps_cogs_btdc);
@@ -203,34 +204,43 @@ void CCKPSPageDlg::EnableIgnitionCogs(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
+void CCKPSPageDlg::SetCrankType(int type)
+{
+ m_crank_type = type;
+ if (::IsWindow(this->m_hWnd))
+  _FillCKPSTeethBTDCComboBox();
+}
+
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
 {
  m_cogs_numbers.clear();
- m_cogs_numbers.push_back(std::make_pair(1,_TSTRING(_T("1"))));
- m_cogs_numbers.push_back(std::make_pair(2,_TSTRING(_T("2"))));
- m_cogs_numbers.push_back(std::make_pair(3,_TSTRING(_T("3"))));
- m_cogs_numbers.push_back(std::make_pair(4,_TSTRING(_T("4"))));
- m_cogs_numbers.push_back(std::make_pair(5,_TSTRING(_T("5"))));
- m_cogs_numbers.push_back(std::make_pair(6,_TSTRING(_T("6"))));
- m_cogs_numbers.push_back(std::make_pair(7,_TSTRING(_T("7"))));
- m_cogs_numbers.push_back(std::make_pair(8,_TSTRING(_T("8"))));
- m_cogs_numbers.push_back(std::make_pair(9,_TSTRING(_T("9"))));
- m_cogs_numbers.push_back(std::make_pair(10,_TSTRING(_T("10"))));
- m_cogs_numbers.push_back(std::make_pair(11,_TSTRING(_T("11"))));
- m_cogs_numbers.push_back(std::make_pair(12,_TSTRING(_T("12"))));
- m_cogs_numbers.push_back(std::make_pair(13,_TSTRING(_T("13"))));
- m_cogs_numbers.push_back(std::make_pair(14,_TSTRING(_T("14"))));
- m_cogs_numbers.push_back(std::make_pair(15,_TSTRING(_T("15"))));
- m_cogs_numbers.push_back(std::make_pair(16,_TSTRING(_T("16"))));
- m_cogs_numbers.push_back(std::make_pair(17,_TSTRING(_T("17"))));
- m_cogs_numbers.push_back(std::make_pair(18,_TSTRING(_T("18"))));
- m_cogs_numbers.push_back(std::make_pair(19,_TSTRING(_T("19"))));
- m_cogs_numbers.push_back(std::make_pair(20,_TSTRING(_T("20"))));
- m_cogs_numbers.push_back(std::make_pair(21,_TSTRING(_T("21"))));
- m_cogs_numbers.push_back(std::make_pair(22,_TSTRING(_T("22"))));
- m_cogs_numbers.push_back(std::make_pair(23,_TSTRING(_T("23"))));
- m_cogs_numbers.push_back(std::make_pair(24,_TSTRING(_T("24"))));
- m_cogs_numbers.push_back(std::make_pair(25,_TSTRING(_T("25"))));
+
+ if (m_crank_type == SECU3IO::COPT_WHEEL_36_1) //36-1
+ {
+  m_cogs_numbers.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+  m_cogs_numbers.push_back(std::make_pair(7,_TSTRING(_T("7"))));
+  m_cogs_numbers.push_back(std::make_pair(8,_TSTRING(_T("8"))));
+  m_cogs_numbers.push_back(std::make_pair(9,_TSTRING(_T("9"))));
+  m_cogs_numbers.push_back(std::make_pair(10,_TSTRING(_T("10"))));
+  m_cogs_numbers.push_back(std::make_pair(11,_TSTRING(_T("11"))));
+  m_cogs_numbers.push_back(std::make_pair(12,_TSTRING(_T("12"))));
+  m_cogs_numbers.push_back(std::make_pair(13,_TSTRING(_T("13"))));
+  m_cogs_numbers.push_back(std::make_pair(14,_TSTRING(_T("14"))));
+ }
+ else //60-2
+ {
+  m_cogs_numbers.push_back(std::make_pair(15,_TSTRING(_T("15"))));
+  m_cogs_numbers.push_back(std::make_pair(16,_TSTRING(_T("16"))));
+  m_cogs_numbers.push_back(std::make_pair(17,_TSTRING(_T("17"))));
+  m_cogs_numbers.push_back(std::make_pair(18,_TSTRING(_T("18"))));
+  m_cogs_numbers.push_back(std::make_pair(19,_TSTRING(_T("19"))));
+  m_cogs_numbers.push_back(std::make_pair(20,_TSTRING(_T("20"))));
+  m_cogs_numbers.push_back(std::make_pair(21,_TSTRING(_T("21"))));
+  m_cogs_numbers.push_back(std::make_pair(22,_TSTRING(_T("22"))));
+  m_cogs_numbers.push_back(std::make_pair(23,_TSTRING(_T("23"))));
+  m_cogs_numbers.push_back(std::make_pair(24,_TSTRING(_T("24"))));
+  m_cogs_numbers.push_back(std::make_pair(25,_TSTRING(_T("25"))));
+ }
 
  m_teeth_before_tdc_combo.ResetContent();
  for(size_t i = 0; i < m_cogs_numbers.size(); i++)
@@ -272,7 +282,15 @@ void CCKPSPageDlg::_SetCKPSTeethBTDCComboBoxSelection(int i_sel)
    return;
   }
  }
- ASSERT(0);
+ //if we are not able to find corresponding number then select middle number
+ int middle = m_cogs_numbers.size() / 2;
+ int count = m_teeth_before_tdc_combo.GetCount();
+ for(int ii = 0; ii < count; ii++)
+ if (m_teeth_before_tdc_combo.GetItemData(ii) == middle)
+ {
+  m_teeth_before_tdc_combo.SetCurSel(ii);
+  return;
+ }
 }
 
 void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)

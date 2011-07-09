@@ -46,6 +46,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   void SetValues(const SECU3IO::CKPSPar* i_values);
 
   void EnableIgnitionCogs(bool enable);
+  void SetCrankType(int type);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -76,6 +77,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::CKPSPar m_params;
   bool m_enabled;
   bool m_igncogs_enabled;
+  int m_crank_type;
 
   CStatic m_ckps_front_groupbox;
   CButton m_ckps_posfront_radio;

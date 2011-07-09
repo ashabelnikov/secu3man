@@ -127,6 +127,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
 {
  mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_COIL_REGULATION)));
  mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
+ mp_view->SetCrankType(((opt & (1 << COPT_WHEEL_36_1)) > 0) ? COPT_WHEEL_36_1 : -1);
 }
 
 //from view. Очередная вкладка активировалась

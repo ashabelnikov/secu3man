@@ -957,12 +957,13 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
   m_fwdm->SetFWFileName(_TSTRING(string));
  }
 
- SetViewFirmwareValues();
-
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
  m_view->mp_TablesPanel->EnableCoilRegulation((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COIL_REGULATION)) > 0);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COIL_REGULATION)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
+ m_view->mp_ParamDeskDlg->SetCrankType(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_WHEEL_36_1)) > 0) ? SECU3IO::COPT_WHEEL_36_1 : -1);
+
+ SetViewFirmwareValues();
 }
 
 void CFirmwareTabController::OnOpenFlashFromFile(void)
