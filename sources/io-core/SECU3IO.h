@@ -176,6 +176,8 @@ namespace SECU3IO
  {
   int baud_rate;                       //скорость UART-a
   int period_ms;                       //период посылки пакетов мс.
+  unsigned char ign_cutoff;            //признак использования отсечки зажигания
+  int ign_cutoff_thrd;                 //обороты отсечки зажигания
  };
 
  struct EditTabPar
