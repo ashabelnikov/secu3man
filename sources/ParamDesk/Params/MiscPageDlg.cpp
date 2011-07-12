@@ -34,7 +34,9 @@ const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
 BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO, OnUpdateControls)
@@ -43,6 +45,12 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_PACKET_PERIOD_SPIN, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnUpdateControlsIgncutoff)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_UNIT, OnUpdateControlsIgncutoff)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_SPIN, OnUpdateControlsIgncutoff)
+ 
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
@@ -50,9 +58,12 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(FALSE)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT)
+, m_igncutoff_rpm_edit(CEditEx::MODE_INT)
 {
  m_params.baud_rate = CBR_9600;
  m_params.period_ms = 0;
+ m_params.ign_cutoff = 0;
+ m_params.ign_cutoff_thrd = 0;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -72,8 +83,15 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_MISC_PACKET_PERIOD_UNIT, m_packet_period_unit);
  DDX_Control(pDX,IDC_PD_MISC_PACKET_PERIOD_SPIN, m_packet_period_spin);
 
+ DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_CHECK, m_igncutoff_check);
+ DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_igncutoff_rpm_edit);
+ DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_RPM_UNIT, m_igncutoff_rpm_unit);
+ DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_RPM_SPIN, m_igncutoff_rpm_spin);
+
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
+ m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
+ DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -83,6 +101,11 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CMiscPageDlg::OnUpdateControlsIgncutoff(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_igncutoff_check.GetCheck() == BST_CHECKED);
 }
 
 void CMiscPageDlg::OnChangeData()
@@ -98,7 +121,12 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_packet_period_edit.SetLimitText(3);
  m_packet_period_edit.SetDecimalPlaces(3);
  m_packet_period_spin.SetBuddy(&m_packet_period_edit);
- m_packet_period_spin.SetRangeAndDelta(0,500,10);
+ m_packet_period_spin.SetRangeAndDelta(0, 500, 10);
+
+ m_igncutoff_rpm_edit.SetLimitText(5);
+ m_igncutoff_rpm_edit.SetDecimalPlaces(5);
+ m_igncutoff_rpm_spin.SetBuddy(&m_igncutoff_rpm_edit);
+ m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 12000, 10);
 
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
@@ -109,6 +137,13 @@ BOOL CMiscPageDlg::OnInitDialog()
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CMiscPageDlg::OnIgncutoffCheck()
+{
+ UpdateData();
+ OnChangeNotify();
+ UpdateDialogControls(this, TRUE);
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -131,14 +166,14 @@ void CMiscPageDlg::GetValues(SECU3IO::MiscelPar* o_values)
  ASSERT(o_values);
  UpdateData(TRUE); //копируем данные из диалога в переменные
  m_params.baud_rate = _GetBRFromComboBoxByIndex(m_uart_speed_cb_index);
- memcpy(o_values,&m_params, sizeof(SECU3IO::MiscelPar));
+ memcpy(o_values, &m_params, sizeof(SECU3IO::MiscelPar));
 }
 
 //эту функцию необходимо использовать когда надо занести данные в диалог
 void CMiscPageDlg::SetValues(const SECU3IO::MiscelPar* i_values)
 {
  ASSERT(i_values);
- memcpy(&m_params,i_values, sizeof(SECU3IO::MiscelPar));
+ memcpy(&m_params, i_values, sizeof(SECU3IO::MiscelPar));
  m_uart_speed_cb_index = _GetIndexFromComboBoxByBR(m_params.baud_rate);
  UpdateData(FALSE); //копируем данные из переменных в диалог
 }

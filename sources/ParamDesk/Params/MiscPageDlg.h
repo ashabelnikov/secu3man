@@ -52,7 +52,9 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
   afx_msg void OnChangeData();
+  afx_msg void OnIgncutoffCheck();
   DECLARE_MESSAGE_MAP()
 
   int _GetBRFromComboBoxByIndex(int i_cb_index);
@@ -66,6 +68,11 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_packet_period_edit;
   CStatic m_packet_period_label;
   CStatic m_packet_period_unit;
+
+  CButton m_igncutoff_check;
+  CEditEx m_igncutoff_rpm_edit;
+  CSpinButtonCtrlEx m_igncutoff_rpm_spin;
+  CStatic m_igncutoff_rpm_unit;
 
   SECU3IO::MiscelPar m_params;
   BOOL m_enabled;

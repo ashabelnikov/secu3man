@@ -101,10 +101,13 @@ typedef struct
 
  _uchar vent_pwm;                    //control ventilator by using pwm
 
+ _uchar ign_cutoff;                  // Cutoff ignition when RPM reaches specified threshold
+ _uint ign_cutoff_thrd;              // Cutoff threshold (RPM)
+ 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[9];
+ _uchar reserved[6];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params;
