@@ -5,8 +5,9 @@ By: Alexey A. Shabelnikov
 
 
 What to do in relation to SECU-3 manager software:
+[] - means already fixed/implemented
 
-1. Unicode support in UOZ1 and UOZ2 DLLs.
+1. Unicode support in Chart2D and Chart3D DLLs.
 
 2. Tab stop mechanism does not work in UOZ1 and UOZ2 DLLs.
 
@@ -14,7 +15,7 @@ What to do in relation to SECU-3 manager software:
 
 4. Main window loses focus when user clicks into combobox of property grid.
 
-5. Add compatibility check of versions of EEPROM parameters and default parameters
+[5.] Add compatibility check of versions of EEPROM parameters and default parameters
    (stored in the firmware).
 
 6. Right round-up when editing parameters (EEPROM and default).
@@ -24,4 +25,7 @@ What to do in relation to SECU-3 manager software:
 8. Bug with hot keys. Sometimes application does not release hot keys when loses 
    focus. WM_ACTIVATE issues. This is annoying bug.
 
-9.
+9. Expand functionality of map editors (Chart2D and Chart3D). Namely. Add ability to fill map
+   using selected value/function, interpolation etc.
+
+10.
