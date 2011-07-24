@@ -51,9 +51,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
-  afx_msg void OnSelchangePdCogsBTDCCombo();
-  afx_msg void OnSelchangePdEngineCylCombo();
-  afx_msg void OnChangePdIgnitionCogsEdit();
+  afx_msg void OnChangeData();
   afx_msg void OnClickedPdPosFrontRadio();
   afx_msg void OnClickedPdNegFrontRadio();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -82,6 +80,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   CStatic m_ckps_front_groupbox;
   CButton m_ckps_posfront_radio;
   CButton m_ckps_negfront_radio;
+  CButton m_merge_ign_outputs_check;
 
   CStatic m_teeth_before_tdc_label;
   CComboBox m_teeth_before_tdc_combo;

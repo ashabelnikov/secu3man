@@ -106,10 +106,12 @@ typedef struct
  
  _uchar zero_adv_ang;                // Zero advance angle flag
 
+ _uchar ckps_merge_ign_outs;         // Merge ignition signals to single ouput
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[5];
+ _uchar reserved[4];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params;

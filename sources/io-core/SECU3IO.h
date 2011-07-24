@@ -134,6 +134,7 @@ namespace SECU3IO
   unsigned char ckps_cogs_btdc;
   unsigned char ckps_ignit_cogs;
   unsigned char ckps_engine_cyl;
+  unsigned char ckps_merge_ign_outs;
  };
 
  struct OPCompNc                       //спользуется если надо просто принять или послать определенный код

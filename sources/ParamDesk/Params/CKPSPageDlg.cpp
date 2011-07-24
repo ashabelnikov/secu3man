@@ -35,9 +35,10 @@ static char THIS_FILE[] = __FILE__;
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
- ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnSelchangePdCogsBTDCCombo)
- ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnSelchangePdEngineCylCombo)
- ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangePdIgnitionCogsEdit)
+ ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
 
@@ -53,6 +54,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_SPIN, OnUpdateIgnitionCogs)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnUpdateIgnitionCogs)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_UNIT, OnUpdateIgnitionCogs)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
@@ -65,6 +68,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
  m_params.ckps_ignit_cogs = 20;
+ m_params.ckps_merge_ign_outs = 0;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -88,8 +92,11 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_EDIT, m_ignition_cogs_edit);
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_UNIT, m_ignition_cogs_label);
 
+ DDX_Control(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_merge_ign_outputs_check);
+
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
- DDX_Radio_UCHAR(pDX,IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
+ DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
+ DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -124,22 +131,10 @@ BOOL CCKPSPageDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CCKPSPageDlg::OnSelchangePdCogsBTDCCombo()
+void CCKPSPageDlg::OnChangeData()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
-}
-
-void CCKPSPageDlg::OnSelchangePdEngineCylCombo()
-{
- UpdateData();
- OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
-}
-
-void CCKPSPageDlg::OnChangePdIgnitionCogsEdit()
-{
- UpdateData();
- OnChangeNotify();
 }
 
 void CCKPSPageDlg::OnClickedPdPosFrontRadio()

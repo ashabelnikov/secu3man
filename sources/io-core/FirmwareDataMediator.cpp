@@ -551,6 +551,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
     p_params->ckps_edge_type  = p_in->ckps_edge_type;
     p_params->ckps_engine_cyl = p_in->ckps_engine_cyl;
+    p_params->ckps_merge_ign_outs = p_in->ckps_merge_ign_outs;
    }
    break;
   case KNOCK_PAR:
@@ -702,6 +703,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
      p_out->ckps_edge_type  = p_params->ckps_edge_type;
      p_out->ckps_engine_cyl = p_params->ckps_engine_cyl;
+     p_out->ckps_merge_ign_outs = p_params->ckps_merge_ign_outs;
     }
     break;
    case KNOCK_PAR:
