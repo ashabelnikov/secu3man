@@ -104,10 +104,12 @@ typedef struct
  _uchar ign_cutoff;                  // Cutoff ignition when RPM reaches specified threshold
  _uint ign_cutoff_thrd;              // Cutoff threshold (RPM)
  
+ _uchar zero_adv_ang;                // Zero advance angle flag
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[6];
+ _uchar reserved[5];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params;

@@ -120,23 +120,23 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,31,118,47,15,
+    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
     CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
     CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,82,117,12,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
     LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,
                     72,9
     LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,
                     74,9
-    LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,30,
+    LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,75,
                     106,90,10
     LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
-    LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
+    LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
     CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
                     16
@@ -153,6 +153,9 @@ BEGIN
                     20,16
     GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,
                     5,48,158,51
+    CONTROL         "Нулев. уг.опер. (полезно для отладки)",
+                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,6,106,65,29
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -744,23 +747,23 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,31,118,47,15,
+    EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
     CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
     CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,82,117,12,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
     LTEXT           "Min. advance angle",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,
                     14,72,9
     LTEXT           "Max. advance angle",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,
                     14,74,9
-    LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,30,
+    LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,75,
                     106,90,10
     LTEXT           "degr.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "degr.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
-    LTEXT           "degr.",IDC_PD_ANGLES_CORRECTION_UNIT,100,120,26,11
+    LTEXT           "degr.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
     CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
                     16
@@ -777,6 +780,9 @@ BEGIN
                     21,16
     GROUPBOX        "Limitation of angle change speed",
                     IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
+    CONTROL         "Zero adv. angle (useful for check-out)",
+                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,7,109,61,23
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158

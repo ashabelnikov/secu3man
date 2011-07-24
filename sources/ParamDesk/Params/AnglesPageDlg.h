@@ -52,7 +52,7 @@ class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::AnglesPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CSpinButtonCtrlEx m_min_angle_spin;
   CSpinButtonCtrlEx m_max_angle_spin;
@@ -64,4 +64,5 @@ class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_correction_edit;
   CEditEx m_decrease_spead_edit;
   CEditEx m_increase_spead_edit;
+  CButton m_zeroaa_check;
 };

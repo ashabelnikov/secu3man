@@ -343,7 +343,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet)
 {
  SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
 
- if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=22)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
@@ -380,6 +380,11 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=4;
  m_AnglesPar.inc_spead = ((float)inc_spead) / m_angle_multiplier;
+
+ //Признак нулевого УОЗ
+ if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_AnglesPar.zero_adv_ang))
+  return false;
+ raw_packet+=1;
 
  if (*raw_packet!='\r')
   return false;
@@ -1465,6 +1470,7 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  CNumericConv::Bin16ToHex(dec_spead,m_outgoing_packet);
  int inc_spead = MathHelpers::Round(packet_data->inc_spead * m_angle_multiplier);
  CNumericConv::Bin16ToHex(inc_spead,m_outgoing_packet);
+ CNumericConv::Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

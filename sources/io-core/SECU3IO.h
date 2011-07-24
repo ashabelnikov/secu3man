@@ -65,6 +65,7 @@ namespace SECU3IO
   float  angle_corr;
   float  dec_spead;
   float  inc_spead;
+  unsigned char zero_adv_ang;
  };
 
 

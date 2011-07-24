@@ -501,6 +501,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
     p_params->angle_dec_spead = MathHelpers::Round(p_in->dec_spead * ANGLE_MULTIPLAYER);
     p_params->angle_inc_spead = MathHelpers::Round(p_in->inc_spead * ANGLE_MULTIPLAYER);
+    p_params->zero_adv_ang = p_in->zero_adv_ang;
    }
    break;
   case FUNSET_PAR:
@@ -651,6 +652,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLAYER;
      p_out->dec_spead = ((float)p_params->angle_dec_spead)  / ANGLE_MULTIPLAYER;
      p_out->inc_spead = ((float)p_params->angle_inc_spead)  / ANGLE_MULTIPLAYER;
+     p_out->zero_adv_ang = p_params->zero_adv_ang;
     }
     break;
    case FUNSET_PAR:
