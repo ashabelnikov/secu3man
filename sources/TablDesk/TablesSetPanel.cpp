@@ -303,7 +303,7 @@ void CTablesSetPanel::OnViewCoilRegulMap()
  if ((!m_coilregul_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_coilregul_map_chart_state = 1;
-  m_coilregul_map_wnd_handle = DLL::Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.0f, 16.0, SECU3IO::coilregul_map_slots, 32,
+  m_coilregul_map_wnd_handle = DLL::Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.25f, 16.0, SECU3IO::coilregul_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COILREGUL_UNIT).c_str(),
     MLL::GetString(IDS_COILREGUL_MAP).c_str());
