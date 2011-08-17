@@ -33,7 +33,7 @@
 #define RECTP_ESA  0x02                       //Extended Segment Address record
 #define RECTP_SSA  0x03                       //Start Segment Address record
 
-EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size)
+EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size, bool i_unix_lfcr /*=true*/)
 {
  UCHAR  state = 0;                            //for state machine
  UINT   d_ptr = 0;                            //output buffer's iterator
@@ -209,9 +209,15 @@ EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_b
 
    //------read and check CR LF
    case 13:
-    if (symbol!=0x0D)
+    if (symbol==0x0D)
+     state = 14;
+    else if (symbol==0x0A && true==i_unix_lfcr)
+     state = 0; //unix
+    else
+    { //error
      errflag|=RH_UNEXPECTED_SYMBOL;
-    state = 14;
+     state = 0;
+    }
     break;
    case 14:
     if (symbol!=0x0A)

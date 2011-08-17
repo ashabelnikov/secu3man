@@ -61,6 +61,7 @@ enum EReadHexStatus
 //op_buff - output buffer which will receive converted (binary) data
 //o_size - receives size of converted binary data
 //i_max_size - maximum size of output binary, if exceded, error will be returned
+//i_unix_lfcr - accept also UNIX LFCRs (only 0xA)
 
 //Returns RH_SUCCESS - if there was no errors, otherwise corresponding error code
-HEXUTILS_API EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size);
+HEXUTILS_API EReadHexStatus HexUtils_ConvertHexToBin(BYTE* ip_buff, size_t i_size, BYTE* op_buff, size_t& o_size, size_t i_max_size, bool i_unix_lfcr = true);
