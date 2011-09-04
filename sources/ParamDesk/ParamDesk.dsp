@@ -292,6 +292,14 @@ SOURCE=.\Tables\TablesPageDlg.cpp
 
 SOURCE=.\Tables\TablesPageDlg.h
 # End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TDContextMenuManager.cpp
+# End Source File
+# Begin Source File
+
+SOURCE=.\Tables\TDContextMenuManager.h
+# End Source File
 # End Group
 # Begin Group "Application"
 

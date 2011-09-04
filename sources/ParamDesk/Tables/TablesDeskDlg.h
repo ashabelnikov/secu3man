@@ -31,6 +31,7 @@
 #include "ui-core/UpdatableDialog.h"
 
 class CHotKeysToCmdRouter;
+class CTDContextMenuManager;
 
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg dialog
@@ -67,6 +68,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetReadOnlyTablesSetName(bool readonly);
   virtual void SetModificationFlag(bool value);
   virtual void MakeChartsChildren(bool children);
+  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index); //Set names of read-only and read/write tables
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction);
@@ -75,6 +77,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void setOnTabActivate(EventHandler OnFunction);
   virtual void setOnSaveButton(EventHandler OnFunction);
   virtual void setOnChangeTablesSetName(EventWithCode OnFunction);
+  virtual void setOnLoadTablesFrom(EventWithCode OnFunction);
+  virtual void setOnSaveTablesTo(EventWithCode OnFunction);
 
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
@@ -93,6 +97,10 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSaveButton();
   afx_msg void OnSysCommand(UINT, LONG);
+  afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
+  afx_msg void OnRangeCmdsLoad(UINT nID);
+  afx_msg void OnRangeCmdsSave(UINT nID);
   afx_msg void OnHK_GASOLINE_TAB();
   afx_msg void OnHK_GAS_TAB();
   DECLARE_MESSAGE_MAP()
@@ -123,6 +131,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   CTabController m_tab_control;
   CImageList* m_pImgList;
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
+  std::auto_ptr<CTDContextMenuManager> mp_ContextMenuManager;
 
   //обработчики событий (делегаты)
   EventWith2Codes m_OnMapChanged;
@@ -131,6 +140,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   EventHandler m_OnTabActivate;
   EventHandler m_OnSaveButton;
   EventWithCode m_OnChangeTablesSetName;
+  EventWithCode m_OnLoadTablesFrom;
+  EventWithCode m_OnSaveTablesTo;
 };
 
 /////////////////////////////////////////////////////////////////////////////

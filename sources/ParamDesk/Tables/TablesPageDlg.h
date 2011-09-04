@@ -57,6 +57,7 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnEditKillFocus();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeTablesSetName();
   DECLARE_MESSAGE_MAP()
@@ -70,6 +71,8 @@ class CTablesPageDlg : public CTabDialog, public ParamPageEvents
 
   bool m_enabled;
   bool m_tsneb_readonly;
+  bool m_lock_enchange;
+  bool m_lock_killfocus;
   CEdit m_names_edit;
   CStatic m_midification_flag;
 };

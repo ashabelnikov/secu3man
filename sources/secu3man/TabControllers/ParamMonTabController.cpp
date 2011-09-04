@@ -27,6 +27,7 @@
 #include <map>
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "io-core/FirmwareMapsDataHolder.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
@@ -80,6 +81,10 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
  //сценарий: [чтение параметров]-->[мониторинг]
  m_scenario4.push_back(mp_parcntr.get());
  m_scenario4.push_back(mp_moncntr.get());
+
+ //сценарий: [сбор данных]-->[мониторинг]
+ m_scenario5.push_back(mp_idccntr.get());
+ m_scenario5.push_back(mp_moncntr.get());
 
  //Устанавливаем обработчики событий от view
  mp_view->setOnRawSensorsCheck(MakeDelegate(this, &CParamMonTabController::OnRawSensorsCheckBox));
@@ -145,14 +150,23 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
   switch(p_ndata->opcode)
   {
-   case OPCODE_EEPROM_PARAM_SAVE:
+   case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;
-   case OPCODE_NEW_TABLSET_SELECTED:
-    if (true==mp_view->GetEditTablesCheckState())
-     _StartScenario(m_scenario3); //пользователь выбрал новый набор таблиц: нужно заново прочитать таблицы
-    mp_tabcntr->Enable(false);
-    mp_tabcntr->InvalidateCache();
+   case OPCODE_SAVE_TABLSET:      //таблицы были сохранены
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    _StartScenario(m_scenario5);
+    return;
+   case OPCODE_LOAD_TABLSET:      //SECU-3 tells us that new tables set has been selected:
+    {
+     //пользователь выбрал новый набор таблиц (в параметрах): нужно заново прочитать таблицы
+     //также, он мог загрузить один из наборов таблиц через меню в окне редактора таблиц, в этом случае
+     //мы тоже попадем сюда
+     if (true==mp_view->GetEditTablesCheckState())
+      _StartScenario(m_scenario3);
+     mp_tabcntr->Enable(false);
+     mp_tabcntr->InvalidateCache();
+    }
     return;
   }
  }
@@ -166,6 +180,13 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    mp_view->EnableEditTablesCheck((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0);
    mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames()); 
    mp_parcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
+
+   if ((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0)
+   {
+    std::vector<_TSTRING> fwnames(mp_idccntr->GetFNNames().begin(), mp_idccntr->GetFNNames().begin() + TABLES_NUMBER);
+    std::vector<_TSTRING> eenames(mp_idccntr->GetFNNames().begin() + TABLES_NUMBER, mp_idccntr->GetFNNames().end());
+    mp_tabcntr->SetFunctionsNames(fwnames, eenames);
+   }
   }
   //Завершилось чтение параметров
   else if ((*m_current_state) == mp_parcntr.get())

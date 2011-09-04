@@ -25,6 +25,7 @@
 #include "ControlApp.h"
 #include "ccomport.h"
 #include "common/MathHelpers.h"
+#include "FirmwareMapsDataHolder.h"
 #include "NumericConv.h"
 #include "ufcodes.h"
 
@@ -303,11 +304,17 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
 
  //имя этого набора характеристик
  char* p;
- if (NULL==(p = strchr((char*)raw_packet,'\r')))
+ if (NULL==(p = strchr((char*)raw_packet, '\r')))
   return false;
  *p = 0;
 
- strcpy(m_FnNameDat.name,(const char*)raw_packet);
+ strcpy(m_FnNameDat.name, (const char*)raw_packet);
+
+ //Заменяем символы FF на 0x20
+ size_t count = strlen(m_FnNameDat.name);
+ for(size_t i = 0; i < count; ++i)
+  if (((unsigned char)m_FnNameDat.name[i]) == 0xFF)
+   m_FnNameDat.name[i] = 0x20;
 
  return true;
 }
@@ -739,13 +746,16 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet)
 {
  SECU3IO::OPCompNc& m_OPCompNc = m_recepted_packet.m_OPCompNc;
 
- if (strlen((char*)raw_packet)!=2)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Код завершенной операции
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_OPCompNc.opcode))
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &m_OPCompNc.opdata))
   return false;
- raw_packet+=1;
+ raw_packet+=2;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &m_OPCompNc.opcode))
+  return false;
+ raw_packet+=2;
 
  if (*raw_packet!='\r')
   return false;
@@ -1559,7 +1569,8 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->opcode,m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->opdata, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->opcode, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 
@@ -1599,10 +1610,20 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
  CNumericConv::Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->address, m_outgoing_packet);
 
- for(unsigned int i = 0; i < packet_data->data_size; ++i)
+ if (packet_data->tab_id != ETMT_NAME_STR)
  {
-  signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
-  CNumericConv::Bin8ToHex(value, m_outgoing_packet);
+  for(unsigned int i = 0; i < packet_data->data_size; ++i)
+  {
+   signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
+   CNumericConv::Bin8ToHex(value, m_outgoing_packet);
+  }
+ }
+ else //string
+ {
+  char raw_string[64];
+  CharToOem(packet_data->name_data, raw_string);
+  std::string str(raw_string, packet_data->data_size);
+  m_outgoing_packet+=str;
  }
 
  m_outgoing_packet+= '\r';

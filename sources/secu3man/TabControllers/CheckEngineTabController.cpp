@@ -130,6 +130,12 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    case OPCODE_CE_SAVE_ERRORS: //Посланные ранее коды ошибок были сохранены в EEPROM
     m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_SAVED_SUCCESSFULLY));
     return;
+   case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
+    return;
+   case OPCODE_SAVE_TABLSET: //таблицы были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    return;
   }
  }
 

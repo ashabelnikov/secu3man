@@ -636,6 +636,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TD_TABNAME_GASOLINE "11:Бензин"
     IDS_TD_TABNAME_GAS      "12:Газ"
+    IDS_TD_LOAD_TABLES_POPUP_MENU "Загрузить из"
+    IDS_TD_SAVE_TABLES_POPUP_MENU "Сохранить в"
 END
 
 #endif    // Russian resources
@@ -1230,6 +1232,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TD_TABNAME_GASOLINE "11:Gasoline"
     IDS_TD_TABNAME_GAS      "12:Gas"
+    IDS_TD_LOAD_TABLES_POPUP_MENU "Load from"
+    IDS_TD_SAVE_TABLES_POPUP_MENU "Save to"
 END
 
 #endif    // English (U.S.) resources

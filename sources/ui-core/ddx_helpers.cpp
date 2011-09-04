@@ -53,3 +53,15 @@ void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value 
   DDX_Radio(pDX, nIDC, b_value);
  }
 }
+
+void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, float& value, LPCTSTR OutFmt, LPCTSTR InFmt)
+{
+ CString temp;
+ if (!pDX->m_bSaveAndValidate)
+  temp.Format(OutFmt, value);
+
+ DDX_Text(pDX, nIDC, temp);
+
+ if (pDX->m_bSaveAndValidate)
+  _stscanf(temp, InFmt, &value);
+}

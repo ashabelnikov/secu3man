@@ -55,6 +55,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void InvalidateCache(void);
   bool IsValidCache(void);
 
+  void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames); //names of read-only and read/write tables
  private:
   //Events from view
   void OnMapChanged(int fuel_type, int i_mapType);
@@ -63,6 +64,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void OnTabActivate(void);
   void OnSaveButton(void);
   void OnChangeTablesSetName(int fuel_type);
+  void OnLoadTablesFrom(int index);
+  void OnSaveTablesTo(int index);
 
  private:
   //helpful methods
@@ -72,6 +75,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void _MoveMapsToCharts(int fuel_type, bool i_original);
   void _ClearAcquisitionFlags(void);
   void _ResetModification(int fuel_type);
+  void _SetTablesSetName(const _TSTRING name);
 
   void _UpdateCache(const SECU3IO::EditTabPar* data); 
   bool _IsCacheUpToDate(void);

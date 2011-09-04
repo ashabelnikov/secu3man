@@ -30,6 +30,7 @@
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
 #include "TablesPageDlg.h"
+#include "TDContextMenuManager.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
@@ -54,6 +55,7 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 , m_pImgList(NULL)
 , m_enabled(false)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
+, mp_ContextMenuManager(new CTDContextMenuManager())
 , m_children_charts(false)
 {
  //создаем image list для TabCtrl
@@ -70,6 +72,8 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
  m_pPageDlg->mp_ButtonsPanel->setOnOpenMapWnd(MakeDelegate(this, &CTablesDeskDlg::OnOpenMapWnd));
  m_pPageDlg->setOnChangeTablesSetName(MakeDelegate(this, &CTablesDeskDlg::OnChangeTablesSetName));
  m_pPageDlg->mp_ButtonsPanel->setOnWndActivation(MakeDelegate(this, &CTablesDeskDlg::OnWndActivation));
+
+ mp_ContextMenuManager->CreateContent();
 }
 
 CTablesDeskDlg::~CTablesDeskDlg()
@@ -89,10 +93,16 @@ void CTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SYSCOMMAND()
+ ON_WM_CONTEXTMENU()
+ ON_WM_INITMENUPOPUP()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_TAB_CTRL, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_TD_LOAD_NAMES_RESERVED0, IDM_TD_LOAD_NAMES_RESERVED15, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_TD_SAVE_NAMES_RESERVED0, IDM_TD_SAVE_NAMES_RESERVED5, OnUpdateControls)
  ON_BN_CLICKED(IDC_TD_SAVE_BUTTON, OnSaveButton)
+ ON_COMMAND_RANGE(IDM_TD_LOAD_NAMES_RESERVED0, IDM_TD_LOAD_NAMES_RESERVED15, OnRangeCmdsLoad)
+ ON_COMMAND_RANGE(IDM_TD_SAVE_NAMES_RESERVED0, IDM_TD_SAVE_NAMES_RESERVED5, OnRangeCmdsSave)
 
 #define ON_COMMAND_HK_XXX(x)\
  ON_COMMAND(ID_TD_ACTIVATE_##x, OnHK_##x)
@@ -131,6 +141,8 @@ BOOL CTablesDeskDlg::OnInitDialog()
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
 
+ mp_ContextMenuManager->Attach(this);
+
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
@@ -166,6 +178,7 @@ void CTablesDeskDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 
  m_tab_control.EnableItem(-1, enable); //all items
+ mp_ContextMenuManager->EnableMenuItems(enable);
 }
 
 //спрятать/показать все
@@ -227,6 +240,25 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
  _MakeWindowChild(hwnd, children);
 }
 
+void CTablesDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index)
+{
+ std::vector<_TSTRING> loadnames = i_fwnames;
+ std::vector<_TSTRING> savenames = i_eenames;
+ //if string consists from all spaces or is empty, then use "<no name>"
+ for(size_t index = 0; index < savenames.size(); ++index)
+ {
+  bool has_name = false;
+  for(size_t i = 0; i < savenames[index].size(); ++i)
+   if (savenames[index][i] != _T(' '))
+    has_name = true;
+  if (0==savenames[index].length() || false==has_name)
+   savenames[index] = _T("<no name>");
+ }
+ std::copy(savenames.begin(), savenames.end(), std::back_inserter(loadnames));
+ mp_ContextMenuManager->SetLoadPopupMenuNames(loadnames, sep_index);
+ mp_ContextMenuManager->SetSavePopupMenuNames(savenames);
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::setOnMapChanged(EventWith2Codes OnFunction)
 { m_OnMapChanged = OnFunction; }
@@ -245,6 +277,12 @@ void CTablesDeskDlg::setOnSaveButton(EventHandler OnFunction)
 
 void CTablesDeskDlg::setOnChangeTablesSetName(EventWithCode OnFunction)
 { m_OnChangeTablesSetName  = OnFunction; }
+
+void CTablesDeskDlg::setOnLoadTablesFrom(EventWithCode OnFunction)
+{ m_OnLoadTablesFrom = OnFunction; }
+
+void CTablesDeskDlg::setOnSaveTablesTo(EventWithCode OnFunction)
+{ m_OnSaveTablesTo = OnFunction; }
 
 //------------------------------------------------------------------------
 bool CTablesDeskDlg::SetCurSel(int sel)
@@ -306,6 +344,11 @@ void CTablesDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)
   m_OnSaveButton();
+
+ //open popup menu beneath of button!
+ CRect rc;
+ m_save_button.GetWindowRect(rc);
+ mp_ContextMenuManager->TrackPopupMenuSave(rc.left, rc.bottom);
 }
 
 void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
@@ -315,6 +358,27 @@ void CTablesDeskDlg::OnSysCommand(UINT nID, LONG lParam)
   SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }
 
+void CTablesDeskDlg::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+ mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
+}
+
+void CTablesDeskDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
+{
+ mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
+}
+
+void CTablesDeskDlg::OnRangeCmdsLoad(UINT nID)
+{
+ if (m_OnLoadTablesFrom)
+  m_OnLoadTablesFrom(nID - IDM_TD_LOAD_NAMES_RESERVED0);
+}
+
+void CTablesDeskDlg::OnRangeCmdsSave(UINT nID)
+{
+ if (m_OnSaveTablesTo)
+  m_OnSaveTablesTo(nID - IDM_TD_SAVE_NAMES_RESERVED0);
+}
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnMapChanged(int i_mapType)
 {

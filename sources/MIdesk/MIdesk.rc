@@ -67,7 +67,7 @@ BEGIN
                     13
     LTEXT           "B",IDC_RS_UBAT_UNIT,231,76,20,14
     CTEXT           "value",IDC_RS_TEMP_VALUE,155,108,70,19,SS_SUNKEN
-    LTEXT           "Датчк температуры ОЖ",IDC_RS_TEMP_CAPTION,24,112,118,13
+    LTEXT           "Датчик температуры ОЖ",IDC_RS_TEMP_CAPTION,24,112,118,13
     LTEXT           "B",IDC_RS_TEMP_UNIT,232,112,20,14
     CTEXT           "value",IDC_RS_KNOCK_VALUE,156,144,70,19,SS_SUNKEN
     LTEXT           "Уровень сигнала детонации",IDC_RS_KNOCK_CAPTION,24,148,

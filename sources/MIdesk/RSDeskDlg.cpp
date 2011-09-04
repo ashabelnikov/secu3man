@@ -25,6 +25,7 @@
 
 #include "io-core/SECU3IO.h"
 #include "MIHelpers.h"
+#include "ui-core/ddx_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -68,10 +69,10 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_unit);
  DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_unit);
 
- DDX_Text(pDX,IDC_RS_MAP_VALUE,m_map_value);
- DDX_Text(pDX,IDC_RS_UBAT_VALUE,m_ubat_value);
- DDX_Text(pDX,IDC_RS_TEMP_VALUE,m_temp_value);
- DDX_Text(pDX,IDC_RS_KNOCK_VALUE,m_knock_value);
+ DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_TEMP_VALUE, m_temp_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_KNOCK_VALUE, m_knock_value, _T("%.3f"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -80,6 +81,28 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 BOOL CRSDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ CFont font;
+ VERIFY(font.CreateFont(
+   16,                        // nHeight
+   0,                         // nWidth
+   0,                         // nEscapement
+   0,                         // nOrientation
+   FW_BOLD,                   // nWeight
+   FALSE,                     // bItalic
+   FALSE,                     // bUnderline
+   0,                         // cStrikeOut
+   ANSI_CHARSET,              // nCharSet
+   OUT_DEFAULT_PRECIS,        // nOutPrecision
+   CLIP_DEFAULT_PRECIS,       // nClipPrecision
+   DEFAULT_QUALITY,           // nQuality
+   DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
+   _T("Arial")));             // lpszFacename
+
+ m_map_field.SetFont(&font);
+ m_ubat_field.SetFont(&font);
+ m_temp_field.SetFont(&font);
+ m_knock_field.SetFont(&font);
 
  Enable(false);
  UpdateData(FALSE);

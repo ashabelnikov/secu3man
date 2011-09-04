@@ -173,7 +173,7 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD, this);
  ::SetClassLong(mp_TablesDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
- mp_TablesDeskDlg->ShowOpenedCharts(true);
+ mp_TablesDeskDlg->ShowOpenedCharts(GetEditTablesCheckState());
 
  if (i_floating)
  {

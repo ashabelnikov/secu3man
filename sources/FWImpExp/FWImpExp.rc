@@ -90,7 +90,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_CANT_LOAD_THIS_FILE "Не знаю как загрузить этот файл, извините!"
-    IDS_MAP_NO_NAME         "<Без имени %d>"
+    IDS_MAP_NO_NAME         "<no name %d>"
     IDS_SECU3_CURRENT_FW    "SECU-3 Текущая прошивка"
     IDS_MPSZ_FW_FILE        "MPSZ %s"
     IDS_SECU3_FW_FILE       "SECU-3 %s"
@@ -249,7 +249,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_CANT_LOAD_THIS_FILE "Don't know how to load this file, sorry!"
-    IDS_MAP_NO_NAME         "<noname %d>"
+    IDS_MAP_NO_NAME         "<no name %d>"
     IDS_SECU3_CURRENT_FW    "SECU-3 Current firmware"
     IDS_MPSZ_FW_FILE        "MPSZ %s"
     IDS_SECU3_FW_FILE       "SECU-3 %s"

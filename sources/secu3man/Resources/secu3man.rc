@@ -352,6 +352,7 @@ BEGIN
     IDS_PM_READING_FWC_OPTIONS   "Чтение опций прошивки..."
     IDS_PM_READING_TABLES        "Чтение таблиц..."
     IDS_PM_WRITING_TABLES        "Запись таблиц..."
+    IDS_PM_WRITING_TABLES_NAME   "Запись имени..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -475,7 +476,9 @@ BEGIN
     IDS_PM_READING_PARAMS   "Чтение параметров..."
     IDS_PM_READY            "Готово."
     IDS_PM_PARAMS_HAS_BEEN_SAVED "Параметры были сохранены."
+    IDS_PM_TABLSET_HAS_BEEN_SAVED "Таблицы были сохранены."    
     IDS_PM_WRITING_PARAMS   "Сохранение параметров..."
+    IDS_PM_WRITING_TABLSET  "Сохранение таблиц..."
     IDS_PM_EEPROM_PARAMETERS "Параметры в EEPROM:"
     IDS_PM_TABLES_IN_RAM     "Таблицы в ОЗУ:"
     IDS_APP_TITLE           "SECU-3 Manager"
@@ -880,6 +883,7 @@ BEGIN
     IDS_PM_READING_FWC_OPTIONS "Reading firmware options..."
     IDS_PM_READING_TABLES   "Reading tables..."
     IDS_PM_WRITING_TABLES   "Writing tables..."
+    IDS_PM_WRITING_TABLES_NAME "Writing name..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -978,7 +982,9 @@ BEGIN
     IDS_PM_READING_PARAMS   "Reading parameters..."
     IDS_PM_READY            "Ready."
     IDS_PM_PARAMS_HAS_BEEN_SAVED "Parameters has been saved."
+    IDS_PM_TABLSET_HAS_BEEN_SAVED "Tables has been saved."
     IDS_PM_WRITING_PARAMS   "Saving parameters..."
+    IDS_PM_WRITING_TABLSET  "Saving tables..."
     IDS_PM_EEPROM_PARAMETERS "Parameters in EEPROM:"
     IDS_PM_TABLES_IN_RAM     "Tables in RAM:"
     IDS_APP_TITLE           "SECU-3 Manager"

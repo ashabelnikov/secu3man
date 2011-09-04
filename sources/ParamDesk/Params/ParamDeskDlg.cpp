@@ -374,7 +374,19 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
 //”станавливает имена семейств характеристик
 void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
- m_pFunSetPageDlg->AccessFunNames() = i_names;
+ std::vector<_TSTRING> names = i_names;
+ //if string consists from all spaces or is empty, then use "<no name>"
+ for(size_t index = 0; index < names.size(); ++index)
+ {
+  bool has_name = false;
+  for(size_t i = 0; i < names[index].size(); ++i)
+   if (names[index][i] != _T(' '))
+    has_name = true;
+  if (0==names[index].length() || false==has_name)
+   names[index] = _T("<no name>");
+ }
+
+ m_pFunSetPageDlg->AccessFunNames() = names;
  m_pFunSetPageDlg->FillCBByFunNames();
 }
 

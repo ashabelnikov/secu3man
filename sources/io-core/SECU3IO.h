@@ -137,15 +137,17 @@ namespace SECU3IO
   unsigned char ckps_merge_ign_outs;
  };
 
- struct OPCompNc                       //спользуется если надо просто принять или послать определенный код
+ struct OPCompNc                       //используется если надо просто принять или послать определенный код действия
  {
-  unsigned char opcode;
+  BYTE opcode;   //operation code
+  BYTE opdata;   //operation data
  };
 
  const int OPCODE_EEPROM_PARAM_SAVE    = 1;
  const int OPCODE_CE_SAVE_ERRORS       = 2;
  const int OPCODE_READ_FW_SIG_INFO     = 3;
- const int OPCODE_NEW_TABLSET_SELECTED = 4;
+ const int OPCODE_LOAD_TABLSET         = 4;  //realtime tables
+ const int OPCODE_SAVE_TABLSET         = 5;  //realtime tables
 
  struct KnockPar
  {

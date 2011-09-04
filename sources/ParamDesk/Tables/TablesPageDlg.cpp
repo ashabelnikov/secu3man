@@ -39,12 +39,15 @@ BEGIN_MESSAGE_MAP(CTablesPageDlg, Super)
  ON_EN_CHANGE(IDC_TD_TABLESSET_NAME_EDIT, OnChangeTablesSetName)
  ON_UPDATE_COMMAND_UI(IDC_TD_TABLESSET_NAME_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_TABLESSET_NAME_TITLE, OnUpdateControls)
+ ON_EN_KILLFOCUS(IDC_TD_TABLESSET_NAME_EDIT, OnEditKillFocus)
 END_MESSAGE_MAP()
 
 CTablesPageDlg::CTablesPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CTablesPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_tsneb_readonly(false)
+, m_lock_enchange(false)
+, m_lock_killfocus(true)
 , mp_ButtonsPanel(new CButtonsPanel(0, NULL))
 {
  mp_ButtonsPanel->setIsAllowed(MakeDelegate(this, &CTablesPageDlg::IsAllowed));
@@ -74,6 +77,7 @@ void CTablesPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 BOOL CTablesPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+ m_lock_killfocus = true;
 
  CRect rect;
  GetDlgItem(IDC_TD_BUTTONS_PANEL_HOLDER)->GetWindowRect(rect);
@@ -84,11 +88,27 @@ BOOL CTablesPageDlg::OnInitDialog()
  mp_ButtonsPanel->ShowWindow(SW_SHOW);
 
  m_names_edit.SetReadOnly(m_tsneb_readonly);
+ m_names_edit.SetLimitText(16);
 
  UpdateData(FALSE);
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CTablesPageDlg::OnEditKillFocus()
+{
+ if (m_lock_killfocus)
+  return; //we need to prevent wrong behaviour when window is recreated
+ if (0==m_names_edit.GetWindowTextLength())
+ {
+  m_names_edit.SetWindowText(_T("<no name>"));
+  //allow controller process latest changes
+  if (m_OnChangeTablesSetName && false==m_lock_enchange)
+   m_OnChangeTablesSetName();
+ }
+
+ m_lock_killfocus = true;
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -120,13 +140,18 @@ bool CTablesPageDlg::IsAllowed(void)
 //from edit box
 void CTablesPageDlg::OnChangeTablesSetName()
 {
- if (m_OnChangeTablesSetName())
+ if (m_OnChangeTablesSetName && false==m_lock_enchange)
+ {
+  m_lock_killfocus = false;
   m_OnChangeTablesSetName();
+ }
 }
 
 void CTablesPageDlg::SetTablesSetName(const _TSTRING& name)
 {
+ m_lock_enchange = true;
  m_names_edit.SetWindowText(name.c_str());
+ m_lock_enchange = false;
 }
 
 _TSTRING CTablesPageDlg::GetTablesSetName(void) const

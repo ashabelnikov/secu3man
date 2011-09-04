@@ -184,6 +184,19 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   //display firmware options if present
   _ShowFWOptions(string, p_packet->options);
  }
+ else if (i_descriptor == OP_COMP_NC)
+ {
+  const SECU3IO::OPCompNc* p_ndata = (SECU3IO::OPCompNc*)ip_packet;
+  switch(p_ndata->opcode)
+  {
+   case SECU3IO::OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
+    return;
+   case SECU3IO::OPCODE_SAVE_TABLSET:     //таблицы были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    return;
+  } 
+ }
 }
 
 void CFirmwareTabController::OnConnection(const bool i_online)

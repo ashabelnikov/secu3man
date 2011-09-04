@@ -46,6 +46,7 @@ class ITablesDeskView
   virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
   virtual void SetModificationFlag(bool value) = 0;               //set/reset modification flag
   virtual void MakeChartsChildren(bool children) = 0;             //make charts children to "parameters and monitor" window
+  virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index) = 0; //Set names of read-only and read/write tables
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
@@ -54,6 +55,8 @@ class ITablesDeskView
   virtual void setOnTabActivate(EventHandler OnFunction) = 0;     //обработцик будет вызываться при появлении вкладки
   virtual void setOnSaveButton(EventHandler OnFunction) = 0;      //обработчик будет вызываться при нажатии кнопки "сохранить"
   virtual void setOnChangeTablesSetName(EventWithCode OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
+  virtual void setOnLoadTablesFrom(EventWithCode OnFunction) = 0; //обработчик будет вызываться при выборе п. меню для загрузки таблиц.
+  virtual void setOnSaveTablesTo(EventWithCode OnFunction) = 0;   //обработчик будет вызываться при выборе п. меню для сохранения таблиц.
 
   //Current selection of tab control. Вызывать только для активной панели!!!
   virtual bool SetCurSel(int sel) = 0;                            //выбрать указанную вкладку по идентификатору (идентификатор - индекс)

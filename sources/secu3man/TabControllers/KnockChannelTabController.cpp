@@ -133,9 +133,12 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
   const OPCompNc* p_ndata = (OPCompNc*)ip_packet;
   switch(p_ndata->opcode)
   {
-   case OPCODE_EEPROM_PARAM_SAVE:
-   m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
-   return;
+   case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
+    return;
+   case OPCODE_SAVE_TABLSET:      //таблицы были сохранены
+    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    return;
   }
  }
 

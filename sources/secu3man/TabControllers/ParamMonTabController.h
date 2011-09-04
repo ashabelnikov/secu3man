@@ -86,6 +86,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   std::vector<CPMStateMachineState*> m_scenario2;
   std::vector<CPMStateMachineState*> m_scenario3;
   std::vector<CPMStateMachineState*> m_scenario4;
+  std::vector<CPMStateMachineState*> m_scenario5;
   //машина состояний
   std::vector<CPMStateMachineState*> m_state_machine;
   std::vector<CPMStateMachineState*>::iterator m_current_state;

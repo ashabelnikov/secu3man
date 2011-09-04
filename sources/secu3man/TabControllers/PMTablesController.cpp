@@ -118,6 +118,23 @@ void CPMTablesController::_ResetModification(int fuel_type)
   (*m_omaps[i]) = (*m_maps[i]);
 }
 
+void CPMTablesController::_SetTablesSetName(const _TSTRING name)
+{
+ _TSTRING str = name;
+ //if string consists from all spaces or is empty, then use "<no name>"
+ bool has_name = false;
+ for(size_t i = 0; i < str.size(); ++i)
+  if (str[i]!=_T(' '))
+   has_name = true;
+ if (0==str.length() || false==has_name)
+  str = _T("<no name>");
+ //also, remove all spaces from right side of string
+ size_t endpos = str.find_last_not_of(_T(" \t"));
+ if(_TSTRING::npos != endpos)
+  str = str.substr(0, endpos + 1);
+ mp_view->SetTablesSetName(str);
+}
+
 //-----------------------------------------------------------------------------------
 CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
 : Super(ip_view)
@@ -132,6 +149,8 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->setOnTabActivate(MakeDelegate(this, &CPMTablesController::OnTabActivate));
  mp_view->setOnSaveButton(MakeDelegate(this, &CPMTablesController::OnSaveButton));
  mp_view->setOnChangeTablesSetName(MakeDelegate(this, &CPMTablesController::OnChangeTablesSetName));
+ mp_view->setOnLoadTablesFrom(MakeDelegate(this, &CPMTablesController::OnLoadTablesFrom));
+ mp_view->setOnSaveTablesTo(MakeDelegate(this, &CPMTablesController::OnSaveTablesTo));
 
  //карты (текущие)
  m_maps.push_back(new SECU3FWMapsItem);
@@ -161,7 +180,7 @@ CPMTablesController::~CPMTablesController()
 void CPMTablesController::OnActivate(void)
 {
  _ClearAcquisitionFlags();
- mp_view->SetReadOnlyTablesSetName(true);
+ mp_view->SetReadOnlyTablesSetName(false);
 
  mp_view->Enable(IsValidCache());
 
@@ -234,6 +253,12 @@ void CPMTablesController::InvalidateCache(void)
 bool CPMTablesController::IsValidCache(void)
 {
  return m_valid_cache;
+}
+
+void CPMTablesController::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames)
+{
+ //note: we insert seperator before item with index = TABLES_NUMBER
+ mp_view->SetFunctionsNames(i_fwnames, i_eenames, TABLES_NUMBER);
 }
 
 //----------------------------------------------------------------
@@ -315,6 +340,8 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
  if (false==_CompareViewMap(TYPE_MAP_DA_TEMP_CORR, _GetMapSize(TYPE_MAP_DA_TEMP_CORR)))
   return true;
+ if (m_maps[mp_view->GetCurSel()]->name != m_omaps[mp_view->GetCurSel()]->name)
+  return true;
  return false; //no modifications
 }
 
@@ -366,7 +393,7 @@ void CPMTablesController::_SynchronizeMap(int fuel_type, int i_mapType)
 //----------------------------------------------------------------
 void CPMTablesController::OnMapChanged(int fuel_type, int i_mapType)
 {
- mp_view->SetModificationFlag(!_CompareViewMap(i_mapType, _GetMapSize(i_mapType)));
+ mp_view->SetModificationFlag(_IsModificationMade());
 
  //send to SECU-3 changed fragment(s)
  _SynchronizeMap(fuel_type, i_mapType);
@@ -389,19 +416,60 @@ void CPMTablesController::OnTabActivate(void)
  _MoveMapsToCharts(mp_view->GetCurSel(), false);
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
  mp_view->UpdateOpenedCharts();
- mp_view->SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
+ _SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
  //update modification flag if any of maps changed
  mp_view->SetModificationFlag(_IsModificationMade());
 }
 
 void CPMTablesController::OnSaveButton(void)
 {
- //todo
+ //not used
 }
 
 void CPMTablesController::OnChangeTablesSetName(int fuel_type)
 {
- //not used
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES_NAME));
+ //Update cache and update midification indicator (flag)
+ _TSTRING name = mp_view->GetTablesSetName();
+ size_t count = F_NAME_SIZE - name.length();
+ name.append(count, _T(' '));
+ m_maps[fuel_type]->name = name;
+ mp_view->SetModificationFlag(_IsModificationMade());
+
+ EditTabPar packet;
+ packet.tab_set_index = fuel_type;
+ packet.tab_id = ETMT_NAME_STR;
+ packet.address = 0; //whole content
+ _tcscpy(packet.name_data, name.c_str());
+ packet.data_size = name.length();
+ ASSERT(packet.data_size == F_NAME_SIZE);
+ mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+}
+
+void CPMTablesController::OnLoadTablesFrom(int index)
+{
+ int fuel_type = mp_view->GetCurSel();
+ OPCompNc packet_data;
+ packet_data.opcode = OPCODE_LOAD_TABLSET;
+ packet_data.opdata = ((BYTE)fuel_type << 4) | ((BYTE)index);
+ mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ //reset modification flag
+ _ResetModification(mp_view->GetCurSel());
+ mp_view->SetModificationFlag(false);
+}
+
+void CPMTablesController::OnSaveTablesTo(int index)
+{
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLSET));
+ int fuel_type = mp_view->GetCurSel();
+ OPCompNc packet_data;
+ packet_data.opcode = OPCODE_SAVE_TABLSET;
+ packet_data.opdata = ((BYTE)fuel_type << 4) | ((BYTE)(index + TABLES_NUMBER));
+ mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ //reset modification flag
+ _ResetModification(mp_view->GetCurSel());
+ mp_view->SetModificationFlag(false);
 }
 
 //----------------------------------------------------------------
@@ -411,7 +479,7 @@ void CPMTablesController::OnDataCollected(void)
  _MoveMapsToCharts(mp_view->GetCurSel(), false);
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
  mp_view->UpdateOpenedCharts();
- mp_view->SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
+ _SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
 }
 
 void CPMTablesController::OnTableDeskChangesTimer(void)
