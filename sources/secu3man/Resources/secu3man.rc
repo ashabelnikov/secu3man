@@ -372,6 +372,8 @@ BEGIN
                             "Неправильный размер файла EEPROM. Размер должен быть %d байт."
     IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
                             "Импорт резервных параметров из файла EEPROM"
+    IDS_IMPORT_TABLES_FROM_EEPROM_FILE 
+                            "Импорт таблиц из файла EEPROM"
     IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
                             "Контрольная сумма не совпадает, возможно что параметры EEPROM повреждены. Желаете продолжить?"
 END
@@ -1010,6 +1012,8 @@ BEGIN
                             "Incorrect size of EEPROM file. Size must be %d bytes."
     IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
                             "Import reserve parameters from EEPROM file"
+    IDS_IMPORT_TABLES_FROM_EEPROM_FILE 
+                            "Import tables from EEPROM file"
     IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
                             "Check sum doesn't match, perhaps EEPROM parameters are corrupted. Do you want to continue?"
 END

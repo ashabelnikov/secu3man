@@ -36,6 +36,8 @@
 
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          8
+//количество наборов характеристик хранимых в EEPROM
+#define TUNABLE_TABLES_NUMBER  2
 
 struct SECU3FWMapsItem
 {

@@ -61,7 +61,9 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_ImportMenu.AppendMenu(MF_SEPARATOR);
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW));
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3));
+ m_ImportMenu.AppendMenu(MF_SEPARATOR);
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, MLL::LoadString(IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE));
+ m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_TABLES_FROM_EEPROM_FILE, MLL::LoadString(IDS_IMPORT_TABLES_FROM_EEPROM_FILE));
 
  ///////////////////////////////////////////////////////////////////////////
  //Popup menu "Ёкспорт данных"

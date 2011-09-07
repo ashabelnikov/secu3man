@@ -107,6 +107,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,OnImportDataFromAnotherFW)
  ON_COMMAND(IDM_IMPORT_FW_DATA_FROM_SECU3,OnImportDataFromSECU3)
  ON_COMMAND(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnImportDefParamsFromEEPROMFile)
+ ON_COMMAND(IDM_IMPORT_TABLES_FROM_EEPROM_FILE, OnImportTablesFromEEPROMFile)
 
  ON_COMMAND(IDM_READ_FLASH,OnReadFlashFromSECU)
  ON_COMMAND(IDM_WRITE_FLASH,OnWriteFlashToSECU)
@@ -118,6 +119,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_MPSZ, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_SECU3, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnUpdatePopupMenu_file1)
+ ON_UPDATE_COMMAND_UI(IDM_IMPORT_TABLES_FROM_EEPROM_FILE, OnUpdatePopupMenu_file1)
 
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_SECU3, OnImportMapsFromSECU3)
@@ -442,6 +444,12 @@ void CFirmwareTabDlg::OnImportDefParamsFromEEPROMFile()
   m_OnImportDefParamsFromEEPROMFile();
 }
 
+void CFirmwareTabDlg::OnImportTablesFromEEPROMFile()
+{
+ if (m_OnImportTablesFromEEPROMFile)
+  m_OnImportTablesFromEEPROMFile();
+}
+
 void CFirmwareTabDlg::OnExportMapsToMPSZ()
 {
  if (m_OnExportMapsToMPSZ)
@@ -540,6 +548,9 @@ void CFirmwareTabDlg::setOnImportMapsFromSECU3(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction)
 {m_OnImportDefParamsFromEEPROMFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnImportTablesFromEEPROMFile(EventHandler OnFunction)
+{m_OnImportTablesFromEEPROMFile = OnFunction;}
 
 void CFirmwareTabDlg::setOnReadFlashFromSECU(EventHandler OnFunction)
 {m_OnReadFlashFromSECU = OnFunction;}

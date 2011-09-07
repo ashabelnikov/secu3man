@@ -100,6 +100,7 @@ BEGIN
     IDS_EXPORT_MPSZ_TABLES  "Экспорт таблиц в MPSZ"
     IDS_EXPORT_SECU3_TABLES  "Экспорт таблиц в SECU-3"
     IDS_OPEN_FILE_FOR_EXPORT "Открыть файл для экспорта"
+    IDS_IMPORT_SECU3_TABLES_EE "Импорт таблиц из SECU-3 EEPROM"
 END
 
 #endif    // Russian resources
@@ -259,6 +260,7 @@ BEGIN
     IDS_EXPORT_MPSZ_TABLES  "Export tables into MPSZ"
     IDS_EXPORT_SECU3_TABLES  "Export tables into SECU-3"
     IDS_OPEN_FILE_FOR_EXPORT "Open file for export"
+    IDS_IMPORT_SECU3_TABLES_EE "Import tables from SECU-3 EEPROM"
 END
 
 #endif    // English (U.S.) resources

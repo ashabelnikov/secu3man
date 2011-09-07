@@ -291,6 +291,10 @@ SOURCE=.\SECU3ParametersDef.h
 # End Source File
 # Begin Source File
 
+SOURCE=.\SECU3TablesDef.h
+# End Source File
+# Begin Source File
+
 SOURCE=.\SECU3Types.h
 # End Source File
 # Begin Source File

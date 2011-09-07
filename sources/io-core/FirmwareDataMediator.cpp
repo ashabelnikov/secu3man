@@ -28,6 +28,7 @@
 #include "PlatformParamHolder.h"
 #include "SECU3IO.h"
 #include "SECU3ParametersDef.h"
+#include "SECU3TablesDef.h"
 #include "ufcodes.h"
 
 //этот файл содержит платформенно ориентированные фрагменты кода
@@ -35,16 +36,6 @@
 
 using namespace SECU3IO;
 using namespace SECU3IO::SECU3Types;
-
-typedef struct
-{
- _char f_str[F_STR_POINTS];                       // функция УОЗ на старте
- _char f_idl[F_IDL_POINTS];                       // функция УОЗ для ХХ
- _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];     // основная функция УОЗ (3D)
- _char f_tmp[F_TMP_POINTS];                       // функция коррект. УОЗ по температуре
- _uchar name[F_NAME_SIZE];                        // ассоциированное имя (имя семейства)
-}F_data;
-
 
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
 #define FW_SIGNATURE_INFO_SIZE 48
@@ -321,7 +312,7 @@ void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name
  i_new_name+= _T("                ");
 
  char raw_string[256];
- memset(raw_string, 0, FW_SIGNATURE_INFO_SIZE+1);
+ memset(raw_string, 0, F_NAME_SIZE+1);
  CharToOem(i_new_name.c_str(), raw_string);
  memcpy(p_maps[i_index].name, raw_string, F_NAME_SIZE);
 }

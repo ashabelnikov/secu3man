@@ -40,7 +40,6 @@ struct PPFlashParam
 struct PPEepromParam
 {
  size_t m_size;           //size of EEPROM
- size_t m_param_start;    //адрес структуры параметров в EEPROM
 };
 
 typedef enum EECUPlatform
@@ -65,6 +64,12 @@ class IOCORE_API PlatformParamHolder
 
   //get platform ID by firmware size
   static bool GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& o_platform);
+
+  //get list of all allowed sizes of EEPROM
+  static std::vector<int> GetEEPROMSizes(void);
+
+  //get platform ID by EEPROM size
+  static bool GetPlatformIdByEEPROMSize(int fwSize, EECUPlatform& o_platform);
 
  private:
   PPEepromParam m_ep;

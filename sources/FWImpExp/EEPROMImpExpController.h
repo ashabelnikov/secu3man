@@ -24,17 +24,17 @@
 #include <vector>
 #include "common/fastdelegate.h"
 
-class CFirmwareDataMediator;
 class CMapImpExpDlg;
+class EEPROMDataMediator;
 struct FWMapsDataHolder;
 
-class AFX_EXT_CLASS SECU3ImportController
+class AFX_EXT_CLASS EEPROMImportController
 {
-  //<buffer, list_of_allowed_sizes, title, selected_size, filename, filepath, ret_value>
-  typedef fastdelegate::FastDelegate6<BYTE*, const std::vector<int>&, _TSTRING*, int*, _TSTRING*, _TSTRING*, bool> Delegate1;
+  //<buffer, list_of_allowed_sizes, selected_size, filename, ret_value>
+  typedef fastdelegate::FastDelegate4<BYTE*, const std::vector<int>&, int*, _TSTRING*, bool> Delegate1;
  public:
-  SECU3ImportController(FWMapsDataHolder* ip_fwd);
-  ~SECU3ImportController();
+  EEPROMImportController(FWMapsDataHolder* ip_fwd);
+  ~EEPROMImportController();
 
   int  DoImport(void);
 
@@ -51,36 +51,7 @@ class AFX_EXT_CLASS SECU3ImportController
  private:
   FWMapsDataHolder* mp_fwd;
   CMapImpExpDlg* mp_view;
-  CFirmwareDataMediator* m_fwdm;
-  _TSTRING m_secu3_file_name;
-  Delegate1 m_FileReader;
-};
-
-class AFX_EXT_CLASS SECU3ExportController
-{
-  //<buffer, list_of_allowed_sizes, selected_size, filename, title, file_path, ret_value>
-  typedef fastdelegate::FastDelegate6<BYTE*, const std::vector<int>&, _TSTRING*, int*, _TSTRING*, _TSTRING*, bool> Delegate1;
- public:
-  SECU3ExportController(FWMapsDataHolder* ip_fwd);
-  ~SECU3ExportController();
-
-  int  DoExport(void);
-
-  void OnOkPressed(void);
-  void OnCancelPressed(void);
-  void OnExchangePressed(void);
-  void OnViewActivate(void);
-  void OnCurrentListNameChanged(int item, CString text);
-  void OnOtherListNameChanged(int item, CString text);
-  bool IsExchangeButtonAllowed(void);
-
-  void setFileReader(Delegate1 delegate);
-
- private:
-  FWMapsDataHolder* mp_fwd;
-  CMapImpExpDlg* mp_view;
-  CFirmwareDataMediator* m_fwdm;
-  _TSTRING m_secu3_file_name;
-  _TSTRING m_secu3_file_path;
+  EEPROMDataMediator* m_eedm;
+  _TSTRING m_eeprom_file_name;
   Delegate1 m_FileReader;
 };

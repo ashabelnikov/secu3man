@@ -89,6 +89,7 @@ class CFirmwareTabDlg : public CTabDialog
   void setOnImportMapsFromMPSZ(EventHandler OnFunction);
   void setOnImportMapsFromSECU3(EventHandler OnFunction);
   void setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction);
+  void setOnImportTablesFromEEPROMFile(EventHandler OnFunction);
   void setOnExportMapsToMPSZ(EventHandler OnFunction);
   void setOnExportMapsToSECU3(EventHandler OnFunction);
   void setOnFirmwareInfo(EventHandler OnFunction);
@@ -129,6 +130,7 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnImportMapsFromMPSZ();
   afx_msg void OnImportMapsFromSECU3();
   afx_msg void OnImportDefParamsFromEEPROMFile();
+  afx_msg void OnImportTablesFromEEPROMFile();
   afx_msg void OnExportMapsToMPSZ();
   afx_msg void OnExportMapsToSECU3();
   afx_msg void OnFirmwareInfo();
@@ -161,6 +163,7 @@ class CFirmwareTabDlg : public CTabDialog
   EventHandler  m_OnImportMapsFromMPSZ;
   EventHandler  m_OnImportMapsFromSECU3;
   EventHandler  m_OnImportDefParamsFromEEPROMFile;
+  EventHandler  m_OnImportTablesFromEEPROMFile;
   EventHandler  m_OnExportMapsToMPSZ;
   EventHandler  m_OnExportMapsToSECU3;
   EventHandler  m_OnFirmwareInfo;

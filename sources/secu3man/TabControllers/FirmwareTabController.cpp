@@ -30,6 +30,7 @@
 #include "common/FastDelegate.h"
 #include "FWImpExp/MPSZImpExpController.h"
 #include "FWImpExp/SECUImpExpController.h"
+#include "FWImpExp/EEPROMImpExpController.h"
 #include "HexUtils/readhex.h"
 #include "io-core/EEPROMDataMediator.h"
 #include "io-core/FirmwareDataMediator.h"
@@ -101,6 +102,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
  m_view->setOnImportMapsFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromSECU3));
  m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
+ m_view->setOnImportTablesFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportTablesFromEEPROMFile));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
  m_view->setOnExportMapsToSECU3(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToSECU3));
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
@@ -511,7 +513,9 @@ void CFirmwareTabController::OnReadEepromToFile(void)
 
 void CFirmwareTabController::OnWriteEepromFromFile(void)
 {
- bool result = LoadEEPROMFromFile(m_bl_data, m_epp.m_size);
+ std::vector<int> sizes;
+ sizes.push_back(m_epp.m_size);
+ bool result = LoadEEPROMFromFile(m_bl_data, sizes);
 
  if (!result)
   return; //cancel
@@ -681,52 +685,11 @@ bool CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size,
   return false; //отказ пользователя
 }
 
-//мы заранее знаем размер файла с EEPROM
-bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const int size)
-{
- HANDLE   hFile=0;
- static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
- CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
- CString cs;
 
- if (open.DoModal()==IDOK)
- {
-  CFile f;
-  CFileException ex;
-  TCHAR szError[1024];
-  if(!f.Open(open.GetFileName(),CFile::modeRead,&ex))
-  {
-   ex.GetErrorMessage(szError, 1024);
-   AfxMessageBox(szError);
-   return false;
-  }
-
-  //Проверка на размер файла (его размер должен соответствовать размеру EEPROM)
-  if (f.GetLength()!=(DWORD)size)
-  {
-   CString string;
-   string.Format(MLL::LoadString(IDS_FW_WRONG_EE_FILE_SIZE), size);
-   AfxMessageBox(string);
-   f.Close();
-   return false;
-  }
-
-  f.Read(p_data,size);
-  f.Close();
-  return true; //подтверждение пользователя
- }
- else
-  return false; //отказ пользователя
-}
-
-//мы заранее знаем размер файла с FLASH
-//p_data - буфер для чтения данных. Должен быть не меньше чем 64кБ
-//size  - размер данных для чтения
-//o_file_name - указатель на строку в которую будет сохранено имя файла
 namespace {
    struct GenMessage
    {
-    CString operator()(const std::vector<int>& sizes)
+    CString operator()(const std::vector<int>& sizes, UINT msgRegId)
     {
      CString string;
      CString size_str;
@@ -741,10 +704,63 @@ namespace {
       value.Format(_T("%d"), sizes[i]);
       size_str+=(value);
      }
-     string.Format(MLL::LoadString(IDS_FW_WRONG_FW_FILE_SIZE), size_str);
+     string.Format(MLL::LoadString(msgRegId), size_str);
      return string;
     }
    }; }
+
+//мы заранее знаем размер файла с EEPROM
+bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/)
+{
+ HANDLE hFile = 0;
+ static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+ CString cs;
+
+ if (sizes.empty())
+  return false; //error, at least one size must be specified
+ std::vector<int>::const_iterator p_size_max = std::max_element(sizes.begin(), sizes.end());
+
+ if (open.DoModal()==IDOK)
+ {
+  CFile f;
+  CFileException ex;
+  TCHAR szError[1024];
+  if(!f.Open(open.GetFileName(), CFile::modeRead, &ex))
+  {
+   ex.GetErrorMessage(szError, 1024);
+   AfxMessageBox(szError);
+   return false; //error, can't open file
+  }
+
+  //Проверка на размер файла (его размер должен соответствовать одному из разрешенных размеров EEPROM)
+  std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), f.GetLength());
+  if (p_size==sizes.end())
+  {
+   AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_EE_FILE_SIZE));
+   f.Close();
+   return false; //ошибка
+  }
+
+  f.Read(p_data, *p_size);
+  f.Close();
+
+  if (NULL != o_selected_size)
+   *o_selected_size = *p_size; //save selected size
+
+  if (NULL != o_file_name)
+   *o_file_name = open.GetFileName();
+
+  return true; //подтверждение пользователя
+ }
+ else
+  return false; //отказ пользователя
+}
+
+//мы заранее знаем размер файла с FLASH
+//p_data - буфер для чтения данных. Должен быть не меньше чем 64кБ
+//size  - размер данных для чтения
+//o_file_name - указатель на строку в которую будет сохранено имя файла
 bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title /*= NULL*/, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/, _TSTRING* o_file_path /*= NULL*/)
 {
  HANDLE   hFile=0;
@@ -812,7 +828,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
    std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), bin_size);
    if ((p_size==sizes.end()) || (status == RH_ADDRESS_EXCEDED))
    {
-    AfxMessageBox(GenMessage()(sizes));
+    AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
     f.Close();
     return false; //ошибка
    }
@@ -825,7 +841,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
    std::vector<int>::const_iterator p_size = std::find(sizes.begin(), sizes.end(), f.GetLength());
    if (p_size==sizes.end())
    {
-    AfxMessageBox(GenMessage()(sizes));
+    AfxMessageBox(GenMessage()(sizes, IDS_FW_WRONG_FW_FILE_SIZE));
     f.Close();
     return false; //ошибка
    }
@@ -1247,20 +1263,37 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
 {
  std::vector<BYTE> eeprom_buffer(m_epp.m_size, 0x00);
  BYTE *eeprom = &eeprom_buffer[0];
- bool result = LoadEEPROMFromFile(eeprom, m_epp.m_size);
+
+ std::vector<int> sizes;
+ sizes.push_back(m_epp.m_size);
+ bool result = LoadEEPROMFromFile(eeprom, sizes);
 
  if (!result)
   return; //cancel
 
  //проверка контрольной суммы загружаемых параметров и вывод предупреждения
- if (!m_edm->VerifyDefParamsCheckSum(eeprom))
+ if (!m_edm->VerifyParamsCheckSum(eeprom))
  {
   if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
    return; //user canceled
  }
 
- m_fwdm->LoadDefParametersFromBuffer(eeprom + m_epp.m_param_start);
+ m_fwdm->LoadDefParametersFromBuffer(eeprom + m_edm->GetParamsStartAddr());
  SetViewFirmwareValues(); //Update!
+}
+
+void CFirmwareTabController::OnImportTablesFromEEPROMFile()
+{
+ FWMapsDataHolder data;
+ EEPROMImportController import(&data);
+ import.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadEEPROMFromFile));
+ m_fwdm->GetMapsData(&data);
+ int result = import.DoImport();
+ if (result == IDOK)
+ {
+  m_fwdm->SetMapsData(&data);
+  SetViewFirmwareValues();
+ }
 }
 
 void CFirmwareTabController::OnExportMapsToMPSZ(void)

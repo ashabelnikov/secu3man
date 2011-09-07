@@ -27,3 +27,4 @@
 #define IDS_SECU3_FW_FILE               6021
 #define IDS_OPEN_FILE_FOR_EXPORT        6022
 #define IDS_EXPORT_SECU3_TABLES         6023
+#define IDS_IMPORT_SECU3_TABLES_EE      6024

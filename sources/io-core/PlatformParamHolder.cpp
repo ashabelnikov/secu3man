@@ -39,7 +39,6 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 512;
-   m_ep.m_param_start = 0x002;
    break;
 
   case EP_ATMEGA32:
@@ -52,7 +51,6 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 1024;
-   m_ep.m_param_start = 0x002;
    break;
 
   case EP_ATMEGA64:
@@ -65,7 +63,6 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 2048;
-   m_ep.m_param_start = 0x002;
    break;
 
   case EP_ATMEGA128:
@@ -78,7 +75,6 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 4096;
-   m_ep.m_param_start = 0x002;
    break;
 
   default:
@@ -116,6 +112,31 @@ bool PlatformParamHolder::GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& 
  {
   PlatformParamHolder params((EECUPlatform)i);
   if (fwSize == params.GetFlashParameters().m_total_size)
+  {
+   o_platform = (EECUPlatform)i;
+   return true;
+  }
+ }
+ return false; //error
+}
+
+std::vector<int> PlatformParamHolder::GetEEPROMSizes(void)
+{
+ std::vector<int> sizes;
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  sizes.push_back(params.GetEepromParameters().m_size);
+ }
+ return sizes;
+}
+
+bool PlatformParamHolder::GetPlatformIdByEEPROMSize(int fwSize, EECUPlatform& o_platform)
+{
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  if (fwSize == params.GetEepromParameters().m_size)
   {
    o_platform = (EECUPlatform)i;
    return true;
