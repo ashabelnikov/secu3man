@@ -144,7 +144,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_gradient_spin.SetBuddy(&m_map_curve_gradient_edit);
  m_map_curve_gradient_edit.SetLimitText(5);
  m_map_curve_gradient_edit.SetDecimalPlaces(3);
- m_map_curve_gradient_spin.SetRangeAndDelta(1.0f,150.0f,0.01f);
+ m_map_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
  UpdateData(FALSE);  //инициализируем контроллы диалога данными

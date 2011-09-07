@@ -440,7 +440,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
 
  //Наклон кривой ДАД
  int map_curve_gradient = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_gradient))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &map_curve_gradient, true))
   return false;
  raw_packet+=4;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
@@ -1500,8 +1500,8 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  CNumericConv::Bin16ToHex(map_upper_pressure,m_outgoing_packet);
  int map_curve_offset = MathHelpers::Round(packet_data->map_curve_offset / m_adc_discrete);
  CNumericConv::Bin16ToHex(map_curve_offset,m_outgoing_packet);
- int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete );
- CNumericConv::Bin16ToHex(map_curve_gradient,m_outgoing_packet);
+ int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete);
+ CNumericConv::Bin16ToHex(map_curve_gradient, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 
