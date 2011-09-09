@@ -369,7 +369,7 @@ BEGIN
     IDS_LP_OPEN_FILE        "Открыть файл"
     IDS_LP_FILE_READ_ERROR  "Произошла ошибка чтения данных.  Возможно что этот файл испорчен или был создан с использованием другой версии программного обеспечения. "
     IDS_FW_WRONG_EE_FILE_SIZE 
-                            "Неправильный размер файла EEPROM. Размер должен быть %d байт."
+                            "Неправильный размер файла EEPROM. Размер должен быть %s байт."
     IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
                             "Импорт резервных параметров из файла EEPROM"
     IDS_IMPORT_TABLES_FROM_EEPROM_FILE 
@@ -1009,7 +1009,7 @@ BEGIN
     IDS_LP_OPEN_FILE        "Open file"
     IDS_LP_FILE_READ_ERROR  "Data read error occured.  Perhaps this file is corrupted or was created by using other version of software. "
     IDS_FW_WRONG_EE_FILE_SIZE 
-                            "Incorrect size of EEPROM file. Size must be %d bytes."
+                            "Incorrect size of EEPROM file. Size must be %s bytes."
     IDS_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE 
                             "Import reserve parameters from EEPROM file"
     IDS_IMPORT_TABLES_FROM_EEPROM_FILE 

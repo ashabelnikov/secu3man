@@ -34,6 +34,7 @@ using namespace fastdelegate;
 
 EEPROMImportController::EEPROMImportController(FWMapsDataHolder* ip_fwd)
 : mp_fwd(ip_fwd)
+, m_eedm(NULL)
 , mp_view(new CMapImpExpDlg())
 , m_eeprom_file_name(_T(""))
 {

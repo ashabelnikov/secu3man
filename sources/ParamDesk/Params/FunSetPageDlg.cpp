@@ -139,7 +139,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_offset_spin.SetBuddy(&m_map_curve_offset_edit);
  m_map_curve_offset_edit.SetLimitText(5);
  m_map_curve_offset_edit.SetDecimalPlaces(3);
- m_map_curve_offset_spin.SetRangeAndDelta(0.0f,5.0f,0.0025f);
+ m_map_curve_offset_spin.SetRangeAndDelta(-5.0f,5.0f,0.0025f);
 
  m_map_curve_gradient_spin.SetBuddy(&m_map_curve_gradient_edit);
  m_map_curve_gradient_edit.SetLimitText(5);

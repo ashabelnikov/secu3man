@@ -70,7 +70,7 @@ typedef struct
  _int angle_inc_spead;
  _int idlreg_min_angle;
  _int idlreg_max_angle;
- _uint map_curve_offset;
+ _int map_curve_offset;              //can be negative  
  _int map_curve_gradient;            //can be negative (in case of inverse characteristic curve)!
 
  _int epm_on_threshold;

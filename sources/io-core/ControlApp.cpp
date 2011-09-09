@@ -433,7 +433,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
 
  //Смещение кривой ДАД
  int map_curve_offset = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map_curve_offset))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &map_curve_offset, true))
   return false;
  raw_packet+=4;
  m_FunSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
@@ -1499,7 +1499,7 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  int map_upper_pressure = MathHelpers::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(map_upper_pressure,m_outgoing_packet);
  int map_curve_offset = MathHelpers::Round(packet_data->map_curve_offset / m_adc_discrete);
- CNumericConv::Bin16ToHex(map_curve_offset,m_outgoing_packet);
+ CNumericConv::Bin16ToHex(map_curve_offset, m_outgoing_packet);
  int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete);
  CNumericConv::Bin16ToHex(map_curve_gradient, m_outgoing_packet);
  m_outgoing_packet+= '\r';

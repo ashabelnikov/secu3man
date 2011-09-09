@@ -34,6 +34,7 @@ using namespace fastdelegate;
 
 SECU3ImportController::SECU3ImportController(FWMapsDataHolder* ip_fwd)
 : mp_fwd(ip_fwd)
+, m_fwdm(NULL)
 , mp_view(new CMapImpExpDlg())
 , m_secu3_file_name(_T(""))
 {
@@ -179,6 +180,7 @@ void SECU3ImportController::OnOtherListNameChanged(int item, CString text)
 //////////////////////////////////////////////////////////////////////////////////////////
 SECU3ExportController::SECU3ExportController(FWMapsDataHolder* ip_fwd)
 : mp_fwd(ip_fwd)
+, m_fwdm(NULL)
 , mp_view(new CMapImpExpDlg())
 , m_secu3_file_name(_T(""))
 , m_secu3_file_path(_T(""))
