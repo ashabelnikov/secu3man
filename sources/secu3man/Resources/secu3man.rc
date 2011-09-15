@@ -380,7 +380,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке"
+    IDS_READ_FW_SIGNATURE_INFO "Информация о прошивке          Ctrl + I"
     IDS_SELECT_FOLDER_FOR_LOG_FILES "Выбор каталога для лог-файлов"
     IDS_ECUERROR_CKPS_MALFUNCTION "Сбои в работе ДПКВ - ошибки синхронизации"
     IDS_ECUERROR_EEPROM_PARAM_BROKEN "Параметры в EEPROM повреждены (СRС)"
@@ -402,15 +402,15 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FLASH          "Прочитать FLASH из SECU-3"
-    IDS_WRITE_FLASH         "Записать FLASH в SECU-3"
+    IDS_READ_FLASH          "Прочитать FLASH из SECU-3   Ctrl + R"
+    IDS_WRITE_FLASH         "Записать FLASH в SECU-3       Ctrl + W"
     IDS_READ_FLASH_TO_FILE  "Прочитать FLASH из SECU-3 в файл..."
     IDS_WRITE_FLASH_FROM_FILE "Записать FLASH в SECU-3 из файла..."
-    IDS_READ_EEPROM_TO_FILE "Прочитать EEPROM в файл..."
-    IDS_WRITE_EEPROM_FROM_FILE "Записать EEPROM из файла..."
+    IDS_READ_EEPROM_TO_FILE "Прочитать EEPROM в файл...  Ctrl + G"
+    IDS_WRITE_EEPROM_FROM_FILE "Записать EEPROM из файла... Ctrl + P"
     IDS_OPEN_FLASH          "Открыть FLASH из файла...   Ctrl + O"
     IDS_SAVE_FLASH          "Сохранить FLASH в файл...    Ctrl + S"
-    IDS_READ_BOOTLOADER_SIGNATURE "Информация о бутлоадере..."
+    IDS_READ_BOOTLOADER_SIGNATURE "Информация о бутлоадере      Ctrl + B"
     IDS_CONN_CONNECTED      "connected"
     IDS_CONN_DISCONNECTED   "disconnected"
     IDS_CONN_BOOTLOADER     "boot loader"
@@ -861,15 +861,15 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FLASH          "Read FLASH from SECU-3"
-    IDS_WRITE_FLASH         "Write FLASH to SECU-3"
+    IDS_READ_FLASH          "Read FLASH from SECU-3   Ctrl + R"
+    IDS_WRITE_FLASH         "Write FLASH to SECU-3       Ctrl + W"
     IDS_READ_FLASH_TO_FILE  "Read FLASH from SECU-3 into file..."
     IDS_WRITE_FLASH_FROM_FILE "Write FLASH to SECU-3 from file..."
-    IDS_READ_EEPROM_TO_FILE "Read EEPROM into file..."
-    IDS_WRITE_EEPROM_FROM_FILE "Write EEPROM from file..."
-    IDS_OPEN_FLASH          "Open FLASH from file...   Ctrl + O"
-    IDS_SAVE_FLASH          "Save FLASH into file...     Ctrl + S"
-    IDS_READ_BOOTLOADER_SIGNATURE "Boot loader information..."
+    IDS_READ_EEPROM_TO_FILE "Read EEPROM into file...   Ctrl + G"
+    IDS_WRITE_EEPROM_FROM_FILE "Write EEPROM from file... Ctrl + P"
+    IDS_OPEN_FLASH          "Open FLASH from file...      Ctrl + O"
+    IDS_SAVE_FLASH          "Save FLASH into file...        Ctrl + S"
+    IDS_READ_BOOTLOADER_SIGNATURE "Boot loader information     Ctrl + B"
     IDS_CONN_CONNECTED      "connected"
     IDS_CONN_DISCONNECTED   "disconnected"
     IDS_CONN_BOOTLOADER     "boot loader"
@@ -913,7 +913,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_READ_FW_SIGNATURE_INFO "Firmware information"
+    IDS_READ_FW_SIGNATURE_INFO "Firmware information         Ctrl + I"
     IDS_SELECT_FOLDER_FOR_LOG_FILES "Select folder for log-files"
     IDS_ECUERROR_CKPS_MALFUNCTION 
                             "Failures in working of CKP sensor - synchronization errors"

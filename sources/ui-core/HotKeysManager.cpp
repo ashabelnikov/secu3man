@@ -13,7 +13,7 @@
 #include <algorithm>
 
 HotKeysManager::HotKeysManager()
-: m_active(false)
+: m_active(true)
 {
 //na
 }

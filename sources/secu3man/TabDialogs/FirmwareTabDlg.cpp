@@ -478,6 +478,12 @@ void CFirmwareTabDlg::_RegisterHotKeys(void)
 {
  m_hot_keys_supplier->RegisterCommand(IDM_OPEN_FLASH, 'O', MOD_CONTROL);
  m_hot_keys_supplier->RegisterCommand(IDM_SAVE_FLASH, 'S', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_READ_FLASH, 'R', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_WRITE_FLASH,'W', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_READ_EEPROM_TO_FILE,'G', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_WRITE_EEPROM_FROM_FILE,'P', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_READ_BOOTLOADER_SIGNATURE,'B', MOD_CONTROL);
+ m_hot_keys_supplier->RegisterCommand(IDM_READ_FW_SIGNATURE_INFO,'I', MOD_CONTROL);
 }
 
 void CFirmwareTabDlg::SetBLStartedEmergency(bool state)
