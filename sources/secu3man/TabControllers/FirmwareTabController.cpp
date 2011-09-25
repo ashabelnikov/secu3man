@@ -956,7 +956,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_COILREGUL), TYPE_MAP_COILREGUL);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
 
  return CheckChangesAskAndSaveFirmware();
 }
@@ -987,8 +987,8 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
  }
 
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
- m_view->mp_TablesPanel->EnableCoilRegulation((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COIL_REGULATION)) > 0);
- m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COIL_REGULATION)));
+ m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
+ m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
  m_view->mp_ParamDeskDlg->SetCrankType(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_WHEEL_36_1)) > 0) ? SECU3IO::COPT_WHEEL_36_1 : -1);
 
@@ -1065,8 +1065,8 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false),false);
  m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(true),true);
 
- m_fwdm->GetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(false),false);
- m_fwdm->GetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(true),true);
+ m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false),false);
+ m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(true),true);
 
  if (m_current_funset_index==-1)
   return;
@@ -1137,8 +1137,8 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_ATTENUATOR:
    m_fwdm->SetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false));
    break;
-  case TYPE_MAP_COILREGUL:
-   m_fwdm->SetCoilRegulMap(m_view->mp_TablesPanel->GetCoilRegulMap(false));
+  case TYPE_MAP_DWELLCNTRL:
+   m_fwdm->SetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false));
    break;
  }
 }
@@ -1378,9 +1378,9 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_AttenuatorMapWnd_X = rc.left;
    ws.m_AttenuatorMapWnd_Y = rc.top;
    break;
-  case TYPE_MAP_COILREGUL:
-   ws.m_CoilRegulMapWnd_X = rc.left;
-   ws.m_CoilRegulMapWnd_Y = rc.top;
+  case TYPE_MAP_DWELLCNTRL:
+   ws.m_DwellCntrlMapWnd_X = rc.left;
+   ws.m_DwellCntrlMapWnd_Y = rc.top;
    break;
  };
 
@@ -1414,8 +1414,8 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_ATTENUATOR:
    X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
    break;
-  case TYPE_MAP_COILREGUL:
-   X = ws.m_CoilRegulMapWnd_X, Y = ws.m_CoilRegulMapWnd_Y;
+  case TYPE_MAP_DWELLCNTRL:
+   X = ws.m_DwellCntrlMapWnd_X, Y = ws.m_DwellCntrlMapWnd_Y;
    break;
   default:
    return; //undefined case...

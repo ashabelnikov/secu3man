@@ -102,8 +102,8 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
   m_fwdm->GetAttenuatorMap(mp_fwd->attenuator_table);
 
- if (mp_view->GetFWDFlag(FLAG_COILREG_MAP))
-  m_fwdm->GetCoilRegulMap(mp_fwd->coilregul_table);
+ if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
+  m_fwdm->GetDwellCntrlMap(mp_fwd->dwellcntrl_table);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -163,7 +163,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP,true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP,true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP,true);
- mp_view->SetFWDFlag(FLAG_COILREG_MAP,true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP,true);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP,true);
 }
 
@@ -252,8 +252,8 @@ void SECU3ExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
   m_fwdm->SetAttenuatorMap(mp_fwd->attenuator_table);
 
- if (mp_view->GetFWDFlag(FLAG_COILREG_MAP))
-  m_fwdm->SetCoilRegulMap(mp_fwd->coilregul_table);
+ if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
+  m_fwdm->SetDwellCntrlMap(mp_fwd->dwellcntrl_table);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
@@ -322,7 +322,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP,true);
- mp_view->SetFWDFlag(FLAG_COILREG_MAP,true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP,true);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP,true);
 }
 

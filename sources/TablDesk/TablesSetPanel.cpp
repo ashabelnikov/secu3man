@@ -64,7 +64,7 @@ void __cdecl CTablesSetPanel::OnCloseAttenuatorTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnChangeCoilRegulTable(void* i_param)
+void __cdecl CTablesSetPanel::OnChangeDwellCntrlTable(void* i_param)
 {
  CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
  if (!_this)
@@ -74,11 +74,11 @@ void __cdecl CTablesSetPanel::OnChangeCoilRegulTable(void* i_param)
  }
 
  if (_this->m_OnMapChanged)
-   _this->m_OnMapChanged(TYPE_MAP_COILREGUL);
+   _this->m_OnMapChanged(TYPE_MAP_DWELLCNTRL);
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnCloseCoilRegulTable(void* i_param)
+void __cdecl CTablesSetPanel::OnCloseDwellCntrlTable(void* i_param)
 {
  CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
  if (!_this)
@@ -86,11 +86,11 @@ void __cdecl CTablesSetPanel::OnCloseCoilRegulTable(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_coilregul_map_chart_state = 0;
+ _this->m_dwellcntrl_map_chart_state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_coilregul_map_wnd_handle, TYPE_MAP_COILREGUL);
+  _this->m_OnCloseMapWnd(_this->m_dwellcntrl_map_wnd_handle, TYPE_MAP_DWELLCNTRL);
 }
 
 //------------------------------------------------------------------------
@@ -118,13 +118,13 @@ const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
 CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 : Super(CTablesSetPanel::IDD, pParent)
-, m_coilreg_enabled(false)
+, m_dwellcntrl_enabled(false)
 {
  m_attenuator_map_chart_state = 0;
- m_coilregul_map_chart_state = 0;
+ m_dwellcntrl_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
- m_coilregul_map_wnd_handle = NULL;
+ m_dwellcntrl_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -139,14 +139,14 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_TD_FUNSET_LIST, m_funset_listbox);
  DDX_Control(pDX, IDC_TD_VIEW_ATTENUATOR_MAP, m_view_attenuator_map_btn);
- DDX_Control(pDX, IDC_TD_VIEW_COIL_REGULATION, m_view_coilregul_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, m_view_dwellcntrl_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_ATTENUATOR_MAP, OnViewAttenuatorMap)
- ON_BN_CLICKED(IDC_TD_VIEW_COIL_REGULATION, OnViewCoilRegulMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_DWELL_CONTROL, OnViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
- ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_COIL_REGULATION, OnUpdateViewCoilRegulMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
@@ -173,12 +173,12 @@ void CTablesSetPanel::OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_attenuator_map_chart_state) ? TRUE : FALSE );
 }
 
-void CTablesSetPanel::OnUpdateViewCoilRegulMap(CCmdUI* pCmdUI)
+void CTablesSetPanel::OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
- pCmdUI->Enable(enable && m_coilreg_enabled);
- pCmdUI->SetCheck( (m_coilregul_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->Enable(enable && m_dwellcntrl_enabled);
+ pCmdUI->SetCheck( (m_dwellcntrl_map_chart_state) ? TRUE : FALSE );
 }
 
 //обновл€ет контроллы состо€ние которых зависит от того - есть данные или нет
@@ -193,17 +193,17 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
  Super::UpdateOpenedCharts();
  if (m_attenuator_map_chart_state)
   DLL::Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
- if (m_coilregul_map_chart_state)
-  DLL::Chart2DUpdate(m_coilregul_map_wnd_handle,GetCoilRegulMap(true), GetCoilRegulMap(false));
+ if (m_dwellcntrl_map_chart_state)
+  DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle,GetDwellCntrlMap(true), GetDwellCntrlMap(false));
 }
 
-void CTablesSetPanel::EnableCoilRegulation(bool enable)
+void CTablesSetPanel::EnableDwellControl(bool enable)
 {
- m_coilreg_enabled = enable;
+ m_dwellcntrl_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
- if (m_coilregul_map_chart_state && ::IsWindow(m_coilregul_map_wnd_handle))
-  DLL::Chart2DEnable(m_coilregul_map_wnd_handle, enable && Super::IsAllowed());
+ if (m_dwellcntrl_map_chart_state && ::IsWindow(m_dwellcntrl_map_wnd_handle))
+  DLL::Chart2DEnable(m_dwellcntrl_map_wnd_handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -291,36 +291,36 @@ void CTablesSetPanel::OnViewAttenuatorMap()
  }
 }
 
-void CTablesSetPanel::OnViewCoilRegulMap()
+void CTablesSetPanel::OnViewDwellCntrlMap()
 {
  //если кнопку "выключили" то закрываем окно редактора
- if (m_view_coilregul_map_btn.GetCheck()==BST_UNCHECKED)
+ if (m_view_dwellcntrl_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_coilregul_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_dwellcntrl_map_wnd_handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_coilregul_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_dwellcntrl_map_chart_state)&&(DLL::Chart2DCreate))
  {
-  m_coilregul_map_chart_state = 1;
-  m_coilregul_map_wnd_handle = DLL::Chart2DCreate(GetCoilRegulMap(true), GetCoilRegulMap(false), 0.25f, 16.0, SECU3IO::coilregul_map_slots, 32,
+  m_dwellcntrl_map_chart_state = 1;
+  m_dwellcntrl_map_wnd_handle = DLL::Chart2DCreate(GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
-    MLL::GetString(IDS_MAPS_COILREGUL_UNIT).c_str(),
-    MLL::GetString(IDS_COILREGUL_MAP).c_str());
-  DLL::Chart2DSetAxisValuesFormat(m_coilregul_map_wnd_handle, 1, _T("%.01f"));
-  DLL::Chart2DSetOnChange(m_coilregul_map_wnd_handle, OnChangeCoilRegulTable, this);
-  DLL::Chart2DSetOnClose(m_coilregul_map_wnd_handle, OnCloseCoilRegulTable, this);
-  DLL::Chart2DUpdate(m_coilregul_map_wnd_handle, NULL, NULL); //<--actuate changes
+    MLL::GetString(IDS_MAPS_DWELLCNTRL_UNIT).c_str(),
+    MLL::GetString(IDS_DWELLCNTRL_MAP).c_str());
+  DLL::Chart2DSetAxisValuesFormat(m_dwellcntrl_map_wnd_handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_dwellcntrl_map_wnd_handle, OnChangeDwellCntrlTable, this);
+  DLL::Chart2DSetOnClose(m_dwellcntrl_map_wnd_handle, OnCloseDwellCntrlTable, this);
+  DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_coilregul_map_wnd_handle, TYPE_MAP_COILREGUL);
+   m_OnOpenMapWnd(m_dwellcntrl_map_wnd_handle, TYPE_MAP_DWELLCNTRL);
 
-  DLL::Chart2DShow(m_coilregul_map_wnd_handle, true);
+  DLL::Chart2DShow(m_dwellcntrl_map_wnd_handle, true);
  }
  else
  {
-  ::SetFocus(m_coilregul_map_wnd_handle);
+  ::SetFocus(m_dwellcntrl_map_wnd_handle);
  }
 }
 
@@ -332,12 +332,12 @@ float* CTablesSetPanel::GetAttenuatorMap(bool i_original)
   return m_attenuator_map_active;
 }
 
-float* CTablesSetPanel::GetCoilRegulMap(bool i_original)
+float* CTablesSetPanel::GetDwellCntrlMap(bool i_original)
 {
  if (i_original)
-  return m_coilregul_map_original;
+  return m_dwellcntrl_map_original;
  else
-  return m_coilregul_map_active;
+  return m_dwellcntrl_map_active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)
@@ -350,8 +350,8 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
  {
  case TYPE_MAP_ATTENUATOR:
   return m_attenuator_map_wnd_handle ? m_attenuator_map_wnd_handle : NULL;
- case TYPE_MAP_COILREGUL:
-  return m_coilregul_map_wnd_handle ? m_coilregul_map_wnd_handle : NULL;
+ case TYPE_MAP_DWELLCNTRL:
+  return m_dwellcntrl_map_wnd_handle ? m_dwellcntrl_map_wnd_handle : NULL;
  default:
   return NULL;
  }

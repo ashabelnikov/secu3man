@@ -8,7 +8,7 @@
 #define IDC_TD_VIEW_WORK_MAP            5004
 #define IDC_TD_VIEW_TEMP_MAP            5005
 #define IDD_TD_ALLTABLES_PANEL          5006
-#define IDC_TD_VIEW_COIL_REGULATION     5007
+#define IDC_TD_VIEW_DWELL_CONTROL       5007
 #define IDC_TD_VIEW_ATTENUATOR_MAP      5008
 #define IDC_TD_FUNSET_LIST              5009
 #define IDC_TD_MAP_GROUPBOX             5010
@@ -22,6 +22,6 @@
 #define IDS_MAPS_ATTENUATOR_GAIN_UNIT   5018
 #define IDS_ATTENUATOR_MAP              5019
 #define IDS_MAPS_VOLT_UNIT              5020
-#define IDS_MAPS_COILREGUL_UNIT         5021
-#define IDS_COILREGUL_MAP               5022
+#define IDS_MAPS_DWELLCNTRL_UNIT        5021
+#define IDS_DWELLCNTRL_MAP              5022
 

@@ -64,8 +64,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_AttenMapWnd_Y(_T("AttenMapWnd_Y"))
 , m_Name_MainFrmWnd_X(_T("MainFrmWnd_X"))
 , m_Name_MainFrmWnd_Y(_T("MainFrmWnd_Y"))
-, m_Name_CoilRegulMapWnd_X(_T("CoilRegulMapWnd_X"))
-, m_Name_CoilRegulMapWnd_Y(_T("CoilRegulMapWnd_Y"))
+, m_Name_DwellCntrlMapWnd_X(_T("DwellCntrlMapWnd_X"))
+, m_Name_DwellCntrlMapWnd_Y(_T("DwellCntrlMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -318,8 +318,8 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_Y, std::numeric_limits<int>::max());
 
- _GETWNDPOSITION(m_Name_WndSettings_Section, CoilRegulMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, CoilRegulMapWnd_Y, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_Y, std::numeric_limits<int>::max());
 
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
@@ -434,11 +434,11 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optMainFrmWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_Y,write_str,IniFileName);
 
- write_str.Format(_T("%d"),m_optCoilRegulMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CoilRegulMapWnd_X,write_str,IniFileName);
+ write_str.Format(_T("%d"),m_optDwellCntrlMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DwellCntrlMapWnd_X,write_str,IniFileName);
 
- write_str.Format(_T("%d"),m_optCoilRegulMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CoilRegulMapWnd_Y,write_str,IniFileName);
+ write_str.Format(_T("%d"),m_optDwellCntrlMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DwellCntrlMapWnd_Y,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
@@ -499,8 +499,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optAttenMapWnd_Y = i_wndSettings.m_AttenuatorMapWnd_Y;
  m_optMainFrmWnd_X = i_wndSettings.m_MainFrmWnd_X;
  m_optMainFrmWnd_Y = i_wndSettings.m_MainFrmWnd_Y;
- m_optCoilRegulMapWnd_X = i_wndSettings.m_CoilRegulMapWnd_X;
- m_optCoilRegulMapWnd_Y = i_wndSettings.m_CoilRegulMapWnd_Y;
+ m_optDwellCntrlMapWnd_X = i_wndSettings.m_DwellCntrlMapWnd_X;
+ m_optDwellCntrlMapWnd_Y = i_wndSettings.m_DwellCntrlMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -517,8 +517,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd_Y;
  o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd_X;
  o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd_Y;
- o_wndSettings.m_CoilRegulMapWnd_X = m_optCoilRegulMapWnd_X;
- o_wndSettings.m_CoilRegulMapWnd_Y = m_optCoilRegulMapWnd_Y;
+ o_wndSettings.m_DwellCntrlMapWnd_X = m_optDwellCntrlMapWnd_X;
+ o_wndSettings.m_DwellCntrlMapWnd_Y = m_optDwellCntrlMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

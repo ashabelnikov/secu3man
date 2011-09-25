@@ -29,5 +29,5 @@ enum EMapTypes
  TYPE_MAP_DA_TEMP_CORR = 3,//must be =3
  // 4, 5, 6, 7 - are reserved
  TYPE_MAP_ATTENUATOR = 8,  //must be =8. used by derived classes
- TYPE_MAP_COILREGUL = 9    //must be =9. used by derived classes
+ TYPE_MAP_DWELLCNTRL = 9   //must be =9. used by derived classes
 };

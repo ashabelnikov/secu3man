@@ -139,8 +139,8 @@ void MPSZImportController::OnViewActivate(void)
 
  mp_view->SetFWDFlag(FLAG_TEMP_MAP,false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP,false);
- mp_view->SetFWDFlag(FLAG_COILREG_MAP, false);
- mp_view->EnableFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
 
@@ -300,8 +300,8 @@ void MPSZExportController::OnViewActivate(void)
 
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
- mp_view->SetFWDFlag(FLAG_COILREG_MAP, false);
- mp_view->EnableFWDFlag(FLAG_COILREG_MAP, false);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
  

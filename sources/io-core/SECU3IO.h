@@ -285,7 +285,7 @@ namespace SECU3IO
  const float idle_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const int work_map_rpm_slots[16]    = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const float temp_map_rpm_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
- const float coilregul_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
+ const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
 
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 12;
@@ -300,7 +300,7 @@ namespace SECU3IO
   _SD(4,  _T("COPT_VPSEM")),
   _SD(5,  _T("COPT_WHEEL_36_1")),
   _SD(6,  _T("COPT_INVERSE_IGN_OUTPUTS")),
-  _SD(7,  _T("COPT_COIL_REGULATION")),
+  _SD(7,  _T("COPT_DWELL_CONTROL")),
   _SD(8,  _T("COPT_COOLINGFAN_PWM")),
   _SD(9,  _T("COPT_REALTIME_TABLES")),
   _SD(10, _T("COPT_ICCAVR_COMPILER")),
@@ -315,7 +315,7 @@ const int COPT_ATMEGA128 = 3;
 const int COPT_VPSEM = 4;
 const int COPT_WHEEL_36_1 = 5;
 const int COPT_INVERSE_IGN_OUTPUTS = 6;
-const int COPT_COIL_REGULATION = 7;
+const int COPT_DWELL_CONTROL = 7;
 const int COPT_COOLINGFAN_PWM = 8;
 const int COPT_REALTIME_TABLES = 9;
 const int COPT_ICCAVR_COMPILER = 10;

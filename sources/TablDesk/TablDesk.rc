@@ -68,7 +68,7 @@ BEGIN
     CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "Настр. врем. накопления",IDC_TD_VIEW_COIL_REGULATION,
+    CONTROL         "Настр. врем. накопления",IDC_TD_VIEW_DWELL_CONTROL,
                     "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,7,
                     110,95,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,
@@ -121,8 +121,8 @@ BEGIN
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
     IDS_ATTENUATOR_MAP      "Настройка кривой усиления аттенюатора"
     IDS_MAPS_VOLT_UNIT      "Вольты (B)"
-    IDS_MAPS_COILREGUL_UNIT "Время накопления (мс)"
-    IDS_COILREGUL_MAP       "Настройка времени накопления энергии катушек зажигания"
+    IDS_MAPS_DWELLCNTRL_UNIT "Время накопления (мс)"
+    IDS_DWELLCNTRL_MAP       "Настройка времени накопления энергии катушек зажигания"
 END
 
 #endif    // Russian resources
@@ -185,7 +185,7 @@ BEGIN
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "Tune coil regulation",IDC_TD_VIEW_COIL_REGULATION,
+    CONTROL         "Tune dwell control",IDC_TD_VIEW_DWELL_CONTROL,
                     "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,5,
                     110,95,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
@@ -321,8 +321,8 @@ BEGIN
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
     IDS_ATTENUATOR_MAP      "Tune attenuator curve of amplification"
     IDS_MAPS_VOLT_UNIT      "Volts (V)"
-    IDS_MAPS_COILREGUL_UNIT "Accumulation time (ms)"
-    IDS_COILREGUL_MAP       "Tune accumulation time of ignition coils"
+    IDS_MAPS_DWELLCNTRL_UNIT "Accumulation time (ms)"
+    IDS_DWELLCNTRL_MAP      "Tune accumulation time of ignition coils"
 END
 
 #endif    // English (U.S.) resources

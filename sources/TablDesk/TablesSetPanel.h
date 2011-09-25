@@ -42,14 +42,14 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void SetFunSetListBoxSelection(int i_selected_index);
 
   float* GetAttenuatorMap(bool i_original);
-  float* GetCoilRegulMap(bool i_original);
+  float* GetDwellCntrlMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
 
   virtual void UpdateOpenedCharts(void);
 
-  void EnableCoilRegulation(bool enable);
+  void EnableDwellControl(bool enable);
 
  public: //установка обработчиков событий
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
@@ -60,9 +60,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnViewAttenuatorMap();
-  afx_msg void OnViewCoilRegulMap();
+  afx_msg void OnViewDwellCntrlMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateViewCoilRegulMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -73,7 +73,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
  private:
   CListCtrl m_funset_listbox;
   CButton   m_view_attenuator_map_btn;
-  CButton   m_view_coilregul_map_btn;
+  CButton   m_view_dwellcntrl_map_btn;
 
  private:
   EventWithCode m_OnFunSetSelectionChanged;
@@ -81,22 +81,22 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
-  static void __cdecl OnChangeCoilRegulTable(void* i_param);
-  static void __cdecl OnCloseCoilRegulTable(void* i_param);
+  static void __cdecl OnChangeDwellCntrlTable(void* i_param);
+  static void __cdecl OnCloseDwellCntrlTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
 
-  bool m_coilreg_enabled;
+  bool m_dwellcntrl_enabled;
   int m_attenuator_map_chart_state;
-  int m_coilregul_map_chart_state;
+  int m_dwellcntrl_map_chart_state;
 
   HWND m_attenuator_map_wnd_handle;
-  HWND m_coilregul_map_wnd_handle;
+  HWND m_dwellcntrl_map_wnd_handle;
 
   float m_attenuator_table_slots[128];
 
   float m_attenuator_map_active[128];
   float m_attenuator_map_original[128];
 
-  float m_coilregul_map_active[32];
-  float m_coilregul_map_original[32];
+  float m_dwellcntrl_map_active[32];
+  float m_dwellcntrl_map_original[32];
 };

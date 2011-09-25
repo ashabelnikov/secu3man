@@ -348,7 +348,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_ECUERROR_COIL_REGULATION "Управление временем накопления энергии КЗ"
+    IDS_ECUERROR_DWELL_CONTROL   "Управление временем накопления энергии КЗ"
     IDS_PM_READING_FWC_OPTIONS   "Чтение опций прошивки..."
     IDS_PM_READING_TABLES        "Чтение таблиц..."
     IDS_PM_WRITING_TABLES        "Запись таблиц..."
@@ -936,7 +936,7 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_ECUERROR_COIL_REGULATION "Coil regulation"
+    IDS_ECUERROR_DWELL_CONTROL "Dwell control"
 END
 
 STRINGTABLE DISCARDABLE 

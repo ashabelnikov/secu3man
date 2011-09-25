@@ -751,7 +751,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
- GetCoilRegulMap(op_fwd->coilregul_table);
+ GetDwellCntrlMap(op_fwd->dwellcntrl_table);
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -766,7 +766,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
- SetCoilRegulMap(ip_fwd->coilregul_table);
+ SetDwellCntrlMap(ip_fwd->dwellcntrl_table);
 }
 
 void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)
@@ -809,7 +809,7 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
  }
 }
 
-void CFirmwareDataMediator::GetCoilRegulMap(float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
  FirmwareData* p_fw_data = NULL;
@@ -829,7 +829,7 @@ void CFirmwareDataMediator::GetCoilRegulMap(float* o_values, bool i_original /* 
   o_values[i] = (p_fw_data->coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
 }
 
-void CFirmwareDataMediator::SetCoilRegulMap(const float* i_values)
+void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
 {
  BYTE* p_bytes = NULL;
  FirmwareData* p_fw_data = NULL;

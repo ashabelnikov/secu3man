@@ -53,7 +53,7 @@ struct FWMapsDataHolder
 {
  SECU3FWMapsItem  maps[TABLES_NUMBER];
  float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
- float coilregul_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
  std::vector<_TSTRING> GetListOfNames(void)
  {

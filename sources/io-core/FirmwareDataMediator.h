@@ -86,8 +86,8 @@ class IOCORE_API CFirmwareDataMediator
   void GetAttenuatorMap(float* o_values, bool i_original = false);
   void SetAttenuatorMap(const float* i_values);
 
-  void GetCoilRegulMap(float* o_values, bool i_original = false);
-  void SetCoilRegulMap(const float* i_values);
+  void GetDwellCntrlMap(float* o_values, bool i_original = false);
+  void SetDwellCntrlMap(const float* i_values);
 
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);
