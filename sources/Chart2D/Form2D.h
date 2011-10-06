@@ -32,6 +32,7 @@
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
 #include <Buttons.hpp>
+#include <Menus.hpp>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
@@ -48,6 +49,9 @@ class TForm2D : public TForm
   TBitBtn *ButtonAngleDown;
   TButton *Smoothing3x;
   TButton *Smoothing5x;
+  TPopupMenu *PopupMenu;
+  TMenuItem  *PM_ZeroAllPoints;
+  TMenuItem  *PM_Dup1stPoint;
   void __fastcall Chart1ClickSeries(TCustomChart *Sender,
   TChartSeries *Series, int ValueIndex, TMouseButton Button,
   TShiftState Shift, int X, int Y);
@@ -62,6 +66,8 @@ class TForm2D : public TForm
   void __fastcall Smoothing5xClick(TObject *Sender);
   void __fastcall Chart1GetAxisLabel(TChartAxis *Sender,
     TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
+  void __fastcall OnZeroAllPoints(TObject *Sender);
+  void __fastcall OnDuplicate1stPoint(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);
@@ -73,6 +79,7 @@ class TForm2D : public TForm
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
 
   void Enable(bool enable);
+  void InitPopupMenu(HINSTANCE hInstance);
 
  public: //properties
   int   count_of_function_points;

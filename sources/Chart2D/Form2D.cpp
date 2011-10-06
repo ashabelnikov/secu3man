@@ -24,6 +24,7 @@
 #include <tchar.h>
 #include <algorithm>
 #include "../common/MathHelpers.h"
+#include "resource.h"
 #pragma hdrstop
 
 #include "Form2D.h"
@@ -118,6 +119,16 @@ void TForm2D::Enable(bool enable)
  ButtonAngleUp->Enabled = enable;
  ButtonAngleDown->Enabled = enable;
  Chart1->Enabled = enable;
+}
+
+//---------------------------------------------------------------------------
+void TForm2D::InitPopupMenu(HINSTANCE hInstance)
+{
+ char string[1024 + 1];
+ ::LoadString(hInstance, IDS_PM_ZERO_ALL_POINTS, string, 1024);
+ PM_ZeroAllPoints->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SET_ALLTO_1ST_PT, string, 1024);
+ PM_Dup1stPoint->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -257,6 +268,24 @@ void __fastcall TForm2D::WndProc(Messages::TMessage &Message)
 
  if (Message.Msg == WM_SYSCOMMAND && m_pOnWndActivation)
   m_pOnWndActivation(m_param_on_wnd_activation, Message.WParam);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
+{
+ for (int i = 0; i < count_of_function_points; i++ )
+  RestrictAndSetValue(i, 0);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
+{
+ for (int i = 0; i < count_of_function_points; i++ )
+  RestrictAndSetValue(i, Series2->YValue[0]);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------

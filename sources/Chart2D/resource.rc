@@ -8,7 +8,8 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 stringtable
 {
   IDS_EDITING_MAPS, "Редактирование карт"
-
+  IDS_PM_ZERO_ALL_POINTS, "Обнулить все точки кривой"
+  IDS_PM_SET_ALLTO_1ST_PT, "Размножить знач. 1-й точки"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -17,6 +18,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 stringtable
 {
   IDS_EDITING_MAPS, "Editing maps"
-
+  IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"
+  IDS_PM_SET_ALLTO_1ST_PT, "Duplicate value of 1st point"
 }
 

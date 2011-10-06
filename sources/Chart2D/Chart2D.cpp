@@ -122,6 +122,7 @@ HWND __cdecl Chart2DCreate(float *original_function, float *modified_function, f
  pForm->aai_max = aai_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
+ pForm->InitPopupMenu(hInst);
 
  //сохраняем значения сетки по горизонтальной оси
  memcpy(pForm->horizontal_axis_grid_values, x_axis_grid_values, sizeof(float) * count_of_points);

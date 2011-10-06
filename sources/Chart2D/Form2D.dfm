@@ -1,15 +1,15 @@
 object Form2D: TForm2D
-  Left = 267
-  Top = 127
+  Left = 660
+  Top = 321
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Редактирование карт УОЗ'
-  ClientHeight = 364
-  ClientWidth = 621
+  ClientHeight = 439
+  ClientWidth = 755
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Icon.Data = {
@@ -48,15 +48,16 @@ object Form2D: TForm2D
     0000E7FF0000E7FF0000FBFF0000FDFB0000FE010000FE7B0000FEBF0000FEC3
     0000FEFF0000FC7F0000FEFF0000FFFF0000FFFF0000}
   OldCreateOrder = False
+  PopupMenu = PopupMenu
   Position = poDefault
   OnClose = FormClose
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 16
   object Chart1: TChart
-    Left = 0
-    Top = 8
-    Width = 585
-    Height = 353
+    Left = 1
+    Top = 1
+    Width = 720
+    Height = 434
     AllowPanning = pmNone
     AllowZoom = False
     BackWall.Brush.Color = clWhite
@@ -120,10 +121,10 @@ object Form2D: TForm2D
     end
   end
   object ButtonAngleUp: TBitBtn
-    Left = 592
-    Top = 88
-    Width = 25
-    Height = 33
+    Left = 723
+    Top = 108
+    Width = 30
+    Height = 41
     TabOrder = 1
     OnClick = ButtonAngleUpClick
     Glyph.Data = {
@@ -175,10 +176,10 @@ object Form2D: TForm2D
       0000}
   end
   object ButtonAngleDown: TBitBtn
-    Left = 592
-    Top = 192
-    Width = 25
-    Height = 33
+    Left = 723
+    Top = 236
+    Width = 30
+    Height = 41
     TabOrder = 2
     OnClick = ButtonAngleDownClick
     Glyph.Data = {
@@ -230,21 +231,33 @@ object Form2D: TForm2D
       0000}
   end
   object Smoothing3x: TButton
-    Left = 592
-    Top = 248
-    Width = 25
-    Height = 25
+    Left = 723
+    Top = 315
+    Width = 30
+    Height = 31
     Caption = '3x'
     TabOrder = 3
     OnClick = Smoothing3xClick
   end
   object Smoothing5x: TButton
-    Left = 592
-    Top = 280
-    Width = 25
-    Height = 25
+    Left = 723
+    Top = 355
+    Width = 30
+    Height = 30
     Caption = '5x'
     TabOrder = 4
     OnClick = Smoothing5xClick
+  end
+  object PopupMenu: TPopupMenu
+    Left = 723
+    Top = 40
+    object PM_ZeroAllPoints: TMenuItem
+      Caption = 'Zero all curve points'
+      OnClick = OnZeroAllPoints
+    end
+    object PM_Dup1stPoint: TMenuItem
+      Caption = 'Duplicate value of 1st point'
+      OnClick = OnDuplicate1stPoint
+    end
   end
 end
