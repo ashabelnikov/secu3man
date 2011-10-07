@@ -1,18 +1,18 @@
 object Form3D: TForm3D
-  Left = 375
-  Top = 242
+  Left = 877
+  Top = 273
   Cursor = crHSplit
   HorzScrollBar.Color = clInfoBk
   HorzScrollBar.ParentColor = False
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Редактирование карт УОЗ'
-  ClientHeight = 392
-  ClientWidth = 607
+  ClientHeight = 481
+  ClientWidth = 737
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
+  Font.Height = -14
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Icon.Data = {
@@ -51,42 +51,43 @@ object Form3D: TForm3D
     0000E7FF0000E7FF0000FBFF0000FDFB0000FE010000FE7B0000FEBF0000FEC3
     0000FEFF0000FC7F0000FEFF0000FFFF0000FFFF0000}
   OldCreateOrder = False
+  PopupMenu = PopupMenu
   Position = poDefault
   OnClose = OnCloseForm
-  PixelsPerInch = 96
-  TextHeight = 13
+  PixelsPerInch = 120
+  TextHeight = 16
   object Label1: TLabel
-    Left = 361
-    Top = 365
-    Width = 17
-    Height = 16
+    Left = 442
+    Top = 449
+    Width = 23
+    Height = 20
     Alignment = taRightJustify
     Caption = '16'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -17
     Font.Name = 'MS Sans Serif'
     Font.Style = [fsBold]
     ParentFont = False
   end
   object Label2: TLabel
-    Left = 32
-    Top = 365
-    Width = 106
-    Height = 16
+    Left = 39
+    Top = 444
+    Width = 137
+    Height = 20
     Caption = 'Расход воздуха:'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -13
+    Font.Height = -17
     Font.Name = 'MS Sans Serif'
     Font.Style = []
     ParentFont = False
   end
   object Chart1: TChart
-    Left = 0
-    Top = 0
-    Width = 569
-    Height = 353
+    Left = 1
+    Top = 1
+    Width = 700
+    Height = 434
     AllowZoom = False
     AnimatedZoomSteps = 4
     BackWall.Brush.Color = clWhite
@@ -751,10 +752,10 @@ object Form3D: TForm3D
     end
   end
   object TrackBar1: TTrackBar
-    Left = 160
-    Top = 357
-    Width = 193
-    Height = 33
+    Left = 197
+    Top = 436
+    Width = 237
+    Height = 41
     Max = 15
     Orientation = trHorizontal
     Frequency = 1
@@ -768,29 +769,29 @@ object Form3D: TForm3D
     OnChange = TrackBar1Change
   end
   object CheckBox1: TCheckBox
-    Left = 402
-    Top = 365
-    Width = 41
-    Height = 17
+    Left = 495
+    Top = 447
+    Width = 50
+    Height = 21
     Caption = '3D'
     TabOrder = 2
     OnClick = CheckBox1Click
   end
   object CheckBox2: TCheckBox
-    Left = 464
-    Top = 361
-    Width = 81
-    Height = 25
+    Left = 571
+    Top = 442
+    Width = 100
+    Height = 31
     Caption = 'вид сзади'
-    TabOrder = 3
+    TabOrder = 6
     OnClick = CheckBox2Click
   end
   object ButtonAngleUp: TBitBtn
-    Left = 576
-    Top = 80
-    Width = 25
-    Height = 33
-    TabOrder = 4
+    Left = 702
+    Top = 98
+    Width = 31
+    Height = 41
+    TabOrder = 7
     OnClick = ButtonAngleUpClick
     Glyph.Data = {
       9E050000424D9E05000000000000360400002800000011000000120000000100
@@ -841,10 +842,10 @@ object Form3D: TForm3D
       0000}
   end
   object ButtonAngleDown: TBitBtn
-    Left = 576
-    Top = 192
-    Width = 25
-    Height = 33
+    Left = 702
+    Top = 236
+    Width = 31
+    Height = 41
     TabOrder = 5
     OnClick = ButtonAngleDownClick
     Glyph.Data = {
@@ -894,5 +895,54 @@ object Form3D: TForm3D
       FFFFFF000000FFFFFFFFFFFF0202020202FFFFFFFFFFFF000000FFFFFFFFFFFF
       0202020202FFFFFFFFFFFF000000FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF00
       0000}
+  end
+  object Smoothing3x: TButton
+    Left = 703
+    Top = 320
+    Width = 30
+    Height = 31
+    Caption = '3x'
+    TabOrder = 3
+    OnClick = Smoothing3xClick
+  end
+  object Smoothing5x: TButton
+    Left = 703
+    Top = 360
+    Width = 30
+    Height = 30
+    Caption = '5x'
+    TabOrder = 4
+    OnClick = Smoothing5xClick
+  end
+  object PopupMenu: TPopupMenu
+    Left = 702
+    Top = 40
+    object PM_ZeroAllPoints: TMenuItem
+      Caption = 'Zero all curve points'
+      OnClick = OnZeroAllPoints
+    end
+    object PM_Dup1stPoint: TMenuItem
+      Caption = 'Duplicate value of 1st point'
+      OnClick = OnDuplicate1stPoint
+    end
+    object PM_BldCurveUsing1stAndLastPoints: TMenuItem
+      Caption = 'Build curve using 1st and last points'
+      OnClick = OnBldCurveUsing1stAndLastPoints
+    end
+    object N1: TMenuItem
+      Caption = '-'
+    end
+    object PM_ZeroAllCurves: TMenuItem
+      Caption = 'Zero all curves'
+      OnClick = OnZeroAllCurves
+    end
+    object PM_DupThisCurve: TMenuItem
+      Caption = 'Duplicate this curve'
+      OnClick = OnDuplicateThisCurve
+    end
+    object PM_BldShapeUsing1stAndLastCurves: TMenuItem
+      Caption = 'Build shape using 1st and last curves'
+      OnClick = OnBuildShapeUsing1stAndLastCurves
+    end
   end
 end

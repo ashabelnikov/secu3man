@@ -52,6 +52,7 @@ class TForm2D : public TForm
   TPopupMenu *PopupMenu;
   TMenuItem  *PM_ZeroAllPoints;
   TMenuItem  *PM_Dup1stPoint;
+  TMenuItem  *PM_BldCurveUsing1stAndLastPoints;
   void __fastcall Chart1ClickSeries(TCustomChart *Sender,
   TChartSeries *Series, int ValueIndex, TMouseButton Button,
   TShiftState Shift, int X, int Y);
@@ -68,6 +69,7 @@ class TForm2D : public TForm
     TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnZeroAllPoints(TObject *Sender);
   void __fastcall OnDuplicate1stPoint(TObject *Sender);
+  void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);

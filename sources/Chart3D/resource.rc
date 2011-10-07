@@ -11,6 +11,12 @@ stringtable
   IDS_LEFT_AXIS_TITLE, "УОЗ (град.)"
   IDS_AIR_FLOW_LABEL_TEXT, "Расход воздуха:"
   IDS_BACK_SIDE_VIEW_CB, "вид сзади"
+  IDS_PM_ZERO_ALL_POINTS, "Обнулить все точки кривой"
+  IDS_PM_SET_ALLTO_1ST_PT, "Размножить знач. 1-й точки"
+  IDS_PM_BLD_CURVE_1ST_LAST_PT, "Постр. кривую исп. 1-ю и послед. точки"
+  IDS_PM_ZERO_ALL_CURVES, "Обнулить все кривые"
+  IDS_PM_SET_ALLTO_THIS_CR, "Размножить кривую"
+  IDS_PM_BLD_SHAPE_1ST_LAST_CR, "Постр. поверхн. исп. 1-ю и послед. крив."
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -22,5 +28,11 @@ stringtable
   IDS_LEFT_AXIS_TITLE, "Advance angle (degg.)"
   IDS_AIR_FLOW_LABEL_TEXT, "Air flow:"
   IDS_BACK_SIDE_VIEW_CB, "back view"
+  IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"
+  IDS_PM_SET_ALLTO_1ST_PT, "Duplicate value of 1st point"
+  IDS_PM_BLD_CURVE_1ST_LAST_PT, "Build curve using 1st and last points"
+  IDS_PM_ZERO_ALL_CURVES, "Zero all curves"
+  IDS_PM_SET_ALLTO_THIS_CR, "Duplicate curve"
+  IDS_PM_BLD_SHAPE_1ST_LAST_CR, "Build shape using 1st and last curves"
 }
 

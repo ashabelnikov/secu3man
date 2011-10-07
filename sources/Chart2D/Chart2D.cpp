@@ -27,9 +27,10 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
+#pragma hdrstop
+
 #include "Form2D.h"
 #include "resource.h"
-#pragma hdrstop
 
 extern "C"
 {

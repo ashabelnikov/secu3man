@@ -33,6 +33,7 @@
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
 #include <Buttons.hpp>
+#include <Menus.hpp>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
@@ -58,10 +59,6 @@ class TForm3D : public TForm
   TLineSeries *Series14;
   TLineSeries *Series15;
   TLineSeries *Series16;
-  TTrackBar *TrackBar1;
-  TLabel *Label1;
-  TLabel *Label2;
-  TCheckBox *CheckBox1;
   TLineSeries *Series17;
   TLineSeries *Series18;
   TLineSeries *Series19;
@@ -78,9 +75,22 @@ class TForm3D : public TForm
   TLineSeries *Series30;
   TLineSeries *Series31;
   TLineSeries *Series32;
+  TLabel *Label1;
+  TLabel *Label2;
+  TTrackBar *TrackBar1;
+  TCheckBox *CheckBox1;
   TCheckBox *CheckBox2;
   TBitBtn *ButtonAngleUp;
   TBitBtn *ButtonAngleDown;
+  TButton *Smoothing3x;
+  TButton *Smoothing5x;
+  TPopupMenu *PopupMenu;
+  TMenuItem *PM_ZeroAllPoints;
+  TMenuItem *PM_Dup1stPoint;
+  TMenuItem *PM_BldCurveUsing1stAndLastPoints;
+  TMenuItem *PM_ZeroAllCurves;
+  TMenuItem *PM_DupThisCurve;
+  TMenuItem *PM_BldShapeUsing1stAndLastCurves;
   void __fastcall TrackBar1Change(TObject *Sender);
   void __fastcall Chart1ClickSeries(TCustomChart *Sender,
     TChartSeries *Series, int ValueIndex, TMouseButton Button,
@@ -94,6 +104,14 @@ class TForm3D : public TForm
   void __fastcall OnCloseForm(TObject *Sender, TCloseAction &Action);
   void __fastcall ButtonAngleUpClick(TObject *Sender);
   void __fastcall ButtonAngleDownClick(TObject *Sender);
+  void __fastcall Smoothing3xClick(TObject *Sender);
+  void __fastcall Smoothing5xClick(TObject *Sender);
+  void __fastcall OnZeroAllCurves(TObject *Sender);
+  void __fastcall OnDuplicateThisCurve(TObject *Sender);
+  void __fastcall OnZeroAllPoints(TObject *Sender);
+  void __fastcall OnDuplicate1stPoint(TObject *Sender);
+  void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
+  void __fastcall OnBuildShapeUsing1stAndLastCurves(TObject *Sender);
  public:
   __fastcall TForm3D(TComponent* Owner);
   void DataPrepare();
@@ -103,6 +121,7 @@ class TForm3D : public TForm
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
 
   void Enable(bool enable);
+  void InitPopupMenu(HINSTANCE hInstance);
 
  public: //Properties
   int count_x;
@@ -117,9 +136,10 @@ class TForm3D : public TForm
   AnsiString x_title;
 
  private:
-  float GetItem_m(int c, int r);
-  float GetItem_o(int c, int r);
-  int SetItem(int c, int r, float value);
+  float GetItem_m(int z, int x);
+  float* GetItem_mp(int z, int x);
+  float GetItem_o(int z, int x);
+  int SetItem(int z, int x, float value);
   void SetAirFlow(int flow);
   void MakeOneVisible(int flow);
   void MakeAllVisible(void);
@@ -127,7 +147,9 @@ class TForm3D : public TForm
   void FillChart(bool dir,int cm);
   void HideAllSeries(void);
 
-  void RestrictAndSetValue(int index, double v);
+  void RestrictAndSetChartValue(int index, double v);
+  double GetChartValue(int z, int index);
+  void SetChartValue(int z, int index, double value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private: // User declarations

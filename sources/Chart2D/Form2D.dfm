@@ -259,5 +259,9 @@ object Form2D: TForm2D
       Caption = 'Duplicate value of 1st point'
       OnClick = OnDuplicate1stPoint
     end
+    object PM_BldCurveUsing1stAndLastPoints: TMenuItem
+      Caption = 'Build curve using 1st and last points'
+      OnClick = OnBldCurveUsing1stAndLastPoints
+    end
   end
 end

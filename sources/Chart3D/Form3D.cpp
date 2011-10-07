@@ -22,7 +22,9 @@
 #include <vcl.h>
 #pragma hdrstop
 
+#include "../common/MathHelpers.h"
 #include "Form3D.h"
+#include "resource.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -133,6 +135,24 @@ void TForm3D::Enable(bool enable)
 }
 
 //---------------------------------------------------------------------------
+void TForm3D::InitPopupMenu(HINSTANCE hInstance)
+{
+ char string[1024 + 1];
+ ::LoadString(hInstance, IDS_PM_ZERO_ALL_POINTS, string, 1024);
+ PM_ZeroAllPoints->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SET_ALLTO_1ST_PT, string, 1024);
+ PM_Dup1stPoint->Caption = string;
+ ::LoadString(hInstance, IDS_PM_BLD_CURVE_1ST_LAST_PT, string, 1024);
+ PM_BldCurveUsing1stAndLastPoints->Caption = string;
+ ::LoadString(hInstance, IDS_PM_ZERO_ALL_CURVES, string, 1024);
+ PM_ZeroAllCurves->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SET_ALLTO_THIS_CR, string, 1024);
+ PM_DupThisCurve->Caption = string;
+ ::LoadString(hInstance, IDS_PM_BLD_SHAPE_1ST_LAST_CR, string, 1024);
+ PM_BldShapeUsing1stAndLastCurves->Caption = string;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
 {
  m_air_flow_position = TrackBar1->Position;
@@ -173,7 +193,7 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
  if (setval)
  {
   v = Chart1->Series[airflow + count_z]->YScreenToValue(Y);
-  RestrictAndSetValue(val_n, v);
+  RestrictAndSetChartValue(val_n, v);
  }
 }
 
@@ -192,6 +212,12 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
   ButtonAngleDown->Enabled = false;
   ButtonAngleUp->Visible = false;
   ButtonAngleDown->Visible = false;
+  Smoothing3x->Enabled = false;
+  Smoothing5x->Enabled = false;
+  Smoothing3x->Visible = false;
+  Smoothing5x->Visible = false;
+  for (int i = 0; i < PopupMenu->Items->Count; i++)
+   PopupMenu->Items->Items[i]->Enabled = false;
  }
  else
  {
@@ -205,6 +231,12 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
   ButtonAngleDown->Enabled = true;
   ButtonAngleUp->Visible = true;
   ButtonAngleDown->Visible = true;
+  Smoothing3x->Enabled = true;
+  Smoothing5x->Enabled = true;
+  Smoothing3x->Visible = true;
+  Smoothing5x->Visible = true;
+  for (int i = 0; i < PopupMenu->Items->Count; i++)
+   PopupMenu->Items->Items[i]->Enabled = true;
  }
 }
 
@@ -212,14 +244,7 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
 //вид 3D графика сзади или спереди
 void __fastcall TForm3D::CheckBox2Click(TObject *Sender)
 {
- if (CheckBox2->Checked)
- {
-  FillChart(0,1);
- }
- else
- {
-  FillChart(1,1);
- }
+ FillChart(!CheckBox2->Checked, 1);
 }
 
 //---------------------------------------------------------------------------
@@ -234,9 +259,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
- {
-  RestrictAndSetValue(i, Chart1->Series[airflow + count_z]->YValue[i] + 0.5);
- }
+  RestrictAndSetChartValue(i, Chart1->Series[airflow + count_z]->YValue[i] + 0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -245,19 +268,46 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
- {
-  RestrictAndSetValue(i, Chart1->Series[airflow + count_z]->YValue[i] - 0.5);
- }
+  RestrictAndSetChartValue(i, Chart1->Series[airflow + count_z]->YValue[i] - 0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
-//get item from oroginal function
+void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
+{
+ float* p_source_function = new float[count_x];
+ for (int i = 0; i < count_x; ++i)
+  p_source_function[i] = GetItem_m(airflow, i);
+ MathHelpers::Smooth1D(p_source_function, GetItem_mp(airflow, 0), count_x, 3);
+ delete[] p_source_function;
+ for (int i = 0; i < count_x; i++ )
+  RestrictAndSetChartValue(i, *GetItem_mp(airflow, i));
+
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
+{
+ float* p_source_function = new float[count_x];
+ for (int i = 0; i < count_x; ++i)
+  p_source_function[i] = GetItem_m(airflow, i);
+ MathHelpers::Smooth1D(p_source_function, GetItem_mp(airflow, 0), count_x, 5);
+ delete[] p_source_function;
+ for (int i = 0; i < count_x; i++ )
+  RestrictAndSetChartValue(i, *GetItem_mp(airflow, i));
+
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+//get item from original function
 float TForm3D::GetItem_o(int z, int x)
 {
- if (z >= count_z) return 0.0f;
- if (x >= count_x) return 0.0f;
+ if ((z >= count_z) || (x >= count_x)) return 0.0f;
  int i  = (count_z - 1) - z;
  return *(original_function + ((i * count_x) + x));
 }
@@ -266,18 +316,24 @@ float TForm3D::GetItem_o(int z, int x)
 //get item from modified function
 float TForm3D::GetItem_m(int z, int x)
 {
- if (z >= count_z) return 0.0f;
- if (x >= count_x) return 0.0f;
+ if ((z >= count_z) || (x >= count_x)) return 0.0f;
  int i  = (count_z - 1) - z;
  return *(modified_function + ((i * count_x) + x));
+}
+
+//---------------------------------------------------------------------------
+float* TForm3D::GetItem_mp(int z, int x)
+{
+ if ((z >= count_z) || (x >= count_x)) return NULL;
+ int i  = (count_z - 1) - z;
+ return (modified_function + ((i * count_x) + x));
 }
 
 //---------------------------------------------------------------------------
 //set item in modified function
 int TForm3D::SetItem(int z, int x, float value)
 {
- if (z >= count_z) return 0;
- if (x >= count_x) return 0;
+ if ((z >= count_z) || (x >= count_x)) return 0;
  int i  = (count_z - 1) - z;
  *(modified_function + ((i * count_x) + x)) = value;
  return 1;
@@ -288,7 +344,7 @@ void TForm3D::SetAirFlow(int flow)
 {
  AnsiString as;
  TrackBar1->Position = flow;
- as.sprintf("%d",flow+1);
+ as.sprintf("%d", flow + 1);
  Label1->Caption = as;
  airflow = flow;
  MakeOneVisible(flow);
@@ -299,16 +355,8 @@ void TForm3D::MakeOneVisible(int flow)
 {
  for(int i = 0; i < count_z; i++)
  {
-  if (i==flow)
-  {
-   Chart1->Series[i]->Active = true;
-   Chart1->Series[i+count_z]->Active = true;
-  }
-  else
-  {
-   Chart1->Series[i]->Active = false;
-   Chart1->Series[i+count_z]->Active = false;
-  }
+  Chart1->Series[i]->Active = (i==flow);
+  Chart1->Series[i+count_z]->Active = (i==flow);
  }
 }
 
@@ -337,17 +385,11 @@ void TForm3D::ShowPoints(bool show)
 //---------------------------------------------------------------------------
 void TForm3D::FillChart(bool dir,int cm)
 {
- int d,k;  AnsiString as;
+ int d, k; AnsiString as;
  if (!dir)
- {
-  d = 1;
-  k = 0;
- }
+  d = 1, k = 0;
  else
- {
-  d = -1;
-  k = count_z - 1;
- }
+  d = -1, k = count_z - 1;
 
  for(int j = 0; j < count_z; j++)
  {
@@ -383,12 +425,24 @@ void TForm3D::HideAllSeries(void)
 }
 
 //---------------------------------------------------------------------------
-void TForm3D::RestrictAndSetValue(int index, double v)
+void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
  if (v > aai_max) v = aai_max;
  if (v < aai_min) v = aai_min;
  SetItem(airflow,index, v);
  Chart1->Series[airflow + count_z]->YValue[index] = v;
+}
+
+//---------------------------------------------------------------------------
+double TForm3D::GetChartValue(int z, int index)
+{
+ return Chart1->Series[z + count_z]->YValue[index];
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetChartValue(int z, int index, double value)
+{
+ Chart1->Series[z + count_z]->YValue[index] = value;
 }
 
 //---------------------------------------------------------------------------
@@ -401,3 +455,83 @@ void __fastcall TForm3D::WndProc(Messages::TMessage &Message)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
+{
+ for (int i = 0; i < count_x; i++ )
+  RestrictAndSetChartValue(i, 0);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
+{
+ for (int i = 0; i < count_x; i++ )
+  RestrictAndSetChartValue(i, GetChartValue(airflow, 0));
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
+{
+ double firstPtVal = GetChartValue(airflow, 0);
+ double lastPtVal = GetChartValue(airflow, count_x - 1);
+ double intrmPtCount = count_x - 1;
+ for (int i = 1; i < count_x - 1; i++ )
+  RestrictAndSetChartValue(i, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * i));
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnZeroAllCurves(TObject *Sender)
+{
+ for (int z = 0; z < count_z; z++ )
+ {
+  for (int x = 0; x < count_x; x++ )
+  {
+   SetChartValue(z, x, 0);
+   SetItem(z, x, 0);
+  }
+ }
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
+{
+ for (int z = 0; z < count_z; z++ )
+ {
+  for (int x = 0; x < count_x; x++ )
+  {
+   SetChartValue(z, x, GetChartValue(airflow, x));
+   SetItem(z, x, GetChartValue(airflow, x));
+  }
+ }
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
+{
+ double intrmPtCount = count_z - 1;
+ for (int x = 0; x < count_x; x++ )
+ {
+  for (int z = 1; z < count_z - 1; z++ )
+  {
+   double firstPtVal = GetChartValue(0, x);
+   double lastPtVal = GetChartValue(count_z - 1, x);
+   double value = firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * z);
+   SetChartValue(z, x, value);
+   SetItem(z, x, value);
+  }
+ }
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+

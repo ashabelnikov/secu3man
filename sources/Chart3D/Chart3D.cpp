@@ -124,6 +124,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,co
  pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
  pForm->Label2->Caption = MLL::LoadString(IDS_AIR_FLOW_LABEL_TEXT);
  pForm->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
+ pForm->InitPopupMenu(hInst);
 
  memcpy(pForm->u_slots, x_axis_grid_values, sizeof(int) * x_count_of_points);
  pForm->DataPrepare();

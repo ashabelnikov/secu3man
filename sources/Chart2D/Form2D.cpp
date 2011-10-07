@@ -129,6 +129,8 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_ZeroAllPoints->Caption = string;
  ::LoadString(hInstance, IDS_PM_SET_ALLTO_1ST_PT, string, 1024);
  PM_Dup1stPoint->Caption = string;
+ ::LoadString(hInstance, IDS_PM_BLD_CURVE_1ST_LAST_PT, string, 1024);
+ PM_BldCurveUsing1stAndLastPoints->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -284,6 +286,18 @@ void __fastcall TForm2D::OnDuplicate1stPoint(TObject *Sender)
 {
  for (int i = 0; i < count_of_function_points; i++ )
   RestrictAndSetValue(i, Series2->YValue[0]);
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
+{
+ double firstPtVal = Series2->YValue[0];
+ double lastPtVal = Series2->YValue[count_of_function_points - 1];
+ double intrmPtCount = count_of_function_points - 1;
+ for (int i = 1; i < count_of_function_points - 1; i++ )
+  RestrictAndSetValue(i, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * i));
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }

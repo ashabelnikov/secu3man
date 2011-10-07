@@ -10,6 +10,7 @@ stringtable
   IDS_EDITING_MAPS, "Редактирование карт"
   IDS_PM_ZERO_ALL_POINTS, "Обнулить все точки кривой"
   IDS_PM_SET_ALLTO_1ST_PT, "Размножить знач. 1-й точки"
+  IDS_PM_BLD_CURVE_1ST_LAST_PT, "Постр. кривую исп. 1-ю и послед. точки"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -20,5 +21,6 @@ stringtable
   IDS_EDITING_MAPS, "Editing maps"
   IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"
   IDS_PM_SET_ALLTO_1ST_PT, "Duplicate value of 1st point"
+  IDS_PM_BLD_CURVE_1ST_LAST_PT, "Build curve using 1st and last points"
 }
 
