@@ -117,8 +117,29 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,39,133,148,9
     COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,14,150,67,52,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_APP_SETTINGS_PLATFORM_SEL_COMBO,204,26,65,139,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_APP_SETTINGS_LANG_SEL_COMBO,274,26,65,139,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Использовать средства отладки",
+                    IDC_APP_SETTINGS_USEDEBUG_FEATURES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
+    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
+                    17,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
+    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,118,43,17,
+                    ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,117,10,18
+    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,118,43,17,
+                    ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,336,117,10,18
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,141,43,17,
                     ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,140,11,18
     DEFPUSHBUTTON   "OK",IDOK,139,174,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,174,50,18
     LTEXT           "Выбор COM-порта:",IDC_STATIC,15,17,77,9
@@ -129,38 +150,18 @@ BEGIN
     LTEXT           "CSV сивол-разделитель",
                     IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_LABEL,87,152,97,10
     GROUPBOX        "Логи",IDC_STATIC,5,90,185,81
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,140,11,18
     LTEXT           "Период обновления панели приборов (ms)",IDC_STATIC,266,
                     141,87,17
     GROUPBOX        "Порт",IDC_STATIC,4,4,186,81
     GROUPBOX        "Прочее",IDC_STATIC,194,4,162,81
-    COMBOBOX        IDC_APP_SETTINGS_LANG_SEL_COMBO,274,26,65,139,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Язык интерфейса:",IDC_STATIC,274,14,77,9
-    COMBOBOX        IDC_APP_SETTINGS_PLATFORM_SEL_COMBO,204,26,65,139,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Платформа:",IDC_STATIC,204,14,70,9
     GROUPBOX        "Приборы",IDC_STATIC,194,90,162,81
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,118,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,117,10,18
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,118,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,336,117,10,18
     LTEXT           "Тах. макс:",IDC_STATIC,204,106,61,9
     LTEXT           "Давл. макс:",IDC_STATIC,291,107,60,9
-    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
-                    17,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
     LTEXT           "Период обновления отладочной панели (мс)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
                     87,17
-    CONTROL         "Использовать средства отладки",IDC_APP_SETTINGS_USEDEBUG_FEATURES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 221
@@ -604,8 +605,28 @@ BEGIN
                     BS_AUTOCHECKBOX | WS_TABSTOP,39,133,148,9
     COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,14,150,67,52,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_APP_SETTINGS_PLATFORM_SEL_COMBO,204,26,65,139,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_APP_SETTINGS_LANG_SEL_COMBO,274,26,65,139,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Use debug features",IDC_APP_SETTINGS_USEDEBUG_FEATURES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
+    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
+                    17,ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
+    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,118,43,17,
+                    ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,117,10,18
+    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,118,43,17,
+                    ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,336,117,10,18
     EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,141,43,17,
                     ES_AUTOHSCROLL
+    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,140,11,18
     DEFPUSHBUTTON   "OK",IDOK,139,174,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,174,50,18
     LTEXT           "COM-port selection:",IDC_STATIC,15,17,77,9
@@ -616,38 +637,18 @@ BEGIN
     LTEXT           "CSV separator-symbol",
                     IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_LABEL,87,152,97,10
     GROUPBOX        "Logs",IDC_STATIC,5,90,185,81
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,140,11,18
     LTEXT           "Update period of fixtures's panel (ms)",IDC_STATIC,266,
                     141,87,17
     GROUPBOX        "Port",IDC_STATIC,4,4,186,81
     GROUPBOX        "Misc",IDC_STATIC,194,4,162,81
-    COMBOBOX        IDC_APP_SETTINGS_LANG_SEL_COMBO,274,26,65,139,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Interface language:",IDC_STATIC,274,14,77,9
-    COMBOBOX        IDC_APP_SETTINGS_PLATFORM_SEL_COMBO,204,26,65,139,
-                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Platform:",IDC_STATIC,204,14,70,9
     GROUPBOX        "Fixtures",IDC_STATIC,194,90,162,81
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,118,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,117,10,18
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,118,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,336,117,10,18
     LTEXT           "Tach. max:",IDC_STATIC,204,106,61,9
     LTEXT           "Press. max:",IDC_STATIC,291,107,60,9
-    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
-                    17,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
     LTEXT           "Update period of debug's panel (ms)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
                     87,17
-    CONTROL         "Use debug features",IDC_APP_SETTINGS_USEDEBUG_FEATURES,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 221

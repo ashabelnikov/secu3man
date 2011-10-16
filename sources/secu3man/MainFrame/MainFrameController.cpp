@@ -104,9 +104,15 @@ void MainFrameController::OnAppSettings()
   m_pCommunicationManager->Init();
   mp_view->EndWaitCursor();
 
-  //обновляем период обновления отладочной панели
-  mp_view->GetDVDesk()->SetUpdatePeriod(settings->GetDVDeskUpdatePeriod());
-  mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
+  //Управление отладочной панелью
+  //Создаем или уничножаем отладочную панель и обновляем ее период обновления если она создана
+  if ((NULL != mp_view->GetDVDesk()) != settings->GetUseDVFeatures())
+   VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
+  if (mp_view->GetDVDesk())
+  {
+   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
+   mp_view->GetDVDesk()->SetUpdatePeriod(settings->GetDVDeskUpdatePeriod());
+  }
  }
 }
 
@@ -167,13 +173,19 @@ void MainFrameController::SetView(CMainFrame* ip_view)
 
 void MainFrameController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
+ //Если пришел пакет с отладочными данными, то обновляем отладочную панель этими данными
+ //(если она(панель) создана)
  if(DBGVAR_DAT==i_descriptor)
  {
   const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
-  if (settings->GetUseDVFeatures())
+  if (mp_view->GetDVDesk())
+  {
    mp_view->GetDVDesk()->SetValues((SECU3IO::DbgvarDat*)ip_packet);
-  if (!mp_view->GetDVDesk()->IsEnabled())
-   mp_view->GetDVDesk()->Enable(true);
+   //Если отладочная панель еще не разрешена, то разрешаем ее.
+   //Таким образом он будет запрещенной если DBGVAR_DAT пакеты не приходят от SECU-3
+   if (!mp_view->GetDVDesk()->IsEnabled())
+    mp_view->GetDVDesk()->Enable(true);
+  }
  }
 }
 
@@ -184,8 +196,10 @@ void MainFrameController::OnConnection(const bool i_online)
   if (m_pLogWriter->IsLoggingInProcess())
    OnAppEndLog(); //прекращаем запись лога при потере коннекта
 
+  //Disabele debug panel if we lose connection
   //here we can only disable it. It may be enabled only after we get DBGVAR_DAT packet!
-  mp_view->GetDVDesk()->Enable(false);
+  if (mp_view->GetDVDesk())
+   mp_view->GetDVDesk()->Enable(false);
  }
 
 }
@@ -228,7 +242,9 @@ CRect MainFrameController::_GetScreenRect(void) const
 void MainFrameController::OnCreate(void)
 {
  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
- mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
+ VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
+ if (mp_view->GetDVDesk())
+  mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
 }
 
 bool MainFrameController::OnClose(void)

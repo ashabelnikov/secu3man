@@ -63,7 +63,6 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_pwndView(NULL)
 , m_bDoIdle(TRUE)
-, mp_DVDeskDlg(new CDVDeskDlg())
 {
  //na
 }
@@ -78,13 +77,29 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
  if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
   return -1;
 
- mp_DVDeskDlg->Create(CDVDeskDlg::IDD, this);
- mp_DVDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE);
- mp_DVDeskDlg->Show(false);
-
  if (m_OnCreate)
-  m_OnCreate();
+  m_OnCreate();  //notify controller about creation of this window
  return 0;
+}
+
+bool CMainFrame::CreateDVDesk(bool create)
+{
+ bool result = false;
+ if (create)
+ {
+  mp_DVDeskDlg = std::auto_ptr<CDVDeskDlg>(new CDVDeskDlg());
+  result = mp_DVDeskDlg->Create(CDVDeskDlg::IDD, this);
+  mp_DVDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE);
+  mp_DVDeskDlg->Show(false);
+ }
+ else
+ {
+  result = true;
+  if (mp_DVDeskDlg.get())
+   result = mp_DVDeskDlg->DestroyWindow();
+  mp_DVDeskDlg = std::auto_ptr<CDVDeskDlg>();
+ }
+ return result;
 }
 
 //хак:

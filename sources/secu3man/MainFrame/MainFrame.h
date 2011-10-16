@@ -63,6 +63,7 @@ class CMainFrame : public CFrameWnd
   void setOnActivate(EventHandler1 i_OnActivate);
   void setOnCreate(EventHandler i_OnCreate);
 
+  bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
 
 protected:
