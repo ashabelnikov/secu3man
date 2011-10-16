@@ -125,7 +125,7 @@ BOOL CCKPSPageDlg::OnInitDialog()
  _FillCKPSTeethBTDCComboBox(); //инициализируем комбо бокс числа зубьев до в.м.т.
  _FillCKPSEngineCylComboBox(); //инициализируем комбо бокс цисла цилиндров двигателя.
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -154,15 +154,17 @@ void CCKPSPageDlg::OnClickedPdNegFrontRadio()
 //разрешение/запрещение контроллов (всех поголовно)
 void CCKPSPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
 bool CCKPSPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога
@@ -185,7 +187,7 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
  _SetCKPSTeethBTDCComboBoxSelection(m_params.ckps_cogs_btdc);
  _SetCKPSEngineCylComboBoxSelection(m_params.ckps_engine_cyl);
 
- //устанавливаем состояние контлоллов фронта ДПКВ
+ //устанавливаем состояние контроллов фронта ДПКВ
  m_ckps_posfront_radio.SetCheck(m_params.ckps_edge_type);
  m_ckps_negfront_radio.SetCheck(~m_params.ckps_edge_type);
 
@@ -194,6 +196,8 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
 
 void CCKPSPageDlg::EnableIgnitionCogs(bool enable)
 {
+ if (m_igncogs_enabled == enable)
+  return; //already has needed state
  m_igncogs_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);

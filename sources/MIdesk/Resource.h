@@ -40,4 +40,13 @@
 #define IDS_MI_PRESSURE_UNIT            2036
 #define IDS_MI_ADVANGLE_TITLE           2037
 #define IDS_MI_ADVANGLE_UNIT            2038
+#define IDD_DBGVAR_DESK                 2039
+#define IDC_DV_VAR1_CAPTION             2040
+#define IDC_DV_VAR1_VALUE               2041
+#define IDC_DV_VAR2_VALUE               2042
+#define IDC_DV_VAR2_CAPTION             2043
+#define IDC_DV_VAR3_VALUE               2044
+#define IDC_DV_VAR3_CAPTION             2045
+#define IDC_DV_VAR4_VALUE               2046
+#define IDC_DV_VAR4_CAPTION             2047
 

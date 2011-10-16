@@ -67,7 +67,7 @@ END_MESSAGE_MAP()
 
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CADCCompenPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_ubat_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
@@ -160,7 +160,7 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_temp_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
 
  UpdateData(FALSE);
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -204,15 +204,17 @@ void CADCCompenPageDlg::OnChangePdTEMPCorrectionEdit()
 //разрешение/запрещение контроллов (всех поголовно)
 void CADCCompenPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
 bool CADCCompenPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

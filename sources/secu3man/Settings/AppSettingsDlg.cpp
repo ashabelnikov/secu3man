@@ -38,6 +38,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_OnCancel(NULL)
 , m_OnActivate(NULL)
 , m_midesk_update_period_edit(CEditEx::MODE_INT)
+, m_dv_update_period_edit(CEditEx::MODE_INT)
 , m_tachometer_max_edit(CEditEx::MODE_INT)
 , m_pressure_max_edit(CEditEx::MODE_INT)
 {
@@ -50,6 +51,8 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_midesk_update_period = 40;
  m_tachometer_max = 0;
  m_pressure_max = 0;
+ m_use_dv_features = 0;
+ m_dv_update_period = 40;
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -65,6 +68,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder_edit);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_BUTTON, m_log_files_folder_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder_button);
+ DDX_Control(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features_button);
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
@@ -76,10 +80,15 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Text(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder);
  DDX_Check(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder);
+ DDX_Check(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN, m_midesk_update_period_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT, m_midesk_update_period_edit);
  m_midesk_update_period_edit.DDX_Value(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT, m_midesk_update_period);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN, m_dv_update_period_spin);
+ DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT, m_dv_update_period_edit);
+ m_dv_update_period_edit.DDX_Value(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT, m_dv_update_period);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN, m_tachometer_max_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT, m_tachometer_max_edit);
@@ -88,12 +97,15 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_SPIN, m_pressure_max_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max_edit);
  m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
 }
 
 
 BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_BUTTON, OnAppSettingsLogfolderButton)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, OnAppSettingsLogfolderUseappfolder)
+ ON_BN_CLICKED(IDC_APP_SETTINGS_USEDEBUG_FEATURES, OnAppSettingsLogfolderUseDVFeatures)
 END_MESSAGE_MAP()
 
 
@@ -103,7 +115,11 @@ BOOL CAppSettingsDlg::OnInitDialog()
 
  m_midesk_update_period_edit.SetLimitText(4);
  m_midesk_update_period_spin.SetBuddy(&m_midesk_update_period_edit);
- m_midesk_update_period_spin.SetRangeAndDelta(0,1000,10);
+ m_midesk_update_period_spin.SetRangeAndDelta(10,1000,10);
+
+ m_dv_update_period_edit.SetLimitText(4);
+ m_dv_update_period_spin.SetBuddy(&m_dv_update_period_edit);
+ m_dv_update_period_spin.SetRangeAndDelta(10,1000,10);
 
  m_tachometer_max_edit.SetLimitText(5);
  m_tachometer_max_spin.SetBuddy(&m_tachometer_max_edit);
@@ -119,6 +135,7 @@ BOOL CAppSettingsDlg::OnInitDialog()
  UpdateData(FALSE);
 
  OnAppSettingsLogfolderUseappfolder();
+ OnAppSettingsLogfolderUseDVFeatures();
 
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -164,9 +181,16 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
 void CAppSettingsDlg::OnAppSettingsLogfolderUseappfolder()
 {
  UpdateData();
- BOOL enable = m_use_app_folder ? FALSE : TRUE;
- m_log_files_folder_edit.EnableWindow(enable);
- m_log_files_folder_button.EnableWindow(enable);
+ m_log_files_folder_edit.EnableWindow(m_use_app_folder);
+ m_log_files_folder_button.EnableWindow(m_use_app_folder);
+}
+
+void CAppSettingsDlg::OnAppSettingsLogfolderUseDVFeatures()
+{
+ UpdateData();
+ m_dv_update_period_edit.EnableWindow(m_use_dv_features);
+ m_dv_update_period_spin.EnableWindow(m_use_dv_features);
+ m_dv_update_period_caption.EnableWindow(m_use_dv_features);
 }
 
 void CAppSettingsDlg::FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates)
@@ -394,4 +418,24 @@ int CAppSettingsDlg::GetTachometerMax(void) const
 int CAppSettingsDlg::GetPressureMax(void) const
 {
  return m_pressure_max;
+}
+
+void CAppSettingsDlg::SetUseDVFeatures(bool i_use)
+{
+ m_use_dv_features = i_use;
+}
+
+void CAppSettingsDlg::SetDVDeskUpdatePeriod(int i_period)
+{
+ m_dv_update_period = i_period;
+}
+
+bool CAppSettingsDlg::GetUseDVFeatures(void)
+{
+ return m_use_dv_features ? true : false;
+}
+
+int CAppSettingsDlg::GetDVDeskUpdatePeriod(void)
+{
+ return m_dv_update_period;
 }

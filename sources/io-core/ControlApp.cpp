@@ -281,6 +281,39 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  return true;
 }
 
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet)
+{
+ SECU3IO::DbgvarDat& m_DbgvarDat = m_recepted_packet.m_DbgvarDat;
+
+ if (strlen((char*)raw_packet)!=17)  //размер пакета без сигнального символа, дескриптора
+  return false;
+
+ //переменная 1
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var1))
+  return false;
+ raw_packet+=4;
+
+ //переменная 2
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var2))
+  return false;
+ raw_packet+=4;
+
+ //переменная 3
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var3))
+  return false;
+ raw_packet+=4;
+
+ //переменная 4
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var4))
+  return false;
+ raw_packet+=4;
+
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
 
 //-----------------------------------------------------------------------
 bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
@@ -1078,6 +1111,10 @@ bool CControlApp::ParsePackets()
     if (Parse_SENSOR_DAT(raw_packet))
      break;
     continue;
+   case DBGVAR_DAT:
+    if (Parse_DBGVAR_DAT(raw_packet))
+     break;
+    continue;
    case ADCRAW_DAT:
     if (Parse_ADCRAW_DAT(raw_packet))
      break;
@@ -1122,7 +1159,6 @@ bool CControlApp::ParsePackets()
    default:
     continue;
   }//switch
-
 
   ////////////////////////////////////////////////////////////////////////////
   __try
@@ -1308,6 +1344,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case STARTR_PAR:
   case FNNAME_DAT:
   case SENSOR_DAT:
+  case DBGVAR_DAT:
   case ADCRAW_DAT:
   case ADCCOR_PAR:
   case CKPS_PAR:
@@ -1639,8 +1676,7 @@ void CControlApp::SetEventHandler(EventHandler* i_pEventHandler)
 //-----------------------------------------------------------------------
 SECU3Packet& CControlApp::EndPendingPacket(void)
 {
- SECU3IO::SECU3Packet& packet = m_pending_packets[m_pending_packets_index];
- m_pending_packets_index++;
+ SECU3IO::SECU3Packet& packet = m_pending_packets[m_pending_packets_index++];
  if (m_pending_packets_index >= PENDING_PACKETS_QUEUE_SIZE)
   m_pending_packets_index = 0;
  return packet;

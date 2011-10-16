@@ -46,8 +46,9 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CMIDeskDlg::IDD, pParent)
 , m_update_period(100)
 , m_was_initialized(false)
+, m_enabled(-1)
 {
- //na
+ memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -90,7 +91,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 
  Enable(false);
 
- m_update_timer.SetTimer(this,&CMIDeskDlg::OnUpdateTimer, m_update_period);
+ m_update_timer.SetTimer(this, &CMIDeskDlg::OnUpdateTimer, m_update_period);
 
  m_was_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -107,6 +108,9 @@ void CMIDeskDlg::OnDestroy()
 //разрешение/запрещение приборов
 void CMIDeskDlg::Enable(bool enable)
 {
+ if (((int)enable) == m_enabled)
+  return; //already has needed state
+ m_enabled = enable;
  m_tachometer.Enable(enable);
  m_pressure.Enable(enable);
  m_voltmeter.Enable(enable);

@@ -55,7 +55,7 @@ END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CMiscPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT)
 , m_igncutoff_rpm_edit(CEditEx::MODE_INT)
@@ -134,7 +134,7 @@ BOOL CMiscPageDlg::OnInitDialog()
  FillUARTSpeedComboBox(br); //инициализируем комбо бокс
 
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -149,15 +149,17 @@ void CMiscPageDlg::OnIgncutoffCheck()
 //разрешение/запрещение контроллов (всех поголовно)
 void CMiscPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
 bool CMiscPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

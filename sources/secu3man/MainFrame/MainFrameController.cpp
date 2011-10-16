@@ -27,7 +27,9 @@
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
 #include "io-core/logwriter.h"
+#include "io-core/ufcodes.h"
 #include "MainFrame.h"
+#include "MIDesk/DVDeskDlg.h"
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
 #include "StatusBarManager.h"
@@ -65,16 +67,17 @@ void MainFrameController::_SetDelegates(void)
 {
  if (NULL==mp_view)
   return;
- mp_view->setOnAppAbout(MakeDelegate(this,&MainFrameController::OnAppAbout));
- mp_view->setOnAppSettings(MakeDelegate(this,&MainFrameController::OnAppSettings));
- mp_view->setOnAppBeginLog(MakeDelegate(this,&MainFrameController::OnAppBeginLog));
- mp_view->setOnAppEndLog(MakeDelegate(this,&MainFrameController::OnAppEndLog));
- mp_view->setIsBeginLoggingAllowed(MakeDelegate(this,&MainFrameController::IsBeginLoggingAllowed));
- mp_view->setIsEndLoggingAllowed(MakeDelegate(this,&MainFrameController::IsEndLoggingAllowed));
- mp_view->setOnActivate(MakeDelegate(this,&MainFrameController::OnActivate));
- mp_view->setOnFullScreen(MakeDelegate(this,&MainFrameController::OnFullScreen));
- mp_view->addOnClose(MakeDelegate(this,&MainFrameController::OnClose));
- mp_view->setOnGetInitialPos(MakeDelegate(this,&MainFrameController::OnGetInitialPos));
+ mp_view->setOnAppAbout(MakeDelegate(this, &MainFrameController::OnAppAbout));
+ mp_view->setOnAppSettings(MakeDelegate(this, &MainFrameController::OnAppSettings));
+ mp_view->setOnAppBeginLog(MakeDelegate(this, &MainFrameController::OnAppBeginLog));
+ mp_view->setOnAppEndLog(MakeDelegate(this, &MainFrameController::OnAppEndLog));
+ mp_view->setIsBeginLoggingAllowed(MakeDelegate(this, &MainFrameController::IsBeginLoggingAllowed));
+ mp_view->setIsEndLoggingAllowed(MakeDelegate(this, &MainFrameController::IsEndLoggingAllowed));
+ mp_view->setOnActivate(MakeDelegate(this, &MainFrameController::OnActivate));
+ mp_view->setOnFullScreen(MakeDelegate(this, &MainFrameController::OnFullScreen));
+ mp_view->setOnCreate(MakeDelegate(this, &MainFrameController::OnCreate));
+ mp_view->addOnClose(MakeDelegate(this, &MainFrameController::OnClose));
+ mp_view->setOnGetInitialPos(MakeDelegate(this, &MainFrameController::OnGetInitialPos));
 }
 
 MainFrameController::~MainFrameController()
@@ -100,6 +103,10 @@ void MainFrameController::OnAppSettings()
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
   mp_view->EndWaitCursor();
+
+  //обновляем период обновления отладочной панели
+  mp_view->GetDVDesk()->SetUpdatePeriod(settings->GetDVDeskUpdatePeriod());
+  mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
  }
 }
 
@@ -160,7 +167,14 @@ void MainFrameController::SetView(CMainFrame* ip_view)
 
 void MainFrameController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
- //na
+ if(DBGVAR_DAT==i_descriptor)
+ {
+  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+  if (settings->GetUseDVFeatures())
+   mp_view->GetDVDesk()->SetValues((SECU3IO::DbgvarDat*)ip_packet);
+  if (!mp_view->GetDVDesk()->IsEnabled())
+   mp_view->GetDVDesk()->Enable(true);
+ }
 }
 
 void MainFrameController::OnConnection(const bool i_online)
@@ -169,7 +183,11 @@ void MainFrameController::OnConnection(const bool i_online)
  {
   if (m_pLogWriter->IsLoggingInProcess())
    OnAppEndLog(); //прекращаем запись лога при потере коннекта
+
+  //here we can only disable it. It may be enabled only after we get DBGVAR_DAT packet!
+  mp_view->GetDVDesk()->Enable(false);
  }
+
 }
 
 bool MainFrameController::OnFullScreen()
@@ -205,6 +223,12 @@ CRect MainFrameController::_GetScreenRect(void) const
  int x_resolution = pDC->GetDeviceCaps(HORZRES);
  int y_resolution = pDC->GetDeviceCaps(VERTRES);
  return CRect(0, 0, x_resolution, y_resolution);
+}
+
+void MainFrameController::OnCreate(void)
+{
+ const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
 }
 
 bool MainFrameController::OnClose(void)

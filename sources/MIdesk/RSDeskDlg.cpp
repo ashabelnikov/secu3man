@@ -43,11 +43,13 @@ const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
 
 CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CRSDeskDlg::IDD, pParent)
+, m_map_value(0.0f)
+, m_ubat_value(0.0f)
+, m_temp_value(0.0f)
+, m_knock_value(0.0f)
+, m_enabled(-1)
 {
- m_map_value  = 0.0f;
- m_ubat_value = 0.0f;
- m_temp_value = 0.0f;
- m_knock_value = 0.0f;
+ //empty
 }
 
 void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -113,21 +115,23 @@ BOOL CRSDeskDlg::OnInitDialog()
 //разрешение/запрещение приборов
 void CRSDeskDlg::Enable(bool enable)
 {
- BOOL b_enable = ((enable) ? TRUE : FALSE);
- m_map_field.EnableWindow(b_enable);
- m_ubat_field.EnableWindow(b_enable);
- m_temp_field.EnableWindow(b_enable);
- m_knock_field.EnableWindow(b_enable);
+ if (((int)enable) == m_enabled)
+  return; //already has needed state
+ m_enabled = enable;
+ m_map_field.EnableWindow(enable);
+ m_ubat_field.EnableWindow(enable);
+ m_temp_field.EnableWindow(enable);
+ m_knock_field.EnableWindow(enable);
 
- m_map_caption.EnableWindow(b_enable);
- m_ubat_caption.EnableWindow(b_enable);
- m_temp_caption.EnableWindow(b_enable);
- m_knock_caption.EnableWindow(b_enable);
+ m_map_caption.EnableWindow(enable);
+ m_ubat_caption.EnableWindow(enable);
+ m_temp_caption.EnableWindow(enable);
+ m_knock_caption.EnableWindow(enable);
 
- m_map_unit.EnableWindow(b_enable);
- m_ubat_unit.EnableWindow(b_enable);
- m_temp_unit.EnableWindow(b_enable);
- m_knock_unit.EnableWindow(b_enable);
+ m_map_unit.EnableWindow(enable);
+ m_ubat_unit.EnableWindow(enable);
+ m_temp_unit.EnableWindow(enable);
+ m_knock_unit.EnableWindow(enable);
 }
 
 void CRSDeskDlg::Show(bool show)

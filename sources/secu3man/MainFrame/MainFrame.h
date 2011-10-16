@@ -25,6 +25,7 @@
 #include "common/FastDelegate.h"
 
 class CChildView;
+class CDVDeskDlg;
 
 class CMainFrame : public CFrameWnd
 {
@@ -60,6 +61,9 @@ class CMainFrame : public CFrameWnd
   void setOnFullScreen(EventResult i_OnFullScreen);
   void setOnFullScreenNotify(EventHandler1 i_OnFullScreenNotify);
   void setOnActivate(EventHandler1 i_OnActivate);
+  void setOnCreate(EventHandler i_OnCreate);
+
+  CDVDeskDlg* GetDVDesk(void);
 
 protected:
   DECLARE_DYNAMIC(CMainFrame)
@@ -94,7 +98,9 @@ private:
   EventResult  m_OnFullScreen;
   EventHandler1 m_OnFullScreenNotify;
   EventHandler1 m_OnActivate;
+  EventHandler m_OnCreate;
 
+  std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;
 };

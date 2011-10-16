@@ -34,8 +34,6 @@ static char THIS_FILE[] = __FILE__;
 
 #define TIMER_ID 0
 
-#pragma warning( disable : 4800 ) // : 'int' : forcing value to bool 'true' or 'false' (performance warning)
-
 void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);

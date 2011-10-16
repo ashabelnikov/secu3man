@@ -50,6 +50,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetECUPlatformType(int i_platform_type);
   virtual void SetTachometerMax(int i_max);
   virtual void SetPressureMax(int i_max);
+  virtual void SetUseDVFeatures(bool i_use);
+  virtual void SetDVDeskUpdatePeriod(int i_period);
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -60,6 +62,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetECUPlatformType(void) const;
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
+  virtual bool GetUseDVFeatures(void);
+  virtual int GetDVDeskUpdatePeriod(void);
 
   //logs
   virtual void SetLogFilesFolder(const CString& i_folder);
@@ -84,6 +88,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void OnOK();
   afx_msg void OnAppSettingsLogfolderButton();
   afx_msg void OnAppSettingsLogfolderUseappfolder();
+  afx_msg void OnAppSettingsLogfolderUseDVFeatures();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -99,20 +104,26 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CComboBox m_ecu_platform_selection_combo;
   CButton   m_log_files_folder_button;
   CButton   m_use_app_folder_button;
+  CButton   m_use_dv_features_button;
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
+  CEditEx   m_dv_update_period_edit;
   CEditEx   m_tachometer_max_edit;
   CEditEx   m_pressure_max_edit;
   CSpinButtonCtrlEx m_midesk_update_period_spin;
+  CSpinButtonCtrlEx m_dv_update_period_spin;
   CSpinButtonCtrlEx m_tachometer_max_spin;
   CSpinButtonCtrlEx m_pressure_max_spin;
+  CStatic m_dv_update_period_caption;
   int m_app_baudrate;
   int m_bl_baudrate;
   int m_port_number;
   CString m_log_files_folder;
   int m_use_app_folder;
+  int m_use_dv_features;
   int m_log_csv_sepsymbol_index;
   int m_midesk_update_period;
+  int m_dv_update_period;
   int m_iface_lang_selection;
   int m_ecu_platform_selection;
   int m_tachometer_max;

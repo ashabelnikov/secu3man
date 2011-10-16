@@ -139,7 +139,7 @@ bool CCommunicationManager::Init(void)
  m_pControlApp->SetEventHandler(m_pAppAdapter);
  m_pBootLoader->SetEventHandler(m_pBldAdapter);
 
- //оповещаем объекта слушателя об изменении настроек. Получатель этого оповещения должен активировать
+ //оповещаем объект слушателя об изменении настроек. Получатель этого оповещения должен активировать
  //необходимый ему коммуникационный контроллер.
  if (m_OnSettingsChanged)
   m_OnSettingsChanged();

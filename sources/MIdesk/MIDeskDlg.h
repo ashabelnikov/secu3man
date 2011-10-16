@@ -92,6 +92,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CObjectTimer<CMIDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;
+  int m_enabled;
 };
 
 /////////////////////////////////////////////////////////////////////////////

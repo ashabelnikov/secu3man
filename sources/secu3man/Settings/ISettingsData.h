@@ -70,4 +70,7 @@ class ISettingsData
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;
   virtual int GetPressureMax(void) const = 0;
+  //Debug features
+  virtual bool GetUseDVFeatures(void) const = 0;
+  virtual int GetDVDeskUpdatePeriod(void) const = 0;
 };

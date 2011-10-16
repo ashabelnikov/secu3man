@@ -71,7 +71,7 @@ END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CFunSetPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_map_grad_edit(CEditEx::MODE_FLOAT)
 , m_press_swing_edit(CEditEx::MODE_FLOAT)
 , m_map_curve_offset_edit(CEditEx::MODE_FLOAT)
@@ -148,7 +148,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -163,7 +163,9 @@ void CFunSetPageDlg::OnChangeData()
 //разрешение/запрещение контроллов (всех поголовно)
 void CFunSetPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }
@@ -171,7 +173,7 @@ void CFunSetPageDlg::Enable(bool enable)
 //что с контроллами?
 bool CFunSetPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //TODO: Если будет необходимость использовать режим сортировки, то для корректного

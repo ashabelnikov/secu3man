@@ -48,7 +48,7 @@ END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CStarterPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT)
 {
@@ -95,7 +95,7 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_starter_off_rpm_spin.SetRangeAndDelta(40,1000,10);
 
  UpdateData(FALSE);
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -115,7 +115,9 @@ void CStarterPageDlg::OnChangePdStarterSmapAbandonRpmEdit()
 //разрешение/запрещение контроллов (всех поголовно)
 void CStarterPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }
@@ -123,7 +125,7 @@ void CStarterPageDlg::Enable(bool enable)
 //что с контроллами?
 bool CStarterPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

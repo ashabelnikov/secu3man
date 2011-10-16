@@ -76,7 +76,7 @@ END_MESSAGE_MAP()
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCarburPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_shutoff_lo_threshold_edit(CEditEx::MODE_INT)
 , m_shutoff_hi_threshold_edit(CEditEx::MODE_INT)
 , m_epm_on_threshold_edit(CEditEx::MODE_FLOAT)
@@ -168,7 +168,7 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_shutoff_delay_edit.SetDecimalPlaces(2);
  m_shutoff_delay_spin.SetRangeAndDelta(0.0f,2.5f,0.01f);
 
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -182,15 +182,17 @@ void CCarburPageDlg::OnChangeData()
 //разрешение/запрещение контроллов (всех поголовно)
 void CCarburPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
 bool CCarburPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

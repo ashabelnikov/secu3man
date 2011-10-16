@@ -19,8 +19,6 @@
               email: shabelnikov@secu-3.org
 */
 
-#pragma warning (disable:C4786)
-
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "TablesDeskDlg.h"
@@ -136,14 +134,14 @@ BOOL CTablesDeskDlg::OnInitDialog()
  m_tab_control.SetEventListener(this);
 
  //устанавливаем предыдущее значение (разрешены вкладки или нет)
- m_tab_control.EnableItem(-1, m_enabled ? true : false);
+ m_tab_control.EnableItem(-1, m_enabled);
 
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
 
  mp_ContextMenuManager->Attach(this);
 
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -165,17 +163,19 @@ void CTablesDeskDlg::GetTitle(CString& o_str)
 
 bool CTablesDeskDlg::IsEnabled(void)
 {
- return m_enabled ? true : false;
+ return m_enabled;
 }
 
 //разрешение/запрещение
 void CTablesDeskDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  m_pPageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 
  m_tab_control.EnableItem(-1, enable); //all items
  mp_ContextMenuManager->EnableMenuItems(enable);

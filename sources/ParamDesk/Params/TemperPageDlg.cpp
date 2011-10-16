@@ -120,7 +120,7 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_vent_off_threshold_spin.SetRangeAndDelta(-10.0f,125.0f,0.2f);
 
  UpdateData(FALSE);
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -153,7 +153,9 @@ void CTemperPageDlg::OnPdTemperUseVentPwm()
 //разрешение/запрещение контроллов (всех поголовно)
 void CTemperPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this, TRUE);
 }
@@ -161,7 +163,7 @@ void CTemperPageDlg::Enable(bool enable)
 //что с контроллами?
 bool CTemperPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога
@@ -182,6 +184,8 @@ void CTemperPageDlg::SetValues(const SECU3IO::TemperPar* i_values)
 
 void CTemperPageDlg::EnableUseVentPwm(bool enable)
 {
+ if (m_use_vent_pwm_enabled == enable)
+  return; //already has needed state
  m_use_vent_pwm_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);

@@ -22,9 +22,6 @@
 
 using namespace std;
 
-//warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
-#pragma warning( disable : 4800 )
-
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #undef THIS_FILE

@@ -75,7 +75,7 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   CStatic m_igncutoff_rpm_unit;
 
   SECU3IO::MiscelPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
 };

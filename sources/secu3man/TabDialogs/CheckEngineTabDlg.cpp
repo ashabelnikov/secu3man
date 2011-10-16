@@ -32,8 +32,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
-
 #define TIMER_ID 0
 
 const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;

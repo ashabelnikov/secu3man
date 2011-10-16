@@ -23,6 +23,7 @@
 #include "Resources/resource.h"
 #include "MainFrame.h"
 #include "common/DPIAware.h"
+#include "MIDesk/DVDeskDlg.h"
 
 #include <limits>
 #include <vector>
@@ -34,7 +35,6 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
 #undef max                        //avoid conflicts with C++
 
 /////////////////////////////////////////////////////////////////////////////
@@ -63,6 +63,7 @@ END_MESSAGE_MAP()
 CMainFrame::CMainFrame()
 : m_pwndView(NULL)
 , m_bDoIdle(TRUE)
+, mp_DVDeskDlg(new CDVDeskDlg())
 {
  //na
 }
@@ -77,6 +78,12 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
  if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
   return -1;
 
+ mp_DVDeskDlg->Create(CDVDeskDlg::IDD, this);
+ mp_DVDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE);
+ mp_DVDeskDlg->Show(false);
+
+ if (m_OnCreate)
+  m_OnCreate();
  return 0;
 }
 
@@ -217,6 +224,11 @@ void CMainFrame::setOnFullScreenNotify(EventHandler1 i_OnFullScreenNotify)
 void CMainFrame::setOnActivate(EventHandler1 i_OnActivate)
 {
  m_OnActivate = i_OnActivate;
+}
+
+void CMainFrame::setOnCreate(EventHandler i_OnCreate)
+{
+ m_OnCreate = i_OnCreate;
 }
 
 void CMainFrame::setOnAppAbout(EventHandler i_OnFunction)
@@ -372,4 +384,9 @@ bool CMainFrame::_UpdateTopLevelMainMenu(void)
  }
  //nothing changed: redraw is not needed
  return false;
+}
+
+CDVDeskDlg* CMainFrame::GetDVDesk(void)
+{
+ return mp_DVDeskDlg.get();
 }

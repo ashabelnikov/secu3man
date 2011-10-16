@@ -19,8 +19,6 @@
               email: shabelnikov@secu-3.org
 */
 
-#pragma warning (disable:C4786)
-
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "ParamDeskDlg.h"
@@ -64,7 +62,7 @@ const UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
 : Super(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -199,12 +197,12 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_control.SetEventListener(this);
 
  //устанавливаем предыдущее значение (разрешены вкладки или нет)
- m_tab_control.EnableItem(-1,m_enabled ? true : false);
+ m_tab_control.EnableItem(-1, m_enabled);
 
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
 
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -245,7 +243,9 @@ void CParamDeskDlg::GetTitle(CString& o_str)
 //разрешение/запрещение
 void CParamDeskDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  m_pStarterPageDlg->Enable(enable);
  m_pAnglesPageDlg->Enable(enable);
  m_pIdlRegPageDlg->Enable(enable);
@@ -261,12 +261,12 @@ void CParamDeskDlg::Enable(bool enable)
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 
- m_tab_control.EnableItem(-1,enable); //all items
+ m_tab_control.EnableItem(-1, enable); //all items
 }
 
 bool CParamDeskDlg::IsEnabled(void)
 {
- return m_enabled ? true : false;
+ return m_enabled;
 }
 
 //спрятать/показать все

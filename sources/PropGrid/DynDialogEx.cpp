@@ -365,12 +365,10 @@ void CDynDialogEx::GetDlgRect(LPRECT lpRect)
 void CDynDialogEx::SetDlgRect(LPRECT lpRect)
 {
  ASSERT(lpRect);
- //#pragma warning(disable : 4244)
  m_DialogTemplate.cx = (short)(lpRect->right  - lpRect->left);
  m_DialogTemplate.cy = (short)(lpRect->bottom - lpRect->top);
  m_DialogTemplate.x  = (short)(lpRect->left);
  m_DialogTemplate.y  = (short)(lpRect->top);
- //#pragma warning(default : 4244)
 }
 
 void CDynDialogEx::SetDlgRectangle(LPRECT pRect)

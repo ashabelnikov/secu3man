@@ -125,7 +125,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   CTabController m_tab_control;
   CImageList* m_pImgList;
 
-  BOOL m_enabled;
+  bool m_enabled;
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;

@@ -28,7 +28,6 @@
 #include "propgrid/wm_messages.h"
 
 using namespace std;
-#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -46,6 +45,7 @@ END_MESSAGE_MAP()
 
 CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockPageDlg::IDD, pParent)
+, m_enabled(false)
 {
  m_params.knock_use_knock_channel = 0;
  m_params.knock_bpf_frequency = 40;
@@ -184,8 +184,9 @@ BOOL CKnockPageDlg::OnInitDialog()
  //-----------------------------------------------------------------
 
  m_ctrlGrid.SetGutterWidth(180);
+ m_ctrlGrid.SetEditable(m_enabled);
 
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -199,10 +200,12 @@ void CKnockPageDlg::OnChangeData()
 //разрешение/запрещение контроллов (всех поголовно)
 void CKnockPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
  {
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
   m_ctrlGrid.SetEditable(m_enabled);
  }
 }
@@ -210,7 +213,7 @@ void CKnockPageDlg::Enable(bool enable)
 //что с контроллами?
 bool CKnockPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

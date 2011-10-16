@@ -76,7 +76,7 @@ END_MESSAGE_MAP()
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CIdlRegPageDlg::IDD, pParent)
-, m_enabled(FALSE)
+, m_enabled(false)
 , m_factor_pos_edit(CEditEx::MODE_FLOAT)
 , m_factor_neg_edit(CEditEx::MODE_FLOAT)
 , m_restriction_min_edit(CEditEx::MODE_FLOAT)
@@ -167,7 +167,7 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_restriction_max_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
 
  UpdateData(FALSE);
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -181,15 +181,17 @@ void CIdlRegPageDlg::OnChangeData()
 //разрешение/запрещение контроллов (всех поголовно)
 void CIdlRegPageDlg::Enable(bool enable)
 {
- m_enabled = (enable) ? TRUE : FALSE;
+ if (m_enabled == enable)
+  return; //already has needed state
+ m_enabled = enable;
  if (::IsWindow(m_hWnd))
-  UpdateDialogControls(this,TRUE);
+  UpdateDialogControls(this, TRUE);
 }
 
 //что с контроллами?
 bool CIdlRegPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

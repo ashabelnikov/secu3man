@@ -19,36 +19,20 @@
               email: shabelnikov@secu-3.org
 */
 
-#ifndef _UFCODES_H_
-#define _UFCODES_H_
+#pragma once
 
-#define   CHANGEMODE   'h'
-#define   BOOTLOADER   'i'
+namespace SECU3IO
+{
+ struct DbgvarDat;
+}
 
-#define   TEMPER_PAR   'j'
-#define   CARBUR_PAR   'k'
-#define   IDLREG_PAR   'l'
-#define   ANGLES_PAR   'm'
-#define   FUNSET_PAR   'n'
-#define   STARTR_PAR   'o'
-
-#define   FNNAME_DAT   'p'
-#define   SENSOR_DAT   'q'
-
-#define   ADCCOR_PAR   'r'
-#define   ADCRAW_DAT   's'
-
-#define   CKPS_PAR     't'
-#define   OP_COMP_NC   'u'
-
-#define   CE_ERR_CODES 'v'
-
-#define   KNOCK_PAR    'w'
-
-#define   CE_SAVED_ERR 'x'
-#define   FWINFO_DAT   'y'
-#define   MISCEL_PAR   'z'
-#define   EDITAB_PAR   '{'
-#define   DBGVAR_DAT   ':'
-
-#endif //_UFCODES_H_
+class IDVView
+{
+ public:
+  virtual void Show(bool show) = 0;                                //показать/спрятать контент представления
+  virtual void Enable(bool enable) = 0;                            //разрешение/запрещение представления
+  virtual bool IsEnabled(void) = 0;                                //returns true if window enabled
+  virtual void SetValues(const SECU3IO::DbgvarDat* i_values) = 0;  //загоняет данные в представление
+  virtual void GetValues(SECU3IO::DbgvarDat* o_values) = 0;        //извлекает данные из представления
+  virtual void SetUpdatePeriod(unsigned int i_period) = 0;         //update period for internal controls
+};

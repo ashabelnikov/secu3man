@@ -52,7 +52,7 @@ class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::IdlRegPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CButton m_use_regulator;
   CSpinButtonCtrlEx m_goal_rpm_spin;

@@ -21,57 +21,59 @@
 
 #pragma once
 
-#include "IRSView.h"
+#include "common/ObjectTimer.h"
+#include "IDVView.h"
 #include "ui-core/DialogWithAccelerators.h"
 
 /////////////////////////////////////////////////////////////////////////////
-// CRSDeskDlg dialog
+// CDVDeskDlg dialog
 
-class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
+class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
 {
   typedef CModelessDialog Super;
 
  public:
-  CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
+  CDVDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
 
   //--------interface implementation---------------
   virtual void Show(bool show);
   virtual void Enable(bool enable);
-  virtual void SetValues(const SECU3IO::RawSensDat* i_values);
-  virtual void GetValues(SECU3IO::RawSensDat* o_values);
+  virtual bool IsEnabled(void);
+  virtual void SetValues(const SECU3IO::DbgvarDat* i_values);
+  virtual void GetValues(SECU3IO::DbgvarDat* o_values);
+  virtual void SetUpdatePeriod(unsigned int i_period);
   //-----------------------------------------------
-
-  //изменение размеров окна
-  void Resize(const CRect& i_rect);
 
   // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();    //deactivate
   DECLARE_MESSAGE_MAP()
 
+  void OnUpdateTimer(void);
+
  private:
-  int  m_enabled;
-  float m_map_value;
-  float m_ubat_value;
-  float m_temp_value;
-  float m_knock_value;
+  CObjectTimer<CDVDeskDlg> m_update_timer;
+  unsigned int m_update_period;
+  bool m_was_initialized;
+  int m_enabled;
 
-  CStatic m_map_field;
-  CStatic m_ubat_field;
-  CStatic m_temp_field;
-  CStatic m_knock_field;
+  int m_var1_value;
+  int m_var2_value;
+  int m_var3_value;
+  int m_var4_value;
 
-  CStatic m_map_caption;
-  CStatic m_ubat_caption;
-  CStatic m_temp_caption;
-  CStatic m_knock_caption;
+  CStatic m_var1_field;
+  CStatic m_var2_field;
+  CStatic m_var3_field;
+  CStatic m_var4_field;
 
-  CStatic m_map_unit;
-  CStatic m_ubat_unit;
-  CStatic m_temp_unit;
-  CStatic m_knock_unit;
+  CStatic m_var1_caption;
+  CStatic m_var2_caption;
+  CStatic m_var3_caption;
+  CStatic m_var4_caption;
 };
 
 /////////////////////////////////////////////////////////////////////////////

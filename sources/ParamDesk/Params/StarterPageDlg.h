@@ -54,7 +54,7 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::StartrPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CSpinButtonCtrlEx m_smap_abandon_rpm_spin;
   CSpinButtonCtrlEx m_starter_off_rpm_spin;

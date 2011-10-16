@@ -91,7 +91,7 @@ BOOL CTablesPageDlg::OnInitDialog()
  m_names_edit.SetLimitText(16);
 
  UpdateData(FALSE);
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	              // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -114,6 +114,8 @@ void CTablesPageDlg::OnEditKillFocus()
 //разрешение/запрещение контроллов (всех поголовно)
 void CTablesPageDlg::Enable(bool enable)
 {
+ if (m_enabled == enable)
+  return; //already has needed state
  m_enabled = enable;
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -128,13 +130,13 @@ void CTablesPageDlg::SetReadOnlyTablesSetName(bool readonly)
 //что с контроллами?
 bool CTablesPageDlg::IsEnabled(void)
 {
- return (m_enabled) ? true : false;
+ return m_enabled;
 }
 
 //from CButtonsPanel
 bool CTablesPageDlg::IsAllowed(void)
 {
- return m_enabled ? true : false;
+ return m_enabled;
 }
 
 //from edit box

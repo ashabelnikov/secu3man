@@ -58,7 +58,7 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
  private:
   SECU3IO::FunSetPar m_params;
   std::vector<_TSTRING> m_fun_names;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;

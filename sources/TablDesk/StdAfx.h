@@ -15,5 +15,9 @@
 #ifdef _DEBUG  //'identifier' : identifier was truncated in the debug information
  #pragma warning (disable: 4786)
 #endif
+
+//warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning( disable : 4800 )
+
 #include <atlconv.h>
 #include "common\LangLayer.h"

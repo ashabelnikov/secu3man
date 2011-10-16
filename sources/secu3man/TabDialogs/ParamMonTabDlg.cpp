@@ -95,7 +95,6 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
- mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
  mp_ParamDeskDlg->Show(!check_state);
 
  //create tables desk
@@ -104,7 +103,6 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_TablesDeskDlg->Create(CTablesDeskDlg::IDD,this);
  mp_TablesDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
- mp_TablesDeskDlg->ShowWindow(SW_SHOWNORMAL);
  mp_TablesDeskDlg->Show(check_state);
  
  return TRUE;  // return TRUE unless you set the focus to a control

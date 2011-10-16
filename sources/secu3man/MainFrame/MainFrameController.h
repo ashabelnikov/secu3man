@@ -55,6 +55,7 @@ class MainFrameController : public IAPPEventHandler
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
   bool OnClose(void);
+  void OnCreate(void);
 
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);

@@ -52,7 +52,7 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::CarburPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CButton m_inverse_throttle_switch;
   CSpinButtonCtrlEx m_shutoff_lo_threshold_spin;

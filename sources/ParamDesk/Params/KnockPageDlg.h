@@ -53,7 +53,7 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::KnockPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CPropertyGrid m_ctrlGrid;
 

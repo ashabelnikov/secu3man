@@ -146,6 +146,7 @@ class IOCORE_API CControlApp
 
   //парсеры отдельных пакетов (тех пакетов которые принимаются от SECU-3)
   bool Parse_SENSOR_DAT(const BYTE* raw_packet);
+  bool Parse_DBGVAR_DAT(const BYTE* raw_packet);
   bool Parse_FNNAME_DAT(const BYTE* raw_packet);
   bool Parse_STARTR_PAR(const BYTE* raw_packet);
   bool Parse_ANGLES_PAR(const BYTE* raw_packet);

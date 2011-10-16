@@ -45,6 +45,14 @@ namespace SECU3IO
   unsigned char ce_state;               // !currently is not used!
  };
 
+ struct DbgvarDat
+ {
+  int var1;                             //переменная 1
+  int var2;                             //переменная 2
+  int var3;                             //переменная 3
+  int var4;                             //переменная 4
+ };
+
  struct FnNameDat
  {
   unsigned char tables_num;
@@ -89,7 +97,6 @@ namespace SECU3IO
   float min_angle;
   float max_angle;
  };
-
 
  struct CarburPar
  {
@@ -279,6 +286,7 @@ namespace SECU3IO
   SECU3IO::FWInfoDat    m_FWInfoDat;
   SECU3IO::MiscelPar    m_MiscelPar;
   SECU3IO::EditTabPar   m_EditTabPar;
+  SECU3IO::DbgvarDat    m_DbgvarDat;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
@@ -288,7 +296,7 @@ namespace SECU3IO
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
 
- const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 12;
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 13;
  //<bitnumber, name>
 #define _SD std::pair<int, TCHAR*>
  static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
@@ -304,7 +312,8 @@ namespace SECU3IO
   _SD(8,  _T("COPT_COOLINGFAN_PWM")),
   _SD(9,  _T("COPT_REALTIME_TABLES")),
   _SD(10, _T("COPT_ICCAVR_COMPILER")),
-  _SD(11, _T("COPT_AVRGCC_COMPILER"))
+  _SD(11, _T("COPT_AVRGCC_COMPILER")),
+  _SD(12, _T("COPT_DEBUG_VARIABLES"))
  };
 #undef _SD
 
@@ -320,6 +329,7 @@ const int COPT_COOLINGFAN_PWM = 8;
 const int COPT_REALTIME_TABLES = 9;
 const int COPT_ICCAVR_COMPILER = 10;
 const int COPT_AVRGCC_COMPILER = 11;
+const int COPT_DEBUG_VARIABLES = 12;
 
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;

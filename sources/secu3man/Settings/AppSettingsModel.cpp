@@ -25,8 +25,6 @@
 #include <limits>
 #include <algorithm>
 
-#pragma warning( disable : 4800 ) //: forcing value to bool 'true' or 'false' (performance warning)
-
 #undef max //avoid conflicts with C++
 
 #ifdef _DEBUG
@@ -50,6 +48,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
 , m_Name_InterfaceLang(_T("InterfaceLanguage"))
 , m_Name_ECUPlatformType(_T("ECUPlatformType"))
+, m_Name_UseDVFeatures(_T("UseDVFeatures"))
+, m_Name_DVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -282,6 +282,30 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optECUPlatformType = (EECUPlatform)m_AllowablePlatforms[0].second; //atmega16 by default
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_DVDeskUpdatePeriod,_T("40"),read_str,255,IniFileName);
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0)
+  m_optDVDeskUpdatePeriod = i_val;
+ else
+ { //error
+  status = false;
+  m_optDVDeskUpdatePeriod = 40;
+ }
+
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_UseDVFeatures,_T("0"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optUseDVFeatures = 0;
+ }
+ else
+ {
+  m_optUseDVFeatures = i_val;
+ }
+
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
  {\
@@ -394,6 +418,13 @@ bool CAppSettingsModel::WriteSettings(void)
    write_str = m_AllowablePlatforms[i].first.second.c_str();
  WritePrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,write_str,IniFileName);
 
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optUseDVFeatures);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_UseDVFeatures,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optDVDeskUpdatePeriod);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_DVDeskUpdatePeriod,write_str,IniFileName);
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -539,4 +570,14 @@ int CAppSettingsModel::GetTachometerMax(void) const
 int CAppSettingsModel::GetPressureMax(void) const
 {
  return m_optPressureMax;
+}
+
+bool CAppSettingsModel::GetUseDVFeatures(void) const
+{
+ return m_optUseDVFeatures;
+}
+
+int CAppSettingsModel::GetDVDeskUpdatePeriod(void) const
+{
+ return m_optDVDeskUpdatePeriod;
 }

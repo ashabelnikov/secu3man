@@ -71,6 +71,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_MIDeskUpdatePeriod;
   const CString m_Name_InterfaceLang;
   const CString m_Name_ECUPlatformType;
+  const CString m_Name_UseDVFeatures;
+  const CString m_Name_DVDeskUpdatePeriod;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -114,6 +116,9 @@ class CAppSettingsModel : public ISettingsData
   //fixtures's customization
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
+  //Debug features
+  virtual bool GetUseDVFeatures(void) const;
+  virtual int GetDVDeskUpdatePeriod(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -144,6 +149,9 @@ class CAppSettingsModel : public ISettingsData
   int m_optMainFrmWnd_Y;
   int m_optDwellCntrlMapWnd_X;
   int m_optDwellCntrlMapWnd_Y;
+
+  bool m_optUseDVFeatures;
+  int m_optDVDeskUpdatePeriod;
 
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);

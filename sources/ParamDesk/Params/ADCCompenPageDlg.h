@@ -57,7 +57,7 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
 
  private:
   SECU3IO::ADCCompenPar m_params;
-  BOOL m_enabled;
+  bool m_enabled;
 
   CSpinButtonCtrlEx m_map_factor_spin;
   CSpinButtonCtrlEx m_map_correction_spin;

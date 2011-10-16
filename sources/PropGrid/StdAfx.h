@@ -32,4 +32,8 @@
 #if (_MSC_VER <1300)
  #pragma warning( disable : 4786 ) // : identifier was truncated to '255' characters in the debug information
 #endif
+
+//warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)
+#pragma warning( disable : 4800 )
+
 #include <atlconv.h>
