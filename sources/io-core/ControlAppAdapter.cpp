@@ -62,7 +62,10 @@ BOOL CControlAppAdapter::Create(CWnd* pParentWnd)
 void CControlAppAdapter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
  if (IsWindow(m_hWnd) && m_switch_on_thread_side)
+ {
   PostMessage(WM_THREAD_ON_PACKET_RECEIVED,i_descriptor,(LPARAM)ip_packet);
+  Sleep(0); //<-- This is because we have to prevent dead locks (deadlock appears at high data rate)
+ }
 }
 
 void CControlAppAdapter::OnConnection(const bool i_online)
