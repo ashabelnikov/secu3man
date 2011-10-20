@@ -103,6 +103,7 @@ class IOCORE_API CFirmwareDataMediator
   const PPFlashParam& GetPlatformParams(void) const;
 
  private:
+  CFirmwareDataMediator(const CFirmwareDataMediator& i);
   const std::auto_ptr<PPFlashParam> m_fpp;
   const std::auto_ptr<LocInfoProvider> m_lip;
   const size_t m_firmware_size;

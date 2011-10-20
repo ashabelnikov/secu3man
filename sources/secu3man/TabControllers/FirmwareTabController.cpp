@@ -1299,18 +1299,18 @@ void CFirmwareTabController::OnImportTablesFromEEPROMFile()
 void CFirmwareTabController::OnExportMapsToMPSZ(void)
 {
  FWMapsDataHolder data;
- MPSZExportController export(&data);
+ MPSZExportController export_cntr(&data);
  m_fwdm->GetMapsData(&data);
- export.DoExport();
+ export_cntr.DoExport();
 }
 
 void CFirmwareTabController::OnExportMapsToSECU3(void)
 {
  FWMapsDataHolder data;
- SECU3ExportController export(&data);
- export.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadFLASHFromFile));
+ SECU3ExportController export_cntr(&data);
+ export_cntr.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadFLASHFromFile));
  m_fwdm->GetMapsData(&data);
- export.DoExport();
+ export_cntr.DoExport();
 }
 
 //Пользователь захотел получить информацию о пршивке из SECU-3

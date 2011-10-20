@@ -266,7 +266,7 @@ namespace {
 void UpdateMap(float* map, float* flag, const EditTabPar* data)
 {
  int address = data->address;
- for(int i = 0; i < data->data_size; ++i)
+ for(size_t i = 0; i < data->data_size; ++i)
  {
   flag[address] = 1.f; //set flag
   map [address] = data->table_data[i]; //save data

@@ -109,7 +109,7 @@ void CTDContextMenuManager::SetLoadPopupMenuNames(const std::vector<_TSTRING>& i
 
 void CTDContextMenuManager::SetSavePopupMenuNames(const std::vector<_TSTRING>& i_names)
 {
- int i, count = m_SaveMenu.GetMenuItemCount();
+ size_t i, count = m_SaveMenu.GetMenuItemCount();
  for(i = 0; i < count; ++i)
   m_SaveMenu.DeleteMenu(IDM_TD_SAVE_NAMES_RESERVED0 + i, MF_BYCOMMAND);
  

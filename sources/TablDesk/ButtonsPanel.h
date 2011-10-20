@@ -29,12 +29,13 @@
 class AFX_EXT_CLASS CButtonsPanel : public CDialog
 {
   typedef CDialog Super;
+
+ public:
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
   typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
 
- public:
   CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL);   // standard constructor
   /*static*/ const UINT IDD;
 

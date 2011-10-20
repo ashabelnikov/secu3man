@@ -111,7 +111,8 @@ BOOL CKnockPageDlg::OnInitDialog()
      m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
  //-----------------------------------------------------------------
  vector<_TSTRING> bpf_freqs;
- for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
+ size_t i;
+ for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
  {
   CString string;
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);

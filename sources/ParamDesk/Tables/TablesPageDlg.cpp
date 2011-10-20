@@ -160,7 +160,7 @@ _TSTRING CTablesPageDlg::GetTablesSetName(void) const
 {
  CString str;
  m_names_edit.GetWindowText(str);
- return str;
+ return str.GetBuffer(128);
 }
 
 void CTablesPageDlg::SetModificationFlag(bool value)
