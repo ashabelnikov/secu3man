@@ -35,6 +35,7 @@ static char THIS_FILE[] = __FILE__;
 
 BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
  ON_WM_DESTROY()
+ ON_COMMAND_RANGE(IDC_DV_BASE1_CHECK, IDC_DV_BASE4_CHECK, OnBaseCheck)
 END_MESSAGE_MAP()
 
 const UINT CDVDeskDlg::IDD = IDD_DBGVAR_DESK;
@@ -44,35 +45,28 @@ const UINT CDVDeskDlg::IDD = IDD_DBGVAR_DESK;
 
 CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CDVDeskDlg::IDD, pParent)
-, m_var1_value(0)
-, m_var2_value(0)
-, m_var3_value(0)
-, m_var4_value(0)
 , m_update_period(100)
 , m_was_initialized(false)
 , m_enabled(-1)
 {
- //empty
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  m_vu[i].var_value = 0;
+  m_vu[i].base_fmt = _T("0x%04X");
+ }
 }
 
 void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- DDX_Control(pDX, IDC_DV_VAR1_VALUE, m_var1_field);
- DDX_Control(pDX, IDC_DV_VAR2_VALUE, m_var2_field);
- DDX_Control(pDX, IDC_DV_VAR3_VALUE, m_var3_field);
- DDX_Control(pDX, IDC_DV_VAR4_VALUE, m_var4_field);
-
- DDX_Control(pDX, IDC_DV_VAR1_CAPTION, m_var1_caption);
- DDX_Control(pDX, IDC_DV_VAR2_CAPTION, m_var2_caption);
- DDX_Control(pDX, IDC_DV_VAR3_CAPTION, m_var3_caption);
- DDX_Control(pDX, IDC_DV_VAR4_CAPTION, m_var4_caption);
-
- DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE, m_var1_value, _T("0x%04X"));
- DDX_Text_Fmt(pDX,IDC_DV_VAR2_VALUE, m_var2_value, _T("0x%04X"));
- DDX_Text_Fmt(pDX,IDC_DV_VAR3_VALUE, m_var3_value, _T("0x%04X"));
- DDX_Text_Fmt(pDX,IDC_DV_VAR4_VALUE, m_var4_value, _T("0x%04X"));
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  DDX_Control(pDX, IDC_DV_VAR1_VALUE + i, m_vu[i].var_field);
+  DDX_Control(pDX, IDC_DV_VAR1_CAPTION + i, m_vu[i].var_caption);
+  DDX_Control(pDX, IDC_DV_BASE1_CHECK + i, m_vu[i].base_check);
+  DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, m_vu[i].var_value, m_vu[i].base_fmt.c_str());
+ }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -99,10 +93,8 @@ BOOL CDVDeskDlg::OnInitDialog()
    DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
    _T("Arial")));             // lpszFacename
 
- m_var1_field.SetFont(&font);
- m_var2_field.SetFont(&font);
- m_var3_field.SetFont(&font);
- m_var4_field.SetFont(&font);
+ for(size_t i = 0; i < VU_SIZE; ++i)
+  m_vu[i].var_field.SetFont(&font);
 
  Enable(false);
  UpdateData(FALSE);
@@ -121,21 +113,27 @@ void CDVDeskDlg::OnDestroy()
  m_update_timer.KillTimer();
 }
 
+void CDVDeskDlg::OnBaseCheck(UINT nID)
+{
+ size_t index = nID - IDC_DV_BASE1_CHECK;
+ bool checked = m_vu[index].base_check.GetCheck() == BST_CHECKED;
+ m_vu[index].base_fmt = checked ? _T("%05d") : _T("0x%04X");
+ UpdateData(FALSE);
+}
+
 //разрешение/запрещение приборов
 void CDVDeskDlg::Enable(bool enable)
 {
  if (((int)enable) == m_enabled)
   return; //already has needed state
  m_enabled = enable;
- m_var1_field.EnableWindow(enable);
- m_var2_field.EnableWindow(enable);
- m_var3_field.EnableWindow(enable);
- m_var4_field.EnableWindow(enable);
 
- m_var1_caption.EnableWindow(enable);
- m_var2_caption.EnableWindow(enable);
- m_var3_caption.EnableWindow(enable);
- m_var4_caption.EnableWindow(enable);
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  m_vu[i].var_field.EnableWindow(enable);
+  m_vu[i].var_caption.EnableWindow(enable);
+  m_vu[i].base_check.EnableWindow(enable);
+ }
 }
 
 bool CDVDeskDlg::IsEnabled(void)
@@ -146,15 +144,13 @@ bool CDVDeskDlg::IsEnabled(void)
 void CDVDeskDlg::Show(bool show)
 {
  int sw = ((show) ? SW_SHOW : SW_HIDE);
- m_var1_field.ShowWindow(sw);
- m_var2_field.ShowWindow(sw);
- m_var3_field.ShowWindow(sw);
- m_var4_field.ShowWindow(sw);
 
- m_var1_caption.ShowWindow(sw);
- m_var2_caption.ShowWindow(sw);
- m_var3_caption.ShowWindow(sw);
- m_var4_caption.ShowWindow(sw);
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  m_vu[i].var_field.ShowWindow(sw);
+  m_vu[i].var_caption.ShowWindow(sw);
+  m_vu[i].base_check.ShowWindow(sw);
+ }
  ShowWindow(sw);
 }
 
@@ -162,19 +158,19 @@ using namespace SECU3IO;
 
 void CDVDeskDlg::SetValues(const DbgvarDat* i_values)
 {
- m_var1_value = i_values->var1;
- m_var2_value = i_values->var2;
- m_var3_value = i_values->var3;
- m_var4_value = i_values->var4;
+ m_vu[0].var_value = i_values->var1;
+ m_vu[1].var_value = i_values->var2;
+ m_vu[2].var_value = i_values->var3;
+ m_vu[3].var_value = i_values->var4;
 }
 
 void CDVDeskDlg::GetValues(DbgvarDat* o_values)
 {
  UpdateData();
- o_values->var1 = m_var1_value;
- o_values->var2 = m_var2_value;
- o_values->var3 = m_var3_value;
- o_values->var4 = m_var4_value;
+ o_values->var1 = m_vu[0].var_value;
+ o_values->var2 = m_vu[1].var_value;
+ o_values->var3 = m_vu[2].var_value;
+ o_values->var4 = m_vu[3].var_value;
 }
 
 void CDVDeskDlg::OnUpdateTimer(void)

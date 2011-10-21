@@ -50,6 +50,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();    //deactivate
+  afx_msg void OnBaseCheck(UINT nID);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -60,20 +61,15 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   bool m_was_initialized;
   int m_enabled;
 
-  int m_var1_value;
-  int m_var2_value;
-  int m_var3_value;
-  int m_var4_value;
-
-  CStatic m_var1_field;
-  CStatic m_var2_field;
-  CStatic m_var3_field;
-  CStatic m_var4_field;
-
-  CStatic m_var1_caption;
-  CStatic m_var2_caption;
-  CStatic m_var3_caption;
-  CStatic m_var4_caption;
+  enum {VU_SIZE = 4}; 
+  struct VarUnit
+  {
+   int var_value;
+   _TSTRING base_fmt;
+   CStatic var_field;
+   CStatic var_caption;
+   CButton base_check;
+  }m_vu[VU_SIZE];
 };
 
 /////////////////////////////////////////////////////////////////////////////
