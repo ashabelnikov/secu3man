@@ -48,6 +48,7 @@ class IParamDeskView
   virtual void EnableIgnitionCogs(bool enable) = 0;
   virtual void EnableUseVentPwm(bool enable) = 0;
   virtual void SetCrankType(int type) = 0;
+  virtual void SetMaxCylinders(int number) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
 

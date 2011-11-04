@@ -47,6 +47,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
 
   void EnableIgnitionCogs(bool enable);
   void SetCrankType(int type);
+  void SetMaxCylinders(int number);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -76,6 +77,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   bool m_enabled;
   bool m_igncogs_enabled;
   int m_crank_type;
+  int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;
   CButton m_ckps_posfront_radio;

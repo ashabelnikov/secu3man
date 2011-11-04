@@ -64,6 +64,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
 , m_igncogs_enabled(false)
 , m_crank_type(-1)
+, m_max_cylinders(8)
 {
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
@@ -210,6 +211,13 @@ void CCKPSPageDlg::SetCrankType(int type)
   _FillCKPSTeethBTDCComboBox();
 }
 
+void CCKPSPageDlg::SetMaxCylinders(int number)
+{
+ m_max_cylinders = number;
+ if (::IsWindow(this->m_hWnd))
+  _FillCKPSEngineCylComboBox();
+}
+
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
 {
  m_cogs_numbers.clear();
@@ -297,8 +305,11 @@ void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
  m_engine_cyls.clear();
  m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
  m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
- m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
- m_engine_cyls.push_back(std::make_pair(8,_TSTRING(_T("8"))));
+ if (m_max_cylinders > 4)
+ {
+  m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+  m_engine_cyls.push_back(std::make_pair(8,_TSTRING(_T("8"))));
+ }
 
  m_engine_cyl_combo.ResetContent();
  for(size_t i = 0; i < m_engine_cyls.size(); i++)
