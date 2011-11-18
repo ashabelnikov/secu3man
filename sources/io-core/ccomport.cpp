@@ -88,9 +88,9 @@ CComPort::~CComPort()
 //exceptions: xInitialize
 bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rts)
 {
- DWORD	dwRC;
- DWORD	dwError;
- TCHAR	sMsg[1024];
+ DWORD dwRC;
+ DWORD dwError;
+ TCHAR sMsg[1024];
  LPVOID  lpMsgBuf = NULL;
 
  m_bPortReady = TRUE; // всЄ OK
@@ -100,23 +100,22 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
  for(int i = 0; i < 5; i++)
  {
   m_hCom = CreateFile(m_sComPort.c_str(),GENERIC_READ | GENERIC_WRITE,
-		      0,             // экслюзивно занимаем порт
-		      NULL,          // no security
-		      OPEN_EXISTING, // port is existing file
-		      0,             // no overlapped I/O
-		      NULL);         // null template
+                      0,             // экслюзивно занимаем порт
+                      NULL,          // no security
+                      OPEN_EXISTING, // port is existing file
+                      0,             // no overlapped I/O
+                      NULL);         // null template
   if (m_hCom!=INVALID_HANDLE_VALUE)
    break;
   //пытаемс€ открыть использу€ другой синтаксис
   m_hCom = CreateFile(("\\\\.\\" + m_sComPort).c_str(),GENERIC_READ | GENERIC_WRITE,
-		      0,             // экслюзивно занимаем порт
-		      NULL,          // no security
-		      OPEN_EXISTING, // port is existing file
-		      0,             // no overlapped I/O
-		      NULL);         // null template
+                       0,             // экслюзивно занимаем порт
+                       NULL,          // no security
+                       OPEN_EXISTING, // port is existing file
+                       0,             // no overlapped I/O
+                       NULL);         // null template
   if (m_hCom!=INVALID_HANDLE_VALUE)
    break;
-
 
   if (GetLastError()!=ERROR_ACCESS_DENIED)
    break; //дл€ других случаев не делаем много попыток
@@ -131,13 +130,13 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
 
   // обработка ошибки
   dwRC = FormatMessage(
-   		    FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
-			NULL,
-			dwError, //  из GetLastError(),
-			MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
-			(LPTSTR) &lpMsgBuf,
-			0,
-			NULL);
+         FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS,
+         NULL,
+         dwError, //  из GetLastError(),
+         MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+         (LPTSTR) &lpMsgBuf,
+         0,
+         NULL);
 
   if (dwRC && lpMsgBuf)
   {
@@ -417,8 +416,8 @@ void  CComPort::ResetPortErrors(void)
 //exceptions: xSetTimeout
 bool CComPort::SetTimeouts(COMMTIMEOUTS* i_cto)
 {
- TCHAR	sMsg[1024];
- DWORD	dwError;
+ TCHAR sMsg[1024];
+ DWORD dwError;
  memcpy(&m_CommTimeouts,i_cto,sizeof(COMMTIMEOUTS));
  if (m_bPortReady)
  {
@@ -511,4 +510,3 @@ bool CComPort::IsInitialized(void)
 {
  return ((m_hCom==INVALID_HANDLE_VALUE) ? false : true);
 }
-

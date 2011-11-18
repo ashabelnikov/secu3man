@@ -83,7 +83,7 @@ class IOCORE_API CComPort
 
   typedef xRuntimeError xInitialize;
   typedef xRuntimeError xSetTimeout;
-  
+
  private:
   void _LoadDefaultTimeouts(void);
 

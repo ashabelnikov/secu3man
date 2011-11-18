@@ -204,7 +204,7 @@ namespace SECU3IO
  //Identifiers used in EditTabPar
  const int ETTS_GASOLINE_SET = 0; //tables's set: petrol
  const int ETTS_GAS_SET = 1;      //tables's set: gas
- 
+
  const int ETMT_STRT_MAP = 0; //start map
  const int ETMT_IDLE_MAP = 1; //idle map
  const int ETMT_WORK_MAP = 2; //work map
@@ -321,23 +321,23 @@ namespace SECU3IO
  };
 #undef _SD
 
-const int COPT_ATMEGA16 = 0;
-const int COPT_ATMEGA32 = 1;
-const int COPT_ATMEGA64 = 2;
-const int COPT_ATMEGA128 = 3;
-const int COPT_VPSEM = 4;
-const int COPT_WHEEL_36_1 = 5;
-const int COPT_INVERSE_IGN_OUTPUTS = 6;
-const int COPT_DWELL_CONTROL = 7;
-const int COPT_COOLINGFAN_PWM = 8;
-const int COPT_REALTIME_TABLES = 9;
-const int COPT_ICCAVR_COMPILER = 10;
-const int COPT_AVRGCC_COMPILER = 11;
-const int COPT_DEBUG_VARIABLES = 12;
-const int COPT_PHASE_SENSOR = 13;
-const int COPT_PHASED_IGNITION = 14;
-const int COPT_FUEL_PUMP = 15;
-const int COPT_THERMISTOR_CS = 16;
+ const int COPT_ATMEGA16 = 0;
+ const int COPT_ATMEGA32 = 1;
+ const int COPT_ATMEGA64 = 2;
+ const int COPT_ATMEGA128 = 3;
+ const int COPT_VPSEM = 4;
+ const int COPT_WHEEL_36_1 = 5;
+ const int COPT_INVERSE_IGN_OUTPUTS = 6;
+ const int COPT_DWELL_CONTROL = 7;
+ const int COPT_COOLINGFAN_PWM = 8;
+ const int COPT_REALTIME_TABLES = 9;
+ const int COPT_ICCAVR_COMPILER = 10;
+ const int COPT_AVRGCC_COMPILER = 11;
+ const int COPT_DEBUG_VARIABLES = 12;
+ const int COPT_PHASE_SENSOR = 13;
+ const int COPT_PHASED_IGNITION = 14;
+ const int COPT_FUEL_PUMP = 15;
+ const int COPT_THERMISTOR_CS = 16;
 
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;

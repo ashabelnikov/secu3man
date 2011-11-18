@@ -57,7 +57,7 @@ class AFX_EXT_CLASS CControlAppAdapter : public CWnd, public IAPPThreadEventHand
   //добавление обозревателя
   bool AddEventHandler(IAPPEventHandler* i_pEventHandler, const _TSTRING &i_observer_key);
 
-	  //удаление обозревателя
+  //удаление обозревателя
   bool RemoveEventHandler(const _TSTRING &i_observer_key);
 
  protected:

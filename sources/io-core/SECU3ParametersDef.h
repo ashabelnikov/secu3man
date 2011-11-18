@@ -103,7 +103,7 @@ typedef struct
 
  _uchar ign_cutoff;                  // Cutoff ignition when RPM reaches specified threshold
  _uint ign_cutoff_thrd;              // Cutoff threshold (RPM)
- 
+
  _uchar zero_adv_ang;                // Zero advance angle flag
 
  _uchar ckps_merge_ign_outs;         // Merge ignition signals to single ouput
