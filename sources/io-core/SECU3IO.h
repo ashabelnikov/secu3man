@@ -252,18 +252,19 @@ namespace SECU3IO
  };
 
  //Это маленькая база данных хранящая скорости UART-a SECU-3 и соответствующие им делители.
- const int SECU3_ALLOWABLE_UART_DIVISORS_COUNT = 7;
+ const int SECU3_ALLOWABLE_UART_DIVISORS_COUNT = 8;
  //<spead, divisor>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_allowable_uart_divisors[SECU3_ALLOWABLE_UART_DIVISORS_COUNT] =
  {
-  _SD(2400,   0x01A0),
-  _SD(4800,   0x00CF),
-  _SD(9600,   0x0067),
-  _SD(14400,  0x0044),
-  _SD(19200,  0x0033),
-  _SD(38400,  0x0019),
-  _SD(57600,  0x0010)
+  _SD(2400,   /*0x01A0*/0x340),
+  _SD(4800,   /*0x00CF*/0x1A0),
+  _SD(9600,   /*0x0067*/0xCF),
+  _SD(14400,  /*0x0044*/0x8A),
+  _SD(19200,  /*0x0033*/0x67),
+  _SD(28800,  /*0x0022*/0x44),
+  _SD(38400,  /*0x0019*/0x33),
+  _SD(57600,  /*0x0010*/0x22)
  };
 #undef _SD
 
