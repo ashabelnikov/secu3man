@@ -689,9 +689,9 @@ void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
   m_p_port->SetState();
 
   //теперь необходимо настроить таймауты (я нихрена так и не понял ничего в этих таймаутах)
-  timeouts.ReadIntervalTimeout         = 200;
-  timeouts.ReadTotalTimeoutMultiplier  = 200;
-  timeouts.ReadTotalTimeoutConstant    = 200;
+  timeouts.ReadIntervalTimeout         = 2000;
+  timeouts.ReadTotalTimeoutMultiplier  = 2000;
+  timeouts.ReadTotalTimeoutConstant    = 2000;
   timeouts.WriteTotalTimeoutConstant   = 200;
   timeouts.WriteTotalTimeoutMultiplier = 200;
   m_p_port->SetTimeouts(&timeouts);
