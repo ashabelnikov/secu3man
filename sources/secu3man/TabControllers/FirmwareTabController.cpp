@@ -483,6 +483,9 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
 //получение информации о бутлоадере
 void CFirmwareTabController::OnBootLoaderInfo(void)
 {
+ if (!m_comm->m_pBootLoader->IsIdle())
+  return;
+
  //запускаем бутлоадер (если нужно)
  StartBootLoader();
 
@@ -498,6 +501,9 @@ void CFirmwareTabController::OnBootLoaderInfo(void)
 
 void CFirmwareTabController::OnReadEepromToFile(void)
 {
+ if (!m_comm->m_pBootLoader->IsIdle())
+  return;
+
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
@@ -1170,6 +1176,8 @@ void CFirmwareTabController::OnModificationCheckTimer(void)
 
 void CFirmwareTabController::OnReadFlashFromSECU(void)
 {
+ if (!m_comm->m_pBootLoader->IsIdle())
+  return;
  //I don't like "copy/paste" paradigm of programming...
  m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_FOR_LOAD;
  _OnReadFlashToFile();
@@ -1177,6 +1185,8 @@ void CFirmwareTabController::OnReadFlashFromSECU(void)
 
 void CFirmwareTabController::OnWriteFlashToSECU(void)
 {
+ if (!m_comm->m_pBootLoader->IsIdle())
+  return;
  m_fwdm->StoreBytes(m_bl_data);
  StartWritingOfFLASHFromBuff(m_bl_data);
 }
