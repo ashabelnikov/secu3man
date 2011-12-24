@@ -38,8 +38,8 @@ CCommunicationManager::CCommunicationManager()
 : m_pComPort(NULL)
 , m_pBootLoader(NULL)
 , m_pControlApp(NULL)
-, m_recv_buff_size(32768)
-, m_send_buff_size(32768)
+, m_recv_buff_size(4096)  //<--Note: some shitty drivers (e.g. SiLabs) don't accept large buffers
+, m_send_buff_size(4096)
 , m_pSettings(NULL)  //external!
 , m_OnSettingsChanged(NULL)
 , m_pAppAdapter(NULL)
