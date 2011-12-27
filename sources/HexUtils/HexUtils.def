@@ -1,6 +1,0 @@
-; HexUtils.def : Declares the module parameters for the DLL.
-
-LIBRARY      "HexUtils"
-DESCRIPTION  'HexUtils Windows Dynamic Link Library'
-
-EXPORTS

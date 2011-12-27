@@ -1,6 +1,0 @@
-; FWImpExp.def : Declares the module parameters for the DLL.
-
-LIBRARY      "FWImpExp"
-DESCRIPTION  'FWImpExp Windows Dynamic Link Library'
-
-EXPORTS
