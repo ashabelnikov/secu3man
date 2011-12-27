@@ -22,7 +22,6 @@
 #include "stdafx.h"
 #include "NumericConv.h"
 #include "ctype.h"
-#include "windows.h"
 
 //Конвертирует массив шестнадцатерично заданных чисел (два ASCII символа представляют один байт) в массив бинарно
 //заданных числел (unsigned char).

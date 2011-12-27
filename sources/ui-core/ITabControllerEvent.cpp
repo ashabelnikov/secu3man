@@ -7,7 +7,6 @@
  *****************************************************************/
 
 #include "stdafx.h"
-#include "uicore.h"
 #include "ITabControllerEvent.h"
 
 #ifdef _DEBUG
