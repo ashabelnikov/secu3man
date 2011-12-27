@@ -19,7 +19,6 @@
               email: shabelnikov@secu-3.org
 */
 
-#include <windows.h>
 #include <vector>
 #include "iocore_api.h"
 #include "PlatformParamHolder.h"

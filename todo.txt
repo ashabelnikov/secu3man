@@ -22,10 +22,10 @@ What to do in relation to SECU-3 manager software:
 
 7. Immobilizer (use password)
 
-8. Bug with hot keys. Sometimes application does not release hot keys when loses 
+[8.] Bug with hot keys. Sometimes application does not release hot keys when loses 
    focus. WM_ACTIVATE issues. This is annoying bug.
 
-9. Expand functionality of map editors (Chart2D and Chart3D). Namely. Add ability to fill map
+[9.] Expand functionality of map editors (Chart2D and Chart3D). Namely. Add ability to fill map
    using selected value/function, interpolation etc.
 
 10.

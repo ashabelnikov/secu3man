@@ -21,7 +21,6 @@
 
 #include "stdafx.h"
 #include <vector>
-#include <windows.h>
 #include "ControlApp.h"
 #include "ccomport.h"
 #include "common/MathHelpers.h"
@@ -1161,17 +1160,10 @@ bool CControlApp::ParsePackets()
   }//switch
 
   ////////////////////////////////////////////////////////////////////////////
-  __try
-  {
    EnterCriticalSection();
    memcpy(&PendingPacket(),&m_recepted_packet,sizeof(SECU3Packet));
-  }
-  __finally
-  {
    LeaveCriticalSection();
-  }
   ////////////////////////////////////////////////////////////////////////////
-
   //так как все возможные структуры данных пакетов собраны в union, то нам достаточно оперировать
   //только адресом union.
   m_pEventHandler->OnPacketReceived(descriptor, &EndPendingPacket());

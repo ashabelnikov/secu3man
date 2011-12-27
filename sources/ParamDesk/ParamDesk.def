@@ -1,7 +1,0 @@
-; ParamDesk.def : Declares the module parameters for the DLL.
-
-LIBRARY      "ParamDesk"
-DESCRIPTION  'ParamDesk Windows Dynamic Link Library'
-
-EXPORTS
-    ; Explicit exports can go here
