@@ -3,7 +3,7 @@
 <PROJECT>
   <MACROS>
     <VERSION value="BCB.05.03"/>
-    <PROJECT value="../../binaries\Chart3D.dll"/>
+    <PROJECT value="../../binaries\chart3d.dll"/>
     <OBJFILES value="Chart3D.obj Form3D.obj"/>
     <RESFILES value="Chart3D.res resource.res"/>
     <IDLFILES value=""/>
