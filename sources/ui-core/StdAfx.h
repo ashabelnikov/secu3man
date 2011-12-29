@@ -5,6 +5,11 @@
 
 #pragma once
 
+#ifdef _USRDLL
+#undef _USRDLL //CMake adds _USRDLL symbol to Extensions DLLs projects...
+#pragma message("WARNING! _USRDLL symbol shouldn't be defined for Extension DLLs!")
+#endif
+
 #define VC_EXTRALEAN  // Exclude rarely-used stuff from Windows headers
 
 #include <afxwin.h>         // MFC core and standard components

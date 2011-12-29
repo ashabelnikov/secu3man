@@ -2,7 +2,6 @@ cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-DHEXUTILS_EXPORTS)
 
-set(CMAKE_MFC_FLAG 2)  
 set(PROJECT hexutils) 
 
 #set(LIBRARY_OUTPUT_PATH ../../binaries) 
