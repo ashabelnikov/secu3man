@@ -25,7 +25,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
  if (dwReason == DLL_PROCESS_ATTACH)
  {
-  TRACE0("UICORE.DLL Initializing!\n");
+  TRACE0("UI-CORE.DLL Initializing!\n");
 
   // Extension DLL one-time initialization
   if (!AfxInitExtensionModule(UicoreDLL, hInstance))
@@ -47,7 +47,7 @@ DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
  }
  else if (dwReason == DLL_PROCESS_DETACH)
  {
-  TRACE0("UICORE.DLL Terminating!\n");
+  TRACE0("UI-CORE.DLL Terminating!\n");
   // Terminate the library before destructors are called
   AfxTermExtensionModule(UicoreDLL);
  }
