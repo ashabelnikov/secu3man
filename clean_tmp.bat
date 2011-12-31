@@ -5,7 +5,7 @@ del binaries\*.idb
 del binaries\*.tds
 del binaries\*.exp
 del binaries\*.pdb
-del binaries\*.lib
+del libraries\*.lib
 
 cd intermediate
 

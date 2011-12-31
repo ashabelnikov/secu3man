@@ -38,7 +38,7 @@
     <PFLAGS value="-$Y- -$L- -$D- -v -JPHNE -M"/>
     <RFLAGS value=""/>
     <AFLAGS value="/mx /w2 /zn"/>
-    <LFLAGS value="-l&quot;..\..\binaries\&quot; -D&quot;&quot; -aa -Tpd -x -Gn -Gi"/>
+    <LFLAGS value="-l&quot;..\..\libraries\&quot; -D&quot;&quot; -aa -Tpd -x -Gn -Gi"/>
   </OPTIONS>
   <LINKER>
     <ALLOBJ value="c0d32.obj sysinit.obj $(OBJFILES)"/>
