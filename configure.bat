@@ -1,8 +1,8 @@
 @echo off
 
-mkdir intermediate
+md intermediate
 cd intermediate
-mkdir secu3man
+md secu3man
 cd secu3man
 
 cmake ../../sources/secu3man
