@@ -47,4 +47,4 @@ set(SOURCES
   ) 
  
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT} ui-core)
+target_link_libraries(${PROJECT} ui-core shlwapi.lib)
