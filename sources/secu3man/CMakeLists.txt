@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 2.6) 
 
+set(PROJECT secu3man)  
+project(${PROJECT}) 
+
 ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
 ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
 
-set(PROJECT secu3man)  
-project(${PROJECT}) 
+if(MSVC_VERSION GREATER 1299)
+ADD_DEFINITIONS(-D_WIN32_WINDOWS=0x0501)
+ADD_DEFINITIONS(-DWINVER=0x0501)
+endif()
 
 set(LIBRARIES about fwimpexp hexutils hiscctrl io-core midesk
   paramdesk propgrid tabldesk ui-core
@@ -14,7 +19,6 @@ foreach(LIBRARY ${LIBRARIES})
   add_subdirectory(../${LIBRARY} ../${LIBRARY})
 endforeach()
 
-#set(EXECUTABLE_OUTPUT_PATH ../../binaries) 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
