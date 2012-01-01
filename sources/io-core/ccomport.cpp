@@ -108,7 +108,7 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
   if (m_hCom!=INVALID_HANDLE_VALUE)
    break;
   //пытаемс€ открыть использу€ другой синтаксис
-  m_hCom = CreateFile(("\\\\.\\" + m_sComPort).c_str(),GENERIC_READ | GENERIC_WRITE,
+  m_hCom = CreateFile((_T("\\\\.\\") + m_sComPort).c_str(),GENERIC_READ | GENERIC_WRITE,
                        0,             // экслюзивно занимаем порт
                        NULL,          // no security
                        OPEN_EXISTING, // port is existing file
