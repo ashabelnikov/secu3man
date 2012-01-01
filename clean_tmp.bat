@@ -2,10 +2,10 @@
 
 del binaries\*.ilk
 del binaries\*.idb
-del binaries\*.tds
-del binaries\*.exp
 del binaries\*.pdb
+del binaries\*.tds
 del libraries\*.lib
+del libraries\*.exp
 
 cd intermediate
 
