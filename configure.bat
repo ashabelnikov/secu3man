@@ -10,3 +10,5 @@ cmake ../../sources/secu3man
 cd ..\..\
 md libraries
 
+md binaries
+7z x binaries.7z

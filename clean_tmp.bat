@@ -42,7 +42,7 @@ del tabldesk\tabldesk.ncb
 RD /s/q secu3man\secu3man.dir
 del secu3man\secu3man.ncb
 
-cd..
+cd ..
 
 cd sources
 
@@ -61,4 +61,5 @@ del Chart3D\*.~bpr /Q
 del Chart3D\*.~bpf /Q
 del Chart3D\*.res  /Q
 
-cd..
+cd ..
+
