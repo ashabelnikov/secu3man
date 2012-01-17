@@ -47,11 +47,11 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_port_number = -1;
  m_log_csv_sepsymbol_index = -1;
  m_log_files_folder = _T("");
- m_use_app_folder = 0;
+ m_use_app_folder = BST_UNCHECKED;
  m_midesk_update_period = 40;
  m_tachometer_max = 0;
  m_pressure_max = 0;
- m_use_dv_features = 0;
+ m_use_dv_features = BST_UNCHECKED;
  m_dv_update_period = 40;
 }
 
@@ -181,16 +181,16 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
 void CAppSettingsDlg::OnAppSettingsLogfolderUseappfolder()
 {
  UpdateData();
- m_log_files_folder_edit.EnableWindow(m_use_app_folder);
- m_log_files_folder_button.EnableWindow(m_use_app_folder);
+ m_log_files_folder_edit.EnableWindow(m_use_app_folder==BST_UNCHECKED);
+ m_log_files_folder_button.EnableWindow(m_use_app_folder==BST_UNCHECKED);
 }
 
 void CAppSettingsDlg::OnAppSettingsLogfolderUseDVFeatures()
 {
  UpdateData();
- m_dv_update_period_edit.EnableWindow(m_use_dv_features);
- m_dv_update_period_spin.EnableWindow(m_use_dv_features);
- m_dv_update_period_caption.EnableWindow(m_use_dv_features);
+ m_dv_update_period_edit.EnableWindow(m_use_dv_features==BST_CHECKED);
+ m_dv_update_period_spin.EnableWindow(m_use_dv_features==BST_CHECKED);
+ m_dv_update_period_caption.EnableWindow(m_use_dv_features==BST_CHECKED);
 }
 
 void CAppSettingsDlg::FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_AllowableBaudRates)
@@ -317,12 +317,12 @@ CString CAppSettingsDlg::GetLogFilesFolder(void) const
 
 void CAppSettingsDlg::SetUseAppFolder(bool i_use)
 {
- m_use_app_folder = i_use;
+ m_use_app_folder = i_use ? BST_CHECKED : BST_UNCHECKED;
 }
 
 bool CAppSettingsDlg::GetUseAppFolder(void) const
 {
- return m_use_app_folder ? true : false;
+ return (m_use_app_folder == BST_CHECKED) ? true : false;
 }
 
 size_t CAppSettingsDlg::GetCSVSepSymbol(void)
@@ -422,7 +422,7 @@ int CAppSettingsDlg::GetPressureMax(void) const
 
 void CAppSettingsDlg::SetUseDVFeatures(bool i_use)
 {
- m_use_dv_features = i_use;
+ m_use_dv_features = i_use ? BST_CHECKED : BST_UNCHECKED;
 }
 
 void CAppSettingsDlg::SetDVDeskUpdatePeriod(int i_period)
@@ -432,7 +432,7 @@ void CAppSettingsDlg::SetDVDeskUpdatePeriod(int i_period)
 
 bool CAppSettingsDlg::GetUseDVFeatures(void)
 {
- return m_use_dv_features ? true : false;
+ return (m_use_dv_features == BST_CHECKED) ? true : false;
 }
 
 int CAppSettingsDlg::GetDVDeskUpdatePeriod(void)
