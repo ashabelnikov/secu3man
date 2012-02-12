@@ -95,7 +95,7 @@ BEGIN
     EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
                     62,63,12,16
-    LTEXT           "Индуктивность катушки (Генри)",IDC_STATIC,83,39,64,18
+    LTEXT           "Индуктивность катушки (мГн)",IDC_STATIC,83,39,64,18
     LTEXT           "Максимальный ток (Ампер)",IDC_STATIC,83,63,64,18
     LTEXT           "Сопротивление катушки (Ом)",IDC_STATIC,82,16,63,16
 END
@@ -234,7 +234,7 @@ BEGIN
     EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
                     62,63,12,16
-    LTEXT           "Coil inductance (Henry)",IDC_STATIC,83,39,64,18
+    LTEXT           "Coil inductance (milliHenry)",IDC_STATIC,83,39,64,18
     LTEXT           "Maximum current (Ampere)",IDC_STATIC,83,63,64,18
     LTEXT           "Coil resistance (Ohm)",IDC_STATIC,82,16,63,16
 END
