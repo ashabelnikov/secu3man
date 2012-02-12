@@ -25,15 +25,18 @@ set(HEADERS
   resource.h
   StdAfx.h
   TablesSetPanel.h
+  DwellCalcDlg.h
   )
  
 set(SOURCES 
   ButtonsPanel.cpp
   DLLLinkedFunctions.cpp
   TablesSetPanel.cpp
+  DwellCalcDlg.cpp
   StdAfx.cpp
   TablDesk.cpp
   TablDesk.rc
   ) 
  
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
+target_link_libraries(${PROJECT} ui-core)

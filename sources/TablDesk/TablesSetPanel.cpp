@@ -23,6 +23,7 @@
 #include "resource.h"
 #include "common/MathHelpers.h"
 #include "DLLLinkedFunctions.h"
+#include "DwellCalcDlg.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 #include "TablesSetPanel.h"
@@ -140,11 +141,14 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_FUNSET_LIST, m_funset_listbox);
  DDX_Control(pDX, IDC_TD_VIEW_ATTENUATOR_MAP, m_view_attenuator_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, m_view_dwellcntrl_map_btn);
+ DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_ATTENUATOR_MAP, OnViewAttenuatorMap)
  ON_BN_CLICKED(IDC_TD_VIEW_DWELL_CONTROL, OnViewDwellCntrlMap)
+ ON_BN_CLICKED(IDC_TD_DWELL_CALC_BUTTON, OnDwellCalcButton)
+ ON_UPDATE_COMMAND_UI(IDC_TD_DWELL_CALC_BUTTON, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
@@ -159,6 +163,9 @@ END_MESSAGE_MAP()
 BOOL CTablesSetPanel::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_calc_dwell_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                              MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -321,6 +328,24 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
  else
  {
   ::SetFocus(m_dwellcntrl_map_wnd_handle);
+ }
+}
+
+void CTablesSetPanel::OnDwellCalcButton()
+{
+ CDwellCalcDlg dialog;
+ dialog.SetVoltageValues(SECU3IO::dwellcntrl_map_slots, 32);
+ dialog.SetLimits(0.25f, 16.0f);
+ if (dialog.DoModal()==IDOK)
+ {
+  //copy results
+  std::copy(dialog.GetTimeValues(), dialog.GetTimeValues() + 32, GetDwellCntrlMap(false));
+  if (DLL::Chart2DCreate)
+  {//Update charts and notify about changes
+   UpdateOpenedCharts();
+   if (this->m_OnMapChanged)
+    this->m_OnMapChanged(TYPE_MAP_DWELLCNTRL);
+  }
  }
 }
 

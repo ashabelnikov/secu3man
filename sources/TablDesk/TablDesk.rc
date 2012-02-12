@@ -68,14 +68,37 @@ BEGIN
     CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "Настр. врем. накопления",IDC_TD_VIEW_DWELL_CONTROL,
-                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,7,
-                    110,95,19
+    CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
+                    BS_BITMAP | WS_TABSTOP,3,110,16,19
+    CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,
+                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,
+                    110,82,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,
                     "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,
                     110,95,19
 END
 
+IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Расчет времени накопления"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,25,95,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,90,95,50,14
+    EDITTEXT        IDC_DWELL_CALC_R_EDIT,26,17,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    63,17,12,16
+    EDITTEXT        IDC_DWELL_CALC_L_EDIT,26,40,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    62,40,12,16
+    EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    62,63,12,16
+    LTEXT           "Индуктивность катушки (Генри)",IDC_STATIC,83,39,64,18
+    LTEXT           "Максимальный ток (Ампер)",IDC_STATIC,83,63,64,18
+    LTEXT           "Сопротивление катушки (Ом)",IDC_STATIC,82,16,63,16
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -122,7 +145,7 @@ BEGIN
     IDS_ATTENUATOR_MAP      "Настройка кривой усиления аттенюатора"
     IDS_MAPS_VOLT_UNIT      "Вольты (B)"
     IDS_MAPS_DWELLCNTRL_UNIT "Время накопления (мс)"
-    IDS_DWELLCNTRL_MAP       "Настройка времени накопления энергии катушек зажигания"
+    IDS_DWELLCNTRL_MAP      "Настройка времени накопления энергии катушек зажигания"
 END
 
 #endif    // Russian resources
@@ -185,11 +208,35 @@ BEGIN
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "Tune dwell control",IDC_TD_VIEW_DWELL_CONTROL,
-                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,5,
-                    110,95,19
+    CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
+                    BS_BITMAP | WS_TABSTOP,3,110,16,19
+    CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,
+                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,
+                    110,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,110,95,19
+END
+
+IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Calculate dwell"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,25,95,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,90,95,50,14
+    EDITTEXT        IDC_DWELL_CALC_R_EDIT,26,17,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_R_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    63,17,12,16
+    EDITTEXT        IDC_DWELL_CALC_L_EDIT,26,40,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_L_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    62,40,12,16
+    EDITTEXT        IDC_DWELL_CALC_I_EDIT,26,63,35,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_DWELL_CALC_I_SPIN,"msctls_updown32",UDS_ARROWKEYS,
+                    62,63,12,16
+    LTEXT           "Coil inductance (Henry)",IDC_STATIC,83,39,64,18
+    LTEXT           "Maximum current (Ampere)",IDC_STATIC,83,63,64,18
+    LTEXT           "Coil resistance (Ohm)",IDC_STATIC,82,16,63,16
 END
 
 
@@ -302,6 +349,15 @@ END
 
 #endif    // !_MAC
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_CALC_UP             BITMAP                  "calc_up.bmp"
+IDB_CALC_DOWN           BITMAP                  "calc_down.bmp"
+IDB_CALC_FOCUSED        BITMAP                  "calc_focused.bmp"
+IDB_CALC_DISABLED       BITMAP                  "calc_disabled.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

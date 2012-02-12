@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by secu3man.rc
-//
 #define IDD_ABOUTBOX                    4000
 #define IDR_MAINFRAME                   4001
 #define IDR_SECU3MTYPE                  4002

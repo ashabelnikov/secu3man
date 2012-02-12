@@ -61,6 +61,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual BOOL OnInitDialog();
   afx_msg void OnViewAttenuatorMap();
   afx_msg void OnViewDwellCntrlMap();
+  afx_msg void OnDwellCalcButton();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -74,6 +75,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CListCtrl m_funset_listbox;
   CButton   m_view_attenuator_map_btn;
   CButton   m_view_dwellcntrl_map_btn;
+  CBitmapButton m_calc_dwell_btn;
 
  private:
   EventWithCode m_OnFunSetSelectionChanged;
