@@ -574,7 +574,7 @@ BEGIN
     CONTROL         "Program only code (without data)",
                     IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,193,86,15
-    CONTROL         "Boot loader launched emergency (jumper set)",
+    CONTROL         "Boot loader been launched emergency (jumper set)",
                     IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,190,122,
                     21
