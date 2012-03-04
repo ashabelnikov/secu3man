@@ -190,7 +190,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Families of characteristics",IDC_TD_MAP_GROUPBOX,3,3,
+    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,
                     217,100
     CONTROL         "List1",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
@@ -367,7 +367,7 @@ IDB_CALC_DISABLED       BITMAP                  "calc_disabled.bmp"
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_MAPS_RPM_UNIT       "Speed (min-1)"
-    IDS_MAPS_ADVANGLE_UNIT  "Angle (degg.)"
+    IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
     IDS_WORK_MAP            "Work angle map"

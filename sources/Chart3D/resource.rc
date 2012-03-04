@@ -25,7 +25,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 stringtable
 {
   IDS_EDITING_MAPS, "Editing maps"
-  IDS_LEFT_AXIS_TITLE, "Advance angle (degg.)"
+  IDS_LEFT_AXIS_TITLE, "Advance angle (degr.)"
   IDS_AIR_FLOW_LABEL_TEXT, "Air flow:"
   IDS_BACK_SIDE_VIEW_CB, "back view"
   IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"
