@@ -29,12 +29,14 @@
 #include "MainTabController.h"
 
 #include "TabControllers/CheckEngineTabController.h"
+#include "TabControllers/DevDiagnostTabController.h"
 #include "TabControllers/FirmwareTabController.h"
 #include "TabControllers/KnockChannelTabController.h"
 #include "TabControllers/LogPlayerTabController.h"
 #include "TabControllers/ParamMonTabController.h"
 
 #include "TabDialogs/CheckEngineTabDlg.h"
+#include "TabDialogs/DevDiagnostTabDlg.h"
 #include "TabDialogs/FirmwareTabDlg.h"
 #include "TabDialogs/KnockChannelTabDlg.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
@@ -59,11 +61,13 @@ CMainTabManager::CMainTabManager()
 , m_pCheckEngineTabController(NULL)
 , m_pKnockChannelTabController(NULL)
 , m_pLogPlayerTabController(NULL)
+, m_pDevDiagnostTabController(NULL)
 , m_pParamMonTabDlg(NULL)
 , m_pFirmwareTabDlg(NULL)
 , m_pCheckEngineTabDlg(NULL)
 , m_pKnockChannelTabDlg(NULL)
 , m_pLogPlayerTabDlg(NULL)
+, m_pDevDiagnostTabDlg(NULL)
 {
  //na
 }
@@ -81,12 +85,14 @@ CMainTabManager::~CMainTabManager()
  delete m_pCheckEngineTabController;
  delete m_pKnockChannelTabController;
  delete m_pLogPlayerTabController;
+ delete m_pDevDiagnostTabController;
 
  delete m_pParamMonTabDlg;
  delete m_pFirmwareTabDlg;
  delete m_pCheckEngineTabDlg;
  delete m_pKnockChannelTabDlg;
  delete m_pLogPlayerTabDlg;
+ delete m_pDevDiagnostTabDlg;
 }
 
 bool CMainTabManager::Init(CChildView* i_pChildView)
@@ -143,6 +149,12 @@ bool CMainTabManager::Init(CChildView* i_pChildView)
 
  mp_MainTabController->AddTabController(m_pLogPlayerTabController);
  mp_tab_control->AddPage(MLL::LoadString(IDS_TAB_LOG_PLAYER),m_pLogPlayerTabDlg,4);
+
+ m_pDevDiagnostTabDlg = new CDevDiagnostTabDlg(); //view
+ m_pDevDiagnostTabController = new CDevDiagnostTabController(m_pDevDiagnostTabDlg, p_comm, p_sbar, p_settings);
+
+ mp_MainTabController->AddTabController(m_pDevDiagnostTabController);
+ mp_tab_control->AddPage(MLL::LoadString(IDS_TAB_DEV_DIAGNOSTICS), m_pDevDiagnostTabDlg, 5);
 
  mp_tab_control->SetCurSel(0);
  mp_tab_control->SetFocus();

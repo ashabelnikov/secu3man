@@ -252,6 +252,12 @@ BEGIN
     CTEXT           "",IDC_LOG_PLAYER_FILE_NAME_INDICATOR,3,6,146,19
 END
 
+IDD_DEV_DIAGNOSTICS DIALOGEX 0, 0, 428, 222
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -368,6 +374,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TAB_LOG_PLAYER      "Проигрыватель"
     IDS_LP_CANT_OPEN_FILE   "Не могу открыть указанный файл!"
+    IDS_TAB_DEV_DIAGNOSTICS "Диагностика"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -737,6 +744,13 @@ BEGIN
 END
 
 
+IDD_DEV_DIAGNOSTICS DIALOGEX 0, 0, 428, 222
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+END
+
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1017,6 +1031,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TAB_LOG_PLAYER      "Player"
     IDS_LP_CANT_OPEN_FILE   "Can't open specified file!"
+    IDS_TAB_DEV_DIAGNOSTICS "Diagnostics"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -46,6 +46,7 @@ set(HEADERS
   Settings/IAppSettingsDlg.h
   Settings/ISettingsData.h
   TabControllers/CheckEngineTabController.h
+  TabControllers/DevDiagnostTabController.h
   TabControllers/FirmwareTabController.h
   TabControllers/KnockChannelTabcontroller.h
   Tabcontrollers/LogPlayerTabController.h
@@ -55,8 +56,9 @@ set(HEADERS
   TabControllers/PMMonitorController.h
   TabControllers/PMParamsController.h
   TabControllers/PMTablesController.h
-  TabControllers/TabcontrollersCommunicator.h
+  TabControllers/TabControllersCommunicator.h
   TabDialogs/CheckEngineTabDlg.h
+  TabDialogs/DevDiagnostTabDlg.h
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
   TabDialogs/KnockChannelTabDlg.h
@@ -85,6 +87,7 @@ set(SOURCES
   Settings/AppSettingsManager.cpp
   Settings/AppSettingsModel.cpp
   TabControllers/CheckEngineTabController.cpp
+  TabControllers/DevDiagnostTabController.cpp
   TabControllers/FirmwareTabController.cpp
   TabControllers/KnockChannelTabcontroller.cpp
   Tabcontrollers/LogPlayerTabController.cpp
@@ -95,6 +98,7 @@ set(SOURCES
   TabControllers/PMTablesController.cpp
   TabControllers/TabcontrollersCommunicator.cpp
   TabDialogs/CheckEngineTabDlg.cpp
+  TabDialogs/DevDiagnostTabDlg.cpp
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp
   TabDialogs/KnockChannelTabDlg.cpp

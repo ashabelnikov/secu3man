@@ -47,6 +47,7 @@ class CMainTabManager
   class CCheckEngineTabController* m_pCheckEngineTabController;
   class CKnockChannelTabController* m_pKnockChannelTabController;
   class CLogPlayerTabController* m_pLogPlayerTabController;
+  class CDevDiagnostTabController* m_pDevDiagnostTabController;
 
   //диалоги вкладок
   class CParamMonTabDlg* m_pParamMonTabDlg;
@@ -54,6 +55,7 @@ class CMainTabManager
   class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
   class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
   class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
+  class CDevDiagnostTabDlg* m_pDevDiagnostTabDlg;
 
  private:
   std::auto_ptr<CMainTabController> mp_MainTabController;

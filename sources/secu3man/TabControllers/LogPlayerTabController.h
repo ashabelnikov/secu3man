@@ -40,7 +40,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   virtual ~CLogPlayerTabController();
 
  private:
-  //появление/закрытие вкладки параметров и монитора
+  //появление/закрытие вкладки проигрывателя
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
 
