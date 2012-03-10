@@ -171,7 +171,7 @@ void MPSZDataMPX_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_d
   op_data->maps[i].name = A2T(raw_str);
  }
 
- //104 - дибильное магическое число
+ //104 - дeбильное магическое число
  //вытягиваем пусковую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
@@ -227,7 +227,7 @@ void MPSZDataMPX_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
    p_raws->names[i][j] = MAKEWORD(0,raw_str[j]);
  }
 
- //104 - дибильное магическое число
+ //104 - дeбильное магическое число
  //засовываем пусковую карту
  for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
  {
