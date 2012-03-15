@@ -421,12 +421,12 @@ BEGIN
     GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,11,6,83,
                     51
     LTEXT           "Кол-во зубьев до в.м.т.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,77,71,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,77,71,89,9,NOT 
                     WS_GROUP
     COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,26,126,47,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Кол-во цилиндров двигателя",
-                    IDC_PD_CKPS_ENGINE_CYL_LABEL,78,127,89,17,NOT WS_GROUP
+                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,78,127,89,17,NOT WS_GROUP
     CONTROL         "Объединить сигналы на одном выходе",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,105,13,63,38
@@ -1050,12 +1050,12 @@ BEGIN
     GROUPBOX        "CKP sensor signal edge",IDC_PD_CKPS_FRONT_GROUPBOX,11,6,
                     83,51
     LTEXT           "Num. of teeth before t.d.c.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_LABEL,77,71,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,77,71,89,9,NOT 
                     WS_GROUP
     COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,26,126,47,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Number of engine cylinders",
-                    IDC_PD_CKPS_ENGINE_CYL_LABEL,78,127,89,17,NOT WS_GROUP
+                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,78,127,89,17,NOT WS_GROUP
     CONTROL         "Merge signals to single output",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,105,13,63,38
