@@ -35,11 +35,29 @@ using namespace fastdelegate;
 
 const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
 
+const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
+const UINT OutputsCheckEnd = IDC_DEV_DIAG_ADD_O2_CHECK;
+const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
+const UINT InputsTextEnd = IDC_DEV_DIAG_PS;
+const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
+const UINT InputsCaptionEnd = IDC_DEV_DIAG_KS_2_CAPTION;
+
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
+ ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
+ ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
+ ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart, InputsTextEnd, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart, InputsCaptionEnd, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_OUTPUTS_GROUP, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_INPUTS_GROUP, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
 END_MESSAGE_MAP()
 
 CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CDevDiagnostTabDlg::IDD, pParent)
+, m_enable_diag_controls(false)
+, m_enable_enter_button(false)
 {
  //todo
 }
@@ -47,6 +65,7 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_DEV_DIAG_ENTER_CHECK, m_enter_button);
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
@@ -60,4 +79,55 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
 
  UpdateDialogControls(this,TRUE);
  return TRUE;
+}
+
+void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enable_diag_controls);
+}
+
+void CDevDiagnostTabDlg::OnUpdateEnterButton(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enable_enter_button);
+}
+
+void CDevDiagnostTabDlg::OnOutputCheckToggle(UINT nID)
+{
+ CButton* p_check = static_cast<CButton*>(GetDlgItem(nID));
+ if (!p_check)
+  return;
+
+ bool state = p_check->GetCheck() == BST_CHECKED;
+ if (m_on_output_check)
+  m_on_output_check(nID-OutputsCheckStart, state);
+}
+
+void CDevDiagnostTabDlg::OnEnterButton()
+{
+ if (m_on_enter_button)
+ {
+  m_on_enter_button(BST_CHECKED == m_enter_button.GetCheck());
+ }
+}
+
+void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
+{
+ m_enable_diag_controls = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+void CDevDiagnostTabDlg::EnableEnterButton(bool i_enable)
+{
+ m_enable_enter_button = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+void CDevDiagnostTabDlg::setOnOutputToggle(EventOutputToggle OnFunction)
+{
+ m_on_output_check = OnFunction;
+}
+
+void CDevDiagnostTabDlg::setOnEnterButton(EventToggle OnFunction)
+{
+ m_on_enter_button = OnFunction;
 }

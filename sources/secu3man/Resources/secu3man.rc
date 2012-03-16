@@ -295,7 +295,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_PS,193,150,30,12,0,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,230,150,40,12
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,83,22
-    LTEXT           "ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим.",IDC_STATIC,201,196,268,18
+    LTEXT           "ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим.",IDC_DEV_DIAG_WARNING_TEXT,201,196,268,18
 END
 
 
@@ -767,7 +767,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_PS,193,150,30,12,0,WS_EX_STATICEDGE
     LTEXT           "PS",IDC_DEV_DIAG_PS_CAPTION,230,150,40,12
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,83,22
-    LTEXT           "WARNING! Disconnect ignition coils before entering diagnostic mode.",IDC_STATIC,201,196,268,18
+    LTEXT           "WARNING! Disconnect ignition coils before entering diagnostic mode.",IDC_DEV_DIAG_WARNING_TEXT,201,196,268,18
 END
 
 #ifdef APSTUDIO_INVOKED

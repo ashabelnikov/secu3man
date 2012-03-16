@@ -25,6 +25,7 @@
 
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "TabDialogs/DevDiagnostTabDlg.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "Settings/ISettingsData.h"
@@ -51,6 +52,8 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* i_view,
  mp_settings = ip_settings;
 
  //устанавливаем делегаты (обработчики событий от представления)
+ m_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
+ m_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
 }
 
 CDevDiagnostTabController::~CDevDiagnostTabController()
@@ -137,4 +140,14 @@ bool CDevDiagnostTabController::OnAskFullScreen(void)
 void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
  //empty
+}
+
+void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
+{
+
+}
+
+void CDevDiagnostTabController::OnEnterButton(bool state)
+{
+
 }

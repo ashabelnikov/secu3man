@@ -27,15 +27,68 @@
 class CDevDiagnostTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
+  typedef fastdelegate::FastDelegate1<bool> EventToggle;
+  typedef fastdelegate::FastDelegate2<int, bool> EventOutputToggle;
 
  public:
   CDevDiagnostTabDlg(CWnd* pParent = NULL);
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
- protected:
+  //установка обработчиков событий от элементов управления
+  void setOnOutputToggle(EventOutputToggle OnFunction);
+  void setOnEnterButton(EventToggle OnFunction);
 
+  void EnableDiagControls(bool i_enable);
+  void EnableEnterButton(bool i_enable);
+
+  //IDs for outputs
+  enum 
+  {
+   OID_IGN_OUT1 = 0,
+   OID_IGN_OUT2,
+   OID_IGN_OUT3,
+   OID_IGN_OUT4,
+   OID_IE,
+   OID_FE,
+   OID_ECF,
+   OID_CE,
+   OID_ST_BLOCK,
+   OID_ADD_IO1,
+   OID_ADD_IO2,
+  };
+
+  //IDs for inputs
+  enum
+  {
+   IID_VOLTAGE = 0,
+   IID_MAP_S,
+   IID_TEMP,
+   IID_ADD_IO1,
+   IID_ADD_IO2,
+   IID_CARB,
+   IID_GAS_V,
+   IID_CKPS,
+   IID_REF_S,
+   IID_PS,
+   IID_KS_1,
+   IID_KS_2
+  };
+
+ protected:
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);
+  afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateEnterButton(CCmdUI* pCmdUI);
+  afx_msg void OnOutputCheckToggle(UINT nID);
+  afx_msg void OnEnterButton();
   DECLARE_MESSAGE_MAP()
+
+ private:
+  CButton m_enter_button;
+  EventOutputToggle m_on_output_check;
+  EventToggle m_on_enter_button;
+
+  bool m_enable_diag_controls;
+  bool m_enable_enter_button;
 };

@@ -51,6 +51,8 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
 
   //от представления (диалога)
   void OnSettingsChanged(void);
+  void OnOutputToggle(int output_id, bool state);
+  void OnEnterButton(bool state);
 
  private:
   CDevDiagnostTabDlg*  m_view;
