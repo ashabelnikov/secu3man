@@ -21,8 +21,12 @@
 
 #pragma once
 
+#include <memory>
 #include "common/FastDelegate.h"
+#include "io-core/SECU3IO.h"
 #include "ui-core/TabDialog.h"
+
+class COScopeCtrl;
 
 class CDevDiagnostTabDlg : public CTabDialog
 {
@@ -38,6 +42,9 @@ class CDevDiagnostTabDlg : public CTabDialog
   //установка обработчиков событий от элементов управления
   void setOnOutputToggle(EventOutputToggle OnFunction);
   void setOnEnterButton(EventToggle OnFunction);
+
+  //Set values of inputs (digital and analog)
+  void SetInputValues(const SECU3IO::DiagInpDat* i_values);
 
   void EnableDiagControls(bool i_enable);
   void EnableEnterButton(bool i_enable);
@@ -58,23 +65,6 @@ class CDevDiagnostTabDlg : public CTabDialog
    OID_ADD_IO2,
   };
 
-  //IDs for inputs
-  enum
-  {
-   IID_VOLTAGE = 0,
-   IID_MAP_S,
-   IID_TEMP,
-   IID_ADD_IO1,
-   IID_ADD_IO2,
-   IID_CARB,
-   IID_GAS_V,
-   IID_CKPS,
-   IID_REF_S,
-   IID_PS,
-   IID_KS_1,
-   IID_KS_2
-  };
-
  protected:
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -87,10 +77,16 @@ class CDevDiagnostTabDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _InitializeOscilloscopeControls(void);
+
+  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl1;
+  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl2;
+
   CButton m_enter_button;
   EventOutputToggle m_on_output_check;
   EventToggle m_on_enter_button;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;
+  SECU3IO::DiagInpDat m_inputValues;
 };

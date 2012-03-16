@@ -24,6 +24,8 @@
 #include "DevDiagnostTabDlg.h"
 
 #include "common/FastDelegate.h"
+#include "ui-core/ddx_helpers.h"
+#include "ui-core/OScopeCtrl.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -60,16 +62,28 @@ END_MESSAGE_MAP()
 
 CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CDevDiagnostTabDlg::IDD, pParent)
+, mp_OScopeCtrl1(new COScopeCtrl())
+, mp_OScopeCtrl2(new COScopeCtrl())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
 {
- //todo
+ memset(&m_inputValues, 0, sizeof(SECU3IO::DiagInpDat));
 }
 
 void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_DEV_DIAG_ENTER_CHECK, m_enter_button);
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_VOLTAGE, m_inputValues.voltage, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_MAP_S, m_inputValues.map, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_TEMP, m_inputValues.temp, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I1, m_inputValues.add_io1, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I2, m_inputValues.add_io2, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, m_inputValues.carb, _T("%.3f"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_GAS_V, m_inputValues.gas, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CKPS, m_inputValues.ckps, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_REF_S, m_inputValues.ref_s, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_PS, m_inputValues.ps, _T("%d"));
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
@@ -82,6 +96,9 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  Super::OnInitDialog();
 
  SetTimer(TIMER_ID, 250, NULL);
+
+ //инициализируем осциллографы
+ _InitializeOscilloscopeControls();
 
  UpdateDialogControls(this,TRUE);
  return TRUE;
@@ -149,4 +166,47 @@ void CDevDiagnostTabDlg::setOnOutputToggle(EventOutputToggle OnFunction)
 void CDevDiagnostTabDlg::setOnEnterButton(EventToggle OnFunction)
 {
  m_on_enter_button = OnFunction;
+}
+
+void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)
+{
+ ASSERT(i_values);
+ memcpy(&m_inputValues, i_values, sizeof(SECU3IO::DiagInpDat));
+ UpdateData(FALSE);
+ mp_OScopeCtrl1->AppendPoint(i_values->ks_1);
+ mp_OScopeCtrl2->AppendPoint(i_values->ks_2);
+}
+
+//инициализация осциллографа для сигналов с ДД
+void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
+{
+ CRect rect;
+
+ GetDlgItem(IDC_DEV_DIAG_OSCILLOSCOPE_KS1_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
+ // create the control
+ mp_OScopeCtrl1->Create(WS_VISIBLE | WS_CHILD, rect, this);
+
+ // customize the control
+ mp_OScopeCtrl1->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl1->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl1->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl1->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl1->SetGridColor(RGB(192, 192, 255));
+ mp_OScopeCtrl1->SetPlotColor(RGB(255, 255, 255));
+
+ GetDlgItem(IDC_DEV_DIAG_OSCILLOSCOPE_KS2_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
+ // create the control
+ mp_OScopeCtrl2->Create(WS_VISIBLE | WS_CHILD, rect, this);
+
+ // customize the control
+ mp_OScopeCtrl2->SetRange(0.0, 5.0, 1);
+ mp_OScopeCtrl2->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl2->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl2->SetGridColor(RGB(192, 192, 255));
+ mp_OScopeCtrl2->SetPlotColor(RGB(255, 255, 255));
 }

@@ -211,6 +211,36 @@ namespace SECU3IO
  const int ETMT_TEMP_MAP = 3; //temp.corr. map
  const int ETMT_NAME_STR = 4; //name of tables's set
 
+ struct DiagInpDat
+ {
+  float voltage;        //board voltage
+  float map;            //MAP sensor
+  float temp;           //coolant temperature
+  float add_io1;        //additional input 1 (analog)
+  float add_io2;        //additional input 2 (analog)
+  float carb;           //carburetor switch, throttle position sensor (analog)
+  int gas;              //gas valve state (digital)
+  int ckps;             //CKP sensor (digital)
+  int ref_s;            //VR type cam sensor (digital)
+  int ps;               //Hall-effect cam sensor (digital)
+  float ks_1;           //knock sensor 1  
+  float ks_2;           //knock sensor 2
+ };
+
+ struct DiagOutDat
+ {
+  int ign_out1;         //ignition output 1
+  int ign_out2;         //ignition output 2  
+  int ign_out3;         //ignition output 3
+  int ign_out4;         //ignition output 4
+  int ie;               //idle edconomizer
+  int fe;               //fuel economizer
+  int ecf;              //electric cooling fan
+  int ce;               //Check engine
+  int st_block;         //starter blocking
+  int add_io1;          //additional output 1
+  int add_io2;          //additional output 2
+ };
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
@@ -288,6 +318,8 @@ namespace SECU3IO
   SECU3IO::MiscelPar    m_MiscelPar;
   SECU3IO::EditTabPar   m_EditTabPar;
   SECU3IO::DbgvarDat    m_DbgvarDat;
+  SECU3IO::DiagInpDat   m_DiagInpDat;
+  SECU3IO::DiagOutDat   m_DiagOutDat;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
