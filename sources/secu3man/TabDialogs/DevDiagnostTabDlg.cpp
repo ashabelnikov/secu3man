@@ -31,6 +31,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+#define TIMER_ID 0
+
 using namespace fastdelegate;
 
 const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
@@ -43,6 +45,8 @@ const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
 const UINT InputsCaptionEnd = IDC_DEV_DIAG_KS_2_CAPTION;
 
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
+ ON_WM_DESTROY()
+ ON_WM_TIMER()
  ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
  ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
  ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
@@ -77,6 +81,8 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ SetTimer(TIMER_ID, 250, NULL);
+
  UpdateDialogControls(this,TRUE);
  return TRUE;
 }
@@ -89,6 +95,19 @@ void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
 void CDevDiagnostTabDlg::OnUpdateEnterButton(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enable_enter_button);
+}
+
+void CDevDiagnostTabDlg::OnTimer(UINT nIDEvent)
+{
+ //dirty hack
+ UpdateDialogControls(this,TRUE);
+ Super::OnTimer(nIDEvent);
+}
+
+void CDevDiagnostTabDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ KillTimer(TIMER_ID);
 }
 
 void CDevDiagnostTabDlg::OnOutputCheckToggle(UINT nID)

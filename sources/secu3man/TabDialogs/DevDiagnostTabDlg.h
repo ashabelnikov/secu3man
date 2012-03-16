@@ -82,6 +82,8 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnUpdateEnterButton(CCmdUI* pCmdUI);
   afx_msg void OnOutputCheckToggle(UINT nID);
   afx_msg void OnEnterButton();
+  afx_msg void OnTimer(UINT nIDEvent);
+  afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
  private:
