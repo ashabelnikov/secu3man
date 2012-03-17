@@ -20,6 +20,7 @@ static char THIS_FILE[] = __FILE__;
 BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
  ON_WM_PAINT()
  ON_WM_SIZE()
+ ON_WM_ENABLE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -50,12 +51,13 @@ COScopeCtrl::COScopeCtrl()
 
  // background, grid and data colors
  // these are public variables and can be set directly
- m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
- m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
- m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
+ m_normalBackColor = m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
+ m_normalGridColor = m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
+ m_normalPlotColor = m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
 
  m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
  m_brushBack.CreateSolidBrush(m_crBackColor);
+ m_BlackBrush.CreateSolidBrush(RGB(0, 0, 0));
 
  m_strXUnitsString.Format(_T("Samples"));  // can also be set with SetXUnits
  m_strYUnitsString.Format(_T("Y units"));  // can also be set with SetYUnits
@@ -89,7 +91,10 @@ BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT
                           rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top,
                           pParentWnd->GetSafeHwnd(), (HMENU)nID);
  if (result != 0)
+ {
+  _SetStateColors(IsWindowEnabled());
   InvalidateCtrl();
+ }
 
  return result;
 }
@@ -128,7 +133,8 @@ void COScopeCtrl::SetYUnits(CString string)
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetGridColor(COLORREF color)
 {
- m_crGridColor = color;
+ m_normalGridColor = color;
+ _SetStateColors(IsWindowEnabled());
  // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
@@ -136,9 +142,8 @@ void COScopeCtrl::SetGridColor(COLORREF color)
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetPlotColor(COLORREF color)
 {
- m_crPlotColor = color;
- m_penPlot.DeleteObject();
- m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
+ m_normalPlotColor = color;
+ _SetStateColors(IsWindowEnabled());
  // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
@@ -146,9 +151,8 @@ void COScopeCtrl::SetPlotColor(COLORREF color)
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetBackgroundColor(COLORREF color)
 {
- m_crBackColor = color;
- m_brushBack.DeleteObject();
- m_brushBack.CreateSolidBrush(m_crBackColor);
+ m_normalBackColor = color;
+ _SetStateColors(IsWindowEnabled());
  // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
@@ -289,8 +293,8 @@ void COScopeCtrl::InvalidateCtrl()
  }
 
  // make sure the plot bitmap is cleared
- m_dcPlot.SetBkColor (m_crBackColor);
- m_dcPlot.FillRect(m_rectClient, &m_brushBack);
+ m_dcPlot.SetBkColor(RGB(0, 0, 0));
+ m_dcPlot.FillRect(m_rectClient, &m_BlackBrush);
 
  // finally, force the plot area to redraw
  InvalidateRect(m_rectClient);
@@ -367,7 +371,6 @@ void COScopeCtrl::OnPaint()
   memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
                &m_dcGrid, 0, 0, SRCCOPY);
   // now add the plot on top as a "pattern" via SRCPAINT.
-  // works well with dark background and a light plot
   memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
                &m_dcPlot, 0, 0, SRCPAINT);  //SRCPAINT
   // finally send the result to the display
@@ -483,6 +486,12 @@ void COScopeCtrl::OnSize(UINT nType, int cx, int cy)
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
 }
 
+void COScopeCtrl::OnEnable(BOOL bEnable)
+{
+ _SetStateColors(bEnable);
+ InvalidateCtrl();
+}
+
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::Reset()
 {
@@ -497,4 +506,24 @@ void COScopeCtrl::Reset()
 size_t COScopeCtrl::_GetPtCount(void)
 {
  return m_rectPlot.Width() / m_nShiftPixels;
+}
+
+void COScopeCtrl::_SetStateColors(bool state)
+{
+ if (state)
+ { //enabled
+  m_crBackColor = m_normalBackColor;
+  m_crGridColor = m_normalGridColor;
+  m_crPlotColor = m_normalPlotColor;
+ }
+ else
+ { //disabled
+  m_crBackColor = GetSysColor(COLOR_3DFACE);
+  m_crGridColor = GetSysColor(COLOR_GRAYTEXT);
+  m_crPlotColor = GetSysColor(COLOR_GRAYTEXT);
+ }
+ m_brushBack.DeleteObject();
+ m_brushBack.CreateSolidBrush(m_crBackColor);
+ m_penPlot.DeleteObject();
+ m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
 }

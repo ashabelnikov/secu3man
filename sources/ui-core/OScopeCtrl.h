@@ -38,9 +38,11 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
  //Implementation
  protected:
   size_t _GetPtCount(void);
+  void _SetStateColors(bool state);
   // Generated message map functions
   afx_msg void OnPaint();
   afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnEnable(BOOL bEnable);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -54,6 +56,10 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   COLORREF m_crGridColor;      // grid color
   COLORREF m_crPlotColor;      // data color
 
+  COLORREF m_normalBackColor;
+  COLORREF m_normalGridColor;
+  COLORREF m_normalPlotColor;
+
   double m_dCurrentPosition;   // current position
   double m_dPreviousPosition;  // previous position
 
@@ -65,7 +71,8 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   CRect  m_rectClient;
   CRect  m_rectPlot;
   CPen   m_penPlot;
-  CBrush m_brushBack;
+  CBrush m_brushBack;         //background brush
+  CBrush m_BlackBrush;        //black brush
 
   CDC     m_dcGrid;
   CDC     m_dcPlot;

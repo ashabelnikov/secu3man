@@ -134,6 +134,7 @@ void CKnockChannelTabDlg::OnSaveParameters(void)
 void CKnockChannelTabDlg::EnableAll(bool i_enable)
 {
  m_all_enabled = i_enable; //remember state
+ mp_OScopeCtrl->EnableWindow(i_enable);
  UpdateDialogControls(this,TRUE);
 }
 

@@ -33,6 +33,7 @@
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/LPControlPanelDlg.h"
+#include "ui-core/OScopeCtrl.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -247,6 +248,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
 
  m_view->mp_MIDeskDlg->Enable(true);
  m_view->mp_LPPanelDlg->EnableAll(true);
+ m_view->mp_OScopeCtrl->EnableWindow(true);
 
   //инициализируем логику плеера и начинаем сразу проигрывать
  if (mp_log_reader->GetCount() > 0)
@@ -478,9 +480,10 @@ void CLogPlayerTabController::_ClosePlayer(void)
 {
  m_view->mp_LPPanelDlg->SetFileIndicator(_T(""));
  m_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_OPEN_FILE));
- m_view->mp_MIDeskDlg->Enable(false);
  m_view->mp_LPPanelDlg->SetSliderPosition(0);
+ m_view->mp_MIDeskDlg->Enable(false);
  m_view->mp_LPPanelDlg->EnableAll(false);
+ m_view->mp_OScopeCtrl->EnableWindow(false);
  m_timer.KillTimer();
  mp_log_reader->CloseFile();
  m_view->mp_LPPanelDlg->SetPositionIndicator(_T(""));

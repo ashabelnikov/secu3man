@@ -149,7 +149,9 @@ void CDevDiagnostTabDlg::OnEnterButton()
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
 {
  m_enable_diag_controls = i_enable;
- UpdateDialogControls(this,TRUE);
+ mp_OScopeCtrl1->EnableWindow(i_enable);
+ mp_OScopeCtrl2->EnableWindow(i_enable);
+ UpdateDialogControls(this, TRUE);
 }
 
 void CDevDiagnostTabDlg::EnableEnterButton(bool i_enable)
@@ -186,7 +188,7 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  ScreenToClient(rect);
 
  // create the control
- mp_OScopeCtrl1->Create(WS_VISIBLE | WS_CHILD, rect, this);
+ mp_OScopeCtrl1->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
 
  // customize the control
  mp_OScopeCtrl1->SetRange(0.0, 5.0, 1);
@@ -200,7 +202,7 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  ScreenToClient(rect);
 
  // create the control
- mp_OScopeCtrl2->Create(WS_VISIBLE | WS_CHILD, rect, this);
+ mp_OScopeCtrl2->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
 
  // customize the control
  mp_OScopeCtrl2->SetRange(0.0, 5.0, 1);

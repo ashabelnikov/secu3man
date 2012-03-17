@@ -131,7 +131,7 @@ void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
  ScreenToClient(rect);
 
  // create the control
- mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD, rect, this);
+ mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
 
  // customize the control
  mp_OScopeCtrl->SetRange(0.0, 5.0, 1);

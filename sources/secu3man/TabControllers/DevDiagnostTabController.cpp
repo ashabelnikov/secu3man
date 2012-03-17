@@ -124,6 +124,7 @@ void CDevDiagnostTabController::OnConnection(const bool i_online)
  else
   state = CStatusBarManager::STATE_OFFLINE;
 
+ m_view->EnableEnterButton(i_online);
  m_sbar->SetConnectionState(state);
 }
 
