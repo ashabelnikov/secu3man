@@ -1058,6 +1058,88 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
+{
+ SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
+
+ if (strlen((char*)raw_packet)!=35)  //размер пакета без сигнального символа, дескриптора
+  return false;
+
+ //напряжение бортовой сети
+ int voltage = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &voltage))
+  return false;
+ m_DiagInpDat.voltage = ((float)voltage) * m_adc_discrete;
+ raw_packet+=4;
+
+ //датчик абсолютного давления
+ int map = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &map))
+  return false;
+ m_DiagInpDat.map = ((float)map) * m_adc_discrete;
+ raw_packet+=4;
+
+ //датчик температуры охлаждающей жидкости
+ int temp = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &temp))
+  return false;
+ m_DiagInpDat.temp = ((float)temp) * m_adc_discrete;
+ raw_packet+=4;
+
+ //дополнительный IO1
+ int add_io1 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &add_io1))
+  return false;
+ m_DiagInpDat.add_io1 = ((float)add_io1) * m_adc_discrete;
+ raw_packet+=4;
+
+ //дополнительный IO2
+ int add_io2 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &add_io2))
+  return false;
+ m_DiagInpDat.add_io2 = ((float)add_io2) * m_adc_discrete;
+ raw_packet+=4;
+
+ //датчик положения дроссельной заслонки (концевик карбюратора)
+ int carb = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &carb))
+  return false;
+ m_DiagInpDat.carb = ((float)carb) * m_adc_discrete;
+ raw_packet+=4;
+
+ //Датчик детонации 1
+ int ks_1 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &ks_1))
+  return false;
+ m_DiagInpDat.ks_1 = ((float)ks_1) * m_adc_discrete;
+ raw_packet+=4;
+
+ //Датчик детонации 2
+ int ks_2 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &ks_2))
+  return false;
+ m_DiagInpDat.ks_2 = ((float)ks_2) * m_adc_discrete;
+ raw_packet+=4;
+
+ //байт с состоянием цифровых входов
+ unsigned char byte = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &byte))
+  return false;
+ raw_packet+=2;
+
+ //газовый клапан, ДПКВ, ДНО(VR), ДФ
+ m_DiagInpDat.gas   = (byte & (1 << 0)) != 0;
+ m_DiagInpDat.ckps  = (byte & (1 << 1)) != 0;
+ m_DiagInpDat.ref_s = (byte & (1 << 2)) != 0;
+ m_DiagInpDat.ps    = (byte & (1 << 3)) != 0;
+
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1152,6 +1234,10 @@ bool CControlApp::ParsePackets()
     continue;
    case EDITAB_PAR:
     if (Parse_EDITAB_PAR(raw_packet))
+     break;
+    continue;
+   case DIAGINP_DAT:
+    if (Parse_DIAGINP_DAT(raw_packet))
      break;
     continue;
 
@@ -1347,6 +1433,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case FWINFO_DAT:
   case MISCEL_PAR:
   case EDITAB_PAR:
+  case DIAGINP_DAT:
+  case DIAGOUT_DAT: 
    return true;
   default:
    return false;
@@ -1408,6 +1496,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case EDITAB_PAR:
    Build_EDITAB_PAR((EditTabPar*)i_packet_data);
+   break;
+  case DIAGOUT_DAT:
+   Build_DIAGOUT_DAT((DiagOutDat*)i_packet_data);
    break;
 
   default:
@@ -1654,6 +1745,19 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
   std::string str(raw_string, packet_data->data_size);
   m_outgoing_packet+=str;
  }
+
+ m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
+{
+ unsigned int bits = ((packet_data->ign_out1 != 0) << 0) | ((packet_data->ign_out2 != 0) << 1) |
+((packet_data->ign_out3 != 0) << 2) | ((packet_data->ign_out4 != 0) << 3) | ((packet_data->add_io1 != 0) << 4) |
+((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
+((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
+
+ CNumericConv::Bin16ToHex(bits, m_outgoing_packet);
 
  m_outgoing_packet+= '\r';
 }

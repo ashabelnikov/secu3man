@@ -51,4 +51,7 @@
 #define   EDITAB_PAR   '{'
 #define   DBGVAR_DAT   ':'
 
+#define   DIAGINP_DAT  '='
+#define   DIAGOUT_DAT  '^'
+
 #endif //_UFCODES_H_
