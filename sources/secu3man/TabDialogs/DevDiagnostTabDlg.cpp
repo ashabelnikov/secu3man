@@ -179,6 +179,11 @@ void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)
  mp_OScopeCtrl2->AppendPoint(i_values->ks_2);
 }
 
+void CDevDiagnostTabDlg::SetEnterButtonCaption(const _TSTRING& i_text)
+{
+ m_enter_button.SetWindowText(i_text.c_str());
+}
+
 //инициализация осциллографа для сигналов с ДД
 void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
 {

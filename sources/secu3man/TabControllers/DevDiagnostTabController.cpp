@@ -25,10 +25,11 @@
 
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
-#include "TabDialogs/DevDiagnostTabDlg.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
+#include "PMInitDataCollector.h"
 #include "Settings/ISettingsData.h"
+#include "TabDialogs/DevDiagnostTabDlg.h"
 
 using namespace fastdelegate;
 
@@ -40,20 +41,18 @@ static char THIS_FILE[]=__FILE__;
 
 #define EHKEY _T("DevDiagCntr")
 
-CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
-: m_view(NULL)
-, m_comm(NULL)
-, m_sbar(NULL)
+CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
+: mp_view(ip_view)
+, mp_comm(ip_comm)
+, mp_sbar(ip_sbar)
+, mp_settings(ip_settings)
+, mp_idccntr(new CPMInitDataCollector(ip_comm, ip_sbar))
+, m_comm_state(0) //for state machine
+, m_diagnost_mode_active(false) //indicates that we are currently in diagnostic mode
 {
- //инициализируем указатели на вспомогательные объекты
- m_view = i_view;
- m_comm = i_comm;
- m_sbar = i_sbar;
- mp_settings = ip_settings;
-
  //устанавливаем делегаты (обработчики событий от представления)
- m_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
- m_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
+ mp_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
+ mp_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
 }
 
 CDevDiagnostTabController::~CDevDiagnostTabController()
@@ -65,33 +64,42 @@ CDevDiagnostTabController::~CDevDiagnostTabController()
 void CDevDiagnostTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 
 }
 
 //from MainTabController
 void CDevDiagnostTabController::OnActivate(void)
 {
+ m_comm_state = 0;
+ m_diagnost_mode_active = false;
+ mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
+
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
- m_comm->setOnSettingsChanged(MakeDelegate(this,&CDevDiagnostTabController::OnSettingsChanged));
+ mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
+ mp_comm->setOnSettingsChanged(MakeDelegate(this,&CDevDiagnostTabController::OnSettingsChanged));
  //////////////////////////////////////////////////////////////////
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
- bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ bool online_status = mp_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
 }
 
 //from MainTabController
 void CDevDiagnostTabController::OnDeactivate(void)
 {
- m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
- m_sbar->SetInformationText(_T(""));
+ //This command will make SECU-3 to leave diagnostic mode
+ SECU3IO::OPCompNc packet_data;
+ packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
+ mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+
+ mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
+ mp_sbar->SetInformationText(_T(""));
 }
 
 //hurrah!!! получен пакет от SECU-3
@@ -104,28 +112,87 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
   switch(p_ndata->opcode)
   {
    case SECU3IO::OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;
    case SECU3IO::OPCODE_SAVE_TABLSET:      //таблицы были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    return;
+   case SECU3IO::OPCODE_DIAGNOST_ENTER:    //Confirmation: Entered diagnostic mode
+    mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
+    m_diagnost_mode_active = true;
+    return;
+   case SECU3IO::OPCODE_DIAGNOST_LEAVE:    //Confirmation: Left diagnostic mode
+    mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
+    m_diagnost_mode_active = false;
     return;
   }
  }
+
+ switch(m_comm_state)
+ {
+  case 0:
+   if (i_descriptor == DIAGINP_DAT && ((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0))
+   {//skip initial procedures if we are already in diagnostic mode
+    m_comm_state = 2;
+    m_diagnost_mode_active = true;
+    mp_view->EnableEnterButton(true);
+    break;
+   }
+
+   //Start collecting initial data
+   mp_idccntr->StartDataCollection();
+   m_comm_state = 1;
+   break;
+  case 1:
+   //Collect initial data
+   if (mp_idccntr->CollectData(i_descriptor, ip_packet))
+   {
+    mp_view->EnableEnterButton((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0);
+    m_comm_state = 2;
+   }
+   break; 
+  case 2:
+   //Wait before user enter to diagnostic mode
+   if (true==m_diagnost_mode_active)
+   {
+    if (i_descriptor != DIAGINP_DAT)
+     mp_comm->m_pControlApp->ChangeContext(DIAGINP_DAT);
+    else
+    {
+     mp_view->SetInputValues((SECU3IO::DiagInpDat*)(ip_packet));
+     mp_view->EnableDiagControls(true);
+     m_comm_state = 3;
+    }
+   }
+   break;
+  case 3:
+   //Display data from inputs
+   if (i_descriptor != DIAGINP_DAT)
+    mp_comm->m_pControlApp->ChangeContext(DIAGINP_DAT);
+   else
+    mp_view->SetInputValues((SECU3IO::DiagInpDat*)(ip_packet));
+   break;
+ };
 }
 
 //состояние подключения изменилось!
 void CDevDiagnostTabController::OnConnection(const bool i_online)
 {
  int state;
- ASSERT(m_sbar);
+ ASSERT(mp_sbar);
 
  if (i_online) //перешли в онлайн
   state = CStatusBarManager::STATE_ONLINE;
  else
+ {
   state = CStatusBarManager::STATE_OFFLINE;
+  mp_view->EnableEnterButton(false);
+  mp_view->EnableDiagControls(false);
+  m_comm_state = 0;
+  m_diagnost_mode_active = false;
+ }
 
- m_view->EnableEnterButton(i_online);
- m_sbar->SetConnectionState(state);
+ mp_sbar->SetConnectionState(state);
 }
 
 bool CDevDiagnostTabController::OnClose(void)
@@ -140,15 +207,28 @@ bool CDevDiagnostTabController::OnAskFullScreen(void)
 
 void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- //empty
+ //empty. Not applicable in this tab
 }
 
 void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
-
+ //todo
 }
 
 void CDevDiagnostTabController::OnEnterButton(bool state)
 {
-
+ if (false==state)
+ {
+  //This command will make SECU-3 to enter diagnostic mode
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_ENTER;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
+ if (true==state)
+ {
+  //This command will make SECU-3 to leave diagnostic mode
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
 }

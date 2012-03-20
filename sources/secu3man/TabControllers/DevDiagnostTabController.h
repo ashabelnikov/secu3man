@@ -21,19 +21,21 @@
 
 #pragma once
 
+#include <memory>
 #include "common/unicodesupport.h"
 #include "io-core/ControlAppAdapter.h"
 #include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
 class CDevDiagnostTabDlg;
+class CPMInitDataCollector;
 class CStatusBarManager;
 class ISettingsData;
 
 class CDevDiagnostTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CDevDiagnostTabController(CDevDiagnostTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
+  CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CDevDiagnostTabController();
 
  private:
@@ -55,8 +57,13 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   void OnEnterButton(bool state);
 
  private:
-  CDevDiagnostTabDlg*  m_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
+  CDevDiagnostTabDlg*  mp_view;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
+
+    //sub-controllers
+  std::auto_ptr<CPMInitDataCollector> mp_idccntr;
+  int m_comm_state;
+  bool m_diagnost_mode_active;
 };

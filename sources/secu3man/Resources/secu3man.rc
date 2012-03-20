@@ -356,6 +356,8 @@ BEGIN
     IDS_TAB_LOG_PLAYER      "Проигрыватель"
     IDS_LP_CANT_OPEN_FILE   "Не могу открыть указанный файл!"
     IDS_TAB_DEV_DIAGNOSTICS "Диагностика"
+    IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER "Войти в диагн. режим"
+    IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE "Выйти из диагн. режима"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1051,6 +1053,8 @@ BEGIN
     IDS_TAB_LOG_PLAYER      "Player"
     IDS_LP_CANT_OPEN_FILE   "Can't open specified file!"
     IDS_TAB_DEV_DIAGNOSTICS "Diagnostics"
+    IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER "Enter diagnostic mode"
+    IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE "Leave diagnostic mode"
 END
 
 STRINGTABLE DISCARDABLE 

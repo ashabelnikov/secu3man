@@ -155,6 +155,8 @@ namespace SECU3IO
  const int OPCODE_READ_FW_SIG_INFO     = 3;
  const int OPCODE_LOAD_TABLSET         = 4;  //realtime tables
  const int OPCODE_SAVE_TABLSET         = 5;  //realtime tables
+ const int OPCODE_DIAGNOST_ENTER       = 6;  //enter diagnostic mode
+ const int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
 
  struct KnockPar
  {
@@ -329,7 +331,7 @@ namespace SECU3IO
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
 
- const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 18;
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 19;
  //<bitnumber, name>
 #define _SD std::pair<int, TCHAR*>
  static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
@@ -351,7 +353,8 @@ namespace SECU3IO
   _SD(14, _T("COPT_PHASED_IGNITION")),
   _SD(15, _T("COPT_FUEL_PUMP")),
   _SD(16, _T("COPT_THERMISTOR_CS")),
-  _SD(17, _T("COPT_SECU3T"))
+  _SD(17, _T("COPT_SECU3T")),
+  _SD(18, _T("COPT_DIAGNOSTICS"))
  };
 #undef _SD
 
@@ -373,6 +376,7 @@ namespace SECU3IO
  const int COPT_FUEL_PUMP = 15;
  const int COPT_THERMISTOR_CS = 16;
  const int COPT_SECU3T = 17;
+ const int COPT_DIAGNOSTICS = 18;
 
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;
