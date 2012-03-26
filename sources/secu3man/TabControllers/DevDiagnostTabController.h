@@ -21,9 +21,11 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
 #include "common/unicodesupport.h"
 #include "io-core/ControlAppAdapter.h"
+#include "io-core/SECU3IO.h"
 #include "TabsManagement/ITabController.h"
 
 class CCommunicationManager;
@@ -66,4 +68,6 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   std::auto_ptr<CPMInitDataCollector> mp_idccntr;
   int m_comm_state;
   bool m_diagnost_mode_active;
+  SECU3IO::DiagOutDat m_outputs;
+  std::map<int, int*> m_outputs_map;
 };

@@ -1753,9 +1753,9 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 {
  unsigned int bits = ((packet_data->ign_out1 != 0) << 0) | ((packet_data->ign_out2 != 0) << 1) |
-((packet_data->ign_out3 != 0) << 2) | ((packet_data->ign_out4 != 0) << 3) | ((packet_data->add_io1 != 0) << 4) |
-((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
-((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
+ ((packet_data->ign_out3 != 0) << 2) | ((packet_data->ign_out4 != 0) << 3) | ((packet_data->add_io1 != 0) << 4) |
+ ((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
+ ((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
 
  CNumericConv::Bin16ToHex(bits, m_outgoing_packet);
 

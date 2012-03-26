@@ -46,6 +46,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
   void SetEnterButtonCaption(const _TSTRING& i_text);
+  void SetEnterButton(bool i_state);
 
   void EnableDiagControls(bool i_enable);
   void EnableEnterButton(bool i_enable);

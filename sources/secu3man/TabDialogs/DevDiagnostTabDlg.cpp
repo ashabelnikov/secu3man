@@ -184,6 +184,11 @@ void CDevDiagnostTabDlg::SetEnterButtonCaption(const _TSTRING& i_text)
  m_enter_button.SetWindowText(i_text.c_str());
 }
 
+void CDevDiagnostTabDlg::SetEnterButton(bool i_state)
+{
+ m_enter_button.SetCheck(i_state ? BST_CHECKED : BST_UNCHECKED);
+}
+
 //инициализация осциллографа для сигналов с ДД
 void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
 {

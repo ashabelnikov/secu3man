@@ -303,6 +303,8 @@ void COScopeCtrl::InvalidateCtrl()
 /////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 {
+ if (!IsWindowEnabled())
+  return; //do not try to add new points when control is disabled
  ASSERT(_GetPtCount() != 0);
  size_t MaxPointIndex = _GetPtCount() - 1;
 

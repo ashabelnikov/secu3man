@@ -53,6 +53,19 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  //устанавливаем делегаты (обработчики событий от представлени€)
  mp_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
  mp_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
+
+ memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT1, &m_outputs.ign_out1));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT2, &m_outputs.ign_out2));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT3, &m_outputs.ign_out3));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT4, &m_outputs.ign_out4));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IE, &m_outputs.ie));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_FE, &m_outputs.fe));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ECF, &m_outputs.ecf));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_CE, &m_outputs.ce));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ST_BLOCK, &m_outputs.st_block));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO1, &m_outputs.add_io1));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO2, &m_outputs.add_io2));
 }
 
 CDevDiagnostTabController::~CDevDiagnostTabController()
@@ -65,7 +78,6 @@ void CDevDiagnostTabController::OnSettingsChanged(void)
 {
  //включаем необходимый дл€ данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
-
 }
 
 //from MainTabController
@@ -73,6 +85,8 @@ void CDevDiagnostTabController::OnActivate(void)
 {
  m_comm_state = 0;
  m_diagnost_mode_active = false;
+ mp_view->EnableEnterButton(false);
+ mp_view->EnableDiagControls(false);
  mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
 
  //////////////////////////////////////////////////////////////////
@@ -94,15 +108,19 @@ void CDevDiagnostTabController::OnActivate(void)
 void CDevDiagnostTabController::OnDeactivate(void)
 {
  //This command will make SECU-3 to leave diagnostic mode
- SECU3IO::OPCompNc packet_data;
- packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
- mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ if (true==m_diagnost_mode_active)
+ {
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
+  packet_data.opdata = 0;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
 
  mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  mp_sbar->SetInformationText(_T(""));
 }
 
-//hurrah!!! получен пакет от SECU-3
+//ѕолучен пакет от SECU-3
 void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
 {
  //особый случай: пришел пакет с нотификацонным кодом
@@ -124,6 +142,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    case SECU3IO::OPCODE_DIAGNOST_LEAVE:    //Confirmation: Left diagnostic mode
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
     m_diagnost_mode_active = false;
+    m_comm_state = 2; //<--wait before user enters again
     return;
   }
  }
@@ -131,12 +150,22 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
  switch(m_comm_state)
  {
   case 0:
+   if (i_descriptor == DBGVAR_DAT)
+    break; //skip debug packets
    if (i_descriptor == DIAGINP_DAT && ((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0))
    {//skip initial procedures if we are already in diagnostic mode
     m_comm_state = 2;
     m_diagnost_mode_active = true;
-    mp_view->EnableEnterButton(true);
+    mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
+    mp_view->EnableEnterButton(true);//enabled
+    mp_view->SetEnterButton(true);   //checked    
     break;
+   }
+   else
+   { //device is not in diagnostic mode
+    mp_view->EnableEnterButton(false);
+    mp_view->SetEnterButton(false);
+    mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
    }
 
    //Start collecting initial data
@@ -158,7 +187,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     if (i_descriptor != DIAGINP_DAT)
      mp_comm->m_pControlApp->ChangeContext(DIAGINP_DAT);
     else
-    {
+    {//first packet from diagnostic mode!
      mp_view->SetInputValues((SECU3IO::DiagInpDat*)(ip_packet));
      mp_view->EnableDiagControls(true);
      m_comm_state = 3;
@@ -166,7 +195,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    }
    break;
   case 3:
-   //Display data from inputs
+   //Display data from inputs (we are in diagnostic mode)
    if (i_descriptor != DIAGINP_DAT)
     mp_comm->m_pControlApp->ChangeContext(DIAGINP_DAT);
    else
@@ -197,11 +226,20 @@ void CDevDiagnostTabController::OnConnection(const bool i_online)
 
 bool CDevDiagnostTabController::OnClose(void)
 {
+ if (true==m_diagnost_mode_active)
+ {
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
+  packet_data.opdata = 0;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+  Sleep(100); //wait until data transfered
+ }
  return true;
 }
 
 bool CDevDiagnostTabController::OnAskFullScreen(void)
 {
+ //not available in this mode
  return false;
 }
 
@@ -212,23 +250,29 @@ void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 
 void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
- //todo
+ if (m_outputs_map.find(output_id) != m_outputs_map.end())
+  *m_outputs_map[output_id] = state;
+ 
+ mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
 }
 
 void CDevDiagnostTabController::OnEnterButton(bool state)
 {
- if (false==state)
+ if (true==state)
  {
   //This command will make SECU-3 to enter diagnostic mode
   SECU3IO::OPCompNc packet_data;
   packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_ENTER;
+  packet_data.opdata = 0;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
  }
- if (true==state)
+ else
  {
   //This command will make SECU-3 to leave diagnostic mode
   SECU3IO::OPCompNc packet_data;
   packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
+  packet_data.opdata = 0;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+  mp_view->EnableDiagControls(false);
  }
 }
