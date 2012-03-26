@@ -83,6 +83,7 @@ void CDevDiagnostTabController::OnSettingsChanged(void)
 //from MainTabController
 void CDevDiagnostTabController::OnActivate(void)
 {
+ memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0
  m_comm_state = 0;
  m_diagnost_mode_active = false;
  mp_view->EnableEnterButton(false);
@@ -158,7 +159,9 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     m_diagnost_mode_active = true;
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
     mp_view->EnableEnterButton(true);//enabled
-    mp_view->SetEnterButton(true);   //checked    
+    mp_view->SetEnterButton(true);   //checked
+    //Set correct states of outputs
+    mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
     break;
    }
    else
@@ -191,6 +194,8 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
      mp_view->SetInputValues((SECU3IO::DiagInpDat*)(ip_packet));
      mp_view->EnableDiagControls(true);
      m_comm_state = 3;
+     //Set correct states of outputs
+     mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
     }
    }
    break;
