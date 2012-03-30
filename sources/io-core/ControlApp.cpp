@@ -1127,11 +1127,13 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
   return false;
  raw_packet+=2;
 
- //газовый клапан, ДПКВ, ДНО(VR), ДФ
+ //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
  m_DiagInpDat.gas   = (byte & (1 << 0)) != 0;
  m_DiagInpDat.ckps  = (byte & (1 << 1)) != 0;
  m_DiagInpDat.ref_s = (byte & (1 << 2)) != 0;
  m_DiagInpDat.ps    = (byte & (1 << 3)) != 0;
+ m_DiagInpDat.bl    = (byte & (1 << 4)) != 0;
+ m_DiagInpDat.de    = (byte & (1 << 5)) != 0;
 
  if (*raw_packet!='\r')
   return false;

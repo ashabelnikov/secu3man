@@ -225,6 +225,8 @@ namespace SECU3IO
   int ckps;             //CKP sensor (digital)
   int ref_s;            //VR type cam sensor (digital)
   int ps;               //Hall-effect cam sensor (digital)
+  int bl;               //"Bootloader" jumper
+  int de;               //"Default EEPROM" jumper
   float ks_1;           //knock sensor 1  
   float ks_2;           //knock sensor 2
  };

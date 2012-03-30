@@ -42,9 +42,9 @@ const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
 const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
 const UINT OutputsCheckEnd = IDC_DEV_DIAG_ADD_O2_CHECK;
 const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
-const UINT InputsTextEnd = IDC_DEV_DIAG_PS;
+const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
 const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
-const UINT InputsCaptionEnd = IDC_DEV_DIAG_KS_2_CAPTION;
+const UINT InputsCaptionEnd = IDC_DEV_DIAG_DE_CAPTION;
 
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_DESTROY()
@@ -84,6 +84,8 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CKPS, m_inputValues.ckps, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_REF_S, m_inputValues.ref_s, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_PS, m_inputValues.ps, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_BL, m_inputValues.bl, _T("%d"));
+ DDX_Text_Fmt(pDX, IDC_DEV_DIAG_DE, m_inputValues.de, _T("%d"));
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
