@@ -180,6 +180,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    if (mp_idccntr->CollectData(i_descriptor, ip_packet))
    {
     mp_view->EnableEnterButton((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0);
+    mp_view->EnableSECU3TFeatures((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
     m_comm_state = 2;
    }
    break; 

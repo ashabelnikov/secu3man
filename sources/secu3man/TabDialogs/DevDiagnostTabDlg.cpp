@@ -66,6 +66,7 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , mp_OScopeCtrl2(new COScopeCtrl())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
+, m_enable_secu3t_features(false)
 {
  memset(&m_inputValues, 0, sizeof(SECU3IO::DiagInpDat));
 }
@@ -79,7 +80,13 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_TEMP, m_inputValues.temp, _T("%.3f"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I1, m_inputValues.add_io1, _T("%.3f"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I2, m_inputValues.add_io2, _T("%.3f"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, m_inputValues.carb, _T("%.3f"));
+ if (m_enable_secu3t_features)
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, m_inputValues.carb,_T("%.3f"));
+ else
+ {
+  int value = m_inputValues.carb > 0;
+  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, value, _T("%d"));
+ }
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_GAS_V, m_inputValues.gas, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CKPS, m_inputValues.ckps, _T("%d"));
  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_REF_S, m_inputValues.ref_s, _T("%d"));
@@ -108,7 +115,22 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
 
 void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enable_diag_controls);
+ switch(pCmdUI->m_nID)
+ {
+  case IDC_DEV_DIAG_ADD_O1_CHECK:
+  case IDC_DEV_DIAG_ADD_O2_CHECK:
+  case IDC_DEV_DIAG_ADD_I1:
+  case IDC_DEV_DIAG_ADD_I2:
+  case IDC_DEV_DIAG_ADD_I1_CAPTION:
+  case IDC_DEV_DIAG_ADD_I2_CAPTION:
+  case IDC_DEV_DIAG_REF_S:
+  case IDC_DEV_DIAG_REF_S_CAPTION:
+  case IDC_DEV_DIAG_KS_2_CAPTION:
+   pCmdUI->Enable(m_enable_diag_controls && m_enable_secu3t_features);
+   break;
+  default:
+   pCmdUI->Enable(m_enable_diag_controls);
+ };
 }
 
 void CDevDiagnostTabDlg::OnUpdateEnterButton(CCmdUI* pCmdUI)
@@ -152,13 +174,20 @@ void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
 {
  m_enable_diag_controls = i_enable;
  mp_OScopeCtrl1->EnableWindow(i_enable);
- mp_OScopeCtrl2->EnableWindow(i_enable);
+ mp_OScopeCtrl2->EnableWindow(i_enable && m_enable_secu3t_features); //SECU-3T
  UpdateDialogControls(this, TRUE);
 }
 
 void CDevDiagnostTabDlg::EnableEnterButton(bool i_enable)
 {
  m_enable_enter_button = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+void CDevDiagnostTabDlg::EnableSECU3TFeatures(bool i_enable)
+{
+ m_enable_secu3t_features = i_enable;
+ mp_OScopeCtrl2->EnableWindow(i_enable && m_enable_diag_controls); //SECU-3T
  UpdateDialogControls(this,TRUE);
 }
 
