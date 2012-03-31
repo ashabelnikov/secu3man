@@ -83,6 +83,7 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 BOOL CRSDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+ m_enabled = -1; //reset cache flag
 
  CFont font;
  VERIFY(font.CreateFont(
