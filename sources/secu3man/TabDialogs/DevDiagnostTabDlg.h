@@ -31,7 +31,7 @@ class COScopeCtrl;
 class CDevDiagnostTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
-  typedef fastdelegate::FastDelegate1<bool> EventToggle;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<int, bool> EventOutputToggle;
 
  public:
@@ -41,7 +41,7 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   //установка обработчиков событий от элементов управления
   void setOnOutputToggle(EventOutputToggle OnFunction);
-  void setOnEnterButton(EventToggle OnFunction);
+  void setOnEnterButton(EventHandler OnFunction);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
@@ -87,7 +87,7 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   CButton m_enter_button;
   EventOutputToggle m_on_output_check;
-  EventToggle m_on_enter_button;
+  EventHandler m_on_enter_button;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;

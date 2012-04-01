@@ -137,10 +137,12 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
    case SECU3IO::OPCODE_DIAGNOST_ENTER:    //Confirmation: Entered diagnostic mode
+    mp_view->SetEnterButton(true);
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
     m_diagnost_mode_active = true;
     return;
    case SECU3IO::OPCODE_DIAGNOST_LEAVE:    //Confirmation: Left diagnostic mode
+    mp_view->SetEnterButton(false);
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
     m_diagnost_mode_active = false;
     m_comm_state = 2; //<--wait before user enters again
@@ -157,9 +159,9 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    {//skip initial procedures if we are already in diagnostic mode
     m_comm_state = 2;
     m_diagnost_mode_active = true;
+    mp_view->SetEnterButton(true);   //checked
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
     mp_view->EnableEnterButton(true);//enabled
-    mp_view->SetEnterButton(true);   //checked
     //Set correct states of outputs
     mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
     break;
@@ -262,17 +264,9 @@ void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
  mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
 }
 
-void CDevDiagnostTabController::OnEnterButton(bool state)
+void CDevDiagnostTabController::OnEnterButton(void)
 {
- if (true==state)
- {
-  //This command will make SECU-3 to enter diagnostic mode
-  SECU3IO::OPCompNc packet_data;
-  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_ENTER;
-  packet_data.opdata = 0;
-  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
- }
- else
+ if (m_diagnost_mode_active)
  {
   //This command will make SECU-3 to leave diagnostic mode
   SECU3IO::OPCompNc packet_data;
@@ -280,5 +274,13 @@ void CDevDiagnostTabController::OnEnterButton(bool state)
   packet_data.opdata = 0;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
   mp_view->EnableDiagControls(false);
+ }
+ else
+ {
+  //This command will make SECU-3 to enter diagnostic mode
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_ENTER;
+  packet_data.opdata = 0;
+  mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
  }
 }

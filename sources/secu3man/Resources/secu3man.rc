@@ -298,7 +298,7 @@ BEGIN
     LTEXT           "BL jmp",IDC_DEV_DIAG_BL_CAPTION,230,130,40,12
     LTEXT           "",IDC_DEV_DIAG_DE,193,155,30,12,0,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,230,155,40,12
-    CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,83,22
+    CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,88,22
     LTEXT           "ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим.",IDC_DEV_DIAG_WARNING_TEXT,201,196,268,18
 END
 
@@ -776,7 +776,7 @@ BEGIN
     LTEXT           "BL jmp",IDC_DEV_DIAG_BL_CAPTION,230,130,40,12
     LTEXT           "",IDC_DEV_DIAG_DE,193,155,30,12,0,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,230,155,40,12
-    CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,83,22
+    CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,192,88,22
     LTEXT           "WARNING! Disconnect ignition coils before entering diagnostic mode.",IDC_DEV_DIAG_WARNING_TEXT,201,196,268,18
 END
 

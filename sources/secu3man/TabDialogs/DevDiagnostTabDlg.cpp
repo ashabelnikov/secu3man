@@ -165,9 +165,7 @@ void CDevDiagnostTabDlg::OnOutputCheckToggle(UINT nID)
 void CDevDiagnostTabDlg::OnEnterButton()
 {
  if (m_on_enter_button)
- {
-  m_on_enter_button(BST_CHECKED == m_enter_button.GetCheck());
- }
+  m_on_enter_button();
 }
 
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
@@ -196,7 +194,7 @@ void CDevDiagnostTabDlg::setOnOutputToggle(EventOutputToggle OnFunction)
  m_on_output_check = OnFunction;
 }
 
-void CDevDiagnostTabDlg::setOnEnterButton(EventToggle OnFunction)
+void CDevDiagnostTabDlg::setOnEnterButton(EventHandler OnFunction)
 {
  m_on_enter_button = OnFunction;
 }
