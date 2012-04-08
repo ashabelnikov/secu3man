@@ -25,6 +25,8 @@
 
 #include "common/MathHelpers.h"
 #include "FirmwareContextMenuManager.h"
+#include "ParamDesk/Params/IDeskView.h"
+#include "ParamDesk/Params/IORemappingDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "tabldesk/TablesSetPanel.h"
 #include "ui-core/HotKeysToCmdRouter.h"
@@ -39,6 +41,26 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
 
+//CTabCtrl doesn't support TCS_VERTICAL when Windows XP visual styles are enabled.
+//So, we need a special function which will disable visual styles for a tab control.
+//Function uses dynamic linking to avoid static linking to uxtheme.lib
+namespace {
+ typedef HRESULT (_stdcall *SetWindowTheme_addr)(HWND, LPCWSTR, LPCWSTR);
+
+ void DisableTabCtrlVisualStyles(CTabCtrl& ctrl)
+ {
+  static SetWindowTheme_addr p_proc = NULL;
+  if (NULL == p_proc)
+  {
+   HMODULE h_dll = LoadLibrary(_T("uxtheme.dll"));
+   if (NULL != h_dll)   
+    p_proc = (SetWindowTheme_addr)GetProcAddress(h_dll, _T("SetWindowTheme"));  
+  }
+  if (p_proc)
+   p_proc(ctrl.m_hWnd, (L""), (L""));
+ }
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 
@@ -48,11 +70,16 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , m_is_bl_items_available(false)
 , m_is_app_items_available(false)
 , mp_ParamDeskDlg(new CParamDeskDlg(NULL, true)) //<-- используем вкладку параметров детонации
+, mp_IORemappingDlg(new CIORemappingDlg())
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 , mp_ContextMenuManager(new CFirmwareModeContextMenuManager())
 , mp_TablesPanel(new CTablesSetPanel(NULL))
+, m_tab_selection(0) //<-- "default parameters" is selected by default
 {
  mp_ContextMenuManager->CreateContent();
+ //create list of tabs
+ m_tabs.push_back(std::make_pair(mp_ParamDeskDlg.get(), MLL::GetString(IDS_FW_DEF_PARAMETR)));
+ m_tabs.push_back(std::make_pair(mp_IORemappingDlg.get(), MLL::GetString(IDS_FW_IO_REMAPPING)));
 }
 
 void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -65,6 +92,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG, m_modification_flag);
  DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, m_prog_only_code_checkbox);
+ DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, m_param_sel_tab);
 }
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
@@ -131,6 +159,9 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnViewFWOptions)
+
+ ON_NOTIFY(TCN_SELCHANGE, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, OnSelchangeTabctl)
+ ON_NOTIFY(TCN_SELCHANGING, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, OnSelchangingTabctl)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -140,6 +171,28 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ //Prepare and tune tab control
+ DisableTabCtrlVisualStyles(m_param_sel_tab);
+ for(size_t i = 0; i < m_tabs.size(); ++i)
+  m_param_sel_tab.InsertItem(TCIF_TEXT, i, m_tabs[i].second.c_str(), 0, NULL);
+/* CFont font;
+ VERIFY(font.CreateFont(
+   25,                        // nHeight
+   0,                         // nWidth
+   0,                         // nEscapement
+   0,                         // nOrientation
+   FW_BOLD,                   // nWeight
+   FALSE,                     // bItalic
+   FALSE,                     // bUnderline
+   0,                         // cStrikeOut
+   ANSI_CHARSET,              // nCharSet
+   OUT_DEFAULT_PRECIS,        // nOutPrecision
+   CLIP_DEFAULT_PRECIS,       // nClipPrecision
+   DEFAULT_QUALITY,           // nQuality
+   DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
+   _T("MS Sans Serif")));             // lpszFacename
+ m_param_sel_tab.SetFont(&font);*/
+
  //create parameters desk
  CRect rect;
  GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
@@ -148,7 +201,18 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
- mp_ParamDeskDlg->ShowWindow(SW_SHOWNORMAL);
+ mp_ParamDeskDlg->ShowWindow(SW_HIDE);
+
+ //create IO remapping desk
+ GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_IORemappingDlg->Create(CIORemappingDlg::IDD,this);
+ mp_IORemappingDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
+ mp_IORemappingDlg->ShowWindow(SW_HIDE);
+
+ //select current tab
+ m_param_sel_tab.SetCurSel(m_tab_selection);
+ m_tabs[m_tab_selection].first->Show(true);
 
  //create tables desk
  GetDlgItem(IDC_FIRMWARE_SUPPORT_TD_FRAME)->GetWindowRect(rect);
@@ -252,8 +316,14 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
 
  //обновляем состояние (если нужно)
  bool pd_enable = IsFirmwareOpened();
- if (mp_ParamDeskDlg->IsEnabled()!=pd_enable)
-  mp_ParamDeskDlg->Enable(pd_enable);
+
+ for(size_t i = 0; i < m_tabs.size(); ++i)
+ {
+  if (m_tabs[i].first->IsEnabled()!=pd_enable)
+   m_tabs[i].first->Enable(pd_enable);
+ }
+
+ m_param_sel_tab.EnableWindow(pd_enable);
 }
 
 void CFirmwareTabDlg::OnDestroy()
@@ -261,6 +331,7 @@ void CFirmwareTabDlg::OnDestroy()
  Super::OnDestroy();
  KillTimer(TIMER_ID);
  m_hot_keys_supplier->Close();
+ m_tab_selection = m_param_sel_tab.GetCurSel(); //remember last selected tab
 }
 
 //делегаты
@@ -511,6 +582,22 @@ bool CFirmwareTabDlg::IsFirmwareOpened(void)
  if (m_IsFirmwareOpened)
   return m_IsFirmwareOpened();
  return false;
+}
+
+void CFirmwareTabDlg::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+{
+ size_t index = m_param_sel_tab.GetCurSel();
+ if (index < m_tabs.size())
+  m_tabs[index].first->Show(true); //show current window
+ *pResult = 0;
+}
+
+void CFirmwareTabDlg::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+{
+ size_t index = TabCtrl_GetCurSel(m_param_sel_tab.m_hWnd);
+ if (index < m_tabs.size())
+  m_tabs[index].first->Show(false); //hide previous window
+ *pResult = 0;
 }
 
 void CFirmwareTabDlg::setOnBootLoaderInfo(EventHandler OnFunction)

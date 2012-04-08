@@ -28,8 +28,10 @@
 
 class CHotKeysToCmdRouter;
 class CFirmwareModeContextMenuManager;
+class CIORemappingDlg;
 class CParamDeskDlg;
 class CTablesSetPanel;
+class IDeskView;
 
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
@@ -69,6 +71,7 @@ class CFirmwareTabDlg : public CTabDialog
   bool IsProgrammeOnlyCode(void);
 
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
+  std::auto_ptr<CIORemappingDlg> mp_IORemappingDlg;
   std::auto_ptr<CFirmwareModeContextMenuManager> mp_ContextMenuManager;
   std::auto_ptr<CTablesSetPanel> mp_TablesPanel;
 
@@ -135,6 +138,8 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnExportMapsToSECU3();
   afx_msg void OnFirmwareInfo();
   afx_msg void OnViewFWOptions();
+  afx_msg void OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
+  afx_msg void OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -145,6 +150,7 @@ class CFirmwareTabDlg : public CTabDialog
   CEdit     m_fw_name;
   CStatic   m_fw_crc;
   CStatic   m_modification_flag;
+  CTabCtrl  m_param_sel_tab;
 
  private:
   EventHandler  m_OnBootLoaderInfo;
@@ -179,4 +185,6 @@ class CFirmwareTabDlg : public CTabDialog
 
   void _RegisterHotKeys(void);
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
+  std::vector<std::pair<IDeskView*, _TSTRING> > m_tabs;
+  size_t m_tab_selection;
 };

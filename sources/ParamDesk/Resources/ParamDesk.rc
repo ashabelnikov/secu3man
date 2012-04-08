@@ -471,6 +471,14 @@ BEGIN
 END
 
 
+IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 191
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "text",IDC_IO_REMAPPING_ECF_CAPTION,70,70,50,19
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // DESIGNINFO
@@ -1098,6 +1106,14 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,36,79,100,9
 END
 
+
+IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 191
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "text",IDC_IO_REMAPPING_ECF_CAPTION,70,70,50,19
+END
 
 #ifdef APSTUDIO_INVOKED
 /////////////////////////////////////////////////////////////////////////////

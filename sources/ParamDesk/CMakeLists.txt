@@ -33,6 +33,7 @@ set(HEADERS
   Params/ParamDeskDlg.h
   Params/StarterPageDlg.h
   Params/TemperPageDlg.h
+  Params/IORemappingDlg.h
   Resources/Resource.h
   Tables/ITablesDeskView.h
   Tables/TablesDeskDlg.h
@@ -55,6 +56,7 @@ set(SOURCES
   Params/ParamDeskDlg.cpp
   Params/StarterPageDlg.cpp
   Params/TemperPageDlg.cpp
+  Params/IORemappingDlg.cpp
   Resources/ParamDesk.rc
   Tables/TablesDeskDlg.cpp
   Tables/TablesPageDlg.cpp

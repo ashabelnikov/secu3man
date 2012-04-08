@@ -76,6 +76,7 @@ BOOL CSecu3manApp::InitInstance()
  AfxEnableControlContainer();
 
  CoInitialize(NULL);
+ InitCommonControls();
 
 #if (_MSC_VER <1300)
  #ifdef _AFXDLL

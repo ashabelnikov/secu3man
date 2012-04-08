@@ -23,19 +23,15 @@
 
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
+#include "IDeskView.h"
 
 //через этот интерфейс нужно общатся с панелью параметров (представлением)
 //Особенность: Любой из следующих методов интерфейса может быть вызван независимо
 //от того - видна вкладка или нет (кроме SetCurSel()). Тип данных и соответственно тип вкладки определяется дескриптором
 
-class IParamDeskView
+class IParamDeskView : public IDeskView
 {
  public:
-  typedef fastdelegate::FastDelegate0<> EventHandler;
-
-  virtual bool IsEnabled(void) = 0;
-  virtual void Enable(bool enable) = 0;                                 //разрешить/запретить представление
-  virtual void Show(bool show) = 0;                                     //показать/спрятать контент представления
   virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //загнать данные в представление
   virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //извлечь данные из представления
   virtual void ShowSaveButton(bool i_show) = 0;
