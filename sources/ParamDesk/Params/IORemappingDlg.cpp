@@ -30,12 +30,18 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
+const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
+
+const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT3_CAPTION;
+const UINT IOCaptionEnd = IDC_IO_REMAPPING_ST_BLOCK_CAPTION;
+const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT3_COMBOBOX;
+const UINT IOComboboxEnd = IDC_IO_REMAPPING_ST_BLOCK_COMBOBOX;
+
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_ECF_CAPTION, OnUpdateControls)
-
+ ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
 END_MESSAGE_MAP()
-
-const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
 /////////////////////////////////////////////////////////////////////////////
 // CIORemappingDlg dialog
