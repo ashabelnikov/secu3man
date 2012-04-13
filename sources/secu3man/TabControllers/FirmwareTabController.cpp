@@ -31,6 +31,7 @@
 #include "FWImpExp/MPSZImpExpController.h"
 #include "FWImpExp/SECUImpExpController.h"
 #include "FWImpExp/EEPROMImpExpController.h"
+#include "FWIORemappingController.h"
 #include "HexUtils/readhex.h"
 #include "io-core/EEPROMDataMediator.h"
 #include "io-core/FirmwareDataMediator.h"
@@ -54,7 +55,6 @@ static char THIS_FILE[]=__FILE__;
 #define new DEBUG_NEW
 #endif
 
-
 #define EHKEY _T("FirmwareCntr")
 
 //////////////////////////////////////////////////////////////////////
@@ -70,6 +70,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_bl_read_flash_mode(MODE_RD_FLASH_TO_FILE)
 , m_lastSel(0)
 , m_bl_started_emergency(false)
+, mp_iorCntr(new CFWIORemappingController(i_view->mp_IORemappingDlg.get()))
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -161,6 +162,9 @@ void CFirmwareTabController::OnActivate(void)
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
+
+ //Activate children controllers
+ mp_iorCntr->OnActivate();
 }
 
 void CFirmwareTabController::OnDeactivate(void)
@@ -171,6 +175,9 @@ void CFirmwareTabController::OnDeactivate(void)
  m_modification_check_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
  m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
+
+ //Deactivate children controllers
+ mp_iorCntr->OnDeactivate();
 }
 
 /////////////////////////////////////////////////////////////////////////////////

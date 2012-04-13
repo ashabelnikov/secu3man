@@ -32,6 +32,7 @@
 class CCommunicationManager;
 class CFirmwareDataMediator;
 class CFirmwareTabDlg;
+class CFWIORemappingController;
 class CStatusBarManager;
 class EEPROMDataMediator;
 class ISettingsData;
@@ -134,6 +135,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   CFirmwareDataMediator* m_fwdm;
   EEPROMDataMediator* m_edm;
   ISettingsData* mp_settings;
+  std::auto_ptr<CFWIORemappingController> mp_iorCntr;
 
   BYTE* m_bl_data;
   BYTE* m_code_for_merge_with_overhead;
