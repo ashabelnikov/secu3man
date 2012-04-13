@@ -31,19 +31,38 @@
 #include "SECU3TablesDef.h"
 #include "ufcodes.h"
 
-//этот файл содержит платформенно ориентированные фрагменты кода
+//этот файл содержит платформенно-ориентированные фрагменты кода
 #pragma pack(1)
 
 using namespace SECU3IO;
 using namespace SECU3IO::SECU3Types;
 
-#define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
-#define FW_SIGNATURE_INFO_SIZE 48
-#define COIL_ON_TIME_LOOKUP_TABLE_SIZE 32
+#define KC_ATTENUATOR_LOOKUP_TABLE_SIZE  128
+#define FW_SIGNATURE_INFO_SIZE           48
+#define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
+
+//Describes all data related to I/O remapping
+typedef struct iorem_slots_t
+{
+ _fnptr_t i_slots[CFirmwareDataMediator::IOS_COUNT];  // initialization slots
+ _fnptr_t v_slots[CFirmwareDataMediator::IOS_COUNT];  // data slots
+ _fnptr_t s_stub;                                     // special pointer used as stub
+ _fnptr_t i_plugs[CFirmwareDataMediator::IOP_COUNT];  // initialization plugs
+ _fnptr_t v_plugs[CFirmwareDataMediator::IOP_COUNT];  // data plugs
+}iorem_slots_t;
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
+ //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
+ //новых версий прошивок с более старыми версиями. При добавлении новых данных
+ //в структуру, необходимо расходовать эти байты.
+ _uchar reserved[32];
+
+ // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
+ iorem_slots_t iorem;
+
+ //Информация о прошивке
  _uchar fw_signature_info[FW_SIGNATURE_INFO_SIZE];
 
  //таблица усиления аттенюатора (зависимость от оборотов).
@@ -60,26 +79,27 @@ typedef struct
  //holds flags which give information about options were used to build firmware
  //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
  _ulong config;
+}fw_ex_data_t;
 
- //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
- //новых версий прошивок с более старыми версиями. При добавлении новых данных
- //в структуру, необходимо расходовать эти байты.
- _uchar reserved[58];
-}FirmwareData;
+//Describes all data residing in the firmware
+typedef struct fw_data_t
+{
+ fw_ex_data_t exdata;                    // Additional data in the firmware
+ params_t     def_param;                 // Reserve parameters (loaded when instance in EEPROM is broken)
+ f_data_t     tables[TABLES_NUMBER];     // Array of tables of advance angle
+ _uint        code_crc;                  // Check sum of the whole firmware (except this check sum and boot loader)
+}fw_data_t;
+
 
 class CFirmwareDataMediator::LocInfoProvider
  {
   public:
    LocInfoProvider(const PPFlashParam& i_fpp)
-    : CODE_CRC_SIZE(sizeof(_uint))
+    : CODE_CRC_SIZE(sizeof(fw_data_t().code_crc))
     , BOOT_START(i_fpp.m_app_section_size)
-    , CODE_CRC_ADDR(BOOT_START - CODE_CRC_SIZE)
     , CODE_SIZE(BOOT_START - CODE_CRC_SIZE)
-    , TABLES_START(CODE_CRC_ADDR - (sizeof(F_data)*TABLES_NUMBER))
-    , DEFPARAM_START(TABLES_START - sizeof(params))
-    , FIRMWARE_DATA_START(DEFPARAM_START - sizeof(FirmwareData))
-    , FIRMWARE_ALL_DATA_START(FIRMWARE_DATA_START)
-    , FIRMWARE_ALL_DATA_SIZE((sizeof(F_data)*TABLES_NUMBER) + sizeof(params) + sizeof(FirmwareData))
+    , FIRMWARE_DATA_START(BOOT_START - sizeof(fw_data_t))
+    , FIRMWARE_DATA_SIZE(sizeof(fw_data_t) - CODE_CRC_SIZE)
    {
     //empty
    }
@@ -88,21 +108,12 @@ class CFirmwareDataMediator::LocInfoProvider
    const size_t CODE_CRC_SIZE;
    //starting address of boot loader section
    const size_t BOOT_START;
-   //starting address of check sum
-   const size_t CODE_CRC_ADDR;
    //размер кода прошивки без учета байтов контрольной суммы
    const size_t CODE_SIZE;
-   //адрес массива таблиц - семейств характеристик
-   const size_t TABLES_START;
-   //адрес структуры дефаултных параметров (параметров EEPROM по умолчанию)
-   const size_t DEFPARAM_START;
-   //адрес дополнительных параметров
-   const size_t FIRMWARE_DATA_START;
-   //---два нижних определения необходимы для экспорта/импорта данных между прошивками--
    //стартовый адрес всех данных прошивки в байтах
-   const size_t FIRMWARE_ALL_DATA_START;
+   const size_t FIRMWARE_DATA_START;
    //размер всех данных прошивки без учета байтов контрольной суммы прошивки
-   const size_t FIRMWARE_ALL_DATA_SIZE;
+   const size_t FIRMWARE_DATA_SIZE;
  }; 
 
 CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
@@ -131,17 +142,17 @@ CFirmwareDataMediator::~CFirmwareDataMediator()
 void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* io_data)
 {
  _uint crc = crc16(io_data, m_lip->CODE_SIZE);
- _uint* crc_addr = (_uint*)(&io_data[m_lip->CODE_CRC_ADDR]);
- *crc_addr = crc; //сохранили контрольную сумму
+ fw_data_t* p_fd = (fw_data_t*)(&io_data[m_lip->FIRMWARE_DATA_START]);
+ p_fd->code_crc = crc; //сохранили контрольную сумму
 }
 
 bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data) const
 {
  bool compatible = true;
 
- FirmwareData* p_fwdata = (FirmwareData*)&i_data[m_lip->FIRMWARE_DATA_START];
+ fw_data_t* p_fd = (fw_data_t*)&i_data[m_lip->FIRMWARE_DATA_START];
 
- if ((m_lip->FIRMWARE_ALL_DATA_SIZE + m_lip->CODE_CRC_SIZE) != p_fwdata->fw_data_size)
+ if (sizeof(fw_data_t) != p_fd->exdata.fw_data_size)
   compatible = false;
 
  return compatible;
@@ -179,33 +190,32 @@ _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
 {
  char raw_string[256];
  memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
- BYTE* addr = &m_bytes_active[m_lip->FIRMWARE_DATA_START];
- memcpy(raw_string,addr,FW_SIGNATURE_INFO_SIZE);
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+ memcpy(raw_string, &p_fd->exdata.fw_signature_info, FW_SIGNATURE_INFO_SIZE);
  TCHAR string[256];
- OemToChar(raw_string,string);
+ OemToChar(raw_string, string);
  return _TSTRING(string);
 }
 
 void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
 {
  char raw_string[256];
- memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
- BYTE* addr = &m_bytes_active[m_lip->FIRMWARE_DATA_START];
- CharToOem(i_string.c_str(),raw_string);
- memcpy(addr,raw_string,FW_SIGNATURE_INFO_SIZE);
+ memset(raw_string, 0, FW_SIGNATURE_INFO_SIZE+1);
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+ CharToOem(i_string.c_str(), raw_string);
+ memcpy(&p_fd->exdata.fw_signature_info, raw_string, FW_SIGNATURE_INFO_SIZE);
 }
 
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
- BYTE* addr = &m_bytes_active[m_lip->FIRMWARE_DATA_START];
- FirmwareData* data= (FirmwareData*)addr;
- return data->config;
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ return p_fd->exdata.config;
 }
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -214,31 +224,31 @@ void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_orig
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
+  o_values[i] = ((float)p_fd->tables[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  p_maps[i_index].f_str[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_str[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -247,25 +257,25 @@ void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_origi
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
+  o_values[i] = ((float)p_fd->tables[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  p_maps[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
@@ -273,18 +283,18 @@ std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
  std::vector<_TSTRING> names(TABLES_NUMBER);
 
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < TABLES_NUMBER; i++)
  {
   char raw_string[256];
   memset(raw_string, 0, F_NAME_SIZE+1);
-  BYTE* addr = p_maps[i].name;
+  BYTE* addr = p_fd->tables[i].name;
   memcpy(raw_string, addr, F_NAME_SIZE);
   TCHAR string[256];
   OemToChar(raw_string,string);
@@ -300,12 +310,12 @@ void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name
   return;
 
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  //дополняем строку пробелами, так чтобы если длина строки меньше F_NAME_SIZE,
  //остальные символы были пробелами
@@ -314,7 +324,7 @@ void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name
  char raw_string[256];
  memset(raw_string, 0, F_NAME_SIZE+1);
  CharToOem(i_new_name.c_str(), raw_string);
- memcpy(p_maps[i_index].name, raw_string, F_NAME_SIZE);
+ memcpy(p_fd->tables[i_index].name, raw_string, F_NAME_SIZE);
 }
 
 void CFirmwareDataMediator::SetFWFileName(const _TSTRING i_fw_file_name)
@@ -329,14 +339,14 @@ _TSTRING CFirmwareDataMediator::GetFWFileName(void)
 
 unsigned int CFirmwareDataMediator::CalculateCRC16OfActiveFirmware(void)
 {
- _uint crc_16 = crc16(m_bytes_active,m_lip->CODE_SIZE);
+ _uint crc_16 = crc16(m_bytes_active, m_lip->CODE_SIZE);
  return crc_16;
 }
 
 unsigned int CFirmwareDataMediator::GetCRC16StoredInActiveFirmware(void)
 {
- _uint* crc_16_addr = (_uint*)(&m_bytes_active[m_lip->CODE_CRC_ADDR]);
- return *crc_16_addr;
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ return p_fd->code_crc;
 }
 
 void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(void)
@@ -352,24 +362,24 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  if (ip_fpp)
  {
   LocInfoProvider lip(*ip_fpp);
-  ASSERT(m_lip->FIRMWARE_ALL_DATA_SIZE == lip.FIRMWARE_ALL_DATA_SIZE);
-  memcpy(m_bytes_active + m_lip->FIRMWARE_ALL_DATA_START, i_source_bytes + lip.FIRMWARE_ALL_DATA_START, m_lip->FIRMWARE_ALL_DATA_SIZE);
+  memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + lip.FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
  }
  else
-  memcpy(m_bytes_active + m_lip->FIRMWARE_ALL_DATA_START, i_source_bytes + m_lip->FIRMWARE_ALL_DATA_START, m_lip->FIRMWARE_ALL_DATA_SIZE);
+  memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + m_lip->FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
 {
  if (false==IsLoaded())
   return; //некуда загружать...
- memcpy(m_bytes_active + m_lip->DEFPARAM_START, i_source_bytes, sizeof(params));
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ memcpy(&p_fd->def_param, i_source_bytes, sizeof(params_t));
 }
 
 void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original /* = false*/)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -378,11 +388,11 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
-  _char *p = &(p_maps[i_index].f_wrk[0][0]);
+  _char *p = &(p_fd->tables[i_index].f_wrk[0][0]);
   o_values[i] = ((float) *(p + i)) / AA_MAPS_M_FACTOR;
  }
 }
@@ -390,17 +400,17 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
 void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
-  _char *p = &(p_maps[i_index].f_wrk[0][0]);
+  _char *p = &(p_fd->tables[i_index].f_wrk[0][0]);
   *(p + i) = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
  }
 }
@@ -408,7 +418,7 @@ void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
 void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -417,25 +427,25 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
+  o_values[i] = ((float)p_fd->tables[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + m_lip->TABLES_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  p_maps[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
 }
 
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_values)
@@ -443,10 +453,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
  using namespace SECU3IO;
 
  BYTE* p_bytes = NULL;
- params* p_params = NULL;
+ params_t* p_params = NULL;
  p_bytes = m_bytes_active;
  //получаем адрес структуры дефаултных параметров
- p_params = (params*)(p_bytes + m_lip->DEFPARAM_START);
+ p_params = &((fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]))->def_param;
 
  //TODO: Remove these copy/paste! (conversions should be implemented in functions, as certain class)
  switch(i_descriptor)
@@ -595,10 +605,10 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
  using namespace SECU3IO;
 
  BYTE* p_bytes = NULL;
- params* p_params = NULL;
+ params_t* p_params = NULL;
  p_bytes = m_bytes_active;
  //получаем адрес структуры дефаултных параметров
- p_params = (params*)(p_bytes + m_lip->DEFPARAM_START);
+ p_params = &((fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]))->def_param;
 
  //TODO: Remove these copy/paste! (conversions should be implemented in functions, as certain class)
  switch(i_descriptor)
@@ -772,7 +782,6 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
 void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- FirmwareData* p_fw_data = NULL;
  ASSERT(o_values);
  if (!o_values)
   return;
@@ -783,16 +792,15 @@ void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /*
   p_bytes = m_bytes_active;
 
  //получаем адрес структуры дополнительных данных
- p_fw_data = (FirmwareData*)(p_bytes + m_lip->FIRMWARE_DATA_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = p_fw_data->attenuator_table[i];
+  o_values[i] = p_fd->exdata.attenuator_table[i];
 }
 
 void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
 {
  BYTE* p_bytes = NULL;
- FirmwareData* p_fw_data = NULL;
  ASSERT(i_values);
  if (!i_values)
   return;
@@ -800,19 +808,18 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
  p_bytes = m_bytes_active;
 
  //получаем адрес структуры дополнительных данных
- p_fw_data = (FirmwareData*)(p_bytes + m_lip->FIRMWARE_DATA_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
  {
   ASSERT(i_values[i] >= 0.0f);
-  p_fw_data->attenuator_table[i] = (_uchar)MathHelpers::Round(i_values[i]);
+  p_fd->exdata.attenuator_table[i] = (_uchar)MathHelpers::Round(i_values[i]);
  }
 }
 
 void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- FirmwareData* p_fw_data = NULL;
  ASSERT(o_values);
  if (!o_values)
   return;
@@ -823,16 +830,15 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /*
   p_bytes = m_bytes_active;
 
  //получаем адрес структуры дополнительных данных
- p_fw_data = (FirmwareData*)(p_bytes + m_lip->FIRMWARE_DATA_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fw_data->coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
+  o_values[i] = (p_fd->exdata.coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
 }
 
 void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
 {
  BYTE* p_bytes = NULL;
- FirmwareData* p_fw_data = NULL;
  ASSERT(i_values);
  if (!i_values)
   return;
@@ -840,13 +846,73 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
  p_bytes = m_bytes_active;
 
  //получаем адрес структуры дополнительных данных
- p_fw_data = (FirmwareData*)(p_bytes + m_lip->FIRMWARE_DATA_START);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  p_fw_data->coil_on_time[i] = (_uint)MathHelpers::Round((i_values[i] * 1000.0) / 4.0);
+  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((i_values[i] * 1000.0) / 4.0);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
 {
  return *m_fpp;
+}
+
+DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
+{
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ DWORD value = 0;
+ switch(type)
+ {
+  case IOX_INIT:
+   if (id < IOP_COUNT)
+    value = p_fd->exdata.iorem.i_plugs[id]; 
+   break;
+  case IOX_DATA:
+   if (id < IOP_COUNT)
+    value = p_fd->exdata.iorem.v_plugs[id]; 
+   break;
+ }
+ return value;
+}
+DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
+{
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ DWORD value = 0;
+ switch(type)
+ {
+  case IOX_INIT:
+   if (id < IOS_COUNT)
+    value = p_fd->exdata.iorem.i_slots[id]; 
+   break;
+  case IOX_DATA:
+   if (id < IOS_COUNT)
+    value = p_fd->exdata.iorem.v_slots[id]; 
+   break;
+ }
+ return value;
+}
+DWORD CFirmwareDataMediator::GetSStub(void)
+{
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ return p_fd->exdata.iorem.s_stub;
+}
+void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
+{
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ switch(type)
+ {
+  case IOX_INIT:
+   if (id < IOP_COUNT)
+    p_fd->exdata.iorem.i_plugs[id] = (_fnptr_t)value; 
+   break;
+  case IOX_DATA:
+   if (id < IOP_COUNT)
+    p_fd->exdata.iorem.v_plugs[id] = (_fnptr_t)value; 
+   break;
+ }
 }

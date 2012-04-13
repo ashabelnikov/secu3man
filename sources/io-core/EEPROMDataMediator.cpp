@@ -34,7 +34,7 @@ using namespace SECU3IO::SECU3Types;
 #define EEPROM_PARAM_START 0x0002
 
 //Address of errors's array (Check Engine) in EEPROM (адрес массива ошибок (Check Engine) в EEPROM)
-#define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params)))
+#define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params_t)))
 
 //Address of tables which can be edited in real time
 #define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 16)
@@ -89,8 +89,8 @@ void EEPROMDataMediator::ResetModified(void)
 
 bool EEPROMDataMediator::VerifyParamsCheckSum(const BYTE* ip_eeprom_buffer)
 {
- _uint crc = crc16(ip_eeprom_buffer + EEPROM_PARAM_START, sizeof(params) - sizeof(_uint));
- const _uint* crc_addr = (_uint*)(&ip_eeprom_buffer[EEPROM_PARAM_START + sizeof(params) - sizeof(_uint)]);
+ _uint crc = crc16(ip_eeprom_buffer + EEPROM_PARAM_START, sizeof(params_t) - sizeof(_uint));
+ const _uint* crc_addr = (_uint*)(&ip_eeprom_buffer[EEPROM_PARAM_START + sizeof(params_t) - sizeof(_uint)]);
  return (*crc_addr)==crc; //check it!
 }
 
@@ -102,7 +102,7 @@ size_t EEPROMDataMediator::GetParamsStartAddr(void) const
 void EEPROMDataMediator::GetStartMap(int i_index, float* o_values, bool i_original/* = false*/)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -111,7 +111,7 @@ void EEPROMDataMediator::GetStartMap(int i_index, float* o_values, bool i_origin
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
   o_values[i] = ((float)p_maps[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
@@ -120,7 +120,7 @@ void EEPROMDataMediator::GetStartMap(int i_index, float* o_values, bool i_origin
 void EEPROMDataMediator::GetIdleMap(int i_index,  float* o_values, bool i_original/* = false*/)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -129,7 +129,7 @@ void EEPROMDataMediator::GetIdleMap(int i_index,  float* o_values, bool i_origin
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
   o_values[i] = ((float)p_maps[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
@@ -138,7 +138,7 @@ void EEPROMDataMediator::GetIdleMap(int i_index,  float* o_values, bool i_origin
 void EEPROMDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original/* = false*/)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -147,7 +147,7 @@ void EEPROMDataMediator::GetWorkMap(int i_index, float* o_values, bool i_origina
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
@@ -159,7 +159,7 @@ void EEPROMDataMediator::GetWorkMap(int i_index, float* o_values, bool i_origina
 void EEPROMDataMediator::GetTempMap(int i_index, float* o_values, bool i_original/* = false*/)
 {
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
  ASSERT(o_values);
 
  if (i_original)
@@ -168,7 +168,7 @@ void EEPROMDataMediator::GetTempMap(int i_index, float* o_values, bool i_origina
   p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
   o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
@@ -179,12 +179,12 @@ std::vector<_TSTRING> EEPROMDataMediator::GetFunctionsSetNames(void)
  std::vector<_TSTRING> names(TUNABLE_TABLES_NUMBER);
 
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < TUNABLE_TABLES_NUMBER; i++)
  {
@@ -206,12 +206,12 @@ void EEPROMDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name)
   return;
 
  BYTE* p_bytes = NULL;
- F_data* p_maps = NULL;
+ f_data_t* p_maps = NULL;
 
  p_bytes = m_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
- p_maps = (F_data*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
 
  //дополняем строку пробелами, так чтобы если длина строки меньше F_NAME_SIZE,
  //остальные символы были пробелами

@@ -39,7 +39,7 @@ typedef struct
  _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];     // основная функция УОЗ (3D)
  _char f_tmp[F_TMP_POINTS];                       // функция коррект. УОЗ по температуре
  _uchar name[F_NAME_SIZE];                        // ассоциированное имя (имя семейства)
-}F_data;
+}f_data_t;
 
 } //SECU3IO
 

@@ -34,6 +34,7 @@ typedef signed long    _long;           // int32
 typedef unsigned long  _ulong;          //uint32
 typedef signed char    _char;           // int8
 typedef unsigned char  _uchar;          //uint8
+typedef unsigned short _fnptr_t;        //function pointers
 
 }
 

@@ -89,6 +89,52 @@ class IOCORE_API CFirmwareDataMediator
   void GetDwellCntrlMap(float* o_values, bool i_original = false);
   void SetDwellCntrlMap(const float* i_values);
 
+  //Types of slots/plugs
+  enum IOXtype
+  {
+   IOX_INIT = 0,             //initialization slot  
+   IOX_DATA = 1              //data slot
+  };
+
+  //IDs of plugs 
+  enum IOPid
+  {
+   IOP_ECF        =   0,     // ECF
+   IOP_ST_BLOCK   =   1,     // ST_BLOCK
+   IOP_IGN_OUT3   =   2,     // IGN_OUT3
+   IOP_IGN_OUT4   =   3,     // IGN_OUT4
+   IOP_ADD_IO1    =   4,     // ADD_IO1     (applicable only in SECU-3T)
+   IOP_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
+   IOP_IE         =   6,     // IE
+   IOP_FE         =   7,     // FE
+   IOP_FL_PUMP    =   8,     // FL_PUMP
+   IOP_HALL_OUT   =   9,     // HALL_OUT
+   IOP_RESERVED1  =  10,     // Reserved
+   IOP_RESERVED2  =  11,     // Reserved
+   IOP_COUNT                 // Number of plugs used in I/O remapping
+  };
+
+  //IDs of slots
+  enum IOSid
+  {
+   IOS_ECF        =   0,     // ECF
+   IOS_ST_BLOCK   =   1,     // ST_BLOCK
+   IOS_IGN_OUT3   =   2,     // IGN_OUT3
+   IOS_IGN_OUT4   =   3,     // IGN_OUT4
+   IOS_ADD_IO1    =   4,     // ADD_IO1     (applicable only in SECU-3T)
+   IOS_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
+   IOS_IE         =   6,     // IE
+   IOS_FE         =   7,     // FE
+   IOS_RESERVED1  =   8,     // Reserved
+   IOS_RESERVED2  =   9,     // Reserved
+   IOS_COUNT                 // Number of slots used for I/O remapping
+  };
+
+  DWORD GetIOPlug(IOXtype type, IOPid id);
+  DWORD GetIOSlot(IOXtype type, IOSid id);
+  DWORD GetSStub(void);
+  void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
+
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);
   void CalculateAndPlaceFirmwareCRC(void);

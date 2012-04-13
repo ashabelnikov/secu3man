@@ -114,7 +114,7 @@ typedef struct
  _uchar reserved[4];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
-}params;
+}params_t;
 
 } //SECU3IO
 
