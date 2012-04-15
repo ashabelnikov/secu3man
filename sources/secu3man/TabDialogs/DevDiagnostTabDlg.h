@@ -93,4 +93,5 @@ class CDevDiagnostTabDlg : public CTabDialog
   bool m_enable_enter_button;
   bool m_enable_secu3t_features;
   SECU3IO::DiagInpDat m_inputValues;
+  CFont m_textFont;
 };

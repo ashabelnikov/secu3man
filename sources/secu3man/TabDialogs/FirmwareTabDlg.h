@@ -151,6 +151,7 @@ class CFirmwareTabDlg : public CTabDialog
   CStatic   m_fw_crc;
   CStatic   m_modification_flag;
   CTabCtrl  m_param_sel_tab;
+  CFont     m_tabctrlFont;
 
  private:
   EventHandler  m_OnBootLoaderInfo;

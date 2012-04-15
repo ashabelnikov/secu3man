@@ -26,6 +26,7 @@
 #include "io-core/SECU3IO.h"
 #include "MIHelpers.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/fnt_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -76,25 +77,10 @@ BOOL CDVDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- CFont font;
- VERIFY(font.CreateFont(
-   16,                        // nHeight
-   0,                         // nWidth
-   0,                         // nEscapement
-   0,                         // nOrientation
-   FW_BOLD,                   // nWeight
-   FALSE,                     // bItalic
-   FALSE,                     // bUnderline
-   0,                         // cStrikeOut
-   ANSI_CHARSET,              // nCharSet
-   OUT_DEFAULT_PRECIS,        // nOutPrecision
-   CLIP_DEFAULT_PRECIS,       // nClipPrecision
-   DEFAULT_QUALITY,           // nQuality
-   DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
-   _T("Arial")));             // lpszFacename
-
+ //Set font of fields
+ CloneWndFont(&m_vu[0].var_field, &m_fieldFont, 11, true);
  for(size_t i = 0; i < VU_SIZE; ++i)
-  m_vu[i].var_field.SetFont(&font);
+  m_vu[i].var_field.SetFont(&m_fieldFont);
 
  Enable(false);
  UpdateData(FALSE);

@@ -39,4 +39,4 @@ set(SOURCES
   ) 
 
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})
-target_link_libraries(${PROJECT} io-core)
+target_link_libraries(${PROJECT} io-core ui-core)

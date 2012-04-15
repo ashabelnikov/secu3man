@@ -29,6 +29,7 @@
 #include "ParamDesk/Params/IORemappingDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "tabldesk/TablesSetPanel.h"
+#include "ui-core/fnt_helpers.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 
 #ifdef _DEBUG
@@ -175,23 +176,9 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  DisableTabCtrlVisualStyles(m_param_sel_tab);
  for(size_t i = 0; i < m_tabs.size(); ++i)
   m_param_sel_tab.InsertItem(TCIF_TEXT, i, m_tabs[i].second.c_str(), 0, NULL);
-/* CFont font;
- VERIFY(font.CreateFont(
-   25,                        // nHeight
-   0,                         // nWidth
-   0,                         // nEscapement
-   0,                         // nOrientation
-   FW_BOLD,                   // nWeight
-   FALSE,                     // bItalic
-   FALSE,                     // bUnderline
-   0,                         // cStrikeOut
-   ANSI_CHARSET,              // nCharSet
-   OUT_DEFAULT_PRECIS,        // nOutPrecision
-   CLIP_DEFAULT_PRECIS,       // nClipPrecision
-   DEFAULT_QUALITY,           // nQuality
-   DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
-   _T("MS Sans Serif")));             // lpszFacename
- m_param_sel_tab.SetFont(&font);*/
+
+ CloneWndFont(&m_param_sel_tab, &m_tabctrlFont, 8, true);
+ m_param_sel_tab.SetFont(&m_tabctrlFont);
 
  //create parameters desk
  CRect rect;

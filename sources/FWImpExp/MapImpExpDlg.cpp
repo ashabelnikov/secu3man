@@ -23,6 +23,7 @@
 #include "resource.h"
 #include "MapImpExpDlg.h"
 #include "io-core/SECU3IO.h"
+#include "ui-core/fnt_helpers.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -281,24 +282,8 @@ BOOL CMapImpExpDlg::OnInitDialog()
  if (m_OnActivate)
   m_OnActivate();
 
- CFont font;
- VERIFY(font.CreateFont(
-   16,                        // nHeight
-   0,                         // nWidth
-   0,                         // nEscapement
-   0,                         // nOrientation
-   FW_BOLD,                   // nWeight
-   FALSE,                     // bItalic
-   FALSE,                     // bUnderline
-   0,                         // cStrikeOut
-   ANSI_CHARSET,              // nCharSet
-   OUT_DEFAULT_PRECIS,        // nOutPrecision
-   CLIP_DEFAULT_PRECIS,       // nClipPrecision
-   DEFAULT_QUALITY,           // nQuality
-   DEFAULT_PITCH | FF_SWISS,  // nPitchAndFamily
-   _T("Arial")));             // lpszFacename
-
- m_exchange_button.SetFont(&font);
+ CloneWndFont(&m_exchange_button, &m_exbtnFont, 16, true);
+ m_exchange_button.SetFont(&m_exbtnFont);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 	       // EXCEPTION: OCX Property Pages should return FALSE

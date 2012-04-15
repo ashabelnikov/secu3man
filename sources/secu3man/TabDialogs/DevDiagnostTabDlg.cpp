@@ -25,6 +25,7 @@
 
 #include "common/FastDelegate.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/fnt_helpers.h"
 #include "ui-core/OScopeCtrl.h"
 
 #ifdef _DEBUG
@@ -104,6 +105,11 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ //Change size of fonts (this will improve user experience)
+ CloneWndFont(GetDlgItem(InputsTextStart), &m_textFont, 11, true);
+ for(size_t i = InputsTextStart; i <= InputsTextEnd; ++i)
+  GetDlgItem(i)->SetFont(&m_textFont);
+  
  SetTimer(TIMER_ID, 250, NULL);
 
  //инициализируем осциллографы

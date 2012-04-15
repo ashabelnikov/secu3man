@@ -1,4 +1,6 @@
 
+#pragma once
+
 #ifdef DDX_HELPERS_EXPORTS
  #define DDX_HELPERS_API __declspec(dllexport)
 #else

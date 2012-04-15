@@ -97,6 +97,7 @@ class CMapImpExpDlg : public CDialog
   CListCtrl m_current_fwd_list;
   CString   m_current_fwd_title_string;
   CString   m_other_fwd_title_string;
+  CFont     m_exbtnFont;
 
   BOOL m_fwd_flags[FLAG_NR_OF_FLAGS];
   CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];

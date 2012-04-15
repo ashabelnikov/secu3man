@@ -4,6 +4,7 @@ ADD_DEFINITIONS(-D_AFXDLL)
 ADD_DEFINITIONS(-D_AFXEXT)
 ADD_DEFINITIONS(-D_WINDLL)
 ADD_DEFINITIONS(-DDDX_HELPERS_EXPORTS)
+ADD_DEFINITIONS(-DFNT_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DXBROWSEFORFOLDER_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)  
@@ -23,6 +24,7 @@ set(HEADERS
   AnalogMeter.h
   AnalogMeterCtrl.h
   ddx_helpers.h
+  fnt_helpers.h
   DialogWithAccelerators.h
   EditEx.h
   HeaderCtrlEx.h
@@ -47,6 +49,7 @@ set(SOURCES
   AnalogMeter.cpp
   AnalogMeterCtrl.cpp
   ddx_helpers.cpp
+  fnt_helpers.cpp
   DialogWithAccelerators.cpp
   EditEx.cpp
   HeaderCtrlEx.cpp

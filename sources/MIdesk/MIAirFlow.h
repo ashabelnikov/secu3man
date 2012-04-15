@@ -46,6 +46,7 @@ class AFX_EXT_CLASS CMIAirFlow : public IMeasInstrument
   //---------------------------------------
 
  private:
+  CFont m_textFont;
   CProgressCtrlEx m_progress;
   CStatic m_digits;
   CStatic m_caption;

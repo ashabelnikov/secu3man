@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "MIAirFlow.h"
 #include "MIHelpers.h"
+#include "ui-core/fnt_helpers.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -57,6 +58,9 @@ void CMIAirFlow::Create()
  m_progress.SetRange((int)m_loLimit,(int)m_upLimit);
  m_progress.SetPos(0);
  m_digits.SetWindowText(_T("00"));
+
+ CloneWndFont(&m_digits, &m_textFont, 11, true);
+ m_digits.SetFont(&m_textFont);
 
  Enable(m_prev_enable);
 }

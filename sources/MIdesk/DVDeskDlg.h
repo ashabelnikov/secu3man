@@ -56,6 +56,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   void OnUpdateTimer(void);
 
  private:
+  CFont m_fieldFont;
   CObjectTimer<CDVDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;

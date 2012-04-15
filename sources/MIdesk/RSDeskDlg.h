@@ -57,6 +57,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   float m_ubat_value;
   float m_temp_value;
   float m_knock_value;
+  CFont m_fieldFont;
 
   CStatic m_map_field;
   CStatic m_ubat_field;
