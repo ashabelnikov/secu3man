@@ -23,6 +23,7 @@
 
 #include <map>
 #include <memory>
+#include "common/ObjectTimer.h"
 #include "common/unicodesupport.h"
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/SECU3IO.h"
@@ -33,6 +34,7 @@ class CDevDiagnostTabDlg;
 class CPMInitDataCollector;
 class CStatusBarManager;
 class ISettingsData;
+namespace { class ITstMode; }
 
 class CDevDiagnostTabController : public ITabController, private IAPPEventHandler
 {
@@ -57,17 +59,25 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   void OnSettingsChanged(void);
   void OnOutputToggle(int output_id, bool state);
   void OnEnterButton(void);
+  void OnStartOutputsAutoTesting(void);
+  void OnStopOutputsAutoTesting(void);
 
+  void OnTstTimer(void);
+  void UpdateOutputs(void);
+  void SetOutputValue(int id, bool state);
  private:
   CDevDiagnostTabDlg*  mp_view;
   CCommunicationManager* mp_comm;
   CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
 
-    //sub-controllers
+  //sub-controllers
   std::auto_ptr<CPMInitDataCollector> mp_idccntr;
   int m_comm_state;
   bool m_diagnost_mode_active;
   SECU3IO::DiagOutDat m_outputs;
   std::map<int, int*> m_outputs_map;
+  CObjectTimer<CDevDiagnostTabController> m_tst_timer;
+  std::vector<ITstMode*> m_tstModes;
+  std::vector<ITstMode*>::iterator m_current_tst_mode;
 };

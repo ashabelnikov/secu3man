@@ -60,6 +60,7 @@ set(HEADERS
   TabControllers/TabControllersCommunicator.h
   TabDialogs/CheckEngineTabDlg.h
   TabDialogs/DevDiagnostTabDlg.h
+  TabDialogs/DiagnostContextMenuManager.h
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
   TabDialogs/KnockChannelTabDlg.h
@@ -101,6 +102,7 @@ set(SOURCES
   TabControllers/TabcontrollersCommunicator.cpp
   TabDialogs/CheckEngineTabDlg.cpp
   TabDialogs/DevDiagnostTabDlg.cpp
+  TabDialogs/DiagnostContextMenuManager.cpp
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp
   TabDialogs/KnockChannelTabDlg.cpp

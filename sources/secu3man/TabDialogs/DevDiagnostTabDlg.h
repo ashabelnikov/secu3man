@@ -26,6 +26,7 @@
 #include "io-core/SECU3IO.h"
 #include "ui-core/TabDialog.h"
 
+class CDiagnostContextMenuManager;
 class COScopeCtrl;
 
 class CDevDiagnostTabDlg : public CTabDialog
@@ -42,11 +43,14 @@ class CDevDiagnostTabDlg : public CTabDialog
   //установка обработчиков событий от элементов управления
   void setOnOutputToggle(EventOutputToggle OnFunction);
   void setOnEnterButton(EventHandler OnFunction);
+  void setOnStartOutAutoTesting(EventHandler OnFunction);
+  void setOnStopOutAutoTesting(EventHandler OnFunction);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
   void SetEnterButtonCaption(const _TSTRING& i_text);
   void SetEnterButton(bool i_state);
+  void SetOutputValue(int id, bool state);
 
   void EnableDiagControls(bool i_enable);
   void EnableEnterButton(bool i_enable);
@@ -74,9 +78,13 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateEnterButton(CCmdUI* pCmdUI);
   afx_msg void OnOutputCheckToggle(UINT nID);
+  afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnEnterButton();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
+  afx_msg void OnStartOutputsAutoTesting();
+  afx_msg void OnStopOutputsAutoTesting();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -84,10 +92,13 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl1;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl2;
+  std::auto_ptr<CDiagnostContextMenuManager> mp_ContextMenuManager;
 
   CButton m_enter_button;
   EventOutputToggle m_on_output_check;
   EventHandler m_on_enter_button;
+  EventHandler m_on_start_outauto_tst;
+  EventHandler m_on_stop_outauto_tst;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;

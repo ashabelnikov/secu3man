@@ -24,6 +24,7 @@
 #include "DevDiagnostTabDlg.h"
 
 #include "common/FastDelegate.h"
+#include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/OScopeCtrl.h"
@@ -50,13 +51,20 @@ const UINT InputsCaptionEnd = IDC_DEV_DIAG_DE_CAPTION;
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
+ ON_WM_CONTEXTMENU()
+ ON_WM_INITMENUPOPUP()
  ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
+ ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
+ ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
  ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
+
  ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart, InputsTextEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart, InputsCaptionEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_OUTPUTS_GROUP, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_INPUTS_GROUP, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_START_OUTAUTO_TST, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
 END_MESSAGE_MAP()
@@ -65,10 +73,13 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CDevDiagnostTabDlg::IDD, pParent)
 , mp_OScopeCtrl1(new COScopeCtrl())
 , mp_OScopeCtrl2(new COScopeCtrl())
+, mp_ContextMenuManager(new CDiagnostContextMenuManager())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
 , m_enable_secu3t_features(false)
 {
+ mp_ContextMenuManager->CreateContent();
+
  memset(&m_inputValues, 0, sizeof(SECU3IO::DiagInpDat));
 }
 
@@ -115,6 +126,8 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  //инициализируем осциллографы
  _InitializeOscilloscopeControls();
 
+ mp_ContextMenuManager->Attach(this);
+
  UpdateDialogControls(this,TRUE);
  return TRUE;
 }
@@ -157,6 +170,16 @@ void CDevDiagnostTabDlg::OnDestroy()
  KillTimer(TIMER_ID);
 }
 
+void CDevDiagnostTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+ mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
+}
+
+void CDevDiagnostTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
+{
+ mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
+}
+
 void CDevDiagnostTabDlg::OnOutputCheckToggle(UINT nID)
 {
  CButton* p_check = static_cast<CButton*>(GetDlgItem(nID));
@@ -172,6 +195,18 @@ void CDevDiagnostTabDlg::OnEnterButton()
 {
  if (m_on_enter_button)
   m_on_enter_button();
+}
+
+void CDevDiagnostTabDlg::OnStartOutputsAutoTesting()
+{
+ if (m_on_start_outauto_tst)
+  m_on_start_outauto_tst();
+}
+
+void CDevDiagnostTabDlg::OnStopOutputsAutoTesting()
+{
+ if (m_on_stop_outauto_tst)
+  m_on_stop_outauto_tst();
 }
 
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
@@ -205,6 +240,16 @@ void CDevDiagnostTabDlg::setOnEnterButton(EventHandler OnFunction)
  m_on_enter_button = OnFunction;
 }
 
+void CDevDiagnostTabDlg::setOnStartOutAutoTesting(EventHandler OnFunction)
+{
+ m_on_start_outauto_tst = OnFunction;
+}
+
+void CDevDiagnostTabDlg::setOnStopOutAutoTesting(EventHandler OnFunction)
+{
+ m_on_stop_outauto_tst = OnFunction;
+}
+
 void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)
 {
  ASSERT(i_values);
@@ -222,6 +267,12 @@ void CDevDiagnostTabDlg::SetEnterButtonCaption(const _TSTRING& i_text)
 void CDevDiagnostTabDlg::SetEnterButton(bool i_state)
 {
  m_enter_button.SetCheck(i_state ? BST_CHECKED : BST_UNCHECKED);
+}
+
+void CDevDiagnostTabDlg::SetOutputValue(int id, bool state)
+{
+ CButton *pButton = (CButton*)GetDlgItem(OutputsCheckStart + id);
+ pButton->SetCheck(state ? BST_CHECKED : BST_UNCHECKED);
 }
 
 //инициализация осциллографа для сигналов с ДД

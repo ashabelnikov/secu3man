@@ -41,6 +41,93 @@ static char THIS_FILE[]=__FILE__;
 
 #define EHKEY _T("DevDiagCntr")
 
+namespace {
+
+class ITstMode
+{
+ public:
+  virtual void Reset(void) = 0;
+  virtual bool Next(void) = 0;  
+};
+
+//Test mode 1
+class TstMode1 : public ITstMode
+{
+  typedef fastdelegate::FastDelegate2<int, bool> CBSetOutput;
+  typedef fastdelegate::FastDelegate0<> CBUpdateOutputs;
+  CBSetOutput     m_cbSO;
+  CBUpdateOutputs m_cbUO;
+  size_t m_state;
+  std::vector<int> m_items;
+ public:
+  TstMode1(CBSetOutput i_cbSO, CBUpdateOutputs i_cbUO) : m_cbSO(i_cbSO), m_cbUO(i_cbUO), m_state(0)
+  {
+   m_items.push_back(CDevDiagnostTabDlg::OID_FE);
+   m_items.push_back(CDevDiagnostTabDlg::OID_IE);
+   m_items.push_back(CDevDiagnostTabDlg::OID_ST_BLOCK);
+   m_items.push_back(CDevDiagnostTabDlg::OID_IGN_OUT1);
+   m_items.push_back(CDevDiagnostTabDlg::OID_IGN_OUT2);
+   m_items.push_back(CDevDiagnostTabDlg::OID_IGN_OUT3);
+   m_items.push_back(CDevDiagnostTabDlg::OID_IGN_OUT4);
+   m_items.push_back(CDevDiagnostTabDlg::OID_CE);
+   m_items.push_back(CDevDiagnostTabDlg::OID_ECF);
+   m_items.push_back(CDevDiagnostTabDlg::OID_ADD_IO1);
+   m_items.push_back(CDevDiagnostTabDlg::OID_ADD_IO2);
+  }
+
+  virtual void Reset(void)
+  {
+   m_cbSO(-1, false);
+   m_cbUO();
+   m_state = 0;
+  }
+
+  virtual bool Next(void)
+  {
+   if (m_state >= m_items.size())
+    return false;
+
+   m_cbSO(m_items[(m_state == 0)  ? m_items.size()-1 : m_state - 1 ], false);
+   m_cbSO(m_items[m_state++], true);
+   m_cbUO();
+   return true;
+  }
+};
+
+//Test mode 2
+class TstMode2 : public ITstMode
+{
+  typedef fastdelegate::FastDelegate2<int, bool> CBSetOutput;
+  typedef fastdelegate::FastDelegate0<> CBUpdateOutputs;
+  CBSetOutput     m_cbSO;
+  CBUpdateOutputs m_cbUO;
+  size_t m_state;
+ public:
+  TstMode2(CBSetOutput i_cbSO, CBUpdateOutputs i_cbUO) : m_cbSO(i_cbSO), m_cbUO(i_cbUO), m_state(0)
+  {
+  }
+
+  virtual void Reset(void)
+  {
+   m_cbSO(-1, false);
+   m_cbUO();
+   m_state = 0;
+  }
+
+  virtual bool Next(void)
+  {
+   if (m_state > 4)
+    return false;
+   if (!(m_state++ & 1))
+    m_cbSO(-1, true);
+   else
+    m_cbSO(-1, false);   
+   m_cbUO();
+   return true;
+  }
+};
+}
+
 CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : mp_view(ip_view)
 , mp_comm(ip_comm)
@@ -49,10 +136,15 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
 , mp_idccntr(new CPMInitDataCollector(ip_comm, ip_sbar))
 , m_comm_state(0) //for state machine
 , m_diagnost_mode_active(false) //indicates that we are currently in diagnostic mode
+, m_current_tst_mode(m_tstModes.end())
 {
  //устанавливаем делегаты (обработчики событий от представления)
  mp_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
  mp_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
+ mp_view->setOnStartOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStartOutputsAutoTesting));
+ mp_view->setOnStopOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStopOutputsAutoTesting));
+
+ m_tst_timer.SetMsgHandler(this, &CDevDiagnostTabController::OnTstTimer);
 
  memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT1, &m_outputs.ign_out1));
@@ -66,6 +158,10 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ST_BLOCK, &m_outputs.st_block));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO1, &m_outputs.add_io1));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO2, &m_outputs.add_io2));
+
+ //Init test framework
+ m_tstModes.push_back(new TstMode1(MakeDelegate(this, &CDevDiagnostTabController::SetOutputValue), MakeDelegate(this, &CDevDiagnostTabController::UpdateOutputs)));
+ m_tstModes.push_back(new TstMode2(MakeDelegate(this, &CDevDiagnostTabController::SetOutputValue), MakeDelegate(this, &CDevDiagnostTabController::UpdateOutputs)));
 }
 
 CDevDiagnostTabController::~CDevDiagnostTabController()
@@ -261,7 +357,7 @@ void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
  if (m_outputs_map.find(output_id) != m_outputs_map.end())
   *m_outputs_map[output_id] = state;
  
- mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
+ UpdateOutputs(); //send outputs states to device
 }
 
 void CDevDiagnostTabController::OnEnterButton(void)
@@ -282,5 +378,53 @@ void CDevDiagnostTabController::OnEnterButton(void)
   packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_ENTER;
   packet_data.opdata = 0;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
+}
+
+void CDevDiagnostTabController::OnStartOutputsAutoTesting(void)
+{
+ m_current_tst_mode = m_tstModes.begin();
+ (*m_current_tst_mode)->Reset();
+ m_tst_timer.SetTimer(400);
+}
+
+void CDevDiagnostTabController::OnStopOutputsAutoTesting(void)
+{
+ m_tst_timer.KillTimer();
+ SetOutputValue(-1, false);
+ UpdateOutputs();
+}
+
+void CDevDiagnostTabController::OnTstTimer(void)
+{
+ if (!(*m_current_tst_mode)->Next())
+ {
+  if (++m_current_tst_mode == m_tstModes.end())
+   m_current_tst_mode = m_tstModes.begin();
+  (*m_current_tst_mode)->Reset();
+ }
+}
+
+void CDevDiagnostTabController::UpdateOutputs(void)
+{
+  mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
+}
+
+void CDevDiagnostTabController::SetOutputValue(int id, bool state)
+{
+ if (id == -1) //all
+ {
+  for(int i = CDevDiagnostTabDlg::OID_IGN_OUT1; i <= CDevDiagnostTabDlg::OID_ADD_IO2; ++i)
+  {
+   mp_view->SetOutputValue(i, state);
+   if (m_outputs_map.find(i) != m_outputs_map.end())
+    *m_outputs_map[i] = state;
+  }
+ }
+ else //single
+ {
+  mp_view->SetOutputValue(id, state);
+  if (m_outputs_map.find(id) != m_outputs_map.end())
+   *m_outputs_map[id] = state;
  }
 }
