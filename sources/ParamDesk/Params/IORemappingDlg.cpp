@@ -32,12 +32,14 @@ static char THIS_FILE[] = __FILE__;
 
 const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
-const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT3_CAPTION;
-const UINT IOCaptionEnd = IDC_IO_REMAPPING_ST_BLOCK_CAPTION;
-const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT3_COMBOBOX;
-const UINT IOComboboxEnd = IDC_IO_REMAPPING_ST_BLOCK_COMBOBOX;
+//See also FirmwareDataMediator.h
+const UINT IOCaptionStart = IDC_IO_REMAPPING_ECF_CAPTION;
+const UINT IOCaptionEnd = IDC_IO_REMAPPING_FE_CAPTION;
+const UINT IOComboboxStart = IDC_IO_REMAPPING_ECF_COMBOBOX;
+const UINT IOComboboxEnd = IDC_IO_REMAPPING_FE_COMBOBOX;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
+ ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_ECF_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
@@ -49,6 +51,7 @@ END_MESSAGE_MAP()
 CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 : Super(CIORemappingDlg::IDD, pParent)
 , m_enabled(false)
+, m_enable_secu3t_features(false)
 {
  //empty
 }
@@ -56,7 +59,8 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
-
+ for(size_t i = 0; i < FWDM::IOS_COUNT; ++i)
+  DDX_Control(pDX, IOComboboxStart + i, m_iorcb[i]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -75,7 +79,32 @@ BOOL CIORemappingDlg::OnInitDialog()
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CIORemappingDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled);
+ switch(pCmdUI->m_nID)
+ {
+  case IDC_IO_REMAPPING_ADD_IO1_COMBOBOX:
+  case IDC_IO_REMAPPING_ADD_IO2_COMBOBOX:
+  case IDC_IO_REMAPPING_ADD_IO1_CAPTION:
+  case IDC_IO_REMAPPING_ADD_IO2_CAPTION:
+   pCmdUI->Enable(m_enabled && m_enable_secu3t_features);
+   break;
+  default:
+   pCmdUI->Enable(m_enabled);
+ };
+}
+
+void CIORemappingDlg::OnChangeSelection(UINT nID)
+{
+ FWDM::IOSid index = (FWDM::IOSid)(nID - IOComboboxStart);
+ if (index < FWDM::IOS_COUNT)
+ {
+  int selection = m_iorcb[index].GetCurSel();
+  if (CB_ERR != selection)
+  {
+   FWDM::IOPid data = (FWDM::IOPid)m_iorcb[index].GetItemData(selection);
+   if (m_OnItemSel)
+    m_OnItemSel(index, data);
+  }
+ }
 }
 
 void CIORemappingDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
@@ -87,6 +116,7 @@ bool CIORemappingDlg::IsEnabled(void)
 {
  return m_enabled;
 }
+
 void CIORemappingDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -96,8 +126,56 @@ void CIORemappingDlg::Enable(bool enable)
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 }
+
 void CIORemappingDlg::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
  this->ShowWindow(nCmdShow);
+}
+ 
+bool CIORemappingDlg::AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRING& i_text)
+{ 
+ if (iosId >= FWDM::IOS_COUNT)
+  return false;
+ int iid = m_iorcb[iosId].AddString(i_text.c_str());
+ if (CB_ERR == iid)
+  return false;
+ iid = m_iorcb[iosId].SetItemData(iid, iopId);
+ if (CB_ERR == iid)
+  return false;
+ return true; //Ok 
+}
+
+bool CIORemappingDlg::SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId)
+{
+ if (iosId >= FWDM::IOS_COUNT)
+  return false;
+
+ int count = m_iorcb[iosId].GetCount();
+ for(int i = 0; i < count; ++i)
+ {
+  DWORD data = m_iorcb[iosId].GetItemData(i);
+  if (CB_ERR == data || data != iopId)
+   continue;
+  m_iorcb[iosId].SetCurSel(i);
+  return true; //Ok
+ }
+ return false; //Not Ok
+}
+
+CIORemappingDlg::FWDM::IOPid CIORemappingDlg::GetSelection(FWDM::IOSid iosId) const
+{
+ int selection = m_iorcb[iosId].GetCurSel();
+ return (FWDM::IOPid)m_iorcb[iosId].GetItemData(selection);
+}
+
+void CIORemappingDlg::setOnItemSelected(EventItemSel OnFunction)
+{
+ m_OnItemSel = OnFunction;
+}
+
+void CIORemappingDlg::EnableSECU3TItems(bool i_enable)
+{
+ m_enable_secu3t_features = i_enable;
+ UpdateDialogControls(this,TRUE);
 }

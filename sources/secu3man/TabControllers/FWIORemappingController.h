@@ -21,23 +21,41 @@
 
 #pragma once
 
+#include <map>
+#include "io-core/FirmwareDataMediator.h"
+
 class CIORemappingDlg;
 
 class CFWIORemappingController
 {
   typedef CIORemappingDlg IORVIEW;
+  typedef CFirmwareDataMediator FWDM;
+
  public:
   CFWIORemappingController(IORVIEW* ip_view);
   virtual ~CFWIORemappingController();
 
+  void AttachFWDM(FWDM* ip_fwdm);
+
   //начало работы контроллера
-  virtual void OnActivate(void);
+  void OnActivate(void);
 
   //конец работы контроллера
-  virtual void OnDeactivate(void);
+  void OnDeactivate(void);
 
-  virtual void Enable(bool state);
+  void Enable(bool state);
+
+  void EnableSECU3TFeatures(bool i_enable);
 
  private:
+  bool _CheckErrors(void);
+  void _UpdateView(void);
+  void _AttachPlug(FWDM::IOPid iopId);
+  void _AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId);
+  void _DetachPlugsFromSlot(FWDM::IOSid iosId);
+  void OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iopId);
+
   CIORemappingDlg* mp_view;
+  FWDM* mp_fwdm;
+  std::map<FWDM::IOPid, FWDM::IOSid> m_defValMap;
 };

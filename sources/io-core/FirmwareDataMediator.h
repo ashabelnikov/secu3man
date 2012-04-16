@@ -109,8 +109,8 @@ class IOCORE_API CFirmwareDataMediator
    IOP_FE         =   7,     // FE
    IOP_FL_PUMP    =   8,     // FL_PUMP
    IOP_HALL_OUT   =   9,     // HALL_OUT
-   IOP_RESERVED1  =  10,     // Reserved
-   IOP_RESERVED2  =  11,     // Reserved
+// IOP_RESERVED1  =  10,     // Reserved
+// IOP_RESERVED2  =  11,     // Reserved
    IOP_COUNT                 // Number of plugs used in I/O remapping
   };
 
@@ -125,8 +125,8 @@ class IOCORE_API CFirmwareDataMediator
    IOS_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
    IOS_IE         =   6,     // IE
    IOS_FE         =   7,     // FE
-   IOS_RESERVED1  =   8,     // Reserved
-   IOS_RESERVED2  =   9,     // Reserved
+// IOS_RESERVED1  =   8,     // Reserved
+// IOS_RESERVED2  =   9,     // Reserved
    IOS_COUNT                 // Number of slots used for I/O remapping
   };
 

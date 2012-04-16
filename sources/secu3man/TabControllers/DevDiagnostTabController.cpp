@@ -166,7 +166,8 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
 
 CDevDiagnostTabController::~CDevDiagnostTabController()
 {
- //na
+ for(size_t i = 0; i < m_tstModes.size(); ++i)
+  delete m_tstModes[i];
 }
 
 //изменились настройки программы!

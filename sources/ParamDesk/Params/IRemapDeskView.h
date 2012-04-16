@@ -24,10 +24,18 @@
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
 #include "IDeskView.h"
+#include "io-core/FirmwareDataMediator.h"
 
 //Interface for IO remapping View
 class IRemapDeskView : public IDeskView
 {
  public:
-  //todo
+  typedef CFirmwareDataMediator FWDM;
+  typedef fastdelegate::FastDelegate2<FWDM::IOSid, FWDM::IOPid> EventItemSel;
+
+  virtual bool AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRING& i_text) = 0;
+  virtual bool SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId) = 0;
+  virtual FWDM::IOPid GetSelection(FWDM::IOSid iosId) const = 0;
+  virtual void setOnItemSelected(EventItemSel OnFunction) = 0;
+  virtual void EnableSECU3TItems(bool i_enable) = 0;
 };

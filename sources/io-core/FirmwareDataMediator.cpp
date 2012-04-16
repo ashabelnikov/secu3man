@@ -41,14 +41,19 @@ using namespace SECU3IO::SECU3Types;
 #define FW_SIGNATURE_INFO_SIZE           48
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
 
+//See also FirmwareDataMediator.h
+#define IOREM_SLOTS 10           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 12           // Number of plugs used in I/O remapping
+
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
- _fnptr_t i_slots[CFirmwareDataMediator::IOS_COUNT];  // initialization slots
- _fnptr_t v_slots[CFirmwareDataMediator::IOS_COUNT];  // data slots
- _fnptr_t s_stub;                                     // special pointer used as stub
- _fnptr_t i_plugs[CFirmwareDataMediator::IOP_COUNT];  // initialization plugs
- _fnptr_t v_plugs[CFirmwareDataMediator::IOP_COUNT];  // data plugs
+ _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
+ _fnptr_t v_slots[IOREM_SLOTS];  // data slots
+ _fnptr_t s_stub;                // special pointer used as stub
+ _fnptr_t reserved;              // reserved
+ _fnptr_t i_plugs[IOREM_PLUGS];  // initialization plugs
+ _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
 }iorem_slots_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -57,7 +62,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[32];
+ _uchar reserved[33];
 
  // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
  iorem_slots_t iorem;

@@ -156,15 +156,15 @@ void CFirmwareTabController::OnActivate(void)
 
  m_modification_check_timer.SetTimer(this,&CFirmwareTabController::OnModificationCheckTimer,250);
 
+ //Activate children controllers
+ mp_iorCntr->OnActivate();
+
  SetViewFirmwareValues();
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
-
- //Activate children controllers
- mp_iorCntr->OnActivate();
 }
 
 void CFirmwareTabController::OnDeactivate(void)
@@ -1005,6 +1005,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
  m_view->mp_ParamDeskDlg->SetCrankType(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_WHEEL_36_1)) > 0) ? SECU3IO::COPT_WHEEL_36_1 : -1);
  m_view->mp_ParamDeskDlg->SetMaxCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
+ this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
 
  SetViewFirmwareValues();
 }
@@ -1124,6 +1125,9 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  BYTE paramdata[256];
  m_fwdm->GetDefParamValues(descriptor,paramdata);
  m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
+
+ //Attach fwdm to children controllers
+ this->mp_iorCntr->AttachFWDM(m_fwdm);
 }
 
 //вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен.

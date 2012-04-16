@@ -41,6 +41,12 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual bool IsEnabled(void);
   virtual void Enable(bool enable);
   virtual void Show(bool show);
+
+  virtual bool AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRING& i_text);
+  virtual bool SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId);
+  virtual FWDM::IOPid GetSelection(FWDM::IOSid iosId) const;
+  virtual void setOnItemSelected(EventItemSel OnFunction);
+  virtual void EnableSECU3TItems(bool i_enable);
   //-------------------------------------------------------------
 
   // Implementation
@@ -48,10 +54,15 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnChangeSelection(UINT nID);
   DECLARE_MESSAGE_MAP()
 
  private:
   bool m_enabled;
+  bool m_enable_secu3t_features;
+
+  EventItemSel m_OnItemSel;
+  CComboBox m_iorcb[FWDM::IOS_COUNT];
 };
 
 /////////////////////////////////////////////////////////////////////////////
