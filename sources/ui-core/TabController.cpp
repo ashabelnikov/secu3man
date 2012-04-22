@@ -334,8 +334,8 @@ void CTabController::OnDestroy()
   delete pItemData;
  }
 
- if (op_newFnt->m_hObject)
-  op_newFnt->DeleteObject();
+ if (m_vfnt.m_hObject)
+  m_vfnt.DeleteObject();
 
  CTabCtrl::OnDestroy();
 }

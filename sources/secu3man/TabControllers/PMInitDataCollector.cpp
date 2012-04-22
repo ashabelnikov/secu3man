@@ -127,7 +127,9 @@ bool CPMInitDataCollector::CollectData(const BYTE i_descriptor, const void* i_pa
     BYTE ci_descriptor = FWINFO_DAT;
     if (i_descriptor != ci_descriptor)
     {
-     mp_comm->m_pControlApp->ChangeContext(ci_descriptor);
+     SECU3IO::OPCompNc packet_data;
+     packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
+     mp_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
     }
     else
     {//тот что надо!
