@@ -24,6 +24,8 @@
 #include <memory>
 #include <vector>
 #include "common/FastDelegate.h"
+#include "ui-core/ITabControllerEvent.h"
+#include "ui-core/TabController.h"
 #include "ui-core/TabDialog.h"
 
 class CHotKeysToCmdRouter;
@@ -36,7 +38,7 @@ class IDeskView;
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 
-class CFirmwareTabDlg : public CTabDialog
+class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 {
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
@@ -138,9 +140,11 @@ class CFirmwareTabDlg : public CTabDialog
   afx_msg void OnExportMapsToSECU3();
   afx_msg void OnFirmwareInfo();
   afx_msg void OnViewFWOptions();
-  afx_msg void OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
-  afx_msg void OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
+  
+  //ITabControllerEvent interface (from tab control)
+  virtual void OnSelchangeTabctl(void);
+  virtual void OnSelchangingTabctl(void);
 
  private:
   CButton   m_bl_started_emergency;
@@ -150,8 +154,7 @@ class CFirmwareTabDlg : public CTabDialog
   CEdit     m_fw_name;
   CStatic   m_fw_crc;
   CStatic   m_modification_flag;
-  CTabCtrl  m_param_sel_tab;
-  CFont     m_tabctrlFont;
+  CTabController m_param_sel_tab;
 
  private:
   EventHandler  m_OnBootLoaderInfo;

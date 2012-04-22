@@ -161,8 +161,6 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
  ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnViewFWOptions)
 
- ON_NOTIFY(TCN_SELCHANGE, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, OnSelchangeTabctl)
- ON_NOTIFY(TCN_SELCHANGING, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, OnSelchangingTabctl)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -175,10 +173,9 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  //Prepare and tune tab control
  DisableTabCtrlVisualStyles(m_param_sel_tab);
  for(size_t i = 0; i < m_tabs.size(); ++i)
-  m_param_sel_tab.InsertItem(TCIF_TEXT, i, m_tabs[i].second.c_str(), 0, NULL);
-
- CloneWndFont(&m_param_sel_tab, &m_tabctrlFont, 8, true);
- m_param_sel_tab.SetFont(&m_tabctrlFont);
+  m_param_sel_tab.AddPage(m_tabs[i].second.c_str(), NULL);
+ m_param_sel_tab.SetEventListener(this);
+ m_param_sel_tab.EnableItem(-1, false);
 
  //create parameters desk
  CRect rect;
@@ -311,6 +308,7 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
  }
 
  m_param_sel_tab.EnableWindow(pd_enable);
+ m_param_sel_tab.EnableItem(-1, pd_enable);
 }
 
 void CFirmwareTabDlg::OnDestroy()
@@ -571,20 +569,17 @@ bool CFirmwareTabDlg::IsFirmwareOpened(void)
  return false;
 }
 
-void CFirmwareTabDlg::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+void CFirmwareTabDlg::OnSelchangeTabctl(void)
 {
  size_t index = m_param_sel_tab.GetCurSel();
  if (index < m_tabs.size())
   m_tabs[index].first->Show(true); //show current window
- *pResult = 0;
 }
-
-void CFirmwareTabDlg::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+void CFirmwareTabDlg::OnSelchangingTabctl(void)
 {
  size_t index = TabCtrl_GetCurSel(m_param_sel_tab.m_hWnd);
  if (index < m_tabs.size())
   m_tabs[index].first->Show(false); //hide previous window
- *pResult = 0;
 }
 
 void CFirmwareTabDlg::setOnBootLoaderInfo(EventHandler OnFunction)

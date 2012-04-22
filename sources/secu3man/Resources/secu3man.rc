@@ -97,7 +97,7 @@ BEGIN
     CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,12,57,214,128
     CONTROL         "tab",IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB,
-                    "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS,
+                    "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,
                     450,70,15,140
 END
 
@@ -587,7 +587,7 @@ BEGIN
     CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,12,57,214,128
    CONTROL         "tab",IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB,
-                    "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS,
+                    "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,
                     450,70,15,140
 END
 

@@ -78,6 +78,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   void CreateTabPage(void);
   void DestroyTabPage(void);
   void CalculatePageRect(int nItem, CRect& o_rect);
+  int GetTCOrientation(void);
 
   CTabDialog*  mp_CurDlg;
   HMODULE m_hResourceModule;
@@ -87,6 +88,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   BOOL  m_msg_reflect;
   DWORD m_style;
   int   m_tcmn;
+  CFont m_vfnt;
 };
 
 /////////////////////////////////////////////////////////////////////////////
