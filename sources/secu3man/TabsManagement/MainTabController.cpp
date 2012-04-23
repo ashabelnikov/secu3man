@@ -20,9 +20,9 @@
 */
 
 #include "stdafx.h"
+#include "MainFrame/ChildView.h"
 #include "MainTabController.h"
 #include "ITabController.h"
-#include "ui-core/TabController.h"
 
 #ifdef _DEBUG
 #undef THIS_FILE
@@ -34,15 +34,15 @@ static char THIS_FILE[]=__FILE__;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CMainTabController::CMainTabController()
-: m_pTabController(NULL)
+CMainTabController::CMainTabController(CChildView* ip_view)
+: mp_view(ip_view)
 {
- //na
+ //empty
 }
 
 CMainTabController::~CMainTabController()
 {
- //na
+ //empty
 }
 
 void CMainTabController::AddTabController(ITabController* i_pCntr)
@@ -58,25 +58,20 @@ std::vector<ITabController*>& CMainTabController::GetControllersList(void)
 void CMainTabController::OnSelchangeTabctl(void)
 {
  ASSERT(m_controllers_list.size());
- ASSERT(m_pTabController);
- m_controllers_list[m_pTabController->GetCurSel()]->OnActivate();
+ ASSERT(mp_view);
+ m_controllers_list[mp_view->GetCurSel()]->OnActivate();
 }
 
 void CMainTabController::OnSelchangingTabctl(void)
 {
  ASSERT(m_controllers_list.size());
- ASSERT(m_pTabController);
- m_controllers_list[m_pTabController->GetCurSel()]->OnDeactivate();
+ ASSERT(mp_view);
+ m_controllers_list[mp_view->GetCurSel()]->OnDeactivate();
 }
 
 ITabController* CMainTabController::GetActiveController() const
 {
- int selected_index = m_pTabController->GetCurSel();
+ int selected_index = mp_view->GetCurSel();
  ASSERT(selected_index!=-1);
  return m_controllers_list[selected_index];
-}
-
-void CMainTabController::SetTabController(CTabController* i_pTabController)
-{
- m_pTabController = i_pTabController;
 }

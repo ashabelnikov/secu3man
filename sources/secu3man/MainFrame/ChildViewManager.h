@@ -25,7 +25,7 @@
 
 class CChildView;
 class CMainFrame;
-class CMainTabManager;
+class CMainTabController;
 
 class CChildViewManager
 {
@@ -35,13 +35,27 @@ class CChildViewManager
 
   bool Init(CMainFrame* i_pMainFrame);
 
-  void OnAfterCreate(void);
-
   virtual bool OnClose(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what);
 
  private:
-  std::auto_ptr<CMainTabManager> mp_MainTabManager;
   std::auto_ptr<CChildView> mp_wndView;
+  std::auto_ptr<CMainTabController> mp_MainTabController;
+
+  //контроллеры вкладок
+  class CParamMonTabController* m_pParamMonTabController;
+  class CFirmwareTabController* m_pFirmwareTabController;
+  class CCheckEngineTabController* m_pCheckEngineTabController;
+  class CKnockChannelTabController* m_pKnockChannelTabController;
+  class CLogPlayerTabController* m_pLogPlayerTabController;
+  class CDevDiagnostTabController* m_pDevDiagnostTabController;
+
+  //диалоги вкладок
+  class CParamMonTabDlg* m_pParamMonTabDlg;
+  class CFirmwareTabDlg* m_pFirmwareTabDlg;
+  class CCheckEngineTabDlg* m_pCheckEngineTabDlg;
+  class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
+  class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
+  class CDevDiagnostTabDlg* m_pDevDiagnostTabDlg;
 };

@@ -22,6 +22,7 @@
 #pragma once
 
 #include "ui-core/DialogWithAccelerators.h"
+#include "ui-core/TabController.h"
 
 // CChildView window
 class CChildView : public CModelessDialog
@@ -34,10 +35,34 @@ class CChildView : public CModelessDialog
 
   //Возвращает false если ошибка
   bool Create(CWnd* ip_parent);
+  
+  //Add view tab
+  void AddView(const _TSTRING& title, CTabDialog* ip_dlg, const int nImage);
+
+  //Set Listener
+  void SetEventListener(ITabControllerEvent* ip_listener);
+
+  //Get current selection of a tab control
+  int GetCurSel(void) const;
+  
+  //Set current selection of a tab control
+  void SetCurSel(int index);
+  
+  //Set focus to default control (tab control)
+  void SetFocus(bool curPage = false);
+
+  //Enable/Disable tab control (only tab control, not its content)
+  void EnableTabControl(bool i_enable);
 
   // Generated message map functions
  protected:
+  virtual void DoDataExchange(CDataExchange* pDX);// DDX/DDV support
+  afx_msg void OnSize(UINT, int, int);
   DECLARE_MESSAGE_MAP()
+
+ private:
+  CTabController m_tab_control;
+  CImageList* m_pImgList;
 };
 
 /////////////////////////////////////////////////////////////////////////////

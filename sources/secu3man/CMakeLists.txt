@@ -69,7 +69,6 @@ set(HEADERS
   TabDialogs/ParamMonTabDlg.h
   TabsManagement/ITabController.h
   TabsManagement/MainTabController.h
-  TabsManagement/MainTabManager.h
   Resources/Resource.h
   )
  
@@ -110,7 +109,6 @@ set(SOURCES
   TabDialogs/LPControlPanelDlg.cpp
   TabDialogs/ParamMonTabDlg.cpp
   TabsManagement/MainTabController.cpp
-  TabsManagement/MainTabManager.cpp
   Resources/secu3man.rc
   ) 
 

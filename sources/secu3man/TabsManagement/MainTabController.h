@@ -24,13 +24,14 @@
 #include <vector>
 #include "ui-core/ITabControllerEvent.h"
 
-class CTabController;
+class CChildView;
 class ITabController;
 
 class CMainTabController  : public ITabControllerEvent
 {
+  typedef  CChildView VIEW;
  public:
-  CMainTabController();
+  CMainTabController(CChildView* ip_view);
   virtual ~CMainTabController();
 
   //добавляет контроллер
@@ -38,9 +39,6 @@ class CMainTabController  : public ITabControllerEvent
 
   //возвращает список контроллеров
   std::vector<ITabController*>& GetControllersList(void);
-
-  //Привязка к Tab-контролу
-  void SetTabController(CTabController* i_pTabController);
 
   //возвращает контроллер активной вкладки
   virtual ITabController* GetActiveController() const;
@@ -52,5 +50,5 @@ class CMainTabController  : public ITabControllerEvent
 
  private:
   std::vector<ITabController*> m_controllers_list;
-  CTabController* m_pTabController;
+  CChildView* mp_view;
 };

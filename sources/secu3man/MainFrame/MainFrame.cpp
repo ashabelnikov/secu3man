@@ -64,12 +64,12 @@ CMainFrame::CMainFrame()
 : m_pwndView(NULL)
 , m_bDoIdle(TRUE)
 {
- //na
+ //empty
 }
 
 CMainFrame::~CMainFrame()
 {
- //na
+ //empty
 }
 
 int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)

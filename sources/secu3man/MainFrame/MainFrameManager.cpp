@@ -86,7 +86,6 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
  m_pMainFrame->setOnAskFullScreen(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnAskFullScreen));
  m_pMainFrame->setOnFullScreenNotify(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnFullScreen));
 
- m_pChildViewManager->OnAfterCreate();
  return true;
 }
 
