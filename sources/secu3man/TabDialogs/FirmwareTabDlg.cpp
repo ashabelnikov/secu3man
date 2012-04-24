@@ -62,6 +62,14 @@ namespace {
  }
 }
 
+//Tab IDs of parameters selection tab. Note that order of beneath IDs must
+//correspond to AddPage() calling order.
+enum PSTabId
+{
+ PSTID_DEF_PARAMETERS = 0,
+ PSTID_IO_REMAPPING
+};
+
 /////////////////////////////////////////////////////////////////////////////
 // CFirmwareTabDlg dialog
 
@@ -79,8 +87,8 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 {
  mp_ContextMenuManager->CreateContent();
  //create list of tabs
- m_tabs.push_back(std::make_pair(mp_ParamDeskDlg.get(), MLL::GetString(IDS_FW_DEF_PARAMETR)));
- m_tabs.push_back(std::make_pair(mp_IORemappingDlg.get(), MLL::GetString(IDS_FW_IO_REMAPPING)));
+ m_tabs.insert(std::make_pair(PSTID_DEF_PARAMETERS, std::make_pair(mp_ParamDeskDlg.get(), MLL::GetString(IDS_FW_DEF_PARAMETR))));
+ m_tabs.insert(std::make_pair(PSTID_IO_REMAPPING, std::make_pair(mp_IORemappingDlg.get(), MLL::GetString(IDS_FW_IO_REMAPPING))));
 }
 
 void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -170,10 +178,11 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- //Prepare and tune tab control
+ //Prepare and tune tab control (See PSTabId enum)
  DisableTabCtrlVisualStyles(m_param_sel_tab);
- for(size_t i = 0; i < m_tabs.size(); ++i)
-  m_param_sel_tab.AddPage(m_tabs[i].second.c_str(), NULL);
+ std::map<int, std::pair<IDeskView*, _TSTRING> >::const_iterator it;
+ for(it = m_tabs.begin(); it != m_tabs.end(); ++it)
+  m_param_sel_tab.AddPage(it->second.second.c_str(), NULL);
  m_param_sel_tab.SetEventListener(this);
  m_param_sel_tab.EnableItem(-1, false);
 
@@ -301,14 +310,20 @@ void CFirmwareTabDlg::OnTimer(UINT nIDEvent)
  //обновляем состояние (если нужно)
  bool pd_enable = IsFirmwareOpened();
 
+ //Enable separate tabs
  for(size_t i = 0; i < m_tabs.size(); ++i)
  {
-  if (m_tabs[i].first->IsEnabled()!=pd_enable)
-   m_tabs[i].first->Enable(pd_enable);
- }
+  bool enable;
+  if (i == PSTID_IO_REMAPPING)
+   enable = pd_enable && IsIORemappingAvailable();
+  else
+   enable = pd_enable;
 
+  if (m_tabs[i].first->IsEnabled()!=enable)
+   m_tabs[i].first->Enable(enable);
+  m_param_sel_tab.EnableItem(i, enable);
+ }
  m_param_sel_tab.EnableWindow(pd_enable);
- m_param_sel_tab.EnableItem(-1, pd_enable);
 }
 
 void CFirmwareTabDlg::OnDestroy()
@@ -569,6 +584,13 @@ bool CFirmwareTabDlg::IsFirmwareOpened(void)
  return false;
 }
 
+bool CFirmwareTabDlg::IsIORemappingAvailable(void)
+{
+ if (m_IsIORemappingAvailable)
+  return m_IsIORemappingAvailable();
+ return false;
+}
+
 void CFirmwareTabDlg::OnSelchangeTabctl(void)
 {
  size_t index = m_param_sel_tab.GetCurSel();
@@ -647,6 +669,9 @@ void CFirmwareTabDlg::setOnViewFWOptions(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setIsViewFWOptionsAvailable(EventResult OnFunction)
 { m_IsViewFWOptionsAvailable = OnFunction;}
+
+void CFirmwareTabDlg::setIsIORemappingAvailable(EventResult OnFunction)
+{ m_IsIORemappingAvailable = OnFunction;}
 
 void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 {m_OnBLStartedEmergency = OnFunction;}

@@ -43,30 +43,40 @@ using namespace SECU3IO::SECU3Types;
 
 //See also FirmwareDataMediator.h
 #define IOREM_SLOTS 10           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 12           // Number of plugs used in I/O remapping
+#define IOREM_PLUGS 16           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
+ _uchar size;                    // size of this structure   
+ _uchar reserved;                // A reserved byte
  _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
  _fnptr_t v_slots[IOREM_SLOTS];  // data slots
- _fnptr_t s_stub;                // special pointer used as stub
- _fnptr_t reserved;              // reserved
  _fnptr_t i_plugs[IOREM_PLUGS];  // initialization plugs
  _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
+ _fnptr_t s_stub;                // special pointer used as stub
+ _fnptr_t reserved_ptr;          // reserved
 }iorem_slots_t;
+
+//Describes data stored directly in the firmware code
+typedef struct cd_data_t
+{
+ _ulong sign;                    // 32-bit signature
+ _uchar size;                    // size of this structure
+
+ //holds flags which give information about options were used to build firmware
+ //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
+ _ulong config;
+
+ _uchar reserved[2];             //two reserved bytes
+
+ // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
+ iorem_slots_t iorem;
+}cd_data_t;
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
- //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
- //новых версий прошивок с более старыми версиями. При добавлении новых данных
- //в структуру, необходимо расходовать эти байты.
- _uchar reserved[33];
-
- // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
- iorem_slots_t iorem;
-
  //Информация о прошивке
  _uchar fw_signature_info[FW_SIGNATURE_INFO_SIZE];
 
@@ -80,10 +90,14 @@ typedef struct
  //used for checking compatibility with management software. Holds size of all data stored in the firmware.
  //Includes CRC size also.
  _uint fw_data_size;
+ 
+ //reserved 32-bit value
+ _ulong reserv32;
 
- //holds flags which give information about options were used to build firmware
- //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
- _ulong config;
+ //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
+ //новых версий прошивок с более старыми версиями. При добавлении новых данных
+ //в структуру, необходимо расходовать эти байты.
+ _uchar reserved[58];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -126,6 +140,7 @@ CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
 , m_is_opened(false)
 , m_fpp(new PPFlashParam(i_fpp))
 , m_lip(new LocInfoProvider(i_fpp))
+, mp_cddata(NULL)
 {
  m_bytes_active = new BYTE[m_fpp->m_total_size + 1];
  ASSERT(m_bytes_active);
@@ -172,6 +187,7 @@ void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
  memcpy(m_bytes_active,i_bytes,m_firmware_size);
  memcpy(m_bytes_original,i_bytes,m_firmware_size);
 
+ _FindCodeData(); //find data residing directly in the code
  m_is_opened = true;
 }
 
@@ -213,8 +229,10 @@ void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
 
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
- return p_fd->exdata.config;
+ if (mp_cddata)
+  return mp_cddata->config;
+ else
+  return 0; //there is no such data in this firmware
 }
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
@@ -371,6 +389,8 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  }
  else
   memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + m_lip->FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
+
+ _FindCodeData(); //find data residing directly in the code
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
@@ -379,6 +399,7 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_byt
   return; //некуда загружать...
  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
  memcpy(&p_fd->def_param, i_source_bytes, sizeof(params_t));
+ _FindCodeData(); //find data residing directly in the code
 }
 
 void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original /* = false*/)
@@ -864,60 +885,88 @@ const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ if (!mp_cddata)
+  return 0;
  DWORD value = 0;
  switch(type)
  {
   case IOX_INIT:
    if (id < IOP_COUNT)
-    value = p_fd->exdata.iorem.i_plugs[id]; 
+    value = mp_cddata->iorem.i_plugs[id]; 
    break;
   case IOX_DATA:
    if (id < IOP_COUNT)
-    value = p_fd->exdata.iorem.v_plugs[id]; 
+    value = mp_cddata->iorem.v_plugs[id]; 
    break;
  }
  return value;
 }
+
 DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
 {
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ if (!mp_cddata)
+  return 0;
  DWORD value = 0;
  switch(type)
  {
   case IOX_INIT:
    if (id < IOS_COUNT)
-    value = p_fd->exdata.iorem.i_slots[id]; 
+    value = mp_cddata->iorem.i_slots[id]; 
    break;
   case IOX_DATA:
    if (id < IOS_COUNT)
-    value = p_fd->exdata.iorem.v_slots[id]; 
+    value = mp_cddata->iorem.v_slots[id]; 
    break;
  }
  return value;
 }
 DWORD CFirmwareDataMediator::GetSStub(void)
 {
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
- return p_fd->exdata.iorem.s_stub;
+ if (!mp_cddata)
+  return 0;
+ return mp_cddata->iorem.s_stub;
 }
 void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
 {
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
-
+ if (!mp_cddata)
+  return;
  switch(type)
  {
   case IOX_INIT:
    if (id < IOP_COUNT)
-    p_fd->exdata.iorem.i_plugs[id] = (_fnptr_t)value; 
+    mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value; 
    break;
   case IOX_DATA:
    if (id < IOP_COUNT)
-    p_fd->exdata.iorem.v_plugs[id] = (_fnptr_t)value; 
+    mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value; 
    break;
  }
 }
+
+void CFirmwareDataMediator::_FindCodeData(void)
+{
+ mp_cddata = NULL;
+ _ulong signature = 0xAA55642E;
+ size_t sz = m_fpp->m_only_code_size - sizeof(_ulong);
+ size_t index = 0;
+ bool found = false;
+ for(size_t i = 0; i < sz; ++i)
+ {
+  _ulong* p = (_ulong*)&m_bytes_active[i];
+  if ((*p) == signature)
+  {
+   index = i;
+   if (true == found)
+    return; //leave pointer NULL if more than one instance of signature has found!
+   found = true;
+  }
+ }
+ if (0 != index) //found!
+  mp_cddata = (cd_data_t*)&m_bytes_active[index];
+}
+
+bool CFirmwareDataMediator::HasCodeData(void) const
+{
+ return (NULL != mp_cddata);
+}
+

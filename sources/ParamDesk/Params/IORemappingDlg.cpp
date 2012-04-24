@@ -43,6 +43,7 @@ BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_ECF_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

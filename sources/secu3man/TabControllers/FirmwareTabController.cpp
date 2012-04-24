@@ -109,6 +109,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
  m_view->setOnViewFWOptions(MakeDelegate(this,&CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
+ m_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
 
  m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this,&CFirmwareTabController::OnMapChanged));
  m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetSelectionChanged));
@@ -1006,6 +1007,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRIN
  m_view->mp_ParamDeskDlg->SetCrankType(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_WHEEL_36_1)) > 0) ? SECU3IO::COPT_WHEEL_36_1 : -1);
  m_view->mp_ParamDeskDlg->SetMaxCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
  this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
+ this->mp_iorCntr->Enable(m_fwdm->HasCodeData());
 
  SetViewFirmwareValues();
 }
@@ -1127,7 +1129,8 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 
  //Attach fwdm to children controllers
- this->mp_iorCntr->AttachFWDM(m_fwdm);
+ if (m_fwdm->HasCodeData())
+  this->mp_iorCntr->AttachFWDM(m_fwdm);
 }
 
 //вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен.
@@ -1352,6 +1355,11 @@ void CFirmwareTabController::OnViewFWOptions(void)
 bool CFirmwareTabController::IsViewFWOptionsAvailable(void)
 {
  return m_fwdm->GetFWOptions() > 0;
+}
+
+bool CFirmwareTabController::IsIORemappingAvailable(void)
+{
+ return m_fwdm->HasCodeData();
 }
 
 void CFirmwareTabController::SetAttenuatorMap(const float* i_values)

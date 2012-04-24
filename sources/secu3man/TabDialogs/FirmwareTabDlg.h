@@ -21,8 +21,8 @@
 
 #pragma once
 
+#include <map>
 #include <memory>
-#include <vector>
 #include "common/FastDelegate.h"
 #include "ui-core/ITabControllerEvent.h"
 #include "ui-core/TabController.h"
@@ -100,6 +100,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   void setOnFirmwareInfo(EventHandler OnFunction);
   void setOnViewFWOptions(EventHandler OnFunction);
   void setIsViewFWOptionsAvailable(EventResult OnFunction);
+  void setIsIORemappingAvailable(EventResult IsFunction);
   //... от кнопок и чек боксов
   void setOnBLStartedEmergency(EventHandler OnFunction);
 
@@ -180,8 +181,10 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   EventHandler  m_OnViewFWOptions;
   EventResult   m_IsFirmwareOpened;
   EventResult   m_IsViewFWOptionsAvailable;
+  EventResult   m_IsIORemappingAvailable;
 
   bool IsFirmwareOpened(void);
+  bool IsIORemappingAvailable(void);
 
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;
@@ -189,6 +192,6 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
   void _RegisterHotKeys(void);
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
-  std::vector<std::pair<IDeskView*, _TSTRING> > m_tabs;
+  std::map<int, std::pair<IDeskView*, _TSTRING> > m_tabs;
   size_t m_tab_selection;
 };

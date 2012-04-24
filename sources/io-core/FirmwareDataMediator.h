@@ -135,6 +135,8 @@ class IOCORE_API CFirmwareDataMediator
   DWORD GetSStub(void);
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
 
+  bool HasCodeData(void) const;
+
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);
   void CalculateAndPlaceFirmwareCRC(void);
@@ -150,6 +152,9 @@ class IOCORE_API CFirmwareDataMediator
 
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
+  void _FindCodeData(void);
+
+ private:
   const std::auto_ptr<PPFlashParam> m_fpp;
   const std::auto_ptr<LocInfoProvider> m_lip;
   const size_t m_firmware_size;
@@ -157,4 +162,5 @@ class IOCORE_API CFirmwareDataMediator
   BYTE* m_bytes_original; //байты прошивки (копия для сравнения)
   bool m_is_opened;
   _TSTRING m_fw_file_name;
+  struct cd_data_t* mp_cddata;
 };
