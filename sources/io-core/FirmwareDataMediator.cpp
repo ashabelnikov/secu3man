@@ -61,8 +61,8 @@ typedef struct iorem_slots_t
 //Describes data stored directly in the firmware code
 typedef struct cd_data_t
 {
- _ulong sign;                    // 32-bit signature
- _uchar size;                    // size of this structure
+ // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
+ iorem_slots_t iorem;
 
  //holds flags which give information about options were used to build firmware
  //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
@@ -70,8 +70,7 @@ typedef struct cd_data_t
 
  _uchar reserved[2];             //two reserved bytes
 
- // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
- iorem_slots_t iorem;
+ _uchar size;                    // size of this structure
 }cd_data_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -114,11 +113,11 @@ class CFirmwareDataMediator::LocInfoProvider
  {
   public:
    LocInfoProvider(const PPFlashParam& i_fpp)
-    : CODE_CRC_SIZE(sizeof(fw_data_t().code_crc))
-    , BOOT_START(i_fpp.m_app_section_size)
-    , CODE_SIZE(BOOT_START - CODE_CRC_SIZE)
-    , FIRMWARE_DATA_START(BOOT_START - sizeof(fw_data_t))
-    , FIRMWARE_DATA_SIZE(sizeof(fw_data_t) - CODE_CRC_SIZE)
+   : CODE_CRC_SIZE(sizeof(fw_data_t().code_crc))
+   , BOOT_START(i_fpp.m_app_section_size)
+   , CODE_SIZE(BOOT_START - CODE_CRC_SIZE)
+   , FIRMWARE_DATA_START(BOOT_START - sizeof(fw_data_t))
+   , FIRMWARE_DATA_SIZE(sizeof(fw_data_t) - CODE_CRC_SIZE)
    {
     //empty
    }
@@ -172,7 +171,8 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data) const
 
  fw_data_t* p_fd = (fw_data_t*)&i_data[m_lip->FIRMWARE_DATA_START];
 
- if (sizeof(fw_data_t) != p_fd->exdata.fw_data_size)
+ if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
+  ((p_fd->def_param.crc > 0) && p_fd->def_param.crc != p_fd->exdata.fw_data_size))
   compatible = false;
 
  return compatible;
@@ -232,7 +232,11 @@ DWORD CFirmwareDataMediator::GetFWOptions(void)
  if (mp_cddata)
   return mp_cddata->config;
  else
-  return 0; //there is no such data in this firmware
+ {
+  //there is no such data in this firmware, then we have to use old place
+  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+  return p_fd->exdata.reserv32; 
+ }
 }
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
@@ -390,7 +394,8 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  else
   memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + m_lip->FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
 
- _FindCodeData(); //find data residing directly in the code
+ //Now we need to load data stored in the code area
+ _LoadCodeData(i_source_bytes);
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
@@ -920,12 +925,14 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
  }
  return value;
 }
+
 DWORD CFirmwareDataMediator::GetSStub(void)
 {
  if (!mp_cddata)
   return 0;
  return mp_cddata->iorem.s_stub;
 }
+
 void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
 {
  if (!mp_cddata)
@@ -945,24 +952,19 @@ void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
 
 void CFirmwareDataMediator::_FindCodeData(void)
 {
- mp_cddata = NULL;
- _ulong signature = 0xAA55642E;
- size_t sz = m_fpp->m_only_code_size - sizeof(_ulong);
- size_t index = 0;
- bool found = false;
- for(size_t i = 0; i < sz; ++i)
- {
-  _ulong* p = (_ulong*)&m_bytes_active[i];
-  if ((*p) == signature)
-  {
-   index = i;
-   if (true == found)
-    return; //leave pointer NULL if more than one instance of signature has found!
-   found = true;
-  }
- }
- if (0 != index) //found!
-  mp_cddata = (cd_data_t*)&m_bytes_active[index];
+ //size of cd_data_t structure
+ BYTE size = m_bytes_active[m_lip->FIRMWARE_DATA_START - 1];
+ //obtain pointer to cd_data_t structure
+ cd_data_t* p_cd = (cd_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START - size]);
+ //obtain pointer to fw_data_t structure
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ _uint dataSize = p_fd->def_param.crc;
+
+ if (0==dataSize)
+  mp_cddata = NULL;
+ else
+  mp_cddata = p_cd;
 }
 
 bool CFirmwareDataMediator::HasCodeData(void) const
@@ -970,3 +972,7 @@ bool CFirmwareDataMediator::HasCodeData(void) const
  return (NULL != mp_cddata);
 }
 
+void CFirmwareDataMediator::_LoadCodeData(const BYTE* i_source_bytes)
+{
+
+}

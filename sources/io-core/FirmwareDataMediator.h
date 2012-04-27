@@ -127,6 +127,12 @@ class IOCORE_API CFirmwareDataMediator
    IOS_FE         =   7,     // FE
 // IOS_RESERVED1  =   8,     // Reserved
 // IOS_RESERVED2  =   9,     // Reserved
+// IOS_RESERVED1  =  10,     // Reserved
+// IOS_RESERVED2  =  11,     // Reserved
+// IOS_RESERVED1  =  12,     // Reserved
+// IOS_RESERVED2  =  13,     // Reserved
+// IOS_RESERVED1  =  14,     // Reserved
+// IOS_RESERVED2  =  15,     // Reserved
    IOS_COUNT                 // Number of slots used for I/O remapping
   };
 
@@ -153,6 +159,7 @@ class IOCORE_API CFirmwareDataMediator
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
   void _FindCodeData(void);
+  void _LoadCodeData(const BYTE* i_source_bytes);
 
  private:
   const std::auto_ptr<PPFlashParam> m_fpp;
