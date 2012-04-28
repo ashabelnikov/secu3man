@@ -31,10 +31,10 @@ struct PPFlashParam
  size_t m_total_size;      //общий размер памяти программ микроконтроллера
  size_t m_bl_section_size; //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
  size_t m_app_section_size;//часть прошивки кроме бутлоадера
+ //NOTE! Following parameters are obsolete and left for compatibility reasons:
  size_t m_only_code_size;  //размер кода без данных, которые в конце
- //часть прошивки располагающаяся после кода программы и перед бутлоадером. Сюда входят пустое пространство, данные
- //и контрольная сумма прошивки.
- size_t m_only_overhead_size;
+ //часть прошивки располагающаяся после кода программы и перед бутлоадером. Это данные и контрольная сумма прошивки.
+ size_t m_only_data_size;
 };
 
 struct PPEepromParam

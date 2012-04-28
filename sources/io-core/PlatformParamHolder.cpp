@@ -35,8 +35,9 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 512; //256 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //NOTE! Following parameters are obsolete and left for compatibility reasons:
    m_fp.m_only_code_size = 0x3263; //warning! change this constant if you changed flash data alignment
-   m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
+   m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 512;
    break;
@@ -47,8 +48,9 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 1024; //512 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //NOTE! Following parameters are obsolete and left for compatibility reasons:
    m_fp.m_only_code_size = 0x7063; //warning! change this constant if you changed flash data alignment
-   m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
+   m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 1024;
    break;
@@ -59,8 +61,9 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 2048; //1024 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //NOTE! Following parameters are obsolete and left for compatibility reasons:
    m_fp.m_only_code_size = 0xEC63; //warning! change this constant if you changed flash data allignment
-   m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
+   m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 2048;
    break;
@@ -71,8 +74,9 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
    m_fp.m_bl_section_size = 2048; //1024 words
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //NOTE! Following parameters are obsolete and left for compatibility reasons:
    m_fp.m_only_code_size = 0x1EC63; //warning! change this constant if you changed flash data alignment
-   m_fp.m_only_overhead_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
+   m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 4096;
    break;

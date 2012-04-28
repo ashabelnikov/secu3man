@@ -171,8 +171,15 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data) const
 
  fw_data_t* p_fd = (fw_data_t*)&i_data[m_lip->FIRMWARE_DATA_START];
 
+ //size of firmware data
+ int sizeoffd = p_fd->def_param.crc;
+
+ //size of code area data (must be valid if def_param.crc > 0)
+ BYTE sizeofcd = i_data[m_lip->FIRMWARE_DATA_START - 1];
+
  if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
-  ((p_fd->def_param.crc > 0) && p_fd->def_param.crc != p_fd->exdata.fw_data_size))
+  ((sizeoffd > 0) && sizeoffd != p_fd->exdata.fw_data_size) ||
+  ((sizeoffd > 0) && sizeofcd != sizeof(cd_data_t)))
   compatible = false;
 
  return compatible;
@@ -389,13 +396,25 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  if (ip_fpp)
  {
   LocInfoProvider lip(*ip_fpp);
-  memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + lip.FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
+
+  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+  //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
+  size_t start_d = (0==p_fd->def_param.crc) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - p_fd->def_param.crc);
+  size_t start_s = (0==p_fd->def_param.crc) ? lip.FIRMWARE_DATA_START : (lip.BOOT_START - p_fd->def_param.crc);
+  size_t size = (0==p_fd->def_param.crc) ? m_lip->FIRMWARE_DATA_SIZE : p_fd->def_param.crc; 
+  memcpy(m_bytes_active + start_d, i_source_bytes + start_s, size);
  }
  else
-  memcpy(m_bytes_active + m_lip->FIRMWARE_DATA_START, i_source_bytes + m_lip->FIRMWARE_DATA_START, m_lip->FIRMWARE_DATA_SIZE);
+ {
+  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+  //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
+  size_t start = (0==p_fd->def_param.crc) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - p_fd->def_param.crc);
+  size_t size = (0==p_fd->def_param.crc) ? m_lip->FIRMWARE_DATA_SIZE : p_fd->def_param.crc; 
+  memcpy(m_bytes_active + start, i_source_bytes + start, size);  
+ }
 
- //Now we need to load data stored in the code area
- _LoadCodeData(i_source_bytes);
+ //Now we need to load data stored in the code area to current firmware
+ LoadCodeData(i_source_bytes);
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
@@ -972,7 +991,21 @@ bool CFirmwareDataMediator::HasCodeData(void) const
  return (NULL != mp_cddata);
 }
 
-void CFirmwareDataMediator::_LoadCodeData(const BYTE* i_source_bytes)
+size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* i_bytes) const
+{
+ ASSERT(i_bytes);
+ //obtain pointer to fw_data_t structure
+ fw_data_t* p_fd = (fw_data_t*)(&i_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ size_t sizeoffd = p_fd->def_param.crc;
+
+ if ((sizeoffd > 0) && (sizeoffd >= m_fpp->m_only_data_size) && (sizeoffd < m_fpp->m_app_section_size))
+  return m_fpp->m_app_section_size - sizeoffd;
+ else //old versions of firmware
+  return m_fpp->m_only_code_size;
+}
+
+void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, BYTE* o_destin_bytes /*= NULL*/)
 {
 
 }

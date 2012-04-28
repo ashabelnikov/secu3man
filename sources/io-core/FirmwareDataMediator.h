@@ -142,6 +142,8 @@ class IOCORE_API CFirmwareDataMediator
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
 
   bool HasCodeData(void) const;
+  size_t GetOnlyCodeSize(const BYTE* i_bytes) const;
+  void LoadCodeData(const BYTE* i_source_bytes, BYTE* o_destin_bytes = NULL);
 
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);
@@ -159,7 +161,6 @@ class IOCORE_API CFirmwareDataMediator
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
   void _FindCodeData(void);
-  void _LoadCodeData(const BYTE* i_source_bytes);
 
  private:
   const std::auto_ptr<PPFlashParam> m_fpp;
