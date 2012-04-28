@@ -422,19 +422,25 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
 
      //закончилось чтение данных. Теперь необходимо объединить прочитанные данные с данными для записи,
      //обновить контрольную сумму и запустить процесс программирования FLASH.
-     memcpy(m_code_for_merge_with_overhead + m_code_for_merge_size, m_bl_data + m_moreSize, m_fpp.m_app_section_size - m_code_for_merge_size);
+     size_t dataSize = m_fpp.m_app_section_size - m_code_for_merge_size;
+     BYTE* dataPtr = m_code_for_merge_with_overhead + m_code_for_merge_size;
+     //Так как мы программируем только код, а он содержит некоторые данные, то мы должны
+     //"подтянуть" эти данные из фрагмента старого кода. m_code_for_merge_with_overhead хранит еще данные пришедшие
+     //с новым кодом.
+     size_t srcSize = (m_fpp.m_app_section_size - m_code_for_merge_size) + m_moreSize;
+     m_fwdm->LoadCodeData(m_bl_data, srcSize, m_code_for_merge_with_overhead);
+     //переносим старые данные
+     memset(dataPtr, 0, dataSize);
+     memcpy(dataPtr, m_bl_data + m_moreSize, dataSize);
+     //Высчитываем и записываем контрольную сумму всей прошивки
      m_fwdm->CalculateAndPlaceFirmwareCRC(m_code_for_merge_with_overhead);
-
-     //Так как мы программируем только код, а он седержит некоторые данные, то мы должны
-     //"подтянуть" эти данные из фрагмента старого кода
-     m_fwdm->LoadCodeData(m_bl_data, m_code_for_merge_with_overhead);
 
      Sleep(250);
      m_sbar->SetProgressPos(0);
      m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, m_code_for_merge_with_overhead, m_fpp.m_app_section_size);
 
      //НЕ ВЫХОДИМ ИЗ БУТЛОАДЕРА И НЕ ДЕАКТИВИРУЕМ КОММУНИКАЦИОННЫЙ КОНТРОЛЛЕР, так как должна
-     //выполнится запущенная операция.
+     //выполниться запущенная операция.
      return;
     }
     else
@@ -622,12 +628,11 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать.
   m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
 
-  //сохраняем данные для того чтобы позже объединить их с прочитанными "верхними" данными
+  //сохраняем данные для того, чтобы позже объединить их с прочитанными "верхними" данными
   m_code_for_merge_size = m_fwdm->GetOnlyCodeSize(io_buff);
-  memset(m_code_for_merge_with_overhead, 0, m_fpp.m_app_section_size);
-  memcpy(m_code_for_merge_with_overhead, io_buff, m_code_for_merge_size);
+  memcpy(m_code_for_merge_with_overhead, io_buff, m_fpp.m_app_section_size);
 
-  m_moreSize = (m_fwdm->HasCodeData() ? 0x400 : 0); //1024 bytes more
+  m_moreSize = (m_fwdm->HasCodeData(io_buff) ? 0x400 : 0); //1024 bytes more
 
   //Читаем немного больше байт, для того, чтобы гарантировано прочитать данные находящиеся в коде  
   size_t reducedSize = m_code_for_merge_size - m_moreSize;

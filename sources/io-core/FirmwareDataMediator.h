@@ -141,9 +141,9 @@ class IOCORE_API CFirmwareDataMediator
   DWORD GetSStub(void);
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
 
-  bool HasCodeData(void) const;
+  bool HasCodeData(const BYTE* i_source_bytes = NULL) const;
   size_t GetOnlyCodeSize(const BYTE* i_bytes) const;
-  void LoadCodeData(const BYTE* i_source_bytes, BYTE* o_destin_bytes = NULL);
+  void LoadCodeData(const BYTE* i_source_bytes, size_t i_srcSize, BYTE* o_destin_bytes = NULL);
 
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);

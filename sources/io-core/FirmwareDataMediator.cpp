@@ -414,7 +414,7 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  }
 
  //Now we need to load data stored in the code area to current firmware
- LoadCodeData(i_source_bytes);
+ LoadCodeData(i_source_bytes, (ip_fpp ? ip_fpp : m_fpp.get())->m_app_section_size);
 }
 
 void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
@@ -986,9 +986,17 @@ void CFirmwareDataMediator::_FindCodeData(void)
   mp_cddata = p_cd;
 }
 
-bool CFirmwareDataMediator::HasCodeData(void) const
+bool CFirmwareDataMediator::HasCodeData(const BYTE* i_source_bytes /*= NULL*/) const
 {
- return (NULL != mp_cddata);
+ if (!i_source_bytes) //current firmware (check loaded firmware)
+  return (NULL != mp_cddata);
+ else
+ {
+  //obtain pointer to fw_data_t structure
+  fw_data_t* p_fd = (fw_data_t*)(&i_source_bytes[m_lip->FIRMWARE_DATA_START]);
+  _uint dataSize = p_fd->def_param.crc;
+  return (dataSize > 0); //has code data?
+ }
 }
 
 size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* i_bytes) const
@@ -1005,7 +1013,23 @@ size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* i_bytes) const
   return m_fpp->m_only_code_size;
 }
 
-void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, BYTE* o_destin_bytes /*= NULL*/)
+void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_srcSize, BYTE* o_destin_bytes /*= NULL*/)
 {
-
+ ASSERT(i_source_bytes);
+ //obtain actual size of data (source and destination data)
+ _uint dataSizeSrc = ((fw_data_t*)((i_source_bytes + i_srcSize)-sizeof(fw_data_t)))->def_param.crc;
+ _uint dataSizeDst = ((fw_data_t*)((o_destin_bytes + m_lip->FIRMWARE_DATA_START)))->def_param.crc;
+ //Check compatibility and copy data from source to destination
+ if (dataSizeSrc && dataSizeDst)
+ { //code area data is present
+  const BYTE *p_dataSrc = (i_source_bytes + i_srcSize) - dataSizeSrc;
+  BYTE *p_dataDst = (o_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
+  size_t szSrc = *(p_dataSrc-1), szDst = *(p_dataDst-1);
+  if (szSrc == szDst) //compatible?
+  {
+   cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - szSrc);
+   cd_data_t* pDst = (cd_data_t*)(p_dataDst - szDst);
+   memcpy(pDst, pSrc, szDst); //Copy!
+  }
+ }
 }
