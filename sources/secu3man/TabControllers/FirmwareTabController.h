@@ -140,6 +140,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
 
   BYTE* m_bl_data;
   BYTE* m_code_for_merge_with_overhead;
+  size_t m_code_for_merge_size;
+  size_t m_moreSize;
   bool m_bl_started_emergency;
   int  m_current_funset_index;
   CObjectTimer<CFirmwareTabController> m_modification_check_timer;
