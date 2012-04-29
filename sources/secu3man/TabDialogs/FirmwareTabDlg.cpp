@@ -38,29 +38,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-#define TIMER_ID 1
+const int TIMER_ID = 1;
 
 const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;
-
-//CTabCtrl doesn't support TCS_VERTICAL when Windows XP visual styles are enabled.
-//So, we need a special function which will disable visual styles for a tab control.
-//Function uses dynamic linking to avoid static linking to uxtheme.lib
-namespace {
- typedef HRESULT (_stdcall *SetWindowTheme_addr)(HWND, LPCWSTR, LPCWSTR);
-
- void DisableTabCtrlVisualStyles(CTabCtrl& ctrl)
- {
-  static SetWindowTheme_addr p_proc = NULL;
-  if (NULL == p_proc)
-  {
-   HMODULE h_dll = LoadLibrary(_T("uxtheme.dll"));
-   if (NULL != h_dll)   
-    p_proc = (SetWindowTheme_addr)GetProcAddress(h_dll, _T("SetWindowTheme"));  
-  }
-  if (p_proc)
-   p_proc(ctrl.m_hWnd, (L""), (L""));
- }
-}
 
 //Tab IDs of parameters selection tab. Note that order of beneath IDs must
 //correspond to AddPage() calling order.
@@ -179,7 +159,6 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  Super::OnInitDialog();
 
  //Prepare and tune tab control (See PSTabId enum)
- DisableTabCtrlVisualStyles(m_param_sel_tab);
  std::map<int, std::pair<IDeskView*, _TSTRING> >::const_iterator it;
  for(it = m_tabs.begin(); it != m_tabs.end(); ++it)
   m_param_sel_tab.AddPage(it->second.second.c_str(), NULL);
@@ -216,7 +195,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  mp_ContextMenuManager->Attach(this);
 
- SetTimer(TIMER_ID,250,NULL);
+ SetTimer(TIMER_ID, 250, NULL);
 
  //в коде прошивки выдeлено ограниченное количество байтов для строки иныормации
  m_fw_information_edit.SetLimitText(48);
