@@ -23,12 +23,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
   //Если reflect - true, то сообщения будут перепосылаться родительскому окну,
   //иначе - нет.
-  void SetMsgReflection(BOOL reflect);
-
-  //использовать этот метод только совместно с Create() - перед вызовом.
-  //Иначе он не будет иметь эффекта!
-  void SetStyle(const DWORD style);
-  bool Create(CWnd* pParentWnd, const CRect& rect, UINT nID, const bool);
+  void SetMsgReflection(bool reflect);
 
   //Добавление вкладок
   int  AddPage(CString name, CTabDialog* pPageDlg);
@@ -65,15 +60,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   virtual void DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct);
 
  private:
-  class TabPageData
-  {
-   public:
-    TabPageData() : pDialogTemplate(NULL), pDialogClass(NULL) {};
-    DLGTEMPLATE* pDialogTemplate;
-    CTabDialog*  pDialogClass;
-    bool is_enabled;  //определяет текущее состояние Item-a
-  };
-
+  class TabPageData;
   TabPageData* GetItemData(int item) const;
   void CreateTabPage(void);
   void DestroyTabPage(void);
@@ -85,10 +72,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   ITabControllerEvent* m_pEventHandler;
 
   int   m_tab_item_index;
-  BOOL  m_msg_reflect;
-  DWORD m_style;
+  bool  m_msg_reflect;
   int   m_tcmn;
-  CFont m_vfnt;
 };
 
 /////////////////////////////////////////////////////////////////////////////

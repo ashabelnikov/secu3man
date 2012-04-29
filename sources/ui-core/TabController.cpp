@@ -22,6 +22,15 @@ enum tcOrient
  TCO_LEFT, TCO_TOP, TCO_RIGHT, TCO_BOTTOM
 };
 
+class CTabController::TabPageData
+{
+ public:
+  TabPageData() : pDialogTemplate(NULL), pDialogClass(NULL) {};
+  DLGTEMPLATE* pDialogTemplate;
+  CTabDialog*  pDialogClass;
+  bool is_enabled;  //определяет текущее состояние Item-a
+};
+
 IMPLEMENT_DYNAMIC(CTabController, CTabCtrl)
 
 BEGIN_MESSAGE_MAP(CTabController, CTabCtrl)
@@ -38,12 +47,11 @@ CTabController::CTabController()
 : m_tab_item_index(0)
 , mp_CurDlg(NULL)
 , m_msg_reflect(TRUE)
-, m_style(WS_VISIBLE | WS_CHILD)
 , m_tcmn(4) //magic number
 , m_pEventHandler(NULL)
 , m_hResourceModule(NULL)
 {
- //empty
+ m_hResourceModule = AfxGetInstanceHandle();
 }
 
 CTabController::~CTabController()
@@ -153,35 +161,6 @@ void CTabController::DestroyTabPage(void)
   if (IsWindow(mp_CurDlg->m_hWnd)) //только если окно было создано (предотвращаем повторное закрытие окна)
    mp_CurDlg->DestroyWindow();
  }
-}
-
-bool CTabController::Create(CWnd* pParentWnd,const CRect& rect,UINT nID,const bool i_msg_reflect)
-{
- if (FALSE == CTabCtrl::Create(m_style, rect, pParentWnd, nID))
-  return false;
-
- if (NULL==m_hResourceModule)
-  m_hResourceModule = AfxGetInstanceHandle();
-
- m_msg_reflect = (i_msg_reflect) ? FALSE : TRUE; //отражать сообщения родительскому окну или нет?
- 
- if (TCO_LEFT==GetTCOrientation() || TCO_RIGHT==GetTCOrientation())
- {
-  LOGFONT lf;
-  CFont* pfont = GetFont();
-  if (!pfont)
-   pfont = pParentWnd->GetFont();
-  ASSERT(pfont);
-  if (pfont)
-  {
-   pfont->GetLogFont(&lf);
-   lf.lfEscapement = 2700; //rotation by 270 deg.
-   lf.lfOrientation = 2700;
-   _tcscpy(lf.lfFaceName, _T("Microsoft Sans Serif"));
-   VERIFY(m_vfnt.CreateFontIndirect(&lf));
-  }
- }
- return true;
 }
 
 //добавление вкладки, !!! ВНИЗУ смотреть похожую функцию !!!
@@ -334,9 +313,6 @@ void CTabController::OnDestroy()
   delete pItemData;
  }
 
- if (m_vfnt.m_hObject)
-  m_vfnt.DeleteObject();
-
  CTabCtrl::OnDestroy();
 }
 
@@ -409,12 +385,8 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
  }
 
  //Select vertical font if orientation is vertical
- CFont* oldFont = NULL;
  if (TCO_LEFT==GetTCOrientation() || TCO_RIGHT==GetTCOrientation())
- {
-  oldFont = p_dc->SelectObject(&m_vfnt);
   rect.left+=p_dc->GetTextExtent(label).cy;
- }
 
  //рисуем текст в зависимости от текущего состояния
  if(selected)
@@ -428,8 +400,6 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
  p_dc->SetTextColor(IsTabEnabled(tab_index) ? color_normal : color_disabled);
  p_dc->DrawText(label, rect, DT_SINGLELINE | DT_NOCLIP | uFormat);
 
- if (oldFont)
-  p_dc->SelectObject(&oldFont);
  p_dc->RestoreDC(save_dc);
 }
 
@@ -596,11 +566,6 @@ void CTabController::EnableItem(int iTab, bool enable)
   Invalidate();
 }
 
-void CTabController::SetStyle(const DWORD style)
-{
- m_style = style;
-}
-
 void CTabController::Init(void)
 {
  m_tab_item_index = 0;
@@ -612,7 +577,7 @@ void CTabController::SetEventListener(ITabControllerEvent* i_listener)
  m_pEventHandler = i_listener;
 }
 
-void CTabController::SetMsgReflection(BOOL reflect)
+void CTabController::SetMsgReflection(bool reflect)
 {
  m_msg_reflect = reflect;
 }
