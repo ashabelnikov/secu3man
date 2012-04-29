@@ -57,7 +57,7 @@ class IOCORE_API CFirmwareDataMediator
 
   //checks compatibility of specified firmware with this version of management software
   //returns false if incompatible
-  bool CheckCompatibility(const BYTE* i_data) const;
+  bool CheckCompatibility(const BYTE* i_data, const PPFlashParam* ip_fpp = NULL) const;
 
   //-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);

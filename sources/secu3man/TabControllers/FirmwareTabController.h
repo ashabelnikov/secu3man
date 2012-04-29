@@ -80,11 +80,11 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void SetViewFirmwareValues(void);
   void SetViewChartsValues(void);
 
-  void PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name);
+  void PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name);
   void StartWritingOfFLASHFromBuff(BYTE* io_buff);
 
   void _OnReadFlashToFile(void);
-  bool _CheckCompatibilityAndAskUser(BYTE* i_buff);
+  bool _CheckCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph = NULL);
   void _ShowFWOptions(const _TSTRING& info, DWORD options);
 
   ///////////context menu and other event handlers/////////////////////

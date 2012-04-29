@@ -410,9 +410,8 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     {
      if (_CheckCompatibilityAndAskUser(m_bl_data))
      {
-      m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);
-      m_fwdm->StoreBytes(m_bl_data);
-      PrepareOnLoadFLASH(m_bl_data, m_fwdm->GetFWFileName());
+      m_fwdm->LoadDataBytesFromAnotherFirmware(m_bl_data);      
+      PrepareOnLoadFLASH(NULL, m_fwdm->GetFWFileName());
      }
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
@@ -581,12 +580,12 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
  m_sbar->SetProgressPos(0);
 }
 
-bool CFirmwareTabController::_CheckCompatibilityAndAskUser(BYTE* i_buff)
+bool CFirmwareTabController::_CheckCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph /*=NULL*/)
 {
  if (!i_buff)
   return false;
 
- if (!m_fwdm->CheckCompatibility(i_buff))
+ if (!m_fwdm->CheckCompatibility(i_buff, p_pph ? &p_pph->GetFlashParameters() : NULL))
  {
   if (IDNO==AfxMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_FIRMWARE), MB_YESNO | MB_ICONEXCLAMATION))
    return false; //aborted by user
@@ -1000,9 +999,10 @@ void CFirmwareTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  //na
 }
 
-void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff,const _TSTRING& i_file_name)
+void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name)
 {
- m_fwdm->LoadBytes(i_buff);
+ if (i_buff) //Do we need to load?
+  m_fwdm->LoadBytes(i_buff);
  if (i_file_name!=_T(""))
   m_fwdm->SetFWFileName(_TSTRING(i_file_name));
  else
@@ -1236,16 +1236,15 @@ void CFirmwareTabController::OnImportDataFromAnotherFW()
 
  //!!! без вычисления и записи контрольной суммы в буфер
  result  = LoadFLASHFromFile(buff, sizes, NULL, &selected_size, &opened_file_name);
- if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
+ //Get platform information
+ EECUPlatform platform_id;
+ if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
+  return; //error
+ PlatformParamHolder params(platform_id);
+ if (result && _CheckCompatibilityAndAskUser(buff, &params)) //user OK?
  {
-  EECUPlatform platform_id;
-  if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
-   return; //error
-  PlatformParamHolder params(platform_id);
-
   m_fwdm->LoadDataBytesFromAnotherFirmware(buff, &params.GetFlashParameters());
-  m_fwdm->StoreBytes(m_bl_data);
-  PrepareOnLoadFLASH(m_bl_data, m_fwdm->GetFWFileName());
+  PrepareOnLoadFLASH(NULL, m_fwdm->GetFWFileName());
  }
 }
 
