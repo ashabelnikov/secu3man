@@ -440,7 +440,9 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_byt
  if (false==IsLoaded())
   return; //некуда загружать...
  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ _uint fwd_size = p_fd->def_param.crc; //save
  memcpy(&p_fd->def_param, i_source_bytes, sizeof(params_t));
+ p_fd->def_param.crc = fwd_size; //restore
  _FindCodeData(); //find data residing directly in the code
 }
 
