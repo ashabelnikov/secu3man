@@ -40,14 +40,14 @@ CFWIORemappingController::CFWIORemappingController(IORVIEW* ip_view)
 {
  mp_view->setOnItemSelected(MakeDelegate(this, &CFWIORemappingController::OnItemSelected));
 
- m_defValMap.insert(std::make_pair(FWDM::IOP_ECF, FWDM::IOS_ECF));
- m_defValMap.insert(std::make_pair(FWDM::IOP_ST_BLOCK, FWDM::IOS_ST_BLOCK));
- m_defValMap.insert(std::make_pair(FWDM::IOP_IGN_OUT3, FWDM::IOS_IGN_OUT3));
- m_defValMap.insert(std::make_pair(FWDM::IOP_IGN_OUT4, FWDM::IOS_IGN_OUT4));
- m_defValMap.insert(std::make_pair(FWDM::IOP_ADD_IO1, FWDM::IOS_ADD_IO1));
- m_defValMap.insert(std::make_pair(FWDM::IOP_ADD_IO2, FWDM::IOS_ADD_IO2));
- m_defValMap.insert(std::make_pair(FWDM::IOP_IE, FWDM::IOS_IE));
- m_defValMap.insert(std::make_pair(FWDM::IOP_FE, FWDM::IOS_FE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ECF, FWDM::IOP_ECF));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IE, FWDM::IOP_IE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_FE, FWDM::IOP_FE));
 }
 
 CFWIORemappingController::~CFWIORemappingController()
@@ -117,41 +117,64 @@ void CFWIORemappingController::EnableSECU3TFeatures(bool i_enable)
 void CFWIORemappingController::OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iopId)
 {
  //Detach redundant plugs
- _DetachPlugsFromSlot(iosId);
+ _DetachPlugsFromSpecifiedSlot(iosId);
 
  //Attach selected plug to slot
  _AttachPlug(iopId, iosId);
+
+ //Not connected plugs must be connected to default free slots
+ _AttachFreeSlotsToDefaultPlugs();
 
  //Update UI
  _UpdateView();
 }
 
-void CFWIORemappingController::_DetachPlugsFromSlot(FWDM::IOSid iosId)
+void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
+{
+ for(int s = FWDM::IOS_ECF; s <= FWDM::IOS_COUNT; ++s)
+ {
+  if (!_IsSlotFree((FWDM::IOSid)s))
+   continue;
+  //DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s);
+  std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
+  if (it != m_defValMap.end())
+   _AttachPlug(it->second, (FWDM::IOSid)s); //default
+ } 
+}
+
+bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
+{
+ DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
+ for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
+ {
+  DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
+  if (plug == slot)
+   return false; //already connected to one of plugs
+ }
+ return true; //free!
+}
+
+void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
 {
  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
  for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
  {
   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
   if(plug == slot)
-  {
-   std::map<FWDM::IOPid, FWDM::IOSid>::const_iterator it = m_defValMap.find((FWDM::IOPid)p);
-   if (it == m_defValMap.end())
     _AttachPlug((FWDM::IOPid)p); //stub
-   else
-    _AttachPlug((FWDM::IOPid)p, it->second); //default
-  }
  }
 }
 
 void CFWIORemappingController::_UpdateView(void)
 {
  for(int s = FWDM::IOS_ECF; s <= FWDM::IOS_COUNT; ++s)
- {
+ {  
   DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s);
   for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
   {
    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   if (slot == plug)
+   //If slot == stub, then it is not allowed in this firmware
+   if (slot == plug && slot != mp_fwdm->GetSStub())
     mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
   }
  }
