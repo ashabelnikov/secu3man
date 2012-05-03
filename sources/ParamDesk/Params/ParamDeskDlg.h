@@ -64,6 +64,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
 
   virtual void EnableIgnitionCogs(bool enable);
   virtual void EnableUseVentPwm(bool enable);
+  virtual void EnableHallOutputParams(bool enable);
   virtual void SetCrankType(int type);
   virtual void SetMaxCylinders(int number);
 

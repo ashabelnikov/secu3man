@@ -658,6 +658,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->uart_period_t_ms = p_in->period_ms / 10;
     p_params->ign_cutoff = p_in->ign_cutoff;
     p_params->ign_cutoff_thrd = p_in->ign_cutoff_thrd;
+    p_params->hop_start_cogs = p_in->hop_start_cogs;
+    p_params->hop_durat_cogs = p_in->hop_durat_cogs;
    }
    break;
 
@@ -805,6 +807,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->period_ms = p_params->uart_period_t_ms * 10;
      p_out->ign_cutoff = p_params->ign_cutoff;
      p_out->ign_cutoff_thrd = p_params->ign_cutoff_thrd;
+     p_out->hop_start_cogs = p_params->hop_start_cogs;
+     p_out->hop_durat_cogs = p_params->hop_durat_cogs;
     }
     break;
 

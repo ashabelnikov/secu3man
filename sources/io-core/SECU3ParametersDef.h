@@ -108,10 +108,13 @@ typedef struct
 
  _uchar ckps_merge_ign_outs;         // Merge ignition signals to single ouput
 
+ _char  hop_start_cogs;              // Hall output: start of pulse in teeth relatively to TDC 
+ _uchar hop_durat_cogs;              // Hall output: duration of pulse in teeth
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4];
+ _uchar reserved[2];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

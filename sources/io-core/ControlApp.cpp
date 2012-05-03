@@ -949,7 +949,7 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
 
- if (strlen((char*)raw_packet)!=12)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=16)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Делитель для UART-а
@@ -983,6 +983,22 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
  if (false == CNumericConv::Hex16ToBin(raw_packet, &m_MiscPar.ign_cutoff_thrd, true))
   return false;
  raw_packet+=4;
+
+ //Выход ДХ: Начало импульса в зубьях шкива относительно ВМТ
+ signed int start = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &start))
+  return false;
+ raw_packet+=2;
+
+ m_MiscPar.hop_start_cogs = start;
+
+ //Выход ДХ: Длительность импульса в зубьях шкива
+ unsigned char duration = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &duration))
+  return false;
+ raw_packet+=2;
+
+ m_MiscPar.hop_durat_cogs = duration;
 
  if (*raw_packet!='\r')
   return false;
@@ -1722,6 +1738,8 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  CNumericConv::Bin8ToHex(perid_ms, m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->ign_cutoff, m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

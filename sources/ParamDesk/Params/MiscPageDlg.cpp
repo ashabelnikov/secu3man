@@ -35,6 +35,8 @@ const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_START_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
 
@@ -50,20 +52,33 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnUpdateControlsIgncutoff)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_UNIT, OnUpdateControlsIgncutoff)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_IGNCUTOFF_RPM_SPIN, OnUpdateControlsIgncutoff)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_GROUP, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_START_EDIT, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_START_SPIN, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_START_UNIT, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN, OnUpdateControlsHOP)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT, OnUpdateControlsHOP)
  
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CMiscPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_hall_output_enabled(false)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT)
 , m_igncutoff_rpm_edit(CEditEx::MODE_INT)
+, m_hop_start_edit(CEditEx::MODE_INT)
+, m_hop_durat_edit(CEditEx::MODE_INT)
 {
  m_params.baud_rate = CBR_9600;
  m_params.period_ms = 0;
  m_params.ign_cutoff = 0;
  m_params.ign_cutoff_thrd = 0;
+ m_params.hop_start_cogs = 0;
+ m_params.hop_durat_cogs = 0;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -88,9 +103,19 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_RPM_UNIT, m_igncutoff_rpm_unit);
  DDX_Control(pDX,IDC_PD_MISC_IGNCUTOFF_RPM_SPIN, m_igncutoff_rpm_spin);
 
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_START_EDIT, m_hop_start_edit);
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_START_UNIT, m_hop_start_unit);
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_START_SPIN, m_hop_start_spin);
+
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, m_hop_durat_edit);
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT, m_hop_durat_unit);
+ DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN, m_hop_durat_spin);
+
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
  m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
+ m_hop_start_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_START_EDIT, m_params.hop_start_cogs);
+ m_hop_durat_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, m_params.hop_durat_cogs);
  DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
 }
 
@@ -101,6 +126,11 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CMiscPageDlg::OnUpdateControlsHOP(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_hall_output_enabled);
 }
 
 void CMiscPageDlg::OnUpdateControlsIgncutoff(CCmdUI* pCmdUI)
@@ -127,6 +157,16 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_igncutoff_rpm_edit.SetDecimalPlaces(5);
  m_igncutoff_rpm_spin.SetBuddy(&m_igncutoff_rpm_edit);
  m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 12000, 10);
+ 
+ m_hop_start_edit.SetLimitText(3);
+ m_hop_start_edit.SetDecimalPlaces(3);
+ m_hop_start_spin.SetBuddy(&m_hop_start_edit);
+ m_hop_start_spin.SetRangeAndDelta(-6, 12, 1);
+
+ m_hop_durat_edit.SetLimitText(3);
+ m_hop_durat_edit.SetDecimalPlaces(3);
+ m_hop_durat_spin.SetBuddy(&m_hop_durat_edit);
+ m_hop_durat_spin.SetRangeAndDelta(1, 20, 1);
 
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
@@ -160,6 +200,15 @@ void CMiscPageDlg::Enable(bool enable)
 bool CMiscPageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CMiscPageDlg::EnableHallOutputParams(bool enable)
+{
+ if (m_hall_output_enabled == enable)
+  return; //already has needed state
+ m_hall_output_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

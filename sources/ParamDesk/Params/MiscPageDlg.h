@@ -42,6 +42,7 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableHallOutputParams(bool enable);
 
   void GetValues(SECU3IO::MiscelPar* o_values);
   void SetValues(const SECU3IO::MiscelPar* i_values);
@@ -53,6 +54,7 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsHOP(CCmdUI* pCmdUI);
   afx_msg void OnChangeData();
   afx_msg void OnIgncutoffCheck();
   DECLARE_MESSAGE_MAP()
@@ -74,8 +76,17 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_igncutoff_rpm_spin;
   CStatic m_igncutoff_rpm_unit;
 
+  CEditEx m_hop_start_edit;
+  CSpinButtonCtrlEx m_hop_start_spin;
+  CStatic m_hop_start_unit;
+  
+  CEditEx m_hop_durat_edit;
+  CSpinButtonCtrlEx m_hop_durat_spin;
+  CStatic m_hop_durat_unit;
+
   SECU3IO::MiscelPar m_params;
   bool m_enabled;
+  bool m_hall_output_enabled;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
 };

@@ -191,6 +191,8 @@ namespace SECU3IO
   int period_ms;                       //период посылки пакетов мс.
   unsigned char ign_cutoff;            //признак использования отсечки зажигания
   int ign_cutoff_thrd;                 //обороты отсечки зажигания
+  int hop_start_cogs;                  //Выход ДХ: Начало испульса в зубьях шкива относ. ВМТ 
+  int hop_durat_cogs;                  //Выход ДХ: Длительность импульса в зубьях шкива
  };
 
  struct EditTabPar

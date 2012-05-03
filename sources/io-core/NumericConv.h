@@ -33,6 +33,7 @@ class IOCORE_API CNumericConv
 
   static bool   Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte);
   static bool   Hex8ToBin(const BYTE* i_hex_number,BYTE* o_byte);
+  static bool   Hex8ToBin(const BYTE* i_hex_number,int* o_byte); //signed
   static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word,bool i_signed  = false);
   static bool   Hex32ToBin(const BYTE* i_hex_number,signed long *o_dword);
   static bool   Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword);

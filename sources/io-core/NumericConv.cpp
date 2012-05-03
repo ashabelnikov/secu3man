@@ -58,6 +58,13 @@ bool CNumericConv::Hex8ToBin(const BYTE* i_buf,BYTE* o_byte)
   return false;
 }
 
+bool CNumericConv::Hex8ToBin(const BYTE* i_buf, int* o_byte)
+{
+ BYTE byte = 0;
+ bool result = Hex8ToBin(i_buf, &byte);
+ *o_byte = (int)((signed char)byte);
+ return result;
+}
 
 //считает контрольную сумму (8 бит) для буфера байтов i_buf размером size простым методом
 //(используя сложение по модулю 2)
