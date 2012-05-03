@@ -166,7 +166,7 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_hop_durat_edit.SetLimitText(3);
  m_hop_durat_edit.SetDecimalPlaces(3);
  m_hop_durat_spin.SetBuddy(&m_hop_durat_edit);
- m_hop_durat_spin.SetRangeAndDelta(1, 20, 1);
+ m_hop_durat_spin.SetRangeAndDelta(1, 30, 1);
 
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
