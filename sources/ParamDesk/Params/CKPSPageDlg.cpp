@@ -306,10 +306,9 @@ void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
  m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
  m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
  if (m_max_cylinders > 4)
- {
   m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+ if (m_max_cylinders > 6)
   m_engine_cyls.push_back(std::make_pair(8,_TSTRING(_T("8"))));
- }
 
  m_engine_cyl_combo.ResetContent();
  for(size_t i = 0; i < m_engine_cyls.size(); i++)
