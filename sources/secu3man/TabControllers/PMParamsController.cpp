@@ -134,6 +134,9 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
   mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 6 : 8);
  else
   mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
+
+ //in full-sequential ignition mode odd cylinder number engines are also supported
+ mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0);
 }
 
 //from view. Очередная вкладка активировалась

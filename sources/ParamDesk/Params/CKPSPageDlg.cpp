@@ -60,9 +60,10 @@ END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
-, m_enabled(false)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
+, m_enabled(false)
 , m_igncogs_enabled(false)
+, m_odd_cylnum_enabled(false)
 , m_crank_type(-1)
 , m_max_cylinders(8)
 {
@@ -218,6 +219,13 @@ void CCKPSPageDlg::SetMaxCylinders(int number)
   _FillCKPSEngineCylComboBox();
 }
 
+void CCKPSPageDlg::EnableOddCylinders(bool enable)
+{
+ m_odd_cylnum_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  _FillCKPSEngineCylComboBox();
+}
+
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
 {
  m_cogs_numbers.clear();
@@ -303,10 +311,18 @@ void CCKPSPageDlg::_SetCKPSTeethBTDCComboBoxSelection(int i_sel)
 void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
 {
  m_engine_cyls.clear();
+ if (m_odd_cylnum_enabled) //odd
+  m_engine_cyls.push_back(std::make_pair(1,_TSTRING(_T("1"))));
  m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
+ if (m_odd_cylnum_enabled) //odd
+  m_engine_cyls.push_back(std::make_pair(3,_TSTRING(_T("3"))));
  m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
  if (m_max_cylinders > 4)
+ {
+  if (m_odd_cylnum_enabled && m_crank_type != SECU3IO::COPT_WHEEL_36_1) //odd
+   m_engine_cyls.push_back(std::make_pair(5,_TSTRING(_T("5"))));
   m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
+ }
  if (m_max_cylinders > 6)
   m_engine_cyls.push_back(std::make_pair(8,_TSTRING(_T("8"))));
 

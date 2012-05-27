@@ -420,6 +420,11 @@ void CParamDeskDlg::SetMaxCylinders(int number)
  m_pCKPSPageDlg->SetMaxCylinders(number);
 }
 
+void CParamDeskDlg::EnableOddCylinders(bool enable)
+{
+ m_pCKPSPageDlg->EnableOddCylinders(enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

@@ -48,6 +48,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   void EnableIgnitionCogs(bool enable);
   void SetCrankType(int type);
   void SetMaxCylinders(int number);
+  void EnableOddCylinders(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -76,6 +77,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::CKPSPar m_params;
   bool m_enabled;
   bool m_igncogs_enabled;
+  bool m_odd_cylnum_enabled;
   int m_crank_type;
   int m_max_cylinders;
 
