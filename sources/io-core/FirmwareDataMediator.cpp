@@ -40,6 +40,7 @@ using namespace SECU3IO::SECU3Types;
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE  128
 #define FW_SIGNATURE_INFO_SIZE           48
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
+#define THERMISTOR_LOOKUP_TABLE_SIZE     16
 
 //See also FirmwareDataMediator.h
 #define IOREM_SLOTS 10           // Number of slots used for I/O remapping
@@ -93,10 +94,13 @@ typedef struct
  //reserved 32-bit value
  _ulong reserv32;
 
+ //Coolant temperature sensor lookup table (таблица значений температуры с шагом по напряжению)
+ _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[58];
+ _uchar reserved[26];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -536,6 +540,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     TemperPar* p_in = (TemperPar*)i_values;
     p_params->tmp_use  = p_in->tmp_use;
     p_params->vent_pwm = p_in->vent_pwm;
+    p_params->cts_use_map = p_in->cts_use_map;
     p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
     p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
    }
@@ -690,6 +695,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      TemperPar* p_out = (TemperPar*)o_values;
      p_out->tmp_use  = p_params->tmp_use;
      p_out->vent_pwm = p_params->vent_pwm;
+     p_out->cts_use_map = p_params->cts_use_map;
      p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
      p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
     }
@@ -924,6 +930,43 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
   p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((i_values[i] * 1000.0) / 4.0);
+}
+
+void CFirmwareDataMediator::GetCTSCurveMap(float* o_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ ASSERT(o_values);
+ if (!o_values)
+  return;
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ size_t j = THERMISTOR_LOOKUP_TABLE_SIZE-1;
+ for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
+  o_values[i] = (p_fd->exdata.cts_curve[j--] / 4.0f);
+}
+
+void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
+{
+ BYTE* p_bytes = NULL;
+ ASSERT(i_values);
+ if (!i_values)
+  return;
+
+ p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ size_t j = THERMISTOR_LOOKUP_TABLE_SIZE-1;
+ for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
+  p_fd->exdata.cts_curve[j--] = (_uint)MathHelpers::Round(i_values[i] * 4.0);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const

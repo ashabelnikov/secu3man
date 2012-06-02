@@ -113,6 +113,7 @@ namespace SECU3IO
  {
   unsigned char tmp_use;
   unsigned char vent_pwm;
+  unsigned char cts_use_map;
   float  vent_on;
   float  vent_off;
  };

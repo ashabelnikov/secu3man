@@ -321,33 +321,36 @@ BEGIN
     LTEXT           "сек.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
 END
 
-IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 155, 158
+IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,26,51,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,12,30,35,19,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,69,50,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,91,30,35,19,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Использовать датчик температуры охлаждающей жидкости",
                     IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,97,116,27
-    LTEXT           "Порог включения вентилятора",
-                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,16,12,119,11
-    LTEXT           "Порог выключения вентилятора",
-                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,54,116,9
-    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,26,14,
-                    19
-    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,69,14,
-                    19
-    LTEXT           "°С",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,29,18,14
-    LTEXT           "°С",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,71,18,14
+                    BS_MULTILINE | WS_TABSTOP,28,61,116,27
     CONTROL         "Управлять вентилятором используя ШИМ",
                     IDC_PD_TEMPER_USE_VENT_PWM,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,125,116,27
+                    BS_MULTILINE | WS_TABSTOP,28,86,116,27
+    CONTROL         "Кривая датчика задается таблицей",
+                    IDC_PD_TEMPER_USE_CURVE_MAP,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+    LTEXT           "Порог включения вентилятора",
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,11,10,74,17
+    LTEXT           "Порог выключения вентилятора",
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,91,10,72,17
+    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,
+                    19
+    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,
+                    19
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
@@ -938,33 +941,36 @@ BEGIN
     LTEXT           "sec.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
 END
 
-IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 155, 158
+IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,33,26,51,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT,12,30,35,19,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,34,69,50,19,
+    EDITTEXT        IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT,91,30,35,19,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "Use coolant temperature sensor",
                     IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,97,116,27
-    LTEXT           "Ventilator turn on threshold",
-                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,17,12,119,11
-    LTEXT           "Ventilator turn off threshold",
-                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,19,54,116,9
-    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,26,14,
-                    19
-    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,88,69,14,
-                    19
-    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,108,29,18,14
-    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,109,71,18,14
+                    BS_MULTILINE | WS_TABSTOP,28,61,116,27
     CONTROL         "Control ventilator using PWM",
                     IDC_PD_TEMPER_USE_VENT_PWM,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,28,125,116,27
+                    BS_MULTILINE | WS_TABSTOP,28,86,116,27
+    CONTROL         "Use table to define sensor's curve",
+                    IDC_PD_TEMPER_USE_CURVE_MAP,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,28,114,116,27
+    LTEXT           "Ventilator turn on threshold",
+                    IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,11,10,74,17
+    LTEXT           "Ventilator turn off threshold",
+                    IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,91,10,72,17
+    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,
+                    19
+    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,
+                    19
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
+    LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158

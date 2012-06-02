@@ -78,6 +78,7 @@ class TForm2D : public TForm
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
+  void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
 
   void Enable(bool enable);
@@ -111,7 +112,11 @@ class TForm2D : public TForm
 
   //адпес функции которая будет вызываться при рисовании надписей на оси Y
   OnGetAxisLabel m_pOnGetYAxisLabel;
-  void* m_param_on_get_axis_label;
+  void* m_param_on_get_y_axis_label;
+
+  //адпес функции которая будет вызываться при рисовании надписей на оси X
+  OnGetAxisLabel m_pOnGetXAxisLabel;
+  void* m_param_on_get_x_axis_label;
 
   //адрес функции которая будет вызываться при свертывании/развертывании окна
   OnWndActivation m_pOnWndActivation;

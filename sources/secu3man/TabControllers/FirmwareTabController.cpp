@@ -1017,8 +1017,10 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
 
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
  m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
+ m_view->mp_TablesPanel->EnableCTSCurve((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
+ m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
  m_view->mp_ParamDeskDlg->EnableHallOutputParams((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_OUTPUT)) > 0);
  m_view->mp_ParamDeskDlg->SetCrankType(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_WHEEL_36_1)) > 0) ? SECU3IO::COPT_WHEEL_36_1 : -1);
  if ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)))
@@ -1109,6 +1111,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false),false);
  m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(true),true);
 
+ m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false),false);
+ m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
+
  if (m_current_funset_index==-1)
   return;
  m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false),false);
@@ -1184,6 +1189,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_DWELLCNTRL:
    m_fwdm->SetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false));
+   break;
+  case TYPE_MAP_CTS_CURVE:
+   m_fwdm->SetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false));
    break;
  }
 }

@@ -43,6 +43,7 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   void SetValues(const SECU3IO::TemperPar* i_values);
 
   void EnableUseVentPwm(bool enable);
+  void EnableUseCTSCurveMap(bool enable);
 
  // Implementation
  protected:
@@ -52,18 +53,22 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnChangePdTemperVentOffThresholdEdit();
   afx_msg void OnPdTemperUseTempSensor();
   afx_msg void OnPdTemperUseVentPwm();
+  afx_msg void OnPdTemperUseCurveMap();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateVentOff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseVentPwm(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseCurveMap(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::TemperPar m_params;
   bool m_enabled;
   bool m_use_vent_pwm_enabled;
+  bool m_use_curve_map_enabled;
 
   CButton m_use_temp_sensor;
   CButton m_use_vent_pwm;
+  CButton m_use_curve_map;
   CSpinButtonCtrlEx m_vent_on_threshold_spin;
   CSpinButtonCtrlEx m_vent_off_threshold_spin;
   CEditEx m_vent_off_threshold_edit;

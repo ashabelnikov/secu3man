@@ -89,6 +89,9 @@ class IOCORE_API CFirmwareDataMediator
   void GetDwellCntrlMap(float* o_values, bool i_original = false);
   void SetDwellCntrlMap(const float* i_values);
 
+  void GetCTSCurveMap(float* o_values, bool i_original = false);
+  void SetCTSCurveMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

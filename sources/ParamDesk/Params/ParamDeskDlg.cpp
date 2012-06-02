@@ -405,6 +405,11 @@ void CParamDeskDlg::EnableUseVentPwm(bool enable)
  m_pTemperPageDlg->EnableUseVentPwm(enable);
 }
 
+void CParamDeskDlg::EnableUseCTSCurveMap(bool enable)
+{
+ m_pTemperPageDlg->EnableUseCTSCurveMap(enable);
+}
+
 void CParamDeskDlg::EnableHallOutputParams(bool enable)
 {
  m_pMiscPageDlg->EnableHallOutputParams(enable);

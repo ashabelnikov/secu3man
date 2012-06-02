@@ -45,7 +45,7 @@ BEGIN
                     71,96,18
 END
 
-IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 134
+IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 148
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
@@ -69,13 +69,13 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,110,16,19
-    CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,
-                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,
-                    110,82,19
-    CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,
-                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,
-                    110,95,19
+                    BS_BITMAP | WS_TABSTOP,3,105,16,19
+    CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,105,82,19
+    CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
+    CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -146,6 +146,8 @@ BEGIN
     IDS_MAPS_VOLT_UNIT      "Вольты (B)"
     IDS_MAPS_DWELLCNTRL_UNIT "Время накопления (мс)"
     IDS_DWELLCNTRL_MAP      "Настройка времени накопления энергии катушек зажигания"
+    IDS_CTS_CURVE_MAP       "Настройка кривой датчика температуры охлаждающей жидкости"
+    IDS_MAPS_VOLTAGE        "Напряжение"
 END
 
 #endif    // Russian resources
@@ -185,7 +187,7 @@ BEGIN
                     70,96,18
 END
 
-IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 134
+IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 148
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
@@ -209,12 +211,13 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,110,16,19
-    CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,
-                    "Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,
-                    110,82,19
+                    BS_BITMAP | WS_TABSTOP,3,105,16,19
+    CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,105,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,110,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
+    CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -378,6 +381,8 @@ BEGIN
     IDS_MAPS_VOLT_UNIT      "Volts (V)"
     IDS_MAPS_DWELLCNTRL_UNIT "Accumulation time (ms)"
     IDS_DWELLCNTRL_MAP      "Tune accumulation time of ignition coils"
+    IDS_CTS_CURVE_MAP       "Tune coolant temperature sensor curve"
+    IDS_MAPS_VOLTAGE        "Voltage"
 END
 
 #endif    // English (U.S.) resources

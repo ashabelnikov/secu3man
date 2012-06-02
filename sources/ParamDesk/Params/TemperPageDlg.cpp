@@ -37,6 +37,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnChangePdTemperVentOffThresholdEdit)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_VENT_PWM, OnPdTemperUseVentPwm)
+ ON_BN_CLICKED(IDC_PD_TEMPER_USE_CURVE_MAP, OnPdTemperUseCurveMap)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN, OnUpdateControls)
@@ -50,12 +51,14 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateUseVentPwm)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_CURVE_MAP, OnUpdateUseCurveMap)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CTemperPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_use_vent_pwm_enabled(false)
+, m_use_curve_map_enabled(false)
 , m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 {
@@ -63,6 +66,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
  m_params.vent_off = 98.0f;
  m_params.tmp_use = 1;
  m_params.vent_pwm = 0;
+ m_params.cts_use_map = 0;
 }
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
@@ -75,6 +79,7 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_use_temp_sensor);
  DDX_Control(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_use_vent_pwm);
+ DDX_Control(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_use_curve_map);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN, m_vent_on_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, m_vent_off_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_vent_off_threshold_edit);
@@ -84,6 +89,7 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  m_vent_off_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_params.vent_off);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
+ DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -100,6 +106,11 @@ void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
 void CTemperPageDlg::OnUpdateUseVentPwm(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_use_vent_pwm_enabled);
+}
+
+void CTemperPageDlg::OnUpdateUseCurveMap(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_use_curve_map_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -150,6 +161,13 @@ void CTemperPageDlg::OnPdTemperUseVentPwm()
  UpdateDialogControls(this,TRUE);
 }
 
+void CTemperPageDlg::OnPdTemperUseCurveMap()
+{
+ UpdateData();
+ OnChangeNotify();
+ UpdateDialogControls(this,TRUE);
+}
+
 //разрешение/запрещение контроллов (всех поголовно)
 void CTemperPageDlg::Enable(bool enable)
 {
@@ -187,6 +205,15 @@ void CTemperPageDlg::EnableUseVentPwm(bool enable)
  if (m_use_vent_pwm_enabled == enable)
   return; //already has needed state
  m_use_vent_pwm_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CTemperPageDlg::EnableUseCTSCurveMap(bool enable)
+{
+ if (m_use_curve_map_enabled == enable)
+  return; //already has needed state
+ m_use_curve_map_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

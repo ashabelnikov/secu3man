@@ -32,3 +32,6 @@
 #define IDC_DWELL_CALC_L_SPIN           5032
 #define IDC_DWELL_CALC_I_EDIT           5033
 #define IDC_DWELL_CALC_I_SPIN           5034
+#define IDC_TD_VIEW_CTS_CURVE           5035
+#define IDS_CTS_CURVE_MAP               5036
+#define IDS_MAPS_VOLTAGE                5037

@@ -126,7 +126,8 @@ HWND __cdecl Chart2DCreate(float *original_function, float *modified_function, f
  pForm->InitPopupMenu(hInst);
 
  //сохраняем значения сетки по горизонтальной оси
- memcpy(pForm->horizontal_axis_grid_values, x_axis_grid_values, sizeof(float) * count_of_points);
+ if (x_axis_grid_values)
+  memcpy(pForm->horizontal_axis_grid_values, x_axis_grid_values, sizeof(float) * count_of_points);
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
 }
@@ -220,6 +221,9 @@ void __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pO
  {
   case 0: //Y
    pForm->SetOnGetYAxisLabel(i_pOnGetAxisLabel, i_param);
+   break;
+  case 1: //X
+   pForm->SetOnGetXAxisLabel(i_pOnGetAxisLabel, i_param);
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetOnGetAxisLabel: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);

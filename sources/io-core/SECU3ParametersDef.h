@@ -111,10 +111,12 @@ typedef struct
  _char  hop_start_cogs;              // Hall output: start of pulse in teeth relatively to TDC 
  _uchar hop_durat_cogs;              // Hall output: duration of pulse in teeth
 
+ _uchar cts_use_map;                 // Flag which indicates using of lookup table for coolant temperature sensor
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2];
+ _uchar reserved[1];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -47,15 +47,17 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_pOnChange(NULL)
 , m_pOnClose(NULL)
 , m_pOnGetYAxisLabel(NULL)
+, m_pOnGetXAxisLabel(NULL)
 , m_pOnWndActivation(NULL)
 , m_param_on_change(NULL)
 , m_param_on_close(NULL)
-, m_param_on_get_axis_label(NULL)
+, m_param_on_get_y_axis_label(NULL)
+, m_param_on_get_x_axis_label(NULL)
 , m_param_on_wnd_activation(NULL)
 , setval(0)
 , val_n(0)
 {
- //empty
+ memset(horizontal_axis_grid_values, 0, sizeof(float) * 1024);
 }
 
 //---------------------------------------------------------------------------
@@ -100,7 +102,13 @@ void TForm2D::SetOnClose(EventHandler i_pOnClose,void* i_param)
 void TForm2D::SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param)
 {
  m_pOnGetYAxisLabel = i_pOnGetAxisLabel;
- m_param_on_get_axis_label = i_param;
+ m_param_on_get_y_axis_label = i_param;
+}
+
+void TForm2D::SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param)
+{
+ m_pOnGetXAxisLabel = i_pOnGetAxisLabel;
+ m_param_on_get_x_axis_label = i_param;
 }
 
 void TForm2D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param)
@@ -232,12 +240,22 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
       TChartSeries *Series, int ValueIndex, AnsiString &LabelText)
 {
  if (Sender == Chart1->LeftAxis)
- {
+ { //Y
   if (m_pOnGetYAxisLabel)
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   m_pOnGetYAxisLabel(string, m_param_on_get_axis_label);
+   m_pOnGetYAxisLabel(string, m_param_on_get_y_axis_label);
+   LabelText = string;
+  }
+ }
+ else if (Sender == Chart1->BottomAxis)
+ { //X
+  if (m_pOnGetXAxisLabel)
+  {
+   TCHAR string[64];
+   _tcscpy(string, LabelText.c_str());
+   m_pOnGetXAxisLabel(string, m_param_on_get_x_axis_label);
    LabelText = string;
   }
  }
