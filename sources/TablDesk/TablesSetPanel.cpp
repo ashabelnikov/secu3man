@@ -152,6 +152,23 @@ void __cdecl CTablesSetPanel::OnGetXAxisLabel(LPTSTR io_label_string, void* i_pa
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ 
+ _this->m_cts_curve_x_axis_limits[i_type] = i_value;
+
+ //allow controller to detect changes
+ if (_this->m_OnCTSXAxisEditChanged)
+  _this->m_OnCTSXAxisEditChanged(i_type, i_value);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -177,6 +194,8 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
   m_attenuator_table_slots[i] = (float)rpm;
   rpm+=60;
  }
+
+ memset(m_cts_curve_x_axis_limits, 0, sizeof(float) * 2);
 }
 
 void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
@@ -254,9 +273,14 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 {
  Super::UpdateOpenedCharts();
  if (m_attenuator_map_chart_state)
-  DLL::Chart2DUpdate(m_attenuator_map_wnd_handle,GetAttenuatorMap(true),GetAttenuatorMap(false));
+  DLL::Chart2DUpdate(m_attenuator_map_wnd_handle, GetAttenuatorMap(true), GetAttenuatorMap(false));
  if (m_dwellcntrl_map_chart_state)
-  DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle,GetDwellCntrlMap(true), GetDwellCntrlMap(false));
+  DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle, GetDwellCntrlMap(true), GetDwellCntrlMap(false));
+ if (m_cts_curve_map_chart_state)
+ {
+  DLL::Chart2DUpdate(m_cts_curve_map_wnd_handle, GetCTSCurveMap(true), GetCTSCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_cts_curve_map_wnd_handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
+ }
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -411,10 +435,13 @@ void CTablesSetPanel::OnViewCTSCurveMap()
     MLL::GetString(IDS_MAPS_VOLTAGE).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str());
+  DLL::Chart2DSetAxisValuesFormat(m_cts_curve_map_wnd_handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(m_cts_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeCTSXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_cts_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
   DLL::Chart2DSetOnChange(m_cts_curve_map_wnd_handle, OnChangeCTSCurveTable, this);
   DLL::Chart2DSetOnClose(m_cts_curve_map_wnd_handle, OnCloseCTSCurveTable, this);
   DLL::Chart2DUpdate(m_cts_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_cts_curve_map_wnd_handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
 
    //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
@@ -470,6 +497,12 @@ float* CTablesSetPanel::GetCTSCurveMap(bool i_original)
   return m_cts_curve_map_active;
 }
 
+void CTablesSetPanel::SetCTSXAxisEdits(float i_begin, float i_end)
+{
+ m_cts_curve_x_axis_limits[0] = i_begin;
+ m_cts_curve_x_axis_limits[1] = i_end;	
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -499,3 +532,7 @@ void CTablesSetPanel::setOnFunSetSelectionChanged(EventWithCode OnFunction)
 
 void CTablesSetPanel::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
 {m_OnFunSetNamechanged = OnFunction;}
+
+void CTablesSetPanel::setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
+{m_OnCTSXAxisEditChanged = OnFunction;}
+

@@ -114,6 +114,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
+  void OnCTSXAxisEditChanged(int i_type, float i_value);
   ///////////////////////////////////////////////////////////
   void OnBLStartedEmergency(void);
 

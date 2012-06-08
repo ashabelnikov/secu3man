@@ -92,6 +92,9 @@ class IOCORE_API CFirmwareDataMediator
   void GetCTSCurveMap(float* o_values, bool i_original = false);
   void SetCTSCurveMap(const float* i_values);
 
+  float GetCTSMapVoltageLimit(int i_type);
+  void  SetCTSMapVoltageLimit(int i_type, float i_value);
+
   //Types of slots/plugs
   enum IOXtype
   {

@@ -31,10 +31,11 @@ namespace DLL
 {
  typedef void (__cdecl *EventHandler)(void* i_param);
  typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
- typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
-
- typedef HWND (__cdecl *Chart2DCreate_Addr) (float *original_function, float *modified_function,float aai_min,float aai_max,const float *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title);
- typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, float *original_function, float *modified_function);
+ typedef void (__cdecl *OnWndActivation)(void* i_param, long i_cmd);
+ typedef void (__cdecl *OnChangeValue)(void* i_param, int i_type, float i_value);
+ //2D
+ typedef HWND (__cdecl *Chart2DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
+ typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart2DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
  typedef void (__cdecl *Chart2DSetMarksVisible_Addr) (HWND hWnd, int i_series_index, bool i_visible);
@@ -44,16 +45,19 @@ namespace DLL
  typedef void (__cdecl *Chart2DShow_Addr) (HWND hWnd, int i_show);
  typedef void (__cdecl *Chart2DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart2DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
- typedef void (__cdecl *Chart2DEnable_Addr)(HWND hWnd, bool enable);
+ typedef void (__cdecl *Chart2DEnable_Addr)(HWND hWnd, bool i_enable);
+ typedef void (__cdecl *Chart2DSetAxisEdits_Addr)(HWND hWnd, int i_axis, int i_show, float i_beginLo, float i_beginHi, float i_endLo, float i_endHi, float i_step, OnChangeValue i_pOnChangeValue, void* i_param);
+ typedef void (__cdecl *Chart2DUpdateAxisEdits_Addr)(HWND hWnd, int i_axis, float i_begin, float i_end);
 
- typedef HWND (__cdecl *Chart3DCreate_Addr) (float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
- typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, float *original_function, float *modified_function);
+ //3D
+ typedef HWND (__cdecl *Chart3DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, const int *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_chart_title);
+ typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart3DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart3DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
  typedef void (__cdecl *Chart3DShow_Addr) (HWND hWnd, int i_show);
  typedef void (__cdecl *Chart3DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart3DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
- typedef void (__cdecl *Chart3DEnable_Addr)(HWND hWnd, bool enable);
+ typedef void (__cdecl *Chart3DEnable_Addr)(HWND hWnd, bool i_enable);
 
  ///////////////////////////////////////////////////////////////////
  extern Chart2DCreate_Addr              Chart2DCreate;
@@ -68,6 +72,8 @@ namespace DLL
  extern Chart2DSetLanguage_Addr         Chart2DSetLanguage;
  extern Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation;
  extern Chart2DEnable_Addr              Chart2DEnable;
+ extern Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits;
+ extern Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits;
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;

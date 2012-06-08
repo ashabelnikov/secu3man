@@ -22,21 +22,23 @@
 #ifndef _FORM2D_H_
 #define _FORM2D_H_
 //---------------------------------------------------------------------------
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
+#include <Buttons.hpp>
 #include <Chart.hpp>
+#include <Classes.hpp>
+#include <ComCtrls.hpp>
+#include <Controls.hpp>
 #include <ExtCtrls.hpp>
+#include <Forms.hpp>
+#include <Menus.hpp>
 #include <Series.hpp>
+#include <StdCtrls.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
-#include <Buttons.hpp>
-#include <Menus.hpp>
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
+typedef void (__cdecl *OnChangeValue)(void* i_param, int type, float value);
 
 //---------------------------------------------------------------------------
 class TForm2D : public TForm
@@ -50,26 +52,29 @@ class TForm2D : public TForm
   TButton *Smoothing3x;
   TButton *Smoothing5x;
   TPopupMenu *PopupMenu;
-  TMenuItem  *PM_ZeroAllPoints;
-  TMenuItem  *PM_Dup1stPoint;
-  TMenuItem  *PM_BldCurveUsing1stAndLastPoints;
-  void __fastcall Chart1ClickSeries(TCustomChart *Sender,
-  TChartSeries *Series, int ValueIndex, TMouseButton Button,
-  TShiftState Shift, int X, int Y);
-  void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button,
-  TShiftState Shift, int X, int Y);
-  void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift,
-    int X, int Y);
+  TMenuItem *PM_ZeroAllPoints;
+  TMenuItem *PM_Dup1stPoint;
+  TMenuItem *PM_BldCurveUsing1stAndLastPoints;
+  TEdit *EditXBegin;
+  TEdit *EditXEnd;
+  TUpDown *SpinXBegin;
+  TUpDown *SpinXEnd;
+  void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
   void __fastcall FormClose(TObject *Sender, TCloseAction &Action);
   void __fastcall ButtonAngleUpClick(TObject *Sender);
   void __fastcall ButtonAngleDownClick(TObject *Sender);
   void __fastcall Smoothing3xClick(TObject *Sender);
   void __fastcall Smoothing5xClick(TObject *Sender);
-  void __fastcall Chart1GetAxisLabel(TChartAxis *Sender,
-    TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
+  void __fastcall Chart1GetAxisLabel(TChartAxis *Sender, TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnZeroAllPoints(TObject *Sender);
   void __fastcall OnDuplicate1stPoint(TObject *Sender);
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
+  void __fastcall EditXBeginOnChange(TObject *Sender);
+  void __fastcall EditXEndOnChange(TObject *Sender);
+  void __fastcall SpinXBeginOnChangingEx(TObject *Sender, bool &AllowChange, short NewValue, TUpDownDirection Direction);
+  void __fastcall SpinXEndOnChangingEx(TObject *Sender, bool &AllowChange, short NewValue, TUpDownDirection Direction);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);
@@ -80,21 +85,25 @@ class TForm2D : public TForm
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
+  void ShowXEdits(bool i_show);
+  void SetXEditsCB(OnChangeValue i_pOnChangeValue, void* i_param);
+  void CfgXEdits(int i_type, float i_min, float i_max, float i_step);
+  void SetXEditVal(int i_type, float i_value);
 
-  void Enable(bool enable);
+  void Enable(bool i_enable);
   void InitPopupMenu(HINSTANCE hInstance);
 
  public: //properties
-  int   count_of_function_points;
-  float aai_min;
-  float aai_max;
-  float *original_function;
-  float *modified_function;
-  float horizontal_axis_grid_values[1024];
-  AnsiString  horizontal_axis_values_format;
-  AnsiString  chart_title_text;
-  AnsiString  x_axis_title;
-  AnsiString  y_axis_title;
+  int m_count_of_function_points;
+  float m_aai_min;
+  float m_aai_max;
+  const float *m_original_function;
+  float *m_modified_function;
+  float m_horizontal_axis_grid_values[2][1024];
+  AnsiString m_horizontal_axis_values_format;
+  AnsiString m_chart_title_text;
+  AnsiString m_x_axis_title;
+  AnsiString m_y_axis_title;
 
  private:
   void RestrictAndSetValue(int index, double v);
@@ -122,8 +131,16 @@ class TForm2D : public TForm
   OnWndActivation m_pOnWndActivation;
   void* m_param_on_wnd_activation;
 
-  bool setval;
-  int  val_n;
+  //адрес функции которая будет вызываться при изменении соответствующего лимита по оси X (edit controls)
+  OnChangeValue m_pOnChangeXEditValue;
+  void* m_param_on_change_xedit_value;
+
+  float m_spinXBeginStep;
+  float m_spinXEndStep;
+  int m_horizontal_axis_grid_mode;
+
+  bool m_setval;
+  int  m_val_n;
 };
 #endif //_FORM2D_H_
 

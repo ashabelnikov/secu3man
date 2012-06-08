@@ -34,8 +34,8 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart2DCreate(float *original_function, float *modified_function,float aai_min,float aai_max,const float *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title,LPCTSTR chart_title);
- void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_function);
+ HWND  __declspec(dllexport)  __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
+ void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
@@ -45,7 +45,9 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart2DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
- void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool enable);
+ void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool i_enable);
+ void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
 }
 
 std::map<HWND, TForm*> g_form_instances;
@@ -109,37 +111,37 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 }
 
 //---------------------------------------------------------------------------
-HWND __cdecl Chart2DCreate(float *original_function, float *modified_function, float aai_min, float aai_max, const float *x_axis_grid_values, int count_of_points, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title)
 {
  TForm2D* pForm;
  pForm = new TForm2D((TComponent *)NULL);
- pForm->count_of_function_points = count_of_points;
- pForm->chart_title_text = chart_title;
- pForm->x_axis_title = x_axis_title;
- pForm->y_axis_title = y_axis_title;
- pForm->original_function = original_function;
- pForm->modified_function = modified_function;
- pForm->aai_min = aai_min;
- pForm->aai_max = aai_max;
+ pForm->m_count_of_function_points = i_count_of_points;
+ pForm->m_chart_title_text = i_chart_title;
+ pForm->m_x_axis_title = i_x_axis_title;
+ pForm->m_y_axis_title = i_y_axis_title;
+ pForm->m_original_function = ip_original_function;
+ pForm->m_modified_function = iop_modified_function;
+ pForm->m_aai_min = i_aai_min;
+ pForm->m_aai_max = i_aai_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
 
  //сохраняем значения сетки по горизонтальной оси
- if (x_axis_grid_values)
-  memcpy(pForm->horizontal_axis_grid_values, x_axis_grid_values, sizeof(float) * count_of_points);
+ if (ip_x_axis_grid_values)
+  memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
 }
 
 //---------------------------------------------------------------------------
-void __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_function)
+void __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function)
 {
  TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm)
   return;
 
- if (original_function && modified_function)
+ if (ip_original_function && iop_modified_function)
  {
   //удаляем старые значения, а потом вновь заполняем серии
   for (;pForm->Series1->Count() > 0;)
@@ -147,8 +149,8 @@ void __cdecl Chart2DUpdate(HWND hWnd, float *original_function, float *modified_
   for (;pForm->Series2->Count() > 0;)
    pForm->Series2->Delete(pForm->Series2->Count()-1);
 
-  pForm->original_function = original_function;
-  pForm->modified_function = modified_function;
+  pForm->m_original_function = ip_original_function;
+  pForm->m_modified_function = iop_modified_function;
  }
  pForm->DataPrepare();
 }
@@ -203,7 +205,7 @@ void __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_
    pForm->Chart1->LeftAxis->AxisValuesFormat = i_format_string;
    break;
   case 1: //X
-   pForm->horizontal_axis_values_format = i_format_string;
+   pForm->m_horizontal_axis_values_format = i_format_string;
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetAxisValuesFormat: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
@@ -286,12 +288,52 @@ void __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActiva
 }
 
 //---------------------------------------------------------------------------
-void __cdecl Chart2DEnable(HWND hWnd, bool enable)
+void __cdecl Chart2DEnable(HWND hWnd, bool i_enable)
 {
  TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm)
   return;
- pForm->Enable(enable);
+ pForm->Enable(i_enable);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+
+ switch(i_axis)
+ {
+  case 1: //X
+   pForm->ShowXEdits(i_show);
+   pForm->SetXEditsCB(i_pOnChangeValue, i_param);
+   pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep); //begin
+   pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep);     //end
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DSetAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+
+ switch(i_axis)
+ {
+  case 1: //X
+   pForm->SetXEditVal(0, i_begin);
+   pForm->SetXEditVal(1, i_end);
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DUpdateAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
 }
 
 //---------------------------------------------------------------------------

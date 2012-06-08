@@ -1,15 +1,15 @@
 object Form2D: TForm2D
-  Left = 660
-  Top = 321
+  Left = 226
+  Top = 115
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'Редактирование карт УОЗ'
-  ClientHeight = 439
-  ClientWidth = 755
+  ClientHeight = 357
+  ClientWidth = 613
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Icon.Data = {
@@ -51,13 +51,13 @@ object Form2D: TForm2D
   PopupMenu = PopupMenu
   Position = poDefault
   OnClose = FormClose
-  PixelsPerInch = 120
-  TextHeight = 16
+  PixelsPerInch = 96
+  TextHeight = 13
   object Chart1: TChart
     Left = 1
     Top = 1
-    Width = 720
-    Height = 434
+    Width = 585
+    Height = 352
     AllowPanning = pmNone
     AllowZoom = False
     BackWall.Brush.Color = clWhite
@@ -121,10 +121,10 @@ object Form2D: TForm2D
     end
   end
   object ButtonAngleUp: TBitBtn
-    Left = 723
-    Top = 108
-    Width = 30
-    Height = 41
+    Left = 587
+    Top = 88
+    Width = 25
+    Height = 33
     TabOrder = 1
     OnClick = ButtonAngleUpClick
     Glyph.Data = {
@@ -176,10 +176,10 @@ object Form2D: TForm2D
       0000}
   end
   object ButtonAngleDown: TBitBtn
-    Left = 723
-    Top = 236
-    Width = 30
-    Height = 41
+    Left = 587
+    Top = 192
+    Width = 25
+    Height = 33
     TabOrder = 2
     OnClick = ButtonAngleDownClick
     Glyph.Data = {
@@ -231,22 +231,70 @@ object Form2D: TForm2D
       0000}
   end
   object Smoothing3x: TButton
-    Left = 723
-    Top = 315
-    Width = 30
-    Height = 31
+    Left = 587
+    Top = 256
+    Width = 25
+    Height = 25
     Caption = '3x'
     TabOrder = 3
     OnClick = Smoothing3xClick
   end
   object Smoothing5x: TButton
-    Left = 723
-    Top = 355
-    Width = 30
-    Height = 30
+    Left = 587
+    Top = 288
+    Width = 25
+    Height = 25
     Caption = '5x'
     TabOrder = 4
     OnClick = Smoothing5xClick
+  end
+  object EditXBegin: TEdit
+    Left = 48
+    Top = 328
+    Width = 41
+    Height = 21
+    MaxLength = 10
+    TabOrder = 5
+    Text = '0'
+    Visible = False
+    OnChange = EditXBeginOnChange
+  end
+  object EditXEnd: TEdit
+    Left = 528
+    Top = 328
+    Width = 41
+    Height = 21
+    MaxLength = 10
+    TabOrder = 6
+    Text = '0'
+    Visible = False
+    OnChange = EditXEndOnChange
+  end
+  object SpinXBegin: TUpDown
+    Left = 89
+    Top = 328
+    Width = 16
+    Height = 21
+    Min = 0
+    Max = 1000
+    Position = 0
+    TabOrder = 7
+    Visible = False
+    Wrap = False
+    OnChangingEx = SpinXBeginOnChangingEx
+  end
+  object SpinXEnd: TUpDown
+    Left = 569
+    Top = 328
+    Width = 16
+    Height = 21
+    Min = 0
+    Max = 1000
+    Position = 0
+    TabOrder = 8
+    Visible = False
+    Wrap = False
+    OnChangingEx = SpinXEndOnChangingEx
   end
   object PopupMenu: TPopupMenu
     Left = 723

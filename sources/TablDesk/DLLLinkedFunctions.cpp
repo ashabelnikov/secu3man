@@ -38,6 +38,8 @@ namespace DLL
  Chart2DSetLanguage_Addr         Chart2DSetLanguage = NULL;
  Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation = NULL;
  Chart2DEnable_Addr              Chart2DEnable = NULL;
+ Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits = NULL;  
+ Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -92,6 +94,8 @@ namespace DLL
    Chart2DSetLanguage = NULL;
    Chart2DSetOnWndActivation = NULL;
    Chart2DEnable = NULL;
+   Chart2DSetAxisEdits = NULL;
+   Chart2DUpdateAxisEdits = NULL;
    status = false;
   }
   else
@@ -108,6 +112,8 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetLanguage, "Chart2DSetLanguage", status);
    LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
    LoadFunction(hModule, Chart2DEnable, "Chart2DEnable", status);
+   LoadFunction(hModule, Chart2DSetAxisEdits, "Chart2DSetAxisEdits", status);
+   LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
   }
 
   hModule = LoadLibrary(_T("Chart3D.dll"));

@@ -33,6 +33,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 {
   typedef CButtonsPanel Super;
   typedef fastdelegate::FastDelegate2<int,CString> EventWithCodeAndString;
+  typedef fastdelegate::FastDelegate2<int,float> EventWithCodeAndFloat;
 
  public:
   CTablesSetPanel(CWnd* pParent = NULL);   // standard constructor
@@ -44,6 +45,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetAttenuatorMap(bool i_original);
   float* GetDwellCntrlMap(bool i_original);
   float* GetCTSCurveMap(bool i_original);
+  void SetCTSXAxisEdits(float i_begin, float i_end);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -56,6 +58,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
  public: //установка обработчиков событий
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
+  void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
 
 // Implementation
  protected:
@@ -85,6 +88,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
  private:
   EventWithCode m_OnFunSetSelectionChanged;
   EventWithCodeAndString m_OnFunSetNamechanged;
+  EventWithCodeAndFloat m_OnCTSXAxisEditChanged;
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
@@ -94,6 +98,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
   static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, void* i_param);
+  static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
@@ -115,4 +120,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   float m_cts_curve_map_active[16];
   float m_cts_curve_map_original[16];
+
+  float m_cts_curve_x_axis_limits[2];
 };

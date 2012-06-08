@@ -96,11 +96,14 @@ typedef struct
 
  //Coolant temperature sensor lookup table (таблица значений температуры с шагом по напряжению)
  _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
+ //Related voltage limits
+ _uint cts_vl_begin;
+ _uint cts_vl_end;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[26];
+ _uchar reserved[22];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -967,6 +970,34 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
  size_t j = THERMISTOR_LOOKUP_TABLE_SIZE-1;
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
   p_fd->exdata.cts_curve[j--] = (_uint)MathHelpers::Round(i_values[i] * 4.0);
+}
+
+float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
+{
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ if (0 == i_type)
+  return p_fd->exdata.cts_vl_begin * ADC_DISCRETE;
+ else if (1 == i_type)
+  return p_fd->exdata.cts_vl_end * ADC_DISCRETE;
+ else
+ {
+  ASSERT(0); //wrong i_type value
+  return 0;
+ }
+}
+
+void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
+{
+ fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ if (0 == i_type)
+  p_fd->exdata.cts_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
+ else if (1 == i_type)
+  p_fd->exdata.cts_vl_end = MathHelpers::Round(i_value / ADC_DISCRETE);
+ else
+ {
+  ASSERT(0); //wrong i_type value
+ }
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const

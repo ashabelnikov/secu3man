@@ -118,6 +118,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
  m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
  m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
+ m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this,&CFirmwareTabController::OnCTSXAxisEditChanged));
 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
@@ -1114,6 +1115,8 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false),false);
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
 
+ m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
+
  if (m_current_funset_index==-1)
   return;
  m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false),false);
@@ -1212,6 +1215,11 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
 void CFirmwareTabController::OnFunSetNamechanged(int i_index_of_item, CString i_new_name)
 {
  m_fwdm->SetFunctionsSetName(i_index_of_item,_TSTRING(i_new_name));
+}
+
+void CFirmwareTabController::OnCTSXAxisEditChanged(int i_type, float i_value)
+{
+ m_fwdm->SetCTSMapVoltageLimit(i_type, i_value);
 }
 
 void CFirmwareTabController::OnModificationCheckTimer(void)
