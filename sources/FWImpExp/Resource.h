@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by FWImpExp.rc
-//
 #define IDD_MAP_IMPEXP                  6000
 #define IDC_MAP_IMPEXP_CURRENT_FWD_LIST 6000
 #define IDC_MAP_IMPEXP_OTHER_FWD_LIST   6001
@@ -28,3 +24,5 @@
 #define IDS_OPEN_FILE_FOR_EXPORT        6022
 #define IDS_EXPORT_SECU3_TABLES         6023
 #define IDS_IMPORT_SECU3_TABLES_EE      6024
+#define IDC_MAP_IMPEXP_CTS_FLAG         6025
+
