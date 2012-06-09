@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by MIdesk.rc
-//
 #define IDC_MI_AIR_FLOW                 2001
 #define IDC_MI_GAS_VALVE                2002
 #define IDC_MI_THROTTLE_GATE            2003

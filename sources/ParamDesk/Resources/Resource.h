@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by ParamDesk.rc
-//
 #define IDD_PARAMETERS_DESK             3000
 #define IDC_PD_TAB_CTRL                 3001
 #define IDD_PD_STARTER_PAGE             3002
