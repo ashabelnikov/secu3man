@@ -28,6 +28,6 @@ IDR_RGN0001             RGN     DISCARDABLE     "res\\about0001.rgn"
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_SOFTWARE_INFO       "SECU-3 Manager v3.1. Build [%s]"
+    IDS_SOFTWARE_INFO       "SECU-3 Manager v3.3. Build [%s]"
     IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n                     Ukraine, Gorlovka city\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n         ICQ: 405-791-931, http://secu-3.org\r\n"
 END
