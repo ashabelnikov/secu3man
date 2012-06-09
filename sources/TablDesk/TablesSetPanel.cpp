@@ -432,7 +432,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
  {
   m_cts_curve_map_chart_state = 1;
   m_cts_curve_map_wnd_handle = DLL::Chart2DCreate(GetCTSCurveMap(true), GetCTSCurveMap(false), -40.0, 120.0, NULL, 16,
-    MLL::GetString(IDS_MAPS_VOLTAGE).c_str(),
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str());
   DLL::Chart2DSetAxisValuesFormat(m_cts_curve_map_wnd_handle, 1, _T("%.02f"));

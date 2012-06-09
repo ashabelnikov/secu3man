@@ -106,7 +106,6 @@ BEGIN
     IDS_MAPS_DWELLCNTRL_UNIT "Время накопления (мс)"
     IDS_DWELLCNTRL_MAP      "Настройка времени накопления энергии катушек зажигания"
     IDS_CTS_CURVE_MAP       "Настройка кривой датчика температуры охлаждающей жидкости"
-    IDS_MAPS_VOLTAGE        "Напряжение"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -224,5 +223,4 @@ BEGIN
     IDS_MAPS_DWELLCNTRL_UNIT "Accumulation time (ms)"
     IDS_DWELLCNTRL_MAP      "Tune accumulation time of ignition coils"
     IDS_CTS_CURVE_MAP       "Tune coolant temperature sensor curve"
-    IDS_MAPS_VOLTAGE        "Voltage"
 END
