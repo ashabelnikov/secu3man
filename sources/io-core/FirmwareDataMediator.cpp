@@ -958,9 +958,8 @@ void CFirmwareDataMediator::GetCTSCurveMap(float* o_values, bool i_original /* =
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
- size_t j = THERMISTOR_LOOKUP_TABLE_SIZE-1;
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fd->exdata.cts_curve[j--] / 4.0f);
+  o_values[i] = (p_fd->exdata.cts_curve[i] / 4.0f);
 }
 
 void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
@@ -975,9 +974,8 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
- size_t j = THERMISTOR_LOOKUP_TABLE_SIZE-1;
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.cts_curve[j--] = (_uint)MathHelpers::Round(i_values[i] * 4.0);
+  p_fd->exdata.cts_curve[i] = (_uint)MathHelpers::Round(i_values[i] * 4.0);
 }
 
 float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
