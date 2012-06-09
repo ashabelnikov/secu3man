@@ -104,6 +104,13 @@ void SECU3ImportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
   m_fwdm->GetDwellCntrlMap(mp_fwd->dwellcntrl_table);
+
+ if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
+ {
+  m_fwdm->GetCTSCurveMap(mp_fwd->ctscurve_table);
+  mp_fwd->ctscurve_vlimits[0] = m_fwdm->GetCTSMapVoltageLimit(0);
+  mp_fwd->ctscurve_vlimits[1] = m_fwdm->GetCTSMapVoltageLimit(1);
+ }
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -159,12 +166,13 @@ void SECU3ImportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = m_fwdm->GetFunctionsSetNames();
  mp_view->FillFWDOtherList(strings);
 
- mp_view->SetFWDFlag(FLAG_START_MAP,true);
- mp_view->SetFWDFlag(FLAG_IDLE_MAP,true);
- mp_view->SetFWDFlag(FLAG_WORK_MAP,true);
- mp_view->SetFWDFlag(FLAG_TEMP_MAP,true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP,true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP,true);
+ mp_view->SetFWDFlag(FLAG_START_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -255,6 +263,13 @@ void SECU3ExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
   m_fwdm->SetDwellCntrlMap(mp_fwd->dwellcntrl_table);
 
+ if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
+ {
+  m_fwdm->SetCTSCurveMap(mp_fwd->ctscurve_table);
+  m_fwdm->SetCTSMapVoltageLimit(0, mp_fwd->ctscurve_vlimits[0]);
+  m_fwdm->SetCTSMapVoltageLimit(1, mp_fwd->ctscurve_vlimits[1]);
+ }
+
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
  m_fwdm->StoreBytes(&buffer[0]);
@@ -321,9 +336,10 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
- mp_view->SetFWDFlag(FLAG_TEMP_MAP,true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP,true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP,true);
+ mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

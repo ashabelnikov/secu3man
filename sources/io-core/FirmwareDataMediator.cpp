@@ -845,6 +845,10 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
  GetDwellCntrlMap(op_fwd->dwellcntrl_table);
+
+ GetCTSCurveMap(op_fwd->ctscurve_table);
+ op_fwd->ctscurve_vlimits[0] = GetCTSMapVoltageLimit(0);
+ op_fwd->ctscurve_vlimits[1] = GetCTSMapVoltageLimit(1);
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -860,6 +864,10 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
  SetDwellCntrlMap(ip_fwd->dwellcntrl_table);
+
+ SetCTSCurveMap(ip_fwd->ctscurve_table);
+ SetCTSMapVoltageLimit(0, ip_fwd->ctscurve_vlimits[0]);
+ SetCTSMapVoltageLimit(1, ip_fwd->ctscurve_vlimits[1]);
 }
 
 void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)

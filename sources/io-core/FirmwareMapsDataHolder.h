@@ -33,6 +33,7 @@
 #define F_NAME_SIZE            16
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE 32
+#define THERMISTOR_LOOKUP_TABLE_SIZE 16
 
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          8
@@ -43,7 +44,7 @@ struct SECU3FWMapsItem
 {
  float f_str[F_STR_POINTS];    // функция УОЗ на старте
  float f_idl[F_IDL_POINTS];    // функция УОЗ для ХХ
- float f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];     // основная функция УОЗ (3D)
+ float f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; // основная функция УОЗ (3D)
  float f_tmp[F_TMP_POINTS];    // функция коррект. УОЗ по температуре
  _TSTRING name;                // имя набора характеристик
 };
@@ -54,6 +55,8 @@ struct FWMapsDataHolder
  SECU3FWMapsItem  maps[TABLES_NUMBER];
  float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
  float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
+ float ctscurve_vlimits[2]; //voltage limits are stored together with table
 
  std::vector<_TSTRING> GetListOfNames(void)
  {

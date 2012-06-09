@@ -162,6 +162,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

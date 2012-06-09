@@ -137,12 +137,14 @@ void MPSZImportController::OnViewActivate(void)
  title.Format(MLL::GetString(IDS_MPSZ_FW_FILE).c_str(),m_mpsz_file_name.c_str());
  mp_view->SetFWDOtherListTitle(_TSTRING(title));
 
- mp_view->SetFWDFlag(FLAG_TEMP_MAP,false);
- mp_view->EnableFWDFlag(FLAG_TEMP_MAP,false);
+ mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
 
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
@@ -151,9 +153,9 @@ void MPSZImportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = mp_mpsz_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(strings);
 
- mp_view->SetFWDFlag(FLAG_START_MAP,true);
- mp_view->SetFWDFlag(FLAG_IDLE_MAP,true);
- mp_view->SetFWDFlag(FLAG_WORK_MAP,true);
+ mp_view->SetFWDFlag(FLAG_START_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
 }
 
 void MPSZImportController::OnCurrentListNameChanged(int item, CString text)
@@ -304,6 +306,8 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
  
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));

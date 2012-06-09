@@ -102,7 +102,7 @@ bool MPSZFileDataIO::Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes
   return false;  //некорректный размер файла
  }
 
- file.Read(rawdata,size);
+ file.Read(rawdata, size);
  file.Close();
 
  p_object->operator()(rawdata,&m_data);
@@ -333,7 +333,7 @@ void MPSZDataMPZ_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
  memset(raw_str,0,32);
  strcpy(raw_str,T2A(const_cast<TCHAR*>(ip_data->maps[i].name.c_str())));
  for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++) //копируем только определенное кол-во символов
-   p_raws->name[j] = raw_str[j];
+  p_raws->name[j] = raw_str[j];
 
  //засовываем карту ХХ
  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)

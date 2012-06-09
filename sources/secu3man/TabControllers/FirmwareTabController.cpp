@@ -87,41 +87,41 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  ASSERT(m_code_for_merge_with_overhead);
 
  //устанавливаем делегаты (обработчики событий от представления)
- m_view->setOnBootLoaderInfo(MakeDelegate(this,&CFirmwareTabController::OnBootLoaderInfo));
- m_view->setOnReadEepromToFile(MakeDelegate(this,&CFirmwareTabController::OnReadEepromToFile));
- m_view->setOnWriteEepromFromFile(MakeDelegate(this,&CFirmwareTabController::OnWriteEepromFromFile));
- m_view->setOnReadFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnReadFlashToFile));
- m_view->setOnWriteFlashFromFile(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashFromFile));
- m_view->setOnBLStartedEmergency(MakeDelegate(this,&CFirmwareTabController::OnBLStartedEmergency));
- m_view->setOnOpenFlashFromFile(MakeDelegate(this,&CFirmwareTabController::OnOpenFlashFromFile));
- m_view->setOnFWInformationTextChanged(MakeDelegate(this,&CFirmwareTabController::OnFWInformationTextChanged));
- m_view->setOnSaveFlashToFile(MakeDelegate(this,&CFirmwareTabController::OnSaveFlashToFile));
- m_view->setIsFirmwareOpened(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
- m_view->setOnImportDataFromAnotherFW(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromAnotherFW));
- m_view->setOnImportDataFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportDataFromSECU3));
- m_view->setOnReadFlashFromSECU(MakeDelegate(this,&CFirmwareTabController::OnReadFlashFromSECU));
- m_view->setOnWriteFlashToSECU(MakeDelegate(this,&CFirmwareTabController::OnWriteFlashToSECU));
- m_view->setOnImportMapsFromMPSZ(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromMPSZ));
- m_view->setOnImportMapsFromSECU3(MakeDelegate(this,&CFirmwareTabController::OnImportMapsFromSECU3));
+ m_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));
+ m_view->setOnReadEepromToFile(MakeDelegate(this, &CFirmwareTabController::OnReadEepromToFile));
+ m_view->setOnWriteEepromFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteEepromFromFile));
+ m_view->setOnReadFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnReadFlashToFile));
+ m_view->setOnWriteFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashFromFile));
+ m_view->setOnBLStartedEmergency(MakeDelegate(this, &CFirmwareTabController::OnBLStartedEmergency));
+ m_view->setOnOpenFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnOpenFlashFromFile));
+ m_view->setOnFWInformationTextChanged(MakeDelegate(this, &CFirmwareTabController::OnFWInformationTextChanged));
+ m_view->setOnSaveFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnSaveFlashToFile));
+ m_view->setIsFirmwareOpened(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
+ m_view->setOnImportDataFromAnotherFW(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromAnotherFW));
+ m_view->setOnImportDataFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromSECU3));
+ m_view->setOnReadFlashFromSECU(MakeDelegate(this, &CFirmwareTabController::OnReadFlashFromSECU));
+ m_view->setOnWriteFlashToSECU(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashToSECU));
+ m_view->setOnImportMapsFromMPSZ(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromMPSZ));
+ m_view->setOnImportMapsFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromSECU3));
  m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
  m_view->setOnImportTablesFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportTablesFromEEPROMFile));
- m_view->setOnExportMapsToMPSZ(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToMPSZ));
- m_view->setOnExportMapsToSECU3(MakeDelegate(this,&CFirmwareTabController::OnExportMapsToSECU3));
- m_view->setOnFirmwareInfo(MakeDelegate(this,&CFirmwareTabController::OnFirmwareInfo));
- m_view->setOnViewFWOptions(MakeDelegate(this,&CFirmwareTabController::OnViewFWOptions));
+ m_view->setOnExportMapsToMPSZ(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToMPSZ));
+ m_view->setOnExportMapsToSECU3(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToSECU3));
+ m_view->setOnFirmwareInfo(MakeDelegate(this, &CFirmwareTabController::OnFirmwareInfo));
+ m_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
  m_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
 
- m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this,&CFirmwareTabController::OnMapChanged));
- m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetSelectionChanged));
- m_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this,&CFirmwareTabController::OnFunSetNamechanged));
+ m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
+ m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
+ m_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetNamechanged));
  m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
  m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
- m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this,&CFirmwareTabController::IsFirmwareOpened));
- m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this,&CFirmwareTabController::OnCTSXAxisEditChanged));
+ m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
+ m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
 
- m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this,&CFirmwareTabController::OnParamDeskTabActivate));
- m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this,&CFirmwareTabController::OnParamDeskChangeInTab));
+ m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
+ m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
 
  //register controller!
  TabControllersCommunicator::GetInstance()->AddReference(this, TCC_FIRMWARE_TAB_CONTROLLER);
