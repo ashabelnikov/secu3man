@@ -415,11 +415,6 @@ void CParamDeskDlg::EnableHallOutputParams(bool enable)
  m_pMiscPageDlg->EnableHallOutputParams(enable);
 }
 
-void CParamDeskDlg::SetCrankType(int type)
-{
- m_pCKPSPageDlg->SetCrankType(type);
-}
-
 void CParamDeskDlg::SetMaxCylinders(int number)
 {
  m_pCKPSPageDlg->SetMaxCylinders(number);

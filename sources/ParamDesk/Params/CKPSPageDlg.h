@@ -46,7 +46,6 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   void SetValues(const SECU3IO::CKPSPar* i_values);
 
   void EnableIgnitionCogs(bool enable);
-  void SetCrankType(int type);
   void SetMaxCylinders(int number);
   void EnableOddCylinders(bool enable);
 
@@ -54,6 +53,8 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataCogsNum();
+  afx_msg void OnChangeDataCylNum();
   afx_msg void OnClickedPdPosFrontRadio();
   afx_msg void OnClickedPdNegFrontRadio();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -78,7 +79,6 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   bool m_enabled;
   bool m_igncogs_enabled;
   bool m_odd_cylnum_enabled;
-  int m_crank_type;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;
@@ -93,4 +93,12 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_ignition_cogs_spin;
   CEditEx m_ignition_cogs_edit;
   CStatic m_ignition_cogs_label;
+
+  CSpinButtonCtrlEx m_wheel_cogs_num_spin;
+  CEditEx m_wheel_cogs_num_edit;
+  CStatic m_wheel_cogs_num_label;
+
+  CSpinButtonCtrlEx m_wheel_miss_num_spin;
+  CEditEx m_wheel_miss_num_edit;
+  CStatic m_wheel_miss_num_label;
 };

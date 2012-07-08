@@ -143,6 +143,8 @@ namespace SECU3IO
   unsigned char ckps_ignit_cogs;
   unsigned char ckps_engine_cyl;
   unsigned char ckps_merge_ign_outs;
+  unsigned char ckps_cogs_num;
+  unsigned char ckps_miss_num;
  };
 
  struct OPCompNc                       //используется если надо просто принять или послать определенный код действия
@@ -346,7 +348,7 @@ namespace SECU3IO
   _SD(2,  _T("COPT_ATMEGA64")),
   _SD(3,  _T("COPT_ATMEGA128")),
   _SD(4,  _T("COPT_VPSEM")),
-  _SD(5,  _T("COPT_WHEEL_36_1")),
+  _SD(5,  _T("COPT_WHEEL_36_1")),   /*Obsolete! Left for compatibility reasons*/
   _SD(6,  _T("COPT_INVERSE_IGN_OUTPUTS")),
   _SD(7,  _T("COPT_DWELL_CONTROL")),
   _SD(8,  _T("COPT_COOLINGFAN_PWM")),
@@ -369,7 +371,7 @@ namespace SECU3IO
  const int COPT_ATMEGA64 = 2;
  const int COPT_ATMEGA128 = 3;
  const int COPT_VPSEM = 4;
- const int COPT_WHEEL_36_1 = 5;
+ const int COPT_WHEEL_36_1 = 5;     /*Obsolete! Left for compatibility reasons*/
  const int COPT_INVERSE_IGN_OUTPUTS = 6;
  const int COPT_DWELL_CONTROL = 7;
  const int COPT_COOLINGFAN_PWM = 8;

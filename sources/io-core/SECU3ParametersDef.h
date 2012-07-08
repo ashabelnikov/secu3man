@@ -113,10 +113,13 @@ typedef struct
 
  _uchar cts_use_map;                 // Flag which indicates using of lookup table for coolant temperature sensor
 
+ _uchar ckps_cogs_num;               // number of crank wheel's teeth 
+ _uchar ckps_miss_num;               // number of missing crank wheel's teeth
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1];
+ _uchar reserved[32];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

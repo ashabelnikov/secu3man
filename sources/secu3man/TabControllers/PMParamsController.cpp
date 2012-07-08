@@ -129,7 +129,6 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
  mp_view->EnableUseCTSCurveMap((opt & (1 << COPT_THERMISTOR_CS)) > 0);
  mp_view->EnableHallOutputParams((opt & (1 << COPT_HALL_OUTPUT)) > 0);
- mp_view->SetCrankType(((opt & (1 << COPT_WHEEL_36_1)) > 0) ? COPT_WHEEL_36_1 : -1);
  if ((opt & (1 << COPT_SECU3T)))
   //SECU-3T has two additional ignition outputs
   mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 6 : 8);

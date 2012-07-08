@@ -45,7 +45,6 @@ class IParamDeskView : public IDeskView
   virtual void EnableUseVentPwm(bool enable) = 0;
   virtual void EnableUseCTSCurveMap(bool enable) = 0;
   virtual void EnableHallOutputParams(bool enable) = 0;
-  virtual void SetCrankType(int type) = 0;
   virtual void SetMaxCylinders(int number) = 0;
   virtual void EnableOddCylinders(bool enable) = 0;
 

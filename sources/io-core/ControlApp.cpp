@@ -744,7 +744,7 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
 
- if (strlen((char*)raw_packet)!=9)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Тип фронта ДПКВ
@@ -771,6 +771,16 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
  if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_CKPSPar.ckps_merge_ign_outs))
   return false;
  raw_packet+=1;
+
+ //Кол-во зубьев задающего шкива, включая пропущенные
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &m_CKPSPar.ckps_cogs_num))
+  return false;
+ raw_packet+=2;
+
+ //Кол-во пропущенных зубьев задающего шкива (допустимые значения: 0, 1, 2)
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
+  return false;
+ raw_packet+=2;
 
  if (*raw_packet!='\r')
   return false;
@@ -1680,6 +1690,8 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  CNumericConv::Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
+ CNumericConv::Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 
