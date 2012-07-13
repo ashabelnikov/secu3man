@@ -240,12 +240,16 @@ _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
  return _TSTRING(string);
 }
 
-void CFirmwareDataMediator::SetSignatureInfo(_TSTRING i_string)
+void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
 {
+ _TSTRING str = i_string;
+ //string must be fixed length
+ while(str.length() < FW_SIGNATURE_INFO_SIZE)
+  str+=' ';
  char raw_string[256];
  memset(raw_string, 0, FW_SIGNATURE_INFO_SIZE+1);
  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
- CharToOem(i_string.c_str(), raw_string);
+ CharToOem(str.c_str(), raw_string);
  memcpy(&p_fd->exdata.fw_signature_info, raw_string, FW_SIGNATURE_INFO_SIZE);
 }
 
