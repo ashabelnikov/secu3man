@@ -61,7 +61,7 @@ class IOCORE_API CFirmwareDataMediator
 
   //-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
-  void SetSignatureInfo(_TSTRING i_string);
+  void SetSignatureInfo(const _TSTRING& i_string);
 
   DWORD GetFWOptions(void);
 
