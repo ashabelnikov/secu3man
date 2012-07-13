@@ -230,7 +230,7 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
    SelectObject(hdc,fntDescr.m_hObject);
    SetTextColor(hdc,RGB(250,240,250));
    SetBkMode(hdc, TRANSPARENT);
-   DrawText(hdc,d_about.about_description,-1,CRect(203,45,433,170),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
+   DrawText(hdc,d_about.about_description,-1,CRect(203,45,433,180),DT_EDITCONTROL |DT_WORD_ELLIPSIS);
 
    EndPaint(hWnd,&pt);
    break;
