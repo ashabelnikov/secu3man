@@ -336,7 +336,7 @@ namespace SECU3IO
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
 
- const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 20;
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 21;
  //<bitnumber, name>
 #define _SD std::pair<int, TCHAR*>
  static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
@@ -360,7 +360,8 @@ namespace SECU3IO
   _SD(16, _T("COPT_THERMISTOR_CS")),
   _SD(17, _T("COPT_SECU3T")),
   _SD(18, _T("COPT_DIAGNOSTICS")),
-  _SD(19, _T("COPT_HALL_OUTPUT"))
+  _SD(19, _T("COPT_HALL_OUTPUT")),
+  _SD(20, _T("COPT_REV9_BOARD"))
  };
 #undef _SD
 
@@ -384,6 +385,7 @@ namespace SECU3IO
  const int COPT_SECU3T = 17;
  const int COPT_DIAGNOSTICS = 18;
  const int COPT_HALL_OUTPUT = 19;
+ const int COPT_REV9_BOARD = 20;
 
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;
