@@ -115,8 +115,13 @@ class IOCORE_API CFirmwareDataMediator
    IOP_FE         =   7,     // FE
    IOP_FL_PUMP    =   8,     // FL_PUMP
    IOP_HALL_OUT   =   9,     // HALL_OUT
-// IOP_RESERVED1  =  10,     // Reserved
+   IOP_STROBE     =  10,     // STROBE
 // IOP_RESERVED2  =  11,     // Reserved
+// IOS_RESERVED3  =  11,     // Reserved
+// IOS_RESERVED4  =  12,     // Reserved
+// IOS_RESERVED5  =  13,     // Reserved
+// IOS_RESERVED6  =  14,     // Reserved
+// IOS_RESERVED7  =  15,     // Reserved
    IOP_COUNT                 // Number of plugs used in I/O remapping
   };
 
@@ -133,12 +138,6 @@ class IOCORE_API CFirmwareDataMediator
    IOS_FE         =   7,     // FE
 // IOS_RESERVED1  =   8,     // Reserved
 // IOS_RESERVED2  =   9,     // Reserved
-// IOS_RESERVED1  =  10,     // Reserved
-// IOS_RESERVED2  =  11,     // Reserved
-// IOS_RESERVED1  =  12,     // Reserved
-// IOS_RESERVED2  =  13,     // Reserved
-// IOS_RESERVED1  =  14,     // Reserved
-// IOS_RESERVED2  =  15,     // Reserved
    IOS_COUNT                 // Number of slots used for I/O remapping
   };
 
