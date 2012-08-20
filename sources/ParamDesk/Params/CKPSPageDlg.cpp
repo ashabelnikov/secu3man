@@ -41,7 +41,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnChangeDataCylNum)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
- ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
@@ -248,6 +248,10 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params, i_values, sizeof(SECU3IO::CKPSPar));
 
+ //Fill it here because its contents depend on cogs & cylinder number. Note, selection will be set by
+ //following calls
+ _FillCKPSTeethBTDCComboBox();
+
  //комбо боксы
  _SetCKPSTeethBTDCComboBoxSelection(m_params.ckps_cogs_btdc);
  _SetCKPSEngineCylComboBoxSelection(m_params.ckps_engine_cyl);
@@ -287,14 +291,28 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  m_cogs_numbers.clear();
 
  std::map<int, float> degBTDC;
- degBTDC.insert(std::make_pair(1, 120.0f));
- degBTDC.insert(std::make_pair(2, 120.0f));
- degBTDC.insert(std::make_pair(3, 120.0f));
- degBTDC.insert(std::make_pair(4, 120.0f));
- degBTDC.insert(std::make_pair(5, 60.0f));
- degBTDC.insert(std::make_pair(6, 50.0f));
- degBTDC.insert(std::make_pair(7, 45.0f));
- degBTDC.insert(std::make_pair(8, 40.0f));
+ if (m_params.ckps_miss_num > 0)
+ {
+  degBTDC.insert(std::make_pair(1, 120.0f));
+  degBTDC.insert(std::make_pair(2, 120.0f));
+  degBTDC.insert(std::make_pair(3, 120.0f));
+  degBTDC.insert(std::make_pair(4, 120.0f));
+  degBTDC.insert(std::make_pair(5, 60.0f));
+  degBTDC.insert(std::make_pair(6, 50.0f));
+  degBTDC.insert(std::make_pair(7, 45.0f));
+  degBTDC.insert(std::make_pair(8, 40.0f));
+ }
+ else
+ { //non-missing teeth wheel
+  degBTDC.insert(std::make_pair(1, 330.0f));
+  degBTDC.insert(std::make_pair(2, 330.0f));
+  degBTDC.insert(std::make_pair(3, 330.0f));
+  degBTDC.insert(std::make_pair(4, 330.0f));
+  degBTDC.insert(std::make_pair(5, 330.0f));
+  degBTDC.insert(std::make_pair(6, 270.0f));
+  degBTDC.insert(std::make_pair(7, 270.0f));
+  degBTDC.insert(std::make_pair(8, 270.0f)); 
+ }
 
  //calculate range for number of cogs BTDC
  int cyl = m_params.ckps_engine_cyl;
@@ -303,7 +321,9 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  int cogs = m_params.ckps_cogs_num;
  float deg = degBTDC[cyl];
  int cogsBTDC = MathHelpers::Round(ceil(deg / (360.0f / cogs)));
- for(int tn = cogsBTDC - (cogsBTDC / 3); tn <= cogsBTDC + (cogsBTDC / 3); ++tn)
+ int lo_limit = (m_params.ckps_miss_num > 0) ? cogsBTDC - (cogsBTDC / 3) : MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
+ int hi_limit = (m_params.ckps_miss_num > 0) ? cogsBTDC + (cogsBTDC / 3) : cogsBTDC;
+ for(int tn = lo_limit; tn <= hi_limit; ++tn)
  {
   CString str;
   str.Format(_T("%d"), tn);
