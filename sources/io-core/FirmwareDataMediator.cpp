@@ -1144,7 +1144,26 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
   {
    cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - szSrc);
    cd_data_t* pDst = (cd_data_t*)(p_dataDst - szDst);
-   memcpy(&pDst->iorem, &pSrc->iorem, pDst->iorem.size); //Copy!
+   //Transfer values (don't copy it as memory block, because pointers may be different!)
+   //So, we copy logical references. Not actual bits.
+   for(size_t p = 0; p < IOREM_PLUGS; ++p)
+   {
+    for(size_t s = 0; s < IOREM_SLOTS; ++s)
+    {
+     if (pSrc->iorem.i_slots[s] == pSrc->iorem.i_plugs[p])
+      break;
+    }
+    if  (s < IOREM_SLOTS) //slot?
+    {
+     pDst->iorem.i_plugs[p] = pDst->iorem.i_slots[s];
+     pDst->iorem.v_plugs[p] = pDst->iorem.v_slots[s];
+    }
+    else if (pSrc->iorem.i_plugs[p] == pSrc->iorem.s_stub) //stub?
+    {
+     pDst->iorem.i_plugs[p] = pDst->iorem.s_stub;
+     pDst->iorem.v_plugs[p] = pDst->iorem.s_stub;
+    }
+   }
   }
  }
 }
