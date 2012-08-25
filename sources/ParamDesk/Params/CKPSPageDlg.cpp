@@ -25,6 +25,7 @@
 
 #include <algorithm>
 #include <map>
+#include <math.h>
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
 

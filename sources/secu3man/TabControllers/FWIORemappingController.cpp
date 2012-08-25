@@ -139,7 +139,7 @@ void CFWIORemappingController::OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iop
 
 void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
 {
- for(int s = FWDM::IOS_ECF; s <= FWDM::IOS_COUNT; ++s)
+ for(int s = FWDM::IOS_ECF; s < FWDM::IOS_COUNT; ++s)
  {
   if (!_IsSlotFree((FWDM::IOSid)s))
    continue;
@@ -153,7 +153,7 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
 bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
 {
  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
- for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
+ for(int p = FWDM::IOP_ECF; p < FWDM::IOP_COUNT; ++p)
  {
   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
   if (plug == slot)
@@ -165,7 +165,7 @@ bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
 void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
 {
  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
- for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
+ for(int p = FWDM::IOP_ECF; p < FWDM::IOP_COUNT; ++p)
  {
   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
   if(plug == slot)
@@ -174,18 +174,18 @@ void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
 }
 
 void CFWIORemappingController::_UpdateView(void)
-{
- for(int s = FWDM::IOS_ECF; s <= FWDM::IOS_COUNT; ++s)
+ {
+ for(int s = FWDM::IOS_ECF; s < FWDM::IOS_COUNT; ++s)
  {  
   DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s);
-  for(int p = FWDM::IOP_ECF; p <= FWDM::IOP_COUNT; ++p)
-  {
-   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   //If slot == stub, then it is not allowed in this firmware
+  for(int p = FWDM::IOP_ECF; p < FWDM::IOP_COUNT; ++p)
+   {
+    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
+    //If slot == stub, then it is not allowed in this firmware
    if (slot == plug && slot != mp_fwdm->GetSStub())
-    mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
+     mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
+   }
   }
- }
 }
 
 void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId)
@@ -202,6 +202,7 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId)
 
 bool CFWIORemappingController::_CheckErrors(void)
 {
+ _AttachFreeSlotsToDefaultPlugs();
  //todo
  return false;
 }

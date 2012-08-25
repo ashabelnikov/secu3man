@@ -1153,7 +1153,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
      if (pSrc->iorem.i_slots[s] == pSrc->iorem.i_plugs[p])
       break;
     }
-    if  (s < IOREM_SLOTS) //slot?
+    if  ((s < IOREM_SLOTS) && (pSrc->iorem.i_plugs[p] != pSrc->iorem.s_stub)) //slot?
     {
      pDst->iorem.i_plugs[p] = pDst->iorem.i_slots[s];
      pDst->iorem.v_plugs[p] = pDst->iorem.v_slots[s];
