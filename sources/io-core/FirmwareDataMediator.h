@@ -116,7 +116,7 @@ class IOCORE_API CFirmwareDataMediator
    IOP_FL_PUMP    =   8,     // FL_PUMP
    IOP_HALL_OUT   =   9,     // HALL_OUT
    IOP_STROBE     =  10,     // STROBE
-// IOP_RESERVED2  =  11,     // Reserved
+   IOP_PWRRELAY   =  11,     // PWRRELAY
 // IOS_RESERVED3  =  11,     // Reserved
 // IOS_RESERVED4  =  12,     // Reserved
 // IOS_RESERVED5  =  13,     // Reserved
