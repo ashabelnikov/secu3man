@@ -116,10 +116,12 @@ typedef struct
  _uchar ckps_cogs_num;               // number of crank wheel's teeth 
  _uchar ckps_miss_num;               // number of missing crank wheel's teeth
 
+ _uchar ref_s_edge_type;             // REF_S edge type (тип фронта ДНО)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[32];
+ _uchar reserved[31];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

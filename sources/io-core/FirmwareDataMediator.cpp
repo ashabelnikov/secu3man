@@ -633,6 +633,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->ckps_cogs_btdc  = p_in->ckps_cogs_btdc;
     p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
     p_params->ckps_edge_type  = p_in->ckps_edge_type;
+    p_params->ref_s_edge_type  = p_in->ref_s_edge_type;
     p_params->ckps_engine_cyl = p_in->ckps_engine_cyl;
     p_params->ckps_merge_ign_outs = p_in->ckps_merge_ign_outs;
     p_params->ckps_cogs_num = p_in->ckps_cogs_num;
@@ -790,6 +791,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->ckps_cogs_btdc  = p_params->ckps_cogs_btdc;
      p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
      p_out->ckps_edge_type  = p_params->ckps_edge_type;
+     p_out->ref_s_edge_type  = p_params->ref_s_edge_type;
      p_out->ckps_engine_cyl = p_params->ckps_engine_cyl;
      p_out->ckps_merge_ign_outs = p_params->ckps_merge_ign_outs;
      p_out->ckps_cogs_num = p_params->ckps_cogs_num;
@@ -1148,7 +1150,8 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
    //So, we copy logical references. Not actual bits.
    for(size_t p = 0; p < IOREM_PLUGS; ++p)
    {
-    for(size_t s = 0; s < IOREM_SLOTS; ++s)
+    size_t s = 0;
+    for(; s < IOREM_SLOTS; ++s)
     {
      if (pSrc->iorem.i_slots[s] == pSrc->iorem.i_plugs[p])
       break;

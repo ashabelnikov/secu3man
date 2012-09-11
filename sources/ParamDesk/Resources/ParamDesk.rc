@@ -395,42 +395,45 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    CONTROL         "Отрицательный",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,15,17,67,10
-    CONTROL         "Положтельный",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,15,31,67,10
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,9,81,48,71,
+    CONTROL         "Отрицат.",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,15,17,49,10
+    CONTROL         "Полож.",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,15,31,41,10
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,9,109,47,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,10,103,34,16,
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
-                    IDC_PD_CKPS_IGNITION_COGS_UNIT,63,98,92,24,NOT WS_GROUP
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,45,103,11,16
-    GROUPBOX        "Фронт сигнала ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,83,
+                    UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
+    GROUPBOX        "Фронт ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,
                     39
     LTEXT           "Кол-во зубьев до в.м.т.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,63,82,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,9,90,55,18,NOT
                     WS_GROUP
-    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,10,127,47,71,
+    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,93,110,43,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Кол-во цилиндров двигателя",
-                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,63,126,89,17,NOT WS_GROUP
+                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,93,90,76,17,NOT WS_GROUP
     CONTROL         "Объединить сигналы на одном выходе",
-                    IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,103,10,63,31
-    EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,56,25,16,ES_AUTOHSCROLL | 
+                    IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX |
+                    BS_MULTILINE | WS_TABSTOP,16,49,148,12
+    EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,68,25,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    LTEXT           "Кол-во зубьев шкива",IDC_PD_CKPS_COGS_NUM_UNIT,50,51,39,
+    LTEXT           "Кол-во зубьев шкива",IDC_PD_CKPS_COGS_NUM_UNIT,50,63,39,
                     25,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_COGS_NUM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,36,56,11,16
-    EDITTEXT        IDC_PD_CKPS_MISS_NUM_EDIT,93,56,25,16,ES_AUTOHSCROLL | 
+                    UDS_ARROWKEYS | UDS_HOTTRACK,36,68,11,16
+    EDITTEXT        IDC_PD_CKPS_MISS_NUM_EDIT,93,68,25,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    LTEXT           "Кол-во отсут. зубьев",IDC_PD_CKPS_MISS_NUM_UNIT,133,51,
+    LTEXT           "Кол-во отсут. зубьев",IDC_PD_CKPS_MISS_NUM_UNIT,133,63,
                     36,24,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_MISS_NUM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,119,56,11,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,119,68,11,16
+    CONTROL         "Отрицат.",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,17,48,10
+    CONTROL         "Полож.",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,30,41,10
+    GROUPBOX        "Фронт ДНО",IDC_PD_REF_S_FRONT_GROUPBOX,87,6,59,39
 END
 
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 148
@@ -956,41 +959,44 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Falling",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,15,17,67,10
+                    BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,15,17,49,10
     CONTROL         "Rising",IDC_PD_CKPS_POSFRONT_RADIOBOX,"Button",
-                    BS_AUTORADIOBUTTON | WS_TABSTOP,15,31,67,10
-    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,9,81,48,71,
+                    BS_AUTORADIOBUTTON | WS_TABSTOP,15,31,41,10
+    COMBOBOX        IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX,9,109,47,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,10,103,34,16,
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Duration of commutator's pulse driver in teeth of wheel",
-                    IDC_PD_CKPS_IGNITION_COGS_UNIT,63,98,92,24,NOT WS_GROUP
+                    IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,45,103,11,16
-    GROUPBOX        "CKP sensor signal edge",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,
-                    83,39
+                    UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
+    GROUPBOX        "CKPS edge",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,
+                    39
     LTEXT           "Num. of teeth before t.d.c.",
-                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,63,82,89,9,NOT 
+                    IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,9,90,55,18,NOT 
                     WS_GROUP
-    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,10,127,47,71,
+    COMBOBOX        IDC_PD_CKPS_ENGINE_CYL_COMBOBOX,93,110,43,71,
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Number of engine cylinders",
-                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,63,126,89,17,NOT WS_GROUP
+                    IDC_PD_CKPS_ENGINE_CYL_CAPTION,93,90,76,17,NOT WS_GROUP
     CONTROL         "Merge signals to single output",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,103,10,63,31
-    EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,56,25,16,ES_AUTOHSCROLL | 
+                    BS_MULTILINE | WS_TABSTOP,16,49,148,12
+    EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,68,25,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    LTEXT           "Number of wheel's teeth",IDC_PD_CKPS_COGS_NUM_UNIT,50,51,39,
+    LTEXT           "Number of wheel's teeth",IDC_PD_CKPS_COGS_NUM_UNIT,50,63,39,
                     25,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_COGS_NUM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,36,56,11,16
-    EDITTEXT        IDC_PD_CKPS_MISS_NUM_EDIT,93,56,25,16,ES_AUTOHSCROLL | 
+                    UDS_ARROWKEYS | UDS_HOTTRACK,36,68,11,16
+    EDITTEXT        IDC_PD_CKPS_MISS_NUM_EDIT,93,68,25,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    LTEXT           "Number of missing teeth",IDC_PD_CKPS_MISS_NUM_UNIT,133,51,
+    LTEXT           "Number of missing teeth",IDC_PD_CKPS_MISS_NUM_UNIT,133,63,
                     36,24,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_MISS_NUM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,119,56,11,16
+                    UDS_ARROWKEYS | UDS_HOTTRACK,119,68,11,16
+    CONTROL         "Falling",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,17,48,10
+    CONTROL         "Rising",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,30,41,10
+    GROUPBOX        "REF_S edge",IDC_PD_REF_S_FRONT_GROUPBOX,87,6,59,39
 END
 
 IDD_PD_KNOCK_PAGE DIALOGEX 0, 0, 174, 148

@@ -744,11 +744,16 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
 
- if (strlen((char*)raw_packet)!=13)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Тип фронта ДПКВ
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CKPSPar.ckps_edge_type))
+  return false;
+ raw_packet+=1;
+
+ //Тип фронта ДНО (вход REF_S)
+ if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CKPSPar.ref_s_edge_type))
   return false;
  raw_packet+=1;
 
@@ -1686,6 +1691,7 @@ void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
 void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
 {
  CNumericConv::Bin4ToHex(packet_data->ckps_edge_type, m_outgoing_packet);
+ CNumericConv::Bin4ToHex(packet_data->ref_s_edge_type, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_cogs_btdc, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);

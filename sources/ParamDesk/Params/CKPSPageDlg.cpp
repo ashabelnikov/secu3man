@@ -46,10 +46,15 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
+ ON_BN_CLICKED(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio2)
+ ON_BN_CLICKED(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio2)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_FRONT_GROUPBOX, OnUpdateControls_REF_S_Front)
+ ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
+ ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnUpdateControls)
@@ -83,6 +88,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 {
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
+ m_params.ref_s_edge_type = 0;
  m_params.ckps_ignit_cogs = 20;
  m_params.ckps_merge_ign_outs = 0;
  m_params.ckps_cogs_num = 60;
@@ -102,6 +108,10 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_FRONT_GROUPBOX, m_ckps_front_groupbox);
  DDX_Control(pDX,IDC_PD_CKPS_POSFRONT_RADIOBOX, m_ckps_posfront_radio);
  DDX_Control(pDX,IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_ckps_negfront_radio);
+
+ DDX_Control(pDX,IDC_PD_REF_S_FRONT_GROUPBOX, m_ref_s_front_groupbox);
+ DDX_Control(pDX,IDC_PD_REF_S_POSFRONT_RADIOBOX, m_ref_s_posfront_radio);
+ DDX_Control(pDX,IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_ref_s_negfront_radio);
 
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION, m_teeth_before_tdc_label);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, m_teeth_before_tdc_combo);
@@ -125,6 +135,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text(pDX, IDC_PD_CKPS_COGS_NUM_EDIT, m_params.ckps_cogs_num);
  DDX_Text(pDX, IDC_PD_CKPS_MISS_NUM_EDIT, m_params.ckps_miss_num);
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
+ DDX_Radio_UCHAR(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
  DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
 }
 
@@ -135,6 +146,11 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.ckps_miss_num == 0);
 }
 
 void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
@@ -217,6 +233,20 @@ void CCKPSPageDlg::OnClickedPdNegFrontRadio()
  OnChangeNotify();
 }
 
+void CCKPSPageDlg::OnClickedPdPosFrontRadio2()
+{//REF_S
+ m_ref_s_negfront_radio.SetCheck(0);
+ UpdateData();
+ OnChangeNotify();
+}
+
+void CCKPSPageDlg::OnClickedPdNegFrontRadio2()
+{//REF_S
+ m_ref_s_posfront_radio.SetCheck(0);
+ UpdateData();
+ OnChangeNotify();
+}
+
 //разрешение/запрещение контроллов (всех поголовно)
 void CCKPSPageDlg::Enable(bool enable)
 {
@@ -260,6 +290,10 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
  //устанавливаем состояние контроллов фронта ДПКВ
  m_ckps_posfront_radio.SetCheck(m_params.ckps_edge_type);
  m_ckps_negfront_radio.SetCheck(~m_params.ckps_edge_type);
+
+ //устанавливаем состояние контроллов фронта ДНО (входы REF_S)
+ m_ref_s_posfront_radio.SetCheck(m_params.ref_s_edge_type);
+ m_ref_s_negfront_radio.SetCheck(~m_params.ref_s_edge_type);
 
  UpdateData(FALSE); //копируем данные из переменных в диалог
 }
