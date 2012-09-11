@@ -99,6 +99,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
+ DDX_Control(pDX, IDC_APP_SETTINGS_INFO_TEXT, m_info_text);
 }
 
 
@@ -106,8 +107,32 @@ BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_BUTTON, OnAppSettingsLogfolderButton)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, OnAppSettingsLogfolderUseappfolder)
  ON_BN_CLICKED(IDC_APP_SETTINGS_USEDEBUG_FEATURES, OnAppSettingsLogfolderUseDVFeatures)
+ ON_WM_CTLCOLOR()
+ ON_CBN_SELENDOK(IDC_APP_SETTINGS_LANG_SEL_COMBO, OnSelendokRestartPerameters)
+ ON_CBN_SELENDOK(IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, OnSelendokRestartPerameters)
 END_MESSAGE_MAP()
 
+HBRUSH CAppSettingsDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
+{
+ if (pWnd->m_hWnd == m_info_text.m_hWnd && nCtlColor == CTLCOLOR_STATIC)
+ {
+  pDC->SetTextColor(RGB(255, 0, 0));
+  pDC->SetBkMode(TRANSPARENT);
+  return (HBRUSH)GetStockObject(NULL_BRUSH);
+ }
+
+ return CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+}
+
+void CAppSettingsDlg::OnSelendokRestartPerameters()
+{
+ UpdateData();
+ bool program_restart_required = m_iface_lang_selection_orig != m_iface_lang_selection || 
+                                 m_ecu_platform_selection_orig != m_ecu_platform_selection;
+ 
+ m_info_text.SetWindowText(program_restart_required ? MLL::GetString(IDS_APP_SETTINGS_PRG_RESTART_REQ).c_str() : _T(""));
+ m_info_text.ShowWindow(program_restart_required ? SW_SHOW : SW_HIDE); 
+}
 
 BOOL CAppSettingsDlg::OnInitDialog()
 {
@@ -369,6 +394,7 @@ void CAppSettingsDlg::SetInterfaceLanguage(int i_iface_lang)
   if (id == i_iface_lang)
   { //found!
    m_iface_lang_selection = i;
+   m_iface_lang_selection_orig = i;
    return;
   }
  }
@@ -384,6 +410,7 @@ void CAppSettingsDlg::SetECUPlatformType(int i_platform_type)
   if (id == i_platform_type)
   { //found!
    m_ecu_platform_selection = i;
+   m_ecu_platform_selection_orig = i;
    return;
   }
  }

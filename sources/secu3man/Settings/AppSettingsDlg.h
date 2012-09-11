@@ -89,6 +89,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   afx_msg void OnAppSettingsLogfolderButton();
   afx_msg void OnAppSettingsLogfolderUseappfolder();
   afx_msg void OnAppSettingsLogfolderUseDVFeatures();
+  afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
+  afx_msg void OnSelendokRestartPerameters();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -115,6 +117,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CSpinButtonCtrlEx m_tachometer_max_spin;
   CSpinButtonCtrlEx m_pressure_max_spin;
   CStatic m_dv_update_period_caption;
+  CStatic m_info_text;
   int m_app_baudrate;
   int m_bl_baudrate;
   int m_port_number;
@@ -125,7 +128,9 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_midesk_update_period;
   int m_dv_update_period;
   int m_iface_lang_selection;
+  int m_iface_lang_selection_orig;
   int m_ecu_platform_selection;
+  int m_ecu_platform_selection_orig;
   int m_tachometer_max;
   int m_pressure_max;
 };

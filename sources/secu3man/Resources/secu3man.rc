@@ -151,6 +151,8 @@ BEGIN
     LTEXT           "ѕериод обновлени€ отладочной панели (мс)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
                     87,17
+    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,176,125,17,NOT 
+                    WS_VISIBLE
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 221
@@ -426,6 +428,7 @@ BEGIN
     IDS_EXPORT_POPUP_MENU   "Ёкспорт данных"
     IDS_EXPORT_EXPORT_TO_MPSZ "Ёкспортировать таблицы в MPSZ-ZH"
     IDS_EXPORT_EXPORT_TO_SECU3 "Ёкспортировать таблицы в SECU-3"
+    IDS_APP_SETTINGS_PRG_RESTART_REQ "¬нимание! Ќеобходим перезапуск программы!"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -633,6 +636,8 @@ BEGIN
     LTEXT           "Update period of debug's panel (ms)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
                     87,17
+    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,176,125,17,NOT 
+                    WS_VISIBLE
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 221
@@ -905,6 +910,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_ECUERROR_DWELL_CONTROL "Dwell control"
+    IDS_APP_SETTINGS_PRG_RESTART_REQ "Warning! Program restart required!"
 END
 
 STRINGTABLE DISCARDABLE 
