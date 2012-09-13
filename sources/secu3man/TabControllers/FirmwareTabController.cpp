@@ -30,6 +30,7 @@
 #include "common/FastDelegate.h"
 #include "FWImpExp/MPSZImpExpController.h"
 #include "FWImpExp/SECUImpExpController.h"
+#include "FWImpExp/S3FImpExpController.h"
 #include "FWImpExp/EEPROMImpExpController.h"
 #include "FWIORemappingController.h"
 #include "HexUtils/readhex.h"
@@ -103,10 +104,12 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnWriteFlashToSECU(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashToSECU));
  m_view->setOnImportMapsFromMPSZ(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromMPSZ));
  m_view->setOnImportMapsFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromSECU3));
+ m_view->setOnImportMapsFromS3F(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromS3F));
  m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
  m_view->setOnImportTablesFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportTablesFromEEPROMFile));
  m_view->setOnExportMapsToMPSZ(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToMPSZ));
  m_view->setOnExportMapsToSECU3(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToSECU3));
+ m_view->setOnExportMapsToS3F(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToS3F));
  m_view->setOnFirmwareInfo(MakeDelegate(this, &CFirmwareTabController::OnFirmwareInfo));
  m_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
@@ -1322,6 +1325,19 @@ void CFirmwareTabController::OnImportMapsFromSECU3(void)
  }
 }
 
+void CFirmwareTabController::OnImportMapsFromS3F(void)
+{
+ FWMapsDataHolder data;
+ S3FImportController import(&data);
+ m_fwdm->GetMapsData(&data);
+ int result = import.DoImport();
+ if (result == IDOK)
+ {
+  m_fwdm->SetMapsData(&data);
+  SetViewFirmwareValues();
+ }
+}
+
 void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
 {
  std::vector<BYTE> eeprom_buffer(m_epp.m_size, 0x00);
@@ -1372,6 +1388,14 @@ void CFirmwareTabController::OnExportMapsToSECU3(void)
  FWMapsDataHolder data;
  SECU3ExportController export_cntr(&data);
  export_cntr.setFileReader(MakeDelegate(this, &CFirmwareTabController::LoadFLASHFromFile));
+ m_fwdm->GetMapsData(&data);
+ export_cntr.DoExport();
+}
+
+void CFirmwareTabController::OnExportMapsToS3F(void)
+{
+ FWMapsDataHolder data;
+ S3FExportController export_cntr(&data);
  m_fwdm->GetMapsData(&data);
  export_cntr.DoExport();
 }

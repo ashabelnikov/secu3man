@@ -133,15 +133,19 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_MPSZ, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_SECU3, OnUpdatePopupMenu_file1)
+ ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_S3F, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_MPSZ, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_SECU3, OnUpdatePopupMenu_file1)
+ ON_UPDATE_COMMAND_UI(IDM_EXPORT_EXPORT_TO_S3F, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_DEF_PARAMS_FROM_EEPROM_FILE, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_TABLES_FROM_EEPROM_FILE, OnUpdatePopupMenu_file1)
 
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_MPSZ, OnImportMapsFromMPSZ)
  ON_COMMAND(IDM_IMPORT_IMPORT_FROM_SECU3, OnImportMapsFromSECU3)
+ ON_COMMAND(IDM_IMPORT_IMPORT_FROM_S3F, OnImportMapsFromS3F)
  ON_COMMAND(IDM_EXPORT_EXPORT_TO_MPSZ, OnExportMapsToMPSZ)
  ON_COMMAND(IDM_EXPORT_EXPORT_TO_SECU3, OnExportMapsToSECU3)
+ ON_COMMAND(IDM_EXPORT_EXPORT_TO_S3F, OnExportMapsToS3F)
 
  ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnFirmwareInfo)
  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
@@ -488,6 +492,12 @@ void CFirmwareTabDlg::OnImportMapsFromSECU3()
   m_OnImportMapsFromSECU3();
 }
 
+void CFirmwareTabDlg::OnImportMapsFromS3F()
+{
+ if (m_OnImportMapsFromS3F)
+  m_OnImportMapsFromS3F();
+}
+
 void CFirmwareTabDlg::OnImportDefParamsFromEEPROMFile()
 {
  if (m_OnImportDefParamsFromEEPROMFile)
@@ -510,6 +520,12 @@ void CFirmwareTabDlg::OnExportMapsToSECU3()
 {
  if (m_OnExportMapsToSECU3)
   m_OnExportMapsToSECU3();
+}
+
+void CFirmwareTabDlg::OnExportMapsToS3F()
+{
+ if (m_OnExportMapsToS3F)
+  m_OnExportMapsToS3F();
 }
 
 void CFirmwareTabDlg::OnFirmwareInfo()
@@ -622,6 +638,9 @@ void CFirmwareTabDlg::setOnImportMapsFromMPSZ(EventHandler OnFunction)
 void CFirmwareTabDlg::setOnImportMapsFromSECU3(EventHandler OnFunction)
 {m_OnImportMapsFromSECU3 = OnFunction;}
 
+void CFirmwareTabDlg::setOnImportMapsFromS3F(EventHandler OnFunction)
+{m_OnImportMapsFromS3F = OnFunction;}
+
 void CFirmwareTabDlg::setOnImportDefParamsFromEEPROMFile(EventHandler OnFunction)
 {m_OnImportDefParamsFromEEPROMFile = OnFunction;}
 
@@ -639,6 +658,9 @@ void CFirmwareTabDlg::setOnExportMapsToMPSZ(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setOnExportMapsToSECU3(EventHandler OnFunction)
 {m_OnExportMapsToSECU3 = OnFunction;}
+
+void CFirmwareTabDlg::setOnExportMapsToS3F(EventHandler OnFunction)
+{m_OnExportMapsToS3F = OnFunction;}
 
 void CFirmwareTabDlg::setOnFirmwareInfo(EventHandler OnFunction)
 {m_OnFirmwareInfo = OnFunction;}

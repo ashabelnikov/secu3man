@@ -25,4 +25,6 @@
 #define IDS_EXPORT_SECU3_TABLES         6023
 #define IDS_IMPORT_SECU3_TABLES_EE      6024
 #define IDC_MAP_IMPEXP_CTS_FLAG         6025
-
+#define IDS_S3F_FW_FILE                 6026
+#define IDS_IMPORT_S3F_TABLES           6027
+#define IDS_EXPORT_S3F_TABLES           6028

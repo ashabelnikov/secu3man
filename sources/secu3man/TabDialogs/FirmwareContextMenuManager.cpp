@@ -58,6 +58,7 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_ImportMenu.CreatePopupMenu();
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_MPSZ,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_MPSZ));
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_SECU3,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_SECU3));
+ m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_IMPORT_FROM_S3F,MLL::LoadString(IDS_IMPORT_IMPORT_FROM_S3F));
  m_ImportMenu.AppendMenu(MF_SEPARATOR);
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_ANOTHER_FW,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW));
  m_ImportMenu.AppendMenu(MF_STRING,IDM_IMPORT_FW_DATA_FROM_SECU3,MLL::LoadString(IDS_IMPORT_FW_DATA_FROM_SECU3));
@@ -70,6 +71,7 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_ExportMenu.CreatePopupMenu();
  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_MPSZ,MLL::LoadString(IDS_EXPORT_EXPORT_TO_MPSZ));
  m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_SECU3,MLL::LoadString(IDS_EXPORT_EXPORT_TO_SECU3));
+ m_ExportMenu.AppendMenu(MF_STRING,IDM_EXPORT_EXPORT_TO_S3F,MLL::LoadString(IDS_EXPORT_EXPORT_TO_S3F));
  ///////////////////////////////////////////////////////////////////////////
  m_ParentMenu.CreatePopupMenu();
 

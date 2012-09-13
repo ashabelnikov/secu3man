@@ -101,10 +101,12 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnImportDataFromSECU3(void);
   void OnImportMapsFromMPSZ(void);
   void OnImportMapsFromSECU3(void);
+  void OnImportMapsFromS3F(void);
   void OnImportDefParamsFromEEPROMFile();
   void OnImportTablesFromEEPROMFile();
   void OnExportMapsToMPSZ(void);
   void OnExportMapsToSECU3(void);
+  void OnExportMapsToS3F(void);
   void OnFirmwareInfo(void);
   void OnViewFWOptions(void);
   

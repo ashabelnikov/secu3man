@@ -23,6 +23,8 @@ set(HEADERS
   MPSZFileDataIO.h
   MPSZImpExpController.h
   Resource.h
+  S3FImpExpController.h
+  S3FFileDataIO.h
   SECUImpExpController.h
   StdAfx.h
   )
@@ -33,6 +35,8 @@ set(SOURCES
   MapImpExpDlg.cpp
   MPSZFileDataIO.cpp
   MPSZImpExpController.cpp
+  S3FImpExpController.cpp
+  S3FFileDataIO.cpp
   SECUImpExpController.cpp
   StdAfx.cpp
   FwImpExp.rc

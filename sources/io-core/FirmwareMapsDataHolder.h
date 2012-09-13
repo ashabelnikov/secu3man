@@ -58,7 +58,7 @@ struct FWMapsDataHolder
  float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
  float ctscurve_vlimits[2]; //voltage limits are stored together with table
 
- std::vector<_TSTRING> GetListOfNames(void)
+ std::vector<_TSTRING> GetListOfNames(void) const
  {
   std::vector<_TSTRING> list;
   for (int i = 0; i < TABLES_NUMBER; i++)
