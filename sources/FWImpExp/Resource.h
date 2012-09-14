@@ -28,3 +28,4 @@
 #define IDS_S3F_FW_FILE                 6026
 #define IDS_IMPORT_S3F_TABLES           6027
 #define IDS_EXPORT_S3F_TABLES           6028
+#define IDS_FILE_WRONG_CRC              6029

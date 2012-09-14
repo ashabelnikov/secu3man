@@ -34,11 +34,13 @@ class S3FFileDataIO
   bool Load(const _TSTRING i_file_name);
   bool Save(const _TSTRING i_file_name);
 
-  const FWMapsDataHolder& GetData();
+  const FWMapsDataHolder& GetData() const;
   FWMapsDataHolder& GetDataLeft();
 
-  int GetMapSetsNumber(void);
+  int GetMapSetsNumber(void) const;
+  bool IsFileIntegrityOk(void) const;
 
  private:
   FWMapsDataHolder m_data;
+  bool m_file_crc_ok;
 };

@@ -72,6 +72,7 @@ BEGIN
     IDS_EXPORT_S3F_TABLES   "Экспорт таблиц в S3F файл"
     IDS_OPEN_FILE_FOR_EXPORT "Открыть файл для экспорта"
     IDS_IMPORT_SECU3_TABLES_EE "Импорт таблиц из SECU-3 EEPROM"
+    IDS_FILE_WRONG_CRC       "Внимание! Открываемый файл имеет неправильную контролуую сумму. Вы хотите продолжить?"
 END
 
 
@@ -146,4 +147,5 @@ BEGIN
     IDS_EXPORT_S3F_TABLES   "Export tables into S3F file"
     IDS_OPEN_FILE_FOR_EXPORT "Open file for export"
     IDS_IMPORT_SECU3_TABLES_EE "Import tables from SECU-3 EEPROM"
+    IDS_FILE_WRONG_CRC       "Warning! File you are opening has wrong check sum. Do you want to continue?"
 END

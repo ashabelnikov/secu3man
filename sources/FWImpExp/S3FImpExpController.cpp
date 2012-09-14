@@ -63,6 +63,11 @@ int S3FImportController::DoImport(void)
    AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
    return IDCANCEL;
   }
+  if (!mp_s3f_io->IsFileIntegrityOk())
+  { //file CRC is bad, warn user
+   if (IDCANCEL == AfxMessageBox(MLL::LoadString(IDS_FILE_WRONG_CRC),MB_OKCANCEL|MB_ICONWARNING))
+    return IDCANCEL;
+  }
  }
  else
   return IDCANCEL; //отказ пользователя
