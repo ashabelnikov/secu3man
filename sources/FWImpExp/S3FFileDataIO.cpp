@@ -224,7 +224,7 @@ FWMapsDataHolder& S3FFileDataIO::GetDataLeft(void)
  return m_data;
 }
 
-int S3FFileDataIO::GetMapSetsNumber(void) const
+size_t S3FFileDataIO::GetMapSetsNumber(void) const
 {
  return TABLES_NUMBER;
 }

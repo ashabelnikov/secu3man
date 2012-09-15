@@ -37,7 +37,7 @@ class S3FFileDataIO
   const FWMapsDataHolder& GetData() const;
   FWMapsDataHolder& GetDataLeft();
 
-  int GetMapSetsNumber(void) const;
+  size_t GetMapSetsNumber(void) const;
   bool IsFileIntegrityOk(void) const;
 
  private:

@@ -29,6 +29,25 @@
 
 using namespace fastdelegate;
 
+namespace {
+void GenArtificialName(_TSTRING& str, size_t index)
+{
+ if (str == _T(""))
+ { //искусственное имя
+  TCHAR name[32];
+  _stprintf(name, MLL::GetString(IDS_MAP_NO_NAME).c_str(), index);
+  str = _TSTRING(name);
+ }
+}
+std::vector<_TSTRING> GenArtificialNames(const std::vector<_TSTRING>& inpNames)
+{
+ std::vector<_TSTRING> strings = inpNames;
+ for (size_t i = 0; i < strings.size(); ++i)
+  GenArtificialName(strings[i], i+1); 
+ return strings;
+}
+}
+
 S3FImportController::S3FImportController(FWMapsDataHolder* ip_fwd)
 : mp_fwd(ip_fwd)
 , mp_view(new CMapImpExpDlg())
@@ -154,7 +173,7 @@ void S3FImportController::OnViewActivate(void)
 
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
- mp_view->FillFWDOtherList(strings);
+ mp_view->FillFWDOtherList(GenArtificialNames(strings));
 
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
@@ -264,6 +283,10 @@ void S3FExportController::OnOkPressed(void)
   mp_s3f_io->GetDataLeft().ctscurve_vlimits[0] = mp_fwd->ctscurve_vlimits[0];
   mp_s3f_io->GetDataLeft().ctscurve_vlimits[1] = mp_fwd->ctscurve_vlimits[1];
  }
+
+ //empty strings must be replaced with some default names
+ for(size_t i = 0; i < mp_s3f_io->GetMapSetsNumber(); ++i)
+  GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
 }
 
 void S3FExportController::OnCancelPressed(void)
@@ -278,7 +301,8 @@ void S3FExportController::OnExchangePressed(void)
  int other_sel   = mp_view->GetFWDOtherListSelection();
 
  mp_s3f_io->GetDataLeft().maps[other_sel].name = mp_fwd->maps[current_sel].name;
- mp_view->FillFWDOtherList(mp_s3f_io->GetData().GetListOfNames());
+ std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
+ mp_view->FillFWDOtherList(GenArtificialNames(strings));
  mp_view->SetFWDOtherListSelection(other_sel);
 
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
@@ -307,7 +331,7 @@ void S3FExportController::OnViewActivate(void)
 
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
- mp_view->FillFWDOtherList(strings);
+ mp_view->FillFWDOtherList(GenArtificialNames(strings));
 
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
