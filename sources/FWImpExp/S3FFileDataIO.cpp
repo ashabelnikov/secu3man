@@ -31,9 +31,11 @@
 #pragma pack( push, enter_S3FFileMap )
 #pragma pack(1) //<--SECU3
 
+#define INT_MULTIPLIER 10000.0f
+
 //define our own types
 typedef unsigned short s3f_uint16_t;
-typedef signed short s3f_int16_t;
+typedef signed int s3f_int32_t;
 typedef unsigned char s3f_uint8_t;
 
 struct S3FFileHdr
@@ -49,21 +51,21 @@ struct S3FFileHdr
 
 struct S3FMapSet
 {
- s3f_int16_t f_str[F_STR_POINTS]; //start
- s3f_int16_t f_idl[F_IDL_POINTS]; //idle 
- s3f_int16_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; //work
- s3f_int16_t f_tmp[F_TMP_POINTS]; //temperature
+ s3f_int32_t f_str[F_STR_POINTS]; //start
+ s3f_int32_t f_idl[F_IDL_POINTS]; //idle 
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; //work
+ s3f_int32_t f_tmp[F_TMP_POINTS]; //temperature
  s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
 };
 
 struct S3FFileMaps
 {
  S3FMapSet maps[TABLES_NUMBER]; //sets of tables
- s3f_int16_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
- s3f_int16_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
- s3f_int16_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
- s3f_int16_t ctscurve_vlimits[2];    //volatge limits for coolant sensor look up table
- s3f_int16_t reserved[128];     //reserved bytes, = 0
+ s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
+ s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
+ s3f_int32_t ctscurve_vlimits[2];    //volatge limits for coolant sensor look up table
+ s3f_int32_t reserved[128];     //reserved bytes, = 0
 };
 
 #pragma pack( pop, enter_S3FFileMap )
@@ -121,13 +123,13 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_fileMaps->maps[s].f_str[i];
+   m_data.maps[s].f_str[i] = p_fileMaps->maps[s].f_str[i] / INT_MULTIPLIER;
   for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_fileMaps->maps[s].f_idl[i];
+   m_data.maps[s].f_idl[i] = p_fileMaps->maps[s].f_idl[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_fileMaps->maps[s].f_wrk[i];
+   m_data.maps[s].f_wrk[i] = p_fileMaps->maps[s].f_wrk[i] / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_fileMaps->maps[s].f_tmp[i];
+   m_data.maps[s].f_tmp[i] = p_fileMaps->maps[s].f_tmp[i] / INT_MULTIPLIER;
   //convert name
   char raw_string[F_NAME_SIZE + 1];
   memset(raw_string, 0, F_NAME_SIZE + 1);
@@ -138,13 +140,13 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  }
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_fileMaps->attenuator_table[i];
+  m_data.attenuator_table[i] = p_fileMaps->attenuator_table[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_fileMaps->dwellcntrl_table[i];
+  m_data.dwellcntrl_table[i] = p_fileMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.ctscurve_table[i] = p_fileMaps->ctscurve_table[i];
+  m_data.ctscurve_table[i] = p_fileMaps->ctscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_fileMaps->ctscurve_vlimits[i];
+  m_data.ctscurve_vlimits[i] = p_fileMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
 
  return true;
 }
@@ -168,7 +170,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  size_t size = sizeof(S3FFileHdr) + sizeof(S3FFileMaps) + dataSize;
  S3FFileHdr* p_fileHdr = (S3FFileHdr*)(rawdata);
  memcpy(p_fileHdr->hdr, "S3F", 3);
- p_fileHdr->btpmi = sizeof(s3f_int16_t);
+ p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = TABLES_NUMBER;
  p_fileHdr->sofdat = dataSize; //size of additional data
  p_fileHdr->version = 0x0100; //01.00
@@ -178,13 +180,13 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
-   p_fileMaps->maps[s].f_str[i] = MathHelpers::Round(m_data.maps[s].f_str[i]);
+   p_fileMaps->maps[s].f_str[i] = MathHelpers::Round(m_data.maps[s].f_str[i] * INT_MULTIPLIER);
   for(i = 0; i < F_IDL_POINTS; ++i)
-   p_fileMaps->maps[s].f_idl[i] = MathHelpers::Round(m_data.maps[s].f_idl[i]);
+   p_fileMaps->maps[s].f_idl[i] = MathHelpers::Round(m_data.maps[s].f_idl[i] * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   p_fileMaps->maps[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i]);
+   p_fileMaps->maps[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   p_fileMaps->maps[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i]);
+   p_fileMaps->maps[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -197,13 +199,13 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  }
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i]);
+  p_fileMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i] * INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->dwellcntrl_table[i] = MathHelpers::Round(m_data.dwellcntrl_table[i]);
+  p_fileMaps->dwellcntrl_table[i] = MathHelpers::Round(m_data.dwellcntrl_table[i] * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i]);
+  p_fileMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
  for(i = 0; i < 2; ++i)
-  p_fileMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i]);
+  p_fileMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(rawdata + 5, size - 5);

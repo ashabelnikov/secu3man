@@ -90,7 +90,19 @@ S3FImportController::~S3FImportController()
 
 void S3FImportController::OnOkPressed(void)
 {
- //empty
+ //import separate tables
+ if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
+  memcpy(mp_fwd->attenuator_table, mp_s3f_io->GetData().attenuator_table, sizeof(float) * KC_ATTENUATOR_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
+  memcpy(mp_fwd->dwellcntrl_table, mp_s3f_io->GetData().dwellcntrl_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
+ {
+  memcpy(mp_fwd->ctscurve_table, mp_s3f_io->GetData().ctscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
+  mp_fwd->ctscurve_vlimits[0] = mp_s3f_io->GetData().ctscurve_vlimits[0];
+  mp_fwd->ctscurve_vlimits[1] = mp_s3f_io->GetData().ctscurve_vlimits[1];
+ }
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -124,6 +136,9 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
   memcpy(mp_fwd->maps[current_sel].f_wrk, mp_s3f_io->GetData().maps[other_sel].f_wrk,sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
+  memcpy(mp_fwd->maps[current_sel].f_tmp, mp_s3f_io->GetData().maps[other_sel].f_tmp,sizeof(float) * F_TMP_POINTS);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -236,7 +251,19 @@ S3FExportController::~S3FExportController()
 
 void S3FExportController::OnOkPressed(void)
 {
- //empty
+ //import separate tables
+ if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().attenuator_table, mp_fwd->attenuator_table, sizeof(float) * KC_ATTENUATOR_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_DWLCNTR_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().dwellcntrl_table, mp_fwd->dwellcntrl_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CTS_MAP))
+ {
+  memcpy(mp_s3f_io->GetDataLeft().ctscurve_table, mp_fwd->ctscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
+  mp_s3f_io->GetDataLeft().ctscurve_vlimits[0] = mp_fwd->ctscurve_vlimits[0];
+  mp_s3f_io->GetDataLeft().ctscurve_vlimits[1] = mp_fwd->ctscurve_vlimits[1];
+ }
 }
 
 void S3FExportController::OnCancelPressed(void)
@@ -262,6 +289,9 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_WORK_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].f_wrk, mp_fwd->maps[current_sel].f_wrk, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].f_tmp, mp_fwd->maps[current_sel].f_tmp, sizeof(float) * F_TMP_POINTS);
 }
 
 //модальное окно активировалось - проводим его инициализацию
