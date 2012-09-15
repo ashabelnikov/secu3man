@@ -66,6 +66,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MainFrmWnd_Y(_T("MainFrmWnd_Y"))
 , m_Name_DwellCntrlMapWnd_X(_T("DwellCntrlMapWnd_X"))
 , m_Name_DwellCntrlMapWnd_Y(_T("DwellCntrlMapWnd_Y"))
+, m_Name_CTSCurveMapWnd_X(_T("CTSCurveMapWnd_X"))
+, m_Name_CTSCurveMapWnd_Y(_T("CTSCurveMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -345,6 +347,9 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CTSCurveMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CTSCurveMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -471,6 +476,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optDwellCntrlMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DwellCntrlMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optCTSCurveMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CTSCurveMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optCTSCurveMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CTSCurveMapWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -532,6 +543,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optMainFrmWnd_Y = i_wndSettings.m_MainFrmWnd_Y;
  m_optDwellCntrlMapWnd_X = i_wndSettings.m_DwellCntrlMapWnd_X;
  m_optDwellCntrlMapWnd_Y = i_wndSettings.m_DwellCntrlMapWnd_Y;
+ m_optCTSCurveMapWnd_X = i_wndSettings.m_CTSCurveMapWnd_X;
+ m_optCTSCurveMapWnd_Y = i_wndSettings.m_CTSCurveMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -550,6 +563,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd_Y;
  o_wndSettings.m_DwellCntrlMapWnd_X = m_optDwellCntrlMapWnd_X;
  o_wndSettings.m_DwellCntrlMapWnd_Y = m_optDwellCntrlMapWnd_Y;
+ o_wndSettings.m_CTSCurveMapWnd_X = m_optCTSCurveMapWnd_X;
+ o_wndSettings.m_CTSCurveMapWnd_Y = m_optCTSCurveMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

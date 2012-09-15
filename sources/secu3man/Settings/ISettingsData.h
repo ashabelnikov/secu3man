@@ -40,6 +40,8 @@ struct WndSettings
  int m_MainFrmWnd_Y;
  int m_DwellCntrlMapWnd_X;
  int m_DwellCntrlMapWnd_Y;
+ int m_CTSCurveMapWnd_X;
+ int m_CTSCurveMapWnd_Y;
 };
 
 typedef enum EInterLang

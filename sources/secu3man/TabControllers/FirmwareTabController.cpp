@@ -1474,6 +1474,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_DwellCntrlMapWnd_X = rc.left;
    ws.m_DwellCntrlMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_CTS_CURVE:
+   ws.m_CTSCurveMapWnd_X = rc.left;
+   ws.m_CTSCurveMapWnd_Y = rc.top;
+   break;
  };
 
  mp_settings->SetWndSettings(ws);
@@ -1508,6 +1512,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_DWELLCNTRL:
    X = ws.m_DwellCntrlMapWnd_X, Y = ws.m_DwellCntrlMapWnd_Y;
+   break;
+  case TYPE_MAP_CTS_CURVE:
+   X = ws.m_CTSCurveMapWnd_X, Y = ws.m_CTSCurveMapWnd_Y;
    break;
   default:
    return; //undefined case...
