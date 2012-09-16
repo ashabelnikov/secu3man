@@ -32,11 +32,26 @@
 #pragma pack(1) //<--SECU3
 
 #define INT_MULTIPLIER 10000.0f
+#define MIN_OPTDATA_SIZE 1024
+#define MIN_NOFSETS TABLES_NUMBER
+#define MAX_NOFSETS 64
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
 typedef signed int s3f_int32_t;
 typedef unsigned char s3f_uint8_t;
+
+// Format is following:
+//   _______________________________
+//  / File header (S3FFileHdr)      \
+//  |-------------------------------|
+//  | array of S3FMapSet blocks     |
+//  |-------------------------------| 
+//  | S3FFileMaps block             |
+//  |-------------------------------| 
+//  | Optional data (size >= 1024)  |
+//  \_______________________________/
+//
 
 struct S3FFileHdr
 {
@@ -49,7 +64,8 @@ struct S3FFileHdr
  s3f_uint8_t  reserved[8];     //reserved bytes, = 0
 };
 
-struct S3FMapSet
+//One entry of map sets array
+struct S3FMapSetItem
 {
  s3f_int32_t f_str[F_STR_POINTS]; //start
  s3f_int32_t f_idl[F_IDL_POINTS]; //idle 
@@ -58,10 +74,9 @@ struct S3FMapSet
  s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
 };
 
-template <size_t N = TABLES_NUMBER>
-struct S3FFileMaps
+//Separate maps
+struct S3FSepMaps
 {
- S3FMapSet maps[N];               //sets of tables
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
@@ -98,7 +113,8 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  }
  //read the file into memory
  size_t filesize = (size_t)file.GetLength();
- if ((filesize > 1048576) || (filesize < (sizeof(S3FFileHdr) + sizeof(S3FFileMaps<>))))
+ size_t minFileSize = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * MIN_NOFSETS) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
+ if ((filesize > 1048576) || (filesize < minFileSize))
  {
   file.Close();
   return false; //некорректный размер файла
@@ -116,42 +132,48 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
   return false; //wrong file format!
  s3f_uint16_t crc = crc16(&rawdata[5], filesize - 5);
  m_file_crc_ok = (crc == p_fileHdr->crc16);
- if (p_fileHdr->nofsets < TABLES_NUMBER || p_fileHdr->nofsets > 64)
+ if (p_fileHdr->nofsets < MIN_NOFSETS || p_fileHdr->nofsets > MAX_NOFSETS)
   return false; //incompatible
+
+ //Size of a whole array of map sets
+ size_t mapSetArrSize = sizeof(S3FMapSetItem) * p_fileHdr->nofsets;
 
  //resize container to hold all map sets
  m_data = FWMapsDataHolder(p_fileHdr->nofsets);
+
  //convert sets of tables
- const S3FFileMaps<>* p_fileMaps = (S3FFileMaps<>*)(&rawdata[sizeof(S3FFileHdr)]);
+ const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
  for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_fileMaps->maps[s].f_str[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
   for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_fileMaps->maps[s].f_idl[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_fileMaps->maps[s].f_wrk[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
   for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_fileMaps->maps[s].f_tmp[i] / INT_MULTIPLIER;
+   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
   //convert name
   char raw_string[F_NAME_SIZE + 1];
   memset(raw_string, 0, F_NAME_SIZE + 1);
-  memcpy(raw_string, p_fileMaps->maps[s].name, F_NAME_SIZE);
+  memcpy(raw_string, p_setItem[s].name, F_NAME_SIZE);
   TCHAR string[128];
   OemToChar(raw_string, string);
   m_data.maps[s].name = _TSTRING(string);
  }
- //convert separate tables
+
+ //convert separate maps
+ const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_fileMaps->attenuator_table[i] / INT_MULTIPLIER;
+  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_fileMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.ctscurve_table[i] = p_fileMaps->ctscurve_table[i] / INT_MULTIPLIER;
+  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_fileMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
+  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
 
  return true;
 }
@@ -169,9 +191,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   return false;
  }
 
- size_t dataSize = 1024; //must be at least 1024 bytes
- size_t size = sizeof(S3FFileHdr) + sizeof(S3FFileMaps<>) + dataSize;
- ASSERT(m_data.maps.size() == TABLES_NUMBER);
+ size_t dataSize = MIN_OPTDATA_SIZE; //must be at least 1024 bytes
+ size_t mapSetArrSize = sizeof(S3FMapSetItem) * m_data.maps.size(); //Size of a whole array of map sets
+ size_t size = sizeof(S3FFileHdr) + mapSetArrSize + sizeof(S3FSepMaps) + dataSize;
  std::vector<BYTE> rawdata(size, 0);
 
  S3FFileHdr* p_fileHdr = (S3FFileHdr*)(&rawdata[0]);
@@ -182,18 +204,18 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->version = 0x0100; //01.00
 
  //convert sets of maps
- S3FFileMaps<>* p_fileMaps = (S3FFileMaps<>*)(&rawdata[sizeof(S3FFileHdr)]);
+ S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
  for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
-   p_fileMaps->maps[s].f_str[i] = MathHelpers::Round(m_data.maps[s].f_str[i] * INT_MULTIPLIER);
+   p_setItem[s].f_str[i] = MathHelpers::Round(m_data.maps[s].f_str[i] * INT_MULTIPLIER);
   for(i = 0; i < F_IDL_POINTS; ++i)
-   p_fileMaps->maps[s].f_idl[i] = MathHelpers::Round(m_data.maps[s].f_idl[i] * INT_MULTIPLIER);
+   p_setItem[s].f_idl[i] = MathHelpers::Round(m_data.maps[s].f_idl[i] * INT_MULTIPLIER);
   for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   p_fileMaps->maps[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
+   p_setItem[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
-   p_fileMaps->maps[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
+   p_setItem[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -202,18 +224,20 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   char raw_string[F_NAME_SIZE + 1];
   memset(raw_string, 0, F_NAME_SIZE + 1);
   CharToOem(str.c_str(), raw_string);
-  memcpy(p_fileMaps->maps[s].name, raw_string, F_NAME_SIZE);
+  memcpy(p_setItem[s].name, raw_string, F_NAME_SIZE);
  }
+
  //convert separate maps
+ S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i] * INT_MULTIPLIER);
+  p_sepMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i] * INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->dwellcntrl_table[i] = MathHelpers::Round(m_data.dwellcntrl_table[i] * INT_MULTIPLIER);
+  p_sepMaps->dwellcntrl_table[i] = MathHelpers::Round(m_data.dwellcntrl_table[i] * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
-  p_fileMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
+  p_sepMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
  for(i = 0; i < 2; ++i)
-  p_fileMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
+  p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
