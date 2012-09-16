@@ -420,7 +420,7 @@ BEGIN
                             "»мпортировать данные непосредственно из SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "»мпортировать таблицы из MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "»мпорт данных"
-    IDS_IMPORT_IMPORT_FROM_SECU3 "»мпортировать таблицы из SECU-3"
+    IDS_IMPORT_IMPORT_FROM_SECU3 "»мпортировать таблицы из прошивки SECU-3"
     IDS_IMPORT_IMPORT_FROM_S3F "»мпортировать таблицы из S3F файла"
 END
 
@@ -428,7 +428,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Ёкспорт данных"
     IDS_EXPORT_EXPORT_TO_MPSZ "Ёкспортировать таблицы в MPSZ-ZH"
-    IDS_EXPORT_EXPORT_TO_SECU3 "Ёкспортировать таблицы в SECU-3"
+    IDS_EXPORT_EXPORT_TO_SECU3 "Ёкспортировать таблицы в прошивку SECU-3"
     IDS_EXPORT_EXPORT_TO_S3F "Ёкспортировать таблицы в S3F файл"
     IDS_APP_SETTINGS_PRG_RESTART_REQ "¬нимание! Ќеобходим перезапуск программы!"
 END
@@ -853,7 +853,7 @@ BEGIN
     IDS_IMPORT_FW_DATA_FROM_SECU3 "Import data directly from SECU-3"
     IDS_IMPORT_IMPORT_FROM_MPSZ "Import tables from MPSZ-ZH"
     IDS_IMPORT_POPUP_MENU   "Import data"
-    IDS_IMPORT_IMPORT_FROM_SECU3 "Import tables from SECU-3"
+    IDS_IMPORT_IMPORT_FROM_SECU3 "Import tables from SECU-3 firmware"
     IDS_IMPORT_IMPORT_FROM_S3F "Import tables from S3F file"
     IDS_PM_READING_FWC_OPTIONS "Reading firmware options..."
     IDS_PM_READING_TABLES   "Reading tables..."
@@ -877,7 +877,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_EXPORT_POPUP_MENU   "Export data"
     IDS_EXPORT_EXPORT_TO_MPSZ "Export tables into MPSZ-ZH"
-    IDS_EXPORT_EXPORT_TO_SECU3 "Export tables into SECU-3"
+    IDS_EXPORT_EXPORT_TO_SECU3 "Export tables into SECU-3 firmware"
     IDS_EXPORT_EXPORT_TO_S3F "Export tables into S3F file"
 END
 
