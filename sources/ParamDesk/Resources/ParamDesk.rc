@@ -821,7 +821,7 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Inversion of curburetor's trailer",
+    CONTROL         "Inversion of throttle position switch",
                     IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,93,92,67,25
     EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,

@@ -48,6 +48,8 @@ BEGIN
                     31
     CONTROL         "ДТОЖ",IDC_MAP_IMPEXP_CTS_FLAG,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,322,168,49,14
+    LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",
+                    IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -72,7 +74,7 @@ BEGIN
     IDS_EXPORT_S3F_TABLES   "Экспорт таблиц в S3F файл"
     IDS_OPEN_FILE_FOR_EXPORT "Открыть файл для экспорта"
     IDS_IMPORT_SECU3_TABLES_EE "Импорт таблиц из SECU-3 EEPROM"
-    IDS_FILE_WRONG_CRC       "Внимание! Открываемый файл имеет неправильную контролуую сумму. Вы хотите продолжить?"
+    IDS_FILE_WRONG_CRC      "Внимание! Открываемый файл имеет неправильную контролуую сумму. Вы хотите продолжить?"
 END
 
 
@@ -123,6 +125,8 @@ BEGIN
                     31
     CONTROL         "coolant sensor",IDC_MAP_IMPEXP_CTS_FLAG,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,322,168,49,14
+    LTEXT           "\nSelect one item in each list and click button located between them",
+                    IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -147,5 +151,5 @@ BEGIN
     IDS_EXPORT_S3F_TABLES   "Export tables into S3F file"
     IDS_OPEN_FILE_FOR_EXPORT "Open file for export"
     IDS_IMPORT_SECU3_TABLES_EE "Import tables from SECU-3 EEPROM"
-    IDS_FILE_WRONG_CRC       "Warning! File you are opening has wrong check sum. Do you want to continue?"
+    IDS_FILE_WRONG_CRC      "Warning! File you are opening has wrong check sum. Do you want to continue?"
 END
