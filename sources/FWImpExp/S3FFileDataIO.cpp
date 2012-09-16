@@ -58,14 +58,15 @@ struct S3FMapSet
  s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
 };
 
+template <size_t N = TABLES_NUMBER>
 struct S3FFileMaps
 {
- S3FMapSet maps[TABLES_NUMBER]; //sets of tables
+ S3FMapSet maps[N];               //sets of tables
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
- s3f_int32_t ctscurve_vlimits[2];    //volatge limits for coolant sensor look up table
- s3f_int32_t reserved[128];     //reserved bytes, = 0
+ s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t reserved[128];       //reserved bytes, = 0
 };
 
 #pragma pack( pop, enter_S3FFileMap )
@@ -96,30 +97,33 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
   return false;
  }
  //read the file into memory
- BYTE rawdata[65536];
  size_t filesize = (size_t)file.GetLength();
- if ((filesize > 65536) || (filesize < (sizeof(S3FFileHdr) + sizeof(S3FFileMaps))))
+ if ((filesize > 1048576) || (filesize < (sizeof(S3FFileHdr) + sizeof(S3FFileMaps<>))))
  {
   file.Close();
   return false; //некорректный размер файла
  }
- file.Read(rawdata, filesize);
+ std::vector<BYTE> rawdata(filesize, 0);
+ file.Read(&rawdata[0], filesize);
  file.Close();
 
  //parse file's contents. 
  //(1) First of all check the file format
  //(2) Next we have to check CRC and store status.
  //(3) Convert maps
- const S3FFileHdr* p_fileHdr = (S3FFileHdr*)rawdata;
+ const S3FFileHdr* p_fileHdr = (S3FFileHdr*)(&rawdata[0]);
  if (memcmp(p_fileHdr->hdr, "S3F", 3))
   return false; //wrong file format!
- s3f_uint16_t crc = crc16(rawdata + 5, filesize - 5);
+ s3f_uint16_t crc = crc16(&rawdata[5], filesize - 5);
  m_file_crc_ok = (crc == p_fileHdr->crc16);
- if (p_fileHdr->nofsets < TABLES_NUMBER)
+ if (p_fileHdr->nofsets < TABLES_NUMBER || p_fileHdr->nofsets > 64)
   return false; //incompatible
 
- const S3FFileMaps* p_fileMaps = (S3FFileMaps*)(rawdata + sizeof(S3FFileHdr));
- for(size_t s = 0; s < TABLES_NUMBER; ++s)
+ //resize container to hold all map sets
+ m_data = FWMapsDataHolder(p_fileHdr->nofsets);
+ //convert sets of tables
+ const S3FFileMaps<>* p_fileMaps = (S3FFileMaps<>*)(&rawdata[sizeof(S3FFileHdr)]);
+ for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
@@ -138,6 +142,7 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
   OemToChar(raw_string, string);
   m_data.maps[s].name = _TSTRING(string);
  }
+ //convert separate tables
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
   m_data.attenuator_table[i] = p_fileMaps->attenuator_table[i] / INT_MULTIPLIER;
@@ -164,19 +169,21 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   return false;
  }
 
- BYTE rawdata[65536];
- memset(rawdata, 0, 65536);
  size_t dataSize = 1024; //must be at least 1024 bytes
- size_t size = sizeof(S3FFileHdr) + sizeof(S3FFileMaps) + dataSize;
- S3FFileHdr* p_fileHdr = (S3FFileHdr*)(rawdata);
+ size_t size = sizeof(S3FFileHdr) + sizeof(S3FFileMaps<>) + dataSize;
+ ASSERT(m_data.maps.size() == TABLES_NUMBER);
+ std::vector<BYTE> rawdata(size, 0);
+
+ S3FFileHdr* p_fileHdr = (S3FFileHdr*)(&rawdata[0]);
  memcpy(p_fileHdr->hdr, "S3F", 3);
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
- p_fileHdr->nofsets = TABLES_NUMBER;
+ p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
  p_fileHdr->version = 0x0100; //01.00
 
- S3FFileMaps* p_fileMaps = (S3FFileMaps*)(rawdata + sizeof(S3FFileHdr));
- for(size_t s = 0; s < TABLES_NUMBER; ++s)
+ //convert sets of maps
+ S3FFileMaps<>* p_fileMaps = (S3FFileMaps<>*)(&rawdata[sizeof(S3FFileHdr)]);
+ for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
  {
   size_t i;
   for(i = 0; i < F_STR_POINTS; ++i)
@@ -197,6 +204,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   CharToOem(str.c_str(), raw_string);
   memcpy(p_fileMaps->maps[s].name, raw_string, F_NAME_SIZE);
  }
+ //convert separate maps
  size_t i;
  for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
   p_fileMaps->attenuator_table[i] = MathHelpers::Round(m_data.attenuator_table[i] * INT_MULTIPLIER);
@@ -208,8 +216,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_fileMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
- p_fileHdr->crc16 = crc16(rawdata + 5, size - 5);
- file.Write(rawdata, size);
+ p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
+ file.Write(&rawdata[0], size);
  file.Close();
  return true;
 }
@@ -222,11 +230,6 @@ const FWMapsDataHolder& S3FFileDataIO::GetData() const
 FWMapsDataHolder& S3FFileDataIO::GetDataLeft(void)
 {
  return m_data;
-}
-
-size_t S3FFileDataIO::GetMapSetsNumber(void) const
-{
- return TABLES_NUMBER;
 }
 
 bool S3FFileDataIO::IsFileIntegrityOk(void) const

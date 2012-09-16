@@ -285,7 +285,7 @@ void S3FExportController::OnOkPressed(void)
  }
 
  //empty strings must be replaced with some default names
- for(size_t i = 0; i < mp_s3f_io->GetMapSetsNumber(); ++i)
+ for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
 }
 

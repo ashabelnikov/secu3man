@@ -52,16 +52,26 @@ struct SECU3FWMapsItem
 //Аппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
 struct FWMapsDataHolder
 {
- SECU3FWMapsItem  maps[TABLES_NUMBER];
+ std::vector<SECU3FWMapsItem> maps;
  float attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
  float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
  float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
  float ctscurve_vlimits[2]; //voltage limits are stored together with table
-
+ //default constructor
+ FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
+ { 
+  static const SECU3FWMapsItem defval = {{.0f},{.0f},{.0f},{.0f},_TSTRING(_T(""))};
+  maps.assign(setNum, defval);
+  std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
+  std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
+  std::fill(ctscurve_table, ctscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE, .0f);
+  std::fill(ctscurve_vlimits, ctscurve_vlimits + 2, .0f);
+ }
+ //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const
  {
   std::vector<_TSTRING> list;
-  for (int i = 0; i < TABLES_NUMBER; i++)
+  for (size_t i = 0; i < maps.size(); i++)
    list.push_back(maps[i].name);
   return list;
  };
