@@ -19,41 +19,33 @@
  *
  */
 
-#if !defined(AFX_CHARTAXISLABEL_H__0E5519C8_A2F4_4CED_9681_32A56B25D0C5__INCLUDED_)
-#define AFX_CHARTAXISLABEL_H__0E5519C8_A2F4_4CED_9681_32A56B25D0C5__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ChartObject.h"
 #include "ChartString.h"
-
 
 class CChartAxis;
 
 class AFX_EXT_CLASS CChartAxisLabel : public CChartObject
 {
-    friend CChartAxis;
+  friend CChartAxis;
 
-public:
-    void SetText(const TChartString& NewText);
-    TChartString GetText() const        { return m_strLabelText;    }
+ public:
+  void SetText(const TChartString& NewText);
+  TChartString GetText() const { return m_strLabelText; }
 
-    void SetFont(int nPointSize, const TChartString& strFaceName);
+  void SetFont(int nPointSize, const TChartString& strFaceName);
 
-    CChartAxisLabel(CChartCtrl* pParent, bool bHorizontal);
-    virtual ~CChartAxisLabel();
+  CChartAxisLabel(CChartCtrl* pParent, bool bHorizontal);
+  virtual ~CChartAxisLabel();
 
-private:
-    void SetPosition(int LeftBorder, int TopBorder, CDC *pDC);
-    void Draw(CDC* pDC);
-    CSize GetSize(CDC* pDC) const;
+ private:
+  void SetPosition(int LeftBorder, int TopBorder, CDC *pDC);
+  void Draw(CDC* pDC);
+  CSize GetSize(CDC* pDC) const;
 
-    bool m_bIsHorizontal;      // Specifies if the axis is horizontal or not
-    int  m_iFontSize;
-    TChartString m_strFontName;
-    TChartString m_strLabelText;
+  bool m_bIsHorizontal;      // Specifies if the axis is horizontal or not
+  int  m_iFontSize;
+  TChartString m_strFontName;
+  TChartString m_strLabelText;
 };
-
-#endif // !defined(AFX_CHARTAXISLABEL_H__0E5519C8_A2F4_4CED_9681_32A56B25D0C5__INCLUDED_)

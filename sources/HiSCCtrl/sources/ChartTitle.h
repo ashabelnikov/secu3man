@@ -19,42 +19,34 @@
  *
  */
 
-#if !defined(AFX_CHARTTITLE_H__49972787_6D28_4F81_A12F_420947456913__INCLUDED_)
-#define AFX_CHARTTITLE_H__49972787_6D28_4F81_A12F_420947456913__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ChartObject.h"
 
 #include <vector>
 #include "ChartString.h"
 
-
 class AFX_EXT_CLASS CChartTitle : public CChartObject
 {
-    friend CChartCtrl;
+  friend CChartCtrl;
 
-public:
-    size_t GetStringCount() const;
-    TChartString GetString(size_t Index) const;
-    void AddString(const TChartString& NewString);
-    void RemoveAll();
+ public:
+  size_t GetStringCount() const;
+  TChartString GetString(size_t Index) const;
+  void AddString(const TChartString& NewString);
+  void RemoveAll();
 
-    void SetFont(int iPointSize, const TChartString& strFaceName);
+  void SetFont(int iPointSize, const TChartString& strFaceName);
 
-    CChartTitle(CChartCtrl* pParent);
-    virtual ~CChartTitle();
+  CChartTitle(CChartCtrl* pParent);
+  virtual ~CChartTitle();
 
-private:
-    CSize GetSize(CDC* pDC);
-    void Draw(CDC *pDC);
+ private:
+  CSize GetSize(CDC* pDC);
+  void Draw(CDC *pDC);
 
-    std::vector<TChartString> m_StringArray;
+  std::vector<TChartString> m_StringArray;
 
-    TChartString m_strFontName;
-    int          m_iFontSize;
+  TChartString m_strFontName;
+  int          m_iFontSize;
 };
-
-#endif // !defined(AFX_CHARTTITLE_H__49972787_6D28_4F81_A12F_420947456913__INCLUDED_)

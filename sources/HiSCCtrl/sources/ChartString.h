@@ -24,7 +24,7 @@
 #include <string>
 
 #if defined _UNICODE || defined UNICODE
-    typedef std::wstring TChartString;
+typedef std::wstring TChartString;
 #else
-    typedef std::string TChartString;
+typedef std::string TChartString;
 #endif

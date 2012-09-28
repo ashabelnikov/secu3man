@@ -19,34 +19,27 @@
  *
  */
 
-#if !defined(AFX_CHARTGRID_H__ECCBEFF4_2365_49CD_A865_F1B4DD8CA138__INCLUDED_)
-#define AFX_CHARTGRID_H__ECCBEFF4_2365_49CD_A865_F1B4DD8CA138__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ChartObject.h"
 #include <list>
-
 
 class CChartAxis;
 
 class AFX_EXT_CLASS CChartGrid : public CChartObject
 {
-    friend CChartAxis;
-public:
-    CChartGrid(CChartCtrl* pParent, bool bHoriz);
-    virtual ~CChartGrid();
+  friend CChartAxis;
 
-private:
-    void Draw(CDC* pDC);
+ public:
+  CChartGrid(CChartCtrl* pParent, bool bHoriz);
+  virtual ~CChartGrid();
 
-    void AddTick(int Position);
-    void ClearTicks();
+ private:
+  void Draw(CDC* pDC);
 
-    std::list<int> m_vecTickPos;
-    bool           m_bIsHorizontal;
+  void AddTick(int Position);
+  void ClearTicks();
+
+  std::list<int> m_vecTickPos;
+  bool           m_bIsHorizontal;
 };
-
-#endif // !defined(AFX_CHARTGRID_H__ECCBEFF4_2365_49CD_A865_F1B4DD8CA138__INCLUDED_)

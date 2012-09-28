@@ -19,36 +19,28 @@
  *
  */
 
-#if !defined(AFX_CHARTLINESERIE_H__792C2F20_9650_42FA_B13D_E63911C98CE5__INCLUDED_)
-#define AFX_CHARTLINESERIE_H__792C2F20_9650_42FA_B13D_E63911C98CE5__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ChartSerie.h"
 
-
 class AFX_EXT_CLASS CChartLineSerie : public CChartSerie
 {
-public:
-    int  GetPenStyle() const        { return m_iPenStyle; }
-    void SetPenStyle(int NewStyle);
+ public:
+  int  GetPenStyle() const { return m_iPenStyle; }
+  void SetPenStyle(int NewStyle);
 
-    int  GetWidth() const       { return m_iLineWidth; }
-    void SetWidth(int NewValue);
+  int  GetWidth() const { return m_iLineWidth; }
+  void SetWidth(int NewValue);
 
-    CChartLineSerie(CChartCtrl* pParent);
-    virtual ~CChartLineSerie();
+  CChartLineSerie(CChartCtrl* pParent);
+  virtual ~CChartLineSerie();
 
-private:
-    void DrawLegend(CDC* pDC, const CRect& rectBitmap) const;
+ private:
+  void DrawLegend(CDC* pDC, const CRect& rectBitmap) const;
 
-    void Draw(CDC* pDC);
-    void DrawAll(CDC *pDC);
+  void Draw(CDC* pDC);
+  void DrawAll(CDC *pDC);
 
-    int m_iLineWidth;
-    int m_iPenStyle;
+  int m_iLineWidth;
+  int m_iPenStyle;
 };
-
-#endif // !defined(AFX_CHARTLINESERIE_H__792C2F20_9650_42FA_B13D_E63911C98CE5__INCLUDED_)

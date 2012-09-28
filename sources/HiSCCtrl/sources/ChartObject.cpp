@@ -24,14 +24,14 @@
 
 CChartObject::CChartObject(CChartCtrl* pOwner)
 {
-    m_ObjectRect.left = m_ObjectRect.right = 0;
-    m_ObjectRect.top = m_ObjectRect.bottom = 0;
-    m_ObjectColor = RGB(0,0,0);
-    m_pParent = pOwner;
-    m_bIsVisible = true;
-    m_bShadow = false;
-    m_ShadowColor = RGB(150,150,150);
-    m_iShadowDepth = 2;
+ m_ObjectRect.left = m_ObjectRect.right = 0;
+ m_ObjectRect.top = m_ObjectRect.bottom = 0;
+ m_ObjectColor = RGB(0,0,0);
+ m_pParent = pOwner;
+ m_bIsVisible = true;
+ m_bShadow = false;
+ m_ShadowColor = RGB(150,150,150);
+ m_iShadowDepth = 2;
 }
 
 CChartObject::~CChartObject()
@@ -40,30 +40,30 @@ CChartObject::~CChartObject()
 
 void CChartObject::SetVisible(bool bVisible)
 {
-    m_bIsVisible = bVisible;
-    m_pParent->RefreshCtrl();
+ m_bIsVisible = bVisible;
+ m_pParent->RefreshCtrl();
 }
 
 void CChartObject::SetColor(COLORREF NewColor)
 {
-    m_ObjectColor = NewColor;
-    m_pParent->RefreshCtrl();
+ m_ObjectColor = NewColor;
+ m_pParent->RefreshCtrl();
 }
 
 void CChartObject::SetShadowColor(COLORREF NewColor)
 {
-    m_ShadowColor = NewColor;
-    m_pParent->RefreshCtrl();
+ m_ShadowColor = NewColor;
+ m_pParent->RefreshCtrl();
 }
 
 void CChartObject::EnableShadow(bool bEnable)
 {
-    m_bShadow = bEnable;
-    m_pParent->RefreshCtrl();
+ m_bShadow = bEnable;
+ m_pParent->RefreshCtrl();
 }
 
 void CChartObject::SetShadowDepth(int Depth)
 {
-    m_iShadowDepth = Depth;
-    m_pParent->RefreshCtrl();
+ m_iShadowDepth = Depth;
+ m_pParent->RefreshCtrl();
 }

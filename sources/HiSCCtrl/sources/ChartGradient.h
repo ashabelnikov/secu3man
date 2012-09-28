@@ -23,18 +23,18 @@
 
 enum EGradientType
 {
-    gtHorizontal,
-    gtVertical,
-    gtHorizontalDouble,
-    gtVerticalDouble
+ gtHorizontal,
+ gtVertical,
+ gtHorizontalDouble,
+ gtVerticalDouble
 };
 
 class AFX_EXT_CLASS CChartGradient
 {
-public:
-    CChartGradient();
-    ~CChartGradient();
+ public:
+  CChartGradient();
+ ~CChartGradient();
 
-    static void DrawGradient(CDC* pDC, const CRect& GradientRect, COLORREF Color1,
-                             COLORREF Color2, EGradientType GradientType);
+  static void DrawGradient(CDC* pDC, const CRect& GradientRect, COLORREF Color1,
+                           COLORREF Color2, EGradientType GradientType);
 };

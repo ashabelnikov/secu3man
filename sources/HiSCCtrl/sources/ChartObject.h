@@ -19,12 +19,7 @@
  *
  */
 
-#if !defined(AFX_CHARTOBJECT_H__6ED024F2_00D9_45D5_AB83_258EF0075288__INCLUDED_)
-#define AFX_CHARTOBJECT_H__6ED024F2_00D9_45D5_AB83_258EF0075288__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include <afx.h>
 #include <afxwin.h>
@@ -33,68 +28,64 @@ class CChartCtrl;
 
 class AFX_EXT_CLASS CChartObject
 {
-    friend CChartCtrl;
+  friend CChartCtrl;
 
-public:
-    CChartObject(CChartCtrl* pOwner);
-    virtual ~CChartObject();
+ public:
+  CChartObject(CChartCtrl* pOwner);
+  virtual ~CChartObject();
 
-    void SetVisible(bool bVisible);
-    bool IsVisible()  const         { return m_bIsVisible; }
+  void SetVisible(bool bVisible);
+  bool IsVisible()  const { return m_bIsVisible; }
 
-    COLORREF GetColor() const              { return m_ObjectColor; }
-    void SetColor(COLORREF NewColor);
-    COLORREF GetShadowColor() const        { return m_ShadowColor; }
-    void SetShadowColor(COLORREF NewColor);
+  COLORREF GetColor() const { return m_ObjectColor; }
+  void SetColor(COLORREF NewColor);
+  COLORREF GetShadowColor() const { return m_ShadowColor; }
+  void SetShadowColor(COLORREF NewColor);
 
-    void EnableShadow(bool bEnable);
-    void SetShadowDepth(int Depth);
+  void EnableShadow(bool bEnable);
+  void SetShadowDepth(int Depth);
 
-    bool Clip(int& dX, int& dY)  const
-    {
-        bool bResult = true;
+  bool Clip(int& dX, int& dY)  const
+  {
+   bool bResult = true;
 
-        if (dX>m_ObjectRect.right)
-        {
-            dX = m_ObjectRect.right;
-            bResult = false;
-        }
-        if (dX<m_ObjectRect.left)
-        {
-            dX = m_ObjectRect.left;
-            bResult = false;
-        }
-        if (dY>m_ObjectRect.bottom)
-        {
-            dY = m_ObjectRect.bottom;
-            bResult = false;
-        }
-        if (dY<m_ObjectRect.top)
-        {
-            dY = m_ObjectRect.top;
-            bResult = false;
-        }
+   if (dX>m_ObjectRect.right)
+   {
+    dX = m_ObjectRect.right;
+    bResult = false;
+   }
+   if (dX<m_ObjectRect.left)
+   {
+    dX = m_ObjectRect.left;
+    bResult = false;
+   }
+   if (dY>m_ObjectRect.bottom)
+   {
+    dY = m_ObjectRect.bottom;
+    bResult = false;
+   }
+   if (dY<m_ObjectRect.top)
+   {
+    dY = m_ObjectRect.top;
+    bResult = false;
+   }
 
-        return bResult;
-    }
+   return bResult;
+  }
 
+ protected:
+  void SetRect(CRect NewTect) { m_ObjectRect = NewTect; }
 
+  CRect       m_ObjectRect;       // Size of the object
+  COLORREF    m_ObjectColor;      // Color of the objet
 
-protected:
-    void SetRect(CRect NewTect)  { m_ObjectRect = NewTect; }
+  CChartCtrl* m_pParent;          // Owner of the object
+  bool        m_bIsVisible;
+  bool        m_bShadow;          // Specifies if the object generate a shadow.
+  // This is not supported for all objects.
+  COLORREF    m_ShadowColor;
+  int         m_iShadowDepth;
 
-    CRect       m_ObjectRect;       // Size of the object
-    COLORREF    m_ObjectColor;      // Color of the objet
-
-    CChartCtrl* m_pParent;          // Owner of the object
-    bool        m_bIsVisible;
-    bool        m_bShadow;          // Specifies if the object generate a shadow.
-                                    // This is not supported for all objects.
-    COLORREF    m_ShadowColor;
-    int         m_iShadowDepth;
-
-private:
-    virtual void Draw(CDC* pDC) = 0;
+ private:
+  virtual void Draw(CDC* pDC) = 0;
 };
-
-#endif // !defined(AFX_CHARTOBJECT_H__6ED024F2_00D9_45D5_AB83_258EF0075288__INCLUDED_)

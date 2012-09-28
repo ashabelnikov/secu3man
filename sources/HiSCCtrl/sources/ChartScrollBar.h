@@ -25,29 +25,29 @@ class CChartAxis;
 
 class AFX_EXT_CLASS CChartScrollBar : public CScrollBar
 {
-public:
-    CChartScrollBar(CChartAxis* pParentAxis);
-    ~CChartScrollBar();
+ public:
+  CChartScrollBar(CChartAxis* pParentAxis);
+ ~CChartScrollBar();
 
-    void CreateScrollBar(const CRect& PlottingRect);
+  void CreateScrollBar(const CRect& PlottingRect);
 
-    void OnHScroll(UINT nSBCode, UINT nPos);
-    void OnVScroll(UINT nSBCode, UINT nPos);
-    void Refresh();
+  void OnHScroll(UINT nSBCode, UINT nPos);
+  void OnVScroll(UINT nSBCode, UINT nPos);
+  void Refresh();
 
-    void SetEnabled(bool bEnabled)  { m_bEnabled = bEnabled; }
-    bool GetEnabled() const         { return m_bEnabled; }
-    void SetAutoHide(bool bAutoHide)  { m_bAutoHide = bAutoHide; }
-    bool GetAutoHide() const          { return m_bAutoHide; }
+  void SetEnabled(bool bEnabled) { m_bEnabled = bEnabled; }
+  bool GetEnabled() const { return m_bEnabled; }
+  void SetAutoHide(bool bAutoHide) { m_bAutoHide = bAutoHide; }
+  bool GetAutoHide() const { return m_bAutoHide; }
 
-    void OnMouseEnter();
-    void OnMouseLeave();
+  void OnMouseEnter();
+  void OnMouseLeave();
 
-private:
-    bool IsScrollInverted() const;
-    void MoveAxisToPos(int PreviousPos, int CurPos);
+ private:
+  bool IsScrollInverted() const;
+  void MoveAxisToPos(int PreviousPos, int CurPos);
 
-    CChartAxis* m_pParentAxis;
-    bool m_bEnabled;
-    bool m_bAutoHide;
+  CChartAxis* m_pParentAxis;
+  bool m_bEnabled;
+  bool m_bAutoHide;
 };

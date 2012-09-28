@@ -19,12 +19,7 @@
  *
  */
 
-#if !defined(AFX_CHARTLEGEND_H__CD72E5A0_8F52_472A_A611_C588F642080B__INCLUDED_)
-#define AFX_CHARTLEGEND_H__CD72E5A0_8F52_472A_A611_C588F642080B__INCLUDED_
-
-#if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
 
 #include "ChartObject.h"
 #include "ChartCtrl.h"
@@ -35,47 +30,45 @@ class CChartSerie;
 
 class AFX_EXT_CLASS CChartLegend : public CChartObject
 {
-    friend CChartCtrl;
+  friend CChartCtrl;
 
-public:
-    void SetFont(int iPointSize, const TChartString& strFaceName);
+ public:
+  void SetFont(int iPointSize, const TChartString& strFaceName);
 
-    CChartLegend(CChartCtrl* pParent);
-    virtual ~CChartLegend();
+  CChartLegend(CChartCtrl* pParent);
+  virtual ~CChartLegend();
 
-    enum DockSide
-    {
-        dsDockRight,
-        dsDockLeft,
-        dsDockTop,
-        dsDockBottom
-    };
+  enum DockSide
+  {
+   dsDockRight,
+   dsDockLeft,
+   dsDockTop,
+   dsDockBottom
+  };
 
-    void DockLegend(DockSide dsSide);
-    void UndockLegend(int iLeftPos, int iTopPos);
+  void DockLegend(DockSide dsSide);
+  void UndockLegend(int iLeftPos, int iTopPos);
 
-    void SetTransparent(bool bTransparent);
-    void SetHorizontalMode(bool bHorizontal);
+  void SetTransparent(bool bTransparent);
+  void SetHorizontalMode(bool bHorizontal);
 
-private:
-    void Draw(CDC* pDC);
-    void ClipArea(CRect& rcControl, CDC* pDC);
-    void UpdatePosition(CDC* pDC, const CRect& rcControl);
+ private:
+  void Draw(CDC* pDC);
+  void ClipArea(CRect& rcControl, CDC* pDC);
+  void UpdatePosition(CDC* pDC, const CRect& rcControl);
 
-    TChartString m_strFontName;
-    int          m_iFontSize;
+  TChartString m_strFontName;
+  int          m_iFontSize;
 
-    bool m_bDocked; // true if the legend is docked
-    DockSide m_DockSide;
+  bool m_bDocked; // true if the legend is docked
+  DockSide m_DockSide;
 
-    // If the legend is not docked:
-    int m_iLeftPos;
-    int m_iTopPos;
+  // If the legend is not docked:
+  int m_iLeftPos;
+  int m_iTopPos;
 
-    bool m_bIsTransparent;
-    bool m_bIsHorizontal;
+  bool m_bIsTransparent;
+  bool m_bIsHorizontal;
 
-    CSize m_BitmapSize;
+  CSize m_BitmapSize;
 };
-
-#endif // !defined(AFX_CHARTLEGEND_H__CD72E5A0_8F52_472A_A611_C588F642080B__INCLUDED_)
