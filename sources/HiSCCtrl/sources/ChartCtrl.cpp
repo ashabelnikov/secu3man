@@ -58,16 +58,7 @@
 #include "ChartBarSerie.h"
 #include "ChartGradient.h"
 
-
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define CHARTCTRL_CLASSNAME    _T("ChartCtrl")  // Window class name
-
 
 COLORREF pSeriesColorTable[] = { RGB(255,0,0), RGB(0,150,0), RGB(0,0,255), RGB(255,255,0), RGB(0,255,255),
                                  RGB(255,128,0), RGB(128,0,128), RGB(128,128,0), RGB(255,0,255), RGB(64,128,128)};

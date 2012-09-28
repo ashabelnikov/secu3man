@@ -23,13 +23,6 @@
 #include "Resources/resource.h"
 #include "IORemappingDlg.h"
 
-
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
 //See also FirmwareDataMediator.h

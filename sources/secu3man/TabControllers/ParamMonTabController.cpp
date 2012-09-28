@@ -41,12 +41,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define EHKEY _T("ParamMonCntr")
 
 //We only save value of this pointer (we do not access members), so we can ignore warning.

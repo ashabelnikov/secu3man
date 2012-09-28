@@ -29,12 +29,6 @@
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)

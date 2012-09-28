@@ -26,12 +26,6 @@
 #include "ChartCtrl.h"
 #include "Math.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -40,11 +34,12 @@ CChartPointsSerie::CChartPointsSerie(CChartCtrl* pParent)
  : CChartSerie(pParent,stPointsSerie), m_iPointType(ptEllipse), m_iXPointSize(5),
    m_iYPointSize(5)
 {
+ //empty
 }
 
 CChartPointsSerie::~CChartPointsSerie()
 {
-
+ //empty
 }
 void CChartPointsSerie::SetPointSize(int XSize, int YSize)
 {

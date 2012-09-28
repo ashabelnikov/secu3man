@@ -29,12 +29,6 @@
 #include "MainFrame/StatusBarManager.h"
 #include "TabDialogs/CheckEngineTabDlg.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 using namespace fastdelegate;
 using namespace SECU3IO;
 
@@ -79,7 +73,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 
 CCheckEngineTabController::~CCheckEngineTabController()
 {
- //na
+ //empty
 }
 
 //изменились настройки программы!
@@ -194,7 +188,7 @@ bool CCheckEngineTabController::OnAskFullScreen(void)
 
 void CCheckEngineTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- //na
+ //empty
 }
 
 //посльзователь "дернул" чек бокс "—читывать ошибки в реальном времени".

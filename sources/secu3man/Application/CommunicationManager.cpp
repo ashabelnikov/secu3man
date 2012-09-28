@@ -28,12 +28,6 @@
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 CCommunicationManager::CCommunicationManager()
 : m_pComPort(NULL)
 , m_pBootLoader(NULL)

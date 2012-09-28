@@ -9,22 +9,16 @@
 #include "stdafx.h"
 #include "EditEx.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 CEditEx::CEditEx(int i_mode /* = MODE_STRING*/)
 : m_mode(i_mode)
 , m_DecimalPlaces(4)
 {
- //na
+ //empty
 }
 
 CEditEx::~CEditEx()
 {
- //na
+ //empty
 }
 
 BEGIN_MESSAGE_MAP(CEditEx, CEdit)

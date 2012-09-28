@@ -23,12 +23,6 @@
 #include "Resources/resource.h"
 #include "DiagnostContextMenuManager.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -36,12 +30,12 @@ static char THIS_FILE[]=__FILE__;
 CDiagnostContextMenuManager::CDiagnostContextMenuManager(CWnd* pWnd /*= NULL*/)
 : m_pWnd(pWnd)
 {
- //na
+ //empty
 }
 
 CDiagnostContextMenuManager::~CDiagnostContextMenuManager()
 {
- //na
+ //empty
 }
 
 void CDiagnostContextMenuManager::Attach(CWnd* pWnd)

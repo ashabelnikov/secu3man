@@ -26,12 +26,6 @@
 
 using namespace std;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -45,7 +39,7 @@ CChartTitle::CChartTitle(CChartCtrl* pParent) : CChartObject(pParent)
 
 CChartTitle::~CChartTitle()
 {
-
+ //empty
 }
 
 void CChartTitle::SetFont(int iPointSize, const TChartString& strFaceName)

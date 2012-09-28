@@ -23,12 +23,6 @@
 #include "Resources/resource.h"
 #include "StarterPageDlg.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)

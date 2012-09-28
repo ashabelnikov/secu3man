@@ -24,24 +24,18 @@
 #include "MIDwellAngle.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIDwellAngle::CMIDwellAngle()
 {
- //na
+ //empty
 }
 
 CMIDwellAngle::~CMIDwellAngle()
 {
- //na
+ //empty
 }
 
 void CMIDwellAngle::Create(void)

@@ -24,12 +24,6 @@
 #include "ChildView.h"
 #include "ui-core/TabDialog.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
 namespace {

@@ -24,24 +24,18 @@
 #include "MIVoltmeter.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIVoltmeter::CMIVoltmeter()
 {
- //na
+ //empty
 }
 
 CMIVoltmeter::~CMIVoltmeter()
 {
- //na
+ //empty
 }
 
 void CMIVoltmeter::Create(void)

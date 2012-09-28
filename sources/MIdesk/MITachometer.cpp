@@ -24,24 +24,18 @@
 #include "MITachometer.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMITachometer::CMITachometer()
 {
- //na
+ //empty
 }
 
 CMITachometer::~CMITachometer()
 {
- //na
+ //empty
 }
 
 void CMITachometer::Create(void)

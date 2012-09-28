@@ -22,13 +22,6 @@
 #include "stdafx.h"
 #include <afxdllx.h>
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
 static AFX_EXTENSION_MODULE IocoreDLL = { NULL, NULL };
 
 extern "C" int APIENTRY

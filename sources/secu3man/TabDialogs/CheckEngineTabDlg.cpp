@@ -26,12 +26,6 @@
 #include "common/unicodesupport.h"
 #include "ui-core/HeaderCtrlEx.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define TIMER_ID 0
 
 const UINT CCheckEngineTabDlg::IDD = IDD_CHECK_ENGINE;

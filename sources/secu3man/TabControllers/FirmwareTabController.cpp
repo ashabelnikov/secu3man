@@ -50,12 +50,6 @@ using namespace fastdelegate;
 
 #undef max   //avoid conflicts with C++
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define EHKEY _T("FirmwareCntr")
 
 //////////////////////////////////////////////////////////////////////
@@ -1000,7 +994,7 @@ bool CFirmwareTabController::OnAskFullScreen(void)
 
 void CFirmwareTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- //na
+ //empty
 }
 
 void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name)

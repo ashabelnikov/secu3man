@@ -30,12 +30,6 @@ using namespace std;
 
 #undef max //numeric_limits<>::max() cases warning C4003: not enough actual parameters for macro...
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 using namespace fastdelegate;
 
 const UINT CLPControlPanelDlg::IDD = IDD_LOG_PLAYER_CONTROL_PANEL;
@@ -48,7 +42,7 @@ CLPControlPanelDlg::CLPControlPanelDlg(CWnd* pParent /*=NULL*/)
 , m_slider_state(false)
 , m_all_enabled(false)
 {
- //todo
+ //empty
 }
 
 void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)

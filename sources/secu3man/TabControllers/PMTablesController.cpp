@@ -36,12 +36,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //------------------------------ Helpful functions ----------------------------------
 bool CPMTablesController::_CompareViewMap(int i_mapType, size_t size) const
 {
@@ -75,7 +69,7 @@ size_t _GetMapSize(int i_mapType)
    return F_STR_POINTS;
   case TYPE_MAP_DA_IDLE:
    return F_IDL_POINTS;
-  case TYPE_MAP_DA_WORK:  
+  case TYPE_MAP_DA_WORK:
    return F_WRK_POINTS_L * F_WRK_POINTS_F;
   case TYPE_MAP_DA_TEMP_CORR:
    return F_TMP_POINTS;
@@ -210,10 +204,10 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
   case 0:
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    if (i_descriptor != EDITAB_PAR)
-    mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);   
+    mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
    else
    {//Очищаем флаги, сохраняем принятые данные и идем на продолжение приема
-    _ClearAcquisitionFlags();    
+    _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
     m_operation_state = 1;
@@ -229,7 +223,7 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     }
 
     //update chache and perform checking
-    const EditTabPar* data = (const EditTabPar*)i_packet_data;    
+    const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
     if (_IsCacheUpToDate())
     {

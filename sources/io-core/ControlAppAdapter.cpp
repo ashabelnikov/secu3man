@@ -22,12 +22,6 @@
 #include "stdafx.h"
 #include "ControlAppAdapter.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define WM_THREAD_ON_CONNECTON        (WM_USER + 1)
 #define WM_THREAD_ON_PACKET_RECEIVED  (WM_USER + 2)
 
@@ -42,12 +36,12 @@ CControlAppAdapter::CControlAppAdapter()
 : m_switch_on(true)
 , m_switch_on_thread_side(false)
 {
- //na
+ //empty
 }
 
 CControlAppAdapter::~CControlAppAdapter()
 {
- //na
+ //empty
 }
 
 BOOL CControlAppAdapter::Create(CWnd* pParentWnd)

@@ -33,12 +33,6 @@
 
 using namespace fastdelegate;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define EHKEY _T("DevDiagCntr")
 
 namespace {
@@ -121,7 +115,7 @@ class TstMode2 : public ITstMode
    if (!(m_state++ & 1))
     m_cbSO(-1, true);
    else
-    m_cbSO(-1, false);   
+    m_cbSO(-1, false);
    m_cbUO();
    return true;
   }
@@ -357,7 +351,7 @@ void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
  if (m_outputs_map.find(output_id) != m_outputs_map.end())
   *m_outputs_map[output_id] = state;
- 
+
  UpdateOutputs(); //send outputs states to device
 }
 

@@ -33,12 +33,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection)
 : Super(ip_view)
 , mp_comm(ip_comm)

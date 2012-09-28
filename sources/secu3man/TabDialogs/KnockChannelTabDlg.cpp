@@ -32,12 +32,6 @@
 #include "ParamDesk/Params/KnockPageDlg.h"
 #include "ui-core/OScopeCtrl.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 using namespace std;
 using namespace fastdelegate;
 
@@ -49,7 +43,6 @@ using namespace fastdelegate;
 #define RPM_AXIS_MIN  200
 #define RPM_AXIS_STEP 60
 #define RPM_AXIS_MAX  (RPM_AXIS_MIN + (RPM_KNOCK_SIGNAL_POINTS * RPM_AXIS_STEP))
-
 
 const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
 
@@ -66,7 +59,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
 {
- //na
+ //empty
 }
 
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)

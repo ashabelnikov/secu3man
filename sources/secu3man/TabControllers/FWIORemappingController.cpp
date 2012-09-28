@@ -29,12 +29,6 @@
 using namespace fastdelegate;
 typedef CFirmwareDataMediator FWDM;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 CFWIORemappingController::CFWIORemappingController(IORVIEW* ip_view)
 : mp_view(ip_view)
 {

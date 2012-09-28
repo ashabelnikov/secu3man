@@ -53,12 +53,6 @@
 
 using namespace std;
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 CPropertyGridInPlaceEdit::CPropertyGridInPlaceEdit(CWnd* pParent, CRect& rect, DWORD dwStyle, UINT nID, _TSTRING sInitText, const InplaceEditParamsEx* ip_ex_params /*= NULL*/)
 {
  m_sInitText     = sInitText.c_str();

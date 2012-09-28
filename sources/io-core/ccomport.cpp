@@ -79,7 +79,7 @@ CComPort::CComPort(int nComPort, UINT dwInQueuep, UINT dwOutQueuep)
 //деструктор
 CComPort::~CComPort()
 {
- //na
+ //empty
 }
 
 //

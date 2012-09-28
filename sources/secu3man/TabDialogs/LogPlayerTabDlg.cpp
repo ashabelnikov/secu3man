@@ -31,12 +31,6 @@
 
 using namespace std;
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 using namespace fastdelegate;
 
 const UINT CLogPlayerTabDlg::IDD = IDD_LOG_PLAYER;
@@ -50,7 +44,7 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , mp_OScopeCtrl(new COScopeCtrl())
 {
- //todo
+ //empty
 }
 
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)

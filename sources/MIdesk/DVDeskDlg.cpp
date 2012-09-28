@@ -28,12 +28,6 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
  ON_WM_DESTROY()
  ON_COMMAND_RANGE(IDC_DV_BASE1_CHECK, IDC_DV_BASE4_CHECK, OnBaseCheck)

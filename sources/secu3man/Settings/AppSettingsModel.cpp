@@ -27,12 +27,6 @@
 
 #undef max //avoid conflicts with C++
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -119,7 +113,7 @@ CAppSettingsModel::CAppSettingsModel()
 
 CAppSettingsModel::~CAppSettingsModel()
 {
- //na
+ //empty
 }
 
 CString CAppSettingsModel::GetINIFileFullName(void) const

@@ -19,7 +19,7 @@ CHeaderCtrlEx::CHeaderCtrlEx()
 
 CHeaderCtrlEx::~CHeaderCtrlEx()
 {
- //na
+ //empty
 }
 
 BEGIN_MESSAGE_MAP(CHeaderCtrlEx, CHeaderCtrl)

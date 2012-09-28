@@ -10,23 +10,17 @@
 #include "AnalogMeterCtrl.h"
 #include "AnalogMeter.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CAnalogMeterCtrl
 
 CAnalogMeterCtrl::CAnalogMeterCtrl()
 {
- //na
+ //empty
 }
 
 CAnalogMeterCtrl::~CAnalogMeterCtrl()
 {
- //na
+ //empty
 }
 
 BEGIN_MESSAGE_MAP(CAnalogMeterCtrl, CStatic)

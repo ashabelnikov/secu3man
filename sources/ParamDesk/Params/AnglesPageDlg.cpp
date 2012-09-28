@@ -24,12 +24,6 @@
 #include "AnglesPageDlg.h"
 #include "ui-core/DDX_helpers.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
 
 BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)

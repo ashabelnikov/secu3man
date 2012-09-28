@@ -23,13 +23,6 @@
 #include "ChartSurfaceSerie.h"
 #include "ChartCtrl.h"
 
-
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -37,12 +30,12 @@ static char THIS_FILE[]=__FILE__;
 CChartSurfaceSerie::CChartSurfaceSerie(CChartCtrl* pParent)
  : CChartSerie(pParent,stSurfaceSerie), m_FillStyle(fsHatchDownDiag), m_bHorizontal(true)
 {
-
+ //empty
 }
 
 CChartSurfaceSerie::~CChartSurfaceSerie()
 {
-
+ //empty
 }
 
 void CChartSurfaceSerie::Draw(CDC* pDC)

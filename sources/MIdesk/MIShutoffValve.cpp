@@ -23,24 +23,18 @@
 #include "MIShutoffValve.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIShutoffValve::CMIShutoffValve()
 {
- //na
+ //empty
 }
 
 CMIShutoffValve::~CMIShutoffValve()
 {
- //na
+ //empty
 }
 
 void CMIShutoffValve::Create(void)

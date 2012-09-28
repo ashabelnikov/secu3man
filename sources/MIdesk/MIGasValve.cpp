@@ -23,24 +23,18 @@
 #include "MIGasValve.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIGasValve::CMIGasValve()
 {
- //na
+ //empty
 }
 
 CMIGasValve::~CMIGasValve()
 {
- //na
+ //empty
 }
 
 void CMIGasValve::Create(void)

@@ -30,12 +30,6 @@
 #include "ChartSerie.h"
 #include "ChartCtrl.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -62,6 +56,7 @@ CChartLegend::CChartLegend(CChartCtrl* pParent):CChartObject(pParent)
 
 CChartLegend::~CChartLegend()
 {
+ //empty
 }
 
 void CChartLegend::SetFont(int iPointSize, const TChartString& strFaceName)

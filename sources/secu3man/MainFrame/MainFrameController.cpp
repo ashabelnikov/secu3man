@@ -82,7 +82,7 @@ void MainFrameController::_SetDelegates(void)
 
 MainFrameController::~MainFrameController()
 {
- //na
+ //empty
 }
 
 void MainFrameController::OnAppAbout()

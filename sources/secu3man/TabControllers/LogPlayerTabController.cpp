@@ -38,12 +38,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define QUEUE_SIZE 32   //размер очереди для усреднения периода
 #define EHKEY _T("LogPlayerCntr")
 
@@ -98,7 +92,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
 
 CLogPlayerTabController::~CLogPlayerTabController()
 {
- //na
+ //empty
 }
 
 //изменились настройки программы!

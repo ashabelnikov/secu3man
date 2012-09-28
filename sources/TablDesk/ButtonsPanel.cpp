@@ -26,12 +26,6 @@
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define TIMER_ID 0
 
 void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)

@@ -26,12 +26,6 @@
 #include "ChartAxisLabel.h"
 #include "ChartCtrl.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -48,7 +42,7 @@ CChartAxisLabel::CChartAxisLabel(CChartCtrl* pParent, bool bHorizontal):CChartOb
 
 CChartAxisLabel::~CChartAxisLabel()
 {
-
+ //empty
 }
 
 void CChartAxisLabel::SetText(const TChartString& NewText)

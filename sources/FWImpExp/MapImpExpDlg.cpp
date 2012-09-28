@@ -25,12 +25,6 @@
 #include "io-core/SECU3IO.h"
 #include "ui-core/fnt_helpers.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
 
 #define WM_KICKIDLE 0x036A //hack

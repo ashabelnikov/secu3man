@@ -23,14 +23,7 @@
 #include "ChartGrid.h"
 #include "ChartAxis.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 using namespace std;
-
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -44,7 +37,7 @@ CChartGrid::CChartGrid(CChartCtrl* pParent, bool bHoriz)
 
 CChartGrid::~CChartGrid()
 {
-
+ //empty
 }
 
 void CChartGrid::AddTick(int Position)

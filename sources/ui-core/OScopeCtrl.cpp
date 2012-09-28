@@ -11,12 +11,6 @@
 
 #include "OScopeCtrl.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
  ON_WM_PAINT()
  ON_WM_SIZE()

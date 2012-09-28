@@ -24,24 +24,18 @@
 #include "MITemperature.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMITemperature::CMITemperature()
 {
- //na
+ //empty
 }
 
 CMITemperature::~CMITemperature()
 {
- //na
+ //empty
 }
 
 void CMITemperature::Create(void)

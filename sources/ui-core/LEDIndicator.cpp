@@ -9,12 +9,6 @@
 #include "stdafx.h"
 #include "LEDIndicator.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 // CLEDIndicator
 
@@ -31,7 +25,7 @@ CLEDIndicator::CLEDIndicator()
 
 CLEDIndicator::~CLEDIndicator()
 {
- //na
+ //empty
 }
 
 BEGIN_MESSAGE_MAP(CLEDIndicator, CStatic)

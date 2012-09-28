@@ -27,12 +27,6 @@
 #include "MIHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()

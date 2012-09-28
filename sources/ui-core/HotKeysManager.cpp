@@ -15,12 +15,12 @@
 HotKeysManager::HotKeysManager()
 : m_active(true)
 {
-//na
+ //empty
 }
 
 HotKeysManager::~HotKeysManager()
 {
-//na
+ //empty
 }
 
 HotKeysManager* HotKeysManager::GetInstance(void)

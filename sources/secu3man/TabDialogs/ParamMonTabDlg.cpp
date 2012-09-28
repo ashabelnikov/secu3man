@@ -30,12 +30,6 @@
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 using namespace fastdelegate;
 
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
@@ -53,7 +47,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_TablesDeskDlg(new CTablesDeskDlg())
 , floating(false)
 {
- //na
+ //empty
 }
 
 void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)

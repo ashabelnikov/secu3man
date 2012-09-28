@@ -11,12 +11,6 @@
 #include "SpinButtonCtrlEx.h"
 #include "EditEx.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define EPS 1.0e-9
 
 //-------------------------------------------------------------
@@ -26,13 +20,13 @@ CSpinButtonCtrlEx::CSpinButtonCtrlEx()
 , m_MaxVal(100)
 , m_IntRange(100)
 {
- //na
+ //empty
 }
 
 //-------------------------------------------------------------
 CSpinButtonCtrlEx::~CSpinButtonCtrlEx()
 {
- //na
+ //empty
 }
 
 //-------------------------------------------------------------

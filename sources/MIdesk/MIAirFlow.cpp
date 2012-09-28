@@ -24,12 +24,6 @@
 #include "MIHelpers.h"
 #include "ui-core/fnt_helpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -38,12 +32,12 @@ CMIAirFlow::CMIAirFlow()
 : m_loLimit(0.0f)
 , m_upLimit(16.0f)
 {
- //na
+ //empty
 }
 
 CMIAirFlow::~CMIAirFlow()
 {
- //na
+ //empty
 }
 
 void CMIAirFlow::DDX_Controls(CDataExchange* pDX, int nIDC_progress, int nIDC_digits, int nIDC_caption )

@@ -33,12 +33,6 @@
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
 END_MESSAGE_MAP()
 

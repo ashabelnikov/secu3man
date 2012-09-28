@@ -37,12 +37,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 #define EHKEY _T("KnockChanCntr")
 
 const BYTE default_context = SENSOR_DAT;
@@ -78,7 +72,7 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 
 CKnockChannelTabController::~CKnockChannelTabController()
 {
- //na
+ //empty
 }
 
 //изменились настройки программы!
@@ -258,7 +252,7 @@ bool CKnockChannelTabController::OnAskFullScreen(void)
 
 void CKnockChannelTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
- //na
+ //empty
 }
 
 void CKnockChannelTabController::OnSaveParameters(void)

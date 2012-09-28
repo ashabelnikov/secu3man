@@ -23,24 +23,18 @@
 #include "MIThrottleGate.h"
 #include "MIHelpers.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIThrottleGate::CMIThrottleGate()
 {
- //na
+ //empty
 }
 
 CMIThrottleGate::~CMIThrottleGate()
 {
- //na
+ //empty
 }
 
 void CMIThrottleGate::Create(void)

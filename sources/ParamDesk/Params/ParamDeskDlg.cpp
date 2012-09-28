@@ -42,12 +42,6 @@
 #include "io-core/ufcodes.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 #define TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
 using namespace std;

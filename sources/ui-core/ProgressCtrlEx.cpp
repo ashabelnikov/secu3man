@@ -9,22 +9,16 @@
 #include "stdafx.h"
 #include "ProgressCtrlEx.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 /////////////////////////////////////////////////////////////////////////////
 
 CProgressCtrlEx::CProgressCtrlEx()
 {
- //na
+ //empty
 }
 
 CProgressCtrlEx::~CProgressCtrlEx()
 {
- //na
+ //empty
 }
 
 BEGIN_MESSAGE_MAP(CProgressCtrlEx, CProgressCtrl)

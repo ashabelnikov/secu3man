@@ -11,12 +11,6 @@
 #include "TabDialog.h"
 #include "ITabControllerEvent.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 enum tcOrient
 {
  TCO_LEFT, TCO_TOP, TCO_RIGHT, TCO_BOTTOM

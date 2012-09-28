@@ -23,12 +23,6 @@
 #include "Resources/resource.h"
 #include "TDContextMenuManager.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -36,12 +30,12 @@ static char THIS_FILE[]=__FILE__;
 CTDContextMenuManager::CTDContextMenuManager(CWnd* pWnd /*= NULL*/)
 : m_pWnd(pWnd)
 {
- //na
+ //empty
 }
 
 CTDContextMenuManager::~CTDContextMenuManager()
 {
- //na
+ //empty
 }
 
 void CTDContextMenuManager::Attach(CWnd* pWnd)

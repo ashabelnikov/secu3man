@@ -32,12 +32,6 @@
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/HotKeysToCmdRouter.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const int TIMER_ID = 1;
 
 const UINT CFirmwareTabDlg::IDD = IDD_FIRMWARE_SUPPORT;

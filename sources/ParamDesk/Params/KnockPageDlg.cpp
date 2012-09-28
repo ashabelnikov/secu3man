@@ -29,12 +29,6 @@
 
 using namespace std;
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
 const UINT CKnockPageDlg::IDD = IDD_PD_KNOCK_PAGE;
 
 BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)

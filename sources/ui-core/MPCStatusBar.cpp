@@ -20,13 +20,6 @@
 #include <afxtempl.h>
 #include "MPCStatusBar.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
 ////////////////////////////////////////////////////////////////////////
 // MPCStatusBarPaneControlInfo
 IMPLEMENT_DYNCREATE(MPCStatusBarPaneControlInfo,CObject)
@@ -53,8 +46,8 @@ MPCStatusBarPane& MPCStatusBarPane::operator=(MPCStatusBarPane & xfxpane )
 
 MPCStatusBarPane::MPCStatusBarPane()
 {
+ //empty
 }
-
 
 ////////////////////////////////////////////////////////////////////////
 // MPCStatusBar

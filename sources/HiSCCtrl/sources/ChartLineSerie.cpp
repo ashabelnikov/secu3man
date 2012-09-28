@@ -31,12 +31,6 @@
 
 #include "Math.h"
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -49,7 +43,7 @@ CChartLineSerie::CChartLineSerie(CChartCtrl* pParent) : CChartSerie(pParent,stLi
 
 CChartLineSerie::~CChartLineSerie()
 {
-
+ //empty
 }
 
 void CChartLineSerie::SetPenStyle(int NewStyle)

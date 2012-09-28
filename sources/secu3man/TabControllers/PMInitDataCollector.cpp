@@ -32,12 +32,6 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-#ifdef _DEBUG
-#undef THIS_FILE
-static char THIS_FILE[]=__FILE__;
-#define new DEBUG_NEW
-#endif
-
 CPMInitDataCollector::CPMInitDataCollector(CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
 : mp_comm(ip_comm)
 , mp_sbar(ip_sbar)

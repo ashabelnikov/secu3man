@@ -14,13 +14,6 @@
 #include "StdAfx.h"
 #include "MPCLogoPane.h"
 
-#ifdef _DEBUG
-#define new DEBUG_NEW
-#undef THIS_FILE
-static char THIS_FILE[] = __FILE__;
-#endif
-
-
 ////////////////////////////////////////////////////////////////////////
 // MPCLogoPane
 IMPLEMENT_DYNCREATE(MPCLogoPane,CWnd)
@@ -33,12 +26,10 @@ MPCLogoPane::MPCLogoPane()
  SetLogoFont("Arial");
 }
 
-
 void MPCLogoPane::SetLogoText(CString sTxt)
 {
  m_LogoText=sTxt;
 }
-
 
 void MPCLogoPane::SetLogoFont(CString Name, int nHeight/* = 24*/,
  int nWeight/* = FW_BOLD*/, BYTE bItalic/* = true*/, BYTE bUnderline/* = false*/)
