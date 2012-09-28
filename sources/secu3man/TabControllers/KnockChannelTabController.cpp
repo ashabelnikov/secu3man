@@ -60,6 +60,7 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_vi
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 , m_k_desired_level(1.0f)
+, m_currentRPM(0)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -204,6 +205,8 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
  }
 
  m_sbar->SetConnectionState(state);
+ //показываем или прячем вертикальную линию отображающую обороты на графике
+ m_view->SetRPMVisibility(i_online);
 }
 
 void CKnockChannelTabController::StartReadingNecessaryParameters(void)
@@ -290,6 +293,8 @@ void CKnockChannelTabController::OnParamsChangesTimer(void)
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
  m_view->SetRPMKnockSignal(values);
+ ///обновляем значение оборотов (отображается верт. линией на графике)
+ m_view->SetRPMValue(m_currentRPM);
 }
 
 void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time)
@@ -316,6 +321,9 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
   m_rpm_knock_signal[index][ii] = p_packet->knock_k;
   ii = ii < (RPM_KNOCK_SAMPLES_PER_POINT - 1) ? ii + 1 : 0;
  }
+
+ //сохраняем текущее значение оборотов
+ m_currentRPM = p_packet->frequen;
 }
 
 void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function)

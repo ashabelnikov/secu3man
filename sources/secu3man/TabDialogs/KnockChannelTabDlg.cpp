@@ -46,6 +46,10 @@ using namespace fastdelegate;
 #define K_SIG_MIN 0.0f
 #define K_SIG_MAX 5.0f
 #define LEVEL_SLIDER_POS_NUM 100
+#define RPM_AXIS_MIN  200
+#define RPM_AXIS_STEP 60
+#define RPM_AXIS_MAX  (RPM_AXIS_MIN + (RPM_KNOCK_SIGNAL_POINTS * RPM_AXIS_STEP))
+
 
 const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
 
@@ -58,6 +62,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_pPointSerie(NULL)
 , m_pLineSerie(NULL)
 , m_pLineSerieLevel(NULL)
+, m_pLineSerieRPM(NULL)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
 {
@@ -189,12 +194,14 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  m_pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
  m_pLineSerie = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
  m_pLineSerieLevel = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
+ m_pLineSerieRPM = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
 
  m_pLineSerie->SetColor(RGB(80,80,200));
  m_pLineSerieLevel->SetColor(RGB(50,200,0));
+ m_pLineSerieRPM->SetColor(RGB(200,50,0));
 
- int rpm = 200;
- int rpm_step = 60;
+ int rpm = RPM_AXIS_MIN;
+ int rpm_step = RPM_AXIS_STEP;
 
  //первая точка линии желаемого уровня сигнала
  m_pLineSerieLevel->AddPoint(rpm, 0);
@@ -212,6 +219,10 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 
  //вторая точка линии желаемого уровня сигнала
  m_pLineSerieLevel->AddPoint(rpm, 0);
+
+ //первая и вторая точки вертикальной линии отображающей обороты
+ m_pLineSerieRPM->AddPoint(RPM_AXIS_MIN, K_SIG_MIN);
+ m_pLineSerieRPM->AddPoint(RPM_AXIS_MIN, K_SIG_MAX);
 
  //инициализация слайдера и установка дефаултного значения уровня
  m_level_slider.SetRange(0, LEVEL_SLIDER_POS_NUM);
@@ -328,3 +339,20 @@ float CKnockChannelTabDlg::GetDesiredLevel(void)
 {
  return SliderToLevel(m_level_slider.GetPos());
 }
+
+void CKnockChannelTabDlg::SetRPMValue(int rpm)
+{
+ if (rpm < RPM_AXIS_MIN)
+  rpm = RPM_AXIS_MIN;
+ if (rpm > RPM_AXIS_MAX)
+  rpm = RPM_AXIS_MAX;
+
+ m_pLineSerieRPM->SetXPointValue(0, rpm);
+ m_pLineSerieRPM->SetXPointValue(1, rpm);
+}
+
+void CKnockChannelTabDlg::SetRPMVisibility(bool visible)
+{
+ m_pLineSerieRPM->SetVisible(visible);
+}
+

@@ -60,6 +60,11 @@ class CKnockChannelTabDlg : public CTabDialog
   void SetDesiredLevel(float i_level);
   float GetDesiredLevel(void);
 
+  //установка значения оборотов, отображаемых на графике в виде вертикальной линии
+  void SetRPMValue(int rpm);
+  //установка видимости вертикальной линии, отображающей обороты на графике
+  void SetRPMVisibility(bool visible);
+
   enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
 
   std::auto_ptr<CKnockPageDlg> mp_knock_parameters_dlg;
@@ -87,6 +92,7 @@ class CKnockChannelTabDlg : public CTabDialog
   CChartPointsSerie* m_pPointSerie;
   CChartLineSerie* m_pLineSerie;
   CChartLineSerie* m_pLineSerieLevel;
+  CChartLineSerie* m_pLineSerieRPM;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;

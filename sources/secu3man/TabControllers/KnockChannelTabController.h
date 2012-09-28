@@ -94,4 +94,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 
   //сохран€ет желаемый уровень сигнала ƒƒ когда контроллер деактивируетс€
   float m_k_desired_level;
+
+  //сохран€ет текущие обороты дл€ отображени€ в виде вертикальной линии на графике
+  int m_currentRPM;
 };
