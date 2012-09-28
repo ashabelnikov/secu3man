@@ -1,23 +1,23 @@
-cmake_minimum_required(VERSION 2.6) 
+cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
 ADD_DEFINITIONS(-D_AFXEXT)
 ADD_DEFINITIONS(-D_WINDLL)
 
-set(CMAKE_MFC_FLAG 2)  
-set(PROJECT propgrid) 
+set(CMAKE_MFC_FLAG 2)
+set(PROJECT propgrid)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
- 
+
 include_directories(../)
-project(${PROJECT}) 
- 
-set(HEADERS 
+project(${PROJECT})
+
+set(HEADERS
   DynDialogEx.h
   DynDialogItemEx.h
   ListDynDialogEx.h
@@ -31,8 +31,8 @@ set(HEADERS
   StdAfx.h
   wm_messages.h
   )
- 
-set(SOURCES 
+
+set(SOURCES
   DynDialogEx.cpp
   DynDialogItemEx.cpp
   ListDynDialogEx.cpp
@@ -44,7 +44,7 @@ set(SOURCES
   PropertyGridMonthCalCtrl.cpp
   PropertyGridSelector.cpp
   StdAfx.cpp
-  ) 
- 
+  )
+
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})
 target_link_libraries(${PROJECT} ui-core shlwapi.lib)

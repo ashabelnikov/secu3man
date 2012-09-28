@@ -1,7 +1,7 @@
-cmake_minimum_required(VERSION 2.6) 
+cmake_minimum_required(VERSION 2.6)
 
-set(PROJECT secu3man)  
-project(${PROJECT}) 
+set(PROJECT secu3man)
+project(${PROJECT})
 
 ADD_DEFINITIONS(-D_CRT_NON_CONFORMING_SWPRINTFS)
 ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
@@ -24,11 +24,11 @@ endforeach()
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
-set(CMAKE_MFC_FLAG 2)  
+set(CMAKE_MFC_FLAG 2)
 include_directories(../)
 include_directories(../secu3man)
- 
-set(HEADERS 
+
+set(HEADERS
   Application/StdAfx.h
   Application/secu3man.h
   Application/ISECU3man.h
@@ -71,8 +71,8 @@ set(HEADERS
   TabsManagement/MainTabController.h
   Resources/Resource.h
   )
- 
-set(SOURCES 
+
+set(SOURCES
   Application/StdAfx.cpp
   Application/secu3man.cpp
   Application/CommunicationManager.cpp
@@ -110,7 +110,7 @@ set(SOURCES
   TabDialogs/ParamMonTabDlg.cpp
   TabsManagement/MainTabController.cpp
   Resources/secu3man.rc
-  ) 
+  )
 
 foreach(src_file ${SOURCES})
   set_source_files_properties(${src_file}
@@ -118,6 +118,6 @@ foreach(src_file ${SOURCES})
   )
 endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
- 
+
 add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES})
 target_link_libraries(${PROJECT} ${LIBRARIES})

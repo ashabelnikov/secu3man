@@ -6,20 +6,20 @@ ADD_DEFINITIONS(-D_WINDLL)
 ADD_DEFINITIONS(-DIOCORE_EXPORTS)
 ADD_DEFINITIONS(-DCRC_EXPORTS)
 
-set(CMAKE_MFC_FLAG 2)  
-set(PROJECT io-core) 
+set(CMAKE_MFC_FLAG 2)
+set(PROJECT io-core)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
- 
+
 include_directories(../)
-project(${PROJECT}) 
- 
-set(HEADERS 
+project(${PROJECT})
+
+set(HEADERS
   BootLoader.h
   BootLoaderAdapter.h
   ccomport.h
@@ -43,8 +43,8 @@ set(HEADERS
   ufcodes.h
   StdAfx.h
   )
- 
-set(SOURCES 
+
+set(SOURCES
   BootLoader.cpp
   BootLoaderAdapter.cpp
   ccomport.cpp
@@ -59,6 +59,6 @@ set(SOURCES
   NumericConv.cpp
   PlatformParamHolder.cpp
   StdAfx.cpp
-  ) 
- 
+  )
+
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

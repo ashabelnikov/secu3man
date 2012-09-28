@@ -1,23 +1,23 @@
-cmake_minimum_required(VERSION 2.6) 
+cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
 ADD_DEFINITIONS(-D_AFXEXT)
 ADD_DEFINITIONS(-D_WINDLL)
 
-set(CMAKE_MFC_FLAG 2)  
-set(PROJECT hiscctrl) 
+set(CMAKE_MFC_FLAG 2)
+set(PROJECT hiscctrl)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
- 
+
 include_directories(../)
-project(${PROJECT}) 
- 
-set(HEADERS 
+project(${PROJECT})
+
+set(HEADERS
   sources/ChartAxis.h
   sources/ChartAxisLabel.h
   sources/ChartBarSerie.h
@@ -34,8 +34,8 @@ set(HEADERS
   sources/ChartTitle.h
   StdAfx.h
   )
- 
-set(SOURCES 
+
+set(SOURCES
   sources/ChartAxis.cpp
   sources/ChartAxisLabel.cpp
   sources/ChartBarSerie.cpp
@@ -51,7 +51,7 @@ set(SOURCES
   sources/ChartSurfaceSerie.cpp
   sources/ChartTitle.cpp
   StdAfx.cpp
-  ) 
+  )
 
 foreach(src_file ${SOURCES})
   set_source_files_properties(${src_file}
@@ -59,5 +59,5 @@ foreach(src_file ${SOURCES})
   )
 endforeach(src_file ${SOURCES})
 set_source_files_properties(StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
- 
+
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

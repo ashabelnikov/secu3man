@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6) 
+cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
 ADD_DEFINITIONS(-D_AFXEXT)
@@ -7,20 +7,20 @@ ADD_DEFINITIONS(-DDDX_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DFNT_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DXBROWSEFORFOLDER_EXPORTS)
 
-set(CMAKE_MFC_FLAG 2)  
-set(PROJECT ui-core) 
+set(CMAKE_MFC_FLAG 2)
+set(PROJECT ui-core)
 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries) 
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries) 
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY_RELEASE ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_DEBUG ../../libraries)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY_RELEASE ../../libraries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
- 
+
 include_directories(../)
 project(${PROJECT}) 
- 
-set(HEADERS 
+
+set(HEADERS
   AnalogMeter.h
   AnalogMeterCtrl.h
   ddx_helpers.h
@@ -42,10 +42,10 @@ set(HEADERS
   TabDialog.h
   UpdatableDialog.h
   WndSubclasser.h
-  XBrowseForFolder.h 
+  XBrowseForFolder.h
   )
- 
-set(SOURCES 
+
+set(SOURCES
   AnalogMeter.cpp
   AnalogMeterCtrl.cpp
   ddx_helpers.cpp
@@ -69,6 +69,6 @@ set(SOURCES
   WndSubclasser.cpp
   XBrowseForFolder.cpp
   uicore.cpp
-  ) 
- 
+  )
+
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
