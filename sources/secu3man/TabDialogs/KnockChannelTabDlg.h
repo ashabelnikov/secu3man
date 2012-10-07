@@ -59,6 +59,8 @@ class CKnockChannelTabDlg : public CTabDialog
 
   void SetDesiredLevel(float i_level);
   float GetDesiredLevel(void);
+  bool GetDLSMCheckboxState(void) const;
+  void SetDesiredLevelColor(bool color_ok);
 
   //установка значения оборотов, отображаемых на графике в виде вертикальной линии
   void SetRPMValue(int rpm);
@@ -80,6 +82,7 @@ class CKnockChannelTabDlg : public CTabDialog
   afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
   afx_msg void OnUpdateClearFunction(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
+  afx_msg void OnDLSMCheckbox();
   afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   DECLARE_MESSAGE_MAP()
 
@@ -96,7 +99,9 @@ class CKnockChannelTabDlg : public CTabDialog
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;
+  CButton m_dlsm_checkbox;
   CSliderCtrl m_level_slider;
+  CStatic m_level_text;
 
   EventHandler  m_OnSaveParameters;
   EventHandler  m_OnCopyToAttenuatorTable;
@@ -104,4 +109,5 @@ class CKnockChannelTabDlg : public CTabDialog
   bool m_all_enabled;
   bool m_copy_to_attenuator_table_button_state;
   bool m_clear_function_button_state;
+  bool m_dlsm_checkbox_state;
 };

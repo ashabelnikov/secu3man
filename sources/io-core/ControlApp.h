@@ -164,6 +164,7 @@ class IOCORE_API CControlApp
   bool Parse_MISCEL_PAR(const BYTE* raw_packet);
   bool Parse_EDITAB_PAR(const BYTE* raw_packet);
   bool Parse_DIAGINP_DAT(const BYTE* raw_packet);
+  bool Parse_ATTTAB_PAR(const BYTE* raw_packet);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);

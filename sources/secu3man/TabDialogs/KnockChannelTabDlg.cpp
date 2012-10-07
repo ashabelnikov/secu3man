@@ -58,6 +58,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_pLineSerieRPM(NULL)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
+, m_dlsm_checkbox_state(true)
 {
  //empty
 }
@@ -69,6 +70,8 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, m_clear_function_button);
  DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER, m_level_slider);
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_DLSM_CHECKBOX, m_dlsm_checkbox);
+ DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT, m_level_text);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -84,6 +87,7 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnUpdateCopyToAttenuatorTable)
  ON_BN_CLICKED(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnClearFunction)
  ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnUpdateClearFunction)
+ ON_BN_CLICKED(IDC_KNOCK_CHANNEL_DLSM_CHECKBOX, OnDLSMCheckbox)
  ON_WM_TIMER()
  ON_WM_VSCROLL()
 END_MESSAGE_MAP()
@@ -95,16 +99,19 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ m_dlsm_checkbox.SetCheck(m_dlsm_checkbox_state ? BST_CHECKED : BST_UNCHECKED);
+ m_level_slider.EnableWindow(!m_dlsm_checkbox_state);
+
  CRect rect;
  GetDlgItem(IDC_KNOCK_CHANNEL_PARAMETERS_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
 
  //создаем диалог с параметрами ДД
- mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD,this);
+ mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD, this);
  mp_knock_parameters_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
- SetTimer(TIMER_ID,250,NULL);
+ SetTimer(TIMER_ID, 200, NULL);
 
  //Инициализируем построитель функций
  _InitializeRPMKnockSignalControl();
@@ -127,6 +134,12 @@ void CKnockChannelTabDlg::OnSaveParameters(void)
 {
  if (m_OnSaveParameters)
   m_OnSaveParameters();
+}
+
+void CKnockChannelTabDlg::OnDLSMCheckbox()
+{
+ m_dlsm_checkbox_state = m_dlsm_checkbox.GetCheck()==BST_CHECKED;
+ m_level_slider.EnableWindow(!m_dlsm_checkbox_state);
 }
 
 void CKnockChannelTabDlg::EnableAll(bool i_enable)
@@ -191,7 +204,7 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 
  m_pLineSerie->SetColor(RGB(80,80,200));
  m_pLineSerieLevel->SetColor(RGB(50,200,0));
- m_pLineSerieRPM->SetColor(RGB(200,50,0));
+ m_pLineSerieRPM->SetColor(RGB(255,255,0));
 
  int rpm = RPM_AXIS_MIN;
  int rpm_step = RPM_AXIS_STEP;
@@ -286,9 +299,12 @@ static float SliderToLevel(int i_pos)
 
 void CKnockChannelTabDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
-#define _SET_LEVEL(pos) \
+#define _SET_LEVEL(pos) {\
     m_pLineSerieLevel->SetYPointValue(0, SliderToLevel((pos))); \
-    m_pLineSerieLevel->SetYPointValue(1, SliderToLevel((pos)));
+    m_pLineSerieLevel->SetYPointValue(1, SliderToLevel((pos))); \
+    CString cs; cs.Format("%.02f", SliderToLevel((pos))); \
+    m_level_text.SetWindowText(cs); \
+    }
 
  switch(nSBCode)
  {
@@ -326,11 +342,23 @@ void CKnockChannelTabDlg::SetDesiredLevel(float i_level)
  m_level_slider.SetPos(MathHelpers::Round((K_SIG_MAX - i_level) * factor));
  m_pLineSerieLevel->SetYPointValue(0, i_level);
  m_pLineSerieLevel->SetYPointValue(1, i_level);
+ CString cs; cs.Format("%.02f", i_level);
+ m_level_text.SetWindowText(cs);
 }
 
 float CKnockChannelTabDlg::GetDesiredLevel(void)
 {
  return SliderToLevel(m_level_slider.GetPos());
+}
+
+void CKnockChannelTabDlg::SetDesiredLevelColor(bool color_ok)
+{ 
+ m_pLineSerieLevel->SetColor(color_ok ? RGB(50,200,0) : RGB(200,50,0));
+}
+
+bool CKnockChannelTabDlg::GetDLSMCheckboxState(void) const
+{
+ return m_dlsm_checkbox_state;
 }
 
 void CKnockChannelTabDlg::SetRPMValue(int rpm)

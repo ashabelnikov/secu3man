@@ -1094,6 +1094,45 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet)
+{
+ SECU3IO::SepTabPar& m_AttTabPar = m_recepted_packet.m_SepTabPar;
+
+ int packet_size = strlen((char*)raw_packet);
+ if (packet_size < 5 || packet_size > 35)
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &address))
+  return false;
+ m_AttTabPar.address = address;
+ raw_packet+=2;
+
+ packet_size-=3;
+ if (packet_size % 2) // 1 byte in HEX is 2 symbols
+  return false;
+
+ //фрагмент с данными (коды коэффициентов усиления)
+ size_t data_size = 0;
+ for(int i = 0; i < packet_size / 2; ++i)
+ {
+  unsigned char value;
+  if (false == CNumericConv::Hex8ToBin(raw_packet, &value))
+   return false;
+  m_AttTabPar.table_data[i] = value;
+  raw_packet+=2;
+  ++data_size;
+ }
+ m_AttTabPar.data_size = data_size;
+ 
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
@@ -1272,6 +1311,10 @@ bool CControlApp::ParsePackets()
     continue;
    case EDITAB_PAR:
     if (Parse_EDITAB_PAR(raw_packet))
+     break;
+    continue;
+   case ATTTAB_PAR:
+    if (Parse_ATTTAB_PAR(raw_packet))
      break;
     continue;
    case DIAGINP_DAT:
@@ -1471,6 +1514,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case FWINFO_DAT:
   case MISCEL_PAR:
   case EDITAB_PAR:
+  case ATTTAB_PAR:
   case DIAGINP_DAT:
   case DIAGOUT_DAT: 
    return true;

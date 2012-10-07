@@ -49,6 +49,7 @@
 #define   FWINFO_DAT   'y'
 #define   MISCEL_PAR   'z'
 #define   EDITAB_PAR   '{'
+#define   ATTTAB_PAR   '}'
 #define   DBGVAR_DAT   ':'
 
 #define   DIAGINP_DAT  '='

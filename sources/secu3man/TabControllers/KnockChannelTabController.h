@@ -34,7 +34,7 @@ class CStatusBarManager;
 class CKnockChannelTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CKnockChannelTabController(CKnockChannelTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
+  CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
   virtual ~CKnockChannelTabController();
 
  private:
@@ -64,27 +64,31 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   enum //Packet Processing States
   {
    PPS_READ_NECESSARY_PARAMETERS = 0,
-   PPS_BEFORE_READ_MONITOR_DATA = 1,
-   PPS_READ_MONITOR_DATA = 2
+   PPS_READ_ATTENUATOR_MAP = 1,
+   PPS_BEFORE_READ_MONITOR_DATA = 2,
+   PPS_READ_MONITOR_DATA = 3
   };
 
   void StartReadingNecessaryParameters(void);
   bool ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data);
+  void StartReadingAttenuatorMap(void);
+  bool ReadAttenuatorMapFromSECU(const BYTE i_descriptor, const void* i_packet_data);
   void _HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time);
 
   void _PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function);
   void _InitializeRPMKnockFunctionBuffer(void);
 
-  CKnockChannelTabDlg*  m_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
-  CControlAppAdapter* m_pAdapter;
+  CKnockChannelTabDlg*  mp_view;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
+  CControlAppAdapter* mp_pAdapter;
 
  private:
   int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA
   int  m_operation_state;          //хранит состояние конечных автоматов конкретной операции, если -1 -значит КА остановлен
   bool m_parameters_changed;       //этот флаг устанавливается параметров ДД и сбрасывается после посылки измененных данных в SECU
   CObjectTimer<CKnockChannelTabController> m_params_changes_timer;
+  int m_params_changes_timer_div;
 
   //Буфер содержащий значения функции сигнала детонации от оборотов. Каждое значение функции
   //может состоять из множества (но ограниченного) значений для усреднения.
@@ -97,4 +101,8 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 
   //сохраняет текущие обороты для отображения в виде вертикальной линии на графике
   int m_currentRPM;
+ 
+  //Массив для хранения таблицы аттенюатора прочитанной из SECU-3 и массив с флагами
+  std::vector<size_t> m_rdAttenMap;
+  std::vector<int> m_rdAttenMapFlags;
 };

@@ -103,10 +103,10 @@ namespace SECU3IO
   int  ephh_lot;
   int  ephh_hit;
   unsigned char carb_invers;
-  float epm_ont;                       //порог включения ЭМР
+  float epm_ont;                        //порог включения ЭМР
   int  ephh_lot_g;
   int  ephh_hit_g;
-  float shutoff_delay;                 //задержка выключения клапана
+  float shutoff_delay;                  //задержка выключения клапана
  };
 
  struct TemperPar
@@ -120,8 +120,8 @@ namespace SECU3IO
 
  struct ADCCompenPar
  {
-  float  map_adc_factor;               //коэффициент передаточной погрешности
-  float  map_adc_correction;           //сдвиг в вольтах
+  float  map_adc_factor;                //коэффициент передаточной погрешности
+  float  map_adc_correction;            //сдвиг в вольтах
   float  ubat_adc_factor;
   float  ubat_adc_correction;
   float  temp_adc_factor;
@@ -148,7 +148,7 @@ namespace SECU3IO
   unsigned char ref_s_edge_type;
  };
 
- struct OPCompNc                       //используется если надо просто принять или послать определенный код действия
+ struct OPCompNc                        //используется если надо просто принять или послать определенный код действия
  {
   BYTE opcode;   //operation code
   BYTE opdata;   //operation data
@@ -170,11 +170,11 @@ namespace SECU3IO
   float knock_k_wnd_end_angle;
   int knock_int_time_const;
 
-  float knock_retard_step;    //шаг смещения УОЗ при детонации
-  float knock_advance_step;   //шаг восстановления УОЗ
-  float knock_max_retard;     //максимальное смещение УОЗ
-  float knock_threshold;      //в вольтах
-  int knock_recovery_delay;   //в рабочих циклах двигателя
+  float knock_retard_step;              //шаг смещения УОЗ при детонации
+  float knock_advance_step;             //шаг восстановления УОЗ
+  float knock_max_retard;               //максимальное смещение УОЗ
+  float knock_threshold;                //в вольтах
+  int knock_recovery_delay;             //в рабочих циклах двигателя
  };
 
  struct CEErrors
@@ -185,71 +185,78 @@ namespace SECU3IO
  const int FW_SIGNATURE_INFO_SIZE = 48;
  struct FWInfoDat
  {
-  char   info[FW_SIGNATURE_INFO_SIZE+1];  //*one more byte for string's termination
+  char   info[FW_SIGNATURE_INFO_SIZE+1];//*one more byte for string's termination
   DWORD  options;
  };
 
  struct MiscelPar
  {
-  int baud_rate;                       //скорость UART-a
-  int period_ms;                       //период посылки пакетов мс.
-  unsigned char ign_cutoff;            //признак использования отсечки зажигания
-  int ign_cutoff_thrd;                 //обороты отсечки зажигания
-  int hop_start_cogs;                  //Выход ДХ: Начало испульса в зубьях шкива относ. ВМТ 
-  int hop_durat_cogs;                  //Выход ДХ: Длительность импульса в зубьях шкива
+  int baud_rate;                        //скорость UART-a
+  int period_ms;                        //период посылки пакетов мс.
+  unsigned char ign_cutoff;             //признак использования отсечки зажигания
+  int ign_cutoff_thrd;                  //обороты отсечки зажигания
+  int hop_start_cogs;                   //Выход ДХ: Начало испульса в зубьях шкива относ. ВМТ 
+  int hop_durat_cogs;                   //Выход ДХ: Длительность импульса в зубьях шкива
  };
 
  struct EditTabPar
  {
-  unsigned char tab_set_index;         //номер набора таблиц
-  unsigned char tab_id;                //идентификатор таблицы(данных) в наборе
-  unsigned int address;                //адрес начала фрагмента данных в таблице
-  float table_data[32];                //фрагмент данных (не более 16-ти байт)
-  TCHAR name_data[32];                 //содержит текстовую информацию
-  unsigned int data_size;              //размер фрагмента данных
+  unsigned char tab_set_index;          //номер набора таблиц
+  unsigned char tab_id;                 //идентификатор таблицы(данных) в наборе
+  unsigned int address;                 //адрес начала фрагмента данных в таблице
+  float table_data[32];                 //фрагмент данных (не более 16-ти байт)
+  TCHAR name_data[32];                  //содержит текстовую информацию
+  unsigned int data_size;               //размер фрагмента данных
  };
 
  //Identifiers used in EditTabPar
- const int ETTS_GASOLINE_SET = 0; //tables's set: petrol
- const int ETTS_GAS_SET = 1;      //tables's set: gas
+ const int ETTS_GASOLINE_SET = 0;       //tables's set: petrol
+ const int ETTS_GAS_SET = 1;            //tables's set: gas
 
- const int ETMT_STRT_MAP = 0; //start map
- const int ETMT_IDLE_MAP = 1; //idle map
- const int ETMT_WORK_MAP = 2; //work map
- const int ETMT_TEMP_MAP = 3; //temp.corr. map
- const int ETMT_NAME_STR = 4; //name of tables's set
+ const int ETMT_STRT_MAP = 0;           //start map
+ const int ETMT_IDLE_MAP = 1;           //idle map
+ const int ETMT_WORK_MAP = 2;           //work map
+ const int ETMT_TEMP_MAP = 3;           //temp.corr. map
+ const int ETMT_NAME_STR = 4;           //name of tables's set
+
+ struct SepTabPar
+ {
+  unsigned int address;                 //адрес начала фрагмента данных в таблице
+  float table_data[32];                 //фрагмент данных (не более 16-ти байт)
+  unsigned int data_size;               //размер фрагмента данных
+ };
 
  struct DiagInpDat
  {
-  float voltage;        //board voltage
-  float map;            //MAP sensor
-  float temp;           //coolant temperature
-  float add_io1;        //additional input 1 (analog)
-  float add_io2;        //additional input 2 (analog)
-  float carb;           //carburetor switch, throttle position sensor (analog)
-  int gas;              //gas valve state (digital)
-  int ckps;             //CKP sensor (digital)
-  int ref_s;            //VR type cam sensor (digital)
-  int ps;               //Hall-effect cam sensor (digital)
-  int bl;               //"Bootloader" jumper
-  int de;               //"Default EEPROM" jumper
-  float ks_1;           //knock sensor 1  
-  float ks_2;           //knock sensor 2
+  float voltage;                        //board voltage
+  float map;                            //MAP sensor
+  float temp;                           //coolant temperature
+  float add_io1;                        //additional input 1 (analog)
+  float add_io2;                        //additional input 2 (analog)
+  float carb;                           //carburetor switch, throttle position sensor (analog)
+  int gas;                              //gas valve state (digital)
+  int ckps;                             //CKP sensor (digital)
+  int ref_s;                            //VR type cam sensor (digital)
+  int ps;                               //Hall-effect cam sensor (digital)
+  int bl;                               //"Bootloader" jumper
+  int de;                               //"Default EEPROM" jumper
+  float ks_1;                           //knock sensor 1  
+  float ks_2;                           //knock sensor 2
  };
 
  struct DiagOutDat
  {
-  int ign_out1;         //ignition output 1
-  int ign_out2;         //ignition output 2  
-  int ign_out3;         //ignition output 3
-  int ign_out4;         //ignition output 4
-  int ie;               //idle edconomizer
-  int fe;               //fuel economizer
-  int ecf;              //electric cooling fan
-  int ce;               //Check engine
-  int st_block;         //starter blocking
-  int add_io1;          //additional output 1
-  int add_io2;          //additional output 2
+  int ign_out1;                         //ignition output 1
+  int ign_out2;                         //ignition output 2  
+  int ign_out3;                         //ignition output 3
+  int ign_out4;                         //ignition output 4
+  int ie;                               //idle edconomizer
+  int fe;                               //fuel economizer
+  int ecf;                              //electric cooling fan
+  int ce;                               //Check engine
+  int st_block;                         //starter blocking
+  int add_io1;                          //additional output 1
+  int add_io2;                          //additional output 2
  };
 
  //таблица перекодировки кода частоты ПФ в частоту
@@ -327,6 +334,7 @@ namespace SECU3IO
   SECU3IO::FWInfoDat    m_FWInfoDat;
   SECU3IO::MiscelPar    m_MiscelPar;
   SECU3IO::EditTabPar   m_EditTabPar;
+  SECU3IO::SepTabPar    m_SepTabPar;
   SECU3IO::DbgvarDat    m_DbgvarDat;
   SECU3IO::DiagInpDat   m_DiagInpDat;
   SECU3IO::DiagOutDat   m_DiagOutDat;

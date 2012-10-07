@@ -192,6 +192,9 @@ BEGIN
     PUSHBUTTON      "Копировать в таблицу аттенюатора",
                     IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
+    CONTROL         "Авт.",
+                    IDC_KNOCK_CHANNEL_DLSM_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
@@ -201,6 +204,7 @@ BEGIN
     CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
+    LTEXT           "0.00",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,
                     255,7,183,10
     CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
@@ -463,6 +467,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Параметры были сохранены."
     IDS_KC_READING_PARAMETERS "Чтение параметров ДД..."
+    IDS_KC_READING_ATTENUATOR_MAP "Чтение таблицы аттенюатора..."
     IDS_KC_READY            "Готово."
     IDS_KC_WRITING_PARAMETERS "Сохранение параметров ДД..."
     IDS_CANT_START_LOG_WRITING 
@@ -677,6 +682,9 @@ BEGIN
     PUSHBUTTON      "Copy into attenuator table",
                     IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
+    CONTROL         "Autom.",
+                    IDC_KNOCK_CHANNEL_DLSM_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
     CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
     CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
@@ -686,6 +694,7 @@ BEGIN
     CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
+    LTEXT           "0.00",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,183,10
     CTEXT           "Signal from knock sensor:",IDC_STATIC,285,129,127,10
     CONTROL         "",IDC_KNOCK_CHANNEL_PARAMETERS_FRAME,"Static",
@@ -948,6 +957,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_KC_PARAMETERS_HAS_BEEN_SAVED "Parameters has been saved."
     IDS_KC_READING_PARAMETERS "Reading KS parameters..."
+    IDS_KC_READING_ATTENUATOR_MAP "Reading attenuator map..."
     IDS_KC_READY            "Ready."
     IDS_KC_WRITING_PARAMETERS "Saving KS parameters..."
     IDS_CANT_START_LOG_WRITING 

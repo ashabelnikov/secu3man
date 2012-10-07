@@ -21,6 +21,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include <algorithm>
 #include <limits>
 #include <math.h>
 #include <numeric>
@@ -38,37 +39,62 @@ using namespace fastdelegate;
 using namespace SECU3IO;
 
 #define EHKEY _T("KnockChanCntr")
+#define TIMER_DIV_VAL 5
+#define TIMER_PERIOD 100
 
 const BYTE default_context = SENSOR_DAT;
 const BYTE kparams_context = KNOCK_PAR;
+const BYTE attnmap_context = ATTTAB_PAR;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+namespace {
+void UpdateMap(size_t* map, int* flag, const SepTabPar* data)
+{
+ int address = data->address;
+ for(size_t i = 0; i < data->data_size; ++i)
+ {
+  flag[address] = 1; //set flag
+  map [address] = MathHelpers::Round(data->table_data[i]); //save data
+  ++address;
+ }
+}
+void FindMinMaxWithBackTransformation(const std::vector<float>& array, std::vector<std::vector<float> >& exclude, const std::vector<size_t>& gain, size_t size, float& min, float& max)
+{
+ min = FLT_MAX; //5V is maximum
+ max = 0;       //0V is minimum
+ for(size_t i = 0; i < size; ++i)
+ {
+  float value = array[i] / SECU3IO::hip9011_attenuator_gains[gain[i]];
+  if (0==exclude[i].size())
+   continue; //exclude values which have no statistics
+  if (value < min)
+   min = value;
+  if (value > max)
+   max = value;
+ }
+}
+}
 
-CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar)
-: m_view(NULL)
-, m_comm(NULL)
-, m_sbar(NULL)
+CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
+: mp_view(ip_view)
+, mp_comm(ip_comm)
+, mp_sbar(ip_sbar)
 , m_operation_state(-1)
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
 , m_k_desired_level(1.0f)
 , m_currentRPM(0)
+, m_params_changes_timer_div(TIMER_DIV_VAL)
 {
- //инициализируем указатели на вспомогательные объекты
- m_view = i_view;
- m_comm = i_comm;
- m_sbar = i_sbar;
+ m_rdAttenMap.resize(CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, 0);
+ m_rdAttenMapFlags.resize(CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, false);
 
- m_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
- m_view->mp_knock_parameters_dlg->setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
- m_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
- m_view->setOnClearFunction(MakeDelegate(this,&CKnockChannelTabController::OnClearFunction));
+ mp_view->setOnSaveParameters(MakeDelegate(this,&CKnockChannelTabController::OnSaveParameters));
+ mp_view->mp_knock_parameters_dlg->setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
+ mp_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
+ mp_view->setOnClearFunction(MakeDelegate(this,&CKnockChannelTabController::OnClearFunction));
 
  _InitializeRPMKnockFunctionBuffer();
 }
-
 
 CKnockChannelTabController::~CKnockChannelTabController()
 {
@@ -79,45 +105,45 @@ CKnockChannelTabController::~CKnockChannelTabController()
 void CKnockChannelTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 }
 
 //from MainTabController
 void CKnockChannelTabController::OnActivate(void)
 {
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
- m_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
+ mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
+ mp_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
- //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
- m_params_changes_timer.SetTimer(this,&CKnockChannelTabController::OnParamsChangesTimer,500);
+ //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3, дополнительно используеься программный делитель частоты на 5
+ m_params_changes_timer.SetTimer(this,&CKnockChannelTabController::OnParamsChangesTimer, TIMER_PERIOD);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
- bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ bool online_status = mp_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
 
  //запрещаем кнопку если прошивка не открыта на вкладке "Данные прошивки"
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
  (TabControllersCommunicator::GetInstance()->GetReference(TCC_FIRMWARE_TAB_CONTROLLER));
- m_view->EnableCopyToAttenuatorTableButton(p_controller->IsFirmwareOpened());
- m_view->EnableClearFunctionButton(true);
+ mp_view->EnableCopyToAttenuatorTableButton(p_controller->IsFirmwareOpened());
+ mp_view->EnableClearFunctionButton(true);
 
  //восстанавливаем желаемый уровень сигнала
- m_view->SetDesiredLevel(m_k_desired_level);
+ mp_view->SetDesiredLevel(m_k_desired_level);
 }
 
 //from MainTabController
 void CKnockChannelTabController::OnDeactivate(void)
 {
  m_params_changes_timer.KillTimer();
- m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
- m_sbar->SetInformationText(_T(""));
+ mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
+ mp_sbar->SetInformationText(_T(""));
 
  //сохраняем желаемый уровень сигнала
- m_k_desired_level = m_view->GetDesiredLevel();
+ m_k_desired_level = mp_view->GetDesiredLevel();
 }
 
 void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -129,10 +155,10 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
   switch(p_ndata->opcode)
   {
    case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_PARAMETERS_HAS_BEEN_SAVED));
     return;
    case OPCODE_SAVE_TABLSET:      //таблицы были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
   }
  }
@@ -141,22 +167,25 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
  switch(m_packet_processing_state)
  {
   case PPS_READ_NECESSARY_PARAMETERS:  //чтение указанных параметров
-   if (ReadNecessaryParametersFromSECU(i_descriptor,ip_packet))
+   if (ReadNecessaryParametersFromSECU(i_descriptor, ip_packet))
+    StartReadingAttenuatorMap();
+   break;
+
+  case PPS_READ_ATTENUATOR_MAP: //чтение таблицы аттенюатора
+   if (ReadAttenuatorMapFromSECU(i_descriptor, ip_packet))
    {
     m_packet_processing_state = PPS_BEFORE_READ_MONITOR_DATA;
-
-    //конфигурация прочитана - можно разрешать панели
-    bool state = m_comm->m_pControlApp->GetOnlineStatus();
-    m_view->mp_knock_parameters_dlg->Enable(state);
-    m_view->EnableAll(state);
+   
+    //Вся конфигурация прочитана - можно разрешать панели
+    bool state = mp_comm->m_pControlApp->GetOnlineStatus();
+    mp_view->mp_knock_parameters_dlg->Enable(state);
+    mp_view->EnableAll(state);
    }
    break;
 
   case PPS_BEFORE_READ_MONITOR_DATA: //в этот режим мы попадаем только один раз
    if (i_descriptor!=default_context)
-   {
-    m_comm->m_pControlApp->ChangeContext(default_context); //!!!
-   }
+    mp_comm->m_pControlApp->ChangeContext(default_context); //!!!
    else
    {
     _HandleSample((SensorDat*)(ip_packet), true);
@@ -166,13 +195,9 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
 
   case PPS_READ_MONITOR_DATA:  //получение данных для монитора
    if (i_descriptor!=default_context)
-   {
-    m_comm->m_pControlApp->ChangeContext(default_context); //!!!
-   }
+    mp_comm->m_pControlApp->ChangeContext(default_context); //!!!
    else
-   {
     _HandleSample((SensorDat*)(ip_packet), false);
-   }
    break;
  }//switch
 }
@@ -180,7 +205,7 @@ void CKnockChannelTabController::OnPacketReceived(const BYTE i_descriptor, SECU3
 void CKnockChannelTabController::OnConnection(const bool i_online)
 {
  int state;
- ASSERT(m_sbar);
+ ASSERT(mp_sbar);
 
  if (i_online) //перешли в онлайн
  {
@@ -194,18 +219,18 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
 
  if (i_online==false)
  { //здесь только запрещаем, разрешим в другом месте после выполнения подготовительных операций
-  m_view->mp_knock_parameters_dlg->Enable(i_online);
-  m_view->EnableAll(i_online);
+  mp_view->mp_knock_parameters_dlg->Enable(i_online);
+  mp_view->EnableAll(i_online);
  }
 
- m_sbar->SetConnectionState(state);
+ mp_sbar->SetConnectionState(state);
  //показываем или прячем вертикальную линию отображающую обороты на графике
- m_view->SetRPMVisibility(i_online);
+ mp_view->SetRPMVisibility(i_online);
 }
 
 void CKnockChannelTabController::StartReadingNecessaryParameters(void)
 {
- m_comm->m_pControlApp->ChangeContext(kparams_context);  //change context!
+ mp_comm->m_pControlApp->ChangeContext(kparams_context);  //change context!
  m_packet_processing_state = PPS_READ_NECESSARY_PARAMETERS;
  m_operation_state = 0;
 }
@@ -214,7 +239,7 @@ void CKnockChannelTabController::StartReadingNecessaryParameters(void)
 //m_operation_state = 0 для запуска
 bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_descriptor, const void* i_packet_data)
 {
- m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_PARAMETERS));
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_PARAMETERS));
 
  switch(m_operation_state)
  {
@@ -222,20 +247,69 @@ bool CKnockChannelTabController::ReadNecessaryParametersFromSECU(const BYTE i_de
   {
    if (i_descriptor!=kparams_context)
    {
-    m_comm->m_pControlApp->ChangeContext(kparams_context); //!!!
+    mp_comm->m_pControlApp->ChangeContext(kparams_context); //!!!
    }
    else
    {//тот что надо!
-    m_view->mp_knock_parameters_dlg->SetValues((SECU3IO::KnockPar*)i_packet_data);
+    mp_view->mp_knock_parameters_dlg->SetValues((SECU3IO::KnockPar*)i_packet_data);
 
     //процесс инициализации окончен
     m_operation_state = -1; //останов КА - операции выполнены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_READY));
     return true; //операции выполнены
    }
   }
   break;
  }//switch
+
+ return false; //КА продолжает работу
+}
+
+void CKnockChannelTabController::StartReadingAttenuatorMap(void)
+{
+ mp_comm->m_pControlApp->ChangeContext(attnmap_context);  //change context!
+ m_packet_processing_state = PPS_READ_ATTENUATOR_MAP;
+ m_operation_state = 0;
+}
+
+//возвращает true когда работа автомата завершена
+//m_operation_state = 0 для запуска
+bool CKnockChannelTabController::ReadAttenuatorMapFromSECU(const BYTE i_descriptor, const void* i_packet_data)
+{
+ switch(m_operation_state)
+ {
+  case 0: //ожидаем пока не будут получены все фрагменты таблицы   
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_READING_ATTENUATOR_MAP));
+   if (i_descriptor!=attnmap_context)
+    mp_comm->m_pControlApp->ChangeContext(attnmap_context);
+   else
+   { //clear acquisition flags and save received piece of data
+    std::fill(m_rdAttenMapFlags.begin(), m_rdAttenMapFlags.end(), 0);
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    UpdateMap(&m_rdAttenMap[0], &m_rdAttenMapFlags[0], data);
+    m_operation_state = 1; //next state
+   }   
+   break;
+  case 1:
+   {
+    if (i_descriptor != attnmap_context)
+    {
+     m_operation_state = 0;
+     break;
+    }
+
+    //update chache and perform checking
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    UpdateMap(&m_rdAttenMap[0], &m_rdAttenMapFlags[0], data);
+    if (std::find(m_rdAttenMapFlags.begin(), m_rdAttenMapFlags.end(), 0) == m_rdAttenMapFlags.end())
+    { //cache is already up to date (все фрагменты таблицы прочитаны)
+     m_operation_state = -1; //останов КА - операции выполнены
+     mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+     return true; //работа КА завершена
+    }
+   }
+   break;
+ } //switch
 
  return false; //КА продолжает работу
 }
@@ -257,10 +331,10 @@ void CKnockChannelTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 
 void CKnockChannelTabController::OnSaveParameters(void)
 {
- m_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));
  OPCompNc packet_data;
  packet_data.opcode = OPCODE_EEPROM_PARAM_SAVE;
- m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
+ mp_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
 }
 
 void CKnockChannelTabController::OnParametersChange(void)
@@ -271,30 +345,56 @@ void CKnockChannelTabController::OnParametersChange(void)
 //передача пакетов с параметрами в SECU будет происходить не чаще чем вызов этого обработчика
 void CKnockChannelTabController::OnParamsChangesTimer(void)
 {
- if (m_parameters_changed)
+ if (m_params_changes_timer_div)
+  --m_params_changes_timer_div;
+ else
  {
-  //получаем данные от view и сохраняем их во временный буфер
-  SECU3IO::KnockPar packet_data;
-  m_view->mp_knock_parameters_dlg->GetValues(&packet_data);
+  m_params_changes_timer_div = TIMER_DIV_VAL;
+  if (m_parameters_changed)
+  {
+   //получаем данные от view и сохраняем их во временный буфер
+   SECU3IO::KnockPar packet_data;
+   mp_view->mp_knock_parameters_dlg->GetValues(&packet_data);
 
-  //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
-  m_comm->m_pControlApp->SendPacket(kparams_context, &packet_data);
+   //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
+   mp_comm->m_pControlApp->SendPacket(kparams_context, &packet_data);
 
-  m_parameters_changed = false; //обработали событие - сбрасываем признак
+   m_parameters_changed = false; //обработали событие - сбрасываем признак
+  }
+
+  //перекачиваем данные из буфера в график на представлении
+  std::vector<float> values;
+  _PerformAverageOfRPMKnockFunctionValues(values);
+ 
+  float min, max;
+  FindMinMaxWithBackTransformation(values, m_rpm_knock_signal, m_rdAttenMap, values.size(), min, max);
+  float dlev = mp_view->GetDesiredLevel();
+  if (dlev < 0.1f) dlev = 0.1f;
+  if (min < 0.1f)  min = 0.1f;
+  if (max < 0.1f)  max = 0.1f;
+
+  float gate_ratio = SECU3IO::hip9011_attenuator_gains[0] / SECU3IO::hip9011_attenuator_gains[SECU3IO::GAIN_FREQUENCES_SIZE-1];
+  bool level_ok = ((max / min) < gate_ratio) && 
+                  ((min < dlev) ? ((dlev/min) < 2.0f) : true) && ((min >= dlev) ? ((min/dlev) < 9.0f) : true) &&
+                  ((max < dlev) ? ((dlev/max) < 2.0f) : true) && ((max >= dlev) ? ((max/dlev) < 9.0f) : true);
+
+  mp_view->SetDesiredLevelColor(level_ok);
+  mp_view->SetRPMKnockSignal(values);
+  if (mp_view->GetDLSMCheckboxState())
+  { //automatic mode
+   float dlev_max = min * 2.0f, dlev_min = max / 9.0f;  
+   mp_view->SetDesiredLevel((dlev_max + dlev_min) / 2.0f);   
+  }
  }
 
- //перекачиваем данные из буфера в график на представлении
- std::vector<float> values;
- _PerformAverageOfRPMKnockFunctionValues(values);
- m_view->SetRPMKnockSignal(values);
- ///обновляем значение оборотов (отображается верт. линией на графике)
- m_view->SetRPMValue(m_currentRPM);
+ //обновляем значение оборотов (отображается верт. линией на графике)
+ mp_view->SetRPMValue(m_currentRPM);
 }
 
 void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, bool i_first_time)
 {
  //добавляем новое значение в осциллограф
- m_view->AppendPoint(p_packet->knock_k);
+ mp_view->AppendPoint(p_packet->knock_k);
 
  //обновляем новым значением буфер функции сигнала ДД от оборотов
  //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
@@ -352,42 +452,42 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
 
- //проводим сглаживание функции (скользящее окно 5 выборок)
+ //проводим сглаживание функции (скользящее окно 5 выборок), важный момент заключается в том, что нужно
+ //сглаживать только те точки, для которых есть статистика, иначе будут захватыватся нулевые точки.
  float function_out[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  float function_inp[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  std::copy(values.begin(), values.end(), function_inp);
- VERIFY(MathHelpers::Smooth1D(function_inp, function_out, CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS, 5));
+ std::copy(values.begin(), values.end(), function_out); 
+ for(size_t begin = 0; begin < m_rpm_knock_signal.size(); ++begin)
+  if (m_rpm_knock_signal[begin].size() > 0)
+   break;  
+ for(size_t end = m_rpm_knock_signal.size() - 1; end > begin; --end)
+  if (m_rpm_knock_signal[end].size() > 0)
+   break;
+ if (begin < m_rpm_knock_signal.size())
+  VERIFY(MathHelpers::Smooth1D(function_inp + begin, function_out + begin, end - begin, 5));
 
  //получили значение желаемого уровеня сигнала
- float level = m_view->GetDesiredLevel();
+ float level = mp_view->GetDesiredLevel();
 
- //получили текущую таблицу аттенюатора
+ //подготавливаем текущую таблицу аттенюатора
  float array[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
- p_controller->GetAttenuatorMap(array);
+ for(size_t i = 0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
+  array[i] = static_cast<float>(m_rdAttenMap[i]);
 
  //проводим расчет коэффициентов усиления и записываем их в таблицу аттенюатора
  //Коэфф. усиления для каждой выборки расчитывается исходя их разницы значения
  //функции и значения желаемого уровня сигнала.
- for(size_t i =0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
+ for(size_t i = 0; i < CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS; ++i)
  {
-  //нашли во сколько раз нужно изменить коэфф. усиления
-  float correcting_gain;
-  if (function_out[i]!=0)
-    correcting_gain = level / function_out[i];
-  else
-    correcting_gain = SECU3IO::hip9011_attenuator_gains[0];
-
-  //вычисляем новый коэффициент усиления
-  size_t old_gain_index = MathHelpers::Round(array[i]);
-  float new_gain = SECU3IO::hip9011_attenuator_gains[old_gain_index] * correcting_gain;
-
-  //ищем ближайший коэффициент усиления с таблице коэффициентов усиления
+  //ищем ближайший коэффициент усиления в таблице коэффициентов усиления
   size_t new_gain_index = 0;
   float smaller_diff = FLT_MAX;
   for(size_t j = 0; j < SECU3IO::GAIN_FREQUENCES_SIZE; ++j)
   {
    float gain = SECU3IO::hip9011_attenuator_gains[j];
-   float diff = fabs(gain - new_gain);
+   float old_gain = SECU3IO::hip9011_attenuator_gains[m_rdAttenMap[i]];
+   float diff = fabs(gain * function_out[i] - level * old_gain);
    if (diff < smaller_diff)
    {
     smaller_diff = diff;
@@ -410,5 +510,5 @@ void CKnockChannelTabController::OnClearFunction(void)
  //перекачиваем данные из буфера в график на представлении
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
- m_view->SetRPMKnockSignal(values);
+ mp_view->SetRPMKnockSignal(values);
 }
