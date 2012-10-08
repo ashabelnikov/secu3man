@@ -57,19 +57,23 @@ void UpdateMap(size_t* map, int* flag, const SepTabPar* data)
   ++address;
  }
 }
-void FindMinMaxWithBackTransformation(const std::vector<float>& array, std::vector<std::vector<float> >& exclude, const std::vector<size_t>& gain, size_t size, float& min, float& max)
+void FindMinMaxWithBackTransformation(const std::vector<float>& array, std::vector<std::vector<float> >& exclude, const std::vector<size_t>& gain, size_t size, std::pair<size_t, float>& min, std::pair<size_t, float>& max)
 {
- min = FLT_MAX; //5V is maximum
- max = 0;       //0V is minimum
+ min.second = FLT_MAX; //5V is maximum
+ max.second = 0;       //0V is minimum
  for(size_t i = 0; i < size; ++i)
  {
   float value = array[i] / SECU3IO::hip9011_attenuator_gains[gain[i]];
   if (0==exclude[i].size())
    continue; //exclude values which have no statistics
-  if (value < min)
-   min = value;
-  if (value > max)
-   max = value;
+  if (value < min.second){
+   min.first = i;
+   min.second = value;
+  }
+  if (value > max.second){
+   max.first = i;
+   max.second = value;
+  }
  }
 }
 }
@@ -366,24 +370,25 @@ void CKnockChannelTabController::OnParamsChangesTimer(void)
   std::vector<float> values;
   _PerformAverageOfRPMKnockFunctionValues(values);
  
-  float min, max;
+  std::pair<size_t, float> min, max;
   FindMinMaxWithBackTransformation(values, m_rpm_knock_signal, m_rdAttenMap, values.size(), min, max);
   float dlev = mp_view->GetDesiredLevel();
   if (dlev < 0.1f) dlev = 0.1f;
-  if (min < 0.1f)  min = 0.1f;
-  if (max < 0.1f)  max = 0.1f;
+  if (min.second < 0.1f)  min.second = 0.1f;
+  if (max.second < 0.1f)  max.second = 0.1f;
 
   float gate_ratio = SECU3IO::hip9011_attenuator_gains[0] / SECU3IO::hip9011_attenuator_gains[SECU3IO::GAIN_FREQUENCES_SIZE-1];
-  bool level_ok = ((max / min) < gate_ratio) && 
-                  ((min < dlev) ? ((dlev/min) < 2.0f) : true) && ((min >= dlev) ? ((min/dlev) < 9.0f) : true) &&
-                  ((max < dlev) ? ((dlev/max) < 2.0f) : true) && ((max >= dlev) ? ((max/dlev) < 9.0f) : true);
+  bool has_statistics = m_rpm_knock_signal[min.first].size() && m_rpm_knock_signal[max.first].size();
+  bool level_ok = ((max.second / min.second) < gate_ratio) && has_statistics &&
+                  ((min.second < dlev) ? ((dlev/min.second) < 2.0f) : true) && ((min.second >= dlev) ? ((min.second/dlev) < 9.0f) : true) &&
+                  ((max.second < dlev) ? ((dlev/max.second) < 2.0f) : true) && ((max.second >= dlev) ? ((max.second/dlev) < 9.0f) : true);
 
   mp_view->SetDesiredLevelColor(level_ok);
   mp_view->SetRPMKnockSignal(values);
-  if (mp_view->GetDLSMCheckboxState())
+  if (mp_view->GetDLSMCheckboxState() && has_statistics)
   { //automatic mode
-   float dlev_max = min * 2.0f, dlev_min = max / 9.0f;  
-   mp_view->SetDesiredLevel((dlev_max + dlev_min) / 2.0f);   
+   float dlev_max = min.second * 2.0f, dlev_min = max.second / 9.0f;  
+   mp_view->SetDesiredLevel((dlev_max + dlev_min) / 2.0f);
   }
  }
 
@@ -458,10 +463,11 @@ void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
  float function_inp[CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS];
  std::copy(values.begin(), values.end(), function_inp);
  std::copy(values.begin(), values.end(), function_out); 
- for(size_t begin = 0; begin < m_rpm_knock_signal.size(); ++begin)
+ size_t begin, end;
+ for(begin = 0; begin < m_rpm_knock_signal.size(); ++begin)
   if (m_rpm_knock_signal[begin].size() > 0)
    break;  
- for(size_t end = m_rpm_knock_signal.size() - 1; end > begin; --end)
+ for(end = m_rpm_knock_signal.size() - 1; end > begin; --end)
   if (m_rpm_knock_signal[end].size() > 0)
    break;
  if (begin < m_rpm_knock_signal.size())
