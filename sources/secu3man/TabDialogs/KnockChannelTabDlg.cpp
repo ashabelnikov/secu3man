@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "KnockChannelTabDlg.h"
+#include "KnockFrqCalcDlg.h"
 
 #include <math.h>
 #include "common/FastDelegate.h"
@@ -50,6 +51,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
 , mp_RTChart(NULL)
 , mp_knock_parameters_dlg(new CKnockPageDlg())
+, mp_knock_frq_calc_dlg(new CKnockFrqCalcDlg())
 , mp_OScopeCtrl(new COScopeCtrl())
 , m_all_enabled(true)
 , m_pPointSerie(NULL)
@@ -110,6 +112,14 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD, this);
  mp_knock_parameters_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
+
+ GetDlgItem(IDC_KNOCK_CHANNEL_KFC_DLG_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+
+ //создаем диалог с калькулятором частоты детонации
+ mp_knock_frq_calc_dlg->Create(CKnockFrqCalcDlg::IDD, this);
+ mp_knock_frq_calc_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_frq_calc_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID, 200, NULL);
 

@@ -64,6 +64,7 @@ set(HEADERS
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
   TabDialogs/KnockChannelTabDlg.h
+  TabDialogs/KnockFrqCalcDlg.h
   TabDialogs/LogPlayerTabDlg.h
   TabDialogs/LPControlPanelDlg.h
   TabDialogs/ParamMonTabDlg.h
@@ -105,6 +106,7 @@ set(SOURCES
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp
   TabDialogs/KnockChannelTabDlg.cpp
+  TabDialogs/KnockFrqCalcDlg.cpp
   TabDialogs/LogPlayerTabDlg.cpp
   TabDialogs/LPControlPanelDlg.cpp
   TabDialogs/ParamMonTabDlg.cpp

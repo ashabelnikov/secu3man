@@ -30,6 +30,7 @@ class CChartCtrl;
 class CChartLineSerie;
 class CChartPointsSerie;
 class CKnockPageDlg;
+class CKnockFrqCalcDlg;
 class COScopeCtrl;
 
 class CKnockChannelTabDlg : public CTabDialog
@@ -97,6 +98,7 @@ class CKnockChannelTabDlg : public CTabDialog
   CChartLineSerie* m_pLineSerieLevel;
   CChartLineSerie* m_pLineSerieRPM;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
+  std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;
   CButton m_dlsm_checkbox;
