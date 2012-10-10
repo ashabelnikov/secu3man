@@ -25,6 +25,7 @@
 #include "KnockFrqCalcDlg.h"
 
 #include <math.h>
+#include <limits>
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
 #include "HiSCCtrl/sources/ChartCtrl.h"
@@ -62,7 +63,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_clear_function_button_state(true)
 , m_dlsm_checkbox_state(true)
 {
- //empty
+ mp_knock_frq_calc_dlg->setOnCalculate(MakeDelegate(this, &CKnockChannelTabDlg::OnFrqCalculate));
 }
 
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -387,3 +388,25 @@ void CKnockChannelTabDlg::SetRPMVisibility(bool visible)
  m_pLineSerieRPM->SetVisible(visible);
 }
 
+void CKnockChannelTabDlg::OnFrqCalculate(float frq)
+{
+ //»щем блищаюшую частоту к той, что получилась исход€ из расчетов
+ float smaller_diff = FLT_MAX;
+ size_t index = 0;
+ for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++)
+ {
+  float diff = fabs(SECU3IO::hip9011_gain_frequences[i] - frq);
+  if (diff < smaller_diff)
+  {
+   smaller_diff = diff;
+   index = i;
+  }
+ }
+ //сохран€ем значение
+ SECU3IO::KnockPar values;
+ mp_knock_parameters_dlg->GetValues(&values);
+ values.knock_bpf_frequency = index;
+ mp_knock_parameters_dlg->SetValues(&values);
+ //apply changes
+ mp_knock_parameters_dlg->ForceOnChangeNotify();
+}

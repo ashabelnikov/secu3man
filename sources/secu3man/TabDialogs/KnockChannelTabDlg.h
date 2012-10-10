@@ -90,6 +90,8 @@ class CKnockChannelTabDlg : public CTabDialog
   void _InitializeOscilloscopeControl(void);
   void _InitializeRPMKnockSignalControl(void);
 
+  void OnFrqCalculate(float frq);
+
  private:
   CButton  m_param_save_button;
   CChartCtrl* mp_RTChart;

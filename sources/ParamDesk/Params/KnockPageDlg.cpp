@@ -330,6 +330,11 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  ASSERT(status);
 }
 
+void CKnockPageDlg::ForceOnChangeNotify(void)
+{
+ OnChangeNotify();
+}
+
 LRESULT CKnockPageDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
 {
  if (wParam == m_knock_use_knock_channel_item ||

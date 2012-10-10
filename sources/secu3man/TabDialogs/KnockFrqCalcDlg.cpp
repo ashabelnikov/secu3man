@@ -24,13 +24,24 @@
 #include "KnockFrqCalcDlg.h"
 
 #include "common/FastDelegate.h"
+#include "ui-core/DDX_helpers.h"
 
 using namespace fastdelegate;
 
 const UINT CKnockFrqCalcDlg::IDD = IDD_KC_KNOCK_FRQ_CALC;
 
+const float MIN_CYL_DIAMETER = 28.7f;   //mm
+const float MAX_CYL_DIAMETER = 470.0f;  //mm
+
+//I hate math.h
+#ifndef M_PI
+#define M_PI       3.14159265358979323846
+#endif
+
 CKnockFrqCalcDlg::CKnockFrqCalcDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockFrqCalcDlg::IDD, pParent)
+, m_cyl_d_edit(CEditEx::MODE_FLOAT)
+, m_cyl_d(80.0f)
 {
  //empty
 }
@@ -38,18 +49,52 @@ CKnockFrqCalcDlg::CKnockFrqCalcDlg(CWnd* pParent /*=NULL*/)
 void CKnockFrqCalcDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
-// DDX_Control(pDX, IDC_, m_);
+ DDX_Control(pDX, IDC_KC_KNOCK_FRQ_CALC_BTN, m_calc_frq_btn);
+ DDX_Control(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, m_cyl_d_edit);
+
+ m_cyl_d_edit.DDX_Value(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, m_cyl_d);
 }
 
 BEGIN_MESSAGE_MAP(CKnockFrqCalcDlg, Super)
-// ON_UPDATE_COMMAND_UI(IDC_, OnUpdate)
-// ON_BN_CLICKED(IDC_, On)
+ ON_BN_CLICKED(IDC_KC_KNOCK_FRQ_CALC_BTN, OnFrqCalcButton)
 END_MESSAGE_MAP()
 
 BOOL CKnockFrqCalcDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- UpdateDialogControls(this,TRUE);
+ m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+ m_cyl_d_edit.SetDecimalPlaces(1);
+ m_cyl_d_edit.SetLimitText(5);
+ m_cyl_d_edit.SetValue(m_cyl_d);
+
+ UpdateDialogControls(this, TRUE);
  return TRUE;
+}
+
+void CKnockFrqCalcDlg::OnFrqCalcButton()
+{
+ UpdateData(TRUE);
+ //check limits and correct value if required
+ if (m_cyl_d > MAX_CYL_DIAMETER)
+ {
+  m_cyl_d = MAX_CYL_DIAMETER;
+  UpdateData(FALSE);
+ }
+ if (m_cyl_d < MIN_CYL_DIAMETER)
+ {
+  m_cyl_d = MIN_CYL_DIAMETER;
+  UpdateData(FALSE);
+ }
+ //calculate approximate frequency
+ float frq = 900.0f / ((float)M_PI * (m_cyl_d / 2.0f));
+ //delegate result
+ if (m_OnCalculate)
+  m_OnCalculate(frq);
+}
+
+void CKnockFrqCalcDlg::setOnCalculate(EventHandler OnFunction)
+{
+ m_OnCalculate = OnFunction;
 }

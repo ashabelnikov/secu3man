@@ -305,6 +305,8 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "Расчет частоты детонации:",IDC_KC_KNOCK_FRQ_CALC_TEXT,2,1,70,20
+    EDITTEXT        IDC_KC_KNOCK_FRQ_CALC_EDIT,2,24,30,13,ES_AUTOHSCROLL
+    CONTROL         "",IDC_KC_KNOCK_FRQ_CALC_BTN,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,35,24,16,19
 END
 
 
@@ -803,6 +805,8 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     LTEXT           "Calculate knock frequency:",IDC_KC_KNOCK_FRQ_CALC_TEXT,2,1,70,20
+    EDITTEXT        IDC_KC_KNOCK_FRQ_CALC_EDIT,2,24,30,13,ES_AUTOHSCROLL
+    CONTROL         "",IDC_KC_KNOCK_FRQ_CALC_BTN,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,35,24,16,19
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1043,6 +1047,16 @@ END
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_CALC_UP             BITMAP     "res\\calc_up.bmp"
+IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
+IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
+IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

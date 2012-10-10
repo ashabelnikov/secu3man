@@ -41,6 +41,8 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::KnockPar* o_values);
   void SetValues(const SECU3IO::KnockPar* i_values);
 
+  void ForceOnChangeNotify(void);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
