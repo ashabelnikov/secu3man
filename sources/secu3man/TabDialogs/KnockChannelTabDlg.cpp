@@ -111,7 +111,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  //создаем диалог с параметрами ƒƒ
  mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD, this);
- mp_knock_parameters_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_parameters_dlg->SetWindowPos(GetDlgItem(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION),rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
  GetDlgItem(IDC_KNOCK_CHANNEL_KFC_DLG_HOLDER)->GetWindowRect(rect);
@@ -119,7 +119,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  //создаем диалог с калькул€тором частоты детонации
  mp_knock_frq_calc_dlg->Create(CKnockFrqCalcDlg::IDD, this);
- mp_knock_frq_calc_dlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOZORDER|SWP_NOSIZE);
+ mp_knock_frq_calc_dlg->SetWindowPos(GetDlgItem(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE), rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_frq_calc_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID, 200, NULL);
@@ -405,7 +405,7 @@ void CKnockChannelTabDlg::OnFrqCalculate(float frq)
  //сохран€ем значение
  SECU3IO::KnockPar values;
  mp_knock_parameters_dlg->GetValues(&values);
- values.knock_bpf_frequency = index;
+ values.knock_bpf_frequency = static_cast<float>(index);
  mp_knock_parameters_dlg->SetValues(&values);
  //apply changes
  mp_knock_parameters_dlg->ForceOnChangeNotify();
