@@ -25,6 +25,7 @@
 
 #include "common/FastDelegate.h"
 #include "ui-core/DDX_helpers.h"
+#include "ui-core/EditEx.h"
 
 using namespace fastdelegate;
 
@@ -38,9 +39,38 @@ const float MAX_CYL_DIAMETER = 470.0f;  //mm
 #define M_PI       3.14159265358979323846
 #endif
 
+//We need this descendant to have ability to handle Enter key press
+class CEditExWithEnter : public CEditEx
+{
+  typedef fastdelegate::FastDelegate0<> EventHandler;
+  void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
+  {
+   CEditEx::OnChar(nChar, nRepCnt, nFlags);
+   if (nChar==VK_RETURN)
+    m_onEnter();
+  }
+  UINT OnGetDlgCode()
+  {
+   return CEditEx::OnGetDlgCode() | DLGC_WANTALLKEYS;
+  }
+
+  EventHandler m_onEnter;
+  DECLARE_MESSAGE_MAP()
+ public:
+  CEditExWithEnter(const EventHandler& OnEnter) : CEditEx(CEditEx::MODE_FLOAT), m_onEnter(OnEnter) {}
+};
+
+BEGIN_MESSAGE_MAP(CEditExWithEnter, CEditEx)
+ ON_WM_CHAR()
+ ON_WM_GETDLGCODE()
+END_MESSAGE_MAP()
+
+//We only save value of this pointer (we do not access members), so we can ignore warning.
+#pragma warning( disable : 4355 ) // : 'this' : used in base member initializer list
+
 CKnockFrqCalcDlg::CKnockFrqCalcDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockFrqCalcDlg::IDD, pParent)
-, m_cyl_d_edit(CEditEx::MODE_FLOAT)
+, mp_cyl_d_edit(new CEditExWithEnter(MakeDelegate(this, &CKnockFrqCalcDlg::OnFrqCalcButton)))
 , m_cyl_d(80.0f)
 {
  //empty
@@ -50,9 +80,9 @@ void CKnockFrqCalcDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_KC_KNOCK_FRQ_CALC_BTN, m_calc_frq_btn);
- DDX_Control(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, m_cyl_d_edit);
+ DDX_Control(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, *mp_cyl_d_edit);
 
- m_cyl_d_edit.DDX_Value(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, m_cyl_d);
+ mp_cyl_d_edit->DDX_Value(pDX, IDC_KC_KNOCK_FRQ_CALC_EDIT, m_cyl_d);
 }
 
 BEGIN_MESSAGE_MAP(CKnockFrqCalcDlg, Super)
@@ -65,9 +95,9 @@ BOOL CKnockFrqCalcDlg::OnInitDialog()
 
  m_calc_frq_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
- m_cyl_d_edit.SetDecimalPlaces(1);
- m_cyl_d_edit.SetLimitText(5);
- m_cyl_d_edit.SetValue(m_cyl_d);
+ mp_cyl_d_edit->SetDecimalPlaces(1);
+ mp_cyl_d_edit->SetLimitText(5);
+ mp_cyl_d_edit->SetValue(m_cyl_d);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;

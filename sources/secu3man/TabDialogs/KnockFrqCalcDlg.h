@@ -21,9 +21,11 @@
 
 #pragma once
 
+#include <memory>
 #include "common/FastDelegate.h"
 #include "ui-core/DialogWithAccelerators.h"
-#include "ui-core/EditEx.h"
+
+class CEditEx;
 
 class CKnockFrqCalcDlg : public CModelessDialog
 {
@@ -45,6 +47,6 @@ class CKnockFrqCalcDlg : public CModelessDialog
 private:
   EventHandler  m_OnCalculate;
   CBitmapButton m_calc_frq_btn;
-  CEditEx m_cyl_d_edit;
+  std::auto_ptr<CEditEx> mp_cyl_d_edit;
   float m_cyl_d;
 };
