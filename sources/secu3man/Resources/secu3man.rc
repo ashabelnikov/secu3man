@@ -187,30 +187,30 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Сохранить",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,12,48,
+    PUSHBUTTON      "Сохранить",IDC_KC_SAVE_PARAM_BUTTON,29,12,48,
                     19
     PUSHBUTTON      "Копировать в таблицу аттенюатора",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
+                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
-    PUSHBUTTON      "Очистить функцию",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,
+    PUSHBUTTON      "Очистить функцию",IDC_KC_CLEAR_FUNCTION,97,
                     41,86,23,BS_MULTILINE
     CONTROL         "Авт.",
-                    IDC_KNOCK_CHANNEL_DLSM_CHECKBOX,"Button",
+                    IDC_KC_DLSM_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
-    CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
+    CONTROL         "",IDC_KC_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
-    CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
+    CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
-    CONTROL         "",IDC_KNOCK_CHANNEL_KFC_DLG_HOLDER,"Static",
+    CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
-    CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
+    CONTROL         "Slider1",IDC_KC_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
-    LTEXT           "0.00",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT,203,117,22,15
+    LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,
                     255,7,183,10
     CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
-    CONTROL         "",IDC_KNOCK_CHANNEL_PARAMETERS_FRAME,"Static",
+    CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,13,65,161,115
 END
 
@@ -691,28 +691,28 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Save",IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON,29,12,48,19
+    PUSHBUTTON      "Save",IDC_KC_SAVE_PARAM_BUTTON,29,12,48,19
     PUSHBUTTON      "Copy into attenuator table",
-                    IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
+                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
                     BS_MULTILINE
-    PUSHBUTTON      "Clear function",IDC_KNOCK_CHANNEL_CLEAR_FUNCTION,97,41,
+    PUSHBUTTON      "Clear function",IDC_KC_CLEAR_FUNCTION,97,41,
                     86,23,BS_MULTILINE
     CONTROL         "Autom.",
-                    IDC_KNOCK_CHANNEL_DLSM_CHECKBOX,"Button",
+                    IDC_KC_DLSM_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
-    CONTROL         "",IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER,"Static",
+    CONTROL         "",IDC_KC_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
-    CONTROL         "",IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
+    CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
-    CONTROL         "",IDC_KNOCK_CHANNEL_KFC_DLG_HOLDER,"Static",
+    CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
-    CONTROL         "Slider1",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER,
+    CONTROL         "Slider1",IDC_KC_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
                     201,18,19,100
-    LTEXT           "0.00",IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT,203,117,22,15
+    LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,183,10
     CTEXT           "Signal from knock sensor:",IDC_STATIC,285,129,127,10
-    CONTROL         "",IDC_KNOCK_CHANNEL_PARAMETERS_FRAME,"Static",
+    CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,13,65,152,110
 END
 

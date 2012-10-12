@@ -69,12 +69,12 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, m_param_save_button);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, m_clear_function_button);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_SLIDER, m_level_slider);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_DLSM_CHECKBOX, m_dlsm_checkbox);
- DDX_Control(pDX, IDC_KNOCK_CHANNEL_DESIRED_LEVEL_TEXT, m_level_text);
+ DDX_Control(pDX, IDC_KC_SAVE_PARAM_BUTTON, m_param_save_button);
+ DDX_Control(pDX, IDC_KC_COPY_TO_ATTENUATOR_TABLE, m_copy_to_attenuator_table_button);
+ DDX_Control(pDX, IDC_KC_CLEAR_FUNCTION, m_clear_function_button);
+ DDX_Control(pDX, IDC_KC_DESIRED_LEVEL_SLIDER, m_level_slider);
+ DDX_Control(pDX, IDC_KC_DLSM_CHECKBOX, m_dlsm_checkbox);
+ DDX_Control(pDX, IDC_KC_DESIRED_LEVEL_TEXT, m_level_text);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -84,13 +84,13 @@ LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()
- ON_BN_CLICKED(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnSaveParameters)
- ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_SAVE_PARAM_BUTTON, OnUpdateControls)
- ON_BN_CLICKED(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
- ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE, OnUpdateCopyToAttenuatorTable)
- ON_BN_CLICKED(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnClearFunction)
- ON_UPDATE_COMMAND_UI(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION, OnUpdateClearFunction)
- ON_BN_CLICKED(IDC_KNOCK_CHANNEL_DLSM_CHECKBOX, OnDLSMCheckbox)
+ ON_BN_CLICKED(IDC_KC_SAVE_PARAM_BUTTON, OnSaveParameters)
+ ON_UPDATE_COMMAND_UI(IDC_KC_SAVE_PARAM_BUTTON, OnUpdateControls)
+ ON_BN_CLICKED(IDC_KC_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
+ ON_UPDATE_COMMAND_UI(IDC_KC_COPY_TO_ATTENUATOR_TABLE, OnUpdateCopyToAttenuatorTable)
+ ON_BN_CLICKED(IDC_KC_CLEAR_FUNCTION, OnClearFunction)
+ ON_UPDATE_COMMAND_UI(IDC_KC_CLEAR_FUNCTION, OnUpdateClearFunction)
+ ON_BN_CLICKED(IDC_KC_DLSM_CHECKBOX, OnDLSMCheckbox)
  ON_WM_TIMER()
  ON_WM_VSCROLL()
 END_MESSAGE_MAP()
@@ -106,20 +106,20 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  m_level_slider.EnableWindow(!m_dlsm_checkbox_state);
 
  CRect rect;
- GetDlgItem(IDC_KNOCK_CHANNEL_PARAMETERS_FRAME)->GetWindowRect(rect);
+ GetDlgItem(IDC_KC_PARAMETERS_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
 
  //создаем диалог с параметрами ДД
  mp_knock_parameters_dlg->Create(CKnockPageDlg::IDD, this);
- mp_knock_parameters_dlg->SetWindowPos(GetDlgItem(IDC_KNOCK_CHANNEL_CLEAR_FUNCTION),rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
+ mp_knock_parameters_dlg->SetWindowPos(GetDlgItem(IDC_KC_CLEAR_FUNCTION),rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_parameters_dlg->ShowWindow(SW_SHOWNORMAL);
 
- GetDlgItem(IDC_KNOCK_CHANNEL_KFC_DLG_HOLDER)->GetWindowRect(rect);
+ GetDlgItem(IDC_KC_KFC_DLG_HOLDER)->GetWindowRect(rect);
  ScreenToClient(rect);
 
  //создаем диалог с калькулятором частоты детонации
  mp_knock_frq_calc_dlg->Create(CKnockFrqCalcDlg::IDD, this);
- mp_knock_frq_calc_dlg->SetWindowPos(GetDlgItem(IDC_KNOCK_CHANNEL_COPY_TO_ATTENUATOR_TABLE), rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
+ mp_knock_frq_calc_dlg->SetWindowPos(GetDlgItem(IDC_KC_COPY_TO_ATTENUATOR_TABLE), rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE);
  mp_knock_frq_calc_dlg->ShowWindow(SW_SHOWNORMAL);
 
  SetTimer(TIMER_ID, 200, NULL);
@@ -204,9 +204,9 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  //Инициализируем построитель функций
  mp_RTChart = new CChartCtrl();
  CRect rect;
- GetDlgItem(IDC_KNOCK_CHANNEL_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
+ GetDlgItem(IDC_KC_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
  ScreenToClient(rect);
- mp_RTChart->Create(this,rect,IDC_KNOCK_CHANNEL_REALTIME_CHART);
+ mp_RTChart->Create(this,rect,IDC_KC_REALTIME_CHART);
 
  m_pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
  m_pLineSerie = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
@@ -250,7 +250,7 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
 {
  CRect rect;
- GetDlgItem(IDC_KNOCK_CHANNEL_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect);
+ GetDlgItem(IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect);
  ScreenToClient(rect);
 
  // create the control
