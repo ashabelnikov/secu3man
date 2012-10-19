@@ -966,7 +966,7 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,
                     ES_AUTOHSCROLL | ES_READONLY
-    LTEXT           "Duration of commutator's pulse driver in teeth of wheel",
+    LTEXT           "Duration of igniter's pulse driver in teeth of wheel",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
     CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
