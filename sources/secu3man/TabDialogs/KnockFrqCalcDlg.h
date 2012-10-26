@@ -26,6 +26,7 @@
 #include "ui-core/DialogWithAccelerators.h"
 
 class CEditEx;
+class CToolTipCtrlEx;
 
 class CKnockFrqCalcDlg : public CModelessDialog
 {
@@ -48,5 +49,6 @@ private:
   EventHandler  m_OnCalculate;
   CBitmapButton m_calc_frq_btn;
   std::auto_ptr<CEditEx> mp_cyl_d_edit;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   float m_cyl_d;
 };

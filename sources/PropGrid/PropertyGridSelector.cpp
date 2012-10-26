@@ -1,10 +1,10 @@
  /****************************************************************
  *       SECU-3  - An open source, free engine control unit
  *    Designed by Alexey A. Shabelnikov. Ukraine, Gorlovka 2007.
- *       Microprocessors systems - design & programming.
+ *       Microprocessor systems - design & programming.
  *    contacts:
  *              http://secu-3.org
- *              ICQ: 405-791-931
+ *              email: shabelnikov@secu-3.org
  ****************************************************************/
 
 #include "stdafx.h"

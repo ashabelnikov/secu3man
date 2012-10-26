@@ -40,6 +40,7 @@ set(HEADERS
   StdAfx.h
   TabController.h
   TabDialog.h
+  ToolTipCtrlEx.h
   UpdatableDialog.h
   WndSubclasser.h
   XBrowseForFolder.h
@@ -65,6 +66,7 @@ set(SOURCES
   StdAfx.cpp
   TabController.cpp
   TabDialog.cpp
+  ToolTipCtrlEx.cpp
   UpdatableDialog.cpp
   WndSubclasser.cpp
   XBrowseForFolder.cpp

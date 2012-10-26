@@ -282,3 +282,5 @@
 #define IDB_CALC_DOWN                   4300
 #define IDB_CALC_FOCUSED                4301
 #define IDB_CALC_DISABLED               4302
+#define IDS_KC_KNOCK_FRQ_CALC_TT        4303
+#define IDS_KC_KNOCK_FRQ_CALC_EDIT_TT   4304

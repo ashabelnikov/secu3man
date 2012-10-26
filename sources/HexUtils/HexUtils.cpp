@@ -15,8 +15,9 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
    contacts:
-          ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
-          Microprocessors systems - design & programming.
+          http://secu-3.org
+          e-mail: shabelnikov-stc@mail.ru
+          Microprocessor systems - design & programming.
 */
 
 #include "stdafx.h"

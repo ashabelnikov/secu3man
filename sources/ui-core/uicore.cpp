@@ -1,8 +1,9 @@
  /****************************************************************
  *
  *  Created by Alexey A. Shabelnikov. Ukraine, Gorlovka 2008.
- *   ICQ: 405-791-931. e-mail: shabelnikov-stc@mail.ru
- *  Microprocessors systems - design & programming.
+ *   http://secu-3.org
+ *   e-mail: shabelnikov-stc@mail.ru
+ *  Microprocessor systems - design & programming.
  *
  *****************************************************************/
 

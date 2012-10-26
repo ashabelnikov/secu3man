@@ -20,26 +20,41 @@
 */
 
 #include "stdafx.h"
-#include "TabDialog.h"
+#include "ToolTipCtrlEx.h"
 
-CTabDialog::CTabDialog(UINT nIDTemplate, CWnd* pParentWnd)
-: Super(nIDTemplate, pParentWnd)
+CToolTipCtrlEx::CToolTipCtrlEx()
 {
  //empty
 }
 
-CTabDialog::~CTabDialog()
+CToolTipCtrlEx::~CToolTipCtrlEx()
 {
  //empty
 }
 
-void CTabDialog::OnOK()
+bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
 {
- UpdateData(); //for DDX/DDV
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
+ TOOLINFO ti;
+ ti.cbSize = sizeof (TOOLINFO);
+ ti.uFlags = TTF_IDISHWND | TTF_SUBCLASS;
+ ti.hwnd = pWnd->GetParent ()->GetSafeHwnd ();
+ ti.uId = (UINT) pWnd->GetSafeHwnd ();
+ ti.hinst = AfxGetInstanceHandle ();
+ ti.lpszText = const_cast<TCHAR*>(text.c_str());
+
+ return (bool) SendMessage (TTM_ADDTOOL, 0, (LPARAM) &ti);
 }
 
-void CTabDialog::OnCancel()
+bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool)
 {
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
+ TOOLINFO ti;
+ ti.cbSize = sizeof (TOOLINFO);
+ ti.uFlags = TTF_SUBCLASS;
+ ti.hwnd = pWnd->GetSafeHwnd ();
+ ti.uId = nIDTool;
+ ti.hinst = AfxGetInstanceHandle ();
+ ti.lpszText = const_cast<TCHAR*>(text.c_str());
+ ::CopyRect (&ti.rect, pRect);
+
+ return (bool) SendMessage (TTM_ADDTOOL, 0, (LPARAM) &ti);
 }

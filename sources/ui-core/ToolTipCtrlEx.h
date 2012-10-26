@@ -19,27 +19,20 @@
               email: shabelnikov@secu-3.org
 */
 
-#include "stdafx.h"
-#include "TabDialog.h"
+#pragma once
 
-CTabDialog::CTabDialog(UINT nIDTemplate, CWnd* pParentWnd)
-: Super(nIDTemplate, pParentWnd)
-{
- //empty
-}
+#include "../common/unicodesupport.h"
 
-CTabDialog::~CTabDialog()
+//Custom tooltip control
+class AFX_EXT_CLASS CToolTipCtrlEx : public CToolTipCtrl
 {
- //empty
-}
+  typedef CToolTipCtrl Super;
 
-void CTabDialog::OnOK()
-{
- UpdateData(); //for DDX/DDV
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
-}
+ public:
+  CToolTipCtrlEx();
+  virtual ~CToolTipCtrlEx();
 
-void CTabDialog::OnCancel()
-{
- //не вызываем реализацию базового класса чтобы диалог нельзя было закрыть
-}
+  //Create custom methods
+  bool AddWindow(CWnd* pWnd, const _TSTRING& text);
+  bool AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool);
+};

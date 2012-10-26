@@ -487,6 +487,8 @@ BEGIN
                             "Не могу начать запись лога в файл: %s\n Возможно этот файл защищен от записи или уже открыт другой программой."
     IDS_TAB_PARAMETERS_AND_MONOTOR "Параметры и монитор"
     IDS_TAB_FIRMWARE_DATA   "Данные прошивки"
+    IDS_KC_KNOCK_FRQ_CALC_TT "Приблизительный расчет частоты детонации по диаметру цилиндра (мм)"     
+    IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Введите диаметр цилиндра двигателя в мм"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -990,6 +992,8 @@ BEGIN
                             "Can't start writing log into file: %s\n Perhaps this file is write-protected or already opened by other program."
     IDS_TAB_PARAMETERS_AND_MONOTOR "Parameters and monitor"
     IDS_TAB_FIRMWARE_DATA   "Firmware data"
+    IDS_KC_KNOCK_FRQ_CALC_TT "Rough calculation of the knock frequency based on cylinder diameter (mm)"     
+    IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Input diameter in mm of engine cylinder"
 END
 
 STRINGTABLE DISCARDABLE 

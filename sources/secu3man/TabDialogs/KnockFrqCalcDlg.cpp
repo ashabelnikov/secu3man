@@ -26,6 +26,7 @@
 #include "common/FastDelegate.h"
 #include "ui-core/DDX_helpers.h"
 #include "ui-core/EditEx.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace fastdelegate;
 
@@ -98,6 +99,14 @@ BOOL CKnockFrqCalcDlg::OnInitDialog()
  mp_cyl_d_edit->SetDecimalPlaces(1);
  mp_cyl_d_edit->SetLimitText(5);
  mp_cyl_d_edit->SetValue(m_cyl_d);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(this, MLL::GetString(IDS_KC_KNOCK_FRQ_CALC_TT)));
+ VERIFY(mp_ttc->AddWindow(mp_cyl_d_edit.get(), MLL::GetString(IDS_KC_KNOCK_FRQ_CALC_EDIT_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->Activate(TRUE);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;
