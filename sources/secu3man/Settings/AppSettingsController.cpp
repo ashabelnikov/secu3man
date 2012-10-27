@@ -54,6 +54,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optMIDeskUpdatePeriod = m_pView->GetMIDeskUpdatePeriod();
  m_pModel->m_optUseDVFeatures = m_pView->GetUseDVFeatures();
  m_pModel->m_optDVDeskUpdatePeriod = m_pView->GetDVDeskUpdatePeriod();
+ m_pModel->m_optShowToolTips = m_pView->GetShowToolTips();
 
  size_t index = m_pView->GetCSVSepSymbol();
  m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
@@ -88,6 +89,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod);
  m_pView->SetUseDVFeatures(m_pModel->m_optUseDVFeatures);
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod);
+ m_pView->SetShowToolTips(m_pModel->m_optShowToolTips);
 
  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)

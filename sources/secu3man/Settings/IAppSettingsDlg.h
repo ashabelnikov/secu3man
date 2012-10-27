@@ -50,6 +50,7 @@ class IAppSettingsDlg
   virtual void SetPressureMax(int i_max) = 0;
   virtual void SetUseDVFeatures(bool i_use) = 0;
   virtual void SetDVDeskUpdatePeriod(int i_period) = 0;
+  virtual void SetShowToolTips(bool i_show) = 0;
 
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
@@ -65,6 +66,7 @@ class IAppSettingsDlg
   virtual int GetPressureMax(void) const = 0;
   virtual bool GetUseDVFeatures(void) = 0;
   virtual int GetDVDeskUpdatePeriod(void) = 0;
+  virtual bool GetShowToolTips(void) const = 0;
 
   //устанавливают обработчики событий
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;

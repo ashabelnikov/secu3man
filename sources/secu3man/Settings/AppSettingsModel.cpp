@@ -43,6 +43,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_InterfaceLang(_T("InterfaceLanguage"))
 , m_Name_ECUPlatformType(_T("ECUPlatformType"))
 , m_Name_UseDVFeatures(_T("UseDVFeatures"))
+, m_Name_ShowToolTips(_T("ShowToolTips"))
 , m_Name_DVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
@@ -302,6 +303,20 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optUseDVFeatures = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,_T("0"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optShowToolTips = 0;
+ }
+ else
+ {
+  m_optShowToolTips = i_val;
+ }
+
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
  {\
@@ -424,6 +439,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optDVDeskUpdatePeriod);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_DVDeskUpdatePeriod,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optShowToolTips);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,write_str,IniFileName);
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -589,4 +608,9 @@ bool CAppSettingsModel::GetUseDVFeatures(void) const
 int CAppSettingsModel::GetDVDeskUpdatePeriod(void) const
 {
  return m_optDVDeskUpdatePeriod;
+}
+
+bool CAppSettingsModel::GetShowToolTips(void) const
+{
+ return m_optShowToolTips;
 }

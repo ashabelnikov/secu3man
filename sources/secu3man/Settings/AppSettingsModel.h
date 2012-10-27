@@ -73,6 +73,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_ECUPlatformType;
   const CString m_Name_UseDVFeatures;
   const CString m_Name_DVDeskUpdatePeriod;
+  const CString m_Name_ShowToolTips;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -121,6 +122,7 @@ class CAppSettingsModel : public ISettingsData
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
   virtual int GetDVDeskUpdatePeriod(void) const;
+  virtual bool GetShowToolTips(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -156,6 +158,8 @@ class CAppSettingsModel : public ISettingsData
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;
+
+  bool m_optShowToolTips;
 
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);
