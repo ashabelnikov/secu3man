@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <list>
 #include "../common/unicodesupport.h"
 
 //Custom tooltip control
@@ -35,4 +36,15 @@ class AFX_EXT_CLASS CToolTipCtrlEx : public CToolTipCtrl
   //Create custom methods
   bool AddWindow(CWnd* pWnd, const _TSTRING& text);
   bool AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool);
+
+  //This method affects all instances of this class
+  static void ActivateAllTooltips(bool i_activate);
+
+  //Activates/Deactivates tool tip control. Use this method instead of base implementation
+  void ActivateToolTips(bool i_activate);
+
+ private:
+  static std::list<CToolTipCtrlEx*> m_insts;
+  static bool m_activated_all;
+  bool m_activated;
 };

@@ -34,6 +34,7 @@
 #include "Settings/ISettingsData.h"
 #include "StatusBarManager.h"
 #include "ui-core/HotKeysManager.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace fastdelegate;
 
@@ -113,6 +114,9 @@ void MainFrameController::OnAppSettings()
    mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
    mp_view->GetDVDesk()->SetUpdatePeriod(settings->GetDVDeskUpdatePeriod());
   }
+
+  //–азрешаем или запрещаем показавание подсказок
+  CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
  }
 }
 

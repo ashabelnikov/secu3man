@@ -22,14 +22,18 @@
 #include "stdafx.h"
 #include "ToolTipCtrlEx.h"
 
+std::list<CToolTipCtrlEx*> CToolTipCtrlEx::m_insts;
+bool CToolTipCtrlEx::m_activated_all = true;
+
 CToolTipCtrlEx::CToolTipCtrlEx()
+: m_activated(false)
 {
- //empty
+ m_insts.insert(m_insts.begin(), this);
 }
 
 CToolTipCtrlEx::~CToolTipCtrlEx()
 {
- //empty
+ m_insts.remove(this);
 }
 
 bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
@@ -57,4 +61,20 @@ bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRec
  ::CopyRect (&ti.rect, pRect);
 
  return (bool) SendMessage (TTM_ADDTOOL, 0, (LPARAM) &ti);
+}
+
+/*static*/ void CToolTipCtrlEx::ActivateAllTooltips(bool i_activate)
+{
+ m_activated_all = i_activate;
+ std::list<CToolTipCtrlEx*>::iterator it;
+ for(it = m_insts.begin(); it != m_insts.end(); ++it)
+ {
+  (*it)->Activate((*it)->m_activated && m_activated_all);
+ }
+}
+
+void CToolTipCtrlEx::ActivateToolTips(bool i_activate)
+{
+ m_activated = i_activate;
+ Activate(i_activate && m_activated_all);
 }

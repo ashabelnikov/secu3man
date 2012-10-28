@@ -29,6 +29,7 @@ class CMIDeskDlg;
 class CParamDeskDlg;
 class CRSDeskDlg;
 class CTablesDeskDlg;
+class CToolTipCtrlEx;
 
 // CParamMonTabDlg dialog
 class CParamMonTabDlg : public CTabDialog
@@ -79,4 +80,6 @@ class CParamMonTabDlg : public CTabDialog
   CPoint m_original_check_pos;
   CPoint m_original_button_pos;
   bool floating;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

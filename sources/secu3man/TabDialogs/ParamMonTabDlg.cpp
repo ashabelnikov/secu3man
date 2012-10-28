@@ -29,6 +29,7 @@
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace fastdelegate;
 
@@ -99,6 +100,14 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
  mp_TablesDeskDlg->Show(check_state);
  
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_edit_tables_check, MLL::GetString(IDS_PM_EDIT_TABLES_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_raw_sensors_check, MLL::GetString(IDS_PM_SHOW_RAW_SENSORS_TT))); 
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
+
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
