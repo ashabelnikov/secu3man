@@ -844,7 +844,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
 {
  std::vector<_TSTRING> names = GetFunctionsSetNames();
- for(int i = 0; i < TABLES_NUMBER; i++)
+ int i;
+ for(i = 0; i < TABLES_NUMBER; i++)
  {
   GetStartMap(i,op_fwd->maps[i].f_str);
   GetIdleMap(i,op_fwd->maps[i].f_idl);
@@ -859,11 +860,16 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetCTSCurveMap(op_fwd->ctscurve_table);
  op_fwd->ctscurve_vlimits[0] = GetCTSMapVoltageLimit(0);
  op_fwd->ctscurve_vlimits[1] = GetCTSMapVoltageLimit(1);
+
+ //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+  op_fwd->rpm_slots[i] = (float)work_map_rpm_slots[i];
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
 {
- for(int i = 0; i < TABLES_NUMBER; i++)
+ int i;
+ for(i = 0; i < TABLES_NUMBER; i++)
  {
   SetStartMap(i,ip_fwd->maps[i].f_str);
   SetIdleMap(i,ip_fwd->maps[i].f_idl);
@@ -878,6 +884,13 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetCTSCurveMap(ip_fwd->ctscurve_table);
  SetCTSMapVoltageLimit(0, ip_fwd->ctscurve_vlimits[0]);
  SetCTSMapVoltageLimit(1, ip_fwd->ctscurve_vlimits[1]);
+
+ //todo in the future, set values from ip_fwd->rpm_slots into the firmware here
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+  if (ip_fwd->rpm_slots[i] != work_map_rpm_slots[i]){
+   AfxMessageBox(_T("RPM grids from firmware and source are not equal!"), MB_ICONSTOP);
+   break;
+  }
 }
 
 void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)

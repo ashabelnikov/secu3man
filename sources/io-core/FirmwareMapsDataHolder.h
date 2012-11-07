@@ -34,6 +34,7 @@
 #define KC_ATTENUATOR_LOOKUP_TABLE_SIZE 128
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE 32
 #define THERMISTOR_LOOKUP_TABLE_SIZE 16
+#define F_RPM_SLOTS            16
 
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          8
@@ -57,6 +58,7 @@ struct FWMapsDataHolder
  float dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
  float ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];
  float ctscurve_vlimits[2]; //voltage limits are stored together with table
+ float rpm_slots[F_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  { 
@@ -66,6 +68,7 @@ struct FWMapsDataHolder
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
   std::fill(ctscurve_table, ctscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(ctscurve_vlimits, ctscurve_vlimits + 2, .0f);
+  std::fill(rpm_slots, rpm_slots + F_RPM_SLOTS, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

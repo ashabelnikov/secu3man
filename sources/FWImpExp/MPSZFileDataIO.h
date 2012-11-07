@@ -32,6 +32,7 @@
 #define MPSZ_WORK_MAP_SIZE_F 16
 #define MPSZ_MAPS_NAME_SIZE  16    //LO level value
 #define MPSZ_NUMBER_OF_MAPS  16    //not actual value for some files, e.g *.mpz
+#define MPSZ_RPM_SLOTS       16    //Appeared in v2
 
 #define MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE 1  //damn declaration
 
@@ -48,6 +49,7 @@ struct MPSZMapsDataHolder
 {
  MPSZMapsDataItem maps[MPSZ_NUMBER_OF_MAPS];
  int m_actual_sets_num;
+ float rpm_slots[MPSZ_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
 
  MPSZMapsDataHolder() : m_actual_sets_num(0)
  {
@@ -57,6 +59,7 @@ struct MPSZMapsDataHolder
    memset(maps[i].f_idl,0,sizeof(float) * MPSZ_IDLE_MAP_SIZE);
    memset(maps[i].f_wrk,0,sizeof(float) * MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F);
   }
+  memset(rpm_slots,0,sizeof(float) * MPSZ_RPM_SLOTS);
  };
 
  std::vector<_TSTRING> GetListOfNames(void) const;
@@ -72,6 +75,7 @@ class MPSZFileDataIO
   enum EFileTypes
   {
    FILE_TYPE_MPX = 0,
+   FILE_TYPE_MPXv2,
    FILE_TYPE_MPZ
   };
 
@@ -114,6 +118,29 @@ class MPSZDataMPX_IO : public MPSZDataBase
   {
    ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
    SIZE_OF_RAW_DATA   = 9216
+  };
+
+  //binary -> abstract
+  virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);
+
+  //abstract -> bynary
+  virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
+
+  virtual int GetRequiredRawSize(void)  {return SIZE_OF_RAW_DATA;};
+
+  virtual int GetActualSetsNumber(void) {return ACTUAL_SETS_NUMBER;};
+};
+
+class MPSZDataMPXv2_IO : public MPSZDataBase
+{
+ public:
+  MPSZDataMPXv2_IO() {};
+  virtual ~MPSZDataMPXv2_IO() {};
+
+  enum
+  {
+   ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
+   SIZE_OF_RAW_DATA   = 5120
   };
 
   //binary -> abstract

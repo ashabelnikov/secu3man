@@ -51,15 +51,17 @@ MPSZImportController::MPSZImportController(FWMapsDataHolder* ip_fwd)
 
 int MPSZImportController::DoImport(void)
 {
- static TCHAR BASED_CODE szFilter[] = _T("MPSZ Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||");
+ static TCHAR BASED_CODE szFilter[] = _T("MPSZ Files (*.mpx)|*.mpx|MPSZ-II Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||");
  CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
 
  if (open.DoModal()==IDOK)
  {
   MPSZFileDataIO::EFileTypes type;
-  if (open.GetFileExt()==_T("mpx"))
+  if (open.GetOFN().nFilterIndex == 1 && open.GetFileExt()==_T("mpx"))
    type = MPSZFileDataIO::FILE_TYPE_MPX;
-  if (open.GetFileExt()==_T("mpz"))
+  else if (open.GetOFN().nFilterIndex == 2 && open.GetFileExt()==_T("mpx"))
+   type = MPSZFileDataIO::FILE_TYPE_MPXv2;
+  else if (open.GetOFN().nFilterIndex == 3 && open.GetFileExt()==_T("mpz"))
    type = MPSZFileDataIO::FILE_TYPE_MPZ;
   else
    type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
@@ -93,7 +95,8 @@ MPSZImportController::~MPSZImportController()
 
 void MPSZImportController::OnOkPressed(void)
 {
- //empty
+ //копируем таблицу сетки оборотов
+ memcpy(mp_fwd->rpm_slots, mp_mpsz_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
 
 void MPSZImportController::OnCancelPressed(void)
@@ -196,7 +199,7 @@ int MPSZExportController::DoExport(void)
  {
   public:
    CFileDialogEx() : CFileDialog(FALSE,_T("mpx"), NULL, NULL,
-     _T("MPSZ Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||"), NULL) {};
+     _T("MPSZ Files (*.mpx)|*.mpx|MPSZ-II Files (*.mpx)|*.mpx|MPSZ Files (*.mpz)|*.mpz|All Files (*.*)|*.*||"), NULL) {};
    virtual ~CFileDialogEx() {};
 
   protected:
@@ -204,8 +207,9 @@ int MPSZExportController::DoExport(void)
    {
     if (m_ofn.nFilterIndex==1)
      m_ofn.lpstrDefExt = _T("mpx");
-
     if (m_ofn.nFilterIndex==2)
+     m_ofn.lpstrDefExt = _T("mpx");
+    if (m_ofn.nFilterIndex==3)
      m_ofn.lpstrDefExt = _T("mpz");
    }
  };
@@ -214,12 +218,17 @@ int MPSZExportController::DoExport(void)
  if (save.DoModal()==IDOK)
  {
   MPSZFileDataIO::EFileTypes type;
-  if (save.GetFileExt()==_T("mpx"))
+  if (save.GetOFN().nFilterIndex == 1) //mpx
   {
    type = MPSZFileDataIO::FILE_TYPE_MPX;
    mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
   }
-  else if (save.GetFileExt()==_T("mpz"))
+  if (save.GetOFN().nFilterIndex == 2)  //mpx MPSZ II
+  {
+   type = MPSZFileDataIO::FILE_TYPE_MPXv2;
+   mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS);
+  }
+  else if (save.GetOFN().nFilterIndex == 3) //mpz
   {
    type = MPSZFileDataIO::FILE_TYPE_MPZ;
    mp_mpsz_io->SetActualSetsNumber(MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE);
@@ -264,7 +273,8 @@ MPSZExportController::~MPSZExportController()
 
 void MPSZExportController::OnOkPressed(void)
 {
- //empty
+ //копируем таблицу сетки оборотов
+ memcpy(mp_mpsz_io->GetDataLeft().rpm_slots, mp_fwd->rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
 
 void MPSZExportController::OnCancelPressed(void)
