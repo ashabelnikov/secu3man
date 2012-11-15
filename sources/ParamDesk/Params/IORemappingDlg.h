@@ -21,6 +21,7 @@
 
 #pragma once
 
+#include <map>
 #include "IRemapDeskView.h"
 #include "ui-core/DialogWithAccelerators.h"
 
@@ -33,6 +34,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
 
  public:
   CIORemappingDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CIORemappingDlg();                       // destructor
   static const UINT IDD;
 
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
@@ -47,6 +49,8 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual FWDM::IOPid GetSelection(FWDM::IOSid iosId) const;
   virtual void setOnItemSelected(EventItemSel OnFunction);
   virtual void EnableSECU3TItems(bool i_enable);
+  virtual void EnableItem(FWDM::IOSid iosId, bool i_enable);
+  virtual void ResetContent(void);
   //-------------------------------------------------------------
 
   // Implementation
@@ -54,6 +58,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsCommon(CCmdUI* pCmdUI);
   afx_msg void OnChangeSelection(UINT nID);
   DECLARE_MESSAGE_MAP()
 
@@ -62,7 +67,8 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   bool m_enable_secu3t_features;
 
   EventItemSel m_OnItemSel;
-  CComboBox m_iorcb[FWDM::IOS_COUNT];
+  std::map<UINT, std::pair<int, CComboBox*> > m_iorcb;
+  std::map<UINT, bool> m_enflg;
 };
 
 /////////////////////////////////////////////////////////////////////////////

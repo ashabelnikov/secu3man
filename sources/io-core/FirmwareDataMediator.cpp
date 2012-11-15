@@ -42,21 +42,66 @@ using namespace SECU3IO::SECU3Types;
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
 #define THERMISTOR_LOOKUP_TABLE_SIZE     16
 
+//We rely that size member is valid in all versions of cd_data_t structure and use it to determine
+//version of the structure.
+#define CAST_CDDATA(ptr, mbr) (((ptr)->size == sizeof(cd_datav0_t)) ? (((cd_datav0_t*)( ((((_uchar*)(ptr)) + sizeof(cd_data_t)) - sizeof(cd_datav0_t)) ))->mbr) : (((cd_data_t*)(ptr))->mbr))
+
+#define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
+
+#define IOREM_SLOTS_NUM(ptr) (size_t)(((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOREM_SLOTSv0 : IOREM_SLOTS))
+#define IOREM_PLUGS_NUM(ptr) (size_t)(((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOREM_PLUGSv0 : IOREM_PLUGS))
+
+#define IOP_COUNT_NUM(ptr) ((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOP_COUNTv0 : IOP_COUNT)
+#define IOS_COUNT_NUM(ptr) ((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOS_COUNTv0 : IOS_COUNT)
+
+//--------------------------For iorem_slots_t V0.0----------------------------
 //See also FirmwareDataMediator.h
-#define IOREM_SLOTS 10           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 16           // Number of plugs used in I/O remapping
+#define IOREM_SLOTSv0 10         // Number of slots used for I/O remapping
+#define IOREM_PLUGSv0 16         // Number of plugs used in I/O remapping
+
+//Describes all data related to I/O remapping
+typedef struct iorem_slotsv0_t
+{
+ _uchar size;                    // size of this structure   
+ _uchar version;                 // A reserved byte = 0
+ _fnptr_t i_slots[IOREM_SLOTSv0];// initialization slots
+ _fnptr_t v_slots[IOREM_SLOTSv0];// data slots
+ _fnptr_t i_plugs[IOREM_PLUGSv0];// initialization plugs
+ _fnptr_t v_plugs[IOREM_PLUGSv0];// data plugs
+ _fnptr_t s_stub;                // special pointer used as stub
+ _fnptr_t g_stub;                // reserved = 0
+}iorem_slotsv0_t;
+
+//Describes data stored directly in the firmware code
+typedef struct cd_datav0_t
+{
+ // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
+ iorem_slotsv0_t iorem;
+
+ //holds flags which give information about options were used to build firmware
+ //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
+ _ulong config;
+
+ _uchar reserved[2];             //two reserved bytes
+
+ _uchar size;                    // size of this structure
+}cd_datav0_t;
+
+//------------------------For iorem_slots_t V1.0----------------------------
+#define IOREM_SLOTS 16           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 32           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
  _uchar size;                    // size of this structure   
- _uchar reserved;                // A reserved byte
+ _uchar version;                 // A reserved byte
  _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
  _fnptr_t v_slots[IOREM_SLOTS];  // data slots
  _fnptr_t i_plugs[IOREM_PLUGS];  // initialization plugs
  _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
- _fnptr_t s_stub;                // special pointer used as stub
- _fnptr_t reserved_ptr;          // reserved
+ _fnptr_t s_stub;                // special pointer used as stub (for outputs)
+ _fnptr_t g_stub;                // special pointer used as stub (for inputs)
 }iorem_slots_t;
 
 //Describes data stored directly in the firmware code
@@ -148,19 +193,19 @@ CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
 , m_lip(new LocInfoProvider(i_fpp))
 , mp_cddata(NULL)
 {
- m_bytes_active = new BYTE[m_fpp->m_total_size + 1];
- ASSERT(m_bytes_active);
- m_bytes_original = new BYTE[m_fpp->m_total_size + 1];
- ASSERT(m_bytes_original);
+ mp_bytes_active = new BYTE[m_fpp->m_total_size + 1];
+ ASSERT(mp_bytes_active);
+ mp_bytes_original = new BYTE[m_fpp->m_total_size + 1];
+ ASSERT(mp_bytes_original);
 
- memset(m_bytes_active, 0x00, m_firmware_size);
- memset(m_bytes_original, 0x00, m_firmware_size);
+ memset(mp_bytes_active, 0x00, m_firmware_size);
+ memset(mp_bytes_original, 0x00, m_firmware_size);
 }
 
 CFirmwareDataMediator::~CFirmwareDataMediator()
 {
- delete m_bytes_active;
- delete m_bytes_original;
+ delete[] mp_bytes_active;
+ delete[] mp_bytes_original;
 }
 
 //считает контрольную сумму и записывает результат по соответствующему адресу
@@ -190,11 +235,14 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlash
  BYTE sizeofcd = i_data[lip.FIRMWARE_DATA_START - 1];
 
  cd_data_t* p_cd = (cd_data_t*)&i_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
+ size_t iorem_struct_size = (sizeofcd == sizeof(cd_datav0_t)) ? sizeof(iorem_slotsv0_t) : sizeof(iorem_slots_t);
 
  if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
   ((sizeoffd > 0) && sizeoffd != p_fd->exdata.fw_data_size) ||
-  ((sizeoffd > 0) && sizeofcd != sizeof(cd_data_t)) ||
-  ((sizeoffd > 0) && p_cd->iorem.size != sizeof(iorem_slots_t)))
+  ((sizeoffd > 0) && (sizeofcd != sizeof(cd_datav0_t) && sizeofcd != sizeof(cd_data_t))) ||
+  ((sizeoffd > 0) && CAST_CDDATA(p_cd, iorem.size) != iorem_struct_size) ||
+  //supported major versions: 0, 1
+  ((sizeoffd > 0) && (IOREM_MAJ_VER(CAST_CDDATA(p_cd, iorem.version)) != 0 && IOREM_MAJ_VER(CAST_CDDATA(p_cd, iorem.version)) != 1)))
   compatible = false;
 
  return compatible;
@@ -203,11 +251,11 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlash
 void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
 {
  ASSERT(i_bytes);
- memset(m_bytes_active,0x00,m_firmware_size);
- memset(m_bytes_original,0x00,m_firmware_size);
+ memset(mp_bytes_active,0x00,m_firmware_size);
+ memset(mp_bytes_original,0x00,m_firmware_size);
 
- memcpy(m_bytes_active,i_bytes,m_firmware_size);
- memcpy(m_bytes_original,i_bytes,m_firmware_size);
+ memcpy(mp_bytes_active,i_bytes,m_firmware_size);
+ memcpy(mp_bytes_original,i_bytes,m_firmware_size);
 
  _FindCodeData(); //find data residing directly in the code
  m_is_opened = true;
@@ -216,24 +264,24 @@ void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
 void CFirmwareDataMediator::StoreBytes(BYTE* o_bytes)
 {
  ASSERT(o_bytes);
- memcpy(o_bytes,m_bytes_active,m_firmware_size);
+ memcpy(o_bytes,mp_bytes_active,m_firmware_size);
 }
 
 bool CFirmwareDataMediator::IsModified(void)
 {
- return (0 != memcmp(m_bytes_active,m_bytes_original,m_firmware_size));
+ return (0 != memcmp(mp_bytes_active,mp_bytes_original,m_firmware_size));
 }
 
 void CFirmwareDataMediator::ResetModified(void)
 {
- memcpy(m_bytes_original,m_bytes_active,m_firmware_size);
+ memcpy(mp_bytes_original,mp_bytes_active,m_firmware_size);
 }
 
 _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
 {
  char raw_string[256];
  memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
  memcpy(raw_string, &p_fd->exdata.fw_signature_info, FW_SIGNATURE_INFO_SIZE);
  TCHAR string[256];
  OemToChar(raw_string, string);
@@ -248,7 +296,7 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
   str+=' ';
  char raw_string[256];
  memset(raw_string, 0, FW_SIGNATURE_INFO_SIZE+1);
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
  CharToOem(str.c_str(), raw_string);
  memcpy(&p_fd->exdata.fw_signature_info, raw_string, FW_SIGNATURE_INFO_SIZE);
 }
@@ -256,11 +304,11 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
  if (mp_cddata)
-  return mp_cddata->config;
+  return CAST_CDDATA(mp_cddata, config);
  else
  {
   //there is no such data in this firmware, then we have to use old place
-  fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]); 
+  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
   return p_fd->exdata.reserv32; 
  }
 }
@@ -272,9 +320,9 @@ void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_orig
  ASSERT(o_values);
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -289,7 +337,7 @@ void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
  f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -305,9 +353,9 @@ void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_origi
  ASSERT(o_values);
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -322,7 +370,7 @@ void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
  f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -338,7 +386,7 @@ std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -365,7 +413,7 @@ void CFirmwareDataMediator::SetFunctionsSetName(int i_index, _TSTRING i_new_name
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
@@ -392,19 +440,19 @@ _TSTRING CFirmwareDataMediator::GetFWFileName(void)
 
 unsigned int CFirmwareDataMediator::CalculateCRC16OfActiveFirmware(void)
 {
- _uint crc_16 = crc16(m_bytes_active, m_lip->CODE_SIZE);
+ _uint crc_16 = crc16(mp_bytes_active, m_lip->CODE_SIZE);
  return crc_16;
 }
 
 unsigned int CFirmwareDataMediator::GetCRC16StoredInActiveFirmware(void)
 {
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  return p_fd->code_crc;
 }
 
 void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(void)
 {
- CalculateAndPlaceFirmwareCRC(m_bytes_active);
+ CalculateAndPlaceFirmwareCRC(mp_bytes_active);
 }
 
 void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes, const PPFlashParam* ip_fpp /*= NULL*/)
@@ -415,9 +463,10 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  //Now we need to load data stored in the code area to the current firmware
  LoadCodeData(i_source_bytes, (ip_fpp ? ip_fpp : m_fpp.get())->m_app_section_size);
 
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  size_t dataSize = p_fd->def_param.crc;
  _ulong oldFWOpt = p_fd->exdata.reserv32;
+ _uint oldFWCRC  = p_fd->code_crc;
 
  if (ip_fpp)
  {
@@ -427,14 +476,14 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
   size_t start_d = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t start_s = (0==dataSize) ? lip.FIRMWARE_DATA_START : (lip.BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
-  memcpy(m_bytes_active + start_d, i_source_bytes + start_s, size);
+  memcpy(mp_bytes_active + start_d, i_source_bytes + start_s, size);
  }
  else
  {
   //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
   size_t start = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
-  memcpy(m_bytes_active + start, i_source_bytes + start, size);  
+  memcpy(mp_bytes_active + start, i_source_bytes + start, size);  
  }
  //Значение def_param.crc не импортируем, так как оно служебное.
  //Если загружаются данные из новой прошивки в старую, то нужно установить значение exdata.reserv32
@@ -443,6 +492,9 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  if (0==dataSize)
   p_fd->exdata.reserv32 = oldFWOpt;
 
+ //не импортируем контрольную сумму прошивки
+ p_fd->code_crc = oldFWCRC;
+
  _FindCodeData();
 }
 
@@ -450,7 +502,7 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_byt
 {
  if (false==IsLoaded())
   return; //некуда загружать...
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  _uint fwd_size = p_fd->def_param.crc; //save
  memcpy(&p_fd->def_param, i_source_bytes, sizeof(params_t));
  p_fd->def_param.crc = fwd_size; //restore
@@ -464,9 +516,9 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
  ASSERT(o_values);
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -484,7 +536,7 @@ void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
  f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -503,9 +555,9 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
  ASSERT(o_values);
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -520,7 +572,7 @@ void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
  f_data_t* p_maps = NULL;
  ASSERT(i_values);
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес начала таблиц семейств характеристик
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -535,7 +587,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
 
  BYTE* p_bytes = NULL;
  params_t* p_params = NULL;
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
  //получаем адрес структуры дефаултных параметров
  p_params = &((fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]))->def_param;
 
@@ -693,7 +745,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 
  BYTE* p_bytes = NULL;
  params_t* p_params = NULL;
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
  //получаем адрес структуры дефаултных параметров
  p_params = &((fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]))->def_param;
 
@@ -901,9 +953,9 @@ void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /*
   return;
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -919,7 +971,7 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
  if (!i_values)
   return;
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -939,9 +991,9 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /*
   return;
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -957,7 +1009,7 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
  if (!i_values)
   return;
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -974,9 +1026,9 @@ void CFirmwareDataMediator::GetCTSCurveMap(float* o_values, bool i_original /* =
   return;
 
  if (i_original)
-  p_bytes = m_bytes_original;
+  p_bytes = mp_bytes_original;
  else
-  p_bytes = m_bytes_active;
+  p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -992,7 +1044,7 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
  if (!i_values)
   return;
 
- p_bytes = m_bytes_active;
+ p_bytes = mp_bytes_active;
 
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
@@ -1004,7 +1056,7 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
 float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
 {
  //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
   return p_fd->exdata.cts_vl_begin * ADC_DISCRETE;
  else if (1 == i_type)
@@ -1018,7 +1070,7 @@ float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
 
 void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
 {
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  if (0 == i_type)
   p_fd->exdata.cts_vl_begin = MathHelpers::Round(i_value / ADC_DISCRETE);
  else if (1 == i_type)
@@ -1042,12 +1094,12 @@ DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT)
-    value = mp_cddata->iorem.i_plugs[id]; 
+   if (id < IOP_COUNT_NUM(mp_cddata))
+    value = CAST_CDDATA(mp_cddata, iorem.i_plugs[id]); 
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT)
-    value = mp_cddata->iorem.v_plugs[id]; 
+   if (id < IOP_COUNT_NUM(mp_cddata))
+    value = CAST_CDDATA(mp_cddata, iorem.v_plugs[id]); 
    break;
  }
  return value;
@@ -1061,22 +1113,29 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOS_COUNT)
-    value = mp_cddata->iorem.i_slots[id]; 
+   if (id < IOS_COUNT_NUM(mp_cddata))
+    value = CAST_CDDATA(mp_cddata, iorem.i_slots[id]); 
    break;
   case IOX_DATA:
-   if (id < IOS_COUNT)
-    value = mp_cddata->iorem.v_slots[id]; 
+   if (id < IOS_COUNT_NUM(mp_cddata))
+    value = CAST_CDDATA(mp_cddata, iorem.v_slots[id]); 
    break;
  }
  return value;
 }
 
-DWORD CFirmwareDataMediator::GetSStub(void)
+DWORD CFirmwareDataMediator::GetSStub(void) const
 {
  if (!mp_cddata)
   return 0;
- return mp_cddata->iorem.s_stub;
+ return CAST_CDDATA(mp_cddata, iorem.s_stub);
+}
+
+DWORD CFirmwareDataMediator::GetGStub(void) const
+{
+ if (!mp_cddata)
+  return 0;
+ return CAST_CDDATA(mp_cddata, iorem.g_stub);
 }
 
 void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
@@ -1086,24 +1145,30 @@ void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT)
-    mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value; 
+   if (id < IOP_COUNT_NUM(mp_cddata))
+    CAST_CDDATA(mp_cddata, iorem.i_plugs[id]) = (_fnptr_t)value; 
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT)
-    mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value; 
+   if (id < IOP_COUNT_NUM(mp_cddata))
+    CAST_CDDATA(mp_cddata, iorem.v_plugs[id]) = (_fnptr_t)value; 
    break;
  }
 }
 
+CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) const
+{
+ ASSERT(mp_cddata);
+ if (!mp_cddata)
+  return IOV_V00; //error
+ return (IORemVer)CAST_CDDATA(mp_cddata, iorem.version);
+}
+
 void CFirmwareDataMediator::_FindCodeData(void)
 {
- //size of cd_data_t structure
- BYTE size = m_bytes_active[m_lip->FIRMWARE_DATA_START - 1];
- //obtain pointer to cd_data_t structure
- cd_data_t* p_cd = (cd_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START - size]);
+ //obtain pointer to cd_data_t structure, note that this pointer must be casted
+ cd_data_t* p_cd = (cd_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START - sizeof(cd_data_t)]);
  //obtain pointer to fw_data_t structure
- fw_data_t* p_fd = (fw_data_t*)(&m_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
 
  _uint dataSize = p_fd->def_param.crc;
 
@@ -1144,7 +1209,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
 {
  ASSERT(i_source_bytes);
  if (!o_destin_bytes)
-  o_destin_bytes = m_bytes_active; //use current firmware bytes as destination
+  o_destin_bytes = mp_bytes_active; //use current firmware bytes as destination
 
  //obtain actual size of data (source and destination data)
  _uint dataSizeSrc = ((fw_data_t*)((i_source_bytes + i_srcSize)-sizeof(fw_data_t)))->def_param.crc;
@@ -1155,30 +1220,108 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
   const BYTE *p_dataSrc = (i_source_bytes + i_srcSize) - dataSizeSrc;
   BYTE *p_dataDst = (o_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
   size_t szSrc = *(p_dataSrc-1), szDst = *(p_dataDst-1);
+  cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t)); //must be casted!
+  cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t)); //must be casted!
   if (szSrc == szDst) //compatible?
   {
-   cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - szSrc);
-   cd_data_t* pDst = (cd_data_t*)(p_dataDst - szDst);
    //Transfer values (don't copy it as memory block, because pointers may be different!)
    //So, we copy logical references. Not actual bits.
-   for(size_t p = 0; p < IOREM_PLUGS; ++p)
+   for(size_t p = 0; p < IOREM_PLUGS_NUM(pSrc); ++p)
    {
+    if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == 0)
+     continue; //skip not implemented plugs
     size_t s = 0;
-    for(; s < IOREM_SLOTS; ++s)
+    //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
+    for(; s < IOREM_SLOTS_NUM(pSrc); ++s)
     {
-     if (pSrc->iorem.i_slots[s] == pSrc->iorem.i_plugs[p])
+     if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
       break;
     }
-    if  ((s < IOREM_SLOTS) && (pSrc->iorem.i_plugs[p] != pSrc->iorem.s_stub)) //slot?
+    if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
     {
-     pDst->iorem.i_plugs[p] = pDst->iorem.i_slots[s];
-     pDst->iorem.v_plugs[p] = pDst->iorem.v_slots[s];
+     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
+     CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
     }
-    else if (pSrc->iorem.i_plugs[p] == pSrc->iorem.s_stub) //stub?
+    else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
     {
-     pDst->iorem.i_plugs[p] = pDst->iorem.s_stub;
-     pDst->iorem.v_plugs[p] = pDst->iorem.s_stub;
+     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+     //Use input stub if source has input stub
+     if (CAST_CDDATA(pSrc, iorem.v_plugs[p]) == CAST_CDDATA(pDst, iorem.g_stub))
+      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
+     else
+      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
     }
+   }
+  }
+  else
+  { //incompatible, then try to resolve incompatibility
+   if (CAST_CDDATA(pSrc, iorem.version) == IOV_V00)
+   { //импортируем файл версии V0.0 в V1.0+
+    for(size_t p = 0; p < IOREM_PLUGS_NUM(pDst); ++p)
+    {
+     if (CAST_CDDATA(pDst, iorem.i_plugs[p]) == 0)
+      continue; //skip not implemented plugs
+
+     //до IOP_FE включительно индексы совпадают
+     if (p <= IOP_FE)
+     {
+      size_t s = 0;
+      //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
+      for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
+       if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
+        break;
+      } 
+      if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
+      {
+       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
+       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
+      }
+      else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
+      {
+       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+      }
+     }//выходы, индексы которых отличаются в версиях 0 и 1
+     else if (p == IOP_FL_PUMP || p == IOP_HALL_OUT || p == IOP_STROBE || p == IOP_PWRRELAY)
+     {
+      size_t s = 0;
+      //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
+      for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
+       if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]))
+        break;
+      }
+      if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
+      {
+       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
+       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
+      }
+      else if (CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
+      {
+       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+      }
+     }//входы
+     else if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || IOP_IGN)
+     { //ставим зашлушки. Неподключенные слоты будут автоматически подключены в CFWIORemappingController::_CheckErrors()
+      CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
+     }
+    }
+    //If ADD_IOx are connected to default plugs, we have to connect ADD_Ix inputs to default plugs also
+    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO1]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1]))
+    {
+     CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I1]);
+     CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I1]);
+    }
+    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO2]))
+    {
+     CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I2]);
+     CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I2]);
+    }
+   }
+   else if (CAST_CDDATA(pDst, iorem.version) == IOV_V00)
+   {//импортируем файл версии V1.0+ в V0.0
+    //not implemented
    }
   }
  }

@@ -23,20 +23,30 @@
 #include "Resources/resource.h"
 #include "IORemappingDlg.h"
 
+namespace {
+CComboBox* _GetCBbyIOSID(const std::map<UINT, std::pair<int, CComboBox*> >& map, int iosId)
+{
+ std::map<UINT, std::pair<int, CComboBox*> >::const_iterator it;
+ for(it = map.begin(); it != map.end(); ++it)
+  if (it->second.first == iosId)
+   return it->second.second;
+ return NULL;
+}
+}
+
 const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
 //See also FirmwareDataMediator.h
 const UINT IOCaptionStart = IDC_IO_REMAPPING_ECF_CAPTION;
-const UINT IOCaptionEnd = IDC_IO_REMAPPING_FE_CAPTION;
+const UINT IOCaptionEnd = IDC_IO_REMAPPING_PS_CAPTION;
 const UINT IOComboboxStart = IDC_IO_REMAPPING_ECF_COMBOBOX;
-const UINT IOComboboxEnd = IDC_IO_REMAPPING_FE_COMBOBOX;
+const UINT IOComboboxEnd = IDC_IO_REMAPPING_PS_COMBOBOX;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
- ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_ECF_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControlsCommon)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -47,14 +57,34 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_enable_secu3t_features(false)
 {
- //empty
+ UINT ctrlId = 0;
+ for(size_t i = 0; i < FWDM::IOS_COUNT; ++i)
+ {
+  //Exclude ADD_I1 and ADD_I2 because they have not to appear in the UI
+  if ((i != FWDM::IOS_ADD_I1) && (i != FWDM::IOS_ADD_I2))
+  {
+   std::pair<int, CComboBox*> value;
+   value.first = FWDM::IOS_ECF + i; //slot ID
+   value.second = new CComboBox();  //MFC object
+   m_iorcb.insert(std::make_pair(IOComboboxStart + ctrlId, value));
+   m_enflg.insert(std::make_pair(IOComboboxStart + ctrlId++, false));
+  }
+ }
+}
+
+CIORemappingDlg::~CIORemappingDlg()
+{
+ std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+  delete (it->second.second);
 }
 
 void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- for(size_t i = 0; i < FWDM::IOS_COUNT; ++i)
-  DDX_Control(pDX, IOComboboxStart + i, m_iorcb[i]);
+ std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+  DDX_Control(pDX, it->first, *(it->second.second));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -73,30 +103,38 @@ BOOL CIORemappingDlg::OnInitDialog()
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CIORemappingDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
+ bool enable_secu3t_features = true;
  switch(pCmdUI->m_nID)
  {
   case IDC_IO_REMAPPING_ADD_IO1_COMBOBOX:
   case IDC_IO_REMAPPING_ADD_IO2_COMBOBOX:
   case IDC_IO_REMAPPING_ADD_IO1_CAPTION:
   case IDC_IO_REMAPPING_ADD_IO2_CAPTION:
-   pCmdUI->Enable(m_enabled && m_enable_secu3t_features);
+   enable_secu3t_features = m_enable_secu3t_features;
    break;
-  default:
-   pCmdUI->Enable(m_enabled);
  };
+ 
+ UINT id = pCmdUI->m_nID;
+ if (pCmdUI->m_nID >= IOCaptionStart && pCmdUI->m_nID <= IOCaptionEnd)
+  id = IOComboboxStart + (pCmdUI->m_nID - IOCaptionStart);
+ pCmdUI->Enable(m_enabled && enable_secu3t_features && m_enflg[id]);
+}
+
+void CIORemappingDlg::OnUpdateControlsCommon(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
 }
 
 void CIORemappingDlg::OnChangeSelection(UINT nID)
-{
- FWDM::IOSid index = (FWDM::IOSid)(nID - IOComboboxStart);
- if (index < FWDM::IOS_COUNT)
+{ 
+ if (m_iorcb.find(nID) != m_iorcb.end())
  {
-  int selection = m_iorcb[index].GetCurSel();
+  int selection = m_iorcb[nID].second->GetCurSel();
   if (CB_ERR != selection)
   {
-   FWDM::IOPid data = (FWDM::IOPid)m_iorcb[index].GetItemData(selection);
+   FWDM::IOPid data = (FWDM::IOPid)m_iorcb[nID].second->GetItemData(selection);
    if (m_OnItemSel)
-    m_OnItemSel(index, data);
+    m_OnItemSel((FWDM::IOSid)m_iorcb[nID].first, data);
   }
  }
 }
@@ -129,12 +167,13 @@ void CIORemappingDlg::Show(bool show)
  
 bool CIORemappingDlg::AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRING& i_text)
 { 
- if (iosId >= FWDM::IOS_COUNT)
+ CComboBox* cb = _GetCBbyIOSID(m_iorcb, iosId);
+ if (!cb)
   return false;
- int iid = m_iorcb[iosId].AddString(i_text.c_str());
+ int iid = cb->AddString(i_text.c_str());
  if (CB_ERR == iid)
   return false;
- iid = m_iorcb[iosId].SetItemData(iid, iopId);
+ iid = cb->SetItemData(iid, iopId);
  if (CB_ERR == iid)
   return false;
  return true; //Ok 
@@ -142,16 +181,16 @@ bool CIORemappingDlg::AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRI
 
 bool CIORemappingDlg::SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId)
 {
- if (iosId >= FWDM::IOS_COUNT)
+ CComboBox* cb = _GetCBbyIOSID(m_iorcb, iosId);
+ if (!cb)
   return false;
-
- int count = m_iorcb[iosId].GetCount();
+ int count = cb->GetCount();
  for(int i = 0; i < count; ++i)
  {
-  DWORD data = m_iorcb[iosId].GetItemData(i);
+  DWORD data = cb->GetItemData(i);
   if (CB_ERR == data || data != iopId)
    continue;
-  m_iorcb[iosId].SetCurSel(i);
+  cb->SetCurSel(i);
   return true; //Ok
  }
  return false; //Not Ok
@@ -159,8 +198,14 @@ bool CIORemappingDlg::SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId)
 
 CIORemappingDlg::FWDM::IOPid CIORemappingDlg::GetSelection(FWDM::IOSid iosId) const
 {
- int selection = m_iorcb[iosId].GetCurSel();
- return (FWDM::IOPid)m_iorcb[iosId].GetItemData(selection);
+ CComboBox* cb = _GetCBbyIOSID(m_iorcb, iosId);
+ ASSERT(cb);
+ if (cb)
+ {
+  int selection = cb->GetCurSel();
+  return (FWDM::IOPid)cb->GetItemData(selection);
+ }
+ return FWDM::IOP_ECF; //error
 }
 
 void CIORemappingDlg::setOnItemSelected(EventItemSel OnFunction)
@@ -171,5 +216,30 @@ void CIORemappingDlg::setOnItemSelected(EventItemSel OnFunction)
 void CIORemappingDlg::EnableSECU3TItems(bool i_enable)
 {
  m_enable_secu3t_features = i_enable;
- UpdateDialogControls(this,TRUE);
+ UpdateDialogControls(this, TRUE);
 }
+
+void CIORemappingDlg::EnableItem(FWDM::IOSid iosId, bool i_enable)
+{
+ std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+ {
+  if (it->second.first == iosId)
+  {
+   m_enflg[it->first] = i_enable;
+   UpdateDialogControls(this, TRUE);
+   return;
+  }
+ }
+}
+
+void CIORemappingDlg::ResetContent(void)
+{
+ std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+  it->second.second->ResetContent();
+ std::map<UINT, bool>::iterator fg;
+ for(fg = m_enflg.begin(); fg != m_enflg.end(); ++fg)
+  fg->second = false;
+}
+

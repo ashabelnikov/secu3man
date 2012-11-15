@@ -35,6 +35,7 @@ class CFWIORemappingController
   CFWIORemappingController(IORVIEW* ip_view);
   virtual ~CFWIORemappingController();
 
+  //Must be called each time when user loads firmware
   void AttachFWDM(FWDM* ip_fwdm);
 
   //начало работы контроллера
@@ -52,9 +53,17 @@ class CFWIORemappingController
   void _UpdateView(void);
   void _AttachPlug(FWDM::IOPid iopId);
   void _AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId);
+  void _AttachPlugToSpecifiedSlot(FWDM::IOPid iopId, FWDM::IOSid iosId);
   void _DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId);
   void _AttachFreeSlotsToDefaultPlugs(void);
   bool _IsSlotFree(FWDM::IOSid iosId);
+  void _PrepareLogic(void);
+  bool _FixRedundantConnections(void);
+  bool _FixInputsVSOutputs(void);
+  bool _IsIOPInput(FWDM::IOPid iopId) const;
+  bool _IsIOSInput(FWDM::IOSid iosId) const;
+  FWDM::IOSid _GetConnectedSlot(FWDM::IOPid iopId, bool init = true);
+  void _DisplayPlugs(void);
   void OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iopId);
 
   CIORemappingDlg* mp_view;

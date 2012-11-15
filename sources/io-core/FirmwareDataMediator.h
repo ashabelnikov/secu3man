@@ -105,24 +105,52 @@ class IOCORE_API CFirmwareDataMediator
   //IDs of plugs 
   enum IOPid
   {
-   IOP_ECF        =   0,     // ECF
-   IOP_ST_BLOCK   =   1,     // ST_BLOCK
-   IOP_IGN_OUT3   =   2,     // IGN_OUT3
-   IOP_IGN_OUT4   =   3,     // IGN_OUT4
-   IOP_ADD_IO1    =   4,     // ADD_IO1     (applicable only in SECU-3T)
-   IOP_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
-   IOP_IE         =   6,     // IE
-   IOP_FE         =   7,     // FE
-   IOP_FL_PUMP    =   8,     // FL_PUMP
-   IOP_HALL_OUT   =   9,     // HALL_OUT
-   IOP_STROBE     =  10,     // STROBE
-   IOP_PWRRELAY   =  11,     // PWRRELAY
-// IOS_RESERVED3  =  11,     // Reserved
-// IOS_RESERVED4  =  12,     // Reserved
-// IOS_RESERVED5  =  13,     // Reserved
-// IOS_RESERVED6  =  14,     // Reserved
-// IOS_RESERVED7  =  15,     // Reserved
-   IOP_COUNT                 // Number of plugs used in I/O remapping
+   IOP_ECF        =   0,     // ECF         (output)
+   IOP_ECFv0      =   0,     // ECF         (output)
+   IOP_ST_BLOCK   =   1,     // ST_BLOCK    (output)
+   IOP_ST_BLOCKv0 =   1,     // ST_BLOCK    (output)
+   IOP_IGN_OUT3   =   2,     // IGN_OUT3    (output)
+   IOP_IGN_OUT3v0 =   2,     // IGN_OUT3    (output)
+   IOP_IGN_OUT4   =   3,     // IGN_OUT4    (output)
+   IOP_IGN_OUT4v0 =   3,     // IGN_OUT4    (output)
+   IOP_ADD_IO1    =   4,     // ADD_IO1     (output)  (applicable only in SECU-3T)
+   IOP_ADD_IO1v0  =   4,     // ADD_IO1     (output)  (applicable only in SECU-3T)
+   IOP_ADD_IO2    =   5,     // ADD_IO2     (output)  (applicable only in SECU-3T)
+   IOP_ADD_IO2v0  =   5,     // ADD_IO2     (output)  (applicable only in SECU-3T)
+   IOP_IE         =   6,     // IE          (output)
+   IOP_IEv0       =   6,     // IE          (output)
+   IOP_FE         =   7,     // FE          (output)
+   IOP_FEv0       =   7,     // FE          (output)
+   IOP_PS         =   8,     // PS          (input)                                  v1.0+
+   IOP_ADD_I1     =   9,     // ADD_IO1     (input)   (applicable only in SECU-3T)   v1.0+
+   IOP_ADD_I2     =  10,     // ADD_IO2     (input)   (applicable only in SECU-3T)   v1.0+
+   IOP_RESERVED1  =  11,     // Reserved    ()
+   IOP_RESERVED2  =  12,     // Reserved    ()
+   IOP_RESERVED3  =  13,     // Reserved    ()
+   IOP_RESERVED4  =  14,     // Reserved    ()
+   IOP_RESERVED5  =  15,     // Reserved    ()
+   IOP_FL_PUMP    =  16,     // FL_PUMP     (output)
+   IOP_FL_PUMPv0  =   8,     // FL_PUMP     (output)
+   IOP_HALL_OUT   =  17,     // HALL_OUT    (output)
+   IOP_HALL_OUTv0 =   9,     // HALL_OUT    (output)
+   IOP_STROBE     =  18,     // STROBE      (output)
+   IOP_STROBEv0   =  10,     // STROBE      (output)
+   IOP_PWRRELAY   =  19,     // PWRRELAY    (output)
+   IOP_PWRRELAYv0 =  11,     // PWRRELAY    (output)
+   IOP_IGN        =  20,     // IGN         (input)                                  v1.0+
+// IOP_RESERVED6  =  21,     // Reserved    ()
+// IOP_RESERVED7  =  22,     // Reserved    ()
+// IOP_RESERVED8  =  23,     // Reserved    ()
+// IOP_RESERVED9  =  24,     // Reserved    ()
+// IOP_RESERVED10 =  25,     // Reserved    ()
+// IOP_RESERVED11 =  26,     // Reserved    ()
+// IOP_RESERVED12 =  27,     // Reserved    ()
+// IOP_RESERVED13 =  28,     // Reserved    ()
+// IOP_RESERVED14 =  29,     // Reserved    ()
+// IOP_RESERVED15 =  30,     // Reserved    ()
+// IOP_RESERVED16 =  31,     // Reserved    ()
+   IOP_COUNT,                // Number of plugs used in I/O remapping
+   IOP_COUNTv0    =  12      // Number of plugs used in I/O remapping (v0.0)
   };
 
   //IDs of slots
@@ -136,15 +164,34 @@ class IOCORE_API CFirmwareDataMediator
    IOS_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
    IOS_IE         =   6,     // IE
    IOS_FE         =   7,     // FE
-// IOS_RESERVED1  =   8,     // Reserved
-// IOS_RESERVED2  =   9,     // Reserved
-   IOS_COUNT                 // Number of slots used for I/O remapping
+   //Added in V1.0:
+   IOS_PS         =   8,     // PS          (input)
+   IOS_ADD_I1     =   9,     // ADD_IO1     (input)
+   IOS_ADD_I2     =  10,     // ADD_IO2     (input) 
+// IOS_RESERVED1  =  11,     // Reserved
+// IOS_RESERVED2  =  12,     // Reserved
+// IOS_RESERVED3  =  13,     // Reserved
+// IOS_RESERVED4  =  14,     // Reserved
+// IOS_RESERVED5  =  15,     // Reserved
+   IOS_COUNT,                // Number of slots used for I/O remapping
+   IOS_COUNTv0    =  8,      // Number of slots used for I/O remapping (v0.0)
+   IOS_NA         =  255     //
+  };
+
+  //Version of I/O remapping logic. Note that major version number changes only
+  //in case of changing of data layout.
+  enum IORemVer
+  {
+   IOV_V00 = 0,              //V0.0
+   IOV_V10 = 0x10            //V1.0
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
   DWORD GetIOSlot(IOXtype type, IOSid id);
-  DWORD GetSStub(void);
+  DWORD GetSStub(void) const;
+  DWORD GetGStub(void) const;
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
+  IORemVer GetIORemVersion(void) const;
 
   bool HasCodeData(const BYTE* i_source_bytes = NULL) const;
   size_t GetOnlyCodeSize(const BYTE* i_bytes) const;
@@ -171,8 +218,8 @@ class IOCORE_API CFirmwareDataMediator
   const std::auto_ptr<PPFlashParam> m_fpp;
   const std::auto_ptr<LocInfoProvider> m_lip;
   const size_t m_firmware_size;
-  BYTE* m_bytes_active;   //байты прошивки (копия для модификации)
-  BYTE* m_bytes_original; //байты прошивки (копия для сравнения)
+  BYTE* mp_bytes_active;   //байты прошивки (копия для модификации)
+  BYTE* mp_bytes_original; //байты прошивки (копия для сравнения)
   bool m_is_opened;
   _TSTRING m_fw_file_name;
   struct cd_data_t* mp_cddata;

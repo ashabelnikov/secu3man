@@ -1222,6 +1222,8 @@ void CFirmwareTabController::OnModificationCheckTimer(void)
 {
  bool modified = m_fwdm->IsModified();
  m_view->SetModified(modified);
+ if (m_fwdm->IsLoaded())
+  m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
 }
 
 void CFirmwareTabController::OnReadFlashFromSECU(void)

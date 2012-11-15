@@ -38,4 +38,6 @@ class IRemapDeskView : public IDeskView
   virtual FWDM::IOPid GetSelection(FWDM::IOSid iosId) const = 0;
   virtual void setOnItemSelected(EventItemSel OnFunction) = 0;
   virtual void EnableSECU3TItems(bool i_enable) = 0;
+  virtual void EnableItem(FWDM::IOSid iosId, bool i_enable) = 0;
+  virtual void ResetContent(void) = 0;
 };
