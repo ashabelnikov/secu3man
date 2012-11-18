@@ -49,6 +49,10 @@ class CFWIORemappingController
   void EnableSECU3TFeatures(bool i_enable);
 
  private:
+  FWDM::IOPid _IOPStart(void);
+  FWDM::IOPid _IOPCount(void);
+  FWDM::IOSid _IOSStart(void);
+  FWDM::IOSid _IOSCount(void);
   bool _CheckErrors(void);
   void _UpdateView(void);
   void _AttachPlug(FWDM::IOPid iopId);
@@ -65,6 +69,7 @@ class CFWIORemappingController
   FWDM::IOSid _GetConnectedSlot(FWDM::IOPid iopId, bool init = true);
   void _DisplayPlugs(void);
   void OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iopId);
+  void OnItemInverted(FWDM::IOSid iosId, bool i_invert);
 
   CIORemappingDlg* mp_view;
   FWDM* mp_fwdm;

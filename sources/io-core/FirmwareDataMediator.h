@@ -105,10 +105,10 @@ class IOCORE_API CFirmwareDataMediator
   //IDs of plugs 
   enum IOPid
   {
-   IOP_ECF        =   0,     // ECF         (output)
-   IOP_ECFv0      =   0,     // ECF         (output)
-   IOP_ST_BLOCK   =   1,     // ST_BLOCK    (output)
-   IOP_ST_BLOCKv0 =   1,     // ST_BLOCK    (output)
+   IOP_START      =   0,
+   IOP_STARTv0    =   0,
+   IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)                                 v1.0+
+   IOP_IGN_OUT2   =   1,     // IGN_OUT2    (output)                                 v1.0+
    IOP_IGN_OUT3   =   2,     // IGN_OUT3    (output)
    IOP_IGN_OUT3v0 =   2,     // IGN_OUT3    (output)
    IOP_IGN_OUT4   =   3,     // IGN_OUT4    (output)
@@ -117,18 +117,20 @@ class IOCORE_API CFirmwareDataMediator
    IOP_ADD_IO1v0  =   4,     // ADD_IO1     (output)  (applicable only in SECU-3T)
    IOP_ADD_IO2    =   5,     // ADD_IO2     (output)  (applicable only in SECU-3T)
    IOP_ADD_IO2v0  =   5,     // ADD_IO2     (output)  (applicable only in SECU-3T)
-   IOP_IE         =   6,     // IE          (output)
+   IOP_ECF        =   6,     // ECF         (output)
+   IOP_ECFv0      =   0,     // ECF         (output)
+   IOP_ST_BLOCK   =   7,     // ST_BLOCK    (output)
+   IOP_ST_BLOCKv0 =   1,     // ST_BLOCK    (output)
+   IOP_IE         =   8,     // IE          (output)
    IOP_IEv0       =   6,     // IE          (output)
-   IOP_FE         =   7,     // FE          (output)
+   IOP_FE         =   9,     // FE          (output)
    IOP_FEv0       =   7,     // FE          (output)
-   IOP_PS         =   8,     // PS          (input)                                  v1.0+
-   IOP_ADD_I1     =   9,     // ADD_IO1     (input)   (applicable only in SECU-3T)   v1.0+
-   IOP_ADD_I2     =  10,     // ADD_IO2     (input)   (applicable only in SECU-3T)   v1.0+
-   IOP_RESERVED1  =  11,     // Reserved    ()
-   IOP_RESERVED2  =  12,     // Reserved    ()
-   IOP_RESERVED3  =  13,     // Reserved    ()
-   IOP_RESERVED4  =  14,     // Reserved    ()
-   IOP_RESERVED5  =  15,     // Reserved    ()
+   IOP_PS         =  10,     // PS          (input)                                  v1.0+
+   IOP_ADD_I1     =  11,     // ADD_IO1     (input)   (applicable only in SECU-3T)   v1.0+
+   IOP_ADD_I2     =  12,     // ADD_IO2     (input)   (applicable only in SECU-3T)   v1.0+
+   IOP_RESERVED1  =  13,     // Reserved    ()
+   IOP_RESERVED2  =  14,     // Reserved    ()
+   IOP_RESERVED3  =  15,     // Reserved    ()
    IOP_FL_PUMP    =  16,     // FL_PUMP     (output)
    IOP_FL_PUMPv0  =   8,     // FL_PUMP     (output)
    IOP_HALL_OUT   =  17,     // HALL_OUT    (output)
@@ -150,29 +152,40 @@ class IOCORE_API CFirmwareDataMediator
 // IOP_RESERVED15 =  30,     // Reserved    ()
 // IOP_RESERVED16 =  31,     // Reserved    ()
    IOP_COUNT,                // Number of plugs used in I/O remapping
-   IOP_COUNTv0    =  12      // Number of plugs used in I/O remapping (v0.0)
+   IOP_COUNTv0    =  12,     // Number of plugs used in I/O remapping (v0.0)
+   IOP_NA         =  255     //
   };
 
   //IDs of slots
   enum IOSid
   {
-   IOS_ECF        =   0,     // ECF
-   IOS_ST_BLOCK   =   1,     // ST_BLOCK
+   IOS_START      =   0,
+   IOS_STARTv0    =   0,
+   IOS_IGN_OUT1   =   0,     // IGN_OUT1                                             v1.0+
+   IOS_IGN_OUT2   =   1,     // IGN_OUT2                                             v1.0+ 
    IOS_IGN_OUT3   =   2,     // IGN_OUT3
+   IOS_IGN_OUT3v0 =   2,     // IGN_OUT3
    IOS_IGN_OUT4   =   3,     // IGN_OUT4
+   IOS_IGN_OUT4v0 =   3,     // IGN_OUT4
    IOS_ADD_IO1    =   4,     // ADD_IO1     (applicable only in SECU-3T)
+   IOS_ADD_IO1v0  =   4,     // ADD_IO1     (applicable only in SECU-3T)
    IOS_ADD_IO2    =   5,     // ADD_IO2     (applicable only in SECU-3T)
-   IOS_IE         =   6,     // IE
-   IOS_FE         =   7,     // FE
+   IOS_ADD_IO2v0  =   5,     // ADD_IO2     (applicable only in SECU-3T)
+   IOS_ECF        =   6,     // ECF
+   IOS_ECFv0      =   0,     // ECF
+   IOS_ST_BLOCK   =   7,     // ST_BLOCK
+   IOS_ST_BLOCKv0 =   1,     // ST_BLOCK
+   IOS_IE         =   8,     // IE
+   IOS_IEv0       =   6,     // IE
+   IOS_FE         =   9,     // FE
+   IOS_FEv0       =   7,     // FE
    //Added in V1.0:
-   IOS_PS         =   8,     // PS          (input)
-   IOS_ADD_I1     =   9,     // ADD_IO1     (input)
-   IOS_ADD_I2     =  10,     // ADD_IO2     (input) 
-// IOS_RESERVED1  =  11,     // Reserved
-// IOS_RESERVED2  =  12,     // Reserved
-// IOS_RESERVED3  =  13,     // Reserved
-// IOS_RESERVED4  =  14,     // Reserved
-// IOS_RESERVED5  =  15,     // Reserved
+   IOS_PS         =  10,     // PS          (input)
+   IOS_ADD_I1     =  11,     // ADD_IO1     (input)
+   IOS_ADD_I2     =  12,     // ADD_IO2     (input) 
+// IOS_RESERVED1  =  13,     // Reserved
+// IOS_RESERVED2  =  14,     // Reserved
+// IOS_RESERVED3  =  15,     // Reserved
    IOS_COUNT,                // Number of slots used for I/O remapping
    IOS_COUNTv0    =  8,      // Number of slots used for I/O remapping (v0.0)
    IOS_NA         =  255     //

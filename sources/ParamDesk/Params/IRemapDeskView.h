@@ -32,6 +32,7 @@ class IRemapDeskView : public IDeskView
  public:
   typedef CFirmwareDataMediator FWDM;
   typedef fastdelegate::FastDelegate2<FWDM::IOSid, FWDM::IOPid> EventItemSel;
+  typedef fastdelegate::FastDelegate2<FWDM::IOSid, bool> EventItemInv;
 
   virtual bool AddItem(FWDM::IOSid iosId, FWDM::IOPid iopId, const _TSTRING& i_text) = 0;
   virtual bool SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId) = 0;
@@ -39,5 +40,8 @@ class IRemapDeskView : public IDeskView
   virtual void setOnItemSelected(EventItemSel OnFunction) = 0;
   virtual void EnableSECU3TItems(bool i_enable) = 0;
   virtual void EnableItem(FWDM::IOSid iosId, bool i_enable) = 0;
+  virtual void EnableInvertion(FWDM::IOSid iosId, bool i_invert) = 0;
   virtual void ResetContent(void) = 0;
+  virtual bool InvertItem(FWDM::IOSid iosId, bool i_invert) = 0;
+  virtual void setOnItemInverted(EventItemInv OnFunction) = 0;
 };

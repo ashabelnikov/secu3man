@@ -20,6 +20,7 @@
 */
 
 #include "stdafx.h"
+#include <map>
 #include "FirmwareDataMediator.h"
 #include "CRC16.h"
 #include "ControlApp.h"    //should be removed - it is nearly unnecessary!
@@ -1257,64 +1258,86 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
   { //incompatible, then try to resolve incompatibility
    if (CAST_CDDATA(pSrc, iorem.version) == IOV_V00)
    { //импортируем файл версии V0.0 в V1.0+
+    std::map<IOPid, IOPid> pidm; //for associating of plug ID from old version to plug ID from new version
+    std::map<IOSid, IOSid> sidm; //for associating of slot ID from old version to slot ID from new version
+    //associate plugs
+    pidm.insert(std::make_pair(IOP_ECF, IOP_ECFv0));
+    pidm.insert(std::make_pair(IOP_ST_BLOCK, IOP_ST_BLOCKv0));
+    pidm.insert(std::make_pair(IOP_IGN_OUT3, IOP_IGN_OUT3v0));
+    pidm.insert(std::make_pair(IOP_IGN_OUT4, IOP_IGN_OUT4v0));
+    pidm.insert(std::make_pair(IOP_ADD_IO1, IOP_ADD_IO1v0));
+    pidm.insert(std::make_pair(IOP_ADD_IO2, IOP_ADD_IO2v0));
+    pidm.insert(std::make_pair(IOP_IE, IOP_IEv0));
+    pidm.insert(std::make_pair(IOP_FE, IOP_FEv0));
+    pidm.insert(std::make_pair(IOP_FL_PUMP, IOP_FL_PUMPv0));
+    pidm.insert(std::make_pair(IOP_HALL_OUT, IOP_HALL_OUTv0));
+    pidm.insert(std::make_pair(IOP_STROBE, IOP_STROBEv0));
+    pidm.insert(std::make_pair(IOP_PWRRELAY, IOP_PWRRELAYv0));
+    //associate slots
+    sidm.insert(std::make_pair(IOS_ECFv0, IOS_ECF));
+    sidm.insert(std::make_pair(IOS_ST_BLOCKv0, IOS_ST_BLOCK));
+    sidm.insert(std::make_pair(IOS_IGN_OUT3v0, IOS_IGN_OUT3));
+    sidm.insert(std::make_pair(IOS_IGN_OUT4v0, IOS_IGN_OUT4));
+    sidm.insert(std::make_pair(IOS_ADD_IO1v0, IOS_ADD_IO1));
+    sidm.insert(std::make_pair(IOS_ADD_IO2v0, IOS_ADD_IO2));
+    sidm.insert(std::make_pair(IOS_IEv0, IOS_IE));
+    sidm.insert(std::make_pair(IOS_FEv0, IOS_FE));
+
     for(size_t p = 0; p < IOREM_PLUGS_NUM(pDst); ++p)
     {
      if (CAST_CDDATA(pDst, iorem.i_plugs[p]) == 0)
       continue; //skip not implemented plugs
 
-     //до IOP_FE включительно индексы совпадают
-     if (p <= IOP_FE)
-     {
-      size_t s = 0;
-      //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
-      for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
-       if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
-        break;
-      } 
-      if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
-      {
-       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
-       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
-      }
-      else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
-      {
-       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-      }
-     }//выходы, индексы которых отличаются в версиях 0 и 1
-     else if (p == IOP_FL_PUMP || p == IOP_HALL_OUT || p == IOP_STROBE || p == IOP_PWRRELAY)
-     {
-      size_t s = 0;
-      //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
-      for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
-       if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]))
-        break;
-      }
-      if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
-      {
-       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
-       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
-      }
-      else if (CAST_CDDATA(pSrc, iorem.i_plugs[p - 8]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
-      {
-       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-      }
-     }//входы
-     else if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || IOP_IGN)
-     { //ставим зашлушки. Неподключенные слоты будут автоматически подключены в CFWIORemappingController::_CheckErrors()
+     //First of all detach each plug, anyway unattached plugs will be attached in CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs()
+     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+
+     //Если входы, то сразу ставим зашлушки, так как в старой версии не было входов
+     //Неподключенные слоты будут автоматически подключены в CFWIORemappingController::_CheckErrors()
+     if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || p == IOP_IGN) { 
       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
      }
+     //Этих двух выходов не было в старой версии, поэтому как и для входов ставим заглушки
+     else if (p == IOP_IGN_OUT1 || p == IOP_IGN_OUT2)
+     {
+      CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);     
+     }
+     //Остальные выходы есть в старой версии
+     else 
+     {
+      size_t s = 0;
+      std::map<IOPid, IOPid>::const_iterator pi = pidm.find((IOPid)p);
+      if (pi != pidm.end()) {
+       //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных (V0.0)
+       for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
+        if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[pi->second]))
+         break;
+       }      
+       if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[pi->second]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
+       {
+        std::map<IOSid, IOSid>::const_iterator si = sidm.find((IOSid)s);
+        if (si != sidm.end()) {
+         CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[si->second]);
+         CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[si->second]);
+        }
+       }
+       else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
+       {
+        CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+        CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+       }
+      }
+     }
     }
     //If ADD_IOx are connected to default plugs, we have to connect ADD_Ix inputs to default plugs also
-    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO1]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1]))
-    {
+    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO1v0]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1v0]) &&
+        CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1v0]) != CAST_CDDATA(pSrc, iorem.s_stub)) {
      CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I1]);
      CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I1]);
     }
-    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO2]))
-    {
+    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2v0]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO2v0]) &&
+        CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2v0]) != CAST_CDDATA(pSrc, iorem.s_stub)) {
      CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I2]);
      CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I2]);
     }

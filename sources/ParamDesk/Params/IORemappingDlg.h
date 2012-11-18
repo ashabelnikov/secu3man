@@ -50,7 +50,10 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void setOnItemSelected(EventItemSel OnFunction);
   virtual void EnableSECU3TItems(bool i_enable);
   virtual void EnableItem(FWDM::IOSid iosId, bool i_enable);
+  virtual void EnableInvertion(FWDM::IOSid iosId, bool i_invert);
   virtual void ResetContent(void);
+  virtual bool InvertItem(FWDM::IOSid iosId, bool i_invert);
+  virtual void setOnItemInverted(EventItemInv OnFunction);
   //-------------------------------------------------------------
 
   // Implementation
@@ -58,8 +61,10 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsChecks(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsCommon(CCmdUI* pCmdUI);
   afx_msg void OnChangeSelection(UINT nID);
+  afx_msg void OnChangeInversion(UINT nID);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -67,8 +72,10 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   bool m_enable_secu3t_features;
 
   EventItemSel m_OnItemSel;
+  EventItemInv m_OnItemInv;
   std::map<UINT, std::pair<int, CComboBox*> > m_iorcb;
-  std::map<UINT, bool> m_enflg;
+  std::map<UINT, std::pair<int, CButton*> > m_iorcm;
+  std::map<UINT, std::pair<bool, bool> > m_enflg;
 };
 
 /////////////////////////////////////////////////////////////////////////////
