@@ -140,8 +140,8 @@ class IOCORE_API CFirmwareDataMediator
    IOP_PWRRELAY   =  19,     // PWRRELAY    (output)
    IOP_PWRRELAYv0 =  11,     // PWRRELAY    (output)
    IOP_IGN        =  20,     // IGN         (input)                                  v1.0+
-// IOP_RESERVED6  =  21,     // Reserved    ()
-// IOP_RESERVED7  =  22,     // Reserved    ()
+   IOP_IGN_OUT7   =  21,     // IGN_OUT7    (output)                                 v1.0+
+   IOP_IGN_OUT8   =  22,     // IGN_OUT8    (output)                                 v1.0+
 // IOP_RESERVED8  =  23,     // Reserved    ()
 // IOP_RESERVED9  =  24,     // Reserved    ()
 // IOP_RESERVED10 =  25,     // Reserved    ()

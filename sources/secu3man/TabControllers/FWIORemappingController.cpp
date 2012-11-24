@@ -316,6 +316,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECF, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ECF, true);
   mp_view->EnableInvertion(FWDM::IOS_ECF, true);
@@ -324,6 +326,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
   mp_view->EnableInvertion(FWDM::IOS_ST_BLOCK, true);
@@ -332,6 +336,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IE, true);
   mp_view->EnableInvertion(FWDM::IOS_IE, true);
@@ -340,6 +346,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_FE, true); 
   mp_view->EnableInvertion(FWDM::IOS_FE, true);
