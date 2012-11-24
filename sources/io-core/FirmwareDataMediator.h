@@ -200,7 +200,7 @@ class IOCORE_API CFirmwareDataMediator
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
-  DWORD GetIOSlot(IOXtype type, IOSid id);
+  DWORD GetIOSlot(IOXtype type, IOSid id, bool inv = false);
   DWORD GetSStub(void) const;
   DWORD GetGStub(void) const;
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);

@@ -53,10 +53,10 @@ class CFWIORemappingController
   FWDM::IOPid _IOPCount(void);
   FWDM::IOSid _IOSStart(void);
   FWDM::IOSid _IOSCount(void);
-  bool _CheckErrors(void);
+  bool _CheckForErrors(void);
   void _UpdateView(void);
   void _AttachPlug(FWDM::IOPid iopId);
-  void _AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId);
+  void _AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId, bool inv = false);
   void _AttachPlugToSpecifiedSlot(FWDM::IOPid iopId, FWDM::IOSid iosId);
   void _DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId);
   void _AttachFreeSlotsToDefaultPlugs(void);
@@ -66,12 +66,15 @@ class CFWIORemappingController
   bool _FixInputsVSOutputs(void);
   bool _IsIOPInput(FWDM::IOPid iopId) const;
   bool _IsIOSInput(FWDM::IOSid iosId) const;
-  FWDM::IOSid _GetConnectedSlot(FWDM::IOPid iopId, bool init = true);
+  FWDM::IOSid _GetConnectedSlot(FWDM::IOPid iopId, bool init, bool& inv);
   void _DisplayPlugs(void);
+  void _SetInvFlag(FWDM::IOSid iosId, bool inv);
+  bool _CmpPnS(FWDM::IOPid pid, FWDM::IOSid sid);
   void OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iopId);
   void OnItemInverted(FWDM::IOSid iosId, bool i_invert);
 
   CIORemappingDlg* mp_view;
   FWDM* mp_fwdm;
   std::map<FWDM::IOSid, FWDM::IOPid> m_defValMap;
+  std::map<FWDM::IOSid, bool> m_invFlags;
 };

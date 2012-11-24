@@ -43,9 +43,11 @@ using namespace SECU3IO::SECU3Types;
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
 #define THERMISTOR_LOOKUP_TABLE_SIZE     16
 
+#define _BIGEND16(v) ((((v) >> 8) & 0x00FF) | (((v) << 8) & 0xFF00))
+
 //We rely that size member is valid in all versions of cd_data_t structure and use it to determine
 //version of the structure.
-#define CAST_CDDATA(ptr, mbr) (((ptr)->size == sizeof(cd_datav0_t)) ? (((cd_datav0_t*)( ((((_uchar*)(ptr)) + sizeof(cd_data_t)) - sizeof(cd_datav0_t)) ))->mbr) : (((cd_data_t*)(ptr))->mbr))
+#define CAST_CDDATA(ptr, mbr) ((_BIGEND16((ptr)->size) == sizeof(cd_datav0_t)) ? (((cd_datav0_t*)( ((((_uchar*)(ptr)) + sizeof(cd_data_t)) - sizeof(cd_datav0_t)) ))->mbr) : (((cd_data_t*)(ptr))->mbr))
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -65,8 +67,21 @@ typedef struct iorem_slotsv0_t
 {
  _uchar size;                    // size of this structure   
  _uchar version;                 // A reserved byte = 0
+
+ //Dirty hack. This version of struct actually has no i_slotsi member,
+ //it is necessary for CAST_CDDATA
+union {
  _fnptr_t i_slots[IOREM_SLOTSv0];// initialization slots
- _fnptr_t v_slots[IOREM_SLOTSv0];// data slots
+ _fnptr_t i_slotsi[IOREM_SLOTSv0];// initialization slots (stub)
+};
+
+ //Dirty hack. This version of struct actually has no v_slotsi member,
+ //it is necessary for CAST_CDDATA
+union {
+ _fnptr_t v_slots[IOREM_SLOTSv0];// data slots            
+ _fnptr_t v_slotsi[IOREM_SLOTSv0];// data slots           (stub)
+};
+
  _fnptr_t i_plugs[IOREM_PLUGSv0];// initialization plugs
  _fnptr_t v_plugs[IOREM_PLUGSv0];// data plugs
  _fnptr_t s_stub;                // special pointer used as stub
@@ -95,10 +110,12 @@ typedef struct cd_datav0_t
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
- _uchar size;                    // size of this structure   
+ _uint size;                     // size of this structure   
  _uchar version;                 // A reserved byte
  _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
+ _fnptr_t i_slotsi[IOREM_SLOTS]; // initialization slots (inverted)
  _fnptr_t v_slots[IOREM_SLOTS];  // data slots
+ _fnptr_t v_slotsi[IOREM_SLOTS]; // data slots           (inverted)
  _fnptr_t i_plugs[IOREM_PLUGS];  // initialization plugs
  _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
  _fnptr_t s_stub;                // special pointer used as stub (for outputs)
@@ -115,9 +132,9 @@ typedef struct cd_data_t
  //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
  _ulong config;
 
- _uchar reserved[2];             //two reserved bytes
+ _uchar reserved;                //A reserved byte
 
- _uchar size;                    // size of this structure
+ _uint size;                     // size of this structure (2 bytes, big-endian format)
 }cd_data_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -233,7 +250,7 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlash
  int sizeoffd = p_fd->def_param.crc;
 
  //size of code area data (must be valid if def_param.crc > 0)
- BYTE sizeofcd = i_data[lip.FIRMWARE_DATA_START - 1];
+ _uint sizeofcd = _BIGEND16(*(((_uint*)&i_data[lip.FIRMWARE_DATA_START])-1));
 
  cd_data_t* p_cd = (cd_data_t*)&i_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
  size_t iorem_struct_size = (sizeofcd == sizeof(cd_datav0_t)) ? sizeof(iorem_slotsv0_t) : sizeof(iorem_slots_t);
@@ -1106,7 +1123,7 @@ DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
  return value;
 }
 
-DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
+DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id, bool inv)
 {
  if (!mp_cddata)
   return 0;
@@ -1115,11 +1132,11 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id)
  {
   case IOX_INIT:
    if (id < IOS_COUNT_NUM(mp_cddata))
-    value = CAST_CDDATA(mp_cddata, iorem.i_slots[id]); 
+    value = inv ? CAST_CDDATA(mp_cddata, iorem.i_slotsi[id]) : CAST_CDDATA(mp_cddata, iorem.i_slots[id]);
    break;
   case IOX_DATA:
    if (id < IOS_COUNT_NUM(mp_cddata))
-    value = CAST_CDDATA(mp_cddata, iorem.v_slots[id]); 
+    value = inv ? CAST_CDDATA(mp_cddata, iorem.v_slotsi[id]) : CAST_CDDATA(mp_cddata, iorem.v_slots[id]); 
    break;
  }
  return value;
@@ -1220,7 +1237,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
  { //code area data is present
   const BYTE *p_dataSrc = (i_source_bytes + i_srcSize) - dataSizeSrc;
   BYTE *p_dataDst = (o_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
-  size_t szSrc = *(p_dataSrc-1), szDst = *(p_dataDst-1);
+  size_t szSrc = _BIGEND16(*(((_uint*)p_dataSrc)-1)), szDst = _BIGEND16(*(((_uint*)p_dataDst)-1));
   cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t)); //must be casted!
   cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t)); //must be casted!
   if (szSrc == szDst) //compatible?
@@ -1233,15 +1250,20 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
      continue; //skip not implemented plugs
     size_t s = 0;
     //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
+    bool inv = false;
     for(; s < IOREM_SLOTS_NUM(pSrc); ++s)
     {
      if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
       break;
+     if (CAST_CDDATA(pSrc, iorem.i_slotsi[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
+     { inv = true; break; }
     }
+    //Для V0.0 не имеет значения какой слот будет получен, так как и прямой и инверсный слоты это один и тот же слот
+    //так как используется union
     if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
     {
-     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[s]);
-     CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[s]);
+     CAST_CDDATA(pDst, iorem.i_plugs[p]) = inv ? CAST_CDDATA(pDst, iorem.i_slotsi[s]) : CAST_CDDATA(pDst, iorem.i_slots[s]);
+     CAST_CDDATA(pDst, iorem.v_plugs[p]) = inv ? CAST_CDDATA(pDst, iorem.v_slotsi[s]) : CAST_CDDATA(pDst, iorem.v_slots[s]);
     }
     else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
     {

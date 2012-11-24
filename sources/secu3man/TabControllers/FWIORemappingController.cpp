@@ -108,7 +108,7 @@ void CFWIORemappingController::AttachFWDM(FWDM* ip_fwdm)
 
  _PrepareLogic();
 
- _CheckErrors();
+ _CheckForErrors();
 
  _UpdateView();
 }
@@ -151,9 +151,16 @@ void CFWIORemappingController::OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iop
  _UpdateView();
 }
 
+//This method is suitable for V1.0+ (not for V0.0, because inversion checkboxes are disabled)
 void CFWIORemappingController::OnItemInverted(FWDM::IOSid iosId, bool i_invert)
 {
- //todo
+ _SetInvFlag(iosId, i_invert); //update inversion flags
+
+ //Get ID of plug currently connected to slot with identified by iosId
+ FWDM::IOPid iopId = mp_view->GetSelection(iosId);
+
+ //reattach corresponding plug 
+ _AttachPlugToSpecifiedSlot(iopId, iosId);
 }
 
 void CFWIORemappingController::_PrepareLogic(void)
@@ -233,6 +240,11 @@ void CFWIORemappingController::_PrepareLogic(void)
  }
  else
  { //v1.0+
+  //Set inversion flags to default values
+  m_invFlags.clear();
+  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
+   m_invFlags.insert(std::make_pair((FWDM::IOSid)s, false));
+
   m_defValMap.clear();
   m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1));
   m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2));
@@ -339,6 +351,7 @@ void CFWIORemappingController::_PrepareLogic(void)
  }
 }
 
+//Note that this function uses default inversion values from m_invFlags map.
 void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
 {
  FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
@@ -368,7 +381,10 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
   //attach
   std::map<FWDM::IOPid, FWDM::IOSid>::const_iterator it = attachList.begin();
   for(; it != attachList.end(); ++it)
-   _AttachPlug(it->first, it->second); //default
+  {
+   bool inv = m_invFlags[it->second];
+   _AttachPlug(it->first, it->second, inv); //default
+  }
  } 
 }
 
@@ -387,21 +403,20 @@ bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
  }
  else
  {//V1.0+
-  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
   for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
   {  
    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
    if (plug == 0)
     continue; //skip reserved plugs
-   if (plug == slot)
+   if (_CmpPnS((FWDM::IOPid)p, iosId))
     return false; //already connected to one of plugs
    //Если входы ADD_Ix не свободны, то выходы ADD_IOx тоже не считаем свободными (и наоборот), в противном случае
    //будет назначен выход по умолчанию и он будет мешать работе входа
-   if ((iosId == FWDM::IOS_ADD_IO1 && plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1)) ||
-      (iosId == FWDM::IOS_ADD_I1 && plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_IO1)))    
+   if ((iosId == FWDM::IOS_ADD_IO1 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I1)) ||
+      (iosId == FWDM::IOS_ADD_I1   && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_IO1)))    
     return false; //already connected to one of plugs
-   if ((iosId == FWDM::IOS_ADD_IO2 && plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2)) ||
-      (iosId == FWDM::IOS_ADD_I2 && plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_IO2)))
+   if ((iosId == FWDM::IOS_ADD_IO2 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I2)) ||
+      (iosId == FWDM::IOS_ADD_I2   && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_IO2)))
     return false; //already connected to one of plugs
   } 
  }
@@ -423,9 +438,6 @@ void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
  }
  else
  {//V1.0+
-  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
-  DWORD slot_add_i1 = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1);
-  DWORD slot_add_i2 = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2);
   for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
   {
    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
@@ -433,7 +445,9 @@ void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
     continue; //skip reserved plugs
    //Если происходит отключение ADD_IO1, то нужно также отключить ADD_I1;
    //Если происходит отключение ADD_IO2, то нужно также отключить ADD_I2;
-   if((plug == slot) || (iosId == FWDM::IOS_ADD_IO1 && plug == slot_add_i1) || (iosId == FWDM::IOS_ADD_IO2 && plug == slot_add_i2))
+   if( _CmpPnS((FWDM::IOPid)p, iosId) ||
+      (iosId == FWDM::IOS_ADD_IO1 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I1)) ||
+      (iosId == FWDM::IOS_ADD_IO2 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I2)))
     _AttachPlug((FWDM::IOPid)p); //stub
   }
  }
@@ -460,16 +474,27 @@ void CFWIORemappingController::_UpdateView(void)
  {//V1.0+
   for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
   {  
-   DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s);
-   DWORD slot_add_i1 = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1);
-   DWORD slot_add_i2 = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2);
+   DWORD slot[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, true)};
+   DWORD slot_add_i1[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1, true)};
+   DWORD slot_add_i2[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2, true)};
    for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
    {
     DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
     //If slot == stub, then it is not allowed in this firmware
-    if ((slot != mp_fwdm->GetSStub()) && ((slot == plug) || (s == FWDM::IOS_ADD_IO1 && plug == slot_add_i1) ||
-        (s == FWDM::IOS_ADD_IO2 && plug == slot_add_i2)))
+    if ((slot[0] != mp_fwdm->GetSStub()) && ((slot[0] == plug) || (s == FWDM::IOS_ADD_IO1 && plug == slot_add_i1[0]) ||
+        (s == FWDM::IOS_ADD_IO2 && plug == slot_add_i2[0])))
+    {
      mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
+     mp_view->InvertItem((FWDM::IOSid)s, false);
+     _SetInvFlag((FWDM::IOSid)s, false); //update inversion flags
+    }
+    else if ((slot[1] != mp_fwdm->GetSStub()) && ((slot[1] == plug) || (s == FWDM::IOS_ADD_IO1 && plug == slot_add_i1[1]) ||
+        (s == FWDM::IOS_ADD_IO2 && plug == slot_add_i2[1])))
+    {
+     mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
+     mp_view->InvertItem((FWDM::IOSid)s, true);
+     _SetInvFlag((FWDM::IOSid)s, true); //update inversion flags
+    }
    }
   }
  }
@@ -500,23 +525,24 @@ void CFWIORemappingController::_AttachPlugToSpecifiedSlot(FWDM::IOPid iopId, FWD
   _AttachPlug(iopId, _IOStV0(iosId));
  else
  {//V1.0+
+  bool inv = m_invFlags[iosId];
   if (_IsIOPInput(iopId) && iosId == FWDM::IOS_ADD_IO1)
-   _AttachPlug(iopId, FWDM::IOS_ADD_I1); //substitute IOS_ADD_IO1 to IOS_ADD_I1
+   _AttachPlug(iopId, FWDM::IOS_ADD_I1, inv); //substitute IOS_ADD_IO1 to IOS_ADD_I1
   else if (_IsIOPInput(iopId) && iosId == FWDM::IOS_ADD_IO2)
-   _AttachPlug(iopId, FWDM::IOS_ADD_I2); //substitute IOS_ADD_IO2 to IOS_ADD_I2
+   _AttachPlug(iopId, FWDM::IOS_ADD_I2, inv); //substitute IOS_ADD_IO2 to IOS_ADD_I2
   else if (iopId == FWDM::IOP_ADD_IO1)   //when connecting ADD_IO1 plug back to ADD_IO1 slot we also have to connect ADD_I1
-   _AttachPlug(FWDM::IOP_ADD_IO1, iosId), _AttachPlug(FWDM::IOP_ADD_I1, FWDM::IOS_ADD_I1);
+   _AttachPlug(FWDM::IOP_ADD_IO1, iosId, inv), _AttachPlug(FWDM::IOP_ADD_I1, FWDM::IOS_ADD_I1, inv);
   else if (iopId == FWDM::IOP_ADD_IO2)   //when connecting ADD_IO1 plug back to ADD_IO1 slot we also have to connect ADD_I1
-   _AttachPlug(FWDM::IOP_ADD_IO2, iosId), _AttachPlug(FWDM::IOP_ADD_I2, FWDM::IOS_ADD_I2);
+   _AttachPlug(FWDM::IOP_ADD_IO2, iosId, inv), _AttachPlug(FWDM::IOP_ADD_I2, FWDM::IOS_ADD_I2, inv);
   else
-   _AttachPlug(iopId, iosId);
+   _AttachPlug(iopId, iosId, inv);
  }
 }
 
-void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId)
+void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId, bool inv /*=false*/)
 {
- mp_fwdm->SetIOPlug(FWDM::IOX_INIT, iopId, mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId));
- mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetIOSlot(FWDM::IOX_DATA, iosId));
+ mp_fwdm->SetIOPlug(FWDM::IOX_INIT, iopId, mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId, inv));
+ mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetIOSlot(FWDM::IOX_DATA, iosId, inv));
 }
 
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
@@ -527,6 +553,26 @@ bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
 {
  return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2);
+}
+
+void CFWIORemappingController::_SetInvFlag(FWDM::IOSid iosId, bool inv)
+{
+ m_invFlags[iosId] = inv;
+ if (iosId == FWDM::IOS_ADD_IO1)
+  m_invFlags[FWDM::IOS_ADD_I1] = inv;
+ else if (iosId == FWDM::IOS_ADD_IO2)
+  m_invFlags[FWDM::IOS_ADD_I2] = inv;
+ else if (iosId == FWDM::IOS_ADD_I1)
+  m_invFlags[FWDM::IOS_ADD_IO1] = inv;
+ else if (iosId == FWDM::IOS_ADD_I2)
+  m_invFlags[FWDM::IOS_ADD_IO2] = inv; 
+}
+
+bool CFWIORemappingController::_CmpPnS(FWDM::IOPid pid, FWDM::IOSid sid)
+{
+ DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, pid);
+ return (plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, sid, false) ||
+         plug == mp_fwdm->GetIOSlot(FWDM::IOX_INIT, sid, true));
 }
 
 bool CFWIORemappingController::_FixRedundantConnections(void)
@@ -574,15 +620,17 @@ bool CFWIORemappingController::_FixInputsVSOutputs(void)
   int plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
   if (plug == 0 || plug == mp_fwdm->GetSStub())
    continue; //skip reserved plugs or plugs which are not utilized in SECU-3
-  
-  FWDM::IOSid sId = _GetConnectedSlot((FWDM::IOPid)p, true); //init
+
+  bool inv = false;  
+  FWDM::IOSid sId = _GetConnectedSlot((FWDM::IOPid)p, true, inv); //init
   if ((sId != FWDM::IOS_NA) && ((_IsIOPInput((FWDM::IOPid)p) && !_IsIOSInput((FWDM::IOSid)sId)) ||
       (!_IsIOPInput((FWDM::IOPid)p) &&  _IsIOSInput((FWDM::IOSid)sId))))
   {
     _AttachPlug((FWDM::IOPid)p); //fix using a stub
     result = false;
   }
-  sId = _GetConnectedSlot((FWDM::IOPid)p, false); //data
+  inv = false;
+  sId = _GetConnectedSlot((FWDM::IOPid)p, false, inv); //data
   if ((sId != FWDM::IOS_NA) && ((_IsIOPInput((FWDM::IOPid)p) && !_IsIOSInput((FWDM::IOSid)sId)) ||
       (!_IsIOPInput((FWDM::IOPid)p) &&  _IsIOSInput((FWDM::IOSid)sId))))
   {
@@ -593,7 +641,7 @@ bool CFWIORemappingController::_FixInputsVSOutputs(void)
  return result;
 }
 
-bool CFWIORemappingController::_CheckErrors(void)
+bool CFWIORemappingController::_CheckForErrors(void)
 {
  //Check and disconnect plugs if they are redundant
  bool result = _FixRedundantConnections();
@@ -610,16 +658,17 @@ bool CFWIORemappingController::_CheckErrors(void)
  return true;
 }
 
-FWDM::IOSid CFWIORemappingController::_GetConnectedSlot(FWDM::IOPid iopId, bool init /*=true*/)
+FWDM::IOSid CFWIORemappingController::_GetConnectedSlot(FWDM::IOPid iopId, bool init, bool&  inv)
 {
  DWORD plug = mp_fwdm->GetIOPlug(init ? FWDM::IOX_INIT : FWDM::IOX_DATA, iopId);
  for(int s = _IOSStart(); s < _IOSCount(); ++s)
  {
-  DWORD slot = mp_fwdm->GetIOSlot(init ? FWDM::IOX_INIT : FWDM::IOX_DATA, (FWDM::IOSid)s);
-  if (slot == mp_fwdm->GetSStub() || slot == mp_fwdm->GetGStub())
-   continue; //skip not unilized slots
-  if (plug == slot)
-   return (FWDM::IOSid)s;
+  FWDM::IOXtype iotype = init ? FWDM::IOX_INIT : FWDM::IOX_DATA;
+  DWORD slot[2] = {mp_fwdm->GetIOSlot(iotype, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(iotype, (FWDM::IOSid)s, true)};
+  if (slot[0] == mp_fwdm->GetSStub() || slot[0] == mp_fwdm->GetGStub())
+   continue; //skip not utilized slots
+  if (plug == slot[0]) { inv = false; return (FWDM::IOSid)s; }
+  else if (plug == slot[1]) { inv = true; return (FWDM::IOSid)s; }
  }
  return FWDM::IOS_NA; //there is no slot connected to specified plug
 }
@@ -660,10 +709,11 @@ void CFWIORemappingController::_DisplayPlugs(void)
  {
   FWDM::IOSid sId;
   CString str_i, str_d;
-  sId = _GetConnectedSlot((FWDM::IOPid)p, true);
+  bool inv = false;
+  sId = _GetConnectedSlot((FWDM::IOPid)p, true, inv); //init
   it = names.find(sId);
   if (sId != FWDM::IOS_NA && it != names.end())
-   str_i = it->second.c_str();
+   str_i = inv ? (_TSTRING(_T("~"))+it->second).c_str() : it->second.c_str();
   else
   {
    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
@@ -674,10 +724,11 @@ void CFWIORemappingController::_DisplayPlugs(void)
    else
     str_i = _T("?");
   }
-  sId = _GetConnectedSlot((FWDM::IOPid)p, false);
+  inv = false;
+  sId = _GetConnectedSlot((FWDM::IOPid)p, false, inv); //data
   it = names.find(sId);
   if (sId != FWDM::IOS_NA && it != names.end())
-   str_d = it->second.c_str();
+   str_d = inv ? (_TSTRING(_T("~"))+it->second).c_str() : it->second.c_str();
   else
   {
    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_DATA, (FWDM::IOPid)p);
