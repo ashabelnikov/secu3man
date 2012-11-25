@@ -225,15 +225,20 @@ bool CIORemappingDlg::SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId)
  CComboBox* cb = _GetCBbyIOSID(m_iorcb, iosId);
  if (!cb)
   return false;
- int count = cb->GetCount();
- for(int i = 0; i < count; ++i)
+ if (iopId != FWDM::IOP_NA)
  {
-  DWORD data = cb->GetItemData(i);
-  if (CB_ERR == data || data != iopId)
-   continue;
-  cb->SetCurSel(i);
-  return true; //Ok
+  int count = cb->GetCount();
+  for(int i = 0; i < count; ++i)
+  {
+   DWORD data = cb->GetItemData(i);
+   if (CB_ERR == data || data != iopId)
+    continue;
+   cb->SetCurSel(i);
+   return true; //Ok
+  }
  }
+ else
+  cb->SetCurSel(-1);
  return false; //Not Ok
 }
 
@@ -274,7 +279,7 @@ void CIORemappingDlg::EnableItem(FWDM::IOSid iosId, bool i_enable)
  }
 }
 
-void CIORemappingDlg::EnableInvertion(FWDM::IOSid iosId, bool i_invert)
+void CIORemappingDlg::EnableInversion(FWDM::IOSid iosId, bool i_invert)
 {
  std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
  for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)

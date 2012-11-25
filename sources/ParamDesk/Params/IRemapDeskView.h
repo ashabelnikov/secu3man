@@ -40,7 +40,7 @@ class IRemapDeskView : public IDeskView
   virtual void setOnItemSelected(EventItemSel OnFunction) = 0;
   virtual void EnableSECU3TItems(bool i_enable) = 0;
   virtual void EnableItem(FWDM::IOSid iosId, bool i_enable) = 0;
-  virtual void EnableInvertion(FWDM::IOSid iosId, bool i_invert) = 0;
+  virtual void EnableInversion(FWDM::IOSid iosId, bool i_invert) = 0;
   virtual void ResetContent(void) = 0;
   virtual bool InvertItem(FWDM::IOSid iosId, bool i_invert) = 0;
   virtual void setOnItemInverted(EventItemInv OnFunction) = 0;

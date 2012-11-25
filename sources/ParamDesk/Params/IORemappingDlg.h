@@ -50,7 +50,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void setOnItemSelected(EventItemSel OnFunction);
   virtual void EnableSECU3TItems(bool i_enable);
   virtual void EnableItem(FWDM::IOSid iosId, bool i_enable);
-  virtual void EnableInvertion(FWDM::IOSid iosId, bool i_invert);
+  virtual void EnableInversion(FWDM::IOSid iosId, bool i_invert);
   virtual void ResetContent(void);
   virtual bool InvertItem(FWDM::IOSid iosId, bool i_invert);
   virtual void setOnItemInverted(EventItemInv OnFunction);

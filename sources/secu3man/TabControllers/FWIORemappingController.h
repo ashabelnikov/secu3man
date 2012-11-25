@@ -67,6 +67,7 @@ class CFWIORemappingController
   bool _IsIOPInput(FWDM::IOPid iopId) const;
   bool _IsIOSInput(FWDM::IOSid iosId) const;
   FWDM::IOSid _GetConnectedSlot(FWDM::IOPid iopId, bool init, bool& inv);
+  void _EnableInversionItems(void);
   void _DisplayPlugs(void);
   void _SetInvFlag(FWDM::IOSid iosId, bool inv);
   bool _CmpPnS(FWDM::IOPid pid, FWDM::IOSid sid);
