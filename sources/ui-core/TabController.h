@@ -89,6 +89,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
   CTabDialog*  mp_CurDlg;
   HMODULE m_hResourceModule;
+  HMODULE _GetResourceModule(void);
   ITabControllerEvent* m_pEventHandler;
 
   int   m_tab_item_index;

@@ -58,7 +58,7 @@ CTabController::CTabController()
 , m_pEventHandler(NULL)
 , m_hResourceModule(NULL)
 {
- m_hResourceModule = AfxGetInstanceHandle();
+ //empty
 }
 
 CTabController::~CTabController()
@@ -181,14 +181,14 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
  if (pPageDlg) //our control is able to work without dialogs
  {
   //создание шаблона диалога
-  HRSRC hrsrc  = FindResource(m_hResourceModule,pPageDlg->GetDialogID(), RT_DIALOG);
+  HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
   if (NULL==hrsrc)
   {
    AfxMessageBox(_T("Resource not found!"));
    return -1;  //error
   }
 
-  HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc);
+  HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
   if (NULL==hglb)
   {
    AfxMessageBox(_T("Resource load failed!"));
@@ -216,14 +216,14 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
  pPageData->is_enabled = true; //by default - item has been enabled
 
  //создание шаблона диалога
- HRSRC hrsrc  = FindResource(m_hResourceModule,pPageDlg->GetDialogID(), RT_DIALOG);
+ HRSRC hrsrc  = FindResource(_GetResourceModule(), pPageDlg->GetDialogID(), RT_DIALOG);
  if (NULL==hrsrc)
  {
   AfxMessageBox(_T("Resource not found!"));
   return -1; //error
  }
 
- HGLOBAL hglb = LoadResource(m_hResourceModule, hrsrc);
+ HGLOBAL hglb = LoadResource(_GetResourceModule(), hrsrc);
  if (NULL==hglb)
  {
   AfxMessageBox(_T("Resource load failed!"));
@@ -592,6 +592,13 @@ void CTabController::SetMsgReflection(bool reflect)
 void CTabController::SetResourceModule(HMODULE hModule)
 {
  m_hResourceModule = hModule;
+}
+
+HMODULE CTabController::_GetResourceModule(void)
+{
+ if (!m_hResourceModule)
+  m_hResourceModule = AfxGetInstanceHandle();
+ return m_hResourceModule;
 }
 
 CTabDialog* CTabController::GetCurrentPage(void) const
