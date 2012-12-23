@@ -61,28 +61,28 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,10,133,14,ES_READONLY | 
+    EDITTEXT        IDC_FW_FW_NAME,14,10,133,14,ES_READONLY | 
                     NOT WS_BORDER,WS_EX_STATICEDGE
-    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,10,77,14,
+    LTEXT           "CRC16: 16EF/16EF",IDC_FW_CRC,153,10,77,14,
                     0,WS_EX_STATICEDGE
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,29,129,16,
+    EDITTEXT        IDC_FW_FW_INFORMATION,75,29,129,16,
                     ES_AUTOHSCROLL
-    PUSHBUTTON      "Опц.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,29,22,17
+    PUSHBUTTON      "Опц.",IDC_FW_VIEW_FWOPT,209,29,22,17
     CONTROL         "Прошивать только код (без данных)",
-                    IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
+                    IDC_FW_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,197,86,17
     CONTROL         "Boot loader запущен аварийно (установлена перемычка)",
-                    IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
+                    IDC_FW_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,195,122,
                     21
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME | 
+    CONTROL         "",IDC_FW_PD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,262,10,164,176
     CTEXT           "Доп. информ.\nо прошивке:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_CAPTION,14,29,56,18
-    LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
+                    IDC_FW_FW_INFORMATION_CAPTION,14,29,56,18
+    LTEXT           "",IDC_FW_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FW_TD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,12,48,214,128
-    CONTROL         "tab",IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB,
+    CONTROL         "tab",IDC_FW_PARAM_SEL_TAB,
                     "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,
                     450,70,15,140
 END
@@ -163,25 +163,25 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Установить все",IDC_CHECK_ENGINE_LIST_SETALL_BUTTON,52,
+    PUSHBUTTON      "Установить все",IDC_CE_LIST_SETALL_BUTTON,52,
                     13,65,16
-    PUSHBUTTON      "Сбросить все",IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON,135,
+    PUSHBUTTON      "Сбросить все",IDC_CE_LIST_CLEARALL_BUTTON,135,
                     13,65,16
-    CONTROL         "List1",IDC_CHECK_ENGINE_ERRORS_LIST,"SysListView32",
+    CONTROL         "List1",IDC_CE_ERRORS_LIST,"SysListView32",
                     LVS_REPORT | WS_BORDER | WS_TABSTOP,53,34,356,102
     PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",
-                    IDC_CHECK_ENGINE_READ_ERRORS_BUTTON,59,144,102,28,
+                    IDC_CE_READ_ERRORS_BUTTON,59,144,102,28,
                     BS_MULTILINE
     PUSHBUTTON      "ЗАПИСАТЬ сохраненные ошибки",
-                    IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON,179,144,101,28,
+                    IDC_CE_WRITE_ERRORS_BUTTON,179,144,101,28,
                     BS_MULTILINE
     CONTROL         "Считывать ошибки в реальном времени",
-                    IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX,"Button",
+                    IDC_CE_READ_REALTIME_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
-    LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
+    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,180,347,32
     CONTROL         "Показывать ошибки с инертностью",
-                    IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX,"Button",
+                    IDC_CE_READ_INERTNESS_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,250,18,138,10
 END
 
@@ -574,28 +574,28 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_NAME,14,10,133,14,ES_READONLY | 
+    EDITTEXT        IDC_FW_FW_NAME,14,10,133,14,ES_READONLY | 
                     NOT WS_BORDER,WS_EX_STATICEDGE
-    LTEXT           "CRC16: 16EF/16EF",IDC_FIRMWARE_SUPPORT_CRC,153,10,77,14,
+    LTEXT           "CRC16: 16EF/16EF",IDC_FW_CRC,153,10,77,14,
                     0,WS_EX_STATICEDGE
-    EDITTEXT        IDC_FIRMWARE_SUPPORT_FW_INFORMATION,75,29,129,16,
+    EDITTEXT        IDC_FW_FW_INFORMATION,75,29,129,16,
                     ES_AUTOHSCROLL
-    PUSHBUTTON      "Opt.",IDC_FIRMWARE_SUPPORT_VIEW_FWOPT,209,29,22,17
+    PUSHBUTTON      "Opt.",IDC_FW_VIEW_FWOPT,209,29,22,17
     CONTROL         "Program only code (without data)",
-                    IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE,"Button",
+                    IDC_FW_PROG_ONLY_CODE,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,197,86,17
     CONTROL         "Boot loader been launched emergency (jumper set)",
-                    IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY,"Button",
+                    IDC_FW_BL_STARTED_EMERGENCY,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,108,195,122,
                     21
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_PD_FRAME,"Static",SS_BLACKFRAME | 
+    CONTROL         "",IDC_FW_PD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,262,10,164,176
     CTEXT           "Addit. inform.\nabout firmware:",
-                    IDC_FIRMWARE_SUPPORT_FW_INFORMATION_CAPTION,14,29,56,18
-    LTEXT           "",IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG,233,14,8,15
-    CONTROL         "",IDC_FIRMWARE_SUPPORT_TD_FRAME,"Static",SS_BLACKFRAME | 
+                    IDC_FW_FW_INFORMATION_CAPTION,14,29,56,18
+    LTEXT           "",IDC_FW_MODIFICATION_FLAG,233,14,8,15
+    CONTROL         "",IDC_FW_TD_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,12,48,214,128
-    CONTROL         "tab",IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB,
+    CONTROL         "tab",IDC_FW_PARAM_SEL_TAB,
                     "SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS | TCS_OWNERDRAWFIXED,
                     450,70,15,140
 END
@@ -675,24 +675,24 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Set All",IDC_CHECK_ENGINE_LIST_SETALL_BUTTON,52,13,65,
+    PUSHBUTTON      "Set All",IDC_CE_LIST_SETALL_BUTTON,52,13,65,
                     16
-    PUSHBUTTON      "Reset All",IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON,135,13,
+    PUSHBUTTON      "Reset All",IDC_CE_LIST_CLEARALL_BUTTON,135,13,
                     65,16
-    CONTROL         "List1",IDC_CHECK_ENGINE_ERRORS_LIST,"SysListView32",
+    CONTROL         "List1",IDC_CE_ERRORS_LIST,"SysListView32",
                     LVS_REPORT | WS_BORDER | WS_TABSTOP,53,34,356,102
-    PUSHBUTTON      "READ saved errors",IDC_CHECK_ENGINE_READ_ERRORS_BUTTON,
+    PUSHBUTTON      "READ saved errors",IDC_CE_READ_ERRORS_BUTTON,
                     59,144,102,28,BS_MULTILINE
     PUSHBUTTON      "WRITE saved errors",
-                    IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON,179,144,101,28,
+                    IDC_CE_WRITE_ERRORS_BUTTON,179,144,101,28,
                     BS_MULTILINE
     CONTROL         "Read errors in realtime",
-                    IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX,"Button",
+                    IDC_CE_READ_REALTIME_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,146,97,
                     22
-    LTEXT           "Quick help",IDC_CHECK_ENGINE_QUICK_HELP,49,180,347,32
+    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,180,347,32
     CONTROL         "Show errors with inertness",
-                    IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX,"Button",
+                    IDC_CE_READ_INERTNESS_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,250,18,138,10
 END
 

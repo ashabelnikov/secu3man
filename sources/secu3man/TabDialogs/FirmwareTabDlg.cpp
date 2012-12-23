@@ -68,14 +68,14 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, m_bl_started_emergency);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, m_fw_options_btn);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_INFORMATION,m_fw_information_edit);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_FW_NAME,m_fw_name);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_CRC, m_fw_crc);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_MODIFICATION_FLAG, m_modification_flag);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, m_prog_only_code_checkbox);
- DDX_Control(pDX, IDC_FIRMWARE_SUPPORT_PARAM_SEL_TAB, m_param_sel_tab);
+ DDX_Control(pDX, IDC_FW_BL_STARTED_EMERGENCY, m_bl_started_emergency);
+ DDX_Control(pDX, IDC_FW_VIEW_FWOPT, m_fw_options_btn);
+ DDX_Control(pDX, IDC_FW_FW_INFORMATION,m_fw_information_edit);
+ DDX_Control(pDX, IDC_FW_FW_NAME,m_fw_name);
+ DDX_Control(pDX, IDC_FW_CRC, m_fw_crc);
+ DDX_Control(pDX, IDC_FW_MODIFICATION_FLAG, m_modification_flag);
+ DDX_Control(pDX, IDC_FW_PROG_ONLY_CODE, m_prog_only_code_checkbox);
+ DDX_Control(pDX, IDC_FW_PARAM_SEL_TAB, m_param_sel_tab);
 }
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
@@ -95,16 +95,16 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_WRITE_EEPROM_FROM_FILE, OnWriteEepromFromFile)
  ON_COMMAND(IDM_READ_FLASH_TO_FILE, OnReadFlashToFile)
  ON_COMMAND(IDM_WRITE_FLASH_FROM_FILE, OnWriteFlashFromFile)
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnUpdateBLStartedEmergency)
- ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_BL_STARTED_EMERGENCY, OnFirmwareSupportBlStartedEmergency)
+ ON_UPDATE_COMMAND_UI(IDC_FW_BL_STARTED_EMERGENCY, OnUpdateBLStartedEmergency)
+ ON_BN_CLICKED(IDC_FW_BL_STARTED_EMERGENCY, OnFirmwareSupportBlStartedEmergency)
  ON_COMMAND(IDM_OPEN_FLASH, OnOpenFlashFromFile)
  ON_COMMAND(IDM_SAVE_FLASH, OnSaveFlashToFile)
- ON_EN_CHANGE(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnChangeFirmwareSupportFwInformation)
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION, OnUpdateFirmwareControls)
+ ON_EN_CHANGE(IDC_FW_FW_INFORMATION, OnChangeFirmwareSupportFwInformation)
+ ON_UPDATE_COMMAND_UI(IDC_FW_FW_INFORMATION, OnUpdateFirmwareControls)
 
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_INFORMATION_CAPTION, OnUpdateFirmwareControls)
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_CRC, OnUpdateFirmwareControls)
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_FW_NAME, OnUpdateFirmwareControls)
+ ON_UPDATE_COMMAND_UI(IDC_FW_FW_INFORMATION_CAPTION, OnUpdateFirmwareControls)
+ ON_UPDATE_COMMAND_UI(IDC_FW_CRC, OnUpdateFirmwareControls)
+ ON_UPDATE_COMMAND_UI(IDC_FW_FW_NAME, OnUpdateFirmwareControls)
 
  ON_UPDATE_COMMAND_UI(IDM_WRITE_FLASH, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_SAVE_FLASH, OnUpdatePopupMenu_file1)
@@ -124,7 +124,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_WRITE_FLASH,OnWriteFlashToSECU)
 
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_FW_DATA_FROM_SECU3, OnUpdatePopupMenu_bl)
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
+ ON_UPDATE_COMMAND_UI(IDC_FW_PROG_ONLY_CODE, OnUpdateProgOnlyCode)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_MPSZ, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_SECU3, OnUpdatePopupMenu_file1)
  ON_UPDATE_COMMAND_UI(IDM_IMPORT_IMPORT_FROM_S3F, OnUpdatePopupMenu_file1)
@@ -144,8 +144,8 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_READ_FW_SIGNATURE_INFO, OnFirmwareInfo)
  ON_UPDATE_COMMAND_UI(IDM_READ_FW_SIGNATURE_INFO, OnUpdatePopupMenu_app)
 
- ON_UPDATE_COMMAND_UI(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
- ON_BN_CLICKED(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT, OnViewFWOptions)
+ ON_UPDATE_COMMAND_UI(IDC_FW_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
+ ON_BN_CLICKED(IDC_FW_VIEW_FWOPT, OnViewFWOptions)
 
 END_MESSAGE_MAP()
 
@@ -165,7 +165,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  //create parameters desk
  CRect rect;
- GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
+ GetDlgItem(IDC_FW_PD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
@@ -174,7 +174,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_ParamDeskDlg->ShowWindow(SW_HIDE);
 
  //create IO remapping desk
- GetDlgItem(IDC_FIRMWARE_SUPPORT_PD_FRAME)->GetWindowRect(rect);
+ GetDlgItem(IDC_FW_PD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
  mp_IORemappingDlg->Create(CIORemappingDlg::IDD,this);
  mp_IORemappingDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
@@ -185,10 +185,10 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  m_tabs[m_tab_selection].first->Show(true);
 
  //create tables desk
- GetDlgItem(IDC_FIRMWARE_SUPPORT_TD_FRAME)->GetWindowRect(rect);
+ GetDlgItem(IDC_FW_TD_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect); 
  mp_TablesPanel->Create(CTablesSetPanel::IDD, this);
- mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FIRMWARE_SUPPORT_VIEW_FWOPT));
+ mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FW_VIEW_FWOPT));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
 
  mp_ContextMenuManager->Attach(this);

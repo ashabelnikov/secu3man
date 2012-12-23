@@ -36,7 +36,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 , m_rw_buttons_enabled(false)
 , m_header_ctrl(new CHeaderCtrlEx())
 {
- m_image_list.Create(IDB_CHECK_ENGINE_LIST_ICONS, 16, 2, RGB(255,255,255));
+ m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
  m_gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
  m_normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
 }
@@ -44,14 +44,14 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 void CCheckEngineTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_CHECK_ENGINE_QUICK_HELP, m_quick_help_text);
- DDX_Control(pDX, IDC_CHECK_ENGINE_ERRORS_LIST, m_errors_list);
- DDX_Control(pDX, IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, m_realtime_checkbox);
- DDX_Control(pDX, IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX, m_show_with_inertness);
- DDX_Control(pDX, IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, m_read_saved_button);
- DDX_Control(pDX, IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, m_write_saved_button);
- DDX_Control(pDX, IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, m_list_set_all_button);
- DDX_Control(pDX, IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, m_list_clear_all_button);
+ DDX_Control(pDX, IDC_CE_QUICK_HELP, m_quick_help_text);
+ DDX_Control(pDX, IDC_CE_ERRORS_LIST, m_errors_list);
+ DDX_Control(pDX, IDC_CE_READ_REALTIME_CHECKBOX, m_realtime_checkbox);
+ DDX_Control(pDX, IDC_CE_READ_INERTNESS_CHECKBOX, m_show_with_inertness);
+ DDX_Control(pDX, IDC_CE_READ_ERRORS_BUTTON, m_read_saved_button);
+ DDX_Control(pDX, IDC_CE_WRITE_ERRORS_BUTTON, m_write_saved_button);
+ DDX_Control(pDX, IDC_CE_LIST_SETALL_BUTTON, m_list_set_all_button);
+ DDX_Control(pDX, IDC_CE_LIST_CLEARALL_BUTTON, m_list_clear_all_button);
 }
 
 LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
@@ -62,21 +62,21 @@ LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
 BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
- ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
- ON_BN_CLICKED(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnReadSavedErrors)
- ON_BN_CLICKED(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
- ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnListSetAllErrors)
- ON_BN_CLICKED(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnListClearAllErrors)
+ ON_BN_CLICKED(IDC_CE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
+ ON_BN_CLICKED(IDC_CE_READ_ERRORS_BUTTON, OnReadSavedErrors)
+ ON_BN_CLICKED(IDC_CE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
+ ON_BN_CLICKED(IDC_CE_LIST_SETALL_BUTTON, OnListSetAllErrors)
+ ON_BN_CLICKED(IDC_CE_LIST_CLEARALL_BUTTON, OnListClearAllErrors)
 
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_QUICK_HELP, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_ERRORS_LIST, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_REALTIME_CHECKBOX, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_INERTNESS_CHECKBOX, OnUpdateInertnessCheckbox)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_READ_ERRORS_BUTTON, OnUpdateRWButtons)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_SETALL_BUTTON, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_CHECK_ENGINE_LIST_CLEARALL_BUTTON, OnUpdateControls)
- ON_NOTIFY(NM_CUSTOMDRAW, IDC_CHECK_ENGINE_ERRORS_LIST, OnCustomdrawList)
+ ON_UPDATE_COMMAND_UI(IDC_CE_QUICK_HELP, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CE_ERRORS_LIST, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CE_READ_REALTIME_CHECKBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CE_READ_INERTNESS_CHECKBOX, OnUpdateInertnessCheckbox)
+ ON_UPDATE_COMMAND_UI(IDC_CE_READ_ERRORS_BUTTON, OnUpdateRWButtons)
+ ON_UPDATE_COMMAND_UI(IDC_CE_WRITE_ERRORS_BUTTON, OnUpdateRWButtons)
+ ON_UPDATE_COMMAND_UI(IDC_CE_LIST_SETALL_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_CE_LIST_CLEARALL_BUTTON, OnUpdateControls)
+ ON_NOTIFY(NM_CUSTOMDRAW, IDC_CE_ERRORS_LIST, OnCustomdrawList)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////

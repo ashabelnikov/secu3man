@@ -394,11 +394,11 @@ void MPSZDataMPXv2_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_ra
  //записываем сетку оборотов
  for(i = 0, j = 0; i < MPSZ_WORK_MAP_SIZE_F; ++i)
  {
-  WORD value = ip_data->rpm_slots[i];
+  WORD value = MathHelpers::Round(ip_data->rpm_slots[i]);
   p_raws->data[i].slotVal = MAKEWORD(HIBYTE(value), LOBYTE(value));
   if (i >= 1)
   {
-   value = (ip_data->rpm_slots[i] - ip_data->rpm_slots[i-1]);
+   value = MathHelpers::Round((ip_data->rpm_slots[i] - ip_data->rpm_slots[i-1]));
    p_raws->data[j].slotDiff = MAKEWORD(HIBYTE(value), LOBYTE(value));
    ++j;
   }
