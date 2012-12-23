@@ -33,6 +33,7 @@ class CFirmwareModeContextMenuManager;
 class CIORemappingDlg;
 class CParamDeskDlg;
 class CTablesSetPanel;
+class CToolTipCtrlEx;
 class IDeskView;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -200,4 +201,6 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
   std::map<int, std::pair<IDeskView*, _TSTRING> > m_tabs;
   size_t m_tab_selection;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

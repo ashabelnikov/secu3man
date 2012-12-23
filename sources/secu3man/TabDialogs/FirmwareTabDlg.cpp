@@ -31,6 +31,7 @@
 #include "tabldesk/TablesSetPanel.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/HotKeysToCmdRouter.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const int TIMER_ID = 1;
 
@@ -190,6 +191,13 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_TablesPanel->Create(CTablesSetPanel::IDD, this);
  mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FW_VIEW_FWOPT));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
+
+//create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_fw_options_btn, MLL::GetString(IDS_FW_VIEW_FWOPT_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  mp_ContextMenuManager->Attach(this);
 

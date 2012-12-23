@@ -608,6 +608,20 @@ BEGIN
     IDS_TD_SAVE_TABLES_POPUP_MENU "Сохранить в"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_IO_REMAPPING_IGN_OUT1_TT "Выход зажигания 1"
+    IDS_IO_REMAPPING_IGN_OUT2_TT "Выход зажигания 2"
+    IDS_IO_REMAPPING_IGN_OUT3_TT "Выход зажигания 3"
+    IDS_IO_REMAPPING_IGN_OUT4_TT "Выход зажигания 4"
+    IDS_IO_REMAPPING_ADD_IO1_TT  "Выход зажигания 5 (вход/выход)"
+    IDS_IO_REMAPPING_ADD_IO2_TT  "Выход зажигания 6 (вход/выход)"
+    IDS_IO_REMAPPING_ECF_TT      "Выход управления вентилятором"
+    IDS_IO_REMAPPING_ST_BLOCK_TT "Выход управления блокировкой стартера"
+    IDS_IO_REMAPPING_IE_TT       "Выход управления ЭПХХ"
+    IDS_IO_REMAPPING_FE_TT       "Выход управления ЭМР"
+    IDS_IO_REMAPPING_PS_TT       "Вход датчика фаз (ДФ)"
+END
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -1218,4 +1232,19 @@ BEGIN
     IDS_TD_TABNAME_GAS      "12:Gas"
     IDS_TD_LOAD_TABLES_POPUP_MENU "Load from"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Save to"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_IO_REMAPPING_IGN_OUT1_TT "Ignition output 1"
+    IDS_IO_REMAPPING_IGN_OUT2_TT "Ignition output 2"
+    IDS_IO_REMAPPING_IGN_OUT3_TT "Ignition output 3"
+    IDS_IO_REMAPPING_IGN_OUT4_TT "Ignition output 4"
+    IDS_IO_REMAPPING_ADD_IO1_TT  "Ignition output 5 (input/output)"
+    IDS_IO_REMAPPING_ADD_IO2_TT  "Ignition output 6 (input/output)"
+    IDS_IO_REMAPPING_ECF_TT      "Cooling fan control output"
+    IDS_IO_REMAPPING_ST_BLOCK_TT "Starter blocking control output"
+    IDS_IO_REMAPPING_IE_TT       "Idle economizer control output"
+    IDS_IO_REMAPPING_FE_TT       "Power valve control output"
+    IDS_IO_REMAPPING_PS_TT       "Cam sensor input"
 END

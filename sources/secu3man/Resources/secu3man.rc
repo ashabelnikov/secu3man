@@ -513,6 +513,7 @@ BEGIN
     IDS_KC_OSCILLOSCOPE_H_UNIT "Samples, grid 1x4"
     IDS_PM_EDIT_TABLES_TT   "Открывает панель редактирования таблиц в реальном времени"
     IDS_PM_SHOW_RAW_SENSORS_TT "Показать значения напряжений на датчиках"
+    IDS_FW_VIEW_FWOPT_TT    "Просмотр опций с которыми скомпилирована прошивка"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1032,6 +1033,7 @@ BEGIN
     IDS_TAB_DEV_DIAGNOSTICS "Diagnostics"
     IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER "Enter diagnostic mode"
     IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE "Leave diagnostic mode"
+    IDS_FW_VIEW_FWOPT_TT    "View firmware compilation options"
 END
 
 STRINGTABLE DISCARDABLE 

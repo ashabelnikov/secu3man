@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "IORemappingDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 namespace {
 CComboBox* _GetCBbyIOSID(const std::map<UINT, std::pair<int, CComboBox*> >& map, int iosId)
@@ -43,6 +44,8 @@ const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
 const UINT IOComboboxEnd = IDC_IO_REMAPPING_PS_COMBOBOX;
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
 const UINT IOCheckboxEnd = IDC_IO_REMAPPING_PS_CHECKBOX;
+const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
+const UINT IOTTStrEnd = IDS_IO_REMAPPING_PS_TT;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
@@ -107,6 +110,16 @@ void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)
 BOOL CIORemappingDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ UINT ttStrId = IOTTStrStart;
+ UINT cbObjId = IOComboboxStart;
+ for(; cbObjId <= IOComboboxEnd; ++cbObjId, ++ttStrId)
+  VERIFY(mp_ttc->AddWindow(m_iorcb[cbObjId].second, MLL::GetString(ttStrId)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
  UpdateData(FALSE);

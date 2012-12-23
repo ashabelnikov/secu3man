@@ -22,8 +22,11 @@
 #pragma once
 
 #include <map>
+#include <memory>
 #include "IRemapDeskView.h"
 #include "ui-core/DialogWithAccelerators.h"
+
+class CToolTipCtrlEx;
 
 /////////////////////////////////////////////////////////////////////////////
 // CIORemapping dialog
@@ -76,6 +79,8 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   std::map<UINT, std::pair<int, CComboBox*> > m_iorcb;
   std::map<UINT, std::pair<int, CButton*> > m_iorcm;
   std::map<UINT, std::pair<bool, bool> > m_enflg;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 
 /////////////////////////////////////////////////////////////////////////////
