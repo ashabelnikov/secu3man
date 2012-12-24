@@ -34,7 +34,7 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 12
+#define CSV_COUNT_DATA_VAL 13
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -42,7 +42,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -138,7 +138,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_time.wSecond = wSecond;
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
- int frequen,carb,gas,air_flow,ephh_valve,epm_valve = 0;
+ int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard;
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
@@ -153,7 +153,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
                 &carb,
                 &gas,
                 &ephh_valve,
-                &epm_valve);
+                &epm_valve,
+                &cool_fan);
 
  if (result != CSV_COUNT_DATA_VAL)
   return false;
@@ -169,6 +170,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.gas = gas;
  o_data.ephh_valve = ephh_valve;
  o_data.epm_valve = epm_valve;
+ o_data.cool_fan = cool_fan;
 
  //все прочитано без ошибок
  return true;
@@ -201,7 +203,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

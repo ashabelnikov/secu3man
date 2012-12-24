@@ -27,7 +27,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%5.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
+const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%5.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
 
 LogWriter::LogWriter()
 : m_is_busy(false)
@@ -70,7 +70,8 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         (int)p_sensors->carb,
                         (int)p_sensors->gas,
                         (int)p_sensors->ephh_valve,
-                        (int)p_sensors->epm_valve);
+                        (int)p_sensors->epm_valve,
+                        (int)p_sensors->cool_fan);
  }
 }
 
@@ -125,5 +126,5 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }

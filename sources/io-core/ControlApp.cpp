@@ -273,6 +273,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  m_SensorDat.gas        = (byte & (1 << 2)) != 0;
  m_SensorDat.epm_valve  = (byte & (1 << 3)) != 0;
  m_SensorDat.ce_state   = (byte & (1 << 4)) != 0;
+ m_SensorDat.cool_fan   = (byte & (1 << 5)) != 0;
 
  if (*raw_packet!='\r')
   return false;
