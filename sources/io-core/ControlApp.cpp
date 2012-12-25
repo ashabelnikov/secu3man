@@ -204,7 +204,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
- if (strlen((char*)raw_packet)!=33)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //частота вращения двигателя
@@ -274,6 +274,13 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  m_SensorDat.epm_valve  = (byte & (1 << 3)) != 0;
  m_SensorDat.ce_state   = (byte & (1 << 4)) != 0;
  m_SensorDat.cool_fan   = (byte & (1 << 5)) != 0;
+
+ //Биты ошибок СЕ
+ int ce_errors = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &ce_errors))
+  return false;
+ m_SensorDat.ce_errors = ce_errors;
+ raw_packet+=4;
 
  if (*raw_packet!='\r')
   return false;

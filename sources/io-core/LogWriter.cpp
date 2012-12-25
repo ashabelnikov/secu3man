@@ -27,7 +27,17 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%5.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d%c%%01d\r\n";
+const char cCSVDataTemplateString[] = "%c%%04d%c%%6.2f%c%%6.2f%c%%5.2f%c%%6.2f%c%%4.2f%c%%5.2f%c%%02d%c%%01d%c%%01d%c%%01d%c%%01d%c%%01d%c%%s\r\n";
+
+namespace {
+void wordToString(WORD value, char* str)
+{
+ WORD z, i = 0;
+ for (z = 32768; z > 0; z >>= 1)
+  str[i++] = ((value & z) == z) ? '1' : '0';
+ str[i] = '\0';
+}
+}
 
 LogWriter::LogWriter()
 : m_is_busy(false)
@@ -57,6 +67,10 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
   //используем ASCII версию, файл не должен быть юникодным
   //"hh:mm:ss.ms", ms - сотые доли секунды
   fprintf(m_out_handle, cCSVTimeTemplateString,time.wHour,time.wMinute,time.wSecond,time.wMilliseconds/10);
+  
+  //Convert binary to string
+  char ce_errors[20];
+  wordToString(p_sensors->ce_errors, ce_errors);
 
   fprintf(m_out_handle, m_csv_data_template,
                         p_sensors->frequen,
@@ -71,7 +85,8 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         (int)p_sensors->gas,
                         (int)p_sensors->ephh_valve,
                         (int)p_sensors->epm_valve,
-                        (int)p_sensors->cool_fan);
+                        (int)p_sensors->cool_fan,
+                        ce_errors);
  }
 }
 
@@ -126,5 +141,5 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }

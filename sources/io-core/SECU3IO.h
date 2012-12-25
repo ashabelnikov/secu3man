@@ -44,6 +44,7 @@ namespace SECU3IO
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
   unsigned char ce_state;               // !currently is not used!
+  WORD ce_errors;                       //биты ошибок СЕ
  };
 
  struct DbgvarDat

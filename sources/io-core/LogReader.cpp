@@ -28,13 +28,13 @@
 using namespace SECU3IO;
 
 //максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 80
+#define MAX_REC_BUF 90
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 13
+#define CSV_COUNT_DATA_VAL 14
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -42,7 +42,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -140,6 +140,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
 
  int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard;
+ char ce_errors[20] = {0};
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
@@ -154,10 +155,21 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
                 &gas,
                 &ephh_valve,
                 &epm_valve,
-                &cool_fan);
+                &cool_fan,
+                &ce_errors);
 
- if (result != CSV_COUNT_DATA_VAL)
+ if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 16))
   return false;
+ //Convert CE errors bits from string to binary
+ WORD ce_bits = 0;
+ for(size_t i = 0; i < 16; ++i)
+ {
+  if (ce_errors[i] != '0' && ce_errors[i] != '1')
+   return false; //error (wrong char)
+  WORD mask = 32768;
+  ce_bits|= (ce_errors[i] == '1') ? (mask >> i) : 0;
+ }
+ //Save all data fields
  o_data.frequen = frequen;
  o_data.adv_angle = adv_angle;
  o_data.pressure = pressure;
@@ -171,6 +183,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.ephh_valve = ephh_valve;
  o_data.epm_valve = epm_valve;
  o_data.cool_fan = cool_fan;
+ o_data.ce_errors = ce_bits;
 
  //все прочитано без ошибок
  return true;
@@ -203,7 +216,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const
