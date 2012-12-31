@@ -854,8 +854,8 @@ END
 // Bitmap
 //
 
-IDB_MAIN_TAB_CTRL_BITMAPS BITMAP  DISCARDABLE     "res\\tab_ctrl_bitmaps.bmp"
-IDB_CHECK_ENGINE_LIST_ICONS BITMAP  DISCARDABLE     "res\\ce_list_icons.bmp"
+IDB_MAIN_TAB_CTRL_BITMAPS BITMAP  DISCARDABLE  "res\\tab_ctrl_bitmaps.bmp"
+IDB_CE_LIST_ICONS BITMAP  DISCARDABLE          "res\\ce_list_icons.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
