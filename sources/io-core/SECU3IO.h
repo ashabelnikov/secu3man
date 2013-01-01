@@ -46,6 +46,9 @@ namespace SECU3IO
   float knock_retard;                   //корректировка УОЗ при детонации
   unsigned char ce_state;               // !currently is not used!
   WORD ce_errors;                       //биты ошибок СЕ
+  float tps;                            //ДПДЗ (TPS sensor value)
+  float add_i1;                         //ADD_I1 voltage
+  float add_i2;                         //ADD_I2 voltage
  };
 
  struct DbgvarDat
