@@ -42,22 +42,21 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::ADCCompenPar* o_values);
   void SetValues(const SECU3IO::ADCCompenPar* i_values);
 
+  void EnableSECU3TItems(bool i_enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
-  afx_msg void OnChangePdMAPFactorEdit();
-  afx_msg void OnChangePdMAPCorrectionEdit();
-  afx_msg void OnChangePdUBATFactorEdit();
-  afx_msg void OnChangePdUBATCorrectionEdit();
-  afx_msg void OnChangePdTEMPFactorEdit();
-  afx_msg void OnChangePdTEMPCorrectionEdit();
+  afx_msg void OnChangeEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3T(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::ADCCompenPar m_params;
   bool m_enabled;
+  bool m_enable_secu3t_features;
 
   CSpinButtonCtrlEx m_map_factor_spin;
   CSpinButtonCtrlEx m_map_correction_spin;
@@ -73,4 +72,19 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_temp_correction_spin;
   CEditEx m_temp_factor_edit;
   CEditEx m_temp_correction_edit;
+
+  CSpinButtonCtrlEx m_tps_factor_spin;
+  CSpinButtonCtrlEx m_tps_correction_spin;
+  CEditEx m_tps_factor_edit;
+  CEditEx m_tps_correction_edit;
+
+  CSpinButtonCtrlEx m_ai1_factor_spin;
+  CSpinButtonCtrlEx m_ai1_correction_spin;
+  CEditEx m_ai1_factor_edit;
+  CEditEx m_ai1_correction_edit;
+
+  CSpinButtonCtrlEx m_ai2_factor_spin;
+  CSpinButtonCtrlEx m_ai2_correction_spin;
+  CEditEx m_ai2_factor_edit;
+  CEditEx m_ai2_correction_edit;
 };

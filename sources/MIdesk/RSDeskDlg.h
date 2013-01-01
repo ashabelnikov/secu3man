@@ -40,6 +40,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   virtual void Enable(bool enable);
   virtual void SetValues(const SECU3IO::RawSensDat* i_values);
   virtual void GetValues(SECU3IO::RawSensDat* o_values);
+  virtual void EnableSECU3TItems(bool i_enable);
   //-----------------------------------------------
 
   //изменение размеров окна
@@ -53,6 +54,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
 
  private:
   int  m_enabled;
+  bool m_enable_secu3t_features;
   float m_map_value;
   float m_ubat_value;
   float m_temp_value;

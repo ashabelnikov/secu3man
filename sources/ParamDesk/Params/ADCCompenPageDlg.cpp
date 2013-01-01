@@ -27,47 +27,69 @@
 const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
 BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangePdMAPFactorEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnChangePdMAPCorrectionEdit)
-
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangePdUBATFactorEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnChangePdUBATCorrectionEdit)
-
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnChangePdTEMPFactorEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnChangePdTEMPCorrectionEdit)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnUpdateControls)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnUpdateControls)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnUpdateControls)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, OnChangeEdit)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CAPTION, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CAPTION, OnUpdateControlsSECU3T)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, OnUpdateControlsSECU3T)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT, OnUpdateControls)
-
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT, OnUpdateControls)
-
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_FACTOR_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_UNIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_UNIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_UNIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_UNIT, OnUpdateControlsSECU3T)
 END_MESSAGE_MAP()
 
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CADCCompenPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_enable_secu3t_features(false)
 , m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_ubat_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_ubat_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_temp_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_temp_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_tps_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_tps_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ai1_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 {
  m_params.map_adc_factor = 1.0f;
  m_params.map_adc_correction = 0.0f;
@@ -75,6 +97,12 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ubat_adc_correction = 0.0f;
  m_params.temp_adc_factor = 1.0f;
  m_params.temp_adc_correction = 0.0f;
+ m_params.tps_adc_factor = 1.0f;
+ m_params.tps_adc_correction = 0.0f;
+ m_params.ai1_adc_factor = 1.0f;
+ m_params.ai1_adc_correction = 0.0f;
+ m_params.ai2_adc_factor = 1.0f;
+ m_params.ai2_adc_correction = 0.0f;
 }
 
 LPCTSTR CADCCompenPageDlg::GetDialogID(void) const
@@ -100,6 +128,21 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, m_temp_factor_edit);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, m_temp_correction_edit);
 
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_SPIN, m_tps_factor_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_SPIN, m_tps_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, m_tps_factor_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, m_tps_correction_edit);
+
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_SPIN, m_ai1_factor_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_SPIN, m_ai1_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, m_ai1_factor_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, m_ai1_correction_edit);
+
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_SPIN, m_ai2_factor_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_SPIN, m_ai2_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_ai2_factor_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, m_ai2_correction_edit);
+
  m_map_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_params.map_adc_factor);
  m_map_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, m_params.map_adc_correction);
 
@@ -108,12 +151,26 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_temp_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, m_params.temp_adc_factor);
  m_temp_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, m_params.temp_adc_correction);
+
+ m_tps_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, m_params.tps_adc_factor);
+ m_tps_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, m_params.tps_adc_correction);
+
+ m_ai1_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, m_params.ai1_adc_factor);
+ m_ai1_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, m_params.ai1_adc_correction);
+
+ m_ai2_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_params.ai2_adc_factor);
+ m_ai2_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, m_params.ai2_adc_correction);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CADCCompenPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CADCCompenPageDlg::OnUpdateControlsSECU3T(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_enable_secu3t_features);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -153,46 +210,46 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_temp_correction_edit.SetDecimalPlaces(4);
  m_temp_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
 
+ m_tps_factor_spin.SetBuddy(&m_tps_factor_edit);
+ m_tps_factor_edit.SetLimitText(6);
+ m_tps_factor_edit.SetDecimalPlaces(3);
+ m_tps_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+
+ m_tps_correction_spin.SetBuddy(&m_tps_correction_edit);
+ m_tps_correction_edit.SetLimitText(6);
+ m_tps_correction_edit.SetDecimalPlaces(4);
+ m_tps_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+
+ m_ai1_factor_spin.SetBuddy(&m_ai1_factor_edit);
+ m_ai1_factor_edit.SetLimitText(6);
+ m_ai1_factor_edit.SetDecimalPlaces(3);
+ m_ai1_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+
+ m_ai1_correction_spin.SetBuddy(&m_ai1_correction_edit);
+ m_ai1_correction_edit.SetLimitText(6);
+ m_ai1_correction_edit.SetDecimalPlaces(4);
+ m_ai1_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+
+ m_ai2_factor_spin.SetBuddy(&m_ai2_factor_edit);
+ m_ai2_factor_edit.SetLimitText(6);
+ m_ai2_factor_edit.SetDecimalPlaces(3);
+ m_ai2_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+
+ m_ai2_correction_spin.SetBuddy(&m_ai2_correction_edit);
+ m_ai2_correction_edit.SetLimitText(6);
+ m_ai2_correction_edit.SetDecimalPlaces(4);
+ m_ai2_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CADCCompenPageDlg::OnChangePdMAPFactorEdit()
+void CADCCompenPageDlg::OnChangeEdit()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
-}
-
-void CADCCompenPageDlg::OnChangePdMAPCorrectionEdit()
-{
- UpdateData();
- OnChangeNotify();
-}
-
-void CADCCompenPageDlg::OnChangePdUBATFactorEdit()
-{
- UpdateData();
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
-}
-
-void CADCCompenPageDlg::OnChangePdUBATCorrectionEdit()
-{
- UpdateData();
- OnChangeNotify();
-}
-
-void CADCCompenPageDlg::OnChangePdTEMPFactorEdit()
-{
- UpdateData();
- OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
-}
-
-void CADCCompenPageDlg::OnChangePdTEMPCorrectionEdit()
-{
- UpdateData();
- OnChangeNotify();
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -209,6 +266,15 @@ void CADCCompenPageDlg::Enable(bool enable)
 bool CADCCompenPageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CADCCompenPageDlg::EnableSECU3TItems(bool i_enable)
+{
+ if (m_enable_secu3t_features == i_enable)
+  return; //already has needed state
+ m_enable_secu3t_features = i_enable;
+ if (::IsWindow(m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

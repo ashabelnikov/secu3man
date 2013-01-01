@@ -57,6 +57,8 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
 
   virtual void ShowRawSensors(bool show);
 
+  void ApplyFWOptions(DWORD opt);
+
  private:
   CRSDeskDlg* mp_rsdview;
   CCommunicationManager* mp_comm;

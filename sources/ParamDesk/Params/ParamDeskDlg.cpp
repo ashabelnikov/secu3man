@@ -419,6 +419,11 @@ void CParamDeskDlg::EnableOddCylinders(bool enable)
  m_pCKPSPageDlg->EnableOddCylinders(enable);
 }
 
+void CParamDeskDlg::EnableSECU3TItems(bool i_enable)
+{
+ m_pADCCompenPageDlg->EnableSECU3TItems(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

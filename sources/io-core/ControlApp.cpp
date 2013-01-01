@@ -741,7 +741,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
 {
  SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
 
- if (strlen((char*)raw_packet)!=37)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=73)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  signed int map_adc_factor = 0;
@@ -783,6 +783,48 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
  raw_packet+=8;
  m_ADCCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.temp_adc_factor;
  m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
+ 
+ //TPS sensor
+ signed int tps_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&tps_adc_factor,true))
+  return false;
+ raw_packet+=4;
+ m_ADCCompenPar.tps_adc_factor = ((float)tps_adc_factor) / 16384;
+
+ signed long tps_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&tps_adc_correction))
+  return false;
+ raw_packet+=8;
+ m_ADCCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.tps_adc_factor;
+ m_ADCCompenPar.tps_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_IO1 input
+ signed int ai1_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ai1_adc_factor,true))
+  return false;
+ raw_packet+=4;
+ m_ADCCompenPar.ai1_adc_factor = ((float)ai1_adc_factor) / 16384;
+
+ signed long ai1_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&ai1_adc_correction))
+  return false;
+ raw_packet+=8;
+ m_ADCCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai1_adc_factor;
+ m_ADCCompenPar.ai1_adc_correction*=m_adc_discrete; //в вольты
+
+ //ADD_IO2 input
+ signed int ai2_adc_factor = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&ai2_adc_factor,true))
+  return false;
+ raw_packet+=4;
+ m_ADCCompenPar.ai2_adc_factor = ((float)ai2_adc_factor) / 16384;
+
+ signed long ai2_adc_correction = 0;
+ if (false == CNumericConv::Hex32ToBin(raw_packet,&ai2_adc_correction))
+  return false;
+ raw_packet+=8;
+ m_ADCCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai2_adc_factor;
+ m_ADCCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
 
  if (*raw_packet!='\r')
   return false;
@@ -1779,6 +1821,24 @@ void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
  signed long temp_correction_d = MathHelpers::Round((-packet_data->temp_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor));
  CNumericConv::Bin32ToHex(temp_adc_correction,m_outgoing_packet);
+ //TPS sensor
+ signed int tps_adc_factor = MathHelpers::Round(packet_data->tps_adc_factor * 16384);
+ CNumericConv::Bin16ToHex(tps_adc_factor,m_outgoing_packet);
+ signed long tps_correction_d = MathHelpers::Round((-packet_data->tps_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * packet_data->tps_adc_factor));
+ CNumericConv::Bin32ToHex(tps_adc_correction,m_outgoing_packet);
+ //ADD_IO1 input
+ signed int ai1_adc_factor = MathHelpers::Round(packet_data->ai1_adc_factor * 16384);
+ CNumericConv::Bin16ToHex(ai1_adc_factor,m_outgoing_packet);
+ signed long ai1_correction_d = MathHelpers::Round((-packet_data->ai1_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * packet_data->ai1_adc_factor));
+ CNumericConv::Bin32ToHex(ai1_adc_correction,m_outgoing_packet);
+ //ADD_IO2 input
+ signed int ai2_adc_factor = MathHelpers::Round(packet_data->ai2_adc_factor * 16384);
+ CNumericConv::Bin16ToHex(ai2_adc_factor,m_outgoing_packet);
+ signed long ai2_correction_d = MathHelpers::Round((-packet_data->ai2_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
+ signed long ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * packet_data->ai2_adc_factor));
+ CNumericConv::Bin32ToHex(ai2_adc_correction,m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

@@ -118,10 +118,20 @@ typedef struct
 
  _uchar ref_s_edge_type;             // REF_S edge type (тип фронта ДНО)
 
+ _int  tps_adc_factor;               // ADC error compensation factor for TPS
+ _long tps_adc_correction;           // ADC error compensation correction for TPS
+ _int  ai1_adc_factor;               // ADC error compensation factor for ADD_IO1 input 
+ _long ai1_adc_correction;           // ADC error compensation correction for ADD_IO1 input
+ _int  ai2_adc_factor;               // ADC error compensation factor for ADD_IO2 input
+ _long ai2_adc_correction;           // ADC error compensation correction for ADD_IO2 input
+
+ _int  tps_curve_offset;             // offset of curve in volts
+ _int  tps_curve_gradient;           // gradient of curve in Percentage/V
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[31];
+ _uchar reserved[9];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

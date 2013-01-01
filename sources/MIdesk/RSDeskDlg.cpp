@@ -43,6 +43,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 , m_temp_value(0.0f)
 , m_knock_value(0.0f)
 , m_enabled(-1)
+, m_enable_secu3t_features(false)
 {
  //empty
 }
@@ -119,24 +120,24 @@ void CRSDeskDlg::Enable(bool enable)
  m_temp_field.EnableWindow(enable);
  m_knock_field.EnableWindow(enable);
  m_tps_field.EnableWindow(enable);
- m_add_i1_field.EnableWindow(enable);
- m_add_i2_field.EnableWindow(enable);
+ m_add_i1_field.EnableWindow(enable && m_enable_secu3t_features);
+ m_add_i2_field.EnableWindow(enable && m_enable_secu3t_features);
 
  m_map_caption.EnableWindow(enable);
  m_ubat_caption.EnableWindow(enable);
  m_temp_caption.EnableWindow(enable);
  m_knock_caption.EnableWindow(enable);
  m_tps_caption.EnableWindow(enable);
- m_add_i1_caption.EnableWindow(enable);
- m_add_i2_caption.EnableWindow(enable);
+ m_add_i1_caption.EnableWindow(enable && m_enable_secu3t_features);
+ m_add_i2_caption.EnableWindow(enable && m_enable_secu3t_features);
 
  m_map_unit.EnableWindow(enable);
  m_ubat_unit.EnableWindow(enable);
  m_temp_unit.EnableWindow(enable);
  m_knock_unit.EnableWindow(enable);
  m_tps_unit.EnableWindow(enable);
- m_add_i1_unit.EnableWindow(enable);
- m_add_i2_unit.EnableWindow(enable);
+ m_add_i1_unit.EnableWindow(enable && m_enable_secu3t_features);
+ m_add_i2_unit.EnableWindow(enable && m_enable_secu3t_features);
 }
 
 void CRSDeskDlg::Show(bool show)
@@ -191,6 +192,19 @@ void CRSDeskDlg::GetValues(RawSensDat* o_values)
  o_values->tps_value = m_tps_value;
  o_values->add_i1_value = m_add_i1_value;
  o_values->add_i2_value = m_add_i2_value;
+}
+
+void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
+{
+ if (i_enable == m_enable_secu3t_features)
+  return; //already has needed state
+ m_enable_secu3t_features = i_enable;
+ m_add_i1_caption.EnableWindow(m_enabled && i_enable);
+ m_add_i1_field.EnableWindow(m_enabled && i_enable);
+ m_add_i1_unit.EnableWindow(m_enabled && i_enable);
+ m_add_i2_caption.EnableWindow(m_enabled && i_enable);
+ m_add_i2_field.EnableWindow(m_enabled && i_enable);
+ m_add_i2_unit.EnableWindow(m_enabled && i_enable);
 }
 
 void CRSDeskDlg::Resize(const CRect& i_rect)

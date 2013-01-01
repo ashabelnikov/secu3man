@@ -132,6 +132,12 @@ namespace SECU3IO
   float  ubat_adc_correction;
   float  temp_adc_factor;
   float  temp_adc_correction;
+  float  tps_adc_factor;
+  float  tps_adc_correction;
+  float  ai1_adc_factor;
+  float  ai1_adc_correction;
+  float  ai2_adc_factor;
+  float  ai2_adc_correction;
  };
 
  struct RawSensDat

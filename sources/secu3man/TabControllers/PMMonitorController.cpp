@@ -156,3 +156,8 @@ void CPMMonitorController::ShowRawSensors(bool show)
  }
  m_show_raw_sensors = show;
 }
+
+void CPMMonitorController::ApplyFWOptions(DWORD opt)
+{
+ mp_rsdview->EnableSECU3TItems((opt & (1 << COPT_SECU3T)));
+}

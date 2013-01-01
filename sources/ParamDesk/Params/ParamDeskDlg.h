@@ -68,6 +68,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableHallOutputParams(bool enable);
   virtual void SetMaxCylinders(int number);
   virtual void EnableOddCylinders(bool enable);
+  virtual void EnableSECU3TItems(bool i_enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 
