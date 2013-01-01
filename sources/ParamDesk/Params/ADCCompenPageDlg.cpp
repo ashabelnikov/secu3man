@@ -259,7 +259,10 @@ void CADCCompenPageDlg::Enable(bool enable)
   return; //already has needed state
  m_enabled = enable;
  if (::IsWindow(m_hWnd))
+ {
   UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
 }
 
 //что с контроллами?
@@ -274,7 +277,10 @@ void CADCCompenPageDlg::EnableSECU3TItems(bool i_enable)
   return; //already has needed state
  m_enable_secu3t_features = i_enable;
  if (::IsWindow(m_hWnd))
+ {
   UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога
