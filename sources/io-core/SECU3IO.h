@@ -140,6 +140,9 @@ namespace SECU3IO
   float ubat_value;
   float temp_value;
   float knock_value;
+  float tps_value;
+  float add_i1_value;
+  float add_i2_value;
  };
 
  struct CKPSPar

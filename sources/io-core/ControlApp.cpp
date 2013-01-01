@@ -676,7 +676,7 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
 
- if (strlen((char*)raw_packet)!=17)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=29)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //MAP sensor
@@ -706,6 +706,27 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
   return false;
  raw_packet+=4;
  m_RawSensDat.knock_value = knock * m_adc_discrete;
+
+ //Throttle position sensor
+ signed int tps = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&tps,true))
+  return false;
+ raw_packet+=4;
+ m_RawSensDat.tps_value = tps * m_adc_discrete;
+
+ //ADD_I1 input
+ signed int add_i1 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i1,true))
+  return false;
+ raw_packet+=4;
+ m_RawSensDat.add_i1_value = add_i1 * m_adc_discrete;
+
+ //ADD_I2 input
+ signed int add_i2 = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i2,true))
+  return false;
+ raw_packet+=4;
+ m_RawSensDat.add_i2_value = add_i2 * m_adc_discrete;
 
  if (*raw_packet!='\r')
   return false;

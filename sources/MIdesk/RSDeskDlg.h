@@ -57,22 +57,34 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   float m_ubat_value;
   float m_temp_value;
   float m_knock_value;
+  float m_tps_value;
+  float m_add_i1_value;
+  float m_add_i2_value;
   CFont m_fieldFont;
 
   CStatic m_map_field;
   CStatic m_ubat_field;
   CStatic m_temp_field;
   CStatic m_knock_field;
+  CStatic m_tps_field;
+  CStatic m_add_i1_field;
+  CStatic m_add_i2_field;
 
   CStatic m_map_caption;
   CStatic m_ubat_caption;
   CStatic m_temp_caption;
   CStatic m_knock_caption;
+  CStatic m_tps_caption;
+  CStatic m_add_i1_caption;
+  CStatic m_add_i2_caption;
 
   CStatic m_map_unit;
   CStatic m_ubat_unit;
   CStatic m_temp_unit;
   CStatic m_knock_unit;
+  CStatic m_tps_unit;
+  CStatic m_add_i1_unit;
+  CStatic m_add_i2_unit;
 };
 
 /////////////////////////////////////////////////////////////////////////////

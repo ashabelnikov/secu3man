@@ -44,21 +44,27 @@ IDD_RAW_SENSORS_DESK DIALOG DISCARDABLE  0, 0, 284, 195
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "value",IDC_RS_MAP_VALUE,155,35,70,19,SS_SUNKEN
-    LTEXT           "Датчик абсолютного давления",IDC_RS_MAP_CAPTION,23,39,
-                    118,13
-    LTEXT           "B",IDC_RS_MAP_UNIT,231,40,20,14
-    CTEXT           "value",IDC_RS_UBAT_VALUE,155,71,70,19,SS_SUNKEN
-    LTEXT           "Напряжение бортовой сети",IDC_RS_UBAT_CAPTION,23,74,118,
-                    13
-    LTEXT           "B",IDC_RS_UBAT_UNIT,231,76,20,14
-    CTEXT           "value",IDC_RS_TEMP_VALUE,155,108,70,19,SS_SUNKEN
-    LTEXT           "Датчик температуры ОЖ",IDC_RS_TEMP_CAPTION,24,112,118,13
-    LTEXT           "B",IDC_RS_TEMP_UNIT,232,112,20,14
-    CTEXT           "value",IDC_RS_KNOCK_VALUE,156,144,70,19,SS_SUNKEN
-    LTEXT           "Уровень сигнала детонации",IDC_RS_KNOCK_CAPTION,24,148,
-                    118,13
-    LTEXT           "B",IDC_RS_KNOCK_UNIT,232,148,20,14
+    CTEXT           "value",IDC_RS_MAP_VALUE,160,7,70,19,SS_SUNKEN
+    LTEXT           "Датчик абсолютного давления",IDC_RS_MAP_CAPTION,28,11,118,13
+    LTEXT           "B",IDC_RS_MAP_UNIT,236,12,20,14
+    CTEXT           "value",IDC_RS_UBAT_VALUE,160,33,70,19,SS_SUNKEN
+    LTEXT           "Напряжение бортовой сети",IDC_RS_UBAT_CAPTION,28,36,118,13
+    LTEXT           "B",IDC_RS_UBAT_UNIT,236,38,20,14
+    CTEXT           "value",IDC_RS_TEMP_VALUE,160,59,70,19,SS_SUNKEN
+    LTEXT           "Датчик температуры ОЖ",IDC_RS_TEMP_CAPTION,28,62,118,13
+    LTEXT           "B",IDC_RS_TEMP_UNIT,236,64,20,14
+    CTEXT           "value",IDC_RS_KNOCK_VALUE,160,85,70,19,SS_SUNKEN
+    LTEXT           "Уровень сигнала детонации",IDC_RS_KNOCK_CAPTION,28,88,118,13
+    LTEXT           "B",IDC_RS_KNOCK_UNIT,236,90,20,14
+    CTEXT           "value",IDC_RS_TPS_VALUE,160,111,70,19,SS_SUNKEN
+    LTEXT           "Датчик полож. дрос. заслонки",IDC_RS_TPS_CAPTION,28,114,118,13
+    LTEXT           "B",IDC_RS_TPS_UNIT,236,116,20,14
+    CTEXT           "value",IDC_RS_ADD_I1_VALUE,160,137,70,19,SS_SUNKEN
+    LTEXT           "Вход  ADD_IO1",IDC_RS_ADD_I1_CAPTION,28,140,118,13
+    LTEXT           "B",IDC_RS_ADD_I1_UNIT,236,142,20,14
+    CTEXT           "value",IDC_RS_ADD_I2_VALUE,160,163,70,19,SS_SUNKEN
+    LTEXT           "Вход  ADD_IO2",IDC_RS_ADD_I2_CAPTION,28,166,118,13
+    LTEXT           "B",IDC_RS_ADD_I2_UNIT,236,168,20,14
 END
 
 IDD_DBGVAR_DESK DIALOGEX 0, 0, 175, 27
@@ -148,18 +154,30 @@ IDD_RAW_SENSORS_DESK DIALOG DISCARDABLE  0, 0, 284, 195
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "value",IDC_RS_MAP_VALUE,155,35,70,19,SS_SUNKEN
-    LTEXT           "MAP sensor",IDC_RS_MAP_CAPTION,23,39,118,13
-    LTEXT           "V",IDC_RS_MAP_UNIT,231,40,20,14
-    CTEXT           "value",IDC_RS_UBAT_VALUE,155,71,70,19,SS_SUNKEN
-    LTEXT           "Voltage",IDC_RS_UBAT_CAPTION,23,74,118,13
-    LTEXT           "V",IDC_RS_UBAT_UNIT,231,76,20,14
-    CTEXT           "value",IDC_RS_TEMP_VALUE,155,108,70,19,SS_SUNKEN
-    LTEXT           "Coolant sensor",IDC_RS_TEMP_CAPTION,24,112,118,13
-    LTEXT           "V",IDC_RS_TEMP_UNIT,232,112,20,14
-    CTEXT           "value",IDC_RS_KNOCK_VALUE,156,144,70,19,SS_SUNKEN
-    LTEXT           "Knock signal level",IDC_RS_KNOCK_CAPTION,24,148,118,13
-    LTEXT           "V",IDC_RS_KNOCK_UNIT,232,148,20,14
+    CTEXT           "value",IDC_RS_MAP_VALUE,160,7,70,19,SS_SUNKEN
+    LTEXT           "MAP sensor",IDC_RS_MAP_CAPTION,28,11,118,13
+    LTEXT           "V",IDC_RS_MAP_UNIT,236,12,20,14
+    CTEXT           "value",IDC_RS_UBAT_VALUE,160,33,70,19,SS_SUNKEN
+    LTEXT           "Voltage",IDC_RS_UBAT_CAPTION,28,36,118,13
+    LTEXT           "V",IDC_RS_UBAT_UNIT,236,38,20,14
+    CTEXT           "value",IDC_RS_TEMP_VALUE,160,59,70,19,SS_SUNKEN
+    LTEXT           "Coolant sensor",IDC_RS_TEMP_CAPTION,28,62,118,13
+    LTEXT           "V",IDC_RS_TEMP_UNIT,236,64,20,14
+    CTEXT           "value",IDC_RS_KNOCK_VALUE,160,85,70,19,SS_SUNKEN
+    LTEXT           "Knock signal level",IDC_RS_KNOCK_CAPTION,28,88,118,13
+    LTEXT           "V",IDC_RS_KNOCK_UNIT,236,90,20,14
+    CTEXT           "value",IDC_RS_TPS_VALUE,160,111,70,19,SS_SUNKEN
+    LTEXT           "Throttle position sensor",IDC_RS_TPS_CAPTION,28,114,
+                    118,13
+    LTEXT           "V",IDC_RS_TPS_UNIT,236,116,20,14
+    CTEXT           "value",IDC_RS_ADD_I1_VALUE,160,137,70,19,SS_SUNKEN
+    LTEXT           "ADD_IO1  Input",IDC_RS_ADD_I1_CAPTION,28,140,
+                    118,13
+    LTEXT           "V",IDC_RS_ADD_I1_UNIT,236,142,20,14
+    CTEXT           "value",IDC_RS_ADD_I2_VALUE,160,163,70,19,SS_SUNKEN
+    LTEXT           "ADD_IO2  Input",IDC_RS_ADD_I2_CAPTION,28,166,
+                    118,13
+    LTEXT           "V",IDC_RS_ADD_I2_UNIT,236,168,20,14
 END
 
 IDD_DBGVAR_DESK DIALOGEX 0, 0, 175, 27

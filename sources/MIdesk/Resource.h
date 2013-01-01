@@ -49,3 +49,12 @@
 #define IDC_DV_BASE2_CHECK              2049
 #define IDC_DV_BASE3_CHECK              2050
 #define IDC_DV_BASE4_CHECK              2051
+#define IDC_RS_TPS_VALUE                2052
+#define IDC_RS_TPS_CAPTION              2053
+#define IDC_RS_TPS_UNIT                 2054
+#define IDC_RS_ADD_I1_VALUE             2055
+#define IDC_RS_ADD_I1_CAPTION           2056
+#define IDC_RS_ADD_I1_UNIT              2057
+#define IDC_RS_ADD_I2_VALUE             2058
+#define IDC_RS_ADD_I2_CAPTION           2059
+#define IDC_RS_ADD_I2_UNIT              2060

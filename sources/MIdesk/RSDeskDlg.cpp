@@ -55,21 +55,33 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_field);
  DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_field);
  DDX_Control(pDX, IDC_RS_KNOCK_VALUE, m_knock_field);
+ DDX_Control(pDX, IDC_RS_TPS_VALUE, m_tps_field);
+ DDX_Control(pDX, IDC_RS_ADD_I1_VALUE, m_add_i1_field);
+ DDX_Control(pDX, IDC_RS_ADD_I2_VALUE, m_add_i2_field);
 
  DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_caption);
  DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_caption);
  DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_caption);
  DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_caption);
+ DDX_Control(pDX, IDC_RS_TPS_CAPTION, m_tps_caption);
+ DDX_Control(pDX, IDC_RS_ADD_I1_CAPTION, m_add_i1_caption);
+ DDX_Control(pDX, IDC_RS_ADD_I2_CAPTION, m_add_i2_caption);
 
  DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_unit);
  DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_unit);
  DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_unit);
  DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_unit);
+ DDX_Control(pDX, IDC_RS_TPS_UNIT, m_tps_unit);
+ DDX_Control(pDX, IDC_RS_ADD_I1_UNIT, m_add_i1_unit);
+ DDX_Control(pDX, IDC_RS_ADD_I2_UNIT, m_add_i2_unit);
 
  DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_TEMP_VALUE, m_temp_value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_KNOCK_VALUE, m_knock_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_TPS_VALUE, m_tps_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I1_VALUE, m_add_i1_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I2_VALUE, m_add_i2_value, _T("%.3f"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -86,6 +98,9 @@ BOOL CRSDeskDlg::OnInitDialog()
  m_ubat_field.SetFont(&m_fieldFont);
  m_temp_field.SetFont(&m_fieldFont);
  m_knock_field.SetFont(&m_fieldFont);
+ m_tps_field.SetFont(&m_fieldFont);
+ m_add_i1_field.SetFont(&m_fieldFont);
+ m_add_i2_field.SetFont(&m_fieldFont);
 
  Enable(false);
  UpdateData(FALSE);
@@ -103,16 +118,25 @@ void CRSDeskDlg::Enable(bool enable)
  m_ubat_field.EnableWindow(enable);
  m_temp_field.EnableWindow(enable);
  m_knock_field.EnableWindow(enable);
+ m_tps_field.EnableWindow(enable);
+ m_add_i1_field.EnableWindow(enable);
+ m_add_i2_field.EnableWindow(enable);
 
  m_map_caption.EnableWindow(enable);
  m_ubat_caption.EnableWindow(enable);
  m_temp_caption.EnableWindow(enable);
  m_knock_caption.EnableWindow(enable);
+ m_tps_caption.EnableWindow(enable);
+ m_add_i1_caption.EnableWindow(enable);
+ m_add_i2_caption.EnableWindow(enable);
 
  m_map_unit.EnableWindow(enable);
  m_ubat_unit.EnableWindow(enable);
  m_temp_unit.EnableWindow(enable);
  m_knock_unit.EnableWindow(enable);
+ m_tps_unit.EnableWindow(enable);
+ m_add_i1_unit.EnableWindow(enable);
+ m_add_i2_unit.EnableWindow(enable);
 }
 
 void CRSDeskDlg::Show(bool show)
@@ -122,16 +146,25 @@ void CRSDeskDlg::Show(bool show)
  m_ubat_field.ShowWindow(sw);
  m_temp_field.ShowWindow(sw);
  m_knock_field.ShowWindow(sw);
+ m_tps_field.ShowWindow(sw);
+ m_add_i1_field.ShowWindow(sw);
+ m_add_i2_field.ShowWindow(sw);
 
  m_map_caption.ShowWindow(sw);
  m_ubat_caption.ShowWindow(sw);
  m_temp_caption.ShowWindow(sw);
  m_knock_caption.ShowWindow(sw);
+ m_tps_caption.ShowWindow(sw);
+ m_add_i1_caption.ShowWindow(sw);
+ m_add_i2_caption.ShowWindow(sw);
 
  m_map_unit.ShowWindow(sw);
  m_ubat_unit.ShowWindow(sw);
  m_temp_unit.ShowWindow(sw);
  m_knock_unit.ShowWindow(sw);
+ m_tps_unit.ShowWindow(sw);
+ m_add_i1_unit.ShowWindow(sw);
+ m_add_i2_unit.ShowWindow(sw);
 }
 
 using namespace SECU3IO;
@@ -142,6 +175,9 @@ void CRSDeskDlg::SetValues(const RawSensDat* i_values)
  m_ubat_value = i_values->ubat_value;
  m_temp_value = i_values->temp_value;
  m_knock_value = i_values->knock_value;
+ m_tps_value = i_values->tps_value;
+ m_add_i1_value = i_values->add_i1_value;
+ m_add_i2_value = i_values->add_i2_value;
  UpdateData(FALSE);
 }
 
@@ -152,6 +188,9 @@ void CRSDeskDlg::GetValues(RawSensDat* o_values)
  o_values->ubat_value = m_ubat_value;
  o_values->temp_value = m_temp_value;
  o_values->knock_value = m_knock_value;
+ o_values->tps_value = m_tps_value;
+ o_values->add_i1_value = m_add_i1_value;
+ o_values->add_i2_value = m_add_i2_value;
 }
 
 void CRSDeskDlg::Resize(const CRect& i_rect)
@@ -175,16 +214,25 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  _RESIZE(m_ubat_field);
  _RESIZE(m_temp_field);
  _RESIZE(m_knock_field);
+ _RESIZE(m_tps_field);
+ _RESIZE(m_add_i1_field);
+ _RESIZE(m_add_i2_field);
 
  _RESIZE(m_map_caption);
  _RESIZE(m_ubat_caption);
  _RESIZE(m_temp_caption);
  _RESIZE(m_knock_caption);
+ _RESIZE(m_tps_caption);
+ _RESIZE(m_add_i1_caption);
+ _RESIZE(m_add_i2_caption);
 
  _RESIZE(m_map_unit);
  _RESIZE(m_ubat_unit);
  _RESIZE(m_temp_unit);
  _RESIZE(m_knock_unit);
+ _RESIZE(m_tps_unit);
+ _RESIZE(m_add_i1_unit);
+ _RESIZE(m_add_i2_unit);
 
 #undef _RESIZE
 
