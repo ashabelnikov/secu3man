@@ -70,4 +70,8 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_map_curve_offset_edit;
   CSpinButtonCtrlEx m_map_curve_gradient_spin;
   CEditEx m_map_curve_gradient_edit;
+  CSpinButtonCtrlEx m_tps_curve_offset_spin;
+  CEditEx m_tps_curve_offset_edit;
+  CSpinButtonCtrlEx m_tps_curve_gradient_spin;
+  CEditEx m_tps_curve_gradient_edit;
 };

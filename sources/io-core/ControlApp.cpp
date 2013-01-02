@@ -280,7 +280,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  unsigned char tps = 0;
  if (false == CNumericConv::Hex8ToBin(raw_packet,&tps))
   return false;
- m_SensorDat.tps = tps / 2.0f;
+ m_SensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
  raw_packet+=2;
 
  //ADD_I1 input
@@ -466,7 +466,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
 
- if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=29)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -506,6 +506,20 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=4;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
+
+ //Смещение кривой ДПДЗ
+ int tps_curve_offset = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &tps_curve_offset, true))
+  return false;
+ raw_packet+=4;
+ m_FunSetPar.tps_curve_offset = ((float)tps_curve_offset) * m_adc_discrete;
+
+ //Наклон кривой ДПДЗ
+ int tps_curve_gradient = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &tps_curve_gradient, true))
+  return false;
+ raw_packet+=4;
+ m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete * 128.0f);
 
  if (*raw_packet!='\r')
   return false;
@@ -1798,6 +1812,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  CNumericConv::Bin16ToHex(map_curve_offset, m_outgoing_packet);
  int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete);
  CNumericConv::Bin16ToHex(map_curve_gradient, m_outgoing_packet);
+ int tps_curve_offset = MathHelpers::Round(packet_data->tps_curve_offset / m_adc_discrete);
+ CNumericConv::Bin16ToHex(tps_curve_offset, m_outgoing_packet);
+ int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete);
+ CNumericConv::Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

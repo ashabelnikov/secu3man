@@ -91,6 +91,8 @@ namespace SECU3IO
   float map_upper_pressure;
   float map_curve_offset;
   float map_curve_gradient;
+  float tps_curve_offset;
+  float tps_curve_gradient;
  };
 
  struct IdlRegPar

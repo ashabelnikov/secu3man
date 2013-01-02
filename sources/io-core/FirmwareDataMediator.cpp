@@ -666,6 +666,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->map_upper_pressure = MathHelpers::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
     p_params->map_curve_offset = MathHelpers::Round(p_in->map_curve_offset / ADC_DISCRETE);
     p_params->map_curve_gradient = MathHelpers::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE);
+    p_params->tps_curve_offset = MathHelpers::Round(p_in->tps_curve_offset / ADC_DISCRETE);
+    p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * ADC_DISCRETE);
    }
    break;
   case STARTR_PAR:
@@ -842,6 +844,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
      p_out->map_curve_offset = ((float)p_params->map_curve_offset) * ADC_DISCRETE;
      p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE * 128.0f);
+     p_out->tps_curve_offset = ((float)p_params->tps_curve_offset) * ADC_DISCRETE;
+     p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * ADC_DISCRETE * 128.0f);
     }
     break;
    case STARTR_PAR:

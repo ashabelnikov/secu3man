@@ -33,6 +33,8 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControls)
@@ -54,13 +56,23 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,OnUpdateControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR_GROUP,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_SENSOR_GROUP,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
@@ -70,7 +82,8 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 , m_press_swing_edit(CEditEx::MODE_FLOAT)
 , m_map_curve_offset_edit(CEditEx::MODE_FLOAT)
 , m_map_curve_gradient_edit(CEditEx::MODE_FLOAT)
-
+, m_tps_curve_offset_edit(CEditEx::MODE_FLOAT)
+, m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -78,6 +91,8 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.fn_gas = 1;
  m_params.map_curve_offset = 0.547f;
  m_params.map_curve_gradient = 20.9f;
+ m_params.tps_curve_offset = 0.4f; //(V)
+ m_params.tps_curve_gradient = 25.64f; //(%/V)
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -98,11 +113,17 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_SPIN, m_map_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_map_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_SPIN, m_map_curve_gradient_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_tps_curve_offset_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN, m_tps_curve_offset_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_tps_curve_gradient_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN, m_tps_curve_gradient_spin);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
  m_map_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_params.map_curve_offset);
  m_map_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_params.map_curve_gradient);
+ m_tps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_params.tps_curve_offset);
+ m_tps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_params.tps_curve_gradient);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_params.fn_gas);
 }
@@ -139,6 +160,16 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_gradient_edit.SetLimitText(5);
  m_map_curve_gradient_edit.SetDecimalPlaces(3);
  m_map_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
+
+ m_tps_curve_offset_spin.SetBuddy(&m_tps_curve_offset_edit);
+ m_tps_curve_offset_edit.SetLimitText(5);
+ m_tps_curve_offset_edit.SetDecimalPlaces(3);
+ m_tps_curve_offset_spin.SetRangeAndDelta(-5.0f, 5.0f, 0.0025f);
+
+ m_tps_curve_gradient_spin.SetBuddy(&m_tps_curve_gradient_edit);
+ m_tps_curve_gradient_edit.SetLimitText(5);
+ m_tps_curve_gradient_edit.SetDecimalPlaces(3);
+ m_tps_curve_gradient_spin.SetRangeAndDelta(.0f, 100.0f, 0.01f);
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
