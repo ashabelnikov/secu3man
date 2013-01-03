@@ -69,6 +69,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_VOLT_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_VOLT_SENSOR_FAIL), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_DWELL_CONTROL, std::make_pair(MLL::GetString(IDS_ECUERROR_DWELL_CONTROL), v)));
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_CAMS_MALFUNCTION, std::make_pair(MLL::GetString(IDS_ECUERROR_CAMS_MALFUNCTION), v))); 
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TPS_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_TPS_SENSOR_FAIL), v))); 
 }
 
 CCheckEngineTabController::~CCheckEngineTabController()
@@ -89,7 +90,20 @@ void CCheckEngineTabController::OnActivate(void)
  //заполняем список кодами ошибок
  ErrorsIDContainer::const_iterator it = m_errors_ids.begin();
  for(; it != m_errors_ids.end(); ++it)
-  m_view->AppendErrorsList((*it).first, (*it).second.first, false);
+ {
+  size_t found = 0;
+  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
+   if (secu3_ce_error_codes[i].first==(*it).first)
+    found = i;
+  if (found < SECU3_CE_ERRCODES_COUNT)
+  {
+   TCHAR str[10];
+   _stprintf(str, _T("%d"), secu3_ce_error_codes[found].second);
+   m_view->AppendErrorsList((*it).first, _TSTRING(str), (*it).second.first, false);
+  }
+  else
+   ASSERT(0);
+ }
 
  m_view->EnableRWButtons(true);
 

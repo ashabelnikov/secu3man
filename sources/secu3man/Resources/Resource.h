@@ -288,3 +288,4 @@
 #define IDS_PM_EDIT_TABLES_TT           4306
 #define IDS_PM_SHOW_RAW_SENSORS_TT      4307
 #define IDS_FW_VIEW_FWOPT_TT            4308
+#define IDS_ECUERROR_TPS_SENSOR_FAIL    4309

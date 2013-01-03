@@ -355,6 +355,7 @@ BEGIN
     IDS_ECUERROR_TEMP_SENSOR_FAIL "Поломка или неправильная работа ДТОЖ"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
     IDS_ECUERROR_CAMS_MALFUNCTION "Поломка или неправильная работа ДФ"
+    IDS_ECUERROR_TPS_SENSOR_FAIL "Поломка или неправильные показания ДПДЗ"
     IDS_INCOMPATIBLE_FIRMWARE 
                             "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
 END
@@ -915,6 +916,7 @@ BEGIN
                             "Breakage or wrong work of coolant temperature sensor"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Abnormal board voltage"
     IDS_ECUERROR_CAMS_MALFUNCTION "Breakage or wrong work of cam sensor"
+    IDS_ECUERROR_TPS_SENSOR_FAIL "Breakage or wrong indication of TPS"
     IDS_INCOMPATIBLE_FIRMWARE 
                             "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
 END

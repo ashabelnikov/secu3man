@@ -94,8 +94,9 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  m_errors_list.SetImageList(&m_image_list, LVSIL_STATE);
 
  DPIAware dpia;
- m_errors_list.InsertColumn(0,MLL::LoadString(IDS_CEPAGE_ERROR_STATE),LVCFMT_LEFT,dpia.ScaleX(70));
- m_errors_list.InsertColumn(1,MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION),LVCFMT_LEFT,450);
+ m_errors_list.InsertColumn(0, MLL::LoadString(IDS_CEPAGE_ERROR_STATE), LVCFMT_LEFT, dpia.ScaleX(70));
+ m_errors_list.InsertColumn(1, _T("BC"), LVCFMT_LEFT, 25);
+ m_errors_list.InsertColumn(2, MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION), LVCFMT_LEFT, 450);
 
  SetTimer(TIMER_ID,250,NULL);
 
@@ -132,10 +133,11 @@ bool CCheckEngineTabDlg::GetRealTimeErrorsCheck(void) const
  return m_realtime_checkbox.GetCheck();
 }
 
-void CCheckEngineTabDlg::AppendErrorsList(size_t i_id, const _TSTRING& i_description, bool i_state /* = false */)
+void CCheckEngineTabDlg::AppendErrorsList(size_t i_id, const _TSTRING& i_bc, const _TSTRING& i_description, bool i_state /* = false */)
 {
  m_errors_list.InsertItem(m_list_next_item_index,_T(""));
- m_errors_list.SetItemText(m_list_next_item_index, 1, i_description.c_str());
+ m_errors_list.SetItemText(m_list_next_item_index, 1, i_bc.c_str());
+ m_errors_list.SetItemText(m_list_next_item_index, 2, i_description.c_str());
  m_errors_list.SetCheck(m_list_next_item_index, i_state);
  m_list_items_indexes.insert(Indexes::value_type(i_id, m_list_next_item_index));
  m_list_next_item_index++;

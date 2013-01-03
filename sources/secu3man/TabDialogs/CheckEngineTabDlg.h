@@ -47,7 +47,7 @@ class CCheckEngineTabDlg : public CTabDialog
 
   bool GetRealTimeErrorsCheck(void) const;
 
-  void AppendErrorsList(size_t i_id, const _TSTRING& i_description, bool i_state = false);
+  void AppendErrorsList(size_t i_id, const _TSTRING& i_bc, const _TSTRING& i_description, bool i_state = false);
   void ResetErrorsList(void);
   void SetErrorState(size_t i_id, bool i_state);
   bool GetErrorState(size_t i_id) const;
