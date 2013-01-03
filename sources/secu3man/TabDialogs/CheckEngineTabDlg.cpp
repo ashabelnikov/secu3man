@@ -95,7 +95,7 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
 
  DPIAware dpia;
  m_errors_list.InsertColumn(0, MLL::LoadString(IDS_CEPAGE_ERROR_STATE), LVCFMT_LEFT, dpia.ScaleX(70));
- m_errors_list.InsertColumn(1, _T("BC"), LVCFMT_LEFT, 25);
+ m_errors_list.InsertColumn(1, _T("BC"), LVCFMT_LEFT, 35);
  m_errors_list.InsertColumn(2, MLL::LoadString(IDS_CEPAGE_ERROR_DESCRIPTION), LVCFMT_LEFT, 450);
 
  SetTimer(TIMER_ID,250,NULL);
