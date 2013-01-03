@@ -1355,7 +1355,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_sr
 
      //Если входы, то сразу ставим зашлушки, так как в старой версии не было входов
      //Неподключенные слоты будут автоматически подключены в CFWIORemappingController::_CheckErrors()
-     if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || p == IOP_IGN) { 
+     if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || p == IOP_IGN || p == IOP_BC_INPUT) { 
       CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
       CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
      }

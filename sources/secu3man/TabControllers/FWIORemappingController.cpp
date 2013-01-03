@@ -304,6 +304,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN, _T("IGN"));
+  if (iov >= FWDM::IOV_V11)
+   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_BC_INPUT, _T("BC_INPUT")); //appeared in v1.1
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1, _T("NONE"));
@@ -315,6 +317,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_STROBE, _T("STROBE"));
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN, _T("IGN"));
+  if (iov >= FWDM::IOV_V11)
+   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_BC_INPUT, _T("BC_INPUT")); //appeared in v1.1
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2, _T("NONE"));
@@ -370,6 +374,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->EnableInversion(FWDM::IOS_FE, true);
   //PS input:
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_IGN, _T("IGN"));
+  if (iov >= FWDM::IOV_V11)
+   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT")); //appeared in v1.1
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_PS, true); 
   mp_view->EnableInversion(FWDM::IOS_PS, true);
@@ -587,7 +593,7 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId,
 
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 {
- return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN);
+ return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
