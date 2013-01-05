@@ -142,9 +142,9 @@ class IOCORE_API CFirmwareDataMediator
    IOP_IGN        =  20,     // IGN         (input)                                  v1.0+
    IOP_IGN_OUT7   =  21,     // IGN_OUT7    (output)                                 v1.0+
    IOP_IGN_OUT8   =  22,     // IGN_OUT8    (output)                                 v1.0+
-   IOP_BC_INPUT   =  23,     // BC_INPUT    (input)                                  v1.0+
-// IOP_RESERVED9  =  24,     // Reserved    ()
-// IOP_RESERVED10 =  25,     // Reserved    ()
+   IOP_BC_INPUT   =  23,     // BC_INPUT    (input)                                  v1.1+
+   IOP_SM_DIR     =  24,     // SM_DIR      (output)                                 v1.2+
+   IOP_SM_STP     =  25,     // SM_STP      (output)                                 v1.2+
 // IOP_RESERVED11 =  26,     // Reserved    ()
 // IOP_RESERVED12 =  27,     // Reserved    ()
 // IOP_RESERVED13 =  28,     // Reserved    ()
