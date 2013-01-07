@@ -25,6 +25,7 @@
 
 #include <limits>
 #include "common/FastDelegate.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 using namespace std;
 
@@ -76,6 +77,17 @@ END_MESSAGE_MAP()
 BOOL CLPControlPanelDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_prev_button, MLL::GetString(IDS_LOG_PLAYER_PREV_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_play_button, MLL::GetString(IDS_LOG_PLAYER_PLAY_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_next_button, MLL::GetString(IDS_LOG_PLAYER_NEXT_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_time_factor_combo, MLL::GetString(IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_slider, MLL::GetString(IDS_LOG_PLAYER_POSITION_SLIDER_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;

@@ -27,7 +27,10 @@
 #include "common/MathHelpers.h"
 #include "LPControlPanelDlg.h"
 #include "MIDesk/MIDeskDlg.h"
+#include "MIDesk/CEDeskDlg.h"
 #include "ui-core/OScopeCtrl.h"
+#include "ui-core/ToolTipCtrlEx.h"
+
 
 using namespace std;
 
@@ -40,6 +43,7 @@ END_MESSAGE_MAP()
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CLogPlayerTabDlg::IDD, pParent)
+, mp_CEDeskDlg(new CCEDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , mp_OScopeCtrl(new COScopeCtrl())
@@ -69,6 +73,12 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
+ GetDlgItem(IDC_LP_CEDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_CEDeskDlg->Create(CCEDeskDlg::IDD, this);
+ mp_CEDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_CEDeskDlg->Show(true);
+
  GetDlgItem(IDC_LP_LOGCONTROL_PANEL_FRAME)->GetWindowRect(rect);
  ScreenToClient(rect);
  mp_LPPanelDlg->Create(CLPControlPanelDlg::IDD, this);
@@ -76,6 +86,13 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
 
  //инициализируем осциллограф
  _InitializeOscilloscopeControl();
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl.get(), MLL::GetString(IDS_LP_SIGNAL_OSCILLOSCOPE_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;
@@ -87,18 +104,29 @@ void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge)
  GetClientRect(rect);
 
  if (i_enlarge)
- {
+ {//remember original positions
   mp_MIDeskDlg->GetWindowRect(m_original_mi_rect);
   ScreenToClient(m_original_mi_rect);
+  mp_CEDeskDlg->GetWindowRect(m_original_ce_rect);
+  ScreenToClient(m_original_ce_rect);
+  //restrict size of MI desk
   CRect cp_rect;
   mp_LPPanelDlg->GetWindowRect(cp_rect);
   rect.left+=cp_rect.Width();
+  rect.bottom-=m_original_ce_rect.Height();
+  //move and resize MI desk
   CRect mi_rect = m_original_mi_rect;
   _ResizeRect(rect, mi_rect);
   mp_MIDeskDlg->Resize(mi_rect);
+  //move CE panel, don't resize it
+  int ce_panel_x = mi_rect.CenterPoint().x - (m_original_ce_rect.Width()/2);
+  mp_CEDeskDlg->SetWindowPos(0, ce_panel_x, mi_rect.bottom, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
  }
  else
+ {//restore original positions
   mp_MIDeskDlg->Resize(m_original_mi_rect);
+  mp_CEDeskDlg->Resize(m_original_ce_rect);
+ }
 }
 
 void CLogPlayerTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
@@ -145,4 +173,3 @@ void CLogPlayerTabDlg::ResetKnockOscilloscope(void)
 {
  mp_OScopeCtrl->Reset();
 }
-

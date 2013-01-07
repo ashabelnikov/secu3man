@@ -18,6 +18,7 @@ include_directories(../)
 project(${PROJECT})
 
 set(HEADERS
+  CEDeskDlg.h
   DVDeskDlg.h
   IDVView.h
   IMeasInstrument.h
@@ -41,6 +42,7 @@ set(HEADERS
   )
 
 set (SOURCES
+  CEDeskDlg.cpp
   DVDeskDlg.cpp
   MIAirFlow.cpp
   MIDeskDlg.cpp

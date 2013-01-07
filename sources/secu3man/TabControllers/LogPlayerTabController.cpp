@@ -29,6 +29,7 @@
 #include "io-core/LogReader.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
+#include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
@@ -241,6 +242,7 @@ void CLogPlayerTabController::OnOpenFileButton(void)
  m_view->mp_LPPanelDlg->SetFileIndicator(string.GetBuffer(0));
 
  m_view->mp_MIDeskDlg->Enable(true);
+ m_view->mp_CEDeskDlg->Enable(true);
  m_view->mp_LPPanelDlg->EnableAll(true);
  m_view->mp_OScopeCtrl->EnableWindow(true);
 
@@ -365,7 +367,7 @@ void CLogPlayerTabController::_GoNext(void)
 
 void CLogPlayerTabController::_GoBack(void)
 {
- //добавляем о очередь cзади
+ //добавляем в очередь cзади
  unsigned long period = CalcPeriod(m_curr_record.first, m_prev_record.first);
  m_last_perionds.push_back(period);
 
@@ -476,6 +478,7 @@ void CLogPlayerTabController::_ClosePlayer(void)
  m_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_OPEN_FILE));
  m_view->mp_LPPanelDlg->SetSliderPosition(0);
  m_view->mp_MIDeskDlg->Enable(false);
+ m_view->mp_CEDeskDlg->Enable(false);
  m_view->mp_LPPanelDlg->EnableAll(false);
  m_view->mp_OScopeCtrl->EnableWindow(false);
  m_timer.KillTimer();
@@ -488,6 +491,9 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 {
  //обновляем приборы, а также обновляем позицию слайдера, если нужно
  m_view->mp_MIDeskDlg->SetValues(&m_curr_record.second);
+
+ //обновляем ошибки
+ m_view->mp_CEDeskDlg->SetValues(m_curr_record.second.ce_errors);
 
  //выводим время записи
  CString string;

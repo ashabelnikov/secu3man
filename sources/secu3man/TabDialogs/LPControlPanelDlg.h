@@ -26,6 +26,8 @@
 #include "common/FastDelegate.h"
 #include "ui-core/DialogWithAccelerators.h"
 
+class CToolTipCtrlEx;
+
 class CLPControlPanelDlg : public CModelessDialog
 {
   typedef CModelessDialog Super;
@@ -117,4 +119,6 @@ private:
   EventHandler m_on_open_file_button;
   EventWithCode m_on_time_factor_combo;
   EventHScroll m_on_slider_moved;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

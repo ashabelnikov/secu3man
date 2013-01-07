@@ -217,6 +217,8 @@ BEGIN
                     SS_BLACKFRAME,16,150,153,54
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,195,238,20
     CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,14,0,145,138
 END
@@ -384,6 +386,13 @@ BEGIN
                             "Импорт таблиц из файла EEPROM"
     IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
                             "Контрольная сумма не совпадает, возможно что параметры EEPROM повреждены. Желаете продолжить?"
+
+    IDS_LP_SIGNAL_OSCILLOSCOPE_TT "Сигнал с датчика детонации (ДД)"
+    IDS_LOG_PLAYER_PREV_BUTTON_TT "Назад на 1 запись"
+    IDS_LOG_PLAYER_PLAY_BUTTON_TT "Старт/Стоп"
+    IDS_LOG_PLAYER_NEXT_BUTTON_TT "Вперед на 1 запись"
+    IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT "Управление скоростью проигрывания"
+    IDS_LOG_PLAYER_POSITION_SLIDER_TT "Прокрутка записей"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -720,6 +729,8 @@ BEGIN
                     SS_BLACKFRAME,16,150,153,54
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,187,0,238,172
+    CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,195,238,20
     CONTROL         "",IDC_LP_LOGCONTROL_PANEL_FRAME,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,14,0,145,138
 END
@@ -1036,6 +1047,12 @@ BEGIN
                             "Import tables from EEPROM file"
     IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID 
                             "Check sum doesn't match, perhaps EEPROM parameters are corrupted. Do you want to continue?"
+    IDS_LP_SIGNAL_OSCILLOSCOPE_TT "Signal from a knock sensor (KS)"
+    IDS_LOG_PLAYER_PREV_BUTTON_TT "Backward by 1 record"
+    IDS_LOG_PLAYER_PLAY_BUTTON_TT "Start/Stop"
+    IDS_LOG_PLAYER_NEXT_BUTTON_TT "Forward by 1 record"
+    IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT "Control playback speed"
+    IDS_LOG_PLAYER_POSITION_SLIDER_TT "Records scrolling"
 END
 
 STRINGTABLE DISCARDABLE 

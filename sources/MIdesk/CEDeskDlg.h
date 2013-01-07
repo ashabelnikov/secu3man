@@ -22,48 +22,40 @@
 #pragma once
 
 #include <memory>
-#include <vector>
-#include "common/FastDelegate.h"
-#include "ui-core/TabDialog.h"
+#include "ui-core/DialogWithAccelerators.h"
 
-class CCEDeskDlg;
-class CLPControlPanelDlg;
-class CMIDeskDlg;
-class COScopeCtrl;
 class CToolTipCtrlEx;
 
-class CLogPlayerTabDlg : public CTabDialog
+/////////////////////////////////////////////////////////////////////////////
+// CRSDeskDlg dialog
+
+class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
 {
-  typedef CTabDialog Super;
+  typedef CModelessDialog Super;
 
  public:
-  CLogPlayerTabDlg(CWnd* pParent = NULL);
+  CCEDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
-  virtual LPCTSTR GetDialogID(void) const;
 
-  void EnlargeMonitor(bool i_enlarge);
+  void Show(bool show);
+  void Enable(bool enable);
+  void SetValues(WORD errors);
 
-  void AppendKnockValue(double i_value, bool i_reverse);
-  void ResetKnockOscilloscope(void);
+  //изменение размеров окна
+  void Resize(const CRect& i_rect);
 
- public:
-  std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
-  std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
-  std::auto_ptr<CLPControlPanelDlg> mp_LPPanelDlg;
-
-  //additional: for displaying of knock
-  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
-
+  // Implementation
  protected:
-  void _ResizeRect(const CRect& i_external, CRect& io_victim);
-  void _InitializeOscilloscopeControl(void);
-
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
-  virtual void DoDataExchange(CDataExchange* pDX);
   DECLARE_MESSAGE_MAP()
 
-  CRect m_original_mi_rect;
-  CRect m_original_ce_rect;
-
+ private:
+  int  m_enabled;
+  CStatic m_ce_errors[16];
+  CStatic m_ce_text;
+  
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
+
+/////////////////////////////////////////////////////////////////////////////

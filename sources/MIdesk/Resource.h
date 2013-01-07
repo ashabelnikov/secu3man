@@ -58,3 +58,23 @@
 #define IDC_RS_ADD_I2_VALUE             2058
 #define IDC_RS_ADD_I2_CAPTION           2059
 #define IDC_RS_ADD_I2_UNIT              2060
+#define IDD_CE_ERRORS_DESK              2061
+#define IDC_CE_DESK_CE                  2062
+#define IDC_CE_DESK_0                   2063
+#define IDC_CE_DESK_1                   2064
+#define IDC_CE_DESK_2                   2065
+#define IDC_CE_DESK_3                   2066
+#define IDC_CE_DESK_4                   2067
+#define IDC_CE_DESK_5                   2068
+#define IDC_CE_DESK_6                   2069
+#define IDC_CE_DESK_7                   2070
+#define IDC_CE_DESK_8                   2071
+#define IDC_CE_DESK_9                   2072
+#define IDC_CE_DESK_10                  2073
+#define IDC_CE_DESK_11                  2074
+#define IDC_CE_DESK_12                  2075
+#define IDC_CE_DESK_13                  2076
+#define IDC_CE_DESK_14                  2077
+#define IDC_CE_DESK_15                  2078
+#define IDS_CE_ERRORS_DESK_TT           2079
+
