@@ -80,6 +80,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_gas_valve.Create();
  m_shutoff_valve.Create();
  m_throttle_gate.Create();
+ m_throttle_gate.SetLimits(0,100);
  m_air_flow.Create();
  m_temperature.Create();
 
@@ -145,6 +146,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->gas = (unsigned char)m_gas_valve.GetValue();
  o_values->ephh_valve = (unsigned char)m_shutoff_valve.GetValue();
  o_values->carb = (unsigned char)m_throttle_gate.GetValue();
+ o_values->tps = m_throttle_gate.GetPosition();
  o_values->air_flow = (unsigned char)m_air_flow.GetValue();
  o_values->temperat = m_temperature.GetValue();
 }
@@ -160,6 +162,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_gas_valve.SetValue(m_values.gas);
  m_shutoff_valve.SetValue(m_values.ephh_valve);
  m_throttle_gate.SetValue(m_values.carb);
+ m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetValue(m_values.temperat);
 }

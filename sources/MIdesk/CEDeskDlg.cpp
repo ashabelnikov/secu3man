@@ -35,7 +35,7 @@ END_MESSAGE_MAP()
 const UINT CCEDeskDlg::IDD = IDD_CE_ERRORS_DESK;
 
 /////////////////////////////////////////////////////////////////////////////
-// CRSDeskDlg dialog
+// CCEDeskDlg dialog
 
 CCEDeskDlg::CCEDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CCEDeskDlg::IDD, pParent)
@@ -53,7 +53,7 @@ void CCEDeskDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CRSDeskDlg message handlers
+// CCEDeskDlg message handlers
 
 BOOL CCEDeskDlg::OnInitDialog()
 {

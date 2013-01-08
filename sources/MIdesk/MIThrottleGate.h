@@ -45,8 +45,13 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
   virtual void SetTicks(int number);
   //---------------------------------------
 
+  void SetPosition(float value); //specific function
+  float GetPosition(void) const; //specific function
+
  private:
   bool m_prev_enable;
   CLEDIndicator m_led;
   CStatic m_caption;
+  float m_loLimit;
+  float m_upLimit;
 };

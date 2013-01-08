@@ -27,7 +27,8 @@ enum LEDMemberEnum
 {
  led_rect,  //рамка
  led_on,    //включенное состояние
- led_off    //выключенное сщстояние
+ led_off,   //выключенное сщстояние
+ led_pos    //позиция
 };
 
 /////////////////////////////////////////////////////////////////////////////
@@ -36,7 +37,7 @@ enum LEDMemberEnum
 class AFX_EXT_CLASS CLEDIndicator : public CStatic
 {
  public:
-  CLEDIndicator();
+  CLEDIndicator(bool pieIndicator = false);
   virtual ~CLEDIndicator();
 
   void SetColor(enum LEDMemberEnum led_member, COLORREF Color);
@@ -45,6 +46,9 @@ class AFX_EXT_CLASS CLEDIndicator : public CStatic
   void SetState(bool state);
   bool GetState(void);
 
+  void SetPosition(float value); //0...100
+  float GetPosition(void) const;
+ 
  protected:
   void ActuateColors();
 
@@ -52,17 +56,25 @@ class AFX_EXT_CLASS CLEDIndicator : public CStatic
   afx_msg void OnPaint();
   DECLARE_MESSAGE_MAP()
 
+  void DrawLED(CDC& dc, const CRect& rect);
  private:
   CBrush m_onBrush;
   CBrush m_offBrush;
+  CBrush m_posBrush;
+  CBrush m_bkBrush;
   CPen   m_rectPen;
-
+  CPen   m_posPen;
+ 
   COLORREF m_onColor;
+  COLORREF m_posColor;
   COLORREF m_offColor;
   COLORREF m_rectColor;
 
   int m_rectWidth;
   bool m_state;
+  bool m_pieIndicator;
+  float m_value;
+  double m_dPI; 
 };
 
 /////////////////////////////////////////////////////////////////////////////

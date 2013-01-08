@@ -28,6 +28,9 @@
 //////////////////////////////////////////////////////////////////////
 
 CMIThrottleGate::CMIThrottleGate()
+: m_led(true)
+, m_loLimit(.0f)
+, m_upLimit(.0f)
 {
  //empty
 }
@@ -89,7 +92,8 @@ bool CMIThrottleGate::IsEnabled(void)
 
 void CMIThrottleGate::SetLimits(float loLimit, float upLimit)
 {
- //not used by LED
+ m_loLimit = loLimit;
+ m_upLimit = upLimit;
 }
 
 void CMIThrottleGate::SetTicks(int number)
@@ -97,6 +101,18 @@ void CMIThrottleGate::SetTicks(int number)
  //not used by LED
 }
 //----------------------------------------------------
+
+void CMIThrottleGate::SetPosition(float value)
+{
+ if (value < m_loLimit) value = m_loLimit;
+ if (value > m_upLimit) value = m_upLimit;
+ m_led.SetPosition(((m_upLimit - m_loLimit) / 100.0f) * (value-m_loLimit));
+}
+
+float CMIThrottleGate::GetPosition(void) const
+{
+ return m_led.GetPosition();
+}
 
 void CMIThrottleGate::DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_caption)
 {
