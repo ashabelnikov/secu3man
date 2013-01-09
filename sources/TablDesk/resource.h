@@ -34,3 +34,5 @@
 #define IDC_DWELL_CALC_I_SPIN           5034
 #define IDC_TD_VIEW_CTS_CURVE           5035
 #define IDS_CTS_CURVE_MAP               5036
+#define IDS_TD_DWELL_CALC_BUTTON_TT     5037
+#define IDS_TD_VIEW_DWELL_CONTROL_TT    5038

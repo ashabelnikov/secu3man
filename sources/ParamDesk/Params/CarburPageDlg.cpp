@@ -182,12 +182,12 @@ BOOL CCarburPageDlg::OnInitDialog()
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_edit, MLL::GetString(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_spin, MLL::GetString(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_threshold_edit, MLL::GetString(IDC_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_threshold_spin, MLL::GetString(IDC_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_edit, MLL::GetString(IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_spin, MLL::GetString(IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_edit, MLL::GetString(IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_spin, MLL::GetString(IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_threshold_edit, MLL::GetString(IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_threshold_spin, MLL::GetString(IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

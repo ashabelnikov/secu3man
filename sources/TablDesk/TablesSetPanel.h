@@ -21,10 +21,13 @@
 
 #pragma once
 
+#include <memory>
 #include <vector>
 #include "ButtonsPanel.h"
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
+
+class CToolTipCtrlEx;
 
 /////////////////////////////////////////////////////////////////////////////
 // CTablesSetPanel dialog
@@ -122,4 +125,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float m_cts_curve_map_original[16];
 
   float m_cts_curve_x_axis_limits[2];
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
