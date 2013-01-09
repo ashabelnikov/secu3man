@@ -115,6 +115,7 @@ namespace SECU3IO
   int  ephh_lot_g;
   int  ephh_hit_g;
   float shutoff_delay;                  //задержка выключения клапана
+  float tps_threshold;                  //порог переключения в режим ХХ по ДПДЗ
  };
 
  struct TemperPar

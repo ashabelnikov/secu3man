@@ -632,6 +632,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->ephh_hit_g  = p_in->ephh_hit_g;
     p_params->ephh_lot_g  = p_in->ephh_lot_g;
     p_params->shutoff_delay = MathHelpers::Round(p_in->shutoff_delay * 100); //переводим в десятки мс
+    p_params->tps_threshold = MathHelpers::Round(p_in->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
    }
    break;
   case IDLREG_PAR:
@@ -810,6 +811,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->ephh_hit_g  = p_params->ephh_hit_g;
      p_out->ephh_lot_g  = p_params->ephh_lot_g;
      p_out->shutoff_delay = ((float)p_params->shutoff_delay) / 100.0f; //переводим в секунды
+     p_out->tps_threshold = ((float)p_params->tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
     }
     break;
    case IDLREG_PAR:

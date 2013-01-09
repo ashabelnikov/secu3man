@@ -253,63 +253,50 @@ FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,13,20,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,93,21,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,92,21,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,14,64,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,13,62,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,64,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,62,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,13,98,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Инверсия концевика карбюратора",
-                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
-    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
+    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,92,98,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,43,20,13,
-                    18
-    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,20,13,
-                    18
-    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,
-                    10,33,10
-    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,
-                    10,34,10
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
-                    22,13
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
-                    13
-    CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,93,130,11,
-                    18
-    LTEXT           "Порог включения ЭМР",
-                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
-    LTEXT           "Разряжение (кПа)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
-                    110,130,48,17
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,64,13,
-                    18
-    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,122,64,13,
-                    18
-    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,
-                    54,33,10
-    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,
-                    94,54,34,10
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,137,66,
-                    22,13
-    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,65,
-                    22,13
-    GROUPBOX        "Пороги ЭПХХ для бензина",
-                    IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
-    GROUPBOX        "Пороги ЭПХХ для газа",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,6,
-                    47,159,40
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,45,98,11,18
-    LTEXT           "Задержка выкл. клап.",
-                    IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,5,88,79,10
-    LTEXT           "сек.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
+    CONTROL         "Инверсия концевика карбюратора",IDC_PD_CARBUR_INVERSE_SWITCH,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,14,123,67,25
+    EDITTEXT        IDC_PD_CARBUR_TPS_THRESHOLD_EDIT,92,129,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,20,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,20,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,62,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,62,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,98,13,18
+    CONTROL         "",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,97,13,18
+    CONTROL         "",IDC_PD_CARBUR_TPS_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,129,13,18
+    GROUPBOX        "Пороги ЭПХХ для бензина",IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
+    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,10,33,10
+    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,97,10,34,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,22,13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,59,23,22,13
+    LTEXT           "Разряж. (кПа)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,138,97,36,17
+    GROUPBOX        "Пороги ЭПХХ для газа",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,6,45,159,40
+    LTEXT           "нижний",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,52,33,10
+    LTEXT           "верхний",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,94,52,34,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,138,64,22,13
+    LTEXT           "мин-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,63,22,13
+    LTEXT           "Задержка выкл. клап.",IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,6,88,79,8
+    LTEXT           "Порог включения ЭМР",IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,87,88,85,8
+    LTEXT           "сек.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,60,100,19,13
+    LTEXT           "Порог ДПДЗ",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,87,119,71,10
+    LTEXT           "% откр.",IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,138,131,25,13
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -633,6 +620,9 @@ BEGIN
     IDS_TD_TABNAME_GAS      "12:Газ"
     IDS_TD_LOAD_TABLES_POPUP_MENU "Загрузить из"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Сохранить в"
+    IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана Экономайзера Мощностных Режимов (по разряжению)"
+    IDC_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %"
+    IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -840,7 +830,7 @@ BEGIN
     LTEXT           "%/V",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,140,130,25,11
     LTEXT           "Maps set for gasoline",IDC_PD_FUNSET_BENZIN_MAPS_COMBO_CAPTION,2,81,83,8
     LTEXT           "Maps set for gas",IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,88,81,80,8
-    GROUPBOX        "MAP tuning",IDC_PD_FUNSET_MAP_SENSOR_GROUP,3,41,164,39
+    GROUPBOX        "MAP sensor tuning",IDC_PD_FUNSET_MAP_SENSOR_GROUP,3,41,164,39
     GROUPBOX        "Tuning press. axis of work map",IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,3,1,164,39
     GROUPBOX        "TPS tuning",IDC_PD_FUNSET_TPS_SENSOR_GROUP,3,108,164,39
 END
@@ -901,63 +891,50 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,13,20,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,93,21,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT,92,21,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,14,64,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,13,62,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,64,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,92,62,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,14,98,30,18,
+    EDITTEXT        IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,13,98,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Inversion of throttle position switch",
-                    IDC_PD_CARBUR_INVERSE_SWITCH,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,93,92,67,25
-    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,42,131,46,18,
+    EDITTEXT        IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,92,98,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,43,20,13,
-                    18
-    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,20,13,
-                    18
-    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,10,
-                    33,10
-    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,98,10,
-                    34,10
-    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,
-                    22,13
-    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,58,23,22,
-                    13
-    CONTROL         "Spin2",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,93,130,11,
-                    18
-    LTEXT           "EPM switch on threshold",
-                    IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,40,121,101,8
-    LTEXT           "Discharge (kPa)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,
-                    110,130,48,17
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,64,13,
-                    18
-    CONTROL         "Spin2",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,122,64,13,
-                    18
-    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,
-                    54,33,10
-    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,94,
-                    54,34,10
-    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,137,66,
-                    22,13
-    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,65,
-                    22,13
-    GROUPBOX        "FI thresholds for gasoline",
-                    IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
-    GROUPBOX        "FI thresholds for gas",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,
-                    6,47,159,40
-    CONTROL         "Spin1",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,45,98,11,18
-    LTEXT           "Valve turn off delay",
-                    IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,5,88,79,10
-    LTEXT           "sec.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,58,100,19,13
+    CONTROL         "Inversion of throttle position switch",IDC_PD_CARBUR_INVERSE_SWITCH,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,14,123,67,25
+    EDITTEXT        IDC_PD_CARBUR_TPS_THRESHOLD_EDIT,92,129,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,20,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,20,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,62,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,62,13,18
+    CONTROL         "",IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,44,98,13,18
+    CONTROL         "",IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,97,13,18
+    CONTROL         "",IDC_PD_CARBUR_TPS_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,129,13,18
+    GROUPBOX        "Idle cut-off valve thresholds for gasoline",IDC_PD_CARBUR_SHUTOFF_BENZIN_GROUP,5,2,160,42
+    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION,17,10,33,10
+    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION,97,10,34,10
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT,138,23,22,13
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT,59,23,22,13
+    LTEXT           "Vacuum (kPa)",IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,138,97,36,17
+    GROUPBOX        "Idle cut-off valve thresholds for gas",IDC_PD_CARBUR_SHUTOFF_GAS_GROUP,6,44,159,41
+    LTEXT           "lower",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,16,52,33,10
+    LTEXT           "upper",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,94,52,34,10
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,138,64,22,13
+    LTEXT           "min-1",IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,59,63,22,13
+    LTEXT           "Valve turn off delay",IDC_PD_CARBUR_SHUTOFF_DELAY_CAPTION,6,88,79,8
+    LTEXT           "PVS turn on threshold",IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,87,88,85,8
+    LTEXT           "sec.",IDC_PD_CARBUR_SHUTOFF_DELAY_UNIT,60,100,19,13
+    LTEXT           "TPS threshold",IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,87,119,71,10
+    LTEXT           "% open.",IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,138,131,25,13
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -972,7 +949,7 @@ BEGIN
     CONTROL         "Use coolant temperature sensor",
                     IDC_PD_TEMPER_USE_TEMP_SENSOR,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,28,61,116,27
-    CONTROL         "Control ventilator using PWM",
+    CONTROL         "Control cooling fan using PWM",
                     IDC_PD_TEMPER_USE_VENT_PWM,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,28,86,116,27
     CONTROL         "Use table to define sensor's curve",
@@ -1288,6 +1265,9 @@ BEGIN
     IDS_TD_TABNAME_GAS      "12:Gas"
     IDS_TD_LOAD_TABLES_POPUP_MENU "Load from"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Save to"
+    IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Power Valve Solenoid (Part-load enrichment) turn on threshold (by vacuum)"
+    IDC_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %"
+    IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Turn off delay of the Idle cut-off valve solenoid"
 END
 
 STRINGTABLE DISCARDABLE 

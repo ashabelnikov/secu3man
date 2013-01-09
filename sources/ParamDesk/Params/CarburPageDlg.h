@@ -21,11 +21,14 @@
 
 #pragma once
 
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+
+class CToolTipCtrlEx;
 
 class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -61,10 +64,14 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_shutoff_lo_threshold_spin_g;
   CSpinButtonCtrlEx m_shutoff_hi_threshold_spin_g;
   CSpinButtonCtrlEx m_shutoff_delay_spin;
+  CSpinButtonCtrlEx m_tps_threshold_spin;
   CEditEx m_shutoff_lo_threshold_edit;
   CEditEx m_shutoff_hi_threshold_edit;
   CEditEx m_epm_on_threshold_edit;
   CEditEx m_shutoff_lo_threshold_edit_g;
   CEditEx m_shutoff_hi_threshold_edit_g;
   CEditEx m_shutoff_delay_edit;
+  CEditEx m_tps_threshold_edit;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

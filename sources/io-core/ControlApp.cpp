@@ -591,47 +591,54 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
 
- if (strlen((char*)raw_packet)!=24)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Нижний порог ЭПХХ (бензин)
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_lot))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot))
   return false;
  raw_packet+=4;
 
  //Верхний порог ЭПХХ (бензин)
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_hit))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit))
   return false;
  raw_packet+=4;
 
  //Признак инверсии концевика карбюратора
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CarburPar.carb_invers))
+ if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_CarburPar.carb_invers))
   return false;
  raw_packet+=1;
 
  //Порог разрежения ЭМР
  int epm_on_threshold = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&epm_on_threshold,true))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &epm_on_threshold, true))
   return false;
  raw_packet+=4;
  m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Нижний порог ЭПХХ (газ)
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_lot_g))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot_g))
   return false;
  raw_packet+=4;
 
  //Верхний порог ЭПХХ (газ)
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_CarburPar.ephh_hit_g))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit_g))
   return false;
  raw_packet+=4;
 
  //Задержка выключения клапана ЭПХХ
  unsigned char shutoff_delay;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&shutoff_delay))
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &shutoff_delay))
   return false;
  raw_packet+=2;
  m_CarburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
+
+ //Порог переключения в режим ХХ по ДПДЗ
+ unsigned char tps_threshold;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &tps_threshold))
+  return false;
+ raw_packet+=2;
+ m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  if (*raw_packet!='\r')
    return false;
@@ -1736,6 +1743,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  CNumericConv::Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
  unsigned char shutoff_delay = MathHelpers::Round(packet_data->shutoff_delay * 100.0f);
  CNumericConv::Bin8ToHex(shutoff_delay,m_outgoing_packet);
+ unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ CNumericConv::Bin8ToHex(tps_threshold, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 
