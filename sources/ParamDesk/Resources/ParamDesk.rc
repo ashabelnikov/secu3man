@@ -623,6 +623,8 @@ BEGIN
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана Экономайзера Мощностных Режимов (по разряжению)"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %"
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ"
+    IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
+    IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1268,6 +1270,8 @@ BEGIN
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Power Valve Solenoid (Part-load enrichment) turn on threshold (by vacuum)"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %"
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Turn off delay of the Idle cut-off valve solenoid"
+    IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
+    IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
 END
 
 STRINGTABLE DISCARDABLE 

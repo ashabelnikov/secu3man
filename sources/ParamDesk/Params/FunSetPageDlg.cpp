@@ -23,6 +23,7 @@
 #include "Resources/resource.h"
 #include "FunSetPageDlg.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
@@ -170,6 +171,16 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_tps_curve_gradient_edit.SetLimitText(5);
  m_tps_curve_gradient_edit.SetDecimalPlaces(3);
  m_tps_curve_gradient_spin.SetRangeAndDelta(.0f, 100.0f, 0.01f);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
