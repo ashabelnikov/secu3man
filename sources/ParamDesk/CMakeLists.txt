@@ -24,6 +24,7 @@ set(HEADERS
   Params/ADCCompenPageDlg.h
   Params/AnglesPageDlg.h
   Params/CarburPageDlg.h
+  Params/ChokePageDlg.h
   Params/CKPSPageDlg.h
   Params/FunSetPageDlg.h
   Params/IdlRegPageDlg.h
@@ -48,6 +49,7 @@ set(SOURCES
   Params/ADCCompenPageDlg.cpp
   Params/AnglesPageDlg.cpp
   Params/CarburPageDlg.cpp
+  Params/ChokePageDlg.cpp
   Params/CKPSPageDlg.cpp
   Params/FunSetPageDlg.cpp
   Params/IdlRegPageDlg.cpp

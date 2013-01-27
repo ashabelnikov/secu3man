@@ -773,6 +773,12 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
     p_params->hop_durat_cogs = p_in->hop_durat_cogs;
    }
    break;
+  case CHOKE_PAR:
+   {
+    ChokePar* p_in = (ChokePar*)i_values;
+    p_params->sm_steps  = p_in->sm_steps;
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -945,6 +951,12 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
      p_out->ign_cutoff_thrd = p_params->ign_cutoff_thrd;
      p_out->hop_start_cogs = p_params->hop_start_cogs;
      p_out->hop_durat_cogs = p_params->hop_durat_cogs;
+    }
+    break;
+   case CHOKE_PAR:
+    {
+     ChokePar* p_out = (ChokePar*)o_values;
+     p_out->sm_steps = p_params->sm_steps;
     }
     break;
 

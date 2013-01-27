@@ -1331,6 +1331,25 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet)
+{
+ SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
+
+ if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+  return false;
+
+ //Number of stepper motor steps
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&m_ChokePar.sm_steps))
+  return false;
+ raw_packet+=4;
+
+ if (*raw_packet!='\r')
+  return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1433,6 +1452,10 @@ bool CControlApp::ParsePackets()
     continue;
    case DIAGINP_DAT:
     if (Parse_DIAGINP_DAT(raw_packet))
+     break;
+    continue;
+   case CHOKE_PAR:
+    if (Parse_CHOKE_PAR(raw_packet))
      break;
     continue;
 
@@ -1630,7 +1653,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case EDITAB_PAR:
   case ATTTAB_PAR:
   case DIAGINP_DAT:
-  case DIAGOUT_DAT: 
+  case DIAGOUT_DAT:
+  case CHOKE_PAR: 
    return true;
   default:
    return false;
@@ -1695,6 +1719,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case DIAGOUT_DAT:
    Build_DIAGOUT_DAT((DiagOutDat*)i_packet_data);
+   break;
+  case CHOKE_PAR:
+   Build_CHOKE_PAR((ChokePar*)i_packet_data);
    break;
 
   default:
@@ -1985,6 +2012,13 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 
  CNumericConv::Bin16ToHex(bits, m_outgoing_packet);
 
+ m_outgoing_packet+= '\r';
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
+{
+ CNumericConv::Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
  m_outgoing_packet+= '\r';
 }
 

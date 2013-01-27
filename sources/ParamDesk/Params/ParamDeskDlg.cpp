@@ -29,6 +29,7 @@
 #include "ADCCompenPageDlg.h"
 #include "AnglesPageDlg.h"
 #include "CarburPageDlg.h"
+#include "ChokePageDlg.h"
 #include "CKPSPageDlg.h"
 #include "FunSetPageDlg.h"
 #include "IdlRegPageDlg.h"
@@ -100,6 +101,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 
  m_pMiscPageDlg = new CMiscPageDlg();
  m_pMiscPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+ m_pChokePageDlg = new CChokePageDlg();
+ m_pChokePageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -117,6 +121,7 @@ CParamDeskDlg::~CParamDeskDlg()
  if (m_show_knock_page)
   delete m_pKnockPageDlg;
  delete m_pMiscPageDlg;
+ delete m_pChokePageDlg;
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -148,6 +153,7 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_COMMAND_HK_XXX(CKPS_PAR)
  ON_COMMAND_HK_XXX(KNOCK_PAR)
  ON_COMMAND_HK_XXX(MISCEL_PAR)
+ ON_COMMAND_HK_XXX(CHOKE_PAR)
 
 END_MESSAGE_MAP()
 
@@ -183,6 +189,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (m_show_knock_page)
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_KNOCK_PAR),m_pKnockPageDlg,8), KNOCK_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_MISCEL_PAR),m_pMiscPageDlg,9), MISCEL_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
 
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
@@ -198,7 +205,7 @@ BOOL CParamDeskDlg::OnInitDialog()
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-	           // EXCEPTION: OCX Property Pages should return FALSE
+               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 BYTE CParamDeskDlg::GetCurrentDescriptor(void)
@@ -251,6 +258,7 @@ void CParamDeskDlg::Enable(bool enable)
  if (m_show_knock_page)
   m_pKnockPageDlg->Enable(enable);
  m_pMiscPageDlg->Enable(enable);
+ m_pChokePageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -309,6 +317,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case MISCEL_PAR:
    m_pMiscPageDlg->SetValues((MiscelPar*)i_values);
    break;
+  case CHOKE_PAR:
+   m_pChokePageDlg->SetValues((ChokePar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -355,6 +366,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case MISCEL_PAR:
    m_pMiscPageDlg->GetValues((MiscelPar*)o_values);
+   break;
+  case CHOKE_PAR:
+   m_pChokePageDlg->GetValues((ChokePar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:
@@ -511,6 +525,7 @@ void CParamDeskDlg::_RegisterHotKeys(void)
  if (m_show_knock_page)
   RegisterHK(KNOCK_PAR,  VK_F9);
  RegisterHK(MISCEL_PAR, VK_F10);
+ RegisterHK(CHOKE_PAR,  VK_F11);
 }
 
 #define OnHK_XXX(x)\
@@ -531,3 +546,4 @@ OnHK_XXX(ADCCOR_PAR)
 OnHK_XXX(CKPS_PAR)
 OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
+OnHK_XXX(CHOKE_PAR)

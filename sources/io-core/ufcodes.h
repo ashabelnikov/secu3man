@@ -55,4 +55,6 @@
 #define   DIAGINP_DAT  '='
 #define   DIAGOUT_DAT  '^'
 
+#define   CHOKE_PAR    '%'
+
 #endif //_UFCODES_H_

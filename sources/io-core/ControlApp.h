@@ -165,6 +165,7 @@ class IOCORE_API CControlApp
   bool Parse_EDITAB_PAR(const BYTE* raw_packet);
   bool Parse_DIAGINP_DAT(const BYTE* raw_packet);
   bool Parse_ATTTAB_PAR(const BYTE* raw_packet);
+  bool Parse_CHOKE_PAR(const BYTE* raw_packet);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -181,6 +182,7 @@ class IOCORE_API CControlApp
   void Build_MISCEL_PAR(SECU3IO::MiscelPar* packet_data);
   void Build_EDITAB_PAR(SECU3IO::EditTabPar* packet_data);
   void Build_DIAGOUT_DAT(SECU3IO::DiagOutDat* packet_data);
+  void Build_CHOKE_PAR(SECU3IO::ChokePar* packet_data);
 };
 
 #endif //_CONTROLAPP_
