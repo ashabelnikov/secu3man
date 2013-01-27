@@ -163,10 +163,13 @@ typedef struct
  _uint cts_vl_begin;
  _uint cts_vl_end;
 
+ //Choke closing versus coolant temperature
+ _uchar choke_closing[CHOKE_CLOSING_LOOKUP_TABLE_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[22];
+ _uchar reserved[6];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -973,6 +976,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  op_fwd->ctscurve_vlimits[0] = GetCTSMapVoltageLimit(0);
  op_fwd->ctscurve_vlimits[1] = GetCTSMapVoltageLimit(1);
 
+ GetChokeOpMap(op_fwd->choke_op_table);
+
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  for(i = 0; i < F_RPM_SLOTS; ++i)
   op_fwd->rpm_slots[i] = (float)work_map_rpm_slots[i];
@@ -996,6 +1001,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetCTSCurveMap(ip_fwd->ctscurve_table);
  SetCTSMapVoltageLimit(0, ip_fwd->ctscurve_vlimits[0]);
  SetCTSMapVoltageLimit(1, ip_fwd->ctscurve_vlimits[1]);
+
+ SetChokeOpMap(ip_fwd->choke_op_table);
 
  //todo in the future, set values from ip_fwd->rpm_slots into the firmware here
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -1139,6 +1146,41 @@ void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
  {
   ASSERT(0); //wrong i_type value
  }
+}
+
+void CFirmwareDataMediator::GetChokeOpMap(float* o_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ ASSERT(o_values);
+ if (!o_values)
+  return;
+
+ if (i_original)
+  p_bytes = mp_bytes_original;
+ else
+  p_bytes = mp_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
+  o_values[i] = (p_fd->exdata.choke_closing[i] / 2.0f);
+}
+
+void CFirmwareDataMediator::SetChokeOpMap(const float* i_values)
+{
+ BYTE* p_bytes = NULL;
+ ASSERT(i_values);
+ if (!i_values)
+  return;
+
+ p_bytes = mp_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
+  p_fd->exdata.choke_closing[i] = (_uchar)MathHelpers::Round(i_values[i] * 2.0);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const

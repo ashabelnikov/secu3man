@@ -38,7 +38,7 @@ FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,217,
                     100
-    CONTROL         "List1",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
+    CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
                     WS_EX_LEFTSCROLLBAR
@@ -62,6 +62,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
+    CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,127,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -108,6 +110,8 @@ BEGIN
     IDS_CTS_CURVE_MAP       "Настройка кривой датчика температуры охлаждающей жидкости"
     IDS_TD_DWELL_CALC_BUTTON_TT "Расчет таблицы времени накопления энергии КЗ по параметрам катушки"
     IDS_TD_VIEW_DWELL_CONTROL_TT "Редактирование таблицы времени накопления энергии КЗ"
+    IDS_CHOKE_OP_UNIT       "Закрытие воздушной заслонки (%)"
+    IDS_CHOKE_OP_MAP        "Настройка положения воздушной заслонки от температуры"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -147,7 +151,7 @@ FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
     GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,
                     217,100
-    CONTROL         "List1",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
+    CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
                     WS_EX_LEFTSCROLLBAR
@@ -171,6 +175,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
+    CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,127,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -227,4 +233,6 @@ BEGIN
     IDS_CTS_CURVE_MAP       "Tune coolant temperature sensor curve"
     IDS_TD_DWELL_CALC_BUTTON_TT "Calculate dwell control lookup table using coil's characteristics"
     IDS_TD_VIEW_DWELL_CONTROL_TT "Edit dwell control lookup table"
+    IDS_CHOKE_OP_UNIT       "Choke closing (%)"
+    IDS_CHOKE_OP_MAP        "Tune choke position as function of temperature"
 END

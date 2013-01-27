@@ -118,6 +118,37 @@ void __cdecl CTablesSetPanel::OnCloseCTSCurveTable(void* i_param)
  if (_this->m_OnCloseMapWnd)
   _this->m_OnCloseMapWnd(_this->m_cts_curve_map_wnd_handle, TYPE_MAP_CTS_CURVE);
 }
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeChokeOpTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_CHOKE_OP);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseChokeOpTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_choke_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_choke_map_wnd_handle, TYPE_MAP_CHOKE_OP);
+}
+
 //------------------------------------------------------------------------
 void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, void* i_param)
 {
@@ -174,14 +205,17 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 : Super(CTablesSetPanel::IDD, pParent)
 , m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
+, m_choke_op_enabled(false)
 {
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
  m_cts_curve_map_chart_state = 0;
+ m_choke_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
  m_cts_curve_map_wnd_handle = NULL;
+ m_choke_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -201,16 +235,19 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, m_view_dwellcntrl_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CTS_CURVE, m_view_cts_curve_map_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_CHOKE_MAP, m_view_choke_op_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_ATTENUATOR_MAP, OnViewAttenuatorMap)
  ON_BN_CLICKED(IDC_TD_VIEW_DWELL_CONTROL, OnViewDwellCntrlMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CTS_CURVE, OnViewCTSCurveMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_CHOKE_MAP, OnViewChokeOpMap)
  ON_BN_CLICKED(IDC_TD_DWELL_CALC_BUTTON, OnDwellCalcButton)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CHOKE_MAP, OnUpdateViewChokeOpMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_DWELL_CALC_BUTTON, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
@@ -265,6 +302,14 @@ void CTablesSetPanel::OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_cts_curve_map_chart_state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewChokeOpMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_choke_op_enabled);
+ pCmdUI->SetCheck( (m_choke_map_chart_state) ? TRUE : FALSE );
+}
+
 //обновл€ет контроллы состо€ние которых зависит от того - есть данные или нет
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -284,6 +329,8 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_cts_curve_map_wnd_handle, GetCTSCurveMap(true), GetCTSCurveMap(false));
   DLL::Chart2DUpdateAxisEdits(m_cts_curve_map_wnd_handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
  }
+ if (m_choke_map_chart_state)
+  DLL::Chart2DUpdate(m_choke_map_wnd_handle, GetChokeOpMap(true), GetChokeOpMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -302,6 +349,15 @@ void CTablesSetPanel::EnableCTSCurve(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_cts_curve_map_chart_state && ::IsWindow(m_cts_curve_map_wnd_handle))
   DLL::Chart2DEnable(m_cts_curve_map_wnd_handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableChokeOp(bool enable)
+{
+ m_choke_op_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_choke_map_chart_state && ::IsWindow(m_choke_map_wnd_handle))
+  DLL::Chart2DEnable(m_choke_map_wnd_handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -458,6 +514,38 @@ void CTablesSetPanel::OnViewCTSCurveMap()
  }
 }
 
+void CTablesSetPanel::OnViewChokeOpMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_choke_op_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_choke_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_choke_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_choke_map_chart_state = 1;
+  m_choke_map_wnd_handle = DLL::Chart2DCreate(GetChokeOpMap(true), GetChokeOpMap(false), 0, 100.0, SECU3IO::choke_op_map_slots, 16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_CHOKE_OP_UNIT).c_str(),
+    MLL::GetString(IDS_CHOKE_OP_MAP).c_str());
+  DLL::Chart2DSetOnChange(m_choke_map_wnd_handle, OnChangeChokeOpTable, this);
+  DLL::Chart2DSetOnClose(m_choke_map_wnd_handle, OnCloseChokeOpTable, this);
+  DLL::Chart2DUpdate(m_choke_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_choke_map_wnd_handle, TYPE_MAP_CHOKE_OP);
+
+  DLL::Chart2DShow(m_choke_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_choke_map_wnd_handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -504,6 +592,14 @@ void CTablesSetPanel::SetCTSXAxisEdits(float i_begin, float i_end)
 {
  m_cts_curve_x_axis_limits[0] = i_begin;
  m_cts_curve_x_axis_limits[1] = i_end;	
+}
+
+float* CTablesSetPanel::GetChokeOpMap(bool i_original)
+{
+ if (i_original)
+  return m_choke_map_original;
+ else
+  return m_choke_map_active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

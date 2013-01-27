@@ -983,6 +983,8 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CHOKE_OP), TYPE_MAP_CHOKE_OP);
 
  return CheckChangesAskAndSaveFirmware();
 }
@@ -1016,6 +1018,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
  m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
  m_view->mp_TablesPanel->EnableCTSCurve((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
+ m_view->mp_TablesPanel->EnableChokeOp((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
@@ -1112,6 +1115,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false),false);
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
 
+ m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false),false);
+ m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(true),true);
+
  m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
 
  if (m_current_funset_index==-1)
@@ -1192,6 +1198,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_CTS_CURVE:
    m_fwdm->SetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false));
+   break;
+  case TYPE_MAP_CHOKE_OP:
+   m_fwdm->SetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false));
    break;
  }
 }
@@ -1475,6 +1484,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_CTSCurveMapWnd_X = rc.left;
    ws.m_CTSCurveMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_CHOKE_OP:
+   ws.m_ChokeOpMapWnd_X = rc.left;
+   ws.m_ChokeOpMapWnd_Y = rc.top;
+   break;
  };
 
  mp_settings->SetWndSettings(ws);
@@ -1512,6 +1525,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_CTS_CURVE:
    X = ws.m_CTSCurveMapWnd_X, Y = ws.m_CTSCurveMapWnd_Y;
+   break;
+  case TYPE_MAP_CHOKE_OP:
+   X = ws.m_ChokeOpMapWnd_X, Y = ws.m_ChokeOpMapWnd_Y;
    break;
   default:
    return; //undefined case...

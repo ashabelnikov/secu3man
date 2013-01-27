@@ -48,6 +48,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetAttenuatorMap(bool i_original);
   float* GetDwellCntrlMap(bool i_original);
   float* GetCTSCurveMap(bool i_original);
+  float* GetChokeOpMap(bool i_original);
   void SetCTSXAxisEdits(float i_begin, float i_end);
 
   //returns NULL if corresponding window wasn't opened
@@ -57,6 +58,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);
+  void EnableChokeOp(bool enable);
 
  public: //установка обработчиков событий
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
@@ -70,10 +72,12 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewAttenuatorMap();
   afx_msg void OnViewDwellCntrlMap();
   afx_msg void OnViewCTSCurveMap();
+  afx_msg void OnViewChokeOpMap();
   afx_msg void OnDwellCalcButton();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewChokeOpMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -86,6 +90,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_attenuator_map_btn;
   CButton   m_view_dwellcntrl_map_btn;
   CButton   m_view_cts_curve_map_btn;
+  CButton   m_view_choke_op_map_btn;
   CBitmapButton m_calc_dwell_btn;
 
  private:
@@ -99,19 +104,24 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseDwellCntrlTable(void* i_param);
   static void __cdecl OnChangeCTSCurveTable(void* i_param);
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
+  static void __cdecl OnChangeChokeOpTable(void* i_param);
+  static void __cdecl OnCloseChokeOpTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
   static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
+  bool m_choke_op_enabled;
   int m_attenuator_map_chart_state;
   int m_dwellcntrl_map_chart_state;
   int m_cts_curve_map_chart_state;
+  int m_choke_map_chart_state;
 
   HWND m_attenuator_map_wnd_handle;
   HWND m_dwellcntrl_map_wnd_handle;
   HWND m_cts_curve_map_wnd_handle;
+  HWND m_choke_map_wnd_handle;
 
   float m_attenuator_table_slots[128];
 
@@ -125,6 +135,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float m_cts_curve_map_original[16];
 
   float m_cts_curve_x_axis_limits[2];
+
+  float m_choke_map_active[16];
+  float m_choke_map_original[16];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

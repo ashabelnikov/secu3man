@@ -30,5 +30,6 @@ enum EMapTypes
  // 4, 5, 6, 7 - are reserved
  TYPE_MAP_ATTENUATOR = 8,  //must be =8. used by derived classes
  TYPE_MAP_DWELLCNTRL = 9,  //must be =9. used by derived classes
- TYPE_MAP_CTS_CURVE  = 10
+ TYPE_MAP_CTS_CURVE  = 10,
+ TYPE_MAP_CHOKE_OP   = 11
 };

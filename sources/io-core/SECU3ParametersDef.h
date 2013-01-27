@@ -128,12 +128,13 @@ typedef struct
  _int  tps_curve_offset;             // offset of curve in volts
  _int  tps_curve_gradient;           // gradient of curve in Percentage/V
 
-  _uchar tps_threshold;              // TPS threshold used to switch work and idle modes
+ _uchar tps_threshold;               // TPS threshold used to switch work and idle modes
+ _uint  sm_steps;                    // Number of steps of choke stepper motor
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[8];
+ _uchar reserved[6];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
