@@ -29,6 +29,8 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CToolTipCtrlEx;
+
 class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
 {
   typedef CTabDialog Super;
@@ -74,4 +76,6 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_tps_curve_offset_edit;
   CSpinButtonCtrlEx m_tps_curve_gradient_spin;
   CEditEx m_tps_curve_gradient_edit;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
