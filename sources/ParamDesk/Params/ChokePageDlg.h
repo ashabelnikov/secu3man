@@ -21,12 +21,15 @@
 
 #pragma once
 
+#include <memory>
 #include <string>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+
+class CToolTipCtrlEx;
 
 class CChokePageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -49,6 +52,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangePdChokeSMStepsNumEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnSMTestButton();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -57,4 +61,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
 
   CSpinButtonCtrlEx m_sm_steps_num_spin;
   CEditEx m_sm_steps_num_edit;
+  CButton m_sm_test_check;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
