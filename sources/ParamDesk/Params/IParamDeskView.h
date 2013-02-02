@@ -47,6 +47,8 @@ class IParamDeskView : public IDeskView
   virtual void EnableHallOutputParams(bool enable) = 0;
   virtual void SetMaxCylinders(int number) = 0;
   virtual void EnableOddCylinders(bool enable) = 0;
+  virtual void EnableSECU3TItems(bool i_enable) = 0;
+  virtual void EnableChokeTesting(bool i_enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
 

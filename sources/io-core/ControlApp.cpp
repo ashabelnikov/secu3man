@@ -1341,13 +1341,18 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
 
- if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=6)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Number of stepper motor steps
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_ChokePar.sm_steps))
   return false;
  raw_packet+=4;
+
+ //choke testing mode command/state (it is fake parameter)
+ if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_ChokePar.testing))
+  return false;
+ raw_packet+=1;
 
  if (*raw_packet!='\r')
   return false;
@@ -2028,6 +2033,7 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 {
  CNumericConv::Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
+ CNumericConv::Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  m_outgoing_packet+= '\r';
 }
 

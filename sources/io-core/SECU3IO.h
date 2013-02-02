@@ -281,6 +281,7 @@ namespace SECU3IO
  struct ChokePar
  {
   int sm_steps;                         //number of stepper motor steps
+  unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
  };
 
  //таблица перекодировки кода частоты ПФ в частоту

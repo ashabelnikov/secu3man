@@ -438,6 +438,11 @@ void CParamDeskDlg::EnableSECU3TItems(bool i_enable)
  m_pADCCompenPageDlg->EnableSECU3TItems(i_enable);
 }
 
+void CParamDeskDlg::EnableChokeTesting(bool i_enable)
+{
+ m_pChokePageDlg->EnableChokeTesting(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

@@ -46,18 +46,22 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::ChokePar* o_values);
   void SetValues(const SECU3IO::ChokePar* i_values);
 
+  void EnableChokeTesting(bool enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangePdChokeSMStepsNumEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateChokeTestBtn(CCmdUI* pCmdUI);
   afx_msg void OnSMTestButton();
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::ChokePar m_params;
   bool m_enabled;
+  bool m_choketst_enabled;
 
   CSpinButtonCtrlEx m_sm_steps_num_spin;
   CEditEx m_sm_steps_num_edit;

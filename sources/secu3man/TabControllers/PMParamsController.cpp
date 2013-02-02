@@ -132,6 +132,8 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
 
  //in full-sequential ignition mode odd cylinder number engines are also supported
  mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0);
+
+ mp_view->EnableChokeTesting(true);
 }
 
 //from view. Очередная вкладка активировалась

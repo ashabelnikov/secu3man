@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "ChokePageDlg.h"
+#include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CChokePageDlg::IDD = IDD_PD_CHOKE_PAGE;
@@ -33,7 +34,7 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_TEST_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_TEST_CHECK,OnUpdateChokeTestBtn)
 
 END_MESSAGE_MAP()
 
@@ -41,8 +42,10 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 : Super(CChokePageDlg::IDD, pParent)
 , m_enabled(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT)
+, m_choketst_enabled(false)
 {
  m_params.sm_steps = 700;
+ m_params.testing = 0;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -58,12 +61,18 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_sm_test_check);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_params.sm_steps);
+ DDX_Check_UCHAR(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_params.testing);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CChokePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CChokePageDlg::OnUpdateChokeTestBtn(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_choketst_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -100,7 +109,8 @@ void CChokePageDlg::OnChangePdChokeSMStepsNumEdit()
 
 void CChokePageDlg::OnSMTestButton()
 {
- //m_sm_test_check.GetCheck();
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -117,6 +127,15 @@ void CChokePageDlg::Enable(bool enable)
 bool CChokePageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CChokePageDlg::EnableChokeTesting(bool enable)
+{
+ if (m_choketst_enabled == enable)
+  return; //already has needed state
+ m_choketst_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога
