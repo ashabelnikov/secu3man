@@ -131,10 +131,12 @@ typedef struct
  _uchar tps_threshold;               // TPS threshold used to switch work and idle modes
  _uint  sm_steps;                    // Number of steps of choke stepper motor
 
+ _int idlreg_turn_on_temp;           // Idling regulator turn on temperature
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[6];
+ _uchar reserved[4];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

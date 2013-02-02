@@ -67,4 +67,6 @@ class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_restriction_min_edit;
   CSpinButtonCtrlEx m_restriction_max_spin;
   CEditEx m_restriction_max_edit;
+  CSpinButtonCtrlEx m_turn_on_temp_spin;
+  CEditEx m_turn_on_temp_edit;
 };

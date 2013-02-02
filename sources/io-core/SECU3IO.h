@@ -104,6 +104,7 @@ namespace SECU3IO
   int  idling_rpm;
   float min_angle;
   float max_angle;
+  float turn_on_temp;                   //idling regulator turn on temperature
  };
 
  struct CarburPar

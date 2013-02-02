@@ -533,14 +533,13 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
 
- if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=30)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //признак использования регулятора
  if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_IdlRegPar.idl_regul))
   return false;
  raw_packet+=1;
-
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -579,6 +578,13 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
   return false;
  raw_packet+=4;
  m_IdlRegPar.max_angle = ((float)max_angle) / m_angle_multiplier;
+
+ //Порог включения регулятора ХХ по температуре (число со знаком)
+ int turn_on_temp = 0;
+ if (false == CNumericConv::Hex16ToBin(raw_packet,&turn_on_temp,true))
+  return false;
+ raw_packet+=4;
+ m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  if (*raw_packet!='\r')
   return false;
@@ -1793,6 +1799,9 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
  int max_angle = MathHelpers::Round((packet_data->max_angle * m_angle_multiplier));
  CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
+
+ int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER));
+ CNumericConv::Bin16ToHex(turn_on_temp, m_outgoing_packet);
 
  m_outgoing_packet+= '\r';
 }

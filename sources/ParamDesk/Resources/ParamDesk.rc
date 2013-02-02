@@ -38,7 +38,7 @@ END
 IDD_TABLES_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Сохранить",IDC_TD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_TD_TAB_CTRL,"SysTabControl32",
@@ -50,7 +50,7 @@ IDD_TABLES_DESK_FLOATING DIALOGEX 0, 0, 187, 191
 STYLE WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | WS_SYSMENU | WS_GROUP
 EXSTYLE WS_EX_CONTROLPARENT
 CAPTION "Редактирование таблиц"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Сохранить",IDC_TD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_TD_TAB_CTRL,"SysTabControl32",
@@ -66,25 +66,23 @@ BEGIN
     CONTROL         "",IDC_TD_BUTTONS_PANEL_HOLDER,"Static",SS_BLACKFRAME | 
                     NOT WS_VISIBLE,22,48,120,108
     EDITTEXT        IDC_TD_TABLESSET_NAME_EDIT,19,24,115,16,ES_AUTOHSCROLL
-    CTEXT           "Имя набора таблиц:",IDC_TD_TABLESSET_NAME_TITLE,19,9,
-                    114,10
+    CTEXT           "Имя набора таблиц:",IDC_TD_TABLESSET_NAME_TITLE,19,9,114,10
     CTEXT           "",IDC_TD_MODIFICATION_FLAG,139,25,11,10
 END
 
 IDD_PD_STARTER_PAGE DIALOGEX 0, 0, 155, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_STARTER_OFF_RPM_EDIT,22,39,46,16,ES_AUTOHSCROLL | 
                     ES_READONLY
     EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
-    CONTROL         "Spin1",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,
-                    17
+    CONTROL         "",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,17
     LTEXT           "Обороты перехода с пусковой карты УОЗ",
                     IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
     LTEXT           "Обороты при достижении которых стартер будет авт. выключен",
@@ -96,7 +94,7 @@ END
 IDD_PD_ANGLES_PAGE DIALOGEX 0, 0, 175, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_ANGLES_MIN_ANGLE_EDIT,12,25,29,15,ES_AUTOHSCROLL | 
                     ES_READONLY
@@ -108,37 +106,27 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
-    CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
-    CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
-    LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,
-                    72,9
-    LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,
-                    74,9
-    LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,75,
-                    106,90,10
+    LTEXT           "Минимальный УОЗ",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,72,9
+    LTEXT           "Максимальный УОЗ",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,74,9
+    LTEXT           "Октан коррекция",IDC_PD_ANGLES_CORRECTION_CAPTION,75,106,90,10
     LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
-    CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
-                    16
-    CONTROL         "Spin2",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,
-                    17
-    LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,
-                    72,9
-    LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,
-                    74,9
-    LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,
-                    16
-    LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,138,72,
-                    20,16
-    GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,
-                    5,48,158,51
+    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
+    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
+    LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,9
+    LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,9
+    LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,16
+    LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,138,72,20,16
+    GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
     CONTROL         "Нулев. уг.опер. (полезно для отладки)",
                     IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,6,106,65,29
@@ -147,7 +135,7 @@ END
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,11,20,35,14,ES_AUTOHSCROLL | 
                     ES_READONLY
@@ -199,7 +187,7 @@ END
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_IDLREG_FACTOR_NEG_EDIT,15,17,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
@@ -209,15 +197,12 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,88,50,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-
     EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,15,90,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,88,90,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-
-    EDITTEXT        IDC_PD_IDLREG_TURN_ON_TEMP_EDIT,26,118,30,18,
+    EDITTEXT        IDC_PD_IDLREG_TURN_ON_TEMP_EDIT,26,116,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-
     CONTROL         "",IDC_PD_IDLREG_FACTOR_NEG_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,17,11,16
     CONTROL         "",IDC_PD_IDLREG_FACTOR_POS_SPIN,
@@ -226,33 +211,31 @@ BEGIN
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,50,11,16
     CONTROL         "",IDC_PD_IDLREG_RESTRICTION_MAX_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,50,11,16
-
     CONTROL         "",IDC_PD_IDLREG_GOAL_RPM_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,90,11,16
     CONTROL         "",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,90,11,16
-
     CONTROL         "",IDC_PD_IDLREG_TURN_ON_TEMP_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,58,118,11,16
-
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,58,116,11,16
     CONTROL         "Использовать регулятор",IDC_PD_IDLREG_USE_REGULATOR,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
-    LTEXT           "коэффициенты регулятора",IDC_PD_IDLREG_FACTORS_CAPTION,23,5,113,9
-    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
+    LTEXT           "Коэффициенты регулятора",IDC_PD_IDLREG_FACTORS_CAPTION,23,5,113,9
+    LTEXT           "Пределы регулирования",IDC_PD_IDLREG_RESTRICTIONS_CAPTION,28,38,113,9
+    LTEXT           "Целевое значение оборотов",IDC_PD_IDLREG_GOAL_RPM_CAPTION,15,71,70,18
+    LTEXT           "Зона нечувствительности ",IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,88,71,70,18
     LTEXT           "_",IDC_PD_IDLREG_FACTOR_NEG_CAPTION,63,16,13,17
-    LTEXT           "Целевое значение оборотов",IDC_PD_IDLREG_GOAL_RPM_CAPTION,23,71,108,10
-    LTEXT           "Зона нечувствительности ",IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,23,106,103,10
-    LTEXT           "мин-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,85,85,25,13
-    LTEXT           "мин-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,85,121,25,13
-    LTEXT           "пределы регулирования",IDC_PD_IDLREG_RESTRICTIONS_CAPTION,28,38,113,9
-    LTEXT           "мин.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,50,19,17
-    LTEXT           "макс.",IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,133,50,20,17
+    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
+    LTEXT           "мин.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,52,19,17
+    LTEXT           "макс.",IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,133,52,20,17
+    LTEXT           "мин-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,61,92,25,13
+    LTEXT           "мин-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,133,92,25,13
+    LTEXT           "Температура вкл. регулятора, °C",IDC_PD_IDLREG_TURN_ON_TEMP_UNIT,75,117,70,18
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,13,20,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
@@ -324,12 +307,10 @@ BEGIN
                     IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,11,10,74,17
     LTEXT           "Порог выключения вентилятора",
                     IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,91,10,72,17
-    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,
-                    19
-    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,
-                    19
+    CONTROL         "",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,19
+    CONTROL         "",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,19
     LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
     LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 END
@@ -410,7 +391,7 @@ END
 IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Отрицат.",IDC_PD_CKPS_NEGFRONT_RADIOBOX,"Button",
                     BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,15,17,49,10
@@ -422,10 +403,9 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
-    CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
-    GROUPBOX        "Фронт ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,
-                    39
+    GROUPBOX        "Фронт ДПКВ",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,39
     LTEXT           "Кол-во зубьев до в.м.т.",
                     IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,9,90,55,18,NOT
                     WS_GROUP
@@ -466,7 +446,7 @@ END
 IDD_PD_MISC_PAGE DIALOGEX 0, 0, 192, 126
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     COMBOBOX        IDC_PD_MISC_UART_SPEED_COMBO,8,32,53,82,
                     CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | 
@@ -475,14 +455,14 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Скорость передачи данных (бод)",
                     IDC_PD_MISC_UART_SPEED_COMBO_CAPTION,8,6,60,24
-    CONTROL         "Spin1",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,134,29,11,17
     LTEXT           "Период передачи пакетов с данными",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,83,9,66,16
     LTEXT           "мс",IDC_PD_MISC_PACKET_PERIOD_UNIT,151,32,25,13
     EDITTEXT        IDC_PD_MISC_IGNCUTOFF_RPM_EDIT,8,67,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,58,67,11,17
     LTEXT           "мин-1",IDC_PD_MISC_IGNCUTOFF_RPM_UNIT,75,70,25,13
     CONTROL         "Разрешить отсечку зажигания",
@@ -494,21 +474,19 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_HALL_OUTPUT_START_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,32,111,11,17
-    LTEXT           "Нач. отн. ВМТ",IDC_PD_MISC_HALL_OUTPUT_START_UNIT,
-                    46,112,36,16
+    LTEXT           "Нач. отн. ВМТ",IDC_PD_MISC_HALL_OUTPUT_START_UNIT,46,112,36,16
     EDITTEXT        IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT,86,111,21,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,109,111,11,17
-    LTEXT           "Длительн.",IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT,121,115,36,
-                    12
+    LTEXT           "Длительн.",IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT,121,115,36,12
 END
 
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
@@ -675,7 +653,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 IDD_PARAMETERS_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
@@ -687,7 +665,7 @@ IDD_PARAMETERS_DESK_FLOATING DIALOGEX 0, 0, 187, 191
 STYLE WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | WS_SYSMENU | WS_GROUP
 EXSTYLE WS_EX_CONTROLPARENT
 CAPTION "Parameters"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_PD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_PD_TAB_CTRL,"SysTabControl32",
@@ -698,7 +676,7 @@ END
 IDD_TABLES_DESK DIALOGEX 0, 0, 184, 191
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_TD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_TD_TAB_CTRL,"SysTabControl32",
@@ -710,7 +688,7 @@ IDD_TABLES_DESK_FLOATING DIALOGEX 0, 0, 187, 191
 STYLE WS_CHILD | WS_CLIPSIBLINGS | WS_CAPTION | WS_SYSMENU | WS_GROUP
 EXSTYLE WS_EX_CONTROLPARENT
 CAPTION "Edit tables"
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_TD_SAVE_BUTTON,5,2,41,12
     CONTROL         "Tab1",IDC_TD_TAB_CTRL,"SysTabControl32",
@@ -740,11 +718,10 @@ BEGIN
                     ES_READONLY
     EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
-    CONTROL         "Spin1",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,
-                    17
+    CONTROL         "",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,17
     LTEXT           "RPM when switching from start map",
                     IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
     LTEXT           "RPM when starter will be turned off",
@@ -768,35 +745,26 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,45,24,11,16
-    CONTROL         "Spin2",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_MAX_ANGLE_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,124,24,11,17
-    CONTROL         "Spin3",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_ANGLES_CORRECTION_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,127,117,12,16
-    LTEXT           "Min. advance angle",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,
-                    14,72,9
-    LTEXT           "Max. advance angle",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,
-                    14,74,9
-    LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,75,
-                    106,90,10
+    LTEXT           "Min. advance angle",IDC_PD_ANGLES_MIN_ANGLE_CAPTION,9,14,72,9
+    LTEXT           "Max. advance angle",IDC_PD_ANGLES_MAX_ANGLE_CAPTION,87,14,74,9
+    LTEXT           "Octane correction",IDC_PD_ANGLES_CORRECTION_CAPTION,75,106,90,10
     LTEXT           "degr.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "degr.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "degr.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
-    CONTROL         "Spin1",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,
-                    16
-    CONTROL         "Spin2",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,
-                    17
-    LTEXT           "Decrease",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,
-                    9
-    LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,
-                    9
-    LTEXT           "degr./ stroke",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,
-                    22,16
-    LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,
-                    21,16
+    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
+    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
+    LTEXT           "Decrease",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,9
+    LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,9
+    LTEXT           "degr./ stroke",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,16
+    LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,21,16
     GROUPBOX        "Limitation of angle change speed",
                     IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
     CONTROL         "Zero adv. angle (useful for check-out)",
@@ -861,48 +829,47 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    EDITTEXT        IDC_PD_IDLREG_FACTOR_NEG_EDIT,15,17,30,18,ES_AUTOHSCROLL | 
-                    ES_READONLY
-    EDITTEXT        IDC_PD_IDLREG_FACTOR_POS_EDIT,88,17,30,18,ES_AUTOHSCROLL | 
-                    ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_NEG_EDIT,15,17,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_FACTOR_POS_EDIT,88,17,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,15,50,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_IDLREG_RESTRICTION_MAX_EDIT,88,50,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,26,83,39,18,ES_AUTOHSCROLL | 
-                    ES_READONLY
-    EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,26,118,39,18,
+    EDITTEXT        IDC_PD_IDLREG_GOAL_RPM_EDIT,15,90,30,18,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Use regulator",IDC_PD_IDLREG_USE_REGULATOR,"Button",
-                    BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
-    LTEXT           "regulator's factors",IDC_PD_IDLREG_FACTORS_CAPTION,23,5,
-                    113,9
-    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
+    EDITTEXT        IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT,88,90,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_IDLREG_TURN_ON_TEMP_EDIT,26,116,30,18,
+                    ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "",IDC_PD_IDLREG_FACTOR_NEG_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,17,11,16
+    CONTROL         "",IDC_PD_IDLREG_FACTOR_POS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,17,11,16
+    CONTROL         "",IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,50,11,16
+    CONTROL         "",IDC_PD_IDLREG_RESTRICTION_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,50,11,16
+    CONTROL         "",IDC_PD_IDLREG_GOAL_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,90,11,16
+    CONTROL         "",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,90,11,16
+    CONTROL         "",IDC_PD_IDLREG_TURN_ON_TEMP_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,58,116,11,16
+    CONTROL         "Use regulator",IDC_PD_IDLREG_USE_REGULATOR,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,26,138,104,12
+    LTEXT           "Regulator's factors",IDC_PD_IDLREG_FACTORS_CAPTION,23,5,113,9
+    LTEXT           "Regulation limits",IDC_PD_IDLREG_RESTRICTIONS_CAPTION,28,38,113,9
+    LTEXT           "Goal RPM",IDC_PD_IDLREG_GOAL_RPM_CAPTION,15,76,70,11
+    LTEXT           "Dead band of RPM ",IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,88,76,70,11
     LTEXT           "_",IDC_PD_IDLREG_FACTOR_NEG_CAPTION,63,16,13,17
-    LTEXT           "Goal RPM",IDC_PD_IDLREG_GOAL_RPM_CAPTION,23,71,108,10
-    LTEXT           "Dead band of RPM",IDC_PD_IDLREG_DEAD_BAND_RPM_CAPTION,
-                    23,106,103,10
-    LTEXT           "min-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,85,85,25,13
-    LTEXT           "min-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,85,121,25,13
-    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_POS_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,120,17,11,16
-    CONTROL         "Spin1",IDC_PD_IDLREG_FACTOR_NEG_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,48,17,11,16
-    CONTROL         "Spin1",IDC_PD_IDLREG_GOAL_RPM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,68,83,11,16
-    CONTROL         "Spin1",IDC_PD_IDLREG_DEAD_BAND_RPM_SPIN,"msctls_updown32",
-                    UDS_ARROWKEYS | UDS_HOTTRACK,68,118,11,16
-    LTEXT           "regulation limits",IDC_PD_IDLREG_RESTRICTIONS_CAPTION,
-                    28,38,113,9
-    LTEXT           "min.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,50,19,17
-    CONTROL         "Spin1",IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,47,50,11,
-                    16
-    CONTROL         "Spin1",IDC_PD_IDLREG_RESTRICTION_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,120,50,11,
-                    16
-    LTEXT           "max.",IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,133,50,20,
-                    17
+    LTEXT           "+",IDC_PD_IDLREG_FACTOR_POS_CAPTION,135,19,13,17
+    LTEXT           "min.",IDC_PD_IDLREG_RESTRICTION_MIN_CAPTION,61,52,19,17
+    LTEXT           "max.",IDC_PD_IDLREG_RESTRICTION_MAX_CAPTION,133,52,20,17
+    LTEXT           "min-1",IDC_PD_IDLREG_GOAL_RPM_UNIT,61,92,25,13
+    LTEXT           "min-1",IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,133,92,25,13
+    LTEXT           "Regulator turn on temperature, °C",IDC_PD_IDLREG_TURN_ON_TEMP_UNIT,75,117,70,18
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -980,12 +947,10 @@ BEGIN
                     IDC_PD_TEMPER_VENT_ON_THRESHOLD_CAPTION,11,10,74,17
     LTEXT           "Ventilator turn off threshold",
                     IDC_PD_TEMPER_VENT_OFF_THRESHOLD_CAPTION,91,10,72,17
-    CONTROL         "Spin1",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,
-                    19
-    CONTROL         "Spin2",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,
-                    19
+    CONTROL         "",IDC_PD_TEMPER_VENT_ON_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,50,30,14,19
+    CONTROL         "",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,30,14,19
     LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
     LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 END
@@ -1078,10 +1043,9 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Duration of igniter's pulse driver in teeth of wheel",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
-    CONTROL         "Spin1",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
-    GROUPBOX        "CKPS edge",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,
-                    39
+    GROUPBOX        "CKPS edge",IDC_PD_CKPS_FRONT_GROUPBOX,9,6,59,39
     LTEXT           "Num. of teeth before t.d.c.",
                     IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION,9,90,55,18,NOT 
                     WS_GROUP
@@ -1131,14 +1095,14 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Data transmition speed (baud)",
                     IDC_PD_MISC_UART_SPEED_COMBO_CAPTION,8,11,53,18
-    CONTROL         "Spin1",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_MISC_PACKET_PERIOD_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,134,27,11,17
     LTEXT           "Data packets transmition period",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,83,9,66,16
     LTEXT           "ms",IDC_PD_MISC_PACKET_PERIOD_UNIT,151,30,25,13
     EDITTEXT        IDC_PD_MISC_IGNCUTOFF_RPM_EDIT,8,67,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
-    CONTROL         "Spin1",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
+    CONTROL         "",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,58,67,11,17
     LTEXT           "min-1",IDC_PD_MISC_IGNCUTOFF_RPM_UNIT,75,70,25,13
     CONTROL         "Enable cutoff of ignition",IDC_PD_MISC_IGNCUTOFF_CHECK,
@@ -1149,21 +1113,19 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_HALL_OUTPUT_START_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,32,111,11,17
-    LTEXT           "Start rel. to TDC",IDC_PD_MISC_HALL_OUTPUT_START_UNIT,
-                    46,112,36,16
+    LTEXT           "Start rel. to TDC",IDC_PD_MISC_HALL_OUTPUT_START_UNIT,46,112,36,16
     EDITTEXT        IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT,86,111,21,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,110,111,11,17
-    LTEXT           "Duration",IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT,124,115,34,
-                    12
+    LTEXT           "Duration",IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT,124,115,34,12
 END
 
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 158
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
-FONT 8, "MS Sans Serif", 0, 0, 0x1
+FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
