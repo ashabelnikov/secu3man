@@ -891,20 +891,35 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
 
      p_out->tps_adc_factor     = ((float)p_params->tps_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->tps_adc_correction = ((((float)p_params->tps_adc_correction)/16384.0f) - 0.5f) / p_out->tps_adc_factor;
-     p_out->tps_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     if (p_out->tps_adc_factor > 0)
+     {
+      p_out->tps_adc_correction = ((((float)p_params->tps_adc_correction)/16384.0f) - 0.5f) / p_out->tps_adc_factor;
+      p_out->tps_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     }
+     else
+      p_out->tps_adc_correction = 0;
      //-------------------------------------------------------------------------
 
      p_out->ai1_adc_factor     = ((float)p_params->ai1_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->ai1_adc_correction = ((((float)p_params->ai1_adc_correction)/16384.0f) - 0.5f) / p_out->ai1_adc_factor;
-     p_out->ai1_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     if (p_out->ai1_adc_factor > 0)
+     {
+      p_out->ai1_adc_correction = ((((float)p_params->ai1_adc_correction)/16384.0f) - 0.5f) / p_out->ai1_adc_factor;
+      p_out->ai1_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     }
+     else
+      p_out->ai1_adc_correction = 0;
      //-------------------------------------------------------------------------
 
      p_out->ai2_adc_factor     = ((float)p_params->ai2_adc_factor) / 16384;
      //-------------------------------------------------------------------------
-     p_out->ai2_adc_correction = ((((float)p_params->ai2_adc_correction)/16384.0f) - 0.5f) / p_out->ai2_adc_factor;
-     p_out->ai2_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     if (p_out->ai2_adc_factor > 0)
+     {
+      p_out->ai2_adc_correction = ((((float)p_params->ai2_adc_correction)/16384.0f) - 0.5f) / p_out->ai2_adc_factor;
+      p_out->ai2_adc_correction*=ADC_DISCRETE; //ג גמכüעû
+     }
+     else
+      p_out->ai2_adc_correction = 0;
      //-------------------------------------------------------------------------
     }
     break;
