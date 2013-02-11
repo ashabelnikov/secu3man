@@ -39,3 +39,23 @@
 #define IDC_TD_VIEW_CHOKE_MAP           5039
 #define IDS_CHOKE_OP_UNIT               5040
 #define IDS_CHOKE_OP_MAP                5041
+#define IDD_RPM_GRID_EDITOR             5042
+#define IDC_RGE_EDIT_0                  5043
+#define IDC_RGE_EDIT_1                  5044
+#define IDC_RGE_EDIT_2                  5045
+#define IDC_RGE_EDIT_3                  5046
+#define IDC_RGE_EDIT_4                  5047
+#define IDC_RGE_EDIT_5                  5048
+#define IDC_RGE_EDIT_6                  5049
+#define IDC_RGE_EDIT_7                  5050
+#define IDC_RGE_EDIT_8                  5051
+#define IDC_RGE_EDIT_9                  5052
+#define IDC_RGE_EDIT_10                 5053
+#define IDC_RGE_EDIT_11                 5054
+#define IDC_RGE_EDIT_12                 5055
+#define IDC_RGE_EDIT_13                 5056
+#define IDC_RGE_EDIT_14                 5057
+#define IDC_RGE_EDIT_15                 5058
+#define IDC_RGE_LOAD_DEF_VAL            5059
+#define IDC_RGE_ERROR_MSG_TEXT          5060
+
