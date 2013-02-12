@@ -21,21 +21,23 @@ project(${PROJECT})
 set(HEADERS 
   ButtonsPanel.h
   DLLLinkedFunctions.h
+  DwellCalcDlg.h
   MapIds.h
   resource.h
+  RPMGridEditDlg.h
   StdAfx.h
   TablesSetPanel.h
-  DwellCalcDlg.h
   )
  
 set(SOURCES 
   ButtonsPanel.cpp
   DLLLinkedFunctions.cpp
-  TablesSetPanel.cpp
   DwellCalcDlg.cpp
+  RPMGridEditDlg.cpp
   StdAfx.cpp
   TablDesk.cpp
   TablDesk.rc
+  TablesSetPanel.cpp
   ) 
  
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
