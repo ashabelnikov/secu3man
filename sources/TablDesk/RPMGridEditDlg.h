@@ -27,7 +27,7 @@
 
 class CEditEx;
 
-class CRPMGridEditDlg : public CDialog
+class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;

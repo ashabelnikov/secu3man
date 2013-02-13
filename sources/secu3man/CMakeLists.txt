@@ -49,6 +49,7 @@ set(HEADERS
   TabControllers/DevDiagnostTabController.h
   TabControllers/FirmwareTabController.h
   TabControllers/FWIORemappingController.h
+  TabControllers/FWRPMGridEditController.h
   TabControllers/KnockChannelTabcontroller.h
   Tabcontrollers/LogPlayerTabController.h
   TabControllers/ParamMonTabController.h
@@ -92,6 +93,7 @@ set(SOURCES
   TabControllers/DevDiagnostTabController.cpp
   TabControllers/FirmwareTabController.cpp
   TabControllers/FWIORemappingController.cpp
+  TabControllers/FWRPMGridEditController.cpp
   TabControllers/KnockChannelTabcontroller.cpp
   Tabcontrollers/LogPlayerTabController.cpp
   TabControllers/ParamMonTabController.cpp
