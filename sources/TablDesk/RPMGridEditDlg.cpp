@@ -62,7 +62,10 @@ void CRPMGridEditDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_RGE_ERROR_MSG_TEXT, m_errMsg);
  for(size_t i = 0; i < m_edits.size(); ++i)
-  m_edits[i]->DDX_Value(pDX, IDC_DWELL_CALC_I_EDIT, m_values[i]);
+ {
+  DDX_Control(pDX, editStart + i, *(m_edits[i]));
+  m_edits[i]->DDX_Value(pDX, editStart + i, m_values[i]);
+ }
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -131,6 +134,8 @@ void CRPMGridEditDlg::SetValues(const float* ip_values)
  if (!ip_values)
   return;
  m_values = std::vector<float>(ip_values, ip_values + m_values.size());
+ if (::IsWindow(m_hWnd))
+  UpdateData(FALSE);
 }
 
 void CRPMGridEditDlg::GetValues(float* op_values)
@@ -139,6 +144,14 @@ void CRPMGridEditDlg::GetValues(float* op_values)
   return;
  for(size_t i = 0; i < m_values.size(); ++i)
   op_values[i] = m_values[i];
+}
+
+float CRPMGridEditDlg::GetValue(size_t index)
+{
+ if (index >= m_edits.size())
+  return 0;
+ UpdateData();
+ return m_values[index];
 }
 
 void CRPMGridEditDlg::setOnChange(EventOnChange onFunction)

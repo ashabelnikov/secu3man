@@ -40,6 +40,7 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
 
   void SetValues(const float* ip_values);
   void GetValues(float* op_values);
+  float GetValue(size_t index);
   void setOnChange(EventOnChange OnFunction);
   void setOnLoadDefVal(EventHandler OnFunction);
   void SetErrMessage(const _TSTRING& str);

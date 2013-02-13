@@ -109,6 +109,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnExportMapsToS3F(void);
   void OnFirmwareInfo(void);
   void OnViewFWOptions(void);
+  void OnEditRPMGrid(void);
   
   void OnFWInformationTextChanged(void);
   void OnMapChanged(int i_type);

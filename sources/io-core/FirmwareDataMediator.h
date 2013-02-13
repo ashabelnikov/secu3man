@@ -98,6 +98,9 @@ class IOCORE_API CFirmwareDataMediator
   void GetChokeOpMap(float* o_values, bool i_original = false);
   void SetChokeOpMap(const float* i_values);
 
+  void GetRPMGridMap(float* o_values);
+  void SetRPMGridMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

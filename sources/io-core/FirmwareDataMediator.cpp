@@ -1217,6 +1217,16 @@ const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
  return *m_fpp;
 }
 
+void CFirmwareDataMediator::GetRPMGridMap(float* o_values)
+{
+ //todo
+}
+
+void CFirmwareDataMediator::SetRPMGridMap(const float* i_values)
+{
+ //todo
+}
+
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
 {
  if (!mp_cddata)

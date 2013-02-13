@@ -40,6 +40,7 @@
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
+#include "FWRPMGridEditController.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/FirmwareTabDlg.h"
 #include "TablDesk/MapIds.h"
@@ -1404,6 +1405,16 @@ void CFirmwareTabController::OnExportMapsToS3F(void)
  S3FExportController export_cntr(&data);
  m_fwdm->GetMapsData(&data);
  export_cntr.DoExport();
+}
+
+void CFirmwareTabController::OnEditRPMGrid(void)
+{
+ CFWRPMGridEditController cntr;
+ cntr.AttachFWDM(m_fwdm);
+ if (IDOK == cntr.Edit())
+ {
+  //todo
+ }
 }
 
 //Пользователь захотел получить информацию о пршивке из SECU-3

@@ -21,16 +21,27 @@
 
 #pragma once
 
+#include <memory>
+
+class CFirmwareDataMediator;
 class CRPMGridEditDlg;
 
 class CFWRPMGridEditController
 {
  typedef CRPMGridEditDlg VIEW;
+ typedef CFirmwareDataMediator FWDM;
+
  public:
   CFWRPMGridEditController();
  ~CFWRPMGridEditController();
 
+  void AttachFWDM(CFirmwareDataMediator* ip_fwdm);
+
   int Edit(void);
 
  private:
+  void OnItemChange(size_t itemIndex, float value);
+  void OnLoadDefVal(void);
+  CFirmwareDataMediator* mp_fwdm;
+  std::auto_ptr<CRPMGridEditDlg> mp_view;
 };
