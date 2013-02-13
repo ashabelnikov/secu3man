@@ -36,6 +36,9 @@
 
 #define MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE 1  //damn declaration
 
+//standard MPSZ RPM grid
+static const float mpsz_std_rpm_slots[MPSZ_RPM_SLOTS] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
+
 /////////////////////////////////////////////////////////////////////////////////////////
 struct MPSZMapsDataItem
 {
@@ -59,7 +62,7 @@ struct MPSZMapsDataHolder
    memset(maps[i].f_idl,0,sizeof(float) * MPSZ_IDLE_MAP_SIZE);
    memset(maps[i].f_wrk,0,sizeof(float) * MPSZ_WORK_MAP_SIZE_L * MPSZ_WORK_MAP_SIZE_F);
   }
-  memset(rpm_slots,0,sizeof(float) * MPSZ_RPM_SLOTS);
+  std::copy(mpsz_std_rpm_slots, mpsz_std_rpm_slots + MPSZ_RPM_SLOTS, rpm_slots); //Default RPM grid
  };
 
  std::vector<_TSTRING> GetListOfNames(void) const;
