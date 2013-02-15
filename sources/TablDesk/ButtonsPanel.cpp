@@ -229,6 +229,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
  memset(m_work_map_original, 0, 16 * 16 * sizeof(float));
  memset(m_temp_map_active, 0, 16 * sizeof(float));
  memset(m_temp_map_original, 0, 16 * sizeof(float));
+ memset(m_rpm_grid_values, 0, 16 * sizeof(float));
 }
 
 void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
@@ -314,7 +315,7 @@ void CButtonsPanel::OnViewIdleMap()
  if ((!m_idle_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_idle_map_chart_state = 1;
-  m_idle_map_wnd_handle = DLL::Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,SECU3IO::idle_map_rpm_slots,16,
+  m_idle_map_wnd_handle = DLL::Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str());
@@ -347,7 +348,7 @@ void CButtonsPanel::OnViewWorkMap()
  if ((!m_work_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_work_map_chart_state = 1;
-  m_work_map_wnd_handle = DLL::Chart3DCreate(GetWorkMap(true),GetWorkMap(false),SECU3IO::work_map_rpm_slots,16,16,-15.0,55.0,
+  m_work_map_wnd_handle = DLL::Chart3DCreate(GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
   DLL::Chart3DSetOnWndActivation(m_work_map_wnd_handle, OnWndActivationWorkMap, this);
@@ -378,7 +379,7 @@ void CButtonsPanel::OnViewTempMap()
  if ((!m_temp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_temp_map_chart_state = 1;
-  m_temp_map_wnd_handle = DLL::Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_rpm_slots,16,
+  m_temp_map_wnd_handle = DLL::Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORR_MAP).c_str());
@@ -457,6 +458,14 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
 }
 
+void CButtonsPanel::UpdateOpenedChartsAxisLabels(void)
+{
+ if (m_idle_map_chart_state)
+  DLL::Chart2DUpdateAxisLabels(m_idle_map_wnd_handle, 1, GetRPMGrid());
+ if (m_work_map_chart_state)
+  DLL::Chart3DUpdateAxisLabels(m_work_map_wnd_handle, 1, GetRPMGrid());
+}
+
 float* CButtonsPanel::GetStartMap(bool i_original)
 {
  if (i_original)
@@ -487,6 +496,11 @@ float* CButtonsPanel::GetTempMap(bool i_original)
   return m_temp_map_original;
  else
   return m_temp_map_active;
+}
+
+float* CButtonsPanel::GetRPMGrid(void)
+{
+ return m_rpm_grid_values;
 }
 
 HWND CButtonsPanel::GetMapWindow(int wndType)

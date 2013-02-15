@@ -59,6 +59,7 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , setval(0)
 , val_n(0)
 , m_air_flow_position(0)
+, m_values_format_x("%.00f")  //integer 
 {
  //empty
 }
@@ -401,7 +402,7 @@ void TForm3D::FillChart(bool dir,int cm)
  {
   for(int i = 0; i < count_x; i++)
   {
-   as.sprintf("%d",u_slots[i]);
+   as.sprintf(m_values_format_x.c_str(),u_slots[i]);
    if (cm)
    {
     Chart1->Series[k + count_z]->Add(GetItem_m(j,i),as,TColor(col[j]));

@@ -153,7 +153,7 @@ void CFWRPMGridEditController::OnLoadDefVal(void)
 {
  if (!mp_view.get())
   return;
- mp_view->SetValues(SECU3IO::idle_map_rpm_slots);
+ mp_view->SetValues(SECU3IO::work_map_rpm_slots);
  mp_view->SetErrMessage(_T(""));
  for(size_t i = 0; i < itemNumber; i++)
   mp_view->SetItemError(i, false);

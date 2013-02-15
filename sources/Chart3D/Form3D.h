@@ -127,13 +127,14 @@ class TForm3D : public TForm
   int count_x;
   int count_z;
   int airflow;
-  int u_slots[1024];
+  float u_slots[1024];
   float aai_min;
   float aai_max;
   float *modified_function;
   float *original_function;
   AnsiString u_title;
   AnsiString x_title;
+  AnsiString m_values_format_x;
 
  private:
   float GetItem_m(int z, int x);

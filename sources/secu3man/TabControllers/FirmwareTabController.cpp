@@ -1088,6 +1088,7 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
   //устанавливаем значения только в графики
   SetViewChartsValues();
   m_view->mp_TablesPanel->UpdateOpenedCharts();
+  m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
 
   m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
  }
@@ -1115,11 +1116,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false),false);
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
+ m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
 
  m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false),false);
  m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(true),true);
 
- m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
+ m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
  if (m_current_funset_index==-1)
   return;
@@ -1150,6 +1152,7 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  m_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
  m_view->mp_TablesPanel->UpdateOpenedCharts();
+ m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
 
  //если было выделение в списке, то восстанавлваем его
  m_view->mp_TablesPanel->SetFunSetListBoxSelection(m_current_funset_index);
@@ -1413,7 +1416,8 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  cntr.AttachFWDM(m_fwdm);
  if (IDOK == cntr.Edit())
  {
-  //todo
+  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
+  m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
  }
 }
 

@@ -50,9 +50,11 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIdleMap(bool i_original);
   float* GetWorkMap(bool i_original);
   float* GetTempMap(bool i_original);
+  float* GetRPMGrid(void);
   
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);
+  virtual void UpdateOpenedChartsAxisLabels(void);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
@@ -128,5 +130,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float m_work_map_original[16][16];
   float m_temp_map_active[16];
   float m_temp_map_original[16];
+  float m_rpm_grid_values[16];
   ///////////////////////////////////////////////////////
 };

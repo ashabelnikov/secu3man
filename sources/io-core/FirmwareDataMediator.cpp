@@ -1008,8 +1008,9 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetChokeOpMap(op_fwd->choke_op_table);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
+ float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
  for(i = 0; i < F_RPM_SLOTS; ++i)
-  op_fwd->rpm_slots[i] = (float)work_map_rpm_slots[i];
+  op_fwd->rpm_slots[i] = slots[i];
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -1034,8 +1035,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetChokeOpMap(ip_fwd->choke_op_table);
 
  //todo in the future, set values from ip_fwd->rpm_slots into the firmware here
+ float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
  for(i = 0; i < F_RPM_SLOTS; ++i)
-  if (ip_fwd->rpm_slots[i] != work_map_rpm_slots[i]){
+  if (ip_fwd->rpm_slots[i] != slots[i]){
    AfxMessageBox(_T("RPM grids from firmware and source are not equal!"), MB_ICONSTOP);
    break;
   }
@@ -1217,14 +1219,17 @@ const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
  return *m_fpp;
 }
 
+static float rpmGrid[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; //temporary
 void CFirmwareDataMediator::GetRPMGridMap(float* o_values)
 {
  //todo
+ std::copy(rpmGrid, rpmGrid+16, o_values); //temporary
 }
 
 void CFirmwareDataMediator::SetRPMGridMap(const float* i_values)
 {
  //todo
+ std::copy(i_values, i_values+16, rpmGrid); //temporary
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

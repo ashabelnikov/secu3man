@@ -2,6 +2,7 @@ EXPORTS
   ; VC funcname             = BCB funcname
   Chart3DCreate             = _Chart3DCreate
   Chart3DUpdate             = _Chart3DUpdate
+  Chart3DUpdateAxisLabels   = _Chart3DUpdateAxisLabels
   Chart3DSetOnChange        = _Chart3DSetOnChange
   Chart3DSetOnClose         = _Chart3DSetOnClose
   Chart3DShow               = _Chart3DShow

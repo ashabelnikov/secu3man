@@ -36,6 +36,7 @@ extern "C"
 {
  HWND  __declspec(dllexport)  __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function);
+ void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
@@ -153,6 +154,30 @@ void __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *
   pForm->m_modified_function = iop_modified_function;
  }
  pForm->DataPrepare();
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm || !ip_labels_values)
+  return;
+
+ switch(i_axis)
+ {
+  case 1: //X
+  {
+   for(int i = 0; i < pForm->m_count_of_function_points; ++i)
+   {
+    pForm->Series1->XLabel[i] = ip_labels_values[i];
+    pForm->Series2->XLabel[i] = ip_labels_values[i];
+   }
+  }
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart2DUpdateLabels: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
 }
 
 //---------------------------------------------------------------------------

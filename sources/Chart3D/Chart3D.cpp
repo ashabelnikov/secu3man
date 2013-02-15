@@ -33,8 +33,9 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
+ void  __declspec(dllexport)  __cdecl Chart3DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
@@ -108,7 +109,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 
 //original_function и modified_function - адреса двухмерных массивов содержащих
 //значения функций
-HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,const int *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
 {
  TForm3D *pForm = new TForm3D((TComponent *)NULL);
  pForm->count_x = x_count_of_points;
@@ -126,7 +127,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function,co
  pForm->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
  pForm->InitPopupMenu(hInst);
 
- memcpy(pForm->u_slots, x_axis_grid_values, sizeof(int) * x_count_of_points);
+ memcpy(pForm->u_slots, x_axis_grid_values, sizeof(float) * x_count_of_points);
  pForm->DataPrepare();
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
@@ -148,6 +149,34 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
  pForm->modified_function = modified_function;
  pForm->DataPrepare();
 }
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm || !ip_labels_values)
+  return;
+
+ switch(i_axis)
+ {
+  case 1: //X
+  {
+   for(int i = 0; i < pForm->count_x; ++i)
+   {
+    for(int s = 0; s < pForm->count_z; ++s)
+    {
+     pForm->Chart1->Series[s]->XLabel[i] = ip_labels_values[i];
+     pForm->Chart1->Series[s+pForm->count_z]->XLabel[i] = ip_labels_values[i];
+    }
+   }
+  }
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart3DUpdateLabels: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
+}
+
 //---------------------------------------------------------------------------
 void __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param)
 {

@@ -55,6 +55,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual HWND GetMapWindow(int wndType);
 
   virtual void UpdateOpenedCharts(void);
+  virtual void UpdateOpenedChartsAxisLabels(void);
 
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);

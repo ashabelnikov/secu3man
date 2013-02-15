@@ -333,6 +333,11 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_choke_map_wnd_handle, GetChokeOpMap(true), GetChokeOpMap(false));
 }
 
+void CTablesSetPanel::UpdateOpenedChartsAxisLabels(void)
+{
+ Super::UpdateOpenedChartsAxisLabels();
+}
+
 void CTablesSetPanel::EnableDwellControl(bool enable)
 {
  m_dwellcntrl_enabled = enable;
