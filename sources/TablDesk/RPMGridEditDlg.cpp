@@ -20,6 +20,7 @@
 */
 
 #include "stdafx.h"
+#include <afxpriv.h>
 #include <float.h>
 #include <math.h>
 #include "resource.h"
@@ -30,6 +31,8 @@ const UINT CRPMGridEditDlg::IDD = IDD_RPM_GRID_EDITOR;
 
 static const int editStart = IDC_RGE_EDIT_0;
 static const int editEnd = IDC_RGE_EDIT_15;
+static const COLORREF itemErrColor = RGB(255,120,120);
+static const COLORREF errorMsgColor = RGB(255, 0, 0);
 
 /////////////////////////////////////////////////////////////////////////////
 // CDwellCalcDlg dialog
@@ -37,11 +40,14 @@ static const int editEnd = IDC_RGE_EDIT_15;
 BEGIN_MESSAGE_MAP(CRPMGridEditDlg, Super)
  ON_CONTROL_RANGE(EN_CHANGE, editStart, editEnd, OnChangeEdit)
  ON_BN_CLICKED(IDC_RGE_LOAD_DEF_VAL, OnLoadDefValBtn)
+ ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
  ON_WM_CTLCOLOR()
+ ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
 END_MESSAGE_MAP()
 
 CRPMGridEditDlg::CRPMGridEditDlg(CWnd* pParent /*=NULL*/)
 : Super(CRPMGridEditDlg::IDD, pParent)
+, m_redBrush(itemErrColor)
 {
  for(size_t i = 0; i < 16; ++i)
  {
@@ -81,6 +87,11 @@ void CRPMGridEditDlg::OnCancel()
  Super::OnCancel();
 }
 
+void CRPMGridEditDlg::OnUpdateOkButton(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_isOkEnabled ? m_isOkEnabled() : false);
+}
+
 BOOL CRPMGridEditDlg::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -93,25 +104,31 @@ BOOL CRPMGridEditDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
+LRESULT CRPMGridEditDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+ UpdateDialogControls(this, true);
+ return FALSE;
+}
+
 HBRUSH CRPMGridEditDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
- if (pWnd->m_hWnd == m_errMsg.m_hWnd && nCtlColor == CTLCOLOR_STATIC)
+ HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+ if (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg.m_hWnd)
  {
-  pDC->SetTextColor(RGB(255, 0, 0));
+  pDC->SetTextColor(errorMsgColor);
   pDC->SetBkMode(TRANSPARENT);
-  return (HBRUSH)GetStockObject(NULL_BRUSH);
+  hbr = (HBRUSH)GetStockObject(NULL_BRUSH);
  }
-
- if (nCtlColor == CTLCOLOR_EDIT)
+ else if (nCtlColor == CTLCOLOR_EDIT)
  {
   for(size_t i = 0; i < m_edits.size(); ++i)
    if (pWnd->m_hWnd == m_edits[i]->m_hWnd && true==m_errflags[i])
    { 
-    pDC->SetBkColor(RGB(255, 100, 100));
+    pDC->SetBkColor(itemErrColor);
+    hbr = m_redBrush;
    }
  }
-
- return CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
+ return hbr;
 }
 
 void CRPMGridEditDlg::OnChangeEdit(UINT nID)
@@ -162,6 +179,11 @@ void CRPMGridEditDlg::setOnChange(EventOnChange onFunction)
 void CRPMGridEditDlg::setOnLoadDefVal(EventHandler OnFunction)
 {
  m_onLoadDefVal = OnFunction;
+}
+
+void CRPMGridEditDlg::setIsOkEnabled(EventResult OnFunction)
+{
+ m_isOkEnabled = OnFunction;
 }
 
 void CRPMGridEditDlg::SetErrMessage(const _TSTRING& str)

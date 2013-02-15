@@ -20,16 +20,24 @@
 */
 
 #include "stdafx.h"
+#include <algorithm>
 #include <math.h>
+#include <sstream>
 #include "Resources/resource.h"
 #include "FWRPMGridEditController.h"
 
 #include "common/fastdelegate.h"
+#include "common/LangLayer.h"
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/SECU3IO.h"
 #include "TablDesk/RPMGridEditDlg.h"
 
 using namespace fastdelegate;
+
+static const size_t itemNumber = 16;
+static const float gridMinStep = 100;
+static const float gridMinValue = 600;
+static const float gridMaxValue = 7500;
 
 CFWRPMGridEditController::CFWRPMGridEditController()
 {
@@ -52,7 +60,8 @@ int CFWRPMGridEditController::Edit(void)
  mp_view.reset(new CRPMGridEditDlg());
  mp_view->setOnChange(MakeDelegate(this, &CFWRPMGridEditController::OnItemChange));
  mp_view->setOnLoadDefVal(MakeDelegate(this, &CFWRPMGridEditController::OnLoadDefVal));
- float values[16] = {0};
+ mp_view->setIsOkEnabled(MakeDelegate(this, &CFWRPMGridEditController::IsOkEnabled));
+ float values[itemNumber] = {0};
  mp_fwdm->GetRPMGridMap(values);
  mp_view->SetValues(values);
  int result = mp_view->DoModal();
@@ -65,41 +74,79 @@ int CFWRPMGridEditController::Edit(void)
  return result;
 }
 
+bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value, bool i_check_only /*= false*/)
+{
+ bool error = true;
+ if (value < gridMinValue)
+ {
+  if (!i_check_only)
+  {
+   std::stringstream s;
+   s << MLL::GetString(IDS_RGE_ERROR_RPM_LESS_MIN);
+   s << gridMinValue;
+   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+  }
+ }
+ else if (value > gridMaxValue)
+ {
+  if (!i_check_only)
+  {
+   std::stringstream s;
+   s << MLL::GetString(IDS_RGE_ERROR_RPM_ABOVE_MAX);
+   s << gridMaxValue;
+   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+  }
+ }
+ else if (((itemIndex < itemNumber-1) ? (gridMinStep > fabs(value - mp_view->GetValue(itemIndex+1))) : 0) ||
+          ((itemIndex >  0) ? (gridMinStep > fabs(value - mp_view->GetValue(itemIndex-1))) : 0))
+ {
+  if (!i_check_only)
+  {
+   std::stringstream s;
+   s << MLL::GetString(IDS_RGE_ERROR_RPM_STEP_LESS_MIN);
+   s << gridMinStep;
+   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+  }
+ }
+ else if (((itemIndex < itemNumber-1) ? (value > mp_view->GetValue(itemIndex+1)) : 0) ||
+          ((itemIndex >  0) ? (value < mp_view->GetValue(itemIndex-1)) : 0))
+ {
+  if (!i_check_only)
+   m_errors.push_back(std::make_pair(itemIndex, MLL::GetString(IDS_RGE_ERROR_RPM_VAL_ORDER).c_str()));
+ }
+ else
+  error = false; //Ok
+
+ return error;
+}
+
 void CFWRPMGridEditController::OnItemChange(size_t itemIndex, float value)
 {
  if (!mp_view.get())
   return;
 
- if (value < 600)
+ //Check changed item for errors
+ _CheckItemForErrors(itemIndex, value);
+
+ //Recheck all present errors and remove items which are OK
+ std::list<std::pair<size_t, _TSTRING> >::iterator it = m_errors.begin();
+ while(it!=m_errors.end())
  {
-  mp_view->SetErrMessage(_T(""));
-  mp_view->SetErrMessage("Значения не могут быть меньше 600");
-  mp_view->SetItemError(itemIndex, true);
+  if (!_CheckItemForErrors(it->first, mp_view->GetValue(it->first), true)) //only check
+  {//OK
+   mp_view->SetItemError(it->first, false);  
+   it = m_errors.erase(it);
+  }
+  else //next error
+   ++it;
  }
- else if (value > 7500)
- {
-  mp_view->SetErrMessage(_T(""));
-  mp_view->SetErrMessage("Значения не могут быть больше 7500");
-  mp_view->SetItemError(itemIndex, true); 
- }
- else if ((itemIndex < 15) ? (value > mp_view->GetValue(itemIndex+1)) : 0)
- {
-  mp_view->SetErrMessage(_T(""));
-  mp_view->SetErrMessage("Предыдущее знач. не может быть больше следующего");
-  mp_view->SetItemError(itemIndex, true);  
- }
- else if (((itemIndex < 15) ? (100 > fabs(value - mp_view->GetValue(itemIndex+1))) : 0) ||
-          ((itemIndex >  0) ? (100 > fabs(value - mp_view->GetValue(itemIndex-1))) : 0))
- {
-  mp_view->SetErrMessage(_T(""));
-  mp_view->SetErrMessage("Шаг сетки не может быть меньше 100");
-  mp_view->SetItemError(itemIndex, true);   
- }
- else
- {
-  mp_view->SetErrMessage(_T(""));
-  mp_view->SetItemError(itemIndex, false); 
- }
+
+ //Update view
+ for(it = m_errors.begin(); it != m_errors.end(); ++it)
+  mp_view->SetItemError(it->first, true);
+ mp_view->SetErrMessage(_T("")); //erase message
+ if (m_errors.size())
+  mp_view->SetErrMessage(m_errors.rbegin()->second);
 }
 
 void CFWRPMGridEditController::OnLoadDefVal(void)
@@ -108,6 +155,12 @@ void CFWRPMGridEditController::OnLoadDefVal(void)
   return;
  mp_view->SetValues(SECU3IO::idle_map_rpm_slots);
  mp_view->SetErrMessage(_T(""));
- for(size_t i = 0; i < 16; i++)
+ for(size_t i = 0; i < itemNumber; i++)
   mp_view->SetItemError(i, false);
+ m_errors.clear(); //reset errors
+}
+
+bool CFWRPMGridEditController::IsOkEnabled(void)
+{
+ return 0==m_errors.size(); //Ok button will be enabled if errors' stack is empty
 }

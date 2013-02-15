@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <list>
 
 class CFirmwareDataMediator;
 class CRPMGridEditDlg;
@@ -35,13 +36,21 @@ class CFWRPMGridEditController
   CFWRPMGridEditController();
  ~CFWRPMGridEditController();
 
+  //Attach data I/O
   void AttachFWDM(CFirmwareDataMediator* ip_fwdm);
 
+  //Calls modal dialog
   int Edit(void);
 
  private:
+  //Event handlers
   void OnItemChange(size_t itemIndex, float value);
   void OnLoadDefVal(void);
+  bool IsOkEnabled(void);
+  //Error checker
+  bool _CheckItemForErrors(size_t itemIndex, float value, bool i_check_only = false);
+  //Variables
   CFirmwareDataMediator* mp_fwdm;
   std::auto_ptr<CRPMGridEditDlg> mp_view;
+  std::list<std::pair<size_t, _TSTRING> > m_errors;
 };

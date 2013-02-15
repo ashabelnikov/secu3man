@@ -32,6 +32,7 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<size_t, float> EventOnChange;
+  typedef fastdelegate::FastDelegate0<bool> EventResult;
 
  public:
   CRPMGridEditDlg(CWnd* pParent = NULL);   // standard constructor
@@ -43,6 +44,7 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   float GetValue(size_t index);
   void setOnChange(EventOnChange OnFunction);
   void setOnLoadDefVal(EventHandler OnFunction);
+  void setIsOkEnabled(EventResult OnFunction);
   void SetErrMessage(const _TSTRING& str);
   void SetItemError(size_t index, bool i_error);
 
@@ -52,8 +54,10 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   virtual void OnOK();
   virtual void OnCancel();
   virtual BOOL OnInitDialog();
+  afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnChangeEdit(UINT nID);
   afx_msg void OnLoadDefValBtn();
+  afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   DECLARE_MESSAGE_MAP()
 
@@ -64,4 +68,6 @@ class AFX_EXT_CLASS CRPMGridEditDlg : public CDialog
   std::vector<bool> m_errflags;
   EventOnChange m_onChange;
   EventHandler m_onLoadDefVal;
+  EventResult m_isOkEnabled;
+  CBrush m_redBrush;
 };

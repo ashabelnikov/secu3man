@@ -517,6 +517,14 @@ BEGIN
     IDS_FW_VIEW_FWOPT_TT    "Просмотр опций с которыми скомпилирована прошивка"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_RGE_ERROR_RPM_LESS_MIN      "Значения не могут быть меньше "
+    IDS_RGE_ERROR_RPM_ABOVE_MAX     "Значения не могут быть больше "
+    IDS_RGE_ERROR_RPM_STEP_LESS_MIN "Шаг сетки не может быть меньше "
+    IDS_RGE_ERROR_RPM_VAL_ORDER     "Значения должны идти с возрастанием"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1060,6 +1068,14 @@ BEGIN
     ID_INDICATOR_CAPS       "CAP"
     ID_INDICATOR_NUM        "NUM"
     ID_INDICATOR_SCRL       "SCRL"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_RGE_ERROR_RPM_LESS_MIN      "Values can't be less than "
+    IDS_RGE_ERROR_RPM_ABOVE_MAX     "Values can't be above "
+    IDS_RGE_ERROR_RPM_STEP_LESS_MIN "Grid step can't be less than "
+    IDS_RGE_ERROR_RPM_VAL_ORDER     "Values must go in ascending order"
 END
 
 /////////////////////////////////////////////////////////////////////////////
