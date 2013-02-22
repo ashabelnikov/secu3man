@@ -253,8 +253,8 @@ object Form2D: TForm2D
     Top = 328
     Width = 41
     Height = 21
-    MaxLength = 10
-    TabOrder = 5
+    MaxLength = 5
+    TabOrder = 5    
     Text = '0'
     Visible = False
     OnChange = EditXBeginOnChange
@@ -264,37 +264,37 @@ object Form2D: TForm2D
     Top = 328
     Width = 41
     Height = 21
-    MaxLength = 10
+    MaxLength = 5
     TabOrder = 6
     Text = '0'
     Visible = False
     OnChange = EditXEndOnChange
   end
-  object SpinXBegin: TUpDown
+  object SpinXBegin: TFloatUpDown
     Left = 89
     Top = 328
     Width = 16
     Height = 21
-    Min = 0
-    Max = 1000
-    Position = 0
+    FloatAssociate = EditXBegin
+    FloatMin = 0
+    FloatMax = 100
+    FloatPosition = 0
     TabOrder = 7
     Visible = False
     Wrap = False
-    OnChangingEx = SpinXBeginOnChangingEx
   end
-  object SpinXEnd: TUpDown
+ object SpinXEnd: TFloatUpDown
     Left = 569
     Top = 328
     Width = 16
     Height = 21
-    Min = 0
-    Max = 1000
-    Position = 0
+    FloatAssociate = EditXEnd
+    FloatMin = 0
+    FloatMax = 100
+    FloatPosition = 0
     TabOrder = 8
     Visible = False
     Wrap = False
-    OnChangingEx = SpinXEndOnChangingEx
   end
   object PopupMenu: TPopupMenu
     Left = 723

@@ -34,6 +34,7 @@
 #include <StdCtrls.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
+#include "TFloatUpDown.h"
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
@@ -57,8 +58,8 @@ class TForm2D : public TForm
   TMenuItem *PM_BldCurveUsing1stAndLastPoints;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
-  TUpDown *SpinXBegin;
-  TUpDown *SpinXEnd;
+  TFloatUpDown *SpinXBegin;
+  TFloatUpDown *SpinXEnd;
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
@@ -73,8 +74,6 @@ class TForm2D : public TForm
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
   void __fastcall EditXBeginOnChange(TObject *Sender);
   void __fastcall EditXEndOnChange(TObject *Sender);
-  void __fastcall SpinXBeginOnChangingEx(TObject *Sender, bool &AllowChange, short NewValue, TUpDownDirection Direction);
-  void __fastcall SpinXEndOnChangingEx(TObject *Sender, bool &AllowChange, short NewValue, TUpDownDirection Direction);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);
@@ -107,7 +106,7 @@ class TForm2D : public TForm
 
  private:
   void RestrictAndSetValue(int index, double v);
-  void ShiftFunction(float i_value);
+  void __fastcall ShiftFunction(float i_value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private:  // User declarations
@@ -135,8 +134,6 @@ class TForm2D : public TForm
   OnChangeValue m_pOnChangeXEditValue;
   void* m_param_on_change_xedit_value;
 
-  float m_spinXBeginStep;
-  float m_spinXEndStep;
   int m_horizontal_axis_grid_mode;
 
   bool m_setval;

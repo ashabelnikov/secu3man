@@ -1,3 +1,5 @@
+// Resource file for Chart2D DLL unit.
+// Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 
 #include "resource.h"
 
@@ -23,4 +25,3 @@ stringtable
   IDS_PM_SET_ALLTO_1ST_PT, "Duplicate value of 1st point"
   IDS_PM_BLD_CURVE_1ST_LAST_PT, "Build curve using 1st and last points"
 }
-

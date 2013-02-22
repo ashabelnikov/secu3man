@@ -1,4 +1,5 @@
 USEUNIT("Chart2D.cpp");
+USEUNIT("TFloatUpDown.cpp");
 USEFORM("Form2D.cpp", Form2D);
 USEDEF("Chart2D.def");
 USERES("Chart2D.res");

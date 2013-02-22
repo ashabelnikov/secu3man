@@ -58,8 +58,6 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_param_on_change_xedit_value(NULL)
 , m_setval(0)
 , m_val_n(0)
-, m_spinXBeginStep(1)
-, m_spinXEndStep(1)
 , m_horizontal_axis_grid_mode(0)
 {
  memset(&m_horizontal_axis_grid_values[0][0], 0, sizeof(float) * 1024);
@@ -138,19 +136,17 @@ void TForm2D::ShowXEdits(bool i_show)
 //---------------------------------------------------------------------------
 void TForm2D::CfgXEdits(int i_type, float i_min, float i_max, float i_step)
 {
- int spinMin = MathHelpers::Round(i_min / i_step);
- int spinMax = MathHelpers::Round(i_max / i_step);
  switch(i_type)
  {
   case 0:  //begin
-   SpinXBegin->Min = spinMin;
-   SpinXBegin->Max = spinMax;
-   m_spinXBeginStep = i_step;
+   SpinXBegin->FloatMin = i_min;
+   SpinXBegin->FloatMax = i_max;
+   SpinXBegin->FloatIncrement = i_step;
    break;
   case 1:  //end
-   SpinXEnd->Min = spinMin;
-   SpinXEnd->Max = spinMax;
-   m_spinXEndStep = i_step;
+   SpinXEnd->FloatMin = i_min;
+   SpinXEnd->FloatMax = i_max;
+   SpinXEnd->FloatIncrement = i_step;
    break;
  }
 }
@@ -393,92 +389,59 @@ void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 {
- double value;
- AnsiString as(EditXBegin->Text);
+ double bValue = 0, eValue = 0;
  try {
- value = as.ToDouble();
+ AnsiString as(EditXBegin->Text);
+ bValue = as.ToDouble();
  }
  catch(EConvertError* e) {
   return; //error
  }
 
- if (!SpinXBegin->Tag)
- {
-  EditXBegin->Tag = 1;
-  SpinXBegin->Position = value / m_spinXBeginStep;
+ try {
+ AnsiString as(EditXEnd->Text);
+ eValue = as.ToDouble();
  }
- SpinXBegin->Tag = 0;
+ catch(EConvertError* e) {
+  return; //error
+ }
+
+ double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
+ for(int i = 0; i < m_count_of_function_points; ++i)
+  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
+ Chart1->Invalidate();
 
  if (m_pOnChangeXEditValue)
-  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 0, value);
+  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 0, bValue);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 {
- double value;
- AnsiString as(EditXEnd->Text);
+ double bValue = 0, eValue = 0;
  try {
- value = as.ToDouble();
+ AnsiString as(EditXBegin->Text);
+ bValue = as.ToDouble();
  }
  catch(EConvertError* e) {
   return; //error
  }
 
- if (!SpinXEnd->Tag)
- {
-  EditXEnd->Tag = 1;
-  SpinXEnd->Position = value / m_spinXEndStep;
+ try {
+ AnsiString as(EditXEnd->Text);
+ eValue = as.ToDouble();
  }
- SpinXEnd->Tag = 0;
+ catch(EConvertError* e) {
+  return; //error
+ }
+
+ double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
+ for(int i = 0; i < m_count_of_function_points; ++i)
+  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
+ Chart1->Invalidate();
 
  if (m_pOnChangeXEditValue)
-  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 1, value);
+  m_pOnChangeXEditValue(m_param_on_change_xedit_value, 1, eValue);
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm2D::SpinXBeginOnChangingEx(TObject *Sender,
-      bool &AllowChange, short NewValue, TUpDownDirection Direction)
-{
- double bValue = ((double)NewValue) * m_spinXBeginStep;
- double eValue = ((double)SpinXEnd->Position) * m_spinXEndStep;
-
- if (!EditXBegin->Tag)
- {
-  SpinXBegin->Tag = 1;
-  AnsiString as;
-  as.sprintf(m_horizontal_axis_values_format.c_str(), bValue);
-  EditXBegin->Text = as;
- }
- EditXBegin->Tag = 0;
-
- double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
- for(int i = 0; i < m_count_of_function_points; ++i)
-  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
- Chart1->Invalidate();
-}
-
-//---------------------------------------------------------------------------
-void __fastcall TForm2D::SpinXEndOnChangingEx(TObject *Sender,
-      bool &AllowChange, short NewValue, TUpDownDirection Direction)
-{
- double bValue = ((double)SpinXBegin->Position) * m_spinXBeginStep;
- double eValue = ((double)NewValue) * m_spinXEndStep;
-
- if (!EditXEnd->Tag)
- {
-  SpinXEnd->Tag = 1;
-  AnsiString as;
-  as.sprintf(m_horizontal_axis_values_format.c_str(), eValue);
-  EditXEnd->Text = as;
- }
- EditXEnd->Tag = 0;
-
- double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
- for(int i = 0; i < m_count_of_function_points; ++i)
-  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
- Chart1->Invalidate();
-}
-
-//---------------------------------------------------------------------------
-
