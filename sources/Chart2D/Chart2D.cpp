@@ -21,6 +21,7 @@
 
 #include <map>
 #include <mem.h>
+#include <vector>
 #include <vcl.h>
 #include <windows.h>
 #include <ExtCtrls.hpp>
@@ -51,7 +52,8 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
 }
 
-std::map<HWND, TForm*> g_form_instances;
+std::map<HWND, TForm*> g_form_instances; //form instance DB
+std::vector<TForm*> g_form_delete;       //for garbage collection
 
 enum ELanguage
 {
@@ -76,6 +78,7 @@ bool RemoveInstanceByHWND(HWND hWnd)
 {
  if (g_form_instances.find(hWnd)!= g_form_instances.end())
  {
+  g_form_delete.push_back(g_form_instances[hWnd]);
   g_form_instances.erase(hWnd);
   return true;
  }
@@ -114,6 +117,12 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //---------------------------------------------------------------------------
 HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title)
 {
+ //Clean up previous instances of forms
+ for(size_t i = 0; i < g_form_delete.size(); ++i)
+  delete g_form_delete[i];
+ g_form_delete.clear();
+
+ //Create a form
  TForm2D* pForm;
  pForm = new TForm2D((TComponent *)NULL);
  pForm->m_count_of_function_points = i_count_of_points;

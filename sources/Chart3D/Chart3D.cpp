@@ -20,6 +20,7 @@
 */
 
 #include <map>
+#include <vector>
 #include <vcl.h>
 #include <windows.h>
 #include <mem.h>
@@ -44,7 +45,8 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
 }
 
-std::map<HWND,TForm*> g_form_instances;
+std::map<HWND,TForm*> g_form_instances;  //form instance DB
+std::vector<TForm*> g_form_delete;       //for garbage collection
 
 enum ELanguage
 {
@@ -69,6 +71,7 @@ bool RemoveInstanceByHWND(HWND hWnd)
 {
  if (g_form_instances.find(hWnd)!= g_form_instances.end())
  {
+  g_form_delete.push_back(g_form_instances[hWnd]);
   g_form_instances.erase(hWnd);
   return true;
  }
@@ -111,6 +114,12 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //значения функций
 HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
 {
+ //Clean up previous instances of forms
+ for(size_t i = 0; i < g_form_delete.size(); ++i)
+  delete g_form_delete[i];
+ g_form_delete.clear();
+
+ //Create a form
  TForm3D *pForm = new TForm3D((TComponent *)NULL);
  pForm->count_x = x_count_of_points;
  pForm->count_z = z_count_of_points;
@@ -215,7 +224,7 @@ void __cdecl Chart3DShow(HWND hWnd, int i_show)
  else if  (0 == i_show)
   pForm->Hide();
  else
-  MessageBox(hWnd, _T("Chart2DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
+  MessageBox(hWnd, _T("Chart3DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
 }
 //---------------------------------------------------------------------------
 void __cdecl Chart3DSetLanguage(int i_language)
