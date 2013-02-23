@@ -390,22 +390,11 @@ void __fastcall TForm2D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 {
  double bValue = 0, eValue = 0;
- try {
- AnsiString as(EditXBegin->Text);
- bValue = as.ToDouble();
- }
- catch(EConvertError* e) {
-  return; //error
- }
-
- try {
- AnsiString as(EditXEnd->Text);
- eValue = as.ToDouble();
- }
- catch(EConvertError* e) {
-  return; //error
- }
-
+ if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
+  return;
+ if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
+  return;
+   
  double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
  for(int i = 0; i < m_count_of_function_points; ++i)
   m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
@@ -419,21 +408,10 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
 void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 {
  double bValue = 0, eValue = 0;
- try {
- AnsiString as(EditXBegin->Text);
- bValue = as.ToDouble();
- }
- catch(EConvertError* e) {
-  return; //error
- }
-
- try {
- AnsiString as(EditXEnd->Text);
- eValue = as.ToDouble();
- }
- catch(EConvertError* e) {
-  return; //error
- }
+ if (1!=sscanf(EditXBegin->Text.c_str(), "%lf", &bValue))
+  return;
+ if (1!=sscanf(EditXEnd->Text.c_str(), "%lf", &eValue))
+  return;
 
  double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
  for(int i = 0; i < m_count_of_function_points; ++i)
