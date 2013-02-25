@@ -436,12 +436,12 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   case VK_TAB:
    mask = DLGC_WANTTAB;
    break;
-  case VK_LEFT:
-  case VK_RIGHT:
-  case VK_UP:
-  case VK_DOWN:
-   mask = DLGC_WANTARROWS;
-   break;
+//  case VK_LEFT:
+//  case VK_RIGHT:
+//  case VK_UP:
+//  case VK_DOWN:
+//   mask = DLGC_WANTARROWS;
+//   break;
   case VK_RETURN: 
   case VK_EXECUTE:
   case VK_ESCAPE:
@@ -449,9 +449,13 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    mask = DLGC_WANTALLKEYS;
    break;
  }
- if ((mask != 0) & (0 == ctrl->Perform(CM_WANTSPECIALKEY, Key, 0)) &
-     (ctrl->Perform(WM_GETDLGCODE, 0, 0) & (0==mask)) & this->Perform(CM_DIALOGKEY, Key, 0))
+ if (mask != 0)
+ { 
+  if ((0 == ctrl->Perform(CM_WANTSPECIALKEY, Key, 0)) &
+     (ctrl->Perform(WM_GETDLGCODE, 0, 0) & (0==mask)) & 
+     (this->Perform(CM_DIALOGKEY, Key, 0)))
   return;
+ }
 }
 
 //---------------------------------------------------------------------------

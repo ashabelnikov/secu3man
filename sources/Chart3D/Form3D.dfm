@@ -108,6 +108,7 @@ object Form3D: TForm3D
     View3DOptions.Orthogonal = False
     View3DOptions.Zoom = 72
     TabOrder = 0
+    TabStop = False
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
     object Series1: TLineSeries
@@ -762,11 +763,12 @@ object Form3D: TForm3D
     Position = 1
     SelEnd = 0
     SelStart = 0
-    TabOrder = 1
+    TabOrder = 5
     ThumbLength = 15
     TickMarks = tmTopLeft
     TickStyle = tsAuto
     OnChange = TrackBar1Change
+    OnKeyDown = CtrlKeyDown
   end
   object CheckBox1: TCheckBox
     Left = 495
@@ -774,8 +776,9 @@ object Form3D: TForm3D
     Width = 50
     Height = 21
     Caption = '3D'
-    TabOrder = 2
+    TabOrder = 6
     OnClick = CheckBox1Click
+    OnKeyDown = CtrlKeyDown
   end
   object CheckBox2: TCheckBox
     Left = 571
@@ -783,16 +786,18 @@ object Form3D: TForm3D
     Width = 100
     Height = 31
     Caption = 'גטה סחאהט'
-    TabOrder = 6
+    TabOrder = 7
     OnClick = CheckBox2Click
+    OnKeyDown = CtrlKeyDown
   end
   object ButtonAngleUp: TBitBtn
     Left = 702
     Top = 98
     Width = 31
     Height = 41
-    TabOrder = 7
+    TabOrder = 1
     OnClick = ButtonAngleUpClick
+    OnKeyDown = CtrlKeyDown
     Glyph.Data = {
       9E050000424D9E05000000000000360400002800000011000000120000000100
       0800000000006801000000000000000000000001000000000000000000000000
@@ -846,8 +851,9 @@ object Form3D: TForm3D
     Top = 236
     Width = 31
     Height = 41
-    TabOrder = 5
+    TabOrder = 2
     OnClick = ButtonAngleDownClick
+    OnKeyDown = CtrlKeyDown
     Glyph.Data = {
       9E050000424D9E05000000000000360400002800000011000000120000000100
       0800000000006801000000000000000000000001000000000000000000000000
@@ -904,6 +910,7 @@ object Form3D: TForm3D
     Caption = '3x'
     TabOrder = 3
     OnClick = Smoothing3xClick
+    OnKeyDown = CtrlKeyDown
   end
   object Smoothing5x: TButton
     Left = 703
@@ -913,6 +920,7 @@ object Form3D: TForm3D
     Caption = '5x'
     TabOrder = 4
     OnClick = Smoothing5xClick
+    OnKeyDown = CtrlKeyDown
   end
   object PopupMenu: TPopupMenu
     Left = 702

@@ -112,6 +112,8 @@ class TForm3D : public TForm
   void __fastcall OnDuplicate1stPoint(TObject *Sender);
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
   void __fastcall OnBuildShapeUsing1stAndLastCurves(TObject *Sender);
+  void __fastcall CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+
  public:
   __fastcall TForm3D(TComponent* Owner);
   void DataPrepare();
