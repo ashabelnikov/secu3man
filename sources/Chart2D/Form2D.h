@@ -74,6 +74,7 @@ class TForm2D : public TForm
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
   void __fastcall EditXBeginOnChange(TObject *Sender);
   void __fastcall EditXEndOnChange(TObject *Sender);
+  void __fastcall CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);

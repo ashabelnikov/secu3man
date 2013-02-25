@@ -77,6 +77,7 @@ object Form2D: TForm2D
     View3D = False
     OnGetAxisLabel = Chart1GetAxisLabel
     TabOrder = 0
+    TabStop = False
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
     object Series1: TLineSeries
@@ -127,6 +128,7 @@ object Form2D: TForm2D
     Height = 33
     TabOrder = 1
     OnClick = ButtonAngleUpClick
+    OnKeyDown = CtrlKeyDown
     Glyph.Data = {
       9E050000424D9E05000000000000360400002800000011000000120000000100
       0800000000006801000000000000000000000001000000000000000000000000
@@ -182,6 +184,7 @@ object Form2D: TForm2D
     Height = 33
     TabOrder = 2
     OnClick = ButtonAngleDownClick
+    OnKeyDown = CtrlKeyDown
     Glyph.Data = {
       9E050000424D9E05000000000000360400002800000011000000120000000100
       0800000000006801000000000000000000000001000000000000000000000000
@@ -238,6 +241,7 @@ object Form2D: TForm2D
     Caption = '3x'
     TabOrder = 3
     OnClick = Smoothing3xClick
+    OnKeyDown = CtrlKeyDown
   end
   object Smoothing5x: TButton
     Left = 587
@@ -247,6 +251,7 @@ object Form2D: TForm2D
     Caption = '5x'
     TabOrder = 4
     OnClick = Smoothing5xClick
+    OnKeyDown = CtrlKeyDown
   end
   object EditXBegin: TEdit
     Left = 48
@@ -258,6 +263,7 @@ object Form2D: TForm2D
     Text = '0'
     Visible = False
     OnChange = EditXBeginOnChange
+    OnKeyDown = CtrlKeyDown
   end
   object EditXEnd: TEdit
     Left = 528
@@ -269,6 +275,7 @@ object Form2D: TForm2D
     Text = '0'
     Visible = False
     OnChange = EditXEndOnChange
+    OnKeyDown = CtrlKeyDown
   end
   object SpinXBegin: TFloatUpDown
     Left = 89
@@ -280,6 +287,7 @@ object Form2D: TForm2D
     FloatMax = 100
     FloatPosition = 0
     TabOrder = 7
+    TabStop = False
     Visible = False
     Wrap = False
   end
@@ -293,6 +301,7 @@ object Form2D: TForm2D
     FloatMax = 100
     FloatPosition = 0
     TabOrder = 8
+    TabStop = False
     Visible = False
     Wrap = False
   end

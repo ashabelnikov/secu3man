@@ -423,3 +423,35 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+ TWinControl* ctrl = (TWinControl*)Sender;
+
+ if (0 != ctrl->Perform(CM_CHILDKEY, Key, (LPARAM)ctrl))
+  return;
+
+ int mask = 0;
+ switch(Key)
+ {
+  case VK_TAB:
+   mask = DLGC_WANTTAB;
+   break;
+  case VK_LEFT:
+  case VK_RIGHT:
+  case VK_UP:
+  case VK_DOWN:
+   mask = DLGC_WANTARROWS;
+   break;
+  case VK_RETURN: 
+  case VK_EXECUTE:
+  case VK_ESCAPE:
+  case VK_CANCEL:
+   mask = DLGC_WANTALLKEYS;
+   break;
+ }
+ if ((mask != 0) & (0 == ctrl->Perform(CM_WANTSPECIALKEY, Key, 0)) &
+     (ctrl->Perform(WM_GETDLGCODE, 0, 0) & (0==mask)) & this->Perform(CM_DIALOGKEY, Key, 0))
+  return;
+}
+
+//---------------------------------------------------------------------------
