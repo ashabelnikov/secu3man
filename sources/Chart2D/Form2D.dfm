@@ -290,6 +290,7 @@ object Form2D: TForm2D
     TabStop = False
     Visible = False
     Wrap = False
+    ArrowKeys = True
   end
  object SpinXEnd: TFloatUpDown
     Left = 569
@@ -304,6 +305,7 @@ object Form2D: TForm2D
     TabStop = False
     Visible = False
     Wrap = False
+    ArrowKeys = True
   end
   object PopupMenu: TPopupMenu
     Left = 723

@@ -67,6 +67,7 @@ __fastcall TFloatUpDown::TFloatUpDown(TComponent* Owner)
 , m_floatPosition(0)
 , m_floatIncrement(1)
 , m_OnFloatChanging(NULL)
+, m_oldOnKeyDown(NULL)
 {
  Min = SHRT_MIN;
  Max = SHRT_MAX;
@@ -131,6 +132,17 @@ void __fastcall TFloatUpDown::CustomUpDownClick(TObject *Sender,TUDBtnType Butto
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TFloatUpDown::CustomUpDownOnKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
+{
+ //Simulate buttons pressing
+ if (Key == VK_UP)  Click(btNext);
+ else if (Key == VK_DOWN) Click(btPrev);
+
+ if (m_oldOnKeyDown)
+  m_oldOnKeyDown(Sender, Key, Shift); //let our buddy's event listener to precess OnKeyDown
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TFloatUpDown::SetFloatMin(double floatMin)
 {
  m_floatMin = floatMin;
@@ -185,7 +197,13 @@ void __fastcall TFloatUpDown::SetFloatPosition(double position)
 //---------------------------------------------------------------------------
 void __fastcall TFloatUpDown::SetFloatAssociate(TWinControl *ip_floatAssociate)
 {
- Associate = ip_floatAssociate;
+ Associate = ip_floatAssociate; //move and size control
+ if (ArrowKeys && ip_floatAssociate)
+ {
+  TEdit* buddyControl = static_cast<TEdit*>(Associate);
+  m_oldOnKeyDown = buddyControl->OnKeyDown;         //save old 
+  buddyControl->OnKeyDown = CustomUpDownOnKeyDown;  //set new
+ }
  Associate = this;
  mp_floatAssociate = ip_floatAssociate;
  SetFloatPosition(m_floatPosition);

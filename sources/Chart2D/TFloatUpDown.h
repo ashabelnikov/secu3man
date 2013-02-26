@@ -62,6 +62,7 @@ class TFloatUpDown : public TCustomUpDown
 
  private:
   void __fastcall CustomUpDownClick(TObject *Sender, TUDBtnType Button);
+  void __fastcall CustomUpDownOnKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
   void __fastcall SetFloatMin(double floatMin);
   void __fastcall SetFloatMax(double floatMax);
   void __fastcall SetFloatIncrement(double increment);
@@ -77,6 +78,7 @@ private:
   TUDChangingEvent m_OnFloatChanging;
   TUDClickEvent m_OnFloatClick;
   TWinControl *mp_floatAssociate;
+  TKeyEvent m_oldOnKeyDown; 
 };
 
 #endif //_FLOATUPDOWN_H_
