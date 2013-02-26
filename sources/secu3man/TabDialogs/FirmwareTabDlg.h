@@ -44,6 +44,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
+  typedef fastdelegate::FastDelegate1<_TSTRING> EventString;
 
  public:
   CFirmwareTabDlg(CWnd* pParent = NULL);   // standard constructor
@@ -106,6 +107,8 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   void setIsIORemappingAvailable(EventResult IsFunction);
   //... от кнопок и чек боксов
   void setOnBLStartedEmergency(EventHandler OnFunction);
+  //Drag and Drop
+  void setOnDragFile(EventString OnFunction);
 
 // Implementation
  protected:
@@ -146,6 +149,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   afx_msg void OnExportMapsToS3F();
   afx_msg void OnFirmwareInfo();
   afx_msg void OnViewFWOptions();
+  afx_msg void OnDropFiles(HDROP hDropInfo);
   DECLARE_MESSAGE_MAP()
   
   //ITabControllerEvent interface (from tab control)
@@ -189,6 +193,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   EventResult   m_IsFirmwareOpened;
   EventResult   m_IsViewFWOptionsAvailable;
   EventResult   m_IsIORemappingAvailable;
+  EventString   m_OnDragFile;
 
   bool IsFirmwareOpened(void);
   bool IsIORemappingAvailable(void);

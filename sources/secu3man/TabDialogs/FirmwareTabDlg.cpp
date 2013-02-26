@@ -148,6 +148,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_FW_VIEW_FWOPT, OnUpdateFirmwareSupportViewFWOptions)
  ON_BN_CLICKED(IDC_FW_VIEW_FWOPT, OnViewFWOptions)
 
+ ON_WM_DROPFILES()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -208,6 +209,9 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
+
+ //Enable drap & drop functionality
+ DragAcceptFiles(true);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -542,6 +546,18 @@ void CFirmwareTabDlg::OnViewFWOptions()
   m_OnViewFWOptions();
 }
 
+void CFirmwareTabDlg::OnDropFiles(HDROP hDropInfo)
+{
+ TCHAR fileName[MAX_PATH+1];
+ if (DragQueryFile(hDropInfo, 0, fileName, MAX_PATH))
+ {
+  if (m_OnDragFile)
+   m_OnDragFile(fileName);
+ }
+ else
+  MessageBeep(MB_ICONEXCLAMATION);
+}
+
 void CFirmwareTabDlg::_RegisterHotKeys(void)
 {
  m_hot_keys_supplier->RegisterCommand(IDM_OPEN_FLASH, 'O', MOD_CONTROL);
@@ -678,3 +694,6 @@ void CFirmwareTabDlg::setIsIORemappingAvailable(EventResult OnFunction)
 
 void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 {m_OnBLStartedEmergency = OnFunction;}
+
+void CFirmwareTabDlg::setOnDragFile(EventString OnFunction)
+{m_OnDragFile = OnFunction;}

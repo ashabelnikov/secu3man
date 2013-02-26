@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include <algorithm>
 #include <limits>
+#include <shlwapi.h>
 
 #include "Resources/resource.h"
 #include "FirmwareTabController.h"
@@ -109,6 +110,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
  m_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
+ m_view->setOnDragFile(MakeDelegate(this, &CFirmwareTabController::OnDragFile));
 
  m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
  m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
@@ -801,12 +803,14 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
   return false; //error
  std::vector<int>::const_iterator p_size_max = std::max_element(sizes.begin(), sizes.end());
 
- if (open.DoModal()==IDOK)
+ if ((o_file_path && !o_file_path->empty()) || open.DoModal()==IDOK)
  {
   CFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(open.GetFileName(),CFile::modeRead,&ex))
+  //obtain file name either from full path (if supplied) or open file dialog
+  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetFileName().GetBuffer(256);
+  if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
@@ -814,7 +818,18 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
   }
 
   //----------------------------------------------------------------------------
-  if (open.GetFileExt()==_T("hex") || open.GetFileExt()==_T("a90"))
+  _TSTRING fileExt;
+  if (o_file_path && !o_file_path->empty())
+  { //obtain file extension from full path
+   TCHAR path[MAX_PATH] = {0};
+   o_file_path->copy(path, o_file_path->size());
+   fileExt = PathFindExtension(path);
+   if (fileExt[0] == '.')
+    fileExt.erase(0, 1);  //Remove dot
+  }
+  else //obtain extension from open file dialog
+   fileExt = open.GetFileExt().GetBuffer(256);
+  if (fileExt==_T("hex") || fileExt==_T("a90"))
   {
    ULONGLONG ulonglong_size = f.GetLength();
    if (ulonglong_size > 524288)
@@ -881,9 +896,20 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
 
   f.Close();
   if (NULL != o_file_name)
-   *o_file_name = open.GetFileName();
-
-  if (NULL != o_file_path)
+  {
+   if (o_file_path && !o_file_path->empty())
+   { //obtain file name from full path
+    TCHAR path[MAX_PATH] = {0};
+    o_file_path->copy(path, o_file_path->size());
+    PathStripPath(path);
+    *o_file_name = path;
+   }
+   else //obtain file name from open file dialog
+    *o_file_name = open.GetFileName();
+  }
+  
+  //Save full path only if it is not supplied
+  if (NULL != o_file_path && o_file_path->empty())
    *o_file_path = open.GetPathName();
 
   return true; //подтверждение пользователя
@@ -1055,6 +1081,26 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  std::vector<int> sizes;
  sizes.push_back(m_fpp.m_total_size);
  result  = LoadFLASHFromFile(buff, sizes, NULL, NULL, &opened_file_name);
+ if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
+ {
+  PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
+ }
+}
+
+void CFirmwareTabController::OnDragFile(_TSTRING fileName)
+{
+ bool result;
+ std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
+ BYTE *buff = &buff_container[0];
+ _TSTRING opened_file_name = _T("");
+
+ bool is_continue = CheckChangesAskAndSaveFirmware();
+ if (!is_continue)
+  return;  //пользователь передумал
+
+ std::vector<int> sizes;
+ sizes.push_back(m_fpp.m_total_size);
+ result  = LoadFLASHFromFile(buff, sizes, NULL, NULL, &opened_file_name, &fileName);
  if (result && _CheckCompatibilityAndAskUser(buff)) //user OK?
  {
   PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
