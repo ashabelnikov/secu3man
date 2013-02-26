@@ -110,7 +110,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
  m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
  m_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
- m_view->setOnDragFile(MakeDelegate(this, &CFirmwareTabController::OnDragFile));
+ m_view->setOnDropFile(MakeDelegate(this, &CFirmwareTabController::OnDropFile));
 
  m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
  m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
@@ -821,10 +821,10 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
   _TSTRING fileExt;
   if (o_file_path && !o_file_path->empty())
   { //obtain file extension from full path
-   TCHAR path[MAX_PATH] = {0};
+   TCHAR path[MAX_PATH+1] = {0};
    o_file_path->copy(path, o_file_path->size());
    fileExt = PathFindExtension(path);
-   if (fileExt[0] == '.')
+   if (fileExt[0] == _T('.'))
     fileExt.erase(0, 1);  //Remove dot
   }
   else //obtain extension from open file dialog
@@ -899,7 +899,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
   {
    if (o_file_path && !o_file_path->empty())
    { //obtain file name from full path
-    TCHAR path[MAX_PATH] = {0};
+    TCHAR path[MAX_PATH+1] = {0};
     o_file_path->copy(path, o_file_path->size());
     PathStripPath(path);
     *o_file_name = path;
@@ -1087,7 +1087,7 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  }
 }
 
-void CFirmwareTabController::OnDragFile(_TSTRING fileName)
+void CFirmwareTabController::OnDropFile(_TSTRING fileName)
 {
  bool result;
  std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);

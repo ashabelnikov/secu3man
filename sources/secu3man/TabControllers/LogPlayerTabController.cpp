@@ -20,6 +20,7 @@
 */
 
 #include "stdafx.h"
+#include <shlwapi.h>
 #include "Resources/resource.h"
 #include "LogPlayerTabController.h"
 
@@ -87,6 +88,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* i_view, CComm
  m_view->mp_LPPanelDlg->setOnPrevButton(MakeDelegate(this,&CLogPlayerTabController::OnPrevButton));
  m_view->mp_LPPanelDlg->setOnTimeFactorCombo(MakeDelegate(this,&CLogPlayerTabController::OnTimeFactorCombo));
  m_view->mp_LPPanelDlg->setOnSliderMoved(MakeDelegate(this,&CLogPlayerTabController::OnSliderMoved));
+ m_view->setOnDropFile(MakeDelegate(this,&CLogPlayerTabController::OnDropFile));
 
  m_timer.SetMsgHandler(this, &CLogPlayerTabController::OnTimer);
 }
@@ -209,50 +211,8 @@ void CLogPlayerTabController::OnOpenFileButton(void)
   _ClosePlayer();
   return;
  }
-
- HANDLE   hFile = NULL;
- static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
- CFileDialog open(TRUE, NULL, NULL, NULL, szFilter, NULL);
-
- if (open.DoModal() != IDOK)
-  return; //пользователь передумал
-
- LogReader::FileError error_id;
- bool result = mp_log_reader->OpenFile(open.GetFileName().GetBuffer(0), error_id);
- if (false==result)
- {
-  if (error_id==LogReader::FE_OPEN)
-   AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
-  else if (error_id==LogReader::FE_FORMAT)
-  {
-   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));
-  }
-  else
-   ASSERT(0);
-
-  mp_log_reader->CloseFile();
-  return; //не можем продолжать, так как произошла ошибка
- }
-
- ////////////////////////////////////////////////////////////////
- m_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_CLOSE_FILE));
-
- CString string;
- string.Format(MLL::LoadString(IDS_LP_FILE_INFO_FMT_STRING),open.GetFileName(),mp_log_reader->GetCount());
- m_view->mp_LPPanelDlg->SetFileIndicator(string.GetBuffer(0));
-
- m_view->mp_MIDeskDlg->Enable(true);
- m_view->mp_CEDeskDlg->Enable(true);
- m_view->mp_LPPanelDlg->EnableAll(true);
- m_view->mp_OScopeCtrl->EnableWindow(true);
-
-  //инициализируем логику плеера и начинаем сразу проигрывать
- if (mp_log_reader->GetCount() > 0)
- {
-  _InitPlayer();
-  _Play(true);
- }
- ////////////////////////////////////////////////////////////////
+ _TSTRING fileName = _T("");
+ _OpenFile(fileName);
 }
 
 void CLogPlayerTabController::OnPlayButton(void)
@@ -350,6 +310,67 @@ void CLogPlayerTabController::OnTimer(void)
  }
 
  _ProcessOneRecord(true, DIR_NEXT);
+}
+
+void CLogPlayerTabController::OnDropFile(_TSTRING fileName)
+{
+ if (mp_log_reader->IsOpened())
+  _ClosePlayer(); //закрываем плеер перед началом следующего проигрывания
+
+ _OpenFile(fileName);
+}
+
+void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
+{
+ HANDLE   hFile = NULL;
+ static TCHAR BASED_CODE szFilter[] = _T("CSV Files (*.csv)|*.csv|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE, NULL, NULL, NULL, szFilter, NULL);
+
+ if (fileName.empty() && open.DoModal() != IDOK)
+  return; //пользователь передумал
+
+ LogReader::FileError error_id;
+ _TSTRING file_path = fileName.empty() ? open.GetFileName().GetBuffer(0) : fileName;
+ bool result = mp_log_reader->OpenFile(file_path, error_id);
+ if (false==result)
+ {
+  if (error_id==LogReader::FE_OPEN)
+   AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
+  else if (error_id==LogReader::FE_FORMAT)
+  {
+   AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));
+  }
+  else
+   ASSERT(0);
+
+  mp_log_reader->CloseFile();
+  return; //не можем продолжать, так как произошла ошибка
+ }
+
+ ////////////////////////////////////////////////////////////////
+ m_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_CLOSE_FILE));
+
+ //obtain file name from full path
+ TCHAR stripped_name[MAX_PATH+1] = {0};
+ file_path.copy(stripped_name, file_path.size());
+ PathStripPath(stripped_name);
+
+ CString string;
+ string.Format(MLL::LoadString(IDS_LP_FILE_INFO_FMT_STRING), stripped_name, mp_log_reader->GetCount());
+ m_view->mp_LPPanelDlg->SetFileIndicator(string.GetBuffer(0));
+
+ m_view->mp_MIDeskDlg->Enable(true);
+ m_view->mp_CEDeskDlg->Enable(true);
+ m_view->mp_LPPanelDlg->EnableAll(true);
+ m_view->mp_OScopeCtrl->EnableWindow(true);
+
+ //инициализируем логику плеера и начинаем сразу проигрывать
+ if (mp_log_reader->GetCount() > 0)
+ {
+  _InitPlayer();
+  _Play(true);
+ }
+ ////////////////////////////////////////////////////////////////
 }
 
 void CLogPlayerTabController::_GoNext(void)

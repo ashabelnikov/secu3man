@@ -97,7 +97,7 @@ CAppSettingsModel::CAppSettingsModel()
  _tcscpy(m_current_directory,_T(""));
 
  //определение тек. директории
- GetCurrentDirectory(MAX_PATH,m_current_directory);
+ GetCurrentDirectory(MAX_PATH, m_current_directory);
 
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\";\"  semicolon")), ';'));

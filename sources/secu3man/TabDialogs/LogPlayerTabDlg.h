@@ -35,6 +35,7 @@ class CToolTipCtrlEx;
 class CLogPlayerTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
+  typedef fastdelegate::FastDelegate1<_TSTRING> EventString;
 
  public:
   CLogPlayerTabDlg(CWnd* pParent = NULL);
@@ -45,6 +46,9 @@ class CLogPlayerTabDlg : public CTabDialog
 
   void AppendKnockValue(double i_value, bool i_reverse);
   void ResetKnockOscilloscope(void);
+
+  //Drag and Drop event handler
+  void setOnDropFile(EventString OnFunction);
 
  public:
   std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
@@ -60,7 +64,10 @@ class CLogPlayerTabDlg : public CTabDialog
 
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);
+  afx_msg void OnDropFiles(HDROP hDropInfo);
   DECLARE_MESSAGE_MAP()
+
+  EventString m_OnDropFile;
 
   CRect m_original_mi_rect;
   CRect m_original_ce_rect;

@@ -40,7 +40,7 @@ int CALLBACK CPropertyGridDirectoryPicker::BrowseCallbackProc(HWND hwnd,UINT uMs
 
 bool CPropertyGridDirectoryPicker::PickDirectory(_TSTRING &directory, HWND hwnd)
 {
- TCHAR pszBuffer[MAX_PATH];
+ TCHAR pszBuffer[MAX_PATH+1];
  pszBuffer[0] = '\0';
 
  // Gets the Shell's default allocator

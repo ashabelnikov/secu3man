@@ -64,8 +64,12 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //от таймера
   void OnTimer(void);
 
+  //Drag and Drop event handler
+  void OnDropFile(_TSTRING fileName);
+
  private:
   //вспомогательные функции
+  void _OpenFile(const _TSTRING& fileName);
   void _GoNext(void);
   void _GoBack(void);
   void _GetRecord(void);

@@ -551,8 +551,8 @@ void CFirmwareTabDlg::OnDropFiles(HDROP hDropInfo)
  TCHAR fileName[MAX_PATH+1];
  if (DragQueryFile(hDropInfo, 0, fileName, MAX_PATH))
  {
-  if (m_OnDragFile)
-   m_OnDragFile(fileName);
+  if (m_OnDropFile)
+   m_OnDropFile(fileName);
  }
  else
   MessageBeep(MB_ICONEXCLAMATION);
@@ -695,5 +695,5 @@ void CFirmwareTabDlg::setIsIORemappingAvailable(EventResult OnFunction)
 void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 {m_OnBLStartedEmergency = OnFunction;}
 
-void CFirmwareTabDlg::setOnDragFile(EventString OnFunction)
-{m_OnDragFile = OnFunction;}
+void CFirmwareTabDlg::setOnDropFile(EventString OnFunction)
+{m_OnDropFile = OnFunction;}

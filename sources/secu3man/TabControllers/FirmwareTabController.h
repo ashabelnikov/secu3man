@@ -125,7 +125,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnParamDeskTabActivate(void);
   void OnParamDeskChangeInTab(void);
 
-  void OnDragFile(_TSTRING fileName);
+  void OnDropFile(_TSTRING fileName);
 
  private: //функции - обертки
   bool IsBLStartedEmergency(void);

@@ -31,14 +31,13 @@
 #include "ui-core/OScopeCtrl.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
-
 using namespace std;
-
 using namespace fastdelegate;
 
 const UINT CLogPlayerTabDlg::IDD = IDD_LOG_PLAYER;
 
 BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
+ ON_WM_DROPFILES()
 END_MESSAGE_MAP()
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
@@ -54,6 +53,18 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+}
+
+void CLogPlayerTabDlg::OnDropFiles(HDROP hDropInfo)
+{
+ TCHAR fileName[MAX_PATH+1];
+ if (DragQueryFile(hDropInfo, 0, fileName, MAX_PATH))
+ {
+  if (m_OnDropFile)
+   m_OnDropFile(fileName);
+ }
+ else
+  MessageBeep(MB_ICONEXCLAMATION);
 }
 
 LPCTSTR CLogPlayerTabDlg::GetDialogID(void) const
@@ -93,6 +104,9 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl.get(), MLL::GetString(IDS_LP_SIGNAL_OSCILLOSCOPE_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //Enable drap & drop functionality
+ DragAcceptFiles(true);
 
  UpdateDialogControls(this,TRUE);
  return TRUE;
@@ -173,3 +187,6 @@ void CLogPlayerTabDlg::ResetKnockOscilloscope(void)
 {
  mp_OScopeCtrl->Reset();
 }
+
+void CLogPlayerTabDlg::setOnDropFile(EventString OnFunction)
+{m_OnDropFile = OnFunction;}

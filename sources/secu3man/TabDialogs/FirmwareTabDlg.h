@@ -108,7 +108,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   //... от кнопок и чек боксов
   void setOnBLStartedEmergency(EventHandler OnFunction);
   //Drag and Drop
-  void setOnDragFile(EventString OnFunction);
+  void setOnDropFile(EventString OnFunction);
 
 // Implementation
  protected:
@@ -193,7 +193,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   EventResult   m_IsFirmwareOpened;
   EventResult   m_IsViewFWOptionsAvailable;
   EventResult   m_IsIORemappingAvailable;
-  EventString   m_OnDragFile;
+  EventString   m_OnDropFile;
 
   bool IsFirmwareOpened(void);
   bool IsIORemappingAvailable(void);
