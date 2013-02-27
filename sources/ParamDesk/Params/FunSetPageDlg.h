@@ -76,6 +76,7 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_tps_curve_offset_edit;
   CSpinButtonCtrlEx m_tps_curve_gradient_spin;
   CEditEx m_tps_curve_gradient_edit;
+  CBitmapButton m_calc_map_btn;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

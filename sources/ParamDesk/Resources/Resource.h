@@ -356,3 +356,8 @@
 #define IDC_PD_IDLREG_TURN_ON_TEMP_EDIT 3355
 #define IDC_PD_IDLREG_TURN_ON_TEMP_SPIN 3356
 #define IDC_PD_IDLREG_TURN_ON_TEMP_UNIT 3357
+#define IDC_PD_MAP_CALC_BUTTON          3358
+#define IDB_CALC_UP                     3359
+#define IDB_CALC_DOWN                   3360
+#define IDB_CALC_FOCUSED                3361
+#define IDB_CALC_DISABLED               3362

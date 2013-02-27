@@ -118,6 +118,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN, m_tps_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_tps_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN, m_tps_curve_gradient_spin);
+ DDX_Control(pDX, IDC_PD_MAP_CALC_BUTTON, m_calc_map_btn);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
@@ -141,6 +142,9 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 BOOL CFunSetPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_calc_map_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
  m_map_grad_edit.SetLimitText(4);
