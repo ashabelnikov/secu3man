@@ -199,6 +199,26 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
 }
 
 //---------------------------------------------------------------------------
+void TForm2D::InitHints(HINSTANCE hInstance)
+{
+ char string[1024 + 1];
+ ::LoadString(hInstance, IDS_TT_SMOOTHING_3_POINTS, string, 1024);
+ Smoothing3x->Hint = string;
+ ::LoadString(hInstance, IDS_TT_SMOOTHING_5_POINTS, string, 1024);
+ Smoothing5x->Hint = string;
+ ::LoadString(hInstance, IDS_TT_MOVE_FUNC_UP, string, 1024);
+ ButtonAngleUp->Hint = string;
+ ::LoadString(hInstance, IDS_TT_MOVE_FUNC_DOWN, string, 1024);
+ ButtonAngleDown->Hint = string;
+ ::LoadString(hInstance, IDS_TT_H_AXIS_BEGIN_VAL, string, 1024);
+ EditXBegin->Hint = string;
+ SpinXBegin->Hint = string;
+ ::LoadString(hInstance, IDS_TT_H_AXIS_END_VAL, string, 1024);
+ EditXEnd->Hint = string;
+ SpinXEnd->Hint = string; 
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::Chart1ClickSeries(TCustomChart *Sender,
       TChartSeries *Series, int ValueIndex, TMouseButton Button,
       TShiftState Shift, int X, int Y)

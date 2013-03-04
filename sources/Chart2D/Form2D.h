@@ -92,6 +92,7 @@ class TForm2D : public TForm
 
   void Enable(bool i_enable);
   void InitPopupMenu(HINSTANCE hInstance);
+  void InitHints(HINSTANCE hInstance);
 
  public: //properties
   int m_count_of_function_points;

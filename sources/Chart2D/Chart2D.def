@@ -15,3 +15,4 @@ EXPORTS
   Chart2DEnable              = _Chart2DEnable
   Chart2DSetAxisEdits        = _Chart2DSetAxisEdits
   Chart2DUpdateAxisEdits     = _Chart2DUpdateAxisEdits
+  Chart2DShowHints           = _Chart2DShowHints

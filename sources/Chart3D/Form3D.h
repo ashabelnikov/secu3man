@@ -124,6 +124,7 @@ class TForm3D : public TForm
 
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);
+  void InitHints(HINSTANCE hInstance);
 
  public: //Properties
   int count_x;

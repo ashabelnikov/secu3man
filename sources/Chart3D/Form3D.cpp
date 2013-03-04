@@ -154,6 +154,26 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
 }
 
 //---------------------------------------------------------------------------
+void TForm3D::InitHints(HINSTANCE hInstance)
+{
+ char string[1024 + 1];
+ ::LoadString(hInstance, IDS_TT_SMOOTHING_3_POINTS, string, 1024);
+ Smoothing3x->Hint = string;
+ ::LoadString(hInstance, IDS_TT_SMOOTHING_5_POINTS, string, 1024);
+ Smoothing5x->Hint = string;
+ ::LoadString(hInstance, IDS_TT_MOVE_FUNC_UP, string, 1024);
+ ButtonAngleUp->Hint = string;
+ ::LoadString(hInstance, IDS_TT_MOVE_FUNC_DOWN, string, 1024);
+ ButtonAngleDown->Hint = string;
+ ::LoadString(hInstance, IDS_TT_FUNC_VIEW_3D, string, 1024);
+ CheckBox1->Hint = string;
+ ::LoadString(hInstance, IDS_TT_FUNC_VIEW_BACK, string, 1024);
+ CheckBox2->Hint = string;
+ ::LoadString(hInstance, IDS_TT_SELECT_CURVE, string, 1024);
+ TrackBar1->Hint = string;
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
 {
  m_air_flow_position = TrackBar1->Position;
@@ -207,6 +227,7 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
   Chart1->View3D  = true;
   MakeAllVisible();
   TrackBar1->Enabled = false;
+  Label1->Enabled = false;
   CheckBox2->Enabled = true;
   CheckBox2Click(NULL);
   ButtonAngleUp->Enabled = false;
@@ -226,6 +247,7 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
   Chart1->View3D = false;
   MakeOneVisible(airflow);
   TrackBar1->Enabled = true;
+  Label1->Enabled = true;
   CheckBox2->Enabled = false;
   FillChart(0,0);
   ButtonAngleUp->Enabled = true;

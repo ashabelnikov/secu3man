@@ -50,6 +50,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool i_enable);
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
+ void  __declspec(dllexport)  __cdecl Chart2DShowHints(int i_show);
 }
 
 std::map<HWND, TForm*> g_form_instances; //form instance DB
@@ -136,6 +137,7 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
+ pForm->InitHints(hInst); //Set hints' text
 
  //сохраняем значения сетки по горизонтальной оси
  if (ip_x_axis_grid_values)
@@ -371,4 +373,9 @@ void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float 
 }
 
 //---------------------------------------------------------------------------
+void __cdecl Chart2DShowHints(int i_show)
+{
+ Application->ShowHint = i_show;
+}
 
+//---------------------------------------------------------------------------

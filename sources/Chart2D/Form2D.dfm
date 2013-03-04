@@ -127,6 +127,7 @@ object Form2D: TForm2D
     Width = 25
     Height = 33
     TabOrder = 1
+    ShowHint = True    
     OnClick = ButtonAngleUpClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -183,6 +184,7 @@ object Form2D: TForm2D
     Width = 25
     Height = 33
     TabOrder = 2
+    ShowHint = True    
     OnClick = ButtonAngleDownClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -240,6 +242,7 @@ object Form2D: TForm2D
     Height = 25
     Caption = '3x'
     TabOrder = 3
+    ShowHint = True    
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
   end
@@ -250,6 +253,7 @@ object Form2D: TForm2D
     Height = 25
     Caption = '5x'
     TabOrder = 4
+    ShowHint = True    
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
   end
@@ -262,6 +266,7 @@ object Form2D: TForm2D
     TabOrder = 5    
     Text = '0'
     Visible = False
+    ShowHint = True    
     OnChange = EditXBeginOnChange
     OnKeyDown = CtrlKeyDown
   end
@@ -274,6 +279,7 @@ object Form2D: TForm2D
     TabOrder = 6
     Text = '0'
     Visible = False
+    ShowHint = True    
     OnChange = EditXEndOnChange
     OnKeyDown = CtrlKeyDown
   end
@@ -291,6 +297,7 @@ object Form2D: TForm2D
     Visible = False
     Wrap = False
     ArrowKeys = True
+    ShowHint = True    
   end
  object SpinXEnd: TFloatUpDown
     Left = 569
@@ -306,6 +313,7 @@ object Form2D: TForm2D
     Visible = False
     Wrap = False
     ArrowKeys = True
+    ShowHint = True    
   end
   object PopupMenu: TPopupMenu
     Left = 723

@@ -9,4 +9,4 @@ EXPORTS
   Chart3DSetLanguage        = _Chart3DSetLanguage
   Chart3DSetOnWndActivation = _Chart3DSetOnWndActivation
   Chart3DEnable             = _Chart3DEnable
-
+  Chart3DShowHints          = _Chart3DShowHints

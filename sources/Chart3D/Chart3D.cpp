@@ -43,6 +43,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
+ void  __declspec(dllexport)  __cdecl Chart3DShowHints(int i_show);
 }
 
 std::map<HWND,TForm*> g_form_instances;  //form instance DB
@@ -135,6 +136,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
  pForm->Label2->Caption = MLL::LoadString(IDS_AIR_FLOW_CAPTION_TEXT);
  pForm->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
  pForm->InitPopupMenu(hInst);
+ pForm->InitHints(hInst); //Set hints' text
 
  memcpy(pForm->u_slots, x_axis_grid_values, sizeof(float) * x_count_of_points);
  pForm->DataPrepare();
@@ -250,4 +252,9 @@ void __cdecl Chart3DEnable(HWND hWnd, bool enable)
 }
 
 //---------------------------------------------------------------------------
+void __cdecl Chart3DShowHints(int i_show)
+{
+ Application->ShowHint = i_show;
+}
 
+//---------------------------------------------------------------------------

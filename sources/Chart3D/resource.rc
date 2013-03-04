@@ -19,6 +19,13 @@ stringtable
   IDS_PM_ZERO_ALL_CURVES, "Обнулить все кривые"
   IDS_PM_SET_ALLTO_THIS_CR, "Размножить кривую"
   IDS_PM_BLD_SHAPE_1ST_LAST_CR, "Постр. поверхн. исп. 1-ю и послед. крив."
+  IDS_TT_SMOOTHING_3_POINTS, "Сглаживание по 3-м соседним точкам"
+  IDS_TT_SMOOTHING_5_POINTS, "Сглаживание по 5-ти соседним точкам"
+  IDS_TT_MOVE_FUNC_UP, "Сместить функцию вверх на 0.5"
+  IDS_TT_MOVE_FUNC_DOWN, "Сместить функцию вниз на 0.5"
+  IDS_TT_FUNC_VIEW_3D, "Просмотр функции в 3D"
+  IDS_TT_FUNC_VIEW_BACK, "Вид с обратной стороны"
+  IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -36,5 +43,12 @@ stringtable
   IDS_PM_ZERO_ALL_CURVES, "Zero all curves"
   IDS_PM_SET_ALLTO_THIS_CR, "Duplicate curve"
   IDS_PM_BLD_SHAPE_1ST_LAST_CR, "Build shape using 1st and last curves"
+  IDS_TT_SMOOTHING_3_POINTS, "Smoothing uning 3 adjacent points"
+  IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points"
+  IDS_TT_MOVE_FUNC_UP, "Move function up by 0.5"
+  IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
+  IDS_TT_FUNC_VIEW_3D, "View function in 3D"
+  IDS_TT_FUNC_VIEW_BACK, "Function back side view"
+  IDS_TT_SELECT_CURVE, "Select curve for editing"
 }
 

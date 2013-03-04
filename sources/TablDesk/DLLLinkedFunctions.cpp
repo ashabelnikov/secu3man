@@ -41,6 +41,7 @@ namespace DLL
  Chart2DEnable_Addr              Chart2DEnable = NULL;
  Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits = NULL;  
  Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
+ Chart2DShowHints_Addr           Chart2DShowHints = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -51,6 +52,7 @@ namespace DLL
  Chart3DSetLanguage_Addr         Chart3DSetLanguage = NULL;
  Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
  Chart3DEnable_Addr              Chart3DEnable = NULL;
+ Chart3DShowHints_Addr           Chart3DShowHints = NULL;
 
  //---------------------------------------------------------
  //загружает одну функцию
@@ -99,6 +101,7 @@ namespace DLL
    Chart2DEnable = NULL;
    Chart2DSetAxisEdits = NULL;
    Chart2DUpdateAxisEdits = NULL;
+   Chart2DShowHints = NULL;
    status = false;
   }
   else
@@ -118,6 +121,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DEnable, "Chart2DEnable", status);
    LoadFunction(hModule, Chart2DSetAxisEdits, "Chart2DSetAxisEdits", status);
    LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
+   LoadFunction(hModule, Chart2DShowHints, "Chart2DShowHints", status);
   }
 
   hModule = LoadLibrary(_T("Chart3D.dll"));
@@ -133,6 +137,7 @@ namespace DLL
    Chart3DSetLanguage = NULL;
    Chart3DSetOnWndActivation = NULL;
    Chart3DEnable = NULL;
+   Chart3DShowHints = NULL;
    status = false;
   }
   else
@@ -146,6 +151,7 @@ namespace DLL
    LoadFunction(hModule, Chart3DSetLanguage, "Chart3DSetLanguage", status);
    LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);
    LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
+   LoadFunction(hModule, Chart3DShowHints, "Chart3DShowHints", status);
   }
 
   return status;
@@ -157,6 +163,12 @@ namespace DLL
    DLL::Chart2DSetLanguage(language);
   if (Chart3DSetLanguage)
    DLL::Chart3DSetLanguage(language);
+ }
+
+ void ShowHints(bool i_show)
+ {
+  DLL::Chart2DShowHints(i_show);
+  DLL::Chart3DShowHints(i_show);
  }
 
 };//namespace

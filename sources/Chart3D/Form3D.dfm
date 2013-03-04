@@ -767,6 +767,7 @@ object Form3D: TForm3D
     ThumbLength = 15
     TickMarks = tmTopLeft
     TickStyle = tsAuto
+    ShowHint = True    
     OnChange = TrackBar1Change
     OnKeyDown = CtrlKeyDown
   end
@@ -777,6 +778,7 @@ object Form3D: TForm3D
     Height = 21
     Caption = '3D'
     TabOrder = 6
+    ShowHint = True    
     OnClick = CheckBox1Click
     OnKeyDown = CtrlKeyDown
   end
@@ -787,6 +789,7 @@ object Form3D: TForm3D
     Height = 31
     Caption = 'גטה סחאהט'
     TabOrder = 7
+    ShowHint = True    
     OnClick = CheckBox2Click
     OnKeyDown = CtrlKeyDown
   end
@@ -796,6 +799,7 @@ object Form3D: TForm3D
     Width = 31
     Height = 41
     TabOrder = 1
+    ShowHint = True    
     OnClick = ButtonAngleUpClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -852,6 +856,7 @@ object Form3D: TForm3D
     Width = 31
     Height = 41
     TabOrder = 2
+    ShowHint = True    
     OnClick = ButtonAngleDownClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -909,6 +914,7 @@ object Form3D: TForm3D
     Height = 31
     Caption = '3x'
     TabOrder = 3
+    ShowHint = True    
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
   end
@@ -919,6 +925,7 @@ object Form3D: TForm3D
     Height = 30
     Caption = '5x'
     TabOrder = 4
+    ShowHint = True    
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
   end

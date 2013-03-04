@@ -11,3 +11,10 @@
 #define IDS_PM_ZERO_ALL_CURVES         107
 #define IDS_PM_SET_ALLTO_THIS_CR       108
 #define IDS_PM_BLD_SHAPE_1ST_LAST_CR   109
+#define IDS_TT_SMOOTHING_3_POINTS      110
+#define IDS_TT_SMOOTHING_5_POINTS      111
+#define IDS_TT_MOVE_FUNC_UP            112
+#define IDS_TT_MOVE_FUNC_DOWN          113
+#define IDS_TT_FUNC_VIEW_3D            114
+#define IDS_TT_FUNC_VIEW_BACK          115
+#define IDS_TT_SELECT_CURVE            116

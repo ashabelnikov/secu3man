@@ -33,6 +33,7 @@
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
 #include "StatusBarManager.h"
+#include "TablDesk/DLLLinkedFunctions.h"  //for ShowHints()
 #include "ui-core/HotKeysManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
@@ -117,6 +118,7 @@ void MainFrameController::OnAppSettings()
 
   //–азрешаем или запрещаем показавание подсказок
   CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
+  DLL::ShowHints(settings->GetShowToolTips());  
  }
 }
 
