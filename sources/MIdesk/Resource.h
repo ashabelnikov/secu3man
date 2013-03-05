@@ -77,4 +77,5 @@
 #define IDC_CE_DESK_14                  2077
 #define IDC_CE_DESK_15                  2078
 #define IDS_CE_ERRORS_DESK_TT           2079
-
+#define IDC_MI_POWER_VALVE              2080
+#define IDC_MI_POWER_VALVE_CAPTION      2081

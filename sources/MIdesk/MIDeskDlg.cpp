@@ -60,6 +60,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
  m_throttle_gate.DDX_Controls(pDX, IDC_MI_THROTTLE_GATE, IDC_MI_THROTTLE_GATE_CAPTION);
  m_shutoff_valve.DDX_Controls(pDX, IDC_MI_SHUTOFF_VALVE, IDC_MI_SHUTOFF_VALVE_CAPTION);
+ m_power_valve.DDX_Controls(pDX, IDC_MI_POWER_VALVE, IDC_MI_POWER_VALVE_CAPTION);
 
  //расход воздуха
  m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
@@ -79,6 +80,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_dwell_angle.Create();
  m_gas_valve.Create();
  m_shutoff_valve.Create();
+ m_power_valve.Create();
  m_throttle_gate.Create();
  m_throttle_gate.SetLimits(0,100);
  m_air_flow.Create();
@@ -112,6 +114,7 @@ void CMIDeskDlg::Enable(bool enable)
  m_dwell_angle.Enable(enable);
  m_gas_valve.Enable(enable);
  m_shutoff_valve.Enable(enable);
+ m_power_valve.Enable(enable);
  m_throttle_gate.Enable(enable);
  m_air_flow.Enable(enable);
  m_temperature.Enable(enable);
@@ -125,6 +128,7 @@ void CMIDeskDlg::Show(bool show)
  m_dwell_angle.Show(show);
  m_gas_valve.Show(show);
  m_shutoff_valve.Show(show);
+ m_power_valve.Show(show);
  m_throttle_gate.Show(show);
  m_air_flow.Show(show);
  m_temperature.Show(show);
@@ -145,6 +149,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->adv_angle = m_dwell_angle.GetValue();
  o_values->gas = (unsigned char)m_gas_valve.GetValue();
  o_values->ephh_valve = (unsigned char)m_shutoff_valve.GetValue();
+ o_values->epm_valve = (unsigned char)m_power_valve.GetValue();
  o_values->carb = (unsigned char)m_throttle_gate.GetValue();
  o_values->tps = m_throttle_gate.GetPosition();
  o_values->air_flow = (unsigned char)m_air_flow.GetValue();
@@ -161,6 +166,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_dwell_angle.SetValue(m_values.adv_angle);
  m_gas_valve.SetValue(m_values.gas);
  m_shutoff_valve.SetValue(m_values.ephh_valve);
+ m_power_valve.SetValue(m_values.epm_valve);
  m_throttle_gate.SetValue(m_values.carb);
  m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
@@ -205,6 +211,7 @@ void CMIDeskDlg::Resize(const CRect& i_rect)
  m_dwell_angle.Scale(Xf, Yf);
  m_gas_valve.Scale(Xf, Yf);
  m_shutoff_valve.Scale(Xf, Yf);
+ m_power_valve.Scale(Xf, Yf);
  m_throttle_gate.Scale(Xf, Yf);
  m_air_flow.Scale(Xf, Yf);
  m_temperature.Scale(Xf, Yf);

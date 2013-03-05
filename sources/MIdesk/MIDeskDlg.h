@@ -87,6 +87,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIGasValve     m_gas_valve;
   CMIThrottleGate m_throttle_gate;
   CMIShutoffValve m_shutoff_valve;
+  CMIShutoffValve m_power_valve;
 
   SECU3IO::SensorDat m_values;
   CObjectTimer<CMIDeskDlg> m_update_timer;
