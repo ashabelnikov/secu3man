@@ -661,7 +661,7 @@ void CFirmwareTabController::SaveEEPROMToFile(const BYTE* p_data, const int size
   CFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(save.GetFileName(),CFile::modeWrite|CFile::modeCreate,&ex))
+  if(!f.Open(save.GetPathName(),CFile::modeWrite|CFile::modeCreate,&ex))
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
@@ -688,7 +688,7 @@ bool CFirmwareTabController::SaveFLASHToFile(const BYTE* p_data, const int size,
   CFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(save.GetFileName(),CFile::modeWrite|CFile::modeCreate,&ex))
+  if(!f.Open(save.GetPathName(),CFile::modeWrite|CFile::modeCreate,&ex))
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
@@ -755,7 +755,7 @@ bool CFirmwareTabController::LoadEEPROMFromFile(BYTE* p_data, const std::vector<
   CFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(open.GetFileName(), CFile::modeRead, &ex))
+  if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
@@ -809,7 +809,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
   CFileException ex;
   TCHAR szError[1024];
   //obtain file name either from full path (if supplied) or open file dialog
-  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetFileName().GetBuffer(256);
+  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetPathName().GetBuffer(256);
   if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);

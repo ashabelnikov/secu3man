@@ -67,7 +67,7 @@ int MPSZImportController::DoImport(void)
    type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
 
   m_mpsz_file_name = _TSTRING(open.GetFileName());
-  bool result = mp_mpsz_io->Load(m_mpsz_file_name,type);
+  bool result = mp_mpsz_io->Load(_TSTRING(open.GetPathName()),type);
   if (!result)
   {
    AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
@@ -245,7 +245,7 @@ int MPSZExportController::DoExport(void)
   int id = mp_view->DoModal();
   if (id == IDOK)
   {
-   bool result = mp_mpsz_io->Save(m_mpsz_file_name,type);
+   bool result = mp_mpsz_io->Save(_TSTRING(save.GetPathName()),type);
    if (!result)
    {
     AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);

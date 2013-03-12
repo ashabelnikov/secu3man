@@ -330,7 +330,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
   return; //пользователь передумал
 
  LogReader::FileError error_id;
- _TSTRING file_path = fileName.empty() ? open.GetFileName().GetBuffer(0) : fileName;
+ _TSTRING file_path = fileName.empty() ? open.GetPathName().GetBuffer(0) : fileName;
  bool result = mp_log_reader->OpenFile(file_path, error_id);
  if (false==result)
  {

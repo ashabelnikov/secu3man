@@ -76,7 +76,7 @@ int S3FImportController::DoImport(void)
  if (open.DoModal()==IDOK)
  {
   m_s3f_file_name = _TSTRING(open.GetFileName());
-  bool result = mp_s3f_io->Load(m_s3f_file_name);
+  bool result = mp_s3f_io->Load(_TSTRING(open.GetPathName()));
   if (!result)
   {
    AfxMessageBox(MLL::LoadString(IDS_CANT_LOAD_THIS_FILE),MB_OK|MB_ICONWARNING);
@@ -242,7 +242,7 @@ int S3FExportController::DoExport(void)
   int id = mp_view->DoModal();
   if (id == IDOK)
   {
-   bool result = mp_s3f_io->Save(m_s3f_file_name);
+   bool result = mp_s3f_io->Save(_TSTRING(save.GetPathName()));
    if (!result)
    {
     AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
