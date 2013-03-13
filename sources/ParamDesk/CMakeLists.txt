@@ -21,6 +21,8 @@ project(${PROJECT})
 set(HEADERS 
   Application/StdAfx.h
   common/ParamPageEvents.h
+  MAPCalc/MAPCalcController.h
+  MAPCalc/MAPCalcDlg.h
   Params/ADCCompenPageDlg.h
   Params/AnglesPageDlg.h
   Params/CarburPageDlg.h
@@ -46,6 +48,8 @@ set(SOURCES
   Application/StdAfx.cpp
   Application/ParamDesk.cpp
   common/ParamPageEvents.cpp
+  MAPCalc/MAPCalcController.cpp
+  MAPCalc/MAPCalcDlg.cpp
   Params/ADCCompenPageDlg.cpp
   Params/AnglesPageDlg.cpp
   Params/CarburPageDlg.cpp

@@ -24,6 +24,7 @@
 #include "FunSetPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "../MAPCalc/MAPCalcController.h"
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
@@ -36,6 +37,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControls)
@@ -74,6 +76,8 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR_GROUP,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_SENSOR_GROUP,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC_BUTTON, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
@@ -183,11 +187,12 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
- UpdateData(FALSE);  //инициализируем контроллы диалога данными
+ UpdateData(false);  //инициализируем контроллы диалога данными
  UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -198,6 +203,18 @@ void CFunSetPageDlg::OnChangeData()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CFunSetPageDlg::OnMapCalcButton()
+{
+ float offset = m_params.map_curve_offset, gradient = m_params.map_curve_gradient; 
+ if (CMAPCalcController::Calculate(offset, gradient))
+ {
+  m_params.map_curve_offset = offset;
+  m_params.map_curve_gradient = gradient;
+  UpdateData(false);
+  OnChangeNotify(); //notify event receiver about change
+ }
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -271,5 +288,5 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::FunSetPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(false); //копируем данные из переменных в диалог
 }

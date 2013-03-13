@@ -54,6 +54,7 @@ class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
+  afx_msg void OnMapCalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 

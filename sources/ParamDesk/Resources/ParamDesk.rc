@@ -573,6 +573,49 @@ BEGIN
                     BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,128,176,48,12
 END
 
+IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Расчет параметров ДАД"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,43,115,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,108,115,50,14
+    EDITTEXT        IDC_MAP_CALC_1STPT_PRESS_EDIT,10,15,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_1STPT_PRESS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_PRESS_COMBO,53,15,48,80,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_1STPT_VOLT_EDIT,110,15,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_1STPT_VOLT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,140,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_VOLT_COMBO,153,15,48,50,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_GRADIENT_EDIT,10,50,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_GRADIENT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,50,12,14
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_N_COMBO,53,50,48,100,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_D_COMBO,110,50,48,100,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Наклон известен",IDC_MAP_CALC_KNOW_GRAD_CHECK,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,165,47,60,20
+    EDITTEXT        IDC_MAP_CALC_2NDPT_PRESS_EDIT,10,85,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_2NDPT_PRESS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_PRESS_COMBO,53,85,48,80,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_2NDPT_VOLT_EDIT,110,85,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_2NDPT_VOLT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,140,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_VOLT_COMBO,153,85,48,50,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CTEXT           "/",IDC_MAP_CALC_GRADIENT_SLASH,102,52,8,10
+    CTEXT           "1-я точка на гафике",IDC_STATIC,50,4,100,10
+    CTEXT           "2-я точка на гафике",IDC_MAP_CALC_2NDPT_CAPTION,50,74,100,10
+    CTEXT           "Наклон прямой",IDC_MAP_CALC_GRADIENT_CAPTION,50,40,100,10
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -639,6 +682,20 @@ BEGIN
     IDS_IO_REMAPPING_IE_TT       "Выход управления ЭПХХ"
     IDS_IO_REMAPPING_FE_TT       "Выход управления ЭМР"
     IDS_IO_REMAPPING_PS_TT       "Вход датчика фаз (ДФ)"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PA_UNIT     "Па"
+    IDS_KPA_UNIT    "кПа"
+    IDS_MMHG_UNIT   "мм рт.ст."
+    IDS_BAR_UNIT    "бар"
+    IDS_AT_UNIT     "ат"
+    IDS_PSI_UNIT    "psi"
+    IDS_MV_UNIT     "мВ"
+    IDS_V_UNIT      "В"
+    IDS_PD_MAP_CALC_BUTTON_TT "Калькулятор позволяет легко рассчитать параметры ДАД"
+    IDS_MAP_CALC_1V_ABOVE_2V "Напряжение в 1-й точке не может быть равно или больше напряжения во 2-й точке!"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1214,6 +1271,49 @@ BEGIN
                     BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,128,176,48,12
 END
 
+IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Calculate MAP sensor parameters"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,43,115,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,108,115,50,14
+    EDITTEXT        IDC_MAP_CALC_1STPT_PRESS_EDIT,10,15,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_1STPT_PRESS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_PRESS_COMBO,53,15,48,80,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_1STPT_VOLT_EDIT,110,15,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_1STPT_VOLT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,140,15,12,14
+    COMBOBOX        IDC_MAP_CALC_1STPT_VOLT_COMBO,153,15,48,50,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_GRADIENT_EDIT,10,50,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_GRADIENT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,50,12,14
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_N_COMBO,53,50,48,100,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_MAP_CALC_GRADIENT_D_COMBO,110,50,48,100,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Gradient known",IDC_MAP_CALC_KNOW_GRAD_CHECK,
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,165,47,60,20
+    EDITTEXT        IDC_MAP_CALC_2NDPT_PRESS_EDIT,10,85,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_2NDPT_PRESS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,40,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_PRESS_COMBO,53,85,48,80,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_MAP_CALC_2NDPT_VOLT_EDIT,110,85,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_MAP_CALC_2NDPT_VOLT_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,140,85,12,14
+    COMBOBOX        IDC_MAP_CALC_2NDPT_VOLT_COMBO,153,85,48,50,
+                    CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    CTEXT           "/",IDC_MAP_CALC_GRADIENT_SLASH,102,52,8,10
+    CTEXT           "1-st point at diagram",IDC_STATIC,50,4,100,10
+    CTEXT           "2-nd point at diagram",IDC_MAP_CALC_2NDPT_CAPTION,50,74,100,10
+    CTEXT           "Curve gradient (slope)",IDC_MAP_CALC_GRADIENT_CAPTION,50,40,100,10
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Bitmap
@@ -1292,4 +1392,18 @@ BEGIN
     IDS_IO_REMAPPING_IE_TT       "Idle economizer control output"
     IDS_IO_REMAPPING_FE_TT       "Power valve control output"
     IDS_IO_REMAPPING_PS_TT       "Cam sensor input"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PA_UNIT     "Pa"
+    IDS_KPA_UNIT    "kPa"
+    IDS_MMHG_UNIT   "mm Hg"
+    IDS_BAR_UNIT    "bar"
+    IDS_AT_UNIT     "at"
+    IDS_PSI_UNIT    "psi"
+    IDS_MV_UNIT     "mV"
+    IDS_V_UNIT      "V"
+    IDS_PD_MAP_CALC_BUTTON_TT "Calculator allows to calculate MAP sensor parameters easily"
+    IDS_MAP_CALC_1V_ABOVE_2V  "Voltage of the 1st point can not be equal to or greater than 2nd point voltage!"
 END
