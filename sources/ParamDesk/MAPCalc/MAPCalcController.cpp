@@ -33,7 +33,7 @@ static const float pressMin = 0.0f;       //Pa
 static const float pressMax = 500000.0f;  //Pa
 static const float voltMin  = 0.0f;       //V
 static const float voltMax  = 5.5f;       //V
-static const float gradMin  = 100.0f;     //Pa/V
+static const float gradMin  = 1000.0f;    //Pa/V
 static const float gradMax  = 500000.0f;  //Pa/V
 
 CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gradient)
@@ -289,7 +289,7 @@ void CMAPCalcController::_GetLimitAndDPG(UnitId i_n_unit, UnitId i_d_unit, float
 }
 
 // if dir == true, then value of specified unit will be converted to SI from
-// if dir == false, then SI from value will be converted to specified unit
+// if dir == false, then SI form value will be converted to specified unit
 float CMAPCalcController::_ConvertUnit(float i_value, UnitId i_unit, bool dir /*=false*/) const
 {
  switch(i_unit)
@@ -309,7 +309,7 @@ float CMAPCalcController::_ConvertUnit(float i_value, UnitId i_unit, bool dir /*
   case PU_PSI: //psi  <--> Pa
    return (float)(dir ? (i_value / (145.04 * 0.000001)) : (i_value * (145.04 * 0.000001)));
   case VU_MV:  //mV   <--> V
-   return (float)(dir ? (i_value * (1.0 * 1000.0))      : (i_value / (1.0 * 1000.0)));
+   return (float)(dir ? (i_value / (1.0 * 1000.0))      : (i_value * (1.0 * 1000.0)));
  }
  return .0f; //WTF case
 }

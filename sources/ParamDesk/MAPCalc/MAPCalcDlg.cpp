@@ -97,7 +97,7 @@ CMAPCalcDlg::CMAPCalcDlg(CWnd* pParent /*=NULL*/)
 , m_1stpt_volt_edit(CEditEx::MODE_FLOAT)
 , m_2ndpt_press_edit(CEditEx::MODE_FLOAT)
 , m_2ndpt_volt_edit(CEditEx::MODE_FLOAT)
-, m_gradient_edit(CEditEx::MODE_FLOAT)
+, m_gradient_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
 , m_1stpt_press(0.0f)
 , m_1stpt_volt(0.0f)
 , m_2ndpt_press(0.0f)
@@ -152,7 +152,12 @@ void CMAPCalcDlg::DoDataExchange(CDataExchange* pDX)
   DDV_MinMaxFloat(pDX, m_2ndpt_volt, m_voltLimits.first, m_voltLimits.second);
  m_gradient_edit.DDX_Value(pDX, IDC_MAP_CALC_GRADIENT_EDIT, m_gradient);
  if (m_enable_gradient_ctrls)
-  DDV_MinMaxFloat(pDX, m_gradient, m_gradLimits.first, m_gradLimits.second);
+ {
+  if (m_gradient > 0)
+   DDV_MinMaxFloat(pDX, m_gradient, m_gradLimits.first, m_gradLimits.second);
+  else
+   DDV_MinMaxFloat(pDX, m_gradient, -m_gradLimits.second, -m_gradLimits.first);
+ }
 }
 
 /////////////////////////////////////////////////////////////////////////////
