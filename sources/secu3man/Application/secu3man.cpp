@@ -33,6 +33,36 @@
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
 
+//Functionality of the SetThreadLocale() function is broken beginning from Windows Vista
+namespace {
+typedef LANGID (WINAPI *SetThreadUILanguage_Addr)(LANGID LangId);
+SetThreadUILanguage_Addr pLangProc = NULL;
+void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
+{
+ OSVERSIONINFOEX osver;
+ ZeroMemory(&osver, sizeof(osver));
+ osver.dwOSVersionInfoSize = sizeof(osver);
+ GetVersionEx((OSVERSIONINFO*)&osver);
+ if((osver.dwMajorVersion > 5))
+ {
+  if(pLangProc==NULL)
+  {
+   HMODULE hLibrary = LoadLibrary(_T("kernel32"));
+   if (hLibrary)
+    pLangProc = (SetThreadUILanguage_Addr)GetProcAddress(hLibrary, _T("SetThreadUILanguage"));
+  } 
+  if(pLangProc)
+  { // Vista or later
+   pLangProc(MAKELANGID(language, subLanguage));
+  }
+  else // fallback for XP and early
+   ::SetThreadLocale(MAKELCID(MAKELANGID(language, subLanguage), SORT_DEFAULT));
+ }
+ else //XP and early
+  ::SetThreadLocale(MAKELCID(MAKELANGID(language, subLanguage), SORT_DEFAULT));
+}
+}
+
 BEGIN_MESSAGE_MAP(CSecu3manApp, CWinApp)
 END_MESSAGE_MAP()
 
@@ -93,10 +123,10 @@ BOOL CSecu3manApp::InitInstance()
  switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
  {
   case IL_ENGLISH:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   SetThreadLocalSettings(LANG_ENGLISH, SUBLANG_ENGLISH_US);
    break;
   case IL_RUSSIAN:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   SetThreadLocalSettings(LANG_RUSSIAN, SUBLANG_ENGLISH_US);
    break;
  }
 

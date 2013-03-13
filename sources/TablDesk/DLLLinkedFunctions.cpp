@@ -167,8 +167,10 @@ namespace DLL
 
  void ShowHints(bool i_show)
  {
-  DLL::Chart2DShowHints(i_show);
-  DLL::Chart3DShowHints(i_show);
+  if (Chart2DShowHints)
+   DLL::Chart2DShowHints(i_show);
+  if (Chart3DShowHints)
+   DLL::Chart3DShowHints(i_show);
  }
 
 };//namespace
