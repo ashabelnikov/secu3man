@@ -24,6 +24,7 @@
 #include <math.h>
 #include "Resources/resource.h"
 #include "MAPCalcDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 namespace {
 void _FillCB(CComboBox& combo, const CMAPCalcDlg::UnitMap& i_units)
@@ -197,6 +198,13 @@ BOOL CMAPCalcDlg::OnInitDialog()
 
  m_gradient_spin.SetBuddy(&m_gradient_edit);
  m_gradient_edit.SetLimitText(6);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_known_grad_check, MLL::GetString(IDS_MAP_CALC_KNOW_GRAD_CHECK_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  if (m_OnActivate)
   m_OnActivate();

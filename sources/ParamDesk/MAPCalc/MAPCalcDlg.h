@@ -27,6 +27,8 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 
+class CToolTipCtrlEx;
+
 class CMAPCalcDlg : public CDialog
 {
  public:
@@ -131,6 +133,8 @@ class CMAPCalcDlg : public CDialog
   CComboBox m_gradient_d_unit;
 
   CButton m_known_grad_check;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
   float m_1stpt_press;
   float m_1stpt_volt;

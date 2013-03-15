@@ -392,3 +392,4 @@
 #define IDS_V_UNIT                      3391
 #define IDS_PD_MAP_CALC_BUTTON_TT       3392
 #define IDS_MAP_CALC_1V_ABOVE_2V        3393 
+#define IDS_MAP_CALC_KNOW_GRAD_CHECK_TT 3394

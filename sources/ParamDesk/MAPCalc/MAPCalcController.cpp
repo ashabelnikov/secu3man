@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "MAPCalcController.h"
 
+#include <math.h>
 #include "common/fastdelegate.h"
 #include "MAPCalcDlg.h"
 #include "Resources/resource.h"
@@ -35,6 +36,8 @@ static const float voltMin  = 0.0f;       //V
 static const float voltMax  = 5.5f;       //V
 static const float gradMin  = 1000.0f;    //Pa/V
 static const float gradMax  = 500000.0f;  //Pa/V
+static const float pressStp = 100.0f;     //pressure step (Pa)
+static const float voltStp  = 0.001f;     //voltage step (V)
 
 CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gradient)
 : mp_view(ip_view)
@@ -86,18 +89,10 @@ CMAPCalcController::CMAPCalcController(VIEW* ip_view, float i_offset, float i_gr
    //first of all, convert gradient to SI form (Pa/V)
    float gradValue;
    ASSERT(g.n_unit != g.d_unit);
-   if (cntr._IsPressureUnit(g.n_unit))
-   {
-    gradValue = cntr._ConvertUnit(g.grad, g.n_unit, true);
-    if (g.d_unit == VU_MV)
-     gradValue*=1000.0;
-   }
-   else
-   {
-    gradValue = cntr._ConvertUnit((float)(1.0/g.grad), g.d_unit, true);
-    if (g.n_unit == VU_MV)
-     gradValue/=1000.0;   
-   }
+   if (cntr._IsPressureUnit(g.n_unit)) //P/V
+    gradValue = cntr._ConvertUnit(g.grad, g.n_unit, true) / cntr._ConvertUnit(1.0f, g.d_unit, true);
+   else //V/P
+    gradValue = cntr._ConvertUnit(1.0f, g.d_unit, true) / cntr._ConvertUnit(g.grad, g.n_unit, true);
    
    //convert pressure and voltage of the 1st point to SI form (Pa,V)
    float p1Press = cntr._ConvertUnit(p1.first, p1.second, true);
@@ -268,23 +263,18 @@ void CMAPCalcController::_GetLimitAndDPG(UnitId i_n_unit, UnitId i_d_unit, float
  ASSERT(i_n_unit != i_d_unit);
  if (_IsPressureUnit(i_n_unit)) //P/V
  {
-  o_min = _ConvertUnit(gradMin, i_n_unit);
-  if (i_d_unit == VU_MV)
-   o_min/=1000.0;
-  o_max = _ConvertUnit(gradMax, i_n_unit);
-  if (i_d_unit == VU_MV)
-   o_max/=1000.0;
+  o_min = _ConvertUnit(gradMin, i_n_unit) / _ConvertUnit(1.0f, i_d_unit);
+  o_max = _ConvertUnit(gradMax, i_n_unit) / _ConvertUnit(1.0f, i_d_unit);
   o_dp  = _GetDecimalPlaces(i_n_unit);
+  if (i_d_unit == VU_MV) o_dp+=3;
  }
  if (_IsPressureUnit(i_d_unit)) //V/P
  {
-  o_max = _ConvertUnit((float)(1.0/gradMin), i_d_unit);
-  if (i_n_unit == VU_MV)
-   o_max*=1000.0;
-  o_min = _ConvertUnit((float)(1.0/gradMax), i_d_unit);
-  if (i_n_unit == VU_MV)
-   o_min*=1000.0; 
+  o_max = _ConvertUnit(1.0f, i_n_unit) / _ConvertUnit(gradMin, i_d_unit);
+  o_min = _ConvertUnit(1.0f, i_n_unit) / _ConvertUnit(gradMax, i_d_unit);
   o_dp  = _GetDecimalPlaces(i_d_unit);
+  if (i_n_unit == VU_MV) o_dp-=3;
+  if (o_dp < 0) o_dp = 0;
  }
 }
 
@@ -315,19 +305,20 @@ float CMAPCalcController::_ConvertUnit(float i_value, UnitId i_unit, bool dir /*
 }
 
 int CMAPCalcController::_GetDecimalPlaces(UnitId i_unit) const
-{
- switch(i_unit)
+{  
+ double step, intPart = 0;
+ if (_IsPressureUnit(i_unit))
+  step = _ConvertUnit(pressStp, i_unit); //pressure
+ else
+  step = _ConvertUnit(voltStp, i_unit);  //voltage
+ //find out number of zero decimal places after the point. (e.g. for 1.045, n = 2)
+ double fracPart = modf(step, &intPart);
+ int n = 0;
+ while(fracPart < 1.0 && n < 10)
  {
-  case PU_PA:   return 0;
-  case PU_KPA:  return 2;
-  case PU_BAR:  return 4;
-  case PU_MMHG: return 2;
-  case PU_AT:   return 5;
-  case PU_PSI:  return 5;
-  case VU_V:    return 3;
-  case VU_MV:   return 0;
+  fracPart*=10, ++n;
  }
- return 0; //WTF case
+ return n;
 }
 
 bool CMAPCalcController::_IsPressureUnit(UnitId i_unit) const

@@ -696,6 +696,7 @@ BEGIN
     IDS_V_UNIT      "В"
     IDS_PD_MAP_CALC_BUTTON_TT "Калькулятор позволяет легко рассчитать параметры ДАД"
     IDS_MAP_CALC_1V_ABOVE_2V "Напряжение в 1-й точке не может быть равно или больше напряжения во 2-й точке!"
+    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Поставьте эту галочку если вам известно соотношение изменения  давления к напряжению (или напряжения к давлению)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1406,4 +1407,5 @@ BEGIN
     IDS_V_UNIT      "V"
     IDS_PD_MAP_CALC_BUTTON_TT "Calculator allows to calculate MAP sensor parameters easily"
     IDS_MAP_CALC_1V_ABOVE_2V  "Voltage of the 1st point can not be equal to or greater than 2nd point voltage!"
+    IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Set this check if you know pressure to voltage (or voltage to pressure) ratio"
 END
