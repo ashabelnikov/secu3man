@@ -611,8 +611,8 @@ BEGIN
     COMBOBOX        IDC_MAP_CALC_2NDPT_VOLT_COMBO,153,85,48,50,
                     CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
     CTEXT           "/",IDC_MAP_CALC_GRADIENT_SLASH,102,52,8,10
-    CTEXT           "1-я точка на гафике",IDC_STATIC,50,4,100,10
-    CTEXT           "2-я точка на гафике",IDC_MAP_CALC_2NDPT_CAPTION,50,74,100,10
+    CTEXT           "1-я точка на графике",IDC_STATIC,50,4,100,10
+    CTEXT           "2-я точка на графике",IDC_MAP_CALC_2NDPT_CAPTION,50,74,100,10
     CTEXT           "Наклон прямой",IDC_MAP_CALC_GRADIENT_CAPTION,50,40,100,10
 END
 
