@@ -373,7 +373,7 @@ namespace SECU3IO
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
  const float choke_op_map_slots[16]  = {-5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
 
- const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 23;
+ const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 24;
  //<bitnumber, name>
 #define _SD std::pair<int, TCHAR*>
  static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
@@ -400,7 +400,8 @@ namespace SECU3IO
   _SD(19, _T("COPT_HALL_OUTPUT")),
   _SD(20, _T("COPT_REV9_BOARD")),
   _SD(21, _T("COPT_STROBOSCOPE")),
-  _SD(22, _T("COPT_SM_CONTROL"))
+  _SD(22, _T("COPT_SM_CONTROL")),
+  _SD(23, _T("COPT_VREF_5V"))
  };
 #undef _SD
 
@@ -427,6 +428,7 @@ namespace SECU3IO
  const int COPT_REV9_BOARD = 20;
  const int COPT_STROBOSCOPE = 21;
  const int COPT_SM_CONTROL = 22;
+ const int COPT_VREF_5V = 23;
 
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;
