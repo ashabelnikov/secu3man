@@ -182,6 +182,34 @@ typedef struct fw_data_t
 }fw_data_t;
 
 
+namespace {
+void _CompensateVRef(params_t* iop_data, bool i_dir)
+{
+ const float adc_vref_factor = 1.9531f;
+ const int _min = 0, _max = SHRT_MAX;
+ if (i_dir)
+ { //5v <-- 2.56v
+  iop_data->map_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->map_adc_factor * adc_vref_factor),  _min, _max);
+  iop_data->ubat_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ubat_adc_factor * adc_vref_factor), _min, _max); 
+  iop_data->temp_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->temp_adc_factor * adc_vref_factor), _min, _max);
+  //SECU-3T
+  iop_data->tps_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->tps_adc_factor * adc_vref_factor), _min, _max);
+  iop_data->ai1_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai1_adc_factor * adc_vref_factor), _min, _max);
+  iop_data->ai2_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai2_adc_factor * adc_vref_factor), _min, _max);
+ }
+ else
+ { //5v --> 2.56v
+  iop_data->map_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->map_adc_factor / adc_vref_factor),  _min, _max);
+  iop_data->ubat_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ubat_adc_factor / adc_vref_factor), _min, _max);
+  iop_data->temp_adc_factor = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->temp_adc_factor / adc_vref_factor), _min, _max);
+  //SECU-3T
+  iop_data->tps_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->tps_adc_factor / adc_vref_factor), _min, _max);
+  iop_data->ai1_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai1_adc_factor / adc_vref_factor), _min, _max);
+  iop_data->ai2_adc_factor  = MathHelpers::RestrictValue<int>(MathHelpers::Round(iop_data->ai2_adc_factor / adc_vref_factor), _min, _max);
+ }
+}
+}
+
 class CFirmwareDataMediator::LocInfoProvider
  {
   public:
@@ -231,14 +259,14 @@ CFirmwareDataMediator::~CFirmwareDataMediator()
 
 //считает контрольную сумму и записывает результат по соответствующему адресу
 //io_data - массив байтов прошивки
-void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* io_data)
+void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(BYTE* iop_data)
 {
- _uint crc = crc16(io_data, m_lip->CODE_SIZE);
- fw_data_t* p_fd = (fw_data_t*)(&io_data[m_lip->FIRMWARE_DATA_START]);
+ _uint crc = crc16(iop_data, m_lip->CODE_SIZE);
+ fw_data_t* p_fd = (fw_data_t*)(&iop_data[m_lip->FIRMWARE_DATA_START]);
  p_fd->code_crc = crc; //сохранили контрольную сумму
 }
 
-bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlashParam* ip_fpp /*= NULL*/) const
+bool CFirmwareDataMediator::CheckCompatibility(const BYTE* ip_data, const PPFlashParam* ip_fpp /*= NULL*/) const
 {
  if (!ip_fpp)
   ip_fpp = m_fpp.get(); //use information form current firmware
@@ -247,15 +275,15 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlash
 
  bool compatible = true;
 
- fw_data_t* p_fd = (fw_data_t*)&i_data[lip.FIRMWARE_DATA_START];
+ fw_data_t* p_fd = (fw_data_t*)&ip_data[lip.FIRMWARE_DATA_START];
 
  //size of firmware data
  int sizeoffd = p_fd->def_param.crc;
 
  //size of code area data (must be valid if def_param.crc > 0)
- _uint sizeofcd = _BIGEND16(*(((_uint*)&i_data[lip.FIRMWARE_DATA_START])-1));
+ _uint sizeofcd = _BIGEND16(*(((_uint*)&ip_data[lip.FIRMWARE_DATA_START])-1));
 
- cd_data_t* p_cd = (cd_data_t*)&i_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
+ cd_data_t* p_cd = (cd_data_t*)&ip_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
  size_t iorem_struct_size = (sizeofcd == sizeof(cd_datav0_t)) ? sizeof(iorem_slotsv0_t) : sizeof(iorem_slots_t);
 
  if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
@@ -269,23 +297,23 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* i_data, const PPFlash
  return compatible;
 }
 
-void CFirmwareDataMediator::LoadBytes(const BYTE* i_bytes)
+void CFirmwareDataMediator::LoadBytes(const BYTE* ip_bytes)
 {
- ASSERT(i_bytes);
+ ASSERT(ip_bytes);
  memset(mp_bytes_active,0x00,m_firmware_size);
  memset(mp_bytes_original,0x00,m_firmware_size);
 
- memcpy(mp_bytes_active,i_bytes,m_firmware_size);
- memcpy(mp_bytes_original,i_bytes,m_firmware_size);
+ memcpy(mp_bytes_active,ip_bytes,m_firmware_size);
+ memcpy(mp_bytes_original,ip_bytes,m_firmware_size);
 
- _FindCodeData(); //find data residing directly in the code
+ mp_cddata = _FindCodeData(); //find data residing directly in the code
  m_is_opened = true;
 }
 
-void CFirmwareDataMediator::StoreBytes(BYTE* o_bytes)
+void CFirmwareDataMediator::StoreBytes(BYTE* op_bytes)
 {
- ASSERT(o_bytes);
- memcpy(o_bytes,mp_bytes_active,m_firmware_size);
+ ASSERT(op_bytes);
+ memcpy(op_bytes,mp_bytes_active,m_firmware_size);
 }
 
 bool CFirmwareDataMediator::IsModified(void)
@@ -334,11 +362,26 @@ DWORD CFirmwareDataMediator::GetFWOptions(void)
  }
 }
 
-void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_original /* = false */)
+DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp)
+{
+ ASSERT(ip_fpp);
+ cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
+ if (p_cd)
+  return CAST_CDDATA(p_cd, config);
+ else
+ {
+  //there is no such data in this firmware, then we have to use old place
+  LocInfoProvider lip(*ip_fpp);
+  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[lip.FIRMWARE_DATA_START]); 
+  return p_fd->exdata.reserv32;  
+ }
+}
+
+void CFirmwareDataMediator::GetStartMap(int i_index,float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(o_values);
+ ASSERT(op_values);
 
  if (i_original)
   p_bytes = mp_bytes_original;
@@ -349,14 +392,14 @@ void CFirmwareDataMediator::GetStartMap(int i_index,float* o_values, bool i_orig
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  o_values[i] = ((float)p_fd->tables[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->tables[i_index].f_str[i]) / AA_MAPS_M_FACTOR;
 }
 
-void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
+void CFirmwareDataMediator::SetStartMap(int i_index,const float* ip_values)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(i_values);
+ ASSERT(ip_values);
 
  p_bytes = mp_bytes_active;
 
@@ -364,14 +407,14 @@ void CFirmwareDataMediator::SetStartMap(int i_index,const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_STR_POINTS; i++ )
-  p_fd->tables[i_index].f_str[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_str[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
-void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetIdleMap(int i_index,float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(o_values);
+ ASSERT(op_values);
 
  if (i_original)
   p_bytes = mp_bytes_original;
@@ -382,14 +425,14 @@ void CFirmwareDataMediator::GetIdleMap(int i_index,float* o_values, bool i_origi
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  o_values[i] = ((float)p_fd->tables[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->tables[i_index].f_idl[i]) / AA_MAPS_M_FACTOR;
 }
 
-void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
+void CFirmwareDataMediator::SetIdleMap(int i_index,const float* ip_values)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(i_values);
+ ASSERT(ip_values);
 
  p_bytes = mp_bytes_active;
 
@@ -397,7 +440,7 @@ void CFirmwareDataMediator::SetIdleMap(int i_index,const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(p_bytes + m_lip->FIRMWARE_DATA_START);
 
  for (int i = 0; i < F_IDL_POINTS; i++ )
-  p_fd->tables[i_index].f_idl[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_idl[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
 std::vector<_TSTRING> CFirmwareDataMediator::GetFunctionsSetNames(void)
@@ -476,13 +519,13 @@ void CFirmwareDataMediator::CalculateAndPlaceFirmwareCRC(void)
  CalculateAndPlaceFirmwareCRC(mp_bytes_active);
 }
 
-void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes, const PPFlashParam* ip_fpp /*= NULL*/)
+void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp /*= NULL*/)
 {
  if (false==IsLoaded())
   return; //некуда загружать...
 
  //Now we need to load data stored in the code area to the current firmware
- LoadCodeData(i_source_bytes, (ip_fpp ? ip_fpp : m_fpp.get())->m_app_section_size);
+ LoadCodeData(ip_source_bytes, (ip_fpp ? ip_fpp : m_fpp.get())->m_app_section_size);
 
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  size_t dataSize = p_fd->def_param.crc;
@@ -497,14 +540,14 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
   size_t start_d = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t start_s = (0==dataSize) ? lip.FIRMWARE_DATA_START : (lip.BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
-  memcpy(mp_bytes_active + start_d, i_source_bytes + start_s, size);
+  memcpy(mp_bytes_active + start_d, ip_source_bytes + start_s, size);
  }
  else
  {
   //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
   size_t start = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
-  memcpy(mp_bytes_active + start, i_source_bytes + start, size);  
+  memcpy(mp_bytes_active + start, ip_source_bytes + start, size);  
  }
  //Значение def_param.crc не импортируем, так как оно служебное.
  //Если загружаются данные из новой прошивки в старую, то нужно установить значение exdata.reserv32
@@ -516,25 +559,53 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* i_sourc
  //не импортируем контрольную сумму прошивки
  p_fd->code_crc = oldFWCRC;
 
- _FindCodeData();
+ mp_cddata = _FindCodeData();
+
+ //Compensate ADC correction factors then destination and source firmware use different ADC Vref
+ DWORD dst_fwopt = GetFWOptions();
+ DWORD src_fwopt = GetFWOptions(ip_source_bytes, ip_fpp);
+ if ((dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && !(src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))
+  _CompensateVRef(&p_fd->def_param, true);  //5v <-- 2.56v
+ if (!(dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && (src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))
+  _CompensateVRef(&p_fd->def_param, false); //5v --> 2.56v
 }
 
-void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* i_source_bytes)
+void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_bytes, EventHandler onVrefUsrConfirm /*= NULL*/)
 {
  if (false==IsLoaded())
   return; //некуда загружать...
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  _uint fwd_size = p_fd->def_param.crc; //save
- memcpy(&p_fd->def_param, i_source_bytes, sizeof(params_t));
+ memcpy(&p_fd->def_param, ip_source_bytes, sizeof(params_t));
  p_fd->def_param.crc = fwd_size; //restore
- _FindCodeData(); //find data residing directly in the code
+ mp_cddata = _FindCodeData(); //find data residing directly in the code
+
+ //Use heuristic check, ask user and apply ADC factor compensation
+ std::vector<float> factors;
+ params_t& par = p_fd->def_param;
+ factors.push_back(((float)par.map_adc_factor)  / 16384.0f);
+ factors.push_back(((float)par.ubat_adc_factor) / 16384.0f);
+ factors.push_back(((float)par.temp_adc_factor) / 16384.0f);
+ factors.push_back(((float)par.tps_adc_factor)  / 16384.0f);
+ factors.push_back(((float)par.ai1_adc_factor)  / 16384.0f);
+ factors.push_back(((float)par.ai2_adc_factor)  / 16384.0f);
+ bool src_vref_5v = true;
+ for(size_t i = 0; i < factors.size(); ++i)
+  if (factors[i] < 1.70f)
+   src_vref_5v = false;
+ bool dst_vref_5v = (GetFWOptions() & (1 << SECU3IO::COPT_VREF_5V)) > 0;
+ if (src_vref_5v != dst_vref_5v) //different ADC voltage reference?
+ {//Ask user, before applying compensation
+  if ((onVrefUsrConfirm) ? onVrefUsrConfirm() : true)
+   _CompensateVRef(&par, (!src_vref_5v && dst_vref_5v)); //5v <-- 2.56v or 5v --> 2.56v
+ }
 }
 
-void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_original /* = false*/)
+void CFirmwareDataMediator::GetWorkMap(int i_index, float* op_values, bool i_original /* = false*/)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(o_values);
+ ASSERT(op_values);
 
  if (i_original)
   p_bytes = mp_bytes_original;
@@ -547,15 +618,15 @@ void CFirmwareDataMediator::GetWorkMap(int i_index, float* o_values, bool i_orig
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _char *p = &(p_fd->tables[i_index].f_wrk[0][0]);
-  o_values[i] = ((float) *(p + i)) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float) *(p + i)) / AA_MAPS_M_FACTOR;
  }
 }
 
-void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
+void CFirmwareDataMediator::SetWorkMap(int i_index, const float* ip_values)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(i_values);
+ ASSERT(ip_values);
 
  p_bytes = mp_bytes_active;
 
@@ -565,15 +636,15 @@ void CFirmwareDataMediator::SetWorkMap(int i_index, const float* i_values)
  for (int i = 0; i < (F_WRK_POINTS_F * F_WRK_POINTS_L); i++ )
  {
   _char *p = &(p_fd->tables[i_index].f_wrk[0][0]);
-  *(p + i) = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  *(p + i) = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
  }
 }
 
-void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetTempMap(int i_index,float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(o_values);
+ ASSERT(op_values);
 
  if (i_original)
   p_bytes = mp_bytes_original;
@@ -584,14 +655,14 @@ void CFirmwareDataMediator::GetTempMap(int i_index,float* o_values, bool i_origi
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  o_values[i] = ((float)p_fd->tables[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
+  op_values[i] = ((float)p_fd->tables[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
 }
 
-void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
+void CFirmwareDataMediator::SetTempMap(int i_index,const float* ip_values)
 {
  BYTE* p_bytes = NULL;
  f_data_t* p_maps = NULL;
- ASSERT(i_values);
+ ASSERT(ip_values);
 
  p_bytes = mp_bytes_active;
 
@@ -599,10 +670,10 @@ void CFirmwareDataMediator::SetTempMap(int i_index,const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < F_TMP_POINTS; i++ )
-  p_fd->tables[i_index].f_tmp[i] = MathHelpers::Round((i_values[i]*AA_MAPS_M_FACTOR));
+  p_fd->tables[i_index].f_tmp[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
-bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_values)
+bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
 {
  using namespace SECU3IO;
 
@@ -617,7 +688,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
  {
   case TEMPER_PAR:
    {
-    TemperPar* p_in = (TemperPar*)i_values;
+    TemperPar* p_in = (TemperPar*)ip_values;
     p_params->tmp_use  = p_in->tmp_use;
     p_params->vent_pwm = p_in->vent_pwm;
     p_params->cts_use_map = p_in->cts_use_map;
@@ -627,7 +698,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case CARBUR_PAR:
    {
-    CarburPar* p_in = (CarburPar*)i_values;
+    CarburPar* p_in = (CarburPar*)ip_values;
     p_params->ephh_hit    = p_in->ephh_hit;
     p_params->ephh_lot    = p_in->ephh_lot;
     p_params->carb_invers = p_in->carb_invers;
@@ -640,7 +711,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case IDLREG_PAR:
    {
-    IdlRegPar* p_in = (IdlRegPar*)i_values;
+    IdlRegPar* p_in = (IdlRegPar*)ip_values;
     p_params->idl_regul  = p_in->idl_regul;
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
@@ -653,7 +724,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case ANGLES_PAR:
    {
-    AnglesPar* p_in = (AnglesPar*)i_values;
+    AnglesPar* p_in = (AnglesPar*)ip_values;
     p_params->angle_corr = MathHelpers::Round(p_in->angle_corr * ANGLE_MULTIPLAYER);
     p_params->max_angle  = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
     p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
@@ -664,7 +735,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case FUNSET_PAR:
    {
-    FunSetPar* p_in = (FunSetPar*)i_values;
+    FunSetPar* p_in = (FunSetPar*)ip_values;
     p_params->fn_benzin = p_in->fn_benzin;
     p_params->fn_gas    = p_in->fn_gas;
     p_params->map_lower_pressure = MathHelpers::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
@@ -677,14 +748,14 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case STARTR_PAR:
    {
-    StartrPar* p_in = (StartrPar*)i_values;
+    StartrPar* p_in = (StartrPar*)ip_values;
     p_params->starter_off  = p_in->starter_off ;
     p_params->smap_abandon = p_in->smap_abandon;
    }
    break;
   case ADCCOR_PAR:
    {
-    ADCCompenPar* p_in = (ADCCompenPar*)i_values;
+    ADCCompenPar* p_in = (ADCCompenPar*)ip_values;
     p_params->map_adc_factor      = MathHelpers::Round(p_in->map_adc_factor * 16384);
     //-------------------------------------------------------------------------
     signed long map_correction_d  = MathHelpers::Round((-p_in->map_adc_correction) / ADC_DISCRETE); //переводим из вольтов в дискреты АЦП
@@ -724,7 +795,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case CKPS_PAR:
    {
-    CKPSPar* p_in = (CKPSPar*)i_values;
+    CKPSPar* p_in = (CKPSPar*)ip_values;
     p_params->ckps_cogs_btdc  = p_in->ckps_cogs_btdc;
     p_params->ckps_ignit_cogs = p_in->ckps_ignit_cogs;
     p_params->ckps_edge_type  = p_in->ckps_edge_type;
@@ -737,7 +808,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case KNOCK_PAR:
    {
-    KnockPar* p_in = (KnockPar*)i_values;
+    KnockPar* p_in = (KnockPar*)ip_values;
     p_params->knock_use_knock_channel = p_in->knock_use_knock_channel;
     p_params->knock_k_wnd_begin_angle = MathHelpers::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLAYER);
     p_params->knock_k_wnd_end_angle = MathHelpers::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLAYER);
@@ -754,7 +825,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case MISCEL_PAR:
    {
-    MiscelPar* p_in = (MiscelPar*)i_values;
+    MiscelPar* p_in = (MiscelPar*)ip_values;
 
     int divisor = 0;
     for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
@@ -776,7 +847,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
    break;
   case CHOKE_PAR:
    {
-    ChokePar* p_in = (ChokePar*)i_values;
+    ChokePar* p_in = (ChokePar*)ip_values;
     p_params->sm_steps  = p_in->sm_steps;
    }
    break;
@@ -788,7 +859,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* i_v
  return true;
 }
 
-bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
+bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values)
 {
  using namespace SECU3IO;
 
@@ -803,7 +874,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
   {
    case TEMPER_PAR:
     {
-     TemperPar* p_out = (TemperPar*)o_values;
+     TemperPar* p_out = (TemperPar*)op_values;
      p_out->tmp_use  = p_params->tmp_use;
      p_out->vent_pwm = p_params->vent_pwm;
      p_out->cts_use_map = p_params->cts_use_map;
@@ -813,7 +884,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case CARBUR_PAR:
     {
-     CarburPar* p_out = (CarburPar*)o_values;
+     CarburPar* p_out = (CarburPar*)op_values;
      p_out->ephh_hit    = p_params->ephh_hit;
      p_out->ephh_lot    = p_params->ephh_lot;
      p_out->carb_invers = p_params->carb_invers;
@@ -826,7 +897,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case IDLREG_PAR:
     {
-     IdlRegPar* p_out = (IdlRegPar*)o_values;
+     IdlRegPar* p_out = (IdlRegPar*)op_values;
      p_out->idl_regul  = p_params->idl_regul;
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
@@ -839,7 +910,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case ANGLES_PAR:
     {
-     AnglesPar* p_out = (AnglesPar*)o_values;
+     AnglesPar* p_out = (AnglesPar*)op_values;
      p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLAYER;
      p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLAYER;
      p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLAYER;
@@ -850,7 +921,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case FUNSET_PAR:
     {
-     FunSetPar* p_out = (FunSetPar*)o_values;
+     FunSetPar* p_out = (FunSetPar*)op_values;
      p_out->fn_benzin = p_params->fn_benzin;
      p_out->fn_gas    = p_params->fn_gas;
      p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
@@ -863,14 +934,14 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case STARTR_PAR:
     {
-     StartrPar* p_out = (StartrPar*)o_values;
+     StartrPar* p_out = (StartrPar*)op_values;
      p_out->starter_off = p_params->starter_off;
      p_out->smap_abandon = p_params->smap_abandon;
     }
     break;
    case ADCCOR_PAR:
     {
-     ADCCompenPar* p_out = (ADCCompenPar*)o_values;
+     ADCCompenPar* p_out = (ADCCompenPar*)op_values;
      p_out->map_adc_factor      = ((float)p_params->map_adc_factor) / 16384;
      //-------------------------------------------------------------------------
      p_out->map_adc_correction  = ((((float)p_params->map_adc_correction)/16384.0f) - 0.5f) / p_out->map_adc_factor;
@@ -925,7 +996,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case CKPS_PAR:
     {
-     CKPSPar* p_out = (CKPSPar*)o_values;
+     CKPSPar* p_out = (CKPSPar*)op_values;
      p_out->ckps_cogs_btdc  = p_params->ckps_cogs_btdc;
      p_out->ckps_ignit_cogs = p_params->ckps_ignit_cogs;
      p_out->ckps_edge_type  = p_params->ckps_edge_type;
@@ -938,7 +1009,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case KNOCK_PAR:
     {
-     KnockPar* p_out = (KnockPar*)o_values;
+     KnockPar* p_out = (KnockPar*)op_values;
      p_out->knock_use_knock_channel = p_params->knock_use_knock_channel;
      p_out->knock_k_wnd_begin_angle = ((float)p_params->knock_k_wnd_begin_angle) / ANGLE_MULTIPLAYER;
      p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLAYER;
@@ -954,7 +1025,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case MISCEL_PAR:
     {
-     MiscelPar* p_out = (MiscelPar*)o_values;
+     MiscelPar* p_out = (MiscelPar*)op_values;
 
      int baud_rate = 0;
      for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
@@ -972,7 +1043,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* o_values)
     break;
    case CHOKE_PAR:
     {
-     ChokePar* p_out = (ChokePar*)o_values;
+     ChokePar* p_out = (ChokePar*)op_values;
      p_out->sm_steps = p_params->sm_steps;
     }
     break;
@@ -1043,11 +1114,11 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   }
 }
 
-void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetAttenuatorMap(float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- ASSERT(o_values);
- if (!o_values)
+ ASSERT(op_values);
+ if (!op_values)
   return;
 
  if (i_original)
@@ -1059,14 +1130,14 @@ void CFirmwareDataMediator::GetAttenuatorMap(float* o_values, bool i_original /*
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = p_fd->exdata.attenuator_table[i];
+  op_values[i] = p_fd->exdata.attenuator_table[i];
 }
 
-void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
+void CFirmwareDataMediator::SetAttenuatorMap(const float* ip_values)
 {
  BYTE* p_bytes = NULL;
- ASSERT(i_values);
- if (!i_values)
+ ASSERT(ip_values);
+ if (!ip_values)
   return;
 
  p_bytes = mp_bytes_active;
@@ -1076,16 +1147,16 @@ void CFirmwareDataMediator::SetAttenuatorMap(const float* i_values)
 
  for(size_t i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; i++)
  {
-  ASSERT(i_values[i] >= 0.0f);
-  p_fd->exdata.attenuator_table[i] = (_uchar)MathHelpers::Round(i_values[i]);
+  ASSERT(ip_values[i] >= 0.0f);
+  p_fd->exdata.attenuator_table[i] = (_uchar)MathHelpers::Round(ip_values[i]);
  }
 }
 
-void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetDwellCntrlMap(float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- ASSERT(o_values);
- if (!o_values)
+ ASSERT(op_values);
+ if (!op_values)
   return;
 
  if (i_original)
@@ -1097,14 +1168,14 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* o_values, bool i_original /*
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fd->exdata.coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
+  op_values[i] = (p_fd->exdata.coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
 }
 
-void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
+void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
 {
  BYTE* p_bytes = NULL;
- ASSERT(i_values);
- if (!i_values)
+ ASSERT(ip_values);
+ if (!ip_values)
   return;
 
  p_bytes = mp_bytes_active;
@@ -1113,14 +1184,14 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((i_values[i] * 1000.0) / 4.0);
+  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / 4.0);
 }
 
-void CFirmwareDataMediator::GetCTSCurveMap(float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetCTSCurveMap(float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- ASSERT(o_values);
- if (!o_values)
+ ASSERT(op_values);
+ if (!op_values)
   return;
 
  if (i_original)
@@ -1132,14 +1203,14 @@ void CFirmwareDataMediator::GetCTSCurveMap(float* o_values, bool i_original /* =
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fd->exdata.cts_curve[i] / 4.0f);
+  op_values[i] = (p_fd->exdata.cts_curve[i] / 4.0f);
 }
 
-void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
+void CFirmwareDataMediator::SetCTSCurveMap(const float* ip_values)
 {
  BYTE* p_bytes = NULL;
- ASSERT(i_values);
- if (!i_values)
+ ASSERT(ip_values);
+ if (!ip_values)
   return;
 
  p_bytes = mp_bytes_active;
@@ -1148,7 +1219,7 @@ void CFirmwareDataMediator::SetCTSCurveMap(const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.cts_curve[i] = (_uint)MathHelpers::Round(i_values[i] * 4.0);
+  p_fd->exdata.cts_curve[i] = (_uint)MathHelpers::Round(ip_values[i] * 4.0);
 }
 
 float CFirmwareDataMediator::GetCTSMapVoltageLimit(int i_type)
@@ -1179,11 +1250,11 @@ void  CFirmwareDataMediator::SetCTSMapVoltageLimit(int i_type, float i_value)
  }
 }
 
-void CFirmwareDataMediator::GetChokeOpMap(float* o_values, bool i_original /* = false */)
+void CFirmwareDataMediator::GetChokeOpMap(float* op_values, bool i_original /* = false */)
 {
  BYTE* p_bytes = NULL;
- ASSERT(o_values);
- if (!o_values)
+ ASSERT(op_values);
+ if (!op_values)
   return;
 
  if (i_original)
@@ -1195,14 +1266,14 @@ void CFirmwareDataMediator::GetChokeOpMap(float* o_values, bool i_original /* = 
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
-  o_values[i] = (p_fd->exdata.choke_closing[i] / 2.0f);
+  op_values[i] = (p_fd->exdata.choke_closing[i] / 2.0f);
 }
 
-void CFirmwareDataMediator::SetChokeOpMap(const float* i_values)
+void CFirmwareDataMediator::SetChokeOpMap(const float* ip_values)
 {
  BYTE* p_bytes = NULL;
- ASSERT(i_values);
- if (!i_values)
+ ASSERT(ip_values);
+ if (!ip_values)
   return;
 
  p_bytes = mp_bytes_active;
@@ -1211,7 +1282,7 @@ void CFirmwareDataMediator::SetChokeOpMap(const float* i_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.choke_closing[i] = (_uchar)MathHelpers::Round(i_values[i] * 2.0);
+  p_fd->exdata.choke_closing[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
@@ -1220,16 +1291,16 @@ const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
 }
 
 static float rpmGrid[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; //temporary
-void CFirmwareDataMediator::GetRPMGridMap(float* o_values)
+void CFirmwareDataMediator::GetRPMGridMap(float* op_values)
 {
  //todo
- std::copy(rpmGrid, rpmGrid+16, o_values); //temporary
+ std::copy(rpmGrid, rpmGrid+16, op_values); //temporary
 }
 
-void CFirmwareDataMediator::SetRPMGridMap(const float* i_values)
+void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
 {
  //todo
- std::copy(i_values, i_values+16, rpmGrid); //temporary
+ std::copy(ip_values, ip_values+16, rpmGrid); //temporary
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
@@ -1309,39 +1380,50 @@ CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) con
  return (IORemVer)CAST_CDDATA(mp_cddata, iorem.version);
 }
 
-void CFirmwareDataMediator::_FindCodeData(void)
+cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/, const PPFlashParam* ip_fpp /*= NULL*/)
 {
+ LocInfoProvider* p_lip = m_lip.get();
+ const BYTE* p_bytes = mp_bytes_active;
+ std::auto_ptr<LocInfoProvider> lip;
+
+ if (ip_bytes && ip_fpp)
+ {
+  lip.reset(new LocInfoProvider(*ip_fpp));
+  p_bytes = ip_bytes;
+  p_lip = lip.get();
+ }
+  
  //obtain pointer to cd_data_t structure, note that this pointer must be casted
- cd_data_t* p_cd = (cd_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START - sizeof(cd_data_t)]);
+ cd_data_t* p_cd = (cd_data_t*)(&p_bytes[p_lip->FIRMWARE_DATA_START - sizeof(cd_data_t)]);
  //obtain pointer to fw_data_t structure
- fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[p_lip->FIRMWARE_DATA_START]);
 
  _uint dataSize = p_fd->def_param.crc;
 
  if (0==dataSize)
-  mp_cddata = NULL;
+  return NULL; //there is no code data
  else
-  mp_cddata = p_cd;
+  return p_cd;
 }
 
-bool CFirmwareDataMediator::HasCodeData(const BYTE* i_source_bytes /*= NULL*/) const
+bool CFirmwareDataMediator::HasCodeData(const BYTE* ip_source_bytes /*= NULL*/) const
 {
- if (!i_source_bytes) //current firmware (check loaded firmware)
+ if (!ip_source_bytes) //current firmware (check loaded firmware)
   return (NULL != mp_cddata);
  else
  {
   //obtain pointer to fw_data_t structure
-  fw_data_t* p_fd = (fw_data_t*)(&i_source_bytes[m_lip->FIRMWARE_DATA_START]);
+  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[m_lip->FIRMWARE_DATA_START]);
   _uint dataSize = p_fd->def_param.crc;
   return (dataSize > 0); //has code data?
  }
 }
 
-size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* i_bytes) const
+size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* ip_bytes) const
 {
- ASSERT(i_bytes);
+ ASSERT(ip_bytes);
  //obtain pointer to fw_data_t structure
- fw_data_t* p_fd = (fw_data_t*)(&i_bytes[m_lip->FIRMWARE_DATA_START]);
+ fw_data_t* p_fd = (fw_data_t*)(&ip_bytes[m_lip->FIRMWARE_DATA_START]);
 
  size_t sizeoffd = p_fd->def_param.crc;
 
@@ -1351,20 +1433,20 @@ size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* i_bytes) const
   return m_fpp->m_only_code_size;
 }
 
-void CFirmwareDataMediator::LoadCodeData(const BYTE* i_source_bytes, size_t i_srcSize, BYTE* o_destin_bytes /*= NULL*/)
+void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_srcSize, BYTE* op_destin_bytes /*= NULL*/)
 {
- ASSERT(i_source_bytes);
- if (!o_destin_bytes)
-  o_destin_bytes = mp_bytes_active; //use current firmware bytes as destination
+ ASSERT(ip_source_bytes);
+ if (!op_destin_bytes)
+  op_destin_bytes = mp_bytes_active; //use current firmware bytes as destination
 
  //obtain actual size of data (source and destination data)
- _uint dataSizeSrc = ((fw_data_t*)((i_source_bytes + i_srcSize)-sizeof(fw_data_t)))->def_param.crc;
- _uint dataSizeDst = ((fw_data_t*)((o_destin_bytes + m_lip->FIRMWARE_DATA_START)))->def_param.crc;
+ _uint dataSizeSrc = ((fw_data_t*)((ip_source_bytes + i_srcSize)-sizeof(fw_data_t)))->def_param.crc;
+ _uint dataSizeDst = ((fw_data_t*)((op_destin_bytes + m_lip->FIRMWARE_DATA_START)))->def_param.crc;
  //Check compatibility and copy data from source to destination
  if ((dataSizeSrc > 0) && dataSizeSrc && (dataSizeDst > 0) && dataSizeDst)
  { //code area data is present
-  const BYTE *p_dataSrc = (i_source_bytes + i_srcSize) - dataSizeSrc;
-  BYTE *p_dataDst = (o_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
+  const BYTE *p_dataSrc = (ip_source_bytes + i_srcSize) - dataSizeSrc;
+  BYTE *p_dataDst = (op_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
   size_t szSrc = _BIGEND16(*(((_uint*)p_dataSrc)-1)), szDst = _BIGEND16(*(((_uint*)p_dataDst)-1));
   cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t)); //must be casted!
   cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t)); //must be casted!

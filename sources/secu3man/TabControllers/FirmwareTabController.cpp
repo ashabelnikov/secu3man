@@ -54,6 +54,11 @@ using namespace fastdelegate;
 
 #define EHKEY _T("FirmwareCntr")
 
+bool AskUserAboutVrefCompensation(void)
+{
+ return (IDYES == AfxMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -1413,7 +1418,7 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
    return; //user canceled
  }
 
- m_fwdm->LoadDefParametersFromBuffer(eeprom + m_edm->GetParamsStartAddr());
+ m_fwdm->LoadDefParametersFromBuffer(eeprom + m_edm->GetParamsStartAddr(), AskUserAboutVrefCompensation);
  SetViewFirmwareValues(); //Update!
 }
 

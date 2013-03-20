@@ -31,17 +31,18 @@ struct PPFlashParam;
 class IOCORE_API CFirmwareDataMediator
 {
   class LocInfoProvider;
+  typedef bool (*EventHandler)(void);
  public:
   CFirmwareDataMediator(const PPFlashParam& i_fpp);
  ~CFirmwareDataMediator();
 
   //загрузка байтов прошивки из указанного буфера
-  void LoadBytes(const BYTE* i_bytes);
-  void LoadDataBytesFromAnotherFirmware(const BYTE* i_source_bytes, const PPFlashParam* ip_fpp = NULL);
-  void LoadDefParametersFromBuffer(const BYTE* i_source_bytes);
+  void LoadBytes(const BYTE* ip_bytes);
+  void LoadDataBytesFromAnotherFirmware(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp = NULL);
+  void LoadDefParametersFromBuffer(const BYTE* ip_source_bytes, EventHandler onVrefUsrConfirm = NULL);
 
   //сохранение байтов прошивки в указанный буфер
-  void StoreBytes(BYTE* o_bytes);
+  void StoreBytes(BYTE* op_bytes);
 
   //была ли прошивка изменена после последней загрузки
   bool IsModified(void);
@@ -53,25 +54,26 @@ class IOCORE_API CFirmwareDataMediator
   //после того как данные были успешно сохранены.
   void ResetModified(void);
 
-  void CalculateAndPlaceFirmwareCRC(BYTE* io_data);
+  void CalculateAndPlaceFirmwareCRC(BYTE* iop_data);
 
   //checks compatibility of specified firmware with this version of management software
   //returns false if incompatible
-  bool CheckCompatibility(const BYTE* i_data, const PPFlashParam* ip_fpp = NULL) const;
+  bool CheckCompatibility(const BYTE* ip_data, const PPFlashParam* ip_fpp = NULL) const;
 
   //-----------------------------------------------------------------------
   _TSTRING GetSignatureInfo(void);
   void SetSignatureInfo(const _TSTRING& i_string);
 
   DWORD GetFWOptions(void);
+  DWORD GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp);
 
-  void GetStartMap(int i_index, float* o_values, bool i_original = false);
+  void GetStartMap(int i_index, float* op_values, bool i_original = false);
   void SetStartMap(int i_index,const float* i_values);
-  void GetIdleMap(int i_index,  float* o_values, bool i_original = false);
+  void GetIdleMap(int i_index,  float* op_values, bool i_original = false);
   void SetIdleMap(int i_index, const float* i_values);
-  void GetWorkMap(int i_index, float* o_values, bool i_original = false);
+  void GetWorkMap(int i_index, float* op_values, bool i_original = false);
   void SetWorkMap(int i_index, const float* i_values);
-  void GetTempMap(int i_index, float* o_values, bool i_original = false);
+  void GetTempMap(int i_index, float* op_values, bool i_original = false);
   void SetTempMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
@@ -83,22 +85,22 @@ class IOCORE_API CFirmwareDataMediator
   void SetFWFileName(const _TSTRING i_fw_file_name);
   _TSTRING GetFWFileName(void);
 
-  void GetAttenuatorMap(float* o_values, bool i_original = false);
+  void GetAttenuatorMap(float* op_values, bool i_original = false);
   void SetAttenuatorMap(const float* i_values);
 
-  void GetDwellCntrlMap(float* o_values, bool i_original = false);
+  void GetDwellCntrlMap(float* op_values, bool i_original = false);
   void SetDwellCntrlMap(const float* i_values);
 
-  void GetCTSCurveMap(float* o_values, bool i_original = false);
+  void GetCTSCurveMap(float* op_values, bool i_original = false);
   void SetCTSCurveMap(const float* i_values);
 
   float GetCTSMapVoltageLimit(int i_type);
   void  SetCTSMapVoltageLimit(int i_type, float i_value);
 
-  void GetChokeOpMap(float* o_values, bool i_original = false);
+  void GetChokeOpMap(float* op_values, bool i_original = false);
   void SetChokeOpMap(const float* i_values);
 
-  void GetRPMGridMap(float* o_values);
+  void GetRPMGridMap(float* op_values);
   void SetRPMGridMap(const float* i_values);
 
   //Types of slots/plugs
@@ -215,9 +217,9 @@ class IOCORE_API CFirmwareDataMediator
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
   IORemVer GetIORemVersion(void) const;
 
-  bool HasCodeData(const BYTE* i_source_bytes = NULL) const;
-  size_t GetOnlyCodeSize(const BYTE* i_bytes) const;
-  void LoadCodeData(const BYTE* i_source_bytes, size_t i_srcSize, BYTE* o_destin_bytes = NULL);
+  bool HasCodeData(const BYTE* ip_source_bytes = NULL) const;
+  size_t GetOnlyCodeSize(const BYTE* ip_bytes) const;
+  void LoadCodeData(const BYTE* ip_source_bytes, size_t i_srcSize, BYTE* op_destin_bytes = NULL);
 
   unsigned int CalculateCRC16OfActiveFirmware(void);
   unsigned int GetCRC16StoredInActiveFirmware(void);
@@ -225,8 +227,8 @@ class IOCORE_API CFirmwareDataMediator
 
   //-----------------------------------------------------------------------
 
-  bool SetDefParamValues(BYTE i_descriptor, const void* i_values);   //загнать указанные резервн.парам. в прошивку
-  bool GetDefParamValues(BYTE i_descriptor, void* o_values);         //извлечь указанные резервн.парам. из прошивки
+  bool SetDefParamValues(BYTE i_descriptor, const void* ip_values);   //загнать указанные резервн.парам. в прошивку
+  bool GetDefParamValues(BYTE i_descriptor, void* op_values);         //извлечь указанные резервн.парам. из прошивки
 
   //-----------------------------------------------------------------------
 
@@ -234,7 +236,7 @@ class IOCORE_API CFirmwareDataMediator
 
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
-  void _FindCodeData(void);
+  struct cd_data_t* _FindCodeData(const BYTE* ip_bytes = NULL, const PPFlashParam* ip_fpp = NULL);
 
  private:
   const std::auto_ptr<PPFlashParam> m_fpp;

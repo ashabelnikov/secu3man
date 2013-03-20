@@ -100,4 +100,14 @@ namespace MathHelpers
    return true;
   }
 
+  //Restrict specified value to min and max
+  template <class T>
+  T RestrictValue(T i_value, T i_min, T i_max)
+  {
+   if (i_value < i_min)
+    i_value = i_min;
+   if (i_value > i_max)
+    i_value = i_max;
+   return i_value;
+  }
 }
