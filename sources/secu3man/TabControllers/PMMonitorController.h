@@ -25,6 +25,7 @@
 #include "PMControllerBase.h"
 
 class CCommunicationManager;
+class CCEDeskDlg;
 class CMIDeskDlg;
 class CRSDeskDlg;
 class CStatusBarManager;
@@ -34,8 +35,9 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
 {
   typedef CPMControllerBase<VIEW> Super;
   typedef CRSDeskDlg RSDVIEW;
+  typedef CCEDeskDlg CEDVIEW;
  public:
-  CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
+  CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CPMMonitorController();
 
   //настройки программы изменились
@@ -61,6 +63,7 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
 
  private:
   CRSDeskDlg* mp_rsdview;
+  CCEDeskDlg* mp_cedview;
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
   ISettingsData* mp_settings;

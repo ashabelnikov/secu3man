@@ -44,16 +44,18 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 181,196,89,17
+                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 181,214,89,17
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,197,163,15
+                    BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,215,163,15
     LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
                     IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,187,0,261,172
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,0,0,156,172
+    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,193,238,20
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225
@@ -569,15 +571,17 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "Edit tables",IDC_PM_EDIT_TABLES,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,181,196,89,17
+                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,181,214,89,17
     CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,197,163,15
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,215,163,15
     LTEXT           "NOTE: SECU-3 automatically saves parameters after some time after stop editing ",
                     IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,187,0,261,172
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
                     WS_VISIBLE,0,0,147,172
+    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
+                    WS_VISIBLE,187,193,238,20
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225

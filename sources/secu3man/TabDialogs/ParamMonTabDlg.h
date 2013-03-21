@@ -25,6 +25,7 @@
 #include "common/FastDelegate.h"
 #include "ui-core/TabDialog.h"
 
+class CCEDeskDlg;
 class CMIDeskDlg;
 class CParamDeskDlg;
 class CRSDeskDlg;
@@ -52,6 +53,7 @@ class CParamMonTabDlg : public CTabDialog
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);
 
+  std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CRSDeskDlg> mp_RSDeskDlg;
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
@@ -77,6 +79,7 @@ class CParamMonTabDlg : public CTabDialog
 
   CRect m_original_mi_rect;
   CRect m_original_rs_rect;
+  CRect m_original_ce_rect;
   CPoint m_original_check_pos;
   CPoint m_original_button_pos;
   bool floating;

@@ -25,6 +25,7 @@
 
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
+#include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
@@ -42,6 +43,7 @@ const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
 
 CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CParamMonTabDlg::IDD, pParent)
+, mp_CEDeskDlg(new CCEDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
@@ -82,6 +84,12 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_RSDeskDlg->Create(CRSDeskDlg::IDD, this);
  mp_RSDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
  mp_RSDeskDlg->Show(true);
+
+ GetDlgItem(IDC_PM_CEDESK_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_CEDeskDlg->Create(CCEDeskDlg::IDD, this);
+ mp_CEDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_CEDeskDlg->Show(true);
 
  bool check_state = GetEditTablesCheckState();
 
@@ -198,11 +206,13 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
  GetClientRect(rect);
 
  if (i_enlarge)
- {
+ {//remember original positions
   mp_MIDeskDlg->GetWindowRect(m_original_mi_rect);
   ScreenToClient(m_original_mi_rect);
   mp_RSDeskDlg->GetWindowRect(m_original_rs_rect);
   ScreenToClient(m_original_rs_rect);
+  mp_CEDeskDlg->GetWindowRect(m_original_ce_rect);
+  ScreenToClient(m_original_ce_rect);
   
   CRect check_rect;
   m_raw_sensors_check.GetWindowRect(check_rect);
@@ -215,6 +225,11 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
   m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!  
   m_edit_tables_check.SetWindowPos(0,button_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
   m_original_button_pos = CPoint(button_rect.left, button_rect.top); //save it!
+
+  //move CE panel, don't resize it
+  rect.bottom-= m_original_ce_rect.Height();
+  int ce_panel_x = rect.CenterPoint().x - (m_original_ce_rect.Width()/2);
+  mp_CEDeskDlg->SetWindowPos(0, ce_panel_x, rect.bottom, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
 
   CRect mi_rect = m_original_mi_rect;
   _ResizeRect(rect, mi_rect);
@@ -230,6 +245,7 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
   m_edit_tables_check.SetWindowPos(0,m_original_button_pos.x,m_original_button_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
   mp_MIDeskDlg->Resize(m_original_mi_rect);
   mp_RSDeskDlg->Resize(m_original_rs_rect);
+  mp_CEDeskDlg->Resize(m_original_ce_rect);
   m_save_note_text.ShowWindow(SW_SHOW);
  }
 }

@@ -28,6 +28,7 @@
 #include "common/fastdelegate.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
+#include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "Settings/ISettingsData.h"
@@ -35,9 +36,10 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
+CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : Super(ip_view)
 , mp_rsdview(ip_rsdview)
+, mp_cedview(ip_cedview)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 , mp_settings(ip_settings)
@@ -75,6 +77,7 @@ void CPMMonitorController::Enable(bool state)
 {
  mp_view->Enable(state);
  mp_rsdview->Enable(state);
+ mp_cedview->Enable(state);
 }
 
 void CPMMonitorController::StartDataCollection(void)
@@ -98,7 +101,9 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
     {
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
      mp_view->SetValues((SensorDat*)(i_packet_data));
+     mp_cedview->SetValues(((SensorDat*)(i_packet_data))->ce_errors);
      mp_view->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
+     mp_cedview->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      m_operation_state = 1; //все готово для отображения данных
     }
    }
@@ -124,7 +129,10 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
     if (i_descriptor != SENSOR_DAT)
      mp_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
     else
+    {
      mp_view->SetValues((SensorDat*)(i_packet_data));
+     mp_cedview->SetValues(((SensorDat*)(i_packet_data))->ce_errors);
+    }
    }
    else
    {
@@ -145,12 +153,14 @@ void CPMMonitorController::ShowRawSensors(bool show)
  if (show)
  {//показывать сырые значения (прячем панель приборов и показываем панель "сырых" значений)
   mp_view->ShowWindow(SW_HIDE);
+  mp_cedview->Show(false);
   mp_rsdview->ShowWindow(SW_SHOW);
   StartDataCollection(); //reset finite state machine
  }
  else
  {//показывать панель приборов (прячем панель "сырых" значений и показываем панель приборов)
   mp_view->ShowWindow(SW_SHOW);
+  mp_cedview->Show(true);
   mp_rsdview->ShowWindow(SW_HIDE);
   StartDataCollection(); //reset finite state machine
  }
