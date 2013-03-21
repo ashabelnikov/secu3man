@@ -160,11 +160,11 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
  switch(dpia.GetDPIY())
  {
   case 72:
-   cs.cy = dpia.ScaleY(605);
+   cs.cy = dpia.ScaleY(607);
    break;
   default:
   case 96:
-   cs.cy = dpia.ScaleY(475);
+   cs.cy = dpia.ScaleY(477);
    break;
  }
 
