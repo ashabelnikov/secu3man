@@ -114,6 +114,21 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    IDS_CE_ERRORS_DESK_CKPS_MALFUNCTION_TT    "Сбои в работе ДПКВ - ошибки синхронизации"
+    IDS_CE_ERRORS_DESK_EEPROM_PARAM_BROKEN_TT "Параметры в EEPROM повреждены (СRС)"
+    IDS_CE_ERRORS_DESK_PROGRAM_CODE_BROKEN_TT "Код прошивки поврежден (СRС)"
+    IDS_CE_ERRORS_DESK_KSP_CHIP_FAILED_TT     "Процессор детонации не отвечает"
+    IDS_CE_ERRORS_DESK_KNOCK_DETECTED_TT      "Обнаруживалась детонация"
+    IDS_CE_ERRORS_DESK_MAP_SENSOR_FAIL_TT     "Поломка или неправильная работа ДАД"
+    IDS_CE_ERRORS_DESK_TEMP_SENSOR_FAIL_TT    "Поломка или неправильная работа ДТОЖ"
+    IDS_CE_ERRORS_DESK_VOLT_SENSOR_FAIL_TT    "Ненормальное напряжение бортовой сети"
+	IDS_CE_ERRORS_DWELL_CONTROL_TT            "Управление временем накопления энергии КЗ"
+    IDS_CE_ERRORS_DESK_CAMS_MALFUNCTION_TT    "Поломка или неправильная работа ДФ"
+    IDS_CE_ERRORS_DESK_TPS_SENSOR_FAIL_TT     "Поломка или неправильные показания ДПДЗ"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_MI_VOLTAGE_TITLE    "Напряжение"
     IDS_MI_VOLTAGE_UNIT     "Вольт"
     IDS_MI_TEMPERATURE_TITLE "Температура"
@@ -244,6 +259,21 @@ END
 //
 // String Table
 //
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_CE_ERRORS_DESK_CKPS_MALFUNCTION_TT    "Failures in working of CKP sensor - synchronization errors"
+    IDS_CE_ERRORS_DESK_EEPROM_PARAM_BROKEN_TT "EEPROM parameters is damaged (CRC)"
+    IDS_CE_ERRORS_DESK_PROGRAM_CODE_BROKEN_TT "Firmware code is damaged (CRC)"
+    IDS_CE_ERRORS_DESK_KSP_CHIP_FAILED_TT     "Knock chip doesn't respond"
+    IDS_CE_ERRORS_DESK_KNOCK_DETECTED_TT      "Detonation detected"
+    IDS_CE_ERRORS_DESK_MAP_SENSOR_FAIL_TT     "Breakage or wrong work of MAP sensor"
+    IDS_CE_ERRORS_DESK_TEMP_SENSOR_FAIL_TT    "Breakage or wrong work of coolant temperature sensor"
+    IDS_CE_ERRORS_DESK_VOLT_SENSOR_FAIL_TT    "Abnormal board voltage"
+	IDS_CE_ERRORS_DWELL_CONTROL_TT            "Dwell control"
+    IDS_CE_ERRORS_DESK_CAMS_MALFUNCTION_TT    "Breakage or wrong work of cam sensor"
+    IDS_CE_ERRORS_DESK_TPS_SENSOR_FAIL_TT     "Breakage or wrong indication of TPS"
+END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
