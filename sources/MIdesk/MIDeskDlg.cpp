@@ -55,6 +55,8 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_voltmeter.DDX_Controls(pDX, IDC_MI_VOLTMETER);
  m_dwell_angle.DDX_Controls(pDX, IDC_MI_DWELL_ANGLE);
  m_temperature.DDX_Controls(pDX, IDC_MI_TEMPERATURE);
+ m_add_i1.DDX_Controls(pDX, IDC_MI_ADD_I1);
+ m_add_i2.DDX_Controls(pDX, IDC_MI_ADD_I2);
 
  //Булевские приборы (лампочка)
  m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
@@ -85,6 +87,10 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_throttle_gate.SetLimits(0,100);
  m_air_flow.Create();
  m_temperature.Create();
+ m_add_i1.Create();
+ m_add_i2.Create();
+ m_add_i1.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE));
+ m_add_i2.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE));
 
  Enable(false);
 
@@ -118,6 +124,8 @@ void CMIDeskDlg::Enable(bool enable)
  m_throttle_gate.Enable(enable);
  m_air_flow.Enable(enable);
  m_temperature.Enable(enable);
+ m_add_i1.Enable(enable);
+ m_add_i2.Enable(enable);
 }
 
 void CMIDeskDlg::Show(bool show)
@@ -132,6 +140,8 @@ void CMIDeskDlg::Show(bool show)
  m_throttle_gate.Show(show);
  m_air_flow.Show(show);
  m_temperature.Show(show);
+ m_add_i1.Show(show);
+ m_add_i2.Show(show);
 }
 
 using namespace SECU3IO;
@@ -154,6 +164,8 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->tps = m_throttle_gate.GetPosition();
  o_values->air_flow = (unsigned char)m_air_flow.GetValue();
  o_values->temperat = m_temperature.GetValue();
+ o_values->add_i1 = m_add_i1.GetValue();
+ o_values->add_i2 = m_add_i2.GetValue();
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -171,6 +183,8 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetValue(m_values.temperat);
+ m_add_i1.SetValue(m_values.add_i1);
+ m_add_i2.SetValue(m_values.add_i2);
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -215,6 +229,8 @@ void CMIDeskDlg::Resize(const CRect& i_rect)
  m_throttle_gate.Scale(Xf, Yf);
  m_air_flow.Scale(Xf, Yf);
  m_temperature.Scale(Xf, Yf);
+ m_add_i1.Scale(Xf, Yf);
+ m_add_i2.Scale(Xf, Yf);
 
  RedrawWindow();
 }

@@ -33,6 +33,7 @@
 #include "MITachometer.h"
 #include "MITemperature.h"
 #include "MIThrottleGate.h"
+#include "MIVoltage.h"
 #include "MIVoltmeter.h"
 
 #include "ui-core/DialogWithAccelerators.h"
@@ -82,6 +83,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIVoltmeter    m_voltmeter;
   CMIDwellAngle   m_dwell_angle;
   CMITemperature  m_temperature;
+  CMIVoltage      m_add_i1;
+  CMIVoltage      m_add_i2;
 
   CMIAirFlow      m_air_flow;
   CMIGasValve     m_gas_valve;

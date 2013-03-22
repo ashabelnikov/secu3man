@@ -79,3 +79,9 @@
 #define IDS_CE_ERRORS_DESK_TT           2079
 #define IDC_MI_POWER_VALVE              2080
 #define IDC_MI_POWER_VALVE_CAPTION      2081
+#define IDC_MI_ADD_I1                   2082
+#define IDC_MI_ADD_I2                   2083
+#define IDC_MI_FULL_SIZE_FRAME          2084
+#define IDC_MI_NORM_SIZE_FRAME          2085
+#define IDS_MI_ADD_I1_TITLE             2086
+#define IDS_MI_ADD_I2_TITLE             2087

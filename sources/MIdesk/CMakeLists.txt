@@ -35,6 +35,7 @@ set(HEADERS
   MITachometer.h
   MITemperature.h
   MIThrottleGate.h
+  MIVoltage.h
   MIVoltMeter.h
   Resource.h
   RSDeskDlg.h
@@ -54,6 +55,7 @@ set (SOURCES
   MITachometer.cpp
   MITemperature.cpp
   MIThrottleGate.cpp
+  MIVoltage.cpp
   MIVoltMeter.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
