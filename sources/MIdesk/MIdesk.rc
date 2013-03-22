@@ -120,12 +120,27 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    IDS_CED_CKPS_MALFUNCTION_TT    "Сбои в работе ДПКВ - ошибки синхронизации"
+    IDS_CED_EEPROM_PARAM_BROKEN_TT "Параметры в EEPROM повреждены (СRС)"
+    IDS_CED_PROGRAM_CODE_BROKEN_TT "Код прошивки поврежден (СRС)"
+    IDS_CED_KSP_CHIP_FAILED_TT     "Процессор детонации не отвечает"
+    IDS_CED_KNOCK_DETECTED_TT      "Обнаруживалась детонация"
+    IDS_CED_MAP_SENSOR_FAIL_TT     "Поломка или неправильная работа ДАД"
+    IDS_CED_TEMP_SENSOR_FAIL_TT    "Поломка или неправильная работа ДТОЖ"
+    IDS_CED_VOLT_SENSOR_FAIL_TT    "Ненормальное напряжение бортовой сети"
+    IDS_CED_DWELL_CONTROL_TT       "Управление временем накопления энергии КЗ"
+    IDS_CED_CAMS_MALFUNCTION_TT    "Поломка или неправильная работа ДФ"
+    IDS_CED_TPS_SENSOR_FAIL_TT     "Поломка или неправильные показания ДПДЗ"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_MI_VOLTAGE_TITLE    "Напряжение"
     IDS_MI_VOLTAGE_UNIT     "Вольт"
     IDS_MI_TEMPERATURE_TITLE "Температура"
     IDS_CE_ERRORS_DESK_TT   "Коды ошибок CE"
-    IDS_MI_ADD_I1_TITLE    "Вход 1"
-    IDS_MI_ADD_I2_TITLE    "Вход 2"
+    IDS_MI_ADD_I1_TITLE     "Вход 1"
+    IDS_MI_ADD_I2_TITLE     "Вход 2"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -261,12 +276,27 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
+    IDS_CED_CKPS_MALFUNCTION_TT    "Failures in working of CKP sensor - synchronization errors"
+    IDS_CED_EEPROM_PARAM_BROKEN_TT "EEPROM parameters is damaged (CRC)"
+    IDS_CED_PROGRAM_CODE_BROKEN_TT "Firmware code is damaged (CRC)"
+    IDS_CED_KSP_CHIP_FAILED_TT     "Knock chip doesn't respond"
+    IDS_CED_KNOCK_DETECTED_TT      "Detonation detected"
+    IDS_CED_MAP_SENSOR_FAIL_TT     "Breakage or wrong work of MAP sensor"
+    IDS_CED_TEMP_SENSOR_FAIL_TT    "Breakage or wrong work of coolant temperature sensor"
+    IDS_CED_VOLT_SENSOR_FAIL_TT    "Abnormal board voltage"
+    IDS_CED_DWELL_CONTROL_TT       "Dwell control"
+    IDS_CED_CAMS_MALFUNCTION_TT    "Breakage or wrong work of cam sensor"
+    IDS_CED_TPS_SENSOR_FAIL_TT     "Breakage or wrong indication of TPS"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
     IDS_MI_VOLTAGE_TITLE    "Voltage"
     IDS_MI_VOLTAGE_UNIT     "Volt"
     IDS_MI_TEMPERATURE_TITLE "Temperature"
     IDS_CE_ERRORS_DESK_TT   "CE error codes"
-    IDS_MI_ADD_I1_TITLE    "Input 1"
-    IDS_MI_ADD_I2_TITLE    "Input 2"
+    IDS_MI_ADD_I1_TITLE     "Input 1"
+    IDS_MI_ADD_I2_TITLE     "Input 2"
 END
 
 STRINGTABLE DISCARDABLE 
