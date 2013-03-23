@@ -46,7 +46,7 @@ void CMIVoltage::Create(void)
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
- m_meter.SetTickNumber(10);
+ m_meter.SetTickNumber(20);
  m_meter.AddAlertZone(0.0,5.0,RGB(180,180,230));
  m_meter.UpdateNeedle(0.0);
  m_meter.SetMeterSize(130);

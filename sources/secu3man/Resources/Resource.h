@@ -304,3 +304,4 @@
 #define IDC_PM_CEDESK_FRAME             4322
 #define IDC_PM_MIDESK_FRAME_F           4323
 #define IDC_APP_SETTINGS_EXFIXTURES     4324
+#define IDC_LP_MIDESK_FRAME_F           4325

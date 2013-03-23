@@ -46,6 +46,8 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , mp_OScopeCtrl(new COScopeCtrl())
+, m_enlarged(false)
+, m_exfixtures(false)
 {
  //empty
 }
@@ -81,7 +83,7 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  ScreenToClient(rect);
 
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
  GetDlgItem(IDC_LP_CEDESK_FRAME)->GetWindowRect(rect);
@@ -112,10 +114,12 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  return TRUE;
 }
 
-void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge)
+void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
 {
  CRect rect;
  GetClientRect(rect);
+ m_enlarged = i_enlarge;
+ m_exfixtures = i_exfixtures;
 
  if (i_enlarge)
  {//remember original positions
@@ -128,18 +132,50 @@ void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge)
   mp_LPPanelDlg->GetWindowRect(cp_rect);
   rect.left+=cp_rect.Width();
   rect.bottom-=m_original_ce_rect.Height();
+
   //move and resize MI desk
-  CRect mi_rect = m_original_mi_rect;
+  CRect mi_rect, mi_rect_o;
+  if (i_exfixtures)
+  { //extended
+   GetDlgItem(IDC_LP_MIDESK_FRAME_F)->GetWindowRect(mi_rect);
+   ScreenToClient(mi_rect);
+  }
+  else //regular
+   mi_rect = m_original_mi_rect;
+  mi_rect_o = mi_rect;
   _ResizeRect(rect, mi_rect);
-  mp_MIDeskDlg->Resize(mi_rect);
+  mp_MIDeskDlg->Resize(mi_rect, mi_rect_o);
+  mp_MIDeskDlg->ShowExFixtures(i_exfixtures);
+
   //move CE panel, don't resize it
   int ce_panel_x = mi_rect.CenterPoint().x - (m_original_ce_rect.Width()/2);
   mp_CEDeskDlg->SetWindowPos(0, ce_panel_x, mi_rect.bottom, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
  }
  else
  {//restore original positions
-  mp_MIDeskDlg->Resize(m_original_mi_rect);
+  CRect rc_s;
+  mp_MIDeskDlg->GetWindowRect(rc_s); 
+  ScreenToClient(rc_s); 
+  if (i_exfixtures)
+  {
+   CRect rc_o, rc_f;
+   GetDlgItem(IDC_LP_MIDESK_FRAME)->GetWindowRect(rc_o);
+   GetDlgItem(IDC_LP_MIDESK_FRAME_F)->GetWindowRect(rc_f);   
+   float rx = (((float)rc_f.Width())/rc_o.Width());
+   rc_s.right = MathHelpers::Round(((float)rc_s.left) + (((float)rc_s.Width())/rx));
+  }
+  mp_MIDeskDlg->Resize(m_original_mi_rect, rc_s);
   mp_CEDeskDlg->Resize(m_original_ce_rect);
+  mp_MIDeskDlg->ShowExFixtures(false);
+ }
+}
+
+void CLogPlayerTabDlg::ShowExFixtures(bool i_exfixtures)
+{
+ if (m_enlarged && (m_exfixtures!=i_exfixtures))
+ {
+  EnlargeMonitor(false, !i_exfixtures);
+  EnlargeMonitor(true, i_exfixtures);
  }
 }
 

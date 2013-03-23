@@ -42,7 +42,8 @@ class CLogPlayerTabDlg : public CTabDialog
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
-  void EnlargeMonitor(bool i_enlarge);
+  void EnlargeMonitor(bool i_enlarge, bool i_exfixtures);
+  void ShowExFixtures(bool i_exfixtures); //applicable only in the fullscreen mode
 
   void AppendKnockValue(double i_value, bool i_reverse);
   void ResetKnockOscilloscope(void);
@@ -71,6 +72,8 @@ class CLogPlayerTabDlg : public CTabDialog
 
   CRect m_original_mi_rect;
   CRect m_original_ce_rect;
+  bool m_enlarged;
+  bool m_exfixtures;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

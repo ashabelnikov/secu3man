@@ -108,6 +108,8 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  //обновляем диапазоны приборов
  m_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  m_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+
+ m_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  m_view->Invalidate();
 }
 
@@ -201,7 +203,7 @@ void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  if (i_what)
   m_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
- m_view->EnlargeMonitor(i_what);
+ m_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
 }
 
 void CLogPlayerTabController::OnOpenFileButton(void)

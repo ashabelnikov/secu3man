@@ -79,7 +79,6 @@ class CParamMonTabDlg : public CTabDialog
   EventHandler m_OnEditTablesCheck;
 
   CRect m_original_mi_rect;
-  CRect m_enlarged_mi_rect;
   CRect m_original_rs_rect;
   CRect m_original_ce_rect;
   CPoint m_original_check_pos;
