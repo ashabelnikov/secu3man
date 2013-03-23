@@ -130,7 +130,8 @@ void CLogPlayerTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
   //restrict size of MI desk
   CRect cp_rect;
   mp_LPPanelDlg->GetWindowRect(cp_rect);
-  rect.left+=cp_rect.Width();
+  ScreenToClient(cp_rect);
+  rect.left+=cp_rect.right;
   rect.bottom-=m_original_ce_rect.Height();
 
   //move and resize MI desk

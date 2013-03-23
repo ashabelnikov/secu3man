@@ -103,9 +103,9 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   void _UpdateTimerPeriod(bool i_set_timer);
 
  private:
-  CLogPlayerTabDlg*  m_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
+  CLogPlayerTabDlg*  mp_view;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
 
   //<factor id, <name, value> >
