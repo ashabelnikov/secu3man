@@ -23,12 +23,14 @@
 #include "resource.h"
 #include "MIVoltage.h"
 #include "MIHelpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CMIVoltage::CMIVoltage()
+CMIVoltage::CMIVoltage(const _TSTRING& ttText)
+: m_ttText(ttText)
 {
  //empty
 }
@@ -50,6 +52,13 @@ void CMIVoltage::Create(void)
  m_meter.AddAlertZone(0.0,5.0,RGB(180,180,230));
  m_meter.UpdateNeedle(0.0);
  m_meter.SetMeterSize(130);
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(&m_meter, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_meter, m_ttText.c_str()));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 }
 
 void CMIVoltage::DDX_Controls(CDataExchange* pDX, int nIDC_meter)

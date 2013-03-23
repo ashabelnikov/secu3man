@@ -94,3 +94,5 @@
 #define IDS_CED_DWELL_CONTROL_TT        2094
 #define IDS_CED_CAMS_MALFUNCTION_TT     2095
 #define IDS_CED_TPS_SENSOR_FAIL_TT      2096
+#define IDS_MI_ADD_I1_TT                2097
+#define IDS_MI_ADD_I2_TT                2098

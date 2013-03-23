@@ -24,10 +24,12 @@
 #include "IMeasInstrument.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
+class CToolTipCtrlEx;
+
 class AFX_EXT_CLASS CMIVoltage : public IMeasInstrument
 {
  public:
-  CMIVoltage();
+  CMIVoltage(const _TSTRING& ttText);
   virtual ~CMIVoltage();
 
   void DDX_Controls(CDataExchange* pDX, int nIDC_meter);
@@ -49,4 +51,6 @@ class AFX_EXT_CLASS CMIVoltage : public IMeasInstrument
 
  private:
   CAnalogMeterCtrl m_meter;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  _TSTRING m_ttText;
 };

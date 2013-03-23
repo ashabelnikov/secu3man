@@ -41,6 +41,8 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_update_period(100)
 , m_was_initialized(false)
 , m_enabled(-1)
+, m_add_i1(MLL::GetString(IDS_MI_ADD_I1_TT))
+, m_add_i2(MLL::GetString(IDS_MI_ADD_I2_TT))
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
 }

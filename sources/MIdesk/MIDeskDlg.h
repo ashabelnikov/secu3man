@@ -81,7 +81,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   // Implementation
  private:
-  CMITachometer	m_tachometer;
+  CMITachometer   m_tachometer;
   CMIPressure     m_pressure;
   CMIVoltmeter    m_voltmeter;
   CMIDwellAngle   m_dwell_angle;
