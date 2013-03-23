@@ -96,6 +96,7 @@ void CParamMonTabController::OnSettingsChanged(void)
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  mp_moncntr->OnSettingsChanged();
+ mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
 }
 
@@ -252,7 +253,7 @@ void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
   mp_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
  mp_view->MakePDFloating(i_what);
- mp_view->EnlargeMonitor(i_what);
+ mp_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
 }
 
 //Событие от чекбокса переключающего режим мониторинга (приборы/сырые данные)

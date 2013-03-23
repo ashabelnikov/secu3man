@@ -48,7 +48,8 @@ class CParamMonTabDlg : public CTabDialog
   void EnableEditTablesCheck(bool enable);
 
   void MakePDFloating(bool i_floating);
-  void EnlargeMonitor(bool i_enlarge);
+  void EnlargeMonitor(bool i_enlarge, bool i_exfixtures);
+  void ShowExFixtures(bool i_exfixtures); //applicable only in the fullscreen mode
 
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);
@@ -78,11 +79,14 @@ class CParamMonTabDlg : public CTabDialog
   EventHandler m_OnEditTablesCheck;
 
   CRect m_original_mi_rect;
+  CRect m_enlarged_mi_rect;
   CRect m_original_rs_rect;
   CRect m_original_ce_rect;
   CPoint m_original_check_pos;
   CPoint m_original_button_pos;
-  bool floating;
+  bool m_floating;
+  bool m_enlarged;
+  bool m_exfixtures;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

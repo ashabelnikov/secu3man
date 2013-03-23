@@ -128,7 +128,7 @@ void CMIDeskDlg::Enable(bool enable)
  m_add_i2.Enable(enable);
 }
 
-void CMIDeskDlg::Show(bool show)
+void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
 {
  m_tachometer.Show(show);
  m_pressure.Show(show);
@@ -140,8 +140,9 @@ void CMIDeskDlg::Show(bool show)
  m_throttle_gate.Show(show);
  m_air_flow.Show(show);
  m_temperature.Show(show);
- m_add_i1.Show(show);
- m_add_i2.Show(show);
+ //extended fixtures
+ m_add_i1.Show(show && show_exf);
+ m_add_i2.Show(show && show_exf); 
 }
 
 using namespace SECU3IO;
@@ -207,12 +208,15 @@ void CMIDeskDlg::SetPressureMax(int i_max)
  m_pressure.SetLimits(10, (float)i_max);
 }
 
-void CMIDeskDlg::Resize(const CRect& i_rect)
+void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
 {
  //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
  CRect old_rect;
  float Xf, Yf;
- GetWindowRect(old_rect);
+ if (i_src.IsRectNull())
+  GetWindowRect(old_rect);
+ else
+  old_rect = i_src;
  MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
 
  //изменяем размеры окна
@@ -233,4 +237,10 @@ void CMIDeskDlg::Resize(const CRect& i_rect)
  m_add_i2.Scale(Xf, Yf);
 
  RedrawWindow();
+}
+
+void CMIDeskDlg::ShowExFixtures(bool i_show)
+{
+ m_add_i1.Show(i_show);
+ m_add_i2.Show(i_show);
 }

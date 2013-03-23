@@ -48,7 +48,9 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
 , mp_TablesDeskDlg(new CTablesDeskDlg())
-, floating(false)
+, m_floating(false)
+, m_enlarged(false)
+, m_exfixtures(false)
 {
  //empty
 }
@@ -78,7 +80,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  ScreenToClient(rect);
 
  mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_MIDeskDlg->Show(true);
 
  mp_RSDeskDlg->Create(CRSDeskDlg::IDD, this);
@@ -129,12 +131,12 @@ void CParamMonTabDlg::OnPmShowRawSensors()
 void CParamMonTabDlg::OnPmEditTables()
 {//делегируем обработку события чекбокса
  bool check_state = GetEditTablesCheckState();
- if (false==floating)
+ if (false==m_floating)
   mp_ParamDeskDlg->Show(!check_state);
  mp_TablesDeskDlg->Show(check_state);
  mp_TablesDeskDlg->ShowOpenedCharts(check_state);
  if (check_state)
-  mp_TablesDeskDlg->MakeChartsChildren(floating);
+  mp_TablesDeskDlg->MakeChartsChildren(m_floating);
 
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
@@ -159,7 +161,7 @@ void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
 
 void CParamMonTabDlg::MakePDFloating(bool i_floating)
 {
- floating = i_floating;
+ m_floating = i_floating;
  ///////////////////////////////////////////////////////////////
  //запоминаем номер последней выбранной вкладки
  int lastSelPD = mp_ParamDeskDlg->GetCurSel();
@@ -200,10 +202,12 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  ///////////////////////////////////////////////////////////////
 }
 
-void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
+void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
 {
  CRect rect;
  GetClientRect(rect);
+ m_enlarged = i_enlarge;
+ m_exfixtures = i_exfixtures;
 
  if (i_enlarge)
  {//remember original positions
@@ -230,10 +234,21 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
   rect.bottom-= m_original_ce_rect.Height();
   int ce_panel_x = rect.CenterPoint().x - (m_original_ce_rect.Width()/2);
   mp_CEDeskDlg->SetWindowPos(0, ce_panel_x, rect.bottom, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
+  m_enlarged_mi_rect = rect; //remember enlarged MI rect
 
-  CRect mi_rect = m_original_mi_rect;
+  CRect mi_rect, mi_rect_o;
+  if (i_exfixtures)
+  { //extended
+   GetDlgItem(IDC_PM_MIDESK_FRAME_F)->GetWindowRect(mi_rect);
+   ScreenToClient(mi_rect);
+  }
+  else //regular
+   mi_rect = m_original_mi_rect;
+  mi_rect_o = mi_rect;
   _ResizeRect(rect, mi_rect);
-  mp_MIDeskDlg->Resize(mi_rect);
+  mp_MIDeskDlg->Resize(mi_rect, mi_rect_o);
+  mp_MIDeskDlg->ShowExFixtures(i_exfixtures);
+
   CRect rs_rect = m_original_rs_rect;
   _ResizeRect(rect, rs_rect);
   mp_RSDeskDlg->Resize(rs_rect);
@@ -243,10 +258,24 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge)
  {
   m_raw_sensors_check.SetWindowPos(0,m_original_check_pos.x,m_original_check_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
   m_edit_tables_check.SetWindowPos(0,m_original_button_pos.x,m_original_button_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  mp_MIDeskDlg->Resize(m_original_mi_rect);
+  CRect rc;
+  GetDlgItem(IDC_PM_MIDESK_FRAME)->GetWindowRect(rc);
+  ScreenToClient(rc);
+  _ResizeRect(m_enlarged_mi_rect, rc);
+  mp_MIDeskDlg->Resize(m_original_mi_rect, rc);
   mp_RSDeskDlg->Resize(m_original_rs_rect);
   mp_CEDeskDlg->Resize(m_original_ce_rect);
   m_save_note_text.ShowWindow(SW_SHOW);
+  mp_MIDeskDlg->ShowExFixtures(false);
+ }
+}
+
+void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)
+{
+ if (m_enlarged && (m_exfixtures!=i_exfixtures))
+ {
+  EnlargeMonitor(false, !i_exfixtures);
+  EnlargeMonitor(true, i_exfixtures);
  }
 }
 

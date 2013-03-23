@@ -48,6 +48,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_use_dv_features = BST_UNCHECKED;
  m_dv_update_period = 40;
  m_show_tooltips = BST_CHECKED;
+ m_exfixtures = BST_CHECKED;
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -65,6 +66,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_SHOW_TOOLTIPS, m_show_tooltips_button);
+ DDX_Control(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures_button);
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
@@ -78,6 +80,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder);
  DDX_Check(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features);
  DDX_Check(pDX, IDC_APP_SETTINGS_SHOW_TOOLTIPS, m_show_tooltips);
+ DDX_Check(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN, m_midesk_update_period_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT, m_midesk_update_period_edit);
@@ -474,3 +477,12 @@ bool CAppSettingsDlg::GetShowToolTips(void) const
  return (m_show_tooltips == BST_CHECKED) ? true : false;
 }
 
+void CAppSettingsDlg::SetShowExFixtures(bool i_show)
+{
+ m_exfixtures = i_show ? BST_CHECKED : BST_UNCHECKED;
+}
+
+bool CAppSettingsDlg::GetShowExFixtures(void) const
+{
+ return (m_exfixtures == BST_CHECKED) ? true : false;
+}

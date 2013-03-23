@@ -37,7 +37,7 @@ END
 // Dialog
 //
 
-IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 222
+IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 232
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -48,14 +48,12 @@ BEGIN
     CONTROL         "Показывать ""сырые"" значения датчиков",
                     IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,215,163,15
-    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через некоторое время после прекращения редактирования",
+    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через 30 сек. после последнего редактирования",
                     IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
-    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,0,261,172
-    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,0,0,156,172
-    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,193,238,20
+    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
+    CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
+    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,156,172
+    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225
@@ -100,8 +98,7 @@ BEGIN
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     COMBOBOX        IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO,111,65,65,
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_APP_SETTINGS_LOGFOLDER_EDITBOX,13,129,155,14,
-                    ES_AUTOHSCROLL
+    EDITTEXT        IDC_APP_SETTINGS_LOGFOLDER_EDITBOX,13,129,155,14,ES_AUTOHSCROLL
     PUSHBUTTON      "...",IDC_APP_SETTINGS_LOGFOLDER_BUTTON,170,129,15,14
     CONTROL         "Использовать каталог программы",
                     IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",
@@ -115,25 +112,21 @@ BEGIN
     CONTROL         "Использовать средства отладки",
                     IDC_APP_SETTINGS_USEDEBUG_FEATURES,"Button",
                     BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
-    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
-                    17,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
+    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
     CONTROL         "Показывать подсказки",
                     IDC_APP_SETTINGS_SHOW_TOOLTIPS,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,204,83,140,9
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,133,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,132,11,18
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,133,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,336,132,10,18
-    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,156,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,155,11,18
+    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,128,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,127,11,18
+    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,128,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,336,127,10,18
+    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,151,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,150,11,18
     DEFPUSHBUTTON   "OK",IDOK,139,192,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,192,50,18
     LTEXT           "Выбор COM-порта:",IDC_STATIC,15,17,77,9
@@ -144,20 +137,19 @@ BEGIN
     LTEXT           "CSV сивол-разделитель",
                     IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_CAPTION,87,167,97,10
     GROUPBOX        "Логи",IDC_STATIC,5,105,185,81
-    LTEXT           "Период обновления панели приборов (ms)",IDC_STATIC,266,
-                    156,87,17
+    LTEXT           "Период обновления панели приборов (ms)",IDC_STATIC,266,151,87,17
     GROUPBOX        "Порт",IDC_STATIC,4,4,186,97
     GROUPBOX        "Прочее",IDC_STATIC,194,4,162,97
     LTEXT           "Язык интерфейса:",IDC_STATIC,274,14,77,9
     LTEXT           "Платформа:",IDC_STATIC,204,14,70,9
     GROUPBOX        "Приборы",IDC_STATIC,194,105,162,81
-    LTEXT           "Тах. макс:",IDC_STATIC,204,121,61,9
-    LTEXT           "Давл. макс:",IDC_STATIC,291,122,60,9
+    LTEXT           "Тах. макс:",IDC_STATIC,204,117,61,9
+    LTEXT           "Давл. макс:",IDC_STATIC,291,117,61,9
     LTEXT           "Период обновления отладочной панели (мс)",
-                    IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
-                    87,17
-    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT 
-                    WS_VISIBLE
+                    IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,87,17
+    LTEXT           "",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT WS_VISIBLE
+    CONTROL         "Дополнительные приборы",IDC_APP_SETTINGS_EXFIXTURES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,204,172,110,10
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 225
@@ -564,7 +556,7 @@ END
 // Dialog
 //
 
-IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 222
+IDD_PARAMETERS_AND_MONITOR DIALOGEX 0, 0, 479, 232
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -574,14 +566,12 @@ BEGIN
                     WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,181,214,89,17
     CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,
                     "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,215,163,15
-    LTEXT           "NOTE: SECU-3 automatically saves parameters after some time after stop editing ",
+    LTEXT           "NOTE: SECU-3 automatically saves parameters in 30 seconds after the last editing",
                     IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
-    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,0,261,172
-    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,0,0,147,172
-    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT 
-                    WS_VISIBLE,187,193,238,20
+    CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
+    CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
+    CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,147,172
+    CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225
@@ -626,8 +616,7 @@ BEGIN
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     COMBOBOX        IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO,111,65,65,
                     82,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    EDITTEXT        IDC_APP_SETTINGS_LOGFOLDER_EDITBOX,13,129,155,14,
-                    ES_AUTOHSCROLL
+    EDITTEXT        IDC_APP_SETTINGS_LOGFOLDER_EDITBOX,13,129,155,14,ES_AUTOHSCROLL
     PUSHBUTTON      "...",IDC_APP_SETTINGS_LOGFOLDER_BUTTON,170,129,15,14
     CONTROL         "Use program folder",
                     IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",
@@ -640,25 +629,21 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Use debug features",IDC_APP_SETTINGS_USEDEBUG_FEATURES,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,204,47,140,9
-    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,
-                    17,ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
+    EDITTEXT        IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_EDIT,204,61,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS,250,60,11,18
     CONTROL         "Show tool tips",
                     IDC_APP_SETTINGS_SHOW_TOOLTIPS,"Button",BS_AUTOCHECKBOX | 
                     WS_TABSTOP,204,83,140,9
-    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,133,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,132,11,18
-    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,133,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,336,132,10,18
-    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,156,43,17,
-                    ES_AUTOHSCROLL
-    CONTROL         "Spin1",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
-                    "msctls_updown32",UDS_ARROWKEYS,250,155,11,18
+    EDITTEXT        IDC_APP_SETTINGS_TACHOMETER_MAX_EDIT,204,128,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_TACHOMETER_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,127,11,18
+    EDITTEXT        IDC_APP_SETTINGS_PRESSURE_MAX_EDIT,290,128,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_PRESSURE_MAX_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,336,127,10,18
+    EDITTEXT        IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT,204,151,43,17,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS,250,150,11,18
     DEFPUSHBUTTON   "OK",IDOK,139,192,50,18
     PUSHBUTTON      "Cancel",IDCANCEL,195,192,50,18
     LTEXT           "COM-port selection:",IDC_STATIC,15,17,77,9
@@ -669,20 +654,19 @@ BEGIN
     LTEXT           "CSV separator-symbol",
                     IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_CAPTION,87,167,97,10
     GROUPBOX        "Logs",IDC_STATIC,5,105,185,81
-    LTEXT           "Update period of fixtures's panel (ms)",IDC_STATIC,266,
-                    156,87,17
+    LTEXT           "Update period of fixtures's panel (ms)",IDC_STATIC,266,151,87,17
     GROUPBOX        "Port",IDC_STATIC,4,4,186,97
     GROUPBOX        "Misc",IDC_STATIC,194,4,162,97
     LTEXT           "Interface language:",IDC_STATIC,274,14,77,9
     LTEXT           "Platform:",IDC_STATIC,204,14,70,9
     GROUPBOX        "Fixtures",IDC_STATIC,194,105,162,81
-    LTEXT           "Tach. max:",IDC_STATIC,204,121,61,9
-    LTEXT           "Press. max:",IDC_STATIC,291,122,60,9
+    LTEXT           "Tach. max:",IDC_STATIC,204,117,61,9
+    LTEXT           "Press. max:",IDC_STATIC,291,117,61,9
     LTEXT           "Update period of debug's panel (ms)",
-                    IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,
-                    87,17
-    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT 
-                    WS_VISIBLE
+                    IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,87,17
+    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT WS_VISIBLE
+    CONTROL         "Additional fixtures",IDC_APP_SETTINGS_EXFIXTURES,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,204,172,110,10
 END
 
 IDD_CHECK_ENGINE DIALOGEX 0, 0, 434, 225

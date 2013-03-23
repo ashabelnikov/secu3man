@@ -50,7 +50,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   static const UINT IDD;
 
   //--------interface implementation---------------
-  virtual void Show(bool show);
+  virtual void Show(bool show, bool show_exf = false);
   virtual void Enable(bool enable);
   virtual void SetValues(const SECU3IO::SensorDat* i_values);
   virtual void GetValues(SECU3IO::SensorDat* o_values);
@@ -66,7 +66,10 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetPressureMax(int i_max);
 
   //изменение размеров окна
-  void Resize(const CRect& i_rect);
+  void Resize(const CRect& i_rect, const CRect& i_src = CRect(0,0,0,0));
+
+  //Show/hide extended fixtures
+  void ShowExFixtures(bool i_show);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

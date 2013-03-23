@@ -78,4 +78,5 @@ class ISettingsData
   virtual bool GetUseDVFeatures(void) const = 0;
   virtual int GetDVDeskUpdatePeriod(void) const = 0;
   virtual bool GetShowToolTips(void) const = 0;
+  virtual bool GetShowExFixtures(void) const = 0;
 };
