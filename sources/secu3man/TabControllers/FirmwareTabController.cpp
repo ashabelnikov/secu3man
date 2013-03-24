@@ -74,6 +74,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_bl_started_emergency(false)
 , mp_iorCntr(new CFWIORemappingController(i_view->mp_IORemappingDlg.get()))
 , m_moreSize(0)
+, m_clear_sbar_txt_on_conn(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -215,7 +216,10 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     return;
    case SECU3IO::OPCODE_RESET_EEPROM:     //начался процесс сброса EEPROM
     if (p_ndata->opdata == 0x55)
+    {
      m_sbar->SetInformationText(MLL::LoadString(IDS_FW_RESET_EEPROM_STARTED));
+     m_clear_sbar_txt_on_conn = true;
+    }
     return;
   } 
  }
@@ -239,7 +243,11 @@ void CFirmwareTabController::OnConnection(const bool i_online)
   m_view->SetBLStartedEmergency(false);
 
   m_view->EnableAppItems(true);
-  m_sbar->SetInformationText(_T(""));
+  if (m_clear_sbar_txt_on_conn)
+  {
+   m_sbar->SetInformationText(_T(""));
+   m_clear_sbar_txt_on_conn = false;
+  }
  }
  else
  { //перешли в оффлайн
