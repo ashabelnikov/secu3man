@@ -95,6 +95,9 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
  m_ParentMenu.AppendMenu(MF_STRING,IDM_WRITE_EEPROM_FROM_FILE,MLL::LoadString(IDS_WRITE_EEPROM_FROM_FILE));
  m_bl_menu_items_IDs.push_back(IDM_WRITE_EEPROM_FROM_FILE);
 
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_RESET_EEPROM, MLL::LoadString(IDS_RESET_EEPROM));
+ m_app_menu_items_IDs.push_back(IDM_RESET_EEPROM);
+
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
 
  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_BOOTLOADER_SIGNATURE,MLL::LoadString(IDS_READ_BOOTLOADER_SIGNATURE));

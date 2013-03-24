@@ -94,6 +94,8 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_READ_BOOTLOADER_SIGNATURE, OnBootLoaderInfo)
  ON_COMMAND(IDM_READ_EEPROM_TO_FILE, OnReadEepromToFile)
  ON_COMMAND(IDM_WRITE_EEPROM_FROM_FILE, OnWriteEepromFromFile)
+ ON_COMMAND(IDM_RESET_EEPROM, OnResetEeprom)
+ ON_UPDATE_COMMAND_UI(IDM_RESET_EEPROM, OnUpdatePopupMenu_app)
  ON_COMMAND(IDM_READ_FLASH_TO_FILE, OnReadFlashToFile)
  ON_COMMAND(IDM_WRITE_FLASH_FROM_FILE, OnWriteFlashFromFile)
  ON_UPDATE_COMMAND_UI(IDC_FW_BL_STARTED_EMERGENCY, OnUpdateBLStartedEmergency)
@@ -340,6 +342,12 @@ void CFirmwareTabDlg::OnWriteEepromFromFile()
 {
  if (m_OnWriteEepromFromFile)
   m_OnWriteEepromFromFile();
+}
+
+void CFirmwareTabDlg::OnResetEeprom()
+{
+ if (m_OnResetEeprom)
+  m_OnResetEeprom();
 }
 
 void CFirmwareTabDlg::OnReadFlashToFile()
@@ -626,6 +634,9 @@ void CFirmwareTabDlg::setOnReadEepromToFile(EventHandler OnFunction)
 void CFirmwareTabDlg::setOnWriteEepromFromFile(EventHandler OnFunction)
 {m_OnWriteEepromFromFile = OnFunction;}
 
+void CFirmwareTabDlg::setOnResetEeprom(EventHandler OnFunction)
+{m_OnResetEeprom = OnFunction; }
+
 void CFirmwareTabDlg::setOnReadFlashToFile(EventHandler OnFunction)
 {m_OnReadFlashToFile = OnFunction;}
 
@@ -687,10 +698,10 @@ void CFirmwareTabDlg::setOnViewFWOptions(EventHandler OnFunction)
 {m_OnViewFWOptions = OnFunction;}
 
 void CFirmwareTabDlg::setIsViewFWOptionsAvailable(EventResult OnFunction)
-{ m_IsViewFWOptionsAvailable = OnFunction;}
+{m_IsViewFWOptionsAvailable = OnFunction;}
 
 void CFirmwareTabDlg::setIsIORemappingAvailable(EventResult OnFunction)
-{ m_IsIORemappingAvailable = OnFunction;}
+{m_IsIORemappingAvailable = OnFunction;}
 
 void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 {m_OnBLStartedEmergency = OnFunction;}

@@ -467,8 +467,11 @@ BEGIN
     IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
     IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
     IDS_FW_OR "или"
-    IDS_FW_IO_REMAPPING "Переназн. I/O"
-    IDS_FW_DEF_PARAMETR "Резервн. парам."
+    IDS_FW_IO_REMAPPING     "Переназн. I/O"
+    IDS_FW_DEF_PARAMETR     "Резервн. парам."
+    IDS_RESET_EEPROM        "Сброс EEPROM"
+    IDS_RESET_EEPROM_COMFIRMATION "Вы действительно хотите сбросить EEPROM?\n Сохраненные данные будут потеряны."
+    IDS_FW_RESET_EEPROM_STARTED "Сброс EEPROM можеть занять несколько секунд..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -973,8 +976,11 @@ BEGIN
     IDS_FW_READING_FW_SIGNATURE "Reading firmware information..."
     IDS_FW_RESERVE_PARAMETERS "Reserve parameters:"
     IDS_FW_OR "or"
-    IDS_FW_IO_REMAPPING "I/O remapping"
-    IDS_FW_DEF_PARAMETR "Default param."
+    IDS_FW_IO_REMAPPING     "I/O remapping"
+    IDS_FW_DEF_PARAMETR     "Default param."
+    IDS_RESET_EEPROM        "Reset EEPROM"
+    IDS_RESET_EEPROM_COMFIRMATION "Do you really want to reset EEPROM?\n Saved data will be lost."
+    IDS_FW_RESET_EEPROM_STARTED "EEPROM resetting may take several seconds..."
 END
 
 STRINGTABLE DISCARDABLE 

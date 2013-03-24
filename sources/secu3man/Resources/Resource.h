@@ -305,3 +305,7 @@
 #define IDC_PM_MIDESK_FRAME_F           4323
 #define IDC_APP_SETTINGS_EXFIXTURES     4324
 #define IDC_LP_MIDESK_FRAME_F           4325
+#define IDM_RESET_EEPROM                4326
+#define IDS_RESET_EEPROM                4327
+#define IDS_RESET_EEPROM_COMFIRMATION   4328
+#define IDS_FW_RESET_EEPROM_STARTED     4329 

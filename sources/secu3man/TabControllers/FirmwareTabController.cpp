@@ -92,6 +92,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));
  m_view->setOnReadEepromToFile(MakeDelegate(this, &CFirmwareTabController::OnReadEepromToFile));
  m_view->setOnWriteEepromFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteEepromFromFile));
+ m_view->setOnResetEeprom(MakeDelegate(this, &CFirmwareTabController::OnResetEeprom));
  m_view->setOnReadFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnReadFlashToFile));
  m_view->setOnWriteFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashFromFile));
  m_view->setOnBLStartedEmergency(MakeDelegate(this, &CFirmwareTabController::OnBLStartedEmergency));
@@ -212,6 +213,10 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    case SECU3IO::OPCODE_SAVE_TABLSET:     //таблицы были сохранены
     m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
+   case SECU3IO::OPCODE_RESET_EEPROM:     //начался процесс сброса EEPROM
+    if (p_ndata->opdata == 0x55)
+     m_sbar->SetInformationText(MLL::LoadString(IDS_FW_RESET_EEPROM_STARTED));
+    return;
   } 
  }
 }
@@ -234,6 +239,7 @@ void CFirmwareTabController::OnConnection(const bool i_online)
   m_view->SetBLStartedEmergency(false);
 
   m_view->EnableAppItems(true);
+  m_sbar->SetInformationText(_T(""));
  }
  else
  { //перешли в оффлайн
@@ -563,6 +569,17 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
 
  m_sbar->ShowProgressBar(true);
  m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::OnResetEeprom(void)
+{
+ if (IDYES==AfxMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ {
+  SECU3IO::OPCompNc packet_data;
+  packet_data.opcode = SECU3IO::OPCODE_RESET_EEPROM;
+  packet_data.opdata = 0xAA;
+  m_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+ }
 }
 
 void CFirmwareTabController::OnReadFlashToFile(void)

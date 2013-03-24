@@ -91,6 +91,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnBootLoaderInfo(void);
   void OnReadEepromToFile(void);
   void OnWriteEepromFromFile(void);
+  void OnResetEeprom(void);
   void OnReadFlashToFile(void);
   void OnWriteFlashFromFile(void);
   void OnOpenFlashFromFile(void);

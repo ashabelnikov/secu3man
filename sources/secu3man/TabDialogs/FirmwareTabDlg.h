@@ -105,6 +105,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   void setOnViewFWOptions(EventHandler OnFunction);
   void setIsViewFWOptionsAvailable(EventResult OnFunction);
   void setIsIORemappingAvailable(EventResult IsFunction);
+  void setOnResetEeprom(EventHandler OnFunction);
   //... от кнопок и чек боксов
   void setOnBLStartedEmergency(EventHandler OnFunction);
   //Drag and Drop
@@ -126,6 +127,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   afx_msg void OnBootLoaderInfo();
   afx_msg void OnReadEepromToFile();
   afx_msg void OnWriteEepromFromFile();
+  afx_msg void OnResetEeprom();
   afx_msg void OnReadFlashToFile();
   afx_msg void OnWriteFlashFromFile();
   afx_msg void OnUpdateBLStartedEmergency(CCmdUI* pCmdUI);
@@ -170,6 +172,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   EventHandler  m_OnBootLoaderInfo;
   EventHandler  m_OnReadEepromToFile;
   EventHandler  m_OnWriteEepromFromFile;
+  EventHandler  m_OnResetEeprom;
   EventHandler  m_OnReadFlashToFile;
   EventHandler  m_OnWriteFlashFromFile;
   EventHandler  m_OnBLStartedEmergency;
