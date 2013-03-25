@@ -364,15 +364,14 @@ DWORD CFirmwareDataMediator::GetFWOptions(void)
 
 DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp)
 {
- ASSERT(ip_fpp);
+ if (ip_source_bytes) ASSERT(ip_fpp);
  cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
  if (p_cd)
   return CAST_CDDATA(p_cd, config);
  else
  {
   //there is no such data in this firmware, then we have to use old place
-  LocInfoProvider lip(*ip_fpp);
-  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[lip.FIRMWARE_DATA_START]); 
+  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[ip_fpp ? LocInfoProvider(*ip_fpp).FIRMWARE_DATA_START : m_lip->FIRMWARE_DATA_START]); 
   return p_fd->exdata.reserv32;  
  }
 }
@@ -561,9 +560,9 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
 
  mp_cddata = _FindCodeData();
 
- //Compensate ADC correction factors then destination and source firmware use different ADC Vref
+ //Compensate ADC correction factors when destination and source firmware use different ADC Vref
  DWORD dst_fwopt = GetFWOptions();
- DWORD src_fwopt = GetFWOptions(ip_source_bytes, ip_fpp);
+ DWORD src_fwopt = GetFWOptions(ip_source_bytes, ip_fpp ? ip_fpp : m_fpp.get());
  if ((dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && !(src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))
   _CompensateVRef(&p_fd->def_param, true);  //5v <-- 2.56v
  if (!(dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && (src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))

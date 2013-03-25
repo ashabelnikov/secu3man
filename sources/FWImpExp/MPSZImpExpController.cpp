@@ -64,7 +64,14 @@ int MPSZImportController::DoImport(void)
   else if (open.GetOFN().nFilterIndex == 3 && open.GetFileExt()==_T("mpz"))
    type = MPSZFileDataIO::FILE_TYPE_MPZ;
   else
-   type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
+  {
+   if (open.GetFileExt() == _T("mpx"))
+    type = MPSZFileDataIO::FILE_TYPE_MPX;
+   else if (open.GetFileExt() == _T("mpz"))
+    type = MPSZFileDataIO::FILE_TYPE_MPZ;
+   else
+    type = MPSZFileDataIO::FILE_TYPE_MPX; //если у файла нет расширения или оно другое то по умолчанию mpx
+  }
 
   m_mpsz_file_name = _TSTRING(open.GetFileName());
   bool result = mp_mpsz_io->Load(_TSTRING(open.GetPathName()),type);

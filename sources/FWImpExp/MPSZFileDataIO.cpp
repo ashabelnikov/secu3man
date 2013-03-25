@@ -125,6 +125,18 @@ bool MPSZFileDataIO::Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes
   if (size==p_object->GetRequiredRawSize())
    goto l_ok_to_read; //stupid 4864 bytes version
  }
+ if (i_file_type==FILE_TYPE_MPX)
+ {
+  p_object = factory.CreateIOObject(FILE_TYPE_MPXv2);
+  if (size==p_object->GetRequiredRawSize())
+   goto l_ok_to_read; //V2
+ }
+ if (i_file_type==FILE_TYPE_MPXv2)
+ {
+  p_object = factory.CreateIOObject(FILE_TYPE_MPX);
+  if (size==p_object->GetRequiredRawSize())
+   goto l_ok_to_read; //V1
+ }
 
  file.Close();
  return false;  //некорректный размер файла
