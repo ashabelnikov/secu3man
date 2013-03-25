@@ -79,7 +79,9 @@ class MPSZFileDataIO
   {
    FILE_TYPE_MPX = 0,
    FILE_TYPE_MPXv2,
-   FILE_TYPE_MPZ
+   FILE_TYPE_MPZ,
+   FILE_TYPE_MPZ288,  //288  bytes (without idle map)
+   FILE_TYPE_MPX4864  //4864 bytes (V2, but without RPM grid)
   };
 
   bool Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes i_file_type);
@@ -106,9 +108,9 @@ class MPSZDataBase
   //abstract -> bynary
   virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata) = 0;
 
-  virtual int GetRequiredRawSize(void)  = 0;
+  virtual int GetRequiredRawSize(void) const = 0;
 
-  virtual int GetActualSetsNumber(void) = 0;
+  virtual int GetActualSetsNumber(void) const = 0;
 };
 
 class MPSZDataMPX_IO : public MPSZDataBase
@@ -129,9 +131,9 @@ class MPSZDataMPX_IO : public MPSZDataBase
   //abstract -> bynary
   virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
 
-  virtual int GetRequiredRawSize(void)  {return SIZE_OF_RAW_DATA;};
+  virtual int GetRequiredRawSize(void) const {return SIZE_OF_RAW_DATA;};
 
-  virtual int GetActualSetsNumber(void) {return ACTUAL_SETS_NUMBER;};
+  virtual int GetActualSetsNumber(void) const {return ACTUAL_SETS_NUMBER;};
 };
 
 class MPSZDataMPXv2_IO : public MPSZDataBase
@@ -152,9 +154,32 @@ class MPSZDataMPXv2_IO : public MPSZDataBase
   //abstract -> bynary
   virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
 
-  virtual int GetRequiredRawSize(void)  {return SIZE_OF_RAW_DATA;};
+  virtual int GetRequiredRawSize(void) const { return SIZE_OF_RAW_DATA;};
 
-  virtual int GetActualSetsNumber(void) {return ACTUAL_SETS_NUMBER;};
+  virtual int GetActualSetsNumber(void) const {return ACTUAL_SETS_NUMBER;};
+};
+
+class MPSZDataMPX4864_IO : public MPSZDataBase
+{
+ public:
+  MPSZDataMPX4864_IO() {};
+  virtual ~MPSZDataMPX4864_IO() {};
+
+  enum
+  {
+   ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS,
+   SIZE_OF_RAW_DATA   = 4864
+  };
+
+  //binary -> abstract
+  virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);
+
+  //abstract -> bynary
+  virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
+
+  virtual int GetRequiredRawSize(void) const { return SIZE_OF_RAW_DATA;};
+
+  virtual int GetActualSetsNumber(void) const {return ACTUAL_SETS_NUMBER;};
 };
 
 class MPSZDataMPZ_IO : public MPSZDataBase
@@ -172,9 +197,29 @@ class MPSZDataMPZ_IO : public MPSZDataBase
   virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);
   virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
 
-  virtual int GetRequiredRawSize(void)  {return SIZE_OF_RAW_DATA;};
+  virtual int GetRequiredRawSize(void) const {return SIZE_OF_RAW_DATA;};
 
-  virtual int GetActualSetsNumber(void) {return ACTUAL_SETS_NUMBER;};
+  virtual int GetActualSetsNumber(void) const {return ACTUAL_SETS_NUMBER;};
+};
+
+class MPSZDataMPZ288_IO : public MPSZDataBase
+{
+ public:
+  MPSZDataMPZ288_IO() {};
+  virtual ~MPSZDataMPZ288_IO() {};
+
+  enum
+  {
+   ACTUAL_SETS_NUMBER = MPSZ_NUMBER_OF_MAPS_IN_MPZ_FILE,
+   SIZE_OF_RAW_DATA   = 288
+  };
+
+  virtual void operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data);
+  virtual void operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata);
+
+  virtual int GetRequiredRawSize(void) const { return SIZE_OF_RAW_DATA;}
+
+  virtual int GetActualSetsNumber(void) const {return ACTUAL_SETS_NUMBER;};
 };
 
 /////////////////////////////////////////////////////////////////////////////////////////

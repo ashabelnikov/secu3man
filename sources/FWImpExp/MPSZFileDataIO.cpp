@@ -53,8 +53,18 @@ class MPSZIOFactory
      garbage_list.push_back(p_object);
      return p_object;
 
+    case MPSZFileDataIO::FILE_TYPE_MPX4864:
+     p_object = new MPSZDataMPX4864_IO();
+     garbage_list.push_back(p_object);
+     return p_object;
+
     case MPSZFileDataIO::FILE_TYPE_MPZ:
      p_object = new MPSZDataMPZ_IO();
+     garbage_list.push_back(p_object);
+     return p_object;
+
+    case MPSZFileDataIO::FILE_TYPE_MPZ288:
+     p_object = new MPSZDataMPZ288_IO();
      garbage_list.push_back(p_object);
      return p_object;
 
@@ -100,17 +110,30 @@ bool MPSZFileDataIO::Load(const _TSTRING i_file_name, MPSZFileDataIO::EFileTypes
  BYTE rawdata[65536];
  MPSZIOFactory factory;
  MPSZDataBase* p_object = factory.CreateIOObject(i_file_type);
- int size = p_object->GetRequiredRawSize();
- if (file.GetLength()!=size)
+ ULONGLONG size = file.GetLength();
+ if (size==p_object->GetRequiredRawSize())
+  goto l_ok_to_read; //normal behaviour
+ if (i_file_type==FILE_TYPE_MPZ)
  {
-  file.Close();
-  return false;  //некорректный размер файла
+  p_object = factory.CreateIOObject(FILE_TYPE_MPZ288);
+  if (size==p_object->GetRequiredRawSize())
+   goto l_ok_to_read; //stupid 288 bytes version
+ }
+ if (i_file_type==FILE_TYPE_MPX)
+ {
+  p_object = factory.CreateIOObject(FILE_TYPE_MPX4864);
+  if (size==p_object->GetRequiredRawSize())
+   goto l_ok_to_read; //stupid 4864 bytes version
  }
 
- file.Read(rawdata, size);
+ file.Close();
+ return false;  //некорректный размер файла
+
+l_ok_to_read:
+ file.Read(rawdata, (UINT)size);
  file.Close();
 
- p_object->operator()(rawdata,&m_data);
+ p_object->operator()(rawdata, &m_data);
  return true;
 }
 
@@ -405,6 +428,138 @@ void MPSZDataMPXv2_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_ra
  }
 }
 
+void MPSZDataMPX4864_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data)
+{
+ ASSERT(op_data);
+
+ #pragma pack(1) //Внимание! выравнивание 1 байт.
+
+ struct V2DataItem
+ {
+  WORD slotVal;       //2 bytes
+  WORD slotDiff;      //2 bytes
+  BYTE reserved[12];  //12 bytes
+ };
+
+ struct MPXStructure
+ {
+  BYTE names[MPSZ_NUMBER_OF_MAPS][MPSZ_MAPS_NAME_SIZE];
+  BYTE start[MPSZ_NUMBER_OF_MAPS][MPSZ_START_MAP_SIZE];
+  BYTE  idle[MPSZ_NUMBER_OF_MAPS][MPSZ_IDLE_MAP_SIZE];
+  BYTE  work[MPSZ_NUMBER_OF_MAPS][MPSZ_WORK_MAP_SIZE_L][MPSZ_WORK_MAP_SIZE_F];
+  V2DataItem data[MPSZ_WORK_MAP_SIZE_F]; //256 bytes
+ };
+
+ MPXStructure* p_raws = (MPXStructure*)ip_rawdata;
+ int i, j;
+
+ USES_CONVERSION;
+ //вытягиваем имена наборов характеристик
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  char raw_str[32];
+  memset(raw_str,0,32);
+  for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
+   raw_str[j] = p_raws->names[i][j];
+  op_data->maps[i].name = A2T(raw_str);
+ }
+
+ //120 - новое магическое число ;-)
+ //вытягиваем пусковую карту
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
+   op_data->maps[i].f_str[j] = (120 - (p_raws->start[i][j])) / 2.0f;
+ }
+
+ //вытягиваем карту ХХ
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
+   op_data->maps[i].f_idl[j] = (120 - (p_raws->idle[i][j])) / 2.0f;
+ }
+
+ //вытягиваем рабочую карту
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  int k = 0;
+  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  {
+   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
+    op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (120 - (p_raws->work[i][j][f])) / 2.0f;
+  }
+ }
+
+ //в этом файле нет сетки оборотов, копируем "стандартную"
+ for(i = 0; i < MPSZ_WORK_MAP_SIZE_F; ++i)
+  op_data->rpm_slots[i] = mpsz_std_rpm_slots[i];
+
+ op_data->m_actual_sets_num = GetActualSetsNumber();
+}
+
+void MPSZDataMPX4864_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata)
+{
+ ASSERT(ip_data);
+
+ #pragma pack(1)
+
+ struct V2DataItem
+ {
+  WORD slotVal;       //2 bytes
+  WORD slotDiff;      //2 bytes
+  BYTE reserved[12];  //12 bytes
+ };
+
+ struct MPXStructure
+ {
+  BYTE names[MPSZ_NUMBER_OF_MAPS][MPSZ_MAPS_NAME_SIZE];
+  BYTE start[MPSZ_NUMBER_OF_MAPS][MPSZ_START_MAP_SIZE];
+  BYTE  idle[MPSZ_NUMBER_OF_MAPS][MPSZ_IDLE_MAP_SIZE];
+  BYTE  work[MPSZ_NUMBER_OF_MAPS][MPSZ_WORK_MAP_SIZE_L][MPSZ_WORK_MAP_SIZE_F];
+  V2DataItem data[MPSZ_WORK_MAP_SIZE_F]; //256 bytes
+ };
+
+ MPXStructure* p_raws = (MPXStructure*)op_rawdata;
+ int i, j;
+
+ USES_CONVERSION;
+ //засовываем имена наборов характеристик
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  char raw_str[32];
+  memset(raw_str,0,32);
+  strcpy(raw_str,T2A(const_cast<TCHAR*>(ip_data->maps[i].name.c_str())));
+  for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
+   p_raws->names[i][j] = raw_str[j];
+ }
+
+ //120 - новое магическое число ;-)
+ //засовываем пусковую карту
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
+   p_raws->start[i][j] = (120 - MathHelpers::Round(ip_data->maps[i].f_str[j] * 2.0f));
+ }
+
+ //засовываем карту ХХ (при этом не затираем пусковую карту)
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
+   p_raws->idle[i][j] = (120 - MathHelpers::Round(ip_data->maps[i].f_idl[j] * 2.0f));
+ }
+
+ //засовываем рабочую карту
+ for (i = 0; i < MPSZ_NUMBER_OF_MAPS; i++)
+ {
+  int k = 0;
+  for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+  {
+   for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
+    p_raws->work[i][j][f] = (120 - MathHelpers::Round(ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] * 2.0f));
+  }
+ }
+}
+
 ////////////////////////////////////////////////////////////////////////////////
 void MPSZDataMPZ_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data)
 {
@@ -489,4 +644,84 @@ void MPSZDataMPZ_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawd
  //засовываем карту ХХ
  for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
   p_raws->idl[j] = MathHelpers::Round((ip_data->maps[i].f_idl[j]) * 2.0f);
+}
+
+void MPSZDataMPZ288_IO::operator()(const BYTE* ip_rawdata, MPSZMapsDataHolder* op_data)
+{
+ ASSERT(op_data);
+
+ #pragma pack(1)
+
+ struct MPZStructure
+ {
+  BYTE work[MPSZ_WORK_MAP_SIZE_L][MPSZ_WORK_MAP_SIZE_F];
+  BYTE str[MPSZ_START_MAP_SIZE];
+  BYTE name[MPSZ_MAPS_NAME_SIZE];
+  BYTE idl[MPSZ_IDLE_MAP_SIZE];
+ };
+
+ MPZStructure* p_raws = (MPZStructure*)ip_rawdata;
+ int i = 0, j;
+
+ //вытягиваем рабочую карту
+ int k = 0;
+ for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ {
+  for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
+   op_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f] = (p_raws->work[j][f]) / 2.0f;
+ }
+
+ //вытягиваем пусковую карту
+ for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
+  op_data->maps[i].f_str[j] = (p_raws->str[j]) / 2.0f;
+
+ USES_CONVERSION;
+ char raw_str[32];
+ memset(raw_str,0,32);
+ for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++)
+  raw_str[j] = p_raws->name[j];
+ op_data->maps[i].name = A2T(raw_str);
+
+ //This file does not contain idle map
+ for(j = 0; j < MPSZ_IDLE_MAP_SIZE; j++)
+  op_data->maps[i].f_idl[j] = 0.0f; //fill with zeros
+
+ op_data->m_actual_sets_num = GetActualSetsNumber();
+}
+
+void MPSZDataMPZ288_IO::operator()(const MPSZMapsDataHolder* ip_data, BYTE* op_rawdata)
+{
+ ASSERT(ip_data);
+
+ #pragma pack(1)
+
+ struct MPZStructure
+ {
+  BYTE work[MPSZ_WORK_MAP_SIZE_L][MPSZ_WORK_MAP_SIZE_F];
+  BYTE str[MPSZ_START_MAP_SIZE];
+  BYTE name[MPSZ_MAPS_NAME_SIZE];
+ };
+
+ MPZStructure* p_raws = (MPZStructure*)op_rawdata;
+ int i = 0, j;
+
+ //засовываем рабочую карту
+ int k = 0;
+ for(j = MPSZ_WORK_MAP_SIZE_L-1; j >= 0; j--, k++)
+ {
+  for(int f = 0; f < MPSZ_WORK_MAP_SIZE_F; f++)
+   p_raws->work[j][f] = MathHelpers::Round((ip_data->maps[i].f_wrk[(k*MPSZ_WORK_MAP_SIZE_F)+f]) * 2.0f);
+ }
+
+ //засовываем пусковую карту
+ for(j = 0; j < MPSZ_START_MAP_SIZE; j++)
+  p_raws->str[j] = MathHelpers::Round((ip_data->maps[i].f_str[j]) * 2.0f);
+
+ //засовываем fucking имя
+ USES_CONVERSION;
+ char raw_str[32];
+ memset(raw_str,0,32);
+ strcpy(raw_str,T2A(const_cast<TCHAR*>(ip_data->maps[i].name.c_str())));
+ for(j = 0; j < MPSZ_MAPS_NAME_SIZE; j++) //копируем только определенное кол-во символов
+  p_raws->name[j] = raw_str[j];
 }
