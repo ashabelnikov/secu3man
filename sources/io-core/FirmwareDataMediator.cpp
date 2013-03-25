@@ -364,14 +364,14 @@ DWORD CFirmwareDataMediator::GetFWOptions(void)
 
 DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp)
 {
- if (ip_source_bytes) ASSERT(ip_fpp);
+ ASSERT(ip_source_bytes && ip_fpp);
  cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
  if (p_cd)
   return CAST_CDDATA(p_cd, config);
  else
  {
   //there is no such data in this firmware, then we have to use old place
-  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[ip_fpp ? LocInfoProvider(*ip_fpp).FIRMWARE_DATA_START : m_lip->FIRMWARE_DATA_START]); 
+  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[LocInfoProvider(*ip_fpp).FIRMWARE_DATA_START]); 
   return p_fd->exdata.reserv32;  
  }
 }
