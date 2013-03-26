@@ -214,3 +214,8 @@ void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex,
   state.m_nIndexMax = nCount;
  }//for
 }
+
+int CFirmwareModeContextMenuManager::GetItemCount(void) const
+{
+ return m_ParentMenu.GetMenuItemCount();
+}

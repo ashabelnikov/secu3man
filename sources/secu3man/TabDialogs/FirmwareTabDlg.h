@@ -116,6 +116,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnPopupMenuButton();
   afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePopupMenu_file(CCmdUI* pCmdUI);
   afx_msg void OnUpdatePopupMenu_file1(CCmdUI* pCmdUI);

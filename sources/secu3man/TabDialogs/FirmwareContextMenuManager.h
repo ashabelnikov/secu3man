@@ -38,6 +38,8 @@ class CFirmwareModeContextMenuManager
   //Надо вызывать когда окну приходит WM_INITMENUPOPUP
   void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 
+  int GetItemCount(void) const;
+
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_ParentMenu;  //Top level menu

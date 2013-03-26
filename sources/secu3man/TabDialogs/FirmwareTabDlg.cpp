@@ -85,6 +85,7 @@ LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
 }
 
 BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
+ ON_BN_CLICKED(IDC_FW_POPUPMENU_BUTTON, OnPopupMenuButton)
  ON_WM_CONTEXTMENU()
  ON_UPDATE_COMMAND_UI(IDM_READ_FLASH, OnUpdatePopupMenu_bl)
  ON_UPDATE_COMMAND_UI(IDM_OPEN_FLASH, OnUpdatePopupMenu_file)
@@ -225,11 +226,18 @@ void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
  mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
 }
 
+void CFirmwareTabDlg::OnPopupMenuButton()
+{
+ CRect rc;
+ GetDlgItem(IDC_FW_POPUPMENU_BUTTON)->GetWindowRect(rc);
+ int offset = ::GetSystemMetrics(SM_CYMENU)*(mp_ContextMenuManager->GetItemCount()-4);
+ mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top-offset);
+}
+
 void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
 {
  mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
-
 
 void CFirmwareTabDlg::OnUpdatePopupMenu_bl(CCmdUI* pCmdUI)
 {
