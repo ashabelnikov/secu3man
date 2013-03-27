@@ -310,3 +310,7 @@
 #define IDS_RESET_EEPROM_COMFIRMATION   4328
 #define IDS_FW_RESET_EEPROM_STARTED     4329 
 #define IDC_FW_POPUPMENU_BUTTON         4330
+#define IDC_KC_REALTIME_LIST            4331
+#define IDC_KC_LIST_CHECKBOX            4332
+#define IDS_KC_LIST_HDR_RPM             4333
+#define IDS_KC_LIST_HDR_VALUE           4334

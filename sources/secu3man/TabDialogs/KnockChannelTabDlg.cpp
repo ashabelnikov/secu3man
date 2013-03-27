@@ -75,6 +75,8 @@ void CKnockChannelTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_KC_DESIRED_LEVEL_SLIDER, m_level_slider);
  DDX_Control(pDX, IDC_KC_DLSM_CHECKBOX, m_dlsm_checkbox);
  DDX_Control(pDX, IDC_KC_DESIRED_LEVEL_TEXT, m_level_text);
+ DDX_Control(pDX, IDC_KC_REALTIME_LIST, m_RTList);
+ DDX_Control(pDX, IDC_KC_LIST_CHECKBOX, m_list_checkbox);
 }
 
 LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
@@ -91,6 +93,7 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_BN_CLICKED(IDC_KC_CLEAR_FUNCTION, OnClearFunction)
  ON_UPDATE_COMMAND_UI(IDC_KC_CLEAR_FUNCTION, OnUpdateClearFunction)
  ON_BN_CLICKED(IDC_KC_DLSM_CHECKBOX, OnDLSMCheckbox)
+ ON_BN_CLICKED(IDC_KC_LIST_CHECKBOX, OnListCheckbox)
  ON_WM_TIMER()
  ON_WM_VSCROLL()
 END_MESSAGE_MAP()
@@ -130,6 +133,9 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  //инициализируем осциллограф
  _InitializeOscilloscopeControl();
 
+ //Initialize list of signal points
+ _InitializeRPMKnockSignalList();
+
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -151,6 +157,21 @@ void CKnockChannelTabDlg::OnDLSMCheckbox()
 {
  m_dlsm_checkbox_state = m_dlsm_checkbox.GetCheck()==BST_CHECKED;
  m_level_slider.EnableWindow(!m_dlsm_checkbox_state);
+}
+
+void CKnockChannelTabDlg::OnListCheckbox()
+{
+ bool list_checkbox_state = m_list_checkbox.GetCheck()==BST_CHECKED;
+ if (list_checkbox_state)
+ {
+  m_RTList.ShowWindow(SW_SHOW);
+  mp_RTChart->ShowWindow(SW_HIDE);
+ }
+ else
+ {
+  m_RTList.ShowWindow(SW_HIDE);
+  mp_RTChart->ShowWindow(SW_SHOW);
+ }
 }
 
 void CKnockChannelTabDlg::EnableAll(bool i_enable)
@@ -195,6 +216,9 @@ void CKnockChannelTabDlg::SetRPMKnockSignal(const std::vector<float> &i_values)
  {
   m_pPointSerie->SetYPointValue(i, i_values[i]);
   m_pLineSerie->SetYPointValue(i, i_values[i]);
+  TCHAR str[32];
+  _stprintf(str, _T("%0.3f"), i_values[i]);
+  m_RTList.SetItemText(i, 2, str);
  }
  mp_RTChart->EnableRefresh(true);
 }
@@ -244,6 +268,27 @@ void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
  //инициализация слайдера и установка дефаултного значения уровня
  m_level_slider.SetRange(0, LEVEL_SLIDER_POS_NUM);
  SetDesiredLevel(K_SIG_MIN);
+}
+
+void CKnockChannelTabDlg::_InitializeRPMKnockSignalList(void)
+{
+ m_RTList.SetExtendedStyle(LVS_EX_FULLROWSELECT | LVS_EX_GRIDLINES);
+ m_RTList.InsertColumn(0, _T("N"), LVCFMT_LEFT, 35);
+ m_RTList.InsertColumn(1, MLL::GetString(IDS_KC_LIST_HDR_RPM).c_str(), LVCFMT_CENTER, 70);
+ m_RTList.InsertColumn(2, MLL::GetString(IDS_KC_LIST_HDR_VALUE).c_str(), LVCFMT_CENTER, 160);
+
+ int rpm = RPM_AXIS_MIN;
+ int rpm_step = RPM_AXIS_STEP;
+ //Add items
+ for(size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; ++i)
+ {  
+  TCHAR str[32];
+  _stprintf(str, _T("%d"), i+1);
+  m_RTList.InsertItem(i, str);
+  _stprintf(str, _T("%d"), rpm);
+  m_RTList.SetItemText(i, 1, str);
+  rpm+=rpm_step;
+ }
 }
 
 //инициализация осциллографа
