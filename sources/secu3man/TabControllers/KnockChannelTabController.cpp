@@ -96,6 +96,9 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_v
  mp_view->mp_knock_parameters_dlg->setFunctionOnChange(MakeDelegate(this,&CKnockChannelTabController::OnParametersChange));
  mp_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
  mp_view->setOnClearFunction(MakeDelegate(this,&CKnockChannelTabController::OnClearFunction));
+ mp_view->setOnResetPoints(MakeDelegate(this,&CKnockChannelTabController::OnResetPoints));
+ mp_view->setOnLoadPoints(MakeDelegate(this,&CKnockChannelTabController::OnLoadPoints));
+ mp_view->setOnSavePoints(MakeDelegate(this,&CKnockChannelTabController::OnSavePoints));
 
  _InitializeRPMKnockFunctionBuffer();
 }
@@ -448,6 +451,16 @@ void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(void)
  }
 }
 
+void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(const std::vector<int>& pointIndexes)
+{
+ for(size_t i = 0; i < pointIndexes.size(); ++i)
+ {
+  size_t index = pointIndexes[i];
+  m_rpm_knock_signal[index] = std::vector<float>();
+  m_rpm_knock_signal_ii[index] = 0;
+ }
+}
+
 void CKnockChannelTabController::OnCopyToAttenuatorTable(void)
 {
  CFirmwareTabController* p_controller = static_cast<CFirmwareTabController*>
@@ -517,4 +530,92 @@ void CKnockChannelTabController::OnClearFunction(void)
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);
  mp_view->SetRPMKnockSignal(values);
+}
+
+void CKnockChannelTabController::OnResetPoints(const std::vector<int>& pointIndexes)
+{
+ _InitializeRPMKnockFunctionBuffer(pointIndexes);
+ //перекачиваем данные из буфера в график на представлении
+ std::vector<float> values;
+ _PerformAverageOfRPMKnockFunctionValues(values);
+ mp_view->SetRPMKnockSignal(values);
+}
+
+void CKnockChannelTabController::OnLoadPoints(void)
+{
+ FILE* fin = NULL;
+ static TCHAR BASED_CODE szFilter[] = _T("KND Files (*.knd)|*.knd|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+
+ if (open.DoModal()==IDOK)
+ {
+  fin = _tfopen(open.GetPathName(),_T("rb"));
+  if (NULL == fin)
+  {
+   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
+   return;
+  }
+
+  const int maxRec = 20;
+  char string[maxRec + 1];
+  int rpm = CKnockChannelTabDlg::RPM_AXIS_MIN;
+  std::vector<float> values;
+
+  bool error = false;
+  while(fgets(string, maxRec, fin) != NULL)
+  {
+   int rrpm = 0;
+   float value = 0;
+   if (2==sscanf(string, "%d, %f", &rrpm, &value))
+   {
+    if (rpm != rrpm)
+     error = true;
+    values.push_back(value);
+   }
+   else
+    error = true;
+   rpm+=CKnockChannelTabDlg::RPM_AXIS_STEP;
+  }
+
+  if (error || (values.size() != CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS))
+  {
+   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_LOAD_FILE).c_str(), MB_ICONSTOP);
+   return;
+  }
+
+  _InitializeRPMKnockFunctionBuffer();
+  for(size_t index = 0; index < values.size(); ++index)
+   m_rpm_knock_signal[index].push_back(values[index]);
+
+  fclose(fin);
+ }
+}
+
+void CKnockChannelTabController::OnSavePoints(void)
+{
+ FILE* fout = NULL;
+ static TCHAR BASED_CODE szFilter[] = _T("KND Files (*.knd)|*.knd|All Files (*.*)|*.*||");
+ CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ save.m_ofn.lpstrDefExt = _T("knd");
+ if (save.DoModal()==IDOK)
+ {
+  fout = _tfopen(save.GetPathName(),_T("wb+"));
+  if (NULL == fout)
+  {
+   AfxMessageBox(MLL::GetString(IDS_KC_LIST_ERROR_SAVE_FILE).c_str(), MB_ICONSTOP);
+   return;
+  }
+
+  std::vector<float> values;
+  _PerformAverageOfRPMKnockFunctionValues(values);
+
+  int rpm = CKnockChannelTabDlg::RPM_AXIS_MIN;
+  for(size_t i = 0; i < values.size(); ++i)
+  {
+   fprintf(fout, "%05d, %0.3f\n", rpm, values[i]);
+   rpm+=CKnockChannelTabDlg::RPM_AXIS_STEP;
+  }
+
+  fclose(fout);
+ }
 }

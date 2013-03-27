@@ -31,6 +31,7 @@
 #include "HiSCCtrl/sources/ChartCtrl.h"
 #include "HiSCCtrl/sources/ChartPointsSerie.h"
 #include "HiSCCtrl/sources/ChartLineSerie.h"
+#include "KnockContextMenuManager.h"
 #include "ParamDesk/Params/KnockPageDlg.h"
 #include "ui-core/OScopeCtrl.h"
 
@@ -42,8 +43,6 @@ using namespace fastdelegate;
 #define K_SIG_MIN 0.0f
 #define K_SIG_MAX 5.0f
 #define LEVEL_SLIDER_POS_NUM 100
-#define RPM_AXIS_MIN  200
-#define RPM_AXIS_STEP 60
 #define RPM_AXIS_MAX  (RPM_AXIS_MIN + (RPM_KNOCK_SIGNAL_POINTS * RPM_AXIS_STEP))
 
 const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
@@ -54,6 +53,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , mp_knock_parameters_dlg(new CKnockPageDlg())
 , mp_knock_frq_calc_dlg(new CKnockFrqCalcDlg())
 , mp_OScopeCtrl(new COScopeCtrl())
+, mp_ContextMenuManager(new CKnockContextMenuManager())
 , m_all_enabled(true)
 , m_pPointSerie(NULL)
 , m_pLineSerie(NULL)
@@ -63,6 +63,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_clear_function_button_state(true)
 , m_dlsm_checkbox_state(true)
 {
+ mp_ContextMenuManager->CreateContent();
  mp_knock_frq_calc_dlg->setOnCalculate(MakeDelegate(this, &CKnockChannelTabDlg::OnFrqCalculate));
 }
 
@@ -86,6 +87,8 @@ LPCTSTR CKnockChannelTabDlg::GetDialogID(void) const
 
 BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_INITMENUPOPUP()
+ ON_WM_CONTEXTMENU()
  ON_BN_CLICKED(IDC_KC_SAVE_PARAM_BUTTON, OnSaveParameters)
  ON_UPDATE_COMMAND_UI(IDC_KC_SAVE_PARAM_BUTTON, OnUpdateControls)
  ON_BN_CLICKED(IDC_KC_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
@@ -94,6 +97,10 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_KC_CLEAR_FUNCTION, OnUpdateClearFunction)
  ON_BN_CLICKED(IDC_KC_DLSM_CHECKBOX, OnDLSMCheckbox)
  ON_BN_CLICKED(IDC_KC_LIST_CHECKBOX, OnListCheckbox)
+ ON_UPDATE_COMMAND_UI(IDM_KC_LIST_RESET_POINTS, OnUpdateListResetPoints)
+ ON_COMMAND(IDM_KC_LIST_RESET_POINTS, OnListResetPoints)
+ ON_COMMAND(IDM_KC_LIST_LOAD_POINTS, OnListLoadPoints)
+ ON_COMMAND(IDM_KC_LIST_SAVE_POINTS, OnListSavePoints)
  ON_WM_TIMER()
  ON_WM_VSCROLL()
 END_MESSAGE_MAP()
@@ -136,6 +143,8 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  //Initialize list of signal points
  _InitializeRPMKnockSignalList();
 
+ mp_ContextMenuManager->Attach(this);
+
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
 }
@@ -145,6 +154,17 @@ void CKnockChannelTabDlg::OnDestroy()
  Super::OnDestroy();
  delete mp_RTChart;
  KillTimer(TIMER_ID);
+}
+
+void CKnockChannelTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
+{
+ mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
+}
+
+void CKnockChannelTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
+{
+ if (pWnd->m_hWnd == m_RTList.m_hWnd)
+  mp_ContextMenuManager->TrackPopupMenu(point.x, point.y);
 }
 
 void CKnockChannelTabDlg::OnSaveParameters(void)
@@ -194,6 +214,11 @@ void CKnockChannelTabDlg::OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI)
 void CKnockChannelTabDlg::OnUpdateClearFunction(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(/*m_all_enabled && */m_clear_function_button_state);
+}
+
+void CKnockChannelTabDlg::OnUpdateListResetPoints(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_RTList.GetSelectedCount());
 }
 
 void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
@@ -325,6 +350,21 @@ void CKnockChannelTabDlg::setOnClearFunction(EventHandler OnFunction)
  m_OnClearFunction = OnFunction;
 }
 
+void CKnockChannelTabDlg::setOnResetPoints(EventIndexes OnFunction)
+{
+ m_OnResetPoints = OnFunction;
+}
+
+void CKnockChannelTabDlg::setOnLoadPoints(EventHandler OnFunction)
+{
+ m_OnLoadPoints = OnFunction;
+}
+
+void CKnockChannelTabDlg::setOnSavePoints(EventHandler OnFunction)
+{
+ m_OnSavePoints = OnFunction;
+}
+
 void CKnockChannelTabDlg::OnCopyToAttenuatorTable()
 {
  if (m_OnCopyToAttenuatorTable)
@@ -454,4 +494,34 @@ void CKnockChannelTabDlg::OnFrqCalculate(float frq)
  mp_knock_parameters_dlg->SetValues(&values);
  //apply changes
  mp_knock_parameters_dlg->ForceOnChangeNotify();
+}
+
+void CKnockChannelTabDlg::OnListResetPoints()
+{
+ std::vector<int> pointIndexes;
+ UINT i, uSelectedCount = m_RTList.GetSelectedCount();
+ int  nItem = -1;
+ if (uSelectedCount > 0)
+ {
+  for (i = 0; i < uSelectedCount; i++)
+  {
+   nItem = m_RTList.GetNextItem(nItem, LVNI_SELECTED);
+   ASSERT(nItem != -1);
+   pointIndexes.push_back(nItem);
+  }
+ } 
+ if (m_OnResetPoints)
+  m_OnResetPoints(pointIndexes);
+}
+
+void CKnockChannelTabDlg::OnListLoadPoints()
+{
+ if (m_OnLoadPoints)
+  m_OnLoadPoints();
+}
+
+void CKnockChannelTabDlg::OnListSavePoints()
+{
+ if (m_OnSavePoints)
+  m_OnSavePoints();
 }

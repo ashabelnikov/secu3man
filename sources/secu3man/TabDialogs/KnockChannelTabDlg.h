@@ -29,14 +29,16 @@
 class CChartCtrl;
 class CChartLineSerie;
 class CChartPointsSerie;
-class CKnockPageDlg;
+class CKnockContextMenuManager;
 class CKnockFrqCalcDlg;
+class CKnockPageDlg;
 class COScopeCtrl;
 
 class CKnockChannelTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate1<const std::vector<int>&> EventIndexes;
 
  public:
   CKnockChannelTabDlg(CWnd* pParent = NULL);   // standard constructor
@@ -46,6 +48,9 @@ class CKnockChannelTabDlg : public CTabDialog
   void setOnSaveParameters(EventHandler OnFunction);
   void setOnCopyToAttenuatorTable(EventHandler OnFunction);
   void setOnClearFunction(EventHandler OnFunction);
+  void setOnResetPoints(EventIndexes OnFunction);
+  void setOnLoadPoints(EventHandler OnFunction);
+  void setOnSavePoints(EventHandler OnFunction);
 
   void EnableAll(bool i_enable);
 
@@ -69,6 +74,7 @@ class CKnockChannelTabDlg : public CTabDialog
   void SetRPMVisibility(bool visible);
 
   enum { RPM_KNOCK_SIGNAL_POINTS = 128 };
+  enum { RPM_AXIS_MIN = 200, RPM_AXIS_STEP = 60 };
 
   std::auto_ptr<CKnockPageDlg> mp_knock_parameters_dlg;
 
@@ -76,16 +82,22 @@ class CKnockChannelTabDlg : public CTabDialog
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   afx_msg void OnDestroy();
+  afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnSaveParameters();
   afx_msg void OnCopyToAttenuatorTable();
   afx_msg void OnClearFunction();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
   afx_msg void OnUpdateClearFunction(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateListResetPoints(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDLSMCheckbox();
   afx_msg void OnListCheckbox();
   afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+  afx_msg void OnListResetPoints();
+  afx_msg void OnListLoadPoints();
+  afx_msg void OnListSavePoints();
   DECLARE_MESSAGE_MAP()
 
   void _InitializeOscilloscopeControl(void);
@@ -104,6 +116,7 @@ class CKnockChannelTabDlg : public CTabDialog
   CListCtrl m_RTList;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;
+  std::auto_ptr<CKnockContextMenuManager> mp_ContextMenuManager;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;
   CButton m_dlsm_checkbox;
@@ -114,6 +127,9 @@ class CKnockChannelTabDlg : public CTabDialog
   EventHandler  m_OnSaveParameters;
   EventHandler  m_OnCopyToAttenuatorTable;
   EventHandler  m_OnClearFunction;
+  EventIndexes  m_OnResetPoints;
+  EventHandler  m_OnLoadPoints;
+  EventHandler  m_OnSavePoints;
   bool m_all_enabled;
   bool m_copy_to_attenuator_table_button_state;
   bool m_clear_function_button_state;

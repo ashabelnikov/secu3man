@@ -314,3 +314,11 @@
 #define IDC_KC_LIST_CHECKBOX            4332
 #define IDS_KC_LIST_HDR_RPM             4333
 #define IDS_KC_LIST_HDR_VALUE           4334
+#define IDM_KC_LIST_RESET_POINTS        4335
+#define IDM_KC_LIST_LOAD_POINTS         4336
+#define IDM_KC_LIST_SAVE_POINTS         4337
+#define IDS_KC_LIST_RESET_POINTS        4338
+#define IDS_KC_LIST_LOAD_POINTS         4339
+#define IDS_KC_LIST_SAVE_POINTS         4340
+#define IDS_KC_LIST_ERROR_LOAD_FILE     4341
+#define IDS_KC_LIST_ERROR_SAVE_FILE     4342

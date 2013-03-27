@@ -58,6 +58,9 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   void OnParametersChange(void);
   void OnCopyToAttenuatorTable(void);
   void OnClearFunction(void);
+  void OnResetPoints(const std::vector<int>& pointIndexes);
+  void OnLoadPoints(void);
+  void OnSavePoints(void);
 
   void OnParamsChangesTimer(void);
 
@@ -77,6 +80,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
 
   void _PerformAverageOfRPMKnockFunctionValues(std::vector<float> &o_function);
   void _InitializeRPMKnockFunctionBuffer(void);
+  void _InitializeRPMKnockFunctionBuffer(const std::vector<int>& pointIndexes);
 
   CKnockChannelTabDlg*  mp_view;
   CCommunicationManager* mp_comm;

@@ -488,6 +488,11 @@ BEGIN
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Введите диаметр цилиндра двигателя в мм"
     IDS_KC_LIST_HDR_RPM     "Обороты"
     IDS_KC_LIST_HDR_VALUE   "Среднее значение сигнала"
+    IDS_KC_LIST_RESET_POINTS "Сбросить точку(и)"
+    IDS_KC_LIST_LOAD_POINTS  "Загрузить из файла"
+    IDS_KC_LIST_SAVE_POINTS  "Сохранить в файл"
+    IDS_KC_LIST_ERROR_LOAD_FILE "Ошибка загрузки данных из файла!"
+    IDS_KC_LIST_ERROR_SAVE_FILE "Ошибка сохранения данных в файл!"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1000,6 +1005,11 @@ BEGIN
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Input diameter in mm of engine cylinder"
     IDS_KC_LIST_HDR_RPM     "RPM"
     IDS_KC_LIST_HDR_VALUE   "Averaged signal level"
+    IDS_KC_LIST_RESET_POINTS "Reset point(s)"
+    IDS_KC_LIST_LOAD_POINTS  "Load from a file"
+    IDS_KC_LIST_SAVE_POINTS  "Save to a file"
+    IDS_KC_LIST_ERROR_LOAD_FILE "Error loading data from file!"
+    IDS_KC_LIST_ERROR_SAVE_FILE "Error saving data into a file!"
 END
 
 STRINGTABLE DISCARDABLE 
