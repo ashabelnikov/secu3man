@@ -230,8 +230,7 @@ void CFirmwareTabDlg::OnPopupMenuButton()
 {
  CRect rc;
  GetDlgItem(IDC_FW_POPUPMENU_BUTTON)->GetWindowRect(rc);
- int offset = ::GetSystemMetrics(SM_CYMENU)*(mp_ContextMenuManager->GetItemCount()-4);
- mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top-offset);
+ mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top, false); //bottom align
 }
 
 void CFirmwareTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)

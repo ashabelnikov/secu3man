@@ -31,14 +31,12 @@ class CFirmwareModeContextMenuManager
 
   void Attach(CWnd* pWnd);
   void CreateContent(void);
-  void TrackPopupMenu(int x, int y);
+  void TrackPopupMenu(int x, int y, bool topAlign = true);
   void EnableBLMenuItems(bool i_enable);
   void EnableAppMenuItems(bool i_enable);
 
   //Надо вызывать когда окну приходит WM_INITMENUPOPUP
   void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
-
-  int GetItemCount(void) const;
 
  private:
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu

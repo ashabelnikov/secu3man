@@ -108,10 +108,10 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
 }
 
 //показывает контекстное меню
-void CFirmwareModeContextMenuManager::TrackPopupMenu(int x, int y)
+void CFirmwareModeContextMenuManager::TrackPopupMenu(int x, int y, bool topAlign /*= true*/)
 {
  ASSERT(m_pWnd);
- m_ParentMenu.TrackPopupMenu(TPM_LEFTALIGN,x,y,m_pWnd);
+ m_ParentMenu.TrackPopupMenu(TPM_LEFTALIGN | (topAlign ? TPM_TOPALIGN : TPM_BOTTOMALIGN),x,y,m_pWnd);
 }
 
 void CFirmwareModeContextMenuManager::EnableBLMenuItems(bool i_enable)
@@ -213,9 +213,4 @@ void CFirmwareModeContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex,
   }
   state.m_nIndexMax = nCount;
  }//for
-}
-
-int CFirmwareModeContextMenuManager::GetItemCount(void) const
-{
- return m_ParentMenu.GetMenuItemCount();
 }
