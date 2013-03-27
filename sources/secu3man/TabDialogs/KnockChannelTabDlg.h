@@ -84,11 +84,13 @@ class CKnockChannelTabDlg : public CTabDialog
   afx_msg void OnUpdateClearFunction(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDLSMCheckbox();
+  afx_msg void OnListCheckbox();
   afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   DECLARE_MESSAGE_MAP()
 
   void _InitializeOscilloscopeControl(void);
   void _InitializeRPMKnockSignalControl(void);
+  void _InitializeRPMKnockSignalList(void);
 
   void OnFrqCalculate(float frq);
 
@@ -99,11 +101,13 @@ class CKnockChannelTabDlg : public CTabDialog
   CChartLineSerie* m_pLineSerie;
   CChartLineSerie* m_pLineSerieLevel;
   CChartLineSerie* m_pLineSerieRPM;
+  CListCtrl m_RTList;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;
   CButton m_copy_to_attenuator_table_button;
   CButton m_clear_function_button;
   CButton m_dlsm_checkbox;
+  CButton m_list_checkbox;
   CSliderCtrl m_level_slider;
   CStatic m_level_text;
 

@@ -176,28 +176,26 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    PUSHBUTTON      "Сохранить",IDC_KC_SAVE_PARAM_BUTTON,29,12,48,
-                    19
+    PUSHBUTTON      "Сохранить",IDC_KC_SAVE_PARAM_BUTTON,29,12,48,19
     PUSHBUTTON      "Копировать в таблицу аттенюатора",
-                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
-                    BS_MULTILINE
-    PUSHBUTTON      "Очистить функцию",IDC_KC_CLEAR_FUNCTION,97,
-                    41,86,23,BS_MULTILINE
-    CONTROL         "Авт.",
-                    IDC_KC_DLSM_CHECKBOX,"Button",
+                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,BS_MULTILINE
+    PUSHBUTTON      "Очистить функцию",IDC_KC_CLEAR_FUNCTION,97,41,86,23,BS_MULTILINE
+    CONTROL         "Авт.",IDC_KC_DLSM_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
     CONTROL         "",IDC_KC_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
+    CONTROL         "",IDC_KC_REALTIME_LIST,"SysListView32",NOT WS_VISIBLE |
+                    LVS_REPORT | WS_BORDER | WS_TABSTOP,225,19,245,105    
+    CONTROL         "Список",IDC_KC_LIST_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,437,5,50,13
     CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
     CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
-    CONTROL         "Slider1",IDC_KC_DESIRED_LEVEL_SLIDER,
-                    "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
-                    201,18,19,100
+    CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,
+                    "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
-    CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,
-                    255,7,183,10
+    CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,255,7,181,10
     CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,13,65,161,115
@@ -488,6 +486,8 @@ BEGIN
     IDS_TAB_FIRMWARE_DATA   "Данные прошивки"
     IDS_KC_KNOCK_FRQ_CALC_TT "Приблизительный расчет частоты детонации по диаметру цилиндра (мм)"     
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Введите диаметр цилиндра двигателя в мм"
+    IDS_KC_LIST_HDR_RPM     "Обороты"
+    IDS_KC_LIST_HDR_VALUE   "Среднее значение сигнала"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -696,24 +696,24 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Save",IDC_KC_SAVE_PARAM_BUTTON,29,12,48,19
     PUSHBUTTON      "Copy into attenuator table",
-                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,
-                    BS_MULTILINE
-    PUSHBUTTON      "Clear function",IDC_KC_CLEAR_FUNCTION,97,41,
-                    86,23,BS_MULTILINE
-    CONTROL         "Autom.",
-                    IDC_KC_DLSM_CHECKBOX,"Button",
+                    IDC_KC_COPY_TO_ATTENUATOR_TABLE,97,12,86,23,BS_MULTILINE
+    PUSHBUTTON      "Clear function",IDC_KC_CLEAR_FUNCTION,97,41,86,23,BS_MULTILINE
+    CONTROL         "Autom.",IDC_KC_DLSM_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,204,5,50,15
     CONTROL         "",IDC_KC_REALTIME_CHART_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,19,245,105
+    CONTROL         "",IDC_KC_REALTIME_LIST,"SysListView32",NOT WS_VISIBLE |
+                    LVS_REPORT | WS_BORDER | WS_TABSTOP,225,19,245,105    
+    CONTROL         "List",IDC_KC_LIST_CHECKBOX,"Button",
+                    BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,437,5,50,13
     CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
     CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
-    CONTROL         "Slider1",IDC_KC_DESIRED_LEVEL_SLIDER,
-                    "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,
-                    201,18,19,100
+    CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,
+                    "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
-    CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,183,10
+    CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,181,10
     CTEXT           "Signal from knock sensor:",IDC_STATIC,285,129,127,10
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,13,65,152,110
@@ -998,6 +998,8 @@ BEGIN
     IDS_TAB_FIRMWARE_DATA   "Firmware data"
     IDS_KC_KNOCK_FRQ_CALC_TT "Rough calculation of the knock frequency based on cylinder diameter (mm)"     
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Input diameter in mm of engine cylinder"
+    IDS_KC_LIST_HDR_RPM     "RPM"
+    IDS_KC_LIST_HDR_VALUE   "Averaged signal level"
 END
 
 STRINGTABLE DISCARDABLE 
