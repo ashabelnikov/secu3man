@@ -274,12 +274,12 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[0].first.second.c_str(),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[1].first.second.c_str(),read_str,255,IniFileName);
 
  if (!CheckAllowablePlatform(read_str, m_optECUPlatformType))
  {
   status = false;
-  m_optECUPlatformType = (EECUPlatform)m_AllowablePlatforms[0].second; //atmega16 by default
+  m_optECUPlatformType = (EECUPlatform)m_AllowablePlatforms[1].second; //atmega32 by default
  }
 
  //-----------------------------------------
