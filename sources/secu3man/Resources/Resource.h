@@ -322,3 +322,5 @@
 #define IDS_KC_LIST_SAVE_POINTS         4340
 #define IDS_KC_LIST_ERROR_LOAD_FILE     4341
 #define IDS_KC_LIST_ERROR_SAVE_FILE     4342
+#define IDC_PM_SECU3ORG_LINK            4343
+#define IDC_CURSOR_HAND                 4344
