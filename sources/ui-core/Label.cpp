@@ -74,7 +74,7 @@ void CLabel::OnLButtonDown(UINT nFlags, CPoint point)
  CString strLink;
 
  GetWindowText(strLink);
- ShellExecute(NULL, "open", strLink, NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), strLink, NULL, NULL, SW_SHOWNORMAL);
 		
  CStatic::OnLButtonDown(nFlags, point);
 }

@@ -324,3 +324,4 @@
 #define IDS_KC_LIST_ERROR_SAVE_FILE     4342
 #define IDC_PM_SECU3ORG_LINK            4343
 #define IDC_CURSOR_HAND                 4344
+#define ID_APP_DEV_SITE                 4345
