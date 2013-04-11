@@ -115,8 +115,9 @@ set(SOURCES
   TabDialogs/LPControlPanelDlg.cpp
   TabDialogs/ParamMonTabDlg.cpp
   TabsManagement/MainTabController.cpp
-  Resources/secu3man.rc
   )
+
+set(RESOURCES Resources/secu3man.rc )
 
 foreach(src_file ${SOURCES})
   set_source_files_properties(${src_file}
@@ -125,5 +126,5 @@ foreach(src_file ${SOURCES})
 endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
-add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES})
+add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT} ${LIBRARIES})
