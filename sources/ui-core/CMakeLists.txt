@@ -31,6 +31,7 @@ set(HEADERS
   HotKeysManager.h
   HotKeysToCmdRouter.h
   ITabControllerEvent.h
+  Label.h
   LEDIndicator.h
   MPCLogoPane.h
   MPCStatusBar.h
@@ -57,6 +58,7 @@ set(SOURCES
   HotKeysManager.cpp
   HotKeysToCmdRouter.cpp
   ITabControllerEvent.cpp
+  Label.cpp
   LEDIndicator.cpp
   MPCLogoPane.cpp
   MPCStatusBar.cpp
