@@ -1,3 +1,9 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
+# This Makefile builds the whole SECU-3 Manager project
+# You may need to set MAKE and BMAKE variables.
+
 # Microsoft make utility
 MAKE=nmake
 # Borland make utility
@@ -5,7 +11,7 @@ BMAKE=make
 
 all:
     md ..\binaries
-    md ..\libraries    
+    md ..\libraries
     @cd chart2d   &  @$(BMAKE) & @cd ..
     @cd chart3d   &  @$(BMAKE) & @cd ..
     @cd about     &  @$(MAKE)  & @cd ..

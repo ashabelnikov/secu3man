@@ -1,3 +1,6 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
 # compiler
 CC      = cl
 # compiler flags

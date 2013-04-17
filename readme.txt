@@ -16,4 +16,3 @@
     3. Run configure.bat. This will generate build environment for you.
 
     4. Project is ready to build (e.g. open project using Visual Studio).
-    

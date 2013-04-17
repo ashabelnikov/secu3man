@@ -380,10 +380,10 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
   //рисуем картинку в зависимости от текущего состояния
   if (IsTabEnabled(tab_index))
    p_imagelist->Draw(p_dc, item.iImage, CPoint(x_pos, y_pos),ILD_TRANSPARENT);
-  else  
+  else
    DrawState(p_dc->m_hDC,NULL,NULL,(LPARAM)p_imagelist->ExtractIcon(item.iImage),
      0, x_pos, y_pos, image_rect.Width(), image_rect.Height(), DST_ICON|DSS_DISABLED);
-  
+
   //Text will be placed after an image
   if (TCO_TOP==GetTCOrientation() || TCO_BOTTOM==GetTCOrientation())
    rect.left += image_rect.Width();
