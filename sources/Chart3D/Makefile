@@ -22,7 +22,7 @@ PFLAGS = -U$(BCB)\lib\obj;$(BCB)\lib \
    -AWinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE -v \
    -$Y -$W -$O- -JPHNV -M     
 RFLAGS = -i$(BCB)\include;$(BCB)\include\vcl 
-LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib -aa -Tpd -x -Gn -Gi
+LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib -aa -Tpd -x -Gn -Gi -l..\..\libraries
 IFLAGS = 
 LINKER = ilink32
 # ----------------------------------------------------------------------------
@@ -57,3 +57,10 @@ $(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 .rc.res:
     $(BCB)\BIN\brcc32 $(RFLAGS) $<
 #------------------------------------------------------------------------------
+
+clean:
+    @if exist ..\..\binaries\Chart3D.dll ( DEL /Q ..\..\binaries\Chart3D.dll )
+    @if exist ..\..\binaries\Chart3D.tds ( DEL /Q ..\..\binaries\Chart3D.tds )
+    @if exist ..\..\libraries\Chart3D.lib ( DEL /Q ..\..\libraries\Chart3D.lib )
+    @if exist *.obj ( DEL /Q *.obj )
+    @if exist *.res ( DEL /Q *.res )

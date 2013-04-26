@@ -29,8 +29,8 @@ all:
 clean:
     @if exist ..\binaries ( RD /s/q ..\binaries )
     @if exist ..\libraries ( RD /s/q ..\libraries )
-#   @cd chart2d   &  @$(BMAKE) clean & @cd ..
-#   @cd chart3d   &  @$(BMAKE) clean & @cd ..
+    @cd chart2d   &  @$(BMAKE) clean & @cd ..
+    @cd chart3d   &  @$(BMAKE) clean & @cd ..
     @cd about     &  @$(MAKE)  clean & @cd ..
     @cd hexutils  &  @$(MAKE)  clean & @cd ..
     @cd io-core   &  @$(MAKE)  clean & @cd ..
