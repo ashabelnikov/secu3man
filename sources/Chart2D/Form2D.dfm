@@ -50,10 +50,10 @@ object Form2D: TForm2D
   OldCreateOrder = False
   PopupMenu = PopupMenu
   Position = poDefault
-  OnClose = FormClose
+  OnClose = FormClose  
   PixelsPerInch = 96
   TextHeight = 13
-  object Chart1: TChart
+  object Chart1: TChartEx
     Left = 1
     Top = 1
     Width = 585
@@ -62,8 +62,7 @@ object Form2D: TForm2D
     AllowZoom = False
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
-    Title.Text.Strings = (
-      'График УОЗ на пуске')
+    Title.Text.Strings = ( 'График УОЗ на пуске' )
     OnClickSeries = Chart1ClickSeries
     BottomAxis.Title.Caption = 'Обороты (мин-1)'
     LeftAxis.Automatic = False
@@ -75,11 +74,15 @@ object Form2D: TForm2D
     LeftAxis.Title.Caption = 'УОЗ (град.)'
     Legend.Visible = False
     View3D = False
-    OnGetAxisLabel = Chart1GetAxisLabel
     TabOrder = 0
-    TabStop = False
+    TabStop = True
+    OnGetAxisLabel = Chart1GetAxisLabel
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
+    OnKeyDown = CtrlKeyDown
+    OnEnter = OnEnterChart
+    OnExit = OnExitChart
+    OnMouseDown = OnChartMouseDown
     object Series1: TLineSeries
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False

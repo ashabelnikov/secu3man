@@ -9,7 +9,7 @@ BCB = $(MAKEDIR)\..
 !endif
 # ----------------------------------------------------------------------------
 PROJECT  = ..\..\binaries\Chart3D.dll
-OBJFILES = Form3D.obj Chart3D.obj
+OBJFILES = Form3D.obj Chart3D.obj TChartEx.obj
 RESDEPEN = $(RESFILES) Form3D.dfm
 RESFILES = resource.res
 DEFFILE  = Chart3D.def

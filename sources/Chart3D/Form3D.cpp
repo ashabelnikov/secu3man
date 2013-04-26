@@ -43,7 +43,6 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 : TForm(Owner)
 , count_x(0)
 , count_z(0)
-, airflow(0)
 , aai_min(0)
 , aai_max(0)
 , modified_function(NULL)
@@ -56,12 +55,12 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , m_param_on_change(NULL)
 , m_param_on_close(NULL)
 , m_param_on_wnd_activation(NULL)
-, setval(0)
-, val_n(0)
+, m_setval(0)
+, m_val_n(0)
 , m_air_flow_position(0)
 , m_values_format_x("%.00f")  //integer 
 {
- //empty
+ m_selpts.push_back(0);
 }
 
 //---------------------------------------------------------------------------
@@ -70,11 +69,10 @@ void TForm3D::DataPrepare()
  HideAllSeries();
  CheckBox2->Enabled = false;
  TrackBar1->Max = count_z - 1;
- SetAirFlow(m_air_flow_position);
- MakeOneVisible(airflow);
+ MakeOneVisible(m_air_flow_position);
  ShowPoints(true);
- setval = 0;
- val_n  = 0;
+ m_setval = 0;
+ m_val_n  = 0;
 
  Chart1->Title->Text->Clear();
  Chart1->Title->Text->Add(u_title);
@@ -89,6 +87,7 @@ void TForm3D::DataPrepare()
  FillChart(0,0);
 
  CheckBox1Click(NULL);
+ SetAirFlow(m_air_flow_position);
 }
 
 //---------------------------------------------------------------------------
@@ -178,8 +177,10 @@ void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
 {
  m_air_flow_position = TrackBar1->Position;
  SetAirFlow(m_air_flow_position);
- setval = 0;
- val_n  = 0;
+ m_setval = 0;
+ m_val_n  = 0; 
+ UnmarkPoints();
+ MarkPoints(true);
 }
 
 //---------------------------------------------------------------------------
@@ -187,23 +188,46 @@ void __fastcall TForm3D::Chart1ClickSeries(TCustomChart *Sender,
       TChartSeries *Series, int ValueIndex, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
- if (Series==Chart1->Series[airflow + count_z])
+ if (Series==Chart1->Series[m_air_flow_position + count_z])
  {
+  //if Ctrl key is not pressed then, select single point
+  if (!Shift.Contains(ssCtrl))
+  {
+   MarkPoints(false);
+   m_selpts.clear();
+   m_selpts.push_back(ValueIndex);
+   MarkPoints(true);
+  }
+
   if (Button==mbLeft)
   {
-   setval  = 1;
-   val_n   = ValueIndex;
+   m_setval  = 1;
+   m_val_n   = ValueIndex;
   }
  }
+ m_prev_pt = std::make_pair(X, Y);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
- if ((m_pOnChange) && (setval))
+ //implementation of multiple points selection
+ if (Shift.Contains(ssCtrl) && (m_prev_pt.first == X && m_prev_pt.second == Y))
+ {
+  MarkPoints(false);
+  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
+  if (it == m_selpts.end())
+   m_selpts.push_back(m_val_n);
+  else
+   m_selpts.erase(it);
+  MarkPoints(true);
+  std::sort(m_selpts.begin(), m_selpts.end());
+ }
+
+ if ((m_pOnChange) && (m_setval))
   m_pOnChange(m_param_on_change);
- setval = 0;
+ m_setval = 0;
 }
 
 //---------------------------------------------------------------------------
@@ -211,10 +235,18 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
       int X, int Y)
 {
  double v;
- if (setval)
- {
-  v = Chart1->Series[airflow + count_z]->YScreenToValue(Y);
-  RestrictAndSetChartValue(val_n, v);
+ if (m_setval)
+ {//select on the fly point being moved
+  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
+  if (it == m_selpts.end())
+  {
+   m_selpts.push_back(m_val_n);
+   MarkPoints(true);
+   std::sort(m_selpts.begin(), m_selpts.end());
+  }
+  //Move all selected points
+  v = Chart1->Series[m_air_flow_position + count_z]->YScreenToValue(Y);
+  ShiftPoints(v - Chart1->Series[m_air_flow_position + count_z]->YValue[m_val_n]);
  }
 }
 
@@ -245,7 +277,7 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
  {
   ShowPoints(true);
   Chart1->View3D = false;
-  MakeOneVisible(airflow);
+  MakeOneVisible(m_air_flow_position);
   TrackBar1->Enabled = true;
   Label1->Enabled = true;
   CheckBox2->Enabled = false;
@@ -282,7 +314,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[airflow + count_z]->YValue[i] + 0.5);
+  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + count_z]->YValue[i] + 0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -291,7 +323,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[airflow + count_z]->YValue[i] - 0.5);
+  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + count_z]->YValue[i] - 0.5);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -301,11 +333,11 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
 {
  float* p_source_function = new float[count_x];
  for (int i = 0; i < count_x; ++i)
-  p_source_function[i] = GetItem_m(airflow, i);
- MathHelpers::Smooth1D(p_source_function, GetItem_mp(airflow, 0), count_x, 3);
+  p_source_function[i] = GetItem_m(m_air_flow_position, i);
+ MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), count_x, 3);
  delete[] p_source_function;
  for (int i = 0; i < count_x; i++ )
-  RestrictAndSetChartValue(i, *GetItem_mp(airflow, i));
+  RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
 
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -316,11 +348,11 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
 {
  float* p_source_function = new float[count_x];
  for (int i = 0; i < count_x; ++i)
-  p_source_function[i] = GetItem_m(airflow, i);
- MathHelpers::Smooth1D(p_source_function, GetItem_mp(airflow, 0), count_x, 5);
+  p_source_function[i] = GetItem_m(m_air_flow_position, i);
+ MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), count_x, 5);
  delete[] p_source_function;
  for (int i = 0; i < count_x; i++ )
-  RestrictAndSetChartValue(i, *GetItem_mp(airflow, i));
+  RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
 
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -369,7 +401,7 @@ void TForm3D::SetAirFlow(int flow)
  TrackBar1->Position = flow;
  as.sprintf("%d", flow + 1);
  Label1->Caption = as;
- airflow = flow;
+ m_air_flow_position = flow;
  MakeOneVisible(flow);
 }
 
@@ -448,12 +480,33 @@ void TForm3D::HideAllSeries(void)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm3D::ShiftPoints(float i_value)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+  RestrictAndSetChartValue(m_selpts[i], Chart1->Series[m_air_flow_position + count_z]->YValue[m_selpts[i]] + i_value);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::MarkPoints(bool i_mark)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+  (Chart1->Series[m_air_flow_position + count_z])->ValueColor[m_selpts[i]] = (i_mark ? clNavy : clRed);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::UnmarkPoints(void)
+{
+ for(int i = 0; i < count_x; ++i)
+  (Chart1->Series[m_air_flow_position + count_z])->ValueColor[i] = clRed;
+}
+
+//---------------------------------------------------------------------------
 void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
  if (v > aai_max) v = aai_max;
  if (v < aai_min) v = aai_min;
- SetItem(airflow,index, v);
- Chart1->Series[airflow + count_z]->YValue[index] = v;
+ SetItem(m_air_flow_position, index, v);
+ Chart1->Series[m_air_flow_position + count_z]->YValue[index] = v;
 }
 
 //---------------------------------------------------------------------------
@@ -490,7 +543,7 @@ void __fastcall TForm3D::OnZeroAllPoints(TObject *Sender)
 void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 {
  for (int i = 0; i < count_x; i++ )
-  RestrictAndSetChartValue(i, GetChartValue(airflow, 0));
+  RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, 0));
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -498,8 +551,8 @@ void __fastcall TForm3D::OnDuplicate1stPoint(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnBldCurveUsing1stAndLastPoints(TObject *Sender)
 {
- double firstPtVal = GetChartValue(airflow, 0);
- double lastPtVal = GetChartValue(airflow, count_x - 1);
+ double firstPtVal = GetChartValue(m_air_flow_position, 0);
+ double lastPtVal = GetChartValue(m_air_flow_position, count_x - 1);
  double intrmPtCount = count_x - 1;
  for (int i = 1; i < count_x - 1; i++ )
   RestrictAndSetChartValue(i, firstPtVal + (((lastPtVal-firstPtVal) / intrmPtCount) * i));
@@ -529,8 +582,8 @@ void __fastcall TForm3D::OnDuplicateThisCurve(TObject *Sender)
  {
   for (int x = 0; x < count_x; x++ )
   {
-   SetChartValue(z, x, GetChartValue(airflow, x));
-   SetItem(z, x, GetChartValue(airflow, x));
+   SetChartValue(z, x, GetChartValue(m_air_flow_position, x));
+   SetItem(z, x, GetChartValue(m_air_flow_position, x));
   }
  }
  if (m_pOnChange)
@@ -557,10 +610,115 @@ void __fastcall TForm3D::OnBuildShapeUsing1stAndLastCurves(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm3D::SelLeftArrow(bool i_shift)
+{
+ if (i_shift)
+ {//Shift key is pressed
+  MarkPoints(false);
+  if (m_selpts.front() != m_val_n)
+  {
+   m_selpts.pop_back();
+   m_val_n = m_selpts.back();
+  }
+  else
+  {
+   m_val_n = m_selpts.front() - 1;
+   if (m_val_n >= 0)
+    m_selpts.push_front(m_val_n);
+   else
+    m_val_n = 0;    
+  }     
+  MarkPoints(true);
+ }
+ else
+ {//Without shift
+  MarkPoints(false);
+  int prev_pt = m_selpts.size() ? m_selpts.back() - 1 : 0;
+  if (prev_pt < 0)
+   prev_pt = 0;
+  m_selpts.clear();
+  m_selpts.push_back(prev_pt);
+  MarkPoints(true);
+  m_val_n = prev_pt;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::SelRightArrow(bool i_shift)
+{
+ if (i_shift)
+ { //Shift key is pressed
+  MarkPoints(false);
+  if (m_selpts.back() != m_val_n)
+  {
+   m_selpts.pop_front();
+   m_val_n = m_selpts.front();
+  }
+  else
+  {
+   m_val_n = m_selpts.back() + 1;
+   if (m_val_n < count_x)
+    m_selpts.push_back(m_val_n);
+   else
+    m_val_n = count_x-1;
+  }
+  MarkPoints(true);
+ }
+ else
+ { //Without shift
+  MarkPoints(false);
+  int next_pt = m_selpts.size() ? m_selpts.back() + 1 : 0;
+  if (next_pt >= count_x)
+   next_pt = count_x-1;
+  m_selpts.clear();
+  m_selpts.push_back(next_pt);
+  MarkPoints(true);
+  m_val_n = next_pt;
+ }
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
- TWinControl* ctrl = (TWinControl*)Sender;
+ //Implement keyboard actions related to chart
+ if (ActiveControl == Chart1)
+ {
+  if (Key == VK_UP)
+  { //move points upward
+   ShiftPoints(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
+   if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+  }
+  else if (Key == VK_DOWN)
+  { //move points downward
+   ShiftPoints(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
+   if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+  }
+  else if (Key == VK_LEFT)
+  { //move selection to the left
+   SelLeftArrow(Shift.Contains(ssShift));
+  }
+  else if (Key == VK_RIGHT)
+  { //move selection to the right
+   SelRightArrow(Shift.Contains(ssShift));
+  }
+  else if (Key == 'Z')
+  { //decrement curve index
+   if (m_air_flow_position > 0)
+    --m_air_flow_position;
+   SetAirFlow(m_air_flow_position);  
+  }
+  else if (Key == 'X')
+  { //increment curve index
+   if (m_air_flow_position < (count_z-1))
+    ++m_air_flow_position;
+   SetAirFlow(m_air_flow_position);  
+  }
+ }
 
+ //Following code will simulate normal dialog messages
+ TWinControl* ctrl = (TWinControl*)Sender;
  if (0 != ctrl->Perform(CM_CHILDKEY, Key, (LPARAM)ctrl))
   return;
 
@@ -590,6 +748,27 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
      (this->Perform(CM_DIALOGKEY, Key, 0)))
   return;
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnEnterChart(TObject* Sender)
+{
+ MarkPoints(true);
+ Chart1->Title->Font->Style = TFontStyles() << fsBold;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnExitChart(TObject* Sender)
+{
+ MarkPoints(false);
+ Chart1->Title->Font->Style = TFontStyles();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+ if (ActiveControl != Chart1)
+  ActiveControl = Chart1;
 }
 
 //---------------------------------------------------------------------------

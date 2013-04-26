@@ -1,4 +1,5 @@
 USEUNIT("Chart3D.cpp");
+USEUNIT("TChartEx.cpp");
 USEFORM("Form3D.cpp", Form3D);
 USEDEF("Chart3D.def");
 USERES("Chart3D.res");

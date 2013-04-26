@@ -30,10 +30,10 @@
 #include <ComCtrls.hpp>
 #include <ExtCtrls.hpp>
 #include <Series.hpp>
-#include <TeEngine.hpp>
-#include <TeeProcs.hpp>
 #include <Buttons.hpp>
 #include <Menus.hpp>
+#include <deque>
+#include "TChartEx.h"
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
@@ -42,7 +42,7 @@ typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
 class TForm3D : public TForm
 {
  __published: // IDE-managed Components
-  TChart *Chart1;
+  TChartEx *Chart1;
   TLineSeries *Series1;
   TLineSeries *Series2;
   TLineSeries *Series3;
@@ -113,6 +113,9 @@ class TForm3D : public TForm
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
   void __fastcall OnBuildShapeUsing1stAndLastCurves(TObject *Sender);
   void __fastcall CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+  void __fastcall OnEnterChart(TObject* Sender);
+  void __fastcall OnExitChart(TObject* Sender);
+  void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 
  public:
   __fastcall TForm3D(TComponent* Owner);
@@ -129,7 +132,6 @@ class TForm3D : public TForm
  public: //Properties
   int count_x;
   int count_z;
-  int airflow;
   float u_slots[1024];
   float aai_min;
   float aai_max;
@@ -150,6 +152,11 @@ class TForm3D : public TForm
   void ShowPoints(bool show);
   void FillChart(bool dir,int cm);
   void HideAllSeries(void);
+  void __fastcall ShiftPoints(float i_value);
+  void __fastcall MarkPoints(bool i_mark);
+  void __fastcall UnmarkPoints(void);
+  void __fastcall SelLeftArrow(bool i_shift);
+  void __fastcall SelRightArrow(bool i_shift);
 
   void RestrictAndSetChartValue(int index, double v);
   double GetChartValue(int z, int index);
@@ -167,9 +174,11 @@ class TForm3D : public TForm
   OnWndActivation m_pOnWndActivation;
   void* m_param_on_wnd_activation;
 
-  int setval;
-  int val_n;
+  int m_setval;
+  int m_val_n;
   int m_air_flow_position;
+  std::deque<int> m_selpts;
+  std::pair<int, int> m_prev_pt;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

@@ -4,7 +4,7 @@
   <MACROS>
     <VERSION value="BCB.05.03"/>
     <PROJECT value="../../binaries\chart2d.dll"/>
-    <OBJFILES value="Chart2D.obj Form2D.obj TFloatUpDown.obj"/>
+    <OBJFILES value="Chart2D.obj Form2D.obj TFloatUpDown.obj TChartEx.obj"/>
     <RESFILES value="Chart2D.res resource.res"/>
     <IDLFILES value=""/>
     <IDLGENFILES value=""/>
