@@ -505,8 +505,8 @@ void __fastcall TForm2D::SelLeftArrow(bool i_shift)
    if (m_val_n >= 0)
     m_selpts.push_front(m_val_n);
    else
-    m_val_n = 0;    
-  }     
+    m_val_n = 0;
+  }
   MarkPoints(true);
  }
  else

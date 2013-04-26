@@ -92,13 +92,9 @@ class TForm3D : public TForm
   TMenuItem *PM_DupThisCurve;
   TMenuItem *PM_BldShapeUsing1stAndLastCurves;
   void __fastcall TrackBar1Change(TObject *Sender);
-  void __fastcall Chart1ClickSeries(TCustomChart *Sender,
-    TChartSeries *Series, int ValueIndex, TMouseButton Button,
-    TShiftState Shift, int X, int Y);
-  void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button,
-    TShiftState Shift, int X, int Y);
-  void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift,
-    int X, int Y);
+  void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
   void __fastcall CheckBox1Click(TObject *Sender);
   void __fastcall CheckBox2Click(TObject *Sender);
   void __fastcall OnCloseForm(TObject *Sender, TCloseAction &Action);

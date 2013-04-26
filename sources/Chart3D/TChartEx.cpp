@@ -38,6 +38,7 @@ namespace
 __fastcall TChartEx::TChartEx(TComponent* Owner)
 : TChart(Owner)
 {
+ //empty
 }
 
 //---------------------------------------------------------------------------

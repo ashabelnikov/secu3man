@@ -626,8 +626,8 @@ void __fastcall TForm3D::SelLeftArrow(bool i_shift)
    if (m_val_n >= 0)
     m_selpts.push_front(m_val_n);
    else
-    m_val_n = 0;    
-  }     
+    m_val_n = 0;
+  }
   MarkPoints(true);
  }
  else
@@ -707,13 +707,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   { //decrement curve index
    if (m_air_flow_position > 0)
     --m_air_flow_position;
-   SetAirFlow(m_air_flow_position);  
+   SetAirFlow(m_air_flow_position);
   }
   else if (Key == 'X')
   { //increment curve index
    if (m_air_flow_position < (count_z-1))
     ++m_air_flow_position;
-   SetAirFlow(m_air_flow_position);  
+   SetAirFlow(m_air_flow_position);
   }
  }
 
@@ -744,7 +744,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  if (mask != 0)
  { 
   if ((0 == ctrl->Perform(CM_WANTSPECIALKEY, Key, 0)) &
-     (ctrl->Perform(WM_GETDLGCODE, 0, 0) & (0==mask)) & 
+     (ctrl->Perform(WM_GETDLGCODE, 0, 0) & (0==mask)) &
      (this->Perform(CM_DIALOGKEY, Key, 0)))
   return;
  }

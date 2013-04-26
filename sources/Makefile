@@ -7,7 +7,7 @@
 # Microsoft make utility
 MAKE=nmake
 # Borland make utility
-BMAKE=make
+BMAKE=C:\Program Files\Borland\CBuilder5\Bin\make
 
 all:
     md ..\binaries
