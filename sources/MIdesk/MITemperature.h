@@ -45,6 +45,12 @@ class AFX_EXT_CLASS CMITemperature : public IMeasInstrument
   virtual void SetTicks(int number);
   //---------------------------------------
 
+  //Choke position top-right pane
+  void SetChokePos(float value, bool redraw = false);
+  float GetChokePos(void) const;
+  void ShowChokePos(bool i_show,  bool redraw = false);
+
  private:
   CAnalogMeterCtrl m_meter;
+  bool m_showChokePos;
 };

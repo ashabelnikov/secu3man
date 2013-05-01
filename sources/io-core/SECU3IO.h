@@ -49,6 +49,7 @@ namespace SECU3IO
   float tps;                            //додг (TPS sensor value)
   float add_i1;                         //ADD_I1 voltage
   float add_i2;                         //ADD_I2 voltage
+  float choke_pos;                      //choke position (%)
  };
 
  struct DbgvarDat
