@@ -51,7 +51,8 @@ void CMIDwellAngle::Create(void)
  m_meter.AddAlertZone(-15,0,RGB(180,130,130));
  m_meter.AddAlertZone(0,45,RGB(220,220,120));
  m_meter.AddAlertZone(45,65,RGB(255,100,100));
- m_meter.UpdateNeedle(-15.0);
+ m_meter.SetNeedleValue(-15.0);
+ m_meter.Update();
  m_meter.SetMeterSize(145);
 }
 
@@ -63,7 +64,8 @@ void CMIDwellAngle::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMIDwellAngle::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMIDwellAngle::GetValue(void)

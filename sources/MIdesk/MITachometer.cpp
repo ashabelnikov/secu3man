@@ -51,7 +51,8 @@ void CMITachometer::Create(void)
  m_meter.AddAlertZone(0,4000,RGB(100,255,100));
  m_meter.AddAlertZone(4000,6000,RGB(255,255,100));
  m_meter.AddAlertZone(6000,8000,RGB(255,100,100));
- m_meter.UpdateNeedle(0.0);
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
 }
 
 void CMITachometer::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -62,7 +63,8 @@ void CMITachometer::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMITachometer::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMITachometer::GetValue(void)

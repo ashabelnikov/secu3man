@@ -261,14 +261,14 @@ namespace SECU3IO
   int ps;                               //Hall-effect cam sensor (digital)
   int bl;                               //"Bootloader" jumper
   int de;                               //"Default EEPROM" jumper
-  float ks_1;                           //knock sensor 1  
+  float ks_1;                           //knock sensor 1
   float ks_2;                           //knock sensor 2
  };
 
  struct DiagOutDat
  {
   int ign_out1;                         //ignition output 1
-  int ign_out2;                         //ignition output 2  
+  int ign_out2;                         //ignition output 2
   int ign_out3;                         //ignition output 3
   int ign_out4;                         //ignition output 4
   int ie;                               //idle edconomizer
@@ -284,6 +284,7 @@ namespace SECU3IO
  {
   int sm_steps;                         //number of stepper motor steps
   unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
+  signed char manual_delta;             //delta position value for manual choke control
  };
 
  //таблица перекодировки кода частоты ПФ в частоту

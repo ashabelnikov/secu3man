@@ -53,7 +53,8 @@ void CMITemperature::Create(void)
  m_meter.AddAlertZone(50,100,RGB(120,120,120));
  m_meter.AddAlertZone(100,120,RGB(230,130,130));
  m_meter.SetTRPane(_T("n/a"));
- m_meter.UpdateNeedle(-40.0);
+ m_meter.SetNeedleValue(-40.0);
+ m_meter.Update();
 }
 
 void CMITemperature::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -64,7 +65,8 @@ void CMITemperature::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMITemperature::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMITemperature::GetValue(void)
@@ -127,8 +129,7 @@ void CMITemperature::SetChokePos(float value, bool redraw /*= false*/)
  CString str;
  str.Format(_T("%0.1f"), value);
  m_meter.SetTRPane(str);
- if (redraw)
-  m_meter.UpdateNeedle(m_meter.GetNeedlePos());
+ if (redraw) m_meter.Update();
 }
 
 float CMITemperature::GetChokePos(void) const

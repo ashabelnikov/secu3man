@@ -48,9 +48,11 @@ CAnalogMeter::CAnalogMeter()
  // default unit, scaling and needle position
  m_dMinScale   = -10.0;
  m_dMaxScale   =  10.0;
- m_dNeedlePos  =   0.0;
+ m_dNeedlePos  =  0.0;
+ m_dNeedlePos_n=  0.0;
  m_strTitle    =  "";
  m_strTRPane   =  "";
+ m_strTRPane_n =  "";
  m_strUnit     =  "";
 
  // for numerical values
@@ -179,15 +181,18 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
 }
 
 //////////////////////////////////////////////////////
-void CAnalogMeter::UpdateNeedle(CDC *pDC, double dPos)
+void CAnalogMeter::Update(CDC *pDC)
 {
  // if the needle hasn't changed, don't bother updating
- if (m_dNeedlePos == dPos)
+ if ((m_dNeedlePos == m_dNeedlePos_n) && (m_strTRPane == m_strTRPane_n))
   return;
 
- // store the position in the member variable
+ // store the values in the member variables
  // for availability elsewhere
- m_dNeedlePos = dPos;
+ if (m_dNeedlePos != m_dNeedlePos_n)
+  m_dNeedlePos = m_dNeedlePos_n;
+ if (m_strTRPane != m_strTRPane_n)
+  m_strTRPane = m_strTRPane_n;
 
  // do not support updates if we are not working with
  // bitmaps images
@@ -888,6 +893,16 @@ void CAnalogMeter::SetRange(double dMin, double dMax)
  m_boolForceRedraw = true;
 }
 
+void CAnalogMeter::SetNeedleValue(double value)
+{
+ m_dNeedlePos_n = value;
+}
+
+void CAnalogMeter::SetTRPane(CString strPane)
+{
+ m_strTRPane_n = strPane;
+}
+
 //////////////////////////////////////////////////////
 void CAnalogMeter::SetFontScale(int nFontScale)
 {
@@ -927,13 +942,6 @@ void CAnalogMeter::SetTitle(CString strTitle)
  // The function does NOT force the re-drawing of the meter.
  // The owner must explicitly call the ShowMeter function
  m_strTitle = strTitle;
- m_boolForceRedraw = true;
-}
-
-void CAnalogMeter::SetTRPane(CString strPane)
-{
- // The function does NOT force the re-drawing of the meter.
- m_strTRPane = strPane;
  m_boolForceRedraw = true;
 }
 

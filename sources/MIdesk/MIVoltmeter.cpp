@@ -51,7 +51,8 @@ void CMIVoltmeter::Create(void)
  m_meter.AddAlertZone(2.0,10.0,RGB(230,130,130));
  m_meter.AddAlertZone(10.0,15.0,RGB(120,200,120));
  m_meter.AddAlertZone(15.0,18.0,RGB(255,160,160));
- m_meter.UpdateNeedle(0.0);
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
  m_meter.SetMeterSize(130);
 }
 
@@ -63,7 +64,8 @@ void CMIVoltmeter::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMIVoltmeter::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMIVoltmeter::GetValue(void)

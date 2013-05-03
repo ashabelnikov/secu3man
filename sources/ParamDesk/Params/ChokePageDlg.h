@@ -47,6 +47,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   void SetValues(const SECU3IO::ChokePar* i_values);
 
   void EnableChokeTesting(bool enable);
+  void EnableChokeManPos(bool enable);
 
  // Implementation
  protected:
@@ -55,17 +56,21 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnChangePdChokeSMStepsNumEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateChokeTestBtn(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateChokeManPosBtn(CCmdUI* pCmdUI);
   afx_msg void OnSMTestButton();
+  afx_msg void OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::ChokePar m_params;
   bool m_enabled;
   bool m_choketst_enabled;
+  bool m_chokemanpos_enabled;
 
   CSpinButtonCtrlEx m_sm_steps_num_spin;
   CEditEx m_sm_steps_num_edit;
   CButton m_sm_test_check;
+  CSpinButtonCtrl m_man_ctrl_spin;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

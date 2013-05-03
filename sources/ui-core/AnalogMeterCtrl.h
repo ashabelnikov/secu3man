@@ -30,7 +30,7 @@ class AFX_EXT_CLASS CAnalogMeterCtrl : public CStatic, public CAnalogMeter
   virtual ~CAnalogMeterCtrl();
 
  public:
-  void UpdateNeedle(double dPos);
+  void Update(void);
 
   void Redraw(void);
 

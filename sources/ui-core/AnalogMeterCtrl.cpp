@@ -53,10 +53,10 @@ void CAnalogMeterCtrl::OnPaint()
  // Do not call CStatic::OnPaint() for painting messages
 }
 
-void CAnalogMeterCtrl::UpdateNeedle(double dPos)
+void CAnalogMeterCtrl::Update(void)
 {
  CClientDC dc(this);
- CAnalogMeter::UpdateNeedle(&dc, dPos);
+ CAnalogMeter::Update(&dc);
 }
 
 void CAnalogMeterCtrl::Redraw(void)

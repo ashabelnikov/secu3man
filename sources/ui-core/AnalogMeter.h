@@ -28,16 +28,17 @@ class AFX_EXT_CLASS CAnalogMeter
  // Operations
  public:
   void ShowMeter(CDC *pDC, CRect rectBorder);
-  virtual void UpdateNeedle(CDC *pDC, double dPos);
+  virtual void Update(CDC *pDC);
 
   void SetColor(enum MeterMemberEnum meter_member, COLORREF Color);
   void SetState(enum MeterMemberEnum meter_member, bool State);
   void SetRange(double dMin, double dMax);
+  void SetNeedleValue(double value);
+  void SetTRPane(CString strPane);
   void SetFontScale(int nFontScale);
   void SetLabelsDecimals(int nRangeDecimals);
   void SetValueDecimals(int nValueDecimals);
   void SetTitle(CString strTitle);
-  void SetTRPane(CString strPane);
   void SetUnit(CString strUnit);
   void SetGridLineWidth(int width)
   {
@@ -59,9 +60,9 @@ class AFX_EXT_CLASS CAnalogMeter
   int     GetRangeDecimals() const {return m_nLabelsDecimals; };
   int     GetValueDecimals() const {return m_nValueDecimals; };
   CString GetTitle() const {return m_strTitle; };
-  CString GetTRPane() const {return m_strTRPane; };
+  CString GetTRPane() const {return m_strTRPane_n; };
   CString GetUnit() const {return m_strUnit; };
-  double  GetNeedlePos(void) const {return m_dNeedlePos;};
+  double  GetNeedlePos(void) const {return m_dNeedlePos_n;};
 
  protected:
   bool m_boolUseBitmaps;
@@ -128,12 +129,14 @@ class AFX_EXT_CLASS CAnalogMeter
   double m_dLimitAngleRad;
   double m_dRadiansPerValue;
   double m_dNeedlePos;
+  double m_dNeedlePos_n;
   double m_dMinScale;
   double m_dMaxScale;
 
   CString m_strTitle;
   CString m_strUnit;
   CString m_strTRPane;
+  CString m_strTRPane_n;
 
   CDC     m_dcGrid;
   CBitmap m_bitmapGrid;
