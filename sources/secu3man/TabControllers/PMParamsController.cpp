@@ -57,7 +57,7 @@ void CPMParamsController::OnActivate(void)
  bool result = mp_view->SetCurSel(m_lastSel);
 
  //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
- m_pd_changes_timer.SetTimer(this, &CPMParamsController::OnParamDeskChangesTimer, 500);
+ m_pd_changes_timer.SetTimer(this, &CPMParamsController::OnParamDeskChangesTimer, 250);
 }
 
 void CPMParamsController::OnDeactivate(void)
@@ -133,7 +133,8 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  //in full-sequential ignition mode odd cylinder number engines are also supported
  mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0);
 
- mp_view->EnableChokeTesting(true);
+ mp_view->EnableChokeTesting((opt & (1 << COPT_SM_CONTROL)) > 0);
+ mp_view->EnableChokeManPos((opt & (1 << COPT_SM_CONTROL)) > 0);
 }
 
 //from view. Очередная вкладка активировалась
@@ -170,6 +171,11 @@ void CPMParamsController::OnParamDeskChangesTimer(void)
 
   //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
   mp_comm->m_pControlApp->SendPacket(view_descriptor, &packet_data);
+  if (view_descriptor == CHOKE_PAR)
+  {
+   packet_data.m_ChokePar.manual_delta = 0; //reset accumulated value
+   mp_view->SetValues(view_descriptor, &packet_data);
+  }
 
   m_parameters_changed = false; //обработали событие - сбрасываем признак
  }

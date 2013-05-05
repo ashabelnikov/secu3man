@@ -490,6 +490,9 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL         "",IDC_PD_CHOKE_MANUAL_POS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP | UDS_HORZ,23,30,35,20
+    LTEXT           "Ручное управл.",IDC_PD_CHOKE_MANUAL_POS_CAPTION,62,31,26,20
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,
@@ -667,6 +670,7 @@ BEGIN
     IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Позволяет проверить работу заслонки. Заслонка выставляется в начальное положение и затем начинает полностью открываться и закрываться (пока нажата кнопка)."
     IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT "Кол-во шагов ШД между полностью закрытым и открытым положениями ВЗ"
+    IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Изменение положения ВЗ вручную. После первого нажатия на кнопку система входит в ручной режим управл. ВЗ, который будет действовать до выкл. зажигания."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1189,6 +1193,9 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
+    CONTROL         "",IDC_PD_CHOKE_MANUAL_POS_SPIN,
+                    "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP | UDS_HORZ,23,30,35,20
+    LTEXT           "Manual control",IDC_PD_CHOKE_MANUAL_POS_CAPTION,62,31,26,20
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,23,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,
@@ -1378,6 +1385,7 @@ BEGIN
     IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Allows to check working of choke. Choke is being set to initial position and after it is being opened and closed (while button is pressed)."
     IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT "Number of SM steps between fully closed and fully opend positions of choke"
+    IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Manual choke control. System will enter manual control mode after first click, this mode will be active while ignition is ON"
 END
 
 STRINGTABLE DISCARDABLE 

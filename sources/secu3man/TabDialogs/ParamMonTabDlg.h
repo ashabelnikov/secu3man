@@ -26,6 +26,7 @@
 #include "ui-core/TabDialog.h"
 
 class CCEDeskDlg;
+class CLabel;
 class CMIDeskDlg;
 class CParamDeskDlg;
 class CRSDeskDlg;
@@ -74,6 +75,7 @@ class CParamMonTabDlg : public CTabDialog
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;
   CStatic m_save_note_text;
+  std::auto_ptr<CLabel> mp_secu3orgLink;
 
   EventHandler m_OnRawSensorsCheck;
   EventHandler m_OnEditTablesCheck;
@@ -83,6 +85,7 @@ class CParamMonTabDlg : public CTabDialog
   CRect m_original_ce_rect;
   CPoint m_original_check_pos;
   CPoint m_original_button_pos;
+  CPoint m_original_link_pos;
   bool m_floating;
   bool m_enlarged;
   bool m_exfixtures;

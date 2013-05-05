@@ -9,21 +9,21 @@ BCB = $(MAKEDIR)\..
 !endif
 # ----------------------------------------------------------------------------
 PROJECT  = ..\..\binaries\Chart2D.dll
-OBJFILES = Form2D.obj Chart2D.obj TFloatUpDown.obj
+OBJFILES = Form2D.obj Chart2D.obj TFloatUpDown.obj TChartEx.obj
 RESDEPEN = $(RESFILES) Form2D.dfm
 RESFILES = resource.res
 DEFFILE  = Chart2D.def
-LIBFILES = 
+LIBFILES =
 # ----------------------------------------------------------------------------
 CFLAG1 = -Od -Hc -w -k -r- -y -v -vi- -c -a4 -b- -w-par -w-inl -Vx -Ve -x
-CFLAG2 = -I$(BCB)\include;$(BCB)\include\vcl -H=$(BCB)\lib\vcld.csm 
+CFLAG2 = -I$(BCB)\include;$(BCB)\include\vcl -H=$(BCB)\lib\vcld.csm
 PFLAGS = -U$(BCB)\lib\obj;$(BCB)\lib \
    -I$(BCB)\include;$(BCB)\include\vcl \
    -AWinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE -v \
-   -$Y -$W -$O- -JPHNV -M     
+   -$Y -$W -$O- -JPHNV -M
 RFLAGS = -i$(BCB)\include;$(BCB)\include\vcl 
-LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib -aa -Tpd -x -Gn -Gi
-IFLAGS = 
+LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib -aa -Tpd -x -Gn -Gi -l..\..\libraries
+IFLAGS =
 LINKER = ilink32
 # ----------------------------------------------------------------------------
 ALLOBJ = c0d32.obj $(OBJFILES)
@@ -39,7 +39,7 @@ $(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(PROJECT),, +
     $(ALLLIB), +
     $(DEFFILE), +
-    $(ALLRES) 
+    $(ALLRES)
 !
 
 .pas.hpp:
@@ -49,7 +49,7 @@ $(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
     $(BCB)\BIN\dcc32 $(PFLAGS) { $** }
 
 .cpp.obj:
-    $(BCB)\BIN\bcc32 $(CFLAG1) $(CFLAG2) -o$* $* 
+    $(BCB)\BIN\bcc32 $(CFLAG1) $(CFLAG2) -o$* $*
 
 .c.obj:
     $(BCB)\BIN\bcc32 $(CFLAG1) $(CFLAG2) -o$* $**
@@ -57,3 +57,10 @@ $(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 .rc.res:
     $(BCB)\BIN\brcc32 $(RFLAGS) $<
 #------------------------------------------------------------------------------
+
+clean:
+    @if exist ..\..\binaries\Chart2D.dll ( DEL /Q ..\..\binaries\Chart2D.dll )
+    @if exist ..\..\binaries\Chart2D.tds ( DEL /Q ..\..\binaries\Chart2D.tds )
+    @if exist ..\..\libraries\Chart2D.lib ( DEL /Q ..\..\libraries\Chart2D.lib )
+    @if exist *.obj ( DEL /Q *.obj )
+    @if exist *.res ( DEL /Q *.res )

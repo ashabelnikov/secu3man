@@ -51,7 +51,8 @@ void CMIPressure::Create(void)
  m_meter.AddAlertZone(10,30,RGB(180,130,130));
  m_meter.AddAlertZone(30,90,RGB(120,200,120));
  m_meter.AddAlertZone(90,110,RGB(180,130,130));
- m_meter.UpdateNeedle(0.0);
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
 }
 
 void CMIPressure::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -62,7 +63,8 @@ void CMIPressure::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMIPressure::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMIPressure::GetValue(void)

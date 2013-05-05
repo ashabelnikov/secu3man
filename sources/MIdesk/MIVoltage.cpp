@@ -50,7 +50,8 @@ void CMIVoltage::Create(void)
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
  m_meter.SetTickNumber(20);
  m_meter.AddAlertZone(0.0,5.0,RGB(180,180,230));
- m_meter.UpdateNeedle(0.0);
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
  m_meter.SetMeterSize(130);
 
  //create a tooltip control and assign tooltips
@@ -69,7 +70,8 @@ void CMIVoltage::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 //--------------------interface-----------------------
 void CMIVoltage::SetValue(float value)
 {
- m_meter.UpdateNeedle((double)value);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMIVoltage::GetValue(void)

@@ -1,3 +1,6 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
 cmake_minimum_required(VERSION 2.6)
 
 set(PROJECT secu3man)
@@ -6,6 +9,7 @@ project(${PROJECT})
 ADD_DEFINITIONS(-D_CRT_NON_CONFORMING_SWPRINTFS)
 ADD_DEFINITIONS(-D_CRT_SECURE_NO_WARNINGS)
 ADD_DEFINITIONS(-D_SCL_SECURE_NO_WARNINGS)
+ADD_DEFINITIONS(-D_AFXDLL)
 #ADD_DEFINITIONS(-D_UNICODE)
 
 if(MSVC_VERSION GREATER 1299)
@@ -115,8 +119,9 @@ set(SOURCES
   TabDialogs/LPControlPanelDlg.cpp
   TabDialogs/ParamMonTabDlg.cpp
   TabsManagement/MainTabController.cpp
-  Resources/secu3man.rc
   )
+
+set(RESOURCES Resources/secu3man.rc )
 
 foreach(src_file ${SOURCES})
   set_source_files_properties(${src_file}
@@ -125,5 +130,5 @@ foreach(src_file ${SOURCES})
 endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
-add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES})
+add_executable(${PROJECT} WIN32 ${HEADERS} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT} ${LIBRARIES})

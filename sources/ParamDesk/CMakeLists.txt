@@ -1,3 +1,6 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
 cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
@@ -63,11 +66,12 @@ set(SOURCES
   Params/StarterPageDlg.cpp
   Params/TemperPageDlg.cpp
   Params/IORemappingDlg.cpp
-  Resources/ParamDesk.rc
   Tables/TablesDeskDlg.cpp
   Tables/TablesPageDlg.cpp
   Tables/TDContextMenuManager.cpp
   )
+
+set(RESOURCES Resources/ParamDesk.rc )
 
 foreach(src_file ${SOURCES})
   set_source_files_properties(${src_file}
@@ -76,5 +80,5 @@ foreach(src_file ${SOURCES})
 endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
-add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
+add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES} ${RESOURCES})
 target_link_libraries(${PROJECT} ui-core propgrid tabldesk)

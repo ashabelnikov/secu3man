@@ -62,6 +62,7 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 {
  memset(&m_horizontal_axis_grid_values[0][0], 0, sizeof(float) * 1024);
  memset(&m_horizontal_axis_grid_values[1][0], 0, sizeof(float) * 1024);
+ m_selpts.push_back(0);
 }
 
 //---------------------------------------------------------------------------
@@ -225,18 +226,41 @@ void __fastcall TForm2D::Chart1ClickSeries(TCustomChart *Sender,
 {
  if (Series==Series2)
  {
+  //if Ctrl key is not pressed than select single point
+  if (!Shift.Contains(ssCtrl))
+  {
+   MarkPoints(false);
+   m_selpts.clear();
+   m_selpts.push_back(ValueIndex);
+   MarkPoints(true);
+  }
+
   if (Button==mbLeft) //левая кнопка мышки?
   {
    m_setval  = 1;
    m_val_n = ValueIndex;
   }
  }
+ m_prev_pt = std::make_pair(X, Y);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
       TShiftState Shift, int X, int Y)
 {
+ //implementation of multiple points selection by using Ctrl key
+ if (Shift.Contains(ssCtrl) && (m_prev_pt.first == X && m_prev_pt.second == Y))
+ {
+  MarkPoints(false);
+  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
+  if (it == m_selpts.end())
+   m_selpts.push_back(m_val_n);
+  else
+   m_selpts.erase(it);
+  MarkPoints(true);
+  std::sort(m_selpts.begin(), m_selpts.end());
+ }
+
  if ((m_pOnChange) && (m_setval))
   m_pOnChange(m_param_on_change);
  m_setval = 0;
@@ -248,9 +272,17 @@ void __fastcall TForm2D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
 {
  double v;
  if (m_setval)
- {
+ {//select on the fly point being moved
+  std::deque<int>::iterator it = std::find(m_selpts.begin(), m_selpts.end(), m_val_n);
+  if (it == m_selpts.end())
+  {
+   m_selpts.push_back(m_val_n);
+   MarkPoints(true);
+   std::sort(m_selpts.begin(), m_selpts.end());
+  }
+  //Move all selected points
   v = Series2->YScreenToValue(Y);
-  RestrictAndSetValue(m_val_n, v);
+  ShiftPoints(v - Series2->YValue[m_val_n]);
  }
 }
 
@@ -361,10 +393,24 @@ void TForm2D::RestrictAndSetValue(int index, double v)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ShiftFunction(float i_value)
 {
- for (int i = 0; i < m_count_of_function_points; i++ )
+ for (int i = 0; i < m_count_of_function_points; ++i )
  {
   RestrictAndSetValue(i, Series2->YValue[i] + i_value);
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::ShiftPoints(float i_value)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+  RestrictAndSetValue(m_selpts[i], Series2->YValue[m_selpts[i]] + i_value);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::MarkPoints(bool i_mark)
+{
+ for(size_t i = 0; i < m_selpts.size(); ++i)
+  Series2->ValueColor[m_selpts[i]] = i_mark ? clNavy : clRed; 
 }
 
 //---------------------------------------------------------------------------
@@ -379,7 +425,7 @@ void __fastcall TForm2D::WndProc(Messages::TMessage &Message)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::OnZeroAllPoints(TObject *Sender)
 {
- for (int i = 0; i < m_count_of_function_points; i++ )
+ for (int i = 0; i < m_count_of_function_points; ++i )
   RestrictAndSetValue(i, 0);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -443,10 +489,103 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm2D::SelLeftArrow(bool i_shift)
+{
+ if (i_shift)
+ {//Shift key is pressed
+  MarkPoints(false);
+  if (m_selpts.front() != m_val_n)
+  {
+   m_selpts.pop_back();
+   m_val_n = m_selpts.back();
+  }
+  else
+  {
+   m_val_n = m_selpts.front() - 1;
+   if (m_val_n >= 0)
+    m_selpts.push_front(m_val_n);
+   else
+    m_val_n = 0;
+  }
+  MarkPoints(true);
+ }
+ else
+ {//Without shift
+  MarkPoints(false);
+  int prev_pt = m_selpts.size() ? m_selpts.back() - 1 : 0;
+  if (prev_pt < 0)
+   prev_pt = 0;
+  m_selpts.clear();
+  m_selpts.push_back(prev_pt);
+  MarkPoints(true);
+  m_val_n = prev_pt;
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::SelRightArrow(bool i_shift)
+{
+ if (i_shift)
+ { //Shift key is pressed
+  MarkPoints(false);
+  if (m_selpts.back() != m_val_n)
+  {
+   m_selpts.pop_front();
+   m_val_n = m_selpts.front();
+  }
+  else
+  {
+   m_val_n = m_selpts.back() + 1;
+   if (m_val_n < m_count_of_function_points)
+    m_selpts.push_back(m_val_n);
+   else
+    m_val_n = m_count_of_function_points-1;
+  }
+  MarkPoints(true);
+ }
+ else
+ { //Without shift
+  MarkPoints(false);
+  int next_pt = m_selpts.size() ? m_selpts.back() + 1 : 0;
+  if (next_pt >= m_count_of_function_points)
+   next_pt = m_count_of_function_points-1;
+  m_selpts.clear();
+  m_selpts.push_back(next_pt);
+  MarkPoints(true);
+  m_val_n = next_pt;
+ }
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift)
 {
- TWinControl* ctrl = (TWinControl*)Sender;
+ //Implement keyboard actions related to chart
+ if (ActiveControl == Chart1)
+ {
+  if (Key == VK_UP)
+  { //move points upward
+   ShiftPoints(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
+   if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+  }
+  else if (Key == VK_DOWN)
+  { //move points downward
+   ShiftPoints(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
+   if (m_pOnChange)
+    m_pOnChange(m_param_on_change);
+  }
+  else if (Key == VK_LEFT)
+  { //move selection to the left
+   SelLeftArrow(Shift.Contains(ssShift));
+  }
+  else if (Key == VK_RIGHT)
+  { //move selection to the right
+   SelRightArrow(Shift.Contains(ssShift));
+  }
+ }
 
+ //Following code simulates normal dialog messages
+ TWinControl* ctrl = (TWinControl*)Sender;
  if (0 != ctrl->Perform(CM_CHILDKEY, Key, (LPARAM)ctrl))
   return;
 
@@ -476,6 +615,27 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
      (this->Perform(CM_DIALOGKEY, Key, 0)))
   return;
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnEnterChart(TObject* Sender)
+{
+ MarkPoints(true);
+ Chart1->Title->Font->Style = TFontStyles() << fsBold;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnExitChart(TObject* Sender)
+{
+ MarkPoints(false);
+ Chart1->Title->Font->Style = TFontStyles();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
+{
+ if (ActiveControl != Chart1)
+  ActiveControl = Chart1;
 }
 
 //---------------------------------------------------------------------------

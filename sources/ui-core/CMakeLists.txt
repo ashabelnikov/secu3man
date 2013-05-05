@@ -1,3 +1,6 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
 cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
@@ -31,6 +34,7 @@ set(HEADERS
   HotKeysManager.h
   HotKeysToCmdRouter.h
   ITabControllerEvent.h
+  Label.h
   LEDIndicator.h
   MPCLogoPane.h
   MPCStatusBar.h
@@ -57,6 +61,7 @@ set(SOURCES
   HotKeysManager.cpp
   HotKeysToCmdRouter.cpp
   ITabControllerEvent.cpp
+  Label.cpp
   LEDIndicator.cpp
   MPCLogoPane.cpp
   MPCStatusBar.cpp

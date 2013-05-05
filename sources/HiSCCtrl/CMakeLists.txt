@@ -1,3 +1,6 @@
+# SECU-3  - An open source, free engine control unit
+# http://secu-3.org
+
 cmake_minimum_required(VERSION 2.6)
 
 ADD_DEFINITIONS(-D_AFXDLL)
@@ -18,6 +21,7 @@ include_directories(../)
 project(${PROJECT})
 
 set(HEADERS
+  StdAfx.h
   sources/ChartAxis.h
   sources/ChartAxisLabel.h
   sources/ChartBarSerie.h
@@ -32,10 +36,10 @@ set(HEADERS
   sources/ChartSerie.h
   sources/ChartSurfaceSerie.h
   sources/ChartTitle.h
-  StdAfx.h
   )
 
 set(SOURCES
+  StdAfx.cpp
   sources/ChartAxis.cpp
   sources/ChartAxisLabel.cpp
   sources/ChartBarSerie.cpp
@@ -50,7 +54,6 @@ set(SOURCES
   sources/ChartSerie.cpp
   sources/ChartSurfaceSerie.cpp
   sources/ChartTitle.cpp
-  StdAfx.cpp
   )
 
 foreach(src_file ${SOURCES})

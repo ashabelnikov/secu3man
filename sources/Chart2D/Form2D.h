@@ -23,7 +23,6 @@
 #define _FORM2D_H_
 //---------------------------------------------------------------------------
 #include <Buttons.hpp>
-#include <Chart.hpp>
 #include <Classes.hpp>
 #include <ComCtrls.hpp>
 #include <Controls.hpp>
@@ -32,9 +31,9 @@
 #include <Menus.hpp>
 #include <Series.hpp>
 #include <StdCtrls.hpp>
-#include <TeEngine.hpp>
-#include <TeeProcs.hpp>
+#include <deque>
 #include "TFloatUpDown.h"
+#include "TChartEx.h"
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
@@ -45,7 +44,7 @@ typedef void (__cdecl *OnChangeValue)(void* i_param, int type, float value);
 class TForm2D : public TForm
 {
  __published:  // IDE-managed Components
-  TChart *Chart1;
+  TChartEx *Chart1;
   TLineSeries *Series1;
   TLineSeries *Series2;
   TBitBtn *ButtonAngleUp;
@@ -75,6 +74,9 @@ class TForm2D : public TForm
   void __fastcall EditXBeginOnChange(TObject *Sender);
   void __fastcall EditXEndOnChange(TObject *Sender);
   void __fastcall CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
+  void __fastcall OnEnterChart(TObject* Sender);
+  void __fastcall OnExitChart(TObject* Sender);
+  void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);
@@ -109,6 +111,10 @@ class TForm2D : public TForm
  private:
   void RestrictAndSetValue(int index, double v);
   void __fastcall ShiftFunction(float i_value);
+  void __fastcall ShiftPoints(float i_value);
+  void __fastcall MarkPoints(bool i_mark);
+  void __fastcall SelLeftArrow(bool i_shift);
+  void __fastcall SelRightArrow(bool i_shift);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private:  // User declarations
@@ -140,6 +146,8 @@ class TForm2D : public TForm
 
   bool m_setval;
   int  m_val_n;
+  std::deque<int> m_selpts;
+  std::pair<int, int> m_prev_pt;
 };
 #endif //_FORM2D_H_
 

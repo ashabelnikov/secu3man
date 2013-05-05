@@ -83,7 +83,7 @@ object Form3D: TForm3D
     Font.Style = []
     ParentFont = False
   end
-  object Chart1: TChart
+  object Chart1: TChartEx
     Left = 1
     Top = 1
     Width = 700
@@ -92,8 +92,7 @@ object Form3D: TForm3D
     AnimatedZoomSteps = 4
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
-    Title.Text.Strings = (
-      'График рабочего УОЗ')
+    Title.Text.Strings = ('График рабочего УОЗ')
     OnClickSeries = Chart1ClickSeries
     BottomAxis.Title.Caption = 'Обороты (мин-1)'
     LeftAxis.Automatic = False
@@ -108,9 +107,13 @@ object Form3D: TForm3D
     View3DOptions.Orthogonal = False
     View3DOptions.Zoom = 72
     TabOrder = 0
-    TabStop = False
+    TabStop = True
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
+    OnKeyDown = CtrlKeyDown
+    OnEnter = OnEnterChart
+    OnExit = OnExitChart
+    OnMouseDown = OnChartMouseDown
     object Series1: TLineSeries
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False

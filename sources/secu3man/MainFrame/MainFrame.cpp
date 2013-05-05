@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_SETFOCUS()
  ON_WM_CLOSE()
  ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
+ ON_COMMAND(ID_APP_DEV_SITE, OnAppDevSite)
  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
@@ -245,6 +246,11 @@ void CMainFrame::setOnAppAbout(EventHandler i_OnFunction)
  m_OnAppAbout = i_OnFunction;
 }
 
+void CMainFrame::setOnAppDevSite(EventHandler i_OnFunction)
+{
+ m_OnAppDevSite = i_OnFunction;
+}
+
 void CMainFrame::setOnAppSettings(EventHandler i_OnFunction)
 {
  m_OnAppSettings = i_OnFunction;
@@ -292,6 +298,12 @@ void CMainFrame::OnAppAbout()
 {
  if (m_OnAppAbout)
   m_OnAppAbout();
+}
+
+void CMainFrame::OnAppDevSite()
+{
+ if (m_OnAppDevSite)
+  m_OnAppDevSite();
 }
 
 void CMainFrame::OnAppSettings()

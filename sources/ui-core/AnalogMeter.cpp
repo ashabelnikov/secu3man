@@ -48,8 +48,11 @@ CAnalogMeter::CAnalogMeter()
  // default unit, scaling and needle position
  m_dMinScale   = -10.0;
  m_dMaxScale   =  10.0;
- m_dNeedlePos  =   0.0;
+ m_dNeedlePos  =  0.0;
+ m_dNeedlePos_n=  0.0;
  m_strTitle    =  "";
+ m_strTRPane   =  "";
+ m_strTRPane_n =  "";
  m_strUnit     =  "";
 
  // for numerical values
@@ -61,6 +64,7 @@ CAnalogMeter::CAnalogMeter()
 
  // switches
  m_swTitle   = true;
+ m_swTRPane  = false;
  m_swGrid    = true;
  m_swLabels  = true;
  m_swValue   = true;
@@ -69,6 +73,8 @@ CAnalogMeter::CAnalogMeter()
 
  // title color
  m_colorTitle     = RGB(128, 128, 128);
+ //top-right pane color
+ m_colorTRPane    = RGB(0, 0, 255);
  // normal grid color
  m_colorGrid      = RGB(0, 0, 50);
  // current numerical value color
@@ -78,7 +84,7 @@ CAnalogMeter::CAnalogMeter()
  // needle color
  m_colorNeedle    = RGB(255, 0, 0) ;
  // range color
- m_colorLabels     = RGB(0, 0, 0);
+ m_colorLabels    = RGB(0, 0, 0);
  // value color
  m_colorValue     = RGB(0, 0, 0);
 
@@ -175,15 +181,18 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
 }
 
 //////////////////////////////////////////////////////
-void CAnalogMeter::UpdateNeedle(CDC *pDC, double dPos)
+void CAnalogMeter::Update(CDC *pDC)
 {
  // if the needle hasn't changed, don't bother updating
- if (m_dNeedlePos == dPos)
+ if ((m_dNeedlePos == m_dNeedlePos_n) && (m_strTRPane == m_strTRPane_n))
   return;
 
- // store the position in the member variable
+ // store the values in the member variables
  // for availability elsewhere
- m_dNeedlePos = dPos;
+ if (m_dNeedlePos != m_dNeedlePos_n)
+  m_dNeedlePos = m_dNeedlePos_n;
+ if (m_strTRPane != m_strTRPane_n)
+  m_strTRPane = m_strTRPane_n;
 
  // do not support updates if we are not working with
  // bitmaps images
@@ -426,7 +435,7 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
  Circle.DeflateRect(r,r,r,r);
 
  CPoint ptStart(ROUND(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
-		        ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)));
+ ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)));
  CPoint ptEnd(m_nLeftLimitXPix, m_nLeftLimitYPix);
 
  pBrushOld = m_dcGrid.SelectObject(&chord_brush);
@@ -589,6 +598,7 @@ void CAnalogMeter::DrawNeedle()
  double  dAngleRad, dX, dY;
  double  dCosAngle, dSinAngle;
  bool    disable_value;
+ bool    disable_trpane;
 
  if (!m_dcNeedle.GetSafeHdc())
   return;
@@ -618,9 +628,11 @@ void CAnalogMeter::DrawNeedle()
  // check sizes       //
  ///////////////////////
  disable_value = false;
+ disable_trpane = false;
  if((m_rectGfx.Height() < 50) || (m_rectGfx.Width() < 50))
  {
   disable_value = true;
+  disable_trpane = true;
  }
  if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20))
   return;
@@ -637,6 +649,18 @@ void CAnalogMeter::DrawNeedle()
       m_rectValue.bottom-m_nTextBaseSpacing, tempString);
 
   m_dcNeedle.SelectObject(pFontOld);
+ }
+
+ if (!disable_trpane && m_swTRPane) //top-right pane
+ {
+  pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
+  m_dcNeedle.SetTextAlign(TA_RIGHT | TA_TOP);
+  m_dcNeedle.SetTextColor(m_colorTRPane^m_colorBGround);
+  m_dcNeedle.SetBkColor(RGB(0,0,0)); 
+  CRect rect = m_rectDraw;
+  rect.DeflateRect(8,3);
+  m_dcNeedle.TextOut(rect.right, rect.top, m_strTRPane);
+  m_dcNeedle.SelectObject(pFontOld); 
  }
 
  dAngleRad = (m_dNeedlePos - m_dMinScale)*m_dRadiansPerValue - m_dLimitAngleRad;
@@ -682,7 +706,7 @@ void CAnalogMeter::DrawNeedle()
   // draw circle at the bottom
   int r = (m_nRadiusPix/20);
   m_dcNeedle.Ellipse (m_nCXPix-m_nHalfBaseWidth-r, m_nCYPix-m_nHalfBaseWidth-r,
-	m_nCXPix+m_nHalfBaseWidth+1+r, m_nCYPix+m_nHalfBaseWidth+1+r);
+  m_nCXPix+m_nHalfBaseWidth+1+r, m_nCYPix+m_nHalfBaseWidth+1+r);
  }
 
  // old pen / brush
@@ -795,6 +819,10 @@ void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
    m_swTitle = State;
    break;
 
+  case meter_trpane:
+   m_swTRPane = State;
+   break;
+
   case meter_grid:
    m_swGrid = State;
    break;
@@ -824,6 +852,10 @@ void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
  {
   case meter_title:
    m_colorTitle = Color;
+   break;
+
+  case meter_trpane:
+   m_colorTRPane = Color;
    break;
 
   case meter_needle:
@@ -859,6 +891,16 @@ void CAnalogMeter::SetRange(double dMin, double dMax)
  m_dMinScale   = dMin;
  m_dMaxScale   = dMax;
  m_boolForceRedraw = true;
+}
+
+void CAnalogMeter::SetNeedleValue(double value)
+{
+ m_dNeedlePos_n = value;
+}
+
+void CAnalogMeter::SetTRPane(CString strPane)
+{
+ m_strTRPane_n = strPane;
 }
 
 //////////////////////////////////////////////////////
@@ -913,12 +955,16 @@ void CAnalogMeter::SetUnit(CString strUnit)
 }
 
 //////////////////////////////////////////////////////
-void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor)
+void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const
 {
  switch(meter_member)
  {
   case meter_title:
    *pColor = m_colorTitle;
+   break;
+
+  case meter_trpane:
+   *pColor = m_colorTRPane;
    break;
 
   case meter_needle:
@@ -944,12 +990,16 @@ void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor)
 }
 
 //////////////////////////////////////////////////////
-void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState)
+void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) const
 {
  switch(meter_member)
  {
   case meter_title:
    *pState = m_swTitle;
+   break;
+
+  case meter_trpane:
+   *pState = m_swTRPane;
    break;
 
   case meter_grid:

@@ -8,6 +8,7 @@
 enum MeterMemberEnum
 {
  meter_title,   //заголовок (название прибора)
+ meter_trpane,  //top-right pane
  meter_needle,  //стрелка
  meter_grid,    //деления шкалы
  meter_value,   //числовое значение отображаемое внизу
@@ -27,11 +28,13 @@ class AFX_EXT_CLASS CAnalogMeter
  // Operations
  public:
   void ShowMeter(CDC *pDC, CRect rectBorder);
-  virtual void UpdateNeedle(CDC *pDC, double dPos);
+  virtual void Update(CDC *pDC);
 
   void SetColor(enum MeterMemberEnum meter_member, COLORREF Color);
   void SetState(enum MeterMemberEnum meter_member, bool State);
   void SetRange(double dMin, double dMax);
+  void SetNeedleValue(double value);
+  void SetTRPane(CString strPane);
   void SetFontScale(int nFontScale);
   void SetLabelsDecimals(int nRangeDecimals);
   void SetValueDecimals(int nValueDecimals);
@@ -44,21 +47,22 @@ class AFX_EXT_CLASS CAnalogMeter
   }
 
   void SetMeterSize(double half_angle) {m_dLimitAngleDeg = half_angle;}
+  void SetTickNumber(int number) { m_nTickNumber = number;};
 
   void AddAlertZone(double start,double end, COLORREF color);
   void ResetAlertZones(void);
 
-  void    GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor);
-  void    GetState(enum MeterMemberEnum meter_member, bool* pState);
-  double  GetMinRange()      {return m_dMinScale; };
-  double  GetMaxRange()      {return m_dMaxScale; };
-  int     GetFontScale()     {return m_nFontScale; };
-  int     GetRangeDecimals() {return m_nLabelsDecimals; };
-  int     GetValueDecimals() {return m_nValueDecimals; };
-  CString GetTitle()         {return m_strTitle; };
-  CString GetUnit()          {return m_strUnit; };
-  double  GetNeedlePos(void) {return m_dNeedlePos;};
-  void    SetTickNumber(int number) { m_nTickNumber = number;};
+  void    GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
+  void    GetState(enum MeterMemberEnum meter_member, bool* pState) const;
+  double  GetMinRange() const {return m_dMinScale; };
+  double  GetMaxRange() const {return m_dMaxScale; };
+  int     GetFontScale() const {return m_nFontScale; };
+  int     GetRangeDecimals() const {return m_nLabelsDecimals; };
+  int     GetValueDecimals() const {return m_nValueDecimals; };
+  CString GetTitle() const {return m_strTitle; };
+  CString GetTRPane() const {return m_strTRPane_n; };
+  CString GetUnit() const {return m_strUnit; };
+  double  GetNeedlePos(void) const {return m_dNeedlePos_n;};
 
  protected:
   bool m_boolUseBitmaps;
@@ -87,6 +91,7 @@ class AFX_EXT_CLASS CAnalogMeter
   std::vector<AlertZone*> m_AlertZones;
 
   bool m_swTitle;
+  bool m_swTRPane;
   bool m_swGrid;
   bool m_swValue;
   bool m_swLabels;
@@ -94,6 +99,7 @@ class AFX_EXT_CLASS CAnalogMeter
   bool m_swNeedle;
 
   COLORREF m_colorTitle;
+  COLORREF m_colorTRPane;
   COLORREF m_colorNeedle;
   COLORREF m_colorGrid;
   COLORREF m_colorValue;
@@ -123,11 +129,14 @@ class AFX_EXT_CLASS CAnalogMeter
   double m_dLimitAngleRad;
   double m_dRadiansPerValue;
   double m_dNeedlePos;
+  double m_dNeedlePos_n;
   double m_dMinScale;
   double m_dMaxScale;
 
   CString m_strTitle;
   CString m_strUnit;
+  CString m_strTRPane;
+  CString m_strTRPane_n;
 
   CDC     m_dcGrid;
   CBitmap m_bitmapGrid;

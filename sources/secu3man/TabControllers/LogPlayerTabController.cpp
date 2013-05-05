@@ -136,6 +136,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_LPPanelDlg->SetTimeFactor(m_current_time_factor);
 
  mp_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ mp_view->mp_MIDeskDlg->ShowChokePos(true);
 }
 
 //from MainTabController

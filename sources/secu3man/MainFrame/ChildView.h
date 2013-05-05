@@ -35,7 +35,7 @@ class CChildView : public CModelessDialog
 
   //Возвращает false если ошибка
   bool Create(CWnd* ip_parent);
-  
+
   //Add view tab
   void AddView(const _TSTRING& title, CTabDialog* ip_dlg, const int nImage);
 
@@ -44,10 +44,10 @@ class CChildView : public CModelessDialog
 
   //Get current selection of a tab control
   int GetCurSel(void) const;
-  
+
   //Set current selection of a tab control
   void SetCurSel(int index);
-  
+
   //Set focus to default control (tab control)
   void SetFocus(bool curPage = false);
 

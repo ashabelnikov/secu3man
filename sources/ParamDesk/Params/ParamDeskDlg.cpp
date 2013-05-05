@@ -443,6 +443,11 @@ void CParamDeskDlg::EnableChokeTesting(bool i_enable)
  m_pChokePageDlg->EnableChokeTesting(i_enable);
 }
 
+void CParamDeskDlg::EnableChokeManPos(bool i_enable)
+{
+ m_pChokePageDlg->EnableChokeManPos(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

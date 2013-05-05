@@ -30,6 +30,7 @@
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "ui-core/Label.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 using namespace fastdelegate;
@@ -48,6 +49,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_RSDeskDlg(new CRSDeskDlg())
 , mp_ParamDeskDlg(new CParamDeskDlg())
 , mp_TablesDeskDlg(new CTablesDeskDlg())
+, mp_secu3orgLink(new CLabel)
 , m_floating(false)
 , m_enlarged(false)
 , m_exfixtures(false)
@@ -61,6 +63,7 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
  DDX_Control(pDX,IDC_PM_EDIT_TABLES,m_edit_tables_check);
  DDX_Control(pDX,IDC_PM_SAVE_NOTE_TEXT, m_save_note_text);
+ DDX_Control(pDX,IDC_PM_SECU3ORG_LINK, *mp_secu3orgLink);
 }
 
 LPCTSTR CParamMonTabDlg::GetDialogID(void) const
@@ -117,6 +120,12 @@ BOOL CParamMonTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_raw_sensors_check, MLL::GetString(IDS_PM_SHOW_RAW_SENSORS_TT))); 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //init HTTP link
+ mp_secu3orgLink->SetLink(true);
+ mp_secu3orgLink->SetTextColor(RGB(0, 0, 255));
+ mp_secu3orgLink->SetFontUnderline(true);
+ mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
 
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -224,11 +233,16 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
   CRect button_rect;
   m_edit_tables_check.GetWindowRect(button_rect);
   ScreenToClient(button_rect);//button rect 
+  CRect link_rect;
+  mp_secu3orgLink->GetWindowRect(link_rect);
+  ScreenToClient(link_rect);//link rect 
   rect.bottom-= max(check_rect.Height(), button_rect.Height());
   m_raw_sensors_check.SetWindowPos(0,check_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
   m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!  
   m_edit_tables_check.SetWindowPos(0,button_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
   m_original_button_pos = CPoint(button_rect.left, button_rect.top); //save it!
+  mp_secu3orgLink->SetWindowPos(0,link_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
+  m_original_link_pos = CPoint(link_rect.left, link_rect.top); //save it!  
 
   //move CE panel, don't resize it
   rect.bottom-= m_original_ce_rect.Height();
@@ -257,6 +271,7 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
  {
   m_raw_sensors_check.SetWindowPos(0,m_original_check_pos.x,m_original_check_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
   m_edit_tables_check.SetWindowPos(0,m_original_button_pos.x,m_original_button_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
+  mp_secu3orgLink->SetWindowPos(0,m_original_link_pos.x,m_original_link_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
 
   CRect rc_s;
   mp_MIDeskDlg->GetWindowRect(rc_s); 

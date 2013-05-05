@@ -154,7 +154,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   afx_msg void OnViewFWOptions();
   afx_msg void OnDropFiles(HDROP hDropInfo);
   DECLARE_MESSAGE_MAP()
-  
+
   //ITabControllerEvent interface (from tab control)
   virtual void OnSelchangeTabctl(void);
   virtual void OnSelchangingTabctl(void);

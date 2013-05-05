@@ -204,7 +204,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
 
- if (strlen((char*)raw_packet)!=47)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=49)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //частота вращения двигателя
@@ -303,6 +303,13 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
   return false;
  m_SensorDat.ce_errors = ce_errors;
  raw_packet+=4;
+
+ //Choke position
+ unsigned char choke_pos = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &choke_pos))
+  return false;
+ m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ raw_packet+=2;
 
  if (*raw_packet!='\r')
   return false;
@@ -1341,18 +1348,25 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
 
- if (strlen((char*)raw_packet)!=6)  //размер пакета без сигнального символа, дескриптора
+ if (strlen((char*)raw_packet)!=8)  //размер пакета без сигнального символа, дескриптора
   return false;
 
  //Number of stepper motor steps
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_ChokePar.sm_steps))
+ if (false == CNumericConv::Hex16ToBin(raw_packet, &m_ChokePar.sm_steps))
   return false;
  raw_packet+=4;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_ChokePar.testing))
+ if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_ChokePar.testing))
   return false;
  raw_packet+=1;
+
+ //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
+ int delta = 0;
+ if (false == CNumericConv::Hex8ToBin(raw_packet, &delta))
+  return false;
+ raw_packet+=2;
+ m_ChokePar.manual_delta = delta;
 
  if (*raw_packet!='\r')
   return false;
@@ -1665,7 +1679,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case ATTTAB_PAR:
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
-  case CHOKE_PAR: 
+  case CHOKE_PAR:
    return true;
   default:
    return false;
@@ -2034,6 +2048,7 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 {
  CNumericConv::Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
+ CNumericConv::Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
  m_outgoing_packet+= '\r';
 }
 

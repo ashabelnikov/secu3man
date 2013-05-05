@@ -16,9 +16,9 @@ IDR_MAINFRAME MENU PRELOAD DISCARDABLE
 BEGIN
     POPUP "&Программа"
     BEGIN
-        MENUITEM "Выход    Ctrl + Q",           ID_APP_EXIT
+        MENUITEM "Выход    Ctrl + Q", ID_APP_EXIT
     END
-    MENUITEM "&Настройки",                  ID_APP_SETTINGS
+    MENUITEM "&Настройки", ID_APP_SETTINGS
     POPUP "&Запись лога"
     BEGIN
         MENUITEM "Начать запись         Ctrl + B", ID_APP_BEGIN_LOG
@@ -26,7 +26,8 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "&About SECU-3 Manager...",    ID_APP_ABOUT
+        MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
+        MENUITEM "Сайт разработчиков", ID_APP_DEV_SITE
     END
     MENUITEM "Полно&экранный режим Ctrl + F", ID_FULL_SCREEN
 END
@@ -54,6 +55,7 @@ BEGIN
     CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,156,172
     CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
+    CTEXT           "http://www.secu-3.org",IDC_PM_SECU3ORG_LINK,10,217,100,10,SS_CENTERIMAGE    
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225
@@ -541,9 +543,9 @@ IDR_MAINFRAME MENU PRELOAD DISCARDABLE
 BEGIN
     POPUP "&Program"
     BEGIN
-        MENUITEM "Exit    Ctrl + Q",            ID_APP_EXIT
+        MENUITEM "Exit    Ctrl + Q", ID_APP_EXIT
     END
-    MENUITEM "&Settings",                   ID_APP_SETTINGS
+    MENUITEM "&Settings", ID_APP_SETTINGS
     POPUP "&Log writing"
     BEGIN
         MENUITEM "Begin writing         Ctrl + B", ID_APP_BEGIN_LOG
@@ -551,9 +553,10 @@ BEGIN
     END
     POPUP "&Help"
     BEGIN
-        MENUITEM "&About SECU-3 Manager...",    ID_APP_ABOUT
+        MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
+        MENUITEM "Developers' site", ID_APP_DEV_SITE
     END
-    MENUITEM "Full screen mode Ctrl + F",   ID_FULL_SCREEN
+    MENUITEM "Full screen mode Ctrl + F", ID_FULL_SCREEN
 END
 
 
@@ -578,6 +581,7 @@ BEGIN
     CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,147,172
     CONTROL         "",IDC_PM_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,193,238,20
+    CTEXT           "http://www.secu-3.org",IDC_PM_SECU3ORG_LINK,10,217,100,10,SS_CENTERIMAGE    
 END
 
 IDD_FIRMWARE_SUPPORT DIALOGEX 0, 0, 480, 225
@@ -1097,6 +1101,7 @@ IDB_CALC_UP             BITMAP     "res\\calc_up.bmp"
 IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
+IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //

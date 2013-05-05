@@ -167,6 +167,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->tps = m_throttle_gate.GetPosition();
  o_values->air_flow = (unsigned char)m_air_flow.GetValue();
  o_values->temperat = m_temperature.GetValue();
+ o_values->choke_pos = m_temperature.GetChokePos();
  o_values->add_i1 = m_add_i1.GetValue();
  o_values->add_i2 = m_add_i2.GetValue();
 }
@@ -185,7 +186,8 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_throttle_gate.SetValue(m_values.carb);
  m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
- m_temperature.SetValue(m_values.temperat);
+ m_temperature.SetChokePos(m_values.choke_pos);
+ m_temperature.SetValue(m_values.temperat);   //top-right pane
  m_add_i1.SetValue(m_values.add_i1);
  m_add_i2.SetValue(m_values.add_i2);
 }
@@ -245,4 +247,9 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
 {
  m_add_i1.Show(i_show);
  m_add_i2.Show(i_show);
+}
+
+void CMIDeskDlg::ShowChokePos(bool i_show)
+{
+ m_temperature.ShowChokePos(i_show);
 }

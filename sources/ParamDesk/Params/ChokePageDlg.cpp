@@ -35,7 +35,9 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_TEST_CHECK,OnUpdateChokeTestBtn)
-
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MANUAL_POS_SPIN,OnUpdateChokeManPosBtn)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MANUAL_POS_CAPTION,OnUpdateChokeManPosBtn)
+ ON_NOTIFY(UDN_DELTAPOS, IDC_PD_CHOKE_MANUAL_POS_SPIN, OnManualDeltapos)
 END_MESSAGE_MAP()
 
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
@@ -43,9 +45,11 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT)
 , m_choketst_enabled(false)
+, m_chokemanpos_enabled(false)
 {
  m_params.sm_steps = 700;
  m_params.testing = 0;
+ m_params.manual_delta = 0;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -59,6 +63,7 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_SPIN, m_sm_steps_num_spin);
  DDX_Control(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_sm_steps_num_edit);
  DDX_Control(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_sm_test_check);
+ DDX_Control(pDX, IDC_PD_CHOKE_MANUAL_POS_SPIN, m_man_ctrl_spin);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_params.sm_steps);
  DDX_Check_UCHAR(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_params.testing);
@@ -75,6 +80,11 @@ void CChokePageDlg::OnUpdateChokeTestBtn(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_choketst_enabled);
 }
 
+void CChokePageDlg::OnUpdateChokeManPosBtn(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_chokemanpos_enabled);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CStarterPageDlg message handlers
 
@@ -86,12 +96,15 @@ BOOL CChokePageDlg::OnInitDialog()
  m_sm_steps_num_spin.SetBuddy(&m_sm_steps_num_edit);
  m_sm_steps_num_spin.SetRangeAndDelta(50, 1000, 1);
 
+ m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_sm_steps_num_edit, MLL::GetString(IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sm_steps_num_spin, MLL::GetString(IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sm_test_check, MLL::GetString(IDS_PD_CHOKE_SM_TEST_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_man_ctrl_spin, MLL::GetString(IDS_PD_CHOKE_MANUAL_POS_SPIN_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -111,6 +124,20 @@ void CChokePageDlg::OnSMTestButton()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CChokePageDlg::OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult)
+{
+ NM_UPDOWN* pUD = (NM_UPDOWN*)pNMHDR;
+ m_man_ctrl_spin.SetFocus();
+
+ int accDelta = m_params.manual_delta - pUD->iDelta;
+ if (accDelta > 127)  accDelta = 127; //because signed char
+ if (accDelta < -127) accDelta = -127;
+ m_params.manual_delta = accDelta;
+
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+ *pResult = 0;
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -134,6 +161,15 @@ void CChokePageDlg::EnableChokeTesting(bool enable)
  if (m_choketst_enabled == enable)
   return; //already has needed state
  m_choketst_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CChokePageDlg::EnableChokeManPos(bool enable)
+{
+ if (m_chokemanpos_enabled == enable)
+  return; //already has needed state
+ m_chokemanpos_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }
