@@ -253,6 +253,12 @@ void CTablesDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, c
  mp_ContextMenuManager->SetSavePopupMenuNames(savenames);
 }
 
+void CTablesDeskDlg::SetRPMGrid(const float* values)
+{
+ if (m_pPageDlg)
+  std::copy(values, values + 16, m_pPageDlg->mp_ButtonsPanel->GetRPMGrid());
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::setOnMapChanged(EventWith2Codes OnFunction)
 { m_OnMapChanged = OnFunction; }
