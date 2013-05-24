@@ -182,10 +182,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -344,10 +344,10 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

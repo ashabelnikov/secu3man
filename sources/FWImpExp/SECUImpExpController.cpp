@@ -173,10 +173,10 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -344,10 +344,10 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)
