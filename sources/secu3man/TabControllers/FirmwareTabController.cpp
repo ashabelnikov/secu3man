@@ -53,6 +53,7 @@ using namespace fastdelegate;
 #undef max   //avoid conflicts with C++
 
 #define EHKEY _T("FirmwareCntr")
+#define DELAY_AFTER_BL_START 100
 
 bool AskUserAboutVrefCompensation(void)
 {
@@ -937,7 +938,7 @@ bool CFirmwareTabController::LoadFLASHFromFile(BYTE* p_data, const std::vector<i
    else //obtain file name from open file dialog
     *o_file_name = open.GetFileName();
   }
-  
+
   //Save full path only if it is not supplied
   if (NULL != o_file_path && o_file_path->empty())
    *o_file_path = open.GetPathName();
@@ -983,7 +984,7 @@ bool CFirmwareTabController::StartBootLoader(void)
  if (!m_bl_started_emergency)
  {
   bool result = m_comm->m_pControlApp->StartBootLoader();
-  Sleep(55); //обязательно нужно подождать не менее 50 мс, иначе будут вылазить посторонние символы при приеме данных от загрузчика
+  Sleep(DELAY_AFTER_BL_START); //обязательно нужно подождать не менее 50 мс, иначе будут вылазить посторонние символы при приеме данных от загрузчика
   return result;
  }
 
