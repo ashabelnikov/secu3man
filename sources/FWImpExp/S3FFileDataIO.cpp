@@ -45,13 +45,17 @@ typedef unsigned char s3f_uint8_t;
 //   _______________________________
 //  / File header (S3FFileHdr)      \
 //  |-------------------------------|
-//  | array of S3FMapSet blocks     |
+//  | array of S3FMapSetItem blocks |
 //  |-------------------------------| 
 //  | S3FFileMaps block             |
 //  |-------------------------------| 
 //  | Optional data (size >= 1024)  |
 //  \_______________________________/
 //
+
+// S3F Version history
+// 01.00 - initial version
+// 01.01 - Choke opening map added (24.05.2013)
 
 struct S3FFileHdr
 {
@@ -81,7 +85,8 @@ struct S3FSepMaps
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
  s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
- s3f_int32_t reserved[128];       //reserved bytes, = 0
+ s3f_int32_t choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE]; //choke opening map (appeared in version 1.01, reserved bytes were utilized)
+ s3f_int32_t reserved[112];       //reserved bytes, = 0
 };
 
 #pragma pack( pop, enter_S3FFileMap )
@@ -174,6 +179,8 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
   m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
+  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
 
  return true;
 }
@@ -201,7 +208,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0100; //01.00
+ p_fileHdr->version = 0x0101; //01.01
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -238,6 +245,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
  for(i = 0; i < 2; ++i)
   p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
+ for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
+  p_sepMaps->choke_op_table[i] = MathHelpers::Round(m_data.choke_op_table[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);

@@ -122,6 +122,9 @@ void S3FImportController::OnOkPressed(void)
   mp_fwd->ctscurve_vlimits[0] = mp_s3f_io->GetData().ctscurve_vlimits[0];
   mp_fwd->ctscurve_vlimits[1] = mp_s3f_io->GetData().ctscurve_vlimits[1];
  }
+
+ if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
+  memcpy(mp_fwd->choke_op_table, mp_s3f_io->GetData().choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE); 
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -179,9 +182,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -284,6 +288,9 @@ void S3FExportController::OnOkPressed(void)
   mp_s3f_io->GetDataLeft().ctscurve_vlimits[1] = mp_fwd->ctscurve_vlimits[1];
  }
 
+ if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().choke_op_table, mp_fwd->choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE);
+
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
@@ -337,9 +344,10 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

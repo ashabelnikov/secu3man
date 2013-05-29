@@ -35,6 +35,7 @@ enum EFWDFlags
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate
+ FLAG_CHOKE_MAP,    //separate
  FLAG_NR_OF_FLAGS
 };
 

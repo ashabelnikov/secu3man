@@ -474,6 +474,9 @@ void CPMTablesController::OnDataCollected(void)
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
  mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
+ //TODO: Here we set standard RPM grid, but if in the future we will enable "RPM grid editiong" we will have to
+ //read out actual RPM grid from SECU-3.
+ mp_view->SetRPMGrid(SECU3IO::work_map_rpm_slots);
 }
 
 void CPMTablesController::OnTableDeskChangesTimer(void)

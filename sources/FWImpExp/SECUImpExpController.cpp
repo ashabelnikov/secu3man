@@ -111,6 +111,9 @@ void SECU3ImportController::OnOkPressed(void)
   mp_fwd->ctscurve_vlimits[0] = m_fwdm->GetCTSMapVoltageLimit(0);
   mp_fwd->ctscurve_vlimits[1] = m_fwdm->GetCTSMapVoltageLimit(1);
  }
+
+ if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
+  m_fwdm->GetChokeOpMap(mp_fwd->choke_op_table);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -170,9 +173,10 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -269,6 +273,9 @@ void SECU3ExportController::OnOkPressed(void)
   m_fwdm->SetCTSMapVoltageLimit(0, mp_fwd->ctscurve_vlimits[0]);
   m_fwdm->SetCTSMapVoltageLimit(1, mp_fwd->ctscurve_vlimits[1]);
  }
+ 
+ if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
+  m_fwdm->SetChokeOpMap(mp_fwd->choke_op_table);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
@@ -337,9 +344,10 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, true);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, true);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

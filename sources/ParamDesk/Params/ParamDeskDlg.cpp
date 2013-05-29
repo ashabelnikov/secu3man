@@ -448,6 +448,11 @@ void CParamDeskDlg::EnableChokeManPos(bool i_enable)
  m_pChokePageDlg->EnableChokeManPos(i_enable);
 }
 
+void CParamDeskDlg::EnableCKPSItems(bool i_enable)
+{
+ m_pCKPSPageDlg->EnableCKPSItems(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

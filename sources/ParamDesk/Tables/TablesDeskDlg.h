@@ -69,6 +69,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetModificationFlag(bool value);
   virtual void MakeChartsChildren(bool children);
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index); //Set names of read-only and read/write tables
+  virtual void SetRPMGrid(const float* values);
 
   //events
   virtual void setOnMapChanged(EventWith2Codes OnFunction);

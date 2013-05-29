@@ -54,6 +54,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
  m_fwd_flags[FLAG_CTS_MAP] = FALSE;
+ m_fwd_flags[FLAG_CHOKE_MAP] = FALSE;
 }
 
 void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
@@ -72,6 +73,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags[FLAG_CTS_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags[FLAG_CHOKE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags_buttons[FLAG_START_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_IDLEMAP_FLAG, m_fwd_flags_buttons[FLAG_IDLE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_WORKMAP_FLAG, m_fwd_flags_buttons[FLAG_WORK_MAP]);
@@ -79,6 +81,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags_buttons[FLAG_CTS_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags_buttons[FLAG_CHOKE_MAP]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -251,7 +254,7 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
 
  //if both check boxes are disabled then disable corresponding group box
  enable = ((m_fwd_flags_buttons[FLAG_ATTEN_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_DWLCNTR_MAP].IsWindowEnabled()) ||
-           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()));
+           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_CHOKE_MAP].IsWindowEnabled()));
  GetDlgItem(IDC_MAP_IMPEXP_SEPTAB_GROUP)->EnableWindow(enable);
 }
 

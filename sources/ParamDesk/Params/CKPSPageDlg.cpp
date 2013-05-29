@@ -52,8 +52,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_CAPTION, OnUpdateCylNumber)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnUpdateCylNumber)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_SPIN, OnUpdateIgnitionCogs)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnUpdateIgnitionCogs)
@@ -78,6 +78,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_igncogs_enabled(false)
 , m_odd_cylnum_enabled(false)
+, m_ckps_enabled(false)
 , m_max_cylinders(8)
 {
  m_params.ckps_cogs_btdc = 20;
@@ -139,17 +140,22 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled);
+ pCmdUI->Enable(m_enabled && m_ckps_enabled);
 }
 
 void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.ckps_miss_num == 0);
+ pCmdUI->Enable(m_enabled && m_params.ckps_miss_num == 0 && m_ckps_enabled);
 }
 
 void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_igncogs_enabled);
+ pCmdUI->Enable(m_enabled && m_igncogs_enabled && m_ckps_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -313,6 +319,15 @@ void CCKPSPageDlg::EnableOddCylinders(bool enable)
  m_odd_cylnum_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   _FillCKPSEngineCylComboBox();
+}
+
+void CCKPSPageDlg::EnableCKPSItems(bool enable)
+{
+ if (m_ckps_enabled == enable)
+  return; //already has needed state
+ m_ckps_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)

@@ -30,3 +30,4 @@
 #define IDS_EXPORT_S3F_TABLES           6028
 #define IDS_FILE_WRONG_CRC              6029
 #define IDC_MAP_IMPEXP_HOWTO_TEXT       6030
+#define IDC_MAP_IMPEXP_CHOKE_FLAG       6031
