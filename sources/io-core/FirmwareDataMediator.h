@@ -136,9 +136,9 @@ class IOCORE_API CFirmwareDataMediator
    IOP_PS         =  10,     // PS          (input)                                  v1.0+
    IOP_ADD_I1     =  11,     // ADD_IO1     (input)   (applicable only in SECU-3T)   v1.0+
    IOP_ADD_I2     =  12,     // ADD_IO2     (input)   (applicable only in SECU-3T)   v1.0+
-   IOP_RESERVED1  =  13,     // Reserved    ()
-   IOP_RESERVED2  =  14,     // Reserved    ()
-   IOP_RESERVED3  =  15,     // Reserved    ()
+   IOP_CE         =  13,     // CE          (output)                                 v1.4+
+   IOP_BL         =  14,     // Bootloader  (output)                                 v1.4+
+   IOP_DE         =  15,     // Def. EEPROM (output)                                 v1.4+
    IOP_FL_PUMP    =  16,     // FL_PUMP     (output)
    IOP_FL_PUMPv0  =   8,     // FL_PUMP     (output)
    IOP_HALL_OUT   =  17,     // HALL_OUT    (output)
@@ -191,9 +191,9 @@ class IOCORE_API CFirmwareDataMediator
    IOS_PS         =  10,     // PS          (input)
    IOS_ADD_I1     =  11,     // ADD_IO1     (input)
    IOS_ADD_I2     =  12,     // ADD_IO2     (input) 
-// IOS_RESERVED1  =  13,     // Reserved
-// IOS_RESERVED2  =  14,     // Reserved
-// IOS_RESERVED3  =  15,     // Reserved
+   IOS_CE         =  13,     // CE                                                   v1.4+
+   IOS_BL         =  14,     // Bootloader  (output)                                 v1.4+
+   IOS_DE         =  15,     // Def. EEPROM (output)                                 v1.4+
    IOS_COUNT,                // Number of slots used for I/O remapping
    IOS_COUNTv0    =  8,      // Number of slots used for I/O remapping (v0.0)
    IOS_NA         =  255     //
@@ -208,6 +208,7 @@ class IOCORE_API CFirmwareDataMediator
    IOV_V11 = 0x11,           //V1.1 (minor changes)
    IOV_V12 = 0x12,           //V1.2 (minor changes)
    IOV_V13 = 0x13,           //V1.3 (minor changes)
+   IOV_V14 = 0x14,           //V1.4 (minor changes)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

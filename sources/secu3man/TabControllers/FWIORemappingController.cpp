@@ -264,6 +264,12 @@ void CFWIORemappingController::_PrepareLogic(void)
   m_defValMap.insert(std::make_pair(FWDM::IOS_PS, FWDM::IOP_PS));
   m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1));
   m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2));
+  if (iov >= FWDM::IOV_V14)
+  {
+   m_defValMap.insert(std::make_pair(FWDM::IOS_CE, FWDM::IOP_CE));
+   m_defValMap.insert(std::make_pair(FWDM::IOS_BL, FWDM::IOP_BL));
+   m_defValMap.insert(std::make_pair(FWDM::IOS_DE, FWDM::IOP_DE));
+  }
 
   //Fill view with values
   mp_view->ResetContent();
@@ -430,6 +436,51 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_PS, true); 
   mp_view->EnableInversion(FWDM::IOS_PS, true);
+
+  if (iov >= FWDM::IOV_V14)                                                 //appeared in v1.4
+  {
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_STROBE, _T("STROBE"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_STP, _T("SM_STP"));
+   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_CE, _T("NONE"));
+   mp_view->EnableItem(FWDM::IOS_CE, true);
+   mp_view->EnableInversion(FWDM::IOS_CE, true);
+
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_STROBE, _T("STROBE"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_STP, _T("SM_STP"));
+   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_BL, _T("NONE"));
+   mp_view->EnableItem(FWDM::IOS_BL, true);
+   mp_view->EnableInversion(FWDM::IOS_BL, true);
+
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_STROBE, _T("STROBE"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_STP, _T("SM_STP"));
+   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_DE, _T("NONE"));
+   mp_view->EnableItem(FWDM::IOS_DE, true);
+   mp_view->EnableInversion(FWDM::IOS_DE, true);
+  }
  }
 }
 
@@ -825,6 +876,9 @@ void CFWIORemappingController::_DisplayPlugs(void)
   names.insert(std::make_pair(FWDM::IOS_PS, _T("PS")));
   names.insert(std::make_pair(FWDM::IOS_ADD_I1, _T("ADD_I1")));
   names.insert(std::make_pair(FWDM::IOS_ADD_I2, _T("ADD_I2")));
+  names.insert(std::make_pair(FWDM::IOS_CE, _T("CE")));
+  names.insert(std::make_pair(FWDM::IOS_BL, _T("BL")));
+  names.insert(std::make_pair(FWDM::IOS_DE, _T("DE")));
  }
  CString out(_T("      [INIT]            [DATA]\n"));
  for(int p = _IOPStart(); p < _IOPCount(); ++p)
