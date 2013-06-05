@@ -130,8 +130,9 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  else
   mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
 
- //in full-sequential ignition mode odd cylinder number engines are also supported
- mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0);
+ //in full-sequential ignition mode odd cylinder number engines are also supported,
+ //aslo if hall sensor synchronization is used
+ mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 || (opt & (1 << COPT_HALL_SYNC)) > 0);
 
  mp_view->EnableChokeTesting((opt & (1 << COPT_SM_CONTROL)) > 0);
  mp_view->EnableChokeManPos((opt & (1 << COPT_SM_CONTROL)) > 0);

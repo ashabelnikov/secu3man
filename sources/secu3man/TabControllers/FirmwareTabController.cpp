@@ -1088,8 +1088,9 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  else
   m_view->mp_ParamDeskDlg->SetMaxCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
 
- //in full-sequential ignition mode odd cylinder number engines are also supported
- m_view->mp_ParamDeskDlg->EnableOddCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0);
+ //in full-sequential ignition mode odd cylinder number engines are also supported,
+ //also if hall sensor synchronization is used
+ m_view->mp_ParamDeskDlg->EnableOddCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) > 0);
 
  this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
  this->mp_iorCntr->Enable(m_fwdm->HasCodeData());
