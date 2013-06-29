@@ -16,7 +16,7 @@ LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries
 # source files
 SOURCES = StdAfx.cpp BootLoader.cpp BootLoaderAdapter.cpp ccomport.cpp ControlApp.cpp \
   ControlAppAdapter.cpp CRC16.cpp EEPROMDataMediator.cpp FirmwareDataMediator.cpp iocore.cpp \
-  LogReader.cpp LogWriter.cpp NumericConv.cpp PlatformParamHolder.cpp
+  LogReader.cpp LogWriter.cpp NumericConv.cpp PlatformParamHolder.cpp PacketDataProxy.cpp
 
 # DLL building
 all: iocore

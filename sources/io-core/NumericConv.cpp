@@ -118,7 +118,6 @@ bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = f
   return false;
 
  BYTE lo,hi;
- int word;
  if (isxdigit(i_buf[0])&&isxdigit(i_buf[1])&&isxdigit(i_buf[2])&&isxdigit(i_buf[3]))
  {
   if (false==Hex8ToBin(i_buf,&hi))
@@ -127,10 +126,9 @@ bool CNumericConv::Hex16ToBin(const BYTE* i_buf,int* o_word,bool i_signed /* = f
   if (false==Hex8ToBin(i_buf+2,&lo))
    return false;
 
-  word = MAKEWORD(lo,hi);
-
+  WORD word = MAKEWORD(lo,hi);
   //если число знаковое и отрицательное то делаем его отрицательным
-  *o_word = (i_signed && word > 0x7FFF) ? -(0x10000 - word) : word;
+  *o_word = i_signed ? (int)((signed short)word) : word;
   return true;
  }
  return false;

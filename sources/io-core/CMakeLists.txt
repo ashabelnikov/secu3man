@@ -37,6 +37,7 @@ set(HEADERS
   LogReader.h
   LogWriter.h
   NumericConv.h
+  PacketDataProxy.h
   PlatformParamHolder.h
   SECU3IO.h
   SECU3ParametersDef.h
@@ -60,6 +61,7 @@ set(SOURCES
   LogReader.cpp
   LogWriter.cpp
   NumericConv.cpp
+  PacketDataProxy.cpp
   PlatformParamHolder.cpp
   StdAfx.cpp
   )

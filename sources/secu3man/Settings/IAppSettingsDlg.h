@@ -52,6 +52,7 @@ class IAppSettingsDlg
   virtual void SetDVDeskUpdatePeriod(int i_period) = 0;
   virtual void SetShowToolTips(bool i_show) = 0;
   virtual void SetShowExFixtures(bool i_show) = 0;
+  virtual void SetHexDataMode(bool i_hex) = 0;
 
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
@@ -69,6 +70,7 @@ class IAppSettingsDlg
   virtual int GetDVDeskUpdatePeriod(void) = 0;
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
+  virtual bool GetHexDataMode(void) const = 0;
 
   //устанавливают обработчики событий
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;

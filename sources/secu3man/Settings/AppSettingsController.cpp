@@ -56,6 +56,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optDVDeskUpdatePeriod = m_pView->GetDVDeskUpdatePeriod();
  m_pModel->m_optShowToolTips = m_pView->GetShowToolTips();
  m_pModel->m_optShowExFixtures = m_pView->GetShowExFixtures();
+ m_pModel->m_optHexDataMode = m_pView->GetHexDataMode();
 
  size_t index = m_pView->GetCSVSepSymbol();
  m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
@@ -92,6 +93,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod);
  m_pView->SetShowToolTips(m_pModel->m_optShowToolTips);
  m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures);
+ m_pView->SetHexDataMode(m_pModel->m_optHexDataMode);
 
  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)

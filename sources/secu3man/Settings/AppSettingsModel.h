@@ -75,6 +75,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_DVDeskUpdatePeriod;
   const CString m_Name_ShowToolTips;
   const CString m_Name_ShowExFixtures;
+  const CString m_Name_HexDataMode;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -127,6 +128,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetDVDeskUpdatePeriod(void) const;
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
+  virtual bool GetHexDataMode(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -167,6 +169,7 @@ class CAppSettingsModel : public ISettingsData
 
   bool m_optShowToolTips;
   bool m_optShowExFixtures;
+  bool m_optHexDataMode;
 
   //проверяет указанное значение скорости на соответствие стандарту
   bool CheckAllowableBaudRate(DWORD baud);

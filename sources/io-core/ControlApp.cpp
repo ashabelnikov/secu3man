@@ -25,10 +25,69 @@
 #include "ccomport.h"
 #include "common/MathHelpers.h"
 #include "FirmwareMapsDataHolder.h"
-#include "NumericConv.h"
+#include "PacketDataProxy.h"
 #include "ufcodes.h"
 
 using namespace SECU3IO;
+
+
+namespace {
+
+// There are several special reserved symbols in binary mode: 0x21, 0x40, 0x0D, 0x0A
+const BYTE FIBEGIN = 0x21;  // '!' indicates beginning of the ingoing packet
+const BYTE FOBEGIN = 0x40;  // '@' indicates beginning of the outgoing packet
+const BYTE FIOEND = 0x0D;   // '\r' indicates ending of the ingoing/outgoing packet
+const BYTE FESC = 0x0A;     // '\n' Packet escape (FESC)
+// Following bytes are used only in escape sequeces and may appear in the data without any problems
+const BYTE TFIBEGIN = 0x81; // Transposed FIBEGIN
+const BYTE TFOBEGIN = 0x82; // Transposed FOBEGIN
+const BYTE TFIOEND = 0x83;  // Transposed FIOEND
+const BYTE TFESC = 0x84;    // Transposed FESC
+
+
+void Esc_Rx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
+{
+ for(size_t i = offset; i < size; ++i)
+ {
+  if (io_data[i] == FESC)
+  {
+   io_data.erase(io_data.begin() + i);
+   if (io_data[i] == TFOBEGIN)
+    io_data[i] = FOBEGIN;
+   else if (io_data[i] == TFIOEND)
+    io_data[i] = FIOEND;
+   else if (io_data[i] == TFESC)
+    io_data[i] = FESC;     
+   --size;
+  }
+ }
+}
+
+void Esc_Tx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
+{
+ for(size_t i = offset; i < size; ++i)
+ {
+  if (io_data[i] == FIBEGIN)
+  {
+   io_data[i] = FESC;
+   io_data.insert(io_data.begin() + (i+1), TFIBEGIN); 
+   ++size;
+  }
+  else if (io_data[i] == FIOEND)
+  {
+   io_data[i] = FESC;
+   io_data.insert(io_data.begin() + (i+1), TFIOEND); 
+   ++size;
+  }
+  else if (io_data[i] == FESC)
+  {
+   io_data[i] = FESC;
+   io_data.insert(io_data.begin() + (i+1), TFESC); 
+   ++size;
+  }
+ }
+}
+}
 
 //-----------------------------------------------------------------------
 CControlApp::CControlApp()
@@ -56,6 +115,8 @@ CControlApp::CControlApp()
 
  mp_csection = new CSECTION;
  InitializeCriticalSection(GetSyncObject());
+
+ mp_pdp = new PacketDataProxy();
 }
 
 //-----------------------------------------------------------------------
@@ -64,6 +125,7 @@ CControlApp::~CControlApp()
  delete m_pPackets;
  DeleteCriticalSection(GetSyncObject());
  delete mp_csection;
+ delete mp_pdp;
 }
 
 
@@ -168,25 +230,25 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
   switch(m_packets_parse_state) //я люблю автоматное программирование...
   {
    case 0:       //search '@'
-	   if (*p=='@')
-	   {
+    if (*p=='@')
+    {
      m_ingoing_packet.push_back(*p);
-	    m_packets_parse_state = 1;
-	   }
-	   break;
+     m_packets_parse_state = 1;
+    }
+    break;
    case 1:       //wait '\r'
-	   if (*p=='\r')
-	   {
+    if (*p=='\r')
+    {
      m_ingoing_packet.push_back(*p);
-	    m_pPackets->push_back(m_ingoing_packet);
-	    m_ingoing_packet.clear();
-	    m_packets_parse_state = 0;
-	   }
-	   else
-	   {
-	    m_ingoing_packet.push_back(*p);
-	   }
-	   break;
+     m_pPackets->push_back(m_ingoing_packet);
+     m_ingoing_packet.clear();
+     m_packets_parse_state = 0;
+    }
+    else
+    {
+     m_ingoing_packet.push_back(*p);
+    }
+    break;
   }//switch
   ++p;
  };
@@ -198,67 +260,57 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != 48)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 48 : 24))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_SensorDat.frequen))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_SensorDat.frequen))
   return false;
- raw_packet+=4;
 
  //давление во впускном коллекторе
  int pressure = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&pressure))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &pressure))
   return false;
-
  m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;
 
  //напряжение бортовой сети
  int voltage = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&voltage))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&voltage))
   return false;
  m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;
 
  //Температура охлаждающей жидкости
  int temperature = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&temperature,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&temperature,true))
   return false;
  m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=4;
 
  //Текущий УОЗ (число со знаком)
  int adv_angle = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&adv_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&adv_angle,true))
   return false;
  m_SensorDat.adv_angle = ((float)adv_angle) / m_angle_multiplier;
- raw_packet+=4;
 
  //Уровень детонации двигателя
  int knock_k = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k))
   return false;
  m_SensorDat.knock_k = ((float)knock_k) * m_adc_discrete;
- raw_packet+=4;
 
  //Корректировка УОЗ при детонации
  int knock_retard = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard, true))
   return false;
  m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
- raw_packet+=4;
 
  //Расход воздуха
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
   return false;
- raw_packet+=2;
 
  //Байт с флажками
  unsigned char byte = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&byte))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&byte))
   return false;
- raw_packet+=2;
 
  //Состояние клапана ЭПХХ, Состояние дроссельной заслонки, Состояние газового клапана
  //Состояние клапана ЭМР, Состояние лампы "CE"
@@ -272,35 +324,31 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //TPS sensor
  unsigned char tps = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&tps))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&tps))
   return false;
  m_SensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=2;
 
  //ADD_I1 input
  int add_i1_v = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i1_v))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i1_v))
   return false;
  m_SensorDat.add_i1 = ((float)add_i1_v) * m_adc_discrete;
- raw_packet+=4;
 
  //ADD_I2 input
  int add_i2_v = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i2_v))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i2_v))
   return false;
  m_SensorDat.add_i2 = ((float)add_i2_v) * m_adc_discrete;
- raw_packet+=4;
 
  //Биты ошибок СЕ
  int ce_errors = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &ce_errors))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ce_errors))
   return false;
  m_SensorDat.ce_errors = ce_errors;
- raw_packet+=4;
 
  //Choke position
  unsigned char choke_pos = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &choke_pos))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_pos))
   return false;
  m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
@@ -311,26 +359,23 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DbgvarDat& m_DbgvarDat = m_recepted_packet.m_DbgvarDat;
- if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 16 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //переменная 1
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var1))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var1))
   return false;
- raw_packet+=4;
 
  //переменная 2
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var2))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var2))
   return false;
- raw_packet+=4;
 
  //переменная 3
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var3))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var3))
   return false;
- raw_packet+=4;
 
  //переменная 4
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var4))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_DbgvarDat.var4))
   return false;
 
  return true;
@@ -340,21 +385,19 @@ bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FnNameDat& m_FnNameDat = m_recepted_packet.m_FnNameDat;
- if (size != 20)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 20 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Общее кол-во наборов (семейств характеристик)
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FnNameDat.tables_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FnNameDat.tables_num))
   return false;
- raw_packet+=2;
 
  //номер этого набора характеристик
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FnNameDat.index))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FnNameDat.index))
   return false;
- raw_packet+=2;
 
  //имя этого набора характеристик
- size_t fn_name_size = size - 4;
+ size_t fn_name_size = size - (mp_pdp->getHex8Size()*2);
  strncpy(m_FnNameDat.name, (const char*)raw_packet, fn_name_size);
  m_FnNameDat.name[fn_name_size] = 0;
 
@@ -371,16 +414,15 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
- if (size != 8)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_StartrPar.starter_off))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&m_StartrPar.starter_off))
   return false;
- raw_packet+=4;
 
  //Обороты перехода с пусковой карты
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
   return false;
 
  return true;
@@ -391,46 +433,41 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
- if (size != 21)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
  int max_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&max_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&max_angle,true))
   return false;
- raw_packet+=4;
  m_AnglesPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
  //Минимальный, допустимый УОЗ (число со знаком)
  int  min_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&min_angle,true))
   return false;
- raw_packet+=4;
  m_AnglesPar.min_angle = ((float)min_angle) / m_angle_multiplier;
 
  //Октан-коррекция УОЗ (число со знаком)
  int angle_corr;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&angle_corr,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&angle_corr,true))
   return false;
- raw_packet+=4;
  m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
 
  //Скорость уменьшения УОЗ (число со знаком)
  int dec_spead;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&dec_spead,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&dec_spead,true))
   return false;
- raw_packet+=4;
  m_AnglesPar.dec_spead = ((float)dec_spead) / m_angle_multiplier;
 
 //Скорость увеличения УОЗ (число со знаком)
  int inc_spead;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&inc_spead,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&inc_spead,true))
   return false;
- raw_packet+=4;
  m_AnglesPar.inc_spead = ((float)inc_spead) / m_angle_multiplier;
 
  //Признак нулевого УОЗ
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_AnglesPar.zero_adv_ang))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_AnglesPar.zero_adv_ang))
   return false;
 
  return true;
@@ -440,57 +477,50 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
- if (size != 28)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FunSetPar.fn_benzin))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FunSetPar.fn_benzin))
   return false;
- raw_packet+=2;
 
  //Номер семейства характеристик используемого для газа
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FunSetPar.fn_gas))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_FunSetPar.fn_gas))
   return false;
- raw_packet+=2;
 
  //Нижнее значение давления по оси ДАД
  int map_lower_pressure = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map_lower_pressure))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&map_lower_pressure))
   return false;
- raw_packet+=4;
  m_FunSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Верхнее значение давления по оси ДАД
  int map_upper_pressure = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map_upper_pressure))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&map_upper_pressure))
   return false;
- raw_packet+=4;
  m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Смещение кривой ДАД
  int map_curve_offset = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &map_curve_offset, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_offset, true))
   return false;
- raw_packet+=4;
  m_FunSetPar.map_curve_offset = ((float)map_curve_offset) * m_adc_discrete;
 
  //Наклон кривой ДАД
  int map_curve_gradient = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &map_curve_gradient, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_gradient, true))
   return false;
- raw_packet+=4;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
 
  //Смещение кривой ДПДЗ
  int tps_curve_offset = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &tps_curve_offset, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_offset, true))
   return false;
- raw_packet+=4;
  m_FunSetPar.tps_curve_offset = ((float)tps_curve_offset) * m_adc_discrete;
 
  //Наклон кривой ДПДЗ
  int tps_curve_gradient = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &tps_curve_gradient, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
  m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete * 128.0f);
 
@@ -502,55 +532,48 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != 29)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //признак использования регулятора
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_IdlRegPar.idl_regul))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_IdlRegPar.idl_regul))
   return false;
- raw_packet+=1;
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac1,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac1,true))
   return false;
- raw_packet+=4;
  m_IdlRegPar.ifac1 = ((float)ifac1) / ANGLE_MULTIPLAYER;
 
  //Коэффициент регулятора при  отрицательной ошибке (число со знаком)
  int ifac2;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ifac2,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac2,true))
   return false;
- raw_packet+=4;
  m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLAYER;
 
  //Зона нечувствительности регулятора
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
   return false;
- raw_packet+=4;
 
  //Поддерживаемые обороты
- if (false == CNumericConv::Hex16ToBin(raw_packet,&m_IdlRegPar.idling_rpm))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.idling_rpm))
   return false;
- raw_packet+=4;
 
  //Минимальный УОЗ (число со знаком)
  int min_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&min_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&min_angle,true))
   return false;
- raw_packet+=4;
  m_IdlRegPar.min_angle = ((float)min_angle) / m_angle_multiplier;
 
  //Максимальный УОЗ (число со знаком)
  int max_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&max_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&max_angle,true))
   return false;
- raw_packet+=4;
  m_IdlRegPar.max_angle = ((float)max_angle) / m_angle_multiplier;
 
  //Порог включения регулятора ХХ по температуре (число со знаком)
  int turn_on_temp = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&turn_on_temp,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&turn_on_temp,true))
   return false;
  m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
@@ -561,51 +584,44 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
- if (size != 25)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 25 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot))
   return false;
- raw_packet+=4;
 
  //Верхний порог ЭПХХ (бензин)
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit))
   return false;
- raw_packet+=4;
 
  //Признак инверсии концевика карбюратора
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_CarburPar.carb_invers))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_CarburPar.carb_invers))
   return false;
- raw_packet+=1;
 
  //Порог разрежения ЭМР
  int epm_on_threshold = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &epm_on_threshold, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &epm_on_threshold, true))
   return false;
- raw_packet+=4;
  m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Нижний порог ЭПХХ (газ)
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot_g))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot_g))
   return false;
- raw_packet+=4;
 
  //Верхний порог ЭПХХ (газ)
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit_g))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_hit_g))
   return false;
- raw_packet+=4;
 
  //Задержка выключения клапана ЭПХХ
  unsigned char shutoff_delay;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &shutoff_delay))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &shutoff_delay))
   return false;
- raw_packet+=2;
  m_CarburPar.shutoff_delay = ((float)shutoff_delay) / 100.0f; //переводим в секунды
 
  //Порог переключения в режим ХХ по ДПДЗ
  unsigned char tps_threshold;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &tps_threshold))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &tps_threshold))
   return false;
  m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
@@ -616,37 +632,33 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
- if (size != 11)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 11 : 7))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.tmp_use))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.tmp_use))
   return false;
- raw_packet+=1;
 
  //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.vent_pwm))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.vent_pwm))
   return false;
- raw_packet+=1;
 
  //Флаг использования таблицы для задания зависимости температуры от напрящения ДТОЖ
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_TemperPar.cts_use_map))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.cts_use_map))
   return false;
- raw_packet+=1;
 
  //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной
  //дискретами АЦП (как измеренное значение прямо с датчика)
 
  //Порог включения вентилятора (число со знаком)
  int vent_on = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_on,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_on,true))
   return false;
- raw_packet+=4;
  m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
  //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_off,true))
   return false;
  m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
 
@@ -657,54 +669,48 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
- if (size != 28)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //MAP sensor
  signed int map = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&map,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.map_value = map * m_adc_discrete;
 
  //напряжение бортовой сети
  signed int ubat = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ubat,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.ubat_value = ubat * m_adc_discrete;
 
  //температура ОЖ (ДТОЖ)
  signed int temp = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&temp,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&temp,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.temp_value = temp * m_adc_discrete;
 
  //Уровень сигнала детонации
  signed int knock = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.knock_value = knock * m_adc_discrete;
 
  //Throttle position sensor
  signed int tps = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&tps,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&tps,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.tps_value = tps * m_adc_discrete;
 
  //ADD_I1 input
  signed int add_i1 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i1,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i1,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.add_i1_value = add_i1 * m_adc_discrete;
 
  //ADD_I2 input
  signed int add_i2 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i2,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i2,true))
   return false;
  m_RawSensDat.add_i2_value = add_i2 * m_adc_discrete;
 
@@ -717,86 +723,74 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
- if (size != 72)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 72 : 36))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  signed int map_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&map_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&map_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.map_adc_factor = ((float)map_adc_factor) / 16384;
 
  signed long map_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&map_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&map_adc_correction))
   return false;
- raw_packet+=8;
  m_ADCCompenPar.map_adc_correction = ((((float)map_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.map_adc_factor;
  m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //в вольты
 
  signed int ubat_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ubat_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.ubat_adc_factor = ((float)ubat_adc_factor) / 16384;
 
  signed long ubat_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&ubat_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ubat_adc_correction))
   return false;
-
- raw_packet+=8;
  m_ADCCompenPar.ubat_adc_correction = ((((float)ubat_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ubat_adc_factor;
  m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //в вольты
 
  signed int temp_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&temp_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.temp_adc_factor = ((float)temp_adc_factor) / 16384;
 
  signed long temp_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&temp_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&temp_adc_correction))
   return false;
- raw_packet+=8;
  m_ADCCompenPar.temp_adc_correction = ((((float)temp_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.temp_adc_factor;
  m_ADCCompenPar.temp_adc_correction*=m_adc_discrete; //в вольты
  
  //TPS sensor
  signed int tps_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&tps_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&tps_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.tps_adc_factor = ((float)tps_adc_factor) / 16384;
 
  signed long tps_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&tps_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&tps_adc_correction))
   return false;
- raw_packet+=8;
  m_ADCCompenPar.tps_adc_correction = ((((float)tps_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.tps_adc_factor;
  m_ADCCompenPar.tps_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_IO1 input
  signed int ai1_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ai1_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai1_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.ai1_adc_factor = ((float)ai1_adc_factor) / 16384;
 
  signed long ai1_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&ai1_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai1_adc_correction))
   return false;
- raw_packet+=8;
  m_ADCCompenPar.ai1_adc_correction = ((((float)ai1_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai1_adc_factor;
  m_ADCCompenPar.ai1_adc_correction*=m_adc_discrete; //в вольты
 
  //ADD_IO2 input
  signed int ai2_adc_factor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&ai2_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai2_adc_factor,true))
   return false;
- raw_packet+=4;
  m_ADCCompenPar.ai2_adc_factor = ((float)ai2_adc_factor) / 16384;
 
  signed long ai2_adc_correction = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&ai2_adc_correction))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&ai2_adc_correction))
   return false;
  m_ADCCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai2_adc_factor;
  m_ADCCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
@@ -808,46 +802,39 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
- if (size != 13)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 13 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Тип фронта ДПКВ
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CKPSPar.ckps_edge_type))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_CKPSPar.ckps_edge_type))
   return false;
- raw_packet+=1;
 
  //Тип фронта ДНО (вход REF_S)
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_CKPSPar.ref_s_edge_type))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_CKPSPar.ref_s_edge_type))
   return false;
- raw_packet+=1;
 
  //Количество зубьев до в.м.т.
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_cogs_btdc))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_cogs_btdc))
   return false;
- raw_packet+=2;
 
  //Длительность импульса запуска коммутаторов в зубьях шкива
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_ignit_cogs))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_ignit_cogs))
   return false;
- raw_packet+=2;
 
  //Кол-во цилиндров двигателя
- if (false == CNumericConv::Hex8ToBin(raw_packet,&m_CKPSPar.ckps_engine_cyl))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_engine_cyl))
   return false;
- raw_packet+=2;
 
  //Флаг объединения выходов зажигания
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_CKPSPar.ckps_merge_ign_outs))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_CKPSPar.ckps_merge_ign_outs))
   return false;
- raw_packet+=1;
 
  //Кол-во зубьев задающего шкива, включая пропущенные
- if (false == CNumericConv::Hex8ToBin(raw_packet, &m_CKPSPar.ckps_cogs_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &m_CKPSPar.ckps_cogs_num))
   return false;
- raw_packet+=2;
 
  //Кол-во пропущенных зубьев задающего шкива (допустимые значения: 0, 1, 2)
- if (false == CNumericConv::Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
   return false;
 
  return true;
@@ -857,14 +844,13 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::OPCompNc& m_OPCompNc = m_recepted_packet.m_OPCompNc;
- if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Код завершенной операции
- if (false == CNumericConv::Hex8ToBin(raw_packet, &m_OPCompNc.opdata))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &m_OPCompNc.opdata))
   return false;
- raw_packet+=2;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &m_OPCompNc.opcode))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &m_OPCompNc.opcode))
   return false;
 
  return true;
@@ -874,74 +860,65 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
- if (size != (14+17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? (14+17) : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
- if (false == CNumericConv::Hex4ToBin(*raw_packet,&m_KnockPar.knock_use_knock_channel))
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_KnockPar.knock_use_knock_channel))
   return false;
- raw_packet+=1;
 
  //Частота ПФ
  unsigned char knock_bpf_frequency;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_bpf_frequency))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_bpf_frequency))
   return false;
  m_KnockPar.knock_bpf_frequency = knock_bpf_frequency;
- raw_packet+=2;
 
  //Начало фазового окна
  int  knock_k_wnd_begin_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k_wnd_begin_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k_wnd_begin_angle,true))
   return false;
  m_KnockPar.knock_k_wnd_begin_angle = ((float)knock_k_wnd_begin_angle) / m_angle_multiplier;
- raw_packet+=4;
 
  //Конец фазового окна
  int  knock_k_wnd_end_angle;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_k_wnd_end_angle,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_k_wnd_end_angle,true))
   return false;
  m_KnockPar.knock_k_wnd_end_angle = ((float)knock_k_wnd_end_angle) / m_angle_multiplier;
- raw_packet+=4;
 
  //Постоянная времени интегрирования
  unsigned char knock_int_time_const;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_int_time_const))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_int_time_const))
   return false;
  m_KnockPar.knock_int_time_const = knock_int_time_const;
- raw_packet+=2;
 
  //-----------------
  //Шаг смещения УОЗ при детонации
  int knock_retard_step;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_retard_step,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard_step,true))
   return false;
  m_KnockPar.knock_retard_step = ((float)knock_retard_step) / m_angle_multiplier;
- raw_packet+=4;
 
  //Шаг восстановления УОЗ
  int knock_advance_step;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_advance_step,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_advance_step,true))
   return false;
  m_KnockPar.knock_advance_step = ((float)knock_advance_step) / m_angle_multiplier;
- raw_packet+=4;
 
  //Максимальное смещение УОЗ
  int knock_max_retard;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_max_retard,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_max_retard,true))
   return false;
  m_KnockPar.knock_max_retard = ((float)knock_max_retard) / m_angle_multiplier;
- raw_packet+=4;
 
  //Порог детонации
  int knock_threshold;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&knock_threshold, false))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_threshold, false))
   return false;
  m_KnockPar.knock_threshold = ((float)knock_threshold) * m_adc_discrete;
- raw_packet+=4;
 
  //Задержка восстановления УОЗ
  unsigned char knock_recovery_delay;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_recovery_delay))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&knock_recovery_delay))
   return false;
  m_KnockPar.knock_recovery_delay = knock_recovery_delay;
 
@@ -952,11 +929,11 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
- if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  int flags = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&flags))
   return false;
  m_CEErrors.flags = flags;
 
@@ -967,11 +944,11 @@ bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
- if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  int flags = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&flags))
   return false;
  m_CEErrors.flags = flags;
 
@@ -982,7 +959,7 @@ bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
- if (size != (FW_SIGNATURE_INFO_SIZE+8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (FW_SIGNATURE_INFO_SIZE + (mp_pdp->isHex() ? 8 : 4)))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //строка с информацией 
@@ -992,7 +969,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 
  //биты опций прошивки
  DWORD options = 0;
- if (false == CNumericConv::Hex32ToBin(raw_packet,&options))
+ if (false == mp_pdp->Hex32ToBin(raw_packet,&options))
   return false;
  m_FWInfoDat.options = options;
 
@@ -1003,52 +980,47 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
- if (size != 15)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 15 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
  int divisor = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &divisor))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &divisor))
   return false;
- raw_packet+=4;
 
  m_MiscPar.baud_rate = 0;
 
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   if (SECU3IO::secu3_allowable_uart_divisors[i].second == divisor)
     m_MiscPar.baud_rate = SECU3IO::secu3_allowable_uart_divisors[i].first;
-
-  ASSERT(m_MiscPar.baud_rate);
+ 
+ ASSERT(m_MiscPar.baud_rate);
 
  //Период посылки пакетов в десятках миллисекунд
  unsigned char period_t_ms = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet,&period_t_ms))
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&period_t_ms))
   return false;
- raw_packet+=2;
 
  m_MiscPar.period_ms = period_t_ms * 10;
 
  //Отсечка разрешена/запрещена
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_MiscPar.ign_cutoff))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_MiscPar.ign_cutoff))
   return false;
- raw_packet+=1;
 
  //Обороты отсечки
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_MiscPar.ign_cutoff_thrd, true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_MiscPar.ign_cutoff_thrd, true))
   return false;
- raw_packet+=4;
 
  //Выход ДХ: Начало импульса в зубьях шкива относительно ВМТ
  signed int start = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &start))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &start))
   return false;
- raw_packet+=2;
 
  m_MiscPar.hop_start_cogs = start;
 
  //Выход ДХ: Длительность импульса в зубьях шкива
  unsigned char duration = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &duration))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &duration))
   return false;
  m_MiscPar.hop_durat_cogs = duration;
 
@@ -1059,20 +1031,18 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
- if (size < 6 || size > 36)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 4 || size > 19))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //номер набора таблиц
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_EditTabPar.tab_set_index))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_EditTabPar.tab_set_index))
   return false;
- raw_packet+=1;
  if (m_EditTabPar.tab_set_index != ETTS_GASOLINE_SET && m_EditTabPar.tab_set_index != ETTS_GAS_SET)
   return false;
 
  //код таблицы в наборе
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_EditTabPar.tab_id))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_EditTabPar.tab_id))
   return false;
- raw_packet+=1;
 
  if (m_EditTabPar.tab_id != ETMT_STRT_MAP && m_EditTabPar.tab_id != ETMT_IDLE_MAP && m_EditTabPar.tab_id != ETMT_WORK_MAP &&
      m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR)
@@ -1080,26 +1050,25 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 
  //адрес фрагмента данных в таблице (смещение в таблице)
  unsigned char address;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &address))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
  m_EditTabPar.address = address;
- raw_packet+=2;
 
- size-=4;
- if (size % 2) // 1 byte in HEX is 2 symbols
+ size-=(1 + 1 + mp_pdp->getHex8Size());
+ size_t div = mp_pdp->isHex() ? 2 : 1;
+ if (size % div) // 1 byte in HEX is 2 symbols
   return false;
 
  if (m_EditTabPar.tab_id != ETMT_NAME_STR)
  {
   //фрагмент с данными (float)
   size_t data_size = 0;
-  for(size_t i = 0; i < size / 2; ++i)
+  for(size_t i = 0; i < size / div; ++i)
   {
    signed char value;
-   if (false == CNumericConv::Hex8ToBin(raw_packet, (unsigned char*)&value))
+   if (false == mp_pdp->Hex8ToBin(raw_packet, (unsigned char*)&value))
     return false;
    m_EditTabPar.table_data[i] = ((float)value) / AA_MAPS_M_FACTOR;
-   raw_packet+=2;
    ++data_size;
   }
   m_EditTabPar.data_size = data_size;
@@ -1119,29 +1088,28 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& m_AttTabPar = m_recepted_packet.m_SepTabPar;
- if (size < 4 || size > 34)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (mp_pdp->isHex() ? (size < 4 || size > 34) : (size < 2 || size > 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
  unsigned char address;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &address))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
   return false;
  m_AttTabPar.address = address;
- raw_packet+=2;
 
- size-=2;
- if (size % 2) // 1 byte in HEX is 2 symbols
+ size-=mp_pdp->getHex8Size();
+ size_t div = mp_pdp->isHex() ? 2 : 1;
+ if (size % div) // 1 byte in HEX is 2 symbols
   return false;
 
  //фрагмент с данными (коды коэффициентов усиления)
  size_t data_size = 0;
- for(size_t i = 0; i < size / 2; ++i)
+ for(size_t i = 0; i < size / div; ++i)
  {
   unsigned char value;
-  if (false == CNumericConv::Hex8ToBin(raw_packet, &value))
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
    return false;
   m_AttTabPar.table_data[i] = value;
-  raw_packet+=2;
   ++data_size;
  }
  m_AttTabPar.data_size = data_size;
@@ -1153,68 +1121,60 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
- if (size != 34)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 34 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //напряжение бортовой сети
  int voltage = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &voltage))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &voltage))
   return false;
  m_DiagInpDat.voltage = ((float)voltage) * m_adc_discrete;
- raw_packet+=4;
 
  //датчик абсолютного давления
  int map = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &map))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &map))
   return false;
  m_DiagInpDat.map = ((float)map) * m_adc_discrete;
- raw_packet+=4;
 
  //датчик температуры охлаждающей жидкости
  int temp = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &temp))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &temp))
   return false;
  m_DiagInpDat.temp = ((float)temp) * m_adc_discrete;
- raw_packet+=4;
 
  //дополнительный IO1
  int add_io1 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &add_io1))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_io1))
   return false;
  m_DiagInpDat.add_io1 = ((float)add_io1) * m_adc_discrete;
- raw_packet+=4;
 
  //дополнительный IO2
  int add_io2 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &add_io2))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_io2))
   return false;
  m_DiagInpDat.add_io2 = ((float)add_io2) * m_adc_discrete;
- raw_packet+=4;
 
  //датчик положения дроссельной заслонки (концевик карбюратора)
  int carb = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &carb))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &carb))
   return false;
  m_DiagInpDat.carb = ((float)carb) * m_adc_discrete;
- raw_packet+=4;
 
  //Датчик детонации 1
  int ks_1 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &ks_1))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ks_1))
   return false;
  m_DiagInpDat.ks_1 = ((float)ks_1) * m_adc_discrete;
- raw_packet+=4;
 
  //Датчик детонации 2
  int ks_2 = 0;
- if (false == CNumericConv::Hex16ToBin(raw_packet, &ks_2))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &ks_2))
   return false;
  m_DiagInpDat.ks_2 = ((float)ks_2) * m_adc_discrete;
- raw_packet+=4;
 
  //байт с состоянием цифровых входов
  unsigned char byte = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &byte))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &byte))
   return false;
 
  //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
@@ -1232,22 +1192,20 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != 7)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 7 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
- if (false == CNumericConv::Hex16ToBin(raw_packet, &m_ChokePar.sm_steps))
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_ChokePar.sm_steps))
   return false;
- raw_packet+=4;
 
  //choke testing mode command/state (it is fake parameter)
- if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_ChokePar.testing))
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_ChokePar.testing))
   return false;
- raw_packet+=1;
 
  //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
  int delta = 0;
- if (false == CNumericConv::Hex8ToBin(raw_packet, &delta))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
   return false;
  m_ChokePar.manual_delta = delta;
 
@@ -1268,6 +1226,9 @@ bool CControlApp::ParsePackets()
    continue;
   if (it->back() != '\r')
    continue;
+
+  if (!mp_pdp->isHex())
+   Esc_Rx_Packet(*it, 2, it->size() - 3); //byte stuffing
 
   size_t p_size = it->size() - 3;
   const BYTE* p_start = &(*it)[2];
@@ -1564,6 +1525,12 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
 }
 
 //-----------------------------------------------------------------------
+void CControlApp::SetProtocolDataMode(bool i_mode)
+{
+ mp_pdp->SetMode(i_mode);
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 {
  if (false==IsValidDescriptor(i_descriptor))
@@ -1628,8 +1595,12 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
   default:
    return false; //invalid descriptor
-  }//switch
+ }//switch
  m_outgoing_packet.push_back('\r');
+
+ if (!mp_pdp->isHex())
+  Esc_Tx_Packet(m_outgoing_packet, 2, m_outgoing_packet.size() - 3); //byte stuffing
+ 
  return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size());
 }
 
@@ -1664,185 +1635,185 @@ bool CControlApp::StartBootLoader()
 //-----------------------------------------------------------------------
 void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 {
- CNumericConv::Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
  int epm_on_threshold = MathHelpers::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin16ToHex(epm_on_threshold,m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(epm_on_threshold,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
  unsigned char shutoff_delay = MathHelpers::Round(packet_data->shutoff_delay * 100.0f);
- CNumericConv::Bin8ToHex(shutoff_delay,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(shutoff_delay,m_outgoing_packet);
  unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin8ToHex(tps_threshold, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(tps_threshold, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->idl_regul,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->idl_regul,m_outgoing_packet);
 
  int ifac1 =  MathHelpers::Round((packet_data->ifac1 * m_angle_multiplier));
- CNumericConv::Bin16ToHex(ifac1,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ifac1,m_outgoing_packet);
 
  int ifac2 = MathHelpers::Round((packet_data->ifac2 * m_angle_multiplier));
- CNumericConv::Bin16ToHex(ifac2,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ifac2,m_outgoing_packet);
 
- CNumericConv::Bin16ToHex(packet_data->MINEFR,m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->idling_rpm,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->MINEFR,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->idling_rpm,m_outgoing_packet);
 
  int min_angle = MathHelpers::Round((packet_data->min_angle * m_angle_multiplier));
- CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(min_angle,m_outgoing_packet);
  int max_angle = MathHelpers::Round((packet_data->max_angle * m_angle_multiplier));
- CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(max_angle,m_outgoing_packet);
 
  int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER));
- CNumericConv::Bin16ToHex(turn_on_temp, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(turn_on_temp, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 {
- CNumericConv::Bin16ToHex(packet_data->starter_off,m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->starter_off,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 
 void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->vent_pwm,m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->cts_use_map,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->vent_pwm,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->cts_use_map,m_outgoing_packet);
  int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin16ToHex(vent_on,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(vent_on, m_outgoing_packet);
  int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin16ToHex(vent_off,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(vent_off, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
 {
  int max_angle = MathHelpers::Round(packet_data->max_angle * m_angle_multiplier);
- CNumericConv::Bin16ToHex(max_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(max_angle,m_outgoing_packet);
  int min_angle = MathHelpers::Round(packet_data->min_angle * m_angle_multiplier);
- CNumericConv::Bin16ToHex(min_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(min_angle,m_outgoing_packet);
  int angle_corr = MathHelpers::Round(packet_data->angle_corr * m_angle_multiplier);
- CNumericConv::Bin16ToHex(angle_corr,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(angle_corr,m_outgoing_packet);
  int dec_spead = MathHelpers::Round(packet_data->dec_spead * m_angle_multiplier);
- CNumericConv::Bin16ToHex(dec_spead,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(dec_spead,m_outgoing_packet);
  int inc_spead = MathHelpers::Round(packet_data->inc_spead * m_angle_multiplier);
- CNumericConv::Bin16ToHex(inc_spead,m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(inc_spead,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 {
- CNumericConv::Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
  unsigned int map_lower_pressure = MathHelpers::Round(packet_data->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin16ToHex(map_lower_pressure,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(map_lower_pressure,m_outgoing_packet);
  int map_upper_pressure = MathHelpers::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
- CNumericConv::Bin16ToHex(map_upper_pressure,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(map_upper_pressure,m_outgoing_packet);
  int map_curve_offset = MathHelpers::Round(packet_data->map_curve_offset / m_adc_discrete);
- CNumericConv::Bin16ToHex(map_curve_offset, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(map_curve_offset, m_outgoing_packet);
  int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete);
- CNumericConv::Bin16ToHex(map_curve_gradient, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(map_curve_gradient, m_outgoing_packet);
  int tps_curve_offset = MathHelpers::Round(packet_data->tps_curve_offset / m_adc_discrete);
- CNumericConv::Bin16ToHex(tps_curve_offset, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete);
- CNumericConv::Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
 {
  signed int map_adc_factor = MathHelpers::Round(packet_data->map_adc_factor * 16384);
- CNumericConv::Bin16ToHex(map_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(map_adc_factor,m_outgoing_packet);
  signed long map_correction_d = MathHelpers::Round((-packet_data->map_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long map_adc_correction = MathHelpers::Round(16384 * (0.5f - map_correction_d * packet_data->map_adc_factor));
- CNumericConv::Bin32ToHex(map_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(map_adc_correction,m_outgoing_packet);
 
  signed int ubat_adc_factor = MathHelpers::Round(packet_data->ubat_adc_factor * 16384);
- CNumericConv::Bin16ToHex(ubat_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ubat_adc_factor,m_outgoing_packet);
  signed long ubat_correction_d = MathHelpers::Round((-packet_data->ubat_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long ubat_adc_correction = MathHelpers::Round(16384 * (0.5f - ubat_correction_d * packet_data->ubat_adc_factor));
- CNumericConv::Bin32ToHex(ubat_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(ubat_adc_correction,m_outgoing_packet);
 
  signed int temp_adc_factor = MathHelpers::Round(packet_data->temp_adc_factor * 16384);
- CNumericConv::Bin16ToHex(temp_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(temp_adc_factor,m_outgoing_packet);
  signed long temp_correction_d = MathHelpers::Round((-packet_data->temp_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long temp_adc_correction = MathHelpers::Round(16384 * (0.5f - temp_correction_d * packet_data->temp_adc_factor));
- CNumericConv::Bin32ToHex(temp_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(temp_adc_correction,m_outgoing_packet);
  //TPS sensor
  signed int tps_adc_factor = MathHelpers::Round(packet_data->tps_adc_factor * 16384);
- CNumericConv::Bin16ToHex(tps_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(tps_adc_factor,m_outgoing_packet);
  signed long tps_correction_d = MathHelpers::Round((-packet_data->tps_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long tps_adc_correction = MathHelpers::Round(16384 * (0.5f - tps_correction_d * packet_data->tps_adc_factor));
- CNumericConv::Bin32ToHex(tps_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(tps_adc_correction,m_outgoing_packet);
  //ADD_IO1 input
  signed int ai1_adc_factor = MathHelpers::Round(packet_data->ai1_adc_factor * 16384);
- CNumericConv::Bin16ToHex(ai1_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ai1_adc_factor,m_outgoing_packet);
  signed long ai1_correction_d = MathHelpers::Round((-packet_data->ai1_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long ai1_adc_correction = MathHelpers::Round(16384 * (0.5f - ai1_correction_d * packet_data->ai1_adc_factor));
- CNumericConv::Bin32ToHex(ai1_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(ai1_adc_correction,m_outgoing_packet);
  //ADD_IO2 input
  signed int ai2_adc_factor = MathHelpers::Round(packet_data->ai2_adc_factor * 16384);
- CNumericConv::Bin16ToHex(ai2_adc_factor,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(ai2_adc_factor,m_outgoing_packet);
  signed long ai2_correction_d = MathHelpers::Round((-packet_data->ai2_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * packet_data->ai2_adc_factor));
- CNumericConv::Bin32ToHex(ai2_adc_correction,m_outgoing_packet);
+ mp_pdp->Bin32ToHex(ai2_adc_correction,m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->ckps_edge_type, m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->ref_s_edge_type, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->ckps_cogs_btdc, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->ckps_edge_type, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->ref_s_edge_type, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ckps_cogs_btdc, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->knock_use_knock_channel,m_outgoing_packet);
  unsigned char knock_bpf_frequency = (unsigned char)packet_data->knock_bpf_frequency;
- CNumericConv::Bin8ToHex(knock_bpf_frequency,m_outgoing_packet);
+ mp_pdp->Bin8ToHex(knock_bpf_frequency,m_outgoing_packet);
  int knock_k_wnd_begin_angle = MathHelpers::Round(packet_data->knock_k_wnd_begin_angle * m_angle_multiplier);
- CNumericConv::Bin16ToHex(knock_k_wnd_begin_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_k_wnd_begin_angle,m_outgoing_packet);
  int knock_k_wnd_end_angle = MathHelpers::Round(packet_data->knock_k_wnd_end_angle * m_angle_multiplier);
- CNumericConv::Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_k_wnd_end_angle,m_outgoing_packet);
  unsigned char knock_int_time_const = (unsigned char)packet_data->knock_int_time_const;
- CNumericConv::Bin8ToHex(knock_int_time_const, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(knock_int_time_const, m_outgoing_packet);
 
  int knock_retard_step = MathHelpers::Round(packet_data->knock_retard_step * m_angle_multiplier);
- CNumericConv::Bin16ToHex(knock_retard_step, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_retard_step, m_outgoing_packet);
  int knock_advance_step = MathHelpers::Round(packet_data->knock_advance_step * m_angle_multiplier);
- CNumericConv::Bin16ToHex(knock_advance_step, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_advance_step, m_outgoing_packet);
  int knock_max_retard = MathHelpers::Round(packet_data->knock_max_retard * m_angle_multiplier);
- CNumericConv::Bin16ToHex(knock_max_retard, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_max_retard, m_outgoing_packet);
  int knock_threshold = MathHelpers::Round(packet_data->knock_threshold / m_adc_discrete);
- CNumericConv::Bin16ToHex(knock_threshold, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(knock_threshold, m_outgoing_packet);
  unsigned char knock_recovery_delay = (unsigned char)packet_data->knock_recovery_delay;
- CNumericConv::Bin8ToHex(knock_recovery_delay, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(knock_recovery_delay, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 {
- CNumericConv::Bin8ToHex(packet_data->opdata, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->opcode, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->opdata, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->opcode, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 {
- CNumericConv::Bin16ToHex(packet_data->flags, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->flags, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -1851,7 +1822,7 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  int divisor = 0;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   if (SECU3IO::secu3_allowable_uart_divisors[i].first == packet_data->baud_rate)
-    divisor = SECU3IO::secu3_allowable_uart_divisors[i].second;
+   divisor = SECU3IO::secu3_allowable_uart_divisors[i].second;
 
  if (0==divisor)
  {
@@ -1859,28 +1830,28 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
   ASSERT(0);
  }
 
- CNumericConv::Bin16ToHex(divisor, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(divisor, m_outgoing_packet);
  unsigned char perid_ms = packet_data->period_ms / 10;
- CNumericConv::Bin8ToHex(perid_ms, m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->ign_cutoff, m_outgoing_packet);
- CNumericConv::Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(perid_ms, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->ign_cutoff, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 {
- CNumericConv::Bin4ToHex(packet_data->tab_set_index, m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
- CNumericConv::Bin8ToHex(packet_data->address, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->tab_set_index, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 
  if (packet_data->tab_id != ETMT_NAME_STR)
  {
   for(unsigned int i = 0; i < packet_data->data_size; ++i)
   {
    signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
-   CNumericConv::Bin8ToHex(value, m_outgoing_packet);
+   mp_pdp->Bin8ToHex(value, m_outgoing_packet);
   }
  }
  else //string
@@ -1900,15 +1871,15 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
  ((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
  ((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
 
- CNumericConv::Bin16ToHex(bits, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(bits, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 {
- CNumericConv::Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
- CNumericConv::Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
- CNumericConv::Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
+ mp_pdp->Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
+ mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
 }
 
 //-----------------------------------------------------------------------

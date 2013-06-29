@@ -325,3 +325,4 @@
 #define IDC_PM_SECU3ORG_LINK            4343
 #define IDC_CURSOR_HAND                 4344
 #define ID_APP_DEV_SITE                 4345
+#define IDC_APP_SETTINGS_HEXMODE        4346

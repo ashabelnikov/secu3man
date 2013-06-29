@@ -54,6 +54,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetDVDeskUpdatePeriod(int i_period);
   virtual void SetShowToolTips(bool i_show);
   virtual void SetShowExFixtures(bool i_show);
+  virtual void SetHexDataMode(bool i_hex);
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -68,6 +69,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetDVDeskUpdatePeriod(void);
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
+  virtual bool GetHexDataMode(void) const;
 
   //logs
   virtual void SetLogFilesFolder(const CString& i_folder);
@@ -113,6 +115,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_use_dv_features_button;
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
+  CButton   m_hexdatamode_button;
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
   CEditEx   m_dv_update_period_edit;
@@ -132,6 +135,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;
+  int m_hexdatamode;
   int m_log_csv_sepsymbol_index;
   int m_midesk_update_period;
   int m_dv_update_period;

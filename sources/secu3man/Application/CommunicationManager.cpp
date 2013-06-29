@@ -89,6 +89,9 @@ bool CCommunicationManager::Init(void)
  //для того чтобы можно было применить новые настройки к порту, необходимо его заново открыть
  m_pComPort->Terminate();
 
+ //Set protocol data encoding/decoding mode (Hex or Bin)
+ m_pControlApp->SetProtocolDataMode(m_pSettings->GetHexDataMode());
+
  try
  {
   //на скорость переданную в эту функцию не нужно обращать внимания (она будет установлена конкретным контроллером интрерфейса)
