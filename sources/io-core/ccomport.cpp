@@ -298,7 +298,7 @@ bool CComPort::RecvByte(unsigned char* byte)
 // data     - адрес буфера с данными для передачи
 // datasize - размер данных в бувере (в байтах)
 // Return: TRUE - OK, FALSE - error
-bool CComPort::SendBlock(BYTE* data,UINT datasize)
+bool CComPort::SendBlock(BYTE* data, UINT datasize)
 {
  DWORD  numwr;
  if (!data) return false;   //плохой указатель

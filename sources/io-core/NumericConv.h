@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-#include <string>
+#include <vector>
 #include "iocore_api.h"
 #include "types.h"
 
@@ -53,14 +53,14 @@ class IOCORE_API CNumericConv
 
   static bool   BinToHexArray(const BYTE* i_buf, BYTE* o_buf, const int size);
 
-  static bool   Bin4ToHex(const BYTE i_byte, std::string& o_hex_number);
+  static bool   Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number);
   static bool   Bin8ToHex(const BYTE i_byte, BYTE* o_hex_number);
-  static bool   Bin8ToHex(const BYTE i_byte, std::string& o_hex_number);
+  static bool   Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number);
   static bool   Bin12ToHex(const int i_12bit, BYTE* o_hex_number);
   static bool   Bin16ToHex(const int i_word, BYTE* o_hex_number);
-  static bool   Bin16ToHex(const int i_word, std::string& o_hex_number);
-  static bool   Bin32ToHex(const unsigned long i_dword, std::string& o_hex_number);
-  static bool   Bin32ToHex(const signed long i_dword, std::string& o_hex_number);
+  static bool   Bin16ToHex(const int i_word, std::vector<BYTE>& o_hex_number);
+  static bool   Bin32ToHex(const unsigned long i_dword, std::vector<BYTE>& o_hex_number);
+  static bool   Bin32ToHex(const signed long i_dword, std::vector<BYTE>& o_hex_number);
 
  private:
   static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);

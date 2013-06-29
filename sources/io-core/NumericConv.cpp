@@ -104,10 +104,10 @@ bool CNumericConv::Bin8ToHex(const BYTE i_byte,BYTE* o_hex_number)
 }
 
 
-bool CNumericConv::Bin8ToHex(const BYTE i_byte,std::string& o_hex_number)
+bool CNumericConv::Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
 {
- o_hex_number+= DTOH(i_byte >> 4); //store HI part
- o_hex_number+= DTOH(i_byte);      //store LO part
+ o_hex_number.push_back(DTOH(i_byte >> 4)); //store HI part
+ o_hex_number.push_back(DTOH(i_byte));      //store LO part
  return true;
 }
 
@@ -213,14 +213,14 @@ bool CNumericConv::Bin16ToHex(const int i_word,BYTE* o_hex_number)
 }
 
 
-bool CNumericConv::Bin16ToHex(const int i_word,std::string& o_hex_number)
+bool CNumericConv::Bin16ToHex(const int i_word, std::vector<BYTE>& o_hex_number)
 {
  Bin8ToHex(HIBYTE(((WORD)i_word)),o_hex_number);
  Bin8ToHex(LOBYTE(((WORD)i_word)),o_hex_number);
  return true;
 }
 
-bool CNumericConv::Bin32ToHex(const unsigned long i_dword,std::string& o_hex_number)
+bool CNumericConv::Bin32ToHex(const unsigned long i_dword, std::vector<BYTE>& o_hex_number)
 {
  Bin8ToHex(HIBYTE(HIWORD(i_dword)),o_hex_number);
  Bin8ToHex(LOBYTE(HIWORD(i_dword)),o_hex_number);
@@ -229,13 +229,13 @@ bool CNumericConv::Bin32ToHex(const unsigned long i_dword,std::string& o_hex_num
  return true;
 }
 
-bool CNumericConv::Bin32ToHex(const signed long i_dword,std::string& o_hex_number)
+bool CNumericConv::Bin32ToHex(const signed long i_dword, std::vector<BYTE>& o_hex_number)
 {
  return CNumericConv::Bin32ToHex((unsigned long)i_dword,o_hex_number);
 }
 
-bool CNumericConv::Bin4ToHex(const BYTE i_byte,std::string& o_hex_number)
+bool CNumericConv::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
 {
- o_hex_number+=DTOH(i_byte);
+ o_hex_number.push_back(DTOH(i_byte));
  return true;
 }

@@ -45,10 +45,8 @@ CControlApp::CControlApp()
 , m_hSleepEvent(NULL)
 , m_is_thread_must_exit(false)
 , m_uart_speed(CBR_9600)
-, m_ingoing_packet("")
 , m_packets_parse_state(0)
 , m_hTimer(NULL)
-, m_outgoing_packet("")
 , mp_csection(NULL)
 , m_work_state(false)
 {
@@ -142,7 +140,7 @@ bool CControlApp::Initialize(CComPort* p_port,const DWORD uart_speed, const DWOR
  m_uart_speed = uart_speed;
  m_dat_packet_timeout = dat_packet_timeout;
 
- m_ingoing_packet  = "";
+ m_ingoing_packet.clear();
  m_packets_parse_state = 0;
 
  if (NULL==(m_hTimer = CreateWaitableTimer(NULL,TRUE,_T("packet_wt"))))
@@ -163,35 +161,32 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
  m_pPackets->clear();
 
  BYTE* p = i_buff;
+ BYTE* end = i_buff + i_size;
 
- //Пакет(ы) содержит 0x0 символы.
- _ASSERTE((!memchr(i_buff, '\0', i_size)) && "0x0 characters are not allowed in SECU-3 packets.\
- Please, check firmware code for this problem.");
-
- while(*p!=0)
+ while(p != end)
  {
   switch(m_packets_parse_state) //я люблю автоматное программирование...
   {
    case 0:       //search '@'
-	if (*p=='@')
-	{
-	 m_ingoing_packet+=*p;
-	 m_packets_parse_state = 1;
-	}
-	break;
+	   if (*p=='@')
+	   {
+     m_ingoing_packet.push_back(*p);
+	    m_packets_parse_state = 1;
+	   }
+	   break;
    case 1:       //wait '\r'
-	if (*p=='\r')
-	{
-	 m_ingoing_packet+=*p;
-	 m_pPackets->push_back(m_ingoing_packet);
-	 m_ingoing_packet = "";
-	 m_packets_parse_state = 0;
-	}
-	else
-	{
-	 m_ingoing_packet+=*p;
-	}
-	break;
+	   if (*p=='\r')
+	   {
+     m_ingoing_packet.push_back(*p);
+	    m_pPackets->push_back(m_ingoing_packet);
+	    m_ingoing_packet.clear();
+	    m_packets_parse_state = 0;
+	   }
+	   else
+	   {
+	    m_ingoing_packet.push_back(*p);
+	   }
+	   break;
   }//switch
   ++p;
  };
@@ -200,11 +195,10 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
-
- if (strlen((char*)raw_packet)!=49)  //размер пакета без сигнального символа, дескриптора
+ if (size != 48)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -309,20 +303,15 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet)
  if (false == CNumericConv::Hex8ToBin(raw_packet, &choke_pos))
   return false;
  m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
- raw_packet+=2;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DbgvarDat& m_DbgvarDat = m_recepted_packet.m_DbgvarDat;
-
- if (strlen((char*)raw_packet)!=17)  //размер пакета без сигнального символа, дескриптора
+ if (size != 16)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //переменная 1
@@ -343,23 +332,16 @@ bool CControlApp::Parse_DBGVAR_DAT(const BYTE* raw_packet)
  //переменная 4
  if (false == CNumericConv::Hex16ToBin(raw_packet, &m_DbgvarDat.var4))
   return false;
- raw_packet+=4;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FnNameDat& m_FnNameDat = m_recepted_packet.m_FnNameDat;
-
- if (strlen((char*)raw_packet)!=21)  //размер пакета без сигнального символа, дескриптора
- {
+ if (size != 20)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
- }
 
  //Общее кол-во наборов (семейств характеристик)
  if (false == CNumericConv::Hex8ToBin(raw_packet,&m_FnNameDat.tables_num))
@@ -372,16 +354,12 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
  raw_packet+=2;
 
  //имя этого набора характеристик
- char* p;
- if (NULL==(p = strchr((char*)raw_packet, '\r')))
-  return false;
- *p = 0;
+ size_t fn_name_size = size - 4;
+ strncpy(m_FnNameDat.name, (const char*)raw_packet, fn_name_size);
+ m_FnNameDat.name[fn_name_size] = 0;
 
- strcpy(m_FnNameDat.name, (const char*)raw_packet);
-
- //Заменяем символы FF на 0x20
- size_t count = strlen(m_FnNameDat.name);
- for(size_t i = 0; i < count; ++i)
+ //Заменяем символы FF на 0x20 
+ for(size_t i = 0; i < fn_name_size; ++i)
   if (((unsigned char)m_FnNameDat.name[i]) == 0xFF)
    m_FnNameDat.name[i] = 0x20;
 
@@ -390,11 +368,10 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet)
 
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
-
- if (strlen((char*)raw_packet)!=9)  //размер пакета без сигнального символа, дескриптора
+ if (size != 8)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -405,21 +382,16 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet)
  //Обороты перехода с пусковой карты
  if (false == CNumericConv::Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
   return false;
- raw_packet+=4;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AnglesPar& m_AnglesPar = m_recepted_packet.m_AnglesPar;
-
- if (strlen((char*)raw_packet)!=22)  //размер пакета без сигнального символа, дескриптора
+ if (size != 21)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Максимальный, допустимый УОЗ (число со знаком)
@@ -460,20 +432,15 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet)
  //Признак нулевого УОЗ
  if (false == CNumericConv::Hex4ToBin(*raw_packet, &m_AnglesPar.zero_adv_ang))
   return false;
- raw_packet+=1;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
-
- if (strlen((char*)raw_packet)!=29)  //размер пакета без сигнального символа, дескриптора
+ if (size != 28)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -525,22 +492,17 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet)
  int tps_curve_gradient = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
- raw_packet+=4;
  m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete * 128.0f);
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
-
- if (strlen((char*)raw_packet)!=30)  //размер пакета без сигнального символа, дескриптора
+ if (size != 29)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //признак использования регулятора
@@ -590,21 +552,16 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet)
  int turn_on_temp = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&turn_on_temp,true))
   return false;
- raw_packet+=4;
  m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
-
- if (strlen((char*)raw_packet)!=26)  //размер пакета без сигнального символа, дескриптора
+ if (size != 25)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -650,21 +607,16 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet)
  unsigned char tps_threshold;
  if (false == CNumericConv::Hex8ToBin(raw_packet, &tps_threshold))
   return false;
- raw_packet+=2;
  m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-
- if (*raw_packet!='\r')
-   return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
-
- if (strlen((char*)raw_packet)!=12)  //размер пакета без сигнального символа, дескриптора
+ if (size != 11)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
@@ -696,21 +648,16 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet)
  int vent_off = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&vent_off,true))
   return false;
- raw_packet+=4;
  m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
-
- if (strlen((char*)raw_packet)!=29)  //размер пакета без сигнального символа, дескриптора
+ if (size != 28)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //MAP sensor
@@ -759,11 +706,7 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
  signed int add_i2 = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&add_i2,true))
   return false;
- raw_packet+=4;
  m_RawSensDat.add_i2_value = add_i2 * m_adc_discrete;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
@@ -771,11 +714,10 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet)
 
 //-----------------------------------------------------------------------
 //note: for more information see AVR120 application note.
-bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ADCCompenPar& m_ADCCompenPar = m_recepted_packet.m_ADCCompenPar;
-
- if (strlen((char*)raw_packet)!=73)  //размер пакета без сигнального символа, дескриптора
+ if (size != 72)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  signed int map_adc_factor = 0;
@@ -856,22 +798,17 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet)
  signed long ai2_adc_correction = 0;
  if (false == CNumericConv::Hex32ToBin(raw_packet,&ai2_adc_correction))
   return false;
- raw_packet+=8;
  m_ADCCompenPar.ai2_adc_correction = ((((float)ai2_adc_correction)/16384.0f) - 0.5f) / m_ADCCompenPar.ai2_adc_factor;
  m_ADCCompenPar.ai2_adc_correction*=m_adc_discrete; //в вольты
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
-
- if (strlen((char*)raw_packet)!=14)  //размер пакета без сигнального символа, дескриптора
+ if (size != 13)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Тип фронта ДПКВ
@@ -912,20 +849,15 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet)
  //Кол-во пропущенных зубьев задающего шкива (допустимые значения: 0, 1, 2)
  if (false == CNumericConv::Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
   return false;
- raw_packet+=2;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet)
+bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::OPCompNc& m_OPCompNc = m_recepted_packet.m_OPCompNc;
-
- if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+ if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Код завершенной операции
@@ -934,20 +866,15 @@ bool CControlApp::Parse_OP_COMP_NC(const BYTE* raw_packet)
  raw_packet+=2;
  if (false == CNumericConv::Hex8ToBin(raw_packet, &m_OPCompNc.opcode))
   return false;
- raw_packet+=2;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::KnockPar& m_KnockPar = m_recepted_packet.m_KnockPar;
-
- if (strlen((char*)raw_packet)!=(14+18))  //размер пакета без сигнального символа, дескриптора
+ if (size != (14+17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Разрешен/запрещен
@@ -1017,60 +944,45 @@ bool CControlApp::Parse_KNOCK_PAR(const BYTE* raw_packet)
  if (false == CNumericConv::Hex8ToBin(raw_packet,&knock_recovery_delay))
   return false;
  m_KnockPar.knock_recovery_delay = knock_recovery_delay;
- raw_packet+=2;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet)
+bool CControlApp::Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
-
- if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+ if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  int flags = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
   return false;
  m_CEErrors.flags = flags;
- raw_packet+=4;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet)
+bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CEErrors& m_CEErrors = m_recepted_packet.m_CEErrors;
-
- if (strlen((char*)raw_packet)!=5)  //размер пакета без сигнального символа, дескриптора
+ if (size != 4)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  int flags = 0;
  if (false == CNumericConv::Hex16ToBin(raw_packet,&flags))
   return false;
  m_CEErrors.flags = flags;
- raw_packet+=4;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
-
- if (strlen((char*)raw_packet)!=(FW_SIGNATURE_INFO_SIZE+8+1))  //размер пакета без сигнального символа, дескриптора
+ if (size != (FW_SIGNATURE_INFO_SIZE+8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //строка с информацией 
@@ -1083,20 +995,15 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet)
  if (false == CNumericConv::Hex32ToBin(raw_packet,&options))
   return false;
  m_FWInfoDat.options = options;
- raw_packet+=8;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
-
- if (strlen((char*)raw_packet)!=16)  //размер пакета без сигнального символа, дескриптора
+ if (size != 15)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1143,23 +1050,16 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet)
  unsigned char duration = 0;
  if (false == CNumericConv::Hex8ToBin(raw_packet, &duration))
   return false;
- raw_packet+=2;
-
  m_MiscPar.hop_durat_cogs = duration;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
-
- int packet_size = strlen((char*)raw_packet);
- if (packet_size < 7 || packet_size > 37)
+ if (size < 6 || size > 36)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //номер набора таблиц
@@ -1185,15 +1085,15 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
  m_EditTabPar.address = address;
  raw_packet+=2;
 
- packet_size-=5;
- if (packet_size % 2) // 1 byte in HEX is 2 symbols
+ size-=4;
+ if (size % 2) // 1 byte in HEX is 2 symbols
   return false;
 
  if (m_EditTabPar.tab_id != ETMT_NAME_STR)
  {
   //фрагмент с данными (float)
   size_t data_size = 0;
-  for(int i = 0; i < packet_size / 2; ++i)
+  for(size_t i = 0; i < size / 2; ++i)
   {
    signed char value;
    if (false == CNumericConv::Hex8ToBin(raw_packet, (unsigned char*)&value))
@@ -1206,27 +1106,20 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet)
  }
  else
  {
-  //фрагмент с данными (текстовая информация)
-  char *p = strchr((char*)raw_packet, '\r');
-  std::string raw_string((char*)raw_packet, ((BYTE*)p) - raw_packet);
+  //фрагмент с данными (текстовая информация)  
+  std::string raw_string((char*)raw_packet, size);
   OemToChar(raw_string.c_str(), m_EditTabPar.name_data);
-  raw_packet+=raw_string.size();
   m_EditTabPar.data_size = raw_string.size();
  }
  
- if (*raw_packet!='\r')
-  return false;
-
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& m_AttTabPar = m_recepted_packet.m_SepTabPar;
-
- int packet_size = strlen((char*)raw_packet);
- if (packet_size < 5 || packet_size > 35)
+ if (size < 4 || size > 34)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1236,13 +1129,13 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet)
  m_AttTabPar.address = address;
  raw_packet+=2;
 
- packet_size-=3;
- if (packet_size % 2) // 1 byte in HEX is 2 symbols
+ size-=2;
+ if (size % 2) // 1 byte in HEX is 2 symbols
   return false;
 
  //фрагмент с данными (коды коэффициентов усиления)
  size_t data_size = 0;
- for(int i = 0; i < packet_size / 2; ++i)
+ for(size_t i = 0; i < size / 2; ++i)
  {
   unsigned char value;
   if (false == CNumericConv::Hex8ToBin(raw_packet, &value))
@@ -1253,18 +1146,14 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet)
  }
  m_AttTabPar.data_size = data_size;
  
- if (*raw_packet!='\r')
-  return false;
-
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
+bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
-
- if (strlen((char*)raw_packet)!=35)  //размер пакета без сигнального символа, дескриптора
+ if (size != 34)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //напряжение бортовой сети
@@ -1327,7 +1216,6 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
  unsigned char byte = 0;
  if (false == CNumericConv::Hex8ToBin(raw_packet, &byte))
   return false;
- raw_packet+=2;
 
  //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
  m_DiagInpDat.gas   = (byte & (1 << 0)) != 0;
@@ -1337,18 +1225,14 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet)
  m_DiagInpDat.bl    = (byte & (1 << 4)) != 0;
  m_DiagInpDat.de    = (byte & (1 << 5)) != 0;
 
- if (*raw_packet!='\r')
-  return false;
-
  return true;
 }
 
 //-----------------------------------------------------------------------
-bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet)
+bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
-
- if (strlen((char*)raw_packet)!=8)  //размер пакета без сигнального символа, дескриптора
+ if (size != 7)  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1365,11 +1249,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet)
  int delta = 0;
  if (false == CNumericConv::Hex8ToBin(raw_packet, &delta))
   return false;
- raw_packet+=2;
  m_ChokePar.manual_delta = delta;
-
- if (*raw_packet!='\r')
-  return false;
 
  return true;
 }
@@ -1380,107 +1260,105 @@ bool CControlApp::ParsePackets()
 {
  Packets::iterator it;
  bool status = false;
- BYTE descriptor = 0;
 
  ASSERT(m_pPackets);
  for(it = m_pPackets->begin(); it!=m_pPackets->end(); ++it)
  {
-  const BYTE* raw_packet = (const BYTE*)it->c_str();
-  if (*raw_packet!='@')
+  if (it->size() < 3 || (*it)[0] != '@')
    continue;
-  ++raw_packet;   //пропустили '@'
-  if (*raw_packet==0)
+  if (it->back() != '\r')
    continue;
-  descriptor = *raw_packet;
-  ++raw_packet;  //пропустили символ дескриптора
-  switch(descriptor)
+
+  size_t p_size = it->size() - 3;
+  const BYTE* p_start = &(*it)[2];
+  switch((*it)[1])
   {
    case TEMPER_PAR:
-    if (Parse_TEMPER_PAR(raw_packet))
+    if (Parse_TEMPER_PAR(p_start, p_size))
      break; //пакет успешно разобран по составляющим
     continue;//пакет не прошел сурового отбора нашим жюри :-)
    case CARBUR_PAR:
-    if (Parse_CARBUR_PAR(raw_packet))
+    if (Parse_CARBUR_PAR(p_start, p_size))
      break;
     continue;
    case IDLREG_PAR:
-    if (Parse_IDLREG_PAR(raw_packet))
+    if (Parse_IDLREG_PAR(p_start, p_size))
      break;
     continue;
    case ANGLES_PAR:
-    if (Parse_ANGLES_PAR(raw_packet))
+    if (Parse_ANGLES_PAR(p_start, p_size))
      break;
     continue;
    case FUNSET_PAR:
-    if (Parse_FUNSET_PAR(raw_packet))
+    if (Parse_FUNSET_PAR(p_start, p_size))
      break;
     continue;
    case STARTR_PAR:
-    if (Parse_STARTR_PAR(raw_packet))
+    if (Parse_STARTR_PAR(p_start, p_size))
      break;
     continue;
    case FNNAME_DAT:
-    if (Parse_FNNAME_DAT(raw_packet))
+    if (Parse_FNNAME_DAT(p_start, p_size))
      break;
     continue;
    case SENSOR_DAT:
-    if (Parse_SENSOR_DAT(raw_packet))
+    if (Parse_SENSOR_DAT(p_start, p_size))
      break;
     continue;
    case DBGVAR_DAT:
-    if (Parse_DBGVAR_DAT(raw_packet))
+    if (Parse_DBGVAR_DAT(p_start, p_size))
      break;
     continue;
    case ADCRAW_DAT:
-    if (Parse_ADCRAW_DAT(raw_packet))
+    if (Parse_ADCRAW_DAT(p_start, p_size))
      break;
     continue;
    case ADCCOR_PAR:
-    if (Parse_ADCCOR_PAR(raw_packet))
+    if (Parse_ADCCOR_PAR(p_start, p_size))
      break;
     continue;
    case CKPS_PAR:
-    if (Parse_CKPS_PAR(raw_packet))
+    if (Parse_CKPS_PAR(p_start, p_size))
      break;
     continue;
    case OP_COMP_NC:
-    if (Parse_OP_COMP_NC(raw_packet))
+    if (Parse_OP_COMP_NC(p_start, p_size))
      break;
     continue;
    case KNOCK_PAR:
-    if (Parse_KNOCK_PAR(raw_packet))
+    if (Parse_KNOCK_PAR(p_start, p_size))
      break;
     continue;
    case CE_ERR_CODES:
-    if (Parse_CE_ERR_CODES(raw_packet))
+    if (Parse_CE_ERR_CODES(p_start, p_size))
      break;
     continue;
    case CE_SAVED_ERR:
-    if (Parse_CE_SAVED_ERR(raw_packet))
+    if (Parse_CE_SAVED_ERR(p_start, p_size))
      break;
     continue;
    case FWINFO_DAT:
-    if (Parse_FWINFO_DAT(raw_packet))
+    if (Parse_FWINFO_DAT(p_start, p_size))
      break;
     continue;
    case MISCEL_PAR:
-    if (Parse_MISCEL_PAR(raw_packet))
+    if (Parse_MISCEL_PAR(p_start, p_size))
      break;
     continue;
    case EDITAB_PAR:
-    if (Parse_EDITAB_PAR(raw_packet))
+    if (Parse_EDITAB_PAR(p_start, p_size))
      break;
     continue;
    case ATTTAB_PAR:
-    if (Parse_ATTTAB_PAR(raw_packet))
+    if (Parse_ATTTAB_PAR(p_start, p_size))
      break;
     continue;
    case DIAGINP_DAT:
-    if (Parse_DIAGINP_DAT(raw_packet))
+    if (Parse_DIAGINP_DAT(p_start, p_size))
      break;
     continue;
    case CHOKE_PAR:
-    if (Parse_CHOKE_PAR(raw_packet))
+    if (Parse_CHOKE_PAR(p_start, p_size))
      break;
     continue;
 
@@ -1495,7 +1373,7 @@ bool CControlApp::ParsePackets()
   ////////////////////////////////////////////////////////////////////////////
   //так как все возможные структуры данных пакетов собраны в union, то нам достаточно оперировать
   //только адресом union.
-  m_pEventHandler->OnPacketReceived(descriptor, &EndPendingPacket());
+  m_pEventHandler->OnPacketReceived((*it)[1], &EndPendingPacket());
   status = true;
  }//for
 
@@ -1531,8 +1409,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 
   //читаем блок данных
   actual_received = 0;
-  p_port->RecvBlock(read_buf,RAW_BYTES_TO_READ_MAX,&actual_received);
-  read_buf[actual_received] = 0;
+  p_port->RecvBlock(read_buf,RAW_BYTES_TO_READ_MAX, &actual_received);
 
   //парсим данные и пытаемся выделить пакеты
   p_capp->SplitPackets(read_buf, actual_received);
@@ -1692,9 +1569,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
  if (false==IsValidDescriptor(i_descriptor))
   return false;
 
- m_outgoing_packet = "";
- m_outgoing_packet+='!';
- m_outgoing_packet+=i_descriptor;
+ m_outgoing_packet.clear();
+ m_outgoing_packet.push_back('!');
+ m_outgoing_packet.push_back(i_descriptor);
 
  //формирование пакетов и их передача, WriteFile будет заблокирована пока не завершится ReadFile...
  switch(i_descriptor)
@@ -1752,35 +1629,36 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
   default:
    return false; //invalid descriptor
   }//switch
- return m_p_port->SendASCII(m_outgoing_packet.c_str());
+ m_outgoing_packet.push_back('\r');
+ return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size());
 }
 
 //-----------------------------------------------------------------------
 //посылает команду изменения контекста на новый контекст специфицированный i_new_descriptor-ом
 bool CControlApp::ChangeContext(const BYTE i_new_descriptor)
 {
- m_outgoing_packet = "";
+ m_outgoing_packet.clear();
 
  if (false==IsValidDescriptor(i_new_descriptor))  //передали правильный дескриптор ?
   return false;
 
- m_outgoing_packet+='!';
- m_outgoing_packet+= CHANGEMODE;
- m_outgoing_packet+= i_new_descriptor;
- m_outgoing_packet+= '\r';
- return m_p_port->SendASCII(m_outgoing_packet.c_str());   //посылаем команду изменения дескриптора
+ m_outgoing_packet.push_back('!');
+ m_outgoing_packet.push_back(CHANGEMODE);
+ m_outgoing_packet.push_back(i_new_descriptor);
+ m_outgoing_packet.push_back('\r');
+ return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size()); //посылаем команду изменения дескриптора
 }
 //-----------------------------------------------------------------------
 //Посылает команду запуска бутлоадера
 bool CControlApp::StartBootLoader()
 {
- m_outgoing_packet = "";
+ m_outgoing_packet.clear();
 
- m_outgoing_packet+='!';
- m_outgoing_packet+= BOOTLOADER;
- m_outgoing_packet+= 'l';
- m_outgoing_packet+= '\r';
- return m_p_port->SendASCII(m_outgoing_packet.c_str());   //посылаем команду запуска бутлоадера
+ m_outgoing_packet.push_back('!');
+ m_outgoing_packet.push_back(BOOTLOADER);
+ m_outgoing_packet.push_back('l');
+ m_outgoing_packet.push_back('\r');
+ return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size()); //посылаем команду запуска бутлоадера
 }
 
 //-----------------------------------------------------------------------
@@ -1797,7 +1675,6 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  CNumericConv::Bin8ToHex(shutoff_delay,m_outgoing_packet);
  unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin8ToHex(tps_threshold, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1821,8 +1698,6 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER));
  CNumericConv::Bin16ToHex(turn_on_temp, m_outgoing_packet);
-
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1830,7 +1705,6 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 {
  CNumericConv::Bin16ToHex(packet_data->starter_off,m_outgoing_packet);
  CNumericConv::Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 //-----------------------------------------------------------------------
 
@@ -1843,7 +1717,6 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
  CNumericConv::Bin16ToHex(vent_on,m_outgoing_packet);
  int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  CNumericConv::Bin16ToHex(vent_off,m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1860,7 +1733,6 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  int inc_spead = MathHelpers::Round(packet_data->inc_spead * m_angle_multiplier);
  CNumericConv::Bin16ToHex(inc_spead,m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1880,7 +1752,6 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  CNumericConv::Bin16ToHex(tps_curve_offset, m_outgoing_packet);
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete);
  CNumericConv::Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1921,7 +1792,6 @@ void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
  signed long ai2_correction_d = MathHelpers::Round((-packet_data->ai2_adc_correction) / m_adc_discrete); //переводим из вольтов в дискреты АЦП
  signed long ai2_adc_correction = MathHelpers::Round(16384 * (0.5f - ai2_correction_d * packet_data->ai2_adc_factor));
  CNumericConv::Bin32ToHex(ai2_adc_correction,m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1935,7 +1805,6 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  CNumericConv::Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1961,8 +1830,6 @@ void CControlApp::Build_KNOCK_PAR(KnockPar* packet_data)
  CNumericConv::Bin16ToHex(knock_threshold, m_outgoing_packet);
  unsigned char knock_recovery_delay = (unsigned char)packet_data->knock_recovery_delay;
  CNumericConv::Bin8ToHex(knock_recovery_delay, m_outgoing_packet);
-
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -1970,14 +1837,12 @@ void CControlApp::Build_OP_COMP_NC(SECU3IO::OPCompNc* packet_data)
 {
  CNumericConv::Bin8ToHex(packet_data->opdata, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->opcode, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
 void CControlApp::Build_CE_SAVED_ERR(SECU3IO::CEErrors* packet_data)
 {
  CNumericConv::Bin16ToHex(packet_data->flags, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -2001,7 +1866,6 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  CNumericConv::Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
  CNumericConv::Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -2023,11 +1887,9 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
  {
   char raw_string[64];
   CharToOem(packet_data->name_data, raw_string);
-  std::string str(raw_string, packet_data->data_size);
-  m_outgoing_packet+=str;
+  for(size_t i = 0; i < packet_data->data_size; ++i)
+   m_outgoing_packet.push_back(raw_string[i]);
  }
-
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -2039,8 +1901,6 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
  ((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
 
  CNumericConv::Bin16ToHex(bits, m_outgoing_packet);
-
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------
@@ -2049,7 +1909,6 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  CNumericConv::Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
  CNumericConv::Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  CNumericConv::Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
- m_outgoing_packet+= '\r';
 }
 
 //-----------------------------------------------------------------------

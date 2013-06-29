@@ -100,7 +100,7 @@ class IOCORE_API CControlApp
   class xThread {};
 
  private:
-  typedef std::vector<std::string> Packets;
+  typedef std::vector<std::vector<BYTE> > Packets;
 
   enum {PENDING_PACKETS_QUEUE_SIZE = 256};
 
@@ -124,8 +124,8 @@ class IOCORE_API CControlApp
   volatile bool m_is_thread_must_exit;
 
   Packets*     m_pPackets;              //хранит списик выделенных пакетов
-  std::string  m_ingoing_packet;        //используетс€ дл€ выделени€ одного пакета
-  std::string  m_outgoing_packet;       //используетс€ дл€ формировани€ пакетов
+  std::vector<BYTE>  m_ingoing_packet;  //используетс€ дл€ выделени€ одного пакета
+  std::vector<BYTE>  m_outgoing_packet; //используетс€ дл€ формировани€ пакетов
   int          m_packets_parse_state;   //хранит состо€ние конечного автомата используемого дл€ отделени€ пакетов
 
   const float m_adc_discrete;
@@ -145,28 +145,28 @@ class IOCORE_API CControlApp
   SECU3IO::SECU3Packet& PendingPacket(void);
 
   //парсеры отдельных пакетов (тех пакетов которые принимаютс€ от SECU-3)
-  bool Parse_SENSOR_DAT(const BYTE* raw_packet);
-  bool Parse_DBGVAR_DAT(const BYTE* raw_packet);
-  bool Parse_FNNAME_DAT(const BYTE* raw_packet);
-  bool Parse_STARTR_PAR(const BYTE* raw_packet);
-  bool Parse_ANGLES_PAR(const BYTE* raw_packet);
-  bool Parse_FUNSET_PAR(const BYTE* raw_packet);
-  bool Parse_IDLREG_PAR(const BYTE* raw_packet);
-  bool Parse_CARBUR_PAR(const BYTE* raw_packet);
-  bool Parse_TEMPER_PAR(const BYTE* raw_packet);
-  bool Parse_ADCRAW_DAT(const BYTE* raw_packet);
-  bool Parse_ADCCOR_PAR(const BYTE* raw_packet);
-  bool Parse_CKPS_PAR(const BYTE* raw_packet);
-  bool Parse_OP_COMP_NC(const BYTE* raw_packet);
-  bool Parse_KNOCK_PAR(const BYTE* raw_packet);
-  bool Parse_CE_ERR_CODES(const BYTE* raw_packet);
-  bool Parse_CE_SAVED_ERR(const BYTE* raw_packet);
-  bool Parse_FWINFO_DAT(const BYTE* raw_packet);
-  bool Parse_MISCEL_PAR(const BYTE* raw_packet);
-  bool Parse_EDITAB_PAR(const BYTE* raw_packet);
-  bool Parse_DIAGINP_DAT(const BYTE* raw_packet);
-  bool Parse_ATTTAB_PAR(const BYTE* raw_packet);
-  bool Parse_CHOKE_PAR(const BYTE* raw_packet);
+  bool Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_DBGVAR_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_STARTR_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_CKPS_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_OP_COMP_NC(const BYTE* raw_packet, size_t size);
+  bool Parse_KNOCK_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_CE_ERR_CODES(const BYTE* raw_packet, size_t size);
+  bool Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size);
+  bool Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size);
+  bool Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
