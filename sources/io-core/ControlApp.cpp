@@ -47,17 +47,18 @@ const BYTE TFESC = 0x84;    // Transposed FESC
 
 void Esc_Rx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
 {
- for(size_t i = offset; i < size; ++i)
+ for(size_t i = 0; i < size; ++i)
  {
-  if (io_data[i] == FESC)
+  size_t index = i + offset;
+  if (io_data[index] == FESC)
   {
-   io_data.erase(io_data.begin() + i);
-   if (io_data[i] == TFOBEGIN)
-    io_data[i] = FOBEGIN;
-   else if (io_data[i] == TFIOEND)
-    io_data[i] = FIOEND;
-   else if (io_data[i] == TFESC)
-    io_data[i] = FESC;     
+   io_data.erase(io_data.begin() + index);
+   if (io_data[index] == TFOBEGIN)
+    io_data[index] = FOBEGIN;
+   else if (io_data[index] == TFIOEND)
+    io_data[index] = FIOEND;
+   else if (io_data[index] == TFESC)
+    io_data[index] = FESC;
    --size;
   }
  }
@@ -65,24 +66,25 @@ void Esc_Rx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
 
 void Esc_Tx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
 {
- for(size_t i = offset; i < size; ++i)
+ for(size_t i = 0; i < size; ++i)
  {
-  if (io_data[i] == FIBEGIN)
+  size_t index = i + offset;
+  if (io_data[index] == FIBEGIN)
   {
-   io_data[i] = FESC;
-   io_data.insert(io_data.begin() + (i+1), TFIBEGIN); 
+   io_data[index] = FESC;
+   io_data.insert(io_data.begin() + (index+1), TFIBEGIN);
    ++size;
   }
-  else if (io_data[i] == FIOEND)
+  else if (io_data[index] == FIOEND)
   {
-   io_data[i] = FESC;
-   io_data.insert(io_data.begin() + (i+1), TFIOEND); 
+   io_data[index] = FESC;
+   io_data.insert(io_data.begin() + (index+1), TFIOEND);
    ++size;
   }
-  else if (io_data[i] == FESC)
+  else if (io_data[index] == FESC)
   {
-   io_data[i] = FESC;
-   io_data.insert(io_data.begin() + (i+1), TFESC); 
+   io_data[index] = FESC;
+   io_data.insert(io_data.begin() + (index+1), TFESC);
    ++size;
   }
  }
