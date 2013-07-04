@@ -37,6 +37,7 @@ set(HEADERS
   Params/KnockPageDlg.h
   Params/MiscPageDlg.h
   Params/ParamDeskDlg.h
+  Params/SecurPageDlg.h
   Params/StarterPageDlg.h
   Params/TemperPageDlg.h
   Params/IORemappingDlg.h
@@ -63,6 +64,7 @@ set(SOURCES
   Params/KnockPageDlg.cpp
   Params/MiscPageDlg.cpp
   Params/ParamDeskDlg.cpp
+  Params/SecurPageDlg.cpp
   Params/StarterPageDlg.cpp
   Params/TemperPageDlg.cpp
   Params/IORemappingDlg.cpp

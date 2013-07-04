@@ -1215,6 +1215,29 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SecurPar& m_SecurPar = m_recepted_packet.m_SecurPar;
+ if (size != (mp_pdp->isHex() ? 2 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //Number of characters in name (must be zero)
+ BYTE numName = 0;
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &numName))
+  return false;
+
+ //Number of characters in password (must be zero)
+ BYTE numPass = 0;
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &numPass))
+  return false;
+
+ if (numName || numPass)
+  return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1322,6 +1345,10 @@ bool CControlApp::ParsePackets()
     continue;
    case CHOKE_PAR:
     if (Parse_CHOKE_PAR(p_start, p_size))
+     break;
+    continue;
+   case SECUR_PAR:
+    if (Parse_SECUR_PAR(p_start, p_size))
      break;
     continue;
 
@@ -1520,6 +1547,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
   case CHOKE_PAR:
+  case SECUR_PAR:
    return true;
   default:
    return false;
@@ -1593,6 +1621,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case CHOKE_PAR:
    Build_CHOKE_PAR((ChokePar*)i_packet_data);
+   break;
+  case SECUR_PAR:
+   Build_SECUR_PAR((SecurPar*)i_packet_data);
    break;
 
   default:
@@ -1882,6 +1913,25 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
+{
+ char raw_name[32], raw_pass[32];
+ CharToOem(packet_data->bt_name, raw_name);
+ size_t numName = strlen(raw_name);
+ CharToOem(packet_data->bt_pass, raw_pass);
+ size_t numPass = strlen(raw_pass);
+
+ mp_pdp->Bin4ToHex(numName, m_outgoing_packet); 
+ mp_pdp->Bin4ToHex(numPass, m_outgoing_packet); 
+
+ for(size_t i = 0; i < numName; ++i)
+  m_outgoing_packet.push_back(raw_name[i]);
+
+ for(size_t i = 0; i < numPass; ++i)
+  m_outgoing_packet.push_back(raw_pass[i]); 
 }
 
 //-----------------------------------------------------------------------

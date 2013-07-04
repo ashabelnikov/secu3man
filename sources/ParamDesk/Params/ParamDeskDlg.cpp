@@ -35,6 +35,7 @@
 #include "IdlRegPageDlg.h"
 #include "KnockPageDlg.h"
 #include "MiscPageDlg.h"
+#include "SecurPageDlg.h"
 #include "StarterPageDlg.h"
 #include "TemperPageDlg.h"
 
@@ -104,6 +105,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 
  m_pChokePageDlg = new CChokePageDlg();
  m_pChokePageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
+
+ m_pSecurPageDlg = new CSecurPageDlg();
+ m_pSecurPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -122,6 +126,7 @@ CParamDeskDlg::~CParamDeskDlg()
   delete m_pKnockPageDlg;
  delete m_pMiscPageDlg;
  delete m_pChokePageDlg;
+ delete m_pSecurPageDlg;
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -154,6 +159,7 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_COMMAND_HK_XXX(KNOCK_PAR)
  ON_COMMAND_HK_XXX(MISCEL_PAR)
  ON_COMMAND_HK_XXX(CHOKE_PAR)
+ ON_COMMAND_HK_XXX(SECUR_PAR)
 
 END_MESSAGE_MAP()
 
@@ -190,6 +196,7 @@ BOOL CParamDeskDlg::OnInitDialog()
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_KNOCK_PAR),m_pKnockPageDlg,8), KNOCK_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_MISCEL_PAR),m_pMiscPageDlg,9), MISCEL_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_SECUR_PAR),m_pSecurPageDlg,11), SECUR_PAR));
 
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
@@ -259,6 +266,7 @@ void CParamDeskDlg::Enable(bool enable)
   m_pKnockPageDlg->Enable(enable);
  m_pMiscPageDlg->Enable(enable);
  m_pChokePageDlg->Enable(enable);
+ m_pSecurPageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -320,6 +328,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case CHOKE_PAR:
    m_pChokePageDlg->SetValues((ChokePar*)i_values);
    break;
+  case SECUR_PAR:
+   m_pSecurPageDlg->SetValues((SecurPar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -369,6 +380,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case CHOKE_PAR:
    m_pChokePageDlg->GetValues((ChokePar*)o_values);
+   break;
+  case SECUR_PAR:
+   m_pSecurPageDlg->GetValues((SecurPar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:
@@ -541,6 +555,7 @@ void CParamDeskDlg::_RegisterHotKeys(void)
   RegisterHK(KNOCK_PAR,  VK_F9);
  RegisterHK(MISCEL_PAR, VK_F10);
  RegisterHK(CHOKE_PAR,  VK_F11);
+ RegisterHK(SECUR_PAR,  VK_SNAPSHOT); //We can't use F12 "The F12 key is reserved for use by the debugger at all times, so it should not be registered as a hot key"
 }
 
 #define OnHK_XXX(x)\
@@ -562,3 +577,4 @@ OnHK_XXX(CKPS_PAR)
 OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
 OnHK_XXX(CHOKE_PAR)
+OnHK_XXX(SECUR_PAR)

@@ -287,6 +287,12 @@ namespace SECU3IO
   signed char manual_delta;             //delta position value for manual choke control
  };
 
+ struct SecurPar
+ {
+  TCHAR bt_name[10];                    //bluetooth name, this parameter is not stored in EEPROM
+  TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM  
+ };
+
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
  static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] =
@@ -367,6 +373,7 @@ namespace SECU3IO
   SECU3IO::DiagInpDat   m_DiagInpDat;
   SECU3IO::DiagOutDat   m_DiagOutDat;
   SECU3IO::ChokePar     m_ChokePar;
+  SECU3IO::SecurPar     m_SecurPar;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

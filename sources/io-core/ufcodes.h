@@ -56,5 +56,6 @@
 #define   DIAGOUT_DAT  '^'
 
 #define   CHOKE_PAR    '%'
+#define   SECUR_PAR    '#'
 
 #endif //_UFCODES_H_

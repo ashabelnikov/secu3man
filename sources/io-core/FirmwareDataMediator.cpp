@@ -850,6 +850,12 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->sm_steps  = p_in->sm_steps;
    }
    break;
+  case SECUR_PAR:
+   {
+    SecurPar* p_in = (SecurPar*)ip_values;
+    //todo
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -1044,6 +1050,12 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     {
      ChokePar* p_out = (ChokePar*)op_values;
      p_out->sm_steps = p_params->sm_steps;
+    }
+    break;
+   case SECUR_PAR:
+    {
+     SecurPar* p_out = (SecurPar*)op_values;
+     //todo
     }
     break;
 

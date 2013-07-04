@@ -77,16 +77,16 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_STARTER_OFF_RPM_EDIT,22,39,46,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
+    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,22,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
     CONTROL         "",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,17
     LTEXT           "Обороты перехода с пусковой карты УОЗ",
-                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
+                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,22,70,105,18
     LTEXT           "Обороты при достижении которых стартер будет авт. выключен",
-                    IDC_PD_STARTER_OFF_RPM_CAPTION,21,18,119,20
+                    IDC_PD_STARTER_OFF_RPM_CAPTION,22,18,119,20
     LTEXT           "мин-1",IDC_PD_STARTER_OFF_RPM_UNIT,89,41,25,13
     LTEXT           "мин-1",IDC_PD_STARTER_SMAP_ABANDON_RPM_UNIT,89,92,25,13
 END
@@ -502,6 +502,19 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_PUSHLIKE,87,91,28,15
 END
 
+IDD_PD_SECUR_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_SECUR_BT_NAME_EDIT,10,39,46,16,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_SECUR_BT_PASS_EDIT,10,60,46,16,ES_AUTOHSCROLL
+    PUSHBUTTON      "Применить",IDC_PD_SECUR_BT_APPLY_BUTTON,95,60,41,12
+    GROUPBOX        "Bluetooth",IDC_PD_SECUR_BT_GROUP,5,27,160,54
+    LTEXT           "Имя",IDC_PD_SECUR_BT_NAME_CAPTION,60,43,35,8
+    LTEXT           "Пароль",IDC_PD_SECUR_BT_PASS_CAPTION,60,63,35,8
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -673,6 +686,7 @@ BEGIN
     IDS_PD_TABNAME_KNOCK_PAR  "9:Детонация"
     IDS_PD_TABNAME_MISCEL_PAR "10:Прочее"
     IDS_PD_TABNAME_CHOKE_PAR  "11:Управ.ВЗ"
+    IDS_PD_TABNAME_SECUR_PAR  "PS:Безопасность"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -722,6 +736,12 @@ BEGIN
     IDS_PD_MAP_CALC_BUTTON_TT "Калькулятор позволяет легко рассчитать параметры ДАД"
     IDS_MAP_CALC_1V_ABOVE_2V "Напряжение в 1-й точке не может быть равно или больше напряжения во 2-й точке!"
     IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Поставьте эту галочку если вам известно соотношение изменения  давления к напряжению (или напряжения к давлению)"
+END
+
+
+STRINGTABLE
+BEGIN
+    IDS_PD_SECUR_BT_APPLY_BUTTON_TT "Запись нового имени и пароля в блютуз. Изменение имени и пароля не будет работать если блютуз в состоянии online"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -801,16 +821,16 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_STARTER_OFF_RPM_EDIT,22,39,46,16,ES_AUTOHSCROLL | 
                     ES_READONLY
-    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,23,91,46,16,
+    EDITTEXT        IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT,22,91,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_STARTER_OFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,72,38,13,17
     CONTROL         "",IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,72,90,13,17
     LTEXT           "RPM when switching from start map",
-                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,24,70,105,18
+                    IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,22,70,105,18
     LTEXT           "RPM when starter will be turned off",
-                    IDC_PD_STARTER_OFF_RPM_CAPTION,21,18,119,20
+                    IDC_PD_STARTER_OFF_RPM_CAPTION,22,18,119,20
     LTEXT           "min-1",IDC_PD_STARTER_OFF_RPM_UNIT,89,41,25,13
     LTEXT           "min-1",IDC_PD_STARTER_SMAP_ABANDON_RPM_UNIT,89,92,25,13
 END
@@ -1226,6 +1246,19 @@ BEGIN
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_PUSHLIKE,87,91,28,15
 END
 
+IDD_PD_SECUR_PAGE DIALOGEX 0, 0, 155, 158
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PD_SECUR_BT_NAME_EDIT,10,39,46,16,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_SECUR_BT_PASS_EDIT,10,60,46,16,ES_AUTOHSCROLL
+    PUSHBUTTON      "Apply",IDC_PD_SECUR_BT_APPLY_BUTTON,95,60,41,12
+    GROUPBOX        "Bluetooth",IDC_PD_SECUR_BT_GROUP,5,27,160,54
+    LTEXT           "Name",IDC_PD_SECUR_BT_NAME_CAPTION,60,43,35,8
+    LTEXT           "Password",IDC_PD_SECUR_BT_PASS_CAPTION,60,63,35,8
+END
+
 IDD_IO_REMAPPING DIALOGEX 0, 0, 184, 196
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_CONTROLPARENT | WS_EX_STATICEDGE
@@ -1409,6 +1442,7 @@ BEGIN
     IDS_PD_TABNAME_KNOCK_PAR  "9:Knock"
     IDS_PD_TABNAME_MISCEL_PAR "10:Misc"
     IDS_PD_TABNAME_CHOKE_PAR  "11:Choke ctrl"
+    IDS_PD_TABNAME_SECUR_PAR  "PS:Security"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1458,4 +1492,9 @@ BEGIN
     IDS_PD_MAP_CALC_BUTTON_TT "Calculator allows to calculate MAP sensor parameters easily"
     IDS_MAP_CALC_1V_ABOVE_2V  "Voltage of the 1st point can not be equal to or greater than 2nd point voltage!"
     IDS_MAP_CALC_KNOW_GRAD_CHECK_TT "Set this check if you know pressure to voltage (or voltage to pressure) ratio"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_SECUR_BT_APPLY_BUTTON_TT "Write new name and password into bluetooth. Changing of name and password will not work if bluetooth is online"
 END
