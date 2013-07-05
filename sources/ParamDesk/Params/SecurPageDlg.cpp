@@ -30,17 +30,18 @@ const UINT CSecurPageDlg::IDD = IDD_PD_SECUR_PAGE;
 BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeData)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_APPLY_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_EDIT, OnUpdateNameAndPass)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_EDIT, OnUpdateNameAndPass)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_CAPTION, OnUpdateNameAndPass)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_CAPTION, OnUpdateNameAndPass)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_APPLY_BUTTON, OnUpdateNameAndPass)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_GROUP, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CSecurPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_namepass_enabled(false)
 , m_bt_name_edit(CEditEx::MODE_STRING)
 , m_bt_pass_edit(CEditEx::MODE_STRING)
 {
@@ -74,6 +75,11 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CSecurPageDlg::OnUpdateNameAndPass(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_namepass_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -119,6 +125,15 @@ void CSecurPageDlg::Enable(bool enable)
 bool CSecurPageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CSecurPageDlg::EnableBTNameAndPass(bool enable)
+{
+ if (m_namepass_enabled == enable)
+  return; //already has needed state
+ m_namepass_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

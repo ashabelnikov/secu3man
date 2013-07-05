@@ -467,6 +467,11 @@ void CParamDeskDlg::EnableCKPSItems(bool i_enable)
  m_pCKPSPageDlg->EnableCKPSItems(i_enable);
 }
 
+void CParamDeskDlg::EnableBTNameAndPass(bool i_enable)
+{
+ m_pSecurPageDlg->EnableBTNameAndPass(i_enable);
+}
+
 void CParamDeskDlg::OnSaveButton()
 {
  if (m_OnSaveButton)

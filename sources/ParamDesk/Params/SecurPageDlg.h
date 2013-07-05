@@ -46,17 +46,21 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::SecurPar* o_values);
   void SetValues(const SECU3IO::SecurPar* i_values);
 
+  void EnableBTNameAndPass(bool enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateNameAndPass(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::SecurPar m_params;
   bool m_enabled;
+  bool m_namepass_enabled;
   
   CEditEx m_bt_name_edit;
   CStatic m_bt_name_caption;

@@ -58,6 +58,8 @@ void CPMParamsController::OnActivate(void)
 
  //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
  m_pd_changes_timer.SetTimer(this, &CPMParamsController::OnParamDeskChangesTimer, 250);
+
+ mp_view->EnableBTNameAndPass(true);
 }
 
 void CPMParamsController::OnDeactivate(void)
