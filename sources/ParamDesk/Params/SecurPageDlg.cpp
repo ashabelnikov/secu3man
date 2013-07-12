@@ -47,6 +47,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 {
  _tcscpy(m_params.bt_name, _T(""));
  _tcscpy(m_params.bt_pass, _T(""));
+ m_params.use_bt = 0;
 }
 
 LPCTSTR CSecurPageDlg::GetDialogID(void) const
@@ -63,6 +64,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_BT_PASS_EDIT, m_bt_pass_edit);
  DDX_Control(pDX, IDC_PD_SECUR_BT_PASS_CAPTION, m_bt_pass_caption);
  DDX_Control(pDX, IDC_PD_SECUR_BT_APPLY_BUTTON, m_bt_apply_button);
+ DDX_Control(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_bt_use_check);
 
  CString name = m_params.bt_name;
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
@@ -70,6 +72,8 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  CString pass = m_params.bt_pass;
  DDX_Text(pDX, IDC_PD_SECUR_BT_PASS_EDIT, pass);
  _tcscpy(m_params.bt_pass, pass.GetBuffer(0));
+
+ DDX_Check_UCHAR(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -79,7 +83,7 @@ void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CSecurPageDlg::OnUpdateNameAndPass(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_namepass_enabled);
+ pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt);
 }
 
 /////////////////////////////////////////////////////////////////////////////

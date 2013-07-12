@@ -290,7 +290,9 @@ namespace SECU3IO
  struct SecurPar
  {
   TCHAR bt_name[10];                    //bluetooth name, this parameter is not stored in EEPROM
-  TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM  
+  TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM
+  unsigned char use_bt;                 //flag specifying to use or not to use bluetooth
+  unsigned char set_btbr;               //flag indicating that bluetooth baud rate has to be set
  };
 
  //таблица перекодировки кода частоты ПФ в частоту

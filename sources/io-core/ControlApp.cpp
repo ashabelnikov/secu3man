@@ -1218,7 +1218,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SecurPar& m_SecurPar = m_recepted_packet.m_SecurPar;
- if (size != (mp_pdp->isHex() ? 2 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 4 : 3))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of characters in name (must be zero)
@@ -1233,6 +1233,13 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 
  if (numName || numPass)
   return false;
+
+ unsigned char flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
+  return false;
+
+ m_SecurPar.use_bt   = (flags & (1 << 0)) != 0;
+ m_SecurPar.set_btbr = (flags & (1 << 1)) != 0; 
 
  return true;
 }
@@ -1932,6 +1939,9 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
 
  for(size_t i = 0; i < numPass; ++i)
   m_outgoing_packet.push_back(raw_pass[i]); 
+
+ unsigned char flags = ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

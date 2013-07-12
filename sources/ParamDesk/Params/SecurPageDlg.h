@@ -69,6 +69,7 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
   CStatic m_bt_pass_caption;
 
   CButton m_bt_apply_button;
+  CButton m_bt_use_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
