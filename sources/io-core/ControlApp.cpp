@@ -1234,6 +1234,10 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  if (numName || numPass)
   return false;
 
+ _tcscpy(m_SecurPar.bt_name, _T(""));
+ _tcscpy(m_SecurPar.bt_pass, _T(""));
+
+ //Bluetooth and security flags
  unsigned char flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;

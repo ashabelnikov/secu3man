@@ -28,14 +28,18 @@
 const UINT CSecurPageDlg::IDD = IDD_PD_SECUR_PAGE;
 
 BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
- ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeDataApply)
+ ON_BN_CLICKED(IDC_PD_SECUR_BT_USE_CHECK, OnChangeDataUseBtCheck)
+ ON_EN_CHANGE(IDC_PD_SECUR_BT_NAME_EDIT, OnChangeDataNamePass)
+ ON_EN_CHANGE(IDC_PD_SECUR_BT_PASS_EDIT, OnChangeDataNamePass)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_EDIT, OnUpdateNameAndPass)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_EDIT, OnUpdateNameAndPass)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_CAPTION, OnUpdateNameAndPass)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_CAPTION, OnUpdateNameAndPass)
- ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_APPLY_BUTTON, OnUpdateNameAndPass)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_APPLY_BUTTON, OnUpdateApplyButton)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_GROUP, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_USE_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
@@ -43,7 +47,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_namepass_enabled(false)
 , m_bt_name_edit(CEditEx::MODE_STRING)
-, m_bt_pass_edit(CEditEx::MODE_STRING)
+, m_bt_pass_edit(CEditEx::MODE_INT)
 {
  _tcscpy(m_params.bt_name, _T(""));
  _tcscpy(m_params.bt_pass, _T(""));
@@ -66,12 +70,12 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_BT_APPLY_BUTTON, m_bt_apply_button);
  DDX_Control(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_bt_use_check);
 
- CString name = m_params.bt_name;
+ CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
- _tcscpy(m_params.bt_name, name.GetBuffer(0));
- CString pass = m_params.bt_pass;
+ m_bt_name = name.GetBuffer(0);
+ CString pass = m_bt_pass.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_PASS_EDIT, pass);
- _tcscpy(m_params.bt_pass, pass.GetBuffer(0));
+ m_bt_pass = pass.GetBuffer(0);
 
  DDX_Check_UCHAR(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
 }
@@ -86,6 +90,12 @@ void CSecurPageDlg::OnUpdateNameAndPass(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt);
 }
 
+void CSecurPageDlg::OnUpdateApplyButton(CCmdUI* pCmdUI)
+{
+ bool namepass_not_empty = (m_bt_name_edit.LineLength() > 0) && (m_bt_pass_edit.LineLength() > 0);
+ pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt && namepass_not_empty);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CSecurPageDlg message handlers
 
@@ -93,7 +103,7 @@ BOOL CSecurPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- m_bt_name_edit.SetLimitText(6);
+ m_bt_name_edit.SetLimitText(8);
  m_bt_pass_edit.SetLimitText(4);
 
  //create a tooltip control and assign tooltips
@@ -109,10 +119,25 @@ BOOL CSecurPageDlg::OnInitDialog()
                // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CSecurPageDlg::OnChangeData()
+void CSecurPageDlg::OnChangeDataApply()
 {
  UpdateData();
+ _tcscpy(m_params.bt_name, m_bt_name.c_str());
+ _tcscpy(m_params.bt_pass, m_bt_pass.c_str());
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CSecurPageDlg::OnChangeDataUseBtCheck()
+{
+ UpdateData();
+ UpdateDialogControls(this, TRUE);
+ m_params.set_btbr = 1;
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CSecurPageDlg::OnChangeDataNamePass()
+{
+ UpdateDialogControls(this, TRUE);
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
@@ -152,9 +177,9 @@ void CSecurPageDlg::GetValues(SECU3IO::SecurPar* o_values)
 void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
 {
  ASSERT(i_values);
- _TSTRING name = m_params.bt_name, pass = m_params.bt_pass;
+ bool use_bt_prev = m_params.use_bt;
  memcpy(&m_params, i_values, sizeof(SECU3IO::SecurPar));
- _tcscpy(m_params.bt_name, name.c_str());
- _tcscpy(m_params.bt_pass, pass.c_str());
  UpdateData(FALSE); //копируем данные из переменных в диалог
+ if (use_bt_prev != (m_params.use_bt > 0))
+  UpdateDialogControls(this, TRUE); //to apply state of "Use bluetooth" checkbox
 }
