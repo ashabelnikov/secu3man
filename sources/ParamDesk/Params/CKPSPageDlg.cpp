@@ -337,14 +337,16 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  std::map<int, float> degBTDC;
  if (m_params.ckps_miss_num > 0)
  {
-  degBTDC.insert(std::make_pair(1, 120.0f));
-  degBTDC.insert(std::make_pair(2, 120.0f));
-  degBTDC.insert(std::make_pair(3, 120.0f));
-  degBTDC.insert(std::make_pair(4, 120.0f));
-  degBTDC.insert(std::make_pair(5, 60.0f));
-  degBTDC.insert(std::make_pair(6, 50.0f));
-  degBTDC.insert(std::make_pair(7, 45.0f));
-  degBTDC.insert(std::make_pair(8, 40.0f));
+  //Note: Some users require less limited values, so we set 120 for all.
+  //Old values are commented out
+  degBTDC.insert(std::make_pair(1, 120.0f)); //120
+  degBTDC.insert(std::make_pair(2, 120.0f)); //120
+  degBTDC.insert(std::make_pair(3, 120.0f)); //120
+  degBTDC.insert(std::make_pair(4, 120.0f)); //120
+  degBTDC.insert(std::make_pair(5, 120.0f));  //60
+  degBTDC.insert(std::make_pair(6, 120.0f));  //50
+  degBTDC.insert(std::make_pair(7, 120.0f));  //45
+  degBTDC.insert(std::make_pair(8, 120.0f));  //40
  }
  else
  { //non-missing teeth wheel
