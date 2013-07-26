@@ -52,6 +52,7 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnChangeData();
   afx_msg void OnChangeDataApply();
   afx_msg void OnChangeDataUseBtCheck();
   afx_msg void OnChangeDataNamePass();
@@ -75,6 +76,7 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
 
   CButton m_bt_apply_button;
   CButton m_bt_use_check;
+  CButton m_imm_use_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -30,6 +30,7 @@ const UINT CSecurPageDlg::IDD = IDD_PD_SECUR_PAGE;
 BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeDataApply)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_USE_CHECK, OnChangeDataUseBtCheck)
+ ON_BN_CLICKED(IDC_PD_SECUR_IMM_USE_CHECK, OnChangeData)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_NAME_EDIT, OnChangeDataNamePass)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_PASS_EDIT, OnChangeDataNamePass)
 
@@ -40,6 +41,8 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_APPLY_BUTTON, OnUpdateApplyButton)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_GROUP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IMM_USE_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IMM_GROUP, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
@@ -52,6 +55,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
  _tcscpy(m_params.bt_name, _T(""));
  _tcscpy(m_params.bt_pass, _T(""));
  m_params.use_bt = 0;
+ m_params.use_imm = 0;
 }
 
 LPCTSTR CSecurPageDlg::GetDialogID(void) const
@@ -69,6 +73,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_BT_PASS_CAPTION, m_bt_pass_caption);
  DDX_Control(pDX, IDC_PD_SECUR_BT_APPLY_BUTTON, m_bt_apply_button);
  DDX_Control(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_bt_use_check);
+ DDX_Control(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_imm_use_check);
 
  CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
@@ -78,6 +83,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  m_bt_pass = pass.GetBuffer(0);
 
  DDX_Check_UCHAR(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
+ DDX_Check_UCHAR(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -117,6 +123,12 @@ BOOL CSecurPageDlg::OnInitDialog()
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CSecurPageDlg::OnChangeData()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
 void CSecurPageDlg::OnChangeDataApply()

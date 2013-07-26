@@ -853,7 +853,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
   case SECUR_PAR:
    {
     SecurPar* p_in = (SecurPar*)ip_values;
-    p_params->bt_flags = (p_params->bt_flags & (~(1 << 0))) | ((p_in->use_bt != 0) << 0);
+    p_params->bt_flags = (p_params->bt_flags & 0xFA) | ((p_in->use_imm != 0) << 2) | ((p_in->use_bt != 0) << 0);
    }
    break;
 
@@ -1056,6 +1056,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     {
      SecurPar* p_out = (SecurPar*)op_values;
      p_out->use_bt = p_params->bt_flags & (1 << 0);
+     p_out->use_imm = p_params->bt_flags & (1 << 2);
     }
     break;
 

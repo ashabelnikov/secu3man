@@ -1243,7 +1243,8 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  m_SecurPar.use_bt   = (flags & (1 << 0)) != 0;
- m_SecurPar.set_btbr = (flags & (1 << 1)) != 0; 
+ m_SecurPar.set_btbr = (flags & (1 << 1)) != 0;
+ m_SecurPar.use_imm  = (flags & (1 << 2)) != 0;
 
  return true;
 }
@@ -1944,7 +1945,7 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  for(size_t i = 0; i < numPass; ++i)
   m_outgoing_packet.push_back(raw_pass[i]); 
 
- unsigned char flags = ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
+ unsigned char flags = ((packet_data->use_imm != 0) << 2) | ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 

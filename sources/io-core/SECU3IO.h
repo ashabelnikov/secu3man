@@ -293,6 +293,7 @@ namespace SECU3IO
   TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM
   unsigned char use_bt;                 //flag specifying to use or not to use bluetooth
   unsigned char set_btbr;               //flag indicating that bluetooth baud rate has to be set
+  unsigned char use_imm;                //flag specifying to use or not to use immobilizer
  };
 
  //таблица перекодировки кода частоты ПФ в частоту
