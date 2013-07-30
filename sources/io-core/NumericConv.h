@@ -29,15 +29,6 @@
 class IOCORE_API CNumericConv
 {
  public:
-  static bool   HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size);
-
-  static bool   Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte);
-  static bool   Hex8ToBin(const BYTE* i_hex_number,BYTE* o_byte);
-  static bool   Hex8ToBin(const BYTE* i_hex_number,int* o_byte); //signed
-  static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word,bool i_signed  = false);
-  static bool   Hex32ToBin(const BYTE* i_hex_number,signed long *o_dword);
-  static bool   Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword);
-
   inline static BYTE HTOD(BYTE h)
   {
    return ((h<0x3A)?h-'0':h-'A'+10);
@@ -49,10 +40,16 @@ class IOCORE_API CNumericConv
    return hdig[(d & 0x0F)];
   }
 
-  static BYTE   CheckSum_8_xor(const BYTE* i_buf,const int size);
+  static bool   HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size);
+  static bool   Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte);
+  static bool   Hex8ToBin(const BYTE* i_hex_number,BYTE* o_byte);
+  static bool   Hex8ToBin(const BYTE* i_hex_number,int* o_byte); //signed
+  static bool   Hex16ToBin(const BYTE* i_hex_number,int* o_word,bool i_signed  = false);
+  static bool   Hex32ToBin(const BYTE* i_hex_number,signed long *o_dword);
+  static bool   Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword);
+  static bool   Hex24ToBin(const BYTE* i_hex_number,unsigned long *o_dword);
 
   static bool   BinToHexArray(const BYTE* i_buf, BYTE* o_buf, const int size);
-
   static bool   Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number);
   static bool   Bin8ToHex(const BYTE i_byte, BYTE* o_hex_number);
   static bool   Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number);
@@ -61,6 +58,8 @@ class IOCORE_API CNumericConv
   static bool   Bin16ToHex(const int i_word, std::vector<BYTE>& o_hex_number);
   static bool   Bin32ToHex(const unsigned long i_dword, std::vector<BYTE>& o_hex_number);
   static bool   Bin32ToHex(const signed long i_dword, std::vector<BYTE>& o_hex_number);
+
+  static BYTE   CheckSum_8_xor(const BYTE* i_buf,const int size);
 
  private:
   static bool CNumericConv::_Hex32ToBin(const BYTE* i_buf,DWORD* o_dword);

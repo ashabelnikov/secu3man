@@ -139,6 +139,24 @@ bool PacketDataProxy::Hex32ToBin(const BYTE*& ip_hex_number, unsigned long *o_dw
  }
 }
 
+bool PacketDataProxy::Hex24ToBin(const BYTE*& ip_hex_number, unsigned long *o_dword)
+{
+ if (m_mode)
+ { //hex
+  bool result = CNumericConv::Hex24ToBin(ip_hex_number, o_dword);
+  if (result)
+   ip_hex_number+=6;
+  return result;
+ }
+ else
+ { //bin
+  WORD hi = MAKEWORD(*(ip_hex_number+0), 0);
+  WORD lo = MAKEWORD(*(ip_hex_number+2), *(ip_hex_number+1));
+  *o_dword = MAKELONG(lo, hi);
+  ip_hex_number+=3;
+  return true;
+ }
+}
 
 
 bool PacketDataProxy::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)

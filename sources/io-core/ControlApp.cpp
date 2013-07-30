@@ -110,6 +110,7 @@ CControlApp::CControlApp()
 , m_hTimer(NULL)
 , mp_csection(NULL)
 , m_work_state(false)
+, m_period_distance(0.1f)   //for speed sensor calculations
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -262,7 +263,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 48 : 24))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 58 : 29))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -353,6 +354,19 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_pos))
   return false;
  m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+
+ //Vehicle speed
+ int speed = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&speed))
+  return false;
+ float period_s = ((float)speed / 250000.0f); //period in seconds
+ m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+
+ //Distance
+ unsigned long distance = 0;
+ if (false == mp_pdp->Hex24ToBin(raw_packet,&distance))
+  return false;
+ m_SensorDat.distance = m_period_distance * distance;
 
  return true;
 }
@@ -1992,4 +2006,12 @@ inline void CControlApp::LeaveCriticalSection(void)
 }
 
 //-----------------------------------------------------------------------
+void CControlApp::SetWheelDiameterAndPulses(float w_d, int w_p)
+{
+ if (w_d < 0.01f) w_d = 0.01f;
+ if (w_p == 0) w_p = 1;
+ double pi = 4.0 * atan(1.0);
+ m_period_distance = (float)((pi * w_d) / ((double)w_p)); //distance of one period in meters
+}
 
+//-----------------------------------------------------------------------

@@ -178,6 +178,35 @@ bool CNumericConv::Hex32ToBin(const BYTE* i_hex_number,unsigned long *o_dword)
  return CNumericConv::_Hex32ToBin(i_hex_number,(unsigned long*)o_dword);
 }
 
+bool CNumericConv::Hex24ToBin(const BYTE* i_hex_number,unsigned long *o_dword)
+{
+ if (o_dword==NULL)
+  return false;
+
+ BYTE b0,b1,b2;
+ if (isxdigit(i_hex_number[0])&&isxdigit(i_hex_number[1])&&isxdigit(i_hex_number[2])&&isxdigit(i_hex_number[3])&&
+     isxdigit(i_hex_number[4])&&isxdigit(i_hex_number[5]))
+ {
+  if (false==Hex8ToBin(i_hex_number+0,&b2))
+   return false;
+
+  if (false==Hex8ToBin(i_hex_number+2,&b1))
+   return false;
+
+  if (false==Hex8ToBin(i_hex_number+4,&b0))
+   return false;
+
+
+  WORD hi = MAKEWORD(b2,0);
+  WORD lo = MAKEWORD(b0,b1);
+
+  *o_dword = MAKELONG(lo,hi);
+
+  return true;
+ }
+ return false;
+}
+
 bool CNumericConv::Hex4ToBin(const BYTE i_hex_number,BYTE* o_byte)
 {
  if (isxdigit(i_hex_number))

@@ -433,6 +433,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));      //appeared in v1.1
   if (iov >= FWDM::IOV_V13)
    mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));        //appeared in v1.3
+  if (iov >= FWDM::IOV_V15)
+   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_SPDSENS, _T("SPD_SENS"));       //appeared in v1.5
   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_PS, true); 
   mp_view->EnableInversion(FWDM::IOS_PS, true);
@@ -695,7 +697,7 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId,
 
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 {
- return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0);
+ return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const

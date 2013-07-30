@@ -33,6 +33,7 @@ class PacketDataProxy
   bool Hex16ToBin(const BYTE*& ip_hex_number, int* o_word, bool i_signed  = false);
   bool Hex32ToBin(const BYTE*& ip_hex_number, signed long *o_dword); //signed
   bool Hex32ToBin(const BYTE*& ip_hex_number, unsigned long *o_dword);
+  bool Hex24ToBin(const BYTE*& ip_hex_number, unsigned long *o_dword);
 
   //Bin --> Hex
   bool Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number);

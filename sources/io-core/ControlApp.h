@@ -97,6 +97,11 @@ class IOCORE_API CControlApp
   inline bool GetOnlineStatus(void) { return m_online_state; }
   inline bool GetWorkState(void) { return m_work_state; };
 
+  //Required by speed sensor
+  //w_d - Wheel diameter in meters
+  //w_p - number of pulses per one revolution of wheel
+  void SetWheelDiameterAndPulses(float w_d, int w_p);
+
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
   class xThread {};
@@ -137,6 +142,8 @@ class IOCORE_API CControlApp
   bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn();
 
   PacketDataProxy* mp_pdp;
+
+  float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
 
   //helper
   void SwitchOnThread(bool state);

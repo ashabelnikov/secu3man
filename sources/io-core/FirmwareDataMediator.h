@@ -154,7 +154,7 @@ class IOCORE_API CFirmwareDataMediator
    IOP_SM_DIR     =  24,     // SM_DIR      (output)                                 v1.2+
    IOP_SM_STP     =  25,     // SM_STP      (output)                                 v1.2+
    IOP_MAPSEL0    =  26,     // MAPSEL0     (input)                                  v1.3+
-// IOP_RESERVED12 =  27,     // Reserved    ()
+   IOP_SPDSENS    =  27,     // SPD_SENS    (input)                                  v1.5+
 // IOP_RESERVED13 =  28,     // Reserved    ()
 // IOP_RESERVED14 =  29,     // Reserved    ()
 // IOP_RESERVED15 =  30,     // Reserved    ()
@@ -209,6 +209,7 @@ class IOCORE_API CFirmwareDataMediator
    IOV_V12 = 0x12,           //V1.2 (minor changes)
    IOV_V13 = 0x13,           //V1.3 (minor changes)
    IOV_V14 = 0x14,           //V1.4 (minor changes)
+   IOV_V15 = 0x15            //V1.5 (minor changes - SPD_SENS input added)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
