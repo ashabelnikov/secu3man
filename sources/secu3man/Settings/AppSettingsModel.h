@@ -102,6 +102,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Fixtures_Section;
   const CString m_Name_Tachometer_Max;
   const CString m_Name_Pressure_Max;
+  const CString m_Name_WheelDiameter;
+  const CString m_Name_WheelPulses;
 
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;
@@ -129,6 +131,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
   virtual bool GetHexDataMode(void) const;
+  virtual float GetWheelDiameter(void) const;
+  virtual int GetWheelPulses(void) const;
   ////////////////////////////////////////////////////
 
  private:
@@ -144,6 +148,8 @@ class CAppSettingsModel : public ISettingsData
   EECUPlatform m_optECUPlatformType;
   int m_optTachometerMax;
   int m_optPressureMax;
+  float m_optWheelDiameter;
+  int m_optWheelPulses;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

@@ -80,4 +80,6 @@ class ISettingsData
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
   virtual bool GetHexDataMode(void) const = 0;
+  virtual float GetWheelDiameter(void) const = 0;
+  virtual int GetWheelPulses(void) const = 0;
 };

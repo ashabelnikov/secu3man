@@ -42,7 +42,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -140,6 +140,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
 
  int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,reserved = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos;
+ float speed, distance;
  char ce_errors[20] = {0};
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
@@ -162,6 +163,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
                 &add_i1,
                 &add_i2,
                 &choke_pos,
+				&speed,
+				&distance,
                 &ce_errors);
 
  if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 16))
@@ -195,6 +198,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.add_i1 = add_i1;
  o_data.add_i2 = add_i2;
  o_data.choke_pos = choke_pos;
+ o_data.speed = speed;
+ o_data.distance = speed;
 
  //все прочитано без ошибок
  return true;
@@ -227,7 +232,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const
