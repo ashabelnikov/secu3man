@@ -51,6 +51,8 @@ CAnalogMeter::CAnalogMeter()
  m_dNeedlePos  =  0.0;
  m_dNeedlePos_n=  0.0;
  m_strTitle    =  "";
+ m_strTLPane   =  "";
+ m_strTLPane_n =  "";
  m_strTRPane   =  "";
  m_strTRPane_n =  "";
  m_strUnit     =  "";
@@ -64,6 +66,7 @@ CAnalogMeter::CAnalogMeter()
 
  // switches
  m_swTitle   = true;
+ m_swTLPane  = false;
  m_swTRPane  = false;
  m_swGrid    = true;
  m_swLabels  = true;
@@ -73,6 +76,8 @@ CAnalogMeter::CAnalogMeter()
 
  // title color
  m_colorTitle     = RGB(128, 128, 128);
+ //top-left pane color
+ m_colorTLPane    = RGB(0, 0, 255);
  //top-right pane color
  m_colorTRPane    = RGB(0, 0, 255);
  // normal grid color
@@ -184,13 +189,15 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
 void CAnalogMeter::Update(CDC *pDC)
 {
  // if the needle hasn't changed, don't bother updating
- if ((m_dNeedlePos == m_dNeedlePos_n) && (m_strTRPane == m_strTRPane_n))
+ if ((m_dNeedlePos == m_dNeedlePos_n) && (m_strTLPane == m_strTLPane_n) && (m_strTRPane == m_strTRPane_n))
   return;
 
  // store the values in the member variables
  // for availability elsewhere
  if (m_dNeedlePos != m_dNeedlePos_n)
   m_dNeedlePos = m_dNeedlePos_n;
+ if (m_strTLPane != m_strTLPane_n)
+  m_strTLPane = m_strTLPane_n;
  if (m_strTRPane != m_strTRPane_n)
   m_strTRPane = m_strTRPane_n;
 
@@ -598,6 +605,7 @@ void CAnalogMeter::DrawNeedle()
  double  dAngleRad, dX, dY;
  double  dCosAngle, dSinAngle;
  bool    disable_value;
+ bool    disable_tlpane;
  bool    disable_trpane;
 
  if (!m_dcNeedle.GetSafeHdc())
@@ -628,10 +636,12 @@ void CAnalogMeter::DrawNeedle()
  // check sizes       //
  ///////////////////////
  disable_value = false;
+ disable_tlpane = false;
  disable_trpane = false;
  if((m_rectGfx.Height() < 50) || (m_rectGfx.Width() < 50))
  {
   disable_value = true;
+  disable_tlpane = true;
   disable_trpane = true;
  }
  if((m_rectGfx.Height() < 20) || (m_rectGfx.Width() < 20))
@@ -651,6 +661,18 @@ void CAnalogMeter::DrawNeedle()
   m_dcNeedle.SelectObject(pFontOld);
  }
 
+ if (!disable_tlpane && m_swTLPane) //top-left pane
+ {
+  pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
+  m_dcNeedle.SetTextAlign(TA_LEFT | TA_TOP);
+  m_dcNeedle.SetTextColor(m_colorTLPane^m_colorBGround);
+  m_dcNeedle.SetBkColor(RGB(0,0,0)); 
+  CRect rect = m_rectDraw;
+  rect.DeflateRect(8,3);
+  m_dcNeedle.TextOut(rect.left, rect.top, m_strTLPane);
+  m_dcNeedle.SelectObject(pFontOld); 
+ }
+
  if (!disable_trpane && m_swTRPane) //top-right pane
  {
   pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
@@ -660,7 +682,7 @@ void CAnalogMeter::DrawNeedle()
   CRect rect = m_rectDraw;
   rect.DeflateRect(8,3);
   m_dcNeedle.TextOut(rect.right, rect.top, m_strTRPane);
-  m_dcNeedle.SelectObject(pFontOld); 
+  m_dcNeedle.SelectObject(pFontOld);
  }
 
  dAngleRad = (m_dNeedlePos - m_dMinScale)*m_dRadiansPerValue - m_dLimitAngleRad;
@@ -819,6 +841,10 @@ void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
    m_swTitle = State;
    break;
 
+  case meter_tlpane:
+   m_swTLPane = State;
+   break;
+
   case meter_trpane:
    m_swTRPane = State;
    break;
@@ -852,6 +878,10 @@ void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
  {
   case meter_title:
    m_colorTitle = Color;
+   break;
+
+  case meter_tlpane:
+   m_colorTLPane = Color;
    break;
 
   case meter_trpane:
@@ -896,6 +926,11 @@ void CAnalogMeter::SetRange(double dMin, double dMax)
 void CAnalogMeter::SetNeedleValue(double value)
 {
  m_dNeedlePos_n = value;
+}
+
+void CAnalogMeter::SetTLPane(CString strPane)
+{
+ m_strTLPane_n = strPane;
 }
 
 void CAnalogMeter::SetTRPane(CString strPane)
@@ -963,6 +998,10 @@ void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor)
    *pColor = m_colorTitle;
    break;
 
+  case meter_tlpane:
+   *pColor = m_colorTLPane;
+   break;
+
   case meter_trpane:
    *pColor = m_colorTRPane;
    break;
@@ -996,6 +1035,10 @@ void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) con
  {
   case meter_title:
    *pState = m_swTitle;
+   break;
+
+  case meter_tlpane:
+   *pState = m_swTLPane;
    break;
 
   case meter_trpane:

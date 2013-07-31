@@ -175,7 +175,7 @@ BOOL CAppSettingsDlg::OnInitDialog()
 
  m_wheel_pulses_edit.SetLimitText(2);
  m_wheel_pulses_spin.SetBuddy(&m_wheel_pulses_edit);
- m_wheel_pulses_spin.SetRangeAndDelta(1, 16, 1);
+ m_wheel_pulses_spin.SetRangeAndDelta(0, 16, 1);
 
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том что мы готовы к приему данных

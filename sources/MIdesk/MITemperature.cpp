@@ -127,7 +127,7 @@ void CMITemperature::Scale(float i_x_factor, float i_y_factor)
 void CMITemperature::SetChokePos(float value, bool redraw /*= false*/)
 {
  CString str;
- str.Format(_T("%0.1f"), value);
+ str.Format(_T("%0.1f%%"), value);
  m_meter.SetTRPane(str);
  if (redraw) m_meter.Update();
 }

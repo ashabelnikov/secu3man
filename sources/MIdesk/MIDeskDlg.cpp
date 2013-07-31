@@ -157,6 +157,8 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
 void CMIDeskDlg::GetValues(SensorDat* o_values)
 {
  o_values->frequen = MathHelpers::Round(m_tachometer.GetValue());
+ o_values->speed = m_tachometer.GetSpeed();  //top-left pane
+ o_values->distance = m_tachometer.GetDistance(); //top-right pane
  o_values->pressure = m_pressure.GetValue();
  o_values->voltage = m_voltmeter.GetValue();
  o_values->adv_angle = m_dwell_angle.GetValue();
@@ -167,7 +169,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->tps = m_throttle_gate.GetPosition();
  o_values->air_flow = (unsigned char)m_air_flow.GetValue();
  o_values->temperat = m_temperature.GetValue();
- o_values->choke_pos = m_temperature.GetChokePos();
+ o_values->choke_pos = m_temperature.GetChokePos(); //top-right pane
  o_values->add_i1 = m_add_i1.GetValue();
  o_values->add_i2 = m_add_i2.GetValue();
 }
@@ -176,6 +178,8 @@ void CMIDeskDlg::OnUpdateTimer(void)
 {
  if (!m_was_initialized)
   return;
+ m_tachometer.SetSpeed(m_values.speed);   //top-left pane
+ m_tachometer.SetDistance(m_values.distance); //top-right pane
  m_tachometer.SetValue((float)m_values.frequen);
  m_pressure.SetValue(m_values.pressure);
  m_voltmeter.SetValue(m_values.voltage);
@@ -186,8 +190,8 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_throttle_gate.SetValue(m_values.carb);
  m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
- m_temperature.SetChokePos(m_values.choke_pos);
- m_temperature.SetValue(m_values.temperat);   //top-right pane
+ m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
+ m_temperature.SetValue(m_values.temperat);
  m_add_i1.SetValue(m_values.add_i1);
  m_add_i2.SetValue(m_values.add_i2);
 }
@@ -252,4 +256,10 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
 void CMIDeskDlg::ShowChokePos(bool i_show)
 {
  m_temperature.ShowChokePos(i_show);
+}
+
+void CMIDeskDlg::ShowSpeedAndDistance(bool i_show)
+{
+ m_tachometer.ShowSpeed(i_show);
+ m_tachometer.ShowDistance(i_show);
 }

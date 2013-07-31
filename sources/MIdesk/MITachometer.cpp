@@ -29,6 +29,8 @@
 //////////////////////////////////////////////////////////////////////
 
 CMITachometer::CMITachometer()
+: m_showDistance(false)
+, m_showSpeed(false)
 {
  //empty
 }
@@ -84,6 +86,8 @@ void CMITachometer::Enable(bool enable)
  m_meter.SetState(meter_grid, enable);
  m_meter.SetState(meter_labels, enable);
  m_meter.SetState(meter_unit, enable);
+ m_meter.SetState(meter_tlpane, enable && m_showSpeed);
+ m_meter.SetState(meter_trpane, enable && m_showDistance);
  COLORREF bk_color;
  m_meter.GetColor(meter_bground, &bk_color);
  m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
@@ -124,4 +128,54 @@ void CMITachometer::Scale(float i_x_factor, float i_y_factor)
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
  m_meter.MoveWindow(rect);
+}
+
+void CMITachometer::SetSpeed(float value, bool redraw /*= false*/)
+{
+ CString str;
+ _TSTRING template_str = _T("%0.1f ") + MLL::GetString(IDS_MI_KM_H);
+ str.Format(template_str.c_str(), value);
+ m_meter.SetTLPane(str);
+ if (redraw) m_meter.Update();
+}
+
+float CMITachometer::GetSpeed(void) const
+{
+ CString str = m_meter.GetTLPane();
+ float f_value = 0.0f;
+ _stscanf(str.GetBuffer(), _T("%f"), &f_value);
+ return f_value;
+}
+
+void CMITachometer::ShowSpeed(bool i_show, bool redraw /*= false*/)
+{
+ m_showSpeed = i_show;
+ m_meter.SetState(meter_tlpane, IsEnabled() && i_show);
+ if (redraw)
+  m_meter.Redraw();
+}
+
+void CMITachometer::SetDistance(float value, bool redraw /*= false*/)
+{
+ CString str;
+ _TSTRING template_str = _T("%0.1f ") + MLL::GetString(IDS_MI_KM);
+ str.Format(template_str.c_str(), value);
+ m_meter.SetTRPane(str);
+ if (redraw) m_meter.Update();
+}
+
+float CMITachometer::GetDistance(void) const
+{
+ CString str = m_meter.GetTRPane();
+ float f_value = 0.0f;
+ _stscanf(str.GetBuffer(), _T("%f"), &f_value);
+ return f_value;
+}
+
+void CMITachometer::ShowDistance(bool i_show, bool redraw /*= false*/)
+{
+ m_showDistance = i_show;
+ m_meter.SetState(meter_trpane, IsEnabled() && i_show);
+ if (redraw)
+  m_meter.Redraw();
 }

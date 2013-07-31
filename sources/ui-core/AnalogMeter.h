@@ -8,6 +8,7 @@
 enum MeterMemberEnum
 {
  meter_title,   //заголовок (название прибора)
+ meter_tlpane,  //top-left pane
  meter_trpane,  //top-right pane
  meter_needle,  //стрелка
  meter_grid,    //деления шкалы
@@ -34,6 +35,7 @@ class AFX_EXT_CLASS CAnalogMeter
   void SetState(enum MeterMemberEnum meter_member, bool State);
   void SetRange(double dMin, double dMax);
   void SetNeedleValue(double value);
+  void SetTLPane(CString strPane);
   void SetTRPane(CString strPane);
   void SetFontScale(int nFontScale);
   void SetLabelsDecimals(int nRangeDecimals);
@@ -60,6 +62,7 @@ class AFX_EXT_CLASS CAnalogMeter
   int     GetRangeDecimals() const {return m_nLabelsDecimals; };
   int     GetValueDecimals() const {return m_nValueDecimals; };
   CString GetTitle() const {return m_strTitle; };
+  CString GetTLPane() const {return m_strTLPane_n; };
   CString GetTRPane() const {return m_strTRPane_n; };
   CString GetUnit() const {return m_strUnit; };
   double  GetNeedlePos(void) const {return m_dNeedlePos_n;};
@@ -91,6 +94,7 @@ class AFX_EXT_CLASS CAnalogMeter
   std::vector<AlertZone*> m_AlertZones;
 
   bool m_swTitle;
+  bool m_swTLPane;
   bool m_swTRPane;
   bool m_swGrid;
   bool m_swValue;
@@ -99,6 +103,7 @@ class AFX_EXT_CLASS CAnalogMeter
   bool m_swNeedle;
 
   COLORREF m_colorTitle;
+  COLORREF m_colorTLPane;
   COLORREF m_colorTRPane;
   COLORREF m_colorNeedle;
   COLORREF m_colorGrid;
@@ -135,6 +140,8 @@ class AFX_EXT_CLASS CAnalogMeter
 
   CString m_strTitle;
   CString m_strUnit;
+  CString m_strTLPane;
+  CString m_strTLPane_n;
   CString m_strTRPane;
   CString m_strTRPane_n;
 

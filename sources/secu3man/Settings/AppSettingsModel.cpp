@@ -428,7 +428,7 @@ bool CAppSettingsModel::ReadSettings(void)
 
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_WheelPulses,_T("6"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val > 0 && i_val <= 16)
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 16)
   m_optWheelPulses = i_val;
  else
  { //error

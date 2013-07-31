@@ -361,12 +361,16 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  float period_s = ((float)speed / 250000.0f); //period in seconds
  m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+ if (m_SensorDat.speed > 999.9f)
+  m_SensorDat.speed = 999.9f;
 
  //Distance
  unsigned long distance = 0;
  if (false == mp_pdp->Hex24ToBin(raw_packet,&distance))
   return false;
  m_SensorDat.distance = m_period_distance * distance;
+ if (m_SensorDat.distance > 9999.99f)
+  m_SensorDat.distance = 9999.99f;
 
  return true;
 }

@@ -45,6 +45,18 @@ class AFX_EXT_CLASS CMITachometer : public IMeasInstrument
   virtual void SetTicks(int number);
   //---------------------------------------
 
+  //Speed in Km/h top-left pane
+  void SetSpeed(float value, bool redraw = false);
+  float GetSpeed(void) const;
+  void ShowSpeed(bool i_show,  bool redraw = false);
+
+  //Distance in Km top-right pane
+  void SetDistance(float value, bool redraw = false);
+  float GetDistance(void) const;
+  void ShowDistance(bool i_show,  bool redraw = false);
+
  private:
   CAnalogMeterCtrl m_meter;
+  bool m_showSpeed;
+  bool m_showDistance;
 };

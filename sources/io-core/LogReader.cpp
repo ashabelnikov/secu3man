@@ -28,13 +28,13 @@
 using namespace SECU3IO;
 
 //максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 150
+#define MAX_REC_BUF 160
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 20
+#define CSV_COUNT_DATA_VAL 22
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -163,8 +163,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
                 &add_i1,
                 &add_i2,
                 &choke_pos,
-				&speed,
-				&distance,
+                &speed,
+                &distance,
                 &ce_errors);
 
  if ((result != CSV_COUNT_DATA_VAL) || (strlen(ce_errors) != 16))
@@ -199,7 +199,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.add_i2 = add_i2;
  o_data.choke_pos = choke_pos;
  o_data.speed = speed;
- o_data.distance = speed;
+ o_data.distance = distance;
 
  //все прочитано без ошибок
  return true;

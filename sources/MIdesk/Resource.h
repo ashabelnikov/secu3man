@@ -96,3 +96,5 @@
 #define IDS_CED_TPS_SENSOR_FAIL_TT      2096
 #define IDS_MI_ADD_I1_TT                2097
 #define IDS_MI_ADD_I2_TT                2098
+#define IDS_MI_KM                       2099
+#define IDS_MI_KM_H                     2100

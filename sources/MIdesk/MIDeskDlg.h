@@ -74,6 +74,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //Show/hide choke position indicator
   void ShowChokePos(bool i_show);
 
+  //Show/hide speed and distance indicators
+  void ShowSpeedAndDistance(bool i_show);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
