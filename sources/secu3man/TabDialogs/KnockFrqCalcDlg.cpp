@@ -49,6 +49,8 @@ class CEditExWithEnter : public CEditEx
    CEditEx::OnChar(nChar, nRepCnt, nFlags);
    if (nChar==VK_RETURN)
     m_onEnter();
+   else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
+    GetNextWindow()->SetFocus();
   }
   UINT OnGetDlgCode()
   {
