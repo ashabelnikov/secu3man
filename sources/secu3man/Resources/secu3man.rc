@@ -294,7 +294,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_DE,193,151,30,12,0,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,230,151,40,12
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,188,88,22
-    LTEXT           "ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим.",IDC_DEV_DIAG_WARNING_TEXT,201,192,268,18
+    LTEXT           "ВНИМАНИЕ! Отключите катушки зажигания перед входом в диагностический режим.\nВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (есть отличия).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
@@ -828,7 +828,7 @@ BEGIN
     LTEXT           "",IDC_DEV_DIAG_DE,193,151,30,12,0,WS_EX_STATICEDGE
     LTEXT           "DE jmp",IDC_DEV_DIAG_DE_CAPTION,230,151,40,12
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,188,88,22
-    LTEXT           "WARNING! Disconnect ignition coils before entering diagnostic mode.",IDC_DEV_DIAG_WARNING_TEXT,201,192,268,18
+    LTEXT           "WARNING! Disconnect ignition coils before entering diagnostic mode.\nWARNING! Displayed inputs' values are on the MCU lines, not on the external connector (there are differences).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
