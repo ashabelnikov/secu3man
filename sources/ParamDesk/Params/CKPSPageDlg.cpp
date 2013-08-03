@@ -67,7 +67,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeInputs)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
@@ -79,6 +79,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_igncogs_enabled(false)
 , m_odd_cylnum_enabled(false)
 , m_ckps_enabled(false)
+, m_inpmrg_enabled(false)
 , m_max_cylinders(8)
 {
  m_params.ckps_cogs_btdc = 20;
@@ -156,6 +157,11 @@ void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateMergeInputs(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_inpmrg_enabled);
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -326,6 +332,15 @@ void CCKPSPageDlg::EnableCKPSItems(bool enable)
  if (m_ckps_enabled == enable)
   return; //already has needed state
  m_ckps_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CCKPSPageDlg::EnableInputsMerging(bool enable)
+{
+ if (m_inpmrg_enabled == enable)
+  return; //already has needed state
+ m_inpmrg_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

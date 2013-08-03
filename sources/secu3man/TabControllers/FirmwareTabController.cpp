@@ -1077,7 +1077,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
  m_view->mp_TablesPanel->EnableCTSCurve((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
  m_view->mp_TablesPanel->EnableChokeOp((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
- m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)));
+ m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) && !(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
  m_view->mp_ParamDeskDlg->EnableHallOutputParams(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_OUTPUT)) > 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0));
@@ -1096,6 +1096,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  this->mp_iorCntr->Enable(m_fwdm->HasCodeData());
 
  m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0);
+ m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
 
  SetViewFirmwareValues();
 }
@@ -1640,14 +1641,19 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options)
   str_options+=info;
   if (info.size() > 0)
    str_options+=_T("\n\n");
+  int opt_count = 0;
   for(size_t i = 0; i < SECU3IO::SECU3_COMPILE_OPTIONS_BITS_COUNT; ++i)
   {
    if(options & 1 << SECU3IO::secu3_compile_options_bits[i].first)
    {
     str_options+= SECU3IO::secu3_compile_options_bits[i].second;
     str_options+=_T("\n");
+    ++opt_count;
    }
   }
+  str_options+=MLL::GetString(IDS_FW_TOTAL_NUMOF_OPT);
+  _TSSTREAM str;  str << _T(" ") << opt_count;
+  str_options+=str.str();
   AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
  }
 }

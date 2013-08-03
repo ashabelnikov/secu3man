@@ -49,6 +49,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   void SetMaxCylinders(int number);
   void EnableOddCylinders(bool enable);
   void EnableCKPSItems(bool enable);
+  void EnableInputsMerging(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -64,6 +65,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI);
   afx_msg void OnUpdateIgnitionCogs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCylNumber(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMergeInputs(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);
@@ -85,6 +87,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   bool m_igncogs_enabled;
   bool m_odd_cylnum_enabled;
   bool m_ckps_enabled;
+  bool m_inpmrg_enabled;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;

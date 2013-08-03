@@ -160,7 +160,7 @@ BEGIN
     LTEXT           "Давл. макс:",IDC_STATIC,291,115,61,9
     LTEXT           "Период обновления отладочной панели (мс)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,87,17
-    LTEXT           "",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT WS_VISIBLE
+    LTEXT           "",IDC_APP_SETTINGS_INFO_TEXT,10,210,125,17,NOT WS_VISIBLE
     LTEXT           "Диам. колеса(''):",IDC_STATIC,203,172,70,9
     LTEXT           "Число импульсов:",IDC_STATIC,289,172,62,9
 END
@@ -483,6 +483,7 @@ BEGIN
     IDS_RESET_EEPROM        "Сброс EEPROM"
     IDS_RESET_EEPROM_COMFIRMATION "Вы действительно хотите сбросить EEPROM?\n Сохраненные данные будут потеряны."
     IDS_FW_RESET_EEPROM_STARTED "Сброс EEPROM можеть занять несколько секунд..."
+    IDS_FW_TOTAL_NUMOF_OPT  "Всего опций:"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -695,7 +696,7 @@ BEGIN
     LTEXT           "Press. max:",IDC_STATIC,291,115,61,9
     LTEXT           "Update period of debug's panel (ms)",
                     IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION,266,61,87,17
-    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,194,125,17,NOT WS_VISIBLE
+    LTEXT           "Static",IDC_APP_SETTINGS_INFO_TEXT,10,210,125,17,NOT WS_VISIBLE
     LTEXT           "Wheel diameter(''):",IDC_STATIC,203,172,70,9
     LTEXT           "Number of pulses:",IDC_STATIC,289,172,62,9
 END
@@ -1012,6 +1013,7 @@ BEGIN
     IDS_RESET_EEPROM        "Reset EEPROM"
     IDS_RESET_EEPROM_COMFIRMATION "Do you really want to reset EEPROM?\n Saved data will be lost."
     IDS_FW_RESET_EEPROM_STARTED "EEPROM resetting may take several seconds..."
+    IDS_FW_TOTAL_NUMOF_OPT  "Total number of options:"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -73,6 +73,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableChokeManPos(bool i_enable);
   virtual void EnableCKPSItems(bool i_enable);
   virtual void EnableBTNameAndPass(bool i_enable);
+  virtual void EnableInputsMerging(bool i_enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 

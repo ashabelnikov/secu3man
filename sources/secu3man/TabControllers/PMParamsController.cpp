@@ -121,7 +121,7 @@ void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names
 
 void CPMParamsController::ApplyFWOptions(DWORD opt)
 {
- mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_DWELL_CONTROL)));
+ mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_DWELL_CONTROL)) && !(opt & (1 << COPT_CKPS_2CHIGN)));
  mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
  mp_view->EnableUseCTSCurveMap((opt & (1 << COPT_THERMISTOR_CS)) > 0);
  mp_view->EnableHallOutputParams(((opt & (1 << COPT_HALL_OUTPUT)) > 0) && ((opt & (1 << COPT_HALL_SYNC)) == 0));
@@ -139,6 +139,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableChokeTesting((opt & (1 << COPT_SM_CONTROL)) > 0);
  mp_view->EnableChokeManPos((opt & (1 << COPT_SM_CONTROL)) > 0);
  mp_view->EnableCKPSItems((opt & (1 << COPT_HALL_SYNC)) == 0);
+ mp_view->EnableInputsMerging(!(opt & (1 << COPT_CKPS_2CHIGN)));
 }
 
 //from view. Очередная вкладка активировалась

@@ -25,9 +25,12 @@
 //set the Entry Point Symbol to wWinMainCRTStartup.
 
 #include <string>
+#include <sstream>
 
 #ifdef _UNICODE
  typedef std::wstring _TSTRING;
+ typedef std::wstringstream _TSSTREAM;
 #else
  typedef std::string  _TSTRING;
+ typedef std::stringstream _TSSTREAM;
 #endif
