@@ -172,6 +172,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Установить все",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Сбросить все",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
+    CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
     CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",
                     LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,133
     PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",IDC_CE_READ_ERRORS_BUTTON,59,159,102,28,BS_MULTILINE
@@ -179,8 +181,6 @@ BEGIN
     CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,
                     "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,161,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,190,347,32
-    CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -708,6 +708,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Set All",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Reset All",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
+    CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
     CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",
                     LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,133
     PUSHBUTTON      "READ saved errors",IDC_CE_READ_ERRORS_BUTTON,59,159,102,28,BS_MULTILINE
@@ -715,8 +717,6 @@ BEGIN
     CONTROL         "Read errors in realtime", IDC_CE_READ_REALTIME_CHECKBOX,
                     "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,161,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,190,347,32
-    CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218

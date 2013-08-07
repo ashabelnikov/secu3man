@@ -104,6 +104,9 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Нулев. уг.опер. (полезно для отладки)",
+                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,6,106,65,29
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
@@ -127,9 +130,6 @@ BEGIN
     LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,16
     LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,138,72,20,16
     GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
-    CONTROL         "Нулев. уг.опер. (полезно для отладки)",
-                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,6,106,65,29
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -460,14 +460,14 @@ BEGIN
     LTEXT           "Период передачи пакетов с данными",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,83,9,66,16
     LTEXT           "мс",IDC_PD_MISC_PACKET_PERIOD_UNIT,151,32,25,13
+    CONTROL         "Разрешить отсечку зажигания",
+                    IDC_PD_MISC_IGNCUTOFF_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,8,54,118,9
     EDITTEXT        IDC_PD_MISC_IGNCUTOFF_RPM_EDIT,8,67,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,58,67,11,17
     LTEXT           "мин-1",IDC_PD_MISC_IGNCUTOFF_RPM_UNIT,75,70,25,13
-    CONTROL         "Разрешить отсечку зажигания",
-                    IDC_PD_MISC_IGNCUTOFF_CHECK,"Button",BS_AUTOCHECKBOX | 
-                    WS_TABSTOP,8,54,118,9
     GROUPBOX        "Парам. импульса вых. ДХ в зубъях шкива",
                     IDC_PD_MISC_HALL_OUTPUT_GROUP,3,95,160,43
     EDITTEXT        IDC_PD_MISC_HALL_OUTPUT_START_EDIT,9,111,21,16,
@@ -851,6 +851,9 @@ BEGIN
                     ES_AUTOHSCROLL | ES_READONLY
     EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,
                     ES_AUTOHSCROLL | ES_READONLY
+    CONTROL         "Zero adv. angle (useful for check-out)",
+                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
+                    BS_MULTILINE | WS_TABSTOP,7,109,61,23
     EDITTEXT        IDC_PD_ANGLES_CORRECTION_EDIT,76,118,47,15,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_ANGLES_MIN_ANGLE_SPIN,"msctls_updown32",
@@ -875,9 +878,6 @@ BEGIN
     LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,21,16
     GROUPBOX        "Limitation of angle change speed",
                     IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
-    CONTROL         "Zero adv. angle (useful for check-out)",
-                    IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP,7,109,61,23
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -1208,13 +1208,13 @@ BEGIN
     LTEXT           "Data packets transmition period",
                     IDC_PD_MISC_PACKET_PERIOD_CAPTION,83,9,66,16
     LTEXT           "ms",IDC_PD_MISC_PACKET_PERIOD_UNIT,151,30,25,13
+    CONTROL         "Enable cutoff of ignition",IDC_PD_MISC_IGNCUTOFF_CHECK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,54,115,9
     EDITTEXT        IDC_PD_MISC_IGNCUTOFF_RPM_EDIT,8,67,46,16,
                     ES_AUTOHSCROLL | ES_READONLY
     CONTROL         "",IDC_PD_MISC_IGNCUTOFF_RPM_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,58,67,11,17
     LTEXT           "min-1",IDC_PD_MISC_IGNCUTOFF_RPM_UNIT,75,70,25,13
-    CONTROL         "Enable cutoff of ignition",IDC_PD_MISC_IGNCUTOFF_CHECK,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,8,54,115,9
     GROUPBOX        "Pulse parameters of Hall output in wheel teeth",
                     IDC_PD_MISC_HALL_OUTPUT_GROUP,3,95,160,43
     EDITTEXT        IDC_PD_MISC_HALL_OUTPUT_START_EDIT,9,111,21,16,
