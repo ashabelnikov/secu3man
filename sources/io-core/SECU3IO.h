@@ -168,6 +168,7 @@ namespace SECU3IO
   unsigned char ckps_cogs_num;
   unsigned char ckps_miss_num;
   unsigned char ref_s_edge_type;
+  unsigned char use_ckps_for_hall;      //Use CKPS input for Hall sensor
  };
 
  struct OPCompNc                        //используется если надо просто принять или послать определенный код действия

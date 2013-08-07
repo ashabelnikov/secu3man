@@ -822,7 +822,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
- if (size != (mp_pdp->isHex() ? 13 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 15 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Тип фронта ДПКВ
@@ -856,6 +856,13 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
  //Кол-во пропущенных зубьев задающего шкива (допустимые значения: 0, 1, 2)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &m_CKPSPar.ckps_miss_num))
   return false;
+
+ //Hall sensor flags
+ unsigned char flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
+  return false;
+
+ m_CKPSPar.use_ckps_for_hall = (flags & (1 << 0)) != 0;
 
  return true;
 }
@@ -1839,6 +1846,8 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
+ unsigned char flags = ((packet_data->use_ckps_for_hall != 0) << 0);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

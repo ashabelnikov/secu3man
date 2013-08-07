@@ -38,14 +38,15 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
  ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CKPS_USE_CKPS_INPUT, OnChangeUseCKPSInput)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
  ON_BN_CLICKED(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio2)
  ON_BN_CLICKED(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio2)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX, OnUpdateCKPSFront)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnUpdateCKPSFront)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnUpdateCKPSFront)
  ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_FRONT_GROUPBOX, OnUpdateControls_REF_S_Front)
  ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
  ON_UPDATE_COMMAND_UI(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnUpdateControls_REF_S_Front)
@@ -67,7 +68,8 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeInputs)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeOutputs)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_USE_CKPS_INPUT, OnUpdateUseCKPSInput)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
@@ -90,6 +92,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_cogs_num = 60;
  m_params.ckps_miss_num = 2;
  m_params.ckps_engine_cyl = 4;
+ m_params.use_ckps_for_hall = 0;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -133,6 +136,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
  DDX_Radio_UCHAR(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
  DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
+ DDX_Check_UCHAR(pDX, IDC_PD_CKPS_USE_CKPS_INPUT, m_params.use_ckps_for_hall);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -142,6 +146,11 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_ckps_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateCKPSFront(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_ckps_enabled || m_params.use_ckps_for_hall));
 }
 
 void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
@@ -159,9 +168,14 @@ void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
-void CCKPSPageDlg::OnUpdateMergeInputs(CCmdUI* pCmdUI)
+void CCKPSPageDlg::OnUpdateMergeOutputs(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_inpmrg_enabled);
+ pCmdUI->Enable(m_enabled && m_inpmrg_enabled && m_ckps_enabled);
+}
+
+void CCKPSPageDlg::OnUpdateUseCKPSInput(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_ckps_enabled); //enabled only for Hall sensor
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -250,6 +264,13 @@ void CCKPSPageDlg::OnClickedPdNegFrontRadio2()
 {//REF_S
  m_ref_s_posfront_radio.SetCheck(0);
  UpdateData();
+ OnChangeNotify();
+}
+
+void CCKPSPageDlg::OnChangeUseCKPSInput()
+{
+ UpdateData();
+ UpdateDialogControls(this, TRUE);
  OnChangeNotify();
 }
 
@@ -357,11 +378,11 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
   degBTDC.insert(std::make_pair(1, 120.0f)); //120
   degBTDC.insert(std::make_pair(2, 120.0f)); //120
   degBTDC.insert(std::make_pair(3, 120.0f)); //120
-  degBTDC.insert(std::make_pair(4, 120.0f)); //120
-  degBTDC.insert(std::make_pair(5, 120.0f));  //60
-  degBTDC.insert(std::make_pair(6, 120.0f));  //50
-  degBTDC.insert(std::make_pair(7, 120.0f));  //45
-  degBTDC.insert(std::make_pair(8, 120.0f));  //40
+  degBTDC.insert(std::make_pair(4, 105.0f)); //120
+  degBTDC.insert(std::make_pair(5,  85.0f));  //60
+  degBTDC.insert(std::make_pair(6,  75.0f));  //50
+  degBTDC.insert(std::make_pair(7,  65.0f));  //45
+  degBTDC.insert(std::make_pair(8,  55.0f));  //40
  }
  else
  { //non-missing teeth wheel
@@ -382,8 +403,8 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  int cogs = m_params.ckps_cogs_num;
  float deg = degBTDC[cyl];
  int cogsBTDC = MathHelpers::Round(ceil(deg / (360.0f / cogs)));
- int lo_limit = (m_params.ckps_miss_num > 0) ? cogsBTDC - (cogsBTDC / 3) : MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
- int hi_limit = (m_params.ckps_miss_num > 0) ? cogsBTDC + (cogsBTDC / 3) : cogsBTDC;
+ int lo_limit = (m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC - (cogsBTDC / 2.0f)) : MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
+ int hi_limit = (m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC + (cogsBTDC / 1.5f)) : cogsBTDC;
  for(int tn = lo_limit; tn <= hi_limit; ++tn)
  {
   CString str;

@@ -61,11 +61,14 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnClickedPdNegFrontRadio();
   afx_msg void OnClickedPdPosFrontRadio2();
   afx_msg void OnClickedPdNegFrontRadio2();
+  afx_msg void OnChangeUseCKPSInput();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI);
   afx_msg void OnUpdateIgnitionCogs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCylNumber(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateMergeInputs(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMergeOutputs(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseCKPSInput(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateCKPSFront(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);

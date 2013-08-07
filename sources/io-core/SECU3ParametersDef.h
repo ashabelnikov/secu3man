@@ -134,11 +134,13 @@ typedef struct
  _int idlreg_turn_on_temp;           // Idling regulator turn on temperature
 
  _uchar bt_flags;                    // Bluetooth and security related flags           
-
+ 
+ _uchar hall_flags;                  // Hall sensor flags
+                 					
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3];
+ _uchar reserved[2];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
