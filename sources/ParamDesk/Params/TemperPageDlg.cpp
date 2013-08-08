@@ -25,6 +25,7 @@
 #include "ui-core/ddx_helpers.h"
 
 const UINT CTemperPageDlg::IDD = IDD_PD_TEMPER_PAGE;
+const float TEMP_HYSTERESIS = 0.25f;
 
 BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnChangePdTemperVentOnThresholdEdit)
@@ -133,12 +134,21 @@ BOOL CTemperPageDlg::OnInitDialog()
 void CTemperPageDlg::OnChangePdTemperVentOnThresholdEdit()
 {
  UpdateData();
+ if (m_use_vent_pwm.GetCheck()!=BST_CHECKED)
+ {
+  //Turn on temperature can not be less than turn off temperature
+  if (m_params.vent_on < m_params.vent_off + TEMP_HYSTERESIS)
+   m_vent_off_threshold_spin.SetPos(m_params.vent_on - TEMP_HYSTERESIS);
+ }
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
 void CTemperPageDlg::OnChangePdTemperVentOffThresholdEdit()
 {
  UpdateData();
+ //Turn off temperature can not be above than turn on temperature
+ if (m_params.vent_off > m_params.vent_on - TEMP_HYSTERESIS)
+  m_vent_on_threshold_spin.SetPos(m_params.vent_off + TEMP_HYSTERESIS);
  OnChangeNotify();
 }
 
@@ -153,6 +163,9 @@ void CTemperPageDlg::OnPdTemperUseVentPwm()
  UpdateData();
  OnChangeNotify();
  UpdateDialogControls(this,TRUE);
+ //Turn on temperature can not be less than turn off temperature
+ if (m_params.vent_on < m_params.vent_off + TEMP_HYSTERESIS)
+  m_vent_off_threshold_spin.SetPos(m_params.vent_on - TEMP_HYSTERESIS);
 }
 
 void CTemperPageDlg::OnPdTemperUseCurveMap()
