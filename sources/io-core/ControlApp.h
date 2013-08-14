@@ -98,9 +98,8 @@ class IOCORE_API CControlApp
   inline bool GetWorkState(void) { return m_work_state; };
 
   //Required by speed sensor
-  //w_d - Wheel diameter in meters
-  //w_p - number of pulses per one revolution of wheel
-  void SetWheelDiameterAndPulses(float w_d, int w_p);
+  //pp1km - number of pulses per 1 km
+  void SetNumPulsesPer1Km(int pp1km);
 
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 

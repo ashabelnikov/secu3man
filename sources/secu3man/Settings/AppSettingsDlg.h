@@ -55,8 +55,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetShowToolTips(bool i_show);
   virtual void SetShowExFixtures(bool i_show);
   virtual void SetHexDataMode(bool i_hex);
-  virtual void SetWheelDiameter(float i_w_d);
-  virtual void SetWheelPulses(int i_w_p);
+  virtual void SetNumPulsesPer1Km(int i_pp1km);
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -72,8 +71,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
   virtual bool GetHexDataMode(void) const;
-  virtual float GetWheelDiameter(void) const;
-  virtual int GetWheelPulses(void) const;
+  virtual int GetNumPulsesPer1Km(void) const;
 
   //logs
   virtual void SetLogFilesFolder(const CString& i_folder);
@@ -125,13 +123,11 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CEditEx   m_dv_update_period_edit;
   CEditEx   m_tachometer_max_edit;
   CEditEx   m_pressure_max_edit;
-  CEditEx   m_wheel_diameter_edit;
   CEditEx   m_wheel_pulses_edit;
   CSpinButtonCtrlEx m_midesk_update_period_spin;
   CSpinButtonCtrlEx m_dv_update_period_spin;
   CSpinButtonCtrlEx m_tachometer_max_spin;
   CSpinButtonCtrlEx m_pressure_max_spin;
-  CSpinButtonCtrlEx m_wheel_diameter_spin;
   CSpinButtonCtrlEx m_wheel_pulses_spin;
   CStatic m_dv_update_period_caption;
   CStatic m_info_text;
@@ -153,6 +149,5 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_ecu_platform_selection_orig;
   int m_tachometer_max;
   int m_pressure_max;
-  float m_wheel_diameter;
   int m_wheel_pulses;
 };

@@ -59,7 +59,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  //обновляем диапазоны приборов
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
- mp_view->ShowSpeedAndDistance(mp_settings->GetWheelPulses() > 0); //disabled if pulses = 0
+ mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -67,7 +67,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
- mp_view->ShowSpeedAndDistance(mp_settings->GetWheelPulses() > 0); //disabled if pulses = 0
+ mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
 }
 
 void CPMMonitorController::OnDeactivate(void)

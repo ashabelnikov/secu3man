@@ -71,8 +71,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
 , m_Name_Pressure_Max(_T("Pressure_Max"))
-, m_Name_WheelDiameter(_T("WheelDiameter"))
-, m_Name_WheelPulses(_T("WheelPulses"))
+, m_Name_PulsesPer1Km(_T("PulsesPer1Km"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_600);
@@ -417,23 +416,13 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_WheelDiameter,_T("14.0"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%f"), &f_val) == 1 && f_val > 0 && f_val <= 100)
-  m_optWheelDiameter = f_val;
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_PulsesPer1Km,_T("6000"),read_str,255,IniFileName);
+ if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 60000)
+  m_optPulsesPer1Km = i_val;
  else
  { //error
   status = false;
-  m_optWheelDiameter = 14.0f;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_WheelPulses,_T("6"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 16)
-  m_optWheelPulses = i_val;
- else
- { //error
-  status = false;
-  m_optWheelPulses = 6;
+  m_optPulsesPer1Km = 6000;
  }
 
  return status;
@@ -573,11 +562,8 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),(int)m_optPressureMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,write_str,IniFileName);
 
- write_str.Format(_T("%f"),(float)m_optWheelDiameter);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_WheelDiameter,write_str,IniFileName);
-
- write_str.Format(_T("%d"),(int)m_optWheelPulses);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_WheelPulses,write_str,IniFileName);
+ write_str.Format(_T("%d"),(int)m_optPulsesPer1Km);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_PulsesPer1Km,write_str,IniFileName);
 
  return status;
 }
@@ -706,12 +692,7 @@ bool CAppSettingsModel::GetHexDataMode(void) const
  return m_optHexDataMode;
 }
 
-float CAppSettingsModel::GetWheelDiameter(void) const
+int CAppSettingsModel::GetNumPulsesPer1Km(void) const
 {
- return m_optWheelDiameter;
-}
-
-int CAppSettingsModel::GetWheelPulses(void) const
-{
- return m_optWheelPulses;
+ return m_optPulsesPer1Km;
 }

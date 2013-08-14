@@ -67,8 +67,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optTachometerMax = m_pView->GetTachometerMax();
  m_pModel->m_optPressureMax = m_pView->GetPressureMax();
 
- m_pModel->m_optWheelDiameter = m_pView->GetWheelDiameter();
- m_pModel->m_optWheelPulses = m_pView->GetWheelPulses();
+ m_pModel->m_optPulsesPer1Km = m_pView->GetNumPulsesPer1Km();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -109,8 +108,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetTachometerMax(m_pModel->m_optTachometerMax);
  m_pView->SetPressureMax(m_pModel->m_optPressureMax);
 
- m_pView->SetWheelDiameter(m_pModel->m_optWheelDiameter);
- m_pView->SetWheelPulses(m_pModel->m_optWheelPulses);
+ m_pView->SetNumPulsesPer1Km(m_pModel->m_optPulsesPer1Km);
 }
 
 int CAppSettingsController::ShowDialog(void)

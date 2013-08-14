@@ -53,8 +53,7 @@ class IAppSettingsDlg
   virtual void SetShowToolTips(bool i_show) = 0;
   virtual void SetShowExFixtures(bool i_show) = 0;
   virtual void SetHexDataMode(bool i_hex) = 0;
-  virtual void SetWheelDiameter(float i_w_d) = 0;
-  virtual void SetWheelPulses(int i_w_p) = 0;
+  virtual void SetNumPulsesPer1Km(int i_pp1km) = 0;
 
   //"Get" - получение данных представления
   virtual _TSTRING GetPortName(void) = 0;
@@ -73,8 +72,7 @@ class IAppSettingsDlg
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
   virtual bool GetHexDataMode(void) const = 0;
-  virtual float GetWheelDiameter(void) const = 0;
-  virtual int GetWheelPulses(void) const = 0;
+  virtual int GetNumPulsesPer1Km(void) const = 0;
 
   //устанавливают обработчики событий
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;

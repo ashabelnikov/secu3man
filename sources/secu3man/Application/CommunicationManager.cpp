@@ -92,7 +92,7 @@ bool CCommunicationManager::Init(void)
  //Set protocol data encoding/decoding mode (Hex or Bin)
  m_pControlApp->SetProtocolDataMode(m_pSettings->GetHexDataMode());
  //Set parameters for speed sensor calculations
- m_pControlApp->SetWheelDiameterAndPulses(m_pSettings->GetWheelDiameter() * 25.4f, m_pSettings->GetWheelPulses());
+ m_pControlApp->SetNumPulsesPer1Km(m_pSettings->GetNumPulsesPer1Km());
 
  try
  {

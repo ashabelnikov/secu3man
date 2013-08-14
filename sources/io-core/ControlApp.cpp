@@ -359,16 +359,21 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int speed = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&speed))
   return false;
- float period_s = ((float)speed / 250000.0f); //period in seconds
- m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
- if (m_SensorDat.speed > 999.9f)
-  m_SensorDat.speed = 999.9f;
+ if (speed)
+ { //speed sensor is used, value is correct
+  float period_s = ((float)speed / 250000.0f); //period in seconds
+  m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+  if (m_SensorDat.speed > 999.9f)
+   m_SensorDat.speed = 999.9f;
+ }
+ else //speed sensor is not used or speed is too low
+  m_SensorDat.speed = 0;
 
  //Distance
  unsigned long distance = 0;
  if (false == mp_pdp->Hex24ToBin(raw_packet,&distance))
   return false;
- m_SensorDat.distance = m_period_distance * distance;
+ m_SensorDat.distance = (m_period_distance * distance) / 1000.0f;
  if (m_SensorDat.distance > 9999.99f)
   m_SensorDat.distance = 9999.99f;
 
@@ -2019,12 +2024,10 @@ inline void CControlApp::LeaveCriticalSection(void)
 }
 
 //-----------------------------------------------------------------------
-void CControlApp::SetWheelDiameterAndPulses(float w_d, int w_p)
+void CControlApp::SetNumPulsesPer1Km(int pp1km)
 {
- if (w_d < 0.01f) w_d = 0.01f;
- if (w_p == 0) w_p = 1;
- double pi = 4.0 * atan(1.0);
- m_period_distance = (float)((pi * w_d) / ((double)w_p)); //distance of one period in meters
+ double value = MathHelpers::RestrictValue(pp1km, 1, 60000);
+ m_period_distance = (float)(1000.0 / value); //distance of one period in meters
 }
 
 //-----------------------------------------------------------------------

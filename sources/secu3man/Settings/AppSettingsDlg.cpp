@@ -35,7 +35,6 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_dv_update_period_edit(CEditEx::MODE_INT)
 , m_tachometer_max_edit(CEditEx::MODE_INT)
 , m_pressure_max_edit(CEditEx::MODE_INT)
-, m_wheel_diameter_edit(CEditEx::MODE_FLOAT)
 , m_wheel_pulses_edit(CEditEx::MODE_INT)
 {
  m_app_baudrate = -1;
@@ -52,8 +51,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_show_tooltips = BST_CHECKED;
  m_exfixtures = BST_CHECKED;
  m_hexdatamode = BST_CHECKED;
- m_wheel_diameter = 14.0f;
- m_wheel_pulses = 6;
+ m_wheel_pulses = 6000;   //Number of pulses per 1km
 }
 
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
@@ -105,13 +103,9 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max_edit);
  m_pressure_max_edit.DDX_Value(pDX, IDC_APP_SETTINGS_PRESSURE_MAX_EDIT, m_pressure_max);
 
- DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_DIAM_SPIN, m_wheel_diameter_spin);
- DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_DIAM_EDIT, m_wheel_diameter_edit);
- m_wheel_diameter_edit.DDX_Value(pDX, IDC_APP_SETTINGS_WHEEL_DIAM_EDIT, m_wheel_diameter);
-
  DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_SPIN, m_wheel_pulses_spin);
  DDX_Control(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_EDIT, m_wheel_pulses_edit);
- m_wheel_pulses_edit.DDX_Value(pDX, IDC_APP_SETTINGS_WHEEL_DIAM_EDIT, m_wheel_pulses);
+ m_wheel_pulses_edit.DDX_Value(pDX, IDC_APP_SETTINGS_WHEEL_PULSES_EDIT, m_wheel_pulses);
 
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
  DDX_Control(pDX, IDC_APP_SETTINGS_INFO_TEXT, m_info_text);
@@ -169,13 +163,10 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_pressure_max_spin.SetBuddy(&m_pressure_max_edit);
  m_pressure_max_spin.SetRangeAndDelta(50, 500, 10);
 
- m_wheel_diameter_edit.SetLimitText(5);
- m_wheel_diameter_spin.SetBuddy(&m_wheel_diameter_edit);
- m_wheel_diameter_spin.SetRangeAndDelta(5.0f, 100.0f, 0.01f); //дюймы
-
- m_wheel_pulses_edit.SetLimitText(2);
+ m_wheel_pulses_edit.SetLimitText(5);
+ m_wheel_pulses_edit.SetDecimalPlaces(5);
  m_wheel_pulses_spin.SetBuddy(&m_wheel_pulses_edit);
- m_wheel_pulses_spin.SetRangeAndDelta(0, 16, 1);
+ m_wheel_pulses_spin.SetRangeAndDelta(0, 30000, 1);
 
  if (m_OnActivate)
   m_OnActivate(); //информируем слушателя о том что мы готовы к приему данных
@@ -520,22 +511,12 @@ bool CAppSettingsDlg::GetHexDataMode(void) const
  return (m_hexdatamode == BST_CHECKED) ? true : false;
 }
 
-void CAppSettingsDlg::SetWheelDiameter(float i_w_d)
+void CAppSettingsDlg::SetNumPulsesPer1Km(int i_pp1km)
 {
- m_wheel_diameter = i_w_d;
+ m_wheel_pulses = i_pp1km;
 }
 
-void CAppSettingsDlg::SetWheelPulses(int i_w_p)
-{
- m_wheel_pulses = i_w_p;
-}
-
-float CAppSettingsDlg::GetWheelDiameter(void) const
-{
- return m_wheel_diameter;
-}
-
-int CAppSettingsDlg::GetWheelPulses(void) const
+int CAppSettingsDlg::GetNumPulsesPer1Km(void) const
 {
  return m_wheel_pulses;
 }
