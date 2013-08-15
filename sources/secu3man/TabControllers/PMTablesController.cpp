@@ -377,7 +377,8 @@ void CPMTablesController::_SynchronizeMap(int fuel_type, int i_mapType)
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES));
    state = 0;
    mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
-   //transfer copied values from view into chache (save midification)
+   Sleep(20);
+   //transfer copied values from view into cache (save midification)
    for(size_t i = 0; i < packet.data_size; ++i)
     _GetMap(fuel_type, i_mapType, false)[packet.address + i] = pMap[packet.address + i];
   }
