@@ -359,7 +359,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int speed = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&speed))
   return false;
- if (speed)
+ if (0 != speed && 65535 != speed)
  { //speed sensor is used, value is correct
   float period_s = ((float)speed / 250000.0f); //period in seconds
   m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
