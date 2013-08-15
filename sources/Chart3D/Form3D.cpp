@@ -130,6 +130,8 @@ void TForm3D::Enable(bool enable)
  CheckBox2->Enabled = enable && CheckBox1->Checked;
  ButtonAngleUp->Enabled = enable;
  ButtonAngleDown->Enabled = enable;
+ Smoothing3x->Enabled = enable;
+ Smoothing5x->Enabled = enable;
  if (CheckBox1->Checked)
   Chart1->Visible = enable;
 }
