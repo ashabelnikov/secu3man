@@ -56,7 +56,7 @@ object Form3D: TForm3D
   OnClose = OnCloseForm
   PixelsPerInch = 120
   TextHeight = 16
-  object Label1: TLabel
+  object LabelAfv: TLabel
     Left = 442
     Top = 449
     Width = 23
@@ -70,7 +70,7 @@ object Form3D: TForm3D
     Font.Style = [fsBold]
     ParentFont = False
   end
-  object Label2: TLabel
+  object LabelAfc: TLabel
     Left = 39
     Top = 444
     Width = 137
@@ -755,7 +755,7 @@ object Form3D: TForm3D
       YValues.Order = loNone
     end
   end
-  object TrackBar1: TTrackBar
+  object TrackBarAf: TTrackBar
     Left = 197
     Top = 436
     Width = 237
@@ -771,10 +771,10 @@ object Form3D: TForm3D
     TickMarks = tmTopLeft
     TickStyle = tsAuto
     ShowHint = True    
-    OnChange = TrackBar1Change
+    OnChange = TrackBarAfChange
     OnKeyDown = CtrlKeyDown
   end
-  object CheckBox1: TCheckBox
+  object CheckBox3d: TCheckBox
     Left = 495
     Top = 447
     Width = 50
@@ -782,10 +782,10 @@ object Form3D: TForm3D
     Caption = '3D'
     TabOrder = 6
     ShowHint = True    
-    OnClick = CheckBox1Click
+    OnClick = CheckBox3dClick
     OnKeyDown = CtrlKeyDown
   end
-  object CheckBox2: TCheckBox
+  object CheckBoxBv: TCheckBox
     Left = 571
     Top = 442
     Width = 100
@@ -793,7 +793,7 @@ object Form3D: TForm3D
     Caption = 'גטה סחאהט'
     TabOrder = 7
     ShowHint = True    
-    OnClick = CheckBox2Click
+    OnClick = CheckBoxBvClick
     OnKeyDown = CtrlKeyDown
   end
   object ButtonAngleUp: TBitBtn

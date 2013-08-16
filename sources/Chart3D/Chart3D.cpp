@@ -133,8 +133,8 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
- pForm->Label2->Caption = MLL::LoadString(IDS_AIR_FLOW_CAPTION_TEXT);
- pForm->CheckBox2->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
+ pForm->LabelAfc->Caption = MLL::LoadString(IDS_AIR_FLOW_CAPTION_TEXT);
+ pForm->CheckBoxBv->Caption = MLL::LoadString(IDS_BACK_SIDE_VIEW_CB);
  pForm->InitPopupMenu(hInst);
  pForm->InitHints(hInst); //Set hints' text
 

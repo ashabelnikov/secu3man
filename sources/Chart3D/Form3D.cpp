@@ -68,8 +68,8 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 void TForm3D::DataPrepare()
 {
  HideAllSeries();
- CheckBox2->Enabled = false;
- TrackBar1->Max = count_z - 1;
+ CheckBoxBv->Enabled = false;
+ TrackBarAf->Max = count_z - 1;
  ShowPoints(true);
  m_setval = 0;
  m_val_n  = 0;
@@ -87,7 +87,7 @@ void TForm3D::DataPrepare()
  FillChart(0,0);
 
  SetAirFlow(m_air_flow_position); //set trackbar position
- CheckBox1Click(NULL);
+ CheckBox3dClick(NULL);
 
  if (m_chart_active)
  {
@@ -136,16 +136,16 @@ void TForm3D::Enable(bool enable)
   DataPrepare();
 
  Chart1->Enabled = enable;
- Label1->Enabled = enable;
- Label2->Enabled = enable;
- TrackBar1->Enabled = enable;
- CheckBox1->Enabled = enable;
- CheckBox2->Enabled = enable && CheckBox1->Checked;
+ LabelAfv->Enabled = enable;
+ LabelAfc->Enabled = enable;
+ TrackBarAf->Enabled = enable;
+ CheckBox3d->Enabled = enable;
+ CheckBoxBv->Enabled = enable && CheckBox3d->Checked;
  ButtonAngleUp->Enabled = enable;
  ButtonAngleDown->Enabled = enable;
  Smoothing3x->Enabled = enable;
  Smoothing5x->Enabled = enable;
- if (CheckBox1->Checked)
+ if (CheckBox3d->Checked)
   Chart1->Visible = enable;
 }
 
@@ -180,17 +180,17 @@ void TForm3D::InitHints(HINSTANCE hInstance)
  ::LoadString(hInstance, IDS_TT_MOVE_FUNC_DOWN, string, 1024);
  ButtonAngleDown->Hint = string;
  ::LoadString(hInstance, IDS_TT_FUNC_VIEW_3D, string, 1024);
- CheckBox1->Hint = string;
+ CheckBox3d->Hint = string;
  ::LoadString(hInstance, IDS_TT_FUNC_VIEW_BACK, string, 1024);
- CheckBox2->Hint = string;
+ CheckBoxBv->Hint = string;
  ::LoadString(hInstance, IDS_TT_SELECT_CURVE, string, 1024);
- TrackBar1->Hint = string;
+ TrackBarAf->Hint = string;
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
+void __fastcall TForm3D::TrackBarAfChange(TObject *Sender)
 {
- SetAirFlow(TrackBar1->Position);
+ SetAirFlow(TrackBarAf->Position);
  m_setval = 0;
  m_val_n  = 0; 
  UnmarkPoints();
@@ -265,17 +265,17 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
 }
 
 //---------------------------------------------------------------------------
-void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
+void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
 {
- if (CheckBox1->Checked)
+ if (CheckBox3d->Checked)
  {
   ShowPoints(false);
   Chart1->View3D  = true;
   MakeAllVisible();
-  TrackBar1->Enabled = false;
-  Label1->Enabled = false;
-  CheckBox2->Enabled = true;
-  CheckBox2Click(NULL);
+  TrackBarAf->Enabled = false;
+  LabelAfv->Enabled = false;
+  CheckBoxBv->Enabled = true;
+  CheckBoxBvClick(NULL);
   ButtonAngleUp->Enabled = false;
   ButtonAngleDown->Enabled = false;
   ButtonAngleUp->Visible = false;
@@ -292,9 +292,9 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
   ShowPoints(true);
   Chart1->View3D = false;
   MakeOneVisible(m_air_flow_position);
-  TrackBar1->Enabled = true;
-  Label1->Enabled = true;
-  CheckBox2->Enabled = false;
+  TrackBarAf->Enabled = true;
+  LabelAfv->Enabled = true;
+  CheckBoxBv->Enabled = false;
   FillChart(0,0);
   ButtonAngleUp->Enabled = true;
   ButtonAngleDown->Enabled = true;
@@ -311,9 +311,9 @@ void __fastcall TForm3D::CheckBox1Click(TObject *Sender)
 
 //---------------------------------------------------------------------------
 //вид 3D графика сзади или спереди
-void __fastcall TForm3D::CheckBox2Click(TObject *Sender)
+void __fastcall TForm3D::CheckBoxBvClick(TObject *Sender)
 {
- FillChart(!CheckBox2->Checked, 1);
+ FillChart(!CheckBoxBv->Checked, 1);
 }
 
 //---------------------------------------------------------------------------
@@ -412,11 +412,12 @@ int TForm3D::SetItem(int z, int x, float value)
 void TForm3D::SetAirFlow(int flow)
 {
  AnsiString as;
- TrackBar1->Position = flow;
+ TrackBarAf->Position = flow;
  as.sprintf("%d", flow + 1);
- Label1->Caption = as;
+ LabelAfv->Caption = as;
  m_air_flow_position = flow;
- MakeOneVisible(flow);
+ if (!CheckBox3d->Checked)
+  MakeOneVisible(flow);
 }
 
 //---------------------------------------------------------------------------
