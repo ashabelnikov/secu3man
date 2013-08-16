@@ -173,6 +173,7 @@ class TForm3D : public TForm
   int m_setval;
   int m_val_n;
   int m_air_flow_position;
+  bool m_chart_active;
   std::deque<int> m_selpts;
   std::pair<int, int> m_prev_pt;
 };

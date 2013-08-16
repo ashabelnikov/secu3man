@@ -59,6 +59,7 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , m_val_n(0)
 , m_air_flow_position(0)
 , m_values_format_x("%.00f")  //integer 
+, m_chart_active(true)
 {
  m_selpts.push_back(0);
 }
@@ -69,7 +70,6 @@ void TForm3D::DataPrepare()
  HideAllSeries();
  CheckBox2->Enabled = false;
  TrackBar1->Max = count_z - 1;
- MakeOneVisible(m_air_flow_position);
  ShowPoints(true);
  m_setval = 0;
  m_val_n  = 0;
@@ -86,8 +86,20 @@ void TForm3D::DataPrepare()
  Chart1->Chart3DPercent = 29;
  FillChart(0,0);
 
+ SetAirFlow(m_air_flow_position); //set trackbar position
  CheckBox1Click(NULL);
- SetAirFlow(m_air_flow_position);
+
+ if (m_chart_active)
+ {
+  UnmarkPoints();
+  MarkPoints(true);
+  Chart1->Title->Font->Style = TFontStyles() << fsBold;
+ }
+ else
+ {
+  UnmarkPoints();
+  Chart1->Title->Font->Style = TFontStyles();
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -118,6 +130,7 @@ void TForm3D::Enable(bool enable)
  {
   for (int i = 0; i < 32; i++ )
    Chart1->Series[i]->Active = false;
+  Chart1->Title->Font->Style = TFontStyles();
  }
  else
   DataPrepare();
@@ -177,8 +190,7 @@ void TForm3D::InitHints(HINSTANCE hInstance)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::TrackBar1Change(TObject *Sender)
 {
- m_air_flow_position = TrackBar1->Position;
- SetAirFlow(m_air_flow_position);
+ SetAirFlow(TrackBar1->Position);
  m_setval = 0;
  m_val_n  = 0; 
  UnmarkPoints();
@@ -757,6 +769,7 @@ void __fastcall TForm3D::OnEnterChart(TObject* Sender)
 {
  MarkPoints(true);
  Chart1->Title->Font->Style = TFontStyles() << fsBold;
+ m_chart_active = true;
 }
 
 //---------------------------------------------------------------------------
@@ -764,13 +777,17 @@ void __fastcall TForm3D::OnExitChart(TObject* Sender)
 {
  MarkPoints(false);
  Chart1->Title->Font->Style = TFontStyles();
+ m_chart_active = false;
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
  if (ActiveControl != Chart1)
+ {
   ActiveControl = Chart1;
+  m_chart_active = true;
+ }
 }
 
 //---------------------------------------------------------------------------

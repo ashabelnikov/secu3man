@@ -25,7 +25,7 @@ stringtable
   IDS_TT_MOVE_FUNC_DOWN, "Сместить функцию вниз на 0.5"
   IDS_TT_FUNC_VIEW_3D, "Просмотр функции в 3D"
   IDS_TT_FUNC_VIEW_BACK, "Вид с обратной стороны"
-  IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования"
+  IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования (можно использ. клавиши Z,X на клавиатуре)"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -49,6 +49,6 @@ stringtable
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
   IDS_TT_FUNC_VIEW_3D, "View function in 3D"
   IDS_TT_FUNC_VIEW_BACK, "Function back side view"
-  IDS_TT_SELECT_CURVE, "Select curve for editing"
+  IDS_TT_SELECT_CURVE, "Select curve for editing (you can use Z,X keys on the keyboard)"
 }
 
