@@ -122,14 +122,14 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
 
  //Create a form
  TForm3D *pForm = new TForm3D((TComponent *)NULL);
- pForm->count_x = x_count_of_points;
- pForm->count_z = z_count_of_points;
- pForm->u_title = chart_title;
- pForm->modified_function = modified_function;
- pForm->original_function = original_function;
- pForm->x_title = x_axis_title;
- pForm->aai_min = aai_min;
- pForm->aai_max = aai_max;
+ pForm->m_count_x = x_count_of_points;
+ pForm->m_count_z = z_count_of_points;
+ pForm->m_u_title = chart_title;
+ pForm->mp_modified_function = modified_function;
+ pForm->mp_original_function = original_function;
+ pForm->m_x_title = x_axis_title;
+ pForm->m_aai_min = aai_min;
+ pForm->m_aai_max = aai_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);
@@ -138,7 +138,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
  pForm->InitPopupMenu(hInst);
  pForm->InitHints(hInst); //Set hints' text
 
- memcpy(pForm->u_slots, x_axis_grid_values, sizeof(float) * x_count_of_points);
+ memcpy(pForm->m_u_slots, x_axis_grid_values, sizeof(float) * x_count_of_points);
  pForm->DataPrepare();
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
@@ -156,8 +156,8 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
   for (;pForm->Chart1->Series[i]->Count() > 0;)
    pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);
 
- pForm->original_function = original_function;
- pForm->modified_function = modified_function;
+ pForm->mp_original_function = original_function;
+ pForm->mp_modified_function = modified_function;
  pForm->DataPrepare();
 }
 
@@ -172,12 +172,12 @@ void __cdecl Chart3DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labe
  {
   case 1: //X
   {
-   for(int i = 0; i < pForm->count_x; ++i)
+   for(int i = 0; i < pForm->m_count_x; ++i)
    {
-    for(int s = 0; s < pForm->count_z; ++s)
+    for(int s = 0; s < pForm->m_count_z; ++s)
     {
      pForm->Chart1->Series[s]->XLabel[i] = ip_labels_values[i];
-     pForm->Chart1->Series[s+pForm->count_z]->XLabel[i] = ip_labels_values[i];
+     pForm->Chart1->Series[s+pForm->m_count_z]->XLabel[i] = ip_labels_values[i];
     }
    }
   }

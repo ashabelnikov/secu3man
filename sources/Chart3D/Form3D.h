@@ -126,15 +126,15 @@ class TForm3D : public TForm
   void InitHints(HINSTANCE hInstance);
 
  public: //Properties
-  int count_x;
-  int count_z;
-  float u_slots[1024];
-  float aai_min;
-  float aai_max;
-  float *modified_function;
-  float *original_function;
-  AnsiString u_title;
-  AnsiString x_title;
+  int m_count_x;
+  int m_count_z;
+  float m_u_slots[1024];
+  float m_aai_min;
+  float m_aai_max;
+  float *mp_modified_function;
+  float *mp_original_function;
+  AnsiString m_u_title;
+  AnsiString m_x_title;
   AnsiString m_values_format_x;
 
  private:
