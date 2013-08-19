@@ -748,6 +748,15 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    SetAirFlow(m_air_flow_position);
    if (CheckBox3d->Checked) MarkPoints(true); //3D view
   }
+  else if (Key == 'B')
+  {
+   if (CheckBox3d->Checked)
+   {
+    CheckBoxBv->Checked = !CheckBoxBv->Checked;
+    UnmarkPoints();
+    MarkPoints(true);
+   }
+  }
  }
 
  //Following code will simulate normal dialog messages

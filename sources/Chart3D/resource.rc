@@ -24,7 +24,7 @@ stringtable
   IDS_TT_MOVE_FUNC_UP, "Сместить функцию вверх на 0.5"
   IDS_TT_MOVE_FUNC_DOWN, "Сместить функцию вниз на 0.5"
   IDS_TT_FUNC_VIEW_3D, "Просмотр функции в 3D"
-  IDS_TT_FUNC_VIEW_BACK, "Вид с обратной стороны"
+  IDS_TT_FUNC_VIEW_BACK, "Вид с обратной стороны (можно использ. клавишу B на клавиатуре)"
   IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования (можно использ. клавиши Z,X на клавиатуре)"
 }
 
@@ -48,7 +48,7 @@ stringtable
   IDS_TT_MOVE_FUNC_UP, "Move function up by 0.5"
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
   IDS_TT_FUNC_VIEW_3D, "View function in 3D"
-  IDS_TT_FUNC_VIEW_BACK, "Function back side view"
+  IDS_TT_FUNC_VIEW_BACK, "Function back side view (you can use B key on the keyboard)"
   IDS_TT_SELECT_CURVE, "Select curve for editing (you can use Z,X keys on the keyboard)"
 }
 
