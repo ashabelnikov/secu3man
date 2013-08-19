@@ -138,9 +138,9 @@ class TForm3D : public TForm
   AnsiString m_values_format_x;
 
  private:
-  float GetItem_m(int z, int x);
+  float GetItem_m(int z, int x) const;
   float* GetItem_mp(int z, int x);
-  float GetItem_o(int z, int x);
+  float GetItem_o(int z, int x) const;
   int SetItem(int z, int x, float value);
   void SetAirFlow(int flow);
   void MakeOneVisible(int flow);
@@ -148,6 +148,7 @@ class TForm3D : public TForm
   void ShowPoints(bool show);
   void FillChart(bool dir,int cm);
   void HideAllSeries(void);
+  int __fastcall GetCurveSelIndex(void) const;
   void __fastcall ShiftPoints(float i_value);
   void __fastcall MarkPoints(bool i_mark);
   void __fastcall UnmarkPoints(void);

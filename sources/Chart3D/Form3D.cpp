@@ -374,7 +374,7 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
 
 //---------------------------------------------------------------------------
 //get item from original function
-float TForm3D::GetItem_o(int z, int x)
+float TForm3D::GetItem_o(int z, int x) const
 {
  if ((z >= count_z) || (x >= count_x)) return 0.0f;
  int i  = (count_z - 1) - z;
@@ -383,7 +383,7 @@ float TForm3D::GetItem_o(int z, int x)
 
 //---------------------------------------------------------------------------
 //get item from modified function
-float TForm3D::GetItem_m(int z, int x)
+float TForm3D::GetItem_m(int z, int x) const
 {
  if ((z >= count_z) || (x >= count_x)) return 0.0f;
  int i  = (count_z - 1) - z;
@@ -495,24 +495,32 @@ void TForm3D::HideAllSeries(void)
 }
 
 //---------------------------------------------------------------------------
+int __fastcall TForm3D::GetCurveSelIndex(void) const
+{
+ return ((CheckBox3d->Checked && !CheckBoxBv->Checked) ? count_z - 1 - m_air_flow_position : m_air_flow_position);
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm3D::ShiftPoints(float i_value)
 {
  for(size_t i = 0; i < m_selpts.size(); ++i)
-  RestrictAndSetChartValue(m_selpts[i], Chart1->Series[m_air_flow_position + count_z]->YValue[m_selpts[i]] + i_value);
+  RestrictAndSetChartValue(m_selpts[i], Chart1->Series[GetCurveSelIndex() + count_z]->YValue[m_selpts[i]] + i_value);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::MarkPoints(bool i_mark)
 {
+ TColor color = CheckBox3d->Checked ? TColor(col[m_air_flow_position]) : clRed;
  for(size_t i = 0; i < m_selpts.size(); ++i)
-  (Chart1->Series[m_air_flow_position + count_z])->ValueColor[m_selpts[i]] = (i_mark ? clNavy : clRed);
+  (Chart1->Series[GetCurveSelIndex() + count_z])->ValueColor[m_selpts[i]] = (i_mark ? clNavy : color);
 }
 
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::UnmarkPoints(void)
 {
+ TColor color = CheckBox3d->Checked ? TColor(col[m_air_flow_position]) : clRed;
  for(int i = 0; i < count_x; ++i)
-  (Chart1->Series[m_air_flow_position + count_z])->ValueColor[i] = clRed;
+  (Chart1->Series[GetCurveSelIndex() + count_z])->ValueColor[i] = color;
 }
 
 //---------------------------------------------------------------------------
@@ -521,7 +529,7 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
  if (v > aai_max) v = aai_max;
  if (v < aai_min) v = aai_min;
  SetItem(m_air_flow_position, index, v);
- Chart1->Series[m_air_flow_position + count_z]->YValue[index] = v;
+ Chart1->Series[GetCurveSelIndex() + count_z]->YValue[index] = v;
 }
 
 //---------------------------------------------------------------------------
@@ -629,21 +637,24 @@ void __fastcall TForm3D::SelLeftArrow(bool i_shift)
 {
  if (i_shift)
  {//Shift key is pressed
-  MarkPoints(false);
-  if (m_selpts.front() != m_val_n)
+  if (m_selpts.size())
   {
-   m_selpts.pop_back();
-   m_val_n = m_selpts.back();
-  }
-  else
-  {
-   m_val_n = m_selpts.front() - 1;
-   if (m_val_n >= 0)
-    m_selpts.push_front(m_val_n);
+   MarkPoints(false);
+   if (m_selpts.front() != m_val_n && m_selpts.back() != m_selpts.front())
+   {
+    m_selpts.pop_back();
+    m_val_n = m_selpts.back();
+   }
    else
-    m_val_n = 0;
+   {
+    m_val_n = m_selpts.front() - 1;
+    if (m_val_n >= 0)
+     m_selpts.push_front(m_val_n);
+    else
+     m_val_n = 0;
+   }
+   MarkPoints(true);
   }
-  MarkPoints(true);
  }
  else
  {//Without shift
@@ -663,21 +674,24 @@ void __fastcall TForm3D::SelRightArrow(bool i_shift)
 {
  if (i_shift)
  { //Shift key is pressed
-  MarkPoints(false);
-  if (m_selpts.back() != m_val_n)
+  if (m_selpts.size())
   {
-   m_selpts.pop_front();
-   m_val_n = m_selpts.front();
-  }
-  else
-  {
-   m_val_n = m_selpts.back() + 1;
-   if (m_val_n < count_x)
-    m_selpts.push_back(m_val_n);
+   MarkPoints(false);
+   if (m_selpts.back() != m_val_n && m_selpts.back() != m_selpts.front())
+   {
+    m_selpts.pop_front();
+    m_val_n = m_selpts.front();
+   }
    else
-    m_val_n = count_x-1;
+   {
+    m_val_n = m_selpts.back() + 1;
+    if (m_val_n < count_x)
+     m_selpts.push_back(m_val_n);
+    else
+     m_val_n = count_x-1;
+   }
+   MarkPoints(true);
   }
-  MarkPoints(true);
  }
  else
  { //Without shift
@@ -720,15 +734,19 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
   }
   else if (Key == 'Z')
   { //decrement curve index
+   if (CheckBox3d->Checked) UnmarkPoints();   //3D view
    if (m_air_flow_position > 0)
     --m_air_flow_position;
    SetAirFlow(m_air_flow_position);
+   if (CheckBox3d->Checked) MarkPoints(true); //3D view
   }
   else if (Key == 'X')
   { //increment curve index
+   if (CheckBox3d->Checked) UnmarkPoints();   //3D view
    if (m_air_flow_position < (count_z-1))
     ++m_air_flow_position;
    SetAirFlow(m_air_flow_position);
+   if (CheckBox3d->Checked) MarkPoints(true); //3D view
   }
  }
 
