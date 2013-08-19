@@ -37,9 +37,9 @@ bool RemoveInstanceByHWND(HWND hWnd);
 __fastcall TForm2D::TForm2D(TComponent* Owner)
 : TForm(Owner)
 , m_count_of_function_points(0)
-, m_aai_min(0.0f), m_aai_max(0.0f)
-, m_original_function(NULL)
-, m_modified_function(NULL)
+, m_fnc_min(0.0f), m_fnc_max(0.0f)
+, mp_original_function(NULL)
+, mp_modified_function(NULL)
 , m_horizontal_axis_values_format("%.00f")  //integer
 , m_chart_title_text("")
 , m_x_axis_title("")
@@ -73,8 +73,8 @@ void TForm2D::DataPrepare()
  AnsiString as;
 
  //диапазон значений шкалы графика должен быть немного шире...
- Chart1->LeftAxis->Maximum = m_aai_max;
- Chart1->LeftAxis->Minimum = m_aai_min;
+ Chart1->LeftAxis->Maximum = m_fnc_max;
+ Chart1->LeftAxis->Minimum = m_fnc_min;
 
  Chart1->Title->Text->Clear();
  Chart1->Title->Text->Add(m_chart_title_text);
@@ -84,8 +84,8 @@ void TForm2D::DataPrepare()
  for(int i = 0; i < m_count_of_function_points; i++)
  {
   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i]);
-  Series1->Add(m_original_function[i], as, clAqua);
-  Series2->Add(m_modified_function[i], as, clRed);
+  Series1->Add(mp_original_function[i], as, clAqua);
+  Series2->Add(mp_modified_function[i], as, clRed);
  }
 }
 
@@ -295,8 +295,8 @@ void __fastcall TForm2D::FormClose(TObject *Sender, TCloseAction &Action)
  m_val_n   = 0;
  m_count_of_function_points = 0;
  m_chart_title_text = "";
- m_original_function = NULL;
- m_modified_function = NULL;
+ mp_original_function = NULL;
+ mp_modified_function = NULL;
  RemoveInstanceByHWND(Handle);
 }
 
@@ -320,12 +320,12 @@ void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 {
  float* p_source_function = new float[m_count_of_function_points];
- std::copy(m_modified_function, m_modified_function + m_count_of_function_points, p_source_function);
- MathHelpers::Smooth1D(p_source_function, m_modified_function, m_count_of_function_points, 3);
+ std::copy(mp_modified_function, mp_modified_function + m_count_of_function_points, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_of_function_points, 3);
  delete[] p_source_function;
 
  for (int i = 0; i < m_count_of_function_points; i++ )
-  Series2->YValue[i] = m_modified_function[i];
+  Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -334,12 +334,12 @@ void __fastcall TForm2D::Smoothing3xClick(TObject *Sender)
 void __fastcall TForm2D::Smoothing5xClick(TObject *Sender)
 {
  float* p_source_function = new float[m_count_of_function_points];
- std::copy(m_modified_function, m_modified_function + m_count_of_function_points, p_source_function);
- MathHelpers::Smooth1D(p_source_function, m_modified_function, m_count_of_function_points, 5);
+ std::copy(mp_modified_function, mp_modified_function + m_count_of_function_points, p_source_function);
+ MathHelpers::Smooth1D(p_source_function, mp_modified_function, m_count_of_function_points, 5);
  delete[] p_source_function;
 
  for (int i = 0; i < m_count_of_function_points; i++ )
-  Series2->YValue[i] = m_modified_function[i];
+  Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -382,11 +382,8 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
 //---------------------------------------------------------------------------
 void TForm2D::RestrictAndSetValue(int index, double v)
 {
- if (v > m_aai_max)
-  v = m_aai_max;
- if (v < m_aai_min)
-  v = m_aai_min;
- m_modified_function[index] = v;
+ v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
+ mp_modified_function[index] = v;
  Series2->YValue[index] = v;
 }
 

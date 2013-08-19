@@ -35,7 +35,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
@@ -116,7 +116,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 }
 
 //---------------------------------------------------------------------------
-HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title)
+HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title)
 {
  //Clean up previous instances of forms
  for(size_t i = 0; i < g_form_delete.size(); ++i)
@@ -130,10 +130,10 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;
  pForm->m_y_axis_title = i_y_axis_title;
- pForm->m_original_function = ip_original_function;
- pForm->m_modified_function = iop_modified_function;
- pForm->m_aai_min = i_aai_min;
- pForm->m_aai_max = i_aai_max;
+ pForm->mp_original_function = ip_original_function;
+ pForm->mp_modified_function = iop_modified_function;
+ pForm->m_fnc_min = i_fnc_min;
+ pForm->m_fnc_max = i_fnc_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
@@ -161,8 +161,8 @@ void __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *
   for (;pForm->Series2->Count() > 0;)
    pForm->Series2->Delete(pForm->Series2->Count()-1);
 
-  pForm->m_original_function = ip_original_function;
-  pForm->m_modified_function = iop_modified_function;
+  pForm->mp_original_function = ip_original_function;
+  pForm->mp_modified_function = iop_modified_function;
  }
  pForm->DataPrepare();
 }

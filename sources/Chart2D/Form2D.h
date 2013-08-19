@@ -98,10 +98,10 @@ class TForm2D : public TForm
 
  public: //properties
   int m_count_of_function_points;
-  float m_aai_min;
-  float m_aai_max;
-  const float *m_original_function;
-  float *m_modified_function;
+  float m_fnc_min;
+  float m_fnc_max;
+  const float *mp_original_function;
+  float *mp_modified_function;
   float m_horizontal_axis_grid_values[2][1024];
   AnsiString m_horizontal_axis_values_format;
   AnsiString m_chart_title_text;
