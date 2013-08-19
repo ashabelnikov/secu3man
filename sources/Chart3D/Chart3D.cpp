@@ -34,7 +34,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart3DUpdateAxisLabels(HWND hWnd, int i_axis, const float *ip_labels_values);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
@@ -113,7 +113,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 
 //original_function и modified_function - адреса двухмерных массивов содержащих
 //значения функций
-HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float aai_min,float aai_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
 {
  //Clean up previous instances of forms
  for(size_t i = 0; i < g_form_delete.size(); ++i)
@@ -128,8 +128,8 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
  pForm->mp_modified_function = modified_function;
  pForm->mp_original_function = original_function;
  pForm->m_x_title = x_axis_title;
- pForm->m_aai_min = aai_min;
- pForm->m_aai_max = aai_max;
+ pForm->m_fnc_min = fnc_min;
+ pForm->m_fnc_max = fnc_max;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->Chart1->LeftAxis->Title->Caption = MLL::LoadString(IDS_LEFT_AXIS_TITLE);

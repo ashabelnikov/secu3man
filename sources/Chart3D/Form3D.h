@@ -129,8 +129,8 @@ class TForm3D : public TForm
   int m_count_x;
   int m_count_z;
   float m_u_slots[1024];
-  float m_aai_min;
-  float m_aai_max;
+  float m_fnc_min;
+  float m_fnc_max;
   float *mp_modified_function;
   float *mp_original_function;
   AnsiString m_u_title;

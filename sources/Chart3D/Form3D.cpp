@@ -43,8 +43,8 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 : TForm(Owner)
 , m_count_x(0)
 , m_count_z(0)
-, m_aai_min(0)
-, m_aai_max(0)
+, m_fnc_min(0)
+, m_fnc_max(0)
 , mp_modified_function(NULL)
 , mp_original_function(NULL)
 , m_u_title("")
@@ -79,9 +79,9 @@ void TForm3D::DataPrepare()
  Chart1->BottomAxis->Title->Caption = m_x_title;
 
  //диапазон значений на графике будет немного шире чем требуемый...
- int range = m_aai_max - m_aai_min;
- Chart1->LeftAxis->Maximum = m_aai_max + range / 15.0f;
- Chart1->LeftAxis->Minimum = m_aai_min - range / 20.0f;
+ int range = m_fnc_max - m_fnc_min;
+ Chart1->LeftAxis->Maximum = m_fnc_max + range / 15.0f;
+ Chart1->LeftAxis->Minimum = m_fnc_min - range / 20.0f;
 
  Chart1->Chart3DPercent = 29;
  FillChart(0,0);
@@ -526,8 +526,7 @@ void __fastcall TForm3D::UnmarkPoints(void)
 //---------------------------------------------------------------------------
 void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
- if (v > m_aai_max) v = m_aai_max;
- if (v < m_aai_min) v = m_aai_min;
+ v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(m_air_flow_position, index, v);
  Chart1->Series[GetCurveSelIndex() + m_count_z]->YValue[index] = v;
 }
