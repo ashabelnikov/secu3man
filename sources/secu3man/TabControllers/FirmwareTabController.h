@@ -164,4 +164,5 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   int  m_bl_read_flash_mode;
   int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
   bool m_clear_sbar_txt_on_conn;
+  bool m_read_fw_sig_info_flag;
 };

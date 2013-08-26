@@ -76,6 +76,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , mp_iorCntr(new CFWIORemappingController(i_view->mp_IORemappingDlg.get()))
 , m_moreSize(0)
 , m_clear_sbar_txt_on_conn(false)
+, m_read_fw_sig_info_flag(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -196,13 +197,17 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
 {
  if (i_descriptor == FWINFO_DAT)
  { //приняли пакет с сигнатурной информацией о прошивке
-  SECU3IO::FWInfoDat* p_packet = (SECU3IO::FWInfoDat*)ip_packet;
-  TCHAR string[256];
-  OemToChar(p_packet->info, string);
-  m_sbar->SetInformationText(string);
+  if (m_read_fw_sig_info_flag)
+  {
+   SECU3IO::FWInfoDat* p_packet = (SECU3IO::FWInfoDat*)ip_packet;
+   TCHAR string[256];
+   OemToChar(p_packet->info, string);
+   m_sbar->SetInformationText(string);
 
-  //display firmware options if present
-  _ShowFWOptions(string, p_packet->options);
+   //display firmware options if present
+   _ShowFWOptions(string, p_packet->options);
+   m_read_fw_sig_info_flag = false;
+  }
  }
  else if (i_descriptor == OP_COMP_NC)
  {
@@ -1509,6 +1514,7 @@ void CFirmwareTabController::OnFirmwareInfo(void)
  SECU3IO::OPCompNc packet_data;
  packet_data.opcode = SECU3IO::OPCODE_READ_FW_SIG_INFO;
  m_comm->m_pControlApp->SendPacket(OP_COMP_NC,&packet_data);
+ m_read_fw_sig_info_flag = true;
 }
 
 void CFirmwareTabController::OnViewFWOptions(void)
