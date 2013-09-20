@@ -71,6 +71,7 @@ void MainFrameController::_SetDelegates(void)
   return;
  mp_view->setOnAppAbout(MakeDelegate(this, &MainFrameController::OnAppAbout));
  mp_view->setOnAppDevSite(MakeDelegate(this, &MainFrameController::OnAppDevSite));
+ mp_view->setOnAppDevForum(MakeDelegate(this, &MainFrameController::OnAppDevForum));
  mp_view->setOnAppSettings(MakeDelegate(this, &MainFrameController::OnAppSettings));
  mp_view->setOnAppBeginLog(MakeDelegate(this, &MainFrameController::OnAppBeginLog));
  mp_view->setOnAppEndLog(MakeDelegate(this, &MainFrameController::OnAppEndLog));
@@ -96,6 +97,11 @@ void MainFrameController::OnAppAbout()
 void MainFrameController::OnAppDevSite()
 {
  ShellExecute(NULL, _T("open"), _T("http://www.secu-3.org"), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void MainFrameController::OnAppDevForum()
+{
+ ShellExecute(NULL, _T("open"), _T("http://secu-3.org/forum"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppSettings()

@@ -28,6 +28,7 @@ BEGIN
     BEGIN
         MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
         MENUITEM "Сайт разработчиков", ID_APP_DEV_SITE
+        MENUITEM "Поддержка на форуме", ID_APP_DEV_FORUM
     END
     MENUITEM "Полно&экранный режим Ctrl + F", ID_FULL_SCREEN
 END
@@ -562,6 +563,7 @@ BEGIN
     BEGIN
         MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
         MENUITEM "Developers' site", ID_APP_DEV_SITE
+        MENUITEM "Support forum", ID_APP_DEV_FORUM
     END
     MENUITEM "Full screen mode Ctrl + F", ID_FULL_SCREEN
 END
