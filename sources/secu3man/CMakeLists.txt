@@ -51,6 +51,7 @@ set(HEADERS
   Settings/ISettingsData.h
   TabControllers/CheckEngineTabController.h
   TabControllers/DevDiagnostTabController.h
+  TabControllers/FirmwareFileUtils.h
   TabControllers/FirmwareTabController.h
   TabControllers/FWIORemappingController.h
   TabControllers/FWRPMGridEditController.h
@@ -96,6 +97,7 @@ set(SOURCES
   Settings/AppSettingsModel.cpp
   TabControllers/CheckEngineTabController.cpp
   TabControllers/DevDiagnostTabController.cpp
+  TabControllers/FirmwareFileUtils.cpp
   TabControllers/FirmwareTabController.cpp
   TabControllers/FWIORemappingController.cpp
   TabControllers/FWRPMGridEditController.cpp

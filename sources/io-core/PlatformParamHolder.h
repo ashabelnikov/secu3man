@@ -24,6 +24,18 @@
 
 #pragma once
 
+static const int PLATFORM_MN_SIZE = 4;
+
+typedef enum EECUPlatform
+{
+ EP_ATMEGA16 = 0,
+ EP_ATMEGA32,
+ EP_ATMEGA64,
+ EP_ATMEGA128,
+ EP_ATMEGA644,            //redundant to EP_ATMEGA64 by firmware and EEPROM sizes
+ EP_NR_OF_PLATFORMS       //must be last!
+};
+
 struct PPFlashParam
 {
  size_t m_page_size;       //размер страницы памяти программ в байтах
@@ -35,20 +47,14 @@ struct PPFlashParam
  size_t m_only_code_size;  //размер кода без данных, которые в конце
  //часть прошивки располагающаяся после кода программы и перед бутлоадером. Это данные и контрольная сумма прошивки.
  size_t m_only_data_size;
+ size_t m_fcpu_hz;         //MCU clock frequency (e.g. 16000000)
+ char   m_magic[PLATFORM_MN_SIZE]; //Magic number identifying platform (holds last 4 bytes in FLASH)
+ EECUPlatform m_platform_id;//platform ID
 };
 
 struct PPEepromParam
 {
  size_t m_size;           //size of EEPROM
-};
-
-typedef enum EECUPlatform
-{
- EP_ATMEGA16 = 0,
- EP_ATMEGA32,
- EP_ATMEGA64,
- EP_ATMEGA128,
- EP_NR_OF_PLATFORMS       //must be last!
 };
 
 class IOCORE_API PlatformParamHolder
@@ -64,12 +70,16 @@ class IOCORE_API PlatformParamHolder
 
   //get platform ID by firmware size
   static bool GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& o_platform);
+  //get platform ID by magic number placed in last 4 bytes of firmware
+  static bool GetPlatformIdByFirmwareMagic(const BYTE* p_buff, int fwSize, EECUPlatform& o_platform);
 
   //get list of all allowed sizes of EEPROM
   static std::vector<int> GetEEPROMSizes(void);
 
   //get platform ID by EEPROM size
   static bool GetPlatformIdByEEPROMSize(int fwSize, EECUPlatform& o_platform);
+  //get platform ID by magic number placed in last 4 bytes of EEPROM
+  static bool GetPlatformIdByEEPROMMagic(const BYTE* p_buff, int fwSize, EECUPlatform& o_platform);
 
  private:
   PPEepromParam m_ep;

@@ -71,10 +71,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnSettingsChanged(void);
 
   CString GenerateErrorStr(void);
-  void SaveEEPROMToFile(const BYTE* p_data, const int size);
-  bool SaveFLASHToFile(const BYTE* p_data, const int size, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
-  bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL);
-  bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title = NULL, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
 
   bool CheckChangesAskAndSaveFirmware(void);
   void SetViewFirmwareValues(void);
@@ -84,7 +80,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void StartWritingOfFLASHFromBuff(BYTE* io_buff);
 
   void _OnReadFlashToFile(void);
-  bool _CheckCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph = NULL);
+  bool _CheckFirmwareCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph = NULL);
+  bool _CheckQuartzCompatibilityAndAskUser(BYTE* ip_buff, size_t fwSize = 0);
   void _ShowFWOptions(const _TSTRING& info, DWORD options);
 
   ///////////context menu and other event handlers/////////////////////

@@ -20,6 +20,8 @@
 */
 
 #include "stdafx.h"
+#include <algorithm>
+#include <string.h>
 #include "PlatformParamHolder.h"
 
 
@@ -40,6 +42,11 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 512;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 16000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "16  ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA16;
    break;
 
   case EP_ATMEGA32:
@@ -53,6 +60,30 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 1024;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 16000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "32  ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA32;
+   break;
+
+   //ATmega644 and ATmega64 have same FLASH and EEPROM parameters
+  case EP_ATMEGA644: 
+   m_fp.m_page_size = 256;
+   m_fp.m_total_size = 65536;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
+   m_fp.m_bl_section_size = 2048; //1024 words
+   m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //NOTE! Following parameters are obsolete and left for compatibility reasons:
+   m_fp.m_only_code_size = 0xEC63; //warning! change this constant if you changed flash data allignment
+   m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
+   //eeprom
+   m_ep.m_size = 2048;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 20000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "644 ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA644;
    break;
 
   case EP_ATMEGA64:
@@ -66,6 +97,11 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 2048;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 16000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "64  ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA64;
    break;
 
   case EP_ATMEGA128:
@@ -79,6 +115,11 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_only_data_size = m_fp.m_app_section_size - m_fp.m_only_code_size;
    //eeprom
    m_ep.m_size = 4096;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 16000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "128 ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA128;
    break;
 
   default:
@@ -105,7 +146,8 @@ std::vector<int> PlatformParamHolder::GetFirmwareSizes(void)
  for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
  {
   PlatformParamHolder params((EECUPlatform)i);
-  sizes.push_back(params.GetFlashParameters().m_total_size);
+  if (sizes.end()==std::find(sizes.begin(), sizes.end(), params.GetFlashParameters().m_total_size)) //already exists?
+   sizes.push_back(params.GetFlashParameters().m_total_size);
  }
  return sizes;
 }
@@ -124,13 +166,28 @@ bool PlatformParamHolder::GetPlatformIdByFirmwareSize(int fwSize, EECUPlatform& 
  return false; //error
 }
 
+bool PlatformParamHolder::GetPlatformIdByFirmwareMagic(const BYTE* p_buff, int fwSize, EECUPlatform& o_platform)
+{
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  if (0==strncmp(params.GetFlashParameters().m_magic, (const char*)(p_buff + fwSize - PLATFORM_MN_SIZE), PLATFORM_MN_SIZE))
+  {
+   o_platform = (EECUPlatform)i;
+   return true;
+  }
+ }
+ return false; //error
+}
+
 std::vector<int> PlatformParamHolder::GetEEPROMSizes(void)
 {
  std::vector<int> sizes;
  for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
  {
   PlatformParamHolder params((EECUPlatform)i);
-  sizes.push_back(params.GetEepromParameters().m_size);
+  if (sizes.end()==std::find(sizes.begin(), sizes.end(), params.GetEepromParameters().m_size)) //already exists?
+   sizes.push_back(params.GetEepromParameters().m_size);
  }
  return sizes;
 }
@@ -141,6 +198,20 @@ bool PlatformParamHolder::GetPlatformIdByEEPROMSize(int fwSize, EECUPlatform& o_
  {
   PlatformParamHolder params((EECUPlatform)i);
   if (fwSize == params.GetEepromParameters().m_size)
+  {
+   o_platform = (EECUPlatform)i;
+   return true;
+  }
+ }
+ return false; //error
+}
+
+bool PlatformParamHolder::GetPlatformIdByEEPROMMagic(const BYTE* p_buff, int fwSize, EECUPlatform& o_platform)
+{
+ for(size_t i = 0; i < EP_NR_OF_PLATFORMS; ++i)
+ {
+  PlatformParamHolder params((EECUPlatform)i);
+  if (0==strncmp(params.GetFlashParameters().m_magic, (const char*)(p_buff + fwSize - PLATFORM_MN_SIZE), PLATFORM_MN_SIZE))
   {
    o_platform = (EECUPlatform)i;
    return true;

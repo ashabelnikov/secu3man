@@ -111,6 +111,7 @@ CControlApp::CControlApp()
 , mp_csection(NULL)
 , m_work_state(false)
 , m_period_distance(0.1f)   //for speed sensor calculations
+, m_quartz_frq(16000000)    //default clock is 16mHz
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -361,7 +362,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  if (0 != speed && 65535 != speed)
  { //speed sensor is used, value is correct
-  float period_s = ((float)speed / 250000.0f); //period in seconds
+  float period_s = ((float)speed / ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f)); //period in seconds
   m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
   if (m_SensorDat.speed > 999.9f)
    m_SensorDat.speed = 999.9f;
@@ -1600,6 +1601,12 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
 void CControlApp::SetProtocolDataMode(bool i_mode)
 {
  mp_pdp->SetMode(i_mode);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::SetQuartzFrq(long frq)
+{
+ m_quartz_frq = frq;
 }
 
 //-----------------------------------------------------------------------

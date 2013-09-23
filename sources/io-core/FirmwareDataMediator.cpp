@@ -1181,8 +1181,9 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* op_values, bool i_original /
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
+ float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = (p_fd->exdata.coil_on_time[i] * 4.0f) / 1000.0f; //convert to ms, discrete = 4us
+  op_values[i] = (p_fd->exdata.coil_on_time[i] * discrete) / 1000.0f; //convert to ms
 }
 
 void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
@@ -1197,8 +1198,9 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
+ float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / 4.0);
+  p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
 
 void CFirmwareDataMediator::GetCTSCurveMap(float* op_values, bool i_original /* = false */)

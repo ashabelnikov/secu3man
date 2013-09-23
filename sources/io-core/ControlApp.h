@@ -87,6 +87,7 @@ class IOCORE_API CControlApp
   bool Terminate(void);
   void SwitchOn(bool state, bool i_force_reinit = false);
   void SetProtocolDataMode(bool i_mode);
+  void SetQuartzFrq(long frq);
   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
   bool ChangeContext(const BYTE i_new_descriptor);
   bool StartBootLoader();
@@ -143,6 +144,7 @@ class IOCORE_API CControlApp
   PacketDataProxy* mp_pdp;
 
   float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
+  long m_quartz_frq;                    //MCU clock frequency
 
   //helper
   void SwitchOnThread(bool state);

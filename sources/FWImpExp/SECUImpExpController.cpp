@@ -71,8 +71,11 @@ int SECU3ImportController::DoImport(void)
  {
   m_secu3_file_name = file_name;
   EECUPlatform platform_id;
-  if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
-   return IDCANCEL; //error
+  if (!PlatformParamHolder::GetPlatformIdByFirmwareMagic(&buffer[0], selected_size, platform_id))
+  {
+   if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
+    return IDCANCEL; //error
+  }
   PlatformParamHolder params(platform_id);
   m_fwdm = new CFirmwareDataMediator(params.GetFlashParameters());
   m_fwdm->LoadBytes(&buffer[0]);
@@ -233,8 +236,11 @@ int SECU3ExportController::DoExport(void)
   m_secu3_file_name = file_name;  //save file name
   m_secu3_file_path = file_path;  //save file path
   EECUPlatform platform_id;
-  if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
-   return IDCANCEL; //error
+  if (!PlatformParamHolder::GetPlatformIdByFirmwareMagic(&buffer[0], selected_size, platform_id))
+  {
+   if (!PlatformParamHolder::GetPlatformIdByFirmwareSize(selected_size, platform_id))
+    return IDCANCEL; //error
+  }
   PlatformParamHolder params(platform_id);
   m_fwdm = new CFirmwareDataMediator(params.GetFlashParameters());
   m_fwdm->LoadBytes(&buffer[0]);

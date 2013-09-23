@@ -71,8 +71,11 @@ int EEPROMImportController::DoImport(void)
  {
   m_eeprom_file_name = file_name;
   EECUPlatform platform_id;
-  if (!PlatformParamHolder::GetPlatformIdByEEPROMSize(selected_size, platform_id))
-   return IDCANCEL; //error
+  if (!PlatformParamHolder::GetPlatformIdByEEPROMMagic(&buffer[0], selected_size, platform_id))
+  {
+   if (!PlatformParamHolder::GetPlatformIdByEEPROMSize(selected_size, platform_id))
+    return IDCANCEL; //error
+  }
   PlatformParamHolder params(platform_id);
   m_eedm = new EEPROMDataMediator(params.GetEepromParameters());
   m_eedm->LoadBytes(&buffer[0]);

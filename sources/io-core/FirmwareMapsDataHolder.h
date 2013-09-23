@@ -21,8 +21,8 @@
 
 #pragma once
 
-#include "common/unicodesupport.h"
 #include <vector>
+#include "common/unicodesupport.h"
 
 //определ€ем количество узлов интерпол€ции дл€ каждой функции
 #define F_WRK_POINTS_F         16
