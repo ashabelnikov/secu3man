@@ -9,7 +9,7 @@ What to do in relation to SECU-3 manager software:
 
 1. Unicode support in Chart2D and Chart3D DLLs.
 
-2. Tab stop mechanism does not work in UOZ1 and UOZ2 DLLs.
+[2.] Tab stop mechanism does not work in UOZ1 and UOZ2 DLLs.
 
 3. Display log reading errror (remove VERIFY).
 
