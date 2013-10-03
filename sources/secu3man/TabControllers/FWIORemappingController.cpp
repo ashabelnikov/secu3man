@@ -290,6 +290,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IGN_OUT2, true);
   mp_view->EnableInversion(FWDM::IOS_IGN_OUT2, true);
@@ -303,6 +305,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IGN_OUT3, true);
   mp_view->EnableInversion(FWDM::IOS_IGN_OUT3, true);
@@ -316,6 +320,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IGN_OUT4, true);
   mp_view->EnableInversion(FWDM::IOS_IGN_OUT4, true);
@@ -336,6 +342,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_DIR, _T("SM_DIR"));     //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_STP, _T("SM_STP"));     //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ADD_IO1, true);
   mp_view->EnableInversion(FWDM::IOS_ADD_IO1, true);
@@ -356,6 +364,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_DIR, _T("SM_DIR"));     //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_STP, _T("SM_STP"));     //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ADD_IO2, true);
   mp_view->EnableInversion(FWDM::IOS_ADD_IO2, true);
@@ -373,6 +383,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_DIR, _T("SM_DIR"));         //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_STP, _T("SM_STP"));         //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECF, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ECF, true);
   mp_view->EnableInversion(FWDM::IOS_ECF, true);
@@ -390,6 +402,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
   mp_view->EnableInversion(FWDM::IOS_ST_BLOCK, true);
@@ -407,6 +421,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_DIR, _T("SM_DIR"));          //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_STP, _T("SM_STP"));          //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));    //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IE, true);
   mp_view->EnableInversion(FWDM::IOS_IE, true);
@@ -424,6 +440,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_DIR, _T("SM_DIR"));          //appeared in v1.2
    mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_STP, _T("SM_STP"));          //appeared in v1.2
   }
+  if (iov >= FWDM::IOV_V16)
+   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));    //appeared in v1.6
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_FE, true); 
   mp_view->EnableInversion(FWDM::IOS_FE, true);
@@ -451,6 +469,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_STP, _T("SM_STP"));
+   if (iov >= FWDM::IOV_V16)
+    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_CE, _T("NONE"));
    mp_view->EnableItem(FWDM::IOS_CE, true);
    mp_view->EnableInversion(FWDM::IOS_CE, true);
@@ -465,6 +485,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_DIR, _T("SM_DIR"));
    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_STP, _T("SM_STP"));
+   if (iov >= FWDM::IOV_V16)
+    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_BL, _T("NONE"));
    mp_view->EnableItem(FWDM::IOS_BL, true);
    mp_view->EnableInversion(FWDM::IOS_BL, true);
@@ -479,6 +501,8 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_STP, _T("SM_STP"));
+   if (iov >= FWDM::IOV_V16)
+    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_DE, _T("NONE"));
    mp_view->EnableItem(FWDM::IOS_DE, true);
    mp_view->EnableInversion(FWDM::IOS_DE, true);
