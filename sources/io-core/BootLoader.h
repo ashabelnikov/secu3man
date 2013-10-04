@@ -97,7 +97,7 @@ class AFX_EXT_CLASS CBootLoader
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
   enum {BL_SIGNATURE_STR_LEN = 24};
-  enum {EEPROM_WR_DELAY_MULTIPLIER = 3};
+  enum {EEPROM_WR_DELAY_MULTIPLIER = 8};
   enum {FLASH_PG_ERASE_DELAY = 30};
 
   enum //список поддерживаемых команд
