@@ -148,7 +148,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
  int opcode = 0, i = 0, j = 0, k = 0;
  int block_size,total_size,current;
  BYTE symbol = 0;  //для принятия символа '<'
- BYTE raw[2048];   //хватит с запасом для любой меги
+ BYTE raw[4096+8]; //хватит с запасом для любой меги
  BYTE t_buf[1024];
  BYTE* fw_buf = &p_boot->m_fw_buf[0];
 #define FLASH_PAGE_SIZE_S (p_boot->m_ppf.m_page_size)
@@ -323,7 +323,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
    //=========================================================================================
    case BL_OP_READ_EEPROM:    //чтение EEPROM
-    p_boot->m_ErrorCode = 0;  //перед выполнение новой команды необходимо сбросить ошибки
+    p_boot->m_ErrorCode = 0;  //перед выполнением новой команды необходимо сбросить ошибки
     symbol = 0;
     block_size = (EEPROM_SIZE_S*2)/EEPROM_RD_BLOCKS;
     total_size = (EEPROM_SIZE_S*2)+1+2;   //1 byte - '<' + 2 bytes - CS
