@@ -94,7 +94,7 @@ BOOL CChokePageDlg::OnInitDialog()
 
  m_sm_steps_num_edit.SetLimitText(4);
  m_sm_steps_num_spin.SetBuddy(&m_sm_steps_num_edit);
- m_sm_steps_num_spin.SetRangeAndDelta(50, 1000, 1);
+ m_sm_steps_num_spin.SetRangeAndDelta(50, 2000, 1);
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
