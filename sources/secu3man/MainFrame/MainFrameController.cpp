@@ -96,7 +96,7 @@ void MainFrameController::OnAppAbout()
 
 void MainFrameController::OnAppDevSite()
 {
- ShellExecute(NULL, _T("open"), _T("http://www.secu-3.org"), NULL, NULL, SW_SHOWNORMAL);
+ ShellExecute(NULL, _T("open"), _T("http://secu-3.org"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppDevForum()

@@ -706,6 +706,8 @@ BEGIN
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Позволяет проверить работу заслонки. Заслонка выставляется в начальное положение и затем начинает полностью открываться и закрываться (пока нажата кнопка)."
     IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT "Кол-во шагов ШД между полностью закрытым и открытым положениями ВЗ"
     IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Изменение положения ВЗ вручную. После первого нажатия на кнопку система входит в ручной режим управл. ВЗ, который будет действовать до выкл. зажигания."
+    IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В."
+    IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В. Поставьте 0, если используется концевик."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1465,6 +1467,8 @@ BEGIN
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Allows to check working of choke. Choke is being set to initial position and after it is being opened and closed (while button is pressed)."
     IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT "Number of SM steps between fully closed and fully opend positions of choke"
     IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Manual choke control. System will enter manual control mode after first click, this mode will be active while ignition is ON"
+    IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V."
+    IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V. Set to zero if limit switch is used."
 END
 
 STRINGTABLE DISCARDABLE 

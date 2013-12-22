@@ -188,6 +188,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
