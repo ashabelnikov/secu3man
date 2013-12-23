@@ -20,6 +20,7 @@
 */
 
 #include "stdafx.h"
+#include <dbt.h>
 #include "Resources/resource.h"
 #include "MainFrame.h"
 #include "common/DPIAware.h"
@@ -51,6 +52,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_FULL_SCREEN, OnUpdateOnFullScreen)
  ON_WM_ACTIVATEAPP()
+ ON_WM_DEVICECHANGE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -287,6 +289,11 @@ void CMainFrame::setOnGetInitialPos(EventHandler2 i_OnGetInitialPos)
  m_OnGetInitialPos = i_OnGetInitialPos;
 }
 
+void CMainFrame::setOnPortDevArrived(EventHandler3 i_OnPortDevArrived)
+{
+ m_OnPortDevArrived = i_OnPortDevArrived;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -422,4 +429,18 @@ bool CMainFrame::_UpdateTopLevelMainMenu(void)
 CDVDeskDlg* CMainFrame::GetDVDesk(void)
 {
  return mp_DVDeskDlg.get();
+}
+
+BOOL CMainFrame::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
+{
+ if (DBT_DEVICEARRIVAL==nEventType)
+ {
+  if (DBT_DEVTYP_PORT==((DEV_BROADCAST_HDR*)dwData)->dbch_devicetype)
+  {
+   DEV_BROADCAST_PORT* pPort = (DEV_BROADCAST_PORT*)dwData;
+   if (m_OnPortDevArrived)
+    m_OnPortDevArrived(_TSTRING(pPort->dbcp_name));
+  } 
+ }
+ return TRUE;
 }

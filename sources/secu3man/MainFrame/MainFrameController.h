@@ -62,6 +62,9 @@ class MainFrameController : public IAPPEventHandler
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);
 
+  //called when new port device arrived
+  void OnPortDevArrived(const _TSTRING& devName);
+
   CRect _GetScreenRect(void) const;
 
   //You have to call this function before using of this controller!

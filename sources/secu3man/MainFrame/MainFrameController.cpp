@@ -82,6 +82,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnCreate(MakeDelegate(this, &MainFrameController::OnCreate));
  mp_view->addOnClose(MakeDelegate(this, &MainFrameController::OnClose));
  mp_view->setOnGetInitialPos(MakeDelegate(this, &MainFrameController::OnGetInitialPos));
+ mp_view->setOnPortDevArrived(MakeDelegate(this, &MainFrameController::OnPortDevArrived));
 }
 
 MainFrameController::~MainFrameController()
@@ -290,4 +291,14 @@ void MainFrameController::OnGetInitialPos(CPoint& o_point)
 
  //restore remembered position of main winwow
  o_point.x = ws.m_MainFrmWnd_X, o_point.y = ws.m_MainFrmWnd_Y;
+}
+
+void MainFrameController::OnPortDevArrived(const _TSTRING& devName)
+{
+ if (m_pAppSettingsManager->GetSettings()->GetPortName() == devName)
+ {
+  mp_view->BeginWaitCursor();
+  m_pCommunicationManager->Init();
+  mp_view->EndWaitCursor();
+ }
 }

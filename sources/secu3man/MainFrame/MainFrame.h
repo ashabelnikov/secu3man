@@ -33,6 +33,7 @@ class CMainFrame : public CFrameWnd
  typedef fastdelegate::FastDelegate0<bool> EventResult;
  typedef fastdelegate::FastDelegate1<bool> EventHandler1;
  typedef fastdelegate::FastDelegate1<CPoint&> EventHandler2;
+ typedef fastdelegate::FastDelegate1<const _TSTRING&> EventHandler3;
 
  public:
   CMainFrame();
@@ -64,6 +65,7 @@ class CMainFrame : public CFrameWnd
   void setOnFullScreenNotify(EventHandler1 i_OnFullScreenNotify);
   void setOnActivate(EventHandler1 i_OnActivate);
   void setOnCreate(EventHandler i_OnCreate);
+  void setOnPortDevArrived(EventHandler3 i_OnPortDevArrived);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -86,6 +88,7 @@ protected:
   afx_msg void OnFullScreen();
   afx_msg void OnUpdateOnFullScreen(CCmdUI* pCmdUI);
   afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
+  afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -106,6 +109,7 @@ private:
   EventHandler1 m_OnFullScreenNotify;
   EventHandler1 m_OnActivate;
   EventHandler m_OnCreate;
+  EventHandler3 m_OnPortDevArrived;
 
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
