@@ -36,7 +36,7 @@ using namespace fastdelegate;
 const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
 
 const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
-const UINT OutputsCheckEnd = IDC_DEV_DIAG_ADD_O2_CHECK;
+const UINT OutputsCheckEnd = IDC_DEV_DIAG_DE_CHECK;
 const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
 const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
 const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
  ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
+ ON_COMMAND(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnEnableBLDETesting)
  ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
 
  ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
@@ -59,6 +60,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_INPUTS_GROUP, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_START_OUTAUTO_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
 END_MESSAGE_MAP()
@@ -71,6 +73,7 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
 , m_enable_secu3t_features(false)
+, m_enable_blde_testing(false)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -141,6 +144,14 @@ void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
   case IDC_DEV_DIAG_KS_2_CAPTION:
    pCmdUI->Enable(m_enable_diag_controls && m_enable_secu3t_features);
    break;
+  case IDM_DEV_DIAG_ENABLE_BLDE_TST:
+   pCmdUI->SetCheck(m_enable_blde_testing);  
+   pCmdUI->Enable(m_enable_diag_controls);  
+   break;
+  case IDC_DEV_DIAG_BL_CHECK:
+  case IDC_DEV_DIAG_DE_CHECK:
+   pCmdUI->Enable(m_enable_diag_controls && m_enable_blde_testing);  
+   break;
   default:
    pCmdUI->Enable(m_enable_diag_controls);
  };
@@ -203,6 +214,15 @@ void CDevDiagnostTabDlg::OnStopOutputsAutoTesting()
   m_on_stop_outauto_tst();
 }
 
+void CDevDiagnostTabDlg::OnEnableBLDETesting()
+{
+ UINT state = mp_ContextMenuManager->GetParentMenu().GetMenuState(IDM_DEV_DIAG_ENABLE_BLDE_TST, MF_BYCOMMAND);
+ ASSERT(state != 0xFFFFFFFF);
+ m_enable_blde_testing = (state & MF_CHECKED) ? false : true; //toggle
+ if (m_on_enable_blde_tst)
+  m_on_enable_blde_tst(m_enable_blde_testing);
+}
+
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
 {
  m_enable_diag_controls = i_enable;
@@ -224,6 +244,17 @@ void CDevDiagnostTabDlg::EnableSECU3TFeatures(bool i_enable)
  UpdateDialogControls(this,TRUE);
 }
 
+void CDevDiagnostTabDlg::EnableBLDETesting(bool i_enable)
+{
+ m_enable_blde_testing = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
+bool CDevDiagnostTabDlg::IsBLDETestingEnabled(void)
+{
+ return m_enable_blde_testing;
+}
+
 void CDevDiagnostTabDlg::setOnOutputToggle(EventOutputToggle OnFunction)
 {
  m_on_output_check = OnFunction;
@@ -242,6 +273,11 @@ void CDevDiagnostTabDlg::setOnStartOutAutoTesting(EventHandler OnFunction)
 void CDevDiagnostTabDlg::setOnStopOutAutoTesting(EventHandler OnFunction)
 {
  m_on_stop_outauto_tst = OnFunction;
+}
+
+void CDevDiagnostTabDlg::setOnEnableBLDETesting(EventFlag OnFunction)
+{
+ m_on_enable_blde_tst = OnFunction;
 }
 
 void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)

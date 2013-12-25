@@ -33,6 +33,7 @@ class CDevDiagnostTabDlg : public CTabDialog
 {
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate1<bool> EventFlag;
   typedef fastdelegate::FastDelegate2<int, bool> EventOutputToggle;
 
  public:
@@ -45,6 +46,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   void setOnEnterButton(EventHandler OnFunction);
   void setOnStartOutAutoTesting(EventHandler OnFunction);
   void setOnStopOutAutoTesting(EventHandler OnFunction);
+  void setOnEnableBLDETesting(EventFlag OnFunction);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
@@ -55,6 +57,8 @@ class CDevDiagnostTabDlg : public CTabDialog
   void EnableDiagControls(bool i_enable);
   void EnableEnterButton(bool i_enable);
   void EnableSECU3TFeatures(bool i_enable);
+  void EnableBLDETesting(bool i_enable);
+  bool IsBLDETestingEnabled(void);
 
   //IDs for outputs
   enum 
@@ -70,6 +74,8 @@ class CDevDiagnostTabDlg : public CTabDialog
    OID_ST_BLOCK,
    OID_ADD_IO1,
    OID_ADD_IO2,
+   OID_BL,       //3-state output
+   OID_DE        //3-state output
   };
 
  protected:
@@ -85,6 +91,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnDestroy();
   afx_msg void OnStartOutputsAutoTesting();
   afx_msg void OnStopOutputsAutoTesting();
+  afx_msg void OnEnableBLDETesting();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -99,10 +106,12 @@ class CDevDiagnostTabDlg : public CTabDialog
   EventHandler m_on_enter_button;
   EventHandler m_on_start_outauto_tst;
   EventHandler m_on_stop_outauto_tst;
+  EventFlag m_on_enable_blde_tst;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;
   bool m_enable_secu3t_features;
+  bool m_enable_blde_testing;
   SECU3IO::DiagInpDat m_inputValues;
   CFont m_textFont;
 };

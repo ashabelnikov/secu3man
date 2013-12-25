@@ -51,6 +51,8 @@ void CDiagnostContextMenuManager::CreateContent(void)
 
  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_START_OUTAUTO_TST,MLL::LoadString(IDS_DEV_DIAG_START_OUTAUTO_TST));
  m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_STOP_OUTAUTO_TST,MLL::LoadString(IDS_DEV_DIAG_STOP_OUTAUTO_TST));
+ m_ParentMenu.AppendMenu(MF_SEPARATOR);
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_DEV_DIAG_ENABLE_BLDE_TST,MLL::LoadString(IDS_DEV_DIAG_ENABLE_BLDE_TST));
 }
 
 //показывает контекстное меню
@@ -141,4 +143,9 @@ void CDiagnostContextMenuManager::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOO
   }
   state.m_nIndexMax = nCount;
  }//for
+}
+
+CMenu& CDiagnostContextMenuManager::GetParentMenu(void)
+{
+ return m_ParentMenu;
 }

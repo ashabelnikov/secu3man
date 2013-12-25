@@ -61,11 +61,14 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   void OnEnterButton(void);
   void OnStartOutputsAutoTesting(void);
   void OnStopOutputsAutoTesting(void);
+  void OnEnableBLDETesting(bool enable);
 
   void OnTstTimer(void);
   void UpdateOutputs(void);
   void SetOutputValue(int id, bool state);
  private:
+  void _SetOuptutMapItem(int id, bool state);
+
   CDevDiagnostTabDlg*  mp_view;
   CCommunicationManager* mp_comm;
   CStatusBarManager*  mp_sbar;

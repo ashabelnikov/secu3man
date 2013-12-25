@@ -67,6 +67,8 @@ class TstMode1 : public ITstMode
    m_items.push_back(CDevDiagnostTabDlg::OID_ECF);
    m_items.push_back(CDevDiagnostTabDlg::OID_ADD_IO1);
    m_items.push_back(CDevDiagnostTabDlg::OID_ADD_IO2);
+   m_items.push_back(CDevDiagnostTabDlg::OID_BL);
+   m_items.push_back(CDevDiagnostTabDlg::OID_DE);
   }
 
   virtual void Reset(void)
@@ -137,10 +139,12 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  mp_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
  mp_view->setOnStartOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStartOutputsAutoTesting));
  mp_view->setOnStopOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStopOutputsAutoTesting));
+ mp_view->setOnEnableBLDETesting(MakeDelegate(this,&CDevDiagnostTabController::OnEnableBLDETesting));
 
  m_tst_timer.SetMsgHandler(this, &CDevDiagnostTabController::OnTstTimer);
 
  memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat));
+ //Assosiate output state variables with IDs
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT1, &m_outputs.ign_out1));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT2, &m_outputs.ign_out2));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_IGN_OUT3, &m_outputs.ign_out3));
@@ -152,6 +156,8 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ST_BLOCK, &m_outputs.st_block));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO1, &m_outputs.add_io1));
  m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_ADD_IO2, &m_outputs.add_io2));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_BL, &m_outputs.bl));
+ m_outputs_map.insert(std::make_pair(CDevDiagnostTabDlg::OID_DE, &m_outputs.de));
 
  //Init test framework
  m_tstModes.push_back(new TstMode1(MakeDelegate(this, &CDevDiagnostTabController::SetOutputValue), MakeDelegate(this, &CDevDiagnostTabController::UpdateOutputs)));
@@ -174,11 +180,12 @@ void CDevDiagnostTabController::OnSettingsChanged(void)
 //from MainTabController
 void CDevDiagnostTabController::OnActivate(void)
 {
- memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0
+ memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0, 3-state outputs = HiZ
  m_comm_state = 0;
  m_diagnost_mode_active = false;
  mp_view->EnableEnterButton(false);
  mp_view->EnableDiagControls(false);
+ mp_view->EnableBLDETesting(false);
  mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
 
  //////////////////////////////////////////////////////////////////
@@ -349,9 +356,7 @@ void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 
 void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
- if (m_outputs_map.find(output_id) != m_outputs_map.end())
-  *m_outputs_map[output_id] = state;
-
+ _SetOuptutMapItem(output_id, state);
  UpdateOutputs(); //send outputs states to device
 }
 
@@ -390,6 +395,13 @@ void CDevDiagnostTabController::OnStopOutputsAutoTesting(void)
  UpdateOutputs();
 }
 
+void CDevDiagnostTabController::OnEnableBLDETesting(bool enable)
+{
+ SetOutputValue(CDevDiagnostTabDlg::OID_BL, false);
+ SetOutputValue(CDevDiagnostTabDlg::OID_DE, false);
+ UpdateOutputs();
+}
+
 void CDevDiagnostTabController::OnTstTimer(void)
 {
  if (!(*m_current_tst_mode)->Next())
@@ -402,24 +414,33 @@ void CDevDiagnostTabController::OnTstTimer(void)
 
 void CDevDiagnostTabController::UpdateOutputs(void)
 {
-  mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
+ mp_comm->m_pControlApp->SendPacket(DIAGOUT_DAT, &m_outputs);
 }
 
 void CDevDiagnostTabController::SetOutputValue(int id, bool state)
 {
  if (id == -1) //all
  {
-  for(int i = CDevDiagnostTabDlg::OID_IGN_OUT1; i <= CDevDiagnostTabDlg::OID_ADD_IO2; ++i)
+  for(int i = CDevDiagnostTabDlg::OID_IGN_OUT1; i <= CDevDiagnostTabDlg::OID_DE; ++i)
   {
    mp_view->SetOutputValue(i, state);
-   if (m_outputs_map.find(i) != m_outputs_map.end())
-    *m_outputs_map[i] = state;
+   _SetOuptutMapItem(i, state);
   }
  }
  else //single
  {
   mp_view->SetOutputValue(id, state);
-  if (m_outputs_map.find(id) != m_outputs_map.end())
-   *m_outputs_map[id] = state;
+  _SetOuptutMapItem(id, state);
  }
+}
+
+void CDevDiagnostTabController::_SetOuptutMapItem(int id, bool state)
+{
+ if (m_outputs_map.find(id) == m_outputs_map.end())
+  return;
+  
+ if (CDevDiagnostTabDlg::OID_BL==id || CDevDiagnostTabDlg::OID_DE==id)
+  *m_outputs_map[id] = mp_view->IsBLDETestingEnabled() ? ((int)state)+1 : 0; //logic level or HiZ
+ else
+  *m_outputs_map[id] = state;
 }

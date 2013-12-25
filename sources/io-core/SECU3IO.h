@@ -281,6 +281,8 @@ namespace SECU3IO
   int st_block;                         //starter blocking
   int add_io1;                          //additional output 1
   int add_io2;                          //additional output 2
+  int bl;                               //BL, 3-state output (0 - hiZ, 1 - "0", 2 - "1")
+  int de;                               //DE, 3-state output (0 - hiZ, 1 - "0", 2 - "1")
  };
 
  struct ChokePar

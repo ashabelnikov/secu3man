@@ -31,6 +31,8 @@ class CDiagnostContextMenuManager
   void CreateContent(void);
   void TrackPopupMenu(int x, int y);
 
+  CMenu& GetParentMenu(void);
+
   //Надо вызывать когда окну приходит WM_INITMENUPOPUP
   void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 

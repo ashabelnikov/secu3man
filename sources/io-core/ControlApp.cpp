@@ -1955,6 +1955,11 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
  ((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
  ((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
 
+ if (packet_data->bl!=0)
+  bits|= ((packet_data->bl==2) << 11) | (1 << 12);
+ if (packet_data->de!=0)
+  bits|= ((packet_data->de==2) << 13) | (1 << 14);
+ 
  mp_pdp->Bin16ToHex(bits, m_outgoing_packet);
 }
 
