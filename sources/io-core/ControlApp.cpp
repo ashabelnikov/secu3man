@@ -288,6 +288,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temperature,true))
   return false;
  m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.temperat = MathHelpers::RestrictValue(m_SensorDat.temperat, -99.9f, 999.0f);
 
  //Текущий УОЗ (число со знаком)
  int adv_angle = 0;

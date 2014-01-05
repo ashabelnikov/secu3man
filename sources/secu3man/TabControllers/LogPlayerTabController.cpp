@@ -328,6 +328,8 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  if (fileName.empty() && open.DoModal() != IDOK)
   return; //пользователь передумал
 
+ mp_log_reader->SetSeparatingSymbol(mp_settings->GetCSVSepSymbol());
+
  LogReader::FileError error_id;
  _TSTRING file_path = fileName.empty() ? open.GetPathName().GetBuffer(0) : fileName;
  bool result = mp_log_reader->OpenFile(file_path, error_id);
