@@ -28,6 +28,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 
 BEGIN_MESSAGE_MAP(CLMDeskDlg, CDialog)
+ ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 const UINT CLMDeskDlg::IDD = IDD_LOG_MARKS_DESK;
@@ -39,15 +40,18 @@ CLMDeskDlg::CLMDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CLMDeskDlg::IDD, pParent)
 , m_enabled(-1)
 {
- //empty
+ for(int i = 0; i < KEY_COUNT; ++i)
+  m_key_flags[i] = false;
+ m_key_str[0] = _T("   Ctrl+1   "); m_key_colors[0] = RGB(255, 0, 0);
+ m_key_str[1] = _T("   Ctrl+2   "); m_key_colors[1] = RGB(0, 255, 0);
+ m_key_str[2] = _T("   Ctrl+3   "); m_key_colors[2] = RGB(0, 0, 255);
 }
 
 void CLMDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_LOG_MARKS_K1, m_key_text[0]);
- DDX_Control(pDX, IDC_LOG_MARKS_K2, m_key_text[1]);
- DDX_Control(pDX, IDC_LOG_MARKS_K3, m_key_text[2]);
+ for(int i = 0; i < KEY_COUNT; ++i)
+  DDX_Control(pDX, IDC_LOG_MARKS_K1+i, m_key_text[i]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -59,14 +63,32 @@ BOOL CLMDeskDlg::OnInitDialog()
  m_enabled = -1; //reset cache flag
 
  //create a tooltip control and assign tooltips
-// mp_ttc.reset(new CToolTipCtrlEx());
-// VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
-// mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
-// mp_ttc->ActivateToolTips(true);
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(this, MLL::GetString(IDS_LOG_MARKS_DESK_TT)));
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  Enable(false);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+HBRUSH CLMDeskDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
+{
+ if (nCtlColor == CTLCOLOR_STATIC)
+ {
+  for(int i = 0; i < KEY_COUNT; ++i)
+  {
+   if (m_key_flags[i] && pWnd->GetDlgCtrlID() == IDC_LOG_MARKS_K1+i)
+   {
+    pDC->SetTextColor(RGB(255, 255, 0));
+    pDC->SetBkColor(m_key_colors[i]);
+    return (HBRUSH)GetStockObject(NULL_BRUSH);
+   }
+  }
+ }
+ return CDialog::OnCtlColor(pDC, pWnd, nCtlColor); 
 }
 
 //разрешение/запрещение приборов
@@ -75,9 +97,8 @@ void CLMDeskDlg::Enable(bool enable)
  if (((int)enable) == m_enabled)
   return; //already has needed state
  m_enabled = enable;
- m_key_text[0].EnableWindow(enable);
- m_key_text[1].EnableWindow(enable);
- m_key_text[2].EnableWindow(enable);
+ for(int i = 0; i < KEY_COUNT; ++i)
+  m_key_text[i].EnableWindow(enable);
 }
 
 void CLMDeskDlg::Show(bool show)
@@ -88,13 +109,13 @@ void CLMDeskDlg::Show(bool show)
 
 void CLMDeskDlg::SetValues(bool k1, bool k2, bool k3)
 {
- TCHAR buff[10] = {0};
- _stprintf(buff, _T("%s"), k1 ? _T("Ctrl+1") : _T(""));
- m_key_text[0].SetWindowText(buff);
- _stprintf(buff, _T("%s"), k2 ? _T("Ctrl+2") : _T(""));
- m_key_text[1].SetWindowText(buff);
- _stprintf(buff, _T("%s"), k3 ? _T("Ctrl+3") : _T(""));
- m_key_text[2].SetWindowText(buff);
+ m_key_flags[0] = k1; m_key_flags[1] = k2; m_key_flags[2] = k3;
+ TCHAR buff[16] = {0};
+ for(int i = 0; i < KEY_COUNT; ++i)
+ {
+  _stprintf(buff, _T("%s"), m_key_flags[i] ? m_key_str[i].c_str() : _T(""));
+  m_key_text[i].SetWindowText(buff);
+ }
 }
 
 void CLMDeskDlg::Resize(const CRect& i_rect)

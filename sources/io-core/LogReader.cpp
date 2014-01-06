@@ -34,7 +34,7 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 22
+#define CSV_COUNT_DATA_VAL 23
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11

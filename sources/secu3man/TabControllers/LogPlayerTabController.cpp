@@ -457,6 +457,16 @@ void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_d
 
  if (i_set_slider)
   mp_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
+
+ //Stop playing if mark appears and it is enabled by a check box
+ if (m_curr_marks && mp_view->mp_LPPanelDlg->GetStopOnMarksCheck())
+ {
+  if (mp_view->mp_LPPanelDlg->GetPlayButtonState()) //start
+  {
+   _Play(false);
+   mp_view->mp_LPPanelDlg->SetPlayButtonState(false);
+  }
+ }
 }
 
 void CLogPlayerTabController::_UpdateTimerPeriod(bool i_set_timer)

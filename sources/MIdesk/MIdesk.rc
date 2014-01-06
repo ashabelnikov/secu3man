@@ -108,14 +108,14 @@ BEGIN
     CTEXT           "",IDC_CE_DESK_15,240,4,13,10,SS_SUNKEN | SS_NOTIFY
 END
 
-IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 12
+IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 11
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_STATICEDGE
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
-    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
-    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,9,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,9,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,9,SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -148,6 +148,7 @@ BEGIN
     IDS_MI_ADD_I2_TITLE     "Вход 2"
     IDS_MI_ADD_I1_TT        "Напряжение на входе ADD_IO1"
     IDS_MI_ADD_I2_TT        "Напряжение на входе ADD_IO2"
+    IDS_LOG_MARKS_DESK_TT   "Пользовательские маркеры в логе"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -274,14 +275,14 @@ BEGIN
     CTEXT           "",IDC_CE_DESK_15,240,4,13,10,SS_SUNKEN | SS_NOTIFY
 END
 
-IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 12
+IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 11
 STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_STATICEDGE
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
-    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
-    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,9,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,9,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,9,SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -314,6 +315,7 @@ BEGIN
     IDS_MI_ADD_I2_TITLE     "Input 2"
     IDS_MI_ADD_I1_TT        "Voltage at the ADD_IO1 input"
     IDS_MI_ADD_I2_TT        "Voltage at the ADD_IO2 input"
+    IDS_LOG_MARKS_DESK_TT   "User's markers in the log"
 END
 
 STRINGTABLE DISCARDABLE 

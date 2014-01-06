@@ -57,6 +57,7 @@ void CLPControlPanelDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_INDICATOR, m_position_indicator);
  DDX_Control(pDX, IDC_LOG_PLAYER_OPEN_FILE_BUTTON, m_open_file_button);
  DDX_Control(pDX, IDC_LOG_PLAYER_POSITION_SLIDER, m_slider);
+ DDX_Control(pDX, IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, m_stoponmarks_check);
 }
 
 BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
@@ -66,6 +67,7 @@ BEGIN_MESSAGE_MAP(CLPControlPanelDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_POSITION_SLIDER, OnUpdateSlider)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_TIME_FACTOR_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX, OnUpdateControls)
  ON_BN_CLICKED(IDC_LOG_PLAYER_OPEN_FILE_BUTTON, OnOpenFileButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_PLAY_BUTTON, OnPlayButton)
  ON_BN_CLICKED(IDC_LOG_PLAYER_NEXT_BUTTON, OnNextButton)
@@ -327,4 +329,9 @@ unsigned long CLPControlPanelDlg::GetSliderPageSize(void) const
 void CLPControlPanelDlg::SetSliderPageSize(unsigned long i_page_size)
 {
  m_slider.SetPageSize(i_page_size);
+}
+
+bool CLPControlPanelDlg::GetStopOnMarksCheck(void)
+{
+ return m_stoponmarks_check.GetCheck() == BST_CHECKED;
 }

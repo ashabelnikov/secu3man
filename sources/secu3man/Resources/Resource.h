@@ -339,3 +339,4 @@
 #define ID_APP_LOG_MARK1                4357
 #define ID_APP_LOG_MARK2                4358
 #define ID_APP_LOG_MARK3                4359
+#define IDC_LOG_PLAYER_STOPONMARKS_CHECKBOX 4360

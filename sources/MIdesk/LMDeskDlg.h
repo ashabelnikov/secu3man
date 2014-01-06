@@ -48,13 +48,18 @@ class AFX_EXT_CLASS CLMDeskDlg : public CModelessDialog
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg HBRUSH OnCtlColor( CDC* pDC, CWnd* pWnd, UINT nCtlColor );
   DECLARE_MESSAGE_MAP()
 
  private:
+  enum { KEY_COUNT = 3 };           //number of marker keys
+
   int  m_enabled;
-  CStatic m_key_text[3];
-  
-  //std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  CStatic m_key_text[KEY_COUNT];    //controls
+  _TSTRING m_key_str[KEY_COUNT];    //strings
+  bool m_key_flags[KEY_COUNT];      //state flags
+  COLORREF m_key_colors[KEY_COUNT]; //colors
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 
 /////////////////////////////////////////////////////////////////////////////

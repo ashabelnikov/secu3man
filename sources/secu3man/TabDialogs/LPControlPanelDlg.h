@@ -67,6 +67,7 @@ class CLPControlPanelDlg : public CModelessDialog
   void SetSliderLineSize(unsigned long i_line_size);
   unsigned long GetSliderPageSize(void) const;
   void SetSliderPageSize(unsigned long i_page_size);
+  bool GetStopOnMarksCheck(void);
 
   //indicators
   void SetFileIndicator(const _TSTRING& i_string);
@@ -103,6 +104,7 @@ private:
   CButton m_next_button;
   CButton m_prev_button;
   CButton m_open_file_button;
+  CButton m_stoponmarks_check;
   CSliderCtrl m_slider;
   CStatic m_file_indicator;
   CStatic m_position_indicator;
