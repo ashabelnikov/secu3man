@@ -27,19 +27,19 @@
 class CToolTipCtrlEx;
 
 /////////////////////////////////////////////////////////////////////////////
-// CCEDeskDlg dialog
+// CLMDeskDlg dialog
 
-class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
+class AFX_EXT_CLASS CLMDeskDlg : public CModelessDialog
 {
   typedef CModelessDialog Super;
 
  public:
-  CCEDeskDlg(CWnd* pParent = NULL);   // standard constructor
+  CLMDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
 
   void Show(bool show);
   void Enable(bool enable);
-  void SetValues(WORD errors);
+  void SetValues(bool k1, bool k2, bool k3);
 
   //изменение размеров окна
   void Resize(const CRect& i_rect);
@@ -52,10 +52,9 @@ class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
 
  private:
   int  m_enabled;
-  CStatic m_ce_errors[16];
-  CStatic m_ce_text;
+  CStatic m_key_text[3];
   
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  //std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 
 /////////////////////////////////////////////////////////////////////////////

@@ -27,6 +27,7 @@
 #include "ui-core/TabDialog.h"
 
 class CCEDeskDlg;
+class CLMDeskDlg;
 class CLPControlPanelDlg;
 class CMIDeskDlg;
 class COScopeCtrl;
@@ -53,6 +54,7 @@ class CLogPlayerTabDlg : public CTabDialog
 
  public:
   std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
+  std::auto_ptr<CLMDeskDlg> mp_LMDeskDlg;
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CLPControlPanelDlg> mp_LPPanelDlg;
 

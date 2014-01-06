@@ -98,3 +98,7 @@
 #define IDS_MI_ADD_I2_TT                2098
 #define IDS_MI_KM                       2099
 #define IDS_MI_KM_H                     2100
+#define IDD_LOG_MARKS_DESK              2101
+#define IDC_LOG_MARKS_K1                2102
+#define IDC_LOG_MARKS_K2                2103
+#define IDC_LOG_MARKS_K3                2104

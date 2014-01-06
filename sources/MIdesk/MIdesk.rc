@@ -108,6 +108,15 @@ BEGIN
     CTEXT           "",IDC_CE_DESK_15,240,4,13,10,SS_SUNKEN | SS_NOTIFY
 END
 
+IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 12
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+EXSTYLE WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Ctrl+1",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
+    CTEXT           "Ctrl+2",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
+    CTEXT           "Ctrl+3",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -263,6 +272,16 @@ BEGIN
     CTEXT           "",IDC_CE_DESK_13,212,4,13,10,SS_SUNKEN | SS_NOTIFY
     CTEXT           "",IDC_CE_DESK_14,226,4,13,10,SS_SUNKEN | SS_NOTIFY
     CTEXT           "",IDC_CE_DESK_15,240,4,13,10,SS_SUNKEN | SS_NOTIFY
+END
+
+IDD_LOG_MARKS_DESK DIALOGEX 0, 0, 152, 12
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
+EXSTYLE WS_EX_STATICEDGE
+FONT 8, "MS Sans Serif"
+BEGIN
+    CTEXT           "Ctrl+1",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
+    CTEXT           "Ctrl+2",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
+    CTEXT           "Ctrl+3",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////

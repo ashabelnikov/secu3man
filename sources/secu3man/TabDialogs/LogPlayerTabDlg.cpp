@@ -26,6 +26,7 @@
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
 #include "LPControlPanelDlg.h"
+#include "MIDesk/LMDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/CEDeskDlg.h"
 #include "ui-core/OScopeCtrl.h"
@@ -43,6 +44,7 @@ END_MESSAGE_MAP()
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CLogPlayerTabDlg::IDD, pParent)
 , mp_CEDeskDlg(new CCEDeskDlg())
+, mp_LMDeskDlg(new CLMDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , mp_OScopeCtrl(new COScopeCtrl())
@@ -96,6 +98,12 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  ScreenToClient(rect);
  mp_LPPanelDlg->Create(CLPControlPanelDlg::IDD, this);
  mp_LPPanelDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ 
+ GetDlgItem(IDC_LP_LOG_MARKS_DESK_HOLDER)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_LMDeskDlg->Create(CLMDeskDlg::IDD, this);
+ mp_LMDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
+ mp_LMDeskDlg->Show(true);
 
  //инициализируем осциллограф
  _InitializeOscilloscopeControl();

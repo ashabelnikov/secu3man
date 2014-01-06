@@ -28,6 +28,7 @@ set(HEADERS
   IMIView.h
   StdAfx.h
   IRSView.h
+  LMDeskDlg.h
   MIAirFlow.h
   MIDeskDlg.h
   MIDwellAngle.h
@@ -48,6 +49,7 @@ set(HEADERS
 set (SOURCES
   CEDeskDlg.cpp
   DVDeskDlg.cpp
+  LMDeskDlg.cpp
   MIAirFlow.cpp
   MIDeskDlg.cpp
   MIDesk.cpp

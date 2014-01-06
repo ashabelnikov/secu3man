@@ -362,6 +362,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 
  mp_view->mp_MIDeskDlg->Enable(true);
  mp_view->mp_CEDeskDlg->Enable(true);
+ mp_view->mp_LMDeskDlg->Enable(true);
  mp_view->mp_LPPanelDlg->EnableAll(true);
  mp_view->mp_OScopeCtrl->EnableWindow(true);
 
@@ -501,6 +502,7 @@ void CLogPlayerTabController::_ClosePlayer(void)
  mp_view->mp_LPPanelDlg->SetSliderPosition(0);
  mp_view->mp_MIDeskDlg->Enable(false);
  mp_view->mp_CEDeskDlg->Enable(false);
+ mp_view->mp_LMDeskDlg->Enable(false);
  mp_view->mp_LPPanelDlg->EnableAll(false);
  mp_view->mp_OScopeCtrl->EnableWindow(false);
  m_timer.KillTimer();
