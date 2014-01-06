@@ -23,6 +23,10 @@ BEGIN
     BEGIN
         MENUITEM "Начать запись         Ctrl + B", ID_APP_BEGIN_LOG
         MENUITEM "Закончить запись   Ctrl + E", ID_APP_END_LOG
+        MENUITEM SEPARATOR 
+        MENUITEM "Вставить метку 1    Ctrl + 1", ID_APP_LOG_MARK1
+        MENUITEM "Вставить метку 2    Ctrl + 2", ID_APP_LOG_MARK2
+        MENUITEM "Вставить метку 3    Ctrl + 3", ID_APP_LOG_MARK3
     END
     POPUP "&Help"
     BEGIN
@@ -216,7 +220,7 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",SS_BLACKFRAME,16,150,153,64
-    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,16,216,125,14
+    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,16,218,125,14
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
     CONTROL         "",IDC_LP_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
     CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,195,238,20
@@ -562,6 +566,10 @@ BEGIN
     BEGIN
         MENUITEM "Begin writing         Ctrl + B", ID_APP_BEGIN_LOG
         MENUITEM "End writing            Ctrl + E", ID_APP_END_LOG
+        MENUITEM SEPARATOR 
+        MENUITEM "Insert mark 1    Ctrl + 1", ID_APP_LOG_MARK1
+        MENUITEM "Insert mark 2    Ctrl + 2", ID_APP_LOG_MARK2
+        MENUITEM "Insert mark 3    Ctrl + 3", ID_APP_LOG_MARK3
     END
     POPUP "&Help"
     BEGIN
@@ -753,7 +761,7 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "",IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",SS_BLACKFRAME,16,150,153,64
-    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,16,216,125,14    
+    CONTROL         "",IDC_LP_LOG_MARKS_DESK_HOLDER,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,16,218,125,14    
     CONTROL         "",IDC_LP_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
     CONTROL         "",IDC_LP_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,376,192
     CONTROL         "",IDC_LP_CEDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,195,238,20
@@ -869,6 +877,9 @@ BEGIN
     "F",            ID_FULL_SCREEN,         VIRTKEY, CONTROL, NOINVERT
     "O",            IDM_OPEN_FLASH,         VIRTKEY, CONTROL, NOINVERT
     "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
+    "1",            ID_APP_LOG_MARK1,       VIRTKEY, CONTROL, NOINVERT
+    "2",            ID_APP_LOG_MARK2,       VIRTKEY, CONTROL, NOINVERT
+    "3",            ID_APP_LOG_MARK3,       VIRTKEY, CONTROL, NOINVERT
 END
 
 /////////////////////////////////////////////////////////////////////////////

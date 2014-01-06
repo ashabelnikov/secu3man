@@ -31,6 +31,7 @@
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/CEDeskDlg.h"
+#include "MIDesk/LMDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
@@ -403,7 +404,7 @@ void CLogPlayerTabController::_GoBack(void)
 
 void CLogPlayerTabController::_GetRecord(void)
 {
- bool status = mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second);
+ bool status = mp_log_reader->GetRecord(m_curr_record.first, m_curr_record.second, m_curr_marks);
  if (!status)
  {
   AfxMessageBox(MLL::LoadString(IDS_LP_FILE_READ_ERROR), MB_OK);
@@ -509,6 +510,7 @@ void CLogPlayerTabController::_ClosePlayer(void)
  mp_log_reader->CloseFile();
  mp_view->mp_LPPanelDlg->SetPositionIndicator(_T(""));
  mp_view->ResetKnockOscilloscope();
+ mp_view->mp_LMDeskDlg->SetValues(false, false, false);
 }
 
 void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
@@ -518,6 +520,9 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 
  //обновляем ошибки
  mp_view->mp_CEDeskDlg->SetValues(m_curr_record.second.ce_errors);
+
+ //Обновляем метки лога
+ mp_view->mp_LMDeskDlg->SetValues(m_curr_marks & 0x1, m_curr_marks & 0x2, m_curr_marks & 0x4);
 
  //выводим время записи
  CString string;

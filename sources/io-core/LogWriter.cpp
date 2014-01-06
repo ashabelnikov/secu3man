@@ -43,6 +43,7 @@ LogWriter::LogWriter()
 : m_is_busy(false)
 , m_out_handle(NULL)
 , m_csv_separating_symbol(',')
+, m_pending_marks(0)
 {
  SetSeparatingSymbol(m_csv_separating_symbol);
 }
@@ -94,8 +95,9 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->choke_pos,
                         p_sensors->speed,
                         p_sensors->distance,
-                        0,
+                        m_pending_marks,
                         ce_errors);
+  m_pending_marks = 0; //reset after injection
  }
 }
 
@@ -151,4 +153,12 @@ void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
  sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+}
+
+bool LogWriter::InjectMarks(int marks)
+{
+ if (!m_is_busy)
+  return false;
+ m_pending_marks|= (marks & 7); //value must not be above 7
+ return true;
 }

@@ -45,6 +45,9 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Separating symbol for CSV
   void SetSeparatingSymbol(char i_sep_symbol);
 
+  //marks variable contains bits: 0, 1, 2, so possible values are 0-7
+  bool InjectMarks(int marks);
+
  public:
 
   //через эти обработчики данные поступают в механизм записи
@@ -61,4 +64,6 @@ class IOCORE_API LogWriter : public IAPPEventHandler
 
   char m_csv_separating_symbol;
   char m_csv_data_template[1024];
+
+  int m_pending_marks;
 };

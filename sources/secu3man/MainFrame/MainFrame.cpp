@@ -47,10 +47,16 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_SETTINGS, OnAppSettings)
  ON_COMMAND(ID_APP_BEGIN_LOG, OnAppBeginLog)
  ON_COMMAND(ID_APP_END_LOG, OnAppEndLog)
+ ON_COMMAND(ID_APP_LOG_MARK1, OnAppLogMark1)
+ ON_COMMAND(ID_APP_LOG_MARK2, OnAppLogMark2)
+ ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
  ON_COMMAND(ID_FULL_SCREEN, OnFullScreen)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_FULL_SCREEN, OnUpdateOnFullScreen)
+ ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
+ ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK2,OnUpdateOnAppEndLog)
+ ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK3,OnUpdateOnAppEndLog)
  ON_WM_ACTIVATEAPP()
  ON_WM_DEVICECHANGE()
 END_MESSAGE_MAP()
@@ -294,6 +300,11 @@ void CMainFrame::setOnPortDevArrived(EventHandler3 i_OnPortDevArrived)
  m_OnPortDevArrived = i_OnPortDevArrived;
 }
 
+void CMainFrame::setOnAppLogMark(EventHandler4 i_OnFunction)
+{
+ m_OnAppLogMark = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -341,6 +352,24 @@ void CMainFrame::OnAppEndLog()
 {
  if (m_OnAppEndLog)
   m_OnAppEndLog();
+}
+
+void CMainFrame::OnAppLogMark1()
+{
+ if (m_OnAppLogMark)
+  m_OnAppLogMark(1);
+}
+
+void CMainFrame::OnAppLogMark2()
+{
+ if (m_OnAppLogMark)
+  m_OnAppLogMark(2);
+}
+
+void CMainFrame::OnAppLogMark3()
+{
+ if (m_OnAppLogMark)
+  m_OnAppLogMark(4);
 }
 
 void CMainFrame::OnUpdateOnAppBeginLog(CCmdUI* pCmdUI)

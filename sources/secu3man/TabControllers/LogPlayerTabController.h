@@ -123,6 +123,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   typedef std::pair<SYSTEMTIME, SECU3IO::SensorDat> RECORD_INFO;
   RECORD_INFO m_prev_record;
   RECORD_INFO m_curr_record;
+  int m_curr_marks;
 
   //сохраняет период таймера на время работы со слайдером
   unsigned long m_period_before_tracking;

@@ -34,6 +34,7 @@ class CMainFrame : public CFrameWnd
  typedef fastdelegate::FastDelegate1<bool> EventHandler1;
  typedef fastdelegate::FastDelegate1<CPoint&> EventHandler2;
  typedef fastdelegate::FastDelegate1<const _TSTRING&> EventHandler3;
+ typedef fastdelegate::FastDelegate1<int> EventHandler4;
 
  public:
   CMainFrame();
@@ -66,6 +67,7 @@ class CMainFrame : public CFrameWnd
   void setOnActivate(EventHandler1 i_OnActivate);
   void setOnCreate(EventHandler i_OnCreate);
   void setOnPortDevArrived(EventHandler3 i_OnPortDevArrived);
+  void setOnAppLogMark(EventHandler4 i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -83,6 +85,9 @@ protected:
   afx_msg void OnAppSettings();
   afx_msg void OnAppBeginLog();
   afx_msg void OnAppEndLog();
+  afx_msg void OnAppLogMark1();
+  afx_msg void OnAppLogMark2();
+  afx_msg void OnAppLogMark3();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnFullScreen();
@@ -110,6 +115,7 @@ private:
   EventHandler1 m_OnActivate;
   EventHandler m_OnCreate;
   EventHandler3 m_OnPortDevArrived;
+  EventHandler4 m_OnAppLogMark;
 
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;

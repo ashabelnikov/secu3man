@@ -49,7 +49,7 @@ class IOCORE_API LogReader
   bool IsOpened(void) const;
 
   //получает данные из текущей записи
-  bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data);
+  bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks);
 
   //Перемещение к следующей записи
   //возвращает false если достигнут конец записей

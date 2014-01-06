@@ -336,3 +336,6 @@
 #define IDM_DEV_DIAG_ENABLE_BLDE_TST    4354
 #define IDS_DEV_DIAG_ENABLE_BLDE_TST    4355
 #define IDC_LP_LOG_MARKS_DESK_HOLDER    4356
+#define ID_APP_LOG_MARK1                4357
+#define ID_APP_LOG_MARK2                4358
+#define ID_APP_LOG_MARK3                4359

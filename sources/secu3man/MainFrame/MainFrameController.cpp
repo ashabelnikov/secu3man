@@ -83,6 +83,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->addOnClose(MakeDelegate(this, &MainFrameController::OnClose));
  mp_view->setOnGetInitialPos(MakeDelegate(this, &MainFrameController::OnGetInitialPos));
  mp_view->setOnPortDevArrived(MakeDelegate(this, &MainFrameController::OnPortDevArrived));
+ mp_view->setOnAppLogMark(MakeDelegate(this, &MainFrameController::OnAppLogMark));
 }
 
 MainFrameController::~MainFrameController()
@@ -171,6 +172,11 @@ void MainFrameController::OnAppEndLog()
  m_pCommunicationManager->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_pLogWriter->EndLogging();
  m_pStatusBarManager->SetLoggerState(CStatusBarManager::LOG_STATE_STOPPED);
+}
+
+void MainFrameController::OnAppLogMark(int mark)
+{
+ m_pLogWriter->InjectMarks(mark);
 }
 
 bool MainFrameController::IsBeginLoggingAllowed(void)

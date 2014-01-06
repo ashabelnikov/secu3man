@@ -115,7 +115,7 @@ bool LogReader::IsOpened(void) const
  return (m_file_handle != NULL);
 }
 
-bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
+bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks)
 {
  char string[MAX_REC_BUF + 1];
 
@@ -201,6 +201,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data)
  o_data.choke_pos = choke_pos;
  o_data.speed = speed;
  o_data.distance = distance;
+ o_marks = log_mark;  //save log marks
 
  //все прочитано без ошибок
  return true;

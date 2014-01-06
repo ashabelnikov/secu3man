@@ -113,9 +113,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_STATICEDGE
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "Ctrl+1",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
-    CTEXT           "Ctrl+2",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
-    CTEXT           "Ctrl+3",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -279,9 +279,9 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS
 EXSTYLE WS_EX_STATICEDGE
 FONT 8, "MS Sans Serif"
 BEGIN
-    CTEXT           "Ctrl+1",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
-    CTEXT           "Ctrl+2",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
-    CTEXT           "Ctrl+3",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K1,7,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K2,57,1,35,10,SS_SUNKEN
+    CTEXT           "",IDC_LOG_MARKS_K3,107,1,35,10,SS_SUNKEN
 END
 
 /////////////////////////////////////////////////////////////////////////////
