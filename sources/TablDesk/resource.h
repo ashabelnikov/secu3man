@@ -58,4 +58,9 @@
 #define IDC_RGE_EDIT_15                 5058
 #define IDC_RGE_LOAD_DEF_VAL            5059
 #define IDC_RGE_ERROR_MSG_TEXT          5060
-
+#define IDB_GRID_UP                     5061
+#define IDB_GRID_DOWN                   5062
+#define IDB_GRID_FOCUSED                5063
+#define IDB_GRID_DISABLED               5064
+#define IDC_TD_RPM_GRID_BUTTON          5065
+#define IDS_TD_RPM_GRID_BUTTON_TT       5066

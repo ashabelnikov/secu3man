@@ -60,6 +60,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,105,82,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
+    CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
+                    BS_BITMAP | WS_TABSTOP,3,127,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
@@ -140,6 +142,7 @@ BEGIN
     IDS_TD_VIEW_DWELL_CONTROL_TT "Редактирование таблицы времени накопления энергии КЗ"
     IDS_CHOKE_OP_UNIT       "Закрытие воздушной заслонки (%)"
     IDS_CHOKE_OP_MAP        "Настройка положения воздушной заслонки от температуры"
+    IDS_TD_RPM_GRID_BUTTON_TT "Изменение сетки оборотов для таблиц УОЗ ХХ и рабочего режима."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -201,6 +204,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,105,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
+    CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
+                    BS_BITMAP | WS_TABSTOP,3,127,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
     CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
@@ -267,6 +272,11 @@ IDB_CALC_DOWN           BITMAP     "calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "calc_disabled.bmp"
 
+IDB_GRID_UP             BITMAP     "grid_up.bmp"
+IDB_GRID_DOWN           BITMAP     "grid_down.bmp"
+IDB_GRID_FOCUSED        BITMAP     "grid_focused.bmp"
+IDB_GRID_DISABLED       BITMAP     "grid_disabled.bmp"
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -291,4 +301,5 @@ BEGIN
     IDS_TD_VIEW_DWELL_CONTROL_TT "Edit dwell control lookup table"
     IDS_CHOKE_OP_UNIT       "Choke closing (%)"
     IDS_CHOKE_OP_MAP        "Tune choke position as function of temperature"
+    IDS_TD_RPM_GRID_BUTTON_TT "Alter RPM grid for afvance angle maps of idle and work modes."
 END

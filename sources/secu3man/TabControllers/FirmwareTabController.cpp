@@ -127,6 +127,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
  m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
  m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
+ m_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
  m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
@@ -1008,7 +1009,7 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
 }
 
 //вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен.
-//В этом случае данная функция может выхываться и при закрытой вкладке.
+//В этом случае данная функция может вызываться и при закрытой вкладке.
 void CFirmwareTabController::OnMapChanged(int i_type)
 {
  switch(i_type)

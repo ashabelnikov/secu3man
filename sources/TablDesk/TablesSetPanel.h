@@ -37,6 +37,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   typedef CButtonsPanel Super;
   typedef fastdelegate::FastDelegate2<int,CString> EventWithCodeAndString;
   typedef fastdelegate::FastDelegate2<int,float> EventWithCodeAndFloat;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
   CTablesSetPanel(CWnd* pParent = NULL);   // standard constructor
@@ -65,6 +66,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
   void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
+  void setOnRPMGridEditButton(EventHandler OnFunction);
 
 // Implementation
  protected:
@@ -75,6 +77,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewCTSCurveMap();
   afx_msg void OnViewChokeOpMap();
   afx_msg void OnDwellCalcButton();
+  afx_msg void OnRPMGridButton();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -93,11 +96,13 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_cts_curve_map_btn;
   CButton   m_view_choke_op_map_btn;
   CBitmapButton m_calc_dwell_btn;
+  CBitmapButton m_rpm_grid_btn;
 
  private:
   EventWithCode m_OnFunSetSelectionChanged;
   EventWithCodeAndString m_OnFunSetNamechanged;
   EventWithCodeAndFloat m_OnCTSXAxisEditChanged;
+  EventHandler m_OnRPMGridEditButton;
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
