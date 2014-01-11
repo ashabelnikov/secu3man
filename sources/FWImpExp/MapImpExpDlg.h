@@ -25,6 +25,9 @@
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 
+
+class CToolTipCtrlEx;
+
 //типы флажков определ€ющих какие данные перемещать
 enum EFWDFlags
 {
@@ -113,4 +116,6 @@ class CMapImpExpDlg : public CDialog
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventResult m_IsExchengeButtonAllowed;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

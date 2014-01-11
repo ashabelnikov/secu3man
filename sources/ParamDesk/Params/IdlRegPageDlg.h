@@ -26,6 +26,9 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+#include <memory>
+
+class CToolTipCtrlEx;
 
 class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -69,4 +72,6 @@ class CIdlRegPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_restriction_max_edit;
   CSpinButtonCtrlEx m_turn_on_temp_spin;
   CEditEx m_turn_on_temp_edit;
+    
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

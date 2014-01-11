@@ -26,6 +26,9 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+#include <memory>
+
+class CToolTipCtrlEx;
 
 class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -87,4 +90,6 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_ai2_correction_spin;
   CEditEx m_ai2_factor_edit;
   CEditEx m_ai2_correction_edit;
+  
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

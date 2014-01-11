@@ -23,6 +23,7 @@
 #include "Resources/resource.h"
 #include "MiscPageDlg.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
@@ -168,6 +169,15 @@ BOOL CMiscPageDlg::OnInitDialog()
  FillUARTSpeedComboBox(br); //инициализируем комбо бокс
 
  UpdateData(FALSE);  //инициализируем контроллы диалога данными
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_check, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_edit, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_spin, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 	           // EXCEPTION: OCX Property Pages should return FALSE

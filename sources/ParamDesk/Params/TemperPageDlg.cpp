@@ -23,6 +23,8 @@
 #include "Resources/resource.h"
 #include "TemperPageDlg.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
+
 
 const UINT CTemperPageDlg::IDD = IDD_PD_TEMPER_PAGE;
 const float TEMP_HYSTERESIS = 0.25f;
@@ -126,6 +128,20 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_vent_off_threshold_spin.SetRangeAndDelta(-10.0f,125.0f,0.2f);
 
  UpdateData(FALSE);
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_use_temp_sensor, MLL::GetString(IDS_PD_TEMPER_USE_TEMP_SENSOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_vent_pwm, MLL::GetString(IDS_PD_TEMPER_USE_VENT_PWM_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_curve_map, MLL::GetString(IDS_PD_TEMPER_USE_CURVE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_spin, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_spin, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
+
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE

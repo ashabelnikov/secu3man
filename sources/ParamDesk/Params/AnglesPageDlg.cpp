@@ -23,6 +23,7 @@
 #include "Resources/resource.h"
 #include "AnglesPageDlg.h"
 #include "ui-core/DDX_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
 
@@ -145,8 +146,21 @@ BOOL CAnglesPageDlg::OnInitDialog()
  m_increase_spead_edit.SetLimitText(4);
  m_increase_spead_edit.SetDecimalPlaces(2);
  m_increase_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
-
+ 
  UpdateData(FALSE);
+ 
+  //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_spin, MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_edit, MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_spin, MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_edit, MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_zeroaa_check, MLL::GetString(IDS_PD_ANGLES_ZEROAA_CHECK_TT)));
+ 
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE

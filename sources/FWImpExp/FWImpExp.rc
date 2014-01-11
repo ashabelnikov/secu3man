@@ -77,6 +77,12 @@ BEGIN
 END
 
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+	IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
+	IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -150,4 +156,10 @@ BEGIN
     IDS_OPEN_FILE_FOR_EXPORT "Open file for export"
     IDS_IMPORT_SECU3_TABLES_EE "Import tables from SECU-3 EEPROM"
     IDS_FILE_WRONG_CRC      "Warning! File you are opening has wrong check sum. Do you want to continue?"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+	IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
+	IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
 END

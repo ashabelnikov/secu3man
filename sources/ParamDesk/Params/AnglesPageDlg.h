@@ -26,6 +26,9 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+#include <memory>
+
+class CToolTipCtrlEx;
 
 class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -65,4 +68,6 @@ class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_decrease_spead_edit;
   CEditEx m_increase_spead_edit;
   CButton m_zeroaa_check;
+  
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -26,6 +26,9 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+#include <memory>
+
+class CToolTipCtrlEx;
 
 class CTemperPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -73,4 +76,6 @@ class CTemperPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_vent_off_threshold_spin;
   CEditEx m_vent_off_threshold_edit;
   CEditEx m_vent_on_threshold_edit;
+    
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

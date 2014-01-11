@@ -29,6 +29,9 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+
+class CToolTipCtrlEx;
+
 class CMiscPageDlg : public CTabDialog, public ParamPageEvents
 {
   typedef CTabDialog Super;
@@ -89,4 +92,7 @@ class CMiscPageDlg : public CTabDialog, public ParamPageEvents
   bool m_hall_output_enabled;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
+  
+    
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
