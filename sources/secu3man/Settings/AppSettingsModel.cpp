@@ -277,7 +277,7 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[1].first.second.c_str(),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[3].first.second.c_str(),read_str,255,IniFileName);
 
  if (!CheckAllowablePlatform(read_str, m_optECUPlatformType))
  {
