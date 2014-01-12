@@ -310,7 +310,7 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,_T("0"),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,_T("1"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
  if (i_val != 0 && i_val != 1)
