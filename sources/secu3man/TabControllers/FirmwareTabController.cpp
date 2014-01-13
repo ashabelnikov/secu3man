@@ -878,7 +878,11 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  std::vector<BYTE> buff_container(m_fpp.m_total_size, 0);
  BYTE *buff = &buff_container[0];
  _TSTRING opened_file_name = _T("");
-
+ 
+ if (!m_comm->m_pBootLoader->IsIdle())
+  if (!AskUserAboutTabLeaving())
+   return;
+  
  bool is_continue = CheckChangesAskAndSaveFirmware();
  if (!is_continue)
   return;  //пользователь передумал
