@@ -41,8 +41,8 @@ class CTabController::TabPageData
 IMPLEMENT_DYNAMIC(CTabController, CTabCtrl)
 
 BEGIN_MESSAGE_MAP(CTabController, CTabCtrl)
- ON_NOTIFY_REFLECT_EX(TCN_SELCHANGE, OnSelchangeTabctl)
- ON_NOTIFY_REFLECT_EX(TCN_SELCHANGING, OnSelchangingTabctl)
+ ON_NOTIFY_REFLECT(TCN_SELCHANGE, OnSelchangeTabctl)
+ ON_NOTIFY_REFLECT(TCN_SELCHANGING, OnSelchangingTabctl)
  ON_WM_SIZE()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -53,7 +53,6 @@ END_MESSAGE_MAP()
 CTabController::CTabController()
 : m_tab_item_index(0)
 , mp_CurDlg(NULL)
-, m_msg_reflect(TRUE)
 , m_tcmn(4) //magic number
 , m_pEventHandler(NULL)
 , m_hResourceModule(NULL)
@@ -244,7 +243,7 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
  return m_tab_item_index++;
 }
 
-BOOL CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+void CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 {
  //отображение выбранной вкладки вкладки
  CreateTabPage();
@@ -253,15 +252,13 @@ BOOL CTabController::OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult)
   m_pEventHandler->OnSelchangeTabctl();
 
  *pResult = 0;
- return m_msg_reflect;
 }
 
-BOOL CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
+void CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 {
  // Figure out index of new tab we are about to go to, as opposed
  // to the current one we're at. Believe it or not, Windows doesn't
  // pass this info
- //
  TC_HITTESTINFO htinfo;
  GetCursorPos(&htinfo.pt);
  ScreenToClient(&htinfo.pt);
@@ -271,14 +268,19 @@ BOOL CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
   *pResult = TRUE; // tab disabled: prevent selection
  else
  {
+  bool result = true;
   if (m_pEventHandler)
-   m_pEventHandler->OnSelchangingTabctl();
-
-  //удаление предыдущей вкладки
-  DestroyTabPage();
-  *pResult = 0;
+   result = m_pEventHandler->OnSelchangingTabctl();
+   
+  if (result)
+  {
+   //удаление предыдущей вкладки
+   DestroyTabPage();
+   *pResult = 0;
+  }
+  else
+   *pResult = TRUE; //not allowed by listener
  }
- return m_msg_reflect;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -502,33 +504,19 @@ int CTabController::PrevEnabledTab(int iCurrentTab, BOOL bWrap)
 bool CTabController::SetCurSel(UINT iNewTab)
 {
  //=====================================================================
- if (m_pEventHandler&&(!m_msg_reflect))  //если не поставить проверку !m_msg_reflect то хэндлер будет вызываться второй раз
-  m_pEventHandler->OnSelchangingTabctl(); //Send event!
+ if (m_pEventHandler)
+  if (!m_pEventHandler->OnSelchangingTabctl()) //Send event!
+   return false; //not allowed by listener
  //=====================================================================
-
- // send the parent TCN_SELCHANGING
- NMHDR nmh;
- nmh.hwndFrom = m_hWnd;
- nmh.idFrom = GetDlgCtrlID();
- nmh.code = TCN_SELCHANGING;
-
- if (m_msg_reflect)
-  GetParent()->SendMessage(WM_NOTIFY, nmh.idFrom, (LPARAM)&nmh);
 
  DestroyTabPage(); //удаление предыдущей вкладки
  int previos_selected_item = CTabCtrl::SetCurSel(iNewTab); //выбор новой вкладки
  CreateTabPage(); //отображение новой - выбранной вкладки
 
  //=====================================================================
- if (m_pEventHandler&&(!m_msg_reflect))
+ if (m_pEventHandler)
   m_pEventHandler->OnSelchangeTabctl(); //Send event!
  //=====================================================================
-
- // send to parent TCN_SELCHANGE
- nmh.code = TCN_SELCHANGE;
-
- if (m_msg_reflect)
-  GetParent()->SendMessage(WM_NOTIFY, nmh.idFrom, (LPARAM)&nmh);
 
  return true;
 }
@@ -582,11 +570,6 @@ void CTabController::SetEventListener(ITabControllerEvent* i_listener)
 {
  ASSERT(i_listener);
  m_pEventHandler = i_listener;
-}
-
-void CTabController::SetMsgReflection(bool reflect)
-{
- m_msg_reflect = reflect;
 }
 
 void CTabController::SetResourceModule(HMODULE hModule)

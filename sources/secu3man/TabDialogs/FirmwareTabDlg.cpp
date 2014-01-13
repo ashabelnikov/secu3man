@@ -625,11 +625,12 @@ void CFirmwareTabDlg::OnSelchangeTabctl(void)
  if (index < m_tabs.size())
   m_tabs[index].first->Show(true); //show current window
 }
-void CFirmwareTabDlg::OnSelchangingTabctl(void)
+bool CFirmwareTabDlg::OnSelchangingTabctl(void)
 {
  size_t index = TabCtrl_GetCurSel(m_param_sel_tab.m_hWnd);
  if (index < m_tabs.size())
   m_tabs[index].first->Show(false); //hide previous window
+ return true;
 }
 
 void CFirmwareTabDlg::setOnBootLoaderInfo(EventHandler OnFunction)

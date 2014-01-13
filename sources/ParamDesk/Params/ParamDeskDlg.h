@@ -111,7 +111,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
  private:
   // ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
-  virtual void OnSelchangingTabctl(void);
+  virtual bool OnSelchangingTabctl(void);
 
   void OnChangeInTab(void);
   int  _GetTabIndex(unsigned i_descriptor);

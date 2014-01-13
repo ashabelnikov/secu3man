@@ -419,9 +419,9 @@ void CTablesDeskDlg::OnSelchangeTabctl(void)
   m_OnTabActivate();
 }
 
-void CTablesDeskDlg::OnSelchangingTabctl(void)
+bool CTablesDeskDlg::OnSelchangingTabctl(void)
 {
- //empty
+ return true; //allow change of tab
 }
 
 //------------------------------------------------------------------------

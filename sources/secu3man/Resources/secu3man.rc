@@ -534,6 +534,7 @@ BEGIN
     IDS_PM_SHOW_RAW_SENSORS_TT "Показать значения напряжений на датчиках"
     IDS_FW_VIEW_FWOPT_TT    "Просмотр опций с которыми скомпилирована прошивка"
     IDS_ASK_USER_ABOUT_VREF_COMP "Программа определила что загружаемые данные возможно использовались в прошивке с другим опорным напряжением АЦП.\n Пересчитать поправочные коэффициенты АЦП?"
+    IDS_FW_LEAVE_TAB_WARNING "Выполняется важная операция, если вы ее прервете, то данные блока SECU-3 могут стать некорректными.\nВы уверены что хотите продолжить?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1105,6 +1106,7 @@ BEGIN
     IDS_LOG_PLAYER_TIME_FACTOR_COMBO_TT "Control playback speed"
     IDS_LOG_PLAYER_POSITION_SLIDER_TT "Records scrolling"
     IDS_ASK_USER_ABOUT_VREF_COMP "Software has detected that data being loading was using by firmware with different ADC reference voltage.\n Do you want to recalculate ADC compensation factors?"
+    IDS_FW_LEAVE_TAB_WARNING "Important operation is in process, if you will interrupt it, then data in the SECU-3 unit may become invalid.\nAre you sure you want to proceed?"
 END
 
 STRINGTABLE DISCARDABLE 

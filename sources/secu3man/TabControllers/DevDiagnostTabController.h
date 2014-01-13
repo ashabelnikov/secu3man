@@ -50,6 +50,7 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   virtual bool OnClose(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
+  virtual bool OnAskChangeTab(void);
 
   //from IAPPEventHandler:
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);

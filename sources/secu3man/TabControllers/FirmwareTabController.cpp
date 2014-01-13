@@ -59,6 +59,11 @@ bool AskUserAboutVrefCompensation(void)
  return (IDYES == AfxMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
 }
 
+bool AskUserAboutTabLeaving(void)
+{
+ return (IDYES==AfxMessageBox(MLL::LoadString(IDS_FW_LEAVE_TAB_WARNING), MB_YESNO|MB_DEFBUTTON2));
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -799,6 +804,10 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CHOKE_OP), TYPE_MAP_CHOKE_OP);
 
+ if (!m_comm->m_pBootLoader->IsIdle())
+  if (!AskUserAboutTabLeaving())
+   return false;
+
  return CheckChangesAskAndSaveFirmware();
 }
 
@@ -810,6 +819,13 @@ bool CFirmwareTabController::OnAskFullScreen(void)
 void CFirmwareTabController::OnFullScreen(bool i_what, const CRect& i_rect)
 {
  //empty
+}
+
+bool CFirmwareTabController::OnAskChangeTab(void)
+{
+ if (m_comm->m_pBootLoader->IsIdle())
+  return true; //allows
+ return AskUserAboutTabLeaving();
 }
 
 void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name)

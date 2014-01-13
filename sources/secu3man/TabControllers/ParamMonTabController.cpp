@@ -256,6 +256,11 @@ void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  mp_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
 }
 
+bool CParamMonTabController::OnAskChangeTab(void)
+{
+ return true; //always allows to change tab
+}
+
 //Событие от чекбокса переключающего режим мониторинга (приборы/сырые данные)
 void CParamMonTabController::OnRawSensorsCheckBox(void)
 {

@@ -205,6 +205,11 @@ void CCheckEngineTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  //empty
 }
 
+bool CCheckEngineTabController::OnAskChangeTab(void)
+{
+ return true; //always allows to change tab
+}
+
 //посльзователь "дернул" чек бокс "—читывать ошибки в реальном времени".
 void CCheckEngineTabController::OnRealTimeErrors(void)
 {

@@ -157,7 +157,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
 
   //ITabControllerEvent interface (from tab control)
   virtual void OnSelchangeTabctl(void);
-  virtual void OnSelchangingTabctl(void);
+  virtual bool OnSelchangingTabctl(void);
 
  private:
   CButton   m_bl_started_emergency;

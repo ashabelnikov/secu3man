@@ -55,6 +55,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   virtual bool OnClose(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
+  virtual bool OnAskChangeTab(void);
 
   void OnRealTimeErrors(void);
   void OnReadSavedErrors(void);

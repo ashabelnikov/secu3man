@@ -52,6 +52,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   virtual bool OnClose(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
+  virtual bool OnAskChangeTab(void);
 
   //события
   void OnSaveParameters(void);

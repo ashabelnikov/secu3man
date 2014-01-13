@@ -46,7 +46,7 @@ class CMainTabController  : public ITabControllerEvent
  private:
   //ITabControllerEvent imp.
   virtual void OnSelchangeTabctl(void);
-  virtual void OnSelchangingTabctl(void);
+  virtual bool OnSelchangingTabctl(void);
 
  private:
   std::vector<ITabController*> m_controllers_list;

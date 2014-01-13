@@ -60,6 +60,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   virtual bool OnClose(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
+  virtual bool OnAskChangeTab(void);
   
   //from view
   void OnRawSensorsCheckBox(void);  //from "show raw sensors" check box  

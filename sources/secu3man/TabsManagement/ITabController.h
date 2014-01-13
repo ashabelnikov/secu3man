@@ -30,4 +30,5 @@ class ITabController
   virtual bool OnClose(void) = 0;
   virtual bool OnAskFullScreen(void) = 0;
   virtual void OnFullScreen(bool i_what, const CRect& i_rect) = 0;
+  virtual bool OnAskChangeTab(void) = 0;
 };

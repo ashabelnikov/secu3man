@@ -204,6 +204,11 @@ void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  mp_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
 }
 
+bool CLogPlayerTabController::OnAskChangeTab(void)
+{
+ return true; //always allows to change tab
+}
+
 void CLogPlayerTabController::OnOpenFileButton(void)
 {
  if (mp_log_reader->IsOpened())

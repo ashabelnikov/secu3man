@@ -336,6 +336,11 @@ void CKnockChannelTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  //empty
 }
 
+bool CKnockChannelTabController::OnAskChangeTab(void)
+{
+ return true; //always allows to change tab
+}
+
 void CKnockChannelTabController::OnSaveParameters(void)
 {
  mp_sbar->SetInformationText(MLL::LoadString(IDS_KC_WRITING_PARAMETERS));

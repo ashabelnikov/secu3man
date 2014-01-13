@@ -489,9 +489,9 @@ void CParamDeskDlg::OnSelchangeTabctl(void)
   m_OnTabActivate();
 }
 
-void CParamDeskDlg::OnSelchangingTabctl(void)
+bool CParamDeskDlg::OnSelchangingTabctl(void)
 {
- //empty
+ return true; //allow changing of tab
 }
 
 void CParamDeskDlg::OnChangeInTab(void)

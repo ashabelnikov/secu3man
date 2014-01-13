@@ -41,10 +41,6 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   //”станавливает модуль, который содержит ресурсы необходимые дл€ работы контролла.
   void SetResourceModule(HMODULE hModule);
 
-  //≈сли reflect - true, то сообщени€ будут перепосылатьс€ родительскому окну,
-  //иначе - нет.
-  void SetMsgReflection(bool reflect);
-
   //ƒобавление вкладок
   int  AddPage(CString name, CTabDialog* pPageDlg);
   int  AddPage(CString name, CTabDialog* pPageDlg, const int nImage);
@@ -65,8 +61,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
  protected:
   // Generated message map functions
-  afx_msg BOOL OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
-  afx_msg BOOL OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult);
+  afx_msg void OnSelchangeTabctl(NMHDR* pNMHDR, LRESULT* pResult);
+  afx_msg void OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
@@ -93,7 +89,6 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   ITabControllerEvent* m_pEventHandler;
 
   int   m_tab_item_index;
-  bool  m_msg_reflect;
   int   m_tcmn;
 };
 

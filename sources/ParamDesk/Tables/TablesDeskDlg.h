@@ -117,7 +117,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
 
   // ITabControllerEvent
   virtual void OnSelchangeTabctl(void);
-  virtual void OnSelchangingTabctl(void);
+  virtual bool OnSelchangingTabctl(void);
 
   void _MakeWindowChild(HWND hwnd, bool child);
   void _RegisterHotKeys(void);

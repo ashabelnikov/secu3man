@@ -28,5 +28,5 @@ class AFX_EXT_CLASS ITabControllerEvent
  ~ITabControllerEvent();
 
   virtual void OnSelchangeTabctl(void) = 0;
-  virtual void OnSelchangingTabctl(void) = 0;
+  virtual bool OnSelchangingTabctl(void) = 0;
 };

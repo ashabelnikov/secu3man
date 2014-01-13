@@ -56,11 +56,14 @@ void CMainTabController::OnSelchangeTabctl(void)
  m_controllers_list[mp_view->GetCurSel()]->OnActivate();
 }
 
-void CMainTabController::OnSelchangingTabctl(void)
+bool CMainTabController::OnSelchangingTabctl(void)
 {
+ if (!m_controllers_list[mp_view->GetCurSel()]->OnAskChangeTab())
+  return false; //current tab controller did not allowed changing of tab
  ASSERT(m_controllers_list.size());
  ASSERT(mp_view);
  m_controllers_list[mp_view->GetCurSel()]->OnDeactivate();
+ return true;
 }
 
 ITabController* CMainTabController::GetActiveController() const

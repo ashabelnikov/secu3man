@@ -354,6 +354,11 @@ void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
  //empty. Not applicable in this tab
 }
 
+bool CDevDiagnostTabController::OnAskChangeTab(void)
+{
+ return true; //always allows to change tab
+}
+
 void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 {
  _SetOuptutMapItem(output_id, state);
