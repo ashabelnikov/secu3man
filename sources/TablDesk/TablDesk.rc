@@ -61,7 +61,7 @@ BEGIN
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,127,16,19
+                    BS_BITMAP | WS_TABSTOP | NOT WS_VISIBLE,3,127,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
@@ -205,7 +205,7 @@ BEGIN
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,105,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,127,16,19
+                    BS_BITMAP | WS_TABSTOP | NOT WS_VISIBLE,3,127,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,127,82,19
     CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
