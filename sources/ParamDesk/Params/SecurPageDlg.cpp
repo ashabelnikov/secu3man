@@ -98,7 +98,7 @@ void CSecurPageDlg::OnUpdateNameAndPass(CCmdUI* pCmdUI)
 
 void CSecurPageDlg::OnUpdateApplyButton(CCmdUI* pCmdUI)
 {
- bool namepass_not_empty = (m_bt_name_edit.LineLength() > 0) && (m_bt_pass_edit.LineLength() > 0);
+ bool namepass_not_empty = (m_bt_name_edit.LineLength() > 0) && (m_bt_pass_edit.LineLength() == 4);
  pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt && namepass_not_empty);
 }
 
