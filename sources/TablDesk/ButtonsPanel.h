@@ -21,10 +21,13 @@
 
 #pragma once
 
+#include <memory>
 #include "common/FastDelegate.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
+
+class CGridModeEditorDlg;
 
 class AFX_EXT_CLASS CButtonsPanel : public CDialog
 {
@@ -56,6 +59,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void UpdateOpenedCharts(void);
   virtual void UpdateOpenedChartsAxisLabels(void);
 
+  std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -71,10 +76,12 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIdleMap();
   afx_msg void OnViewWorkMap();
   afx_msg void OnViewTempMap();
+  afx_msg void OnGridModeEditing();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewWorkMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewTempMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
@@ -95,6 +102,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_temp_map_btn;
   CButton m_view_start_map_btn;
   CButton m_view_idle_map_btn;
+  CButton m_grid_mode_editing_check;
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);

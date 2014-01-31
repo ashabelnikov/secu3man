@@ -23,6 +23,7 @@
 #include "resource.h"
 #include "ButtonsPanel.h"
 #include "DLLLinkedFunctions.h"
+#include "GridModeEditorDlg.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 
@@ -220,6 +221,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_temp_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
+, mp_gridModeEditorDlg(new CGridModeEditorDlg())
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -239,6 +241,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_TEMP_MAP,  m_view_temp_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_START_MAP, m_view_start_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP,  m_view_idle_map_btn);
+ DDX_Control(pDX, IDC_TD_GME_CHECK, m_grid_mode_editing_check);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -246,10 +249,12 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_IDLE_MAP, OnViewIdleMap)
  ON_BN_CLICKED(IDC_TD_VIEW_WORK_MAP, OnViewWorkMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMP_MAP, OnViewTempMap)
+ ON_BN_CLICKED(IDC_TD_GME_CHECK, OnGridModeEditing)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_START_MAP,OnUpdateViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLE_MAP, OnUpdateViewIdleMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_WORK_MAP, OnUpdateViewWorkMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TEMP_MAP, OnUpdateViewTempMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_GME_CHECK, OnUpdateGridModeEditing)
  ON_WM_TIMER()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -400,6 +405,22 @@ void CButtonsPanel::OnViewTempMap()
  }
 }
 
+void CButtonsPanel::OnGridModeEditing()
+{
+ if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
+ {
+  if (!mp_gridModeEditorDlg.get())
+   mp_gridModeEditorDlg.reset(new CGridModeEditorDlg());
+  mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, this);
+  mp_gridModeEditorDlg->ShowWindow(SW_SHOW);
+ }
+ else
+ {
+  mp_gridModeEditorDlg->DestroyWindow();
+  mp_gridModeEditorDlg.reset(NULL);
+ }
+}
+
 void CButtonsPanel::OnUpdateViewStartMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
@@ -430,6 +451,12 @@ void CButtonsPanel::OnUpdateViewTempMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateGridModeEditing(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ pCmdUI->Enable(allowed);
 }
 
 void CButtonsPanel::OnTimer(UINT nIDEvent)

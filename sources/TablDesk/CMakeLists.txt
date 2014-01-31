@@ -25,6 +25,7 @@ set(HEADERS
   ButtonsPanel.h
   DLLLinkedFunctions.h
   DwellCalcDlg.h
+  GridModeEditorDlg.h
   MapIds.h
   resource.h
   RPMGridEditDlg.h
@@ -36,6 +37,7 @@ set(SOURCES
   ButtonsPanel.cpp
   DLLLinkedFunctions.cpp
   DwellCalcDlg.cpp
+  GridModeEditorDlg.cpp
   RPMGridEditDlg.cpp
   StdAfx.cpp
   TablDesk.cpp
