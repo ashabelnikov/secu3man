@@ -42,6 +42,8 @@ using namespace SECU3IO::SECU3Types;
 #define FW_SIGNATURE_INFO_SIZE           48
 #define COIL_ON_TIME_LOOKUP_TABLE_SIZE   32
 #define THERMISTOR_LOOKUP_TABLE_SIZE     16
+#define ATS_CORR_LOOKUP_TABLE_SIZE       16
+#define RPM_GRID_SIZE                    16
 
 #define _BIGEND16(v) ((((v) >> 8) & 0x00FF) | (((v) << 8) & 0xFF00))
 
@@ -65,7 +67,7 @@ using namespace SECU3IO::SECU3Types;
 //Describes all data related to I/O remapping
 typedef struct iorem_slotsv0_t
 {
- _uchar size;                    // size of this structure   
+ _uchar size;                    // size of this structure
  _uchar version;                 // A reserved byte = 0
 
  //Dirty hack. This version of struct actually has no i_slotsi member,
@@ -78,7 +80,7 @@ union {
  //Dirty hack. This version of struct actually has no v_slotsi member,
  //it is necessary for CAST_CDDATA
 union {
- _fnptr_t v_slots[IOREM_SLOTSv0];// data slots            
+ _fnptr_t v_slots[IOREM_SLOTSv0];// data slots
  _fnptr_t v_slotsi[IOREM_SLOTSv0];// data slots           (stub)
 };
 
@@ -110,7 +112,7 @@ typedef struct cd_datav0_t
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
- _uint size;                     // size of this structure   
+ _uint size;                     // size of this structure
  _uchar version;                 // A reserved byte
  _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
  _fnptr_t i_slotsi[IOREM_SLOTS]; // initialization slots (inverted)
@@ -153,7 +155,7 @@ typedef struct
  //used for checking compatibility with management software. Holds size of all data stored in the firmware.
  //Includes CRC size also.
  _uint fw_data_size;
- 
+
  //reserved 32-bit value
  _ulong reserv32;
 
@@ -166,10 +168,25 @@ typedef struct
  //Choke closing versus coolant temperature
  _uchar choke_closing[CHOKE_CLOSING_LOOKUP_TABLE_SIZE];
 
+ //Air temperature sensor lookup table
+ _int ats_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
+ //Voltage corresponding to the beginning of axis
+ _uint ats_vl_begin;
+ //Voltage corresponding to the end of axis
+ _uint ats_vl_end;
+
+ //Air temperature correction of advance angle
+ _char ats_corr[ATS_CORR_LOOKUP_TABLE_SIZE];
+
+ //Points of the RPM grid
+ _int rpm_grid_points[RPM_GRID_SIZE];
+ //Sizes of cells in RPM grid (so, we don't need to calculate them at the runtime)
+ _int rpm_grid_sizes[RPM_GRID_SIZE-1];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[6];
+ _uchar reserved[8];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -233,7 +250,7 @@ class CFirmwareDataMediator::LocInfoProvider
    const size_t FIRMWARE_DATA_START;
    //размер всех данных прошивки без учета байтов контрольной суммы прошивки
    const size_t FIRMWARE_DATA_SIZE;
- }; 
+ };
 
 CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
 : m_firmware_size(i_fpp.m_total_size)

@@ -120,7 +120,7 @@ typedef struct
 
  _int  tps_adc_factor;               // ADC error compensation factor for TPS
  _long tps_adc_correction;           // ADC error compensation correction for TPS
- _int  ai1_adc_factor;               // ADC error compensation factor for ADD_IO1 input 
+ _int  ai1_adc_factor;               // ADC error compensation factor for ADD_IO1 input
  _long ai1_adc_correction;           // ADC error compensation correction for ADD_IO1 input
  _int  ai2_adc_factor;               // ADC error compensation factor for ADD_IO2 input
  _long ai2_adc_correction;           // ADC error compensation correction for ADD_IO2 input
@@ -137,10 +137,16 @@ typedef struct
 
  _uchar hall_flags;                  // Hall sensor flags
 
+ _uint choke_rpm[2];                 //!< Values of RPM needed for RPM-based control of choke position
+ _uchar ibtn_keys[2][6];             //!< iButton keys for immobilizer
+
+ _uchar choke_startup_corr;          //!< Startup correction value for choke
+ _uint choke_rpm_if;                 //!< Integral factor for RPM-based control of choke position (factor * 1024)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2];
+ _uchar reserved[5];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

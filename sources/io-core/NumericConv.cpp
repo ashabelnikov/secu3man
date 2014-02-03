@@ -87,7 +87,7 @@ bool CNumericConv::BinToHexArray(const BYTE* i_buf, BYTE* o_buf, const int size)
  int j=0;
  for(int i = 0; i < size; i++)
  {
-  Bin8ToHex(i_buf[i],&o_buf[j]);	  //сохраняем по 2 символа
+  Bin8ToHex(i_buf[i],&o_buf[j]);          //сохраняем по 2 символа
   j+=2;
  } //for
  return true;

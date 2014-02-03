@@ -106,11 +106,11 @@ class IOCORE_API CFirmwareDataMediator
   //Types of slots/plugs
   enum IOXtype
   {
-   IOX_INIT = 0,             //initialization slot  
+   IOX_INIT = 0,             //initialization slot
    IOX_DATA = 1              //data slot
   };
 
-  //IDs of plugs 
+  //IDs of plugs
   enum IOPid
   {
    IOP_START      =   0,
@@ -155,7 +155,7 @@ class IOCORE_API CFirmwareDataMediator
    IOP_SM_STP     =  25,     // SM_STP      (output)                                 v1.2+
    IOP_MAPSEL0    =  26,     // MAPSEL0     (input)                                  v1.3+
    IOP_SPDSENS    =  27,     // SPD_SENS    (input)                                  v1.5+
-   IOP_INTK_HEAT  =  28,     // INTK_HEAT   (output)                                 v1.6+ 
+   IOP_INTK_HEAT  =  28,     // INTK_HEAT   (output)                                 v1.6+
 // IOP_RESERVED14 =  29,     // Reserved    ()
 // IOP_RESERVED15 =  30,     // Reserved    ()
 // IOP_RESERVED16 =  31,     // Reserved    ()
@@ -170,7 +170,7 @@ class IOCORE_API CFirmwareDataMediator
    IOS_START      =   0,
    IOS_STARTv0    =   0,
    IOS_IGN_OUT1   =   0,     // IGN_OUT1                                             v1.0+
-   IOS_IGN_OUT2   =   1,     // IGN_OUT2                                             v1.0+ 
+   IOS_IGN_OUT2   =   1,     // IGN_OUT2                                             v1.0+
    IOS_IGN_OUT3   =   2,     // IGN_OUT3
    IOS_IGN_OUT3v0 =   2,     // IGN_OUT3
    IOS_IGN_OUT4   =   3,     // IGN_OUT4
@@ -190,7 +190,7 @@ class IOCORE_API CFirmwareDataMediator
    //Added in V1.0:
    IOS_PS         =  10,     // PS          (input)
    IOS_ADD_I1     =  11,     // ADD_IO1     (input)
-   IOS_ADD_I2     =  12,     // ADD_IO2     (input) 
+   IOS_ADD_I2     =  12,     // ADD_IO2     (input)
    IOS_CE         =  13,     // CE                                                   v1.4+
    IOS_BL         =  14,     // Bootloader  (output)                                 v1.4+
    IOS_DE         =  15,     // Def. EEPROM (output)                                 v1.4+
