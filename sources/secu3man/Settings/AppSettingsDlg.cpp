@@ -277,7 +277,7 @@ void CAppSettingsDlg::FillCtrlsWithAllowableECUPlatformTypes(std::vector<std::pa
  {
   int index = m_ecu_platform_selection_combo.AddString(i_AllowableECUPlatformTypes[i].first.first.c_str());
   ASSERT(index != LB_ERR);
-  m_ecu_platform_selection_combo.SetItemData(i_AllowableECUPlatformTypes[i].second, i);
+  m_ecu_platform_selection_combo.SetItemData(i, i_AllowableECUPlatformTypes[i].second);
  }
 }
 
