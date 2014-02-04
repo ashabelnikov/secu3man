@@ -1226,7 +1226,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 7 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1242,6 +1242,26 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
   return false;
  m_ChokePar.manual_delta = delta;
+
+ //Startup addition
+ BYTE strt_add;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &strt_add))
+  return false;
+ m_ChokePar.strt_add = ((float)strt_add) / 2.0f;
+
+ //Choke RPM point 1
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_ChokePar.choke_rpm[0]))
+  return false;
+
+ //Choke RPM point 2
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_ChokePar.choke_rpm[1]))
+  return false;
+
+ //Choke RPM regulator integral factor
+ int choke_rpm_if;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_rpm_if))
+  return false;
+ m_ChokePar.choke_rpm_if = ((float)choke_rpm_if) / 1024.0f;
 
  return true;
 }
@@ -1970,6 +1990,12 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->sm_steps, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
+ BYTE strt_add = MathHelpers::Round(packet_data->strt_add * 2.0f);
+ mp_pdp->Bin8ToHex(strt_add, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->choke_rpm[0], m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->choke_rpm[1], m_outgoing_packet);
+ int choke_rpm_if = MathHelpers::Round(packet_data->choke_rpm_if * 1024.0f);
+ mp_pdp->Bin16ToHex(choke_rpm_if, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

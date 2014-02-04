@@ -233,7 +233,7 @@ BEGIN
     CTEXT           "УОЗ",IDC_GME_AA_CAPTION,18,320,35,10
     CTEXT           "Рабочая",IDC_GME_WM_CAPTION,58,320,35,10
     CTEXT           "ОктКорр",IDC_GME_OC_CAPTION,98,320,35,10
-    CTEXT           "ТКорр",IDC_GME_TC_CAPTION,138,320,35,10
+    CTEXT           "Ткор",IDC_GME_TC_CAPTION,138,320,35,10
     CTEXT           "ДДКорр",IDC_GME_KC_CAPTION,178,320,35,10
     CTEXT           "ХХ",IDC_GME_IM_CAPTION,218,320,35,10
     CTEXT           "РХХ",IDC_GME_IC_CAPTION,258,320,35,10

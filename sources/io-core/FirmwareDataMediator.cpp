@@ -866,6 +866,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
    {
     ChokePar* p_in = (ChokePar*)ip_values;
     p_params->sm_steps  = p_in->sm_steps;
+    p_params->choke_rpm[0] = p_in->choke_rpm[0];
+    p_params->choke_rpm[1] = p_in->choke_rpm[1];
+    p_params->choke_startup_corr = MathHelpers::Round(p_in->strt_add * 2.0f);
+    p_params->choke_rpm_if = MathHelpers::Round(p_in->choke_rpm_if * 1024.0f);
    }
    break;
   case SECUR_PAR:
@@ -1069,6 +1073,10 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     {
      ChokePar* p_out = (ChokePar*)op_values;
      p_out->sm_steps = p_params->sm_steps;
+     p_out->choke_rpm[0] = p_params->choke_rpm[0];
+     p_out->choke_rpm[1] = p_params->choke_rpm[1];
+     p_out->strt_add = p_params->choke_startup_corr / 2.0f;
+     p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
     }
     break;
    case SECUR_PAR:
@@ -1323,17 +1331,35 @@ const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const
  return *m_fpp;
 }
 
-static float rpmGrid[16] = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500}; //temporary
 void CFirmwareDataMediator::GetRPMGridMap(float* op_values)
 {
- //todo
- std::copy(rpmGrid, rpmGrid+16, op_values); //temporary
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < RPM_GRID_SIZE; i++)
+  op_values[i] = p_fd->exdata.rpm_grid_points[i];
 }
 
 void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
 {
- //todo
- std::copy(ip_values, ip_values+16, rpmGrid); //temporary
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ //store grid points
+ for(size_t i = 0; i < RPM_GRID_SIZE; i++)
+  p_fd->exdata.rpm_grid_points[i] = MathHelpers::Round(ip_values[i]);
+
+ //calculate sizes
+ for(size_t i = 0; i < RPM_GRID_SIZE-1; i++)
+  p_fd->exdata.rpm_grid_sizes[i] = p_fd->exdata.rpm_grid_points[i+1] - p_fd->exdata.rpm_grid_points[i];
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

@@ -54,6 +54,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangePdChokeSMStepsNumEdit();
+  afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateChokeTestBtn(CCmdUI* pCmdUI);
   afx_msg void OnUpdateChokeManPosBtn(CCmdUI* pCmdUI);
@@ -71,6 +72,18 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_sm_steps_num_edit;
   CButton m_sm_test_check;
   CSpinButtonCtrl m_man_ctrl_spin;
+
+  CSpinButtonCtrlEx m_strt_add_spin;
+  CEditEx m_strt_add_edit;
+
+  CSpinButtonCtrlEx m_rpmreg_1stpt_spin;
+  CEditEx m_rpmreg_1stpt_edit;
+
+  CSpinButtonCtrlEx m_rpmreg_2ndpt_spin;
+  CEditEx m_rpmreg_2ndpt_edit;
+
+  CSpinButtonCtrlEx m_rpmreg_if_spin;
+  CEditEx m_rpmreg_if_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

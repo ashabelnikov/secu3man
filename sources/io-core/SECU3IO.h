@@ -290,6 +290,9 @@ namespace SECU3IO
   int sm_steps;                         //number of stepper motor steps
   unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
   signed char manual_delta;             //delta position value for manual choke control
+  float strt_add;                       //Startup addition value used for choke (0...100%)  
+  int choke_rpm[2];                     //two points which define RPM vs temperature function 
+  float choke_rpm_if;                   //Integral choke RPM regulator factor
  };
 
  struct SecurPar
