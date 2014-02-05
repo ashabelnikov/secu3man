@@ -234,6 +234,11 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
 }
 
+CButtonsPanel::~CButtonsPanel()
+{
+ //empty
+}
+
 void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
