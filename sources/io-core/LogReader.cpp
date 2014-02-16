@@ -34,7 +34,7 @@ using namespace SECU3IO;
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 23
+#define CSV_COUNT_DATA_VAL 24
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -42,7 +42,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -140,7 +140,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
 
  int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,reserved,log_mark = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos;
- float speed, distance;
+ float speed, distance, air_temp;
  char ce_errors[20] = {0};
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
@@ -165,6 +165,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &choke_pos,
                 &speed,
                 &distance,
+                &air_temp,
                 &log_mark,
                 &ce_errors);
 
@@ -201,6 +202,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.choke_pos = choke_pos;
  o_data.speed = speed;
  o_data.distance = distance;
+ o_data.air_temp = air_temp;
  o_marks = log_mark;  //save log marks
 
  //все прочитано без ошибок
@@ -234,7 +236,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

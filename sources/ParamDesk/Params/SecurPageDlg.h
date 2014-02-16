@@ -54,6 +54,7 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataApply();
+  afx_msg void OnChangeDataIbtnKeys();
   afx_msg void OnChangeDataUseBtCheck();
   afx_msg void OnChangeDataNamePass();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -77,6 +78,9 @@ class CSecurPageDlg : public CTabDialog, public ParamPageEvents
   CButton m_bt_apply_button;
   CButton m_bt_use_check;
   CButton m_imm_use_check;
+
+  CEditEx m_ibtn_key1_edit;
+  CEditEx m_ibtn_key2_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

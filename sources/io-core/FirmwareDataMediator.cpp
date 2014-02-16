@@ -876,6 +876,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
    {
     SecurPar* p_in = (SecurPar*)ip_values;
     p_params->bt_flags = (p_params->bt_flags & 0xFA) | ((p_in->use_imm != 0) << 2) | ((p_in->use_bt != 0) << 0);
+    for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
+     memcpy(p_params->ibtn_keys[j], p_in->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
    }
    break;
 
@@ -1084,6 +1086,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      SecurPar* p_out = (SecurPar*)op_values;
      p_out->use_bt = p_params->bt_flags & (1 << 0);
      p_out->use_imm = p_params->bt_flags & (1 << 2);
+    for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
+     memcpy(p_out->ibtn_keys[j], p_params->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
     }
     break;
 

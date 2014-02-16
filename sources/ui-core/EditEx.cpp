@@ -129,6 +129,26 @@ bool CEditEx::OnChar_hex(UINT nChar, UINT nRepCnt, UINT nFlags)
 }
 
 //-------------------------------------------------------------
+//фильтрует символы для шестнадцатиричной строки
+bool CEditEx::OnChar_hexstr(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+ CString str;
+ if(!(nChar >= 'A' && nChar <= 'F' || nChar >= 'a' && nChar <= 'f'
+   || nChar >= '0' && nChar <= '9' || nChar == '\b'))
+  return false;
+
+ GetWindowText(str);
+
+ int nStartChar, nEndChar;
+ GetSel(nStartChar, nEndChar);
+
+ if(nChar == '\b' && nStartChar <= 0)
+  return false;
+
+ return true;
+}
+
+//-------------------------------------------------------------
 //фильтруем вводимые символы в зависимомти от режима
 void CEditEx::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 {
@@ -151,6 +171,10 @@ void CEditEx::OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
 
   case MODE_STRING:
    result = true; //there are no filtering for string
+   break;
+ 
+  case MODE_HEXSTR:
+   result = OnChar_hexstr(nChar, nRepCnt, nFlags);
    break;
  }
 
