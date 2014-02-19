@@ -159,7 +159,7 @@ void CSecurPageDlg::OnChangeDataIbtnKeys()
  int result1, result2;
  unsigned long long value1, value2;
  m_ibtn_key1_edit.GetWindowText(str);
- result1 = _stscanf(str.GetBuffer(1024), _T("%I64X"), &value1);
+ result1 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value1);
  m_ibtn_key2_edit.GetWindowText(str);
  result2 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value2);
 
@@ -233,7 +233,7 @@ void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
  CString str, value; int i;
  for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
  {
-  value.Format(_T("%llX"), m_params.ibtn_keys[0][SECU3IO::IBTN_KEY_SIZE - i - 1]);
+  value.Format(_T("%02X"), (int)m_params.ibtn_keys[0][SECU3IO::IBTN_KEY_SIZE - i - 1]);
   str.Append(value);
  }
  m_ibtn_key1_edit.SetWindowText(str);
@@ -241,7 +241,7 @@ void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
  str = _T("");
  for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
  {
-  value.Format(_T("%llX"), m_params.ibtn_keys[1][SECU3IO::IBTN_KEY_SIZE - i - 1]);
+  value.Format(_T("%02X"), (int)m_params.ibtn_keys[1][SECU3IO::IBTN_KEY_SIZE - i - 1]);
   str.Append(value);
  }
  m_ibtn_key2_edit.SetWindowText(str);

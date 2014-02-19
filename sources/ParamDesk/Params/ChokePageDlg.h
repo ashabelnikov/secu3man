@@ -85,5 +85,8 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_rpmreg_if_spin;
   CEditEx m_rpmreg_if_edit;
 
+  CSpinButtonCtrlEx m_strt_add_tm_spin;
+  CEditEx m_strt_add_tm_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
