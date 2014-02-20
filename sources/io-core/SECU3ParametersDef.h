@@ -143,11 +143,12 @@ typedef struct
  _uchar choke_startup_corr;          // Startup correction value for choke
  _uint choke_rpm_if;                 // Integral factor for RPM-based control of choke position (factor * 1024)
  _uint choke_corr_time;              // Time for startup correction to be applied
+ _int choke_corr_temp;               // Temperature threshold for startup correction
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3];
+ _uchar reserved[1];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

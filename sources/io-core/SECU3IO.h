@@ -295,6 +295,7 @@ namespace SECU3IO
   int choke_rpm[2];                     //two points which define RPM vs temperature function 
   float choke_rpm_if;                   //Integral choke RPM regulator factor
   float choke_corr_time;                //Startup corretion time
+  float choke_corr_temp;                //Startup corretion temperature threshold
  };
 
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys

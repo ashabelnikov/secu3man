@@ -871,6 +871,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->choke_startup_corr = MathHelpers::Round(p_in->strt_add * 2.0f);
     p_params->choke_rpm_if = MathHelpers::Round(p_in->choke_rpm_if * 1024.0f);
     p_params->choke_corr_time = MathHelpers::Round(p_in->choke_corr_time * 100.0f);
+    p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
    }
    break;
   case SECUR_PAR:
@@ -1081,6 +1082,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->strt_add = p_params->choke_startup_corr / 2.0f;
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
      p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
+     p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
     }
     break;
    case SECUR_PAR:
