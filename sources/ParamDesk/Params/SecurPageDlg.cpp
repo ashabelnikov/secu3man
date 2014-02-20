@@ -33,6 +33,8 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_SECUR_IMM_USE_CHECK, OnChangeData)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_NAME_EDIT, OnChangeDataNamePass)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_PASS_EDIT, OnChangeDataNamePass)
+ ON_EN_CHANGE(IDC_PD_SECUR_IBTN_KEY1_EDIT, OnChangeDataIbtnKeys)
+ ON_EN_CHANGE(IDC_PD_SECUR_IBTN_KEY2_EDIT, OnChangeDataIbtnKeys)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_NAME_EDIT, OnUpdateNameAndPass)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_PASS_EDIT, OnUpdateNameAndPass)
@@ -43,6 +45,9 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_USE_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IMM_USE_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IMM_GROUP, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEY1_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEY2_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEYS_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
@@ -51,11 +56,15 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 , m_namepass_enabled(false)
 , m_bt_name_edit(CEditEx::MODE_STRING)
 , m_bt_pass_edit(CEditEx::MODE_INT)
+, m_ibtn_key1_edit(CEditEx::MODE_HEXSTR)
+, m_ibtn_key2_edit(CEditEx::MODE_HEXSTR)
 {
  _tcscpy(m_params.bt_name, _T(""));
  _tcscpy(m_params.bt_pass, _T(""));
  m_params.use_bt = 0;
  m_params.use_imm = 0;
+ for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
+  memset(m_params.ibtn_keys[j], 0, SECU3IO::IBTN_KEY_SIZE);
 }
 
 LPCTSTR CSecurPageDlg::GetDialogID(void) const
@@ -74,6 +83,8 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_BT_APPLY_BUTTON, m_bt_apply_button);
  DDX_Control(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_bt_use_check);
  DDX_Control(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_imm_use_check);
+ DDX_Control(pDX, IDC_PD_SECUR_IBTN_KEY1_EDIT, m_ibtn_key1_edit);
+ DDX_Control(pDX, IDC_PD_SECUR_IBTN_KEY2_EDIT, m_ibtn_key2_edit);
 
  CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
@@ -112,6 +123,9 @@ BOOL CSecurPageDlg::OnInitDialog()
  m_bt_name_edit.SetLimitText(8);
  m_bt_pass_edit.SetLimitText(4);
 
+ m_ibtn_key1_edit.SetLimitText(12);
+ m_ibtn_key2_edit.SetLimitText(12);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -137,6 +151,27 @@ void CSecurPageDlg::OnChangeDataApply()
  _tcscpy(m_params.bt_name, m_bt_name.c_str());
  _tcscpy(m_params.bt_pass, m_bt_pass.c_str());
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CSecurPageDlg::OnChangeDataIbtnKeys()
+{
+ CString str;
+ int result1, result2;
+ unsigned long long value1, value2;
+ m_ibtn_key1_edit.GetWindowText(str);
+ result1 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value1);
+ m_ibtn_key2_edit.GetWindowText(str);
+ result2 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value2);
+
+ if (1==result1 && 1==result2)
+ {
+  int i;
+  for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
+   m_params.ibtn_keys[0][i] = (BYTE)((value1 >> i*8) & 0xFF);
+  for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
+   m_params.ibtn_keys[1][i] = (BYTE)((value2 >> i*8) & 0xFF);
+  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+ }
 }
 
 void CSecurPageDlg::OnChangeDataUseBtCheck()
@@ -194,4 +229,20 @@ void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
  UpdateData(FALSE); //копируем данные из переменных в диалог
  if (use_bt_prev != (m_params.use_bt > 0))
   UpdateDialogControls(this, TRUE); //to apply state of "Use bluetooth" checkbox
+
+ CString str, value; int i;
+ for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
+ {
+  value.Format(_T("%02X"), (int)m_params.ibtn_keys[0][SECU3IO::IBTN_KEY_SIZE - i - 1]);
+  str.Append(value);
+ }
+ m_ibtn_key1_edit.SetWindowText(str);
+
+ str = _T("");
+ for(i = 0; i < SECU3IO::IBTN_KEY_SIZE; ++i)
+ {
+  value.Format(_T("%02X"), (int)m_params.ibtn_keys[1][SECU3IO::IBTN_KEY_SIZE - i - 1]);
+  str.Append(value);
+ }
+ m_ibtn_key2_edit.SetWindowText(str);
 }

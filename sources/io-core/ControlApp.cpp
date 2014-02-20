@@ -264,7 +264,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 58 : 29))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 62 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -379,6 +379,13 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (m_SensorDat.distance > 9999.99f)
   m_SensorDat.distance = 9999.99f;
 
+ //Intake air temperature
+ int air_temp = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&air_temp,true))
+  return false;
+ m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
+ 
  return true;
 }
 
@@ -1226,7 +1233,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 25 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1263,6 +1270,12 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_ChokePar.choke_rpm_if = ((float)choke_rpm_if) / 1024.0f;
 
+ //Startup correction apply time
+ int choke_corr_time;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_time))
+  return false;
+ m_ChokePar.choke_corr_time = ((float)choke_corr_time / 100.0f);
+
  return true;
 }
 
@@ -1270,7 +1283,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SecurPar& m_SecurPar = m_recepted_packet.m_SecurPar;
- if (size != (mp_pdp->isHex() ? 4 : 3))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 28 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of characters in name (must be zero)
@@ -1297,6 +1310,18 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  m_SecurPar.use_bt   = (flags & (1 << 0)) != 0;
  m_SecurPar.set_btbr = (flags & (1 << 1)) != 0;
  m_SecurPar.use_imm  = (flags & (1 << 2)) != 0;
+
+ //Parse out iButton keys
+ BYTE key[IBTN_KEY_SIZE]; int i, j;
+ for(j = 0; j < IBTN_KEYS_NUM; ++j)
+ {
+  for(i = 0; i < IBTN_KEY_SIZE; ++i)
+  {
+   if (false == mp_pdp->Hex8ToBin(raw_packet, &key[i]))
+    return false;
+  }
+  memcpy(m_SecurPar.ibtn_keys[j], key, IBTN_KEY_SIZE);
+ }
 
  return true;
 }
@@ -1996,6 +2021,8 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->choke_rpm[1], m_outgoing_packet);
  int choke_rpm_if = MathHelpers::Round(packet_data->choke_rpm_if * 1024.0f);
  mp_pdp->Bin16ToHex(choke_rpm_if, m_outgoing_packet);
+ int choke_corr_time = MathHelpers::Round(packet_data->choke_corr_time * 100.0f);
+ mp_pdp->Bin16ToHex(choke_corr_time, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -2018,6 +2045,11 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
 
  unsigned char flags = ((packet_data->use_imm != 0) << 2) | ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+
+ //iButton keys
+ for(int j = 0; j < IBTN_KEYS_NUM; ++j)
+  for(int i = 0; i < IBTN_KEY_SIZE; ++i)
+   mp_pdp->Bin8ToHex(packet_data->ibtn_keys[j][i], m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

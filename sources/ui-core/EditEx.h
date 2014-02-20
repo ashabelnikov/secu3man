@@ -34,8 +34,9 @@ class AFX_EXT_CLASS CEditEx : public CEdit
    MODE_INT     = 0x00000002,
    MODE_FLOAT   = 0x00000004,
    MODE_HEX     = 0x00000008,
+   MODE_HEXSTR  = 0x00000010,   //hex string
 
-   MODE_SIGNED  = 0x00000100,   //несовместим с MODE_HEX
+   MODE_SIGNED  = 0x00000100,   //несовместим с MODE_HEX и MODE_HEXSTR
    //---------------------------------------------------------
    MODE_MASK    = 0x000000FF   //для внутреннего использования
   };
@@ -95,6 +96,7 @@ class AFX_EXT_CLASS CEditEx : public CEdit
   bool OnChar_int(UINT nChar, UINT nRepCnt, UINT nFlags);
   bool OnChar_float(UINT nChar, UINT nRepCnt, UINT nFlags);
   bool OnChar_hex(UINT nChar, UINT nRepCnt, UINT nFlags);
+  bool OnChar_hexstr(UINT nChar, UINT nRepCnt, UINT nFlags);
 
   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
   DECLARE_MESSAGE_MAP()

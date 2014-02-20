@@ -52,6 +52,7 @@ namespace SECU3IO
   float choke_pos;                      //choke position (%)
   float speed;                          //vehicle speed (Km/h)
   float distance;                       //passed distance since last ignition turn on (meters)
+  float air_temp;                       //intake air temperature
  };
 
  struct DbgvarDat
@@ -293,7 +294,11 @@ namespace SECU3IO
   float strt_add;                       //Startup addition value used for choke (0...100%)  
   int choke_rpm[2];                     //two points which define RPM vs temperature function 
   float choke_rpm_if;                   //Integral choke RPM regulator factor
+  float choke_corr_time;                //Startup corretion time
  };
+
+ const int IBTN_KEYS_NUM = 2;           //Number of iButton keys
+ const int IBTN_KEY_SIZE = 6;           //Size of iButton key (except CRC8 and family code)
 
  struct SecurPar
  {
@@ -302,6 +307,7 @@ namespace SECU3IO
   unsigned char use_bt;                 //flag specifying to use or not to use bluetooth
   unsigned char set_btbr;               //flag indicating that bluetooth baud rate has to be set
   unsigned char use_imm;                //flag specifying to use or not to use immobilizer
+  BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 
  //таблица перекодировки кода частоты ПФ в частоту
