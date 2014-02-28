@@ -1233,7 +1233,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 25 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1275,6 +1275,12 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_time))
   return false;
  m_ChokePar.choke_corr_time = ((float)choke_corr_time / 100.0f);
+
+ //Startup correction apply temperature threshold
+ int choke_corr_temp;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_temp, true))
+  return false;
+ m_ChokePar.choke_corr_temp = ((float)choke_corr_temp / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
 
  return true;
 }
@@ -2023,6 +2029,8 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(choke_rpm_if, m_outgoing_packet);
  int choke_corr_time = MathHelpers::Round(packet_data->choke_corr_time * 100.0f);
  mp_pdp->Bin16ToHex(choke_corr_time, m_outgoing_packet);
+ int choke_corr_temp = MathHelpers::Round(packet_data->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ mp_pdp->Bin16ToHex(choke_corr_temp, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

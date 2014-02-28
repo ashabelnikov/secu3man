@@ -41,6 +41,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL);   // standard constructor
   /*static*/ const UINT IDD;
+  ~CButtonsPanel();
 
   //note: use wnd_insert_after parameter to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
