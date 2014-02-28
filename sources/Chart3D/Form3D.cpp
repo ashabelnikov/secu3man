@@ -307,6 +307,9 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   for (int i = 0; i < PopupMenu->Items->Count; i++)
    PopupMenu->Items->Items[i]->Enabled = true;
  }
+ //Fill bottom area when 3D view is turned on
+ for (int i = 0; i < m_count_z; i++)
+  ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = CheckBox3d->Checked;  
 }
 
 //---------------------------------------------------------------------------
@@ -755,6 +758,15 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
     UnmarkPoints();
     MarkPoints(true);
    }
+  }
+  else if (Key == 'A')
+  { //toggle area view
+   if (((TPointSeries*)Chart1->Series[0 + m_count_z])->DrawArea)
+    for (int i = 0; i < m_count_z; i++)
+     ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = False;  
+   else
+    for (int i = 0; i < m_count_z; i++)
+     ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = True;  
   }
  }
 
