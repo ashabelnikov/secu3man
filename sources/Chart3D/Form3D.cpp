@@ -759,7 +759,7 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
     MarkPoints(true);
    }
   }
-  else if (Key == 'A')
+  else if (Key == 'Q')
   { //toggle area view
    if (((TPointSeries*)Chart1->Series[0 + m_count_z])->DrawArea)
     for (int i = 0; i < m_count_z; i++)
@@ -767,6 +767,30 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    else
     for (int i = 0; i < m_count_z; i++)
      ((TPointSeries*)Chart1->Series[i + m_count_z])->DrawArea = True;  
+  }
+  else if (Key == 'A')
+  {
+   Chart1->View3DOptions->Rotation+=1;
+   if (Chart1->View3DOptions->Rotation > 360)
+    Chart1->View3DOptions->Rotation = 360;
+  }
+  else if (Key == 'S')
+  {
+   Chart1->View3DOptions->Rotation-=1;
+   if (Chart1->View3DOptions->Rotation < 0)
+    Chart1->View3DOptions->Rotation = 0;
+  }
+  else if (Key == 'W')
+  {
+   Chart1->View3DOptions->Elevation+=1;
+   if (Chart1->View3DOptions->Elevation > 360)
+    Chart1->View3DOptions->Elevation = 360;
+  }
+  else if (Key == 'D')
+  {
+   Chart1->View3DOptions->Elevation-=1;
+   if (Chart1->View3DOptions->Elevation < 0)
+    Chart1->View3DOptions->Elevation = 0;
   }
  }
 
