@@ -836,7 +836,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
- if (size != (mp_pdp->isHex() ? 15 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 19 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Тип фронта ДПКВ
@@ -877,6 +877,12 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  m_CKPSPar.use_ckps_for_hall = (flags & (1 << 0)) != 0;
+
+ //Hall shutter's window width
+ int wnd_width;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&wnd_width,true))
+  return false;
+ m_CKPSPar.hall_wnd_width = ((float)wnd_width) / m_angle_multiplier;
 
  return true;
 }
@@ -1912,6 +1918,8 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
  unsigned char flags = ((packet_data->use_ckps_for_hall != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+ int wnd_width = MathHelpers::Round(packet_data->hall_wnd_width * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(wnd_width, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
