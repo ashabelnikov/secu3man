@@ -36,8 +36,10 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnChangeDataCylNum)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
  ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
+
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CKPS_USE_CKPS_INPUT, OnChangeUseCKPSInput)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
@@ -61,6 +63,10 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnUpdateIgnitionCogs)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_IGNITION_COGS_UNIT, OnUpdateIgnitionCogs)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_HALL_WND_WIDTH_SPIN, OnUpdateHallWndWidth)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, OnUpdateHallWndWidth)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_HALL_WND_WIDTH_UNIT, OnUpdateHallWndWidth)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_SPIN, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_UNIT, OnUpdateControls)
@@ -76,6 +82,7 @@ END_MESSAGE_MAP()
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
 , m_ignition_cogs_edit(CEditEx::MODE_INT)
+, m_hall_wnd_width_edit(CEditEx::MODE_FLOAT)
 , m_wheel_cogs_num_edit(CEditEx::MODE_INT)
 , m_wheel_miss_num_edit(CEditEx::MODE_INT)
 , m_enabled(false)
@@ -94,6 +101,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_miss_num = 2;
  m_params.ckps_engine_cyl = 4;
  m_params.use_ckps_for_hall = 0;
+ m_params.hall_wnd_width = 60.0f;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -121,6 +129,10 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_EDIT, m_ignition_cogs_edit);
  DDX_Control(pDX,IDC_PD_CKPS_IGNITION_COGS_UNIT, m_ignition_cogs_label);
 
+ DDX_Control(pDX,IDC_PD_CKPS_HALL_WND_WIDTH_SPIN, m_hall_wnd_width_spin);
+ DDX_Control(pDX,IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_hall_wnd_width_edit);
+ DDX_Control(pDX,IDC_PD_CKPS_HALL_WND_WIDTH_UNIT, m_hall_wnd_width_label);
+
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_SPIN, m_wheel_cogs_num_spin);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_EDIT, m_wheel_cogs_num_edit);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_UNIT, m_wheel_cogs_num_label);
@@ -132,6 +144,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_merge_ign_outputs_check);
 
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
+ m_hall_wnd_width_edit.DDX_Value(pDX, IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_params.hall_wnd_width);
  DDX_Text(pDX, IDC_PD_CKPS_COGS_NUM_EDIT, m_params.ckps_cogs_num);
  DDX_Text(pDX, IDC_PD_CKPS_MISS_NUM_EDIT, m_params.ckps_miss_num);
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
@@ -162,6 +175,7 @@ void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_igncogs_enabled && m_ckps_enabled);
+ pCmdUI->m_pOther->ShowWindow(m_ckps_enabled ? SW_SHOW : SW_HIDE);
 }
 
 void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
@@ -179,6 +193,12 @@ void CCKPSPageDlg::OnUpdateUseCKPSInput(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && !m_ckps_enabled); //enabled only for Hall sensor
 }
 
+void CCKPSPageDlg::OnUpdateHallWndWidth(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_ckps_enabled); //enabled only for Hall sensor
+ pCmdUI->m_pOther->ShowWindow(m_ckps_enabled ? SW_HIDE : SW_SHOW);
+}
+
 BOOL CCKPSPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -187,6 +207,11 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_ignition_cogs_edit.SetDecimalPlaces(2);
  m_ignition_cogs_spin.SetBuddy(&m_ignition_cogs_edit);
  m_ignition_cogs_spin.SetRangeAndDelta(1, 200, 1);
+
+ m_hall_wnd_width_spin.SetBuddy(&m_hall_wnd_width_edit);
+ m_hall_wnd_width_edit.SetLimitText(5);
+ m_hall_wnd_width_edit.SetDecimalPlaces(1);
+ m_hall_wnd_width_spin.SetRangeAndDelta(30.0f, 110.0f, 0.1f);
 
  m_wheel_cogs_num_edit.SetLimitText(3);
  m_wheel_cogs_num_edit.SetDecimalPlaces(3);

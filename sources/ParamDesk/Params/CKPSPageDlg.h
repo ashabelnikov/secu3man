@@ -67,6 +67,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI);
   afx_msg void OnUpdateIgnitionCogs(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateHallWndWidth(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCylNumber(CCmdUI* pCmdUI);
   afx_msg void OnUpdateMergeOutputs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseCKPSInput(CCmdUI* pCmdUI);
@@ -111,6 +112,10 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_ignition_cogs_spin;
   CEditEx m_ignition_cogs_edit;
   CStatic m_ignition_cogs_label;
+
+  CSpinButtonCtrlEx m_hall_wnd_width_spin;
+  CEditEx m_hall_wnd_width_edit;
+  CStatic m_hall_wnd_width_label;
 
   CSpinButtonCtrlEx m_wheel_cogs_num_spin;
   CEditEx m_wheel_cogs_num_edit;

@@ -425,11 +425,15 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Кол-во цилиндров двигателя",
                     IDC_PD_CKPS_ENGINE_CYL_CAPTION,93,91,76,17,NOT WS_GROUP
-    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,
-                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CKPS_HALL_WND_WIDTH_EDIT,9,129,34,16,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Длительность импульса запуска коммутатора в зубьях шкива",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,61,124,92,24,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
+    LTEXT           "Ширина окна в шторке ДХ в градусах по коленвалу",
+                    IDC_PD_CKPS_HALL_WND_WIDTH_UNIT,61,128,92,24,NOT WS_GROUP
+    CONTROL         "",IDC_PD_CKPS_HALL_WND_WIDTH_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
 END
 
@@ -1243,11 +1247,15 @@ BEGIN
                     CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     LTEXT           "Number of engine cylinders",
                     IDC_PD_CKPS_ENGINE_CYL_CAPTION,93,91,76,17,NOT WS_GROUP
-    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,
-                    ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CKPS_IGNITION_COGS_EDIT,9,129,34,16,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_PD_CKPS_HALL_WND_WIDTH_EDIT,9,129,34,16,ES_AUTOHSCROLL | ES_READONLY
     LTEXT           "Duration of igniter's pulse driver in teeth of wheel",
                     IDC_PD_CKPS_IGNITION_COGS_UNIT,61,128,92,20,NOT WS_GROUP
     CONTROL         "",IDC_PD_CKPS_IGNITION_COGS_SPIN,"msctls_updown32",
+                    UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
+    LTEXT           "Hall sensor shutter's window width in degrees of crankshaft",
+                    IDC_PD_CKPS_HALL_WND_WIDTH_UNIT,61,128,92,20,NOT WS_GROUP
+    CONTROL         "",IDC_PD_CKPS_HALL_WND_WIDTH_SPIN,"msctls_updown32",
                     UDS_ARROWKEYS | UDS_HOTTRACK,44,129,11,16
 END
 
