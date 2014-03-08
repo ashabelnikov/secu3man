@@ -57,6 +57,7 @@ class CCKPSPageDlg : public CTabDialog, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
+  afx_msg void OnChangeMergeOutputs();
   afx_msg void OnChangeDataCogsNum();
   afx_msg void OnChangeDataCylNum();
   afx_msg void OnClickedPdPosFrontRadio();

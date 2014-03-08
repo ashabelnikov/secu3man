@@ -40,7 +40,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
  ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
 
- ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeMergeOutputs)
  ON_BN_CLICKED(IDC_PD_CKPS_USE_CKPS_INPUT, OnChangeUseCKPSInput)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
@@ -320,6 +320,19 @@ void CCKPSPageDlg::OnChangeUseCKPSInput()
  OnChangeNotify();
 }
 
+void CCKPSPageDlg::OnChangeMergeOutputs()
+{
+ UpdateData();
+
+ //Cylinder number combobox depends on merge outputs check box,
+ //Also we have to preserve selection 
+ int sel = _GetCKPSEngineCylComboBoxSelection();
+ _FillCKPSEngineCylComboBox();
+ _SetCKPSEngineCylComboBoxSelection(sel);
+
+ OnChangeNotify();
+}
+
 //разрешение/запрещение контроллов (всех поголовно)
 void CCKPSPageDlg::Enable(bool enable)
 {
@@ -511,16 +524,18 @@ void CCKPSPageDlg::_SetCKPSTeethBTDCComboBoxSelection(int i_sel)
 
 void CCKPSPageDlg::_FillCKPSEngineCylComboBox(void)
 {
+ bool odd_cylnum_enabled = m_params.ckps_merge_ign_outs || m_odd_cylnum_enabled;
+
  m_engine_cyls.clear();
- if (m_odd_cylnum_enabled) //odd
+ if (odd_cylnum_enabled) //odd
   m_engine_cyls.push_back(std::make_pair(1,_TSTRING(_T("1"))));
  m_engine_cyls.push_back(std::make_pair(2,_TSTRING(_T("2"))));
- if (m_odd_cylnum_enabled) //odd
+ if (odd_cylnum_enabled) //odd
   m_engine_cyls.push_back(std::make_pair(3,_TSTRING(_T("3"))));
  m_engine_cyls.push_back(std::make_pair(4,_TSTRING(_T("4"))));
  if (m_max_cylinders > 4)
  {
-  if (m_odd_cylnum_enabled) //odd
+  if (odd_cylnum_enabled) //odd
    m_engine_cyls.push_back(std::make_pair(5,_TSTRING(_T("5"))));
   m_engine_cyls.push_back(std::make_pair(6,_TSTRING(_T("6"))));
  }
