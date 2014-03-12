@@ -178,7 +178,7 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
 bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title /*= NULL*/, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/, _TSTRING* o_file_path /*= NULL*/)
 {
  HANDLE   hFile=0;
- static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
+ static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex;*.a90)|*.hex;*.a90|All Files (*.*)|*.*||");
  CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
  if (i_title)
   open.m_ofn.lpstrTitle = i_title->c_str();
