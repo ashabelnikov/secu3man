@@ -947,6 +947,142 @@ object Form3D: TForm3D
       Caption = 'Build curve using 1st and last points'
       OnClick = OnBldCurveUsing1stAndLastPoints
     end
+    object PM_CopyToCurve: TMenuItem
+      Caption = 'Copy to curve'
+      OnClick = OnCopyToCurve
+      object PM_CopyToCurve0: TMenuItem
+        Caption = '1'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve1: TMenuItem
+        Caption = '2'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve2: TMenuItem
+        Caption = '3'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve3: TMenuItem
+        Caption = '4'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve4: TMenuItem
+        Caption = '5'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve5: TMenuItem
+        Caption = '6'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve6: TMenuItem
+        Caption = '7'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve7: TMenuItem
+        Caption = '8'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve8: TMenuItem
+        Caption = '9'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve9: TMenuItem
+        Caption = '10'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve10: TMenuItem
+        Caption = '11'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve11: TMenuItem
+        Caption = '12'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve12: TMenuItem
+        Caption = '13'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve13: TMenuItem
+        Caption = '14'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve14: TMenuItem
+        Caption = '15'
+        OnClick = OnCopyToCurve
+      end
+      object PM_CopyToCurve15: TMenuItem
+        Caption = '16'
+        OnClick = OnCopyToCurve
+      end
+    end
+    object PM_CopyFromCurve: TMenuItem
+      Caption = 'Copy from curve'
+      OnClick = OnCopyFromCurve
+      object PM_CopyFromCurve0: TMenuItem
+        Caption = '1'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve1: TMenuItem
+        Caption = '2'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve2: TMenuItem
+        Caption = '3'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve3: TMenuItem
+        Caption = '4'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve4: TMenuItem
+        Caption = '5'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve5: TMenuItem
+        Caption = '6'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve6: TMenuItem
+        Caption = '7'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve7: TMenuItem
+        Caption = '8'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve8: TMenuItem
+        Caption = '9'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve9: TMenuItem
+        Caption = '10'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve10: TMenuItem
+        Caption = '11'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve11: TMenuItem
+        Caption = '12'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve12: TMenuItem
+        Caption = '13'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve13: TMenuItem
+        Caption = '14'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve14: TMenuItem
+        Caption = '15'
+        OnClick = OnCopyFromCurve
+      end
+      object PM_CopyFromCurve15: TMenuItem
+        Caption = '16'
+        OnClick = OnCopyFromCurve
+      end
+    end
     object N1: TMenuItem
       Caption = '-'
     end

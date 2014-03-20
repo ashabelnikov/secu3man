@@ -165,6 +165,10 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_DupThisCurve->Caption = string;
  ::LoadString(hInstance, IDS_PM_BLD_SHAPE_1ST_LAST_CR, string, 1024);
  PM_BldShapeUsing1stAndLastCurves->Caption = string;
+ ::LoadString(hInstance, IDS_PM_COPY_FROM_CURVE, string, 1024);
+ PM_CopyFromCurve->Caption = string;
+ ::LoadString(hInstance, IDS_PM_COPY_TO_CURVE, string, 1024);
+ PM_CopyToCurve->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -535,6 +539,16 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
 }
 
 //---------------------------------------------------------------------------
+void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
+{
+ for(size_t i = 0; i < m_count_x; ++i)
+ { 
+  SetChartValue(toIndex, i, GetChartValue(fromIndex, i));
+  SetItem(toIndex, i, Chart1->Series[fromIndex + m_count_z]->YValue[i]);
+ }
+}
+
+//---------------------------------------------------------------------------
 double TForm3D::GetChartValue(int z, int index)
 {
  return Chart1->Series[z + m_count_z]->YValue[index];
@@ -851,6 +865,50 @@ void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, 
   ActiveControl = Chart1;
   m_chart_active = true;
  }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
+{
+ if (Sender == PM_CopyToCurve0)       CopyCurve(m_air_flow_position, 0);
+ else if (Sender == PM_CopyToCurve1)  CopyCurve(m_air_flow_position, 1);
+ else if (Sender == PM_CopyToCurve2)  CopyCurve(m_air_flow_position, 2);
+ else if (Sender == PM_CopyToCurve3)  CopyCurve(m_air_flow_position, 3);
+ else if (Sender == PM_CopyToCurve4)  CopyCurve(m_air_flow_position, 4);
+ else if (Sender == PM_CopyToCurve5)  CopyCurve(m_air_flow_position, 5);
+ else if (Sender == PM_CopyToCurve6)  CopyCurve(m_air_flow_position, 6);
+ else if (Sender == PM_CopyToCurve7)  CopyCurve(m_air_flow_position, 7);
+ else if (Sender == PM_CopyToCurve8)  CopyCurve(m_air_flow_position, 8);
+ else if (Sender == PM_CopyToCurve9)  CopyCurve(m_air_flow_position, 9);
+ else if (Sender == PM_CopyToCurve10) CopyCurve(m_air_flow_position, 10);
+ else if (Sender == PM_CopyToCurve11) CopyCurve(m_air_flow_position, 11);
+ else if (Sender == PM_CopyToCurve12) CopyCurve(m_air_flow_position, 12);
+ else if (Sender == PM_CopyToCurve13) CopyCurve(m_air_flow_position, 13);
+ else if (Sender == PM_CopyToCurve14) CopyCurve(m_air_flow_position, 14);
+ else if (Sender == PM_CopyToCurve15) CopyCurve(m_air_flow_position, 15);
+ else return;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnCopyFromCurve(TObject *Sender)
+{
+ if (Sender == PM_CopyFromCurve0)       CopyCurve(0, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve1)  CopyCurve(1, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve2)  CopyCurve(2, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve3)  CopyCurve(3, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve4)  CopyCurve(4, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve5)  CopyCurve(5, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve6)  CopyCurve(6, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve7)  CopyCurve(7, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve8)  CopyCurve(8, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve9)  CopyCurve(9, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve10) CopyCurve(10, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve11) CopyCurve(11, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve12) CopyCurve(12, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve13) CopyCurve(13, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve14) CopyCurve(14, m_air_flow_position);
+ else if (Sender == PM_CopyFromCurve15) CopyCurve(15, m_air_flow_position);
+ else return;
 }
 
 //---------------------------------------------------------------------------

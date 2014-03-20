@@ -91,6 +91,43 @@ class TForm3D : public TForm
   TMenuItem *PM_ZeroAllCurves;
   TMenuItem *PM_DupThisCurve;
   TMenuItem *PM_BldShapeUsing1stAndLastCurves;
+
+  TMenuItem *PM_CopyToCurve;
+  TMenuItem *PM_CopyToCurve0;
+  TMenuItem *PM_CopyToCurve1;
+  TMenuItem *PM_CopyToCurve2;
+  TMenuItem *PM_CopyToCurve3;
+  TMenuItem *PM_CopyToCurve4;
+  TMenuItem *PM_CopyToCurve5;
+  TMenuItem *PM_CopyToCurve6;
+  TMenuItem *PM_CopyToCurve7;
+  TMenuItem *PM_CopyToCurve8;
+  TMenuItem *PM_CopyToCurve9;
+  TMenuItem *PM_CopyToCurve10;
+  TMenuItem *PM_CopyToCurve11;
+  TMenuItem *PM_CopyToCurve12;
+  TMenuItem *PM_CopyToCurve13;
+  TMenuItem *PM_CopyToCurve14;
+  TMenuItem *PM_CopyToCurve15;
+
+  TMenuItem *PM_CopyFromCurve;
+  TMenuItem *PM_CopyFromCurve0;
+  TMenuItem *PM_CopyFromCurve1;
+  TMenuItem *PM_CopyFromCurve2;
+  TMenuItem *PM_CopyFromCurve3;
+  TMenuItem *PM_CopyFromCurve4;
+  TMenuItem *PM_CopyFromCurve5;
+  TMenuItem *PM_CopyFromCurve6;
+  TMenuItem *PM_CopyFromCurve7;
+  TMenuItem *PM_CopyFromCurve8;
+  TMenuItem *PM_CopyFromCurve9;
+  TMenuItem *PM_CopyFromCurve10;
+  TMenuItem *PM_CopyFromCurve11;
+  TMenuItem *PM_CopyFromCurve12;
+  TMenuItem *PM_CopyFromCurve13;
+  TMenuItem *PM_CopyFromCurve14;
+  TMenuItem *PM_CopyFromCurve15;
+
   void __fastcall TrackBarAfChange(TObject *Sender);
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
@@ -112,6 +149,8 @@ class TForm3D : public TForm
   void __fastcall OnEnterChart(TObject* Sender);
   void __fastcall OnExitChart(TObject* Sender);
   void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall OnCopyToCurve(TObject *Sender);
+  void __fastcall OnCopyFromCurve(TObject *Sender);
 
  public:
   __fastcall TForm3D(TComponent* Owner);
@@ -156,6 +195,7 @@ class TForm3D : public TForm
   void __fastcall SelRightArrow(bool i_shift);
 
   void RestrictAndSetChartValue(int index, double v);
+  void __fastcall CopyCurve(int fromIndex, int toIndex);
   double GetChartValue(int z, int index);
   void SetChartValue(int z, int index, double value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);

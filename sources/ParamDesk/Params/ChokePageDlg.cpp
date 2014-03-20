@@ -190,7 +190,7 @@ BOOL CChokePageDlg::OnInitDialog()
  m_rpmreg_if_edit.SetLimitText(4);
  m_rpmreg_if_spin.SetBuddy(&m_rpmreg_if_edit);
  m_rpmreg_if_edit.SetDecimalPlaces(2);
- m_rpmreg_if_spin.SetRangeAndDelta(0.01f, 10.0f, 0.01f);
+ m_rpmreg_if_spin.SetRangeAndDelta(0.01f, 1.0f, 0.01f);
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
