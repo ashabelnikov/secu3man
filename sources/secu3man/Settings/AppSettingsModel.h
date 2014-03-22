@@ -67,6 +67,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_BaudRateBootloader;
   const CString m_Name_LogFilesFolder;
   const CString m_Name_UseAppFolder;
+  const CString m_Name_AlwaysWriteLog;
   const CString m_Name_CSVSepSymbol;
   const CString m_Name_MIDeskUpdatePeriod;
   const CString m_Name_InterfaceLang;
@@ -110,6 +111,7 @@ class CAppSettingsModel : public ISettingsData
   virtual DWORD GetBaudRateBootloader(void) const;
   virtual const CString& GetLogFilesFolder(void) const;
   virtual bool  GetUseAppFolder(void) const;
+  virtual bool  GetAlwaysWriteLog(void) const;
   virtual char  GetCSVSepSymbol(void) const;
   virtual int   GetMIDeskUpdatePeriod(void) const;
   //Возвращает полный путь к каталогу из которого было запущено приложение
@@ -140,6 +142,7 @@ class CAppSettingsModel : public ISettingsData
   DWORD m_optBaudRateBootloader;
   CString m_optLogFilesFolder;
   bool  m_optUseAppFolder;
+  bool  m_optAlwaysWriteLog;
   char  m_optCSVSepSymbol;
   int   m_optMIDeskUpdatePeriod;
   EInterLang m_optInterLang;

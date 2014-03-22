@@ -42,6 +42,8 @@ class IAppSettingsDlg
   virtual void SetBaudRateBootloader(DWORD i_bl_baud) = 0;
   virtual void SetLogFilesFolder(const CString& i_folder) = 0;
   virtual void SetUseAppFolder(bool i_use) = 0;
+  virtual void SetAlwaysWriteLog(bool i_always) = 0;
+  virtual bool GetAlwaysWriteLog(void) const = 0;
   virtual void SetCSVSepSymbol(size_t i_index) = 0;
   virtual void SetMIDeskUpdatePeriod(int i_period) = 0;
   virtual void SetInterfaceLanguage(int i_iface_lang) = 0;

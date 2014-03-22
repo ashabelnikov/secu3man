@@ -78,6 +78,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual CString GetLogFilesFolder(void) const;
   virtual void SetUseAppFolder(bool i_use);
   virtual bool GetUseAppFolder(void) const;
+  virtual void SetAlwaysWriteLog(bool i_always);
+  virtual bool GetAlwaysWriteLog(void) const;
   virtual size_t GetCSVSepSymbol(void);
 
   virtual void setFunctionOnOk(EventHandler OnOk);
@@ -114,6 +116,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CComboBox m_ecu_platform_selection_combo;
   CButton   m_log_files_folder_button;
   CButton   m_use_app_folder_button;
+  CButton   m_always_write_log_button;
   CButton   m_use_dv_features_button;
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
@@ -136,6 +139,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_port_number;
   CString m_log_files_folder;
   int m_use_app_folder;
+  int m_always_write_log;
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;

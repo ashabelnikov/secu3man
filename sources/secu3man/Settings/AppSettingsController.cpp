@@ -51,6 +51,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader();
  m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
  m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
+ m_pModel->m_optAlwaysWriteLog = m_pView->GetAlwaysWriteLog();
  m_pModel->m_optMIDeskUpdatePeriod = m_pView->GetMIDeskUpdatePeriod();
  m_pModel->m_optUseDVFeatures = m_pView->GetUseDVFeatures();
  m_pModel->m_optDVDeskUpdatePeriod = m_pView->GetDVDeskUpdatePeriod();
@@ -90,6 +91,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader);
  m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
  m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
+ m_pView->SetAlwaysWriteLog(m_pModel->m_optAlwaysWriteLog);
  m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod);
  m_pView->SetUseDVFeatures(m_pModel->m_optUseDVFeatures);
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod);

@@ -38,6 +38,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_PortName(_T("COM_port"))
 , m_Name_LogFilesFolder(_T("LogFilesFolder"))
 , m_Name_UseAppFolder(_T("UseAppFolder"))
+, m_Name_AlwaysWriteLog(_T("AlwaysWriteLog"))
 , m_Name_CSVSepSymbol(_T("CSVSeparatingSymbol"))
 , m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
 , m_Name_InterfaceLang(_T("InterfaceLanguage"))
@@ -241,6 +242,20 @@ bool CAppSettingsModel::ReadSettings(void)
  else
  {
   m_optUseAppFolder = i_val;
+ }
+
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_AlwaysWriteLog,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optAlwaysWriteLog = 0;
+ }
+ else
+ {
+  m_optAlwaysWriteLog = i_val;
  }
 
  //-----------------------------------------
@@ -459,6 +474,10 @@ bool CAppSettingsModel::WriteSettings(void)
  WritePrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,write_str,IniFileName);
 
  //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optAlwaysWriteLog);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_AlwaysWriteLog,write_str,IniFileName);
+
+ //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optCSVSepSymbol);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,write_str,IniFileName);
 
@@ -592,6 +611,11 @@ const CString& CAppSettingsModel::GetLogFilesFolder(void) const
 bool CAppSettingsModel::GetUseAppFolder(void) const
 {
  return m_optUseAppFolder;
+}
+
+bool CAppSettingsModel::GetAlwaysWriteLog(void) const
+{
+ return m_optAlwaysWriteLog;
 }
 
 char CAppSettingsModel::GetCSVSepSymbol(void) const
