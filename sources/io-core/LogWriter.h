@@ -48,6 +48,9 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //marks variable contains bits: 0, 1, 2, so possible values are 0-7
   bool InjectMarks(int marks);
 
+  //Flushes file buffers
+  void FlushFileBuffers(void);
+
  public:
 
   //через эти обработчики данные поступают в механизм записи

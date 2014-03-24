@@ -133,6 +133,10 @@ void MainFrameController::OnAppSettings()
   //Разрешаем или запрещаем показавание подсказок
   CToolTipCtrlEx::ActivateAllTooltips(settings->GetShowToolTips());
   DLL::ShowHints(settings->GetShowToolTips());  
+
+  //Start logging if user selected always to write log  
+  if (settings->GetAlwaysWriteLog() && IsBeginLoggingAllowed())
+   OnAppBeginLog();
  }
 }
 
@@ -216,17 +220,28 @@ void MainFrameController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SEC
 
 void MainFrameController::OnConnection(const bool i_online)
 {
+ const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
  if (false==i_online)
  {
   if (m_pLogWriter->IsLoggingInProcess())
-   OnAppEndLog(); //прекращаем запись лога при потере коннекта
+  {
+   if (!settings->GetAlwaysWriteLog())
+    OnAppEndLog(); //прекращаем запись лога при потере коннекта (если не установлена галочка "Записывать лог всегда")
+   else
+    m_pLogWriter->FlushFileBuffers();
+  }
 
   //Disabele debug panel if we lose connection
   //here we can only disable it. It may be enabled only after we get DBGVAR_DAT packet!
   if (mp_view->GetDVDesk())
    mp_view->GetDVDesk()->Enable(false);
  }
-
+ else
+ {
+  //Start logging if user selected always to write log  
+  if (settings->GetAlwaysWriteLog() && IsBeginLoggingAllowed())
+   OnAppBeginLog();
+ }
 }
 
 bool MainFrameController::OnFullScreen()

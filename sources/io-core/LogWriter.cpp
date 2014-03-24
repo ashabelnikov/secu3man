@@ -142,8 +142,8 @@ void LogWriter::EndLogging(void)
   _ASSERTE(0);
 
  m_is_busy = false;
+ m_out_handle = NULL;
 }
-
 
 bool LogWriter::IsLoggingInProcess(void)
 {
@@ -162,4 +162,10 @@ bool LogWriter::InjectMarks(int marks)
   return false;
  m_pending_marks|= (marks & 7); //value must not be above 7
  return true;
+}
+
+void LogWriter::FlushFileBuffers(void)
+{
+ if (m_out_handle)
+  fflush(m_out_handle);
 }
