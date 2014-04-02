@@ -31,5 +31,7 @@ enum EMapTypes
  TYPE_MAP_ATTENUATOR = 8,  //must be =8. used by derived classes
  TYPE_MAP_DWELLCNTRL = 9,  //must be =9. used by derived classes
  TYPE_MAP_CTS_CURVE  = 10,
- TYPE_MAP_CHOKE_OP   = 11
+ TYPE_MAP_CHOKE_OP   = 11,
+
+ TYPE_MAP_GME_WND = 32     //pseudo map, grid mode editing window
 };

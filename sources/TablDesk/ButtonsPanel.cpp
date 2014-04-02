@@ -40,6 +40,8 @@ void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_START);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
 }
 
 void __cdecl CButtonsPanel::OnCloseStartMap(void* i_param)
@@ -69,6 +71,8 @@ void __cdecl CButtonsPanel::OnChangeIdleMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_IDLE);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
 }
 
 void __cdecl CButtonsPanel::OnCloseIdleMap(void* i_param)
@@ -98,6 +102,8 @@ void __cdecl CButtonsPanel::OnChangeWorkMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_WORK);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -128,6 +134,8 @@ void __cdecl CButtonsPanel::OnChangeTempMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_TEMP_CORR);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -202,6 +210,28 @@ void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
   _this->m_OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
 }
 
+void CButtonsPanel::OnGridMapChanged(int mapType)
+{
+ if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
+  DLL::Chart2DUpdate(m_start_map_wnd_handle, GetStartMap(true), GetStartMap(false));
+ if (m_idle_map_chart_state && mapType == TYPE_MAP_DA_IDLE)
+  DLL::Chart2DUpdate(m_idle_map_wnd_handle, GetIdleMap(true), GetIdleMap(false));
+ if (m_work_map_chart_state && mapType == TYPE_MAP_DA_WORK)
+  DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
+ if (m_temp_map_chart_state && mapType == TYPE_MAP_DA_TEMP_CORR)
+  DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapType);
+}
+
+void CButtonsPanel::OnGridMapClosed(HWND hwnd, int mapType)
+{
+ m_grid_map_state = 0;
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(mp_gridModeEditorDlg->m_hWnd, TYPE_MAP_GME_WND);
+}
+
 //------------------------------------------------------------------------
 
 //const UINT CButtonsPanel::IDD = IDD_TD_BUTTONS_PANEL; //WTF?
@@ -215,13 +245,13 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_temp_map_chart_state(0)
 , m_start_map_chart_state(0)
 , m_idle_map_chart_state(0)
+, m_grid_map_state(0)
 , m_start_map_wnd_handle(NULL)
 , m_idle_map_wnd_handle(NULL)
 , m_work_map_wnd_handle(NULL)
 , m_temp_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
-, mp_gridModeEditorDlg(new CGridModeEditorDlg())
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -414,13 +444,19 @@ void CButtonsPanel::OnGridModeEditing()
 {
  if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
  {
-  if (!mp_gridModeEditorDlg.get())
-   mp_gridModeEditorDlg.reset(new CGridModeEditorDlg());
+  mp_gridModeEditorDlg.reset(new CGridModeEditorDlg());
+  mp_gridModeEditorDlg->BindMaps(m_start_map_active, m_idle_map_active, &m_work_map_active[0][0], m_temp_map_active);
+  mp_gridModeEditorDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
+  mp_gridModeEditorDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChanged));
+  mp_gridModeEditorDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosed));
+  mp_gridModeEditorDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
   mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, this);
   mp_gridModeEditorDlg->ShowWindow(SW_SHOW);
+  m_grid_map_state = 1;
  }
  else
  {
+  OnGridMapClosed(mp_gridModeEditorDlg->m_hWnd, TYPE_MAP_GME_WND);
   mp_gridModeEditorDlg->DestroyWindow();
   mp_gridModeEditorDlg.reset(NULL);
  }
@@ -462,6 +498,7 @@ void CButtonsPanel::OnUpdateGridModeEditing(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  pCmdUI->Enable(allowed);
+ pCmdUI->SetCheck((mp_gridModeEditorDlg.get() && m_grid_map_state) ? TRUE : FALSE);
 }
 
 void CButtonsPanel::OnTimer(UINT nIDEvent)
@@ -488,6 +525,8 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+ if (mp_gridModeEditorDlg.get())
+  mp_gridModeEditorDlg->UpdateView();
 }
 
 void CButtonsPanel::UpdateOpenedChartsAxisLabels(void)
@@ -547,6 +586,8 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
  case TYPE_MAP_DA_TEMP_CORR:
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
+ case TYPE_MAP_GME_WND: //pseudo map
+  return mp_gridModeEditorDlg.get() ? mp_gridModeEditorDlg->m_hWnd : NULL; 
  default:
   return NULL;
  }
@@ -567,6 +608,9 @@ void CButtonsPanel::_EnableCharts(bool enable)
 
   if (m_temp_map_chart_state && ::IsWindow(m_temp_map_wnd_handle))
    DLL::Chart2DEnable(m_temp_map_wnd_handle, enable && IsAllowed());
+
+  if (mp_gridModeEditorDlg.get())
+   mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);
  }
 
  m_charts_enabled = enable;

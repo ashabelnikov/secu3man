@@ -118,6 +118,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationTempMap(void* i_param, long cmd);
+  void OnGridMapChanged(int mapType);
+  void OnGridMapClosed(HWND, int);
 
   int m_charts_enabled;
   ///////////////////////////////////////////////////////
@@ -125,6 +127,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   int m_temp_map_chart_state;
   int m_start_map_chart_state;
   int m_idle_map_chart_state;
+  int m_grid_map_state;
 
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;

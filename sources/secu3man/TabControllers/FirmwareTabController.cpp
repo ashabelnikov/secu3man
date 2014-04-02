@@ -803,6 +803,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CHOKE_OP), TYPE_MAP_CHOKE_OP);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
   if (!AskUserAboutTabLeaving())
@@ -1363,6 +1364,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_ChokeOpMapWnd_X = rc.left;
    ws.m_ChokeOpMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_GME_WND: //pseudo map
+   ws.m_GridMapWnd_X = rc.left;
+   ws.m_GridMapWnd_Y = rc.top;
+   break;
  };
 
  mp_settings->SetWndSettings(ws);
@@ -1403,6 +1408,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_CHOKE_OP:
    X = ws.m_ChokeOpMapWnd_X, Y = ws.m_ChokeOpMapWnd_Y;
+   break;
+  case TYPE_MAP_GME_WND:
+   X = ws.m_GridMapWnd_X, Y = ws.m_GridMapWnd_Y;
    break;
   default:
    return; //undefined case...

@@ -203,6 +203,9 @@ void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
  hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
  if (hwnd)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
 }
 
 void CTablesDeskDlg::UpdateOpenedCharts(void)
@@ -231,6 +234,8 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
  hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
  _MakeWindowChild(hwnd, children);
  hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
+ _MakeWindowChild(hwnd, children);
+ hwnd = m_pPageDlg->mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND); //pseudo map
  _MakeWindowChild(hwnd, children);
 }
 
