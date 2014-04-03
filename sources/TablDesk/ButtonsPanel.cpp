@@ -450,7 +450,7 @@ void CButtonsPanel::OnGridModeEditing()
   mp_gridModeEditorDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChanged));
   mp_gridModeEditorDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosed));
   mp_gridModeEditorDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
-  mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, this);
+  mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, NULL);
   mp_gridModeEditorDlg->ShowWindow(SW_SHOW);
   m_grid_map_state = 1;
  }
