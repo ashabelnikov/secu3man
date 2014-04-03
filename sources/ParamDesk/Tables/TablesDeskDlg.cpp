@@ -24,6 +24,7 @@
 #include "TablesDeskDlg.h"
 
 #include <map>
+#include "common/Dll.h"
 #include "common/FastDelegate.h"
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
@@ -114,7 +115,7 @@ BOOL CTablesDeskDlg::OnInitDialog()
 
  //контрол создан через ресурсы и стили описаны в ресурсах.
  m_tab_control.SetImageList(m_pImgList);
- m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
+ m_tab_control.SetResourceModule(DLL::GetModuleHandle());
  m_tab_control.Init();
 
  //наполняем Tab control вкладками

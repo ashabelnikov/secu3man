@@ -188,3 +188,4 @@
 #define IDC_GME_KCP_TEXT                5447
 #define IDC_GME_IMP_TEXT                5448
 #define IDC_GME_AA_UNIT                 5449
+#define IDI_GRAPH                       5450

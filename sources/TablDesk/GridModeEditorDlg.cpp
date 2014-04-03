@@ -21,6 +21,7 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include "common/Dll.h"
 #include "common/MathHelpers.h"
 #include "GridModeEditorDlg.h"
 #include "MapIds.h"
@@ -302,6 +303,8 @@ BOOL CGridModeEditorDlg::OnInitDialog()
 
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_WND);
+
+ SetIcon(::LoadIcon(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH)), TRUE);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control

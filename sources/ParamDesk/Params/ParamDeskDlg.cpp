@@ -39,6 +39,7 @@
 #include "StarterPageDlg.h"
 #include "TemperPageDlg.h"
 
+#include "common/Dll.h"
 #include "common/FastDelegate.h"
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
@@ -179,7 +180,7 @@ BOOL CParamDeskDlg::OnInitDialog()
 
  //контрол создан через ресурсы и стили описаны в ресурсах.
  m_tab_control.SetImageList(m_pImgList);
- m_tab_control.SetResourceModule(::GetModuleHandle(_T("paramdesk.dll")));
+ m_tab_control.SetResourceModule(DLL::GetModuleHandle());
  m_tab_control.Init();
 
  m_tab_descriptors.clear();
