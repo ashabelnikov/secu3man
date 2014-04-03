@@ -35,7 +35,7 @@ void RegisterOwnClasses(HINSTANCE hInstance)
  ::GetClassInfo(hInstance, "#32770", &wc);
 
  // Change the name of the class.
- wc.lpszClassName = "SECU3GridModeEditWnd";
+ wc.lpszClassName = "SECU-3GridModeEditWnd";
 
  // Register this class so that MFC can use it.
  AfxRegisterClass(&wc);	
