@@ -525,7 +525,7 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
- if (mp_gridModeEditorDlg.get())
+ if (mp_gridModeEditorDlg.get() && m_grid_map_state)
   mp_gridModeEditorDlg->UpdateView();
 }
 
@@ -587,7 +587,7 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
  case TYPE_MAP_DA_TEMP_CORR:
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
  case TYPE_MAP_GME_WND: //pseudo map
-  return mp_gridModeEditorDlg.get() ? mp_gridModeEditorDlg->m_hWnd : NULL; 
+  return (mp_gridModeEditorDlg.get() && m_grid_map_state) ? mp_gridModeEditorDlg->m_hWnd : NULL; 
  default:
   return NULL;
  }
@@ -609,7 +609,7 @@ void CButtonsPanel::_EnableCharts(bool enable)
   if (m_temp_map_chart_state && ::IsWindow(m_temp_map_wnd_handle))
    DLL::Chart2DEnable(m_temp_map_wnd_handle, enable && IsAllowed());
 
-  if (mp_gridModeEditorDlg.get())
+  if (mp_gridModeEditorDlg.get() && m_grid_map_state && ::IsWindow(mp_gridModeEditorDlg->m_hWnd))
    mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);
  }
 
