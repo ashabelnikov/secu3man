@@ -60,7 +60,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void UpdateOpenedCharts(void);
   virtual void UpdateOpenedChartsAxisLabels(void);
 
-  std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
+  //used for grid mode editing window
+  void EnableAdvanceAngleIndication(bool i_enable);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
@@ -104,6 +105,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_start_map_btn;
   CButton m_view_idle_map_btn;
   CButton m_grid_mode_editing_check;
+  std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);
@@ -144,4 +146,5 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float m_temp_map_original[16];
   float m_rpm_grid_values[16];
   ///////////////////////////////////////////////////////
+  bool m_en_aa_indication;
 };

@@ -42,6 +42,8 @@ class CGridModeEditorDlg : public CDialog
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
   void UpdateView(void);
 
+  void EnableAdvanceAngleIndication(bool i_enable);
+
  public:
   void setIsAllowed(EventResult IsFunction);
   void setOnMapChanged(EventWithCode OnFunction);
@@ -53,6 +55,7 @@ class CGridModeEditorDlg : public CDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateAAControls(CCmdUI* pCmdUI);
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   afx_msg void OnClose();
   DECLARE_MESSAGE_MAP()
@@ -80,4 +83,5 @@ class CGridModeEditorDlg : public CDialog
 
   CBrush m_redBrush;
   bool m_closing_wnd;
+  bool m_en_aa_indication;
 };

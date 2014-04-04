@@ -252,6 +252,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_temp_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
+, m_en_aa_indication(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -450,6 +451,7 @@ void CButtonsPanel::OnGridModeEditing()
   mp_gridModeEditorDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChanged));
   mp_gridModeEditorDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosed));
   mp_gridModeEditorDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
+  mp_gridModeEditorDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
   mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, NULL);
   mp_gridModeEditorDlg->ShowWindow(SW_SHOW);
   m_grid_map_state = 1;
@@ -535,6 +537,13 @@ void CButtonsPanel::UpdateOpenedChartsAxisLabels(void)
   DLL::Chart2DUpdateAxisLabels(m_idle_map_wnd_handle, 1, GetRPMGrid());
  if (m_work_map_chart_state)
   DLL::Chart3DUpdateAxisLabels(m_work_map_wnd_handle, 1, GetRPMGrid());
+}
+
+void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)
+{
+ m_en_aa_indication = i_enable;
+ if (mp_gridModeEditorDlg.get())
+  mp_gridModeEditorDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)

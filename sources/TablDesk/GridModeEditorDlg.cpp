@@ -167,6 +167,30 @@ BEGIN_MESSAGE_MAP(CGridModeEditorDlg, Super)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_IDL_0, IDC_GME_IDL_15, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_STR_0, IDC_GME_STR_15, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_TMP_0, IDC_GME_TMP_15, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_AA_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_WM_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_OC_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_TC_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_KC_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IM_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IC_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_AC_CAPTION, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_AA_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_AAE_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_WM_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_WMP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_OC_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_OCP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_TC_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_TCP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_KC_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_KCP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IM_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IMP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IC_VALUE, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_ICP_TEXT, OnUpdateAAControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_AC_VALUE, OnUpdateAAControls)   //air temper. corr.
+ ON_UPDATE_COMMAND_UI(IDC_GME_AA_UNIT, OnUpdateAAControls)
  ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
@@ -178,6 +202,7 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 , mp_tempMap(NULL)
 , m_redBrush(itemErrColor)
 , m_closing_wnd(false)
+, m_en_aa_indication(false)
 {
  int i,j;
  for(i = 0; i < 16; ++i)
@@ -311,6 +336,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
 
  SetIcon(::LoadIcon(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH)), TRUE);
 
+ UpdateDialogControls(this, true);
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
@@ -320,6 +346,12 @@ void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
  pCmdUI->Enable(allowed);
+}
+
+void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
+{
+ bool allowed = m_IsAllowed ? m_IsAllowed() : false;
+ pCmdUI->Enable(allowed && m_en_aa_indication);
 }
 
 HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
@@ -367,6 +399,13 @@ void CGridModeEditorDlg::UpdateView(void)
 {
  if (::IsWindow(this->m_hWnd))
   UpdateData(FALSE); //update dialog controls
+}
+
+void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
+{
+ m_en_aa_indication = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, true);
 }
 
 void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)

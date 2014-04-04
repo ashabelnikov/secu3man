@@ -234,11 +234,12 @@ BEGIN
 
     CTEXT           "ÓÎÇ",IDC_GME_AA_CAPTION,18,320,35,10
     CTEXT           "Ðàáî÷àÿ",IDC_GME_WM_CAPTION,58,320,35,10
-    CTEXT           "ÎêòÊîðð",IDC_GME_OC_CAPTION,98,320,35,10
+    CTEXT           "ÎêòÊîð",IDC_GME_OC_CAPTION,98,320,35,10
     CTEXT           "Òêîð",IDC_GME_TC_CAPTION,138,320,35,10
-    CTEXT           "ÄÄÊîðð",IDC_GME_KC_CAPTION,178,320,35,10
+    CTEXT           "ÄÄÊîð",IDC_GME_KC_CAPTION,178,320,35,10
     CTEXT           "ÕÕ",IDC_GME_IM_CAPTION,218,320,35,10
     CTEXT           "ÐÕÕ",IDC_GME_IC_CAPTION,258,320,35,10
+    CTEXT           "Âêîð",IDC_GME_AC_CAPTION,298,320,35,10
 
     CTEXT           "",IDC_GME_AA_VALUE,20,330,30,12, SS_SUNKEN
     CTEXT           "=",IDC_GME_AAE_TEXT,50,330,10,10
@@ -253,7 +254,9 @@ BEGIN
     CTEXT           "",IDC_GME_IM_VALUE,220,330,30,12, SS_SUNKEN
     CTEXT           "+",IDC_GME_IMP_TEXT,250,330,10,10
     CTEXT           "",IDC_GME_IC_VALUE,260,330,30,12, SS_SUNKEN
-    LTEXT           "°",IDC_GME_AA_UNIT,291,330,10,10
+    CTEXT           "+",IDC_GME_ICP_TEXT,290,330,10,10
+    CTEXT           "",IDC_GME_AC_VALUE,300,330,30,12, SS_SUNKEN
+    LTEXT           "° (ÊÂ)",IDC_GME_AA_UNIT,332,330,50,10
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -521,6 +524,7 @@ BEGIN
     CTEXT           "KSCorr",IDC_GME_KC_CAPTION,178,320,35,10
     CTEXT           "Idle",IDC_GME_IM_CAPTION,218,320,35,10
     CTEXT           "IdlReg",IDC_GME_IC_CAPTION,258,320,35,10
+    CTEXT           "ATcorr",IDC_GME_IC_CAPTION,298,320,35,10
 
     CTEXT           "",IDC_GME_AA_VALUE,20,330,30,12, SS_SUNKEN
     CTEXT           "=",IDC_GME_AAE_TEXT,50,330,10,10
@@ -535,7 +539,9 @@ BEGIN
     CTEXT           "",IDC_GME_IM_VALUE,220,330,30,12, SS_SUNKEN
     CTEXT           "+",IDC_GME_IMP_TEXT,250,330,10,10
     CTEXT           "",IDC_GME_IC_VALUE,260,330,30,12, SS_SUNKEN
-    LTEXT           "°",IDC_GME_AA_UNIT,291,330,10,10
+    CTEXT           "+",IDC_GME_ICP_TEXT,290,330,10,10
+    CTEXT           "",IDC_GME_AC_VALUE,300,330,30,12, SS_SUNKEN
+    LTEXT           "° (crankshaft)",IDC_GME_AA_UNIT,332,330,50,10
 END
 
 /////////////////////////////////////////////////////////////////////////////
