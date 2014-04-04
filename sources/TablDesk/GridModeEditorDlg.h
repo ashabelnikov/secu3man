@@ -79,4 +79,5 @@ class CGridModeEditorDlg : public CDialog
   float* mp_tempMap;
 
   CBrush m_redBrush;
+  bool m_closing_wnd;
 };

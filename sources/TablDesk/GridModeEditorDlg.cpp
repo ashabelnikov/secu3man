@@ -177,6 +177,7 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 , mp_workMap(NULL)
 , mp_tempMap(NULL)
 , m_redBrush(itemErrColor)
+, m_closing_wnd(false)
 {
  int i,j;
  for(i = 0; i < 16; ++i)
@@ -245,17 +246,21 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
  {
   for(int i = 0; i < 16; ++i)
    for(int j = 0; j < 16; ++j)
-    m_wrk_grid[i][j]->DDX_Value(pDX, IDC_GME_WRK_START+i*16+j, mp_workMap[i*16+j]);
+    if (!m_wrk_grid[i][j]->m_error)
+     m_wrk_grid[i][j]->DDX_Value(pDX, IDC_GME_WRK_START+i*16+j, mp_workMap[i*16+j]);
  }
 
  for(int i = 0; i < 16; ++i)
  {
   DDX_Control(pDX, IDC_GME_IDL_0 + i, *m_idl_grid[i]);
-  m_idl_grid[i]->DDX_Value(pDX, IDC_GME_IDL_0 + i, mp_idleMap[i]);
+  if (!m_idl_grid[i]->m_error)
+   m_idl_grid[i]->DDX_Value(pDX, IDC_GME_IDL_0 + i, mp_idleMap[i]);
   DDX_Control(pDX, IDC_GME_STR_0 + i, *m_str_grid[i]);
-  m_str_grid[i]->DDX_Value(pDX, IDC_GME_STR_0 + i, mp_startMap[i]);
+  if (!m_str_grid[i]->m_error)
+   m_str_grid[i]->DDX_Value(pDX, IDC_GME_STR_0 + i, mp_startMap[i]);
   DDX_Control(pDX, IDC_GME_TMP_0 + i, *m_tmp_grid[i]);
-  m_tmp_grid[i]->DDX_Value(pDX, IDC_GME_TMP_0 + i, mp_tempMap[i]);
+  if (!m_tmp_grid[i]->m_error)
+   m_tmp_grid[i]->DDX_Value(pDX, IDC_GME_TMP_0 + i, mp_tempMap[i]);
  }
 }
 
@@ -344,6 +349,7 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 
 void CGridModeEditorDlg::OnClose()
 {
+ m_closing_wnd = true; //set flag indicating that window is being closing
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_WND);
  Super::OnClose(); //close window
@@ -360,7 +366,7 @@ void CGridModeEditorDlg::BindMaps(float* pStart, float* pIdle, float* pWork, flo
 void CGridModeEditorDlg::UpdateView(void)
 {
  if (::IsWindow(this->m_hWnd))
-  UpdateData(FALSE);
+  UpdateData(FALSE); //update dialog controls
 }
 
 void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)
@@ -410,6 +416,9 @@ void CGridModeEditorDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
 
 void CGridModeEditorDlg::OnEditKill(CEditExCustomKeys* pSender)
 {
+ if (m_closing_wnd)
+  return; //do not perform validation and update of values if window is being closed
+
  if (!_ValidateItem(pSender))
  {
   pSender->SetFocus();
