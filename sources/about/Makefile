@@ -12,11 +12,11 @@ CFLAGS  = $(CFLAGS) -DABOUT_EXPORTS
 CFLAGS  = $(CFLAGS) /D NDEBUG
 CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
-SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
+SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib version.lib
 # linker flags and directives
 LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/about.dll /IMPLIB:../../libraries/about.lib about.res
 # source files
-SOURCES = stdafx.cpp secu-3about.cpp STCAbout.cpp about.cpp
+SOURCES = stdafx.cpp secu-3about.cpp STCAbout.cpp about.cpp Version.cpp
 
 # DLL building
 all: about
