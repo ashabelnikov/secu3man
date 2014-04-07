@@ -20,8 +20,8 @@ SOURCES = Application/StdAfx.cpp Application/ParamDesk.cpp common/ParamPageEvent
   MAPCalc/MAPCalcDlg.cpp Params/ADCCompenPageDlg.cpp Params/AnglesPageDlg.cpp Params/CarburPageDlg.cpp \
   Params/ChokePageDlg.cpp Params/CKPSPageDlg.cpp Params/FunSetPageDlg.cpp Params/IdlRegPageDlg.cpp \
   Params/KnockPageDlg.cpp Params/MiscPageDlg.cpp Params/ParamDeskDlg.cpp Params/StarterPageDlg.cpp \
-  Params/TemperPageDlg.cpp Params/IORemappingDlg.cpp Tables/TablesDeskDlg.cpp Tables/TablesPageDlg.cpp \
-  Tables/TDContextMenuManager.cpp
+  Params/TemperPageDlg.cpp Params/IORemappingDlg.cpp Params/SecurPageDlg.cpp Tables/TablesDeskDlg.cpp \
+  Tables/TablesPageDlg.cpp Tables/TDContextMenuManager.cpp
 
 # DLL building
 all: paramdesk
