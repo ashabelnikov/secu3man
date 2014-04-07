@@ -54,6 +54,7 @@ set(SOURCES
   sources/ChartSerie.cpp
   sources/ChartSurfaceSerie.cpp
   sources/ChartTitle.cpp
+  hiscctrl.rc
   )
 
 foreach(src_file ${SOURCES})

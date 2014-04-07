@@ -163,3 +163,25 @@ BEGIN
 	IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
 	IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
 END
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//Version information
+VS_VERSION_INFO     VERSIONINFO
+  PRODUCTVERSION    3,9,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904e4"
+    BEGIN
+      VALUE "CompanyName", "SECU-3.ORG"
+      VALUE "LegalCopyright", "(c) Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "ProductName", "SECU-3 Manager"
+    END
+  END
+END

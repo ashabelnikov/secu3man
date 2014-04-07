@@ -23,6 +23,5 @@
 
 #include "about_api.h"
 
-void ABOUT_API DisplayAbout(CWnd* i_pParent);
-
-void ABOUT_API DisplaySplash(int timeToShow);
+bool ABOUT_API GetVersionInfo(LPCTSTR filename, int &major, int &minor);
+bool ABOUT_API GetProductVersion(int &major, int &minor);

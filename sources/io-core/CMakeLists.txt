@@ -64,6 +64,7 @@ set(SOURCES
   PacketDataProxy.cpp
   PlatformParamHolder.cpp
   StdAfx.cpp
+  iocore.rc
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

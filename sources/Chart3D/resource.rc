@@ -56,3 +56,21 @@ stringtable
   IDS_TT_SELECT_CURVE, "Select curve for editing (you can use Z,X keys on the keyboard)"
 }
 
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//Version information
+VS_VERSION_INFO     VERSIONINFO
+  PRODUCTVERSION    3,9,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904e4"
+    BEGIN
+      VALUE "CompanyName", "SECU-3.ORG"
+      VALUE "LegalCopyright", "(c) Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "ProductName", "SECU-3 Manager"
+    END
+  END
+END

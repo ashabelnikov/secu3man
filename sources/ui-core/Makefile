@@ -12,7 +12,7 @@ CFLAGS = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
 SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 # linker flags and directives
-LFLAGS  = /nologo /machine:X86 /STACK:10000000 /release /dll /OUT:../../binaries/ui-core.dll /implib:../../libraries/ui-core.lib
+LFLAGS  = /nologo /machine:X86 /STACK:10000000 /release /dll /OUT:../../binaries/ui-core.dll /implib:../../libraries/ui-core.lib uicore.res
 # source files
 SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_helpers.cpp \
   DialogWithAccelerators.cpp EditEx.cpp HeaderCtrlEx.cpp HotKeysManager.cpp HotKeysToCmdRouter.cpp \
@@ -24,6 +24,7 @@ SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_hel
 all: uicore
 
 uicore: uicore.cpp
+  $(RC) uicore.rc
   $(CC) $(CFLAGS) $(SOURCES) /link$(LFLAGS) $(SYSLIBS)
 
 clean:

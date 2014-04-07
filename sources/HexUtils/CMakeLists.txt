@@ -23,6 +23,7 @@ set(HEADERS
 
 set(SOURCES
   HexUtils.cpp
+  hexutils.rc
   readhex.cpp
   StdAfx.cpp
   )

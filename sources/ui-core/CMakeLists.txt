@@ -76,6 +76,7 @@ set(SOURCES
   WndSubclasser.cpp
   XBrowseForFolder.cpp
   uicore.cpp
+  uicore.rc
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

@@ -25,26 +25,33 @@
 
 #include "STCAbout.h"
 #include "../common/unicodesupport.h"
+#include "Version.h"
 
 extern HINSTANCE hInstance;  //DLLs hInstance
 
+
+namespace {
+ CString BuildSoftwareInfoStr(void)
+ {
+  USES_CONVERSION;
+  CString string;
+  CString templ = MLL::LoadString(IDS_SOFTWARE_INFO);
+  int major = 0, minor = 0;
+  GetVersionInfo(NULL, major, minor);
+  string.Format(templ, major, minor, A2T(__DATE__)); //compiler uses only ASCII format... 
+  return string;
+ }
+}
+
 void ABOUT_API DisplayAbout(CWnd* i_pParent)
 {
- USES_CONVERSION;
- CString string; CString templ = MLL::LoadString(IDS_SOFTWARE_INFO);
- string.Format(templ, A2T(__DATE__)); //compiler uses only ASCII format...
-
  AboutStc(i_pParent, hInstance, (LPCTSTR)IDB_BITMAP0001, (LPCTSTR)IDR_RGN0001,
-  string, MLL::LoadString(IDS_AUTHOR_INFO));
+  BuildSoftwareInfoStr(), MLL::LoadString(IDS_AUTHOR_INFO));
 }
 
 //timeToshow - How long show splash screen, in milliseconds.
 void ABOUT_API DisplaySplash(int timeToShow)
 {
- USES_CONVERSION;
- CString string; CString templ = MLL::LoadString(IDS_SOFTWARE_INFO);
- string.Format(templ, A2T(__DATE__)); //compiler uses only ASCII format...
-
  AboutStc(CWnd::GetDesktopWindow(), hInstance, (LPCTSTR)IDB_BITMAP0001, (LPCTSTR)IDR_RGN0001,
-  string, MLL::LoadString(IDS_AUTHOR_INFO), true, timeToShow);
+  BuildSoftwareInfoStr(), MLL::LoadString(IDS_AUTHOR_INFO), true, timeToShow);
 }

@@ -19,13 +19,16 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
+set(LIBRARIES Version.lib)
 project(${PROJECT})
 
 set(HEADERS
+  about_api.h
   Resource.h
   secu-3about.h
   STCAbout.h
   StdAfx.h
+  Version.h
   )
 
 set(SOURCES
@@ -34,6 +37,8 @@ set(SOURCES
   STCAbout.cpp
   StdAfx.cpp
   about.rc
+  Version.cpp
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
+target_link_libraries(${PROJECT} ${LIBRARIES})

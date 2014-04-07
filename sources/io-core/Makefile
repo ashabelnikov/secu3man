@@ -12,7 +12,7 @@ CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
 SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 # linker flags and directives
-LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/io-core.dll /IMPLIB:../../libraries/io-core.lib
+LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/io-core.dll /IMPLIB:../../libraries/io-core.lib iocore.res
 # source files
 SOURCES = StdAfx.cpp BootLoader.cpp BootLoaderAdapter.cpp ccomport.cpp ControlApp.cpp \
   ControlAppAdapter.cpp CRC16.cpp EEPROMDataMediator.cpp FirmwareDataMediator.cpp iocore.cpp \
@@ -22,6 +22,7 @@ SOURCES = StdAfx.cpp BootLoader.cpp BootLoaderAdapter.cpp ccomport.cpp ControlAp
 all: iocore
 
 iocore: iocore.cpp
+  $(RC) iocore.rc
   $(CC) $(CFLAGS) $(SOURCES) /link$(LFLAGS) $(SYSLIBS)
 
 clean:

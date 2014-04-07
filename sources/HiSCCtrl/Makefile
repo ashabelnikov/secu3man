@@ -11,7 +11,7 @@ CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
 SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 # linker flags and directives
-LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/hiscctrl.dll /IMPLIB:../../libraries/hiscctrl.lib
+LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/hiscctrl.dll /IMPLIB:../../libraries/hiscctrl.lib hiscctrl.res
 # source files
 SOURCES = StdAfx.cpp sources/ChartAxis.cpp sources/ChartAxisLabel.cpp sources/ChartBarSerie.cpp \
   sources/ChartCtrl.cpp sources/ChartGradient.cpp sources/ChartGrid.cpp sources/ChartLegend.cpp \
@@ -22,6 +22,7 @@ SOURCES = StdAfx.cpp sources/ChartAxis.cpp sources/ChartAxisLabel.cpp sources/Ch
 all: hiscctrl
 
 hiscctrl: hiscctrl.cpp
+  $(RC) hiscctrl.rc
   $(CC) $(CFLAGS) $(SOURCES) /link$(LFLAGS) $(SYSLIBS)
 
 clean:

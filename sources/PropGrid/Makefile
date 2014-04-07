@@ -12,7 +12,7 @@ CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 SYSLIBS = shlwapi.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
 LIBS = ui-core.lib
 # linker flags and directives
-LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/propgrid.dll /IMPLIB:../../libraries/propgrid.lib /LIBPATH:../../libraries 
+LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/propgrid.dll /IMPLIB:../../libraries/propgrid.lib /LIBPATH:../../libraries propgrid.res
 # source files
 SOURCES = DynDialogEx.cpp DynDialogItemEx.cpp ListDynDialogEx.cpp PropGrid.cpp \
   PropertyGrid.cpp PropertyGridCombo.cpp PropertyGridDirectoryPicker.cpp PropertyGridInPlaceEdit.cpp \
@@ -22,6 +22,7 @@ SOURCES = DynDialogEx.cpp DynDialogItemEx.cpp ListDynDialogEx.cpp PropGrid.cpp \
 all: propgrid
 
 propgrid: propgrid.cpp
+  $(RC) propgrid.rc
   $(CC) $(CFLAGS) $(SOURCES) /link$(LFLAGS) $(LIBS) $(SYSLIBS)
 
 clean:

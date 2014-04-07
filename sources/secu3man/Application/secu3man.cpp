@@ -23,6 +23,7 @@
 #include "secu3man.h"
 #include "Resources/resource.h"
 
+#include "About/Version.h"
 #include "CommunicationManager.h"
 #include "io-core/ccomport.h"
 #include "io-core/logwriter.h"
@@ -33,8 +34,8 @@
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
 
-//Functionality of the SetThreadLocale() function is broken beginning from Windows Vista
 namespace {
+//Functionality of the SetThreadLocale() function is broken beginning from Windows Vista
 typedef LANGID (WINAPI *SetThreadUILanguage_Addr)(LANGID LangId);
 SetThreadUILanguage_Addr pLangProc = NULL;
 void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
@@ -60,6 +61,66 @@ void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
  }
  else //XP and early
   ::SetThreadLocale(MAKELCID(MAKELANGID(language, subLanguage), SORT_DEFAULT));
+}
+
+//Check DLL compatibility
+bool CheckDLLCompatibility(void)
+{
+ std::vector<_TSTRING> dlls;
+ dlls.push_back(_T(_T("about.dll")));
+ dlls.push_back(_T(_T("chart2d.dll")));
+ dlls.push_back(_T(_T("chart3d.dll")));
+ dlls.push_back(_T(_T("fwimpexp.dll")));
+ dlls.push_back(_T(_T("hexutils.dll")));
+ dlls.push_back(_T(_T("hiscctrl.dll")));
+ dlls.push_back(_T(_T("io-core.dll")));
+ dlls.push_back(_T(_T("midesk.dll")));
+ dlls.push_back(_T(_T("paramdesk.dll")));
+ dlls.push_back(_T(_T("propgrid.dll")));
+ dlls.push_back(_T(_T("tabldesk.dll")));
+ dlls.push_back(_T(_T("ui-core.dll")));
+
+ int exe_major = 0, exe_minor = 0;
+ if (!GetVersionInfo(_T("secu3man.exe"), exe_major, exe_minor))
+ {
+  ::MessageBox(NULL, MLL::GetString(IDS_CANT_CHECK_DLL_COMPAT).c_str(), AfxGetAppName(), MB_OK | MB_ICONWARNING);
+  return false;
+ }
+
+ std::vector<_TSTRING> incompat;
+ for(std::vector<_TSTRING>::const_iterator it = dlls.begin(); it != dlls.end(); ++it)
+ {
+  int major = 0, minor = 0;
+  bool result = GetVersionInfo((*it).c_str(), major, minor);
+  if (!result || 0==major || exe_major != major || exe_minor!=minor)
+   incompat.push_back(*it);
+ } 
+ if (incompat.size())
+ {
+  _TSTRING str(MLL::GetString(IDS_DLL_MAY_BE_INCOMPAT));
+  str.append(_T("\n"));
+  for(std::vector<_TSTRING>::const_iterator it = incompat.begin(); it != incompat.end(); ++it)
+  {
+   str.append((*it).c_str());
+   str.append(_T(" "));
+  }
+  ::MessageBox(NULL, str.c_str(), AfxGetAppName(), MB_OK | MB_ICONWARNING);
+  return false;
+ }
+ return true; //all DLLs are compatible
+}
+
+void SetMainWindowTitle(void)
+{
+ int major = 0, minor = 0;
+ if (GetProductVersion(major, minor) && major > 0)
+ {
+  CString strTitle(MLL::LoadString(IDS_APP_TITLE));
+  CString strVersion;
+  strVersion.Format(" v%d.%d", major, minor);
+  strTitle.Append(strVersion);
+  AfxGetMainWnd()->SetWindowText(strTitle);
+ }
 }
 }
 
@@ -112,6 +173,9 @@ BOOL CSecu3manApp::InitInstance()
 
  SetRegistryKey(MLL::LoadString(IDS_APP_TITLE));
 
+ //sanity check
+ CheckDLLCompatibility();
+
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
 
@@ -139,6 +203,9 @@ BOOL CSecu3manApp::InitInstance()
 
  //Инициализируем содержимое главного окна (дочерние контроллеры).
  m_pMainFrameManager->Init(m_pMainWnd);
+
+ //Set title of main window
+ SetMainWindowTitle();
 
  return TRUE;
 }

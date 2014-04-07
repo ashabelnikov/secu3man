@@ -47,6 +47,7 @@ set(SOURCES
   PropertyGridMonthCalCtrl.cpp
   PropertyGridSelector.cpp
   StdAfx.cpp
+  propgrid.rc
   )
 
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})
