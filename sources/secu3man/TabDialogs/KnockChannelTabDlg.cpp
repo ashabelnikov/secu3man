@@ -98,7 +98,10 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_BN_CLICKED(IDC_KC_DLSM_CHECKBOX, OnDLSMCheckbox)
  ON_BN_CLICKED(IDC_KC_LIST_CHECKBOX, OnListCheckbox)
  ON_UPDATE_COMMAND_UI(IDM_KC_LIST_RESET_POINTS, OnUpdateListResetPoints)
+ ON_UPDATE_COMMAND_UI(IDM_KC_LIST_NEIGHBOUR_MIDDLE, OnUpdateListNeighbourMiddle)
  ON_COMMAND(IDM_KC_LIST_RESET_POINTS, OnListResetPoints)
+ ON_COMMAND(IDM_KC_LIST_NEIGHBOUR_MIDDLE, OnListNeighbourMiddle)
+ ON_COMMAND(IDM_KC_LIST_SIGMA_FILTER, OnListSigmaFilter)
  ON_COMMAND(IDM_KC_LIST_LOAD_POINTS, OnListLoadPoints)
  ON_COMMAND(IDM_KC_LIST_SAVE_POINTS, OnListSavePoints)
  ON_WM_TIMER()
@@ -219,6 +222,11 @@ void CKnockChannelTabDlg::OnUpdateClearFunction(CCmdUI* pCmdUI)
 void CKnockChannelTabDlg::OnUpdateListResetPoints(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_RTList.GetSelectedCount());
+}
+
+void CKnockChannelTabDlg::OnUpdateListNeighbourMiddle(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_RTList.GetSelectedCount()==1);
 }
 
 void CKnockChannelTabDlg::OnTimer(UINT nIDEvent)
@@ -353,6 +361,16 @@ void CKnockChannelTabDlg::setOnClearFunction(EventHandler OnFunction)
 void CKnockChannelTabDlg::setOnResetPoints(EventIndexes OnFunction)
 {
  m_OnResetPoints = OnFunction;
+}
+
+void CKnockChannelTabDlg::setOnSigmaFilter(EventHandler OnFunction)
+{
+ m_OnSigmaFilter = OnFunction;
+}
+
+void CKnockChannelTabDlg::setOnNeighbourMiddle(EventIndexes OnFunction)
+{
+ m_OnNeighbourMiddle = OnFunction;
 }
 
 void CKnockChannelTabDlg::setOnLoadPoints(EventHandler OnFunction)
@@ -512,6 +530,21 @@ void CKnockChannelTabDlg::OnListResetPoints()
  } 
  if (m_OnResetPoints)
   m_OnResetPoints(pointIndexes);
+}
+
+void CKnockChannelTabDlg::OnListNeighbourMiddle()
+{
+ std::vector<int> pointIndexes;
+ if (m_RTList.GetSelectedCount() > 0)
+  pointIndexes.push_back(m_RTList.GetNextItem(-1, LVNI_SELECTED));
+ if (m_OnNeighbourMiddle)
+  m_OnNeighbourMiddle(pointIndexes);
+}
+
+void CKnockChannelTabDlg::OnListSigmaFilter()
+{
+ if (m_OnSigmaFilter)
+  m_OnSigmaFilter();
 }
 
 void CKnockChannelTabDlg::OnListLoadPoints()

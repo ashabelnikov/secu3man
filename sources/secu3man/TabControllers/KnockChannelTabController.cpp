@@ -97,6 +97,8 @@ CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_v
  mp_view->setOnCopyToAttenuatorTable(MakeDelegate(this,&CKnockChannelTabController::OnCopyToAttenuatorTable));
  mp_view->setOnClearFunction(MakeDelegate(this,&CKnockChannelTabController::OnClearFunction));
  mp_view->setOnResetPoints(MakeDelegate(this,&CKnockChannelTabController::OnResetPoints));
+ mp_view->setOnNeighbourMiddle(MakeDelegate(this,&CKnockChannelTabController::OnNeighbourMiddle));
+ mp_view->setOnSigmaFilter(MakeDelegate(this, &CKnockChannelTabController::OnSigmaFilter));
  mp_view->setOnLoadPoints(MakeDelegate(this,&CKnockChannelTabController::OnLoadPoints));
  mp_view->setOnSavePoints(MakeDelegate(this,&CKnockChannelTabController::OnSavePoints));
 
@@ -445,6 +447,12 @@ void CKnockChannelTabController::_PerformAverageOfRPMKnockFunctionValues(std::ve
  }
 }
 
+float CKnockChannelTabController::_AverageKnockValue(size_t index)
+{
+ size_t n = m_rpm_knock_signal[index].size();
+ return n ? (std::accumulate(m_rpm_knock_signal[index].begin(), m_rpm_knock_signal[index].end(), 0.f) / n) : 0.f;
+}
+
 void CKnockChannelTabController::_InitializeRPMKnockFunctionBuffer(void)
 {
  m_rpm_knock_signal.clear();
@@ -540,6 +548,101 @@ void CKnockChannelTabController::OnClearFunction(void)
 void CKnockChannelTabController::OnResetPoints(const std::vector<int>& pointIndexes)
 {
  _InitializeRPMKnockFunctionBuffer(pointIndexes);
+ //перекачиваем данные из буфера в график на представлении
+ std::vector<float> values;
+ _PerformAverageOfRPMKnockFunctionValues(values);
+ mp_view->SetRPMKnockSignal(values);
+}
+
+void CKnockChannelTabController::OnNeighbourMiddle(const std::vector<int>& pointIndexes)
+{
+ int index = pointIndexes[0], anterior_n = 0, posterior_n = 0;
+ float anterior_v = 0, posterior_v = 0;
+
+ if (0==index)
+ {
+  posterior_n = m_rpm_knock_signal[index+1].size(), anterior_n = posterior_n;
+  posterior_v = _AverageKnockValue(index+1), anterior_v = posterior_v;
+ }
+ else if (index==CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS-1)
+ {
+  anterior_n = m_rpm_knock_signal[index-1].size(), posterior_n = anterior_n;
+  anterior_v = _AverageKnockValue(index-1), posterior_v = anterior_v;
+ }
+ else
+ {
+  posterior_n = m_rpm_knock_signal[index+1].size(), anterior_n = m_rpm_knock_signal[index-1].size();
+  posterior_v = _AverageKnockValue(index+1), anterior_v = _AverageKnockValue(index-1);
+ }
+
+ int n = (anterior_n + posterior_n) / 2;
+ if (n < 1) n = 1;
+ m_rpm_knock_signal[index] = std::vector<float>(n, (anterior_v + posterior_v) / 2.0f);
+ m_rpm_knock_signal_ii[index] = 0;
+
+ //перекачиваем данные из буфера в график на представлении
+ std::vector<float> values;
+ _PerformAverageOfRPMKnockFunctionValues(values);
+ mp_view->SetRPMKnockSignal(values);
+}
+
+void CKnockChannelTabController::OnSigmaFilter(void)
+{
+ //find begin and end positions
+ int begin, end, i;
+ for(begin = 0; begin < (int)m_rpm_knock_signal.size(); ++begin)
+  if (m_rpm_knock_signal[begin].size() > 0)
+   break;  
+ for(end = m_rpm_knock_signal.size() - 1; end > begin; --end)
+  if (m_rpm_knock_signal[end].size() > 0)
+   break;
+
+ //at least 30% of points must be valid
+ if ((begin > end) || (end - begin) < (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS/3))
+ { 
+  AfxMessageBox(IDS_KC_PLEASE_COLLECT_MORE_STAT);
+  return;
+ }
+
+ //apply sliding window
+ int ks = 5;
+ for(i = begin; i <= end; ++i)
+ {
+  //skip points which have no statistics
+  if (0==m_rpm_knock_signal[i].size()) continue;
+
+  //calculate arithmetic mean
+  float m = 0.f; int k, n;
+  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
+   m+=_AverageKnockValue(k), ++n;
+  }
+  if (0==n) continue;
+  m/=n; 
+  //calculate standard deviation
+  float s = 0.f;
+  for(k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
+   s+= pow(_AverageKnockValue(k) - m, 2.0f);
+  }
+  s = sqrt(s / ((float)n));
+  //filter points using "3 sigma rule"
+  m = 0.f;
+  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;   
+   float x = _AverageKnockValue(k);
+   if (x  < _AverageKnockValue(i) + (3.0f * s))
+    m+=x, ++n;
+  }
+  if (0==n) continue;
+  m/=n;
+  m_rpm_knock_signal[i].clear();
+  m_rpm_knock_signal[i].push_back(m);
+  m_rpm_knock_signal_ii[i] = 0;
+ }
  //перекачиваем данные из буфера в график на представлении
  std::vector<float> values;
  _PerformAverageOfRPMKnockFunctionValues(values);

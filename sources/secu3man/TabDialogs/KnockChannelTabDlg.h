@@ -49,6 +49,8 @@ class CKnockChannelTabDlg : public CTabDialog
   void setOnCopyToAttenuatorTable(EventHandler OnFunction);
   void setOnClearFunction(EventHandler OnFunction);
   void setOnResetPoints(EventIndexes OnFunction);
+  void setOnNeighbourMiddle(EventIndexes OnFunction);
+  void setOnSigmaFilter(EventHandler OnFunction);
   void setOnLoadPoints(EventHandler OnFunction);
   void setOnSavePoints(EventHandler OnFunction);
 
@@ -91,11 +93,14 @@ class CKnockChannelTabDlg : public CTabDialog
   afx_msg void OnUpdateCopyToAttenuatorTable(CCmdUI* pCmdUI);
   afx_msg void OnUpdateClearFunction(CCmdUI* pCmdUI);
   afx_msg void OnUpdateListResetPoints(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateListNeighbourMiddle(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDLSMCheckbox();
   afx_msg void OnListCheckbox();
   afx_msg void OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
   afx_msg void OnListResetPoints();
+  afx_msg void OnListNeighbourMiddle();
+  afx_msg void OnListSigmaFilter();
   afx_msg void OnListLoadPoints();
   afx_msg void OnListSavePoints();
   DECLARE_MESSAGE_MAP()
@@ -128,6 +133,8 @@ class CKnockChannelTabDlg : public CTabDialog
   EventHandler  m_OnCopyToAttenuatorTable;
   EventHandler  m_OnClearFunction;
   EventIndexes  m_OnResetPoints;
+  EventIndexes  m_OnNeighbourMiddle;
+  EventHandler  m_OnSigmaFilter;
   EventHandler  m_OnLoadPoints;
   EventHandler  m_OnSavePoints;
   bool m_all_enabled;

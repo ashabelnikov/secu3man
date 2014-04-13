@@ -49,6 +49,8 @@ void CKnockContextMenuManager::CreateContent(void)
 {
  m_ParentMenu.CreatePopupMenu();
  m_ParentMenu.AppendMenu(MF_STRING,IDM_KC_LIST_RESET_POINTS,MLL::LoadString(IDS_KC_LIST_RESET_POINTS));
+ m_ParentMenu.AppendMenu(MF_STRING, IDM_KC_LIST_NEIGHBOUR_MIDDLE, MLL::LoadString(IDS_KC_LIST_NEIGHBOUR_MIDDLE));
+ m_ParentMenu.AppendMenu(MF_STRING, IDM_KC_LIST_SIGMA_FILTER, MLL::LoadString(IDS_KC_LIST_SIGMA_FILTER));
  m_ParentMenu.AppendMenu(MF_SEPARATOR);
  m_ParentMenu.AppendMenu(MF_STRING,IDM_KC_LIST_LOAD_POINTS,MLL::LoadString(IDS_KC_LIST_LOAD_POINTS));
  m_ParentMenu.AppendMenu(MF_STRING,IDM_KC_LIST_SAVE_POINTS,MLL::LoadString(IDS_KC_LIST_SAVE_POINTS));
