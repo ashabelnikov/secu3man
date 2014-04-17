@@ -53,6 +53,14 @@ namespace SECU3IO
   float speed;                          //vehicle speed (Km/h)
   float distance;                       //passed distance since last ignition turn on (meters)
   float air_temp;                       //intake air temperature
+
+  float strt_aalt;                      //advance angle from start map
+  float idle_aalt;                      //advance angle from idle map
+  float work_aalt;                      //advance angle from work map
+  float temp_aalt;                      //advance angle from coolant temperature correction map
+  float airt_aalt;                      //advance angle from air temperature correction map
+  float idlreg_aac;                     //advance angle correction from idling RPM regulator
+  float octan_aac;                      //octane correction value
  };
 
  struct DbgvarDat

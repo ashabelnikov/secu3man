@@ -264,7 +264,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 62 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 90 : 45))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -385,6 +385,48 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
  m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
+
+ // Advance angle from start map (signed value)
+ int strt_aalt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&strt_aalt,true))
+  return false;
+ m_SensorDat.strt_aalt = ((float)strt_aalt) / m_angle_multiplier;
+
+ //Advance angle from idle map (signed value)
+ int idle_aalt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&idle_aalt,true))
+  return false;
+ m_SensorDat.idle_aalt = ((float)idle_aalt) / m_angle_multiplier;
+
+ // Advance angle from work map (signed value)
+ int work_aalt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&work_aalt,true))
+  return false;
+ m_SensorDat.work_aalt = ((float)work_aalt) / m_angle_multiplier;
+
+ // Advance angle from coolant temperature correction map (signed value)
+ int temp_aalt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_aalt,true))
+  return false;
+ m_SensorDat.temp_aalt = ((float)temp_aalt) / m_angle_multiplier;
+
+ // Advance angle from air temperature correction map (signed value)
+ int airt_aalt = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&airt_aalt,true))
+  return false;
+ m_SensorDat.airt_aalt = ((float)airt_aalt) / m_angle_multiplier;
+
+ // Advance angle from correction from idling RPM regulator (signed value)
+ int idlreg_aac = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&idlreg_aac,true))
+  return false;
+ m_SensorDat.idlreg_aac = ((float)idlreg_aac) / m_angle_multiplier;
+
+ // Octane correction value (signed value)
+ int octan_aac = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&octan_aac,true))
+  return false;
+ m_SensorDat.octan_aac = ((float)octan_aac) / m_angle_multiplier;
  
  return true;
 }
