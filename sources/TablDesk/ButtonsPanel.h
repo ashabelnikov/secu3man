@@ -23,11 +23,10 @@
 
 #include <memory>
 #include "common/FastDelegate.h"
+#include "GridModeEditorDlg.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
-
-class CGridModeEditorDlg;
 
 class AFX_EXT_CLASS CButtonsPanel : public CDialog
 {
@@ -62,6 +61,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   //used for grid mode editing window
   void EnableAdvanceAngleIndication(bool i_enable);
+
+  void SetDynamicValues(const CGridModeEditorDlg::DynVal& dv);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);

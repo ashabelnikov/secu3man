@@ -546,6 +546,12 @@ void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)
   mp_gridModeEditorDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
 }
 
+void CButtonsPanel::SetDynamicValues(const CGridModeEditorDlg::DynVal& dv)
+{
+ if (mp_gridModeEditorDlg.get())
+  mp_gridModeEditorDlg->SetDynamicValues(dv);
+}
+
 float* CButtonsPanel::GetStartMap(bool i_original)
 {
  if (i_original)

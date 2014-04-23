@@ -88,6 +88,11 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetTablesSetName(const _TSTRING& name);
   virtual _TSTRING GetTablesSetName(void) const;
   virtual float* GetMap(int i_mapType, bool i_original);
+
+  virtual void SetDynamicValues(float adv_ang, float knock_retard,
+   float strt_aalt, float idle_aalt, float work_aalt, float temp_aalt,
+   float airt_aalt, float idlreg_aac, float octan_aac);
+  virtual void EnableAdvanceAngleIndication(bool i_enable);
   //-------------------------------------------------------------
 
  // Implementation

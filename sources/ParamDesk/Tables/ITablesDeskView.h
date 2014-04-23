@@ -67,4 +67,10 @@ class ITablesDeskView
   virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 
   virtual _TSTRING GetTablesSetName(void) const = 0;              //get name from edit box
   virtual float* GetMap(int i_mapType, bool i_original) = 0;      //r/w access to specified table  
+
+  //Dynamically indicated values
+  virtual void SetDynamicValues(float adv_ang, float knock_retard,//set values dynamycally indicated in the GMW window
+   float strt_aalt, float idle_aalt, float work_aalt, float temp_aalt,
+   float airt_aalt, float idlreg_aac, float octan_aac) = 0;
+  virtual void EnableAdvanceAngleIndication(bool i_enable) = 0;   //enable/disable grid mode editing window
 };

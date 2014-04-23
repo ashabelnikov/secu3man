@@ -332,6 +332,30 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
  }
 }
 
+void CTablesDeskDlg::SetDynamicValues(float adv_ang, float knock_retard,
+ float strt_aalt, float idle_aalt, float work_aalt, float temp_aalt,
+ float airt_aalt, float idlreg_aac, float octan_aac)
+{
+ if (!m_pPageDlg) return;
+ CGridModeEditorDlg::DynVal dv;
+ dv.adv_ang = adv_ang;
+ dv.knock_retard = knock_retard;
+ dv.strt_aalt = strt_aalt; 
+ dv.idle_aalt = idle_aalt;
+ dv.work_aalt = work_aalt;
+ dv.temp_aalt = temp_aalt;
+ dv.airt_aalt = airt_aalt;
+ dv.idlreg_aac = idlreg_aac;
+ dv.octan_aac = octan_aac;
+ m_pPageDlg->mp_ButtonsPanel->SetDynamicValues(dv);
+}
+
+void CTablesDeskDlg::EnableAdvanceAngleIndication(bool i_enable)
+{
+ if (!m_pPageDlg) return;
+ m_pPageDlg->mp_ButtonsPanel->EnableAdvanceAngleIndication(i_enable);
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnDestroy()
 {

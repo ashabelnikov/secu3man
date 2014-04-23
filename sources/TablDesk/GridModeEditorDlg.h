@@ -44,6 +44,21 @@ class CGridModeEditorDlg : public CDialog
 
   void EnableAdvanceAngleIndication(bool i_enable);
 
+  struct DynVal
+  {
+   float adv_ang;
+   float knock_retard;
+   float strt_aalt;
+   float idle_aalt;
+   float work_aalt;
+   float temp_aalt;
+   float airt_aalt;
+   float idlreg_aac;
+   float octan_aac;
+  };
+
+  void SetDynamicValues(const DynVal& dv);
+
  public:
   void setIsAllowed(EventResult IsFunction);
   void setOnMapChanged(EventWithCode OnFunction);
@@ -76,6 +91,15 @@ class CGridModeEditorDlg : public CDialog
   std::auto_ptr<CEditExCustomKeys> m_str_grid[16];
   std::auto_ptr<CEditExCustomKeys> m_tmp_grid[16];
 
+  CStatic m_aa_value;
+  CStatic m_wm_value;
+  CStatic m_oc_value;
+  CStatic m_tc_value;
+  CStatic m_kc_value;
+  CStatic m_im_value;
+  CStatic m_ic_value;
+  CStatic m_ac_value;
+
   float* mp_startMap;
   float* mp_idleMap;
   float* mp_workMap;
@@ -84,4 +108,6 @@ class CGridModeEditorDlg : public CDialog
   CBrush m_redBrush;
   bool m_closing_wnd;
   bool m_en_aa_indication;
+
+  CFont m_font;
 };

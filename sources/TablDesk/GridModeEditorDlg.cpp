@@ -287,6 +287,16 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
   if (!m_tmp_grid[i]->m_error)
    m_tmp_grid[i]->DDX_Value(pDX, IDC_GME_TMP_0 + i, mp_tempMap[i]);
  }
+
+ //Advance angle indication controls
+ DDX_Control(pDX, IDC_GME_AA_VALUE, m_aa_value);
+ DDX_Control(pDX, IDC_GME_WM_VALUE, m_wm_value);
+ DDX_Control(pDX, IDC_GME_OC_VALUE, m_oc_value);
+ DDX_Control(pDX, IDC_GME_TC_VALUE, m_tc_value);
+ DDX_Control(pDX, IDC_GME_KC_VALUE, m_kc_value);
+ DDX_Control(pDX, IDC_GME_IM_VALUE, m_im_value);
+ DDX_Control(pDX, IDC_GME_IC_VALUE, m_ic_value);
+ DDX_Control(pDX, IDC_GME_AC_VALUE, m_ac_value);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -300,9 +310,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
  memset(&LogFont, 0x00, sizeof(LogFont));
  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
  LogFont.lfHeight = 8;
-
- CFont* pFont = new CFont;
- pFont->CreateFontIndirect(&LogFont);
+ m_font.CreateFontIndirect(&LogFont);
 
  CRect rc;
  GetDlgItem(IDC_GME_WRK_FRAME)->GetWindowRect(&rc);
@@ -319,7 +327,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
    CRect wrk_rect(j*(width+space), i*(height+space), j*(width+space) + width, i*(height+space) + height);
    wrk_rect.OffsetRect(rc.left, rc.top);
    m_wrk_grid[i][j]->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, wrk_rect, this, IDC_GME_WRK_START+i*16+j);
-   m_wrk_grid[i][j]->SetFont(pFont);   
+   m_wrk_grid[i][j]->SetFont(&m_font);
   }
 
  //map labels
@@ -328,7 +336,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
   CRect lab_rect(rc.left - width, rc.top+(i*(height+space)), rc.left, rc.top + (i*(height+space) + height));
   CString cs; cs.Format("%d ", 16-i);
   m_wrk_map_labels[i].Create(cs.GetBuffer(0),WS_CHILD | WS_VISIBLE | SS_RIGHT, lab_rect, this);
-  m_wrk_map_labels[i].SetFont(pFont);
+  m_wrk_map_labels[i].SetFont(&m_font);
  }
 
  if (m_OnOpenMapWnd)
@@ -406,6 +414,19 @@ void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
  m_en_aa_indication = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, true);
+}
+
+void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
+{
+ CString str;
+ str.Format("%0.2f", dv.adv_ang), m_aa_value.SetWindowText(str);
+ str.Format("%0.2f", dv.knock_retard), m_kc_value.SetWindowText(str);
+ str.Format("%0.2f", dv.idle_aalt), m_im_value.SetWindowText(str);
+ str.Format("%0.2f", dv.work_aalt), m_wm_value.SetWindowText(str);
+ str.Format("%0.2f", dv.temp_aalt), m_tc_value.SetWindowText(str);
+ str.Format("%0.2f", dv.airt_aalt), m_ac_value.SetWindowText(str);
+ str.Format("%0.2f", dv.idlreg_aac), m_ic_value.SetWindowText(str);
+ str.Format("%0.2f", dv.octan_aac), m_oc_value.SetWindowText(str);
 }
 
 void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)

@@ -31,15 +31,17 @@
 #include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
+#include "ParamDesk/Tables/ITablesDeskView.h"
 #include "Settings/ISettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
+CPMMonitorController::CPMMonitorController(VIEW* ip_view, RSDVIEW* ip_rsdview, CEDVIEW* ip_cedview, TDVIEW* ip_tdview, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : Super(ip_view)
 , mp_rsdview(ip_rsdview)
 , mp_cedview(ip_cedview)
+, mp_tdview(ip_tdview)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 , mp_settings(ip_settings)
@@ -101,11 +103,15 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      mp_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
     else
     {
+     SensorDat* sd = (SensorDat*)(i_packet_data);
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
-     mp_view->SetValues((SensorDat*)(i_packet_data));
-     mp_cedview->SetValues(((SensorDat*)(i_packet_data))->ce_errors);
+     mp_view->SetValues(sd);
+     mp_cedview->SetValues(sd->ce_errors);
+     mp_tdview->SetDynamicValues(sd->adv_angle, sd->knock_retard, sd->strt_aalt, 
+      sd->idle_aalt, sd->work_aalt, sd->temp_aalt, sd->airt_aalt, sd->idlreg_aac, sd->octan_aac);
      mp_view->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
      mp_cedview->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
+     mp_tdview->EnableAdvanceAngleIndication(mp_comm->m_pControlApp->GetOnlineStatus());
      m_operation_state = 1; //все готово для отображения данных
     }
    }
@@ -119,6 +125,7 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
      mp_rsdview->SetValues((RawSensDat*)(i_packet_data));
      mp_rsdview->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
+     mp_tdview->EnableAdvanceAngleIndication(false);
      m_operation_state = 1; //все готово для отображения данных
     }
    }   
@@ -132,8 +139,11 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      mp_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
     else
     {
-     mp_view->SetValues((SensorDat*)(i_packet_data));
-     mp_cedview->SetValues(((SensorDat*)(i_packet_data))->ce_errors);
+     SensorDat* sd = (SensorDat*)(i_packet_data);
+     mp_view->SetValues(sd);
+     mp_cedview->SetValues(sd->ce_errors);
+     mp_tdview->SetDynamicValues(sd->adv_angle, sd->knock_retard, sd->strt_aalt, 
+      sd->idle_aalt, sd->work_aalt, sd->temp_aalt, sd->airt_aalt, sd->idlreg_aac, sd->octan_aac);
     }
    }
    else
