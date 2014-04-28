@@ -332,21 +332,31 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
  }
 }
 
-void CTablesDeskDlg::SetDynamicValues(float adv_ang, float knock_retard,
- float strt_aalt, float idle_aalt, float work_aalt, float temp_aalt,
- float airt_aalt, float idlreg_aac, float octan_aac)
+void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, float adv_ang, float knock_retard, bool knkret_use,
+ float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
+ float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use)
 {
  if (!m_pPageDlg) return;
  CGridModeEditorDlg::DynVal dv;
+ dv.rpm = rpm;
+ dv.temp = temp;
  dv.adv_ang = adv_ang;
  dv.knock_retard = knock_retard;
+ dv.knkret_use = knkret_use;
  dv.strt_aalt = strt_aalt; 
+ dv.strt_use = strt_use;
  dv.idle_aalt = idle_aalt;
+ dv.idle_use = idle_use;
  dv.work_aalt = work_aalt;
+ dv.work_use = work_use;
  dv.temp_aalt = temp_aalt;
+ dv.temp_use = temp_use;
  dv.airt_aalt = airt_aalt;
+ dv.airt_use = airt_use;
  dv.idlreg_aac = idlreg_aac;
+ dv.idlreg_use = idlreg_use;
  dv.octan_aac = octan_aac;
+ dv.octan_use = octan_use;
  m_pPageDlg->mp_ButtonsPanel->SetDynamicValues(dv);
 }
 

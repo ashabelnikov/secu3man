@@ -162,6 +162,7 @@ const UINT CGridModeEditorDlg::IDD = IDD_GRID_MODE_EDITOR;
 // CGridModeEditorDlg dialog
 
 BEGIN_MESSAGE_MAP(CGridModeEditorDlg, Super)
+ ON_WM_PAINT()
  ON_WM_CLOSE()
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_WRK_START, IDC_GME_WRK_START+16*16, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_IDL_0, IDC_GME_IDL_15, OnUpdateControls)
@@ -196,6 +197,7 @@ END_MESSAGE_MAP()
 
 CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 : Super(CGridModeEditorDlg::IDD, pParent)
+, m_wpiPen(PS_SOLID, 2, RGB(255, 128, 128))
 , mp_startMap(NULL)
 , mp_idleMap(NULL)
 , mp_workMap(NULL)
@@ -255,7 +257,10 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
   m_str_grid[j]->m_un = m_tmp_grid[j].get();
   m_str_grid[j]->m_ln = j > 0 ? m_str_grid[j-1].get() : NULL;
   m_str_grid[j]->m_rn = j < 15 ? m_str_grid[j+1].get() : NULL;
- } 
+ }
+
+ m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use = 
+ m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
 }
 
 CGridModeEditorDlg::~CGridModeEditorDlg()
@@ -359,7 +364,17 @@ void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
- pCmdUI->Enable(allowed && m_en_aa_indication);
+ bool flag;
+
+ if (pCmdUI->m_nID == IDC_GME_WM_VALUE) flag = m_curDV.work_use;
+ else if (pCmdUI->m_nID == IDC_GME_OC_VALUE) flag = m_curDV.octan_use;
+ else if (pCmdUI->m_nID == IDC_GME_TC_VALUE) flag = m_curDV.temp_use;
+ else if (pCmdUI->m_nID == IDC_GME_KC_VALUE) flag = m_curDV.knkret_use;
+ else if (pCmdUI->m_nID == IDC_GME_IM_VALUE) flag = m_curDV.idle_use;
+ else if (pCmdUI->m_nID == IDC_GME_IC_VALUE) flag = m_curDV.idlreg_use;
+ else if (pCmdUI->m_nID == IDC_GME_AC_VALUE) flag = m_curDV.airt_use;
+
+ pCmdUI->Enable(allowed && m_en_aa_indication && flag);
 }
 
 HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
@@ -385,6 +400,13 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
   }
  }
  return hbr;
+}
+
+void CGridModeEditorDlg::OnPaint()
+{
+ Super::OnPaint();
+ //CClientDC dc(this);
+ //dc.SelectObject(&m_wpiPen);
 }
 
 void CGridModeEditorDlg::OnClose()
@@ -427,6 +449,8 @@ void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
  str.Format("%0.2f", dv.airt_aalt), m_ac_value.SetWindowText(str);
  str.Format("%0.2f", dv.idlreg_aac), m_ic_value.SetWindowText(str);
  str.Format("%0.2f", dv.octan_aac), m_oc_value.SetWindowText(str);
+ m_curDV = dv;
+ UpdateDialogControls(this, true);  //todo: check it for perfomance issues
 }
 
 void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)
@@ -500,4 +524,4 @@ bool CGridModeEditorDlg::_ValidateItem(CEditExCustomKeys* pItem)
  pItem->Invalidate();
  return !pItem->m_error;
 }
- 
+

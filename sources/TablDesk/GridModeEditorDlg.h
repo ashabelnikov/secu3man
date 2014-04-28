@@ -46,15 +46,26 @@ class CGridModeEditorDlg : public CDialog
 
   struct DynVal
   {
+   int rpm;
+   float temp;
+
    float adv_ang;
    float knock_retard;
+   bool knkret_use;
    float strt_aalt;
+   bool strt_use;
    float idle_aalt;
+   bool idle_use;
    float work_aalt;
+   bool work_use;
    float temp_aalt;
+   bool temp_use;
    float airt_aalt;
+   bool airt_use;
    float idlreg_aac;
+   bool idlreg_use;
    float octan_aac;
+   bool octan_use;
   };
 
   void SetDynamicValues(const DynVal& dv);
@@ -72,6 +83,7 @@ class CGridModeEditorDlg : public CDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateAAControls(CCmdUI* pCmdUI);
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
+  afx_msg void OnPaint();
   afx_msg void OnClose();
   DECLARE_MESSAGE_MAP()
 
@@ -83,7 +95,7 @@ class CGridModeEditorDlg : public CDialog
   void OnEditChar(UINT nChar, CEditExCustomKeys*);
   void OnEditKill(CEditExCustomKeys*);
   bool _ValidateItem(CEditExCustomKeys* pItem);
-
+  
  private:
   std::auto_ptr<CEditExCustomKeys> m_wrk_grid[16][16];
   CStatic m_wrk_map_labels[16];
@@ -110,4 +122,6 @@ class CGridModeEditorDlg : public CDialog
   bool m_en_aa_indication;
 
   CFont m_font;
+  CPen m_wpiPen;
+  DynVal m_curDV;
 };

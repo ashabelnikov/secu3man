@@ -306,6 +306,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int knock_retard = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&knock_retard, true))
   return false;
+ m_SensorDat.knkret_use = (knock_retard != 32767);
  m_SensorDat.knock_retard = ((float)knock_retard) / m_angle_multiplier;
 
  //Расход воздуха
@@ -390,43 +391,50 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int strt_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&strt_aalt,true))
   return false;
- m_SensorDat.strt_aalt = ((float)strt_aalt) / m_angle_multiplier;
+ m_SensorDat.strt_use = (strt_aalt != 32767);
+ m_SensorDat.strt_aalt = m_SensorDat.strt_use ? (((float)strt_aalt) / m_angle_multiplier) : 0;
 
  //Advance angle from idle map (signed value)
  int idle_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&idle_aalt,true))
   return false;
- m_SensorDat.idle_aalt = ((float)idle_aalt) / m_angle_multiplier;
+ m_SensorDat.idle_use = (idle_aalt != 32767);
+ m_SensorDat.idle_aalt = m_SensorDat.idle_use ? (((float)idle_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from work map (signed value)
  int work_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&work_aalt,true))
   return false;
- m_SensorDat.work_aalt = ((float)work_aalt) / m_angle_multiplier;
+ m_SensorDat.work_use = (work_aalt != 32767);
+ m_SensorDat.work_aalt = m_SensorDat.work_use ? (((float)work_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from coolant temperature correction map (signed value)
  int temp_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_aalt,true))
   return false;
- m_SensorDat.temp_aalt = ((float)temp_aalt) / m_angle_multiplier;
+ m_SensorDat.temp_use = (temp_aalt != 32767);
+ m_SensorDat.temp_aalt = m_SensorDat.temp_use ? (((float)temp_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from air temperature correction map (signed value)
  int airt_aalt = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&airt_aalt,true))
   return false;
- m_SensorDat.airt_aalt = ((float)airt_aalt) / m_angle_multiplier;
+ m_SensorDat.airt_use = (airt_aalt != 32767);
+ m_SensorDat.airt_aalt = m_SensorDat.airt_use ? (((float)airt_aalt) / m_angle_multiplier) : 0;
 
  // Advance angle from correction from idling RPM regulator (signed value)
  int idlreg_aac = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&idlreg_aac,true))
   return false;
- m_SensorDat.idlreg_aac = ((float)idlreg_aac) / m_angle_multiplier;
+ m_SensorDat.idlreg_use = (idlreg_aac != 32767);
+ m_SensorDat.idlreg_aac = m_SensorDat.idlreg_use ? (((float)idlreg_aac) / m_angle_multiplier) : 0;
 
  // Octane correction value (signed value)
  int octan_aac = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&octan_aac,true))
   return false;
- m_SensorDat.octan_aac = ((float)octan_aac) / m_angle_multiplier;
+ m_SensorDat.octan_use = (octan_aac != 32767);
+ m_SensorDat.octan_aac = m_SensorDat.octan_use ? (((float)octan_aac) / m_angle_multiplier) : 0;
  
  return true;
 }
