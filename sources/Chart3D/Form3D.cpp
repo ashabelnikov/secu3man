@@ -52,9 +52,11 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , m_pOnChange(NULL)
 , m_pOnClose(NULL)
 , m_pOnWndActivation(NULL)
+, m_pOnGetXAxisLabel(NULL)
 , m_param_on_change(NULL)
 , m_param_on_close(NULL)
 , m_param_on_wnd_activation(NULL)
+, m_param_on_get_x_axis_label(NULL)
 , m_setval(0)
 , m_val_n(0)
 , m_air_flow_position(0)
@@ -124,6 +126,13 @@ void TForm3D::SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_par
 }
 
 //---------------------------------------------------------------------------
+void TForm3D::SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param)
+{
+ m_pOnGetXAxisLabel = i_pOnGetAxisLabel;
+ m_param_on_get_x_axis_label = i_param;
+}
+
+//---------------------------------------------------------------------------
 void TForm3D::Enable(bool enable)
 {
  if (false==enable)
@@ -169,7 +178,7 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_CopyFromCurve->Caption = string;
  ::LoadString(hInstance, IDS_PM_COPY_TO_CURVE, string, 1024);
  PM_CopyToCurve->Caption = string;
-}
+} 
 
 //---------------------------------------------------------------------------
 void TForm3D::InitHints(HINSTANCE hInstance)
@@ -265,6 +274,22 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
   //Move all selected points
   v = Chart1->Series[m_air_flow_position + m_count_z]->YScreenToValue(Y);
   ShiftPoints(v - Chart1->Series[m_air_flow_position + m_count_z]->YValue[m_val_n]);
+ }
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::Chart1GetAxisLabel(TChartAxis *Sender,
+      TChartSeries *Series, int ValueIndex, AnsiString &LabelText)
+{
+ if (Sender == Chart1->BottomAxis)
+ { //X
+  if (m_pOnGetXAxisLabel)
+  {
+   TCHAR string[64];
+   _tcscpy(string, LabelText.c_str());
+   m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
+   LabelText = string;
+  }
  }
 }
 
@@ -541,7 +566,7 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
 {
- for(size_t i = 0; i < m_count_x; ++i)
+ for(int i = 0; i < m_count_x; ++i)
  { 
   SetChartValue(toIndex, i, GetChartValue(fromIndex, i));
   SetItem(toIndex, i, Chart1->Series[fromIndex + m_count_z]->YValue[i]);

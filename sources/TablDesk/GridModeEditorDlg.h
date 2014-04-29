@@ -40,6 +40,7 @@ class CGridModeEditorDlg : public CDialog
   static const UINT IDD;
   
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
+  void BindRPMGrid(float* pGrid);
   void UpdateView(void);
 
   void EnableAdvanceAngleIndication(bool i_enable);
@@ -116,6 +117,7 @@ class CGridModeEditorDlg : public CDialog
   float* mp_idleMap;
   float* mp_workMap;
   float* mp_tempMap;
+  float* mp_rpmGrid;
 
   CBrush m_redBrush;
   bool m_closing_wnd;

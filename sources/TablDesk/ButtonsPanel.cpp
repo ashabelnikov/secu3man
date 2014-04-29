@@ -22,6 +22,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ButtonsPanel.h"
+#include "common/MathHelpers.h"
 #include "DLLLinkedFunctions.h"
 #include "GridModeEditorDlg.h"
 #include "io-core/secu3io.h"
@@ -154,6 +155,19 @@ void __cdecl CButtonsPanel::OnCloseTempMap(void* i_param)
   _this->m_OnCloseMapWnd(_this->m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
 }
 
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //WTF?
+  return;
+ }
+ _stprintf(io_label_string, _T("%d"), MathHelpers::Round(_this->GetRPMGrid()[index]));
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationStartMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -168,6 +182,7 @@ void __cdecl CButtonsPanel::OnWndActivationStartMap(void* i_param, long cmd)
   _this->m_OnWndActivation(_this->m_start_map_wnd_handle, cmd);
 }
 
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationIdleMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -182,6 +197,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdleMap(void* i_param, long cmd)
   _this->m_OnWndActivation(_this->m_idle_map_wnd_handle, cmd);
 }
 
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationWorkMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -196,6 +212,7 @@ void __cdecl CButtonsPanel::OnWndActivationWorkMap(void* i_param, long cmd)
   _this->m_OnWndActivation(_this->m_work_map_wnd_handle, cmd);
 }
 
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -210,6 +227,7 @@ void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
   _this->m_OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
 }
 
+//------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChanged(int mapType)
 {
  if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
@@ -225,6 +243,7 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
   m_OnMapChanged(mapType);
 }
 
+//------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapClosed(HWND hwnd, int mapType)
 {
  m_grid_map_state = 0;
@@ -361,6 +380,7 @@ void CButtonsPanel::OnViewIdleMap()
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str());
   DLL::Chart2DSetOnWndActivation(m_idle_map_wnd_handle,OnWndActivationIdleMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_idle_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
   DLL::Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
   DLL::Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
@@ -393,6 +413,7 @@ void CButtonsPanel::OnViewWorkMap()
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
   DLL::Chart3DSetOnWndActivation(m_work_map_wnd_handle, OnWndActivationWorkMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_work_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
   DLL::Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
 
@@ -447,6 +468,7 @@ void CButtonsPanel::OnGridModeEditing()
  {
   mp_gridModeEditorDlg.reset(new CGridModeEditorDlg());
   mp_gridModeEditorDlg->BindMaps(m_start_map_active, m_idle_map_active, &m_work_map_active[0][0], m_temp_map_active);
+  mp_gridModeEditorDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChanged));
   mp_gridModeEditorDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosed));
@@ -529,14 +551,6 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
  if (mp_gridModeEditorDlg.get() && m_grid_map_state)
   mp_gridModeEditorDlg->UpdateView();
-}
-
-void CButtonsPanel::UpdateOpenedChartsAxisLabels(void)
-{
- if (m_idle_map_chart_state)
-  DLL::Chart2DUpdateAxisLabels(m_idle_map_wnd_handle, 1, GetRPMGrid());
- if (m_work_map_chart_state)
-  DLL::Chart3DUpdateAxisLabels(m_work_map_wnd_handle, 1, GetRPMGrid());
 }
 
 void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)

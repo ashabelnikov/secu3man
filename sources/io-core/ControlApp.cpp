@@ -1215,6 +1215,44 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::SepTabPar& m_RpmGrdPar = m_recepted_packet.m_SepTabPar;
+ if (mp_pdp->isHex() ? (size != 66) : (size != 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //адрес фрагмента данных в таблице (смещение в таблице)
+ unsigned char address;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &address))
+  return false;
+ m_RpmGrdPar.address = address;
+ if (0!=address)
+  return false;  //address must be always zero
+
+ size-=mp_pdp->getHex8Size();
+ size_t div = mp_pdp->isHex() ? 2*2 : 1*2;
+ if (size % div) // 1 byte in HEX is 2 symbols
+  return false;
+
+ //фрагмент с данными (сетка оборотов)
+ size_t data_size = 0;
+ for(size_t i = 0; i < size / div; ++i)
+ {
+  unsigned char lo_byte, hi_byte;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &lo_byte))
+   return false;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &hi_byte))
+   return false;
+
+  m_RpmGrdPar.table_data[i] = MAKEWORD(lo_byte, hi_byte);
+  ++data_size;
+ }
+ m_RpmGrdPar.data_size = data_size;
+ 
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
@@ -1490,6 +1528,10 @@ bool CControlApp::ParsePackets()
     if (Parse_ATTTAB_PAR(p_start, p_size))
      break;
     continue;
+   case RPMGRD_PAR:
+    if (Parse_RPMGRD_PAR(p_start, p_size))
+     break;
+    continue;
    case DIAGINP_DAT:
     if (Parse_DIAGINP_DAT(p_start, p_size))
      break;
@@ -1695,6 +1737,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case MISCEL_PAR:
   case EDITAB_PAR:
   case ATTTAB_PAR:
+  case RPMGRD_PAR:
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
   case CHOKE_PAR:

@@ -369,6 +369,7 @@ BEGIN
     IDS_PM_READING_TABLES   "Чтение таблиц..."
     IDS_PM_WRITING_TABLES   "Запись таблиц..."
     IDS_PM_WRITING_TABLES_NAME "Запись имени..."
+    IDS_PM_READING_RPMRGD   "Чтение сетки оборотов..."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -949,6 +950,7 @@ BEGIN
     IDS_PM_READING_TABLES   "Reading tables..."
     IDS_PM_WRITING_TABLES   "Writing tables..."
     IDS_PM_WRITING_TABLES_NAME "Writing name..."
+    IDS_PM_READING_RPMRGD   "Reading RPM grid..."
 END
 
 STRINGTABLE DISCARDABLE 

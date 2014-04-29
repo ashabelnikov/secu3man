@@ -99,4 +99,6 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
 
   bool m_valid_cache; //признак валидного кеша (данные в менеджере соответствуют данным в SECU-3)
   CObjectTimer<CPMTablesController> m_td_changes_timer;
+
+  float m_rpmGrid[32];
 };

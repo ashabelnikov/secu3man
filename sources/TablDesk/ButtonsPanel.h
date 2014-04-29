@@ -57,7 +57,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);
-  virtual void UpdateOpenedChartsAxisLabels(void);
 
   //used for grid mode editing window
   void EnableAdvanceAngleIndication(bool i_enable);
@@ -116,7 +115,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnCloseWorkMap(void* i_param);
   static void __cdecl OnChangeTempMap(void* i_param);
   static void __cdecl OnCloseTempMap(void* i_param);
-  static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
+  static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);

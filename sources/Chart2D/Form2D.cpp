@@ -354,7 +354,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
   {
    TCHAR string[64];
    _tcscpy(string, LabelText.c_str());
-   m_pOnGetYAxisLabel(string, m_param_on_get_y_axis_label);
+   m_pOnGetYAxisLabel(string, ValueIndex, m_param_on_get_y_axis_label);
    LabelText = string;
   }
  }
@@ -366,7 +366,7 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
    {
     TCHAR string[64];
     _tcscpy(string, LabelText.c_str());
-    m_pOnGetXAxisLabel(string, m_param_on_get_x_axis_label);
+    m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
     LabelText = string;
    }
   }

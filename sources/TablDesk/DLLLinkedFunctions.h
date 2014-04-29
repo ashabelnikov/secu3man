@@ -30,13 +30,12 @@
 namespace DLL
 {
  typedef void (__cdecl *EventHandler)(void* i_param);
- typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
+ typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
  typedef void (__cdecl *OnWndActivation)(void* i_param, long i_cmd);
  typedef void (__cdecl *OnChangeValue)(void* i_param, int i_type, float i_value);
  //2D
  typedef HWND (__cdecl *Chart2DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
  typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
- typedef void (__cdecl *Chart2DUpdateAxisLabels_Addr)(HWND hWnd, int i_axis, const float *ip_labels_values);
  typedef void (__cdecl *Chart2DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
  typedef void (__cdecl *Chart2DSetMarksVisible_Addr) (HWND hWnd, int i_series_index, bool i_visible);
@@ -54,9 +53,9 @@ namespace DLL
  //3D
  typedef HWND (__cdecl *Chart3DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_chart_title);
  typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
- typedef void (__cdecl *Chart3DUpdateAxisLabels_Addr) (HWND hWnd, int i_axis, const float *ip_labels_values);
  typedef void (__cdecl *Chart3DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart3DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
+ typedef void (__cdecl *Chart3DSetOnGetAxisLabel_Addr) (HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  typedef void (__cdecl *Chart3DShow_Addr) (HWND hWnd, int i_show);
  typedef void (__cdecl *Chart3DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart3DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
@@ -66,7 +65,6 @@ namespace DLL
  ///////////////////////////////////////////////////////////////////
  extern Chart2DCreate_Addr              Chart2DCreate;
  extern Chart2DUpdate_Addr              Chart2DUpdate;
- extern Chart2DUpdateAxisLabels_Addr    Chart2DUpdateAxisLabels;
  extern Chart2DSetOnChange_Addr         Chart2DSetOnChange;
  extern Chart2DSetOnClose_Addr          Chart2DSetOnClose;
  extern Chart2DSetMarksVisible_Addr     Chart2DSetMarksVisible;
@@ -83,9 +81,9 @@ namespace DLL
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;
- extern Chart3DUpdateAxisLabels_Addr    Chart3DUpdateAxisLabels;
  extern Chart3DSetOnChange_Addr         Chart3DSetOnChange;
  extern Chart3DSetOnClose_Addr          Chart3DSetOnClose;
+ extern Chart3DSetOnGetAxisLabel_Addr   Chart3DSetOnGetAxisLabel;
  extern Chart3DShow_Addr                Chart3DShow;
  extern Chart3DSetLanguage_Addr         Chart3DSetLanguage;
  extern Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation;

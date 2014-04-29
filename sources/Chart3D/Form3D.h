@@ -37,6 +37,7 @@
 
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
+typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
 
 //---------------------------------------------------------------------------
 class TForm3D : public TForm
@@ -132,6 +133,7 @@ class TForm3D : public TForm
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
+  void __fastcall Chart1GetAxisLabel(TChartAxis *Sender, TChartSeries *Series, int ValueIndex, AnsiString &LabelText);
   void __fastcall CheckBox3dClick(TObject *Sender);
   void __fastcall CheckBoxBvClick(TObject *Sender);
   void __fastcall OnCloseForm(TObject *Sender, TCloseAction &Action);
@@ -159,6 +161,7 @@ class TForm3D : public TForm
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
+  void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
 
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);
@@ -210,6 +213,10 @@ class TForm3D : public TForm
 
   OnWndActivation m_pOnWndActivation;
   void* m_param_on_wnd_activation;
+
+  //адпес функции которая будет вызываться при рисовании надписей на оси X
+  OnGetAxisLabel m_pOnGetXAxisLabel;
+  void* m_param_on_get_x_axis_label;
 
   int m_setval;
   int m_val_n;

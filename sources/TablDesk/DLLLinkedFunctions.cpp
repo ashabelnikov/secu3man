@@ -28,7 +28,6 @@ namespace DLL
  //глобальная таблица функций из DLL
  Chart2DCreate_Addr              Chart2DCreate = NULL;
  Chart2DUpdate_Addr              Chart2DUpdate = NULL;
- Chart2DUpdateAxisLabels_Addr    Chart2DUpdateAxisLabels = NULL;
  Chart2DSetOnChange_Addr         Chart2DSetOnChange = NULL;
  Chart2DSetOnClose_Addr          Chart2DSetOnClose = NULL;
  Chart2DSetMarksVisible_Addr     Chart2DSetMarksVisible = NULL;
@@ -45,9 +44,9 @@ namespace DLL
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
- Chart3DUpdateAxisLabels_Addr    Chart3DUpdateAxisLabels = NULL;
  Chart3DSetOnChange_Addr         Chart3DSetOnChange = NULL;
  Chart3DSetOnClose_Addr          Chart3DSetOnClose = NULL;
+ Chart3DSetOnGetAxisLabel_Addr   Chart3DSetOnGetAxisLabel = NULL;
  Chart3DShow_Addr                Chart3DShow = NULL;
  Chart3DSetLanguage_Addr         Chart3DSetLanguage = NULL;
  Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
@@ -88,7 +87,6 @@ namespace DLL
    AfxMessageBox(_T("Can't load library Chart2D.dll"), MB_OK|MB_ICONSTOP);
    Chart2DCreate = NULL;
    Chart2DUpdate = NULL;
-   Chart2DUpdateAxisLabels = NULL;
    Chart2DSetOnChange = NULL;
    Chart2DSetOnClose = NULL;
    Chart2DSetMarksVisible = NULL;
@@ -108,7 +106,6 @@ namespace DLL
   {
    LoadFunction(hModule, Chart2DCreate, "Chart2DCreate", status);
    LoadFunction(hModule, Chart2DUpdate, "Chart2DUpdate", status);
-   LoadFunction(hModule, Chart2DUpdateAxisLabels, "Chart2DUpdateAxisLabels", status);
    LoadFunction(hModule, Chart2DSetOnChange, "Chart2DSetOnChange", status);
    LoadFunction(hModule, Chart2DSetOnClose, "Chart2DSetOnClose", status);
    LoadFunction(hModule, Chart2DSetMarksVisible, "Chart2DSetMarksVisible", status);
@@ -130,9 +127,9 @@ namespace DLL
    AfxMessageBox(_T("Can't load library Chart3D.dll"), MB_OK|MB_ICONSTOP);
    Chart3DCreate = NULL;
    Chart3DUpdate = NULL;
-   Chart3DUpdateAxisLabels = NULL;
    Chart3DSetOnChange = NULL;
    Chart3DSetOnClose = NULL;
+   Chart3DSetOnGetAxisLabel = NULL;
    Chart3DShow = NULL;
    Chart3DSetLanguage = NULL;
    Chart3DSetOnWndActivation = NULL;
@@ -144,9 +141,9 @@ namespace DLL
   {
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
    LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
-   LoadFunction(hModule, Chart3DUpdateAxisLabels, "Chart3DUpdateAxisLabels", status);
    LoadFunction(hModule, Chart3DSetOnChange, "Chart3DSetOnChange", status);
    LoadFunction(hModule, Chart3DSetOnClose, "Chart3DSetOnClose", status);
+   LoadFunction(hModule, Chart3DSetOnGetAxisLabel, "Chart3DSetOnGetAxisLabel", status);
    LoadFunction(hModule, Chart3DShow, "Chart3DShow", status);
    LoadFunction(hModule, Chart3DSetLanguage, "Chart3DSetLanguage", status);
    LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);

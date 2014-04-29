@@ -36,7 +36,7 @@
 #include "TChartEx.h"
 
 typedef void (__cdecl *EventHandler)(void* i_param);
-typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, void* i_param);
+typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
 typedef void (__cdecl *OnChangeValue)(void* i_param, int type, float value);
 

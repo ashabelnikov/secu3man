@@ -201,7 +201,19 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
 {
  switch(m_operation_state)
  {
-  case 0:
+  case 0: //Read out RPM grid
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMRGD));
+   if (i_descriptor != RPMGRD_PAR)
+    mp_comm->m_pControlApp->ChangeContext(RPMGRD_PAR);
+   else
+   {//save RPM grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_rpmGrid, data->table_data, F_RPM_SLOTS*sizeof(float)); //save RPM grid
+    m_operation_state = 1;
+   }
+   break;
+
+  case 1:
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    if (i_descriptor != EDITAB_PAR)
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
@@ -210,15 +222,15 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
-    m_operation_state = 1;
+    m_operation_state = 2;
    }
    break;
 
-  case 1:
+  case 2:
    {
     if (i_descriptor != EDITAB_PAR)
     {
-     m_operation_state = 0;
+     m_operation_state = 1;
      break;
     }
 
@@ -473,11 +485,10 @@ void CPMTablesController::OnDataCollected(void)
  _ResetModification(mp_view->GetCurSel()); //original=current
  _MoveMapsToCharts(mp_view->GetCurSel(), false);
  _MoveMapsToCharts(mp_view->GetCurSel(), true);
- mp_view->UpdateOpenedCharts();
+ //Set RPM grid read out from SECU-3
+ mp_view->SetRPMGrid(m_rpmGrid);
+  mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps[mp_view->GetCurSel()]->name);
- //TODO: Here we set standard RPM grid, but if in the future we will enable "RPM grid editiong" we will have to
- //read out actual RPM grid from SECU-3.
- mp_view->SetRPMGrid(SECU3IO::work_map_rpm_slots);
 }
 
 void CPMTablesController::OnTableDeskChangesTimer(void)

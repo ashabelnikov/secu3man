@@ -946,7 +946,6 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
   //устанавливаем значения только в графики
   SetViewChartsValues();
   m_view->mp_TablesPanel->UpdateOpenedCharts();
-  m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
 
   m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
  }
@@ -1010,7 +1009,6 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  m_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
  m_view->mp_TablesPanel->UpdateOpenedCharts();
- m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
 
  //если было выделение в списке, то восстанавлваем его
  m_view->mp_TablesPanel->SetFunSetListBoxSelection(m_current_funset_index);
@@ -1278,7 +1276,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  if (IDOK == cntr.Edit())
  {
   m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
-  m_view->mp_TablesPanel->UpdateOpenedChartsAxisLabels();
+  m_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
 

@@ -202,6 +202,7 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 , mp_idleMap(NULL)
 , mp_workMap(NULL)
 , mp_tempMap(NULL)
+, mp_rpmGrid(NULL)
 , m_redBrush(itemErrColor)
 , m_closing_wnd(false)
 , m_en_aa_indication(false)
@@ -292,6 +293,13 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
   if (!m_tmp_grid[i]->m_error)
    m_tmp_grid[i]->DDX_Value(pDX, IDC_GME_TMP_0 + i, mp_tempMap[i]);
  }
+
+ //RPM grid
+ for(int i = 0; i < 16; ++i)
+ {
+  int value = MathHelpers::Round(mp_rpmGrid[i]);
+  DDX_Text(pDX, IDC_GME_WRKL_0 + i, value);
+ } 
 
  //Advance angle indication controls
  DDX_Control(pDX, IDC_GME_AA_VALUE, m_aa_value);
@@ -423,6 +431,11 @@ void CGridModeEditorDlg::BindMaps(float* pStart, float* pIdle, float* pWork, flo
  mp_idleMap = pIdle;
  mp_workMap = pWork;
  mp_tempMap = pTemp;
+}
+
+void CGridModeEditorDlg::BindRPMGrid(float* pGrid)
+{
+ mp_rpmGrid = pGrid;
 }
 
 void CGridModeEditorDlg::UpdateView(void)

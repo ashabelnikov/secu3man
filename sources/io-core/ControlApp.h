@@ -178,6 +178,7 @@ class IOCORE_API CControlApp
   bool Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size);
   bool Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_SECUR_PAR(const BYTE* raw_packet, size_t size);
 

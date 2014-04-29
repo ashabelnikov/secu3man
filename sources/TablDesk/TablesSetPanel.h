@@ -56,7 +56,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual HWND GetMapWindow(int wndType);
 
   virtual void UpdateOpenedCharts(void);
-  virtual void UpdateOpenedChartsAxisLabels(void);
 
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);
@@ -112,8 +111,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
   static void __cdecl OnChangeChokeOpTable(void* i_param);
   static void __cdecl OnCloseChokeOpTable(void* i_param);
-  static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, void* i_param);
-  static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, void* i_param);
+  static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
+  static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
 
   bool m_dwellcntrl_enabled;

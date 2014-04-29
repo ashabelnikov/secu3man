@@ -150,7 +150,7 @@ void __cdecl CTablesSetPanel::OnCloseChokeOpTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, void* i_param)
+void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
  CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
  if (!_this)
@@ -166,7 +166,7 @@ void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, void* i_pa
 }
 
 //------------------------------------------------------------------------
-void __cdecl CTablesSetPanel::OnGetXAxisLabel(LPTSTR io_label_string, void* i_param)
+void __cdecl CTablesSetPanel::OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
  CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
  if (!_this)
@@ -337,11 +337,6 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
  }
  if (m_choke_map_chart_state)
   DLL::Chart2DUpdate(m_choke_map_wnd_handle, GetChokeOpMap(true), GetChokeOpMap(false));
-}
-
-void CTablesSetPanel::UpdateOpenedChartsAxisLabels(void)
-{
- Super::UpdateOpenedChartsAxisLabels();
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)

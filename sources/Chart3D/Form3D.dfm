@@ -108,6 +108,7 @@ object Form3D: TForm3D
     View3DOptions.Zoom = 72
     TabOrder = 0
     TabStop = True
+    OnGetAxisLabel = Chart1GetAxisLabel
     OnMouseMove = Chart1MouseMove
     OnMouseUp = Chart1MouseUp
     OnKeyDown = CtrlKeyDown
