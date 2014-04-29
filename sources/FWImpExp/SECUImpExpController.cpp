@@ -117,6 +117,9 @@ void SECU3ImportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   m_fwdm->GetChokeOpMap(mp_fwd->choke_op_table);
+
+ //копируем таблицу сетки оборотов
+ m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -266,7 +269,7 @@ SECU3ExportController::~SECU3ExportController()
 
 void SECU3ExportController::OnOkPressed(void)
 {
- //import separate tables
+ //export separate tables
  if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
   m_fwdm->SetAttenuatorMap(mp_fwd->attenuator_table);
 
@@ -282,6 +285,10 @@ void SECU3ExportController::OnOkPressed(void)
  
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   m_fwdm->SetChokeOpMap(mp_fwd->choke_op_table);
+
+ //проверяем совместимость и копируем таблицу сетки оборотов
+ if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
+  m_fwdm->SetRPMGridMap(mp_fwd->rpm_slots);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);

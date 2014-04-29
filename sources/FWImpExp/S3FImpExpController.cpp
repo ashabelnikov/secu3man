@@ -125,6 +125,9 @@ void S3FImportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   memcpy(mp_fwd->choke_op_table, mp_s3f_io->GetData().choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE); 
+
+ //копируем сетку оборотов
+ memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -274,7 +277,7 @@ S3FExportController::~S3FExportController()
 
 void S3FExportController::OnOkPressed(void)
 {
- //import separate tables
+ //export separate tables
  if (mp_view->GetFWDFlag(FLAG_ATTEN_MAP))
   memcpy(mp_s3f_io->GetDataLeft().attenuator_table, mp_fwd->attenuator_table, sizeof(float) * KC_ATTENUATOR_LOOKUP_TABLE_SIZE);
 
@@ -294,6 +297,9 @@ void S3FExportController::OnOkPressed(void)
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
+
+ //copy RPM grid
+ memcpy(mp_s3f_io->GetDataLeft().rpm_slots, mp_fwd->rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
 
 void S3FExportController::OnCancelPressed(void)

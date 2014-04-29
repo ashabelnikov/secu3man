@@ -27,6 +27,7 @@
 #include "common/MathHelpers.h"
 #include "io-core/CRC16.h"
 #include "io-core/FirmwareMapsDataHolder.h"
+#include "io-core/SECU3IO.h"
 
 #pragma pack( push, enter_S3FFileMap )
 #pragma pack(1) //<--SECU3
@@ -56,6 +57,7 @@ typedef unsigned char s3f_uint8_t;
 // S3F Version history
 // 01.00 - initial version
 // 01.01 - Choke opening map added (24.05.2013)
+// 01.02 - RPM grid added (29.04.2014)
 
 struct S3FFileHdr
 {
@@ -86,7 +88,8 @@ struct S3FSepMaps
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
  s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
  s3f_int32_t choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE]; //choke opening map (appeared in version 1.01, reserved bytes were utilized)
- s3f_int32_t reserved[112];       //reserved bytes, = 0
+ s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
+ s3f_int32_t reserved[96];       //reserved bytes, = 0
 };
 
 #pragma pack( pop, enter_S3FFileMap )
@@ -182,6 +185,18 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
   m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
 
+ //convert RPM grid
+ bool empty = true;
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->rpm_slots[i])
+   empty = false;
+  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
+  std::copy(SECU3IO::work_map_rpm_slots, SECU3IO::work_map_rpm_slots + F_RPM_SLOTS, m_data.rpm_slots);
+
  return true;
 }
 
@@ -208,7 +223,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0101; //01.01
+ p_fileHdr->version = 0x0102; //01.02
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -247,6 +262,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
  for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->choke_op_table[i] = MathHelpers::Round(m_data.choke_op_table[i] * INT_MULTIPLIER);
+
+ //convert RPM grid
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+  p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);

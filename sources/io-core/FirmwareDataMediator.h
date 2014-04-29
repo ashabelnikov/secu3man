@@ -78,6 +78,7 @@ class IOCORE_API CFirmwareDataMediator
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
+  bool CheckRPMGridsCompatibility(const float* rpmGrid);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);

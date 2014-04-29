@@ -1154,13 +1154,21 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
 
  SetChokeOpMap(ip_fwd->choke_op_table);
 
- //todo in the future, set values from ip_fwd->rpm_slots into the firmware here
+ //Check RPM grids compatibility and set RPM grid
+ if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
+  SetRPMGridMap(ip_fwd->rpm_slots);
+}
+
+bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
+{
+ bool match = true;
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
- for(i = 0; i < F_RPM_SLOTS; ++i)
-  if (ip_fwd->rpm_slots[i] != slots[i]){
-   AfxMessageBox(_T("RPM grids from firmware and source are not equal!"), MB_ICONSTOP);
-   break;
-  }
+ for(int i = 0; i < F_RPM_SLOTS; ++i)
+  if (rpmGrid[i] != slots[i])
+   match = false;
+ if (!match)
+  return (IDYES==AfxMessageBox(_T("RPM grids from firmware and source are not equal!\n Please inspect idle and work maps if you accept new RPM grid.\n Accept new RPM grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+ return true;
 }
 
 void CFirmwareDataMediator::GetAttenuatorMap(float* op_values, bool i_original /* = false */)
