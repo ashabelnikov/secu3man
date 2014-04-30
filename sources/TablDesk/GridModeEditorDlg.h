@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 
@@ -49,6 +50,7 @@ class CGridModeEditorDlg : public CDialog
   {
    int rpm;
    float temp;
+   int air_flow;
 
    float adv_ang;
    float knock_retard;
@@ -98,6 +100,9 @@ class CGridModeEditorDlg : public CDialog
   bool _ValidateItem(CEditExCustomKeys* pItem);
   
  private:
+  void _2DLookup(float x, const float* grid, std::vector<int>& pt);
+  void _DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc);
+
   std::auto_ptr<CEditExCustomKeys> m_wrk_grid[16][16];
   CStatic m_wrk_map_labels[16];
   std::auto_ptr<CEditExCustomKeys> m_idl_grid[16];

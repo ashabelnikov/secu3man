@@ -332,7 +332,7 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
  }
 }
 
-void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, float adv_ang, float knock_retard, bool knkret_use,
+void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,
  float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
  float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use)
 {
@@ -340,6 +340,7 @@ void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, float adv_ang, float 
  CGridModeEditorDlg::DynVal dv;
  dv.rpm = rpm;
  dv.temp = temp;
+ dv.air_flow = air_flow;
  dv.adv_ang = adv_ang;
  dv.knock_retard = knock_retard;
  dv.knkret_use = knkret_use;

@@ -24,6 +24,7 @@
 #include "common/Dll.h"
 #include "common/MathHelpers.h"
 #include "GridModeEditorDlg.h"
+#include "io-core/SECU3IO.h"
 #include "MapIds.h"
 #include "ui-core/EditEx.h"
 
@@ -197,7 +198,7 @@ END_MESSAGE_MAP()
 
 CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 : Super(CGridModeEditorDlg::IDD, pParent)
-, m_wpiPen(PS_SOLID, 2, RGB(255, 128, 128))
+, m_wpiPen(PS_SOLID, 3, RGB(255, 64, 64))
 , mp_startMap(NULL)
 , mp_idleMap(NULL)
 , mp_workMap(NULL)
@@ -299,7 +300,7 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
  {
   int value = MathHelpers::Round(mp_rpmGrid[i]);
   DDX_Text(pDX, IDC_GME_WRKL_0 + i, value);
- } 
+ }
 
  //Advance angle indication controls
  DDX_Control(pDX, IDC_GME_AA_VALUE, m_aa_value);
@@ -410,11 +411,69 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
  return hbr;
 }
 
+void CGridModeEditorDlg::_2DLookup(float x, const float* grid, std::vector<int>& pt)
+{
+ pt.clear();
+ if (x <= grid[0]) { pt.push_back(0); return; }
+ if (x >= grid[15]) { pt.push_back(15); return; }
+
+ for(int i = 0; i < 16; ++i)
+ {
+  float d = grid[i] - grid[i-1];
+  if (x <= grid[i])
+  {
+   if (x < (grid[i-1] + d/5)) pt.push_back(i-1);
+   else if (x > (grid[i] - d/5)) pt.push_back(i);
+   else { pt.push_back(i-1); pt.push_back(i); }    
+   break;
+  }
+ }
+}
+
+void CGridModeEditorDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc)
+{
+ CRect rc;
+ wnd->GetWindowRect(rc);
+ ScreenToClient(rc);
+ rc.InflateRect(2,2,2,2);
+ dc.Rectangle(rc);
+}
+
 void CGridModeEditorDlg::OnPaint()
 {
  Super::OnPaint();
- //CClientDC dc(this);
- //dc.SelectObject(&m_wpiPen);
+ CClientDC dc(this);
+ dc.SelectObject(&m_wpiPen);
+
+ std::vector<int> pt;
+
+ if (m_curDV.strt_use)
+ {
+  _2DLookup((float)m_curDV.rpm, SECU3IO::start_map_rpm_slots, pt);
+  for(size_t i = 0; i < pt.size(); ++i)
+   _DrawRect(m_str_grid[pt[i]], dc);
+ }
+
+ if (m_curDV.work_use)
+ {
+  _2DLookup((float)m_curDV.rpm, mp_rpmGrid, pt);
+  for(size_t i = 0; i < pt.size(); ++i)
+   _DrawRect(m_wrk_grid[16-m_curDV.air_flow][pt[i]], dc);
+ }
+
+ if (m_curDV.idle_use)
+ {
+  _2DLookup((float)m_curDV.rpm, mp_rpmGrid, pt);
+  for(size_t i = 0; i < pt.size(); ++i)
+   _DrawRect(m_idl_grid[pt[i]], dc);
+ }
+
+ if (m_curDV.temp_use)
+ {
+  _2DLookup(m_curDV.temp, SECU3IO::temp_map_tmp_slots, pt);
+  for(size_t i = 0; i < pt.size(); ++i)
+   _DrawRect(m_tmp_grid[pt[i]], dc);
+ }
 }
 
 void CGridModeEditorDlg::OnClose()
@@ -464,6 +523,7 @@ void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
  str.Format("%0.2f", dv.octan_aac), m_oc_value.SetWindowText(str);
  m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
+ Invalidate(); //shit
 }
 
 void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)

@@ -107,7 +107,7 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      //устанавливаем значения приборов, разрешаем их и переходим в основной режим
      mp_view->SetValues(sd);
      mp_cedview->SetValues(sd->ce_errors);
-     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
+     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
       sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
       sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use);
      mp_view->Enable(mp_comm->m_pControlApp->GetOnlineStatus());
@@ -143,7 +143,7 @@ bool CPMMonitorController::CollectData(const BYTE i_descriptor, const void* i_pa
      SensorDat* sd = (SensorDat*)(i_packet_data);
      mp_view->SetValues(sd);
      mp_cedview->SetValues(sd->ce_errors);
-     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
+     mp_tdview->SetDynamicValues(sd->frequen, sd->temperat, sd->air_flow, sd->adv_angle, sd->knock_retard, sd->knkret_use, sd->strt_aalt, sd->strt_use,
       sd->idle_aalt, sd->idle_use, sd->work_aalt, sd->work_use, sd->temp_aalt, sd->temp_use, sd->airt_aalt, sd->airt_use,
       sd->idlreg_aac, sd->idlreg_use, sd->octan_aac, sd->octan_use);
     }
