@@ -200,13 +200,13 @@ bool CAppSettingsModel::ReadSettings(void)
  m_optPortName = read_str;
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("9600"),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("57600"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
  if (!CheckAllowableBaudRate(i_val))
  {
   status = false;
-  m_optBaudRateApplication = 9600;
+  m_optBaudRateApplication = 57600;
  }
  else
  {
@@ -214,13 +214,13 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("9600"),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("57600"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
  if (!CheckAllowableBaudRate(i_val))
  {
   status = false;
-  m_optBaudRateBootloader = 9600;
+  m_optBaudRateBootloader = 57600;
  }
  else
  {
@@ -253,7 +253,7 @@ bool CAppSettingsModel::ReadSettings(void)
  if (i_val != 0 && i_val != 1)
  {
   status = false;
-  m_optAlwaysWriteLog = 0;
+  m_optAlwaysWriteLog = 1;
  }
  else
  {
@@ -341,7 +341,7 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
 //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_HexDataMode,_T("1"),read_str,255,IniFileName);
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_HexDataMode,_T("0"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
  if (i_val != 0 && i_val != 1)

@@ -1218,7 +1218,7 @@ bool CControlApp::Parse_ATTTAB_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SepTabPar& m_RpmGrdPar = m_recepted_packet.m_SepTabPar;
- if (mp_pdp->isHex() ? (size != 66) : (size != 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (mp_pdp->isHex() ? (size != 66) : (size != 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
