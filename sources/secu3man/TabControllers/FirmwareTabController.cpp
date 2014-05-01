@@ -1280,7 +1280,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  }
 }
 
-//Пользователь захотел получить информацию о пршивке из SECU-3
+//Пользователь захотел получить информацию о прошивке из SECU-3
 void CFirmwareTabController::OnFirmwareInfo(void)
 {
  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW_SIGNATURE));

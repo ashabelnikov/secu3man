@@ -102,6 +102,7 @@ class CGridModeEditorDlg : public CDialog
  private:
   void _2DLookup(float x, const float* grid, std::vector<int>& pt);
   void _DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc);
+  int _CalcGradIndex(float value);
 
   std::auto_ptr<CEditExCustomKeys> m_wrk_grid[16][16];
   CStatic m_wrk_map_labels[16];

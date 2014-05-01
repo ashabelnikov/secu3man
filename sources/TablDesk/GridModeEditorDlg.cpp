@@ -406,6 +406,14 @@ void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(allowed && m_en_aa_indication && flag);
 }
 
+int CGridModeEditorDlg::_CalcGradIndex(float value)
+{
+ int index = MathHelpers::Round((value - (wrkMinVal)) / ((wrkMaxVal - wrkMinVal)/16.0f));
+ if (index < 0) index = 0;
+ if (index > 15) index = 15;
+ return index;
+}
+
 HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
  HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
@@ -413,6 +421,7 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
  {
   for(size_t i = 0; i < 16; ++i)
   {
+   //work map
    for(size_t j = 0; j < 16; ++j)
    {
     if (pWnd->m_hWnd == m_wrk_grid[i][j]->m_hWnd)
@@ -424,22 +433,56 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
      }
      else
      {//use gradient colors
-      float value = mp_workMap[(i*16)+j];
-      int index = MathHelpers::Round((value - (wrkMinVal)) / ((wrkMaxVal - wrkMinVal)/16.0f));
-      if (index < 0) index = 0;
-      if (index > 15) index = 15;
+      int index = _CalcGradIndex(mp_workMap[(i*16)+j]);
       pDC->SetBkColor(gradColor[index]);
       hbr = m_gradBrush[index];
      }
     }
    }
-
-   if ((pWnd->m_hWnd == m_idl_grid[i]->m_hWnd && true==m_idl_grid[i]->m_error)||
-      (pWnd->m_hWnd == m_str_grid[i]->m_hWnd && true==m_str_grid[i]->m_error)||
-      (pWnd->m_hWnd == m_tmp_grid[i]->m_hWnd && true==m_tmp_grid[i]->m_error))
-   { 
-    pDC->SetBkColor(itemErrColor);
-    hbr = m_redBrush;
+   //Idle map
+   if (pWnd->m_hWnd == m_idl_grid[i]->m_hWnd)
+   {
+    if (true==m_idl_grid[i]->m_error)
+    { //error
+     pDC->SetBkColor(itemErrColor);
+     hbr = m_redBrush;    
+    }
+    else
+    {//gradient
+     int index = _CalcGradIndex(mp_idleMap[i]);
+     pDC->SetBkColor(gradColor[index]);
+     hbr = m_gradBrush[index];    
+    }
+   }
+   //Start map
+   if (pWnd->m_hWnd == m_str_grid[i]->m_hWnd)
+   {
+    if (true==m_str_grid[i]->m_error)
+    {//error
+     pDC->SetBkColor(itemErrColor);
+     hbr = m_redBrush;
+    }
+    else
+    {//gradient
+     int index = _CalcGradIndex(mp_startMap[i]);
+     pDC->SetBkColor(gradColor[index]);
+     hbr = m_gradBrush[index];    
+    }
+   }
+   //Coolant temperature map
+   if (pWnd->m_hWnd == m_tmp_grid[i]->m_hWnd)
+   {
+    if (true==m_tmp_grid[i]->m_error)
+    {//error
+     pDC->SetBkColor(itemErrColor);
+     hbr = m_redBrush;
+    }
+    else
+    {//gradient
+     int index = _CalcGradIndex(mp_tempMap[i]);
+     pDC->SetBkColor(gradColor[index]);
+     hbr = m_gradBrush[index];        
+    }
    }
   }
  }
