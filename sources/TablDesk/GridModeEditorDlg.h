@@ -130,6 +130,7 @@ class CGridModeEditorDlg : public CDialog
   bool m_en_aa_indication;
 
   CFont m_font;
+  CFont m_fieldFont;
   CPen m_wpiPen;
   DynVal m_curDV;
   CBrush m_gradBrush[16];

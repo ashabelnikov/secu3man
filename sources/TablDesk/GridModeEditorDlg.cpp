@@ -27,6 +27,7 @@
 #include "io-core/SECU3IO.h"
 #include "MapIds.h"
 #include "ui-core/EditEx.h"
+#include "ui-core/fnt_helpers.h"
 
 static const COLORREF itemErrColor = RGB(255,120,120);
 static const float wrkMinVal = -15.0f;
@@ -327,6 +328,17 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
 BOOL CGridModeEditorDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ //Set bold font to advance angle indication controls
+ CloneWndFont(&m_aa_value, &m_fieldFont, 11, true);
+ m_aa_value.SetFont(&m_fieldFont);
+ m_wm_value.SetFont(&m_fieldFont);
+ m_oc_value.SetFont(&m_fieldFont);
+ m_tc_value.SetFont(&m_fieldFont);
+ m_kc_value.SetFont(&m_fieldFont);
+ m_im_value.SetFont(&m_fieldFont);
+ m_ic_value.SetFont(&m_fieldFont);
+ m_ac_value.SetFont(&m_fieldFont);
 
  LOGFONT LogFont;
  memset(&LogFont, 0x00, sizeof(LogFont));
