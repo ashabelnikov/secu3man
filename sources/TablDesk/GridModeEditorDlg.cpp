@@ -344,6 +344,18 @@ BOOL CGridModeEditorDlg::OnInitDialog()
    m_wrk_grid[i][j]->SetFont(&m_font);
   }
 
+ //set position of idle, temperature and start map edits
+ CRect rc_idle,rc_strt,rc_temp;
+ m_idl_grid[0]->GetWindowRect(rc_idle); ScreenToClient(rc_idle);
+ m_str_grid[0]->GetWindowRect(rc_strt); ScreenToClient(rc_strt);
+ m_tmp_grid[0]->GetWindowRect(rc_temp); ScreenToClient(rc_temp);
+ for(j = 0; j < 16; ++j)
+ {
+  m_idl_grid[j]->SetWindowPos(NULL, rc_idle.left + (j*(width+space)), rc_idle.top, width, height, SWP_NOZORDER);
+  m_str_grid[j]->SetWindowPos(NULL, rc_strt.left + (j*(width+space)), rc_strt.top, width, height, SWP_NOZORDER);
+  m_tmp_grid[j]->SetWindowPos(NULL, rc_temp.left + (j*(width+space)), rc_temp.top, width, height, SWP_NOZORDER);
+ }
+
  //map labels
  for(i = 0; i < 16; ++i)
  {
