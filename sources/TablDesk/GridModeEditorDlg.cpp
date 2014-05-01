@@ -407,7 +407,7 @@ void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
- bool flag;
+ bool flag = true;
 
  if (pCmdUI->m_nID == IDC_GME_WM_VALUE) flag = m_curDV.work_use;
  else if (pCmdUI->m_nID == IDC_GME_OC_VALUE) flag = m_curDV.octan_use;
