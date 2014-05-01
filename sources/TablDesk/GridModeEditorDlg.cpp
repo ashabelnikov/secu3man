@@ -398,6 +398,9 @@ BOOL CGridModeEditorDlg::OnInitDialog()
 void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
+ if (!allowed)
+  m_wrk_grid[15][15]->SetFocus(); //hack
+
  pCmdUI->Enable(allowed);
 }
 
