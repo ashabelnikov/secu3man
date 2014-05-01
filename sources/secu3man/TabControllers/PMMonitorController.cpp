@@ -82,6 +82,7 @@ void CPMMonitorController::Enable(bool state)
  mp_view->Enable(state);
  mp_rsdview->Enable(state);
  mp_cedview->Enable(state);
+ mp_tdview->EnableAdvanceAngleIndication(state);
 }
 
 void CPMMonitorController::StartDataCollection(void)

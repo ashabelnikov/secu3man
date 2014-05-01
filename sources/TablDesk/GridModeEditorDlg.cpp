@@ -266,8 +266,7 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
   m_str_grid[j]->m_rn = j < 15 ? m_str_grid[j+1].get() : NULL;
  }
 
- m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use = 
- m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
+ _ResetUseFlags();
 
  //Create gradient brushes
  for(i = 0; i < 16; ++i)
@@ -529,6 +528,12 @@ void CGridModeEditorDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& d
  dc.Rectangle(rc);
 }
 
+void CGridModeEditorDlg::_ResetUseFlags(void)
+{
+ m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use = 
+ m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
+}
+
 void CGridModeEditorDlg::OnPaint()
 {
  Super::OnPaint();
@@ -536,6 +541,8 @@ void CGridModeEditorDlg::OnPaint()
  dc.SelectObject(&m_wpiPen);
 
  std::vector<int> pt;
+ if (m_curDV.strt_use && m_curDV.work_use && m_curDV.idle_use && m_curDV.temp_use)
+  return;
 
  if (m_curDV.strt_use)
  {
@@ -544,7 +551,7 @@ void CGridModeEditorDlg::OnPaint()
    _DrawRect(m_str_grid[pt[i]], dc);
  }
 
- if (m_curDV.work_use)
+ if (m_curDV.work_use && m_curDV.air_flow)
  {
   _2DLookup((float)m_curDV.rpm, mp_rpmGrid, pt);
   for(size_t i = 0; i < pt.size(); ++i)
@@ -596,6 +603,13 @@ void CGridModeEditorDlg::UpdateView(void)
 void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
 {
  m_en_aa_indication = i_enable;
+
+ if (!i_enable)
+ {
+  _ResetUseFlags();
+  Invalidate();
+ }
+
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, true);
 }
