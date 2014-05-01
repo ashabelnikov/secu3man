@@ -29,6 +29,10 @@
 #include "ui-core/EditEx.h"
 
 static const COLORREF itemErrColor = RGB(255,120,120);
+static const float wrkMinVal = -15.0f;
+static const float wrkMaxVal = 55.0f;
+static const COLORREF gradColor[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
+                                      0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
 
 namespace {
 class MapLimits
@@ -43,7 +47,7 @@ class MapLimits
     case TYPE_MAP_DA_START:
     case TYPE_MAP_DA_IDLE:
     case TYPE_MAP_DA_WORK:
-     return -15.0f;
+     return wrkMinVal;
     case TYPE_MAP_DA_TEMP_CORR:
      return -15.0f;
     default:
@@ -59,7 +63,7 @@ class MapLimits
     case TYPE_MAP_DA_START:
     case TYPE_MAP_DA_IDLE:
     case TYPE_MAP_DA_WORK:
-     return 55.0f;
+     return wrkMaxVal;
     case TYPE_MAP_DA_TEMP_CORR:
      return 25.0f;
     default:
@@ -263,6 +267,10 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
 
  m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use = 
  m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
+
+ //Create gradient brushes
+ for(i = 0; i < 16; ++i)
+  m_gradBrush[i].CreateSolidBrush(gradColor[i]);
 }
 
 CGridModeEditorDlg::~CGridModeEditorDlg()
@@ -406,11 +414,26 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
   for(size_t i = 0; i < 16; ++i)
   {
    for(size_t j = 0; j < 16; ++j)
-    if (pWnd->m_hWnd == m_wrk_grid[i][j]->m_hWnd && true==m_wrk_grid[i][j]->m_error)
-    { 
-     pDC->SetBkColor(itemErrColor);
-     hbr = m_redBrush;
+   {
+    if (pWnd->m_hWnd == m_wrk_grid[i][j]->m_hWnd)
+    {
+     if (true==m_wrk_grid[i][j]->m_error)
+     {//use error color
+      pDC->SetBkColor(itemErrColor);
+      hbr = m_redBrush;
+     }
+     else
+     {//use gradient colors
+      float value = mp_workMap[(i*16)+j];
+      int index = MathHelpers::Round((value - (wrkMinVal)) / ((wrkMaxVal - wrkMinVal)/16.0f));
+      if (index < 0) index = 0;
+      if (index > 15) index = 15;
+      pDC->SetBkColor(gradColor[index]);
+      hbr = m_gradBrush[index];
+     }
     }
+   }
+
    if ((pWnd->m_hWnd == m_idl_grid[i]->m_hWnd && true==m_idl_grid[i]->m_error)||
       (pWnd->m_hWnd == m_str_grid[i]->m_hWnd && true==m_str_grid[i]->m_error)||
       (pWnd->m_hWnd == m_tmp_grid[i]->m_hWnd && true==m_tmp_grid[i]->m_error))

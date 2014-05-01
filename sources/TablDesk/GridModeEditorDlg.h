@@ -131,4 +131,5 @@ class CGridModeEditorDlg : public CDialog
   CFont m_font;
   CPen m_wpiPen;
   DynVal m_curDV;
+  CBrush m_gradBrush[16];
 };
