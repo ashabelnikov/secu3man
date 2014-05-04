@@ -160,8 +160,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-	IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
-	IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
+    IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
+    IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -173,7 +173,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    3,9,0,0
+  PRODUCTVERSION    4,3,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
