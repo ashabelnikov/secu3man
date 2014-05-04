@@ -205,6 +205,15 @@ BOOL CChokePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_strt_add_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_1stpt_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_1stpt_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmreg_2ndpt_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmreg_2ndpt_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tmp_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tmp_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

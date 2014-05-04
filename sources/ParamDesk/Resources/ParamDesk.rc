@@ -745,7 +745,11 @@ BEGIN
     IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В."
     IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В. Поставьте 0, если используется концевик."
     IDS_PD_CHOKE_STRT_ADD_EDIT_TT "Задает на сколько % заслонка будет дополнительно прикрыта на пуске"
-    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "Первая точка задающая зависимость оборотов от температуры. Поставьте в 0 если хотите отключить регулятор оборотов."
+    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "Первая точка задающая зависимость оборотов прогрева от температуры. Поставьте в 0 если хотите отключить регулятор оборотов."
+    IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT "Вторая точка задающая зависимость оборотов прогрева от температуры."
+    IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "Задает время добав. пуск. закрытия. По истечении этого времени включится регулятор оборотов."
+    IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "Температура после которой добав. пуск. закрытие не будет применяться. При температуре меньше 0 заслонка полностью закрыта."
+    IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "Коэффициент И-регулятора используемого для регулирования оборотов при прогреве."
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1579,7 +1583,11 @@ BEGIN
     IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V."
     IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V. Set to zero if limit switch is used."
     IDS_PD_CHOKE_STRT_ADD_EDIT_TT "Set how much in % choke will be additionally closed at startup."
-    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "First point which set RPM vs temperature dependance. Set to 0 if you want to turn off RPM regulator."
+    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "First point which set warm up RPM vs temperature dependance. Set to 0 if you want to turn off RPM regulator."
+    IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT "Second point which set warm up RPM vs temperature dependance."
+    IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "During this time choke will be additionally closed at startup. After this time RPM regulator will be turned on."
+    IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "After this temperature choke will not be additionally closed at startup. Choke will be fully closed when temperature < 0°C"
+    IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "I-regulator factor (integral gain) used for RPM regulation during warm up."
 END
 
 STRINGTABLE DISCARDABLE 
