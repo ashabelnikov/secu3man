@@ -606,14 +606,16 @@ void CGridModeEditorDlg::UpdateView(void)
 void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
 {
  m_en_aa_indication = i_enable;
+ bool is_wnd = ::IsWindow(this->m_hWnd);
 
  if (!i_enable)
  {
   _ResetUseFlags();
-  Invalidate();
+  if (is_wnd)
+   Invalidate();
  }
 
- if (::IsWindow(this->m_hWnd))
+ if (is_wnd)
   UpdateDialogControls(this, true);
 }
 
