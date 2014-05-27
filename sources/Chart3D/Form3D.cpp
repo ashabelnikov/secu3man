@@ -813,19 +813,19 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
    if (Chart1->View3DOptions->Rotation > 360)
     Chart1->View3DOptions->Rotation = 360;
   }
-  else if (Key == 'S')
+  else if (Key == 'D')
   {
    Chart1->View3DOptions->Rotation-=1;
    if (Chart1->View3DOptions->Rotation < 0)
     Chart1->View3DOptions->Rotation = 0;
   }
-  else if (Key == 'W')
+  else if (Key == 'S')
   {
    Chart1->View3DOptions->Elevation+=1;
    if (Chart1->View3DOptions->Elevation > 360)
     Chart1->View3DOptions->Elevation = 360;
   }
-  else if (Key == 'D')
+  else if (Key == 'W')
   {
    Chart1->View3DOptions->Elevation-=1;
    if (Chart1->View3DOptions->Elevation < 0)
