@@ -46,6 +46,7 @@ set(HEADERS
   TabDialog.h
   ToolTipCtrlEx.h
   UpdatableDialog.h
+  WndScroller.h
   WndSubclasser.h
   XBrowseForFolder.h
   )
@@ -73,6 +74,7 @@ set(SOURCES
   TabDialog.cpp
   ToolTipCtrlEx.cpp
   UpdatableDialog.cpp
+  WndScroller.cpp
   WndSubclasser.cpp
   XBrowseForFolder.cpp
   uicore.cpp

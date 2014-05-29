@@ -23,6 +23,7 @@
 #include "Resources/resource.h"
 #include "IORemappingDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 namespace {
 CComboBox* _GetCBbyIOSID(const std::map<UINT, std::pair<int, CComboBox*> >& map, int iosId)
@@ -39,21 +40,22 @@ const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
 //See also FirmwareDataMediator.h
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
-const UINT IOCaptionEnd = IDC_IO_REMAPPING_DE_CAPTION;
+const UINT IOCaptionEnd = IDC_IO_REMAPPING_GAS_V_CAPTION;
 const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
-const UINT IOComboboxEnd = IDC_IO_REMAPPING_DE_COMBOBOX;
+const UINT IOComboboxEnd = IDC_IO_REMAPPING_GAS_V_COMBOBOX;
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
-const UINT IOCheckboxEnd = IDC_IO_REMAPPING_DE_CHECKBOX;
+const UINT IOCheckboxEnd = IDC_IO_REMAPPING_GAS_V_CHECKBOX;
 const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
-const UINT IOTTStrEnd = IDS_IO_REMAPPING_DE_TT;
+const UINT IOTTStrEnd = IDS_IO_REMAPPING_GAS_V_TT;
 
-BEGIN_MESSAGE_MAP(CIORemappingDlg, CDialog)
+BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
  ON_CONTROL_RANGE(BN_CLICKED, IOCheckboxStart, IOCheckboxEnd, OnChangeInversion)
  ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOCheckboxStart,  IOCheckboxEnd, OnUpdateControlsChecks)
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControlsCommon)
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -63,13 +65,11 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 : Super(CIORemappingDlg::IDD, pParent)
 , m_enabled(false)
 , m_enable_secu3t_features(false)
+, mp_scr(new CWndScroller)
 {
  UINT ctrlId = 0;
  for(size_t i = FWDM::IOS_START; i < FWDM::IOS_COUNT; ++i)
  {
-  //Exclude ADD_I1 and ADD_I2 because they have not to appear in the UI
-  if ((i != FWDM::IOS_ADD_I1) && (i != FWDM::IOS_ADD_I2))
-  {
    std::pair<int, CComboBox*> cb_info;
    cb_info.first = FWDM::IOS_START + i; //slot ID
    cb_info.second = new CComboBox();  //MFC object
@@ -79,7 +79,6 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
    m_iorcb.insert(std::make_pair(IOComboboxStart + ctrlId, cb_info));
    m_iorcm.insert(std::make_pair(IOCheckboxStart + ctrlId, cm_info));
    m_enflg.insert(std::make_pair(IOComboboxStart + ctrlId++, std::make_pair(false, false)));
-  }
  }
 }
 
@@ -121,10 +120,20 @@ BOOL CIORemappingDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.28f));
+
  UpdateDialogControls(this, TRUE);
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
                // EXCEPTION: OCX Property Pages should return FALSE
+}
+
+void CIORemappingDlg::OnDestroy()
+{
+ mp_scr->Close();
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -137,6 +146,12 @@ void CIORemappingDlg::OnUpdateControls(CCmdUI* pCmdUI)
   case IDC_IO_REMAPPING_ADD_IO2_COMBOBOX:
   case IDC_IO_REMAPPING_ADD_IO1_CAPTION:
   case IDC_IO_REMAPPING_ADD_IO2_CAPTION:
+  case IDC_IO_REMAPPING_ADD_I1_COMBOBOX:
+  case IDC_IO_REMAPPING_ADD_I2_COMBOBOX:
+  case IDC_IO_REMAPPING_ADD_I1_CAPTION:
+  case IDC_IO_REMAPPING_ADD_I2_CAPTION:
+  case IDC_IO_REMAPPING_REF_S_COMBOBOX:
+  case IDC_IO_REMAPPING_REF_S_CAPTION:
    enable_secu3t_features = m_enable_secu3t_features;
    break;
  };
@@ -154,6 +169,9 @@ void CIORemappingDlg::OnUpdateControlsChecks(CCmdUI* pCmdUI)
  {
   case IDC_IO_REMAPPING_ADD_IO1_CHECKBOX:
   case IDC_IO_REMAPPING_ADD_IO2_CHECKBOX:
+  case IDC_IO_REMAPPING_ADD_I1_CHECKBOX:
+  case IDC_IO_REMAPPING_ADD_I2_CHECKBOX:
+  case IDC_IO_REMAPPING_REF_S_CHECKBOX:
    enable_secu3t_features = m_enable_secu3t_features;
    break;
  };

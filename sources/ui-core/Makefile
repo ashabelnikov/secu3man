@@ -18,7 +18,7 @@ SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_hel
   DialogWithAccelerators.cpp EditEx.cpp HeaderCtrlEx.cpp HotKeysManager.cpp HotKeysToCmdRouter.cpp \
   ITabControllerEvent.cpp Label.cpp LEDIndicator.cpp MPCLogoPane.cpp MPCStatusBar.cpp OScopeCtrl.cpp \
   ProgressCtrlEx.cpp SpinButtonctrlEx.cpp TabController.cpp TabDialog.cpp ToolTipCtrlEx.cpp \
-  UpdatableDialog.cpp WndSubclasser.cpp XBrowseForFolder.cpp uicore.cpp
+  UpdatableDialog.cpp WndSubclasser.cpp XBrowseForFolder.cpp uicore.cpp WndScroller.cpp
 
 # DLL building
 all: uicore

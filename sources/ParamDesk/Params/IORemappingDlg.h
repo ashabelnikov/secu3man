@@ -27,6 +27,7 @@
 #include "ui-core/DialogWithAccelerators.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 /////////////////////////////////////////////////////////////////////////////
 // CIORemapping dialog
@@ -63,6 +64,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsChecks(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsCommon(CCmdUI* pCmdUI);
@@ -81,6 +83,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   std::map<UINT, std::pair<bool, bool> > m_enflg;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };
 
 /////////////////////////////////////////////////////////////////////////////

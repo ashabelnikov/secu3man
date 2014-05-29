@@ -46,68 +46,11 @@ using namespace SECU3IO::SECU3Types;
 #define RPM_GRID_SIZE                    16
 
 #define _BIGEND16(v) ((((v) >> 8) & 0x00FF) | (((v) << 8) & 0xFF00))
-
-//We rely that size member is valid in all versions of cd_data_t structure and use it to determine
-//version of the structure.
-#define CAST_CDDATA(ptr, mbr) ((_BIGEND16((ptr)->size) == sizeof(cd_datav0_t)) ? (((cd_datav0_t*)( ((((_uchar*)(ptr)) + sizeof(cd_data_t)) - sizeof(cd_datav0_t)) ))->mbr) : (((cd_data_t*)(ptr))->mbr))
-
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
-#define IOREM_SLOTS_NUM(ptr) (size_t)(((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOREM_SLOTSv0 : IOREM_SLOTS))
-#define IOREM_PLUGS_NUM(ptr) (size_t)(((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOREM_PLUGSv0 : IOREM_PLUGS))
-
-#define IOP_COUNT_NUM(ptr) ((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOP_COUNTv0 : IOP_COUNT)
-#define IOS_COUNT_NUM(ptr) ((IOREM_MAJ_VER(CAST_CDDATA(ptr, iorem.version)) == 0) ? IOS_COUNTv0 : IOS_COUNT)
-
-//--------------------------For iorem_slots_t V0.0----------------------------
-//See also FirmwareDataMediator.h
-#define IOREM_SLOTSv0 10         // Number of slots used for I/O remapping
-#define IOREM_PLUGSv0 16         // Number of plugs used in I/O remapping
-
-//Describes all data related to I/O remapping
-typedef struct iorem_slotsv0_t
-{
- _uchar size;                    // size of this structure
- _uchar version;                 // A reserved byte = 0
-
- //Dirty hack. This version of struct actually has no i_slotsi member,
- //it is necessary for CAST_CDDATA
-union {
- _fnptr_t i_slots[IOREM_SLOTSv0];// initialization slots
- _fnptr_t i_slotsi[IOREM_SLOTSv0];// initialization slots (stub)
-};
-
- //Dirty hack. This version of struct actually has no v_slotsi member,
- //it is necessary for CAST_CDDATA
-union {
- _fnptr_t v_slots[IOREM_SLOTSv0];// data slots
- _fnptr_t v_slotsi[IOREM_SLOTSv0];// data slots           (stub)
-};
-
- _fnptr_t i_plugs[IOREM_PLUGSv0];// initialization plugs
- _fnptr_t v_plugs[IOREM_PLUGSv0];// data plugs
- _fnptr_t s_stub;                // special pointer used as stub
- _fnptr_t g_stub;                // reserved = 0
-}iorem_slotsv0_t;
-
-//Describes data stored directly in the firmware code
-typedef struct cd_datav0_t
-{
- // Arrays which are used for I/O remapping. Some arrays are "slots", some are "plugs"
- iorem_slotsv0_t iorem;
-
- //holds flags which give information about options were used to build firmware
- //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
- _ulong config;
-
- _uchar reserved[2];             //two reserved bytes
-
- _uchar size;                    // size of this structure
-}cd_datav0_t;
-
-//------------------------For iorem_slots_t V1.0----------------------------
-#define IOREM_SLOTS 16           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 32           // Number of plugs used in I/O remapping
+//------------------------For iorem_slots_t V2.0----------------------------
+#define IOREM_SLOTS 23           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 50           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -186,7 +129,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[8];
+ _uchar reserved[2048];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -301,14 +244,14 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* ip_data, const PPFlas
  _uint sizeofcd = _BIGEND16(*(((_uint*)&ip_data[lip.FIRMWARE_DATA_START])-1));
 
  cd_data_t* p_cd = (cd_data_t*)&ip_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
- size_t iorem_struct_size = (sizeofcd == sizeof(cd_datav0_t)) ? sizeof(iorem_slotsv0_t) : sizeof(iorem_slots_t);
+ size_t iorem_struct_size = sizeof(iorem_slots_t);
 
  if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
   ((sizeoffd > 0) && sizeoffd != p_fd->exdata.fw_data_size) ||
-  ((sizeoffd > 0) && (sizeofcd != sizeof(cd_datav0_t) && sizeofcd != sizeof(cd_data_t))) ||
-  ((sizeoffd > 0) && CAST_CDDATA(p_cd, iorem.size) != iorem_struct_size) ||
-  //supported major versions: 0, 1
-  ((sizeoffd > 0) && (IOREM_MAJ_VER(CAST_CDDATA(p_cd, iorem.version)) != 0 && IOREM_MAJ_VER(CAST_CDDATA(p_cd, iorem.version)) != 1)))
+  ((sizeoffd > 0) && sizeofcd != sizeof(cd_data_t)) ||
+  ((sizeoffd > 0) && p_cd->iorem.size != iorem_struct_size) ||
+  //supported major versions: 2
+  ((sizeoffd > 0) && (IOREM_MAJ_VER(p_cd->iorem.version) != 2)))
   compatible = false;
 
  return compatible;
@@ -370,7 +313,7 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
  if (mp_cddata)
-  return CAST_CDDATA(mp_cddata, config);
+  return mp_cddata->config;
  else
  {
   //there is no such data in this firmware, then we have to use old place
@@ -384,7 +327,7 @@ DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPF
  ASSERT(ip_source_bytes && ip_fpp);
  cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
  if (p_cd)
-  return CAST_CDDATA(p_cd, config);
+  return p_cd->config;
  else
  {
   //there is no such data in this firmware, then we have to use old place
@@ -1388,12 +1331,12 @@ DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT_NUM(mp_cddata))
-    value = CAST_CDDATA(mp_cddata, iorem.i_plugs[id]); 
+   if (id < IOP_COUNT)
+    value = mp_cddata->iorem.i_plugs[id]; 
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT_NUM(mp_cddata))
-    value = CAST_CDDATA(mp_cddata, iorem.v_plugs[id]); 
+   if (id < IOP_COUNT)
+    value = mp_cddata->iorem.v_plugs[id]; 
    break;
  }
  return value;
@@ -1407,12 +1350,12 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id, bool inv)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOS_COUNT_NUM(mp_cddata))
-    value = inv ? CAST_CDDATA(mp_cddata, iorem.i_slotsi[id]) : CAST_CDDATA(mp_cddata, iorem.i_slots[id]);
+   if (id < IOS_COUNT)
+    value = inv ? mp_cddata->iorem.i_slotsi[id] : mp_cddata->iorem.i_slots[id];
    break;
   case IOX_DATA:
-   if (id < IOS_COUNT_NUM(mp_cddata))
-    value = inv ? CAST_CDDATA(mp_cddata, iorem.v_slotsi[id]) : CAST_CDDATA(mp_cddata, iorem.v_slots[id]); 
+   if (id < IOS_COUNT)
+    value = inv ? mp_cddata->iorem.v_slotsi[id] : mp_cddata->iorem.v_slots[id]; 
    break;
  }
  return value;
@@ -1422,14 +1365,14 @@ DWORD CFirmwareDataMediator::GetSStub(void) const
 {
  if (!mp_cddata)
   return 0;
- return CAST_CDDATA(mp_cddata, iorem.s_stub);
+ return mp_cddata->iorem.s_stub;
 }
 
 DWORD CFirmwareDataMediator::GetGStub(void) const
 {
  if (!mp_cddata)
   return 0;
- return CAST_CDDATA(mp_cddata, iorem.g_stub);
+ return mp_cddata->iorem.g_stub;
 }
 
 void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
@@ -1439,12 +1382,12 @@ void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT_NUM(mp_cddata))
-    CAST_CDDATA(mp_cddata, iorem.i_plugs[id]) = (_fnptr_t)value; 
+   if (id < IOP_COUNT)
+    mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value; 
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT_NUM(mp_cddata))
-    CAST_CDDATA(mp_cddata, iorem.v_plugs[id]) = (_fnptr_t)value; 
+   if (id < IOP_COUNT)
+    mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value; 
    break;
  }
 }
@@ -1454,7 +1397,7 @@ CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) con
  ASSERT(mp_cddata);
  if (!mp_cddata)
   return IOV_V00; //error
- return (IORemVer)CAST_CDDATA(mp_cddata, iorem.version);
+ return (IORemVer)mp_cddata->iorem.version;
 }
 
 cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/, const PPFlashParam* ip_fpp /*= NULL*/)
@@ -1470,7 +1413,7 @@ cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/,
   p_lip = lip.get();
  }
   
- //obtain pointer to cd_data_t structure, note that this pointer must be casted
+ //obtain pointer to cd_data_t structure
  cd_data_t* p_cd = (cd_data_t*)(&p_bytes[p_lip->FIRMWARE_DATA_START - sizeof(cd_data_t)]);
  //obtain pointer to fw_data_t structure
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[p_lip->FIRMWARE_DATA_START]);
@@ -1525,136 +1468,45 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_s
   const BYTE *p_dataSrc = (ip_source_bytes + i_srcSize) - dataSizeSrc;
   BYTE *p_dataDst = (op_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
   size_t szSrc = _BIGEND16(*(((_uint*)p_dataSrc)-1)), szDst = _BIGEND16(*(((_uint*)p_dataDst)-1));
-  cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t)); //must be casted!
-  cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t)); //must be casted!
+  cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t));
+  cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t));
   if (szSrc == szDst) //compatible?
   {
    //Transfer values (don't copy it as memory block, because pointers may be different!)
    //So, we copy logical references. Not actual bits.
-   for(size_t p = 0; p < IOREM_PLUGS_NUM(pSrc); ++p)
+   for(size_t p = 0; p < IOREM_PLUGS; ++p)
    {
-    if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == 0)
+    if (pSrc->iorem.i_plugs[p] == 0)
      continue; //skip not implemented plugs
     size_t s = 0;
     //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных
     bool inv = false;
-    for(; s < IOREM_SLOTS_NUM(pSrc); ++s)
+    for(; s < IOREM_SLOTS; ++s)
     {
-     if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
+     if (pSrc->iorem.i_slots[s] == pSrc->iorem.i_plugs[p])
       break;
-     if (CAST_CDDATA(pSrc, iorem.i_slotsi[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[p]))
+     if (pSrc->iorem.i_slotsi[s] == pSrc->iorem.i_plugs[p])
      { inv = true; break; }
     }
-    //Для V0.0 не имеет значения какой слот будет получен, так как и прямой и инверсный слоты это один и тот же слот
-    //так как используется union
-    if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[p]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
+    if ((s < IOREM_SLOTS) && (pSrc->iorem.i_plugs[p] != pSrc->iorem.s_stub)) //slot?
     {
-     CAST_CDDATA(pDst, iorem.i_plugs[p]) = inv ? CAST_CDDATA(pDst, iorem.i_slotsi[s]) : CAST_CDDATA(pDst, iorem.i_slots[s]);
-     CAST_CDDATA(pDst, iorem.v_plugs[p]) = inv ? CAST_CDDATA(pDst, iorem.v_slotsi[s]) : CAST_CDDATA(pDst, iorem.v_slots[s]);
+     pDst->iorem.i_plugs[p] = inv ? pDst->iorem.i_slotsi[s] : pDst->iorem.i_slots[s];
+     pDst->iorem.v_plugs[p] = inv ? pDst->iorem.v_slotsi[s] : pDst->iorem.v_slots[s];
     }
-    else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
+    else if (pSrc->iorem.i_plugs[p] == pSrc->iorem.s_stub) //stub?
     {
-     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+     pDst->iorem.i_plugs[p] = pDst->iorem.s_stub;
      //Use input stub if source has input stub
-     if (CAST_CDDATA(pSrc, iorem.v_plugs[p]) == CAST_CDDATA(pDst, iorem.g_stub))
-      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
+     if (pSrc->iorem.v_plugs[p] == pDst->iorem.g_stub)
+      pDst->iorem.v_plugs[p] = pDst->iorem.g_stub;
      else
-      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
+      pDst->iorem.v_plugs[p] = pDst->iorem.s_stub;
     }
    }
   }
   else
-  { //incompatible, then try to resolve incompatibility
-   if (CAST_CDDATA(pSrc, iorem.version) == IOV_V00)
-   { //импортируем файл версии V0.0 в V1.0+
-    std::map<IOPid, IOPid> pidm; //for associating of plug ID from old version to plug ID from new version
-    std::map<IOSid, IOSid> sidm; //for associating of slot ID from old version to slot ID from new version
-    //associate plugs
-    pidm.insert(std::make_pair(IOP_ECF, IOP_ECFv0));
-    pidm.insert(std::make_pair(IOP_ST_BLOCK, IOP_ST_BLOCKv0));
-    pidm.insert(std::make_pair(IOP_IGN_OUT3, IOP_IGN_OUT3v0));
-    pidm.insert(std::make_pair(IOP_IGN_OUT4, IOP_IGN_OUT4v0));
-    pidm.insert(std::make_pair(IOP_ADD_IO1, IOP_ADD_IO1v0));
-    pidm.insert(std::make_pair(IOP_ADD_IO2, IOP_ADD_IO2v0));
-    pidm.insert(std::make_pair(IOP_IE, IOP_IEv0));
-    pidm.insert(std::make_pair(IOP_FE, IOP_FEv0));
-    pidm.insert(std::make_pair(IOP_FL_PUMP, IOP_FL_PUMPv0));
-    pidm.insert(std::make_pair(IOP_HALL_OUT, IOP_HALL_OUTv0));
-    pidm.insert(std::make_pair(IOP_STROBE, IOP_STROBEv0));
-    pidm.insert(std::make_pair(IOP_PWRRELAY, IOP_PWRRELAYv0));
-    //associate slots
-    sidm.insert(std::make_pair(IOS_ECFv0, IOS_ECF));
-    sidm.insert(std::make_pair(IOS_ST_BLOCKv0, IOS_ST_BLOCK));
-    sidm.insert(std::make_pair(IOS_IGN_OUT3v0, IOS_IGN_OUT3));
-    sidm.insert(std::make_pair(IOS_IGN_OUT4v0, IOS_IGN_OUT4));
-    sidm.insert(std::make_pair(IOS_ADD_IO1v0, IOS_ADD_IO1));
-    sidm.insert(std::make_pair(IOS_ADD_IO2v0, IOS_ADD_IO2));
-    sidm.insert(std::make_pair(IOS_IEv0, IOS_IE));
-    sidm.insert(std::make_pair(IOS_FEv0, IOS_FE));
-
-    for(size_t p = 0; p < IOREM_PLUGS_NUM(pDst); ++p)
-    {
-     if (CAST_CDDATA(pDst, iorem.i_plugs[p]) == 0)
-      continue; //skip not implemented plugs
-
-     //First of all detach each plug, anyway unattached plugs will be attached in CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs()
-     CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-
-     //Если входы, то сразу ставим зашлушки, так как в старой версии не было входов
-     //Неподключенные слоты будут автоматически подключены в CFWIORemappingController::_CheckErrors()
-     if (p == IOP_PS || p == IOP_ADD_I1 || p == IOP_ADD_I2 || p == IOP_IGN || p == IOP_BC_INPUT || p == IOP_MAPSEL0) { 
-      CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.g_stub);
-     }
-     //Этих двух выходов не было в старой версии, поэтому как и для входов ставим заглушки
-     else if (p == IOP_IGN_OUT1 || p == IOP_IGN_OUT2)
-     {
-      CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-      CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);     
-     }
-     //Остальные выходы есть в старой версии
-     else 
-     {
-      size_t s = 0;
-      std::map<IOPid, IOPid>::const_iterator pi = pidm.find((IOPid)p);
-      if (pi != pidm.end()) {
-       //Ищем есть ли подключение к какому-нибудь слоту на стороне исходных данных (V0.0)
-       for(; s < IOREM_SLOTS_NUM(pSrc); ++s) {
-        if (CAST_CDDATA(pSrc, iorem.i_slots[s]) == CAST_CDDATA(pSrc, iorem.i_plugs[pi->second]))
-         break;
-       }      
-       if ((s < IOREM_SLOTS_NUM(pSrc)) && (CAST_CDDATA(pSrc, iorem.i_plugs[pi->second]) != CAST_CDDATA(pSrc, iorem.s_stub))) //slot?
-       {
-        std::map<IOSid, IOSid>::const_iterator si = sidm.find((IOSid)s);
-        if (si != sidm.end()) {
-         CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.i_slots[si->second]);
-         CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.v_slots[si->second]);
-        }
-       }
-       else if (CAST_CDDATA(pSrc, iorem.i_plugs[p]) == CAST_CDDATA(pSrc, iorem.s_stub)) //stub?
-       {
-        CAST_CDDATA(pDst, iorem.i_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-        CAST_CDDATA(pDst, iorem.v_plugs[p]) = CAST_CDDATA(pDst, iorem.s_stub);
-       }
-      }
-     }
-    }
-    //If ADD_IOx are connected to default plugs, we have to connect ADD_Ix inputs to default plugs also
-    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO1v0]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1v0]) &&
-        CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO1v0]) != CAST_CDDATA(pSrc, iorem.s_stub)) {
-     CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I1]);
-     CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I1]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I1]);
-    }
-    if (CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2v0]) == CAST_CDDATA(pSrc, iorem.i_slots[IOS_ADD_IO2v0]) &&
-        CAST_CDDATA(pSrc, iorem.i_plugs[IOP_ADD_IO2v0]) != CAST_CDDATA(pSrc, iorem.s_stub)) {
-     CAST_CDDATA(pDst, iorem.i_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.i_slots[IOS_ADD_I2]);
-     CAST_CDDATA(pDst, iorem.v_plugs[IOP_ADD_I2]) = CAST_CDDATA(pDst, iorem.v_slots[IOS_ADD_I2]);
-    }
-   }
-   else if (CAST_CDDATA(pDst, iorem.version) == IOV_V00)
-   {//импортируем файл версии V1.0+ в V0.0
-    //not implemented
-   }
+  { //incompatible
+   //do nothing
   }
  }
 }

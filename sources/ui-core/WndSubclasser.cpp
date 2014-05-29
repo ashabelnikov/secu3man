@@ -133,7 +133,7 @@ LRESULT CWndSubclasser::Call(LPVOID token)
   r = pWS->Default(); //skip a declared as "destroyed"
  else
   r = pWS->WndProcSub(pPrms->uMsg, pPrms->wParam, pPrms->lParam); //just call the subproc
- pWS->_token = pPrms->prevtoken; //restore previous token (naw can return also from recursion)
+ pWS->_token = pPrms->prevtoken; //restore previous token (now can return also from recursion)
  return r;
 }
 

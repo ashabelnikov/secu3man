@@ -31,63 +31,6 @@ typedef CFirmwareDataMediator FWDM;
 
 //#define IOREMCNTR_DEBUG
 
-namespace {
-//Following functions for compatibility
-std::map<FWDM::IOSid, FWDM::IOSid> idm;
-void _fill_idm(void) {
- typedef CFirmwareDataMediator FWDM;
- if (idm.size())
-  return;
- idm.insert(std::make_pair(FWDM::IOS_ECFv0, FWDM::IOS_ECF));
- idm.insert(std::make_pair(FWDM::IOS_ST_BLOCKv0, FWDM::IOS_ST_BLOCK));
- idm.insert(std::make_pair(FWDM::IOS_IGN_OUT3v0, FWDM::IOS_IGN_OUT3));
- idm.insert(std::make_pair(FWDM::IOS_IGN_OUT4v0, FWDM::IOS_IGN_OUT4));
- idm.insert(std::make_pair(FWDM::IOS_ADD_IO1v0, FWDM::IOS_ADD_IO1));
- idm.insert(std::make_pair(FWDM::IOS_ADD_IO2v0, FWDM::IOS_ADD_IO2));
- idm.insert(std::make_pair(FWDM::IOS_IEv0, FWDM::IOS_IE));
- idm.insert(std::make_pair(FWDM::IOS_FEv0, FWDM::IOS_FE));
-}
-
-//Convert slot ID from V0.0 to V1.0+
-CFirmwareDataMediator::IOSid _IOSfV0(CFirmwareDataMediator::IOSid idv0) {
- typedef CFirmwareDataMediator FWDM;
- _fill_idm();
- std::map<FWDM::IOSid, FWDM::IOSid>::const_iterator it = idm.find(idv0);
- if (it != idm.end())
-  return it->second;
- else
-  return FWDM::IOS_NA;
-}
-
-//Convert slot ID from V1.0+ to V0.0
-CFirmwareDataMediator::IOSid _IOStV0(CFirmwareDataMediator::IOSid id) {
- typedef CFirmwareDataMediator FWDM;
- _fill_idm();
- std::map<FWDM::IOSid, FWDM::IOSid>::const_iterator it = idm.begin();
- for(; it != idm.end(); ++it)
-  if (it->second == id)
-   return it->first;
- return FWDM::IOS_NA;
-}
-}
-
-//Get ID of first plug
-CFWIORemappingController::FWDM::IOPid CFWIORemappingController::_IOPStart(void) {
- return (FWDM::IOV_V00 == mp_fwdm->GetIORemVersion()) ? FWDM::IOP_STARTv0 : FWDM::IOP_START;
-}
-//Get count of plugs
-CFWIORemappingController::FWDM::IOPid CFWIORemappingController::_IOPCount(void) {
- return (FWDM::IOV_V00 == mp_fwdm->GetIORemVersion()) ? FWDM::IOP_COUNTv0 : FWDM::IOP_COUNT;
-}
-//Get ID of first slot
-CFWIORemappingController::FWDM::IOSid CFWIORemappingController::_IOSStart(void) {
- return (FWDM::IOV_V00 == mp_fwdm->GetIORemVersion()) ? FWDM::IOS_STARTv0 : FWDM::IOS_START;
-}
-//Get count of slots
-CFWIORemappingController::FWDM::IOSid CFWIORemappingController::_IOSCount(void) {
- return (FWDM::IOV_V00 == mp_fwdm->GetIORemVersion()) ? FWDM::IOS_COUNTv0 : FWDM::IOS_COUNT;
-}
-
 CFWIORemappingController::CFWIORemappingController(IORVIEW* ip_view)
 : mp_view(ip_view)
 , mp_fwdm(NULL)
@@ -149,14 +92,13 @@ void CFWIORemappingController::OnItemSelected(FWDM::IOSid iosId, FWDM::IOPid iop
  //For debug purposes
  _DisplayPlugs();
 
- //Enable inversion check boxes (applicable only for V1.0+)
+ //Enable inversion check boxes
  _EnableInversionItems();
 
  //Update UI
  _UpdateView();
 }
 
-//This method is suitable for V1.0+ (not for V0.0, because inversion checkboxes are disabled)
 void CFWIORemappingController::OnItemInverted(FWDM::IOSid iosId, bool i_invert)
 {
  _SetInvFlag(iosId, i_invert); //update inversion flags
@@ -173,544 +115,379 @@ void CFWIORemappingController::_PrepareLogic(void)
  if (!mp_fwdm)
   return; //Can't prepare when FWDM is not attached
 
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ECFv0, FWDM::IOP_ECFv0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ST_BLOCKv0, FWDM::IOP_ST_BLOCKv0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT3v0, FWDM::IOP_IGN_OUT3v0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT4v0, FWDM::IOP_IGN_OUT4v0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO1v0, FWDM::IOP_ADD_IO1v0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO2v0, FWDM::IOP_ADD_IO2v0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IEv0, FWDM::IOP_IEv0));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_FEv0, FWDM::IOP_FEv0));
+ //Set inversion flags to default values
+ m_invFlags.clear();
+ for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
+  m_invFlags.insert(std::make_pair((FWDM::IOSid)s, false));
 
-  //fill view with values
-  mp_view->ResetContent();
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECFv0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ECF, true);
+ m_defValMap.clear();
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ECF, FWDM::IOP_ECF));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_IE, FWDM::IOP_IE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_FE, FWDM::IOP_FE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_PS, FWDM::IOP_PS));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_CE, FWDM::IOP_CE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_BL, FWDM::IOP_BL));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_DE, FWDM::IOP_DE));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_REF_S, FWDM::IOP_REF_S));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_GAS_V, FWDM::IOP_GAS_V));
 
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCKv0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
+ //Fill view with values
+ mp_view->ResetContent();
+ mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_IGN_OUT1, true);
+ mp_view->EnableInversion(FWDM::IOS_IGN_OUT1, true);
 
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3v0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT3, true);
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_IGN_OUT2, true);
+ mp_view->EnableInversion(FWDM::IOS_IGN_OUT2, true);
 
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4v0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT4, true);
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_IGN_OUT3, true);
+ mp_view->EnableInversion(FWDM::IOS_IGN_OUT3, true);
 
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1v0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ADD_IO1, true);
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_IGN_OUT4, true);
+ mp_view->EnableInversion(FWDM::IOS_IGN_OUT4, true);
 
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2v0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ADD_IO2, true);
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ADD_IO1, true);
+ mp_view->EnableInversion(FWDM::IOS_ADD_IO1, true);
 
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IEv0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IE, true);
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ADD_IO2, true);
+ mp_view->EnableInversion(FWDM::IOS_ADD_IO2, true);
 
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FL_PUMPv0, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_HALL_OUTv0, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_STROBEv0, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_PWRRELAYv0, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FEv0, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_FE, true);
- }
- else
- { //v1.0+
-  //Set inversion flags to default values
-  m_invFlags.clear();
-  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
-   m_invFlags.insert(std::make_pair((FWDM::IOSid)s, false));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECF, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ECF, true);
+ mp_view->EnableInversion(FWDM::IOS_ECF, true);
 
-  m_defValMap.clear();
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ECF, FWDM::IOP_ECF));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_IE, FWDM::IOP_IE));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_FE, FWDM::IOP_FE));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_PS, FWDM::IOP_PS));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1));
-  m_defValMap.insert(std::make_pair(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2));
-  if (iov >= FWDM::IOV_V14)
-  {
-   m_defValMap.insert(std::make_pair(FWDM::IOS_CE, FWDM::IOP_CE));
-   m_defValMap.insert(std::make_pair(FWDM::IOS_BL, FWDM::IOP_BL));
-   m_defValMap.insert(std::make_pair(FWDM::IOS_DE, FWDM::IOP_DE));
-  }
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
+ mp_view->EnableInversion(FWDM::IOS_ST_BLOCK, true);
 
-  //Fill view with values
-  mp_view->ResetContent();
-  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT1, true);
-  mp_view->EnableInversion(FWDM::IOS_IGN_OUT1, true);
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_IE, true);
+ mp_view->EnableInversion(FWDM::IOS_IE, true);
 
-  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT2, true);
-  mp_view->EnableInversion(FWDM::IOS_IGN_OUT2, true);
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_FE, true); 
+ mp_view->EnableInversion(FWDM::IOS_FE, true);
+ //PS input:
+ mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
+ mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_PS, true); 
+ mp_view->EnableInversion(FWDM::IOS_PS, true);
 
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_IGN_OUT3, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT3, true);
-  mp_view->EnableInversion(FWDM::IOS_IGN_OUT3, true);
+ //CE
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT0"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_CE, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_CE, true);
+ mp_view->EnableInversion(FWDM::IOS_CE, true);
 
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_IGN_OUT4, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IGN_OUT4, true);
-  mp_view->EnableInversion(FWDM::IOS_IGN_OUT4, true);
+ //BL
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_BL, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_BL, true);
+ mp_view->EnableInversion(FWDM::IOS_BL, true);
 
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN, _T("IGN"));
-  if (iov >= FWDM::IOV_V11)
-   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_BC_INPUT, _T("BC_INPUT")); //appeared in v1.1
-  if (iov >= FWDM::IOV_V13)
-   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));   //appeared in v1.3
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_DIR, _T("SM_DIR"));     //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_STP, _T("SM_STP"));     //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_ADD_IO1, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ADD_IO1, true);
-  mp_view->EnableInversion(FWDM::IOS_ADD_IO1, true);
+ //DE
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_STROBE, _T("STROBE"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_STP, _T("SM_STP"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_UNI_OUT, _T("UNI_OUT"));
+ mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_DE, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_DE, true);
+ mp_view->EnableInversion(FWDM::IOS_DE, true);
 
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN, _T("IGN"));
-  if (iov >= FWDM::IOV_V11)
-   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_BC_INPUT, _T("BC_INPUT")); //appeared in v1.1
-  if (iov >= FWDM::IOV_V13)
-   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));   //appeared in v1.3
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  if (iov >= FWDM::IOV_V12)
-  {  
-   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_DIR, _T("SM_DIR"));     //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_STP, _T("SM_STP"));     //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_ADD_IO2, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ADD_IO2, true);
-  mp_view->EnableInversion(FWDM::IOS_ADD_IO2, true);
+ //ADD_I1
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_LAMBDA, _T("LAMBDA"));
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_AIR_TEMP, _T("AIR_TEMP"));
+ mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ADD_I1, true); 
+ mp_view->EnableInversion(FWDM::IOS_ADD_I1, true);
 
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_DIR, _T("SM_DIR"));         //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_STP, _T("SM_STP"));         //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECF, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ECF, true);
-  mp_view->EnableInversion(FWDM::IOS_ECF, true);
+ //ADD_I2
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_LAMBDA, _T("LAMBDA"));
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_AIR_TEMP, _T("AIR_TEMP"));
+ mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_ADD_I2, true); 
+ mp_view->EnableInversion(FWDM::IOS_ADD_I2, true);
 
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_DIR, _T("SM_DIR"));    //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_STP, _T("SM_STP"));    //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT")); //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
-  mp_view->EnableInversion(FWDM::IOS_ST_BLOCK, true);
+ //REF_S
+ mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+//mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
+ mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_REF_S, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_REF_S, true); 
+ mp_view->EnableInversion(FWDM::IOS_REF_S, true);
 
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_DIR, _T("SM_DIR"));          //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_STP, _T("SM_STP"));          //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));    //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_IE, true);
-  mp_view->EnableInversion(FWDM::IOS_IE, true);
-
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_STROBE, _T("STROBE"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-  if (iov >= FWDM::IOV_V12)
-  {
-   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_DIR, _T("SM_DIR"));          //appeared in v1.2
-   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_STP, _T("SM_STP"));          //appeared in v1.2
-  }
-  if (iov >= FWDM::IOV_V16)
-   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));    //appeared in v1.6
-  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_FE, true); 
-  mp_view->EnableInversion(FWDM::IOS_FE, true);
-  //PS input:
-  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_IGN, _T("IGN"));
-  if (iov >= FWDM::IOV_V11)
-   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));      //appeared in v1.1
-  if (iov >= FWDM::IOV_V13)
-   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));        //appeared in v1.3
-  if (iov >= FWDM::IOV_V15)
-   mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_SPDSENS, _T("SPD_SENS"));       //appeared in v1.5
-  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
-  mp_view->EnableItem(FWDM::IOS_PS, true); 
-  mp_view->EnableInversion(FWDM::IOS_PS, true);
-
-  if (iov >= FWDM::IOV_V14)                                                 //appeared in v1.4
-  {
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_STROBE, _T("STROBE"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_STP, _T("SM_STP"));
-   if (iov >= FWDM::IOV_V16)
-    mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
-   mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_CE, _T("NONE"));
-   mp_view->EnableItem(FWDM::IOS_CE, true);
-   mp_view->EnableInversion(FWDM::IOS_CE, true);
-
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_STROBE, _T("STROBE"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_DIR, _T("SM_DIR"));
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_SM_STP, _T("SM_STP"));
-   if (iov >= FWDM::IOV_V16)
-    mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
-   mp_view->AddItem(FWDM::IOS_BL, FWDM::IOP_BL, _T("NONE"));
-   mp_view->EnableItem(FWDM::IOS_BL, true);
-   mp_view->EnableInversion(FWDM::IOS_BL, true);
-
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_FL_PUMP, _T("FL_PUMP"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_STROBE, _T("STROBE"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_DIR, _T("SM_DIR"));
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_SM_STP, _T("SM_STP"));
-   if (iov >= FWDM::IOV_V16)
-    mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));   //appeared in v1.6
-   mp_view->AddItem(FWDM::IOS_DE, FWDM::IOP_DE, _T("NONE"));
-   mp_view->EnableItem(FWDM::IOS_DE, true);
-   mp_view->EnableInversion(FWDM::IOS_DE, true);
-  }
- }
+ //GAS_V
+ mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
+ mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
+ mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_GAS_V, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_GAS_V, true); 
+ mp_view->EnableInversion(FWDM::IOS_GAS_V, true);
 }
 
 //Note that this function uses default inversion values from m_invFlags map.
 void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {//V0.0
-  for(int s = FWDM::IOS_STARTv0; s < FWDM::IOS_COUNTv0; ++s)
-  {
-   if (!_IsSlotFree((FWDM::IOSid)s))
-    continue;
-   std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
-   if (it != m_defValMap.end())
-    _AttachPlug(it->second, (FWDM::IOSid)s); //default
-  }
+ std::map<FWDM::IOPid, FWDM::IOSid> attachList;
+ //build list of free slots which have to be attached to default plugs
+ for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
+ {
+  if (!_IsSlotFree((FWDM::IOSid)s))
+   continue;
+  //костыль для возможности переназначения IGN_OUT3 и IGN_OUT4 на другие выходы
+  if (((FWDM::IOSid)s == FWDM::IOS_IGN_OUT3) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IGN_OUT3)))
+   continue; //3
+  if (((FWDM::IOSid)s == FWDM::IOS_IGN_OUT4) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IGN_OUT4)))
+   continue; //4
+  std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
+  if (it != m_defValMap.end())
+   attachList.insert(std::make_pair(it->second, (FWDM::IOSid)s));
  }
- else
- {//V1.0+  
-  std::map<FWDM::IOPid, FWDM::IOSid> attachList;
-  //build list of free slots which have to be attached to default plugs
-  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
-  {
-   if (!_IsSlotFree((FWDM::IOSid)s))
-    continue;
-   //костыль для возможности переназначения IGN_OUT3 и IGN_OUT4 на другие выходы
-   if (((FWDM::IOSid)s == FWDM::IOS_IGN_OUT3) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IGN_OUT3)))
-    continue; //3
-   if (((FWDM::IOSid)s == FWDM::IOS_IGN_OUT4) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IGN_OUT4)))
-    continue; //4
-   std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
-   if (it != m_defValMap.end())
-    attachList.insert(std::make_pair(it->second, (FWDM::IOSid)s));
-  }
-  //attach
-  std::map<FWDM::IOPid, FWDM::IOSid>::const_iterator it = attachList.begin();
-  for(; it != attachList.end(); ++it)
-  {
-   bool inv = m_invFlags[it->second];
-   _AttachPlug(it->first, it->second, inv); //default
-  }
- } 
+ //attach
+ std::map<FWDM::IOPid, FWDM::IOSid>::const_iterator it = attachList.begin();
+ for(; it != attachList.end(); ++it)
+ {
+  bool inv = m_invFlags[it->second];
+  _AttachPlug(it->first, it->second, inv); //default
+ }
 }
 
 bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {//V0.0
-  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, iosId);
-  for(int p = FWDM::IOP_STARTv0; p < FWDM::IOP_COUNTv0; ++p)
-  {
-   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   if (plug == slot)
-    return false; //already connected to one of plugs
-  }
- }
- else
- {//V1.0+
-  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
-  {  
-   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   if (plug == 0)
-    continue; //skip reserved plugs
-   if (_CmpPnS((FWDM::IOPid)p, iosId))
-    return false; //already connected to one of plugs
-   //Если входы ADD_Ix не свободны, то выходы ADD_IOx тоже не считаем свободными (и наоборот), в противном случае
-   //будет назначен выход по умолчанию и он будет мешать работе входа
-   if ((iosId == FWDM::IOS_ADD_IO1 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I1)) ||
-      (iosId == FWDM::IOS_ADD_I1   && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_IO1)))    
-    return false; //already connected to one of plugs
-   if ((iosId == FWDM::IOS_ADD_IO2 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I2)) ||
-      (iosId == FWDM::IOS_ADD_I2   && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_IO2)))
-    return false; //already connected to one of plugs
-  } 
- }
+ for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
+ {  
+  DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
+  if (plug == 0)
+   continue; //skip reserved plugs
+  if (_CmpPnS((FWDM::IOPid)p, iosId))
+   return false; //already connected to one of plugs
+ } 
  return true; //free!
 }
 
 void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {//V0.0
-  DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, _IOStV0(iosId));
-  for(int p = FWDM::IOP_STARTv0; p < FWDM::IOP_COUNTv0; ++p)
-  {
-   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   if(plug == slot)
-    _AttachPlug((FWDM::IOPid)p); //stub
-  }
- }
- else
- {//V1.0+
-  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
-  {
-   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-   if (plug == 0)
-    continue; //skip reserved plugs
-   //Если происходит отключение ADD_IO1, то нужно также отключить ADD_I1;
-   //Если происходит отключение ADD_IO2, то нужно также отключить ADD_I2;
-   if( _CmpPnS((FWDM::IOPid)p, iosId) ||
-      (iosId == FWDM::IOS_ADD_IO1 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I1)) ||
-      (iosId == FWDM::IOS_ADD_IO2 && _CmpPnS((FWDM::IOPid)p, FWDM::IOS_ADD_I2)))
-    _AttachPlug((FWDM::IOPid)p); //stub
-  }
+ for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
+ {
+  DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
+  if (plug == 0)
+   continue; //skip reserved plugs
+  if(_CmpPnS((FWDM::IOPid)p, iosId))
+   _AttachPlug((FWDM::IOPid)p); //stub
  }
 }
 
 void CFWIORemappingController::_UpdateView(void)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {//V0.0
-  for(int s = FWDM::IOS_STARTv0; s < FWDM::IOS_COUNTv0; ++s)
-  {  
-   DWORD slot = mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s);
-   for(int p = FWDM::IOP_STARTv0; p < FWDM::IOP_COUNTv0; ++p)
+ for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
+ {  
+  DWORD slot[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, true)};
+  bool itemSet = false;
+  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
+  {
+   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
+   //If slot == stub, then it is not allowed in this firmware
+   if ((slot[0] != mp_fwdm->GetSStub()) && (slot[0] == plug))
    {
-    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-    //If slot == stub, then it is not allowed in this firmware
-    if (slot == plug && slot != mp_fwdm->GetSStub())
-     mp_view->SelectItem(_IOSfV0((FWDM::IOSid)s), (FWDM::IOPid)p);
-   }
-  }
- }
- else
- {//V1.0+
-  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
-  {  
-   if (((FWDM::IOSid)s == FWDM::IOS_ADD_I1) || ((FWDM::IOSid)s == FWDM::IOS_ADD_I2))
-    continue; //skip ADD_I1 and ADD_I2 because they have not to appear in the UI
-   DWORD slot[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, true)};
-   DWORD slot_add_i1[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I1, true)};
-   DWORD slot_add_i2[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, FWDM::IOS_ADD_I2, true)};
-   bool itemSet = false;
-   for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
-   {
-    DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
-    //If slot == stub, then it is not allowed in this firmware
-    if ((slot[0] != mp_fwdm->GetSStub()) && ((slot[0] == plug) || (s == FWDM::IOS_ADD_IO1 && plug == slot_add_i1[0]) ||
-        (s == FWDM::IOS_ADD_IO2 && plug == slot_add_i2[0])))
-    {
-     mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
-     mp_view->InvertItem((FWDM::IOSid)s, false);
-     _SetInvFlag((FWDM::IOSid)s, false); //update inversion flags
-     itemSet = true;
-    }
-    else if ((slot[1] != mp_fwdm->GetSStub()) && ((slot[1] == plug) || (s == FWDM::IOS_ADD_IO1 && plug == slot_add_i1[1]) ||
-        (s == FWDM::IOS_ADD_IO2 && plug == slot_add_i2[1])))
-    {
-     mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
-     mp_view->InvertItem((FWDM::IOSid)s, true);
-     _SetInvFlag((FWDM::IOSid)s, true); //update inversion flags
-     itemSet = true;
-    }
-   }
-   if (!itemSet) {
-    mp_view->SelectItem((FWDM::IOSid)s, FWDM::IOP_NA);
+    mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
     mp_view->InvertItem((FWDM::IOSid)s, false);
     _SetInvFlag((FWDM::IOSid)s, false); //update inversion flags
+    itemSet = true;
    }
+   else if ((slot[1] != mp_fwdm->GetSStub()) && (slot[1] == plug))
+   {
+    mp_view->SelectItem((FWDM::IOSid)s, (FWDM::IOPid)p);
+    mp_view->InvertItem((FWDM::IOSid)s, true);
+    _SetInvFlag((FWDM::IOSid)s, true); //update inversion flags
+    itemSet = true;
+   }
+  }
+  if (!itemSet) {
+   mp_view->SelectItem((FWDM::IOSid)s, FWDM::IOP_NA);
+   mp_view->InvertItem((FWDM::IOSid)s, false);
+   _SetInvFlag((FWDM::IOSid)s, false); //update inversion flags
   }
  }
 }
 
 void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
- {//V0.0
-  mp_fwdm->SetIOPlug(FWDM::IOX_INIT, iopId, mp_fwdm->GetSStub());
-  mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetSStub());
- }
+ mp_fwdm->SetIOPlug(FWDM::IOX_INIT, iopId, mp_fwdm->GetSStub());
+ if (_IsIOPInput(iopId))
+  mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetGStub()); //для входов своя заглушка, 
  else
- {//V1.0+
-  mp_fwdm->SetIOPlug(FWDM::IOX_INIT, iopId, mp_fwdm->GetSStub());
-  if (_IsIOPInput(iopId))
-   mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetGStub()); //для входов своя заглушка, 
-  else
-   mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetSStub()); //для выходов своя
- }
+  mp_fwdm->SetIOPlug(FWDM::IOX_DATA, iopId, mp_fwdm->GetSStub()); //для выходов своя
 }
 
 void CFWIORemappingController::_AttachPlugToSpecifiedSlot(FWDM::IOPid iopId, FWDM::IOSid iosId)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)//V0.0
-  _AttachPlug(iopId, _IOStV0(iosId));
- else
- {//V1.0+
-  bool inv = m_invFlags[iosId];
-  if (_IsIOPInput(iopId) && iosId == FWDM::IOS_ADD_IO1)
-   _AttachPlug(iopId, FWDM::IOS_ADD_I1, inv); //substitute IOS_ADD_IO1 to IOS_ADD_I1
-  else if (_IsIOPInput(iopId) && iosId == FWDM::IOS_ADD_IO2)
-   _AttachPlug(iopId, FWDM::IOS_ADD_I2, inv); //substitute IOS_ADD_IO2 to IOS_ADD_I2
-  else if (iopId == FWDM::IOP_ADD_IO1)   //when connecting ADD_IO1 plug back to ADD_IO1 slot we also have to connect ADD_I1
-   _AttachPlug(FWDM::IOP_ADD_IO1, iosId, inv), _AttachPlug(FWDM::IOP_ADD_I1, FWDM::IOS_ADD_I1, inv);
-  else if (iopId == FWDM::IOP_ADD_IO2)   //when connecting ADD_IO1 plug back to ADD_IO1 slot we also have to connect ADD_I1
-   _AttachPlug(FWDM::IOP_ADD_IO2, iosId, inv), _AttachPlug(FWDM::IOP_ADD_I2, FWDM::IOS_ADD_I2, inv);
-  else
-   _AttachPlug(iopId, iosId, inv);
- }
+ bool inv = m_invFlags[iosId];
+ _AttachPlug(iopId, iosId, inv);
 }
 
 void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId, bool inv /*=false*/)
@@ -721,25 +498,17 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId,
 
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 {
- return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS);
+ return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS || iopId == FWDM::IOP_REF_S || iopId == FWDM::IOP_GAS_V || iopId == FWDM::IOP_LAMBDA || iopId == FWDM::IOP_AIR_TEMP);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
 {
- return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2);
+ return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2 || iosId == FWDM::IOS_REF_S || iosId == FWDM::IOS_GAS_V);
 }
 
 void CFWIORemappingController::_SetInvFlag(FWDM::IOSid iosId, bool inv)
 {
  m_invFlags[iosId] = inv;
- if (iosId == FWDM::IOS_ADD_IO1)
-  m_invFlags[FWDM::IOS_ADD_I1] = inv;
- else if (iosId == FWDM::IOS_ADD_IO2)
-  m_invFlags[FWDM::IOS_ADD_I2] = inv;
- else if (iosId == FWDM::IOS_ADD_I1)
-  m_invFlags[FWDM::IOS_ADD_IO1] = inv;
- else if (iosId == FWDM::IOS_ADD_I2)
-  m_invFlags[FWDM::IOS_ADD_IO2] = inv; 
 }
 
 bool CFWIORemappingController::_CmpPnS(FWDM::IOPid pid, FWDM::IOSid sid)
@@ -752,7 +521,7 @@ bool CFWIORemappingController::_CmpPnS(FWDM::IOPid pid, FWDM::IOSid sid)
 bool CFWIORemappingController::_FixRedundantConnections(void)
 {
  bool result = true;
- for(int p = _IOPStart(); p < _IOPCount(); ++p)
+ for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
  {
   for(int i = FWDM::IOX_INIT; i <= /*FWDM::IOX_DATA*/FWDM::IOX_INIT; ++i)
   {
@@ -760,7 +529,7 @@ bool CFWIORemappingController::_FixRedundantConnections(void)
    if (plug == 0)
     continue;
    bool find = false;
-   for(int pp = _IOPStart(); pp < _IOPCount(); ++pp)
+   for(int pp = FWDM::IOP_START; pp < FWDM::IOP_COUNT; ++pp)
    {
     DWORD value = mp_fwdm->GetIOPlug((FWDM::IOXtype)i, (FWDM::IOPid)pp);
     if (value == 0 || value == mp_fwdm->GetSStub() || value == mp_fwdm->GetGStub())
@@ -784,11 +553,6 @@ bool CFWIORemappingController::_FixRedundantConnections(void)
 bool CFWIORemappingController::_FixInputsVSOutputs(void)
 {
  bool result = true;
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
-  return result; //V0.0 had no input remapping capabilities!
-
- //V1.0+
  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
  {
   int plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
@@ -835,7 +599,7 @@ bool CFWIORemappingController::_CheckForErrors(void)
 FWDM::IOSid CFWIORemappingController::_GetConnectedSlot(FWDM::IOPid iopId, bool init, bool&  inv)
 {
  DWORD plug = mp_fwdm->GetIOPlug(init ? FWDM::IOX_INIT : FWDM::IOX_DATA, iopId);
- for(int s = _IOSStart(); s < _IOSCount(); ++s)
+ for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
  {
   FWDM::IOXtype iotype = init ? FWDM::IOX_INIT : FWDM::IOX_DATA;
   DWORD slot[2] = {mp_fwdm->GetIOSlot(iotype, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(iotype, (FWDM::IOSid)s, true)};
@@ -849,10 +613,6 @@ FWDM::IOSid CFWIORemappingController::_GetConnectedSlot(FWDM::IOPid iopId, bool 
 
 void CFWIORemappingController::_EnableInversionItems(void)
 {
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
- if (iov == FWDM::IOV_V00)
-  return; //V0.0 had no inversion capabilities
-
  std::map<FWDM::IOSid, bool> enableFlags;
  enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT3, false));
  enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT4, false));
@@ -875,39 +635,28 @@ void CFWIORemappingController::_EnableInversionItems(void)
 void CFWIORemappingController::_DisplayPlugs(void)
 {
 #ifdef IOREMCNTR_DEBUG
- FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
  std::map<FWDM::IOSid, _TSTRING> names;
  std::map<FWDM::IOSid, _TSTRING>::iterator it;
- if (iov == FWDM::IOV_V00) {//V0.0
-  names.insert(std::make_pair(FWDM::IOS_ECFv0, _T("ECF")));
-  names.insert(std::make_pair(FWDM::IOS_ST_BLOCKv0, _T("ST_BLOCK")));
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT3v0, _T("IGN_OUT3")));
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT4v0, _T("IGN_OUT4")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_IO1v0, _T("ADD_IO1")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_IO2v0, _T("ADD_IO2")));
-  names.insert(std::make_pair(FWDM::IOS_IEv0, _T("IE")));
-  names.insert(std::make_pair(FWDM::IOS_FEv0, _T("FE")));
- }
- else if (iov > FWDM::IOV_V00) {//V1.0+
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT1, _T("IGN_OUT1")));
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT2, _T("IGN_OUT2")));
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT3, _T("IGN_OUT3")));
-  names.insert(std::make_pair(FWDM::IOS_IGN_OUT4, _T("IGN_OUT4")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_IO1, _T("ADD_IO1")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_IO2, _T("ADD_IO2")));
-  names.insert(std::make_pair(FWDM::IOS_ECF, _T("ECF")));
-  names.insert(std::make_pair(FWDM::IOS_ST_BLOCK, _T("ST_BLOCK")));
-  names.insert(std::make_pair(FWDM::IOS_IE, _T("IE")));
-  names.insert(std::make_pair(FWDM::IOS_FE, _T("FE")));
-  names.insert(std::make_pair(FWDM::IOS_PS, _T("PS")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_I1, _T("ADD_I1")));
-  names.insert(std::make_pair(FWDM::IOS_ADD_I2, _T("ADD_I2")));
-  names.insert(std::make_pair(FWDM::IOS_CE, _T("CE")));
-  names.insert(std::make_pair(FWDM::IOS_BL, _T("BL")));
-  names.insert(std::make_pair(FWDM::IOS_DE, _T("DE")));
- }
+ names.insert(std::make_pair(FWDM::IOS_IGN_OUT1, _T("IGN_OUT1")));
+ names.insert(std::make_pair(FWDM::IOS_IGN_OUT2, _T("IGN_OUT2")));
+ names.insert(std::make_pair(FWDM::IOS_IGN_OUT3, _T("IGN_OUT3")));
+ names.insert(std::make_pair(FWDM::IOS_IGN_OUT4, _T("IGN_OUT4")));
+ names.insert(std::make_pair(FWDM::IOS_ADD_IO1, _T("ADD_IO1")));
+ names.insert(std::make_pair(FWDM::IOS_ADD_IO2, _T("ADD_IO2")));
+ names.insert(std::make_pair(FWDM::IOS_ECF, _T("ECF")));
+ names.insert(std::make_pair(FWDM::IOS_ST_BLOCK, _T("ST_BLOCK")));
+ names.insert(std::make_pair(FWDM::IOS_IE, _T("IE")));
+ names.insert(std::make_pair(FWDM::IOS_FE, _T("FE")));
+ names.insert(std::make_pair(FWDM::IOS_PS, _T("PS")));
+ names.insert(std::make_pair(FWDM::IOS_ADD_I1, _T("ADD_I1")));
+ names.insert(std::make_pair(FWDM::IOS_ADD_I2, _T("ADD_I2")));
+ names.insert(std::make_pair(FWDM::IOS_CE, _T("CE")));
+ names.insert(std::make_pair(FWDM::IOS_BL, _T("BL")));
+ names.insert(std::make_pair(FWDM::IOS_DE, _T("DE")));
+ names.insert(std::make_pair(FWDM::IOS_REF_S, _T("REF_S")));
+ names.insert(std::make_pair(FWDM::IOS_GAS_V, _T("GAS_V")));
  CString out(_T("      [INIT]            [DATA]\n"));
- for(int p = _IOPStart(); p < _IOPCount(); ++p)
+ for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
  {
   FWDM::IOSid sId;
   CString str_i, str_d;

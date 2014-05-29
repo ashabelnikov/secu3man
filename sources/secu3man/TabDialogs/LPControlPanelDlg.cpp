@@ -231,8 +231,12 @@ void CLPControlPanelDlg::OnPrevButton()
 
 void CLPControlPanelDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
- if (m_on_slider_moved)
-  m_on_slider_moved(nSBCode, nPos);
+ if (pScrollBar) //process messages from controls only
+ {
+  if (m_on_slider_moved)
+   m_on_slider_moved(nSBCode, nPos);
+ }
+ Super::OnHScroll(nSBCode, nPos, pScrollBar);
 }
 
 void CLPControlPanelDlg::OnSelchangeTimeFactorCombo()

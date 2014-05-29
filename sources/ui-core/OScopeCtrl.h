@@ -1,16 +1,28 @@
-//Original code written by Mark C. Malburg
-//Midified by Alexey A. Shabelnikov
+/* SECU-3  - An open source, free engine control unit
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
+   Original code written by Mark C. Malburg, USA, http://digitalmetrology.com
 
-// OScopeCtrl.h : header file
-//
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
 
-#ifndef __OScopeCtrl_H__
-#define __OScopeCtrl_H__
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+              http://secu-3.org
+              email: shabelnikov@secu-3.org
+*/
+
+#pragma once
 
 #include <deque>
-
-/////////////////////////////////////////////////////////////////////////////
-// COScopeCtrl window
 
 class AFX_EXT_CLASS COScopeCtrl : public CWnd
 {
@@ -86,6 +98,3 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   //stores point position, used for correct scrolling
   size_t m_point_position;
 };
-
-/////////////////////////////////////////////////////////////////////////////
-#endif
