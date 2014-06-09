@@ -379,7 +379,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
  for(i = 0; i < 16; ++i)
  {
   CRect lab_rect(rc.left - width, rc.top+(i*(height+space)), rc.left, rc.top + (i*(height+space) + height));
-  CString cs; cs.Format("%d ", 16-i);
+  CString cs; cs.Format(_T("%d "), 16-i);
   m_wrk_map_labels[i].Create(cs.GetBuffer(0),WS_CHILD | WS_VISIBLE | SS_RIGHT, lab_rect, this);
   m_wrk_map_labels[i].SetFont(&m_font);
  }
@@ -622,14 +622,14 @@ void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
 void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
 {
  CString str;
- str.Format("%0.2f", dv.adv_ang), m_aa_value.SetWindowText(str);
- str.Format("%0.2f", dv.knock_retard), m_kc_value.SetWindowText(str);
- str.Format("%0.2f", dv.idle_aalt), m_im_value.SetWindowText(str);
- str.Format("%0.2f", dv.work_aalt), m_wm_value.SetWindowText(str);
- str.Format("%0.2f", dv.temp_aalt), m_tc_value.SetWindowText(str);
- str.Format("%0.2f", dv.airt_aalt), m_ac_value.SetWindowText(str);
- str.Format("%0.2f", dv.idlreg_aac), m_ic_value.SetWindowText(str);
- str.Format("%0.2f", dv.octan_aac), m_oc_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.adv_ang), m_aa_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.knock_retard), m_kc_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.idle_aalt), m_im_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.work_aalt), m_wm_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.temp_aalt), m_tc_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.airt_aalt), m_ac_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.idlreg_aac), m_ic_value.SetWindowText(str);
+ str.Format(_T("%0.2f"), dv.octan_aac), m_oc_value.SetWindowText(str);
  m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
  Invalidate(); //shit

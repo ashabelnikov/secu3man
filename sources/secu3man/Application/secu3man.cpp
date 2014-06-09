@@ -50,7 +50,7 @@ void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
   {
    HMODULE hLibrary = LoadLibrary(_T("kernel32"));
    if (hLibrary)
-    pLangProc = (SetThreadUILanguage_Addr)GetProcAddress(hLibrary, _T("SetThreadUILanguage"));
+    pLangProc = (SetThreadUILanguage_Addr)GetProcAddress(hLibrary, "SetThreadUILanguage");
   } 
   if(pLangProc)
   { // Vista or later
@@ -67,18 +67,18 @@ void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
 bool CheckDLLCompatibility(void)
 {
  std::vector<_TSTRING> dlls;
- dlls.push_back(_T(_T("about.dll")));
- dlls.push_back(_T(_T("chart2d.dll")));
- dlls.push_back(_T(_T("chart3d.dll")));
- dlls.push_back(_T(_T("fwimpexp.dll")));
- dlls.push_back(_T(_T("hexutils.dll")));
- dlls.push_back(_T(_T("hiscctrl.dll")));
- dlls.push_back(_T(_T("io-core.dll")));
- dlls.push_back(_T(_T("midesk.dll")));
- dlls.push_back(_T(_T("paramdesk.dll")));
- dlls.push_back(_T(_T("propgrid.dll")));
- dlls.push_back(_T(_T("tabldesk.dll")));
- dlls.push_back(_T(_T("ui-core.dll")));
+ dlls.push_back(_T("about.dll"));
+ dlls.push_back(_T("chart2d.dll"));
+ dlls.push_back(_T("chart3d.dll"));
+ dlls.push_back(_T("fwimpexp.dll"));
+ dlls.push_back(_T("hexutils.dll"));
+ dlls.push_back(_T("hiscctrl.dll"));
+ dlls.push_back(_T("io-core.dll"));
+ dlls.push_back(_T("midesk.dll"));
+ dlls.push_back(_T("paramdesk.dll"));
+ dlls.push_back(_T("propgrid.dll"));
+ dlls.push_back(_T("tabldesk.dll"));
+ dlls.push_back(_T("ui-core.dll"));
 
  int exe_major = 0, exe_minor = 0;
  if (!GetVersionInfo(_T("secu3man.exe"), exe_major, exe_minor))
@@ -117,7 +117,7 @@ void SetMainWindowTitle(void)
  {
   CString strTitle(MLL::LoadString(IDS_APP_TITLE));
   CString strVersion;
-  strVersion.Format(" v%d.%d", major, minor);
+  strVersion.Format(_T(" v%d.%d"), major, minor);
   strTitle.Append(strVersion);
   AfxGetMainWnd()->SetWindowText(strTitle);
  }

@@ -416,7 +416,7 @@ void CKnockChannelTabDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScroll
 #define _SET_LEVEL(pos) {\
     m_pLineSerieLevel->SetYPointValue(0, SliderToLevel((pos))); \
     m_pLineSerieLevel->SetYPointValue(1, SliderToLevel((pos))); \
-    CString cs; cs.Format("%.02f", SliderToLevel((pos))); \
+    CString cs; cs.Format(_T("%.02f"), SliderToLevel((pos))); \
     m_level_text.SetWindowText(cs); \
     }
 
@@ -456,7 +456,7 @@ void CKnockChannelTabDlg::SetDesiredLevel(float i_level)
  m_level_slider.SetPos(MathHelpers::Round((K_SIG_MAX - i_level) * factor));
  m_pLineSerieLevel->SetYPointValue(0, i_level);
  m_pLineSerieLevel->SetYPointValue(1, i_level);
- CString cs; cs.Format("%.02f", i_level);
+ CString cs; cs.Format(_T("%.02f"), i_level);
  m_level_text.SetWindowText(cs);
 }
 

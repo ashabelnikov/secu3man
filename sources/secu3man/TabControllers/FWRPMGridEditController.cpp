@@ -81,7 +81,7 @@ bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value
  {
   if (!i_check_only)
   {
-   std::stringstream s;
+   _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_LESS_MIN);
    s << gridMinValue;
    m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
@@ -91,7 +91,7 @@ bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value
  {
   if (!i_check_only)
   {
-   std::stringstream s;
+   _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_ABOVE_MAX);
    s << gridMaxValue;
    m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
@@ -102,7 +102,7 @@ bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value
  {
   if (!i_check_only)
   {
-   std::stringstream s;
+   _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_STEP_LESS_MIN);
    s << gridMinStep;
    m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));

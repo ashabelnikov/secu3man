@@ -32,10 +32,10 @@ void RegisterOwnClasses(HINSTANCE hInstance)
  WNDCLASS wc;
 
  // Get the info for this class. #32770 is the default class name for dialogs boxes.
- ::GetClassInfo(hInstance, "#32770", &wc);
+ ::GetClassInfo(hInstance, _T("#32770"), &wc);
 
  // Change the name of the class.
- wc.lpszClassName = "SECU-3GridModeEditWnd";
+ wc.lpszClassName = _T("SECU-3GridModeEditWnd");
 
  // Register this class so that MFC can use it.
  AfxRegisterClass(&wc);	

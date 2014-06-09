@@ -117,7 +117,7 @@ bool CChildView::Create(CWnd* ip_parent)
  lpw = reinterpret_cast<WORD*>(lpdi + 1);
  //class
  lpwsz = (LPWSTR) lpw;
- nchar = MultiByteToWideChar (CP_ACP, 0, WC_TABCONTROL, -1, lpwsz, 100);
+ nchar = MultiByteToWideChar (CP_ACP, 0, WC_TABCONTROLA, -1, lpwsz, 100);
  lpw   += nchar;
  //title
  lpwsz = (LPWSTR) lpw;
