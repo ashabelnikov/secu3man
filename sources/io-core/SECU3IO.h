@@ -69,6 +69,8 @@ namespace SECU3IO
   bool idlreg_use;
   float octan_aac;                      //octane correction value
   bool octan_use;
+
+  float inj_pw;                         //injector pulse width in ms
  };
 
  struct DbgvarDat
