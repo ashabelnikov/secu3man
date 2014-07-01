@@ -229,7 +229,7 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
 // инициализация COM порта
 //
 bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit)
-{	                    //не изменяем сост. линий
+{                    //не изменяем сост. линий
  return Initialize(baud, parity, stopbit, -1, -1);
 }
 

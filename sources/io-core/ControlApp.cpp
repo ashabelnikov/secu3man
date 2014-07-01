@@ -264,7 +264,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 94 : 47))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 98 : 49))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -435,6 +435,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   return false;
  m_SensorDat.octan_use = (octan_aac != 32767);
  m_SensorDat.octan_aac = m_SensorDat.octan_use ? (((float)octan_aac) / m_angle_multiplier) : 0;
+
+ // Lambda correction value (signed value)
+ int lambda_corr = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&lambda_corr,true))
+  return false;
+ m_SensorDat.lambda_corr = ((float)lambda_corr) / 512.0f;
 
  //Injector pulse width (ms)
  int inj_pw = 0;

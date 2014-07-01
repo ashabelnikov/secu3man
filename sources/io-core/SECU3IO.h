@@ -69,6 +69,7 @@ namespace SECU3IO
   bool idlreg_use;
   float octan_aac;                      //octane correction value
   bool octan_use;
+  float lambda_corr;                    //lanbda correction in %
 
   float inj_pw;                         //injector pulse width in ms
  };
