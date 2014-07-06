@@ -99,9 +99,6 @@ typedef struct
  //Includes CRC size also.
  _uint fw_data_size;
 
- //reserved 32-bit value
- _ulong reserv32;
-
  //Coolant temperature sensor lookup table (таблица значений температуры с шагом по напр€жению)
  _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
  //Related voltage limits
@@ -129,7 +126,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2048];
+ _uchar reserved[2052];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -312,28 +309,16 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
 
 DWORD CFirmwareDataMediator::GetFWOptions(void)
 {
- if (mp_cddata)
-  return mp_cddata->config;
- else
- {
-  //there is no such data in this firmware, then we have to use old place
-  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
-  return p_fd->exdata.reserv32; 
- }
+  //if there is no such data in this firmware, then return zero
+  return (mp_cddata) ? mp_cddata->config : 0;
 }
 
 DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp)
 {
  ASSERT(ip_source_bytes && ip_fpp);
  cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
- if (p_cd)
-  return p_cd->config;
- else
- {
-  //there is no such data in this firmware, then we have to use old place
-  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[LocInfoProvider(*ip_fpp).FIRMWARE_DATA_START]); 
-  return p_fd->exdata.reserv32;  
- }
+ //there is no such data in this firmware, then return 0
+ return (p_cd) ? p_cd->config : 0;
 }
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* op_values, bool i_original /* = false */)
@@ -488,7 +473,6 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
 
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
  size_t dataSize = p_fd->def_param.crc;
- _ulong oldFWOpt = p_fd->exdata.reserv32;
  _uint oldFWCRC  = p_fd->code_crc;
 
  if (ip_fpp)
@@ -509,11 +493,7 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
   memcpy(mp_bytes_active + start, ip_source_bytes + start, size);  
  }
  //«начение def_param.crc не импортируем, так как оно служебное.
- //≈сли загружаютс€ данные из новой прошивки в старую, то нужно установить значение exdata.reserv32
- //в значение, которе в старых прошивках.
  p_fd->def_param.crc = dataSize;
- if (0==dataSize)
-  p_fd->exdata.reserv32 = oldFWOpt;
 
  //не импортируем контрольную сумму прошивки
  p_fd->code_crc = oldFWCRC;
