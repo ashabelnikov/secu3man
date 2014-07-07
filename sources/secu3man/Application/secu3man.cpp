@@ -1,5 +1,5 @@
 /* SECU-3  - An open source, free engine control unit
-   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Gorlovka
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -165,9 +165,9 @@ BOOL CSecu3manApp::InitInstance()
 
 #if (_MSC_VER <1300)
  #ifdef _AFXDLL
-  Enable3dControls();		// Call this when using MFC in a shared DLL
+  Enable3dControls();           // Call this when using MFC in a shared DLL
  #else
-  Enable3dControlsStatic();	// Call this when linking to MFC statically
+  Enable3dControlsStatic();     // Call this when linking to MFC statically
  #endif
 #endif
 
