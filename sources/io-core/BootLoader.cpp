@@ -148,7 +148,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
  int opcode = 0, i = 0, j = 0, k = 0;
  int block_size,total_size,current;
  BYTE symbol = 0;  //для принятия символа '<'
- BYTE raw[4096+8]; //хватит с запасом для любой меги
+ BYTE raw[8192+8]; //хватит с запасом для любой меги
  BYTE t_buf[1024];
  BYTE* fw_buf = &p_boot->m_fw_buf[0];
 #define FLASH_PAGE_SIZE_S (p_boot->m_ppf.m_page_size)
