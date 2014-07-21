@@ -381,7 +381,7 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
  mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_LAMBDA, _T("LAMBDA"));
- mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_AIR_TEMP, _T("AIR_TEMP"));
+//mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_AIR_TEMP, _T("AIR_TEMP"));
  mp_view->AddItem(FWDM::IOS_ADD_I1, FWDM::IOP_ADD_I1, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_ADD_I1, true); 
  mp_view->EnableInversion(FWDM::IOS_ADD_I1, true);
@@ -390,7 +390,7 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_IGN, _T("IGN"));
  mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
  mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
- mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_LAMBDA, _T("LAMBDA"));
+ //mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_LAMBDA, _T("LAMBDA"));
  mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_AIR_TEMP, _T("AIR_TEMP"));
  mp_view->AddItem(FWDM::IOS_ADD_I2, FWDM::IOP_ADD_I2, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_ADD_I2, true); 

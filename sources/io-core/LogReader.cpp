@@ -28,7 +28,7 @@
 using namespace SECU3IO;
 
 //максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 235
+#define MAX_REC_BUF 236
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4

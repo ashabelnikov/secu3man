@@ -440,7 +440,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int lambda_corr = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&lambda_corr,true))
   return false;
- m_SensorDat.lambda_corr = ((float)lambda_corr) / 512.0f;
+ m_SensorDat.lambda_corr = (((float)lambda_corr) / 512.0f) * 100.0f; //obtain value in %
 
  //Injector pulse width (ms)
  int inj_pw = 0;
