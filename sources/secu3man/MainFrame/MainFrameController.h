@@ -53,6 +53,7 @@ class MainFrameController : public IAPPEventHandler
   void OnAppBeginLog();
   void OnAppEndLog();
   void OnAppLogMark(int mark);
+  void OnAppLogFormat();
   void OnActivate(bool i_state);
   bool OnFullScreen();
   bool IsBeginLoggingAllowed(void);

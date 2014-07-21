@@ -350,3 +350,5 @@
 #define IDM_KC_LIST_SIGMA_FILTER        4368
 #define IDS_KC_PLEASE_COLLECT_MORE_STAT 4369
 #define IDS_PM_READING_RPMRGD           4370
+#define ID_APP_LOG_FORMAT               4371
+#define IDS_LOG_FORMAT_DESC             4372

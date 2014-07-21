@@ -68,6 +68,7 @@ class CMainFrame : public CFrameWnd
   void setOnCreate(EventHandler i_OnCreate);
   void setOnPortDevArrived(EventHandler3 i_OnPortDevArrived);
   void setOnAppLogMark(EventHandler4 i_OnFunction);
+  void setOnAppLogFormat(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -88,6 +89,7 @@ protected:
   afx_msg void OnAppLogMark1();
   afx_msg void OnAppLogMark2();
   afx_msg void OnAppLogMark3();
+  afx_msg void OnAppLogFormat();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnFullScreen();
@@ -107,6 +109,7 @@ private:
   EventHandler m_OnAppSettings;
   EventHandler m_OnAppBeginLog;
   EventHandler m_OnAppEndLog;
+  EventHandler m_OnAppLogFormat;
   EventResult  m_IsBeginLoggingAllowed;
   EventResult  m_IsEndLoggingAllowed;
   EventResult  m_OnAskFullScreen;

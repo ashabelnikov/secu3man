@@ -84,6 +84,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnGetInitialPos(MakeDelegate(this, &MainFrameController::OnGetInitialPos));
  mp_view->setOnPortDevArrived(MakeDelegate(this, &MainFrameController::OnPortDevArrived));
  mp_view->setOnAppLogMark(MakeDelegate(this, &MainFrameController::OnAppLogMark));
+ mp_view->setOnAppLogFormat(MakeDelegate(this, &MainFrameController::OnAppLogFormat));
 }
 
 MainFrameController::~MainFrameController()
@@ -181,6 +182,11 @@ void MainFrameController::OnAppEndLog()
 void MainFrameController::OnAppLogMark(int mark)
 {
  m_pLogWriter->InjectMarks(mark);
+}
+
+void MainFrameController::OnAppLogFormat()
+{
+ AfxMessageBox(MLL::GetString(IDS_LOG_FORMAT_DESC).c_str(), MB_OK|MB_ICONINFORMATION);
 }
 
 bool MainFrameController::IsBeginLoggingAllowed(void)

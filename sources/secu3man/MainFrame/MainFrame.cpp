@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_LOG_MARK1, OnAppLogMark1)
  ON_COMMAND(ID_APP_LOG_MARK2, OnAppLogMark2)
  ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
+ ON_COMMAND(ID_APP_LOG_FORMAT, OnAppLogFormat)
  ON_COMMAND(ID_FULL_SCREEN, OnFullScreen)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
@@ -305,6 +306,11 @@ void CMainFrame::setOnAppLogMark(EventHandler4 i_OnFunction)
  m_OnAppLogMark = i_OnFunction;
 }
 
+void CMainFrame::setOnAppLogFormat(EventHandler i_OnFunction)
+{
+ m_OnAppLogFormat = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -370,6 +376,12 @@ void CMainFrame::OnAppLogMark3()
 {
  if (m_OnAppLogMark)
   m_OnAppLogMark(4);
+}
+
+void CMainFrame::OnAppLogFormat()
+{
+ if (m_OnAppLogFormat)
+  m_OnAppLogFormat();
 }
 
 void CMainFrame::OnUpdateOnAppBeginLog(CCmdUI* pCmdUI)
