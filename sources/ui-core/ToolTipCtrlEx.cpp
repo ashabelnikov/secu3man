@@ -46,7 +46,7 @@ bool CToolTipCtrlEx::AddWindow(CWnd* pWnd, const _TSTRING& text)
  ti.hinst = AfxGetInstanceHandle ();
  ti.lpszText = const_cast<TCHAR*>(text.c_str());
 
- return (bool) SendMessage (TTM_ADDTOOL, 0, (LPARAM) &ti);
+ return (bool)SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
 }
 
 bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool)
@@ -60,7 +60,20 @@ bool CToolTipCtrlEx::AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRec
  ti.lpszText = const_cast<TCHAR*>(text.c_str());
  ::CopyRect (&ti.rect, pRect);
 
- return (bool) SendMessage (TTM_ADDTOOL, 0, (LPARAM) &ti);
+ return (bool)SendMessage(TTM_ADDTOOL, 0, (LPARAM) &ti);
+}
+
+bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
+{
+ TOOLINFO ti;
+ ti.cbSize = sizeof (TOOLINFO);
+ ti.uFlags = TTF_IDISHWND;
+ ti.hwnd = pWnd->GetParent ()->GetSafeHwnd ();
+ ti.uId = (UINT) pWnd->GetSafeHwnd ();
+ ti.hinst = AfxGetInstanceHandle ();
+ ti.lpszText = const_cast<TCHAR*>(text.c_str()); 
+
+ return (bool)SendMessage(TTM_UPDATETIPTEXT, 0, (LPARAM) &ti);
 }
 
 /*static*/ void CToolTipCtrlEx::ActivateAllTooltips(bool i_activate)

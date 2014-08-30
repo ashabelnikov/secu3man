@@ -331,6 +331,53 @@ namespace SECU3IO
   BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 
+ //Describes a universal programmable output
+ struct uni_output_par
+ {
+  unsigned char logicFunc;              //logic function between two conditions
+  bool invers_1;                        //inversion flags for condition 1
+  bool invers_2;                        //inversion flags for condition 2
+  unsigned char condition1;             //code of condition 1
+  unsigned char condition2;             //code of condition 2
+  float on_thrd_1;                      //ON threshold (if value > on_thrd_1)
+  float off_thrd_1;                     //OFF threshold (if value < off_thrd_1)
+  float on_thrd_2;                      //same as on_thrd_1
+  float off_thrd_2;                     //same as off_thrd_1
+ };
+
+ const int UNI_OUTPUT_NUM = 3;
+
+ struct UniOutPar
+ {
+  uni_output_par out[UNI_OUTPUT_NUM];
+ };
+
+ //logic functions
+ const int UNIOUT_LF_OR = 0;
+ const int UNIOUT_LF_AND = 1;
+ const int UNIOUT_LF_XOR = 2;
+ const int UNIOUT_LF_NONE = 15;
+ //conditions
+ const int UNIOUT_COND_CTS = 0;       //coolant temperature
+ const int UNIOUT_COND_RPM = 1;       //RPM
+ const int UNIOUT_COND_MAP = 2;       //MAP
+ const int UNIOUT_COND_UBAT = 3;      //board voltage
+ const int UNIOUT_COND_CARB = 4;      //throttle position limit switch
+ const int UNIOUT_COND_VSPD = 5;      //vehicle speed
+ const int UNIOUT_COND_AIRFL = 6;     //air flow
+ const int UNIOUT_COND_TMR = 7;       //timer, allowed only for 2nd condition
+ const int UNIOUT_COND_ITTMR = 8;     //timer, triggered after turning on of ignition
+ const int UNIOUT_COND_ESTMR = 9;     //timer, triggered after starting of engine
+ const int UNIOUT_COND_CPOS = 10;     //choke position
+ const int UNIOUT_COND_AANG = 11;     //advance angle
+ const int UNIOUT_COND_KLEV = 12;     //knock signal level
+ const int UNIOUT_COND_TPS = 13;      //throttle position sensor
+ const int UNIOUT_COND_ATS = 14;      //intake air temperature sensor
+ const int UNIOUT_COND_AI1 = 15;      //analog input 1
+ const int UNIOUT_COND_AI2 = 16;      //analog input 2
+ const int UNIOUT_COND_GASV = 17;     //gas valve input
+ const int UNIOUT_COND_IPW = 18;      //injector pulse width
+
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
  static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] =
@@ -412,6 +459,7 @@ namespace SECU3IO
   SECU3IO::DiagOutDat   m_DiagOutDat;
   SECU3IO::ChokePar     m_ChokePar;
   SECU3IO::SecurPar     m_SecurPar;
+  SECU3IO::UniOutPar    m_UniOutPar;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

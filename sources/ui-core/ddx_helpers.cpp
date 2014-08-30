@@ -37,6 +37,21 @@ void DDX_HELPERS_API DDX_Check_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value 
  }
 }
 
+void DDX_HELPERS_API DDX_Check_bool(CDataExchange* pDX, int nIDC, bool& value )
+{
+ BOOL b_value;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_Check(pDX, nIDC, b_value);
+  value = (b_value) ? true : false;
+ }
+ else
+ {
+  b_value = (value) ? TRUE : FALSE;
+  DDX_Check(pDX, nIDC, b_value);
+ }
+}
+
 void DDX_HELPERS_API DDX_CBIndex_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& index)
 {
  int i_index;

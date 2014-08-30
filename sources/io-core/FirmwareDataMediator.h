@@ -240,6 +240,9 @@ class IOCORE_API CFirmwareDataMediator
 
   const PPFlashParam& GetPlatformParams(void) const;
 
+  void SetNumPulsesPer1Km(int pp1km);
+  void SetQuartzFrq(long frq);
+
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
   struct cd_data_t* _FindCodeData(const BYTE* ip_bytes = NULL, const PPFlashParam* ip_fpp = NULL);
@@ -253,4 +256,7 @@ class IOCORE_API CFirmwareDataMediator
   bool m_is_opened;
   _TSTRING m_fw_file_name;
   struct cd_data_t* mp_cddata;
+
+  float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
+  long m_quartz_frq;                    //MCU clock frequency
 };

@@ -106,6 +106,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   afx_msg void OnHK_MISCEL_PAR();
   afx_msg void OnHK_CHOKE_PAR();
   afx_msg void OnHK_SECUR_PAR();
+  afx_msg void OnHK_UNIOUT_PAR();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -132,6 +133,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   class CMiscPageDlg*      m_pMiscPageDlg;
   class CChokePageDlg*     m_pChokePageDlg;
   class CSecurPageDlg*     m_pSecurPageDlg;
+  class CUniOutPageDlg*    m_pUniOutPageDlg;
 
   CStatic m_pd_title;
   CButton m_save_button;

@@ -58,5 +58,6 @@
 
 #define   CHOKE_PAR    '%'
 #define   SECUR_PAR    '#'
+#define   UNIOUT_PAR   '&'
 
 #endif //_UFCODES_H_

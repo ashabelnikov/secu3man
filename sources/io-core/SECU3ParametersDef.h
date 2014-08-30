@@ -31,6 +31,18 @@ namespace SECU3IO {
 
 using namespace SECU3Types;
 
+//Describes a unirersal programmable output
+typedef struct
+{
+ _uchar flags;                          // MS Nibble - logic function, LS Nibble - flags (inversion)
+ _uchar condition1;                     // code of condition 1
+ _uchar condition2;                     // code of condition 2
+ _uint on_thrd_1;                       // ON threshold (if value > on_thrd_1)
+ _uint off_thrd_1;                      // OFF threshold (if value < off_thrd_1)
+ _uint on_thrd_2;                       // same as on_thrd_1
+ _uint off_thrd_2;                      // same as off_thrd_1
+}uni_output_t;
+
 //описывает параметры системы
 typedef struct
 {
@@ -134,10 +146,30 @@ typedef struct
  _uchar bt_flags;                       // Bluetooth and security related flags
  _uchar ibtn_keys[2][6];                // iButton keys for immobilizer
 
+ uni_output_t uni_output[3];            // parameters for versatile outputs
+
+ // Fuel injection
+ _uchar  inj_flags;                     // Fuel injection related flags
+ _uchar  inj_config;                    // Configuration of injection
+ _uint   inj_flow_rate;                 // Injector flow rate (cc/min) * 64
+ _uint   inj_cyl_disp;                  // The displacement of one cylinder in liters * 16384
+ _ulong  inj_sd_igl_const;              // Constant used in speed-density algorithm to calculate PW. Const = ((CYL_DISP * 3.482 * 18750000) / Ifr ) * (Ncyl / (Nsq * Ninj))
+
+ _uint   inj_cranktorun_time;           // Time in seconds for going from the crank position to the run position (1 tick = 10ms)
+ _uchar  inj_aftstr_enrich;             // Afterstart enrichment factor * 128, e.g. 128 = 1.00
+ _uchar  inj_aftstr_strokes;            // Number of engine strokes, during this time afterstart enrichment is applied
+
+ _uchar  inj_lambda_str_per_stp;        // Number of strokes per step for lambda control
+ _uchar  inj_lambda_step_size;          // Step size, value * 512, max 0.49
+ _uint   inj_lambda_corr_limit;         // +/- limit, value * 512
+ _uint   inj_lambda_swt_point;          // lambda switch point in volts
+ _int    inj_lambda_temp_thrd;          // Coolant temperature activation threshold
+ _uint   inj_lambda_rpm_thrd;           // RPM activation threshold
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[96];
+ _uchar reserved[39];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

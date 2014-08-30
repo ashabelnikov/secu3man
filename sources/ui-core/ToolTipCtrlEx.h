@@ -36,6 +36,8 @@ class AFX_EXT_CLASS CToolTipCtrlEx : public CToolTipCtrl
   //Create custom methods
   bool AddWindow(CWnd* pWnd, const _TSTRING& text);
   bool AddRectangle(CWnd* pWnd, const _TSTRING& text, LPCRECT pRect, UINT nIDTool);
+  //updates text on the already created tooltip
+  bool UpdateText(CWnd* pWnd, const _TSTRING& text);
 
   //This method affects all instances of this class
   static void ActivateAllTooltips(bool i_activate);

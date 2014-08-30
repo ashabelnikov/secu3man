@@ -9,7 +9,7 @@
    This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
+   GNU General Public License for more details.  
 
    You should have received a copy of the GNU General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
@@ -29,7 +29,6 @@
 #include "ufcodes.h"
 
 using namespace SECU3IO;
-
 
 namespace {
 
@@ -110,8 +109,8 @@ CControlApp::CControlApp()
 , m_hTimer(NULL)
 , mp_csection(NULL)
 , m_work_state(false)
-, m_period_distance(0.1f)   //for speed sensor calculations
-, m_quartz_frq(16000000)    //default clock is 16mHz
+, m_period_distance(0.166666f)   //for speed sensor calculations
+, m_quartz_frq(20000000)    //default clock is 20mHz
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -1439,6 +1438,58 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::UniOutPar& m_UniOutPar = m_recepted_packet.m_UniOutPar;
+ if (size != (mp_pdp->isHex() ? 66 : 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ CondEncoder cen(m_quartz_frq, m_period_distance);
+
+ for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
+ {
+  unsigned char flags = 0;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
+   return false;
+  m_UniOutPar.out[oi].logicFunc = flags >> 4;
+  m_UniOutPar.out[oi].invers_1 = (flags & 0x01) != 0;
+  m_UniOutPar.out[oi].invers_2 = (flags & 0x02) != 0;
+
+  unsigned char cond1 = 0;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &cond1))
+   return false;
+  m_UniOutPar.out[oi].condition1 = cond1;
+
+  unsigned char cond2 = 0;
+  if (false == mp_pdp->Hex8ToBin(raw_packet, &cond2))
+   return false;
+  m_UniOutPar.out[oi].condition2 = cond2;
+
+  int on_thrd_1 = 0;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_1))
+   return false;
+  m_UniOutPar.out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(on_thrd_1, cond1);
+
+  int off_thrd_1 = 0;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_1))
+   return false;
+  m_UniOutPar.out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(off_thrd_1, cond1);
+
+  int on_thrd_2 = 0;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_2))
+   return false;
+  m_UniOutPar.out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(on_thrd_2, cond2);
+
+  int off_thrd_2 = 0;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_2))
+   return false;
+  m_UniOutPar.out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(off_thrd_2, cond2);
+ }
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1554,6 +1605,10 @@ bool CControlApp::ParsePackets()
     continue;
    case SECUR_PAR:
     if (Parse_SECUR_PAR(p_start, p_size))
+     break;
+    continue;
+   case UNIOUT_PAR:
+    if (Parse_UNIOUT_PAR(p_start, p_size))
      break;
     continue;
 
@@ -1754,6 +1809,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case DIAGOUT_DAT:
   case CHOKE_PAR:
   case SECUR_PAR:
+  case UNIOUT_PAR:
    return true;
   default:
    return false;
@@ -1836,6 +1892,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case SECUR_PAR:
    Build_SECUR_PAR((SecurPar*)i_packet_data);
+   break;
+  case UNIOUT_PAR:
+   Build_UNIOUT_PAR((UniOutPar*)i_packet_data);
    break;
 
   default:
@@ -2174,6 +2233,23 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
 }
 
 //-----------------------------------------------------------------------
+void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
+{
+ CondEncoder cen(m_quartz_frq, m_period_distance);
+ for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
+ {
+  unsigned char flags = ((packet_data->out[oi].logicFunc) << 4) | ((int)packet_data->out[oi].invers_2 << 1) | ((int)packet_data->out[oi].invers_1);
+  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+  mp_pdp->Bin8ToHex(packet_data->out[oi].condition1, m_outgoing_packet);
+  mp_pdp->Bin8ToHex(packet_data->out[oi].condition2, m_outgoing_packet);
+  mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].on_thrd_1, packet_data->out[oi].condition1), m_outgoing_packet);
+  mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].off_thrd_1, packet_data->out[oi].condition1), m_outgoing_packet);
+  mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].on_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
+  mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].off_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
+ }
+}
+
+//-----------------------------------------------------------------------
 void CControlApp::SetEventHandler(EventHandler* i_pEventHandler)
 {
  m_pEventHandler = i_pEventHandler;
@@ -2223,3 +2299,71 @@ void CControlApp::SetNumPulsesPer1Km(int pp1km)
 }
 
 //-----------------------------------------------------------------------
+
+CondEncoder::CondEncoder(long quartz_frq, float period_distance)
+: m_quartz_frq(quartz_frq)
+, m_period_distance(period_distance)
+{
+ //empty
+}
+
+int CondEncoder::UniOutEncodeCondVal(float val, int cond)
+{
+ switch(cond)
+ {
+  case UNIOUT_COND_CTS:  return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_RPM:  return MathHelpers::Round(val);
+  case UNIOUT_COND_MAP:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_UBAT: return MathHelpers::Round(val * UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_CARB: return MathHelpers::Round(val);
+  case UNIOUT_COND_VSPD:
+   return MathHelpers::Round(((m_period_distance * (3600.0f / 1000.0f)) / val) * ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f));
+  case UNIOUT_COND_AIRFL: return MathHelpers::Round(val);
+  case UNIOUT_COND_TMR: return MathHelpers::Round(val * 100.0f);
+  case UNIOUT_COND_ITTMR: return MathHelpers::Round(val * 100.0f);
+  case UNIOUT_COND_ESTMR: return MathHelpers::Round(val * 100.0f);
+  case UNIOUT_COND_CPOS: return MathHelpers::Round(val * CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_AANG: return MathHelpers::Round(val * ANGLE_MULTIPLAYER);
+  case UNIOUT_COND_KLEV: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_TPS: return MathHelpers::Round(val * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_ATS: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_AI1: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI2: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_GASV: return MathHelpers::Round(val);
+  case UNIOUT_COND_IPW: return MathHelpers::Round((val * 1000.0f) / 3.2);
+ }
+ return 0;
+}
+
+float CondEncoder::UniOutDecodeCondVal(int val, int cond)
+{
+ switch(cond)
+ {
+  case UNIOUT_COND_CTS:  return (((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_RPM:  return (float)val;
+  case UNIOUT_COND_MAP:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_UBAT: return (((float)val) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_CARB: return (float)val;
+  case UNIOUT_COND_VSPD:
+  {
+   float period_s = ((float)val / ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f)); //period in seconds
+   float speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
+   if (speed > 999.9f) speed = 999.9f;
+   return speed;
+  }
+  case UNIOUT_COND_AIRFL: return (float)val;
+  case UNIOUT_COND_TMR: return ((float)val) / 100.0f;
+  case UNIOUT_COND_ITTMR: return ((float)val) / 100.0f;
+  case UNIOUT_COND_ESTMR: return ((float)val) / 100.0f;
+  case UNIOUT_COND_CPOS: return ((float)val) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+  case UNIOUT_COND_AANG: return ((float)val) / ANGLE_MULTIPLAYER;
+  case UNIOUT_COND_KLEV: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_TPS: return ((float)val) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+  case UNIOUT_COND_ATS: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+  case UNIOUT_COND_AI1: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI2: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_GASV: return (float)val;
+  case UNIOUT_COND_IPW: return (val * 3.2f) / 1000.0f;
+ }
+ return .0f;
+}

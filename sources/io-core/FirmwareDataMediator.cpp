@@ -198,6 +198,8 @@ CFirmwareDataMediator::CFirmwareDataMediator(const PPFlashParam& i_fpp)
 , m_fpp(new PPFlashParam(i_fpp))
 , m_lip(new LocInfoProvider(i_fpp))
 , mp_cddata(NULL)
+, m_period_distance(0.166666f)//for speed sensor calculations
+, m_quartz_frq(20000000)      //default clock is 20mHz
 {
  mp_bytes_active = new BYTE[m_fpp->m_total_size + 1];
  ASSERT(mp_bytes_active);
@@ -806,6 +808,22 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
      memcpy(p_params->ibtn_keys[j], p_in->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
    }
    break;
+  case UNIOUT_PAR:
+   {
+    CondEncoder cen(m_quartz_frq, m_period_distance);
+    UniOutPar* p_in = (UniOutPar*)ip_values;
+    for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
+    {
+     p_params->uni_output[oi].flags = ((p_in->out[oi].logicFunc) << 4) | (p_in->out[oi].invers_2?2:0) | (p_in->out[oi].invers_1?1:0);
+     p_params->uni_output[oi].condition1 = p_in->out[oi].condition1;
+     p_params->uni_output[oi].condition2 = p_in->out[oi].condition2;
+     p_params->uni_output[oi].on_thrd_1 = cen.UniOutEncodeCondVal(p_in->out[oi].on_thrd_1, p_in->out[oi].condition1);
+     p_params->uni_output[oi].off_thrd_1 = cen.UniOutEncodeCondVal(p_in->out[oi].off_thrd_1, p_in->out[oi].condition1);
+     p_params->uni_output[oi].on_thrd_2 = cen.UniOutEncodeCondVal(p_in->out[oi].on_thrd_2, p_in->out[oi].condition2);
+     p_params->uni_output[oi].off_thrd_2 = cen.UniOutEncodeCondVal(p_in->out[oi].off_thrd_2, p_in->out[oi].condition2);
+    }
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -1019,12 +1037,41 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      memcpy(p_out->ibtn_keys[j], p_params->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
     }
     break;
+  case UNIOUT_PAR:
+   {
+    CondEncoder cen(m_quartz_frq, m_period_distance);
+    UniOutPar* p_out = (UniOutPar*)op_values;
+    for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
+    {
+     p_out->out[oi].logicFunc = p_params->uni_output[oi].flags >> 4;
+     p_out->out[oi].invers_1 = (p_params->uni_output[oi].flags & 0x01) != 0;
+     p_out->out[oi].invers_2 = (p_params->uni_output[oi].flags & 0x02) != 0;
+     p_out->out[oi].condition1 = p_params->uni_output[oi].condition1;
+     p_out->out[oi].condition2 = p_params->uni_output[oi].condition2;
+     p_out->out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_1, p_params->uni_output[oi].condition1);
+     p_out->out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_1, p_params->uni_output[oi].condition1);
+     p_out->out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_2, p_params->uni_output[oi].condition2);
+     p_out->out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_2, p_params->uni_output[oi].condition2);
+    }
+   }
+   break;
 
    default:
     return false; //неизвестный или неподдерживаемый дескриптор
   }//switch
 
   return true;
+}
+
+void CFirmwareDataMediator::SetNumPulsesPer1Km(int pp1km)
+{
+ double value = MathHelpers::RestrictValue(pp1km, 1, 60000);
+ m_period_distance = (float)(1000.0 / value); //distance of one period in meters
+}
+
+void CFirmwareDataMediator::SetQuartzFrq(long frq)
+{
+ m_quartz_frq = frq;
 }
 
 //выдает все таблицы в одной структуре

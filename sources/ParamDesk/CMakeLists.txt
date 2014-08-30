@@ -40,6 +40,7 @@ set(HEADERS
   Params/SecurPageDlg.h
   Params/StarterPageDlg.h
   Params/TemperPageDlg.h
+  Params/UniOutPageDlg.h
   Params/IORemappingDlg.h
   Resources/Resource.h
   Tables/ITablesDeskView.h
@@ -67,6 +68,7 @@ set(SOURCES
   Params/SecurPageDlg.cpp
   Params/StarterPageDlg.cpp
   Params/TemperPageDlg.cpp
+  Params/UniOutPageDlg.cpp
   Params/IORemappingDlg.cpp
   Tables/TablesDeskDlg.cpp
   Tables/TablesPageDlg.cpp

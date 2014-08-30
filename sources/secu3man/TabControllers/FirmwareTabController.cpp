@@ -87,6 +87,9 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_epp = holder.GetEepromParameters();
  m_fwdm = new CFirmwareDataMediator(holder.GetFlashParameters());
  ASSERT(m_fwdm);
+ //Set parameters for speed sensor calculations and set clock frequency (16 or 20 mHz)
+ m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
+ m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
  m_edm = new EEPROMDataMediator(holder.GetEepromParameters());
  ASSERT(m_edm);
 
@@ -155,6 +158,11 @@ void CFirmwareTabController::OnSettingsChanged(void)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+
+ //Set parameters for speed sensor calculations
+ m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
+ //Set clock frequency (16 or 20 mHz)
+ m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
 }
 
 void CFirmwareTabController::OnActivate(void)

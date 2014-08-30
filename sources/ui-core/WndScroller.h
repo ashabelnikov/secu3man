@@ -44,12 +44,12 @@ class AFX_EXT_CLASS CWndScroller : private CWndSubclasser
   //from CWndSubclasser
   virtual LRESULT WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-  void   _OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
-  void   _OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar);
+  void   _OnHScroll(UINT nSBCode, UINT nPos, HWND hWnd);
+  void   _OnVScroll(UINT nSBCode, UINT nPos, HWND hWnd);
   bool   _OnMouseWheel(UINT nFlags, short zDelta, CPoint pt);
   void   _UpdateScrollBar(int bar, int wndSize, int viewSize, long& pageSize, long& scrollPos, long& deltaPos);
   void   _UpdateScrollInfo(void);
-  int    _GetScrollPos(int bar, CScrollBar* pScrollBar);
+  int    _GetScrollPos(int bar, HWND hWnd);
 
  private:
   CWnd*  mp_origWnd;

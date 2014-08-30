@@ -181,6 +181,7 @@ class IOCORE_API CControlApp
   bool Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_SECUR_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -199,6 +200,19 @@ class IOCORE_API CControlApp
   void Build_DIAGOUT_DAT(SECU3IO::DiagOutDat* packet_data);
   void Build_CHOKE_PAR(SECU3IO::ChokePar* packet_data);
   void Build_SECUR_PAR(SECU3IO::SecurPar* packet_data);
+  void Build_UNIOUT_PAR(SECU3IO::UniOutPar* packet_data);
+};
+
+class CondEncoder
+{
+ public:
+  CondEncoder(long quartz_frq, float period_distance);
+ public:
+  float UniOutDecodeCondVal(int val, int cond);
+  int UniOutEncodeCondVal(float val, int cond);
+ private:
+  long m_quartz_frq;
+  float m_period_distance;
 };
 
 #endif //_CONTROLAPP_

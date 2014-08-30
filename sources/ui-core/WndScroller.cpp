@@ -85,7 +85,7 @@ const CSize& CWndScroller::GetScrollPos(void) const
  return m_scrlPos;
 }
 
-void CWndScroller::_OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CWndScroller::_OnHScroll(UINT nSBCode, UINT nPos, HWND hWnd)
 {
  if (mp_origWnd == NULL) return;
 
@@ -93,10 +93,10 @@ void CWndScroller::_OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
  switch(nSBCode)
  {
   case SB_THUMBTRACK:
-   delta = _GetScrollPos(SB_HORZ, pScrollBar) - m_scrlPos.cx;
+   delta = _GetScrollPos(SB_HORZ, hWnd) - m_scrlPos.cx;
    break;
   case SB_THUMBPOSITION:
-   delta = _GetScrollPos(SB_HORZ, pScrollBar) - m_scrlPos.cx;
+   delta = _GetScrollPos(SB_HORZ, hWnd) - m_scrlPos.cx;
    break;
   case SB_LINELEFT:   delta = -m_lineInc;      break;
   case SB_LINERIGHT:  delta = m_lineInc;       break;
@@ -118,7 +118,7 @@ void CWndScroller::_OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
  }
 }
 
-void CWndScroller::_OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
+void CWndScroller::_OnVScroll(UINT nSBCode, UINT nPos, HWND hWnd)
 {
  if (mp_origWnd == NULL) return;
 
@@ -126,10 +126,10 @@ void CWndScroller::_OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
  switch(nSBCode)
  {
   case SB_THUMBTRACK:
-   delta = _GetScrollPos(SB_VERT, pScrollBar) - m_scrlPos.cy;
+   delta = _GetScrollPos(SB_VERT, hWnd) - m_scrlPos.cy;
    break;
   case SB_THUMBPOSITION:
-   delta = _GetScrollPos(SB_VERT, pScrollBar) - m_scrlPos.cy;
+   delta = _GetScrollPos(SB_VERT, hWnd) - m_scrlPos.cy;
    break;
   case SB_LINEUP:    delta = -m_lineInc;      break;
   case SB_LINEDOWN:  delta = m_lineInc;       break;
@@ -179,14 +179,17 @@ bool CWndScroller::_OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 
 LRESULT CWndScroller::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+ if (lParam) //Do nothing if it is not standard scroll bar
+  return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
+
  switch(uMsg)
  {
   case WM_HSCROLL:
-   _OnHScroll(LOWORD(wParam), HIWORD(wParam), reinterpret_cast<CScrollBar*>(lParam));
+   _OnHScroll(LOWORD(wParam), HIWORD(wParam), reinterpret_cast<HWND>(lParam));
    break;
 
   case WM_VSCROLL:
-   _OnVScroll(LOWORD(wParam), HIWORD(wParam), reinterpret_cast<CScrollBar*>(lParam));
+   _OnVScroll(LOWORD(wParam), HIWORD(wParam), reinterpret_cast<HWND>(lParam));
    break;
 
   case WM_MOUSEWHEEL:
@@ -260,12 +263,11 @@ void CWndScroller::_UpdateScrollInfo()
  if (delta.cx != 0 || delta.cy != 0) mp_origWnd->ScrollWindow(delta.cx, delta.cy);
 }
 
-int CWndScroller::_GetScrollPos(int bar, CScrollBar* pScrollBar)
+int CWndScroller::_GetScrollPos(int bar, HWND hWnd)
 {
- HWND hWnd = (pScrollBar == NULL) ? hWnd = mp_origWnd->m_hWnd : hWnd = pScrollBar->m_hWnd;
  SCROLLINFO si;
  si.cbSize = sizeof(SCROLLINFO);
  si.fMask = SIF_TRACKPOS;
- ::GetScrollInfo(hWnd, bar, &si);
+ ::GetScrollInfo(NULL==hWnd?mp_origWnd->m_hWnd:hWnd, bar, &si);
  return si.nTrackPos;
 }
