@@ -377,6 +377,7 @@ namespace SECU3IO
  const int UNIOUT_COND_AI2 = 16;      //analog input 2
  const int UNIOUT_COND_GASV = 17;     //gas valve input
  const int UNIOUT_COND_IPW = 18;      //injector pulse width
+ const int UNIOUT_COND_CE = 19;       //CE state
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;

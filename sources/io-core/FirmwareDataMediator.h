@@ -220,7 +220,7 @@ class IOCORE_API CFirmwareDataMediator
    IOV_V15 = 0x15,           //V1.5 (minor changes - SPD_SENS input added)
    IOV_V16 = 0x16,           //V1.6 (minor changes - INTK_HEAT output added)
    IOV_V20 = 0x20,           //V2.0 (major changes)
-   IOV_V20 = 0x21            //V2.1 (minor changes)
+   IOV_V21 = 0x21            //V2.1 (minor changes)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

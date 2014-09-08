@@ -581,12 +581,13 @@
 #define IDS_UNIOUT_COND_AI2              3580
 #define IDS_UNIOUT_COND_GASV             3581
 #define IDS_UNIOUT_COND_IPW              3582
-#define IDS_UNIOUT_LF_OR                 3583
-#define IDS_UNIOUT_LF_AND                3584
-#define IDS_UNIOUT_LF_XOR                3585
-#define IDS_UNIOUT_LF_NONE               3586
-#define IDS_PD_UNIOUT_COND_ON_EDIT_DEF_TT 3587
-#define IDS_PD_UNIOUT_COND_OFF_EDIT_DEF_TT 3588
-#define IDS_PD_UNIOUT_COND_TMR_OFF_EDIT_TT 3589
-#define IDS_PD_UNIOUT_LOGFUN_COMBO_TT    3590
+#define IDS_UNIOUT_COND_CE               3583
+#define IDS_UNIOUT_LF_OR                 3584
+#define IDS_UNIOUT_LF_AND                3585
+#define IDS_UNIOUT_LF_XOR                3586
+#define IDS_UNIOUT_LF_NONE               3587
+#define IDS_PD_UNIOUT_COND_ON_EDIT_DEF_TT 3588
+#define IDS_PD_UNIOUT_COND_OFF_EDIT_DEF_TT 3589
+#define IDS_PD_UNIOUT_COND_TMR_OFF_EDIT_TT 3590
+#define IDS_PD_UNIOUT_LOGFUN_COMBO_TT    3591
 

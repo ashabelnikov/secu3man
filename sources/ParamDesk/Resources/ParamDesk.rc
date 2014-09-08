@@ -953,6 +953,7 @@ BEGIN
     IDS_UNIOUT_COND_AI2    "Аналогов.вход 2(В)"
     IDS_UNIOUT_COND_GASV   "Газовый клапан (логич.)"
     IDS_UNIOUT_COND_IPW    "Длит.впрыска (мс)"
+    IDS_UNIOUT_COND_CE     "Состояние CE"
 
     IDS_UNIOUT_LF_OR       "ИЛИ"
     IDS_UNIOUT_LF_AND      "И"
@@ -1931,6 +1932,7 @@ BEGIN
     IDS_UNIOUT_COND_AI2    "Analog input 2(V)"
     IDS_UNIOUT_COND_GASV   "Gas valve input (logic)"
     IDS_UNIOUT_COND_IPW    "Injector PW (ms)"
+    IDS_UNIOUT_COND_CE     "CE state"
 
     IDS_UNIOUT_LF_OR       "OR"
     IDS_UNIOUT_LF_AND      "AND"
