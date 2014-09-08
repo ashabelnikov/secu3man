@@ -48,9 +48,9 @@ using namespace SECU3IO::SECU3Types;
 #define _BIGEND16(v) ((((v) >> 8) & 0x00FF) | (((v) << 8) & 0xFF00))
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
-//------------------------For iorem_slots_t V2.0----------------------------
-#define IOREM_SLOTS 23           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 50           // Number of plugs used in I/O remapping
+//------------------------For iorem_slots_t V2.1----------------------------
+#define IOREM_SLOTS 25           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 56           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -126,7 +126,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2052];
+ _uchar reserved[7656];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
