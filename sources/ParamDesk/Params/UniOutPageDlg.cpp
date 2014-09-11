@@ -45,12 +45,14 @@ BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnChangeDataLFCombo)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnChangeDataLFCombo)
  ON_CBN_SELCHANGE(IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnChangeDataLFCombo)
+ ON_CBN_SELCHANGE(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnChangeDataLF12Combo)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_GROUP, IDC_PD_UNIOUT_1_LOGFUN_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_GROUP, IDC_PD_UNIOUT_2_LOGFUN_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_GROUP, IDC_PD_UNIOUT_3_LOGFUN_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_1_COND2_COMBO, IDC_PD_UNIOUT_1_COND2_INV_CHECK, OnUpdateControlsOut1Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_2_COND2_COMBO, IDC_PD_UNIOUT_2_COND2_INV_CHECK, OnUpdateControlsOut2Con2)
  ON_UPDATE_COMMAND_UI_RANGE(IDC_PD_UNIOUT_3_COND2_COMBO, IDC_PD_UNIOUT_3_COND2_INV_CHECK, OnUpdateControlsOut3Con2)
+ ON_UPDATE_COMMAND_UI(IDC_PD_UNIOUT_12_LOGFUN_COMBO, OnUpdateControls)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_ON_EDIT,  OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND1_OFF_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_UNIOUT_1_COND2_ON_EDIT,  OnChangeData)
@@ -88,6 +90,7 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
   m_params.out[i].on_thrd_2 = 55.0f;
   m_params.out[i].off_thrd_2 = 50.0f;
  }
+ m_params.logicFunc12 = SECU3IO::UNIOUT_LF_OR;
 
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_OR, MLL::GetString(IDS_UNIOUT_LF_OR)));
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_AND, MLL::GetString(IDS_UNIOUT_LF_AND)));
@@ -124,7 +127,7 @@ LPCTSTR CUniOutPageDlg::GetDialogID(void) const
 void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- 
+
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {
   int idoff = i * (IDC_PD_UNIOUT_2_COND1_COMBO - IDC_PD_UNIOUT_1_COND1_COMBO);
@@ -133,14 +136,14 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND1_ON_SPIN + idoff, m_out[i].on_thrd_1_spin);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND1_OFF_EDIT + idoff, m_out[i].off_thrd_1_edit);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND1_OFF_SPIN + idoff, m_out[i].off_thrd_1_spin);
-  DDX_Control(pDX, IDC_PD_UNIOUT_1_COND1_INV_CHECK + idoff, m_out[i].inv1_check); 
+  DDX_Control(pDX, IDC_PD_UNIOUT_1_COND1_INV_CHECK + idoff, m_out[i].inv1_check);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_LOGFUN_COMBO + idoff, m_out[i].lf_combo); //logic function
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_COMBO + idoff, m_out[i].cond2_combo);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_ON_EDIT + idoff, m_out[i].on_thrd_2_edit);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_ON_SPIN + idoff, m_out[i].on_thrd_2_spin);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_OFF_EDIT + idoff, m_out[i].off_thrd_2_edit);
   DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_OFF_SPIN + idoff, m_out[i].off_thrd_2_spin);
-  DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_out[i].inv2_check); 
+  DDX_Control(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_out[i].inv2_check);
 
   m_out[i].on_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_ON_EDIT + idoff, m_params.out[i].on_thrd_1);
   m_out[i].off_thrd_1_edit.DDX_Value(pDX, IDC_PD_UNIOUT_1_COND1_OFF_EDIT + idoff, m_params.out[i].off_thrd_1);
@@ -150,6 +153,7 @@ void CUniOutPageDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND1_INV_CHECK + idoff, m_params.out[i].invers_1);
   DDX_Check_bool(pDX, IDC_PD_UNIOUT_1_COND2_INV_CHECK + idoff, m_params.out[i].invers_2);
  }
+ DDX_Control(pDX, IDC_PD_UNIOUT_12_LOGFUN_COMBO, lf12_combo); //logic function for 1st and 2nd outputs
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -182,9 +186,11 @@ BOOL CUniOutPageDlg::OnInitDialog()
 
  _FillConditionComboBoxes();
  _FillLogicFuncComboBoxes();
+ _FillLogicFunc12ComboBoxes();
 
  _SetCondComboBoxesSel();
  _SetLogicFuncComboBoxesSel();
+ _SetLogicFunc12ComboBoxSel();
 
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {
@@ -219,6 +225,8 @@ BOOL CUniOutPageDlg::OnInitDialog()
   //finally, set condition format
   _SetCondInputFormat(i, false), _SetCondInputFormat(i, true);
  }
+
+ VERIFY(mp_ttc->AddWindow(&lf12_combo, MLL::GetString(IDS_PD_UNIOUT_12_LOGFUN_COMBO_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -292,6 +300,14 @@ void CUniOutPageDlg::OnChangeDataLFCombo(void)
  UpdateDialogControls(this, TRUE);
 }
 
+void CUniOutPageDlg::OnChangeDataLF12Combo(void)
+{
+ UpdateData();
+ _GetLogicFunc12ComboBoxSel();
+ OnChangeNotify();
+ UpdateDialogControls(this, TRUE);
+}
+
 void CUniOutPageDlg::OnChangeData(void)
 {
  UpdateData();
@@ -321,6 +337,7 @@ void CUniOutPageDlg::GetValues(SECU3IO::UniOutPar* o_values)
  UpdateData(TRUE); //копируем данные из диалога в переменные
  _GetCondComboBoxesSel();
  _GetLogicFuncComboBoxesSel();
+ _GetLogicFunc12ComboBoxSel();
  memcpy(o_values, &m_params, sizeof(SECU3IO::UniOutPar));
 }
 
@@ -332,6 +349,7 @@ void CUniOutPageDlg::SetValues(const SECU3IO::UniOutPar* i_values)
 
  _SetCondComboBoxesSel();
  _SetLogicFuncComboBoxesSel();
+ _SetLogicFunc12ComboBoxSel();
 
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {_SetCondInputFormat(i, false, false); _SetCondInputFormat(i, true, false);}
@@ -364,7 +382,7 @@ void CUniOutPageDlg::_FillConditionComboBoxes(void)
     ASSERT(0);
     continue;
    }
-   m_out[i].cond2_combo.SetItemData(index, it->first);   
+   m_out[i].cond2_combo.SetItemData(index, it->first);
   }
  }
 }
@@ -382,8 +400,23 @@ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
     ASSERT(0);
     continue;
    }
-   m_out[i].lf_combo.SetItemData(index, it->first);   
+   m_out[i].lf_combo.SetItemData(index, it->first);
   }
+ }
+}
+
+void CUniOutPageDlg::_FillLogicFunc12ComboBoxes(void)
+{
+ std::map<int, _TSTRING>::const_iterator it = m_lf_str.begin();
+ for(; it != m_lf_str.end(); ++it)
+ {
+  int index = lf12_combo.AddString(it->second.c_str());
+  if (index==CB_ERR)
+  {
+   ASSERT(0);
+   continue;
+  }
+  lf12_combo.SetItemData(index, it->first);
  }
 }
 
@@ -473,5 +506,27 @@ void CUniOutPageDlg::_GetLogicFuncComboBoxesSel(void)
  {
   int index = m_out[i].lf_combo.GetCurSel();
   m_params.out[i].logicFunc = (unsigned char)m_out[i].lf_combo.GetItemData(index);
+ }
+}
+
+void CUniOutPageDlg::_SetLogicFunc12ComboBoxSel(void)
+{
+ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+ {
+  int count = lf12_combo.GetCount();
+  for(int ii = 0; ii < count; ++ii)
+  {
+   if (lf12_combo.GetItemData(ii) == m_params.logicFunc12)
+    lf12_combo.SetCurSel(ii);
+  }
+ }
+}
+
+void CUniOutPageDlg::_GetLogicFunc12ComboBoxSel(void)
+{
+ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+ {
+  int index = lf12_combo.GetCurSel();
+  m_params.logicFunc12 = (unsigned char)lf12_combo.GetItemData(index);
  }
 }

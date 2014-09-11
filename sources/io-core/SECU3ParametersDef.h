@@ -147,6 +147,7 @@ typedef struct
  _uchar ibtn_keys[2][6];                // iButton keys for immobilizer
 
  uni_output_t uni_output[3];            // parameters for versatile outputs
+ uint8_t uniout_12lf;                   // logic function for 1st and second outputs
 
  // Fuel injection
  _uchar  inj_flags;                     // Fuel injection related flags
@@ -169,7 +170,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[100];
+ _uchar reserved[99];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

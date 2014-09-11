@@ -65,17 +65,21 @@ class CUniOutPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnChangeDataOut3Con1(void);
   afx_msg void OnChangeDataOut3Con2(void);
   afx_msg void OnChangeDataLFCombo(void);
+  afx_msg void OnChangeDataLF12Combo(void);
   afx_msg void OnChangeData(void);
   DECLARE_MESSAGE_MAP()
 
  private:
   void _FillConditionComboBoxes(void);
   void _FillLogicFuncComboBoxes(void);
+  void _FillLogicFunc12ComboBox(void);
   void _SetCondInputFormat(int outIndex, bool cond, bool setdefval = true);
   void _SetCondComboBoxesSel(void);
   void _GetCondComboBoxesSel(void);
   void _SetLogicFuncComboBoxesSel(void);
   void _GetLogicFuncComboBoxesSel(void);
+  void _SetLogicFunc12ComboBoxSel(void);
+  void _GetLogicFunc12ComboBoxSel(void);
 
   SECU3IO::UniOutPar m_params;
   bool m_enabled;
@@ -87,7 +91,7 @@ class CUniOutPageDlg : public CTabDialog, public ParamPageEvents
    CComboBox lf_combo;
    CButton inv1_check;
    CButton inv2_check;
-   
+
    CSpinButtonCtrlEx on_thrd_1_spin;
    CEditEx on_thrd_1_edit;
    CSpinButtonCtrlEx off_thrd_1_spin;
@@ -98,6 +102,8 @@ class CUniOutPageDlg : public CTabDialog, public ParamPageEvents
    CSpinButtonCtrlEx off_thrd_2_spin;
    CEditEx off_thrd_2_edit;
   }m_out[SECU3IO::UNI_OUTPUT_NUM];
+
+  CComboBox lf12_combo;
 
   struct CondFmt
   {

@@ -350,6 +350,7 @@ namespace SECU3IO
  struct UniOutPar
  {
   uni_output_par out[UNI_OUTPUT_NUM];
+  unsigned char logicFunc12;            //logic function between 1st and 2nd outputs
  };
 
  //logic functions

@@ -1441,7 +1441,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::UniOutPar& m_UniOutPar = m_recepted_packet.m_UniOutPar;
- if (size != (mp_pdp->isHex() ? 66 : 33))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 67 : 34))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  CondEncoder cen(m_quartz_frq, m_period_distance);
@@ -1485,6 +1485,12 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
    return false;
   m_UniOutPar.out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(off_thrd_2, cond2);
  }
+
+ //logic function for 1st and 2nd outputs
+ BYTE lf12 = 0;
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &lf12))
+  return false;
+ m_UniOutPar.logicFunc12 = lf12;
 
  return true;
 }
@@ -2247,6 +2253,7 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
   mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].on_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
   mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].off_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
  }
+ mp_pdp->Bin4ToHex(packet_data->logicFunc12, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

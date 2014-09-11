@@ -822,6 +822,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
      p_params->uni_output[oi].on_thrd_2 = cen.UniOutEncodeCondVal(p_in->out[oi].on_thrd_2, p_in->out[oi].condition2);
      p_params->uni_output[oi].off_thrd_2 = cen.UniOutEncodeCondVal(p_in->out[oi].off_thrd_2, p_in->out[oi].condition2);
     }
+    p_params->uniout_12lf = p_in->logicFunc12;
    }
    break;
 
@@ -1053,6 +1054,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_2, p_params->uni_output[oi].condition2);
      p_out->out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_2, p_params->uni_output[oi].condition2);
     }
+    p_out->logicFunc12 = p_params->uniout_12lf;
    }
    break;
 
@@ -1382,7 +1384,7 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id, bool inv)
    break;
   case IOX_DATA:
    if (id < IOS_COUNT)
-    value = inv ? mp_cddata->iorem.v_slotsi[id] : mp_cddata->iorem.v_slots[id]; 
+    value = inv ? mp_cddata->iorem.v_slotsi[id] : mp_cddata->iorem.v_slots[id];
    break;
  }
  return value;
@@ -1410,11 +1412,11 @@ void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
  {
   case IOX_INIT:
    if (id < IOP_COUNT)
-    mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value; 
+    mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value;
    break;
   case IOX_DATA:
    if (id < IOP_COUNT)
-    mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value; 
+    mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value;
    break;
  }
 }
