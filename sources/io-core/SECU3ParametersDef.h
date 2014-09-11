@@ -147,7 +147,7 @@ typedef struct
  _uchar ibtn_keys[2][6];                // iButton keys for immobilizer
 
  uni_output_t uni_output[3];            // parameters for versatile outputs
- uint8_t uniout_12lf;                   // logic function for 1st and second outputs
+ _uchar uniout_12lf;                    // logic function for 1st and second outputs
 
  // Fuel injection
  _uchar  inj_flags;                     // Fuel injection related flags

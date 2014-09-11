@@ -186,7 +186,7 @@ BOOL CUniOutPageDlg::OnInitDialog()
 
  _FillConditionComboBoxes();
  _FillLogicFuncComboBoxes();
- _FillLogicFunc12ComboBoxes();
+ _FillLogicFunc12ComboBox();
 
  _SetCondComboBoxesSel();
  _SetLogicFuncComboBoxesSel();
@@ -203,7 +203,7 @@ BOOL CUniOutPageDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.85f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.96f));
 
 //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -405,7 +405,7 @@ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  }
 }
 
-void CUniOutPageDlg::_FillLogicFunc12ComboBoxes(void)
+void CUniOutPageDlg::_FillLogicFunc12ComboBox(void)
 {
  std::map<int, _TSTRING>::const_iterator it = m_lf_str.begin();
  for(; it != m_lf_str.end(); ++it)
