@@ -203,6 +203,8 @@ class IOCORE_API CFirmwareDataMediator
 // IOS_RESERVED3  =  20,     // Reserved    ()
 // IOS_RESERVED4  =  21,     // Reserved    ()
 // IOS_RESERVED5  =  22,     // Reserved    ()
+// IOS_RESERVED6  =  23,     // Reserved    ()
+// IOS_RESERVED7  =  24,     // Reserved    ()
    IOS_COUNT,                // Number of slots used for I/O remapping
    IOS_NA         =  255     //
   };
