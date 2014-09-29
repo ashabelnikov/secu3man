@@ -79,13 +79,13 @@ END_MESSAGE_MAP()
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 : Super(CChokePageDlg::IDD, pParent)
 , m_enabled(false)
-, m_sm_steps_num_edit(CEditEx::MODE_INT)
-, m_strt_add_edit(CEditEx::MODE_FLOAT)
-, m_strt_add_tm_edit(CEditEx::MODE_FLOAT)
-, m_strt_add_tmp_edit(CEditEx::MODE_FLOAT)
-, m_rpmreg_1stpt_edit(CEditEx::MODE_INT)
-, m_rpmreg_2ndpt_edit(CEditEx::MODE_INT)
-, m_rpmreg_if_edit(CEditEx::MODE_FLOAT)
+, m_sm_steps_num_edit(CEditEx::MODE_INT, true)
+, m_strt_add_edit(CEditEx::MODE_FLOAT, true)
+, m_strt_add_tm_edit(CEditEx::MODE_FLOAT, true)
+, m_strt_add_tmp_edit(CEditEx::MODE_FLOAT, true)
+, m_rpmreg_1stpt_edit(CEditEx::MODE_INT, true)
+, m_rpmreg_2ndpt_edit(CEditEx::MODE_INT, true)
+, m_rpmreg_if_edit(CEditEx::MODE_FLOAT, true)
 , m_choketst_enabled(false)
 , m_chokemanpos_enabled(false)
 {
@@ -163,34 +163,41 @@ BOOL CChokePageDlg::OnInitDialog()
  m_sm_steps_num_edit.SetLimitText(4);
  m_sm_steps_num_spin.SetBuddy(&m_sm_steps_num_edit);
  m_sm_steps_num_spin.SetRangeAndDelta(50, 2000, 1);
+ m_sm_steps_num_edit.SetRange(50, 2000);
 
  m_strt_add_edit.SetLimitText(5);
  m_strt_add_spin.SetBuddy(&m_strt_add_edit);
  m_strt_add_edit.SetDecimalPlaces(1);
  m_strt_add_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
+ m_strt_add_edit.SetRange(0.0f, 100.0f);
 
  m_strt_add_tm_edit.SetLimitText(4);
  m_strt_add_tm_spin.SetBuddy(&m_strt_add_tm_edit);
  m_strt_add_tm_edit.SetDecimalPlaces(1);
  m_strt_add_tm_spin.SetRangeAndDelta(0.1f, 10.0f, 0.1f);
+ m_strt_add_tm_edit.SetRange(0.1f, 10.0f);
 
  m_strt_add_tmp_edit.SetLimitText(6);
  m_strt_add_tmp_spin.SetBuddy(&m_strt_add_tmp_edit);
  m_strt_add_tmp_edit.SetDecimalPlaces(2);
  m_strt_add_tmp_spin.SetRangeAndDelta(-10.0f, 50.0f, 0.25f);
+ m_strt_add_tmp_edit.SetRange(-10.0f, 50.0f);
 
  m_rpmreg_1stpt_edit.SetLimitText(4);
  m_rpmreg_1stpt_spin.SetBuddy(&m_rpmreg_1stpt_edit);
  m_rpmreg_1stpt_spin.SetRangeAndDelta(0, 3000, 10);
+ m_rpmreg_1stpt_edit.SetRange(0, 3000);
 
  m_rpmreg_2ndpt_edit.SetLimitText(4);
  m_rpmreg_2ndpt_spin.SetBuddy(&m_rpmreg_2ndpt_edit);
  m_rpmreg_2ndpt_spin.SetRangeAndDelta(500, 3000, 10);
+ m_rpmreg_2ndpt_edit.SetRange(500, 3000);
 
  m_rpmreg_if_edit.SetLimitText(4);
  m_rpmreg_if_spin.SetBuddy(&m_rpmreg_if_edit);
  m_rpmreg_if_edit.SetDecimalPlaces(2);
  m_rpmreg_if_spin.SetRangeAndDelta(0.01f, 1.0f, 0.01f);
+ m_rpmreg_if_edit.SetRange(0.01f, 1.0f);
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 

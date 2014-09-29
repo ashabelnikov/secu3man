@@ -43,8 +43,8 @@ END_MESSAGE_MAP()
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CStarterPageDlg::IDD, pParent)
 , m_enabled(false)
-, m_starter_off_rpm_edit(CEditEx::MODE_INT)
-, m_smap_abandon_rpm_edit(CEditEx::MODE_INT)
+, m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
+, m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 {
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
@@ -80,13 +80,15 @@ BOOL CStarterPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- m_starter_off_rpm_edit.SetLimitText(4);
+ m_smap_abandon_rpm_edit.SetLimitText(4);
  m_smap_abandon_rpm_spin.SetBuddy(&m_smap_abandon_rpm_edit);
  m_smap_abandon_rpm_spin.SetRangeAndDelta(40,1000,10);
+ m_smap_abandon_rpm_edit.SetRange(40, 1000);
 
- m_smap_abandon_rpm_edit.SetLimitText(4);
+ m_starter_off_rpm_edit.SetLimitText(4);
  m_starter_off_rpm_spin.SetBuddy(&m_starter_off_rpm_edit);
  m_starter_off_rpm_spin.SetRangeAndDelta(40,1000,10);
+ m_starter_off_rpm_edit.SetRange(40, 1000);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);

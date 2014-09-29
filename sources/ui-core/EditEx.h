@@ -24,7 +24,7 @@
 class AFX_EXT_CLASS CEditEx : public CEdit
 {
  public:
-  CEditEx(int i_mode = MODE_STRING);
+  CEditEx(int i_mode = MODE_STRING, bool i_own_ddv = false);
   virtual ~CEditEx();
 
   //поддерживаемые режимы (фильтрация вводимых символов)
@@ -50,6 +50,8 @@ class AFX_EXT_CLASS CEditEx : public CEdit
   {
    _DDX_Value(ipDX, iIDC, ioValue);
   }
+  
+  void SetRange(float i_min, float i_max);
 
   bool GetValue(float& o_value);
   bool SetValue(float i_value);
@@ -99,6 +101,7 @@ class AFX_EXT_CLASS CEditEx : public CEdit
   bool OnChar_hexstr(UINT nChar, UINT nRepCnt, UINT nFlags);
 
   afx_msg void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags);
+  afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -108,6 +111,10 @@ class AFX_EXT_CLASS CEditEx : public CEdit
  private:
   DWORD m_mode;
   int m_DecimalPlaces;
+  bool m_own_ddv;
+  bool m_ddv_status;
+  float m_min, m_max;
+  CBrush m_redBrush;
 };
 
 //-------------------------------------------------------------
@@ -121,15 +128,25 @@ void CEditEx::_DDX_Value(CDataExchange *ipDX, int iIDC, T& ioValue)
  // Now copy to/from control
  if (ipDX->m_bSaveAndValidate)
  {
-  if (!GetValue(ioValue))
+  if (!m_own_ddv)
   {
-   //message box!
-   ipDX->Fail();
+   if (!GetValue(ioValue))
+    ipDX->Fail(); //message box!
+  }
+  else
+  { //own DDV mode
+   T value;
+   bool result = GetValue(value);
+   m_ddv_status = (result && value >= m_min && value <= m_max);     
+   if (m_ddv_status)
+    ioValue = value;
+   Invalidate();
   }
  }
  else
  {
   SetValue(ioValue);
+  m_ddv_status = true;
  }
 }
 

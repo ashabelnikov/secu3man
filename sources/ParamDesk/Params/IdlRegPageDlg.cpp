@@ -78,13 +78,13 @@ END_MESSAGE_MAP()
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CIdlRegPageDlg::IDD, pParent)
 , m_enabled(false)
-, m_factor_pos_edit(CEditEx::MODE_FLOAT)
-, m_factor_neg_edit(CEditEx::MODE_FLOAT)
-, m_restriction_min_edit(CEditEx::MODE_FLOAT)
-, m_restriction_max_edit(CEditEx::MODE_FLOAT)
-, m_goal_rpm_edit(CEditEx::MODE_INT)
-, m_dead_band_rpm_edit(CEditEx::MODE_INT)
-, m_turn_on_temp_edit(CEditEx::MODE_FLOAT)
+, m_factor_pos_edit(CEditEx::MODE_FLOAT, true)
+, m_factor_neg_edit(CEditEx::MODE_FLOAT, true)
+, m_restriction_min_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_restriction_max_edit(CEditEx::MODE_FLOAT, true)
+, m_goal_rpm_edit(CEditEx::MODE_INT, true)
+, m_dead_band_rpm_edit(CEditEx::MODE_INT, true)
+, m_turn_on_temp_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.ifac1 = 1.0f;
  m_params.ifac2 = 1.0f;
@@ -147,35 +147,42 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_factor_pos_edit.SetLimitText(5);
  m_factor_pos_edit.SetDecimalPlaces(2);
  m_factor_pos_spin.SetRangeAndDelta(0.0f,10.0f,0.01f);
+ m_factor_pos_edit.SetRange(0.0f,10.0f);
 
  m_factor_neg_spin.SetBuddy(&m_factor_neg_edit);
  m_factor_neg_edit.SetLimitText(5);
  m_factor_neg_edit.SetDecimalPlaces(2);
  m_factor_neg_spin.SetRangeAndDelta(0.0f,10.0f,0.01f);
+ m_factor_neg_edit.SetRange(0.0f,10.0f);
 
  m_dead_band_rpm_edit.SetLimitText(3);
  m_dead_band_rpm_edit.SetDecimalPlaces(3);
  m_dead_band_rpm_spin.SetBuddy(&m_dead_band_rpm_edit);
  m_dead_band_rpm_spin.SetRangeAndDelta(0,500,1);
+ m_dead_band_rpm_edit.SetRange(0,500);
 
- m_goal_rpm_edit.SetLimitText(3);
+ m_goal_rpm_edit.SetLimitText(4);
  m_goal_rpm_spin.SetBuddy(&m_goal_rpm_edit);
  m_goal_rpm_spin.SetRangeAndDelta(250,1800,5);
+ m_goal_rpm_edit.SetRange(250,1800);
 
  m_restriction_min_spin.SetBuddy(&m_restriction_min_edit);
- m_restriction_min_edit.SetLimitText(4);
+ m_restriction_min_edit.SetLimitText(5);
  m_restriction_min_edit.SetDecimalPlaces(2);
  m_restriction_min_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
+ m_restriction_min_edit.SetRange(-15.0f,30.0f);
 
  m_restriction_max_spin.SetBuddy(&m_restriction_max_edit);
- m_restriction_max_edit.SetLimitText(4);
+ m_restriction_max_edit.SetLimitText(5);
  m_restriction_max_edit.SetDecimalPlaces(2);
  m_restriction_max_spin.SetRangeAndDelta(-15.0f,30.0f,0.025f);
+ m_restriction_max_edit.SetRange(-15.0f,30.0f);
 
  m_turn_on_temp_spin.SetBuddy(&m_turn_on_temp_edit);
  m_turn_on_temp_edit.SetLimitText(5);
  m_turn_on_temp_edit.SetDecimalPlaces(2);
  m_turn_on_temp_spin.SetRangeAndDelta(0.0f,100.0f,0.2f);
+ m_turn_on_temp_edit.SetRange(0.0f,100.0f);
 
  UpdateData(FALSE);
  

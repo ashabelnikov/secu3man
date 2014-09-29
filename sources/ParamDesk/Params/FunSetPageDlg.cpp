@@ -83,12 +83,12 @@ END_MESSAGE_MAP()
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CFunSetPageDlg::IDD, pParent)
 , m_enabled(false)
-, m_map_grad_edit(CEditEx::MODE_FLOAT)
-, m_press_swing_edit(CEditEx::MODE_FLOAT)
-, m_map_curve_offset_edit(CEditEx::MODE_FLOAT)
-, m_map_curve_gradient_edit(CEditEx::MODE_FLOAT)
-, m_tps_curve_offset_edit(CEditEx::MODE_FLOAT)
-, m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT)
+, m_map_grad_edit(CEditEx::MODE_FLOAT, true)
+, m_press_swing_edit(CEditEx::MODE_FLOAT, true)
+, m_map_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_map_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
+, m_tps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -154,31 +154,37 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_grad_edit.SetLimitText(4);
  m_map_grad_edit.SetDecimalPlaces(2);
  m_map_grad_spin.SetRangeAndDelta(0.25f,105.0f,0.25f);
+ m_map_grad_edit.SetRange(0.25f,105.0f);
 
  m_press_swing_spin.SetBuddy(&m_press_swing_edit);
  m_press_swing_edit.SetLimitText(4);
  m_press_swing_edit.SetDecimalPlaces(2);
  m_press_swing_spin.SetRangeAndDelta(0.25,500.0f,0.25f);
+ m_press_swing_edit.SetRange(0.25,500.0f);
 
  m_map_curve_offset_spin.SetBuddy(&m_map_curve_offset_edit);
  m_map_curve_offset_edit.SetLimitText(5);
  m_map_curve_offset_edit.SetDecimalPlaces(3);
  m_map_curve_offset_spin.SetRangeAndDelta(-5.0f,5.0f,0.0025f);
+ m_map_curve_offset_edit.SetRange(-5.0f,5.0f);
 
  m_map_curve_gradient_spin.SetBuddy(&m_map_curve_gradient_edit);
  m_map_curve_gradient_edit.SetLimitText(5);
  m_map_curve_gradient_edit.SetDecimalPlaces(3);
  m_map_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
+ m_map_curve_gradient_edit.SetRange(-150.0f,150.0f);
 
  m_tps_curve_offset_spin.SetBuddy(&m_tps_curve_offset_edit);
  m_tps_curve_offset_edit.SetLimitText(5);
  m_tps_curve_offset_edit.SetDecimalPlaces(3);
  m_tps_curve_offset_spin.SetRangeAndDelta(-5.0f, 5.0f, 0.0025f);
+ m_tps_curve_offset_edit.SetRange(-5.0f, 5.0f);
 
  m_tps_curve_gradient_spin.SetBuddy(&m_tps_curve_gradient_edit);
  m_tps_curve_gradient_edit.SetLimitText(5);
  m_tps_curve_gradient_edit.SetDecimalPlaces(3);
  m_tps_curve_gradient_spin.SetRangeAndDelta(.0f, 100.0f, 0.01f);
+ m_tps_curve_gradient_edit.SetRange(.0f, 100.0f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

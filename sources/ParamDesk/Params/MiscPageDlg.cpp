@@ -63,10 +63,10 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_hall_output_enabled(false)
 , m_uart_speed_cb_index(0)
-, m_packet_period_edit(CEditEx::MODE_INT)
-, m_igncutoff_rpm_edit(CEditEx::MODE_INT)
-, m_hop_start_edit(CEditEx::MODE_INT)
-, m_hop_durat_edit(CEditEx::MODE_INT)
+, m_packet_period_edit(CEditEx::MODE_INT, true)
+, m_igncutoff_rpm_edit(CEditEx::MODE_INT, true)
+, m_hop_start_edit(CEditEx::MODE_INT, true)
+, m_hop_durat_edit(CEditEx::MODE_INT, true)
 {
  m_params.baud_rate = CBR_9600;
  m_params.period_ms = 0;
@@ -147,21 +147,25 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_packet_period_edit.SetDecimalPlaces(3);
  m_packet_period_spin.SetBuddy(&m_packet_period_edit);
  m_packet_period_spin.SetRangeAndDelta(0, 500, 10);
+ m_packet_period_edit.SetRange(0, 500);
 
  m_igncutoff_rpm_edit.SetLimitText(5);
  m_igncutoff_rpm_edit.SetDecimalPlaces(5);
  m_igncutoff_rpm_spin.SetBuddy(&m_igncutoff_rpm_edit);
  m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 12000, 10);
+ m_igncutoff_rpm_edit.SetRange(1000, 12000);
  
  m_hop_start_edit.SetLimitText(3);
  m_hop_start_edit.SetDecimalPlaces(3);
  m_hop_start_spin.SetBuddy(&m_hop_start_edit);
  m_hop_start_spin.SetRangeAndDelta(-6, 12, 1);
+ m_hop_start_edit.SetRange(-6, 12);
 
  m_hop_durat_edit.SetLimitText(3);
  m_hop_durat_edit.SetDecimalPlaces(3);
  m_hop_durat_spin.SetBuddy(&m_hop_durat_edit);
  m_hop_durat_spin.SetRangeAndDelta(1, 30, 1);
+ m_hop_durat_edit.SetRange(1, 30);
 
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)

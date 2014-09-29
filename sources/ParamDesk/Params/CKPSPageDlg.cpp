@@ -81,10 +81,10 @@ END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
-, m_ignition_cogs_edit(CEditEx::MODE_INT)
-, m_hall_wnd_width_edit(CEditEx::MODE_FLOAT)
-, m_wheel_cogs_num_edit(CEditEx::MODE_INT)
-, m_wheel_miss_num_edit(CEditEx::MODE_INT)
+, m_ignition_cogs_edit(CEditEx::MODE_INT, true)
+, m_hall_wnd_width_edit(CEditEx::MODE_FLOAT, true)
+, m_wheel_cogs_num_edit(CEditEx::MODE_INT, true)
+, m_wheel_miss_num_edit(CEditEx::MODE_INT, true)
 , m_enabled(false)
 , m_igncogs_enabled(false)
 , m_odd_cylnum_enabled(false)
@@ -207,21 +207,25 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_ignition_cogs_edit.SetDecimalPlaces(2);
  m_ignition_cogs_spin.SetBuddy(&m_ignition_cogs_edit);
  m_ignition_cogs_spin.SetRangeAndDelta(1, 200, 1);
+ m_ignition_cogs_edit.SetRange(1, 200);
 
  m_hall_wnd_width_spin.SetBuddy(&m_hall_wnd_width_edit);
  m_hall_wnd_width_edit.SetLimitText(5);
  m_hall_wnd_width_edit.SetDecimalPlaces(1);
  m_hall_wnd_width_spin.SetRangeAndDelta(30.0f, 110.0f, 0.1f);
+ m_hall_wnd_width_edit.SetRange(30.0f, 110.0f);
 
  m_wheel_cogs_num_edit.SetLimitText(3);
  m_wheel_cogs_num_edit.SetDecimalPlaces(3);
  m_wheel_cogs_num_spin.SetBuddy(&m_wheel_cogs_num_edit);
  m_wheel_cogs_num_spin.SetRangeAndDelta(16, 200, 1);
+ m_wheel_cogs_num_edit.SetRange(16, 200);
 
  m_wheel_miss_num_edit.SetLimitText(1);
  m_wheel_miss_num_edit.SetDecimalPlaces(1);
  m_wheel_miss_num_spin.SetBuddy(&m_wheel_miss_num_edit);
  m_wheel_miss_num_spin.SetRangeAndDelta(0, 2, 1);
+ m_wheel_miss_num_edit.SetRange(0, 2);
 
  _FillCKPSTeethBTDCComboBox(); //инициализируем комбо бокс числа зубьев до в.м.т.
  _FillCKPSEngineCylComboBox(); //инициализируем комбо бокс цисла цилиндров двигателя.

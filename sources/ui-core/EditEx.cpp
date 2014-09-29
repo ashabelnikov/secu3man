@@ -22,9 +22,15 @@
 #include "stdafx.h"
 #include "EditEx.h"
 
-CEditEx::CEditEx(int i_mode /* = MODE_STRING*/)
+static const COLORREF ErrColor = RGB(255,120,120);
+
+CEditEx::CEditEx(int i_mode /* = MODE_STRING*/, bool i_own_ddv /*=false*/)
 : m_mode(i_mode)
 , m_DecimalPlaces(4)
+, m_own_ddv(i_own_ddv)
+, m_ddv_status(true)
+, m_redBrush(ErrColor)
+, m_min(0), m_max(100)
 {
  //empty
 }
@@ -36,6 +42,7 @@ CEditEx::~CEditEx()
 
 BEGIN_MESSAGE_MAP(CEditEx, CEdit)
  ON_WM_CHAR()
+ ON_WM_CTLCOLOR_REFLECT()
 END_MESSAGE_MAP()
 
 //-------------------------------------------------------------
@@ -248,6 +255,28 @@ float CEditEx::operator = (float i_value)
 {
  SetValue(i_value);
  return(i_value);
+}
+
+//-------------------------------------------------------------
+void CEditEx::SetRange(float i_min, float i_max)
+{
+ m_min = i_min;
+ m_max = i_max;
+}
+
+//-------------------------------------------------------------
+HBRUSH CEditEx::CtlColor(CDC* pDC, UINT nCtlColor)
+{
+ HBRUSH hbr = NULL;
+ if (nCtlColor == CTLCOLOR_EDIT && m_own_ddv)
+ {
+  if (false==m_ddv_status)
+  { 
+   pDC->SetBkColor(ErrColor);
+   hbr = m_redBrush;
+  }
+ }
+ return hbr;
 }
 
 //-------------------------------------------------------------

@@ -78,13 +78,13 @@ END_MESSAGE_MAP()
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCarburPageDlg::IDD, pParent)
 , m_enabled(false)
-, m_shutoff_lo_threshold_edit(CEditEx::MODE_INT)
-, m_shutoff_hi_threshold_edit(CEditEx::MODE_INT)
-, m_epm_on_threshold_edit(CEditEx::MODE_FLOAT)
-, m_shutoff_lo_threshold_edit_g(CEditEx::MODE_INT)
-, m_shutoff_hi_threshold_edit_g(CEditEx::MODE_INT)
-, m_shutoff_delay_edit(CEditEx::MODE_FLOAT)
-, m_tps_threshold_edit(CEditEx::MODE_FLOAT)
+, m_shutoff_lo_threshold_edit(CEditEx::MODE_INT, true)
+, m_shutoff_hi_threshold_edit(CEditEx::MODE_INT, true)
+, m_epm_on_threshold_edit(CEditEx::MODE_FLOAT, true)
+, m_shutoff_lo_threshold_edit_g(CEditEx::MODE_INT, true)
+, m_shutoff_hi_threshold_edit_g(CEditEx::MODE_INT, true)
+, m_shutoff_delay_edit(CEditEx::MODE_FLOAT, true)
+, m_tps_threshold_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.ephh_lot = 1250;
  m_params.ephh_hit = 1500;
@@ -151,33 +151,40 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_shutoff_lo_threshold_edit.SetLimitText(4);
  m_shutoff_lo_threshold_spin.SetBuddy(&m_shutoff_lo_threshold_edit);
  m_shutoff_lo_threshold_spin.SetRangeAndDelta(250,7500,10);
+ m_shutoff_lo_threshold_edit.SetRange(250,7500);
 
  m_shutoff_hi_threshold_edit.SetLimitText(4);
  m_shutoff_hi_threshold_spin.SetBuddy(&m_shutoff_hi_threshold_edit);
  m_shutoff_hi_threshold_spin.SetRangeAndDelta(250,7500,10);
+ m_shutoff_hi_threshold_edit.SetRange(250,7500);
 
  m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
  m_epm_on_threshold_edit.SetLimitText(4);
  m_epm_on_threshold_edit.SetDecimalPlaces(2);
  m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
+ m_epm_on_threshold_edit.SetRange(0.0f,50.0f);
 
  m_shutoff_lo_threshold_edit_g.SetLimitText(4);
  m_shutoff_lo_threshold_spin_g.SetBuddy(&m_shutoff_lo_threshold_edit_g);
  m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,7500,10);
+ m_shutoff_lo_threshold_edit_g.SetRange(250,7500);
 
  m_shutoff_hi_threshold_edit_g.SetLimitText(4);
  m_shutoff_hi_threshold_spin_g.SetBuddy(&m_shutoff_hi_threshold_edit_g);
  m_shutoff_hi_threshold_spin_g.SetRangeAndDelta(250,7500,10);
+ m_shutoff_hi_threshold_edit_g.SetRange(250,7500);
 
  m_shutoff_delay_spin.SetBuddy(&m_shutoff_delay_edit);
  m_shutoff_delay_edit.SetLimitText(4);
  m_shutoff_delay_edit.SetDecimalPlaces(2);
  m_shutoff_delay_spin.SetRangeAndDelta(0.0f,2.5f,0.01f);
+ m_shutoff_delay_edit.SetRange(0.0f,2.5f);
 
  m_tps_threshold_spin.SetBuddy(&m_tps_threshold_edit);
  m_tps_threshold_edit.SetLimitText(5);
  m_tps_threshold_edit.SetDecimalPlaces(1);
  m_tps_threshold_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
+ m_tps_threshold_edit.SetRange(0.0f, 100.0f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

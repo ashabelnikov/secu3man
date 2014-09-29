@@ -56,8 +56,8 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_use_vent_pwm_enabled(false)
 , m_use_curve_map_enabled(false)
-, m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 {
  m_params.vent_on = 95.0f;
  m_params.vent_off = 98.0f;
@@ -121,11 +121,13 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_vent_on_threshold_edit.SetLimitText(4);
  m_vent_on_threshold_edit.SetDecimalPlaces(2);
  m_vent_on_threshold_spin.SetRangeAndDelta(-10.0f,125.0f,0.2f);
+ m_vent_on_threshold_edit.SetRange(-10.0f,125.0f);
 
  m_vent_off_threshold_spin.SetBuddy(&m_vent_off_threshold_edit);
  m_vent_off_threshold_edit.SetLimitText(4);
  m_vent_off_threshold_edit.SetDecimalPlaces(2);
  m_vent_off_threshold_spin.SetRangeAndDelta(-10.0f,125.0f,0.2f);
+ m_vent_off_threshold_edit.SetRange(-10.0f,125.0f);
 
  UpdateData(FALSE);
  //create a tooltip control and assign tooltips

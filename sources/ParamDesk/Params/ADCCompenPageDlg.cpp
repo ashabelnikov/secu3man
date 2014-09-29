@@ -79,18 +79,18 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CADCCompenPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_enable_secu3t_features(false)
-, m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ubat_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ubat_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_temp_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_temp_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_tps_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_tps_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ai1_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
-, m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED)
+, m_map_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_map_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ubat_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ubat_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_temp_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_temp_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_tps_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_tps_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai1_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 {
  m_params.map_adc_factor = 1.0f;
  m_params.map_adc_correction = 0.0f;
@@ -185,61 +185,73 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_map_factor_edit.SetLimitText(6);
  m_map_factor_edit.SetDecimalPlaces(3);
  m_map_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_map_factor_edit.SetRange(-2.0f,2.0f);
 
  m_map_correction_spin.SetBuddy(&m_map_correction_edit);
  m_map_correction_edit.SetLimitText(6);
  m_map_correction_edit.SetDecimalPlaces(4);
  m_map_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_map_correction_edit.SetRange(-2.0f,2.0f);
 
  m_ubat_factor_spin.SetBuddy(&m_ubat_factor_edit);
  m_ubat_factor_edit.SetLimitText(6);
  m_ubat_factor_edit.SetDecimalPlaces(3);
  m_ubat_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_ubat_factor_edit.SetRange(-2.0f,2.0f);
 
  m_ubat_correction_spin.SetBuddy(&m_ubat_correction_edit);
  m_ubat_correction_edit.SetLimitText(6);
  m_ubat_correction_edit.SetDecimalPlaces(4);
  m_ubat_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_ubat_correction_edit.SetRange(-2.0f,2.0f);
 
  m_temp_factor_spin.SetBuddy(&m_temp_factor_edit);
  m_temp_factor_edit.SetLimitText(6);
  m_temp_factor_edit.SetDecimalPlaces(3);
  m_temp_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_temp_factor_edit.SetRange(-2.0f,2.0f);
 
  m_temp_correction_spin.SetBuddy(&m_temp_correction_edit);
  m_temp_correction_edit.SetLimitText(6);
  m_temp_correction_edit.SetDecimalPlaces(4);
  m_temp_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_temp_correction_edit.SetRange(-2.0f,2.0f);
 
  m_tps_factor_spin.SetBuddy(&m_tps_factor_edit);
  m_tps_factor_edit.SetLimitText(6);
  m_tps_factor_edit.SetDecimalPlaces(3);
  m_tps_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_tps_factor_edit.SetRange(-2.0f,2.0f);
 
  m_tps_correction_spin.SetBuddy(&m_tps_correction_edit);
  m_tps_correction_edit.SetLimitText(6);
  m_tps_correction_edit.SetDecimalPlaces(4);
  m_tps_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_tps_correction_edit.SetRange(-2.0f,2.0f);
 
  m_ai1_factor_spin.SetBuddy(&m_ai1_factor_edit);
  m_ai1_factor_edit.SetLimitText(6);
  m_ai1_factor_edit.SetDecimalPlaces(3);
  m_ai1_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_ai1_factor_edit.SetRange(-2.0f,2.0f);
 
  m_ai1_correction_spin.SetBuddy(&m_ai1_correction_edit);
  m_ai1_correction_edit.SetLimitText(6);
  m_ai1_correction_edit.SetDecimalPlaces(4);
  m_ai1_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_ai1_correction_edit.SetRange(-2.0f,2.0f);
 
  m_ai2_factor_spin.SetBuddy(&m_ai2_factor_edit);
  m_ai2_factor_edit.SetLimitText(6);
  m_ai2_factor_edit.SetDecimalPlaces(3);
  m_ai2_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
+ m_ai2_factor_edit.SetRange(-2.0f,2.0f);
 
  m_ai2_correction_spin.SetBuddy(&m_ai2_correction_edit);
  m_ai2_correction_edit.SetLimitText(6);
  m_ai2_correction_edit.SetDecimalPlaces(4);
  m_ai2_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
+ m_ai2_correction_edit.SetRange(-2.0f,2.0f);
 
  UpdateData(FALSE);
  //create a tooltip control and assign tooltips
