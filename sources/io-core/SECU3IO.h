@@ -210,10 +210,10 @@ namespace SECU3IO
  struct KnockPar
  {
   unsigned char knock_use_knock_channel;
-  float knock_bpf_frequency;
+  unsigned char knock_bpf_frequency;
   float knock_k_wnd_begin_angle;
   float knock_k_wnd_end_angle;
-  int knock_int_time_const;
+  unsigned char knock_int_time_const;
 
   float knock_retard_step;              //шаг смещения УОЗ при детонации
   float knock_advance_step;             //шаг восстановления УОЗ

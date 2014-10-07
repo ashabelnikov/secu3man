@@ -25,21 +25,84 @@
 
 #include <vector>
 #include "common/MathHelpers.h"
-#include "propgrid/wm_messages.h"
+#include "ui-core/ddx_helpers.h"
+#include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 using namespace std;
 
 const UINT CKnockPageDlg::IDD = IDD_PD_KNOCK_PAGE;
 
 BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
+ ON_CBN_SELCHANGE(IDC_PD_KNOCK_ENABLE_KC_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_KNOCK_BPF_FREQ_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_KNOCK_INT_TIME_CONST_COMBO, OnChangeData)
+
+ ON_EN_CHANGE(IDC_PD_KNOCK_BEGIN_KWND_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_END_KWND_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_RETARD_STEP_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_ADVANCE_STEP_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_MAX_RETARD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_THRESHOLD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, OnChangeData)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ENABLE_KC_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BPF_FREQ_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_INT_TIME_CONST_COMBO, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ENABLE_KC_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BPF_FREQ_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_INT_TIME_CONST_CAPTION, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BPF_FREQ_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_INT_TIME_CONST_UNIT, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BEGIN_KWND_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_END_KWND_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RETARD_STEP_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ADVANCE_STEP_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_MAX_RETARD_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_THRESHOLD_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BEGIN_KWND_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_END_KWND_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RETARD_STEP_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ADVANCE_STEP_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_MAX_RETARD_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_THRESHOLD_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_SPIN, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BEGIN_KWND_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_END_KWND_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RETARD_STEP_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ADVANCE_STEP_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_MAX_RETARD_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_THRESHOLD_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_CAPTION, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_BEGIN_KWND_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_END_KWND_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RETARD_STEP_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_ADVANCE_STEP_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_MAX_RETARD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_THRESHOLD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_UNIT, OnUpdateControls)
+
  ON_WM_DESTROY()
- ON_MESSAGE(WM_PG_ITEMCHANGED, OnItemChanged)
- ON_UPDATE_COMMAND_UI(IDC_PROPERTY_GRID,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockPageDlg::IDD, pParent)
 , m_enabled(false)
+, mp_scr(new CWndScroller)
+, m_wnd_begin_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_wnd_end_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_retard_step_edit(CEditEx::MODE_FLOAT, true)
+, m_advance_step_edit(CEditEx::MODE_FLOAT, true)
+, m_max_retard_edit(CEditEx::MODE_FLOAT, true)
+, m_threshold_edit(CEditEx::MODE_FLOAT, true)
+, m_recovery_delay_edit(CEditEx::MODE_INT, true)
 {
  m_params.knock_use_knock_channel = 0;
  m_params.knock_bpf_frequency = 40;
@@ -63,11 +126,41 @@ LPCTSTR CKnockPageDlg::GetDialogID(void) const
 void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_PROPERTY_GRID, m_ctrlGrid);
+ DDX_Control(pDX, IDC_PD_KNOCK_ENABLE_KC_COMBO, m_use_knock_channel_combo);
+ DDX_Control(pDX, IDC_PD_KNOCK_BPF_FREQ_COMBO, m_bpf_frequency_combo);
+ DDX_Control(pDX, IDC_PD_KNOCK_INT_TIME_CONST_COMBO, m_integrator_const_combo);
+
+ DDX_Control(pDX, IDC_PD_KNOCK_BEGIN_KWND_EDIT, m_wnd_begin_angle_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_END_KWND_EDIT, m_wnd_end_angle_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_RETARD_STEP_EDIT, m_retard_step_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_ADVANCE_STEP_EDIT, m_advance_step_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_MAX_RETARD_EDIT, m_max_retard_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_THRESHOLD_EDIT, m_threshold_edit);
+ DDX_Control(pDX, IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, m_recovery_delay_edit);
+
+ DDX_Control(pDX, IDC_PD_KNOCK_BEGIN_KWND_SPIN, m_wnd_begin_angle_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_END_KWND_SPIN, m_wnd_end_angle_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_RETARD_STEP_SPIN, m_retard_step_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_ADVANCE_STEP_SPIN, m_advance_step_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_MAX_RETARD_SPIN, m_max_retard_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_THRESHOLD_SPIN, m_threshold_spin);
+ DDX_Control(pDX, IDC_PD_KNOCK_RECOVERY_DELAY_SPIN, m_recovery_delay_spin);
+
+ DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_ENABLE_KC_COMBO, m_params.knock_use_knock_channel);
+ DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_BPF_FREQ_COMBO, m_params.knock_bpf_frequency);
+ DDX_CBIndex_UCHAR(pDX, IDC_PD_KNOCK_INT_TIME_CONST_COMBO, m_params.knock_int_time_const);
+
+ m_wnd_begin_angle_edit.DDX_Value(pDX, IDC_PD_KNOCK_BEGIN_KWND_EDIT, m_params.knock_k_wnd_begin_angle);
+ m_wnd_end_angle_edit.DDX_Value(pDX, IDC_PD_KNOCK_END_KWND_EDIT, m_params.knock_k_wnd_end_angle);
+ m_retard_step_edit.DDX_Value(pDX, IDC_PD_KNOCK_RETARD_STEP_EDIT, m_params.knock_retard_step);
+ m_advance_step_edit.DDX_Value(pDX, IDC_PD_KNOCK_ADVANCE_STEP_EDIT, m_params.knock_advance_step);
+ m_max_retard_edit.DDX_Value(pDX, IDC_PD_KNOCK_MAX_RETARD_EDIT, m_params.knock_max_retard);
+ m_threshold_edit.DDX_Value(pDX, IDC_PD_KNOCK_THRESHOLD_EDIT, m_params.knock_threshold);
+ m_recovery_delay_edit.DDX_Value(pDX, IDC_PD_KNOCK_RECOVERY_DELAY_EDIT, m_params.knock_recovery_delay);
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CCarburPageDlg message handlers
+// CKnockPageDlg message handlers
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CKnockPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -79,107 +172,99 @@ BOOL CKnockPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- HSECTION hs = m_ctrlGrid.AddSection(MLL::GetString(IDS_PD_KNOCK_PARAMETERS));
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.45f));
+
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+
+ VERIFY(mp_ttc->AddWindow(&m_wnd_begin_angle_edit, MLL::GetString(IDS_PD_KNOCK_BEGIN_KWND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wnd_end_angle_edit, MLL::GetString(IDS_PD_KNOCK_END_KWND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_retard_step_edit, MLL::GetString(IDS_PD_KNOCK_RETARD_STEP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_advance_step_edit, MLL::GetString(IDS_PD_KNOCK_ADVANCE_STEP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_retard_edit, MLL::GetString(IDS_PD_KNOCK_MAX_RETARD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_threshold_edit, MLL::GetString(IDS_PD_KNOCK_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_recovery_delay_edit, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_wnd_begin_angle_spin, MLL::GetString(IDS_PD_KNOCK_BEGIN_KWND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wnd_end_angle_spin, MLL::GetString(IDS_PD_KNOCK_END_KWND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_retard_step_spin, MLL::GetString(IDS_PD_KNOCK_RETARD_STEP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_advance_step_spin, MLL::GetString(IDS_PD_KNOCK_ADVANCE_STEP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_retard_spin, MLL::GetString(IDS_PD_KNOCK_MAX_RETARD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_threshold_spin, MLL::GetString(IDS_PD_KNOCK_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_recovery_delay_spin, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_integrator_const_combo, MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONST_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_bpf_frequency_combo, MLL::GetString(IDS_PD_KNOCK_BPF_FREQ_COMBO_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
+
+
  //-----------------------------------------------------------------
- m_knock_use_knock_channel_item = m_ctrlGrid.AddBoolItem(hs, MLL::GetString(IDS_PD_KNOCK_ENABLE_KC), m_params.knock_use_knock_channel);
+ m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_NO));
+ m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_YES));
  //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex1;
- ex1.m_decimal_places = 2;
- ex1.m_spin = true;
- ex1.m_delta = 1.0; //шаг
- ex1.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
- ex1.m_lower = -12.0;
- ex1.m_upper = 54.0;
- ex1.m_limit_text = 6;
- m_knock_k_wnd_begin_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_BEGIN_KWND), m_params.knock_k_wnd_begin_angle,_T("%g°"),true,false,-1,&ex1);
- //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex2;
- ex2.m_decimal_places = 2;
- ex2.m_spin = true;
- ex2.m_delta = 1.0; //шаг
- ex2.m_mode = CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED;
- ex2.m_lower = -12.0;
- ex2.m_upper = 54.0;
- ex2.m_limit_text = 6;
- m_knock_k_wnd_end_angle_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_END_KWND),
-     m_params.knock_k_wnd_end_angle,_T("%g°"),true,false,-1,&ex2);
- //-----------------------------------------------------------------
- vector<_TSTRING> bpf_freqs;
  size_t i;
  for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
  {
   CString string;
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
-  bpf_freqs.push_back(_TSTRING(string));
+  m_bpf_frequency_combo.AddString(string);
  }
- m_knock_bpf_frequency_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_BPF_FREQ), bpf_freqs,
-     MathHelpers::Round(m_params.knock_bpf_frequency), MLL::GetString(IDS_PD_KNOCK_BPF_UNIT));
-
- //-----------------------------------------------------------------
- vector<_TSTRING> int_conts;
+ //----------------------------------------------------------------- 
  for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
  {
   CString string;
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
-  int_conts.push_back(_TSTRING(string));
+  m_integrator_const_combo.AddString(string);
  }
- m_knock_integrator_const_item = m_ctrlGrid.AddSelectorItem(hs,MLL::GetString(IDS_PD_KNOCK_INT_TIME_CONSTANT), int_conts,
-     m_params.knock_int_time_const, MLL::GetString(IDS_PD_KNOCK_INT_TIME_UNIT));
+ //-----------------------------------------------------------------  
+ m_wnd_begin_angle_edit.SetLimitText(6);
+ m_wnd_begin_angle_edit.SetDecimalPlaces(2);
+ m_wnd_begin_angle_spin.SetBuddy(&m_wnd_begin_angle_edit);
+ m_wnd_begin_angle_spin.SetRangeAndDelta(-12.0f, 54.0f, 1.0f);
+ m_wnd_begin_angle_edit.SetRange(-12.0f, 54.0f);
+ //-----------------------------------------------------------------  
+ m_wnd_end_angle_edit.SetLimitText(6);
+ m_wnd_end_angle_edit.SetDecimalPlaces(2);
+ m_wnd_end_angle_spin.SetBuddy(&m_wnd_end_angle_edit);
+ m_wnd_end_angle_spin.SetRangeAndDelta(-12.0f, 54.0f, 1.0f);
+ m_wnd_end_angle_edit.SetRange(-12.0f, 54.0f);
+ //-----------------------------------------------------------------  
+ m_retard_step_edit.SetLimitText(5);
+ m_retard_step_edit.SetDecimalPlaces(2);
+ m_retard_step_spin.SetBuddy(&m_retard_step_edit);
+ m_retard_step_spin.SetRangeAndDelta(0.0f, 20.0f, 0.25f);
+ m_retard_step_edit.SetRange(0.0f, 20.0f);
  //-----------------------------------------------------------------
-
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex3;
- ex3.m_decimal_places = 2;
- ex3.m_spin = true;
- ex3.m_delta = 0.25; //шаг
- ex3.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
- ex3.m_lower = 0.0;
- ex3.m_upper = 20.0;
- ex3.m_limit_text = 5;
- m_knock_retard_step_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_RETARD_STEP), m_params.knock_retard_step,_T("%g°"),true,false,-1,&ex3);
+ m_advance_step_edit.SetLimitText(5);
+ m_advance_step_edit.SetDecimalPlaces(2);
+ m_advance_step_spin.SetBuddy(&m_advance_step_edit);
+ m_advance_step_spin.SetRangeAndDelta(0.0f, 5.0f, 0.02f);
+ m_advance_step_edit.SetRange(0.0f, 5.0f);
  //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex4;
- ex4.m_decimal_places = 2;
- ex4.m_spin = true;
- ex4.m_delta = 0.02; //шаг
- ex4.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
- ex4.m_lower = 0.0;
- ex4.m_upper = 5.0;
- ex4.m_limit_text = 5;
- m_knock_advance_step_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_ADVANCE_STEP), m_params.knock_advance_step,_T("%g°"),true,false,-1,&ex4);
+ m_max_retard_edit.SetLimitText(5);
+ m_max_retard_edit.SetDecimalPlaces(2);
+ m_max_retard_spin.SetBuddy(&m_max_retard_edit);
+ m_max_retard_spin.SetRangeAndDelta(0.0f, 25.0f, 0.25f);
+ m_max_retard_edit.SetRange(0.0f, 25.0f);
  //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex5;
- ex5.m_decimal_places = 2;
- ex5.m_spin = true;
- ex5.m_delta = 0.25; //шаг
- ex5.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
- ex5.m_lower = 0.0;
- ex5.m_upper = 25.0;
- ex5.m_limit_text = 5;
- m_knock_max_retard_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_MAX_RETARD), m_params.knock_max_retard,_T("%g°"),true,false,-1,&ex5);
+ m_threshold_edit.SetLimitText(5);
+ m_threshold_edit.SetDecimalPlaces(2);
+ m_threshold_spin.SetBuddy(&m_threshold_edit);
+ m_threshold_spin.SetRangeAndDelta(0.1f, 5.0f, 0.01f);
+ m_threshold_edit.SetRange(0.1f, 5.0f);
  //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex6;
- ex6.m_decimal_places = 2;
- ex6.m_spin = true;
- ex6.m_delta = 0.01; //шаг
- ex6.m_mode = CEditEx::MODE_FLOAT /*| CEditEx::MODE_SIGNED*/;
- ex6.m_lower = 0.1;
- ex6.m_upper = 5.0;
- ex6.m_limit_text = 5;
- m_knock_threshold_item = m_ctrlGrid.AddDoubleItem(hs, MLL::GetString(IDS_PD_KNOCK_THRESHOLD), m_params.knock_threshold,_T("%g V"),true,false,-1,&ex6);
+ m_recovery_delay_edit.SetLimitText(2);
+ m_recovery_delay_edit.SetDecimalPlaces(2);
+ m_recovery_delay_spin.SetBuddy(&m_recovery_delay_edit);
+ m_recovery_delay_spin.SetRangeAndDelta(1, 99, 1);
+ m_recovery_delay_edit.SetRange(1, 99);
  //-----------------------------------------------------------------
- CPropertyGridInPlaceEdit::InplaceEditParamsEx ex7;
- ex7.m_decimal_places = 2;
- ex7.m_spin = true;
- ex7.m_delta = 1; //шаг
- ex7.m_mode = CEditEx::MODE_INT /*| CEditEx::MODE_SIGNED*/;
- ex7.m_lower = 1;
- ex7.m_upper = 99;
- ex7.m_limit_text = 2;
- m_knock_recovery_delay_item = m_ctrlGrid.AddIntegerItem(hs, MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY), m_params.knock_recovery_delay,_TSTRING(_T("%d ")) + MLL::GetString(IDS_PD_KNOCK_RECOVERY_DELAY_UNIT),true,false,-1,&ex7);
- //-----------------------------------------------------------------
-
- m_ctrlGrid.SetGutterWidth(180);
- m_ctrlGrid.SetEditable(m_enabled);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -201,7 +286,6 @@ void CKnockPageDlg::Enable(bool enable)
  if (::IsWindow(m_hWnd))
  {
   UpdateDialogControls(this, TRUE);
-  m_ctrlGrid.SetEditable(m_enabled);
  }
 }
 
@@ -216,63 +300,6 @@ void CKnockPageDlg::GetValues(SECU3IO::KnockPar* o_values)
 {
  ASSERT(o_values);
  UpdateData(TRUE); //копируем данные из диалога в переменные
-
- bool status = true;
-
- bool knock_use_knock_channel;
- if (!m_ctrlGrid.GetItemValue(m_knock_use_knock_channel_item,knock_use_knock_channel))
-  status = false;
- m_params.knock_use_knock_channel = knock_use_knock_channel;
-
- double knock_k_wnd_begin_angle;
- if (!m_ctrlGrid.GetItemValue(m_knock_k_wnd_begin_angle_item,knock_k_wnd_begin_angle))
-  status = false;
- m_params.knock_k_wnd_begin_angle = (float)knock_k_wnd_begin_angle;
-
- double knock_k_wnd_end_angle;
- if (!m_ctrlGrid.GetItemValue(m_knock_k_wnd_end_angle_item,knock_k_wnd_end_angle))
-  status = false;
- m_params.knock_k_wnd_end_angle = (float)knock_k_wnd_end_angle;
-
- int knock_bpf_frequency;
- if (!m_ctrlGrid.GetItemValue(m_knock_bpf_frequency_item,knock_bpf_frequency))
-   status = false;
- m_params.knock_bpf_frequency = (float)knock_bpf_frequency;
-
- int int_time_constant;
- if (!m_ctrlGrid.GetItemValue(m_knock_integrator_const_item,int_time_constant))
-     status = false;
- m_params.knock_int_time_const = int_time_constant;
-
-//-----------------------
- double knock_retard_step;
- if (!m_ctrlGrid.GetItemValue(m_knock_retard_step_item, knock_retard_step))
-  status = false;
- m_params.knock_retard_step = (float)knock_retard_step;
-
- double knock_advance_step;
- if (!m_ctrlGrid.GetItemValue(m_knock_advance_step_item, knock_advance_step))
-  status = false;
- m_params.knock_advance_step = (float)knock_advance_step;
-
- double knock_max_retard;
- if (!m_ctrlGrid.GetItemValue(m_knock_max_retard_item, knock_max_retard))
-  status = false;
- m_params.knock_max_retard = (float)knock_max_retard;
-
- double knock_threshold;
- if (!m_ctrlGrid.GetItemValue(m_knock_threshold_item, knock_threshold))
-  status = false;
- m_params.knock_threshold = (float)knock_threshold;
-
- int knock_recovery_delay;
- if (!m_ctrlGrid.GetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
-  status = false;
- m_params.knock_recovery_delay = knock_recovery_delay;
- //-----------------------
-
- ASSERT(status);
-
  memcpy(o_values,&m_params, sizeof(SECU3IO::KnockPar));
 }
 
@@ -282,52 +309,6 @@ void CKnockPageDlg::SetValues(const SECU3IO::KnockPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::KnockPar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
-
- bool status = true;
-
- bool knock_use_knock_channel = m_params.knock_use_knock_channel;
- if (!m_ctrlGrid.SetItemValue(m_knock_use_knock_channel_item,knock_use_knock_channel))
-  status = false;
-
- double knock_k_wnd_begin_angle = m_params.knock_k_wnd_begin_angle;
- if (!m_ctrlGrid.SetItemValue(m_knock_k_wnd_begin_angle_item,knock_k_wnd_begin_angle))
-  status = false;
-
- double knock_k_wnd_end_angle = m_params.knock_k_wnd_end_angle;
- if (!m_ctrlGrid.SetItemValue(m_knock_k_wnd_end_angle_item,knock_k_wnd_end_angle))
-  status = false;
-
- int knock_bpf_frequency = MathHelpers::Round(m_params.knock_bpf_frequency);
- if (!m_ctrlGrid.SetItemValue(m_knock_bpf_frequency_item, knock_bpf_frequency))
-     status = false;
-
- int int_time_constant = (size_t)m_params.knock_int_time_const;
- if (!m_ctrlGrid.SetItemValue(m_knock_integrator_const_item, int_time_constant))
-     status = false;
-
- //-----------------------
- double knock_retard_step = m_params.knock_retard_step;
- if (!m_ctrlGrid.SetItemValue(m_knock_retard_step_item, knock_retard_step))
-  status = false;
-
- double knock_advance_step = m_params.knock_advance_step;
- if (!m_ctrlGrid.SetItemValue(m_knock_advance_step_item, knock_advance_step))
-  status = false;
-
- double knock_max_retard = m_params.knock_max_retard;
- if (!m_ctrlGrid.SetItemValue(m_knock_max_retard_item, knock_max_retard))
-  status = false;
-
- double knock_threshold = m_params.knock_threshold;
- if (!m_ctrlGrid.SetItemValue(m_knock_threshold_item, knock_threshold))
-  status = false;
-
- int knock_recovery_delay = m_params.knock_recovery_delay;
- if (!m_ctrlGrid.SetItemValue(m_knock_recovery_delay_item, knock_recovery_delay))
-  status = false;
- //-----------------------
-
- ASSERT(status);
 }
 
 void CKnockPageDlg::ForceOnChangeNotify(void)
@@ -335,31 +316,8 @@ void CKnockPageDlg::ForceOnChangeNotify(void)
  OnChangeNotify();
 }
 
-LRESULT CKnockPageDlg::OnItemChanged(WPARAM wParam, LPARAM lParam)
-{
- if (wParam == m_knock_use_knock_channel_item ||
-     wParam == m_knock_k_wnd_begin_angle_item ||
-     wParam == m_knock_k_wnd_end_angle_item   ||
-     wParam == m_knock_bpf_frequency_item ||
-     wParam == m_knock_integrator_const_item ||
-     wParam == m_knock_retard_step_item   ||
-     wParam == m_knock_advance_step_item  ||
-     wParam == m_knock_max_retard_item    ||
-     wParam == m_knock_threshold_item     ||
-     wParam == m_knock_recovery_delay_item)
- {
-  OnChangeNotify();
- }
- else
- {
-  ASSERT(0);
- }
-
- return 0;
-}
-
 void CKnockPageDlg::OnDestroy()
 {
  Super::OnDestroy();
- m_ctrlGrid.ResetContents();
+ mp_scr->Close();
 }

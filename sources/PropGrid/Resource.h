@@ -1,2 +1,0 @@
-
-#define IDC_LIST_DYN_DLGEX_LIST1 9000

@@ -205,16 +205,16 @@ BEGIN
     CONTROL         "Список",IDC_KC_LIST_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,437,5,50,13
     CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
+                    SS_BLACKFRAME | NOT WS_VISIBLE,225,145,246,60
     CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
     CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Распределение шума двигателя по оборотам:",IDC_STATIC,255,7,181,10
-    CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,129,127,10
+    CTEXT           "Сигнал с датчика детонации:",IDC_STATIC,285,134,127,10
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,13,65,161,115
+                    SS_BLACKFRAME | NOT WS_VISIBLE,13,67,161,115
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222
@@ -757,16 +757,16 @@ BEGIN
     CONTROL         "List",IDC_KC_LIST_CHECKBOX,"Button",
                     BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,437,5,50,13
     CONTROL         "",IDC_KC_SIGNAL_OSCILLOSCOPE_HOLDER,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,225,140,246,60
+                    SS_BLACKFRAME | NOT WS_VISIBLE,225,145,246,60
     CONTROL         "",IDC_KC_KFC_DLG_HOLDER,"Static",
                     SS_BLACKFRAME | NOT WS_VISIBLE,18,40,60,25
     CONTROL         "",IDC_KC_DESIRED_LEVEL_SLIDER,
                     "msctls_trackbar32",TBS_VERT | TBS_NOTICKS | WS_TABSTOP,201,18,19,100
     LTEXT           "0.00",IDC_KC_DESIRED_LEVEL_TEXT,203,117,22,15
     CTEXT           "Noise distribution over RPM:",IDC_STATIC,255,7,181,10
-    CTEXT           "Signal from knock sensor:",IDC_STATIC,285,129,127,10
+    CTEXT           "Signal from knock sensor:",IDC_STATIC,285,134,127,10
     CONTROL         "",IDC_KC_PARAMETERS_FRAME,"Static",
-                    SS_BLACKFRAME | NOT WS_VISIBLE,13,65,152,110
+                    SS_BLACKFRAME | NOT WS_VISIBLE,13,67,152,110
 END
 
 IDD_LOG_PLAYER DIALOGEX 0, 0, 428, 222

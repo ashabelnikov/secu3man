@@ -21,10 +21,15 @@
 
 #pragma once
 
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "../common/ParamPageEvents.h" //because included externally
-#include "propgrid/propertygrid.h"
+#include "ui-core/EditEx.h"
+#include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+
+class CToolTipCtrlEx;
+class CWndScroller;
 
 class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -49,7 +54,6 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-  afx_msg LRESULT OnItemChanged(WPARAM, LPARAM);
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
@@ -57,17 +61,26 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::KnockPar m_params;
   bool m_enabled;
 
-  CPropertyGrid m_ctrlGrid;
+  std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 
-  HITEM m_knock_use_knock_channel_item;
-  HITEM m_knock_k_wnd_begin_angle_item;
-  HITEM m_knock_k_wnd_end_angle_item;
-  HITEM m_knock_bpf_frequency_item;
-  HITEM m_knock_integrator_const_item; //us
+  CComboBox m_use_knock_channel_combo;
+  CComboBox m_bpf_frequency_combo;
+  CComboBox m_integrator_const_combo;//us
 
-  HITEM m_knock_retard_step_item;    //deg.
-  HITEM m_knock_advance_step_item;   //deg.
-  HITEM m_knock_max_retard_item;     //deg.
-  HITEM m_knock_threshold_item;      //voltage
-  HITEM m_knock_recovery_delay_item; //in work cycles
+  CEditEx m_wnd_begin_angle_edit;//deg.
+  CEditEx m_wnd_end_angle_edit;  //deg.
+  CEditEx m_retard_step_edit;    //deg.
+  CEditEx m_advance_step_edit;   //deg.
+  CEditEx m_max_retard_edit;     //deg.
+  CEditEx m_threshold_edit;      //voltage
+  CEditEx m_recovery_delay_edit; //in work cycles
+
+  CSpinButtonCtrlEx m_wnd_begin_angle_spin;
+  CSpinButtonCtrlEx m_wnd_end_angle_spin;
+  CSpinButtonCtrlEx m_retard_step_spin;
+  CSpinButtonCtrlEx m_advance_step_spin;
+  CSpinButtonCtrlEx m_max_retard_spin;
+  CSpinButtonCtrlEx m_threshold_spin;
+  CSpinButtonCtrlEx m_recovery_delay_spin;
 };

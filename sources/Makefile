@@ -19,7 +19,6 @@ all:
     @cd io-core   &  @$(MAKE)  & @cd ..
     @cd ui-core   &  @$(MAKE)  & @cd ..
     @cd hiscctrl  &  @$(MAKE)  & @cd ..
-    @cd propgrid  &  @$(MAKE)  & @cd ..
     @cd fwimpexp  &  @$(MAKE)  & @cd ..
     @cd midesk    &  @$(MAKE)  & @cd ..
     @cd tabldesk  &  @$(MAKE)  & @cd ..
@@ -36,7 +35,6 @@ clean:
     @cd io-core   &  @$(MAKE)  clean & @cd ..
     @cd ui-core   &  @$(MAKE)  clean & @cd ..
     @cd hiscctrl  &  @$(MAKE)  clean & @cd ..
-    @cd propgrid  &  @$(MAKE)  clean & @cd ..
     @cd fwimpexp  &  @$(MAKE)  clean & @cd ..
     @cd midesk    &  @$(MAKE)  clean & @cd ..
     @cd tabldesk  &  @$(MAKE)  clean & @cd ..

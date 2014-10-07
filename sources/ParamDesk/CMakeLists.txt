@@ -85,4 +85,4 @@ endforeach(src_file ${SOURCES})
 set_source_files_properties(Application/StdAfx.cpp PROPERTIES COMPILE_FLAGS "/YcStdAfx.h")
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES} ${RESOURCES})
-target_link_libraries(${PROJECT} ui-core propgrid tabldesk)
+target_link_libraries(${PROJECT} ui-core tabldesk)

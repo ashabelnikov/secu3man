@@ -18,9 +18,9 @@ ADD_DEFINITIONS(-DWINVER=0x0501)
 endif()
 
 set(LIBRARIES about fwimpexp hexutils hiscctrl io-core midesk
-  paramdesk propgrid tabldesk ui-core
+  paramdesk tabldesk ui-core
   )
- 
+
 foreach(LIBRARY ${LIBRARIES})
   add_subdirectory(../${LIBRARY} ../${LIBRARY})
 endforeach()
