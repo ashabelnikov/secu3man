@@ -210,6 +210,7 @@ class CondEncoder
  public:
   float UniOutDecodeCondVal(int val, int cond);
   int UniOutEncodeCondVal(float val, int cond);
+  bool isSigned(int cond) const;
  private:
   long m_quartz_frq;
   float m_period_distance;

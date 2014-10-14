@@ -1466,22 +1466,22 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
   m_UniOutPar.out[oi].condition2 = cond2;
 
   int on_thrd_1 = 0;
-  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_1))
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_1, cen.isSigned(cond1)))
    return false;
   m_UniOutPar.out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(on_thrd_1, cond1);
 
   int off_thrd_1 = 0;
-  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_1))
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_1, cen.isSigned(cond1)))
    return false;
   m_UniOutPar.out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(off_thrd_1, cond1);
 
   int on_thrd_2 = 0;
-  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_2))
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &on_thrd_2, cen.isSigned(cond2)))
    return false;
   m_UniOutPar.out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(on_thrd_2, cond2);
 
   int off_thrd_2 = 0;
-  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_2))
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &off_thrd_2, cen.isSigned(cond2)))
    return false;
   m_UniOutPar.out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(off_thrd_2, cond2);
  }
@@ -2375,4 +2375,17 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_CE: return (float)val;
  }
  return .0f;
+}
+
+bool CondEncoder::isSigned(int cond) const
+{
+ switch(cond)
+ {
+  case UNIOUT_COND_CTS:
+  case UNIOUT_COND_ATS:
+  case UNIOUT_COND_AANG:
+   return true;
+  default:
+   return false;
+ }
 }

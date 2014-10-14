@@ -107,13 +107,14 @@ class CUniOutPageDlg : public CTabDialog, public ParamPageEvents
 
   struct CondFmt
   {
-   CondFmt(int i_textlim, int i_decplaces, float i_min, float i_max, float i_delta, float i_defval_on, float i_defval_off, _TSTRING i_condstr)
+   CondFmt(int i_textlim, int i_decplaces, float i_min, float i_max, float i_delta, float i_defval_on, float i_defval_off, _TSTRING i_condstr, bool i_sign)
    : textlim(i_textlim), decplaces(i_decplaces), minimum(i_min), maximum(i_max), delta(i_delta), defval_on(i_defval_on)
-   , defval_off(i_defval_off), condstr(i_condstr){}
+   , defval_off(i_defval_off), condstr(i_condstr), sign(i_sign) {}
    int textlim, decplaces;
    float minimum, maximum, delta;
    float defval_on, defval_off;
    _TSTRING condstr;
+   bool sign;
   };
 
   std::map<int, CondFmt> m_condFmt;

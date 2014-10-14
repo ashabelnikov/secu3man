@@ -76,6 +76,11 @@ class AFX_EXT_CLASS CEditEx : public CEdit
    m_mode = i_mode;
   }
 
+  inline void SetOwnDDV(bool i_own_ddv)
+  {
+   m_own_ddv = i_own_ddv;
+  }
+
   inline DWORD GetMode(void)
   {
    return m_mode;

@@ -74,6 +74,10 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
 {
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {
+  m_out[i].on_thrd_1_edit.SetOwnDDV(true);
+  m_out[i].off_thrd_1_edit.SetOwnDDV(true);
+  m_out[i].on_thrd_2_edit.SetOwnDDV(true);
+  m_out[i].off_thrd_2_edit.SetOwnDDV(true);
   m_out[i].on_thrd_1_edit.SetMode(CEditEx::MODE_FLOAT);
   m_out[i].off_thrd_1_edit.SetMode(CEditEx::MODE_FLOAT);
   m_out[i].on_thrd_2_edit.SetMode(CEditEx::MODE_FLOAT);
@@ -97,26 +101,26 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_XOR, MLL::GetString(IDS_UNIOUT_LF_XOR)));
  m_lf_str.insert(std::make_pair(SECU3IO::UNIOUT_LF_NONE, MLL::GetString(IDS_UNIOUT_LF_NONE)));
 
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CTS,  CondFmt(5, 2, -40.0f, 180.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_CTS))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_RPM,  CondFmt(5, 0, 50.0f, 20000.0f, 10.0f, 1500.0f, 1200.0f, MLL::GetString(IDS_UNIOUT_COND_RPM))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAP,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAP))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_UBAT, CondFmt(4, 1, 5.0f, 16.0f, 0.1f, 10.0f, 10.5f, MLL::GetString(IDS_UNIOUT_COND_UBAT))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CARB, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_CARB))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_VSPD, CondFmt(5, 1, 5.0f, 250.0f, 0.1f, 70.0f, 65.0f, MLL::GetString(IDS_UNIOUT_COND_VSPD))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AIRFL, CondFmt(2, 0, .0f, 16.0f, 1.0f, 13.0f, 12.0f, MLL::GetString(IDS_UNIOUT_COND_AIRFL))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_TMR))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ITTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_ITTMR))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ESTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_ESTMR))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CPOS, CondFmt(5, 1, .0f, 100.0f, 0.5f, 60.0f, 55.0f, MLL::GetString(IDS_UNIOUT_COND_CPOS))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AANG, CondFmt(5, 1, -15.0f, 65.0f, 0.1f, 55.0f, 53.0f, MLL::GetString(IDS_UNIOUT_COND_AANG))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_KLEV, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.45f, MLL::GetString(IDS_UNIOUT_COND_KLEV))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPS, CondFmt(5, 1, .0f, 100.0f, 0.5f, 30.0f, 29.0f, MLL::GetString(IDS_UNIOUT_COND_TPS))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ATS, CondFmt(5, 2, -40.0f, 180.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_ATS))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI1, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI1))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI2, CondFmt(4, 2, .0f, 600.0f, 0.1f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI2))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_GASV, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_GASV))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_IPW, CondFmt(6, 2, 0.01f, 200.0f, 0.01f, 20.0f, 19.90f, MLL::GetString(IDS_UNIOUT_COND_IPW))));
- m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CE, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_CE))));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CTS,  CondFmt(6, 2, -40.0f, 180.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_CTS), true)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_RPM,  CondFmt(5, 0, 50.0f, 20000.0f, 10.0f, 1500.0f, 1200.0f, MLL::GetString(IDS_UNIOUT_COND_RPM), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_MAP,  CondFmt(5, 2, 0.25f, 500.0f, 0.25f, 95.0f, 90.0f, MLL::GetString(IDS_UNIOUT_COND_MAP), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_UBAT, CondFmt(4, 1, 5.0f, 16.0f, 0.1f, 10.0f, 10.5f, MLL::GetString(IDS_UNIOUT_COND_UBAT), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CARB, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_CARB), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_VSPD, CondFmt(5, 1, 5.0f, 250.0f, 0.1f, 70.0f, 65.0f, MLL::GetString(IDS_UNIOUT_COND_VSPD), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AIRFL, CondFmt(2, 0, .0f, 16.0f, 1.0f, 13.0f, 12.0f, MLL::GetString(IDS_UNIOUT_COND_AIRFL), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_TMR), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ITTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_ITTMR), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ESTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_ESTMR), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CPOS, CondFmt(5, 1, .0f, 100.0f, 0.5f, 60.0f, 55.0f, MLL::GetString(IDS_UNIOUT_COND_CPOS), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AANG, CondFmt(5, 1, -15.0f, 65.0f, 0.1f, 55.0f, 53.0f, MLL::GetString(IDS_UNIOUT_COND_AANG), true)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_KLEV, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.45f, MLL::GetString(IDS_UNIOUT_COND_KLEV), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_TPS, CondFmt(5, 1, .0f, 100.0f, 0.5f, 30.0f, 29.0f, MLL::GetString(IDS_UNIOUT_COND_TPS), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_ATS, CondFmt(5, 2, -40.0f, 180.0f, 0.25f, 55.0f, 50.0f, MLL::GetString(IDS_UNIOUT_COND_ATS), true)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI1, CondFmt(4, 2, .0f, 5.00f, 0.01f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI1), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_AI2, CondFmt(4, 2, .0f, 600.0f, 0.1f, 2.5f, 2.48f, MLL::GetString(IDS_UNIOUT_COND_AI2), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_GASV, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_GASV), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_IPW, CondFmt(6, 2, 0.01f, 200.0f, 0.01f, 20.0f, 19.90f, MLL::GetString(IDS_UNIOUT_COND_IPW), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CE, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_CE), false)));
 }
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const
@@ -437,11 +441,15 @@ void CUniOutPageDlg::_SetCondInputFormat(int outIndex, bool cond, bool setdefval
 
  (cond?m_out[outIndex].on_thrd_2_edit:m_out[outIndex].on_thrd_1_edit).SetLimitText(it->second.textlim);
  (cond?m_out[outIndex].on_thrd_2_edit:m_out[outIndex].on_thrd_1_edit).SetDecimalPlaces(it->second.decplaces);
+ (cond?m_out[outIndex].on_thrd_2_edit:m_out[outIndex].on_thrd_1_edit).SetMode(CEditEx::MODE_FLOAT | (it->second.sign?CEditEx::MODE_SIGNED:0));
  (cond?m_out[outIndex].on_thrd_2_spin:m_out[outIndex].on_thrd_1_spin).SetRangeAndDelta(it->second.minimum, it->second.maximum, it->second.delta);
+ (cond?m_out[outIndex].on_thrd_2_edit:m_out[outIndex].on_thrd_1_edit).SetRange(it->second.minimum, it->second.maximum);
 
  (cond?m_out[outIndex].off_thrd_2_edit:m_out[outIndex].off_thrd_1_edit).SetLimitText(it->second.textlim);
  (cond?m_out[outIndex].off_thrd_2_edit:m_out[outIndex].off_thrd_1_edit).SetDecimalPlaces(it->second.decplaces);
+ (cond?m_out[outIndex].off_thrd_2_edit:m_out[outIndex].off_thrd_1_edit).SetMode(CEditEx::MODE_FLOAT | (it->second.sign?CEditEx::MODE_SIGNED:0));
  (cond?m_out[outIndex].off_thrd_2_spin:m_out[outIndex].off_thrd_1_spin).SetRangeAndDelta(it->second.minimum, it->second.maximum, it->second.delta);
+ (cond?m_out[outIndex].off_thrd_2_edit:m_out[outIndex].off_thrd_1_edit).SetRange(it->second.minimum, it->second.maximum);
 
  if (setdefval)
  {
