@@ -12,7 +12,7 @@ CFLAGS  = $(CFLAGS) /D NDEBUG
 CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
 SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib odbc32.lib odbccp32.lib
-LIBS = ui-core.lib propgrid.lib tabldesk.lib
+LIBS = ui-core.lib tabldesk.lib
 # linker flags and directives
 LFLAGS  = /nologo /STACK:10000000 /MACHINE:x86 /release /DLL /OUT:../../binaries/paramdesk.dll /IMPLIB:../../libraries/paramdesk.lib /LIBPATH:../../libraries paramdesk.res
 # source files

@@ -76,7 +76,6 @@ bool CheckDLLCompatibility(void)
  dlls.push_back(_T("io-core.dll"));
  dlls.push_back(_T("midesk.dll"));
  dlls.push_back(_T("paramdesk.dll"));
- dlls.push_back(_T("propgrid.dll"));
  dlls.push_back(_T("tabldesk.dll"));
  dlls.push_back(_T("ui-core.dll"));
 
