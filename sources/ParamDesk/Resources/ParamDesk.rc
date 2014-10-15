@@ -942,10 +942,12 @@ BEGIN
     IDS_UNIOUT_COND_GASV   "Газовый клапан (логич.)"
     IDS_UNIOUT_COND_IPW    "Длит.впрыска (мс)"
     IDS_UNIOUT_COND_CE     "Состояние CE"
+    IDS_UNIOUT_COND_OFTMR  "Таймер по вкл./выкл. 1 усл. (сек)"
 
     IDS_UNIOUT_LF_OR       "ИЛИ"
     IDS_UNIOUT_LF_AND      "И"
     IDS_UNIOUT_LF_XOR      "Искл.ИЛИ"
+    IDS_UNIOUT_LF_2ND      "2-е условие"
     IDS_UNIOUT_LF_NONE     "Отсутствует"
 
     IDS_PD_UNIOUT_COND_ON_EDIT_DEF_TT "Порог включения"
@@ -1923,10 +1925,12 @@ BEGIN
     IDS_UNIOUT_COND_GASV   "Gas valve input (logic)"
     IDS_UNIOUT_COND_IPW    "Injector PW (ms)"
     IDS_UNIOUT_COND_CE     "CE state"
+    IDS_UNIOUT_COND_OFTMR  "Timer on/off 1 cond. (sec.)"
 
     IDS_UNIOUT_LF_OR       "OR"
     IDS_UNIOUT_LF_AND      "AND"
     IDS_UNIOUT_LF_XOR      "XOR"
+    IDS_UNIOUT_LF_2ND      "2nd condition"
     IDS_UNIOUT_LF_NONE     "NONE"
 
     IDS_PD_UNIOUT_COND_ON_EDIT_DEF_TT "On threshold"

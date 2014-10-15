@@ -357,6 +357,7 @@ namespace SECU3IO
  const int UNIOUT_LF_OR = 0;
  const int UNIOUT_LF_AND = 1;
  const int UNIOUT_LF_XOR = 2;
+ const int UNIOUT_LF_2ND = 3;
  const int UNIOUT_LF_NONE = 15;
  //conditions
  const int UNIOUT_COND_CTS = 0;       //coolant temperature
@@ -379,6 +380,7 @@ namespace SECU3IO
  const int UNIOUT_COND_GASV = 17;     //gas valve input
  const int UNIOUT_COND_IPW = 18;      //injector pulse width
  const int UNIOUT_COND_CE = 19;       //CE state
+ const int UNIOUT_COND_OFTMR = 20;    //On/Off delay timer
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
