@@ -189,7 +189,7 @@ void CRPMGridEditDlg::setIsOkEnabled(EventResult OnFunction)
 void CRPMGridEditDlg::SetErrMessage(const _TSTRING& str)
 {
  m_errMsg.SetWindowText(str.c_str());
- m_errMsg.ShowWindow(str.size() ? SW_SHOW : SW_HIDE); 
+ m_errMsg.ShowWindow(str.size() ? SW_SHOW : SW_HIDE);
 }
 
 void CRPMGridEditDlg::SetItemError(size_t index, bool i_error)

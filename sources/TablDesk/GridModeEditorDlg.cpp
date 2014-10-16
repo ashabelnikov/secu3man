@@ -76,7 +76,7 @@ class MapLimits
   int m_mapType;
 };
 }
-                   
+
 //We need this descendant to have ability to handle some keyboard keys
 class CEditExCustomKeys : public CEditEx
 {
@@ -218,7 +218,7 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
  {
   for(j = 0; j < 16; ++j)
   {
-   m_wrk_grid[i][j].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar), 
+   m_wrk_grid[i][j].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar),
                                                 fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditKill), TYPE_MAP_DA_WORK));
    m_wrk_grid[i][j]->SetDecimalPlaces(2);
   }
@@ -459,13 +459,13 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
     if (true==m_idl_grid[i]->m_error)
     { //error
      pDC->SetBkColor(itemErrColor);
-     hbr = m_redBrush;    
+     hbr = m_redBrush;
     }
     else
     {//gradient
      int index = _CalcGradIndex(mp_idleMap[i]);
      pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];    
+     hbr = m_gradBrush[index];
     }
    }
    //Start map
@@ -480,7 +480,7 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
     {//gradient
      int index = _CalcGradIndex(mp_startMap[i]);
      pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];    
+     hbr = m_gradBrush[index];
     }
    }
    //Coolant temperature map
@@ -495,7 +495,7 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
     {//gradient
      int index = _CalcGradIndex(mp_tempMap[i]);
      pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];        
+     hbr = m_gradBrush[index];
     }
    }
   }
@@ -516,7 +516,7 @@ void CGridModeEditorDlg::_2DLookup(float x, const float* grid, std::vector<int>&
   {
    if (x < (grid[i-1] + d/5)) pt.push_back(i-1);
    else if (x > (grid[i] - d/5)) pt.push_back(i);
-   else { pt.push_back(i-1); pt.push_back(i); }    
+   else { pt.push_back(i-1); pt.push_back(i); }
    break;
   }
  }
@@ -533,7 +533,7 @@ void CGridModeEditorDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& d
 
 void CGridModeEditorDlg::_ResetUseFlags(void)
 {
- m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use = 
+ m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use =
  m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
 }
 

@@ -438,14 +438,14 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  {
   //Note: Some users require less limited values, so we set 120 for all.
   //Old values are commented out
-  degBTDC.insert(std::make_pair(1, 120.0f)); //120
-  degBTDC.insert(std::make_pair(2, 120.0f)); //120
-  degBTDC.insert(std::make_pair(3, 120.0f)); //120
-  degBTDC.insert(std::make_pair(4, 105.0f)); //120
-  degBTDC.insert(std::make_pair(5,  85.0f));  //60
-  degBTDC.insert(std::make_pair(6,  75.0f));  //50
-  degBTDC.insert(std::make_pair(7,  65.0f));  //45
-  degBTDC.insert(std::make_pair(8,  55.0f));  //40
+  degBTDC.insert(std::make_pair(1, 180.0f)); //120
+  degBTDC.insert(std::make_pair(2, 180.0f)); //120
+  degBTDC.insert(std::make_pair(3, 180.0f)); //120
+  degBTDC.insert(std::make_pair(4, 180.0f)); //120
+  degBTDC.insert(std::make_pair(5, 180.0f));  //60
+  degBTDC.insert(std::make_pair(6, 160.0f));  //50
+  degBTDC.insert(std::make_pair(7, 140.0f));  //45
+  degBTDC.insert(std::make_pair(8, 120.0f));  //40
  }
  else
  { //non-missing teeth wheel
@@ -456,7 +456,7 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
   degBTDC.insert(std::make_pair(5, 330.0f));
   degBTDC.insert(std::make_pair(6, 270.0f));
   degBTDC.insert(std::make_pair(7, 270.0f));
-  degBTDC.insert(std::make_pair(8, 270.0f)); 
+  degBTDC.insert(std::make_pair(8, 270.0f));
  }
 
  //calculate range for number of cogs BTDC

@@ -39,7 +39,7 @@ class CGridModeEditorDlg : public CDialog
   CGridModeEditorDlg(CWnd* pParent = NULL);   // standard constructor
  ~CGridModeEditorDlg();
   static const UINT IDD;
-  
+
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
   void BindRPMGrid(float* pGrid);
   void UpdateView(void);
