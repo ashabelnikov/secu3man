@@ -434,7 +434,7 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  m_cogs_numbers.clear();
 
  std::map<int, float> degBTDC;
- if (m_params.ckps_miss_num > 0)
+/*if (m_params.ckps_miss_num > 0)
  {
   //Note: Some users require less limited values, so we set 120 for all.
   //Old values are commented out
@@ -447,7 +447,7 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
   degBTDC.insert(std::make_pair(7, 140.0f));  //45
   degBTDC.insert(std::make_pair(8, 120.0f));  //40
  }
- else
+ else*/
  { //non-missing teeth wheel
   degBTDC.insert(std::make_pair(1, 330.0f));
   degBTDC.insert(std::make_pair(2, 330.0f));
@@ -466,8 +466,8 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  int cogs = m_params.ckps_cogs_num;
  float deg = degBTDC[cyl];
  int cogsBTDC = MathHelpers::Round(ceil(deg / (360.0f / cogs)));
- int lo_limit = (m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC - (cogsBTDC / 2.0f)) : MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
- int hi_limit = (m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC + (cogsBTDC / 1.5f)) : cogsBTDC;
+ int lo_limit = /*(m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC - (cogsBTDC / 2.0f)) :*/ MathHelpers::Round(ceil(66.0f / (360.0f / cogs)));
+ int hi_limit = /*(m_params.ckps_miss_num > 0) ? MathHelpers::Round(cogsBTDC + (cogsBTDC / 1.5f)) :*/ cogsBTDC;
  for(int tn = lo_limit; tn <= hi_limit; ++tn)
  {
   CString str;
