@@ -24,30 +24,24 @@
 #include <map>
 #include <vector>
 
+#include "common/ParamPageEvents.h"
 #include "common/unicodesupport.h"
 #include "ITablesDeskView.h"
-#include "ui-core/ITabControllerEvent.h"
-#include "ui-core/TabController.h"
 #include "ui-core/UpdatableDialog.h"
 
-class CHotKeysToCmdRouter;
+class CButtonsPanel;
 class CTDContextMenuManager;
 
-/////////////////////////////////////////////////////////////////////////////
-// CParamDeskDlg dialog
 
-class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITablesDeskView, private ITabControllerEvent
+/////////////////////////////////////////////////////////////////////////////
+// CTablesDeskDlg dialog
+
+class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITablesDeskView, public ParamPageEvents
 {
  typedef CModelessUpdatableDialog Super;
+ typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
-  //идентификаторы вкладок
-  enum 
-  {
-   GASOLINE_TAB = 0,  //бензин
-   GAS_TAB            //газ
-  };
-
   CTablesDeskDlg(CWnd* pParent = NULL);
   virtual ~CTablesDeskDlg();
   static UINT IDD;
@@ -72,18 +66,14 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void SetRPMGrid(const float* values);
 
   //events
-  virtual void setOnMapChanged(EventWith2Codes OnFunction);
+  virtual void setOnMapChanged(EventWithCode OnFunction);
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction);
   virtual void setOnOpenMapWnd(EventWithHWND OnFunction);
   virtual void setOnTabActivate(EventHandler OnFunction);
   virtual void setOnSaveButton(EventHandler OnFunction);
-  virtual void setOnChangeTablesSetName(EventWithCode OnFunction);
+  virtual void setOnChangeTablesSetName(EventHandler OnFunction);
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction);
   virtual void setOnSaveTablesTo(EventWithCode OnFunction);
-
-  //Get/Set current selection
-  virtual bool SetCurSel(int sel);
-  virtual int GetCurSel(void);
 
   virtual void SetTablesSetName(const _TSTRING& name);
   virtual _TSTRING GetTablesSetName(void) const;
@@ -94,6 +84,9 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
    float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use);
   virtual void EnableAdvanceAngleIndication(bool i_enable);
   //-------------------------------------------------------------
+
+  //CButtonsPanel
+  std::auto_ptr<CButtonsPanel> mp_ButtonsPanel;
 
  // Implementation
  protected:
@@ -107,8 +100,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnRangeCmdsLoad(UINT nID);
   afx_msg void OnRangeCmdsSave(UINT nID);
-  afx_msg void OnHK_GASOLINE_TAB();
-  afx_msg void OnHK_GAS_TAB();
+  afx_msg void OnEditKillFocus();
+  afx_msg void OnChangeTablesSetName();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -117,35 +110,31 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnWndActivation(HWND i_hwnd, long cmd);
- //events from CTablesPageDlg
-  void OnChangeTablesSetName(void);
 
-  // ITabControllerEvent
-  virtual void OnSelchangeTabctl(void);
-  virtual bool OnSelchangingTabctl(void);
+  //from CButtonsPanel
+  bool IsAllowed(void);
 
   void _MakeWindowChild(HWND hwnd, bool child);
-  void _RegisterHotKeys(void);
  
-  //указатели на диалоги всех вкладок. ћы используем один диалог дл€ двух вкладок
-  class CTablesPageDlg* m_pPageDlg;
-
   bool m_children_charts;
   bool m_enabled;
+  bool m_tsneb_readonly;
+  bool m_lock_enchange;
+  bool m_lock_killfocus;
+
   CStatic m_td_title;
   CButton m_save_button;
-  CTabController m_tab_control;
-  CImageList* m_pImgList;
-  std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
+  CEdit m_names_edit;
+  CStatic m_midification_flag;
   std::auto_ptr<CTDContextMenuManager> mp_ContextMenuManager;
 
   //обработчики событий (делегаты)
-  EventWith2Codes m_OnMapChanged;
+  EventWithCode m_OnMapChanged;
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
   EventHandler m_OnTabActivate;
   EventHandler m_OnSaveButton;
-  EventWithCode m_OnChangeTablesSetName;
+  EventHandler m_OnChangeTablesSetName;
   EventWithCode m_OnLoadTablesFrom;
   EventWithCode m_OnSaveTablesTo;
 };

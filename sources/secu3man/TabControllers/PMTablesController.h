@@ -58,29 +58,29 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames); //names of read-only and read/write tables
  private:
   //Events from view
-  void OnMapChanged(int fuel_type, int i_mapType);
+  void OnMapChanged(int i_mapType);
   void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnTabActivate(void);
   void OnSaveButton(void);
-  void OnChangeTablesSetName(int fuel_type);
+  void OnChangeTablesSetName(void);
   void OnLoadTablesFrom(int index);
   void OnSaveTablesTo(int index);
 
  private:
   //helpful methods
   bool _CompareViewMap(int i_mapType, size_t size) const;
-  float* _GetMap(int fuel_type, int i_mapType, bool i_original);
-  void _MoveMapToChart(int fuel_type, int i_mapType, bool i_original);
-  void _MoveMapsToCharts(int fuel_type, bool i_original);
+  float* _GetMap(int i_mapType, bool i_original);
+  void _MoveMapToChart(int i_mapType, bool i_original);
+  void _MoveMapsToCharts(bool i_original);
   void _ClearAcquisitionFlags(void);
-  void _ResetModification(int fuel_type);
+  void _ResetModification(void);
   void _SetTablesSetName(const _TSTRING name);
 
   void _UpdateCache(const SECU3IO::EditTabPar* data); 
   bool _IsCacheUpToDate(void);
   bool _IsModificationMade(void) const;
-  void _SynchronizeMap(int fuel_type, int i_mapType);
+  void _SynchronizeMap(int i_mapType);
 
   //tables's data collected 
   void OnDataCollected(void);
@@ -92,10 +92,10 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   CStatusBarManager* mp_sbar;
 
   //кеш таблиц 
-  std::vector<SECU3FWMapsItem*> m_maps;  //current
-  std::vector<SECU3FWMapsItem*> m_omaps; //original
+  SECU3FWMapsItem* m_maps;  //current
+  SECU3FWMapsItem* m_omaps; //original
   //флаги описывающие состояние сбора информации по таблицам
-  std::vector<SECU3FWMapsItem*> m_maps_flags;
+  SECU3FWMapsItem* m_maps_flags;
 
   bool m_valid_cache; //признак валидного кеша (данные в менеджере соответствуют данным в SECU-3)
   CObjectTimer<CPMTablesController> m_td_changes_timer;

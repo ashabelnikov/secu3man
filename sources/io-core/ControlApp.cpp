@@ -1143,9 +1143,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  //номер набора таблиц
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_EditTabPar.tab_set_index))
+ unsigned char reserved;
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &reserved))
   return false;
- if (m_EditTabPar.tab_set_index != ETTS_GASOLINE_SET && m_EditTabPar.tab_set_index != ETTS_GAS_SET)
+ if (reserved != 0)
   return false;
 
  //код таблицы в наборе
@@ -2156,7 +2157,7 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 {
- mp_pdp->Bin4ToHex(packet_data->tab_set_index, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(0, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 

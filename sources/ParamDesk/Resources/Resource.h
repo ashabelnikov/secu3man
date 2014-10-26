@@ -185,14 +185,7 @@
 #define IDD_TABLES_DESK                 3198
 #define IDD_TABLES_DESK_FLOATING        3199
 #define IDC_TD_SAVE_BUTTON              3200
-#define IDC_TD_TAB_CTRL                 3201
 #define IDC_TABLES_DESK_TITLE           3202
-#define ID_TD_ACTIVATE_GASOLINE_TAB     3203
-#define ID_TD_ACTIVATE_GAS_TAB          3204
-#define IDS_TD_TABNAME_GASOLINE         3205
-#define IDS_TD_TABNAME_GAS              3206
-#define IDD_TD_TABLES_PAGE              3207
-#define IDB_TABLES_TAB_CTRL_BITMAPS     3208
 #define IDC_TD_BUTTONS_PANEL_HOLDER     3209
 #define IDC_TD_TABLESSET_NAME_EDIT      3210
 #define IDC_TD_TABLESSET_NAME_TITLE     3211

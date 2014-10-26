@@ -31,6 +31,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 set(CMAKE_MFC_FLAG 2)
 include_directories(../)
 include_directories(../secu3man)
+include_directories(../ParamDesk)
 
 set(HEADERS
   Application/StdAfx.h

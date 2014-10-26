@@ -38,9 +38,9 @@
 #define CHOKE_CLOSING_LOOKUP_TABLE_SIZE 16
 
 //количество наборов характеристик хранимых в памяти программ
-#define TABLES_NUMBER          8
+#define TABLES_NUMBER          4
 //количество наборов характеристик хранимых в EEPROM
-#define TUNABLE_TABLES_NUMBER  2
+#define TUNABLE_TABLES_NUMBER  1
 
 struct SECU3FWMapsItem
 {

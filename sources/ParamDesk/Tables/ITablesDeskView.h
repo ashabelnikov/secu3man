@@ -32,7 +32,6 @@ class ITablesDeskView
 {
  public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
-  typedef fastdelegate::FastDelegate2<int, int> EventWith2Codes;
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
 
@@ -50,18 +49,14 @@ class ITablesDeskView
   virtual void SetRPMGrid(const float* values) = 0;               //Set RPM grid for horizontal axis of tables
 
   //events
-  virtual void setOnMapChanged(EventWith2Codes OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
+  virtual void setOnMapChanged(EventWithCode OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction) = 0;    //обработцик будет вызываться при закрытии окна с таблицей
   virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей
   virtual void setOnTabActivate(EventHandler OnFunction) = 0;     //обработцик будет вызываться при появлении вкладки
   virtual void setOnSaveButton(EventHandler OnFunction) = 0;      //обработчик будет вызываться при нажатии кнопки "сохранить"
-  virtual void setOnChangeTablesSetName(EventWithCode OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
+  virtual void setOnChangeTablesSetName(EventHandler OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction) = 0; //обработчик будет вызываться при выборе п. меню для загрузки таблиц.
   virtual void setOnSaveTablesTo(EventWithCode OnFunction) = 0;   //обработчик будет вызываться при выборе п. меню для сохранения таблиц.
-
-  //Current selection of tab control. Вызывать только для активной панели!!!
-  virtual bool SetCurSel(int sel) = 0;                            //выбрать указанную вкладку по идентификатору (идентификатор - индекс)
-  virtual int GetCurSel(void) = 0;                                //получить идентификатор выбранной вкладки (идентификатор - индекс)
 
   //Data access
   virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 

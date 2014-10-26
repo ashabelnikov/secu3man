@@ -45,7 +45,6 @@ set(HEADERS
   Resources/Resource.h
   Tables/ITablesDeskView.h
   Tables/TablesDeskDlg.h
-  Tables/TablesPageDlg.h
   Tables/TDContextMenuManager.h
   )
 
@@ -71,7 +70,6 @@ set(SOURCES
   Params/UniOutPageDlg.cpp
   Params/IORemappingDlg.cpp
   Tables/TablesDeskDlg.cpp
-  Tables/TablesPageDlg.cpp
   Tables/TDContextMenuManager.cpp
   )
 

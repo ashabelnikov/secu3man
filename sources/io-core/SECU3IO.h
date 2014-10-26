@@ -246,17 +246,12 @@ namespace SECU3IO
 
  struct EditTabPar
  {
-  unsigned char tab_set_index;          //номер набора таблиц
   unsigned char tab_id;                 //идентификатор таблицы(данных) в наборе
   unsigned int address;                 //адрес начала фрагмента данных в таблице
   float table_data[32];                 //фрагмент данных (не более 16-ти байт)
   TCHAR name_data[32];                  //содержит текстовую информацию
   unsigned int data_size;               //размер фрагмента данных
  };
-
- //Identifiers used in EditTabPar
- const int ETTS_GASOLINE_SET = 0;       //tables's set: petrol
- const int ETTS_GAS_SET = 1;            //tables's set: gas
 
  const int ETMT_STRT_MAP = 0;           //start map
  const int ETMT_IDLE_MAP = 1;           //idle map

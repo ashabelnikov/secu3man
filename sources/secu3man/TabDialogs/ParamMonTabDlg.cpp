@@ -174,7 +174,6 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  ///////////////////////////////////////////////////////////////
  //запоминаем номер последней выбранной вкладки
  int lastSelPD = mp_ParamDeskDlg->GetCurSel();
- int lastSelTD = mp_TablesDeskDlg->GetCurSel();
  ///////////////////////////////////////////////////////////////
 
  mp_ParamDeskDlg->DestroyWindow();
@@ -207,7 +206,6 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
 
  ///////////////////////////////////////////////////////////////
  VERIFY(mp_ParamDeskDlg->SetCurSel(lastSelPD));
- VERIFY(mp_TablesDeskDlg->SetCurSel(lastSelTD));
  ///////////////////////////////////////////////////////////////
 }
 
