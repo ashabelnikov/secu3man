@@ -192,3 +192,14 @@
 #define IDC_GME_ICP_TEXT                5451
 #define IDC_GME_AA_UNIT                 5452
 #define IDI_GRAPH                       5453
+#define IDC_TD_VIEW_VE_MAP              5454
+#define IDC_TD_VIEW_AFR_MAP             5455
+#define IDC_TD_VIEW_CRNK_MAP            5456
+#define IDC_TD_VIEW_WRMP_MAP            5457
+#define IDC_TD_VIEW_DEAD_MAP            5458
+#define IDC_TD_VIEW_IDLR_MAP            5459
+#define IDC_TD_VIEW_IDLC_MAP            5460
+#define IDC_TD_VIEW_ATS_CURVE           5461
+#define IDC_TD_VIEW_ATS_MAP             5462
+#define IDS_ATS_CURVE_MAP               5463
+#define IDS_ATSCORR_MAP                 5464

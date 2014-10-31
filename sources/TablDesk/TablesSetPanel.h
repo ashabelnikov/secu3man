@@ -50,7 +50,10 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetDwellCntrlMap(bool i_original);
   float* GetCTSCurveMap(bool i_original);
   float* GetChokeOpMap(bool i_original);
+  float* GetATSCurveMap(bool i_original);
+  float* GetATSAACMap(bool i_original);
   void SetCTSXAxisEdits(float i_begin, float i_end);
+  void SetATSXAxisEdits(float i_begin, float i_end);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -65,6 +68,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
   void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
+  void setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnRPMGridEditButton(EventHandler OnFunction);
 
 // Implementation
@@ -76,10 +80,14 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewCTSCurveMap();
   afx_msg void OnViewChokeOpMap();
   afx_msg void OnDwellCalcButton();
+  afx_msg void OnViewATSCurveMap();
+  afx_msg void OnViewATSAACMap();
   afx_msg void OnRPMGridButton();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewATSCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewATSAACMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewChokeOpMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -93,6 +101,8 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_attenuator_map_btn;
   CButton   m_view_dwellcntrl_map_btn;
   CButton   m_view_cts_curve_map_btn;
+  CButton   m_view_ats_curve_map_btn;
+  CButton   m_view_ats_aac_map_btn;
   CButton   m_view_choke_op_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
@@ -101,6 +111,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   EventWithCode m_OnFunSetSelectionChanged;
   EventWithCodeAndString m_OnFunSetNamechanged;
   EventWithCodeAndFloat m_OnCTSXAxisEditChanged;
+  EventWithCodeAndFloat m_OnATSXAxisEditChanged;
   EventHandler m_OnRPMGridEditButton;
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
@@ -114,6 +125,12 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
+  static void __cdecl OnChangeATSXAxisEdit(void* i_param, int type, float value);
+
+  static void __cdecl OnChangeATSCurveTable(void* i_param);
+  static void __cdecl OnCloseATSCurveTable(void* i_param);
+  static void __cdecl OnChangeATSAACTable(void* i_param);
+  static void __cdecl OnCloseATSAACTable(void* i_param);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
@@ -121,11 +138,15 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   int m_attenuator_map_chart_state;
   int m_dwellcntrl_map_chart_state;
   int m_cts_curve_map_chart_state;
+  int m_ats_curve_map_chart_state;
+  int m_ats_aac_map_chart_state;
   int m_choke_map_chart_state;
 
   HWND m_attenuator_map_wnd_handle;
   HWND m_dwellcntrl_map_wnd_handle;
   HWND m_cts_curve_map_wnd_handle;
+  HWND m_ats_curve_map_wnd_handle;
+  HWND m_ats_aac_map_wnd_handle;
   HWND m_choke_map_wnd_handle;
 
   float m_attenuator_table_slots[128];
@@ -140,6 +161,14 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float m_cts_curve_map_original[16];
 
   float m_cts_curve_x_axis_limits[2];
+
+  float m_ats_curve_map_active[16];
+  float m_ats_curve_map_original[16];
+
+  float m_ats_curve_x_axis_limits[2];
+
+  float m_ats_aac_map_active[16];
+  float m_ats_aac_map_original[16];
 
   float m_choke_map_active[16];
   float m_choke_map_original[16];

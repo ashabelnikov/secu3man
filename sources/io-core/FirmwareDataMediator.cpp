@@ -45,7 +45,6 @@ using namespace SECU3IO::SECU3Types;
 #define ATS_CORR_LOOKUP_TABLE_SIZE       16
 #define RPM_GRID_SIZE                    16
 
-#define _BIGEND16(v) ((((v) >> 8) & 0x00FF) | (((v) << 8) & 0xFF00))
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
 //------------------------For iorem_slots_t V2.1----------------------------
@@ -55,8 +54,6 @@ using namespace SECU3IO::SECU3Types;
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
 {
- _uint size;                     // size of this structure
- _uchar version;                 // A reserved byte
  _fnptr_t i_slots[IOREM_SLOTS];  // initialization slots
  _fnptr_t i_slotsi[IOREM_SLOTS]; // initialization slots (inverted)
  _fnptr_t v_slots[IOREM_SLOTS];  // data slots
@@ -65,6 +62,8 @@ typedef struct iorem_slots_t
  _fnptr_t v_plugs[IOREM_PLUGS];  // data plugs
  _fnptr_t s_stub;                // special pointer used as stub (for outputs)
  _fnptr_t g_stub;                // special pointer used as stub (for inputs)
+ _uchar version;                 // A reserved byte
+ _uint size;                     // size of this structure
 }iorem_slots_t;
 
 //Describes data stored directly in the firmware code
@@ -77,27 +76,20 @@ typedef struct cd_data_t
  //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
  _ulong config;
 
- _uchar reserved;                //A reserved byte
+ _uchar reserved[4];             //Reserved bytes
 
- _uint size;                     // size of this structure (2 bytes, big-endian format)
+ _uint size;                     // size of this structure (2 bytes)
 }cd_data_t;
 
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
- //Информация о прошивке
- _uchar fw_signature_info[FW_SIGNATURE_INFO_SIZE];
-
  //таблица усиления аттенюатора (зависимость от оборотов).
  _uchar attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE];
 
  //lookup table containing accumulation time for ignition coils (dependence from voltage)
  //таблица времени накопления энергии в катушках зажигания (зависимость от напряжения)
  _uint coil_on_time[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
-
- //used for checking compatibility with management software. Holds size of all data stored in the firmware.
- //Includes CRC size also.
- _uint fw_data_size;
 
  //Coolant temperature sensor lookup table (таблица значений температуры с шагом по напряжению)
  _int cts_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
@@ -126,15 +118,24 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[7656+1280];
+ _uchar reserved[2048];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
 typedef struct fw_data_t
 {
- fw_ex_data_t exdata;                    // Additional data in the firmware
  params_t     def_param;                 // Reserve parameters (loaded when instance in EEPROM is broken)
+ fw_ex_data_t exdata;                    // Additional data in the firmware
  f_data_t     tables[TABLES_NUMBER];     // Array of tables of advance angle
+ //Информация о прошивке
+ _uchar       fw_signature_info[FW_SIGNATURE_INFO_SIZE];
+
+ _uchar       version;                   //version of this structure
+
+ //used for checking compatibility with management software. Holds size of all data stored in the firmware.
+ //Includes CRC size also.
+ _uint fw_data_size;
+
  _uint        code_crc;                  // Check sum of the whole firmware (except this check sum and boot loader)
 }fw_data_t;
 
@@ -234,23 +235,16 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* ip_data, const PPFlas
 
  bool compatible = true;
 
- fw_data_t* p_fd = (fw_data_t*)&ip_data[lip.FIRMWARE_DATA_START];
+ fw_data_t* p_fd = (fw_data_t*)&ip_data[lip.FIRMWARE_DATA_START]; //firmware data
+ cd_data_t* p_cd = (cd_data_t*)&ip_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)]; //code data
 
- //size of firmware data
- int sizeoffd = p_fd->def_param.crc;
+ //size of code area data
+ _uint sizeofcd = *(((_uint*)&ip_data[lip.FIRMWARE_DATA_START])-1);
 
- //size of code area data (must be valid if def_param.crc > 0)
- _uint sizeofcd = _BIGEND16(*(((_uint*)&ip_data[lip.FIRMWARE_DATA_START])-1));
-
- cd_data_t* p_cd = (cd_data_t*)&ip_data[lip.FIRMWARE_DATA_START - sizeof(cd_data_t)];
- size_t iorem_struct_size = sizeof(iorem_slots_t);
-
- if ((sizeof(fw_data_t)) != p_fd->exdata.fw_data_size ||
-  ((sizeoffd > 0) && sizeoffd != p_fd->exdata.fw_data_size) ||
-  ((sizeoffd > 0) && sizeofcd != sizeof(cd_data_t)) ||
-  ((sizeoffd > 0) && p_cd->iorem.size != iorem_struct_size) ||
+ if ((sizeof(fw_data_t)) != p_fd->fw_data_size ||
+  (sizeofcd != sizeof(cd_data_t)) || (p_cd->iorem.size != sizeof(iorem_slots_t)) ||
   //supported major versions: 2
-  ((sizeoffd > 0) && (IOREM_MAJ_VER(p_cd->iorem.version) != 2)))
+  ((IOREM_MAJ_VER(p_cd->iorem.version) != 2)))
   compatible = false;
 
  return compatible;
@@ -290,7 +284,7 @@ _TSTRING CFirmwareDataMediator::GetSignatureInfo(void)
  char raw_string[256];
  memset(raw_string,0,FW_SIGNATURE_INFO_SIZE+1);
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
- memcpy(raw_string, &p_fd->exdata.fw_signature_info, FW_SIGNATURE_INFO_SIZE);
+ memcpy(raw_string, &p_fd->fw_signature_info, FW_SIGNATURE_INFO_SIZE);
  TCHAR string[256];
  OemToChar(raw_string, string);
  return _TSTRING(string);
@@ -306,7 +300,7 @@ void CFirmwareDataMediator::SetSignatureInfo(const _TSTRING& i_string)
  memset(raw_string, 0, FW_SIGNATURE_INFO_SIZE+1);
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]); 
  CharToOem(str.c_str(), raw_string);
- memcpy(&p_fd->exdata.fw_signature_info, raw_string, FW_SIGNATURE_INFO_SIZE);
+ memcpy(&p_fd->fw_signature_info, raw_string, FW_SIGNATURE_INFO_SIZE);
 }
 
 DWORD CFirmwareDataMediator::GetFWOptions(void)
@@ -1447,9 +1441,7 @@ cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/,
  //obtain pointer to fw_data_t structure
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[p_lip->FIRMWARE_DATA_START]);
 
- _uint dataSize = p_fd->def_param.crc;
-
- if (0==dataSize)
+ if (0==p_fd->fw_data_size)
   return NULL; //there is no code data
  else
   return p_cd;
@@ -1496,7 +1488,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_s
  { //code area data is present
   const BYTE *p_dataSrc = (ip_source_bytes + i_srcSize) - dataSizeSrc;
   BYTE *p_dataDst = (op_destin_bytes + m_lip->BOOT_START) - dataSizeDst;
-  size_t szSrc = _BIGEND16(*(((_uint*)p_dataSrc)-1)), szDst = _BIGEND16(*(((_uint*)p_dataDst)-1));
+  size_t szSrc = *(((_uint*)p_dataSrc)-1), szDst = *(((_uint*)p_dataDst)-1);
   cd_data_t* pSrc = (cd_data_t*)(p_dataSrc - sizeof(cd_data_t));
   cd_data_t* pDst = (cd_data_t*)(p_dataDst - sizeof(cd_data_t));
   if (szSrc == szDst) //compatible?

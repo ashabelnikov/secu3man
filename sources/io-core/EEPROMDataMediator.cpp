@@ -31,13 +31,13 @@ using namespace SECU3IO;
 using namespace SECU3IO::SECU3Types;
 
 //Address of parameters structure in EEPROM (адрес структуры параметров в EEPROM)
-#define EEPROM_PARAM_START 0x0002
+#define EEPROM_PARAM_START 0x0001
 
 //Address of errors's array (Check Engine) in EEPROM (адрес массива ошибок (Check Engine) в EEPROM)
 #define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params_t)))
 
 //Address of tables which can be edited in real time
-#define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 16)
+#define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 5)
 
 
 EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)

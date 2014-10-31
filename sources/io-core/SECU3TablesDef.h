@@ -31,14 +31,25 @@ namespace SECU3IO {
 
 using namespace SECU3Types;
 
-//описывает основные таблицы (таблицы УОЗ) в системе SECU-3
+//описывает основные таблицы (таблицы УОЗ и впрыска топлива) в системе SECU-3
 typedef struct
 {
+ _uchar name[F_NAME_SIZE];                        // ассоциированное имя (имя семейства)
+ //ignition maps
  _char f_str[F_STR_POINTS];                       // функция УОЗ на старте
  _char f_idl[F_IDL_POINTS];                       // функция УОЗ для ХХ
  _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];     // основная функция УОЗ (3D)
  _char f_tmp[F_TMP_POINTS];                       // функция коррект. УОЗ по температуре
- _uchar name[F_NAME_SIZE];                        // ассоциированное имя (имя семейства)
+ //fuel injection maps
+ _char inj_ve[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // VE
+ _char inj_afr[INJ_VE_POINTS_L][INJ_VE_POINTS_F]; // VE
+ _uint inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; //Cranking PW
+ _uchar inj_warup[INJ_WARMUP_LOOKUP_TABLE_SIZE];  // Warmup enrichment
+ _uint inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];   // Injector's dead time
+ _uchar inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];  // IAC/PWM position on run
+ _uchar inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];// IAC/PWM position on cranking
+ 
+ _uchar reserved[742];                            // reserved bytes - for compatibility
 }f_data_t;
 
 } //SECU3IO

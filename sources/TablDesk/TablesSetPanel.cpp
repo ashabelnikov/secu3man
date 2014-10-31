@@ -149,6 +149,67 @@ void __cdecl CTablesSetPanel::OnCloseChokeOpTable(void* i_param)
   _this->m_OnCloseMapWnd(_this->m_choke_map_wnd_handle, TYPE_MAP_CHOKE_OP);
 }
 
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeATSCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_ATS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseATSCurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_ats_curve_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_ats_curve_map_wnd_handle, TYPE_MAP_ATS_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeATSAACTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_ATS_CORR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseATSAACTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_ats_aac_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_ats_aac_map_wnd_handle, TYPE_MAP_ATS_CORR);
+}
+
 //------------------------------------------------------------------------
 void __cdecl CTablesSetPanel::OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param)
 {
@@ -195,6 +256,23 @@ void __cdecl CTablesSetPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, fl
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ 
+ _this->m_ats_curve_x_axis_limits[i_type] = i_value;
+
+ //allow controller to detect changes
+ if (_this->m_OnATSXAxisEditChanged)
+  _this->m_OnATSXAxisEditChanged(i_type, i_value);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -207,14 +285,20 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_cts_curve_enabled(false)
 , m_choke_op_enabled(false)
 {
+ m_scrl_factor = 1.8f;
+
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
  m_cts_curve_map_chart_state = 0;
+ m_ats_curve_map_chart_state = 0;
+ m_ats_aac_map_chart_state = 0;
  m_choke_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
  m_cts_curve_map_wnd_handle = NULL;
+ m_ats_curve_map_wnd_handle = NULL;
+ m_ats_aac_map_wnd_handle = NULL;
  m_choke_map_wnd_handle = NULL;
 
  int rpm = 200;
@@ -225,6 +309,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  }
 
  memset(m_cts_curve_x_axis_limits, 0, sizeof(float) * 2);
+ memset(m_ats_curve_x_axis_limits, 0, sizeof(float) * 2);
 }
 
 void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
@@ -234,6 +319,8 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_ATTENUATOR_MAP, m_view_attenuator_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_DWELL_CONTROL, m_view_dwellcntrl_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CTS_CURVE, m_view_cts_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_ATS_CURVE, m_view_ats_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_ATS_MAP, m_view_ats_aac_map_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CHOKE_MAP, m_view_choke_op_map_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
@@ -246,9 +333,13 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_CHOKE_MAP, OnViewChokeOpMap)
  ON_BN_CLICKED(IDC_TD_DWELL_CALC_BUTTON, OnDwellCalcButton)
  ON_BN_CLICKED(IDC_TD_RPM_GRID_BUTTON, OnRPMGridButton)
+ ON_BN_CLICKED(IDC_TD_VIEW_ATS_CURVE, OnViewATSCurveMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_ATS_MAP, OnViewATSAACMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATS_CURVE, OnUpdateViewATSCurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATS_MAP, OnUpdateViewATSAACMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CHOKE_MAP, OnUpdateViewChokeOpMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_DWELL_CALC_BUTTON, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_RPM_GRID_BUTTON, OnUpdateControls)
@@ -306,6 +397,22 @@ void CTablesSetPanel::OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable && m_cts_curve_enabled);
  pCmdUI->SetCheck( (m_cts_curve_map_chart_state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewATSCurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_ats_curve_map_chart_state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewATSAACMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_ats_aac_map_chart_state) ? TRUE : FALSE );
 }
 
 void CTablesSetPanel::OnUpdateViewChokeOpMap(CCmdUI* pCmdUI)
@@ -552,6 +659,75 @@ void CTablesSetPanel::OnViewChokeOpMap()
  }
 }
 
+
+void CTablesSetPanel::OnViewATSCurveMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_ats_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_ats_curve_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_ats_curve_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_ats_curve_map_chart_state = 1;
+  m_ats_curve_map_wnd_handle = DLL::Chart2DCreate(GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_ATS_CURVE_MAP).c_str());
+  DLL::Chart2DSetAxisValuesFormat(m_ats_curve_map_wnd_handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(m_ats_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeCTSXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_ats_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
+  DLL::Chart2DSetOnChange(m_ats_curve_map_wnd_handle, OnChangeATSCurveTable, this);
+  DLL::Chart2DSetOnClose(m_ats_curve_map_wnd_handle, OnCloseATSCurveTable, this);
+  DLL::Chart2DUpdate(m_ats_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_ats_curve_map_wnd_handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_ats_curve_map_wnd_handle, TYPE_MAP_ATS_CURVE);
+
+  DLL::Chart2DShow(m_ats_curve_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_ats_curve_map_wnd_handle);
+ }
+}
+
+void CTablesSetPanel::OnViewATSAACMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_ats_aac_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_ats_aac_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_ats_aac_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_ats_aac_map_chart_state = 1;
+  m_ats_aac_map_wnd_handle = DLL::Chart2DCreate(GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
+    MLL::GetString(IDS_ATSCORR_MAP).c_str());
+  DLL::Chart2DSetOnChange(m_ats_aac_map_wnd_handle,OnChangeATSAACTable,this);
+  DLL::Chart2DSetOnClose(m_ats_aac_map_wnd_handle,OnCloseATSAACTable,this);
+  DLL::Chart2DUpdate(m_ats_aac_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_ats_aac_map_wnd_handle, TYPE_MAP_ATS_CORR);
+
+  DLL::Chart2DShow(m_ats_aac_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_ats_aac_map_wnd_handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -600,10 +776,32 @@ float* CTablesSetPanel::GetCTSCurveMap(bool i_original)
   return m_cts_curve_map_active;
 }
 
+float* CTablesSetPanel::GetATSCurveMap(bool i_original)
+{
+ if (i_original)
+  return m_ats_curve_map_original;
+ else
+  return m_ats_curve_map_active;
+}
+
+float* CTablesSetPanel::GetATSAACMap(bool i_original)
+{
+ if (i_original)
+  return m_ats_aac_map_original;
+ else
+  return m_ats_aac_map_active;
+}
+
 void CTablesSetPanel::SetCTSXAxisEdits(float i_begin, float i_end)
 {
  m_cts_curve_x_axis_limits[0] = i_begin;
  m_cts_curve_x_axis_limits[1] = i_end;	
+}
+
+void CTablesSetPanel::SetATSXAxisEdits(float i_begin, float i_end)
+{
+ m_ats_curve_x_axis_limits[0] = i_begin;
+ m_ats_curve_x_axis_limits[1] = i_end;	
 }
 
 float* CTablesSetPanel::GetChokeOpMap(bool i_original)
@@ -646,6 +844,9 @@ void CTablesSetPanel::setOnFunSetNamechanged(EventWithCodeAndString OnFunction)
 
 void CTablesSetPanel::setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
 {m_OnCTSXAxisEditChanged = OnFunction;}
+
+void CTablesSetPanel::setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
+{m_OnATSXAxisEditChanged = OnFunction;}
 
 void CTablesSetPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 {m_OnRPMGridEditButton = OnFunction;}

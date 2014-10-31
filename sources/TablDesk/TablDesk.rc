@@ -12,7 +12,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 108
+IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 257
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -25,8 +25,22 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,49,96,18
     CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,71,96,18
+    CONTROL         "Коэфф. наполн.",IDC_TD_VIEW_VE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,93,96,18
+    CONTROL         "Воздух/топливо",IDC_TD_VIEW_AFR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,115,96,18
+    CONTROL         "Длит.впр.на пуске",IDC_TD_VIEW_CRNK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,137,96,18
+    CONTROL         "Обогащ.при прогр.",IDC_TD_VIEW_WRMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,159,96,18
+    CONTROL         "Время откр.форс.",IDC_TD_VIEW_DEAD_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,181,96,18
+    CONTROL         "Полож.РХХ рабоч.",IDC_TD_VIEW_IDLR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,203,96,18
+    CONTROL         "Полож РХХ пуск.",IDC_TD_VIEW_IDLC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,225,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,90,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,244,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -34,11 +48,13 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,217,112
+    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,217,190
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
-                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
                     WS_EX_LEFTSCROLLBAR
+    CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,15,80,96,12
     CONTROL         "Пусковая карта УОЗ",IDC_TD_VIEW_START_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,15,96,18
@@ -51,20 +67,38 @@ BEGIN
     CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,110,100,96,12
+    CONTROL         "Коэфф. наполн.",IDC_TD_VIEW_VE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,102,82,18
+    CONTROL         "Воздух/топливо",IDC_TD_VIEW_AFR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,102,96,18
+    CONTROL         "Длит.впр.на пуске",IDC_TD_VIEW_CRNK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,124,82,18
+    CONTROL         "Обогащ.при прогр.",IDC_TD_VIEW_WRMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,124,96,18
+    CONTROL         "Время откр.форс.",IDC_TD_VIEW_DEAD_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,146,82,18
+    CONTROL         "Полож.РХХ рабоч.",IDC_TD_VIEW_IDLR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,146,96,18
+    CONTROL         "Полож РХХ пуск.",IDC_TD_VIEW_IDLC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,168,82,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,117,16,19
+                    BS_BITMAP | WS_TABSTOP,3,200,16,19
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,117,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,200,82,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,117,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,200,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,139,16,19
+                    BS_BITMAP | WS_TABSTOP,3,222,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,139,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,222,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,139,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,222,95,19
+
+    CONTROL         "Настр. крив. ДТВ",IDC_TD_VIEW_ATS_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
+    CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,244,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -272,6 +306,7 @@ BEGIN
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
     IDS_WORK_MAP            "Рабочая карта УОЗ"
     IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости"
+    IDS_ATSCORR_MAP         "Карта коррекции УОЗ по температуре вохдуха"
     IDS_MAPS_TEMPERATURE_UNIT "Температура °C"
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Константа коэфф. усиления"
     IDS_ATTENUATOR_MAP      "Настройка кривой усиления аттенюатора"
@@ -279,6 +314,7 @@ BEGIN
     IDS_MAPS_DWELLCNTRL_UNIT "Время накопления (мс)"
     IDS_DWELLCNTRL_MAP      "Настройка времени накопления энергии катушек зажигания"
     IDS_CTS_CURVE_MAP       "Настройка кривой датчика температуры охлаждающей жидкости"
+    IDS_ATS_CURVE_MAP       "Настройка кривой датчика температуры воздуха"
     IDS_TD_DWELL_CALC_BUTTON_TT "Расчет таблицы времени накопления энергии КЗ по параметрам катушки"
     IDS_TD_VIEW_DWELL_CONTROL_TT "Редактирование таблицы времени накопления энергии КЗ"
     IDS_CHOKE_OP_UNIT       "Закрытие воздушной заслонки (%)"
@@ -297,7 +333,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 108
+IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 257
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -310,8 +346,22 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,49,96,18
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,7,70,96,18
+    CONTROL         "VE",IDC_TD_VIEW_VE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,93,96,18
+    CONTROL         "AFR",IDC_TD_VIEW_AFR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,115,96,18
+    CONTROL         "Cranking PW",IDC_TD_VIEW_CRNK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,137,96,18
+    CONTROL         "Warmup enrich.",IDC_TD_VIEW_WRMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,159,96,18
+    CONTROL         "Inj. dead time",IDC_TD_VIEW_DEAD_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,181,96,18
+    CONTROL         "IAC on run",IDC_TD_VIEW_IDLR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,203,96,18
+    CONTROL         "IAC on cranking",IDC_TD_VIEW_IDLC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,225,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,90,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,244,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -319,11 +369,13 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,217,112
+    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,217,190
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
-                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,83,
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
                     WS_EX_LEFTSCROLLBAR
+    CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
+                    BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,15,80,96,12
     CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,15,96,18
@@ -336,20 +388,45 @@ BEGIN
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
                     110,80,96,18
-    CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,110,100,96,12
+
+
+    CONTROL         "VE",IDC_TD_VIEW_VE_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,102,82,18
+    CONTROL         "AFR",IDC_TD_VIEW_AFR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,102,96,18
+
+    CONTROL         "Cranking PW",IDC_TD_VIEW_CRNK_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,124,82,18
+    CONTROL         "Warmup enrich.",IDC_TD_VIEW_WRMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,124,96,18
+
+    CONTROL         "Inj. dead time",IDC_TD_VIEW_DEAD_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,146,82,18
+    CONTROL         "IAC on run",IDC_TD_VIEW_IDLR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,146,96,18
+
+    CONTROL         "IAC on cranking",IDC_TD_VIEW_IDLC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,168,82,18
+
+
+
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,117,16,19
+                    BS_BITMAP | WS_TABSTOP,3,200,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,117,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,200,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,117,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,200,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,139,16,19
+                    BS_BITMAP | WS_TABSTOP,3,222,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,139,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,222,82,19
     CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,139,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,222,95,19
+    CONTROL         "Tune ATS curve",IDC_TD_VIEW_ATS_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
+    CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
+                    110,244,96,18
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -574,6 +651,7 @@ BEGIN
     IDS_IDLE_MAP            "Idle angle map"
     IDS_WORK_MAP            "Work angle map"
     IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map"
+    IDS_ATSCORR_MAP         "Intake air temperature angle's correction map"
     IDS_MAPS_TEMPERATURE_UNIT "Temperature °C"
     IDS_MAPS_ATTENUATOR_GAIN_UNIT "Gain factor constant"
     IDS_ATTENUATOR_MAP      "Tune attenuator curve of amplification"
@@ -581,6 +659,7 @@ BEGIN
     IDS_MAPS_DWELLCNTRL_UNIT "Accumulation time (ms)"
     IDS_DWELLCNTRL_MAP      "Tune accumulation time of ignition coils"
     IDS_CTS_CURVE_MAP       "Tune coolant temperature sensor curve"
+    IDS_ATS_CURVE_MAP       "Intake air temperature sensor curve"
     IDS_TD_DWELL_CALC_BUTTON_TT "Calculate dwell control lookup table using coil's characteristics"
     IDS_TD_VIEW_DWELL_CONTROL_TT "Edit dwell control lookup table"
     IDS_CHOKE_OP_UNIT       "Choke closing (%)"

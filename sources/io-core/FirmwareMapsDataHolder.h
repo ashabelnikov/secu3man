@@ -37,6 +37,14 @@
 #define F_RPM_SLOTS            16
 #define CHOKE_CLOSING_LOOKUP_TABLE_SIZE 16
 
+#define INJ_VE_POINTS_L        16
+#define INJ_VE_POINTS_F        16
+#define INJ_CRANKING_LOOKUP_TABLE_SIZE 16
+#define INJ_WARMUP_LOOKUP_TABLE_SIZE 16
+#define INJ_DT_LOOKUP_TABLE_SIZE 32
+#define INJ_IAC_POS_TABLE_SIZE 16
+#define INJ_IAC_POS_TABLE_SIZE 16
+
 //количество наборов характеристик хранимых в памяти программ
 #define TABLES_NUMBER          4
 //количество наборов характеристик хранимых в EEPROM

@@ -32,6 +32,16 @@ enum EMapTypes
  TYPE_MAP_DWELLCNTRL = 9,  //must be =9. used by derived classes
  TYPE_MAP_CTS_CURVE  = 10,
  TYPE_MAP_CHOKE_OP   = 11,
+ TYPE_MAP_ATS_CURVE = 12,
+ TYPE_MAP_ATS_CORR = 13,
+
+ TYPE_MAP_INJ_VE   = 14,
+ TYPE_MAP_INJ_AFR  = 15,
+ TYPE_MAP_INJ_CRNK = 16,
+ TYPE_MAP_INJ_WRMP = 17,
+ TYPE_MAP_INJ_DEAD = 18,
+ TYPE_MAP_INJ_IDLR = 19,
+ TYPE_MAP_INJ_IDLC = 20,
 
  TYPE_MAP_GME_WND = 32     //pseudo map, grid mode editing window
 };

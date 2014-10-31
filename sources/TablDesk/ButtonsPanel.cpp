@@ -27,6 +27,7 @@
 #include "GridModeEditorDlg.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
+#include "ui-core/WndScroller.h"
 
 #define TIMER_ID 0
 
@@ -228,6 +229,335 @@ void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeVEMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_VE);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseVEMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_ve_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeAFRMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_AFR);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseAFRMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_afr_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeCrnkMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_CRNK);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseCrnkMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_crnk_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeWrmpMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_WRMP);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseWrmpMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_wrmp_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeDeadMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_DEAD);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseDeadMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_dead_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeIdlrMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_IDLR);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseIdlrMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_idlr_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeIdlcMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_IDLC);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseIdlcMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_idlc_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_crnk_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationVEMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_ve_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationAFRMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_afr_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationCrnkMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_crnk_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationWrmpMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_wrmp_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationDeadMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_dead_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationIdlrMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_idlr_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationIdlcMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_idlc_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChanged(int mapType)
 {
  if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
@@ -238,6 +568,20 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
   DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state && mapType == TYPE_MAP_DA_TEMP_CORR)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+ if (m_ve_map_chart_state && mapType == TYPE_MAP_INJ_VE)
+  DLL::Chart3DUpdate(m_ve_map_wnd_handle, GetVEMap(true), GetVEMap(false));
+ if (m_afr_map_chart_state && mapType == TYPE_MAP_INJ_AFR)
+  DLL::Chart3DUpdate(m_afr_map_wnd_handle, GetAFRMap(true), GetAFRMap(false));
+ if (m_crnk_map_chart_state && mapType == TYPE_MAP_INJ_CRNK)
+  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, GetCrnkMap(true), GetCrnkMap(false));
+ if (m_wrmp_map_chart_state && mapType == TYPE_MAP_INJ_WRMP)
+  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, GetWrmpMap(true), GetWrmpMap(false));
+ if (m_dead_map_chart_state && mapType == TYPE_MAP_INJ_DEAD)
+  DLL::Chart2DUpdate(m_dead_map_wnd_handle, GetDeadMap(true), GetDeadMap(false));
+ if (m_idlr_map_chart_state && mapType == TYPE_MAP_INJ_IDLR)
+  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, GetIdlrMap(true), GetIdlrMap(false));
+ if (m_idlc_map_chart_state && mapType == TYPE_MAP_INJ_IDLC)
+  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, GetIdlcMap(true), GetIdlcMap(false));
 
  if (m_OnMapChanged)
   m_OnMapChanged(mapType);
@@ -264,14 +608,30 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_temp_map_chart_state(0)
 , m_start_map_chart_state(0)
 , m_idle_map_chart_state(0)
+, m_ve_map_chart_state(0)
+, m_afr_map_chart_state(0)
+, m_crnk_map_chart_state(0)
+, m_wrmp_map_chart_state(0)
+, m_dead_map_chart_state(0)
+, m_idlr_map_chart_state(0)
+, m_idlc_map_chart_state(0)
 , m_grid_map_state(0)
 , m_start_map_wnd_handle(NULL)
 , m_idle_map_wnd_handle(NULL)
 , m_work_map_wnd_handle(NULL)
 , m_temp_map_wnd_handle(NULL)
+, m_ve_map_wnd_handle(NULL)
+, m_afr_map_wnd_handle(NULL)
+, m_crnk_map_wnd_handle(NULL)
+, m_wrmp_map_wnd_handle(NULL)
+, m_dead_map_wnd_handle(NULL)
+, m_idlr_map_wnd_handle(NULL)
+, m_idlc_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
+, mp_scr(new CWndScroller)
+, m_scrl_factor(2.5f)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -282,6 +642,20 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
  memset(m_temp_map_active, 0, 16 * sizeof(float));
  memset(m_temp_map_original, 0, 16 * sizeof(float));
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
+ memset(m_ve_map_active, 0, 16 * 16 * sizeof(float));
+ memset(m_ve_map_original, 0, 16 * 16 * sizeof(float));
+ memset(m_afr_map_active, 0, 16 * 16 * sizeof(float));
+ memset(m_afr_map_original, 0, 16 * 16 * sizeof(float));
+ memset(m_crnk_map_active, 0, 16 * sizeof(float));
+ memset(m_crnk_map_original, 0, 16 * sizeof(float));
+ memset(m_wrmp_map_active, 0, 16 * sizeof(float));
+ memset(m_wrmp_map_original, 0, 16 * sizeof(float));
+ memset(m_dead_map_active, 0, 32 * sizeof(float));
+ memset(m_dead_map_original, 0, 32 * sizeof(float));
+ memset(m_idlr_map_active, 0, 16 * sizeof(float));
+ memset(m_idlr_map_original, 0, 16 * sizeof(float));
+ memset(m_idlc_map_active, 0, 16 * sizeof(float));
+ memset(m_idlc_map_original, 0, 16 * sizeof(float));
 }
 
 CButtonsPanel::~CButtonsPanel()
@@ -297,6 +671,13 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_START_MAP, m_view_start_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP,  m_view_idle_map_btn);
  DDX_Control(pDX, IDC_TD_GME_CHECK, m_grid_mode_editing_check);
+ DDX_Control(pDX, IDC_TD_VIEW_VE_MAP,  m_view_ve_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_AFR_MAP,  m_view_afr_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_CRNK_MAP,  m_view_crnk_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_WRMP_MAP,  m_view_wrmp_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_DEAD_MAP,  m_view_dead_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_IDLR_MAP,  m_view_idlr_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_IDLC_MAP,  m_view_idlc_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -305,10 +686,25 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_WORK_MAP, OnViewWorkMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMP_MAP, OnViewTempMap)
  ON_BN_CLICKED(IDC_TD_GME_CHECK, OnGridModeEditing)
+ ON_BN_CLICKED(IDC_TD_VIEW_VE_MAP, OnViewVEMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_AFR_MAP, OnViewAFRMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_CRNK_MAP, OnViewCrnkMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_WRMP_MAP, OnViewWrmpMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_DEAD_MAP, OnViewDeadMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_IDLR_MAP, OnViewIdlrMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_IDLC_MAP, OnViewIdlcMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_START_MAP,OnUpdateViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLE_MAP, OnUpdateViewIdleMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_WORK_MAP, OnUpdateViewWorkMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TEMP_MAP, OnUpdateViewTempMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_VE_MAP, OnUpdateViewVEMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_AFR_MAP, OnUpdateViewAFRMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CRNK_MAP, OnUpdateViewCrnkMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_WRMP_MAP, OnUpdateViewWrmpMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DEAD_MAP, OnUpdateViewDeadMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLR_MAP, OnUpdateViewIdlrMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLC_MAP, OnUpdateViewIdlcMap)
+
  ON_UPDATE_COMMAND_UI(IDC_TD_GME_CHECK, OnUpdateGridModeEditing)
  ON_WM_TIMER()
  ON_WM_DESTROY()
@@ -322,6 +718,11 @@ BOOL CButtonsPanel::OnInitDialog()
  Super::OnInitDialog();
 
  SetTimer(TIMER_ID, 250, NULL);
+
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * m_scrl_factor));
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -462,6 +863,35 @@ void CButtonsPanel::OnViewTempMap()
  }
 }
 
+
+void CButtonsPanel::OnViewVEMap()
+{
+}
+
+void CButtonsPanel::OnViewAFRMap()
+{
+}
+
+void CButtonsPanel::OnViewCrnkMap()
+{
+}
+
+void CButtonsPanel::OnViewWrmpMap()
+{
+}
+
+void CButtonsPanel::OnViewDeadMap()
+{
+}
+
+void CButtonsPanel::OnViewIdlrMap()
+{
+}
+
+void CButtonsPanel::OnViewIdlcMap()
+{
+}
+
 void CButtonsPanel::OnGridModeEditing()
 {
  if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
@@ -525,6 +955,64 @@ void CButtonsPanel::OnUpdateGridModeEditing(CCmdUI* pCmdUI)
  pCmdUI->SetCheck((mp_gridModeEditorDlg.get() && m_grid_map_state) ? TRUE : FALSE);
 }
 
+void CButtonsPanel::OnUpdateViewVEMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_ve_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_afr_map_chart_state) ? TRUE : FALSE );
+}
+
+
+void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_crnk_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewWrmpMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_wrmp_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewDeadMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_dead_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewIdlrMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_idlr_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewIdlcMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_idlc_map_chart_state) ? TRUE : FALSE );
+}
+
+
 void CButtonsPanel::OnTimer(UINT nIDEvent)
 {
  //I know it is dirty hack, but... :-)
@@ -537,6 +1025,7 @@ void CButtonsPanel::OnDestroy()
 {
  Super::OnDestroy();
  KillTimer(TIMER_ID);
+ mp_scr->Close();
 }
 
 void CButtonsPanel::UpdateOpenedCharts(void)
@@ -549,6 +1038,21 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+ if (m_ve_map_chart_state)
+  DLL::Chart3DUpdate(m_ve_map_wnd_handle, GetVEMap(true), GetVEMap(false));
+ if (m_afr_map_chart_state)
+  DLL::Chart3DUpdate(m_afr_map_wnd_handle, GetAFRMap(true), GetAFRMap(false));
+ if (m_crnk_map_chart_state)
+  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, GetCrnkMap(true), GetCrnkMap(false));
+ if (m_wrmp_map_chart_state)
+  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, GetWrmpMap(true), GetWrmpMap(false));
+ if (m_dead_map_chart_state)
+  DLL::Chart2DUpdate(m_dead_map_wnd_handle, GetDeadMap(true), GetDeadMap(false));
+ if (m_idlr_map_chart_state)
+  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, GetIdlrMap(true), GetIdlrMap(false));
+ if (m_idlc_map_chart_state)
+  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, GetIdlcMap(true), GetIdlcMap(false));
+
  if (mp_gridModeEditorDlg.get() && m_grid_map_state)
   mp_gridModeEditorDlg->UpdateView();
 }
@@ -596,6 +1100,62 @@ float* CButtonsPanel::GetTempMap(bool i_original)
   return m_temp_map_original;
  else
   return m_temp_map_active;
+}
+
+float* CButtonsPanel::GetVEMap(bool i_original)
+{
+ if (i_original)
+  return &m_ve_map_original[0][0];
+ else
+  return &m_ve_map_active[0][0];
+}
+
+float* CButtonsPanel::GetAFRMap(bool i_original)
+{
+ if (i_original)
+  return &m_afr_map_original[0][0];
+ else
+  return &m_afr_map_active[0][0];
+}
+
+float* CButtonsPanel::GetCrnkMap(bool i_original)
+{
+ if (i_original)
+  return m_crnk_map_original;
+ else
+  return m_crnk_map_active;
+}
+
+float* CButtonsPanel::GetWrmpMap(bool i_original)
+{
+ if (i_original)
+  return m_wrmp_map_original;
+ else
+  return m_wrmp_map_active;
+}
+
+float* CButtonsPanel::GetDeadMap(bool i_original)
+{
+ if (i_original)
+  return m_dead_map_original;
+ else
+  return m_dead_map_active;
+}
+
+float* CButtonsPanel::GetIdlrMap(bool i_original)
+{
+ if (i_original)
+  return m_idlr_map_original;
+ else
+  return m_idlr_map_active;
+}
+
+float* CButtonsPanel::GetIdlcMap(bool i_original)
+{
+ if (i_original)
+  return m_idlc_map_original;
+ else
+  return m_idlc_map_active;
 }
 
 float* CButtonsPanel::GetRPMGrid(void)
