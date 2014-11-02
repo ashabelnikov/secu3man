@@ -41,10 +41,10 @@ typedef struct
  _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];     // основная функция УОЗ (3D)
  _char f_tmp[F_TMP_POINTS];                       // функция коррект. УОЗ по температуре
  //fuel injection maps
- _char inj_ve[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // VE
- _char inj_afr[INJ_VE_POINTS_L][INJ_VE_POINTS_F]; // VE
+ _uchar inj_ve[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // VE
+ _uchar inj_afr[INJ_VE_POINTS_L][INJ_VE_POINTS_F]; // AFR
  _uint inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; //Cranking PW
- _uchar inj_warup[INJ_WARMUP_LOOKUP_TABLE_SIZE];  // Warmup enrichment
+ _uchar inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];  // Warmup enrichment
  _uint inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];   // Injector's dead time
  _uchar inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];  // IAC/PWM position on run
  _uchar inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];// IAC/PWM position on cranking

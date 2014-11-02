@@ -15,3 +15,5 @@ EXPORTS
   Chart2DSetAxisEdits        = _Chart2DSetAxisEdits
   Chart2DUpdateAxisEdits     = _Chart2DUpdateAxisEdits
   Chart2DShowHints           = _Chart2DShowHints
+  Chart2DSetPtValuesFormat   = _Chart2DSetPtValuesFormat
+  Chart2DSetPtMovingStep     = _Chart2DSetPtMovingStep

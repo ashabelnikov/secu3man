@@ -59,6 +59,7 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_setval(0)
 , m_val_n(0)
 , m_horizontal_axis_grid_mode(0)
+, m_pt_moving_step(0.5f)
 {
  memset(&m_horizontal_axis_grid_values[0][0], 0, sizeof(float) * 1024);
  memset(&m_horizontal_axis_grid_values[1][0], 0, sizeof(float) * 1024);
@@ -220,6 +221,13 @@ void TForm2D::InitHints(HINSTANCE hInstance)
 }
 
 //---------------------------------------------------------------------------
+void TForm2D::SetPtValuesFormat(LPCTSTR ptValFormat)
+{
+ for (int i = 0; i < 2; i++ )
+  Chart1->Series[i]->ValueFormat = ptValFormat; //format for point values
+}
+
+//---------------------------------------------------------------------------
 void __fastcall TForm2D::Chart1ClickSeries(TCustomChart *Sender,
       TChartSeries *Series, int ValueIndex, TMouseButton Button,
       TShiftState Shift, int X, int Y)
@@ -303,7 +311,7 @@ void __fastcall TForm2D::FormClose(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ButtonAngleUpClick(TObject *Sender)
 {
- ShiftFunction(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
+ ShiftFunction(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -311,7 +319,7 @@ void __fastcall TForm2D::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm2D::ButtonAngleDownClick(TObject *Sender)
 {
- ShiftFunction(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
+ ShiftFunction(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -561,13 +569,13 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  {
   if (Key == VK_UP)
   { //move points upward
-   ShiftPoints(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
+   ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
   else if (Key == VK_DOWN)
   { //move points downward
-   ShiftPoints(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
+   ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }

@@ -166,6 +166,7 @@ class TForm3D : public TForm
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);
   void InitHints(HINSTANCE hInstance);
+  void SetPtValuesFormat(LPCTSTR ptValFormat);
 
  public: //Properties
   int m_count_x;
@@ -177,7 +178,9 @@ class TForm3D : public TForm
   float *mp_original_function;
   AnsiString m_u_title;
   AnsiString m_x_title;
+  AnsiString m_y_title;
   AnsiString m_values_format_x;
+  float m_pt_moving_step;
 
  private:
   float GetItem_m(int z, int x) const;

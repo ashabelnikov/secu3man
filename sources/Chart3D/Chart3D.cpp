@@ -34,7 +34,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
@@ -44,6 +44,8 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
  void  __declspec(dllexport)  __cdecl Chart3DShowHints(int i_show);
+ void  __declspec(dllexport)  __cdecl Chart3DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
+ void  __declspec(dllexport)  __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step);
 }
 
 std::map<HWND,TForm*> g_form_instances;  //form instance DB
@@ -113,7 +115,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 
 //original_function и modified_function - адреса двухмерных массивов содержащих
 //значения функций
-HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
  //Clean up previous instances of forms
  for(size_t i = 0; i < g_form_delete.size(); ++i)
@@ -128,6 +130,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
  pForm->mp_modified_function = modified_function;
  pForm->mp_original_function = original_function;
  pForm->m_x_title = x_axis_title;
+ pForm->m_y_title = y_axis_title;
  pForm->m_fnc_min = fnc_min;
  pForm->m_fnc_max = fnc_max;
 
@@ -245,6 +248,24 @@ void __cdecl Chart3DEnable(HWND hWnd, bool enable)
 void __cdecl Chart3DShowHints(int i_show)
 {
  Application->ShowHint = i_show;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetPtValuesFormat(ptValFormat);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->m_pt_moving_step = step;
 }
 
 //---------------------------------------------------------------------------

@@ -12,7 +12,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 114, 257
+IDD_TD_BUTTONS_PANEL DIALOG DISCARDABLE  0, 0, 140, 140
 STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
@@ -56,17 +56,13 @@ BEGIN
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
                     BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,15,80,96,12
     CONTROL         "Пусковая карта УОЗ",IDC_TD_VIEW_START_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,15,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,15,96,18
     CONTROL         "Карта УОЗ на ХХ",IDC_TD_VIEW_IDLE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,36,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,36,96,18
     CONTROL         "Рабочая карта УОЗ",IDC_TD_VIEW_WORK_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,58,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,58,96,18
     CONTROL         "Темпер. коррекция",IDC_TD_VIEW_TEMP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,80,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,80,96,18
     CONTROL         "Коэфф. наполн.",IDC_TD_VIEW_VE_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,102,82,18
     CONTROL         "Воздух/топливо",IDC_TD_VIEW_AFR_MAP,"Button",
@@ -93,12 +89,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,222,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,222,95,19
-
     CONTROL         "Настр. крив. ДТВ",IDC_TD_VIEW_ATS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
     CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,244,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,244,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -301,10 +295,23 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_MAPS_RPM_UNIT       "Обороты (мин-1)"
+    IDS_MAPS_VE_UNIT        "Коэффициент"
+    IDS_MAPS_AFR_UNIT       "Воздух/Топливо"
+    IDS_MAPS_INJPW_UNIT     "Время впрыска (мс)"
+    IDS_MAPS_WRMP_UNIT      "Коэффициент обогащения"
+    IDS_MAPS_DEAD_UNIT      "Время (мс)"
+    IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_START_MAP           "Пусковая карта УОЗ"
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
     IDS_WORK_MAP            "Рабочая карта УОЗ"
+    IDS_VE_MAP              "Коэффициент наполнения (Объёмный КПД двигателя)"
+    IDS_AFR_MAP             "Соотношение воздух/топливо в зависимости от оборотов и нагрузки"
+    IDS_CRNK_MAP            "Длительность впрыска на пуске"
+    IDS_WRMP_MAP            "Обогащение при прогреве"
+    IDS_DEAD_MAP            "Время открытия форсунки"
+    IDS_IDLR_MAP            "Положение РХХ от температуры охлаждающей жидкости"
+    IDS_IDLC_MAP            "Положение РХХ на пуске"
     IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости"
     IDS_ATSCORR_MAP         "Карта коррекции УОЗ по температуре вохдуха"
     IDS_MAPS_TEMPERATURE_UNIT "Температура °C"
@@ -377,39 +384,27 @@ BEGIN
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
                     BS_AUTOCHECKBOX | BS_LEFT | WS_TABSTOP,15,80,96,12
     CONTROL         "Start angle map",IDC_TD_VIEW_START_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,15,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,15,96,18
     CONTROL         "Idle angle map",IDC_TD_VIEW_IDLE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,36,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,36,96,18
     CONTROL         "Work angle map",IDC_TD_VIEW_WORK_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,58,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,58,96,18
     CONTROL         "Coolant temper. corr.",IDC_TD_VIEW_TEMP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,80,96,18
-
-
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,80,96,18
     CONTROL         "VE",IDC_TD_VIEW_VE_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,102,82,18
     CONTROL         "AFR",IDC_TD_VIEW_AFR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,102,96,18
-
     CONTROL         "Cranking PW",IDC_TD_VIEW_CRNK_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,124,82,18
     CONTROL         "Warmup enrich.",IDC_TD_VIEW_WRMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,124,96,18
-
     CONTROL         "Inj. dead time",IDC_TD_VIEW_DEAD_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,146,82,18
     CONTROL         "IAC on run",IDC_TD_VIEW_IDLR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,146,96,18
-
     CONTROL         "IAC on cranking",IDC_TD_VIEW_IDLC_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,168,82,18
-
-
-
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
                     BS_BITMAP | WS_TABSTOP,3,200,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
@@ -425,8 +420,7 @@ BEGIN
     CONTROL         "Tune ATS curve",IDC_TD_VIEW_ATS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
     CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,
-                    110,244,96,18
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,244,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -646,10 +640,23 @@ IDI_GRAPH               ICON       "graph.ico"
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_MAPS_RPM_UNIT       "Speed (min-1)"
+    IDS_MAPS_VE_UNIT        "Factor"
+    IDS_MAPS_AFR_UNIT       "Air/Fuel"
+    IDS_MAPS_INJPW_UNIT     "Injection PW (ms)"
+    IDS_MAPS_WRMP_UNIT      "Enrichment factor"
+    IDS_MAPS_DEAD_UNIT      "Time (ms)"
+    IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
     IDS_WORK_MAP            "Work angle map"
+    IDS_VE_MAP              "Volumetric efficiency"
+    IDS_AFR_MAP             "Air/fuel ratio vs RPM and Load"
+    IDS_CRNK_MAP            "Injection pulse width on cranking"
+    IDS_WRMP_MAP            "Warmup enrichment vs coolant temperature"
+    IDS_DEAD_MAP            "Injector's dead time"
+    IDS_IDLR_MAP            "IAC position vs coolant temperature"
+    IDS_IDLC_MAP            "IAC position on cranking"
     IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map"
     IDS_ATSCORR_MAP         "Intake air temperature angle's correction map"
     IDS_MAPS_TEMPERATURE_UNIT "Temperature °C"

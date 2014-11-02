@@ -49,6 +49,7 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , mp_original_function(NULL)
 , m_u_title("")
 , m_x_title("")
+, m_y_title("")
 , m_pOnChange(NULL)
 , m_pOnClose(NULL)
 , m_pOnWndActivation(NULL)
@@ -62,6 +63,7 @@ __fastcall TForm3D::TForm3D(TComponent* Owner)
 , m_air_flow_position(0)
 , m_values_format_x("%.00f")  //integer 
 , m_chart_active(true)
+, m_pt_moving_step(0.5f)
 {
  m_selpts.push_back(0);
 }
@@ -75,10 +77,11 @@ void TForm3D::DataPrepare()
  ShowPoints(true);
  m_setval = 0;
  m_val_n  = 0;
-
+ 
  Chart1->Title->Text->Clear();
  Chart1->Title->Text->Add(m_u_title);
  Chart1->BottomAxis->Title->Caption = m_x_title;
+ Chart1->LeftAxis->Title->Caption = m_y_title;
 
  //диапазон значений на графике будет немного шире чем требуемый...
  int range = m_fnc_max - m_fnc_min;
@@ -198,6 +201,13 @@ void TForm3D::InitHints(HINSTANCE hInstance)
  CheckBoxBv->Hint = string;
  ::LoadString(hInstance, IDS_TT_SELECT_CURVE, string, 1024);
  TrackBarAf->Hint = string;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetPtValuesFormat(LPCTSTR ptValFormat)
+{
+ for (int i = 0; i < 32; i++ )
+  Chart1->Series[i]->ValueFormat = ptValFormat; //format for point values
 }
 
 //---------------------------------------------------------------------------
@@ -360,7 +370,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] + 0.5);
+  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] + m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -369,7 +379,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
  for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] - 0.5);
+  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] - m_pt_moving_step);
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -755,13 +765,13 @@ void __fastcall TForm3D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
  {
   if (Key == VK_UP)
   { //move points upward
-   ShiftPoints(Chart1->LeftAxis->Inverted ? -0.5 : 0.5);
+   ShiftPoints(Chart1->LeftAxis->Inverted ? -m_pt_moving_step : m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }
   else if (Key == VK_DOWN)
   { //move points downward
-   ShiftPoints(Chart1->LeftAxis->Inverted ? 0.5 : -0.5);
+   ShiftPoints(Chart1->LeftAxis->Inverted ? m_pt_moving_step : -m_pt_moving_step);
    if (m_pOnChange)
     m_pOnChange(m_param_on_change);
   }

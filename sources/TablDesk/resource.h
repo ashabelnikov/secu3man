@@ -203,3 +203,16 @@
 #define IDC_TD_VIEW_ATS_MAP             5462
 #define IDS_ATS_CURVE_MAP               5463
 #define IDS_ATSCORR_MAP                 5464
+#define IDS_VE_MAP                      5465
+#define IDS_MAPS_VE_UNIT                5466
+#define IDS_MAPS_AFR_UNIT               5467
+#define IDS_AFR_MAP                     5468
+#define IDS_CRNK_MAP                    5469
+#define IDS_MAPS_INJPW_UNIT             5470
+#define IDS_MAPS_WRMP_UNIT              5471
+#define IDS_WRMP_MAP                    5472
+#define IDS_MAPS_DEAD_UNIT              5473
+#define IDS_DEAD_MAP                    5474
+#define IDS_MAPS_IAC_UNIT               5475
+#define IDS_IDLR_MAP                    5476
+#define IDS_IDLC_MAP                    5477

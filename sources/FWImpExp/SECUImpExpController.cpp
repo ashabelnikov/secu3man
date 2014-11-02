@@ -118,6 +118,16 @@ void SECU3ImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   m_fwdm->GetChokeOpMap(mp_fwd->choke_op_table);
 
+ if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
+ {
+  m_fwdm->GetATSCurveMap(mp_fwd->atscurve_table);
+  mp_fwd->atscurve_vlimits[0] = m_fwdm->GetATSMapVoltageLimit(0);
+  mp_fwd->atscurve_vlimits[1] = m_fwdm->GetATSMapVoltageLimit(1);
+ }
+
+ if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
+  m_fwdm->GetATSAACMap(mp_fwd->ats_corr_table);
+
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
 }
@@ -158,6 +168,27 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   m_fwdm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+
+ if (mp_view->GetFWDFlag(FLAG_VE_MAP))
+  m_fwdm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+
+ if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
+  m_fwdm->GetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
+  m_fwdm->GetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+
+ if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
+  m_fwdm->GetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+
+ if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
+  m_fwdm->GetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
+  m_fwdm->GetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
+  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -179,10 +210,19 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -286,6 +326,17 @@ void SECU3ExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   m_fwdm->SetChokeOpMap(mp_fwd->choke_op_table);
 
+
+ if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
+ {
+  m_fwdm->SetATSCurveMap(mp_fwd->atscurve_table);
+  m_fwdm->SetATSMapVoltageLimit(0, mp_fwd->atscurve_vlimits[0]);
+  m_fwdm->SetATSMapVoltageLimit(1, mp_fwd->atscurve_vlimits[1]);
+ }
+
+ if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
+  m_fwdm->SetATSAACMap(mp_fwd->ats_corr_table);
+
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
   m_fwdm->SetRPMGridMap(mp_fwd->rpm_slots);
@@ -336,6 +387,27 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   m_fwdm->SetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+
+ if (mp_view->GetFWDFlag(FLAG_VE_MAP))
+  m_fwdm->SetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+
+ if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
+  m_fwdm->SetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
+  m_fwdm->SetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+
+ if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
+  m_fwdm->SetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+
+ if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
+  m_fwdm->SetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
+  m_fwdm->SetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
+  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -357,10 +429,19 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_VE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

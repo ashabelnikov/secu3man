@@ -52,10 +52,19 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_IDLE_MAP] = FALSE;
  m_fwd_flags[FLAG_WORK_MAP] = FALSE;
  m_fwd_flags[FLAG_TEMP_MAP] = FALSE;
+ m_fwd_flags[FLAG_VE_MAP] = FALSE;
+ m_fwd_flags[FLAG_AFR_MAP] = FALSE;
+ m_fwd_flags[FLAG_CRNK_MAP] = FALSE;
+ m_fwd_flags[FLAG_WRMP_MAP] = FALSE;
+ m_fwd_flags[FLAG_DEAD_MAP] = FALSE;
+ m_fwd_flags[FLAG_IDLR_MAP] = FALSE;
+ m_fwd_flags[FLAG_IDLC_MAP] = FALSE;
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
  m_fwd_flags[FLAG_CTS_MAP] = FALSE;
  m_fwd_flags[FLAG_CHOKE_MAP] = FALSE;
+ m_fwd_flags[FLAG_ATS_MAP] = FALSE;
+ m_fwd_flags[FLAG_ATSAAC_MAP] = FALSE;
 }
 
 void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
@@ -71,18 +80,37 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_IDLEMAP_FLAG, m_fwd_flags[FLAG_IDLE_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_WORKMAP_FLAG, m_fwd_flags[FLAG_WORK_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_TEMPMAP_FLAG, m_fwd_flags[FLAG_TEMP_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_VEMAP_FLAG, m_fwd_flags[FLAG_VE_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_AFRMAP_FLAG, m_fwd_flags[FLAG_AFR_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_CRNKMAP_FLAG, m_fwd_flags[FLAG_CRNK_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_WRMPMAP_FLAG, m_fwd_flags[FLAG_WRMP_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_DEADMAP_FLAG, m_fwd_flags[FLAG_DEAD_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_IDLRMAP_FLAG, m_fwd_flags[FLAG_IDLR_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_IDLCMAP_FLAG, m_fwd_flags[FLAG_IDLC_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags[FLAG_CTS_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags[FLAG_CHOKE_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_ATS_FLAG, m_fwd_flags[FLAG_ATS_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_ATSAAC_FLAG, m_fwd_flags[FLAG_ATSAAC_MAP]);
+
  DDX_Control(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags_buttons[FLAG_START_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_IDLEMAP_FLAG, m_fwd_flags_buttons[FLAG_IDLE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_WORKMAP_FLAG, m_fwd_flags_buttons[FLAG_WORK_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_TEMPMAP_FLAG, m_fwd_flags_buttons[FLAG_TEMP_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_VEMAP_FLAG, m_fwd_flags_buttons[FLAG_VE_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_AFRMAP_FLAG, m_fwd_flags_buttons[FLAG_AFR_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_CRNKMAP_FLAG, m_fwd_flags_buttons[FLAG_CRNK_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_WRMPMAP_FLAG, m_fwd_flags_buttons[FLAG_WRMP_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_DEADMAP_FLAG, m_fwd_flags_buttons[FLAG_DEAD_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_IDLRMAP_FLAG, m_fwd_flags_buttons[FLAG_IDLR_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_IDLCMAP_FLAG, m_fwd_flags_buttons[FLAG_IDLC_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags_buttons[FLAG_CTS_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags_buttons[FLAG_CHOKE_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_ATS_FLAG, m_fwd_flags_buttons[FLAG_ATS_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_ATSAAC_FLAG, m_fwd_flags_buttons[FLAG_ATSAAC_MAP]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -253,9 +281,10 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
  BOOL enable = i_enable ? TRUE : FALSE;
  m_fwd_flags_buttons[i_flag_type].EnableWindow(enable);
 
- //if both check boxes are disabled then disable corresponding group box
+ //if all check boxes are disabled then disable corresponding group box
  enable = ((m_fwd_flags_buttons[FLAG_ATTEN_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_DWLCNTR_MAP].IsWindowEnabled()) ||
-           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_CHOKE_MAP].IsWindowEnabled()));
+           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_CHOKE_MAP].IsWindowEnabled()) ||
+           (m_fwd_flags_buttons[FLAG_ATS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_ATSAAC_MAP].IsWindowEnabled()));
  GetDlgItem(IDC_MAP_IMPEXP_SEPTAB_GROUP)->EnableWindow(enable);
 }
 
@@ -294,12 +323,20 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IDLE_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_WORK_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_TEMP_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_VE_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_AFR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CRNK_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_WRMP_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DEAD_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IDLR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IDLC_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DWLCNTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATTEN_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CTS_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CHOKE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATS_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATSAAC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  
-
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
  

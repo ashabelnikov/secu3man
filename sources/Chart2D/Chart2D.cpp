@@ -50,6 +50,8 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
  void  __declspec(dllexport)  __cdecl Chart2DShowHints(int i_show);
+ void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
+ void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
 }
 
 std::map<HWND, TForm*> g_form_instances; //form instance DB
@@ -351,6 +353,24 @@ void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float 
 void __cdecl Chart2DShowHints(int i_show)
 {
  Application->ShowHint = i_show;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetPtValuesFormat(ptValFormat);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->m_pt_moving_step = step;
 }
 
 //---------------------------------------------------------------------------

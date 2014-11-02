@@ -157,6 +157,25 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_VE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_VE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CRNK_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_WRMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DEAD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IDLR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, false);
+
 
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_MPSZ_TABLES));
@@ -329,6 +348,24 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_VE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_VE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CRNK_MAP, false);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_WRMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DEAD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IDLR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IDLC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, false);
  
  mp_view->SetExchangeButtonCaption(_T(">"));
  mp_view->SetWindowText(MLL::LoadString(IDS_EXPORT_MPSZ_TABLES));

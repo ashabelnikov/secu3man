@@ -95,6 +95,7 @@ class TForm2D : public TForm
   void Enable(bool i_enable);
   void InitPopupMenu(HINSTANCE hInstance);
   void InitHints(HINSTANCE hInstance);
+  void SetPtValuesFormat(LPCTSTR ptValFormat);
 
  public: //properties
   int m_count_of_function_points;
@@ -107,6 +108,7 @@ class TForm2D : public TForm
   AnsiString m_chart_title_text;
   AnsiString m_x_axis_title;
   AnsiString m_y_axis_title;
+  float m_pt_moving_step;
 
  private:
   void RestrictAndSetValue(int index, double v);

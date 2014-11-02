@@ -41,6 +41,8 @@ namespace DLL
  Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits = NULL;  
  Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
  Chart2DShowHints_Addr           Chart2DShowHints = NULL;
+ Chart2DSetPtValuesFormat_Addr   Chart2DSetPtValuesFormat = NULL;
+ Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
@@ -52,6 +54,8 @@ namespace DLL
  Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
  Chart3DEnable_Addr              Chart3DEnable = NULL;
  Chart3DShowHints_Addr           Chart3DShowHints = NULL;
+ Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat = NULL;
+ Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep = NULL;
 
  //---------------------------------------------------------
  //загружает одну функцию
@@ -100,6 +104,8 @@ namespace DLL
    Chart2DSetAxisEdits = NULL;
    Chart2DUpdateAxisEdits = NULL;
    Chart2DShowHints = NULL;
+   Chart2DSetPtValuesFormat = NULL;
+   Chart2DSetPtMovingStep = NULL;
    status = false;
   }
   else
@@ -119,6 +125,8 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetAxisEdits, "Chart2DSetAxisEdits", status);
    LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
    LoadFunction(hModule, Chart2DShowHints, "Chart2DShowHints", status);
+   LoadFunction(hModule, Chart2DSetPtValuesFormat, "Chart2DSetPtValuesFormat", status);
+   LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
   }
 
   hModule = LoadLibrary(_T("Chart3D.dll"));
@@ -135,6 +143,8 @@ namespace DLL
    Chart3DSetOnWndActivation = NULL;
    Chart3DEnable = NULL;
    Chart3DShowHints = NULL;
+   Chart3DSetPtValuesFormat = NULL;
+   Chart3DSetPtMovingStep = NULL;
    status = false;
   }
   else
@@ -149,6 +159,8 @@ namespace DLL
    LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);
    LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
    LoadFunction(hModule, Chart3DShowHints, "Chart3DShowHints", status);
+   LoadFunction(hModule, Chart3DSetPtValuesFormat, "Chart3DSetPtValuesFormat", status);
+   LoadFunction(hModule, Chart3DSetPtMovingStep, "Chart3DSetPtMovingStep", status);
   }
 
   return status;

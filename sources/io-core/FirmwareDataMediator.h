@@ -66,7 +66,7 @@ class IOCORE_API CFirmwareDataMediator
 
   DWORD GetFWOptions(void);
   DWORD GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp);
-
+  //ignition
   void GetStartMap(int i_index, float* op_values, bool i_original = false);
   void SetStartMap(int i_index,const float* i_values);
   void GetIdleMap(int i_index,  float* op_values, bool i_original = false);
@@ -75,6 +75,21 @@ class IOCORE_API CFirmwareDataMediator
   void SetWorkMap(int i_index, const float* i_values);
   void GetTempMap(int i_index, float* op_values, bool i_original = false);
   void SetTempMap(int i_index, const float* i_values);
+  //fuel injection
+  void GetVEMap(int i_index, float* op_values, bool i_original = false);
+  void SetVEMap(int i_index, const float* i_values);
+  void GetAFRMap(int i_index, float* op_values, bool i_original = false);
+  void SetAFRMap(int i_index, const float* i_values);
+  void GetCrnkMap(int i_index, float* op_values, bool i_original = false);
+  void SetCrnkMap(int i_index, const float* i_values);
+  void GetWrmpMap(int i_index, float* op_values, bool i_original = false);
+  void SetWrmpMap(int i_index, const float* i_values);
+  void GetDeadMap(int i_index, float* op_values, bool i_original = false);
+  void SetDeadMap(int i_index, const float* i_values);
+  void GetIdlrMap(int i_index, float* op_values, bool i_original = false);
+  void SetIdlrMap(int i_index, const float* i_values);
+  void GetIdlcMap(int i_index, float* op_values, bool i_original = false);
+  void SetIdlcMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
@@ -98,11 +113,20 @@ class IOCORE_API CFirmwareDataMediator
   float GetCTSMapVoltageLimit(int i_type);
   void  SetCTSMapVoltageLimit(int i_type, float i_value);
 
+  void GetATSCurveMap(float* op_values, bool i_original = false);
+  void SetATSCurveMap(const float* i_values);
+
+  float GetATSMapVoltageLimit(int i_type);
+  void  SetATSMapVoltageLimit(int i_type, float i_value);
+
   void GetChokeOpMap(float* op_values, bool i_original = false);
   void SetChokeOpMap(const float* i_values);
 
   void GetRPMGridMap(float* op_values);
   void SetRPMGridMap(const float* i_values);
+
+  void GetATSAACMap(float* op_values, bool i_original = false);
+  void SetATSAACMap(const float* i_values);
 
   //Types of slots/plugs
   enum IOXtype

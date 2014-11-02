@@ -983,8 +983,15 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
  m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
 
+ m_fwdm->GetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(false),false);
+ m_fwdm->GetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(true),true);
+ m_view->mp_TablesPanel->SetATSXAxisEdits(m_fwdm->GetATSMapVoltageLimit(0), m_fwdm->GetATSMapVoltageLimit(1));
+
  m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false),false);
  m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(true),true);
+
+ m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false),false);
+ m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(true),true);
 
  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1001,6 +1008,27 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false),false);
  m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(true),true);
+
+ m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(false),false);
+ m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(true),true);
+
+ m_fwdm->GetAFRMap(m_current_funset_index,m_view->mp_TablesPanel->GetAFRMap(false),false);
+ m_fwdm->GetAFRMap(m_current_funset_index,m_view->mp_TablesPanel->GetAFRMap(true),true);
+
+ m_fwdm->GetCrnkMap(m_current_funset_index,m_view->mp_TablesPanel->GetCrnkMap(false),false);
+ m_fwdm->GetCrnkMap(m_current_funset_index,m_view->mp_TablesPanel->GetCrnkMap(true),true);
+
+ m_fwdm->GetWrmpMap(m_current_funset_index,m_view->mp_TablesPanel->GetWrmpMap(false),false);
+ m_fwdm->GetWrmpMap(m_current_funset_index,m_view->mp_TablesPanel->GetWrmpMap(true),true);
+
+ m_fwdm->GetDeadMap(m_current_funset_index,m_view->mp_TablesPanel->GetDeadMap(false),false);
+ m_fwdm->GetDeadMap(m_current_funset_index,m_view->mp_TablesPanel->GetDeadMap(true),true);
+
+ m_fwdm->GetIdlrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlrMap(false),false);
+ m_fwdm->GetIdlrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlrMap(true),true);
+
+ m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(false),false);
+ m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1042,22 +1070,53 @@ void CFirmwareTabController::OnMapChanged(int i_type)
 {
  switch(i_type)
  {
+   //ignition maps
   case TYPE_MAP_DA_START:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false));
+   m_fwdm->SetStartMap(m_current_funset_index, m_view->mp_TablesPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(false));
+   m_fwdm->SetIdleMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(false));
+   m_fwdm->SetWorkMap(m_current_funset_index, m_view->mp_TablesPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false));
+   m_fwdm->SetTempMap(m_current_funset_index, m_view->mp_TablesPanel->GetTempMap(false));
    break;
+   //fuel injection maps
+  case TYPE_MAP_INJ_VE:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetVEMap(m_current_funset_index, m_view->mp_TablesPanel->GetVEMap(false));
+   break;
+  case TYPE_MAP_INJ_AFR:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetAFRMap(m_current_funset_index, m_view->mp_TablesPanel->GetAFRMap(false));
+   break;
+  case TYPE_MAP_INJ_CRNK:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetCrnkMap(m_current_funset_index, m_view->mp_TablesPanel->GetCrnkMap(false));
+   break;
+  case TYPE_MAP_INJ_WRMP:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetWrmpMap(m_current_funset_index, m_view->mp_TablesPanel->GetWrmpMap(false));
+   break;
+  case TYPE_MAP_INJ_DEAD:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetDeadMap(m_current_funset_index, m_view->mp_TablesPanel->GetDeadMap(false));
+   break;
+  case TYPE_MAP_INJ_IDLR:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetIdlrMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdlrMap(false));
+   break;
+  case TYPE_MAP_INJ_IDLC:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetIdlcMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdlcMap(false));
+   break;
+   //separate maps
   case TYPE_MAP_ATTENUATOR:
    m_fwdm->SetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false));
    break;
@@ -1067,8 +1126,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_CTS_CURVE:
    m_fwdm->SetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false));
    break;
+  case TYPE_MAP_ATS_CURVE:
+   m_fwdm->SetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(false));
+   break;
   case TYPE_MAP_CHOKE_OP:
    m_fwdm->SetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false));
+   break;
+  case TYPE_MAP_ATS_CORR:
+   m_fwdm->SetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false));
    break;
  }
 }

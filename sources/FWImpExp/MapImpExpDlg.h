@@ -35,10 +35,19 @@ enum EFWDFlags
  FLAG_IDLE_MAP,
  FLAG_WORK_MAP,
  FLAG_TEMP_MAP,
+ FLAG_VE_MAP,       //inj
+ FLAG_AFR_MAP,      //inj
+ FLAG_CRNK_MAP,     //inj
+ FLAG_WRMP_MAP,     //inj
+ FLAG_DEAD_MAP,     //inj
+ FLAG_IDLR_MAP,     //inj
+ FLAG_IDLC_MAP,     //inj
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate
  FLAG_CHOKE_MAP,    //separate
+ FLAG_ATS_MAP,      //separate
+ FLAG_ATSAAC_MAP,   //separate
  FLAG_NR_OF_FLAGS
 };
 

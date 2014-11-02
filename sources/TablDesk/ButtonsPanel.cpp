@@ -631,7 +631,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_factor(2.5f)
+, m_scrl_factor(1.75f)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -812,6 +812,7 @@ void CButtonsPanel::OnViewWorkMap()
   m_work_map_chart_state = 1;
   m_work_map_wnd_handle = DLL::Chart3DCreate(GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
   DLL::Chart3DSetOnWndActivation(m_work_map_wnd_handle, OnWndActivationWorkMap, this);
   DLL::Chart3DSetOnGetAxisLabel(m_work_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
@@ -863,33 +864,245 @@ void CButtonsPanel::OnViewTempMap()
  }
 }
 
-
 void CButtonsPanel::OnViewVEMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_ve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_ve_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_ve_map_chart_state)&&(DLL::Chart3DCreate))
+ {
+  m_ve_map_chart_state = 1;
+  m_ve_map_wnd_handle = DLL::Chart3DCreate(GetVEMap(true),GetVEMap(false),GetRPMGrid(),16,16,0.0f,1.99f,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_VE_UNIT).c_str(),
+    MLL::GetString(IDS_VE_MAP).c_str());
+  DLL::Chart3DSetPtValuesFormat(m_ve_map_wnd_handle, _T("#0.00"));
+  DLL::Chart3DSetPtMovingStep(m_ve_map_wnd_handle, 0.05f);
+  DLL::Chart3DSetOnWndActivation(m_ve_map_wnd_handle, OnWndActivationVEMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_ve_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_ve_map_wnd_handle,OnChangeVEMap,this);
+  DLL::Chart3DSetOnClose(m_ve_map_wnd_handle,OnCloseVEMap,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
+
+  DLL::Chart3DShow(m_ve_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_ve_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewAFRMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_afr_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_afr_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_afr_map_chart_state)&&(DLL::Chart3DCreate))
+ {
+  m_afr_map_chart_state = 1;
+  m_afr_map_wnd_handle = DLL::Chart3DCreate(GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.1f,22.0f,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
+    MLL::GetString(IDS_AFR_MAP).c_str());
+  DLL::Chart3DSetPtValuesFormat(m_afr_map_wnd_handle, _T("#00.00"));
+  DLL::Chart3DSetPtMovingStep(m_afr_map_wnd_handle, 0.25f);
+  DLL::Chart3DSetOnWndActivation(m_afr_map_wnd_handle, OnWndActivationAFRMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_afr_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_afr_map_wnd_handle,OnChangeAFRMap,this);
+  DLL::Chart3DSetOnClose(m_afr_map_wnd_handle,OnCloseAFRMap,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
+
+  DLL::Chart3DShow(m_afr_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_afr_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewCrnkMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_crnk_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_crnk_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_crnk_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_crnk_map_chart_state = 1;
+  m_crnk_map_wnd_handle = DLL::Chart2DCreate(GetCrnkMap(true), GetCrnkMap(false), 0.25f, 16.0, SECU3IO::temp_map_tmp_slots, 16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
+    MLL::GetString(IDS_CRNK_MAP).c_str());
+  DLL::Chart2DSetAxisValuesFormat(m_crnk_map_wnd_handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_crnk_map_wnd_handle, OnChangeCrnkMap, this);
+  DLL::Chart2DSetOnClose(m_crnk_map_wnd_handle, OnCloseCrnkMap, this);
+  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
+
+  DLL::Chart2DShow(m_crnk_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_crnk_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewWrmpMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_wrmp_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_wrmp_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_wrmp_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_wrmp_map_chart_state = 1;
+  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(GetWrmpMap(true),GetWrmpMap(false),0.0f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
+    MLL::GetString(IDS_WRMP_MAP).c_str());
+  DLL::Chart2DSetPtValuesFormat(m_wrmp_map_wnd_handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_wrmp_map_wnd_handle, 0.05f);
+  DLL::Chart2DSetOnWndActivation(m_wrmp_map_wnd_handle,OnWndActivationWrmpMap,this);
+  DLL::Chart2DSetOnChange(m_wrmp_map_wnd_handle,OnChangeWrmpMap,this);
+  DLL::Chart2DSetOnClose(m_wrmp_map_wnd_handle,OnCloseWrmpMap,this);
+  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
+
+  DLL::Chart2DShow(m_wrmp_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_wrmp_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewDeadMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_dead_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_dead_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_dead_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_dead_map_chart_state = 1;
+  m_dead_map_wnd_handle = DLL::Chart2DCreate(GetDeadMap(true), GetDeadMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
+    MLL::GetString(IDS_DEAD_MAP).c_str());
+  DLL::Chart2DSetPtValuesFormat(m_dead_map_wnd_handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_dead_map_wnd_handle, 0.1f);
+  DLL::Chart2DSetAxisValuesFormat(m_dead_map_wnd_handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_dead_map_wnd_handle, OnChangeDeadMap, this);
+  DLL::Chart2DSetOnClose(m_dead_map_wnd_handle, OnCloseDeadMap, this);
+  DLL::Chart2DUpdate(m_dead_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+   //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
+
+  DLL::Chart2DShow(m_dead_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_dead_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewIdlrMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_idlr_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_idlr_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_idlr_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_idlr_map_chart_state = 1;
+  m_idlr_map_wnd_handle = DLL::Chart2DCreate(GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
+    MLL::GetString(IDS_IDLR_MAP).c_str());
+  DLL::Chart2DSetPtMovingStep(m_idlr_map_wnd_handle, 1.0f);
+  DLL::Chart2DSetOnWndActivation(m_idlr_map_wnd_handle,OnWndActivationIdlrMap,this);
+  DLL::Chart2DSetOnChange(m_idlr_map_wnd_handle,OnChangeIdlrMap,this);
+  DLL::Chart2DSetOnClose(m_idlr_map_wnd_handle,OnCloseIdlrMap,this);
+  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
+
+  DLL::Chart2DShow(m_idlr_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_idlr_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnViewIdlcMap()
 {
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_idlc_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_idlc_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_idlc_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_idlc_map_chart_state = 1;
+  m_idlc_map_wnd_handle = DLL::Chart2DCreate(GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
+    MLL::GetString(IDS_IDLC_MAP).c_str());
+  DLL::Chart2DSetPtMovingStep(m_idlc_map_wnd_handle, 1.0f);
+  DLL::Chart2DSetOnWndActivation(m_idlc_map_wnd_handle,OnWndActivationIdlcMap,this);
+  DLL::Chart2DSetOnChange(m_idlc_map_wnd_handle,OnChangeIdlcMap,this);
+  DLL::Chart2DSetOnClose(m_idlc_map_wnd_handle,OnCloseIdlcMap,this);
+  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+
+  DLL::Chart2DShow(m_idlc_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_idlc_map_wnd_handle);
+ }
 }
 
 void CButtonsPanel::OnGridModeEditing()

@@ -126,6 +126,16 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   memcpy(mp_fwd->choke_op_table, mp_s3f_io->GetData().choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE); 
 
+ if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
+ {
+  memcpy(mp_fwd->atscurve_table, mp_s3f_io->GetData().atscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
+  mp_fwd->atscurve_vlimits[0] = mp_s3f_io->GetData().atscurve_vlimits[0];
+  mp_fwd->atscurve_vlimits[1] = mp_s3f_io->GetData().atscurve_vlimits[1];
+ }
+
+ if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
+  memcpy(mp_fwd->ats_corr_table, mp_s3f_io->GetData().ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);
+
  //копируем сетку оборотов
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
@@ -164,6 +174,27 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   memcpy(mp_fwd->maps[current_sel].f_tmp, mp_s3f_io->GetData().maps[other_sel].f_tmp,sizeof(float) * F_TMP_POINTS);
+
+ if (mp_view->GetFWDFlag(FLAG_VE_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_ve, mp_s3f_io->GetData().maps[other_sel].inj_ve,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_afr, mp_s3f_io->GetData().maps[other_sel].inj_afr,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_cranking, mp_s3f_io->GetData().maps[other_sel].inj_cranking,sizeof(float) * INJ_CRANKING_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_warmup, mp_s3f_io->GetData().maps[other_sel].inj_warmup,sizeof(float) * INJ_WARMUP_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_dead_time, mp_s3f_io->GetData().maps[other_sel].inj_dead_time,sizeof(float) * INJ_DT_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_iac_run_pos, mp_s3f_io->GetData().maps[other_sel].inj_iac_run_pos,sizeof(float) * INJ_IAC_POS_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_iac_crank_pos, mp_s3f_io->GetData().maps[other_sel].inj_iac_crank_pos,sizeof(float) * INJ_IAC_POS_TABLE_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -181,14 +212,38 @@ void S3FImportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(GenArtificialNames(strings));
 
+ //ignition
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+
+ bool injen = (mp_s3f_io->GetVersion() > 0x0102);
+ //injection
+ mp_view->SetFWDFlag(FLAG_VE_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_VE_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_AFR_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_CRNK_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_WRMP_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_DEAD_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_IDLR_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_IDLC_MAP, injen);
+ 
+ //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen);
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -294,6 +349,16 @@ void S3FExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().choke_op_table, mp_fwd->choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
+ {
+  memcpy(mp_s3f_io->GetDataLeft().atscurve_table, mp_fwd->atscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
+  mp_s3f_io->GetDataLeft().atscurve_vlimits[0] = mp_fwd->atscurve_vlimits[0];
+  mp_s3f_io->GetDataLeft().atscurve_vlimits[1] = mp_fwd->atscurve_vlimits[1];
+ }
+
+ if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().ats_corr_table, mp_fwd->ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);
+
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
@@ -329,6 +394,27 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].f_tmp, mp_fwd->maps[current_sel].f_tmp, sizeof(float) * F_TMP_POINTS);
+
+ if (mp_view->GetFWDFlag(FLAG_VE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ve, mp_fwd->maps[current_sel].inj_ve, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_afr, mp_fwd->maps[current_sel].inj_afr, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_cranking, mp_fwd->maps[current_sel].inj_cranking, sizeof(float) * INJ_CRANKING_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_warmup, mp_fwd->maps[current_sel].inj_warmup, sizeof(float) * INJ_WARMUP_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_dead_time, mp_fwd->maps[current_sel].inj_dead_time, sizeof(float) * INJ_DT_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_iac_run_pos, mp_fwd->maps[current_sel].inj_iac_run_pos, sizeof(float) * INJ_IAC_POS_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_iac_crank_pos, mp_fwd->maps[current_sel].inj_iac_crank_pos, sizeof(float) * INJ_IAC_POS_TABLE_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -346,14 +432,26 @@ void S3FExportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(GenArtificialNames(strings));
 
+ //ignition
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ //injection
+ mp_view->SetFWDFlag(FLAG_VE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
+ //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

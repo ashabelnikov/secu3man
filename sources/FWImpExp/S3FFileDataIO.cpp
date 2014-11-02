@@ -58,6 +58,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.00 - initial version
 // 01.01 - Choke opening map added (24.05.2013)
 // 01.02 - RPM grid added (29.04.2014)
+// 01.03 - Major changes (02.11.2014). Fuel injection and intake air maps added.
 
 struct S3FFileHdr
 {
@@ -73,15 +74,51 @@ struct S3FFileHdr
 //One entry of map sets array
 struct S3FMapSetItem
 {
+ s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
+ //ignition
  s3f_int32_t f_str[F_STR_POINTS]; //start
  s3f_int32_t f_idl[F_IDL_POINTS]; //idle 
  s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; //work
  s3f_int32_t f_tmp[F_TMP_POINTS]; //temperature
- s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
+ //fuel injection, since v01.03
+ s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];  // VE
+ s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F]; // AFR
+ s3f_int32_t inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; //Cranking PW
+ s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];  // Warmup enrichment
+ s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];   // Injector's dead time
+ s3f_int32_t inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];  // IAC/PWM position on run
+ s3f_int32_t inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];// IAC/PWM position on cranking
+ s3f_int32_t reserved[1024]; //reserved bytes, = 0
 };
 
 //Separate maps
 struct S3FSepMaps
+{
+ s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
+ s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
+ s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
+ s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
+ s3f_int32_t choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE]; //choke opening map (appeared in version 1.01, reserved bytes were utilized)
+ s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
+ s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
+ s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
+ s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
+ s3f_int32_t reserved[2048];       //reserved bytes, = 0
+};
+
+
+//One entry of map sets array
+struct S3FMapSetItem_v0102
+{
+ s3f_int32_t f_str[F_STR_POINTS]; //start
+ s3f_int32_t f_idl[F_IDL_POINTS]; //idle 
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; //work
+ s3f_int32_t f_tmp[F_TMP_POINTS]; //temperature
+ s3f_uint8_t name[F_NAME_SIZE];   //assosiated name of set
+};
+
+//Separate maps
+struct S3FSepMaps_v0102
 {
  s3f_int32_t attenuator_table[KC_ATTENUATOR_LOOKUP_TABLE_SIZE]; //attenuator table (for knock detection)
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
@@ -97,6 +134,7 @@ struct S3FSepMaps
 /////////////////////////////////////////////////////////////////////////////////////
 S3FFileDataIO::S3FFileDataIO()
 : m_file_crc_ok(false)
+, m_version(0)
 {
  //empty
 }
@@ -122,7 +160,8 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  //read the file into memory
  size_t filesize = (size_t)file.GetLength();
  size_t minFileSize = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * MIN_NOFSETS) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
- if ((filesize > 1048576) || (filesize < minFileSize))
+ size_t minFileSizev_v0102 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0102) * MIN_NOFSETS) + sizeof(S3FSepMaps_v0102) + MIN_OPTDATA_SIZE;
+ if ((filesize > 1048576) || ((filesize < minFileSize) && (filesize < minFileSizev_v0102)))
  {
   file.Close();
   return false; //некорректный размер файла
@@ -143,61 +182,14 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  if (p_fileHdr->nofsets < MIN_NOFSETS || p_fileHdr->nofsets > MAX_NOFSETS)
   return false; //incompatible
 
- //Size of a whole array of map sets
- size_t mapSetArrSize = sizeof(S3FMapSetItem) * p_fileHdr->nofsets;
+ m_version = p_fileHdr->version;  //save version number
 
- //resize container to hold all map sets
- m_data = FWMapsDataHolder(p_fileHdr->nofsets);
-
- //convert sets of tables
- const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
- for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
+ if (p_fileHdr->version <= 0x0102)
  {
-  size_t i;
-  for(i = 0; i < F_STR_POINTS; ++i)
-   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
-  for(i = 0; i < F_IDL_POINTS; ++i)
-   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
-  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
-   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
-  for(i = 0; i < F_TMP_POINTS; ++i)
-   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
-  //convert name
-  char raw_string[F_NAME_SIZE + 1];
-  memset(raw_string, 0, F_NAME_SIZE + 1);
-  memcpy(raw_string, p_setItem[s].name, F_NAME_SIZE);
-  TCHAR string[128];
-  OemToChar(raw_string, string);
-  m_data.maps[s].name = _TSTRING(string);
+  return _ReadData_v0102(&rawdata[0], p_fileHdr);
  }
-
- //convert separate maps
- const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
- size_t i;
- for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
- for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
-  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
- for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
-  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
- for(i = 0; i < 2; ++i)
-  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
- for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
-  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
-
- //convert RPM grid
- bool empty = true;
- for(i = 0; i < F_RPM_SLOTS; ++i)
- {
-  if (0 != p_sepMaps->rpm_slots[i])
-   empty = false;
-  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
- }
-
- if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
-  std::copy(SECU3IO::work_map_rpm_slots, SECU3IO::work_map_rpm_slots + F_RPM_SLOTS, m_data.rpm_slots);
-
- return true;
+ else
+  return _ReadData(&rawdata[0], p_fileHdr);
 }
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -223,7 +215,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0102; //01.02
+ p_fileHdr->version = 0x0103; //01.03
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -238,6 +230,21 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].f_wrk[i] = MathHelpers::Round(m_data.maps[s].f_wrk[i] * INT_MULTIPLIER);
   for(i = 0; i < F_TMP_POINTS; ++i)
    p_setItem[s].f_tmp[i] = MathHelpers::Round(m_data.maps[s].f_tmp[i] * INT_MULTIPLIER);
+  //fuel injection
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   p_setItem[s].inj_ve[i] = MathHelpers::Round(m_data.maps[s].inj_ve[i] * INT_MULTIPLIER);
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   p_setItem[s].inj_afr[i] = MathHelpers::Round(m_data.maps[s].inj_afr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
+   p_setItem[s].inj_cranking[i] = MathHelpers::Round(m_data.maps[s].inj_cranking[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
+   p_setItem[s].inj_warmup[i] = MathHelpers::Round(m_data.maps[s].inj_warmup[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; ++i)
+   p_setItem[s].inj_dead_time[i] = MathHelpers::Round(m_data.maps[s].inj_dead_time[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   p_setItem[s].inj_iac_run_pos[i] = MathHelpers::Round(m_data.maps[s].inj_iac_run_pos[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   p_setItem[s].inj_iac_crank_pos[i] = MathHelpers::Round(m_data.maps[s].inj_iac_crank_pos[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -262,6 +269,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
  for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->choke_op_table[i] = MathHelpers::Round(m_data.choke_op_table[i] * INT_MULTIPLIER);
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  p_sepMaps->atscurve_table[i] = MathHelpers::Round(m_data.atscurve_table[i] * INT_MULTIPLIER);
+ for(i = 0; i < 2; ++i)
+  p_sepMaps->atscurve_vlimits[i] = MathHelpers::Round(m_data.atscurve_vlimits[i] * INT_MULTIPLIER);
+ for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
+  p_sepMaps->ats_corr_table[i] = MathHelpers::Round(m_data.ats_corr_table[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -287,4 +300,143 @@ FWMapsDataHolder& S3FFileDataIO::GetDataLeft(void)
 bool S3FFileDataIO::IsFileIntegrityOk(void) const
 {
  return m_file_crc_ok;
+}
+
+unsigned short S3FFileDataIO::GetVersion(void) const
+{
+ return m_version;
+}
+
+bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
+{
+ //Size of a whole array of map sets
+ size_t mapSetArrSize = sizeof(S3FMapSetItem) * p_fileHdr->nofsets;
+
+ //resize container to hold all map sets
+ m_data = FWMapsDataHolder(p_fileHdr->nofsets);
+
+ //convert sets of tables
+ const S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
+ for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
+ {
+  size_t i;
+  //ignition
+  for(i = 0; i < F_STR_POINTS; ++i)
+   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_IDL_POINTS; ++i)
+   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+  //fuel injection
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_ve[i] = p_setItem[s].inj_ve[i] / INT_MULTIPLIER;
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_afr[i] = p_setItem[s].inj_afr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_cranking[i] = p_setItem[s].inj_cranking[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_warmup[i] = p_setItem[s].inj_warmup[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_dead_time[i] = p_setItem[s].inj_dead_time[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_iac_run_pos[i] = p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_iac_crank_pos[i] = p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER;
+
+  //convert name
+  char raw_string[F_NAME_SIZE + 1];
+  memset(raw_string, 0, F_NAME_SIZE + 1);
+  memcpy(raw_string, p_setItem[s].name, F_NAME_SIZE);
+  TCHAR string[128];
+  OemToChar(raw_string, string);
+  m_data.maps[s].name = _TSTRING(string);
+ }
+
+ //convert separate maps
+ const S3FSepMaps* p_sepMaps = (S3FSepMaps*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
+ size_t i;
+ for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < 2; ++i)
+  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
+  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < 2; ++i)
+  m_data.atscurve_vlimits[i] = p_sepMaps->atscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
+
+ //convert RPM grid
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+
+ return true;
+}
+
+//Function for reading data from older formats
+bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
+{
+ //Size of a whole array of map sets
+ size_t mapSetArrSize = sizeof(S3FMapSetItem_v0102) * p_fileHdr->nofsets;
+
+ //resize container to hold all map sets
+ m_data = FWMapsDataHolder(p_fileHdr->nofsets);
+
+ //convert sets of tables
+ const S3FMapSetItem_v0102* p_setItem = (S3FMapSetItem_v0102*)(&rawdata[sizeof(S3FFileHdr)]);
+ for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
+ {
+  size_t i;
+  for(i = 0; i < F_STR_POINTS; ++i)
+   m_data.maps[s].f_str[i] = p_setItem[s].f_str[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_IDL_POINTS; ++i)
+   m_data.maps[s].f_idl[i] = p_setItem[s].f_idl[i] / INT_MULTIPLIER;
+  for(i = 0; i < (F_WRK_POINTS_L * F_WRK_POINTS_F); ++i)
+   m_data.maps[s].f_wrk[i] = p_setItem[s].f_wrk[i] / INT_MULTIPLIER;
+  for(i = 0; i < F_TMP_POINTS; ++i)
+   m_data.maps[s].f_tmp[i] = p_setItem[s].f_tmp[i] / INT_MULTIPLIER;
+  //convert name
+  char raw_string[F_NAME_SIZE + 1];
+  memset(raw_string, 0, F_NAME_SIZE + 1);
+  memcpy(raw_string, p_setItem[s].name, F_NAME_SIZE);
+  TCHAR string[128];
+  OemToChar(raw_string, string);
+  m_data.maps[s].name = _TSTRING(string);
+ }
+
+ //convert separate maps
+ const S3FSepMaps_v0102* p_sepMaps = (S3FSepMaps_v0102*)(&rawdata[sizeof(S3FFileHdr) + mapSetArrSize]);
+ size_t i;
+ for(i = 0; i < KC_ATTENUATOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.attenuator_table[i] = p_sepMaps->attenuator_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  m_data.dwellcntrl_table[i] = p_sepMaps->dwellcntrl_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
+  m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < 2; ++i)
+  m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
+ for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
+  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
+
+ //convert RPM grid
+ bool empty = true;
+ for(i = 0; i < F_RPM_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->rpm_slots[i])
+   empty = false;
+  m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
+  std::copy(SECU3IO::work_map_rpm_slots, SECU3IO::work_map_rpm_slots + F_RPM_SLOTS, m_data.rpm_slots);
+ 
+ return true;
 }
