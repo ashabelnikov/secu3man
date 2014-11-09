@@ -1139,22 +1139,17 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
- if (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 4 || size > 19))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
-  return false;
-
- //номер набора таблиц
- unsigned char reserved;
- if (false == mp_pdp->Hex4ToBin(raw_packet, &reserved))
-  return false;
- if (reserved != 0)
+ if (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //код таблицы в наборе
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_EditTabPar.tab_id))
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &m_EditTabPar.tab_id))
   return false;
 
  if (m_EditTabPar.tab_id != ETMT_STRT_MAP && m_EditTabPar.tab_id != ETMT_IDLE_MAP && m_EditTabPar.tab_id != ETMT_WORK_MAP &&
-     m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR)
+     m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR && m_EditTabPar.tab_id != ETMT_VE_MAP &&
+     m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
+     m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1163,22 +1158,52 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_EditTabPar.address = address;
 
- size-=(1 + 1 + mp_pdp->getHex8Size());
- size_t div = mp_pdp->isHex() ? 2 : 1;
- if (size % div) // 1 byte in HEX is 2 symbols
-  return false;
+ size-=(2 * mp_pdp->getHex8Size());
 
  if (m_EditTabPar.tab_id != ETMT_NAME_STR)
  {
-  //фрагмент с данными (float)
+  size_t div;
   size_t data_size = 0;
-  for(size_t i = 0; i < size / div; ++i)
+  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
+  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP)
   {
-   signed char value;
-   if (false == mp_pdp->Hex8ToBin(raw_packet, (unsigned char*)&value))
+   div = mp_pdp->isHex() ? 4 : 2;
+   if (size % div) // 1 byte in HEX is 2 symbols
     return false;
-   m_EditTabPar.table_data[i] = ((float)value) / AA_MAPS_M_FACTOR;
-   ++data_size;
+
+   //фрагмент с данными (float)
+   for(size_t i = 0; i < size / div; ++i)
+   {
+    int value;
+    if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+     return false;
+    m_EditTabPar.table_data[i] = (((float)value) / discrete) / 1000.0f;  //convert to ms
+    ++data_size;
+   }
+  }
+  else
+  {
+   div = mp_pdp->isHex() ? 2 : 1;
+   if (size % div) // 1 byte in HEX is 2 symbols
+    return false;
+   //фрагмент с данными (float)
+   for(size_t i = 0; i < size / div; ++i)
+   {
+     unsigned char value;
+     if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
+      return false;
+     if (m_EditTabPar.tab_id == ETMT_VE_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / VE_MAPS_M_FACTOR;
+     else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
+      m_EditTabPar.table_data[i] = AFR_MAPS_M_FACTOR / ((float)value);
+     else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
+     else if (m_EditTabPar.tab_id == ETMT_IDLR_MAP || m_EditTabPar.tab_id == ETMT_IDLC_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
+     else
+      m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
+     ++data_size;
+   }
   }
   m_EditTabPar.data_size = data_size;
  }
@@ -2157,16 +2182,44 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 {
- mp_pdp->Bin4ToHex(0, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->tab_id, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->tab_id, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 
  if (packet_data->tab_id != ETMT_NAME_STR)
  {
+  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
   for(unsigned int i = 0; i < packet_data->data_size; ++i)
   {
-   signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
-   mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   if (packet_data->tab_id == ETMT_CRNK_MAP || packet_data->tab_id == ETMT_DEAD_MAP)
+   {
+    int value = MathHelpers::Round((packet_data->table_data[i] * 1000.0f) / discrete);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_VE_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * VE_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+   }
+   else if (packet_data->tab_id == ETMT_AFR_MAP)
+   {
+    unsigned char value = MathHelpers::Round(AFR_MAPS_M_FACTOR / packet_data->table_data[i]);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+   }
+   else if (packet_data->tab_id == ETMT_WRMP_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * WRMP_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+   }
+   else if (packet_data->tab_id == ETMT_IDLR_MAP || packet_data->tab_id == ETMT_IDLC_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * IACPOS_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+   }
+   else
+   {
+    signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
   }
  }
  else //string

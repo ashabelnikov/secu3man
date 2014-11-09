@@ -826,6 +826,13 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
   return m_dwellcntrl_map_wnd_handle ? m_dwellcntrl_map_wnd_handle : NULL;
  case TYPE_MAP_CTS_CURVE:
   return m_cts_curve_map_wnd_handle ? m_cts_curve_map_wnd_handle : NULL;
+ case TYPE_MAP_CHOKE_OP:
+  return m_choke_map_wnd_handle ? m_choke_map_wnd_handle : NULL;
+ case TYPE_MAP_ATS_CURVE:
+  return m_ats_curve_map_wnd_handle ? m_ats_curve_map_wnd_handle : NULL;
+ case TYPE_MAP_ATS_CORR:
+  return m_ats_aac_map_wnd_handle ? m_ats_aac_map_wnd_handle : NULL;
+
  default:
   return NULL;
  }

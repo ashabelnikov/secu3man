@@ -83,7 +83,7 @@ void CDwellCalcDlg::OnOK()
    double U = mp_v_values[i];
    if (U < 1.0) U = 1.0;        //prevent div. by zero case
    if (R < 0.01) R = 0.01;      //prevent div. by zero case
-   double x = 1.0 - (R * I / U);   
+   double x = 1.0 - (R * I / U);
    if (x <= 0) x = DBL_EPSILON; //prevent U/R <= I case
    mp_t_values[i] = static_cast<float>((-L / R) * log(x));
    //restrict values

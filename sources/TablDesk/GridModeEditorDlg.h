@@ -98,7 +98,7 @@ class CGridModeEditorDlg : public CDialog
   void OnEditChar(UINT nChar, CEditExCustomKeys*);
   void OnEditKill(CEditExCustomKeys*);
   bool _ValidateItem(CEditExCustomKeys* pItem);
-  
+
  private:
   void _2DLookup(float x, const float* grid, std::vector<int>& pt);
   void _DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc);

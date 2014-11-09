@@ -49,7 +49,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
-  
+
   //Read/Write access
   float* GetStartMap(bool i_original);
   float* GetIdleMap(bool i_original);
@@ -64,7 +64,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIdlcMap(bool i_original);
 
   float* GetRPMGrid(void);
-  
+
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);
 

@@ -1388,6 +1388,22 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
  case TYPE_MAP_DA_TEMP_CORR:
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
+
+ case TYPE_MAP_INJ_VE:
+  return m_ve_map_chart_state ? m_ve_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_AFR:
+  return m_afr_map_chart_state ? m_afr_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_CRNK:
+  return m_crnk_map_chart_state ? m_crnk_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_WRMP:
+  return m_wrmp_map_chart_state ? m_wrmp_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_DEAD:
+  return m_dead_map_chart_state ? m_dead_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_IDLR:
+  return m_idlr_map_chart_state ? m_idlr_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_IDLC:
+  return m_idlc_map_chart_state ? m_idlc_map_wnd_handle : NULL;
+
  case TYPE_MAP_GME_WND: //pseudo map
   return (mp_gridModeEditorDlg.get() && m_grid_map_state) ? mp_gridModeEditorDlg->m_hWnd : NULL; 
  default:

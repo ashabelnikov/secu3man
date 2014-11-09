@@ -23,25 +23,24 @@
 
 enum EMapTypes
 {
- TYPE_MAP_DA_START = 0,    //must be =0
- TYPE_MAP_DA_IDLE = 1,     //must be =1
- TYPE_MAP_DA_WORK = 2,     //must be =2
- TYPE_MAP_DA_TEMP_CORR = 3,//must be =3
- // 4, 5, 6, 7 - are reserved
- TYPE_MAP_ATTENUATOR = 8,  //must be =8. used by derived classes
- TYPE_MAP_DWELLCNTRL = 9,  //must be =9. used by derived classes
- TYPE_MAP_CTS_CURVE  = 10,
- TYPE_MAP_CHOKE_OP   = 11,
- TYPE_MAP_ATS_CURVE = 12,
- TYPE_MAP_ATS_CORR = 13,
+ TYPE_MAP_DA_START     = 1,  //must be = 1
+ TYPE_MAP_DA_IDLE      = 2,  //must be = 2
+ TYPE_MAP_DA_WORK      = 3,  //must be = 3
+ TYPE_MAP_DA_TEMP_CORR = 4,  //must be = 4
+ TYPE_MAP_INJ_VE       = 5,  //must be = 5
+ TYPE_MAP_INJ_AFR      = 6,  //must be = 6
+ TYPE_MAP_INJ_CRNK     = 7,  //must be = 7
+ TYPE_MAP_INJ_WRMP     = 8,  //must be = 8
+ TYPE_MAP_INJ_DEAD     = 9,  //must be = 9
+ TYPE_MAP_INJ_IDLR     = 10, //must be = 10
+ TYPE_MAP_INJ_IDLC     = 11, //must be = 11
+ //separate maps
+ TYPE_MAP_ATTENUATOR   = 12, //
+ TYPE_MAP_DWELLCNTRL   = 13, //
+ TYPE_MAP_CTS_CURVE    = 14, //
+ TYPE_MAP_CHOKE_OP     = 15, //
+ TYPE_MAP_ATS_CURVE    = 16, //
+ TYPE_MAP_ATS_CORR     = 17, //
 
- TYPE_MAP_INJ_VE   = 14,
- TYPE_MAP_INJ_AFR  = 15,
- TYPE_MAP_INJ_CRNK = 16,
- TYPE_MAP_INJ_WRMP = 17,
- TYPE_MAP_INJ_DEAD = 18,
- TYPE_MAP_INJ_IDLR = 19,
- TYPE_MAP_INJ_IDLC = 20,
-
- TYPE_MAP_GME_WND = 32     //pseudo map, grid mode editing window
+ TYPE_MAP_GME_WND      = 32  //pseudo map, grid mode editing window
 };

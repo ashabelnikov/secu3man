@@ -56,7 +56,7 @@ class MapLimits
      return 0;
    }
   }
-  
+
   float getHiLimit(void) const
   {
    switch(m_mapType)
@@ -104,7 +104,7 @@ class CEditExCustomKeys : public CEditEx
     SetValue(value);
    }
    else
-    SetValue(0.0f);    
+    SetValue(0.0f);
   }
   void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
   {
@@ -147,7 +147,7 @@ class CEditExCustomKeys : public CEditEx
   EventHandler1 m_onKillFocus;
   DECLARE_MESSAGE_MAP()
  public:
-  CEditExCustomKeys(const EventHandler2& onChar, const EventHandler1& onKillFocus, int mapType) 
+  CEditExCustomKeys(const EventHandler2& onChar, const EventHandler1& onKillFocus, int mapType)
   : CEditEx(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED), m_onChar(onChar), m_onKillFocus(onKillFocus),
   m_ln(NULL), m_rn(NULL), m_un(NULL), m_dn(NULL), m_error(false), m_mapType(mapType) {}
   CEditExCustomKeys* m_ln, *m_rn, *m_un, *m_dn; //neighbours

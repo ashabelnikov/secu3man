@@ -253,11 +253,20 @@ namespace SECU3IO
   unsigned int data_size;               //размер фрагмента данных
  };
 
- const int ETMT_STRT_MAP = 0;           //start map
- const int ETMT_IDLE_MAP = 1;           //idle map
- const int ETMT_WORK_MAP = 2;           //work map
- const int ETMT_TEMP_MAP = 3;           //temp.corr. map
- const int ETMT_NAME_STR = 4;           //name of tables's set
+ const int ETMT_NAME_STR = 0;           //name of tables's set
+ const int ETMT_STRT_MAP = 1;           //start map
+ const int ETMT_IDLE_MAP = 2;           //idle map
+ const int ETMT_WORK_MAP = 3;           //work map
+ const int ETMT_TEMP_MAP = 4;           //temp.corr. map
+
+ const int ETMT_VE_MAP   = 5;           //VE
+ const int ETMT_AFR_MAP  = 6;           //AFR
+ const int ETMT_CRNK_MAP = 7;           //Cranking PW
+ const int ETMT_WRMP_MAP = 8;           //Warmup enrichment
+ const int ETMT_DEAD_MAP = 9;           //Injector dead time
+ const int ETMT_IDLR_MAP = 10;          //IAC run pos
+ const int ETMT_IDLC_MAP = 11;          //IAC cranking pos
+
 
  struct SepTabPar
  {
