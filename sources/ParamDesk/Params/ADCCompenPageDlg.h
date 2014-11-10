@@ -21,12 +21,12 @@
 
 #pragma once
 
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
-#include <memory>
 
 class CToolTipCtrlEx;
 
@@ -36,6 +36,7 @@ class CADCCompenPageDlg : public CTabDialog, public ParamPageEvents
 
  public:
   CADCCompenPageDlg(CWnd* pParent = NULL); // standard constructor
+ ~CADCCompenPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
 

@@ -508,7 +508,7 @@ void CKnockChannelTabDlg::OnFrqCalculate(float frq)
  //сохраняем значение
  SECU3IO::KnockPar values;
  mp_knock_parameters_dlg->GetValues(&values);
- values.knock_bpf_frequency = static_cast<float>(index);
+ values.knock_bpf_frequency = index;
  mp_knock_parameters_dlg->SetValues(&values);
  //apply changes
  mp_knock_parameters_dlg->ForceOnChangeNotify();

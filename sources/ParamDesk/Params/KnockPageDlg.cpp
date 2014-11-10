@@ -118,6 +118,11 @@ CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
  m_params.knock_int_time_const = 23; //300us
 }
 
+CKnockPageDlg::~CKnockPageDlg()
+{
+ //empty
+}
+
 LPCTSTR CKnockPageDlg::GetDialogID(void) const
 {
  return (LPCTSTR)IDD;

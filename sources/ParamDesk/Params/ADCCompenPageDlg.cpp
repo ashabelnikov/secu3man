@@ -106,6 +106,11 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ai2_adc_correction = 0.0f;
 }
 
+CADCCompenPageDlg::~CADCCompenPageDlg()
+{
+ //empty
+}
+
 LPCTSTR CADCCompenPageDlg::GetDialogID(void) const
 {
  return (LPCTSTR)IDD;

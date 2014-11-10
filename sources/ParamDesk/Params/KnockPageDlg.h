@@ -37,6 +37,7 @@ class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
 
  public:
   CKnockPageDlg(CWnd* pParent = NULL); // standard constructor
+ ~CKnockPageDlg();
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
 
