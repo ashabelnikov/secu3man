@@ -47,15 +47,30 @@ bool CPMTablesController::_CompareViewMap(int i_mapType, size_t size) const
 float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
 {
  switch(i_mapType)
- {
+ {//ignition maps
   case TYPE_MAP_DA_START:
    return i_original ? m_omaps->f_str : m_maps->f_str;
   case TYPE_MAP_DA_IDLE:
    return i_original ? m_omaps->f_idl : m_maps->f_idl;
-  case TYPE_MAP_DA_WORK:  
+  case TYPE_MAP_DA_WORK:
    return i_original ? m_omaps->f_wrk : m_maps->f_wrk;
   case TYPE_MAP_DA_TEMP_CORR:
    return i_original ? m_omaps->f_tmp : m_maps->f_tmp;
+  //fuel injection
+  case TYPE_MAP_INJ_VE:
+   return i_original ? m_omaps->inj_ve : m_maps->inj_ve;
+  case TYPE_MAP_INJ_AFR:
+   return i_original ? m_omaps->inj_afr : m_maps->inj_afr;
+  case TYPE_MAP_INJ_CRNK:
+   return i_original ? m_omaps->inj_cranking : m_maps->inj_cranking;
+  case TYPE_MAP_INJ_WRMP:
+   return i_original ? m_omaps->inj_warmup : m_maps->inj_warmup;
+  case TYPE_MAP_INJ_DEAD:
+   return i_original ? m_omaps->inj_dead_time : m_maps->inj_dead_time;
+  case TYPE_MAP_INJ_IDLR:
+   return i_original ? m_omaps->inj_iac_run_pos : m_maps->inj_iac_run_pos;
+  case TYPE_MAP_INJ_IDLC:
+   return i_original ? m_omaps->inj_iac_crank_pos : m_maps->inj_iac_crank_pos;
  }
  return NULL; //undefined type of map
 }
@@ -64,7 +79,7 @@ namespace {
 size_t _GetMapSize(int i_mapType)
 {
  switch(i_mapType)
- {
+ {//ignition maps
   case TYPE_MAP_DA_START:
    return F_STR_POINTS;
   case TYPE_MAP_DA_IDLE:
@@ -73,7 +88,22 @@ size_t _GetMapSize(int i_mapType)
    return F_WRK_POINTS_L * F_WRK_POINTS_F;
   case TYPE_MAP_DA_TEMP_CORR:
    return F_TMP_POINTS;
+  //fuel injection maps
+  case TYPE_MAP_INJ_VE:
+   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+  case TYPE_MAP_INJ_AFR:
+   return INJ_VE_POINTS_L * INJ_VE_POINTS_F;
+  case TYPE_MAP_INJ_CRNK:
+   return INJ_CRANKING_LOOKUP_TABLE_SIZE;
+  case TYPE_MAP_INJ_WRMP:
+   return INJ_WARMUP_LOOKUP_TABLE_SIZE;
+  case TYPE_MAP_INJ_DEAD:
+   return INJ_DT_LOOKUP_TABLE_SIZE;
+  case TYPE_MAP_INJ_IDLR:
+  case TYPE_MAP_INJ_IDLC:
+   return INJ_IAC_POS_TABLE_SIZE;
  }
+ ASSERT(0);
  return 0; //undefined type of map
 }
 }
@@ -86,20 +116,37 @@ void CPMTablesController::_MoveMapToChart(int i_mapType, bool i_original)
 }
 
 void CPMTablesController::_MoveMapsToCharts(bool i_original)
-{
+{//ignition maps
  _MoveMapToChart(TYPE_MAP_DA_START, i_original);
  _MoveMapToChart(TYPE_MAP_DA_IDLE, i_original);
  _MoveMapToChart(TYPE_MAP_DA_WORK, i_original);
  _MoveMapToChart(TYPE_MAP_DA_TEMP_CORR, i_original);
+ //fuel injection maps
+ _MoveMapToChart(TYPE_MAP_INJ_VE, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_AFR, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_CRNK, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_WRMP, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_DEAD, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_IDLR, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_IDLC, i_original);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
 {
+ m_maps_flags->name = _T("");
+ //ignition maps
  std::fill(m_maps_flags->f_str, m_maps_flags->f_str + F_STR_POINTS, .0f);
  std::fill(m_maps_flags->f_idl, m_maps_flags->f_idl + F_IDL_POINTS, .0f);
  std::fill(m_maps_flags->f_wrk, m_maps_flags->f_wrk + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
  std::fill(m_maps_flags->f_tmp, m_maps_flags->f_tmp + F_TMP_POINTS, .0f);
- m_maps_flags->name = _T("");
+ //fuel injection maps
+ std::fill(m_maps_flags->inj_ve, m_maps_flags->inj_ve + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
+ std::fill(m_maps_flags->inj_afr, m_maps_flags->inj_afr + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
+ std::fill(m_maps_flags->inj_cranking, m_maps_flags->inj_cranking + INJ_CRANKING_LOOKUP_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_warmup, m_maps_flags->inj_warmup + INJ_WARMUP_LOOKUP_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_dead_time, m_maps_flags->inj_dead_time + INJ_DT_LOOKUP_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_iac_run_pos, m_maps_flags->inj_iac_run_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -272,6 +319,11 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
 {
  switch(data->tab_id)
  {
+  case ETMT_NAME_STR: //name of set
+   m_maps->name = data->name_data;
+   m_maps_flags->name = _T("1");
+   break;
+  //ignition maps
   case ETMT_STRT_MAP: //start map
    UpdateMap(m_maps->f_str, m_maps_flags->f_str, data);
    break;
@@ -284,11 +336,29 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_TEMP_MAP: //temp. corr. map
    UpdateMap(m_maps->f_tmp, m_maps_flags->f_tmp, data);
    break;
-  case ETMT_NAME_STR: //name of set
-   m_maps->name = data->name_data;
-   m_maps_flags->name = _T("1");
+  //fuel injection maps
+  case ETMT_VE_MAP: //ve map
+   UpdateMap(m_maps->inj_ve, m_maps_flags->inj_ve, data);
    break;
-  default:
+  case ETMT_AFR_MAP: //afr map
+   UpdateMap(m_maps->inj_afr, m_maps_flags->inj_afr, data);
+   break;
+  case ETMT_CRNK_MAP: //cranking pw map
+   UpdateMap(m_maps->inj_cranking, m_maps_flags->inj_cranking, data);
+   break;
+  case ETMT_WRMP_MAP: //warmup enrichment map
+   UpdateMap(m_maps->inj_warmup, m_maps_flags->inj_warmup, data);
+   break;
+  case ETMT_DEAD_MAP: //injector's dead time map
+   UpdateMap(m_maps->inj_dead_time, m_maps_flags->inj_dead_time, data);
+   break;
+  case ETMT_IDLR_MAP: //run IAC pos map
+   UpdateMap(m_maps->inj_iac_run_pos, m_maps_flags->inj_iac_run_pos, data);
+   break;
+  case ETMT_IDLC_MAP: //cranking IAC pos map
+   UpdateMap(m_maps->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos, data);
+   break;
+  default: ASSERT(0);
    //error
    break;
  }
@@ -301,10 +371,13 @@ bool _FindZero(float* array, size_t size)
   if (array[i] == .0f)
    return false;
  return true;
-} 
+}
 }
 bool CPMTablesController::_IsCacheUpToDate(void)
-{ 
+{
+  if (m_maps_flags->name == _T(""))
+   return false;
+  //ignition maps
   if (!_FindZero(m_maps_flags->f_str, F_STR_POINTS))
    return false;
   if (!_FindZero(m_maps_flags->f_idl, F_IDL_POINTS))
@@ -313,13 +386,29 @@ bool CPMTablesController::_IsCacheUpToDate(void)
    return false;
   if (!_FindZero(m_maps_flags->f_tmp, F_TMP_POINTS))
    return false;
-  if (m_maps_flags->name == _T(""))
+  //fuel injection maps
+  if (!_FindZero(m_maps_flags->inj_ve, INJ_VE_POINTS_L * INJ_VE_POINTS_F))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_afr, INJ_VE_POINTS_L * INJ_VE_POINTS_F))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_cranking, INJ_CRANKING_LOOKUP_TABLE_SIZE))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_warmup, INJ_WARMUP_LOOKUP_TABLE_SIZE))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_dead_time, INJ_DT_LOOKUP_TABLE_SIZE))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_iac_run_pos, INJ_IAC_POS_TABLE_SIZE))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_iac_crank_pos, INJ_IAC_POS_TABLE_SIZE))
    return false;
  return true;
 }
 
 bool CPMTablesController::_IsModificationMade(void) const
 {
+ if (m_maps->name != m_omaps->name)
+  return true;
+ //ignition maps
  if (false==_CompareViewMap(TYPE_MAP_DA_START, _GetMapSize(TYPE_MAP_DA_START)))
   return true;
  if (false==_CompareViewMap(TYPE_MAP_DA_IDLE, _GetMapSize(TYPE_MAP_DA_IDLE)))
@@ -328,7 +417,20 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
  if (false==_CompareViewMap(TYPE_MAP_DA_TEMP_CORR, _GetMapSize(TYPE_MAP_DA_TEMP_CORR)))
   return true;
- if (m_maps->name != m_omaps->name)
+ //fuel injection maps
+ if (false==_CompareViewMap(TYPE_MAP_INJ_VE, _GetMapSize(TYPE_MAP_INJ_VE)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_AFR, _GetMapSize(TYPE_MAP_INJ_AFR)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_CRNK, _GetMapSize(TYPE_MAP_INJ_CRNK)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_WRMP, _GetMapSize(TYPE_MAP_INJ_WRMP)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_DEAD, _GetMapSize(TYPE_MAP_INJ_DEAD)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_IDLR, _GetMapSize(TYPE_MAP_INJ_IDLR)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_IDLC, _GetMapSize(TYPE_MAP_INJ_IDLC)))
   return true;
  return false; //no modifications
 }
@@ -336,7 +438,11 @@ bool CPMTablesController::_IsModificationMade(void) const
 void CPMTablesController::_SynchronizeMap(int i_mapType)
 {
  float* pMap = mp_view->GetMap(i_mapType, false); //<--current
- size_t mapSize = _GetMapSize(i_mapType);
+ size_t mapSize = _GetMapSize(i_mapType); //map size in items (not bytes)
+
+ size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time
+ if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD)
+  pieceSize = 8;
 
  size_t index;
  EditTabPar packet;
@@ -364,14 +470,15 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
     break;
   }
 
+  //Split big volume of data in to small pieces (8 or 16 items in one piece)
   ++index;
-  if ((16==index || a==(mapSize-1)) && packet.data_size > 0)
+  if ((pieceSize==index || a==(mapSize-1)) && packet.data_size > 0)
   {
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES));
    state = 0;
    mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
    Sleep(20);
-   //transfer copied values from view into cache (save midification)
+   //transfer copied values from view into cache (save modification)
    for(size_t i = 0; i < packet.data_size; ++i)
     _GetMap(i_mapType, false)[packet.address + i] = pMap[packet.address + i];
   }
@@ -465,7 +572,7 @@ void CPMTablesController::OnDataCollected(void)
  _MoveMapsToCharts(true);
  //Set RPM grid read out from SECU-3
  mp_view->SetRPMGrid(m_rpmGrid);
-  mp_view->UpdateOpenedCharts();
+ mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps->name);
 }
 

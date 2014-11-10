@@ -82,7 +82,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   bool _IsModificationMade(void) const;
   void _SynchronizeMap(int i_mapType);
 
-  //tables's data collected 
+  //tables's data collected
   void OnDataCollected(void);
   //from timer
   void OnTableDeskChangesTimer(void);
@@ -91,7 +91,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
 
-  //кеш таблиц 
+  //кеш таблиц
   SECU3FWMapsItem* m_maps;  //current
   SECU3FWMapsItem* m_omaps; //original
   //флаги описывающие состояние сбора информации по таблицам
