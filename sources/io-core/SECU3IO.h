@@ -386,6 +386,25 @@ namespace SECU3IO
  const int UNIOUT_COND_CE = 19;       //CE state
  const int UNIOUT_COND_OFTMR = 20;    //On/Off delay timer
 
+ struct InjctrPar
+ {
+  int inj_config;                     //Injection configuration
+  float inj_flow_rate;                //Injector flow rate
+  float inj_cyl_disp;                 //The displacement of one cylinder in liters
+  float inj_sd_igl_const;             //precalculated constant
+ };
+
+ struct LambdaPar
+ {
+  int lam_str_per_stp;                //Number of strokes per step for lambda control
+  float lam_step_size;                //Size of step 
+  float lam_corr_limit;               //correction limit
+  float lam_swt_point;                //switch point in Volts
+  float lam_temp_thrd;                //Temperature turn on threshold
+  int lam_rpm_thrd;                   //RPM turn on threshold
+ };
+
+
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
  static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] =

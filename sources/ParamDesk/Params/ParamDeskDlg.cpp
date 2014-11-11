@@ -39,6 +39,8 @@
 #include "StarterPageDlg.h"
 #include "TemperPageDlg.h"
 #include "UniOutPageDlg.h"
+#include "InjectorPageDlg.h"
+#include "LambdaPageDlg.h"
 
 #include "common/Dll.h"
 #include "common/FastDelegate.h"
@@ -113,6 +115,12 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 
  m_pUniOutPageDlg = new CUniOutPageDlg();
  m_pUniOutPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+
+ m_pInjectorPageDlg = new CInjectorPageDlg();
+ m_pInjectorPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+
+ m_pLambdaPageDlg = new CLambdaPageDlg();
+ m_pLambdaPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -133,6 +141,8 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pChokePageDlg;
  delete m_pSecurPageDlg;
  delete m_pUniOutPageDlg;
+ delete m_pInjectorPageDlg;
+ delete m_pLambdaPageDlg;
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -205,6 +215,8 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_SECUR_PAR),m_pSecurPageDlg,11), SECUR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_UNIOUT_PAR),m_pUniOutPageDlg,12), UNIOUT_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
 
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
@@ -276,6 +288,8 @@ void CParamDeskDlg::Enable(bool enable)
  m_pChokePageDlg->Enable(enable);
  m_pSecurPageDlg->Enable(enable);
  m_pUniOutPageDlg->Enable(enable);
+ m_pInjectorPageDlg->Enable(enable);
+ m_pLambdaPageDlg->Enable(enable);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -343,6 +357,12 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case UNIOUT_PAR:
    m_pUniOutPageDlg->SetValues((UniOutPar*)i_values);
    break;
+  case INJCTR_PAR:
+   m_pInjectorPageDlg->SetValues((InjctrPar*)i_values);
+   break;
+  case LAMBDA_PAR:
+   m_pLambdaPageDlg->SetValues((LambdaPar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -398,6 +418,12 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case UNIOUT_PAR:
    m_pUniOutPageDlg->GetValues((UniOutPar*)o_values);
+   break;
+  case INJCTR_PAR:
+   m_pInjectorPageDlg->GetValues((InjctrPar*)o_values);
+   break;
+  case LAMBDA_PAR:
+   m_pLambdaPageDlg->GetValues((LambdaPar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:

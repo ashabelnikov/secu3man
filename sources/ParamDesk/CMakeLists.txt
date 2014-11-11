@@ -33,15 +33,17 @@ set(HEADERS
   Params/CKPSPageDlg.h
   Params/FunSetPageDlg.h
   Params/IdlRegPageDlg.h
+  Params/InjectorPageDlg.h
   Params/IParamDeskView.h
   Params/KnockPageDlg.h
+  Params/LambdaPageDlg.h
   Params/MiscPageDlg.h
   Params/ParamDeskDlg.h
   Params/SecurPageDlg.h
   Params/StarterPageDlg.h
   Params/TemperPageDlg.h
   Params/UniOutPageDlg.h
-  Params/IORemappingDlg.h
+  Params/IORemappingDlg.h  
   Resources/Resource.h
   Tables/ITablesDeskView.h
   Tables/TablesDeskDlg.h
@@ -61,7 +63,9 @@ set(SOURCES
   Params/CKPSPageDlg.cpp
   Params/FunSetPageDlg.cpp
   Params/IdlRegPageDlg.cpp
+  Params/InjectorPageDlg.cpp
   Params/KnockPageDlg.cpp
+  Params/LambdaPageDlg.cpp
   Params/MiscPageDlg.cpp
   Params/ParamDeskDlg.cpp
   Params/SecurPageDlg.cpp

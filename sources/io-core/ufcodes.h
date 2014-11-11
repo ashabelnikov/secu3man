@@ -60,4 +60,7 @@
 #define   SECUR_PAR    '#'
 #define   UNIOUT_PAR   '&'
 
+#define   INJCTR_PAR   ';'
+#define   LAMBDA_PAR   '-'
+
 #endif //_UFCODES_H_
