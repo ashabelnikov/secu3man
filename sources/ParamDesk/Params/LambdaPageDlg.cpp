@@ -27,14 +27,44 @@
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_TEMPTHRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_TEMPTHRD_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_TEMPTHRD_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_TEMPTHRD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_UNIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CLambdaPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_strperstp_edit(CEditEx::MODE_INT, true)
+, m_stepsize_edit(CEditEx::MODE_FLOAT, true)
+, m_corrlimit_edit(CEditEx::MODE_FLOAT, true)
+, m_swtpoint_edit(CEditEx::MODE_FLOAT, true)
+, m_tempthrd_edit(CEditEx::MODE_FLOAT, true)
+, m_rpmthrd_edit(CEditEx::MODE_INT, true)
 {
  m_params.lam_str_per_stp = 10;
- m_params.lam_step_size = 0.25f;
+ m_params.lam_step_size = 2.5f;
  m_params.lam_corr_limit = 30.0f;
  m_params.lam_swt_point = 0.50f;
  m_params.lam_temp_thrd = 70.0f;
@@ -54,9 +84,27 @@ LPCTSTR CLambdaPageDlg::GetDialogID(void) const
 void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_EDIT, m_strperstp_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_SPIN, m_strperstp_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_EDIT, m_stepsize_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_SPIN, m_stepsize_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_EDIT, m_corrlimit_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_SPIN, m_corrlimit_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_SWTPOINT_EDIT, m_swtpoint_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_SWTPOINT_SPIN, m_swtpoint_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_TEMPTHRD_EDIT, m_tempthrd_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_TEMPTHRD_SPIN, m_tempthrd_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_RPMTHRD_EDIT, m_rpmthrd_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_RPMTHRD_SPIN, m_rpmthrd_spin);
+
+ m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
+ m_stepsize_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_EDIT, m_params.lam_step_size);
+ m_corrlimit_edit.DDX_Value(pDX, IDC_PD_LAMBDA_CORRLIMIT_EDIT, m_params.lam_corr_limit);
+ m_swtpoint_edit.DDX_Value(pDX, IDC_PD_LAMBDA_SWTPOINT_EDIT, m_params.lam_swt_point);
+ m_tempthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_TEMPTHRD_EDIT, m_params.lam_temp_thrd);
+ m_rpmthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_RPMTHRD_EDIT, m_params.lam_rpm_thrd);
 }
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -68,6 +116,42 @@ void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 BOOL CLambdaPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_strperstp_spin.SetBuddy(&m_strperstp_edit);
+ m_strperstp_edit.SetLimitText(3);
+ m_strperstp_edit.SetDecimalPlaces(3);
+ m_strperstp_spin.SetRangeAndDelta(1, 100, 1);
+ m_strperstp_edit.SetRange(1, 100);
+
+ m_stepsize_spin.SetBuddy(&m_stepsize_edit);
+ m_stepsize_edit.SetLimitText(5);
+ m_stepsize_edit.SetDecimalPlaces(2);
+ m_stepsize_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
+ m_stepsize_edit.SetRange(0.25f, 45.00f);
+
+ m_corrlimit_spin.SetBuddy(&m_corrlimit_edit);
+ m_corrlimit_edit.SetLimitText(6);
+ m_corrlimit_edit.SetDecimalPlaces(2);
+ m_corrlimit_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
+ m_corrlimit_edit.SetRange(0.50f, 100.00f);
+
+ m_swtpoint_spin.SetBuddy(&m_stepsize_edit);
+ m_swtpoint_edit.SetLimitText(4);
+ m_swtpoint_edit.SetDecimalPlaces(2);
+ m_swtpoint_spin.SetRangeAndDelta(0.10f, 5.00f, 0.01f);
+ m_swtpoint_edit.SetRange(0.10f, 5.00f);
+
+ m_tempthrd_spin.SetBuddy(&m_tempthrd_edit);
+ m_tempthrd_edit.SetLimitText(5);
+ m_tempthrd_edit.SetDecimalPlaces(2);
+ m_tempthrd_spin.SetRangeAndDelta(0.00f, 100.00f, 0.25f);
+ m_tempthrd_edit.SetRange(0.00f, 100.00f);
+
+ m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
+ m_rpmthrd_edit.SetLimitText(4);
+ m_rpmthrd_edit.SetDecimalPlaces(5);
+ m_rpmthrd_spin.SetRangeAndDelta(100, 5000, 50);
+ m_rpmthrd_edit.SetRange(100, 5000);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

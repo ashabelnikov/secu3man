@@ -57,5 +57,18 @@ class CLambdaPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::LambdaPar m_params;
   bool m_enabled;
 
+  CSpinButtonCtrlEx m_strperstp_spin;
+  CEditEx m_strperstp_edit;
+  CSpinButtonCtrlEx m_stepsize_spin;
+  CEditEx m_stepsize_edit;
+  CSpinButtonCtrlEx m_corrlimit_spin;
+  CEditEx m_corrlimit_edit;
+  CSpinButtonCtrlEx m_swtpoint_spin;
+  CEditEx m_swtpoint_edit;
+  CSpinButtonCtrlEx m_tempthrd_spin;
+  CEditEx m_tempthrd_edit;
+  CSpinButtonCtrlEx m_rpmthrd_spin;
+  CEditEx m_rpmthrd_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
