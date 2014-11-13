@@ -27,6 +27,13 @@
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_STRPERSTP_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_CORRLIMIT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_SWTPOINT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_TEMPTHRD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_RPMTHRD_EDIT, OnChangeData)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_CAPTION,OnUpdateControls)
@@ -135,7 +142,7 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_corrlimit_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
  m_corrlimit_edit.SetRange(0.50f, 100.00f);
 
- m_swtpoint_spin.SetBuddy(&m_stepsize_edit);
+ m_swtpoint_spin.SetBuddy(&m_swtpoint_edit);
  m_swtpoint_edit.SetLimitText(4);
  m_swtpoint_edit.SetDecimalPlaces(2);
  m_swtpoint_spin.SetRangeAndDelta(0.10f, 5.00f, 0.01f);
@@ -156,6 +163,7 @@ BOOL CLambdaPageDlg::OnInitDialog()
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_strperstp_edit, MLL::GetString(IDS_PD_LAMBDA_STRPERSTP_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -163,6 +171,12 @@ BOOL CLambdaPageDlg::OnInitDialog()
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CLambdaPageDlg::OnChangeData()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

@@ -1522,6 +1522,81 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
+ if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ unsigned char inj_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_flags))
+  return false;
+ m_InjctrPar.inj_flags = inj_flags; //<--todo
+
+ unsigned char inj_config = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
+  return false;
+ m_InjctrPar.inj_config = inj_config;
+
+ int inj_flow_rate = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
+  return false;
+ m_InjctrPar.inj_flow_rate = float(inj_flow_rate) / 64.0f;
+
+ int inj_cyl_disp = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_cyl_disp))
+  return false;
+ m_InjctrPar.inj_cyl_disp = float(inj_cyl_disp) / 16384.0f;
+
+ unsigned long inj_sd_igl_const = 0;
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
+  return false;
+ m_InjctrPar.inj_sd_igl_const = (float)inj_sd_igl_const;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
+bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
+ if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ unsigned char strperstp = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &strperstp))
+  return false;
+ m_LambdaPar.lam_str_per_stp = strperstp;
+
+ unsigned char stepsize = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize))
+  return false;
+ m_LambdaPar.lam_step_size = (float(stepsize) / 512.0f) * 100.0f;
+
+ int corrlimit = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit))
+  return false;
+ m_LambdaPar.lam_corr_limit = (float(corrlimit) / 512.0f) * 100.0f;
+
+ int swtpoint = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &swtpoint))
+  return false;
+ m_LambdaPar.lam_swt_point = float(swtpoint) * ADC_DISCRETE;
+
+ int tempthrd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tempthrd))
+  return false;
+ m_LambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+
+ int rpmthrd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &rpmthrd))
+  return false;
+ m_LambdaPar.lam_rpm_thrd = rpmthrd;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1641,6 +1716,14 @@ bool CControlApp::ParsePackets()
     continue;
    case UNIOUT_PAR:
     if (Parse_UNIOUT_PAR(p_start, p_size))
+     break;
+    continue;
+   case INJCTR_PAR:
+    if (Parse_INJCTR_PAR(p_start, p_size))
+     break;
+    continue;
+   case LAMBDA_PAR:
+    if (Parse_LAMBDA_PAR(p_start, p_size))
      break;
     continue;
 
@@ -1842,6 +1925,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case CHOKE_PAR:
   case SECUR_PAR:
   case UNIOUT_PAR:
+  case INJCTR_PAR:
+  case LAMBDA_PAR:
    return true;
   default:
    return false;
@@ -1927,6 +2012,12 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case UNIOUT_PAR:
    Build_UNIOUT_PAR((UniOutPar*)i_packet_data);
+   break;
+  case INJCTR_PAR:
+   Build_INJCTR_PAR((InjctrPar*)i_packet_data);
+   break;
+  case LAMBDA_PAR:
+   Build_LAMBDA_PAR((LambdaPar*)i_packet_data);
    break;
 
   default:
@@ -2308,6 +2399,36 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
   mp_pdp->Bin16ToHex(cen.UniOutEncodeCondVal(packet_data->out[oi].off_thrd_2, packet_data->out[oi].condition2), m_outgoing_packet);
  }
  mp_pdp->Bin4ToHex(packet_data->logicFunc12, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
+{
+ mp_pdp->Bin8ToHex(packet_data->inj_flags, m_outgoing_packet); //<--todo
+ mp_pdp->Bin8ToHex(packet_data->inj_config, m_outgoing_packet);
+
+ int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);
+ mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
+
+ int inj_cyl_disp = MathHelpers::Round(packet_data->inj_flow_rate * 16384.0f);
+ mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
+
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
+{
+ mp_pdp->Bin8ToHex(packet_data->lam_str_per_stp, m_outgoing_packet);
+ int step_size = MathHelpers::Round(packet_data->lam_step_size * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(step_size, m_outgoing_packet);
+ int corr_limit = MathHelpers::Round(packet_data->lam_corr_limit * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(corr_limit, m_outgoing_packet);
+ int swt_point = MathHelpers::Round(packet_data->lam_swt_point / ADC_DISCRETE);
+ mp_pdp->Bin16ToHex(swt_point, m_outgoing_packet);
+ int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ mp_pdp->Bin16ToHex(temp_thrd, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->lam_rpm_thrd, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

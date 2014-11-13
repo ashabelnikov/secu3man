@@ -388,6 +388,7 @@ namespace SECU3IO
 
  struct InjctrPar
  {
+  unsigned char inj_flags;            //todo
   int inj_config;                     //Injection configuration
   float inj_flow_rate;                //Injector flow rate
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
@@ -487,6 +488,8 @@ namespace SECU3IO
   SECU3IO::ChokePar     m_ChokePar;
   SECU3IO::SecurPar     m_SecurPar;
   SECU3IO::UniOutPar    m_UniOutPar;
+  SECU3IO::InjctrPar    m_InjctrPar;
+  SECU3IO::LambdaPar    m_LambdaPar;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

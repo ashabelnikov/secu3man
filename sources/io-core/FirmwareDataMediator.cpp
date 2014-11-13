@@ -1070,6 +1070,25 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->uniout_12lf = p_in->logicFunc12;
    }
    break;
+  case INJCTR_PAR:
+   {
+    InjctrPar* p_in = (InjctrPar*)ip_values;
+    p_params->inj_flow_rate = MathHelpers::Round(p_in->inj_flow_rate * 64.0f);
+    p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
+    p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);
+   }
+   break;
+  case LAMBDA_PAR:
+   {
+    LambdaPar* p_in = (LambdaPar*)ip_values;
+    p_params->inj_lambda_str_per_stp = p_in->lam_str_per_stp;
+    p_params->inj_lambda_step_size = MathHelpers::Round(p_in->lam_step_size * 512.0f / 100.0f);
+    p_params->inj_lambda_corr_limit = MathHelpers::Round(p_in->lam_corr_limit * 512.0f / 100.0f);
+    p_params->inj_lambda_swt_point = MathHelpers::Round(p_in->lam_swt_point / ADC_DISCRETE);
+    p_params->inj_lambda_temp_thrd = MathHelpers::Round(p_in->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -1300,6 +1319,25 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_2, p_params->uni_output[oi].condition2);
     }
     p_out->logicFunc12 = p_params->uniout_12lf;
+   }
+   break;
+  case INJCTR_PAR:
+   {
+    InjctrPar* p_out = (InjctrPar*)op_values;
+    p_out->inj_flow_rate = float(p_params->inj_flow_rate) / 64.0f;
+    p_out->inj_cyl_disp = float(p_params->inj_flow_rate) / 16384.0f;
+    p_out->inj_sd_igl_const = (float)p_params->inj_sd_igl_const;
+   }
+   break;
+  case LAMBDA_PAR:
+   {
+    LambdaPar* p_out = (LambdaPar*)op_values;
+    p_out->lam_str_per_stp = p_params->inj_lambda_str_per_stp;
+    p_out->lam_step_size = ((float)p_params->inj_lambda_step_size * 100.0f)/512.0f;
+    p_out->lam_corr_limit = ((float)p_params->inj_lambda_corr_limit * 100.0f)/512.0f;
+    p_out->lam_swt_point = ((float)p_params->inj_lambda_swt_point) * ADC_DISCRETE;
+    p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+    p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
    }
    break;
 

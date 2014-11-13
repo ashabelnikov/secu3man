@@ -50,6 +50,7 @@ class CLambdaPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 

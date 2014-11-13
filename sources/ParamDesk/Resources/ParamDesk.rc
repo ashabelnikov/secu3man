@@ -1014,6 +1014,11 @@ BEGIN
     IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT "Задержка восстановления УОЗ в тактах двигателя"
 END
 
+STRINGTABLE
+BEGIN
+    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Количество тактов двигателя на один шаг коррекции"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -2037,6 +2042,11 @@ BEGIN
     IDS_PD_KNOCK_MAX_RETARD_EDIT_TT "Максимальное смещение УОЗ при детонации"
     IDS_PD_KNOCK_THRESHOLD_EDIT_TT   "Если напряжение превысит этот порог, то считается что детонация наступила"
     IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT "Задержка восстановления УОЗ в тактах двигателя"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step"
 END
 
 /////////////////////////////////////////////////////////////////////////////
