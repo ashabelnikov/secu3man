@@ -63,5 +63,7 @@ class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
   CSpinButtonCtrlEx m_flowrate_spin;
   CEditEx m_flowrate_edit;
 
+  float m_fuel_density; //fuel density (g/cc)
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -205,15 +205,11 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_restriction_max_edit, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_restriction_max_spin, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
 
-
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
- 
- 
- 
+  
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CIdlRegPageDlg::OnChangeData()

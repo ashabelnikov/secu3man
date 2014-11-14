@@ -509,7 +509,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 8 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 16 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -519,6 +519,24 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  //Обороты перехода с пусковой карты
  if (false == mp_pdp->Hex16ToBin(raw_packet,&m_StartrPar.smap_abandon))
   return false;
+
+ //IAC Crank to run time
+ int cranktorun_time = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time))
+  return false;
+ m_StartrPar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
+
+ //Afterstart enrichment
+ unsigned char aftstr_enrich = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_enrich))
+  return false;
+ m_StartrPar.inj_aftstr_enrich = (float(aftstr_enrich) / 128.0f) * 100.0f - 100.0f;
+
+ //Time of afterstart enrichment in strokes
+ unsigned char aftstr_strokes = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes))
+  return false;
+ m_StartrPar.inj_aftstr_strokes = aftstr_strokes;
 
  return true;
 }
@@ -1525,7 +1543,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 22 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -1552,6 +1570,12 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
   return false;
  m_InjctrPar.inj_sd_igl_const = (float)inj_sd_igl_const;
+
+ //read-only parameter: number of engine cylinders
+ unsigned char cyl_num = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &cyl_num))
+  return false;
+ m_InjctrPar.cyl_num = cyl_num;
 
  return true;
 }
@@ -2103,6 +2127,11 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 {
  mp_pdp->Bin16ToHex(packet_data->starter_off,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
+ int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
+ mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
+ unsigned char aftstr_enrich = MathHelpers::Round((packet_data->inj_aftstr_enrich + 100.0f) * 128.0f / 100.0f);
+ mp_pdp->Bin8ToHex(aftstr_enrich, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->inj_aftstr_strokes, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 
@@ -2406,14 +2435,12 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 {
  mp_pdp->Bin8ToHex(packet_data->inj_flags, m_outgoing_packet); //<--todo
  mp_pdp->Bin8ToHex(packet_data->inj_config, m_outgoing_packet);
-
  int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);
  mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
-
- int inj_cyl_disp = MathHelpers::Round(packet_data->inj_flow_rate * 16384.0f);
+ int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
  mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
-
  mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
 }
 
 //-----------------------------------------------------------------------

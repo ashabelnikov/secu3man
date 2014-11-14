@@ -47,8 +47,7 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
-  afx_msg void OnChangePdStarterOffRpmEdit();
-  afx_msg void OnChangePdStarterSmapAbandonRpmEdit();
+  afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
@@ -57,7 +56,13 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
   bool m_enabled;
 
   CSpinButtonCtrlEx m_smap_abandon_rpm_spin;
-  CSpinButtonCtrlEx m_starter_off_rpm_spin;
   CEditEx m_smap_abandon_rpm_edit;
+  CSpinButtonCtrlEx m_starter_off_rpm_spin;
   CEditEx m_starter_off_rpm_edit;
+  CSpinButtonCtrlEx m_cranktoruntime_spin;
+  CEditEx m_cranktoruntime_edit;
+  CSpinButtonCtrlEx m_aftstrenrich_spin;
+  CEditEx m_aftstrenrich_edit;
+  CSpinButtonCtrlEx m_aftstrstr_spin;
+  CEditEx m_aftstrstr_edit;
 };

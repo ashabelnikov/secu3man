@@ -935,8 +935,11 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
   case STARTR_PAR:
    {
     StartrPar* p_in = (StartrPar*)ip_values;
-    p_params->starter_off  = p_in->starter_off ;
+    p_params->starter_off  = p_in->starter_off;
     p_params->smap_abandon = p_in->smap_abandon;
+    p_params->inj_cranktorun_time = MathHelpers::Round(p_in->inj_cranktorun_time * 100.0f);
+    p_params->inj_aftstr_enrich = MathHelpers::Round(((p_in->inj_aftstr_enrich + 100.0f) * 128.0f) / 100.0f);
+    p_params->inj_aftstr_strokes = p_in->inj_aftstr_strokes;
    }
    break;
   case ADCCOR_PAR:
@@ -1075,7 +1078,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     InjctrPar* p_in = (InjctrPar*)ip_values;
     p_params->inj_flow_rate = MathHelpers::Round(p_in->inj_flow_rate * 64.0f);
     p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
-    p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);
+    p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);    
    }
    break;
   case LAMBDA_PAR:
@@ -1175,6 +1178,9 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      StartrPar* p_out = (StartrPar*)op_values;
      p_out->starter_off = p_params->starter_off;
      p_out->smap_abandon = p_params->smap_abandon;
+     p_out->inj_cranktorun_time = float(p_params->inj_cranktorun_time) / 100.0f;
+     p_out->inj_aftstr_enrich = (float(p_params->inj_aftstr_enrich) / 128.0f) * 100.0f - 100.0f;
+     p_out->inj_aftstr_strokes = p_params->inj_aftstr_strokes;
     }
     break;
    case ADCCOR_PAR:
@@ -1325,8 +1331,9 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
    {
     InjctrPar* p_out = (InjctrPar*)op_values;
     p_out->inj_flow_rate = float(p_params->inj_flow_rate) / 64.0f;
-    p_out->inj_cyl_disp = float(p_params->inj_flow_rate) / 16384.0f;
+    p_out->inj_cyl_disp = float(p_params->inj_cyl_disp) / 16384.0f;
     p_out->inj_sd_igl_const = (float)p_params->inj_sd_igl_const;
+    p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
    }
    break;
   case LAMBDA_PAR:

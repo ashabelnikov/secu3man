@@ -26,8 +26,11 @@
 const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
- ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangePdStarterOffRpmEdit)
- ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangePdStarterSmapAbandonRpmEdit)
+ ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRENRICH_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRSTR_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,OnUpdateControls)
@@ -38,6 +41,21 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_UNIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_EDIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_EDIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
@@ -45,9 +63,15 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
+, m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
+, m_aftstrenrich_edit(CEditEx::MODE_FLOAT, true)
+, m_aftstrstr_edit(CEditEx::MODE_INT, true)
 {
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
+ m_params.inj_cranktorun_time = 3.00f;
+ m_params.inj_aftstr_enrich = 10.0f;
+ m_params.inj_aftstr_strokes = 150;
 }
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
@@ -62,12 +86,20 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_SPIN, m_starter_off_rpm_spin);
  DDX_Control(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_smap_abandon_rpm_edit);
  DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_starter_off_rpm_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_cranktoruntime_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_SPIN, m_cranktoruntime_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRENRICH_EDIT, m_aftstrenrich_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRENRICH_SPIN, m_aftstrenrich_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_aftstrstr_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_SPIN, m_aftstrstr_spin);
 
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
+ m_cranktoruntime_edit.DDX_Value(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_params.inj_cranktorun_time);
+ m_aftstrenrich_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRENRICH_EDIT, m_params.inj_aftstr_enrich);
+ m_aftstrstr_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_params.inj_aftstr_strokes);
 }
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -90,22 +122,32 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_starter_off_rpm_spin.SetRangeAndDelta(40,1000,10);
  m_starter_off_rpm_edit.SetRange(40, 1000);
 
+ m_cranktoruntime_edit.SetLimitText(5);
+ m_cranktoruntime_spin.SetBuddy(&m_cranktoruntime_edit);
+ m_cranktoruntime_edit.SetDecimalPlaces(2);
+ m_cranktoruntime_spin.SetRangeAndDelta(0.10f,99.00f, 0.01f);
+ m_cranktoruntime_edit.SetRange(0.10f, 99.00f);
+
+ m_aftstrenrich_edit.SetLimitText(5);
+ m_aftstrenrich_spin.SetBuddy(&m_aftstrenrich_edit);
+ m_aftstrenrich_edit.SetDecimalPlaces(1);
+ m_aftstrenrich_spin.SetRangeAndDelta(.0f,99.0f,0.5f); //%
+ m_aftstrenrich_edit.SetRange(.0f, 100.0f);
+
+ m_aftstrstr_edit.SetLimitText(3);
+ m_aftstrstr_spin.SetBuddy(&m_aftstrstr_edit);
+ m_aftstrstr_spin.SetRangeAndDelta(1, 255, 1);  //strokes
+ m_aftstrstr_edit.SetRange(1, 255);
+
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-	           // EXCEPTION: OCX Property Pages should return FALSE
 }
 
-void CStarterPageDlg::OnChangePdStarterOffRpmEdit()
+void CStarterPageDlg::OnChangeData()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
-}
-
-void CStarterPageDlg::OnChangePdStarterSmapAbandonRpmEdit()
-{
- UpdateData();
- OnChangeNotify();
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

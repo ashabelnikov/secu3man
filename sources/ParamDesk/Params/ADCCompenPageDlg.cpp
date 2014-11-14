@@ -296,7 +296,6 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  mp_ttc->ActivateToolTips(true);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CADCCompenPageDlg::OnChangeEdit()

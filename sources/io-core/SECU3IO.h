@@ -93,6 +93,9 @@ namespace SECU3IO
  {
   int  starter_off;                     //порог выключения стартера (обороты)
   int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую
+  float inj_cranktorun_time;            //sec.
+  float inj_aftstr_enrich;              //%
+  int   inj_aftstr_strokes;             //strokes
  };
 
  struct AnglesPar
@@ -393,6 +396,7 @@ namespace SECU3IO
   float inj_flow_rate;                //Injector flow rate
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
   float inj_sd_igl_const;             //precalculated constant
+  int cyl_num;                        //read-only parameter: number of cylinders
  };
 
  struct LambdaPar

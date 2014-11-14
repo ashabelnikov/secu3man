@@ -43,11 +43,15 @@ END_MESSAGE_MAP()
 CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjectorPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
+, m_flowrate_edit(CEditEx::MODE_FLOAT, true)
+, m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 {
  m_params.inj_config = 0;
  m_params.inj_flow_rate = 200.0f;
- m_params.inj_cyl_disp = 0.75f;
- m_params.inj_sd_igl_const = 0; 
+ m_params.inj_cyl_disp = 0.375f;
+ m_params.inj_sd_igl_const = 0;
+ m_params.cyl_num = 4; 
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -69,7 +73,9 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_SPIN, m_flowrate_spin);
 
  m_flowrate_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate);
-//m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, m_params.inj_cyl_disp);
+ float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
+ m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
+ m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -136,6 +142,13 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
 {
  ASSERT(o_values);
  UpdateData(TRUE); //копируем данные из диалога в переменные
+
+ //convert inj.flow rate from cc/min to g/min
+ float mifr = m_params.inj_flow_rate * m_fuel_density;
+ //calculate constant (calculation of this value related to the ideal gas law, see firmware code for more information)
+ //todo: injection config
+ m_params.inj_sd_igl_const = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * (float(m_params.cyl_num) / (4.0f * 4.0f));
+
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
 }
 
