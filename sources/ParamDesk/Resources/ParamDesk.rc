@@ -1019,6 +1019,11 @@ BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Количество тактов двигателя на один шаг коррекции"
 END
 
+STRINGTABLE
+BEGIN
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -2047,6 +2052,11 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement"
 END
 
 /////////////////////////////////////////////////////////////////////////////

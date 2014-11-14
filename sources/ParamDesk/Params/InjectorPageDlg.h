@@ -50,12 +50,18 @@ class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::InjctrPar m_params;
   bool m_enabled;
+
+  CSpinButtonCtrlEx m_cyldisp_spin;
+  CEditEx m_cyldisp_edit;
+  CSpinButtonCtrlEx m_flowrate_spin;
+  CEditEx m_flowrate_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
