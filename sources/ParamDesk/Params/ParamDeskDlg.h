@@ -74,6 +74,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableCKPSItems(bool i_enable);
   virtual void EnableBTNameAndPass(bool i_enable);
   virtual void EnableInputsMerging(bool i_enable);
+  virtual void EnableFuelInjection(bool i_enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 
@@ -143,6 +144,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   CImageList* m_pImgList;
 
   bool m_enabled;
+  bool m_fuel_injection;
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;

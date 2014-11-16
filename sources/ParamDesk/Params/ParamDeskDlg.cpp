@@ -63,6 +63,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 : Super(CParamDeskDlg::IDD, pParent)
 , m_pImgList(NULL)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -288,13 +289,20 @@ void CParamDeskDlg::Enable(bool enable)
  m_pChokePageDlg->Enable(enable);
  m_pSecurPageDlg->Enable(enable);
  m_pUniOutPageDlg->Enable(enable);
- m_pInjectorPageDlg->Enable(enable);
- m_pLambdaPageDlg->Enable(enable);
+ m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
+ m_pLambdaPageDlg->Enable(enable && m_fuel_injection);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 
  m_tab_control.EnableItem(-1, enable); //all items
+
+ //disable fuel injection related tabs if fuel injection is not supported
+ if (false==m_fuel_injection)
+ {
+  m_tab_control.EnableItem(13, false);
+  m_tab_control.EnableItem(14, false);
+ }
 }
 
 bool CParamDeskDlg::IsEnabled(void)
@@ -516,6 +524,19 @@ void CParamDeskDlg::EnableBTNameAndPass(bool i_enable)
 void CParamDeskDlg::EnableInputsMerging(bool i_enable)
 {
  m_pCKPSPageDlg->EnableInputsMerging(i_enable);
+}
+
+void CParamDeskDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ m_tab_control.EnableItem(13, i_enable && m_enabled);
+ m_tab_control.EnableItem(14, i_enable && m_enabled);
+ m_pInjectorPageDlg->Enable(i_enable && m_enabled);
+ m_pLambdaPageDlg->Enable(i_enable && m_enabled);
+
+ m_pStarterPageDlg->EnableFuelInjection(i_enable);
 }
 
 void CParamDeskDlg::OnSaveButton()

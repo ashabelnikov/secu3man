@@ -43,17 +43,21 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
   void GetValues(SECU3IO::StartrPar* o_values);
   void SetValues(const SECU3IO::StartrPar* i_values);
 
+  void EnableFuelInjection(bool i_enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionItems(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::StartrPar m_params;
   bool m_enabled;
+  bool m_fuel_injection;
 
   CSpinButtonCtrlEx m_smap_abandon_rpm_spin;
   CEditEx m_smap_abandon_rpm_edit;

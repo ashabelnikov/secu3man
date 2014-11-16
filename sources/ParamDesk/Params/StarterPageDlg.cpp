@@ -42,25 +42,26 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_UNIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_OFF_RPM_EDIT,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateFuelInjectionItems)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_EDIT,OnUpdateFuelInjectionItems)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateFuelInjectionItems)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CStarterPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
@@ -103,6 +104,11 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
 void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CStarterPageDlg::OnUpdateFuelInjectionItems(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -180,4 +186,13 @@ void CStarterPageDlg::SetValues(const SECU3IO::StartrPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::StartrPar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CStarterPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }

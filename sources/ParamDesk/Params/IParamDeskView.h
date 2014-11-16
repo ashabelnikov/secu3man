@@ -53,6 +53,7 @@ class IParamDeskView : public IDeskView
   virtual void EnableCKPSItems(bool i_enable) = 0;
   virtual void EnableBTNameAndPass(bool i_enable) = 0;
   virtual void EnableInputsMerging(bool i_enable) = 0;
+  virtual void EnableFuelInjection(bool i_enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
 

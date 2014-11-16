@@ -879,6 +879,8 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0);
  m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
 
+ m_view->mp_ParamDeskDlg->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);
+
  SetViewFirmwareValues();
 }
 
