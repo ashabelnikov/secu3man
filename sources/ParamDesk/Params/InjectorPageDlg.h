@@ -22,6 +22,7 @@
 #pragma once
 
 #include <memory>
+#include <vector>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
@@ -55,6 +56,17 @@ class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _FillInjCfgComboBox(void);
+  int  _GetInjCfgComboBoxSelection(void);
+  void _SetInjCfgComboBoxSelection(int i_sel);
+  std::vector<std::pair<int, _TSTRING> > m_injcfgs;
+
+  void _FillSqrNumComboBox(void);
+  int  _GetSqrNumComboBoxSelection(void);
+  void _SetSqrNumComboBoxSelection(int i_sel);
+  std::vector<std::pair<int, _TSTRING> > m_sqrnum;
+
+ private:
   SECU3IO::InjctrPar m_params;
   bool m_enabled;
 
@@ -62,6 +74,8 @@ class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_cyldisp_edit;
   CSpinButtonCtrlEx m_flowrate_spin;
   CEditEx m_flowrate_edit;
+  CComboBox m_injcfg_combo;
+  CComboBox m_sqrnum_combo;
 
   float m_fuel_density; //fuel density (g/cc)
 

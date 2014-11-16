@@ -1554,7 +1554,8 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
   return false;
- m_InjctrPar.inj_config = inj_config;
+ m_InjctrPar.inj_config = inj_config >> 4;        //configuration
+ m_InjctrPar.inj_squirt_num = inj_config & 0x0F;  //number of squirts per cycle
 
  int inj_flow_rate = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
@@ -2434,7 +2435,8 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
 void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 {
  mp_pdp->Bin8ToHex(packet_data->inj_flags, m_outgoing_packet); //<--todo
- mp_pdp->Bin8ToHex(packet_data->inj_config, m_outgoing_packet);
+ unsigned char inj_config = (packet_data->inj_config << 4) | (packet_data->inj_squirt_num & 0x0F);
+ mp_pdp->Bin8ToHex(inj_config, m_outgoing_packet);
  int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);
  mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
  int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);

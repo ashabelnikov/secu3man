@@ -437,6 +437,6 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
 
  if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
   std::copy(SECU3IO::work_map_rpm_slots, SECU3IO::work_map_rpm_slots + F_RPM_SLOTS, m_data.rpm_slots);
- 
+
  return true;
 }

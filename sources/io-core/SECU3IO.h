@@ -389,10 +389,17 @@ namespace SECU3IO
  const int UNIOUT_COND_CE = 19;       //CE state
  const int UNIOUT_COND_OFTMR = 20;    //On/Off delay timer
 
+ //define allowed fuel injection configurations
+ const int INJCFG_TROTTLEBODY  = 0;   //single injector for N cylinders
+ const int INJCFG_SIMULTANEOUS = 1;   //N injectors, all injectors work simultaneously
+ const int INJCFG_SEMISEQUENTIAL = 2; //N injectors, injectors work in pairs
+ const int INGCFG_FULLSEQUENTIAL = 3; //N injectors, each injector works 1 time per cycle
+
  struct InjctrPar
  {
   unsigned char inj_flags;            //todo
-  int inj_config;                     //Injection configuration
+  int inj_config;                     //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
+  int inj_squirt_num;                 //Number of squirts per cycle
   float inj_flow_rate;                //Injector flow rate
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
   float inj_sd_igl_const;             //precalculated constant
