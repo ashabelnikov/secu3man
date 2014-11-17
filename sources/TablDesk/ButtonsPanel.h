@@ -73,6 +73,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetDynamicValues(const CGridModeEditorDlg::DynVal& dv);
 
+  void EnableFuelInjection(bool i_enable);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -234,4 +236,5 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float m_idlc_map_original[16];
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
+  bool m_fuel_injection;
 };

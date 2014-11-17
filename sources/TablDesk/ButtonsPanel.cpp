@@ -632,6 +632,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
 , m_scrl_factor(1.75f)
+, m_fuel_injection(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -1172,7 +1173,7 @@ void CButtonsPanel::OnUpdateViewVEMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_ve_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1180,7 +1181,7 @@ void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_afr_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1189,7 +1190,7 @@ void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_crnk_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1197,7 +1198,7 @@ void CButtonsPanel::OnUpdateViewWrmpMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_wrmp_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1205,7 +1206,7 @@ void CButtonsPanel::OnUpdateViewDeadMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_dead_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1213,7 +1214,7 @@ void CButtonsPanel::OnUpdateViewIdlrMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_idlr_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1221,7 +1222,7 @@ void CButtonsPanel::OnUpdateViewIdlcMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_idlc_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1281,6 +1282,27 @@ void CButtonsPanel::SetDynamicValues(const CGridModeEditorDlg::DynVal& dv)
 {
  if (mp_gridModeEditorDlg.get())
   mp_gridModeEditorDlg->SetDynamicValues(dv);
+}
+
+void CButtonsPanel::EnableFuelInjection(bool i_enable)
+{
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_ve_map_chart_state && ::IsWindow(m_ve_map_wnd_handle))
+  DLL::Chart3DEnable(m_ve_map_wnd_handle, i_enable && IsAllowed());
+ if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
+  DLL::Chart3DEnable(m_afr_map_wnd_handle, i_enable && IsAllowed());
+ if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
+  DLL::Chart2DEnable(m_crnk_map_wnd_handle, i_enable && IsAllowed());
+ if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
+  DLL::Chart2DEnable(m_wrmp_map_wnd_handle, i_enable && IsAllowed());
+ if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
+  DLL::Chart2DEnable(m_dead_map_wnd_handle, i_enable && IsAllowed());
+ if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
+  DLL::Chart2DEnable(m_idlr_map_wnd_handle, i_enable && IsAllowed());
+ if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
+  DLL::Chart2DEnable(m_idlc_map_wnd_handle, i_enable && IsAllowed());
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)

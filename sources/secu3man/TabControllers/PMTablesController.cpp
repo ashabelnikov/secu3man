@@ -31,6 +31,7 @@
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
 
 using namespace fastdelegate;
@@ -300,6 +301,11 @@ void CPMTablesController::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnam
 {
  //note: we insert seperator before item with index = TABLES_NUMBER
  mp_view->SetFunctionsNames(i_fwnames, i_eenames, TABLES_NUMBER);
+}
+
+void CPMTablesController::ApplyFWOptions(DWORD opt)
+{
+ mp_view->mp_ButtonsPanel->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0);
 }
 
 //----------------------------------------------------------------

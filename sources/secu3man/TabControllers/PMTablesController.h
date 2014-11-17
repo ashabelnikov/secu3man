@@ -56,6 +56,9 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   bool IsValidCache(void);
 
   void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames); //names of read-only and read/write tables
+
+  void ApplyFWOptions(DWORD opt);
+
  private:
   //Events from view
   void OnMapChanged(int i_mapType);

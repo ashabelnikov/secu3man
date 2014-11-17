@@ -177,6 +177,7 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames()); 
    mp_parcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
    mp_moncntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
+   mp_tabcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
 
    if ((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0)
    {
