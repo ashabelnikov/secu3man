@@ -1195,7 +1195,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     int value;
     if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
      return false;
-    m_EditTabPar.table_data[i] = (((float)value) / discrete) / 1000.0f;  //convert to ms
+    m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
    }
   }
