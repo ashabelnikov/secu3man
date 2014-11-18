@@ -315,7 +315,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
 
  CloneWndFont(&m_exchange_button, &m_exbtnFont, 16, true);
  m_exchange_button.SetFont(&m_exbtnFont);
- 
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -336,13 +336,11 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CHOKE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATS_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATSAAC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
- 
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
- 
 
  return TRUE;  // return TRUE unless you set the focus to a control
-	       // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CMapImpExpDlg::SetExchangeButtonCaption(const _TSTRING& i_text)

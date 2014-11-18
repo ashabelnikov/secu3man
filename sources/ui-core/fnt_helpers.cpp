@@ -41,7 +41,7 @@ bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, b
 
  // Set other LOGFONT values as appropriate.
  lf.lfHeight = -MulDiv(height, 96, 72);
- lf.lfWeight = bold ? FW_BOLD : FW_NORMAL; 
+ lf.lfWeight = bold ? FW_BOLD : FW_NORMAL;
  CFont tmpFont;
  VERIFY(tmpFont.CreateFontIndirect(&lf));
 

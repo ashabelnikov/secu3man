@@ -128,7 +128,6 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
 
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CParamMonTabDlg::OnPmShowRawSensors()

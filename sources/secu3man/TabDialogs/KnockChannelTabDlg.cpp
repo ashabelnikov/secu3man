@@ -149,7 +149,6 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
  mp_ContextMenuManager->Attach(this);
 
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CKnockChannelTabDlg::OnDestroy()
