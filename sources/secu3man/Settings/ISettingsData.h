@@ -46,6 +46,24 @@ struct WndSettings
  int m_ChokeOpMapWnd_Y;
  int m_GridMapWnd_X;
  int m_GridMapWnd_Y;
+ int m_VEMapWnd_X;
+ int m_VEMapWnd_Y;
+ int m_AFRMapWnd_X;
+ int m_AFRMapWnd_Y;
+ int m_CrnkMapWnd_X;
+ int m_CrnkMapWnd_Y;
+ int m_WrmpMapWnd_X;
+ int m_WrmpMapWnd_Y;
+ int m_DeadMapWnd_X;
+ int m_DeadMapWnd_Y;
+ int m_IdlrMapWnd_X;
+ int m_IdlrMapWnd_Y;
+ int m_IdlcMapWnd_X;
+ int m_IdlcMapWnd_Y;
+ int m_ATSCurvMapWnd_X;
+ int m_ATSCurvMapWnd_Y;
+ int m_ATSCorrMapWnd_X;
+ int m_ATSCorrMapWnd_Y;
 };
 
 typedef enum EInterLang

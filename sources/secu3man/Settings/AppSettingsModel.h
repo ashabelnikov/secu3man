@@ -100,6 +100,24 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_ChokeOpMapWnd_Y;
   const CString m_Name_GridMapWnd_X;
   const CString m_Name_GridMapWnd_Y;
+  const CString m_Name_VEMapWnd_X;
+  const CString m_Name_VEMapWnd_Y;
+  const CString m_Name_AFRMapWnd_X;
+  const CString m_Name_AFRMapWnd_Y;
+  const CString m_Name_CrnkMapWnd_X;
+  const CString m_Name_CrnkMapWnd_Y;
+  const CString m_Name_WrmpMapWnd_X;
+  const CString m_Name_WrmpMapWnd_Y;
+  const CString m_Name_DeadMapWnd_X;
+  const CString m_Name_DeadMapWnd_Y;
+  const CString m_Name_IdlrMapWnd_X;
+  const CString m_Name_IdlrMapWnd_Y;
+  const CString m_Name_IdlcMapWnd_X;
+  const CString m_Name_IdlcMapWnd_Y;
+  const CString m_Name_ATSCurvMapWnd_X;
+  const CString m_Name_ATSCurvMapWnd_Y;
+  const CString m_Name_ATSCorrMapWnd_X;
+  const CString m_Name_ATSCorrMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -173,6 +191,24 @@ class CAppSettingsModel : public ISettingsData
   int m_optChokeOpMapWnd_Y;
   int m_optGridMapWnd_X;
   int m_optGridMapWnd_Y;
+  int m_optVEMapWnd_X;
+  int m_optVEMapWnd_Y;
+  int m_optAFRMapWnd_X;
+  int m_optAFRMapWnd_Y;
+  int m_optCrnkMapWnd_X;
+  int m_optCrnkMapWnd_Y;
+  int m_optWrmpMapWnd_X;
+  int m_optWrmpMapWnd_Y;
+  int m_optDeadMapWnd_X;
+  int m_optDeadMapWnd_Y;
+  int m_optIdlrMapWnd_X;
+  int m_optIdlrMapWnd_Y;
+  int m_optIdlcMapWnd_X;
+  int m_optIdlcMapWnd_Y;
+  int m_optATSCurvMapWnd_X;
+  int m_optATSCurvMapWnd_Y;
+  int m_optATSCorrMapWnd_X;
+  int m_optATSCorrMapWnd_Y;
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;

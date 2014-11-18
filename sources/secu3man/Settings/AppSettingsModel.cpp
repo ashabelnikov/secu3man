@@ -70,6 +70,24 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_ChokeOpMapWnd_Y(_T("ChokeOpMapWnd_Y"))
 , m_Name_GridMapWnd_X(_T("GridMapWnd_X"))
 , m_Name_GridMapWnd_Y(_T("GridMapWnd_Y"))
+, m_Name_VEMapWnd_X(_T("VEMapWnd_X"))
+, m_Name_VEMapWnd_Y(_T("VEMapWnd_Y"))
+, m_Name_AFRMapWnd_X(_T("AFRMapWnd_X"))
+, m_Name_AFRMapWnd_Y(_T("AFRMapWnd_Y"))
+, m_Name_CrnkMapWnd_X(_T("CrnkMapWnd_X"))
+, m_Name_CrnkMapWnd_Y(_T("CrnkMapWnd_Y"))
+, m_Name_WrmpMapWnd_X(_T("WrmpMapWnd_X"))
+, m_Name_WrmpMapWnd_Y(_T("WrmpMapWnd_Y"))
+, m_Name_DeadMapWnd_X(_T("DeadMapWnd_X"))
+, m_Name_DeadMapWnd_Y(_T("DeadMapWnd_Y"))
+, m_Name_IdlrMapWnd_X(_T("IdlrMapWnd_X"))
+, m_Name_IdlrMapWnd_Y(_T("IdlrMapWnd_Y"))
+, m_Name_IdlcMapWnd_X(_T("IdlcMapWnd_X"))
+, m_Name_IdlcMapWnd_Y(_T("IdlcMapWnd_Y"))
+, m_Name_ATSCurvMapWnd_X(_T("ATSCurvMapWnd_X"))
+, m_Name_ATSCurvMapWnd_Y(_T("ATSCurvMapWnd_Y"))
+, m_Name_ATSCorrMapWnd_X(_T("ATSCorrMapWnd_X"))
+, m_Name_ATSCorrMapWnd_Y(_T("ATSCorrMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -416,6 +434,33 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AFRMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AFRMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CrnkMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CrnkMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, WrmpMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, WrmpMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, DeadMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, DeadMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdlrMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdlrMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdlcMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IdlcMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -586,6 +631,60 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optGridMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optVEMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_VEMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optVEMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_VEMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAFRMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AFRMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAFRMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AFRMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optCrnkMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrnkMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optCrnkMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrnkMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optWrmpMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WrmpMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optWrmpMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WrmpMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optDeadMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DeadMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optDeadMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DeadMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdlrMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlrMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdlrMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlrMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdlcMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlcMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIdlcMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlcMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optATSCurvMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCurvMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optATSCurvMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCurvMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optATSCorrMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCorrMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optATSCorrMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCorrMapWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -661,6 +760,24 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optChokeOpMapWnd_Y = i_wndSettings.m_ChokeOpMapWnd_Y;
  m_optGridMapWnd_X = i_wndSettings.m_GridMapWnd_X;
  m_optGridMapWnd_Y = i_wndSettings.m_GridMapWnd_Y;
+ m_optVEMapWnd_X = i_wndSettings.m_VEMapWnd_X;
+ m_optVEMapWnd_Y = i_wndSettings.m_VEMapWnd_Y;
+ m_optAFRMapWnd_X = i_wndSettings.m_AFRMapWnd_X;
+ m_optAFRMapWnd_Y = i_wndSettings.m_AFRMapWnd_Y;
+ m_optCrnkMapWnd_X = i_wndSettings.m_CrnkMapWnd_X;
+ m_optCrnkMapWnd_Y = i_wndSettings.m_CrnkMapWnd_Y;
+ m_optWrmpMapWnd_X = i_wndSettings.m_WrmpMapWnd_X;
+ m_optWrmpMapWnd_Y = i_wndSettings.m_WrmpMapWnd_Y;
+ m_optDeadMapWnd_X = i_wndSettings.m_DeadMapWnd_X;
+ m_optDeadMapWnd_Y = i_wndSettings.m_DeadMapWnd_Y;
+ m_optIdlrMapWnd_X = i_wndSettings.m_IdlrMapWnd_X;
+ m_optIdlrMapWnd_Y = i_wndSettings.m_IdlrMapWnd_Y;
+ m_optIdlcMapWnd_X = i_wndSettings.m_IdlcMapWnd_X;
+ m_optIdlcMapWnd_Y = i_wndSettings.m_IdlcMapWnd_Y;
+ m_optATSCurvMapWnd_X = i_wndSettings.m_ATSCurvMapWnd_X;
+ m_optATSCurvMapWnd_Y = i_wndSettings.m_ATSCurvMapWnd_Y;
+ m_optATSCorrMapWnd_X = i_wndSettings.m_ATSCorrMapWnd_X;
+ m_optATSCorrMapWnd_Y = i_wndSettings.m_ATSCorrMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -685,6 +802,24 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_ChokeOpMapWnd_Y = m_optChokeOpMapWnd_Y;
  o_wndSettings.m_GridMapWnd_X = m_optGridMapWnd_X;
  o_wndSettings.m_GridMapWnd_Y = m_optGridMapWnd_Y;
+ o_wndSettings.m_VEMapWnd_X = m_optVEMapWnd_X;
+ o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd_Y;
+ o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd_X;
+ o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd_Y;
+ o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd_X;
+ o_wndSettings.m_CrnkMapWnd_Y = m_optCrnkMapWnd_Y;
+ o_wndSettings.m_WrmpMapWnd_X = m_optWrmpMapWnd_X;
+ o_wndSettings.m_WrmpMapWnd_Y = m_optWrmpMapWnd_Y;
+ o_wndSettings.m_DeadMapWnd_X = m_optDeadMapWnd_X;
+ o_wndSettings.m_DeadMapWnd_Y = m_optDeadMapWnd_Y;
+ o_wndSettings.m_IdlrMapWnd_X = m_optIdlrMapWnd_X;
+ o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd_Y;
+ o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd_X;
+ o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd_Y;
+ o_wndSettings.m_ATSCurvMapWnd_X = m_optATSCurvMapWnd_X;
+ o_wndSettings.m_ATSCurvMapWnd_Y = m_optATSCurvMapWnd_Y;
+ o_wndSettings.m_ATSCorrMapWnd_X = m_optATSCorrMapWnd_X;
+ o_wndSettings.m_ATSCorrMapWnd_Y = m_optATSCorrMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

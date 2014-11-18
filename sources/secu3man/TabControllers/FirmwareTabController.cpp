@@ -1439,6 +1439,42 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_ChokeOpMapWnd_X = rc.left;
    ws.m_ChokeOpMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_VE:
+   ws.m_VEMapWnd_X = rc.left;
+   ws.m_VEMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_AFR:
+   ws.m_AFRMapWnd_X = rc.left;
+   ws.m_AFRMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_CRNK:
+   ws.m_CrnkMapWnd_X = rc.left;
+   ws.m_CrnkMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_WRMP:
+   ws.m_WrmpMapWnd_X = rc.left;
+   ws.m_WrmpMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_DEAD:
+   ws.m_DeadMapWnd_X = rc.left;
+   ws.m_DeadMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_IDLR:
+   ws.m_IdlrMapWnd_X = rc.left;
+   ws.m_IdlrMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_IDLC:
+   ws.m_IdlcMapWnd_X = rc.left;
+   ws.m_IdlcMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_ATS_CURVE:
+   ws.m_ATSCurvMapWnd_X = rc.left;
+   ws.m_ATSCurvMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_ATS_CORR:
+   ws.m_ATSCorrMapWnd_X = rc.left;
+   ws.m_ATSCorrMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
    ws.m_GridMapWnd_Y = rc.top;
@@ -1484,6 +1520,34 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_CHOKE_OP:
    X = ws.m_ChokeOpMapWnd_X, Y = ws.m_ChokeOpMapWnd_Y;
    break;
+  case TYPE_MAP_INJ_VE:
+   X = ws.m_VEMapWnd_X, Y = ws.m_VEMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_AFR:
+   X = ws.m_AFRMapWnd_X, Y = ws.m_AFRMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_CRNK:
+   X = ws.m_CrnkMapWnd_X, Y = ws.m_CrnkMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_WRMP:
+   X = ws.m_WrmpMapWnd_X, Y = ws.m_WrmpMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_DEAD:
+   X = ws.m_DeadMapWnd_X, Y = ws.m_DeadMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_IDLR:
+   X = ws.m_IdlrMapWnd_X, Y = ws.m_IdlrMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_IDLC:
+   X = ws.m_IdlcMapWnd_X, Y = ws.m_IdlcMapWnd_Y;
+   break;
+  case TYPE_MAP_ATS_CURVE:
+   X = ws.m_ATSCurvMapWnd_X, Y = ws.m_ATSCurvMapWnd_Y;
+   break;
+  case TYPE_MAP_ATS_CORR:
+   X = ws.m_ATSCorrMapWnd_X, Y = ws.m_ATSCorrMapWnd_Y;
+   break;
+
   case TYPE_MAP_GME_WND:
    X = ws.m_GridMapWnd_X, Y = ws.m_GridMapWnd_Y;
    break;
