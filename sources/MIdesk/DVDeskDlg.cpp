@@ -83,7 +83,6 @@ BOOL CDVDeskDlg::OnInitDialog()
  m_was_initialized = true;
 
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CDVDeskDlg::OnDestroy()

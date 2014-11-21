@@ -218,7 +218,6 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)

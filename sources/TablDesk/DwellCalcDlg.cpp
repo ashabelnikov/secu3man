@@ -122,7 +122,6 @@ BOOL CDwellCalcDlg::OnInitDialog()
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 void CDwellCalcDlg::SetVoltageValues(const float* values, size_t size)

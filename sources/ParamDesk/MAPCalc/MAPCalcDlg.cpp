@@ -211,7 +211,6 @@ BOOL CMAPCalcDlg::OnInitDialog()
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
-               // EXCEPTION: OCX Property Pages should return FALSE
 }
 
 LRESULT CMAPCalcDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
