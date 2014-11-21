@@ -172,6 +172,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT3, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -187,6 +190,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_IGN_OUT4, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -207,6 +213,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -227,6 +236,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -246,6 +258,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -265,6 +280,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -284,6 +302,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -303,6 +324,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
@@ -331,6 +355,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_SM_STP, _T("SM_STP"));
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INTK_HEAT, _T("INTK_HEAT"));
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INJ_OUT0, _T("INJ_OUT1"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INJ_OUT1, _T("INJ_OUT2"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INJ_OUT2, _T("INJ_OUT3"));
+ mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_INJ_OUT3, _T("INJ_OUT4"));
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_CE, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
