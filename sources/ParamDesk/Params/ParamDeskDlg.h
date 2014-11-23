@@ -137,6 +137,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   class CUniOutPageDlg*    m_pUniOutPageDlg;
   class CInjectorPageDlg*  m_pInjectorPageDlg;
   class CLambdaPageDlg*    m_pLambdaPageDlg;
+  class CAccelEnrPageDlg*  m_pAccelEnrPageDlg;
 
   CStatic m_pd_title;
   CButton m_save_button;

@@ -416,6 +416,10 @@ namespace SECU3IO
   int lam_rpm_thrd;                   //RPM turn on threshold
  };
 
+ struct AccelPar
+ {
+
+ };
 
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
@@ -501,6 +505,7 @@ namespace SECU3IO
   SECU3IO::UniOutPar    m_UniOutPar;
   SECU3IO::InjctrPar    m_InjctrPar;
   SECU3IO::LambdaPar    m_LambdaPar;
+  SECU3IO::AccelPar     m_AccelPar;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

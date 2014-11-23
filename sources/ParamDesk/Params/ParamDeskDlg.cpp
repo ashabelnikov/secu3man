@@ -26,6 +26,7 @@
 #include <map>
 
 //вкладки
+#include "AccelEnrPageDlg.h"
 #include "ADCCompenPageDlg.h"
 #include "AnglesPageDlg.h"
 #include "CarburPageDlg.h"
@@ -122,6 +123,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 
  m_pLambdaPageDlg = new CLambdaPageDlg();
  m_pLambdaPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+
+ m_pAccelEnrPageDlg = new CAccelEnrPageDlg();
+ m_pAccelEnrPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -144,6 +148,7 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pUniOutPageDlg;
  delete m_pInjectorPageDlg;
  delete m_pLambdaPageDlg;
+ delete m_pAccelEnrPageDlg;
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -218,6 +223,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_UNIOUT_PAR),m_pUniOutPageDlg,12), UNIOUT_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
 
  //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
  //уже использует обработчики сообщений!
@@ -290,6 +296,7 @@ void CParamDeskDlg::Enable(bool enable)
  m_pUniOutPageDlg->Enable(enable);
  m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
  m_pLambdaPageDlg->Enable(enable && m_fuel_injection);
+ m_pAccelEnrPageDlg->Enable(enable && m_fuel_injection);
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
@@ -301,6 +308,7 @@ void CParamDeskDlg::Enable(bool enable)
  {
   m_tab_control.EnableItem(13, false);
   m_tab_control.EnableItem(14, false);
+  m_tab_control.EnableItem(15, false);
  }
 }
 
@@ -370,6 +378,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case LAMBDA_PAR:
    m_pLambdaPageDlg->SetValues((LambdaPar*)i_values);
    break;
+  case ACCEL_PAR:
+   m_pAccelEnrPageDlg->SetValues((AccelPar*)i_values);
+   break;
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
@@ -431,6 +442,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case LAMBDA_PAR:
    m_pLambdaPageDlg->GetValues((LambdaPar*)o_values);
+   break;
+  case ACCEL_PAR:
+   m_pAccelEnrPageDlg->GetValues((AccelPar*)o_values);
    break;
   case FNNAME_DAT:
   case SENSOR_DAT:
@@ -532,9 +546,10 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_fuel_injection = i_enable;
  m_tab_control.EnableItem(13, i_enable && m_enabled);
  m_tab_control.EnableItem(14, i_enable && m_enabled);
+ m_tab_control.EnableItem(15, i_enable && m_enabled);
  m_pInjectorPageDlg->Enable(i_enable && m_enabled);
  m_pLambdaPageDlg->Enable(i_enable && m_enabled);
-
+ m_pAccelEnrPageDlg->Enable(i_enable && m_enabled);
  m_pStarterPageDlg->EnableFuelInjection(i_enable);
 }
 

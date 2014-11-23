@@ -27,7 +27,7 @@
 const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 
 BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
- ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_COMBO, OnChangeDataInjCfg)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_CYLDISP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
@@ -134,6 +134,19 @@ void CInjectorPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
+void CInjectorPageDlg::OnChangeDataInjCfg()
+{
+ UpdateData();
+
+ //SqrNum combobox depends on injection config and cylinder number,
+ //Also we have to preserve selection
+ int sel = _GetSqrNumComboBoxSelection();
+ _FillSqrNumComboBox();
+ _SetSqrNumComboBoxSelection(sel);
+
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
 //разрешение/запрещение контроллов (всех поголовно)
 void CInjectorPageDlg::Enable(bool enable)
 {
@@ -192,6 +205,10 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::InjctrPar));
 
+ //Fill it here because its contents depend on selected injection configuration & cylinder number.  
+ //Note, selection will be set by following calls
+ _FillSqrNumComboBox();
+
  _SetInjCfgComboBoxSelection(m_params.inj_config);
  _SetSqrNumComboBoxSelection(m_params.inj_squirt_num);
 
@@ -203,8 +220,8 @@ void CInjectorPageDlg::_FillInjCfgComboBox(void)
  m_injcfgs.clear();
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_TROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY))); 
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SIMULTANEOUS, MLL::GetString(IDS_INJ_CFG_SIMULTANEOUSLY))); 
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL))); 
- m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL))); 
+//m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL))); 
+//m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL))); 
 
  m_injcfg_combo.ResetContent();
  for(size_t i = 0; i < m_injcfgs.size(); i++)
@@ -252,9 +269,58 @@ void CInjectorPageDlg::_SetInjCfgComboBoxSelection(int i_sel)
 void CInjectorPageDlg::_FillSqrNumComboBox(void)
 {
  m_sqrnum.clear();
- m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
- m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
- m_sqrnum.push_back(std::make_pair(4, _T("4"))); 
+
+ //Fill squirts number list depending of selected configuration and number of engine cylinders
+ if (m_params.inj_config == SECU3IO::INJCFG_TROTTLEBODY || m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
+ {
+  switch(m_params.cyl_num)
+  {
+   case 1:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    break;
+   case 2:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
+    break;
+   case 3:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(3, _T("3"))); 
+    break;
+   case 4:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
+    m_sqrnum.push_back(std::make_pair(4, _T("4"))); 
+    break;
+   case 5:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(5, _T("5")));
+    break;
+   case 6:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
+    m_sqrnum.push_back(std::make_pair(3, _T("3"))); 
+    m_sqrnum.push_back(std::make_pair(6, _T("6"))); 
+    break;
+   case 8:
+    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
+    m_sqrnum.push_back(std::make_pair(4, _T("4"))); 
+    m_sqrnum.push_back(std::make_pair(8, _T("8"))); 
+    break;
+  }
+ }
+ else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL)
+ {
+  //TODO
+ }
+ else if (m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
+ {
+  //TODO
+ }
+ else
+ {
+  ASSERT(0); //unknown configuration
+ }
 
  m_sqrnum_combo.ResetContent();
  for(size_t i = 0; i < m_sqrnum.size(); i++)
@@ -297,5 +363,8 @@ void CInjectorPageDlg::_SetSqrNumComboBoxSelection(int i_sel)
    return;
   }
  }
- ASSERT(0);
+
+ //if we are not able to find corresponding number then select middle number
+ int count = m_sqrnum_combo.GetCount();
+ m_sqrnum_combo.SetCurSel(count/2);
 }

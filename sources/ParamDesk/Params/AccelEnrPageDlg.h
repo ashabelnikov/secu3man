@@ -21,8 +21,8 @@
 
 #pragma once
 
+#include <string>
 #include <memory>
-#include <vector>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "ui-core/EditEx.h"
@@ -31,54 +31,32 @@
 
 class CToolTipCtrlEx;
 
-class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
+class CAccelEnrPageDlg : public CTabDialog, public ParamPageEvents
 {
   typedef CTabDialog Super;
 
  public:
-  CInjectorPageDlg(CWnd* pParent = NULL);   // standard constructor
- ~CInjectorPageDlg();
+  CAccelEnrPageDlg(CWnd* pParent = NULL);   // standard constructor
   virtual LPCTSTR GetDialogID(void) const;
   static const UINT IDD;
 
   void Enable(bool enable);
   bool IsEnabled(void);
 
-  void GetValues(SECU3IO::InjctrPar* o_values);
-  void SetValues(const SECU3IO::InjctrPar* i_values);
+  void GetValues(SECU3IO::AccelPar* o_values);
+  void SetValues(const SECU3IO::AccelPar* i_values);
 
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
-  afx_msg void OnChangeDataInjCfg();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
-  void _FillInjCfgComboBox(void);
-  int  _GetInjCfgComboBoxSelection(void);
-  void _SetInjCfgComboBoxSelection(int i_sel);
-  std::vector<std::pair<int, _TSTRING> > m_injcfgs;
-
-  void _FillSqrNumComboBox(void);
-  int  _GetSqrNumComboBoxSelection(void);
-  void _SetSqrNumComboBoxSelection(int i_sel);
-  std::vector<std::pair<int, _TSTRING> > m_sqrnum;
-
- private:
-  SECU3IO::InjctrPar m_params;
+  SECU3IO::AccelPar m_params;
   bool m_enabled;
-
-  CSpinButtonCtrlEx m_cyldisp_spin;
-  CEditEx m_cyldisp_edit;
-  CSpinButtonCtrlEx m_flowrate_spin;
-  CEditEx m_flowrate_edit;
-  CComboBox m_injcfg_combo;
-  CComboBox m_sqrnum_combo;
-
-  float m_fuel_density; //fuel density (g/cc)
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -62,5 +62,6 @@
 
 #define   INJCTR_PAR   ';'
 #define   LAMBDA_PAR   '-'
+#define   ACCEL_PAR    '|'
 
 #endif //_UFCODES_H_

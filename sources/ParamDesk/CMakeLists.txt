@@ -26,6 +26,7 @@ set(HEADERS
   common/ParamPageEvents.h
   MAPCalc/MAPCalcController.h
   MAPCalc/MAPCalcDlg.h
+  Params/AccelEnrPageDlg.h
   Params/ADCCompenPageDlg.h
   Params/AnglesPageDlg.h
   Params/CarburPageDlg.h
@@ -56,6 +57,7 @@ set(SOURCES
   common/ParamPageEvents.cpp
   MAPCalc/MAPCalcController.cpp
   MAPCalc/MAPCalcDlg.cpp
+  Params/AccelEnrPageDlg.cpp
   Params/ADCCompenPageDlg.cpp
   Params/AnglesPageDlg.cpp
   Params/CarburPageDlg.cpp

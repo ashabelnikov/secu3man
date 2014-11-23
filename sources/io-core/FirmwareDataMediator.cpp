@@ -1093,6 +1093,11 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
    }
    break;
+  case ACCEL_PAR:
+   {
+    AccelPar* p_in = (AccelPar*)ip_values;
+   }
+   break;
 
   default:
    return false; //неизвестный или неподдерживаемый дескриптор
@@ -1348,6 +1353,11 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     p_out->lam_swt_point = ((float)p_params->inj_lambda_swt_point) * ADC_DISCRETE;
     p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
     p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
+   }
+   break;
+  case ACCEL_PAR:
+   {
+    AccelPar* p_out = (AccelPar*)op_values;
    }
    break;
 

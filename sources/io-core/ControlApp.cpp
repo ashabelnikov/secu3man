@@ -1622,6 +1622,16 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::AccelPar& m_AccelPar = m_recepted_packet.m_AccelPar;
+ if (size != (mp_pdp->isHex() ? 0 : 0))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -1749,6 +1759,10 @@ bool CControlApp::ParsePackets()
     continue;
    case LAMBDA_PAR:
     if (Parse_LAMBDA_PAR(p_start, p_size))
+     break;
+    continue;
+   case ACCEL_PAR:
+    if (Parse_ACCEL_PAR(p_start, p_size))
      break;
     continue;
 
@@ -1952,6 +1966,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case UNIOUT_PAR:
   case INJCTR_PAR:
   case LAMBDA_PAR:
+  case ACCEL_PAR:
    return true;
   default:
    return false;
@@ -2043,6 +2058,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case LAMBDA_PAR:
    Build_LAMBDA_PAR((LambdaPar*)i_packet_data);
+   break;
+  case ACCEL_PAR:
+   Build_ACCEL_PAR((AccelPar*)i_packet_data);
    break;
 
   default:
@@ -2440,7 +2458,7 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);
  mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
  int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
- mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
  mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const, m_outgoing_packet);
  mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
 }
@@ -2458,6 +2476,11 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
  mp_pdp->Bin16ToHex(temp_thrd, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->lam_rpm_thrd, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_ACCEL_PAR(AccelPar* packet_data)
+{
 }
 
 //-----------------------------------------------------------------------
