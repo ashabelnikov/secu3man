@@ -178,24 +178,39 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  float mifr = m_params.inj_flow_rate * m_fuel_density;
 
  int inj_num = m_params.cyl_num;
+ int bnk_num = m_params.cyl_num;
  if (m_params.inj_config == SECU3IO::INJCFG_TROTTLEBODY)
+ {
   inj_num = 1; //single injector
- else if (m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS ||
-          m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL ||
-          m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
+  bnk_num = 1; //single bank
+ }
+ else if (m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
+ {
   inj_num = m_params.cyl_num; //= N cylinders
+  bnk_num = 1; //single bank
+ }
+ else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL) //available only for even cylinder number engines
+ {
+  inj_num = m_params.cyl_num; //= N cylinders
+  bnk_num = m_params.cyl_num / 2;
+ }
+ else if (m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
+ {
+  inj_num = m_params.cyl_num; //= N cylinders
+  bnk_num = m_params.cyl_num; //= N cylinders
+ }
  else
   ASSERT(0);
 
  //calculate constant (calculation of this value related to the ideal gas law, see firmware code for more information)
- m_params.inj_sd_igl_const = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * (float(m_params.cyl_num) / (float(inj_num) * float(m_params.inj_squirt_num)));
+ m_params.inj_sd_igl_const = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * ((float(bnk_num) * float(m_params.cyl_num)) / (float(inj_num) * float(m_params.inj_squirt_num)));
  //----------------------------------------------------------------------------
 
  if (m_params.inj_sd_igl_const > 131072)
  {
   m_params.inj_sd_igl_const = 131072;
   AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
- } 
+ }
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
 }
@@ -312,11 +327,63 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
  }
  else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL)
  {
-  //TODO
+  switch(m_params.cyl_num)
+  {
+   case 1:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 2:
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    break;
+   case 3:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 4:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    break;
+   case 5:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 6:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(3, _T("3")));
+    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    break;
+   case 8:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    break;
+  }
  }
  else if (m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
  {
-  //TODO
+  switch(m_params.cyl_num)
+  {
+   case 1:
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    break;
+   case 2:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    break;
+   case 3:
+    m_sqrnum.push_back(std::make_pair(3, _T("3")));
+    break;
+   case 4:
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    break;
+   case 5:
+    m_sqrnum.push_back(std::make_pair(5, _T("5")));
+    break;
+   case 6:
+    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    break;
+   case 8:
+    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    break;
+  }
  }
  else
  {
@@ -334,7 +401,6 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
   }
   m_sqrnum_combo.SetItemData(index, i);
  }
-
 }
 
 int CInjectorPageDlg::_GetSqrNumComboBoxSelection(void)
