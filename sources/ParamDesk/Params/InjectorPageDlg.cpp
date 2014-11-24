@@ -53,6 +53,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_flowrate_edit(CEditEx::MODE_FLOAT, true)
 , m_fuel_density(0.71f) //petrol density (0.71 g/cc)
+, m_ovf_msgbox(false)
 {
  m_params.inj_config = SECU3IO::INJCFG_SIMULTANEOUS;
  m_params.inj_squirt_num = 4;
@@ -209,7 +210,12 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  if (m_params.inj_sd_igl_const > 131072)
  {
   m_params.inj_sd_igl_const = 131072;
-  AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
+  if (!m_ovf_msgbox)
+  {
+   m_ovf_msgbox = true;
+   AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
+   m_ovf_msgbox = false;
+  }
  }
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
