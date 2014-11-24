@@ -116,6 +116,7 @@ BOOL CInjectorPageDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_edit, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo, MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -218,10 +219,10 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
 void CInjectorPageDlg::_FillInjCfgComboBox(void)
 {
  m_injcfgs.clear();
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_TROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY))); 
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SIMULTANEOUS, MLL::GetString(IDS_INJ_CFG_SIMULTANEOUSLY))); 
-//m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL))); 
-//m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL))); 
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_TROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY)));
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SIMULTANEOUS, MLL::GetString(IDS_INJ_CFG_SIMULTANEOUSLY)));
+//m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
+//m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
 
  m_injcfg_combo.ResetContent();
  for(size_t i = 0; i < m_injcfgs.size(); i++)
@@ -276,36 +277,36 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
   switch(m_params.cyl_num)
   {
    case 1:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
     break;
    case 2:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
-    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
     break;
    case 3:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
-    m_sqrnum.push_back(std::make_pair(3, _T("3"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(3, _T("3")));
     break;
    case 4:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
-    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
-    m_sqrnum.push_back(std::make_pair(4, _T("4"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
     break;
    case 5:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
     m_sqrnum.push_back(std::make_pair(5, _T("5")));
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
-    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
-    m_sqrnum.push_back(std::make_pair(3, _T("3"))); 
-    m_sqrnum.push_back(std::make_pair(6, _T("6"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(3, _T("3")));
+    m_sqrnum.push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(1, _T("1"))); 
-    m_sqrnum.push_back(std::make_pair(2, _T("2"))); 
-    m_sqrnum.push_back(std::make_pair(4, _T("4"))); 
-    m_sqrnum.push_back(std::make_pair(8, _T("8"))); 
+    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum.push_back(std::make_pair(8, _T("8")));
     break;
   }
  }

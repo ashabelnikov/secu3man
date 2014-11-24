@@ -1042,6 +1042,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT " оличество тактов двигател€ на один шаг коррекции"
+    IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "—колько раз впрыскиваетс€ топливо (число событий впрыска за цикл), не зависит от числа каналов и форсунок."
 END
 
 STRINGTABLE
@@ -2106,6 +2107,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step"
+    IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "How many times fuel injected into the intake manifold (number of injection events per cycle), not depending on injectors and channels number."
 END
 
 STRINGTABLE
