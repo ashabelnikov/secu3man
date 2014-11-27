@@ -76,7 +76,9 @@ typedef struct cd_data_t
  //(хранит флаги дающие информацию о том с какими опциями была скомпилирована прошивка)
  _ulong config;
 
- _uchar reserved[4];             //Reserved bytes
+ _uchar reserved[3];             //Reserved bytes
+
+ _uchar fw_version;              //Firmware version
 
  _uint size;                     // size of this structure (2 bytes)
 }cd_data_t;
@@ -315,6 +317,14 @@ DWORD CFirmwareDataMediator::GetFWOptions(const BYTE* ip_source_bytes, const PPF
  cd_data_t* p_cd = _FindCodeData(ip_source_bytes, ip_fpp); 
  //there is no such data in this firmware, then return 0
  return (p_cd) ? p_cd->config : 0;
+}
+
+BYTE* CFirmwareDataMediator::GetFWVersion(BYTE* fw_version) const
+{
+ //if there is no such data in this firmware, then return zero
+ fw_version[0] = mp_cddata ? mp_cddata->fw_version & 0x0F : 0;
+ fw_version[1] = mp_cddata ? mp_cddata->fw_version >> 4   : 0;
+ return fw_version;
 }
 
 void CFirmwareDataMediator::GetStartMap(int i_index,float* op_values, bool i_original /* = false */)

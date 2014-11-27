@@ -66,6 +66,8 @@ class IOCORE_API CFirmwareDataMediator
 
   DWORD GetFWOptions(void);
   DWORD GetFWOptions(const BYTE* ip_source_bytes, const PPFlashParam* ip_fpp);
+  BYTE* GetFWVersion(BYTE* fw_version) const;
+
   //ignition
   void GetStartMap(int i_index, float* op_values, bool i_original = false);
   void SetStartMap(int i_index,const float* i_values);

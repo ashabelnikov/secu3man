@@ -83,7 +83,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void _OnReadFlashToFile(void);
   bool _CheckFirmwareCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph = NULL);
   bool _CheckQuartzCompatibilityAndAskUser(BYTE* ip_buff, size_t fwSize = 0);
-  void _ShowFWOptions(const _TSTRING& info, DWORD options);
+  void _ShowFWOptions(const _TSTRING& info, DWORD options, BYTE fw_version[2]);
 
   ///////////context menu and other event handlers/////////////////////
   void OnBootLoaderInfo(void);

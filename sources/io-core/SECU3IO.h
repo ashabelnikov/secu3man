@@ -235,6 +235,7 @@ namespace SECU3IO
  {
   char   info[FW_SIGNATURE_INFO_SIZE+1];//*one more byte for string's termination
   DWORD  options;
+  BYTE   fw_version[2];                 //index: 0 - minor, 1 - major
  };
 
  struct MiscelPar

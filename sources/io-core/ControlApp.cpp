@@ -1085,7 +1085,7 @@ bool CControlApp::Parse_CE_SAVED_ERR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FWInfoDat& m_FWInfoDat = m_recepted_packet.m_FWInfoDat;
- if (size != (FW_SIGNATURE_INFO_SIZE + (mp_pdp->isHex() ? 8 : 4)))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (FW_SIGNATURE_INFO_SIZE + (mp_pdp->isHex() ? 10 : 5)))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //строка с информацией 
@@ -1098,6 +1098,12 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex32ToBin(raw_packet,&options))
   return false;
  m_FWInfoDat.options = options;
+
+ unsigned char fw_version;
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&fw_version))
+  return false;
+ m_FWInfoDat.fw_version[0] = fw_version & 0x0F;
+ m_FWInfoDat.fw_version[1] = fw_version >> 4;
 
  return true;
 }

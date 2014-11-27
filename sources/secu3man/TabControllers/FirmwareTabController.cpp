@@ -219,7 +219,7 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
    m_sbar->SetInformationText(string);
 
    //display firmware options if present
-   _ShowFWOptions(string, p_packet->options);
+   _ShowFWOptions(string, p_packet->options, p_packet->fw_version);
    m_read_fw_sig_info_flag = false;
   }
  }
@@ -1368,7 +1368,8 @@ void CFirmwareTabController::OnFirmwareInfo(void)
 
 void CFirmwareTabController::OnViewFWOptions(void)
 {
- _ShowFWOptions(m_fwdm->GetSignatureInfo(), m_fwdm->GetFWOptions());
+ BYTE fw_version[2];
+ _ShowFWOptions(m_fwdm->GetSignatureInfo(), m_fwdm->GetFWOptions(), m_fwdm->GetFWVersion(fw_version));
 }
 
 bool CFirmwareTabController::IsViewFWOptionsAvailable(void)
@@ -1559,7 +1560,7 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
-void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options)
+void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options, BYTE fw_version[2])
 {
  if (options!=0)
  {
@@ -1579,6 +1580,7 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options)
   }
   str_options+=MLL::GetString(IDS_FW_TOTAL_NUMOF_OPT);
   _TSSTREAM str;  str << _T(" ") << opt_count;
+  str << _T("  Version v") << (int)fw_version[1] << _T(".") << (int)fw_version[0];
   str_options+=str.str();
   AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
  }
