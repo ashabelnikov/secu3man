@@ -81,4 +81,5 @@ class CInjectorPageDlg : public CTabDialog, public ParamPageEvents
   float m_fuel_density; //fuel density (g/cc)
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  bool m_ovf_msgbox;
 };
