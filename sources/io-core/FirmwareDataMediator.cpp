@@ -136,7 +136,7 @@ typedef struct fw_data_t
 
  //used for checking compatibility with management software. Holds size of all data stored in the firmware.
  //Includes CRC size also.
- _uint fw_data_size;
+ _uint        fw_data_size;
 
  _uint        code_crc;                  // Check sum of the whole firmware (except this check sum and boot loader)
 }fw_data_t;
@@ -867,6 +867,80 @@ void CFirmwareDataMediator::SetIdlcMap(int i_index,const float* ip_values)
 
  for (int i = 0; i < INJ_IAC_POS_TABLE_SIZE; i++ )
   p_fd->tables[i_index].inj_iac_crank_pos[i] = MathHelpers::Round((ip_values[i]*IACPOS_MAPS_M_FACTOR));
+}
+
+void CFirmwareDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = mp_bytes_original;
+ else
+  p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_tps_enr[i]) / AETPSV_MAPS_M_FACTOR; //convert to %
+}
+
+void CFirmwareDataMediator::SetAETPSMap(int i_index, const float* ip_values)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(ip_values);
+
+ p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_tps_bins[i] = MathHelpers::Round((ip_values[i]*AETPSB_MAPS_M_FACTOR));
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_tps_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE]*AETPSV_MAPS_M_FACTOR));
+}
+
+void CFirmwareDataMediator::GetAERPMMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = mp_bytes_original;
+ else
+  p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_rpm_bins[i]) / AERPMB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_rpm_enr[i]) / AERPMV_MAPS_M_FACTOR; //convert to %
+}
+
+void CFirmwareDataMediator::SetAERPMMap(int i_index, const float* ip_values)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(ip_values);
+
+ p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_rpm_bins[i] = MathHelpers::Round((ip_values[i]*AERPMB_MAPS_M_FACTOR));
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ae_rpm_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE]*AERPMV_MAPS_M_FACTOR));
 }
 
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_values)

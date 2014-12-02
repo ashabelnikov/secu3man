@@ -92,6 +92,10 @@ class IOCORE_API CFirmwareDataMediator
   void SetIdlrMap(int i_index, const float* i_values);
   void GetIdlcMap(int i_index, float* op_values, bool i_original = false);
   void SetIdlcMap(int i_index, const float* i_values);
+  void GetAETPSMap(int i_index, float* op_values, bool i_original = false);
+  void SetAETPSMap(int i_index, const float* i_values);
+  void GetAERPMMap(int i_index, float* op_values, bool i_original = false);
+  void SetAERPMMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

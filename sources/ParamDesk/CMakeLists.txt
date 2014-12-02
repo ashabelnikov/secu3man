@@ -21,7 +21,7 @@ include_directories(../)
 include_directories(../ParamDesk)
 project(${PROJECT})
 
-set(HEADERS 
+set(HEADERS
   Application/StdAfx.h
   common/ParamPageEvents.h
   MAPCalc/MAPCalcController.h
@@ -44,7 +44,7 @@ set(HEADERS
   Params/StarterPageDlg.h
   Params/TemperPageDlg.h
   Params/UniOutPageDlg.h
-  Params/IORemappingDlg.h  
+  Params/IORemappingDlg.h
   Resources/Resource.h
   Tables/ITablesDeskView.h
   Tables/TablesDeskDlg.h

@@ -44,6 +44,8 @@
 #define INJ_WARMUP_LOOKUP_TABLE_SIZE 16
 #define INJ_DT_LOOKUP_TABLE_SIZE 32
 #define INJ_IAC_POS_TABLE_SIZE 16
+#define INJ_AE_TPS_LOOKUP_TABLE_SIZE 4
+#define INJ_AE_RPM_LOOKUP_TABLE_SIZE 4
 
 //количество наборов характеристик хранимых в пам€ти программ
 #define TABLES_NUMBER          4
@@ -66,6 +68,8 @@ struct SECU3FWMapsItem
  float inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];   // Injector's dead time
  float inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];  // IAC/PWM position on run
  float inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];// IAC/PWM position on cranking
+ float inj_ae_tps[INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's TPS lookup table
+ float inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's RPM lookup table
 };
 
 //јппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -84,8 +88,8 @@ struct FWMapsDataHolder
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
- { 
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
+ {
+  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
