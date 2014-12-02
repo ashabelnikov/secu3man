@@ -631,7 +631,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_factor(1.75f)
+, m_scrl_factor(1.85f)
 , m_fuel_injection(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));

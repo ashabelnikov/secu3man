@@ -216,3 +216,5 @@
 #define IDS_MAPS_IAC_UNIT               5475
 #define IDS_IDLR_MAP                    5476
 #define IDS_IDLC_MAP                    5477
+#define IDC_TD_VIEW_AETPS_MAP           5478
+#define IDC_TD_VIEW_AERPM_MAP           5479
