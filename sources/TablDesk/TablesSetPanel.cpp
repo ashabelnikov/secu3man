@@ -536,7 +536,7 @@ void CTablesSetPanel::OnViewAttenuatorMap()
   m_attenuator_map_wnd_handle = DLL::Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
-    MLL::GetString(IDS_ATTENUATOR_MAP).c_str());
+    MLL::GetString(IDS_ATTENUATOR_MAP).c_str(), false);
   DLL::Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1, false); //пр€чем надписи над узловыми точками функции
   DLL::Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable, this);
   DLL::Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
@@ -572,7 +572,7 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
   m_dwellcntrl_map_wnd_handle = DLL::Chart2DCreate(GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DWELLCNTRL_UNIT).c_str(),
-    MLL::GetString(IDS_DWELLCNTRL_MAP).c_str());
+    MLL::GetString(IDS_DWELLCNTRL_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_dwellcntrl_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_dwellcntrl_map_wnd_handle, OnChangeDwellCntrlTable, this);
   DLL::Chart2DSetOnClose(m_dwellcntrl_map_wnd_handle, OnCloseDwellCntrlTable, this);
@@ -605,7 +605,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
   m_cts_curve_map_wnd_handle = DLL::Chart2DCreate(GetCTSCurveMap(true), GetCTSCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
-    MLL::GetString(IDS_CTS_CURVE_MAP).c_str());
+    MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_cts_curve_map_wnd_handle, 1, _T("%.02f"));
   DLL::Chart2DSetAxisEdits(m_cts_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeCTSXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_cts_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
@@ -641,7 +641,7 @@ void CTablesSetPanel::OnViewChokeOpMap()
   m_choke_map_wnd_handle = DLL::Chart2DCreate(GetChokeOpMap(true), GetChokeOpMap(false), 0, 100.0, SECU3IO::choke_op_map_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CHOKE_OP_UNIT).c_str(),
-    MLL::GetString(IDS_CHOKE_OP_MAP).c_str());
+    MLL::GetString(IDS_CHOKE_OP_MAP).c_str(), false);
   DLL::Chart2DSetOnChange(m_choke_map_wnd_handle, OnChangeChokeOpTable, this);
   DLL::Chart2DSetOnClose(m_choke_map_wnd_handle, OnCloseChokeOpTable, this);
   DLL::Chart2DUpdate(m_choke_map_wnd_handle, NULL, NULL); //<--actuate changes
@@ -674,7 +674,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
   m_ats_curve_map_wnd_handle = DLL::Chart2DCreate(GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
-    MLL::GetString(IDS_ATS_CURVE_MAP).c_str());
+    MLL::GetString(IDS_ATS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_ats_curve_map_wnd_handle, 1, _T("%.02f"));
   DLL::Chart2DSetAxisEdits(m_ats_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeCTSXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_ats_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
@@ -710,7 +710,7 @@ void CTablesSetPanel::OnViewATSAACMap()
   m_ats_aac_map_wnd_handle = DLL::Chart2DCreate(GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_ATSCORR_MAP).c_str());
+    MLL::GetString(IDS_ATSCORR_MAP).c_str(), false);
   DLL::Chart2DSetOnChange(m_ats_aac_map_wnd_handle,OnChangeATSAACTable,this);
   DLL::Chart2DSetOnClose(m_ats_aac_map_wnd_handle,OnCloseATSAACTable,this);
   DLL::Chart2DUpdate(m_ats_aac_map_wnd_handle, NULL, NULL); //<--actuate changes

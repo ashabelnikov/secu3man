@@ -856,7 +856,7 @@ void CButtonsPanel::OnViewStartMap()
   m_start_map_wnd_handle = DLL::Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_START_MAP).c_str());
+    MLL::GetString(IDS_START_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(m_start_map_wnd_handle, OnWndActivationStartMap,this);
   DLL::Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
   DLL::Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
@@ -890,7 +890,7 @@ void CButtonsPanel::OnViewIdleMap()
   m_idle_map_wnd_handle = DLL::Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_IDLE_MAP).c_str());
+    MLL::GetString(IDS_IDLE_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(m_idle_map_wnd_handle,OnWndActivationIdleMap,this);
   DLL::Chart2DSetOnGetAxisLabel(m_idle_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
@@ -957,7 +957,7 @@ void CButtonsPanel::OnViewTempMap()
   m_temp_map_wnd_handle = DLL::Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
-    MLL::GetString(IDS_TEMPCORR_MAP).c_str());
+    MLL::GetString(IDS_TEMPCORR_MAP).c_str(), false);
   DLL::Chart2DSetOnWndActivation(m_temp_map_wnd_handle,OnWndActivationTempMap,this);
   DLL::Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
   DLL::Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
@@ -1060,7 +1060,7 @@ void CButtonsPanel::OnViewCrnkMap()
   m_crnk_map_wnd_handle = DLL::Chart2DCreate(GetCrnkMap(true), GetCrnkMap(false), 0.25f, 16.0, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
-    MLL::GetString(IDS_CRNK_MAP).c_str());
+    MLL::GetString(IDS_CRNK_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_crnk_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_crnk_map_wnd_handle, OnChangeCrnkMap, this);
   DLL::Chart2DSetOnClose(m_crnk_map_wnd_handle, OnCloseCrnkMap, this);
@@ -1093,7 +1093,7 @@ void CButtonsPanel::OnViewWrmpMap()
   m_wrmp_map_wnd_handle = DLL::Chart2DCreate(GetWrmpMap(true),GetWrmpMap(false),0.0f,1.99f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
-    MLL::GetString(IDS_WRMP_MAP).c_str());
+    MLL::GetString(IDS_WRMP_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_wrmp_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_wrmp_map_wnd_handle, 0.05f);
   DLL::Chart2DSetOnWndActivation(m_wrmp_map_wnd_handle,OnWndActivationWrmpMap,this);
@@ -1128,7 +1128,7 @@ void CButtonsPanel::OnViewDeadMap()
   m_dead_map_wnd_handle = DLL::Chart2DCreate(GetDeadMap(true), GetDeadMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
-    MLL::GetString(IDS_DEAD_MAP).c_str());
+    MLL::GetString(IDS_DEAD_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_dead_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_dead_map_wnd_handle, 0.1f);
   DLL::Chart2DSetAxisValuesFormat(m_dead_map_wnd_handle, 1, _T("%.01f"));
@@ -1163,7 +1163,7 @@ void CButtonsPanel::OnViewIdlrMap()
   m_idlr_map_wnd_handle = DLL::Chart2DCreate(GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLR_MAP).c_str());
+    MLL::GetString(IDS_IDLR_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(m_idlr_map_wnd_handle, 1.0f);
   DLL::Chart2DSetOnWndActivation(m_idlr_map_wnd_handle,OnWndActivationIdlrMap,this);
   DLL::Chart2DSetOnChange(m_idlr_map_wnd_handle,OnChangeIdlrMap,this);
@@ -1197,7 +1197,7 @@ void CButtonsPanel::OnViewIdlcMap()
   m_idlc_map_wnd_handle = DLL::Chart2DCreate(GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLC_MAP).c_str());
+    MLL::GetString(IDS_IDLC_MAP).c_str(), false);
   DLL::Chart2DSetPtMovingStep(m_idlc_map_wnd_handle, 1.0f);
   DLL::Chart2DSetOnWndActivation(m_idlc_map_wnd_handle,OnWndActivationIdlcMap,this);
   DLL::Chart2DSetOnChange(m_idlc_map_wnd_handle,OnChangeIdlcMap,this);
@@ -1228,10 +1228,11 @@ void CButtonsPanel::OnViewAETPSMap()
  if ((!m_aetps_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_aetps_map_chart_state = 1;
-/*m_aetps_map_wnd_handle = DLL::Chart2DCreate(GetAETPSMap(true),GetAETPSMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,8,
-    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
-    MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLC_MAP).c_str());*/
+  const float bins_lims[2] = {0.0f, 1000.0f};
+  m_aetps_map_wnd_handle = DLL::Chart2DCreate(GetAETPSMap(true),GetAETPSMap(false),0.0f,199.0f,bins_lims,8,
+    MLL::GetString(IDS_MAPS_DPDT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_AETPS_UNIT).c_str(),
+    MLL::GetString(IDS_AETPS_MAP).c_str(), true); //<-- use horizontal axis bins
   DLL::Chart2DSetPtMovingStep(m_aetps_map_wnd_handle, 1.0f);
   DLL::Chart2DSetOnWndActivation(m_aetps_map_wnd_handle,OnWndActivationAETPSMap,this);
   DLL::Chart2DSetOnChange(m_aetps_map_wnd_handle,OnChangeAETPSMap,this);
@@ -1262,10 +1263,11 @@ void CButtonsPanel::OnViewAERPMMap()
  if ((!m_aerpm_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_aerpm_map_chart_state = 1;
-/*m_aerpm_map_wnd_handle = DLL::Chart2DCreate(GetAERPMMap(true),GetAERPMMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,8,
-    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
-    MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
-    MLL::GetString(IDS_IDLC_MAP).c_str());*/
+  const float bins_lims[2] = {0.0f, 25000.0f}; //max 25000min-1
+  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,8,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_AERPM_UNIT).c_str(),
+    MLL::GetString(IDS_AERPM_MAP).c_str(), true); //<--use horizontal axis bins
   DLL::Chart2DSetPtMovingStep(m_aerpm_map_wnd_handle, 1.0f); //step is 1%
   DLL::Chart2DSetOnWndActivation(m_aerpm_map_wnd_handle,OnWndActivationAERPMMap,this);
   DLL::Chart2DSetOnChange(m_aerpm_map_wnd_handle,OnChangeAERPMMap,this);

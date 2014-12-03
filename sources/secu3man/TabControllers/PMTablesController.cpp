@@ -72,6 +72,10 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
    return i_original ? m_omaps->inj_iac_run_pos : m_maps->inj_iac_run_pos;
   case TYPE_MAP_INJ_IDLC:
    return i_original ? m_omaps->inj_iac_crank_pos : m_maps->inj_iac_crank_pos;
+  case TYPE_MAP_INJ_AETPS:
+   return i_original ? m_omaps->inj_ae_tps : m_maps->inj_ae_tps;
+  case TYPE_MAP_INJ_AERPM:
+   return i_original ? m_omaps->inj_ae_rpm : m_maps->inj_ae_rpm;
  }
  return NULL; //undefined type of map
 }
@@ -103,6 +107,10 @@ size_t _GetMapSize(int i_mapType)
   case TYPE_MAP_INJ_IDLR:
   case TYPE_MAP_INJ_IDLC:
    return INJ_IAC_POS_TABLE_SIZE;
+  case TYPE_MAP_INJ_AETPS:
+   return INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; //bins and values
+  case TYPE_MAP_INJ_AERPM:
+   return INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; //bins and values
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -130,6 +138,8 @@ void CPMTablesController::_MoveMapsToCharts(bool i_original)
  _MoveMapToChart(TYPE_MAP_INJ_DEAD, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_IDLR, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_IDLC, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_AETPS, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_AERPM, i_original);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
@@ -148,6 +158,8 @@ void CPMTablesController::_ClearAcquisitionFlags(void)
  std::fill(m_maps_flags->inj_dead_time, m_maps_flags->inj_dead_time + INJ_DT_LOOKUP_TABLE_SIZE, .0f);
  std::fill(m_maps_flags->inj_iac_run_pos, m_maps_flags->inj_iac_run_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
  std::fill(m_maps_flags->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_ae_tps, m_maps_flags->inj_ae_tps + (INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2), .0f);
+ std::fill(m_maps_flags->inj_ae_rpm, m_maps_flags->inj_ae_rpm + (INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2), .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -364,6 +376,12 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_IDLC_MAP: //cranking IAC pos map
    UpdateMap(m_maps->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos, data);
    break;
+  case ETMT_AETPS_MAP: //AE TPS map
+   UpdateMap(m_maps->inj_ae_tps, m_maps_flags->inj_ae_tps, data);
+   break;
+  case ETMT_AERPM_MAP: //AE TPS map
+   UpdateMap(m_maps->inj_ae_rpm, m_maps_flags->inj_ae_rpm, data);
+   break;
   default: ASSERT(0);
    //error
    break;
@@ -407,6 +425,10 @@ bool CPMTablesController::_IsCacheUpToDate(void)
    return false;
   if (!_FindZero(m_maps_flags->inj_iac_crank_pos, INJ_IAC_POS_TABLE_SIZE))
    return false;
+  if (!_FindZero(m_maps_flags->inj_ae_tps, INJ_AE_TPS_LOOKUP_TABLE_SIZE*2))
+   return false;
+  if (!_FindZero(m_maps_flags->inj_ae_rpm, INJ_AE_RPM_LOOKUP_TABLE_SIZE*2))
+   return false;
  return true;
 }
 
@@ -438,6 +460,11 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
  if (false==_CompareViewMap(TYPE_MAP_INJ_IDLC, _GetMapSize(TYPE_MAP_INJ_IDLC)))
   return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_AETPS, _GetMapSize(TYPE_MAP_INJ_AETPS)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_AERPM, _GetMapSize(TYPE_MAP_INJ_AERPM)))
+  return true;
+
  return false; //no modifications
 }
 

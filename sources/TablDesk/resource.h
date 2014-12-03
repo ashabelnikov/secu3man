@@ -218,3 +218,8 @@
 #define IDS_IDLC_MAP                    5477
 #define IDC_TD_VIEW_AETPS_MAP           5478
 #define IDC_TD_VIEW_AERPM_MAP           5479
+#define IDS_AETPS_MAP                   5480
+#define IDS_MAPS_DPDT_UNIT              5481
+#define IDS_MAPS_AETPS_UNIT             5482
+#define IDS_AERPM_MAP                   5483
+#define IDS_MAPS_AERPM_UNIT             5484

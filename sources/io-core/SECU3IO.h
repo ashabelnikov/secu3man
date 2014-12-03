@@ -270,7 +270,8 @@ namespace SECU3IO
  const int ETMT_DEAD_MAP = 9;           //Injector dead time
  const int ETMT_IDLR_MAP = 10;          //IAC run pos
  const int ETMT_IDLC_MAP = 11;          //IAC cranking pos
-
+ const int ETMT_AETPS_MAP = 12;         //AE TPS map
+ const int ETMT_AERPM_MAP = 13;         //AE RPM map
 
  struct SepTabPar
  {
