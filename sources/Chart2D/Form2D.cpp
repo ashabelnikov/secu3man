@@ -60,6 +60,7 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_val_n(0)
 , m_horizontal_axis_grid_mode(0)
 , m_pt_moving_step(0.5f)
+, m_bins_mode(false)
 {
  memset(&m_horizontal_axis_grid_values[0][0], 0, sizeof(float) * 1024);
  memset(&m_horizontal_axis_grid_values[1][0], 0, sizeof(float) * 1024);
@@ -84,7 +85,11 @@ void TForm2D::DataPrepare()
 
  for(int i = 0; i < m_count_of_function_points; i++)
  {
-  as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i]);
+  if (!i_bins_mode)
+   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i]);
+  else
+   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
+   
   Series1->Add(mp_original_function[i], as, clAqua);
   Series2->Add(mp_modified_function[i], as, clRed);
  }

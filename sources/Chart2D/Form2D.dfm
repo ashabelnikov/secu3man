@@ -318,6 +318,64 @@ object Form2D: TForm2D
     ArrowKeys = True
     ShowHint = True    
   end
+  object EditX1: TEdit
+    Left = 198
+    Top = 328
+    Width = 41
+    Height = 21
+    MaxLength = 5
+    TabOrder = 5    
+    Text = '0'
+    Visible = False
+    ShowHint = True    
+    OnChange = EditXBeginOnChange
+    OnKeyDown = CtrlKeyDown
+  end
+  object EditX2: TEdit
+    Left = 378
+    Top = 328
+    Width = 41
+    Height = 21
+    MaxLength = 5
+    TabOrder = 6
+    Text = '0'
+    Visible = False
+    ShowHint = True    
+    OnChange = EditXEndOnChange
+    OnKeyDown = CtrlKeyDown
+  end
+  object SpinX1: TFloatUpDown
+    Left = 239
+    Top = 328
+    Width = 16
+    Height = 21
+    FloatAssociate = EditXBegin
+    FloatMin = 0
+    FloatMax = 100
+    FloatPosition = 0
+    TabOrder = 7
+    TabStop = False
+    Visible = False
+    Wrap = False
+    ArrowKeys = True
+    ShowHint = True    
+  end
+ object SpinX2: TFloatUpDown
+    Left = 419
+    Top = 328
+    Width = 16
+    Height = 21
+    FloatAssociate = EditXEnd
+    FloatMin = 0
+    FloatMax = 100
+    FloatPosition = 0
+    TabOrder = 8
+    TabStop = False
+    Visible = False
+    Wrap = False
+    ArrowKeys = True
+    ShowHint = True    
+  end
   object PopupMenu: TPopupMenu
     Left = 723
     Top = 40

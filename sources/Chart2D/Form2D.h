@@ -56,8 +56,12 @@ class TForm2D : public TForm
   TMenuItem *PM_Dup1stPoint;
   TMenuItem *PM_BldCurveUsing1stAndLastPoints;
   TEdit *EditXBegin;
+  TEdit *EditX1;
+  TEdit *EditX2;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
+  TFloatUpDown *SpinX1;
+  TFloatUpDown *SpinX2;
   TFloatUpDown *SpinXEnd;
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
@@ -109,6 +113,7 @@ class TForm2D : public TForm
   AnsiString m_x_axis_title;
   AnsiString m_y_axis_title;
   float m_pt_moving_step;
+  bool m_bins_mode;
 
  private:
   void RestrictAndSetValue(int index, double v);

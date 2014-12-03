@@ -34,13 +34,16 @@ enum EMapTypes
  TYPE_MAP_INJ_DEAD     = 9,  //must be = 9
  TYPE_MAP_INJ_IDLR     = 10, //must be = 10
  TYPE_MAP_INJ_IDLC     = 11, //must be = 11
+ TYPE_MAP_INJ_AETPS    = 12, //must be = 12
+ TYPE_MAP_INJ_AERPM    = 13, //must be = 13
+
  //separate maps
- TYPE_MAP_ATTENUATOR   = 12, //
- TYPE_MAP_DWELLCNTRL   = 13, //
- TYPE_MAP_CTS_CURVE    = 14, //
- TYPE_MAP_CHOKE_OP     = 15, //
- TYPE_MAP_ATS_CURVE    = 16, //
- TYPE_MAP_ATS_CORR     = 17, //
+ TYPE_MAP_ATTENUATOR   = 14, //
+ TYPE_MAP_DWELLCNTRL   = 15, //
+ TYPE_MAP_CTS_CURVE    = 16, //
+ TYPE_MAP_CHOKE_OP     = 17, //
+ TYPE_MAP_ATS_CURVE    = 18, //
+ TYPE_MAP_ATS_CORR     = 19, //
 
  TYPE_MAP_GME_WND      = 32  //pseudo map, grid mode editing window
 };
