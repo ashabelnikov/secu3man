@@ -44,7 +44,7 @@
 #define INJ_WARMUP_LOOKUP_TABLE_SIZE 16
 #define INJ_DT_LOOKUP_TABLE_SIZE 32
 #define INJ_IAC_POS_TABLE_SIZE 16
-#define INJ_AE_TPS_LOOKUP_TABLE_SIZE 4
+#define INJ_AE_TPS_LOOKUP_TABLE_SIZE 8
 #define INJ_AE_RPM_LOOKUP_TABLE_SIZE 4
 
 //количество наборов характеристик хранимых в памяти программ

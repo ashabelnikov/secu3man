@@ -253,8 +253,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float m_idlr_map_original[16];
   float m_idlc_map_active[16];
   float m_idlc_map_original[16];
-  float m_aetps_map_active[8];
-  float m_aetps_map_original[8];
+  float m_aetps_map_active[16];
+  float m_aetps_map_original[16];
   float m_aerpm_map_active[8];
   float m_aerpm_map_original[8];
 

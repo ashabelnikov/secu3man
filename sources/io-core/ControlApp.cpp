@@ -1226,7 +1226,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      else if (m_EditTabPar.tab_id == ETMT_IDLR_MAP || m_EditTabPar.tab_id == ETMT_IDLC_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AETPS_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / ((i < INJ_AE_TPS_LOOKUP_TABLE_SIZE)?AETPSB_MAPS_M_FACTOR:AETPSV_MAPS_M_FACTOR);
+      m_EditTabPar.table_data[i] = (i < INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float(value)*AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
      else if (m_EditTabPar.tab_id == ETMT_AERPM_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / ((i < INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
      else
@@ -2367,7 +2367,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    }
    else if (packet_data->tab_id == ETMT_AETPS_MAP)
    {
-    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * ((packet_data->address<INJ_AE_TPS_LOOKUP_TABLE_SIZE)?AETPSB_MAPS_M_FACTOR:AETPSV_MAPS_M_FACTOR));
+    unsigned char value = MathHelpers::Round((packet_data->address<INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(packet_data->table_data[i]*AETPSB_MAPS_M_FACTOR):(packet_data->table_data[i]+AETPSV_MAPS_ADDER));
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
    }
    else if (packet_data->tab_id == ETMT_AERPM_MAP)
