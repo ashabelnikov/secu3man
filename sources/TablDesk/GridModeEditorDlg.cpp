@@ -88,7 +88,13 @@ class CEditExCustomKeys : public CEditEx
    if (nChar==VK_RETURN)
     m_onChar(nChar, this);
    else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
-    GetNextWindow()->SetFocus();
+   {
+    CWnd* pWnd = GetNextWindow((GetKeyState(VK_SHIFT)&0x8000)?GW_HWNDPREV:GW_HWNDNEXT);
+    pWnd->SetFocus();
+    CEditExCustomKeys* pThisClsWnd = dynamic_cast<CEditExCustomKeys*>(pWnd);
+    if (pThisClsWnd)
+     pThisClsWnd->SetSel(0, -1);
+   }
   }
   void IncrementEdit(float incVal)
   {
