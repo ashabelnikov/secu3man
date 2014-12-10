@@ -656,19 +656,32 @@ void CGridModeEditorDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
  {
   case VK_UP:
    if (pSender->m_un)
+   {
     pSender->m_un->SetFocus();
+    pSender->m_un->SetSel(0, -1); //select all text
+   }
    break;
+  case VK_RETURN:                 //move down if user pressed Enter key
   case VK_DOWN:
    if (pSender->m_dn)
+   {
     pSender->m_dn->SetFocus();
+    pSender->m_dn->SetSel(0, -1);
+   }
    break;
   case VK_LEFT:
    if (pSender->m_ln)
+   {
     pSender->m_ln->SetFocus();
+    pSender->m_ln->SetSel(0, -1);
+   }
    break;
   case VK_RIGHT:
    if (pSender->m_rn)
+   {
     pSender->m_rn->SetFocus();
+    pSender->m_rn->SetSel(0, -1);
+   }
    break;
  }
  
