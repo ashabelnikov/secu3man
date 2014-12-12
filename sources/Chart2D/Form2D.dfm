@@ -260,13 +260,63 @@ object Form2D: TForm2D
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
   end
+  object ButtonShowBins: TBitBtn
+    Left = 587
+    Top = 328
+    Width = 25
+    Height = 25
+    TabOrder = 5
+    ShowHint = True    
+    OnClick = ButtonShowBinsClick
+    OnKeyDown = CtrlKeyDown
+    Glyph.Data = {
+      CE040000424DCE04000000000000360000002800000012000000150000000100
+      18000000000098040000000000000000000000000000000000008D847C68615C
+      4D423D5249414C453E4F4942554A43554942534942544842544A43554A445548
+      42534A43524C44504942524C4478706800005D5955656260786E6F737070676F
+      6D676F6C6F6A6A6F67676E6C6B70696A6A6A696367666F6767726A6B67676769
+      6A685B5A574D454100005C5A5AEAEAEAEAEAEAEAEAEA464646808080EAEAEAEA
+      EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA464646808080EAEAEA595D58
+      00006C6A69EAEAEAEAEAEAEAEAEA464646808080EAEAEAEAEAEAEAEAEAEAEAEA
+      EAEAEAEAEAEAEAEAEAEAEAEA464646808080EAEAEA6969650000656362EAEAEA
+      EAEAEAEAEAEA464646808080EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA
+      EAEAEAEA464646808080EAEAEA6F646200006C69688080808080808080808080
+      8080808080808080808080808080808080808080808080808080808080808080
+      80808080806A686500006B696846464646464646464646464680808046464646
+      4646464646464646464646464646464646464646464646808080464646686867
+      00006A6867EAEAEAEAEAEAEAEAEA464646808080EAEAEAEAEAEAFF0000EAEAEA
+      EAEAEAFF0000EAEAEAEAEAEA464646808080EAEAEA6C68680000706E6DEAEAEA
+      EAEAEAEAEAEA464646808080EAEAEAFF0000FF0000EAEAEAEAEAEAFF0000FF00
+      00EAEAEA464646808080EAEAEA6E6B6A00006B6968EAEAEAEAEAEAEAEAEA4646
+      46808080FF0000FF0000FF0000FF0000FF0000FF0000FF0000FF000046464680
+      8080EAEAEA6E6B6A0000686665EAEAEAEAEAEAEAEAEA464646808080EAEAEAFF
+      0000FF0000EAEAEAEAEAEAFF0000FF0000EAEAEA464646808080EAEAEA6E6B6A
+      00006E6C6BEAEAEAEAEAEAEAEAEA464646808080EAEAEAEAEAEAFF0000EAEAEA
+      EAEAEAFF0000EAEAEAEAEAEA464646808080EAEAEA726E6D0000716F6FEAEAEA
+      EAEAEAEAEAEA464646808080EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA
+      EAEAEAEA464646808080EAEAEA746F6E00006C6969EAEAEAEAEAEAEAEAEA4646
+      46808080EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA46464680
+      8080EAEAEA726E6D00006B696980808080808080808080808080808080808080
+      8080808080808080808080808080808080808080808080808080808080727070
+      00006C6A6A464646464646464646464646808080464646464646464646464646
+      46464646464646464646464646464680808046464674727200006D6B6AEAEAEA
+      EAEAEAEAEAEA464646808080EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA
+      EAEAEAEA464646808080EAEAEA7572740000706E6EEAEAEAEAEAEAEAEAEA4646
+      46808080EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA46464680
+      8080EAEAEA7472730000706E6EEAEAEAEAEAEAEAEAEA464646808080EAEAEAEA
+      EAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEAEA464646808080EAEAEA757575
+      00006F6E6EEAEAEAEAEAEAEAEAEA464646808080EAEAEAEAEAEAEAEAEAEAEAEA
+      EAEAEAEAEAEAEAEAEAEAEAEA464646808080EAEAEA868685000063615FA1A09F
+      B2B3B1B2B4B1B5B7B6B6B6B7B7B5B8B7B4B7B7B3B5B7B4B5B7B4B5B6B3B4B6B3
+      B4B4B3B5AEB1B2ACAFB1A7A9AB6F6C680000}
+  end
   object EditXBegin: TEdit
     Left = 48
     Top = 328
     Width = 41
     Height = 21
     MaxLength = 5
-    TabOrder = 5    
+    TabOrder = 6    
     Text = '0'
     Visible = False
     ShowHint = True    
@@ -279,7 +329,7 @@ object Form2D: TForm2D
     Width = 41
     Height = 21
     MaxLength = 5
-    TabOrder = 6
+    TabOrder = 7
     Text = '0'
     Visible = False
     ShowHint = True    
@@ -295,7 +345,7 @@ object Form2D: TForm2D
     FloatMin = 0
     FloatMax = 100
     FloatPosition = 0
-    TabOrder = 7
+    TabOrder = 8
     TabStop = False
     Visible = False
     Wrap = False
@@ -311,70 +361,181 @@ object Form2D: TForm2D
     FloatMin = 0
     FloatMax = 100
     FloatPosition = 0
-    TabOrder = 8
+    TabOrder = 9
     TabStop = False
     Visible = False
     Wrap = False
     ArrowKeys = True
     ShowHint = True    
   end
-  object EditX1: TEdit
-    Left = 198
-    Top = 328
-    Width = 41
-    Height = 21
-    MaxLength = 5
-    TabOrder = 5    
-    Text = '0'
-    Visible = False
-    ShowHint = True    
-    OnChange = EditXBeginOnChange
-    OnKeyDown = CtrlKeyDown
-  end
-  object EditX2: TEdit
-    Left = 378
-    Top = 328
-    Width = 41
-    Height = 21
-    MaxLength = 5
-    TabOrder = 6
-    Text = '0'
-    Visible = False
-    ShowHint = True    
-    OnChange = EditXEndOnChange
-    OnKeyDown = CtrlKeyDown
-  end
-  object SpinX1: TFloatUpDown
-    Left = 239
-    Top = 328
-    Width = 16
-    Height = 21
-    FloatAssociate = EditXBegin
-    FloatMin = 0
-    FloatMax = 100
-    FloatPosition = 0
-    TabOrder = 7
+  object PanelBins: TPanel
+    Left = 49
+    Top = 311
+    Width = 537
+    Height = 41
+    TabOrder = 10
     TabStop = False
     Visible = False
-    Wrap = False
-    ArrowKeys = True
-    ShowHint = True    
-  end
- object SpinX2: TFloatUpDown
-    Left = 419
-    Top = 328
-    Width = 16
-    Height = 21
-    FloatAssociate = EditXEnd
-    FloatMin = 0
-    FloatMax = 100
-    FloatPosition = 0
-    TabOrder = 8
-    TabStop = False
-    Visible = False
-    Wrap = False
-    ArrowKeys = True
-    ShowHint = True    
+    object Edit1: TEdit
+      Left = 16
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 11
+      Text = 'Edit1'
+    end
+    object UpDown1: TUpDown
+      Left = 56
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 12
+      TabStop = False
+      Wrap = False
+      Associate = Edit1
+    end
+    object Edit2: TEdit
+      Left = 80
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 13
+      Text = 'Edit1'
+    end
+    object UpDown2: TUpDown
+      Left = 120
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 14
+      TabStop = False
+      Wrap = False
+      Associate = Edit2
+    end
+    object Edit3: TEdit
+      Left = 144
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 15
+      Text = 'Edit1'
+    end
+    object UpDown3: TUpDown
+      Left = 184
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 16
+      TabStop = False
+      Wrap = False
+      Associate = Edit3
+    end
+    object Edit4: TEdit
+      Left = 208
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 17
+      Text = 'Edit1'
+    end
+    object UpDown4: TUpDown
+      Left = 248
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 18
+      TabStop = False
+      Wrap = False
+      Associate = Edit4
+    end
+    object Edit5: TEdit
+      Left = 272
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 19
+      Text = 'Edit1'
+    end
+    object UpDown5: TUpDown
+      Left = 312
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 20
+      TabStop = False
+      Wrap = False
+      Associate = Edit5
+    end
+    object Edit6: TEdit
+      Left = 336
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 21
+      Text = 'Edit1'
+    end
+    object UpDown6: TUpDown
+      Left = 376
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 22
+      TabStop = False
+      Wrap = False
+      Associate = Edit6
+    end
+    object Edit7: TEdit
+      Left = 400
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 23
+      Text = 'Edit1'
+    end
+    object UpDown7: TUpDown
+      Left = 440
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 24
+      TabStop = False
+      Wrap = False
+      Associate = Edit7
+    end
+    object Edit8: TEdit
+      Left = 464
+      Top = 8
+      Width = 41
+      Height = 25
+      TabOrder = 25
+      Text = 'Edit1'
+    end
+    object UpDown8: TUpDown
+      Left = 504
+      Top = 8
+      Width = 17
+      Height = 25
+      Min = 0
+      Position = 0
+      TabOrder = 26
+      TabStop = False
+      Wrap = False
+      Associate = Edit8
+    end
   end
   object PopupMenu: TPopupMenu
     Left = 723

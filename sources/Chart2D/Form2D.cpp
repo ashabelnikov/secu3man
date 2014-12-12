@@ -85,7 +85,7 @@ void TForm2D::DataPrepare()
 
  for(int i = 0; i < m_count_of_function_points; i++)
  {
-  if (!i_bins_mode)
+  if (!m_bins_mode)
    as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i]);
   else
    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
@@ -355,6 +355,12 @@ void __fastcall TForm2D::Smoothing5xClick(TObject *Sender)
   Series2->YValue[i] = mp_modified_function[i];
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::ButtonShowBinsClick(TObject *Sender)
+{
+ PanelBins->Visible = PanelBins->Visible ? 0 : 1;
 }
 
 //---------------------------------------------------------------------------

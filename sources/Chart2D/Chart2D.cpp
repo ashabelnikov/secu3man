@@ -136,6 +136,7 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
  pForm->m_fnc_min = i_fnc_min;
  pForm->m_fnc_max = i_fnc_max;
  pForm->m_bins_mode = i_bins_mode;
+ pForm->ButtonShowBins->Visible = i_bins_mode!=0;
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
