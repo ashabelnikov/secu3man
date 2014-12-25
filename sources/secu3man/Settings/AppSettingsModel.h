@@ -123,7 +123,6 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AERPMMapWnd_X;
   const CString m_Name_AERPMMapWnd_Y;
 
-
   //fixture settings
   const CString m_Name_Fixtures_Section;
   const CString m_Name_Tachometer_Max;

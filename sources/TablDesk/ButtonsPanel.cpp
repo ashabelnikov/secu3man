@@ -449,7 +449,7 @@ void __cdecl CButtonsPanel::OnCloseIdlcMap(void* i_param)
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_crnk_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+  _this->m_OnCloseMapWnd(_this->m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
 }
 
 //------------------------------------------------------------------------
@@ -1629,7 +1629,7 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
  case TYPE_MAP_DA_TEMP_CORR:
   return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
-
+ //fuel injection maps
  case TYPE_MAP_INJ_VE:
   return m_ve_map_chart_state ? m_ve_map_wnd_handle : NULL;
  case TYPE_MAP_INJ_AFR:
