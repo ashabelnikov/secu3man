@@ -58,12 +58,10 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_param_on_change_xedit_value(NULL)
 , m_setval(0)
 , m_val_n(0)
-, m_horizontal_axis_grid_mode(0)
+, m_horizontal_axis_grid_mode(0) //0 mode is default
 , m_pt_moving_step(0.5f)
-, m_bins_mode(false)
 {
- memset(&m_horizontal_axis_grid_values[0][0], 0, sizeof(float) * 1024);
- memset(&m_horizontal_axis_grid_values[1][0], 0, sizeof(float) * 1024);
+ memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 256);
  m_selpts.push_back(0);
 }
 
@@ -85,9 +83,9 @@ void TForm2D::DataPrepare()
 
  for(int i = 0; i < m_count_of_function_points; i++)
  {
-  if (!m_bins_mode)
-   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i]);
-  else
+  if (m_horizontal_axis_grid_mode < 2) //0,1 modes
+   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[i]);
+  else  //mode 2
    as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[i+m_count_of_function_points]);
    
   Series1->Add(mp_original_function[i], as, clAqua);
@@ -230,6 +228,47 @@ void TForm2D::SetPtValuesFormat(LPCTSTR ptValFormat)
 {
  for (int i = 0; i < 2; i++ )
   Chart1->Series[i]->ValueFormat = ptValFormat; //format for point values
+}
+
+//---------------------------------------------------------------------------
+void TForm2D::InitBins(void)
+{
+ ButtonShowBins->Visible = true;
+ m_horizontal_axis_grid_mode = 2; //mode 2
+
+ m_binsEdit[0] = Edit1; m_binsUpDown[0] = UpDown1;
+ m_binsEdit[1] = Edit2; m_binsUpDown[1] = UpDown2;
+ m_binsEdit[2] = Edit3; m_binsUpDown[2] = UpDown3;
+ m_binsEdit[3] = Edit4; m_binsUpDown[3] = UpDown4;
+ m_binsEdit[4] = Edit5; m_binsUpDown[4] = UpDown5;
+ m_binsEdit[5] = Edit6; m_binsUpDown[5] = UpDown6;
+ m_binsEdit[6] = Edit7; m_binsUpDown[6] = UpDown7;
+ m_binsEdit[7] = Edit8; m_binsUpDown[7] = UpDown8;
+ 
+ //Set position of edit boxes
+ float lr_space = 5;
+ float horz_step = (float(PanelBins->Width)-(lr_space*2)-(Edit1->Width+UpDown1->Width)) /  float(m_count_of_function_points-1);
+ for(int i = 0; i < m_count_of_function_points; ++i)
+ {
+  m_binsUpDown[i]->Visible = True;
+  m_binsEdit[i]->Visible = True;
+  m_binsEdit[i]->Left = lr_space + (i * horz_step);
+  m_binsUpDown[i]->Left = m_binsEdit[i]->Left + m_binsEdit[i]->Width;
+ }
+
+ //hide unnecessary edit boxes
+ for(int i = m_count_of_function_points; i < 8; ++i)
+ { m_binsEdit[i]->Visible = false; m_binsUpDown[i]->Visible = false; }
+
+ //Set limits and values
+ for(int i = 0; i < m_count_of_function_points; ++i)
+ {
+  m_binsUpDown[i]->DecimalPlaces = (int)m_horizontal_axis_grid_values[3];
+  m_binsUpDown[i]->FloatMin = m_horizontal_axis_grid_values[0];
+  m_binsUpDown[i]->FloatMax = m_horizontal_axis_grid_values[1];
+  m_binsUpDown[i]->FloatPosition = mp_modified_function[i+m_count_of_function_points];
+  m_binsUpDown[i]->FloatIncrement = m_horizontal_axis_grid_values[2];
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -379,20 +418,26 @@ void __fastcall TForm2D::Chart1GetAxisLabel(TChartAxis *Sender,
  }
  else if (Sender == Chart1->BottomAxis)
  { //X
-  if (0==m_horizontal_axis_grid_mode)
+  if (0==m_horizontal_axis_grid_mode) //default slots or custom labels
   {
    if (m_pOnGetXAxisLabel)
-   {
+   { //custom labels
     TCHAR string[64];
     _tcscpy(string, LabelText.c_str());
     m_pOnGetXAxisLabel(string, ValueIndex, m_param_on_get_x_axis_label);
     LabelText = string;
    }
   }
-  else if (1==m_horizontal_axis_grid_mode)
+  else if (1==m_horizontal_axis_grid_mode)  //begin & end bins
   {
    AnsiString as;
-   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][ValueIndex]);
+   as.sprintf(m_horizontal_axis_values_format.c_str(), m_horizontal_axis_grid_values[ValueIndex]);
+   LabelText = as;
+  }
+  else if (2==m_horizontal_axis_grid_mode)  //separate bins mode
+  {
+   AnsiString as;
+   as.sprintf(m_horizontal_axis_values_format.c_str(), mp_modified_function[ValueIndex + m_count_of_function_points]);
    LabelText = as;
   }
  }
@@ -479,7 +524,7 @@ void __fastcall TForm2D::EditXBeginOnChange(TObject *Sender)
    
  double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
  for(int i = 0; i < m_count_of_function_points; ++i)
-  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
+  m_horizontal_axis_grid_values[i] = bValue + (step * i);
  Chart1->Invalidate();
 
  if (m_pOnChangeXEditValue)
@@ -497,11 +542,30 @@ void __fastcall TForm2D::EditXEndOnChange(TObject *Sender)
 
  double step = (eValue - bValue) / ((double)m_count_of_function_points - 1);
  for(int i = 0; i < m_count_of_function_points; ++i)
-  m_horizontal_axis_grid_values[m_horizontal_axis_grid_mode][i] = bValue + (step * i);
+  m_horizontal_axis_grid_values[i] = bValue + (step * i);
  Chart1->Invalidate();
 
  if (m_pOnChangeXEditValue)
   m_pOnChangeXEditValue(m_param_on_change_xedit_value, 1, eValue);
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
+{
+ double Value = 0;
+ if (1!=sscanf(((TEdit*)Sender)->Text.c_str(), "%lf", &Value))
+  return;
+
+ for(int i = 0; i < 8; ++i)
+ {
+  if (m_binsEdit[i]==Sender)
+  mp_modified_function[i+m_count_of_function_points] = Value;
+ }
+
+ Chart1->Invalidate();  //See Chart1GetAxisLabel()
+
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------

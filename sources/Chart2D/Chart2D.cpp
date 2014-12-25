@@ -135,19 +135,21 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
  pForm->mp_modified_function = iop_modified_function;
  pForm->m_fnc_min = i_fnc_min;
  pForm->m_fnc_max = i_fnc_max;
- pForm->m_bins_mode = i_bins_mode;
- pForm->ButtonShowBins->Visible = i_bins_mode!=0;
+
+ //сохраняем значения сетки по горизонтальной оси
+ if (ip_x_axis_grid_values)
+ {
+  if (0==i_bins_mode) //0,1 modes
+   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);
+  else //mode 2
+   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * 5); //5 values: min,max,inc,dec places,min diff
+ }
 
  pForm->Caption = MLL::LoadString(IDS_EDITING_MAPS);
  pForm->InitPopupMenu(hInst);
  pForm->InitHints(hInst); //Set hints' text
-
- //сохраняем значения сетки по горизонтальной оси
- if (!i_bins_mode)
- {
-  if (ip_x_axis_grid_values)
-   memcpy(pForm->m_horizontal_axis_grid_values, ip_x_axis_grid_values, sizeof(float) * i_count_of_points);
- }
+ if (i_bins_mode)
+  pForm->InitBins();
 
  AddInstanceByHWND(pForm->Handle, pForm);
  return pForm->Handle;
@@ -329,10 +331,6 @@ void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_begi
    pForm->SetXEditsCB(i_pOnChangeValue, i_param);
    pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep); //begin
    pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep);     //end
-
-//   pForm->CfgXEdits(2, i_beginMin, i_beginMax, i_spinStep); //begin
-//   pForm->CfgXEdits(3, i_endMin, i_endMax, i_spinStep);     //end
-
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);

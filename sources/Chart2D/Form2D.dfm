@@ -269,6 +269,7 @@ object Form2D: TForm2D
     ShowHint = True    
     OnClick = ButtonShowBinsClick
     OnKeyDown = CtrlKeyDown
+    Visible = False
     Glyph.Data = {
       CE040000424DCE04000000000000360000002800000012000000150000000100
       18000000000098040000000000000000000000000000000000008D847C68615C
@@ -381,20 +382,26 @@ object Form2D: TForm2D
       Top = 8
       Width = 41
       Height = 25
+      Text = '0'
       TabOrder = 11
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown1: TUpDown
+    object UpDown1: TFloatUpDown
       Left = 56
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit1
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 12
       TabStop = False
       Wrap = False
-      Associate = Edit1
+      ArrowKeys = True
+      Visible = False
     end
     object Edit2: TEdit
       Left = 80
@@ -402,19 +409,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 13
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown2: TUpDown
+    object UpDown2: TFloatUpDown
       Left = 120
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit2
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 14
       TabStop = False
       Wrap = False
-      Associate = Edit2
+      ArrowKeys = True
+      Visible = False
     end
     object Edit3: TEdit
       Left = 144
@@ -422,19 +434,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 15
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown3: TUpDown
+    object UpDown3: TFloatUpDown
       Left = 184
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit3
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 16
       TabStop = False
       Wrap = False
-      Associate = Edit3
+      ArrowKeys = True
+      Visible = False
     end
     object Edit4: TEdit
       Left = 208
@@ -442,19 +459,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 17
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown4: TUpDown
+    object UpDown4: TFloatUpDown
       Left = 248
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit4
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 18
       TabStop = False
       Wrap = False
-      Associate = Edit4
+      ArrowKeys = True
+      Visible = False
     end
     object Edit5: TEdit
       Left = 272
@@ -462,19 +484,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 19
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown5: TUpDown
+    object UpDown5: TFloatUpDown
       Left = 312
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit5
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 20
       TabStop = False
       Wrap = False
-      Associate = Edit5
+      ArrowKeys = True
+      Visible = False
     end
     object Edit6: TEdit
       Left = 336
@@ -482,19 +509,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 21
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown6: TUpDown
+    object UpDown6: TFloatUpDown
       Left = 376
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit6
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 22
       TabStop = False
       Wrap = False
-      Associate = Edit6
+      ArrowKeys = True
+      Visible = False
     end
     object Edit7: TEdit
       Left = 400
@@ -502,19 +534,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 23
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown7: TUpDown
+    object UpDown7: TFloatUpDown
       Left = 440
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit7
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 24
       TabStop = False
       Wrap = False
-      Associate = Edit7
+      ArrowKeys = True
+      Visible = False
     end
     object Edit8: TEdit
       Left = 464
@@ -522,19 +559,24 @@ object Form2D: TForm2D
       Width = 41
       Height = 25
       TabOrder = 25
-      Text = 'Edit1'
+      Text = '0'
+      Visible = False
+      OnChange = BinsEditOnChange
     end
-    object UpDown8: TUpDown
+    object UpDown8: TFloatUpDown
       Left = 504
       Top = 8
       Width = 17
-      Height = 25
-      Min = 0
-      Position = 0
+      Height = 23
+      FloatAssociate = Edit8
+      FloatMin = 0
+      FloatMax = 100
+      FloatPosition = 0
       TabOrder = 26
       TabStop = False
       Wrap = False
-      Associate = Edit8
+      ArrowKeys = True
+      Visible = False
     end
   end
   object PopupMenu: TPopupMenu

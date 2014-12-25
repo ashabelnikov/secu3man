@@ -884,7 +884,7 @@ void CFirmwareDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_or
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
   op_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_tps_enr[i]) - AETPSV_MAPS_ADDER; //shift by 55
 }

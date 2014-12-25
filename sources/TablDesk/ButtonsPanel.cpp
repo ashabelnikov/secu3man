@@ -1228,7 +1228,7 @@ void CButtonsPanel::OnViewAETPSMap()
  if ((!m_aetps_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_aetps_map_chart_state = 1;
-  const float bins_lims[2] = {0.0f, 1000.0f};
+  const float bins_lims[5] = {-1000.0f, 1000.0f, 1.0f, 0.0f, 10.0f}; //min -1000%, max 1000%, inc 1%, 0 dec places, min diff 10%
   m_aetps_map_wnd_handle = DLL::Chart2DCreate(GetAETPSMap(true),GetAETPSMap(false),0.0f,199.0f,bins_lims,8,
     MLL::GetString(IDS_MAPS_DPDT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AETPS_UNIT).c_str(),
@@ -1263,8 +1263,8 @@ void CButtonsPanel::OnViewAERPMMap()
  if ((!m_aerpm_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_aerpm_map_chart_state = 1;
-  const float bins_lims[2] = {0.0f, 25000.0f}; //max 25000min-1
-  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,8,
+  const float bins_lims[5] = {0.0f, 25000.0f, 100.0f, 0.0f, 100.0f}; //min 0min-1, max 25000min-1, inc 100min-1, 0 dec places, min diff 100min-1
+  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,4,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AERPM_UNIT).c_str(),
     MLL::GetString(IDS_AERPM_MAP).c_str(), true); //<--use horizontal axis bins

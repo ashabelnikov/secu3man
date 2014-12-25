@@ -69,14 +69,14 @@ class TForm2D : public TForm
   TEdit *Edit6;
   TEdit *Edit7;
   TEdit *Edit8;
-  TUpDown *UpDown1;
-  TUpDown *UpDown2;
-  TUpDown *UpDown3;
-  TUpDown *UpDown4;
-  TUpDown *UpDown5;
-  TUpDown *UpDown6;
-  TUpDown *UpDown7;
-  TUpDown *UpDown8;
+  TFloatUpDown *UpDown1;
+  TFloatUpDown *UpDown2;
+  TFloatUpDown *UpDown3;
+  TFloatUpDown *UpDown4;
+  TFloatUpDown *UpDown5;
+  TFloatUpDown *UpDown6;
+  TFloatUpDown *UpDown7;
+  TFloatUpDown *UpDown8;
   void __fastcall Chart1ClickSeries(TCustomChart *Sender, TChartSeries *Series, int ValueIndex, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseUp(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall Chart1MouseMove(TObject *Sender, TShiftState Shift, int X, int Y);
@@ -92,6 +92,7 @@ class TForm2D : public TForm
   void __fastcall OnBldCurveUsing1stAndLastPoints(TObject *Sender);
   void __fastcall EditXBeginOnChange(TObject *Sender);
   void __fastcall EditXEndOnChange(TObject *Sender);
+  void __fastcall BinsEditOnChange(TObject *Sender);
   void __fastcall CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shift);
   void __fastcall OnEnterChart(TObject* Sender);
   void __fastcall OnExitChart(TObject* Sender);
@@ -115,6 +116,7 @@ class TForm2D : public TForm
   void InitPopupMenu(HINSTANCE hInstance);
   void InitHints(HINSTANCE hInstance);
   void SetPtValuesFormat(LPCTSTR ptValFormat);
+  void InitBins(void);
 
  public: //properties
   int m_count_of_function_points;
@@ -122,15 +124,18 @@ class TForm2D : public TForm
   float m_fnc_max;
   const float *mp_original_function;
   float *mp_modified_function;
-  float m_horizontal_axis_grid_values[2][1024];
-  AnsiString m_horizontal_axis_values_format;
+  float m_horizontal_axis_grid_values[256];
+  AnsiString m_horizontal_axis_values_format;  //for axis, not for edit bins
   AnsiString m_chart_title_text;
   AnsiString m_x_axis_title;
   AnsiString m_y_axis_title;
   float m_pt_moving_step;
-  bool m_bins_mode;
+  int m_horizontal_axis_grid_mode;             //3 modes are possible
 
  private:
+  TEdit* m_binsEdit[8];
+  TFloatUpDown* m_binsUpDown[8];
+
   void RestrictAndSetValue(int index, double v);
   void __fastcall ShiftFunction(float i_value);
   void __fastcall ShiftPoints(float i_value);
@@ -163,8 +168,6 @@ class TForm2D : public TForm
   //адрес функции которая будет вызываться при изменении соответствующего лимита по оси X (edit controls)
   OnChangeValue m_pOnChangeXEditValue;
   void* m_param_on_change_xedit_value;
-
-  int m_horizontal_axis_grid_mode;
 
   bool m_setval;
   int  m_val_n;

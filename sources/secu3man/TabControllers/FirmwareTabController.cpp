@@ -1032,6 +1032,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(false),false);
  m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(true),true);
+
+ m_fwdm->GetAETPSMap(m_current_funset_index,m_view->mp_TablesPanel->GetAETPSMap(false),false);
+ m_fwdm->GetAETPSMap(m_current_funset_index,m_view->mp_TablesPanel->GetAETPSMap(true),true);
+
+ m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(false),false);
+ m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1118,6 +1124,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_IDLC:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetIdlcMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdlcMap(false));
+   break;
+  case TYPE_MAP_INJ_AETPS:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetAETPSMap(m_current_funset_index, m_view->mp_TablesPanel->GetAETPSMap(false));
+   break;
+  case TYPE_MAP_INJ_AERPM:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetAERPMMap(m_current_funset_index, m_view->mp_TablesPanel->GetAERPMMap(false));
    break;
    //separate maps
   case TYPE_MAP_ATTENUATOR:
@@ -1468,6 +1482,14 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_IdlcMapWnd_X = rc.left;
    ws.m_IdlcMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_AETPS:
+   ws.m_AETPSMapWnd_X = rc.left;
+   ws.m_AETPSMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_AERPM:
+   ws.m_AERPMMapWnd_X = rc.left;
+   ws.m_AERPMMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_ATS_CURVE:
    ws.m_ATSCurvMapWnd_X = rc.left;
    ws.m_ATSCurvMapWnd_Y = rc.top;
@@ -1541,6 +1563,12 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_IDLC:
    X = ws.m_IdlcMapWnd_X, Y = ws.m_IdlcMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_AETPS:
+   X = ws.m_AETPSMapWnd_X, Y = ws.m_AETPSMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_AERPM:
+   X = ws.m_AERPMMapWnd_X, Y = ws.m_AERPMMapWnd_Y;
    break;
   case TYPE_MAP_ATS_CURVE:
    X = ws.m_ATSCurvMapWnd_X, Y = ws.m_ATSCurvMapWnd_Y;
