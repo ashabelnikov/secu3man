@@ -48,10 +48,10 @@ typedef struct
  _uint inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];        // Injector's dead time
  _uchar inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];       // IAC/PWM position on run
  _uchar inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];     // IAC/PWM position on cranking
- _char  inj_ae_tps_bins[INJ_AE_TPS_LOOKUP_TABLE_SIZE]; // bins of the AE's TPS lookup table
  _uchar inj_ae_tps_enr[INJ_AE_TPS_LOOKUP_TABLE_SIZE];  // values of the AE's TPS lookup table
- _uchar inj_ae_rpm_bins[INJ_AE_RPM_LOOKUP_TABLE_SIZE]; // bins of the AE's RPM lookup table
+ _char  inj_ae_tps_bins[INJ_AE_TPS_LOOKUP_TABLE_SIZE]; // bins of the AE's TPS lookup table
  _uchar inj_ae_rpm_enr[INJ_AE_RPM_LOOKUP_TABLE_SIZE];  // values of the AE's RPM lookup table
+ _uchar inj_ae_rpm_bins[INJ_AE_RPM_LOOKUP_TABLE_SIZE]; // bins of the AE's RPM lookup table
 
  _uchar reserved[718];                                 // reserved bytes - for compatibility
 }f_data_t;

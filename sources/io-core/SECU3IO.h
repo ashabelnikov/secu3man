@@ -590,7 +590,7 @@ namespace SECU3IO
  const float AFR_MAPS_M_FACTOR = 2048.0f;
  const float WRMP_MAPS_M_FACTOR = 128.0f;
  const float IACPOS_MAPS_M_FACTOR = 2.0f;
- const float AETPSB_MAPS_M_FACTOR = 5.0f;
+ const float AETPSB_MAPS_M_FACTOR = 0.1f;
  const float AETPSV_MAPS_ADDER = 55.0f;
  const float AERPMB_MAPS_M_FACTOR = 0.01f;
  const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);

@@ -236,6 +236,9 @@ void TForm2D::InitBins(void)
  ButtonShowBins->Visible = true;
  m_horizontal_axis_grid_mode = 2; //mode 2
 
+ if (m_count_of_function_points > 8)
+  ::MessageBox(NULL, "You can not use more than 8 function points in this mode", "Error", MB_OK);
+
  m_binsEdit[0] = Edit1; m_binsUpDown[0] = UpDown1;
  m_binsEdit[1] = Edit2; m_binsUpDown[1] = UpDown2;
  m_binsEdit[2] = Edit3; m_binsUpDown[2] = UpDown3;
@@ -556,16 +559,59 @@ void __fastcall TForm2D::BinsEditOnChange(TObject *Sender)
  if (1!=sscanf(((TEdit*)Sender)->Text.c_str(), "%lf", &Value))
   return;
 
- for(int i = 0; i < 8; ++i)
+ for(int i = 0; i < m_count_of_function_points; ++i)
  {
   if (m_binsEdit[i]==Sender)
-  mp_modified_function[i+m_count_of_function_points] = Value;
+  {
+   //Check changed item for errors
+   if (true==CheckBinForErrors(i, Value))
+    m_errors.push_back(i);
+   mp_modified_function[i+m_count_of_function_points] = Value;
+   break;
+  }
+ }
+ 
+ //Recheck all present errors and remove items which are OK
+ std::vector<int>::iterator it = m_errors.begin();  
+ while(it!=m_errors.end())
+ {
+  if (false==CheckBinForErrors(*it, mp_modified_function[(*it)+m_count_of_function_points]))
+  {//OK
+   m_binsEdit[*it]->Brush->Color = clWindow; //return background color to default
+   m_binsEdit[*it]->Invalidate();
+   it = m_errors.erase(it);
+  }
+  else //next error
+   ++it;
+ } 
+
+ //Update view
+ for(it = m_errors.begin(); it != m_errors.end(); ++it)
+ {
+  m_binsEdit[*it]->Brush->Color = clRed;
+  m_binsEdit[*it]->Invalidate();
  }
 
  Chart1->Invalidate();  //See Chart1GetAxisLabel()
 
- if (m_pOnChange)
+ if (m_pOnChange && m_errors.empty())
   m_pOnChange(m_param_on_change);
+}
+
+bool __fastcall TForm2D::CheckBinForErrors(int itemIndex, float value)
+{   
+ if (value < m_horizontal_axis_grid_values[0]) //compare with min
+  return true;
+ else if (value > m_horizontal_axis_grid_values[1]) //compare with max
+  return true;
+ else if (((itemIndex < m_count_of_function_points-1) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex+1)+m_count_of_function_points]))) : 0) ||
+          ((itemIndex >  0) ? (m_horizontal_axis_grid_values[4] > fabs(value - (mp_modified_function[(itemIndex-1)+m_count_of_function_points]))) : 0))
+  return true;
+ else if (((itemIndex < m_count_of_function_points-1) ? (value > (mp_modified_function[(itemIndex+1)+m_count_of_function_points])) : 0) ||
+          ((itemIndex >  0) ? (value < (mp_modified_function[(itemIndex-1)+m_count_of_function_points])) : 0))
+  return true;
+ else
+  return false; //Ok
 }
 
 //---------------------------------------------------------------------------

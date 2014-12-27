@@ -884,9 +884,9 @@ void CFirmwareDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_or
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_tps_enr[i]) - AETPSV_MAPS_ADDER; //shift by 55
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_tps_enr[i]) - AETPSV_MAPS_ADDER; //shift by 55
+  op_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
 }
 
 void CFirmwareDataMediator::SetAETPSMap(int i_index, const float* ip_values)
@@ -901,9 +901,9 @@ void CFirmwareDataMediator::SetAETPSMap(int i_index, const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->tables[i_index].inj_ae_tps_bins[i] = MathHelpers::Round((ip_values[i]*AETPSB_MAPS_M_FACTOR));
+  p_fd->tables[i_index].inj_ae_tps_enr[i] = MathHelpers::Round((ip_values[i] + AETPSV_MAPS_ADDER));
  for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->tables[i_index].inj_ae_tps_enr[i] = MathHelpers::Round((ip_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] + AETPSV_MAPS_ADDER));
+  p_fd->tables[i_index].inj_ae_tps_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE]*AETPSB_MAPS_M_FACTOR));
 }
 
 void CFirmwareDataMediator::GetAERPMMap(int i_index, float* op_values, bool i_original /* = false */)
@@ -921,9 +921,9 @@ void CFirmwareDataMediator::GetAERPMMap(int i_index, float* op_values, bool i_or
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_rpm_bins[i]) / AERPMB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ae_rpm_enr[i]) / AERPMV_MAPS_M_FACTOR; //convert to %
  for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
-  op_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_rpm_enr[i]) / AERPMV_MAPS_M_FACTOR; //convert to %
+  op_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE] = ((float)p_fd->tables[i_index].inj_ae_rpm_bins[i]) / AERPMB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
 }
 
 void CFirmwareDataMediator::SetAERPMMap(int i_index, const float* ip_values)
@@ -938,9 +938,9 @@ void CFirmwareDataMediator::SetAERPMMap(int i_index, const float* ip_values)
  fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
 
  for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->tables[i_index].inj_ae_rpm_bins[i] = MathHelpers::Round((ip_values[i]*AERPMB_MAPS_M_FACTOR));
+  p_fd->tables[i_index].inj_ae_rpm_enr[i] = MathHelpers::Round((ip_values[i]*AERPMV_MAPS_M_FACTOR));
  for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
-  p_fd->tables[i_index].inj_ae_rpm_enr[i] = MathHelpers::Round((ip_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE]*AERPMV_MAPS_M_FACTOR));
+  p_fd->tables[i_index].inj_ae_rpm_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE]*AERPMB_MAPS_M_FACTOR));
 }
 
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_values)

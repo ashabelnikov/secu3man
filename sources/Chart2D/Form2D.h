@@ -32,6 +32,7 @@
 #include <Series.hpp>
 #include <StdCtrls.hpp>
 #include <deque>
+#include <vector>
 #include "TFloatUpDown.h"
 #include "TChartEx.h"
 
@@ -142,6 +143,7 @@ class TForm2D : public TForm
   void __fastcall MarkPoints(bool i_mark);
   void __fastcall SelLeftArrow(bool i_shift);
   void __fastcall SelRightArrow(bool i_shift);
+  bool __fastcall CheckBinForErrors(int itemIndex, float value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private:  // User declarations
@@ -173,6 +175,7 @@ class TForm2D : public TForm
   int  m_val_n;
   std::deque<int> m_selpts;
   std::pair<int, int> m_prev_pt;
+  std::vector<int> m_errors;    //for bins errors' checking
 };
 #endif //_FORM2D_H_
 
