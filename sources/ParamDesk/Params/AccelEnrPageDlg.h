@@ -58,5 +58,10 @@ class CAccelEnrPageDlg : public CTabDialog, public ParamPageEvents
   SECU3IO::AccelPar m_params;
   bool m_enabled;
 
+  CSpinButtonCtrlEx m_tpsdot_thrd_spin;
+  CEditEx m_tpsdot_thrd_edit;
+  CSpinButtonCtrlEx m_coldacc_mult_spin;
+  CEditEx m_coldacc_mult_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -1180,6 +1180,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
   case ACCEL_PAR:
    {
     AccelPar* p_in = (AccelPar*)ip_values;
+    p_params->inj_ae_tpsdot_thrd = MathHelpers::Round(p_in->ae_tpsdot_thrd);
+    p_params->inj_ae_coldacc_mult = MathHelpers::Round(((p_in->ae_coldacc_mult/100.0f) - 1.00f) * 128.0f);
    }
    break;
 
@@ -1442,6 +1444,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
   case ACCEL_PAR:
    {
     AccelPar* p_out = (AccelPar*)op_values;
+    p_out->ae_tpsdot_thrd = (float)p_params->inj_ae_tpsdot_thrd;
+    p_out->ae_coldacc_mult = ((((float)p_params->inj_ae_coldacc_mult) + 128.0f) / 128.0f) * 100.0f; //convert to %
    }
    break;
 

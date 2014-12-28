@@ -164,6 +164,7 @@ BOOL CLambdaPageDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_strperstp_edit, MLL::GetString(IDS_PD_LAMBDA_STRPERSTP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strperstp_spin, MLL::GetString(IDS_PD_LAMBDA_STRPERSTP_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

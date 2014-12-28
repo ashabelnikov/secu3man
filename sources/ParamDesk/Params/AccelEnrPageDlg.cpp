@@ -27,13 +27,29 @@
 const UINT CAccelEnrPageDlg::IDD = IDD_PD_ACCELENR_PAGE;
 
 BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
+ ON_EN_CHANGE(IDC_PD_ACCELENR_TPSTHRD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_ACCELENR_MULTCOLDENR_EDIT, OnChangeData)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_UNIT,OnUpdateControls)
+
 END_MESSAGE_MAP()
 
 CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CAccelEnrPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_tpsdot_thrd_edit(CEditEx::MODE_FLOAT, true)
+, m_coldacc_mult_edit(CEditEx::MODE_FLOAT, true)
 {
-
+ m_params.ae_tpsdot_thrd = 50.0f;   //50%/sec
+ m_params.ae_coldacc_mult = 150.0f; //*150% at -30°C
 }
 
 LPCTSTR CAccelEnrPageDlg::GetDialogID(void) const
@@ -45,6 +61,13 @@ void CAccelEnrPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
+ DDX_Control(pDX,IDC_PD_ACCELENR_TPSTHRD_EDIT, m_tpsdot_thrd_edit);
+ DDX_Control(pDX,IDC_PD_ACCELENR_TPSTHRD_SPIN, m_tpsdot_thrd_spin);
+ DDX_Control(pDX,IDC_PD_ACCELENR_MULTCOLDENR_EDIT, m_coldacc_mult_edit);
+ DDX_Control(pDX,IDC_PD_ACCELENR_MULTCOLDENR_SPIN, m_coldacc_mult_spin);
+
+ m_tpsdot_thrd_edit.DDX_Value(pDX, IDC_PD_ACCELENR_TPSTHRD_EDIT, m_params.ae_tpsdot_thrd);
+ m_coldacc_mult_edit.DDX_Value(pDX, IDC_PD_ACCELENR_MULTCOLDENR_EDIT, m_params.ae_coldacc_mult);
 }
 
 void CAccelEnrPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -59,9 +82,24 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ m_tpsdot_thrd_spin.SetBuddy(&m_tpsdot_thrd_edit);
+ m_tpsdot_thrd_edit.SetLimitText(3);
+ m_tpsdot_thrd_edit.SetDecimalPlaces(0);
+ m_tpsdot_thrd_spin.SetRangeAndDelta(0, 255, 1);
+ m_tpsdot_thrd_edit.SetRange(0, 255);
+
+ m_coldacc_mult_spin.SetBuddy(&m_coldacc_mult_edit);
+ m_coldacc_mult_edit.SetLimitText(3);
+ m_coldacc_mult_edit.SetDecimalPlaces(0);
+ m_coldacc_mult_spin.SetRangeAndDelta(100, 299, 1);
+ m_coldacc_mult_edit.SetRange(100, 299);
+
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_tpsdot_thrd_edit, MLL::GetString(IDS_PD_ACCELENR_TPSTHRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tpsdot_thrd_spin, MLL::GetString(IDS_PD_ACCELENR_TPSTHRD_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

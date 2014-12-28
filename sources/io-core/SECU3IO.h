@@ -420,7 +420,8 @@ namespace SECU3IO
 
  struct AccelPar
  {
-
+  float ae_tpsdot_thrd;               //TPS %/sec threshold
+  float ae_coldacc_mult;              //Cold acceleration multiplier
  };
 
  //таблица перекодировки кода частоты ПФ в частоту
