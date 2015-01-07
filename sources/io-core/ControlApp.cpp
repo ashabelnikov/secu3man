@@ -93,7 +93,7 @@ void Esc_Tx_Packet(std::vector<BYTE>& io_data, size_t offset, size_t size)
 //-----------------------------------------------------------------------
 CControlApp::CControlApp()
 : m_adc_discrete(ADC_DISCRETE)
-, m_angle_multiplier(ANGLE_MULTIPLAYER)
+, m_angle_multiplier(ANGLE_MULTIPLIER)
 , m_pEventHandler(NULL)
 , m_online_state(false)
 , m_force_notify_about_connection(false)
@@ -274,19 +274,19 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pressure))
   return false;
- m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.pressure = ((float)pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //напряжение бортовой сети
  int voltage = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&voltage))
   return false;
- m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.voltage = ((float)voltage) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Температура охлаждающей жидкости
  int temperature = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&temperature,true))
   return false;
- m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.temperat = ((float)temperature) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  m_SensorDat.temperat = MathHelpers::RestrictValue(m_SensorDat.temperat, -99.9f, 999.0f);
 
  //Текущий УОЗ (число со знаком)
@@ -331,7 +331,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  unsigned char tps = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet,&tps))
   return false;
- m_SensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.tps = ((float)tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //ADD_I1 input
  int add_i1_v = 0;
@@ -355,7 +355,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  unsigned char choke_pos = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_pos))
   return false;
- m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Vehicle speed
  int speed = 0;
@@ -383,7 +383,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int air_temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&air_temp,true))
   return false;
- m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
 
  // Advance angle from start map (signed value)
@@ -605,13 +605,13 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  int map_lower_pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_lower_pressure))
   return false;
- m_FunSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_FunSetPar.map_lower_pressure = ((float)map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Верхнее значение давления по оси ДАД
  int map_upper_pressure = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&map_upper_pressure))
   return false;
- m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_FunSetPar.map_upper_pressure = ((float)map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Смещение кривой ДАД
  int map_curve_offset = 0;
@@ -623,7 +623,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  int map_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_gradient, true))
   return false;
- m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete * 128.0f);
+ m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  //Смещение кривой ДПДЗ
  int tps_curve_offset = 0;
@@ -635,7 +635,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  int tps_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
- m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete * 128.0f);
+ m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
 
  return true;
 }
@@ -656,13 +656,13 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  int ifac1;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac1,true))
   return false;
- m_IdlRegPar.ifac1 = ((float)ifac1) / ANGLE_MULTIPLAYER;
+ m_IdlRegPar.ifac1 = ((float)ifac1) / ANGLE_MULTIPLIER;
 
  //Коэффициент регулятора при  отрицательной ошибке (число со знаком)
  int ifac2;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac2,true))
   return false;
- m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLAYER;
+ m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLIER;
 
  //Зона нечувствительности регулятора
  if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
@@ -688,7 +688,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  int turn_on_temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&turn_on_temp,true))
   return false;
- m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -716,7 +716,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  int epm_on_threshold = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &epm_on_threshold, true))
   return false;
- m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_CarburPar.epm_ont = ((float)epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Нижний порог ЭПХХ (газ)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.ephh_lot_g))
@@ -736,7 +736,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  unsigned char tps_threshold;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &tps_threshold))
   return false;
- m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -767,13 +767,13 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
  int vent_on = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_on,true))
   return false;
- m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_TemperPar.vent_on = ((float)vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Порог выключения вентилятора (число со знаком)
  int vent_off = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_off,true))
   return false;
- m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -1440,7 +1440,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  int choke_corr_temp;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &choke_corr_temp, true))
   return false;
- m_ChokePar.choke_corr_temp = ((float)choke_corr_temp / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ m_ChokePar.choke_corr_temp = ((float)choke_corr_temp / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 
  return true;
 }
@@ -1622,7 +1622,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  int tempthrd = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tempthrd))
   return false;
- m_LambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+ m_LambdaPar.lam_temp_thrd = float(tempthrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  int rpmthrd = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &rpmthrd))
@@ -2129,13 +2129,13 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->ephh_lot,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ephh_hit,m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->carb_invers,m_outgoing_packet);
- int epm_on_threshold = MathHelpers::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int epm_on_threshold = MathHelpers::Round(packet_data->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(epm_on_threshold,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ephh_lot_g,m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->ephh_hit_g,m_outgoing_packet);
  unsigned char shutoff_delay = MathHelpers::Round(packet_data->shutoff_delay * 100.0f);
  mp_pdp->Bin8ToHex(shutoff_delay,m_outgoing_packet);
- unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin8ToHex(tps_threshold, m_outgoing_packet);
 }
 
@@ -2158,7 +2158,7 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  int max_angle = MathHelpers::Round((packet_data->max_angle * m_angle_multiplier));
  mp_pdp->Bin16ToHex(max_angle,m_outgoing_packet);
 
- int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER));
+ int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER));
  mp_pdp->Bin16ToHex(turn_on_temp, m_outgoing_packet);
 }
 
@@ -2180,9 +2180,9 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
  mp_pdp->Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->vent_pwm,m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->cts_use_map,m_outgoing_packet);
- int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(vent_on, m_outgoing_packet);
- int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(vent_off, m_outgoing_packet);
 }
 
@@ -2207,17 +2207,17 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
 {
  mp_pdp->Bin8ToHex(packet_data->fn_benzin,m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->fn_gas,m_outgoing_packet);
- unsigned int map_lower_pressure = MathHelpers::Round(packet_data->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ unsigned int map_lower_pressure = MathHelpers::Round(packet_data->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(map_lower_pressure,m_outgoing_packet);
- int map_upper_pressure = MathHelpers::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int map_upper_pressure = MathHelpers::Round(packet_data->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(map_upper_pressure,m_outgoing_packet);
  int map_curve_offset = MathHelpers::Round(packet_data->map_curve_offset / m_adc_discrete);
  mp_pdp->Bin16ToHex(map_curve_offset, m_outgoing_packet);
- int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * m_adc_discrete);
+ int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
  mp_pdp->Bin16ToHex(map_curve_gradient, m_outgoing_packet);
  int tps_curve_offset = MathHelpers::Round(packet_data->tps_curve_offset / m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
- int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * m_adc_discrete);
+ int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
 }
 
@@ -2431,7 +2431,7 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(choke_rpm_if, m_outgoing_packet);
  int choke_corr_time = MathHelpers::Round(packet_data->choke_corr_time * 100.0f);
  mp_pdp->Bin16ToHex(choke_corr_time, m_outgoing_packet);
- int choke_corr_temp = MathHelpers::Round(packet_data->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int choke_corr_temp = MathHelpers::Round(packet_data->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(choke_corr_temp, m_outgoing_packet);
 }
 
@@ -2504,7 +2504,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin16ToHex(corr_limit, m_outgoing_packet);
  int swt_point = MathHelpers::Round(packet_data->lam_swt_point / ADC_DISCRETE);
  mp_pdp->Bin16ToHex(swt_point, m_outgoing_packet);
- int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+ int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(temp_thrd, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->lam_rpm_thrd, m_outgoing_packet);
 }
@@ -2581,10 +2581,10 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
 {
  switch(cond)
  {
-  case UNIOUT_COND_CTS:  return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_CTS:  return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_RPM:  return MathHelpers::Round(val);
-  case UNIOUT_COND_MAP:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-  case UNIOUT_COND_UBAT: return MathHelpers::Round(val * UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_MAP:  return MathHelpers::Round(val * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_UBAT: return MathHelpers::Round(val * UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_CARB: return MathHelpers::Round(val);
   case UNIOUT_COND_VSPD:
    return MathHelpers::Round(((m_period_distance * (3600.0f / 1000.0f)) / val) * ((m_quartz_frq==20000000) ? 312500.0f: 250000.0f));
@@ -2592,11 +2592,11 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_TMR: return MathHelpers::Round(val * 100.0f);
   case UNIOUT_COND_ITTMR: return MathHelpers::Round(val * 100.0f);
   case UNIOUT_COND_ESTMR: return MathHelpers::Round(val * 100.0f);
-  case UNIOUT_COND_CPOS: return MathHelpers::Round(val * CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-  case UNIOUT_COND_AANG: return MathHelpers::Round(val * ANGLE_MULTIPLAYER);
+  case UNIOUT_COND_CPOS: return MathHelpers::Round(val * CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_AANG: return MathHelpers::Round(val * ANGLE_MULTIPLIER);
   case UNIOUT_COND_KLEV: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
-  case UNIOUT_COND_TPS: return MathHelpers::Round(val * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-  case UNIOUT_COND_ATS: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_TPS: return MathHelpers::Round(val * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_ATS: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_AI1: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_AI2: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_GASV: return MathHelpers::Round(val);
@@ -2611,10 +2611,10 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
 {
  switch(cond)
  {
-  case UNIOUT_COND_CTS:  return (((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_CTS:  return (((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_RPM:  return (float)val;
-  case UNIOUT_COND_MAP:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-  case UNIOUT_COND_UBAT: return (((float)val) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+  case UNIOUT_COND_MAP:  return (((float)val) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+  case UNIOUT_COND_UBAT: return (((float)val) / UBAT_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_CARB: return (float)val;
   case UNIOUT_COND_VSPD:
   {
@@ -2627,11 +2627,11 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_TMR: return ((float)val) / 100.0f;
   case UNIOUT_COND_ITTMR: return ((float)val) / 100.0f;
   case UNIOUT_COND_ESTMR: return ((float)val) / 100.0f;
-  case UNIOUT_COND_CPOS: return ((float)val) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-  case UNIOUT_COND_AANG: return ((float)val) / ANGLE_MULTIPLAYER;
+  case UNIOUT_COND_CPOS: return ((float)val) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  case UNIOUT_COND_AANG: return ((float)val) / ANGLE_MULTIPLIER;
   case UNIOUT_COND_KLEV: return ((float)val) / (1.0f / ADC_DISCRETE);
-  case UNIOUT_COND_TPS: return ((float)val) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-  case UNIOUT_COND_ATS: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+  case UNIOUT_COND_TPS: return ((float)val) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  case UNIOUT_COND_ATS: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
   case UNIOUT_COND_AI1: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_AI2: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_GASV: return (float)val;

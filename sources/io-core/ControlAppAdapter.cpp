@@ -48,7 +48,7 @@ BOOL CControlAppAdapter::Create(CWnd* pParentWnd)
 {
  ASSERT(pParentWnd);
  if (::IsWindow(m_hWnd))
-  return TRUE; //уже создано - ничего не делаем
+  return TRUE; //already created - do nothing
  return CWnd::Create(NULL,_T("CControlApp_Adapter_Wnd"),0,CRect(0,0,0,0),pParentWnd,0);
 }
 
@@ -71,8 +71,7 @@ void CControlAppAdapter::OnConnection(const bool i_online)
 /////////////////////Application side/////////////////////////////////
 LRESULT CControlAppAdapter::msgOnConnection(WPARAM wParam, LPARAM lParam)
 {
- //мы не должны "засыпать" получателя пакетами если он "выключил нас", а выключить он нас мог
- //еще тогда когда в очереди сообщений были сообщения для него.
+ //We should not spam receiver with packets when he is unsubscribed, at the time when he is unsubscribed some packets may still remain in the queue.
  if (!m_switch_on_thread_side)
   return 0;
 
@@ -95,7 +94,7 @@ LRESULT CControlAppAdapter::msgOnPacketReceived(WPARAM wParam, LPARAM lParam)
  SECU3IO::SECU3Packet recepted_packet;
 
  ////////////////////////////////////////////////////////////////////////
- //эксклюзивный доступ, копирывание данных, а затем освобождение ресурса
+ //exclusive access, copy data, then free access to resource
  EnterCriticalSection();
  memcpy(&recepted_packet,(SECU3IO::SECU3Packet*)lParam,sizeof(SECU3IO::SECU3Packet));
  LeaveCriticalSection();
@@ -122,7 +121,7 @@ bool CControlAppAdapter::AddEventHandler(IAPPEventHandler* i_pEventHandler, cons
 bool CControlAppAdapter::RemoveEventHandler(const _TSTRING &i_observer_key)
 {
  if (m_observers.find(i_observer_key)==m_observers.end())
-  return false; //неверный ключ
+  return false; //invalid key
  m_observers.erase(i_observer_key);
  _UpdateInternalState();
  return true;

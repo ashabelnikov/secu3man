@@ -962,8 +962,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->tmp_use  = p_in->tmp_use;
     p_params->vent_pwm = p_in->vent_pwm;
     p_params->cts_use_map = p_in->cts_use_map;
-    p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-    p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case CARBUR_PAR:
@@ -972,11 +972,11 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->ephh_hit    = p_in->ephh_hit;
     p_params->ephh_lot    = p_in->ephh_lot;
     p_params->carb_invers = p_in->carb_invers;
-    p_params->epm_on_threshold = MathHelpers::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->epm_on_threshold = MathHelpers::Round(p_in->epm_ont * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->ephh_hit_g  = p_in->ephh_hit_g;
     p_params->ephh_lot_g  = p_in->ephh_lot_g;
     p_params->shutoff_delay = MathHelpers::Round(p_in->shutoff_delay * 100); //переводим в десятки мс
-    p_params->tps_threshold = MathHelpers::Round(p_in->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->tps_threshold = MathHelpers::Round(p_in->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case IDLREG_PAR:
@@ -985,21 +985,21 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->idl_regul  = p_in->idl_regul;
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
-    p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLAYER);
-    p_params->ifac2      = MathHelpers::Round(p_in->ifac2 * ANGLE_MULTIPLAYER);
-    p_params->idlreg_min_angle = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
-    p_params->idlreg_max_angle = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
-    p_params->idlreg_turn_on_temp = MathHelpers::Round(p_in->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLIER);
+    p_params->ifac2      = MathHelpers::Round(p_in->ifac2 * ANGLE_MULTIPLIER);
+    p_params->idlreg_min_angle = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLIER);
+    p_params->idlreg_max_angle = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLIER);
+    p_params->idlreg_turn_on_temp = MathHelpers::Round(p_in->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case ANGLES_PAR:
    {
     AnglesPar* p_in = (AnglesPar*)ip_values;
-    p_params->angle_corr = MathHelpers::Round(p_in->angle_corr * ANGLE_MULTIPLAYER);
-    p_params->max_angle  = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLAYER);
-    p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLAYER);
-    p_params->angle_dec_spead = MathHelpers::Round(p_in->dec_spead * ANGLE_MULTIPLAYER);
-    p_params->angle_inc_spead = MathHelpers::Round(p_in->inc_spead * ANGLE_MULTIPLAYER);
+    p_params->angle_corr = MathHelpers::Round(p_in->angle_corr * ANGLE_MULTIPLIER);
+    p_params->max_angle  = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLIER);
+    p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLIER);
+    p_params->angle_dec_spead = MathHelpers::Round(p_in->dec_spead * ANGLE_MULTIPLIER);
+    p_params->angle_inc_spead = MathHelpers::Round(p_in->inc_spead * ANGLE_MULTIPLIER);
     p_params->zero_adv_ang = p_in->zero_adv_ang;
    }
    break;
@@ -1008,12 +1008,12 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     FunSetPar* p_in = (FunSetPar*)ip_values;
     p_params->fn_benzin = p_in->fn_benzin;
     p_params->fn_gas    = p_in->fn_gas;
-    p_params->map_lower_pressure = MathHelpers::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
-    p_params->map_upper_pressure = MathHelpers::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->map_lower_pressure = MathHelpers::Round(p_in->map_lower_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->map_upper_pressure = MathHelpers::Round(p_in->map_upper_pressure * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->map_curve_offset = MathHelpers::Round(p_in->map_curve_offset / ADC_DISCRETE);
-    p_params->map_curve_gradient = MathHelpers::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE);
+    p_params->map_curve_gradient = MathHelpers::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE);
     p_params->tps_curve_offset = MathHelpers::Round(p_in->tps_curve_offset / ADC_DISCRETE);
-    p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * ADC_DISCRETE);
+    p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE);
    }
    break;
   case STARTR_PAR:
@@ -1078,22 +1078,22 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->ckps_cogs_num = p_in->ckps_cogs_num;
     p_params->ckps_miss_num = p_in->ckps_miss_num;
     p_params->hall_flags = (p_params->hall_flags & 0xFE) | ((p_in->use_ckps_for_hall != 0) << 0);
-    p_params->hall_wnd_width = MathHelpers::Round(p_in->hall_wnd_width * ANGLE_MULTIPLAYER);
+    p_params->hall_wnd_width = MathHelpers::Round(p_in->hall_wnd_width * ANGLE_MULTIPLIER);
    }
    break;
   case KNOCK_PAR:
    {
     KnockPar* p_in = (KnockPar*)ip_values;
     p_params->knock_use_knock_channel = p_in->knock_use_knock_channel;
-    p_params->knock_k_wnd_begin_angle = MathHelpers::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLAYER);
-    p_params->knock_k_wnd_end_angle = MathHelpers::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLAYER);
+    p_params->knock_k_wnd_begin_angle = MathHelpers::Round(p_in->knock_k_wnd_begin_angle * ANGLE_MULTIPLIER);
+    p_params->knock_k_wnd_end_angle = MathHelpers::Round(p_in->knock_k_wnd_end_angle  * ANGLE_MULTIPLIER);
     ASSERT(p_in->knock_bpf_frequency >= 0.0f);
     p_params->knock_bpf_frequency = MathHelpers::Round(p_in->knock_bpf_frequency);
     p_params->knock_int_time_const = p_in->knock_int_time_const;
 
-    p_params->knock_retard_step = MathHelpers::Round(p_in->knock_retard_step * ANGLE_MULTIPLAYER);
-    p_params->knock_advance_step = MathHelpers::Round(p_in->knock_advance_step * ANGLE_MULTIPLAYER);
-    p_params->knock_max_retard = MathHelpers::Round(p_in->knock_max_retard * ANGLE_MULTIPLAYER);
+    p_params->knock_retard_step = MathHelpers::Round(p_in->knock_retard_step * ANGLE_MULTIPLIER);
+    p_params->knock_advance_step = MathHelpers::Round(p_in->knock_advance_step * ANGLE_MULTIPLIER);
+    p_params->knock_max_retard = MathHelpers::Round(p_in->knock_max_retard * ANGLE_MULTIPLIER);
     p_params->knock_threshold = MathHelpers::Round(p_in->knock_threshold / ADC_DISCRETE);
     p_params->knock_recovery_delay = p_in->knock_recovery_delay;
    }
@@ -1129,7 +1129,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->choke_startup_corr = MathHelpers::Round(p_in->strt_add * 2.0f);
     p_params->choke_rpm_if = MathHelpers::Round(p_in->choke_rpm_if * 1024.0f);
     p_params->choke_corr_time = MathHelpers::Round(p_in->choke_corr_time * 100.0f);
-    p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case SECUR_PAR:
@@ -1173,7 +1173,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->inj_lambda_step_size = MathHelpers::Round(p_in->lam_step_size * 512.0f / 100.0f);
     p_params->inj_lambda_corr_limit = MathHelpers::Round(p_in->lam_corr_limit * 512.0f / 100.0f);
     p_params->inj_lambda_swt_point = MathHelpers::Round(p_in->lam_swt_point / ADC_DISCRETE);
-    p_params->inj_lambda_temp_thrd = MathHelpers::Round(p_in->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER);
+    p_params->inj_lambda_temp_thrd = MathHelpers::Round(p_in->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
    }
    break;
@@ -1211,8 +1211,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->tmp_use  = p_params->tmp_use;
      p_out->vent_pwm = p_params->vent_pwm;
      p_out->cts_use_map = p_params->cts_use_map;
-     p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-     p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case CARBUR_PAR:
@@ -1221,11 +1221,11 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->ephh_hit    = p_params->ephh_hit;
      p_out->ephh_lot    = p_params->ephh_lot;
      p_out->carb_invers = p_params->carb_invers;
-     p_out->epm_ont =  ((float)p_params->epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->epm_ont =  ((float)p_params->epm_on_threshold) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->ephh_hit_g  = p_params->ephh_hit_g;
      p_out->ephh_lot_g  = p_params->ephh_lot_g;
      p_out->shutoff_delay = ((float)p_params->shutoff_delay) / 100.0f; //переводим в секунды
-     p_out->tps_threshold = ((float)p_params->tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->tps_threshold = ((float)p_params->tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case IDLREG_PAR:
@@ -1234,21 +1234,21 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->idl_regul  = p_params->idl_regul;
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
-     p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLAYER;
-     p_out->ifac2      = ((float)p_params->ifac2) / ANGLE_MULTIPLAYER;
-     p_out->min_angle  = ((float)p_params->idlreg_min_angle) / ANGLE_MULTIPLAYER;
-     p_out->max_angle  = ((float)p_params->idlreg_max_angle) / ANGLE_MULTIPLAYER;
-     p_out->turn_on_temp = ((float)p_params->idlreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLIER;
+     p_out->ifac2      = ((float)p_params->ifac2) / ANGLE_MULTIPLIER;
+     p_out->min_angle  = ((float)p_params->idlreg_min_angle) / ANGLE_MULTIPLIER;
+     p_out->max_angle  = ((float)p_params->idlreg_max_angle) / ANGLE_MULTIPLIER;
+     p_out->turn_on_temp = ((float)p_params->idlreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case ANGLES_PAR:
     {
      AnglesPar* p_out = (AnglesPar*)op_values;
-     p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLAYER;
-     p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLAYER;
-     p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLAYER;
-     p_out->dec_spead = ((float)p_params->angle_dec_spead)  / ANGLE_MULTIPLAYER;
-     p_out->inc_spead = ((float)p_params->angle_inc_spead)  / ANGLE_MULTIPLAYER;
+     p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLIER;
+     p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLIER;
+     p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLIER;
+     p_out->dec_spead = ((float)p_params->angle_dec_spead)  / ANGLE_MULTIPLIER;
+     p_out->inc_spead = ((float)p_params->angle_inc_spead)  / ANGLE_MULTIPLIER;
      p_out->zero_adv_ang = p_params->zero_adv_ang;
     }
     break;
@@ -1257,12 +1257,12 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      FunSetPar* p_out = (FunSetPar*)op_values;
      p_out->fn_benzin = p_params->fn_benzin;
      p_out->fn_gas    = p_params->fn_gas;
-     p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
-     p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->map_lower_pressure = ((float)p_params->map_lower_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->map_upper_pressure = ((float)p_params->map_upper_pressure) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->map_curve_offset = ((float)p_params->map_curve_offset) * ADC_DISCRETE;
-     p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLAYER * ADC_DISCRETE * 128.0f);
+     p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE * 128.0f);
      p_out->tps_curve_offset = ((float)p_params->tps_curve_offset) * ADC_DISCRETE;
-     p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLAYER*64) * ADC_DISCRETE * 128.0f);
+     p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE * 128.0f);
     }
     break;
    case STARTR_PAR:
@@ -1342,21 +1342,21 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->ckps_cogs_num = p_params->ckps_cogs_num;
      p_out->ckps_miss_num = p_params->ckps_miss_num;
      p_out->use_ckps_for_hall = p_params->hall_flags & (1 << 0);
-     p_out->hall_wnd_width = ((float)p_params->hall_wnd_width) / ANGLE_MULTIPLAYER;
+     p_out->hall_wnd_width = ((float)p_params->hall_wnd_width) / ANGLE_MULTIPLIER;
     }
     break;
    case KNOCK_PAR:
     {
      KnockPar* p_out = (KnockPar*)op_values;
      p_out->knock_use_knock_channel = p_params->knock_use_knock_channel;
-     p_out->knock_k_wnd_begin_angle = ((float)p_params->knock_k_wnd_begin_angle) / ANGLE_MULTIPLAYER;
-     p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLAYER;
+     p_out->knock_k_wnd_begin_angle = ((float)p_params->knock_k_wnd_begin_angle) / ANGLE_MULTIPLIER;
+     p_out->knock_k_wnd_end_angle = ((float)p_params->knock_k_wnd_end_angle) / ANGLE_MULTIPLIER;
      p_out->knock_bpf_frequency = p_params->knock_bpf_frequency;
      p_out->knock_int_time_const = p_params->knock_int_time_const;
 
-     p_out->knock_retard_step = ((float)p_params->knock_retard_step) / ANGLE_MULTIPLAYER;
-     p_out->knock_advance_step = ((float)p_params->knock_advance_step) / ANGLE_MULTIPLAYER;
-     p_out->knock_max_retard = ((float)p_params->knock_max_retard) / ANGLE_MULTIPLAYER;
+     p_out->knock_retard_step = ((float)p_params->knock_retard_step) / ANGLE_MULTIPLIER;
+     p_out->knock_advance_step = ((float)p_params->knock_advance_step) / ANGLE_MULTIPLIER;
+     p_out->knock_max_retard = ((float)p_params->knock_max_retard) / ANGLE_MULTIPLIER;
      p_out->knock_threshold = ((float)p_params->knock_threshold) * ADC_DISCRETE;
      p_out->knock_recovery_delay = p_params->knock_recovery_delay;
     }
@@ -1388,7 +1388,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->strt_add = p_params->choke_startup_corr / 2.0f;
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
      p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
-     p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+     p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case SECUR_PAR:
@@ -1437,7 +1437,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     p_out->lam_step_size = ((float)p_params->inj_lambda_step_size * 100.0f)/512.0f;
     p_out->lam_corr_limit = ((float)p_params->inj_lambda_corr_limit * 100.0f)/512.0f;
     p_out->lam_swt_point = ((float)p_params->inj_lambda_swt_point) * ADC_DISCRETE;
-    p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLAYER;
+    p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
    }
    break;
