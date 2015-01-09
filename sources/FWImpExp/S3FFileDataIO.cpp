@@ -76,18 +76,20 @@ struct S3FMapSetItem
 {
  s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
  //ignition
- s3f_int32_t f_str[F_STR_POINTS]; //start
- s3f_int32_t f_idl[F_IDL_POINTS]; //idle 
- s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F]; //work
- s3f_int32_t f_tmp[F_TMP_POINTS]; //temperature
+ s3f_int32_t f_str[F_STR_POINTS];                          //start
+ s3f_int32_t f_idl[F_IDL_POINTS];                          //idle 
+ s3f_int32_t f_wrk[F_WRK_POINTS_L * F_WRK_POINTS_F];       //work
+ s3f_int32_t f_tmp[F_TMP_POINTS];                          //temperature
  //fuel injection, since v01.03
- s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];  // VE
- s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F]; // AFR
+ s3f_int32_t inj_ve[INJ_VE_POINTS_L * INJ_VE_POINTS_F];    // VE
+ s3f_int32_t inj_afr[INJ_VE_POINTS_L * INJ_VE_POINTS_F];   // AFR
  s3f_int32_t inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE]; //Cranking PW
- s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];  // Warmup enrichment
- s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];   // Injector's dead time
- s3f_int32_t inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];  // IAC/PWM position on run
- s3f_int32_t inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];// IAC/PWM position on cranking
+ s3f_int32_t inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];     // Warmup enrichment
+ s3f_int32_t inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];      // Injector's dead time
+ s3f_int32_t inj_iac_run_pos[INJ_IAC_POS_TABLE_SIZE];      // IAC/PWM position on run
+ s3f_int32_t inj_iac_crank_pos[INJ_IAC_POS_TABLE_SIZE];    // IAC/PWM position on cranking
+ s3f_int32_t inj_ae_tps[INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2]; // AE TPS (values and horizontal axis bins)
+ s3f_int32_t inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // AE RPM (values and horizontal axis bins)
  s3f_int32_t reserved[1024]; //reserved bytes, = 0
 };
 
@@ -245,6 +247,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_iac_run_pos[i] = MathHelpers::Round(m_data.maps[s].inj_iac_run_pos[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
    p_setItem[s].inj_iac_crank_pos[i] = MathHelpers::Round(m_data.maps[s].inj_iac_crank_pos[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
+   p_setItem[s].inj_ae_tps[i] = MathHelpers::Round(m_data.maps[s].inj_ae_tps[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; ++i)
+   p_setItem[s].inj_ae_rpm[i] = MathHelpers::Round(m_data.maps[s].inj_ae_rpm[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -344,6 +350,11 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_iac_run_pos[i] = p_setItem[s].inj_iac_run_pos[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_IAC_POS_TABLE_SIZE; ++i)
    m_data.maps[s].inj_iac_crank_pos[i] = p_setItem[s].inj_iac_crank_pos[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; ++i) //size*2 because values and bins are in one
+   m_data.maps[s].inj_ae_tps[i] = p_setItem[s].inj_ae_tps[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; ++i)
+   m_data.maps[s].inj_ae_rpm[i] = p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER;
+
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

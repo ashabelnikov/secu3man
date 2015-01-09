@@ -189,6 +189,12 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
   m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
+  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+
+ if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
+  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -217,6 +223,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
@@ -408,6 +416,12 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
   m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
+  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+
+ if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
+  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -436,6 +450,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
