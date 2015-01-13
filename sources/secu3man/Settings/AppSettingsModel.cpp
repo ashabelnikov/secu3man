@@ -92,6 +92,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_AETPSMapWnd_Y(_T("AETPSMapWnd_Y"))
 , m_Name_AERPMMapWnd_X(_T("AERPMMapWnd_X"))
 , m_Name_AERPMMapWnd_Y(_T("AERPMMapWnd_Y"))
+, m_Name_AftstrMapWnd_X(_T("AftstrMapWnd_X"))
+, m_Name_AftstrMapWnd_Y(_T("AftstrMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -465,6 +467,9 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, AERPMMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, AERPMMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AftstrMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AftstrMapWnd_Y, std::numeric_limits<int>::max());
+
  _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_Y, std::numeric_limits<int>::max());
 
@@ -695,6 +700,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optAERPMMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AERPMMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optAftstrMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AftstrMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAftstrMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AftstrMapWnd_Y,write_str,IniFileName);
+
  write_str.Format(_T("%d"),m_optATSCurvMapWnd_X);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCurvMapWnd_X,write_str,IniFileName);
 
@@ -800,6 +811,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optAETPSMapWnd_Y = i_wndSettings.m_AETPSMapWnd_Y; 
  m_optAERPMMapWnd_X = i_wndSettings.m_AERPMMapWnd_X;
  m_optAERPMMapWnd_Y = i_wndSettings.m_AERPMMapWnd_Y; 
+ m_optAftstrMapWnd_X = i_wndSettings.m_AftstrMapWnd_X;
+ m_optAftstrMapWnd_Y = i_wndSettings.m_AftstrMapWnd_Y; 
  m_optATSCurvMapWnd_X = i_wndSettings.m_ATSCurvMapWnd_X;
  m_optATSCurvMapWnd_Y = i_wndSettings.m_ATSCurvMapWnd_Y;
  m_optATSCorrMapWnd_X = i_wndSettings.m_ATSCorrMapWnd_X;
@@ -846,6 +859,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd_Y;
  o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd_X;
  o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd_Y;
+ o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd_X;
+ o_wndSettings.m_AftstrMapWnd_Y = m_optAftstrMapWnd_Y;
  o_wndSettings.m_ATSCurvMapWnd_X = m_optATSCurvMapWnd_X;
  o_wndSettings.m_ATSCurvMapWnd_Y = m_optATSCurvMapWnd_Y;
  o_wndSettings.m_ATSCorrMapWnd_X = m_optATSCorrMapWnd_X;

@@ -129,6 +129,7 @@ void EEPROMImportController::OnExchangePressed(void)
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  mp_view->SetFWDCurrentListSelection(current_sel);
 
+ //ignition
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
   m_eedm->GetStartMap(other_sel, mp_fwd->maps[current_sel].f_str);
 
@@ -140,6 +141,37 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   m_eedm->GetTempMap(other_sel, mp_fwd->maps[current_sel].f_tmp);
+
+ //fuel injection
+ if (mp_view->GetFWDFlag(FLAG_VE_MAP))
+  m_eedm->GetTempMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+
+ if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
+  m_eedm->GetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNK_MAP))
+  m_eedm->GetCrnkMap(other_sel, mp_fwd->maps[current_sel].inj_cranking);
+
+ if (mp_view->GetFWDFlag(FLAG_WRMP_MAP))
+  m_eedm->GetWrmpMap(other_sel, mp_fwd->maps[current_sel].inj_warmup);
+
+ if (mp_view->GetFWDFlag(FLAG_DEAD_MAP))
+  m_eedm->GetDeadMap(other_sel, mp_fwd->maps[current_sel].inj_dead_time);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLR_MAP))
+  m_eedm->GetIdlrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_run_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_IDLC_MAP))
+  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
+
+ if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
+  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+
+ if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
+  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
+  m_eedm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -156,16 +188,36 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  std::vector<_TSTRING> strings = m_eedm->GetFunctionsSetNames();
  mp_view->FillFWDOtherList(strings);
-
+  
+ //ignition mpa flags
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ //fuel injection map flags
+ mp_view->SetFWDFlag(FLAG_VE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, true);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

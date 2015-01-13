@@ -68,6 +68,8 @@ struct WndSettings
  int m_AETPSMapWnd_Y;
  int m_AERPMMapWnd_X;
  int m_AERPMMapWnd_Y;
+ int m_AftstrMapWnd_X;
+ int m_AftstrMapWnd_Y;
 };
 
 typedef enum EInterLang

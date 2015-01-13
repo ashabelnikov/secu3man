@@ -174,6 +174,200 @@ void EEPROMDataMediator::GetTempMap(int i_index, float* o_values, bool i_origina
   o_values[i] = ((float)p_maps[i_index].f_tmp[i]) / AA_MAPS_M_FACTOR;
 }
 
+void EEPROMDataMediator::GetVEMap(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_maps[i_index].inj_ve[0][0]);
+  op_values[i] = ((float) *(p + i)) / VE_MAPS_M_FACTOR;
+ }
+}
+
+void EEPROMDataMediator::GetAFRMap(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_maps[i_index].inj_afr[0][0]);
+  op_values[i] = AFR_MAPS_M_FACTOR / ((float) *(p + i));
+ }
+}
+
+void EEPROMDataMediator::GetCrnkMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ float discrete = (m_epp.m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ for(size_t i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; i++)
+  op_values[i] = (p_maps[i_index].inj_cranking[i] * discrete) / 1000.0f; //convert to ms
+}
+
+void EEPROMDataMediator::GetWrmpMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_WARMUP_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_warmup[i]) / WRMP_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::GetDeadMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес структуры дополнительных данных
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ float discrete = (m_epp.m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ for(size_t i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; i++)
+  op_values[i] = (p_maps[i_index].inj_dead_time[i] * discrete) / 1000.0f; //convert to ms
+}
+
+void EEPROMDataMediator::GetIdlrMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_IAC_POS_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_iac_run_pos[i]) / IACPOS_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::GetIdlcMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_IAC_POS_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_iac_crank_pos[i]) / IACPOS_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::GetAETPSMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_ae_tps_enr[i]) - AETPSV_MAPS_ADDER; //shift by 55
+ for (int i = 0; i < INJ_AE_TPS_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_TPS_LOOKUP_TABLE_SIZE] = ((float)p_maps[i_index].inj_ae_tps_bins[i]) / AETPSB_MAPS_M_FACTOR;   //convert from %/100ms to %/s
+}
+
+void EEPROMDataMediator::GetAERPMMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_ae_rpm_enr[i]) / AERPMV_MAPS_M_FACTOR; //convert to %
+ for (int i = 0; i < INJ_AE_RPM_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE] = ((float)p_maps[i_index].inj_ae_rpm_bins[i]) / AERPMB_MAPS_M_FACTOR;   //convert from (%*2)/100ms to %/s
+}
+
+void EEPROMDataMediator::GetAftstrMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = m_bytes_original;
+ else
+  p_bytes = m_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ p_maps = (f_data_t*)(p_bytes + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_aftstr[i]) / AFTSTR_MAPS_M_FACTOR;
+}
+
 std::vector<_TSTRING> EEPROMDataMediator::GetFunctionsSetNames(void)
 {
  std::vector<_TSTRING> names(TUNABLE_TABLES_NUMBER);

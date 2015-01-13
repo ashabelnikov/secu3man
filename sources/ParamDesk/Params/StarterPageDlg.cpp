@@ -29,7 +29,6 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRENRICH_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRSTR_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
@@ -47,11 +46,6 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateFuelInjectionItems)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateFuelInjectionItems)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_SPIN,OnUpdateFuelInjectionItems)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_CAPTION,OnUpdateFuelInjectionItems)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_UNIT,OnUpdateFuelInjectionItems)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRENRICH_EDIT,OnUpdateFuelInjectionItems)
-
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateFuelInjectionItems)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateFuelInjectionItems)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateFuelInjectionItems)
@@ -65,13 +59,11 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
-, m_aftstrenrich_edit(CEditEx::MODE_FLOAT, true)
 , m_aftstrstr_edit(CEditEx::MODE_INT, true)
 {
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
  m_params.inj_cranktorun_time = 3.00f;
- m_params.inj_aftstr_enrich = 10.0f;
  m_params.inj_aftstr_strokes = 150;
 }
 
@@ -89,15 +81,12 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_starter_off_rpm_edit);
  DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_cranktoruntime_edit);
  DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_SPIN, m_cranktoruntime_spin);
- DDX_Control(pDX, IDC_PD_STARTER_AFTSTRENRICH_EDIT, m_aftstrenrich_edit);
- DDX_Control(pDX, IDC_PD_STARTER_AFTSTRENRICH_SPIN, m_aftstrenrich_spin);
  DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_aftstrstr_edit);
  DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_SPIN, m_aftstrstr_spin);
 
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
  m_cranktoruntime_edit.DDX_Value(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_params.inj_cranktorun_time);
- m_aftstrenrich_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRENRICH_EDIT, m_params.inj_aftstr_enrich);
  m_aftstrstr_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_params.inj_aftstr_strokes);
 }
 
@@ -133,12 +122,6 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_cranktoruntime_edit.SetDecimalPlaces(2);
  m_cranktoruntime_spin.SetRangeAndDelta(0.10f,99.00f, 0.01f);
  m_cranktoruntime_edit.SetRange(0.10f, 99.00f);
-
- m_aftstrenrich_edit.SetLimitText(5);
- m_aftstrenrich_spin.SetBuddy(&m_aftstrenrich_edit);
- m_aftstrenrich_edit.SetDecimalPlaces(1);
- m_aftstrenrich_spin.SetRangeAndDelta(.0f,99.0f,0.5f); //%
- m_aftstrenrich_edit.SetRange(.0f, 100.0f);
 
  m_aftstrstr_edit.SetLimitText(3);
  m_aftstrstr_spin.SetBuddy(&m_aftstrstr_edit);

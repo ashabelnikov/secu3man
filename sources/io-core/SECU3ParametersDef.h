@@ -157,7 +157,6 @@ typedef struct
  _ulong  inj_sd_igl_const;              // Constant used in speed-density algorithm to calculate PW. Const = ((CYL_DISP * 3.482 * 18750000) / Ifr ) * (Ncyl / (Nsq * Ninj))
 
  _uint   inj_cranktorun_time;           // Time in seconds for going from the crank position to the run position (1 tick = 10ms)
- _uchar  inj_aftstr_enrich;             // Afterstart enrichment factor * 128, e.g. 128 = 1.00
  _uchar  inj_aftstr_strokes;            // Number of engine strokes, during this time afterstart enrichment is applied
 
  _uchar  inj_lambda_str_per_stp;        // Number of strokes per step for lambda control
@@ -173,7 +172,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[97];
+ _uchar reserved[98];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

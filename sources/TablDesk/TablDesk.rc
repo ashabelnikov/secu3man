@@ -43,8 +43,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,247,96,18
     CONTROL         "Ускор.обог.Обор.",IDC_TD_VIEW_AERPM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,269,96,18
+    CONTROL         "Обогащ.пос.пуска",IDC_TD_VIEW_AFTSTR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,291,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,288,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,310,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -85,6 +87,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,168,96,18
     CONTROL         "Ускор.обог.Обор.",IDC_TD_VIEW_AERPM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,190,82,18
+    CONTROL         "Обогащ.пос.пуска",IDC_TD_VIEW_AFTSTR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,190,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
                     BS_BITMAP | WS_TABSTOP,3,222,16,19
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
@@ -307,6 +311,7 @@ BEGIN
     IDS_MAPS_AFR_UNIT       "Воздух/Топливо"
     IDS_MAPS_INJPW_UNIT     "Время впрыска (мс)"
     IDS_MAPS_WRMP_UNIT      "Коэффициент обогащения"
+    IDS_MAPS_AFTSTR_UNIT    "Обогащение (%)"
     IDS_MAPS_DEAD_UNIT      "Время (мс)"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
@@ -320,6 +325,7 @@ BEGIN
     IDS_AFR_MAP             "Соотношение воздух/топливо в зависимости от оборотов и нагрузки"
     IDS_CRNK_MAP            "Длительность впрыска на пуске"
     IDS_WRMP_MAP            "Обогащение при прогреве"
+    IDS_AFTSTR_MAP          "Обогащение после пуска"
     IDS_DEAD_MAP            "Время открытия форсунки"
     IDS_IDLR_MAP            "Положение РХХ от температуры охлаждающей жидкости"
     IDS_IDLC_MAP            "Положение РХХ на пуске"
@@ -384,8 +390,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,247,96,18
     CONTROL         "Accel.enr.RPM",IDC_TD_VIEW_AERPM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,269,96,18
+    CONTROL         "Afterstart enr.",IDC_TD_VIEW_AFTSTR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,291,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,288,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,310,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -426,6 +434,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,168,96,18
     CONTROL         "Accel.enr.RPM",IDC_TD_VIEW_AERPM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,190,82,18
+    CONTROL         "Afterstart enr.",IDC_TD_VIEW_AFTSTR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,190,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
                     BS_BITMAP | WS_TABSTOP,3,222,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
@@ -665,6 +675,7 @@ BEGIN
     IDS_MAPS_AFR_UNIT       "Air/Fuel"
     IDS_MAPS_INJPW_UNIT     "Injection PW (ms)"
     IDS_MAPS_WRMP_UNIT      "Enrichment factor"
+    IDS_MAPS_AFTSTR_UNIT    "Enrichment (%)"
     IDS_MAPS_DEAD_UNIT      "Time (ms)"
     IDS_MAPS_IAC_UNIT       "%"
     IDS_MAPS_DPDT_UNIT      "d%/dt"
@@ -678,6 +689,7 @@ BEGIN
     IDS_AFR_MAP             "Air/fuel ratio vs RPM and Load"
     IDS_CRNK_MAP            "Injection pulse width on cranking"
     IDS_WRMP_MAP            "Warmup enrichment vs coolant temperature"
+    IDS_AFTSTR_MAP          "Afterstart enrichment vs coolant temperature"
     IDS_DEAD_MAP            "Injector's dead time"
     IDS_IDLR_MAP            "IAC position vs coolant temperature"
     IDS_IDLC_MAP            "IAC position on cranking"

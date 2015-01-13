@@ -52,8 +52,9 @@ typedef struct
  _char  inj_ae_tps_bins[INJ_AE_TPS_LOOKUP_TABLE_SIZE]; // bins of the AE's TPS lookup table
  _uchar inj_ae_rpm_enr[INJ_AE_RPM_LOOKUP_TABLE_SIZE];  // values of the AE's RPM lookup table
  _uchar inj_ae_rpm_bins[INJ_AE_RPM_LOOKUP_TABLE_SIZE]; // bins of the AE's RPM lookup table
+ _uchar inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];      // afterstart enrichment table
 
- _uchar reserved[718];                                 // reserved bytes - for compatibility
+ _uchar reserved[702];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 } //SECU3IO

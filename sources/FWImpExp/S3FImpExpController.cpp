@@ -163,6 +163,7 @@ void S3FImportController::OnExchangePressed(void)
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  mp_view->SetFWDCurrentListSelection(current_sel);
 
+ //ignition
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
   memcpy(mp_fwd->maps[current_sel].f_str, mp_s3f_io->GetData().maps[other_sel].f_str,sizeof(float) * F_STR_POINTS);
 
@@ -175,6 +176,7 @@ void S3FImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   memcpy(mp_fwd->maps[current_sel].f_tmp, mp_s3f_io->GetData().maps[other_sel].f_tmp,sizeof(float) * F_TMP_POINTS);
 
+ //fuela injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ve, mp_s3f_io->GetData().maps[other_sel].inj_ve,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
@@ -201,6 +203,9 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ae_rpm, mp_s3f_io->GetData().maps[other_sel].inj_ae_rpm,sizeof(float) * INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_aftstr, mp_s3f_io->GetData().maps[other_sel].inj_aftstr, sizeof(float) * INJ_AFTSTR_LOOKUP_TABLE_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -244,6 +249,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_IDLC_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, injen); 
+ mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, injen); 
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -251,8 +257,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
- mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen);
- mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen);     //absent in old version of S3F
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen);  //absent in old version of S3F
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -392,6 +398,7 @@ void S3FExportController::OnExchangePressed(void)
  mp_view->FillFWDOtherList(GenArtificialNames(strings));
  mp_view->SetFWDOtherListSelection(other_sel);
 
+ //ignition
  if (mp_view->GetFWDFlag(FLAG_START_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].f_str, mp_fwd->maps[current_sel].f_str, sizeof(float) * F_STR_POINTS);
 
@@ -404,6 +411,7 @@ void S3FExportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].f_tmp, mp_fwd->maps[current_sel].f_tmp, sizeof(float) * F_TMP_POINTS);
 
+ //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ve, mp_fwd->maps[current_sel].inj_ve, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
@@ -430,6 +438,9 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ae_rpm, mp_fwd->maps[current_sel].inj_ae_rpm, sizeof(float) * INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_aftstr, mp_fwd->maps[current_sel].inj_aftstr, sizeof(float) * INJ_AFTSTR_LOOKUP_TABLE_SIZE);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -462,6 +473,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

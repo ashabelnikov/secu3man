@@ -700,10 +700,8 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
   m_code_for_merge_size = m_fwdm->GetOnlyCodeSize(io_buff);
   memcpy(m_code_for_merge_with_overhead, io_buff, m_fpp.m_app_section_size);
 
-  m_moreSize = (m_fwdm->HasCodeData(io_buff) ? 0x400 : 0); //1024 bytes more
-
   //Читаем немного больше байт, для того, чтобы гарантировано прочитать данные находящиеся в коде  
-  size_t reducedSize = m_code_for_merge_size - m_moreSize;
+  size_t reducedSize = m_code_for_merge_size - 0x400; //1024 bytes more
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, m_bl_data,
   m_fpp.m_app_section_size - reducedSize, //размер данных сверху над кодом программы
@@ -804,14 +802,29 @@ bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 bool CFirmwareTabController::OnClose(void)
 {
  //сохраняем позиции открытых окон!
+ //ignition
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
+ //fuel injection
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_VE), TYPE_MAP_INJ_VE);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFR), TYPE_MAP_INJ_AFR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_CRNK), TYPE_MAP_INJ_CRNK);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_WRMP), TYPE_MAP_INJ_WRMP);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_DEAD), TYPE_MAP_INJ_DEAD);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLR), TYPE_MAP_INJ_IDLR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLC), TYPE_MAP_INJ_IDLC);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AETPS), TYPE_MAP_INJ_AETPS);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
+ //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CHOKE_OP), TYPE_MAP_CHOKE_OP);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CURVE), TYPE_MAP_ATS_CURVE);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
@@ -875,7 +888,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableOddCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) > 0);
 
  this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
- this->mp_iorCntr->Enable(m_fwdm->HasCodeData());
+ this->mp_iorCntr->Enable(true);
 
  m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0);
  m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
@@ -1012,6 +1025,7 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false),false);
  m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(true),true);
 
+ //fuel injection
  m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(false),false);
  m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(true),true);
 
@@ -1038,6 +1052,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(false),false);
  m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(true),true);
+
+ m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(false),false);
+ m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1069,8 +1086,7 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 
  //Attach fwdm to children controllers
- if (m_fwdm->HasCodeData())
-  this->mp_iorCntr->AttachFWDM(m_fwdm);
+ this->mp_iorCntr->AttachFWDM(m_fwdm);
 }
 
 //вкладка может быть закрыта, а график может быть по прежнему в открытом состоянии и изменен.
@@ -1133,6 +1149,11 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetAERPMMap(m_current_funset_index, m_view->mp_TablesPanel->GetAERPMMap(false));
    break;
+  case TYPE_MAP_INJ_AFTSTR:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetAftstrMap(m_current_funset_index, m_view->mp_TablesPanel->GetAftstrMap(false));
+   break;
+
    //separate maps
   case TYPE_MAP_ATTENUATOR:
    m_fwdm->SetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false));
@@ -1393,7 +1414,7 @@ bool CFirmwareTabController::IsViewFWOptionsAvailable(void)
 
 bool CFirmwareTabController::IsIORemappingAvailable(void)
 {
- return m_fwdm->HasCodeData();
+ return true;
 }
 
 void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
@@ -1490,6 +1511,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_AERPMMapWnd_X = rc.left;
    ws.m_AERPMMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_AFTSTR:
+   ws.m_AftstrMapWnd_X = rc.left;
+   ws.m_AftstrMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_ATS_CURVE:
    ws.m_ATSCurvMapWnd_X = rc.left;
    ws.m_ATSCurvMapWnd_Y = rc.top;
@@ -1569,6 +1594,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_AERPM:
    X = ws.m_AERPMMapWnd_X, Y = ws.m_AERPMMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_AFTSTR:
+   X = ws.m_AftstrMapWnd_X, Y = ws.m_AftstrMapWnd_Y;
    break;
   case TYPE_MAP_ATS_CURVE:
    X = ws.m_ATSCurvMapWnd_X, Y = ws.m_ATSCurvMapWnd_Y;

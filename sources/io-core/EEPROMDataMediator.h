@@ -58,6 +58,17 @@ class IOCORE_API EEPROMDataMediator
   void GetWorkMap(int i_index, float* o_values, bool i_original = false);
   void GetTempMap(int i_index, float* o_values, bool i_original = false);
 
+  void GetVEMap(int i_index, float* o_values, bool i_original = false);
+  void GetAFRMap(int i_index, float* o_values, bool i_original = false);
+  void GetCrnkMap(int i_index, float* o_values, bool i_original = false);
+  void GetWrmpMap(int i_index, float* o_values, bool i_original = false);
+  void GetDeadMap(int i_index, float* o_values, bool i_original = false);
+  void GetIdlrMap(int i_index, float* o_values, bool i_original = false);
+  void GetIdlcMap(int i_index, float* o_values, bool i_original = false);
+  void GetAETPSMap(int i_index, float* o_values, bool i_original = false);
+  void GetAERPMMap(int i_index, float* o_values, bool i_original = false);
+  void GetAftstrMap(int i_index, float* o_values, bool i_original = false);
+
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
 

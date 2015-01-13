@@ -509,7 +509,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 16 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 14 : 7))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -525,12 +525,6 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time))
   return false;
  m_StartrPar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
-
- //Afterstart enrichment
- unsigned char aftstr_enrich = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_enrich))
-  return false;
- m_StartrPar.inj_aftstr_enrich = (float(aftstr_enrich) / 128.0f) * 100.0f - 100.0f;
 
  //Time of afterstart enrichment in strokes
  unsigned char aftstr_strokes = 0;
@@ -1174,7 +1168,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR && m_EditTabPar.tab_id != ETMT_VE_MAP &&
      m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
      m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
-     m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP)
+     m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1223,6 +1217,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = AFR_MAPS_M_FACTOR / ((float)value);
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
+     else if (m_EditTabPar.tab_id == ETMT_AFTSTR_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / AFTSTR_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_IDLR_MAP || m_EditTabPar.tab_id == ETMT_IDLC_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / IACPOS_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AETPS_MAP)
@@ -2169,8 +2165,6 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
  int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
  mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
- unsigned char aftstr_enrich = MathHelpers::Round((packet_data->inj_aftstr_enrich + 100.0f) * 128.0f / 100.0f);
- mp_pdp->Bin8ToHex(aftstr_enrich, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->inj_aftstr_strokes, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
@@ -2368,6 +2362,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_WRMP_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * WRMP_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+   }
+   else if (packet_data->tab_id == ETMT_AFTSTR_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * AFTSTR_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
    }
    else if (packet_data->tab_id == ETMT_IDLR_MAP || packet_data->tab_id == ETMT_IDLC_MAP)

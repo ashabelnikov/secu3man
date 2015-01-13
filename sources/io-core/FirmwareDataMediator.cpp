@@ -478,14 +478,14 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
  LoadCodeData(ip_source_bytes, (ip_fpp ? ip_fpp : m_fpp.get())->m_app_section_size);
 
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- size_t dataSize = p_fd->def_param.crc;
+ size_t dataSize = p_fd->fw_data_size;
  _uint oldFWCRC  = p_fd->code_crc;
 
  if (ip_fpp)
  {
   LocInfoProvider lip(*ip_fpp);
 
-  //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
+  //shrink size using value specified in fw_data_size if fw_data_size contain a valid value
   size_t start_d = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t start_s = (0==dataSize) ? lip.FIRMWARE_DATA_START : (lip.BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
@@ -493,13 +493,13 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
  }
  else
  {
-  //shrink size using value specified in def_param.crc if def_param.crc contain a valid value
+  //shrink size using value specified in fw_data_size if fw_data_size contain a valid value
   size_t start = (0==dataSize) ? m_lip->FIRMWARE_DATA_START : (m_lip->BOOT_START - dataSize);
   size_t size = (0==dataSize) ? m_lip->FIRMWARE_DATA_SIZE : dataSize; 
   memcpy(mp_bytes_active + start, ip_source_bytes + start, size);  
  }
- //Значение def_param.crc не импортируем, так как оно служебное.
- p_fd->def_param.crc = dataSize;
+ //Значение fw_data_size не импортируем, так как оно служебное.
+ p_fd->fw_data_size = dataSize;
 
  //не импортируем контрольную сумму прошивки
  p_fd->code_crc = oldFWCRC;
@@ -520,9 +520,9 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_by
  if (false==IsLoaded())
   return; //некуда загружать...
  fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
- _uint fwd_size = p_fd->def_param.crc; //save
+ _uint fwd_size = p_fd->fw_data_size; //save
  memcpy(&p_fd->def_param, ip_source_bytes, sizeof(params_t));
- p_fd->def_param.crc = fwd_size; //restore
+ p_fd->fw_data_size = fwd_size; //restore
  mp_cddata = _FindCodeData(); //find data residing directly in the code
 
  //Use heuristic check, ask user and apply ADC factor compensation
@@ -943,6 +943,39 @@ void CFirmwareDataMediator::SetAERPMMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_ae_rpm_bins[i] = MathHelpers::Round((ip_values[i+INJ_AE_RPM_LOOKUP_TABLE_SIZE]*AERPMB_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetAftstrMap(int i_index, float* op_values, bool i_original /* = false */)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(op_values);
+
+ if (i_original)
+  p_bytes = mp_bytes_original;
+ else
+  p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_aftstr[i]) / AFTSTR_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetAftstrMap(int i_index,const float* ip_values)
+{
+ BYTE* p_bytes = NULL;
+ f_data_t* p_maps = NULL;
+ ASSERT(ip_values);
+
+ p_bytes = mp_bytes_active;
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&p_bytes[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_aftstr[i] = MathHelpers::Round((ip_values[i]*AFTSTR_MAPS_M_FACTOR));
+}
+
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
 {
  using namespace SECU3IO;
@@ -1022,7 +1055,6 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->starter_off  = p_in->starter_off;
     p_params->smap_abandon = p_in->smap_abandon;
     p_params->inj_cranktorun_time = MathHelpers::Round(p_in->inj_cranktorun_time * 100.0f);
-    p_params->inj_aftstr_enrich = MathHelpers::Round(((p_in->inj_aftstr_enrich + 100.0f) * 128.0f) / 100.0f);
     p_params->inj_aftstr_strokes = p_in->inj_aftstr_strokes;
    }
    break;
@@ -1271,7 +1303,6 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->starter_off = p_params->starter_off;
      p_out->smap_abandon = p_params->smap_abandon;
      p_out->inj_cranktorun_time = float(p_params->inj_cranktorun_time) / 100.0f;
-     p_out->inj_aftstr_enrich = (float(p_params->inj_aftstr_enrich) / 128.0f) * 100.0f - 100.0f;
      p_out->inj_aftstr_strokes = p_params->inj_aftstr_strokes;
     }
     break;
@@ -1940,31 +1971,12 @@ cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/,
   return p_cd;
 }
 
-bool CFirmwareDataMediator::HasCodeData(const BYTE* ip_source_bytes /*= NULL*/) const
-{
- if (!ip_source_bytes) //current firmware (check loaded firmware)
-  return (NULL != mp_cddata);
- else
- {
-  //obtain pointer to fw_data_t structure
-  fw_data_t* p_fd = (fw_data_t*)(&ip_source_bytes[m_lip->FIRMWARE_DATA_START]);
-  _uint dataSize = p_fd->def_param.crc;
-  return (dataSize > 0); //has code data?
- }
-}
-
 size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* ip_bytes) const
 {
  ASSERT(ip_bytes);
  //obtain pointer to fw_data_t structure
  fw_data_t* p_fd = (fw_data_t*)(&ip_bytes[m_lip->FIRMWARE_DATA_START]);
-
- size_t sizeoffd = p_fd->def_param.crc;
-
- if ((sizeoffd > 0) && (sizeoffd >= m_fpp->m_only_data_size) && (sizeoffd < m_fpp->m_app_section_size))
-  return m_fpp->m_app_section_size - sizeoffd;
- else //old versions of firmware
-  return m_fpp->m_only_code_size;
+ return (m_fpp->m_app_section_size - p_fd->fw_data_size);
 }
 
 void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_srcSize, BYTE* op_destin_bytes /*= NULL*/)
@@ -1974,8 +1986,8 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_s
   op_destin_bytes = mp_bytes_active; //use current firmware bytes as destination
 
  //obtain actual size of data (source and destination data)
- _uint dataSizeSrc = ((fw_data_t*)((ip_source_bytes + i_srcSize)-sizeof(fw_data_t)))->def_param.crc;
- _uint dataSizeDst = ((fw_data_t*)((op_destin_bytes + m_lip->FIRMWARE_DATA_START)))->def_param.crc;
+ _uint dataSizeSrc = ((fw_data_t*)((ip_source_bytes + i_srcSize)-sizeof(fw_data_t)))->fw_data_size;
+ _uint dataSizeDst = ((fw_data_t*)((op_destin_bytes + m_lip->FIRMWARE_DATA_START)))->fw_data_size;
  //Check compatibility and copy data from source to destination
  if ((dataSizeSrc > 0) && dataSizeSrc && (dataSizeDst > 0) && dataSizeDst)
  { //code area data is present

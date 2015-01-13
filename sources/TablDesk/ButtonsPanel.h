@@ -64,6 +64,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIdlcMap(bool i_original);
   float* GetAETPSMap(bool i_original);
   float* GetAERPMMap(bool i_original);
+  float* GetAftstrMap(bool i_original);
 
   float* GetRPMGrid(void);
 
@@ -101,6 +102,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIdlcMap();
   afx_msg void OnViewAETPSMap();
   afx_msg void OnViewAERPMMap();
+  afx_msg void OnViewAftstrMap();
 
   afx_msg void OnGridModeEditing();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -116,6 +118,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewIdlcMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAETPSMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAERPMMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewAftstrMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
@@ -149,6 +152,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_idlc_map_btn;
   CButton m_view_aetps_map_btn;
   CButton m_view_aerpm_map_btn;
+  CButton m_view_aftstr_map_btn;
 
   CButton m_grid_mode_editing_check;
   std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
@@ -185,6 +189,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnCloseAETPSMap(void* i_param);
   static void __cdecl OnChangeAERPMMap(void* i_param);
   static void __cdecl OnCloseAERPMMap(void* i_param);
+  static void __cdecl OnChangeAftstrMap(void* i_param);
+  static void __cdecl OnCloseAftstrMap(void* i_param);
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationCrnkMap(void* i_param, long cmd);
@@ -194,6 +200,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnWndActivationIdlcMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAETPSMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAERPMMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationAftstrMap(void* i_param, long cmd);
 
   void OnGridMapChanged(int mapType);
   void OnGridMapClosed(HWND, int);
@@ -214,6 +221,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   int m_idlc_map_chart_state;
   int m_aetps_map_chart_state;
   int m_aerpm_map_chart_state;
+  int m_aftstr_map_chart_state;
 
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
@@ -228,6 +236,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   HWND m_idlc_map_wnd_handle;
   HWND m_aetps_map_wnd_handle;
   HWND m_aerpm_map_wnd_handle;
+  HWND m_aftstr_map_wnd_handle;
 
   float m_start_map_active[16];
   float m_start_map_original[16];
@@ -257,6 +266,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float m_aetps_map_original[16];
   float m_aerpm_map_active[8];
   float m_aerpm_map_original[8];
+  float m_aftstr_map_active[16];
+  float m_aftstr_map_original[16];
 
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;

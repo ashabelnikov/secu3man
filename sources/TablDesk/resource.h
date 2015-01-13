@@ -223,3 +223,6 @@
 #define IDS_MAPS_AETPS_UNIT             5482
 #define IDS_AERPM_MAP                   5483
 #define IDS_MAPS_AERPM_UNIT             5484
+#define IDC_TD_VIEW_AFTSTR_MAP          5485
+#define IDS_MAPS_AFTSTR_UNIT            5486
+#define IDS_AFTSTR_MAP                  5487

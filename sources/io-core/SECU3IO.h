@@ -94,7 +94,6 @@ namespace SECU3IO
   int  starter_off;                     //порог выключения стартера (обороты)
   int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую
   float inj_cranktorun_time;            //sec.
-  float inj_aftstr_enrich;              //%
   int   inj_aftstr_strokes;             //strokes
  };
 
@@ -272,6 +271,7 @@ namespace SECU3IO
  const int ETMT_IDLC_MAP = 11;          //IAC cranking pos
  const int ETMT_AETPS_MAP = 12;         //AE TPS map
  const int ETMT_AERPM_MAP = 13;         //AE RPM map
+ const int ETMT_AFTSTR_MAP = 14;        //afterstart enrichment
 
  struct SepTabPar
  {
@@ -595,4 +595,5 @@ namespace SECU3IO
  const float AETPSV_MAPS_ADDER = 55.0f;
  const float AERPMB_MAPS_M_FACTOR = 0.01f;
  const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);
+ const float AFTSTR_MAPS_M_FACTOR = (128.0f * 0.01f);
 };

@@ -76,6 +76,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
    return i_original ? m_omaps->inj_ae_tps : m_maps->inj_ae_tps;
   case TYPE_MAP_INJ_AERPM:
    return i_original ? m_omaps->inj_ae_rpm : m_maps->inj_ae_rpm;
+  case TYPE_MAP_INJ_AFTSTR:
+   return i_original ? m_omaps->inj_aftstr : m_maps->inj_aftstr;
  }
  return NULL; //undefined type of map
 }
@@ -111,6 +113,8 @@ size_t _GetMapSize(int i_mapType)
    return INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2; //bins and values
   case TYPE_MAP_INJ_AERPM:
    return INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2; //bins and values
+  case TYPE_MAP_INJ_AFTSTR:
+   return INJ_AFTSTR_LOOKUP_TABLE_SIZE;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -140,6 +144,7 @@ void CPMTablesController::_MoveMapsToCharts(bool i_original)
  _MoveMapToChart(TYPE_MAP_INJ_IDLC, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_AETPS, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_AERPM, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_AFTSTR, i_original);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
@@ -160,6 +165,7 @@ void CPMTablesController::_ClearAcquisitionFlags(void)
  std::fill(m_maps_flags->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
  std::fill(m_maps_flags->inj_ae_tps, m_maps_flags->inj_ae_tps + (INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2), .0f);
  std::fill(m_maps_flags->inj_ae_rpm, m_maps_flags->inj_ae_rpm + (INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2), .0f);
+ std::fill(m_maps_flags->inj_aftstr, m_maps_flags->inj_aftstr + INJ_AFTSTR_LOOKUP_TABLE_SIZE, .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -382,6 +388,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_AERPM_MAP: //AE TPS map
    UpdateMap(m_maps->inj_ae_rpm, m_maps_flags->inj_ae_rpm, data);
    break;
+  case ETMT_AFTSTR_MAP: //afterstart enrichment map
+   UpdateMap(m_maps->inj_aftstr, m_maps_flags->inj_aftstr, data);
+   break;
   default: ASSERT(0);
    //error
    break;
@@ -429,6 +438,8 @@ bool CPMTablesController::_IsCacheUpToDate(void)
    return false;
   if (!_FindZero(m_maps_flags->inj_ae_rpm, INJ_AE_RPM_LOOKUP_TABLE_SIZE*2))
    return false;
+  if (!_FindZero(m_maps_flags->inj_aftstr, INJ_AFTSTR_LOOKUP_TABLE_SIZE))
+   return false;
  return true;
 }
 
@@ -463,6 +474,8 @@ bool CPMTablesController::_IsModificationMade(void) const
  if (false==_CompareViewMap(TYPE_MAP_INJ_AETPS, _GetMapSize(TYPE_MAP_INJ_AETPS)))
   return true;
  if (false==_CompareViewMap(TYPE_MAP_INJ_AERPM, _GetMapSize(TYPE_MAP_INJ_AERPM)))
+  return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_AFTSTR, _GetMapSize(TYPE_MAP_INJ_AFTSTR)))
   return true;
 
  return false; //no modifications

@@ -96,6 +96,8 @@ class IOCORE_API CFirmwareDataMediator
   void SetAETPSMap(int i_index, const float* i_values);
   void GetAERPMMap(int i_index, float* op_values, bool i_original = false);
   void SetAERPMMap(int i_index, const float* i_values);
+  void GetAftstrMap(int i_index, float* op_values, bool i_original = false);
+  void SetAftstrMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);
@@ -262,7 +264,6 @@ class IOCORE_API CFirmwareDataMediator
   void  SetIOPlug(IOXtype type, IOPid id, DWORD value);
   IORemVer GetIORemVersion(void) const;
 
-  bool HasCodeData(const BYTE* ip_source_bytes = NULL) const;
   size_t GetOnlyCodeSize(const BYTE* ip_bytes) const;
   void LoadCodeData(const BYTE* ip_source_bytes, size_t i_srcSize, BYTE* op_destin_bytes = NULL);
 

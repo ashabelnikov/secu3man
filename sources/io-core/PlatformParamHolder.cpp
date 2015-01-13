@@ -39,6 +39,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    //eeprom
    m_ep.m_size = 512;
+   m_ep.m_platform_id = EP_ATMEGA16;
    //MCU clock frequency
    m_fp.m_fcpu_hz = 16000000;
    //Magic number
@@ -54,6 +55,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    //eeprom
    m_ep.m_size = 1024;
+   m_ep.m_platform_id = EP_ATMEGA32;
    //MCU clock frequency
    m_fp.m_fcpu_hz = 16000000;
    //Magic number
@@ -70,6 +72,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    //eeprom
    m_ep.m_size = 2048;
+   m_ep.m_platform_id = EP_ATMEGA644;
    //MCU clock frequency
    m_fp.m_fcpu_hz = 20000000;
    //Magic number
@@ -85,6 +88,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    //eeprom
    m_ep.m_size = 2048;
+   m_ep.m_platform_id = EP_ATMEGA64;
    //MCU clock frequency
    m_fp.m_fcpu_hz = 16000000;
    //Magic number
@@ -100,6 +104,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
    //eeprom
    m_ep.m_size = 4096;
+   m_ep.m_platform_id = EP_ATMEGA128;
    //MCU clock frequency
    m_fp.m_fcpu_hz = 16000000;
    //Magic number

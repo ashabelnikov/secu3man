@@ -222,6 +222,9 @@ void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
  if (hwnd)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
  if (hwnd)
@@ -273,6 +276,8 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AETPS);
  _MakeWindowChild(hwnd, children);
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
+ _MakeWindowChild(hwnd, children);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
  _MakeWindowChild(hwnd, children);
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND); //pseudo map
@@ -386,6 +391,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
 
   case TYPE_MAP_INJ_AERPM:
    return mp_ButtonsPanel->GetAERPMMap(i_original);
+
+  case TYPE_MAP_INJ_AFTSTR:
+   return mp_ButtonsPanel->GetAftstrMap(i_original);
 
   default:
   return NULL;

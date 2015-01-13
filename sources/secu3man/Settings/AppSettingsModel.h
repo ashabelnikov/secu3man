@@ -122,6 +122,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AETPSMapWnd_Y;
   const CString m_Name_AERPMMapWnd_X;
   const CString m_Name_AERPMMapWnd_Y;
+  const CString m_Name_AftstrMapWnd_X;
+  const CString m_Name_AftstrMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -217,6 +219,8 @@ class CAppSettingsModel : public ISettingsData
   int m_optAETPSMapWnd_Y;
   int m_optAERPMMapWnd_X;
   int m_optAERPMMapWnd_Y;
+  int m_optAftstrMapWnd_X;
+  int m_optAftstrMapWnd_Y;
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;

@@ -195,6 +195,9 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
+  m_fwdm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -212,10 +215,12 @@ void SECU3ImportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = m_fwdm->GetFunctionsSetNames();
  mp_view->FillFWDOtherList(strings);
 
+ //ignition
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
@@ -225,6 +230,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
@@ -422,6 +429,9 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
   m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+
+ if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
+  m_fwdm->SetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -439,10 +449,12 @@ void SECU3ExportController::OnViewActivate(void)
  std::vector<_TSTRING> strings = m_fwdm->GetFunctionsSetNames();
  mp_view->FillFWDOtherList(strings);
 
+ //ignition
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
  mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
  mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
+ //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, true);
  mp_view->SetFWDFlag(FLAG_CRNK_MAP, true);
@@ -452,6 +464,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, true);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);

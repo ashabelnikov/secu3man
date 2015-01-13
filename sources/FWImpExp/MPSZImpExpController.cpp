@@ -147,16 +147,10 @@ void MPSZImportController::OnViewActivate(void)
  title.Format(MLL::GetString(IDS_MPSZ_FW_FILE).c_str(),m_mpsz_file_name.c_str());
  mp_view->SetFWDOtherListTitle(_TSTRING(title));
 
+ //ignition
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
- mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
- mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
- mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
+ //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, false);
@@ -175,6 +169,17 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, false);
+ //separate
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
@@ -341,16 +346,13 @@ void MPSZExportController::OnViewActivate(void)
  title.Format(MLL::GetString(IDS_MPSZ_FW_FILE).c_str(),m_mpsz_file_name.c_str());
  mp_view->SetFWDOtherListTitle(_TSTRING(title));
 
- mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);
+ //ignition
+ mp_view->SetFWDFlag(FLAG_START_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
+ mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TEMP_MAP, false);     //absent in MPSZ
  mp_view->EnableFWDFlag(FLAG_TEMP_MAP, false);
- mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
- mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
- mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
- mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
- mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
- mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
+ //fuel injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, false);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, false);
@@ -369,6 +371,17 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, false);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, false);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, false);
+ //separate
+ mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
@@ -380,10 +393,6 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
  std::vector<_TSTRING> strings = mp_mpsz_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(strings);
-
- mp_view->SetFWDFlag(FLAG_START_MAP, true);
- mp_view->SetFWDFlag(FLAG_IDLE_MAP, true);
- mp_view->SetFWDFlag(FLAG_WORK_MAP, true);
 }
 
 void MPSZExportController::OnCurrentListNameChanged(int item, CString text)
