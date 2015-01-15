@@ -67,4 +67,10 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_cranktoruntime_edit;
   CSpinButtonCtrlEx m_aftstrstr_spin;
   CEditEx m_aftstrstr_edit;
+  CSpinButtonCtrlEx m_primecold_spin;
+  CEditEx m_primecold_edit;
+  CSpinButtonCtrlEx m_primehot_spin;
+  CEditEx m_primehot_edit;
+  CSpinButtonCtrlEx m_primedelay_spin;
+  CEditEx m_primedelay_edit;
 };

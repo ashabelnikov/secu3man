@@ -95,6 +95,9 @@ namespace SECU3IO
   int  smap_abandon;                    //обороты перехода с пусковой карты на рабочую
   float inj_cranktorun_time;            //sec.
   int   inj_aftstr_strokes;             //strokes
+  float inj_prime_cold;                 //prime pulse width at -30C
+  float inj_prime_hot;                  //prime pulse width at 70C
+  float inj_prime_delay;                //prime pulse delay
  };
 
  struct AnglesPar

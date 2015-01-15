@@ -509,7 +509,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 14 : 7))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 24 : 12))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -531,6 +531,23 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes))
   return false;
  m_StartrPar.inj_aftstr_strokes = aftstr_strokes;
+
+ float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
+ //prime pulse at -30C
+ int prime_cold = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &prime_cold))
+  return false;
+ m_StartrPar.inj_prime_cold = (float(prime_cold) * discrete) / 1000.0f; //convert to ms
+ //prime pulse at 70C
+ int prime_hot = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &prime_hot))
+  return false;
+ m_StartrPar.inj_prime_hot = (float(prime_hot) * discrete) / 1000.0f; //convert to ms
+ //prime pulse delay
+ unsigned char prime_delay = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &prime_delay))
+  return false;
+ m_StartrPar.inj_prime_delay = float(prime_delay) / 10.0f;            //convert to seconds
 
  return true;
 }
@@ -2166,6 +2183,13 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
  mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->inj_aftstr_strokes, m_outgoing_packet);
+ float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
+ int prime_cold = MathHelpers::Round((packet_data->inj_prime_cold * 1000.0f) / discrete);
+ mp_pdp->Bin16ToHex(prime_cold, m_outgoing_packet);
+ int prime_hot = MathHelpers::Round((packet_data->inj_prime_hot * 1000.0f) / discrete);
+ mp_pdp->Bin16ToHex(prime_hot, m_outgoing_packet);
+ int prime_delay = MathHelpers::Round(packet_data->inj_prime_delay * 10.0f);
+ mp_pdp->Bin16ToHex(prime_delay, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 
@@ -2352,37 +2376,37 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_VE_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * VE_MAPS_M_FACTOR);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_AFR_MAP)
    {
     unsigned char value = MathHelpers::Round(AFR_MAPS_M_FACTOR / packet_data->table_data[i]);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_WRMP_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * WRMP_MAPS_M_FACTOR);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_AFTSTR_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * AFTSTR_MAPS_M_FACTOR);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_IDLR_MAP || packet_data->tab_id == ETMT_IDLC_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * IACPOS_MAPS_M_FACTOR);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_AETPS_MAP)
    {
     unsigned char value = MathHelpers::Round((packet_data->address>=INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(packet_data->table_data[i]*AETPSB_MAPS_M_FACTOR):(packet_data->table_data[i]+AETPSV_MAPS_ADDER));
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_AERPM_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * ((packet_data->address>=INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR));
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);   
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
    {

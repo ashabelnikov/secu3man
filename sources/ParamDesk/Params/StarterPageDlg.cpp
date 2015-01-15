@@ -30,6 +30,9 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_AFTSTRSTR_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_PRIMECOLD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_PRIMEHOT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_PRIMEDELAY_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,OnUpdateControls)
@@ -50,6 +53,21 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateFuelInjectionItems)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateFuelInjectionItems)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateFuelInjectionItems)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_EDIT,OnUpdateFuelInjectionItems)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEHOT_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEHOT_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEHOT_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEHOT_EDIT,OnUpdateFuelInjectionItems)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_SPIN,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_CAPTION,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_UNIT,OnUpdateFuelInjectionItems)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_EDIT,OnUpdateFuelInjectionItems)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
@@ -60,11 +78,17 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
 , m_aftstrstr_edit(CEditEx::MODE_INT, true)
+, m_primecold_edit(CEditEx::MODE_FLOAT, true)
+, m_primehot_edit(CEditEx::MODE_FLOAT, true)
+, m_primedelay_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
  m_params.inj_cranktorun_time = 3.00f;
  m_params.inj_aftstr_strokes = 150;
+ m_params.inj_prime_cold =6.0f;
+ m_params.inj_prime_hot = 2.0f;
+ m_params.inj_prime_delay = 2.0f;
 }
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
@@ -83,11 +107,20 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_SPIN, m_cranktoruntime_spin);
  DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_aftstrstr_edit);
  DDX_Control(pDX, IDC_PD_STARTER_AFTSTRSTR_SPIN, m_aftstrstr_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMECOLD_EDIT, m_primecold_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMECOLD_SPIN, m_primecold_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMEHOT_EDIT, m_primehot_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMEHOT_SPIN, m_primehot_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMEDELAY_EDIT, m_primedelay_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_PRIMEDELAY_SPIN, m_primedelay_spin);
 
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
  m_cranktoruntime_edit.DDX_Value(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_params.inj_cranktorun_time);
  m_aftstrstr_edit.DDX_Value(pDX, IDC_PD_STARTER_AFTSTRSTR_EDIT, m_params.inj_aftstr_strokes);
+ m_primecold_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMECOLD_EDIT, m_params.inj_prime_cold);
+ m_primehot_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEHOT_EDIT, m_params.inj_prime_hot);
+ m_primedelay_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEDELAY_EDIT, m_params.inj_prime_delay);
 }
 
 void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -128,6 +161,21 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_aftstrstr_spin.SetRangeAndDelta(1, 255, 1);  //strokes
  m_aftstrstr_edit.SetRange(1, 255);
 
+ m_primecold_edit.SetLimitText(4);
+ m_primecold_spin.SetBuddy(&m_primecold_edit);
+ m_primecold_spin.SetRangeAndDelta(.0f, 65.0f, 0.1f);
+ m_primecold_edit.SetRange(0.1f, 65.0f);
+
+ m_primehot_edit.SetLimitText(4);
+ m_primehot_spin.SetBuddy(&m_primehot_edit);
+ m_primehot_spin.SetRangeAndDelta(.0f, 65.0f, 0.1f);
+ m_primehot_edit.SetRange(0.1f, 65.0f);
+
+ m_primedelay_edit.SetLimitText(4);
+ m_primedelay_spin.SetBuddy(&m_primedelay_edit);
+ m_primedelay_spin.SetRangeAndDelta(.0f, 25.0f, 0.1f);
+ m_primedelay_edit.SetRange(.0f, 25.0f);
+
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -139,7 +187,7 @@ void CStarterPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable controls (All)
 void CStarterPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -149,26 +197,26 @@ void CStarterPageDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 }
 
-//что с контроллами?
+//Get state of controls (enabled/disabled)
 bool CStarterPageDlg::IsEnabled(void)
 {
  return m_enabled;
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//Use this function for getting values from dialog
 void CStarterPageDlg::GetValues(SECU3IO::StartrPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::StartrPar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//Use this function to set values in dialog
 void CStarterPageDlg::SetValues(const SECU3IO::StartrPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::StartrPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
 }
 
 void CStarterPageDlg::EnableFuelInjection(bool i_enable)

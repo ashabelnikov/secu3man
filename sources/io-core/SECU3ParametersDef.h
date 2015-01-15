@@ -156,6 +156,10 @@ typedef struct
  _uint   inj_cyl_disp;                  // The displacement of one cylinder in liters * 16384
  _ulong  inj_sd_igl_const;              // Constant used in speed-density algorithm to calculate PW. Const = ((CYL_DISP * 3.482 * 18750000) / Ifr ) * (Ncyl / (Nsq * Ninj))
 
+ _uint   inj_prime_cold;                // Prime pulse at -30C
+ _uint   inj_prime_hot;                 // Prime pulse at 70C
+ _uchar  inj_prime_delay;               // Prime pulse delay
+
  _uint   inj_cranktorun_time;           // Time in seconds for going from the crank position to the run position (1 tick = 10ms)
  _uchar  inj_aftstr_strokes;            // Number of engine strokes, during this time afterstart enrichment is applied
 
@@ -172,7 +176,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[98];
+ _uchar reserved[93];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
