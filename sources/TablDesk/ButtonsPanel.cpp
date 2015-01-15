@@ -1146,12 +1146,11 @@ void CButtonsPanel::OnViewWrmpMap()
  if ((!m_wrmp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_wrmp_map_chart_state = 1;
-  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(GetWrmpMap(true),GetWrmpMap(false),0.0f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(GetWrmpMap(true),GetWrmpMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
     MLL::GetString(IDS_WRMP_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_wrmp_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_wrmp_map_wnd_handle, 0.05f);
+  DLL::Chart2DSetPtMovingStep(m_wrmp_map_wnd_handle, 1.00f);
   DLL::Chart2DSetOnWndActivation(m_wrmp_map_wnd_handle,OnWndActivationWrmpMap,this);
   DLL::Chart2DSetOnChange(m_wrmp_map_wnd_handle,OnChangeWrmpMap,this);
   DLL::Chart2DSetOnClose(m_wrmp_map_wnd_handle,OnCloseWrmpMap,this);
