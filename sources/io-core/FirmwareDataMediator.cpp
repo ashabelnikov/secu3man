@@ -47,9 +47,9 @@ using namespace SECU3IO::SECU3Types;
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
-//------------------------For iorem_slots_t V2.1----------------------------
-#define IOREM_SLOTS 25           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 56           // Number of plugs used in I/O remapping
+//------------------------For iorem_slots_t V2.2----------------------------
+#define IOREM_SLOTS 37           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 68           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -1951,7 +1951,7 @@ CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) con
 {
  ASSERT(mp_cddata);
  if (!mp_cddata)
-  return IOV_V00; //error
+  return IOV_V22; //error, return current version
  return (IORemVer)mp_cddata->iorem.version;
 }
 
