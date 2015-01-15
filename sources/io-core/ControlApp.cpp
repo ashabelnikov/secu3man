@@ -2189,7 +2189,7 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  int prime_hot = MathHelpers::Round((packet_data->inj_prime_hot * 1000.0f) / discrete);
  mp_pdp->Bin16ToHex(prime_hot, m_outgoing_packet);
  int prime_delay = MathHelpers::Round(packet_data->inj_prime_delay * 10.0f);
- mp_pdp->Bin16ToHex(prime_delay, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(prime_delay, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 
