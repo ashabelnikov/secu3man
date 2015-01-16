@@ -121,7 +121,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
 
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;
 
-  //указатели на диалоги всех вкладок
+  //Pointers to dialogs of all tabs
   class CStarterPageDlg*   m_pStarterPageDlg;
   class CAnglesPageDlg*    m_pAnglesPageDlg;
   class CIdlRegPageDlg*    m_pIdlRegPageDlg;
@@ -130,14 +130,14 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   class CCarburPageDlg*    m_pCarburPageDlg;
   class CADCCompenPageDlg* m_pADCCompenPageDlg;
   class CCKPSPageDlg*      m_pCKPSPageDlg;
-  class CKnockPageDlg*     m_pKnockPageDlg; //<--optional
+  class CKnockPageDlg*     m_pKnockPageDlg;    //<--optional
   class CMiscPageDlg*      m_pMiscPageDlg;
   class CChokePageDlg*     m_pChokePageDlg;
   class CSecurPageDlg*     m_pSecurPageDlg;
   class CUniOutPageDlg*    m_pUniOutPageDlg;
-  class CInjectorPageDlg*  m_pInjectorPageDlg;
-  class CLambdaPageDlg*    m_pLambdaPageDlg;
-  class CAccelEnrPageDlg*  m_pAccelEnrPageDlg;
+  class CInjectorPageDlg*  m_pInjectorPageDlg; //<--fuel injection
+  class CLambdaPageDlg*    m_pLambdaPageDlg;   //<--fuel injection
+  class CAccelEnrPageDlg*  m_pAccelEnrPageDlg; //<--fuel injection
 
   CStatic m_pd_title;
   CButton m_save_button;
@@ -149,8 +149,9 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;
+  std::vector<int> m_fuel_injection_idx;       //<--indexes of fuel injection tabs
 
-  //обработчики событий (делегаты)
+  //Event handlers (delegates)
   EventHandler m_OnTabActivate;
   EventHandler m_OnChangeInTab;
   EventHandler m_OnSaveButton;

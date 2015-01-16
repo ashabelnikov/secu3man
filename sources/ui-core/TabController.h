@@ -67,9 +67,8 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
-  virtual BOOL IsTabEnabled(int iTab) const;
-  int NextEnabledTab(int iTab, BOOL bWrap);  // get next enabled tab
-  int PrevEnabledTab(int iTab, BOOL bWrap);  // get prev enabled tab
+  int NextEnabledTab(int iTab, bool bWrap);  // get next enabled tab
+  int PrevEnabledTab(int iTab, bool bWrap);  // get prev enabled tab
 
   // MFC overrides
   virtual BOOL PreTranslateMessage(MSG* pMsg);
@@ -90,6 +89,7 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
 
   int   m_tab_item_index;
   int   m_tcmn;
+  bool  m_tabNavWrap;
 };
 
 /////////////////////////////////////////////////////////////////////////////

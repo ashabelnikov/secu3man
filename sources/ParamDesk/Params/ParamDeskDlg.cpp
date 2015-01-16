@@ -25,7 +25,7 @@
 
 #include <map>
 
-//вкладки
+//tabs
 #include "AccelEnrPageDlg.h"
 #include "ADCCompenPageDlg.h"
 #include "AnglesPageDlg.h"
@@ -190,7 +190,7 @@ END_MESSAGE_MAP()
 /////////////////////////////////////////////////////////////////////////////
 // CParamDeskDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+//This function is called by framework to update controls
 void CParamDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -199,14 +199,15 @@ void CParamDeskDlg::OnUpdateControls(CCmdUI* pCmdUI)
 BOOL CParamDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+ int idx;
 
- //контрол создан через ресурсы и стили описаны в ресурсах.
+ //Control created in resouces and where all its styles are defined too
  m_tab_control.SetImageList(m_pImgList);
  m_tab_control.SetResourceModule(DLL::GetModuleHandle());
  m_tab_control.Init();
 
  m_tab_descriptors.clear();
- //наполняем Tab control вкладками
+ //Fill Tab control with tabs
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_STARTR_PAR),m_pStarterPageDlg,0), STARTR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ANGLES_PAR),m_pAnglesPageDlg,1), ANGLES_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_IDLREG_PAR),m_pIdlRegPageDlg,2), IDLREG_PAR));
@@ -221,18 +222,30 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_SECUR_PAR),m_pSecurPageDlg,11), SECUR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_UNIOUT_PAR),m_pUniOutPageDlg,12), UNIOUT_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
+ //fuel injection tabs
+ m_fuel_injection_idx.clear();
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
+ m_fuel_injection_idx.push_back(idx); //remember index of tab
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
+ m_fuel_injection_idx.push_back(idx);
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
+ m_fuel_injection_idx.push_back(idx);
 
- //ВНИМАНИЕ! SetEventListener должен быть вызван раньше чем SetCurSel, т.к. SetCurSel
- //уже использует обработчики сообщений!
+ //Warning! SetEventListener must be called before SetCurSel, because SetCurSel
+ //already uses event handlers
 
- //this будет получать события от Tab control-а и делегировать их указанным обработчикам
+ //this will receive events from Tab control and delegate them to specified handlers
  m_tab_control.SetEventListener(this);
 
- //устанавливаем предыдущее значение (разрешены вкладки или нет)
+ //set previous value (tabs are enabled or not)
  m_tab_control.EnableItem(-1, m_enabled);
+
+ //disable fuel injection related tabs if fuel injection is not supported
+ if (false==m_fuel_injection)
+ {
+  for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
+   m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
+ }
 
  m_hot_keys_supplier->Init(this);
  _RegisterHotKeys();
@@ -306,9 +319,8 @@ void CParamDeskDlg::Enable(bool enable)
  //disable fuel injection related tabs if fuel injection is not supported
  if (false==m_fuel_injection)
  {
-  m_tab_control.EnableItem(13, false);
-  m_tab_control.EnableItem(14, false);
-  m_tab_control.EnableItem(15, false);
+  for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
+   m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
  }
 }
 
@@ -317,7 +329,7 @@ bool CParamDeskDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//спрятать/показать все
+//Show/hide all tabs
 void CParamDeskDlg::Show(bool show)
 {
  int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
@@ -325,7 +337,7 @@ void CParamDeskDlg::Show(bool show)
  this->ShowWindow(nCmdShow);
 }
 
-// Устанавливает данные указанной вкладки, вкладка определяется дескриптором
+// Sets data of specified tab, tab is defined by descriptor
 bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
 {
  using namespace SECU3IO;
@@ -384,13 +396,13 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
-   return false; //неизвестный или неподдерживаемый дескриптор
+   return false; //unknown or unsupported descriptor
  }//switch
 
  return true;
 }
 
-// Получает данные из указанной вкладки, вкладка определяется дескриптором
+// Gets data from specified tab, tab is defined by descriptor
 bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
 {
  using namespace SECU3IO;
@@ -449,13 +461,13 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
   case FNNAME_DAT:
   case SENSOR_DAT:
   default:
-   return false; //неизвестный или неподдерживаемый дескриптор
+   return false; //unknown or unsupported descriptor
  }//switch
 
  return true;
 }
 
-//Устанавливает имена семейств характеристик
+//Sets names of tables' sets
 void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {
  std::vector<_TSTRING> names = i_names;

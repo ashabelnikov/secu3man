@@ -56,6 +56,7 @@ CTabController::CTabController()
 , m_tcmn(4) //magic number
 , m_pEventHandler(NULL)
 , m_hResourceModule(NULL)
+, m_tabNavWrap(true)
 {
  //empty
 }
@@ -264,14 +265,14 @@ void CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
  ScreenToClient(&htinfo.pt);
  int iNewTab = HitTest(&htinfo);
 
- if (iNewTab >= 0 && !IsTabEnabled(iNewTab))
+ if (iNewTab >= 0 && !GetItemData(iNewTab)->is_enabled)
   *pResult = TRUE; // tab disabled: prevent selection
  else
  {
   bool result = true;
   if (m_pEventHandler)
    result = m_pEventHandler->OnSelchangingTabctl();
-   
+
   if (result)
   {
    //удаление предыдущей вкладки
@@ -380,7 +381,7 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    x_pos = rect.right-image_rect.Width();
 
   //рисуем картинку в зависимости от текущего состояния
-  if (IsTabEnabled(tab_index))
+  if (GetItemData(tab_index)->is_enabled)
    p_imagelist->Draw(p_dc, item.iImage, CPoint(x_pos, y_pos),ILD_TRANSPARENT);
   else
    DrawState(p_dc->m_hDC,NULL,NULL,(LPARAM)p_imagelist->ExtractIcon(item.iImage),
@@ -404,16 +405,15 @@ void CTabController::DrawItem(LPDRAWITEMSTRUCT lpDrawItemStruct)
    rect.top -= 2 * ::GetSystemMetrics(SM_CYEDGE);
   else
    rect.left += 2 * ::GetSystemMetrics(SM_CYEDGE);
- } 
+ }
  UINT uFormat = (TCO_TOP==GetTCOrientation() || TCO_BOTTOM==GetTCOrientation()) ? (DT_VCENTER | DT_CENTER) : 0;
- p_dc->SetTextColor(IsTabEnabled(tab_index) ? color_normal : color_disabled);
+ p_dc->SetTextColor(GetItemData(tab_index)->is_enabled ? color_normal : color_disabled);
  p_dc->DrawText(label, rect, DT_SINGLELINE | DT_NOCLIP | uFormat);
 
  p_dc->RestoreDC(save_dc);
 }
 
-////////////////////////////////////////////////////////////////////
-// Trap arrow-left key to skip disabled tabs.
+// Trap arrow-left/right keys to skip disabled tabs.
 // This is the only way to know where we're coming from--ie from
 // arrow-left (prev) or arrow-right (next).
 //
@@ -427,8 +427,8 @@ BOOL CTabController::PreTranslateMessage(MSG* pMsg)
    if (pMsg->wParam == VK_LEFT || pMsg->wParam == VK_RIGHT)
    {
     int iNewTab = (pMsg->wParam == VK_LEFT) ?
-    PrevEnabledTab(GetCurSel(), FALSE) :
-    NextEnabledTab(GetCurSel(), FALSE);
+    PrevEnabledTab(GetCurSel(), m_tabNavWrap) :
+    NextEnabledTab(GetCurSel(), m_tabNavWrap);
     if (iNewTab >= 0)
      SetCurSel(iNewTab);
     return TRUE;
@@ -439,23 +439,41 @@ BOOL CTabController::PreTranslateMessage(MSG* pMsg)
    if (pMsg->wParam == VK_UP || pMsg->wParam == VK_DOWN)
    {
     int iNewTab = (pMsg->wParam == VK_UP) ?
-    PrevEnabledTab(GetCurSel(), FALSE) :
-    NextEnabledTab(GetCurSel(), FALSE);
+    PrevEnabledTab(GetCurSel(), m_tabNavWrap) :
+    NextEnabledTab(GetCurSel(), m_tabNavWrap);
     if (iNewTab >= 0)
      SetCurSel(iNewTab);
     return TRUE;
    }
   }
+  //Behaviour of Home and End keys doesn't depend on orientation
+  if (pMsg->wParam == VK_END)
+  { //select last enabled tab
+   for (int iTab = GetItemCount()-1; iTab > 0; iTab--)
+    if (GetItemData(iTab)->is_enabled)
+    {
+     SetCurSel(iTab);
+     break;
+    }
+   return TRUE;
+  }   
+  if (pMsg->wParam == VK_HOME)
+  { //select first enabled tab
+   for (int iTab = 0; iTab < GetItemCount(); iTab++)
+    if (GetItemData(iTab)->is_enabled)
+    {
+     SetCurSel(iTab);
+     break;
+    }
+   return TRUE;
+  }
  }
  return CTabCtrl::PreTranslateMessage(pMsg);
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Return the index of the next enabled tab after a given index, or -1 if none
-// (0 = first tab).
-// If bWrap is TRUE, wrap from beginning to end; otherwise stop at zero.
-//
-int CTabController::NextEnabledTab(int iCurrentTab, BOOL bWrap)
+// Return the index of the next enabled tab after a given index, or -1 if none (0 = first tab).
+// If bWrap is true, wrap from beginning to end; otherwise stop at zero.
+int CTabController::NextEnabledTab(int iCurrentTab, bool bWrap)
 {
  int nTabs = GetItemCount();
  for (int iTab = iCurrentTab+1; iTab != iCurrentTab; iTab++)
@@ -466,18 +484,15 @@ int CTabController::NextEnabledTab(int iCurrentTab, BOOL bWrap)
     return -1;
    iTab = 0;
   }
-  if (IsTabEnabled(iTab))
+  if (GetItemData(iTab)->is_enabled)
    return iTab;
  }
  return -1;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Return the index of the previous enabled tab before a given index, or -1.
-// (0 = first tab).
-// If bWrap is TRUE, wrap from beginning to end; otherwise stop at zero.
-//
-int CTabController::PrevEnabledTab(int iCurrentTab, BOOL bWrap)
+// Return the index of the previous enabled tab before a given index, or -1 (0 = first tab).
+// If bWrap is true, wrap from beginning to end; otherwise stop at zero.
+int CTabController::PrevEnabledTab(int iCurrentTab, bool bWrap)
 {
  for (int iTab = iCurrentTab-1; iTab != iCurrentTab; iTab--)
  {
@@ -487,20 +502,14 @@ int CTabController::PrevEnabledTab(int iCurrentTab, BOOL bWrap)
     return -1;
    iTab = GetItemCount() - 1;
   }
-  if (IsTabEnabled(iTab))
+  if (GetItemData(iTab)->is_enabled)
    return iTab;
  }
  return -1;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Helper to set the active page, when moving backwards. Must simulate Windows
+// Helper to set the active page. Must simulate Windows
 // messages to tell parent I am changing the tab; SetCurSel does not do this!
-//
-// In normal operation, this fn will always succeed, because I don't call it
-// unless I already know IsTabEnabled() = TRUE; but if you call SetActiveTab
-// with a random value, it could fail.
-//
 bool CTabController::SetCurSel(UINT iNewTab)
 {
  //=====================================================================
@@ -521,14 +530,7 @@ bool CTabController::SetCurSel(UINT iNewTab)
  return true;
 }
 
-//
-BOOL CTabController::IsTabEnabled(int iTab) const
-{
- TabPageData* pPageData = GetItemData(iTab);
- return pPageData->is_enabled ? TRUE: FALSE;
-}
-
-//Achtung! Only Item, not a dialog incapsulated by item!
+//Note! Only Item, not a dialog incapsulated by item!
 //if iTab==-1, then all items will be enabled/disabled
 void CTabController::EnableItem(int iTab, bool enable)
 {
