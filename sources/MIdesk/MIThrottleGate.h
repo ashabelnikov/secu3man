@@ -54,4 +54,5 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
   CStatic m_caption;
   float m_loLimit;
   float m_upLimit;
+  float m_value;
 };

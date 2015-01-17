@@ -181,8 +181,6 @@ BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_COMMAND_HK_XXX(KNOCK_PAR)
  ON_COMMAND_HK_XXX(MISCEL_PAR)
  ON_COMMAND_HK_XXX(CHOKE_PAR)
- ON_COMMAND_HK_XXX(SECUR_PAR)
- ON_COMMAND_HK_XXX(UNIOUT_PAR)
 
 END_MESSAGE_MAP()
 
@@ -556,9 +554,8 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  if (m_fuel_injection == i_enable)
   return; //already has needed state
  m_fuel_injection = i_enable;
- m_tab_control.EnableItem(13, i_enable && m_enabled);
- m_tab_control.EnableItem(14, i_enable && m_enabled);
- m_tab_control.EnableItem(15, i_enable && m_enabled);
+ for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
+  m_tab_control.EnableItem(m_fuel_injection_idx[i], i_enable && m_enabled);
  m_pInjectorPageDlg->Enable(i_enable && m_enabled);
  m_pLambdaPageDlg->Enable(i_enable && m_enabled);
  m_pAccelEnrPageDlg->Enable(i_enable && m_enabled);
@@ -653,8 +650,6 @@ void CParamDeskDlg::_RegisterHotKeys(void)
   RegisterHK(KNOCK_PAR,  VK_F9);
  RegisterHK(MISCEL_PAR, VK_F10);
  RegisterHK(CHOKE_PAR,  VK_F11);
- RegisterHK(SECUR_PAR,  VK_SNAPSHOT); //We can't use F12 "The F12 key is reserved for use by the debugger at all times, so it should not be registered as a hot key"
- RegisterHK(UNIOUT_PAR, VK_SCROLL);
 }
 
 #define OnHK_XXX(x)\
@@ -676,5 +671,3 @@ OnHK_XXX(CKPS_PAR)
 OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
 OnHK_XXX(CHOKE_PAR)
-OnHK_XXX(SECUR_PAR)
-OnHK_XXX(UNIOUT_PAR)

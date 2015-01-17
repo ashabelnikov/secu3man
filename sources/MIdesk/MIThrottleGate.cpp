@@ -22,6 +22,8 @@
 #include "stdafx.h"
 #include "MIThrottleGate.h"
 #include "MIHelpers.h"
+#include "resource.h"
+#include <float.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -31,6 +33,7 @@ CMIThrottleGate::CMIThrottleGate()
 : m_led(true)
 , m_loLimit(.0f)
 , m_upLimit(.0f)
+, m_value(FLT_MAX)
 {
  //empty
 }
@@ -107,6 +110,15 @@ void CMIThrottleGate::SetPosition(float value)
  if (value < m_loLimit) value = m_loLimit;
  if (value > m_upLimit) value = m_upLimit;
  m_led.SetPosition(((m_upLimit - m_loLimit) / 100.0f) * (value-m_loLimit));
+
+ if (m_value!=value)
+ {
+  std::string fmt(MLL::GetString(IDS_MI_TPS_FMT_STR));
+  TCHAR buff[32];
+  _stprintf(buff, fmt.c_str(), value);
+  m_caption.SetWindowText(buff);
+  m_value = value;
+ }
 }
 
 float CMIThrottleGate::GetPosition(void) const
