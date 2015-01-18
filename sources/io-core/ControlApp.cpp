@@ -1609,7 +1609,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 22 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -1641,6 +1641,11 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &rpmthrd))
   return false;
  m_LambdaPar.lam_rpm_thrd = rpmthrd;
+
+ int activdelay = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &activdelay))
+  return false;
+ m_LambdaPar.lam_activ_delay = activdelay;
 
  return true;
 }
@@ -2530,6 +2535,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(temp_thrd, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->lam_rpm_thrd, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->lam_activ_delay, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

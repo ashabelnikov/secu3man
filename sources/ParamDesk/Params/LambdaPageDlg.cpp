@@ -33,6 +33,7 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_LAMBDA_SWTPOINT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_TEMPTHRD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_RPMTHRD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_ACTIVDELAY_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
@@ -58,6 +59,10 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_RPMTHRD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_ACTIVDELAY_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_ACTIVDELAY_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_ACTIVDELAY_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_ACTIVDELAY_UNIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
@@ -69,6 +74,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 , m_swtpoint_edit(CEditEx::MODE_FLOAT, true)
 , m_tempthrd_edit(CEditEx::MODE_FLOAT, true)
 , m_rpmthrd_edit(CEditEx::MODE_INT, true)
+, m_activdelay_edit(CEditEx::MODE_INT, true)
 {
  m_params.lam_str_per_stp = 10;
  m_params.lam_step_size = 2.5f;
@@ -76,6 +82,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_swt_point = 0.50f;
  m_params.lam_temp_thrd = 70.0f;
  m_params.lam_rpm_thrd = 800;
+ m_params.lam_activ_delay = 45;
 }
 
 CLambdaPageDlg::~CLambdaPageDlg()
@@ -103,6 +110,8 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_TEMPTHRD_SPIN, m_tempthrd_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_RPMTHRD_EDIT, m_rpmthrd_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_RPMTHRD_SPIN, m_rpmthrd_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_ACTIVDELAY_EDIT, m_activdelay_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_ACTIVDELAY_SPIN, m_activdelay_spin);
 
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
  m_stepsize_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_EDIT, m_params.lam_step_size);
@@ -110,6 +119,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  m_swtpoint_edit.DDX_Value(pDX, IDC_PD_LAMBDA_SWTPOINT_EDIT, m_params.lam_swt_point);
  m_tempthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_TEMPTHRD_EDIT, m_params.lam_temp_thrd);
  m_rpmthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_RPMTHRD_EDIT, m_params.lam_rpm_thrd);
+ m_activdelay_edit.DDX_Value(pDX, IDC_PD_LAMBDA_ACTIVDELAY_EDIT, m_params.lam_activ_delay);
 }
 
 void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -159,6 +169,12 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_rpmthrd_edit.SetDecimalPlaces(5);
  m_rpmthrd_spin.SetRangeAndDelta(100, 5000, 50);
  m_rpmthrd_edit.SetRange(100, 5000);
+
+ m_activdelay_spin.SetBuddy(&m_activdelay_edit);
+ m_activdelay_edit.SetLimitText(3);
+ m_activdelay_edit.SetDecimalPlaces(3);
+ m_activdelay_spin.SetRangeAndDelta(5, 255, 1);
+ m_activdelay_edit.SetRange(5, 255);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

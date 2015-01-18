@@ -419,6 +419,7 @@ namespace SECU3IO
   float lam_swt_point;                //switch point in Volts
   float lam_temp_thrd;                //Temperature turn on threshold
   int lam_rpm_thrd;                   //RPM turn on threshold
+  int lam_activ_delay;                //Afterstart activation delay
  };
 
  struct AccelPar

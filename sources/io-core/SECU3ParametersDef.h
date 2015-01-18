@@ -169,6 +169,7 @@ typedef struct
  _uint   inj_lambda_swt_point;          // lambda switch point in volts
  _int    inj_lambda_temp_thrd;          // Coolant temperature activation threshold
  _uint   inj_lambda_rpm_thrd;           // RPM activation threshold
+ _uchar  inj_lambda_activ_delay;        // Afterstart activation delay
 
  _uchar  inj_ae_tpsdot_thrd;            // TPS %/sec threshold, max rate is 255%/sec
  _uchar  inj_ae_coldacc_mult;           // Cold acceleration multiplier (-30°C), (value - 1.0) * 128
@@ -176,7 +177,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[93];
+ _uchar reserved[92];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -70,6 +70,8 @@ class CLambdaPageDlg : public CTabDialog, public ParamPageEvents
   CEditEx m_tempthrd_edit;
   CSpinButtonCtrlEx m_rpmthrd_spin;
   CEditEx m_rpmthrd_edit;
+  CSpinButtonCtrlEx m_activdelay_spin;
+  CEditEx m_activdelay_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
