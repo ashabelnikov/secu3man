@@ -708,7 +708,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
- if (size != (mp_pdp->isHex() ? 25 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 33 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -748,6 +748,16 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &tps_threshold))
   return false;
  m_CarburPar.tps_threshold = ((float)tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int fuelcut_map_thrd=0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fuelcut_map_thrd))
+  return false;
+ m_CarburPar.fuelcut_map_thrd = ((float)fuelcut_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int fuelcut_cts_thrd=0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fuelcut_cts_thrd, true))
+  return false;
+ m_CarburPar.fuelcut_cts_thrd = ((float)fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -2155,6 +2165,10 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  mp_pdp->Bin8ToHex(shutoff_delay,m_outgoing_packet);
  unsigned char tps_threshold = MathHelpers::Round(packet_data->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin8ToHex(tps_threshold, m_outgoing_packet);
+ int fuelcut_map_thrd = MathHelpers::Round((packet_data->fuelcut_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER));
+ mp_pdp->Bin16ToHex(fuelcut_map_thrd, m_outgoing_packet);
+ int fuelcut_cts_thrd = MathHelpers::Round((packet_data->fuelcut_cts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER));
+ mp_pdp->Bin16ToHex(fuelcut_cts_thrd, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

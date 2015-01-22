@@ -145,6 +145,8 @@ namespace SECU3IO
   int  ephh_hit_g;
   float shutoff_delay;                  //задержка выключения клапана
   float tps_threshold;                  //порог переключения в режим ХХ по ДПДЗ
+  float fuelcut_map_thrd;               //fuel cut MAP threshold 
+  float fuelcut_cts_thrd;               //fuel cut CTS threshold
  };
 
  struct TemperPar

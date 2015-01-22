@@ -29,6 +29,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 {
@@ -49,6 +50,7 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -59,19 +61,25 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 
   CButton m_inverse_throttle_switch;
   CSpinButtonCtrlEx m_shutoff_lo_threshold_spin;
-  CSpinButtonCtrlEx m_shutoff_hi_threshold_spin;
-  CSpinButtonCtrlEx m_epm_on_threshold_spin;
-  CSpinButtonCtrlEx m_shutoff_lo_threshold_spin_g;
-  CSpinButtonCtrlEx m_shutoff_hi_threshold_spin_g;
-  CSpinButtonCtrlEx m_shutoff_delay_spin;
-  CSpinButtonCtrlEx m_tps_threshold_spin;
   CEditEx m_shutoff_lo_threshold_edit;
+  CSpinButtonCtrlEx m_shutoff_hi_threshold_spin;
   CEditEx m_shutoff_hi_threshold_edit;
+  CSpinButtonCtrlEx m_epm_on_threshold_spin;
   CEditEx m_epm_on_threshold_edit;
+  CSpinButtonCtrlEx m_shutoff_lo_threshold_spin_g;
   CEditEx m_shutoff_lo_threshold_edit_g;
+  CSpinButtonCtrlEx m_shutoff_hi_threshold_spin_g;
   CEditEx m_shutoff_hi_threshold_edit_g;
+  CSpinButtonCtrlEx m_shutoff_delay_spin;
   CEditEx m_shutoff_delay_edit;
+  CSpinButtonCtrlEx m_tps_threshold_spin;
   CEditEx m_tps_threshold_edit;
+  CSpinButtonCtrlEx m_fuelcut_map_thrd_spin;
+  CEditEx m_fuelcut_map_thrd_edit;
+  CSpinButtonCtrlEx m_fuelcut_cts_thrd_spin;
+  CEditEx m_fuelcut_cts_thrd_edit;
 
+
+  std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

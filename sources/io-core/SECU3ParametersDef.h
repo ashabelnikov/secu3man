@@ -65,6 +65,8 @@ typedef struct
  _uint  ephh_hit_g;                     // верхний порог ЭПХХ (газ)
  _int   epm_on_threshold;
  _uchar shutoff_delay;                  // задержка выключения клапана
+ _uint  fuelcut_map_thrd;               // fuel cut MAP threshold
+ _int   fuelcut_cts_thrd;               // fuel cut CTS threshold
 
  _int   angle_dec_spead;
  _int   angle_inc_spead;
@@ -177,7 +179,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[92];
+ _uchar reserved[88];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -24,10 +24,12 @@
 #include "CarburPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CCarburPageDlg::IDD = IDD_PD_CARBUR_PAGE;
 
 BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, OnChangeData)
@@ -36,6 +38,8 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_TPS_THRESHOLD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CARBUR_FC_MAP_THRD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CARBUR_FC_CTS_THRD_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN,OnUpdateControls)
@@ -73,6 +77,16 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_TPS_THRESHOLD_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_UNIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
@@ -85,6 +99,9 @@ CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 , m_shutoff_hi_threshold_edit_g(CEditEx::MODE_INT, true)
 , m_shutoff_delay_edit(CEditEx::MODE_FLOAT, true)
 , m_tps_threshold_edit(CEditEx::MODE_FLOAT, true)
+, m_fuelcut_map_thrd_edit(CEditEx::MODE_FLOAT, true)
+, m_fuelcut_cts_thrd_edit(CEditEx::MODE_FLOAT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.ephh_lot = 1250;
  m_params.ephh_hit = 1500;
@@ -94,6 +111,8 @@ CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ephh_hit_g = 1500;
  m_params.shutoff_delay = 0.0f;
  m_params.tps_threshold = 0.0f;
+ m_params.fuelcut_map_thrd = 20.0f;
+ m_params.fuelcut_cts_thrd = 15.0f;
 }
 
 LPCTSTR CCarburPageDlg::GetDialogID(void) const
@@ -123,6 +142,11 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G, m_shutoff_hi_threshold_edit_g);
  DDX_Control(pDX, IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT, m_shutoff_delay_edit);
 
+ DDX_Control(pDX, IDC_PD_CARBUR_FC_MAP_THRD_SPIN, m_fuelcut_map_thrd_spin);
+ DDX_Control(pDX, IDC_PD_CARBUR_FC_CTS_THRD_SPIN, m_fuelcut_cts_thrd_spin);
+ DDX_Control(pDX, IDC_PD_CARBUR_FC_MAP_THRD_EDIT, m_fuelcut_map_thrd_edit);
+ DDX_Control(pDX, IDC_PD_CARBUR_FC_CTS_THRD_EDIT, m_fuelcut_cts_thrd_edit);
+
  m_shutoff_lo_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, m_params.ephh_lot);
  m_shutoff_hi_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, m_params.ephh_hit);
 
@@ -133,6 +157,9 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_UCHAR(pDX, IDC_PD_CARBUR_INVERSE_SWITCH, m_params.carb_invers);
  m_epm_on_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, m_params.epm_ont);
  m_tps_threshold_edit.DDX_Value(pDX, IDC_PD_CARBUR_TPS_THRESHOLD_EDIT, m_params.tps_threshold);
+
+ m_fuelcut_map_thrd_edit.DDX_Value(pDX, IDC_PD_CARBUR_FC_MAP_THRD_EDIT, m_params.fuelcut_map_thrd);
+ m_fuelcut_cts_thrd_edit.DDX_Value(pDX, IDC_PD_CARBUR_FC_CTS_THRD_EDIT, m_params.fuelcut_cts_thrd);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -186,6 +213,23 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_tps_threshold_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
  m_tps_threshold_edit.SetRange(0.0f, 100.0f);
 
+ m_fuelcut_map_thrd_spin.SetBuddy(&m_fuelcut_map_thrd_edit);
+ m_fuelcut_map_thrd_edit.SetLimitText(5);
+ m_fuelcut_map_thrd_edit.SetDecimalPlaces(1);
+ m_fuelcut_map_thrd_spin.SetRangeAndDelta(0.0f, 250.0f, 0.5f);
+ m_fuelcut_map_thrd_edit.SetRange(0.0f, 250.0f);
+
+ m_fuelcut_cts_thrd_spin.SetBuddy(&m_fuelcut_cts_thrd_edit);
+ m_fuelcut_cts_thrd_edit.SetLimitText(5);
+ m_fuelcut_cts_thrd_edit.SetDecimalPlaces(1);
+ m_fuelcut_cts_thrd_spin.SetRangeAndDelta(-30.0f, 180.0f, 0.25f);
+ m_fuelcut_cts_thrd_edit.SetRange(-30.0f, 180.0f);
+
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.41f));
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -211,6 +255,12 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CCarburPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CCarburPageDlg::OnChangeData()
