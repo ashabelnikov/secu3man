@@ -36,6 +36,7 @@ BEGIN
     LTEXT           "Клапан ЭМР",IDC_MI_POWER_VALVE_CAPTION,124,150,55,11
     CONTROL         "",IDC_MI_ADD_I1,"Static",SS_BLACKFRAME | SS_NOTIFY,282,3,90,90
     CONTROL         "",IDC_MI_ADD_I2,"Static",SS_BLACKFRAME | SS_NOTIFY,282,96,90,90
+    CONTROL         "",IDC_MI_IAT,"Static",SS_BLACKFRAME | SS_NOTIFY,282,96,90,90
     CONTROL         "",IDC_MI_INJ_PW,"Static",SS_BLACKFRAME | SS_NOTIFY,375,3,90,90
 END
 
@@ -143,7 +144,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_MI_VOLTAGE_TITLE    "Напряжение"
     IDS_MI_VOLTAGE_UNIT     "Вольт"
-    IDS_MI_TEMPERATURE_TITLE "Температура"
+    IDS_MI_TEMPERATURE_TITLE "Температура ДТОЖ"
     IDS_CE_ERRORS_DESK_TT   "Коды ошибок CE"
     IDS_MI_ADD_I1_TITLE     "Вход 1"
     IDS_MI_ADD_I2_TITLE     "Вход 2"
@@ -166,6 +167,7 @@ BEGIN
     IDS_MI_TPS_FMT_STR      "ДПДЗ  %0.1f%%"
     IDS_MI_INJ_PW_TITLE     "Длительн. впрыска"
     IDS_MI_MS_UNIT          "мс"
+    IDS_MI_IAT_TITLE        "Температура ДТВ"
 END
 
 
@@ -204,6 +206,7 @@ BEGIN
     LTEXT           "Power valve",IDC_MI_POWER_VALVE_CAPTION,124,150,55,11
     CONTROL         "",IDC_MI_ADD_I1,"Static",SS_BLACKFRAME | SS_NOTIFY,282,3,90,90
     CONTROL         "",IDC_MI_ADD_I2,"Static",SS_BLACKFRAME | SS_NOTIFY,282,96,90,90
+    CONTROL         "",IDC_MI_IAT,"Static",SS_BLACKFRAME | SS_NOTIFY,282,96,90,90
     CONTROL         "",IDC_MI_INJ_PW,"Static",SS_BLACKFRAME | SS_NOTIFY,375,3,90,90
 END
 
@@ -314,7 +317,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_MI_VOLTAGE_TITLE    "Voltage"
     IDS_MI_VOLTAGE_UNIT     "Volt"
-    IDS_MI_TEMPERATURE_TITLE "Temperature"
+    IDS_MI_TEMPERATURE_TITLE "Coolant temperature"
     IDS_CE_ERRORS_DESK_TT   "CE error codes"
     IDS_MI_ADD_I1_TITLE     "Input 1"
     IDS_MI_ADD_I2_TITLE     "Input 2"
@@ -337,6 +340,7 @@ BEGIN
     IDS_MI_TPS_FMT_STR      "TPS  %0.1f%%"
     IDS_MI_INJ_PW_TITLE     "Injection PW"
     IDS_MI_MS_UNIT          "ms"
+    IDS_MI_IAT_TITLE        "Intake air temperature"
 END
 
 /////////////////////////////////////////////////////////////////////////////

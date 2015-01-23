@@ -21,63 +21,64 @@
 
 #include "stdafx.h"
 #include "resource.h"
-#include "MIInjPW.h"
+#include "MIIAT.h"
 #include "MIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CMIInjPW::CMIInjPW()
+CMIIAT::CMIIAT()
 {
  //empty
 }
 
-CMIInjPW::~CMIInjPW()
+CMIIAT::~CMIIAT()
 {
  //empty
 }
 
-void CMIInjPW::Create(void)
+void CMIIAT::Create(void)
 {
- m_meter.SetRange (0, 24.00);
- m_meter.SetLabelsDecimals(0);
- m_meter.SetValueDecimals(2);
- m_meter.SetTitle(MLL::LoadString(IDS_MI_INJ_PW_TITLE));
+ m_meter.SetRange (-40.0, 120.0) ;
+ m_meter.SetLabelsDecimals(1) ;
+ m_meter.SetValueDecimals(1) ;
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_IAT_TITLE)) ;
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
- m_meter.SetUnit(MLL::LoadString(IDS_MI_MS_UNIT));
- m_meter.SetTickNumber(24);
- m_meter.AddAlertZone(0,1.0,RGB(255,100,100));
- m_meter.AddAlertZone(1.0,10.0,RGB(100,255,100));
- m_meter.AddAlertZone(10.0,24,RGB(150,150,250));
- m_meter.SetNeedleValue(0.0);
+ m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
+ m_meter.SetTickNumber(16);
+ m_meter.AddAlertZone(-40,50,RGB(130,130,180));
+ m_meter.AddAlertZone(50,100,RGB(120,120,120));
+ m_meter.AddAlertZone(100,120,RGB(230,130,130));
+ m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
 }
 
-void CMIInjPW::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
+void CMIIAT::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 {
  DDX_Control(pDX, nIDC_meter, m_meter);
 }
 
 //--------------------interface-----------------------
-void CMIInjPW::SetValue(float value)
+void CMIIAT::SetValue(float value)
 {
  m_meter.SetNeedleValue((double)value);
  m_meter.Update();
 }
 
-float CMIInjPW::GetValue(void)
+float CMIIAT::GetValue(void)
 {
  return (float)m_meter.GetNeedlePos();
 }
 
-void CMIInjPW::Show(bool show)
+void CMIIAT::Show(bool show)
 {
  m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
 
-void CMIInjPW::Enable(bool enable)
+void CMIIAT::Enable(bool enable)
 {
  m_meter.SetState(meter_needle, enable);
  m_meter.SetState(meter_value, enable);
@@ -91,35 +92,30 @@ void CMIInjPW::Enable(bool enable)
  m_meter.Redraw();
 }
 
-bool CMIInjPW::IsVisible(void)
+bool CMIIAT::IsVisible(void)
 {
  return (m_meter.IsWindowVisible()) ? true : false;
 }
 
-bool CMIInjPW::IsEnabled(void)
+bool CMIIAT::IsEnabled(void)
 {
  bool State = false;
  m_meter.GetState(meter_needle, &State);
  return State;
 }
 
-void CMIInjPW::SetLimits(float loLimit, float upLimit)
+void CMIIAT::SetLimits(float loLimit, float upLimit)
 {
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.5, RGB(100,255,100));
- m_meter.AddAlertZone(upLimit * 0.5, upLimit * 0.75, RGB(255,255,100));
- m_meter.AddAlertZone(upLimit * 0.75, upLimit, RGB(255,100,100));
-
  m_meter.SetRange(loLimit, upLimit);
 }
 
-void CMIInjPW::SetTicks(int number)
+void CMIIAT::SetTicks(int number)
 {
  m_meter.SetTickNumber(number);
 }
 //----------------------------------------------------
 
-void CMIInjPW::Scale(float i_x_factor, float i_y_factor)
+void CMIIAT::Scale(float i_x_factor, float i_y_factor)
 {
  CRect rect = MIHelpers::GetChildWndRect(&m_meter);
  MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);

@@ -59,6 +59,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_temperature.DDX_Controls(pDX, IDC_MI_TEMPERATURE);
  m_add_i1.DDX_Controls(pDX, IDC_MI_ADD_I1);
  m_add_i2.DDX_Controls(pDX, IDC_MI_ADD_I2);
+ m_iat.DDX_Controls(pDX, IDC_MI_IAT);
  m_inj_pw.DDX_Controls(pDX, IDC_MI_INJ_PW);
 
  //Булевские приборы (лампочка)
@@ -92,6 +93,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_temperature.Create();
  m_add_i1.Create();
  m_add_i2.Create();
+ m_iat.Create();
  m_add_i1.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE));
  m_add_i2.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE));
  m_inj_pw.Create();
@@ -129,6 +131,7 @@ void CMIDeskDlg::Enable(bool enable)
  m_temperature.Enable(enable);
  m_add_i1.Enable(enable);
  m_add_i2.Enable(enable);
+ m_iat.Enable(enable);
  m_inj_pw.Enable(enable);
 }
 
@@ -146,8 +149,9 @@ void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
  m_temperature.Show(show);
  //extended fixtures
  m_add_i1.Show(show && show_exf);
- m_add_i2.Show(show && show_exf); 
- m_inj_pw.Show(show && show_exf); 
+ m_add_i2.Show(show && show_exf && !m_values.add_i2_mode);
+ m_iat.Show(show && show_exf && m_values.add_i2_mode);
+ m_inj_pw.Show(show && show_exf);
 }
 
 using namespace SECU3IO;
@@ -155,27 +159,6 @@ using namespace SECU3IO;
 void CMIDeskDlg::SetValues(const SensorDat* i_values)
 {
  m_values = *i_values;
-}
-
-void CMIDeskDlg::GetValues(SensorDat* o_values)
-{
- o_values->frequen = MathHelpers::Round(m_tachometer.GetValue());
- o_values->speed = m_tachometer.GetSpeed();  //top-left pane
- o_values->distance = m_tachometer.GetDistance(); //top-right pane
- o_values->pressure = m_pressure.GetValue();
- o_values->voltage = m_voltmeter.GetValue();
- o_values->adv_angle = m_dwell_angle.GetValue();
- o_values->gas = (unsigned char)m_gas_valve.GetValue();
- o_values->ephh_valve = (unsigned char)m_shutoff_valve.GetValue();
- o_values->epm_valve = (unsigned char)m_power_valve.GetValue();
- o_values->carb = (unsigned char)m_throttle_gate.GetValue();
- o_values->tps = m_throttle_gate.GetPosition();
- o_values->air_flow = (unsigned char)m_air_flow.GetValue();
- o_values->temperat = m_temperature.GetValue();
- o_values->choke_pos = m_temperature.GetChokePos(); //top-right pane
- o_values->add_i1 = m_add_i1.GetValue();
- o_values->add_i2 = m_add_i2.GetValue();
- o_values->inj_pw = m_inj_pw.GetValue();
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -197,7 +180,10 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
  m_temperature.SetValue(m_values.temperat);
  m_add_i1.SetValue(m_values.add_i1);
- m_add_i2.SetValue(m_values.add_i2);
+ if (!m_values.add_i2_mode)
+  m_add_i2.SetValue(m_values.add_i2);
+ else
+  m_iat.SetValue(m_values.air_temp);
  m_inj_pw.SetValue(m_values.inj_pw);
 }
 
@@ -248,6 +234,7 @@ void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
  m_temperature.Scale(Xf, Yf);
  m_add_i1.Scale(Xf, Yf);
  m_add_i2.Scale(Xf, Yf);
+ m_iat.Scale(Xf, Yf);
  m_inj_pw.Scale(Xf, Yf);
 
  RedrawWindow();
@@ -256,7 +243,8 @@ void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
 void CMIDeskDlg::ShowExFixtures(bool i_show)
 {
  m_add_i1.Show(i_show);
- m_add_i2.Show(i_show);
+ m_add_i2.Show(i_show && !m_values.add_i2_mode);
+ m_iat.Show(i_show && m_values.add_i2_mode);
  m_inj_pw.Show(i_show);
 }
 

@@ -28,6 +28,7 @@
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
 #include "MIGasValve.h"
+#include "MIIAT.h"
 #include "MIInjPW.h"
 #include "MIPressure.h"
 #include "MIShutoffValve.h"
@@ -54,7 +55,6 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   virtual void Show(bool show, bool show_exf = false);
   virtual void Enable(bool enable);
   virtual void SetValues(const SECU3IO::SensorDat* i_values);
-  virtual void GetValues(SECU3IO::SensorDat* o_values);
   //-----------------------------------------------
 
   //установка периода обновления в миллисекундах
@@ -96,6 +96,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIVoltage      m_add_i1;
   CMIVoltage      m_add_i2;
   CMIInjPW        m_inj_pw;
+  CMIIAT          m_iat;
 
   CMIAirFlow      m_air_flow;
   CMIGasValve     m_gas_valve;

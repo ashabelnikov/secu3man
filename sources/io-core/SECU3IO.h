@@ -53,6 +53,7 @@ namespace SECU3IO
   float speed;                          //vehicle speed (Km/h)
   float distance;                       //passed distance since last ignition turn on (meters)
   float air_temp;                       //intake air temperature
+  bool  add_i2_mode;                    //0 - show voltage, 1 - show IAT
 
   bool  knkret_use;
   float strt_aalt;                      //advance angle from start map

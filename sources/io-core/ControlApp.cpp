@@ -383,8 +383,18 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  int air_temp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&air_temp,true))
   return false;
- m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
- m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
+
+ if (air_temp!=0x7FFF)
+ {
+  m_SensorDat.air_temp = ((float)air_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+  m_SensorDat.air_temp = MathHelpers::RestrictValue(m_SensorDat.air_temp, -99.9f, 999.0f);
+  m_SensorDat.add_i2_mode = 1;
+ }
+ else //do not show air temperature
+ {
+  m_SensorDat.air_temp = .0f;
+  m_SensorDat.add_i2_mode = 0;
+ }
 
  // Advance angle from start map (signed value)
  int strt_aalt = 0;

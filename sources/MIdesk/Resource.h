@@ -107,4 +107,6 @@
 #define IDC_MI_INJ_PW                   2107
 #define IDS_MI_INJ_PW_TITLE             2108
 #define IDS_MI_MS_UNIT                  2109
+#define IDS_MI_IAT_TITLE                2110
+#define IDC_MI_IAT                      2111
  
