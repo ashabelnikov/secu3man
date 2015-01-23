@@ -2541,7 +2541,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
 {
  mp_pdp->Bin8ToHex(packet_data->lam_str_per_stp, m_outgoing_packet);
  int step_size = MathHelpers::Round(packet_data->lam_step_size * 512.0f / 100.0f);
- mp_pdp->Bin16ToHex(step_size, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(step_size, m_outgoing_packet);
  int corr_limit = MathHelpers::Round(packet_data->lam_corr_limit * 512.0f / 100.0f);
  mp_pdp->Bin16ToHex(corr_limit, m_outgoing_packet);
  int swt_point = MathHelpers::Round(packet_data->lam_swt_point / ADC_DISCRETE);
