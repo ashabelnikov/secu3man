@@ -560,6 +560,8 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_pLambdaPageDlg->Enable(i_enable && m_enabled);
  m_pAccelEnrPageDlg->Enable(i_enable && m_enabled);
  m_pStarterPageDlg->EnableFuelInjection(i_enable);
+ m_pCarburPageDlg->EnableFuelInjection(i_enable);
+ m_pChokePageDlg->EnableFuelInjection(i_enable);
 }
 
 void CParamDeskDlg::OnSaveButton()

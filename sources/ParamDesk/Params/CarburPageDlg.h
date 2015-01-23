@@ -42,6 +42,7 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableFuelInjection(bool i_enable);
 
   void GetValues(SECU3IO::CarburPar* o_values);
   void SetValues(const SECU3IO::CarburPar* i_values);
@@ -53,11 +54,14 @@ class CCarburPageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateCarburetorControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::CarburPar m_params;
   bool m_enabled;
+  bool m_fuel_injection;
 
   CButton m_inverse_throttle_switch;
   CSpinButtonCtrlEx m_shutoff_lo_threshold_spin;

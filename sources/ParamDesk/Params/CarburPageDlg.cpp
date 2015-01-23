@@ -53,20 +53,20 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_INVERSE_SWITCH,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_SPIN,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,OnUpdateCarburetorControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,OnUpdateCarburetorControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,OnUpdateCarburetorControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,OnUpdateControls)
@@ -78,20 +78,21 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_TPS_THRESHOLD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_TPS_THRESHOLD_UNIT,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_MAP_THRD_UNIT,OnUpdateFuelInjectionControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_FC_CTS_THRD_UNIT,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CCarburPageDlg::CCarburPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCarburPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_shutoff_lo_threshold_edit(CEditEx::MODE_INT, true)
 , m_shutoff_hi_threshold_edit(CEditEx::MODE_INT, true)
 , m_epm_on_threshold_edit(CEditEx::MODE_FLOAT, true)
@@ -165,10 +166,19 @@ void CCarburPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CCarburPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CCarburPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CCarburPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection);
+}
+
+void CCarburPageDlg::OnUpdateCarburetorControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_fuel_injection);
 }
 
 BOOL CCarburPageDlg::OnInitDialog()
@@ -299,4 +309,13 @@ void CCarburPageDlg::SetValues(const SECU3IO::CarburPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::CarburPar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CCarburPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }

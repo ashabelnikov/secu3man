@@ -51,7 +51,7 @@ class CStarterPageDlg : public CTabDialog, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateFuelInjectionItems(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:

@@ -48,6 +48,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
 
   void EnableChokeTesting(bool enable);
   void EnableChokeManPos(bool enable);
+  void EnableFuelInjection(bool enable);
 
  // Implementation
  protected:
@@ -60,6 +61,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   afx_msg void OnUpdateChokeManPosBtn(CCmdUI* pCmdUI);
   afx_msg void OnSMTestButton();
   afx_msg void OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult);
+  afx_msg void OnUpdateChokeSMSteps(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -67,6 +69,7 @@ class CChokePageDlg : public CTabDialog, public ParamPageEvents
   bool m_enabled;
   bool m_choketst_enabled;
   bool m_chokemanpos_enabled;
+  bool m_fuel_injection;
 
   CSpinButtonCtrlEx m_sm_steps_num_spin;
   CEditEx m_sm_steps_num_edit;

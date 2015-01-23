@@ -37,9 +37,9 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_IF_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_SM_TEST_CHECK, OnSMTestButton)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateChokeSMSteps)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateChokeSMSteps)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,OnUpdateChokeSMSteps)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_TEST_CHECK,OnUpdateChokeTestBtn)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MANUAL_POS_SPIN,OnUpdateChokeManPosBtn)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MANUAL_POS_CAPTION,OnUpdateChokeManPosBtn)
@@ -79,6 +79,7 @@ END_MESSAGE_MAP()
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 : Super(CChokePageDlg::IDD, pParent)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT, true)
 , m_strt_add_edit(CEditEx::MODE_FLOAT, true)
 , m_strt_add_tm_edit(CEditEx::MODE_FLOAT, true)
@@ -140,7 +141,7 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CChokePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled);
+ pCmdUI->Enable(m_enabled && !m_fuel_injection);
 }
 
 void CChokePageDlg::OnUpdateChokeTestBtn(CCmdUI* pCmdUI)
@@ -151,6 +152,11 @@ void CChokePageDlg::OnUpdateChokeTestBtn(CCmdUI* pCmdUI)
 void CChokePageDlg::OnUpdateChokeManPosBtn(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_chokemanpos_enabled);
+}
+
+void CChokePageDlg::OnUpdateChokeSMSteps(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -309,4 +315,13 @@ void CChokePageDlg::SetValues(const SECU3IO::ChokePar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::ChokePar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CChokePageDlg::EnableFuelInjection(bool enable)
+{
+ if (m_fuel_injection == enable)
+  return; //already has needed state
+ m_fuel_injection = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
