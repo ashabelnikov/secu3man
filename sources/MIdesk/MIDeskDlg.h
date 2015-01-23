@@ -28,6 +28,7 @@
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
 #include "MIGasValve.h"
+#include "MIInjPW.h"
 #include "MIPressure.h"
 #include "MIShutoffValve.h"
 #include "MITachometer.h"
@@ -94,6 +95,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMITemperature  m_temperature;
   CMIVoltage      m_add_i1;
   CMIVoltage      m_add_i2;
+  CMIInjPW        m_inj_pw;
 
   CMIAirFlow      m_air_flow;
   CMIGasValve     m_gas_valve;

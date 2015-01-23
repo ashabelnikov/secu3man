@@ -59,6 +59,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_temperature.DDX_Controls(pDX, IDC_MI_TEMPERATURE);
  m_add_i1.DDX_Controls(pDX, IDC_MI_ADD_I1);
  m_add_i2.DDX_Controls(pDX, IDC_MI_ADD_I2);
+ m_inj_pw.DDX_Controls(pDX, IDC_MI_INJ_PW);
 
  //Булевские приборы (лампочка)
  m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
@@ -93,6 +94,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_add_i2.Create();
  m_add_i1.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE));
  m_add_i2.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE));
+ m_inj_pw.Create();
 
  Enable(false);
 
@@ -127,6 +129,7 @@ void CMIDeskDlg::Enable(bool enable)
  m_temperature.Enable(enable);
  m_add_i1.Enable(enable);
  m_add_i2.Enable(enable);
+ m_inj_pw.Enable(enable);
 }
 
 void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
@@ -144,6 +147,7 @@ void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
  //extended fixtures
  m_add_i1.Show(show && show_exf);
  m_add_i2.Show(show && show_exf); 
+ m_inj_pw.Show(show && show_exf); 
 }
 
 using namespace SECU3IO;
@@ -171,6 +175,7 @@ void CMIDeskDlg::GetValues(SensorDat* o_values)
  o_values->choke_pos = m_temperature.GetChokePos(); //top-right pane
  o_values->add_i1 = m_add_i1.GetValue();
  o_values->add_i2 = m_add_i2.GetValue();
+ o_values->inj_pw = m_inj_pw.GetValue();
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -193,6 +198,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_temperature.SetValue(m_values.temperat);
  m_add_i1.SetValue(m_values.add_i1);
  m_add_i2.SetValue(m_values.add_i2);
+ m_inj_pw.SetValue(m_values.inj_pw);
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -242,6 +248,7 @@ void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
  m_temperature.Scale(Xf, Yf);
  m_add_i1.Scale(Xf, Yf);
  m_add_i2.Scale(Xf, Yf);
+ m_inj_pw.Scale(Xf, Yf);
 
  RedrawWindow();
 }
@@ -250,6 +257,7 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
 {
  m_add_i1.Show(i_show);
  m_add_i2.Show(i_show);
+ m_inj_pw.Show(i_show);
 }
 
 void CMIDeskDlg::ShowChokePos(bool i_show)

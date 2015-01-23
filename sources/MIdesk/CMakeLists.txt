@@ -34,6 +34,7 @@ set(HEADERS
   MIDwellAngle.h
   MIGasValve.h
   MIHelpers.h
+  MIInjPW.h
   MIPressure.h
   MIShutoffValve.h
   MITachometer.h
@@ -55,6 +56,7 @@ set (SOURCES
   MIDesk.cpp
   MIDwellAngle.cpp
   MIGasValve.cpp
+  MIInjPW.cpp
   MIPressure.cpp
   MIShutoffValve.cpp
   MITachometer.cpp

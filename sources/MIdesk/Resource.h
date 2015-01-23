@@ -104,4 +104,7 @@
 #define IDC_LOG_MARKS_K3                2104
 #define IDS_LOG_MARKS_DESK_TT           2105
 #define IDS_MI_TPS_FMT_STR              2106
+#define IDC_MI_INJ_PW                   2107
+#define IDS_MI_INJ_PW_TITLE             2108
+#define IDS_MI_MS_UNIT                  2109
  

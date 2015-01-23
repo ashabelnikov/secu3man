@@ -18,7 +18,8 @@ LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries
 # source files
 SOURCES = StdAfx.cpp CEDeskDlg.cpp DVDeskDlg.cpp MIAirFlow.cpp MIDeskDlg.cpp MIDesk.cpp \
   MIDwellAngle.cpp MIGasValve.cpp MIPressure.cpp MIShutoffValve.cpp MITachometer.cpp \
-  MITemperature.cpp MIThrottleGate.cpp MIVoltage.cpp MIVoltMeter.cpp RSDeskDlg.cpp LMDeskDlg.cpp
+  MITemperature.cpp MIThrottleGate.cpp MIVoltage.cpp MIVoltMeter.cpp RSDeskDlg.cpp LMDeskDlg.cpp \
+  MIInjPW.cpp
 
 # DLL building
 all: midesk
