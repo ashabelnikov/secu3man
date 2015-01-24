@@ -32,6 +32,7 @@ set(HEADERS
   MIAirFlow.h
   MIDeskDlg.h
   MIDwellAngle.h
+  MIEGOCorr.h
   MIGasValve.h
   MIHelpers.h
   MIIAT.h
@@ -56,6 +57,7 @@ set (SOURCES
   MIDeskDlg.cpp
   MIDesk.cpp
   MIDwellAngle.cpp
+  MIEGOCorr.cpp
   MIGasValve.cpp
   MIIAT.cpp
   MIInjPW.cpp

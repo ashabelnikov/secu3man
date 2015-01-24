@@ -109,4 +109,6 @@
 #define IDS_MI_MS_UNIT                  2109
 #define IDS_MI_IAT_TITLE                2110
 #define IDC_MI_IAT                      2111
- 
+#define IDC_MI_EGO_CORR                 2112
+#define IDS_MI_EGO_CORR_TITLE           2113
+#define IDS_MI_PERCENT_UNIT             2114

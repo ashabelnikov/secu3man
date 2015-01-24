@@ -61,6 +61,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_add_i2.DDX_Controls(pDX, IDC_MI_ADD_I2);
  m_iat.DDX_Controls(pDX, IDC_MI_IAT);
  m_inj_pw.DDX_Controls(pDX, IDC_MI_INJ_PW);
+ m_ego_corr.DDX_Controls(pDX, IDC_MI_EGO_CORR);
 
  //Булевские приборы (лампочка)
  m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
@@ -97,6 +98,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  m_add_i1.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE));
  m_add_i2.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE));
  m_inj_pw.Create();
+ m_ego_corr.Create();
 
  Enable(false);
 
@@ -133,6 +135,7 @@ void CMIDeskDlg::Enable(bool enable)
  m_add_i2.Enable(enable);
  m_iat.Enable(enable);
  m_inj_pw.Enable(enable);
+ m_ego_corr.Enable(enable);
 }
 
 void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
@@ -152,6 +155,7 @@ void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
  m_add_i2.Show(show && show_exf && !m_values.add_i2_mode);
  m_iat.Show(show && show_exf && m_values.add_i2_mode);
  m_inj_pw.Show(show && show_exf);
+ m_ego_corr.Show(show && show_exf);
 }
 
 using namespace SECU3IO;
@@ -185,6 +189,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  else
   m_iat.SetValue(m_values.air_temp);
  m_inj_pw.SetValue(m_values.inj_pw);
+ m_ego_corr.SetValue(m_values.lambda_corr);
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -236,6 +241,7 @@ void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
  m_add_i2.Scale(Xf, Yf);
  m_iat.Scale(Xf, Yf);
  m_inj_pw.Scale(Xf, Yf);
+ m_ego_corr.Scale(Xf, Yf);
 
  RedrawWindow();
 }
@@ -246,6 +252,7 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
  m_add_i2.Show(i_show && !m_values.add_i2_mode);
  m_iat.Show(i_show && m_values.add_i2_mode);
  m_inj_pw.Show(i_show);
+ m_ego_corr.Show(i_show);
 }
 
 void CMIDeskDlg::ShowChokePos(bool i_show)

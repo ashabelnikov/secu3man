@@ -27,6 +27,7 @@
 
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
+#include "MIEGOCorr.h"
 #include "MIGasValve.h"
 #include "MIIAT.h"
 #include "MIInjPW.h"
@@ -97,6 +98,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIVoltage      m_add_i2;
   CMIInjPW        m_inj_pw;
   CMIIAT          m_iat;
+  CMIEGOCorr      m_ego_corr;
 
   CMIAirFlow      m_air_flow;
   CMIGasValve     m_gas_valve;
