@@ -71,6 +71,7 @@ void CTablesDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_SAVE_BUTTON, m_save_button);
  DDX_Control(pDX, IDC_TD_TABLESSET_NAME_EDIT, m_names_edit);
  DDX_Control(pDX, IDC_TD_MODIFICATION_FLAG, m_midification_flag);
+ DDX_Text(pDX, IDC_TD_TABLESSET_NAME_EDIT, m_names_text);
 }
 
 BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
@@ -125,7 +126,8 @@ void CTablesDeskDlg::OnEditKillFocus()
   return; //we need to prevent wrong behaviour when window is recreated
  if (0==m_names_edit.GetWindowTextLength())
  {
-  m_names_edit.SetWindowText(_T("<no name>"));
+  m_names_text = _T("<no name>");
+  UpdateData(FALSE);
   //allow controller process latest changes
   if (m_OnChangeTablesSetName && false==m_lock_enchange)
    m_OnChangeTablesSetName();
@@ -338,7 +340,8 @@ void CTablesDeskDlg::setOnSaveTablesTo(EventWithCode OnFunction)
 void CTablesDeskDlg::SetTablesSetName(const _TSTRING& name)
 {
  m_lock_enchange = true;
- m_names_edit.SetWindowText(name.c_str());
+ m_names_text = name.c_str();
+ UpdateData(FALSE);
  m_lock_enchange = false;
 }
 
@@ -539,6 +542,7 @@ void CTablesDeskDlg::OnChangeTablesSetName()
  if (m_OnChangeTablesSetName && false==m_lock_enchange)
  {
   m_lock_killfocus = false;
+  UpdateData(TRUE);
   m_OnChangeTablesSetName();
  }
 }

@@ -125,6 +125,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   CStatic m_td_title;
   CButton m_save_button;
   CEdit m_names_edit;
+  CString m_names_text;
   CStatic m_midification_flag;
   std::auto_ptr<CTDContextMenuManager> mp_ContextMenuManager;
 
