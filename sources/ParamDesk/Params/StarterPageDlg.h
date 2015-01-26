@@ -24,13 +24,14 @@
 #include <string>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
+#include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
-class CStarterPageDlg : public CTabDialog, public ParamPageEvents
+class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
-  typedef CTabDialog Super;
+  typedef CParamTabBaseDlg Super;
 
  public:
   CStarterPageDlg(CWnd* pParent = NULL);   // standard constructor

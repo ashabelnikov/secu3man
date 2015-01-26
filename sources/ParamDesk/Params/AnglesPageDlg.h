@@ -23,6 +23,7 @@
 
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
+#include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
@@ -30,9 +31,9 @@
 
 class CToolTipCtrlEx;
 
-class CAnglesPageDlg : public CTabDialog, public ParamPageEvents
+class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
-  typedef CTabDialog Super;
+  typedef CParamTabBaseDlg Super;
 
  public:
   CAnglesPageDlg(CWnd* pParent = NULL); // standard constructor

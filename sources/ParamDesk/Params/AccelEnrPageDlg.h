@@ -25,15 +25,16 @@
 #include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
+#include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
 
-class CAccelEnrPageDlg : public CTabDialog, public ParamPageEvents
+class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
-  typedef CTabDialog Super;
+  typedef CParamTabBaseDlg Super;
 
  public:
   CAccelEnrPageDlg(CWnd* pParent = NULL);   // standard constructor

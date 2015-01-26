@@ -120,6 +120,24 @@ BOOL CTablesDeskDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
+BOOL CTablesDeskDlg::PreTranslateMessage(MSG* pMsg)
+{
+ //MS says:
+ //The default WM_LBUTTONDOWN handler for edit controls will not set focus to the edit control if its parent
+ //is an inactive captioned child window. This code is implemented as part of the Windows API function, DefWindowProc().
+ //This behavior is by design.
+ if (pMsg->message==WM_LBUTTONDOWN)
+ {
+  TCHAR name[32];
+  GetClassName(pMsg->hwnd, name, 31);
+  //Set focus for edit controls which belong only to this dialog
+  if (!_tcscmp(name, _T("Edit")) && ::GetParent(pMsg->hwnd) == this->m_hWnd)
+   ::SetFocus(pMsg->hwnd);
+ }
+
+ return Super::PreTranslateMessage(pMsg);
+}
+
 void CTablesDeskDlg::OnEditKillFocus()
 {
  if (m_lock_killfocus)

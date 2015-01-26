@@ -25,15 +25,16 @@
 #include "common/unicodesupport.h"
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
+#include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
 
-class CFunSetPageDlg : public CTabDialog, public ParamPageEvents
+class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
-  typedef CTabDialog Super;
+  typedef CParamTabBaseDlg Super;
 
  public:
   CFunSetPageDlg(CWnd* pParent = NULL); // standard constructor

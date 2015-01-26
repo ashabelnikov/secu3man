@@ -24,6 +24,7 @@ project(${PROJECT})
 set(HEADERS
   Application/StdAfx.h
   common/ParamPageEvents.h
+  common/ParamTabBaseDlg.h
   MAPCalc/MAPCalcController.h
   MAPCalc/MAPCalcDlg.h
   Params/AccelEnrPageDlg.h
@@ -55,6 +56,7 @@ set(SOURCES
   Application/StdAfx.cpp
   Application/ParamDesk.cpp
   common/ParamPageEvents.cpp
+  common/ParamTabBaseDlg.cpp
   MAPCalc/MAPCalcController.cpp
   MAPCalc/MAPCalcDlg.cpp
   Params/AccelEnrPageDlg.cpp

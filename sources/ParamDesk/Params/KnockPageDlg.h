@@ -24,6 +24,7 @@
 #include <memory>
 #include "io-core/SECU3IO.h"
 #include "../common/ParamPageEvents.h" //because included externally
+#include "../common/ParamTabBaseDlg.h" //because included externally
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
@@ -31,9 +32,9 @@
 class CToolTipCtrlEx;
 class CWndScroller;
 
-class AFX_EXT_CLASS CKnockPageDlg : public CTabDialog, public ParamPageEvents
+class AFX_EXT_CLASS CKnockPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
-  typedef CTabDialog Super;
+  typedef CParamTabBaseDlg Super;
 
  public:
   CKnockPageDlg(CWnd* pParent = NULL); // standard constructor

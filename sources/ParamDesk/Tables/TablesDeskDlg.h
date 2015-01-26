@@ -102,6 +102,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnRangeCmdsSave(UINT nID);
   afx_msg void OnEditKillFocus();
   afx_msg void OnChangeTablesSetName();
+  virtual BOOL PreTranslateMessage(MSG* pMsg);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -115,7 +116,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   bool IsAllowed(void);
 
   void _MakeWindowChild(HWND hwnd, bool child);
- 
+
   bool m_children_charts;
   bool m_enabled;
   bool m_tsneb_readonly;
