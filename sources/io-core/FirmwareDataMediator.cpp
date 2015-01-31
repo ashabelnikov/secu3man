@@ -1519,20 +1519,34 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  int i;
  for(i = 0; i < TABLES_NUMBER; i++)
  {
+  op_fwd->maps[i].name = names[i];
+  //ignition
   GetStartMap(i,op_fwd->maps[i].f_str);
   GetIdleMap(i,op_fwd->maps[i].f_idl);
   GetWorkMap(i,op_fwd->maps[i].f_wrk);
   GetTempMap(i,op_fwd->maps[i].f_tmp);
-  op_fwd->maps[i].name = names[i];
+  //fuel injection
+  GetVEMap(i,op_fwd->maps[i].inj_ve);
+  GetAFRMap(i,op_fwd->maps[i].inj_afr);
+  GetCrnkMap(i,op_fwd->maps[i].inj_cranking);
+  GetWrmpMap(i,op_fwd->maps[i].inj_warmup);
+  GetDeadMap(i,op_fwd->maps[i].inj_dead_time);
+  GetIdlrMap(i,op_fwd->maps[i].inj_iac_run_pos);
+  GetIdlcMap(i,op_fwd->maps[i].inj_iac_crank_pos);
+  GetAETPSMap(i,op_fwd->maps[i].inj_ae_tps);
+  GetAERPMMap(i,op_fwd->maps[i].inj_ae_rpm);
+  GetAftstrMap(i,op_fwd->maps[i].inj_aftstr);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
  GetDwellCntrlMap(op_fwd->dwellcntrl_table);
-
  GetCTSCurveMap(op_fwd->ctscurve_table);
  op_fwd->ctscurve_vlimits[0] = GetCTSMapVoltageLimit(0);
  op_fwd->ctscurve_vlimits[1] = GetCTSMapVoltageLimit(1);
-
+ GetATSCurveMap(op_fwd->atscurve_table);
+ op_fwd->atscurve_vlimits[0] = GetATSMapVoltageLimit(0);
+ op_fwd->atscurve_vlimits[1] = GetATSMapVoltageLimit(1);
+ GetATSAACMap(op_fwd->ats_corr_table);
  GetChokeOpMap(op_fwd->choke_op_table);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
@@ -1546,20 +1560,34 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  int i;
  for(i = 0; i < TABLES_NUMBER; i++)
  {
+  SetFunctionsSetName(i,ip_fwd->maps[i].name);
+  //ignition
   SetStartMap(i,ip_fwd->maps[i].f_str);
   SetIdleMap(i,ip_fwd->maps[i].f_idl);
   SetWorkMap(i,ip_fwd->maps[i].f_wrk);
   SetTempMap(i,ip_fwd->maps[i].f_tmp);
-  SetFunctionsSetName(i,ip_fwd->maps[i].name);
+  //fuel injection
+  SetVEMap(i,ip_fwd->maps[i].inj_ve);
+  SetAFRMap(i,ip_fwd->maps[i].inj_afr);
+  SetCrnkMap(i,ip_fwd->maps[i].inj_cranking);
+  SetWrmpMap(i,ip_fwd->maps[i].inj_warmup);
+  SetDeadMap(i,ip_fwd->maps[i].inj_dead_time);
+  SetIdlrMap(i,ip_fwd->maps[i].inj_iac_run_pos);
+  SetIdlcMap(i,ip_fwd->maps[i].inj_iac_crank_pos);
+  SetAETPSMap(i,ip_fwd->maps[i].inj_ae_tps);
+  SetAERPMMap(i,ip_fwd->maps[i].inj_ae_rpm);
+  SetAftstrMap(i,ip_fwd->maps[i].inj_aftstr);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
  SetDwellCntrlMap(ip_fwd->dwellcntrl_table);
-
  SetCTSCurveMap(ip_fwd->ctscurve_table);
  SetCTSMapVoltageLimit(0, ip_fwd->ctscurve_vlimits[0]);
  SetCTSMapVoltageLimit(1, ip_fwd->ctscurve_vlimits[1]);
-
+ SetATSCurveMap(ip_fwd->atscurve_table);
+ SetATSMapVoltageLimit(0, ip_fwd->atscurve_vlimits[0]);
+ SetATSMapVoltageLimit(1, ip_fwd->atscurve_vlimits[1]);
+ SetATSAACMap(ip_fwd->ats_corr_table);
  SetChokeOpMap(ip_fwd->choke_op_table);
 
  //Check RPM grids compatibility and set RPM grid

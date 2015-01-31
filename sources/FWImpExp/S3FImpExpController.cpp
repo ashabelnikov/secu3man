@@ -176,7 +176,7 @@ void S3FImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_TEMP_MAP))
   memcpy(mp_fwd->maps[current_sel].f_tmp, mp_s3f_io->GetData().maps[other_sel].f_tmp,sizeof(float) * F_TMP_POINTS);
 
- //fuela injection
+ //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ve, mp_s3f_io->GetData().maps[other_sel].inj_ve,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
@@ -240,6 +240,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IDLC_MAP, injen);
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, injen);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AFR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_CRNK_MAP, injen);
