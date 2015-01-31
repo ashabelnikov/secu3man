@@ -1117,6 +1117,7 @@ void CButtonsPanel::OnViewCrnkMap()
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_CRNK_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(m_crnk_map_wnd_handle,OnWndActivationCrnkMap,this);
   DLL::Chart2DSetAxisValuesFormat(m_crnk_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_crnk_map_wnd_handle, OnChangeCrnkMap, this);
   DLL::Chart2DSetOnClose(m_crnk_map_wnd_handle, OnCloseCrnkMap, this);
@@ -1186,6 +1187,7 @@ void CButtonsPanel::OnViewDeadMap()
     MLL::GetString(IDS_DEAD_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_dead_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_dead_map_wnd_handle, 0.1f);
+  DLL::Chart2DSetOnWndActivation(m_dead_map_wnd_handle,OnWndActivationDeadMap,this);
   DLL::Chart2DSetAxisValuesFormat(m_dead_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_dead_map_wnd_handle, OnChangeDeadMap, this);
   DLL::Chart2DSetOnClose(m_dead_map_wnd_handle, OnCloseDeadMap, this);
@@ -1453,7 +1455,6 @@ void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
  pCmdUI->Enable(enable && m_fuel_injection);
  pCmdUI->SetCheck( (m_afr_map_chart_state) ? TRUE : FALSE );
 }
-
 
 void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
 {
@@ -1770,7 +1771,7 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
 void CButtonsPanel::_EnableCharts(bool enable)
 {
  if (m_charts_enabled != (int)enable)
- {
+ {//ignition
   if (m_start_map_chart_state && ::IsWindow(m_start_map_wnd_handle))
    DLL::Chart2DEnable(m_start_map_wnd_handle, enable && IsAllowed());
   if (m_idle_map_chart_state && ::IsWindow(m_idle_map_wnd_handle))
@@ -1779,27 +1780,27 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart3DEnable(m_work_map_wnd_handle, enable && IsAllowed());
   if (m_temp_map_chart_state && ::IsWindow(m_temp_map_wnd_handle))
    DLL::Chart2DEnable(m_temp_map_wnd_handle, enable && IsAllowed());
-
+  //fuel injection
   if (m_ve_map_chart_state && ::IsWindow(m_ve_map_wnd_handle))
    DLL::Chart3DEnable(m_ve_map_wnd_handle, enable && IsAllowed());
   if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
    DLL::Chart3DEnable(m_afr_map_wnd_handle, enable && IsAllowed());
   if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
-   DLL::Chart3DEnable(m_crnk_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_crnk_map_wnd_handle, enable && IsAllowed());
   if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
-   DLL::Chart3DEnable(m_wrmp_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_wrmp_map_wnd_handle, enable && IsAllowed());
   if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
-   DLL::Chart3DEnable(m_dead_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_dead_map_wnd_handle, enable && IsAllowed());
   if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
-   DLL::Chart3DEnable(m_idlr_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_idlr_map_wnd_handle, enable && IsAllowed());
   if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
-   DLL::Chart3DEnable(m_idlc_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_idlc_map_wnd_handle, enable && IsAllowed());
   if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
-   DLL::Chart3DEnable(m_aetps_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_aetps_map_wnd_handle, enable && IsAllowed());
   if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
-   DLL::Chart3DEnable(m_aerpm_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_aerpm_map_wnd_handle, enable && IsAllowed());
   if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
-   DLL::Chart3DEnable(m_aftstr_map_wnd_handle, enable && IsAllowed());
+   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, enable && IsAllowed());
 
   if (mp_gridModeEditorDlg.get() && m_grid_map_state && ::IsWindow(mp_gridModeEditorDlg->m_hWnd))
    mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);
