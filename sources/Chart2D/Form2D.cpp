@@ -189,6 +189,12 @@ void TForm2D::Enable(bool i_enable)
  ButtonAngleUp->Enabled = i_enable;
  ButtonAngleDown->Enabled = i_enable;
  Chart1->Enabled = i_enable;
+ for(int i = 0; i < 8; ++i)
+ {
+  m_binsEdit[i]->Enabled = i_enable;
+  m_binsUpDown[i]->Enabled = i_enable;
+ }
+ ButtonShowBins->Enabled = i_enable;
 }
 
 //---------------------------------------------------------------------------
