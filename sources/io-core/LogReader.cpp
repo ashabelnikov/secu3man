@@ -23,6 +23,7 @@
 #include "LogReader.h"
 
 #include <stdio.h>
+#include <math.h>
 #include "SECU3IO.h"
 
 using namespace SECU3IO;
@@ -212,7 +213,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.choke_pos = choke_pos;
  o_data.speed = speed;
  o_data.distance = distance;
- o_data.air_temp = air_temp;
+ o_data.add_i2_mode = (fabs(air_temp - 999.99f) > 0.0001); //Comparing with epsilon
+ o_data.air_temp = o_data.add_i2_mode ? air_temp : .0f;
  o_data.strt_aalt = strt_aalt;
  o_data.idle_aalt = idle_aalt;
  o_data.work_aalt = work_aalt;

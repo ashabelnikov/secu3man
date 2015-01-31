@@ -111,6 +111,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   unsigned int m_update_period;
   bool m_was_initialized;
   int m_enabled;
+  bool m_show;
+  bool m_show_exf;
 };
 
 /////////////////////////////////////////////////////////////////////////////

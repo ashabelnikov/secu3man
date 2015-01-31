@@ -43,6 +43,8 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(-1)
 , m_add_i1(MLL::GetString(IDS_MI_ADD_I1_TT))
 , m_add_i2(MLL::GetString(IDS_MI_ADD_I2_TT))
+, m_show_exf(false)
+, m_show(false)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
 }
@@ -140,6 +142,8 @@ void CMIDeskDlg::Enable(bool enable)
 
 void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
 {
+ m_show_exf = show_exf; //save flag
+ m_show = show;
  m_tachometer.Show(show);
  m_pressure.Show(show);
  m_voltmeter.Show(show);
@@ -162,6 +166,11 @@ using namespace SECU3IO;
 
 void CMIDeskDlg::SetValues(const SensorDat* i_values)
 {
+ if (m_values.add_i2_mode != i_values->add_i2_mode)
+ {
+  m_add_i2.Show(m_show && m_show_exf && !i_values->add_i2_mode);
+  m_iat.Show(m_show && m_show_exf && i_values->add_i2_mode); 
+ }
  m_values = *i_values;
 }
 
@@ -248,6 +257,7 @@ void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
 
 void CMIDeskDlg::ShowExFixtures(bool i_show)
 {
+ m_show_exf = i_show; //save flag
  m_add_i1.Show(i_show);
  m_add_i2.Show(i_show && !m_values.add_i2_mode);
  m_iat.Show(i_show && m_values.add_i2_mode);

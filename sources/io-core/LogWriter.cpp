@@ -95,7 +95,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->choke_pos,
                         p_sensors->speed,
                         p_sensors->distance,
-                        p_sensors->air_temp,
+                        p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic nubmer indicates that IAT is not used
 
                         p_sensors->strt_aalt,         // advance angle from start map
                         p_sensors->idle_aalt,         // advance angle from idle map
