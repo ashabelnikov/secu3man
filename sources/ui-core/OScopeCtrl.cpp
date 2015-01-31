@@ -24,6 +24,9 @@
 #include "math.h"
 #include "OScopeCtrl.h"
 
+#undef min //fucking stuff
+#undef max
+
 BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
  ON_WM_PAINT()
  ON_WM_SIZE()
@@ -201,7 +204,7 @@ void COScopeCtrl::InvalidateCtrl()
 
  //avoid overflow range error (crash), when m_dLowerLimit is zero.
  double log10ll = (m_dLowerLimit!=.0) ? log10(fabs(m_dLowerLimit)) : log10ll = .0;
- nCharacters = max(nCharacters, abs((int)log10ll));
+ nCharacters = std::max(nCharacters, abs((int)log10ll));
 
  // add the units digit, decimal point and a minus sign, and an extra space
  // as well as the number of decimal places to display

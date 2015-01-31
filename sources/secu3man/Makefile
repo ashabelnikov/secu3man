@@ -6,7 +6,7 @@ CC      = cl
 # resource compiler
 RC      = rc
 # compiler flags
-CFLAGS  = /nologo /W3 /GX /GR /O2 /Ob2 /DWIN32 /D_WINDOWS -I.. -I../secu3man -I../secu3man/Application /MD -D_AFXDLL /Ycstdafx.h
+CFLAGS  = /nologo /W3 /GX /GR /O2 /Ob2 /DWIN32 /D_WINDOWS -I.. -I../secu3man -I../secu3man/Application -I../ParamDesk /MD -D_AFXDLL /Ycstdafx.h
 CFLAGS  = $(CFLAGS) -D_CRT_NON_CONFORMING_SWPRINTFS -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS
 CFLAGS  = $(CFLAGS) /D NDEBUG
 CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501

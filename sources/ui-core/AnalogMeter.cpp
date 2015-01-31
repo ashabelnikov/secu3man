@@ -24,6 +24,9 @@
 #include <math.h>
 #include "AnalogMeter.h"
 
+#undef min //fucking stuff
+#undef max
+
 //IF You use _UNICODE:
 //In the Output category of the Link tab in the Project Settings dialog box,
 //set the Entry Point Symbol to wWinMainCRTStartup.
@@ -698,8 +701,8 @@ void CAnalogMeter::DrawNeedle()
  }
 
  dAngleRad = (m_dNeedlePos - m_dMinScale)*m_dRadiansPerValue - m_dLimitAngleRad;
- dAngleRad = max(dAngleRad, -m_dLimitAngleRad);
- dAngleRad = min(dAngleRad, m_dLimitAngleRad);
+ dAngleRad = std::max(dAngleRad, -m_dLimitAngleRad);
+ dAngleRad = std::min(dAngleRad, m_dLimitAngleRad);
  dCosAngle = cos(dAngleRad);
  dSinAngle = sin(dAngleRad);
 

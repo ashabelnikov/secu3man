@@ -19,11 +19,12 @@
               email: shabelnikov@secu-3.org
 */
 
-#define NOMINMAX
-
 #include "stdafx.h"
 #include <algorithm>
 #include "WndScroller.h"
+
+#undef min //fucking stuff
+#undef max
 
 CWndScroller::CWndScroller()
 : mp_origWnd(NULL)

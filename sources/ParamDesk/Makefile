@@ -22,7 +22,7 @@ SOURCES = Application/StdAfx.cpp Application/ParamDesk.cpp common/ParamPageEvent
   Params/KnockPageDlg.cpp Params/MiscPageDlg.cpp Params/ParamDeskDlg.cpp Params/StarterPageDlg.cpp \
   Params/TemperPageDlg.cpp Params/IORemappingDlg.cpp Params/SecurPageDlg.cpp Tables/TablesDeskDlg.cpp \
   Tables/TDContextMenuManager.cpp Params/InjectorPageDlg.cpp Params/LambdaPageDlg.cpp Params/AccelEnrPageDlg.cpp \
-  common/ParamTabBaseDlg.cpp
+  common/ParamTabBaseDlg.cpp Params/UniOutPageDlg.cpp
 
 # DLL building
 all: paramdesk
