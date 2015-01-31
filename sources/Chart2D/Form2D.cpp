@@ -63,6 +63,8 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 {
  memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 256);
  m_selpts.push_back(0);
+ memset(m_binsEdit, NULL, sizeof(NULL) * 8);
+ memset(m_binsUpDown, NULL, sizeof(NULL) * 8);
 }
 
 //---------------------------------------------------------------------------
@@ -189,12 +191,17 @@ void TForm2D::Enable(bool i_enable)
  ButtonAngleUp->Enabled = i_enable;
  ButtonAngleDown->Enabled = i_enable;
  Chart1->Enabled = i_enable;
- for(int i = 0; i < 8; ++i)
+ if (m_horizontal_axis_grid_mode == 2) //only in bins mode
  {
-  m_binsEdit[i]->Enabled = i_enable;
-  m_binsUpDown[i]->Enabled = i_enable;
+  for(int i = 0; i < 8; ++i)
+  {
+   if (m_binsEdit[i])
+    m_binsEdit[i]->Enabled = i_enable;
+   if (m_binsUpDown[i])
+    m_binsUpDown[i]->Enabled = i_enable;
+  }
+  ButtonShowBins->Enabled = i_enable;
  }
- ButtonShowBins->Enabled = i_enable;
 }
 
 //---------------------------------------------------------------------------
