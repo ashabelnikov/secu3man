@@ -176,8 +176,8 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
  ///////////////////////////////////////////////////////////////
 
  mp_ParamDeskDlg->DestroyWindow();
- mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD, this);
- ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE); 
+ mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD, i_floating ? AfxGetMainWnd() : this);
+ ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
  if (i_floating)
  {
@@ -188,7 +188,7 @@ void CParamMonTabDlg::MakePDFloating(bool i_floating)
   mp_ParamDeskDlg->Show(!GetEditTablesCheckState());
 
  mp_TablesDeskDlg->DestroyWindow();
- mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD, this);
+ mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD, i_floating ? AfxGetMainWnd() : this);
  ::SetClassLong(mp_TablesDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
  mp_TablesDeskDlg->ShowOpenedCharts(GetEditTablesCheckState());

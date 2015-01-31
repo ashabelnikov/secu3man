@@ -33,7 +33,9 @@ BOOL CParamTabBaseDlg::PreTranslateMessage(MSG* pMsg)
  //MS says:
  //The default WM_LBUTTONDOWN handler for edit controls will not set focus to the edit control if its parent
  //is an inactive captioned child window. This code is implemented as part of the Windows API function, DefWindowProc().
- //This behavior is by design.
+ //This behavior is by design. 
+/*
+ //This code is needed only when parent window of control has WS_CHILD style and has caption bar
  if (pMsg->message==WM_LBUTTONDOWN)
  {
   TCHAR name[32];
@@ -41,7 +43,7 @@ BOOL CParamTabBaseDlg::PreTranslateMessage(MSG* pMsg)
   //Set focus for edit controls which belong only to this dialog
   if (!_tcscmp(name, _T("Edit")) && ::GetParent(pMsg->hwnd) == this->m_hWnd)
    ::SetFocus(pMsg->hwnd);
- }
+ }*/
 
  return Super::PreTranslateMessage(pMsg);
 }

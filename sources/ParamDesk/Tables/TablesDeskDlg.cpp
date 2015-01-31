@@ -126,6 +126,8 @@ BOOL CTablesDeskDlg::PreTranslateMessage(MSG* pMsg)
  //The default WM_LBUTTONDOWN handler for edit controls will not set focus to the edit control if its parent
  //is an inactive captioned child window. This code is implemented as part of the Windows API function, DefWindowProc().
  //This behavior is by design.
+/*
+ //This code is needed only when parent window of control has WS_CHILD style and has caption bar
  if (pMsg->message==WM_LBUTTONDOWN)
  {
   TCHAR name[32];
@@ -133,7 +135,7 @@ BOOL CTablesDeskDlg::PreTranslateMessage(MSG* pMsg)
   //Set focus for edit controls which belong only to this dialog
   if (!_tcscmp(name, _T("Edit")) && ::GetParent(pMsg->hwnd) == this->m_hWnd)
    ::SetFocus(pMsg->hwnd);
- }
+ }*/
  
  return Super::PreTranslateMessage(pMsg);
 }
@@ -578,11 +580,11 @@ void CTablesDeskDlg::_MakeWindowChild(HWND hwnd, bool child)
  if (hwnd)
  {
   if (child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_CHILD | WS_CLIPSIBLINGS);
+   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_POPUP);
   else
-   CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD | WS_CLIPSIBLINGS, 0);
+   CWnd::FromHandle(hwnd)->ModifyStyle(WS_POPUP, 0);
 
-  CWnd::FromHandle(hwnd)->SetParent(child ? this->GetParent() : NULL);
+  CWnd::FromHandle(hwnd)->SetParent(child ? AfxGetMainWnd() : NULL);
  }
 }
 
