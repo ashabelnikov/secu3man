@@ -195,6 +195,11 @@ bool CCheckEngineTabController::OnClose(void)
  return true;
 }
 
+void CCheckEngineTabController::OnCloseNotify(void)
+{
+  //empty
+}
+
 bool CCheckEngineTabController::OnAskFullScreen(void)
 {
  return false;

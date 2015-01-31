@@ -154,6 +154,13 @@ bool CChildViewManager::OnClose(void)
  return true;
 }
 
+void CChildViewManager::OnCloseNotify(void)
+{
+ std::vector<ITabController*>& list = mp_MainTabController->GetControllersList();
+ for (size_t i = 0; i < list.size(); i++)
+  list[i]->OnCloseNotify();
+}
+
 bool CChildViewManager::OnAskFullScreen(void)
 {
  ASSERT(mp_MainTabController->GetActiveController());

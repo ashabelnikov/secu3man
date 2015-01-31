@@ -311,6 +311,11 @@ void CMainFrame::setOnAppLogFormat(EventHandler i_OnFunction)
  m_OnAppLogFormat = i_OnFunction;
 }
 
+void CMainFrame::setOnCloseNotify(EventHandler i_OnFunction)
+{
+ m_OnCloseNotify = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -321,7 +326,11 @@ void CMainFrame::OnClose()
     result = false;
 
  if (result)
+ {
+  if (m_OnCloseNotify)
+   m_OnCloseNotify();   //notify controller about application is being closed
   CFrameWnd::OnClose();
+ }
 }
 
 void CMainFrame::OnAppAbout()

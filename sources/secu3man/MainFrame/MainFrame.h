@@ -69,6 +69,7 @@ class CMainFrame : public CFrameWnd
   void setOnPortDevArrived(EventHandler3 i_OnPortDevArrived);
   void setOnAppLogMark(EventHandler4 i_OnFunction);
   void setOnAppLogFormat(EventHandler i_OnFunction);
+  void setOnCloseNotify(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -119,6 +120,7 @@ private:
   EventHandler m_OnCreate;
   EventHandler3 m_OnPortDevArrived;
   EventHandler4 m_OnAppLogMark;
+  EventHandler m_OnCloseNotify;
 
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;

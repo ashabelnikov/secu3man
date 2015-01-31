@@ -48,6 +48,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
 
   virtual void StartDataCollection(void);
 
+  void OnCloseNotify();
+
   //Чтение всех необходимых данных после коннекта (конечный автомат)
   //возвращает true когда все данные прочитаны  
   virtual bool CollectData(const BYTE i_descriptor, const void* i_packet_data);

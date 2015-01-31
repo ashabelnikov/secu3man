@@ -134,7 +134,7 @@ BOOL CTablesDeskDlg::PreTranslateMessage(MSG* pMsg)
   if (!_tcscmp(name, _T("Edit")) && ::GetParent(pMsg->hwnd) == this->m_hWnd)
    ::SetFocus(pMsg->hwnd);
  }
-
+ 
  return Super::PreTranslateMessage(pMsg);
 }
 
@@ -327,6 +327,43 @@ void CTablesDeskDlg::SetRPMGrid(const float* values)
 {
  if (mp_ButtonsPanel.get())
   std::copy(values, values + 16, mp_ButtonsPanel->GetRPMGrid());
+}
+
+void CTablesDeskDlg::CloseAllCharts(void)
+{
+ HWND hwnd;
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
+ if (hwnd) ::DestroyWindow(hwnd);
+
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_VE);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFR);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_CRNK);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_WRMP);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_DEAD);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLR);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLC);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AETPS);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
+ if (hwnd) ::DestroyWindow(hwnd);
+
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
+ if (hwnd) ::DestroyWindow(hwnd);
 }
 
 //------------------------------------------------------------------------

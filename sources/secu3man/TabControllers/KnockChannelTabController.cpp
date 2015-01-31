@@ -328,6 +328,11 @@ bool CKnockChannelTabController::OnClose(void)
  return true;
 }
 
+void CKnockChannelTabController::OnCloseNotify(void)
+{
+  //empty
+}
+
 bool CKnockChannelTabController::OnAskFullScreen(void)
 {
  return false;

@@ -343,6 +343,11 @@ bool CDevDiagnostTabController::OnClose(void)
  return true;
 }
 
+void CDevDiagnostTabController::OnCloseNotify(void)
+{
+  //empty
+}
+
 bool CDevDiagnostTabController::OnAskFullScreen(void)
 {
  //not available in this mode

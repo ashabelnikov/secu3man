@@ -240,6 +240,11 @@ bool CParamMonTabController::OnClose(void)
  return true; //отвечаем что данная вкладка готова к закрытию приложения
 }
 
+void CParamMonTabController::OnCloseNotify(void)
+{
+  mp_tabcntr->OnCloseNotify();
+}
+
 bool CParamMonTabController::OnAskFullScreen(void)
 {
  return true; //отвечаем что полноэкранный режим для этой вкладки разрешен

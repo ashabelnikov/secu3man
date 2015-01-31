@@ -187,6 +187,11 @@ bool CLogPlayerTabController::OnClose(void)
  return true;
 }
 
+void CLogPlayerTabController::OnCloseNotify(void)
+{
+ //empty
+}
+
 bool CLogPlayerTabController::OnAskFullScreen(void)
 {
  return true;

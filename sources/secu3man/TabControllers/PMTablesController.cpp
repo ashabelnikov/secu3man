@@ -626,3 +626,9 @@ void CPMTablesController::OnTableDeskChangesTimer(void)
 {
  //todo
 }
+
+void CPMTablesController::OnCloseNotify()
+{
+ mp_view->CloseAllCharts();
+}
+

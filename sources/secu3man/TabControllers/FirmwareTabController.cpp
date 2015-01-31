@@ -834,6 +834,11 @@ bool CFirmwareTabController::OnClose(void)
  return CheckChangesAskAndSaveFirmware();
 }
 
+void CFirmwareTabController::OnCloseNotify(void)
+{
+  //empty
+}
+
 bool CFirmwareTabController::OnAskFullScreen(void)
 {
  return false;

@@ -47,6 +47,7 @@ class ITablesDeskView
   virtual void MakeChartsChildren(bool children) = 0;             //make charts children to "parameters and monitor" window
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index) = 0; //Set names of read-only and read/write tables
   virtual void SetRPMGrid(const float* values) = 0;               //Set RPM grid for horizontal axis of tables
+  virtual void CloseAllCharts(void) = 0;                          //close all charts' windows
 
   //events
   virtual void setOnMapChanged(EventWithCode OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц

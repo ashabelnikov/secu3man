@@ -56,6 +56,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   virtual void OnDeactivate(void);
 
   virtual bool OnClose(void);
+  virtual void OnCloseNotify(void);
   virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
   virtual bool OnAskChangeTab(void);
