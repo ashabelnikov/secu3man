@@ -264,6 +264,7 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT0, _T("UNI_OUT1"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
+ mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IAC_PWM, _T("IAC_PWM"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_ECF, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_ECF, true);
  mp_view->EnableInversion(FWDM::IOS_ECF, true);

@@ -207,7 +207,7 @@ class IOCORE_API CFirmwareDataMediator
    IOP_INJ_OUT1   =  56,     // INJ_OUT1    (output)
    IOP_INJ_OUT2   =  57,     // INJ_OUT2    (output)
    IOP_INJ_OUT3   =  58,     // INJ_OUT3    (output)
-// IOP_RESERVED20 =  59,     // Reserved    ()
+   IOP_IAC_PWM    =  59,     // Reserved    ()
 // IOP_RESERVED21 =  60,     // Reserved    ()
 // IOP_RESERVED22 =  61,     // Reserved    ()
 // IOP_RESERVED23 =  62,     // Reserved    ()
@@ -269,7 +269,7 @@ class IOCORE_API CFirmwareDataMediator
   //in case of changing of data layout.
   enum IORemVer
   {
-   IOV_V22 = 0x22            //V2.2
+   IOV_V23 = 0x23            //V2.3
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

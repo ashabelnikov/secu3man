@@ -32,6 +32,7 @@ const float TEMP_HYSTERESIS = 0.25f;
 BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnChangePdTemperVentOnThresholdEdit)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnChangePdTemperVentOffThresholdEdit)
+ ON_EN_CHANGE(IDC_PD_TEMPER_PWM_FRQ_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_VENT_PWM, OnPdTemperUseVentPwm)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_CURVE_MAP, OnPdTemperUseCurveMap)
@@ -49,6 +50,11 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_VENT_PWM, OnUpdateUseVentPwm)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_USE_CURVE_MAP, OnUpdateUseCurveMap)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_EDIT, OnUpdateUseVentPwm)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_SPIN, OnUpdateUseVentPwm)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_CAPTION, OnUpdateUseVentPwm)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_UNIT, OnUpdateUseVentPwm)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
@@ -58,12 +64,14 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 , m_use_curve_map_enabled(false)
 , m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_vent_pwmfrq_edit(CEditEx::MODE_INT, true)
 {
  m_params.vent_on = 95.0f;
  m_params.vent_off = 98.0f;
  m_params.tmp_use = 1;
  m_params.vent_pwm = 0;
  m_params.cts_use_map = 0;
+ m_params.vent_pwmfrq = 5000;
 }
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
@@ -81,9 +89,12 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_SPIN, m_vent_off_threshold_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_vent_off_threshold_edit);
  DDX_Control(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, m_vent_on_threshold_edit);
+ DDX_Control(pDX, IDC_PD_TEMPER_PWM_FRQ_SPIN, m_vent_pwmfrq_spin);
+ DDX_Control(pDX, IDC_PD_TEMPER_PWM_FRQ_EDIT, m_vent_pwmfrq_edit);
 
  m_vent_on_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, m_params.vent_on);
  m_vent_off_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_params.vent_off);
+ m_vent_pwmfrq_edit.DDX_Value(pDX, IDC_PD_TEMPER_PWM_FRQ_EDIT, m_params.vent_pwmfrq);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
@@ -97,7 +108,7 @@ void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CTemperPageDlg::OnUpdateVentOff(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_use_vent_pwm.GetCheck()!=BST_CHECKED);
+ pCmdUI->Enable(m_enabled && (!m_use_vent_pwm_enabled || m_use_vent_pwm.GetCheck()!=BST_CHECKED));
 }
 
 void CTemperPageDlg::OnUpdateUseVentPwm(CCmdUI* pCmdUI)
@@ -129,6 +140,12 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_vent_off_threshold_spin.SetRangeAndDelta(-10.0f,125.0f,0.2f);
  m_vent_off_threshold_edit.SetRange(-10.0f,125.0f);
 
+ m_vent_pwmfrq_spin.SetBuddy(&m_vent_pwmfrq_edit);
+ m_vent_pwmfrq_edit.SetLimitText(4);
+ m_vent_pwmfrq_edit.SetDecimalPlaces(4);
+ m_vent_pwmfrq_spin.SetRangeAndDelta(10, 5000, 1);
+ m_vent_pwmfrq_edit.SetRange(10, 5000);
+
  UpdateData(FALSE);
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -140,7 +157,6 @@ BOOL CTemperPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_spin, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
-
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -167,6 +183,12 @@ void CTemperPageDlg::OnChangePdTemperVentOffThresholdEdit()
  if (m_params.vent_off > m_params.vent_on - TEMP_HYSTERESIS)
   m_vent_on_threshold_spin.SetPos(m_params.vent_off + TEMP_HYSTERESIS);
  OnChangeNotify();
+}
+
+void CTemperPageDlg::OnChangeData()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
 void CTemperPageDlg::OnPdTemperUseTempSensor()

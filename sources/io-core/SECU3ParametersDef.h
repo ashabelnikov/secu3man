@@ -92,6 +92,7 @@ typedef struct
  _int   vent_off;                       // температура выключени€ вентил€тора
  _uchar vent_pwm;                       // control ventilator by using pwm
  _uchar cts_use_map;                    // Flag which indicates using of lookup table for coolant temperature sensor
+ _uint  vent_pwmfrq;                    // PWM frequency (value = 1/f * 524288)
 
  _int   map_adc_factor;
  _long  map_adc_correction;
@@ -179,7 +180,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[88];
+ _uchar reserved[86];
 
  _uint crc;                          //контрольна€ сумма данных этой структуры (дл€ проверки корректности данных после считывани€ из EEPROM)
 }params_t;

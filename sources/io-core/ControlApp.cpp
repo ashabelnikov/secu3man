@@ -776,7 +776,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
- if (size != (mp_pdp->isHex() ? 11 : 7))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 15 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
@@ -805,6 +805,11 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_off,true))
   return false;
  m_TemperPar.vent_off = ((float)vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ int vent_pwmfrq = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_pwmfrq))
+  return false;
+ m_TemperPar.vent_pwmfrq = MathHelpers::Round(1.0/(((double)vent_pwmfrq) / 524288.0));
 
  return true;
 }
@@ -2231,6 +2236,8 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
  mp_pdp->Bin16ToHex(vent_on, m_outgoing_packet);
  int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(vent_off, m_outgoing_packet);
+ int vent_pwmfrq = MathHelpers::Round((1.0/packet_data->vent_pwmfrq) * 524288.0);
+ mp_pdp->Bin16ToHex(vent_pwmfrq, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

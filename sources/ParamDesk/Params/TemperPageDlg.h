@@ -55,6 +55,7 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangePdTemperVentOnThresholdEdit();
   afx_msg void OnChangePdTemperVentOffThresholdEdit();
+  afx_msg void OnChangeData();
   afx_msg void OnPdTemperUseTempSensor();
   afx_msg void OnPdTemperUseVentPwm();
   afx_msg void OnPdTemperUseCurveMap();
@@ -74,9 +75,11 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_use_vent_pwm;
   CButton m_use_curve_map;
   CSpinButtonCtrlEx m_vent_on_threshold_spin;
+  CEditEx m_vent_on_threshold_edit;
   CSpinButtonCtrlEx m_vent_off_threshold_spin;
   CEditEx m_vent_off_threshold_edit;
-  CEditEx m_vent_on_threshold_edit;
+  CSpinButtonCtrlEx m_vent_pwmfrq_spin;
+  CEditEx m_vent_pwmfrq_edit;
     
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

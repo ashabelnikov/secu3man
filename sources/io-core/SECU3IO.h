@@ -157,6 +157,7 @@ namespace SECU3IO
   unsigned char cts_use_map;
   float  vent_on;
   float  vent_off;
+  int vent_pwmfrq;
  };
 
  struct ADCCompenPar

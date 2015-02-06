@@ -997,6 +997,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->cts_use_map = p_in->cts_use_map;
     p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->vent_pwmfrq = MathHelpers::Round((1.0/p_in->vent_pwmfrq) * 524288.0);
    }
    break;
   case CARBUR_PAR:
@@ -1252,6 +1253,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->cts_use_map = p_params->cts_use_map;
      p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->vent_pwmfrq = MathHelpers::Round(1.0/(((double)p_params->vent_pwmfrq) / 524288.0));
     }
     break;
    case CARBUR_PAR:
@@ -1985,7 +1987,7 @@ CFirmwareDataMediator::IORemVer CFirmwareDataMediator::GetIORemVersion(void) con
 {
  ASSERT(mp_cddata);
  if (!mp_cddata)
-  return IOV_V22; //error, return current version
+  return IOV_V23; //error, return current version
  return (IORemVer)mp_cddata->iorem.version;
 }
 
