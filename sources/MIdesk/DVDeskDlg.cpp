@@ -28,9 +28,15 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 
+static int ApplySign(int value, bool sign)
+{ 
+ return sign ? (int)((signed short)value) : value;
+}
+
 BEGIN_MESSAGE_MAP(CDVDeskDlg, Super)
  ON_WM_DESTROY()
  ON_COMMAND_RANGE(IDC_DV_BASE1_CHECK, IDC_DV_BASE4_CHECK, OnBaseCheck)
+ ON_WM_LBUTTONDBLCLK()
 END_MESSAGE_MAP()
 
 const UINT CDVDeskDlg::IDD = IDD_DBGVAR_DESK;
@@ -47,7 +53,9 @@ CDVDeskDlg::CDVDeskDlg(CWnd* pParent /*=NULL*/)
  for(size_t i = 0; i < VU_SIZE; ++i)
  {
   m_vu[i].var_value = 0;
+  m_vu[i].hex = true;   //hex is default
   m_vu[i].base_fmt = _T("0x%04X");
+  m_vu[i].sign = false; //unsigned is default
  }
 }
 
@@ -60,7 +68,10 @@ void CDVDeskDlg::DoDataExchange(CDataExchange* pDX)
   DDX_Control(pDX, IDC_DV_VAR1_VALUE + i, m_vu[i].var_field);
   DDX_Control(pDX, IDC_DV_VAR1_CAPTION + i, m_vu[i].var_caption);
   DDX_Control(pDX, IDC_DV_BASE1_CHECK + i, m_vu[i].base_check);
-  DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, m_vu[i].var_value, m_vu[i].base_fmt.c_str());
+  //When hex mode than always show value as unsigned, when dec mode than show value as signed or unsigned
+  //depending on m_vu[i].sign
+  int value = (m_vu[i].hex ? m_vu[i].var_value : ApplySign(m_vu[i].var_value, m_vu[i].sign));
+  DDX_Text_Fmt(pDX,IDC_DV_VAR1_VALUE + i, value, m_vu[i].base_fmt.c_str());
  }
 }
 
@@ -97,7 +108,23 @@ void CDVDeskDlg::OnBaseCheck(UINT nID)
  size_t index = nID - IDC_DV_BASE1_CHECK;
  bool checked = m_vu[index].base_check.GetCheck() == BST_CHECKED;
  m_vu[index].base_fmt = checked ? _T("%05d") : _T("0x%04X");
+ m_vu[index].hex = !checked;
  UpdateData(FALSE);
+}
+
+void CDVDeskDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
+{
+ CRect rc;
+ for(size_t i = 0; i < VU_SIZE; ++i)
+ {
+  m_vu[i].var_field.GetWindowRect(&rc);
+  this->ScreenToClient(&rc);
+  if (rc.PtInRect(point))
+  { //change signed/unsigned
+   m_vu[i].sign = m_vu[i].sign ? false : true; //toggle sign flag each double click
+   UpdateData(FALSE);
+  }
+ }
 }
 
 //разрешение/запрещение приборов

@@ -51,6 +51,7 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();    //deactivate
   afx_msg void OnBaseCheck(UINT nID);
+  afx_msg void OnLButtonDblClk(UINT nFlags, CPoint point);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -70,6 +71,8 @@ class AFX_EXT_CLASS CDVDeskDlg : public CModelessDialog, public IDVView
    CStatic var_field;
    CStatic var_caption;
    CButton base_check;
+   bool hex;
+   bool sign;
   }m_vu[VU_SIZE];
 };
 
