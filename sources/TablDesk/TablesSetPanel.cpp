@@ -443,6 +443,13 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
  }
  if (m_choke_map_chart_state)
   DLL::Chart2DUpdate(m_choke_map_wnd_handle, GetChokeOpMap(true), GetChokeOpMap(false));
+ if (m_ats_curve_map_chart_state)
+ {
+  DLL::Chart2DUpdate(m_ats_curve_map_wnd_handle, GetATSCurveMap(true), GetATSCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_ats_curve_map_wnd_handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
+ }
+ if (m_ats_aac_map_chart_state)
+  DLL::Chart2DUpdate(m_ats_aac_map_wnd_handle, GetATSAACMap(true), GetATSAACMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
