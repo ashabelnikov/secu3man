@@ -58,15 +58,15 @@ BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_CAPTION,OnUpdateCarburetorControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_EPM_ON_THRESHOLD_UNIT,OnUpdateCarburetorControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_SPIN_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_CAPTION_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_UNIT_G,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,OnUpdateCarburetorControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,OnUpdateCarburetorControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_SPIN_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_CAPTION_G,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_UNIT_G,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_DELAY_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CARBUR_SHUTOFF_DELAY_SPIN,OnUpdateControls)
@@ -203,13 +203,13 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  m_shutoff_lo_threshold_edit_g.SetLimitText(4);
  m_shutoff_lo_threshold_spin_g.SetBuddy(&m_shutoff_lo_threshold_edit_g);
- m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,7500,10);
- m_shutoff_lo_threshold_edit_g.SetRange(250,7500);
+ m_shutoff_lo_threshold_spin_g.SetRangeAndDelta(250,15000,10);
+ m_shutoff_lo_threshold_edit_g.SetRange(250,15000);
 
  m_shutoff_hi_threshold_edit_g.SetLimitText(4);
  m_shutoff_hi_threshold_spin_g.SetBuddy(&m_shutoff_hi_threshold_edit_g);
- m_shutoff_hi_threshold_spin_g.SetRangeAndDelta(250,7500,10);
- m_shutoff_hi_threshold_edit_g.SetRange(250,7500);
+ m_shutoff_hi_threshold_spin_g.SetRangeAndDelta(250,15000,10);
+ m_shutoff_hi_threshold_edit_g.SetRange(250,15000);
 
  m_shutoff_delay_spin.SetBuddy(&m_shutoff_delay_edit);
  m_shutoff_delay_edit.SetLimitText(4);
