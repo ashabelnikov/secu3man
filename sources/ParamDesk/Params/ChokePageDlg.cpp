@@ -89,6 +89,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 , m_rpmreg_if_edit(CEditEx::MODE_FLOAT, true)
 , m_choketst_enabled(false)
 , m_chokemanpos_enabled(false)
+, m_lock_ui_update(false) //UI update is not locked
 {
  m_params.sm_steps = 700;
  m_params.testing = 0;
@@ -314,7 +315,13 @@ void CChokePageDlg::SetValues(const SECU3IO::ChokePar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::ChokePar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ if (!m_lock_ui_update)
+  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CChokePageDlg::LockUIUpdate(bool lock)
+{
+ m_lock_ui_update = lock;
 }
 
 void CChokePageDlg::EnableFuelInjection(bool enable)

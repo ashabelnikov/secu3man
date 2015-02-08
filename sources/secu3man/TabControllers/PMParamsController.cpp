@@ -180,7 +180,9 @@ void CPMParamsController::OnParamDeskChangesTimer(void)
   if (view_descriptor == CHOKE_PAR)
   {
    packet_data.m_ChokePar.manual_delta = 0; //reset accumulated value
+   mp_view->LockUIUpdate(view_descriptor, true);
    mp_view->SetValues(view_descriptor, &packet_data);
+   mp_view->LockUIUpdate(view_descriptor, false);
   }
 
   m_parameters_changed = false; //обработали событие - сбрасываем признак

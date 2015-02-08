@@ -58,6 +58,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
 
   virtual bool SetValues(BYTE i_descriptor, const void* i_values);
   virtual bool GetValues(BYTE i_descriptor, void* o_values);
+  virtual bool LockUIUpdate(BYTE i_descriptor, bool lock);
 
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_names);
   virtual const std::vector<_TSTRING>& GetFunctionsNames(void);

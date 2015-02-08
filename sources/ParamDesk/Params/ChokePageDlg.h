@@ -46,6 +46,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void GetValues(SECU3IO::ChokePar* o_values);
   void SetValues(const SECU3IO::ChokePar* i_values);
+  void LockUIUpdate(bool lock);
 
   void EnableChokeTesting(bool enable);
   void EnableChokeManPos(bool enable);
@@ -71,6 +72,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_choketst_enabled;
   bool m_chokemanpos_enabled;
   bool m_fuel_injection;
+  bool m_lock_ui_update;
 
   CSpinButtonCtrlEx m_sm_steps_num_spin;
   CEditEx m_sm_steps_num_edit;

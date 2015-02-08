@@ -465,6 +465,21 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
  return true;
 }
 
+bool CParamDeskDlg::LockUIUpdate(BYTE i_descriptor, bool lock)
+{
+ using namespace SECU3IO;
+ switch(i_descriptor)
+ {
+  case CHOKE_PAR:
+    m_pChokePageDlg->LockUIUpdate(lock);
+   break;
+  default:
+   return false; //unknown or unsupported descriptor
+ }//switch
+
+ return true;
+}
+
 //Sets names of tables' sets
 void CParamDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_names)
 {

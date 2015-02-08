@@ -34,6 +34,7 @@ class IParamDeskView : public IDeskView
  public:
   virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //загнать данные в представление
   virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //извлечь данные из представления
+  virtual bool LockUIUpdate(BYTE i_descriptor, bool lock) = 0;
   virtual void ShowSaveButton(bool i_show) = 0;
 
   //установка/получение имен семейств характеристик (для вкладки FunSet...)
