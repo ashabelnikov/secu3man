@@ -204,9 +204,6 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_STROBE, _T("STROBE"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
- mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN, _T("IGN"));
- mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
- mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
  mp_view->AddItem(FWDM::IOS_ADD_IO1, FWDM::IOP_SM_DIR, _T("SM_DIR"));
@@ -227,9 +224,6 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_HALL_OUT, _T("HALL_OUT"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_STROBE, _T("STROBE"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_PWRRELAY, _T("PWRRELAY"));
- mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN, _T("IGN"));
- mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
- mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT3, _T("IGN_OUT3"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_IGN_OUT4, _T("IGN_OUT4"));
  mp_view->AddItem(FWDM::IOS_ADD_IO2, FWDM::IOP_SM_DIR, _T("SM_DIR"));
