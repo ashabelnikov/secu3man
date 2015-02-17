@@ -420,6 +420,7 @@ void CFWIORemappingController::_PrepareLogic(void)
 
  //REF_S
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_IGN, _T("IGN"));
+ mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_PS, _T("PS"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
@@ -450,6 +451,9 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
    continue; //3
   if (((FWDM::IOSid)s == FWDM::IOS_IGN_OUT4) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IGN_OUT4)))
    continue; //4
+  //hack which allows remap PS input to other input slots
+  if (((FWDM::IOSid)s == FWDM::IOS_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_PS)))
+   continue; //PS
   std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
   if (it != m_defValMap.end())
    attachList.insert(std::make_pair(it->second, (FWDM::IOSid)s));
@@ -662,6 +666,7 @@ void CFWIORemappingController::_EnableInversionItems(void)
  std::map<FWDM::IOSid, bool> enableFlags;
  enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT3, false));
  enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT4, false));
+ enableFlags.insert(std::make_pair(FWDM::IOS_PS, false));
  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
  {  
   DWORD plug = mp_fwdm->GetIOPlug(FWDM::IOX_INIT, (FWDM::IOPid)p);
