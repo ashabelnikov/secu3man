@@ -120,6 +120,8 @@ void CFWIORemappingController::_PrepareLogic(void)
  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
   m_invFlags.insert(std::make_pair((FWDM::IOSid)s, false));
 
+ FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
+
  m_defValMap.clear();
  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1));
  m_defValMap.insert(std::make_pair(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2));
@@ -139,6 +141,7 @@ void CFWIORemappingController::_PrepareLogic(void)
  m_defValMap.insert(std::make_pair(FWDM::IOS_DE, FWDM::IOP_DE));
  m_defValMap.insert(std::make_pair(FWDM::IOS_REF_S, FWDM::IOP_REF_S));
  m_defValMap.insert(std::make_pair(FWDM::IOS_GAS_V, FWDM::IOP_GAS_V));
+ m_defValMap.insert(std::make_pair(FWDM::IOS_CKPS, FWDM::IOP_CKPS));
 
  //Fill view with values
  mp_view->ResetContent();
@@ -328,11 +331,14 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_FE, true); 
  mp_view->EnableInversion(FWDM::IOS_FE, true);
+
  //PS input:
  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_IGN, _T("IGN"));
  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
+ if (iov >= FWDM::IOV_V24)
+  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_CKPS, _T("CKPS"));        //<--CKPS remapping appeared in v2.4
  mp_view->AddItem(FWDM::IOS_PS, FWDM::IOP_PS, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_PS, true); 
  mp_view->EnableInversion(FWDM::IOS_PS, true);
@@ -421,6 +427,8 @@ void CFWIORemappingController::_PrepareLogic(void)
  //REF_S
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_IGN, _T("IGN"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_PS, _T("PS"));
+ if (iov >= FWDM::IOV_V24)
+  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_CKPS, _T("CKPS"));     //<--CKPS remapping appeared in v2.4
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_BC_INPUT, _T("BC_INPUT"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_MAPSEL0, _T("MAPSEL0"));
  mp_view->AddItem(FWDM::IOS_REF_S, FWDM::IOP_SPDSENS, _T("SPD_SENS"));
@@ -435,6 +443,11 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_GAS_V, FWDM::IOP_GAS_V, _T("NONE"));
  mp_view->EnableItem(FWDM::IOS_GAS_V, true); 
  mp_view->EnableInversion(FWDM::IOS_GAS_V, true);
+
+ //CKPS
+ mp_view->AddItem(FWDM::IOS_CKPS, FWDM::IOP_CKPS, _T("NONE"));
+ mp_view->EnableItem(FWDM::IOS_CKPS, (iov >= FWDM::IOV_V24));        //<--CKPS remapping appeared in v2.4
+ mp_view->EnableInversion(FWDM::IOS_CKPS, (iov >= FWDM::IOV_V24));
 }
 
 //Note that this function uses default inversion values from m_invFlags map.
@@ -548,12 +561,12 @@ void CFWIORemappingController::_AttachPlug(FWDM::IOPid iopId, FWDM::IOSid iosId,
 
 bool CFWIORemappingController::_IsIOPInput(FWDM::IOPid iopId) const
 {
- return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS || iopId == FWDM::IOP_REF_S || iopId == FWDM::IOP_GAS_V || iopId == FWDM::IOP_LAMBDA || iopId == FWDM::IOP_AIR_TEMP);
+ return (iopId == FWDM::IOP_PS || iopId == FWDM::IOP_ADD_I1 || iopId == FWDM::IOP_ADD_I2 || iopId == FWDM::IOP_IGN || iopId == FWDM::IOP_BC_INPUT || iopId == FWDM::IOP_MAPSEL0 || iopId == FWDM::IOP_SPDSENS || iopId == FWDM::IOP_REF_S || iopId == FWDM::IOP_GAS_V || iopId == FWDM::IOP_LAMBDA || iopId == FWDM::IOP_AIR_TEMP || iopId == FWDM::IOP_CKPS);
 }
 
 bool CFWIORemappingController::_IsIOSInput(FWDM::IOSid iosId) const
 {
- return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2 || iosId == FWDM::IOS_REF_S || iosId == FWDM::IOS_GAS_V);
+ return (iosId == FWDM::IOS_PS || iosId == FWDM::IOS_ADD_I1 || iosId == FWDM::IOS_ADD_I2 || iosId == FWDM::IOS_REF_S || iosId == FWDM::IOS_GAS_V || iosId == FWDM::IOS_CKPS);
 }
 
 void CFWIORemappingController::_SetInvFlag(FWDM::IOSid iosId, bool inv)
@@ -706,6 +719,7 @@ void CFWIORemappingController::_DisplayPlugs(void)
  names.insert(std::make_pair(FWDM::IOS_DE, _T("DE")));
  names.insert(std::make_pair(FWDM::IOS_REF_S, _T("REF_S")));
  names.insert(std::make_pair(FWDM::IOS_GAS_V, _T("GAS_V")));
+ names.insert(std::make_pair(FWDM::IOS_CKPS, _T("CKPS")));
  CString out(_T("      [INIT]            [DATA]\n"));
  for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)
  {

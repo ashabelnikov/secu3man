@@ -40,13 +40,13 @@ const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 
 //See also FirmwareDataMediator.h
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
-const UINT IOCaptionEnd = IDC_IO_REMAPPING_REF_S_CAPTION;
+const UINT IOCaptionEnd = IDC_IO_REMAPPING_CKPS_CAPTION;
 const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
-const UINT IOComboboxEnd = IDC_IO_REMAPPING_REF_S_COMBOBOX;
+const UINT IOComboboxEnd = IDC_IO_REMAPPING_CKPS_COMBOBOX;
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
-const UINT IOCheckboxEnd = IDC_IO_REMAPPING_REF_S_CHECKBOX;
+const UINT IOCheckboxEnd = IDC_IO_REMAPPING_CKPS_CHECKBOX;
 const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
-const UINT IOTTStrEnd = IDS_IO_REMAPPING_REF_S_TT;
+const UINT IOTTStrEnd = IDS_IO_REMAPPING_CKPS_TT;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
@@ -123,7 +123,7 @@ BOOL CIORemappingDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.28f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.32f));
 
  UpdateDialogControls(this, TRUE);
  UpdateData(FALSE);

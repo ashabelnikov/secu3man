@@ -1116,7 +1116,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->ckps_merge_ign_outs = p_in->ckps_merge_ign_outs;
     p_params->ckps_cogs_num = p_in->ckps_cogs_num;
     p_params->ckps_miss_num = p_in->ckps_miss_num;
-    p_params->hall_flags = (p_params->hall_flags & 0xFE) | ((p_in->use_ckps_for_hall != 0) << 0);
+    p_params->hall_flags = 0; //not used now
     p_params->hall_wnd_width = MathHelpers::Round(p_in->hall_wnd_width * ANGLE_MULTIPLIER);
    }
    break;
@@ -1387,7 +1387,6 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->ckps_merge_ign_outs = p_params->ckps_merge_ign_outs;
      p_out->ckps_cogs_num = p_params->ckps_cogs_num;
      p_out->ckps_miss_num = p_params->ckps_miss_num;
-     p_out->use_ckps_for_hall = p_params->hall_flags & (1 << 0);
      p_out->hall_wnd_width = ((float)p_params->hall_wnd_width) / ANGLE_MULTIPLIER;
     }
     break;

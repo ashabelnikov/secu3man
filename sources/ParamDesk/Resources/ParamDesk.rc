@@ -377,9 +377,6 @@ BEGIN
     CONTROL         "Отрицат.",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,14,48,10
     CONTROL         "Полож.",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,28,41,10
     GROUPBOX        "Фронт ДНО",IDC_PD_REF_S_FRONT_GROUPBOX,87,3,59,39
-    CONTROL         "Использовать для ДХ вход ДПКВ",
-                    IDC_PD_CKPS_USE_CKPS_INPUT,"Button",BS_AUTOCHECKBOX |
-                    BS_MULTILINE | WS_TABSTOP,16,43,148,12
     CONTROL         "Трамблерная раздача искры",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX |
                     BS_MULTILINE | WS_TABSTOP,16,54,148,12
@@ -842,6 +839,12 @@ BEGIN
     CONTROL         "Инверсия",
                     IDC_IO_REMAPPING_GAS_V_CHECKBOX,"Button",BS_AUTOCHECKBOX |
                     BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,231,48,12
+    RTEXT           "CKPS",IDC_IO_REMAPPING_CKPS_CAPTION,0,245,50,13
+    COMBOBOX        IDC_IO_REMAPPING_CKPS_COMBOBOX,53,244,55,100,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Инверсия",
+                    IDC_IO_REMAPPING_CKPS_CHECKBOX,"Button",BS_AUTOCHECKBOX |
+                    BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,244,48,12
 END
 
 IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
@@ -955,6 +958,7 @@ BEGIN
     IDS_IO_REMAPPING_ADD_I2_TT   "Вход аналоговый 2"
     IDS_IO_REMAPPING_REF_S_TT    "Вход ДНО"
     IDS_IO_REMAPPING_GAS_V_TT    "Вход газового клапана"
+    IDS_IO_REMAPPING_CKPS_TT     "Вход ДПКВ"
 END
 
 STRINGTABLE
@@ -1461,9 +1465,6 @@ BEGIN
     CONTROL         "Falling",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,14,48,10
     CONTROL         "Rising",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,28,41,10
     GROUPBOX        "REF_S edge",IDC_PD_REF_S_FRONT_GROUPBOX,87,3,59,39
-    CONTROL         "Use CKPS input for Hall sensor",
-                    IDC_PD_CKPS_USE_CKPS_INPUT,"Button",BS_AUTOCHECKBOX |
-                    BS_MULTILINE | WS_TABSTOP,16,43,148,12
     CONTROL         "Merge signals to single output",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,16,54,148,12
@@ -1926,6 +1927,12 @@ BEGIN
     CONTROL         "Invert",
                     IDC_IO_REMAPPING_GAS_V_CHECKBOX,"Button",BS_AUTOCHECKBOX |
                     BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,231,48,12
+    RTEXT           "CKPS",IDC_IO_REMAPPING_CKPS_CAPTION,0,245,50,13
+    COMBOBOX        IDC_IO_REMAPPING_CKPS_COMBOBOX,53,244,55,100,
+                    CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Invert",
+                    IDC_IO_REMAPPING_CKPS_CHECKBOX,"Button",BS_AUTOCHECKBOX |
+                    BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,244,48,12
 END
 
 IDD_MAP_CALC DIALOGEX 0, 0, 211, 140
@@ -2050,6 +2057,7 @@ BEGIN
     IDS_IO_REMAPPING_ADD_I2_TT   "Analog input 2"
     IDS_IO_REMAPPING_REF_S_TT    "Referense sensor input (VR)"
     IDS_IO_REMAPPING_GAS_V_TT    "Gas valve input"
+    IDS_IO_REMAPPING_CKPS_TT     "CKP sensor input"
 END
 
 STRINGTABLE
@@ -2188,7 +2196,7 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,3,0,0
+  PRODUCTVERSION    4,4,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN

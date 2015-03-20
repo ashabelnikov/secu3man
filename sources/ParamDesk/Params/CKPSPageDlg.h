@@ -72,7 +72,6 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateHallWndWidth(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCylNumber(CCmdUI* pCmdUI);
   afx_msg void OnUpdateMergeOutputs(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateUseCKPSInput(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCKPSFront(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 

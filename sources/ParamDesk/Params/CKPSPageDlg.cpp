@@ -41,7 +41,6 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
 
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeMergeOutputs)
- ON_BN_CLICKED(IDC_PD_CKPS_USE_CKPS_INPUT, OnChangeUseCKPSInput)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
  ON_BN_CLICKED(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio2)
@@ -76,7 +75,6 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_UNIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeOutputs)
- ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_USE_CKPS_INPUT, OnUpdateUseCKPSInput)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
@@ -100,7 +98,6 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_cogs_num = 60;
  m_params.ckps_miss_num = 2;
  m_params.ckps_engine_cyl = 4;
- m_params.use_ckps_for_hall = 0;
  m_params.hall_wnd_width = 60.0f;
 }
 
@@ -150,7 +147,6 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
  DDX_Radio_UCHAR(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
  DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
- DDX_Check_UCHAR(pDX, IDC_PD_CKPS_USE_CKPS_INPUT, m_params.use_ckps_for_hall);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -164,12 +160,12 @@ void CCKPSPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CCKPSPageDlg::OnUpdateCKPSFront(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && (m_ckps_enabled || m_params.use_ckps_for_hall));
+ pCmdUI->Enable(m_enabled/* && (m_ckps_enabled)*/);
 }
 
 void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && m_params.ckps_miss_num == 0 && m_ckps_enabled);
+ pCmdUI->Enable(m_enabled/* && m_params.ckps_miss_num == 0 && m_ckps_enabled*/);
 }
 
 void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
@@ -186,11 +182,6 @@ void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateMergeOutputs(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_inpmrg_enabled && m_ckps_enabled);
-}
-
-void CCKPSPageDlg::OnUpdateUseCKPSInput(CCmdUI* pCmdUI)
-{
- pCmdUI->Enable(m_enabled && !m_ckps_enabled); //enabled only for Hall sensor
 }
 
 void CCKPSPageDlg::OnUpdateHallWndWidth(CCmdUI* pCmdUI)
@@ -313,13 +304,6 @@ void CCKPSPageDlg::OnClickedPdNegFrontRadio2()
 {//REF_S
  m_ref_s_posfront_radio.SetCheck(0);
  UpdateData();
- OnChangeNotify();
-}
-
-void CCKPSPageDlg::OnChangeUseCKPSInput()
-{
- UpdateData();
- UpdateDialogControls(this, TRUE);
  OnChangeNotify();
 }
 

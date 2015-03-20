@@ -152,21 +152,21 @@ class IOCORE_API CFirmwareDataMediator
    IOP_IGN_OUT2   =   1,     // IGN_OUT2    (output)
    IOP_IGN_OUT3   =   2,     // IGN_OUT3    (output)
    IOP_IGN_OUT4   =   3,     // IGN_OUT4    (output)
-   IOP_ADD_IO1    =   4,     // ADD_IO1     (output)  (applicable only in SECU-3T)
-   IOP_ADD_IO2    =   5,     // ADD_IO2     (output)  (applicable only in SECU-3T)
+   IOP_ADD_IO1    =   4,     // ADD_IO1     (output)
+   IOP_ADD_IO2    =   5,     // ADD_IO2     (output)
    IOP_ECF        =   6,     // ECF         (output)
    IOP_ST_BLOCK   =   7,     // ST_BLOCK    (output)
    IOP_IE         =   8,     // IE          (output)
    IOP_FE         =   9,     // FE          (output)
    IOP_PS         =  10,     // PS          (input)
-   IOP_ADD_I1     =  11,     // ADD_IO1     (input)   (applicable only in SECU-3T)
-   IOP_ADD_I2     =  12,     // ADD_IO2     (input)   (applicable only in SECU-3T)
+   IOP_ADD_I1     =  11,     // ADD_IO1     (input)
+   IOP_ADD_I2     =  12,     // ADD_IO2     (input)
    IOP_CE         =  13,     // CE          (output)
    IOP_BL         =  14,     // Bootloader  (output)
    IOP_DE         =  15,     // Def. EEPROM (output)
    IOP_GAS_V      =  16,     // GAS_V       (input)
-   IOP_REF_S      =  17,     // REF_S       (input)   (applicable only in SECU-3T)
-   IOP_RESERVED1  =  18,     // Reserved    ()
+   IOP_REF_S      =  17,     // REF_S       (input)
+   IOP_CKPS       =  18,     // CKPS        (input)
    IOP_RESERVED2  =  19,     // Reserved    ()
    IOP_RESERVED3  =  20,     // Reserved    ()
    IOP_RESERVED4  =  21,     // Reserved    ()
@@ -228,8 +228,8 @@ class IOCORE_API CFirmwareDataMediator
    IOS_IGN_OUT2   =   1,     // IGN_OUT2
    IOS_IGN_OUT3   =   2,     // IGN_OUT3
    IOS_IGN_OUT4   =   3,     // IGN_OUT4
-   IOS_ADD_IO1    =   4,     // ADD_IO1              (applicable only in SECU-3T)
-   IOS_ADD_IO2    =   5,     // ADD_IO2              (applicable only in SECU-3T)
+   IOS_ADD_IO1    =   4,     // ADD_IO1
+   IOS_ADD_IO2    =   5,     // ADD_IO2
    IOS_ECF        =   6,     // ECF
    IOS_ST_BLOCK   =   7,     // ST_BLOCK
    IOS_IE         =   8,     // IE
@@ -241,8 +241,8 @@ class IOCORE_API CFirmwareDataMediator
    IOS_BL         =  14,     // Bootloader  (output)
    IOS_DE         =  15,     // Def. EEPROM (output)
    IOS_GAS_V      =  16,     // GAS_V       (input)
-   IOS_REF_S      =  17,     // REF_S       (input)  (applicable only in SECU-3T)
-// IOS_RESERVED1  =  18,     // Reserved    ()
+   IOS_REF_S      =  17,     // REF_S       (input)
+   IOS_CKPS       =  18,     // CKPS        (input)
 // IOS_RESERVED2  =  19,     // Reserved    ()
 // IOS_RESERVED3  =  20,     // Reserved    ()
 // IOS_RESERVED4  =  21,     // Reserved    ()
@@ -269,7 +269,8 @@ class IOCORE_API CFirmwareDataMediator
   //in case of changing of data layout.
   enum IORemVer
   {
-   IOV_V23 = 0x23            //V2.3
+   IOV_V23 = 0x23,           //V2.3
+   IOV_V24 = 0x24            //V2.4  CKPS remapping added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
