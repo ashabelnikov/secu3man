@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file LogPlayerTabController.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <shlwapi.h>
 #include "Resources/resource.h"

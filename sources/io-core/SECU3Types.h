@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SECU3Types.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _SECU3_TYPES_H_
 #define _SECU3_TYPES_H_
 

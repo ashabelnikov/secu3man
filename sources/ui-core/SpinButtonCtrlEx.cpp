@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SpinButtonCtrlEx.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <math.h>
 #include "SpinButtonCtrlEx.h"

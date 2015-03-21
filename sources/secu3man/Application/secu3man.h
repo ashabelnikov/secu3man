@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file secu3man.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #ifndef __AFXWIN_H__

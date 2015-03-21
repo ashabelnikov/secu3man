@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MapIds.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 enum EMapTypes

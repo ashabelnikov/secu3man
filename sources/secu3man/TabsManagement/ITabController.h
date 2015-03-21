@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ITabController.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 //через этот интерфейс главный контроллер управляет контроллерами вкладок (Tab control)

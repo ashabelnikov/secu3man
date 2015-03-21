@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file DLLLinkedFunctions.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "common/UnicodeSupport.h"
 #include "DLLLinkedFunctions.h"

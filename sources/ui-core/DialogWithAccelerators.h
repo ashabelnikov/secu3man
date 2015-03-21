@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file DialogWithAccelerators.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 //  ласс добавл€ет акселераторы (из главного окна)

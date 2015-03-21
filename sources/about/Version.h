@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Version.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "about_api.h"

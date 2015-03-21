@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file HeaderCtrlEx.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "StdAfx.h"
 #include "HeaderCtrlEx.h"
 

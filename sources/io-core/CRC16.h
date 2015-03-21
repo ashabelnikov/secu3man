@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file CRC16.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifdef CRC_EXPORTS
 #define CRC_API __declspec(dllexport)
 #else

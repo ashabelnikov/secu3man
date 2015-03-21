@@ -19,8 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
-// TablDesk.cpp : Defines the initialization routines for the DLL.
-//
+/** \file TablDesk.cpp
+ * \author Alexey A. Shabelnikov
+ * Defines the initialization routines for the DLL.
+ */
 
 #include "stdafx.h"
 #include <afxdllx.h>

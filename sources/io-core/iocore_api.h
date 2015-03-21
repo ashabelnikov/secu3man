@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file iocore_api.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #if defined(IOCORE_EXPORTS)

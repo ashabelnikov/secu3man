@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file secu-3about.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "secu-3about.h"

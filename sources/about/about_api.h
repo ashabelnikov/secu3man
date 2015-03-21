@@ -19,6 +19,11 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file about_api.h
+ * \author Alexey A. Shabelnikov
+ * Library import/export macros
+ */
+
 #pragma once
 
 #ifdef ABOUT_EXPORTS

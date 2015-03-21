@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file StarterPageDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include <string>

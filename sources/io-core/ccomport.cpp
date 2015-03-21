@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ccomport.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "ccomport.h"
 #include <stdio.h>

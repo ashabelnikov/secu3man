@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MITemperature.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "MITemperature.h"

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MIDwellAngle.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "MIDwellAngle.h"

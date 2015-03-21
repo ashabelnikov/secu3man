@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file GridModeEditorDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "common/Dll.h"
@@ -724,4 +728,3 @@ bool CGridModeEditorDlg::_ValidateItem(CEditExCustomKeys* pItem)
  pItem->Invalidate();
  return !pItem->m_error;
 }
-

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file BootLoaderAdapter.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "BootLoader.h"

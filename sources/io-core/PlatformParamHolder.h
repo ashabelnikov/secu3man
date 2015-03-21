@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file PlatformParamHolder.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "iocore_api.h"
 #include <vector>
 

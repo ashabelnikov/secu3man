@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file BootLoader.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "BootLoader.h"
 #include "ccomport.h"

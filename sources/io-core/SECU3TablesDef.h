@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SECU3TablesDef.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _SECU3_TABLES_DEF_H_
 #define _SECU3_TABLES_DEF_H_
 

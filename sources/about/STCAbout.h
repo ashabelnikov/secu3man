@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file STCAbout.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance, LPCTSTR bmpName, LPCTSTR rgnName,

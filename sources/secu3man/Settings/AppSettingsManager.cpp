@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file AppSettingsManager.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "AppSettingsDlg.h"
 #include "AppSettingsController.h"

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file UpdatableDialog.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "UpdatableDialog.h"
 

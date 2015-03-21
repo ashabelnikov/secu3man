@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MIShutoffValve.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "MIShutoffValve.h"
 #include "MIHelpers.h"

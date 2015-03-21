@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file NumericConv.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vector>
 #include "iocore_api.h"
 #include "types.h"

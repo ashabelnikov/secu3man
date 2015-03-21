@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file CommunicationManager.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "CommunicationManager.h"
 #include "io-core/CComPort.h"

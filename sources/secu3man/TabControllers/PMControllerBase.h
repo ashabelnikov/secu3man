@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file PMControllerBase.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 //базовый класс для классов представляющих состояние конечного автомата

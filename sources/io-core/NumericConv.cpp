@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file NumericConv.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "NumericConv.h"
 #include "ctype.h"

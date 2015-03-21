@@ -20,6 +20,9 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file OScopeCtrl.h
+ */
+
 #pragma once
 
 #include <deque>

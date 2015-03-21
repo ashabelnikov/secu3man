@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file DwellCalcDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <float.h>
 #include <math.h>

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ITabControllerEvent.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 class AFX_EXT_CLASS ITabControllerEvent

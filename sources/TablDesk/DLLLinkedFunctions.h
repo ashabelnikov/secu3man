@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file DLLLinkedFunctions.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #ifdef DLLLF_EXPORTS

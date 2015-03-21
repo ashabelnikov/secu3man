@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TablesDeskDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "TablesDeskDlg.h"
@@ -136,7 +140,7 @@ BOOL CTablesDeskDlg::PreTranslateMessage(MSG* pMsg)
   if (!_tcscmp(name, _T("Edit")) && ::GetParent(pMsg->hwnd) == this->m_hWnd)
    ::SetFocus(pMsg->hwnd);
  }*/
- 
+
  return Super::PreTranslateMessage(pMsg);
 }
 

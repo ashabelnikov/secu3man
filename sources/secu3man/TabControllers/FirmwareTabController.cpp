@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file FirmwareTabController.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <algorithm>
 #include <limits>

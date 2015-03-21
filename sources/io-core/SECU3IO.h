@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SECU3IO.h
+ * \author Alexey A. Shabelnikov
+ */
+
 //ѕредставление данных передаваемых между SECU и менеджером. —труктуры данных представлены без прив€зки
 //к конкретной платформе - они абстрагированы
 #pragma once

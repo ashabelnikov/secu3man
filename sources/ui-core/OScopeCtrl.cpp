@@ -20,6 +20,9 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file OScopeCtrl.cpp
+ */
+
 #include "stdafx.h"
 #include "math.h"
 #include "OScopeCtrl.h"

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Version.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "version.h"
 #include <vector>
@@ -28,9 +32,9 @@ bool GetVersionInfo(LPCTSTR filename, int &major, int &minor)
 {
  DWORD   verBufferSize;
  TCHAR   filenameBuff[2048+1];
- 
+
  if (!filename)
- { 
+ {
   DWORD size = GetModuleFileName(DLL::GetModuleHandle(), filenameBuff, 2048);
   if (!size || size==ERROR_INSUFFICIENT_BUFFER)
    return false;

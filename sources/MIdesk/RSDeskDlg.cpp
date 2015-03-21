@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file RSDeskDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "RSDeskDlg.h"

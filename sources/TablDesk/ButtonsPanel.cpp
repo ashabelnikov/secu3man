@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ButtonsPanel.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "ButtonsPanel.h"

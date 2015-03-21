@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file RPMGridEditDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <afxpriv.h>
 #include <float.h>

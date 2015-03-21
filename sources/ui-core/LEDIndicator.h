@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file LEDIndicator.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 /////////////////////////////////////////////////////////////////////////////

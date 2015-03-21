@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SpinButtonCtrlEx.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 // Внимание! control должет быть со стилем UDS_AUTOBUDDY и без стиля UDS_SETBUDDYINT !

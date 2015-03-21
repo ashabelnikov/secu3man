@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file fnt_helpers.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #ifdef FNT_HELPERS_EXPORTS

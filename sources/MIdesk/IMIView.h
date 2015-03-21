@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file IMIView.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 namespace SECU3IO

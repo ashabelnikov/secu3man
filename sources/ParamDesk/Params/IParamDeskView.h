@@ -19,21 +19,25 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file IParamDeskView.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
 #include "IDeskView.h"
 
-//через этот интерфейс нужно общатс€ с панелью параметров (представлением)
-//ќсобенность: Ћюбой из следующих методов интерфейса может быть вызван независимо
-//от того - видна вкладка или нет (кроме SetCurSel()). “ип данных и соответственно тип вкладки определ€етс€ дескриптором
+//This interface intended for communication with panel of parameters.
+//Each of these methods can be called separatelly and even if panel is not visible (except SetCurSel()).
+//Type of data and type of tab is described by descriptor.
 
 class IParamDeskView : public IDeskView
 {
  public:
-  virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //загнать данные в представление
-  virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //извлечь данные из представлени€
+  virtual bool SetValues(BYTE i_descriptor, const void* i_values) = 0;  //put data into specified tab
+  virtual bool GetValues(BYTE i_descriptor, void* o_values) = 0;        //get data from specified tab
   virtual bool LockUIUpdate(BYTE i_descriptor, bool lock) = 0;
   virtual void ShowSaveButton(bool i_show) = 0;
 

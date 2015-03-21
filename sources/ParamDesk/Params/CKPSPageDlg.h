@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file CKPSPageDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include <vector>

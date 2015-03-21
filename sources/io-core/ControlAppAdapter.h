@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ControlAppAdapter.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "ControlApp.h"

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file IAppSettingsDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include <vector>

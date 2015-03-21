@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file fnt_helpers.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "common/DPIAware.h"
 #include "fnt_helpers.h"

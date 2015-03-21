@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Label.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "common/unicodesupport.h"

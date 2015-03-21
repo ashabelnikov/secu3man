@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file types.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef BYTE
 typedef unsigned char BYTE;
 #endif

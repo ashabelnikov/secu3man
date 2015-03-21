@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TDContextMenuManager.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "TDContextMenuManager.h"

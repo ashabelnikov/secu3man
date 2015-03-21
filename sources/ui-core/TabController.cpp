@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TabController.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "TabController.h"
 #include "TabDialog.h"

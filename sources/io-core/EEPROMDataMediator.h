@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file EEPROMDataMediator.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "iocore_api.h"

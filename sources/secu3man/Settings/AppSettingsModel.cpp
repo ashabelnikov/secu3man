@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file AppSettingsModel.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "AppSettingsModel.h"
 

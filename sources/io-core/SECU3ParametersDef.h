@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file SECU3ParametersDef.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _SECU3_PARAMETERS_DEF_H_
 #define _SECU3_PARAMETERS_DEF_H_
 

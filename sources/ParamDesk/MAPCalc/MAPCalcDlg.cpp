@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MAPCalcDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <float.h>
 #include <math.h>
@@ -458,7 +462,7 @@ void CMAPCalcDlg::Enable2ndptCtrls(bool i_enable)
 
 void CMAPCalcDlg::setOnKnowGradientCheck(const EventHandler& OnFunction)
 { m_OnKnowGradientCheck = OnFunction; }
-  
+
 void CMAPCalcDlg::setOnActivate(const EventHandler& OnFunction)
 { m_OnActivate = OnFunction; }
 

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file DevDiagnostTabController.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include <map>

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ufcodes.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _UFCODES_H_
 #define _UFCODES_H_
 

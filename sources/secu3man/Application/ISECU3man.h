@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ISECU3man.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 class CAppSettingsManager;

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TablesSetPanel.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "common/MathHelpers.h"
@@ -247,7 +251,7 @@ void __cdecl CTablesSetPanel::OnChangeCTSXAxisEdit(void* i_param, int i_type, fl
   ASSERT(0); //what the fuck?
   return;
  }
- 
+
  _this->m_cts_curve_x_axis_limits[i_type] = i_value;
 
  //allow controller to detect changes

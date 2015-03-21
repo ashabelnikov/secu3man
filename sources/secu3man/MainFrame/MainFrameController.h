@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MainFrameController.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "io-core/ControlAppAdapter.h"

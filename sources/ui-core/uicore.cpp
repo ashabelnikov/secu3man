@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file uicore.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <afxdllx.h>
 

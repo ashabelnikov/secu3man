@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ce_errors.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _CE_ERRORS_H_
 #define _CE_ERRORS_H_
 

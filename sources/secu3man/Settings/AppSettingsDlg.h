@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file AppSettingsDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "common/unicodesupport.h"

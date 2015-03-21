@@ -20,6 +20,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file AnalogMeter.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include <math.h>
 #include "AnalogMeter.h"

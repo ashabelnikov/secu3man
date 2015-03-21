@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file EEPROMDataMediator.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "CRC16.h"
 #include "EEPROMDataMediator.h"

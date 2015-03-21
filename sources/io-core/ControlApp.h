@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ControlApp.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vector>
 #include <string>
 #include "iocore_api.h"
@@ -29,7 +33,7 @@
 #define _CONTROLAPP_
 
 
-#define ADC_DISCRETE        0.0025f   //Вольт
+#define ADC_DISCRETE       0.0025f   //Вольт
 
 #define ANGLE_MULTIPLIER   32.0f     //коэффициент масштабирования углов поворота коленвала
 

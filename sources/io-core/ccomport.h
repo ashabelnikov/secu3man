@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ccomport.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <string>
 #include "iocore_api.h"
 #include "common/unicodesupport.h"

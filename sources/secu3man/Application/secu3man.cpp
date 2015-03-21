@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file secu3man.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "secu3man.h"
 #include "Resources/resource.h"
@@ -51,7 +55,7 @@ void SetThreadLocalSettings(LANGID language, LANGID subLanguage)
    HMODULE hLibrary = LoadLibrary(_T("kernel32"));
    if (hLibrary)
     pLangProc = (SetThreadUILanguage_Addr)GetProcAddress(hLibrary, "SetThreadUILanguage");
-  } 
+  }
   if(pLangProc)
   { // Vista or later
    pLangProc(MAKELANGID(language, subLanguage));
@@ -93,7 +97,7 @@ bool CheckDLLCompatibility(void)
   bool result = GetVersionInfo((*it).c_str(), major, minor);
   if (!result || 0==major || exe_major != major || exe_minor!=minor)
    incompat.push_back(*it);
- } 
+ }
  if (incompat.size())
  {
   _TSTRING str(MLL::GetString(IDS_DLL_MAY_BE_INCOMPAT));

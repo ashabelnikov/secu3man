@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TemperPageDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "io-core/SECU3IO.h"

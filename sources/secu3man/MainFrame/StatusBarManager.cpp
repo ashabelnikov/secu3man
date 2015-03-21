@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file StatusBarManager.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "common/DPIAware.h"

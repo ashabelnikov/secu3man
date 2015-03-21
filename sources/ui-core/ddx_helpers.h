@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ddx_helpers.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #ifdef DDX_HELPERS_EXPORTS

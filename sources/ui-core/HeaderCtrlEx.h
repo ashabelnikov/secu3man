@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file HeaderCtrlEx.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 class AFX_EXT_CLASS CHeaderCtrlEx : public CHeaderCtrl

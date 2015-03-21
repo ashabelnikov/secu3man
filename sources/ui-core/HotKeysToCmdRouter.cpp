@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file HotKeysToCmdRouter.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "HotKeysToCmdRouter.h"
 #include "HotKeysManager.h"

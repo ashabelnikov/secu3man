@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file EditEx.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 class AFX_EXT_CLASS CEditEx : public CEdit

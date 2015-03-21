@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file ISettingsData.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "io-core/PlatformParamHolder.h"  //only for EECUPlatform enum

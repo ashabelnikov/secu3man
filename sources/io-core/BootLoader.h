@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file BootLoader.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vector>
 #include "iocore_api.h"
 #include "PlatformParamHolder.h"

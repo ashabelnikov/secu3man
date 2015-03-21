@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file IRSView.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 namespace SECU3IO

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Label.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "Label.h"
 
