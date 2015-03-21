@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file EEPROMImpExpController.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "resource.h"
 #include "EEPROMImpExpController.h"

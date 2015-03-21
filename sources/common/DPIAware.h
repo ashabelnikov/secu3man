@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file DPIAware.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 //Class for working with DPI-aware issues

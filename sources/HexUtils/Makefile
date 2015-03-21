@@ -1,5 +1,5 @@
 # SECU-3  - An open source, free engine control unit
-# http://secu-3.org
+# Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 
 # compiler
 CC      = cl

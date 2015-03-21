@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file MathHelpers.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 namespace MathHelpers

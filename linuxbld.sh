@@ -1,5 +1,6 @@
 #!/bin/sh
 # SECU-3  - An open source, free engine control unit
+# Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 # http://secu-3.org
 
 # Script for building of SECU-3 Manager under Linux.

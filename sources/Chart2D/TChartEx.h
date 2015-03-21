@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TChartEx.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _CHARTEX_H_
 #define _CHARTEX_H_
 

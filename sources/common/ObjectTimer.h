@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file ObjectTimer.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include <map>

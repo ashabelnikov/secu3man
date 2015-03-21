@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Chart3D.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <map>
 #include <vector>
 #include <vcl.h>

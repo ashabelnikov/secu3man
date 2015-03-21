@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file LangLayer.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "UnicodeSupport.h"

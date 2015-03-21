@@ -1,3 +1,5 @@
+// SECU-3  - An open source, free engine control unit
+//
 // Resource header file for Chart3D DLL unit.
 // Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 

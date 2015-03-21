@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file MPSZImpExpController.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #include "io-core/FirmwareMapsDataHolder.h"

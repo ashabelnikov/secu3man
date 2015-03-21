@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Form3D.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vcl.h>
 #pragma hdrstop
 

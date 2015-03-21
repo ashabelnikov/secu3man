@@ -1,3 +1,5 @@
+# SECU-3  - An open source, free engine control unit
+#
 # Makefile for building of Chart2D DLL. Borland C Bulder is required.
 # Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 

@@ -20,6 +20,10 @@
           Microprocessor systems - design & programming.
 */
 
+/** \file HexUtils.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 
 BOOL APIENTRY DllMain(HINSTANCE i_hInstance, DWORD dwReason, LPVOID lpReserved)

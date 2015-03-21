@@ -1,4 +1,5 @@
 # SECU-3  - An open source, free engine control unit
+# Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 # http://secu-3.org
 
 # This Makefile builds the whole SECU-3 Manager project

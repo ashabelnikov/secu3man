@@ -20,6 +20,10 @@
           Microprocessor systems - design & programming.
 */
 
+/** \file readhex.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 #ifdef HEXUTILS_EXPORTS

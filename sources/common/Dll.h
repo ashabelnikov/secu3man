@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file Dll.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
 namespace DLL {

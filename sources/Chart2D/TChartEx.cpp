@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TChartEx.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vcl\vcl.h>
 #pragma hdrstop
 

@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Form2D.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include <vcl.h>
 #include <stdio.h>
 #include <tchar.h>

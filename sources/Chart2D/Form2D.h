@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Form2D.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _FORM2D_H_
 #define _FORM2D_H_
 //---------------------------------------------------------------------------

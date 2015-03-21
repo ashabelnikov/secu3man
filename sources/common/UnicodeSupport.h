@@ -20,6 +20,10 @@
              Microprocessor systems - design & programming.
 */
 
+/** \file UnicodeSupport.h
+ * \author Alexey A. Shabelnikov
+ */
+
 //IF You use _UNICODE:
 //In the Output category of the Link tab in the Project Settings dialog box,
 //set the Entry Point Symbol to wWinMainCRTStartup.

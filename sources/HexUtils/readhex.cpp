@@ -20,6 +20,10 @@
           Microprocessor systems - design & programming.
 */
 
+/** \file readhex.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "readhex.h"
 

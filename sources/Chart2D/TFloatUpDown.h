@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file TFloatUpDown.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #ifndef _FLOATUPDOWN_H_
 #define _FLOATUPDOWN_H_
 
