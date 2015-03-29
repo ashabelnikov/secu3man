@@ -471,6 +471,9 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
   //hack which allows remap PS input to other input slots
   if (((FWDM::IOSid)s == FWDM::IOS_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_PS)))
    continue; //PS
+  //hack which allows remap CKPS input to other input slots
+  if (((FWDM::IOSid)s == FWDM::IOS_CKPS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_CKPS)))
+   continue; //CKPS
   std::map<FWDM::IOSid, FWDM::IOPid>::const_iterator it = m_defValMap.find((FWDM::IOSid)s);
   if (it != m_defValMap.end())
    attachList.insert(std::make_pair(it->second, (FWDM::IOSid)s));
