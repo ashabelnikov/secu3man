@@ -181,10 +181,12 @@ typedef struct
  _uchar  inj_ae_tpsdot_thrd;            // TPS %/sec threshold, max rate is 255%/sec
  _uchar  inj_ae_coldacc_mult;           // Cold acceleration multiplier (-30°C), (value - 1.0) * 128
 
+ _uint   gd_steps;                      // Number of steps of gas dosator stepper motor
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[86];
+ _uchar reserved[84];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
