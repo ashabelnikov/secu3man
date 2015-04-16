@@ -191,8 +191,8 @@ BOOL CChokePageDlg::OnInitDialog()
  m_strt_add_tmp_edit.SetLimitText(6);
  m_strt_add_tmp_spin.SetBuddy(&m_strt_add_tmp_edit);
  m_strt_add_tmp_edit.SetDecimalPlaces(2);
- m_strt_add_tmp_spin.SetRangeAndDelta(-10.0f, 50.0f, 0.25f);
- m_strt_add_tmp_edit.SetRange(-10.0f, 50.0f);
+ m_strt_add_tmp_spin.SetRangeAndDelta(-10.0f, 70.0f, 0.25f);
+ m_strt_add_tmp_edit.SetRange(-10.0f, 70.0f);
 
  m_rpmreg_1stpt_edit.SetLimitText(4);
  m_rpmreg_1stpt_spin.SetBuddy(&m_rpmreg_1stpt_edit);
