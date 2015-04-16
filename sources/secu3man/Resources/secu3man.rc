@@ -349,7 +349,7 @@ BEGIN
     IDS_DEV_DIAG_START_OUTAUTO_TST"Запустить автоматическое тестирование выходов"
     IDS_DEV_DIAG_STOP_OUTAUTO_TST "Остановить автоматическое тестировнаие выходов"
     IDS_DEV_DIAG_ENABLE_BLDE_TST "Разрешить тестирование выходов BL, DE"
-    IDS_LOG_FORMAT_DESC " чч:мм:сс.сотые\n Обороты(мин-1)\n УОЗ(°КВ)\n ДАД(кПа)\n Напр.борт.сети(В)\n ДТОЖ(°C)\n Уров.сигн.ДД(В)\n Корр.УОЗ по ДД(°КВ)\n Расход возд.(1-16)\n Конкев. ДЗ(0,1)\n Газ. клап.(0,1)\n ЭПХХ клап.(0,1)\n ЭМР клап.(0,1)\n Вентилятор(0,1)\n Блокир.стартера(0,1)\n ДПДЗ(%)\n Вход ADD_I1(В)\n Вход ADD_I2(В)\n Положение ВЗ(%)\n Скорость(км/ч)\n Расстояние(км)\n ДТВ(°C)\n УОЗ из стартовой табл.(°КВ)\n УОЗ из ХХ табл.(°КВ)\n УОЗ из рабоч. табл.(°КВ)\n Корр.УОЗ по ДТОЖ(°КВ)\n Корр.УОЗ по ДТВ(°КВ)\n Корр.УОЗ от РХХ(°КВ)\n Корр.УОЗ октан.(°КВ)\n Корр.впрыска по ДК\n Время впрыска(мс)\n Метки лога\n Ошибки СЕ"
+    IDS_LOG_FORMAT_DESC " чч:мм:сс.сотые\n Обороты(мин-1)\n УОЗ(°КВ)\n ДАД(кПа)\n Напр.борт.сети(В)\n ДТОЖ(°C)\n Уров.сигн.ДД(В)\n Корр.УОЗ по ДД(°КВ)\n Расход возд.(1-16)\n Конкев. ДЗ(0,1)\n Газ. клап.(0,1)\n ЭПХХ клап.(0,1)\n ЭМР клап.(0,1)\n Вентилятор(0,1)\n Блокир.стартера(0,1)\n ДПДЗ(%)\n Вход ADD_I1(В)\n Вход ADD_I2(В)\n Положение ВЗ(%)\n Положение ГД(%)\n Скорость(км/ч)\n Расстояние(км)\n ДТВ(°C)\n УОЗ из стартовой табл.(°КВ)\n УОЗ из ХХ табл.(°КВ)\n УОЗ из рабоч. табл.(°КВ)\n Корр.УОЗ по ДТОЖ(°КВ)\n Корр.УОЗ по ДТВ(°КВ)\n Корр.УОЗ от РХХ(°КВ)\n Корр.УОЗ октан.(°КВ)\n Корр.впрыска по ДК\n Время впрыска(мс)\n Метки лога\n Ошибки СЕ"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -983,7 +983,7 @@ BEGIN
     IDS_DEV_DIAG_START_OUTAUTO_TST "Start automatic testing of outputs"
     IDS_DEV_DIAG_STOP_OUTAUTO_TST "Stop automatic testing of outputs"
     IDS_DEV_DIAG_ENABLE_BLDE_TST "Enable testing of BL, DE outputs"
-    IDS_LOG_FORMAT_DESC " hh:mm:ss.hundreds\n RPM(min-1)\n Adv.angle(°CS)\n MAP(kPa)\n Board voltage(V)\n CTS(°C)\n Knock sig.level(V)\n Knock retard(°CS)\n Air flow(1-16)\n Throttle lim.switch(0,1)\n Gas valve(0,1)\n Idle cutoff valve(0,1)\n Power valve(0,1)\n Cooling fan(0,1)\n Starter blocking(0,1)\n TPS(%)\n ADD_I1 Input(V)\n ADD_I2 Input(V)\n Choke position(%)\n Vehicle speed(km/h)\n Pass.Distance(km)\n IAT sensor(°C)\n Adv.angle from start map(°CS)\n Adv.angle from idle map(°CS)\n Adv.angle from work map(°CS)\n Adv.angle corr.from CTS(°CS)\n Adv.angle corr.from IAT(°CS)\n Adv.angle corr.from idle reg.(°CS)\n Octane correction(°CS)\n EGO corr.\n Injector PW(ms)\n Log marks\n CE errors"
+    IDS_LOG_FORMAT_DESC " hh:mm:ss.hundreds\n RPM(min-1)\n Adv.angle(°CS)\n MAP(kPa)\n Board voltage(V)\n CTS(°C)\n Knock sig.level(V)\n Knock retard(°CS)\n Air flow(1-16)\n Throttle lim.switch(0,1)\n Gas valve(0,1)\n Idle cutoff valve(0,1)\n Power valve(0,1)\n Cooling fan(0,1)\n Starter blocking(0,1)\n TPS(%)\n ADD_I1 Input(V)\n ADD_I2 Input(V)\n Choke position(%)\n Gas dosator position(%)\n Vehicle speed(km/h)\n Pass.Distance(km)\n IAT sensor(°C)\n Adv.angle from start map(°CS)\n Adv.angle from idle map(°CS)\n Adv.angle from work map(°CS)\n Adv.angle corr.from CTS(°CS)\n Adv.angle corr.from IAT(°CS)\n Adv.angle corr.from idle reg.(°CS)\n Octane correction(°CS)\n EGO corr.\n Injector PW(ms)\n Log marks\n CE errors"
 END
 
 STRINGTABLE DISCARDABLE 

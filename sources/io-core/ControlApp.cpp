@@ -267,7 +267,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 98 : 49))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 100 : 50))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -360,6 +360,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_pos))
   return false;
  m_SensorDat.choke_pos = ((float)choke_pos) / CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //gas dosator position
+ unsigned char gasdose_pos = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gasdose_pos))
+  return false;
+ m_SensorDat.gasdose_pos = ((float)gasdose_pos) / GD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  //Vehicle speed
  int speed = 0;

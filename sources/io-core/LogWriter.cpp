@@ -31,7 +31,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%7.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%01d%c %%s\r\n";
+const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%01d%c %%s\r\n";
 
 namespace {
 void wordToString(WORD value, char* str)
@@ -97,6 +97,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->add_i1,
                         p_sensors->add_i2,
                         p_sensors->choke_pos,
+                        p_sensors->gasdose_pos,
                         p_sensors->speed,
                         p_sensors->distance,
                         p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic nubmer indicates that IAT is not used
@@ -169,7 +170,7 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogWriter::InjectMarks(int marks)
