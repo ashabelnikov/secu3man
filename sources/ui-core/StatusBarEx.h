@@ -19,43 +19,54 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file StatusBarManager.h
+/** \file StatusBarEx.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
+#include <vector>
 
-#include <memory>
-
-class CStatusBarEx;
-
-//Менеджер строки статуса
-class CStatusBarManager
+class AFX_EXT_CLASS CStatusBarEx : public CStatusBar
 {
+  typedef CStatusBar Super;
  public:
-  CStatusBarManager();
-  virtual ~CStatusBarManager();
 
-  bool Create(CWnd* pParentWnd);
-  void AddContent(void);
+  class PaneCtrlInfo
+  {
+   public:
+    PaneCtrlInfo();
 
-  void SetConnectionState(int i_State);
-  void SetInformationText(const CString& i_text);
+    CWnd* m_hWnd;
+    int m_nPaneID;
+    BOOL m_bAutoDel;
+  };
 
-  void ShowProgressBar(bool show);
-  void SetProgressRange(int nLower, int nUpper);
-  void SetProgressPos(int nPos);
-  void SetLoggerState(int i_state);
+  class Pane
+  {
+   public:
+    Pane();
+    Pane(const Pane& right);
+    Pane& operator=(const Pane& right);
 
-  enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3 };
+    int  cxText;
+    UINT nID;
+    UINT nStyle;
+    UINT nFlags;
+    CString strText;
+  };
 
-  enum { LOG_STATE_WRITING, LOG_STATE_STOPPED};
+  ~CStatusBarEx();
+  PaneCtrlInfo * GetControl(int nPaneID);
+  BOOL AddControl(CWnd * pWnd, int nPaneID, BOOL bAutoDel = TRUE);
+  void SetPaneWidth(int index, int Width);
+  BOOL AddIndicator(int position, UINT pnID);
 
  protected:
-  CWnd* m_pParentWnd;
-  std::auto_ptr<CStatusBarEx> mp_wndStatusBar;
-  HICON   m_ConnIcons[3];
-  HICON   m_LogWrIcon;
-  CString m_ConnStrings[3];
-  int m_CurrentConnectionState;
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  DECLARE_MESSAGE_MAP()
+
+ private:
+  void _MoveControls();
+  BOOL _GetPane(int nIndex, Pane& xfxpane);
+  std::vector<PaneCtrlInfo*> m_pans;
 };

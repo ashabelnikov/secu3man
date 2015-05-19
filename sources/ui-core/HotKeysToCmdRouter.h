@@ -25,14 +25,14 @@
 
 #pragma once
 
-#include "WndSubclasser.h"
+#include "WindowSubClasser.h"
 #include "../common/unicodesupport.h"
 #include <map>
 
 class HotKeysManager;
 
 //Внимание! Объект должен создаваться только с использованием heap!
-class AFX_EXT_CLASS CHotKeysToCmdRouter : private CWndSubclasser
+class AFX_EXT_CLASS CHotKeysToCmdRouter : private CWindowSubClasser
 {
  public:
   CHotKeysToCmdRouter();

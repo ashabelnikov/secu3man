@@ -1,3 +1,5 @@
+#pragma once
+
 /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
@@ -19,43 +21,31 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file StatusBarManager.h
+/** \file WindowSubClasser.h
  * \author Alexey A. Shabelnikov
  */
 
-#pragma once
-
-#include <memory>
-
-class CStatusBarEx;
-
-//Менеджер строки статуса
-class CStatusBarManager
+class AFX_EXT_CLASS CWindowSubClasser
 {
  public:
-  CStatusBarManager();
-  virtual ~CStatusBarManager();
+  CWindowSubClasser();
 
-  bool Create(CWnd* pParentWnd);
-  void AddContent(void);
+  virtual ~CWindowSubClasser(void);
 
-  void SetConnectionState(int i_State);
-  void SetInformationText(const CString& i_text);
+  //Subclass
+  bool Subclass(HWND hWnd);
 
-  void ShowProgressBar(bool show);
-  void SetProgressRange(int nLower, int nUpper);
-  void SetProgressPos(int nPos);
-  void SetLoggerState(int i_state);
+  //Unsubclass
+  bool Unsubclass();
 
-  enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3 };
-
-  enum { LOG_STATE_WRITING, LOG_STATE_STOPPED};
+ public:
+  static LRESULT CallWndProcSub(LPVOID p_node);
 
  protected:
-  CWnd* m_pParentWnd;
-  std::auto_ptr<CStatusBarEx> mp_wndStatusBar;
-  HICON   m_ConnIcons[3];
-  HICON   m_LogWrIcon;
-  CString m_ConnStrings[3];
-  int m_CurrentConnectionState;
+  virtual LRESULT WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam);
+  HWND m_hwnd;
+
+ private:
+  LPVOID mp_node;
+  bool m_release;
 };

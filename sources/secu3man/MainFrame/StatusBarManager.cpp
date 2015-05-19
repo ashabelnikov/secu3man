@@ -27,8 +27,8 @@
 #include "Resources/resource.h"
 #include "common/DPIAware.h"
 #include "StatusBarManager.h"
-#include "ui-core/MPCLogoPane.h"
-#include "ui-core/MPCStatusBar.h"
+#include "ui-core/TextPane.h"
+#include "ui-core/StatusBarEx.h"
 
 static UINT indicators[] =
 {
@@ -42,7 +42,7 @@ CStatusBarManager::CStatusBarManager()
 : m_pParentWnd(NULL)
 , m_CurrentConnectionState(STATE_OFFLINE)
 , m_LogWrIcon(NULL)
-, mp_wndStatusBar(new MPCStatusBar())
+, mp_wndStatusBar(new CStatusBarEx())
 {
  for(int i = 0; i < 3; i++)
  {
@@ -98,10 +98,10 @@ void CStatusBarManager::AddContent(void)
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_LOGO);
  mp_wndStatusBar->SetPaneWidth(idx,60);
  mp_wndStatusBar->SetPaneStyle(idx, mp_wndStatusBar->GetPaneStyle(idx) | SBPS_NOBORDERS );
- MPCLogoPane* pLogo = new MPCLogoPane;
- pLogo->Create(MLL::LoadString(IDS_STATUS_BAR_LOGO),WS_CHILD|WS_VISIBLE,mp_wndStatusBar.get(),ID_MSB_INDICATOR_LOGO);
- pLogo->SetLogoFont(_T("Arial"), 18);
- mp_wndStatusBar->AddControl(pLogo,ID_MSB_INDICATOR_LOGO);
+ CTextPane* pLogo = new CTextPane;
+ pLogo->Create(MLL::GetString(IDS_STATUS_BAR_LOGO), WS_CHILD|WS_VISIBLE, mp_wndStatusBar.get(), ID_MSB_INDICATOR_LOGO);
+ pLogo->SetPaneFont(_T("Arial"), 18);
+ mp_wndStatusBar->AddControl(pLogo, ID_MSB_INDICATOR_LOGO);
 
  //информационное поле (используем ID_SEPARATOR)
  idx = mp_wndStatusBar->CommandToIndex(ID_SEPARATOR);
@@ -183,7 +183,7 @@ void CStatusBarManager::SetConnectionState(int i_State)
 //показывает/прячет ProgressCtrl
 void CStatusBarManager::ShowProgressBar(bool show)
 {
- MPCStatusBarPaneControlInfo* info = mp_wndStatusBar->GetPanControl(ID_MSB_INDICATOR_PROGRESS);
+ CStatusBarEx::PaneCtrlInfo* info = mp_wndStatusBar->GetControl(ID_MSB_INDICATOR_PROGRESS);
  ASSERT(info);
  int nCmdShow = ((show) ? SW_SHOW : SW_HIDE);
  info->m_hWnd->ShowWindow(nCmdShow);
@@ -197,7 +197,7 @@ void CStatusBarManager::ShowProgressBar(bool show)
 //устанавливает диапазон для ProgressCtrl
 void CStatusBarManager::SetProgressRange(int nLower, int nUpper)
 {
- MPCStatusBarPaneControlInfo* info = mp_wndStatusBar->GetPanControl(ID_MSB_INDICATOR_PROGRESS);
+ CStatusBarEx::PaneCtrlInfo* info = mp_wndStatusBar->GetControl(ID_MSB_INDICATOR_PROGRESS);
  ASSERT(info);
  ((CProgressCtrl*)info->m_hWnd)->SetRange32(nLower, nUpper);
 }
@@ -205,7 +205,7 @@ void CStatusBarManager::SetProgressRange(int nLower, int nUpper)
 //устанавливает текущее значение для ProgressCtrl и текстовое значение
 void CStatusBarManager::SetProgressPos(int nPos)
 {
- MPCStatusBarPaneControlInfo* info = mp_wndStatusBar->GetPanControl(ID_MSB_INDICATOR_PROGRESS);
+ CStatusBarEx::PaneCtrlInfo* info = mp_wndStatusBar->GetControl(ID_MSB_INDICATOR_PROGRESS);
  ASSERT(info);
  CProgressCtrl* pProgress = static_cast<CProgressCtrl*>(info->m_hWnd);
  pProgress->SetPos(nPos);

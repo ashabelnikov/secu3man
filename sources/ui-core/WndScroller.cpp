@@ -68,7 +68,7 @@ bool CWndScroller::Close(void)
 {
  bool result = true;
 
- if (!Clear()) //detach window
+ if (!Unsubclass()) //detach window
   result = false;
 
  mp_origWnd = NULL;
@@ -185,7 +185,7 @@ bool CWndScroller::_OnMouseWheel(UINT nFlags, short zDelta, CPoint pt)
 LRESULT CWndScroller::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
  if (lParam) //Do nothing if it is not standard scroll bar
-  return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
+  return CWindowSubClasser::WndProcSub(uMsg, wParam, lParam);
 
  switch(uMsg)
  {
@@ -206,7 +206,7 @@ LRESULT CWndScroller::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
    break;
 
   default:
-   return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
+   return CWindowSubClasser::WndProcSub(uMsg, wParam, lParam);
  }
  return 0;
 }

@@ -24,9 +24,9 @@
  */
 
 #pragma once
-#include "WndSubclasser.h"
+#include "WindowSubClasser.h"
 
-class AFX_EXT_CLASS CWndScroller : private CWndSubclasser
+class AFX_EXT_CLASS CWndScroller : private CWindowSubClasser
 {
  public:
   //Note: this object must be allocated on heap!

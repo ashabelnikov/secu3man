@@ -13,10 +13,10 @@ SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.l
 # linker flags and directives
 LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/hiscctrl.dll /IMPLIB:../../libraries/hiscctrl.lib hiscctrl.res
 # source files
-SOURCES = StdAfx.cpp sources/ChartAxis.cpp sources/ChartAxisLabel.cpp sources/ChartBarSerie.cpp \
+SOURCES = StdAfx.cpp sources/ChartAxis.cpp sources/ChartAxisLabel.cpp \
   sources/ChartCtrl.cpp sources/ChartGradient.cpp sources/ChartGrid.cpp sources/ChartLegend.cpp \
   sources/ChartLineSerie.cpp sources/ChartObject.cpp sources/ChartPointsSerie.cpp sources/ChartScrollBar.cpp \
-  sources/ChartSerie.cpp sources/ChartSurfaceSerie.cpp sources/ChartTitle.cpp
+  sources/ChartSerie.cpp sources/ChartTitle.cpp
 
 # DLL building
 all: hiscctrl

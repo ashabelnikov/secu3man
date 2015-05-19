@@ -24,7 +24,6 @@ set(HEADERS
   StdAfx.h
   sources/ChartAxis.h
   sources/ChartAxisLabel.h
-  sources/ChartBarSerie.h
   sources/ChartCtrl.h
   sources/ChartGradient.h
   sources/ChartGrid.h
@@ -34,7 +33,6 @@ set(HEADERS
   sources/ChartPointsSerie.h
   sources/ChartScrollBar.h
   sources/ChartSerie.h
-  sources/ChartSurfaceSerie.h
   sources/ChartTitle.h
   )
 
@@ -42,7 +40,6 @@ set(SOURCES
   StdAfx.cpp
   sources/ChartAxis.cpp
   sources/ChartAxisLabel.cpp
-  sources/ChartBarSerie.cpp
   sources/ChartCtrl.cpp
   sources/ChartGradient.cpp
   sources/ChartGrid.cpp
@@ -52,7 +49,6 @@ set(SOURCES
   sources/ChartPointsSerie.cpp
   sources/ChartScrollBar.cpp
   sources/ChartSerie.cpp
-  sources/ChartSurfaceSerie.cpp
   sources/ChartTitle.cpp
   hiscctrl.rc
   )

@@ -37,18 +37,18 @@ set(HEADERS
   ITabControllerEvent.h
   Label.h
   LEDIndicator.h
-  MPCLogoPane.h
-  MPCStatusBar.h
   OScopeCtrl.h
   ProgressCtrlEx.h
   SpinButtonctrlEx.h
+  StatusBarEx.h
   StdAfx.h
   TabController.h
   TabDialog.h
+  TextPane.h
   ToolTipCtrlEx.h
   UpdatableDialog.h
   WndScroller.h
-  WndSubclasser.h
+  WindowSubClasser.h
   XBrowseForFolder.h
   )
 
@@ -65,18 +65,18 @@ set(SOURCES
   ITabControllerEvent.cpp
   Label.cpp
   LEDIndicator.cpp
-  MPCLogoPane.cpp
-  MPCStatusBar.cpp
   OScopeCtrl.cpp
   ProgressCtrlEx.cpp
   SpinButtonctrlEx.cpp
+  StatusBarEx.cpp
   StdAfx.cpp
   TabController.cpp
   TabDialog.cpp
+  TextPane.cpp
   ToolTipCtrlEx.cpp
   UpdatableDialog.cpp
   WndScroller.cpp
-  WndSubclasser.cpp
+  WindowSubClasser.cpp
   XBrowseForFolder.cpp
   uicore.cpp
   uicore.rc

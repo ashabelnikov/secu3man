@@ -19,43 +19,32 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file StatusBarManager.h
+/** \file TextPane.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-#include <memory>
+#include "common/unicodesupport.h"
 
-class CStatusBarEx;
-
-//Менеджер строки статуса
-class CStatusBarManager
+class AFX_EXT_CLASS CTextPane : public CWnd
 {
+  typedef CWnd Super;
+
  public:
-  CStatusBarManager();
-  virtual ~CStatusBarManager();
 
-  bool Create(CWnd* pParentWnd);
-  void AddContent(void);
+  CTextPane();
 
-  void SetConnectionState(int i_State);
-  void SetInformationText(const CString& i_text);
+  virtual BOOL Create(const _TSTRING& text, DWORD dwStyle, CWnd * pParent, UINT nID);
 
-  void ShowProgressBar(bool show);
-  void SetProgressRange(int nLower, int nUpper);
-  void SetProgressPos(int nPos);
-  void SetLoggerState(int i_state);
+  void SetPaneText(const _TSTRING& test);
+  
+  void SetPaneFont(const _TSTRING& name, int nHeight = 18, int nWeight = FW_BOLD, BYTE bItalic = TRUE, BYTE bUnderline = FALSE);
 
-  enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3 };
+  afx_msg void OnPaint();
+  DECLARE_MESSAGE_MAP()
 
-  enum { LOG_STATE_WRITING, LOG_STATE_STOPPED};
-
- protected:
-  CWnd* m_pParentWnd;
-  std::auto_ptr<CStatusBarEx> mp_wndStatusBar;
-  HICON   m_ConnIcons[3];
-  HICON   m_LogWrIcon;
-  CString m_ConnStrings[3];
-  int m_CurrentConnectionState;
+ private:
+  CFont m_font;
+  _TSTRING m_text;
 };

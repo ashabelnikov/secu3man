@@ -54,8 +54,8 @@
 #include "ChartSerie.h"
 #include "ChartLineSerie.h"
 #include "ChartPointsSerie.h"
-#include "ChartSurfaceSerie.h"
-#include "ChartBarSerie.h"
+//#include "ChartSurfaceSerie.h"
+//#include "ChartBarSerie.h"
 #include "ChartGradient.h"
 
 #define CHARTCTRL_CLASSNAME    _T("ChartCtrl")  // Window class name
@@ -409,13 +409,13 @@ CChartSerie* CChartCtrl::AddSerie(int Type)
   pNewSeries = new CChartPointsSerie(this);
   break;
 
- case CChartSerie::stSurfaceSerie:
+/* case CChartSerie::stSurfaceSerie:
   pNewSeries = new CChartSurfaceSerie(this);
-  break;
+  break;*/
 
- case CChartSerie::stBarSerie:
+/* case CChartSerie::stBarSerie:
   pNewSeries = new CChartBarSerie(this);
-  break;
+  break;*/
 
  default:
   pNewSeries = NULL;

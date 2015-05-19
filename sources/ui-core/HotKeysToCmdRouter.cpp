@@ -49,7 +49,7 @@ bool CHotKeysToCmdRouter::Close(void)
 {
  bool result = true;
 
- if (!Clear()) //отсоединяемся от окна
+ if (!Unsubclass()) //отсоединяемся от окна
   result = false;
 
  //удаляем все зарегистрированные горячие клавиши.
@@ -195,5 +195,5 @@ LRESULT CHotKeysToCmdRouter::WndProcSub(UINT uMsg, WPARAM wParam, LPARAM lParam)
    break;
  }
 
- return CWndSubclasser::WndProcSub(uMsg, wParam, lParam);
+ return CWindowSubClasser::WndProcSub(uMsg, wParam, lParam);
 }
