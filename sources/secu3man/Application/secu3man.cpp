@@ -76,7 +76,6 @@ bool CheckDLLCompatibility(void)
  dlls.push_back(_T("chart3d.dll"));
  dlls.push_back(_T("fwimpexp.dll"));
  dlls.push_back(_T("hexutils.dll"));
- dlls.push_back(_T("hiscctrl.dll"));
  dlls.push_back(_T("io-core.dll"));
  dlls.push_back(_T("midesk.dll"));
  dlls.push_back(_T("paramdesk.dll"));

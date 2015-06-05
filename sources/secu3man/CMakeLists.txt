@@ -18,7 +18,7 @@ ADD_DEFINITIONS(-D_WIN32_WINDOWS=0x0501)
 ADD_DEFINITIONS(-DWINVER=0x0501)
 endif()
 
-set(LIBRARIES about fwimpexp hexutils hiscctrl io-core midesk
+set(LIBRARIES about fwimpexp hexutils io-core midesk
   paramdesk tabldesk ui-core
   )
 

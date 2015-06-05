@@ -27,6 +27,7 @@ project(${PROJECT})
 set(HEADERS
   AnalogMeter.h
   AnalogMeterCtrl.h
+  Chart2D.h
   ddx_helpers.h
   fnt_helpers.h
   DialogWithAccelerators.h
@@ -55,6 +56,7 @@ set(HEADERS
 set(SOURCES
   AnalogMeter.cpp
   AnalogMeterCtrl.cpp
+  Chart2D.cpp
   ddx_helpers.cpp
   fnt_helpers.cpp
   DialogWithAccelerators.cpp

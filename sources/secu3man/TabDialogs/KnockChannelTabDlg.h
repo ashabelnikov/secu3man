@@ -30,9 +30,7 @@
 #include "common/fastdelegate.h"
 #include "ui-core/TabDialog.h"
 
-class CChartCtrl;
-class CChartLineSerie;
-class CChartPointsSerie;
+class CChart2D;
 class CKnockContextMenuManager;
 class CKnockFrqCalcDlg;
 class CKnockPageDlg;
@@ -117,11 +115,7 @@ class CKnockChannelTabDlg : public CTabDialog
 
  private:
   CButton  m_param_save_button;
-  CChartCtrl* mp_RTChart;
-  CChartPointsSerie* m_pPointSerie;
-  CChartLineSerie* m_pLineSerie;
-  CChartLineSerie* m_pLineSerieLevel;
-  CChartLineSerie* m_pLineSerieRPM;
+  std::auto_ptr<CChart2D> mp_RTChart;
   CListCtrl m_RTList;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
   std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;

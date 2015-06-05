@@ -32,11 +32,9 @@
 #include <limits>
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
-#include "HiSCCtrl/sources/ChartCtrl.h"
-#include "HiSCCtrl/sources/ChartPointsSerie.h"
-#include "HiSCCtrl/sources/ChartLineSerie.h"
 #include "KnockContextMenuManager.h"
 #include "ParamDesk/Params/KnockPageDlg.h"
+#include "ui-core/Chart2D.h"
 #include "ui-core/OScopeCtrl.h"
 
 using namespace std;
@@ -53,20 +51,29 @@ const UINT CKnockChannelTabDlg::IDD = IDD_KNOCK_CHANNEL;
 
 CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CKnockChannelTabDlg::IDD, pParent)
-, mp_RTChart(NULL)
+, mp_RTChart(new CChart2D())
 , mp_knock_parameters_dlg(new CKnockPageDlg())
 , mp_knock_frq_calc_dlg(new CKnockFrqCalcDlg())
 , mp_OScopeCtrl(new COScopeCtrl())
 , mp_ContextMenuManager(new CKnockContextMenuManager())
 , m_all_enabled(true)
-, m_pPointSerie(NULL)
-, m_pLineSerie(NULL)
-, m_pLineSerieLevel(NULL)
-, m_pLineSerieRPM(NULL)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
 , m_dlsm_checkbox_state(true)
 {
+ mp_RTChart->AddSerie(100);    //signal serie
+ mp_RTChart->AddSerie(2);      //level serie (horiz. line)
+ mp_RTChart->AddSerie(2);      //RPM serie (vert. line)
+ mp_RTChart->SetXAxisValueFormat(_T("%.0f")); //integers
+ mp_RTChart->SetChartTitle(_T(""));
+ mp_RTChart->SetChartLabel(_T(""),_T(""));
+ mp_RTChart->SetGridXYNumber(10, 10);
+ mp_RTChart->SetRange(RPM_AXIS_MIN, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), K_SIG_MIN, K_SIG_MAX);
+ mp_RTChart->SetBackColor(RGB(192, 192, 192));
+ mp_RTChart->SetSerieColor(0, RGB(80, 80, 200));
+ mp_RTChart->SetSerieColor(1, RGB(50, 200, 0));
+ mp_RTChart->SetSerieColor(2, RGB(255, 255, 0));
+
  mp_ContextMenuManager->CreateContent();
  mp_knock_frq_calc_dlg->setOnCalculate(MakeDelegate(this, &CKnockChannelTabDlg::OnFrqCalculate));
 }
@@ -158,7 +165,6 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 void CKnockChannelTabDlg::OnDestroy()
 {
  Super::OnDestroy();
- delete mp_RTChart;
  KillTimer(TIMER_ID);
 }
 
@@ -204,6 +210,7 @@ void CKnockChannelTabDlg::EnableAll(bool i_enable)
 {
  m_all_enabled = i_enable; //remember state
  mp_OScopeCtrl->EnableWindow(i_enable);
+ mp_RTChart->EnableWindow(i_enable);
  UpdateDialogControls(this,TRUE);
 }
 
@@ -247,59 +254,43 @@ void CKnockChannelTabDlg::AppendPoint(float value)
 void CKnockChannelTabDlg::SetRPMKnockSignal(const std::vector<float> &i_values)
 {
  _ASSERTE(i_values.size()==RPM_KNOCK_SIGNAL_POINTS);
- mp_RTChart->EnableRefresh(false);
  for(size_t i = 0; i < i_values.size(); i++)
  {
-  m_pPointSerie->SetYPointValue(i, i_values[i]);
-  m_pLineSerie->SetYPointValue(i, i_values[i]);
+  mp_RTChart->SetXYValue(0, RPM_AXIS_MIN + (RPM_AXIS_STEP * i), i_values[i], i);
   TCHAR str[32];
   _stprintf(str, _T("%0.3f"), i_values[i]);
   m_RTList.SetItemText(i, 2, str);
  }
- mp_RTChart->EnableRefresh(true);
+ mp_RTChart->Invalidate(TRUE);
 }
 
 void CKnockChannelTabDlg::_InitializeRPMKnockSignalControl(void)
 {
  //Инициализируем построитель функций
- mp_RTChart = new CChartCtrl();
  CRect rect;
  GetDlgItem(IDC_KC_REALTIME_CHART_HOLDER)->GetWindowRect(rect);
  ScreenToClient(rect);
- mp_RTChart->Create(this,rect,IDC_KC_REALTIME_CHART);
-
- m_pPointSerie = dynamic_cast<CChartPointsSerie*>(mp_RTChart->AddSerie(CChartSerie::stPointsSerie));
- m_pLineSerie = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
- m_pLineSerieLevel = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
- m_pLineSerieRPM = dynamic_cast<CChartLineSerie*>(mp_RTChart->AddSerie(CChartSerie::stLineSerie));
-
- m_pLineSerie->SetColor(RGB(80,80,200));
- m_pLineSerieLevel->SetColor(RGB(50,200,0));
- m_pLineSerieRPM->SetColor(RGB(255,255,0));
 
  int rpm = RPM_AXIS_MIN;
  int rpm_step = RPM_AXIS_STEP;
 
- //первая точка линии желаемого уровня сигнала
- m_pLineSerieLevel->AddPoint(rpm, 0);
+ mp_RTChart->Create(WS_CHILD | WS_VISIBLE, rect, this, IDC_KC_REALTIME_CHART);
 
- // Sets the min and max values of the bottom and left axis.
- mp_RTChart->GetBottomAxis()->SetMinMax(rpm, rpm + (rpm_step * RPM_KNOCK_SIGNAL_POINTS));
- mp_RTChart->GetLeftAxis()->SetMinMax(K_SIG_MIN, K_SIG_MAX);
+ //First point of desired signal level line
+ mp_RTChart->SetXYValue(1, (double)rpm, 0.0, 0);
 
  for (size_t i = 0; i < RPM_KNOCK_SIGNAL_POINTS; i++)
  {
-  m_pPointSerie->AddPoint(rpm, 0.0);
-  m_pLineSerie->AddPoint(rpm, 0.0);
+  mp_RTChart->SetXYValue(0, rpm, 0.0, i);
   rpm+=rpm_step;
  }
 
- //вторая точка линии желаемого уровня сигнала
- m_pLineSerieLevel->AddPoint(rpm, 0);
+ //Second point of desired signal level line
+ mp_RTChart->SetXYValue(1, (double)rpm, 0.0, 1);
 
  //первая и вторая точки вертикальной линии отображающей обороты
- m_pLineSerieRPM->AddPoint(RPM_AXIS_MIN, K_SIG_MIN);
- m_pLineSerieRPM->AddPoint(RPM_AXIS_MIN, K_SIG_MAX);
+ mp_RTChart->SetXYValue(2, RPM_AXIS_MIN, K_SIG_MIN, 0);
+ mp_RTChart->SetXYValue(2, RPM_AXIS_MIN, K_SIG_MAX, 1);
 
  //инициализация слайдера и установка дефаултного значения уровня
  m_level_slider.SetRange(0, LEVEL_SLIDER_POS_NUM);
@@ -417,8 +408,8 @@ static float SliderToLevel(int i_pos)
 void CKnockChannelTabDlg::OnVScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollBar)
 {
 #define _SET_LEVEL(pos) {\
-    m_pLineSerieLevel->SetYPointValue(0, SliderToLevel((pos))); \
-    m_pLineSerieLevel->SetYPointValue(1, SliderToLevel((pos))); \
+    mp_RTChart->SetXYValue(1, RPM_AXIS_MIN, SliderToLevel((pos)), 0);\
+    mp_RTChart->SetXYValue(1, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), SliderToLevel((pos)), 1);\
     CString cs; cs.Format(_T("%.02f"), SliderToLevel((pos))); \
     m_level_text.SetWindowText(cs); \
     }
@@ -457,8 +448,8 @@ void CKnockChannelTabDlg::SetDesiredLevel(float i_level)
  ASSERT(i_level >= K_SIG_MIN);
  float factor = (((float)LEVEL_SLIDER_POS_NUM) / (K_SIG_MAX - K_SIG_MIN));
  m_level_slider.SetPos(MathHelpers::Round((K_SIG_MAX - i_level) * factor));
- m_pLineSerieLevel->SetYPointValue(0, i_level);
- m_pLineSerieLevel->SetYPointValue(1, i_level);
+ mp_RTChart->SetXYValue(1, RPM_AXIS_MIN, i_level, 0);
+ mp_RTChart->SetXYValue(1, RPM_AXIS_MIN + (RPM_AXIS_STEP * RPM_KNOCK_SIGNAL_POINTS), i_level, 1);
  CString cs; cs.Format(_T("%.02f"), i_level);
  m_level_text.SetWindowText(cs);
 }
@@ -470,7 +461,7 @@ float CKnockChannelTabDlg::GetDesiredLevel(void)
 
 void CKnockChannelTabDlg::SetDesiredLevelColor(bool color_ok)
 { 
- m_pLineSerieLevel->SetColor(color_ok ? RGB(50,200,0) : RGB(200,50,0));
+ mp_RTChart->SetSerieColor(1, color_ok ? RGB(50,200,0) : RGB(200,50,0));
 }
 
 bool CKnockChannelTabDlg::GetDLSMCheckboxState(void) const
@@ -485,18 +476,18 @@ void CKnockChannelTabDlg::SetRPMValue(int rpm)
  if (rpm > RPM_AXIS_MAX)
   rpm = RPM_AXIS_MAX;
 
- m_pLineSerieRPM->SetXPointValue(0, rpm);
- m_pLineSerieRPM->SetXPointValue(1, rpm);
+ mp_RTChart->SetXYValue(2, rpm, K_SIG_MIN, 0);
+ mp_RTChart->SetXYValue(2, rpm, K_SIG_MAX, 1);
 }
 
 void CKnockChannelTabDlg::SetRPMVisibility(bool visible)
 {
- m_pLineSerieRPM->SetVisible(visible);
+ mp_RTChart->SetSerieVisibility(2, visible);
 }
 
 void CKnockChannelTabDlg::OnFrqCalculate(float frq)
 {
- //Ищем блищаюшую частоту к той, что получилась исходя из расчетов
+ //Find frequency which is nearest to calculated one
  float smaller_diff = FLT_MAX;
  size_t index = 0;
  for (size_t i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++)
@@ -508,7 +499,7 @@ void CKnockChannelTabDlg::OnFrqCalculate(float frq)
    index = i;
   }
  }
- //сохраняем значение
+ //save value
  SECU3IO::KnockPar values;
  mp_knock_parameters_dlg->GetValues(&values);
  values.knock_bpf_frequency = index;
