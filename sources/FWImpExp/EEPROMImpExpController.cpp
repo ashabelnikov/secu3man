@@ -148,7 +148,7 @@ void EEPROMImportController::OnExchangePressed(void)
 
  //fuel injection
  if (mp_view->GetFWDFlag(FLAG_VE_MAP))
-  m_eedm->GetTempMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
+  m_eedm->GetVEMap(other_sel, mp_fwd->maps[current_sel].inj_ve);
 
  if (mp_view->GetFWDFlag(FLAG_AFR_MAP))
   m_eedm->GetAFRMap(other_sel, mp_fwd->maps[current_sel].inj_afr);
