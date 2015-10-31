@@ -69,6 +69,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_pImgList(NULL)
 , m_enabled(false)
 , m_fuel_injection(false)
+, m_lambda(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -229,7 +230,7 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
  m_fuel_injection_idx.push_back(idx); //remember index of tab
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
- m_fuel_injection_idx.push_back(idx);
+ m_lambda_tab_idx = idx;
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
  m_fuel_injection_idx.push_back(idx);
 
@@ -247,6 +248,11 @@ BOOL CParamDeskDlg::OnInitDialog()
  {
   for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
    m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
+ }
+ //disable lambda settings tab if lambda support is not included
+ if (false==m_lambda)
+ {
+  m_tab_control.EnableItem(m_lambda_tab_idx, false);
  }
 
  m_hot_keys_supplier->Init(this);
@@ -310,7 +316,7 @@ void CParamDeskDlg::Enable(bool enable)
  m_pSecurPageDlg->Enable(enable);
  m_pUniOutPageDlg->Enable(enable);
  m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
- m_pLambdaPageDlg->Enable(enable && m_fuel_injection);
+ m_pLambdaPageDlg->Enable(enable && m_lambda);
  m_pAccelEnrPageDlg->Enable(enable && m_fuel_injection);
 
  if (::IsWindow(m_hWnd))
@@ -323,6 +329,10 @@ void CParamDeskDlg::Enable(bool enable)
  {
   for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
    m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
+ }
+ if (false==m_lambda)
+ {
+  m_tab_control.EnableItem(m_lambda_tab_idx, false);
  }
 }
 
@@ -576,11 +586,18 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
   m_tab_control.EnableItem(m_fuel_injection_idx[i], i_enable && m_enabled);
  m_pInjectorPageDlg->Enable(i_enable && m_enabled);
- m_pLambdaPageDlg->Enable(i_enable && m_enabled);
  m_pAccelEnrPageDlg->Enable(i_enable && m_enabled);
  m_pStarterPageDlg->EnableFuelInjection(i_enable);
  m_pCarburPageDlg->EnableFuelInjection(i_enable);
  m_pChokePageDlg->EnableFuelInjection(i_enable);
+}
+
+void CParamDeskDlg::EnableLambda(bool i_enable)
+{
+ if (m_lambda == i_enable)
+  return; //already has needed state
+ m_lambda = i_enable;
+ m_pLambdaPageDlg->Enable(i_enable && m_enabled);
 }
 
 void CParamDeskDlg::OnSaveButton()
