@@ -678,7 +678,9 @@ void CFirmwareDataMediator::GetAFRMap(int i_index, float* op_values, bool i_orig
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].inj_afr[0][0]);
-  op_values[i] = AFR_MAPS_M_FACTOR / ((float) *(p + i));
+  float value = (float) *(p + i);
+  if (0==value) value = 1; //prevent division by zero
+  op_values[i] = (AFR_MAPS_M_FACTOR / value);
  }
 }
 
@@ -696,7 +698,7 @@ void CFirmwareDataMediator::SetAFRMap(int i_index, const float* ip_values)
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].inj_afr[0][0]);
-  *(p + i) = MathHelpers::Round((AFR_MAPS_M_FACTOR / ip_values[i]));
+  *(p + i) = MathHelpers::Round((AFR_MAPS_M_FACTOR / (0==ip_values[i] ? 1 : ip_values[i]))); //also, prevent div. by 0
  }
 }
 
