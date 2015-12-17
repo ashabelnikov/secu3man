@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_CYLDISP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -44,6 +45,10 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_CAPTION,OnUpdateControls)
@@ -55,6 +60,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjectorPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
+, m_inj_timing_edit(CEditEx::MODE_FLOAT, true)
 , m_flowrate_edit(CEditEx::MODE_FLOAT, true)
 , m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 , m_ovf_msgbox(false)
@@ -64,7 +70,8 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_flow_rate = 200.0f;
  m_params.inj_cyl_disp = 0.375f;
  m_params.inj_sd_igl_const = 0;
- m_params.cyl_num = 4; 
+ m_params.cyl_num = 4;
+ m_params.inj_timing = 0; 
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -86,11 +93,14 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_SPIN, m_flowrate_spin);
  DDX_Control(pDX,IDC_PD_INJECTOR_INJCONFIG_COMBO, m_injcfg_combo);
  DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_COMBO, m_sqrnum_combo);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_EDIT, m_inj_timing_edit);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin);
 
  m_flowrate_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate);
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
+ m_inj_timing_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -117,11 +127,20 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_flowrate_spin.SetRangeAndDelta(50.00f, 1000.00f, 0.02f);
  m_flowrate_edit.SetRange(50.00f, 1000.00f);
 
+ m_inj_timing_spin.SetBuddy(&m_inj_timing_edit);
+ m_inj_timing_edit.SetLimitText(4);
+ m_inj_timing_edit.SetDecimalPlaces(0);
+ m_inj_timing_spin.SetRangeAndDelta(-360.0f, 360.0f, 1.0);
+ m_inj_timing_edit.SetRange(-360.0f, 360.0f);
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_edit, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cyldisp_spin, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo, MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit, MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin, MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -143,6 +162,7 @@ void CInjectorPageDlg::OnChangeData()
 void CInjectorPageDlg::OnChangeDataInjCfg()
 {
  UpdateData();
+ m_params.inj_config = _GetInjCfgComboBoxSelection(); //update inj_config, because it will be used in _FillSqrNumComboBox()
 
  //SqrNum combobox depends on injection config and cylinder number,
  //Also we have to preserve selection
@@ -184,7 +204,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
 
  int inj_num = m_params.cyl_num;
  int bnk_num = m_params.cyl_num;
- if (m_params.inj_config == SECU3IO::INJCFG_TROTTLEBODY)
+ if (m_params.inj_config == SECU3IO::INJCFG_THROTTLEBODY)
  {
   inj_num = 1; //single injector
   bnk_num = 1; //single bank
@@ -193,6 +213,11 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  {
   inj_num = m_params.cyl_num; //= N cylinders
   bnk_num = 1; //single bank
+ }
+ else if (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN) //available only for even cylinder number engines
+ {
+  inj_num = m_params.cyl_num; //= N cylinders
+  bnk_num = 2;                // 2 banks
  }
  else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL) //available only for even cylinder number engines
  {
@@ -244,9 +269,10 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
 void CInjectorPageDlg::_FillInjCfgComboBox(void)
 {
  m_injcfgs.clear();
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_TROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY)));
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_THROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY)));
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SIMULTANEOUS, MLL::GetString(IDS_INJ_CFG_SIMULTANEOUSLY)));
-//m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_2BANK_ALTERN, MLL::GetString(IDS_INJ_CFG_2BANK_ALTERN)));
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
 //m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
 
  m_injcfg_combo.ResetContent();
@@ -297,7 +323,7 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
  m_sqrnum.clear();
 
  //Fill squirts number list depending of selected configuration and number of engine cylinders
- if (m_params.inj_config == SECU3IO::INJCFG_TROTTLEBODY || m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
+ if (m_params.inj_config == SECU3IO::INJCFG_THROTTLEBODY || m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
  {
   switch(m_params.cyl_num)
   {
@@ -335,6 +361,37 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
     break;
   }
  }
+ else if (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN)
+ {
+  switch(m_params.cyl_num)
+  {
+   case 1:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 2:
+    ASSERT(0); //not applicable with 2 cylinder engine
+    break;
+   case 3:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 4:     //for 4 cyl engine this mode is the same as semi-sequential
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    break;
+   case 5:
+    ASSERT(0); //not available on odd cyl. number engine
+    break;
+   case 6:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    break;
+   case 8:
+    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    break;
+  }
+ }
  else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL)
  {
   switch(m_params.cyl_num)
@@ -357,12 +414,10 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
     m_sqrnum.push_back(std::make_pair(3, _T("3")));
     m_sqrnum.push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
     m_sqrnum.push_back(std::make_pair(4, _T("4")));
     m_sqrnum.push_back(std::make_pair(8, _T("8")));
     break;

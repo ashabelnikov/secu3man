@@ -183,10 +183,12 @@ typedef struct
 
  _uint   gd_steps;                      // Number of steps of gas dosator stepper motor
 
+ _int    inj_timing;                    // Injection timing (phase)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[84];
+ _uchar reserved[82];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

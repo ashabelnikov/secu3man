@@ -1600,7 +1600,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 22 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 26 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -1634,6 +1634,12 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &cyl_num))
   return false;
  m_InjctrPar.cyl_num = cyl_num;
+
+ //injection timing (phase)
+ int  inj_begin_angle;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
+  return false;
+ m_InjctrPar.inj_timing = ((float)inj_begin_angle) / m_angle_multiplier;
 
  return true;
 }
@@ -2559,6 +2565,8 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
  mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const, m_outgoing_packet);
  mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
+ int inj_begin_angle = MathHelpers::Round(packet_data->inj_timing * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(inj_begin_angle, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

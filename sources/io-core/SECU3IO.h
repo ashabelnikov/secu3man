@@ -403,10 +403,11 @@ namespace SECU3IO
  const int UNIOUT_COND_OFTMR = 20;    //On/Off delay timer
 
  //define allowed fuel injection configurations
- const int INJCFG_TROTTLEBODY  = 0;   //single injector for N cylinders
+ const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders
  const int INJCFG_SIMULTANEOUS = 1;   //N injectors, all injectors work simultaneously
- const int INJCFG_SEMISEQUENTIAL = 2; //N injectors, injectors work in pairs
- const int INGCFG_FULLSEQUENTIAL = 3; //N injectors, each injector works 1 time per cycle
+ const int INJCFG_2BANK_ALTERN = 2;   //N injectors split into 2 banks, banks work alternately
+ const int INJCFG_SEMISEQUENTIAL = 3; //N injectors, injectors work in pairs
+ const int INGCFG_FULLSEQUENTIAL = 4; //N injectors, each injector works 1 time per cycle
 
  struct InjctrPar
  {
@@ -417,6 +418,7 @@ namespace SECU3IO
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
   float inj_sd_igl_const;             //precalculated constant
   int cyl_num;                        //read-only parameter: number of cylinders
+  float inj_timing;                   //injection timing
  };
 
  struct LambdaPar

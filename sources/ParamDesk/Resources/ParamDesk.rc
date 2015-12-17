@@ -662,10 +662,15 @@ BEGIN
     LTEXT           "Производит. форсунки",IDC_PD_INJECTOR_FLOWRATE_CAPTION,3,31,94,10
     LTEXT           "см3/мин",IDC_PD_INJECTOR_FLOWRATE_UNIT,146,31,30,10
 
-    COMBOBOX        IDC_PD_INJECTOR_INJCONFIG_COMBO,98,50,45,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_INJECTOR_INJCONFIG_COMBO,98,50,60,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
     LTEXT           "Конфигурация впрыска",IDC_PD_INJECTOR_INJCONFIG_CAPTION,3,51,94,10
     COMBOBOX        IDC_PD_INJECTOR_SQUIRTNUM_COMBO,98,70,45,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
     LTEXT           "Число впрысков на цикл",IDC_PD_INJECTOR_SQUIRTNUM_CAPTION,3,71,94,10
+
+    EDITTEXT        IDC_PD_INJECTOR_TIMING_EDIT,98,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_TIMING_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,90,13,17
+    LTEXT           "Фаза впрыска",IDC_PD_INJECTOR_TIMING_CAPTION,3,91,94,10
+    LTEXT           "°КВ",IDC_PD_INJECTOR_TIMING_UNIT,146,91,30,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -1076,9 +1081,10 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя"
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя (Литры)"
     IDS_INJ_CFG_THROTTLEBODY        "Моновпрыск"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Одновременный"
+    IDS_INJ_CFG_2BANK_ALTERN        "2 Банка Попер."
     IDS_INJ_CFG_SEMISEQUENTIAL      "Попарно-паралл."
     IDS_INJ_CFG_FULLSEQUENTIAL      "Распределенный"
 END
@@ -1086,6 +1092,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Порог включения обогащения по ДПДЗ. Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
+    IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ (относительно ВМТ) система должна начинать впрыск. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1750,10 +1757,15 @@ BEGIN
     LTEXT           "Injector flow rate",IDC_PD_INJECTOR_FLOWRATE_CAPTION,3,31,94,10
     LTEXT           "cc/min",IDC_PD_INJECTOR_FLOWRATE_UNIT,146,31,30,10
 
-    COMBOBOX        IDC_PD_INJECTOR_INJCONFIG_COMBO,98,50,45,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_INJECTOR_INJCONFIG_COMBO,98,50,60,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
     LTEXT           "Injection configuration",IDC_PD_INJECTOR_INJCONFIG_CAPTION,3,51,94,10
     COMBOBOX        IDC_PD_INJECTOR_SQUIRTNUM_COMBO,98,70,45,80,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_TABSTOP
     LTEXT           "Num of squirts per cycle",IDC_PD_INJECTOR_SQUIRTNUM_CAPTION,3,71,94,10
+
+    EDITTEXT        IDC_PD_INJECTOR_TIMING_EDIT,98,90,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_INJECTOR_TIMING_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,90,13,17
+    LTEXT           "Injection timing",IDC_PD_INJECTOR_TIMING_CAPTION,3,91,94,10
+    LTEXT           "°CS",IDC_PD_INJECTOR_TIMING_UNIT,146,91,30,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -2092,14 +2104,14 @@ BEGIN
     IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Пропущенные зубья шкива. \r Для ДУИ+ДНО ставьте 0"
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Количество зубьев, проходящих мимо ДПКВ (ДУИ) от метки на шкиве (пропущенных зубьев (ДПКВ) или штифта начала отсчета (для ДУИ+ДНО) до метки ВМТ."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "При установленной галочке импульсы зажигания суммируются на выходе IGN_OUT1"
-    IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Нижнее ограничение УОЗ"
-    IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Верхнее ограничение УОЗ"
+    IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Bottom limit (minimum allowed value) of advance angle"
+    IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Top limit (maximum allowed value) of advance angle"
     IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "При установленной галочке УОЗ будет нулевой при любых условиях.\rИспользуйте для выставления нулевого угла по меткам при помощи стробоскопа"
     IDS_PD_IDLREG_USE_REGULATOR_TT                  "При установленной галочке МПСЗ будет пытаться поддержать ХХ на заданном уровне посредством изменения УОЗ"   
     IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Установите целевые обороты ХХ. Они должны совпадать с настройкой карбюратора на прогретом двигателе с отключенной нагрузкой (фары, вентилятор охлаждения, мотор отопителя и т.п.)"
     IDS_PD_IDLREG_FACTOR_EDIT_TT                    "Чем больше данное значение, тем быстрее регулятор ХХ будет изменять УОЗ при отклонении оборотов от заданных \r(больше значение - выше реакция регулятора)."  
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Задает пределы, в которых регулятор может менять УОЗ для поддержания заданных оборотов"
-    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора"
+    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Dead band of regulator"
     IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "При прогреве до заданного значения регулятор ХХ не будет работать."
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Первые восемь наборов УОЗ находятся в прошивке, последние два в EEPROM - те что вы редактируете в онлайн режиме\rВыберите те, что будут использоваться при включении зажигания"
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Первые восемь наборов УОЗ находятся в прошивке, последние два в EEPROM - те что вы редактируете в онлайн режиме\rВыберите те, что будут использоваться при включении зажигания"
@@ -2113,8 +2125,8 @@ BEGIN
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT              "Чем меньше значения тем больше экономия топлива в городском режиме, но тем выше вероятность заглохнуть при сбросе газа. Установите опытным путем минималное значение при котором двигатель не глохнет при сбросе газа. Значение нижнего порога должно быть ниже верхнего."
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите так ,чтобы при нажатии на педаль газа загоралась желтая лампочка Дроссельная заслонка"
     IDS_PD_ADCCOMPEN_FACTOR_TT                      "При необходимости изменяйте коэффициенты для совпадения сырых значений с реальными напряжениями на выводах блока"
-    IDS_PD_ADCCOMPEN_KORRECTION_TT                  "Используйте в крайних случаях"
-    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "При превышении заданных оборотов импульсы зажигания выдаваться не будут" 
+    IDS_PD_ADCCOMPEN_KORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
+    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed" 
 END
 
 STRINGTABLE
@@ -2156,15 +2168,15 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_KNOCK_BEGIN_KWND_EDIT_TT  "Момент относительно ВМТ когда система начинает слушать детонацию"
-    IDS_PD_KNOCK_END_KWND_EDIT_TT    "Момент относительно ВМТ когда система заканчивает слушать детонацию"
-    IDS_PD_KNOCK_BPF_FREQ_COMBO_TT   "Частота, которую будет слушать система. Выберите ближайшую частоту"
-    IDS_PD_KNOCK_INT_TIME_CONST_COMBO_TT "Постоянная времени интегратора, влияет на амплитуду выходного сигнала."
-    IDS_PD_KNOCK_RETARD_STEP_EDIT_TT "Шаг смещения УОЗ. Всякий раз при обнаружении детонации УОЗ уменьшается на эту величину"
-    IDS_PD_KNOCK_ADVANCE_STEP_EDIT_TT "Шаг восстановления УОЗ. При отсутствии детонации УОЗ увеличивается на эту величину с периодом равным задержке восстановл. УОЗ."
-    IDS_PD_KNOCK_MAX_RETARD_EDIT_TT "Максимальное смещение УОЗ при детонации"
-    IDS_PD_KNOCK_THRESHOLD_EDIT_TT   "Если напряжение превысит этот порог, то считается что детонация наступила"
-    IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT "Задержка восстановления УОЗ в тактах двигателя"
+    IDS_PD_KNOCK_BEGIN_KWND_EDIT_TT  "Position in degrees of ckankshaft (relatively to TDC) when system starts to listen detonation"
+    IDS_PD_KNOCK_END_KWND_EDIT_TT    "Position in degrees of crankshaft (relatively to TDC) when system ends to listen detonation"
+    IDS_PD_KNOCK_BPF_FREQ_COMBO_TT   "Frequency of the bypass filter (frequency to listen). Please select nearest one"
+    IDS_PD_KNOCK_INT_TIME_CONST_COMBO_TT "Integrator stage constant, affercts level of output signal"
+    IDS_PD_KNOCK_RETARD_STEP_EDIT_TT "Advance angle retard step. Each time system detect detonation, ignition advance decreased by this value"
+    IDS_PD_KNOCK_ADVANCE_STEP_EDIT_TT "Advance angle recovery step. If detonation is absent, ignition timing is being increased with period = 'Recovery delay'"
+    IDS_PD_KNOCK_MAX_RETARD_EDIT_TT "Maximum value of advance angle retard from detonation"
+    IDS_PD_KNOCK_THRESHOLD_EDIT_TT   "Detonation voltage threshold. If signal from knock IC exceed this value, then it is considered presence of detonation"
+    IDS_PD_KNOCK_RECOVERY_DELAY_EDIT_TT "Advance angle recovery delay in engine strokes"
 END
 
 STRINGTABLE
@@ -2175,9 +2187,10 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement"
+    IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement (Liters)"
     IDS_INJ_CFG_THROTTLEBODY        "Throttle-body"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Simultaneous"
+    IDS_INJ_CFG_2BANK_ALTERN        "2 Banks Altern"
     IDS_INJ_CFG_SEMISEQUENTIAL      "Semi-sequential"
     IDS_INJ_CFG_FULLSEQUENTIAL      "Full sequential"
 END
@@ -2185,6 +2198,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Accel.enrichment activation threshold (by TPS). The higher the value, the quickly you need to press the gas pedal to activate enrichment."
+    IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft when (relatively to TDC) system should start injection. This parameter will take effect only with synchronization from CKP sensor."
 END
 
 /////////////////////////////////////////////////////////////////////////////
