@@ -169,10 +169,10 @@ void EEPROMImportController::OnExchangePressed(void)
   m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_eedm->GetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_eedm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_eedm->GetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_eedm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);

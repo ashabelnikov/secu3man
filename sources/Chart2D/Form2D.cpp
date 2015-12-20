@@ -97,6 +97,9 @@ void TForm2D::DataPrepare()
   Series1->Add(mp_original_function[i], as, clAqua);
   Series2->Add(mp_modified_function[i], as, clRed);
  }
+
+ if (2==m_horizontal_axis_grid_mode)
+  UpdateBins();
 }
 
 //---------------------------------------------------------------------------
@@ -280,6 +283,12 @@ void TForm2D::InitBins(void)
  for(int i = m_count_of_function_points; i < 8; ++i)
  { m_binsEdit[i]->Visible = false; m_binsUpDown[i]->Visible = false; }
 
+ //Set limits and values
+ UpdateBins();
+}
+
+void __fastcall TForm2D::UpdateBins(void)
+{
  //Set limits and values
  for(int i = 0; i < m_count_of_function_points; ++i)
  {

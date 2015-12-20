@@ -148,6 +148,7 @@ class TForm2D : public TForm
   void __fastcall SelLeftArrow(bool i_shift);
   void __fastcall SelRightArrow(bool i_shift);
   bool __fastcall CheckBinForErrors(int itemIndex, float value);
+  void __fastcall UpdateBins(void);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
 
  private:  // User declarations

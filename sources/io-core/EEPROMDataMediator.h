@@ -77,6 +77,8 @@ class IOCORE_API EEPROMDataMediator
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
 
  private:
+  BYTE* getBytes(bool i_original = false);
+
   PPEepromParam m_epp;
   const size_t m_eeprom_size;
   BYTE* m_bytes_active;   //байты EEPROM (копия для модификации)
