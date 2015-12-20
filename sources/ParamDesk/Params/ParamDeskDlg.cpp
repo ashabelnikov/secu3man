@@ -37,6 +37,7 @@
 #include "ChokePageDlg.h"
 #include "CKPSPageDlg.h"
 #include "FunSetPageDlg.h"
+#include "GasdosePageDlg.h"
 #include "IdlRegPageDlg.h"
 #include "KnockPageDlg.h"
 #include "MiscPageDlg.h"
@@ -70,6 +71,8 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_enabled(false)
 , m_fuel_injection(false)
 , m_lambda(false)
+, m_gasdose(false)
+, m_choke(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -131,6 +134,9 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 
  m_pAccelEnrPageDlg = new CAccelEnrPageDlg();
  m_pAccelEnrPageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab)); 
+
+ m_pGasdosePageDlg = new CGasdosePageDlg();
+ m_pGasdosePageDlg->setFunctionOnChange(MakeDelegate(this,&CParamDeskDlg::OnChangeInTab));
 }
 
 CParamDeskDlg::~CParamDeskDlg()
@@ -154,6 +160,7 @@ CParamDeskDlg::~CParamDeskDlg()
  delete m_pInjectorPageDlg;
  delete m_pLambdaPageDlg;
  delete m_pAccelEnrPageDlg;
+ delete m_pGasdosePageDlg;
 }
 
 void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -222,7 +229,8 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (m_show_knock_page)
   m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_KNOCK_PAR),m_pKnockPageDlg,8), KNOCK_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_MISCEL_PAR),m_pMiscPageDlg,9), MISCEL_PAR));
- m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_CHOKE_PAR),m_pChokePageDlg,10), CHOKE_PAR));
+ m_choke_tab_idx = idx;
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_SECUR_PAR),m_pSecurPageDlg,11), SECUR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_UNIOUT_PAR),m_pUniOutPageDlg,12), UNIOUT_PAR));
  //fuel injection tabs
@@ -233,6 +241,9 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_lambda_tab_idx = idx;
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
  m_fuel_injection_idx.push_back(idx);
+ //GD tab
+ m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_GASDOSE_PAR),m_pGasdosePageDlg,16), GASDOSE_PAR));
+ m_gasdose_tab_idx = idx;
 
  //Warning! SetEventListener must be called before SetCurSel, because SetCurSel
  //already uses event handlers
@@ -253,6 +264,18 @@ BOOL CParamDeskDlg::OnInitDialog()
  if (false==m_lambda)
  {
   m_tab_control.EnableItem(m_lambda_tab_idx, false);
+ }
+
+ //disable gas dose settings tab if gas dose support is not included
+ if (false==m_gasdose)
+ {
+  m_tab_control.EnableItem(m_gasdose_tab_idx, false);
+ }
+
+ //disable choke settings tab if choke support is not included
+ if (false==m_choke)
+ {
+  m_tab_control.EnableItem(m_choke_tab_idx, false);
  }
 
  m_hot_keys_supplier->Init(this);
@@ -312,7 +335,8 @@ void CParamDeskDlg::Enable(bool enable)
  if (m_show_knock_page)
   m_pKnockPageDlg->Enable(enable);
  m_pMiscPageDlg->Enable(enable);
- m_pChokePageDlg->Enable(enable);
+ m_pChokePageDlg->Enable(enable & m_choke);
+ m_pGasdosePageDlg->Enable(enable & m_gasdose);
  m_pSecurPageDlg->Enable(enable);
  m_pUniOutPageDlg->Enable(enable);
  m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
@@ -333,6 +357,16 @@ void CParamDeskDlg::Enable(bool enable)
  if (false==m_lambda)
  {
   m_tab_control.EnableItem(m_lambda_tab_idx, false);
+ }
+
+ if (false==m_gasdose)
+ {
+  m_tab_control.EnableItem(m_gasdose_tab_idx, false);
+ }
+
+ if (false==m_choke)
+ {
+  m_tab_control.EnableItem(m_choke_tab_idx, false);
  }
 }
 
@@ -389,6 +423,9 @@ bool CParamDeskDlg::SetValues(BYTE i_descriptor, const void* i_values)
    break;
   case CHOKE_PAR:
    m_pChokePageDlg->SetValues((ChokePar*)i_values);
+   break;
+  case GASDOSE_PAR:
+   m_pGasdosePageDlg->SetValues((GasdosePar*)i_values);
    break;
   case SECUR_PAR:
    m_pSecurPageDlg->SetValues((SecurPar*)i_values);
@@ -454,6 +491,9 @@ bool CParamDeskDlg::GetValues(BYTE i_descriptor, void* o_values)
    break;
   case CHOKE_PAR:
    m_pChokePageDlg->GetValues((ChokePar*)o_values);
+   break;
+  case GASDOSE_PAR:
+   m_pGasdosePageDlg->GetValues((GasdosePar*)o_values);
    break;
   case SECUR_PAR:
    m_pSecurPageDlg->GetValues((SecurPar*)o_values);
@@ -563,6 +603,16 @@ void CParamDeskDlg::EnableChokeManPos(bool i_enable)
  m_pChokePageDlg->EnableChokeManPos(i_enable);
 }
 
+void CParamDeskDlg::EnableGasdoseTesting(bool i_enable)
+{
+ m_pGasdosePageDlg->EnableGasdoseTesting(i_enable);
+}
+
+void CParamDeskDlg::EnableGasdoseManPos(bool i_enable)
+{
+ m_pGasdosePageDlg->EnableGasdoseManPos(i_enable);
+}
+
 void CParamDeskDlg::EnableCKPSItems(bool i_enable)
 {
  m_pCKPSPageDlg->EnableCKPSItems(i_enable);
@@ -592,11 +642,30 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_pChokePageDlg->EnableFuelInjection(i_enable);
 }
 
+void CParamDeskDlg::EnableGasdose(bool i_enable)
+{
+ if (m_gasdose == i_enable)
+  return; //already has needed state
+ m_gasdose = i_enable;
+ m_tab_control.EnableItem(m_gasdose_tab_idx, i_enable && m_enabled);
+ m_pGasdosePageDlg->Enable(i_enable && m_enabled);
+}
+
+void CParamDeskDlg::EnableChoke(bool i_enable)
+{
+ if (m_choke == i_enable)
+  return; //already has needed state
+ m_choke = i_enable;
+ m_tab_control.EnableItem(m_choke_tab_idx, i_enable && m_enabled);
+ m_pChokePageDlg->Enable(i_enable && m_enabled);
+}
+
 void CParamDeskDlg::EnableLambda(bool i_enable)
 {
  if (m_lambda == i_enable)
   return; //already has needed state
  m_lambda = i_enable;
+ m_tab_control.EnableItem(m_lambda_tab_idx, i_enable && m_enabled);
  m_pLambdaPageDlg->Enable(i_enable && m_enabled);
 }
 

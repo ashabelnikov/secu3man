@@ -60,6 +60,10 @@ class IParamDeskView : public IDeskView
   virtual void EnableInputsMerging(bool i_enable) = 0;
   virtual void EnableFuelInjection(bool i_enable) = 0;
   virtual void EnableLambda(bool i_enable) = 0;
+  virtual void EnableGasdoseTesting(bool i_enable) = 0;
+  virtual void EnableGasdoseManPos(bool i_enable) = 0;
+  virtual void EnableGasdose(bool i_enable) = 0;
+  virtual void EnableChoke(bool i_enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
 

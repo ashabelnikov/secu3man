@@ -338,6 +338,13 @@ namespace SECU3IO
   float choke_corr_temp;                //Startup corretion temperature threshold
  };
 
+ struct GasdosePar
+ {
+  int gd_steps;                         //number of gas dose stepper motor steps
+  unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
+  signed char manual_delta;             //delta position value for manual choke control
+ };
+
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys
  const int IBTN_KEY_SIZE = 6;           //Size of iButton key (except CRC8 and family code)
 
@@ -518,6 +525,7 @@ namespace SECU3IO
   SECU3IO::DiagInpDat   m_DiagInpDat;
   SECU3IO::DiagOutDat   m_DiagOutDat;
   SECU3IO::ChokePar     m_ChokePar;
+  SECU3IO::GasdosePar   m_GasdosePar; //GD
   SECU3IO::SecurPar     m_SecurPar;
   SECU3IO::UniOutPar    m_UniOutPar;
   SECU3IO::InjctrPar    m_InjctrPar;

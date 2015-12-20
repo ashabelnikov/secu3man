@@ -81,6 +81,10 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableInputsMerging(bool i_enable);
   virtual void EnableFuelInjection(bool i_enable);
   virtual void EnableLambda(bool i_enable);
+  virtual void EnableGasdoseTesting(bool i_enable); //GD
+  virtual void EnableGasdoseManPos(bool i_enable);  //GD
+  virtual void EnableGasdose(bool i_enable);        //GD (entire tab)
+  virtual void EnableChoke(bool i_enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 
@@ -139,6 +143,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   class CKnockPageDlg*     m_pKnockPageDlg;    //<--optional
   class CMiscPageDlg*      m_pMiscPageDlg;
   class CChokePageDlg*     m_pChokePageDlg;
+  class CGasdosePageDlg*   m_pGasdosePageDlg;  //GD
   class CSecurPageDlg*     m_pSecurPageDlg;
   class CUniOutPageDlg*    m_pUniOutPageDlg;
   class CInjectorPageDlg*  m_pInjectorPageDlg; //<--fuel injection
@@ -153,11 +158,15 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   bool m_enabled;
   bool m_fuel_injection;
   bool m_lambda;
+  bool m_gasdose;
+  bool m_choke;
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;
   std::vector<int> m_fuel_injection_idx;       //<--indexes of fuel injection tabs
   int m_lambda_tab_idx;
+  int m_gasdose_tab_idx;
+  int m_choke_tab_idx;
 
   //Event handlers (delegates)
   EventHandler m_OnTabActivate;

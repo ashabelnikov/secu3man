@@ -1027,6 +1027,12 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
+  case GASDOSE_PAR:
+   {
+    GasdosePar* p_in = (GasdosePar*)ip_values;
+    p_params->gd_steps  = p_in->gd_steps;
+   }
+   break;
   case SECUR_PAR:
    {
     SecurPar* p_in = (SecurPar*)ip_values;
@@ -1288,6 +1294,12 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
      p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
      p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+    }
+    break;
+   case GASDOSE_PAR:
+    {
+     GasdosePar* p_out = (GasdosePar*)op_values;
+     p_out->gd_steps = p_params->gd_steps;
     }
     break;
    case SECUR_PAR:

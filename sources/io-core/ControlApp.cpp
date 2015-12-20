@@ -1492,6 +1492,30 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
+ if (size != (mp_pdp->isHex() ? 7 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //Number of stepper motor steps
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_GasdosePar.gd_steps))
+  return false;
+
+ //choke testing mode command/state (it is fake parameter)
+ if (false == mp_pdp->Hex4ToBin(raw_packet, &m_GasdosePar.testing))
+  return false;
+
+ //manual position setting delta (it is fake parameter and must be zero in this ingoing packet)
+ int delta = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
+  return false;
+ m_GasdosePar.manual_delta = delta;
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SecurPar& m_SecurPar = m_recepted_packet.m_SecurPar;
@@ -1823,6 +1847,10 @@ bool CControlApp::ParsePackets()
     if (Parse_CHOKE_PAR(p_start, p_size))
      break;
     continue;
+   case GASDOSE_PAR:
+    if (Parse_GASDOSE_PAR(p_start, p_size)) //GD
+     break;
+    continue;
    case SECUR_PAR:
     if (Parse_SECUR_PAR(p_start, p_size))
      break;
@@ -2040,6 +2068,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case DIAGINP_DAT:
   case DIAGOUT_DAT:
   case CHOKE_PAR:
+  case GASDOSE_PAR: //GD
   case SECUR_PAR:
   case UNIOUT_PAR:
   case INJCTR_PAR:
@@ -2124,6 +2153,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case CHOKE_PAR:
    Build_CHOKE_PAR((ChokePar*)i_packet_data);
+   break;
+  case GASDOSE_PAR:
+   Build_GASDOSE_PAR((GasdosePar*)i_packet_data);
    break;
   case SECUR_PAR:
    Build_SECUR_PAR((SecurPar*)i_packet_data);
@@ -2506,6 +2538,14 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  mp_pdp->Bin16ToHex(choke_corr_time, m_outgoing_packet);
  int choke_corr_temp = MathHelpers::Round(packet_data->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(choke_corr_temp, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
+{
+ mp_pdp->Bin16ToHex(packet_data->gd_steps, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
+ mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
 }
 
 //-----------------------------------------------------------------------

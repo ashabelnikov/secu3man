@@ -68,4 +68,6 @@
 #define   LAMBDA_PAR   '-'
 #define   ACCEL_PAR    '|'
 
+#define   GASDOSE_PAR  '*'
+
 #endif //_UFCODES_H_

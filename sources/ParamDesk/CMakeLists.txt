@@ -35,6 +35,7 @@ set(HEADERS
   Params/ChokePageDlg.h
   Params/CKPSPageDlg.h
   Params/FunSetPageDlg.h
+  Params/GasdosePageDlg.h
   Params/IdlRegPageDlg.h
   Params/InjectorPageDlg.h
   Params/IParamDeskView.h
@@ -67,6 +68,7 @@ set(SOURCES
   Params/ChokePageDlg.cpp
   Params/CKPSPageDlg.cpp
   Params/FunSetPageDlg.cpp
+  Params/GasdosePageDlg.cpp
   Params/IdlRegPageDlg.cpp
   Params/InjectorPageDlg.cpp
   Params/KnockPageDlg.cpp
