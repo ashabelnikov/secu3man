@@ -222,6 +222,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);    //GD
+ mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, false); //GD
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

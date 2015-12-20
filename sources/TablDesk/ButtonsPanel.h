@@ -169,7 +169,9 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnCloseWorkMap(void* i_param);
   static void __cdecl OnChangeTempMap(void* i_param);
   static void __cdecl OnCloseTempMap(void* i_param);
+protected:
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
+private:
   static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationWorkMap(void* i_param, long cmd);

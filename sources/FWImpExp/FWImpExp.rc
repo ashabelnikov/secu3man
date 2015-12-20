@@ -52,6 +52,7 @@ BEGIN
     CONTROL         "ВЗ",IDC_MAP_IMPEXP_CHOKE_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,332,168,32,8
     CONTROL         "ДТВ",IDC_MAP_IMPEXP_ATS_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,182,56,8
     CONTROL         "ДТВ корр.",IDC_MAP_IMPEXP_ATSAAC_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,240,182,56,8
+    CONTROL         "Поз.ДГ",IDC_MAP_IMPEXP_GASDOSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,292,182,42,8
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",
                     IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END
@@ -139,6 +140,7 @@ BEGIN
     CONTROL         "choke",IDC_MAP_IMPEXP_CHOKE_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,332,168,32,8
     CONTROL         "ATS",IDC_MAP_IMPEXP_ATS_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,182,182,56,8
     CONTROL         "ATS corr.",IDC_MAP_IMPEXP_ATSAAC_FLAG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,240,182,56,8
+    CONTROL         "Gas dose",IDC_MAP_IMPEXP_GASDOSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,292,182,45,8
     LTEXT           "\nSelect one item in each list and click button located between them",
                     IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END

@@ -277,6 +277,36 @@ void __cdecl CTablesSetPanel::OnChangeATSXAxisEdit(void* i_param, int i_type, fl
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeGasdoseTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_GASDOSE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseGasdoseTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_gasdose_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_gasdose_map_wnd_handle, TYPE_MAP_GASDOSE);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -288,8 +318,9 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
 , m_choke_op_enabled(false)
+, m_gasdose_enabled(false)
 {
- m_scrl_factor = 1.90f;
+ m_scrl_factor = 1.96f;
 
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
@@ -297,6 +328,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_ats_curve_map_chart_state = 0;
  m_ats_aac_map_chart_state = 0;
  m_choke_map_chart_state = 0;
+ m_gasdose_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
@@ -304,6 +336,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_ats_curve_map_wnd_handle = NULL;
  m_ats_aac_map_wnd_handle = NULL;
  m_choke_map_wnd_handle = NULL;
+ m_gasdose_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -328,6 +361,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CHOKE_MAP, m_view_choke_op_map_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, m_view_gasdose_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -339,6 +373,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_RPM_GRID_BUTTON, OnRPMGridButton)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_CURVE, OnViewATSCurveMap)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_MAP, OnViewATSAACMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_GDP_MAP, OnViewGasdosePosMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -349,6 +384,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_RPM_GRID_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GDP_MAP, OnUpdateViewGasdosePosMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -426,6 +462,14 @@ void CTablesSetPanel::OnUpdateViewChokeOpMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_choke_map_chart_state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart3DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable && m_gasdose_enabled);
+ pCmdUI->SetCheck( (m_gasdose_map_chart_state) ? TRUE : FALSE );
+}
+
 //обновл€ет контроллы состо€ние которых зависит от того - есть данные или нет
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -481,6 +525,15 @@ void CTablesSetPanel::EnableChokeOp(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_choke_map_chart_state && ::IsWindow(m_choke_map_wnd_handle))
   DLL::Chart2DEnable(m_choke_map_wnd_handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableGasdosePos(bool enable)
+{
+ m_gasdose_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_gasdose_map_chart_state && ::IsWindow(m_gasdose_map_wnd_handle))
+  DLL::Chart3DEnable(m_gasdose_map_wnd_handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -738,6 +791,40 @@ void CTablesSetPanel::OnViewATSAACMap()
  }
 }
 
+void CTablesSetPanel::OnViewGasdosePosMap()
+{
+ //если кнопку "выключили" то закрываем окно редактора
+ if (m_view_gasdose_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_gasdose_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_gasdose_map_chart_state)&&(DLL::Chart3DCreate))
+ {
+  m_gasdose_map_chart_state = 1;
+  m_gasdose_map_wnd_handle = DLL::Chart3DCreate(GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_GDP_UNIT).c_str(),
+    MLL::GetString(IDS_WORK_MAP).c_str());
+  //DLL::Chart3DSetOnWndActivation(m_gasdose_map_wnd_handle, OnWndActivationGasdoseMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_gasdose_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_gasdose_map_wnd_handle,OnChangeGasdoseTable,this);
+  DLL::Chart3DSetOnClose(m_gasdose_map_wnd_handle,OnCloseGasdoseTable,this);
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_gasdose_map_wnd_handle, TYPE_MAP_GASDOSE);
+
+  DLL::Chart3DShow(m_gasdose_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_gasdose_map_wnd_handle);
+ }
+}
+
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -822,6 +909,14 @@ float* CTablesSetPanel::GetChokeOpMap(bool i_original)
   return m_choke_map_active;
 }
 
+float* CTablesSetPanel::GetGasdosePosMap(bool i_original)
+{
+ if (i_original)
+  return &m_gasdose_map_original[0][0];
+ else
+  return &m_gasdose_map_active[0][0];
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -842,6 +937,8 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
   return m_ats_curve_map_wnd_handle ? m_ats_curve_map_wnd_handle : NULL;
  case TYPE_MAP_ATS_CORR:
   return m_ats_aac_map_wnd_handle ? m_ats_aac_map_wnd_handle : NULL;
+ case TYPE_MAP_GASDOSE:
+  return m_gasdose_map_wnd_handle ? m_gasdose_map_wnd_handle : NULL;
 
  default:
   return NULL;

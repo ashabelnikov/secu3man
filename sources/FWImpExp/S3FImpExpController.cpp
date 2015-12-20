@@ -140,6 +140,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   memcpy(mp_fwd->ats_corr_table, mp_s3f_io->GetData().ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
+  memcpy(mp_fwd->gasdose_pos_table, mp_s3f_io->GetData().gasdose_pos_table, sizeof(float) * GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE);
+
  //копируем сетку оборотов
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
@@ -262,8 +265,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen);     //absent in old version of S3F
  mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen);  //absent in old version of S3F
+ mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, injen); //absent in old version of S3F
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -379,6 +384,9 @@ void S3FExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ATSAAC_MAP))
   memcpy(mp_s3f_io->GetDataLeft().ats_corr_table, mp_fwd->ats_corr_table, sizeof(float) * ATS_CORR_LOOKUP_TABLE_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().gasdose_pos_table, mp_fwd->gasdose_pos_table, sizeof(float) * GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE);
+
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
@@ -486,6 +494,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
+ mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

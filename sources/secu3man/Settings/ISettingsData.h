@@ -74,6 +74,8 @@ struct WndSettings
  int m_AERPMMapWnd_Y;
  int m_AftstrMapWnd_X;
  int m_AftstrMapWnd_Y;
+ int m_GasdoseMapWnd_X;
+ int m_GasdoseMapWnd_Y;
 };
 
 typedef enum EInterLang

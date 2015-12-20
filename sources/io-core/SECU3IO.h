@@ -614,4 +614,6 @@ namespace SECU3IO
  const float AERPMB_MAPS_M_FACTOR = 0.01f;
  const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float AFTSTR_MAPS_M_FACTOR = (128.0f * 0.01f);
+ const float GD_MAPS_M_FACTOR = 2.0f;
+
 };

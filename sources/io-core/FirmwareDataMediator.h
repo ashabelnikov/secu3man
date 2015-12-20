@@ -140,6 +140,9 @@ class IOCORE_API CFirmwareDataMediator
   void GetATSAACMap(float* op_values, bool i_original = false);
   void SetATSAACMap(const float* i_values);
 
+  void GetGasdosePosMap(float* op_values, bool i_original = false);
+  void SetGasdosePosMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -306,6 +309,8 @@ class IOCORE_API CFirmwareDataMediator
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
   struct cd_data_t* _FindCodeData(const BYTE* ip_bytes = NULL, const PPFlashParam* ip_fpp = NULL);
+
+  BYTE* getBytes(bool i_original = false);
 
  private:
   const std::auto_ptr<PPFlashParam> m_fpp;

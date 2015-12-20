@@ -98,6 +98,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_AERPMMapWnd_Y(_T("AERPMMapWnd_Y"))
 , m_Name_AftstrMapWnd_X(_T("AftstrMapWnd_X"))
 , m_Name_AftstrMapWnd_Y(_T("AftstrMapWnd_Y"))
+, m_Name_GasdoseMapWnd_X(_T("GasdoseMapWnd_X"))
+, m_Name_GasdoseMapWnd_Y(_T("GasdoseMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -480,6 +482,9 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GasdoseMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GasdoseMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -722,6 +727,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optATSCorrMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCorrMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optGasdoseMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GasdoseMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGasdoseMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GasdoseMapWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -821,6 +832,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optATSCurvMapWnd_Y = i_wndSettings.m_ATSCurvMapWnd_Y;
  m_optATSCorrMapWnd_X = i_wndSettings.m_ATSCorrMapWnd_X;
  m_optATSCorrMapWnd_Y = i_wndSettings.m_ATSCorrMapWnd_Y; 
+ m_optGasdoseMapWnd_X = i_wndSettings.m_GasdoseMapWnd_X;
+ m_optGasdoseMapWnd_Y = i_wndSettings.m_GasdoseMapWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -869,6 +882,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_ATSCurvMapWnd_Y = m_optATSCurvMapWnd_Y;
  o_wndSettings.m_ATSCorrMapWnd_X = m_optATSCorrMapWnd_X;
  o_wndSettings.m_ATSCorrMapWnd_Y = m_optATSCorrMapWnd_Y;
+ o_wndSettings.m_GasdoseMapWnd_X = m_optGasdoseMapWnd_X;
+ o_wndSettings.m_GasdoseMapWnd_Y = m_optGasdoseMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

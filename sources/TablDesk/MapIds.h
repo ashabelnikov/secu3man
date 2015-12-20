@@ -49,6 +49,7 @@ enum EMapTypes
  TYPE_MAP_CHOKE_OP     = 18, //
  TYPE_MAP_ATS_CURVE    = 19, //
  TYPE_MAP_ATS_CORR     = 20, //
+ TYPE_MAP_GASDOSE      = 21, //
 
  TYPE_MAP_GME_WND      = 32  //pseudo map, grid mode editing window
 };

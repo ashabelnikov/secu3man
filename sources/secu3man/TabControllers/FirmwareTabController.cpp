@@ -829,6 +829,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CHOKE_OP), TYPE_MAP_CHOKE_OP);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CURVE), TYPE_MAP_ATS_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
@@ -880,6 +881,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
  m_view->mp_TablesPanel->EnableCTSCurve((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
  m_view->mp_TablesPanel->EnableChokeOp((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
+ m_view->mp_TablesPanel->EnableGasdosePos((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0);
  m_view->mp_TablesPanel->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) && !(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
@@ -1018,6 +1020,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false),false);
  m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(true),true);
+
+ m_fwdm->GetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(false),false);
+ m_fwdm->GetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(true),true);
 
  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1182,6 +1187,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_ATS_CORR:
    m_fwdm->SetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false));
+   break;
+  case TYPE_MAP_GASDOSE:
+   m_fwdm->SetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(false));
    break;
  }
 }
@@ -1533,6 +1541,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_ATSCorrMapWnd_X = rc.left;
    ws.m_ATSCorrMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_GASDOSE:
+   ws.m_GasdoseMapWnd_X = rc.left;
+   ws.m_GasdoseMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
    ws.m_GridMapWnd_Y = rc.top;
@@ -1613,6 +1625,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_ATS_CORR:
    X = ws.m_ATSCorrMapWnd_X, Y = ws.m_ATSCorrMapWnd_Y;
+   break;
+  case TYPE_MAP_GASDOSE:
+   X = ws.m_GasdoseMapWnd_X, Y = ws.m_GasdoseMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

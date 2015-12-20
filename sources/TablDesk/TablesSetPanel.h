@@ -58,6 +58,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetATSAACMap(bool i_original);
   void SetCTSXAxisEdits(float i_begin, float i_end);
   void SetATSXAxisEdits(float i_begin, float i_end);
+  float* GetGasdosePosMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -67,6 +68,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);
   void EnableChokeOp(bool enable);
+  void EnableGasdosePos(bool enable);
 
  public: //установка обработчиков событий
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
@@ -87,12 +89,14 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewATSCurveMap();
   afx_msg void OnViewATSAACMap();
   afx_msg void OnRPMGridButton();
+  afx_msg void OnViewGasdosePosMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewATSCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewATSAACMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewChokeOpMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -108,6 +112,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_ats_curve_map_btn;
   CButton   m_view_ats_aac_map_btn;
   CButton   m_view_choke_op_map_btn;
+  CButton   m_view_gasdose_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
 
@@ -136,21 +141,27 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnChangeATSAACTable(void* i_param);
   static void __cdecl OnCloseATSAACTable(void* i_param);
 
+  static void __cdecl OnChangeGasdoseTable(void* i_param);
+  static void __cdecl OnCloseGasdoseTable(void* i_param);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_choke_op_enabled;
+  bool m_gasdose_enabled;
   int m_attenuator_map_chart_state;
   int m_dwellcntrl_map_chart_state;
   int m_cts_curve_map_chart_state;
   int m_ats_curve_map_chart_state;
   int m_ats_aac_map_chart_state;
   int m_choke_map_chart_state;
+  int m_gasdose_map_chart_state;
 
   HWND m_attenuator_map_wnd_handle;
   HWND m_dwellcntrl_map_wnd_handle;
   HWND m_cts_curve_map_wnd_handle;
   HWND m_ats_curve_map_wnd_handle;
   HWND m_ats_aac_map_wnd_handle;
+  HWND m_gasdose_map_wnd_handle;
   HWND m_choke_map_wnd_handle;
 
   float m_attenuator_table_slots[128];
@@ -176,6 +187,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   float m_choke_map_active[16];
   float m_choke_map_original[16];
+
+  float m_gasdose_map_active[16][16];
+  float m_gasdose_map_original[16][16];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

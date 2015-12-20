@@ -63,6 +63,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.01 - Choke opening map added (24.05.2013)
 // 01.02 - RPM grid added (29.04.2014)
 // 01.03 - Major changes (02.11.2014). Fuel injection and intake air maps added.
+// 01.04 - Gas dose position map added (20.12.2015)
 
 struct S3FFileHdr
 {
@@ -110,7 +111,8 @@ struct S3FSepMaps
  s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
- s3f_int32_t reserved[2048];       //reserved bytes, = 0
+ s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map
+ s3f_int32_t reserved[1792];       //reserved bytes, = 0
 };
 
 
@@ -222,7 +224,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0103; //01.03
+ p_fileHdr->version = 0x0104; //01.04
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -288,6 +290,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->atscurve_vlimits[i] = MathHelpers::Round(m_data.atscurve_vlimits[i] * INT_MULTIPLIER);
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->ats_corr_table[i] = MathHelpers::Round(m_data.ats_corr_table[i] * INT_MULTIPLIER);
+ for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
+  p_sepMaps->gasdose_pos_table[i] = MathHelpers::Round(m_data.gasdose_pos_table[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -392,6 +396,8 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.atscurve_vlimits[i] = p_sepMaps->atscurve_vlimits[i] / INT_MULTIPLIER;
  for(i = 0; i < ATS_CORR_LOOKUP_TABLE_SIZE; ++i)
   m_data.ats_corr_table[i] = p_sepMaps->ats_corr_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE); ++i)
+  m_data.gasdose_pos_table[i] = p_sepMaps->gasdose_pos_table[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

@@ -41,6 +41,9 @@
 #define F_RPM_SLOTS            16
 #define CHOKE_CLOSING_LOOKUP_TABLE_SIZE 16
 #define ATS_CORR_LOOKUP_TABLE_SIZE 16
+#define GASDOSE_POS_RPM_SIZE   16
+#define GASDOSE_POS_TPS_SIZE   16
+
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
@@ -91,6 +94,7 @@ struct FWMapsDataHolder
  float rpm_slots[F_RPM_SLOTS]; //сетка оборотов исполузуемая вместе с этими кривыми
  float choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE];
  float ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];  //коррекция УОЗ по ДТВ
+ float gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dosator position
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
@@ -106,6 +110,7 @@ struct FWMapsDataHolder
   std::fill(atscurve_table, atscurve_table + THERMISTOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(atscurve_vlimits, atscurve_vlimits + 2, .0f);
   std::fill(ats_corr_table, ats_corr_table + ATS_CORR_LOOKUP_TABLE_SIZE, .0f);
+  std::fill(gasdose_pos_table, gasdose_pos_table + (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE), .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

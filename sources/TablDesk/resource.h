@@ -226,3 +226,5 @@
 #define IDC_TD_VIEW_AFTSTR_MAP          5485
 #define IDS_MAPS_AFTSTR_UNIT            5486
 #define IDS_AFTSTR_MAP                  5487
+#define IDC_TD_VIEW_GDP_MAP             5488
+#define IDS_MAPS_GDP_UNIT               5489

@@ -105,6 +105,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,266,82,19
     CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,266,95,19
+    CONTROL         "Полож. доз. газа",IDC_TD_VIEW_GDP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,288,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -318,6 +320,7 @@ BEGIN
     IDS_MAPS_AETPS_UNIT     "%"
     IDS_MAPS_AERPM_UNIT     "%"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
+    IDS_MAPS_GDP_UNIT       "Полож. газ. дозатора (%)"
     IDS_START_MAP           "Пусковая карта УОЗ"
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
     IDS_WORK_MAP            "Рабочая карта УОЗ"
@@ -452,6 +455,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,266,82,19
     CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,266,95,19
+    CONTROL         "Gas dose pos.",IDC_TD_VIEW_GDP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,288,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -682,6 +687,7 @@ BEGIN
     IDS_MAPS_AETPS_UNIT     "%"
     IDS_MAPS_AERPM_UNIT     "%"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
+    IDS_MAPS_GDP_UNIT       "Gas dose pos. (%)"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
     IDS_WORK_MAP            "Work angle map"
