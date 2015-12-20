@@ -108,7 +108,8 @@ bool CCommunicationManager::Init(void)
  catch(CComPort::xInitialize e)
  {
   //говорим пользователю что нам не удалось открыть указанный порт!
-  AfxMessageBox(e.GetDetailStr());
+  if (m_pSettings->GetCOMPortBother())
+   AfxMessageBox(e.GetDetailStr());
   status = false;
  }
 

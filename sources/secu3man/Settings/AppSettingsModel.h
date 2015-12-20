@@ -81,6 +81,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_ShowToolTips;
   const CString m_Name_ShowExFixtures;
   const CString m_Name_HexDataMode;
+  const CString m_Name_COMPortBother;
 
   //позиции окон таблиц ”ќ«
   const CString m_Name_WndSettings_Section;
@@ -149,6 +150,9 @@ class CAppSettingsModel : public ISettingsData
   //¬озвращает полный путь к каталогу из которого было запущено приложение
   //(каталог который был текущим на момент вызва конструктора этого класса)
   virtual CString GetAppDirectory(void) const;
+  //To bother about opening of COM port
+  virtual bool GetCOMPortBother(void) const;
+
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
   virtual void GetWndSettings(WndSettings& o_wndSettings) const;
@@ -182,6 +186,7 @@ class CAppSettingsModel : public ISettingsData
   int m_optTachometerMax;
   int m_optPressureMax;
   int m_optPulsesPer1Km;
+  bool m_optCOMPortBother;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;
