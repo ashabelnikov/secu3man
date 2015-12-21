@@ -1013,6 +1013,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->ign_cutoff_thrd = p_in->ign_cutoff_thrd;
     p_params->hop_start_cogs = p_in->hop_start_cogs;
     p_params->hop_durat_cogs = p_in->hop_durat_cogs;
+    p_params->flpmp_flags = (p_params->flpmp_flags & 0xFE) | (p_in->flpmp_offongas << 0);
    }
    break;
   case CHOKE_PAR:
@@ -1282,6 +1283,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->ign_cutoff_thrd = p_params->ign_cutoff_thrd;
      p_out->hop_start_cogs = p_params->hop_start_cogs;
      p_out->hop_durat_cogs = p_params->hop_durat_cogs;
+     p_out->flpmp_offongas = (p_params->flpmp_flags & 0x1) != 0;
     }
     break;
    case CHOKE_PAR:

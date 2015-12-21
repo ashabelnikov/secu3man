@@ -1156,7 +1156,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 15 : 8))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 17 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1199,6 +1199,12 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &duration))
   return false;
  m_MiscPar.hop_durat_cogs = duration;
+
+ //Fuel pump flags
+ unsigned char flpmp_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &flpmp_flags))
+  return false;
+ m_MiscPar.flpmp_offongas = flpmp_flags & 0x1;
 
  return true;
 }
@@ -2437,6 +2443,7 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->flpmp_offongas, m_outgoing_packet); //TODO: not safe! can erase other flags!
 }
 
 //-----------------------------------------------------------------------
