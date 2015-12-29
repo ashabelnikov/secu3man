@@ -139,6 +139,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
  m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
  m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
+ m_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
  m_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
  m_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
 
@@ -1217,6 +1218,11 @@ void CFirmwareTabController::OnFunSetNamechanged(int i_index_of_item, CString i_
 void CFirmwareTabController::OnCTSXAxisEditChanged(int i_type, float i_value)
 {
  m_fwdm->SetCTSMapVoltageLimit(i_type, i_value);
+}
+
+void CFirmwareTabController::OnATSXAxisEditChanged(int i_type, float i_value)
+{
+ m_fwdm->SetATSMapVoltageLimit(i_type, i_value);
 }
 
 void CFirmwareTabController::OnModificationCheckTimer(void)
