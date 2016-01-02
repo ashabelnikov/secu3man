@@ -31,6 +31,7 @@
 
 HotKeysManager::HotKeysManager()
 : m_active(true)
+, m_enabled(false)
 {
  //empty
 }
@@ -95,7 +96,7 @@ void HotKeysManager::ActivateAllHotKeys(void)
  m_active = true;
 }
 
-//Производит регистрацию/антиригистрацию всех горячих клавиш указанного роутера.
+//Производит регистрацию/антирегистрацию всех горячих клавиш указанного роутера.
 //i_register - если true, то регистрация, иначе антирегистрация
 bool HotKeysManager::RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_register)
 {
@@ -128,4 +129,9 @@ bool HotKeysManager::RegisterOneRouter(CHotKeysToCmdRouter* ip_router, bool i_re
 bool HotKeysManager::IsActive(void) const
 {
  return m_active;
+}
+
+void HotKeysManager::Enable(bool i_enable)
+{
+ m_enabled = i_enable;
 }

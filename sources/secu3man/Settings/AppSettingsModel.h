@@ -82,6 +82,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_ShowExFixtures;
   const CString m_Name_HexDataMode;
   const CString m_Name_COMPortBother;
+  const CString m_Name_UseHotKeys;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -152,6 +153,7 @@ class CAppSettingsModel : public ISettingsData
   virtual CString GetAppDirectory(void) const;
   //To bother about opening of COM port
   virtual bool GetCOMPortBother(void) const;
+  virtual bool GetUseHotKeys(void) const;
 
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -187,6 +189,7 @@ class CAppSettingsModel : public ISettingsData
   int m_optPressureMax;
   int m_optPulsesPer1Km;
   bool m_optCOMPortBother;
+  bool m_optUseHotKeys;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

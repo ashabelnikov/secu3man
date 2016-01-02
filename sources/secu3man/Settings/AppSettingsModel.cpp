@@ -53,6 +53,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_HexDataMode(_T("HexDataMode"))
 , m_Name_DVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 , m_Name_COMPortBother(_T("COMPortBother"))
+, m_Name_UseHotKeys(_T("UseHotKeys"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -399,6 +400,19 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optCOMPortBother = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_UseHotKeys,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optUseHotKeys = 0;
+ }
+ else
+ {
+  m_optUseHotKeys = i_val;
+ }
 
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_ShowExFixtures,_T("1"),read_str,255,IniFileName);
@@ -607,6 +621,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optCOMPortBother);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_COMPortBother,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optUseHotKeys);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_UseHotKeys,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optShowExFixtures);
@@ -959,4 +977,9 @@ int CAppSettingsModel::GetNumPulsesPer1Km(void) const
 bool CAppSettingsModel::GetCOMPortBother(void) const
 {
  return m_optCOMPortBother;
+}
+
+bool CAppSettingsModel::GetUseHotKeys(void) const
+{
+ return m_optUseHotKeys;
 }

@@ -82,6 +82,9 @@ bool CHotKeysToCmdRouter::Init(CWnd* ip_wnd)
 
 bool CHotKeysToCmdRouter::RegisterCommand(UINT i_command_id, UINT i_vk, UINT i_fsModifiers /* = 0*/)
 {
+ if (!HotKeysManager::GetInstance()->m_enabled)
+  return true; //hot keys were disabled
+
  if (!mp_OriginalWnd)
  {
   ASSERT(0);

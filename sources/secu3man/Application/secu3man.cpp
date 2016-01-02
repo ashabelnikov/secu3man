@@ -37,6 +37,7 @@
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
+#include "ui-core/HotKeysManager.h"
 
 namespace {
 //Functionality of the SetThreadLocale() function is broken beginning from Windows Vista
@@ -180,6 +181,9 @@ BOOL CSecu3manApp::InitInstance()
 
  //читаем настройки
  m_pAppSettingsManager->ReadSettings();
+
+ //enable/disable hot keys depending on settings
+ HotKeysManager::GetInstance()->Enable(m_pAppSettingsManager->GetSettings()->GetUseHotKeys());
 
  //подгружаем функции из динамически связываемых DLL (TablDesk)
  DLL::LoadDLLsAndLinkToFunctions();

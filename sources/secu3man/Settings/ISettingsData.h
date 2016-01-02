@@ -99,6 +99,7 @@ class ISettingsData
   virtual int   GetMIDeskUpdatePeriod(void) const = 0;
   virtual CString GetAppDirectory(void) const = 0;
   virtual bool GetCOMPortBother(void) const = 0;
+  virtual bool GetUseHotKeys(void) const = 0;
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;

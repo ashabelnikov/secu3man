@@ -43,6 +43,8 @@ class AFX_EXT_CLASS HotKeysManager
 
   bool IsActive(void) const;
 
+  void Enable(bool i_enable);
+
  private:
   friend CHotKeysToCmdRouter;
   void _AddRouter(CHotKeysToCmdRouter* ip_router);
@@ -53,4 +55,5 @@ class AFX_EXT_CLASS HotKeysManager
   std::vector<CHotKeysToCmdRouter*> m_hk_routers;
 
   bool m_active;
+  bool m_enabled;
 };
