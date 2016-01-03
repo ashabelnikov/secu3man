@@ -64,6 +64,7 @@ CSerieData& CSerieData::operator=(const CSerieData& rhs)
  m_ptCount = rhs.m_ptCount;
  std::copy(rhs.mp_valueX, rhs.mp_valueX + m_ptCount, mp_valueX);
  std::copy(rhs.mp_valueY, rhs.mp_valueY + m_ptCount, mp_valueY);
+ m_visible = rhs.m_visible;
  return *this;
 }
 
