@@ -35,6 +35,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -60,6 +61,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangePdChokeSMStepsNumEdit();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -68,6 +70,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnSMTestButton();
   afx_msg void OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnUpdateChokeSMSteps(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseThrottlePos(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -101,5 +104,10 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_strt_add_tmp_spin;
   CEditEx m_strt_add_tmp_edit;
 
+  CButton m_offstrtadd_ongas_check;
+  CButton m_offrpmreg_ongas_check;
+  CButton m_usethrottle_pos_check;
+
+  std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

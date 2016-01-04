@@ -337,6 +337,9 @@ namespace SECU3IO
   float choke_rpm_if;                   //Integral choke RPM regulator factor
   float choke_corr_time;                //Startup corretion time
   float choke_corr_temp;                //Startup corretion temperature threshold
+  bool  offstrtadd_ongas;               //Turn off additional startup closing when fuel type is gas
+  bool  offrpmreg_ongas;                //Turn off RPM regulator when fuel type is gas
+  bool  usethrottle_pos;                //Use throttle position in choke initialization
  };
 
  struct GasdosePar

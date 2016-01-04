@@ -28,10 +28,12 @@
 #include "ChokePageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CChokePageDlg::IDD = IDD_PD_CHOKE_PAGE;
 
 BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, OnChangePdChokeSMStepsNumEdit)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM_EDIT, OnChangeData)
@@ -40,6 +42,9 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_2NDPT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_IF_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_SM_TEST_CHECK, OnSMTestButton)
+ ON_BN_CLICKED(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateChokeSMSteps)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateChokeSMSteps)
@@ -78,6 +83,10 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_IF_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_TITLE,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnUpdateUseThrottlePos)
 END_MESSAGE_MAP()
 
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
@@ -94,6 +103,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 , m_choketst_enabled(false)
 , m_chokemanpos_enabled(false)
 , m_lock_ui_update(false) //UI update is not locked
+, mp_scr(new CWndScroller)
 {
  m_params.sm_steps = 700;
  m_params.testing = 0;
@@ -104,6 +114,9 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
  m_params.choke_rpm_if = 0.05f;
  m_params.choke_corr_time = 3.0f;
  m_params.choke_corr_temp = 10.0f;
+ m_params.offstrtadd_ongas = false;
+ m_params.offrpmreg_ongas = false;
+ m_params.usethrottle_pos = false;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -133,6 +146,10 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_rpmreg_if_edit);
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_SPIN, m_rpmreg_if_spin);
 
+ DDX_Control(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_offstrtadd_ongas_check);
+ DDX_Control(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_offrpmreg_ongas_check);
+ DDX_Control(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_usethrottle_pos_check);
+
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_params.sm_steps);
  m_strt_add_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_EDIT, m_params.strt_add);
  m_strt_add_tm_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM_EDIT, m_params.choke_corr_time);
@@ -141,6 +158,10 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  m_rpmreg_2ndpt_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_2NDPT_EDIT, m_params.choke_rpm[1]);
  m_rpmreg_if_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_params.choke_rpm_if);
  DDX_Check_UCHAR(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_params.testing);
+
+ DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.offstrtadd_ongas);
+ DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_params.offrpmreg_ongas);
+ DDX_Check_bool(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_params.usethrottle_pos);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -160,6 +181,11 @@ void CChokePageDlg::OnUpdateChokeManPosBtn(CCmdUI* pCmdUI)
 }
 
 void CChokePageDlg::OnUpdateChokeSMSteps(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
+}
+
+void CChokePageDlg::OnUpdateUseThrottlePos(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
 }
@@ -212,6 +238,11 @@ BOOL CChokePageDlg::OnInitDialog()
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.3f));
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -238,6 +269,12 @@ BOOL CChokePageDlg::OnInitDialog()
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CChokePageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CChokePageDlg::OnChangePdChokeSMStepsNumEdit()

@@ -835,6 +835,15 @@ void CFirmwareDataMediator::SetAftstrMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].inj_aftstr[i] = MathHelpers::Round((ip_values[i]*AFTSTR_MAPS_M_FACTOR));
 }
 
+// Write specified bit into a 8-bit variable
+// variable - Variable
+// bitNum - Number of bit for writing in
+// value - value of bit
+static void WRITEBIT8(BYTE& variable, int bitNum, bool value)
+{
+ variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
+}
+
 bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
 {
  using namespace SECU3IO;
@@ -1026,6 +1035,9 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->choke_rpm_if = MathHelpers::Round(p_in->choke_rpm_if * 1024.0f);
     p_params->choke_corr_time = MathHelpers::Round(p_in->choke_corr_time * 100.0f);
     p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    WRITEBIT8(p_params->choke_flags, 0, p_in->offstrtadd_ongas);
+    WRITEBIT8(p_params->choke_flags, 1, p_in->offrpmreg_ongas);
+    WRITEBIT8(p_params->choke_flags, 2, p_in->usethrottle_pos);
    }
    break;
   case GASDOSE_PAR:
@@ -1296,6 +1308,9 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
      p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
      p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->offstrtadd_ongas = (p_params->choke_flags & 0x1) != 0;
+     p_out->offrpmreg_ongas = (p_params->choke_flags & 0x2) != 0;
+     p_out->usethrottle_pos = (p_params->choke_flags & 0x4) != 0;
     }
     break;
    case GASDOSE_PAR:
