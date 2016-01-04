@@ -28,10 +28,12 @@
 #include "IdlRegPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
 
 BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_NEG_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_POS_EDIT, OnChangeData)
@@ -40,6 +42,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_RESTRICTION_MAX_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_TURN_ON_TEMP_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_IDLREG_USE_ONGAS, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -62,6 +65,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_DEAD_BAND_RPM_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_REGULATOR,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_ONGAS,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,OnUpdateControls)
@@ -89,12 +93,14 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 , m_goal_rpm_edit(CEditEx::MODE_INT, true)
 , m_dead_band_rpm_edit(CEditEx::MODE_INT, true)
 , m_turn_on_temp_edit(CEditEx::MODE_FLOAT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.ifac1 = 1.0f;
  m_params.ifac2 = 1.0f;
  m_params.MINEFR = 10;
  m_params.idling_rpm = 850;
- m_params.idl_regul = 0;
+ m_params.idl_regul = false;
+ m_params.use_regongas = true;
  m_params.min_angle = -15.0f;
  m_params.max_angle = 30.0f;
  m_params.turn_on_temp = 50.0f;
@@ -123,6 +129,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_RESTRICTION_MAX_SPIN, m_restriction_max_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_EDIT, m_turn_on_temp_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_SPIN, m_turn_on_temp_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_USE_ONGAS, m_use_regongas);
 
  m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
  m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
@@ -131,7 +138,8 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_goal_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_GOAL_RPM_EDIT, m_params.idling_rpm);
  m_dead_band_rpm_edit.DDX_Value(pDX, IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, m_params.MINEFR);
  m_turn_on_temp_edit.DDX_Value(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_EDIT, m_params.turn_on_temp);
- DDX_Check_UCHAR(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_ONGAS, m_params.use_regongas);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -189,6 +197,11 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_turn_on_temp_edit.SetRange(0.0f,100.0f);
 
  UpdateData(FALSE);
+
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.15f));
  
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -214,6 +227,12 @@ BOOL CIdlRegPageDlg::OnInitDialog()
   
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CIdlRegPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CIdlRegPageDlg::OnChangeData()

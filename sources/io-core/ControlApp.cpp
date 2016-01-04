@@ -676,12 +676,16 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 30 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
- //признак использования регулятора
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_IdlRegPar.idl_regul))
+ //Idling regulator flags
+ BYTE idl_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&idl_flags))
   return false;
+
+ m_IdlRegPar.idl_regul = (idl_flags & 0x1) != 0;
+ m_IdlRegPar.use_regongas = (idl_flags & 0x2) != 0;
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -2249,7 +2253,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
- mp_pdp->Bin4ToHex(packet_data->idl_regul,m_outgoing_packet);
+ unsigned char flags = ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  int ifac1 =  MathHelpers::Round((packet_data->ifac1 * m_angle_multiplier));
  mp_pdp->Bin16ToHex(ifac1,m_outgoing_packet);

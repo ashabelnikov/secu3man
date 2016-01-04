@@ -34,6 +34,7 @@
 #include <memory>
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -54,6 +55,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -63,6 +65,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_enabled;
 
   CButton m_use_regulator;
+  CButton m_use_regongas;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;
@@ -79,4 +82,5 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_turn_on_temp_edit;
     
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };

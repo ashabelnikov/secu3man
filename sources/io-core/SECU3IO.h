@@ -131,7 +131,8 @@ namespace SECU3IO
 
  struct IdlRegPar
  {
-  unsigned char idl_regul;
+  bool idl_regul;                       //use idling regulator
+  bool use_regongas;                    //use regulator when fuel type is gas
   float  ifac1;
   float  ifac2;
   int  MINEFR;

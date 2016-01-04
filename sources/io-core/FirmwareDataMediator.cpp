@@ -883,7 +883,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
   case IDLREG_PAR:
    {
     IdlRegPar* p_in = (IdlRegPar*)ip_values;
-    p_params->idl_regul  = p_in->idl_regul;
+    WRITEBIT8(p_params->idl_flags, 0, p_in->idl_regul);
+    WRITEBIT8(p_params->idl_flags, 1, p_in->use_regongas);
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
     p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLIER);
@@ -1147,7 +1148,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
    case IDLREG_PAR:
     {
      IdlRegPar* p_out = (IdlRegPar*)op_values;
-     p_out->idl_regul  = p_params->idl_regul;
+     p_out->idl_regul  = (p_params->idl_flags & 0x1) != 0;
+     p_out->use_regongas  = (p_params->idl_flags & 0x2) != 0;
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
      p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLIER;
