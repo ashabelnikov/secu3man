@@ -878,6 +878,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->tps_threshold = MathHelpers::Round(p_in->tps_threshold * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->fuelcut_map_thrd = MathHelpers::Round(p_in->fuelcut_map_thrd * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->fuelcut_cts_thrd = MathHelpers::Round(p_in->fuelcut_cts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->revlim_lot  = p_in->revlim_lot;
+    p_params->revlim_hit  = p_in->revlim_hit;
    }
    break;
   case IDLREG_PAR:
@@ -1143,6 +1145,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->tps_threshold = ((float)p_params->tps_threshold) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->fuelcut_map_thrd = ((float)p_params->fuelcut_map_thrd) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->fuelcut_cts_thrd = ((float)p_params->fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->revlim_lot = p_params->revlim_lot;
+     p_out->revlim_hit = p_params->revlim_hit;
     }
     break;
    case IDLREG_PAR:

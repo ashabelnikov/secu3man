@@ -48,6 +48,7 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void Enable(bool enable);
   bool IsEnabled(void);
   void EnableFuelInjection(bool i_enable);
+  void EnableGasdose(bool i_enable);
 
   void GetValues(SECU3IO::CarburPar* o_values);
   void SetValues(const SECU3IO::CarburPar* i_values);
@@ -59,6 +60,7 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateGasControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCarburetorControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -67,6 +69,7 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   SECU3IO::CarburPar m_params;
   bool m_enabled;
   bool m_fuel_injection;
+  bool m_gasdose;
 
   CButton m_inverse_throttle_switch;
   CSpinButtonCtrlEx m_shutoff_lo_threshold_spin;
@@ -87,7 +90,10 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_fuelcut_map_thrd_edit;
   CSpinButtonCtrlEx m_fuelcut_cts_thrd_spin;
   CEditEx m_fuelcut_cts_thrd_edit;
-
+  CSpinButtonCtrlEx m_revlim_lo_threshold_spin;
+  CEditEx m_revlim_lo_threshold_edit;
+  CSpinButtonCtrlEx m_revlim_hi_threshold_spin;
+  CEditEx m_revlim_hi_threshold_edit;
 
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

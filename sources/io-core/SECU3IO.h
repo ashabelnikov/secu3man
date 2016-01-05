@@ -154,6 +154,8 @@ namespace SECU3IO
   float tps_threshold;                  //порог переключения в режим ХХ по ДПДЗ
   float fuelcut_map_thrd;               //fuel cut MAP threshold 
   float fuelcut_cts_thrd;               //fuel cut CTS threshold
+  int  revlim_lot;                      //rev.limitting lo threshold
+  int  revlim_hit;                      //rev.limitting hi threshold
  };
 
  struct TemperPar

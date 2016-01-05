@@ -732,7 +732,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CarburPar& m_CarburPar = m_recepted_packet.m_CarburPar;
- if (size != (mp_pdp->isHex() ? 33 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 41 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Нижний порог ЭПХХ (бензин)
@@ -782,6 +782,14 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &fuelcut_cts_thrd, true))
   return false;
  m_CarburPar.fuelcut_cts_thrd = ((float)fuelcut_cts_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //Rev.limitting lo threshold
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.revlim_lot))
+  return false;
+
+ //Rev.limitting hi threshold
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &m_CarburPar.revlim_hit))
+  return false;
 
  return true;
 }
@@ -2248,6 +2256,8 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
  mp_pdp->Bin16ToHex(fuelcut_map_thrd, m_outgoing_packet);
  int fuelcut_cts_thrd = MathHelpers::Round((packet_data->fuelcut_cts_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER));
  mp_pdp->Bin16ToHex(fuelcut_cts_thrd, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->revlim_lot, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(packet_data->revlim_hit, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

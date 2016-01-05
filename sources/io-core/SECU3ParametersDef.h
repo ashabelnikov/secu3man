@@ -189,10 +189,13 @@ typedef struct
 
  _uchar  choke_flags;                   // Choke flags
 
+ _uint   revlim_lot;                    // rev.limitting lo threshold
+ _uint   revlim_hit;                    // rev.limitting hi threshold
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[80];
+ _uchar reserved[76];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
