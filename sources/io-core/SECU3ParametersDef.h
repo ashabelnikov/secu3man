@@ -192,10 +192,12 @@ typedef struct
  _uint   revlim_lot;                    // rev.limitting lo threshold
  _uint   revlim_hit;                    // rev.limitting hi threshold
 
+ _int    inj_timing_crk;                // Injection timing (phase) on cranking
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[76];
+ _uchar reserved[74];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

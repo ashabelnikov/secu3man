@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_CYLDISP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -49,6 +50,10 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_CAPTION,OnUpdateControls)
@@ -61,6 +66,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_inj_timing_edit(CEditEx::MODE_FLOAT, true)
+, m_inj_timing_crk_edit(CEditEx::MODE_FLOAT, true)
 , m_flowrate_edit(CEditEx::MODE_FLOAT, true)
 , m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 , m_ovf_msgbox(false)
@@ -72,6 +78,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_sd_igl_const = 0;
  m_params.cyl_num = 4;
  m_params.inj_timing = 0; 
+ m_params.inj_timing_crk = 0; 
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -95,12 +102,15 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_COMBO, m_sqrnum_combo);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_EDIT, m_inj_timing_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_inj_timing_crk_edit);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_SPIN, m_inj_timing_crk_spin);
 
  m_flowrate_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate);
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
  m_inj_timing_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing);
+ m_inj_timing_crk_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_params.inj_timing_crk);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -132,6 +142,12 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_inj_timing_edit.SetDecimalPlaces(0);
  m_inj_timing_spin.SetRangeAndDelta(-360.0f, 360.0f, 1.0);
  m_inj_timing_edit.SetRange(-360.0f, 360.0f);
+
+ m_inj_timing_crk_spin.SetBuddy(&m_inj_timing_crk_edit);
+ m_inj_timing_crk_edit.SetLimitText(4);
+ m_inj_timing_crk_edit.SetDecimalPlaces(0);
+ m_inj_timing_crk_spin.SetRangeAndDelta(-360.0f, 360.0f, 1.0);
+ m_inj_timing_crk_edit.SetRange(-360.0f, 360.0f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

@@ -84,6 +84,8 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CComboBox m_sqrnum_combo;
   CSpinButtonCtrlEx m_inj_timing_spin;
   CEditEx m_inj_timing_edit;
+  CSpinButtonCtrlEx m_inj_timing_crk_spin;
+  CEditEx m_inj_timing_crk_edit;
 
   float m_fuel_density; //fuel density (g/cc)
 

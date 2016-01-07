@@ -1082,6 +1082,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
     p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);
     p_params->inj_timing = MathHelpers::Round(p_in->inj_timing * ANGLE_MULTIPLIER);
+    p_params->inj_timing_crk = MathHelpers::Round(p_in->inj_timing_crk * ANGLE_MULTIPLIER);
    }
    break;
   case LAMBDA_PAR:
@@ -1363,6 +1364,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     p_out->inj_sd_igl_const = (float)p_params->inj_sd_igl_const;
     p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
     p_out->inj_timing = ((float)p_params->inj_timing) / ANGLE_MULTIPLIER;
+    p_out->inj_timing_crk = ((float)p_params->inj_timing_crk) / ANGLE_MULTIPLIER;
    }
    break;
   case LAMBDA_PAR:

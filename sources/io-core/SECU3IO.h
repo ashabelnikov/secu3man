@@ -433,6 +433,7 @@ namespace SECU3IO
   float inj_sd_igl_const;             //precalculated constant
   int cyl_num;                        //read-only parameter: number of cylinders
   float inj_timing;                   //injection timing
+  float inj_timing_crk;               //injection timing on cranking
  };
 
  struct LambdaPar
