@@ -887,7 +887,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) && !(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
- m_view->mp_ParamDeskDlg->EnableHallOutputParams(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_OUTPUT)) > 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0));
+ m_view->mp_ParamDeskDlg->EnableHallOutputParams(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_OUTPUT)) > 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 0));
  m_view->mp_ParamDeskDlg->EnableSECU3TItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)));
  if ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)))
   //SECU-3T has two additional ignition outputs
@@ -902,7 +902,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
  this->mp_iorCntr->Enable(true);
 
- m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0);
+ m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0 && (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 0);
  m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
 
  m_view->mp_ParamDeskDlg->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);

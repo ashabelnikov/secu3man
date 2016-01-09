@@ -128,7 +128,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_DWELL_CONTROL)) && !(opt & (1 << COPT_CKPS_2CHIGN)));
  mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
  mp_view->EnableUseCTSCurveMap((opt & (1 << COPT_THERMISTOR_CS)) > 0);
- mp_view->EnableHallOutputParams(((opt & (1 << COPT_HALL_OUTPUT)) > 0) && ((opt & (1 << COPT_HALL_SYNC)) == 0));
+ mp_view->EnableHallOutputParams(((opt & (1 << COPT_HALL_OUTPUT)) > 0) && ((opt & (1 << COPT_HALL_SYNC)) == 0) && ((opt & (1 << COPT_CKPS_NPLUS1)) == 0));
  mp_view->EnableSECU3TItems((opt & (1 << COPT_SECU3T)));
  if ((opt & (1 << COPT_SECU3T)))
   //SECU-3T has two additional ignition outputs
@@ -144,7 +144,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableChokeManPos((opt & (1 << COPT_SM_CONTROL)) > 0);
  mp_view->EnableGasdoseTesting((opt & (1 << COPT_GD_CONTROL)) > 0);
  mp_view->EnableGasdoseManPos((opt & (1 << COPT_GD_CONTROL)) > 0);
- mp_view->EnableCKPSItems((opt & (1 << COPT_HALL_SYNC)) == 0);
+ mp_view->EnableCKPSItems((opt & (1 << COPT_HALL_SYNC)) == 0 && (opt & (1 << COPT_CKPS_NPLUS1)) == 0);
  mp_view->EnableInputsMerging(!(opt & (1 << COPT_CKPS_2CHIGN)));
  mp_view->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0); 
  mp_view->EnableLambda((opt & (1 << COPT_FUEL_INJECT)) > 0 || (opt & (1 << COPT_CARB_AFR)) > 0);
