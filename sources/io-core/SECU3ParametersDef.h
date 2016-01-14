@@ -194,10 +194,12 @@ typedef struct
 
  _int    inj_timing_crk;                // Injection timing (phase) on cranking
 
+ _uchar  gd_fc_closing;                 // Closing in fuel cut mode
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[74];
+ _uchar reserved[73];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

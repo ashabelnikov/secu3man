@@ -81,5 +81,8 @@ class CGasdosePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_sm_test_check;
   CSpinButtonCtrl m_man_ctrl_spin;
 
+  CSpinButtonCtrlEx m_fc_closing_spin;
+  CEditEx m_fc_closing_edit;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

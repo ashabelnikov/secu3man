@@ -1047,6 +1047,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
    {
     GasdosePar* p_in = (GasdosePar*)ip_values;
     p_params->gd_steps  = p_in->gd_steps;
+    p_params->gd_fc_closing = MathHelpers::Round(p_in->fc_closing * 2.0f);
    }
    break;
   case SECUR_PAR:
@@ -1324,6 +1325,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     {
      GasdosePar* p_out = (GasdosePar*)op_values;
      p_out->gd_steps = p_params->gd_steps;
+     p_out->fc_closing = p_params->gd_fc_closing / 2.0f;
     }
     break;
    case SECUR_PAR:

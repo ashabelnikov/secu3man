@@ -1521,7 +1521,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 7 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 9 : 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1537,6 +1537,12 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &delta))
   return false;
  m_GasdosePar.manual_delta = delta;
+
+ //Closing in fuel cut mode
+ int fc_closing = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &fc_closing))
+  return false;
+ m_GasdosePar.fc_closing = ((float)fc_closing) / 2.0f;
 
  return true;
 }
@@ -2585,6 +2591,8 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->gd_steps, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->testing, m_outgoing_packet); //fake parameter (actually it is command)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
+ BYTE fc_closing = MathHelpers::Round(packet_data->fc_closing * 2.0f);
+ mp_pdp->Bin8ToHex(fc_closing, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
