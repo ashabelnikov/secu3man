@@ -147,7 +147,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableCKPSItems((opt & (1 << COPT_HALL_SYNC)) == 0 && (opt & (1 << COPT_CKPS_NPLUS1)) == 0);
  mp_view->EnableInputsMerging(!(opt & (1 << COPT_CKPS_2CHIGN)));
  mp_view->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0); 
- mp_view->EnableLambda((opt & (1 << COPT_FUEL_INJECT)) > 0 || (opt & (1 << COPT_CARB_AFR)) > 0);
+ mp_view->EnableLambda((opt & (1 << COPT_FUEL_INJECT)) > 0 || (opt & (1 << COPT_CARB_AFR)) > 0 || (opt & (1 << COPT_GD_CONTROL)) > 0);
  mp_view->EnableGasdose((opt & (1 << COPT_GD_CONTROL)) > 0); //GD
  mp_view->EnableChoke((opt & (1 << COPT_SM_CONTROL)) > 0); 
 }
