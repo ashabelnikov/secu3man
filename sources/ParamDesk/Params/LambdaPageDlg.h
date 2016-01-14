@@ -34,6 +34,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -55,6 +56,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -65,10 +67,14 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CSpinButtonCtrlEx m_strperstp_spin;
   CEditEx m_strperstp_edit;
-  CSpinButtonCtrlEx m_stepsize_spin;
-  CEditEx m_stepsize_edit;
-  CSpinButtonCtrlEx m_corrlimit_spin;
-  CEditEx m_corrlimit_edit;
+  CSpinButtonCtrlEx m_stepsize_p_spin;
+  CEditEx m_stepsize_p_edit;
+  CSpinButtonCtrlEx m_stepsize_m_spin;
+  CEditEx m_stepsize_m_edit;
+  CSpinButtonCtrlEx m_corrlimit_p_spin;
+  CEditEx m_corrlimit_p_edit;
+  CSpinButtonCtrlEx m_corrlimit_m_spin;
+  CEditEx m_corrlimit_m_edit;
   CSpinButtonCtrlEx m_swtpoint_spin;
   CEditEx m_swtpoint_edit;
   CSpinButtonCtrlEx m_tempthrd_spin;
@@ -79,4 +85,5 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_activdelay_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };

@@ -1710,7 +1710,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 22 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -1718,15 +1718,25 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_LambdaPar.lam_str_per_stp = strperstp;
 
- unsigned char stepsize = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize))
+ unsigned char stepsize_p = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize_p))
   return false;
- m_LambdaPar.lam_step_size = (float(stepsize) / 512.0f) * 100.0f;
+ m_LambdaPar.lam_step_size_p = (float(stepsize_p) / 512.0f) * 100.0f;
 
- int corrlimit = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit))
+ unsigned char stepsize_m = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &stepsize_m))
   return false;
- m_LambdaPar.lam_corr_limit = (float(corrlimit) / 512.0f) * 100.0f;
+ m_LambdaPar.lam_step_size_m = (float(stepsize_m) / 512.0f) * 100.0f;
+
+ int corrlimit_p = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_p))
+  return false;
+ m_LambdaPar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
+
+ int corrlimit_m = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_m))
+  return false;
+ m_LambdaPar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
  int swtpoint = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &swtpoint))
@@ -2662,10 +2672,14 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
 {
  mp_pdp->Bin8ToHex(packet_data->lam_str_per_stp, m_outgoing_packet);
- int step_size = MathHelpers::Round(packet_data->lam_step_size * 512.0f / 100.0f);
- mp_pdp->Bin8ToHex(step_size, m_outgoing_packet);
- int corr_limit = MathHelpers::Round(packet_data->lam_corr_limit * 512.0f / 100.0f);
- mp_pdp->Bin16ToHex(corr_limit, m_outgoing_packet);
+ int step_size_p = MathHelpers::Round(packet_data->lam_step_size_p * 512.0f / 100.0f);
+ mp_pdp->Bin8ToHex(step_size_p, m_outgoing_packet);
+ int step_size_m = MathHelpers::Round(packet_data->lam_step_size_m * 512.0f / 100.0f);
+ mp_pdp->Bin8ToHex(step_size_m, m_outgoing_packet);
+ int corr_limit_p = MathHelpers::Round(packet_data->lam_corr_limit_p * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(corr_limit_p, m_outgoing_packet);
+ int corr_limit_m = MathHelpers::Round(packet_data->lam_corr_limit_m * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(corr_limit_m, m_outgoing_packet);
  int swt_point = MathHelpers::Round(packet_data->lam_swt_point / ADC_DISCRETE);
  mp_pdp->Bin16ToHex(swt_point, m_outgoing_packet);
  int temp_thrd = MathHelpers::Round(packet_data->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);

@@ -440,8 +440,10 @@ namespace SECU3IO
  struct LambdaPar
  {
   int lam_str_per_stp;                //Number of strokes per step for lambda control
-  float lam_step_size;                //Size of step 
-  float lam_corr_limit;               //correction limit
+  float lam_step_size_p;              //"+" Size of step 
+  float lam_step_size_m;              //"-" Size of step 
+  float lam_corr_limit_p;             //"+" correction limit
+  float lam_corr_limit_m;             //"-" correction limit
   float lam_swt_point;                //switch point in Volts
   float lam_temp_thrd;                //Temperature turn on threshold
   int lam_rpm_thrd;                   //RPM turn on threshold

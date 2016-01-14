@@ -27,13 +27,17 @@
 #include "Resources/resource.h"
 #include "LambdaPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_LAMBDA_STRPERSTP_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_LAMBDA_CORRLIMIT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_P_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_M_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_CORRLIMIT_P_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_CORRLIMIT_M_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_SWTPOINT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_TEMPTHRD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_RPMTHRD_EDIT, OnChangeData)
@@ -43,14 +47,22 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_M_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_M_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_M_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_M_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_P_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_P_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_P_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_P_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_M_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_M_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_M_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_CORRLIMIT_M_UNIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SWTPOINT_CAPTION,OnUpdateControls)
@@ -73,16 +85,21 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CLambdaPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_strperstp_edit(CEditEx::MODE_INT, true)
-, m_stepsize_edit(CEditEx::MODE_FLOAT, true)
-, m_corrlimit_edit(CEditEx::MODE_FLOAT, true)
+, m_stepsize_p_edit(CEditEx::MODE_FLOAT, true)
+, m_stepsize_m_edit(CEditEx::MODE_FLOAT, true)
+, m_corrlimit_p_edit(CEditEx::MODE_FLOAT, true)
+, m_corrlimit_m_edit(CEditEx::MODE_FLOAT, true)
 , m_swtpoint_edit(CEditEx::MODE_FLOAT, true)
 , m_tempthrd_edit(CEditEx::MODE_FLOAT, true)
 , m_rpmthrd_edit(CEditEx::MODE_INT, true)
 , m_activdelay_edit(CEditEx::MODE_INT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.lam_str_per_stp = 10;
- m_params.lam_step_size = 2.5f;
- m_params.lam_corr_limit = 30.0f;
+ m_params.lam_step_size_p = 2.5f;
+ m_params.lam_step_size_m = 2.5f;
+ m_params.lam_corr_limit_p = 30.0f;
+ m_params.lam_corr_limit_m = 30.0f;
  m_params.lam_swt_point = 0.50f;
  m_params.lam_temp_thrd = 70.0f;
  m_params.lam_rpm_thrd = 800;
@@ -104,10 +121,14 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_EDIT, m_strperstp_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_SPIN, m_strperstp_spin);
- DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_EDIT, m_stepsize_edit);
- DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_SPIN, m_stepsize_spin);
- DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_EDIT, m_corrlimit_edit);
- DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_SPIN, m_corrlimit_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_stepsize_p_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_P_SPIN, m_stepsize_p_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_M_EDIT, m_stepsize_m_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_M_SPIN, m_stepsize_m_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_P_EDIT, m_corrlimit_p_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_P_SPIN, m_corrlimit_p_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_M_EDIT, m_corrlimit_m_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_CORRLIMIT_M_SPIN, m_corrlimit_m_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_SWTPOINT_EDIT, m_swtpoint_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_SWTPOINT_SPIN, m_swtpoint_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_TEMPTHRD_EDIT, m_tempthrd_edit);
@@ -118,8 +139,10 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_ACTIVDELAY_SPIN, m_activdelay_spin);
 
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
- m_stepsize_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_EDIT, m_params.lam_step_size);
- m_corrlimit_edit.DDX_Value(pDX, IDC_PD_LAMBDA_CORRLIMIT_EDIT, m_params.lam_corr_limit);
+ m_stepsize_p_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_params.lam_step_size_p);
+ m_stepsize_m_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_M_EDIT, m_params.lam_step_size_m);
+ m_corrlimit_p_edit.DDX_Value(pDX, IDC_PD_LAMBDA_CORRLIMIT_P_EDIT, m_params.lam_corr_limit_p);
+ m_corrlimit_m_edit.DDX_Value(pDX, IDC_PD_LAMBDA_CORRLIMIT_M_EDIT, m_params.lam_corr_limit_m);
  m_swtpoint_edit.DDX_Value(pDX, IDC_PD_LAMBDA_SWTPOINT_EDIT, m_params.lam_swt_point);
  m_tempthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_TEMPTHRD_EDIT, m_params.lam_temp_thrd);
  m_rpmthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_RPMTHRD_EDIT, m_params.lam_rpm_thrd);
@@ -144,17 +167,29 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_strperstp_spin.SetRangeAndDelta(1, 100, 1);
  m_strperstp_edit.SetRange(1, 100);
 
- m_stepsize_spin.SetBuddy(&m_stepsize_edit);
- m_stepsize_edit.SetLimitText(5);
- m_stepsize_edit.SetDecimalPlaces(2);
- m_stepsize_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
- m_stepsize_edit.SetRange(0.25f, 45.00f);
+ m_stepsize_p_spin.SetBuddy(&m_stepsize_p_edit);
+ m_stepsize_p_edit.SetLimitText(5);
+ m_stepsize_p_edit.SetDecimalPlaces(2);
+ m_stepsize_p_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
+ m_stepsize_p_edit.SetRange(0.25f, 45.00f);
 
- m_corrlimit_spin.SetBuddy(&m_corrlimit_edit);
- m_corrlimit_edit.SetLimitText(6);
- m_corrlimit_edit.SetDecimalPlaces(2);
- m_corrlimit_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
- m_corrlimit_edit.SetRange(0.50f, 100.00f);
+ m_stepsize_m_spin.SetBuddy(&m_stepsize_m_edit);
+ m_stepsize_m_edit.SetLimitText(5);
+ m_stepsize_m_edit.SetDecimalPlaces(2);
+ m_stepsize_m_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
+ m_stepsize_m_edit.SetRange(0.25f, 45.00f);
+
+ m_corrlimit_p_spin.SetBuddy(&m_corrlimit_p_edit);
+ m_corrlimit_p_edit.SetLimitText(6);
+ m_corrlimit_p_edit.SetDecimalPlaces(2);
+ m_corrlimit_p_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
+ m_corrlimit_p_edit.SetRange(0.50f, 100.00f);
+
+ m_corrlimit_m_spin.SetBuddy(&m_corrlimit_m_edit);
+ m_corrlimit_m_edit.SetLimitText(6);
+ m_corrlimit_m_edit.SetDecimalPlaces(2);
+ m_corrlimit_m_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
+ m_corrlimit_m_edit.SetRange(0.50f, 100.00f);
 
  m_swtpoint_spin.SetBuddy(&m_swtpoint_edit);
  m_swtpoint_edit.SetLimitText(4);
@@ -180,6 +215,11 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_activdelay_spin.SetRangeAndDelta(5, 255, 1);
  m_activdelay_edit.SetRange(5, 255);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.3f));
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -192,6 +232,12 @@ BOOL CLambdaPageDlg::OnInitDialog()
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CLambdaPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CLambdaPageDlg::OnChangeData()

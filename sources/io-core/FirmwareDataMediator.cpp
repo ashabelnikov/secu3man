@@ -1090,8 +1090,10 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
    {
     LambdaPar* p_in = (LambdaPar*)ip_values;
     p_params->inj_lambda_str_per_stp = p_in->lam_str_per_stp;
-    p_params->inj_lambda_step_size = MathHelpers::Round(p_in->lam_step_size * 512.0f / 100.0f);
-    p_params->inj_lambda_corr_limit = MathHelpers::Round(p_in->lam_corr_limit * 512.0f / 100.0f);
+    p_params->inj_lambda_step_size_p = MathHelpers::Round(p_in->lam_step_size_p * 512.0f / 100.0f);
+    p_params->inj_lambda_step_size_m = MathHelpers::Round(p_in->lam_step_size_m * 512.0f / 100.0f);
+    p_params->inj_lambda_corr_limit_p = MathHelpers::Round(p_in->lam_corr_limit_p * 512.0f / 100.0f);
+    p_params->inj_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
     p_params->inj_lambda_swt_point = MathHelpers::Round(p_in->lam_swt_point / ADC_DISCRETE);
     p_params->inj_lambda_temp_thrd = MathHelpers::Round(p_in->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
@@ -1373,8 +1375,10 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
    {
     LambdaPar* p_out = (LambdaPar*)op_values;
     p_out->lam_str_per_stp = p_params->inj_lambda_str_per_stp;
-    p_out->lam_step_size = ((float)p_params->inj_lambda_step_size * 100.0f)/512.0f;
-    p_out->lam_corr_limit = ((float)p_params->inj_lambda_corr_limit * 100.0f)/512.0f;
+    p_out->lam_step_size_p = ((float)p_params->inj_lambda_step_size_p * 100.0f)/512.0f;
+    p_out->lam_step_size_m = ((float)p_params->inj_lambda_step_size_m * 100.0f)/512.0f;
+    p_out->lam_corr_limit_p = ((float)p_params->inj_lambda_corr_limit_p * 100.0f)/512.0f;
+    p_out->lam_corr_limit_m = ((float)p_params->inj_lambda_corr_limit_m * 100.0f)/512.0f;
     p_out->lam_swt_point = ((float)p_params->inj_lambda_swt_point) * ADC_DISCRETE;
     p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
