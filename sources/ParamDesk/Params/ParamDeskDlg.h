@@ -163,8 +163,9 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;
-  std::vector<int> m_fuel_injection_idx;       //<--indexes of fuel injection tabs
+  int m_fuel_inject_idx;
   int m_lambda_tab_idx;
+  int m_accenr_tab_idx;
   int m_gasdose_tab_idx;
   int m_choke_tab_idx;
 

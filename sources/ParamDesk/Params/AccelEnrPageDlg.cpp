@@ -39,16 +39,17 @@ BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_UNIT,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_UNIT,OnUpdateFuelInjectionControls)
 
 END_MESSAGE_MAP()
 
 CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CAccelEnrPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_tpsdot_thrd_edit(CEditEx::MODE_FLOAT, true)
 , m_coldacc_mult_edit(CEditEx::MODE_FLOAT, true)
 {
@@ -77,6 +78,11 @@ void CAccelEnrPageDlg::DoDataExchange(CDataExchange* pDX)
 void CAccelEnrPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CAccelEnrPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -149,4 +155,13 @@ void CAccelEnrPageDlg::SetValues(const SECU3IO::AccelPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::AccelPar));
  UpdateData(FALSE); //copy data from variables to dialog
+}
+
+void CAccelEnrPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }

@@ -46,6 +46,7 @@ namespace SECU3IO
   unsigned char epm_valve;              //состояние клапана ЭМР
   unsigned char cool_fan;               //состояние вентилятора (включен/выключен)
   unsigned char st_block;               //состояние выхода блокировки стартера
+  unsigned char acceleration;           //acceleration/deceleration mode
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
   unsigned char ce_state;               // !currently is not used!
@@ -78,6 +79,8 @@ namespace SECU3IO
   float lambda_corr;                    //lambda correction in %
 
   float inj_pw;                         //injector pulse width in ms
+
+  int tpsdot;                           //TPS dot (d%/dt)
  };
 
  struct DbgvarDat

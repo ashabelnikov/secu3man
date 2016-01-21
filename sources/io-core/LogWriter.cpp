@@ -31,7 +31,7 @@
 using namespace SECU3IO;
 
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
-const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%01d%c %%s\r\n";
+const char cCSVDataTemplateString[] = "%c %%05d%c%%6.2f%c %%6.2f%c %%5.2f%c %%6.2f%c %%4.2f%c %%5.2f%c %%02d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%01d%c %%5.1f%c %%6.3f%c %%6.3f%c %%5.1f%c %%5.1f%c %%5.1f%c %%7.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%6.2f%c %%05d%c %%01d%c %%s\r\n";
 
 namespace {
 void wordToString(WORD value, char* str)
@@ -92,7 +92,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         (int)p_sensors->epm_valve,
                         (int)p_sensors->cool_fan,
                         (int)p_sensors->st_block,
-                        (int)0, //reserved bit
+                        (int)p_sensors->acceleration,
                         p_sensors->tps,
                         p_sensors->add_i1,
                         p_sensors->add_i2,
@@ -100,7 +100,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->gasdose_pos,
                         p_sensors->speed,
                         p_sensors->distance,
-                        p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic nubmer indicates that IAT is not used
+                        p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic number indicates that IAT is not used
 
                         p_sensors->strt_aalt,         // advance angle from start map
                         p_sensors->idle_aalt,         // advance angle from idle map
@@ -112,6 +112,8 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->lambda_corr,       // lambda correction
 
                         p_sensors->inj_pw,            // injector pulse width
+
+                        p_sensors->tpsdot,            // TPS dot (d%/dt)
 
                         m_pending_marks,
                         ce_errors);
@@ -170,7 +172,7 @@ bool LogWriter::IsLoggingInProcess(void)
 void LogWriter::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogWriter::InjectMarks(int marks)

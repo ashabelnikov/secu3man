@@ -233,14 +233,13 @@ BOOL CParamDeskDlg::OnInitDialog()
  m_choke_tab_idx = idx;
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_SECUR_PAR),m_pSecurPageDlg,11), SECUR_PAR));
  m_tab_descriptors.insert(TabDescriptor::value_type(m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_UNIOUT_PAR),m_pUniOutPageDlg,12), UNIOUT_PAR));
- //fuel injection tabs
- m_fuel_injection_idx.clear();
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_INJCTR_PAR),m_pInjectorPageDlg,13), INJCTR_PAR));
- m_fuel_injection_idx.push_back(idx); //remember index of tab
+ m_fuel_inject_idx = idx; //remember index of tab
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_LAMBDA_PAR),m_pLambdaPageDlg,14), LAMBDA_PAR));
  m_lambda_tab_idx = idx;
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_ACCEL_PAR),m_pAccelEnrPageDlg,15), ACCEL_PAR));
- m_fuel_injection_idx.push_back(idx);
+ m_accenr_tab_idx = idx;
+
  //GD tab
  m_tab_descriptors.insert(TabDescriptor::value_type(idx = m_tab_control.AddPage(MLL::LoadString(IDS_PD_TABNAME_GASDOSE_PAR),m_pGasdosePageDlg,16), GASDOSE_PAR));
  m_gasdose_tab_idx = idx;
@@ -254,12 +253,18 @@ BOOL CParamDeskDlg::OnInitDialog()
  //set previous value (tabs are enabled or not)
  m_tab_control.EnableItem(-1, m_enabled);
 
- //disable fuel injection related tabs if fuel injection is not supported
+ //disable fuel injection related tab if fuel injection is not supported
  if (false==m_fuel_injection)
  {
-  for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
-   m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
+  m_tab_control.EnableItem(m_fuel_inject_idx, false);
  }
+
+ //disable acceleration enrichment tab if fuel injection and gas doser are not supported
+ if (false==m_fuel_injection && false==m_gasdose)
+ {
+  m_tab_control.EnableItem(m_accenr_tab_idx, false);
+ }
+
  //disable lambda settings tab if lambda support is not included
  if (false==m_lambda)
  {
@@ -341,19 +346,24 @@ void CParamDeskDlg::Enable(bool enable)
  m_pUniOutPageDlg->Enable(enable);
  m_pInjectorPageDlg->Enable(enable && m_fuel_injection);
  m_pLambdaPageDlg->Enable(enable && m_lambda);
- m_pAccelEnrPageDlg->Enable(enable && m_fuel_injection);
+ m_pAccelEnrPageDlg->Enable(enable && (m_fuel_injection || m_gasdose));
 
  if (::IsWindow(m_hWnd))
   UpdateDialogControls(this,TRUE);
 
  m_tab_control.EnableItem(-1, enable); //all items
 
- //disable fuel injection related tabs if fuel injection is not supported
+ //disable fuel injection related tab if fuel injection is not supported
  if (false==m_fuel_injection)
  {
-  for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
-   m_tab_control.EnableItem(m_fuel_injection_idx[i], false);
+  m_tab_control.EnableItem(m_fuel_inject_idx, false);
  }
+
+ if (false==m_fuel_injection && false==m_gasdose)
+ {
+  m_tab_control.EnableItem(m_accenr_tab_idx, false);
+ }
+
  if (false==m_lambda)
  {
   m_tab_control.EnableItem(m_lambda_tab_idx, false);
@@ -633,10 +643,12 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  if (m_fuel_injection == i_enable)
   return; //already has needed state
  m_fuel_injection = i_enable;
- for(size_t i = 0; i < m_fuel_injection_idx.size(); ++i)
-  m_tab_control.EnableItem(m_fuel_injection_idx[i], i_enable && m_enabled);
+
+ m_tab_control.EnableItem(m_fuel_inject_idx, i_enable && m_enabled);
+ m_tab_control.EnableItem(m_accenr_tab_idx, (i_enable || m_gasdose) && m_enabled);
  m_pInjectorPageDlg->Enable(i_enable && m_enabled);
- m_pAccelEnrPageDlg->Enable(i_enable && m_enabled);
+ m_pAccelEnrPageDlg->Enable((i_enable || m_gasdose) && m_enabled);
+ m_pAccelEnrPageDlg->EnableFuelInjection(i_enable);
  m_pStarterPageDlg->EnableFuelInjection(i_enable);
  m_pCarburPageDlg->EnableFuelInjection(i_enable);
  m_pChokePageDlg->EnableFuelInjection(i_enable);
@@ -648,7 +660,9 @@ void CParamDeskDlg::EnableGasdose(bool i_enable)
   return; //already has needed state
  m_gasdose = i_enable;
  m_tab_control.EnableItem(m_gasdose_tab_idx, i_enable && m_enabled);
+ m_tab_control.EnableItem(m_accenr_tab_idx, (m_gasdose || m_fuel_injection) && m_enabled);
  m_pGasdosePageDlg->Enable(i_enable && m_enabled);
+ m_pAccelEnrPageDlg->Enable((m_fuel_injection || i_enable) && m_enabled);
  m_pCarburPageDlg->EnableGasdose(i_enable);
 }
 

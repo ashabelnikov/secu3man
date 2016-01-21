@@ -47,6 +47,7 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableFuelInjection(bool i_enable);
 
   void GetValues(SECU3IO::AccelPar* o_values);
   void SetValues(const SECU3IO::AccelPar* i_values);
@@ -57,11 +58,13 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::AccelPar m_params;
   bool m_enabled;
+  bool m_fuel_injection;
 
   CSpinButtonCtrlEx m_tpsdot_thrd_spin;
   CEditEx m_tpsdot_thrd_edit;

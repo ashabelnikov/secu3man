@@ -267,7 +267,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 100 : 50))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 104 : 52))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -330,6 +330,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  m_SensorDat.ce_state   = (byte & (1 << 4)) != 0;
  m_SensorDat.cool_fan   = (byte & (1 << 5)) != 0;
  m_SensorDat.st_block   = (byte & (1 << 6)) != 0;
+ m_SensorDat.acceleration = (byte & (1 << 7)) != 0;
 
  //TPS sensor
  unsigned char tps = 0;
@@ -466,6 +467,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_pw))
   return false;
  m_SensorDat.inj_pw = (inj_pw * 3.2f) / 1000.0f;
+
+ //TPS opening/clising speed (d%/dt = %/s), signed value
+ int tpsdot = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &tpsdot, true))
+  return false;
+ m_SensorDat.tpsdot = tpsdot;
 
  return true;
 }
