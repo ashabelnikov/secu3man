@@ -61,6 +61,7 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGasControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateInjGasControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCarburetorControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
