@@ -926,7 +926,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->starter_off  = p_in->starter_off;
     p_params->smap_abandon = p_in->smap_abandon;
     p_params->inj_cranktorun_time = MathHelpers::Round(p_in->inj_cranktorun_time * 100.0f);
-    p_params->inj_aftstr_strokes = p_in->inj_aftstr_strokes;
+    p_params->inj_aftstr_strokes = MathHelpers::Round(p_in->inj_aftstr_strokes / 2.0f);
     float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
     p_params->inj_prime_cold = MathHelpers::Round((p_in->inj_prime_cold * 1000.0f) / discrete);
     p_params->inj_prime_hot = MathHelpers::Round((p_in->inj_prime_hot * 1000.0f) / discrete);
@@ -1197,7 +1197,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->starter_off = p_params->starter_off;
      p_out->smap_abandon = p_params->smap_abandon;
      p_out->inj_cranktorun_time = float(p_params->inj_cranktorun_time) / 100.0f;
-     p_out->inj_aftstr_strokes = p_params->inj_aftstr_strokes;
+     p_out->inj_aftstr_strokes = p_params->inj_aftstr_strokes * 2;
      float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
      p_out->inj_prime_cold = (float(p_params->inj_prime_cold) * discrete) / 1000.0f;  //convert to ms
      p_out->inj_prime_hot = (float(p_params->inj_prime_hot) * discrete) / 1000.0f;  //convert to ms

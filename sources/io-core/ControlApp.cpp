@@ -557,7 +557,7 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  unsigned char aftstr_strokes = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &aftstr_strokes))
   return false;
- m_StartrPar.inj_aftstr_strokes = aftstr_strokes;
+ m_StartrPar.inj_aftstr_strokes = aftstr_strokes * 2;
 
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  //prime pulse at -30C
@@ -2320,7 +2320,8 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->smap_abandon,m_outgoing_packet);
  int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
  mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
- mp_pdp->Bin8ToHex(packet_data->inj_aftstr_strokes, m_outgoing_packet);
+ int inj_aftstr_strokes = MathHelpers::Round(packet_data->inj_aftstr_strokes / 2.0f);
+ mp_pdp->Bin8ToHex(inj_aftstr_strokes, m_outgoing_packet);
  float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
  int prime_cold = MathHelpers::Round((packet_data->inj_prime_cold * 1000.0f) / discrete);
  mp_pdp->Bin16ToHex(prime_cold, m_outgoing_packet);
