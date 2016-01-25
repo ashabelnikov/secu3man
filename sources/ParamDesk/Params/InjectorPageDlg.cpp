@@ -252,9 +252,9 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  m_params.inj_sd_igl_const = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * ((float(bnk_num) * float(m_params.cyl_num)) / (float(inj_num) * float(m_params.inj_squirt_num)));
  //----------------------------------------------------------------------------
 
- if (m_params.inj_sd_igl_const > 131072)
+ if (m_params.inj_sd_igl_const > 524288)
  {
-  m_params.inj_sd_igl_const = 131072;
+  m_params.inj_sd_igl_const = 524288;
   if (!m_ovf_msgbox)
   {
    m_ovf_msgbox = true;
