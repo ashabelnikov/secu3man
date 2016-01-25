@@ -1048,6 +1048,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     GasdosePar* p_in = (GasdosePar*)ip_values;
     p_params->gd_steps  = p_in->gd_steps;
     p_params->gd_fc_closing = MathHelpers::Round(p_in->fc_closing * 2.0f);
+    p_params->gd_lambda_corr_limit_p = MathHelpers::Round(p_in->lam_corr_limit_p * 512.0f / 100.0f);
+    p_params->gd_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
    }
    break;
   case SECUR_PAR:
@@ -1328,6 +1330,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      GasdosePar* p_out = (GasdosePar*)op_values;
      p_out->gd_steps = p_params->gd_steps;
      p_out->fc_closing = p_params->gd_fc_closing / 2.0f;
+     p_out->lam_corr_limit_p = ((float)p_params->gd_lambda_corr_limit_p * 100.0f)/512.0f;
+     p_out->lam_corr_limit_m = ((float)p_params->gd_lambda_corr_limit_m * 100.0f)/512.0f;
     }
     break;
    case SECUR_PAR:

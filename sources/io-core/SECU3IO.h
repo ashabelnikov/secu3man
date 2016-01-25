@@ -354,6 +354,8 @@ namespace SECU3IO
   unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
   signed char manual_delta;             //delta position value for manual choke control
   float fc_closing;                     //How much close gas doser in fuel cut mode (%)
+  float lam_corr_limit_p;               //"+" correction limit
+  float lam_corr_limit_m;               //"-" correction limit
  };
 
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys

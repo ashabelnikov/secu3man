@@ -199,10 +199,13 @@ typedef struct
  _uchar  inj_lambda_step_size_m;        // "-" Step size, value * 512, max 0.49
  _uint   inj_lambda_corr_limit_m;       // "-" limit, value * 512
 
+ _uint   gd_lambda_corr_limit_p;        // "+" limit, value * 512
+ _uint   gd_lambda_corr_limit_m;        // "-" limit, value * 512
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[70];
+ _uchar reserved[66];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -1528,7 +1528,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 9 : 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 17 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1550,6 +1550,16 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &fc_closing))
   return false;
  m_GasdosePar.fc_closing = ((float)fc_closing) / 2.0f;
+
+ int corrlimit_p = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_p))
+  return false;
+ m_GasdosePar.lam_corr_limit_p = (float(corrlimit_p) / 512.0f) * 100.0f;
+
+ int corrlimit_m = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_m))
+  return false;
+ m_GasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
  return true;
 }
@@ -2611,6 +2621,10 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->manual_delta, m_outgoing_packet); //fake parameter
  BYTE fc_closing = MathHelpers::Round(packet_data->fc_closing * 2.0f);
  mp_pdp->Bin8ToHex(fc_closing, m_outgoing_packet);
+ int corr_limit_p = MathHelpers::Round(packet_data->lam_corr_limit_p * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(corr_limit_p, m_outgoing_packet);
+ int corr_limit_m = MathHelpers::Round(packet_data->lam_corr_limit_m * 512.0f / 100.0f);
+ mp_pdp->Bin16ToHex(corr_limit_m, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
