@@ -187,8 +187,8 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_tps_curve_gradient_spin.SetBuddy(&m_tps_curve_gradient_edit);
  m_tps_curve_gradient_edit.SetLimitText(5);
  m_tps_curve_gradient_edit.SetDecimalPlaces(3);
- m_tps_curve_gradient_spin.SetRangeAndDelta(.0f, 100.0f, 0.01f);
- m_tps_curve_gradient_edit.SetRange(.0f, 100.0f);
+ m_tps_curve_gradient_spin.SetRangeAndDelta(-100.0f, 100.0f, 0.01f);
+ m_tps_curve_gradient_edit.SetRange(-100.0f, 100.0f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
