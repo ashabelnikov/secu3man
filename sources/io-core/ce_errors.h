@@ -26,7 +26,7 @@
 #ifndef _CE_ERRORS_H_
 #define _CE_ERRORS_H_
 
-//определяем биты ошибок (Check Engine)
+//define error bits (Check Engine)
 #define ECUERROR_CKPS_MALFUNCTION     0
 #define ECUERROR_EEPROM_PARAM_BROKEN  1
 #define ECUERROR_PROGRAM_CODE_BROKEN  2

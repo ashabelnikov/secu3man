@@ -76,6 +76,8 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppAbout(MakeDelegate(this, &MainFrameController::OnAppAbout));
  mp_view->setOnAppDevSite(MakeDelegate(this, &MainFrameController::OnAppDevSite));
  mp_view->setOnAppDevForum(MakeDelegate(this, &MainFrameController::OnAppDevForum));
+ mp_view->setOnAppVK(MakeDelegate(this, &MainFrameController::OnAppVK));
+ mp_view->setOnAppFB(MakeDelegate(this, &MainFrameController::OnAppFB));
  mp_view->setOnAppSettings(MakeDelegate(this, &MainFrameController::OnAppSettings));
  mp_view->setOnAppBeginLog(MakeDelegate(this, &MainFrameController::OnAppBeginLog));
  mp_view->setOnAppEndLog(MakeDelegate(this, &MainFrameController::OnAppEndLog));
@@ -109,6 +111,16 @@ void MainFrameController::OnAppDevSite()
 void MainFrameController::OnAppDevForum()
 {
  ShellExecute(NULL, _T("open"), _T("http://secu-3.org/forum"), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void MainFrameController::OnAppVK()
+{
+ ShellExecute(NULL, _T("open"), _T("http://vk.com/secu3club"), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void MainFrameController::OnAppFB()
+{
+ ShellExecute(NULL, _T("open"), _T("https://www.facebook.com/groups/secu3club/"), NULL, NULL, SW_SHOWNORMAL);
 }
 
 void MainFrameController::OnAppSettings()

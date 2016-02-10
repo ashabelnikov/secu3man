@@ -150,7 +150,7 @@ class AFX_EXT_CLASS CBootLoader
 
   IBLDEventHandler* m_pEventHandler; //указатель на класс-обработчик событий (реализующий интерфейс IBLDEventHandler)
 
-  struct  //сохраняет данные необходимые для выполнения операции
+  struct  //holds data necessary for execution of command
   {
    int   opcode;
    BYTE* data;

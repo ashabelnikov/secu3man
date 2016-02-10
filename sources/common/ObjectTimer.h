@@ -46,7 +46,7 @@ template<class T> class CObjectTimer
    KillTimer();
   };
 
-  //устанавливает все необходимые параметры и запускает таймер
+  //set all necessary paramaters and runs timer
   void SetTimer(T* object, msgHandlerType i_function, int interval)
   {
    SetMsgHandler(i_function);
@@ -69,7 +69,7 @@ template<class T> class CObjectTimer
    m_interval_ms = interval;
   }
 
-  //убивать таймер этой функцией
+  //Kill timer using this function
   void KillTimer(void)
   {
    ::KillTimer(NULL,m_timer_id);

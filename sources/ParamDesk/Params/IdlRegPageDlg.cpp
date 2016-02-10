@@ -241,7 +241,7 @@ void CIdlRegPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable all controls
 void CIdlRegPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -251,7 +251,7 @@ void CIdlRegPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of all controls (enabled or disabled)
 bool CIdlRegPageDlg::IsEnabled(void)
 {
  return m_enabled;

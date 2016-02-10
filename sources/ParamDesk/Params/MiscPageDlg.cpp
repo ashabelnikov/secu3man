@@ -127,7 +127,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CCKPSPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+//Update controls
 void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);

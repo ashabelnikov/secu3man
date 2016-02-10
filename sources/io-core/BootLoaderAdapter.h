@@ -39,7 +39,7 @@ class AFX_EXT_CLASS CBootLoaderAdapter  : public CWnd, public IBLDEventHandler
   //невидимое окно необходимо нам только для того чтобы посылать самим себе сообщения!
   BOOL Create(CWnd* pParentWnd);
 
-  //установка обработчика событий
+  //set event handler
   void SetEventHandler(IBLDEventHandler* ip_destination_handler);
 
  private:

@@ -73,7 +73,7 @@ class IOCORE_API LogReader
   bool IsNextPossible(void) const;
   bool IsPrevPossible(void) const;
 
-  //Возвращает текущую позицию
+  //Returns current position
   unsigned long GetCurPos(void) const;
 
  private:

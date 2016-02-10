@@ -41,7 +41,7 @@ class ITablesDeskView
 
   //Common
   virtual bool IsEnabled(void) = 0;                               //Возвращает true если представление разрешено
-  virtual void Enable(bool enable) = 0;                           //разрешить/запретить представление
+  virtual void Enable(bool enable) = 0;                           //enable/disable view
   virtual void Show(bool show) = 0;                               //показать/спрятать контент представления
   virtual void ShowSaveButton(bool i_show) = 0;                   //показать/cпрятать кнопку "сохранить"
   virtual void ShowOpenedCharts(bool i_show) = 0;                 //show/hide opened charts

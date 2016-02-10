@@ -117,8 +117,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //---------------------------------------------------------------------------
 // y = F(x,z)
 
-//original_function и modified_function - адреса двухмерных массивов содержащих
-//значения функций
+//original_function and modified_function - addresses of 2D arrays containing values of functions
 HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
  //Clean up previous instances of forms
@@ -158,7 +157,7 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
  if (NULL==pForm)
   return;
 
- //удаляем старые значения, а потом вновь заполняем серии
+ //delete old values and then fill series again
  for(int i = 0; i < pForm->Chart1->SeriesList->Count; i++)
   for (;pForm->Chart1->Series[i]->Count() > 0;)
    pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);

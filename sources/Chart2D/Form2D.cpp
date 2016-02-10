@@ -78,7 +78,7 @@ void TForm2D::DataPrepare()
  m_val_n  = 0;
  AnsiString as;
 
- //диапазон значений шкалы графика должен быть немного шире...
+ //range of grid values must be slightly wider...
  Chart1->LeftAxis->Maximum = m_fnc_max;
  Chart1->LeftAxis->Minimum = m_fnc_min;
 

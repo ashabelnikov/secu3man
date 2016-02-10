@@ -215,7 +215,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
    break;
 
    //=========================================================================================
-   case BL_OP_WRITE_FLASH:   //запись FLASH
+   case BL_OP_WRITE_FLASH:   //write FLASH
     p_boot->m_ErrorCode  = 0;  //перед выполнением новой команды необходимо сбросить ошибки
     symbol = 0;
     p_boot->EventHandler_OnBegin(p_boot->m_opdata.opcode,true);
@@ -296,7 +296,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
       break; //нет смысла продолжать дальше
      }
 
-     p_boot->EventHandler_OnUpdateUI(opcode, total_size, ++current);  //1 байт получен
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, ++current);  //1 byte received
 
      if (!p_port->RecvBlock(raw,2))  //CS
      {
@@ -305,7 +305,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
      }
 
      current+=2;
-     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);   //2 байта получено
+     p_boot->EventHandler_OnUpdateUI(opcode, total_size, current);   //2 bytes received
 
      if (!CNumericConv::Hex8ToBin(raw,&symbol))
      {
@@ -315,7 +315,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
 
      if (CNumericConv::CheckSum_8_xor(t_buf, FLASH_PAGE_SIZE_S)!=symbol)
      {
-      p_boot->m_ErrorCode = BL_ERROR_CHKSUM; //контрольная сумма не совпадает
+      p_boot->m_ErrorCode = BL_ERROR_CHKSUM; //check sums don't match 
       break;
      }
 
@@ -326,7 +326,7 @@ DWORD WINAPI CBootLoader::BackgroundProcess(LPVOID lpParameter)
     break;
 
    //=========================================================================================
-   case BL_OP_READ_EEPROM:    //чтение EEPROM
+   case BL_OP_READ_EEPROM:    //read EEPROM
     p_boot->m_ErrorCode = 0;  //перед выполнением новой команды необходимо сбросить ошибки
     symbol = 0;
     block_size = (EEPROM_SIZE_S*2)/EEPROM_RD_BLOCKS;

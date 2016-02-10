@@ -344,7 +344,7 @@ void MPSZExportController::OnExchangePressed(void)
   memcpy(mp_mpsz_io->GetDataLeft().maps[other_sel].f_wrk, mp_fwd->maps[current_sel].f_wrk, sizeof(float) * F_WRK_POINTS_L * F_WRK_POINTS_F);
 }
 
-//модальное окно активировалось - проводим его инициализацию
+//modal window has activated - perform its initialization
 void MPSZExportController::OnViewActivate(void)
 {
  mp_view->SetFWDCurrentListTitle(MLL::GetString(IDS_SECU3_CURRENT_FW));

@@ -236,7 +236,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.tpsdot = tpsdot;
  o_data.acceleration = acceleration;
 
- //все прочитано без ошибок
+ //all read without errors
  return true;
 }
 

@@ -40,13 +40,13 @@ bool PacketDataProxy::Hex4ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
  { //hex
   bool result = CNumericConv::Hex4ToBin(*ip_hex_number, o_byte);
   if (result)
-   ip_hex_number+=1;
+   ip_hex_number+=1; //takes 1 byte
   return result;
  }
  else
  { //bin
   *o_byte = *ip_hex_number;
-  ip_hex_number+=1;
+  ip_hex_number+=1;  //takes 1 byte
   return true;
  }
 }

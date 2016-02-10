@@ -54,7 +54,7 @@ LogWriter::LogWriter()
 
 LogWriter::~LogWriter()
 {
- //завершаем процесс записи лога если он еще не закончен
+ //finish log writing process if it is not finished yet
  if (IsLoggingInProcess())
   EndLogging();
 }

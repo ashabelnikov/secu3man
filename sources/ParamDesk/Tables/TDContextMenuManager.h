@@ -41,7 +41,7 @@ class CTDContextMenuManager
   void SetLoadPopupMenuNames(const std::vector<_TSTRING>& i_names, int sep_index);
   void SetSavePopupMenuNames(const std::vector<_TSTRING>& i_names);
 
-  //Надо вызывать когда окну приходит WM_INITMENUPOPUP
+  //Call when window gets WM_INITMENUPOPUP message
   void OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu);
 
  private:

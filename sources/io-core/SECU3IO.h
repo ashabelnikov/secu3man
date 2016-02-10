@@ -237,8 +237,8 @@ namespace SECU3IO
   float knock_retard_step;              //шаг смещения УОЗ при детонации
   float knock_advance_step;             //шаг восстановления УОЗ
   float knock_max_retard;               //максимальное смещение УОЗ
-  float knock_threshold;                //в вольтах
-  int knock_recovery_delay;             //в рабочих циклах двигателя
+  float knock_threshold;                //in Volts
+  int knock_recovery_delay;             //in engine strokes
  };
 
  struct CEErrors
@@ -256,7 +256,7 @@ namespace SECU3IO
 
  struct MiscelPar
  {
-  int baud_rate;                        //скорость UART-a
+  int baud_rate;                        //UART baud rate
   int period_ms;                        //период посылки пакетов мс.
   unsigned char ign_cutoff;             //признак использования отсечки зажигания
   int ign_cutoff_thrd;                  //обороты отсечки зажигания

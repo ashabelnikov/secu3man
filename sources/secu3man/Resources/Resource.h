@@ -352,3 +352,5 @@
 #define IDS_PM_READING_RPMRGD           4370
 #define ID_APP_LOG_FORMAT               4371
 #define IDS_LOG_FORMAT_DESC             4372
+#define ID_APP_VK                       4373
+#define ID_APP_FB                       4374

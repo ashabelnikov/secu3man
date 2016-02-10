@@ -40,7 +40,7 @@ typedef struct
 {
  _uchar name[F_NAME_SIZE];                             // ассоциированное имя (имя семейства)
  //ignition maps
- _char f_str[F_STR_POINTS];                            // функция УОЗ на старте
+ _char f_str[F_STR_POINTS];                            // ignition timing on cranking
  _char f_idl[F_IDL_POINTS];                            // функция УОЗ для ХХ
  _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];          // основная функция УОЗ (3D)
  _char f_tmp[F_TMP_POINTS];                            // функция коррект. УОЗ по температуре

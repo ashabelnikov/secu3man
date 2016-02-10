@@ -27,6 +27,7 @@
 #include "stdafx.h"
 #include "readhex.h"
 
+//convert byte from hex to binary representation
 #define HEXTONUM(hexbyte)\
  if((hexbyte > 47)&&(hexbyte < 58))\
   hexbyte-=0x30;\

@@ -70,7 +70,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableChokeOp(bool enable);
   void EnableGasdosePos(bool enable);
 
- public: //установка обработчиков событий
+ public: //set event handlers
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
   void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);

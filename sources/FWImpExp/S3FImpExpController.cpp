@@ -93,7 +93,7 @@ int S3FImportController::DoImport(void)
   }
  }
  else
-  return IDCANCEL; //отказ пользователя
+  return IDCANCEL; //canceled by user
 
  return mp_view->DoModal();
 }
@@ -143,7 +143,7 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
   memcpy(mp_fwd->gasdose_pos_table, mp_s3f_io->GetData().gasdose_pos_table, sizeof(float) * GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE);
 
- //копируем сетку оборотов
+ //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
 
@@ -339,7 +339,7 @@ int S3FExportController::DoExport(void)
   return id;
  }
  else
-  return IDCANCEL; //отказ пользователя
+  return IDCANCEL; //canceled by user
 }
 
 bool S3FExportController::IsExchangeButtonAllowed(void)

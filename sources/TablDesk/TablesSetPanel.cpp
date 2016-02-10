@@ -793,7 +793,7 @@ void CTablesSetPanel::OnViewATSAACMap()
 
 void CTablesSetPanel::OnViewGasdosePosMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button has been turned off, then close editor's window
  if (m_view_gasdose_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_gasdose_map_wnd_handle,WM_CLOSE,0,0);

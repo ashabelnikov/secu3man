@@ -171,7 +171,7 @@ void CKnockPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CKnockPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+//Update controls
 void CKnockPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);

@@ -53,6 +53,8 @@ class MainFrameController : public IAPPEventHandler
   void OnAppAbout();
   void OnAppDevSite();
   void OnAppDevForum();
+  void OnAppVK();
+  void OnAppFB();
   void OnAppSettings();
   void OnAppBeginLog();
   void OnAppEndLog();

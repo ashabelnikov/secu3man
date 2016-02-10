@@ -29,7 +29,7 @@
 
 // онвертирует массив шестнадцатерично заданных чисел (два ASCII символа представл€ют один байт) в массив бинарно
 //заданных числел (unsigned char).
-//size - размер в байтах!!!
+//size - size in bytes
 bool CNumericConv::HexArrayToBin(const BYTE* i_buf, BYTE* o_buf, const int size)
 {
  int j=0;

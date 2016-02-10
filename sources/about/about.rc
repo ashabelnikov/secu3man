@@ -1,3 +1,7 @@
+// SECU-3  - An open source, free engine control unit
+// Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
+// http://secu-3.org
+
 #include "resource.h"
 #include "winres.h"
 
@@ -29,7 +33,7 @@ IDR_RGN0001             RGN     DISCARDABLE     "res\\about0001.rgn"
 STRINGTABLE DISCARDABLE 
 BEGIN
  IDS_SOFTWARE_INFO       "SECU-3 Manager v%d.%d. Build [%s]"
- IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n                     Ukraine, Kiev\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
+ IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n                     Ukraine, Kiev, (C) 2007\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
 END
 
 /////////////////////////////////////////////////////////////////////////////

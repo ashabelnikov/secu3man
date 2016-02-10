@@ -34,7 +34,7 @@ class IDeskView
  public:
   typedef fastdelegate::FastDelegate0<> EventHandler;
 
-  virtual bool IsEnabled(void) = 0;                        //проверка разрешено View или нет
-  virtual void Enable(bool enable) = 0;                    //разрешить/запретить представление
-  virtual void Show(bool show) = 0;                        //показать/спрятать контент представления
+  virtual bool IsEnabled(void) = 0;                        //Check view if it is enabled or disabled
+  virtual void Enable(bool enable) = 0;                    //Enable/disable view
+  virtual void Show(bool show) = 0;                        //Show/hide content of view
 };

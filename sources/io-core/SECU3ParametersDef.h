@@ -114,7 +114,7 @@ typedef struct
  _uchar ckps_edge_type;
  _uchar ckps_cogs_btdc;
  _uchar ckps_ignit_cogs;
- _uchar ckps_engine_cyl;                // кол-во цилиндров двигателя
+ _uchar ckps_engine_cyl;                // number of engine cylinders
  _uchar ckps_cogs_num;                  // number of crank wheel's teeth 
  _uchar ckps_miss_num;                  // number of missing crank wheel's teeth
  _uchar ref_s_edge_type;                // REF_S edge type (тип фронта ДНО)

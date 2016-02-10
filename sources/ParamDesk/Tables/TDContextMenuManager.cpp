@@ -66,7 +66,7 @@ void CTDContextMenuManager::CreateContent(void)
  ///////////////////////////////////////////////////////////////////////////
 }
 
-//показывает контекстное меню
+//show context menu
 void CTDContextMenuManager::TrackPopupMenu(int x, int y)
 {
  ASSERT(m_pWnd);

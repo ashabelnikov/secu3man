@@ -35,9 +35,9 @@
 //errors
 enum EReadHexStatus
 {
- RH_SUCCESS = 0,
- RH_INCORRECT_CHKSUM = 1,
- RH_UNEXPECTED_SYMBOL = 2,
+ RH_SUCCESS = 0, //success
+ RH_INCORRECT_CHKSUM = 1, //incorrect check sum
+ RH_UNEXPECTED_SYMBOL = 2,//unexpected symbol
  RH_UNSUPPORTED_RECORD = 4,
  RH_ADDRESS_EXCEDED = 5
 };

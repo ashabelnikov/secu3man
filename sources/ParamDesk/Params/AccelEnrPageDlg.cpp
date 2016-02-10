@@ -125,7 +125,7 @@ void CAccelEnrPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable all controls
 void CAccelEnrPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)

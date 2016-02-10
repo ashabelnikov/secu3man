@@ -28,29 +28,29 @@
 
 namespace MathHelpers
 {
-  //для правильного преобразования в целые числа (округление)
-  //Округление в int
+  //For correct averaging to integer values
+  //Averaging to int
   template <class FPN>
   inline int Round(FPN i_value)
   {
    return (int)((i_value) + 0.5f - (FPN)((i_value) < 0));
   }
 
-  //Округление в указанный тип
+  //Averaging to specified type
   template <class ITN, class FPN>
   inline ITN Round(FPN i_value)
   {
    return (ITN)((i_value) + 0.5f - (FPN)((i_value) < 0));
   }
 
-  //Свертка для одномерной функции.
-  //i_kernel_size - любое число
+  //Convolution for 1D function
+  //i_kernel_size - kernel size, any value
   template <class T>
   bool Convolve1D(T* ip_in, T* op_out, size_t i_data_size, const T* ip_kernel, size_t i_kernel_size)
   {
    size_t i, j, k;
 
-   //Проверяем правильность входных параметров
+   //Check correctness of input arguments
    if(!ip_in || !op_out || !ip_kernel)
     return false;
    if(i_data_size <=0 || i_kernel_size <= 0)
