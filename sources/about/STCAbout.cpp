@@ -34,7 +34,7 @@ struct About_data
  LPCTSTR  d_lprgnname;
  HINSTANCE hInstance;
  BOOL showCloseButton;
- BOOL modal;
+ BOOL modal; //modal flag
  int autoClose;
 }d_about; //singleton!
 

@@ -29,4 +29,5 @@
 #define CRC_API __declspec(dllimport)
 #endif
 
+//Calculates CRC-16 function
 unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num);

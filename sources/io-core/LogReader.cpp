@@ -131,7 +131,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
   return false;
 
  int result;
- //используем ASCII версию, файл не должен быть юникодным
+ //use ASCII version, file must not be in unicode
  int wHour, wMinute, wSecond, wMilliseconds;
 
  result = sscanf(string, cCSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);

@@ -663,13 +663,13 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
- //Смещение кривой ДПДЗ
+ //TPS sensor curve offset
  int tps_curve_offset = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_offset, true))
   return false;
  m_FunSetPar.tps_curve_offset = ((float)tps_curve_offset) * m_adc_discrete;
 
- //Наклон кривой ДПДЗ
+ //TPS sensor curve slope
  int tps_curve_gradient = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;

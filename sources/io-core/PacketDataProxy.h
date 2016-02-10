@@ -25,6 +25,7 @@
 
 #pragma once
 
+//Proxy class for independent working with hex and bin
 class PacketDataProxy
 {
  public:

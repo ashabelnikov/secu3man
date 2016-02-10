@@ -343,14 +343,14 @@ bool CComPort::RecvBlock(BYTE* data,UINT datasize)
  }//else
 }
 
-//Возвращает хендл порта
+//Returns port handle
 //
 HANDLE CComPort::GetHandle(void) const
 {
  return m_hCom;
 }
 
-//уст. в указ. знач. линию DTR
+//set DTR line into specified state
 //
 bool CComPort::SetDTR(bool state)
 {
@@ -376,7 +376,7 @@ bool CComPort::SetRTS(bool state)
  return SetCommState(m_hCom,&m_dcb);
 }
 
-//уст. в указ. знач. линию TXD
+//Set TXD line into specified state
 //
 bool CComPort::SetTXD(bool state)
 {

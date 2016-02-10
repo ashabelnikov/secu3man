@@ -35,9 +35,9 @@ class IOCORE_API CComPort
 {
  public:   //public functions
 
-  CComPort(const _TSTRING&, UINT, UINT);//конструктор
+  CComPort(const _TSTRING&, UINT, UINT);//constructor
   CComPort(int, UINT, UINT);
-  ~CComPort();                        //деструктор
+  ~CComPort();                        //destructor
   void   Set9bitState(bool state);
 
   bool   Initialize(DWORD, BYTE, BYTE); //инициализация порта
@@ -47,10 +47,10 @@ class IOCORE_API CComPort
   VOID   Terminate();                 //закрытие порта
   bool   SendByte(unsigned char);     //передача одного ьайта
   bool   RecvByte(unsigned char*);    //прием одного байта
-  bool   SendBlock(BYTE*, UINT);       //передача заданного кол-ва байт
-  bool   RecvBlock(BYTE*, UINT);       //прием заданного кол-ва байт
+  bool   SendBlock(BYTE*, UINT);      //передача заданного кол-ва байт
+  bool   RecvBlock(BYTE*, UINT);      //receive specified number of bytes
   bool   SendASCII(const char* str);
-  HANDLE GetHandle(void) const;       //возвращает хендл порта
+  HANDLE GetHandle(void) const;       //returns port handle
   bool   SetDTR(bool);                //уст. в указ. знач. линию DTR
   bool   SetRTS(bool);                //уст. в указ. знач. линию RTS
   bool   SetTXD(bool);                //уст. в указ. знач. линию TXD
