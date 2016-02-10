@@ -160,6 +160,7 @@ bool CChildViewManager::OnClose(void)
 
 void CChildViewManager::OnCloseNotify(void)
 {
+ //notify all controllers about app. closing
  std::vector<ITabController*>& list = mp_MainTabController->GetControllersList();
  for (size_t i = 0; i < list.size(); i++)
   list[i]->OnCloseNotify();

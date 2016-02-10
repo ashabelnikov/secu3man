@@ -179,16 +179,16 @@ BOOL CSecu3manApp::InitInstance()
  //sanity check
  CheckDLLCompatibility();
 
- //читаем настройки
+ //read settings
  m_pAppSettingsManager->ReadSettings();
 
  //enable/disable hot keys depending on settings
  HotKeysManager::GetInstance()->Enable(m_pAppSettingsManager->GetSettings()->GetUseHotKeys());
 
- //подгружаем функции из динамически связываемых DLL (TablDesk)
+ //load functions from dynamically linked DLL (TablDesk)
  DLL::LoadDLLsAndLinkToFunctions();
 
- //Локализация
+ //Localization
  DLL::SetLanguage(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage());
  switch(m_pAppSettingsManager->GetSettings()->GetInterfaceLanguage())
  {
@@ -200,14 +200,13 @@ BOOL CSecu3manApp::InitInstance()
    break;
  }
 
- //Создаем главное окно. Оно должно быть создано прежде чем будет произведена
- //дальнейшая инициализация.
+ //create main window. It must be created first of all (before any other initialization)
  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
 
- //инициализируем коммуникационный менеджер
+ //initialize communication manager
  m_pCommunicationManager->Init();
 
- //Инициализируем содержимое главного окна (дочерние контроллеры).
+ //Initialize content of main window (child controls)
  m_pMainFrameManager->Init(m_pMainWnd);
 
  //Set title of main window
@@ -223,10 +222,10 @@ BOOL CSecu3manApp::OnIdle(LONG lCount)
 
 int CSecu3manApp::ExitInstance()
 {
- //сохраняем настройки
+ //save settings
  m_pAppSettingsManager->WriteSettings();
 
- //завершение работы менеджера коммуникаций
+ //finish working of communication manager
  m_pCommunicationManager->Terminate();
 
  return CWinApp::ExitInstance();

@@ -69,10 +69,10 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
  if (::IsWindow(m_tab_control.m_hWnd))
-  m_tab_control.MoveWindow(0,0, cx, cy); //ресайзим таб контрол
+  m_tab_control.MoveWindow(0,0, cx, cy); //resize tab control
 }
 
-//Создает диалог из шаблона в памяти.
+//Creates dialog from template stored in memory
 bool CChildView::Create(CWnd* ip_parent)
 {
  HGLOBAL hgbl;
@@ -89,8 +89,8 @@ bool CChildView::Create(CWnd* ip_parent)
  lpdt->style = WS_VISIBLE | WS_CHILD | WS_CLIPSIBLINGS | DS_SETFONT | DS_CONTROL;
  lpdt->dwExtendedStyle = WS_EX_CONTROLPARENT | WS_EX_CLIENTEDGE;
  lpdt->cdit = 1; // number of controls
- lpdt->x  = 0;   //<--любые дефаултные размеры,
- lpdt->y  = 0;   //фреймворк потом подгонит размеры автоматически.
+ lpdt->x  = 0;   //<--any default sizes,
+ lpdt->y  = 0;   //framework will then set correct sizes.
  lpdt->cx = 0;
  lpdt->cy = 0;
 
