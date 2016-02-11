@@ -137,13 +137,13 @@ bool CPMInitDataCollector::CollectData(const BYTE i_descriptor, const void* i_pa
      //процесс инициализации окончен
      m_operation_state = -1; //останов КА - операции выполнены
      mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
-     return true; //операции выполнены
+     return true; //operations were completed
     }
    }
    break;
  }//switch
 
- return false; //КА продолжает работу...
+ return false; //state machine continue to work...
 }
 
 const std::vector<_TSTRING>& CPMInitDataCollector::GetFNNames(void) const

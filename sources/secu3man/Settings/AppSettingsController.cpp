@@ -77,7 +77,7 @@ void CAppSettingsController::OnOk(void)
 
 void CAppSettingsController::OnCancel(void)
 {
- //ѕри нажатии на Cancel ничего не делаем (не трогаем модель!)
+ //Do nothing! (do not touch model)
 }
 
 void CAppSettingsController::OnActivate(void)

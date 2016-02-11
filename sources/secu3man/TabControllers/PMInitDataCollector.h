@@ -54,5 +54,5 @@ class CPMInitDataCollector : public CPMStateMachineState
 
   std::vector<_TSTRING> fn_names;
   std::vector<int> fn_indexes;
-  DWORD fw_options; //биты опций прошивки
+  DWORD fw_options; //Firmware options' bits
 };

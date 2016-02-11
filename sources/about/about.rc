@@ -5,6 +5,35 @@
 #include "resource.h"
 #include "winres.h"
 
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_WELCOME DIALOGEX 0, 0, 200, 130
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Приветствуем Вас!"
+FONT 8, "MS Sans Serif"
+BEGIN
+
+    CONTROL         "",IDC_BITMAP0002,"Static", SS_BITMAP | WS_VISIBLE, 10,10,132,32
+    CONTROL         "",IDC_BITMAP0003,"Static", SS_BITMAP | WS_VISIBLE, 10,45,32,32
+    CONTROL         "",IDC_BITMAP0004,"Static", SS_BITMAP | WS_VISIBLE, 10,80,32,32
+    RTEXT           "http://secu-3.org",IDC_W_SECU3ORG_LINK,20,20,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    RTEXT           "http://vk.com/secu3club",IDC_W_VKG_LINK,20,50,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    RTEXT           "http://facebook.com/groups/secu3club/",IDC_W_FBG_LINK,20,85,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    DEFPUSHBUTTON   "OK",IDOK,80,110,50,14
+END
+
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -13,10 +42,41 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Dialog
+//
+
+IDD_WELCOME DIALOGEX 0, 0, 200, 130
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Welcome!"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_BITMAP0002,"Static", SS_BITMAP | WS_VISIBLE, 10,10,132,32
+    CONTROL         "",IDC_BITMAP0003,"Static", SS_BITMAP | WS_VISIBLE, 10,45,32,32
+    CONTROL         "",IDC_BITMAP0004,"Static", SS_BITMAP | WS_VISIBLE, 10,80,32,32
+    RTEXT           "http://secu-3.org",IDC_W_SECU3ORG_LINK,20,20,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    RTEXT           "http://vk.com/secu3club",IDC_W_VKG_LINK,20,50,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    RTEXT           "http://facebook.com/groups/secu3club/",IDC_W_FBG_LINK,20,85,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    DEFPUSHBUTTON   "OK",IDOK,80,110,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+// Neutral resources
+
+LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
+#pragma code_page(1252)
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Bitmap
 //
 
 IDB_BITMAP0001          BITMAP  DISCARDABLE     "res\\about0001.BMP"
+IDB_BITMAP0002          BITMAP  DISCARDABLE     "res\\about0002.BMP"
+IDB_BITMAP0003          BITMAP  DISCARDABLE     "res\\about0003.BMP"
+IDB_BITMAP0004          BITMAP  DISCARDABLE     "res\\about0004.BMP"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -24,6 +84,14 @@ IDB_BITMAP0001          BITMAP  DISCARDABLE     "res\\about0001.BMP"
 //
 
 IDR_RGN0001             RGN     DISCARDABLE     "res\\about0001.rgn"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// CURSOR
+//
+
+IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
+
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -35,12 +103,6 @@ BEGIN
  IDS_SOFTWARE_INFO       "SECU-3 Manager v%d.%d. Build [%s]"
  IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n                     Ukraine, Kiev, (C) 2007\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
 END
-
-/////////////////////////////////////////////////////////////////////////////
-// Neutral resources
-
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1252)
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

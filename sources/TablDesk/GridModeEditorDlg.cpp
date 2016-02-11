@@ -332,7 +332,7 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CDwellCalcDlg message handlers
+// CGridModeEditorDlg message handlers
 
 BOOL CGridModeEditorDlg::OnInitDialog()
 {

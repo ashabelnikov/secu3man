@@ -100,10 +100,11 @@ class ISettingsData
   virtual CString GetAppDirectory(void) const = 0;
   virtual bool GetCOMPortBother(void) const = 0;
   virtual bool GetUseHotKeys(void) const = 0;
-  //позиции окон
+  virtual bool GetShowWelcome(void) const = 0;
+  //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;
-  //язык интерфейса и тип платформы SECU-3
+  //Interface language and SECU-3 platform type
   virtual EInterLang GetInterfaceLanguage(void) const = 0;
   virtual EECUPlatform GetECUPlatformType(void) const = 0;
   //Fixtures's customization settings

@@ -37,13 +37,13 @@ public:
  CAppSettingsManager();
  virtual ~CAppSettingsManager();
 
- //прочитать настройки с диска
+ //Read settings from disk
  bool ReadSettings(void) const;
 
- //сохранить настройки на диск
+ //Write settings to disk
  bool WriteSettings(void) const;
 
- //показать диалог параметров
+ //Show settings dialog
  int ShowDialog(void) const;
 
  //возвражает интерфейс к данным настроек программы для чтения/записи

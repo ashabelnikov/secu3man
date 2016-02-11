@@ -30,6 +30,7 @@
 #include "STCAbout.h"
 #include "../common/unicodesupport.h"
 #include "Version.h"
+#include "WelcomeDlg.h"
 
 extern HINSTANCE hInstance;  //DLLs hInstance
 
@@ -58,4 +59,10 @@ void ABOUT_API DisplaySplash(int timeToShow)
 {
  AboutStc(CWnd::GetDesktopWindow(), hInstance, (LPCTSTR)IDB_BITMAP0001, (LPCTSTR)IDR_RGN0001,
   BuildSoftwareInfoStr(), MLL::LoadString(IDS_AUTHOR_INFO), true, timeToShow);
+}
+
+void ABOUT_API DisplayWelcome(void)
+{
+ CWelcomeDlg dialog;
+ dialog.DoModal();
 }

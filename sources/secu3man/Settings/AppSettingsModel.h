@@ -58,13 +58,13 @@ class CAppSettingsModel : public ISettingsData
   //запущена программа.
   CString GetINIFileFullName(void) const;
 
-  //чтение настроек из INI-файла
+  //read settings from INI-file
   bool ReadSettings(void);
 
-  //запись настроек в INI-файл
+  //write settings into INI-file
   bool WriteSettings(void);
 
-  //имя секции и названия полей
+  //Section and fields names
   const CString m_Name_Options_Section;
   const CString m_Name_PortName;
   const CString m_Name_BaudRateApplication;
@@ -83,6 +83,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_HexDataMode;
   const CString m_Name_COMPortBother;
   const CString m_Name_UseHotKeys;
+  const CString m_Name_ShowWelcome;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -154,6 +155,7 @@ class CAppSettingsModel : public ISettingsData
   //To bother about opening of COM port
   virtual bool GetCOMPortBother(void) const;
   virtual bool GetUseHotKeys(void) const;
+  virtual bool GetShowWelcome(void) const;
 
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -190,6 +192,7 @@ class CAppSettingsModel : public ISettingsData
   int m_optPulsesPer1Km;
   bool m_optCOMPortBother;
   bool m_optUseHotKeys;
+  bool m_optShowWelcome;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

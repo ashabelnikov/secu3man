@@ -17,7 +17,7 @@ SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.l
 # linker flags and directives
 LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/about.dll /IMPLIB:../../libraries/about.lib about.res
 # source files
-SOURCES = stdafx.cpp secu-3about.cpp STCAbout.cpp about.cpp Version.cpp
+SOURCES = stdafx.cpp secu-3about.cpp STCAbout.cpp about.cpp Version.cpp WelcomeDlg.cpp
 
 # DLL building
 all: about

@@ -36,6 +36,7 @@ class CAppSettingsController
   CAppSettingsController(IAppSettingsDlg* i_pView, CAppSettingsModel* i_pModel);
   virtual ~CAppSettingsController();
 
+  //show settings' dialog window
   int ShowDialog(void);
 
  private:

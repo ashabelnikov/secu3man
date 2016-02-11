@@ -20,7 +20,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
-set(LIBRARIES Version.lib)
+set(LIBRARIES Version.lib ui-core)
 project(${PROJECT})
 
 set(HEADERS
@@ -30,6 +30,7 @@ set(HEADERS
   STCAbout.h
   StdAfx.h
   Version.h
+  WelcomeDlg.h
   )
 
 set(SOURCES
@@ -39,6 +40,7 @@ set(SOURCES
   StdAfx.cpp
   about.rc
   Version.cpp
+  WelcomeDlg.cpp
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})

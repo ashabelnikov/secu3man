@@ -3,3 +3,14 @@
 #define IDS_SOFTWARE_INFO               1002
 #define IDS_AUTHOR_INFO                 1003
 #define IDC_BUTTON_CLOSE                1004
+#define IDD_WELCOME                     1005
+#define IDC_W_SECU3ORG_LINK             1006
+#define IDC_W_VKG_LINK                  1007
+#define IDC_W_FBG_LINK                  1008
+#define IDC_CURSOR_HAND                 1009
+#define IDB_BITMAP0002                  1010
+#define IDB_BITMAP0003                  1011
+#define IDB_BITMAP0004                  1012
+#define IDC_BITMAP0002                  1013
+#define IDC_BITMAP0003                  1014
+#define IDC_BITMAP0004                  1015

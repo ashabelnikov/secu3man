@@ -193,7 +193,7 @@ void CCheckEngineTabController::OnConnection(const bool i_online)
  m_sbar->SetConnectionState(state);
 }
 
-//Контроллеру говорят что приложение хотят закрыть и спрашивают, можно ли это сделать.
+//This method called when framework ask to close application
 bool CCheckEngineTabController::OnClose(void)
 {
  return true;

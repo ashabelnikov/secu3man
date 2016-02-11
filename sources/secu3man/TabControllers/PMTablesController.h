@@ -42,10 +42,10 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
   virtual ~CPMTablesController();
 
-  //начало работы контроллера
+  //beginning of controller's work
   void OnActivate(void);
 
-  //конец работы контроллера
+  //end of controller's work
   void OnDeactivate(void);
 
   virtual void Enable(bool state);

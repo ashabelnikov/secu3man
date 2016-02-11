@@ -63,7 +63,7 @@ bool CAppSettingsManager::WriteSettings(void) const
 }
 
 int CAppSettingsManager::ShowDialog(void) const
-{ //делегируем вызов контроллеру...
+{ //delegate call to controller...
  ASSERT(m_pController);
  return m_pController->ShowDialog();
 }

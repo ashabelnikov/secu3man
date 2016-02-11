@@ -46,6 +46,11 @@ using namespace fastdelegate;
 #define EHKEY _T("LogWriter")
 #define MFKEY _T("MFCntr")
 
+void MainFrameController::OnWelcomeTimer(void)
+{
+ m_welcome_timer.KillTimer();
+ DisplayWelcome();
+}
 
 MainFrameController::MainFrameController(CCommunicationManager* i_pCommunicationManager,
                    CAppSettingsManager* i_pAppSettingsManager, CStatusBarManager* i_pStatusBarManager,
@@ -304,6 +309,11 @@ CRect MainFrameController::_GetScreenRect(void) const
 void MainFrameController::OnCreate(void)
 {
  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ if (settings->GetShowWelcome()) {
+  //Set welcome timer
+  m_welcome_timer.SetTimer(this, &MainFrameController::OnWelcomeTimer, 2000);
+ }
+
  VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
  if (mp_view->GetDVDesk())
   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());

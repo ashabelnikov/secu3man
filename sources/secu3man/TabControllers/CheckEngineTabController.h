@@ -52,7 +52,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
-  //появление/закрытие вкладки Check Engine
+  //activation/deactivation of Check Engine tab
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
 

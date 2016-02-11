@@ -47,7 +47,7 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   virtual ~CDevDiagnostTabController();
 
  private:
-  //появление/закрытие вкладки диагностики
+  //activation/deactivation of diagnistics tab
   virtual void OnActivate(void);
   virtual void OnDeactivate(void);
 

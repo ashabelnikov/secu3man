@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "common/ObjectTimer.h"
 #include "io-core/ControlAppAdapter.h"
 
 class CMainFrame;
@@ -66,6 +67,7 @@ class MainFrameController : public IAPPEventHandler
   bool IsEndLoggingAllowed(void);
   bool OnClose(void);
   void OnCreate(void);
+  void OnWelcomeTimer(void);
 
   //called by VIEW at the startup for get desired window position
   void OnGetInitialPos(CPoint& o_point);
@@ -83,6 +85,7 @@ class MainFrameController : public IAPPEventHandler
   CAppSettingsManager*   m_pAppSettingsManager;
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
+  CObjectTimer<MainFrameController> m_welcome_timer;
 
   //true, если установлен полноэкранный режим
   bool m_full_screen_mode;

@@ -54,6 +54,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_DVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
 , m_Name_COMPortBother(_T("COMPortBother"))
 , m_Name_UseHotKeys(_T("UseHotKeys"))
+, m_Name_ShowWelcome(_T("ShowWelcome"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -415,6 +416,20 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowWelcome,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optShowWelcome = 0;
+ }
+ else
+ {
+  m_optShowWelcome = i_val;
+ }
+
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_ShowExFixtures,_T("1"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
@@ -625,6 +640,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optUseHotKeys);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_UseHotKeys,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)/*m_optShowWelcome*/0);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_ShowWelcome,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optShowExFixtures);
@@ -982,4 +1001,9 @@ bool CAppSettingsModel::GetCOMPortBother(void) const
 bool CAppSettingsModel::GetUseHotKeys(void) const
 {
  return m_optUseHotKeys;
+}
+
+bool CAppSettingsModel::GetShowWelcome(void) const
+{
+ return m_optShowWelcome;
 }

@@ -19,16 +19,42 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file secu-3about.h
+/** \file CWelcomeDlg.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-#include "about_api.h"
+#include <memory>
+#include "common/UnicodeSupport.h"
 
-void ABOUT_API DisplayAbout(CWnd* i_pParent);
+class CLabel;
 
-void ABOUT_API DisplaySplash(int timeToShow);
+class CWelcomeDlg : public CDialog
+{
+  typedef CDialog Super;
 
-void ABOUT_API DisplayWelcome(void);
+ public:
+  CWelcomeDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CWelcomeDlg();
+  static const UINT IDD;
+
+ // Implementation
+ protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+  virtual void OnOK();
+  virtual BOOL OnInitDialog();
+  DECLARE_MESSAGE_MAP()
+
+  CStatic m_secu3orgPic;
+  CBitmap m_secu3orgBmp;
+  CStatic m_vkgPic;
+  CBitmap m_vkgBmp;
+  CStatic m_fbgPic;
+  CBitmap m_fbgBmp;
+
+ private:
+  std::auto_ptr<CLabel> mp_secu3orgLink;
+  std::auto_ptr<CLabel> mp_vkgLink;
+  std::auto_ptr<CLabel> mp_fbgLink;
+};

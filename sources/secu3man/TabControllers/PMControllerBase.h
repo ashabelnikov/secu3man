@@ -32,7 +32,7 @@ class CPMStateMachineState
   CPMStateMachineState() : m_operation_state(0){}
   virtual ~CPMStateMachineState() {}
 
-  //Начало сбора данных
+  //start of data acquisition
   virtual void StartDataCollection(void) = 0
   {
    m_operation_state = 0;
