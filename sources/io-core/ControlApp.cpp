@@ -1546,7 +1546,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  m_GasdosePar.manual_delta = delta;
 
  //Closing in fuel cut mode
- int fc_closing = 0;
+ BYTE fc_closing = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &fc_closing))
   return false;
  m_GasdosePar.fc_closing = ((float)fc_closing) / 2.0f;
@@ -2643,7 +2643,7 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
   m_outgoing_packet.push_back(raw_name[i]);
 
  for(size_t i = 0; i < numPass; ++i)
-  m_outgoing_packet.push_back(raw_pass[i]); 
+  m_outgoing_packet.push_back(raw_pass[i]);
 
  unsigned char flags = ((packet_data->use_imm != 0) << 2) | ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);

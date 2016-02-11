@@ -164,17 +164,19 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_params.usethrottle_pos);
 }
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+//Update state of controls
 void CChokePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && !m_fuel_injection);
 }
 
+//Update TEST button state
 void CChokePageDlg::OnUpdateChokeTestBtn(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_choketst_enabled);
 }
 
+//Update "Manual postion control"
 void CChokePageDlg::OnUpdateChokeManPosBtn(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_chokemanpos_enabled);

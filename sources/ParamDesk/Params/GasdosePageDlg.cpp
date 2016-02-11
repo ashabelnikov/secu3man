@@ -127,7 +127,7 @@ void CGasdosePageDlg::OnUpdateGasdoseSMSteps(CCmdUI* pCmdUI)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CChokePageDlg message handlers
+// CGasdosePageDlg message handlers
 
 BOOL CGasdosePageDlg::OnInitDialog()
 {
@@ -240,7 +240,7 @@ void CGasdosePageDlg::EnableGasdoseManPos(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//Use this function to obtain data from dialog
 void CGasdosePageDlg::GetValues(SECU3IO::GasdosePar* o_values)
 {
  ASSERT(o_values);

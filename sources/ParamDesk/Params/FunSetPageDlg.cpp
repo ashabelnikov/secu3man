@@ -141,7 +141,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CFunSetPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
+//Update controls
 void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -213,8 +213,8 @@ BOOL CFunSetPageDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
- FillCBByFunNames(); //инициализируем контент ComboBox-ов семейств характеристик
- UpdateData(false);  //инициализируем контроллы диалога данными
+ FillCBByFunNames(); //Initialize content of tables' set ComboBox
+ UpdateData(false);  //Initialize dialog controls with data
  UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
