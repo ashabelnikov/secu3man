@@ -178,7 +178,7 @@ void EEPROMImportController::OnExchangePressed(void)
   m_eedm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
 }
 
-//модальное окно активировалось - проводим его инициализацию
+//Modal window has been activated - perform its initialization
 void EEPROMImportController::OnViewActivate(void)
 {
  mp_view->SetFWDCurrentListTitle(MLL::GetString(IDS_SECU3_CURRENT_FW));

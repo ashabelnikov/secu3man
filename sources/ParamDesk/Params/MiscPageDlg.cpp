@@ -125,7 +125,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CCKPSPageDlg message handlers
+// CMiscPageDlg message handlers
 
 //Update controls
 void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)

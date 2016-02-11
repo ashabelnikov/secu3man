@@ -328,6 +328,7 @@ void CPMTablesController::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnam
 void CPMTablesController::ApplyFWOptions(DWORD opt)
 {
  mp_view->mp_ButtonsPanel->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0);
+ mp_view->mp_ButtonsPanel->EnableGasdose((opt & (1 << COPT_GD_CONTROL)) > 0);
 }
 
 //----------------------------------------------------------------

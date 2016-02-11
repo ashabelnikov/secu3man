@@ -527,8 +527,10 @@ void CTablesSetPanel::EnableChokeOp(bool enable)
   DLL::Chart2DEnable(m_choke_map_wnd_handle, enable && Super::IsAllowed());
 }
 
-void CTablesSetPanel::EnableGasdosePos(bool enable)
+void CTablesSetPanel::EnableGasdose(bool enable)
 {
+ Super::EnableGasdose(enable);
+
  m_gasdose_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);

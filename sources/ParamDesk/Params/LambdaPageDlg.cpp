@@ -262,18 +262,18 @@ bool CLambdaPageDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//Use this function for obtaining data from dialog
 void CLambdaPageDlg::GetValues(SECU3IO::LambdaPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog controls to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::LambdaPar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//Use this function to set dialog data
 void CLambdaPageDlg::SetValues(const SECU3IO::LambdaPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::LambdaPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog controls
 }

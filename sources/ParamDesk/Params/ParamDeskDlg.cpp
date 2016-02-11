@@ -323,7 +323,7 @@ void CParamDeskDlg::GetTitle(CString& o_str)
  m_pd_title.GetWindowText(o_str);
 }
 
-//разрешение/запрещение
+//Enable/disable
 void CParamDeskDlg::Enable(bool enable)
 {
  if (m_enabled == enable)

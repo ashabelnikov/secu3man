@@ -68,7 +68,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);
   void EnableChokeOp(bool enable);
-  void EnableGasdosePos(bool enable);
+  virtual void EnableGasdose(bool enable);
 
  public: //set event handlers
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);

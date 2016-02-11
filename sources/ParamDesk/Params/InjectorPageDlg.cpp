@@ -266,7 +266,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//Use this function to set data in dialog
 void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
 {
  ASSERT(i_values);
@@ -279,7 +279,7 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
  _SetInjCfgComboBoxSelection(m_params.inj_config);
  _SetSqrNumComboBoxSelection(m_params.inj_squirt_num);
 
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog controls
 }
 
 void CInjectorPageDlg::_FillInjCfgComboBox(void)

@@ -96,7 +96,7 @@ template<class T> class CObjectTimer
    msgHandler = i_function;
   }
 
-  //возвращает текущий период таймера
+  //returns current period of timer events
   int GetPeriod(void) const
   {
    return m_interval_ms;
