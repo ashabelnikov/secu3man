@@ -16,7 +16,7 @@
 
    contacts:
           http://secu-3.org
-          e-mail: shabelnikov-stc@mail.ru
+          e-mail: shabelnikov@secu-3.org
           Microprocessor systems - design & programming.
 */
 
