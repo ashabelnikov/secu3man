@@ -107,7 +107,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 {
  m_params.sm_steps = 700;
  m_params.testing = 0;
- m_params.manual_delta = 0;
+ m_params.manual_delta = 0;  //See also code in PMParamsController.cpp
  m_params.strt_add = 10.0f; //10%
  m_params.choke_rpm[0] = 2000;
  m_params.choke_rpm[1] = 1000;

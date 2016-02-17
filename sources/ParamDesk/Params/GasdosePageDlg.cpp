@@ -74,7 +74,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
 {
  m_params.gd_steps = 700;
  m_params.testing = 0;
- m_params.manual_delta = 0;
+ m_params.manual_delta = 0;  //See also code in PMParamsController.cpp
  m_params.fc_closing = 30.0f;
  m_params.lam_corr_limit_p = 30.0f;
  m_params.lam_corr_limit_m = 30.0f;

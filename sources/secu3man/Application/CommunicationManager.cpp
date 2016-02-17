@@ -107,7 +107,7 @@ bool CCommunicationManager::Init(void)
  }
  catch(CComPort::xInitialize e)
  {
-  //говорим пользователю что нам не удалось открыть указанный порт!
+  //Say to user that we was not able to open specified COM-port
   if (m_pSettings->GetCOMPortBother())
    AfxMessageBox(e.GetDetailStr());
   status = false;
@@ -115,7 +115,7 @@ bool CCommunicationManager::Init(void)
 
  m_pComPort->Purge();
 
- //инициализируем контроллеры интерфейсов
+ //Initialize interface controllers
  try
  {
   m_pControlApp->Initialize(m_pComPort,m_pSettings->GetBaudRateApplication(),500);
@@ -136,12 +136,12 @@ bool CCommunicationManager::Init(void)
   status = false;
  }
 
- //Инициализруем адаптеры коммуникационных контроллеров
+ //Initialize communication controllers' adapters
  CWnd* pParent = AfxGetApp()->m_pMainWnd;
  VERIFY(m_pAppAdapter->Create(pParent));
  VERIFY(m_pBldAdapter->Create(pParent));
 
- //Связываем адаптеры с коммуникационными контроллерами
+ //Link adapters with communication controllers
  m_pControlApp->SetEventHandler(m_pAppAdapter);
  m_pBootLoader->SetEventHandler(m_pBldAdapter);
 
