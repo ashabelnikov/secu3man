@@ -1513,7 +1513,7 @@ void CButtonsPanel::OnUpdateViewAERPMMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && m_fuel_injection || m_gasdose);
  pCmdUI->SetCheck( (m_aerpm_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1610,7 +1610,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
   DLL::Chart2DEnable(m_aetps_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_aerpm_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_aerpm_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, i_enable && IsAllowed());
 }
@@ -1622,6 +1622,8 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
   UpdateDialogControls(this, TRUE);
  if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
   DLL::Chart2DEnable(m_aetps_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
+  DLL::Chart2DEnable(m_aerpm_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)
