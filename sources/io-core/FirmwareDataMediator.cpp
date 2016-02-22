@@ -1100,6 +1100,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->inj_lambda_temp_thrd = MathHelpers::Round(p_in->lam_temp_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
     p_params->inj_lambda_activ_delay = p_in->lam_activ_delay;
+    p_params->inj_lambda_dead_band = MathHelpers::Round(p_in->lam_dead_band / ADC_DISCRETE);
    }
    break;
   case ACCEL_PAR:
@@ -1387,6 +1388,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     p_out->lam_temp_thrd = ((float)p_params->inj_lambda_temp_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
     p_out->lam_activ_delay = p_params->inj_lambda_activ_delay;
+    p_out->lam_dead_band = ((float)p_params->inj_lambda_dead_band) * ADC_DISCRETE;
    }
    break;
   case ACCEL_PAR:

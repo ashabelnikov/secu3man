@@ -202,10 +202,12 @@ typedef struct
  _uint   gd_lambda_corr_limit_p;        // "+" limit, value * 512
  _uint   gd_lambda_corr_limit_m;        // "-" limit, value * 512
 
+ _uint   inj_lambda_dead_band;          // Switch point dead band
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[66];
+ _uchar reserved[64];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

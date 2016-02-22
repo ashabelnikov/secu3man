@@ -1727,7 +1727,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 32 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -1774,6 +1774,11 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &activdelay))
   return false;
  m_LambdaPar.lam_activ_delay = activdelay;
+
+ int deadband = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &deadband))
+  return false;
+ m_LambdaPar.lam_dead_band = float(deadband) * ADC_DISCRETE;
 
  return true;
 }
@@ -2708,6 +2713,8 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin16ToHex(temp_thrd, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->lam_rpm_thrd, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->lam_activ_delay, m_outgoing_packet);
+ int deadband = MathHelpers::Round(packet_data->lam_dead_band / ADC_DISCRETE);
+ mp_pdp->Bin16ToHex(deadband, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
