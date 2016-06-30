@@ -58,7 +58,9 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataInjCfg();
+  afx_msg void OnInjUseTimingMap();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateInjTiming(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -86,6 +88,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_inj_timing_edit;
   CSpinButtonCtrlEx m_inj_timing_crk_spin;
   CEditEx m_inj_timing_crk_edit;
+  CButton m_inj_usetimingmap_check;
 
   float m_fuel_density; //fuel density (g/cc)
 

@@ -431,7 +431,7 @@ namespace SECU3IO
 
  struct InjctrPar
  {
-  unsigned char inj_flags;            //todo
+  bool inj_usetimingmap;              //Use timing map instead of constant parameter
   int inj_config;                     //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
   int inj_squirt_num;                 //Number of squirts per cycle
   float inj_flow_rate;                //Injector flow rate

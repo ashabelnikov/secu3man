@@ -1080,6 +1080,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
   case INJCTR_PAR:
    {
     InjctrPar* p_in = (InjctrPar*)ip_values;
+    WRITEBIT8(p_params->inj_flags, 0, p_in->inj_usetimingmap);
     p_params->inj_config = (p_in->inj_config << 4) | (p_in->inj_squirt_num & 0x0F);
     p_params->inj_flow_rate = MathHelpers::Round(p_in->inj_flow_rate * 64.0f);
     p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
@@ -1366,6 +1367,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
   case INJCTR_PAR:
    {
     InjctrPar* p_out = (InjctrPar*)op_values;
+
+    p_out->inj_usetimingmap = (p_params->inj_flags & 0x01) != 0;
     p_out->inj_config = p_params->inj_config >> 4;      //fuel injection configuration
     p_out->inj_squirt_num = p_params->inj_config & 0x0F; //number of squirts per cycle
     p_out->inj_flow_rate = float(p_params->inj_flow_rate) / 64.0f;

@@ -1679,7 +1679,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  unsigned char inj_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_flags))
   return false;
- m_InjctrPar.inj_flags = inj_flags; //<--todo
+ m_InjctrPar.inj_usetimingmap = (inj_flags & 0x01) != 0;
 
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
@@ -2680,7 +2680,8 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 {
- mp_pdp->Bin8ToHex(packet_data->inj_flags, m_outgoing_packet); //<--todo
+ unsigned char inj_flags = ((packet_data->inj_usetimingmap != 0) << 0);
+ mp_pdp->Bin8ToHex(inj_flags, m_outgoing_packet);
  unsigned char inj_config = (packet_data->inj_config << 4) | (packet_data->inj_squirt_num & 0x0F);
  mp_pdp->Bin8ToHex(inj_config, m_outgoing_packet);
  int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);

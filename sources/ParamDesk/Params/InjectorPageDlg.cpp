@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "InjectorPageDlg.h"
+#include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
@@ -37,6 +38,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_EDIT, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -46,10 +48,10 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_UNIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateInjTiming)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateInjTiming)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CAPTION,OnUpdateInjTiming)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_UNIT,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_CAPTION,OnUpdateControls)
@@ -59,6 +61,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_CHECK,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
@@ -71,6 +74,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 , m_ovf_msgbox(false)
 {
+ m_params.inj_usetimingmap = 0;
  m_params.inj_config = SECU3IO::INJCFG_SIMULTANEOUS;
  m_params.inj_squirt_num = 4;
  m_params.inj_flow_rate = 200.0f;
@@ -104,6 +108,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_inj_timing_crk_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_SPIN, m_inj_timing_crk_spin);
+ DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_inj_usetimingmap_check);
 
  m_flowrate_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate);
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
@@ -111,11 +116,17 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
  m_inj_timing_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing);
  m_inj_timing_crk_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_params.inj_timing_crk);
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
+}
+
+void CInjectorPageDlg::OnUpdateInjTiming(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_inj_usetimingmap_check.GetCheck()!=BST_CHECKED));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -187,6 +198,13 @@ void CInjectorPageDlg::OnChangeDataInjCfg()
  _SetSqrNumComboBoxSelection(sel);
 
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CInjectorPageDlg::OnInjUseTimingMap()
+{
+ UpdateData();
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+ UpdateDialogControls(this,TRUE);
 }
 
 //разрешение/запрещение контроллов (всех поголовно)
