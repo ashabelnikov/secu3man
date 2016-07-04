@@ -290,6 +290,7 @@ namespace SECU3IO
  const int ETMT_AETPS_MAP = 12;         //AE TPS map
  const int ETMT_AERPM_MAP = 13;         //AE RPM map
  const int ETMT_AFTSTR_MAP = 14;        //afterstart enrichment
+ const int ETMT_IT_MAP   = 15;          //injection timing
 
  struct SepTabPar
  {

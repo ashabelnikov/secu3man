@@ -823,6 +823,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AETPS), TYPE_MAP_INJ_AETPS);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
@@ -1073,6 +1074,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(false),false);
  m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(true),true);
+
+ m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(false),false);
+ m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1170,6 +1174,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_AFTSTR:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetAftstrMap(m_current_funset_index, m_view->mp_TablesPanel->GetAftstrMap(false));
+   break;
+  case TYPE_MAP_INJ_IT:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetITMap(m_current_funset_index, m_view->mp_TablesPanel->GetITMap(false));
    break;
 
    //separate maps
@@ -1553,6 +1561,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_GasdoseMapWnd_X = rc.left;
    ws.m_GasdoseMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_IT:
+   ws.m_ITMapWnd_X = rc.left;
+   ws.m_ITMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
    ws.m_GridMapWnd_Y = rc.top;
@@ -1636,6 +1648,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_GASDOSE:
    X = ws.m_GasdoseMapWnd_X, Y = ws.m_GasdoseMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_IT:
+   X = ws.m_ITMapWnd_X, Y = ws.m_ITMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

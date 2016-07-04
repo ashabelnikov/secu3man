@@ -835,6 +835,37 @@ void CFirmwareDataMediator::SetAftstrMap(int i_index,const float* ip_values)
   p_fd->tables[i_index].inj_aftstr[i] = MathHelpers::Round((ip_values[i]*AFTSTR_MAPS_M_FACTOR));
 }
 
+void CFirmwareDataMediator::GetITMap(int i_index, float* op_values, bool i_original /* = false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _char *p = &(p_fd->tables[i_index].inj_timing[0][0]);
+  int value = *(p + i);
+  op_values[i] = ((float)value) * 3.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetITMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _char *p = &(p_fd->tables[i_index].inj_timing[0][0]);
+  int value = MathHelpers::Round((ip_values[i] / 3.0f)); 
+  *(p + i) = value;
+ }
+}
+
+
 // Write specified bit into a 8-bit variable
 // variable - Variable
 // bitNum - Number of bit for writing in

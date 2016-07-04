@@ -102,6 +102,8 @@ class IOCORE_API CFirmwareDataMediator
   void SetAERPMMap(int i_index, const float* i_values);
   void GetAftstrMap(int i_index, float* op_values, bool i_original = false);
   void SetAftstrMap(int i_index, const float* i_values);
+  void GetITMap(int i_index, float* op_values, bool i_original = false);
+  void SetITMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

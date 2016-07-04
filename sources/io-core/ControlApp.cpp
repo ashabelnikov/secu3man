@@ -1243,7 +1243,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_TEMP_MAP && m_EditTabPar.tab_id != ETMT_NAME_STR && m_EditTabPar.tab_id != ETMT_VE_MAP &&
      m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
      m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
-     m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP)
+     m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
+     m_EditTabPar.tab_id != ETMT_IT_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1300,6 +1301,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = (i >= INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
      else if (m_EditTabPar.tab_id == ETMT_AERPM_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
+     else if (m_EditTabPar.tab_id == ETMT_IT_MAP)
+      m_EditTabPar.table_data[i] = ((float)((signed char)value)) * 3.0f;
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -2563,6 +2566,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_AERPM_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * ((packet_data->address>=INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR));
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_IT_MAP)
+   {
+    signed char value = MathHelpers::Round(packet_data->table_data[i] / 3.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
