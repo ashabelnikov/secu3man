@@ -152,9 +152,8 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
    cs.y = point.y;
   }
  }
-
- //устанавливаем необходимый размер главного окна. Windows непонятным образо м масштабирует диалоги (непропорционально DPI), поэтому
- //для каждого DPI подгоняем размеры
+ 
+ //Yes, it is stupid. If you know better solution, please let me know
  DPIAware dpia;
  switch(dpia.GetDPIX())
  {
@@ -165,16 +164,125 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
   case 96:
    cs.cx = dpia.ScaleX(730); //OK
    break;
+  case 97:
+   cs.cx = dpia.ScaleX(724);
+   break;
+  case 98:
+   cs.cx = dpia.ScaleX(716);
+   break;
+  case 99:
+   cs.cx = dpia.ScaleX(708);
+   break;
+  case 100:
+   cs.cx = dpia.ScaleX(703);
+   break;
+  case 101:
+   cs.cx = dpia.ScaleX(695);
+   break;
+  case 102:
+   cs.cx = dpia.ScaleX(690);
+   break;
+  case 103:
+   cs.cx = dpia.ScaleX(683);
+   break;
+  case 104:
+   cs.cx = dpia.ScaleX(676);
+   break;
+  case 105:
+   cs.cx = dpia.ScaleX(671);
+   break;
+  case 106:
+   cs.cx = dpia.ScaleX(665);
+   break;
+  case 107:
+  case 108:
+   cs.cx = dpia.ScaleX(657);
+   break;
+  case 109:
+   cs.cx = dpia.ScaleX(850);
+   break;
+  case 110:
+   cs.cx = dpia.ScaleX(842);
+   break;
+  case 111:
+   cs.cx = dpia.ScaleX(835);
+   break;
+  case 112:
+   cs.cx = dpia.ScaleX(826);
+   break;
+  case 113:
+   cs.cx = dpia.ScaleX(819);
+   break;
+  case 114:
+   cs.cx = dpia.ScaleX(812);
+   break;
+  case 115:
+   cs.cx = dpia.ScaleX(805);
+   break;
+  case 116:
+   cs.cx = dpia.ScaleX(795);
+   break;
+  case 117:
+   cs.cx = dpia.ScaleX(792);
+   break;
+  case 118:
+   cs.cx = dpia.ScaleX(788);
+   break;
+  case 119:
+   cs.cx = dpia.ScaleX(780);
+   break;
   case 120:
    cs.cx = dpia.ScaleX(765);
    break;
+  case 121:
+   cs.cx = dpia.ScaleX(768);
+   break;
+  case 122:
+  case 123:
+  case 124:
+   cs.cx = dpia.ScaleX(765);
+   break;
+  case 125:
+  case 126:
+  case 127:
+  case 128:
+   cs.cx = dpia.ScaleX(745);
+   break;
+  case 129:
+  case 130:
+   cs.cx = dpia.ScaleX(722);
+   break;
+  case 131:
+  case 132:
+  case 133:
+   cs.cx = dpia.ScaleX(711);
+   break;
+  case 134:
+  case 135:
+  case 136:
+   cs.cx = dpia.ScaleX(695);
+   break;
+  case 137:
+  case 138:
+  case 139:
+   cs.cx = dpia.ScaleX(681);
+   break;
+  case 140:
+  case 141:
+  case 142:
+  case 143:
+   cs.cx = dpia.ScaleX(823);
+   break;
   case 144:
+  case 145:
+  case 146:
    cs.cx = dpia.ScaleX(795); //OK
    break;
   case 192:
    cs.cx = dpia.ScaleX(730);
    break;
  }
+
  switch(dpia.GetDPIY())
  {
   case 72:
@@ -184,8 +292,69 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
   case 96:
    cs.cy = dpia.ScaleY(477);
    break;
+  case 100:
+   cs.cy = dpia.ScaleY(460);
+   break;
+  case 101:
+  case 102:
+   cs.cy = dpia.ScaleY(450);
+   break;
+  case 103:
+   cs.cy = dpia.ScaleY(442);
+   break;
+  case 104:
+  case 105:
+  case 106:
+  case 107:
+  case 108:
+   cs.cy = dpia.ScaleY(435);
+   break;
+  case 109:
+  case 110:
+   cs.cy = dpia.ScaleY(495);
+   break;
+  case 111:
+   cs.cy = dpia.ScaleY(490);
+   break;
+  case 112:
+  case 113:
+   cs.cy = dpia.ScaleY(484);
+   break;
+  case 121:
+   cs.cy = dpia.ScaleY(454);
+   break;
+  case 122:
+  case 123:
+  case 124:
+   cs.cy = dpia.ScaleY(460);
+   break;
+  case 125:
+  case 126:
+  case 127:
+  case 128:
+   cs.cy = dpia.ScaleY(450);
+   break;
+  case 129:
+  case 130:
+   cs.cy = dpia.ScaleY(432);
+   break;
+  case 131:
+  case 132:
+  case 133:
+   cs.cy = dpia.ScaleY(423);
+   break;
+  case 134:
+  case 135:
+  case 136:
+   cs.cy = dpia.ScaleY(416);
+   break;
+  case 137:
+  case 138:
+  case 139:
+   cs.cy = dpia.ScaleY(411);
+   break;
  }
-
+ 
  cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
  cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
  cs.dwExStyle |= WS_EX_CONTROLPARENT;
