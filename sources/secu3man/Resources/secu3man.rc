@@ -1174,7 +1174,7 @@ IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 // RT_MANIFEST
 //
 
-//1             RT_MANIFEST   "res\\secu3man.exe.manifest"
+1             RT_MANIFEST   "res\\secu3man.exe.manifest"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information
