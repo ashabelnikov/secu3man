@@ -84,6 +84,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_COMPortBother;
   const CString m_Name_UseHotKeys;
   const CString m_Name_ShowWelcome;
+  const CString m_Name_RPMAverage;
+  const CString m_Name_VoltAverage;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -158,6 +160,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetCOMPortBother(void) const;
   virtual bool GetUseHotKeys(void) const;
   virtual bool GetShowWelcome(void) const;
+  virtual int GetRPMAverage(void) const;
+  virtual int GetVoltAverage(void) const;
 
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -195,6 +199,8 @@ class CAppSettingsModel : public ISettingsData
   bool m_optCOMPortBother;
   bool m_optUseHotKeys;
   bool m_optShowWelcome;
+  int  m_optRPMAverage;
+  int  m_optVoltAverage;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

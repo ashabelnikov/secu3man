@@ -55,6 +55,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_COMPortBother(_T("COMPortBother"))
 , m_Name_UseHotKeys(_T("UseHotKeys"))
 , m_Name_ShowWelcome(_T("ShowWelcome"))
+, m_Name_RPMAverage(_T("RPMAverage"))
+, m_Name_VoltAverage(_T("VoltAverage"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -445,6 +447,34 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optShowExFixtures = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_RPMAverage,_T("4"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val < 0 || i_val > 16)
+ {
+  status = false;
+  m_optRPMAverage = 0; //no avaraging
+ }
+ else
+ {
+  m_optRPMAverage = i_val;
+ }
+
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,_T("4"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val < 0 || i_val > 16)
+ {
+  status = false;
+  m_optVoltAverage = 0; //no avaraging
+ }
+ else
+ {
+  m_optVoltAverage = i_val;
+ }
+
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
  {\
@@ -653,6 +683,14 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optShowExFixtures);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_ShowExFixtures,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optRPMAverage);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_RPMAverage,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optVoltAverage);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,write_str,IniFileName);
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -1021,4 +1059,14 @@ bool CAppSettingsModel::GetUseHotKeys(void) const
 bool CAppSettingsModel::GetShowWelcome(void) const
 {
  return m_optShowWelcome;
+}
+
+int CAppSettingsModel::GetRPMAverage(void) const
+{
+ return m_optRPMAverage;
+}
+
+int CAppSettingsModel::GetVoltAverage(void) const
+{
+ return m_optVoltAverage;
 }

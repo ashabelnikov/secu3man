@@ -103,6 +103,8 @@ class ISettingsData
   virtual bool GetCOMPortBother(void) const = 0;
   virtual bool GetUseHotKeys(void) const = 0;
   virtual bool GetShowWelcome(void) const = 0;
+  virtual int GetRPMAverage(void) const = 0;
+  virtual int GetVoltAverage(void) const = 0;
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;

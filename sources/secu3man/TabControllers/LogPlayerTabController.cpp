@@ -108,6 +108,8 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  //обновл€ем диапазоны приборов
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
+ mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
 
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
@@ -118,6 +120,8 @@ void CLogPlayerTabController::OnActivate(void)
 {
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
+ mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
 
  //////////////////////////////////////////////////////////////////
  //ѕодключаем контроллер к потоку данных от SECU-3

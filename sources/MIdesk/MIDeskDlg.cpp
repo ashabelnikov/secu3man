@@ -25,6 +25,8 @@
 
 #include "stdafx.h"
 #include "resource.h"
+#include <algorithm>
+#include <numeric>
 #include "MIDeskDlg.h"
 
 #include "common/MathHelpers.h"
@@ -49,8 +51,14 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_add_i2(MLL::GetString(IDS_MI_ADD_I2_TT))
 , m_show_exf(false)
 , m_show(false)
+, m_rpm_idx(0)
+, m_volt_idx(0)
+, m_rpm_avnum(0)
+, m_volt_avnum(0)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
+ std::fill(m_rpm_rb, m_rpm_rb + 32, 0);
+ std::fill(m_volt_rb, m_volt_rb + 32, 0.0f);
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -176,6 +184,22 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
   m_iat.Show(m_show && m_show_exf && i_values->add_i2_mode); 
  }
  m_values = *i_values;
+
+ if (m_rpm_avnum > 0)
+ {
+  //update RPM ring buffer
+  m_rpm_rb[m_rpm_idx++] = i_values->frequen;
+  if (m_rpm_idx >= m_rpm_avnum)
+   m_rpm_idx = 0;
+ }
+ 
+ if (m_volt_avnum > 0)
+ {
+  //update voltage ring buffer
+  m_volt_rb[m_volt_idx++] = i_values->voltage;
+  if (m_volt_idx >= m_volt_avnum)
+   m_volt_idx = 0;
+ }
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -184,9 +208,25 @@ void CMIDeskDlg::OnUpdateTimer(void)
   return;
  m_tachometer.SetSpeed(m_values.speed);   //top-left pane
  m_tachometer.SetDistance(m_values.distance); //top-right pane
- m_tachometer.SetValue((float)m_values.frequen);
+
+ if (m_rpm_avnum > 0)
+ {
+  int frequen = std::accumulate(m_rpm_rb, m_rpm_rb + m_rpm_avnum, 0);
+  m_tachometer.SetValue((float)(frequen / m_rpm_avnum));
+ }
+ else
+  m_tachometer.SetValue((float)m_values.frequen);
+
  m_pressure.SetValue(m_values.pressure);
- m_voltmeter.SetValue(m_values.voltage);
+
+ if (m_volt_avnum > 0)
+ {
+  float voltage = std::accumulate(m_volt_rb, m_volt_rb + m_volt_avnum, 0.0f);
+  m_voltmeter.SetValue(voltage / m_volt_avnum);
+ }
+ else
+  m_voltmeter.SetValue(m_values.voltage);
+
  m_dwell_angle.SetValue(m_values.adv_angle);
  m_gas_valve.SetValue(m_values.gas);
  m_shutoff_valve.SetValue(m_values.ephh_valve);
@@ -278,4 +318,14 @@ void CMIDeskDlg::ShowSpeedAndDistance(bool i_show)
 {
  m_tachometer.ShowSpeed(i_show);
  m_tachometer.ShowDistance(i_show);
+}
+
+void CMIDeskDlg::SetRPMAverageNum(int avnum)
+{
+ m_rpm_avnum = avnum;
+}
+
+void CMIDeskDlg::SetVoltAverageNum(int avnum)
+{
+ m_volt_avnum = avnum;
 }

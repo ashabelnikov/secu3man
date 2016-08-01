@@ -66,6 +66,8 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
+ mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
+ mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -74,6 +76,8 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
+ mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
+ mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
 }
 
 void CPMMonitorController::OnDeactivate(void)

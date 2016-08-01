@@ -83,6 +83,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //Show/hide speed and distance indicators
   void ShowSpeedAndDistance(bool i_show);
 
+  void SetRPMAverageNum(int avnum);
+  void SetVoltAverageNum(int avnum);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -117,6 +120,13 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_enabled;
   bool m_show;
   bool m_show_exf;
+
+  int m_rpm_rb[32];    //ring buffer for RPM averaging, max. 32
+  float m_volt_rb[32]; //ring buffer for voltage averaging, max 32
+  int m_rpm_idx;       //ring buffer index for RPM
+  int m_volt_idx;      //ring buffer index for voltage
+  int m_rpm_avnum;
+  int m_volt_avnum;
 };
 
 /////////////////////////////////////////////////////////////////////////////
