@@ -808,7 +808,7 @@ void CTablesSetPanel::OnViewGasdosePosMap()
   m_gasdose_map_wnd_handle = DLL::Chart3DCreate(GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_GDP_UNIT).c_str(),
-    MLL::GetString(IDS_WORK_MAP).c_str());
+    MLL::GetString(IDS_GDP_MAP).c_str());
   //DLL::Chart3DSetOnWndActivation(m_gasdose_map_wnd_handle, OnWndActivationGasdoseMap, this);
   DLL::Chart3DSetOnGetAxisLabel(m_gasdose_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_gasdose_map_wnd_handle,OnChangeGasdoseTable,this);

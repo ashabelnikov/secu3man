@@ -231,3 +231,4 @@
 #define IDC_TD_VIEW_IT_MAP              5490
 #define IDS_MAPS_INJTIM_UNIT            5491
 #define IDS_IT_MAP                      5492
+#define IDS_GDP_MAP                     5493
