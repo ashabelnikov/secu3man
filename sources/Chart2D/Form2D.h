@@ -61,6 +61,7 @@ class TForm2D : public TForm
   TMenuItem *PM_ZeroAllPoints;
   TMenuItem *PM_Dup1stPoint;
   TMenuItem *PM_BldCurveUsing1stAndLastPoints;
+  TMenuItem *PM_SetPtMovStep;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -102,6 +103,7 @@ class TForm2D : public TForm
   void __fastcall OnEnterChart(TObject* Sender);
   void __fastcall OnExitChart(TObject* Sender);
   void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
+  void __fastcall OnSetPtMovStep(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);

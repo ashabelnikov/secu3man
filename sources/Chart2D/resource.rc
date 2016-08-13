@@ -15,12 +15,14 @@ stringtable
   IDS_PM_ZERO_ALL_POINTS, "Обнулить все точки кривой"
   IDS_PM_SET_ALLTO_1ST_PT, "Размножить знач. 1-й точки"
   IDS_PM_BLD_CURVE_1ST_LAST_PT, "Постр. кривую исп. 1-ю и послед. точки"
+  IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
   IDS_TT_SMOOTHING_3_POINTS, "Сглаживание по 3-м соседним точкам"
   IDS_TT_SMOOTHING_5_POINTS, "Сглаживание по 5-ти соседним точкам"
   IDS_TT_MOVE_FUNC_UP, "Сместить функцию вверх на 0.5"
   IDS_TT_MOVE_FUNC_DOWN, "Сместить функцию вниз на 0.5"
   IDS_TT_H_AXIS_BEGIN_VAL, "Значение определяющее начало горизонтальной оси"
   IDS_TT_H_AXIS_END_VAL, "Значение определяющее конец горизонтальной оси"
+  IDS_DLG_PTMOV_STEP_CAPT, "Шаг смещения точек"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -32,12 +34,14 @@ stringtable
   IDS_PM_ZERO_ALL_POINTS, "Zero all curve points"
   IDS_PM_SET_ALLTO_1ST_PT, "Duplicate value of 1st point"
   IDS_PM_BLD_CURVE_1ST_LAST_PT, "Build curve using 1st and last points"
+  IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
   IDS_TT_SMOOTHING_3_POINTS, "Smoothing uning 3 adjacent points"
   IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points"
   IDS_TT_MOVE_FUNC_UP, "Move function up by 0.5"
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
   IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis"
   IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis"
+  IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
 }
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL

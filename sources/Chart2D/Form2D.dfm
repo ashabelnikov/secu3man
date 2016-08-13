@@ -594,5 +594,9 @@ object Form2D: TForm2D
       Caption = 'Build curve using 1st and last points'
       OnClick = OnBldCurveUsing1stAndLastPoints
     end
+    object PM_SetPtMovStep: TMenuItem
+      Caption = 'Points moving step...'
+      OnClick = OnSetPtMovStep
+    end
   end
 end

@@ -32,6 +32,7 @@
 #pragma hdrstop
 
 #include "Form2D.h"
+#include "PtMovStepDlg.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
 #pragma resource "*.dfm"
@@ -221,6 +222,8 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_Dup1stPoint->Caption = string;
  ::LoadString(hInstance, IDS_PM_BLD_CURVE_1ST_LAST_PT, string, 1024);
  PM_BldCurveUsing1stAndLastPoints->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SET_PTMOV_STEP, string, 1024);
+ PM_SetPtMovStep->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -788,6 +791,15 @@ void __fastcall TForm2D::OnChartMouseDown(TObject *Sender, TMouseButton Button, 
 {
  if (ActiveControl != Chart1)
   ActiveControl = Chart1;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnSetPtMovStep(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+  m_pt_moving_step = PtMovStepDlg->GetValue();
 }
 
 //---------------------------------------------------------------------------
