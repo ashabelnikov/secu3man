@@ -28,6 +28,7 @@
 
 #include "../common/MathHelpers.h"
 #include "Form3D.h"
+#include "PtMovStepDlg.h"
 #include "resource.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
@@ -185,6 +186,8 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_CopyFromCurve->Caption = string;
  ::LoadString(hInstance, IDS_PM_COPY_TO_CURVE, string, 1024);
  PM_CopyToCurve->Caption = string;
+ ::LoadString(hInstance, IDS_PM_SET_PTMOV_STEP, string, 1024);
+ PM_SetPtMovStep->Caption = string;
 } 
 
 //---------------------------------------------------------------------------
@@ -948,6 +951,15 @@ void __fastcall TForm3D::OnCopyFromCurve(TObject *Sender)
  else if (Sender == PM_CopyFromCurve14) CopyCurve(14, m_air_flow_position);
  else if (Sender == PM_CopyFromCurve15) CopyCurve(15, m_air_flow_position);
  else return;
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnSetPtMovStep(TObject *Sender)
+{
+ Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
+ PtMovStepDlg->SetValue(m_pt_moving_step);
+ if (PtMovStepDlg->ShowModal()==mrOk)
+  m_pt_moving_step = PtMovStepDlg->GetValue();
 }
 
 //---------------------------------------------------------------------------

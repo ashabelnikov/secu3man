@@ -96,6 +96,7 @@ class TForm3D : public TForm
   TMenuItem *PM_ZeroAllCurves;
   TMenuItem *PM_DupThisCurve;
   TMenuItem *PM_BldShapeUsing1stAndLastCurves;
+  TMenuItem *PM_SetPtMovStep;
 
   TMenuItem *PM_CopyToCurve;
   TMenuItem *PM_CopyToCurve0;
@@ -157,6 +158,7 @@ class TForm3D : public TForm
   void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall OnCopyToCurve(TObject *Sender);
   void __fastcall OnCopyFromCurve(TObject *Sender);
+  void __fastcall OnSetPtMovStep(TObject *Sender);
 
  public:
   __fastcall TForm3D(TComponent* Owner);

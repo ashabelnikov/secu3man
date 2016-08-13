@@ -22,3 +22,6 @@
 #define IDS_TT_FUNC_VIEW_3D            116
 #define IDS_TT_FUNC_VIEW_BACK          117
 #define IDS_TT_SELECT_CURVE            118
+#define IDS_PM_SET_PTMOV_STEP          119
+#define IDS_DLG_PTMOV_STEP_CAPT        120
+
