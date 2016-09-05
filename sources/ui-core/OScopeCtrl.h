@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <algorithm>
 #include <deque>
 
 class AFX_EXT_CLASS COScopeCtrl : public CWnd
