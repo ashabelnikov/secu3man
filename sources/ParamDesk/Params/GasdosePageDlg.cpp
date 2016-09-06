@@ -165,6 +165,10 @@ BOOL CGasdosePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_sm_steps_num_spin, MLL::GetString(IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sm_test_check, MLL::GetString(IDS_PD_CHOKE_SM_TEST_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_man_ctrl_spin, MLL::GetString(IDS_PD_CHOKE_MANUAL_POS_SPIN_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_p_edit, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_p_spin, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_edit, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_corrlimit_m_spin, MLL::GetString(IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

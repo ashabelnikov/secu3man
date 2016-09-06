@@ -997,6 +997,8 @@ BEGIN
     IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "Задает время добав. пуск. закрытия. По истечении этого времени включится регулятор оборотов."
     IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "Температура после которой добав. пуск. закрытие не будет применяться. При температуре меньше 0 заслонка полностью закрыта."
     IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "Коэффициент И-регулятора используемого для регулирования оборотов при прогреве."
+    IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Максимальное положительное значение лямбда коррекции на прогреве, используемое для газового дозатора"
+    IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Максимальное отрицательное значение лямбда коррекции на прогреве, используемое для газового дозатора"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -2156,6 +2158,8 @@ BEGIN
     IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "During this time choke will be additionally closed at startup. After this time RPM regulator will be turned on."
     IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "After this temperature choke will not be additionally closed at startup. Choke will be fully closed when temperature < 0°C"
     IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "I-regulator factor (integral gain) used for RPM regulation during warm up."
+    IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Maximum positive value of the EGO correction at warmup, which used by gas doser"
+    IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Maximum negative value of the EGO correction at warmup, which used by gas doser"
 END
 
 STRINGTABLE DISCARDABLE 
