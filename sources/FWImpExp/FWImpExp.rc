@@ -176,8 +176,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Отметьте нужные таблицы и нажмите кнопку со стрелочкой"
-    IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Отметьте нужные таблицы для переноса. Нажимать кнопку со срелочкой НЕ нужно, они скопируются при нажатии на ОК"
+    IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Mark necessary tables and press button with arrow"
+    IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Select necessary maps for moving. Button with arrow doesn't affect them, they will be copied on pressing of OK button."
 END
 
 /////////////////////////////////////////////////////////////////////////////
