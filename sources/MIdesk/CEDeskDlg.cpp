@@ -128,7 +128,7 @@ void CCEDeskDlg::Resize(const CRect& i_rect)
 
  MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
- //ресайзим контроллы
+ //resize controls
  CRect rect;
 #define _RESIZE(wnd)\
  rect = MIHelpers::GetChildWndRect(&wnd);\

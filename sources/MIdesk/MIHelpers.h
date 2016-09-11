@@ -40,7 +40,7 @@ struct MIHelpers
   return rect;
  }
 
- //Масштабирует все точки прямоугольника
+ //Scales all rectangle points
  static void ScaleRect(CRect& io_rect, float i_x_factor, float i_y_factor)
  {
   io_rect.left = MathHelpers::Round(io_rect.left * i_x_factor);

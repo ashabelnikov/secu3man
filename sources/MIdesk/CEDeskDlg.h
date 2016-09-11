@@ -58,7 +58,7 @@ class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
   int  m_enabled;
   CStatic m_ce_errors[16];
   CStatic m_ce_text;
-  
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
 

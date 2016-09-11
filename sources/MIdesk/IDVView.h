@@ -33,8 +33,8 @@ namespace SECU3IO
 class IDVView
 {
  public:
-  virtual void Show(bool show) = 0;                                //показать/спрятать контент представления
-  virtual void Enable(bool enable) = 0;                            //разрешение/запрещение представления
+  virtual void Show(bool show) = 0;                                //show/hide view content
+  virtual void Enable(bool enable) = 0;                            //eneble/disable view
   virtual bool IsEnabled(void) = 0;                                //returns true if window enabled
   virtual void SetValues(const SECU3IO::DbgvarDat* i_values) = 0;  //загоняет данные в представление
   virtual void GetValues(SECU3IO::DbgvarDat* o_values) = 0;        //извлекает данные из представления
