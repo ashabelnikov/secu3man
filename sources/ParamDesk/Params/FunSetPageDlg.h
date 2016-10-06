@@ -35,6 +35,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -54,10 +55,13 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void GetValues(SECU3IO::FunSetPar* o_values);
   void SetValues(const SECU3IO::FunSetPar* i_values);
 
+  void FillCBByLoadOpts(void);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnMapCalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -70,6 +74,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;
+  CComboBox m_load_src_combo;
   CSpinButtonCtrlEx m_press_swing_spin;
   CEditEx m_press_swing_edit;
   CSpinButtonCtrlEx m_map_grad_spin;
@@ -85,4 +90,5 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CBitmapButton m_calc_map_btn;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };

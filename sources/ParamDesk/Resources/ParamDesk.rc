@@ -189,6 +189,8 @@ BEGIN
     GROUPBOX        "Настройка ДПДЗ",IDC_PD_FUNSET_TPS_SENSOR_GROUP,3,108,164,39
     CONTROL         "",IDC_PD_MAP_CALC_BUTTON,
                     "Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,150,60,16,18
+    LTEXT           "Определ. нагрузку по:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,157,83,8
+    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,155,50,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1151,6 +1153,8 @@ STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Порог включения обогащения по ДПДЗ. Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ (относительно ВМТ) система должна начинать впрыск. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
+    IDS_PD_LOAD_OPT_TPS            "ДПДЗ"
+    IDS_PD_LOAD_OPT_MAP            "ДАД"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1338,6 +1342,8 @@ BEGIN
     GROUPBOX        "TPS tuning",IDC_PD_FUNSET_TPS_SENSOR_GROUP,3,108,164,39
     CONTROL         "",IDC_PD_MAP_CALC_BUTTON,
                     "Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,150,60,16,18
+    LTEXT           "load measurement:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,157,83,8
+    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,155,50,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -2312,6 +2318,8 @@ STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Accel.enrichment activation threshold (by TPS). The higher the value, the quickly you need to press the gas pedal to activate enrichment."
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft when (relatively to TDC) system should start injection. This parameter will take effect only with synchronization from CKP sensor."
+    IDS_PD_LOAD_OPT_TPS            "TPS"
+    IDS_PD_LOAD_OPT_MAP            "MAP"
 END
 
 /////////////////////////////////////////////////////////////////////////////

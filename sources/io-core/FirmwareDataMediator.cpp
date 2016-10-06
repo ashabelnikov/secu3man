@@ -949,6 +949,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->map_curve_gradient = MathHelpers::Round(128.0f * p_in->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE);
     p_params->tps_curve_offset = MathHelpers::Round(p_in->tps_curve_offset / ADC_DISCRETE);
     p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE);
+    p_params->load_src_cfg = (p_params->load_src_cfg & 0xF0) | p_in->load_src_cfg;
    }
    break;
   case STARTR_PAR:
@@ -1224,6 +1225,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->map_curve_gradient = ((float)p_params->map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * ADC_DISCRETE * 128.0f);
      p_out->tps_curve_offset = ((float)p_params->tps_curve_offset) * ADC_DISCRETE;
      p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE * 128.0f);
+     p_out->load_src_cfg = p_params->load_src_cfg & 0x0F;
     }
     break;
    case STARTR_PAR:

@@ -28,6 +28,7 @@
 #include "FunSetPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 #include "../MAPCalc/MAPCalcController.h"
 
 const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
@@ -35,6 +36,7 @@ const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_FUNSET_LOAD_SRC_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET_EDIT, OnChangeData)
@@ -58,6 +60,9 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_MAPS_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_MAPS_COMBO_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_LOAD_SRC_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_SPIN,OnUpdateControls)
@@ -93,6 +98,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 , m_map_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , m_tps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.map_lower_pressure = 4.5f;
  m_params.map_upper_pressure = 10.0f;
@@ -102,6 +108,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.map_curve_gradient = 20.9f;
  m_params.tps_curve_offset = 0.4f; //(V)
  m_params.tps_curve_gradient = 25.64f; //(%/V)
+ m_params.load_src_cfg = 0;
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -114,6 +121,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_gas_maps_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_benzin_maps_combo);
+ DDX_Control(pDX, IDC_PD_FUNSET_LOAD_SRC_COMBO, m_load_src_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_SPIN, m_press_swing_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_press_swing_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_SPIN, m_map_grad_spin);
@@ -136,6 +144,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  m_tps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_params.tps_curve_gradient);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_GAS_MAPS_COMBO, m_params.fn_gas);
+ DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_LOAD_SRC_COMBO, m_params.load_src_cfg);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -190,6 +199,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_tps_curve_gradient_spin.SetRangeAndDelta(-100.0f, 100.0f, 0.01f);
  m_tps_curve_gradient_edit.SetRange(-100.0f, 100.0f);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.2f));
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -214,10 +228,17 @@ BOOL CFunSetPageDlg::OnInitDialog()
  mp_ttc->ActivateToolTips(true);
 
  FillCBByFunNames(); //Initialize content of tables' set ComboBox
+ FillCBByLoadOpts();
  UpdateData(false);  //Initialize dialog controls with data
  UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CFunSetPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CFunSetPageDlg::OnChangeData()
@@ -289,6 +310,23 @@ void CFunSetPageDlg::FillCBByFunNames(void)
   m_benzin_maps_combo.SetCurSel(m_params.fn_benzin);
  else
   m_benzin_maps_combo.SetCurSel(0);
+}
+
+void CFunSetPageDlg::FillCBByLoadOpts(void)
+{
+ if (!::IsWindow(m_hWnd))
+  return;
+
+ m_load_src_combo.ResetContent();
+
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));
+
+ //для газа
+ if (m_params.load_src_cfg < 2)
+  m_load_src_combo.SetCurSel(m_params.load_src_cfg);
+ else
+  m_load_src_combo.SetCurSel(0);
 }
 
 std::vector<_TSTRING>& CFunSetPageDlg::AccessFunNames(void)

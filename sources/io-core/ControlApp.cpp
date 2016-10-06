@@ -628,7 +628,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -674,6 +674,10 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &tps_curve_gradient, true))
   return false;
  m_FunSetPar.tps_curve_gradient = ((float)tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete * 128.0f);
+
+ //Engine load measurement source
+ if (false == mp_pdp->Hex4ToBin(raw_packet,&m_FunSetPar.load_src_cfg))
+  return false;
 
  return true;
 }
@@ -2396,6 +2400,7 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
+ mp_pdp->Bin4ToHex(packet_data->load_src_cfg, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
