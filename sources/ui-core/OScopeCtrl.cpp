@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "math.h"
 #include "OScopeCtrl.h"
+#include "common/MathHelpers.h"
 
 #undef min //fucking stuff
 #undef max
@@ -36,34 +37,25 @@ BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
  ON_WM_ENABLE()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl
 COScopeCtrl::COScopeCtrl()
 : m_point_position(0)
-// m_nShiftPixels determines how much the plot shifts (in terms of pixels)
-// with the addition of a new data point
-, m_nShiftPixels(4)
+, m_nShiftPixels(2)
+, m_gridSizeX(8)
+, m_gridNumY(5)
 {
- // since plotting is based on a LineTo for each new point
- // we need a starting point (i.e. a "previous" point)
- // use 0.0 as the default first point.
- // these are public member variables, and can be changed outside
- // (after construction).  Therefore m_perviousPosition could be set to
- // a more appropriate value prior to the first call to SetPosition.
+ //Previous position value for LineTo
  m_dPreviousPosition = 0.0;
 
- // public variable for the number of decimal places on the y axis
+ //Number of decimal places on the y axis
  m_nYDecimals = 3;
 
- // set some initial values for the scaling until "SetRange" is called.
- // these are protected varaibles and must be set with SetRange
- // in order to ensure that m_dRange is updated accordingly
+ //Range
  m_dLowerLimit = -10.0;
  m_dUpperLimit =  10.0;
  m_dRange      =  m_dUpperLimit - m_dLowerLimit;
 
  // background, grid and data colors
- // these are public variables and can be set directly
  m_normalBackColor = m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
  m_normalGridColor = m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
  m_normalPlotColor = m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
@@ -75,26 +67,20 @@ COScopeCtrl::COScopeCtrl()
  m_strXUnitsString.Format(_T("Samples"));  // can also be set with SetXUnits
  m_strYUnitsString.Format(_T("Y units"));  // can also be set with SetYUnits
 
- // bitmaps to restore the memory DC's
+ // bitmaps for restoring memory DC's
  m_pbitmapOldGrid = NULL;
  m_pbitmapOldPlot = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
 COScopeCtrl::~COScopeCtrl()
 {
- // just to be picky restore the bitmaps for the two memory dc's
- // (these dc's are being destroyed so there shouldn't be any leaks)
  if (m_pbitmapOldGrid != NULL)
   m_dcGrid.SelectObject(m_pbitmapOldGrid);
  if (m_pbitmapOldPlot != NULL)
   m_dcPlot.SelectObject(m_pbitmapOldPlot);
 }
 
-/////////////////////////////////////////////////////////////////////////////
 // COScopeCtrl message handlers
-
-/////////////////////////////////////////////////////////////////////////////
 BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
  BOOL result;
@@ -112,73 +98,65 @@ BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT
  return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetRange(double dLower, double dUpper, int nDecimalPlaces)
 {
  ASSERT(dUpper > dLower);
-
  m_dLowerLimit     = dLower;
  m_dUpperLimit     = dUpper;
  m_nYDecimals      = nDecimalPlaces;
  m_dRange          = m_dUpperLimit - m_dLowerLimit;
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
-
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetXUnits(CString string)
 {
  m_strXUnitsString = string;
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetYUnits(CString string)
 {
  m_strYUnitsString = string;
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+void COScopeCtrl::SetYGridNumber(int ny)
+{
+ m_gridNumY = ny;
+}
+
+void COScopeCtrl::SetXGridSize(int sx)
+{
+ m_gridSizeX = sx;
+}
+
 void COScopeCtrl::SetGridColor(COLORREF color)
 {
  m_normalGridColor = color;
  _SetStateColors(IsWindowEnabled());
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetPlotColor(COLORREF color)
 {
  m_normalPlotColor = color;
  _SetStateColors(IsWindowEnabled());
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::SetBackgroundColor(COLORREF color)
 {
  m_normalBackColor = color;
  _SetStateColors(IsWindowEnabled());
- // clear out the existing garbage, re-start with a clean plot
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::InvalidateCtrl()
 {
- // There is a lot of drawing going on here - particularly in terms of
- // drawing the grid.  Don't panic, this is all being drawn (only once)
- // to a bitmap.  The result is then BitBlt'd to the control whenever needed.
+ // This is all being drawn (only once) to a bitmap.  The result is then BitBlt'd to the control whenever needed.
  int i;
  int nCharacters;
- int nTopGridPix, nMidGridPix, nBottomGridPix;
 
  CPen *oldPen;
  CPen solidPen(PS_SOLID, 0, m_crGridColor);
@@ -226,18 +204,11 @@ void COScopeCtrl::InvalidateCtrl()
  m_dcGrid.LineTo (m_rectPlot.left, m_rectPlot.top);
  m_dcGrid.SelectObject (oldPen);
 
- // draw the dotted lines,
- // use SetPixel instead of a dotted pen - this allows for a
- // finer dotted line and a more "technical" look
- nMidGridPix    = (m_rectPlot.top + m_rectPlot.bottom)/2;
- nTopGridPix    = nMidGridPix - m_rectPlot.Height() / 4;
- nBottomGridPix = nMidGridPix + m_rectPlot.Height() / 4;
-
- for (i=m_rectPlot.left; i<m_rectPlot.right; i+=4)
+ // draw grid
+ for (i = m_rectPlot.left; i < m_rectPlot.right; i+=m_gridSizeX)
  {
-  m_dcGrid.SetPixel (i, nTopGridPix,    m_crGridColor);
-  m_dcGrid.SetPixel (i, nMidGridPix,    m_crGridColor);
-  m_dcGrid.SetPixel (i, nBottomGridPix, m_crGridColor);
+  for (int j = 0; j < m_gridNumY; ++j)
+   m_dcGrid.SetPixel (i, m_rectPlot.top + MathHelpers::Round(((float)(m_rectPlot.Height() * j)) / m_gridNumY), m_crGridColor);
  }
 
  // create some fonts (horizontal and vertical)
@@ -313,7 +284,6 @@ void COScopeCtrl::InvalidateCtrl()
  InvalidateRect(m_rectClient);
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 {
  if (!IsWindowEnabled())
@@ -363,7 +333,6 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
  Invalidate();
 }
 
-////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::OnPaint()
 {
  CPaintDC dc(this);  // device context for painting
@@ -396,7 +365,6 @@ void COScopeCtrl::OnPaint()
  memDC.SelectObject(oldBitmap);
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::DrawPoint(bool i_reverse)
 {
  // this does the work of "scrolling" the plot to the left
@@ -451,9 +419,7 @@ void COScopeCtrl::DrawPoint(bool i_reverse)
   else
    prevX = m_rectPlot.left - nPlotShiftPixels;
 
-  prevY = m_rectPlot.bottom -
-          (long)((m_dPreviousPosition - m_dLowerLimit) * m_dVerticalFactor);
-
+  prevY = m_rectPlot.bottom - MathHelpers::Round((m_dPreviousPosition - m_dLowerLimit) * m_dVerticalFactor);
   m_dcPlot.MoveTo (prevX, prevY);
 
   // draw to the current point
@@ -462,8 +428,7 @@ void COScopeCtrl::DrawPoint(bool i_reverse)
   else
    currX = m_rectPlot.left - nHalfShiftPixels;
 
-  currY = m_rectPlot.bottom -
-          (long)((m_dCurrentPosition - m_dLowerLimit) * m_dVerticalFactor);
+  currY = m_rectPlot.bottom - MathHelpers::Round((m_dCurrentPosition - m_dLowerLimit) * m_dVerticalFactor);
   m_dcPlot.LineTo (currX, currY);
 
   // restore the pen
@@ -480,7 +445,6 @@ void COScopeCtrl::DrawPoint(bool i_reverse)
  }
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::OnSize(UINT nType, int cx, int cy)
 {
  CWnd::OnSize(nType, cx, cy);
@@ -507,7 +471,6 @@ void COScopeCtrl::OnEnable(BOOL bEnable)
  InvalidateCtrl();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 void COScopeCtrl::Reset()
 {
  m_point_position = 0;

@@ -36,14 +36,16 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
 
   virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
 
-  //Use for add new point
+  //Use for adding of a new point
   //dNewPoint - value of new point
-  //i_left - if true, then point will be added from left side (reverse)
+  //i_reverse - if true, then point will be added from the left side (reverse)
   void AppendPoint(double dNewPoint, bool i_reverse = false);
 
   void SetRange(double dLower, double dUpper, int nDecimalPlaces=1);
   void SetXUnits(CString string);
   void SetYUnits(CString string);
+  void SetYGridNumber(int ny); 
+  void SetXGridSize(int sx);
   void SetGridColor(COLORREF color);
   void SetPlotColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
@@ -64,6 +66,8 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
  private:
   const int m_nShiftPixels;    // amount to shift with each new point
   int m_nYDecimals;
+  int m_gridNumY;
+  int m_gridSizeX;
 
   CString m_strXUnitsString;
   CString m_strYUnitsString;
