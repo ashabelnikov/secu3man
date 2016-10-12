@@ -222,7 +222,7 @@ void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
  mp_OScopeCtrl->SetRange(0.0, 5.0, 1);
  mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 99));
  mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));
 }

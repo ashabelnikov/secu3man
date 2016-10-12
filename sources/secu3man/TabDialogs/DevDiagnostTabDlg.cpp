@@ -324,7 +324,7 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  mp_OScopeCtrl1->SetRange(0.0, 5.0, 1);
  mp_OScopeCtrl1->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl1->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- mp_OScopeCtrl1->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl1->SetBackgroundColor(RGB(0, 0, 99));
  mp_OScopeCtrl1->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl1->SetPlotColor(RGB(255, 255, 255));
 
@@ -338,7 +338,7 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  mp_OScopeCtrl2->SetRange(0.0, 5.0, 1);
  mp_OScopeCtrl2->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl2->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 0, 99));
  mp_OScopeCtrl2->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl2->SetPlotColor(RGB(255, 255, 255));
 }

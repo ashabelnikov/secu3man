@@ -332,7 +332,7 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
  mp_OScopeCtrl->SetRange(K_SIG_MIN, K_SIG_MAX, 1);
  mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
  mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- mp_OScopeCtrl->SetBackgroundColor(RGB(0, 0, 64));
+ mp_OScopeCtrl->SetBackgroundColor(RGB(0, 64, 0));
  mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));
 }
