@@ -243,15 +243,11 @@ void CLogPlayerTabController::OnPlayButton(void)
 
 void CLogPlayerTabController::OnNextButton(void)
 {
- if (!mp_log_reader->IsNextPossible())
-  return;
  _ProcessOneRecord(false, DIR_NEXT);
 }
 
 void CLogPlayerTabController::OnPrevButton(void)
 {
- if (!mp_log_reader->IsPrevPossible())
-  return;
  _ProcessOneRecord(false, DIR_PREV);
 }
 
@@ -448,9 +444,19 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
  if (i_direction == DIR_NEXT)
-  mp_log_reader->Next();
+ {
+  if (mp_log_reader->IsNextPossible())
+   mp_log_reader->Next();
+  else
+   return;
+ }
  else if (i_direction == DIR_PREV)
-  mp_log_reader->Prev();
+ {
+  if (mp_log_reader->IsPrevPossible())
+   mp_log_reader->Prev();
+  else
+   return;
+ }
  else
  {
   ASSERT(0);
