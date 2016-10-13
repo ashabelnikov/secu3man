@@ -101,10 +101,10 @@ BOOL COScopeCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT
 void COScopeCtrl::SetRange(double dLower, double dUpper, int nDecimalPlaces)
 {
  ASSERT(dUpper > dLower);
- m_dLowerLimit     = dLower;
- m_dUpperLimit     = dUpper;
- m_nYDecimals      = nDecimalPlaces;
- m_dRange          = m_dUpperLimit - m_dLowerLimit;
+ m_dLowerLimit = dLower;
+ m_dUpperLimit = dUpper;
+ m_nYDecimals = nDecimalPlaces;
+ m_dRange = m_dUpperLimit - m_dLowerLimit;
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
  InvalidateCtrl();
 }
@@ -155,8 +155,7 @@ void COScopeCtrl::SetBackgroundColor(COLORREF color)
 void COScopeCtrl::InvalidateCtrl()
 {
  // This is all being drawn (only once) to a bitmap.  The result is then BitBlt'd to the control whenever needed.
- int i;
- int nCharacters;
+ int i, nCharacters;
 
  CPen *oldPen;
  CPen solidPen(PS_SOLID, 0, m_crGridColor);
@@ -215,13 +214,13 @@ void COScopeCtrl::InvalidateCtrl()
  // use a height of 14 pixels and 300 weight
  // (these may need to be adjusted depending on the display)
  axisFont.CreateFont (14, 0, 0, 0, 300,
-                       FALSE, FALSE, 0, ANSI_CHARSET,
+                       FALSE, FALSE, 0, RUSSIAN_CHARSET,
                        OUT_DEFAULT_PRECIS,
                        CLIP_DEFAULT_PRECIS,
                        DEFAULT_QUALITY,
                        DEFAULT_PITCH|FF_SWISS, _T("Arial"));
  yUnitFont.CreateFont (14, 0, 900, 0, 300,
-                       FALSE, FALSE, 0, ANSI_CHARSET,
+                       FALSE, FALSE, 0, RUSSIAN_CHARSET,
                        OUT_DEFAULT_PRECIS,
                        CLIP_DEFAULT_PRECIS,
                        DEFAULT_QUALITY,
