@@ -32,7 +32,7 @@
 class CTabDialog;
 class ITabControllerEvent;
 
-// использовать стиль TCS_OWNERDRAWFIXED!
+// Use TCS_OWNERDRAWFIXED style!
 
 class AFX_EXT_CLASS CTabController : public CTabCtrl
 {
@@ -45,14 +45,14 @@ class AFX_EXT_CLASS CTabController : public CTabCtrl
   //Устанавливает модуль, который содержит ресурсы необходимые для работы контролла.
   void SetResourceModule(HMODULE hModule);
 
-  //Добавление вкладок
+  //Add tabs
   int  AddPage(CString name, CTabDialog* pPageDlg);
   int  AddPage(CString name, CTabDialog* pPageDlg, const int nImage);
 
   // set tab (fail if disabled)
   bool SetCurSel(UINT iNewTab);
 
-  //Разрешение/запрещение указанной вкладки
+  //Enable/disable specified tab
   void EnableItem(int ITab, bool enable);
 
   //Инициализация. Обязательно нужно вызвать перед началом работы!

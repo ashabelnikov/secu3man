@@ -960,7 +960,7 @@ BOOL CButtonsPanel::OnInitDialog()
 //-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnViewStartMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_start_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_start_map_wnd_handle,WM_CLOSE,0,0);
@@ -994,7 +994,7 @@ void CButtonsPanel::OnViewStartMap()
 //-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnViewIdleMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_idle_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_idle_map_wnd_handle,WM_CLOSE,0,0);
@@ -1028,7 +1028,7 @@ void CButtonsPanel::OnViewIdleMap()
 
 void CButtonsPanel::OnViewWorkMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_work_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_work_map_wnd_handle,WM_CLOSE,0,0);
@@ -1061,7 +1061,7 @@ void CButtonsPanel::OnViewWorkMap()
 
 void CButtonsPanel::OnViewTempMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_temp_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_temp_map_wnd_handle,WM_CLOSE,0,0);
@@ -1094,7 +1094,7 @@ void CButtonsPanel::OnViewTempMap()
 
 void CButtonsPanel::OnViewVEMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_ve_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_ve_map_wnd_handle,WM_CLOSE,0,0);
@@ -1129,7 +1129,7 @@ void CButtonsPanel::OnViewVEMap()
 
 void CButtonsPanel::OnViewAFRMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_afr_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_afr_map_wnd_handle,WM_CLOSE,0,0);
@@ -1164,7 +1164,7 @@ void CButtonsPanel::OnViewAFRMap()
 
 void CButtonsPanel::OnViewCrnkMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_crnk_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_crnk_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -1603,7 +1603,7 @@ void CButtonsPanel::OnUpdateViewAERPMMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection || m_gasdose);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
  pCmdUI->SetCheck( (m_aerpm_map_chart_state) ? TRUE : FALSE );
 }
 

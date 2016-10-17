@@ -29,7 +29,7 @@
 
 namespace DLL
 {
- //глобальная таблица функций из DLL
+ //Global table of functions from DLLs
  Chart2DCreate_Addr              Chart2DCreate = NULL;
  Chart2DUpdate_Addr              Chart2DUpdate = NULL;
  Chart2DSetOnChange_Addr         Chart2DSetOnChange = NULL;
@@ -62,7 +62,7 @@ namespace DLL
  Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep = NULL;
 
  //---------------------------------------------------------
- //загружает одну функцию
+ //Loads one function
  template <class T>
  void LoadFunction(HMODULE hModule, T& ptr, const char* name, bool& status)
  {
