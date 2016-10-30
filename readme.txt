@@ -1,12 +1,18 @@
     SECU-3 Management software. Distributed under GPL license
 
-    Designed by Alexey A. Shabelnikov 2007. Ukraine, Kiev.
+    Designed and developed by Alexey A. Shabelnikov (C) 2007. Ukraine, Kiev.
     Microprocessor systems - design & programming.
     http://secu-3.org e-mail: shabelnikov@secu-3.org
 
+      Screenshots
+
+    http://secu-3.org/images/secu-3-manager-1.png
+    http://secu-3.org/images/secu-3-manager-2.png
+    http://secu-3.org/images/secu-3-manager-3.png
+    http://secu-3.org/images/secu-3-manager-4.png
+
 
       How to compile the project
-      Как компилировать проект
 
     1. Prerequisites: Visual Studio >= 6.0, CBuilder >= 5.0, CMake >= 2.6
        (http://www.cmake.org/cmake/resources/software.html).
