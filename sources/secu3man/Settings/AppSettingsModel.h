@@ -86,6 +86,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_ShowWelcome;
   const CString m_Name_RPMAverage;
   const CString m_Name_VoltAverage;
+  const CString m_Name_AllowVisualTheme;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -162,6 +163,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetShowWelcome(void) const;
   virtual int GetRPMAverage(void) const;
   virtual int GetVoltAverage(void) const;
+  virtual bool GetAllowVisualTheme(void) const;
 
   //позиции окон
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -201,6 +203,7 @@ class CAppSettingsModel : public ISettingsData
   bool m_optShowWelcome;
   int  m_optRPMAverage;
   int  m_optVoltAverage;
+  bool m_optAllowVisualTheme;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

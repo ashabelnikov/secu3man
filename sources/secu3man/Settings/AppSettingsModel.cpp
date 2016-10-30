@@ -57,6 +57,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_ShowWelcome(_T("ShowWelcome"))
 , m_Name_RPMAverage(_T("RPMAverage"))
 , m_Name_VoltAverage(_T("VoltAverage"))
+, m_Name_AllowVisualTheme(_T("AllowVisualTheme"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -475,6 +476,20 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optVoltAverage = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optAllowVisualTheme = 0;
+ }
+ else
+ {
+  m_optAllowVisualTheme = i_val;
+ }
+
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
  {\
@@ -691,6 +706,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optVoltAverage);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optAllowVisualTheme);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,write_str,IniFileName);
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -1069,4 +1088,9 @@ int CAppSettingsModel::GetRPMAverage(void) const
 int CAppSettingsModel::GetVoltAverage(void) const
 {
  return m_optVoltAverage;
+}
+
+bool CAppSettingsModel::GetAllowVisualTheme(void) const
+{
+ return m_optAllowVisualTheme;
 }
