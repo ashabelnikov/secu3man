@@ -85,6 +85,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   void SetRPMAverageNum(int avnum);
   void SetVoltAverageNum(int avnum);
+  void SetMAPAverageNum(int avnum);
+  void SetAI1AverageNum(int avnum);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -123,10 +125,16 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   int m_rpm_rb[32];    //ring buffer for RPM averaging, max. 32
   float m_volt_rb[32]; //ring buffer for voltage averaging, max 32
+  float m_map_rb[32];  //ring buffer for pressure averaging, max 32
+  float m_ai1_rb[32];  //ring buffer for ADD_I1 averaging, max 32
   int m_rpm_idx;       //ring buffer index for RPM
   int m_volt_idx;      //ring buffer index for voltage
+  int m_map_idx;       //ring buffer index for pressure
+  int m_ai1_idx;       //ring buffer index for ADD_I1
   int m_rpm_avnum;
   int m_volt_avnum;
+  int m_map_avnum;
+  int m_ai1_avnum;
 };
 
 /////////////////////////////////////////////////////////////////////////////

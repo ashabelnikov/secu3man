@@ -110,6 +110,8 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
+ mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
+ mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
 
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
@@ -122,6 +124,8 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
+ mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
+ mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
 
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3

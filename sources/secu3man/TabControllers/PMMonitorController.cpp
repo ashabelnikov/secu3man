@@ -68,6 +68,8 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
  mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
+ mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
+ mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -78,6 +80,8 @@ void CPMMonitorController::OnActivate(void)
  mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
  mp_view->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
+ mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
+ mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
 }
 
 void CPMMonitorController::OnDeactivate(void)

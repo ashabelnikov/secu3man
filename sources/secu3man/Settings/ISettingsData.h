@@ -105,6 +105,8 @@ class ISettingsData
   virtual bool GetShowWelcome(void) const = 0;
   virtual int GetRPMAverage(void) const = 0;
   virtual int GetVoltAverage(void) const = 0;
+  virtual int GetMAPAverage(void) const = 0;
+  virtual int GetAI1Average(void) const = 0;
   virtual bool GetAllowVisualTheme(void) const = 0;
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;

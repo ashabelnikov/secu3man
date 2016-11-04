@@ -53,12 +53,18 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_show(false)
 , m_rpm_idx(0)
 , m_volt_idx(0)
+, m_map_idx(0)
+, m_ai1_idx(0)
 , m_rpm_avnum(0)
 , m_volt_avnum(0)
+, m_map_avnum(0)
+, m_ai1_avnum(0)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
  std::fill(m_rpm_rb, m_rpm_rb + 32, 0);
  std::fill(m_volt_rb, m_volt_rb + 32, 0.0f);
+ std::fill(m_map_rb, m_map_rb + 32, 0);
+ std::fill(m_ai1_rb, m_ai1_rb + 32, 0.0f);
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -200,6 +206,22 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
   if (m_volt_idx >= m_volt_avnum)
    m_volt_idx = 0;
  }
+
+ if (m_map_avnum > 0)
+ {
+  //update pressure ring buffer
+  m_map_rb[m_map_idx++] = i_values->pressure;
+  if (m_map_idx >= m_map_avnum)
+   m_map_idx = 0;
+ }
+
+ if (m_ai1_avnum > 0)
+ {
+  //update ADD_I1 ring buffer
+  m_ai1_rb[m_ai1_idx++] = i_values->add_i1;
+  if (m_ai1_idx >= m_ai1_avnum)
+   m_ai1_idx = 0;
+ }
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -217,7 +239,13 @@ void CMIDeskDlg::OnUpdateTimer(void)
  else
   m_tachometer.SetValue((float)m_values.frequen);
 
- m_pressure.SetValue(m_values.pressure);
+ if (m_map_avnum > 0)
+ {
+  float pressure = std::accumulate(m_map_rb, m_map_rb + m_map_avnum, 0.0f);
+  m_pressure.SetValue(pressure / m_map_avnum);
+ }
+ else
+  m_pressure.SetValue(m_values.pressure);
 
  if (m_volt_avnum > 0)
  {
@@ -236,7 +264,15 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
  m_temperature.SetValue(m_values.temperat);
- m_add_i1.SetValue(m_values.add_i1);
+
+ if (m_ai1_avnum > 0)
+ {
+  float add_i1 = std::accumulate(m_ai1_rb, m_ai1_rb + m_ai1_avnum, 0.0f);
+  m_add_i1.SetValue(add_i1 / m_ai1_avnum);
+ }
+ else
+  m_pressure.SetValue(m_values.add_i1);
+
  if (!m_values.add_i2_mode)
   m_add_i2.SetValue(m_values.add_i2);
  else
@@ -328,4 +364,14 @@ void CMIDeskDlg::SetRPMAverageNum(int avnum)
 void CMIDeskDlg::SetVoltAverageNum(int avnum)
 {
  m_volt_avnum = avnum;
+}
+
+void CMIDeskDlg::SetMAPAverageNum(int avnum)
+{
+ m_map_avnum = avnum;
+}
+
+void CMIDeskDlg::SetAI1AverageNum(int avnum)
+{
+ m_ai1_avnum = avnum;
 }

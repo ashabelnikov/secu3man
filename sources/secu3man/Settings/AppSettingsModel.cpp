@@ -57,6 +57,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_ShowWelcome(_T("ShowWelcome"))
 , m_Name_RPMAverage(_T("RPMAverage"))
 , m_Name_VoltAverage(_T("VoltAverage"))
+, m_Name_MAPAverage(_T("MAPAverage"))
+, m_Name_AI1Average(_T("AI1Average"))
 , m_Name_AllowVisualTheme(_T("AllowVisualTheme"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
@@ -477,6 +479,34 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_MAPAverage,_T("4"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val < 0 || i_val > 16)
+ {
+  status = false;
+  m_optMAPAverage = 0; //no avaraging
+ }
+ else
+ {
+  m_optMAPAverage = i_val;
+ }
+
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_AI1Average,_T("4"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val < 0 || i_val > 16)
+ {
+  status = false;
+  m_optAI1Average = 0; //no avaraging
+ }
+ else
+ {
+  m_optAI1Average = i_val;
+ }
+
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,_T("1"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
@@ -706,6 +736,14 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optVoltAverage);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optMAPAverage);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_MAPAverage,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optAI1Average);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_AI1Average,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optAllowVisualTheme);
@@ -1088,6 +1126,16 @@ int CAppSettingsModel::GetRPMAverage(void) const
 int CAppSettingsModel::GetVoltAverage(void) const
 {
  return m_optVoltAverage;
+}
+
+int CAppSettingsModel::GetMAPAverage(void) const
+{
+ return m_optMAPAverage;
+}
+
+int CAppSettingsModel::GetAI1Average(void) const
+{
+ return m_optAI1Average;
 }
 
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
