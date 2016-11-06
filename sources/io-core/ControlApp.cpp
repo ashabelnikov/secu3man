@@ -1228,6 +1228,7 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flpmp_flags))
   return false;
  m_MiscPar.flpmp_offongas = flpmp_flags & 0x1;
+ m_MiscPar.inj_offongas = flpmp_flags & 0x2;
 
  return true;
 }
@@ -2519,7 +2520,8 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
- mp_pdp->Bin8ToHex(packet_data->flpmp_offongas, m_outgoing_packet); //TODO: not safe! can erase other flags!
+ BYTE fpf_flags = ((packet_data->inj_offongas != 0) << 1) | ((packet_data->flpmp_offongas != 0) << 0);
+ mp_pdp->Bin8ToHex(fpf_flags, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

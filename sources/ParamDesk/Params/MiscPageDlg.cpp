@@ -39,6 +39,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
  ON_BN_CLICKED(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO, OnUpdateControls)
@@ -62,6 +63,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT, OnUpdateControlsHOP)
  
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
@@ -81,6 +83,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.hop_start_cogs = 0;
  m_params.hop_durat_cogs = 0;
  m_params.flpmp_offongas = true;
+ m_params.inj_offongas = false;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -114,6 +117,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN, m_hop_durat_spin);
 
  DDX_Control(pDX,IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_flpmp_offongas_check);
+ DDX_Control(pDX,IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_inj_offongas_check);
 
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
@@ -122,6 +126,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  m_hop_durat_edit.DDX_Value(pDX, IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, m_params.hop_durat_cogs);
  DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
  DDX_Check_bool(pDX, IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_params.flpmp_offongas);
+ DDX_Check_bool(pDX, IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_params.inj_offongas);
 }
 
 /////////////////////////////////////////////////////////////////////////////

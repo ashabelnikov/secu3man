@@ -99,6 +99,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   int m_uart_speed_cb_index;
   
   CButton m_flpmp_offongas_check;
+  CButton m_inj_offongas_check;
     
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
