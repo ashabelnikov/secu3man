@@ -44,74 +44,56 @@ double CAnalogMeter::DegToRad(double deg)
 }
 
 CAnalogMeter::CAnalogMeter()
-: m_dLimitAngleDeg(145)
+: m_dPI(4.0 * atan(1.0))  // for trig calculations
+, m_dLimitAngleDeg(145)
 , m_nGridLineWidth(1)
 , m_fontType(_T("Times New Roman"))
 , m_pbitmapOldGrid(NULL)
 , m_pbitmapOldNeedle(NULL)
-{
- m_dPI = 4.0 * atan(1.0);  // for trig calculations
-
- // initialized rectangle locations, will be modified on first drawing
- m_rectDraw    = CRect(0, 0, 0, 0);
- m_nRectWidth  = 0;
- m_nRectHeight = 0;
-
- // draw the whole thing the first time
- m_boolForceRedraw  = true;
- m_dRadiansPerValue = 0.0;  // will be modified on first drawing
-
- // false if we are printing
- m_boolUseBitmaps = true;
-
  // default unit, scaling and needle position
- m_dMinScale   = -10.0;
- m_dMaxScale   =  10.0;
- m_dNeedlePos  =  0.0;
- m_dNeedlePos_n=  0.0;
- m_strTitle    =  "";
- m_strTLPane   =  "";
- m_strTLPane_n =  "";
- m_strTRPane   =  "";
- m_strTRPane_n =  "";
- m_strUnit     =  "";
-
+, m_dMinScale(-10.0)
+, m_dMaxScale(10.0)
+, m_dNeedlePos(0.0)
+, m_dNeedlePos_n(0.0)
+, m_strTitle("")
+, m_strTLPane("")
+, m_strTLPane_n("")
+, m_strTRPane("")
+, m_strTRPane_n("")
+, m_strUnit("")
  // for numerical values
- m_nFontScale     = 100;
- m_nLabelsDecimals = 1;
- m_nValueDecimals = 1;
-
- m_nTickNumber = 20;
-
+, m_nFontScale(100)
+, m_nLabelsDecimals(1)
+, m_nValueDecimals(1)
+, m_nTickNumber(20)
  // switches
- m_swTitle   = true;
- m_swTLPane  = false;
- m_swTRPane  = false;
- m_swGrid    = true;
- m_swLabels  = true;
- m_swValue   = true;
- m_swUnit    = true;
- m_swNeedle  = true;
-
- // title color
- m_colorTitle     = RGB(128, 128, 128);
- //top-left pane color
- m_colorTLPane    = RGB(0, 0, 255);
- //top-right pane color
- m_colorTRPane    = RGB(0, 0, 255);
- // normal grid color
- m_colorGrid      = RGB(0, 0, 50);
- // current numerical value color
- m_colorValue     = RGB(0, 0, 0);
- // background color
- m_colorBGround   = RGB(202, 202, 202);
- // needle color
- m_colorNeedle    = RGB(255, 0, 0) ;
- // range color
- m_colorLabels    = RGB(0, 0, 0);
- // value color
- m_colorValue     = RGB(0, 0, 0);
-
+, m_swTitle(true)
+, m_swTLPane(false)
+, m_swTRPane(false)
+, m_swGrid(true)
+, m_swLabels(true)
+, m_swValue(true)
+, m_swUnit(true)
+, m_swNeedle(true)
+ // colors
+, m_colorTitle(RGB(128, 128, 128)) // title color
+, m_colorTLPane(RGB(0, 0, 255))    //top-left pane color
+, m_colorTRPane(RGB(0, 0, 255))    //top-right pane color
+, m_colorGrid(RGB(0, 0, 50))       // normal grid color
+, m_colorValue(RGB(0, 0, 0))       // current numerical value color
+, m_colorBGround(RGB(202, 202, 202)) // background color
+, m_colorNeedle(RGB(255, 0, 0))    // needle color
+, m_colorLabels(RGB(0, 0, 0))      // range color
+ // initialized rectangle locations, will be modified on first drawing
+, m_rectDraw(CRect(0, 0, 0, 0))
+, m_nRectWidth(0)
+, m_nRectHeight(0)
+ // draw the whole thing the first time
+, m_boolForceRedraw(true)
+, m_dRadiansPerValue(0.0)  // will be modified on first drawing
+ // false if we are printing
+, m_boolUseBitmaps(true)
+{
  // set pen/brush colors
  ActuateColors();
 }
@@ -129,7 +111,6 @@ CAnalogMeter::~CAnalogMeter()
  ResetAlertZones();
 }
 
-/////////////////////////////////////////////////////////////////////////////
 // CAnalogMeter message handlers
 
 void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
@@ -204,7 +185,6 @@ void CAnalogMeter::ShowMeter(CDC * pDC, CRect rectBorder)
   ShowMeterImage(pDC);
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::Update(CDC *pDC)
 {
  // if the needle hasn't changed, don't bother updating
@@ -239,7 +219,6 @@ void CAnalogMeter::Update(CDC *pDC)
   ShowMeterImage (pDC);
 }
 
-//////////////////////////////////////////
 void CAnalogMeter::DrawScale()
 {
  double   dTemp;
@@ -248,15 +227,11 @@ void CAnalogMeter::DrawScale()
  CFont*   pFontOld;
  CString  tempString;
 
- bool disable_title;
- bool disable_range;
- bool disable_unit;
+ bool disable_title, disable_range, disable_unit;
 
  m_rectGfx = m_rectDraw;
 
- ///////////////////////
- //  clear background //
- ///////////////////////
+ //clear background
 
  // new pen / brush
  pPenOld   = NULL;
@@ -280,9 +255,8 @@ void CAnalogMeter::DrawScale()
  if (pBrushOld)
   m_dcGrid.SelectObject(pBrushOld);
 
- ///////////////////////
- //  check size       //
- ///////////////////////
+ //  check size
+
  disable_title = false;
  disable_range = false;
  disable_unit  = false;
@@ -301,9 +275,8 @@ void CAnalogMeter::DrawScale()
  if(m_rectGfx.Height() < m_rectGfx.Width())
   m_rectGfx.DeflateRect((m_rectGfx.Width() - m_rectGfx.Height())/2, 0);
 
- ///////////////////////
- //  create font      //
- ///////////////////////
+ //  create font
+
  m_nFontHeight = m_rectGfx.Height()/4;
 
  if(((m_rectGfx.Width()) > 0) && ((m_rectGfx.Height()) > 0))
@@ -402,9 +375,8 @@ void CAnalogMeter::DrawScale()
  else
   m_rectValue.bottom += m_nFontHeight/2;
 
- ///////////////////////
- //  draw grid        //
- ///////////////////////
+ //  draw grid
+
  CRect Bounds(nLeftBoundX,nLeftBoundY,nRightBoundX,nRightBoundY);
 
  DrawAlertZones(Bounds);
@@ -621,11 +593,8 @@ void CAnalogMeter::DrawNeedle()
  CPen*   pPenOld;
  CBrush* pBrushOld;
  CFont*  pFontOld;
- double  dAngleRad, dX, dY;
- double  dCosAngle, dSinAngle;
- bool    disable_value;
- bool    disable_tlpane;
- bool    disable_trpane;
+ double  dAngleRad, dX, dY, dCosAngle, dSinAngle;
+ bool    disable_value, disable_tlpane, disable_trpane;
 
  if (!m_dcNeedle.GetSafeHdc())
   return;
@@ -651,9 +620,8 @@ void CAnalogMeter::DrawNeedle()
    m_dcGrid.SelectObject(pBrushOld);
  }
 
- ///////////////////////
- // check sizes       //
- ///////////////////////
+ // check sizes
+
  disable_value = false;
  disable_tlpane = false;
  disable_trpane = false;
@@ -756,10 +724,8 @@ void CAnalogMeter::DrawNeedle()
 
  if(pBrushOld)
   m_dcGrid.SelectObject(pBrushOld);
+}
 
-} // end DrawNeedle
-
-///////////////////////////////////
 void CAnalogMeter::ShowMeterImage(CDC *pDC)
 {
  CDC memDC;
@@ -797,9 +763,8 @@ void CAnalogMeter::ShowMeterImage(CDC *pDC)
  }
 
  memDC.SelectObject(oldBitmap);
-} // end ShowMeterImage
+}
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::ActuateColors()
 {
  if(m_PenG_Grid.m_hObject)
@@ -851,7 +816,6 @@ void CAnalogMeter::ActuateColors()
   m_BrushN_BGround.CreateSolidBrush(RGB(0,0,0));
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
 {
  switch(meter_member)
@@ -890,7 +854,6 @@ void CAnalogMeter::SetState(enum MeterMemberEnum meter_member, bool State)
  }
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
 {
  switch(meter_member)
@@ -932,11 +895,9 @@ void CAnalogMeter::SetColor(enum MeterMemberEnum meter_member, COLORREF Color)
  ActuateColors();
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetRange(double dMin, double dMax)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  m_dMinScale   = dMin;
  m_dMaxScale   = dMax;
  m_boolForceRedraw = true;
@@ -957,58 +918,47 @@ void CAnalogMeter::SetTRPane(CString strPane)
  m_strTRPane_n = strPane;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetFontScale(int nFontScale)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  if(m_nFontScale < 1)   m_nFontScale = 1;
  if(m_nFontScale > 100) m_nFontScale = 100;
  m_nFontScale = nFontScale;
  m_boolForceRedraw = true;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetLabelsDecimals(int nLabelsDecimals)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  if(m_nLabelsDecimals < 0)   m_nLabelsDecimals = 0;
  if(m_nLabelsDecimals > 100) m_nLabelsDecimals = 100;
  m_nLabelsDecimals = nLabelsDecimals;
  m_boolForceRedraw = true;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetValueDecimals(int nValueDecimals)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  if(m_nValueDecimals < 0)   m_nValueDecimals = 0;
  if(m_nValueDecimals > 100) m_nValueDecimals = 100;
  m_nValueDecimals = nValueDecimals;
  m_boolForceRedraw = true;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetTitle(CString strTitle)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  m_strTitle = strTitle;
  m_boolForceRedraw = true;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::SetUnit(CString strUnit)
 {
- // The function does NOT force the re-drawing of the meter.
- // The owner must explicitly call the ShowMeter function
+ // function doesn't force the re-drawing of the meter.
  m_strUnit = strUnit;
  m_boolForceRedraw = true;
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const
 {
  switch(meter_member)
@@ -1047,7 +997,6 @@ void CAnalogMeter::GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor)
  }
 }
 
-//////////////////////////////////////////////////////
 void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) const
 {
  switch(meter_member)

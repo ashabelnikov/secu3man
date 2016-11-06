@@ -1450,7 +1450,7 @@ void CButtonsPanel::OnViewITMap()
  if ((!m_it_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_it_map_chart_state = 1;
-  m_it_map_wnd_handle = DLL::Chart3DCreate(GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,-360.0,360.0,
+  m_it_map_wnd_handle = DLL::Chart3DCreate(GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,0.0,720.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJTIM_UNIT).c_str(),
     MLL::GetString(IDS_IT_MAP).c_str());

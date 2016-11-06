@@ -58,7 +58,7 @@ typedef struct
  _uchar inj_ae_rpm_bins[INJ_AE_RPM_LOOKUP_TABLE_SIZE]; // bins of the AE's RPM lookup table
  _uchar inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];      // afterstart enrichment table
 
- _char inj_timing[INJ_VE_POINTS_L][INJ_VE_POINTS_F];   // Injection timing
+ _uchar inj_timing[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // Injection timing
 
  _uchar reserved[446];                                 // reserved bytes - for compatibility
 }f_data_t;

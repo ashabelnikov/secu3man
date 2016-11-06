@@ -1306,7 +1306,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      else if (m_EditTabPar.tab_id == ETMT_AERPM_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
      else if (m_EditTabPar.tab_id == ETMT_IT_MAP)
-      m_EditTabPar.table_data[i] = ((float)((signed char)value)) * 3.0f;
+      m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 3.0f;
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -2575,7 +2575,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    }
    else if (packet_data->tab_id == ETMT_IT_MAP)
    {
-    signed char value = MathHelpers::Round(packet_data->table_data[i] / 3.0f);
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] / 3.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else

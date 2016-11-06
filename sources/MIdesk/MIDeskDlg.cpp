@@ -63,7 +63,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
  std::fill(m_rpm_rb, m_rpm_rb + 32, 0);
  std::fill(m_volt_rb, m_volt_rb + 32, 0.0f);
- std::fill(m_map_rb, m_map_rb + 32, 0);
+ std::fill(m_map_rb, m_map_rb + 32, 0.0f);
  std::fill(m_ai1_rb, m_ai1_rb + 32, 0.0f);
 }
 

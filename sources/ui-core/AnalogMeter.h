@@ -29,8 +29,7 @@
 #include <algorithm>
 #include <vector>
 
-/////////////////////////////////////////////////////////////////////////////
-// Enum Types
+// Enum types for altering of properties
 enum MeterMemberEnum
 {
  meter_title,   //заголовок (название прибора)
@@ -44,8 +43,7 @@ enum MeterMemberEnum
  meter_bground, //фон
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CAnalogMeter command target
+// CAnalogMeter class
 class AFX_EXT_CLASS CAnalogMeter
 {
  public:
@@ -198,5 +196,3 @@ class AFX_EXT_CLASS CAnalogMeter
   CPen    m_PenN_BGround;
   CBrush  m_BrushN_BGround;
 };
-
-/////////////////////////////////////////////////////////////////////////////

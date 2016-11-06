@@ -844,7 +844,7 @@ void CFirmwareDataMediator::GetITMap(int i_index, float* op_values, bool i_origi
 
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
-  _char *p = &(p_fd->tables[i_index].inj_timing[0][0]);
+  _uchar *p = &(p_fd->tables[i_index].inj_timing[0][0]);
   int value = *(p + i);
   op_values[i] = ((float)value) * 3.0f;
  }
@@ -859,7 +859,7 @@ void CFirmwareDataMediator::SetITMap(int i_index, const float* ip_values)
 
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
-  _char *p = &(p_fd->tables[i_index].inj_timing[0][0]);
+  _uchar *p = &(p_fd->tables[i_index].inj_timing[0][0]);
   int value = MathHelpers::Round((ip_values[i] / 3.0f)); 
   *(p + i) = value;
  }

@@ -151,14 +151,14 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_inj_timing_spin.SetBuddy(&m_inj_timing_edit);
  m_inj_timing_edit.SetLimitText(4);
  m_inj_timing_edit.SetDecimalPlaces(0);
- m_inj_timing_spin.SetRangeAndDelta(-360.0f, 360.0f, 1.0);
- m_inj_timing_edit.SetRange(-360.0f, 360.0f);
+ m_inj_timing_spin.SetRangeAndDelta(0.0f, 720.0f, 1.0);
+ m_inj_timing_edit.SetRange(0.0f, 720.0f);
 
  m_inj_timing_crk_spin.SetBuddy(&m_inj_timing_crk_edit);
  m_inj_timing_crk_edit.SetLimitText(4);
  m_inj_timing_crk_edit.SetDecimalPlaces(0);
- m_inj_timing_crk_spin.SetRangeAndDelta(-360.0f, 360.0f, 1.0);
- m_inj_timing_crk_edit.SetRange(-360.0f, 360.0f);
+ m_inj_timing_crk_spin.SetRangeAndDelta(0.0f, 720.0f, 1.0);
+ m_inj_timing_crk_edit.SetRange(0.0f, 720.0f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

@@ -43,33 +43,31 @@ COScopeCtrl::COScopeCtrl()
 , m_nShiftPixels(2)
 , m_gridSizeX(8)
 , m_gridNumY(5)
+, m_dPreviousPosition(0.0) //Previous position value for LineTo
+, m_nYDecimals(3)          //Number of decimal places on the y axis
+// Range
+, m_dLowerLimit(-10.0)
+, m_dUpperLimit(10.0)
+, m_dRange(m_dUpperLimit - m_dLowerLimit)
+// bitmaps for restoring memory DC's
+, m_pbitmapOldGrid(NULL)
+, m_pbitmapOldPlot(NULL)
+// background, grid and data colors
+, m_normalBackColor(RGB(0, 0, 0))       // see also SetBackgroundColor
+, m_crBackColor(RGB(0, 0, 0))           // see also SetBackgroundColor
+, m_normalGridColor(RGB(0, 255, 255))   // see also SetGridColor
+, m_crGridColor(RGB(0, 255, 255))       // see also SetGridColor
+, m_normalPlotColor(RGB(255, 255, 255)) // see also SetPlotColor
+, m_crPlotColor(RGB(255, 255, 255))     // see also SetPlotColor
+// initialize pen/brush
+, m_penPlot(PS_SOLID, 0, m_crPlotColor)
+, m_brushBack(m_crBackColor)
+, m_BlackBrush(RGB(0, 0, 0))
+// Units
+, m_strXUnitsString(_T("Samples"))  // See also SetXUnits
+, m_strYUnitsString(_T("Y units"))  // See also SetYUnits
 {
- //Previous position value for LineTo
- m_dPreviousPosition = 0.0;
-
- //Number of decimal places on the y axis
- m_nYDecimals = 3;
-
- //Range
- m_dLowerLimit = -10.0;
- m_dUpperLimit =  10.0;
- m_dRange      =  m_dUpperLimit - m_dLowerLimit;
-
- // background, grid and data colors
- m_normalBackColor = m_crBackColor  = RGB(  0,   0,   0);  // see also SetBackgroundColor
- m_normalGridColor = m_crGridColor  = RGB(  0, 255, 255);  // see also SetGridColor
- m_normalPlotColor = m_crPlotColor  = RGB(255, 255, 255);  // see also SetPlotColor
-
- m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
- m_brushBack.CreateSolidBrush(m_crBackColor);
- m_BlackBrush.CreateSolidBrush(RGB(0, 0, 0));
-
- m_strXUnitsString.Format(_T("Samples"));  // can also be set with SetXUnits
- m_strYUnitsString.Format(_T("Y units"));  // can also be set with SetYUnits
-
- // bitmaps for restoring memory DC's
- m_pbitmapOldGrid = NULL;
- m_pbitmapOldPlot = NULL;
+ //empty
 }
 
 COScopeCtrl::~COScopeCtrl()
