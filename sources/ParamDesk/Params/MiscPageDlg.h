@@ -51,6 +51,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void Enable(bool enable);
   bool IsEnabled(void);
   void EnableHallOutputParams(bool enable);
+  void EnableFuelInjection(bool i_enable);
 
   void GetValues(SECU3IO::MiscelPar* o_values);
   void SetValues(const SECU3IO::MiscelPar* i_values);
@@ -63,6 +64,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHOP(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsInjTurnoffOnGas(CCmdUI* pCmdUI);
   afx_msg void OnChangeData();
   afx_msg void OnIgncutoffCheck();
   DECLARE_MESSAGE_MAP()
@@ -95,6 +97,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   SECU3IO::MiscelPar m_params;
   bool m_enabled;
   bool m_hall_output_enabled;
+  bool m_inj_turnoff_enabled;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
   

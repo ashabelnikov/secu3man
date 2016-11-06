@@ -63,13 +63,14 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT, OnUpdateControlsHOP)
  
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControlsInjTurnoffOnGas)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CMiscPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_hall_output_enabled(false)
+, m_inj_turnoff_enabled(false)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT, true)
 , m_igncutoff_rpm_edit(CEditEx::MODE_INT, true)
@@ -141,6 +142,11 @@ void CMiscPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CMiscPageDlg::OnUpdateControlsHOP(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_hall_output_enabled);
+}
+
+void CMiscPageDlg::OnUpdateControlsInjTurnoffOnGas(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_inj_turnoff_enabled);
 }
 
 void CMiscPageDlg::OnUpdateControlsIgncutoff(CCmdUI* pCmdUI)
@@ -229,6 +235,15 @@ void CMiscPageDlg::EnableHallOutputParams(bool enable)
  if (m_hall_output_enabled == enable)
   return; //already has needed state
  m_hall_output_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CMiscPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_inj_turnoff_enabled == i_enable)
+  return; //already
+ m_inj_turnoff_enabled = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }
