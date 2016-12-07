@@ -146,6 +146,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Tachometer_Max;
   const CString m_Name_Pressure_Max;
   const CString m_Name_PulsesPer1Km;
+  const CString m_Name_SpeedUnit;
 
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;
@@ -178,6 +179,8 @@ class CAppSettingsModel : public ISettingsData
   //fixtures's customization
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
+  virtual ESpeedUnit GetSpeedUnit(void) const;
+
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
   virtual int GetDVDeskUpdatePeriod(void) const;
@@ -202,6 +205,7 @@ class CAppSettingsModel : public ISettingsData
   int m_optTachometerMax;
   int m_optPressureMax;
   int m_optPulsesPer1Km;
+  ESpeedUnit m_optSpeedUnit;
   bool m_optCOMPortBother;
   bool m_optUseHotKeys;
   bool m_optShowWelcome;

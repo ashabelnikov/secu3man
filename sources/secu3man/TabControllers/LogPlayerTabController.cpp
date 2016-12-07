@@ -108,6 +108,8 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  //обновляем диапазоны приборов
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
+ mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
@@ -122,6 +124,8 @@ void CLogPlayerTabController::OnActivate(void)
 {
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
+ mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());

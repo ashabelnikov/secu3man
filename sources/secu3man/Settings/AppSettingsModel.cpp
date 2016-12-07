@@ -115,6 +115,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
 , m_Name_Pressure_Max(_T("Pressure_Max"))
 , m_Name_PulsesPer1Km(_T("PulsesPer1Km"))
+, m_Name_SpeedUnit(_T("SpeedUnit"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_600);
@@ -640,6 +641,18 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optPulsesPer1Km = 6000;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_SpeedUnit,_T("kmh"),read_str,255,IniFileName);
+ if (_TSTRING(read_str)==_T("kmh"))
+  m_optSpeedUnit = SU_KMH;
+ else if (_TSTRING(read_str)==_T("mph"))
+  m_optSpeedUnit = SU_MPH;
+ else
+ {
+  status = false;
+  m_optSpeedUnit = SU_KMH;
+ }
+
  return status;
 }
 
@@ -906,6 +919,9 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),(int)m_optPulsesPer1Km);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_PulsesPer1Km,write_str,IniFileName);
 
+ write_str = (m_optSpeedUnit == SU_KMH) ? _T("kmh") : _T("mph");
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_SpeedUnit,write_str,IniFileName);
+
  return status;
 }
 
@@ -1071,6 +1087,11 @@ int CAppSettingsModel::GetTachometerMax(void) const
 int CAppSettingsModel::GetPressureMax(void) const
 {
  return m_optPressureMax;
+}
+
+ESpeedUnit CAppSettingsModel::GetSpeedUnit(void) const
+{
+ return m_optSpeedUnit;
 }
 
 bool CAppSettingsModel::GetUseDVFeatures(void) const

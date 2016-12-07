@@ -112,3 +112,5 @@
 #define IDC_MI_EGO_CORR                 2112
 #define IDS_MI_EGO_CORR_TITLE           2113
 #define IDS_MI_PERCENT_UNIT             2114
+#define IDS_MI_MP_H                     2115
+#define IDS_MI_MI                       2116

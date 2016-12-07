@@ -35,6 +35,8 @@
 CMITachometer::CMITachometer()
 : m_showDistance(false)
 , m_showSpeed(false)
+, m_speedUnit(MLL::GetString(IDS_MI_KM_H))
+, m_distanceUnit(MLL::GetString(IDS_MI_KM))
 {
  //empty
 }
@@ -137,7 +139,7 @@ void CMITachometer::Scale(float i_x_factor, float i_y_factor)
 void CMITachometer::SetSpeed(float value, bool redraw /*= false*/)
 {
  CString str;
- _TSTRING template_str = _T("%0.1f ") + MLL::GetString(IDS_MI_KM_H);
+ _TSTRING template_str = _T("%0.1f ") + m_speedUnit;
  str.Format(template_str.c_str(), value);
  m_meter.SetTLPane(str);
  if (redraw) m_meter.Update();
@@ -159,10 +161,15 @@ void CMITachometer::ShowSpeed(bool i_show, bool redraw /*= false*/)
   m_meter.Redraw();
 }
 
+void CMITachometer::SetSpeedUnit(const _TSTRING& unit)
+{
+ m_speedUnit = unit;
+}
+
 void CMITachometer::SetDistance(float value, bool redraw /*= false*/)
 {
  CString str;
- _TSTRING template_str = _T("%0.1f ") + MLL::GetString(IDS_MI_KM);
+ _TSTRING template_str = _T("%0.1f ") + m_distanceUnit;
  str.Format(template_str.c_str(), value);
  m_meter.SetTRPane(str);
  if (redraw) m_meter.Update();
@@ -182,4 +189,9 @@ void CMITachometer::ShowDistance(bool i_show, bool redraw /*= false*/)
  m_meter.SetState(meter_trpane, IsEnabled() && i_show);
  if (redraw)
   m_meter.Redraw();
+}
+
+void CMITachometer::SetDistanceUnit(const _TSTRING& unit)
+{
+ m_distanceUnit = unit;
 }

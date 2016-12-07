@@ -115,6 +115,7 @@ CControlApp::CControlApp()
 , m_work_state(false)
 , m_period_distance(0.166666f)   //for speed sensor calculations
 , m_quartz_frq(20000000)    //default clock is 20mHz
+, m_speedUnit(0) //km/h
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -378,6 +379,9 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
   m_SensorDat.speed = ((m_period_distance / period_s) * 3600.0f) / 1000.0f; //Km/h
   if (m_SensorDat.speed > 999.9f)
    m_SensorDat.speed = 999.9f;
+  //convert to selected unit
+  if (m_speedUnit == 1)
+   m_SensorDat.speed/= 1.609344f;
  }
  else //speed sensor is not used or speed is too low
   m_SensorDat.speed = 0;
@@ -389,6 +393,9 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  m_SensorDat.distance = (m_period_distance * distance) / 1000.0f;
  if (m_SensorDat.distance > 9999.99f)
   m_SensorDat.distance = 9999.99f;
+ //convert to selected unit
+ if (m_speedUnit == 1)
+  m_SensorDat.distance/= 1.609344f;
 
  //Intake air temperature
  int air_temp = 0;
@@ -2790,6 +2797,13 @@ void CControlApp::SetNumPulsesPer1Km(int pp1km)
 {
  double value = MathHelpers::RestrictValue(pp1km, 1, 60000);
  m_period_distance = (float)(1000.0 / value); //distance of one period in meters
+}
+
+
+//-----------------------------------------------------------------------
+void CControlApp::SetSpeedUnit(int i_unit)
+{
+ m_speedUnit = i_unit;
 }
 
 //-----------------------------------------------------------------------

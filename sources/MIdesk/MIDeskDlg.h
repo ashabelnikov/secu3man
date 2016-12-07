@@ -71,6 +71,10 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //Set maximum value of pressure meter displayed on the fixture
   void SetPressureMax(int i_max);
 
+  void SetSpeedUnit(int i_unit); //0 - km/h, 1 - mi/h
+
+  void SetDistanceUnit(int i_unit); //0 - km, 1 - mi
+
   //изменение размеров окна
   void Resize(const CRect& i_rect, const CRect& i_src = CRect(0,0,0,0));
 

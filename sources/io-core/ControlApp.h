@@ -107,6 +107,8 @@ class IOCORE_API CControlApp
   //pp1km - number of pulses per 1 km
   void SetNumPulsesPer1Km(int pp1km);
 
+  void SetSpeedUnit(int i_unit); // 0 - km/h, 1 - mi/h
+
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
   class xThread {};
@@ -150,6 +152,7 @@ class IOCORE_API CControlApp
 
   float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
   long m_quartz_frq;                    //MCU clock frequency
+  int m_speedUnit;
 
   //helper
   void SwitchOnThread(bool state);

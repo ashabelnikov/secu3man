@@ -86,6 +86,12 @@ typedef enum EInterLang
  IL_RUSSIAN
 };
 
+typedef enum ESpeedUnit
+{
+ SU_KMH = 0,
+ SU_MPH
+};
+
 //интерфейс через который должен производится доступ к настройкам программы
 //из обычных мест в коде программы
 class ISettingsData
@@ -117,6 +123,7 @@ class ISettingsData
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;
   virtual int GetPressureMax(void) const = 0;
+  virtual ESpeedUnit GetSpeedUnit(void) const = 0;
   //Debug features
   virtual bool GetUseDVFeatures(void) const = 0;
   virtual int GetDVDeskUpdatePeriod(void) const = 0;

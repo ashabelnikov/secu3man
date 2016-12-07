@@ -301,6 +301,16 @@ void CMIDeskDlg::SetPressureMax(int i_max)
  m_pressure.SetLimits(10, (float)i_max);
 }
 
+void CMIDeskDlg::SetSpeedUnit(int i_unit)
+{
+ m_tachometer.SetSpeedUnit((i_unit == 0) ? MLL::GetString(IDS_MI_KM_H) : MLL::GetString(IDS_MI_MP_H));
+}
+
+void CMIDeskDlg::SetDistanceUnit(int i_unit)
+{
+ m_tachometer.SetDistanceUnit((i_unit == 0) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI));
+}
+
 void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
 {
  //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
