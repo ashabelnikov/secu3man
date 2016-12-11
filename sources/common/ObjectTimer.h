@@ -106,7 +106,7 @@ template<class T> class CObjectTimer
 
   static inline VOID CALLBACK TimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
   {
-   //welcome to hell :-D ... а кто сказал что в С++ есть делегаты!?
+   //welcome to hell :-D ... C++ has no delegates
    CObjectTimer* p_this = reinterpret_cast<CObjectTimer*>(g_object_timer_instance_map[idEvent]);
    ASSERT(p_this);
    if (!p_this)  return;

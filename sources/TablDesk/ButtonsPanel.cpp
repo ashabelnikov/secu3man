@@ -1198,7 +1198,7 @@ void CButtonsPanel::OnViewCrnkMap()
 
 void CButtonsPanel::OnViewWrmpMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_wrmp_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_wrmp_map_wnd_handle,WM_CLOSE,0,0);
@@ -1232,7 +1232,7 @@ void CButtonsPanel::OnViewWrmpMap()
 
 void CButtonsPanel::OnViewDeadMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_dead_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_dead_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -1268,7 +1268,7 @@ void CButtonsPanel::OnViewDeadMap()
 
 void CButtonsPanel::OnViewIdlrMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_idlr_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_idlr_map_wnd_handle,WM_CLOSE,0,0);
@@ -1302,7 +1302,7 @@ void CButtonsPanel::OnViewIdlrMap()
 
 void CButtonsPanel::OnViewIdlcMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_idlc_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_idlc_map_wnd_handle,WM_CLOSE,0,0);
@@ -1336,7 +1336,7 @@ void CButtonsPanel::OnViewIdlcMap()
 
 void CButtonsPanel::OnViewAETPSMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_aetps_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_aetps_map_wnd_handle,WM_CLOSE,0,0);
@@ -1371,7 +1371,7 @@ void CButtonsPanel::OnViewAETPSMap()
 
 void CButtonsPanel::OnViewAERPMMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_aerpm_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_aerpm_map_wnd_handle,WM_CLOSE,0,0);
@@ -1406,7 +1406,7 @@ void CButtonsPanel::OnViewAERPMMap()
 
 void CButtonsPanel::OnViewAftstrMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_aftstr_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_aftstr_map_wnd_handle,WM_CLOSE,0,0);
@@ -1440,7 +1440,7 @@ void CButtonsPanel::OnViewAftstrMap()
 
 void CButtonsPanel::OnViewITMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //if button was released, then close editor's window
  if (m_view_it_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_it_map_wnd_handle,WM_CLOSE,0,0);

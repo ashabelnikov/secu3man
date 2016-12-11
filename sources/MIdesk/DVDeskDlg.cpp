@@ -131,7 +131,7 @@ void CDVDeskDlg::OnLButtonDblClk(UINT nFlags, CPoint point)
  }
 }
 
-//разрешение/запрещение приборов
+//enable/disable fixtures
 void CDVDeskDlg::Enable(bool enable)
 {
  if (((int)enable) == m_enabled)

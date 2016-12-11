@@ -33,9 +33,9 @@ namespace SECU3IO
 class IRSView
 {
  public:
-  virtual void Show(bool show) = 0;                                //показать/спрятать контент представления
-  virtual void Enable(bool enable) = 0;                            //разрешение/запрещение представления
+  virtual void Show(bool show) = 0;                                //show/hide content of view
+  virtual void Enable(bool enable) = 0;                            //enable/disable view
   virtual void SetValues(const SECU3IO::RawSensDat* i_values) = 0; //set data of view
   virtual void GetValues(SECU3IO::RawSensDat* o_values) = 0;       //get data from view
-  virtual void EnableSECU3TItems(bool i_enable) = 0;               //Enable SECU-3T specific features 
+  virtual void EnableSECU3TItems(bool i_enable) = 0;               //Enable SECU-3T specific features
 };

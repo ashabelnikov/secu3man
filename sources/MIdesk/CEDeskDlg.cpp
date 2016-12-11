@@ -86,7 +86,7 @@ BOOL CCEDeskDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
-//разрешение/запрещение приборов
+//enable/disable fixtures
 void CCEDeskDlg::Enable(bool enable)
 {
  if (((int)enable) == m_enabled)
@@ -120,7 +120,7 @@ void CCEDeskDlg::SetValues(WORD i_errors)
 
 void CCEDeskDlg::Resize(const CRect& i_rect)
 {
- //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
+ //Calculate scale factors basing on previous size
  CRect old_rect;
  float Xf, Yf;
  GetWindowRect(old_rect);

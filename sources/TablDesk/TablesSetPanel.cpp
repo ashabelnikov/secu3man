@@ -470,7 +470,7 @@ void CTablesSetPanel::OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_gasdose_map_chart_state) ? TRUE : FALSE );
 }
 
-//обновляет контроллы состояние которых зависит от того - есть данные или нет
+//Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
  bool enabled = m_IsAllowed ? m_IsAllowed() : false;
@@ -589,7 +589,7 @@ void CTablesSetPanel::SetFunSetListBoxSelection(int i_selected_index)
 
 void CTablesSetPanel::OnViewAttenuatorMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_attenuator_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_attenuator_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -611,7 +611,7 @@ void CTablesSetPanel::OnViewAttenuatorMap()
   DLL::Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
   DLL::Chart2DUpdate(m_attenuator_map_wnd_handle, NULL, NULL); //<--actuate changes
 
-   //allow controller to detect closing of this window
+  //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
 
@@ -625,7 +625,7 @@ void CTablesSetPanel::OnViewAttenuatorMap()
 
 void CTablesSetPanel::OnViewDwellCntrlMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_dwellcntrl_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_dwellcntrl_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -644,7 +644,7 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
   DLL::Chart2DSetOnClose(m_dwellcntrl_map_wnd_handle, OnCloseDwellCntrlTable, this);
   DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle, NULL, NULL); //<--actuate changes
 
-   //allow controller to detect closing of this window
+  //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_dwellcntrl_map_wnd_handle, TYPE_MAP_DWELLCNTRL);
 
@@ -658,7 +658,7 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
 
 void CTablesSetPanel::OnViewCTSCurveMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_cts_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_cts_curve_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -680,7 +680,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
   DLL::Chart2DUpdate(m_cts_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_cts_curve_map_wnd_handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
 
-   //allow controller to detect closing of this window
+  //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_cts_curve_map_wnd_handle, TYPE_MAP_CTS_CURVE);
 
@@ -694,7 +694,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
 
 void CTablesSetPanel::OnViewChokeOpMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_choke_op_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_choke_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -712,7 +712,7 @@ void CTablesSetPanel::OnViewChokeOpMap()
   DLL::Chart2DSetOnClose(m_choke_map_wnd_handle, OnCloseChokeOpTable, this);
   DLL::Chart2DUpdate(m_choke_map_wnd_handle, NULL, NULL); //<--actuate changes
 
-   //allow controller to detect closing of this window
+  //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_choke_map_wnd_handle, TYPE_MAP_CHOKE_OP);
 
@@ -727,7 +727,7 @@ void CTablesSetPanel::OnViewChokeOpMap()
 
 void CTablesSetPanel::OnViewATSCurveMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_ats_curve_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_ats_curve_map_wnd_handle, WM_CLOSE, 0, 0);
@@ -749,7 +749,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
   DLL::Chart2DUpdate(m_ats_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_ats_curve_map_wnd_handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
 
-   //allow controller to detect closing of this window
+  //allow controller to detect closing of this window
   if (m_OnOpenMapWnd)
    m_OnOpenMapWnd(m_ats_curve_map_wnd_handle, TYPE_MAP_ATS_CURVE);
 
@@ -763,7 +763,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
 
 void CTablesSetPanel::OnViewATSAACMap()
 {
- //если кнопку "выключили" то закрываем окно редактора
+ //If button was released, then close editor's window
  if (m_view_ats_aac_map_btn.GetCheck()==BST_UNCHECKED)
  {
   ::SendMessage(m_ats_aac_map_wnd_handle,WM_CLOSE,0,0);
