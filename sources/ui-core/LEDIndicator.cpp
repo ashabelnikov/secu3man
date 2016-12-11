@@ -122,13 +122,13 @@ void CLEDIndicator::DrawLED(CDC& dc, const CRect& rect)
    dc.SelectObject(&m_posPen);
 
   if (m_pieIndicator)
-  {//Draw a pie if enabled    
+  {//Draw a pie if enabled
    rc.DeflateRect(1,1);
    double value = m_value;
    if (value < minValue) value = minValue;
    if (value > maxValue) value = maxValue;
    double xR = (double)rc.Width() * 100.0;   //calculate x radius
-   double yR = (double)rc.Height() * 100.0;  //calculate y radius  
+   double yR = (double)rc.Height() * 100.0;  //calculate y radius
    double eAngle = (((2.0*m_dPI) / 100.0) * value), bAngle = 0;
    CPoint end(ROUND(rc.CenterPoint().x - xR * sin(eAngle)), ROUND(rc.CenterPoint().y + yR * cos(eAngle)));
    CPoint begin(ROUND(rc.CenterPoint().x - xR * sin(bAngle)), ROUND(rc.CenterPoint().y + yR * cos(bAngle)));

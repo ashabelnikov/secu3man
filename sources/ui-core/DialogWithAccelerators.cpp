@@ -39,7 +39,7 @@ CDialogWithAccelerators::CDialogWithAccelerators(UINT nIDTemplate, CWnd* pParent
 
 BOOL CDialogWithAccelerators::PreTranslateMessage(MSG* pMsg)
 {
- //Этот дурацкий код нужен для работы акселераторов, иначе они не будут работать в диалогах!
+ //This code is necessary for accelerators, otherwise they will not work in dialogs
  HACCEL hAccel = ((CFrameWnd*)AfxGetApp()->m_pMainWnd)->m_hAccelTable;
  if((hAccel && ::TranslateAccelerator(AfxGetApp()->m_pMainWnd->m_hWnd, hAccel, pMsg)))
   return TRUE;
