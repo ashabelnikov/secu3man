@@ -68,8 +68,8 @@ CComPort::CComPort(const _TSTRING& sComPort, UINT dwInQueuep, UINT dwOutQueuep)
 //конструктор (указание порта через номер (1,2,3,4))
 CComPort::CComPort(int nComPort, UINT dwInQueuep, UINT dwOutQueuep)
 : m_bPortReady(FALSE)
-, m_snd_err_num(0)  //нет ошибок записи в порт
-, m_rcv_err_num(0)  //нет ошибок чтения из порта
+, m_snd_err_num(0)  //no port writing errors
+, m_rcv_err_num(0)  //no port reading errors
 , dwInQueue(dwInQueuep)
 , dwOutQueue(dwOutQueuep)
 {
@@ -97,7 +97,7 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
  TCHAR sMsg[1024];
  LPVOID  lpMsgBuf = NULL;
 
- m_bPortReady = TRUE; // всё OK
+ m_bPortReady = TRUE; // All is OK
 
  //Если с первой попытки порт открыть не удается по причине отказа в доступе, то
  //делаем много попыток через равные промежутки времени.
@@ -160,7 +160,7 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
 
  if (m_bPortReady)
  {
-  m_bPortReady = SetupComm(m_hCom, dwInQueue,dwOutQueue); // размер буфера
+  m_bPortReady = SetupComm(m_hCom, dwInQueue,dwOutQueue); // Size of buffer
   if (!m_bPortReady)
   {
    dwError = GetLastError();
@@ -282,7 +282,7 @@ bool CComPort::SendByte(unsigned char byte)
 bool CComPort::RecvByte(unsigned char* byte)
 {
  DWORD numrd;
- if (!byte) return false;   //плохой указатель
+ if (!byte) return false;   //bad pointer
 
  //читаем из порта 1 байт
  ReadFile(m_hCom,byte,1,&numrd,NULL);
@@ -305,7 +305,7 @@ bool CComPort::RecvByte(unsigned char* byte)
 bool CComPort::SendBlock(BYTE* data, UINT datasize)
 {
  DWORD  numwr;
- if (!data) return false;   //плохой указатель
+ if (!data) return false;   //bad pointer
 
  //записываем в порт 1 байт
  WriteFile(m_hCom,data,datasize,&numwr,NULL);
@@ -328,7 +328,7 @@ bool CComPort::SendBlock(BYTE* data, UINT datasize)
 bool CComPort::RecvBlock(BYTE* data,UINT datasize)
 {
  DWORD numrd;
- if (!data) return false;   //плохой указатель
+ if (!data) return false;   //bad pointer
 
  //читаем из порта указанное кол-во байт
  ReadFile(m_hCom,data,datasize,&numrd,NULL);
