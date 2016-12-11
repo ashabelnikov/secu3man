@@ -145,7 +145,6 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CIdlRegPageDlg message handlers
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CIdlRegPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -261,7 +260,7 @@ bool CIdlRegPageDlg::IsEnabled(void)
 void CIdlRegPageDlg::GetValues(SECU3IO::IdlRegPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::IdlRegPar));
 }
 

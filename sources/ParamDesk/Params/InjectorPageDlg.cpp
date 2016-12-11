@@ -227,7 +227,7 @@ bool CInjectorPageDlg::IsEnabled(void)
 void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
 
  m_params.inj_config = _GetInjCfgComboBoxSelection();
  m_params.inj_squirt_num = _GetSqrNumComboBoxSelection();

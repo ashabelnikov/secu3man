@@ -218,32 +218,32 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_YES));
  //-----------------------------------------------------------------
  size_t i;
- for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //заполняем комбо бокс частот ПФ
+ for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //fill combobox containing BPF frequencies
  {
   CString string;
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
   m_bpf_frequency_combo.AddString(string);
  }
- //----------------------------------------------------------------- 
+ //-----------------------------------------------------------------
  for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
  {
   CString string;
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
   m_integrator_const_combo.AddString(string);
  }
- //-----------------------------------------------------------------  
+ //-----------------------------------------------------------------
  m_wnd_begin_angle_edit.SetLimitText(6);
  m_wnd_begin_angle_edit.SetDecimalPlaces(2);
  m_wnd_begin_angle_spin.SetBuddy(&m_wnd_begin_angle_edit);
  m_wnd_begin_angle_spin.SetRangeAndDelta(-12.0f, 54.0f, 1.0f);
  m_wnd_begin_angle_edit.SetRange(-12.0f, 54.0f);
- //-----------------------------------------------------------------  
+ //-----------------------------------------------------------------
  m_wnd_end_angle_edit.SetLimitText(6);
  m_wnd_end_angle_edit.SetDecimalPlaces(2);
  m_wnd_end_angle_spin.SetBuddy(&m_wnd_end_angle_edit);
  m_wnd_end_angle_spin.SetRangeAndDelta(-12.0f, 54.0f, 1.0f);
  m_wnd_end_angle_edit.SetRange(-12.0f, 54.0f);
- //-----------------------------------------------------------------  
+ //-----------------------------------------------------------------
  m_retard_step_edit.SetLimitText(5);
  m_retard_step_edit.SetDecimalPlaces(2);
  m_retard_step_spin.SetBuddy(&m_retard_step_edit);

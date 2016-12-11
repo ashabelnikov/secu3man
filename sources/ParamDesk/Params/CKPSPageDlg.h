@@ -129,6 +129,6 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_wheel_miss_num_spin;
   CEditEx m_wheel_miss_num_edit;
   CStatic m_wheel_miss_num_label;
-  
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

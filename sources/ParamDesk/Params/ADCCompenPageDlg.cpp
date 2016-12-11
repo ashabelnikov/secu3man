@@ -26,8 +26,8 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "ADCCompenPageDlg.h"
-#include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/ddx_helpers.h"
 
 const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
@@ -95,19 +95,20 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 , m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_params.map_adc_factor(1.0f)
+, m_params.map_adc_correction(0.0f)
+, m_params.ubat_adc_factor(1.0f)
+, m_params.ubat_adc_correction(0.0f)
+, m_params.temp_adc_factor(1.0f)
+, m_params.temp_adc_correction(0.0f)
+, m_params.tps_adc_factor(1.0f)
+, m_params.tps_adc_correction(0.0f)
+, m_params.ai1_adc_factor(1.0f)
+, m_params.ai1_adc_correction(0.0f)
+, m_params.ai2_adc_factor(1.0f)
+, m_params.ai2_adc_correction(0.0f)
 {
- m_params.map_adc_factor = 1.0f;
- m_params.map_adc_correction = 0.0f;
- m_params.ubat_adc_factor = 1.0f;
- m_params.ubat_adc_correction = 0.0f;
- m_params.temp_adc_factor = 1.0f;
- m_params.temp_adc_correction = 0.0f;
- m_params.tps_adc_factor = 1.0f;
- m_params.tps_adc_correction = 0.0f;
- m_params.ai1_adc_factor = 1.0f;
- m_params.ai1_adc_correction = 0.0f;
- m_params.ai2_adc_factor = 1.0f;
- m_params.ai2_adc_correction = 0.0f;
+ //empty
 }
 
 CADCCompenPageDlg::~CADCCompenPageDlg()
@@ -263,41 +264,6 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai2_correction_edit.SetRange(-2.0f,2.0f);
 
  UpdateData(FALSE);
- //create a tooltip control and assign tooltips
- mp_ttc.reset(new CToolTipCtrlEx());
- VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_map_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
-  VERIFY(mp_ttc->AddWindow(&m_ubat_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ubat_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ubat_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ubat_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
-  VERIFY(mp_ttc->AddWindow(&m_temp_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_temp_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_temp_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_temp_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
-  VERIFY(mp_ttc->AddWindow(&m_tps_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
-  VERIFY(mp_ttc->AddWindow(&m_ai1_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai1_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai1_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai1_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
-  VERIFY(mp_ttc->AddWindow(&m_ai2_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai2_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai2_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai2_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
-
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
- mp_ttc->ActivateToolTips(true);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }

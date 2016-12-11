@@ -349,7 +349,7 @@ void CChokePageDlg::EnableChokeManPos(bool enable)
 void CChokePageDlg::GetValues(SECU3IO::ChokePar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::ChokePar));
 }
 
@@ -359,7 +359,7 @@ void CChokePageDlg::SetValues(const SECU3IO::ChokePar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::ChokePar));
  if (!m_lock_ui_update)
-  UpdateData(FALSE); //копируем данные из переменных в диалог
+  UpdateData(FALSE); //copy data from variables to dialog
 }
 
 void CChokePageDlg::LockUIUpdate(bool lock)

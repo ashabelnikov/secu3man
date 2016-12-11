@@ -349,7 +349,7 @@ bool CCarburPageDlg::IsEnabled(void)
 void CCarburPageDlg::GetValues(SECU3IO::CarburPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::CarburPar));
 }
 
@@ -358,7 +358,7 @@ void CCarburPageDlg::SetValues(const SECU3IO::CarburPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::CarburPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
 }
 
 void CCarburPageDlg::EnableFuelInjection(bool i_enable)

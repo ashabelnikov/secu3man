@@ -276,21 +276,17 @@ bool CFunSetPageDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//TODO: Если будет необходимость использовать режим сортировки, то для корректного
-//ассоциирования элементов можно использовать CComboBox::SetItemData. В любом случае
-//должна измениться только внутренняя архитектура этого диалога
-
 //заполняет ComboBox-ы имен семейств характеристик
 void CFunSetPageDlg::FillCBByFunNames(void)
 {
  if (!::IsWindow(m_hWnd))
   return;
 
- //удаляем предыдущий контент
+ //delete previous conetent
  m_benzin_maps_combo.ResetContent();
  m_gas_maps_combo.ResetContent();
 
- //добавляем новый контент
+ //add new content
  for(size_t i = 0; i < m_fun_names.size(); i++)
  {
   m_benzin_maps_combo.AddString(m_fun_names[i].c_str());
@@ -300,13 +296,13 @@ void CFunSetPageDlg::FillCBByFunNames(void)
  //после удаления всех элементов текущее выделение в ComboBox-ах
  //теряется и мы должны вернуть старое выделение.
 
- //для газа
+ //form gas
  if (m_params.fn_gas < m_fun_names.size())
   m_gas_maps_combo.SetCurSel(m_params.fn_gas);
  else
   m_gas_maps_combo.SetCurSel(0);
 
- //для бензиа
+ //for petrol
  if (m_params.fn_benzin < m_fun_names.size())
   m_benzin_maps_combo.SetCurSel(m_params.fn_benzin);
  else
