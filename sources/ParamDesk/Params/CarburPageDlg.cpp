@@ -299,17 +299,7 @@ BOOL CCarburPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_threshold_spin, MLL::GetString(IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
- 
- VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_spin_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_spin_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_edit_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_edit_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inverse_throttle_switch, MLL::GetString(IDS_PD_CARBUR_INVERSE_SWITCH_TT)));
- 
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

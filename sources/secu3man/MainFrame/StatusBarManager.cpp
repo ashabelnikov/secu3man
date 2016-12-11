@@ -60,7 +60,7 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
 {
  if (!pParentWnd)
  {
-  ASSERT(pParentWnd); //надо передать родительское окно!
+  ASSERT(pParentWnd); //parent window must be passed!
   return false;
  }
 

@@ -218,13 +218,6 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_press_swing_spin, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_press_swing_edit, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_grad_spin, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_grad_edit, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
-
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -260,7 +253,7 @@ void CFunSetPageDlg::OnMapCalcButton()
  }
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//enable/disable all controls
 void CFunSetPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -270,7 +263,7 @@ void CFunSetPageDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CFunSetPageDlg::IsEnabled(void)
 {
  return m_enabled;
@@ -319,7 +312,7 @@ void CFunSetPageDlg::FillCBByLoadOpts(void)
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));
 
- //для газа
+ //for gas
  if (m_params.load_src_cfg < 2)
   m_load_src_combo.SetCurSel(m_params.load_src_cfg);
  else
@@ -335,7 +328,7 @@ std::vector<_TSTRING>& CFunSetPageDlg::AccessFunNames(void)
 void CFunSetPageDlg::GetValues(SECU3IO::FunSetPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::FunSetPar));
 }
 
@@ -344,5 +337,5 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::FunSetPar));
- UpdateData(false); //копируем данные из переменных в диалог
+ UpdateData(false); //copy data from variables to dialog
 }

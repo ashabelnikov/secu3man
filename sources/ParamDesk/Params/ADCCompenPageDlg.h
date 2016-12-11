@@ -62,7 +62,6 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
-  //class CToolTipCtrlEx;
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   SECU3IO::ADCCompenPar m_params;

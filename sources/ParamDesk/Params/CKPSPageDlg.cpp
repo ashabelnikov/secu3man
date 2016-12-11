@@ -30,9 +30,9 @@
 #include <algorithm>
 #include <map>
 #include <math.h>
+#include "ui-core/ToolTipCtrlEx.h"
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
-#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
@@ -224,27 +224,8 @@ BOOL CCKPSPageDlg::OnInitDialog()
 
  _FillCKPSTeethBTDCComboBox(); //инициализируем комбо бокс числа зубьев до в.м.т.
  _FillCKPSEngineCylComboBox(); //инициализируем комбо бокс цисла цилиндров двигателя.
- UpdateData(FALSE);  //инициализируем контроллы диалога данными
- 
- //create a tooltip control and assign tooltips
- mp_ttc.reset(new CToolTipCtrlEx());
- VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_ignition_cogs_spin, MLL::GetString(IDS_PD_CKPS_IGNITION_COGS_UNIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ignition_cogs_edit, MLL::GetString(IDS_PD_CKPS_IGNITION_COGS_UNIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ckps_negfront_radio, MLL::GetString(IDS_PD_CKPS_FRONT_GROUPBOX_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ckps_posfront_radio, MLL::GetString(IDS_PD_CKPS_FRONT_GROUPBOX_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ref_s_negfront_radio, MLL::GetString(IDS_PD_REF_S_FRONT_GROUPBOX_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ref_s_posfront_radio, MLL::GetString(IDS_PD_REF_S_FRONT_GROUPBOX_TT)));
- VERIFY(mp_ttc->AddWindow(&m_wheel_miss_num_spin, MLL::GetString(IDS_PD_CKPS_MISS_NUM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_wheel_miss_num_edit, MLL::GetString(IDS_PD_CKPS_MISS_NUM_EDIT_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_wheel_cogs_num_spin, MLL::GetString(IDS_PD_CKPS_COGS_NUM_EDIT_TT))); 
- VERIFY(mp_ttc->AddWindow(&m_wheel_cogs_num_edit, MLL::GetString(IDS_PD_CKPS_COGS_NUM_EDIT_TT)));  
- VERIFY(mp_ttc->AddWindow(&m_merge_ign_outputs_check, MLL::GetString(IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT)));  
- VERIFY(mp_ttc->AddWindow(&m_teeth_before_tdc_combo, MLL::GetString(IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT)));
- 
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
- mp_ttc->ActivateToolTips(true);
- 
+ UpdateData(FALSE);  //initialize dialog controls with data
+
  UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
