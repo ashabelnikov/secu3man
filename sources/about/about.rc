@@ -18,7 +18,7 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 // Dialog
 //
 
-IDD_WELCOME DIALOGEX 0, 0, 200, 130
+IDD_WELCOME DIALOGEX 0, 0, 200, 140
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Приветствуем Вас!"
 FONT 8, "MS Sans Serif"
@@ -30,6 +30,7 @@ BEGIN
     RTEXT           "http://secu-3.org",IDC_W_SECU3ORG_LINK,20,20,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "http://vk.com/secu3club",IDC_W_VKG_LINK,20,50,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "http://facebook.com/groups/secu3club/",IDC_W_FBG_LINK,20,85,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "© 2007-2016 Alexey A. Shabelnikov, SECU-3.ORG", IDC_W_CR, 20,130,165,10, WS_VISIBLE
     DEFPUSHBUTTON   "OK",IDOK,80,110,50,14
 END
 
@@ -45,7 +46,7 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 // Dialog
 //
 
-IDD_WELCOME DIALOGEX 0, 0, 200, 130
+IDD_WELCOME DIALOGEX 0, 0, 200, 140
 STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Welcome!"
 FONT 8, "MS Sans Serif"
@@ -56,6 +57,7 @@ BEGIN
     RTEXT           "http://secu-3.org",IDC_W_SECU3ORG_LINK,20,20,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "http://vk.com/secu3club",IDC_W_VKG_LINK,20,50,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "http://facebook.com/groups/secu3club/",IDC_W_FBG_LINK,20,85,170,10,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    CTEXT           "© 2007-2016 Alexey A. Shabelnikov, SECU-3.ORG", IDC_W_CR, 20,130,165,10, WS_VISIBLE
     DEFPUSHBUTTON   "OK",IDOK,80,110,50,14
 END
 
@@ -101,7 +103,7 @@ IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 STRINGTABLE DISCARDABLE 
 BEGIN
  IDS_SOFTWARE_INFO       "SECU-3 Manager v%d.%d. Build [%s]"
- IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n                     Ukraine, Kiev, (C) 2007\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
+ IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n             Ukraine, Kiev, Copyright © 2007-2016\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
 END
 
 /////////////////////////////////////////////////////////////////////////////
