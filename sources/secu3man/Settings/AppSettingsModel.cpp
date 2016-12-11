@@ -117,10 +117,6 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_PulsesPer1Km(_T("PulsesPer1Km"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
- m_AllowableBaudRates.push_back(CBR_600);
- m_AllowableBaudRates.push_back(CBR_1200);
- m_AllowableBaudRates.push_back(CBR_2400);
- m_AllowableBaudRates.push_back(CBR_4800);
  m_AllowableBaudRates.push_back(CBR_9600);
  m_AllowableBaudRates.push_back(CBR_14400);
  m_AllowableBaudRates.push_back(CBR_19200);
@@ -128,10 +124,7 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableBaudRates.push_back(CBR_56000);
  m_AllowableBaudRates.push_back(CBR_57600);
  m_AllowableBaudRates.push_back(CBR_115200);
- m_AllowableBaudRates.push_back(    230400);
- m_AllowableBaudRates.push_back(    250000);
  m_AllowableBaudRates.push_back(CBR_256000);
- m_AllowableBaudRates.push_back(500000);
  //заполняем базу данных допустимых COM-портов
  for(int i = 1; i < 256; i++)
  {
