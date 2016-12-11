@@ -68,17 +68,10 @@ BOOL CCEDeskDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(this, MLL::GetString(IDS_CE_ERRORS_DESK_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[0], MLL::GetString(IDS_CED_CKPS_MALFUNCTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[1], MLL::GetString(IDS_CED_EEPROM_PARAM_BROKEN_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[2], MLL::GetString(IDS_CED_PROGRAM_CODE_BROKEN_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[3], MLL::GetString(IDS_CED_KSP_CHIP_FAILED_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[4], MLL::GetString(IDS_CED_KNOCK_DETECTED_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[5], MLL::GetString(IDS_CED_MAP_SENSOR_FAIL_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[6], MLL::GetString(IDS_CED_TEMP_SENSOR_FAIL_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[7], MLL::GetString(IDS_CED_VOLT_SENSOR_FAIL_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[8], MLL::GetString(IDS_CED_DWELL_CONTROL_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[9], MLL::GetString(IDS_CED_CAMS_MALFUNCTION_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ce_errors[10],MLL::GetString(IDS_CED_TPS_SENSOR_FAIL_TT)));
+ for(int i = IDS_CED_CKPS_MALFUNCTION_TT; i <= IDS_CED_TPS_SENSOR_FAIL_TT; ++i)
+ {
+  VERIFY(mp_ttc->AddWindow(&m_CEErrors[i - IDS_CED_CKPS_MALFUNCTION_TT], MLL::GetString(i)));
+ }
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -93,7 +86,7 @@ void CCEDeskDlg::Enable(bool enable)
   return; //already has needed state
  m_enabled = enable;
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
-  m_ce_errors[i].EnableWindow(enable);
+  m_CEErrors[i].EnableWindow(enable);
  m_ce_text.EnableWindow(enable);
 }
 
@@ -111,10 +104,10 @@ void CCEDeskDlg::SetValues(WORD i_errors)
   {
    TCHAR buff[10] = {0};
    _stprintf(buff, _T("%d"), secu3_ce_error_codes[i].second);
-   m_ce_errors[i].SetWindowText(buff);
+   m_CEErrors[i].SetWindowText(buff);
   }
   else
-   m_ce_errors[i].SetWindowText(_T(""));
+   m_CEErrors[i].SetWindowText(_T(""));
  }
 }
 
