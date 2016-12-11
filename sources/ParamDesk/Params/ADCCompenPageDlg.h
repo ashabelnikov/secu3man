@@ -33,7 +33,6 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
-class CToolTipCtrlEx;
 
 class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -63,6 +62,9 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
+  //class CToolTipCtrlEx;
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+
   SECU3IO::ADCCompenPar m_params;
   bool m_enabled;
   bool m_enable_secu3t_features;
@@ -96,6 +98,4 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_ai2_correction_spin;
   CEditEx m_ai2_factor_edit;
   CEditEx m_ai2_correction_edit;
-  
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

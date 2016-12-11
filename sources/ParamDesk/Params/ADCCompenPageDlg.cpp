@@ -95,20 +95,19 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 , m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
-, m_params.map_adc_factor(1.0f)
-, m_params.map_adc_correction(0.0f)
-, m_params.ubat_adc_factor(1.0f)
-, m_params.ubat_adc_correction(0.0f)
-, m_params.temp_adc_factor(1.0f)
-, m_params.temp_adc_correction(0.0f)
-, m_params.tps_adc_factor(1.0f)
-, m_params.tps_adc_correction(0.0f)
-, m_params.ai1_adc_factor(1.0f)
-, m_params.ai1_adc_correction(0.0f)
-, m_params.ai2_adc_factor(1.0f)
-, m_params.ai2_adc_correction(0.0f)
 {
- //empty
+ m_params.map_adc_factor = 1.0f;
+ m_params.map_adc_correction = 0.0f;
+ m_params.ubat_adc_factor = 1.0f;
+ m_params.ubat_adc_correction = 0.0f;
+ m_params.temp_adc_factor = 1.0f;
+ m_params.temp_adc_correction = 0.0f;
+ m_params.tps_adc_factor = 1.0f;
+ m_params.tps_adc_correction = 0.0f;
+ m_params.ai1_adc_factor = 1.0f;
+ m_params.ai1_adc_correction = 0.0f;
+ m_params.ai2_adc_factor = 1.0f;
+ m_params.ai2_adc_correction = 0.0f;
 }
 
 CADCCompenPageDlg::~CADCCompenPageDlg()

@@ -104,7 +104,6 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
 }
 
-//если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
@@ -238,7 +237,7 @@ bool CTemperPageDlg::IsEnabled(void)
 void CTemperPageDlg::GetValues(SECU3IO::TemperPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::TemperPar));
 }
 
