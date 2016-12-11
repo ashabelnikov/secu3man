@@ -65,13 +65,13 @@ class IParamDeskView : public IDeskView
   virtual void EnableGasdose(bool i_enable) = 0;
   virtual void EnableChoke(bool i_enable) = 0;
 
-  virtual BYTE GetCurrentDescriptor(void) = 0; //получает дескриптор соответствующий текущей (отображаемой) вкладке
+  virtual BYTE GetCurrentDescriptor(void) = 0; //obtains descriptor corresponding to current (displaying) tab
 
-  virtual void SetOnTabActivate(EventHandler OnTabActivate) = 0; //обработцик будет вызываться при появлении вкладки
+  virtual void SetOnTabActivate(EventHandler OnTabActivate) = 0; //Will be called when tab become active
   virtual void SetOnChangeInTab(EventHandler OnChangeInTab) = 0; //обработчик будет вызываться при изменении пользователем данных вкладки
   virtual void SetOnSaveButton(EventHandler OnSaveButton) = 0; //обработчик будет вызываться при нажатии кнопки "сохранить"
 
-  //вызывать только для активной панели!!!
+  //call only for active panel
   virtual bool SetCurSel(int sel) = 0;
   virtual int GetCurSel(void) = 0;
 };

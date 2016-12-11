@@ -222,9 +222,34 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_wheel_miss_num_spin.SetRangeAndDelta(0, 2, 1);
  m_wheel_miss_num_edit.SetRange(0, 2);
 
- _FillCKPSTeethBTDCComboBox(); //инициализируем комбо бокс числа зубьев до в.м.т.
- _FillCKPSEngineCylComboBox(); //инициализируем комбо бокс цисла цилиндров двигателя.
+ _FillCKPSTeethBTDCComboBox(); //initialize number of teeth BTDC combobox
+ _FillCKPSEngineCylComboBox(); //initialize number of cylinders combobox
  UpdateData(FALSE);  //initialize dialog controls with data
+
+ //Create a tooltip control and then assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_ignition_cogs_edit, MLL::GetString(IDS_PD_CKPS_IGNITION_COGS_UNIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ignition_cogs_spin, MLL::GetString(IDS_PD_CKPS_IGNITION_COGS_UNIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_wheel_miss_num_edit, MLL::GetString(IDS_PD_CKPS_MISS_NUM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wheel_miss_num_spin, MLL::GetString(IDS_PD_CKPS_MISS_NUM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_wheel_cogs_num_edit, MLL::GetString(IDS_PD_CKPS_COGS_NUM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_wheel_cogs_num_spin, MLL::GetString(IDS_PD_CKPS_COGS_NUM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_teeth_before_tdc_combo, MLL::GetString(IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_ckps_negfront_radio, MLL::GetString(IDS_PD_CKPS_FRONT_GROUPBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ckps_posfront_radio, MLL::GetString(IDS_PD_CKPS_FRONT_GROUPBOX_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_ref_s_negfront_radio, MLL::GetString(IDS_PD_REF_S_FRONT_GROUPBOX_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ref_s_posfront_radio, MLL::GetString(IDS_PD_REF_S_FRONT_GROUPBOX_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_merge_ign_outputs_check, MLL::GetString(IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
 

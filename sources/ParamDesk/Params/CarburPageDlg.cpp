@@ -293,12 +293,29 @@ BOOL CCarburPageDlg::OnInitDialog()
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+
  VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_edit, MLL::GetString(IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_epm_on_threshold_spin, MLL::GetString(IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT)));
+
  VERIFY(mp_ttc->AddWindow(&m_tps_threshold_edit, MLL::GetString(IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_threshold_spin, MLL::GetString(IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT)));
+
  VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_shutoff_delay_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_edit, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT))); 
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_spin, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_edit_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_lo_threshold_spin_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_edit_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_spin_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_inverse_throttle_switch, MLL::GetString(IDS_PD_CARBUR_INVERSE_SWITCH_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -335,7 +352,7 @@ bool CCarburPageDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//This function is used to obtain data from dialog
 void CCarburPageDlg::GetValues(SECU3IO::CarburPar* o_values)
 {
  ASSERT(o_values);
@@ -343,7 +360,7 @@ void CCarburPageDlg::GetValues(SECU3IO::CarburPar* o_values)
  memcpy(o_values,&m_params, sizeof(SECU3IO::CarburPar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//This function is used to set data in dialog
 void CCarburPageDlg::SetValues(const SECU3IO::CarburPar* i_values)
 {
  ASSERT(i_values);

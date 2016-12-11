@@ -158,6 +158,21 @@ BOOL CAnglesPageDlg::OnInitDialog()
 
  UpdateData(FALSE);
 
+ //create a tooltip control and assign tooltips
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ //Zero ignition timing check
+ VERIFY(mp_ttc->AddWindow(&m_zeroaa_check,MLL::GetString(IDS_PD_ANGLES_ZEROAA_CHECK_TT)));
+ //minimum advance angle edit and spin
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_edit,MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_spin,MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ //maximum advance angle edit and spin
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_edit,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_spin,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
+ mp_ttc->ActivateToolTips(true);
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }
