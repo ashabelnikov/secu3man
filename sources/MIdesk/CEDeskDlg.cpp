@@ -52,7 +52,7 @@ void CCEDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
-  DDX_Control(pDX, IDC_CE_DESK_0 + i, m_ce_errors[i]);
+  DDX_Control(pDX, IDC_CE_DESK_0 + i, m_CEErrors[i]);
  DDX_Control(pDX, IDC_CE_DESK_CE, m_ce_text);
 }
 
@@ -129,7 +129,7 @@ void CCEDeskDlg::Resize(const CRect& i_rect)
  wnd.MoveWindow(rect);
 
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i) {
-  _RESIZE(m_ce_errors[i]);
+  _RESIZE(m_CEErrors[i]);
  }
 
 #undef _RESIZE
