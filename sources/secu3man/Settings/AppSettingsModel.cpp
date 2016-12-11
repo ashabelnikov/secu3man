@@ -31,6 +31,8 @@
 
 #undef max //avoid conflicts with C++
 
+#define SECU3_CBR_500000 500000
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -125,6 +127,7 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableBaudRates.push_back(CBR_57600);
  m_AllowableBaudRates.push_back(CBR_115200);
  m_AllowableBaudRates.push_back(CBR_256000);
+ m_AllowableBaudRates.push_back(SECU3_CBR_500000);  //not standard
  //заполняем базу данных допустимых COM-портов
  for(int i = 1; i < 256; i++)
  {
