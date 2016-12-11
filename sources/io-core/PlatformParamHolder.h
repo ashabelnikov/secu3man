@@ -46,7 +46,7 @@ struct PPFlashParam
  size_t m_page_count;      //number of pages
  size_t m_total_size;      //общий размер памяти программ микроконтроллера
  size_t m_bl_section_size; //кол-во байт отведенное для бутлоадера (из секции бутлоадера этот блок можно читать)
- size_t m_app_section_size;//часть прошивки кроме бутлоадера
+ size_t m_app_section_size;//part of firmware, except boot loader
  size_t m_fcpu_hz;         //MCU clock frequency (e.g. 16000000)
  char   m_magic[PLATFORM_MN_SIZE]; //Magic number identifying platform (holds last 4 bytes in FLASH)
  EECUPlatform m_platform_id;//platform ID

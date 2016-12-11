@@ -63,9 +63,9 @@ CBootLoader::~CBootLoader()
 
 //-----------------------------------------------------------------------
 //¬спомогательна€ функци€ дл€ чтени€ одной страницы FLASH
-//n_page - номер страницы дл€ чтени€
+//n_page - number of page for reading
 //o_buf  - буфер дл€ помещени€ в него прочитаных данных (массив байтов)
-//total_size,current - дл€ обновлени€ UI
+//total_size,current - for updating of UI
 bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int* current)
 {
  BYTE t_buf[2048];
@@ -120,14 +120,14 @@ bool CBootLoader::FLASH_ReadOnePage(int n_page, BYTE* o_buf, int total_size, int
   return false;
  }
 
- if (!m_p_port->RecvBlock(t_buf,2))  //CS - два символа
+ if (!m_p_port->RecvBlock(t_buf,2))  //CS - two symbols
  {
   m_ErrorCode = BL_ERROR_NOANSWER;
   return false;
  }
 
  *current+=2;
- EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);  //страница прин€та
+ EventHandler_OnUpdateUI(m_opdata.opcode, total_size, *current);  //page has been received
 
  if (!CNumericConv::Hex8ToBin(t_buf, &t_byte))   //t_buf -> symbol
  {
