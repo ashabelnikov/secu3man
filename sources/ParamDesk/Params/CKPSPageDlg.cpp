@@ -315,7 +315,7 @@ void CCKPSPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CCKPSPageDlg::IsEnabled(void)
 {
  return m_enabled;
