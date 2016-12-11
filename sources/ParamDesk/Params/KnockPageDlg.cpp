@@ -225,7 +225,7 @@ BOOL CKnockPageDlg::OnInitDialog()
   m_bpf_frequency_combo.AddString(string);
  }
  //-----------------------------------------------------------------
- for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //заполняем комбо бокс постоянных времени интегрирования
+ for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //Fill combobox containing integration time constants
  {
   CString string;
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);

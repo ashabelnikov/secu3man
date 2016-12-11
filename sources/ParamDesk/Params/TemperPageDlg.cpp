@@ -150,6 +150,24 @@ BOOL CTemperPageDlg::OnInitDialog()
 
  UpdateData(FALSE);
 
+ //create tooltip control
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ //Set tooltips for widgets
+ //Turn on threshold
+ VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_edit, MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_on_threshold_spin,  MLL::GetString(IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT)));
+ //turn off threshold
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_edit,MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_off_threshold_spin,MLL::GetString(IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_use_curve_map,  MLL::GetString(IDS_PD_TEMPER_USE_CURVE_MAP_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_vent_pwm, MLL::GetString(IDS_PD_TEMPER_USE_VENT_PWM_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_temp_sensor,MLL::GetString(IDS_PD_TEMPER_USE_TEMP_SENSOR_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
+ mp_ttc->ActivateToolTips(true);
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -204,7 +222,7 @@ void CTemperPageDlg::OnPdTemperUseCurveMap()
  UpdateDialogControls(this,TRUE);
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable all controls
 void CTemperPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -220,7 +238,7 @@ bool CTemperPageDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//Use this function to obtain data from a dialog
 void CTemperPageDlg::GetValues(SECU3IO::TemperPar* o_values)
 {
  ASSERT(o_values);
@@ -228,7 +246,7 @@ void CTemperPageDlg::GetValues(SECU3IO::TemperPar* o_values)
  memcpy(o_values,&m_params, sizeof(SECU3IO::TemperPar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//Use this function for getting data from a dialog
 void CTemperPageDlg::SetValues(const SECU3IO::TemperPar* i_values)
 {
  ASSERT(i_values);

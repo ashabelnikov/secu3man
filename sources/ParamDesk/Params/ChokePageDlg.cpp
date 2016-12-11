@@ -345,7 +345,7 @@ void CChokePageDlg::EnableChokeManPos(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//эту функцию необходимо использовать когда надо получить данные из диалога
+//this function is used to obtain data from a dialog
 void CChokePageDlg::GetValues(SECU3IO::ChokePar* o_values)
 {
  ASSERT(o_values);
@@ -353,7 +353,7 @@ void CChokePageDlg::GetValues(SECU3IO::ChokePar* o_values)
  memcpy(o_values,&m_params, sizeof(SECU3IO::ChokePar));
 }
 
-//эту функцию необходимо использовать когда надо занести данные в диалог
+//This function is used to set dialog data
 void CChokePageDlg::SetValues(const SECU3IO::ChokePar* i_values)
 {
  ASSERT(i_values);

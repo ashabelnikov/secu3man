@@ -175,7 +175,7 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_igncutoff_rpm_spin.SetBuddy(&m_igncutoff_rpm_edit);
  m_igncutoff_rpm_spin.SetRangeAndDelta(1000, 18000, 10);
  m_igncutoff_rpm_edit.SetRange(1000, 18000);
- 
+
  m_hop_start_edit.SetLimitText(3);
  m_hop_start_edit.SetDecimalPlaces(3);
  m_hop_start_spin.SetBuddy(&m_hop_start_edit);
@@ -194,6 +194,19 @@ BOOL CMiscPageDlg::OnInitDialog()
  FillUARTSpeedComboBox(br); //initialize combobox
 
  UpdateData(FALSE);  //initialize dialog controls with data
+
+ //Create tooltip control
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ //set tooltips for widgets
+ //ignition cut off threshold
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_spin,MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_edit,MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+ //ignition cut off check
+ VERIFY(mp_ttc->AddWindow(&m_igncutoff_check,MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -216,7 +229,7 @@ void CMiscPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CMiscPageDlg::IsEnabled(void)
 {
  return m_enabled;

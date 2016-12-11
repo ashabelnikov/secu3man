@@ -290,7 +290,7 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::InjctrPar));
 
- //Fill it here because its contents depend on selected injection configuration & cylinder number.  
+ //Fill it here because its contents depend on selected injection configuration & cylinder number
  //Note, selection will be set by following calls
  _FillSqrNumComboBox();
 
