@@ -305,7 +305,7 @@ void CCKPSPageDlg::OnChangeMergeOutputs()
  OnChangeNotify();
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable all controls
 void CCKPSPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)

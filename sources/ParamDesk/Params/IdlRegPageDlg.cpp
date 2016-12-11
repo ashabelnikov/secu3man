@@ -27,8 +27,8 @@
 #include "Resources/resource.h"
 #include "IdlRegPageDlg.h"
 #include "ui-core/ddx_helpers.h"
-#include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
 
@@ -201,29 +201,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
  mp_scr->SetViewSize(0, int(wndRect.Height() * 1.15f));
- 
- //create a tooltip control and assign tooltips
- mp_ttc.reset(new CToolTipCtrlEx());
- VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_use_regulator, MLL::GetString(IDS_PD_IDLREG_USE_REGULATOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_goal_rpm_spin, MLL::GetString(IDS_PD_IDLREG_GOAL_RPM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_goal_rpm_edit, MLL::GetString(IDS_PD_IDLREG_GOAL_RPM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_factor_pos_spin, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_factor_pos_edit, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_factor_neg_spin, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_factor_neg_edit, MLL::GetString(IDS_PD_IDLREG_FACTOR_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_dead_band_rpm_spin, MLL::GetString(IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_dead_band_rpm_edit, MLL::GetString(IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_turn_on_temp_edit, MLL::GetString(IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_turn_on_temp_spin, MLL::GetString(IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_restriction_min_edit, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_restriction_min_spin, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_restriction_max_edit, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_restriction_max_spin, MLL::GetString(IDS_PD_IDLREG_RESTRICTION_EDIT_TT)));
 
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
- mp_ttc->ActivateToolTips(true);
-  
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -269,5 +248,5 @@ void CIdlRegPageDlg::SetValues(const SECU3IO::IdlRegPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::IdlRegPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
 }

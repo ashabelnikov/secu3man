@@ -26,8 +26,8 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "MiscPageDlg.h"
-#include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/ddx_helpers.h"
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
@@ -61,7 +61,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, OnUpdateControlsHOP)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_SPIN, OnUpdateControlsHOP)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_HALL_OUTPUT_DURAT_UNIT, OnUpdateControlsHOP)
- 
+
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControlsInjTurnoffOnGas)
 END_MESSAGE_MAP()
@@ -191,18 +191,10 @@ BOOL CMiscPageDlg::OnInitDialog()
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
- FillUARTSpeedComboBox(br); //инициализируем комбо бокс
+ FillUARTSpeedComboBox(br); //initialize combobox
 
- UpdateData(FALSE);  //инициализируем контроллы диалога данными
- //create a tooltip control and assign tooltips
- mp_ttc.reset(new CToolTipCtrlEx());
- VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_igncutoff_check, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
- VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_edit, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
- VERIFY(mp_ttc->AddWindow(&m_igncutoff_rpm_spin, MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
+ UpdateData(FALSE);  //initialize dialog controls with data
 
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
- mp_ttc->ActivateToolTips(true);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -252,7 +244,7 @@ void CMiscPageDlg::EnableFuelInjection(bool i_enable)
 void CMiscPageDlg::GetValues(SECU3IO::MiscelPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  m_params.baud_rate = _GetBRFromComboBoxByIndex(m_uart_speed_cb_index);
  memcpy(o_values, &m_params, sizeof(SECU3IO::MiscelPar));
 }
@@ -263,7 +255,7 @@ void CMiscPageDlg::SetValues(const SECU3IO::MiscelPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params, i_values, sizeof(SECU3IO::MiscelPar));
  m_uart_speed_cb_index = _GetIndexFromComboBoxByBR(m_params.baud_rate);
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
 }
 
 void CMiscPageDlg::FillUARTSpeedComboBox(const BRCType& i_baudrates)

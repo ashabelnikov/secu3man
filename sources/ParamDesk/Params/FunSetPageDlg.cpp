@@ -269,7 +269,7 @@ bool CFunSetPageDlg::IsEnabled(void)
  return m_enabled;
 }
 
-//заполняет ComboBox-ы имен семейств характеристик
+//Fills comboboxes of sets of tables
 void CFunSetPageDlg::FillCBByFunNames(void)
 {
  if (!::IsWindow(m_hWnd))

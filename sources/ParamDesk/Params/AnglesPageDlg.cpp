@@ -190,7 +190,7 @@ void CAnglesPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CAnglesPageDlg::IsEnabled(void)
 {
  return m_enabled;
@@ -200,7 +200,7 @@ bool CAnglesPageDlg::IsEnabled(void)
 void CAnglesPageDlg::GetValues(SECU3IO::AnglesPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values, &m_params, sizeof(SECU3IO::AnglesPar));
 }
 

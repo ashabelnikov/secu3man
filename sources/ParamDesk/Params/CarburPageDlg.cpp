@@ -329,7 +329,7 @@ void CCarburPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CCarburPageDlg::IsEnabled(void)
 {
  return m_enabled;
