@@ -128,7 +128,7 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableBaudRates.push_back(CBR_115200);
  m_AllowableBaudRates.push_back(CBR_256000);
  m_AllowableBaudRates.push_back(SECU3_CBR_500000);  //not standard
- //заполняем базу данных допустимых COM-портов
+ //fill database with allowed COM-port numbers
  for(int i = 1; i < 256; i++)
  {
   CString str;
@@ -138,7 +138,7 @@ CAppSettingsModel::CAppSettingsModel()
 
  _tcscpy(m_current_directory,_T(""));
 
- //определение тек. директории
+ //get current directory name
  GetCurrentDirectory(MAX_PATH, m_current_directory);
 
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
