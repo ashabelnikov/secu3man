@@ -170,7 +170,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetAI1Average(void) const;
   virtual bool GetAllowVisualTheme(void) const;
 
-  //позиции окон
+  //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
   virtual void GetWndSettings(WndSettings& o_wndSettings) const;
   //язык интерфейса и тип платформы
@@ -191,7 +191,7 @@ class CAppSettingsModel : public ISettingsData
   ////////////////////////////////////////////////////
 
  private:
-  //данные которые хранятся в INI-файле
+  //data which stored in the INI-file
   _TSTRING m_optPortName;
   DWORD m_optBaudRateApplication;
   DWORD m_optBaudRateBootloader;

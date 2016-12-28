@@ -215,7 +215,7 @@ void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
 
 void CRSDeskDlg::Resize(const CRect& i_rect)
 {
- //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
+ //Calculate scale factors basing on the previous size of window
  CRect old_rect;
  float Xf, Yf;
  GetWindowRect(old_rect);
@@ -223,7 +223,7 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
 
  MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
- //ресайзим контроллы
+ //Resize controls
  CRect rect;
 #define _RESIZE(wnd)\
  rect = MIHelpers::GetChildWndRect(&wnd);\

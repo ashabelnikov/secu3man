@@ -26,6 +26,7 @@
 #pragma once
 
 #include <memory>
+#include "io-core/ce_errors.h"
 #include "ui-core/DialogWithAccelerators.h"
 
 class CToolTipCtrlEx;
@@ -56,8 +57,8 @@ class AFX_EXT_CLASS CCEDeskDlg : public CModelessDialog
 
  private:
   int  m_enabled;
-  CStatic m_ce_errors[16];
   CStatic m_ce_text;
+  CStatic m_CEErrors[SECU3_CE_ERRCODES_COUNT];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

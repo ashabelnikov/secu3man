@@ -61,7 +61,7 @@ class IAppSettingsDlg
   virtual void SetHexDataMode(bool i_hex) = 0;
   virtual void SetNumPulsesPer1Km(int i_pp1km) = 0;
 
-  //"Get" - получение данных представления
+  //Get - obtain data from view
   virtual _TSTRING GetPortName(void) = 0;
   virtual DWORD GetBaudRateApplication(void) = 0;
   virtual DWORD GetBaudRateBootloader(void) = 0;
@@ -80,7 +80,7 @@ class IAppSettingsDlg
   virtual bool GetHexDataMode(void) const = 0;
   virtual int GetNumPulsesPer1Km(void) const = 0;
 
-  //устанавливают обработчики событий
+  //set event handlers
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;
   virtual void setFunctionOnCancel(EventHandler OnCancel) = 0;
   virtual void setFunctionOnActivate(EventHandler OnOk) = 0;

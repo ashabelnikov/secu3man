@@ -41,7 +41,7 @@ CHotKeysToCmdRouter::CHotKeysToCmdRouter()
 
 CHotKeysToCmdRouter::~CHotKeysToCmdRouter()
 {
- Close(); //удаляем и чистим все!
+ Close(); //delete and clean all!
  HotKeysManager::GetInstance()->_RemoveRouter(this);
 }
 
@@ -49,10 +49,10 @@ bool CHotKeysToCmdRouter::Close(void)
 {
  bool result = true;
 
- if (!Unsubclass()) //отсоединяемся от окна
+ if (!Unsubclass()) //disconnect from window
   result = false;
 
- //удаляем все зарегистрированные горячие клавиши.
+ //delete all previously registered hot keys
  if (!UnregisterAllCommands())
   result = false;
 
@@ -155,7 +155,7 @@ bool CHotKeysToCmdRouter::UnregisterCommand(UINT i_command_id)
   if (GlobalDeleteAtom((*it).first) != 0)
    result = false;
 
-  //удаляем из базы данных
+  //delete from database
   m_hot_key_map.erase(it);
  }
 

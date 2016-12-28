@@ -71,7 +71,7 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- //Аналоговые приборы
+ //Analog fixtures
  m_tachometer.DDX_Controls(pDX, IDC_MI_TACHOMETER);
  m_pressure.DDX_Controls(pDX, IDC_MI_MAP);
  m_voltmeter.DDX_Controls(pDX, IDC_MI_VOLTMETER);

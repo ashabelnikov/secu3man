@@ -50,6 +50,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
   void SetFunSetListBoxSelection(int i_selected_index);
 
+  //Access content of maps
   float* GetAttenuatorMap(bool i_original);
   float* GetDwellCntrlMap(bool i_original);
   float* GetCTSCurveMap(bool i_original);

@@ -30,7 +30,7 @@
 struct MIHelpers
 {
 
- //Получает координаты окна в системе координат родительского окна
+ //Obtains window coordinates relatively to parent's window coordinates
  static CRect GetChildWndRect(CWnd* ip_wnd)
  {
   ASSERT(ip_wnd);

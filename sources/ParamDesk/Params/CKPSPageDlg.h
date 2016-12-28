@@ -35,8 +35,6 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
-class CToolTipCtrlEx;
-
 class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -88,6 +86,8 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void _SetCKPSEngineCylComboBoxSelection(int i_sel);
 
  private:
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+
   //<cog number, UI name>
   std::vector<std::pair<int, _TSTRING> > m_cogs_numbers;
   //<cylinders, UI name>
@@ -129,6 +129,5 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_wheel_miss_num_spin;
   CEditEx m_wheel_miss_num_edit;
   CStatic m_wheel_miss_num_label;
-  
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
 };

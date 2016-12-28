@@ -94,7 +94,7 @@ HBRUSH CLMDeskDlg::OnCtlColor(CDC* pDC, CWnd* pWnd, UINT nCtlColor)
  return CDialog::OnCtlColor(pDC, pWnd, nCtlColor); 
 }
 
-//разрешение/запрещение приборов
+//enable/disable fixtures
 void CLMDeskDlg::Enable(bool enable)
 {
  if (((int)enable) == m_enabled)

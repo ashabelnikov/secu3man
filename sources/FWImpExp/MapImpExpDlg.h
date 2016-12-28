@@ -30,8 +30,6 @@
 #include "common/UnicodeSupport.h"
 
 
-class CToolTipCtrlEx;
-
 //типы флажков определ€ющих какие данные перемещать
 enum EFWDFlags
 {
@@ -48,7 +46,7 @@ enum EFWDFlags
  FLAG_IDLC_MAP,     //inj
  FLAG_AETPS_MAP,    //inj
  FLAG_AERPM_MAP,    //inj
- FLAG_AFTSTR_MAP,   //inj  
+ FLAG_AFTSTR_MAP,   //inj
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate
@@ -59,7 +57,9 @@ enum EFWDFlags
  FLAG_NR_OF_FLAGS
 };
 
-//"”льтра-тонкое"  представление ;-)
+class CToolTipCtrlEx;
+
+//view
 class CMapImpExpDlg : public CDialog
 {
   typedef CDialog Super;
@@ -124,6 +124,8 @@ class CMapImpExpDlg : public CDialog
   BOOL m_fwd_flags[FLAG_NR_OF_FLAGS];
   CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];
 
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
   EventHandler m_OnExchangeButton;
   EventWithCodeAndString m_OnFWDCurrentListNamechanged;
   EventWithCode m_OnFWDCurrentSelectionChanged;
@@ -133,6 +135,4 @@ class CMapImpExpDlg : public CDialog
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventResult m_IsExchengeButtonAllowed;
-
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

@@ -325,57 +325,57 @@ BEGIN
     EDITTEXT        IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT,37,12,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,12,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT,106,12,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT,106,12,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_MAP_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,11,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT,37,34,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,34,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT,106,34,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT,106,34,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,34,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT,37,56,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,56,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT,106,56,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT,106,56,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,56,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT,37,78,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_TPS_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,78,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT,106,78,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_TPS_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT,106,78,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_TPS_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,77,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT,37,100,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,100,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT,106,100,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT,106,100,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,100,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT,37,122,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,122,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT,106,122,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT,106,122,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,122,11,16
     CTEXT           "ДАД",IDC_PD_ADCCOMPEN_MAP_CAPTION,1,14,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT,78,14,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT,151,11,23,20
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_MAP_CORRECTION_UNIT,151,11,23,20
     CTEXT           "Напряж.",IDC_PD_ADCCOMPEN_UBAT_CAPTION,1,36,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT,78,36,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT,151,33,23,19
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_UBAT_CORRECTION_UNIT,151,33,23,19
     CTEXT           "ДТОЖ",IDC_PD_ADCCOMPEN_TEMP_CAPTION,1,59,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT,78,59,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT,151,54,23,18
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TEMP_CORRECTION_UNIT,151,54,23,18
     CTEXT           "ДПДЗ",IDC_PD_ADCCOMPEN_TPS_CAPTION,1,80,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_TPS_FACTOR_UNIT,78,80,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TPS_KORRECTION_UNIT,151,76,23,20
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_TPS_CORRECTION_UNIT,151,76,23,20
     CTEXT           "ADD_I1",IDC_PD_ADCCOMPEN_ADD_I1_CAPTION,1,102,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_UNIT,78,102,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_UNIT,151,99,23,19
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_UNIT,151,99,23,19
     CTEXT           "ADD_I2",IDC_PD_ADCCOMPEN_ADD_I2_CAPTION,1,125,32,11
     LTEXT           "коэфф.",IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_UNIT,78,125,25,12
-    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_UNIT,151,120,23,18
+    LTEXT           "корр. (B)",IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_UNIT,151,120,23,18
 END
 
 IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
@@ -391,7 +391,7 @@ BEGIN
     CONTROL         "Отрицат.",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,14,48,10
     CONTROL         "Полож.",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,28,41,10
     GROUPBOX        "Фронт ДНО",IDC_PD_REF_S_FRONT_GROUPBOX,87,3,59,39
-    CONTROL         "Трамблерная раздача искры",
+    CONTROL         "Распределение искры трамблером",
                     IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX |
                     BS_MULTILINE | WS_TABSTOP,16,54,148,12
     EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,70,25,16,ES_AUTOHSCROLL
@@ -967,7 +967,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TD_LOAD_TABLES_POPUP_MENU "Загрузить из"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Сохранить в"
-    IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана Экономайзера Мощностных Режимов (включится при давлении выше чем максимальное минус заданное)"
+    IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана ЭМР (разряжение относительно т.н. верхнего давления). Клапан включается если давление превышает 'Верхн.знач.давл.' минус этот порог"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %. Поставьте 0, если используется концевик."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ (карб.) или задержка отсечки топлива при ПХХ (впрыск)"
     IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
@@ -1035,36 +1035,37 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "Данное значение используется ТОЛЬКО для обычных коммутаторов. \rДля BIP373, SECU-Igniters и катушек с ключами используйте прошивку с расчетом времени накопления! (_dwell)"
-    IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Равносильно изменению порядка подключения проводов к датчику ДПКВ (ДУИ) \r(помогает бороться с ошибками ДПКВ)"
-    IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Равносильно изменению порядка подключения проводов к датчику ДНО \r(помогает бороться с ошибками ДПКВ)"
-    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Общее количество зубьев шкива вместе с пропущенными \r(если имеются)"
-    IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Пропущенные зубья шкива. \r Для ДУИ+ДНО ставьте 0"
-    IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Количество зубьев, проходящих мимо ДПКВ (ДУИ) от метки на шкиве (пропущенных зубьев (ДПКВ) или штифта начала отсчета (для ДУИ+ДНО) до метки ВМТ."
-    IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "При установленной галочке импульсы зажигания суммируются на выходе IGN_OUT1"
-    IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Нижнее ограничение УОЗ"
-    IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Верхнее ограничение УОЗ"
-    IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "При установленной галочке УОЗ будет нулевой при любых условиях.\rИспользуйте для выставления нулевого угла по меткам при помощи стробоскопа"
-    IDS_PD_IDLREG_USE_REGULATOR_TT                  "При установленной галочке МПСЗ будет пытаться поддержать ХХ на заданном уровне посредством изменения УОЗ"   
-    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Установите целевые обороты ХХ. Они должны совпадать с настройкой карбюратора на прогретом двигателе с отключенной нагрузкой (фары, вентилятор охлаждения, мотор отопителя и т.п.)"
-    IDS_PD_IDLREG_FACTOR_EDIT_TT                    "Чем больше данное значение, тем быстрее регулятор ХХ будет изменять УОЗ при отклонении оборотов от заданных \r(больше значение - выше реакция регулятора)."  
-    IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Задает пределы, в которых регулятор может менять УОЗ для поддержания заданных оборотов"
-    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора"
-    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "При прогреве до заданного значения регулятор ХХ не будет работать."
-    IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Первые восемь наборов УОЗ находятся в прошивке, последние два в EEPROM - те что вы редактируете в онлайн режиме\rВыберите те, что будут использоваться при включении зажигания"
-    IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Первые восемь наборов УОЗ находятся в прошивке, последние два в EEPROM - те что вы редактируете в онлайн режиме\rВыберите те, что будут использоваться при включении зажигания"
-    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Установите значение давления во впускном коллекторе при максимальной нагрузке (пытаемся тронуться с 4-й и т.п. - смотрим значение давления)"
-    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Установите значение давления во впускном коллекторе при ПХХ (разгоняемся, бросаем газ - смотрим значение давления)"
-    IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "При установленной галочке будет включена коррекция УОЗ по температуре"
-    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Установите галочку при использовании блока управления скоростью вращения вентилятора.\rМинимальная скорость будет включена за 7.5 градусов до выставленного значения температуры."
-    IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Используйте при нестандартном или резистивном ДТОЖ"
-    IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "При достижении данной температуры вентилятор выключится"
-    IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT         "При достижении данной температуры вентилятор включится"
-    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT              "Чем меньше значения тем больше экономия топлива в городском режиме, но тем выше вероятность заглохнуть при сбросе газа. Установите опытным путем минималное значение при котором двигатель не глохнет при сбросе газа. Значение нижнего порога должно быть ниже верхнего."
-    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите так ,чтобы при нажатии на педаль газа загоралась желтая лампочка Дроссельная заслонка"
-    IDS_PD_ADCCOMPEN_FACTOR_TT                      "При необходимости изменяйте коэффициенты для совпадения сырых значений с реальными напряжениями на выводах блока"
-    IDS_PD_ADCCOMPEN_KORRECTION_TT                  "Используйте в крайних случаях"
-    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "При превышении заданных оборотов импульсы зажигания выдаваться не будут" 
+    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Значение оборотов ХХ, которое будет стремиться поддерживать регулятор. Карбюратор должен быть настроен на такие же обороты на прогретом двигателе с отключенной нагрузкой (фары, вентилятор охлаждения и т.д.)."
+    IDS_PD_IDLREG_FACTOR_EDIT_TT                    "Коэффициент, определяющий величину и скорость реакции регулятора на отклонение оборотов от заданного значения. Слишком большое значение может приводить к колебаниям оборотов ХХ. Слишком малое значение не будет довать эффекта."
+    IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Указывает что зависимость показаний от напряжения на датчике задается таблицей. При помощи таблицы систему можно настроить практически под любой датчик (как с линейной, так и с нелинейной зависимостью)."
+    IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "Этот параметр используется только для обычных коммутаторов. Для BIP373, SECU-Igniters и катушек со встроенными драйверами неоходимо использовать прошивку управляющую временем накопления! (_dwell в названии файла прошивки)"
+    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Число зубьев на задающем диске, включая отсутствующие (если такие имеются)"
+    IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Число отсутствующих зубьев на задающем диске. Для ДУИ+ДНО значение должно быть равно 0"
+    IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Число зубьев, проходящих мимо ДПКВ (ДУИ) от метки на задающем диске до достижения ВМТ (в качестве метки выступают отсутствующие зубья (для ДПКВ) или штифт начала отсчета (для ДУИ+ДНО)."
+    IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Смена фронта равноценна подключению проводов к датчику ДПКВ (ДУИ) в другом порядке"
+    IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Смена фронта равноценна изменению порядка подключения проводов к датчику ДНО"
+    IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Ограничение значения коррекции УОЗ формируемой регулятором ХХ. Правильно подобранное значение, позволит регулятору сохранять устойчивость."
+    IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора. Исключает чувствительность регулятора к небольшим изменениям оборотов."
+    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "Температура двигателя, выше которой начнется работа регулятора (чтобы регулятор работал хотя бы на частично прогретом двигателе)"
+    IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Набор таблиц используемый для газа. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
+    IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Набор таблиц используемый для бензина. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
+    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Значение давления на впуске, соответствующее максимальной нагрузке (16-я кривая в рабочей таблице УОЗ или впрыска). Определить можно следующим образом. Трогаемся на высокой передаче, резко нажимаем педаль газа и смотрим давление."
+    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Значение давления на впуске, соответствующее минимальной нагрузке (1-я кривая в рабочей таблице УОЗ или впрыска). Определить можно на ПХХ. Разгоняемся, бросаем газ и смотрим значение давления."
+    IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "Включение ДТОЖ. Установите эту галочку если Вы используете ДТОЖ и он подключен. Если галочка не установлена, то работа некоторых функций, связанных с температурой двигателя будет ограничена."
+    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Установите эту галочку если Вы собираетесь управлять оборотами вентилятора при помощи ШИМ (с использованием блока SECU-FAN-PWM). Когда температура двигателя приблизится к порогу включения вентилятора ближе чем на 7.5°С, вентилятор включится на минимальные обороты. По мере увеличения температуры обороты будут возрастать, пока не будет достигнута точка равновесия."
+    IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "Если установить эту галочку, то импульсы зажигания будут выдаваться только на выход IGN_OUT1. Используется при распределении искры трамблером"
+    IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Нижний порог ограничения УОЗ формируемого системой. Данное ограничение накладывается в самом конце, после всех вычислений."
+    IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Верхний порог ограничения УОЗ формируемого системой. Данное ограничение накладывается в самом конце, после всех вычислений."
+    IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "Используется для настройки (например для контроля начального угла стробоскопом). Установите эту галочку, если хотите чтобы УОЗ был равен нулю независимо от настроек системы."
+    IDS_PD_IDLREG_USE_REGULATOR_TT                  "Разрешает регулирование оборотов ХХ используя УОЗ. Рекомендуется в начале настроить карбюратор, таблицы УОЗ и только потом включать регулятор ХХ."
+    IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "Вентилятор выключится если температура упадет ниже данного порога"
+    IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT         "Вентилятор включится если температура превысит данный порог"
+    IDS_PD_ADCCOMPEN_FACTOR_TT                      "Подберите значение этого коэффициента для компенсации погрешности измерения. Для контроля используйте галочку 'Показывать сырые значения датчиков' и сравнивайте показания с точным вольтметром, подключенным к датчику."
+    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Используйте если вам нужно сдвинуть напряжение вверх или вниз. Скорее всего у вас не возникнет необходимость менять этот параметр."
+    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "Отсечка зажигания (используйте осторожно!). Выдача импульсов зажигания будет прекращена при превышении заданных оборотов."
+    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "Нижний порог оборотов ЭПХХ. Должен быть меньше чем верхний порог. Чем меньше значение тем больше экономия топлива при ПХХ, Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
+    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "Верхний порог оборотов ЭПХХ. Должен быть больше чем нижний порог. Чем меньше значения тем больше экономия топлива при ПХХ. Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
+    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа желтый индикатор 'ДПДЗ' на вкладке 'Параметры и монитор' был черного цвета, а при нажатии на педаль загорался желтым цветом."
 END
 
 STRINGTABLE
@@ -1463,57 +1464,57 @@ BEGIN
     EDITTEXT        IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT,37,12,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,12,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT,106,12,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT,106,12,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_MAP_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,11,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT,37,34,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,34,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT,106,34,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT,106,34,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_UBAT_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,34,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT,37,56,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,56,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT,106,56,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT,106,56,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_TEMP_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,56,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT,37,78,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_TPS_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,78,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT,106,78,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_TPS_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT,106,78,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_TPS_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,77,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT,37,100,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,100,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT,106,100,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT,106,100,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,100,11,16
     EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT,37,122,27,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,65,122,11,16
-    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT,106,122,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_SPIN,
+    EDITTEXT        IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT,106,122,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,137,122,11,16
     CTEXT           "MAP",IDC_PD_ADCCOMPEN_MAP_CAPTION,1,14,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT,78,14,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT,151,11,23,20
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_MAP_CORRECTION_UNIT,151,11,23,20
     CTEXT           "Voltage",IDC_PD_ADCCOMPEN_UBAT_CAPTION,1,36,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT,78,36,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT,151,33,23,19
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_UBAT_CORRECTION_UNIT,151,33,23,19
     CTEXT           "CTS",IDC_PD_ADCCOMPEN_TEMP_CAPTION,1,59,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT,78,59,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT,151,54,23,18
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_TEMP_CORRECTION_UNIT,151,54,23,18
     CTEXT           "TPS",IDC_PD_ADCCOMPEN_TPS_CAPTION,1,80,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_TPS_FACTOR_UNIT,78,80,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_TPS_KORRECTION_UNIT,151,76,23,20
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_TPS_CORRECTION_UNIT,151,76,23,20
     CTEXT           "ADD_I1",IDC_PD_ADCCOMPEN_ADD_I1_CAPTION,1,102,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_UNIT,78,102,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_UNIT,151,99,23,19
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_UNIT,151,99,23,19
     CTEXT           "ADD_I2",IDC_PD_ADCCOMPEN_ADD_I2_CAPTION,1,125,32,11
     LTEXT           "factor",IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_UNIT,78,125,25,12
-    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_UNIT,151,120,23,18
+    LTEXT           "corr. (V)",IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_UNIT,151,120,23,18
 END
 
 IDD_PD_CKPS_PAGE DIALOGEX 0, 0, 183, 150
@@ -2201,39 +2202,39 @@ BEGIN
     IDS_PD_NO  "No"
 END
 
-
 STRINGTABLE
 BEGIN
-    IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "This value is used only for regular ignition modules. \rFor BIP373, SECU-Igniters and coils with embedded drivers use firmware with dwell control! (_dwell)"
-    IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Equal to the swapping of CKPS wires \r(can help to attack synchronization errors)"
-    IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Equal to the swapping of REF_S wires \r(can help to attack synchronization errors)"
-    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Total number of crank wheel teeth, including missing teeth \r(if present)"
-    IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Missing teeth. \r Set to 0 if you use non-missing tooth wheel"
+    IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Missing teeth. Set to 0 if you use non-missing tooth wheel"
+    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Total number of crank wheel teeth, including missing teeth (if present)"
+    IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "This value is used only for regular ignition modules. For BIP373, SECU-Igniters and coils with embedded drivers use firmware with dwell control! (_dwell)"
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Number of teeth moving past the CKP sensor from label on the wheel (missing teeth or rod ) and to the TDC mark."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "With set check, ignition pulses will be merged on the IGN_OUT1 output"
+    IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Equal to the swapping of CKPS wires (can help to attack synchronization errors)"
+    IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Equal to the swapping of REF_S wires (can help to attack synchronization errors)"
     IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Bottom limit (minimum allowed value) of advance angle"
     IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Top limit (maximum allowed value) of advance angle"
-    IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "When this check is set, ignition timing will be zero at all conditions.\rUse for setting of null advance angle by means of marks and stroboscope"
-    IDS_PD_IDLREG_USE_REGULATOR_TT                  "When this check is set, controller will try to maintain target idling RPM by means of altering of ignition timing"   
-    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Set the target RPM of the idling regulator. It should match the setting of the carburettor on warmed up engine and without load (lights, cooling fan, heater motor, etc.)."
-    IDS_PD_IDLREG_FACTOR_EDIT_TT                    "The higher the value, the faster controller will change the ignition timing when RPM differs from target value \r(bigger value - stronger reaction of regulator)."  
+    IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "When this check is set, ignition timing will be zero at all conditions. Use for setting of null advance angle by means of marks and stroboscope"
+    IDS_PD_IDLREG_FACTOR_EDIT_TT                    "The higher the value, the faster controller will change the ignition timing when RPM differs from target value (bigger value - stronger reaction of regulator)."
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Sets limits, in which idling regulator will alter ignition timing to maintain target RPM"
+    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Set the target RPM of the idling regulator. It should match the setting of the carburettor on warmed up engine and without load (lights, cooling fan, heater motor, etc.)."
     IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Dead band of regulator"
     IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "During warm up idling regulator will be turned on after CLT reach this value."
-    IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time\rSelect which set will be used after turning on of ignition"
-    IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time\rSelect which set will be used after turning on of ignition"
+    IDS_PD_IDLREG_USE_REGULATOR_TT                  "When this check is set, controller will try to maintain target idling RPM by means of altering of ignition timing"
+    IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
+    IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
     IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Set the value of the pressure in the intake manifold at maximum load (trying to move on the 4th gear etc. - see the pressure value)"
     IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Set the value of the pressure in the intake manifold when PQQ (accelerate, throwing gas pedal - see pressure)"
+    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Check the box when using a fan speed control unit. Minimum speed will be turned on before 7.5 degrees to the temperature set value."
     IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "With set check, CLT correction of ignition timing and other functions will be turned on"
-    IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Check the box when using a fan speed control unit. \rMinimum speed will be turned on before 7.5 degrees to the temperature set value."
     IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Use with non-standart or thermistor based CLT sensor"
-    IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "When this temperature reached then cooling fan will be turned off"
     IDS_PD_TEMPER_VENT_ON_THRESHOLD_EDIT_TT         "When this temperature reached then cooling fan will be turned on"
-    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_TT              "The lower the value the greater fuel economy in city mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the lower threshold should be lower than the upper threshold."
+    IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "When this temperature reached then cooling fan will be turned off"
+    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the lower threshold should be lower than the upper threshold."
+    IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the upper threshold should be greater than the lower threshold."
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Set so that when you press the gas pedal, yellow light in the TPS indicator light up"
     IDS_PD_ADCCOMPEN_FACTOR_TT                      "If necessary, alter factors for matching of raw values and real value at the inputs on unit"
-    IDS_PD_ADCCOMPEN_KORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
-    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed" 
+    IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
+    IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"
 END
 
 STRINGTABLE

@@ -26,24 +26,24 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "ADCCompenPageDlg.h"
-#include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/ddx_helpers.h"
 
 const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
 BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnChangeEdit)
- ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, OnChangeEdit)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CAPTION, OnUpdateControls)
@@ -53,30 +53,30 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CAPTION, OnUpdateControlsSECU3T)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, OnUpdateControlsSECU3T)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, OnUpdateControlsSECU3T)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnUpdateControlsSECU3T)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, OnUpdateControlsSECU3T)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CORRECTION_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_FACTOR_UNIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CORRECTION_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_FACTOR_UNIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TEMP_CORRECTION_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_FACTOR_UNIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_KORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_CORRECTION_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_UNIT, OnUpdateControlsSECU3T)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_UNIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_UNIT, OnUpdateControlsSECU3T)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_UNIT, OnUpdateControlsSECU3T)
- ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_UNIT, OnUpdateControlsSECU3T)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_UNIT, OnUpdateControlsSECU3T)
 END_MESSAGE_MAP()
 
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
@@ -124,52 +124,52 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_SPIN, m_map_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_KORRECTION_SPIN, m_map_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_CORRECTION_SPIN, m_map_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_map_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, m_map_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, m_map_correction_edit);
 
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_FACTOR_SPIN, m_ubat_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_KORRECTION_SPIN, m_ubat_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_CORRECTION_SPIN, m_ubat_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, m_ubat_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, m_ubat_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT, m_ubat_correction_edit);
 
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_FACTOR_SPIN, m_temp_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_KORRECTION_SPIN, m_temp_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_CORRECTION_SPIN, m_temp_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, m_temp_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, m_temp_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT, m_temp_correction_edit);
 
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_SPIN, m_tps_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_SPIN, m_tps_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_CORRECTION_SPIN, m_tps_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, m_tps_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, m_tps_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT, m_tps_correction_edit);
 
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_SPIN, m_ai1_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_SPIN, m_ai1_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_SPIN, m_ai1_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, m_ai1_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, m_ai1_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, m_ai1_correction_edit);
 
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_SPIN, m_ai2_factor_spin);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_SPIN, m_ai2_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_SPIN, m_ai2_correction_spin);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_ai2_factor_edit);
- DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, m_ai2_correction_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, m_ai2_correction_edit);
 
  m_map_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_params.map_adc_factor);
- m_map_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_KORRECTION_EDIT, m_params.map_adc_correction);
+ m_map_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, m_params.map_adc_correction);
 
  m_ubat_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, m_params.ubat_adc_factor);
- m_ubat_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_UBAT_KORRECTION_EDIT, m_params.ubat_adc_correction);
+ m_ubat_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_UBAT_CORRECTION_EDIT, m_params.ubat_adc_correction);
 
  m_temp_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TEMP_FACTOR_EDIT, m_params.temp_adc_factor);
- m_temp_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TEMP_KORRECTION_EDIT, m_params.temp_adc_correction);
+ m_temp_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TEMP_CORRECTION_EDIT, m_params.temp_adc_correction);
 
  m_tps_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TPS_FACTOR_EDIT, m_params.tps_adc_factor);
- m_tps_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TPS_KORRECTION_EDIT, m_params.tps_adc_correction);
+ m_tps_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_TPS_CORRECTION_EDIT, m_params.tps_adc_correction);
 
  m_ai1_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I1_FACTOR_EDIT, m_params.ai1_adc_factor);
- m_ai1_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I1_KORRECTION_EDIT, m_params.ai1_adc_correction);
+ m_ai1_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, m_params.ai1_adc_correction);
 
  m_ai2_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_params.ai2_adc_factor);
- m_ai2_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_KORRECTION_EDIT, m_params.ai2_adc_correction);
+ m_ai2_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, m_params.ai2_adc_correction);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -263,41 +263,44 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai2_correction_edit.SetRange(-2.0f,2.0f);
 
  UpdateData(FALSE);
- //create a tooltip control and assign tooltips
+
+ //create tooltip control
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_map_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ //set tooltips form different widgets
  VERIFY(mp_ttc->AddWindow(&m_map_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
-  VERIFY(mp_ttc->AddWindow(&m_ubat_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ubat_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ubat_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ubat_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ubat_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ubat_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ubat_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
-  VERIFY(mp_ttc->AddWindow(&m_temp_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_temp_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
  VERIFY(mp_ttc->AddWindow(&m_temp_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_temp_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_temp_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_temp_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_temp_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
-  VERIFY(mp_ttc->AddWindow(&m_tps_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
-  VERIFY(mp_ttc->AddWindow(&m_ai1_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai1_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ai1_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai1_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai1_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai1_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai1_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
-  VERIFY(mp_ttc->AddWindow(&m_ai2_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai2_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ai2_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
- VERIFY(mp_ttc->AddWindow(&m_ai2_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_KORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai2_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai2_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai2_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }

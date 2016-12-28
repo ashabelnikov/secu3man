@@ -124,7 +124,7 @@ BOOL CMainFrame::PreTranslateMessage(MSG* pMsg)
   if (_UpdateTopLevelMainMenu())
    DrawMenuBar(); //redraw menu
 
-  m_bDoIdle = FALSE; //запоминаем что уже вызвали
+  m_bDoIdle = FALSE; //remember that we already called redraw function
  }
  else
  {
@@ -152,7 +152,7 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
    cs.y = point.y;
   }
  }
- 
+
  //Yes, it is stupid. If you know better solution, please let me know
  DPIAware dpia;
  switch(dpia.GetDPIX())

@@ -92,8 +92,7 @@ typedef enum ESpeedUnit
  SU_MPH
 };
 
-//интерфейс через который должен производится доступ к настройкам программы
-//из обычных мест в коде программы
+//Interface which should be used to access settings' data from usual places of program
 class ISettingsData
 {
  public:

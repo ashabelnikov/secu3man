@@ -48,7 +48,7 @@ CAppSettingsController::~CAppSettingsController()
 
 void CAppSettingsController::OnOk(void)
 {
- //сохраняем данные из представления в модель
+ //save data from view into the model
  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
  m_pModel->m_optPortName = m_pView->GetPortName();
  m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
@@ -82,7 +82,7 @@ void CAppSettingsController::OnCancel(void)
 
 void CAppSettingsController::OnActivate(void)
 {
- //перекачиваем данные из модели в представление
+ //pump data from the model into view
  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
  m_pView->FillCtrlsWithAllowableBaudRates(m_pModel->m_AllowableBaudRates);
  m_pView->FillCtrlsWithAllowablePorts(m_pModel->m_AllowablePorts);

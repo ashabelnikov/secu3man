@@ -25,16 +25,17 @@
 
 #pragma once
 
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
-#include <memory>
+
+class CWndScroller;
 
 class CToolTipCtrlEx;
-class CWndScroller;
 
 class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -61,6 +62,9 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
+  std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
   SECU3IO::IdlRegPar m_params;
   bool m_enabled;
 
@@ -80,7 +84,4 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_restriction_max_edit;
   CSpinButtonCtrlEx m_turn_on_temp_spin;
   CEditEx m_turn_on_temp_edit;
-    
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
-  std::auto_ptr<CWndScroller> mp_scr;
 };

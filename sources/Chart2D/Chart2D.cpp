@@ -140,7 +140,7 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
  pForm->m_fnc_min = i_fnc_min;
  pForm->m_fnc_max = i_fnc_max;
 
- //сохраняем значения сетки по горизонтальной оси
+ //save horizontal axis grid values
  if (ip_x_axis_grid_values)
  {
   if (0==i_bins_mode) //0,1 modes
@@ -168,7 +168,7 @@ void __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *
 
  if (ip_original_function && iop_modified_function)
  {
-  //удаляем старые значения, а потом вновь заполняем серии
+  //delete old values and fill series again
   for (;pForm->Series1->Count() > 0;)
    pForm->Series1->Delete(pForm->Series1->Count()-1);
   for (;pForm->Series2->Count() > 0;)

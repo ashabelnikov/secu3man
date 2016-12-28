@@ -27,8 +27,8 @@
 #include "resource.h"
 #include "MapImpExpDlg.h"
 #include "io-core/SECU3IO.h"
-#include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
 

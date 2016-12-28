@@ -219,7 +219,7 @@ void CSecurPageDlg::EnableBTNameAndPass(bool enable)
 void CSecurPageDlg::GetValues(SECU3IO::SecurPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::SecurPar));
 }
 
@@ -229,7 +229,7 @@ void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
  ASSERT(i_values);
  bool use_bt_prev = m_params.use_bt;
  memcpy(&m_params, i_values, sizeof(SECU3IO::SecurPar));
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
  if (use_bt_prev != (m_params.use_bt > 0))
   UpdateDialogControls(this, TRUE); //to apply state of "Use bluetooth" checkbox
 

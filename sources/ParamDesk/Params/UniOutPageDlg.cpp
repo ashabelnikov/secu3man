@@ -343,7 +343,7 @@ bool CUniOutPageDlg::IsEnabled(void)
 void CUniOutPageDlg::GetValues(SECU3IO::UniOutPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog tp variables
  _GetCondComboBoxesSel();
  _GetLogicFuncComboBoxesSel();
  _GetLogicFunc12ComboBoxSel();
@@ -363,7 +363,7 @@ void CUniOutPageDlg::SetValues(const SECU3IO::UniOutPar* i_values)
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {_SetCondInputFormat(i, false, false); _SetCondInputFormat(i, true, false);}
 
- UpdateData(FALSE); //копируем данные из переменных в диалог
+ UpdateData(FALSE); //copy data from variables to dialog
  UpdateDialogControls(this, TRUE);
 }
 

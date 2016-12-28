@@ -25,15 +25,13 @@
 
 #pragma once
 
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
-#include <memory>
-
-class CToolTipCtrlEx;
 
 class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -70,6 +68,8 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+
   SECU3IO::TemperPar m_params;
   bool m_enabled;
   bool m_use_vent_pwm_enabled;
@@ -84,6 +84,4 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_vent_off_threshold_edit;
   CSpinButtonCtrlEx m_vent_pwmfrq_spin;
   CEditEx m_vent_pwmfrq_edit;
-    
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

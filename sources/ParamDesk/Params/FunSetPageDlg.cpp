@@ -210,20 +210,21 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_press_swing_edit, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_press_swing_spin, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_grad_edit, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map_grad_spin, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tps_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
-
+ VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_press_swing_spin, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_press_swing_edit, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_grad_spin, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_map_grad_edit, MLL::GetString(IDS_PD_FUNSET_MAP_GRAD_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -260,7 +261,7 @@ void CFunSetPageDlg::OnMapCalcButton()
  }
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//enable/disable all controls
 void CFunSetPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -270,27 +271,23 @@ void CFunSetPageDlg::Enable(bool enable)
   UpdateDialogControls(this,TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CFunSetPageDlg::IsEnabled(void)
 {
  return m_enabled;
 }
 
-//TODO: Если будет необходимость использовать режим сортировки, то для корректного
-//ассоциирования элементов можно использовать CComboBox::SetItemData. В любом случае
-//должна измениться только внутренняя архитектура этого диалога
-
-//заполняет ComboBox-ы имен семейств характеристик
+//Fills comboboxes of sets of tables
 void CFunSetPageDlg::FillCBByFunNames(void)
 {
  if (!::IsWindow(m_hWnd))
   return;
 
- //удаляем предыдущий контент
+ //delete previous conetent
  m_benzin_maps_combo.ResetContent();
  m_gas_maps_combo.ResetContent();
 
- //добавляем новый контент
+ //add new content
  for(size_t i = 0; i < m_fun_names.size(); i++)
  {
   m_benzin_maps_combo.AddString(m_fun_names[i].c_str());
@@ -300,13 +297,13 @@ void CFunSetPageDlg::FillCBByFunNames(void)
  //после удаления всех элементов текущее выделение в ComboBox-ах
  //теряется и мы должны вернуть старое выделение.
 
- //для газа
+ //form gas
  if (m_params.fn_gas < m_fun_names.size())
   m_gas_maps_combo.SetCurSel(m_params.fn_gas);
  else
   m_gas_maps_combo.SetCurSel(0);
 
- //для бензиа
+ //for petrol
  if (m_params.fn_benzin < m_fun_names.size())
   m_benzin_maps_combo.SetCurSel(m_params.fn_benzin);
  else
@@ -323,7 +320,7 @@ void CFunSetPageDlg::FillCBByLoadOpts(void)
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));
 
- //для газа
+ //for gas
  if (m_params.load_src_cfg < 2)
   m_load_src_combo.SetCurSel(m_params.load_src_cfg);
  else
@@ -339,7 +336,7 @@ std::vector<_TSTRING>& CFunSetPageDlg::AccessFunNames(void)
 void CFunSetPageDlg::GetValues(SECU3IO::FunSetPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::FunSetPar));
 }
 
@@ -348,5 +345,5 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
 {
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::FunSetPar));
- UpdateData(false); //копируем данные из переменных в диалог
+ UpdateData(false); //copy data from variables to dialog
 }

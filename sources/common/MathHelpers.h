@@ -56,7 +56,7 @@ namespace MathHelpers
    if(i_data_size <=0 || i_kernel_size <= 0)
     return false;
 
-   // начинаем сворачивание от out[i_kernel_size-1] до out[i_data_size-1] (последний)
+   // start convolution from out[i_kernel_size-1] to out[i_data_size-1] (last)
    for(i = i_kernel_size-1; i < i_data_size; ++i)
    {
     op_out[i] = 0;
@@ -64,7 +64,7 @@ namespace MathHelpers
      op_out[i] += ip_in[j] * ip_kernel[k];
    }
 
-   // продолжаем сворачивание от out[0] до out[i_kernel_size-2]
+   // continue convolution from out[0] to out[i_kernel_size-2]
    for(i = 0; i < i_kernel_size - 1; ++i)
    {
     op_out[i] = 0;
@@ -74,12 +74,12 @@ namespace MathHelpers
    return true;
   }
 
-  //—глаживание дл€ одномерной функции методом скольз€щего среднего с симметричным наложением €дра
+  //Smoothing for 1D function using mooving avarage method with symmetrical kernel
   //i_kernel_size - нечетное число! Ќапример 1,3,5,7...
   template <class T>
   bool Smooth1D(T* ip_in, T* op_out, size_t i_data_size, size_t i_kernel_size)
   {
-   //ѕровер€ем правильность входных параметров
+   //Check input parameters
    if (!(i_kernel_size & 1) || i_kernel_size <= 0)
     return false;
    if(!ip_in || !op_out || i_data_size <=0)

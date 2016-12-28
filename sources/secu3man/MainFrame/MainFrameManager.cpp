@@ -75,7 +75,7 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
 {
  _ASSERTE(m_pMainFrame);
 
- //инициализируем менеджер StatusBar-a
+ //initialize manager of StatusBar
  m_pStatusBarManager->Create(m_pMainFrame);
  m_pStatusBarManager->AddContent();
 

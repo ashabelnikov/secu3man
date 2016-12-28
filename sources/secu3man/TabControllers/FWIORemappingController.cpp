@@ -544,7 +544,7 @@ bool CFWIORemappingController::_IsSlotFree(FWDM::IOSid iosId)
    continue; //skip reserved plugs
   if (_CmpPnS((FWDM::IOPid)p, iosId))
    return false; //already connected to one of plugs
- } 
+ }
  return true; //free!
 }
 
@@ -563,7 +563,7 @@ void CFWIORemappingController::_DetachPlugsFromSpecifiedSlot(FWDM::IOSid iosId)
 void CFWIORemappingController::_UpdateView(void)
 {
  for(int s = FWDM::IOS_START; s < FWDM::IOS_COUNT; ++s)
- {  
+ {
   DWORD slot[2] = {mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, false), mp_fwdm->GetIOSlot(FWDM::IOX_INIT, (FWDM::IOSid)s, true)};
   bool itemSet = false;
   for(int p = FWDM::IOP_START; p < FWDM::IOP_COUNT; ++p)

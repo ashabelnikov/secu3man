@@ -248,7 +248,7 @@ void CGasdosePageDlg::EnableGasdoseManPos(bool enable)
 void CGasdosePageDlg::GetValues(SECU3IO::GasdosePar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values,&m_params, sizeof(SECU3IO::GasdosePar));
 }
 

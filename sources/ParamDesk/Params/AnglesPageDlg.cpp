@@ -26,8 +26,8 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "AnglesPageDlg.h"
-#include "ui-core/DDX_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/DDX_helpers.h"
 
 const UINT CAnglesPageDlg::IDD = IDD_PD_ANGLES_PAGE;
 
@@ -155,19 +155,22 @@ BOOL CAnglesPageDlg::OnInitDialog()
  m_increase_spead_edit.SetDecimalPlaces(2);
  m_increase_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
  m_increase_spead_edit.SetRange(0.0f,10.0f);
- 
+
  UpdateData(FALSE);
- 
-  //create a tooltip control and assign tooltips
+
+ //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_min_angle_spin, MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_min_angle_edit, MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_max_angle_spin, MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_max_angle_edit, MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_zeroaa_check, MLL::GetString(IDS_PD_ANGLES_ZEROAA_CHECK_TT)));
- 
- mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ //Zero ignition timing check
+ VERIFY(mp_ttc->AddWindow(&m_zeroaa_check,MLL::GetString(IDS_PD_ANGLES_ZEROAA_CHECK_TT)));
+ //minimum advance angle edit and spin
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_edit,MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_min_angle_spin,MLL::GetString(IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT)));
+ //maximum advance angle edit and spin
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_edit,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_max_angle_spin,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
@@ -180,7 +183,7 @@ void CAnglesPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
-//разрешение/запрещение контроллов (всех поголовно)
+//Enable/disable all controls
 void CAnglesPageDlg::Enable(bool enable)
 {
  if (m_enabled == enable)
@@ -190,7 +193,7 @@ void CAnglesPageDlg::Enable(bool enable)
   UpdateDialogControls(this, TRUE);
 }
 
-//что с контроллами?
+//get state of controls
 bool CAnglesPageDlg::IsEnabled(void)
 {
  return m_enabled;
@@ -200,7 +203,7 @@ bool CAnglesPageDlg::IsEnabled(void)
 void CAnglesPageDlg::GetValues(SECU3IO::AnglesPar* o_values)
 {
  ASSERT(o_values);
- UpdateData(TRUE); //копируем данные из диалога в переменные
+ UpdateData(TRUE); //copy data from dialog to variables
  memcpy(o_values, &m_params, sizeof(SECU3IO::AnglesPar));
 }
 

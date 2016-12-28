@@ -34,9 +34,6 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
-
-class CToolTipCtrlEx;
-
 class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -73,6 +70,8 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   int _GetIndexFromComboBoxByBR(int i_baudrate);
 
  private:
+  std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+
   CStatic m_uart_speed_label;
   CComboBox m_uart_speed_combo;
 
@@ -89,7 +88,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_hop_start_edit;
   CSpinButtonCtrlEx m_hop_start_spin;
   CStatic m_hop_start_unit;
-  
+
   CEditEx m_hop_durat_edit;
   CSpinButtonCtrlEx m_hop_durat_spin;
   CStatic m_hop_durat_unit;
@@ -100,9 +99,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_inj_turnoff_enabled;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
-  
+
   CButton m_flpmp_offongas_check;
   CButton m_inj_offongas_check;
-    
-  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
