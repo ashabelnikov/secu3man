@@ -207,8 +207,8 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_hall_wnd_width_spin.SetBuddy(&m_hall_wnd_width_edit);
  m_hall_wnd_width_edit.SetLimitText(5);
  m_hall_wnd_width_edit.SetDecimalPlaces(1);
- m_hall_wnd_width_spin.SetRangeAndDelta(30.0f, 110.0f, 0.1f);
- m_hall_wnd_width_edit.SetRange(30.0f, 110.0f);
+ m_hall_wnd_width_spin.SetRangeAndDelta(30.0f, 120.0f, 0.1f);
+ m_hall_wnd_width_edit.SetRange(30.0f, 120.0f);
 
  m_wheel_cogs_num_edit.SetLimitText(3);
  m_wheel_cogs_num_edit.SetDecimalPlaces(3);
