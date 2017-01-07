@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "ChildView.h"
 #include "ui-core/TabDialog.h"
+#include "about/secu-3about.h"
 
 #define MAIN_TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -75,6 +76,10 @@ void CChildView::OnSize(UINT nType, int cx, int cy)
 //Creates dialog from template stored in memory
 bool CChildView::Create(CWnd* ip_parent)
 {
+ //========================================================
+ if (!CheckAbout() || !CheckAppMenu()) delete this;
+ //========================================================
+
  HGLOBAL hgbl;
  LPDLGTEMPLATE lpdt; LPDLGITEMTEMPLATE lpdi; 
  LPWORD lpw;

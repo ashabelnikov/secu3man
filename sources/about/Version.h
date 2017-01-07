@@ -26,6 +26,8 @@
 #pragma once
 
 #include "about_api.h"
+#include <vector>
 
 bool ABOUT_API GetVersionInfo(LPCTSTR filename, int &major, int &minor);
 bool ABOUT_API GetProductVersion(int &major, int &minor);
+bool ABOUT_API GetVersionData(LPCTSTR filename, std::vector<BYTE>& o_data);

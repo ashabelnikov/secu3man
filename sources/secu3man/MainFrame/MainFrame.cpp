@@ -29,6 +29,7 @@
 #include "MainFrame.h"
 #include "common/DPIAware.h"
 #include "MIDesk/DVDeskDlg.h"
+#include "About/secu-3about.h"
 
 #include <limits>
 #include <vector>
@@ -551,18 +552,39 @@ void CMainFrame::OnAppFB()
 
 void CMainFrame::OnAppSettings()
 {
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
  if (m_OnAppSettings)
   m_OnAppSettings();
 }
 
 void CMainFrame::OnAppBeginLog()
 {
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
  if (m_OnAppBeginLog)
   m_OnAppBeginLog();
 }
 
 void CMainFrame::OnAppEndLog()
 {
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
  if (m_OnAppEndLog)
   m_OnAppEndLog();
 }
@@ -616,6 +638,13 @@ void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 
 void CMainFrame::OnFullScreen()
 {
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
  bool what = false;
  if (m_OnFullScreen)
   what = m_OnFullScreen();

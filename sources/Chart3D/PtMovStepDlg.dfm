@@ -59,6 +59,6 @@ object PtMovStepDlg: TPtMovStepDlg
     Visible = True
     Wrap = False
     ArrowKeys = True
-    ShowHint = True    
+    ShowHint = True
   end
 end

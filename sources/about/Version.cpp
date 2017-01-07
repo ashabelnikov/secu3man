@@ -70,3 +70,26 @@ bool GetProductVersion(int &major, int &minor)
 {
  return GetVersionInfo(NULL, major, minor);
 }
+
+bool GetVersionData(LPCTSTR filename, std::vector<BYTE>& o_data)
+{
+ //get the size of the version info block in the file and allocate memory for it
+ DWORD verBufferSize = GetFileVersionInfoSize(filename, NULL);
+ std::vector<BYTE> verBuffer(verBufferSize, 0);
+
+ if(verBufferSize > 0)
+ {
+  //get the version block from the file
+  if(TRUE == GetFileVersionInfo(filename, NULL, verBufferSize, &verBuffer[0]))
+  {
+   /*
+   FILE* f = fopen("xxx.xxx","wb");
+   fwrite(&verBuffer[0],1,verBufferSize,f);
+   fclose(f);
+   */
+    o_data = verBuffer; //store result
+    return true;
+  }
+ }
+ return false;
+}

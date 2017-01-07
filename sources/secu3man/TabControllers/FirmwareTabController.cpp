@@ -30,6 +30,7 @@
 #include "Resources/resource.h"
 #include "FirmwareTabController.h"
 
+#include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
 #include "FirmwareFileUtils.h"
@@ -101,6 +102,11 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  ASSERT(m_bl_data);
  m_code_for_merge_with_overhead = new BYTE[m_fpp.m_total_size + 1];
  ASSERT(m_code_for_merge_with_overhead);
+
+ //========================================================
+ if (!CheckVersion())
+  return;
+ //========================================================
 
  //устанавливаем делегаты (обработчики событий от представления)
  m_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));
@@ -449,7 +455,10 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_FOR_LOAD)
     {
      if (_CheckFirmwareCompatibilityAndAskUser(m_bl_data) && _CheckQuartzCompatibilityAndAskUser(m_bl_data))
-      PrepareOnLoadFLASH(m_bl_data, _T(""));
+     {
+      if (FirmwareFileUtils::CheckFirmwareIntegrity(m_bl_data, m_fpp.m_total_size))
+       PrepareOnLoadFLASH(m_bl_data, _T(""));
+     }
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_FOR_IMPORT_DATA)
     {
@@ -935,7 +944,8 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  result  = FirmwareFileUtils::LoadFLASHFromFile(buff, sizes, NULL, NULL, &opened_file_name);
  if (result && _CheckFirmwareCompatibilityAndAskUser(buff) && _CheckQuartzCompatibilityAndAskUser(buff)) //user OK?
  {
-  PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
+  if (FirmwareFileUtils::CheckFirmwareIntegrity(buff, m_fpp.m_total_size))
+   PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
  }
 }
 
@@ -955,7 +965,8 @@ void CFirmwareTabController::OnDropFile(_TSTRING fileName)
  result  = FirmwareFileUtils::LoadFLASHFromFile(buff, sizes, NULL, NULL, &opened_file_name, &fileName);
  if (result && _CheckFirmwareCompatibilityAndAskUser(buff) && _CheckQuartzCompatibilityAndAskUser(buff)) //user OK?
  {
-  PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
+  if (FirmwareFileUtils::CheckFirmwareIntegrity(buff, m_fpp.m_total_size))
+   PrepareOnLoadFLASH(buff, _TSTRING(opened_file_name));
  }
 }
 

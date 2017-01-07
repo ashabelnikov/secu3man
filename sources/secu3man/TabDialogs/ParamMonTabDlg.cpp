@@ -36,6 +36,7 @@
 #include "ParamDesk/Tables/TablesDeskDlg.h"
 #include "ui-core/Label.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "About/secu-3about.h"
 
 using namespace fastdelegate;
 
@@ -58,7 +59,10 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , m_enlarged(false)
 , m_exfixtures(false)
 {
- //empty
+ //=================================================================
+ if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout() || !CheckVersion())
+  delete this;
+ //=================================================================
 }
 
 void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -131,17 +135,40 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_secu3orgLink->SetFontUnderline(true);
  mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
 
+ //=================================================================
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl(str.GetBuffer(100)))
+  DestroyWindow();
+ //=================================================================
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
 void CParamMonTabDlg::OnPmShowRawSensors()
 {//делегируем обработку события чекбокса
+
+ //=================================================================
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl(str.GetBuffer(100)))
+  return;
+ //=================================================================
+
  if (m_OnRawSensorsCheck)
   m_OnRawSensorsCheck();
 }
 
 void CParamMonTabDlg::OnPmEditTables()
 {//делегируем обработку события чекбокса
+
+ //=================================================================
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl(str.GetBuffer(100)))
+  return;
+ //=================================================================
+
  bool check_state = GetEditTablesCheckState();
  if (false==m_floating)
   mp_ParamDeskDlg->Show(!check_state);
@@ -295,6 +322,13 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
 
 void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)
 {
+ //=================================================================
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (!CheckAppUrl(str.GetBuffer(100)))
+  return;
+ //=================================================================
+
  if (m_enlarged && (m_exfixtures!=i_exfixtures))
  {
   EnlargeMonitor(false, !i_exfixtures);

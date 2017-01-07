@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "DevDiagnostTabDlg.h"
 
+#include "about/secu-3about.h"
 #include "common/FastDelegate.h"
 #include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
@@ -82,6 +83,11 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
  mp_ContextMenuManager->CreateContent();
 
  memset(&m_inputValues, 0, sizeof(SECU3IO::DiagInpDat));
+
+ //=================================================================
+ if (!CheckBitmaps() || !CheckAbout())
+  delete this;
+ //=================================================================
 }
 
 void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
@@ -130,6 +136,12 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  mp_ContextMenuManager->Attach(this);
 
  UpdateDialogControls(this,TRUE);
+
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
+ { GetParent()->DestroyWindow(); }
+ //=================================================================
+
  return TRUE;
 }
 

@@ -1,4 +1,4 @@
-/* SECU-3  - An open source, free engine control unit
+/* Names of modules
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
    This program is free software: you can redistribute it and/or modify
@@ -15,39 +15,29 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
    contacts:
-              http://secu-3.org
-              email: shabelnikov@secu-3.org
+             http://secu-3.org
+             e-mail: shabelnikov@secu-3.org
+             Microprocessor systems - design & programming.
 */
 
-/** \file secu-3about.h
+/** \file ModuleName.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-#include "about_api.h"
+namespace ModuleName {
 
-void ABOUT_API DisplayAbout(CWnd* i_pParent);
+ static LPCTSTR about     =  _T("about.dll");
+ static LPCTSTR chart2d   =  _T("chart2d.dll");
+ static LPCTSTR chart3d   =  _T("chart3d.dll");
+ static LPCTSTR fwimpexp  =  _T("fwimpexp.dll");
+ static LPCTSTR hexutils  =  _T("hexutils.dll");
+ static LPCTSTR iocore    =  _T("io-core.dll");
+ static LPCTSTR midesk    =  _T("midesk.dll");
+ static LPCTSTR paramdesk =  _T("paramdesk.dll");
+ static LPCTSTR tabldesk  =  _T("tabldesk.dll");
+ static LPCTSTR uicore    =  _T("ui-core.dll");
+ static LPCTSTR secu3man  =  _T("secu3man.exe");
 
-void ABOUT_API DisplaySplash(int timeToShow);
-
-void ABOUT_API DisplayWelcome(void);
-
-bool ABOUT_API CheckAppTitle(CWnd* p_wnd);
-
-bool ABOUT_API CheckAppLogo(void);
-
-bool ABOUT_API CheckAppUrl(const _TSTRING& str);
-
-bool ABOUT_API CheckAppMenu(void);
-
-bool ABOUT_API CheckBitmaps(void);
-
-bool ABOUT_API CheckAbout(void);
-
-bool ABOUT_API CheckVersion(void);
-
-bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[]);
-
-bool ABOUT_API CompBuffDigest(BYTE* buff, int size, BYTE hash[]);
-
+} //ns

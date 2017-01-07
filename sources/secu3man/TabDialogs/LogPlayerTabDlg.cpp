@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "LogPlayerTabDlg.h"
 
+#include "about/secu-3about.h"
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
 #include "LPControlPanelDlg.h"
@@ -55,7 +56,10 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , m_enlarged(false)
 , m_exfixtures(false)
 {
- //empty
+ //=================================================================
+ if (!CheckBitmaps() || !CheckAppMenu())
+  delete this;
+ //=================================================================
 }
 
 void CLogPlayerTabDlg::DoDataExchange(CDataExchange* pDX)

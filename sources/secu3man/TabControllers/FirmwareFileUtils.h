@@ -33,5 +33,5 @@ void SaveEEPROMToFile(const BYTE* p_data, const int size);
 bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* p_fwdm, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
 bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL);
 bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title = NULL, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
-
+bool CheckFirmwareIntegrity(BYTE* p_data, int size);
 }

@@ -24,6 +24,7 @@
  */
 
 #include "stdafx.h"
+#include "common/ModuleName.h"
 #include "common/UnicodeSupport.h"
 #include "DLLLinkedFunctions.h"
 
@@ -89,7 +90,7 @@ namespace DLL
   HMODULE hModule;
   bool status = true;
 
-  hModule = LoadLibrary(_T("Chart2D.dll"));
+  hModule = LoadLibrary(ModuleName::chart2d);
   if (hModule==NULL)
   {
    AfxMessageBox(_T("Can't load library Chart2D.dll"), MB_OK|MB_ICONSTOP);
@@ -133,7 +134,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
   }
 
-  hModule = LoadLibrary(_T("Chart3D.dll"));
+  hModule = LoadLibrary(ModuleName::chart3d);
   if (hModule==NULL)
   {
    AfxMessageBox(_T("Can't load library Chart3D.dll"), MB_OK|MB_ICONSTOP);
