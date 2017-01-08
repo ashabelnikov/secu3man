@@ -27,7 +27,7 @@
 #include "common/DPIAware.h"
 #include "fnt_helpers.h"
 
-bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, bool bold /*= false*/)
+bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, bool bold /*= false*/, LPCTSTR lpszFacename /*= NULL*/)
 {
  if (!ip_wnd || !op_newFnt)
   return false;
@@ -44,21 +44,28 @@ bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, b
  p_font->GetLogFont(&lf);
 
  // Set other LOGFONT values as appropriate.
- lf.lfHeight = -MulDiv(height, 96, 72);
+
+ if (height > 0) 
+  lf.lfHeight = -MulDiv(height, 96, 72);
  lf.lfWeight = bold ? FW_BOLD : FW_NORMAL;
- CFont tmpFont;
- VERIFY(tmpFont.CreateFontIndirect(&lf));
+ if (lpszFacename)
+  _tcsncpy(lf.lfFaceName, lpszFacename, LF_FACESIZE);
 
  // Scale the tmHeight; create target font.
- TEXTMETRIC tm;
- CDC *pDC = ip_wnd->GetDC();
- CFont* fontOld = pDC->SelectObject(&tmpFont);
- pDC->GetTextMetrics(&tm);
- pDC->SelectObject(fontOld);
- tmpFont.DeleteObject();
- ip_wnd->ReleaseDC(pDC);
- DPIAware da;
- lf.lfHeight = da.ScaleY(tm.tmHeight);
+ if (height > 0)
+ {
+  CFont tmpFont;
+  VERIFY(tmpFont.CreateFontIndirect(&lf));
+  TEXTMETRIC tm;
+  CDC *pDC = ip_wnd->GetDC();
+  CFont* fontOld = pDC->SelectObject(&tmpFont);
+  pDC->GetTextMetrics(&tm);
+  pDC->SelectObject(fontOld);
+  tmpFont.DeleteObject();
+  ip_wnd->ReleaseDC(pDC);
+  DPIAware da;
+  lf.lfHeight = da.ScaleY(tm.tmHeight);
+ }
  op_newFnt->CreateFontIndirect(&lf);
  return true;
 }

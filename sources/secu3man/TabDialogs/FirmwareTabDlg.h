@@ -216,4 +216,5 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   size_t m_tab_selection;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  CFont m_tab_selection_fnt;
 };

@@ -35,4 +35,4 @@
 // newFont - pointer to objects which will receive new font
 // height - height of a new font
 // bold - new font will be bold if true
-bool FNT_HELPERS_API CloneWndFont(CWnd* wnd, CFont* newFnt, LONG height, bool bold = false);
+bool FNT_HELPERS_API CloneWndFont(CWnd* wnd, CFont* newFnt, LONG height, bool bold = false, LPCTSTR lpszFacename = NULL);
