@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <map>
+#include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
 #include "io-core/FirmwareMapsDataHolder.h"
@@ -62,6 +63,11 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
 , mp_tabcntr(new CPMTablesController(ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar))
 , m_current_state(m_state_machine.end())
 {
+ //=================================================================
+ if (!CheckVersion() || !CheckAppMenu() || !CheckAbout() || !CheckAppLogo())
+  delete this;
+ //=================================================================
+
  //сценарий: [сбор данных]-->[чтение параметров]-->[мониторинг]
  m_scenario1.push_back(mp_idccntr.get());
  m_scenario1.push_back(mp_parcntr.get());

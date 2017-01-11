@@ -60,7 +60,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , m_exfixtures(false)
 {
  //=================================================================
- if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout() || !CheckVersion())
+ if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout())
   delete this;
  //=================================================================
 }

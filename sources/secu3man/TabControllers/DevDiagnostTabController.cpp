@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "DevDiagnostTabController.h"
 
+#include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
 #include "io-core/ufcodes.h"
@@ -138,6 +139,11 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
 , m_diagnost_mode_active(false) //indicates that we are currently in diagnostic mode
 , m_current_tst_mode(m_tstModes.end())
 {
+ //========================================================
+ if (!CheckVersion())
+  return;
+ //========================================================
+
  //устанавливаем делегаты (обработчики событий от представления)
  mp_view->setOnOutputToggle(MakeDelegate(this,&CDevDiagnostTabController::OnOutputToggle));
  mp_view->setOnEnterButton(MakeDelegate(this,&CDevDiagnostTabController::OnEnterButton));
@@ -376,6 +382,11 @@ void CDevDiagnostTabController::OnOutputToggle(int output_id, bool state)
 
 void CDevDiagnostTabController::OnEnterButton(void)
 {
+ //========================================================
+ if (!CheckAppTitle(AfxGetMainWnd()) || !CheckAppLogo())
+  return;
+ //========================================================
+
  if (m_diagnost_mode_active)
  {
   //This command will make SECU-3 to leave diagnostic mode

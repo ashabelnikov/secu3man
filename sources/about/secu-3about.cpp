@@ -27,7 +27,7 @@
 #include "resource.h"
 #include "secu-3about.h"
 #include <algorithm>
-#include <stdexcept>
+#include <map>
 
 #include "STCAbout.h"
 #include "../common/unicodesupport.h"
@@ -284,54 +284,75 @@ bool ABOUT_API CheckAbout(void)
 
 bool ABOUT_API CheckVersion(void)
 {//hashes for 4.6 version info
- BYTE hash1[SHA256_BLOCK_SIZE] = {0xb0,0xcb,0x0b,0xa8,0xc4,0xb6,0x93,0x17,0x57,0xe0,0x98,0x47,0xe9,0x50,0x65,0x2c,0xef,0xa0,0x14,0x0b,0x08,0x3c,0x7d,0xef,0xf6,0x3e,0x8c,0xdd,0x76,0xf9,0x28,0xdf};
- BYTE hash2[SHA256_BLOCK_SIZE] = {0x3b,0xad,0x50,0x06,0x8c,0x8b,0x75,0xa3,0x9e,0x13,0xf8,0xe5,0x6c,0xac,0xb2,0xe7,0x52,0xdb,0x2e,0x23,0x28,0x90,0x3f,0x0f,0x29,0x37,0xd2,0x6d,0x3f,0x80,0xce,0xd8};
+ BYTE hash1[SHA256_BLOCK_SIZE] = {0x52,0xDF,0xB6,0xED,0xD4,0xAB,0xE3,0x1D,0x41,0xAA,0x60,0xF7,0x7E,0x00,0xCA,0xB0,0xB3,0xAE,0xEC,0x7D,0x16,0xA8,0x6B,0x80,0x7F,0x38,0x42,0xE3,0x25,0xFB,0x4D,0xBF};
+ BYTE hash2[SHA256_BLOCK_SIZE] = {0x54,0x1D,0x09,0x5E,0x67,0x43,0x4C,0x59,0xF8,0x96,0x23,0xAD,0x4F,0x64,0x3D,0x99,0x17,0x8A,0xF6,0x33,0xF5,0xE1,0x58,0x8B,0x16,0xEF,0xB1,0x28,0x4D,0x43,0x1D,0xB5};
+ BYTE hash3[SHA256_BLOCK_SIZE] = {0x3B,0xAD,0x50,0x06,0x8C,0x8B,0x75,0xA3,0x9E,0x13,0xF8,0xE5,0x6C,0xAC,0xB2,0xE7,0x52,0xDB,0x2E,0x23,0x28,0x90,0x3F,0x0F,0x29,0x37,0xD2,0x6D,0x3F,0x80,0xCE,0xD8};
+ BYTE hash4[SHA256_BLOCK_SIZE] = {0xB0,0xCB,0x0B,0xA8,0xC4,0xB6,0x93,0x17,0x57,0xE0,0x98,0x47,0xE9,0x50,0x65,0x2C,0xEF,0xA0,0x14,0x0B,0x08,0x3C,0x7D,0xEF,0xF6,0x3E,0x8C,0xDD,0x76,0xF9,0x28,0xDF};
 
- std::vector<std::pair<_TSTRING, BYTE*> > mods;
- mods.push_back(std::make_pair(ModuleName::about, hash1));
- mods.push_back(std::make_pair(ModuleName::chart2d, hash2)); //different hash
- mods.push_back(std::make_pair(ModuleName::chart3d, hash2)); //different hash
- mods.push_back(std::make_pair(ModuleName::fwimpexp, hash1));
- mods.push_back(std::make_pair(ModuleName::hexutils, hash1));
- mods.push_back(std::make_pair(ModuleName::iocore, hash1));
- mods.push_back(std::make_pair(ModuleName::midesk, hash1));
- mods.push_back(std::make_pair(ModuleName::paramdesk, hash1));
- mods.push_back(std::make_pair(ModuleName::tabldesk, hash1));
- mods.push_back(std::make_pair(ModuleName::uicore, hash1));
- mods.push_back(std::make_pair(ModuleName::secu3man, hash1));
+ std::map<size_t, BYTE*> hashdb;
+ //note: size include first two bytes
+ hashdb.insert(std::make_pair(0x106, hash1)); //win98
+ hashdb.insert(std::make_pair(0x116, hash2)); //win98, chart2d & chart3d
+ hashdb.insert(std::make_pair(0x1C3, hash3)); //XP, chart2d & chart3d
+ hashdb.insert(std::make_pair(0x1C7, hash4)); //XP
+
+ std::vector<_TSTRING> mods;
+ mods.push_back(ModuleName::about);
+ mods.push_back(ModuleName::chart2d);
+ mods.push_back(ModuleName::chart3d);
+ mods.push_back(ModuleName::fwimpexp);
+ mods.push_back(ModuleName::hexutils);
+ mods.push_back(ModuleName::iocore);
+ mods.push_back(ModuleName::midesk);
+ mods.push_back(ModuleName::paramdesk);
+ mods.push_back(ModuleName::tabldesk);
+ mods.push_back(ModuleName::uicore);
+ mods.push_back(ModuleName::secu3man);
 
  BYTE digest[SHA256_BLOCK_SIZE];
  Sha256 sha;
  std::vector<BYTE> data;
  for (size_t i = 0; i < mods.size(); ++i)
  {
-  if (!GetVersionData(mods[i].first.c_str(), data))
+  if (!GetVersionData(mods[i].c_str(), data))
    return false;
+  int dataSize = *((WORD*)(&data[0])); //from first two bytes (wLength)
+  if (dataSize > (int)data.size())
+   return false;
+  //remove zeros at the end
+  while(dataSize > 0)
+  {
+   if (data[dataSize-1]==0)
+    --dataSize;
+   else
+    break;
+  }
   sha.init();
-  int dataSize = (mods[i].first == ModuleName::chart2d || mods[i].first == ModuleName::chart3d) ? 451 : 455;
-  sha.update(&data[2], dataSize-2/*data.size()*/);  //skip first two bytes of size
+  sha.update(&data[2], dataSize-2);  //skip first two bytes of size
   sha.final(digest);  
 /*
-  FILE* f = fopen("ccc.ccc","wb");
+  char fname1[64];
+  sprintf(fname1,"hasdata%d.bin", i);
+  FILE* ff = fopen(fname1,"wb");
   for (int j = 0; j < 32; ++j)
-   fprintf(f,"0x%02X,", digest[j]); 
-  fclose(f);  
-*/
-  
-//  char fname[64];
-//  sprintf(fname,"verdata%d.bin", i);
-//  FILE* f = fopen(fname,"wb");
-//  fwrite(&data[2],dataSize-2/*data.size()*/,1,f);
-//  fclose(f);
-// 
-  
-  if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, mods[i].second))
-    return false;
+   fprintf(ff,"0x%02X,", digest[j]); 
+  fclose(ff);  
+
+  char fname[64];
+  sprintf(fname,"verdata%d.bin", i);
+  FILE* f = fopen(fname,"wb");
+  fwrite(&data[0],data.size(),1,f);
+  fclose(f);
+*/ 
+  std::map<size_t, BYTE*>::iterator it = hashdb.find(dataSize);
+  if (it == hashdb.end())
+   return false;
+  if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, it->second))
+   return false;
  }
 
  return true; //ok
 }
-
 
 bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[])
 {

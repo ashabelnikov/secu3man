@@ -104,7 +104,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  ASSERT(m_code_for_merge_with_overhead);
 
  //========================================================
- if (!CheckVersion())
+ if (!CheckVersion() || !CheckAbout() || !CheckAppLogo())
   return;
  //========================================================
 
