@@ -27,7 +27,7 @@
 #include "common/DPIAware.h"
 #include "fnt_helpers.h"
 
-bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, bool bold /*= false*/, LPCTSTR lpszFacename /*= NULL*/)
+bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, bool bold /*= false*/, LPCTSTR lpszFacename /*= NULL*/, int lfEscapement /*= 0*/)
 {
  if (!ip_wnd || !op_newFnt)
   return false;
@@ -50,6 +50,8 @@ bool FNT_HELPERS_API CloneWndFont(CWnd* ip_wnd, CFont* op_newFnt, LONG height, b
  lf.lfWeight = bold ? FW_BOLD : FW_NORMAL;
  if (lpszFacename)
   _tcsncpy(lf.lfFaceName, lpszFacename, LF_FACESIZE);
+
+ lf.lfEscapement = lfEscapement;
 
  // Scale the tmHeight; create target font.
  if (height > 0)

@@ -178,8 +178,8 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  m_param_sel_tab.SetEventListener(this);
  m_param_sel_tab.EnableItem(-1, false);
 
- //avoid bugs on wine (vertical "MS Sans Serif" is not rendered correctly)
- CloneWndFont(GetDlgItem(IDC_FW_CRC), &m_tab_selection_fnt, 0, false, _T("MS Serif"));
+ //avoid bugs on wine (vertical "MS Sans Serif" is not rendered correctly), specify 270 degree angle
+ CloneWndFont(GetDlgItem(IDC_FW_CRC), &m_tab_selection_fnt, 0, false, _T("MS Serif"), 2700);
  m_param_sel_tab.SetFont(&m_tab_selection_fnt);
 
  //create parameters desk
