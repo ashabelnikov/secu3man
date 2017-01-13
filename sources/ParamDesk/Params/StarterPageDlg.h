@@ -26,12 +26,15 @@
 #pragma once
 
 #include <string>
+#include <memory>
 #include "io-core/SECU3IO.h"
 #include "common/ParamPageEvents.h"
 #include "common/ParamTabBaseDlg.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
+
+class CToolTipCtrlEx;
 
 class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -78,4 +81,6 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_primehot_edit;
   CSpinButtonCtrlEx m_primedelay_spin;
   CEditEx m_primedelay_edit;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

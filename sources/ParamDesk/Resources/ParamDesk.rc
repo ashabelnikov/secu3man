@@ -1142,6 +1142,17 @@ BEGIN
     IDS_PD_LOAD_OPT_MAP            "ДАД"
 END
 
+STRINGTABLE
+BEGIN
+    IDS_PD_STARTER_OFF_RPM_EDIT_TT "Обороты, выше которых деактивируется выход блока ST_BLOCK, предназначенный для блокировки стартера"
+    IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT "Обороты, выше которых будет использоваться рабочая карта УОЗ или карта УОЗ ХХ. Ниже данных оборотов УОЗ будет использоваться из пусковой карты."
+    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Задает время перехода РХХ из положения на пуске (см. таблицу «Положение РХХ на пуске») в рабочее положение (см. таблицу «Положение РХХ рабочее»). Чем больше значение, тем плавнее РХХ переходит в рабочее положение."
+    IDS_PD_STARTER_AFTSTRSTR_EDIT_TT "Задает время действия обогащения после пуска, которое вычисляется из таблицы «Обогащение после пуска». Обогащение включается после запуска двигателя и плавно убирается в течение заданного времени."
+    IDS_PD_STARTER_PRIMECOLD_EDIT_TT "Длительность впрыска перед пуском при -30°C (в миллисекундах)"
+    IDS_PD_STARTER_PRIMEHOT_EDIT_TT "Длительность впрыска перед пуском при +70°C (в миллисекундах)"
+    IDS_PD_STARTER_PRIMEDELAY_EDIT_TT "Задержка впрыска перед пуском (Prime Pulse)"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -2309,6 +2320,17 @@ BEGIN
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft (BTDC) when system should start injection. This parameter will take effect only with synchronization from CKP sensor."
     IDS_PD_LOAD_OPT_TPS            "TPS"
     IDS_PD_LOAD_OPT_MAP            "MAP"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_STARTER_OFF_RPM_EDIT_TT "When this RPM threshold exceeded, unit's output ST_BLOCK will be deactivated and thus, starter will be locked "
+    IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT "RPM exceeding which, firmware will switch to the work ignition timing map or the idle ignition timing map. If RPM is lower than specified threshold, the ignition advance angle from the cranking map will be used."
+    IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT "Time for going from crank (see table «IAC position on cranking») position to run (see table «IAC position on run») position for IAC. The higher the value, the smoother IAC valve goes into the run position."
+    IDS_PD_STARTER_AFTSTRSTR_EDIT_TT "Specifies action time of the after start enrichment, which calculated from the «After start enrichment» table. Enrichment turns on after start and smoothly removed during the specified time."
+    IDS_PD_STARTER_PRIMECOLD_EDIT_TT "Injection (prime pulse) duration at -30°C (in milliseconds)"
+    IDS_PD_STARTER_PRIMEHOT_EDIT_TT "Injection (prime pulse) duration at +70°C (in milliseconds)"
+    IDS_PD_STARTER_PRIMEDELAY_EDIT_TT "Delay before prime pulse will be applied"
 END
 
 /////////////////////////////////////////////////////////////////////////////

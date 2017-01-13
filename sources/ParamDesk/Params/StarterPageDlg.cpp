@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "StarterPageDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
@@ -185,6 +186,35 @@ BOOL CStarterPageDlg::OnInitDialog()
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
+
+ //Create tooltip control
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+
+ VERIFY(mp_ttc->AddWindow(&m_smap_abandon_rpm_edit, MLL::GetString(IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_smap_abandon_rpm_spin, MLL::GetString(IDS_PD_STARTER_SMAP_ABANDON_RPM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_starter_off_rpm_edit, MLL::GetString(IDS_PD_STARTER_OFF_RPM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_starter_off_rpm_spin, MLL::GetString(IDS_PD_STARTER_OFF_RPM_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_edit, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_cranktoruntime_spin, MLL::GetString(IDS_PD_STARTER_CRANKTORUNTIME_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_edit, MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_aftstrstr_spin, MLL::GetString(IDS_PD_STARTER_AFTSTRSTR_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_primecold_edit, MLL::GetString(IDS_PD_STARTER_PRIMECOLD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_primecold_spin, MLL::GetString(IDS_PD_STARTER_PRIMECOLD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_primehot_edit, MLL::GetString(IDS_PD_STARTER_PRIMEHOT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_primehot_spin, MLL::GetString(IDS_PD_STARTER_PRIMEHOT_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_primedelay_edit, MLL::GetString(IDS_PD_STARTER_PRIMEDELAY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_primedelay_spin, MLL::GetString(IDS_PD_STARTER_PRIMEDELAY_EDIT_TT)));
+
+ mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
+ mp_ttc->ActivateToolTips(true);
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
