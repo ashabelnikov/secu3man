@@ -114,8 +114,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_ANGLES_MIN_ANGLE_EDIT,12,25,29,15,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,91,26,28,15,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEAD_EDIT,12,73,29,15,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEED_EDIT,12,73,29,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEED_EDIT,91,74,28,15,ES_AUTOHSCROLL
     CONTROL         "Нулев. уг.опер. (полезно для отладки)",
                     IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,6,106,65,29
@@ -132,15 +132,15 @@ BEGIN
     LTEXT           "град.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "град.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "град.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
-    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
+    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEED_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
-    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
+    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEED_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
-    LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,9
-    LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,9
-    LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,16
-    LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,138,72,20,16
-    GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
+    LTEXT           "Уменьшение",IDC_PD_ANGLES_DECREASE_SPEED_CAPTION,9,60,72,9
+    LTEXT           "Увеличение",IDC_PD_ANGLES_INCREASE_SPEED_CAPTION,87,60,74,9
+    LTEXT           "град./ такт",IDC_PD_ANGLES_DECREASE_SPEED_UNIT,60,71,22,16
+    LTEXT           "град./ такт",IDC_PD_ANGLES_INCREASE_SPEED_UNIT,138,72,20,16
+    GROUPBOX        "Скорость изменения УОЗ",IDC_PD_ANGLES_ANGLE_SPEED_GROUP,5,48,158,51
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -1072,8 +1072,8 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ANGLES_CORRECTION_EDIT_TT                "Значение, которое добавляется к УОЗ во всех режимах. Изменение данного значения аналогично повороту трамблера (или повороту датчика вокруг задающего диска)."
-    IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT            "Скорость уменьшения УОЗ в градусах за один такт двигателя."
-    IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT            "Скорость увеличения УОЗ в градусах за один такт двигателя."
+    IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Скорость уменьшения УОЗ в градусах за один такт двигателя."
+    IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Скорость увеличения УОЗ в градусах за один такт двигателя."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Разрешить работу регулятора если на входе GAS_V высокий уровень"
     IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД или ДПДЗ. Если выберите ДПДЗ, то это эквивалентно подлючению последнего вместо ДАД."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Выключать бензонасос при переходе на газ (высокий уровень на входе GAS_V)"
@@ -1281,8 +1281,8 @@ FONT 8, "MS Sans Serif"
 BEGIN
     EDITTEXT        IDC_PD_ANGLES_MIN_ANGLE_EDIT,12,25,29,15,ES_AUTOHSCROLL
     EDITTEXT        IDC_PD_ANGLES_MAX_ANGLE_EDIT,91,26,28,15,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEAD_EDIT,12,73,29,15,ES_AUTOHSCROLL
-    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEAD_EDIT,91,74,28,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_ANGLES_DECREASE_SPEED_EDIT,12,73,29,15,ES_AUTOHSCROLL
+    EDITTEXT        IDC_PD_ANGLES_INCREASE_SPEED_EDIT,91,74,28,15,ES_AUTOHSCROLL
     CONTROL         "Zero adv. angle (useful for check-out)",
                     IDC_PD_ANGLES_ZEROAA_CHECK,"Button",BS_AUTOCHECKBOX | 
                     BS_MULTILINE | WS_TABSTOP,7,109,61,23
@@ -1299,16 +1299,16 @@ BEGIN
     LTEXT           "degr.",IDC_PD_ANGLES_MIN_ANGLE_UNIT,60,25,20,11
     LTEXT           "degr.",IDC_PD_ANGLES_MAX_ANGLE_UNIT,138,26,20,11
     LTEXT           "degr.",IDC_PD_ANGLES_CORRECTION_UNIT,145,120,26,11
-    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEAD_SPIN,
+    CONTROL         "",IDC_PD_ANGLES_DECREASE_SPEED_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,45,72,11,16
-    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEAD_SPIN,
+    CONTROL         "",IDC_PD_ANGLES_INCREASE_SPEED_SPIN,
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,124,72,11,17
-    LTEXT           "Decrease",IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION,9,60,72,9
-    LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION,87,60,74,9
-    LTEXT           "degr./ stroke",IDC_PD_ANGLES_DECREASE_SPEAD_UNIT,60,71,22,16
-    LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEAD_UNIT,137,72,21,16
+    LTEXT           "Decrease",IDC_PD_ANGLES_DECREASE_SPEED_CAPTION,9,60,72,9
+    LTEXT           "Increase",IDC_PD_ANGLES_INCREASE_SPEED_CAPTION,87,60,74,9
+    LTEXT           "degr./ stroke",IDC_PD_ANGLES_DECREASE_SPEED_UNIT,60,71,22,16
+    LTEXT           "degr./ stroke",IDC_PD_ANGLES_INCREASE_SPEED_UNIT,137,72,21,16
     GROUPBOX        "Limitation of angle change speed",
-                    IDC_PD_ANGLES_ANGLE_SPEAD_GROUP,5,48,158,51
+                    IDC_PD_ANGLES_ANGLE_SPEED_GROUP,5,48,158,51
 END
 
 IDD_PD_FUNSET_PAGE DIALOGEX 0, 0, 177, 158
@@ -2271,8 +2271,8 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ANGLES_CORRECTION_EDIT_TT                "Value which is been added to ignition timing in all modes of engine operation. Changing of this value is equal to turning of distributor (or rotation of the sensor around the trigger wheel)."
-    IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT            "Specify decreasing speed of ignition timing in crankshaft degrees per one engine stroke."
-    IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT            "Specify increasing speed of ignition timing in crankshaft degrees per one engine stroke."
+    IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Specify decreasing speed of ignition timing in crankshaft degrees per one engine stroke."
+    IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Specify increasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Enable working of regulator when on the GAS_V input is high level"
     IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP or TPS. Selecting a TPS is equal to connecting it instead of MAP."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Turn off petrol fuel pump when switching ot gas (high level at the GAS_V input)"

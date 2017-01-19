@@ -72,8 +72,8 @@ typedef struct
  _uint  fuelcut_map_thrd;               // fuel cut MAP threshold
  _int   fuelcut_cts_thrd;               // fuel cut CTS threshold
 
- _int   angle_dec_spead;
- _int   angle_inc_spead;
+ _int   angle_dec_speed;
+ _int   angle_inc_speed;
  _int   max_angle;                      // ограничение максимального УОЗ
  _int   min_angle;                      // ограничение минимального УОЗ
  _int   angle_corr;                     // октан-коррекция УОЗ

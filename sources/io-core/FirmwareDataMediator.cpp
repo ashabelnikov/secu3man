@@ -933,8 +933,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->angle_corr = MathHelpers::Round(p_in->angle_corr * ANGLE_MULTIPLIER);
     p_params->max_angle  = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLIER);
     p_params->min_angle  = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLIER);
-    p_params->angle_dec_spead = MathHelpers::Round(p_in->dec_spead * ANGLE_MULTIPLIER);
-    p_params->angle_inc_spead = MathHelpers::Round(p_in->inc_spead * ANGLE_MULTIPLIER);
+    p_params->angle_dec_speed = MathHelpers::Round(p_in->dec_speed * ANGLE_MULTIPLIER);
+    p_params->angle_inc_speed = MathHelpers::Round(p_in->inc_speed * ANGLE_MULTIPLIER);
     p_params->zero_adv_ang = p_in->zero_adv_ang;
    }
    break;
@@ -1209,8 +1209,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->angle_corr = ((float)p_params->angle_corr) / ANGLE_MULTIPLIER;
      p_out->max_angle  = ((float)p_params->max_angle)  / ANGLE_MULTIPLIER;
      p_out->min_angle  = ((float)p_params->min_angle) / ANGLE_MULTIPLIER;
-     p_out->dec_spead = ((float)p_params->angle_dec_spead)  / ANGLE_MULTIPLIER;
-     p_out->inc_spead = ((float)p_params->angle_inc_spead)  / ANGLE_MULTIPLIER;
+     p_out->dec_speed = ((float)p_params->angle_dec_speed)  / ANGLE_MULTIPLIER;
+     p_out->inc_speed = ((float)p_params->angle_inc_speed)  / ANGLE_MULTIPLIER;
      p_out->zero_adv_ang = p_params->zero_adv_ang;
     }
     break;

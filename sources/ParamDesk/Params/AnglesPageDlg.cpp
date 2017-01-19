@@ -35,8 +35,8 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_MAX_ANGLE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ANGLES_CORRECTION_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_ANGLES_DECREASE_SPEED_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_ANGLES_INCREASE_SPEED_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_ANGLES_ZEROAA_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_MIN_ANGLE_EDIT, OnUpdateControls)
@@ -54,18 +54,18 @@ BEGIN_MESSAGE_MAP(CAnglesPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_CORRECTION_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_SPIN, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEAD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_DECREASE_SPEED_UNIT, OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_SPIN, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_CAPTION, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEAD_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEED_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEED_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEED_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_INCREASE_SPEED_UNIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ZEROAA_CHECK, OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ANGLE_SPEAD_GROUP, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ANGLES_ANGLE_SPEED_GROUP, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
@@ -74,14 +74,14 @@ CAnglesPageDlg::CAnglesPageDlg(CWnd* pParent /*=NULL*/)
 , m_max_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_min_angle_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
-, m_decrease_spead_edit(CEditEx::MODE_FLOAT, true)
-, m_increase_spead_edit(CEditEx::MODE_FLOAT, true)
+, m_decrease_speed_edit(CEditEx::MODE_FLOAT, true)
+, m_increase_speed_edit(CEditEx::MODE_FLOAT, true)
 {
  m_params.max_angle = 60.0f;
  m_params.min_angle = -15.0f;
  m_params.angle_corr = 0.0f;
- m_params.dec_spead = 3.0f;
- m_params.inc_spead = 3.0f;
+ m_params.dec_speed = 3.0f;
+ m_params.inc_speed = 3.0f;
  m_params.zero_adv_ang = 0;
 }
 
@@ -99,17 +99,17 @@ void CAnglesPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_ANGLES_MIN_ANGLE_EDIT, m_min_angle_edit);
  DDX_Control(pDX, IDC_PD_ANGLES_MAX_ANGLE_EDIT, m_max_angle_edit);
  DDX_Control(pDX, IDC_PD_ANGLES_CORRECTION_EDIT, m_correction_edit);
- DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, m_decrease_spead_edit);
- DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, m_increase_spead_edit);
- DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_SPIN, m_decrease_spead_spin);
- DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_SPIN, m_increase_spead_spin);
+ DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEED_EDIT, m_decrease_speed_edit);
+ DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEED_EDIT, m_increase_speed_edit);
+ DDX_Control(pDX, IDC_PD_ANGLES_DECREASE_SPEED_SPIN, m_decrease_speed_spin);
+ DDX_Control(pDX, IDC_PD_ANGLES_INCREASE_SPEED_SPIN, m_increase_speed_spin);
  DDX_Control(pDX, IDC_PD_ANGLES_ZEROAA_CHECK, m_zeroaa_check);
 
  m_max_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MAX_ANGLE_EDIT, m_params.max_angle);
  m_min_angle_edit.DDX_Value(pDX, IDC_PD_ANGLES_MIN_ANGLE_EDIT, m_params.min_angle);
  m_correction_edit.DDX_Value(pDX, IDC_PD_ANGLES_CORRECTION_EDIT, m_params.angle_corr);
- m_decrease_spead_edit.DDX_Value(pDX, IDC_PD_ANGLES_DECREASE_SPEAD_EDIT, m_params.dec_spead);
- m_increase_spead_edit.DDX_Value(pDX, IDC_PD_ANGLES_INCREASE_SPEAD_EDIT, m_params.inc_spead);
+ m_decrease_speed_edit.DDX_Value(pDX, IDC_PD_ANGLES_DECREASE_SPEED_EDIT, m_params.dec_speed);
+ m_increase_speed_edit.DDX_Value(pDX, IDC_PD_ANGLES_INCREASE_SPEED_EDIT, m_params.inc_speed);
  DDX_Check_UCHAR(pDX, IDC_PD_ANGLES_ZEROAA_CHECK, m_params.zero_adv_ang);
 }
 
@@ -144,17 +144,17 @@ BOOL CAnglesPageDlg::OnInitDialog()
  m_correction_spin.SetRangeAndDelta(-30.0f,30.0f,0.25f);
  m_correction_edit.SetRange(-30.0f,30.0f);
 
- m_decrease_spead_spin.SetBuddy(&m_decrease_spead_edit);
- m_decrease_spead_edit.SetLimitText(4);
- m_decrease_spead_edit.SetDecimalPlaces(2);
- m_decrease_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
- m_decrease_spead_edit.SetRange(0.0f,10.0f);
+ m_decrease_speed_spin.SetBuddy(&m_decrease_speed_edit);
+ m_decrease_speed_edit.SetLimitText(4);
+ m_decrease_speed_edit.SetDecimalPlaces(2);
+ m_decrease_speed_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
+ m_decrease_speed_edit.SetRange(0.0f,10.0f);
 
- m_increase_spead_spin.SetBuddy(&m_increase_spead_edit);
- m_increase_spead_edit.SetLimitText(4);
- m_increase_spead_edit.SetDecimalPlaces(2);
- m_increase_spead_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
- m_increase_spead_edit.SetRange(0.0f,10.0f);
+ m_increase_speed_spin.SetBuddy(&m_increase_speed_edit);
+ m_increase_speed_edit.SetLimitText(4);
+ m_increase_speed_edit.SetDecimalPlaces(2);
+ m_increase_speed_spin.SetRangeAndDelta(0.0f,10.0f,0.025f);
+ m_increase_speed_edit.SetRange(0.0f,10.0f);
 
  UpdateData(FALSE);
 
@@ -173,11 +173,11 @@ BOOL CAnglesPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_correction_edit,MLL::GetString(IDS_PD_ANGLES_CORRECTION_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_correction_spin,MLL::GetString(IDS_PD_ANGLES_CORRECTION_EDIT_TT)));
  //decreasing speed
- VERIFY(mp_ttc->AddWindow(&m_decrease_spead_edit,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_decrease_spead_spin,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_decrease_speed_edit,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_decrease_speed_spin,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT)));
  //increasing speed
- VERIFY(mp_ttc->AddWindow(&m_increase_spead_edit,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_increase_spead_spin,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_increase_speed_edit,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_increase_speed_spin,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(true);

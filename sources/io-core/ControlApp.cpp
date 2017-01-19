@@ -613,16 +613,16 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
  m_AnglesPar.angle_corr = ((float)angle_corr) / m_angle_multiplier;
 
  //Скорость уменьшения УОЗ (число со знаком)
- int dec_spead;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&dec_spead,true))
+ int dec_speed;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&dec_speed,true))
   return false;
- m_AnglesPar.dec_spead = ((float)dec_spead) / m_angle_multiplier;
+ m_AnglesPar.dec_speed = ((float)dec_speed) / m_angle_multiplier;
 
 //Скорость увеличения УОЗ (число со знаком)
- int inc_spead;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&inc_spead,true))
+ int inc_speed;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&inc_speed,true))
   return false;
- m_AnglesPar.inc_spead = ((float)inc_spead) / m_angle_multiplier;
+ m_AnglesPar.inc_speed = ((float)inc_speed) / m_angle_multiplier;
 
  //Признак нулевого УОЗ
  if (false == mp_pdp->Hex4ToBin(raw_packet, &m_AnglesPar.zero_adv_ang))
@@ -2384,10 +2384,10 @@ void CControlApp::Build_ANGLES_PAR(AnglesPar* packet_data)
  mp_pdp->Bin16ToHex(min_angle,m_outgoing_packet);
  int angle_corr = MathHelpers::Round(packet_data->angle_corr * m_angle_multiplier);
  mp_pdp->Bin16ToHex(angle_corr,m_outgoing_packet);
- int dec_spead = MathHelpers::Round(packet_data->dec_spead * m_angle_multiplier);
- mp_pdp->Bin16ToHex(dec_spead,m_outgoing_packet);
- int inc_spead = MathHelpers::Round(packet_data->inc_spead * m_angle_multiplier);
- mp_pdp->Bin16ToHex(inc_spead,m_outgoing_packet);
+ int dec_speed = MathHelpers::Round(packet_data->dec_speed * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(dec_speed,m_outgoing_packet);
+ int inc_speed = MathHelpers::Round(packet_data->inc_speed * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(inc_speed,m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->zero_adv_ang, m_outgoing_packet);
 }
 

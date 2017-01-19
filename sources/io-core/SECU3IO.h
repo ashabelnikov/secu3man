@@ -114,8 +114,8 @@ namespace SECU3IO
   float  max_angle;
   float  min_angle;
   float  angle_corr;
-  float  dec_spead;
-  float  inc_spead;
+  float  dec_speed;
+  float  inc_speed;
   unsigned char zero_adv_ang;
  };
 
@@ -506,7 +506,7 @@ namespace SECU3IO
 
  //Это маленькая база данных хранящая скорости UART-a SECU-3 и соответствующие им делители.
  const int SECU3_ALLOWABLE_UART_DIVISORS_COUNT = 8;
- //<spead, divisor>
+ //<speed, divisor>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_allowable_uart_divisors[SECU3_ALLOWABLE_UART_DIVISORS_COUNT] =
  {

@@ -65,13 +65,13 @@ class CAnglesPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_min_angle_spin;
   CSpinButtonCtrlEx m_max_angle_spin;
   CSpinButtonCtrlEx m_correction_spin;
-  CSpinButtonCtrlEx m_decrease_spead_spin;
-  CSpinButtonCtrlEx m_increase_spead_spin;
+  CSpinButtonCtrlEx m_decrease_speed_spin;
+  CSpinButtonCtrlEx m_increase_speed_spin;
   CEditEx m_min_angle_edit;
   CEditEx m_max_angle_edit;
   CEditEx m_correction_edit;
-  CEditEx m_decrease_spead_edit;
-  CEditEx m_increase_spead_edit;
+  CEditEx m_decrease_speed_edit;
+  CEditEx m_increase_speed_edit;
   CButton m_zeroaa_check;
 
 };
