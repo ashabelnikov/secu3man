@@ -134,7 +134,11 @@ BOOL CSecurPageDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_bt_apply_button, MLL::GetString(IDS_PD_SECUR_BT_APPLY_BUTTON_TT)));
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ //check boxes
+ VERIFY(mp_ttc->AddWindow(&m_bt_use_check, MLL::GetString(IDS_PD_SECUR_BT_USE_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_imm_use_check, MLL::GetString(IDS_PD_SECUR_IMM_USE_CHECK_TT)));
+
+ mp_ttc->SetMaxTipWidth(150); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  UpdateData(FALSE);

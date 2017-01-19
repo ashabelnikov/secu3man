@@ -228,7 +228,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_turn_on_temp_spin, MLL::GetString(IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_use_regulator, MLL::GetString(IDS_PD_IDLREG_USE_REGULATOR_TT)));
-
+ VERIFY(mp_ttc->AddWindow(&m_use_regongas, MLL::GetString(IDS_PD_IDLREG_USE_ONGAS_TT)));
+ 
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
 

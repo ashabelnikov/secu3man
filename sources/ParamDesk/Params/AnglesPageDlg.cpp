@@ -169,6 +169,15 @@ BOOL CAnglesPageDlg::OnInitDialog()
  //maximum advance angle edit and spin
  VERIFY(mp_ttc->AddWindow(&m_max_angle_edit,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_max_angle_spin,MLL::GetString(IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT)));
+ //octane correction
+ VERIFY(mp_ttc->AddWindow(&m_correction_edit,MLL::GetString(IDS_PD_ANGLES_CORRECTION_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_correction_spin,MLL::GetString(IDS_PD_ANGLES_CORRECTION_EDIT_TT)));
+ //decreasing speed
+ VERIFY(mp_ttc->AddWindow(&m_decrease_spead_edit,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_decrease_spead_spin,MLL::GetString(IDS_PD_ANGLES_DECREASE_SPEAD_EDIT_TT)));
+ //increasing speed
+ VERIFY(mp_ttc->AddWindow(&m_increase_spead_edit,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_increase_spead_spin,MLL::GetString(IDS_PD_ANGLES_INCREASE_SPEAD_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //enable text wrapping by setting width
  mp_ttc->ActivateToolTips(true);

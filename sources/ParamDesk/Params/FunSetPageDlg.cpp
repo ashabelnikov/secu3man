@@ -226,6 +226,8 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_load_src_combo, MLL::GetString(IDS_PD_FUNSET_LOAD_SRC_COMBO_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 

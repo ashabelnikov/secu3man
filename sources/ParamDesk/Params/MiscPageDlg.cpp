@@ -205,6 +205,15 @@ BOOL CMiscPageDlg::OnInitDialog()
  //ignition cut off check
  VERIFY(mp_ttc->AddWindow(&m_igncutoff_check,MLL::GetString(IDS_PD_MISC_IGNCUTOFF_CHECK_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_flpmp_offongas_check,MLL::GetString(IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_offongas_check,MLL::GetString(IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT)));
+    
+ VERIFY(mp_ttc->AddWindow(&m_hop_start_edit, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hop_start_spin, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_hop_durat_edit, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hop_durat_spin, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 

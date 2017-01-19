@@ -264,6 +264,10 @@ BOOL CChokePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_strt_add_tmp_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
+ //check boxes
+ VERIFY(mp_ttc->AddWindow(&m_offstrtadd_ongas_check, MLL::GetString(IDS_PD_CHOKE_OFFSTRTADDONGAS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_offrpmreg_ongas_check, MLL::GetString(IDS_PD_CHOKE_OFFRPMREGONGAS_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_usethrottle_pos_check, MLL::GetString(IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
