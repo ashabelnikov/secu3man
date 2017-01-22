@@ -96,6 +96,7 @@ class TForm3D : public TForm
   TMenuItem *PM_ZeroAllCurves;
   TMenuItem *PM_DupThisCurve;
   TMenuItem *PM_BldShapeUsing1stAndLastCurves;
+  TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
 
   TMenuItem *PM_CopyToCurve;

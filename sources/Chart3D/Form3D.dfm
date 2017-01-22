@@ -1099,6 +1099,9 @@ object Form3D: TForm3D
       Caption = 'Build shape using 1st and last curves'
       OnClick = OnBuildShapeUsing1stAndLastCurves
     end
+    object Separator1: TMenuItem
+      Caption = '-'
+    end
     object PM_SetPtMovStep: TMenuItem
       Caption = 'Points moving step...'
       OnClick = OnSetPtMovStep

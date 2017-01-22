@@ -68,6 +68,7 @@ enum ELanguage
 };
 
 HINSTANCE hInst = NULL;
+extern volatile BYTE info[116];
 
 namespace MLL
 {
@@ -123,6 +124,9 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //---------------------------------------------------------------------------
 HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode)
 {
+  if (info[0]!=0x53)
+   return NULL;
+
  //Clean up previous instances of forms
  for(size_t i = 0; i < g_form_delete.size(); ++i)
   delete g_form_delete[i];

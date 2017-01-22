@@ -62,6 +62,7 @@ enum ELanguage
 };
 
 HINSTANCE hInst = NULL;
+extern volatile BYTE info[116];
 
 namespace MLL
 {
@@ -120,6 +121,9 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 //original_function and modified_function - addresses of 2D arrays containing values of functions
 HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
+ if (info[0]!=0x53)
+  return NULL;
+
  //Clean up previous instances of forms
  for(size_t i = 0; i < g_form_delete.size(); ++i)
   delete g_form_delete[i];

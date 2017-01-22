@@ -61,6 +61,7 @@ class TForm2D : public TForm
   TMenuItem *PM_ZeroAllPoints;
   TMenuItem *PM_Dup1stPoint;
   TMenuItem *PM_BldCurveUsing1stAndLastPoints;
+  TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
