@@ -219,7 +219,7 @@ class IOCORE_API CFirmwareDataMediator
    IOP_IAC_PWM    =  59,     // IAC_PWM     (output)
    IOP_GD_DIR     =  60,     // GD_DIR      (output)
    IOP_GD_STP     =  61,     // GD_STP      (output)
-// IOP_RESERVED23 =  62,     // Reserved    ()
+   IOP_GD_PWM     =  62,     // GD_PWM      (output)
 // IOP_RESERVED24 =  63,     // Reserved    ()
 // IOP_RESERVED25 =  64,     // Reserved    ()
 // IOP_RESERVED26 =  65,     // Reserved    ()
@@ -279,7 +279,8 @@ class IOCORE_API CFirmwareDataMediator
   enum IORemVer
   {
    IOV_V23 = 0x23,           //V2.3
-   IOV_V24 = 0x24            //V2.4  CKPS remapping added, gas dose outputs
+   IOV_V24 = 0x24,           //V2.4  CKPS remapping added, gas dose outputs
+   IOV_V25 = 0x25,           //V2.5  GD_PWM plug added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

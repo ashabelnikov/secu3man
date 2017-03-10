@@ -286,6 +286,9 @@ void CFWIORemappingController::_PrepareLogic(void)
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT1, _T("UNI_OUT2"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_UNI_OUT2, _T("UNI_OUT3"));
  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_IAC_PWM, _T("IAC_PWM"));
+ if (iov >= FWDM::IOV_V25)
+  mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_GD_PWM,  _T("GD_PWM"));
+
  if (iov >= FWDM::IOV_V24) { 
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_GD_DIR, _T("GD_DIR"));
   mp_view->AddItem(FWDM::IOS_ECF, FWDM::IOP_GD_STP, _T("GD_STP"));
