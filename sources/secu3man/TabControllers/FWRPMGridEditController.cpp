@@ -40,7 +40,7 @@ using namespace fastdelegate;
 
 static const size_t itemNumber = 16;
 static const float gridMinStep = 100;
-static const float gridMinValue = 600;
+static const float gridMinValue = 300;
 static const float gridMaxValue = 15000;
 
 CFWRPMGridEditController::CFWRPMGridEditController()
