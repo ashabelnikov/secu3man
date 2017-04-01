@@ -289,9 +289,15 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    //Collect initial data
    if (mp_idccntr->CollectData(i_descriptor, ip_packet))
    {
-    mp_view->EnableEnterButton((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0);
+    bool enableEnterBtn = (mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0;
+    mp_view->EnableEnterButton(enableEnterBtn);
     mp_view->EnableSECU3TFeatures((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
     m_comm_state = 2;
+    if (enableEnterBtn && mp_settings->GetAutoDiagEnter())
+    { //automatic entering into a diagnostic mode
+     mp_view->SetEnterButton(true);
+     OnEnterButton();
+    }
    }
    break; 
   case 2:

@@ -62,6 +62,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MAPAverage(_T("MAPAverage"))
 , m_Name_AI1Average(_T("AI1Average"))
 , m_Name_AllowVisualTheme(_T("AllowVisualTheme"))
+, m_Name_AutoDiagEnter(_T("AutoDiagEnter"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -521,6 +522,21 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optAllowVisualTheme = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_AutoDiagEnter,_T("0"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optAutoDiagEnter = 0;
+ }
+ else
+ {
+  m_optAutoDiagEnter = i_val;
+ }
+
+
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
  {\
@@ -767,6 +783,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optAllowVisualTheme);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optAutoDiagEnter);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_AutoDiagEnter,write_str,IniFileName);
 
  //Positions of windows
  WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
@@ -1188,4 +1208,9 @@ int CAppSettingsModel::GetAI1Average(void) const
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
 {
  return m_optAllowVisualTheme;
+}
+
+bool CAppSettingsModel::GetAutoDiagEnter(void) const
+{
+ return m_optAutoDiagEnter;
 }
