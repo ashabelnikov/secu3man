@@ -282,6 +282,44 @@ void EEPROMDataMediator::GetAftstrMap(int i_index, float* op_values, bool i_orig
   op_values[i] = ((float)p_maps[i_index].inj_aftstr[i]) / AFTSTR_MAPS_M_FACTOR;
 }
 
+
+void EEPROMDataMediator::GetITMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
+ {
+  _uchar *p = &(p_maps[i_index].inj_timing[0][0]);
+  int value = *(p + i);
+  op_values[i] = ((float)value) * 3.0f;
+ }
+}
+
+void EEPROMDataMediator::GetITRPMMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_target_rpm[i]) * 10;
+}
+
+void EEPROMDataMediator::GetRigidMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_idl_rigidity[i]) / 128.0f;
+}
+
 std::vector<_TSTRING> EEPROMDataMediator::GetFunctionsSetNames(void)
 {
  std::vector<_TSTRING> names(TUNABLE_TABLES_NUMBER);

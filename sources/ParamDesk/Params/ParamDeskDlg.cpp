@@ -653,6 +653,7 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_pCarburPageDlg->EnableFuelInjection(i_enable);
  m_pChokePageDlg->EnableFuelInjection(i_enable);
  m_pMiscPageDlg->EnableFuelInjection(i_enable);
+ m_pIdlRegPageDlg->EnableFuelInjection(i_enable);
 }
 
 void CParamDeskDlg::EnableGasdose(bool i_enable)

@@ -60,7 +60,10 @@ typedef struct
 
  _uchar inj_timing[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // Injection timing
 
- _uchar reserved[446];                                 // reserved bytes - for compatibility
+ _uchar inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];     // Target RPM on idling function
+ _uint  inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE]; // Idling regulator's rigidity function
+
+ _uchar reserved[414];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 } //SECU3IO

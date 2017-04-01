@@ -51,8 +51,12 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,291,96,18
     CONTROL         "Фаза впрыска",IDC_TD_VIEW_IT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,311,96,18
+    CONTROL         "Обороты ХХ",IDC_TD_VIEW_ITRPM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,331,96,18
+    CONTROL         "Жесткость РХХ",IDC_TD_VIEW_RIGID_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,351,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,330,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,370,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -60,7 +64,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,217,235
+    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,210,257
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
@@ -97,24 +101,28 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,190,96,18
     CONTROL         "Фаза впрыска",IDC_TD_VIEW_IT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,212,82,18
+    CONTROL         "Обороты ХХ",IDC_TD_VIEW_ITRPM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,212,96,18
+    CONTROL         "Жесткость РХХ",IDC_TD_VIEW_RIGID_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,234,82,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW |
-                    BS_BITMAP | WS_TABSTOP,3,244,16,19
+                    BS_BITMAP | WS_TABSTOP,3,271,16,19
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,271,82,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,244,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,271,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,266,16,19
+                    BS_BITMAP | WS_TABSTOP,3,293,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,266,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,293,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,266,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,293,95,19
     CONTROL         "Настр. крив. ДТВ",IDC_TD_VIEW_ATS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,288,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,315,82,19
     CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,288,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,315,95,19
     CONTROL         "Полож. доз. газа",IDC_TD_VIEW_GDP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,310,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,337,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -330,6 +338,7 @@ BEGIN
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_MAPS_INJTIM_UNIT    "Фаза впрыска (град. до ВМТ)"
     IDS_MAPS_GDP_UNIT       "Полож. газ. дозатора (%)"
+    IDS_MAPS_COEFF_UNIT     "Коэффициент"
     IDS_START_MAP           "Пусковая карта УОЗ"
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
     IDS_WORK_MAP            "Рабочая карта УОЗ"
@@ -345,6 +354,8 @@ BEGIN
     IDS_IDLC_MAP            "Положение РХХ на пуске"
     IDS_AETPS_MAP           "Обогащение в зависимости от скорости дроссельной заслонки"
     IDS_AERPM_MAP           "Обогащение в зависимости от оборотов двигателя"
+    IDS_ITRPM_MAP           "Обороты ХХ (closed loop)"
+    IDS_RIGID_MAP           "Функция жесткости регулятора"
     IDS_TEMPCORR_MAP        "Карта коррекции УОЗ по температуре охлаждающей жидкости"
     IDS_ATSCORR_MAP         "Карта коррекции УОЗ по температуре вохдуха"
     IDS_MAPS_TEMPERATURE_UNIT "Температура °C"
@@ -408,8 +419,12 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,291,96,18
     CONTROL         "Injection timing",IDC_TD_VIEW_IT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,311,96,18
+    CONTROL         "Idling RPM",IDC_TD_VIEW_ITRPM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,331,96,18
+    CONTROL         "IAC reg. rigidity",IDC_TD_VIEW_RIGID_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,351,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,330,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,370,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -417,7 +432,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,217,235
+    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,210,257
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
@@ -454,24 +469,28 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,190,96,18
     CONTROL         "Injection timing",IDC_TD_VIEW_IT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,212,82,18
+    CONTROL         "Idling RPM",IDC_TD_VIEW_ITRPM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,212,96,18
+    CONTROL         "IAC reg. rigidity",IDC_TD_VIEW_RIGID_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,234,82,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,244,16,19
+                    BS_BITMAP | WS_TABSTOP,3,271,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,244,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,271,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,244,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,271,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,266,16,19
+                    BS_BITMAP | WS_TABSTOP,3,293,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,266,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,293,82,19
     CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,266,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,293,95,19
     CONTROL         "Tune ATS curve",IDC_TD_VIEW_ATS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,288,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,315,82,19
     CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,288,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,315,95,19
     CONTROL         "Gas dose pos.",IDC_TD_VIEW_GDP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,310,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,337,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -704,6 +723,7 @@ BEGIN
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_MAPS_INJTIM_UNIT    "Injection timing (degr. BTDC)"
     IDS_MAPS_GDP_UNIT       "Gas dose pos. (%)"
+    IDS_MAPS_COEFF_UNIT     "Coefficient"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
     IDS_WORK_MAP            "Work angle map"
@@ -719,6 +739,8 @@ BEGIN
     IDS_IDLC_MAP            "IAC position on cranking"
     IDS_AETPS_MAP           "Enrichment vs throttle movement speed"
     IDS_AERPM_MAP           "Enrichment vs engine speed"
+    IDS_ITRPM_MAP           "Idling RPM (closed loop)"
+    IDS_RIGID_MAP           "Idling regulator's rigidity function"
     IDS_TEMPCORR_MAP        "Coolant temperature angle's correction map"
     IDS_ATSCORR_MAP         "Intake air temperature angle's correction map"
     IDS_MAPS_TEMPERATURE_UNIT "Temperature °C"
@@ -745,14 +767,14 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,6,0,0
+  PRODUCTVERSION    4,7,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2017 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END

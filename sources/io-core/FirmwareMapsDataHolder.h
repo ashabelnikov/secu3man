@@ -54,6 +54,8 @@
 #define INJ_AE_TPS_LOOKUP_TABLE_SIZE 8
 #define INJ_AE_RPM_LOOKUP_TABLE_SIZE 4
 #define INJ_AFTSTR_LOOKUP_TABLE_SIZE 16
+#define INJ_TARGET_RPM_TABLE_SIZE 16
+#define INJ_IDL_RIGIDITY_TABLE_SIZE 8
 
 //количество наборов характеристик хранимых в пам€ти программ
 #define TABLES_NUMBER          4
@@ -80,6 +82,8 @@ struct SECU3FWMapsItem
  float inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // bins and values of the AE's RPM lookup table
  float inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE]; //afterstart enrichment vs coolant temperature
  float inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F]; // Injection timing
+ float inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE]; //Target RPM on idling
+ float inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE]; //Idling regulator's rigidity
 };
 
 //јппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -100,7 +104,7 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
+  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);

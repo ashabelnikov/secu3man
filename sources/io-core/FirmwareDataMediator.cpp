@@ -865,6 +865,50 @@ void CFirmwareDataMediator::SetITMap(int i_index, const float* ip_values)
  }
 }
 
+void CFirmwareDataMediator::GetITRPMMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_target_rpm[i]) * 10;
+}
+
+void CFirmwareDataMediator::SetITRPMMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_target_rpm[i] = MathHelpers::Round((ip_values[i] / 10.0));
+}
+
+void CFirmwareDataMediator::GetRigidMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_idl_rigidity[i]) / 128.0f;
+}
+
+void CFirmwareDataMediator::SetRigidMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; i++ )
+  p_fd->tables[i_index].inj_idl_rigidity[i] = MathHelpers::Round((ip_values[i] * 128.0f));
+}
+
 
 // Write specified bit into a 8-bit variable
 // variable - Variable
@@ -918,6 +962,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     IdlRegPar* p_in = (IdlRegPar*)ip_values;
     WRITEBIT8(p_params->idl_flags, 0, p_in->idl_regul);
     WRITEBIT8(p_params->idl_flags, 1, p_in->use_regongas);
+    WRITEBIT8(p_params->idl_flags, 2, p_in->closed_loop);   
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
     p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLIER);
@@ -925,6 +970,15 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->idlreg_min_angle = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLIER);
     p_params->idlreg_max_angle = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLIER);
     p_params->idlreg_turn_on_temp = MathHelpers::Round(p_in->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    //closed loop parameters:
+    p_params->idl_to_run_add = MathHelpers::Round(p_in->idl_to_run_add * 2.0f);
+    p_params->rpm_on_run_add = MathHelpers::Round(p_in->rpm_on_run_add / 10.0f);
+    p_params->idl_reg_p = MathHelpers::Round(p_in->idl_reg_p * 256.0f);
+    p_params->idl_reg_i = MathHelpers::Round(p_in->idl_reg_i * 256.0f);
+    p_params->idl_coef_thrd1 = MathHelpers::Round(p_in->idl_coef_thrd1 * 128.0f);
+    p_params->idl_coef_thrd2 = MathHelpers::Round(p_in->idl_coef_thrd2 * 128.0f);
+    p_params->idl_intrpm_lim = MathHelpers::Round(p_in->idl_intrpm_lim / 10.0f);
+    p_params->idl_map_value = MathHelpers::Round(p_in->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
    break;
   case ANGLES_PAR:
@@ -1194,6 +1248,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      IdlRegPar* p_out = (IdlRegPar*)op_values;
      p_out->idl_regul  = (p_params->idl_flags & 0x1) != 0;
      p_out->use_regongas  = (p_params->idl_flags & 0x2) != 0;
+     p_out->closed_loop = (p_params->idl_flags & 0x4) != 0;
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
      p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLIER;
@@ -1201,6 +1256,15 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->min_angle  = ((float)p_params->idlreg_min_angle) / ANGLE_MULTIPLIER;
      p_out->max_angle  = ((float)p_params->idlreg_max_angle) / ANGLE_MULTIPLIER;
      p_out->turn_on_temp = ((float)p_params->idlreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     //Closed loop parameters:
+     p_out->idl_to_run_add = ((float)p_params->idl_to_run_add) / 2.0f;
+     p_out->rpm_on_run_add = p_params->rpm_on_run_add * 10;
+     p_out->idl_reg_p = ((float)p_params->idl_reg_p) / 256.0f;
+     p_out->idl_reg_i = ((float)p_params->idl_reg_i) / 256.0f;
+     p_out->idl_coef_thrd1 = ((float)p_params->idl_coef_thrd1) / 128.0f;
+     p_out->idl_coef_thrd2 = ((float)p_params->idl_coef_thrd2) / 128.0f;
+     p_out->idl_intrpm_lim = p_params->idl_intrpm_lim * 10;
+     p_out->idl_map_value = ((float)p_params->idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
     break;
    case ANGLES_PAR:

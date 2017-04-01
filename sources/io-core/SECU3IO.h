@@ -144,6 +144,16 @@ namespace SECU3IO
   float min_angle;
   float max_angle;
   float turn_on_temp;                   //idling regulator turn on temperature
+
+  bool closed_loop;                     //use closed loop mode (fuel injection only)
+  float idl_to_run_add;                 //Value (in %) added to IAC position when exiting from closed loop
+  int rpm_on_run_add;                   //Value added to target RPM when vehicle starts to run
+  float idl_reg_p;                      //IAC closeed loop proportional coefficient
+  float idl_reg_i;                      //IAC closed loop integral coefficient
+  float idl_coef_thrd1;                 //coefficient for calculating closed loop entering RPM threshold
+  float idl_coef_thrd2;                 //coefficient for calculating closed loop leaving RPM threshold
+  int  idl_intrpm_lim;                  //RPM error limit for integrator
+  float idl_map_value;                  //intake manifold pressure on idling
  };
 
  struct CarburPar
@@ -293,6 +303,8 @@ namespace SECU3IO
  const int ETMT_AERPM_MAP = 13;         //AE RPM map
  const int ETMT_AFTSTR_MAP = 14;        //afterstart enrichment
  const int ETMT_IT_MAP   = 15;          //injection timing
+ const int ETMT_ITRPM_MAP = 16;         //Idling RPM
+ const int ETMT_RIGID_MAP = 17;         //Idl. regulator's rigidity
 
  struct SepTabPar
  {
@@ -559,6 +571,8 @@ namespace SECU3IO
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
  const float choke_op_map_slots[16]  = {-5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
+
+ const float rigid_map_slots[8]  = {1,2,3,4,5,6,7,8};
 
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
  //<bitnumber, name>

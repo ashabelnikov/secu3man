@@ -232,3 +232,8 @@
 #define IDS_MAPS_INJTIM_UNIT            5491
 #define IDS_IT_MAP                      5492
 #define IDS_GDP_MAP                     5493
+#define IDC_TD_VIEW_ITRPM_MAP           5494
+#define IDC_TD_VIEW_RIGID_MAP           5495
+#define IDS_MAPS_COEFF_UNIT             5496
+#define IDS_ITRPM_MAP                   5497
+#define IDS_RIGID_MAP                   5498

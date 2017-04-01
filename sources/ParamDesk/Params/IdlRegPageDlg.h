@@ -48,6 +48,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableFuelInjection(bool i_enable);
 
   void GetValues(SECU3IO::IdlRegPar* o_values);
   void SetValues(const SECU3IO::IdlRegPar* i_values);
@@ -59,6 +60,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -67,9 +69,11 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   SECU3IO::IdlRegPar m_params;
   bool m_enabled;
+  bool m_fuel_injection;
 
   CButton m_use_regulator;
   CButton m_use_regongas;
+  CButton m_use_closedloop;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;
@@ -84,4 +88,21 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_restriction_max_edit;
   CSpinButtonCtrlEx m_turn_on_temp_spin;
   CEditEx m_turn_on_temp_edit;
+  //closed loop parameters
+  CSpinButtonCtrlEx m_idltorunadd_spin;
+  CEditEx m_idltorunadd_edit;
+  CSpinButtonCtrlEx m_rpmonrunadd_spin;
+  CEditEx m_rpmonrunadd_edit;
+  CSpinButtonCtrlEx m_idlregp_spin;
+  CEditEx m_idlregp_edit;
+  CSpinButtonCtrlEx m_idlregi_spin;
+  CEditEx m_idlregi_edit;
+  CSpinButtonCtrlEx m_coeffthrd1_spin;
+  CEditEx m_coeffthrd1_edit;
+  CSpinButtonCtrlEx m_coeffthrd2_spin;
+  CEditEx m_coeffthrd2_edit;
+  CSpinButtonCtrlEx m_intrpmlim_spin;
+  CEditEx m_intrpmlim_edit;
+  CSpinButtonCtrlEx m_mapvalue_spin;
+  CEditEx m_mapvalue_edit;
 };

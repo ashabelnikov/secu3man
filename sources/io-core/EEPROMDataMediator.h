@@ -72,6 +72,9 @@ class IOCORE_API EEPROMDataMediator
   void GetAETPSMap(int i_index, float* o_values, bool i_original = false);
   void GetAERPMMap(int i_index, float* o_values, bool i_original = false);
   void GetAftstrMap(int i_index, float* o_values, bool i_original = false);
+  void GetITMap(int i_index, float* op_values, bool i_original = false);
+  void GetITRPMMap(int i_index, float* op_values, bool i_original = false);
+  void GetRigidMap(int i_index, float* op_values, bool i_original = false);
 
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);

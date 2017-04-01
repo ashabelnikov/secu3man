@@ -833,6 +833,9 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
+
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
@@ -1088,6 +1091,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(false),false);
  m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(true),true);
+
+ m_fwdm->GetITRPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetITRPMMap(false),false);
+ m_fwdm->GetITRPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetITRPMMap(true),true);
+
+ m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(false),false);
+ m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1189,6 +1198,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_IT:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetITMap(m_current_funset_index, m_view->mp_TablesPanel->GetITMap(false));
+   break;
+  case TYPE_MAP_INJ_ITRPM:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetITRPMMap(m_current_funset_index, m_view->mp_TablesPanel->GetITRPMMap(false));
+   break;
+  case TYPE_MAP_INJ_RIGID:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetRigidMap(m_current_funset_index, m_view->mp_TablesPanel->GetRigidMap(false));
    break;
 
    //separate maps
@@ -1576,6 +1593,15 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_ITMapWnd_X = rc.left;
    ws.m_ITMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_ITRPM:
+   ws.m_ITRPMMapWnd_X = rc.left;
+   ws.m_ITRPMMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_INJ_RIGID:
+   ws.m_RigidMapWnd_X = rc.left;
+   ws.m_RigidMapWnd_Y = rc.top;
+   break;
+
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
    ws.m_GridMapWnd_Y = rc.top;
@@ -1662,6 +1688,12 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_IT:
    X = ws.m_ITMapWnd_X, Y = ws.m_ITMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_ITRPM:
+   X = ws.m_ITRPMMapWnd_X, Y = ws.m_ITRPMMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_RIGID:
+   X = ws.m_RigidMapWnd_X, Y = ws.m_RigidMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

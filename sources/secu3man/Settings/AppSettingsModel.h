@@ -140,6 +140,10 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_GasdoseMapWnd_Y;
   const CString m_Name_ITMapWnd_X;
   const CString m_Name_ITMapWnd_Y;
+  const CString m_Name_ITRPMMapWnd_X;
+  const CString m_Name_ITRPMMapWnd_Y;
+  const CString m_Name_RigidMapWnd_X;
+  const CString m_Name_RigidMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -263,6 +267,10 @@ class CAppSettingsModel : public ISettingsData
   int m_optGasdoseMapWnd_Y;
   int m_optITMapWnd_X;
   int m_optITMapWnd_Y;
+  int m_optITRPMMapWnd_X;
+  int m_optITRPMMapWnd_Y;
+  int m_optRigidMapWnd_X;
+  int m_optRigidMapWnd_Y;
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;

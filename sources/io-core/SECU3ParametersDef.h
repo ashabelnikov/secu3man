@@ -206,10 +206,19 @@ typedef struct
 
  _uchar  load_src_cfg;                  // Engine load source 
 
+ _uchar  idl_to_run_add;                // Value (in %) added to IAC position when exiting from closed loop (value * 2)
+ _uchar  rpm_on_run_add;                // Value added to target RPM when vehicle starts to run (min-1, value / 10)
+ _uint   idl_reg_p;                     // IAC closeed loop proportional coefficient (value * 256, max 5.0)
+ _uint   idl_reg_i;                     // IAC closed loop integral coefficient (value * 256, max 5.0)
+ _uchar  idl_coef_thrd1;                // coefficient for calculating closed loop entering RPM threshold (value * 128, max 2.0)
+ _uchar  idl_coef_thrd2;                // coefficient for calculating closed loop leaving RPM threshold (value * 128, max 2.0)
+ _uchar  idl_intrpm_lim;                // RPM error limit for integrator (min-1, value / 10, max 1200)
+ _uint   idl_map_value;                 // intake manifold pressure on idling (kPa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[63];
+ _uchar reserved[52];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

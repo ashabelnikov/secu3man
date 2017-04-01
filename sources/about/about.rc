@@ -103,20 +103,20 @@ IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 STRINGTABLE DISCARDABLE 
 BEGIN
  IDS_SOFTWARE_INFO       "SECU-3 Manager v%d.%d. Build [%s]"
- IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n             Ukraine, Kiev, Copyright © 2007-2016\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
+ IDS_AUTHOR_INFO         "            Created by Alexey A. Shabelnikov \r\n             Ukraine, Kiev, Copyright © 2007-2017\r\n\r\n\r\n    This software utility is a part of SECU-3 project.\r\nYou  can obtain  latest  version  and source  code\r\n at the following location: \r\n     https://github.com/ashabelnikov/secu3man\r\n\r\n                     http://secu-3.org\r\n            email: shabelnikov@secu-3.org\r\n"
 END
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,6,0,0
+  PRODUCTVERSION    4,7,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2017 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END

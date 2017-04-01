@@ -694,7 +694,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 30 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 52 : 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -704,6 +704,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 
  m_IdlRegPar.idl_regul = (idl_flags & 0x1) != 0;
  m_IdlRegPar.use_regongas = (idl_flags & 0x2) != 0;
+ m_IdlRegPar.closed_loop = (idl_flags & 0x4) != 0;
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -742,6 +743,56 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&turn_on_temp,true))
   return false;
  m_IdlRegPar.turn_on_temp = ((float)turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //CLOSED LOOP PARAMETERS (FUEL INJECTION)
+
+ //Value (in %) added to IAC position when exiting from closed loop
+ unsigned char idl_to_run_add = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_to_run_add))
+  return false;
+ m_IdlRegPar.idl_to_run_add = ((float)idl_to_run_add) / 2.0f;
+
+ //Value added to target RPM when vehicle starts to run
+ unsigned char rpm_on_run_add = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &rpm_on_run_add))
+  return false;
+ m_IdlRegPar.rpm_on_run_add = rpm_on_run_add * 10;
+
+ //IAC closeed loop proportional coefficient
+ int idl_reg_p = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_p))
+  return false;
+ m_IdlRegPar.idl_reg_p = ((float)idl_reg_p) / 256.0f;
+
+ //IAC closed loop integral coefficient
+ int idl_reg_i = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_reg_i))
+  return false;
+ m_IdlRegPar.idl_reg_i = ((float)idl_reg_i) / 256.0f;
+
+ //coefficient for calculating closed loop entering RPM threshold
+ unsigned char idl_coef_thrd1 = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd1))
+  return false;
+ m_IdlRegPar.idl_coef_thrd1 = ((float)idl_coef_thrd1) / 128.0f;
+
+ //coefficient for calculating closed loop leaving RPM threshold
+ unsigned char idl_coef_thrd2 = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd2))
+  return false;
+ m_IdlRegPar.idl_coef_thrd2 = ((float)idl_coef_thrd2) / 128.0f;
+
+ //RPM error limit for integrator
+ unsigned char idl_intrpm_lim = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_intrpm_lim))
+  return false;
+ m_IdlRegPar.idl_intrpm_lim = idl_intrpm_lim * 10;
+
+ //intake manifold pressure on idling
+ int idl_map_value = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_map_value))
+  return false;
+ m_IdlRegPar.idl_map_value = ((float)idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }
@@ -1234,8 +1285,8 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  unsigned char flpmp_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flpmp_flags))
   return false;
- m_MiscPar.flpmp_offongas = flpmp_flags & 0x1;
- m_MiscPar.inj_offongas = flpmp_flags & 0x2;
+ m_MiscPar.flpmp_offongas = (flpmp_flags & 0x1) != 0;
+ m_MiscPar.inj_offongas = (flpmp_flags & 0x2) != 0;
 
  return true;
 }
@@ -1256,7 +1307,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
      m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
      m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
-     m_EditTabPar.tab_id != ETMT_IT_MAP)
+     m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1272,7 +1323,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   size_t div;
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP)
+  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP)
   {
    div = mp_pdp->isHex() ? 4 : 2;
    if (size % div) // 1 byte in HEX is 2 symbols
@@ -1284,7 +1335,11 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     int value;
     if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
      return false;
-    m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
+
+    if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
+     m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
+    else
+     m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
    }
   }
@@ -1315,6 +1370,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
      else if (m_EditTabPar.tab_id == ETMT_IT_MAP)
       m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 3.0f;
+     else if (m_EditTabPar.tab_id == ETMT_ITRPM_MAP)
+      m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -2322,7 +2379,7 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
- unsigned char flags = ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
+ unsigned char flags = ((packet_data->closed_loop != 0) << 2) | ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  int ifac1 =  MathHelpers::Round((packet_data->ifac1 * m_angle_multiplier));
@@ -2341,6 +2398,31 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  int turn_on_temp = MathHelpers::Round((packet_data->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER));
  mp_pdp->Bin16ToHex(turn_on_temp, m_outgoing_packet);
+
+ //CLOSED LOOP PARAMETERS: 
+ unsigned char idl_to_run_add = MathHelpers::Round(packet_data->idl_to_run_add * 2.0f);
+ mp_pdp->Bin8ToHex(idl_to_run_add, m_outgoing_packet);
+
+ unsigned char rpm_on_run_add = MathHelpers::Round(packet_data->rpm_on_run_add / 10.0f);
+ mp_pdp->Bin8ToHex(rpm_on_run_add, m_outgoing_packet);
+
+ int idl_reg_p = MathHelpers::Round(packet_data->idl_reg_p * 256.0f);
+ mp_pdp->Bin16ToHex(idl_reg_p, m_outgoing_packet);
+
+ int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i * 256.0f);
+ mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
+
+ unsigned char idl_coef_thrd1 = MathHelpers::Round(packet_data->idl_coef_thrd1 * 128.0f);
+ mp_pdp->Bin8ToHex(idl_coef_thrd1, m_outgoing_packet);
+
+ unsigned char idl_coef_thrd2 = MathHelpers::Round(packet_data->idl_coef_thrd2 * 128.0f);
+ mp_pdp->Bin8ToHex(idl_coef_thrd2, m_outgoing_packet);
+
+ unsigned char idl_intrpm_lim = MathHelpers::Round(packet_data->idl_intrpm_lim / 10.0f);
+ mp_pdp->Bin8ToHex(idl_intrpm_lim, m_outgoing_packet);
+
+ int idl_map_value = MathHelpers::Round(packet_data->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ mp_pdp->Bin16ToHex(idl_map_value, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -2587,8 +2669,18 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] / 3.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
-   else
+   else if (packet_data->tab_id == ETMT_ITRPM_MAP)
    {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] / 10.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_RIGID_MAP)
+   {
+    int value = MathHelpers::Round(packet_data->table_data[i] * 128.0f);
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else
+   {  //default case
     signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
