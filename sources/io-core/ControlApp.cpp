@@ -774,13 +774,13 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  unsigned char idl_coef_thrd1 = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd1))
   return false;
- m_IdlRegPar.idl_coef_thrd1 = ((float)idl_coef_thrd1) / 128.0f;
+ m_IdlRegPar.idl_coef_thrd1 = (((float)idl_coef_thrd1) / 128.0f) + 1.0f;
 
  //coefficient for calculating closed loop leaving RPM threshold
  unsigned char idl_coef_thrd2 = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_coef_thrd2))
   return false;
- m_IdlRegPar.idl_coef_thrd2 = ((float)idl_coef_thrd2) / 128.0f;
+ m_IdlRegPar.idl_coef_thrd2 = (((float)idl_coef_thrd2) / 128.0f) + 1.0f;
 
  //RPM error limit for integrator
  unsigned char idl_intrpm_lim = 0;
@@ -2412,10 +2412,10 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  int idl_reg_i = MathHelpers::Round(packet_data->idl_reg_i * 256.0f);
  mp_pdp->Bin16ToHex(idl_reg_i, m_outgoing_packet);
 
- unsigned char idl_coef_thrd1 = MathHelpers::Round(packet_data->idl_coef_thrd1 * 128.0f);
+ unsigned char idl_coef_thrd1 = MathHelpers::Round((packet_data->idl_coef_thrd1 - 1.0f) * 128.0f);
  mp_pdp->Bin8ToHex(idl_coef_thrd1, m_outgoing_packet);
 
- unsigned char idl_coef_thrd2 = MathHelpers::Round(packet_data->idl_coef_thrd2 * 128.0f);
+ unsigned char idl_coef_thrd2 = MathHelpers::Round((packet_data->idl_coef_thrd2 - 1.0f)* 128.0f);
  mp_pdp->Bin8ToHex(idl_coef_thrd2, m_outgoing_packet);
 
  unsigned char idl_intrpm_lim = MathHelpers::Round(packet_data->idl_intrpm_lim / 10.0f);

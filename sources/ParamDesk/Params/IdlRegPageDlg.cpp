@@ -171,8 +171,8 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.rpm_on_run_add = 200;
  m_params.idl_reg_p = 0.1f;
  m_params.idl_reg_i = 0.03f;
- m_params.idl_coef_thrd1 = 0.50f;
- m_params.idl_coef_thrd2 = 0.86f;
+ m_params.idl_coef_thrd1 = 1.50f;
+ m_params.idl_coef_thrd2 = 1.86f;
  m_params.idl_intrpm_lim = 200;
  m_params.idl_map_value = 25.0f;
 }
@@ -326,14 +326,14 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_coeffthrd1_spin.SetBuddy(&m_coeffthrd1_edit);
  m_coeffthrd1_edit.SetLimitText(4);
  m_coeffthrd1_edit.SetDecimalPlaces(2);
- m_coeffthrd1_spin.SetRangeAndDelta(0.0f,2.0f,0.01f);
- m_coeffthrd1_edit.SetRange(0.0f,2.0f);
+ m_coeffthrd1_spin.SetRangeAndDelta(1.0f,2.99f,0.01f);
+ m_coeffthrd1_edit.SetRange(1.0f,2.99f);
 
  m_coeffthrd2_spin.SetBuddy(&m_coeffthrd2_edit);
  m_coeffthrd2_edit.SetLimitText(4);
  m_coeffthrd2_edit.SetDecimalPlaces(2);
- m_coeffthrd2_spin.SetRangeAndDelta(0.0f,2.0f,0.01f);
- m_coeffthrd2_edit.SetRange(0.0f,2.0f);
+ m_coeffthrd2_spin.SetRangeAndDelta(1.0f,2.99f,0.01f);
+ m_coeffthrd2_edit.SetRange(1.0f,2.99f);
 
  m_intrpmlim_spin.SetBuddy(&m_intrpmlim_edit);
  m_intrpmlim_edit.SetLimitText(4);

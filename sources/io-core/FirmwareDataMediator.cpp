@@ -975,8 +975,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->rpm_on_run_add = MathHelpers::Round(p_in->rpm_on_run_add / 10.0f);
     p_params->idl_reg_p = MathHelpers::Round(p_in->idl_reg_p * 256.0f);
     p_params->idl_reg_i = MathHelpers::Round(p_in->idl_reg_i * 256.0f);
-    p_params->idl_coef_thrd1 = MathHelpers::Round(p_in->idl_coef_thrd1 * 128.0f);
-    p_params->idl_coef_thrd2 = MathHelpers::Round(p_in->idl_coef_thrd2 * 128.0f);
+    p_params->idl_coef_thrd1 = MathHelpers::Round((p_in->idl_coef_thrd1 - 1.0f) * 128.0f);
+    p_params->idl_coef_thrd2 = MathHelpers::Round((p_in->idl_coef_thrd2 - 1.0f) * 128.0f);
     p_params->idl_intrpm_lim = MathHelpers::Round(p_in->idl_intrpm_lim / 10.0f);
     p_params->idl_map_value = MathHelpers::Round(p_in->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
    }
@@ -1261,8 +1261,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->rpm_on_run_add = p_params->rpm_on_run_add * 10;
      p_out->idl_reg_p = ((float)p_params->idl_reg_p) / 256.0f;
      p_out->idl_reg_i = ((float)p_params->idl_reg_i) / 256.0f;
-     p_out->idl_coef_thrd1 = ((float)p_params->idl_coef_thrd1) / 128.0f;
-     p_out->idl_coef_thrd2 = ((float)p_params->idl_coef_thrd2) / 128.0f;
+     p_out->idl_coef_thrd1 = (((float)p_params->idl_coef_thrd1) / 128.0f) + 1.0f;
+     p_out->idl_coef_thrd2 = (((float)p_params->idl_coef_thrd2) / 128.0f) + 1.0f;
      p_out->idl_intrpm_lim = p_params->idl_intrpm_lim * 10;
      p_out->idl_map_value = ((float)p_params->idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
     }
