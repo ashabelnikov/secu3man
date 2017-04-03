@@ -83,7 +83,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void SetViewChartsValues(void);
 
   void PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name);
-  void StartWritingOfFLASHFromBuff(BYTE* io_buff);
+  void StartWritingOfFLASHFromBuff(void);
 
   void _OnReadFlashToFile(void);
   bool _CheckFirmwareCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph = NULL);
@@ -138,6 +138,16 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   bool ExitBootLoader(void);
 
  private:
+  //------------------------------------------------------------------------
+  typedef void (CFirmwareTabController::*BLFinishOpType) (void);
+  BLFinishOpType m_blFinishOpCB;
+  void finishOnBootLoaderInfo(void);
+  void finishOnReadEepromToFile(void);
+  void finishOnWriteEepromFromFile(void);
+  void finish_OnReadFlashToFile(void);
+  void finishStartWritingOfFLASHFromBuff(void);
+  //------------------------------------------------------------------------
+
   PPFlashParam  m_fpp;
   PPEepromParam m_epp;
 

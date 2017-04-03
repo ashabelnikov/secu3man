@@ -236,6 +236,7 @@ namespace SECU3IO
  const int OPCODE_DIAGNOST_ENTER       = 6;  //enter diagnostic mode
  const int OPCODE_DIAGNOST_LEAVE       = 7;  //leave diagnostic mode
  const int OPCODE_RESET_EEPROM         = 0xCF;//reset EEPROM
+ const int OPCODE_BL_CONFIRM           = 0xCB; //boot loader entering confirmation
 
  struct KnockPar
  {

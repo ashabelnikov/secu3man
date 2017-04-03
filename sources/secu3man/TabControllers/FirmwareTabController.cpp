@@ -86,6 +86,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_moreSize(0)
 , m_clear_sbar_txt_on_conn(false)
 , m_read_fw_sig_info_flag(false)
+, m_blFinishOpCB(NULL)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -250,6 +251,17 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     {
      m_sbar->SetInformationText(MLL::LoadString(IDS_FW_RESET_EEPROM_STARTED));
      m_clear_sbar_txt_on_conn = true;
+    }
+    return;
+   case SECU3IO::OPCODE_BL_CONFIRM: //confirmation that firmware is going to start boot loader
+    if (p_ndata->opdata == 0xBC)
+    {
+     if (m_blFinishOpCB)
+     {
+      Sleep(DELAY_AFTER_BL_START);
+      (this->*(m_blFinishOpCB))();
+      m_blFinishOpCB = NULL;
+     }
     }
     return;
   } 
@@ -561,14 +573,10 @@ void CFirmwareTabController::OnBootLoaderInfo(void)
  //запускаем бутлоадер (если нужно)
  StartBootLoader();
 
- //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-
- //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE,m_bl_data,0);
-
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ if (!m_bl_started_emergency)
+  m_blFinishOpCB = &CFirmwareTabController::finishOnBootLoaderInfo;
+ else
+  finishOnBootLoaderInfo();
 }
 
 void CFirmwareTabController::OnReadEepromToFile(void)
@@ -579,14 +587,10 @@ void CFirmwareTabController::OnReadEepromToFile(void)
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
- //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-
- //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM,m_bl_data,0);
-
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ if (!m_bl_started_emergency)
+  m_blFinishOpCB = &CFirmwareTabController::finishOnReadEepromToFile;
+ else
+  finishOnReadEepromToFile();
 }
 
 void CFirmwareTabController::OnWriteEepromFromFile(void)
@@ -603,14 +607,10 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
- //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-
- //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM,m_bl_data,0);
-
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ if (!m_bl_started_emergency)
+  m_blFinishOpCB = &CFirmwareTabController::finishOnWriteEepromFromFile;
+ else
+  finishOnWriteEepromFromFile();
 }
 
 void CFirmwareTabController::OnResetEeprom(void)
@@ -635,14 +635,10 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
- //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-
- //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data, m_fpp.m_total_size);
-
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ if (!m_bl_started_emergency)
+  m_blFinishOpCB = &CFirmwareTabController::finish_OnReadFlashToFile;
+ else
+  finish_OnReadFlashToFile();
 }
 
 bool CFirmwareTabController::_CheckFirmwareCompatibilityAndAskUser(BYTE* i_buff, const PlatformParamHolder* p_pph /*=NULL*/)
@@ -686,48 +682,24 @@ void CFirmwareTabController::OnWriteFlashFromFile(void)
  if (!result || !_CheckQuartzCompatibilityAndAskUser(m_bl_data))
   return; //cancel
 
- StartWritingOfFLASHFromBuff(m_bl_data);
+ StartWritingOfFLASHFromBuff();
 }
 
-void CFirmwareTabController::StartWritingOfFLASHFromBuff(BYTE* io_buff)
+void CFirmwareTabController::StartWritingOfFLASHFromBuff(void)
 {
  //вычисляем контрольную сумму и сохраняем ее в массив с прошивкой. Это необходимо например когда
  //мы записываем свеже скомпилированную прошивку, которая может не содержать контрольной суммы
- m_fwdm->CalculateAndPlaceFirmwareCRC(io_buff);
+ m_fwdm->CalculateAndPlaceFirmwareCRC(m_bl_data);
 
  ASSERT(m_comm);
 
  //запускаем бутлоадер по команде из приложения (если нет флага что он запущен вручную)
  StartBootLoader();
 
- //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-
- //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
- if (m_view->IsProgrammeOnlyCode())
- {
-  //Мы программируем только код, одако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
-  //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать.
-  m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
-
-  //сохраняем данные для того, чтобы позже объединить их с прочитанными "верхними" данными
-  m_code_for_merge_size = m_fwdm->GetOnlyCodeSize(io_buff);
-  memcpy(m_code_for_merge_with_overhead, io_buff, m_fpp.m_app_section_size);
-
-  //Читаем немного больше байт, для того, чтобы гарантировано прочитать данные находящиеся в коде  
-  size_t reducedSize = m_code_for_merge_size - 0x400; //1024 bytes more
-  //операция не блокирует поток - стековые переменные ей передавать нельзя!
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, m_bl_data,
-  m_fpp.m_app_section_size - reducedSize, //размер данных сверху над кодом программы
-  reducedSize);                           //адрес начала "верхних" данных
- }
+ if (!m_bl_started_emergency)
+  m_blFinishOpCB = &CFirmwareTabController::finishStartWritingOfFLASHFromBuff;
  else
- {//все очень просто
-  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,io_buff, m_fpp.m_app_section_size);
- }
-
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+  finishStartWritingOfFLASHFromBuff();
 }
 
 //от чекбокса...
@@ -763,7 +735,7 @@ bool CFirmwareTabController::StartBootLoader(void)
 
  //запускаем бутлоадер по команде из приложения (если нет флага что он запущен вручную)
  if (!m_bl_started_emergency)
- {
+ {  
   bool result = m_comm->m_pControlApp->StartBootLoader();
   Sleep(DELAY_AFTER_BL_START); //обязательно нужно подождать не менее 50 мс, иначе будут вылазить посторонние символы при приеме данных от загрузчика
   return result;
@@ -1283,7 +1255,7 @@ void CFirmwareTabController::OnWriteFlashToSECU(void)
  if (!m_comm->m_pBootLoader->IsIdle())
   return;
  m_fwdm->StoreBytes(m_bl_data);
- StartWritingOfFLASHFromBuff(m_bl_data);
+ StartWritingOfFLASHFromBuff();
 }
 
 void CFirmwareTabController::OnImportDataFromAnotherFW()
@@ -1731,4 +1703,85 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options,
   str_options+=str.str();
   AfxMessageBox(str_options.c_str(), MB_OK|MB_ICONINFORMATION);
  }
+}
+
+
+void CFirmwareTabController::finishOnBootLoaderInfo(void)
+{
+ //активируем коммуникационный контроллер бутлоадера
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+
+ //операция не блокирует поток - стековые переменные ей передавать нельзя!
+ m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE,m_bl_data,0);
+
+ m_sbar->ShowProgressBar(true);
+ m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::finishOnReadEepromToFile(void)
+{
+ //активируем коммуникационный контроллер бутлоадера
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+
+ //операция не блокирует поток - стековые переменные ей передавать нельзя!
+ m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM,m_bl_data,0);
+
+ m_sbar->ShowProgressBar(true);
+ m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::finishOnWriteEepromFromFile(void)
+{
+ //активируем коммуникационный контроллер бутлоадера
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+
+ //операция не блокирует поток - стековые переменные ей передавать нельзя!
+ m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM,m_bl_data,0);
+
+ m_sbar->ShowProgressBar(true);
+ m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::finish_OnReadFlashToFile(void)
+{
+ //активируем коммуникационный контроллер бутлоадера
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+
+ //операция не блокирует поток - стековые переменные ей передавать нельзя!
+ m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH,m_bl_data, m_fpp.m_total_size);
+
+ m_sbar->ShowProgressBar(true);
+ m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
+{
+ //активируем коммуникационный контроллер бутлоадера
+ m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+
+ //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
+ if (m_view->IsProgrammeOnlyCode())
+ {
+  //Мы программируем только код, одако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
+  //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать.
+  m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
+
+  //сохраняем данные для того, чтобы позже объединить их с прочитанными "верхними" данными
+  m_code_for_merge_size = m_fwdm->GetOnlyCodeSize(m_bl_data);
+  memcpy(m_code_for_merge_with_overhead, m_bl_data, m_fpp.m_app_section_size);
+
+  //Читаем немного больше байт, для того, чтобы гарантировано прочитать данные находящиеся в коде  
+  size_t reducedSize = m_code_for_merge_size - 0x400; //1024 bytes more
+  //операция не блокирует поток - стековые переменные ей передавать нельзя!
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, m_bl_data,
+  m_fpp.m_app_section_size - reducedSize, //размер данных сверху над кодом программы
+  reducedSize);                           //адрес начала "верхних" данных
+ }
+ else
+ {//все очень просто
+  m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,m_bl_data, m_fpp.m_app_section_size);
+ }
+
+ m_sbar->ShowProgressBar(true);
+ m_sbar->SetProgressPos(0);
 }
