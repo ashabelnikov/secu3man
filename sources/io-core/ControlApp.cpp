@@ -710,13 +710,13 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  int ifac1;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac1,true))
   return false;
- m_IdlRegPar.ifac1 = ((float)ifac1) / ANGLE_MULTIPLIER;
+ m_IdlRegPar.ifac1 = ((float)ifac1) / 256.0f;
 
  //Коэффициент регулятора при  отрицательной ошибке (число со знаком)
  int ifac2;
  if (false == mp_pdp->Hex16ToBin(raw_packet,&ifac2,true))
   return false;
- m_IdlRegPar.ifac2 = ((float)ifac2) / ANGLE_MULTIPLIER;
+ m_IdlRegPar.ifac2 = ((float)ifac2) / 256.0f;
 
  //Зона нечувствительности регулятора
  if (false == mp_pdp->Hex16ToBin(raw_packet,&m_IdlRegPar.MINEFR))
@@ -2382,10 +2382,10 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
  unsigned char flags = ((packet_data->closed_loop != 0) << 2) | ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
- int ifac1 =  MathHelpers::Round((packet_data->ifac1 * m_angle_multiplier));
+ int ifac1 =  MathHelpers::Round((packet_data->ifac1 * 256.0f));
  mp_pdp->Bin16ToHex(ifac1,m_outgoing_packet);
 
- int ifac2 = MathHelpers::Round((packet_data->ifac2 * m_angle_multiplier));
+ int ifac2 = MathHelpers::Round((packet_data->ifac2 * 256.0f));
  mp_pdp->Bin16ToHex(ifac2,m_outgoing_packet);
 
  mp_pdp->Bin16ToHex(packet_data->MINEFR,m_outgoing_packet);

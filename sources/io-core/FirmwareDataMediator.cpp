@@ -965,8 +965,8 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     WRITEBIT8(p_params->idl_flags, 2, p_in->closed_loop);   
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
-    p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * ANGLE_MULTIPLIER);
-    p_params->ifac2      = MathHelpers::Round(p_in->ifac2 * ANGLE_MULTIPLIER);
+    p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * 256.0f);
+    p_params->ifac2      = MathHelpers::Round(p_in->ifac2 * 256.0f);
     p_params->idlreg_min_angle = MathHelpers::Round(p_in->min_angle * ANGLE_MULTIPLIER);
     p_params->idlreg_max_angle = MathHelpers::Round(p_in->max_angle * ANGLE_MULTIPLIER);
     p_params->idlreg_turn_on_temp = MathHelpers::Round(p_in->turn_on_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
@@ -1251,8 +1251,8 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->closed_loop = (p_params->idl_flags & 0x4) != 0;
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
-     p_out->ifac1      = ((float)p_params->ifac1) / ANGLE_MULTIPLIER;
-     p_out->ifac2      = ((float)p_params->ifac2) / ANGLE_MULTIPLIER;
+     p_out->ifac1      = ((float)p_params->ifac1) / 256.0f;
+     p_out->ifac2      = ((float)p_params->ifac2) / 256.0f;
      p_out->min_angle  = ((float)p_params->idlreg_min_angle) / ANGLE_MULTIPLIER;
      p_out->max_angle  = ((float)p_params->idlreg_max_angle) / ANGLE_MULTIPLIER;
      p_out->turn_on_temp = ((float)p_params->idlreg_turn_on_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
