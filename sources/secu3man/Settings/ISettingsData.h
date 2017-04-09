@@ -118,6 +118,7 @@ class ISettingsData
   virtual int GetAI1Average(void) const = 0;
   virtual bool GetAllowVisualTheme(void) const = 0;
   virtual bool GetAutoDiagEnter(void) const = 0;
+  virtual bool GetSaveWarning(void) const = 0;
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;

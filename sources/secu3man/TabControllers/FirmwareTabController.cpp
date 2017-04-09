@@ -763,7 +763,7 @@ bool CFirmwareTabController::ExitBootLoader(void)
 bool CFirmwareTabController::CheckChangesAskAndSaveFirmware(void)
 {
  bool modified = m_fwdm->IsModified();
- if (modified)
+ if (modified && mp_settings->GetSaveWarning())
  {
   int result = AfxMessageBox(MLL::LoadString(IDS_FW_MODIFICATION_WARNING), MB_YESNOCANCEL);
   if (result==IDCANCEL)

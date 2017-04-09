@@ -90,6 +90,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AI1Average;
   const CString m_Name_AllowVisualTheme;
   const CString m_Name_AutoDiagEnter;
+  const CString m_Name_SaveWarning;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -175,6 +176,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetAI1Average(void) const;
   virtual bool GetAllowVisualTheme(void) const;
   virtual bool GetAutoDiagEnter(void) const;
+  virtual bool GetSaveWarning(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -221,6 +223,7 @@ class CAppSettingsModel : public ISettingsData
   int  m_optAI1Average;
   bool m_optAllowVisualTheme;
   bool m_optAutoDiagEnter;
+  bool m_optSaveWarning;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;
