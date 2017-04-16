@@ -88,6 +88,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
    return i_original ? m_omaps->inj_target_rpm : m_maps->inj_target_rpm;
   case TYPE_MAP_INJ_RIGID:
    return i_original ? m_omaps->inj_idl_rigidity : m_maps->inj_idl_rigidity;
+  case TYPE_MAP_INJ_EGOCRV:
+   return i_original ? m_omaps->inj_ego_curve : m_maps->inj_ego_curve;
  }
  return NULL; //undefined type of map
 }
@@ -131,6 +133,8 @@ size_t _GetMapSize(int i_mapType)
    return INJ_TARGET_RPM_TABLE_SIZE;
   case TYPE_MAP_INJ_RIGID:
    return INJ_IDL_RIGIDITY_TABLE_SIZE;
+  case TYPE_MAP_INJ_EGOCRV:
+   return INJ_EGO_CURVE_SIZE+2;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -164,6 +168,7 @@ void CPMTablesController::_MoveMapsToCharts(bool i_original)
  _MoveMapToChart(TYPE_MAP_INJ_IT, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_ITRPM, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_RIGID, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_EGOCRV, i_original);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
@@ -188,6 +193,7 @@ void CPMTablesController::_ClearAcquisitionFlags(void)
  std::fill(m_maps_flags->inj_timing, m_maps_flags->inj_timing + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
  std::fill(m_maps_flags->inj_target_rpm, m_maps_flags->inj_target_rpm + INJ_TARGET_RPM_TABLE_SIZE, .0f);
  std::fill(m_maps_flags->inj_idl_rigidity, m_maps_flags->inj_idl_rigidity + INJ_IDL_RIGIDITY_TABLE_SIZE, .0f);
+ std::fill(m_maps_flags->inj_ego_curve, m_maps_flags->inj_ego_curve + INJ_EGO_CURVE_SIZE + 2, .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -423,6 +429,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_RIGID_MAP: //idl. regulator's rigidity map
    UpdateMap(m_maps->inj_idl_rigidity, m_maps_flags->inj_idl_rigidity, data);
    break;
+  case ETMT_EGOCRV_MAP: //WBO emulation
+   UpdateMap(m_maps->inj_ego_curve, m_maps_flags->inj_ego_curve, data);
+   break;
   default: ASSERT(0);
    //error
    break;
@@ -478,6 +487,8 @@ bool CPMTablesController::_IsCacheUpToDate(void)
    return false;
   if (!_FindZero(m_maps_flags->inj_idl_rigidity, INJ_IDL_RIGIDITY_TABLE_SIZE))
    return false;
+  if (!_FindZero(m_maps_flags->inj_ego_curve, INJ_EGO_CURVE_SIZE+2))
+   return false;
 
  return true;
 }
@@ -522,6 +533,8 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
  if (false==_CompareViewMap(TYPE_MAP_INJ_RIGID, _GetMapSize(TYPE_MAP_INJ_RIGID)))
   return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_EGOCRV, _GetMapSize(TYPE_MAP_INJ_EGOCRV)))
+  return true;
 
  return false; //no modifications
 }
@@ -531,8 +544,8 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
  float* pMap = mp_view->GetMap(i_mapType, false); //<--current
  size_t mapSize = _GetMapSize(i_mapType); //map size in items (not bytes)
 
- size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time and gigidity function
- if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD || i_mapType == TYPE_MAP_INJ_RIGID)
+ size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time and rigidity function
+ if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD || i_mapType == TYPE_MAP_INJ_RIGID || i_mapType == TYPE_MAP_INJ_EGOCRV)
   pieceSize = 8;
 
  size_t index;

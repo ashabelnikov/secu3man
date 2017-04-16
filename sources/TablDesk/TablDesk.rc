@@ -55,8 +55,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,331,96,18
     CONTROL         "Жесткость РХХ",IDC_TD_VIEW_RIGID_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,351,96,18
+    CONTROL         "Эмуляция ШДК",IDC_TD_VIEW_EGOCRV_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,371,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,370,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,390,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -105,6 +107,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,212,96,18
     CONTROL         "Жесткость РХХ",IDC_TD_VIEW_RIGID_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,234,82,18
+    CONTROL         "Эмуляция ШДК",IDC_TD_VIEW_EGOCRV_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,234,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW |
                     BS_BITMAP | WS_TABSTOP,3,271,16,19
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
@@ -371,6 +375,7 @@ BEGIN
     IDS_CHOKE_OP_UNIT       "Закрытие воздушной заслонки (%)"
     IDS_CHOKE_OP_MAP        "Настройка положения воздушной заслонки от температуры"
     IDS_TD_RPM_GRID_BUTTON_TT "Изменение сетки оборотов для таблиц УОЗ ХХ и рабочего режима."
+    IDS_EGO_CURVE_MAP       "Зависимость AFR от напряжения на ДК (эмуляция ШДК)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -423,8 +428,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,331,96,18
     CONTROL         "IAC reg. rigidity",IDC_TD_VIEW_RIGID_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,351,96,18
+    CONTROL         "WBO emulation",IDC_TD_VIEW_EGOCRV_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,371,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,370,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,390,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -473,6 +480,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,212,96,18
     CONTROL         "IAC reg. rigidity",IDC_TD_VIEW_RIGID_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,234,82,18
+    CONTROL         "WBO emulation",IDC_TD_VIEW_EGOCRV_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,234,96,18
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
                     BS_BITMAP | WS_TABSTOP,3,271,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
@@ -756,6 +765,7 @@ BEGIN
     IDS_CHOKE_OP_UNIT       "Choke closing (%)"
     IDS_CHOKE_OP_MAP        "Tune choke position as function of temperature"
     IDS_TD_RPM_GRID_BUTTON_TT "Alter RPM grid for afvance angle maps of idle and work modes."
+    IDS_EGO_CURVE_MAP       "AFR vs voltage on the EGO sensor (WBO emulation)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

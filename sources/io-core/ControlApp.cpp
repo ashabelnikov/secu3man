@@ -1307,7 +1307,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_AFR_MAP && m_EditTabPar.tab_id != ETMT_CRNK_MAP && m_EditTabPar.tab_id != ETMT_WRMP_MAP &&
      m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
      m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
-     m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP)
+     m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
+     m_EditTabPar.tab_id != ETMT_EGOCRV_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1323,7 +1324,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   size_t div;
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP)
+  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP || m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
   {
    div = mp_pdp->isHex() ? 4 : 2;
    if (size % div) // 1 byte in HEX is 2 symbols
@@ -1338,6 +1339,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 
     if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
+    else if (m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
+     m_EditTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (EGO_CURVE_M_FACTOR / ((float)value));
     else
      m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
@@ -1600,7 +1603,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 17 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 19 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1632,6 +1635,12 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &corrlimit_m))
   return false;
  m_GasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
+
+ //Closing in fuel cut mode
+ BYTE lam_stoichval = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &lam_stoichval))
+  return false;
+ m_GasdosePar.lam_stoichval = AFR_MAPS_M_FACTOR / ((float)lam_stoichval);
 
  return true;
 }
@@ -1799,7 +1808,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 32 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 34 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -1851,6 +1860,11 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &deadband))
   return false;
  m_LambdaPar.lam_dead_band = float(deadband) * ADC_DISCRETE;
+
+ unsigned char senstype = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &senstype))
+  return false;
+ m_LambdaPar.lam_senstype = senstype;
 
  return true;
 }
@@ -2679,6 +2693,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     int value = MathHelpers::Round(packet_data->table_data[i] * 128.0f);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
    }
+   else if (packet_data->tab_id == ETMT_EGOCRV_MAP)
+   {
+    int value = MathHelpers::Round((packet_data->address > 15) ? (packet_data->table_data[i] / ADC_DISCRETE) : (EGO_CURVE_M_FACTOR / packet_data->table_data[i]));
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
    else
    {  //default case
     signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
@@ -2744,6 +2763,8 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin16ToHex(corr_limit_p, m_outgoing_packet);
  int corr_limit_m = MathHelpers::Round(packet_data->lam_corr_limit_m * 512.0f / 100.0f);
  mp_pdp->Bin16ToHex(corr_limit_m, m_outgoing_packet);
+ unsigned char lam_stoichval = MathHelpers::Round(AFR_MAPS_M_FACTOR / packet_data->lam_stoichval);
+ mp_pdp->Bin8ToHex(lam_stoichval, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
@@ -2830,6 +2851,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->lam_activ_delay, m_outgoing_packet);
  int deadband = MathHelpers::Round(packet_data->lam_dead_band / ADC_DISCRETE);
  mp_pdp->Bin16ToHex(deadband, m_outgoing_packet);
+ mp_pdp->Bin8ToHex(packet_data->lam_senstype, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

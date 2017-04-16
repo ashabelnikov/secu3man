@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_EN_CHANGE(IDC_PD_GASDOSE_FC_CLOSING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_P_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_GASDOSE_STOICHAFR_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_GASDOSE_SM_TEST_CHECK, OnSMTestButton)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_STEPS_NUM_SPIN,OnUpdateGasdoseSMSteps)
@@ -50,6 +51,11 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_FC_CLOSING_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_FC_CLOSING_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_FC_CLOSING_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_STOICHAFR_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_STOICHAFR_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_STOICHAFR_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_STOICHAFR_UNIT,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_CORRLIMIT_P_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_CORRLIMIT_P_SPIN,OnUpdateControls)
@@ -68,6 +74,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
 , m_fc_closing_edit(CEditEx::MODE_FLOAT, true)
 , m_corrlimit_p_edit(CEditEx::MODE_FLOAT, true)
 , m_corrlimit_m_edit(CEditEx::MODE_FLOAT, true)
+, m_stoichval_edit(CEditEx::MODE_FLOAT, true)
 , m_gasdose_tst_enabled(false)
 , m_gasdose_manpos_enabled(false)
 , m_lock_ui_update(false) //UI update is not locked
@@ -78,6 +85,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
  m_params.fc_closing = 30.0f;
  m_params.lam_corr_limit_p = 30.0f;
  m_params.lam_corr_limit_m = 30.0f;
+ m_params.lam_stoichval = 15.6f;
 }
 
 LPCTSTR CGasdosePageDlg::GetDialogID(void) const
@@ -98,12 +106,15 @@ void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_GASDOSE_CORRLIMIT_P_SPIN, m_corrlimit_p_spin);
  DDX_Control(pDX,IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, m_corrlimit_m_edit);
  DDX_Control(pDX,IDC_PD_GASDOSE_CORRLIMIT_M_SPIN, m_corrlimit_m_spin);
+ DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_SPIN, m_stoichval_spin);
+ DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_stoichval_edit);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_GASDOSE_SM_STEPS_NUM_EDIT, m_params.gd_steps);
  DDX_Check_UCHAR(pDX, IDC_PD_GASDOSE_SM_TEST_CHECK, m_params.testing);
  m_fc_closing_edit.DDX_Value(pDX, IDC_PD_GASDOSE_FC_CLOSING_EDIT, m_params.fc_closing);
  m_corrlimit_p_edit.DDX_Value(pDX, IDC_PD_GASDOSE_CORRLIMIT_P_EDIT, m_params.lam_corr_limit_p);
  m_corrlimit_m_edit.DDX_Value(pDX, IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, m_params.lam_corr_limit_m);
+ m_stoichval_edit.DDX_Value(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_params.lam_stoichval);
 }
 
 void CGasdosePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -155,6 +166,12 @@ BOOL CGasdosePageDlg::OnInitDialog()
  m_corrlimit_m_edit.SetDecimalPlaces(2);
  m_corrlimit_m_spin.SetRangeAndDelta(0.50f, 100.00f, 0.5f);
  m_corrlimit_m_edit.SetRange(0.50f, 100.00f);
+
+ m_stoichval_spin.SetBuddy(&m_stoichval_edit);
+ m_stoichval_edit.SetLimitText(4);
+ m_stoichval_edit.SetDecimalPlaces(1);
+ m_stoichval_spin.SetRangeAndDelta(8.0f, 22.00f, 0.1f);
+ m_stoichval_edit.SetRange(8.0f, 22.00f);
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 

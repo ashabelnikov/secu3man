@@ -807,6 +807,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV), TYPE_MAP_INJ_EGOCRV);
 
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
@@ -1069,6 +1070,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(false),false);
  m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(true),true);
+
+ m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(false),false);
+ m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1178,6 +1182,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_RIGID:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetRigidMap(m_current_funset_index, m_view->mp_TablesPanel->GetRigidMap(false));
+   break;
+  case TYPE_MAP_INJ_EGOCRV:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetEGOCurveMap(m_current_funset_index, m_view->mp_TablesPanel->GetEGOCurveMap(false));
    break;
 
    //separate maps
@@ -1573,6 +1581,10 @@ void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_RigidMapWnd_X = rc.left;
    ws.m_RigidMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_EGOCRV:
+   ws.m_EGOCrvMapWnd_X = rc.left;
+   ws.m_EGOCrvMapWnd_Y = rc.top;
+   break;
 
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
@@ -1666,6 +1678,9 @@ void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_RIGID:
    X = ws.m_RigidMapWnd_X, Y = ws.m_RigidMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_EGOCRV:
+   X = ws.m_EGOCrvMapWnd_X, Y = ws.m_EGOCrvMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

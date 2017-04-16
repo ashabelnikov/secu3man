@@ -63,7 +63,9 @@ typedef struct
  _uchar inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];     // Target RPM on idling function
  _uint  inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE]; // Idling regulator's rigidity function
 
- _uchar reserved[414];                                 // reserved bytes - for compatibility
+ _uint  inj_ego_curve[INJ_EGO_CURVE_SIZE+2];           // Air-Fuel ratio lookup table, (1/value) * 32768, e.g. 1/14.7 * 32768 = 2229, the last two values are voltages corresponding to the beginning and to the end of axis (ADC discretes)
+
+ _uchar reserved[378];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 } //SECU3IO

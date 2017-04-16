@@ -43,6 +43,7 @@ using namespace SECU3IO::SECU3Types;
 //Address of tables which can be edited in real time
 #define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 5)
 
+#define ADC_DISCRETE       0.0025f   //Volts
 
 EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)
 : m_epp(i_epp)
@@ -318,6 +319,29 @@ void EEPROMDataMediator::GetRigidMap(int i_index, float* op_values, bool i_origi
 
  for (int i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; i++ )
   op_values[i] = ((float)p_maps[i_index].inj_idl_rigidity[i]) / 128.0f;
+}
+
+
+void EEPROMDataMediator::GetEGOCurveMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_EGO_CURVE_SIZE; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_ego_curve[i];
+  if (0==value) value = 1; //prevent division by zero
+  op_values[i] = (EGO_CURVE_M_FACTOR / value);
+ }
+
+ for (; i < INJ_EGO_CURVE_SIZE+2; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_ego_curve[i];
+  op_values[i] = value * ADC_DISCRETE;
+ }
 }
 
 std::vector<_TSTRING> EEPROMDataMediator::GetFunctionsSetNames(void)

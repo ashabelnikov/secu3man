@@ -910,6 +910,42 @@ void CFirmwareDataMediator::SetRigidMap(int i_index, const float* ip_values)
 }
 
 
+void CFirmwareDataMediator::GetEGOCurveMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_EGO_CURVE_SIZE; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_ego_curve[i];
+  if (0==value) value = 1; //prevent division by zero
+  op_values[i] = (EGO_CURVE_M_FACTOR / value);
+ }
+
+ for (; i < INJ_EGO_CURVE_SIZE+2; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_ego_curve[i];
+  op_values[i] = value * ADC_DISCRETE;
+ }
+}
+
+void CFirmwareDataMediator::SetEGOCurveMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_EGO_CURVE_SIZE; i++ )
+  p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round((EGO_CURVE_M_FACTOR / (0==ip_values[i] ? 1 : ip_values[i])));
+ for (; i < INJ_EGO_CURVE_SIZE+2; i++ )
+  p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
 // Write specified bit into a 8-bit variable
 // variable - Variable
 // bitNum - Number of bit for writing in
@@ -1136,6 +1172,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->gd_fc_closing = MathHelpers::Round(p_in->fc_closing * 2.0f);
     p_params->gd_lambda_corr_limit_p = MathHelpers::Round(p_in->lam_corr_limit_p * 512.0f / 100.0f);
     p_params->gd_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
+    p_params->gd_lambda_stoichval = MathHelpers::Round((AFR_MAPS_M_FACTOR / (0==p_in->lam_stoichval ? 1 : p_in->lam_stoichval))); //also, prevent div. by 0
    }
    break;
   case SECUR_PAR:
@@ -1188,6 +1225,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->inj_lambda_rpm_thrd = p_in->lam_rpm_thrd;
     p_params->inj_lambda_activ_delay = p_in->lam_activ_delay;
     p_params->inj_lambda_dead_band = MathHelpers::Round(p_in->lam_dead_band / ADC_DISCRETE);
+    p_params->inj_lambda_senstype = p_in->lam_senstype;
    }
    break;
   case ACCEL_PAR:
@@ -1432,6 +1470,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->fc_closing = p_params->gd_fc_closing / 2.0f;
      p_out->lam_corr_limit_p = ((float)p_params->gd_lambda_corr_limit_p * 100.0f)/512.0f;
      p_out->lam_corr_limit_m = ((float)p_params->gd_lambda_corr_limit_m * 100.0f)/512.0f;
+     p_out->lam_stoichval = AFR_MAPS_M_FACTOR / ((float)p_params->gd_lambda_stoichval);
     }
     break;
    case SECUR_PAR:
@@ -1490,6 +1529,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
     p_out->lam_rpm_thrd = p_params->inj_lambda_rpm_thrd;
     p_out->lam_activ_delay = p_params->inj_lambda_activ_delay;
     p_out->lam_dead_band = ((float)p_params->inj_lambda_dead_band) * ADC_DISCRETE;
+    p_out->lam_senstype = p_params->inj_lambda_senstype;
    }
    break;
   case ACCEL_PAR:
@@ -1541,7 +1581,11 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetIdlcMap(i,op_fwd->maps[i].inj_iac_crank_pos);
   GetAETPSMap(i,op_fwd->maps[i].inj_ae_tps);
   GetAERPMMap(i,op_fwd->maps[i].inj_ae_rpm);
-  GetAftstrMap(i,op_fwd->maps[i].inj_aftstr);
+  GetAftstrMap(i,op_fwd->maps[i].inj_aftstr);  
+  GetITMap(i, op_fwd->maps[i].inj_timing);
+  GetITRPMMap(i, op_fwd->maps[i].inj_target_rpm);
+  GetRigidMap(i, op_fwd->maps[i].inj_idl_rigidity);
+  GetEGOCurveMap(i, op_fwd->maps[i].inj_ego_curve);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1584,6 +1628,10 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetAETPSMap(i,ip_fwd->maps[i].inj_ae_tps);
   SetAERPMMap(i,ip_fwd->maps[i].inj_ae_rpm);
   SetAftstrMap(i,ip_fwd->maps[i].inj_aftstr);
+  SetITMap(i, ip_fwd->maps[i].inj_timing);
+  SetITRPMMap(i, ip_fwd->maps[i].inj_target_rpm);
+  SetRigidMap(i, ip_fwd->maps[i].inj_idl_rigidity);
+  SetEGOCurveMap(i, ip_fwd->maps[i].inj_ego_curve);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);

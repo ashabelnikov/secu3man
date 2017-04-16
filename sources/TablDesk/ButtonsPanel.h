@@ -72,6 +72,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetITMap(bool i_original);
   float* GetITRPMMap(bool i_original);
   float* GetRigidMap(bool i_original);
+  float* GetEGOCurveMap(bool i_original);
 
   float* GetRPMGrid(void);
 
@@ -115,6 +116,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewITMap();
   afx_msg void OnViewITRPMMap();
   afx_msg void OnViewRigidMap();
+  afx_msg void OnViewEGOCrvMap();
 
   afx_msg void OnGridModeEditing();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -134,6 +136,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewITMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewITRPMMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewRigidMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewEGOCrvMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
@@ -171,6 +174,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_it_map_btn;
   CButton m_view_itrpm_map_btn;
   CButton m_view_rigid_map_btn;
+  CButton m_view_egocrv_map_btn;
 
   CButton m_grid_mode_editing_check;
   std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
@@ -217,6 +221,10 @@ private:
   static void __cdecl OnCloseITRPMMap(void* i_param);
   static void __cdecl OnChangeRigidMap(void* i_param);
   static void __cdecl OnCloseRigidMap(void* i_param);
+  static void __cdecl OnChangeEGOCrvMap(void* i_param);
+  static void __cdecl OnCloseEGOCrvMap(void* i_param);
+  static void __cdecl OnChangeEGOCrvXAxisEdit(void* i_param, int i_type, float i_value);
+
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationCrnkMap(void* i_param, long cmd);
@@ -230,6 +238,7 @@ private:
   static void __cdecl OnWndActivationITMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationITRPMMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationRigidMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationEGOCrvMap(void* i_param, long cmd);
 
   void OnGridMapChanged(int mapType);
   void OnGridMapClosed(HWND, int);
@@ -254,6 +263,7 @@ private:
   int m_it_map_chart_state;
   int m_itrpm_map_chart_state;
   int m_rigid_map_chart_state;
+  int m_egocrv_map_chart_state;
 
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
@@ -272,6 +282,7 @@ private:
   HWND m_it_map_wnd_handle;
   HWND m_itrpm_map_wnd_handle;
   HWND m_rigid_map_wnd_handle;
+  HWND m_egocrv_map_wnd_handle;
 
   float m_start_map_active[16];
   float m_start_map_original[16];
@@ -309,6 +320,8 @@ private:
   float m_itrpm_map_original[16];
   float m_rigid_map_active[8];
   float m_rigid_map_original[8];
+  float m_egocrv_map_active[16+2];
+  float m_egocrv_map_original[16+2];
 
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;

@@ -237,3 +237,5 @@
 #define IDS_MAPS_COEFF_UNIT             5496
 #define IDS_ITRPM_MAP                   5497
 #define IDS_RIGID_MAP                   5498
+#define IDC_TD_VIEW_EGOCRV_MAP          5499
+#define IDS_EGO_CURVE_MAP               5500

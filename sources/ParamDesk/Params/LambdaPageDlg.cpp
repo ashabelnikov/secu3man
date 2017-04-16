@@ -28,11 +28,13 @@
 #include "LambdaPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ddx_helpers.h"
 
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_WM_DESTROY()
+ ON_CBN_SELCHANGE(IDC_PD_LAMBDA_SENSTYPE_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STRPERSTP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_P_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_M_EDIT, OnChangeData)
@@ -44,6 +46,8 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_LAMBDA_ACTIVDELAY_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_DEADBAND_EDIT, OnChangeData)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_CAPTION,OnUpdateControls)
@@ -111,6 +115,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_rpm_thrd = 800;
  m_params.lam_activ_delay = 45;
  m_params.lam_dead_band = 0.0f;
+ m_params.lam_senstype = 0; //NBO
 }
 
 CLambdaPageDlg::~CLambdaPageDlg()
@@ -126,6 +131,7 @@ LPCTSTR CLambdaPageDlg::GetDialogID(void) const
 void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+ DDX_Control(pDX,IDC_PD_LAMBDA_SENSTYPE_COMBO, m_senstype_combo);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_EDIT, m_strperstp_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_SPIN, m_strperstp_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_stepsize_p_edit);
@@ -147,6 +153,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_EDIT, m_deadband_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_SPIN, m_deadband_spin);
 
+ DDX_CBIndex_UCHAR(pDX, IDC_PD_LAMBDA_SENSTYPE_COMBO, m_params.lam_senstype);
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
  m_stepsize_p_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_params.lam_step_size_p);
  m_stepsize_m_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_M_EDIT, m_params.lam_step_size_m);
@@ -231,10 +238,13 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_deadband_spin.SetRangeAndDelta(0.0f, 5.00f, 0.01f);
  m_deadband_edit.SetRange(0.0f, 5.00f);
 
+ m_senstype_combo.AddString(MLL::LoadString(IDS_PD_NBO));
+ m_senstype_combo.AddString(MLL::LoadString(IDS_PD_WBO));
+
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.38f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.51f));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

@@ -65,6 +65,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   SECU3IO::LambdaPar m_params;
   bool m_enabled;
 
+  CComboBox m_senstype_combo;
   CSpinButtonCtrlEx m_strperstp_spin;
   CEditEx m_strperstp_edit;
   CSpinButtonCtrlEx m_stepsize_p_spin;

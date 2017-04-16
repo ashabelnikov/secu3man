@@ -215,10 +215,13 @@ typedef struct
  _uchar  idl_intrpm_lim;                // RPM error limit for integrator (min-1, value / 10, max 1200)
  _uint   idl_map_value;                 // intake manifold pressure on idling (kPa * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER)
 
+ _uchar  inj_lambda_senstype;           // Oxigen sensor type - NBO(0) or WBO(1)
+ _uchar  gd_lambda_stoichval;           // stoiciometry AFR value for LPG
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[52];
+ _uchar reserved[50];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

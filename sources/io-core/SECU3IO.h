@@ -306,6 +306,7 @@ namespace SECU3IO
  const int ETMT_IT_MAP   = 15;          //injection timing
  const int ETMT_ITRPM_MAP = 16;         //Idling RPM
  const int ETMT_RIGID_MAP = 17;         //Idl. regulator's rigidity
+ const int ETMT_EGOCRV_MAP = 18;        //EGO curve (WBO sensor emulation)
 
  struct SepTabPar
  {
@@ -372,6 +373,7 @@ namespace SECU3IO
   float fc_closing;                     //How much close gas doser in fuel cut mode (%)
   float lam_corr_limit_p;               //"+" correction limit
   float lam_corr_limit_m;               //"-" correction limit
+  float lam_stoichval;                  //stoichiometry value for LPG
  };
 
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys
@@ -460,6 +462,7 @@ namespace SECU3IO
 
  struct LambdaPar
  {
+  unsigned char lam_senstype;         //type of EGO sensor (NBO, WBO) 
   int lam_str_per_stp;                //Number of strokes per step for lambda control
   float lam_step_size_p;              //"+" Size of step 
   float lam_step_size_m;              //"-" Size of step 
@@ -660,5 +663,6 @@ namespace SECU3IO
  const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float AFTSTR_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float GD_MAPS_M_FACTOR = 2.0f;
+ const float EGO_CURVE_M_FACTOR = 32768.0f;
 
 };
