@@ -1340,7 +1340,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
     else if (m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
-     m_EditTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (EGO_CURVE_M_FACTOR / ((float)value));
+     m_EditTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / EGO_CURVE_M_FACTOR);
     else
      m_EditTabPar.table_data[i] = (((float)value) * discrete) / 1000.0f;  //convert to ms
     ++data_size;
@@ -1360,7 +1360,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      if (m_EditTabPar.tab_id == ETMT_VE_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / VE_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
-      m_EditTabPar.table_data[i] = AFR_MAPS_M_FACTOR / ((float)value);
+      m_EditTabPar.table_data[i] = (((float)value) / AFR_MAPS_M_FACTOR) + 8.0f;
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFTSTR_MAP)
@@ -1603,7 +1603,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 19 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 20 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1637,10 +1637,10 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  m_GasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
  //Closing in fuel cut mode
- BYTE lam_stoichval = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &lam_stoichval))
+ int lam_stoichval = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_stoichval))
   return false;
- m_GasdosePar.lam_stoichval = AFR_MAPS_M_FACTOR / ((float)lam_stoichval);
+ m_GasdosePar.lam_stoichval = ((float)lam_stoichval) / 128.0f;
 
  return true;
 }
@@ -2650,7 +2650,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    }
    else if (packet_data->tab_id == ETMT_AFR_MAP)
    {
-    unsigned char value = MathHelpers::Round(AFR_MAPS_M_FACTOR / packet_data->table_data[i]);
+    unsigned char value = MathHelpers::Round((packet_data->table_data[i]-8) * AFR_MAPS_M_FACTOR);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_WRMP_MAP)
@@ -2695,7 +2695,7 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    }
    else if (packet_data->tab_id == ETMT_EGOCRV_MAP)
    {
-    int value = MathHelpers::Round((packet_data->address > 15) ? (packet_data->table_data[i] / ADC_DISCRETE) : (EGO_CURVE_M_FACTOR / packet_data->table_data[i]));
+    int value = MathHelpers::Round((packet_data->address > 15) ? (packet_data->table_data[i] / ADC_DISCRETE) : (packet_data->table_data[i] * EGO_CURVE_M_FACTOR));
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
    }
    else
@@ -2763,8 +2763,8 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin16ToHex(corr_limit_p, m_outgoing_packet);
  int corr_limit_m = MathHelpers::Round(packet_data->lam_corr_limit_m * 512.0f / 100.0f);
  mp_pdp->Bin16ToHex(corr_limit_m, m_outgoing_packet);
- unsigned char lam_stoichval = MathHelpers::Round(AFR_MAPS_M_FACTOR / packet_data->lam_stoichval);
- mp_pdp->Bin8ToHex(lam_stoichval, m_outgoing_packet);
+ int lam_stoichval = MathHelpers::Round(packet_data->lam_stoichval * 128.0f);
+ mp_pdp->Bin16ToHex(lam_stoichval, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

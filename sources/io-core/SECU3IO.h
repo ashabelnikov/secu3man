@@ -654,7 +654,7 @@ namespace SECU3IO
  //scale factor for adv. angle maps (they are stored in integer format)
  const float AA_MAPS_M_FACTOR = 2.0f;
  const float VE_MAPS_M_FACTOR = 128.0f;
- const float AFR_MAPS_M_FACTOR = 2048.0f;
+ const float AFR_MAPS_M_FACTOR = 16.0f;
  const float WRMP_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float IACPOS_MAPS_M_FACTOR = 2.0f;
  const float AETPSB_MAPS_M_FACTOR = 0.1f;
@@ -663,6 +663,6 @@ namespace SECU3IO
  const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float AFTSTR_MAPS_M_FACTOR = (128.0f * 0.01f);
  const float GD_MAPS_M_FACTOR = 2.0f;
- const float EGO_CURVE_M_FACTOR = 32768.0f;
+ const float EGO_CURVE_M_FACTOR = 128.0f;
 
 };

@@ -183,7 +183,7 @@ void EEPROMDataMediator::GetAFRMap(int i_index, float* op_values, bool i_origina
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
   _uchar *p = &(p_maps[i_index].inj_afr[0][0]);
-  op_values[i] = AFR_MAPS_M_FACTOR / ((float) *(p + i));
+  op_values[i] = (((float) *(p + i)) / AFR_MAPS_M_FACTOR) + 8.0f;
  }
 }
 
@@ -334,7 +334,7 @@ void EEPROMDataMediator::GetEGOCurveMap(int i_index, float* op_values, bool i_or
  {
   float value = (float)p_maps[i_index].inj_ego_curve[i];
   if (0==value) value = 1; //prevent division by zero
-  op_values[i] = (EGO_CURVE_M_FACTOR / value);
+  op_values[i] = (value / EGO_CURVE_M_FACTOR);
  }
 
  for (; i < INJ_EGO_CURVE_SIZE+2; i++ )

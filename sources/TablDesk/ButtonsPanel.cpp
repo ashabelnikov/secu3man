@@ -1335,12 +1335,12 @@ void CButtonsPanel::OnViewAFRMap()
  if ((!m_afr_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_afr_map_chart_state = 1;
-  m_afr_map_wnd_handle = DLL::Chart3DCreate(GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.1f,22.0f,
+  m_afr_map_wnd_handle = DLL::Chart3DCreate(GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.0f,22.0f,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
     MLL::GetString(IDS_AFR_MAP).c_str());
-  DLL::Chart3DSetPtValuesFormat(m_afr_map_wnd_handle, _T("#00.00"));
-  DLL::Chart3DSetPtMovingStep(m_afr_map_wnd_handle, 0.25f);
+  DLL::Chart3DSetPtValuesFormat(m_afr_map_wnd_handle, _T("#00.0"));
+  DLL::Chart3DSetPtMovingStep(m_afr_map_wnd_handle, 0.1f);
   DLL::Chart3DSetOnWndActivation(m_afr_map_wnd_handle, OnWndActivationAFRMap, this);
   DLL::Chart3DSetOnGetAxisLabel(m_afr_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_afr_map_wnd_handle,OnChangeAFRMap,this);

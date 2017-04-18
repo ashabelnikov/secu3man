@@ -621,7 +621,7 @@ void CFirmwareDataMediator::GetAFRMap(int i_index, float* op_values, bool i_orig
   _uchar *p = &(p_fd->tables[i_index].inj_afr[0][0]);
   float value = (float) *(p + i);
   if (0==value) value = 1; //prevent division by zero
-  op_values[i] = (AFR_MAPS_M_FACTOR / value);
+  op_values[i] = (value / AFR_MAPS_M_FACTOR) + 8.0f;
  }
 }
 
@@ -635,7 +635,7 @@ void CFirmwareDataMediator::SetAFRMap(int i_index, const float* ip_values)
  for (int i = 0; i < (INJ_VE_POINTS_F * INJ_VE_POINTS_L); i++ )
  {
   _uchar *p = &(p_fd->tables[i_index].inj_afr[0][0]);
-  *(p + i) = MathHelpers::Round((AFR_MAPS_M_FACTOR / (0==ip_values[i] ? 1 : ip_values[i]))); //also, prevent div. by 0
+  *(p + i) = MathHelpers::Round((ip_values[i]-8.0) * AFR_MAPS_M_FACTOR); //also, prevent div. by 0
  }
 }
 
@@ -922,7 +922,7 @@ void CFirmwareDataMediator::GetEGOCurveMap(int i_index, float* op_values, bool i
  {
   float value = (float)p_fd->tables[i_index].inj_ego_curve[i];
   if (0==value) value = 1; //prevent division by zero
-  op_values[i] = (EGO_CURVE_M_FACTOR / value);
+  op_values[i] = (value / EGO_CURVE_M_FACTOR);
  }
 
  for (; i < INJ_EGO_CURVE_SIZE+2; i++ )
@@ -941,7 +941,7 @@ void CFirmwareDataMediator::SetEGOCurveMap(int i_index, const float* ip_values)
 
  int i = 0;
  for (; i < INJ_EGO_CURVE_SIZE; i++ )
-  p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round((EGO_CURVE_M_FACTOR / (0==ip_values[i] ? 1 : ip_values[i])));
+  p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round(ip_values[i] * EGO_CURVE_M_FACTOR);
  for (; i < INJ_EGO_CURVE_SIZE+2; i++ )
   p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
@@ -1172,7 +1172,7 @@ bool CFirmwareDataMediator::SetDefParamValues(BYTE i_descriptor, const void* ip_
     p_params->gd_fc_closing = MathHelpers::Round(p_in->fc_closing * 2.0f);
     p_params->gd_lambda_corr_limit_p = MathHelpers::Round(p_in->lam_corr_limit_p * 512.0f / 100.0f);
     p_params->gd_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
-    p_params->gd_lambda_stoichval = MathHelpers::Round((AFR_MAPS_M_FACTOR / (0==p_in->lam_stoichval ? 1 : p_in->lam_stoichval))); //also, prevent div. by 0
+    p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_stoichval * 128.0f); //also, prevent div. by 0
    }
    break;
   case SECUR_PAR:
@@ -1470,7 +1470,7 @@ bool CFirmwareDataMediator::GetDefParamValues(BYTE i_descriptor, void* op_values
      p_out->fc_closing = p_params->gd_fc_closing / 2.0f;
      p_out->lam_corr_limit_p = ((float)p_params->gd_lambda_corr_limit_p * 100.0f)/512.0f;
      p_out->lam_corr_limit_m = ((float)p_params->gd_lambda_corr_limit_m * 100.0f)/512.0f;
-     p_out->lam_stoichval = AFR_MAPS_M_FACTOR / ((float)p_params->gd_lambda_stoichval);
+     p_out->lam_stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
     }
     break;
    case SECUR_PAR:
