@@ -54,10 +54,10 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateFuelInjectionControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_SPIN,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_CAPTION,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_UNIT,OnUpdateInjGasControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_AFTSTRSTR_EDIT,OnUpdateInjGasControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMECOLD_CAPTION,OnUpdateFuelInjectionControls)
@@ -79,6 +79,7 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CStarterPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_fuel_injection(false)
+, m_gasdose(false)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
@@ -136,6 +137,11 @@ void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CStarterPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_fuel_injection);
+}
+
+void CStarterPageDlg::OnUpdateInjGasControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_fuel_injection || m_gasdose));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -261,6 +267,15 @@ void CStarterPageDlg::EnableFuelInjection(bool i_enable)
  if (m_fuel_injection == i_enable)
   return; //already has needed state
  m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CStarterPageDlg::EnableGasdose(bool i_enable)
+{
+ if (m_gasdose == i_enable)
+  return; //already has needed state
+ m_gasdose = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

@@ -1861,7 +1861,7 @@ void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
  pCmdUI->SetCheck( (m_crnk_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -1917,7 +1917,7 @@ void CButtonsPanel::OnUpdateViewAftstrMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
  pCmdUI->SetCheck( (m_aftstr_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2035,7 +2035,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
   DLL::Chart3DEnable(m_afr_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
-  DLL::Chart2DEnable(m_crnk_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_crnk_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
   DLL::Chart2DEnable(m_wrmp_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
@@ -2049,7 +2049,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
   DLL::Chart2DEnable(m_aerpm_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
-  DLL::Chart2DEnable(m_aftstr_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_it_map_chart_state && ::IsWindow(m_it_map_wnd_handle))
   DLL::Chart3DEnable(m_it_map_wnd_handle, i_enable && IsAllowed());
  if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
@@ -2076,6 +2076,10 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
   DLL::Chart3DEnable(m_afr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
  if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
   DLL::Chart2DEnable(m_wrmp_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
+  DLL::Chart2DEnable(m_crnk_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
+  DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
 
  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
   DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
