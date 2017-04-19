@@ -32,6 +32,7 @@ stringtable
   IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования (можно использ. клавиши Z,X на клавиатуре)"
   IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
   IDS_DLG_PTMOV_STEP_CAPT, "Шаг смещения точек"
+  IDS_PM_HIDE_MARKS, "Спрятать надписи"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -60,6 +61,7 @@ stringtable
   IDS_TT_SELECT_CURVE, "Select curve for editing (you can use Z,X keys on the keyboard)"
   IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
   IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
+  IDS_PM_HIDE_MARKS, "Hide marks"
 }
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL

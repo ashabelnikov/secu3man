@@ -88,7 +88,7 @@ object Form3D: TForm3D
     Top = 1
     Width = 700
     Height = 434
-    AllowZoom = False
+    AllowZoom = True
     AnimatedZoomSteps = 4
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
@@ -454,6 +454,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series18: TLineSeries
       Marks.ArrowLength = 8
@@ -474,6 +475,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series19: TLineSeries
       Marks.ArrowLength = 8
@@ -494,6 +496,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series20: TLineSeries
       Marks.ArrowLength = 8
@@ -514,6 +517,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series21: TLineSeries
       Marks.ArrowLength = 8
@@ -534,6 +538,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series22: TLineSeries
       Marks.ArrowLength = 8
@@ -554,6 +559,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series23: TLineSeries
       Marks.ArrowLength = 8
@@ -574,6 +580,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series24: TLineSeries
       Marks.ArrowLength = 8
@@ -594,6 +601,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series25: TLineSeries
       Marks.ArrowLength = 8
@@ -614,6 +622,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series26: TLineSeries
       Marks.ArrowLength = 8
@@ -634,6 +643,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series27: TLineSeries
       Marks.ArrowLength = 8
@@ -654,6 +664,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series28: TLineSeries
       Marks.ArrowLength = 8
@@ -674,6 +685,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series29: TLineSeries
       Marks.ArrowLength = 8
@@ -694,6 +706,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series30: TLineSeries
       Marks.ArrowLength = 8
@@ -714,6 +727,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series31: TLineSeries
       Marks.ArrowLength = 8
@@ -734,6 +748,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
     object Series32: TLineSeries
       Marks.ArrowLength = 8
@@ -754,6 +769,7 @@ object Form3D: TForm3D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeriesGetMarkText
     end
   end
   object TrackBarAf: TTrackBar
@@ -1105,6 +1121,10 @@ object Form3D: TForm3D
     object PM_SetPtMovStep: TMenuItem
       Caption = 'Points moving step...'
       OnClick = OnSetPtMovStep
+    end
+    object PM_HideMarks: TMenuItem
+      Caption = 'Hide marks'
+      OnClick = OnHideMarks
     end
   end
 end

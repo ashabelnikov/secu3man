@@ -59,7 +59,7 @@ object Form2D: TForm2D
     Width = 585
     Height = 352
     AllowPanning = pmNone
-    AllowZoom = False
+    AllowZoom = True
     BackWall.Brush.Color = clWhite
     BackWall.Brush.Style = bsClear
     Title.Text.Strings = ( 'График УОЗ на пуске' )
@@ -122,6 +122,7 @@ object Form2D: TForm2D
       YValues.Name = 'Y'
       YValues.Multiplier = 1
       YValues.Order = loNone
+      OnGetMarkText = LineSeries2GetMarkText
     end
   end
   object ButtonAngleUp: TBitBtn
@@ -600,6 +601,10 @@ object Form2D: TForm2D
     object PM_SetPtMovStep: TMenuItem
       Caption = 'Points moving step...'
       OnClick = OnSetPtMovStep
+    end
+    object PM_HideMarks: TMenuItem
+      Caption = 'Hide marks'
+      OnClick = OnHideMarks
     end
   end
 end

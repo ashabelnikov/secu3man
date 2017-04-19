@@ -98,6 +98,7 @@ class TForm3D : public TForm
   TMenuItem *PM_BldShapeUsing1stAndLastCurves;
   TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
+  TMenuItem *PM_HideMarks;
 
   TMenuItem *PM_CopyToCurve;
   TMenuItem *PM_CopyToCurve0;
@@ -160,6 +161,8 @@ class TForm3D : public TForm
   void __fastcall OnCopyToCurve(TObject *Sender);
   void __fastcall OnCopyFromCurve(TObject *Sender);
   void __fastcall OnSetPtMovStep(TObject *Sender);
+  void __fastcall LineSeriesGetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
+  void __fastcall OnHideMarks(TObject *Sender);
 
  public:
   __fastcall TForm3D(TComponent* Owner);
@@ -234,6 +237,7 @@ class TForm3D : public TForm
   bool m_chart_active;
   std::deque<int> m_selpts;
   std::pair<int, int> m_prev_pt;
+  int m_visibleMarkIdx;
 };
 //---------------------------------------------------------------------------
 #endif //_FORM3D_H_

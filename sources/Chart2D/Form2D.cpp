@@ -65,6 +65,7 @@ __fastcall TForm2D::TForm2D(TComponent* Owner)
 , m_val_n(0)
 , m_horizontal_axis_grid_mode(0) //0 mode is default
 , m_pt_moving_step(0.5f)
+, m_visibleMarkIdx(-1)
 {
  memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 256);
  m_selpts.push_back(0);
@@ -224,6 +225,8 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_BldCurveUsing1stAndLastPoints->Caption = string;
  ::LoadString(hInstance, IDS_PM_SET_PTMOV_STEP, string, 1024);
  PM_SetPtMovStep->Caption = string;
+ ::LoadString(hInstance, IDS_PM_HIDE_MARKS, string, 1024);
+ PM_HideMarks->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -354,6 +357,26 @@ void __fastcall TForm2D::Chart1MouseUp(TObject *Sender, TMouseButton Button,
 void __fastcall TForm2D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
       int X, int Y)
 {
+ //===========================================
+ if (m_visibleMarkIdx != -1)
+ {
+  if (m_setval)
+  {
+   m_visibleMarkIdx = m_val_n;
+   Chart1->Invalidate();
+  }
+  else
+  {
+   int idx = Series2->GetCursorValueIndex();
+   if (idx >= 0)
+   {
+    m_visibleMarkIdx = idx;
+    Chart1->Invalidate();
+   }
+  } 
+ }
+ //===========================================
+
  double v;
  if (m_setval)
  {//select on the fly point being moved
@@ -800,6 +823,34 @@ void __fastcall TForm2D::OnSetPtMovStep(TObject *Sender)
  PtMovStepDlg->SetValue(m_pt_moving_step);
  if (PtMovStepDlg->ShowModal()==mrOk)
   m_pt_moving_step = PtMovStepDlg->GetValue();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::LineSeries2GetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText)
+{
+
+ if (m_visibleMarkIdx==-1)
+  return; //show all marks
+ else if (m_visibleMarkIdx==-2)
+  LabelText = ""; //hide all marks
+ else
+ { //show only one mark which is under mouse cursor
+  if (ValueIndex==m_visibleMarkIdx)
+   return;
+  else
+   LabelText = "";
+ } 
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnHideMarks(TObject *Sender)
+{
+ PM_HideMarks->Checked = PM_HideMarks->Checked ? false : true; //toggle check mark
+ if (!PM_HideMarks->Checked)
+  m_visibleMarkIdx=-1; //show all marks
+ else
+  m_visibleMarkIdx=-2; //show only one mark which is under mouse cursor
+ Chart1->Invalidate();
 }
 
 //---------------------------------------------------------------------------

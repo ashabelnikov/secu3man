@@ -63,6 +63,7 @@ class TForm2D : public TForm
   TMenuItem *PM_BldCurveUsing1stAndLastPoints;
   TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
+  TMenuItem *PM_HideMarks;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -105,6 +106,8 @@ class TForm2D : public TForm
   void __fastcall OnExitChart(TObject* Sender);
   void __fastcall OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y);
   void __fastcall OnSetPtMovStep(TObject *Sender);
+  void __fastcall LineSeries2GetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
+  void __fastcall OnHideMarks(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);
@@ -184,6 +187,7 @@ class TForm2D : public TForm
   std::deque<int> m_selpts;
   std::pair<int, int> m_prev_pt;
   std::vector<int> m_errors;    //for bins errors' checking
+  int m_visibleMarkIdx;
 };
 #endif //_FORM2D_H_
 
