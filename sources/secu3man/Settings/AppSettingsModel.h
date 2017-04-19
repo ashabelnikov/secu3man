@@ -91,6 +91,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AllowVisualTheme;
   const CString m_Name_AutoDiagEnter;
   const CString m_Name_SaveWarning;
+  const CString m_Name_AutoCERead;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -179,6 +180,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetAllowVisualTheme(void) const;
   virtual bool GetAutoDiagEnter(void) const;
   virtual bool GetSaveWarning(void) const;
+  virtual bool GetAutoCERead(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -226,6 +228,7 @@ class CAppSettingsModel : public ISettingsData
   bool m_optAllowVisualTheme;
   bool m_optAutoDiagEnter;
   bool m_optSaveWarning;
+  bool m_optAutoCERead;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

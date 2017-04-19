@@ -119,7 +119,7 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
  mp_wndView->AddView(MLL::GetString(IDS_TAB_FIRMWARE_DATA),m_pFirmwareTabDlg,1);
 
  m_pCheckEngineTabDlg = new CCheckEngineTabDlg(); //view
- m_pCheckEngineTabController = new CCheckEngineTabController(m_pCheckEngineTabDlg, p_comm, p_sbar);
+ m_pCheckEngineTabController = new CCheckEngineTabController(m_pCheckEngineTabDlg, p_comm, p_sbar, p_settings);
 
  mp_MainTabController->AddTabController(m_pCheckEngineTabController);
  mp_wndView->AddView(MLL::GetString(IDS_TAB_CHECK_ENGINE),m_pCheckEngineTabDlg,2);

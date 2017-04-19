@@ -35,11 +35,12 @@
 class CCheckEngineTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
+class ISettingsData;
 
 class CCheckEngineTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar);
+  CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
   virtual ~CCheckEngineTabController();
 
  private:
@@ -75,6 +76,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CControlAppAdapter* m_pAdapter;
+  ISettingsData* mp_settings;
 
   bool m_real_time_errors_mode;
   ErrorsIDContainer m_errors_ids;

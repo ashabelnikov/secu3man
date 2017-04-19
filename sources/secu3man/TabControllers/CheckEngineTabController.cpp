@@ -32,6 +32,7 @@
 #include "io-core/ce_errors.h"
 #include "MainFrame/StatusBarManager.h"
 #include "TabDialogs/CheckEngineTabDlg.h"
+#include "Settings/ISettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -44,10 +45,11 @@ const BYTE default_context = SENSOR_DAT;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar)
+CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : m_view(NULL)
 , m_comm(NULL)
 , m_sbar(NULL)
+, mp_settings(ip_settings)
 , m_real_time_errors_mode(false)
 {
  //инициализируем указатели на вспомогательные объекты
@@ -123,6 +125,10 @@ void CCheckEngineTabController::OnActivate(void)
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
+
+ //read CE error from SECU-3 after opening of tab if allowed
+ if (mp_settings->GetAutoCERead())
+  OnReadSavedErrors();
 }
 
 //from MainTabController
