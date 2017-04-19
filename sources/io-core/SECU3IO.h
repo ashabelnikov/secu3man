@@ -137,6 +137,7 @@ namespace SECU3IO
  {
   bool idl_regul;                       //use idling regulator
   bool use_regongas;                    //use regulator when fuel type is gas
+  bool preg_mode;                       //proportional regulator mode
   float  ifac1;
   float  ifac2;
   int  MINEFR;

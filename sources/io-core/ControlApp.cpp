@@ -705,6 +705,7 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  m_IdlRegPar.idl_regul = (idl_flags & 0x1) != 0;
  m_IdlRegPar.use_regongas = (idl_flags & 0x2) != 0;
  m_IdlRegPar.closed_loop = (idl_flags & 0x4) != 0;
+ m_IdlRegPar.preg_mode = (idl_flags & 0x8) != 0;
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -2393,7 +2394,7 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
- unsigned char flags = ((packet_data->closed_loop != 0) << 2) | ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
+ unsigned char flags = ((packet_data->preg_mode != 0) << 3) | ((packet_data->closed_loop != 0) << 2) | ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  int ifac1 =  MathHelpers::Round((packet_data->ifac1 * 256.0f));

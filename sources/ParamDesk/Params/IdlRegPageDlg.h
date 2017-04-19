@@ -74,6 +74,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_use_regulator;
   CButton m_use_regongas;
   CButton m_use_closedloop;
+  CButton m_preg_mode_check;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;

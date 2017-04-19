@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_ONGAS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_IDLREG_PMODE_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -75,6 +76,7 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_REGULATOR,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_USE_ONGAS,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_PMODE_CHECK,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_RESTRICTION_MIN_SPIN,OnUpdateControls)
@@ -162,6 +164,7 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.idling_rpm = 850;
  m_params.idl_regul = false;
  m_params.use_regongas = true;
+ m_params.preg_mode = false;
  m_params.min_angle = -15.0f;
  m_params.max_angle = 30.0f;
  m_params.turn_on_temp = 50.0f;
@@ -201,6 +204,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_EDIT, m_turn_on_temp_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_SPIN, m_turn_on_temp_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_USE_ONGAS, m_use_regongas);
+ DDX_Control(pDX, IDC_PD_IDLREG_PMODE_CHECK, m_preg_mode_check);
  //closed loop related:
  DDX_Control(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_use_closedloop);
  DDX_Control(pDX, IDC_PD_IDLREG_IDLTORUNADD_SPIN, m_idltorunadd_spin);
@@ -229,6 +233,7 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_turn_on_temp_edit.DDX_Value(pDX, IDC_PD_IDLREG_TURN_ON_TEMP_EDIT, m_params.turn_on_temp);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_REGULATOR, m_params.idl_regul);
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USE_ONGAS, m_params.use_regongas);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_PMODE_CHECK, m_params.preg_mode);
  //closed loop related:
  DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, m_params.closed_loop);
  m_idltorunadd_edit.DDX_Value(pDX, IDC_PD_IDLREG_IDLTORUNADD_EDIT, m_params.idl_to_run_add);
@@ -351,7 +356,7 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 2.25f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 2.35f));
 
  //Create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
