@@ -1716,7 +1716,7 @@ void CButtonsPanel::OnViewRigidMap()
  {
   m_rigid_map_chart_state = 1;
   m_rigid_map_wnd_handle = DLL::Chart2DCreate(GetRigidMap(true),GetRigidMap(false),0.0f,5.0f,SECU3IO::rigid_map_slots,8,
-    _T(""),
+    MLL::GetString(IDS_MAPS_RIGID_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_RIGID_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_rigid_map_wnd_handle, _T("#0.00"));
