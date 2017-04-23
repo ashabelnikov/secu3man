@@ -25,6 +25,7 @@
  */
 
 #pragma once
+#include <math.h>
 
 namespace MathHelpers
 {
@@ -41,6 +42,13 @@ namespace MathHelpers
   inline ITN Round(FPN i_value)
   {
    return (ITN)((i_value) + 0.5f - (FPN)((i_value) < 0));
+  }
+
+  //Round floating point number to the value with 0.1 precision (e.g. 14.68 ==> 14.7)
+  template <class FPN>
+  FPN RoundP1(FPN f)
+  {
+   return floor((f * 10 ) + 0.5f) / 10;
   }
 
   //Convolution for 1D function

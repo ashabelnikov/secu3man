@@ -1361,7 +1361,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      if (m_EditTabPar.tab_id == ETMT_VE_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / VE_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
-      m_EditTabPar.table_data[i] = (((float)value) / AFR_MAPS_M_FACTOR) + 8.0f;
+      m_EditTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / WRMP_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFTSTR_MAP)
