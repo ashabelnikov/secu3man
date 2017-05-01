@@ -39,7 +39,7 @@ static const COLORREF itemErrColor = RGB(255,120,120);
 static const COLORREF errorMsgColor = RGB(255, 0, 0);
 
 /////////////////////////////////////////////////////////////////////////////
-// CDwellCalcDlg dialog
+// CRPMGridEditDlg dialog
 
 BEGIN_MESSAGE_MAP(CRPMGridEditDlg, Super)
  ON_CONTROL_RANGE(EN_CHANGE, editStart, editEnd, OnChangeEdit)
@@ -79,7 +79,7 @@ void CRPMGridEditDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CDwellCalcDlg message handlers
+// CRPMGridEditDlg message handlers
 
 void CRPMGridEditDlg::OnOK()
 {

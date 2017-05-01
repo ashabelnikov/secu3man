@@ -24,6 +24,7 @@ project(${PROJECT})
 
 set(HEADERS
   ButtonsPanel.h
+  CESettingsDlg.h
   DLLLinkedFunctions.h
   DwellCalcDlg.h
   GridModeEditorDlg.h
@@ -36,6 +37,7 @@ set(HEADERS
 
 set(SOURCES
   ButtonsPanel.cpp
+  CESettingsDlg.cpp
   DLLLinkedFunctions.cpp
   DwellCalcDlg.cpp
   GridModeEditorDlg.cpp

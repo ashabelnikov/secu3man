@@ -570,6 +570,37 @@ namespace SECU3IO
   SECU3IO::AccelPar     m_AccelPar;
  };
 
+ struct CESettingsData
+ {  
+  float map_v_min;
+  float map_v_max;
+  float map_v_em;
+
+  float vbat_v_min;
+  float vbat_v_max;
+  float vbat_v_em;
+
+  float cts_v_min;
+  float cts_v_max;
+  float cts_v_em;
+
+  float ks_v_min;
+  float ks_v_max;
+  float ks_v_em;
+
+  float tps_v_min;
+  float tps_v_max;
+  float tps_v_em;
+
+  float add_i1_v_min;
+  float add_i1_v_max;
+  float add_i1_v_em;
+
+  float add_i2_v_min;
+  float add_i2_v_max;
+  float add_i2_v_em;
+ };
+
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};
  const float work_map_rpm_slots[16]  = {600,720,840,990,1170,1380,1650,1950,2310,2730,3210,3840,4530,5370,6360,7500};
  const float temp_map_tmp_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};

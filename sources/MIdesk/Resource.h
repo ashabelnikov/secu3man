@@ -112,5 +112,7 @@
 #define IDS_CED_DWELL_CONTROL_TT        2112
 #define IDS_CED_CAMS_MALFUNCTION_TT     2113
 #define IDS_CED_TPS_SENSOR_FAIL_TT      2114
-#define IDS_MI_MP_H                     2115
-#define IDS_MI_MI                       2116
+#define IDS_CED_ADD_I1_SENSOR_TT        2115
+#define IDS_CED_ADD_I2_SENSOR_TT        2116
+#define IDS_MI_MP_H                     2117
+#define IDS_MI_MI                       2118

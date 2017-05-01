@@ -123,6 +123,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnCTSXAxisEditChanged(int i_type, float i_value);
   void OnATSXAxisEditChanged(int i_type, float i_value);
+  void OnCESettingsButton(void);
   ///////////////////////////////////////////////////////////
   void OnBLStartedEmergency(void);
 

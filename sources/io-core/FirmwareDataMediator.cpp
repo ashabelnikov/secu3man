@@ -89,6 +89,38 @@ typedef struct cd_data_t
  _uint size;                     // size of this structure (2 bytes)
 }cd_data_t;
 
+//настройки ошибок check engine
+typedef struct
+{
+ _uint map_v_min;                //minimum correct value
+ _uint map_v_max;                //maximum correct value
+ _uint map_v_em;                 //emergency value, used in case of error
+
+ _uint vbat_v_min;
+ _uint vbat_v_max;
+ _uint vbat_v_em;
+
+ _uint cts_v_min;
+ _uint cts_v_max;
+ _uint cts_v_em;
+
+ _uint ks_v_min;
+ _uint ks_v_max;
+ _uint ks_v_em;
+
+ _uint tps_v_min;
+ _uint tps_v_max;
+ _uint tps_v_em;
+
+ _uint add_i1_v_min;
+ _uint add_i1_v_max;
+ _uint add_i1_v_em;
+
+ _uint add_i2_v_min;
+ _uint add_i2_v_max;
+ _uint add_i2_v_em;
+}ce_sett_t;
+
 //описывает дополнительные данные хранимые в прошивке
 typedef struct
 {
@@ -126,10 +158,13 @@ typedef struct
  //gas dosator position vs TPS,RPM
  _uchar gasdose_pos[GASDOSE_POS_TPS_SIZE][GASDOSE_POS_RPM_SIZE];
 
+ //CE settings data
+ ce_sett_t cesd;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1792];
+ _uchar reserved[1750];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -229,6 +264,14 @@ CFirmwareDataMediator::~CFirmwareDataMediator()
 }
 
 BYTE* CFirmwareDataMediator::getBytes(bool i_original /* = false*/)
+{
+ if (i_original)
+  return mp_bytes_original;
+ else
+  return mp_bytes_active;
+}
+
+const BYTE* CFirmwareDataMediator::getBytes(bool i_original /* = false*/) const
 {
  if (i_original)
   return mp_bytes_original;
@@ -2105,4 +2148,70 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_s
    //do nothing
   }
  }
+}
+
+void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
+{
+ const fw_data_t* p_fd = (const fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ o_data.map_v_min = ((float)p_fd->exdata.cesd.map_v_min) * ADC_DISCRETE;
+ o_data.map_v_max = ((float)p_fd->exdata.cesd.map_v_max) * ADC_DISCRETE;
+ o_data.map_v_em  = ((float)p_fd->exdata.cesd.map_v_em) * ADC_DISCRETE;
+
+ o_data.vbat_v_min = ((float)p_fd->exdata.cesd.vbat_v_min) * ADC_DISCRETE;
+ o_data.vbat_v_max = ((float)p_fd->exdata.cesd.vbat_v_max) * ADC_DISCRETE;
+ o_data.vbat_v_em  = ((float)p_fd->exdata.cesd.vbat_v_em) * ADC_DISCRETE;
+
+ o_data.cts_v_min = ((float)p_fd->exdata.cesd.cts_v_min) * ADC_DISCRETE;
+ o_data.cts_v_max = ((float)p_fd->exdata.cesd.cts_v_max) * ADC_DISCRETE;
+ o_data.cts_v_em  = ((float)p_fd->exdata.cesd.cts_v_em) * ADC_DISCRETE;
+
+ o_data.ks_v_min = ((float)p_fd->exdata.cesd.ks_v_min) * ADC_DISCRETE;
+ o_data.ks_v_max = ((float)p_fd->exdata.cesd.ks_v_max) * ADC_DISCRETE;
+ o_data.ks_v_em  = ((float)p_fd->exdata.cesd.ks_v_em) * ADC_DISCRETE;
+
+ o_data.tps_v_min = ((float)p_fd->exdata.cesd.tps_v_min) * ADC_DISCRETE;
+ o_data.tps_v_max = ((float)p_fd->exdata.cesd.tps_v_max) * ADC_DISCRETE;
+ o_data.tps_v_em  = ((float)p_fd->exdata.cesd.tps_v_em) * ADC_DISCRETE;
+
+ o_data.add_i1_v_min = ((float)p_fd->exdata.cesd.add_i1_v_min) * ADC_DISCRETE;
+ o_data.add_i1_v_max = ((float)p_fd->exdata.cesd.add_i1_v_max) * ADC_DISCRETE;
+ o_data.add_i1_v_em  = ((float)p_fd->exdata.cesd.add_i1_v_em) * ADC_DISCRETE;
+
+ o_data.add_i2_v_min = ((float)p_fd->exdata.cesd.add_i2_v_min) * ADC_DISCRETE;
+ o_data.add_i2_v_max = ((float)p_fd->exdata.cesd.add_i2_v_max) * ADC_DISCRETE;
+ o_data.add_i2_v_em  = ((float)p_fd->exdata.cesd.add_i2_v_em) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
+{
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ p_fd->exdata.cesd.map_v_min = MathHelpers::Round((i_data.map_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.map_v_max = MathHelpers::Round((i_data.map_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.map_v_em  = MathHelpers::Round((i_data.map_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.vbat_v_min = MathHelpers::Round((i_data.vbat_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.vbat_v_max = MathHelpers::Round((i_data.vbat_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.vbat_v_em  = MathHelpers::Round((i_data.vbat_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.cts_v_min = MathHelpers::Round((i_data.cts_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.cts_v_max = MathHelpers::Round((i_data.cts_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.cts_v_em  = MathHelpers::Round((i_data.cts_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.ks_v_min = MathHelpers::Round((i_data.ks_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.ks_v_max = MathHelpers::Round((i_data.ks_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.ks_v_em  = MathHelpers::Round((i_data.ks_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.tps_v_min = MathHelpers::Round((i_data.tps_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.tps_v_max = MathHelpers::Round((i_data.tps_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.tps_v_em  = MathHelpers::Round((i_data.tps_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.add_i1_v_min = MathHelpers::Round((i_data.add_i1_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i1_v_max = MathHelpers::Round((i_data.add_i1_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i1_v_em  = MathHelpers::Round((i_data.add_i1_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.add_i2_v_min = MathHelpers::Round((i_data.add_i2_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i2_v_max = MathHelpers::Round((i_data.add_i2_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i2_v_em  = MathHelpers::Round((i_data.add_i2_v_em / ADC_DISCRETE));
 }

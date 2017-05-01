@@ -29,6 +29,8 @@
 #include "common/unicodesupport.h"
 #include <vector>
 
+namespace SECU3IO { struct CESettingsData; }
+
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке
 //(памяти программ микроконтроллера), а также для хранения этих данных.
 struct PPFlashParam;
@@ -150,6 +152,9 @@ class IOCORE_API CFirmwareDataMediator
 
   void GetGasdosePosMap(float* op_values, bool i_original = false);
   void SetGasdosePosMap(const float* i_values);
+
+  void GetCESettingsData(SECU3IO::CESettingsData& o_data) const;
+  void SetCESettingsData(const SECU3IO::CESettingsData& i_data);
 
   //Types of slots/plugs
   enum IOXtype
@@ -320,6 +325,7 @@ class IOCORE_API CFirmwareDataMediator
   struct cd_data_t* _FindCodeData(const BYTE* ip_bytes = NULL, const PPFlashParam* ip_fpp = NULL);
 
   BYTE* getBytes(bool i_original = false);
+  const BYTE* getBytes(bool i_original = false) const;
 
  private:
   const std::auto_ptr<PPFlashParam> m_fpp;

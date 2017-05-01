@@ -354,3 +354,5 @@
 #define IDS_LOG_FORMAT_DESC             4372
 #define ID_APP_VK                       4373
 #define ID_APP_FB                       4374
+#define IDS_ECUERROR_ADD_I1_SENSOR      4375
+#define IDS_ECUERROR_ADD_I2_SENSOR      4376

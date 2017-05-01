@@ -51,6 +51,7 @@
 #include "TabDialogs/FirmwareTabDlg.h"
 #include "TablDesk/MapIds.h"
 #include "TablDesk/TablesSetPanel.h"
+#include "TablDesk/CESettingsDlg.h"
 
 using namespace fastdelegate;
 
@@ -148,6 +149,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
  m_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
  m_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
+ m_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
  m_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
 
  m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
@@ -1799,4 +1801,17 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
 
  m_sbar->ShowProgressBar(true);
  m_sbar->SetProgressPos(0);
+}
+
+void CFirmwareTabController::OnCESettingsButton(void)
+{
+ CCESettingsDlg dialog;
+ SECU3IO::CESettingsData data;
+ m_fwdm->GetCESettingsData(data);
+ dialog.SetValues(data);
+ if (dialog.DoModal() == IDOK)
+ {
+  dialog.GetValues(data);
+  m_fwdm->SetCESettingsData(data);
+ }
 }

@@ -181,13 +181,12 @@ BEGIN
     PUSHBUTTON      "Сбросить все",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
     CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
-    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",
-                    LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,133
-    PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",IDC_CE_READ_ERRORS_BUTTON,59,159,102,28,BS_MULTILINE
-    PUSHBUTTON      "ЗАПИСАТЬ сохраненные ошибки",IDC_CE_WRITE_ERRORS_BUTTON,179,159,101,28,BS_MULTILINE
+    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,153
+    PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",IDC_CE_READ_ERRORS_BUTTON,59,179,102,23,BS_MULTILINE
+    PUSHBUTTON      "ЗАПИСАТЬ сохраненные ошибки",IDC_CE_WRITE_ERRORS_BUTTON,179,179,101,23,BS_MULTILINE
     CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,161,97,22
-    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,190,347,32
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
+    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -363,6 +362,8 @@ BEGIN
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Ненормальное напряжение бортовой сети"
     IDS_ECUERROR_CAMS_MALFUNCTION "Поломка или неправильная работа ДФ"
     IDS_ECUERROR_TPS_SENSOR_FAIL "Поломка или неправильные показания ДПДЗ"
+    IDS_ECUERROR_ADD_I1_SENSOR "Неисправность датчика на входе ADD_I1"
+    IDS_ECUERROR_ADD_I2_SENSOR "Неисправность датчика на входе ADD_I2"   
     IDS_INCOMPATIBLE_FIRMWARE "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
     IDS_INCOMPATIBLE_QUARTZ "Обнаружена несовместимость тактовой частоты, некоторые данные и параметры могут стать неверными. Продолжить?"
 END
@@ -732,13 +733,12 @@ BEGIN
     PUSHBUTTON      "Reset All",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
     CONTROL         "Show errors with inertness",IDC_CE_READ_INERTNESS_CHECKBOX,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
-    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",
-                    LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,133
-    PUSHBUTTON      "READ saved errors",IDC_CE_READ_ERRORS_BUTTON,59,159,102,28,BS_MULTILINE
-    PUSHBUTTON      "WRITE saved errors",IDC_CE_WRITE_ERRORS_BUTTON,179,159,101,28,BS_MULTILINE
+    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,153
+    PUSHBUTTON      "READ saved errors",IDC_CE_READ_ERRORS_BUTTON,59,179,102,23,BS_MULTILINE
+    PUSHBUTTON      "WRITE saved errors",IDC_CE_WRITE_ERRORS_BUTTON,179,179,101,23,BS_MULTILINE
     CONTROL         "Read errors in realtime", IDC_CE_READ_REALTIME_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,161,97,22
-    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,190,347,32
+                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
+    LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
 END
 
 IDD_KNOCK_CHANNEL DIALOGEX 0, 0, 490, 218
@@ -962,11 +962,12 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_ECUERROR_KNOCK_DETECTED "Detonation detected"
     IDS_ECUERROR_MAP_SENSOR_FAIL "Breakage or wrong work of MAP sensor"
-    IDS_ECUERROR_TEMP_SENSOR_FAIL 
-                            "Breakage or wrong work of coolant temperature sensor"
+    IDS_ECUERROR_TEMP_SENSOR_FAIL "Breakage or wrong work of coolant temperature sensor"
     IDS_ECUERROR_VOLT_SENSOR_FAIL "Abnormal board voltage"
     IDS_ECUERROR_CAMS_MALFUNCTION "Breakage or wrong work of cam sensor"
     IDS_ECUERROR_TPS_SENSOR_FAIL "Breakage or wrong indication of TPS"
+    IDS_ECUERROR_ADD_I1_SENSOR "ADD_I1 input's sensor failure"
+    IDS_ECUERROR_ADD_I2_SENSOR "ADD_I2 input's sensor failure"   
     IDS_INCOMPATIBLE_FIRMWARE "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
     IDS_INCOMPATIBLE_QUARTZ "Incompatibility of clock frequency has detected, some data and parameters may become invalid. Do you want to continue?"
 END

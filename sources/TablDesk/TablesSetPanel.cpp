@@ -362,6 +362,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_CHOKE_MAP, m_view_choke_op_map_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
  DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, m_view_gasdose_map_btn);
+ DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -374,6 +375,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_CURVE, OnViewATSCurveMap)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_MAP, OnViewATSAACMap)
  ON_BN_CLICKED(IDC_TD_VIEW_GDP_MAP, OnViewGasdosePosMap)
+ ON_BN_CLICKED(IDC_TD_EDIT_CEPAR, OnCESettingsButton)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -385,6 +387,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GDP_MAP, OnUpdateViewGasdosePosMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_EDIT_CEPAR, OnUpdateCESettingsButton)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -468,6 +471,12 @@ void CTablesSetPanel::OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart3DCreate!=NULL) && opened;
  pCmdUI->Enable(enable && m_gasdose_enabled);
  pCmdUI->SetCheck( (m_gasdose_map_chart_state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateCESettingsButton(CCmdUI* pCmdUI)
+{
+ bool enable = m_IsAllowed ? m_IsAllowed() : false;
+ pCmdUI->Enable(enable);
 }
 
 //Updates controls which state depends on whether or not data is
@@ -851,6 +860,13 @@ void CTablesSetPanel::OnRPMGridButton()
   m_OnRPMGridEditButton();
 }
 
+void CTablesSetPanel::OnCESettingsButton()
+{
+ if (m_OnCESettingsButton)
+  m_OnCESettingsButton();
+ m_edit_cesettings_btn.SetCheck(BST_UNCHECKED);
+}
+
 float* CTablesSetPanel::GetAttenuatorMap(bool i_original)
 {
  if (i_original)
@@ -966,3 +982,6 @@ void CTablesSetPanel::setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
 
 void CTablesSetPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 {m_OnRPMGridEditButton = OnFunction;}
+
+void CTablesSetPanel::setOnCESettingsButton(EventHandler OnFunction)
+{m_OnCESettingsButton = OnFunction;}

@@ -38,8 +38,10 @@
 #define ECUERROR_DWELL_CONTROL        8
 #define ECUERROR_CAMS_MALFUNCTION     9
 #define ECUERROR_TPS_SENSOR_FAIL     10
+#define ECUERROR_ADD_I1_SENSOR       11
+#define ECUERROR_ADD_I2_SENSOR       12
 
-const int SECU3_CE_ERRCODES_COUNT   = 11;
+const int SECU3_CE_ERRCODES_COUNT   = 13;
  //<bitnumber, error code>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_ce_error_codes[SECU3_CE_ERRCODES_COUNT] =
@@ -55,6 +57,8 @@ const int SECU3_CE_ERRCODES_COUNT   = 11;
   _SD(ECUERROR_DWELL_CONTROL,       41),
   _SD(ECUERROR_CAMS_MALFUNCTION,    25), //sensor
   _SD(ECUERROR_TPS_SENSOR_FAIL,     26), //sensor
+  _SD(ECUERROR_ADD_I1_SENSOR,       27), //sensor
+  _SD(ECUERROR_ADD_I2_SENSOR,       28), //sensor
  };
 #undef _SD
 

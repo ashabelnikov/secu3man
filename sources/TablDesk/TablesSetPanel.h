@@ -77,6 +77,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void setOnCTSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnRPMGridEditButton(EventHandler OnFunction);
+  void setOnCESettingsButton(EventHandler OnFunction);
 
 // Implementation
  protected:
@@ -90,6 +91,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewATSCurveMap();
   afx_msg void OnViewATSAACMap();
   afx_msg void OnRPMGridButton();
+  afx_msg void OnCESettingsButton();
   afx_msg void OnViewGasdosePosMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
@@ -98,6 +100,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewATSAACMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewChokeOpMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateCESettingsButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -114,6 +117,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_ats_aac_map_btn;
   CButton   m_view_choke_op_map_btn;
   CButton   m_view_gasdose_map_btn;
+  CButton   m_edit_cesettings_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
 
@@ -123,6 +127,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   EventWithCodeAndFloat m_OnCTSXAxisEditChanged;
   EventWithCodeAndFloat m_OnATSXAxisEditChanged;
   EventHandler m_OnRPMGridEditButton;
+  EventHandler m_OnCESettingsButton;
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
