@@ -331,6 +331,10 @@ void CEEPROMTabController::OnSaveEEPROMToFile(void)
 
 void CEEPROMTabController::OnReadEEPROMFromSECU(void)
 {
+ bool is_continue = CheckChangesAskAndSaveEEPROM();
+ if (!is_continue)
+  return;  //пользователь передумал
+
  if (!m_comm->m_pBootLoader->IsIdle())
   return;
 
@@ -342,7 +346,9 @@ void CEEPROMTabController::OnReadEEPROMFromSECU(void)
 
 void CEEPROMTabController::OnWriteEEPROMToSECU(void)
 {
- m_eedm->StoreBytes(m_bl_data);
+ m_eedm->StoreBytes(m_bl_data); //fill m_bl_date with bytes of EEPROM 
+
+ m_eedm->CalculateAndPlaceParamsCRC(m_bl_data); //update CRC before sending data to SECU-3
 
  ASSERT(m_comm);
 

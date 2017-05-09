@@ -624,8 +624,9 @@ EECUPlatform EEPROMDataMediator::GetPlatformId(void)
 //io_data - массив байтов EEPROM
 void EEPROMDataMediator::CalculateAndPlaceParamsCRC(BYTE* iop_data)
 {
- _uint crc = crc16(iop_data, sizeof(params_t) - sizeof(_uint));
- GetParamsPtr()->crc = crc;
+ params_t* params = (params_t*)(iop_data + EEPROM_PARAM_START);
+ _uint crc = crc16((BYTE*)params, sizeof(params_t) - sizeof(_uint)); //skip last two byte of CRC
+ params->crc = crc;
 }
 
 void EEPROMDataMediator::CalculateAndPlaceParamsCRC(void)

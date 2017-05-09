@@ -320,6 +320,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_lambda_activ_delay = p_in->lam_activ_delay;
     p_params->inj_lambda_dead_band = MathHelpers::Round(p_in->lam_dead_band / ADC_DISCRETE);
     p_params->inj_lambda_senstype = p_in->lam_senstype;
+    p_params->inj_lambda_ms_per_stp = p_in->lam_ms_per_stp / 10;
    }
    break;
   case ACCEL_PAR:
@@ -625,6 +626,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->lam_activ_delay = p_params->inj_lambda_activ_delay;
     p_out->lam_dead_band = ((float)p_params->inj_lambda_dead_band) * ADC_DISCRETE;
     p_out->lam_senstype = p_params->inj_lambda_senstype;
+    p_out->lam_ms_per_stp = p_params->inj_lambda_ms_per_stp * 10;
    }
    break;
   case ACCEL_PAR:

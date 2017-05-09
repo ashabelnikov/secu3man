@@ -218,10 +218,12 @@ typedef struct params_t
  _uchar  inj_lambda_senstype;           // Oxigen sensor type - NBO(0) or WBO(1)
  _uint  gd_lambda_stoichval;            // stoiciometry AFR value for LPG
 
+ _uchar  inj_lambda_ms_per_stp;         // Number of strokes per step for lambda control
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[49];
+ _uchar reserved[48];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

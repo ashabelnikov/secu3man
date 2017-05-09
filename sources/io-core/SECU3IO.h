@@ -465,6 +465,7 @@ namespace SECU3IO
  {
   unsigned char lam_senstype;         //type of EGO sensor (NBO, WBO) 
   int lam_str_per_stp;                //Number of strokes per step for lambda control
+  int lam_ms_per_stp;                 //Number of ms per step for lambda control
   float lam_step_size_p;              //"+" Size of step 
   float lam_step_size_m;              //"-" Size of step 
   float lam_corr_limit_p;             //"+" correction limit

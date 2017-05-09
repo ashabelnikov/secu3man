@@ -59,6 +59,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMsPerStp(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -68,6 +69,8 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CComboBox m_senstype_combo;
   CSpinButtonCtrlEx m_strperstp_spin;
   CEditEx m_strperstp_edit;
+  CSpinButtonCtrlEx m_msperstp_spin;
+  CEditEx m_msperstp_edit;
   CSpinButtonCtrlEx m_stepsize_p_spin;
   CEditEx m_stepsize_p_edit;
   CSpinButtonCtrlEx m_stepsize_m_spin;

@@ -36,6 +36,7 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_WM_DESTROY()
  ON_CBN_SELCHANGE(IDC_PD_LAMBDA_SENSTYPE_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STRPERSTP_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_MSPERSTP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_P_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STEPSIZE_M_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_CORRLIMIT_P_EDIT, OnChangeData)
@@ -52,6 +53,10 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STRPERSTP_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MSPERSTP_EDIT,OnUpdateMsPerStp)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MSPERSTP_SPIN,OnUpdateMsPerStp)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MSPERSTP_CAPTION,OnUpdateMsPerStp)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_MSPERSTP_UNIT,OnUpdateMsPerStp)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_STEPSIZE_P_CAPTION,OnUpdateControls)
@@ -94,6 +99,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CLambdaPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_strperstp_edit(CEditEx::MODE_INT, true)
+, m_msperstp_edit(CEditEx::MODE_INT, true)
 , m_stepsize_p_edit(CEditEx::MODE_FLOAT, true)
 , m_stepsize_m_edit(CEditEx::MODE_FLOAT, true)
 , m_corrlimit_p_edit(CEditEx::MODE_FLOAT, true)
@@ -106,6 +112,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 , mp_scr(new CWndScroller)
 {
  m_params.lam_str_per_stp = 10;
+ m_params.lam_ms_per_stp = 0;
  m_params.lam_step_size_p = 2.5f;
  m_params.lam_step_size_m = 2.5f;
  m_params.lam_corr_limit_p = 30.0f;
@@ -134,6 +141,8 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_SENSTYPE_COMBO, m_senstype_combo);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_EDIT, m_strperstp_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_STRPERSTP_SPIN, m_strperstp_spin);
+ DDX_Control(pDX,IDC_PD_LAMBDA_MSPERSTP_EDIT, m_msperstp_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_MSPERSTP_SPIN, m_msperstp_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_stepsize_p_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_P_SPIN, m_stepsize_p_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_STEPSIZE_M_EDIT, m_stepsize_m_edit);
@@ -155,6 +164,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_CBIndex_UCHAR(pDX, IDC_PD_LAMBDA_SENSTYPE_COMBO, m_params.lam_senstype);
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
+ m_msperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_MSPERSTP_EDIT, m_params.lam_ms_per_stp);
  m_stepsize_p_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_P_EDIT, m_params.lam_step_size_p);
  m_stepsize_m_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STEPSIZE_M_EDIT, m_params.lam_step_size_m);
  m_corrlimit_p_edit.DDX_Value(pDX, IDC_PD_LAMBDA_CORRLIMIT_P_EDIT, m_params.lam_corr_limit_p);
@@ -171,6 +181,11 @@ void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
+void CLambdaPageDlg::OnUpdateMsPerStp(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_params.lam_str_per_stp == 0);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CLambdaPageDlg message handlers
 
@@ -181,8 +196,14 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_strperstp_spin.SetBuddy(&m_strperstp_edit);
  m_strperstp_edit.SetLimitText(3);
  m_strperstp_edit.SetDecimalPlaces(3);
- m_strperstp_spin.SetRangeAndDelta(1, 100, 1);
- m_strperstp_edit.SetRange(1, 100);
+ m_strperstp_spin.SetRangeAndDelta(0, 100, 1);
+ m_strperstp_edit.SetRange(0, 100);
+
+ m_msperstp_spin.SetBuddy(&m_msperstp_edit);
+ m_msperstp_edit.SetLimitText(4);
+ m_msperstp_edit.SetDecimalPlaces(4);
+ m_msperstp_spin.SetRangeAndDelta(0, 2500, 10);
+ m_msperstp_edit.SetRange(0, 2500);
 
  m_stepsize_p_spin.SetBuddy(&m_stepsize_p_edit);
  m_stepsize_p_edit.SetLimitText(5);
@@ -302,4 +323,5 @@ void CLambdaPageDlg::SetValues(const SECU3IO::LambdaPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::LambdaPar));
  UpdateData(FALSE); //copy data from variables to dialog controls
+ UpdateDialogControls(this, TRUE);
 }
