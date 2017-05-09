@@ -51,6 +51,8 @@ set(HEADERS
   Settings/AppSettingsModel.h
   Settings/IAppSettingsDlg.h
   Settings/ISettingsData.h
+  TabControllers/CEErrorIdStr.h
+  TabControllers/ErrorMsg.h
   TabControllers/CheckEngineTabController.h
   TabControllers/DevDiagnostTabController.h
   TabControllers/FirmwareFileUtils.h
@@ -66,8 +68,12 @@ set(HEADERS
   TabControllers/PMParamsController.h
   TabControllers/PMTablesController.h
   TabControllers/TabControllersCommunicator.h
+  TabControllers/EEPROMTabController.h
+  TabControllers/MapWndScrPos.h
+  TabDialogs/EEPROMTabDlg.h
   TabDialogs/CheckEngineTabDlg.h
   TabDialogs/DevDiagnostTabDlg.h
+  TabDialogs/EEPROMContextMenuManager.h
   TabDialogs/DiagnostContextMenuManager.h
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
@@ -97,6 +103,8 @@ set(SOURCES
   Settings/AppSettingsDlg.cpp
   Settings/AppSettingsManager.cpp
   Settings/AppSettingsModel.cpp
+  TabControllers/CEErrorIdStr.cpp
+  TabControllers/ErrorMsg.cpp
   TabControllers/CheckEngineTabController.cpp
   TabControllers/DevDiagnostTabController.cpp
   TabControllers/FirmwareFileUtils.cpp
@@ -111,8 +119,12 @@ set(SOURCES
   TabControllers/PMParamsController.cpp
   TabControllers/PMTablesController.cpp
   TabControllers/TabcontrollersCommunicator.cpp
+  TabControllers/EEPROMTabController.cpp
+  TabControllers/MapWndScrPos.cpp
+  TabDialogs/EEPROMTabDlg.cpp
   TabDialogs/CheckEngineTabDlg.cpp
   TabDialogs/DevDiagnostTabDlg.cpp
+  TabDialogs/EEPROMContextMenuManager.cpp
   TabDialogs/DiagnostContextMenuManager.cpp
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp

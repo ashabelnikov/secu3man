@@ -98,6 +98,20 @@ BEGIN
     PUSHBUTTON      "Действия над прошивкой",IDC_FW_POPUPMENU_BUTTON,260,210,100,15
 END
 
+IDD_EEPROM_DATA DIALOGEX 0, 0, 480, 225
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "",IDC_EE_MODIFICATION_FLAG,150,14,8,15
+    EDITTEXT        IDC_EE_EE_NAME,14,10,133,14,ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EE_MAPSET_NAME,14,25,133,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_EE_PD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,262,10,164,176
+    CONTROL         "",IDC_EE_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,214,128
+    PUSHBUTTON      "Действия над EEPROM",IDC_EE_POPUPMENU_BUTTON,260,210,100,15
+    PUSHBUTTON      "Ошибки CE",IDC_EE_CE_ERRORS_BTN,170,20,50,20
+END
+
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 227
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Настройки"
@@ -489,8 +503,10 @@ BEGIN
     IDS_FW_WRONG_FW_FILE_SIZE 
                             "Неправильный размер файла прошивки. Размер должен быть %s байт."
     IDS_FW_MODIFICATION_WARNING "Прошивка была изменена. Хотите сохранить?"
+    IDS_EE_MODIFICATION_WARNING "EEPROM было изменено. Хотите сохранить?"
     IDS_FW_READING_FW_SIGNATURE "Чтение информации о прошивке..."
     IDS_FW_RESERVE_PARAMETERS "Резервные параметры:"
+    IDS_EE_PARAMETERS "Параметры:"
     IDS_FW_OR "или"
     IDS_FW_IO_REMAPPING     "Переназн. I/O"
     IDS_FW_DEF_PARAMETR     "Резервн. парам."
@@ -511,6 +527,7 @@ BEGIN
                             "Не могу начать запись лога в файл: %s\n Возможно этот файл защищен от записи или уже открыт другой программой."
     IDS_TAB_PARAMETERS_AND_MONOTOR "Параметры и монитор"
     IDS_TAB_FIRMWARE_DATA   "Данные прошивки"
+    IDS_TAB_EEPROM_DATA   "EEPROM"
     IDS_KC_KNOCK_FRQ_CALC_TT "Приблизительный расчет частоты детонации по диаметру цилиндра (мм)"     
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Введите диаметр цилиндра двигателя в мм"
     IDS_KC_LIST_HDR_RPM     "Обороты"
@@ -557,6 +574,16 @@ BEGIN
     IDS_RGE_ERROR_RPM_ABOVE_MAX     "Значения не могут быть больше "
     IDS_RGE_ERROR_RPM_STEP_LESS_MIN "Шаг сетки не может быть меньше "
     IDS_RGE_ERROR_RPM_VAL_ORDER     "Значения должны идти с возрастанием"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_EE_READ_EEPROM              "Прочитать из SECU"
+    IDS_EE_WRITE_EEPROM             "Записать в SECU"
+    IDS_EE_OPEN_EEPROM              "Открыть из файла..."
+    IDS_EE_SAVE_EEPROM              "Сохранить в файл..."
+    IDS_EE_NO_CE_ERRORS             "Список ошибок пуст"
+    IDS_EE_MB_RESET_CE_ERRORS       "Нажмите кнопку 'Yes(Да)' если вы хотите очистить все ошибки"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -649,6 +676,20 @@ BEGIN
     CONTROL         "",IDC_FW_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,214,128
     CONTROL         "tab",IDC_FW_PARAM_SEL_TAB,"SysTabControl32",TCS_VERTICAL | WS_TABSTOP | TCS_BOTTOM | TCS_BUTTONS  | TCS_OWNERDRAWFIXED,450,70,15,140
     PUSHBUTTON      "Actions on the firmware",IDC_FW_POPUPMENU_BUTTON,260,210,100,15
+END
+
+IDD_EEPROM_DATA DIALOGEX 0, 0, 480, 225
+STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    LTEXT           "",IDC_EE_MODIFICATION_FLAG,150,14,8,15
+    EDITTEXT        IDC_EE_EE_NAME,14,10,133,14,ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_EE_MAPSET_NAME,14,25,133,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_EE_PD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,262,10,164,176
+    CONTROL         "",IDC_EE_TD_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,12,48,214,128
+    PUSHBUTTON      "Actions on the EEPROM",IDC_EE_POPUPMENU_BUTTON,260,210,100,15
+    PUSHBUTTON      "CE errors",IDC_EE_CE_ERRORS_BTN,170,20,50,20
 END
 
 IDD_APP_SETTINGS DIALOG DISCARDABLE  0, 0, 360, 227
@@ -1038,8 +1079,10 @@ BEGIN
                             "Wrong size of firmware file. Size must be %s bytes."
     IDS_FW_MODIFICATION_WARNING 
                             "Firmware was modified. Would you like to save it?"
+    IDS_EE_MODIFICATION_WARNING "EEPROM was modified. Would you like to save it?"
     IDS_FW_READING_FW_SIGNATURE "Reading firmware information..."
     IDS_FW_RESERVE_PARAMETERS "Reserve parameters:"
+    IDS_EE_PARAMETERS "Parameters:"
     IDS_FW_OR "or"
     IDS_FW_IO_REMAPPING     "I/O remapping"
     IDS_FW_DEF_PARAMETR     "Default param."
@@ -1060,6 +1103,7 @@ BEGIN
                             "Can't start writing log into file: %s\n Perhaps this file is write-protected or already opened by other program."
     IDS_TAB_PARAMETERS_AND_MONOTOR "Parameters and monitor"
     IDS_TAB_FIRMWARE_DATA   "Firmware data"
+    IDS_TAB_EEPROM_DATA     "EEPROM"
     IDS_KC_KNOCK_FRQ_CALC_TT "Rough calculation of the knock frequency based on cylinder diameter (mm)"     
     IDS_KC_KNOCK_FRQ_CALC_EDIT_TT "Input diameter in mm of engine cylinder"
     IDS_KC_LIST_HDR_RPM     "RPM"
@@ -1145,6 +1189,16 @@ BEGIN
     IDS_RGE_ERROR_RPM_ABOVE_MAX     "Values can't be above "
     IDS_RGE_ERROR_RPM_STEP_LESS_MIN "Grid step can't be less than "
     IDS_RGE_ERROR_RPM_VAL_ORDER     "Values must go in ascending order"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_EE_READ_EEPROM              "Read from SECU"
+    IDS_EE_WRITE_EEPROM             "Write to SECU"
+    IDS_EE_OPEN_EEPROM              "Open from a file..."
+    IDS_EE_SAVE_EEPROM              "Save to a file..."
+    IDS_EE_NO_CE_ERRORS             "Error's list is empty"
+    IDS_EE_MB_RESET_CE_ERRORS       "Press 'Yes' button if you want to clear all errors"
 END
 
 /////////////////////////////////////////////////////////////////////////////

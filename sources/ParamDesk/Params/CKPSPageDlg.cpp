@@ -33,10 +33,12 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
+ ON_WM_DESTROY()
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnChangeDataCylNum)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
@@ -92,7 +94,9 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_odd_cylnum_enabled(false)
 , m_ckps_enabled(false)
 , m_inpmrg_enabled(false)
+, m_hallwndwidth_enabled(false)
 , m_max_cylinders(8)
+, mp_scr(new CWndScroller)
 {
  m_params.ckps_cogs_btdc = 20;
  m_params.ckps_edge_type = 0;
@@ -175,7 +179,6 @@ void CCKPSPageDlg::OnUpdateControls_REF_S_Front(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateIgnitionCogs(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_igncogs_enabled && m_ckps_enabled);
- pCmdUI->m_pOther->ShowWindow(m_ckps_enabled ? SW_SHOW : SW_HIDE);
 }
 
 void CCKPSPageDlg::OnUpdateCylNumber(CCmdUI* pCmdUI)
@@ -190,8 +193,7 @@ void CCKPSPageDlg::OnUpdateMergeOutputs(CCmdUI* pCmdUI)
 
 void CCKPSPageDlg::OnUpdateHallWndWidth(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && !m_ckps_enabled); //enabled only for Hall sensor
- pCmdUI->m_pOther->ShowWindow(m_ckps_enabled ? SW_HIDE : SW_SHOW);
+ pCmdUI->Enable(m_enabled && m_hallwndwidth_enabled); //enabled only for Hall sensor
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -251,9 +253,20 @@ BOOL CCKPSPageDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.2f));
+
  UpdateDialogControls(this, TRUE);
 
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CCKPSPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CCKPSPageDlg::OnChangeData()
@@ -418,6 +431,15 @@ void CCKPSPageDlg::EnableInputsMerging(bool enable)
  if (m_inpmrg_enabled == enable)
   return; //already has needed state
  m_inpmrg_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CCKPSPageDlg::EnableHallWndWidth(bool enable)
+{
+ if (m_hallwndwidth_enabled == enable)
+  return; //already has needed state
+ m_hallwndwidth_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

@@ -84,7 +84,8 @@ class AFX_EXT_CLASS CBootLoader
   //starts the specified operation
   //!!! i_addr используется только при чтении FLASH
   bool StartOperation(const int opcode,BYTE* io_data,int i_size,int i_addr = 0);
-
+  void AbortOperation(void);
+  
   inline bool GetWorkState(void) const;
   inline bool IsIdle(void) const;
   inline HANDLE GetThreadHandle(void) const;

@@ -19,20 +19,18 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file FirmwareFileUtils.h
+/** \file ErrorMsg.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
+#include "common/unicodesupport.h"
 
-class CFirmwareDataMediator;
-class EEPROMDataMediator;
+class CCommunicationManager;
 
-namespace FirmwareFileUtils { 
-
-bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_eedm = NULL, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
-bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* p_fwdm, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
-bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
-bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title = NULL, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
-bool CheckFirmwareIntegrity(BYTE* p_data, int size);
-}
+namespace ErrorMsg
+{
+ CString GenerateErrorStr(CCommunicationManager* p_comm);
+ bool AskUserAboutTabLeaving(void);
+ bool AskUserAboutVrefCompensation(void);
+};

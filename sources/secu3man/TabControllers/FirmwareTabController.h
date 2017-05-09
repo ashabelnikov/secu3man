@@ -32,6 +32,7 @@
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/PlatformParamHolder.h"
 #include "TabsManagement/ITabController.h"
+#include "MapWndScrPos.h"
 
 class CCommunicationManager;
 class CFirmwareDataMediator;
@@ -41,7 +42,7 @@ class CStatusBarManager;
 class EEPROMDataMediator;
 class ISettingsData;
 
-class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler
+class CFirmwareTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler, public MapWndScrPos
 {
  public:
   CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
@@ -75,8 +76,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   virtual void OnEnd(const int opcode,const int status);
 
   void OnSettingsChanged(void);
-
-  CString GenerateErrorStr(void);
 
   bool CheckChangesAskAndSaveFirmware(void);
   void SetViewFirmwareValues(void);
@@ -119,8 +118,6 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnMapChanged(int i_type);
   void OnFunSetSelectionChanged(int i_selected_index);
   void OnFunSetNamechanged(int i_index_of_item, CString i_new_name);
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnCTSXAxisEditChanged(int i_type, float i_value);
   void OnATSXAxisEditChanged(int i_type, float i_value);
   void OnCESettingsButton(void);

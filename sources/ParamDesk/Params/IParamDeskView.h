@@ -64,6 +64,8 @@ class IParamDeskView : public IDeskView
   virtual void EnableGasdoseManPos(bool i_enable) = 0;
   virtual void EnableGasdose(bool i_enable) = 0;
   virtual void EnableChoke(bool i_enable) = 0;
+  virtual void EnableHallWndWidth(bool enable) = 0;
+  virtual void EnableChokeCtrls(bool i_enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //obtains descriptor corresponding to current (displaying) tab
 

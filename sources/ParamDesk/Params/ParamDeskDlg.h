@@ -85,6 +85,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableGasdoseManPos(bool i_enable);  //GD
   virtual void EnableGasdose(bool i_enable);        //GD (entire tab)
   virtual void EnableChoke(bool i_enable);
+  virtual void EnableChokeCtrls(bool i_enable);
+  virtual void EnableHallWndWidth(bool enable);
 
   virtual BYTE GetCurrentDescriptor(void);
 
@@ -160,6 +162,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   bool m_lambda;
   bool m_gasdose;
   bool m_choke;
+  bool m_choke_ctrls;
+
   const bool m_show_knock_page;
   typedef std::map<int,unsigned> TabDescriptor;
   TabDescriptor m_tab_descriptors;

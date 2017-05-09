@@ -73,6 +73,7 @@ CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* 
 , m_lambda(false)
 , m_gasdose(false)
 , m_choke(false)
+, m_choke_ctrls(false)
 , m_show_knock_page(i_show_knock_page)
 , m_hot_keys_supplier(new CHotKeysToCmdRouter())
 {
@@ -628,6 +629,11 @@ void CParamDeskDlg::EnableCKPSItems(bool i_enable)
  m_pCKPSPageDlg->EnableCKPSItems(i_enable);
 }
 
+void CParamDeskDlg::EnableHallWndWidth(bool enable)
+{
+ m_pCKPSPageDlg->EnableHallWndWidth(enable);
+}
+
 void CParamDeskDlg::EnableBTNameAndPass(bool i_enable)
 {
  m_pSecurPageDlg->EnableBTNameAndPass(i_enable);
@@ -667,6 +673,15 @@ void CParamDeskDlg::EnableGasdose(bool i_enable)
  m_pAccelEnrPageDlg->Enable((m_fuel_injection || i_enable) && m_enabled);
  m_pCarburPageDlg->EnableGasdose(i_enable);
  m_pStarterPageDlg->EnableGasdose(i_enable);
+}
+
+void CParamDeskDlg::EnableChokeCtrls(bool i_enable)
+{
+ if (m_choke_ctrls == i_enable)
+  return; //already has needed state
+ m_choke_ctrls = i_enable;
+
+ m_pChokePageDlg->EnableFuelInjection(!m_choke_ctrls);
 }
 
 void CParamDeskDlg::EnableChoke(bool i_enable)

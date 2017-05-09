@@ -55,6 +55,7 @@ class CChildViewManager
   class CKnockChannelTabController* m_pKnockChannelTabController;
   class CLogPlayerTabController* m_pLogPlayerTabController;
   class CDevDiagnostTabController* m_pDevDiagnostTabController;
+  class CEEPROMTabController* m_pEEPROMTabController;
 
   //диалоги вкладок
   class CParamMonTabDlg* m_pParamMonTabDlg;
@@ -63,4 +64,5 @@ class CChildViewManager
   class CKnockChannelTabDlg* m_pKnockChannelTabDlg;
   class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
   class CDevDiagnostTabDlg* m_pDevDiagnostTabDlg;
+  class CEEPROMTabDlg* m_pEEPROMTabDlg;
 };

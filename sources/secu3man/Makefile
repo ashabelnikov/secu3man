@@ -28,7 +28,9 @@ SOURCES = Application/StdAfx.cpp Application/secu3man.cpp Application/Communicat
   TabDialogs/DiagnostContextMenuManager.cpp TabDialogs/FirmwareContextMenuManager.cpp TabDialogs/FirmwareTabDlg.cpp \
   TabDialogs/KnockChannelTabDlg.cpp TabDialogs/KnockContextMenuManager.cpp TabDialogs/KnockFrqCalcDlg.cpp \
   TabDialogs/LogPlayerTabDlg.cpp TabDialogs/LPControlPanelDlg.cpp TabDialogs/ParamMonTabDlg.cpp TabsManagement/MainTabController.cpp \
-  TabControllers/FirmwareFileUtils.cpp
+  TabControllers/FirmwareFileUtils.cpp TabDialogs/EEPROMTabDlg.cpp TabDialogs/EEPROMContextMenuManager.cpp TabControllers/EEPROMTabController.cpp \
+  TabControllers/CEErrorIdStr.cpp TabControllers/ErrorMsg.cpp TabControllers/MapsWndScrPos.cpp
+
 
 # EXE building
 all: secu3man

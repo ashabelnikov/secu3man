@@ -48,7 +48,7 @@ typedef struct
 }uni_output_t;
 
 //описывает параметры системы
-typedef struct
+typedef struct params_t
 {
  _uint  starter_off;                    // порог выключения стартера (мин-1)
  _uint  smap_abandon;                   // обороты перехода с пусковой карты на рабочую  (мин-1)

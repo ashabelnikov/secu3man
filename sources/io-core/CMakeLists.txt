@@ -9,6 +9,8 @@ ADD_DEFINITIONS(-D_AFXEXT)
 ADD_DEFINITIONS(-D_WINDLL)
 ADD_DEFINITIONS(-DIOCORE_EXPORTS)
 ADD_DEFINITIONS(-DCRC_EXPORTS)
+ADD_DEFINITIONS(-DBITMASK_EXPORTS)
+ADD_DEFINITIONS(-DPARAMSIO_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
 set(PROJECT io-core)
@@ -24,6 +26,7 @@ include_directories(../)
 project(${PROJECT})
 
 set(HEADERS
+  BitMask.h
   BootLoader.h
   BootLoaderAdapter.h
   ccomport.h
@@ -39,6 +42,7 @@ set(HEADERS
   LogWriter.h
   NumericConv.h
   PacketDataProxy.h
+  ParamsIO.h
   PlatformParamHolder.h
   SECU3IO.h
   SECU3ParametersDef.h
@@ -50,6 +54,7 @@ set(HEADERS
   )
 
 set(SOURCES
+  BitMask.cpp
   BootLoader.cpp
   BootLoaderAdapter.cpp
   ccomport.cpp
@@ -63,6 +68,7 @@ set(SOURCES
   LogWriter.cpp
   NumericConv.cpp
   PacketDataProxy.cpp
+  ParamsIO.cpp
   PlatformParamHolder.cpp
   StdAfx.cpp
   iocore.rc

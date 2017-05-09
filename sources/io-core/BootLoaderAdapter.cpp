@@ -85,19 +85,22 @@ LRESULT CBootLoaderAdapter::msgOnUpdateUI(WPARAM wParam, LPARAM lParam)
  ASSERT(p_data);
  if (NULL==p_data)
   return 0; //what is this?
- m_destination_handler->OnUpdateUI(p_data);
+ if (m_destination_handler)
+  m_destination_handler->OnUpdateUI(p_data);
  return 0;
 }
 
 LRESULT CBootLoaderAdapter::msgOnBegin(WPARAM wParam, LPARAM lParam)
 {
- m_destination_handler->OnBegin(wParam,(int)lParam);
+ if (m_destination_handler)
+  m_destination_handler->OnBegin(wParam,(int)lParam);
  return 0;
 }
 
 LRESULT CBootLoaderAdapter::msgOnEnd(WPARAM wParam, LPARAM lParam)
 {
- m_destination_handler->OnEnd(wParam,(int)lParam);
+ if (m_destination_handler)
+  m_destination_handler->OnEnd(wParam,(int)lParam);
  return 0;
 }
 
@@ -107,4 +110,9 @@ void CBootLoaderAdapter::SetEventHandler(IBLDEventHandler* ip_destination_handle
 {
  ASSERT(ip_destination_handler);
  m_destination_handler = ip_destination_handler;
+}
+
+void CBootLoaderAdapter::DetachEventHandler(void)
+{
+ m_destination_handler = NULL;
 }

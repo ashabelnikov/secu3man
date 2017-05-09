@@ -41,6 +41,7 @@ class AFX_EXT_CLASS CBootLoaderAdapter  : public CWnd, public IBLDEventHandler
 
   //set event handler
   void SetEventHandler(IBLDEventHandler* ip_destination_handler);
+  void DetachEventHandler(void);
 
  private:
   IBLDEventHandler* m_destination_handler;

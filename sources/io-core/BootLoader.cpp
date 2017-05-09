@@ -672,6 +672,13 @@ bool CBootLoader::StartOperation(const int opcode,BYTE* io_data,int i_size, int 
 }
 
 //-----------------------------------------------------------------------
+void CBootLoader::AbortOperation(void)
+{
+ ResetEvent(m_hAwakeEvent); //make thread to sleep
+ m_ThreadBusy = false;      //thread is not busy
+}
+
+//-----------------------------------------------------------------------
 void CBootLoader::SwitchOn(bool state, bool i_force_reinit /* = false*/)
 {
  COMMTIMEOUTS timeouts;

@@ -70,7 +70,7 @@ int EEPROMImportController::DoImport(void)
  std::vector<BYTE> buffer((*it));
  int selected_size = 0;
  _TSTRING file_name;
- bool result = m_FileReader(&buffer[0], sizes, &selected_size, &file_name);
+ bool result = m_FileReader(&buffer[0], sizes, &selected_size, &file_name, NULL);
  if (true==result)
  {
   m_eeprom_file_name = file_name;

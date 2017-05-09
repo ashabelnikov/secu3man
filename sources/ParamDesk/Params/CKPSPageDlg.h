@@ -35,6 +35,8 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CWndScroller;
+
 class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -55,10 +57,12 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableOddCylinders(bool enable);
   void EnableCKPSItems(bool enable);
   void EnableInputsMerging(bool enable);
+  void EnableHallWndWidth(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnChangeMergeOutputs();
   afx_msg void OnChangeDataCogsNum();
@@ -87,6 +91,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
  private:
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 
   //<cog number, UI name>
   std::vector<std::pair<int, _TSTRING> > m_cogs_numbers;
@@ -99,6 +104,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_odd_cylnum_enabled;
   bool m_ckps_enabled;
   bool m_inpmrg_enabled;
+  bool m_hallwndwidth_enabled;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;
@@ -129,5 +135,4 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_wheel_miss_num_spin;
   CEditEx m_wheel_miss_num_edit;
   CStatic m_wheel_miss_num_label;
-
 };

@@ -52,23 +52,12 @@
 #include "TablDesk/MapIds.h"
 #include "TablDesk/TablesSetPanel.h"
 #include "TablDesk/CESettingsDlg.h"
+#include "ErrorMsg.h"
 
 using namespace fastdelegate;
 
-#undef max   //avoid conflicts with C++
-
 #define EHKEY _T("FirmwareCntr")
 #define DELAY_AFTER_BL_START 100
-
-bool AskUserAboutVrefCompensation(void)
-{
- return (IDYES == AfxMessageBox(MLL::GetString(IDS_ASK_USER_ABOUT_VREF_COMP).c_str(), MB_YESNO));
-}
-
-bool AskUserAboutTabLeaving(void)
-{
- return (IDYES==AfxMessageBox(MLL::LoadString(IDS_FW_LEAVE_TAB_WARNING), MB_YESNO|MB_DEFBUTTON2));
-}
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -88,6 +77,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_clear_sbar_txt_on_conn(false)
 , m_read_fw_sig_info_flag(false)
 , m_blFinishOpCB(NULL)
+, MapWndScrPos(ip_settings)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -98,6 +88,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
  m_edm = new EEPROMDataMediator(holder.GetEepromParameters());
+ m_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
+ m_edm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
  ASSERT(m_edm);
 
  m_bl_data = new BYTE[m_fpp.m_total_size + 1];
@@ -143,8 +135,8 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
  m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
  m_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetNamechanged));
- m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CFirmwareTabController::OnCloseMapWnd));
- m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CFirmwareTabController::OnOpenMapWnd));
+ m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
+ m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
  m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
  m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
  m_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
@@ -177,6 +169,9 @@ void CFirmwareTabController::OnSettingsChanged(void)
  m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  //Set clock frequency (16 or 20 mHz)
  m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+
+ m_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
+ m_edm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -212,6 +207,7 @@ void CFirmwareTabController::OnDeactivate(void)
  //отключаемс€ от потока данных
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));
+ m_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
  m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
@@ -360,21 +356,6 @@ void CFirmwareTabController::OnBegin(const int opcode,const int status)
  m_view->EnableBLStartedEmergency(false);
 }
 
-CString CFirmwareTabController::GenerateErrorStr(void)
-{
- switch(m_comm->m_pBootLoader->GetLastError())
- {
-  case CBootLoader::BL_ERROR_NOANSWER:
-   return MLL::LoadString(IDS_BL_ERROR_NOANSWER);
-  case CBootLoader::BL_ERROR_CHKSUM:
-   return MLL::LoadString(IDS_BL_ERROR_CRC);
-  case CBootLoader::BL_ERROR_WRONG_DATA:
-   return MLL::LoadString(IDS_BL_ERROR_WRONG_DATA);
- }
- ASSERT(0); //что за ошибка?
- return CString(_T(""));
-}
-
 void CFirmwareTabController::OnEnd(const int opcode,const int status)
 {
  switch(opcode)
@@ -397,7 +378,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
    }
    else
    {
-    m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
    }
 
    //ждем пока не выполнитс€ предыдуща€ операци€
@@ -421,7 +402,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
    }
    else
    {
-    m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
    }
 
    //ждем пока не выполнитс€ предыдуща€ операци€
@@ -442,7 +423,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
    else
    {
-    m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
    }
 
    //ждем пока не выполнитс€ предыдуща€ операци€
@@ -517,7 +498,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
    }
    else
    {
-    m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
    }
 
    //ждем пока не выполнитс€ предыдуща€ операци€
@@ -538,7 +519,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     m_sbar->SetInformationText(MLL::LoadString(IDS_FW_FW_WRITTEN_SUCCESSFULLY));
    else
    {
-    m_sbar->SetInformationText(GenerateErrorStr());
+    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
    }
 
    //ждем пока не выполнитс€ предыдуща€ операци€
@@ -822,7 +803,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
-  if (!AskUserAboutTabLeaving())
+  if (!ErrorMsg::AskUserAboutTabLeaving())
    return false;
 
  return CheckChangesAskAndSaveFirmware();
@@ -847,7 +828,7 @@ bool CFirmwareTabController::OnAskChangeTab(void)
 {
  if (m_comm->m_pBootLoader->IsIdle())
   return true; //allows
- return AskUserAboutTabLeaving();
+ return ErrorMsg::AskUserAboutTabLeaving();
 }
 
 void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRING& i_file_name)
@@ -891,12 +872,15 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  this->mp_iorCntr->Enable(true);
 
  m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0 && (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 0);
+ m_view->mp_ParamDeskDlg->EnableHallWndWidth((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 1 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 1);
  m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
 
  m_view->mp_ParamDeskDlg->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);
  m_view->mp_ParamDeskDlg->EnableLambda((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CARB_AFR)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0);
  m_view->mp_ParamDeskDlg->EnableGasdose((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0); //GD
  m_view->mp_ParamDeskDlg->EnableChoke((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
+
+ m_view->mp_ParamDeskDlg->EnableChokeCtrls((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) == 0);
 
  SetViewFirmwareValues();
 }
@@ -909,7 +893,7 @@ void CFirmwareTabController::OnOpenFlashFromFile(void)
  _TSTRING opened_file_name = _T("");
  
  if (!m_comm->m_pBootLoader->IsIdle())
-  if (!AskUserAboutTabLeaving())
+  if (!ErrorMsg::AskUserAboutTabLeaving())
    return;
   
  bool is_continue = CheckChangesAskAndSaveFirmware();
@@ -1381,7 +1365,7 @@ void CFirmwareTabController::OnImportDefParamsFromEEPROMFile()
    return; //user canceled
  }
 
- m_fwdm->LoadDefParametersFromBuffer(eeprom + m_edm->GetParamsStartAddr(), AskUserAboutVrefCompensation);
+ m_fwdm->LoadDefParametersFromBuffer(eeprom + m_edm->GetParamsStartAddr(), ErrorMsg::AskUserAboutVrefCompensation);
  SetViewFirmwareValues(); //Update!
 }
 
@@ -1472,228 +1456,6 @@ void CFirmwareTabController::GetAttenuatorMap(float* o_values)
 {
  ASSERT(o_values);
  m_fwdm->GetAttenuatorMap(o_values, false); //<--NOTE: modified
-}
-
-void CFirmwareTabController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
-{
- if (!i_hwnd)
-  return;
-
- RECT rc;
- GetWindowRect(i_hwnd, &rc);
-
- WndSettings ws;
- mp_settings->GetWndSettings(ws);
-
- switch(i_mapType)
- {
-  case TYPE_MAP_DA_START:
-   ws.m_StrtMapWnd_X = rc.left;
-   ws.m_StrtMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_DA_IDLE:
-   ws.m_IdleMapWnd_X = rc.left;
-   ws.m_IdleMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_DA_WORK:
-   ws.m_WorkMapWnd_X = rc.left;
-   ws.m_WorkMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_DA_TEMP_CORR:
-   ws.m_TempMapWnd_X = rc.left;
-   ws.m_TempMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_ATTENUATOR:
-   ws.m_AttenuatorMapWnd_X = rc.left;
-   ws.m_AttenuatorMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_DWELLCNTRL:
-   ws.m_DwellCntrlMapWnd_X = rc.left;
-   ws.m_DwellCntrlMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_CTS_CURVE:
-   ws.m_CTSCurveMapWnd_X = rc.left;
-   ws.m_CTSCurveMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_CHOKE_OP:
-   ws.m_ChokeOpMapWnd_X = rc.left;
-   ws.m_ChokeOpMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_VE:
-   ws.m_VEMapWnd_X = rc.left;
-   ws.m_VEMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_AFR:
-   ws.m_AFRMapWnd_X = rc.left;
-   ws.m_AFRMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_CRNK:
-   ws.m_CrnkMapWnd_X = rc.left;
-   ws.m_CrnkMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_WRMP:
-   ws.m_WrmpMapWnd_X = rc.left;
-   ws.m_WrmpMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_DEAD:
-   ws.m_DeadMapWnd_X = rc.left;
-   ws.m_DeadMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_IDLR:
-   ws.m_IdlrMapWnd_X = rc.left;
-   ws.m_IdlrMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_IDLC:
-   ws.m_IdlcMapWnd_X = rc.left;
-   ws.m_IdlcMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_AETPS:
-   ws.m_AETPSMapWnd_X = rc.left;
-   ws.m_AETPSMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_AERPM:
-   ws.m_AERPMMapWnd_X = rc.left;
-   ws.m_AERPMMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_AFTSTR:
-   ws.m_AftstrMapWnd_X = rc.left;
-   ws.m_AftstrMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_ATS_CURVE:
-   ws.m_ATSCurvMapWnd_X = rc.left;
-   ws.m_ATSCurvMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_ATS_CORR:
-   ws.m_ATSCorrMapWnd_X = rc.left;
-   ws.m_ATSCorrMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_GASDOSE:
-   ws.m_GasdoseMapWnd_X = rc.left;
-   ws.m_GasdoseMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_IT:
-   ws.m_ITMapWnd_X = rc.left;
-   ws.m_ITMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_ITRPM:
-   ws.m_ITRPMMapWnd_X = rc.left;
-   ws.m_ITRPMMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_RIGID:
-   ws.m_RigidMapWnd_X = rc.left;
-   ws.m_RigidMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_INJ_EGOCRV:
-   ws.m_EGOCrvMapWnd_X = rc.left;
-   ws.m_EGOCrvMapWnd_Y = rc.top;
-   break;
-
-  case TYPE_MAP_GME_WND: //pseudo map
-   ws.m_GridMapWnd_X = rc.left;
-   ws.m_GridMapWnd_Y = rc.top;
-   break;
- };
-
- mp_settings->SetWndSettings(ws);
-}
-
-void CFirmwareTabController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
-{
- if (!i_hwnd)
-  return;
-
- WndSettings ws;
- mp_settings->GetWndSettings(ws);
-
- int X = 0, Y = 0;
-
- switch(i_mapType)
- {
-  case TYPE_MAP_DA_START:
-   X = ws.m_StrtMapWnd_X, Y = ws.m_StrtMapWnd_Y;
-   break;
-  case TYPE_MAP_DA_IDLE:
-   X = ws.m_IdleMapWnd_X, Y = ws.m_IdleMapWnd_Y;
-   break;
-  case TYPE_MAP_DA_WORK:
-   X = ws.m_WorkMapWnd_X, Y = ws.m_WorkMapWnd_Y;
-   break;
-  case TYPE_MAP_DA_TEMP_CORR:
-   X = ws.m_TempMapWnd_X, Y = ws.m_TempMapWnd_Y;
-   break;
-  case TYPE_MAP_ATTENUATOR:
-   X = ws.m_AttenuatorMapWnd_X, Y = ws.m_AttenuatorMapWnd_Y;
-   break;
-  case TYPE_MAP_DWELLCNTRL:
-   X = ws.m_DwellCntrlMapWnd_X, Y = ws.m_DwellCntrlMapWnd_Y;
-   break;
-  case TYPE_MAP_CTS_CURVE:
-   X = ws.m_CTSCurveMapWnd_X, Y = ws.m_CTSCurveMapWnd_Y;
-   break;
-  case TYPE_MAP_CHOKE_OP:
-   X = ws.m_ChokeOpMapWnd_X, Y = ws.m_ChokeOpMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_VE:
-   X = ws.m_VEMapWnd_X, Y = ws.m_VEMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_AFR:
-   X = ws.m_AFRMapWnd_X, Y = ws.m_AFRMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_CRNK:
-   X = ws.m_CrnkMapWnd_X, Y = ws.m_CrnkMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_WRMP:
-   X = ws.m_WrmpMapWnd_X, Y = ws.m_WrmpMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_DEAD:
-   X = ws.m_DeadMapWnd_X, Y = ws.m_DeadMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_IDLR:
-   X = ws.m_IdlrMapWnd_X, Y = ws.m_IdlrMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_IDLC:
-   X = ws.m_IdlcMapWnd_X, Y = ws.m_IdlcMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_AETPS:
-   X = ws.m_AETPSMapWnd_X, Y = ws.m_AETPSMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_AERPM:
-   X = ws.m_AERPMMapWnd_X, Y = ws.m_AERPMMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_AFTSTR:
-   X = ws.m_AftstrMapWnd_X, Y = ws.m_AftstrMapWnd_Y;
-   break;
-  case TYPE_MAP_ATS_CURVE:
-   X = ws.m_ATSCurvMapWnd_X, Y = ws.m_ATSCurvMapWnd_Y;
-   break;
-  case TYPE_MAP_ATS_CORR:
-   X = ws.m_ATSCorrMapWnd_X, Y = ws.m_ATSCorrMapWnd_Y;
-   break;
-  case TYPE_MAP_GASDOSE:
-   X = ws.m_GasdoseMapWnd_X, Y = ws.m_GasdoseMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_IT:
-   X = ws.m_ITMapWnd_X, Y = ws.m_ITMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_ITRPM:
-   X = ws.m_ITRPMMapWnd_X, Y = ws.m_ITRPMMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_RIGID:
-   X = ws.m_RigidMapWnd_X, Y = ws.m_RigidMapWnd_Y;
-   break;
-  case TYPE_MAP_INJ_EGOCRV:
-   X = ws.m_EGOCrvMapWnd_X, Y = ws.m_EGOCrvMapWnd_Y;
-   break;
-
-  case TYPE_MAP_GME_WND:
-   X = ws.m_GridMapWnd_X, Y = ws.m_GridMapWnd_Y;
-   break;
-  default:
-   return; //undefined case...
- };
-
- if (X != std::numeric_limits<int>::max() && Y != std::numeric_limits<int>::max())
-  SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
 void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options, BYTE fw_version[2])

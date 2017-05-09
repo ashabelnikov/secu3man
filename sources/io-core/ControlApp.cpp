@@ -31,6 +31,7 @@
 #include "FirmwareMapsDataHolder.h"
 #include "PacketDataProxy.h"
 #include "ufcodes.h"
+#include "Magnitude.h"
 
 using namespace SECU3IO;
 

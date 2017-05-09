@@ -35,7 +35,7 @@ struct FWMapsDataHolder;
 class AFX_EXT_CLASS EEPROMImportController
 {
   //<buffer, list_of_allowed_sizes, selected_size, filename, ret_value>
-  typedef fastdelegate::FastDelegate4<BYTE*, const std::vector<int>&, int*, _TSTRING*, bool> Delegate1;
+  typedef fastdelegate::FastDelegate5<BYTE*, const std::vector<int>&, int*, _TSTRING*, _TSTRING*, bool> Delegate1;
  public:
   EEPROMImportController(FWMapsDataHolder* ip_fwd);
   ~EEPROMImportController();

@@ -28,14 +28,18 @@
 #include <shlwapi.h>
 #include <vector>
 #include "io-core/FirmwareDataMediator.h"
+#include "io-core/EEPROMDataMediator.h"
 #include "HexUtils/readhex.h"
 #include "Resources/resource.h"
 
 namespace FirmwareFileUtils { 
 
 //Save EEPROM to file
-void SaveEEPROMToFile(const BYTE* p_data, const int size)
+bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_eedm /*= NULL*/, CString* o_file_name /* = NULL*/, bool calculate_and_place_crc16/* = false*/)
 {
+ if (!p_eedm && calculate_and_place_crc16) return false;
+
+ BYTE *save_buff = NULL;
  HANDLE   hFile=0;
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
  CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
@@ -49,14 +53,27 @@ void SaveEEPROMToFile(const BYTE* p_data, const int size)
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
-   return;
+   return false;
   }
-  f.Write(p_data,size);
+
+  save_buff = new BYTE[size];
+  memcpy(save_buff, p_data,size);
+
+  //вычисляем контрольную сумму и сохраняем ее в массив с EEPROM
+  if (calculate_and_place_crc16)
+   p_eedm->CalculateAndPlaceParamsCRC(save_buff);
+
+  f.Write(save_buff,size);
   f.Close();
-  return;
+  delete save_buff;
+
+  if (o_file_name!=NULL)
+   *o_file_name = save.GetFileName();
+
+  return true;
  }
  else
-  return;
+  return false;
 }
 
 //Save FLASH to file
@@ -127,7 +144,7 @@ namespace {
 
 //Load EEPROM form a file
 //мы заранее знаем размер файла с EEPROM
-bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/)
+bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size /*= NULL*/, _TSTRING* o_file_name /*= NULL*/, _TSTRING* o_file_path /*= NULL*/)
 {
  HANDLE hFile = 0;
  static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
@@ -138,12 +155,14 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
   return false; //error, at least one size must be specified
  std::vector<int>::const_iterator p_size_max = std::max_element(sizes.begin(), sizes.end());
 
- if (open.DoModal()==IDOK)
+ if ((o_file_path && !o_file_path->empty()) || open.DoModal()==IDOK)
  {
   CFile f;
   CFileException ex;
   TCHAR szError[1024];
-  if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
+  //obtain file name either from full path (if supplied) or open file dialog
+  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetPathName().GetBuffer(256);
+  if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
    AfxMessageBox(szError);
@@ -166,7 +185,21 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
    *o_selected_size = *p_size; //save selected size
 
   if (NULL != o_file_name)
-   *o_file_name = open.GetFileName();
+  {
+   if (o_file_path && !o_file_path->empty())
+   { //obtain file name from full path
+    TCHAR path[MAX_PATH+1] = {0};
+    o_file_path->copy(path, o_file_path->size());
+    PathStripPath(path);
+    *o_file_name = path;
+   }
+   else //obtain file name from open file dialog
+    *o_file_name = open.GetFileName();
+  }
+
+  //Save full path only if it is not supplied
+  if (NULL != o_file_path && o_file_path->empty())
+   *o_file_path = open.GetPathName();
 
   return true; //подтверждение пользователя
  }

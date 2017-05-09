@@ -28,9 +28,11 @@
 #include "iocore_api.h"
 #include "common/unicodesupport.h"
 #include "PlatformParamHolder.h"
+#include "ParamsIO.h"
+#include <set>
 
 //Аппаратно-независимая прослойка над данными EEPROM.
-class IOCORE_API EEPROMDataMediator
+class IOCORE_API EEPROMDataMediator : public ParamsIO
 {
  public:
   EEPROMDataMediator(const PPEepromParam& i_epp);
@@ -38,6 +40,9 @@ class IOCORE_API EEPROMDataMediator
 
   //загрузка байтов EEPROM из указанного буфера
   void LoadBytes(const BYTE* i_bytes);
+
+  //сохранение байтов EEPROM в указанный буфер
+  void StoreBytes(BYTE* op_bytes);
 
   //была ли прошивка изменена после последней загрузки
   bool IsModified(void);
@@ -55,7 +60,10 @@ class IOCORE_API EEPROMDataMediator
   bool VerifyParamsCheckSum(const BYTE* ip_eeprom_buffer);
 
   //returns address of parameters in EEPROM
-  size_t GetParamsStartAddr(void) const;
+  size_t GetParamsStartAddr(void) const;   //note: redundant to GetParamsPtr()
+
+  void CalculateAndPlaceParamsCRC(BYTE* iop_data);
+  void CalculateAndPlaceParamsCRC(void);
 
   void GetStartMap(int i_index, float* o_values, bool i_original = false);
   void GetIdleMap(int i_index,  float* o_values, bool i_original = false);
@@ -77,8 +85,38 @@ class IOCORE_API EEPROMDataMediator
   void GetRigidMap(int i_index, float* op_values, bool i_original = false);
   void GetEGOCurveMap(int i_index, float* op_values, bool i_original = false);
 
+  void SetStartMap(int i_index,const float* i_values);
+  void SetIdleMap(int i_index, const float* i_values);
+  void SetWorkMap(int i_index, const float* i_values);
+  void SetTempMap(int i_index, const float* i_values);
+  //fuel injection
+  void SetVEMap(int i_index, const float* i_values);
+  void SetAFRMap(int i_index, const float* i_values);
+  void SetCrnkMap(int i_index, const float* i_values);
+  void SetWrmpMap(int i_index, const float* i_values);
+  void SetDeadMap(int i_index, const float* i_values);
+  void SetIdlrMap(int i_index, const float* i_values);
+  void SetIdlcMap(int i_index, const float* i_values);
+  void SetAETPSMap(int i_index, const float* i_values);
+  void SetAERPMMap(int i_index, const float* i_values);
+  void SetAftstrMap(int i_index, const float* i_values);
+  void SetITMap(int i_index, const float* i_values);
+  void SetITRPMMap(int i_index, const float* i_values);
+  void SetRigidMap(int i_index, const float* i_values);
+  void SetEGOCurveMap(int i_index, const float* i_values);
+
   std::vector<_TSTRING> GetFunctionsSetNames(void);
   void SetFunctionsSetName(int i_index, _TSTRING i_new_name);
+
+  void SetEEFileName(const _TSTRING i_ee_file_name);
+  _TSTRING GetEEFileName(void);
+
+  std::set<int> GetCEErrorsList(void);
+  void ResetCEErrorsList(void);
+
+protected:
+  virtual SECU3IO::params_t* GetParamsPtr(void);
+  virtual EECUPlatform GetPlatformId(void);
 
  private:
   BYTE* getBytes(bool i_original = false);
@@ -88,4 +126,5 @@ class IOCORE_API EEPROMDataMediator
   BYTE* m_bytes_active;   //байты EEPROM (копия для модификации)
   BYTE* m_bytes_original; //байты EEPROM (копия для сравнения)
   bool m_is_opened;
+  _TSTRING m_ee_file_name;
 };

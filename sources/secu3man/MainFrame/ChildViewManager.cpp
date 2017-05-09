@@ -39,6 +39,7 @@
 #include "TabControllers/KnockChannelTabController.h"
 #include "TabControllers/LogPlayerTabController.h"
 #include "TabControllers/ParamMonTabController.h"
+#include "TabControllers/EEPROMTabController.h"
 
 #include "TabDialogs/CheckEngineTabDlg.h"
 #include "TabDialogs/DevDiagnostTabDlg.h"
@@ -46,6 +47,7 @@
 #include "TabDialogs/KnockChannelTabDlg.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/ParamMonTabDlg.h"
+#include "TabDialogs/EEPROMTabDlg.h"
 
 #include "Settings/AppSettingsManager.h"
 
@@ -58,12 +60,14 @@ CChildViewManager::CChildViewManager()
 , m_pKnockChannelTabController(NULL)
 , m_pLogPlayerTabController(NULL)
 , m_pDevDiagnostTabController(NULL)
+, m_pEEPROMTabController(NULL)
 , m_pParamMonTabDlg(NULL)
 , m_pFirmwareTabDlg(NULL)
 , m_pCheckEngineTabDlg(NULL)
 , m_pKnockChannelTabDlg(NULL)
 , m_pLogPlayerTabDlg(NULL)
 , m_pDevDiagnostTabDlg(NULL)
+, m_pEEPROMTabDlg(NULL)
 {
  //empty
 }
@@ -76,6 +80,7 @@ CChildViewManager::~CChildViewManager()
  delete m_pKnockChannelTabController;
  delete m_pLogPlayerTabController;
  delete m_pDevDiagnostTabController;
+ delete m_pEEPROMTabController;
 
  delete m_pParamMonTabDlg;
  delete m_pFirmwareTabDlg;
@@ -83,6 +88,7 @@ CChildViewManager::~CChildViewManager()
  delete m_pKnockChannelTabDlg;
  delete m_pLogPlayerTabDlg;
  delete m_pDevDiagnostTabDlg;
+ delete m_pEEPROMTabDlg;
 }
 
 bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
@@ -117,6 +123,12 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
 
  mp_MainTabController->AddTabController(m_pFirmwareTabController);
  mp_wndView->AddView(MLL::GetString(IDS_TAB_FIRMWARE_DATA),m_pFirmwareTabDlg,1);
+
+ m_pEEPROMTabDlg = new CEEPROMTabDlg(); //view
+ m_pEEPROMTabController = new CEEPROMTabController(m_pEEPROMTabDlg, p_comm, p_sbar, p_settings);
+
+ mp_MainTabController->AddTabController(m_pEEPROMTabController);
+ mp_wndView->AddView(MLL::GetString(IDS_TAB_EEPROM_DATA), m_pEEPROMTabDlg, 6);
 
  m_pCheckEngineTabDlg = new CCheckEngineTabDlg(); //view
  m_pCheckEngineTabController = new CCheckEngineTabController(m_pCheckEngineTabDlg, p_comm, p_sbar, p_settings);

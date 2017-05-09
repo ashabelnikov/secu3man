@@ -28,13 +28,14 @@
 #include "iocore_api.h"
 #include "common/unicodesupport.h"
 #include <vector>
+#include "ParamsIO.h"
 
 namespace SECU3IO { struct CESettingsData; }
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке
 //(памяти программ микроконтроллера), а также для хранения этих данных.
 struct PPFlashParam;
-class IOCORE_API CFirmwareDataMediator
+class IOCORE_API CFirmwareDataMediator : public ParamsIO
 {
   class LocInfoProvider;
   typedef bool (*EventHandler)(void);
@@ -308,17 +309,11 @@ class IOCORE_API CFirmwareDataMediator
   unsigned int GetCRC16StoredInActiveFirmware(void);
   void CalculateAndPlaceFirmwareCRC(void);
 
-  //-----------------------------------------------------------------------
-
-  bool SetDefParamValues(BYTE i_descriptor, const void* ip_values);   //загнать указанные резервн.парам. в прошивку
-  bool GetDefParamValues(BYTE i_descriptor, void* op_values);         //извлечь указанные резервн.парам. из прошивки
-
-  //-----------------------------------------------------------------------
-
   const PPFlashParam& GetPlatformParams(void) const;
 
-  void SetNumPulsesPer1Km(int pp1km);
-  void SetQuartzFrq(long frq);
+protected:
+  virtual SECU3IO::params_t* GetParamsPtr(void);
+  virtual EECUPlatform GetPlatformId(void);
 
  private:
   CFirmwareDataMediator(const CFirmwareDataMediator& i);
@@ -336,7 +331,4 @@ class IOCORE_API CFirmwareDataMediator
   bool m_is_opened;
   _TSTRING m_fw_file_name;
   struct cd_data_t* mp_cddata;
-
-  float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
-  long m_quartz_frq;                    //MCU clock frequency
 };

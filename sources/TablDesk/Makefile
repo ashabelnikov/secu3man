@@ -19,7 +19,7 @@ LIBS    = ui-core.lib
 LFLAGS  = /nologo /STACK:10000000 /MACHINE:x86 /release /DLL /OUT:../../binaries/tabldesk.dll /implib:../../libraries/tabldesk.lib /LIBPATH:../../libraries tabldesk.res
 # source files
 SOURCES = ButtonsPanel.cpp DLLLinkedFunctions.cpp DwellCalcDlg.cpp RPMGridEditDlg.cpp \
-  StdAfx.cpp TablDesk.cpp TablesSetPanel.cpp GridModeEditorDlg.cpp
+  StdAfx.cpp TablDesk.cpp TablesSetPanel.cpp GridModeEditorDlg.cpp CESettingsDlg.cpp
 
 # DLL building
 all: tabldesk

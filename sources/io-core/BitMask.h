@@ -19,20 +19,18 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file FirmwareFileUtils.h
+/** \file BitMask.h
  * \author Alexey A. Shabelnikov
  */
 
-#pragma once
+#ifdef BITMASK_EXPORTS
+#define BITMASK_API __declspec(dllexport)
+#else
+#define BITMASK_API __declspec(dllimport)
+#endif
 
-class CFirmwareDataMediator;
-class EEPROMDataMediator;
-
-namespace FirmwareFileUtils { 
-
-bool SaveEEPROMToFile(const BYTE* p_data, const int size, EEPROMDataMediator* p_eedm = NULL, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
-bool SaveFLASHToFile(const BYTE* p_data, const int size, CFirmwareDataMediator* p_fwdm, CString* o_file_name = NULL, bool calculate_and_place_crc16 = false);
-bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
-bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_title = NULL, int* o_selected_size = NULL, _TSTRING* o_file_name = NULL, _TSTRING* o_file_path = NULL);
-bool CheckFirmwareIntegrity(BYTE* p_data, int size);
-}
+// Write specified bit into a 8-bit variable
+// variable - Variable
+// bitNum - Number of bit for writing in
+// value - value of bit
+void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value);

@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file CheckEngineTabController.h
+/** \file EEPROMTabController.h
  * \author Alexey A. Shabelnikov
  */
 
@@ -30,28 +30,36 @@
 #include "common/unicodesupport.h"
 #include "io-core/ControlApp.h"
 #include "io-core/ControlAppAdapter.h"
+#include "io-core/BootLoaderAdapter.h"
+#include "io-core/PlatformParamHolder.h"
 #include "io-core/ufcodes.h"
 #include "TabsManagement/ITabController.h"
+#include "MapWndScrPos.h"
 
-class CCheckEngineTabDlg;
+class CEEPROMTabDlg;
 class CCommunicationManager;
 class CStatusBarManager;
 class ISettingsData;
+class EEPROMDataMediator;
 class CEErrorIdStr;
 
-class CCheckEngineTabController : public ITabController, private IAPPEventHandler
+class CEEPROMTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler, public MapWndScrPos
 {
  public:
-  CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
-  virtual ~CCheckEngineTabController();
+  CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
+  virtual ~CEEPROMTabController();
 
  private:
-  void _SetErrorsToList(const SECU3IO::CEErrors* ip_errors);
-  void _GetErrorsFromList(SECU3IO::CEErrors* op_errors);
+  typedef std::map<size_t, std::pair<_TSTRING, DWORD> > ErrorsIDContainer;
 
   //from IAPPEventHandler:
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
+
+  //from IBLDEventHandler
+  virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);
+  virtual void OnBegin(const int opcode,const int status);
+  virtual void OnEnd(const int opcode,const int status);
 
   //activation/deactivation of Check Engine tab
   virtual void OnActivate(void);
@@ -63,21 +71,47 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   virtual void OnFullScreen(bool i_what, const CRect& i_rect);
   virtual bool OnAskChangeTab(void);
 
-  void OnRealTimeErrors(void);
-  void OnReadSavedErrors(void);
-  void OnWriteSavedErrors(void);
-  void OnListSetAllErrors(void);
-  void OnListClearAllErrors(void);
-
   void OnSettingsChanged(void);
 
+  //from view
+  void OnOpenEEPROMFromFile(void);
+  void OnSaveEEPROMToFile(void);
+  void OnReadEEPROMFromSECU(void);
+  void OnWriteEEPROMToSECU(void);
+  void OnDropFile(_TSTRING fileName);
+
+  void OnMapChanged(int i_type);
+  bool IsEEPROMOpened(void);
+  void OnMapselNameChanged(void);
+  void OnShowCEErrors();
+
+  void PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRING& i_file_name);
+  bool CheckChangesAskAndSaveEEPROM(void);
+  void SetViewChartsValues(void);
+  void SetViewValues(void);
+  void OnModificationCheckTimer(void);
+  void OnParamDeskTabActivate(void);
+  void OnParamDeskChangeInTab(void);
+  bool StartBootLoader(void);
+  bool ExitBootLoader(void);
+
+  typedef void (CEEPROMTabController::*BLFinishOpType) (void);
+  BLFinishOpType m_blFinishOpCB;
+  void finishOnReadEepromFromSECU();
+  void finishOnWriteEepromToSECU();
+
   //data
-  CCheckEngineTabDlg*  m_view;
+  CEEPROMTabDlg*  m_view;
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CControlAppAdapter* m_pAdapter;
   ISettingsData* mp_settings;
 
-  bool m_real_time_errors_mode;
+  EEPROMDataMediator* m_eedm;
+  PPEepromParam m_epp;
+  CObjectTimer<CEEPROMTabController> m_modification_check_timer;
+  int m_lastSel;
+
+  BYTE* m_bl_data;
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
 };
