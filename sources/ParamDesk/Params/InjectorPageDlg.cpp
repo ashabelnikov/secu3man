@@ -139,8 +139,8 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_cyldisp_spin.SetBuddy(&m_cyldisp_edit);
  m_cyldisp_edit.SetLimitText(6);
  m_cyldisp_edit.SetDecimalPlaces(4);
- m_cyldisp_spin.SetRangeAndDelta(0.05f, 3.0000f, 0.0001);
- m_cyldisp_edit.SetRange(0.05f, 3.0000f);
+ m_cyldisp_spin.SetRangeAndDelta(0.05f, 8.0000f, 0.0001);
+ m_cyldisp_edit.SetRange(0.05f, 8.0000f);
 
  m_flowrate_spin.SetBuddy(&m_flowrate_edit);
  m_flowrate_edit.SetLimitText(6);
