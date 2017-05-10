@@ -791,6 +791,8 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV), TYPE_MAP_INJ_EGOCRV);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACC), TYPE_MAP_INJ_IACC);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
 
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
@@ -1059,6 +1061,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(false),false);
  m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+
+ m_fwdm->GetIACCorrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCMap(false),false);
+ m_fwdm->GetIACCorrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCMap(true),true);
+
+ m_fwdm->GetIACCorrWMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCWMap(false),false);
+ m_fwdm->GetIACCorrWMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCWMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1172,6 +1180,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_EGOCRV:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetEGOCurveMap(m_current_funset_index, m_view->mp_TablesPanel->GetEGOCurveMap(false));
+   break;
+  case TYPE_MAP_INJ_IACC:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetIACCorrMap(m_current_funset_index, m_view->mp_TablesPanel->GetIACCMap(false));
+   break;
+  case TYPE_MAP_INJ_IACCW:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetIACCorrWMap(m_current_funset_index, m_view->mp_TablesPanel->GetIACCWMap(false));
    break;
 
    //separate maps

@@ -482,6 +482,12 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetEGOCurveMap(funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(false),false);
  m_eedm->GetEGOCurveMap(funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+
+ m_eedm->GetIACCorrMap(funset_index,m_view->mp_TablesPanel->GetIACCMap(false),false);
+ m_eedm->GetIACCorrMap(funset_index,m_view->mp_TablesPanel->GetIACCMap(true),true);
+
+ m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(false),false);
+ m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(true),true);
 }
 
 
@@ -575,6 +581,12 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_EGOCRV:
    m_eedm->SetEGOCurveMap(funset_index, m_view->mp_TablesPanel->GetEGOCurveMap(false));
+   break;
+  case TYPE_MAP_INJ_IACC:
+   m_eedm->SetIACCorrMap(funset_index, m_view->mp_TablesPanel->GetIACCMap(false));
+   break;
+  case TYPE_MAP_INJ_IACCW:
+   m_eedm->SetIACCorrWMap(funset_index, m_view->mp_TablesPanel->GetIACCWMap(false));
    break;
  }
 }

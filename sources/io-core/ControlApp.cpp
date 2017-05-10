@@ -1310,7 +1310,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_DEAD_MAP && m_EditTabPar.tab_id != ETMT_IDLR_MAP && m_EditTabPar.tab_id != ETMT_IDLC_MAP &&
      m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
      m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
-     m_EditTabPar.tab_id != ETMT_EGOCRV_MAP)
+     m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP)
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1326,7 +1326,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
   size_t div;
   size_t data_size = 0;
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
-  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP || m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
+  if (m_EditTabPar.tab_id == ETMT_CRNK_MAP || m_EditTabPar.tab_id == ETMT_DEAD_MAP || m_EditTabPar.tab_id == ETMT_RIGID_MAP || m_EditTabPar.tab_id == ETMT_EGOCRV_MAP || m_EditTabPar.tab_id == ETMT_IACC_MAP)
   {
    div = mp_pdp->isHex() ? 4 : 2;
    if (size % div) // 1 byte in HEX is 2 symbols
@@ -1339,7 +1339,9 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
      return false;
 
-    if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
+    if (m_EditTabPar.tab_id == ETMT_IACC_MAP)
+     m_EditTabPar.table_data[i] = (address >= INJ_IAC_CORR_SIZE) ? (((float)value) / 16.0f) : (((float)value) / 8192.0f);
+    else if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
     else if (m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
      m_EditTabPar.table_data[i] = (address > 15) ? (value * ADC_DISCRETE) : (((float)value) / EGO_CURVE_M_FACTOR);
@@ -1377,6 +1379,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 3.0f;
      else if (m_EditTabPar.tab_id == ETMT_ITRPM_MAP)
       m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
+     else if (m_EditTabPar.tab_id == ETMT_IACCW_MAP)
+      m_EditTabPar.table_data[i] =  (address >= INJ_IAC_CORR_W_SIZE) ? (((float)value) / 2.0f) : (((float)value) / 256.0f);
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -2704,6 +2708,16 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    {
     int value = MathHelpers::Round((packet_data->address > 15) ? (packet_data->table_data[i] / ADC_DISCRETE) : (packet_data->table_data[i] * EGO_CURVE_M_FACTOR));
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_IACC_MAP)
+   {
+    int value = MathHelpers::Round((packet_data->address >= INJ_IAC_CORR_SIZE) ? (packet_data->table_data[i] * 16.0f) : (packet_data->table_data[i] * 8192.0f));
+    mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_IACCW_MAP)
+   {
+    int value = MathHelpers::Round((packet_data->address >= INJ_IAC_CORR_W_SIZE) ? (packet_data->table_data[i] * 2.0f) : (packet_data->table_data[i] * 256.0f));
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
    {  //default case

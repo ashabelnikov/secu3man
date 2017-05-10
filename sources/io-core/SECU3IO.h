@@ -308,6 +308,8 @@ namespace SECU3IO
  const int ETMT_ITRPM_MAP = 16;         //Idling RPM
  const int ETMT_RIGID_MAP = 17;         //Idl. regulator's rigidity
  const int ETMT_EGOCRV_MAP = 18;        //EGO curve (WBO sensor emulation)
+ const int ETMT_IACC_MAP = 19;          //mixture correction vs IAC pos.
+ const int ETMT_IACCW_MAP = 20;         //weight of mixture correction vs IAC pos.
 
  struct SepTabPar
  {

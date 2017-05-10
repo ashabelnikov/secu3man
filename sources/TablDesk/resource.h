@@ -284,3 +284,9 @@
 #define IDC_CESETT_KS_V_MAX_SPIN        5543
 #define IDC_CESETT_KS_V_EM_EDIT         5544
 #define IDC_CESETT_KS_V_EM_SPIN         5545
+#define IDC_TD_VIEW_IACC_MAP            5546
+#define IDC_TD_VIEW_IACCW_MAP           5547
+#define IDS_IACC_CURVE_MAP              5548
+#define IDS_IACCW_CURVE_MAP             5549
+#define IDS_MAPS_IACPOS_UNIT            5550
+#define IDS_MAPS_TPSPOS_UNIT            5551

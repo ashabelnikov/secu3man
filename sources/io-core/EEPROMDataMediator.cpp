@@ -653,3 +653,77 @@ void EEPROMDataMediator::ResetCEErrorsList(void)
  _uint* p_errors = (_uint*)(getBytes() + EEPROM_ECUERRORS_START);
  *p_errors = 0;
 }
+
+void EEPROMDataMediator::GetIACCorrWMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_W_SIZE; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_iac_corr_w[i];
+  op_values[i] = (value / 256.0f);
+ }
+
+ for (; i < INJ_IAC_CORR_W_SIZE+2; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_iac_corr_w[i];
+  op_values[i] = value / 2.0f;
+ }
+}
+
+void EEPROMDataMediator::SetIACCorrWMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_W_SIZE; i++ )
+ {
+  int value = MathHelpers::Round(ip_values[i] * 256.0f);
+  p_maps[i_index].inj_iac_corr_w[i] = (value > 255) ? 255 : value;
+ }
+ for (; i < INJ_IAC_CORR_W_SIZE+2; i++ )
+  p_maps[i_index].inj_iac_corr_w[i] = MathHelpers::Round(ip_values[i] * 2.0f);
+}
+
+
+void EEPROMDataMediator::GetIACCorrMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_SIZE; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_iac_corr[i];
+  op_values[i] = (value / 8192.0f);
+ }
+
+ for (; i < INJ_IAC_CORR_SIZE+2; i++ )
+ {
+  float value = (float)p_maps[i_index].inj_iac_corr[i];
+  op_values[i] = value / 16.0f;
+ }
+}
+
+void EEPROMDataMediator::SetIACCorrMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_SIZE; i++ )
+  p_maps[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 8192.0f);
+ for (; i < INJ_IAC_CORR_SIZE+2; i++ )
+  p_maps[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 16.0f);
+}

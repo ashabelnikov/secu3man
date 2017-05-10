@@ -113,6 +113,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetRigidMap(int i_index, const float* i_values);
   void GetEGOCurveMap(int i_index, float* op_values, bool i_original = false);
   void SetEGOCurveMap(int i_index, const float* i_values);
+  void GetIACCorrWMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrWMap(int i_index, const float* i_values);
+  void GetIACCorrMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

@@ -65,7 +65,10 @@ typedef struct
 
  _uint  inj_ego_curve[INJ_EGO_CURVE_SIZE+2];           // Air-Fuel ratio lookup table, value * 128, the last two values are voltages corresponding to the beginning and to the end of axis (ADC discretes)
 
- _uchar reserved[378];                                 // reserved bytes - for compatibility
+ _uchar inj_iac_corr_w[INJ_IAC_CORR_W_SIZE+2];         // IAC correction weight lookup table (value * 256), the last two values are TPS corresponding to the beginning and to the end of axis
+ _uint inj_iac_corr[INJ_IAC_CORR_SIZE+2];              // IAC correction lookup table (value * 8192), the last two values are IAC positions corresponding to the beginning and to the end of axis
+
+ _uchar reserved[340];                                 // reserved bytes - for compatibility
 }f_data_t;
 
 } //SECU3IO

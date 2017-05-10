@@ -121,6 +121,11 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_RigidMapWnd_Y(_T("RigidMapWnd_Y"))
 , m_Name_EGOCrvMapWnd_X(_T("EGOCrvMapWnd_X"))
 , m_Name_EGOCrvMapWnd_Y(_T("EGOCrvMapWnd_Y"))
+, m_Name_IACCMapWnd_X(_T("IACCMapWnd_X"))
+, m_Name_IACCMapWnd_Y(_T("IACCMapWnd_Y"))
+, m_Name_IACCWMapWnd_X(_T("IACCWMapWnd_X"))
+, m_Name_IACCWMapWnd_Y(_T("IACCWMapWnd_Y"))
+
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -668,6 +673,12 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, EGOCrvMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, EGOCrvMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IACCMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IACCMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IACCWMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, IACCWMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -998,6 +1009,17 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optEGOCrvMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_EGOCrvMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optIACCMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIACCMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIACCWMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCWMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optIACCWMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCWMapWnd_Y,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
@@ -1111,6 +1133,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optRigidMapWnd_Y = i_wndSettings.m_RigidMapWnd_Y;
  m_optEGOCrvMapWnd_X = i_wndSettings.m_EGOCrvMapWnd_X;
  m_optEGOCrvMapWnd_Y = i_wndSettings.m_EGOCrvMapWnd_Y;
+ m_optIACCMapWnd_X = i_wndSettings.m_IACCMapWnd_X;
+ m_optIACCMapWnd_Y = i_wndSettings.m_IACCMapWnd_Y;
+ m_optIACCWMapWnd_X = i_wndSettings.m_IACCWMapWnd_X;
+ m_optIACCWMapWnd_Y = i_wndSettings.m_IACCWMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -1169,6 +1195,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_RigidMapWnd_Y = m_optRigidMapWnd_Y;
  o_wndSettings.m_EGOCrvMapWnd_X = m_optEGOCrvMapWnd_X;
  o_wndSettings.m_EGOCrvMapWnd_Y = m_optEGOCrvMapWnd_Y;
+ o_wndSettings.m_IACCMapWnd_X = m_optIACCMapWnd_X;
+ o_wndSettings.m_IACCMapWnd_Y = m_optIACCMapWnd_Y;
+ o_wndSettings.m_IACCWMapWnd_X = m_optIACCWMapWnd_X;
+ o_wndSettings.m_IACCWMapWnd_Y = m_optIACCWMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

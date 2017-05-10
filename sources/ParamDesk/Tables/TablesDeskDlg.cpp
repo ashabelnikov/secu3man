@@ -263,7 +263,12 @@ void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
  if (hwnd)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
-
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
  if (hwnd)
@@ -325,6 +330,10 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_RIGID);
  _MakeWindowChild(hwnd, children);
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
+ _MakeWindowChild(hwnd, children);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
+ _MakeWindowChild(hwnd, children);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
  _MakeWindowChild(hwnd, children);
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND); //pseudo map
@@ -395,6 +404,10 @@ void CTablesDeskDlg::CloseAllCharts(void)
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_RIGID);
  if (hwnd) ::DestroyWindow(hwnd);
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
+ if (hwnd) ::DestroyWindow(hwnd);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
  if (hwnd) ::DestroyWindow(hwnd);
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
@@ -499,6 +512,12 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
 
   case TYPE_MAP_INJ_EGOCRV:
    return mp_ButtonsPanel->GetEGOCurveMap(i_original);
+
+  case TYPE_MAP_INJ_IACC:
+   return mp_ButtonsPanel->GetIACCMap(i_original);
+
+  case TYPE_MAP_INJ_IACCW:
+   return mp_ButtonsPanel->GetIACCWMap(i_original);
 
   default:
   return NULL;

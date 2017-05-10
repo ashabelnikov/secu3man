@@ -84,6 +84,10 @@ class IOCORE_API EEPROMDataMediator : public ParamsIO
   void GetITRPMMap(int i_index, float* op_values, bool i_original = false);
   void GetRigidMap(int i_index, float* op_values, bool i_original = false);
   void GetEGOCurveMap(int i_index, float* op_values, bool i_original = false);
+  void GetIACCorrWMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrWMap(int i_index, const float* i_values);
+  void GetIACCorrMap(int i_index, float* op_values, bool i_original = false);
+  void SetIACCorrMap(int i_index, const float* i_values);
 
   void SetStartMap(int i_index,const float* i_values);
   void SetIdleMap(int i_index, const float* i_values);

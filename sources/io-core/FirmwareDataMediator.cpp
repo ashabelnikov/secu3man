@@ -985,6 +985,82 @@ void CFirmwareDataMediator::SetEGOCurveMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_ego_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
+void CFirmwareDataMediator::GetIACCorrWMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_W_SIZE; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iac_corr_w[i];
+  op_values[i] = (value / 256.0f);
+ }
+
+ for (; i < INJ_IAC_CORR_W_SIZE+2; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iac_corr_w[i];
+  op_values[i] = value / 2.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetIACCorrWMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_W_SIZE; i++ )
+ {
+  int value = MathHelpers::Round(ip_values[i] * 256.0f);
+  p_fd->tables[i_index].inj_iac_corr_w[i] = (value > 255) ? 255 : value;
+ }
+ for (; i < INJ_IAC_CORR_W_SIZE+2; i++ )
+  p_fd->tables[i_index].inj_iac_corr_w[i] = MathHelpers::Round(ip_values[i] * 2.0f);
+}
+
+
+void CFirmwareDataMediator::GetIACCorrMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_SIZE; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iac_corr[i];
+  op_values[i] = (value / 8192.0f);
+ }
+
+ for (; i < INJ_IAC_CORR_SIZE+2; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iac_corr[i];
+  op_values[i] = value / 16.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetIACCorrMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IAC_CORR_SIZE; i++ )
+  p_fd->tables[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 8192.0f);
+ for (; i < INJ_IAC_CORR_SIZE+2; i++ )
+  p_fd->tables[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 16.0f);
+}
+
+
+//////////////////////////////////////////////////////////////////////////////////////
 SECU3IO::params_t* CFirmwareDataMediator::GetParamsPtr(void)
 {
  return &((fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]))->def_param;
@@ -994,6 +1070,7 @@ EECUPlatform CFirmwareDataMediator::GetPlatformId(void)
 {
  return m_fpp->m_platform_id;
 }
+//////////////////////////////////////////////////////////////////////////////////////
 
 //выдает все таблицы в одной структуре
 void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
@@ -1023,6 +1100,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetITRPMMap(i, op_fwd->maps[i].inj_target_rpm);
   GetRigidMap(i, op_fwd->maps[i].inj_idl_rigidity);
   GetEGOCurveMap(i, op_fwd->maps[i].inj_ego_curve);
+  GetIACCorrWMap(i, op_fwd->maps[i].inj_iac_corr_w);
+  GetIACCorrMap(i, op_fwd->maps[i].inj_iac_corr);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1069,6 +1148,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetITRPMMap(i, ip_fwd->maps[i].inj_target_rpm);
   SetRigidMap(i, ip_fwd->maps[i].inj_idl_rigidity);
   SetEGOCurveMap(i, ip_fwd->maps[i].inj_ego_curve);
+  SetIACCorrWMap(i, ip_fwd->maps[i].inj_iac_corr_w);
+  SetIACCorrMap(i, ip_fwd->maps[i].inj_iac_corr);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
