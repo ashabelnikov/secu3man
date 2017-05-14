@@ -488,6 +488,9 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(false),false);
  m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(true),true);
+
+ m_eedm->GetIATCLTMap(funset_index,m_view->mp_TablesPanel->GetIATCLTMap(false),false);
+ m_eedm->GetIATCLTMap(funset_index,m_view->mp_TablesPanel->GetIATCLTMap(true),true);
 }
 
 
@@ -587,6 +590,9 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_IACCW:
    m_eedm->SetIACCorrWMap(funset_index, m_view->mp_TablesPanel->GetIACCWMap(false));
+   break;
+  case TYPE_MAP_INJ_IATCLT:
+   m_eedm->SetIATCLTMap(funset_index, m_view->mp_TablesPanel->GetIATCLTMap(false));
    break;
  }
 }

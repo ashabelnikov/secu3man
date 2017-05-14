@@ -94,6 +94,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
    return i_original ? m_omaps->inj_iac_corr : m_maps->inj_iac_corr;
   case TYPE_MAP_INJ_IACCW:
    return i_original ? m_omaps->inj_iac_corr_w : m_maps->inj_iac_corr_w;
+  case TYPE_MAP_INJ_IATCLT:
+   return i_original ? m_omaps->inj_iatclt_corr : m_maps->inj_iatclt_corr;
  }
  return NULL; //undefined type of map
 }
@@ -143,6 +145,8 @@ size_t _GetMapSize(int i_mapType)
    return INJ_IAC_CORR_SIZE+2;
   case TYPE_MAP_INJ_IACCW:
    return INJ_IAC_CORR_W_SIZE+2;
+  case TYPE_MAP_INJ_IATCLT:
+   return INJ_IATCLT_CORR_SIZE+2;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -179,6 +183,7 @@ void CPMTablesController::_MoveMapsToCharts(bool i_original)
  _MoveMapToChart(TYPE_MAP_INJ_EGOCRV, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_IACC, i_original);
  _MoveMapToChart(TYPE_MAP_INJ_IACCW, i_original);
+ _MoveMapToChart(TYPE_MAP_INJ_IATCLT, i_original);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
@@ -206,6 +211,7 @@ void CPMTablesController::_ClearAcquisitionFlags(void)
  std::fill(m_maps_flags->inj_ego_curve, m_maps_flags->inj_ego_curve + INJ_EGO_CURVE_SIZE + 2, .0f);
  std::fill(m_maps_flags->inj_iac_corr, m_maps_flags->inj_iac_corr + INJ_IAC_CORR_SIZE + 2, .0f);
  std::fill(m_maps_flags->inj_iac_corr_w, m_maps_flags->inj_iac_corr_w + INJ_IAC_CORR_W_SIZE + 2, .0f);
+ std::fill(m_maps_flags->inj_iatclt_corr, m_maps_flags->inj_iatclt_corr + INJ_IATCLT_CORR_SIZE + 2, .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -450,6 +456,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
   case ETMT_IACCW_MAP: //weight of mixture correction vs IAC pos
    UpdateMap(m_maps->inj_iac_corr_w, m_maps_flags->inj_iac_corr_w, data);
    break;
+  case ETMT_IATCLT_MAP: //IAT/CLT correction vs air flow
+   UpdateMap(m_maps->inj_iatclt_corr, m_maps_flags->inj_iatclt_corr, data);
+   break;
 
   default: ASSERT(0);
    //error
@@ -512,6 +521,8 @@ bool CPMTablesController::_IsCacheUpToDate(void)
    return false;
   if (!_FindZero(m_maps_flags->inj_iac_corr_w, INJ_IAC_CORR_W_SIZE+2))
    return false;
+  if (!_FindZero(m_maps_flags->inj_iatclt_corr, INJ_IATCLT_CORR_SIZE+2))
+   return false;
 
  return true;
 }
@@ -562,6 +573,8 @@ bool CPMTablesController::_IsModificationMade(void) const
   return true;
  if (false==_CompareViewMap(TYPE_MAP_INJ_IACCW, _GetMapSize(TYPE_MAP_INJ_IACCW)))
   return true;
+ if (false==_CompareViewMap(TYPE_MAP_INJ_IATCLT, _GetMapSize(TYPE_MAP_INJ_IATCLT)))
+  return true;
 
  return false; //no modifications
 }
@@ -572,7 +585,7 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
  size_t mapSize = _GetMapSize(i_mapType); //map size in items (not bytes)
 
  size_t pieceSize = 16; //for all maps exept cranking PW and inj. dead time and rigidity function
- if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD || i_mapType == TYPE_MAP_INJ_RIGID || i_mapType == TYPE_MAP_INJ_EGOCRV || i_mapType == TYPE_MAP_INJ_IACC)
+ if (i_mapType == TYPE_MAP_INJ_CRNK || i_mapType == TYPE_MAP_INJ_DEAD || i_mapType == TYPE_MAP_INJ_RIGID || i_mapType == TYPE_MAP_INJ_EGOCRV || i_mapType == TYPE_MAP_INJ_IACC || i_mapType == TYPE_MAP_INJ_IATCLT)
   pieceSize = 8;
 
  size_t index;

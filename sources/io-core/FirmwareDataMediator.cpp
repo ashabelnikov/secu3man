@@ -1059,6 +1059,40 @@ void CFirmwareDataMediator::SetIACCorrMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 128.0f);
 }
 
+void CFirmwareDataMediator::GetIATCLTMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IATCLT_CORR_SIZE; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iatclt_corr[i];
+  op_values[i] = (value / 8192.0f);
+ }
+
+ for (; i < INJ_IATCLT_CORR_SIZE+2; i++ )
+ {
+  float value = (float)p_fd->tables[i_index].inj_iatclt_corr[i];
+  op_values[i] = value * 32.0f;
+ }
+}
+
+void CFirmwareDataMediator::SetIATCLTMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < INJ_IATCLT_CORR_SIZE; i++ )
+  p_fd->tables[i_index].inj_iatclt_corr[i] = MathHelpers::Round(ip_values[i] * 8192.0f);
+ for (; i < INJ_IATCLT_CORR_SIZE+2; i++ )
+  p_fd->tables[i_index].inj_iatclt_corr[i] = MathHelpers::Round(ip_values[i] / 32.0f);
+}
 
 //////////////////////////////////////////////////////////////////////////////////////
 SECU3IO::params_t* CFirmwareDataMediator::GetParamsPtr(void)

@@ -159,6 +159,10 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_IACCWMapWnd_X = rc.left;
    ws.m_IACCWMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_IATCLT:
+   ws.m_IATCLTMapWnd_X = rc.left;
+   ws.m_IATCLTMapWnd_Y = rc.top;
+   break;
 
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
@@ -261,6 +265,9 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_IACCW:
    X = ws.m_IACCWMapWnd_X, Y = ws.m_IACCWMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_IATCLT:
+   X = ws.m_IATCLTMapWnd_X, Y = ws.m_IATCLTMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

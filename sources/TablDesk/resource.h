@@ -290,3 +290,6 @@
 #define IDS_IACCW_CURVE_MAP             5549
 #define IDS_MAPS_IACPOS_UNIT            5550
 #define IDS_MAPS_TPSPOS_UNIT            5551
+#define IDC_TD_VIEW_IATCLT_MAP          5552
+#define IDS_IATCLT_CORR_MAP             5553
+#define IDS_MAPS_AIRFLOW_UNIT           5554

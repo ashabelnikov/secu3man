@@ -320,7 +320,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_choke_op_enabled(false)
 , m_gasdose_enabled(false)
 {
- m_scrl_factor = 2.45f;
+ m_scrl_factor = 2.60f;
 
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
