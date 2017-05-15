@@ -2025,7 +2025,7 @@ void CButtonsPanel::OnViewIACCMap()
  if ((!m_iacc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_iacc_map_chart_state = 1;
-  m_iacc_map_wnd_handle = DLL::Chart2DCreate(GetIACCMap(true), GetIACCMap(false), 0.00, 2.00, NULL, 8,
+  m_iacc_map_wnd_handle = DLL::Chart2DCreate(GetIACCMap(true), GetIACCMap(false), 0.00, 1.99, NULL, 8,
     MLL::GetString(IDS_MAPS_IACPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), false);
