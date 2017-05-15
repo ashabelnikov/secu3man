@@ -682,7 +682,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_cts_curve_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_cts_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeCTSXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_cts_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeCTSXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_cts_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
   DLL::Chart2DSetOnChange(m_cts_curve_map_wnd_handle, OnChangeCTSCurveTable, this);
   DLL::Chart2DSetOnClose(m_cts_curve_map_wnd_handle, OnCloseCTSCurveTable, this);
@@ -751,7 +751,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_ATS_CURVE_MAP).c_str(), false);
   DLL::Chart2DSetAxisValuesFormat(m_ats_curve_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_ats_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, OnChangeATSXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_ats_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, -1, -1, OnChangeATSXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_ats_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
   DLL::Chart2DSetOnChange(m_ats_curve_map_wnd_handle, OnChangeATSCurveTable, this);
   DLL::Chart2DSetOnClose(m_ats_curve_map_wnd_handle, OnCloseATSCurveTable, this);

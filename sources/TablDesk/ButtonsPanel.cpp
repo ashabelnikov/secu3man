@@ -1994,7 +1994,7 @@ void CButtonsPanel::OnViewEGOCrvMap()
   DLL::Chart2DSetOnWndActivation(m_egocrv_map_wnd_handle,OnWndActivationEGOCrvMap, this);
   DLL::Chart2DSetPtValuesFormat(m_egocrv_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetAxisValuesFormat(m_egocrv_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_egocrv_map_wnd_handle, 1, true, 0, 5.5f, 0, 5.5f, 0.01f, OnChangeEGOCrvXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_egocrv_map_wnd_handle, 1, true, 0, 5.5f, 0, 5.5f, 0.01f, -1, -1, OnChangeEGOCrvXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_egocrv_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_egocrv_map_wnd_handle, OnChangeEGOCrvMap, this);
   DLL::Chart2DSetOnClose(m_egocrv_map_wnd_handle, OnCloseEGOCrvMap, this);
@@ -2025,7 +2025,7 @@ void CButtonsPanel::OnViewIACCMap()
  if ((!m_iacc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_iacc_map_chart_state = 1;
-  m_iacc_map_wnd_handle = DLL::Chart2DCreate(GetIACCMap(true), GetIACCMap(false), 0.00, 1.99, NULL, 8,
+  m_iacc_map_wnd_handle = DLL::Chart2DCreate(GetIACCMap(true), GetIACCMap(false), 0.00f, 1.99f, NULL, 8,
     MLL::GetString(IDS_MAPS_IACPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), false);
@@ -2033,7 +2033,7 @@ void CButtonsPanel::OnViewIACCMap()
   DLL::Chart2DSetPtValuesFormat(m_iacc_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_iacc_map_wnd_handle, 0.05f);
   DLL::Chart2DSetAxisValuesFormat(m_iacc_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_iacc_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, OnChangeIACCXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_iacc_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_iacc_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_iacc_map_wnd_handle, OnChangeIACCMap, this);
   DLL::Chart2DSetOnClose(m_iacc_map_wnd_handle, OnCloseIACCMap, this);
@@ -2072,7 +2072,7 @@ void CButtonsPanel::OnViewIACCWMap()
   DLL::Chart2DSetPtValuesFormat(m_iaccw_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_iaccw_map_wnd_handle, 0.05f);
   DLL::Chart2DSetAxisValuesFormat(m_iaccw_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_iaccw_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, OnChangeIACCWXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_iaccw_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCWXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_iaccw_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_iaccw_map_wnd_handle, OnChangeIACCWMap, this);
   DLL::Chart2DSetOnClose(m_iaccw_map_wnd_handle, OnCloseIACCWMap, this);
@@ -2110,7 +2110,7 @@ void CButtonsPanel::OnViewIATCLTMap()
   DLL::Chart2DSetOnWndActivation(m_iatclt_map_wnd_handle,OnWndActivationIATCLTMap, this);
   DLL::Chart2DSetPtValuesFormat(m_iatclt_map_wnd_handle, _T("#0.000"));
   DLL::Chart2DSetPtMovingStep(m_iatclt_map_wnd_handle, 0.05f);
-  DLL::Chart2DSetAxisEdits(m_iatclt_map_wnd_handle, 1, true, 0, 2000000.0f, 0, 2000000.0f, 100.0f, OnChangeIATCLTXAxisEdit, this);
+  DLL::Chart2DSetAxisEdits(m_iatclt_map_wnd_handle, 1, true, 0, 2000000.0f, 0, 2000000.0f, 100.0f, 7, 0, OnChangeIATCLTXAxisEdit, this);
   DLL::Chart2DSetOnGetAxisLabel(m_iatclt_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_iatclt_map_wnd_handle, OnChangeIATCLTMap, this);
   DLL::Chart2DSetOnClose(m_iatclt_map_wnd_handle, OnCloseIATCLTMap, this);

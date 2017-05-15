@@ -150,7 +150,7 @@ void TForm2D::ShowXEdits(bool i_show)
 }
 
 //---------------------------------------------------------------------------
-void TForm2D::CfgXEdits(int i_type, float i_min, float i_max, float i_step)
+void TForm2D::CfgXEdits(int i_type, float i_min, float i_max, float i_step, int limitText, int spinDecimalPlaces)
 {
  switch(i_type)
  {
@@ -158,11 +158,19 @@ void TForm2D::CfgXEdits(int i_type, float i_min, float i_max, float i_step)
    SpinXBegin->FloatMin = i_min;
    SpinXBegin->FloatMax = i_max;
    SpinXBegin->FloatIncrement = i_step;
+   if (-1!=spinDecimalPlaces)
+    SpinXBegin->DecimalPlaces = spinDecimalPlaces;
+   if (-1!=limitText)
+    EditXBegin->MaxLength = limitText;
    break;
   case 1:  //end
    SpinXEnd->FloatMin = i_min;
    SpinXEnd->FloatMax = i_max;
    SpinXEnd->FloatIncrement = i_step;
+   if (-1!=spinDecimalPlaces)
+    SpinXEnd->DecimalPlaces = spinDecimalPlaces;
+   if (-1!=limitText)
+    EditXEnd->MaxLength = limitText;
    break;
  }
 }

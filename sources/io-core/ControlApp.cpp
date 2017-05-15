@@ -1343,7 +1343,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
     if (m_EditTabPar.tab_id == ETMT_IATCLT_MAP)
      m_EditTabPar.table_data[i] = (address >= INJ_IATCLT_CORR_SIZE) ? (((float)value) * 32.0f) : (((float)value) / 8192.0f);
     else if (m_EditTabPar.tab_id == ETMT_IACC_MAP)
-     m_EditTabPar.table_data[i] = (address >= INJ_IAC_CORR_SIZE) ? (((float)value) / 128.0f) : (((float)value) / 8192.0f);
+     m_EditTabPar.table_data[i] = (address >= INJ_IAC_CORR_SIZE) ? (((float)value) / 128.0f) : (((float)(((signed short)value) + 8192)) / 8192.0f);
     else if (m_EditTabPar.tab_id == ETMT_RIGID_MAP)
      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;  //convert to user readble value
     else if (m_EditTabPar.tab_id == ETMT_EGOCRV_MAP)
@@ -2714,12 +2714,19 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    }
    else if (packet_data->tab_id == ETMT_IACC_MAP)
    {
-    int value = MathHelpers::Round((packet_data->address >= INJ_IAC_CORR_SIZE) ? (packet_data->table_data[i] * 128.0f) : (packet_data->table_data[i] * 8192.0f));
+    int value = MathHelpers::Round((packet_data->address >= INJ_IAC_CORR_SIZE) ? (packet_data->table_data[i] * 128.0f) : ((packet_data->table_data[i] - 1.0f) * 8192.0f));
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_IACCW_MAP)
    {
-    int value = MathHelpers::Round((packet_data->address >= INJ_IAC_CORR_W_SIZE) ? (packet_data->table_data[i] * 2.0f) : (packet_data->table_data[i] * 256.0f));
+    int value;
+    if (packet_data->address >= INJ_IAC_CORR_W_SIZE)
+     value = MathHelpers::Round(packet_data->table_data[i] * 2.0f);
+    else
+    {
+     value = MathHelpers::Round(packet_data->table_data[i] * 256.0f);
+     if (value > 255) value = 255;
+    }
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_IATCLT_MAP)

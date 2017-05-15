@@ -50,7 +50,7 @@ namespace DLL
  typedef void (__cdecl *Chart2DSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *Chart2DSetOnWndActivation_Addr)(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  typedef void (__cdecl *Chart2DEnable_Addr)(HWND hWnd, bool i_enable);
- typedef void (__cdecl *Chart2DSetAxisEdits_Addr)(HWND hWnd, int i_axis, int i_show, float i_beginLo, float i_beginHi, float i_endLo, float i_endHi, float i_step, OnChangeValue i_pOnChangeValue, void* i_param);
+ typedef void (__cdecl *Chart2DSetAxisEdits_Addr)(HWND hWnd, int i_axis, int i_show, float i_beginLo, float i_beginHi, float i_endLo, float i_endHi, float i_step, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param);
  typedef void (__cdecl *Chart2DUpdateAxisEdits_Addr)(HWND hWnd, int i_axis, float i_begin, float i_end);
  typedef void (__cdecl *Chart2DShowHints_Addr) (int i_show);
  typedef void (__cdecl *Chart2DSetPtValuesFormat_Addr) (HWND hWnd, LPCTSTR ptValFormat);

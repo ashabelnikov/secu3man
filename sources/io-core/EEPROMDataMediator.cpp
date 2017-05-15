@@ -704,7 +704,7 @@ void EEPROMDataMediator::GetIACCorrMap(int i_index, float* op_values, bool i_ori
  for (; i < INJ_IAC_CORR_SIZE; i++ )
  {
   float value = (float)p_maps[i_index].inj_iac_corr[i];
-  op_values[i] = (value / 8192.0f);
+  op_values[i] = ((value + 8192) / 8192.0f);
  }
 
  for (; i < INJ_IAC_CORR_SIZE+2; i++ )
@@ -723,7 +723,7 @@ void EEPROMDataMediator::SetIACCorrMap(int i_index, const float* ip_values)
 
  int i = 0;
  for (; i < INJ_IAC_CORR_SIZE; i++ )
-  p_maps[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 8192.0f);
+  p_maps[i_index].inj_iac_corr[i] = MathHelpers::Round((ip_values[i] - 1.0f) * 8192.0f);
  for (; i < INJ_IAC_CORR_SIZE+2; i++ )
   p_maps[i_index].inj_iac_corr[i] = MathHelpers::Round(ip_values[i] * 128.0f);
 }

@@ -120,7 +120,7 @@ class TForm2D : public TForm
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
   void ShowXEdits(bool i_show);
   void SetXEditsCB(OnChangeValue i_pOnChangeValue, void* i_param);
-  void CfgXEdits(int i_type, float i_min, float i_max, float i_step);
+  void CfgXEdits(int i_type, float i_min, float i_max, float i_step, int limitText, int spinDecimalPlaces);
   void SetXEditVal(int i_type, float i_value);
 
   void Enable(bool i_enable);

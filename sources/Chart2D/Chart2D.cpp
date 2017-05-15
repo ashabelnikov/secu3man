@@ -51,7 +51,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool i_enable);
- void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
  void  __declspec(dllexport)  __cdecl Chart2DShowHints(int i_show);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
@@ -326,7 +326,7 @@ void __cdecl Chart2DEnable(HWND hWnd, bool i_enable)
 }
 
 //---------------------------------------------------------------------------
-void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, OnChangeValue i_pOnChangeValue, void* i_param)
+void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param)
 {
  TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
  if (NULL==pForm)
@@ -337,8 +337,8 @@ void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_begi
   case 1: //X
    pForm->ShowXEdits(i_show);
    pForm->SetXEditsCB(i_pOnChangeValue, i_param);
-   pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep); //begin
-   pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep);     //end
+   pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep, limitText, spinDecimalPlaces); //begin
+   pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep, limitText, spinDecimalPlaces);     //end
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
