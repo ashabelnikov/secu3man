@@ -272,8 +272,11 @@ BOOL CLambdaPageDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_strperstp_edit, MLL::GetString(IDS_PD_LAMBDA_STRPERSTP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_strperstp_spin, MLL::GetString(IDS_PD_LAMBDA_STRPERSTP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_senstype_combo, MLL::GetString(IDS_PD_LAMBDA_SENSTYPE_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_msperstp_edit, MLL::GetString(IDS_PD_LAMBDA_MSPERSTP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_msperstp_spin, MLL::GetString(IDS_PD_LAMBDA_MSPERSTP_EDIT_TT)));
 
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
  UpdateData(FALSE);

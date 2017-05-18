@@ -1182,8 +1182,10 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Количество тактов двигателя на один шаг коррекции"
+    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Количество тактов двигателя на один шаг коррекции. Поставьте 0, если хотите задать задержку в миллисекундах."
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "Сколько раз впрыскивается топливо (число событий впрыска за цикл), не зависит от числа каналов и форсунок."
+    IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Тип используемого датчика кислорода (узкополосный или широкополосный). Если выбран УДК, то смесь будет корректироваться только в тех режимах, для которых в таблице AFR установлено значение соответствующее точке переключения (14.7 для бензина). Под ШДК понимается его эмуляция при помощи узкополосного ДК и таблицы или использование ШДК с контроллером, который выдает напряжение линейно зависящие от соотношения воздух/топливо."
+    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Задержка в миллисекундах после каждого обновления коррекции."
 END
 
 STRINGTABLE
@@ -2426,8 +2428,10 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step"
+    IDS_PD_LAMBDA_STRPERSTP_EDIT_TT "Number of engine strokes per one correction step. Set to 0, if you want to use delay in milliseconds."
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "How many times fuel injected into the intake manifold (number of injection events per cycle), not depending on injectors and channels number."
+    IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Type of used oxygen sensor (narrow band or wide band). If NBO is selected, than mixture will be corrected only in modes for which in the AFR table specified value corresponding to switch point (e.g. 14.7 for petrol). WBO means its emulation using narrow band sensor and lookup table or using of wide band sensor with controller, which outputs voltage linearly dependent on the AFR."
+    IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Delay in milliseconds after each update of correction."
 END
 
 STRINGTABLE
