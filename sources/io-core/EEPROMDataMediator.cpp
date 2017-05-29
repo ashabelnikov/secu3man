@@ -637,12 +637,12 @@ void EEPROMDataMediator::CalculateAndPlaceParamsCRC(void)
 std::set<int> EEPROMDataMediator::GetCEErrorsList(void)
 {
  //получаем адрес начала таблиц семейств характеристик
- unsigned int errors = *((_uint*)(getBytes() + EEPROM_ECUERRORS_START));
+ DWORD errors = *((_uint*)(getBytes() + EEPROM_ECUERRORS_START));
  std::set<int> el;
 
  for(int i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
  {
-  if (errors & (1 << i))
+  if (CHECKBIT32(errors, i))
    el.insert(i);
  }
  return el;

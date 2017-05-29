@@ -241,7 +241,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->ign_cutoff_thrd = p_in->ign_cutoff_thrd;
     p_params->hop_start_cogs = p_in->hop_start_cogs;
     p_params->hop_durat_cogs = p_in->hop_durat_cogs;
-    p_params->flpmp_flags = (p_params->flpmp_flags & 0xFC) | (p_in->inj_offongas << 1) | (p_in->flpmp_offongas << 0);
+    WRITEBIT8(p_params->flpmp_flags, 0, p_in->flpmp_offongas);
+    WRITEBIT8(p_params->flpmp_flags, 1, p_in->inj_offongas);
    }
    break;
   case CHOKE_PAR:
@@ -272,7 +273,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
   case SECUR_PAR:
    {
     SecurPar* p_in = (SecurPar*)ip_values;
-    p_params->bt_flags = (p_params->bt_flags & 0xFA) | ((p_in->use_imm != 0) << 2) | ((p_in->use_bt != 0) << 0);
+    WRITEBIT8(p_params->bt_flags, 0, p_in->use_bt);
+    WRITEBIT8(p_params->bt_flags, 2, p_in->use_imm);
     for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
      memcpy(p_params->ibtn_keys[j], p_in->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
    }
@@ -379,10 +381,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    case IDLREG_PAR:
     {
      IdlRegPar* p_out = (IdlRegPar*)op_values;
-     p_out->idl_regul  = (p_params->idl_flags & 0x1) != 0;
-     p_out->use_regongas  = (p_params->idl_flags & 0x2) != 0;
-     p_out->closed_loop = (p_params->idl_flags & 0x4) != 0;
-     p_out->preg_mode = (p_params->idl_flags & 0x08) != 0;
+     p_out->idl_regul  = CHECKBIT8(p_params->idl_flags, 0);
+     p_out->use_regongas  = CHECKBIT8(p_params->idl_flags, 1);
+     p_out->closed_loop = CHECKBIT8(p_params->idl_flags, 2);
+     p_out->preg_mode = CHECKBIT8(p_params->idl_flags, 3);
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
      p_out->ifac1      = ((float)p_params->ifac1) / 256.0f;
@@ -540,8 +542,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->ign_cutoff_thrd = p_params->ign_cutoff_thrd;
      p_out->hop_start_cogs = p_params->hop_start_cogs;
      p_out->hop_durat_cogs = p_params->hop_durat_cogs;
-     p_out->flpmp_offongas = (p_params->flpmp_flags & 0x1) != 0;
-     p_out->inj_offongas = (p_params->flpmp_flags & 0x2) != 0;
+     p_out->flpmp_offongas = CHECKBIT8(p_params->flpmp_flags, 0);
+     p_out->inj_offongas = CHECKBIT8(p_params->flpmp_flags, 1);
     }
     break;
    case CHOKE_PAR:
@@ -554,9 +556,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
      p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
      p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
-     p_out->offstrtadd_ongas = (p_params->choke_flags & 0x1) != 0;
-     p_out->offrpmreg_ongas = (p_params->choke_flags & 0x2) != 0;
-     p_out->usethrottle_pos = (p_params->choke_flags & 0x4) != 0;
+     p_out->offstrtadd_ongas = CHECKBIT8(p_params->choke_flags, 0);
+     p_out->offrpmreg_ongas = CHECKBIT8(p_params->choke_flags, 1);
+     p_out->usethrottle_pos = CHECKBIT8(p_params->choke_flags, 2);
     }
     break;
    case GASDOSE_PAR:
@@ -572,8 +574,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    case SECUR_PAR:
     {
      SecurPar* p_out = (SecurPar*)op_values;
-     p_out->use_bt = p_params->bt_flags & (1 << 0);
-     p_out->use_imm = p_params->bt_flags & (1 << 2);
+     p_out->use_bt = CHECKBIT8(p_params->bt_flags, 0);
+     p_out->use_imm = CHECKBIT8(p_params->bt_flags, 2);
     for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
      memcpy(p_out->ibtn_keys[j], p_params->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
     }
@@ -585,8 +587,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     for(int oi = 0; oi < UNI_OUTPUT_NUM; ++oi)
     {
      p_out->out[oi].logicFunc = p_params->uni_output[oi].flags >> 4;
-     p_out->out[oi].invers_1 = (p_params->uni_output[oi].flags & 0x01) != 0;
-     p_out->out[oi].invers_2 = (p_params->uni_output[oi].flags & 0x02) != 0;
+     p_out->out[oi].invers_1 = CHECKBIT8(p_params->uni_output[oi].flags, 0);
+     p_out->out[oi].invers_2 = CHECKBIT8(p_params->uni_output[oi].flags, 1);
      p_out->out[oi].condition1 = p_params->uni_output[oi].condition1;
      p_out->out[oi].condition2 = p_params->uni_output[oi].condition2;
      p_out->out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_1, p_params->uni_output[oi].condition1);
@@ -601,7 +603,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    {
     InjctrPar* p_out = (InjctrPar*)op_values;
 
-    p_out->inj_usetimingmap = (p_params->inj_flags & 0x01) != 0;
+    p_out->inj_usetimingmap = CHECKBIT8(p_params->inj_flags, 0);
     p_out->inj_config = p_params->inj_config >> 4;      //fuel injection configuration
     p_out->inj_squirt_num = p_params->inj_config & 0x0F; //number of squirts per cycle
     p_out->inj_flow_rate = float(p_params->inj_flow_rate) / 64.0f;

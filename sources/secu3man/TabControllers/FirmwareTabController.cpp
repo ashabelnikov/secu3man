@@ -1494,7 +1494,7 @@ void CFirmwareTabController::_ShowFWOptions(const _TSTRING& info, DWORD options,
   int opt_count = 0;
   for(size_t i = 0; i < SECU3IO::SECU3_COMPILE_OPTIONS_BITS_COUNT; ++i)
   {
-   if(options & 1 << SECU3IO::secu3_compile_options_bits[i].first)
+   if(CHECKBIT32(options, SECU3IO::secu3_compile_options_bits[i].first))
    {
     str_options+= SECU3IO::secu3_compile_options_bits[i].second;
     str_options+=_T("\n");

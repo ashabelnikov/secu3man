@@ -29,6 +29,7 @@
 
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/ce_errors.h"
 #include "MainFrame/StatusBarManager.h"
 #include "TabDialogs/CheckEngineTabDlg.h"
@@ -278,8 +279,7 @@ void CCheckEngineTabController::_SetErrorsToList(const CEErrors* ip_errors)
  CEErrorIdStr::ErrorsIDContainer::iterator it = errors_ids.begin();
  for(; it != errors_ids.end(); ++it)
  {
-  DWORD bit = 1 << ((*it).first);
-  bool state = ((bit & ip_errors->flags)!=0) ? true : false;
+  bool state = CHECKBIT32(ip_errors->flags, ((*it).first));
 
   if (m_view->GetInertShow() && m_real_time_errors_mode)
   {
@@ -304,9 +304,5 @@ void CCheckEngineTabController::_GetErrorsFromList(SECU3IO::CEErrors* op_errors)
  const CEErrorIdStr::ErrorsIDContainer errors_ids = mp_errors_ids->Get();
  CEErrorIdStr::ErrorsIDContainer::const_iterator it = errors_ids.begin();
  for(; it != errors_ids.end(); ++it)
- {
-  DWORD value = m_view->GetErrorState((*it).first) ? 0x00000001 : 0x00000000;
-  DWORD bit = value << ((*it).first);
-  op_errors->flags|= bit;
- }
+  WRITEBIT32(op_errors->flags, ((*it).first), m_view->GetErrorState((*it).first));
 }

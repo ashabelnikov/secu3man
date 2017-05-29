@@ -387,9 +387,9 @@ namespace SECU3IO
  {
   TCHAR bt_name[10];                    //bluetooth name, this parameter is not stored in EEPROM
   TCHAR bt_pass[10];                    //bluetooth password, this parameter is not stored in EEPROM
-  unsigned char use_bt;                 //flag specifying to use or not to use bluetooth
-  unsigned char set_btbr;               //flag indicating that bluetooth baud rate has to be set
-  unsigned char use_imm;                //flag specifying to use or not to use immobilizer
+  bool use_bt;                          //flag specifying to use or not to use bluetooth
+  bool set_btbr;                        //flag indicating that bluetooth baud rate has to be set
+  bool use_imm;                         //flag specifying to use or not to use immobilizer
   BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 

@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "CEDeskDlg.h"
 
+#include "io-core/bitmask.h"
 #include "io-core/ce_errors.h"
 #include "io-core/SECU3IO.h"
 #include "MIHelpers.h"
@@ -100,7 +101,7 @@ void CCEDeskDlg::SetValues(WORD i_errors)
 {
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
  {
-  if (i_errors & (1 << secu3_ce_error_codes[i].first))
+  if (CHECKBIT16(i_errors, secu3_ce_error_codes[i].first))
   {
    TCHAR buff[10] = {0};
    _stprintf(buff, _T("%d"), secu3_ce_error_codes[i].second);

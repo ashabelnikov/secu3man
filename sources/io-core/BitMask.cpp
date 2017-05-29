@@ -33,11 +33,38 @@
 // value - value of bit
 void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value)
 {
+ ASSERT(bitNum < 8);
+ variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
+}
+
+void BITMASK_API WRITEBIT32(DWORD& variable, int bitNum, bool value)
+{
+ ASSERT(bitNum < 32);
  variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
 }
 
 //Check bit in the 32-bit variable
 bool BITMASK_API CHECKBIT32(const DWORD& variable, int bitNum)
 {
+ ASSERT(bitNum < 32);
+ return (variable & (1 << bitNum)) != 0;
+}
+
+void BITMASK_API WRITEBIT16(WORD& variable, int bitNum, bool value)
+{
+ ASSERT(bitNum < 16);
+ variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
+}
+
+//Check bit in the 16-bit variable
+bool BITMASK_API CHECKBIT16(const WORD& variable, int bitNum)
+{
+ ASSERT(bitNum < 16);
+ return (variable & (1 << bitNum)) != 0;
+}
+
+bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum)
+{
+ ASSERT(bitNum < 8);
  return (variable & (1 << bitNum)) != 0;
 }

@@ -32,6 +32,7 @@
 #include "PacketDataProxy.h"
 #include "ufcodes.h"
 #include "Magnitude.h"
+#include "io-core/bitmask.h"
 
 using namespace SECU3IO;
 
@@ -325,14 +326,14 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //Состояние клапана ЭПХХ, Состояние дроссельной заслонки, Состояние газового клапана
  //Состояние клапана ЭМР, Состояние лампы "CE"
- m_SensorDat.ephh_valve = (byte & (1 << 0)) != 0;
- m_SensorDat.carb       = (byte & (1 << 1)) != 0;
- m_SensorDat.gas        = (byte & (1 << 2)) != 0;
- m_SensorDat.epm_valve  = (byte & (1 << 3)) != 0;
- m_SensorDat.ce_state   = (byte & (1 << 4)) != 0;
- m_SensorDat.cool_fan   = (byte & (1 << 5)) != 0;
- m_SensorDat.st_block   = (byte & (1 << 6)) != 0;
- m_SensorDat.acceleration = (byte & (1 << 7)) != 0;
+ m_SensorDat.ephh_valve   = CHECKBIT8(byte, 0);
+ m_SensorDat.carb         = CHECKBIT8(byte, 1);
+ m_SensorDat.gas          = CHECKBIT8(byte, 2);
+ m_SensorDat.epm_valve    = CHECKBIT8(byte, 3);
+ m_SensorDat.ce_state     = CHECKBIT8(byte, 4);
+ m_SensorDat.cool_fan     = CHECKBIT8(byte, 5);
+ m_SensorDat.st_block     = CHECKBIT8(byte, 6);
+ m_SensorDat.acceleration = CHECKBIT8(byte, 7);
 
  //TPS sensor
  unsigned char tps = 0;
@@ -1534,12 +1535,12 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
   return false;
 
  //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
- m_DiagInpDat.gas   = (byte & (1 << 0)) != 0;
- m_DiagInpDat.ckps  = (byte & (1 << 1)) != 0;
- m_DiagInpDat.ref_s = (byte & (1 << 2)) != 0;
- m_DiagInpDat.ps    = (byte & (1 << 3)) != 0;
- m_DiagInpDat.bl    = (byte & (1 << 4)) != 0;
- m_DiagInpDat.de    = (byte & (1 << 5)) != 0;
+ m_DiagInpDat.gas   = CHECKBIT8(byte, 0);
+ m_DiagInpDat.ckps  = CHECKBIT8(byte, 1);
+ m_DiagInpDat.ref_s = CHECKBIT8(byte, 2);
+ m_DiagInpDat.ps    = CHECKBIT8(byte, 3);
+ m_DiagInpDat.bl    = CHECKBIT8(byte, 4);
+ m_DiagInpDat.de    = CHECKBIT8(byte, 5);
 
  return true;
 }
@@ -1682,9 +1683,9 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;
 
- m_SecurPar.use_bt   = (flags & (1 << 0)) != 0;
- m_SecurPar.set_btbr = (flags & (1 << 1)) != 0;
- m_SecurPar.use_imm  = (flags & (1 << 2)) != 0;
+ m_SecurPar.use_bt   = CHECKBIT8(flags, 0);
+ m_SecurPar.set_btbr = CHECKBIT8(flags, 1);
+ m_SecurPar.use_imm  = CHECKBIT8(flags, 2);
 
  //Parse out iButton keys
  BYTE key[IBTN_KEY_SIZE]; int i, j;
@@ -2783,7 +2784,11 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  int choke_corr_temp = MathHelpers::Round(packet_data->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(choke_corr_temp, m_outgoing_packet);
  //choke flags
- unsigned char flags = ((packet_data->usethrottle_pos != 0) << 2) | ((packet_data->offrpmreg_ongas != 0) << 1) | ((packet_data->offstrtadd_ongas != 0) << 0);
+ unsigned char flags = 0;
+ WRITEBIT8(flags, 0, packet_data->offstrtadd_ongas);
+ WRITEBIT8(flags, 1, packet_data->offrpmreg_ongas);
+ WRITEBIT8(flags, 2, packet_data->usethrottle_pos);
+
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 }
 
@@ -2821,7 +2826,11 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  for(size_t i = 0; i < numPass; ++i)
   m_outgoing_packet.push_back(raw_pass[i]);
 
- unsigned char flags = ((packet_data->use_imm != 0) << 2) | ((packet_data->set_btbr != 0) << 1) | ((packet_data->use_bt != 0) << 0);
+ unsigned char flags = 0;
+ WRITEBIT8(flags, 0, packet_data->use_bt);
+ WRITEBIT8(flags, 1, packet_data->set_btbr);
+ WRITEBIT8(flags, 2, packet_data->use_imm);
+
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  //iButton keys
@@ -2851,7 +2860,8 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 {
- unsigned char inj_flags = ((packet_data->inj_usetimingmap != 0) << 0);
+ unsigned char inj_flags = 0;
+ WRITEBIT8(inj_flags, 0, packet_data->inj_usetimingmap); 
  mp_pdp->Bin8ToHex(inj_flags, m_outgoing_packet);
  unsigned char inj_config = (packet_data->inj_config << 4) | (packet_data->inj_squirt_num & 0x0F);
  mp_pdp->Bin8ToHex(inj_config, m_outgoing_packet);

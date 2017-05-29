@@ -35,8 +35,20 @@
 // value - value of bit
 void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value);
 
+void BITMASK_API WRITEBIT16(WORD& variable, int bitNum, bool value);
+
+void BITMASK_API WRITEBIT32(DWORD& variable, int bitNum, bool value);
+
 //Check specified bit of the 32-bit variable
 // variable - Variable
 // bitNum - Number of bit to check
 // return - value of bit
 bool BITMASK_API CHECKBIT32(const DWORD& variable, int bitNum);
+
+//Check specified bit of the 16-bit variable
+// variable - Variable
+// bitNum - Number of bit to check
+// return - value of bit
+bool BITMASK_API CHECKBIT16(const WORD& variable, int bitNum);
+
+bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum);

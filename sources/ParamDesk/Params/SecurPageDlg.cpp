@@ -65,8 +65,8 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 {
  _tcscpy(m_params.bt_name, _T(""));
  _tcscpy(m_params.bt_pass, _T(""));
- m_params.use_bt = 0;
- m_params.use_imm = 0;
+ m_params.use_bt = false;
+ m_params.use_imm = false;
  for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
   memset(m_params.ibtn_keys[j], 0, SECU3IO::IBTN_KEY_SIZE);
 }
@@ -97,8 +97,8 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text(pDX, IDC_PD_SECUR_BT_PASS_EDIT, pass);
  m_bt_pass = pass.GetBuffer(0);
 
- DDX_Check_UCHAR(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
- DDX_Check_UCHAR(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
+ DDX_Check_bool(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
+ DDX_Check_bool(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -185,7 +185,7 @@ void CSecurPageDlg::OnChangeDataUseBtCheck()
 {
  UpdateData();
  UpdateDialogControls(this, TRUE);
- m_params.set_btbr = 1;
+ m_params.set_btbr = true;
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
 
@@ -234,7 +234,7 @@ void CSecurPageDlg::SetValues(const SECU3IO::SecurPar* i_values)
  bool use_bt_prev = m_params.use_bt;
  memcpy(&m_params, i_values, sizeof(SECU3IO::SecurPar));
  UpdateData(FALSE); //copy data from variables to dialog
- if (use_bt_prev != (m_params.use_bt > 0))
+ if (use_bt_prev != m_params.use_bt)
   UpdateDialogControls(this, TRUE); //to apply state of "Use bluetooth" checkbox
 
  CString str, value; int i;
