@@ -34,3 +34,9 @@
 // bitNum - Number of bit for writing in
 // value - value of bit
 void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value);
+
+//Check specified bit of the 32-bit variable
+// variable - Variable
+// bitNum - Number of bit to check
+// return - value of bit
+bool BITMASK_API CHECKBIT32(const DWORD& variable, int bitNum);

@@ -35,3 +35,9 @@ void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value)
 {
  variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
 }
+
+//Check bit in the 32-bit variable
+bool BITMASK_API CHECKBIT32(const DWORD& variable, int bitNum)
+{
+ return (variable & (1 << bitNum)) != 0;
+}

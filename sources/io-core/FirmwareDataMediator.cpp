@@ -536,9 +536,9 @@ void CFirmwareDataMediator::LoadDataBytesFromAnotherFirmware(const BYTE* ip_sour
  //Compensate ADC correction factors when destination and source firmware use different ADC Vref
  DWORD dst_fwopt = GetFWOptions();
  DWORD src_fwopt = GetFWOptions(ip_source_bytes, ip_fpp ? ip_fpp : m_fpp.get());
- if ((dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && !(src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))
+ if (CHECKBIT32(dst_fwopt, SECU3IO::COPT_VREF_5V) && !CHECKBIT32(src_fwopt, SECU3IO::COPT_VREF_5V))
   _CompensateVRef(&p_fd->def_param, true);  //5v <-- 2.56v
- if (!(dst_fwopt & (1 << SECU3IO::COPT_VREF_5V)) && (src_fwopt & (1 << SECU3IO::COPT_VREF_5V)))
+ if (!CHECKBIT32(dst_fwopt, SECU3IO::COPT_VREF_5V) && CHECKBIT32(src_fwopt, SECU3IO::COPT_VREF_5V))
   _CompensateVRef(&p_fd->def_param, false); //5v --> 2.56v
 }
 
@@ -565,7 +565,7 @@ void CFirmwareDataMediator::LoadDefParametersFromBuffer(const BYTE* ip_source_by
  for(size_t i = 0; i < factors.size(); ++i)
   if (factors[i] < 1.70f)
    src_vref_5v = false;
- bool dst_vref_5v = (GetFWOptions() & (1 << SECU3IO::COPT_VREF_5V)) > 0;
+ bool dst_vref_5v = CHECKBIT32(GetFWOptions(), SECU3IO::COPT_VREF_5V);
  if (src_vref_5v != dst_vref_5v) //different ADC voltage reference?
  {//Ask user, before applying compensation
   if ((onVrefUsrConfirm) ? onVrefUsrConfirm() : true)

@@ -32,6 +32,7 @@
 #include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/MIDeskDlg.h"
@@ -183,13 +184,13 @@ void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
   //Завершился сбор данных
   if ((*m_current_state) == mp_idccntr.get())
   {
-   mp_view->EnableEditTablesCheck((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0);
+   mp_view->EnableEditTablesCheck(CHECKBIT32(mp_idccntr->GetFWOptions(), COPT_REALTIME_TABLES));
    mp_parcntr->SetFunctionsNames(mp_idccntr->GetFNNames()); 
    mp_parcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
    mp_moncntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
    mp_tabcntr->ApplyFWOptions(mp_idccntr->GetFWOptions());
 
-   if ((mp_idccntr->GetFWOptions() & (1 << COPT_REALTIME_TABLES)) > 0)
+   if (CHECKBIT32(mp_idccntr->GetFWOptions(), COPT_REALTIME_TABLES))
    {
     std::vector<_TSTRING> fwnames(mp_idccntr->GetFNNames().begin(), mp_idccntr->GetFNNames().begin() + TABLES_NUMBER);
     std::vector<_TSTRING> eenames(mp_idccntr->GetFNNames().begin() + TABLES_NUMBER, mp_idccntr->GetFNNames().end());

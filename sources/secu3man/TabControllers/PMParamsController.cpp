@@ -30,6 +30,7 @@
 #include <algorithm>
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
@@ -125,33 +126,33 @@ void CPMParamsController::SetFunctionsNames(const std::vector<_TSTRING>& i_names
 
 void CPMParamsController::ApplyFWOptions(DWORD opt)
 {
- mp_view->EnableIgnitionCogs(!(opt & (1 << COPT_DWELL_CONTROL)) && !(opt & (1 << COPT_CKPS_2CHIGN)));
- mp_view->EnableUseVentPwm((opt & (1 << COPT_COOLINGFAN_PWM)) > 0);
- mp_view->EnableUseCTSCurveMap((opt & (1 << COPT_THERMISTOR_CS)) > 0);
- mp_view->EnableHallOutputParams(((opt & (1 << COPT_HALL_OUTPUT)) > 0) && ((opt & (1 << COPT_HALL_SYNC)) == 0) && ((opt & (1 << COPT_CKPS_NPLUS1)) == 0));
- mp_view->EnableSECU3TItems((opt & (1 << COPT_SECU3T)));
- if ((opt & (1 << COPT_SECU3T)))
+ mp_view->EnableIgnitionCogs(!CHECKBIT32(opt, COPT_DWELL_CONTROL) && !CHECKBIT32(opt, COPT_CKPS_2CHIGN));
+ mp_view->EnableUseVentPwm(CHECKBIT32(opt, COPT_COOLINGFAN_PWM));
+ mp_view->EnableUseCTSCurveMap(CHECKBIT32(opt, COPT_THERMISTOR_CS));
+ mp_view->EnableHallOutputParams(CHECKBIT32(opt, COPT_HALL_OUTPUT) && !CHECKBIT32(opt, COPT_HALL_SYNC) && !CHECKBIT32(opt, COPT_CKPS_NPLUS1));
+ mp_view->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
+ if (CHECKBIT32(opt, COPT_SECU3T))
   //SECU-3T has two additional ignition outputs
-  mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 8 : 8);
+  mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 8 : 8);
  else
-  mp_view->SetMaxCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
+  mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 4 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //aslo if hall sensor synchronization is used
- mp_view->EnableOddCylinders((opt & (1 << COPT_PHASED_IGNITION)) > 0 || (opt & (1 << COPT_HALL_SYNC)) > 0);
+ mp_view->EnableOddCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) || CHECKBIT32(opt, COPT_HALL_SYNC));
 
- mp_view->EnableChokeTesting((opt & (1 << COPT_SM_CONTROL)) > 0);
- mp_view->EnableChokeManPos((opt & (1 << COPT_SM_CONTROL)) > 0);
- mp_view->EnableGasdoseTesting((opt & (1 << COPT_GD_CONTROL)) > 0);
- mp_view->EnableGasdoseManPos((opt & (1 << COPT_GD_CONTROL)) > 0);
- mp_view->EnableCKPSItems((opt & (1 << COPT_HALL_SYNC)) == 0 && (opt & (1 << COPT_CKPS_NPLUS1)) == 0);
- mp_view->EnableHallWndWidth((opt & (1 << COPT_HALL_SYNC)) == 1 || (opt & (1 << COPT_CKPS_NPLUS1)) == 1);
- mp_view->EnableInputsMerging(!(opt & (1 << COPT_CKPS_2CHIGN)));
- mp_view->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0); 
- mp_view->EnableLambda((opt & (1 << COPT_FUEL_INJECT)) > 0 || (opt & (1 << COPT_CARB_AFR)) > 0 || (opt & (1 << COPT_GD_CONTROL)) > 0);
- mp_view->EnableGasdose((opt & (1 << COPT_GD_CONTROL)) > 0); //GD
- mp_view->EnableChoke((opt & (1 << COPT_SM_CONTROL)) > 0); 
- mp_view->EnableChokeCtrls((opt & (1 << SECU3IO::COPT_FUEL_INJECT)) == 0);
+ mp_view->EnableChokeTesting(CHECKBIT32(opt, COPT_SM_CONTROL));
+ mp_view->EnableChokeManPos(CHECKBIT32(opt, COPT_SM_CONTROL));
+ mp_view->EnableGasdoseTesting(CHECKBIT32(opt, COPT_GD_CONTROL));
+ mp_view->EnableGasdoseManPos(CHECKBIT32(opt, COPT_GD_CONTROL));
+ mp_view->EnableCKPSItems(!CHECKBIT32(opt, COPT_HALL_SYNC) && !CHECKBIT32(opt, COPT_CKPS_NPLUS1));
+ mp_view->EnableHallWndWidth(CHECKBIT32(opt, COPT_HALL_SYNC) || CHECKBIT32(opt, COPT_CKPS_NPLUS1));
+ mp_view->EnableInputsMerging(!CHECKBIT32(opt, COPT_CKPS_2CHIGN));
+ mp_view->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT)); 
+ mp_view->EnableLambda(CHECKBIT32(opt, COPT_FUEL_INJECT) || CHECKBIT32(opt, COPT_CARB_AFR) || CHECKBIT32(opt, COPT_GD_CONTROL));
+ mp_view->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL)); //GD
+ mp_view->EnableChoke(CHECKBIT32(opt, COPT_SM_CONTROL)); 
+ mp_view->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
 }
 
 //from view. Очередная вкладка активировалась

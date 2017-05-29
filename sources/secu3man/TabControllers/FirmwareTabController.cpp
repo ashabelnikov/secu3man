@@ -44,6 +44,7 @@
 #include "io-core/FirmwareDataMediator.h"
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
+#include "io-core/bitmask.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "Settings/ISettingsData.h"
@@ -851,39 +852,39 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  }
 
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
- m_view->mp_TablesPanel->EnableDwellControl((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) > 0);
- m_view->mp_TablesPanel->EnableCTSCurve((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
- m_view->mp_TablesPanel->EnableChokeOp((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
- m_view->mp_TablesPanel->EnableGasdose((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0);
- m_view->mp_TablesPanel->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);
- m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_DWELL_CONTROL)) && !(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
- m_view->mp_ParamDeskDlg->EnableUseVentPwm((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_COOLINGFAN_PWM)) > 0);
- m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_THERMISTOR_CS)) > 0);
- m_view->mp_ParamDeskDlg->EnableHallOutputParams(((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_OUTPUT)) > 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0) && ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 0));
- m_view->mp_ParamDeskDlg->EnableSECU3TItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)));
- if ((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)))
+ m_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL));
+ m_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
+ m_view->mp_TablesPanel->EnableChokeOp(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
+ m_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
+ m_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
+ m_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
+ m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
+ m_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ m_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ if (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T))
   //SECU-3T has two additional ignition outputs
-  m_view->mp_ParamDeskDlg->SetMaxCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 ? 8 : 8);
+  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
  else
-  m_view->mp_ParamDeskDlg->SetMaxCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 ? 4 : 8);
+  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 4 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //also if hall sensor synchronization is used
- m_view->mp_ParamDeskDlg->EnableOddCylinders((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_PHASED_IGNITION)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) > 0);
+ m_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC));
 
- this->mp_iorCntr->EnableSECU3TFeatures((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
+ this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  this->mp_iorCntr->Enable(true);
 
- m_view->mp_ParamDeskDlg->EnableCKPSItems((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 0 && (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 0);
- m_view->mp_ParamDeskDlg->EnableHallWndWidth((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_HALL_SYNC)) == 1 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_NPLUS1)) == 1);
- m_view->mp_ParamDeskDlg->EnableInputsMerging(!(m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CKPS_2CHIGN)));
+ m_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ m_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ m_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
 
- m_view->mp_ParamDeskDlg->EnableFuelInjection((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0);
- m_view->mp_ParamDeskDlg->EnableLambda((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_CARB_AFR)) > 0 || (m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0);
- m_view->mp_ParamDeskDlg->EnableGasdose((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_GD_CONTROL)) > 0); //GD
- m_view->mp_ParamDeskDlg->EnableChoke((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_SM_CONTROL)) > 0);
+ m_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ m_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
+ m_view->mp_ParamDeskDlg->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL)); //GD
+ m_view->mp_ParamDeskDlg->EnableChoke(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
 
- m_view->mp_ParamDeskDlg->EnableChokeCtrls((m_fwdm->GetFWOptions() & (1 << SECU3IO::COPT_FUEL_INJECT)) == 0);
+ m_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
 
  SetViewFirmwareValues();
 }

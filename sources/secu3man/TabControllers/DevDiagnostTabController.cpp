@@ -30,6 +30,7 @@
 #include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "PMInitDataCollector.h"
@@ -263,7 +264,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
   case 0:
    if (i_descriptor == DBGVAR_DAT)
     break; //skip debug packets
-   if (i_descriptor == DIAGINP_DAT && ((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0))
+   if (i_descriptor == DIAGINP_DAT && CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_DIAGNOSTICS))
    {//skip initial procedures if we are already in diagnostic mode
     m_comm_state = 2;
     m_diagnost_mode_active = true;
@@ -289,9 +290,9 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
    //Collect initial data
    if (mp_idccntr->CollectData(i_descriptor, ip_packet))
    {
-    bool enableEnterBtn = (mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_DIAGNOSTICS)) > 0;
+    bool enableEnterBtn = CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_DIAGNOSTICS);
     mp_view->EnableEnterButton(enableEnterBtn);
-    mp_view->EnableSECU3TFeatures((mp_idccntr->GetFWOptions() & (1 << SECU3IO::COPT_SECU3T)) > 0);
+    mp_view->EnableSECU3TFeatures(CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T));
     m_comm_state = 2;
     if (enableEnterBtn && mp_settings->GetAutoDiagEnter())
     { //automatic entering into a diagnostic mode

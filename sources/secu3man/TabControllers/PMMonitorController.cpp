@@ -30,6 +30,7 @@
 #include <algorithm>
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/CEDeskDlg.h"
@@ -200,6 +201,6 @@ void CPMMonitorController::ShowRawSensors(bool show)
 
 void CPMMonitorController::ApplyFWOptions(DWORD opt)
 {
- mp_rsdview->EnableSECU3TItems((opt & (1 << COPT_SECU3T)));
- mp_view->ShowChokePos((opt & (1 << COPT_SM_CONTROL)));
+ mp_rsdview->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
+ mp_view->ShowChokePos(CHECKBIT32(opt, COPT_SM_CONTROL));
 }

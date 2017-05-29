@@ -30,6 +30,7 @@
 #include <algorithm>
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
+#include "io-core/bitmask.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
@@ -369,8 +370,8 @@ void CPMTablesController::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnam
 
 void CPMTablesController::ApplyFWOptions(DWORD opt)
 {
- mp_view->mp_ButtonsPanel->EnableFuelInjection((opt & (1 << COPT_FUEL_INJECT)) > 0);
- mp_view->mp_ButtonsPanel->EnableGasdose((opt & (1 << COPT_GD_CONTROL)) > 0);
+ mp_view->mp_ButtonsPanel->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT));
+ mp_view->mp_ButtonsPanel->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL));
 }
 
 //----------------------------------------------------------------
