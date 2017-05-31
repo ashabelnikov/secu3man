@@ -787,9 +787,10 @@ void __fastcall TForm2D::CtrlKeyDown(TObject *Sender, WORD &Key, TShiftState Shi
 //  case VK_DOWN:
 //   mask = DLGC_WANTARROWS;
 //   break;
+  case VK_ESCAPE:
+   Close();      //close form on Esc
   case VK_RETURN: 
   case VK_EXECUTE:
-  case VK_ESCAPE:
   case VK_CANCEL:
    mask = DLGC_WANTALLKEYS;
    break;
