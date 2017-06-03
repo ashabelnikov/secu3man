@@ -221,6 +221,7 @@ namespace SECU3IO
   unsigned char ckps_miss_num;
   unsigned char ref_s_edge_type;
   float hall_wnd_width; 
+  bool ckps_rising_spark;
  };
 
  struct OPCompNc                        //используется если надо просто принять или послать определенный код действия

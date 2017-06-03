@@ -79,6 +79,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   virtual void EnableCKPSItems(bool i_enable);
   virtual void EnableBTNameAndPass(bool i_enable);
   virtual void EnableInputsMerging(bool i_enable);
+  virtual void EnableRisingSpark(bool i_enable);
   virtual void EnableFuelInjection(bool i_enable);
   virtual void EnableLambda(bool i_enable);
   virtual void EnableGasdoseTesting(bool i_enable); //GD

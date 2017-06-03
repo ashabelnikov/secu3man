@@ -51,6 +51,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_CKPS_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio)
  ON_BN_CLICKED(IDC_PD_REF_S_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio2)
  ON_BN_CLICKED(IDC_PD_REF_S_NEGFRONT_RADIOBOX, OnClickedPdNegFrontRadio2)
+ ON_BN_CLICKED(IDC_PD_CKPS_RISING_SPARK, OnChangeRisingSpark)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_FRONT_GROUPBOX, OnUpdateCKPSFront)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnUpdateCKPSFront)
@@ -81,6 +82,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MISS_NUM_UNIT, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnUpdateMergeOutputs)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_RISING_SPARK, OnUpdateRisingSpark)
 END_MESSAGE_MAP()
 
 CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
@@ -94,6 +96,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , m_odd_cylnum_enabled(false)
 , m_ckps_enabled(false)
 , m_inpmrg_enabled(false)
+, m_rising_spark_enabled(false)
 , m_hallwndwidth_enabled(false)
 , m_max_cylinders(8)
 , mp_scr(new CWndScroller)
@@ -107,6 +110,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_miss_num = 2;
  m_params.ckps_engine_cyl = 4;
  m_params.hall_wnd_width = 60.0f;
+ m_params.ckps_rising_spark = false;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -147,6 +151,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_MISS_NUM_UNIT, m_wheel_miss_num_label);
 
  DDX_Control(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_merge_ign_outputs_check);
+ DDX_Control(pDX, IDC_PD_CKPS_RISING_SPARK, m_rising_spark_check);
 
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
  m_hall_wnd_width_edit.DDX_Value(pDX, IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_params.hall_wnd_width);
@@ -155,6 +160,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
  DDX_Radio_UCHAR(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
  DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
+ DDX_Check_bool(pDX, IDC_PD_CKPS_RISING_SPARK, m_params.ckps_rising_spark);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -194,6 +200,11 @@ void CCKPSPageDlg::OnUpdateMergeOutputs(CCmdUI* pCmdUI)
 void CCKPSPageDlg::OnUpdateHallWndWidth(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_hallwndwidth_enabled); //enabled only for Hall sensor
+}
+
+void CCKPSPageDlg::OnUpdateRisingSpark(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_rising_spark_enabled);
 }
 
 BOOL CCKPSPageDlg::OnInitDialog()
@@ -343,6 +354,12 @@ void CCKPSPageDlg::OnChangeMergeOutputs()
  OnChangeNotify();
 }
 
+void CCKPSPageDlg::OnChangeRisingSpark()
+{
+ UpdateData();
+ OnChangeNotify();
+}
+
 //Enable/disable all controls
 void CCKPSPageDlg::Enable(bool enable)
 {
@@ -431,6 +448,15 @@ void CCKPSPageDlg::EnableInputsMerging(bool enable)
  if (m_inpmrg_enabled == enable)
   return; //already has needed state
  m_inpmrg_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CCKPSPageDlg::EnableRisingSpark(bool enable)
+{
+ if (m_rising_spark_enabled == enable)
+  return; //already has needed state
+ m_rising_spark_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

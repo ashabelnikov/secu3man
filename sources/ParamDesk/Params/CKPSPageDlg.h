@@ -58,6 +58,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableCKPSItems(bool enable);
   void EnableInputsMerging(bool enable);
   void EnableHallWndWidth(bool enable);
+  void EnableRisingSpark(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -65,6 +66,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnChangeMergeOutputs();
+  afx_msg void OnChangeRisingSpark();
   afx_msg void OnChangeDataCogsNum();
   afx_msg void OnChangeDataCylNum();
   afx_msg void OnClickedPdPosFrontRadio();
@@ -79,6 +81,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateCylNumber(CCmdUI* pCmdUI);
   afx_msg void OnUpdateMergeOutputs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCKPSFront(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateRisingSpark(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);
@@ -104,6 +107,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_odd_cylnum_enabled;
   bool m_ckps_enabled;
   bool m_inpmrg_enabled;
+  bool m_rising_spark_enabled;
   bool m_hallwndwidth_enabled;
   int m_max_cylinders;
 
@@ -111,6 +115,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_ckps_posfront_radio;
   CButton m_ckps_negfront_radio;
   CButton m_merge_ign_outputs_check;
+  CButton m_rising_spark_check;
 
   CStatic m_ref_s_front_groupbox;
   CButton m_ref_s_posfront_radio;

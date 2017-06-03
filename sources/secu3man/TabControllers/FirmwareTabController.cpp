@@ -878,6 +878,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
  m_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
  m_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
+ m_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
 
  m_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
  m_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
