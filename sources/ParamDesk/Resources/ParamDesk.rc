@@ -274,6 +274,18 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
     LTEXT           "Режимная точка ДАД",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,340,94,10
     LTEXT           "кПа",IDC_PD_IDLREG_MAPVALUE_UNIT,140,341,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,360,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
+    LTEXT           "Мин. положение РДВ",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,360,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,361,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,380,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
+    LTEXT           "Макс. положение РДВ",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,380,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,381,30,10
+
+    CONTROL         "Использовать closed-loop на газу",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,400,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -1129,6 +1141,7 @@ BEGIN
     IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT            "Использовать положение дроссельной заслонки (открыта/закрыта) при инициализации положения ВЗ"
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Установите галочку чтобы в блютуз записались настройки или можно было изменить его имя и пароль. Также, настройки будут загружаться в блютуз каждый раз при сбросе EEPROM." 
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Установите галочку для использования иммобилайзера (iButton)"
+    IDS_PD_IDLREG_PMODE_CHECK_TT                    "УОЗ РХХ будет работать в режиме пропорционального регулятора. Данная опция актуальна только при совместном использовании с closed-loop РДВ."
 END
 
 STRINGTABLE
@@ -1491,6 +1504,18 @@ BEGIN
     CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
     LTEXT           "Pressure on idling",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,341,94,10
     LTEXT           "kPa",IDC_PD_IDLREG_MAPVALUE_UNIT,140,341,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,360,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMINPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,360,13,17
+    LTEXT           "Minimum IAC position",IDC_PD_IDLREG_IACMINPOS_CAPTION,0,360,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMINPOS_UNIT,140,361,30,10
+
+    EDITTEXT        IDC_PD_IDLREG_IACMAXPOS_EDIT,95,380,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_IDLREG_IACMAXPOS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,380,13,17
+    LTEXT           "Maximum IAC position",IDC_PD_IDLREG_IACMAXPOS_CAPTION,0,380,94,10
+    LTEXT           "%",IDC_PD_IDLREG_IACMAXPOS_UNIT,140,381,30,10
+
+    CONTROL         "Use closed loop on gas fuel",IDC_PD_IDLREG_USECLIACONGAS_CHECK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | BS_LEFTTEXT,0,400,115,15
 END
 
 IDD_PD_CARBUR_PAGE DIALOGEX 0, 0, 175, 158
@@ -2376,6 +2401,7 @@ BEGIN
     IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT            "Use throttle position (opened/closed) for initialization of choke"
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Set this check for loading settings into a Bluetooth or to make possible to change the name and password of Bluetooth. Also, settings will be loaded into a Bluetooth each time you reset EEPROM." 
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Set this check for activation of using of immobilizer (iButton)"
+    IDS_PD_IDLREG_PMODE_CHECK_TT                    "Ignition timing based idling regulator will work in the proportional mode. This option is applicable only when using it in conjunction with IAC closed-loop regulator."
 END
 
 STRINGTABLE

@@ -49,10 +49,13 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_IDLREG_COEFFTHRD2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_INTRPMLIM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_MAPVALUE_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_IACMINPOS_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_IDLREG_IACMAXPOS_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_REGULATOR, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USE_ONGAS, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_USECLOSEDLOOP_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_IDLREG_PMODE_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_IDLREG_USECLIACONGAS_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_FACTORS_CAPTION,OnUpdateControls)
 
@@ -135,6 +138,16 @@ BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_MAPVALUE_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_MAPVALUE_UNIT,OnUpdateFuelInjectionControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMINPOS_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMINPOS_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMINPOS_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMINPOS_UNIT,OnUpdateFuelInjectionControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMAXPOS_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMAXPOS_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMAXPOS_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_IDLREG_IACMAXPOS_UNIT,OnUpdateFuelInjectionControls)
+
 END_MESSAGE_MAP()
 
 CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
@@ -156,6 +169,8 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
 , m_coeffthrd2_edit(CEditEx::MODE_FLOAT, true)
 , m_intrpmlim_edit(CEditEx::MODE_INT, true)
 , m_mapvalue_edit(CEditEx::MODE_FLOAT, true)
+, m_iacminpos_edit(CEditEx::MODE_FLOAT, true)
+, m_iacmaxpos_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.ifac1 = 1.0f;
@@ -178,6 +193,9 @@ CIdlRegPageDlg::CIdlRegPageDlg(CWnd* pParent /*=NULL*/)
  m_params.idl_coef_thrd2 = 1.86f;
  m_params.idl_intrpm_lim = 200;
  m_params.idl_map_value = 25.0f;
+ m_params.idl_iacminpos = 10.0f;
+ m_params.idl_iacmaxpos = 90.0f;
+ m_params.idl_useiacclongas = true;
 }
 
 LPCTSTR CIdlRegPageDlg::GetDialogID(void) const
@@ -223,6 +241,11 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_IDLREG_INTRPMLIM_EDIT, m_intrpmlim_edit);
  DDX_Control(pDX, IDC_PD_IDLREG_MAPVALUE_SPIN, m_mapvalue_spin);
  DDX_Control(pDX, IDC_PD_IDLREG_MAPVALUE_EDIT, m_mapvalue_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_IACMINPOS_SPIN, m_iacminpos_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_IACMINPOS_EDIT, m_iacminpos_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_IACMAXPOS_SPIN, m_iacmaxpos_spin);
+ DDX_Control(pDX, IDC_PD_IDLREG_IACMAXPOS_EDIT, m_iacmaxpos_edit);
+ DDX_Control(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_use_claicongas_check);
 
  m_factor_pos_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_POS_EDIT, m_params.ifac1);
  m_factor_neg_edit.DDX_Value(pDX, IDC_PD_IDLREG_FACTOR_NEG_EDIT, m_params.ifac2);
@@ -244,6 +267,9 @@ void CIdlRegPageDlg::DoDataExchange(CDataExchange* pDX)
  m_coeffthrd2_edit.DDX_Value(pDX, IDC_PD_IDLREG_COEFFTHRD2_EDIT, m_params.idl_coef_thrd2);
  m_intrpmlim_edit.DDX_Value(pDX, IDC_PD_IDLREG_INTRPMLIM_EDIT, m_params.idl_intrpm_lim);
  m_mapvalue_edit.DDX_Value(pDX, IDC_PD_IDLREG_MAPVALUE_EDIT, m_params.idl_map_value);
+ m_iacminpos_edit.DDX_Value(pDX, IDC_PD_IDLREG_IACMINPOS_EDIT, m_params.idl_iacminpos);
+ m_iacmaxpos_edit.DDX_Value(pDX, IDC_PD_IDLREG_IACMAXPOS_EDIT, m_params.idl_iacmaxpos);
+ DDX_Check_bool(pDX, IDC_PD_IDLREG_USECLIACONGAS_CHECK, m_params.idl_useiacclongas);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -351,12 +377,24 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_mapvalue_spin.SetRangeAndDelta(5.0f,100.0f,0.1f);
  m_mapvalue_edit.SetRange(5.0f,100.0f);
 
+ m_iacminpos_spin.SetBuddy(&m_iacminpos_edit);
+ m_iacminpos_edit.SetLimitText(5);
+ m_iacminpos_edit.SetDecimalPlaces(1);
+ m_iacminpos_spin.SetRangeAndDelta(0.0f,100.0f,0.5f);
+ m_iacminpos_edit.SetRange(0.0f,100.0f);
+
+ m_iacmaxpos_spin.SetBuddy(&m_iacmaxpos_edit);
+ m_iacmaxpos_edit.SetLimitText(5);
+ m_iacmaxpos_edit.SetDecimalPlaces(1);
+ m_iacmaxpos_spin.SetRangeAndDelta(0.0f,100.0f,0.5f);
+ m_iacmaxpos_edit.SetRange(0.0f,100.0f);
+
  UpdateData(FALSE);
 
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 2.35f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 2.7f));
 
  //Create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -385,6 +423,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_use_regulator, MLL::GetString(IDS_PD_IDLREG_USE_REGULATOR_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_regongas, MLL::GetString(IDS_PD_IDLREG_USE_ONGAS_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_use_claicongas_check, MLL::GetString(IDS_PD_IDLREG_PMODE_CHECK_TT)));
  
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);

@@ -155,6 +155,9 @@ namespace SECU3IO
   float idl_coef_thrd2;                 //coefficient for calculating closed loop leaving RPM threshold
   int  idl_intrpm_lim;                  //RPM error limit for integrator
   float idl_map_value;                  //intake manifold pressure on idling
+  float idl_iacminpos;
+  float idl_iacmaxpos;
+  bool  idl_useiacclongas;
  };
 
  struct CarburPar

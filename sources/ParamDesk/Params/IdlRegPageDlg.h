@@ -75,6 +75,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_use_regongas;
   CButton m_use_closedloop;
   CButton m_preg_mode_check;
+  CButton m_use_claicongas_check;
   CSpinButtonCtrlEx m_goal_rpm_spin;
   CEditEx m_goal_rpm_edit;
   CSpinButtonCtrlEx m_factor_pos_spin;
@@ -106,4 +107,8 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_intrpmlim_edit;
   CSpinButtonCtrlEx m_mapvalue_spin;
   CEditEx m_mapvalue_edit;
+  CSpinButtonCtrlEx m_iacminpos_spin;
+  CEditEx m_iacminpos_edit;
+  CSpinButtonCtrlEx m_iacmaxpos_spin;
+  CEditEx m_iacmaxpos_edit;
 };

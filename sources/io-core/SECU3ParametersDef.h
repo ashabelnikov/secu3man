@@ -220,10 +220,13 @@ typedef struct params_t
 
  _uchar  inj_lambda_ms_per_stp;         // Number of strokes per step for lambda control
 
+ _uchar  idl_iacminpos;
+ _uchar  idl_iacmaxpos;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[48];
+ _uchar reserved[46];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

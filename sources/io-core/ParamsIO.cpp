@@ -93,6 +93,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->idl_flags, 1, p_in->use_regongas);
     WRITEBIT8(p_params->idl_flags, 2, p_in->closed_loop);   
     WRITEBIT8(p_params->idl_flags, 3, p_in->preg_mode);   
+    WRITEBIT8(p_params->idl_flags, 4, p_in->idl_useiacclongas);
     p_params->idling_rpm = p_in->idling_rpm;
     p_params->MINEFR     = p_in->MINEFR;
     p_params->ifac1      = MathHelpers::Round(p_in->ifac1 * 256.0f);
@@ -109,6 +110,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->idl_coef_thrd2 = MathHelpers::Round((p_in->idl_coef_thrd2 - 1.0f) * 128.0f);
     p_params->idl_intrpm_lim = MathHelpers::Round(p_in->idl_intrpm_lim / 10.0f);
     p_params->idl_map_value = MathHelpers::Round(p_in->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+    p_params->idl_iacminpos = MathHelpers::Round(p_in->idl_iacminpos * 2.0f);
+    p_params->idl_iacmaxpos = MathHelpers::Round(p_in->idl_iacmaxpos * 2.0f);
    }
    break;
   case ANGLES_PAR:
@@ -385,6 +388,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->use_regongas  = CHECKBIT8(p_params->idl_flags, 1);
      p_out->closed_loop = CHECKBIT8(p_params->idl_flags, 2);
      p_out->preg_mode = CHECKBIT8(p_params->idl_flags, 3);
+     p_out->idl_useiacclongas = CHECKBIT8(p_params->idl_flags, 4);
      p_out->idling_rpm = p_params->idling_rpm;
      p_out->MINEFR     = p_params->MINEFR;
      p_out->ifac1      = ((float)p_params->ifac1) / 256.0f;
@@ -401,6 +405,8 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->idl_coef_thrd2 = (((float)p_params->idl_coef_thrd2) / 128.0f) + 1.0f;
      p_out->idl_intrpm_lim = p_params->idl_intrpm_lim * 10;
      p_out->idl_map_value = ((float)p_params->idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+     p_out->idl_iacminpos = ((float)p_params->idl_iacminpos) / 2.0f;
+     p_out->idl_iacmaxpos = ((float)p_params->idl_iacmaxpos) / 2.0f;
     }
     break;
    case ANGLES_PAR:

@@ -696,7 +696,7 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::IdlRegPar& m_IdlRegPar = m_recepted_packet.m_IdlRegPar;
- if (size != (mp_pdp->isHex() ? 52 : 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 56 : 28))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Idling regulator flags
@@ -704,10 +704,11 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet,&idl_flags))
   return false;
 
- m_IdlRegPar.idl_regul = (idl_flags & 0x1) != 0;
- m_IdlRegPar.use_regongas = (idl_flags & 0x2) != 0;
- m_IdlRegPar.closed_loop = (idl_flags & 0x4) != 0;
- m_IdlRegPar.preg_mode = (idl_flags & 0x8) != 0;
+ m_IdlRegPar.idl_regul = CHECKBIT8(idl_flags, 0);
+ m_IdlRegPar.use_regongas = CHECKBIT8(idl_flags, 1);
+ m_IdlRegPar.closed_loop = CHECKBIT8(idl_flags, 2);
+ m_IdlRegPar.preg_mode = CHECKBIT8(idl_flags, 3);
+ m_IdlRegPar.idl_useiacclongas = CHECKBIT8(idl_flags, 4);
 
  //Коэффициент регулятора при  положительной ошибке (число со знаком)
  int ifac1;
@@ -796,6 +797,18 @@ bool CControlApp::Parse_IDLREG_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &idl_map_value))
   return false;
  m_IdlRegPar.idl_map_value = ((float)idl_map_value) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //minimum IAC position
+ unsigned char idl_iacminpos = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_iacminpos))
+  return false;
+ m_IdlRegPar.idl_iacminpos = ((float)idl_iacminpos / 2.0f);
+
+ //maximum IAC position
+ unsigned char idl_iacmaxpos = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &idl_iacmaxpos))
+  return false;
+ m_IdlRegPar.idl_iacmaxpos = ((float)idl_iacmaxpos / 2.0f);
 
  return true;
 }
@@ -2409,7 +2422,13 @@ void CControlApp::Build_CARBUR_PAR(CarburPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 {
- unsigned char flags = ((packet_data->preg_mode != 0) << 3) | ((packet_data->closed_loop != 0) << 2) | ((packet_data->use_regongas != 0) << 1) | ((packet_data->idl_regul != 0) << 0);
+ unsigned char flags = 0;
+ WRITEBIT8(flags, 0, packet_data->idl_regul);
+ WRITEBIT8(flags, 1, packet_data->use_regongas);
+ WRITEBIT8(flags, 2, packet_data->closed_loop);
+ WRITEBIT8(flags, 3, packet_data->preg_mode);
+ WRITEBIT8(flags, 4, packet_data->idl_useiacclongas);
+ 
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
  int ifac1 =  MathHelpers::Round((packet_data->ifac1 * 256.0f));
@@ -2453,6 +2472,12 @@ void CControlApp::Build_IDLREG_PAR(IdlRegPar* packet_data)
 
  int idl_map_value = MathHelpers::Round(packet_data->idl_map_value * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(idl_map_value, m_outgoing_packet);
+
+ unsigned char idl_iacminpos = MathHelpers::Round(packet_data->idl_iacminpos * 2.0f);
+ mp_pdp->Bin8ToHex(idl_iacminpos, m_outgoing_packet);
+
+ unsigned char idl_iacmaxpos = MathHelpers::Round(packet_data->idl_iacmaxpos * 2.0f);
+ mp_pdp->Bin8ToHex(idl_iacmaxpos, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
