@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CKPS_COGS_NUM_EDIT, OnChangeDataCogsNum)
  ON_EN_CHANGE(IDC_PD_CKPS_MISS_NUM_EDIT, OnChangeDataCogsNum)
+ ON_EN_CHANGE(IDC_PD_CKPS_DEGREES_BTDC_EDIT, OnChangeData)
 
  ON_BN_CLICKED(IDC_PD_CKPS_MERGE_IGN_OUTPUTS, OnChangeMergeOutputs)
  ON_BN_CLICKED(IDC_PD_CKPS_POSFRONT_RADIOBOX, OnClickedPdPosFrontRadio)
@@ -73,6 +74,10 @@ BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, OnUpdateHallWndWidth)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_HALL_WND_WIDTH_UNIT, OnUpdateHallWndWidth)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_DEGREES_BTDC_SPIN, OnUpdateHallWndWidth)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_DEGREES_BTDC_EDIT, OnUpdateHallWndWidth)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_DEGREES_BTDC_UNIT, OnUpdateHallWndWidth)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_SPIN, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CKPS_COGS_NUM_UNIT, OnUpdateControls)
@@ -89,6 +94,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CCKPSPageDlg::IDD, pParent)
 , m_ignition_cogs_edit(CEditEx::MODE_INT, true)
 , m_hall_wnd_width_edit(CEditEx::MODE_FLOAT, true)
+, m_hall_degrees_btdc_edit(CEditEx::MODE_FLOAT, true)
 , m_wheel_cogs_num_edit(CEditEx::MODE_INT, true)
 , m_wheel_miss_num_edit(CEditEx::MODE_INT, true)
 , m_enabled(false)
@@ -111,6 +117,7 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ckps_engine_cyl = 4;
  m_params.hall_wnd_width = 60.0f;
  m_params.ckps_rising_spark = false;
+ m_params.hall_degrees_btdc = 60.0f;
 }
 
 LPCTSTR CCKPSPageDlg::GetDialogID(void) const
@@ -142,6 +149,9 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_hall_wnd_width_edit);
  DDX_Control(pDX,IDC_PD_CKPS_HALL_WND_WIDTH_UNIT, m_hall_wnd_width_label);
 
+ DDX_Control(pDX,IDC_PD_CKPS_DEGREES_BTDC_SPIN, m_hall_degrees_btdc_spin);
+ DDX_Control(pDX,IDC_PD_CKPS_DEGREES_BTDC_EDIT, m_hall_degrees_btdc_edit);
+
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_SPIN, m_wheel_cogs_num_spin);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_EDIT, m_wheel_cogs_num_edit);
  DDX_Control(pDX,IDC_PD_CKPS_COGS_NUM_UNIT, m_wheel_cogs_num_label);
@@ -155,6 +165,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Text(pDX, IDC_PD_CKPS_IGNITION_COGS_EDIT, m_params.ckps_ignit_cogs);
  m_hall_wnd_width_edit.DDX_Value(pDX, IDC_PD_CKPS_HALL_WND_WIDTH_EDIT, m_params.hall_wnd_width);
+ m_hall_degrees_btdc_edit.DDX_Value(pDX, IDC_PD_CKPS_DEGREES_BTDC_EDIT, m_params.hall_degrees_btdc);
  DDX_Text(pDX, IDC_PD_CKPS_COGS_NUM_EDIT, m_params.ckps_cogs_num);
  DDX_Text(pDX, IDC_PD_CKPS_MISS_NUM_EDIT, m_params.ckps_miss_num);
  DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
@@ -223,6 +234,12 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_hall_wnd_width_spin.SetRangeAndDelta(30.0f, 120.0f, 0.1f);
  m_hall_wnd_width_edit.SetRange(30.0f, 120.0f);
 
+ m_hall_degrees_btdc_spin.SetBuddy(&m_hall_degrees_btdc_edit);
+ m_hall_degrees_btdc_edit.SetLimitText(5);
+ m_hall_degrees_btdc_edit.SetDecimalPlaces(1);
+ m_hall_degrees_btdc_spin.SetRangeAndDelta(30.0f, 120.0f, 0.1f);
+ m_hall_degrees_btdc_edit.SetRange(30.0f, 120.0f);
+
  m_wheel_cogs_num_edit.SetLimitText(3);
  m_wheel_cogs_num_edit.SetDecimalPlaces(3);
  m_wheel_cogs_num_spin.SetBuddy(&m_wheel_cogs_num_edit);
@@ -267,7 +284,7 @@ BOOL CCKPSPageDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.2f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.3f));
 
  UpdateDialogControls(this, TRUE);
 

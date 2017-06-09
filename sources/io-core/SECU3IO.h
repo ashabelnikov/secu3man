@@ -225,6 +225,7 @@ namespace SECU3IO
   unsigned char ref_s_edge_type;
   float hall_wnd_width; 
   bool ckps_rising_spark;
+  float hall_degrees_btdc;
  };
 
  struct OPCompNc                        //используется если надо просто принять или послать определенный код действия

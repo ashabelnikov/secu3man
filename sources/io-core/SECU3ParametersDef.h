@@ -223,10 +223,12 @@ typedef struct params_t
  _uchar  idl_iacminpos;
  _uchar  idl_iacmaxpos;
 
+ _uint   hall_degrees_btdc;             // Degrees BTDC for Hall sync
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[46];
+ _uchar reserved[44];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
