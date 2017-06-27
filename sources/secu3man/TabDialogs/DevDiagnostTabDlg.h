@@ -32,6 +32,8 @@
 
 class CDiagnostContextMenuManager;
 class COScopeCtrl;
+class CDevDiagInpsDlg;
+class CDevDiagOutsDlg;
 
 class CDevDiagnostTabDlg : public CTabDialog
 {
@@ -64,22 +66,67 @@ class CDevDiagnostTabDlg : public CTabDialog
   void EnableBLDETesting(bool i_enable);
   bool IsBLDETestingEnabled(void);
 
-  //IDs for outputs
+  void EnableStartAutoTstMenuItem(bool i_enable);
+  void EnableStopAutoTstMenuItem(bool i_enable);
+
+  //IDs for outputs (SECU-3T and SECU-3i)
   enum 
   {
    OID_IGN_OUT1 = 0,
-   OID_IGN_OUT2,
-   OID_IGN_OUT3,
-   OID_IGN_OUT4,
-   OID_IE,
-   OID_FE,
-   OID_ECF,
-   OID_CE,
-   OID_ST_BLOCK,
-   OID_ADD_IO1,
-   OID_ADD_IO2,
-   OID_BL,       //3-state output
-   OID_DE        //3-state output
+   OID_IGN_O1 = 0,
+
+   OID_IGN_OUT2 = 1,
+   OID_IGN_O2 = 1,
+
+   OID_IGN_OUT3 = 2,
+   OID_IGN_O3 = 2,
+
+   OID_IGN_OUT4 = 3,
+   OID_IGN_O4 = 3,
+
+   OID_IE = 4,
+   OID_IGN_O5 = 4,
+
+   OID_FE = 5,
+   OID_ECFO = 5,
+
+   OID_ECF = 6,
+   OID_INJ_O1 = 6,
+
+   OID_CE = 7,
+   OID_INJ_O2 = 7,
+
+   OID_ST_BLOCK = 8,
+   OID_INJ_O3 = 8,
+
+   OID_ADD_IO1 = 9,
+   OID_INJ_O4 = 9,
+
+   OID_ADD_IO2 = 10,
+   OID_INJ_O5 = 10,
+
+   OID_BL = 11,       //3-state output
+
+   OID_DE = 12,       //3-state output
+   
+   OID_STBL_O = 13,
+
+   OID_CEL_O = 14,
+
+   OID_FPMP_O = 15,
+
+   OID_PWRR_O = 16,
+
+   OID_EVAP_O = 17,
+
+   OID_O2SH_O = 18,
+
+   OID_COND_O = 19,
+
+   OID_ADD_O2 = 20,
+
+   OID_SECU3T_NUM = 13,
+   OID_SECU3i_NUM = 21
   };
 
  protected:
@@ -87,7 +134,6 @@ class CDevDiagnostTabDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);
   afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateEnterButton(CCmdUI* pCmdUI);
-  afx_msg void OnOutputCheckToggle(UINT nID);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnEnterButton();
@@ -99,11 +145,15 @@ class CDevDiagnostTabDlg : public CTabDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  void OnOutputCheckToggle(int output_id, bool state);
+
   void _InitializeOscilloscopeControls(void);
 
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl1;
   std::auto_ptr<COScopeCtrl> mp_OScopeCtrl2;
   std::auto_ptr<CDiagnostContextMenuManager> mp_ContextMenuManager;
+  std::auto_ptr<CDevDiagInpsDlg> mp_inpsDlg;
+  std::auto_ptr<CDevDiagOutsDlg> mp_outsDlg;
 
   CButton m_enter_button;
   EventOutputToggle m_on_output_check;
@@ -114,8 +164,7 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;
-  bool m_enable_secu3t_features;
   bool m_enable_blde_testing;
-  SECU3IO::DiagInpDat m_inputValues;
-  CFont m_textFont;
+  bool m_start_autotst_enabled;
+  bool m_stop_autotst_enabled;
 };

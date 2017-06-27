@@ -1498,7 +1498,7 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
- if (size != (mp_pdp->isHex() ? 34 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 44 : 22))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //напряжение бортовой сети
@@ -1519,17 +1519,29 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
   return false;
  m_DiagInpDat.temp = ((float)temp) * m_adc_discrete;
 
- //дополнительный IO1
- int add_io1 = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &add_io1))
+ //дополнительный I1
+ int add_i1 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i1))
   return false;
- m_DiagInpDat.add_io1 = ((float)add_io1) * m_adc_discrete;
+ m_DiagInpDat.add_i1 = ((float)add_i1) * m_adc_discrete;
 
- //дополнительный IO2
- int add_io2 = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &add_io2))
+ //дополнительный I2
+ int add_i2 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i2))
   return false;
- m_DiagInpDat.add_io2 = ((float)add_io2) * m_adc_discrete;
+ m_DiagInpDat.add_i2 = ((float)add_i2) * m_adc_discrete;
+
+ //дополнительный I3 (SECU-3i)
+ int add_i3 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i3))
+  return false;
+ m_DiagInpDat.add_i3 = ((float)add_i3) * m_adc_discrete;
+
+ //дополнительный I4 (SECU-3i, reserved)
+ int add_i4 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &add_i4))
+  return false;
+ m_DiagInpDat.add_i4 = ((float)add_i4) * m_adc_discrete;
 
  //датчик положения дроссельной заслонки (концевик карбюратора)
  int carb = 0;
@@ -1550,17 +1562,20 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
  m_DiagInpDat.ks_2 = ((float)ks_2) * m_adc_discrete;
 
  //байт с состоянием цифровых входов
- unsigned char byte = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet, &byte))
+ int word = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &word))
   return false;
 
  //газовый клапан, ДПКВ, ДНО(VR), ДФ, "Bootloader", "Default EEPROM"
- m_DiagInpDat.gas   = CHECKBIT8(byte, 0);
- m_DiagInpDat.ckps  = CHECKBIT8(byte, 1);
- m_DiagInpDat.ref_s = CHECKBIT8(byte, 2);
- m_DiagInpDat.ps    = CHECKBIT8(byte, 3);
- m_DiagInpDat.bl    = CHECKBIT8(byte, 4);
- m_DiagInpDat.de    = CHECKBIT8(byte, 5);
+ m_DiagInpDat.gas    = CHECKBIT16(word, 0);
+ m_DiagInpDat.ckps   = CHECKBIT16(word, 1);
+ m_DiagInpDat.ref_s  = CHECKBIT16(word, 2);
+ m_DiagInpDat.ps     = CHECKBIT16(word, 3);
+ m_DiagInpDat.bl     = CHECKBIT16(word, 4);
+ m_DiagInpDat.de     = CHECKBIT16(word, 5);
+ m_DiagInpDat.ign_i  = CHECKBIT16(word, 6); //SECU-3i
+ m_DiagInpDat.cond_i = CHECKBIT16(word, 7); //SECU-3i
+ m_DiagInpDat.epas_i = CHECKBIT16(word, 8); //SECU-3i
 
  return true;
 }
@@ -2789,17 +2804,24 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 {
- unsigned int bits = ((packet_data->ign_out1 != 0) << 0) | ((packet_data->ign_out2 != 0) << 1) |
- ((packet_data->ign_out3 != 0) << 2) | ((packet_data->ign_out4 != 0) << 3) | ((packet_data->add_io1 != 0) << 4) |
- ((packet_data->add_io2 != 0) << 5) | ((packet_data->ie != 0) << 6) | ((packet_data->fe != 0) << 7) |
- ((packet_data->ecf != 0) << 8) | ((packet_data->ce != 0) << 9) | ((packet_data->st_block != 0) << 10);
-
- if (packet_data->bl!=0)
-  bits|= ((packet_data->bl==2) << 11) | (1 << 12);
- if (packet_data->de!=0)
-  bits|= ((packet_data->de==2) << 13) | (1 << 14);
+ DWORD bits = 0;
+ int bitNum = packet_data->mode ? 21 : 13;
+ int bitIdx = 0;
+ for(int i = 0; i < bitNum; ++i)
+ {
+  if (i==11 || i==12) //BL or DE (special cases)
+  {
+   if (packet_data->out[i]!=0) {
+    WRITEBIT32(bits, bitIdx++, (packet_data->out[i]==2));
+    WRITEBIT32(bits, bitIdx++, 1);
+   }
+  }
+  else { //other
+   WRITEBIT32(bits, bitIdx++, packet_data->out[i]); 
+  }
+ }
  
- mp_pdp->Bin16ToHex(bits, m_outgoing_packet);
+ mp_pdp->Bin32ToHex(bits, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

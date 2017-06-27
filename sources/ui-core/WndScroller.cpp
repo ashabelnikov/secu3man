@@ -85,6 +85,19 @@ void CWndScroller::SetViewSize(int width, int height)
   _UpdateScrollInfo();
 }
 
+void CWndScroller::SetViewSizeF(float coefWidth, float coefHeight)
+{
+ if (!mp_origWnd)
+ {
+  ASSERT(0);
+  return; //not initialized
+ }
+
+ CRect wndRect;
+ mp_origWnd->GetWindowRect(&wndRect);
+ SetViewSize(int(wndRect.Height() * coefWidth), int(wndRect.Height() * coefHeight));
+}
+
 const CSize& CWndScroller::GetScrollPos(void) const
 {
  return m_scrlPos;

@@ -329,8 +329,10 @@ namespace SECU3IO
   float voltage;                        //board voltage
   float map;                            //MAP sensor
   float temp;                           //coolant temperature
-  float add_io1;                        //additional input 1 (analog)
-  float add_io2;                        //additional input 2 (analog)
+  float add_i1;                         //additional input 1 (analog)
+  float add_i2;                         //additional input 2 (analog)
+  float add_i3;                         //additional input 3 (analog)
+  float add_i4;                         //additional input 4 (analog, reserved)
   float carb;                           //carburetor switch, throttle position sensor (analog)
   int gas;                              //gas valve state (digital)
   int ckps;                             //CKP sensor (digital)
@@ -340,23 +342,20 @@ namespace SECU3IO
   int de;                               //"Default EEPROM" jumper
   float ks_1;                           //knock sensor 1
   float ks_2;                           //knock sensor 2
+  int ign_i;                            //IGN_I 
+  int cond_i;                           //COND_I
+  int epas_i;                           //EPAS_I
  };
 
  struct DiagOutDat
  {
-  int ign_out1;                         //ignition output 1
-  int ign_out2;                         //ignition output 2
-  int ign_out3;                         //ignition output 3
-  int ign_out4;                         //ignition output 4
-  int ie;                               //idle edconomizer
-  int fe;                               //fuel economizer
-  int ecf;                              //electric cooling fan
-  int ce;                               //Check engine
-  int st_block;                         //starter blocking
-  int add_io1;                          //additional output 1
-  int add_io2;                          //additional output 2
-  int bl;                               //BL, 3-state output (0 - hiZ, 1 - "0", 2 - "1")
-  int de;                               //DE, 3-state output (0 - hiZ, 1 - "0", 2 - "1")
+  bool mode;                            //false - SECU-3T, true - SECU-3i
+  int  out[32];                         //states of outputs
+  //Note: BL,DE are 3-state outputs (0 - hiZ, 1 - "0", 2 - "1")
+  //SECU-3T (13 values):
+  // IGN_OUT1, IGN_OUT2, IGN_OUT3, IGN_OUT4, IE, FE, ECF, CE, ST_BLOCK, ADD_O1, ADD_O2, BL, DE
+  //SECU-3i (21 values):
+  // IGN_O1, IGN_O2, IGN_O3, IGN_O4, IGN_O5, ECF, INJ_O1, INJ_O2, INJ_O3, INJ_O4, INJ_O5, BL, DE, STBL_O, CEL_O, FPMP_O, PWRR_O, EVAP_O, O2SH_O, COND_O, ADD_O2
  };
 
  struct ChokePar

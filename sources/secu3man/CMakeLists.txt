@@ -73,6 +73,8 @@ set(HEADERS
   TabDialogs/EEPROMTabDlg.h
   TabDialogs/CheckEngineTabDlg.h
   TabDialogs/DevDiagnostTabDlg.h
+  TabDialogs/DevDiagInpsDlg.h
+  TabDialogs/DevDiagOutsDlg.h
   TabDialogs/EEPROMContextMenuManager.h
   TabDialogs/DiagnostContextMenuManager.h
   TabDialogs/FirmwareContextMenuManager.h
@@ -124,6 +126,8 @@ set(SOURCES
   TabDialogs/EEPROMTabDlg.cpp
   TabDialogs/CheckEngineTabDlg.cpp
   TabDialogs/DevDiagnostTabDlg.cpp
+  TabDialogs/DevDiagInpsDlg.cpp
+  TabDialogs/DevDiagOutsDlg.cpp
   TabDialogs/EEPROMContextMenuManager.cpp
   TabDialogs/DiagnostContextMenuManager.cpp
   TabDialogs/FirmwareContextMenuManager.cpp

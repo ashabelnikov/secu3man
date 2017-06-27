@@ -31,8 +31,9 @@
 #include "common/FastDelegate.h"
 #include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
-#include "ui-core/fnt_helpers.h"
 #include "ui-core/OScopeCtrl.h"
+#include "DevDiagInpsDlg.h"
+#include "DevDiagOutsDlg.h"
 
 #define TIMER_ID 0
 
@@ -40,27 +41,17 @@ using namespace fastdelegate;
 
 const UINT CDevDiagnostTabDlg::IDD = IDD_DEV_DIAGNOSTICS;
 
-const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
-const UINT OutputsCheckEnd = IDC_DEV_DIAG_DE_CHECK;
-const UINT InputsTextStart = IDC_DEV_DIAG_VOLTAGE;
-const UINT InputsTextEnd = IDC_DEV_DIAG_DE;
-const UINT InputsCaptionStart = IDC_DEV_DIAG_VOLTAGE_CAPTION;
-const UINT InputsCaptionEnd = IDC_DEV_DIAG_DE_CAPTION;
-
 BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_WM_CONTEXTMENU()
  ON_WM_INITMENUPOPUP()
- ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
+
  ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnEnableBLDETesting)
  ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
 
- ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
- ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart, InputsTextEnd, OnUpdateDiagControls)
- ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart, InputsCaptionEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_OUTPUTS_GROUP, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_INPUTS_GROUP, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_START_OUTAUTO_TST, OnUpdateDiagControls)
@@ -68,6 +59,9 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
+
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_1_CAPTION, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_KS_2_CAPTION, OnUpdateDiagControls) 
 END_MESSAGE_MAP()
 
 CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
@@ -77,12 +71,15 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , mp_ContextMenuManager(new CDiagnostContextMenuManager())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
-, m_enable_secu3t_features(false)
 , m_enable_blde_testing(false)
+, mp_inpsDlg(new CDevDiagInpsDlg(NULL))
+, mp_outsDlg(new CDevDiagOutsDlg(NULL))
+, m_start_autotst_enabled(false)
+, m_stop_autotst_enabled(false)
 {
  mp_ContextMenuManager->CreateContent();
 
- memset(&m_inputValues, 0, sizeof(SECU3IO::DiagInpDat));
+ mp_outsDlg->setOnOutputToggle(MakeDelegate(this, &CDevDiagnostTabDlg::OnOutputCheckToggle));
 
  //=================================================================
  if (!CheckBitmaps() || !CheckAbout())
@@ -94,24 +91,6 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_DEV_DIAG_ENTER_CHECK, m_enter_button);
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_VOLTAGE, m_inputValues.voltage, _T("%.3f"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_MAP_S, m_inputValues.map, _T("%.3f"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_TEMP, m_inputValues.temp, _T("%.3f"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I1, m_inputValues.add_io1, _T("%.3f"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_ADD_I2, m_inputValues.add_io2, _T("%.3f"));
- if (m_enable_secu3t_features)
-  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, m_inputValues.carb,_T("%.3f"));
- else
- {
-  int value = m_inputValues.carb > 0;
-  DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CARB, value, _T("%d"));
- }
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_GAS_V, m_inputValues.gas, _T("%d"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_CKPS, m_inputValues.ckps, _T("%d"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_REF_S, m_inputValues.ref_s, _T("%d"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_PS, m_inputValues.ps, _T("%d"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_BL, m_inputValues.bl, _T("%d"));
- DDX_Text_Fmt(pDX, IDC_DEV_DIAG_DE, m_inputValues.de, _T("%d"));
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
@@ -123,14 +102,23 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- //Change size of fonts (this will improve user experience)
- CloneWndFont(GetDlgItem(InputsTextStart), &m_textFont, 11, true);
- for(size_t i = InputsTextStart; i <= InputsTextEnd; ++i)
-  GetDlgItem(i)->SetFont(&m_textFont);
-  
+ //create outputs child dialog
+ CRect rect;
+ GetDlgItem(IDC_DEV_DIAG_OUTPUTS_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_outsDlg->Create(CDevDiagOutsDlg::IDD,this);
+ mp_outsDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
+ mp_outsDlg->ShowWindow(SW_SHOW);
+ //create inputs child dialog
+ GetDlgItem(IDC_DEV_DIAG_INPUTS_FRAME)->GetWindowRect(rect);
+ ScreenToClient(rect);
+ mp_inpsDlg->Create(CDevDiagInpsDlg::IDD,this);
+ mp_inpsDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
+ mp_inpsDlg->ShowWindow(SW_SHOW);
+
  SetTimer(TIMER_ID, 250, NULL);
 
- //инициализируем осциллографы
+ //initialize oscilloscopes
  _InitializeOscilloscopeControls();
 
  mp_ContextMenuManager->Attach(this);
@@ -149,25 +137,19 @@ void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
 {
  switch(pCmdUI->m_nID)
  {
-  case IDC_DEV_DIAG_ADD_O1_CHECK:
-  case IDC_DEV_DIAG_ADD_O2_CHECK:
-  case IDC_DEV_DIAG_ADD_I1:
-  case IDC_DEV_DIAG_ADD_I2:
-  case IDC_DEV_DIAG_ADD_I1_CAPTION:
-  case IDC_DEV_DIAG_ADD_I2_CAPTION:
-  case IDC_DEV_DIAG_REF_S:
-  case IDC_DEV_DIAG_REF_S_CAPTION:
-  case IDC_DEV_DIAG_KS_2_CAPTION:
-   pCmdUI->Enable(m_enable_diag_controls && m_enable_secu3t_features);
-   break;
   case IDM_DEV_DIAG_ENABLE_BLDE_TST:
    pCmdUI->SetCheck(m_enable_blde_testing);  
    pCmdUI->Enable(m_enable_diag_controls);  
    break;
-  case IDC_DEV_DIAG_BL_CHECK:
-  case IDC_DEV_DIAG_DE_CHECK:
-   pCmdUI->Enable(m_enable_diag_controls && m_enable_blde_testing);  
+
+  case IDM_DEV_DIAG_START_OUTAUTO_TST:
+   pCmdUI->Enable(m_enable_diag_controls && m_start_autotst_enabled);  
    break;
+
+  case IDM_DEV_DIAG_STOP_OUTAUTO_TST:
+   pCmdUI->Enable(m_enable_diag_controls && m_stop_autotst_enabled);  
+   break;
+
   default:
    pCmdUI->Enable(m_enable_diag_controls);
  };
@@ -201,15 +183,10 @@ void CDevDiagnostTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMen
  mp_ContextMenuManager->OnInitMenuPopup(pMenu, nIndex, bSysMenu);
 }
 
-void CDevDiagnostTabDlg::OnOutputCheckToggle(UINT nID)
+void CDevDiagnostTabDlg::OnOutputCheckToggle(int output_id, bool state)
 {
- CButton* p_check = static_cast<CButton*>(GetDlgItem(nID));
- if (!p_check)
-  return;
-
- bool state = p_check->GetCheck() == BST_CHECKED;
  if (m_on_output_check)
-  m_on_output_check(nID-OutputsCheckStart, state);
+  m_on_output_check(output_id, state);
 }
 
 void CDevDiagnostTabDlg::OnEnterButton()
@@ -237,13 +214,16 @@ void CDevDiagnostTabDlg::OnEnableBLDETesting()
  m_enable_blde_testing = (state & MF_CHECKED) ? false : true; //toggle
  if (m_on_enable_blde_tst)
   m_on_enable_blde_tst(m_enable_blde_testing);
+ mp_outsDlg->EnableBLDETesting(m_enable_blde_testing);
 }
 
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
 {
  m_enable_diag_controls = i_enable;
  mp_OScopeCtrl1->EnableWindow(i_enable);
- mp_OScopeCtrl2->EnableWindow(i_enable && m_enable_secu3t_features); //SECU-3T
+ mp_OScopeCtrl2->EnableWindow(i_enable);
+ mp_inpsDlg->EnableDiagControls(i_enable);
+ mp_outsDlg->EnableDiagControls(i_enable);
  UpdateDialogControls(this, TRUE);
 }
 
@@ -255,8 +235,8 @@ void CDevDiagnostTabDlg::EnableEnterButton(bool i_enable)
 
 void CDevDiagnostTabDlg::EnableSECU3TFeatures(bool i_enable)
 {
- m_enable_secu3t_features = i_enable;
- mp_OScopeCtrl2->EnableWindow(i_enable && m_enable_diag_controls); //SECU-3T
+ mp_inpsDlg->EnableSECU3TFeatures(i_enable);
+ mp_outsDlg->EnableSECU3TFeatures(i_enable);
  UpdateDialogControls(this,TRUE);
 }
 
@@ -299,8 +279,7 @@ void CDevDiagnostTabDlg::setOnEnableBLDETesting(EventFlag OnFunction)
 void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)
 {
  ASSERT(i_values);
- memcpy(&m_inputValues, i_values, sizeof(SECU3IO::DiagInpDat));
- UpdateData(FALSE);
+ mp_inpsDlg->SetInputValues(i_values);
  mp_OScopeCtrl1->AppendPoint(i_values->ks_1);
  mp_OScopeCtrl2->AppendPoint(i_values->ks_2);
 }
@@ -317,8 +296,7 @@ void CDevDiagnostTabDlg::SetEnterButton(bool i_state)
 
 void CDevDiagnostTabDlg::SetOutputValue(int id, bool state)
 {
- CButton *pButton = (CButton*)GetDlgItem(OutputsCheckStart + id);
- pButton->SetCheck(state ? BST_CHECKED : BST_UNCHECKED);
+ mp_outsDlg->SetOutputValue(id, state);
 }
 
 //инициализация осциллографа для сигналов с ДД
@@ -353,4 +331,14 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
  mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 64, 0));
  mp_OScopeCtrl2->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl2->SetPlotColor(RGB(255, 255, 255));
+}
+
+void CDevDiagnostTabDlg::EnableStartAutoTstMenuItem(bool i_enable)
+{
+ m_start_autotst_enabled = i_enable;
+}
+
+void CDevDiagnostTabDlg::EnableStopAutoTstMenuItem(bool i_enable)
+{
+ m_stop_autotst_enabled = i_enable;
 }

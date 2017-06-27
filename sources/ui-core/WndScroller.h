@@ -34,12 +34,14 @@ class AFX_EXT_CLASS CWndScroller : private CWindowSubClasser
  ~CWndScroller();
 
   //Attach/Detach CWnd derived object. Each call of Init() must be followed by Close().
-  //Close() automatically called in destructor
+  //Close() automatically called in destructor of this class
   bool  Init(CWnd* ip_wnd);
   bool  Close(void);
 
   //View size values determine how much to scroll
   void   SetViewSize(int width, int height);
+  //View size based on the current size and specified coefficients
+  void   SetViewSizeF(float coefWidth, float coefHeight);
 
   //Get current scroll position
   const CSize& GetScrollPos(void) const;

@@ -72,6 +72,8 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   void OnTstTimer(void);
   void UpdateOutputs(void);
   void SetOutputValue(int id, bool state);
+
+  void _FillOutputsMap(void);
  private:
   void _SetOuptutMapItem(int id, bool state);
 
