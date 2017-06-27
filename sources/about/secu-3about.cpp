@@ -38,6 +38,9 @@
 
 extern HINSTANCE hInstance;  //DLLs hInstance
 
+#ifdef _DEBUG //in debug mode only
+#define SECU3NOPROTECTION
+#endif
 
 namespace {
  CString BuildSoftwareInfoStr(void)
@@ -116,6 +119,10 @@ void ABOUT_API DisplayWelcome(void)
 
 bool CheckAppTitle(CWnd* p_wnd)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  BYTE hash[SHA256_BLOCK_SIZE];
  Sha256 sha;
 
@@ -148,10 +155,16 @@ bool CheckAppTitle(CWnd* p_wnd)
  }
 
  return true;
+
+#endif
 }
 
 bool ABOUT_API CheckAppLogo(void)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  TCHAR str[100+1];
  LoadString(GetModuleHandle(ModuleName::secu3man), 4153/*IDS_STATUS_BAR_LOGO*/, str, 100);
  //"SECU-3"
@@ -165,10 +178,15 @@ bool ABOUT_API CheckAppLogo(void)
   return false;
 
  return true;
+#endif
 }
 
 bool ABOUT_API CheckAppUrl(const _TSTRING& str)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  //"http://secu-3.org"
  BYTE hash[32] = {0x9b,0x1a,0x20,0x07,0xaa,0x9c,0xce,0x55,0x2a,0x3e,0xd8,0x17,0x2f,0xd8,0x48,0xe7,0xa8,0xf9,0xfb,0xf8,0xc3,0x2d,0x50,0x0d,0x99,0xd4,0x6c,0x9f,0x9b,0x82,0xd5,0x41};
  BYTE digest[SHA256_BLOCK_SIZE];
@@ -180,10 +198,15 @@ bool ABOUT_API CheckAppUrl(const _TSTRING& str)
   return false;
 
  return true;
+#endif
 }
 
 bool ABOUT_API CheckAppMenu(void)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  BYTE digest[SHA256_BLOCK_SIZE];
  Sha256 sha;
  BYTE* bytes = NULL;
@@ -209,10 +232,15 @@ bool ABOUT_API CheckAppMenu(void)
 
  FreeResource(hgl);
  return true;
+#endif
 }
 
 bool ABOUT_API CheckBitmaps(void)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  BYTE digest[SHA256_BLOCK_SIZE];
  Sha256 sha;
  BYTE* bitmap = NULL;
@@ -249,10 +277,15 @@ bool ABOUT_API CheckBitmaps(void)
 
  FreeResource(hgl);
  return true;
+#endif
 }
 
 bool ABOUT_API CheckAbout(void)
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  _TSTRING str = MLL::GetString(IDS_AUTHOR_INFO);
  //author info (IDS_AUTHOR_INFO)
  BYTE hash1[32] = {0x5D,0xDC,0x9F,0x00,0x5F,0x83,0x5B,0xFB,0x72,0xEE,0xB7,0xDF,0xE5,0x37,0x04,0xB8,0xD6,0x3C,0x61,0x52,0x13,0x0B,0xC8,0xCB,0xFB,0x14,0xE7,0xAC,0x6D,0x63,0x15,0x5B};
@@ -280,10 +313,15 @@ bool ABOUT_API CheckAbout(void)
   return false;
 
  return true;
+#endif
 }
 
 bool ABOUT_API CheckVersion(void)
 {//hashes for 4.6 version info
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  BYTE hash1[SHA256_BLOCK_SIZE] = {0x52,0xDF,0xB6,0xED,0xD4,0xAB,0xE3,0x1D,0x41,0xAA,0x60,0xF7,0x7E,0x00,0xCA,0xB0,0xB3,0xAE,0xEC,0x7D,0x16,0xA8,0x6B,0x80,0x7F,0x38,0x42,0xE3,0x25,0xFB,0x4D,0xBF};
  BYTE hash2[SHA256_BLOCK_SIZE] = {0x54,0x1D,0x09,0x5E,0x67,0x43,0x4C,0x59,0xF8,0x96,0x23,0xAD,0x4F,0x64,0x3D,0x99,0x17,0x8A,0xF6,0x33,0xF5,0xE1,0x58,0x8B,0x16,0xEF,0xB1,0x28,0x4D,0x43,0x1D,0xB5};
  BYTE hash3[SHA256_BLOCK_SIZE] = {0xF2,0xBA,0xC7,0x78,0x81,0x78,0x83,0x3E,0xDD,0x19,0xDE,0x27,0xC4,0x72,0xD2,0x2D,0x1B,0x6D,0xEB,0x14,0x2D,0xF9,0x80,0xD4,0x2C,0x33,0x2B,0xE0,0x27,0x84,0xA0,0xF7};
@@ -352,10 +390,15 @@ bool ABOUT_API CheckVersion(void)
  }
 
  return true; //ok
+#endif
 }
 
 bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[])
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  Sha256 sha;
  size_t read = 0;
  sha.init();
@@ -373,10 +416,16 @@ bool ABOUT_API CalcFileDigest(LPCTSTR filePath, BYTE hash[])
  fclose(fin);
  sha.final(hash);
  return true;
+
+#endif
 }
 
 bool ABOUT_API CompBuffDigest(BYTE* buff, int size, BYTE hash[])
 {
+#ifdef SECU3NOPROTECTION
+ return true;
+#else
+
  BYTE digest[SHA256_BLOCK_SIZE];
  if (NULL==buff)
   return false;
@@ -387,5 +436,6 @@ bool ABOUT_API CompBuffDigest(BYTE* buff, int size, BYTE hash[])
  if (!std::equal(digest, digest + SHA256_BLOCK_SIZE, hash))
   return false;
  return true;
-}
 
+#endif
+}
