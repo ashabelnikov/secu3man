@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeDataApply)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_USE_CHECK, OnChangeDataUseBtCheck)
  ON_BN_CLICKED(IDC_PD_SECUR_IMM_USE_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_SECUR_USE_RESPAR_CHECK, OnChangeData)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_NAME_EDIT, OnChangeDataNamePass)
  ON_EN_CHANGE(IDC_PD_SECUR_BT_PASS_EDIT, OnChangeDataNamePass)
  ON_EN_CHANGE(IDC_PD_SECUR_IBTN_KEY1_EDIT, OnChangeDataIbtnKeys)
@@ -52,12 +53,14 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEY1_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEY2_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEYS_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_USE_RESPAR_CHECK, OnUpdateUseResPar)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CSecurPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_namepass_enabled(false)
+, m_respar_enabled(false)
 , m_bt_name_edit(CEditEx::MODE_STRING)
 , m_bt_pass_edit(CEditEx::MODE_INT)
 , m_ibtn_key1_edit(CEditEx::MODE_HEXSTR)
@@ -67,6 +70,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
  _tcscpy(m_params.bt_pass, _T(""));
  m_params.use_bt = false;
  m_params.use_imm = false;
+ m_params.use_respar = false;
  for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
   memset(m_params.ibtn_keys[j], 0, SECU3IO::IBTN_KEY_SIZE);
 }
@@ -89,6 +93,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_imm_use_check);
  DDX_Control(pDX, IDC_PD_SECUR_IBTN_KEY1_EDIT, m_ibtn_key1_edit);
  DDX_Control(pDX, IDC_PD_SECUR_IBTN_KEY2_EDIT, m_ibtn_key2_edit);
+ DDX_Control(pDX, IDC_PD_SECUR_USE_RESPAR_CHECK, m_use_respar_check);
 
  CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
@@ -99,6 +104,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Check_bool(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
  DDX_Check_bool(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
+ DDX_Check_bool(pDX, IDC_PD_SECUR_USE_RESPAR_CHECK, m_params.use_respar);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -109,6 +115,11 @@ void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CSecurPageDlg::OnUpdateNameAndPass(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_namepass_enabled && m_params.use_bt);
+}
+
+void CSecurPageDlg::OnUpdateUseResPar(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_respar_enabled);
 }
 
 void CSecurPageDlg::OnUpdateApplyButton(CCmdUI* pCmdUI)
@@ -215,6 +226,15 @@ void CSecurPageDlg::EnableBTNameAndPass(bool enable)
  if (m_namepass_enabled == enable)
   return; //already has needed state
  m_namepass_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CSecurPageDlg::EnableUseResParCheck(bool enable)
+{
+ if (m_respar_enabled == enable)
+  return; //already has needed state
+ m_respar_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }

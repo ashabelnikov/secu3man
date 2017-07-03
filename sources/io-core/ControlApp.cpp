@@ -1721,6 +1721,7 @@ bool CControlApp::Parse_SECUR_PAR(const BYTE* raw_packet, size_t size)
  m_SecurPar.use_bt   = CHECKBIT8(flags, 0);
  m_SecurPar.set_btbr = CHECKBIT8(flags, 1);
  m_SecurPar.use_imm  = CHECKBIT8(flags, 2);
+ m_SecurPar.use_respar = CHECKBIT8(flags, 3);
 
  //Parse out iButton keys
  BYTE key[IBTN_KEY_SIZE]; int i, j;
@@ -2887,6 +2888,7 @@ void CControlApp::Build_SECUR_PAR(SecurPar* packet_data)
  WRITEBIT8(flags, 0, packet_data->use_bt);
  WRITEBIT8(flags, 1, packet_data->set_btbr);
  WRITEBIT8(flags, 2, packet_data->use_imm);
+ WRITEBIT8(flags, 3, packet_data->use_respar);
 
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 

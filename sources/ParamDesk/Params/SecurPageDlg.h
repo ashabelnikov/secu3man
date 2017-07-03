@@ -52,6 +52,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void SetValues(const SECU3IO::SecurPar* i_values);
 
   void EnableBTNameAndPass(bool enable);
+  void EnableUseResParCheck(bool enable);
 
  // Implementation
  protected:
@@ -65,6 +66,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateNameAndPass(CCmdUI* pCmdUI);
   afx_msg void OnUpdateApplyButton(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseResPar(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -73,6 +75,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   _TSTRING m_bt_pass;
   bool m_enabled;
   bool m_namepass_enabled;
+  bool m_respar_enabled;
   
   CEditEx m_bt_name_edit;
   CStatic m_bt_name_caption;
@@ -83,6 +86,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_bt_apply_button;
   CButton m_bt_use_check;
   CButton m_imm_use_check;
+  CButton m_use_respar_check;
 
   CEditEx m_ibtn_key1_edit;
   CEditEx m_ibtn_key2_edit;

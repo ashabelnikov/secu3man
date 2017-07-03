@@ -639,6 +639,11 @@ void CParamDeskDlg::EnableBTNameAndPass(bool i_enable)
  m_pSecurPageDlg->EnableBTNameAndPass(i_enable);
 }
 
+void CParamDeskDlg::EnableUseResParCheck(bool i_enable)
+{
+ m_pSecurPageDlg->EnableUseResParCheck(i_enable);
+}
+
 void CParamDeskDlg::EnableInputsMerging(bool i_enable)
 {
  m_pCKPSPageDlg->EnableInputsMerging(i_enable);

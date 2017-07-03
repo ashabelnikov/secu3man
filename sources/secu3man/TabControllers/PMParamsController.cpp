@@ -65,6 +65,7 @@ void CPMParamsController::OnActivate(void)
  m_pd_changes_timer.SetTimer(this, &CPMParamsController::OnParamDeskChangesTimer, 250);
 
  mp_view->EnableBTNameAndPass(true);
+ mp_view->EnableUseResParCheck(false); 
 }
 
 void CPMParamsController::OnDeactivate(void)
