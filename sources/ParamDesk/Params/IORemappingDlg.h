@@ -56,7 +56,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual bool SelectItem(FWDM::IOSid iosId, FWDM::IOPid iopId);
   virtual FWDM::IOPid GetSelection(FWDM::IOSid iosId) const;
   virtual void setOnItemSelected(EventItemSel OnFunction);
-  virtual void EnableSECU3TItems(bool i_enable);
+  virtual void EnableSECU3TItems(bool i_enable); //true - SECU-3T, false - SECU-3i
   virtual void EnableItem(FWDM::IOSid iosId, bool i_enable);
   virtual void EnableInversion(FWDM::IOSid iosId, bool i_invert);
   virtual void ResetContent(void);
@@ -66,7 +66,6 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
 
   // Implementation
  protected:
-  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -77,13 +76,18 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _FillControls(void);
+  void _SetTooltips(void);
+  void _ShowControls(void);
+  CComboBox* _GetCBbyIOSID(const std::map<UINT, int>& map, int iosId) const;
+
   bool m_enabled;
   bool m_enable_secu3t_features;
 
   EventItemSel m_OnItemSel;
   EventItemInv m_OnItemInv;
-  std::map<UINT, std::pair<int, CComboBox*> > m_iorcb;
-  std::map<UINT, std::pair<int, CButton*> > m_iorcm;
+  std::map<UINT, int> m_iorcb;
+  std::map<UINT, int> m_iorcm;
   std::map<UINT, std::pair<bool, bool> > m_enflg;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

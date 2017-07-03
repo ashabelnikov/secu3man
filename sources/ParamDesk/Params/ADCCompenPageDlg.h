@@ -58,7 +58,7 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnChangeEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateControlsSECU3T(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:

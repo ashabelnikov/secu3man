@@ -132,10 +132,9 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableHallOutputParams(CHECKBIT32(opt, COPT_HALL_OUTPUT) && !CHECKBIT32(opt, COPT_HALL_SYNC) && !CHECKBIT32(opt, COPT_CKPS_NPLUS1));
  mp_view->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
  if (CHECKBIT32(opt, COPT_SECU3T))
-  //SECU-3T has two additional ignition outputs
   mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 8 : 8);
- else
-  mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 4 : 8);
+ else //SECU-3i:
+  mp_view->SetMaxCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) ? 8 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //aslo if hall sensor synchronization is used

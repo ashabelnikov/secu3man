@@ -863,10 +863,9 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
  m_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  if (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T))
-  //SECU-3T has two additional ignition outputs
   m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
- else
-  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 4 : 8);
+ else //SECU-3i:
+  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //also if hall sensor synchronization is used

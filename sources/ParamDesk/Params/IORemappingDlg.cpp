@@ -29,15 +29,13 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
-namespace {
-CComboBox* _GetCBbyIOSID(const std::map<UINT, std::pair<int, CComboBox*> >& map, int iosId)
+CComboBox* CIORemappingDlg::_GetCBbyIOSID(const std::map<UINT, int>& map, int iosId) const
 {
- std::map<UINT, std::pair<int, CComboBox*> >::const_iterator it;
+ std::map<UINT, int>::const_iterator it;
  for(it = map.begin(); it != map.end(); ++it)
-  if (it->second.first == iosId)
-   return it->second.second;
+  if (it->second == iosId)
+   return (CComboBox*)GetDlgItem(it->first);
  return NULL;
-}
 }
 
 const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
@@ -45,19 +43,39 @@ const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 //See also FirmwareDataMediator.h
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
 const UINT IOCaptionEnd = IDC_IO_REMAPPING_CKPS_CAPTION;
+const UINT IOCaptionStart3I = IDC_IO_REMAPPING3I_IGN_O1_CAPTION;
+const UINT IOCaptionEnd3I = IDC_IO_REMAPPING3I_EPAS_I_CAPTION;
+
 const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
 const UINT IOComboboxEnd = IDC_IO_REMAPPING_CKPS_COMBOBOX;
+const UINT IOComboboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_COMBOBOX;
+const UINT IOComboboxEnd3I = IDC_IO_REMAPPING3I_EPAS_I_COMBOBOX;
+
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
 const UINT IOCheckboxEnd = IDC_IO_REMAPPING_CKPS_CHECKBOX;
+const UINT IOCheckboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_CHECKBOX;
+const UINT IOCheckboxEnd3I = IDC_IO_REMAPPING3I_EPAS_I_CHECKBOX;
+
 const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
 const UINT IOTTStrEnd = IDS_IO_REMAPPING_CKPS_TT;
+const UINT IOTTStrStart3I = IDS_IO_REMAPPING3I_IGN_O1_TT;
+const UINT IOTTStrEnd3I = IDS_IO_REMAPPING3I_EPAS_I_TT;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
  ON_CONTROL_RANGE(BN_CLICKED, IOCheckboxStart, IOCheckboxEnd, OnChangeInversion)
+
+ ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart3I, IOComboboxEnd3I, OnChangeSelection)
+ ON_CONTROL_RANGE(BN_CLICKED, IOCheckboxStart3I, IOCheckboxEnd3I, OnChangeInversion)
+
  ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart,  IOCaptionEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart,  IOComboboxEnd, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IOCheckboxStart,  IOCheckboxEnd, OnUpdateControlsChecks)
+
+ ON_UPDATE_COMMAND_UI_RANGE(IOCaptionStart3I,  IOCaptionEnd3I, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IOComboboxStart3I,  IOComboboxEnd3I, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI_RANGE(IOCheckboxStart3I,  IOCheckboxEnd3I, OnUpdateControlsChecks)
+
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControlsCommon)
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -71,40 +89,12 @@ CIORemappingDlg::CIORemappingDlg(CWnd* pParent /*=NULL*/)
 , m_enable_secu3t_features(false)
 , mp_scr(new CWndScroller)
 {
- UINT ctrlId = 0;
- for(size_t i = FWDM::IOS_START; i < FWDM::IOS_COUNT; ++i)
- {
-   std::pair<int, CComboBox*> cb_info;
-   cb_info.first = FWDM::IOS_START + i; //slot ID
-   cb_info.second = new CComboBox();  //MFC object
-   std::pair<int, CButton*> cm_info;
-   cm_info.first = FWDM::IOS_START + i; //slot ID
-   cm_info.second = new CButton();    //MFC object
-   m_iorcb.insert(std::make_pair(IOComboboxStart + ctrlId, cb_info));
-   m_iorcm.insert(std::make_pair(IOCheckboxStart + ctrlId, cm_info));
-   m_enflg.insert(std::make_pair(IOComboboxStart + ctrlId++, std::make_pair(false, false)));
- }
+ _FillControls();
 }
 
 CIORemappingDlg::~CIORemappingDlg()
 {
- std::map<UINT, std::pair<int, CComboBox*> >::iterator cb;
- for(cb = m_iorcb.begin(); cb != m_iorcb.end(); ++cb)
-  delete (cb->second.second);
- std::map<UINT, std::pair<int, CButton*> >::iterator cm;
- for(cm = m_iorcm.begin(); cm != m_iorcm.end(); ++cm)
-  delete (cm->second.second);
-}
-
-void CIORemappingDlg::DoDataExchange(CDataExchange* pDX)
-{
- Super::DoDataExchange(pDX);
- std::map<UINT, std::pair<int, CComboBox*> >::iterator cb;
- for(cb = m_iorcb.begin(); cb != m_iorcb.end(); ++cb)
-  DDX_Control(pDX, cb->first, *(cb->second.second));
- std::map<UINT, std::pair<int, CButton*> >::iterator cm;
- for(cm = m_iorcm.begin(); cm != m_iorcm.end(); ++cm)
-  DDX_Control(pDX, cm->first, *(cm->second.second));
+ //empty
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -115,22 +105,15 @@ BOOL CIORemappingDlg::OnInitDialog()
  Super::OnInitDialog();
 
  //create a tooltip control and assign tooltips
- mp_ttc.reset(new CToolTipCtrlEx());
- VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- UINT ttStrId = IOTTStrStart;
- UINT cbObjId = IOComboboxStart;
- for(; cbObjId <= IOComboboxEnd; ++cbObjId, ++ttStrId)
-  VERIFY(mp_ttc->AddWindow(m_iorcb[cbObjId].second, MLL::GetString(ttStrId)));
- mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
- mp_ttc->ActivateToolTips(true);
+ _SetTooltips(); 
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.32f));
+ mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.32f : 2.15f);
+
+ _ShowControls();
 
  UpdateDialogControls(this, TRUE);
- UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -142,47 +125,25 @@ void CIORemappingDlg::OnDestroy()
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
 void CIORemappingDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
- bool enable_secu3t_features = true;
- switch(pCmdUI->m_nID)
- {
-  case IDC_IO_REMAPPING_ADD_IO1_COMBOBOX:
-  case IDC_IO_REMAPPING_ADD_IO2_COMBOBOX:
-  case IDC_IO_REMAPPING_ADD_IO1_CAPTION:
-  case IDC_IO_REMAPPING_ADD_IO2_CAPTION:
-  case IDC_IO_REMAPPING_ADD_I1_COMBOBOX:
-  case IDC_IO_REMAPPING_ADD_I2_COMBOBOX:
-  case IDC_IO_REMAPPING_ADD_I1_CAPTION:
-  case IDC_IO_REMAPPING_ADD_I2_CAPTION:
-  case IDC_IO_REMAPPING_REF_S_COMBOBOX:
-  case IDC_IO_REMAPPING_REF_S_CAPTION:
-   enable_secu3t_features = m_enable_secu3t_features;
-   break;
- };
- 
+ UINT CaptionStart = m_enable_secu3t_features ? IOCaptionStart : IOCaptionStart3I;
+ UINT CaptionEnd = m_enable_secu3t_features ? IOCaptionEnd : IOCaptionEnd3I;
+ UINT ComboboxStart = m_enable_secu3t_features ? IOComboboxStart : IOComboboxStart3I;
  UINT id = pCmdUI->m_nID;
- if (pCmdUI->m_nID >= IOCaptionStart && pCmdUI->m_nID <= IOCaptionEnd)
-  id = IOComboboxStart + (pCmdUI->m_nID - IOCaptionStart);
- pCmdUI->Enable(m_enabled && enable_secu3t_features && m_enflg[id].first);
+ if (pCmdUI->m_nID >= CaptionStart && pCmdUI->m_nID <= CaptionEnd)
+  id = ComboboxStart + (pCmdUI->m_nID - CaptionStart);
+
+ pCmdUI->Enable(m_enabled && m_enflg[id].first);
 }
 
 void CIORemappingDlg::OnUpdateControlsChecks(CCmdUI* pCmdUI)
 {
- bool enable_secu3t_features = true;
- switch(pCmdUI->m_nID)
- {
-  case IDC_IO_REMAPPING_ADD_IO1_CHECKBOX:
-  case IDC_IO_REMAPPING_ADD_IO2_CHECKBOX:
-  case IDC_IO_REMAPPING_ADD_I1_CHECKBOX:
-  case IDC_IO_REMAPPING_ADD_I2_CHECKBOX:
-  case IDC_IO_REMAPPING_REF_S_CHECKBOX:
-   enable_secu3t_features = m_enable_secu3t_features;
-   break;
- };
- 
+ UINT CheckboxStart = m_enable_secu3t_features ? IOCheckboxStart : IOCheckboxStart3I;
+ UINT CheckboxEnd = m_enable_secu3t_features ? IOCheckboxEnd : IOCheckboxEnd3I;
+ UINT ComboboxStart = m_enable_secu3t_features ? IOComboboxStart : IOComboboxStart3I;
  UINT id = pCmdUI->m_nID;
- if (pCmdUI->m_nID >= IOCheckboxStart && pCmdUI->m_nID <= IOCheckboxEnd)
-  id = IOComboboxStart + (pCmdUI->m_nID - IOCheckboxStart);
- pCmdUI->Enable(m_enabled && enable_secu3t_features && m_enflg[id].first && m_enflg[id].second);
+ if (pCmdUI->m_nID >= CheckboxStart && pCmdUI->m_nID <= CheckboxEnd)
+  id = ComboboxStart + (pCmdUI->m_nID - CheckboxStart);
+ pCmdUI->Enable(m_enabled && m_enflg[id].first && m_enflg[id].second);
 }
 
 void CIORemappingDlg::OnUpdateControlsCommon(CCmdUI* pCmdUI)
@@ -194,23 +155,23 @@ void CIORemappingDlg::OnChangeSelection(UINT nID)
 { 
  if (m_iorcb.find(nID) != m_iorcb.end())
  {
-  int selection = m_iorcb[nID].second->GetCurSel();
+  int selection = ((CComboBox*)GetDlgItem(nID))->GetCurSel();
   if (CB_ERR != selection)
   {
-   FWDM::IOPid data = (FWDM::IOPid)m_iorcb[nID].second->GetItemData(selection);
+   FWDM::IOPid data = (FWDM::IOPid)((CComboBox*)GetDlgItem(nID))->GetItemData(selection);
    if (m_OnItemSel)
-    m_OnItemSel((FWDM::IOSid)m_iorcb[nID].first, data);
+    m_OnItemSel((FWDM::IOSid)m_iorcb[nID], data);
   }
  }
 }
 
 void CIORemappingDlg::OnChangeInversion(UINT nID)
 { 
- std::map<UINT, std::pair<int, CButton*> >::const_iterator it = m_iorcm.find(nID);
+ std::map<UINT, int>::const_iterator it = m_iorcm.find(nID);
  if (it != m_iorcm.end())
  {
   if (m_OnItemInv)
-   m_OnItemInv((FWDM::IOSid)it->second.first, it->second.second->GetCheck() == BST_CHECKED);
+   m_OnItemInv((FWDM::IOSid)it->second, ((CButton*)GetDlgItem(it->first))->GetCheck() == BST_CHECKED);
  }
 }
 
@@ -295,16 +256,23 @@ void CIORemappingDlg::setOnItemSelected(EventItemSel OnFunction)
 
 void CIORemappingDlg::EnableSECU3TItems(bool i_enable)
 {
- m_enable_secu3t_features = i_enable;
+ m_enable_secu3t_features = i_enable; //update controls flag
+
+ mp_scr->SetViewSizeF(.0f, i_enable ? 1.32f : 2.15f);
+
+ _FillControls();
+ _SetTooltips();
+ _ShowControls();
+
  UpdateDialogControls(this, TRUE);
 }
 
 void CIORemappingDlg::EnableItem(FWDM::IOSid iosId, bool i_enable)
 {
- std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ std::map<UINT, int>::iterator it;
  for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
  {
-  if (it->second.first == iosId)
+  if (it->second == iosId)
   {
    m_enflg[it->first].first = i_enable;
    UpdateDialogControls(this, TRUE);
@@ -315,10 +283,10 @@ void CIORemappingDlg::EnableItem(FWDM::IOSid iosId, bool i_enable)
 
 void CIORemappingDlg::EnableInversion(FWDM::IOSid iosId, bool i_invert)
 {
- std::map<UINT, std::pair<int, CComboBox*> >::iterator it;
+ std::map<UINT, int>::iterator it;
  for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
  {
-  if (it->second.first == iosId)
+  if (it->second == iosId)
   {
    m_enflg[it->first].second = i_invert;
    UpdateDialogControls(this, TRUE);
@@ -329,12 +297,12 @@ void CIORemappingDlg::EnableInversion(FWDM::IOSid iosId, bool i_invert)
 
 void CIORemappingDlg::ResetContent(void)
 {
- std::map<UINT, std::pair<int, CComboBox*> >::iterator cb;
+ std::map<UINT, int>::iterator cb;
  for(cb = m_iorcb.begin(); cb != m_iorcb.end(); ++cb)
-  cb->second.second->ResetContent();
- std::map<UINT, std::pair<int, CButton*> >::iterator cm;
+  ((CComboBox*)GetDlgItem(cb->first))->ResetContent();
+ std::map<UINT, int>::iterator cm;
  for(cm = m_iorcm.begin(); cm != m_iorcm.end(); ++cm)
-  cm->second.second->SetCheck(BST_UNCHECKED);
+  ((CButton*)GetDlgItem(cm->first))->SetCheck(BST_UNCHECKED);
  std::map<UINT, std::pair<bool, bool> >::iterator fg;
  for(fg = m_enflg.begin(); fg != m_enflg.end(); ++fg)
   fg->second.first = fg->second.second = false;
@@ -342,11 +310,11 @@ void CIORemappingDlg::ResetContent(void)
 
 bool CIORemappingDlg::InvertItem(FWDM::IOSid iosId, bool i_invert)
 {
- std::map<UINT, std::pair<int, CButton*> >::const_iterator it = m_iorcm.begin();
+ std::map<UINT, int>::const_iterator it = m_iorcm.begin();
  for(; it != m_iorcm.end(); ++it)
-  if (it->second.first == iosId)
+  if (it->second == iosId)
   {
-   it->second.second->SetCheck(i_invert ? BST_CHECKED : BST_UNCHECKED);
+   ((CButton*)GetDlgItem(it->first))->SetCheck(i_invert ? BST_CHECKED : BST_UNCHECKED);
    return true;
   }
  return false;
@@ -355,4 +323,60 @@ bool CIORemappingDlg::InvertItem(FWDM::IOSid iosId, bool i_invert)
 void CIORemappingDlg::setOnItemInverted(EventItemInv OnFunction)
 {
  m_OnItemInv = OnFunction;
+}
+
+void CIORemappingDlg::_FillControls(void)
+{
+ m_iorcb.clear();
+ m_iorcm.clear();
+ m_enflg.clear();
+
+ size_t iosCount  = m_enable_secu3t_features ? FWDM::IOS_COUNT : FWDM::IOS3I_COUNT;
+ UINT ComboboxStart = m_enable_secu3t_features ? IOComboboxStart : IOComboboxStart3I;
+ UINT CheckboxStart = m_enable_secu3t_features ? IOCheckboxStart : IOCheckboxStart3I;
+
+ UINT ctrlId = 0;
+ for(size_t i = FWDM::IOS_START; i < iosCount; ++i)
+ {
+  m_iorcb.insert(std::make_pair(ComboboxStart + ctrlId, FWDM::IOS_START + i));
+  m_iorcm.insert(std::make_pair(CheckboxStart + ctrlId, FWDM::IOS_START + i));
+  m_enflg.insert(std::make_pair(ComboboxStart + ctrlId++, std::make_pair(false, false)));
+ }
+}
+
+void CIORemappingDlg::_SetTooltips(void)
+{
+ if (!mp_ttc.get())
+ {
+  mp_ttc.reset(new CToolTipCtrlEx());
+  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ }
+
+ UINT ttStrId = m_enable_secu3t_features ? IOTTStrStart : IOTTStrStart3I;
+ UINT cbObjId = m_enable_secu3t_features ? IOComboboxStart : IOComboboxStart3I;
+ UINT cbObjEnd = m_enable_secu3t_features ? IOComboboxEnd : IOComboboxEnd3I;
+ 
+ for(; cbObjId <= cbObjEnd; ++cbObjId, ++ttStrId)
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(cbObjId), MLL::GetString(ttStrId)));
+ 
+ mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
+}
+
+void CIORemappingDlg::_ShowControls(void)
+{
+ //SECU-3T
+ for(int i = IOCheckboxStart; i <= IOCheckboxEnd; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_SHOW : SW_HIDE);
+ for(int i = IOComboboxStart; i <= IOComboboxEnd; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_SHOW : SW_HIDE);
+ for(int i = IOCaptionStart; i <= IOCaptionEnd; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_SHOW : SW_HIDE);
+ //SECU-3i
+ for(int i = IOCheckboxStart3I; i <= IOCheckboxEnd3I; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_HIDE : SW_SHOW);
+ for(int i = IOComboboxStart3I; i <= IOComboboxEnd3I; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_HIDE : SW_SHOW);
+ for(int i = IOCaptionStart3I; i <= IOCaptionEnd3I; ++i)
+  GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_HIDE : SW_SHOW); 
 }

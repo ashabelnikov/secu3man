@@ -53,9 +53,7 @@ class CFWIORemappingController
   void EnableSECU3TFeatures(bool i_enable);
 
  private:
-  FWDM::IOPid _IOPStart(void);
   FWDM::IOPid _IOPCount(void);
-  FWDM::IOSid _IOSStart(void);
   FWDM::IOSid _IOSCount(void);
   bool _CheckForErrors(void);
   void _UpdateView(void);
@@ -82,4 +80,5 @@ class CFWIORemappingController
   FWDM* mp_fwdm;
   std::map<FWDM::IOSid, FWDM::IOPid> m_defValMap;
   std::map<FWDM::IOSid, bool> m_invFlags;
+  bool m_enable_secu3t_features;
 };

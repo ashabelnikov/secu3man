@@ -54,7 +54,7 @@ using namespace SECU3IO::SECU3Types;
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
-//------------------------For iorem_slots_t V2.2----------------------------
+//--------------------------------------------------------------------------
 #define IOREM_SLOTS 37           // Number of slots used for I/O remapping
 #define IOREM_PLUGS 68           // Number of plugs used in I/O remapping
 
@@ -89,6 +89,7 @@ typedef struct cd_data_t
 
  _uint size;                     // size of this structure (2 bytes)
 }cd_data_t;
+//--------------------------------------------------------------------------
 
 //настройки ошибок check engine
 typedef struct
@@ -1211,7 +1212,7 @@ bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
   if (rpmGrid[i] != slots[i])
    match = false;
  if (!match)
-  return (IDYES==AfxMessageBox(_T("RPM grids from firmware and source are not equal!\n Please inspect idle and work maps if you accept new RPM grid.\n Accept new RPM grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+  return (IDYES==AfxMessageBox(_T("RPM grids from firmware and source are not equal!\n Please inspect idle, work, VE, AFR and inj.timing maps if you accept new RPM grid.\n Accept new RPM grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -1497,14 +1498,15 @@ DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)
  if (!mp_cddata)
   return 0;
  DWORD value = 0;
+ bool secu3t = CHECKBIT32(GetFWOptions(), SECU3IO::COPT_SECU3T);
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT)
+   if (id < (secu3t ? IOP_COUNT : IOP3I_COUNT))
     value = mp_cddata->iorem.i_plugs[id]; 
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT)
+   if (id < (secu3t ? IOP_COUNT : IOP3I_COUNT))
     value = mp_cddata->iorem.v_plugs[id]; 
    break;
  }
@@ -1516,14 +1518,15 @@ DWORD CFirmwareDataMediator::GetIOSlot(IOXtype type, IOSid id, bool inv)
  if (!mp_cddata)
   return 0;
  DWORD value = 0;
+ bool secu3t = CHECKBIT32(GetFWOptions(), SECU3IO::COPT_SECU3T);
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOS_COUNT)
+   if (id < (secu3t ? IOS_COUNT : IOS3I_COUNT))
     value = inv ? mp_cddata->iorem.i_slotsi[id] : mp_cddata->iorem.i_slots[id];
    break;
   case IOX_DATA:
-   if (id < IOS_COUNT)
+   if (id < (secu3t ? IOS_COUNT : IOS3I_COUNT))
     value = inv ? mp_cddata->iorem.v_slotsi[id] : mp_cddata->iorem.v_slots[id];
    break;
  }
@@ -1548,14 +1551,15 @@ void  CFirmwareDataMediator::SetIOPlug(IOXtype type, IOPid id, DWORD value)
 {
  if (!mp_cddata)
   return;
+ bool secu3t = CHECKBIT32(GetFWOptions(), SECU3IO::COPT_SECU3T);
  switch(type)
  {
   case IOX_INIT:
-   if (id < IOP_COUNT)
+   if (id < (secu3t ? IOP_COUNT : IOP3I_COUNT))
     mp_cddata->iorem.i_plugs[id] = (_fnptr_t)value;
    break;
   case IOX_DATA:
-   if (id < IOP_COUNT)
+   if (id < (secu3t ? IOP_COUNT : IOP3I_COUNT))
     mp_cddata->iorem.v_plugs[id] = (_fnptr_t)value;
    break;
  }

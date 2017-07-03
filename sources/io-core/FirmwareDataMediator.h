@@ -170,11 +170,82 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOX_DATA = 1              //data slot
   };
 
-  //NOTE: we break compatibility with v0.x and v1.x because of support complexity
   //IDs of plugs
   enum IOPid
   {
-   IOP_START      =   0,
+   IOP_START        =   0,
+   //SECU-3i:
+   IOP3I_IGN_O1     =   0,
+   IOP3I_IGN_O2     =   1,
+   IOP3I_IGN_O3     =   2,
+   IOP3I_IGN_O4     =   3,
+   IOP3I_IGN_O5     =   4,
+   IOP3I_ECF        =   5,
+   IOP3I_INJ_O1     =   6,
+   IOP3I_INJ_O2     =   7,
+   IOP3I_INJ_O3     =   8,
+   IOP3I_INJ_O4     =   9,
+   IOP3I_INJ_O5     =  10,
+   IOP3I_BL         =  11,
+   IOP3I_DE         =  12,
+   IOP3I_STBL_O     =  13,
+   IOP3I_CEL_O      =  14,
+   IOP3I_FPMP_O     =  15,
+   IOP3I_PWRR_O     =  16,
+   IOP3I_EVAP_O     =  17,
+   IOP3I_O2SH_O     =  18,
+   IOP3I_COND_O     =  19,
+   IOP3I_ADD_O2     =  20,
+   IOP3I_PS         =  21,     // PS          (input)
+   IOP3I_REF_S      =  22,     // REF_S       (input)
+   IOP3I_CKPS       =  23,     // CKPS        (input)
+   IOP3I_ADD_I1     =  24,     // ADD_IO1     (input)
+   IOP3I_ADD_I2     =  25,     // ADD_IO2     (input)
+   IOP3I_ADD_I3     =  26,     // ADD_IO3     (input)
+   IOP3I_GAS_V      =  27,     // GAS_V       (input)
+   IOP3I_IGN_I      =  28,     // IGN_I       (input)
+   IOP3I_COND_I     =  29,     // COND_I      (input)
+   IOP3I_EPAS_I     =  30,     // EPAS_I      (input)
+   IOP3I_RESERVED1  =  31,     // Reserved    ()
+   IOP3I_RESERVED2  =  32,     // Reserved    ()
+   IOP3I_RESERVED3  =  33,     // Reserved    ()
+   IOP3I_RESERVED4  =  34,     // Reserved    ()
+   IOP3I_RESERVED5  =  35,     // Reserved    ()
+   IOP3I_RESERVED6  =  36,     // Reserved    ()
+   IOP3I_IGN_OUT6   =  37,     // IGN_O6    (output)
+   IOP3I_IGN_OUT7   =  38,     // IGN_O7    (output)
+   IOP3I_IGN_OUT8   =  39,     // IGN_O8    (output)
+   IOP3I_SM_DIR     =  40,     // SM_DIR    (output)
+   IOP3I_SM_STP     =  41,     // SM_STP    (output)
+   IOP3I_GD_DIR     =  42,     // GD_DIR    (output)
+   IOP3I_GD_STP     =  43,     // GD_STP    (output)
+   IOP3I_GD_PWM     =  44,     // GD_PWM    (output)
+   IOP3I_IAC_PWM    =  45,     // IAC_PWM   (output)
+   IOP3I_HALL_OUT   =  46,     // HALL_OUT  (output)
+   IOP3I_STROBE     =  47,     // STROBE    (output)
+   IOP3I_INTK_HEAT  =  48,     // INTK_HEAT (output)
+   IOP3I_UNI_OUT0   =  49,     // UNI_OUT0  (output)
+   IOP3I_UNI_OUT1   =  50,     // UNI_OUT1  (output)
+   IOP3I_UNI_OUT2   =  51,     // UNI_OUT2  (output)
+   IOP3I_IE         =  52,     // IE        (output)
+   IOP3I_FE         =  53,     // FE        (output)
+   IOP3I_BC_INPUT   =  54,     // BC_INPUT  (input)
+   IOP3I_MAPSEL0    =  55,     // MAPSEL0   (input)
+   IOP3I_SPDSENS    =  56,     // SPD_SENS  (input)
+   IOP3I_LAMBDA     =  57,     // LAMBDA    (input)
+   IOP3I_AIR_TEMP   =  58,     // AIR_TEMP  (input)
+// IOP_RESERVED7    =  59,     // Reserved    ()
+// IOP_RESERVED8    =  60,     // Reserved    ()
+// IOP_RESERVED9    =  61,     // Reserved    ()
+// IOP_RESERVED10   =  62,     // Reserved    ()
+// IOP_RESERVED11   =  63,     // Reserved    ()
+// IOP_RESERVED12   =  64,     // Reserved    ()
+// IOP_RESERVED13   =  65,     // Reserved    ()
+// IOP_RESERVED14   =  66,     // Reserved    ()
+// IOP_RESERVED15   =  67,     // Reserved    ()
+   IOP3I_COUNT      =  59,
+
+   //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
    IOP_IGN_OUT2   =   1,     // IGN_OUT2    (output)
    IOP_IGN_OUT3   =   2,     // IGN_OUT3    (output)
@@ -243,53 +314,93 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 // IOP_RESERVED26 =  65,     // Reserved    ()
 // IOP_RESERVED27 =  66,     // Reserved    ()
 // IOP_RESERVED28 =  67,     // Reserved    ()
-   IOP_COUNT,                // Number of plugs used in I/O remapping
+   IOP_COUNT      =  63,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
   //IDs of slots
   enum IOSid
   {
-   IOS_START      =   0,
-   IOS_IGN_OUT1   =   0,     // IGN_OUT1
-   IOS_IGN_OUT2   =   1,     // IGN_OUT2
-   IOS_IGN_OUT3   =   2,     // IGN_OUT3
-   IOS_IGN_OUT4   =   3,     // IGN_OUT4
-   IOS_ADD_IO1    =   4,     // ADD_IO1
-   IOS_ADD_IO2    =   5,     // ADD_IO2
-   IOS_ECF        =   6,     // ECF
-   IOS_ST_BLOCK   =   7,     // ST_BLOCK
-   IOS_IE         =   8,     // IE
-   IOS_FE         =   9,     // FE
-   IOS_PS         =  10,     // PS          (input)
-   IOS_ADD_I1     =  11,     // ADD_IO1     (input)
-   IOS_ADD_I2     =  12,     // ADD_IO2     (input)
-   IOS_CE         =  13,     // CE
-   IOS_BL         =  14,     // Bootloader  (output)
-   IOS_DE         =  15,     // Def. EEPROM (output)
-   IOS_GAS_V      =  16,     // GAS_V       (input)
-   IOS_REF_S      =  17,     // REF_S       (input)
-   IOS_CKPS       =  18,     // CKPS        (input)
-// IOS_RESERVED2  =  19,     // Reserved    ()
-// IOS_RESERVED3  =  20,     // Reserved    ()
-// IOS_RESERVED4  =  21,     // Reserved    ()
-// IOS_RESERVED5  =  22,     // Reserved    ()
-// IOS_RESERVED6  =  23,     // Reserved    ()
-// IOS_RESERVED7  =  24,     // Reserved    ()
-// IOS_RESERVED8  =  25,     // Reserved    ()
-// IOS_RESERVED9  =  26,     // Reserved    ()
-// IOS_RESERVED10 =  27,     // Reserved    ()
-// IOS_RESERVED11 =  28,     // Reserved    ()
-// IOS_RESERVED12 =  29,     // Reserved    ()
-// IOS_RESERVED13 =  30,     // Reserved    ()
-// IOS_RESERVED14 =  31,     // Reserved    ()
-// IOS_RESERVED15 =  32,     // Reserved    ()
-// IOS_RESERVED16 =  33,     // Reserved    ()
-// IOS_RESERVED17 =  34,     // Reserved    ()
-// IOS_RESERVED18 =  35,     // Reserved    ()
-// IOS_RESERVED19 =  36,     // Reserved    ()
-   IOS_COUNT,                // Number of slots used for I/O remapping
-   IOS_NA         =  255     //
+   IOS_START        =   0,
+   //SECU-3i:
+   IOS3I_IGN_O1     =   0,
+   IOS3I_IGN_O2     =   1,
+   IOS3I_IGN_O3     =   2,
+   IOS3I_IGN_O4     =   3,
+   IOS3I_IGN_O5     =   4,
+   IOS3I_ECF        =   5,
+   IOS3I_INJ_O1     =   6,
+   IOS3I_INJ_O2     =   7,
+   IOS3I_INJ_O3     =   8,
+   IOS3I_INJ_O4     =   9,
+   IOS3I_INJ_O5     =  10,
+   IOS3I_BL         =  11,
+   IOS3I_DE         =  12,
+   IOS3I_STBL_O     =  13,
+   IOS3I_CEL_O      =  14,
+   IOS3I_FPMP_O     =  15,
+   IOS3I_PWRR_O     =  16,
+   IOS3I_EVAP_O     =  17,
+   IOS3I_O2SH_O     =  18,
+   IOS3I_COND_O     =  19,
+   IOS3I_ADD_O2     =  20,
+   IOS3I_PS         =  21,     // PS          (input)
+   IOS3I_REF_S      =  22,     // REF_S       (input)
+   IOS3I_CKPS       =  23,     // CKPS        (input)
+   IOS3I_ADD_I1     =  24,     // ADD_IO1     (input)
+   IOS3I_ADD_I2     =  25,     // ADD_IO2     (input)
+   IOS3I_ADD_I3     =  26,     // ADD_IO3     (input)
+   IOS3I_GAS_V      =  27,     // GAS_V       (input)
+   IOS3I_IGN_I      =  28,     // IGN_I       (input)
+   IOS3I_COND_I     =  29,     // COND_I      (input)
+   IOS3I_EPAS_I     =  30,     // EPAS_I      (input)
+// IOS3I_RESERVED1  =  31,     // Reserved    ()
+// IOS3I_RESERVED2  =  32,     // Reserved    ()
+// IOS3I_RESERVED3  =  33,     // Reserved    ()
+// IOS3I_RESERVED4  =  34,     // Reserved    ()
+// IOS3I_RESERVED5  =  35,     // Reserved    ()
+// IOS3I_RESERVED6  =  36,     // Reserved    ()
+   IOS3I_COUNT      =  31,
+   //SECU-3T:   
+   IOS_IGN_OUT1     =   0,     // IGN_OUT1
+   IOS_IGN_OUT2     =   1,     // IGN_OUT2
+   IOS_IGN_OUT3     =   2,     // IGN_OUT3
+   IOS_IGN_OUT4     =   3,     // IGN_OUT4
+   IOS_ADD_IO1      =   4,     // ADD_IO1
+   IOS_ADD_IO2      =   5,     // ADD_IO2
+   IOS_ECF          =   6,     // ECF
+   IOS_ST_BLOCK     =   7,     // ST_BLOCK
+   IOS_IE           =   8,     // IE
+   IOS_FE           =   9,     // FE
+   IOS_PS           =  10,     // PS          (input)
+   IOS_ADD_I1       =  11,     // ADD_IO1     (input)
+   IOS_ADD_I2       =  12,     // ADD_IO2     (input)
+   IOS_CE           =  13,     // CE
+   IOS_BL           =  14,     // Bootloader  (output)
+   IOS_DE           =  15,     // Def. EEPROM (output)
+   IOS_GAS_V        =  16,     // GAS_V       (input)
+   IOS_REF_S        =  17,     // REF_S       (input)
+   IOS_CKPS         =  18,     // CKPS        (input)
+// IOS_RESERVED2    =  19,     // Reserved    ()
+// IOS_RESERVED3    =  20,     // Reserved    ()
+// IOS_RESERVED4    =  21,     // Reserved    ()
+// IOS_RESERVED5    =  22,     // Reserved    ()
+// IOS_RESERVED6    =  23,     // Reserved    ()
+// IOS_RESERVED7    =  24,     // Reserved    ()
+// IOS_RESERVED8    =  25,     // Reserved    ()
+// IOS_RESERVED9    =  26,     // Reserved    ()
+// IOS_RESERVED10   =  27,     // Reserved    ()
+// IOS_RESERVED11   =  28,     // Reserved    ()
+// IOS_RESERVED12   =  29,     // Reserved    ()
+// IOS_RESERVED13   =  30,     // Reserved    ()
+// IOS_RESERVED14   =  31,     // Reserved    ()
+// IOS_RESERVED15   =  32,     // Reserved    ()
+// IOS_RESERVED16   =  33,     // Reserved    ()
+// IOS_RESERVED17   =  34,     // Reserved    ()
+// IOS_RESERVED18   =  35,     // Reserved    ()
+// IOS_RESERVED19   =  36,     // Reserved    ()
+   IOS_COUNT        =  19,     // Number of slots used for I/O remapping
+   IOS_NA           =  255     //
   };
 
   //Version of I/O remapping logic. Note that major version number changes only
@@ -299,6 +410,7 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V23 = 0x23,           //V2.3
    IOV_V24 = 0x24,           //V2.4  CKPS remapping added, gas dose outputs
    IOV_V25 = 0x25,           //V2.5  GD_PWM plug added
+   IOV_V26 = 0x26            //V2.6  Support of SECU-3i added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);
