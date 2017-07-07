@@ -424,7 +424,7 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_regulator, MLL::GetString(IDS_PD_IDLREG_USE_REGULATOR_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_regongas, MLL::GetString(IDS_PD_IDLREG_USE_ONGAS_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_use_claicongas_check, MLL::GetString(IDS_PD_IDLREG_PMODE_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_use_claicongas_check, MLL::GetString(IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT)));
  
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);

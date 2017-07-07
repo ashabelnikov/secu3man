@@ -1233,6 +1233,7 @@ BEGIN
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Установите галочку чтобы в блютуз записались настройки или можно было изменить его имя и пароль. Также, настройки будут загружаться в блютуз каждый раз при сбросе EEPROM." 
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Установите галочку для использования иммобилайзера (iButton)"
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "УОЗ РХХ будет работать в режиме пропорционального регулятора. Данная опция актуальна только при совместном использовании с closed-loop РДВ."
+    IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Использовать closed loop для РДВ если на GAS_V высокий уровень. Снимите галочку, если не хотите чтобы на газу РДВ двигался"
 END
 
 STRINGTABLE
@@ -2621,6 +2622,7 @@ BEGIN
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Set this check for loading settings into a Bluetooth or to make possible to change the name and password of Bluetooth. Also, settings will be loaded into a Bluetooth each time you reset EEPROM." 
     IDS_PD_SECUR_IMM_USE_CHECK_TT                   "Set this check for activation of using of immobilizer (iButton)"
     IDS_PD_IDLREG_PMODE_CHECK_TT                    "Ignition timing based idling regulator will work in the proportional mode. This option is applicable only when using it in conjunction with IAC closed-loop regulator."
+    IDS_PD_IDLREG_USECLIACONGAS_CHECK_TT            "Use closed loop for IAC when GAS_V input is high."
 END
 
 STRINGTABLE
