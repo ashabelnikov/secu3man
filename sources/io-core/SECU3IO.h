@@ -624,7 +624,7 @@ namespace SECU3IO
 #define _SD std::pair<int, TCHAR*>
  static std::pair<int, TCHAR*> secu3_compile_options_bits[SECU3_COMPILE_OPTIONS_BITS_COUNT] =
  {
-  _SD(0,  _T("COPT_ATMEGA16")),
+  _SD(0,  _T("COPT_OBD_SUPPORT")),
   _SD(1,  _T("COPT_ATMEGA32")),
   _SD(2,  _T("COPT_ATMEGA64")),
   _SD(3,  _T("COPT_ATMEGA128")),
@@ -659,7 +659,7 @@ namespace SECU3IO
  };
 #undef _SD
 
- const int COPT_ATMEGA16 = 0;
+ const int COPT_OBD_SUPPORT = 0;
  const int COPT_ATMEGA32 = 1;
  const int COPT_ATMEGA64 = 2;
  const int COPT_ATMEGA128 = 3;
