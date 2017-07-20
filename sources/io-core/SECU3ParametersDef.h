@@ -225,10 +225,12 @@ typedef struct params_t
 
  _uint   hall_degrees_btdc;             // Degrees BTDC for Hall sync
 
+ _uint   vss_period_dist;               // Distance of one period for VSS
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[44];
+ _uchar reserved[42];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

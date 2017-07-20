@@ -234,16 +234,16 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_SPDSENS    =  56,     // SPD_SENS  (input)
    IOP3I_LAMBDA     =  57,     // LAMBDA    (input)
    IOP3I_AIR_TEMP   =  58,     // AIR_TEMP  (input)
-// IOP_RESERVED7    =  59,     // Reserved    ()
-// IOP_RESERVED8    =  60,     // Reserved    ()
-// IOP_RESERVED9    =  61,     // Reserved    ()
-// IOP_RESERVED10   =  62,     // Reserved    ()
-// IOP_RESERVED11   =  63,     // Reserved    ()
-// IOP_RESERVED12   =  64,     // Reserved    ()
-// IOP_RESERVED13   =  65,     // Reserved    ()
-// IOP_RESERVED14   =  66,     // Reserved    ()
-// IOP_RESERVED15   =  67,     // Reserved    ()
-   IOP3I_COUNT      =  59,
+   IOP3I_CAN_CS     =  59,     // CAN_CS    (output)
+// IOP3I_RESERVED8  =  60,     // Reserved    ()
+// IOP3I_RESERVED9  =  61,     // Reserved    ()
+// IOP3I_RESERVED10 =  62,     // Reserved    ()
+// IOP3I_RESERVED11 =  63,     // Reserved    ()
+// IOP3I_RESERVED12 =  64,     // Reserved    ()
+// IOP3I_RESERVED13 =  65,     // Reserved    ()
+// IOP3I_RESERVED14 =  66,     // Reserved    ()
+// IOP3I_RESERVED15 =  67,     // Reserved    ()
+   IOP3I_COUNT      =  60,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)

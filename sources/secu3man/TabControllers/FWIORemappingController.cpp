@@ -627,6 +627,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O5, FWDM::IOP3I_IGN_O5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_O5, true);
   mp_view->EnableInversion(FWDM::IOS3I_IGN_O5, true);
@@ -648,6 +649,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
   mp_view->AddItem(FWDM::IOS3I_ECF, FWDM::IOP3I_ECF, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ECF, true);
   mp_view->EnableInversion(FWDM::IOS3I_ECF, true);
@@ -743,6 +745,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_INJ_O5, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_INJ_O5, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_INJ_O5, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_INJ_O5, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
   mp_view->AddItem(FWDM::IOS3I_INJ_O5, FWDM::IOP3I_INJ_O5, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_INJ_O5, true);
   mp_view->EnableInversion(FWDM::IOS3I_INJ_O5, true);
@@ -762,6 +765,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_BL, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_BL, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_BL, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_BL, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
   mp_view->AddItem(FWDM::IOS3I_BL, FWDM::IOP3I_BL, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_BL, true);
   mp_view->EnableInversion(FWDM::IOS3I_BL, true);
@@ -781,6 +785,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_DE, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_DE, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_DE, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_DE, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
   mp_view->AddItem(FWDM::IOS3I_DE, FWDM::IOP3I_DE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_DE, true);
   mp_view->EnableInversion(FWDM::IOS3I_DE, true);
