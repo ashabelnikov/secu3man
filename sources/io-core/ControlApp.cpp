@@ -2813,9 +2813,11 @@ void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
   if (i==11 || i==12) //BL or DE (special cases)
   {
    if (packet_data->out[i]!=0) {
-    WRITEBIT32(bits, bitIdx++, (packet_data->out[i]==2));
-    WRITEBIT32(bits, bitIdx++, 1);
+    WRITEBIT32(bits, bitIdx++, (packet_data->out[i]==2)); //output state: 0 or 1
+    WRITEBIT32(bits, bitIdx++, 1);                        //configure as output 
    }
+   else
+    bitIdx+=2; //00
   }
   else { //other
    WRITEBIT32(bits, bitIdx++, packet_data->out[i]); 
