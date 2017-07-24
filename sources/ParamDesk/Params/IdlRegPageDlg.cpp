@@ -374,8 +374,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
  m_mapvalue_spin.SetBuddy(&m_mapvalue_edit);
  m_mapvalue_edit.SetLimitText(5);
  m_mapvalue_edit.SetDecimalPlaces(1);
- m_mapvalue_spin.SetRangeAndDelta(5.0f,100.0f,0.1f);
- m_mapvalue_edit.SetRange(5.0f,100.0f);
+ m_mapvalue_spin.SetRangeAndDelta(0.0f,100.0f,0.1f);
+ m_mapvalue_edit.SetRange(0.0f,100.0f);
 
  m_iacminpos_spin.SetBuddy(&m_iacminpos_edit);
  m_iacminpos_edit.SetLimitText(5);
