@@ -420,24 +420,28 @@ void CKnockChannelTabController::_HandleSample(SECU3IO::SensorDat* p_packet, boo
  //добавляем новое значение в осциллограф
  mp_view->AppendPoint(p_packet->knock_k);
 
- //обновляем новым значением буфер функции сигнала ДД от оборотов
- //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
- //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
- //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом.
- int index_unchecked = MathHelpers::Round((p_packet->frequen - 200.f) / 60.f);
- if (index_unchecked < 0)
-  index_unchecked = 0;
- if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))
-  index_unchecked = (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1);
- size_t index = (size_t)index_unchecked;
-
- if (m_rpm_knock_signal[index].size() < RPM_KNOCK_SAMPLES_PER_POINT)
-   m_rpm_knock_signal[index].push_back(p_packet->knock_k);
- else
+ //update statictics only of RPM is rising
+ if (p_packet->frequen > m_currentRPM)
  {
-  size_t &ii = m_rpm_knock_signal_ii[index];
-  m_rpm_knock_signal[index][ii] = p_packet->knock_k;
-  ii = ii < (RPM_KNOCK_SAMPLES_PER_POINT - 1) ? ii + 1 : 0;
+  //обновляем новым значением буфер функции сигнала ДД от оборотов
+  //1. Вычисляем индекс в массиве. 200 - обороты в начале шкалы, 60 - шаг по оборотам.
+  //2. Если ячейка функции не заполнена значениями - добавляем значение. Если ячейка функции
+  //заполнена значениями, то добавляем новое значение поверх в соответствии с текущим индексом.
+  int index_unchecked = MathHelpers::Round((p_packet->frequen - 200.f) / 60.f);
+  if (index_unchecked < 0)
+   index_unchecked = 0;
+  if (index_unchecked > (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1))
+   index_unchecked = (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS - 1);
+  size_t index = (size_t)index_unchecked;
+
+  if (m_rpm_knock_signal[index].size() < RPM_KNOCK_SAMPLES_PER_POINT)
+   m_rpm_knock_signal[index].push_back(p_packet->knock_k);
+  else
+  {
+   size_t &ii = m_rpm_knock_signal_ii[index];
+   m_rpm_knock_signal[index][ii] = p_packet->knock_k;
+   ii = ii < (RPM_KNOCK_SAMPLES_PER_POINT - 1) ? ii + 1 : 0;
+  }
  }
 
  //сохраняем текущее значение оборотов
