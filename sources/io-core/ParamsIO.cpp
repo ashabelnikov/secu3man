@@ -602,10 +602,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->out[oi].invers_2 = CHECKBIT8(p_params->uni_output[oi].flags, 1);
      p_out->out[oi].condition1 = p_params->uni_output[oi].condition1;
      p_out->out[oi].condition2 = p_params->uni_output[oi].condition2;
-     p_out->out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_1, p_params->uni_output[oi].condition1);
-     p_out->out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_1, p_params->uni_output[oi].condition1);
-     p_out->out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].on_thrd_2, p_params->uni_output[oi].condition2);
-     p_out->out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(p_params->uni_output[oi].off_thrd_2, p_params->uni_output[oi].condition2);
+     p_out->out[oi].on_thrd_1 = cen.UniOutDecodeCondVal(cen.isSigned(p_params->uni_output[oi].condition1) ? ((_int)p_params->uni_output[oi].on_thrd_1) : p_params->uni_output[oi].on_thrd_1, p_params->uni_output[oi].condition1);
+     p_out->out[oi].off_thrd_1 = cen.UniOutDecodeCondVal(cen.isSigned(p_params->uni_output[oi].condition1) ? ((_int)p_params->uni_output[oi].off_thrd_1) : p_params->uni_output[oi].off_thrd_1, p_params->uni_output[oi].condition1);
+     p_out->out[oi].on_thrd_2 = cen.UniOutDecodeCondVal(cen.isSigned(p_params->uni_output[oi].condition2) ? ((_int)p_params->uni_output[oi].on_thrd_2) : p_params->uni_output[oi].on_thrd_2, p_params->uni_output[oi].condition2);
+     p_out->out[oi].off_thrd_2 = cen.UniOutDecodeCondVal(cen.isSigned(p_params->uni_output[oi].condition2) ? ((_int)p_params->uni_output[oi].off_thrd_2) : p_params->uni_output[oi].off_thrd_2, p_params->uni_output[oi].condition2);
     }
     p_out->logicFunc12 = p_params->uniout_12lf;
    }
