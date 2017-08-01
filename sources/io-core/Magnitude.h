@@ -35,7 +35,7 @@ static const int CHOKE_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
 static const int GD_PHYSICAL_MAGNITUDE_MULTIPLIER = 2;
 
 static const float AA_MAPS_M_FACTOR = 2.0f; //scale factor for adv. angle maps (they are stored in integer format)
-static const float VE_MAPS_M_FACTOR = 128.0f;
+static const float VE_MAPS_M_FACTOR = 2048.0f;
 static const float AFR_MAPS_M_FACTOR = 16.0f;
 static const float WRMP_MAPS_M_FACTOR = (128.0f * 0.01f);
 static const float IACPOS_MAPS_M_FACTOR = 2.0f;
@@ -46,5 +46,6 @@ static const float AERPMV_MAPS_M_FACTOR = (128.0f * 0.01f);
 static const float AFTSTR_MAPS_M_FACTOR = (128.0f * 0.01f);
 static const float GD_MAPS_M_FACTOR = 2.0f;
 static const float EGO_CURVE_M_FACTOR = 128.0f;
+static const float IT_MAPS_M_FACTOR = 4.0f;
 
 };

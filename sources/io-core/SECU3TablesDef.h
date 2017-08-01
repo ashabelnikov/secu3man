@@ -45,8 +45,10 @@ typedef struct
  _char f_wrk[F_WRK_POINTS_L][F_WRK_POINTS_F];          // основная функция УОЗ (3D)
  _char f_tmp[F_TMP_POINTS];                            // функция коррект. УОЗ по температуре
  //fuel injection maps
- _uchar inj_ve[INJ_VE_POINTS_L][INJ_VE_POINTS_F];      // VE
+ _uchar inj_ve[INJ_VE_POINTS_L][(INJ_VE_POINTS_F*3)/2];// VE (12 bit per cell, 16 rows, 24 bytes per row)
  _uchar inj_afr[INJ_VE_POINTS_L][INJ_VE_POINTS_F];     // AFR
+ _uchar inj_timing[INJ_VE_POINTS_L][(INJ_VE_POINTS_F*3)/2];// Injection timing (12 bit per cell, 16 rows, 24 bytes per row)
+
  _uint inj_cranking[INJ_CRANKING_LOOKUP_TABLE_SIZE];   // Cranking PW
  _uchar inj_warmup[INJ_WARMUP_LOOKUP_TABLE_SIZE];      // Warmup enrichment
  _uint inj_dead_time[INJ_DT_LOOKUP_TABLE_SIZE];        // Injector's dead time
@@ -58,8 +60,6 @@ typedef struct
  _uchar inj_ae_rpm_bins[INJ_AE_RPM_LOOKUP_TABLE_SIZE]; // bins of the AE's RPM lookup table
  _uchar inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];      // afterstart enrichment table
 
- _uchar inj_timing[INJ_VE_POINTS_L][INJ_VE_POINTS_F];  // Injection timing
-
  _uchar inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];     // Target RPM on idling function
  _uint  inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE]; // Idling regulator's rigidity function
 
@@ -70,8 +70,23 @@ typedef struct
 
  _uint inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+2];        //IAT/CLT correction lookup table (value * 8192), the last two values are air flows (load*rpm) corresponding to the beginning and to the end of axis
 
- _uchar reserved[320];                                 // reserved bytes - for compatibility
+ _uchar reserved[64];                                 // reserved bytes - for compatibility
 }f_data_t;
+
+static int w12GetCell(BYTE* data, int cellOffset)
+{
+ _uint word = *((_uint*)(data + (cellOffset + (cellOffset >> 1))));
+ return ((cellOffset & 0x0001) ? word >> 4 : word) & 0x0FFF;
+}
+
+static void w12SetCell(BYTE* data, int cellOffset, int value)
+{
+ _uint *word = ((_uint*)(data + (cellOffset + (cellOffset >> 1))));
+ if (cellOffset & 0x0001)
+  *word = ((*word) & 0x000F) | ((value & 0xfff) << 4);
+ else
+  *word = ((*word) & 0xF000) | (value & 0xfff);
+}
 
 } //SECU3IO
 

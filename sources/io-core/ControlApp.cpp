@@ -33,6 +33,7 @@
 #include "ufcodes.h"
 #include "Magnitude.h"
 #include "io-core/bitmask.h"
+#include "SECU3TablesDef.h"
 
 using namespace SECU3IO;
 
@@ -1318,7 +1319,8 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::EditTabPar& m_EditTabPar = m_recepted_packet.m_EditTabPar;
- if (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ //check for 16 and 24 byte packets
+ if (mp_pdp->isHex() ? (size < 6 || size > 52) : (size < 3 || size > 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //код таблицы в наборе
@@ -1333,6 +1335,10 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
      m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP &&
      m_EditTabPar.tab_id != ETMT_IATCLT_MAP)
+  return false;
+
+ //check for 16-byte packets
+ if ((m_EditTabPar.tab_id != ETMT_VE_MAP) && (m_EditTabPar.tab_id != ETMT_IT_MAP) && (mp_pdp->isHex() ? (size < 6 || size > 36) : (size < 3 || size > 18))) 
   return false;
 
  //адрес фрагмента данных в таблице (смещение в таблице)
@@ -1379,14 +1385,51 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    div = mp_pdp->isHex() ? 2 : 1;
    if (size % div) // 1 byte in HEX is 2 symbols
     return false;
-   //фрагмент с данными (float)
-   for(size_t i = 0; i < size / div; ++i)
+
+   if (m_EditTabPar.tab_id == ETMT_VE_MAP) //volumetric efficiency map
+   { //VE
+    BYTE buff[32]; unsigned char value;
+    for(size_t i = 0; i < size / div; ++i)
+    {     
+     if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
+      return false;
+     buff[i] = value;
+    }
+
+    if (size % 3) //must contain whole number of cells
+     return false;
+
+    size_t numOfCells = (size / 3) * 2;
+    for(size_t i = 0; i < numOfCells; ++i)
+     m_EditTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / VE_MAPS_M_FACTOR;
+    data_size = numOfCells;
+   }
+   else if (m_EditTabPar.tab_id == ETMT_IT_MAP) //injection timing map
    {
+    BYTE buff[32]; unsigned char value;
+    for(size_t i = 0; i < size / div; ++i)
+    {     
+     if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
+      return false;
+     buff[i] = value;
+    }
+
+    if (size % 3) //must contain whole number of cells
+     return false;
+
+    size_t numOfCells = (size / 3) * 2;
+    for(size_t i = 0; i < numOfCells; ++i)
+     m_EditTabPar.table_data[i] = ((float)w12GetCell(buff, i)) / IT_MAPS_M_FACTOR;
+    data_size = numOfCells;
+   }
+   else
+   {
+    //data fragment (float)
+    for(size_t i = 0; i < size / div; ++i)
+    {
      unsigned char value;
      if (false == mp_pdp->Hex8ToBin(raw_packet, &value))
       return false;
-     if (m_EditTabPar.tab_id == ETMT_VE_MAP)
-      m_EditTabPar.table_data[i] = ((float)value) / VE_MAPS_M_FACTOR;
      else if (m_EditTabPar.tab_id == ETMT_AFR_MAP)
       m_EditTabPar.table_data[i] = MathHelpers::RoundP1((((float)value) / AFR_MAPS_M_FACTOR) + 8.0f);
      else if (m_EditTabPar.tab_id == ETMT_WRMP_MAP)
@@ -1399,8 +1442,6 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = (i >= INJ_AE_TPS_LOOKUP_TABLE_SIZE)?(float((signed char)value)/AETPSB_MAPS_M_FACTOR):(float(value)-AETPSV_MAPS_ADDER);
      else if (m_EditTabPar.tab_id == ETMT_AERPM_MAP)
       m_EditTabPar.table_data[i] = ((float)value) / ((i >= INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR);
-     else if (m_EditTabPar.tab_id == ETMT_IT_MAP)
-      m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 3.0f;
      else if (m_EditTabPar.tab_id == ETMT_ITRPM_MAP)
       m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
      else if (m_EditTabPar.tab_id == ETMT_IACCW_MAP)
@@ -1408,6 +1449,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
+    }
    }
   }
   m_EditTabPar.data_size = data_size;
@@ -2699,7 +2741,53 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->tab_id, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->address, m_outgoing_packet);
 
- if (packet_data->tab_id != ETMT_NAME_STR)
+ if (packet_data->tab_id == ETMT_VE_MAP) //Volumetric efficiency map
+ {
+  BYTE buff[64];  
+  int byte_idx_start = packet_data->address & 0x1;
+
+  //padding at the beginning
+  w12SetCell(buff, 0, MathHelpers::Round(packet_data->beginPadding * VE_MAPS_M_FACTOR));
+
+  //body
+  int cellIdx = byte_idx_start;
+  for(unsigned int i = 0; i < packet_data->data_size; ++i)
+  {
+   int value = MathHelpers::Round(packet_data->table_data[i] * VE_MAPS_M_FACTOR);
+   w12SetCell(buff, cellIdx++, value);
+  }
+  //padding at the end
+  w12SetCell(buff, cellIdx, MathHelpers::Round(packet_data->endPadding * VE_MAPS_M_FACTOR));
+  
+  int endIdx = ((cellIdx*3) / 2) + ((cellIdx*3) % 2);
+  //finally, write out bytes into the packet
+  for(int idx = byte_idx_start; idx < endIdx; ++idx)
+   mp_pdp->Bin8ToHex(buff[idx], m_outgoing_packet);
+ }
+ else if (packet_data->tab_id == ETMT_IT_MAP) //injection timing map
+ {
+  BYTE buff[64];  
+  int byte_idx_start = packet_data->address & 0x1;
+
+  //padding at the beginning
+  w12SetCell(buff, 0, MathHelpers::Round(packet_data->beginPadding * IT_MAPS_M_FACTOR));
+
+  //body
+  int cellIdx = byte_idx_start;
+  for(unsigned int i = 0; i < packet_data->data_size; ++i)
+  {
+   int value = MathHelpers::Round(packet_data->table_data[i] * IT_MAPS_M_FACTOR);
+   w12SetCell(buff, cellIdx++, value);
+  }
+  //padding at the end
+  w12SetCell(buff, cellIdx, MathHelpers::Round(packet_data->endPadding * IT_MAPS_M_FACTOR));
+  
+  int endIdx = ((cellIdx*3) / 2) + ((cellIdx*3) % 2);
+  //finally, write out bytes into the packet
+  for(int idx = byte_idx_start; idx < endIdx; ++idx)
+   mp_pdp->Bin8ToHex(buff[idx], m_outgoing_packet);
+ }
+ else if (packet_data->tab_id != ETMT_NAME_STR)
  {
   float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
   for(unsigned int i = 0; i < packet_data->data_size; ++i)
@@ -2708,11 +2796,6 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    {
     int value = MathHelpers::Round((packet_data->table_data[i] * 1000.0f) / discrete);
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
-   }
-   else if (packet_data->tab_id == ETMT_VE_MAP)
-   {
-    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * VE_MAPS_M_FACTOR);
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_AFR_MAP)
    {
@@ -2742,11 +2825,6 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    else if (packet_data->tab_id == ETMT_AERPM_MAP)
    {
     unsigned char value = MathHelpers::Round(packet_data->table_data[i] * ((packet_data->address>=INJ_AE_RPM_LOOKUP_TABLE_SIZE)?AERPMB_MAPS_M_FACTOR:AERPMV_MAPS_M_FACTOR));
-    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
-   }
-   else if (packet_data->tab_id == ETMT_IT_MAP)
-   {
-    unsigned char value = MathHelpers::Round(packet_data->table_data[i] / 3.0f);
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else if (packet_data->tab_id == ETMT_ITRPM_MAP)

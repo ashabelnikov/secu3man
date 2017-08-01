@@ -620,7 +620,11 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
   if ((pieceSize==index || a==(mapSize-1)) && packet.data_size > 0)
   {
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES));
-   state = 0;
+   state = 0;   
+   //store values of padding cells from cache
+   packet.beginPadding = (packet.address > 0) ? _GetMap(i_mapType, false)[packet.address-1] : 0;
+   packet.endPadding = (packet.address + packet.data_size) < _GetMapSize(i_mapType) ? _GetMap(i_mapType, false)[(packet.address + packet.data_size)] : 0;
+   //send packet!
    mp_comm->m_pControlApp->SendPacket(EDITAB_PAR, &packet);
    Sleep(20);
    //transfer copied values from view into cache (save modification)

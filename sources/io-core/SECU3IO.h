@@ -288,9 +288,11 @@ namespace SECU3IO
  {
   unsigned char tab_id;                 //идентификатор таблицы(данных) в наборе
   unsigned int address;                 //адрес начала фрагмента данных в таблице
-  float table_data[32];                 //фрагмент данных (не более 16-ти байт)
+  float table_data[32];                 //фрагмент данных (не более 16-ти значений)
   TCHAR name_data[32];                  //содержит текстовую информацию
   unsigned int data_size;               //размер фрагмента данных
+  float beginPadding;
+  float endPadding;
  };
 
  const int ETMT_NAME_STR = 0;           //name of tables's set
