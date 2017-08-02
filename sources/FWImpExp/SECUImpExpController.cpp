@@ -205,6 +205,12 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_fwdm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+
+ if (mp_view->GetFWDFlag(FLAG_IT_MAP))
+  m_fwdm->GetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+
+ if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
+  m_fwdm->GetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -238,6 +244,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -443,6 +451,12 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_fwdm->SetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+
+ if (mp_view->GetFWDFlag(FLAG_IT_MAP))
+  m_fwdm->SetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+
+ if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
+  m_fwdm->SetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -476,6 +490,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

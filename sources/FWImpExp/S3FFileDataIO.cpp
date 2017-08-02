@@ -64,6 +64,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.02 - RPM grid added (29.04.2014)
 // 01.03 - Major changes (02.11.2014). Fuel injection and intake air maps added.
 // 01.04 - Gas dose position map added (20.12.2015)
+// 01.05 - Injection timing and EGO curve maps were added (02.08.2017)
 
 struct S3FFileHdr
 {
@@ -96,7 +97,10 @@ struct S3FMapSetItem
  s3f_int32_t inj_ae_tps[INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2]; // AE TPS (values and horizontal axis bins)
  s3f_int32_t inj_ae_rpm[INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2]; // AE RPM (values and horizontal axis bins)
  s3f_int32_t inj_aftstr[INJ_AFTSTR_LOOKUP_TABLE_SIZE];     // Afterstart enrichment
- s3f_int32_t reserved[1024]; //reserved bytes, = 0
+ //injection timing and EGO curve, since v01.05
+ s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing
+ s3f_int32_t inj_ego_curve[INJ_EGO_CURVE_SIZE+2];          // EGO curve
+ s3f_int32_t reserved[750]; //reserved bytes, = 0
 };
 
 //Separate maps
@@ -224,7 +228,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0104; //01.04
+ p_fileHdr->version = 0x0105; //01.05
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -260,6 +264,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_ae_rpm[i] = MathHelpers::Round(m_data.maps[s].inj_ae_rpm[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
    p_setItem[s].inj_aftstr[i] = MathHelpers::Round(m_data.maps[s].inj_aftstr[i] * INT_MULTIPLIER);
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   p_setItem[s].inj_timing[i] = MathHelpers::Round(m_data.maps[s].inj_timing[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
+   p_setItem[s].inj_ego_curve[i] = MathHelpers::Round(m_data.maps[s].inj_ego_curve[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -367,6 +375,10 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_ae_rpm[i] = p_setItem[s].inj_ae_rpm[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_AFTSTR_LOOKUP_TABLE_SIZE; ++i)
    m_data.maps[s].inj_aftstr[i] = p_setItem[s].inj_aftstr[i] / INT_MULTIPLIER;
+  for(i = 0; i < (INJ_VE_POINTS_L * INJ_VE_POINTS_F); ++i)
+   m_data.maps[s].inj_timing[i] = p_setItem[s].inj_timing[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
+   m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

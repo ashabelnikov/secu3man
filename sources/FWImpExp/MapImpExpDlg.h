@@ -47,6 +47,8 @@ enum EFWDFlags
  FLAG_AETPS_MAP,    //inj
  FLAG_AERPM_MAP,    //inj
  FLAG_AFTSTR_MAP,   //inj
+ FLAG_IT_MAP,       //inj
+ FLAG_EGOCRV_MAP,   //inj
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate

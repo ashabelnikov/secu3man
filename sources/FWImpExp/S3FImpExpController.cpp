@@ -213,6 +213,12 @@ void S3FImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_aftstr, mp_s3f_io->GetData().maps[other_sel].inj_aftstr, sizeof(float) * INJ_AFTSTR_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IT_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_timing, mp_s3f_io->GetData().maps[other_sel].inj_timing,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_ego_curve, mp_s3f_io->GetData().maps[other_sel].inj_ego_curve, sizeof(float) * (INJ_EGO_CURVE_SIZE+2));
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -258,6 +264,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, injen); 
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, injen); 
+ mp_view->SetFWDFlag(FLAG_IT_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, injen);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -454,6 +462,12 @@ void S3FExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_aftstr, mp_fwd->maps[current_sel].inj_aftstr, sizeof(float) * INJ_AFTSTR_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_IT_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_timing, mp_fwd->maps[current_sel].inj_timing, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
+
+ if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ego_curve, mp_fwd->maps[current_sel].inj_ego_curve, sizeof(float) * (INJ_EGO_CURVE_SIZE+2));
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -487,6 +501,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
