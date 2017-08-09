@@ -309,8 +309,8 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  m_goal_rpm_edit.SetLimitText(4);
  m_goal_rpm_spin.SetBuddy(&m_goal_rpm_edit);
- m_goal_rpm_spin.SetRangeAndDelta(250,1800,5);
- m_goal_rpm_edit.SetRange(250,1800);
+ m_goal_rpm_spin.SetRangeAndDelta(0,1800,5);
+ m_goal_rpm_edit.SetRange(0,1800);
 
  m_restriction_min_spin.SetBuddy(&m_restriction_min_edit);
  m_restriction_min_edit.SetLimitText(5);
