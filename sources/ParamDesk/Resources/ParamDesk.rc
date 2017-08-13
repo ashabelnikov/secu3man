@@ -1299,9 +1299,10 @@ BEGIN
     IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Объем двигателя (Литры)"
     IDS_INJ_CFG_THROTTLEBODY        "Моновпрыск"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Одновременный"
-    IDS_INJ_CFG_2BANK_ALTERN        "2 Банка Попер."
+    IDS_INJ_CFG_2BANK_ALTERN        "2 банка попер."
     IDS_INJ_CFG_SEMISEQUENTIAL      "Попарно-паралл."
     IDS_INJ_CFG_FULLSEQUENTIAL      "Распределенный"
+    IDS_INJ_CFG_SEMISEQSEPAR        "ПП разд. кан."
 END
 
 STRINGTABLE
@@ -2688,9 +2689,10 @@ BEGIN
     IDS_PD_INJECTOR_CYLDISP_EDIT_TT "Engine displacement (Liters)"
     IDS_INJ_CFG_THROTTLEBODY        "Throttle-body"
     IDS_INJ_CFG_SIMULTANEOUSLY      "Simultaneous"
-    IDS_INJ_CFG_2BANK_ALTERN        "2 Banks Altern"
+    IDS_INJ_CFG_2BANK_ALTERN        "2 banks altern"
     IDS_INJ_CFG_SEMISEQUENTIAL      "Semi-sequential"
     IDS_INJ_CFG_FULLSEQUENTIAL      "Full sequential"
+    IDS_INJ_CFG_SEMISEQSEPAR        "SS sep.chan"
 END
 
 STRINGTABLE

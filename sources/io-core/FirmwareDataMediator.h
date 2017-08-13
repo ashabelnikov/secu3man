@@ -235,15 +235,15 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_LAMBDA     =  57,     // LAMBDA    (input)
    IOP3I_AIR_TEMP   =  58,     // AIR_TEMP  (input)
    IOP3I_CAN_CS     =  59,     // CAN_CS    (output)
-// IOP3I_RESERVED8  =  60,     // Reserved    ()
-// IOP3I_RESERVED9  =  61,     // Reserved    ()
-// IOP3I_RESERVED10 =  62,     // Reserved    ()
+   IOP3I_INJ_O6     =  60,     // INJ_O6    (output)
+   IOP3I_INJ_O7     =  61,     // INJ_O7    (output)
+   IOP3I_INJ_O8     =  62,     // INJ_O8    (output)
 // IOP3I_RESERVED11 =  63,     // Reserved    ()
 // IOP3I_RESERVED12 =  64,     // Reserved    ()
 // IOP3I_RESERVED13 =  65,     // Reserved    ()
 // IOP3I_RESERVED14 =  66,     // Reserved    ()
 // IOP3I_RESERVED15 =  67,     // Reserved    ()
-   IOP3I_COUNT      =  60,     //DON'T forget to update this value
+   IOP3I_COUNT      =  63,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -301,20 +301,20 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_UNI_OUT0   =  52,     // UNI_OUT0    (output)
    IOP_UNI_OUT1   =  53,     // UNI_OUT1    (output)
    IOP_UNI_OUT2   =  54,     // UNI_OUT2    (output)
-   IOP_INJ_OUT0   =  55,     // INJ_OUT0    (output)
-   IOP_INJ_OUT1   =  56,     // INJ_OUT1    (output)
-   IOP_INJ_OUT2   =  57,     // INJ_OUT2    (output)
-   IOP_INJ_OUT3   =  58,     // INJ_OUT3    (output)
+   IOP_INJ_OUT1   =  55,     // INJ_OUT1    (output)
+   IOP_INJ_OUT2   =  56,     // INJ_OUT2    (output)
+   IOP_INJ_OUT3   =  57,     // INJ_OUT3    (output)
+   IOP_INJ_OUT4   =  58,     // INJ_OUT4    (output)
    IOP_IAC_PWM    =  59,     // IAC_PWM     (output)
    IOP_GD_DIR     =  60,     // GD_DIR      (output)
    IOP_GD_STP     =  61,     // GD_STP      (output)
    IOP_GD_PWM     =  62,     // GD_PWM      (output)
-// IOP_RESERVED24 =  63,     // Reserved    ()
-// IOP_RESERVED25 =  64,     // Reserved    ()
+   IOP_INJ_OUT5   =  63,     // INJ_OUT5    (output)
+   IOP_INJ_OUT6   =  64,     // INJ_OUT6    (output)
 // IOP_RESERVED26 =  65,     // Reserved    ()
 // IOP_RESERVED27 =  66,     // Reserved    ()
 // IOP_RESERVED28 =  67,     // Reserved    ()
-   IOP_COUNT      =  63,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  65,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
@@ -410,7 +410,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V23 = 0x23,           //V2.3
    IOV_V24 = 0x24,           //V2.4  CKPS remapping added, gas dose outputs
    IOV_V25 = 0x25,           //V2.5  GD_PWM plug added
-   IOV_V26 = 0x26            //V2.6  Support of SECU-3i added
+   IOV_V26 = 0x26,           //V2.6  Support of SECU-3i added
+   IOV_V27 = 0x27            //V2.7  additional injection channels were added (5,6 for SECU-3T and 6,7,8 for SECU-3i)
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

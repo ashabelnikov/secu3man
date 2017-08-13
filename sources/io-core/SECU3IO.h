@@ -457,6 +457,7 @@ namespace SECU3IO
  const int INJCFG_2BANK_ALTERN = 2;   //N injectors split into 2 banks, banks work alternately
  const int INJCFG_SEMISEQUENTIAL = 3; //N injectors, injectors work in pairs
  const int INGCFG_FULLSEQUENTIAL = 4; //N injectors, each injector works 1 time per cycle
+ const int INJCFG_SEMISEQSEPAR  = 5;  //N injectors, injectors work in pairs, each injector has its own separate output
 
  struct InjctrPar
  {
