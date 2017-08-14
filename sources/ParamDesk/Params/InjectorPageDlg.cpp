@@ -313,7 +313,7 @@ void CInjectorPageDlg::_FillInjCfgComboBox(void)
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_2BANK_ALTERN, MLL::GetString(IDS_INJ_CFG_2BANK_ALTERN)));
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQSEPAR, MLL::GetString(IDS_INJ_CFG_SEMISEQSEPAR)));
-//m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
+ m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
 
  m_injcfg_combo.ResetContent();
  for(size_t i = 0; i < m_injcfgs.size(); i++)
