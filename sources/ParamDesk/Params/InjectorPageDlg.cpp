@@ -295,6 +295,9 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::InjctrPar));
 
+ //Because its contents depends on number of cylinders
+ _FillInjCfgComboBox();
+
  //Fill it here because its contents depend on selected injection configuration & cylinder number
  //Note, selection will be set by following calls
  _FillSqrNumComboBox();
@@ -310,9 +313,13 @@ void CInjectorPageDlg::_FillInjCfgComboBox(void)
  m_injcfgs.clear();
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_THROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY)));
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SIMULTANEOUS, MLL::GetString(IDS_INJ_CFG_SIMULTANEOUSLY)));
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_2BANK_ALTERN, MLL::GetString(IDS_INJ_CFG_2BANK_ALTERN)));
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
- m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQSEPAR, MLL::GetString(IDS_INJ_CFG_SEMISEQSEPAR)));
+ if (m_params.cyl_num != 2 && m_params.cyl_num != 1 && m_params.cyl_num != 3 && m_params.cyl_num != 5)
+  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_2BANK_ALTERN, MLL::GetString(IDS_INJ_CFG_2BANK_ALTERN)));
+ if (m_params.cyl_num != 1 && m_params.cyl_num != 3 && m_params.cyl_num != 5)
+ {
+  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQUENTIAL, MLL::GetString(IDS_INJ_CFG_SEMISEQUENTIAL)));
+  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_SEMISEQSEPAR, MLL::GetString(IDS_INJ_CFG_SEMISEQSEPAR)));
+ }
  m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
 
  m_injcfg_combo.ResetContent();
@@ -325,6 +332,15 @@ void CInjectorPageDlg::_FillInjCfgComboBox(void)
    continue;
   }
   m_injcfg_combo.SetItemData(index, i);
+ }
+
+ //prevent setting wrong configuration
+ if (((m_params.cyl_num == 1 || m_params.cyl_num == 2 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN)) ||
+     ((m_params.cyl_num == 1 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL || m_params.inj_config == SECU3IO::INJCFG_SEMISEQSEPAR)))
+ {
+  m_params.inj_config = SECU3IO::INJCFG_THROTTLEBODY;
+  _SetInjCfgComboBoxSelection(SECU3IO::INJCFG_THROTTLEBODY);
+  OnChangeNotify();
  }
 }
 
