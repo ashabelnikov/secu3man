@@ -459,6 +459,10 @@ namespace SECU3IO
  const int INGCFG_FULLSEQUENTIAL = 4; //N injectors, each injector works 1 time per cycle
  const int INJCFG_SEMISEQSEPAR  = 5;  //N injectors, injectors work in pairs, each injector has its own separate output
 
+ const int INJANGLESPEC_BEGIN = 0;
+ const int INJANGLESPEC_MIDDLE = 1;
+ const int INJANGLESPEC_END = 2;
+
  struct InjctrPar
  {
   bool inj_usetimingmap;              //Use timing map instead of constant parameter
@@ -470,6 +474,7 @@ namespace SECU3IO
   int cyl_num;                        //read-only parameter: number of cylinders
   float inj_timing;                   //injection timing
   float inj_timing_crk;               //injection timing on cranking
+  int inj_anglespec;                  //Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
  };
 
  struct LambdaPar

@@ -265,7 +265,7 @@ BOOL CLambdaPageDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.51f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.64f));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

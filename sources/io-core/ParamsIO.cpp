@@ -311,6 +311,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);
     p_params->inj_timing = MathHelpers::Round(p_in->inj_timing * ANGLE_MULTIPLIER);
     p_params->inj_timing_crk = MathHelpers::Round(p_in->inj_timing_crk * ANGLE_MULTIPLIER);
+    p_params->inj_anglespec = p_in->inj_anglespec;
    }
    break;
   case LAMBDA_PAR:
@@ -623,6 +624,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
     p_out->inj_timing = ((float)p_params->inj_timing) / ANGLE_MULTIPLIER;
     p_out->inj_timing_crk = ((float)p_params->inj_timing_crk) / ANGLE_MULTIPLIER;
+    p_out->inj_anglespec = p_params->inj_anglespec;
    }
    break;
   case LAMBDA_PAR:

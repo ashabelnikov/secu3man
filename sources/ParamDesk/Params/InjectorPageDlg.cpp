@@ -28,12 +28,15 @@
 #include "InjectorPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 
 BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
+ ON_WM_DESTROY()
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_COMBO, OnChangeDataInjCfg)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_INJECTOR_ANGLESPEC_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_CYLDISP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_EDIT, OnChangeData)
@@ -62,6 +65,8 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_CAPTION,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
@@ -73,6 +78,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_flowrate_edit(CEditEx::MODE_FLOAT, true)
 , m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 , m_ovf_msgbox(false)
+, mp_scr(new CWndScroller)
 {
  m_params.inj_usetimingmap = 0;
  m_params.inj_config = SECU3IO::INJCFG_SIMULTANEOUS;
@@ -83,6 +89,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
  m_params.cyl_num = 4;
  m_params.inj_timing = 0; 
  m_params.inj_timing_crk = 0; 
+ m_params.inj_anglespec = 0;
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -104,6 +111,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_SPIN, m_flowrate_spin);
  DDX_Control(pDX,IDC_PD_INJECTOR_INJCONFIG_COMBO, m_injcfg_combo);
  DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_COMBO, m_sqrnum_combo);
+ DDX_Control(pDX,IDC_PD_INJECTOR_ANGLESPEC_COMBO, m_injas_combo);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_EDIT, m_inj_timing_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin);
  DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_inj_timing_crk_edit);
@@ -174,10 +182,22 @@ BOOL CInjectorPageDlg::OnInitDialog()
 
  _FillInjCfgComboBox();
  _FillSqrNumComboBox();
+ _FillAngleSpecsComboBox();
+
+ //initialize window scroller
+ mp_scr->Init(this);
+ CRect wndRect; GetWindowRect(&wndRect);
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.2f));
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CInjectorPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CInjectorPageDlg::OnChangeData()
@@ -231,6 +251,7 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
 
  m_params.inj_config = _GetInjCfgComboBoxSelection();
  m_params.inj_squirt_num = _GetSqrNumComboBoxSelection();
+ m_params.inj_anglespec = _GetAngleSpecsComboBoxSelection();
 
  //----------------------------------------------------------------------------
  //convert inj.flow rate from cc/min to g/min
@@ -304,8 +325,59 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
 
  _SetInjCfgComboBoxSelection(m_params.inj_config);
  _SetSqrNumComboBoxSelection(m_params.inj_squirt_num);
+ _SetAngleSpecsComboBoxSelection(m_params.inj_anglespec);
 
  UpdateData(FALSE); //copy data from variables to dialog controls
+}
+
+void CInjectorPageDlg::_FillAngleSpecsComboBox(void)
+{
+ m_anglespecs.clear();
+ m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_BEGIN, MLL::GetString(IDS_INJ_ANGLESPEC_BEGIN)));
+ m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_MIDDLE, MLL::GetString(IDS_INJ_ANGLESPEC_MIDDLE)));
+ m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_END, MLL::GetString(IDS_INJ_ANGLESPEC_END)));
+
+ m_injas_combo.ResetContent();
+ for(size_t i = 0; i < m_anglespecs.size(); i++)
+ {
+  int index = m_injas_combo.AddString(m_anglespecs[i].second.c_str());
+  if (index==CB_ERR)
+  {
+   ASSERT(0);
+   continue;
+  }
+  m_injas_combo.SetItemData(index, i);
+ }
+}
+
+int CInjectorPageDlg::_GetAngleSpecsComboBoxSelection(void)
+{
+ int index = m_injas_combo.GetCurSel();
+ if (index==CB_ERR)
+ {
+  ASSERT(0);
+  return 0;
+ }
+ int as_index = m_injas_combo.GetItemData(index);
+ return m_anglespecs[as_index].first;
+}
+
+void CInjectorPageDlg::_SetAngleSpecsComboBoxSelection(int i_sel)
+{
+ for(size_t i = 0; i < m_anglespecs.size(); i++)
+ {
+  if (m_anglespecs[i].first != i_sel) //find index in container for configuration
+   continue;
+  //find related index and select corresponding item
+  int count = m_injas_combo.GetCount();
+  for(int ii = 0; ii < count; ii++)
+  if (m_injas_combo.GetItemData(ii) == i)
+  {
+   m_injas_combo.SetCurSel(ii);
+   return;
+  }
+ }
+ ASSERT(0);
 }
 
 void CInjectorPageDlg::_FillInjCfgComboBox(void)

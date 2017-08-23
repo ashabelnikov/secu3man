@@ -227,10 +227,12 @@ typedef struct params_t
 
  _uint   vss_period_dist;               // Distance of one period for VSS
 
+ _uchar  inj_anglespec;                 // Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[42];
+ _uchar reserved[41];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

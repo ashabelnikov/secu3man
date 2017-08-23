@@ -37,7 +37,7 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,137,96,18
     CONTROL         "Обогащ.при прогр.",IDC_TD_VIEW_WRMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,159,96,18
-    CONTROL         "Время откр.форс.",IDC_TD_VIEW_DEAD_MAP,"Button",
+    CONTROL         "Лаг форсунки",IDC_TD_VIEW_DEAD_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,181,96,18
     CONTROL         "Полож.РХХ рабоч.",IDC_TD_VIEW_IDLR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,203,96,18
@@ -95,7 +95,7 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,124,82,18
     CONTROL         "Обогащ.при прогр.",IDC_TD_VIEW_WRMP_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,124,96,18
-    CONTROL         "Время откр.форс.",IDC_TD_VIEW_DEAD_MAP,"Button",
+    CONTROL         "Лаг форсунки",IDC_TD_VIEW_DEAD_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,146,82,18
     CONTROL         "Полож.РХХ рабоч.",IDC_TD_VIEW_IDLR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,146,96,18
@@ -457,7 +457,7 @@ BEGIN
     IDS_CRNK_MAP            "Длительность впрыска на пуске"
     IDS_WRMP_MAP            "Обогащение при прогреве"
     IDS_AFTSTR_MAP          "Обогащение после пуска"
-    IDS_DEAD_MAP            "Время открытия форсунки"
+    IDS_DEAD_MAP            "Время открытия/закрытия форсунки (лаг)"
     IDS_IDLR_MAP            "Положение РХХ от температуры охлаждающей жидкости"
     IDS_IDLC_MAP            "Положение РХХ на пуске"
     IDS_AETPS_MAP           "Обогащение в зависимости от скорости дроссельной заслонки"

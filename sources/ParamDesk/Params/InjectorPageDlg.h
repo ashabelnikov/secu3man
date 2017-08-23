@@ -35,6 +35,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -56,6 +57,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataInjCfg();
   afx_msg void OnInjUseTimingMap();
@@ -74,6 +76,11 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void _SetSqrNumComboBoxSelection(int i_sel);
   std::vector<std::pair<int, _TSTRING> > m_sqrnum;
 
+  void _FillAngleSpecsComboBox(void);
+  int  _GetAngleSpecsComboBoxSelection(void);
+  void _SetAngleSpecsComboBoxSelection(int i_sel);
+  std::vector<std::pair<int, _TSTRING> > m_anglespecs;
+
  private:
   SECU3IO::InjctrPar m_params;
   bool m_enabled;
@@ -84,6 +91,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_flowrate_edit;
   CComboBox m_injcfg_combo;
   CComboBox m_sqrnum_combo;
+  CComboBox m_injas_combo;
   CSpinButtonCtrlEx m_inj_timing_spin;
   CEditEx m_inj_timing_edit;
   CSpinButtonCtrlEx m_inj_timing_crk_spin;
@@ -93,5 +101,6 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   float m_fuel_density; //fuel density (g/cc)
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
   bool m_ovf_msgbox;
 };
