@@ -54,7 +54,12 @@ class AFX_EXT_CLASS CMITemperature : public IMeasInstrument
   float GetChokePos(void) const;
   void ShowChokePos(bool i_show,  bool redraw = false);
 
+  //gas doser
+  void SetGDPos(float value, bool redraw = false);
+  void ShowGDPos(bool i_show,  bool redraw = false);
+
  private:
   CAnalogMeterCtrl m_meter;
   bool m_showChokePos;
+  bool m_showGDPos;
 };

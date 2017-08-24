@@ -263,6 +263,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_throttle_gate.SetPosition(m_values.tps);
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
+ m_temperature.SetGDPos(m_values.gasdose_pos); //top-left pane
  m_temperature.SetValue(m_values.temperat);
 
  if (m_ai1_avnum > 0)
@@ -358,6 +359,11 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
 void CMIDeskDlg::ShowChokePos(bool i_show)
 {
  m_temperature.ShowChokePos(i_show);
+}
+
+void CMIDeskDlg::ShowGDPos(bool i_show)
+{
+ m_temperature.ShowGDPos(i_show);
 }
 
 void CMIDeskDlg::ShowSpeedAndDistance(bool i_show)

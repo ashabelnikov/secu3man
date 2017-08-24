@@ -154,6 +154,7 @@ void CLogPlayerTabController::OnActivate(void)
 
  mp_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
  mp_view->mp_MIDeskDlg->ShowChokePos(true);
+ mp_view->mp_MIDeskDlg->ShowGDPos(true);
  mp_view->mp_MIDeskDlg->ShowSpeedAndDistance(true);
 }
 

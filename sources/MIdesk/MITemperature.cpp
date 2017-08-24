@@ -34,6 +34,7 @@
 
 CMITemperature::CMITemperature()
 : m_showChokePos(false)
+, m_showGDPos(false)
 {
  //empty
 }
@@ -57,6 +58,7 @@ void CMITemperature::Create(void)
  m_meter.AddAlertZone(50,100,RGB(120,120,120));
  m_meter.AddAlertZone(100,120,RGB(230,130,130));
  m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
 }
@@ -91,6 +93,7 @@ void CMITemperature::Enable(bool enable)
  m_meter.SetState(meter_labels, enable);
  m_meter.SetState(meter_unit, enable);
  m_meter.SetState(meter_trpane, enable && m_showChokePos);
+ m_meter.SetState(meter_tlpane, enable && m_showGDPos);
  COLORREF bk_color;
  m_meter.GetColor(meter_bground, &bk_color);
  m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
@@ -148,6 +151,22 @@ void CMITemperature::ShowChokePos(bool i_show, bool redraw /*= false*/)
 {
  m_showChokePos = i_show;
  m_meter.SetState(meter_trpane, IsEnabled() && i_show);
+ if (redraw)
+  m_meter.Redraw();
+}
+
+void CMITemperature::SetGDPos(float value, bool redraw /*= false*/)
+{
+ CString str;
+ str.Format(_T("%0.1f%%"), value);
+ m_meter.SetTLPane(str);
+ if (redraw) m_meter.Update();
+}
+
+void CMITemperature::ShowGDPos(bool i_show, bool redraw /*= false*/)
+{
+ m_showGDPos = i_show;
+ m_meter.SetState(meter_tlpane, IsEnabled() && i_show);
  if (redraw)
   m_meter.Redraw();
 }

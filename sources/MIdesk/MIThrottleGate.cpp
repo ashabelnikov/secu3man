@@ -54,6 +54,8 @@ void CMIThrottleGate::Create(void)
  m_led.SetColor(led_off,RGB(40,40,40));
 
  Enable(m_prev_enable);
+
+ m_value = FLT_MAX; //reset cache
 }
 
 //--------------------interface-----------------------
