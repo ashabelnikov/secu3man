@@ -343,6 +343,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     bool enableEnterBtn = CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_DIAGNOSTICS);
     mp_view->EnableEnterButton(enableEnterBtn);
     mp_view->EnableSECU3TFeatures(CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T));
+    mp_view->EnableExtraIO(!CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(mp_idccntr->GetFWOptions(), SECU3IO::COPT_TPIC8101));
     m_comm_state = 2;
     if (enableEnterBtn && mp_settings->GetAutoDiagEnter())
     { //automatic entering into a diagnostic mode

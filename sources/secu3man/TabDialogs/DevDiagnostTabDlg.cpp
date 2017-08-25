@@ -240,6 +240,12 @@ void CDevDiagnostTabDlg::EnableSECU3TFeatures(bool i_enable)
  UpdateDialogControls(this,TRUE);
 }
 
+void CDevDiagnostTabDlg::EnableExtraIO(bool i_enable)
+{
+ mp_inpsDlg->EnableExtraIO(i_enable);
+ UpdateDialogControls(this,TRUE);
+}
+
 void CDevDiagnostTabDlg::EnableBLDETesting(bool i_enable)
 {
  m_enable_blde_testing = i_enable;

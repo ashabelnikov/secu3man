@@ -334,7 +334,7 @@ namespace SECU3IO
   float add_i1;                         //additional input 1 (analog)
   float add_i2;                         //additional input 2 (analog)
   float add_i3;                         //additional input 3 (analog)
-  float add_i4;                         //additional input 4 (analog, reserved)
+  float add_i4;                         //additional input 4 (analog, available only in firwares with TPIC8101 support)
   float carb;                           //carburetor switch, throttle position sensor (analog)
   int gas;                              //gas valve state (digital)
   int ckps;                             //CKP sensor (digital)
@@ -637,7 +637,7 @@ namespace SECU3IO
   _SD(2,  _T("COPT_ATMEGA64")),
   _SD(3,  _T("COPT_ATMEGA128")),
   _SD(4,  _T("COPT_VPSEM")),
-  _SD(5,  _T("COPT_WHEEL_36_1")),          /*Obsolete! Left for compatibility reasons*/
+  _SD(5,  _T("COPT_TPIC8101")),
   _SD(6,  _T("COPT_INVERSE_IGN_OUTPUTS")), /*Obsolete! Left for compatibility reasons*/
   _SD(7,  _T("COPT_DWELL_CONTROL")),
   _SD(8,  _T("COPT_COOLINGFAN_PWM")),
@@ -672,7 +672,7 @@ namespace SECU3IO
  const int COPT_ATMEGA64 = 2;
  const int COPT_ATMEGA128 = 3;
  const int COPT_VPSEM = 4;
- const int COPT_WHEEL_36_1 = 5;          /*Obsolete! Left for compatibility reasons*/
+ const int COPT_TPIC8101 = 5;
  const int COPT_INVERSE_IGN_OUTPUTS = 6; /*Obsolete! Left for compatibility reasons*/
  const int COPT_DWELL_CONTROL = 7;
  const int COPT_COOLINGFAN_PWM = 8;

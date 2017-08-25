@@ -45,6 +45,7 @@ class CDevDiagInpsDlg : public CDialog
 
   void EnableDiagControls(bool i_enable);
   void EnableSECU3TFeatures(bool i_enable);
+  void EnableExtraIO(bool i_enable);
 
   //note: use wnd_insert_after parameter to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
@@ -60,6 +61,7 @@ class CDevDiagInpsDlg : public CDialog
  private:
   bool m_enable_diag_controls;
   bool m_enable_secu3t_features;
+  bool m_enable_extraio;
   SECU3IO::DiagInpDat m_inputValues;
   CFont m_textFont;
   std::auto_ptr<CWndScroller> mp_scr;

@@ -63,6 +63,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   void EnableDiagControls(bool i_enable);
   void EnableEnterButton(bool i_enable);
   void EnableSECU3TFeatures(bool i_enable);
+  void EnableExtraIO(bool i_enable);
   void EnableBLDETesting(bool i_enable);
   bool IsBLDETestingEnabled(void);
 
