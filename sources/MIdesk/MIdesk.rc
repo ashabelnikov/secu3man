@@ -65,11 +65,17 @@ BEGIN
     LTEXT           "ƒатчик полож. дрос. заслонки",IDC_RS_TPS_CAPTION,28,114,118,13
     LTEXT           "B",IDC_RS_TPS_UNIT,236,116,20,14
     CTEXT           "value",IDC_RS_ADD_I1_VALUE,160,137,70,19,SS_SUNKEN
-    LTEXT           "¬ход  ADD_IO1",IDC_RS_ADD_I1_CAPTION,28,140,118,13
+    LTEXT           "¬ход  ADD_I1",IDC_RS_ADD_I1_CAPTION,28,140,118,13
     LTEXT           "B",IDC_RS_ADD_I1_UNIT,236,142,20,14
     CTEXT           "value",IDC_RS_ADD_I2_VALUE,160,163,70,19,SS_SUNKEN
-    LTEXT           "¬ход  ADD_IO2",IDC_RS_ADD_I2_CAPTION,28,166,118,13
+    LTEXT           "¬ход  ADD_I2",IDC_RS_ADD_I2_CAPTION,28,166,118,13
     LTEXT           "B",IDC_RS_ADD_I2_UNIT,236,168,20,14
+    CTEXT           "value",IDC_RS_ADD_I3_VALUE,160,189,70,19,SS_SUNKEN
+    LTEXT           "¬ход  ADD_I3",IDC_RS_ADD_I3_CAPTION,28,192,118,13
+    LTEXT           "B",IDC_RS_ADD_I3_UNIT,236,194,20,14
+    CTEXT           "value",IDC_RS_ADD_I4_VALUE,160,215,70,19,SS_SUNKEN
+    LTEXT           "¬ход  ADD_I4",IDC_RS_ADD_I4_CAPTION,28,218,118,13
+    LTEXT           "B",IDC_RS_ADD_I4_UNIT,236,220,20,14
 END
 
 IDD_DBGVAR_DESK DIALOGEX 0, 0, 175, 27
@@ -239,17 +245,20 @@ BEGIN
     LTEXT           "Knock signal level",IDC_RS_KNOCK_CAPTION,28,88,118,13
     LTEXT           "V",IDC_RS_KNOCK_UNIT,236,90,20,14
     CTEXT           "value",IDC_RS_TPS_VALUE,160,111,70,19,SS_SUNKEN
-    LTEXT           "Throttle position sensor",IDC_RS_TPS_CAPTION,28,114,
-                    118,13
+    LTEXT           "Throttle position sensor",IDC_RS_TPS_CAPTION,28,114,118,13
     LTEXT           "V",IDC_RS_TPS_UNIT,236,116,20,14
     CTEXT           "value",IDC_RS_ADD_I1_VALUE,160,137,70,19,SS_SUNKEN
-    LTEXT           "ADD_IO1  Input",IDC_RS_ADD_I1_CAPTION,28,140,
-                    118,13
+    LTEXT           "ADD_IO1  Input",IDC_RS_ADD_I1_CAPTION,28,140,118,13
     LTEXT           "V",IDC_RS_ADD_I1_UNIT,236,142,20,14
     CTEXT           "value",IDC_RS_ADD_I2_VALUE,160,163,70,19,SS_SUNKEN
-    LTEXT           "ADD_IO2  Input",IDC_RS_ADD_I2_CAPTION,28,166,
-                    118,13
+    LTEXT           "ADD_IO2  Input",IDC_RS_ADD_I2_CAPTION,28,166,118,13
     LTEXT           "V",IDC_RS_ADD_I2_UNIT,236,168,20,14
+    CTEXT           "value",IDC_RS_ADD_I3_VALUE,160,189,70,19,SS_SUNKEN
+    LTEXT           "ADD_I3 Input",IDC_RS_ADD_I3_CAPTION,28,192,118,13
+    LTEXT           "V",IDC_RS_ADD_I3_UNIT,236,194,20,14
+    CTEXT           "value",IDC_RS_ADD_I4_VALUE,160,215,70,19,SS_SUNKEN
+    LTEXT           "ADD_I4 input",IDC_RS_ADD_I4_CAPTION,28,218,118,13
+    LTEXT           "V",IDC_RS_ADD_I4_UNIT,236,220,20,14
 END
 
 IDD_DBGVAR_DESK DIALOGEX 0, 0, 175, 27

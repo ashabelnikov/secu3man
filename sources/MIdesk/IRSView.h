@@ -38,4 +38,5 @@ class IRSView
   virtual void SetValues(const SECU3IO::RawSensDat* i_values) = 0; //set data of view
   virtual void GetValues(SECU3IO::RawSensDat* o_values) = 0;       //get data from view
   virtual void EnableSECU3TItems(bool i_enable) = 0;               //Enable SECU-3T specific features
+  virtual void EnableExtraIO(bool i_enable) = 0;                   //Enable ExtraIO features available in the SECU-3i only
 };

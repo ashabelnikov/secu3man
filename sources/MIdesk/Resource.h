@@ -116,3 +116,9 @@
 #define IDS_CED_ADD_I2_SENSOR_TT        2116
 #define IDS_MI_MP_H                     2117
 #define IDS_MI_MI                       2118
+#define IDC_RS_ADD_I3_VALUE             2119
+#define IDC_RS_ADD_I3_CAPTION           2120
+#define IDC_RS_ADD_I3_UNIT              2121
+#define IDC_RS_ADD_I4_VALUE             2122
+#define IDC_RS_ADD_I4_CAPTION           2123
+#define IDC_RS_ADD_I4_UNIT              2124

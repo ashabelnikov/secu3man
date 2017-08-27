@@ -211,6 +211,8 @@ namespace SECU3IO
   float tps_value;
   float add_i1_value;
   float add_i2_value;
+  float add_i3_value;   //secu-3i only
+  float add_i4_value;   //secu-3i only and TPIC8101 option used
  };
 
  struct CKPSPar

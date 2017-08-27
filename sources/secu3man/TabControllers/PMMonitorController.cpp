@@ -202,6 +202,7 @@ void CPMMonitorController::ShowRawSensors(bool show)
 void CPMMonitorController::ApplyFWOptions(DWORD opt)
 {
  mp_rsdview->EnableSECU3TItems(CHECKBIT32(opt, COPT_SECU3T));
+ mp_rsdview->EnableExtraIO(CHECKBIT32(opt, COPT_TPIC8101) && !CHECKBIT32(opt, COPT_SECU3T));
  mp_view->ShowChokePos(CHECKBIT32(opt, COPT_SM_CONTROL));
  mp_view->ShowGDPos(CHECKBIT32(opt, COPT_GD_CONTROL));
 }

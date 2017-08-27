@@ -926,7 +926,7 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
- if (size != (mp_pdp->isHex() ? 28 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 36 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //MAP sensor
@@ -970,6 +970,18 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i2,true))
   return false;
  m_RawSensDat.add_i2_value = add_i2 * m_adc_discrete;
+
+ //ADD_I3 input
+ signed int add_i3 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i3,true))
+  return false;
+ m_RawSensDat.add_i3_value = add_i3 * m_adc_discrete;
+
+ //ADD_I4 input
+ signed int add_i4 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i4,true))
+  return false;
+ m_RawSensDat.add_i4_value = add_i4 * m_adc_discrete;
 
  return true;
 }
