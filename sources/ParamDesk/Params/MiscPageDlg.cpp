@@ -30,7 +30,7 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
 
-const float AFBEGINEND_MINDIFF = 1500.0f;
+const float AFBEGINEND_MINDIFF = 16500.0f; //this limit prevets overflow, can't be less
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
@@ -97,7 +97,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_evap_afend_edit(CEditEx::MODE_INT, true)
 , mp_scr(new CWndScroller)
 {
- m_params.baud_rate = CBR_9600;
+ m_params.baud_rate = CBR_57600;
  m_params.period_ms = 0;
  m_params.ign_cutoff = 0;
  m_params.ign_cutoff_thrd = 0;
@@ -106,7 +106,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.flpmp_offongas = true;
  m_params.inj_offongas = false;
  m_params.evap_afbegin = 5000;
- m_params.evap_afslope = 0.0107f;
+ m_params.evap_afslope = 0.000188351f;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -296,6 +296,12 @@ BOOL CMiscPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_hop_durat_edit, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_hop_durat_spin, MLL::GetString(IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_evap_afbegin_edit, MLL::GetString(IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_evap_afbegin_spin, MLL::GetString(IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_evap_afend_edit, MLL::GetString(IDS_PD_MISC_EVAP_AFEND_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_evap_afend_spin, MLL::GetString(IDS_PD_MISC_EVAP_AFEND_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);

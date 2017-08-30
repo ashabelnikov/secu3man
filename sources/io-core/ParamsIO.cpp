@@ -247,8 +247,8 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->hop_durat_cogs = p_in->hop_durat_cogs;
     WRITEBIT8(p_params->flpmp_flags, 0, p_in->flpmp_offongas);
     WRITEBIT8(p_params->flpmp_flags, 1, p_in->inj_offongas);
-    p_params->evap_afbegin = p_in->evap_afbegin / 32;
-    p_params->evap_afslope = MathHelpers::Round(p_in->evap_afslope * 65536.0f);
+    p_params->evap_afbegin = MathHelpers::Round(p_in->evap_afbegin / 32.0f);
+    p_params->evap_afslope = MathHelpers::Round(p_in->evap_afslope * 1048576.0f * 32.0f);
    }
    break;
   case CHOKE_PAR:
@@ -558,7 +558,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->flpmp_offongas = CHECKBIT8(p_params->flpmp_flags, 0);
      p_out->inj_offongas = CHECKBIT8(p_params->flpmp_flags, 1);
      p_out->evap_afbegin = p_params->evap_afbegin * 32.0f;
-     p_out->evap_afslope = p_params->evap_afslope / 65536.0f;
+     p_out->evap_afslope = (p_params->evap_afslope / 1048576.0f) / 32.0f;
     }
     break;
    case CHOKE_PAR:

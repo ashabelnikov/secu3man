@@ -385,7 +385,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  m_view->mp_ParamDeskDlg->EnableUseVentPwm(true);
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(true);
  m_view->mp_ParamDeskDlg->EnableHallOutputParams(true);
- m_view->mp_ParamDeskDlg->EnableSECU3TItems(true);
+ m_view->mp_ParamDeskDlg->EnableSECU3TItems(false); //SECU-3i: all functionality
  m_view->mp_ParamDeskDlg->EnableInputsMerging(true);
  m_view->mp_ParamDeskDlg->EnableRisingSpark(true);
  m_view->mp_ParamDeskDlg->EnableFuelInjection(true);

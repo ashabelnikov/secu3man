@@ -1334,7 +1334,7 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  int evap_afslope = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &evap_afslope))
   return false;
- m_MiscPar.evap_afslope = ((float)evap_afslope) / 65536.0f;
+ m_MiscPar.evap_afslope = (((float)evap_afslope) / 1048576.0f) / 32.0f; //2^20
 
  return true;
 }
@@ -2764,9 +2764,9 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  BYTE fpf_flags = ((packet_data->inj_offongas != 0) << 1) | ((packet_data->flpmp_offongas != 0) << 0);
  mp_pdp->Bin8ToHex(fpf_flags, m_outgoing_packet);
 
- int evap_afbegin = packet_data->evap_afbegin / 32.0f;
+ int evap_afbegin = MathHelpers::Round(packet_data->evap_afbegin / 32.0f);
  mp_pdp->Bin16ToHex(evap_afbegin, m_outgoing_packet);
- int evap_afslope = MathHelpers::Round(packet_data->evap_afslope * 65536.0f);
+ int evap_afslope = MathHelpers::Round(packet_data->evap_afslope * 1048576.0f * 32.0f); //2^20
  mp_pdp->Bin16ToHex(evap_afslope, m_outgoing_packet);
 }
 
