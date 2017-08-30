@@ -34,6 +34,8 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CWndScroller;
+
 class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -49,6 +51,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool IsEnabled(void);
   void EnableHallOutputParams(bool enable);
   void EnableFuelInjection(bool i_enable);
+  void EnableSECU3TItems(bool i_enable);
 
   void GetValues(SECU3IO::MiscelPar* o_values);
   void SetValues(const SECU3IO::MiscelPar* i_values);
@@ -58,18 +61,26 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHOP(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsInjTurnoffOnGas(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3iInj(CCmdUI* pCmdUI);
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataAfBegin();
+  afx_msg void OnChangeDataAfEnd();
   afx_msg void OnIgncutoffCheck();
   DECLARE_MESSAGE_MAP()
 
   int _GetBRFromComboBoxByIndex(int i_cb_index);
   int _GetIndexFromComboBoxByBR(int i_baudrate);
 
+  float _calcAfEnd(void);
+  float _calcAfSlope(float afend);
+
  private:
+  std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   CStatic m_uart_speed_label;
@@ -97,9 +108,15 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_enabled;
   bool m_hall_output_enabled;
   bool m_inj_turnoff_enabled;
+  bool m_enable_secu3t_features;
   BRCType m_baudrates;
   int m_uart_speed_cb_index;
 
   CButton m_flpmp_offongas_check;
   CButton m_inj_offongas_check;
+
+  CSpinButtonCtrlEx m_evap_afbegin_spin;
+  CEditEx m_evap_afbegin_edit;
+  CSpinButtonCtrlEx m_evap_afend_spin;
+  CEditEx m_evap_afend_edit;
 };

@@ -229,10 +229,13 @@ typedef struct params_t
 
  _uchar  inj_anglespec;                 // Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
 
+ _uint   evap_afbegin;
+ _uint   evap_afslope;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[41];
+ _uchar reserved[37];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

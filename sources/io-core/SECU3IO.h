@@ -284,6 +284,8 @@ namespace SECU3IO
   int hop_durat_cogs;                   //Выход ДХ: Длительность импульса в зубьях шкива
   bool flpmp_offongas;                  //Flag. Turn off or not fuel pump when fuel type is gas
   bool inj_offongas;                    //Turn off injector(s) on gas
+  float evap_afbegin;
+  float evap_afslope;
  };
 
  struct EditTabPar

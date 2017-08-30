@@ -602,6 +602,7 @@ void CParamDeskDlg::EnableOddCylinders(bool enable)
 void CParamDeskDlg::EnableSECU3TItems(bool i_enable)
 {
  m_pADCCompenPageDlg->EnableSECU3TItems(i_enable);
+ m_pMiscPageDlg->EnableSECU3TItems(i_enable);
 }
 
 void CParamDeskDlg::EnableChokeTesting(bool i_enable)

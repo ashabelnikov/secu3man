@@ -1273,7 +1273,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 17 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 25 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1323,6 +1323,18 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_MiscPar.flpmp_offongas = (flpmp_flags & 0x1) != 0;
  m_MiscPar.inj_offongas = (flpmp_flags & 0x2) != 0;
+
+ //Начальный порог расхода воздуха для EVAP
+ int evap_afbegin = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &evap_afbegin))
+  return false;
+ m_MiscPar.evap_afbegin = ((float)evap_afbegin) * 32.0f;
+
+ //Наклон прямой расхода воздуха для EVAP
+ int evap_afslope = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &evap_afslope))
+  return false;
+ m_MiscPar.evap_afslope = ((float)evap_afslope) / 65536.0f;
 
  return true;
 }
@@ -2751,6 +2763,11 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
  BYTE fpf_flags = ((packet_data->inj_offongas != 0) << 1) | ((packet_data->flpmp_offongas != 0) << 0);
  mp_pdp->Bin8ToHex(fpf_flags, m_outgoing_packet);
+
+ int evap_afbegin = packet_data->evap_afbegin / 32.0f;
+ mp_pdp->Bin16ToHex(evap_afbegin, m_outgoing_packet);
+ int evap_afslope = MathHelpers::Round(packet_data->evap_afslope * 65536.0f);
+ mp_pdp->Bin16ToHex(evap_afslope, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

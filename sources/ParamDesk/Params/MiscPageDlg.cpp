@@ -28,14 +28,20 @@
 #include "MiscPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/WndScroller.h"
+
+const float AFBEGINEND_MINDIFF = 1500.0f;
 
 const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
 BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_START_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_MISC_EVAP_AFBEGIN_EDIT, OnChangeDataAfBegin)
+ ON_EN_CHANGE(IDC_PD_MISC_EVAP_AFEND_EDIT, OnChangeDataAfEnd)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
  ON_BN_CLICKED(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnChangeData)
@@ -64,6 +70,16 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControlsInjTurnoffOnGas)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_EDIT, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_CAPTION, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_UNIT, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_SPIN, OnUpdateControlsSECU3iInj)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_EDIT, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_CAPTION, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_UNIT, OnUpdateControlsSECU3iInj)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_SPIN, OnUpdateControlsSECU3iInj)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
@@ -71,11 +87,15 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_hall_output_enabled(false)
 , m_inj_turnoff_enabled(false)
+, m_enable_secu3t_features(false)
 , m_uart_speed_cb_index(0)
 , m_packet_period_edit(CEditEx::MODE_INT, true)
 , m_igncutoff_rpm_edit(CEditEx::MODE_INT, true)
 , m_hop_start_edit(CEditEx::MODE_INT, true)
 , m_hop_durat_edit(CEditEx::MODE_INT, true)
+, m_evap_afbegin_edit(CEditEx::MODE_INT, true)
+, m_evap_afend_edit(CEditEx::MODE_INT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.baud_rate = CBR_9600;
  m_params.period_ms = 0;
@@ -85,11 +105,24 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.hop_durat_cogs = 0;
  m_params.flpmp_offongas = true;
  m_params.inj_offongas = false;
+ m_params.evap_afbegin = 5000;
+ m_params.evap_afslope = 0.0107f;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
 {
  return (LPCTSTR)IDD;
+}
+
+float CMiscPageDlg::_calcAfEnd(void)
+{
+ float slope = m_params.evap_afslope > .0f ? m_params.evap_afslope : 0.000001f;
+ return (32.0f / slope) + m_params.evap_afbegin; //convert afslope to afend
+}
+
+float CMiscPageDlg::_calcAfSlope(float afend)
+{
+ return 32.0f / (afend - m_params.evap_afbegin); //convert afend to afslope
 }
 
 void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
@@ -120,6 +153,12 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_flpmp_offongas_check);
  DDX_Control(pDX,IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_inj_offongas_check);
 
+ DDX_Control(pDX,IDC_PD_MISC_EVAP_AFBEGIN_EDIT, m_evap_afbegin_edit);
+ DDX_Control(pDX,IDC_PD_MISC_EVAP_AFBEGIN_SPIN, m_evap_afbegin_spin);
+
+ DDX_Control(pDX,IDC_PD_MISC_EVAP_AFEND_EDIT, m_evap_afend_edit);
+ DDX_Control(pDX,IDC_PD_MISC_EVAP_AFEND_SPIN, m_evap_afend_spin);
+
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
  m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
@@ -128,6 +167,11 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
  DDX_Check_bool(pDX, IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_params.flpmp_offongas);
  DDX_Check_bool(pDX, IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_params.inj_offongas);
+
+ m_evap_afbegin_edit.DDX_Value(pDX, IDC_PD_MISC_EVAP_AFBEGIN_EDIT, m_params.evap_afbegin);
+ float afend = _calcAfEnd(); //convert afslope to afend
+ m_evap_afend_edit.DDX_Value(pDX, IDC_PD_MISC_EVAP_AFEND_EDIT, afend);
+ m_params.evap_afslope = _calcAfSlope(afend); //convert afend to afslope
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -154,9 +198,36 @@ void CMiscPageDlg::OnUpdateControlsIgncutoff(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_igncutoff_check.GetCheck() == BST_CHECKED);
 }
 
+void CMiscPageDlg::OnUpdateControlsSECU3iInj(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features && m_inj_turnoff_enabled);
+}
+
 void CMiscPageDlg::OnChangeData()
 {
  UpdateData();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CMiscPageDlg::OnChangeDataAfBegin()
+{
+ UpdateData();
+
+ //Evap begin air flow can not be greater than end air flow
+ if (m_params.evap_afbegin > _calcAfEnd() - AFBEGINEND_MINDIFF)
+  m_evap_afend_spin.SetPos(m_params.evap_afbegin + AFBEGINEND_MINDIFF);
+
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
+void CMiscPageDlg::OnChangeDataAfEnd()
+{
+ UpdateData();
+
+ //Evap end air flow can not be less than begin air flow
+ if (_calcAfEnd() <  m_params.evap_afbegin + AFBEGINEND_MINDIFF)
+  m_evap_afbegin_spin.SetPos(_calcAfEnd() - AFBEGINEND_MINDIFF);
+
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
@@ -188,6 +259,18 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_hop_durat_spin.SetRangeAndDelta(1, 30, 1);
  m_hop_durat_edit.SetRange(1, 30);
 
+ m_evap_afbegin_edit.SetLimitText(7);
+ m_evap_afbegin_edit.SetDecimalPlaces(7);
+ m_evap_afbegin_spin.SetBuddy(&m_evap_afbegin_edit);
+ m_evap_afbegin_spin.SetRangeAndDelta(100, 2000000, 1);
+ m_evap_afbegin_edit.SetRange(100, 2000000);
+
+ m_evap_afend_edit.SetLimitText(7);
+ m_evap_afend_edit.SetDecimalPlaces(7);
+ m_evap_afend_spin.SetBuddy(&m_evap_afend_edit);
+ m_evap_afend_spin.SetRangeAndDelta(100, 2000000, 1);
+ m_evap_afend_edit.SetRange(100, 2000000);
+
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
@@ -217,8 +300,18 @@ BOOL CMiscPageDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ mp_scr->SetViewSizeF(0.0f, 1.35f);
+
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CMiscPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CMiscPageDlg::OnIgncutoffCheck()
@@ -260,6 +353,18 @@ void CMiscPageDlg::EnableFuelInjection(bool i_enable)
  m_inj_turnoff_enabled = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CMiscPageDlg::EnableSECU3TItems(bool i_enable)
+{
+ if (m_enable_secu3t_features == i_enable)
+  return; //already has needed state
+ m_enable_secu3t_features = i_enable;
+ if (::IsWindow(m_hWnd))
+ {
+  UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога
