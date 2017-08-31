@@ -88,6 +88,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_VoltAverage;
   const CString m_Name_MAPAverage;
   const CString m_Name_AI1Average;
+  const CString m_Name_TPSAverage;
   const CString m_Name_AllowVisualTheme;
   const CString m_Name_AutoDiagEnter;
   const CString m_Name_SaveWarning;
@@ -183,6 +184,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetVoltAverage(void) const;
   virtual int GetMAPAverage(void) const;
   virtual int GetAI1Average(void) const;
+  virtual int GetTPSAverage(void) const;
   virtual bool GetAllowVisualTheme(void) const;
   virtual bool GetAutoDiagEnter(void) const;
   virtual bool GetSaveWarning(void) const;
@@ -231,6 +233,7 @@ class CAppSettingsModel : public ISettingsData
   int  m_optVoltAverage;
   int  m_optMAPAverage;
   int  m_optAI1Average;
+  int  m_optTPSAverage;
   bool m_optAllowVisualTheme;
   bool m_optAutoDiagEnter;
   bool m_optSaveWarning;

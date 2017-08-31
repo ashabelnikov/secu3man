@@ -55,16 +55,19 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_volt_idx(0)
 , m_map_idx(0)
 , m_ai1_idx(0)
+, m_tps_idx(0)
 , m_rpm_avnum(0)
 , m_volt_avnum(0)
 , m_map_avnum(0)
 , m_ai1_avnum(0)
+, m_tps_avnum(0)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
  std::fill(m_rpm_rb, m_rpm_rb + 32, 0);
  std::fill(m_volt_rb, m_volt_rb + 32, 0.0f);
  std::fill(m_map_rb, m_map_rb + 32, 0.0f);
  std::fill(m_ai1_rb, m_ai1_rb + 32, 0.0f);
+ std::fill(m_tps_rb, m_tps_rb + 32, 0.0f);
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -222,6 +225,14 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
   if (m_ai1_idx >= m_ai1_avnum)
    m_ai1_idx = 0;
  }
+
+ if (m_tps_avnum > 0)
+ {
+  //update ADD_I1 ring buffer
+  m_tps_rb[m_tps_idx++] = i_values->tps;
+  if (m_tps_idx >= m_tps_avnum)
+   m_tps_idx = 0;
+ }
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
@@ -260,7 +271,15 @@ void CMIDeskDlg::OnUpdateTimer(void)
  m_shutoff_valve.SetValue(m_values.ephh_valve);
  m_power_valve.SetValue(m_values.epm_valve);
  m_throttle_gate.SetValue(m_values.carb);
- m_throttle_gate.SetPosition(m_values.tps);
+
+ if (m_tps_avnum > 0)
+ {
+  float tps = std::accumulate(m_tps_rb, m_tps_rb + m_tps_avnum, 0.0f);
+  m_throttle_gate.SetPosition(tps / m_tps_avnum);
+ }
+ else
+  m_throttle_gate.SetPosition(m_values.tps);
+
  m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
  m_temperature.SetGDPos(m_values.gasdose_pos); //top-left pane
@@ -390,4 +409,9 @@ void CMIDeskDlg::SetMAPAverageNum(int avnum)
 void CMIDeskDlg::SetAI1AverageNum(int avnum)
 {
  m_ai1_avnum = avnum;
+}
+
+void CMIDeskDlg::SetTPSAverageNum(int avnum)
+{
+ m_tps_avnum = avnum;
 }

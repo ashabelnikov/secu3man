@@ -61,6 +61,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_VoltAverage(_T("VoltAverage"))
 , m_Name_MAPAverage(_T("MAPAverage"))
 , m_Name_AI1Average(_T("AI1Average"))
+, m_Name_TPSAverage(_T("TPSAverage"))
 , m_Name_AllowVisualTheme(_T("AllowVisualTheme"))
 , m_Name_AutoDiagEnter(_T("AutoDiagEnter"))
 , m_Name_SaveWarning(_T("SaveWarning"))
@@ -520,6 +521,20 @@ bool CAppSettingsModel::ReadSettings(void)
  }
 
  //-----------------------------------------
+ GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_TPSAverage,_T("4"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val < 0 || i_val > 16)
+ {
+  status = false;
+  m_optTPSAverage = 0; //no avaraging
+ }
+ else
+ {
+  m_optTPSAverage = i_val;
+ }
+
+ //-----------------------------------------
  GetPrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,_T("1"),read_str,255,IniFileName);
  i_val = _ttoi(read_str);
 
@@ -830,6 +845,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optAI1Average);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_AI1Average,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optTPSAverage);
+ WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_TPSAverage,write_str,IniFileName);
 
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optAllowVisualTheme);
@@ -1304,6 +1323,11 @@ int CAppSettingsModel::GetMAPAverage(void) const
 int CAppSettingsModel::GetAI1Average(void) const
 {
  return m_optAI1Average;
+}
+
+int CAppSettingsModel::GetTPSAverage(void) const
+{
+ return m_optTPSAverage;
 }
 
 bool CAppSettingsModel::GetAllowVisualTheme(void) const

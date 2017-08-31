@@ -124,6 +124,7 @@ class ISettingsData
   virtual int GetVoltAverage(void) const = 0;
   virtual int GetMAPAverage(void) const = 0;
   virtual int GetAI1Average(void) const = 0;
+  virtual int GetTPSAverage(void) const = 0;
   virtual bool GetAllowVisualTheme(void) const = 0;
   virtual bool GetAutoDiagEnter(void) const = 0;
   virtual bool GetSaveWarning(void) const = 0;

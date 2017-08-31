@@ -73,6 +73,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
+ mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -87,6 +88,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
+ mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
 }
 
 void CPMMonitorController::OnDeactivate(void)
