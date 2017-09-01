@@ -1650,7 +1650,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 31 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 33 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1706,6 +1706,12 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  m_ChokePar.offstrtadd_ongas = (choke_flags & 0x01) != 0;
  m_ChokePar.offrpmreg_ongas = (choke_flags & 0x02) != 0;
  m_ChokePar.usethrottle_pos = (choke_flags & 0x04) != 0;
+
+ //frequency of stepper motor's pulses
+ int sm_freq = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &sm_freq))
+  return false;
+ m_ChokePar.sm_freq = sm_freq;
 
  return true;
 }
@@ -2963,6 +2969,9 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  WRITEBIT8(flags, 2, packet_data->usethrottle_pos);
 
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
+
+ BYTE sm_freq = packet_data->sm_freq;
+ mp_pdp->Bin8ToHex(sm_freq, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

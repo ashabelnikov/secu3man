@@ -377,6 +377,7 @@ namespace SECU3IO
   bool  offstrtadd_ongas;               //Turn off additional startup closing when fuel type is gas
   bool  offrpmreg_ongas;                //Turn off RPM regulator when fuel type is gas
   bool  usethrottle_pos;                //Use throttle position in choke initialization
+  int   sm_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
  };
 
  struct GasdosePar

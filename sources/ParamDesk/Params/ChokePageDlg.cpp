@@ -45,6 +45,7 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_CHOKE_SM_FREQ_COMBO, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateChokeSMSteps)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,OnUpdateChokeSMSteps)
@@ -87,6 +88,9 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnUpdateUseThrottlePos)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_COMBO,OnUpdateSmFreq)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_CAPTION,OnUpdateSmFreq)
 END_MESSAGE_MAP()
 
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
@@ -117,6 +121,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
  m_params.offstrtadd_ongas = false;
  m_params.offrpmreg_ongas = false;
  m_params.usethrottle_pos = false;
+ m_params.sm_freq = 0;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -150,6 +155,8 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_offrpmreg_ongas_check);
  DDX_Control(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_usethrottle_pos_check);
 
+ DDX_Control(pDX, IDC_PD_CHOKE_SM_FREQ_COMBO, m_sm_freq_combo);
+
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_params.sm_steps);
  m_strt_add_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_EDIT, m_params.strt_add);
  m_strt_add_tm_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM_EDIT, m_params.choke_corr_time);
@@ -162,6 +169,8 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.offstrtadd_ongas);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_params.offrpmreg_ongas);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_params.usethrottle_pos);
+
+ DDX_CBIndex_int(pDX, IDC_PD_CHOKE_SM_FREQ_COMBO, m_params.sm_freq);
 }
 
 //Update state of controls
@@ -188,6 +197,11 @@ void CChokePageDlg::OnUpdateChokeSMSteps(CCmdUI* pCmdUI)
 }
 
 void CChokePageDlg::OnUpdateUseThrottlePos(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled);
+}
+
+void CChokePageDlg::OnUpdateSmFreq(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled);
 }
@@ -240,10 +254,18 @@ BOOL CChokePageDlg::OnInitDialog()
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
+ //-----------------------------------------------------------------
+ //fill combobox containing STEP frequences
+ m_sm_freq_combo.AddString(_T("300"));
+ m_sm_freq_combo.AddString(_T("150"));
+ m_sm_freq_combo.AddString(_T("100"));
+ m_sm_freq_combo.AddString(_T("75"));
+ //-----------------------------------------------------------------
+
  //initialize window scroller
  mp_scr->Init(this);
  CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.3f));
+ mp_scr->SetViewSize(0, int(wndRect.Height() * 1.4f));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

@@ -71,6 +71,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnUpdateChokeSMSteps(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseThrottlePos(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateSmFreq(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -107,6 +108,8 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_offstrtadd_ongas_check;
   CButton m_offrpmreg_ongas_check;
   CButton m_usethrottle_pos_check;
+
+  CComboBox m_sm_freq_combo;
 
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

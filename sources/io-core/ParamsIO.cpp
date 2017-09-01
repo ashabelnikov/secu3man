@@ -264,6 +264,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->choke_flags, 0, p_in->offstrtadd_ongas);
     WRITEBIT8(p_params->choke_flags, 1, p_in->offrpmreg_ongas);
     WRITEBIT8(p_params->choke_flags, 2, p_in->usethrottle_pos);
+    p_params->sm_freq = p_in->sm_freq;
    }
    break;
   case GASDOSE_PAR:
@@ -574,6 +575,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->offstrtadd_ongas = CHECKBIT8(p_params->choke_flags, 0);
      p_out->offrpmreg_ongas = CHECKBIT8(p_params->choke_flags, 1);
      p_out->usethrottle_pos = CHECKBIT8(p_params->choke_flags, 2);
+     p_out->sm_freq = p_params->sm_freq;
     }
     break;
    case GASDOSE_PAR:
