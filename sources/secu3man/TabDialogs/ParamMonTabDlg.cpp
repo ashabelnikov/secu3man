@@ -70,7 +70,6 @@ void CParamMonTabDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PM_SHOW_RAW_SENSORS,m_raw_sensors_check);
  DDX_Control(pDX,IDC_PM_EDIT_TABLES,m_edit_tables_check);
- DDX_Control(pDX,IDC_PM_SAVE_NOTE_TEXT, m_save_note_text);
  DDX_Control(pDX,IDC_PM_SECU3ORG_LINK, *mp_secu3orgLink);
 }
 
@@ -293,7 +292,6 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
   CRect rs_rect = m_original_rs_rect;
   _ResizeRect(rect, rs_rect);
   mp_RSDeskDlg->Resize(rs_rect);
-  m_save_note_text.ShowWindow(SW_HIDE);
  }
  else
  {
@@ -315,7 +313,6 @@ void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
   mp_MIDeskDlg->Resize(m_original_mi_rect, rc_s);
   mp_RSDeskDlg->Resize(m_original_rs_rect);
   mp_CEDeskDlg->Resize(m_original_ce_rect);
-  m_save_note_text.ShowWindow(SW_SHOW);
   mp_MIDeskDlg->ShowExFixtures(false);
  }
 }

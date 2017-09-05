@@ -151,6 +151,8 @@ BEGIN
     IDS_CED_TPS_SENSOR_FAIL_TT     "Поломка или неправильные показания ДПДЗ"
     IDS_CED_ADD_I1_SENSOR_TT       "Неисправность датчика на входе ADD_I1 "
     IDS_CED_ADD_I2_SENSOR_TT       "Неисправность датчика на входе ADD_I2"
+    IDS_CED_ADD_I3_SENSOR_TT       "Неисправность датчика на входе ADD_I3"
+    IDS_CED_ADD_I4_SENSOR_TT       "Неисправность датчика на входе ADD_I4"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -334,6 +336,8 @@ BEGIN
     IDS_CED_TPS_SENSOR_FAIL_TT     "Breakage or wrong indication of TPS"
     IDS_CED_ADD_I1_SENSOR_TT       "ADD_I1 input's sensor failure"
     IDS_CED_ADD_I2_SENSOR_TT       "ADD_I2 input's sensor failure"
+    IDS_CED_ADD_I3_SENSOR_TT       "ADD_I3 input's sensor failure"
+    IDS_CED_ADD_I4_SENSOR_TT       "ADD_I4 input's sensor failure"
 END
 
 STRINGTABLE DISCARDABLE 

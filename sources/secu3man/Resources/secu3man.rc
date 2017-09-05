@@ -55,14 +55,8 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 181,214,89,17
-    CONTROL         "Показывать ""сырые"" значения датчиков",
-                    IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | 
-                    BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,215,163,15
-    LTEXT           "NOTE: SECU-3 автоматически сохраняет параметры через 30 сек. после последнего редактирования",
-                    IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
+    CONTROL         "Редактирование таблиц",IDC_PM_EDIT_TABLES,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS, 181,214,89,17
+    CONTROL         "Показывать ""сырые"" значения датчиков",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS, 311,215,163,15
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
     CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,467,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,156,172
@@ -193,13 +187,11 @@ FONT 8, "MS Sans Serif"
 BEGIN
     PUSHBUTTON      "Установить все",IDC_CE_LIST_SETALL_BUTTON,52,3,65,16
     PUSHBUTTON      "Сбросить все",IDC_CE_LIST_CLEARALL_BUTTON,135,3,65,16
-    CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
-    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,380,153
+    CONTROL         "Показывать ошибки с инертностью",IDC_CE_READ_INERTNESS_CHECKBOX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,250,8,138,10
+    CONTROL         "",IDC_CE_ERRORS_LIST,"SysListView32",LVS_REPORT | WS_BORDER | WS_TABSTOP,53,22,390,153
     PUSHBUTTON      "ПРОЧИТАТЬ сохраненные ошибки",IDC_CE_READ_ERRORS_BUTTON,59,179,102,23,BS_MULTILINE
     PUSHBUTTON      "ЗАПИСАТЬ сохраненные ошибки",IDC_CE_WRITE_ERRORS_BUTTON,179,179,101,23,BS_MULTILINE
-    CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
+    CONTROL         "Считывать ошибки в реальном времени",IDC_CE_READ_REALTIME_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,301,178,97,22
     LTEXT           "Quick help",IDC_CE_QUICK_HELP,49,205,347,32
 END
 
@@ -430,6 +422,8 @@ BEGIN
     IDS_ECUERROR_TPS_SENSOR_FAIL "Поломка или неправильные показания ДПДЗ"
     IDS_ECUERROR_ADD_I1_SENSOR "Неисправность датчика на входе ADD_I1"
     IDS_ECUERROR_ADD_I2_SENSOR "Неисправность датчика на входе ADD_I2"   
+    IDS_ECUERROR_ADD_I3_SENSOR "Неисправность датчика на входе ADD_I3"   
+    IDS_ECUERROR_ADD_I4_SENSOR "Неисправность датчика на входе ADD_I4"   
     IDS_INCOMPATIBLE_FIRMWARE "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
     IDS_INCOMPATIBLE_QUARTZ "Обнаружена несовместимость тактовой частоты, некоторые данные и параметры могут стать неверными. Продолжить?"
 END
@@ -697,13 +691,8 @@ STYLE DS_CONTROL | WS_CHILD | WS_VISIBLE
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    CONTROL         "Edit tables",IDC_PM_EDIT_TABLES,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | 
-                    WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,181,214,89,17
-    CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,
-                    "Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,215,163,15
-    LTEXT           "NOTE: SECU-3 automatically saves parameters in 30 seconds after the last editing",
-                    IDC_PM_SAVE_NOTE_TEXT,7,192,169,24
+    CONTROL         "Edit tables",IDC_PM_EDIT_TABLES,"Button", BS_AUTOCHECKBOX | BS_PUSHLIKE | BS_MULTILINE | WS_DISABLED | WS_TABSTOP | WS_CLIPSIBLINGS ,181,214,89,17
+    CONTROL         "Show ""raw"" values of sensors",IDC_PM_SHOW_RAW_SENSORS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP | WS_CLIPSIBLINGS,311,215,163,15
     CONTROL         "",IDC_PM_MIDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,285,192
     CONTROL         "",IDC_PM_MIDESK_FRAME_F,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,187,0,467,192
     CONTROL         "",IDC_PM_PARAMDESK_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,0,0,147,172
@@ -1121,6 +1110,8 @@ BEGIN
     IDS_ECUERROR_TPS_SENSOR_FAIL "Breakage or wrong indication of TPS"
     IDS_ECUERROR_ADD_I1_SENSOR "ADD_I1 input's sensor failure"
     IDS_ECUERROR_ADD_I2_SENSOR "ADD_I2 input's sensor failure"   
+    IDS_ECUERROR_ADD_I3_SENSOR "ADD_I3 input's sensor failure"   
+    IDS_ECUERROR_ADD_I4_SENSOR "ADD_I4 input's sensor failure"   
     IDS_INCOMPATIBLE_FIRMWARE "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
     IDS_INCOMPATIBLE_QUARTZ "Incompatibility of clock frequency has detected, some data and parameters may become invalid. Do you want to continue?"
 END

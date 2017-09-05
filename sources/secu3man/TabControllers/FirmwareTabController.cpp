@@ -862,6 +862,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
  m_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
  m_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ m_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
  if (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T))
   m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
  else //SECU-3i:
@@ -1596,6 +1597,8 @@ void CFirmwareTabController::OnCESettingsButton(void)
  SECU3IO::CESettingsData data;
  m_fwdm->GetCESettingsData(data);
  dialog.SetValues(data);
+ dialog.EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ dialog.EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
  if (dialog.DoModal() == IDOK)
  {
   dialog.GetValues(data);

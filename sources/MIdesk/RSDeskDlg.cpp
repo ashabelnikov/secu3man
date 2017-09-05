@@ -62,6 +62,11 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
  //empty
 }
 
+CRSDeskDlg::~CRSDeskDlg()
+{
+ //empty
+}
+
 void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);

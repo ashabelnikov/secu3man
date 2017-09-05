@@ -40,6 +40,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
 
  public:
   CRSDeskDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CRSDeskDlg();
   static const UINT IDD;
 
   //--------interface implementation---------------

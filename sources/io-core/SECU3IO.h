@@ -200,6 +200,10 @@ namespace SECU3IO
   float  ai1_adc_correction;
   float  ai2_adc_factor;
   float  ai2_adc_correction;
+  float  ai3_adc_factor;
+  float  ai3_adc_correction;
+  float  ai4_adc_factor;
+  float  ai4_adc_correction;
  };
 
  struct RawSensDat
@@ -621,6 +625,14 @@ namespace SECU3IO
   float add_i2_v_min;
   float add_i2_v_max;
   float add_i2_v_em;
+
+  float add_i3_v_min;
+  float add_i3_v_max;
+  float add_i3_v_em;
+
+  float add_i4_v_min;
+  float add_i4_v_max;
+  float add_i4_v_em;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

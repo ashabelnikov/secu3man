@@ -78,7 +78,6 @@ class CParamMonTabDlg : public CTabDialog
 
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;
-  CStatic m_save_note_text;
   std::auto_ptr<CLabel> mp_secu3orgLink;
 
   EventHandler m_OnRawSensorsCheck;

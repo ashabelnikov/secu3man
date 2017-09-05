@@ -152,7 +152,6 @@
 #define IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_EDIT 4171
 #define IDC_APP_SETTINGS_MIDESK_UPDATE_PERIOD_SPIN 4172
 #define ID_FULL_SCREEN                  4173
-#define IDC_PM_SAVE_NOTE_TEXT           4174
 #define IDS_LP_CANT_OPEN_FILE           4175
 #define IDS_LP_INCORRECT_FILE_FORMAT    4176
 #define IDS_LP_CLOSE_FILE               4177
@@ -416,3 +415,5 @@
 #define IDS_DEV_DIAG_TPS                4434
 #define IDS_DEV_DIAG_MAP_S              4435
 #define IDS_DEV_DIAG_CARB               4436
+#define IDS_ECUERROR_ADD_I3_SENSOR      4437
+#define IDS_ECUERROR_ADD_I4_SENSOR      4438

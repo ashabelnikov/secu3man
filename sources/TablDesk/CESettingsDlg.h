@@ -26,10 +26,13 @@
 #pragma once
 
 #include <vector>
+#include <memory>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
+
+class CWndScroller;
 
 namespace SECU3IO { struct CESettingsData; }
 
@@ -44,6 +47,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
 
   void SetValues(const SECU3IO::CESettingsData& i_data);
   void GetValues(SECU3IO::CESettingsData& o_data);
+  void EnableSECU3TItems(bool i_enable);
+  void EnableExtraIO(bool i_enable);
 
  // Implementation
  protected:
@@ -51,12 +56,18 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   virtual void OnOK();
   virtual void OnCancel();
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateSECU3i(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateSECU3iEx(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::CESettingsData* mp_data;
+  std::auto_ptr<CWndScroller> mp_scr;
+  bool m_enable_secu3t_features;
+  bool m_enable_extraio;
 
   CEditEx m_map_v_min_edit;
   CSpinButtonCtrlEx m_map_v_min_spin;
@@ -106,4 +117,18 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i2_v_max_spin;
   CEditEx m_add_i2_v_em_edit;
   CSpinButtonCtrlEx m_add_i2_v_em_spin;
+
+  CEditEx m_add_i3_v_min_edit;
+  CSpinButtonCtrlEx m_add_i3_v_min_spin;
+  CEditEx m_add_i3_v_max_edit;
+  CSpinButtonCtrlEx m_add_i3_v_max_spin;
+  CEditEx m_add_i3_v_em_edit;
+  CSpinButtonCtrlEx m_add_i3_v_em_spin;
+
+  CEditEx m_add_i4_v_min_edit;
+  CSpinButtonCtrlEx m_add_i4_v_min_spin;
+  CEditEx m_add_i4_v_max_edit;
+  CSpinButtonCtrlEx m_add_i4_v_max_spin;
+  CEditEx m_add_i4_v_em_edit;
+  CSpinButtonCtrlEx m_add_i4_v_em_spin;
 };

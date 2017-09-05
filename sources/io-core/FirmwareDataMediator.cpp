@@ -121,6 +121,14 @@ typedef struct
  _uint add_i2_v_min;
  _uint add_i2_v_max;
  _uint add_i2_v_em;
+
+ _uint add_i3_v_min;
+ _uint add_i3_v_max;
+ _uint add_i3_v_em;
+
+ _uint add_i4_v_min;
+ _uint add_i4_v_max;
+ _uint add_i4_v_em;
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -166,7 +174,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[1750];
+ _uchar reserved[1738];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1692,6 +1700,14 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
  o_data.add_i2_v_min = ((float)p_fd->exdata.cesd.add_i2_v_min) * ADC_DISCRETE;
  o_data.add_i2_v_max = ((float)p_fd->exdata.cesd.add_i2_v_max) * ADC_DISCRETE;
  o_data.add_i2_v_em  = ((float)p_fd->exdata.cesd.add_i2_v_em) * ADC_DISCRETE;
+
+ o_data.add_i3_v_min = ((float)p_fd->exdata.cesd.add_i3_v_min) * ADC_DISCRETE;
+ o_data.add_i3_v_max = ((float)p_fd->exdata.cesd.add_i3_v_max) * ADC_DISCRETE;
+ o_data.add_i3_v_em  = ((float)p_fd->exdata.cesd.add_i3_v_em) * ADC_DISCRETE;
+
+ o_data.add_i4_v_min = ((float)p_fd->exdata.cesd.add_i4_v_min) * ADC_DISCRETE;
+ o_data.add_i4_v_max = ((float)p_fd->exdata.cesd.add_i4_v_max) * ADC_DISCRETE;
+ o_data.add_i4_v_em  = ((float)p_fd->exdata.cesd.add_i4_v_em) * ADC_DISCRETE;
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -1725,4 +1741,12 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->exdata.cesd.add_i2_v_min = MathHelpers::Round((i_data.add_i2_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i2_v_max = MathHelpers::Round((i_data.add_i2_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i2_v_em  = MathHelpers::Round((i_data.add_i2_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.add_i3_v_min = MathHelpers::Round((i_data.add_i3_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i3_v_max = MathHelpers::Round((i_data.add_i3_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i3_v_em  = MathHelpers::Round((i_data.add_i3_v_em / ADC_DISCRETE));
+
+ p_fd->exdata.cesd.add_i4_v_min = MathHelpers::Round((i_data.add_i4_v_min / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
+ p_fd->exdata.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
 }

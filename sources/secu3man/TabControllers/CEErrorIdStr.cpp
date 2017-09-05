@@ -47,6 +47,8 @@ CEErrorIdStr::CEErrorIdStr()
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_TPS_SENSOR_FAIL, std::make_pair(MLL::GetString(IDS_ECUERROR_TPS_SENSOR_FAIL), v))); 
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I1_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I1_SENSOR), v))); 
  m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I2_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I2_SENSOR), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I3_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I3_SENSOR), v)));
+ m_errors_ids.insert(ErrorsIDContainer::value_type(ECUERROR_ADD_I4_SENSOR, std::make_pair(MLL::GetString(IDS_ECUERROR_ADD_I4_SENSOR), v)));
 }
 
 const CEErrorIdStr::ErrorsIDContainer& CEErrorIdStr::Get(void) const

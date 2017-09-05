@@ -53,6 +53,7 @@ class IParamDeskView : public IDeskView
   virtual void SetMaxCylinders(int number) = 0;
   virtual void EnableOddCylinders(bool enable) = 0;
   virtual void EnableSECU3TItems(bool i_enable) = 0;
+  virtual void EnableExtraIO(bool i_enable) = 0;
   virtual void EnableChokeTesting(bool i_enable) = 0;
   virtual void EnableChokeManPos(bool i_enable) = 0;
   virtual void EnableCKPSItems(bool i_enable) = 0;

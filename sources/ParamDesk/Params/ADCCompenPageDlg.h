@@ -33,6 +33,7 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CWndScroller;
 
 class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -51,22 +52,27 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void SetValues(const SECU3IO::ADCCompenPar* i_values);
 
   void EnableSECU3TItems(bool i_enable);
+  void EnableExtraIO(bool i_enable);
 
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeEdit();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3iEx(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
+  std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
 
   SECU3IO::ADCCompenPar m_params;
   bool m_enabled;
   bool m_enable_secu3t_features;
+  bool m_enable_extraio;
 
   CSpinButtonCtrlEx m_map_factor_spin;
   CSpinButtonCtrlEx m_map_correction_spin;
@@ -97,4 +103,14 @@ class CADCCompenPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_ai2_correction_spin;
   CEditEx m_ai2_factor_edit;
   CEditEx m_ai2_correction_edit;
+
+  CSpinButtonCtrlEx m_ai3_factor_spin;
+  CSpinButtonCtrlEx m_ai3_correction_spin;
+  CEditEx m_ai3_factor_edit;
+  CEditEx m_ai3_correction_edit;
+
+  CSpinButtonCtrlEx m_ai4_factor_spin;
+  CSpinButtonCtrlEx m_ai4_correction_spin;
+  CEditEx m_ai4_factor_edit;
+  CEditEx m_ai4_correction_edit;
 };

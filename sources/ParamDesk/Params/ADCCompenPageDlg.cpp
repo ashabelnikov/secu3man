@@ -28,10 +28,12 @@
 #include "ADCCompenPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
 BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangeEdit)
@@ -44,6 +46,10 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_EDIT, OnChangeEdit)
+ ON_EN_CHANGE(IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_EDIT, OnChangeEdit)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_UBAT_CAPTION, OnUpdateControls)
@@ -51,6 +57,8 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_TPS_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I3_CAPTION, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I4_CAPTION, OnUpdateControlsSECU3iEx)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnUpdateControls)
@@ -64,6 +72,10 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_EDIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_EDIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_EDIT, OnUpdateControlsSECU3iEx)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_EDIT, OnUpdateControlsSECU3iEx)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_MAP_CORRECTION_UNIT, OnUpdateControls)
@@ -77,6 +89,10 @@ BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I1_CORRECTION_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_UNIT, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_UNIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_UNIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_UNIT, OnUpdateControlsSECU3iEx)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_UNIT, OnUpdateControlsSECU3iEx)
 END_MESSAGE_MAP()
 
 CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
@@ -95,6 +111,11 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
 , m_ai1_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_ai2_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai3_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai3_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai4_factor_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, m_ai4_correction_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
+, mp_scr(new CWndScroller)
 {
  m_params.map_adc_factor = 1.0f;
  m_params.map_adc_correction = 0.0f;
@@ -108,6 +129,10 @@ CADCCompenPageDlg::CADCCompenPageDlg(CWnd* pParent /*=NULL*/)
  m_params.ai1_adc_correction = 0.0f;
  m_params.ai2_adc_factor = 1.0f;
  m_params.ai2_adc_correction = 0.0f;
+ m_params.ai3_adc_factor = 1.0f;
+ m_params.ai3_adc_correction = 0.0f;
+ m_params.ai4_adc_factor = 1.0f;
+ m_params.ai4_adc_correction = 0.0f;
 }
 
 CADCCompenPageDlg::~CADCCompenPageDlg()
@@ -153,6 +178,16 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_ai2_factor_edit);
  DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, m_ai2_correction_edit);
 
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_SPIN, m_ai3_factor_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_SPIN, m_ai3_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_EDIT, m_ai3_factor_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_EDIT, m_ai3_correction_edit);
+
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_SPIN, m_ai4_factor_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_SPIN, m_ai4_correction_spin);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_EDIT, m_ai4_factor_edit);
+ DDX_Control(pDX, IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_EDIT, m_ai4_correction_edit);
+
  m_map_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, m_params.map_adc_factor);
  m_map_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, m_params.map_adc_correction);
 
@@ -170,6 +205,12 @@ void CADCCompenPageDlg::DoDataExchange(CDataExchange* pDX)
 
  m_ai2_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_FACTOR_EDIT, m_params.ai2_adc_factor);
  m_ai2_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I2_CORRECTION_EDIT, m_params.ai2_adc_correction);
+
+ m_ai3_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I3_FACTOR_EDIT, m_params.ai3_adc_factor);
+ m_ai3_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I3_CORRECTION_EDIT, m_params.ai3_adc_correction);
+
+ m_ai4_factor_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I4_FACTOR_EDIT, m_params.ai4_adc_factor);
+ m_ai4_correction_edit.DDX_Value(pDX, IDC_PD_ADCCOMPEN_ADD_I4_CORRECTION_EDIT, m_params.ai4_adc_correction);
 }
 
 //если надо апдейтить отдельные контроллы, то надо будет плодить функции
@@ -183,6 +224,11 @@ void CADCCompenPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && !m_enable_secu3t_features);
 }
 
+void CADCCompenPageDlg::OnUpdateControlsSECU3iEx(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features && m_enable_extraio);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CADCCompenPageDlg message handlers
 
@@ -193,74 +239,98 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_map_factor_spin.SetBuddy(&m_map_factor_edit);
  m_map_factor_edit.SetLimitText(6);
  m_map_factor_edit.SetDecimalPlaces(3);
- m_map_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_map_factor_edit.SetRange(-2.0f,2.0f);
+ m_map_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_map_factor_edit.SetRange(-2.0f,1.999f);
 
  m_map_correction_spin.SetBuddy(&m_map_correction_edit);
  m_map_correction_edit.SetLimitText(6);
  m_map_correction_edit.SetDecimalPlaces(4);
- m_map_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_map_correction_edit.SetRange(-2.0f,2.0f);
+ m_map_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_map_correction_edit.SetRange(-2.0f,1.999f);
 
  m_ubat_factor_spin.SetBuddy(&m_ubat_factor_edit);
  m_ubat_factor_edit.SetLimitText(6);
  m_ubat_factor_edit.SetDecimalPlaces(3);
- m_ubat_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_ubat_factor_edit.SetRange(-2.0f,2.0f);
+ m_ubat_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_ubat_factor_edit.SetRange(-2.0f,1.999f);
 
  m_ubat_correction_spin.SetBuddy(&m_ubat_correction_edit);
  m_ubat_correction_edit.SetLimitText(6);
  m_ubat_correction_edit.SetDecimalPlaces(4);
- m_ubat_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_ubat_correction_edit.SetRange(-2.0f,2.0f);
+ m_ubat_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_ubat_correction_edit.SetRange(-2.0f,1.999f);
 
  m_temp_factor_spin.SetBuddy(&m_temp_factor_edit);
  m_temp_factor_edit.SetLimitText(6);
  m_temp_factor_edit.SetDecimalPlaces(3);
- m_temp_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_temp_factor_edit.SetRange(-2.0f,2.0f);
+ m_temp_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_temp_factor_edit.SetRange(-2.0f,1.999f);
 
  m_temp_correction_spin.SetBuddy(&m_temp_correction_edit);
  m_temp_correction_edit.SetLimitText(6);
  m_temp_correction_edit.SetDecimalPlaces(4);
- m_temp_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_temp_correction_edit.SetRange(-2.0f,2.0f);
+ m_temp_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_temp_correction_edit.SetRange(-2.0f,1.999f);
 
  m_tps_factor_spin.SetBuddy(&m_tps_factor_edit);
  m_tps_factor_edit.SetLimitText(6);
  m_tps_factor_edit.SetDecimalPlaces(3);
- m_tps_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_tps_factor_edit.SetRange(-2.0f,2.0f);
+ m_tps_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_tps_factor_edit.SetRange(-2.0f,1.999f);
 
  m_tps_correction_spin.SetBuddy(&m_tps_correction_edit);
  m_tps_correction_edit.SetLimitText(6);
  m_tps_correction_edit.SetDecimalPlaces(4);
- m_tps_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_tps_correction_edit.SetRange(-2.0f,2.0f);
+ m_tps_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_tps_correction_edit.SetRange(-2.0f,1.999f);
 
  m_ai1_factor_spin.SetBuddy(&m_ai1_factor_edit);
  m_ai1_factor_edit.SetLimitText(6);
  m_ai1_factor_edit.SetDecimalPlaces(3);
- m_ai1_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_ai1_factor_edit.SetRange(-2.0f,2.0f);
+ m_ai1_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_ai1_factor_edit.SetRange(-2.0f,1.999f);
 
  m_ai1_correction_spin.SetBuddy(&m_ai1_correction_edit);
  m_ai1_correction_edit.SetLimitText(6);
  m_ai1_correction_edit.SetDecimalPlaces(4);
- m_ai1_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_ai1_correction_edit.SetRange(-2.0f,2.0f);
+ m_ai1_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_ai1_correction_edit.SetRange(-2.0f,1.999f);
 
  m_ai2_factor_spin.SetBuddy(&m_ai2_factor_edit);
  m_ai2_factor_edit.SetLimitText(6);
  m_ai2_factor_edit.SetDecimalPlaces(3);
- m_ai2_factor_spin.SetRangeAndDelta(-2.0f,2.0f,0.001f);
- m_ai2_factor_edit.SetRange(-2.0f,2.0f);
+ m_ai2_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_ai2_factor_edit.SetRange(-2.0f,1.999f);
 
  m_ai2_correction_spin.SetBuddy(&m_ai2_correction_edit);
  m_ai2_correction_edit.SetLimitText(6);
  m_ai2_correction_edit.SetDecimalPlaces(4);
- m_ai2_correction_spin.SetRangeAndDelta(-2.0f,2.0f,0.0025f);
- m_ai2_correction_edit.SetRange(-2.0f,2.0f);
+ m_ai2_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_ai2_correction_edit.SetRange(-2.0f,1.999f);
+
+ m_ai3_factor_spin.SetBuddy(&m_ai3_factor_edit);
+ m_ai3_factor_edit.SetLimitText(6);
+ m_ai3_factor_edit.SetDecimalPlaces(3);
+ m_ai3_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_ai3_factor_edit.SetRange(-2.0f,1.999f);
+
+ m_ai3_correction_spin.SetBuddy(&m_ai3_correction_edit);
+ m_ai3_correction_edit.SetLimitText(6);
+ m_ai3_correction_edit.SetDecimalPlaces(4);
+ m_ai3_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_ai3_correction_edit.SetRange(-2.0f,1.999f);
+
+ m_ai4_factor_spin.SetBuddy(&m_ai4_factor_edit);
+ m_ai4_factor_edit.SetLimitText(6);
+ m_ai4_factor_edit.SetDecimalPlaces(3);
+ m_ai4_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
+ m_ai4_factor_edit.SetRange(-2.0f,1.999f);
+
+ m_ai4_correction_spin.SetBuddy(&m_ai4_correction_edit);
+ m_ai4_correction_edit.SetLimitText(6);
+ m_ai4_correction_edit.SetDecimalPlaces(4);
+ m_ai4_correction_spin.SetRangeAndDelta(-2.0f,1.999f,0.0025f);
+ m_ai4_correction_edit.SetRange(-2.0f,1.999f);
 
  UpdateData(FALSE);
 
@@ -298,11 +368,31 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_ai2_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
  VERIFY(mp_ttc->AddWindow(&m_ai2_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_ai3_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai3_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai3_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai3_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_ai4_factor_edit, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai4_correction_edit, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai4_factor_spin, MLL::GetString(IDS_PD_ADCCOMPEN_FACTOR_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_ai4_correction_spin, MLL::GetString(IDS_PD_ADCCOMPEN_CORRECTION_TT)));
+
+ //initialize window scroller
+ mp_scr->Init(this);
+ mp_scr->SetViewSizeF(.0f, 1.25f);
+
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CADCCompenPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CADCCompenPageDlg::OnChangeEdit()
@@ -335,6 +425,18 @@ void CADCCompenPageDlg::EnableSECU3TItems(bool i_enable)
  if (m_enable_secu3t_features == i_enable)
   return; //already has needed state
  m_enable_secu3t_features = i_enable;
+ if (::IsWindow(m_hWnd))
+ {
+  UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
+}
+
+void CADCCompenPageDlg::EnableExtraIO(bool i_enable)
+{
+ if (m_enable_extraio == i_enable)
+  return; //already has needed state
+ m_enable_extraio = i_enable;
  if (::IsWindow(m_hWnd))
  {
   UpdateDialogControls(this, TRUE);

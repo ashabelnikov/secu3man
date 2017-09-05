@@ -605,6 +605,11 @@ void CParamDeskDlg::EnableSECU3TItems(bool i_enable)
  m_pMiscPageDlg->EnableSECU3TItems(i_enable);
 }
 
+void CParamDeskDlg::EnableExtraIO(bool i_enable)
+{
+ m_pADCCompenPageDlg->EnableExtraIO(i_enable);
+}
+
 void CParamDeskDlg::EnableChokeTesting(bool i_enable)
 {
  m_pChokePageDlg->EnableChokeTesting(i_enable);
