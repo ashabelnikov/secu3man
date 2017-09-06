@@ -100,6 +100,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
   virtual int GetCurSel(void);
+
+  virtual void Resize(int cx, int cy);
   //-------------------------------------------------------------
 
  // Implementation
@@ -180,6 +182,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   EventHandler m_OnTabActivate;
   EventHandler m_OnChangeInTab;
   EventHandler m_OnSaveButton;
+  CSize m_tabLRMargin;
 };
 
 /////////////////////////////////////////////////////////////////////////////

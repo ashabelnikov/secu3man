@@ -113,6 +113,7 @@ BOOL CTablesDeskDlg::OnInitDialog()
  mp_ButtonsPanel->Create(mp_ButtonsPanel->IDD, this);
  mp_ButtonsPanel->SetPosition(rect.left, rect.top, &m_names_edit);
  mp_ButtonsPanel->ShowWindow(SW_SHOW);
+ mp_ButtonsPanel->MoveWindow(rect); //Set window size to size of holder
 
  m_names_edit.SetReadOnly(m_tsneb_readonly);
  m_names_edit.SetLimitText(16);
@@ -121,6 +122,18 @@ BOOL CTablesDeskDlg::OnInitDialog()
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
+
+ ///////////////////////////////////////////////
+ //TODO: Replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
+ //Calculate and remember right and bottom margins of buttons panel control
+ CRect wndRectDlg, wndRectBP;
+ GetClientRect(&wndRectDlg);
+ mp_ButtonsPanel->GetWindowRect(&wndRectBP);
+ ScreenToClient(&wndRectBP);
+ m_bpLRMargin.cx = wndRectDlg.right - wndRectBP.right;
+ m_bpLRMargin.cy = wndRectDlg.bottom - wndRectBP.bottom;
+ ///////////////////////////////////////////////
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -676,4 +689,26 @@ void CTablesDeskDlg::OnChangeTablesSetName()
   UpdateData(TRUE);
   m_OnChangeTablesSetName();
  }
+}
+
+void CTablesDeskDlg::Resize(int cx, int cy)
+{
+// TODO:  replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
+// add more rect related functions
+
+ //resize dialog vertically
+ CRect wndRectDlg, wndRectBP;
+ GetWindowRect(&wndRectDlg);
+ GetParent()->ScreenToClient(&wndRectDlg);
+ wndRectDlg.right = wndRectDlg.left + cx;
+ wndRectDlg.bottom = wndRectDlg.top + cy;
+ MoveWindow(wndRectDlg);
+
+ //resize tab control vertically
+ GetClientRect(&wndRectDlg);
+ mp_ButtonsPanel->GetWindowRect(&wndRectBP);
+ ScreenToClient(&wndRectBP);
+ wndRectBP.right = wndRectDlg.right - m_bpLRMargin.cx;
+ wndRectBP.bottom = wndRectDlg.bottom - m_bpLRMargin.cy;
+ mp_ButtonsPanel->MoveWindow(wndRectBP);
 }

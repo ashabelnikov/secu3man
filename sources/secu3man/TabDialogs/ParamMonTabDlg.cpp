@@ -110,6 +110,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
+ mp_ParamDeskDlg->Resize(rect.Width(), rect.Height());
  mp_ParamDeskDlg->Show(!check_state);
 
  //create tables desk
@@ -118,6 +119,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_TablesDeskDlg->Create(CTablesDeskDlg::IDD,this);
  mp_TablesDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
+ mp_TablesDeskDlg->Resize(rect.Width(), rect.Height());
  mp_TablesDeskDlg->Show(check_state);
  
  //create a tooltip control and assign tooltips

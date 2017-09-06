@@ -191,6 +191,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
  mp_ParamDeskDlg->EnableUseResParCheck(true);
+ mp_ParamDeskDlg->Resize(rect.Width(), rect.Height());
  mp_ParamDeskDlg->ShowWindow(SW_HIDE);
 
  //create IO remapping desk

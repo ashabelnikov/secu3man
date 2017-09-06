@@ -88,6 +88,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
    float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
    float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use);
   virtual void EnableAdvanceAngleIndication(bool i_enable);
+  virtual void Resize(int cx, int cy);
   //-------------------------------------------------------------
 
   //CButtonsPanel
@@ -144,6 +145,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   EventHandler m_OnChangeTablesSetName;
   EventWithCode m_OnLoadTablesFrom;
   EventWithCode m_OnSaveTablesTo;
+  CSize m_bpLRMargin;
 };
 
 /////////////////////////////////////////////////////////////////////////////

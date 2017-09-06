@@ -53,6 +53,7 @@
 #include "io-core/SECU3IO.h"
 #include "io-core/ufcodes.h"
 #include "ui-core/HotKeysToCmdRouter.h"
+#include "common/MathHelpers.h"
 
 #define TAB_CTRL_BITMAPS_COLOR_MASK RGB(192,192,192)
 
@@ -288,6 +289,18 @@ BOOL CParamDeskDlg::OnInitDialog()
  _RegisterHotKeys();
 
  UpdateDialogControls(this, TRUE);
+
+ ///////////////////////////////////////////////
+ //TODO: Replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
+ //Calculate and remember right and bottom margins of tab control
+ CRect wndRectDlg, wndRectTab;
+ GetClientRect(&wndRectDlg);
+ m_tab_control.GetWindowRect(&wndRectTab);
+ ScreenToClient(&wndRectTab);
+ m_tabLRMargin.cx = wndRectDlg.right - wndRectTab.right;
+ m_tabLRMargin.cy = wndRectDlg.bottom - wndRectTab.bottom;
+ ///////////////////////////////////////////////
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -827,3 +840,25 @@ OnHK_XXX(CKPS_PAR)
 OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
 OnHK_XXX(CHOKE_PAR)
+
+void CParamDeskDlg::Resize(int cx, int cy)
+{
+// TODO:  replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
+// add more rect related functions
+
+ //resize dialog vertically
+ CRect wndRectDlg, wndRectTab;
+ GetWindowRect(&wndRectDlg);
+ GetParent()->ScreenToClient(&wndRectDlg);
+ wndRectDlg.right = wndRectDlg.left + cx;
+ wndRectDlg.bottom = wndRectDlg.top + cy;
+ MoveWindow(wndRectDlg);
+
+ //resize tab control vertically
+ GetClientRect(&wndRectDlg);
+ m_tab_control.GetWindowRect(&wndRectTab);
+ ScreenToClient(&wndRectTab);
+ wndRectTab.right = wndRectDlg.right - m_tabLRMargin.cx;
+ wndRectTab.bottom = wndRectDlg.bottom - m_tabLRMargin.cy;
+ m_tab_control.MoveWindow(wndRectTab);
+}
