@@ -67,6 +67,9 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->vent_pwmfrq = MathHelpers::Round((1.0/p_in->vent_pwmfrq) * 524288.0);
+    //air conditioner related:
+    p_params->cond_pvt_on = MathHelpers::Round(((float)p_in->cond_pvt_on) / ADC_DISCRETE);
+    p_params->cond_pvt_off = MathHelpers::Round(((float)p_in->cond_pvt_off) / ADC_DISCRETE);    
    }
    break;
   case CARBUR_PAR:
@@ -380,6 +383,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->vent_pwmfrq = MathHelpers::Round(1.0/(((double)p_params->vent_pwmfrq) / 524288.0));
+     //air conditioner related:
+     p_out->cond_pvt_on = ((float)p_params->cond_pvt_on) * ADC_DISCRETE;
+     p_out->cond_pvt_off = ((float)p_params->cond_pvt_off) * ADC_DISCRETE;
     }
     break;
    case CARBUR_PAR:

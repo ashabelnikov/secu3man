@@ -884,7 +884,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
- if (size != (mp_pdp->isHex() ? 15 : 9))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 23 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
@@ -918,6 +918,18 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&vent_pwmfrq))
   return false;
  m_TemperPar.vent_pwmfrq = MathHelpers::Round(1.0/(((double)vent_pwmfrq) / 524288.0));
+
+ //conditioner clutch turn on threshold (voltage from the refrigerant pressure sensor)
+ int cond_pvt_on = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_pvt_on))
+  return false;
+ m_TemperPar.cond_pvt_on = ((float)cond_pvt_on) * m_adc_discrete;
+
+ //conditioner clutch turn off threshold (voltage from the refrigerant pressure sensor)
+ int cond_pvt_off = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_pvt_off))
+  return false;
+ m_TemperPar.cond_pvt_off = ((float)cond_pvt_off) * m_adc_discrete;
 
  return true;
 }
@@ -2634,6 +2646,11 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
  mp_pdp->Bin16ToHex(vent_off, m_outgoing_packet);
  int vent_pwmfrq = MathHelpers::Round((1.0/packet_data->vent_pwmfrq) * 524288.0);
  mp_pdp->Bin16ToHex(vent_pwmfrq, m_outgoing_packet);
+ //air conditioner related:
+ int cond_pvt_on = MathHelpers::Round(((float)packet_data->cond_pvt_on) / m_adc_discrete);
+ mp_pdp->Bin16ToHex(cond_pvt_on, m_outgoing_packet);
+ int cond_pvt_off = MathHelpers::Round(((float)packet_data->cond_pvt_off) / m_adc_discrete);
+ mp_pdp->Bin16ToHex(cond_pvt_off, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

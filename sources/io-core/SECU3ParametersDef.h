@@ -239,10 +239,13 @@ typedef struct params_t
  _int   ai4_adc_factor;                 // ADC error compensation factor for ADD_I4 input
  _long  ai4_adc_correction;             // ADC error compensation correction for ADD_I4 input
 
+ _uint  cond_pvt_on;
+ _uint  cond_pvt_off;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[24];
+ _uchar reserved[20];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

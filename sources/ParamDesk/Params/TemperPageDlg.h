@@ -33,6 +33,8 @@
 #include "ui-core/SpinButtonCtrlEx.h"
 #include "ui-core/TabDialog.h"
 
+class CWndScroller;
+
 class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
   typedef CParamTabBaseDlg Super;
@@ -51,10 +53,13 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableUseVentPwm(bool enable);
   void EnableUseCTSCurveMap(bool enable);
 
+  void EnableSECU3TItems(bool i_enable);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangePdTemperVentOnThresholdEdit();
   afx_msg void OnChangePdTemperVentOffThresholdEdit();
   afx_msg void OnChangeData();
@@ -65,15 +70,18 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateVentOff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseVentPwm(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseCurveMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   std::auto_ptr<class CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 
   SECU3IO::TemperPar m_params;
   bool m_enabled;
   bool m_use_vent_pwm_enabled;
   bool m_use_curve_map_enabled;
+  bool m_enable_secu3t_features;
 
   CButton m_use_temp_sensor;
   CButton m_use_vent_pwm;
@@ -84,4 +92,8 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_vent_off_threshold_edit;
   CSpinButtonCtrlEx m_vent_pwmfrq_spin;
   CEditEx m_vent_pwmfrq_edit;
+  CSpinButtonCtrlEx m_cond_pvt_on_spin;
+  CEditEx m_cond_pvt_on_edit;
+  CSpinButtonCtrlEx m_cond_pvt_off_spin;
+  CEditEx m_cond_pvt_off_edit;
 };
