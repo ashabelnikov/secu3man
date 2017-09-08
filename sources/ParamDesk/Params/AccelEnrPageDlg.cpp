@@ -33,6 +33,7 @@ const UINT CAccelEnrPageDlg::IDD = IDD_PD_ACCELENR_PAGE;
 BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_ACCELENR_TPSTHRD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_ACCELENR_MULTCOLDENR_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_ACCELENR_DECAYTIME_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_TPSTHRD_SPIN,OnUpdateControls)
@@ -44,6 +45,10 @@ BEGIN_MESSAGE_MAP(CAccelEnrPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_MULTCOLDENR_UNIT,OnUpdateFuelInjectionControls)
 
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_ACCELENR_DECAYTIME_UNIT,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
@@ -52,9 +57,11 @@ CAccelEnrPageDlg::CAccelEnrPageDlg(CWnd* pParent /*=NULL*/)
 , m_fuel_injection(false)
 , m_tpsdot_thrd_edit(CEditEx::MODE_FLOAT, true)
 , m_coldacc_mult_edit(CEditEx::MODE_FLOAT, true)
+, m_decaytime_edit(CEditEx::MODE_INT, true)
 {
  m_params.ae_tpsdot_thrd = 50.0f;   //50%/sec
  m_params.ae_coldacc_mult = 150.0f; //*150% at -30°C
+ m_params.ae_decay_time = 50; //strokes
 }
 
 LPCTSTR CAccelEnrPageDlg::GetDialogID(void) const
@@ -70,9 +77,12 @@ void CAccelEnrPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_ACCELENR_TPSTHRD_SPIN, m_tpsdot_thrd_spin);
  DDX_Control(pDX,IDC_PD_ACCELENR_MULTCOLDENR_EDIT, m_coldacc_mult_edit);
  DDX_Control(pDX,IDC_PD_ACCELENR_MULTCOLDENR_SPIN, m_coldacc_mult_spin);
+ DDX_Control(pDX,IDC_PD_ACCELENR_DECAYTIME_EDIT, m_decaytime_edit);
+ DDX_Control(pDX,IDC_PD_ACCELENR_DECAYTIME_SPIN, m_decaytime_spin);
 
  m_tpsdot_thrd_edit.DDX_Value(pDX, IDC_PD_ACCELENR_TPSTHRD_EDIT, m_params.ae_tpsdot_thrd);
  m_coldacc_mult_edit.DDX_Value(pDX, IDC_PD_ACCELENR_MULTCOLDENR_EDIT, m_params.ae_coldacc_mult);
+ m_decaytime_edit.DDX_Value(pDX, IDC_PD_ACCELENR_DECAYTIME_EDIT, m_params.ae_decay_time);
 }
 
 void CAccelEnrPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -104,6 +114,11 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  m_coldacc_mult_spin.SetRangeAndDelta(100, 299, 1);
  m_coldacc_mult_edit.SetRange(100, 299);
 
+ m_decaytime_spin.SetBuddy(&m_decaytime_edit);
+ m_decaytime_edit.SetLimitText(3);
+ m_decaytime_edit.SetDecimalPlaces(3);
+ m_decaytime_spin.SetRangeAndDelta(0, 255, 1);
+ m_decaytime_edit.SetRange(0, 255);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

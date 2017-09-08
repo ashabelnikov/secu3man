@@ -70,6 +70,8 @@ class CAccelEnrPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_tpsdot_thrd_edit;
   CSpinButtonCtrlEx m_coldacc_mult_spin;
   CEditEx m_coldacc_mult_edit;
+  CSpinButtonCtrlEx m_decaytime_spin;
+  CEditEx m_decaytime_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

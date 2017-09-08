@@ -2038,7 +2038,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::AccelPar& m_AccelPar = m_recepted_packet.m_AccelPar;
- if (size != (mp_pdp->isHex() ? 4 : 2))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 6 : 3))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char tpsdot_thrd = 0;
@@ -2050,6 +2050,11 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &coldacc_mult))
   return false;
  m_AccelPar.ae_coldacc_mult = ((((float)coldacc_mult) + 128.0f) / 128.0f) * 100.0f; //convert to %
+
+ unsigned char ae_decay_time = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ae_decay_time))
+  return false;
+ m_AccelPar.ae_decay_time = ae_decay_time; //strokes
 
  return true;
 }
@@ -3147,6 +3152,9 @@ void CControlApp::Build_ACCEL_PAR(AccelPar* packet_data)
 
  unsigned char coldacc_mult = MathHelpers::Round(((packet_data->ae_coldacc_mult/100.0f) - 1.00f) * 128.0f);
  mp_pdp->Bin8ToHex(coldacc_mult, m_outgoing_packet);
+
+ unsigned char ae_decay_time = packet_data->ae_decay_time;
+ mp_pdp->Bin8ToHex(ae_decay_time, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
