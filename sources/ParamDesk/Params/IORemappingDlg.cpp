@@ -44,22 +44,22 @@ const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
 const UINT IOCaptionEnd = IDC_IO_REMAPPING_CKPS_CAPTION;
 const UINT IOCaptionStart3I = IDC_IO_REMAPPING3I_IGN_O1_CAPTION;
-const UINT IOCaptionEnd3I = IDC_IO_REMAPPING3I_EPAS_I_CAPTION;
+const UINT IOCaptionEnd3I = IDC_IO_REMAPPING3I_ADD_I4_CAPTION;
 
 const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
 const UINT IOComboboxEnd = IDC_IO_REMAPPING_CKPS_COMBOBOX;
 const UINT IOComboboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_COMBOBOX;
-const UINT IOComboboxEnd3I = IDC_IO_REMAPPING3I_EPAS_I_COMBOBOX;
+const UINT IOComboboxEnd3I = IDC_IO_REMAPPING3I_ADD_I4_COMBOBOX;
 
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
 const UINT IOCheckboxEnd = IDC_IO_REMAPPING_CKPS_CHECKBOX;
 const UINT IOCheckboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_CHECKBOX;
-const UINT IOCheckboxEnd3I = IDC_IO_REMAPPING3I_EPAS_I_CHECKBOX;
+const UINT IOCheckboxEnd3I = IDC_IO_REMAPPING3I_ADD_I4_CHECKBOX;
 
 const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
 const UINT IOTTStrEnd = IDS_IO_REMAPPING_CKPS_TT;
 const UINT IOTTStrStart3I = IDS_IO_REMAPPING3I_IGN_O1_TT;
-const UINT IOTTStrEnd3I = IDS_IO_REMAPPING3I_EPAS_I_TT;
+const UINT IOTTStrEnd3I = IDS_IO_REMAPPING3I_ADD_I4_TT;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
@@ -109,7 +109,7 @@ BOOL CIORemappingDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.32f : 2.15f);
+ mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.32f : 2.20f);
 
  _ShowControls();
 
@@ -258,7 +258,7 @@ void CIORemappingDlg::EnableSECU3TItems(bool i_enable)
 {
  m_enable_secu3t_features = i_enable; //update controls flag
 
- mp_scr->SetViewSizeF(.0f, i_enable ? 1.32f : 2.15f);
+ mp_scr->SetViewSizeF(.0f, i_enable ? 1.32f : 2.20f);
 
  _FillControls();
  _SetTooltips();

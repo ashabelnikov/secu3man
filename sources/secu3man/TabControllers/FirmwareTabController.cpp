@@ -873,6 +873,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC));
 
  this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ this->mp_iorCntr->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101)); 
  this->mp_iorCntr->Enable(true);
 
  m_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));

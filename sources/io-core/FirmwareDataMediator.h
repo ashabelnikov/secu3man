@@ -199,16 +199,16 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_PS         =  21,     // PS          (input)
    IOP3I_REF_S      =  22,     // REF_S       (input)
    IOP3I_CKPS       =  23,     // CKPS        (input)
-   IOP3I_ADD_I1     =  24,     // ADD_IO1     (input)
-   IOP3I_ADD_I2     =  25,     // ADD_IO2     (input)
-   IOP3I_ADD_I3     =  26,     // ADD_IO3     (input)
+   IOP3I_ADD_I1     =  24,     // ADD_I1      (input)
+   IOP3I_ADD_I2     =  25,     // ADD_I2      (input)
+   IOP3I_ADD_I3     =  26,     // ADD_I3      (input)
    IOP3I_GAS_V      =  27,     // GAS_V       (input)
    IOP3I_IGN_I      =  28,     // IGN_I       (input)
    IOP3I_COND_I     =  29,     // COND_I      (input)
    IOP3I_EPAS_I     =  30,     // EPAS_I      (input)
-   IOP3I_RESERVED1  =  31,     // Reserved    ()
-   IOP3I_RESERVED2  =  32,     // Reserved    ()
-   IOP3I_RESERVED3  =  33,     // Reserved    ()
+   IOP3I_ADD_I4     =  31,     // ADD_I4      (input)
+   IOP3I_OILP_I     =  32,     // OILP_I      (input)
+   IOP3I_GENS_I     =  33,     // GENS_I      (input)
    IOP3I_RESERVED4  =  34,     // Reserved    ()
    IOP3I_RESERVED5  =  35,     // Reserved    ()
    IOP3I_RESERVED6  =  36,     // Reserved    ()
@@ -238,12 +238,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_INJ_O6     =  60,     // INJ_O6    (output)
    IOP3I_INJ_O7     =  61,     // INJ_O7    (output)
    IOP3I_INJ_O8     =  62,     // INJ_O8    (output)
-// IOP3I_RESERVED11 =  63,     // Reserved    ()
+   IOP3I_IGNTIM     =  63,     // IGNTIM    (input)
 // IOP3I_RESERVED12 =  64,     // Reserved    ()
 // IOP3I_RESERVED13 =  65,     // Reserved    ()
 // IOP3I_RESERVED14 =  66,     // Reserved    ()
 // IOP3I_RESERVED15 =  67,     // Reserved    ()
-   IOP3I_COUNT      =  63,     //DON'T forget to update this value
+   IOP3I_COUNT      =  64,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)
@@ -354,13 +354,13 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_IGN_I      =  28,     // IGN_I       (input)
    IOS3I_COND_I     =  29,     // COND_I      (input)
    IOS3I_EPAS_I     =  30,     // EPAS_I      (input)
-// IOS3I_RESERVED1  =  31,     // Reserved    ()
-// IOS3I_RESERVED2  =  32,     // Reserved    ()
-// IOS3I_RESERVED3  =  33,     // Reserved    ()
+   IOS3I_ADD_I4     =  31,     // ADD_I4      (input)
+   IOS3I_OILP_I     =  32,     // OILP_I      (input)
+   IOS3I_GENS_I     =  33,     // GENS_I      (input)
 // IOS3I_RESERVED4  =  34,     // Reserved    ()
 // IOS3I_RESERVED5  =  35,     // Reserved    ()
 // IOS3I_RESERVED6  =  36,     // Reserved    ()
-   IOS3I_COUNT      =  31,
+   IOS3I_COUNT      =  32,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2

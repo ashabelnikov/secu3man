@@ -51,6 +51,7 @@ class CFWIORemappingController
   void Enable(bool state);
 
   void EnableSECU3TFeatures(bool i_enable);
+  void EnableExtraIO(bool i_enable);
 
  private:
   FWDM::IOPid _IOPCount(void);
@@ -81,4 +82,5 @@ class CFWIORemappingController
   std::map<FWDM::IOSid, FWDM::IOPid> m_defValMap;
   std::map<FWDM::IOSid, bool> m_invFlags;
   bool m_enable_secu3t_features;
+  bool m_enable_extraio;
 };
