@@ -929,6 +929,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_IE, _T("IE"));
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_FE, _T("FE"));
+  mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS3I_ADD_O2, FWDM::IOP3I_ADD_O2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_ADD_O2, true);
   mp_view->EnableInversion(FWDM::IOS3I_ADD_O2, true);
@@ -1045,6 +1046,9 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
   }
   else
   { //sECU-3i:
+   //hack which allows remap ECF output to other output slots
+   if (((FWDM::IOSid)s == FWDM::IOS3I_ECF) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_ECF)))
+    continue; //ECF
    //hack which allows remap PS input to other input slots
    if (((FWDM::IOSid)s == FWDM::IOS3I_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_PS)))
     continue; //PS
@@ -1278,6 +1282,7 @@ void CFWIORemappingController::_EnableInversionItems(void)
  }
  else
  {
+  enableFlags.insert(std::make_pair(FWDM::IOS3I_ECF, false));
   enableFlags.insert(std::make_pair(FWDM::IOS3I_PS, false));
   enableFlags.insert(std::make_pair(FWDM::IOS3I_CKPS, false));
  }
