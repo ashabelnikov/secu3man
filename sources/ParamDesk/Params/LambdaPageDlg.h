@@ -89,6 +89,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_activdelay_edit;
   CSpinButtonCtrlEx m_deadband_spin;
   CEditEx m_deadband_edit;
+  CButton m_htgdet_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;

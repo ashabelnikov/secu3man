@@ -502,6 +502,7 @@ namespace SECU3IO
   int lam_rpm_thrd;                   //RPM turn on threshold
   int lam_activ_delay;                //Afterstart activation delay
   float lam_dead_band;                //Switch point dead band (in volts)
+  bool lam_htgdet;                    //Determine heating by voltage
  };
 
  struct AccelPar
