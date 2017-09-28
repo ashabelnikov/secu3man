@@ -176,7 +176,12 @@ void MPSZImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_IT_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ITRPM_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_RIGID_MAP, false);
  mp_view->EnableFWDFlag(FLAG_EGOCRV_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACCORRW_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACCORR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IATCLT_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -382,7 +387,12 @@ void MPSZExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_IT_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ITRPM_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_RIGID_MAP, false);
  mp_view->EnableFWDFlag(FLAG_EGOCRV_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACCORRW_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IACCORR_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_IATCLT_MAP, false);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

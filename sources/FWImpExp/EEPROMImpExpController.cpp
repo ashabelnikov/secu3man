@@ -176,6 +176,27 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_eedm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
+
+ if (mp_view->GetFWDFlag(FLAG_IT_MAP))
+  m_eedm->GetITMap(other_sel, mp_fwd->maps[current_sel].inj_timing);
+
+ if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
+  m_eedm->GetITRPMMap(other_sel, mp_fwd->maps[current_sel].inj_target_rpm);
+
+ if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
+  m_eedm->GetRigidMap(other_sel, mp_fwd->maps[current_sel].inj_idl_rigidity);
+
+ if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
+  m_eedm->GetEGOCurveMap(other_sel, mp_fwd->maps[current_sel].inj_ego_curve);
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
+  m_eedm->GetIACCorrWMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr_w);
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
+  m_eedm->GetIACCorrMap(other_sel, mp_fwd->maps[current_sel].inj_iac_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
+  m_eedm->GetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
 }
 
 //Modal window has been activated - perform its initialization
@@ -209,6 +230,13 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AETPS_MAP, true);
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_ITRPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_RIGID_MAP, true);
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

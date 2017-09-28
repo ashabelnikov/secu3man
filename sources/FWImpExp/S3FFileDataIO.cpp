@@ -65,6 +65,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.03 - Major changes (02.11.2014). Fuel injection and intake air maps added.
 // 01.04 - Gas dose position map added (20.12.2015)
 // 01.05 - Injection timing and EGO curve maps were added (02.08.2017)
+// 01.06 - Rest fuel injection maps were added (28.09.2017)
 
 struct S3FFileHdr
 {
@@ -100,7 +101,14 @@ struct S3FMapSetItem
  //injection timing and EGO curve, since v01.05
  s3f_int32_t inj_timing[INJ_VE_POINTS_L * INJ_VE_POINTS_F];// Injection timing
  s3f_int32_t inj_ego_curve[INJ_EGO_CURVE_SIZE+2];          // EGO curve
- s3f_int32_t reserved[750]; //reserved bytes, = 0
+ //since v01.06
+ s3f_int32_t inj_target_rpm[INJ_TARGET_RPM_TABLE_SIZE];    // Target RPM
+ s3f_int32_t inj_idl_rigidity[INJ_IDL_RIGIDITY_TABLE_SIZE];// Idling regulator's rigidity
+ s3f_int32_t inj_iac_corr_w[INJ_IAC_CORR_W_SIZE+2];        // IAC correction weight lookup table
+ s3f_int32_t inj_iac_corr[INJ_IAC_CORR_SIZE+2];            // IAC correction lookup table
+ s3f_int32_t inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+2];      // IAT/CLT correction vs air flow
+
+ s3f_int32_t reserved[688]; //reserved bytes, = 0
 };
 
 //Separate maps
@@ -228,7 +236,7 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0105; //01.05
+ p_fileHdr->version = 0x0106; //01.06
 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
@@ -268,6 +276,16 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_timing[i] = MathHelpers::Round(m_data.maps[s].inj_timing[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
    p_setItem[s].inj_ego_curve[i] = MathHelpers::Round(m_data.maps[s].inj_ego_curve[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
+   p_setItem[s].inj_target_rpm[i] = MathHelpers::Round(m_data.maps[s].inj_target_rpm[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; ++i)
+   p_setItem[s].inj_idl_rigidity[i] = MathHelpers::Round(m_data.maps[s].inj_idl_rigidity[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IAC_CORR_W_SIZE+2; ++i)
+   p_setItem[s].inj_iac_corr_w[i] = MathHelpers::Round(m_data.maps[s].inj_iac_corr_w[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
+   p_setItem[s].inj_iac_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iac_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
+   p_setItem[s].inj_iatclt_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iatclt_corr[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -379,6 +397,16 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_timing[i] = p_setItem[s].inj_timing[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_EGO_CURVE_SIZE+2; ++i)
    m_data.maps[s].inj_ego_curve[i] = p_setItem[s].inj_ego_curve[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_TARGET_RPM_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_target_rpm[i] = p_setItem[s].inj_target_rpm[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IDL_RIGIDITY_TABLE_SIZE; ++i)
+   m_data.maps[s].inj_idl_rigidity[i] = p_setItem[s].inj_idl_rigidity[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_CORR_W_SIZE+2; ++i)
+   m_data.maps[s].inj_iac_corr_w[i] = p_setItem[s].inj_iac_corr_w[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IAC_CORR_SIZE+2; ++i)
+   m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
+   m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];

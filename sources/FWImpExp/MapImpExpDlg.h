@@ -48,7 +48,12 @@ enum EFWDFlags
  FLAG_AERPM_MAP,    //inj
  FLAG_AFTSTR_MAP,   //inj
  FLAG_IT_MAP,       //inj
+ FLAG_ITRPM_MAP,    //inj
+ FLAG_RIGID_MAP,    //inj
  FLAG_EGOCRV_MAP,   //inj
+ FLAG_IACCORRW_MAP, //inj
+ FLAG_IACCORR_MAP,  //inj
+ FLAG_IATCLT_MAP,   //inj
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate
@@ -60,6 +65,7 @@ enum EFWDFlags
 };
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 //view
 class CMapImpExpDlg : public CDialog
@@ -106,6 +112,7 @@ class CMapImpExpDlg : public CDialog
   virtual void OnOK();
   virtual void OnCancel();
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnMapImpexpExchangeButton();
   afx_msg void OnChangeFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFWDCurrentList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -127,6 +134,7 @@ class CMapImpExpDlg : public CDialog
   CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 
   EventHandler m_OnExchangeButton;
   EventWithCodeAndString m_OnFWDCurrentListNamechanged;

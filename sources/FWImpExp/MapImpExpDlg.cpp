@@ -29,6 +29,7 @@
 #include "io-core/SECU3IO.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/fnt_helpers.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
 
@@ -38,6 +39,7 @@ const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
 // CMapImpExpDlg dialog
 
 BEGIN_MESSAGE_MAP(CMapImpExpDlg, Super)
+ ON_WM_DESTROY()
  ON_BN_CLICKED(IDC_MAP_IMPEXP_EXCHANGE_BUTTON, OnMapImpexpExchangeButton)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_MAP_IMPEXP_CURRENT_FWD_LIST, OnChangeFWDCurrentList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_MAP_IMPEXP_CURRENT_FWD_LIST, OnEndLabelEditFWDCurrentList)
@@ -49,6 +51,7 @@ END_MESSAGE_MAP()
 
 CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
 : Super(CMapImpExpDlg::IDD, pParent)
+, mp_scr(new CWndScroller)
 {
  m_current_fwd_title_string = _T("");
  m_other_fwd_title_string = _T("");
@@ -68,7 +71,12 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_AERPM_MAP] = FALSE;
  m_fwd_flags[FLAG_AFTSTR_MAP] = FALSE;
  m_fwd_flags[FLAG_IT_MAP] = FALSE;
+ m_fwd_flags[FLAG_ITRPM_MAP] = FALSE;
+ m_fwd_flags[FLAG_RIGID_MAP] = FALSE;
  m_fwd_flags[FLAG_EGOCRV_MAP] = FALSE;
+ m_fwd_flags[FLAG_IACCORRW_MAP] = FALSE;
+ m_fwd_flags[FLAG_IACCORR_MAP] = FALSE;
+ m_fwd_flags[FLAG_IATCLT_MAP] = FALSE;
  //separate maps
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
@@ -104,7 +112,12 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_AERPMMAP_FLAG, m_fwd_flags[FLAG_AERPM_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_AFTSTRMAP_FLAG, m_fwd_flags[FLAG_AFTSTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ITMAP_FLAG, m_fwd_flags[FLAG_IT_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_ITRPM_FLAG, m_fwd_flags[FLAG_ITRPM_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_RIGID_FLAG, m_fwd_flags[FLAG_RIGID_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_EGOCRVMAP_FLAG, m_fwd_flags[FLAG_EGOCRV_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_IACCORRW_FLAG, m_fwd_flags[FLAG_IACCORRW_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_IACCORR_FLAG, m_fwd_flags[FLAG_IACCORR_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_IATCLT_FLAG, m_fwd_flags[FLAG_IATCLT_MAP]);
  //separate
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
@@ -131,7 +144,12 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_AERPMMAP_FLAG, m_fwd_flags_buttons[FLAG_AERPM_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_AFTSTRMAP_FLAG, m_fwd_flags_buttons[FLAG_AFTSTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ITMAP_FLAG, m_fwd_flags_buttons[FLAG_IT_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_ITRPM_FLAG, m_fwd_flags_buttons[FLAG_ITRPM_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_RIGID_FLAG, m_fwd_flags_buttons[FLAG_RIGID_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_EGOCRVMAP_FLAG, m_fwd_flags_buttons[FLAG_EGOCRV_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_IACCORRW_FLAG, m_fwd_flags_buttons[FLAG_IACCORRW_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_IACCORR_FLAG, m_fwd_flags_buttons[FLAG_IACCORR_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_IATCLT_FLAG, m_fwd_flags_buttons[FLAG_IATCLT_MAP]);
  //separate
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
@@ -366,7 +384,12 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_AERPM_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_AFTSTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IT_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ITRPM_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_RIGID_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_EGOCRV_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IACCORRW_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IACCORR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IATCLT_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  //separate
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DWLCNTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATTEN_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
@@ -379,7 +402,17 @@ BOOL CMapImpExpDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ mp_scr->SetViewSizeF(.0f, 1.1f);
+
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CMapImpExpDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CMapImpExpDlg::SetExchangeButtonCaption(const _TSTRING& i_text)

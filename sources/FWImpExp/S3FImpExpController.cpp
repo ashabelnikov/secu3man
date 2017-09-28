@@ -217,8 +217,23 @@ void S3FImportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_IT_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_timing, mp_s3f_io->GetData().maps[other_sel].inj_timing,sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
+ if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_target_rpm, mp_s3f_io->GetData().maps[other_sel].inj_target_rpm,sizeof(float) * INJ_TARGET_RPM_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_idl_rigidity, mp_s3f_io->GetData().maps[other_sel].inj_idl_rigidity,sizeof(float) * INJ_IDL_RIGIDITY_TABLE_SIZE);
+
  if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
   memcpy(mp_fwd->maps[current_sel].inj_ego_curve, mp_s3f_io->GetData().maps[other_sel].inj_ego_curve, sizeof(float) * (INJ_EGO_CURVE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_iac_corr_w, mp_s3f_io->GetData().maps[other_sel].inj_iac_corr_w,sizeof(float) * (INJ_IAC_CORR_W_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_iac_corr, mp_s3f_io->GetData().maps[other_sel].inj_iac_corr,sizeof(float) * (INJ_IAC_CORR_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
+  memcpy(mp_fwd->maps[current_sel].inj_iatclt_corr, mp_s3f_io->GetData().maps[other_sel].inj_iatclt_corr,sizeof(float) * (INJ_IATCLT_CORR_SIZE+2));
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -265,7 +280,12 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, injen); 
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, injen); 
  mp_view->SetFWDFlag(FLAG_IT_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_ITRPM_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_RIGID_MAP, injen);
  mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IACCORR_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IATCLT_MAP, injen);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -466,8 +486,23 @@ void S3FExportController::OnExchangePressed(void)
  if (mp_view->GetFWDFlag(FLAG_IT_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_timing, mp_fwd->maps[current_sel].inj_timing, sizeof(float) * INJ_VE_POINTS_L * INJ_VE_POINTS_F);
 
+ if (mp_view->GetFWDFlag(FLAG_ITRPM_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_target_rpm, mp_fwd->maps[current_sel].inj_target_rpm, sizeof(float) * INJ_TARGET_RPM_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_RIGID_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_idl_rigidity, mp_fwd->maps[current_sel].inj_idl_rigidity, sizeof(float) * INJ_IDL_RIGIDITY_TABLE_SIZE);
+
  if (mp_view->GetFWDFlag(FLAG_EGOCRV_MAP))
   memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_ego_curve, mp_fwd->maps[current_sel].inj_ego_curve, sizeof(float) * (INJ_EGO_CURVE_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORRW_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_iac_corr_w, mp_fwd->maps[current_sel].inj_iac_corr_w, sizeof(float) * (INJ_IAC_CORR_W_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IACCORR_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_iac_corr, mp_fwd->maps[current_sel].inj_iac_corr, sizeof(float) * (INJ_IAC_CORR_SIZE+2));
+
+ if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().maps[other_sel].inj_iatclt_corr, mp_fwd->maps[current_sel].inj_iatclt_corr, sizeof(float) * (INJ_IATCLT_CORR_SIZE+2));
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -502,7 +537,12 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_AERPM_MAP, true);
  mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_ITRPM_MAP, true);
+ mp_view->SetFWDFlag(FLAG_RIGID_MAP, true);
  mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
+ mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
