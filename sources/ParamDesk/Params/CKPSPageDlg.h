@@ -59,6 +59,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableInputsMerging(bool enable);
   void EnableHallWndWidth(bool enable);
   void EnableRisingSpark(bool enable);
+  void EnableUseCamRef(bool enable);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);
@@ -82,6 +83,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateMergeOutputs(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCKPSFront(CCmdUI* pCmdUI);
   afx_msg void OnUpdateRisingSpark(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateUseCamRef(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void _FillCKPSTeethBTDCComboBox(void);
@@ -109,6 +111,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_inpmrg_enabled;
   bool m_rising_spark_enabled;
   bool m_hallwndwidth_enabled;
+  bool m_usecamref_enabled;
   int m_max_cylinders;
 
   CStatic m_ckps_front_groupbox;
@@ -116,6 +119,7 @@ class CCKPSPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_ckps_negfront_radio;
   CButton m_merge_ign_outputs_check;
   CButton m_rising_spark_check;
+  CButton m_use_cam_ref_check;
 
   CStatic m_ref_s_front_groupbox;
   CButton m_ref_s_posfront_radio;

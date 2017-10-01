@@ -389,6 +389,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  m_view->mp_ParamDeskDlg->EnableExtraIO(true);
  m_view->mp_ParamDeskDlg->EnableInputsMerging(true);
  m_view->mp_ParamDeskDlg->EnableRisingSpark(true);
+ m_view->mp_ParamDeskDlg->EnableUseCamRef(true);
  m_view->mp_ParamDeskDlg->EnableFuelInjection(true);
  m_view->mp_ParamDeskDlg->EnableLambda(true);
  m_view->mp_ParamDeskDlg->EnableGasdose(true);

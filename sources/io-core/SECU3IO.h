@@ -234,6 +234,7 @@ namespace SECU3IO
   float hall_wnd_width; 
   bool ckps_rising_spark;
   float hall_degrees_btdc;
+  bool ckps_use_cam_ref;
  };
 
  struct OPCompNc                        //используется если надо просто принять или послать определенный код действия

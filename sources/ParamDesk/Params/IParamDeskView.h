@@ -59,6 +59,7 @@ class IParamDeskView : public IDeskView
   virtual void EnableCKPSItems(bool i_enable) = 0;
   virtual void EnableBTNameAndPass(bool i_enable) = 0;
   virtual void EnableInputsMerging(bool i_enable) = 0;
+  virtual void EnableRisingSpark(bool i_enable) = 0;
   virtual void EnableFuelInjection(bool i_enable) = 0;
   virtual void EnableLambda(bool i_enable) = 0;
   virtual void EnableGasdoseTesting(bool i_enable) = 0;
@@ -67,6 +68,7 @@ class IParamDeskView : public IDeskView
   virtual void EnableChoke(bool i_enable) = 0;
   virtual void EnableHallWndWidth(bool enable) = 0;
   virtual void EnableChokeCtrls(bool i_enable) = 0;
+  virtual void EnableUseCamRef(bool enable) = 0;
 
   virtual BYTE GetCurrentDescriptor(void) = 0; //obtains descriptor corresponding to current (displaying) tab
 

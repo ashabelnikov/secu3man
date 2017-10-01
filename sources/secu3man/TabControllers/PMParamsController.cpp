@@ -151,6 +151,7 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  mp_view->EnableHallWndWidth(CHECKBIT32(opt, COPT_HALL_SYNC) || CHECKBIT32(opt, COPT_CKPS_NPLUS1));
  mp_view->EnableInputsMerging(!CHECKBIT32(opt, COPT_CKPS_2CHIGN));
  mp_view->EnableRisingSpark(CHECKBIT32(opt, COPT_DWELL_CONTROL) && !CHECKBIT32(opt, COPT_CKPS_2CHIGN));
+ mp_view->EnableUseCamRef(CHECKBIT32(opt, SECU3IO::COPT_PHASE_SENSOR));
  mp_view->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT)); 
  mp_view->EnableLambda(CHECKBIT32(opt, COPT_FUEL_INJECT) || CHECKBIT32(opt, COPT_CARB_AFR) || CHECKBIT32(opt, COPT_GD_CONTROL));
  mp_view->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL)); //GD

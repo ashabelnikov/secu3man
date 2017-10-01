@@ -219,6 +219,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->ckps_cogs_num = p_in->ckps_cogs_num;
     p_params->ckps_miss_num = p_in->ckps_miss_num;
     WRITEBIT8(p_params->hall_flags, 0, p_in->ckps_rising_spark);
+    WRITEBIT8(p_params->hall_flags, 1, p_in->ckps_use_cam_ref);
     p_params->hall_wnd_width = MathHelpers::Round(p_in->hall_wnd_width * ANGLE_MULTIPLIER);
     p_params->hall_degrees_btdc = MathHelpers::Round(p_in->hall_degrees_btdc * ANGLE_MULTIPLIER);
    }
@@ -562,6 +563,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->ckps_cogs_num = p_params->ckps_cogs_num;
      p_out->ckps_miss_num = p_params->ckps_miss_num;
      p_out->ckps_rising_spark = CHECKBIT8(p_params->hall_flags, 0);
+     p_out->ckps_use_cam_ref = CHECKBIT8(p_params->hall_flags, 1);
      p_out->hall_wnd_width = ((float)p_params->hall_wnd_width) / ANGLE_MULTIPLIER;
      p_out->hall_degrees_btdc = ((float)p_params->hall_degrees_btdc) / ANGLE_MULTIPLIER;
     }

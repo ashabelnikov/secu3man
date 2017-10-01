@@ -1147,6 +1147,7 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
   return false;
  m_CKPSPar.ckps_rising_spark = CHECKBIT8(flags, 0);
+ m_CKPSPar.ckps_use_cam_ref = CHECKBIT8(flags, 1);
 
  //Hall shutter's window width
  int wnd_width;
@@ -2764,6 +2765,7 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
  unsigned char flags = 0; //not used now
  WRITEBIT8(flags, 0, packet_data->ckps_rising_spark);
+ WRITEBIT8(flags, 1, packet_data->ckps_use_cam_ref);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  int wnd_width = MathHelpers::Round(packet_data->hall_wnd_width * m_angle_multiplier);
  mp_pdp->Bin16ToHex(wnd_width, m_outgoing_packet);
