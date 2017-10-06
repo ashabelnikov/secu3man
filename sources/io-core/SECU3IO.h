@@ -396,6 +396,7 @@ namespace SECU3IO
   float lam_corr_limit_p;               //"+" correction limit
   float lam_corr_limit_m;               //"-" correction limit
   float lam_stoichval;                  //stoichiometry value for LPG
+  int   gd_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
  };
 
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys

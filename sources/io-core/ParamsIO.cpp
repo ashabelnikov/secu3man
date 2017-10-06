@@ -291,6 +291,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->gd_lambda_corr_limit_p = MathHelpers::Round(p_in->lam_corr_limit_p * 512.0f / 100.0f);
     p_params->gd_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
     p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_stoichval * 128.0f);
+    p_params->gd_freq = p_in->gd_freq;
    }
    break;
   case SECUR_PAR:
@@ -630,6 +631,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->lam_corr_limit_p = ((float)p_params->gd_lambda_corr_limit_p * 100.0f)/512.0f;
      p_out->lam_corr_limit_m = ((float)p_params->gd_lambda_corr_limit_m * 100.0f)/512.0f;
      p_out->lam_stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
+     p_out->gd_freq = p_params->gd_freq;
     }
     break;
    case SECUR_PAR:

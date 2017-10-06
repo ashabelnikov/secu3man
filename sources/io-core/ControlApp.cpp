@@ -1757,7 +1757,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 20 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 22 : 12))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1795,6 +1795,12 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_stoichval))
   return false;
  m_GasdosePar.lam_stoichval = ((float)lam_stoichval) / 128.0f;
+
+ //frequency of stepper motor's pulses
+ int gd_freq = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gd_freq))
+  return false;
+ m_GasdosePar.gd_freq = gd_freq;
 
  return true;
 }
@@ -3053,6 +3059,8 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin16ToHex(corr_limit_m, m_outgoing_packet);
  int lam_stoichval = MathHelpers::Round(packet_data->lam_stoichval * 128.0f);
  mp_pdp->Bin16ToHex(lam_stoichval, m_outgoing_packet);
+ BYTE gd_freq = packet_data->gd_freq;
+ mp_pdp->Bin8ToHex(gd_freq, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

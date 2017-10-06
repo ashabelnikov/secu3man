@@ -28,16 +28,19 @@
 #include "GasdosePageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CGasdosePageDlg::IDD = IDD_PD_GASDOSE_PAGE;
 
 BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_GASDOSE_SM_STEPS_NUM_EDIT, OnChangePdSMStepsNumEdit)
  ON_EN_CHANGE(IDC_PD_GASDOSE_FC_CLOSING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_P_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_STOICHAFR_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_GASDOSE_SM_TEST_CHECK, OnSMTestButton)
+ ON_CBN_SELCHANGE(IDC_PD_GASDOSE_SM_FREQ_COMBO, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_STEPS_NUM_SPIN,OnUpdateGasdoseSMSteps)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_STEPS_NUM_CAPTION,OnUpdateGasdoseSMSteps)
@@ -65,6 +68,10 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_CORRLIMIT_M_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_CORRLIMIT_M_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_CORRLIMIT_M_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_UNIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
@@ -78,6 +85,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
 , m_gasdose_tst_enabled(false)
 , m_gasdose_manpos_enabled(false)
 , m_lock_ui_update(false) //UI update is not locked
+, mp_scr(new CWndScroller)
 {
  m_params.gd_steps = 700;
  m_params.testing = 0;
@@ -86,6 +94,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_corr_limit_p = 30.0f;
  m_params.lam_corr_limit_m = 30.0f;
  m_params.lam_stoichval = 15.6f;
+ m_params.gd_freq = 0;
 }
 
 LPCTSTR CGasdosePageDlg::GetDialogID(void) const
@@ -108,6 +117,7 @@ void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_GASDOSE_CORRLIMIT_M_SPIN, m_corrlimit_m_spin);
  DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_SPIN, m_stoichval_spin);
  DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_stoichval_edit);
+ DDX_Control(pDX, IDC_PD_GASDOSE_SM_FREQ_COMBO, m_sm_freq_combo);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_GASDOSE_SM_STEPS_NUM_EDIT, m_params.gd_steps);
  DDX_Check_UCHAR(pDX, IDC_PD_GASDOSE_SM_TEST_CHECK, m_params.testing);
@@ -115,6 +125,7 @@ void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)
  m_corrlimit_p_edit.DDX_Value(pDX, IDC_PD_GASDOSE_CORRLIMIT_P_EDIT, m_params.lam_corr_limit_p);
  m_corrlimit_m_edit.DDX_Value(pDX, IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, m_params.lam_corr_limit_m);
  m_stoichval_edit.DDX_Value(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_params.lam_stoichval);
+ DDX_CBIndex_int(pDX, IDC_PD_GASDOSE_SM_FREQ_COMBO, m_params.gd_freq);
 }
 
 void CGasdosePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -175,6 +186,14 @@ BOOL CGasdosePageDlg::OnInitDialog()
 
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
+ //-----------------------------------------------------------------
+ //fill combobox containing STEP frequences
+ m_sm_freq_combo.AddString(_T("300"));
+ m_sm_freq_combo.AddString(_T("150"));
+ m_sm_freq_combo.AddString(_T("100"));
+ m_sm_freq_combo.AddString(_T("75"));
+ //-----------------------------------------------------------------
+
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
@@ -190,9 +209,19 @@ BOOL CGasdosePageDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ mp_scr->SetViewSizeF(.0f, 1.2f);
+
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CGasdosePageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CGasdosePageDlg::OnChangePdSMStepsNumEdit()
