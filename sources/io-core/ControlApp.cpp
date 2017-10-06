@@ -1740,9 +1740,10 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  BYTE choke_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &choke_flags))
   return false;
- m_ChokePar.offstrtadd_ongas = (choke_flags & 0x01) != 0;
- m_ChokePar.offrpmreg_ongas = (choke_flags & 0x02) != 0;
- m_ChokePar.usethrottle_pos = (choke_flags & 0x04) != 0;
+ m_ChokePar.offstrtadd_ongas = CHECKBIT8(choke_flags, 0);
+ m_ChokePar.offrpmreg_ongas = CHECKBIT8(choke_flags, 1);
+ m_ChokePar.usethrottle_pos = CHECKBIT8(choke_flags, 2);
+ m_ChokePar.sm_maxfreqinit = CHECKBIT8(choke_flags, 3);
 
  //frequency of stepper motor's pulses
  int sm_freq = 0;
@@ -1757,7 +1758,7 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::GasdosePar& m_GasdosePar = m_recepted_packet.m_GasdosePar;
- if (size != (mp_pdp->isHex() ? 22 : 12))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 24 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1801,6 +1802,12 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gd_freq))
   return false;
  m_GasdosePar.gd_freq = gd_freq;
+
+ //Flag
+ int gd_maxfreqinit = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gd_maxfreqinit))
+  return false;
+ m_GasdosePar.gd_maxfreqinit = gd_maxfreqinit;
 
  return true;
 }
@@ -3038,6 +3045,7 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
  WRITEBIT8(flags, 0, packet_data->offstrtadd_ongas);
  WRITEBIT8(flags, 1, packet_data->offrpmreg_ongas);
  WRITEBIT8(flags, 2, packet_data->usethrottle_pos);
+ WRITEBIT8(flags, 3, packet_data->sm_maxfreqinit);
 
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
 
@@ -3061,6 +3069,8 @@ void CControlApp::Build_GASDOSE_PAR(GasdosePar* packet_data)
  mp_pdp->Bin16ToHex(lam_stoichval, m_outgoing_packet);
  BYTE gd_freq = packet_data->gd_freq;
  mp_pdp->Bin8ToHex(gd_freq, m_outgoing_packet);
+ BYTE gd_maxfreqinit = packet_data->gd_maxfreqinit;
+ mp_pdp->Bin8ToHex(gd_maxfreqinit, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

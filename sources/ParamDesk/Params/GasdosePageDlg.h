@@ -96,6 +96,8 @@ class CGasdosePageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CComboBox m_sm_freq_combo;
 
+  CButton m_sm_maxfreqinit_check;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;
 };

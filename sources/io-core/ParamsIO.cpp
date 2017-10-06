@@ -280,6 +280,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->choke_flags, 0, p_in->offstrtadd_ongas);
     WRITEBIT8(p_params->choke_flags, 1, p_in->offrpmreg_ongas);
     WRITEBIT8(p_params->choke_flags, 2, p_in->usethrottle_pos);
+    WRITEBIT8(p_params->choke_flags, 3, p_in->sm_maxfreqinit);
     p_params->sm_freq = p_in->sm_freq;
    }
    break;
@@ -292,6 +293,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->gd_lambda_corr_limit_m = MathHelpers::Round(p_in->lam_corr_limit_m * 512.0f / 100.0f);
     p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_stoichval * 128.0f);
     p_params->gd_freq = p_in->gd_freq;
+    p_params->gd_maxfreqinit = p_in->gd_maxfreqinit;
    }
    break;
   case SECUR_PAR:
@@ -620,6 +622,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->offstrtadd_ongas = CHECKBIT8(p_params->choke_flags, 0);
      p_out->offrpmreg_ongas = CHECKBIT8(p_params->choke_flags, 1);
      p_out->usethrottle_pos = CHECKBIT8(p_params->choke_flags, 2);
+     p_out->sm_maxfreqinit = CHECKBIT8(p_params->choke_flags, 3);
      p_out->sm_freq = p_params->sm_freq;
     }
     break;
@@ -632,6 +635,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->lam_corr_limit_m = ((float)p_params->gd_lambda_corr_limit_m * 100.0f)/512.0f;
      p_out->lam_stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
      p_out->gd_freq = p_params->gd_freq;
+     p_out->gd_maxfreqinit = p_params->gd_maxfreqinit;
     }
     break;
    case SECUR_PAR:

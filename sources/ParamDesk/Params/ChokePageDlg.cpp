@@ -45,6 +45,8 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_CHOKE_MAXFREQINIT_CHECK, OnChangeData)
+
  ON_CBN_SELCHANGE(IDC_PD_CHOKE_SM_FREQ_COMBO, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,OnUpdateChokeSMSteps)
@@ -88,6 +90,7 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, OnUpdateUseThrottlePos)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MAXFREQINIT_CHECK, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_COMBO,OnUpdateSmFreq)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_CAPTION,OnUpdateSmFreq)
@@ -122,6 +125,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
  m_params.offrpmreg_ongas = false;
  m_params.usethrottle_pos = false;
  m_params.sm_freq = 0;
+ m_params.sm_maxfreqinit = false;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -154,6 +158,7 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_offstrtadd_ongas_check);
  DDX_Control(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_offrpmreg_ongas_check);
  DDX_Control(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_usethrottle_pos_check);
+ DDX_Control(pDX, IDC_PD_CHOKE_MAXFREQINIT_CHECK, m_sm_maxfreqinit_check);
 
  DDX_Control(pDX, IDC_PD_CHOKE_SM_FREQ_COMBO, m_sm_freq_combo);
 
@@ -169,6 +174,7 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.offstrtadd_ongas);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_params.offrpmreg_ongas);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_params.usethrottle_pos);
+ DDX_Check_bool(pDX, IDC_PD_CHOKE_MAXFREQINIT_CHECK, m_params.sm_maxfreqinit);
 
  DDX_CBIndex_int(pDX, IDC_PD_CHOKE_SM_FREQ_COMBO, m_params.sm_freq);
 }

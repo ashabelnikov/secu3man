@@ -108,6 +108,7 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_offstrtadd_ongas_check;
   CButton m_offrpmreg_ongas_check;
   CButton m_usethrottle_pos_check;
+  CButton m_sm_maxfreqinit_check;
 
   CComboBox m_sm_freq_combo;
 

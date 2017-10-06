@@ -385,6 +385,7 @@ namespace SECU3IO
   bool  offrpmreg_ongas;                //Turn off RPM regulator when fuel type is gas
   bool  usethrottle_pos;                //Use throttle position in choke initialization
   int   sm_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
+  bool  sm_maxfreqinit;                 //Use maximum STEP frequency at initialization of SM
  };
 
  struct GasdosePar
@@ -397,6 +398,7 @@ namespace SECU3IO
   float lam_corr_limit_m;               //"-" correction limit
   float lam_stoichval;                  //stoichiometry value for LPG
   int   gd_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
+  bool  gd_maxfreqinit;                 //Use maximum STEP frequency at initialization of SM
  };
 
  const int IBTN_KEYS_NUM = 2;           //Number of iButton keys

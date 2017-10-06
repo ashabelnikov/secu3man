@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_STOICHAFR_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_GASDOSE_SM_TEST_CHECK, OnSMTestButton)
+ ON_BN_CLICKED(IDC_PD_GASDOSE_MAXFREQINIT_CHECK, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_GASDOSE_SM_FREQ_COMBO, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_STEPS_NUM_SPIN,OnUpdateGasdoseSMSteps)
@@ -72,6 +73,8 @@ BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_SM_FREQ_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_GASDOSE_MAXFREQINIT_CHECK,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
@@ -95,6 +98,7 @@ CGasdosePageDlg::CGasdosePageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_corr_limit_m = 30.0f;
  m_params.lam_stoichval = 15.6f;
  m_params.gd_freq = 0;
+ m_params.gd_maxfreqinit = false;
 }
 
 LPCTSTR CGasdosePageDlg::GetDialogID(void) const
@@ -118,6 +122,7 @@ void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_SPIN, m_stoichval_spin);
  DDX_Control(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_stoichval_edit);
  DDX_Control(pDX, IDC_PD_GASDOSE_SM_FREQ_COMBO, m_sm_freq_combo);
+ DDX_Control(pDX, IDC_PD_GASDOSE_MAXFREQINIT_CHECK, m_sm_maxfreqinit_check);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_GASDOSE_SM_STEPS_NUM_EDIT, m_params.gd_steps);
  DDX_Check_UCHAR(pDX, IDC_PD_GASDOSE_SM_TEST_CHECK, m_params.testing);
@@ -126,6 +131,7 @@ void CGasdosePageDlg::DoDataExchange(CDataExchange* pDX)
  m_corrlimit_m_edit.DDX_Value(pDX, IDC_PD_GASDOSE_CORRLIMIT_M_EDIT, m_params.lam_corr_limit_m);
  m_stoichval_edit.DDX_Value(pDX, IDC_PD_GASDOSE_STOICHAFR_EDIT, m_params.lam_stoichval);
  DDX_CBIndex_int(pDX, IDC_PD_GASDOSE_SM_FREQ_COMBO, m_params.gd_freq);
+ DDX_Check_bool(pDX, IDC_PD_GASDOSE_MAXFREQINIT_CHECK, m_params.gd_maxfreqinit);
 }
 
 void CGasdosePageDlg::OnUpdateControls(CCmdUI* pCmdUI)
