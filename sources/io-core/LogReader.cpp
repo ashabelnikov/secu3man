@@ -33,13 +33,13 @@
 using namespace SECU3IO;
 
 //максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 255
+#define MAX_REC_BUF 300
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 35
+#define CSV_COUNT_DATA_VAL 37
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -47,7 +47,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -147,7 +147,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  int tpsdot = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
- float speed, distance, air_temp, inj_pw, lambda_corr;
+ float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr;
  char ce_errors[20] = {0};
 
  result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
@@ -173,6 +173,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &gasdose_pos,
                 &speed,
                 &distance,
+                &inj_ffd,
+                &inj_fff,
                 &air_temp,
                 &strt_aalt,
                 &idle_aalt,
@@ -221,6 +223,8 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.gasdose_pos = gasdose_pos;
  o_data.speed = speed;
  o_data.distance = distance;
+ o_data.inj_ffd = inj_ffd;
+ o_data.inj_fff = inj_fff;
  o_data.add_i2_mode = (fabs(air_temp - 999.99f) > 0.0001); //Comparing with epsilon
  o_data.air_temp = o_data.add_i2_mode ? air_temp : .0f;
  o_data.strt_aalt = strt_aalt;
@@ -267,7 +271,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

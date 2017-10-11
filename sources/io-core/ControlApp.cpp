@@ -271,7 +271,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 104 : 52))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 108 : 54))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -399,6 +399,18 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  //convert to selected unit
  if (m_speedUnit == 1)
   m_SensorDat.distance/= 1.609344f;
+
+ //Fuel flow frequency
+ int inj_fff = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_fff))
+  return false;
+ m_SensorDat.inj_fff = ((float)inj_fff) / 256.0f; //because raw value multiplied by 256
+
+ //calculate value of fuel flow in L/100km
+ if (m_SensorDat.speed > .0f) 
+  m_SensorDat.inj_ffd = (m_SensorDat.inj_fff / m_SensorDat.speed) * ((3600.0f * 100.0f) / 16000.0f);
+ else
+  m_SensorDat.inj_ffd = .0f;
 
  //Intake air temperature
  int air_temp = 0;

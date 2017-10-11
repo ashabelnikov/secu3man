@@ -58,6 +58,8 @@ namespace SECU3IO
   float gasdose_pos;                    //gas dosator position
   float speed;                          //vehicle speed (Km/h)
   float distance;                       //passed distance since last ignition turn on (meters)
+  float inj_fff;                        //value of instant fuel consumption, Hz (16000 pulses per 1L of burnt fuel)
+  float inj_ffd;                        //value of instant fuel consumption, L/100km (habitual format)                 
   float air_temp;                       //intake air temperature
   bool  add_i2_mode;                    //0 - show voltage, 1 - show IAT
 
