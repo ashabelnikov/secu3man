@@ -650,7 +650,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 31 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -700,6 +700,17 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  //Engine load measurement source
  if (false == mp_pdp->Hex4ToBin(raw_packet,&m_FunSetPar.load_src_cfg))
   return false;
+
+ //Uni.outputs selected for map selection
+ BYTE mapsel_uni = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &mapsel_uni))
+  return false;
+ m_FunSetPar.uni_gas = mapsel_uni >> 4;
+ m_FunSetPar.uni_benzin = mapsel_uni & 0xF;
+ if (m_FunSetPar.uni_gas == 0xF)
+  m_FunSetPar.uni_gas = UNI_OUTPUT_NUM; //disabled
+ if (m_FunSetPar.uni_benzin == 0xF)
+  m_FunSetPar.uni_benzin = UNI_OUTPUT_NUM; //disabled
 
  return true;
 }
@@ -2729,6 +2740,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_gradient, m_outgoing_packet);
  mp_pdp->Bin4ToHex(packet_data->load_src_cfg, m_outgoing_packet);
+ int uni_gas = (packet_data->uni_gas==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_gas;
+ int uni_benzin = (packet_data->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_benzin;
+ BYTE mapsel_uni = MAKEBYTE(uni_gas, uni_benzin);
+ mp_pdp->Bin8ToHex(mapsel_uni, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

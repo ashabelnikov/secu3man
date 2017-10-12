@@ -68,3 +68,8 @@ bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum)
  ASSERT(bitNum < 8);
  return (variable & (1 << bitNum)) != 0;
 }
+
+BYTE BITMASK_API MAKEBYTE(int hi, int lo)
+{
+ return ((hi & 0xF) << 4) | (lo & 0xF);
+}

@@ -133,6 +133,8 @@ namespace SECU3IO
   float tps_curve_offset;
   float tps_curve_gradient;
   unsigned char load_src_cfg;
+  int uni_benzin;
+  int uni_gas;
  };
 
  struct IdlRegPar

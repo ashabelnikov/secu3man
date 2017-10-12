@@ -140,6 +140,9 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->tps_curve_offset = MathHelpers::Round(p_in->tps_curve_offset / ADC_DISCRETE);
     p_params->tps_curve_gradient = MathHelpers::Round(128.0f * p_in->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE);
     p_params->load_src_cfg = (p_params->load_src_cfg & 0xF0) | p_in->load_src_cfg;
+    int uni_gas = (p_in->uni_gas==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_gas;
+    int uni_benzin = (p_in->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : p_in->uni_benzin;
+    p_params->mapsel_uni = MAKEBYTE(uni_gas, uni_benzin);
    }
    break;
   case STARTR_PAR:
@@ -463,6 +466,12 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->tps_curve_offset = ((float)p_params->tps_curve_offset) * ADC_DISCRETE;
      p_out->tps_curve_gradient = ((float)p_params->tps_curve_gradient) / ((TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * ADC_DISCRETE * 128.0f);
      p_out->load_src_cfg = p_params->load_src_cfg & 0x0F;
+     p_out->uni_gas = p_params->mapsel_uni >> 4;
+     p_out->uni_benzin = p_params->mapsel_uni & 0xF;
+     if (p_out->uni_gas == 0xF)
+      p_out->uni_gas = UNI_OUTPUT_NUM; //disabled
+     if (p_out->uni_benzin == 0xF)
+      p_out->uni_benzin = UNI_OUTPUT_NUM; //disabled
     }
     break;
    case STARTR_PAR:
