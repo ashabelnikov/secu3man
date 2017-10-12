@@ -334,6 +334,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_timing = MathHelpers::Round(p_in->inj_timing * ANGLE_MULTIPLIER);
     p_params->inj_timing_crk = MathHelpers::Round(p_in->inj_timing_crk * ANGLE_MULTIPLIER);
     p_params->inj_anglespec = p_in->inj_anglespec;
+    p_params->fff_const = MathHelpers::Round((p_in->fff_const / (1000.0f*60.0f))*65536.0f);
    }
    break;
   case LAMBDA_PAR:
@@ -681,6 +682,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->inj_timing = ((float)p_params->inj_timing) / ANGLE_MULTIPLIER;
     p_out->inj_timing_crk = ((float)p_params->inj_timing_crk) / ANGLE_MULTIPLIER;
     p_out->inj_anglespec = p_params->inj_anglespec;
+    p_out->fff_const = ((float)p_params->fff_const/65536.0f)*(1000.0f*60.0f);
    }
    break;
   case LAMBDA_PAR:

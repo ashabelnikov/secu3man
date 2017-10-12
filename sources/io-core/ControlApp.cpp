@@ -1934,7 +1934,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 32 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 34 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -1986,6 +1986,12 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &anglespec))
   return false;
  m_InjctrPar.inj_anglespec = anglespec;
+
+ //fff_const (fuel consumption)
+ int  fff;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &fff))
+  return false;
+ m_InjctrPar.fff_const = ((float)fff / 65536.0f) * (1000.0f * 60.0f);
 
  return true;
 }
@@ -3155,6 +3161,8 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  mp_pdp->Bin16ToHex(inj_begin_angle_crk, m_outgoing_packet);
  unsigned char inj_anglespec = packet_data->inj_anglespec;
  mp_pdp->Bin8ToHex(inj_anglespec, m_outgoing_packet);
+ int fff = MathHelpers::Round((packet_data->fff_const / (1000.0f*60.0f))*65536.0f);
+ mp_pdp->Bin16ToHex(fff, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

@@ -492,6 +492,7 @@ namespace SECU3IO
   float inj_timing;                   //injection timing
   float inj_timing_crk;               //injection timing on cranking
   int inj_anglespec;                  //Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
+  float fff_const;                    //fuel consumption const.
  };
 
  struct LambdaPar
