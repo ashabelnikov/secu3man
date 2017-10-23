@@ -65,13 +65,11 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangePdChokeSMStepsNumEdit();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsCarb(CCmdUI* pCmdUI);
   afx_msg void OnUpdateChokeTestBtn(CCmdUI* pCmdUI);
   afx_msg void OnUpdateChokeManPosBtn(CCmdUI* pCmdUI);
   afx_msg void OnSMTestButton();
   afx_msg void OnManualDeltapos(NMHDR* pNMHDR, LRESULT* pResult);
-  afx_msg void OnUpdateChokeSMSteps(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateUseThrottlePos(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateSmFreq(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
