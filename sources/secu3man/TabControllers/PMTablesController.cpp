@@ -38,6 +38,8 @@
 #include "ParamDesk/Tables/TablesDeskDlg.h"
 #include "TablDesk/ButtonsPanel.h"
 #include "TablDesk/MapIds.h"
+#include "fwimpexp/S3FFileDataIO.h"
+#include "fwimpexp/S3FImpExpController.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -50,53 +52,58 @@ bool CPMTablesController::_CompareViewMap(int i_mapType, size_t size) const
                    mp_view->GetMap(i_mapType, true));
 }
 
-float* CPMTablesController::_GetMap(int i_mapType, bool i_original)
+float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {
+ if (!p_maps)
+ {
+  p_maps = i_original ? m_omaps : m_maps;
+ }
+
  switch(i_mapType)
  {//ignition maps
   case TYPE_MAP_DA_START:
-   return i_original ? m_omaps->f_str : m_maps->f_str;
+   return p_maps->f_str;
   case TYPE_MAP_DA_IDLE:
-   return i_original ? m_omaps->f_idl : m_maps->f_idl;
+   return p_maps->f_idl;
   case TYPE_MAP_DA_WORK:
-   return i_original ? m_omaps->f_wrk : m_maps->f_wrk;
+   return p_maps->f_wrk;
   case TYPE_MAP_DA_TEMP_CORR:
-   return i_original ? m_omaps->f_tmp : m_maps->f_tmp;
+   return p_maps->f_tmp;
   //fuel injection
   case TYPE_MAP_INJ_VE:
-   return i_original ? m_omaps->inj_ve : m_maps->inj_ve;
+   return p_maps->inj_ve;
   case TYPE_MAP_INJ_AFR:
-   return i_original ? m_omaps->inj_afr : m_maps->inj_afr;
+   return p_maps->inj_afr;
   case TYPE_MAP_INJ_CRNK:
-   return i_original ? m_omaps->inj_cranking : m_maps->inj_cranking;
+   return p_maps->inj_cranking;
   case TYPE_MAP_INJ_WRMP:
-   return i_original ? m_omaps->inj_warmup : m_maps->inj_warmup;
+   return p_maps->inj_warmup;
   case TYPE_MAP_INJ_DEAD:
-   return i_original ? m_omaps->inj_dead_time : m_maps->inj_dead_time;
+   return p_maps->inj_dead_time;
   case TYPE_MAP_INJ_IDLR:
-   return i_original ? m_omaps->inj_iac_run_pos : m_maps->inj_iac_run_pos;
+   return p_maps->inj_iac_run_pos;
   case TYPE_MAP_INJ_IDLC:
-   return i_original ? m_omaps->inj_iac_crank_pos : m_maps->inj_iac_crank_pos;
+   return p_maps->inj_iac_crank_pos;
   case TYPE_MAP_INJ_AETPS:
-   return i_original ? m_omaps->inj_ae_tps : m_maps->inj_ae_tps;
+   return p_maps->inj_ae_tps;
   case TYPE_MAP_INJ_AERPM:
-   return i_original ? m_omaps->inj_ae_rpm : m_maps->inj_ae_rpm;
+   return p_maps->inj_ae_rpm;
   case TYPE_MAP_INJ_AFTSTR:
-   return i_original ? m_omaps->inj_aftstr : m_maps->inj_aftstr;
+   return p_maps->inj_aftstr;
   case TYPE_MAP_INJ_IT:
-   return i_original ? m_omaps->inj_timing : m_maps->inj_timing;
+   return p_maps->inj_timing;
   case TYPE_MAP_INJ_ITRPM:
-   return i_original ? m_omaps->inj_target_rpm : m_maps->inj_target_rpm;
+   return p_maps->inj_target_rpm;
   case TYPE_MAP_INJ_RIGID:
-   return i_original ? m_omaps->inj_idl_rigidity : m_maps->inj_idl_rigidity;
+   return p_maps->inj_idl_rigidity;
   case TYPE_MAP_INJ_EGOCRV:
-   return i_original ? m_omaps->inj_ego_curve : m_maps->inj_ego_curve;
+   return p_maps->inj_ego_curve;
   case TYPE_MAP_INJ_IACC:
-   return i_original ? m_omaps->inj_iac_corr : m_maps->inj_iac_corr;
+   return p_maps->inj_iac_corr;
   case TYPE_MAP_INJ_IACCW:
-   return i_original ? m_omaps->inj_iac_corr_w : m_maps->inj_iac_corr_w;
+   return p_maps->inj_iac_corr_w;
   case TYPE_MAP_INJ_IATCLT:
-   return i_original ? m_omaps->inj_iatclt_corr : m_maps->inj_iatclt_corr;
+   return p_maps->inj_iatclt_corr;
  }
  return NULL; //undefined type of map
 }
@@ -154,65 +161,26 @@ size_t _GetMapSize(int i_mapType)
 }
 }
 
-void CPMTablesController::_MoveMapToChart(int i_mapType, bool i_original)
+void CPMTablesController::_MoveMapToChart(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {
- std::copy(_GetMap(i_mapType, i_original),
-  _GetMap(i_mapType, i_original) + _GetMapSize(i_mapType),
+ std::copy(_GetMap(i_mapType, i_original, p_maps),
+  _GetMap(i_mapType, i_original, p_maps) + _GetMapSize(i_mapType),
   mp_view->GetMap(i_mapType, i_original));
 }
 
-void CPMTablesController::_MoveMapsToCharts(bool i_original)
+void CPMTablesController::_MoveMapsToCharts(bool i_original, SECU3FWMapsItem* p_maps /*= NULL*/)
 {//ignition maps
- _MoveMapToChart(TYPE_MAP_DA_START, i_original);
- _MoveMapToChart(TYPE_MAP_DA_IDLE, i_original);
- _MoveMapToChart(TYPE_MAP_DA_WORK, i_original);
- _MoveMapToChart(TYPE_MAP_DA_TEMP_CORR, i_original);
- //fuel injection maps
- _MoveMapToChart(TYPE_MAP_INJ_VE, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_AFR, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_CRNK, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_WRMP, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_DEAD, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IDLR, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IDLC, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_AETPS, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_AERPM, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_AFTSTR, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IT, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_ITRPM, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_RIGID, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_EGOCRV, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IACC, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IACCW, i_original);
- _MoveMapToChart(TYPE_MAP_INJ_IATCLT, i_original);
+ for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+  _MoveMapToChart(id, i_original, p_maps);
 }
 
 void CPMTablesController::_ClearAcquisitionFlags(void)
 {
  m_maps_flags->name = _T("");
- //ignition maps
- std::fill(m_maps_flags->f_str, m_maps_flags->f_str + F_STR_POINTS, .0f);
- std::fill(m_maps_flags->f_idl, m_maps_flags->f_idl + F_IDL_POINTS, .0f);
- std::fill(m_maps_flags->f_wrk, m_maps_flags->f_wrk + (F_WRK_POINTS_L * F_WRK_POINTS_F), .0f);
- std::fill(m_maps_flags->f_tmp, m_maps_flags->f_tmp + F_TMP_POINTS, .0f);
- //fuel injection maps
- std::fill(m_maps_flags->inj_ve, m_maps_flags->inj_ve + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
- std::fill(m_maps_flags->inj_afr, m_maps_flags->inj_afr + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
- std::fill(m_maps_flags->inj_cranking, m_maps_flags->inj_cranking + INJ_CRANKING_LOOKUP_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_warmup, m_maps_flags->inj_warmup + INJ_WARMUP_LOOKUP_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_dead_time, m_maps_flags->inj_dead_time + INJ_DT_LOOKUP_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_iac_run_pos, m_maps_flags->inj_iac_run_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_iac_crank_pos, m_maps_flags->inj_iac_crank_pos + INJ_IAC_POS_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_ae_tps, m_maps_flags->inj_ae_tps + (INJ_AE_TPS_LOOKUP_TABLE_SIZE * 2), .0f);
- std::fill(m_maps_flags->inj_ae_rpm, m_maps_flags->inj_ae_rpm + (INJ_AE_RPM_LOOKUP_TABLE_SIZE * 2), .0f);
- std::fill(m_maps_flags->inj_aftstr, m_maps_flags->inj_aftstr + INJ_AFTSTR_LOOKUP_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_timing, m_maps_flags->inj_timing + (INJ_VE_POINTS_L * INJ_VE_POINTS_F), .0f);
- std::fill(m_maps_flags->inj_target_rpm, m_maps_flags->inj_target_rpm + INJ_TARGET_RPM_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_idl_rigidity, m_maps_flags->inj_idl_rigidity + INJ_IDL_RIGIDITY_TABLE_SIZE, .0f);
- std::fill(m_maps_flags->inj_ego_curve, m_maps_flags->inj_ego_curve + INJ_EGO_CURVE_SIZE + 2, .0f);
- std::fill(m_maps_flags->inj_iac_corr, m_maps_flags->inj_iac_corr + INJ_IAC_CORR_SIZE + 2, .0f);
- std::fill(m_maps_flags->inj_iac_corr_w, m_maps_flags->inj_iac_corr_w + INJ_IAC_CORR_W_SIZE + 2, .0f);
- std::fill(m_maps_flags->inj_iatclt_corr, m_maps_flags->inj_iatclt_corr + INJ_IATCLT_CORR_SIZE + 2, .0f);
+
+ //See TablDesk/MapIds.h for more information
+ for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+  std::fill(_GetMap(id, false, m_maps_flags), _GetMap(id, false, m_maps_flags) + _GetMapSize(id), .0f);
 }
 
 void CPMTablesController::_ResetModification(void)
@@ -253,6 +221,8 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->setOnChangeTablesSetName(MakeDelegate(this, &CPMTablesController::OnChangeTablesSetName));
  mp_view->setOnLoadTablesFrom(MakeDelegate(this, &CPMTablesController::OnLoadTablesFrom));
  mp_view->setOnSaveTablesTo(MakeDelegate(this, &CPMTablesController::OnSaveTablesTo));
+ mp_view->setOnImportFromS3F(MakeDelegate(this, &CPMTablesController::OnImportFromS3F));
+ mp_view->setOnExportToS3F(MakeDelegate(this, &CPMTablesController::OnExportToS3F));
 
  //карты (текущие)
  m_maps = new SECU3FWMapsItem;
@@ -478,52 +448,15 @@ bool _FindZero(float* array, size_t size)
 }
 bool CPMTablesController::_IsCacheUpToDate(void)
 {
-  if (m_maps_flags->name == _T(""))
+ if (m_maps_flags->name == _T(""))
+  return false;
+
+ //See TablDesk/MapIds.h for more information
+ for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+ {
+  if (!_FindZero(_GetMap(id, false, m_maps_flags), _GetMapSize(id)))
    return false;
-  //ignition maps
-  if (!_FindZero(m_maps_flags->f_str, F_STR_POINTS))
-   return false;
-  if (!_FindZero(m_maps_flags->f_idl, F_IDL_POINTS))
-   return false;
-  if (!_FindZero(m_maps_flags->f_wrk, F_WRK_POINTS_L * F_WRK_POINTS_F))
-   return false;
-  if (!_FindZero(m_maps_flags->f_tmp, F_TMP_POINTS))
-   return false;
-  //fuel injection maps
-  if (!_FindZero(m_maps_flags->inj_ve, INJ_VE_POINTS_L * INJ_VE_POINTS_F))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_afr, INJ_VE_POINTS_L * INJ_VE_POINTS_F))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_cranking, INJ_CRANKING_LOOKUP_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_warmup, INJ_WARMUP_LOOKUP_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_dead_time, INJ_DT_LOOKUP_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_iac_run_pos, INJ_IAC_POS_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_iac_crank_pos, INJ_IAC_POS_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_ae_tps, INJ_AE_TPS_LOOKUP_TABLE_SIZE*2))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_ae_rpm, INJ_AE_RPM_LOOKUP_TABLE_SIZE*2))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_aftstr, INJ_AFTSTR_LOOKUP_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_timing, INJ_VE_POINTS_L * INJ_VE_POINTS_F))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_target_rpm, INJ_TARGET_RPM_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_idl_rigidity, INJ_IDL_RIGIDITY_TABLE_SIZE))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_ego_curve, INJ_EGO_CURVE_SIZE+2))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_iac_corr, INJ_IAC_CORR_SIZE+2))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_iac_corr_w, INJ_IAC_CORR_W_SIZE+2))
-   return false;
-  if (!_FindZero(m_maps_flags->inj_iatclt_corr, INJ_IATCLT_CORR_SIZE+2))
-   return false;
+ }
 
  return true;
 }
@@ -532,50 +465,13 @@ bool CPMTablesController::_IsModificationMade(void) const
 {
  if (m_maps->name != m_omaps->name)
   return true;
- //ignition maps
- if (false==_CompareViewMap(TYPE_MAP_DA_START, _GetMapSize(TYPE_MAP_DA_START)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_DA_IDLE, _GetMapSize(TYPE_MAP_DA_IDLE)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_DA_WORK, _GetMapSize(TYPE_MAP_DA_WORK)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_DA_TEMP_CORR, _GetMapSize(TYPE_MAP_DA_TEMP_CORR)))
-  return true;
- //fuel injection maps
- if (false==_CompareViewMap(TYPE_MAP_INJ_VE, _GetMapSize(TYPE_MAP_INJ_VE)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_AFR, _GetMapSize(TYPE_MAP_INJ_AFR)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_CRNK, _GetMapSize(TYPE_MAP_INJ_CRNK)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_WRMP, _GetMapSize(TYPE_MAP_INJ_WRMP)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_DEAD, _GetMapSize(TYPE_MAP_INJ_DEAD)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IDLR, _GetMapSize(TYPE_MAP_INJ_IDLR)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IDLC, _GetMapSize(TYPE_MAP_INJ_IDLC)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_AETPS, _GetMapSize(TYPE_MAP_INJ_AETPS)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_AERPM, _GetMapSize(TYPE_MAP_INJ_AERPM)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_AFTSTR, _GetMapSize(TYPE_MAP_INJ_AFTSTR)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IT, _GetMapSize(TYPE_MAP_INJ_IT)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_ITRPM, _GetMapSize(TYPE_MAP_INJ_ITRPM)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_RIGID, _GetMapSize(TYPE_MAP_INJ_RIGID)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_EGOCRV, _GetMapSize(TYPE_MAP_INJ_EGOCRV)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IACC, _GetMapSize(TYPE_MAP_INJ_IACC)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IACCW, _GetMapSize(TYPE_MAP_INJ_IACCW)))
-  return true;
- if (false==_CompareViewMap(TYPE_MAP_INJ_IATCLT, _GetMapSize(TYPE_MAP_INJ_IATCLT)))
-  return true;
+
+ //See TablDesk/MapIds.h for more information
+ for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+ {
+  if (false==_CompareViewMap(id, _GetMapSize(id)))
+   return true;
+ }
 
  return false; //no modifications
 }
@@ -619,7 +515,9 @@ void CPMTablesController::_SynchronizeMap(int i_mapType)
   ++index;
   if ((pieceSize==index || a==(mapSize-1)) && packet.data_size > 0)
   {
-   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_WRITING_TABLES));
+   CString statusStr;
+   statusStr.Format(MLL::LoadString(IDS_PM_WRITING_TABLES), i_mapType); 
+   mp_sbar->SetInformationText(statusStr);
    state = 0;   
    //store values of padding cells from cache
    packet.beginPadding = (packet.address > 0) ? _GetMap(i_mapType, false)[packet.address-1] : 0;
@@ -711,6 +609,80 @@ void CPMTablesController::OnSaveTablesTo(int index)
  //reset modification flag
  _ResetModification();
  mp_view->SetModificationFlag(false);
+}
+
+void CPMTablesController::OnImportFromS3F(void)
+{
+ //Set data (maps and RPM grid)
+ FWMapsDataHolder data(1); //1 set
+ data.maps[0] = *m_maps; 
+ std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, data.rpm_slots);
+
+ S3FImportController import(&data);
+
+ int result = import.DoImport();
+ if (result == IDOK)
+ {
+  //Update view
+  _MoveMapsToCharts(false, &data.maps[0]); //current
+  _MoveMapsToCharts(true, &data.maps[0]);  //original
+   mp_view->SetRPMGrid(m_rpmGrid);         //RPM grid
+  _SetTablesSetName(data.maps[0].name);    //name
+  
+  //Send updated set name to SECU-3
+  OnChangeTablesSetName();
+
+  //send updated data to SECU-3
+  //See TablDesk/MapIds.h for more information
+  for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
+   _SynchronizeMap(id);
+
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READY));
+
+  //update stored map values
+  *m_maps = data.maps[0];  //current
+  *m_omaps = data.maps[0]; //original
+  std::copy(data.rpm_slots, data.rpm_slots + F_RPM_SLOTS, m_rpmGrid);
+
+  //update view and update modification flag if any of maps changed
+  mp_view->UpdateOpenedCharts();
+  mp_view->SetModificationFlag(_IsModificationMade());
+ }
+}
+
+void CPMTablesController::OnExportToS3F(void)
+{
+ //этот класс необходим чтобы изменять дефаултное расширение в зависимости от выбранного фильтра
+ class CFileDialogEx : public CFileDialog
+ {
+  public:
+   CFileDialogEx() : CFileDialog(FALSE,_T("s3f"), NULL, NULL,
+     _T("SECU-3 Format Files (*.s3f)|*.s3f|All Files (*.*)|*.*||"), NULL) {};
+   virtual ~CFileDialogEx() {};
+
+  protected:
+   virtual void OnTypeChange( )
+   {
+    if (m_ofn.nFilterIndex==1)
+     m_ofn.lpstrDefExt = _T("s3f");
+   }
+ };
+
+ CFileDialogEx save;
+ S3FFileDataIO s3f_io(false); //no separate maps
+
+ //Set data (maps and RPM grid)
+ s3f_io.GetDataLeft() = FWMapsDataHolder(1); //resize to 1 set
+ s3f_io.GetDataLeft().maps[0] = *m_maps; 
+ std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, s3f_io.GetDataLeft().rpm_slots);
+
+ //saveto file
+ if (save.DoModal()==IDOK)
+ {
+  bool result = s3f_io.Save(_TSTRING(save.GetPathName()));
+  if (!result)
+   AfxMessageBox(MLL::LoadString(IDS_CANT_SAVE_THIS_FILE),MB_OK|MB_ICONWARNING);
+ }
 }
 
 //----------------------------------------------------------------

@@ -54,7 +54,7 @@ class ITablesDeskView
   virtual void CloseAllCharts(void) = 0;                          //close all charts' windows
 
   //events
-  virtual void setOnMapChanged(EventWithCode OnFunction) = 0;   //обработцик будет вызываться при изменении в любой из таблиц
+  virtual void setOnMapChanged(EventWithCode OnFunction) = 0;     //обработцик будет вызываться при изменении в любой из таблиц
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction) = 0;    //обработцик будет вызываться при закрытии окна с таблицей
   virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей
   virtual void setOnTabActivate(EventHandler OnFunction) = 0;     //обработцик будет вызываться при появлении вкладки
@@ -62,6 +62,8 @@ class ITablesDeskView
   virtual void setOnChangeTablesSetName(EventHandler OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction) = 0; //обработчик будет вызываться при выборе п. меню для загрузки таблиц.
   virtual void setOnSaveTablesTo(EventWithCode OnFunction) = 0;   //обработчик будет вызываться при выборе п. меню для сохранения таблиц.
+  virtual void setOnImportFromS3F(EventHandler OnFunction) = 0;   //
+  virtual void setOnExportToS3F(EventHandler OnFunction) = 0;     //
 
   //Data access
   virtual void SetTablesSetName(const _TSTRING& name) = 0;        //set name to edit box 

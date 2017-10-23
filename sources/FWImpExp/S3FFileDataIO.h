@@ -30,10 +30,10 @@
 #include "io-core/FirmwareMapsDataHolder.h"
 
 struct S3FFileHdr;
-class S3FFileDataIO
+class AFX_EXT_CLASS S3FFileDataIO
 {
  public:
-  S3FFileDataIO();
+  S3FFileDataIO(bool sepmaps = true);
  ~S3FFileDataIO();
 
   bool Load(const _TSTRING i_file_name);
@@ -44,6 +44,7 @@ class S3FFileDataIO
 
   bool IsFileIntegrityOk(void) const;
   unsigned short GetVersion(void) const;
+  bool HasSeparateMaps(void) const;
 
  private:  
   bool _ReadData(const BYTE*, const S3FFileHdr*);
@@ -52,4 +53,5 @@ class S3FFileDataIO
   FWMapsDataHolder m_data;
   bool m_file_crc_ok;        //indicates that CRC of the loaded file is Ok
   unsigned short m_version;  //version of loaded file
+  bool m_sepmaps;            //indicates presence of separate maps
 };

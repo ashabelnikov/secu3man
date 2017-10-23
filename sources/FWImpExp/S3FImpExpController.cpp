@@ -247,9 +247,15 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetExchangeButtonCaption(_T("<"));
  mp_view->SetWindowText(MLL::LoadString(IDS_IMPORT_S3F_TABLES));
 
- mp_view->FillFWDCurrentList(mp_fwd->GetListOfNames());
+ std::vector<_TSTRING> curr_strings = mp_fwd->GetListOfNames();
+ mp_view->FillFWDCurrentList(curr_strings);
+ if (1==curr_strings.size()) //select item if it is single
+  mp_view->SetFWDCurrentListSelection(0);
+
  std::vector<_TSTRING> strings = mp_s3f_io->GetData().GetListOfNames();
  mp_view->FillFWDOtherList(GenArtificialNames(strings));
+ if (1==strings.size()) //select item if it is single
+  mp_view->SetFWDOtherListSelection(0);
 
  //ignition
  mp_view->SetFWDFlag(FLAG_START_MAP, true);
@@ -258,6 +264,12 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_TEMP_MAP, true);
 
  bool injen = (mp_s3f_io->GetVersion() > 0x0102);
+ bool sv0104 = (mp_s3f_io->GetVersion() > 0x0103);
+ bool sv0105 = (mp_s3f_io->GetVersion() > 0x0104);
+ bool sv0106 = (mp_s3f_io->GetVersion() > 0x0105);
+
+ bool sepmap = mp_s3f_io->HasSeparateMaps();
+
  //injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, injen);
  mp_view->SetFWDFlag(FLAG_AFR_MAP, injen);
@@ -279,13 +291,13 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, injen); 
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, injen); 
- mp_view->SetFWDFlag(FLAG_IT_MAP, injen);
- mp_view->SetFWDFlag(FLAG_ITRPM_MAP, injen);
- mp_view->SetFWDFlag(FLAG_RIGID_MAP, injen);
- mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, injen);
- mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, injen);
- mp_view->SetFWDFlag(FLAG_IACCORR_MAP, injen);
- mp_view->SetFWDFlag(FLAG_IATCLT_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IT_MAP, sv0105);       //since v01.05
+ mp_view->SetFWDFlag(FLAG_ITRPM_MAP, sv0106);     //since v01.06
+ mp_view->SetFWDFlag(FLAG_RIGID_MAP, sv0106);     //since v01.06
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, sv0105);   //since v01.05
+ mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, sv0106);  //since v01.06
+ mp_view->SetFWDFlag(FLAG_IACCORR_MAP, sv0106);   //since v01.06
+ mp_view->SetFWDFlag(FLAG_IATCLT_MAP, sv0106);    //since v01.06
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -294,9 +306,13 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
- mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen);     //absent in old version of S3F
- mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen);  //absent in old version of S3F
- mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, injen); //absent in old version of S3F
+ mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
+ mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
+ mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
+ mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, sepmap);
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);      //since v01.03
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);   //since v01.03
+ mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);  //since v01.04
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)

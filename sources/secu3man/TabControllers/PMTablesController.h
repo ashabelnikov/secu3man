@@ -75,13 +75,15 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void OnChangeTablesSetName(void);
   void OnLoadTablesFrom(int index);
   void OnSaveTablesTo(int index);
+  void OnImportFromS3F(void);
+  void OnExportToS3F(void);
 
  private:
   //helpful methods
   bool _CompareViewMap(int i_mapType, size_t size) const;
-  float* _GetMap(int i_mapType, bool i_original);
-  void _MoveMapToChart(int i_mapType, bool i_original);
-  void _MoveMapsToCharts(bool i_original);
+  float* _GetMap(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps = NULL);
+  void _MoveMapToChart(int i_mapType, bool i_original, SECU3FWMapsItem* p_maps = NULL);
+  void _MoveMapsToCharts(bool i_original, SECU3FWMapsItem* p_maps = NULL);
   void _ClearAcquisitionFlags(void);
   void _ResetModification(void);
   void _SetTablesSetName(const _TSTRING name);

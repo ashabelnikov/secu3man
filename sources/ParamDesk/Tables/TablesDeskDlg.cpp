@@ -87,9 +87,14 @@ BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_TD_LOAD_NAMES_RESERVED0, IDM_TD_LOAD_NAMES_RESERVED15, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_TD_SAVE_NAMES_RESERVED0, IDM_TD_SAVE_NAMES_RESERVED5, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDM_TD_IMPORT_FROM_S3F, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDM_TD_EXPORT_TO_S3F, OnUpdateControls)
+
  ON_BN_CLICKED(IDC_TD_SAVE_BUTTON, OnSaveButton)
  ON_COMMAND_RANGE(IDM_TD_LOAD_NAMES_RESERVED0, IDM_TD_LOAD_NAMES_RESERVED15, OnRangeCmdsLoad)
  ON_COMMAND_RANGE(IDM_TD_SAVE_NAMES_RESERVED0, IDM_TD_SAVE_NAMES_RESERVED5, OnRangeCmdsSave)
+ ON_COMMAND(IDM_TD_IMPORT_FROM_S3F, OnImportFromS3F)
+ ON_COMMAND(IDM_TD_EXPORT_TO_S3F, OnExportToS3F)
 
  ON_EN_CHANGE(IDC_TD_TABLESSET_NAME_EDIT, OnChangeTablesSetName)
  ON_UPDATE_COMMAND_UI(IDC_TD_TABLESSET_NAME_EDIT, OnUpdateControls)
@@ -459,6 +464,12 @@ void CTablesDeskDlg::setOnLoadTablesFrom(EventWithCode OnFunction)
 void CTablesDeskDlg::setOnSaveTablesTo(EventWithCode OnFunction)
 { m_OnSaveTablesTo = OnFunction; }
 
+void CTablesDeskDlg::setOnImportFromS3F(EventHandler OnFunction)
+{ m_OnImportFromS3F = OnFunction; }
+
+void CTablesDeskDlg::setOnExportToS3F(EventHandler OnFunction)
+{ m_OnExportToS3F = OnFunction; }
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::SetTablesSetName(const _TSTRING& name)
 {
@@ -634,6 +645,19 @@ void CTablesDeskDlg::OnRangeCmdsSave(UINT nID)
  if (m_OnSaveTablesTo)
   m_OnSaveTablesTo(nID - IDM_TD_SAVE_NAMES_RESERVED0);
 }
+
+void CTablesDeskDlg::OnImportFromS3F(void)
+{
+ if (m_OnImportFromS3F)
+  m_OnImportFromS3F();
+}
+
+void CTablesDeskDlg::OnExportToS3F(void)
+{
+ if (m_OnExportToS3F)
+  m_OnExportToS3F();
+}
+
 //------------------------------------------------------------------------
 void CTablesDeskDlg::OnMapChanged(int i_mapType)
 {

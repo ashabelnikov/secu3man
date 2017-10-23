@@ -64,6 +64,9 @@ void CTDContextMenuManager::CreateContent(void)
  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_LoadMenu.m_hMenu, MLL::LoadString(IDS_TD_LOAD_TABLES_POPUP_MENU));
  m_ParentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_SaveMenu.m_hMenu, MLL::LoadString(IDS_TD_SAVE_TABLES_POPUP_MENU));
  ///////////////////////////////////////////////////////////////////////////
+
+ m_ParentMenu.AppendMenu(MF_STRING, IDM_TD_IMPORT_FROM_S3F, MLL::LoadString(IDS_TD_IMPORT_FROM_S3F));
+ m_ParentMenu.AppendMenu(MF_STRING, IDM_TD_EXPORT_TO_S3F, MLL::LoadString(IDS_TD_EXPORT_TO_S3F));
 }
 
 //show context menu

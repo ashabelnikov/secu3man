@@ -417,3 +417,4 @@
 #define IDS_DEV_DIAG_CARB               4436
 #define IDS_ECUERROR_ADD_I3_SENSOR      4437
 #define IDS_ECUERROR_ADD_I4_SENSOR      4438
+#define IDS_CANT_SAVE_THIS_FILE         4439

@@ -79,6 +79,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void setOnChangeTablesSetName(EventHandler OnFunction);
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction);
   virtual void setOnSaveTablesTo(EventWithCode OnFunction);
+  virtual void setOnImportFromS3F(EventHandler OnFunction);
+  virtual void setOnExportToS3F(EventHandler OnFunction);
 
   virtual void SetTablesSetName(const _TSTRING& name);
   virtual _TSTRING GetTablesSetName(void) const;
@@ -106,6 +108,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnRangeCmdsLoad(UINT nID);
   afx_msg void OnRangeCmdsSave(UINT nID);
+  afx_msg void OnImportFromS3F(void);
+  afx_msg void OnExportToS3F(void);
   afx_msg void OnEditKillFocus();
   afx_msg void OnChangeTablesSetName();
   virtual BOOL PreTranslateMessage(MSG* pMsg);
@@ -145,6 +149,8 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   EventHandler m_OnChangeTablesSetName;
   EventWithCode m_OnLoadTablesFrom;
   EventWithCode m_OnSaveTablesTo;
+  EventHandler m_OnImportFromS3F;
+  EventHandler m_OnExportToS3F;
   CSize m_bpLRMargin;
 };
 

@@ -1177,6 +1177,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TD_LOAD_TABLES_POPUP_MENU "Загрузить из"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Сохранить в"
+    IDS_TD_IMPORT_FROM_S3F "Импорт из S3F"
+    IDS_TD_EXPORT_TO_S3F "Экспорт в S3F"
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана ЭМР (разряжение относительно т.н. верхнего давления). Клапан включается если давление превышает 'Верхн.знач.давл.' минус этот порог"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %. Поставьте 0, если используется концевик."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ (карб.) или задержка отсечки топлива при ПХХ (впрыск)"
@@ -2641,6 +2643,8 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TD_LOAD_TABLES_POPUP_MENU "Load from"
     IDS_TD_SAVE_TABLES_POPUP_MENU "Save to"
+    IDS_TD_IMPORT_FROM_S3F "Import from S3F"
+    IDS_TD_EXPORT_TO_S3F "Export to S3F"
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Power Valve Solenoid (Part-load enrichment) turn on threshold (by vacuum)"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %. Set to zero if limit switch is used."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Turn off delay of the Idle cut-off valve solenoid (carb.) or over-run fuel cut off delay (injection)"

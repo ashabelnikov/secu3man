@@ -29,6 +29,7 @@
 
 #include <vector>
 #include "common/MathHelpers.h"
+#include "io-core/BitMask.h"
 #include "io-core/CRC16.h"
 #include "io-core/FirmwareMapsDataHolder.h"
 #include "io-core/SECU3IO.h"
@@ -40,6 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
+#define CURRENT_VERSION 0x0107 //01.07
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -66,6 +68,10 @@ typedef unsigned char s3f_uint8_t;
 // 01.04 - Gas dose position map added (20.12.2015)
 // 01.05 - Injection timing and EGO curve maps were added (02.08.2017)
 // 01.06 - Rest fuel injection maps were added (28.09.2017)
+// 01.07 - Added ability to store single set of maps and no separate maps. (23.10.2017)
+
+//Numbers of flag bits
+#define S3FF_NOSEPMAPS 0
 
 struct S3FFileHdr
 {
@@ -75,13 +81,15 @@ struct S3FFileHdr
  s3f_uint8_t  nofsets;         //Number of set of tables
  s3f_uint8_t  btpmi;           //Bytes per 1 item in the map
  s3f_uint16_t sofdat;          //Size of optional data block, size must be >= 1024
- s3f_uint8_t  reserved[8];     //reserved bytes, = 0
+ s3f_uint8_t  flags;           //flags (appeared in version v01.07): 
+                               //  0 bit - indicates that S3F contain or not contain separate maps (0 - contains, 1 - no sep. maps)
+ s3f_uint8_t  reserved[7];     //reserved bytes, = 0
 };
 
 //One entry of map sets array
 struct S3FMapSetItem
 {
- s3f_uint8_t name[F_NAME_SIZE];   // ассоциированное имя (имя семейства)
+ s3f_uint8_t name[F_NAME_SIZE];   // associated name (name of set of maps)
  //ignition
  s3f_int32_t f_str[F_STR_POINTS];                          //start
  s3f_int32_t f_idl[F_IDL_POINTS];                          //idle 
@@ -153,9 +161,10 @@ struct S3FSepMaps_v0102
 #pragma pack( pop, enter_S3FFileMap )
 
 /////////////////////////////////////////////////////////////////////////////////////
-S3FFileDataIO::S3FFileDataIO()
+S3FFileDataIO::S3FFileDataIO(bool sepmaps /*= true*/)
 : m_file_crc_ok(false)
 , m_version(0)
+, m_sepmaps(sepmaps)
 {
  //empty
 }
@@ -180,9 +189,10 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
  }
  //read the file into memory
  size_t filesize = (size_t)file.GetLength();
- size_t minFileSize = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * MIN_NOFSETS) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
- size_t minFileSizev_v0102 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0102) * MIN_NOFSETS) + sizeof(S3FSepMaps_v0102) + MIN_OPTDATA_SIZE;
- if ((filesize > 1048576) || ((filesize < minFileSize) && (filesize < minFileSizev_v0102)))
+ size_t minFileSize = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * 1) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
+ size_t minFileSize_v0106 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem) * MIN_NOFSETS) + sizeof(S3FSepMaps) + MIN_OPTDATA_SIZE;
+ size_t minFileSize_v0102 = sizeof(S3FFileHdr) + (sizeof(S3FMapSetItem_v0102) * MIN_NOFSETS) + sizeof(S3FSepMaps_v0102) + MIN_OPTDATA_SIZE;
+ if ((filesize > 1048576) || ((filesize < minFileSize) && (filesize < minFileSize_v0102) && (filesize < minFileSize_v0106)))
  {
   file.Close();
   return false; //некорректный размер файла
@@ -200,10 +210,12 @@ bool S3FFileDataIO::Load(const _TSTRING i_file_name)
   return false; //wrong file format!
  s3f_uint16_t crc = crc16(&rawdata[5], filesize - 5);
  m_file_crc_ok = (crc == p_fileHdr->crc16);
- if (p_fileHdr->nofsets < MIN_NOFSETS || p_fileHdr->nofsets > MAX_NOFSETS)
+ int min_nofsets = (p_fileHdr->version <= 0x0106) ? MIN_NOFSETS : 1;
+ if (p_fileHdr->nofsets < min_nofsets || p_fileHdr->nofsets > MAX_NOFSETS)
   return false; //incompatible
 
  m_version = p_fileHdr->version;  //save version number
+ m_sepmaps = !CHECKBIT8(p_fileHdr->flags, S3FF_NOSEPMAPS); //save sep.maps presence flag
 
  if (p_fileHdr->version <= 0x0102)
  {
@@ -236,8 +248,10 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  p_fileHdr->btpmi = sizeof(s3f_int32_t);
  p_fileHdr->nofsets = m_data.maps.size();
  p_fileHdr->sofdat = dataSize; //size of additional data
- p_fileHdr->version = 0x0106; //01.06
-
+ p_fileHdr->version = CURRENT_VERSION; //version of S3F file
+ p_fileHdr->flags = 0; //flags
+ WRITEBIT8(p_fileHdr->flags, S3FF_NOSEPMAPS, !m_sepmaps);
+ 
  //convert sets of maps
  S3FMapSetItem* p_setItem = (S3FMapSetItem*)(&rawdata[sizeof(S3FFileHdr)]);
  for(size_t s = 0; s < p_fileHdr->nofsets; ++s)
@@ -348,6 +362,11 @@ bool S3FFileDataIO::IsFileIntegrityOk(void) const
 unsigned short S3FFileDataIO::GetVersion(void) const
 {
  return m_version;
+}
+
+bool S3FFileDataIO::HasSeparateMaps(void) const
+{
+ return m_sepmaps;
 }
 
 bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
