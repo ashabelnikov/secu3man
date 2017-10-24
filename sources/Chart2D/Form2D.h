@@ -64,6 +64,7 @@ class TForm2D : public TForm
   TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
   TMenuItem *PM_HideMarks;
+  TMenuItem *PM_HideOldCurve;
   TEdit *EditXBegin;
   TEdit *EditXEnd;
   TFloatUpDown *SpinXBegin;
@@ -108,6 +109,7 @@ class TForm2D : public TForm
   void __fastcall OnSetPtMovStep(TObject *Sender);
   void __fastcall LineSeries2GetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnHideMarks(TObject *Sender);
+  void __fastcall OnHideOldCurve(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(TComponent* Owner);

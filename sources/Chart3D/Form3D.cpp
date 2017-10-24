@@ -191,6 +191,8 @@ void TForm3D::InitPopupMenu(HINSTANCE hInstance)
  PM_SetPtMovStep->Caption = string;
  ::LoadString(hInstance, IDS_PM_HIDE_MARKS, string, 1024);
  PM_HideMarks->Caption = string;
+ ::LoadString(hInstance, IDS_PM_HIDE_OLDCURVE, string, 1024);
+ PM_HideOldCurve->Caption = string;
 } 
 
 //---------------------------------------------------------------------------
@@ -497,7 +499,7 @@ void TForm3D::MakeOneVisible(int flow)
 {
  for(int i = 0; i < m_count_z; i++)
  {
-  Chart1->Series[i]->Active = (i==flow);
+  Chart1->Series[i]->Active = (i==flow) && !PM_HideOldCurve->Checked;
   Chart1->Series[i+m_count_z]->Active = (i==flow);
  }
 }
@@ -517,7 +519,7 @@ void TForm3D::ShowPoints(bool show)
 {
  for (int i = 0; i < m_count_z; i++)
  {
-  Chart1->Series[i]->Marks->Visible = show;
+  Chart1->Series[i]->Marks->Visible = false; //show;
   Chart1->Series[i + m_count_z]->Marks->Visible = show;
   ((TPointSeries*)Chart1->Series[i])->Pointer->Visible = show;
   ((TPointSeries*)Chart1->Series[i + m_count_z])->Pointer->Visible = show;
@@ -1010,6 +1012,14 @@ void __fastcall TForm3D::OnHideMarks(TObject *Sender)
   m_visibleMarkIdx=-1; //show all marks
  else
   m_visibleMarkIdx=-2; //show only one mark which is under mouse cursor
+ Chart1->Invalidate();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnHideOldCurve(TObject *Sender)
+{
+ PM_HideOldCurve->Checked = PM_HideOldCurve->Checked ? false : true; //toggle check mark
+ Chart1->Series[m_air_flow_position]->Active = !PM_HideOldCurve->Checked; //apply changes to current curve
  Chart1->Invalidate();
 }
 

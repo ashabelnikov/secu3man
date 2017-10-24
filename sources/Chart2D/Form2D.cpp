@@ -235,6 +235,8 @@ void TForm2D::InitPopupMenu(HINSTANCE hInstance)
  PM_SetPtMovStep->Caption = string;
  ::LoadString(hInstance, IDS_PM_HIDE_MARKS, string, 1024);
  PM_HideMarks->Caption = string;
+ ::LoadString(hInstance, IDS_PM_HIDE_OLDCURVE, string, 1024);
+ PM_HideOldCurve->Caption = string;
 }
 
 //---------------------------------------------------------------------------
@@ -859,6 +861,14 @@ void __fastcall TForm2D::OnHideMarks(TObject *Sender)
   m_visibleMarkIdx=-1; //show all marks
  else
   m_visibleMarkIdx=-2; //show only one mark which is under mouse cursor
+ Chart1->Invalidate();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::OnHideOldCurve(TObject *Sender)
+{
+ PM_HideOldCurve->Checked = PM_HideOldCurve->Checked ? false : true; //toggle check mark
+ Series1->Active = !PM_HideOldCurve->Checked;
  Chart1->Invalidate();
 }
 

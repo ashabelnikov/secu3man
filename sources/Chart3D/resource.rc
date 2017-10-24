@@ -33,6 +33,7 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
   IDS_DLG_PTMOV_STEP_CAPT, "Шаг смещения точек"
   IDS_PM_HIDE_MARKS, "Спрятать надписи"
+  IDS_PM_HIDE_OLDCURVE, "Спрятать 'старую' кривую"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -62,6 +63,7 @@ stringtable
   IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
   IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
   IDS_PM_HIDE_MARKS, "Hide marks"
+  IDS_PM_HIDE_OLDCURVE, "Hide 'old' curve"
 }
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL

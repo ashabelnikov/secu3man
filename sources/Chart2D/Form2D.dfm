@@ -606,5 +606,9 @@ object Form2D: TForm2D
       Caption = 'Hide marks'
       OnClick = OnHideMarks
     end
+    object PM_HideOldCurve: TMenuItem
+      Caption = 'Hide old curve'
+      OnClick = OnHideOldCurve
+    end
   end
 end

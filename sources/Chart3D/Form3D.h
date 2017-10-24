@@ -99,6 +99,7 @@ class TForm3D : public TForm
   TMenuItem *Separator1;
   TMenuItem *PM_SetPtMovStep;
   TMenuItem *PM_HideMarks;
+  TMenuItem *PM_HideOldCurve;
 
   TMenuItem *PM_CopyToCurve;
   TMenuItem *PM_CopyToCurve0;
@@ -163,6 +164,7 @@ class TForm3D : public TForm
   void __fastcall OnSetPtMovStep(TObject *Sender);
   void __fastcall LineSeriesGetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnHideMarks(TObject *Sender);
+  void __fastcall OnHideOldCurve(TObject *Sender);
 
  public:
   __fastcall TForm3D(TComponent* Owner);

@@ -16,3 +16,4 @@
 #define IDS_PM_SET_PTMOV_STEP          110
 #define IDS_DLG_PTMOV_STEP_CAPT        111
 #define IDS_PM_HIDE_MARKS              112
+#define IDS_PM_HIDE_OLDCURVE           113

@@ -120,7 +120,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = True
+      Marks.Visible = False
       SeriesColor = 16744703
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -140,7 +140,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = True
+      Marks.Visible = False
       SeriesColor = clFuchsia
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -160,7 +160,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = True
+      Marks.Visible = False
       SeriesColor = clFuchsia
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -180,7 +180,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = True
+      Marks.Visible = False
       SeriesColor = clFuchsia
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -420,7 +420,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = True
+      Marks.Visible = False
       SeriesColor = clFuchsia
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -482,7 +482,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clYellow
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -503,7 +503,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clBlue
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -524,7 +524,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clWhite
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -545,7 +545,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clGray
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -566,7 +566,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clTeal
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -587,7 +587,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clNavy
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -608,7 +608,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clMaroon
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -629,7 +629,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clLime
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -650,7 +650,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clOlive
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -671,7 +671,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clPurple
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -692,7 +692,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clSilver
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -713,7 +713,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clAqua
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -734,7 +734,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clBlack
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -755,7 +755,7 @@ object Form3D: TForm3D
       Marks.Frame.Visible = False
       Marks.Style = smsValue
       Marks.Transparent = True
-      Marks.Visible = False
+      Marks.Visible = True
       SeriesColor = clRed
       ValueFormat = '#,##0.#'
       Pointer.InflateMargins = True
@@ -1125,6 +1125,10 @@ object Form3D: TForm3D
     object PM_HideMarks: TMenuItem
       Caption = 'Hide marks'
       OnClick = OnHideMarks
+    end
+    object PM_HideOldCurve: TMenuItem
+      Caption = 'Hide old curve'
+      OnClick = OnHideOldCurve
     end
   end
 end
