@@ -274,6 +274,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false); //GD
+ mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);
 }
 
 void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
@@ -390,6 +391,9 @@ void SECU3ExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
   m_fwdm->SetGasdosePosMap(mp_fwd->gasdose_pos_table);
+
+ if (mp_view->GetFWDFlag(FLAG_BAROCORR_MAP))
+  m_fwdm->SetBarocorrMap(mp_fwd->barocorr_table);
 
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
@@ -540,6 +544,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false); //GD
+ mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);
 }
 
 void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)

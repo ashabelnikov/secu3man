@@ -163,6 +163,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetCESettingsData(SECU3IO::CESettingsData& o_data) const;
   void SetCESettingsData(const SECU3IO::CESettingsData& i_data);
 
+  void GetBarocorrMap(float* op_values, bool i_original = false);
+  void SetBarocorrMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

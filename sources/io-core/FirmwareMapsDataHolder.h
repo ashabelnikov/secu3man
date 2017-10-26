@@ -43,6 +43,7 @@
 #define ATS_CORR_LOOKUP_TABLE_SIZE 16
 #define GASDOSE_POS_RPM_SIZE   16
 #define GASDOSE_POS_TPS_SIZE   16
+#define BAROCORR_SIZE          9
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
@@ -107,6 +108,7 @@ struct FWMapsDataHolder
  float choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE];
  float ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];  //коррекция УОЗ по ДТВ
  float gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dosator position
+ float barocorr_table[BAROCORR_SIZE+2]; //barometric correction
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
@@ -123,6 +125,7 @@ struct FWMapsDataHolder
   std::fill(atscurve_vlimits, atscurve_vlimits + 2, .0f);
   std::fill(ats_corr_table, ats_corr_table + ATS_CORR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(gasdose_pos_table, gasdose_pos_table + (GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE), .0f);
+  std::fill(barocorr_table, barocorr_table + BAROCORR_SIZE + 2, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

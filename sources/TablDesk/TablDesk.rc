@@ -142,6 +142,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,379,82,19
     CONTROL         "Параметры CE",IDC_TD_EDIT_CEPAR,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
+    CONTROL         "Барокоррекция",IDC_TD_VIEW_BAROCORR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -468,6 +470,7 @@ BEGIN
     IDS_MAPS_INJTIM_UNIT    "Фаза впрыска (град. до ВМТ)"
     IDS_MAPS_GDP_UNIT       "Полож. газ. дозатора (%)"
     IDS_MAPS_COEFF_UNIT     "Коэффициент"
+    IDS_MAPS_COEFFP_UNIT    "Коэффициент (%)"
     IDS_MAPS_RIGID_UNIT     "Расстояние от заданной целевой точки (давление, обороты)"
     IDS_START_MAP           "Пусковая карта УОЗ"
     IDS_IDLE_MAP            "Карта УОЗ на холостом ходу"
@@ -508,6 +511,8 @@ BEGIN
     IDS_MAPS_TPSPOS_UNIT    "Положение дроссельной заслонки (%)"
     IDS_IATCLT_CORR_MAP     "Коэффициент влияния ТОЖ на ТВ на впуске"
     IDS_MAPS_AIRFLOW_UNIT   "Расход воздуха (нагрузка*обороты)"
+    IDS_BAROCORR_MAP        "Настройка барометрической коррекции"
+    IDS_MAPS_ATMOPRESS_UNIT "Атмосферное давление (кПа)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -647,6 +652,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,379,82,19
     CONTROL         "CE settings",IDC_TD_EDIT_CEPAR,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
+    CONTROL         "Barometric corr.",IDC_TD_VIEW_BAROCORR_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -988,6 +995,7 @@ BEGIN
     IDS_MAPS_INJTIM_UNIT    "Injection timing (degr. BTDC)"
     IDS_MAPS_GDP_UNIT       "Gas dose pos. (%)"
     IDS_MAPS_COEFF_UNIT     "Coefficient"
+    IDS_MAPS_COEFFP_UNIT     "Coefficient (%)"
     IDS_MAPS_RIGID_UNIT     "Distance from the specified target (map, rpm) point"
     IDS_START_MAP           "Start angle map"
     IDS_IDLE_MAP            "Idle angle map"
@@ -1028,6 +1036,8 @@ BEGIN
     IDS_MAPS_TPSPOS_UNIT    "Throttle position (%)"
     IDS_IATCLT_CORR_MAP     "Influence factor of CLT to MAT"
     IDS_MAPS_AIRFLOW_UNIT   "Air flow (load*rpm)"
+    IDS_BAROCORR_MAP        "Tuning of barometric correction"
+    IDS_MAPS_ATMOPRESS_UNIT "Atmospheric pressure (kPa)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

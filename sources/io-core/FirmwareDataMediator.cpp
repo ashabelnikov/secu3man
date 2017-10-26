@@ -51,6 +51,7 @@ using namespace SECU3IO::SECU3Types;
 #define RPM_GRID_SIZE                    16
 #define GASDOSE_POS_RPM_SIZE             16
 #define GASDOSE_POS_TPS_SIZE             16
+#define BAROCORR_SIZE                    9
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -171,10 +172,13 @@ typedef struct
  //CE settings data
  ce_sett_t cesd;
 
+ //barometric correction
+ _uint barocorr[BAROCORR_SIZE+2];
+
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[334];
+ _uchar reserved[312];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1156,6 +1160,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetATSAACMap(op_fwd->ats_corr_table);
  GetChokeOpMap(op_fwd->choke_op_table);
  GetGasdosePosMap(op_fwd->gasdose_pos_table);   //GD
+ GetBarocorrMap(op_fwd->barocorr_table);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1204,6 +1209,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetATSAACMap(ip_fwd->ats_corr_table);
  SetChokeOpMap(ip_fwd->choke_op_table);
  SetGasdosePosMap(ip_fwd->gasdose_pos_table); //GD
+ SetBarocorrMap(ip_fwd->barocorr_table);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1497,6 +1503,41 @@ void CFirmwareDataMediator::SetGasdosePosMap(const float* ip_values)
   _uchar *p = &(p_fd->exdata.gasdose_pos[0][0]);
   *(p + i) = MathHelpers::Round((ip_values[i] * GD_MAPS_M_FACTOR));
  }
+}
+
+void CFirmwareDataMediator::GetBarocorrMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < BAROCORR_SIZE; i++ )
+ {
+  float value = (float)p_fd->exdata.barocorr[i];
+  op_values[i] = (value / BAROCORR_MAPS_M_FACTOR) * 100.0f; // x 100%
+ }
+
+ for (; i < BAROCORR_SIZE+2; i++ )
+ {
+  float value = (float)p_fd->exdata.barocorr[i];
+  op_values[i] = (value) / BAROCORR_MAPSX_M_FACTOR;
+ } 
+}
+
+void CFirmwareDataMediator::SetBarocorrMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < BAROCORR_SIZE; i++ )
+  p_fd->exdata.barocorr[i] = MathHelpers::Round((ip_values[i] / 100.0f) * BAROCORR_MAPS_M_FACTOR); // divide by 100%
+ for (; i < BAROCORR_SIZE+2; i++ )
+  p_fd->exdata.barocorr[i] = MathHelpers::Round(ip_values[i] * BAROCORR_MAPSX_M_FACTOR);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

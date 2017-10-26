@@ -61,6 +61,7 @@ enum EFWDFlags
  FLAG_ATS_MAP,      //separate
  FLAG_ATSAAC_MAP,   //separate
  FLAG_GASDOSE_MAP,  //separate
+ FLAG_BAROCORR_MAP, //separate 
  FLAG_NR_OF_FLAGS
 };
 
