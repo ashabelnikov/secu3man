@@ -30,7 +30,7 @@ LINKER = ilink32
 # ----------------------------------------------------------------------------
 ALLOBJ = c0d32.obj $(OBJFILES)
 ALLRES = $(RESFILES)
-ALLLIB = $(LIBFILES) vcl.lib import32.lib cp32mt.lib Tee50.lib import32.lib cp32mt.lib
+ALLLIB = $(LIBFILES) vcl.lib import32.lib cp32mt.lib Tee8C5.lib import32.lib cp32mt.lib
 # ----------------------------------------------------------------------------
 .autodepend
 
