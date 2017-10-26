@@ -336,9 +336,9 @@ void __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_begi
  {
   case 1: //X
    pForm->ShowXEdits(i_show);
-   pForm->SetXEditsCB(i_pOnChangeValue, i_param);
    pForm->CfgXEdits(0, i_beginMin, i_beginMax, i_spinStep, limitText, spinDecimalPlaces); //begin
    pForm->CfgXEdits(1, i_endMin, i_endMax, i_spinStep, limitText, spinDecimalPlaces);     //end
+   pForm->SetXEditsCB(i_pOnChangeValue, i_param); //important: set callbacks after configuration, in opposite case we may get fake OnChange() event from non-initialized edits
    break;
   default:
    MessageBox(hWnd, _T("Chart2DSetAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
