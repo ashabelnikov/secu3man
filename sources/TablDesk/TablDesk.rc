@@ -144,6 +144,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
     CONTROL         "Барокоррекция",IDC_TD_VIEW_BAROCORR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
+    CONTROL         "Ручн.октан.корр.",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -513,6 +515,7 @@ BEGIN
     IDS_MAPS_AIRFLOW_UNIT   "Расход воздуха (нагрузка*обороты)"
     IDS_BAROCORR_MAP        "Настройка барометрической коррекции"
     IDS_MAPS_ATMOPRESS_UNIT "Атмосферное давление (кПа)"
+    IDS_MANIGNTIM_MAP       "Функция ручной коррекции УОЗ"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -654,6 +657,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
     CONTROL         "Barometric corr.",IDC_TD_VIEW_BAROCORR_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
+    CONTROL         "Manual ign.timing",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1038,6 +1043,7 @@ BEGIN
     IDS_MAPS_AIRFLOW_UNIT   "Air flow (load*rpm)"
     IDS_BAROCORR_MAP        "Tuning of barometric correction"
     IDS_MAPS_ATMOPRESS_UNIT "Atmospheric pressure (kPa)"
+    IDS_MANIGNTIM_MAP       "Manual correction of ignition timing"
 END
 
 /////////////////////////////////////////////////////////////////////////////

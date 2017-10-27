@@ -166,6 +166,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetBarocorrMap(float* op_values, bool i_original = false);
   void SetBarocorrMap(const float* i_values);
 
+  void GetManIgntimMap(float* op_values, bool i_original = false);
+  void SetManIgntimMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

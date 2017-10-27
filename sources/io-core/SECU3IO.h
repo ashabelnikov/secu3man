@@ -657,6 +657,7 @@ namespace SECU3IO
  const float choke_op_map_slots[16]  = {-5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
 
  const float rigid_map_slots[8]  = {1,2,3,4,5,6,7,8};
+ const float manigntim_map_slots[16]  = {.0f,0.33f,0.66f,1.00f,1.33f,1.66f,2.00f,2.33f,2.66f,3.00f,3.33f,3.66f,4.00f,4.33f,4.66f,5.0f};
 
  const int SECU3_COMPILE_OPTIONS_BITS_COUNT = 32;
  //<bitnumber, name>

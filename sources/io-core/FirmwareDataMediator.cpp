@@ -52,6 +52,7 @@ using namespace SECU3IO::SECU3Types;
 #define GASDOSE_POS_RPM_SIZE             16
 #define GASDOSE_POS_TPS_SIZE             16
 #define BAROCORR_SIZE                    9
+#define PA4_LOOKUP_TABLE_SIZE            16
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -175,10 +176,13 @@ typedef struct
  //barometric correction
  _uint barocorr[BAROCORR_SIZE+2];
 
+ //table for manual setting of ign.timing
+ _char pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[312];
+ _uchar reserved[296];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1161,6 +1165,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetChokeOpMap(op_fwd->choke_op_table);
  GetGasdosePosMap(op_fwd->gasdose_pos_table);   //GD
  GetBarocorrMap(op_fwd->barocorr_table);
+ GetManIgntimMap(op_fwd->pa4_igntim_corr);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1210,6 +1215,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetChokeOpMap(ip_fwd->choke_op_table);
  SetGasdosePosMap(ip_fwd->gasdose_pos_table); //GD
  SetBarocorrMap(ip_fwd->barocorr_table);
+ SetManIgntimMap(ip_fwd->pa4_igntim_corr);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1538,6 +1544,28 @@ void CFirmwareDataMediator::SetBarocorrMap(const float* ip_values)
   p_fd->exdata.barocorr[i] = MathHelpers::Round((ip_values[i] / 100.0f) * BAROCORR_MAPS_M_FACTOR); // divide by 100%
  for (; i < BAROCORR_SIZE+2; i++ )
   p_fd->exdata.barocorr[i] = MathHelpers::Round(ip_values[i] * BAROCORR_MAPSX_M_FACTOR);
+}
+
+void CFirmwareDataMediator::GetManIgntimMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < PA4_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.pa4_igntim_corr[i]) / AA_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetManIgntimMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < PA4_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.pa4_igntim_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

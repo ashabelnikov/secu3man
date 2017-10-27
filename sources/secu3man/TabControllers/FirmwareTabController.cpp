@@ -805,6 +805,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_BAROCORR), TYPE_MAP_BAROCORR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
@@ -1011,6 +1012,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(false),false);
  m_fwdm->GetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(true),true);
+
+ m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false),false);
+ m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(true),true);
  
  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1230,6 +1234,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_BAROCORR:
    m_fwdm->SetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(false));
+   break;
+  case TYPE_MAP_MANIGNTIM:
+   m_fwdm->SetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false));
    break;
  }
 }

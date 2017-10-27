@@ -317,3 +317,5 @@
 #define IDS_BAROCORR_MAP                5576
 #define IDS_MAPS_ATMOPRESS_UNIT         5577
 #define IDS_MAPS_COEFFP_UNIT            5578
+#define IDC_TD_VIEW_MANIGNTIM_MAP       5579
+#define IDS_MANIGNTIM_MAP               5580

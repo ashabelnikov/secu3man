@@ -163,6 +163,14 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_IATCLTMapWnd_X = rc.left;
    ws.m_IATCLTMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_BAROCORR:
+   ws.m_BarocorrMapWnd_X = rc.left;
+   ws.m_BarocorrMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_MANIGNTIM:
+   ws.m_ManIgntimMapWnd_X = rc.left;
+   ws.m_ManIgntimMapWnd_Y = rc.top;
+   break;
 
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
@@ -268,6 +276,12 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_IATCLT:
    X = ws.m_IATCLTMapWnd_X, Y = ws.m_IATCLTMapWnd_Y;
+   break;
+  case TYPE_MAP_BAROCORR:
+   X = ws.m_BarocorrMapWnd_X, Y = ws.m_BarocorrMapWnd_Y;
+   break;
+  case TYPE_MAP_MANIGNTIM:
+   X = ws.m_ManIgntimMapWnd_X, Y = ws.m_ManIgntimMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

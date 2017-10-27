@@ -156,6 +156,10 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_IACCWMapWnd_Y;
   const CString m_Name_IATCLTMapWnd_X;
   const CString m_Name_IATCLTMapWnd_Y;
+  const CString m_Name_BarocorrMapWnd_X;
+  const CString m_Name_BarocorrMapWnd_Y;
+  const CString m_Name_ManIgntimMapWnd_X;
+  const CString m_Name_ManIgntimMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -299,6 +303,10 @@ class CAppSettingsModel : public ISettingsData
   int m_optIACCWMapWnd_Y;
   int m_optIATCLTMapWnd_X;
   int m_optIATCLTMapWnd_Y;
+  int m_optBarocorrMapWnd_X;
+  int m_optBarocorrMapWnd_Y;
+  int m_optManIgntimMapWnd_X;
+  int m_optManIgntimMapWnd_Y;
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;

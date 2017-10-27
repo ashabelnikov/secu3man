@@ -358,6 +358,36 @@ void __cdecl CTablesSetPanel::OnChangeBarocorrXAxisEdit(void* i_param, int i_typ
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeManIgntimTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_MANIGNTIM);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseManIgntimTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_manigntim_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_manigntim_map_wnd_handle, TYPE_MAP_MANIGNTIM);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -381,6 +411,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_choke_map_chart_state = 0;
  m_gasdose_map_chart_state = 0;
  m_barocorr_map_chart_state = 0;
+ m_manigntim_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
@@ -390,6 +421,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_choke_map_wnd_handle = NULL;
  m_gasdose_map_wnd_handle = NULL;
  m_barocorr_map_wnd_handle = NULL;
+ m_manigntim_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -417,6 +449,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, m_view_gasdose_map_btn);
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, m_view_barocorr_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, m_view_manigntim_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -431,6 +464,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_GDP_MAP, OnViewGasdosePosMap)
  ON_BN_CLICKED(IDC_TD_EDIT_CEPAR, OnCESettingsButton)
  ON_BN_CLICKED(IDC_TD_VIEW_BAROCORR_MAP, OnViewBarocorrMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_MANIGNTIM_MAP, OnViewManIgntimMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -444,6 +478,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GDP_MAP, OnUpdateViewGasdosePosMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_EDIT_CEPAR, OnUpdateCESettingsButton)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_BAROCORR_MAP, OnUpdateViewBarocorrMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_MANIGNTIM_MAP, OnUpdateViewManIgntimMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -541,6 +576,14 @@ void CTablesSetPanel::OnUpdateViewBarocorrMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
  pCmdUI->Enable(enable);
  pCmdUI->SetCheck( (m_barocorr_map_chart_state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewManIgntimMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_manigntim_map_chart_state) ? TRUE : FALSE );
 }
 
 //Updates controls which state depends on whether or not data is
@@ -943,6 +986,40 @@ void CTablesSetPanel::OnViewBarocorrMap()
  }
 }
 
+void CTablesSetPanel::OnViewManIgntimMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_manigntim_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_manigntim_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_manigntim_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_manigntim_map_chart_state = 1;
+  m_manigntim_map_wnd_handle = DLL::Chart2DCreate(GetManIgntimMap(true),GetManIgntimMap(false),-15.0,15.0,SECU3IO::manigntim_map_slots,16,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
+    MLL::GetString(IDS_MANIGNTIM_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_manigntim_map_wnd_handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_manigntim_map_wnd_handle, _T("#0.0"));
+  DLL::Chart2DSetPtMovingStep(m_manigntim_map_wnd_handle, 0.5f);
+  DLL::Chart2DSetOnChange(m_manigntim_map_wnd_handle,OnChangeManIgntimTable,this);
+  DLL::Chart2DSetOnClose(m_manigntim_map_wnd_handle,OnCloseManIgntimTable,this);
+  DLL::Chart2DUpdate(m_manigntim_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_manigntim_map_wnd_handle, TYPE_MAP_MANIGNTIM);
+
+  DLL::Chart2DShow(m_manigntim_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_manigntim_map_wnd_handle);
+ }
+}
 
 void CTablesSetPanel::OnDwellCalcButton()
 {
@@ -1051,6 +1128,14 @@ float* CTablesSetPanel::GetBarocorrMap(bool i_original)
   return m_barocorr_map_active;
 }
 
+float* CTablesSetPanel::GetManIgntimMap(bool i_original)
+{
+ if (i_original)
+  return m_manigntim_map_original;
+ else
+  return m_manigntim_map_active;
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -1060,21 +1145,23 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
  switch(wndType)
  {
  case TYPE_MAP_ATTENUATOR:
-  return m_attenuator_map_wnd_handle ? m_attenuator_map_wnd_handle : NULL;
+  return m_attenuator_map_chart_state ? m_attenuator_map_wnd_handle : NULL;
  case TYPE_MAP_DWELLCNTRL:
-  return m_dwellcntrl_map_wnd_handle ? m_dwellcntrl_map_wnd_handle : NULL;
+  return m_dwellcntrl_map_chart_state ? m_dwellcntrl_map_wnd_handle : NULL;
  case TYPE_MAP_CTS_CURVE:
-  return m_cts_curve_map_wnd_handle ? m_cts_curve_map_wnd_handle : NULL;
+  return m_cts_curve_map_chart_state ? m_cts_curve_map_wnd_handle : NULL;
  case TYPE_MAP_CHOKE_OP:
-  return m_choke_map_wnd_handle ? m_choke_map_wnd_handle : NULL;
+  return m_choke_map_chart_state ? m_choke_map_wnd_handle : NULL;
  case TYPE_MAP_ATS_CURVE:
-  return m_ats_curve_map_wnd_handle ? m_ats_curve_map_wnd_handle : NULL;
+  return m_ats_curve_map_chart_state ? m_ats_curve_map_wnd_handle : NULL;
  case TYPE_MAP_ATS_CORR:
-  return m_ats_aac_map_wnd_handle ? m_ats_aac_map_wnd_handle : NULL;
+  return m_ats_aac_map_chart_state ? m_ats_aac_map_wnd_handle : NULL;
  case TYPE_MAP_GASDOSE:
-  return m_gasdose_map_wnd_handle ? m_gasdose_map_wnd_handle : NULL;
+  return m_gasdose_map_chart_state ? m_gasdose_map_wnd_handle : NULL;
  case TYPE_MAP_BAROCORR:
-  return m_barocorr_map_wnd_handle ? m_barocorr_map_wnd_handle : NULL;
+  return m_barocorr_map_chart_state ? m_barocorr_map_wnd_handle : NULL;
+ case TYPE_MAP_MANIGNTIM:
+  return m_manigntim_map_chart_state ? m_manigntim_map_wnd_handle : NULL;
 
  default:
   return NULL;

@@ -61,6 +61,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void SetATSXAxisEdits(float i_begin, float i_end);
   float* GetGasdosePosMap(bool i_original);
   float* GetBarocorrMap(bool i_original);
+  float* GetManIgntimMap(bool i_original);
 
   //returns NULL if corresponding window wasn't opened
   virtual HWND GetMapWindow(int wndType);
@@ -95,6 +96,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnCESettingsButton();
   afx_msg void OnViewGasdosePosMap();
   afx_msg void OnViewBarocorrMap();
+  afx_msg void OnViewManIgntimMap();
   afx_msg void OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewDwellCntrlMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
@@ -104,6 +106,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCESettingsButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewBarocorrMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewManIgntimMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnChangeFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult);
@@ -122,6 +125,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_gasdose_map_btn;
   CButton   m_edit_cesettings_btn;
   CButton   m_view_barocorr_map_btn;
+  CButton   m_view_manigntim_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
 
@@ -158,6 +162,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseBarocorrTable(void* i_param);
   static void __cdecl OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value);
 
+  static void __cdecl OnChangeManIgntimTable(void* i_param);
+  static void __cdecl OnCloseManIgntimTable(void* i_param);
+
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_choke_op_enabled;
@@ -170,6 +177,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   int m_choke_map_chart_state;
   int m_gasdose_map_chart_state;
   int m_barocorr_map_chart_state;
+  int m_manigntim_map_chart_state;
 
   HWND m_attenuator_map_wnd_handle;
   HWND m_dwellcntrl_map_wnd_handle;
@@ -179,6 +187,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   HWND m_gasdose_map_wnd_handle;
   HWND m_choke_map_wnd_handle;
   HWND m_barocorr_map_wnd_handle;
+  HWND m_manigntim_map_wnd_handle;
 
   float m_attenuator_table_slots[128];
 
@@ -209,6 +218,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   float m_barocorr_map_active[9+2];
   float m_barocorr_map_original[9+2];
+
+  float m_manigntim_map_active[16];
+  float m_manigntim_map_original[16];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
