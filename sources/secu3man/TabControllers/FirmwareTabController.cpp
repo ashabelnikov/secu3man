@@ -1615,9 +1615,18 @@ void CFirmwareTabController::OnCESettingsButton(void)
  dialog.SetValues(data);
  dialog.EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  dialog.EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
+ WndSettings ws;
+ mp_settings->GetWndSettings(ws);
+ dialog.SetWndPosition(ws.m_CESettingsWnd_X, ws.m_CESettingsWnd_Y);
+
  if (dialog.DoModal() == IDOK)
  {
   dialog.GetValues(data);
   m_fwdm->SetCESettingsData(data);
  }
+
+ CPoint wndPos = dialog.GetWndPosition();
+ ws.m_CESettingsWnd_X = wndPos.x; 
+ ws.m_CESettingsWnd_Y = wndPos.y;
+ mp_settings->SetWndSettings(ws); 
 }

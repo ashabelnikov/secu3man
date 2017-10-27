@@ -132,6 +132,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_BarocorrMapWnd_Y(_T("BarocorrMapWnd_Y"))
 , m_Name_ManIgntimMapWnd_X(_T("ManIgntimMapWnd_X"))
 , m_Name_ManIgntimMapWnd_Y(_T("ManIgntimMapWnd_Y"))
+, m_Name_CESettingsWnd_X(_T("CESettingsWnd_X"))
+, m_Name_CESettingsWnd_Y(_T("CESettingsWnd_Y"))
 
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
@@ -709,6 +711,9 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, ManIgntimMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, ManIgntimMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CESettingsWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, CESettingsWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -1073,6 +1078,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optManIgntimMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ManIgntimMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optCESettingsWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CESettingsWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optCESettingsWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CESettingsWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -1195,6 +1206,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optBarocorrMapWnd_Y = i_wndSettings.m_BarocorrMapWnd_Y; 
  m_optManIgntimMapWnd_X = i_wndSettings.m_ManIgntimMapWnd_X;
  m_optManIgntimMapWnd_Y = i_wndSettings.m_ManIgntimMapWnd_Y; 
+ m_optCESettingsWnd_X = i_wndSettings.m_CESettingsWnd_X;
+ m_optCESettingsWnd_Y = i_wndSettings.m_CESettingsWnd_Y; 
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -1263,6 +1276,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_BarocorrMapWnd_Y = m_optBarocorrMapWnd_Y;
  o_wndSettings.m_ManIgntimMapWnd_X = m_optManIgntimMapWnd_X;
  o_wndSettings.m_ManIgntimMapWnd_Y = m_optManIgntimMapWnd_Y;
+ o_wndSettings.m_CESettingsWnd_X = m_optCESettingsWnd_X;
+ o_wndSettings.m_CESettingsWnd_Y = m_optCESettingsWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

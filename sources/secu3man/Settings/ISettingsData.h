@@ -94,6 +94,8 @@ struct WndSettings
  int m_BarocorrMapWnd_Y;
  int m_ManIgntimMapWnd_X;
  int m_ManIgntimMapWnd_Y;
+ int m_CESettingsWnd_X;
+ int m_CESettingsWnd_Y;
 };
 
 typedef enum EInterLang

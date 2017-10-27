@@ -24,12 +24,15 @@
  */
 
 #include "stdafx.h"
+#include <limits>
 #include <afxpriv.h>
 #include "resource.h"
 #include "CESettingsDlg.h"
 #include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
 #include "ui-core/WndScroller.h"
+
+#undef max   //avoid conflicts with C++
 
 const UINT CCESettingsDlg::IDD = IDD_CESETTINGS_EDITOR;
 
@@ -98,6 +101,7 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_add_i4_v_min_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_max_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_em_edit(CEditEx::MODE_FLOAT)
+, m_wndPos(0, 0)
 {
  //empty
 }
@@ -392,6 +396,9 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_add_i4_v_em_edit.SetLimitText(6);
  m_add_i4_v_em_edit.SetDecimalPlaces(3);
 
+ if (m_wndPos.x != std::numeric_limits<int>::max() && m_wndPos.y != std::numeric_limits<int>::max())
+ SetWindowPos(NULL, m_wndPos.x, m_wndPos.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
  //initialize window scroller
  mp_scr->Init(this);
  mp_scr->SetViewSizeF(0, 1.2f);
@@ -402,6 +409,11 @@ BOOL CCESettingsDlg::OnInitDialog()
 
 void CCESettingsDlg::OnDestroy()
 {
+ RECT rc;
+ GetWindowRect(&rc);
+ m_wndPos.x = rc.left;
+ m_wndPos.y = rc.top;
+
  Super::OnDestroy();
  mp_scr->Close();
 }
@@ -432,4 +444,14 @@ void CCESettingsDlg::EnableSECU3TItems(bool i_enable)
 void CCESettingsDlg::EnableExtraIO(bool i_enable)
 {
  m_enable_extraio = i_enable;
+}
+
+void CCESettingsDlg::SetWndPosition(int x, int y)
+{
+ m_wndPos = CPoint(x, y);
+}
+
+const CPoint& CCESettingsDlg::GetWndPosition(void)
+{
+ return m_wndPos;
 }

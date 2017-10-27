@@ -49,6 +49,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   void GetValues(SECU3IO::CESettingsData& o_data);
   void EnableSECU3TItems(bool i_enable);
   void EnableExtraIO(bool i_enable);
+  void SetWndPosition(int x, int y);
+  const CPoint& GetWndPosition(void);
 
  // Implementation
  protected:
@@ -131,4 +133,6 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i4_v_max_spin;
   CEditEx m_add_i4_v_em_edit;
   CSpinButtonCtrlEx m_add_i4_v_em_spin;
+
+  CPoint m_wndPos;
 };
