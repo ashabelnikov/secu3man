@@ -242,11 +242,11 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_INJ_O7     =  61,     // INJ_O7    (output)
    IOP3I_INJ_O8     =  62,     // INJ_O8    (output)
    IOP3I_IGNTIM     =  63,     // IGNTIM    (input)
-// IOP3I_RESERVED12 =  64,     // Reserved    ()
+   IOP3I_MAP2       =  64,     // MAP2      (input)
 // IOP3I_RESERVED13 =  65,     // Reserved    ()
 // IOP3I_RESERVED14 =  66,     // Reserved    ()
 // IOP3I_RESERVED15 =  67,     // Reserved    ()
-   IOP3I_COUNT      =  64,     //DON'T forget to update this value
+   IOP3I_COUNT      =  65,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)

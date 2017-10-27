@@ -198,6 +198,9 @@ BEGIN
 
     LTEXT           "Условие MAPSEL0 для газа",IDC_PD_FUNSET_GAS_UNI_CAPTION,2,203,110,8
     COMBOBOX        IDC_PD_FUNSET_GAS_UNI_COMBO,115,202,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Барокоррекция",IDC_PD_FUNSET_BAROCORRTYPE_CAPTION,2,224,83,8
+    COMBOBOX        IDC_PD_FUNSET_BAROCORRTYPE_COMBO,85,223,70,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1437,6 +1440,16 @@ BEGIN
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера полностью включен (коэфф.заполнения ШИМ = 100%). Если расход воздуха больше или равен этому значению, то клапан полностью включен. Расход воздуха определяется как Обороты * Нагрузка."
 END
 
+
+STRINGTABLE
+BEGIN
+    IDS_PD_FUNSET_BAROCORR_TYPE0    "-Отключена-"
+    IDS_PD_FUNSET_BAROCORR_TYPE1    "Статич.ДАД1"
+    IDS_PD_FUNSET_BAROCORR_TYPE2    "Динам. ДАД1"
+    IDS_PD_FUNSET_BAROCORR_TYPE3    "Динам. ДАД2"
+END
+
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -1632,6 +1645,9 @@ BEGIN
 
     LTEXT           "MAPSEL0 condition for gas",IDC_PD_FUNSET_GAS_UNI_CAPTION,2,203,110,8
     COMBOBOX        IDC_PD_FUNSET_GAS_UNI_COMBO,115,202,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    LTEXT           "Barometric corr.",IDC_PD_FUNSET_BAROCORRTYPE_CAPTION,2,224,83,8
+    COMBOBOX        IDC_PD_FUNSET_BAROCORRTYPE_COMBO,85,223,70,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -2899,6 +2915,14 @@ STRINGTABLE
 BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Air flow at which canister purge valve start to open (PWM duty = 0%). If air flow is less or equal to this value, than valve will be fully closed. Air flow is determined as RPM * Load"
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Air flow at which canister purge valve is fully opened (PWM duty = 100%). If air flow is above or equal to this value, than valve will be fully opened. Air flow is determined as RPM * Load"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_PD_FUNSET_BAROCORR_TYPE0     "-Disabled-"
+    IDS_PD_FUNSET_BAROCORR_TYPE1     "Static MAP1"
+    IDS_PD_FUNSET_BAROCORR_TYPE2     "Dynam. MAP1"
+    IDS_PD_FUNSET_BAROCORR_TYPE3     "Dynam. MAP2"
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -135,6 +135,7 @@ namespace SECU3IO
   unsigned char load_src_cfg;
   int uni_benzin;
   int uni_gas;
+  int barocorr_type;
  };
 
  struct IdlRegPar

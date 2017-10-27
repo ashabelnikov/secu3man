@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_LOAD_SRC_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_UNI_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_UNI_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_FUNSET_BAROCORRTYPE_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_MAP_GRAD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_PRESS_SWING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET_EDIT, OnChangeData)
@@ -71,6 +72,8 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_GAS_UNI_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BENZIN_UNI_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BENZIN_UNI_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BAROCORRTYPE_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BAROCORRTYPE_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_SPIN,OnUpdateControls)
@@ -119,6 +122,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.load_src_cfg = 0;
  m_params.uni_benzin = SECU3IO::UNI_OUTPUT_NUM; //disabled
  m_params.uni_gas = SECU3IO::UNI_OUTPUT_NUM; //disabled
+ m_params.barocorr_type = 0; //disabled
 }
 
 LPCTSTR CFunSetPageDlg::GetDialogID(void) const
@@ -134,6 +138,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_LOAD_SRC_COMBO, m_load_src_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_GAS_UNI_COMBO, m_gas_uni_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_BENZIN_UNI_COMBO, m_benzin_uni_combo);
+ DDX_Control(pDX, IDC_PD_FUNSET_BAROCORRTYPE_COMBO, m_barocorr_type_combo);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_SPIN, m_press_swing_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_press_swing_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_SPIN, m_map_grad_spin);
@@ -159,6 +164,7 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_LOAD_SRC_COMBO, m_params.load_src_cfg);
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_GAS_UNI_COMBO, m_params.uni_gas);
  DDX_CBIndex_int(pDX, IDC_PD_FUNSET_BENZIN_UNI_COMBO, m_params.uni_benzin);
+ DDX_CBIndex_int(pDX, IDC_PD_FUNSET_BAROCORRTYPE_COMBO, m_params.barocorr_type);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -223,10 +229,14 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_benzin_uni_combo.AddString(_T("3"));
  m_benzin_uni_combo.AddString(_T("--no--"));
 
+ m_barocorr_type_combo.AddString(MLL::LoadString(IDS_PD_FUNSET_BAROCORR_TYPE0));
+ m_barocorr_type_combo.AddString(MLL::LoadString(IDS_PD_FUNSET_BAROCORR_TYPE1));
+ m_barocorr_type_combo.AddString(MLL::LoadString(IDS_PD_FUNSET_BAROCORR_TYPE2));
+ m_barocorr_type_combo.AddString(MLL::LoadString(IDS_PD_FUNSET_BAROCORR_TYPE3));
+
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.4f));
+ mp_scr->SetViewSizeF(.0f, 1.5f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());

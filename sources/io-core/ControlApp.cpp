@@ -650,7 +650,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 31 : 16))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 33 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -711,6 +711,11 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
   m_FunSetPar.uni_gas = UNI_OUTPUT_NUM; //disabled
  if (m_FunSetPar.uni_benzin == 0xF)
   m_FunSetPar.uni_benzin = UNI_OUTPUT_NUM; //disabled
+
+ BYTE barocorr_type = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &barocorr_type))
+  return false;
+ m_FunSetPar.barocorr_type = barocorr_type;
 
  return true;
 }
@@ -2744,6 +2749,8 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  int uni_benzin = (packet_data->uni_benzin==UNI_OUTPUT_NUM) ? 0xF : packet_data->uni_benzin;
  BYTE mapsel_uni = MAKEBYTE(uni_gas, uni_benzin);
  mp_pdp->Bin8ToHex(mapsel_uni, m_outgoing_packet);
+ BYTE barocorr_type = packet_data->barocorr_type;
+ mp_pdp->Bin8ToHex(barocorr_type, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
