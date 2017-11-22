@@ -417,6 +417,7 @@ namespace SECU3IO
   bool set_btbr;                        //flag indicating that bluetooth baud rate has to be set
   bool use_imm;                         //flag specifying to use or not to use immobilizer
   bool use_respar;                      //use reserve parameters (from FLASH only)
+  bool chk_fwcrc;                       //check integrity of firmware
   BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 

@@ -306,6 +306,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->bt_flags, 0, p_in->use_bt);
     WRITEBIT8(p_params->bt_flags, 2, p_in->use_imm);
     WRITEBIT8(p_params->bt_flags, 3, p_in->use_respar);
+    WRITEBIT8(p_params->bt_flags, 4, p_in->chk_fwcrc);
     for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
      memcpy(p_params->ibtn_keys[j], p_in->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
    }
@@ -656,6 +657,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->use_bt = CHECKBIT8(p_params->bt_flags, 0);
      p_out->use_imm = CHECKBIT8(p_params->bt_flags, 2);
      p_out->use_respar = CHECKBIT8(p_params->bt_flags, 3);
+     p_out->chk_fwcrc = CHECKBIT8(p_params->bt_flags, 4);
      for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
       memcpy(p_out->ibtn_keys[j], p_params->ibtn_keys[j], SECU3IO::IBTN_KEY_SIZE);
     }

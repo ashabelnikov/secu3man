@@ -87,6 +87,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_bt_use_check;
   CButton m_imm_use_check;
   CButton m_use_respar_check;
+  CButton m_chk_fwcrc_check;
 
   CEditEx m_ibtn_key1_edit;
   CEditEx m_ibtn_key2_edit;
