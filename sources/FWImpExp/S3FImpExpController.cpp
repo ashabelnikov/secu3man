@@ -306,6 +306,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -313,6 +315,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);      //since v01.03
  mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);   //since v01.03
  mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);  //since v01.04
+
+ mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false && sepmap);  //since todo
+ mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false && sepmap);  //since todo
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)

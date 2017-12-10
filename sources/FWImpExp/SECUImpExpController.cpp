@@ -204,10 +204,10 @@ void SECU3ImportController::OnExchangePressed(void)
   m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_fwdm->GetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_fwdm->GetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_fwdm->GetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_fwdm->GetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
@@ -478,10 +478,10 @@ void SECU3ExportController::OnExchangePressed(void)
   m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_iac_crank_pos);
 
  if (mp_view->GetFWDFlag(FLAG_AETPS_MAP))
-  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
+  m_fwdm->SetAETPSMap(other_sel, mp_fwd->maps[current_sel].inj_ae_tps);
 
  if (mp_view->GetFWDFlag(FLAG_AERPM_MAP))
-  m_fwdm->SetIdlcMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
+  m_fwdm->SetAERPMMap(other_sel, mp_fwd->maps[current_sel].inj_ae_rpm);
 
  if (mp_view->GetFWDFlag(FLAG_AFTSTR_MAP))
   m_fwdm->SetAftstrMap(other_sel, mp_fwd->maps[current_sel].inj_aftstr);
