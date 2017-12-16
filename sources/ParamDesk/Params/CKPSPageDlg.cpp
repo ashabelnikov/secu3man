@@ -253,8 +253,8 @@ BOOL CCKPSPageDlg::OnInitDialog()
  m_wheel_cogs_num_edit.SetLimitText(3);
  m_wheel_cogs_num_edit.SetDecimalPlaces(3);
  m_wheel_cogs_num_spin.SetBuddy(&m_wheel_cogs_num_edit);
- m_wheel_cogs_num_spin.SetRangeAndDelta(16, 200, 1);
- m_wheel_cogs_num_edit.SetRange(16, 200);
+ m_wheel_cogs_num_spin.SetRangeAndDelta(10, 200, 1);
+ m_wheel_cogs_num_edit.SetRange(10, 200);
 
  m_wheel_miss_num_edit.SetLimitText(1);
  m_wheel_miss_num_edit.SetDecimalPlaces(1);
