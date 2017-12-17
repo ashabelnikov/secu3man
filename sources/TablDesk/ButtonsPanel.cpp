@@ -873,6 +873,38 @@ void __cdecl CButtonsPanel::OnChangeIATCLTXAxisEdit(void* i_param, int i_type, f
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeTpsswtMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_TPSSWT);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseTpsswtMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_tpsswt_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationITMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1128,6 +1160,21 @@ void __cdecl CButtonsPanel::OnWndActivationIATCLTMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationTpsswtMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_tpsswt_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChanged(int mapType)
 {
  if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
@@ -1172,6 +1219,8 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
   DLL::Chart2DUpdate(m_iaccw_map_wnd_handle, GetIACCWMap(true), GetIACCWMap(false));
  if (m_iatclt_map_chart_state && mapType == TYPE_MAP_INJ_IATCLT)
   DLL::Chart2DUpdate(m_iatclt_map_wnd_handle, GetIATCLTMap(true), GetIATCLTMap(false));
+ if (m_tpsswt_map_chart_state && mapType == TYPE_MAP_INJ_TPSSWT)
+  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, GetTpsswtMap(true), GetTpsswtMap(false));
 
  if (m_OnMapChanged)
   m_OnMapChanged(mapType);
@@ -1215,6 +1264,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_iacc_map_chart_state(0)
 , m_iaccw_map_chart_state(0)
 , m_iatclt_map_chart_state(0)
+, m_tpsswt_map_chart_state(0)
 , m_grid_map_state(0)
 , m_start_map_wnd_handle(NULL)
 , m_idle_map_wnd_handle(NULL)
@@ -1237,6 +1287,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_iacc_map_wnd_handle(NULL)
 , m_iaccw_map_wnd_handle(NULL)
 , m_iatclt_map_wnd_handle(NULL)
+, m_tpsswt_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
@@ -1288,6 +1339,8 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
  memset(m_iaccw_map_original, 0, (16+2) * sizeof(float));
  memset(m_iatclt_map_active, 0, (8+2) * sizeof(float));
  memset(m_iatclt_map_original, 0, (8+2) * sizeof(float));
+ memset(m_tpsswt_map_active, 0, 16 * sizeof(float));
+ memset(m_tpsswt_map_original, 0, 16 * sizeof(float));
 }
 
 CButtonsPanel::~CButtonsPanel()
@@ -1320,6 +1373,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_IACC_MAP,  m_view_iacc_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IACCW_MAP,  m_view_iaccw_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IATCLT_MAP,  m_view_iatclt_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_TPSSWT_MAP,  m_view_tpsswt_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -1345,6 +1399,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_IACC_MAP, OnViewIACCMap)
  ON_BN_CLICKED(IDC_TD_VIEW_IACCW_MAP, OnViewIACCWMap)
  ON_BN_CLICKED(IDC_TD_VIEW_IATCLT_MAP, OnViewIATCLTMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_TPSSWT_MAP, OnViewTpsswtMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_START_MAP,OnUpdateViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLE_MAP, OnUpdateViewIdleMap)
@@ -1367,6 +1422,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IACC_MAP, OnUpdateViewIACCMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IACCW_MAP, OnUpdateViewIACCWMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IATCLT_MAP, OnUpdateViewIATCLTMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TPSSWT_MAP, OnUpdateViewTpsswtMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GME_CHECK, OnUpdateGridModeEditing)
  ON_WM_TIMER()
  ON_WM_DESTROY()
@@ -2129,6 +2185,42 @@ void CButtonsPanel::OnViewIATCLTMap()
  }
 }
 
+//-----------------------------------------------------------------------------------------------
+void CButtonsPanel::OnViewTpsswtMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_tpsswt_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_tpsswt_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_tpsswt_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_tpsswt_map_chart_state = 1;
+  m_tpsswt_map_wnd_handle = DLL::Chart2DCreate(GetTpsswtMap(true),GetTpsswtMap(false),0.0,100.0,GetRPMGrid(),16,
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TPSSWT_UNIT).c_str(),
+    MLL::GetString(IDS_TPSSWT_MAP).c_str(), false);
+  DLL::Chart2DSetOnWndActivation(m_tpsswt_map_wnd_handle,OnWndActivationTpsswtMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_tpsswt_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(m_tpsswt_map_wnd_handle,OnChangeTpsswtMap,this);
+  DLL::Chart2DSetOnClose(m_tpsswt_map_wnd_handle,OnCloseTpsswtMap,this);
+  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
+
+  DLL::Chart2DShow(m_tpsswt_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_tpsswt_map_wnd_handle);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnGridModeEditing()
 {
  if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
@@ -2328,6 +2420,14 @@ void CButtonsPanel::OnUpdateViewIATCLTMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_iatclt_map_chart_state) ? TRUE : FALSE );
 }
 
+void CButtonsPanel::OnUpdateViewTpsswtMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->SetCheck( (m_tpsswt_map_chart_state) ? TRUE : FALSE );
+}
+
 void CButtonsPanel::OnTimer(UINT nIDEvent)
 {
  //I know it is dirty hack, but... :-)
@@ -2387,6 +2487,8 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_iaccw_map_wnd_handle, GetIACCWMap(true), GetIACCWMap(false));
  if (m_iatclt_map_chart_state)
   DLL::Chart2DUpdate(m_iatclt_map_wnd_handle, GetIATCLTMap(true), GetIATCLTMap(false));
+ if (m_tpsswt_map_chart_state)
+  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, GetTpsswtMap(true), GetTpsswtMap(false));
  if (mp_gridModeEditorDlg.get() && m_grid_map_state)
   mp_gridModeEditorDlg->UpdateView();
 }
@@ -2443,6 +2545,8 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
   DLL::Chart2DEnable(m_iaccw_map_wnd_handle, i_enable && IsAllowed());
  if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
   DLL::Chart2DEnable(m_iatclt_map_wnd_handle, i_enable && IsAllowed());
+ if (m_tpsswt_map_chart_state && ::IsWindow(m_tpsswt_map_wnd_handle))
+  DLL::Chart2DEnable(m_tpsswt_map_wnd_handle, i_enable && IsAllowed());
 }
 
 void CButtonsPanel::EnableGasdose(bool i_enable)
@@ -2638,6 +2742,14 @@ float* CButtonsPanel::GetIATCLTMap(bool i_original)
   return m_iatclt_map_active;
 }
 
+float* CButtonsPanel::GetTpsswtMap(bool i_original)
+{
+ if (i_original)
+  return m_tpsswt_map_original;
+ else
+  return m_tpsswt_map_active;
+}
+
 float* CButtonsPanel::GetRPMGrid(void)
 {
  return m_rpm_grid_values;
@@ -2690,6 +2802,8 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_iaccw_map_chart_state ? m_iaccw_map_wnd_handle : NULL;
  case TYPE_MAP_INJ_IATCLT:
   return m_iatclt_map_chart_state ? m_iatclt_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_TPSSWT:
+  return m_tpsswt_map_chart_state ? m_tpsswt_map_wnd_handle : NULL;
 
  case TYPE_MAP_GME_WND: //pseudo map
   return (mp_gridModeEditorDlg.get() && m_grid_map_state) ? mp_gridModeEditorDlg->m_hWnd : NULL; 
@@ -2745,6 +2859,8 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart2DEnable(m_iaccw_map_wnd_handle, enable && IsAllowed());
   if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
    DLL::Chart2DEnable(m_iatclt_map_wnd_handle, enable && IsAllowed());
+  if (m_tpsswt_map_chart_state && ::IsWindow(m_tpsswt_map_wnd_handle))
+   DLL::Chart2DEnable(m_tpsswt_map_wnd_handle, enable && IsAllowed());
 
   if (mp_gridModeEditorDlg.get() && m_grid_map_state && ::IsWindow(mp_gridModeEditorDlg->m_hWnd))
    mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);

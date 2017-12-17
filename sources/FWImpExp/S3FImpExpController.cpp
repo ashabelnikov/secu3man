@@ -272,32 +272,42 @@ void S3FImportController::OnViewActivate(void)
 
  //injection
  mp_view->SetFWDFlag(FLAG_VE_MAP, injen);
- mp_view->SetFWDFlag(FLAG_AFR_MAP, injen);
- mp_view->SetFWDFlag(FLAG_CRNK_MAP, injen);
- mp_view->SetFWDFlag(FLAG_WRMP_MAP, injen);
- mp_view->SetFWDFlag(FLAG_DEAD_MAP, injen);
- mp_view->SetFWDFlag(FLAG_IDLR_MAP, injen);
- mp_view->SetFWDFlag(FLAG_IDLC_MAP, injen);
- mp_view->SetFWDFlag(FLAG_AETPS_MAP, injen);
- mp_view->SetFWDFlag(FLAG_AERPM_MAP, injen);
- mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_VE_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_AFR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AFR_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_CRNK_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_CRNK_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_WRMP_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_WRMP_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_DEAD_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_DEAD_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IDLR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_IDLR_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_IDLC_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_IDLC_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_AETPS_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AETPS_MAP, injen);
+ mp_view->SetFWDFlag(FLAG_AERPM_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AERPM_MAP, injen); 
+ mp_view->SetFWDFlag(FLAG_AFTSTR_MAP, injen);
  mp_view->EnableFWDFlag(FLAG_AFTSTR_MAP, injen); 
- mp_view->SetFWDFlag(FLAG_IT_MAP, sv0105);       //since v01.05
- mp_view->SetFWDFlag(FLAG_ITRPM_MAP, sv0106);     //since v01.06
- mp_view->SetFWDFlag(FLAG_RIGID_MAP, sv0106);     //since v01.06
- mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, sv0105);   //since v01.05
- mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, sv0106);  //since v01.06
- mp_view->SetFWDFlag(FLAG_IACCORR_MAP, sv0106);   //since v01.06
- mp_view->SetFWDFlag(FLAG_IATCLT_MAP, sv0106);    //since v01.06
+ mp_view->SetFWDFlag(FLAG_IT_MAP, sv0105);           //since v01.05
+ mp_view->EnableFWDFlag(FLAG_IT_MAP, sv0105);        //since v01.05
+ mp_view->SetFWDFlag(FLAG_ITRPM_MAP, sv0106);        //since v01.06
+ mp_view->EnableFWDFlag(FLAG_ITRPM_MAP, sv0106);     //since v01.06
+ mp_view->SetFWDFlag(FLAG_RIGID_MAP, sv0106);        //since v01.06
+ mp_view->EnableFWDFlag(FLAG_RIGID_MAP, sv0106);     //since v01.06
+ mp_view->SetFWDFlag(FLAG_EGOCRV_MAP, sv0105);       //since v01.05
+ mp_view->EnableFWDFlag(FLAG_EGOCRV_MAP, sv0105);    //since v01.05
+ mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, sv0106);     //since v01.06
+ mp_view->EnableFWDFlag(FLAG_IACCORRW_MAP, sv0106);  //since v01.06
+ mp_view->SetFWDFlag(FLAG_IACCORR_MAP, sv0106);      //since v01.06
+ mp_view->EnableFWDFlag(FLAG_IACCORR_MAP, sv0106);   //since v01.06
+ mp_view->SetFWDFlag(FLAG_IATCLT_MAP, sv0106);       //since v01.06
+ mp_view->EnableFWDFlag(FLAG_IATCLT_MAP, sv0106);    //since v01.06
+ mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, false);        //since todo
+ mp_view->EnableFWDFlag(FLAG_TPSSWT_MAP, false);     //since todo
+
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -312,12 +322,12 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, sepmap);
- mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);      //since v01.03
- mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);   //since v01.03
+ mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);       //since v01.03
+ mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);    //since v01.03
  mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);  //since v01.04
 
  mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false && sepmap);  //since todo
- mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false && sepmap);  //since todo
+ mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false && sepmap);     //since todo
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -564,6 +574,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, false);    //todo
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -572,6 +583,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);  //todo
+ mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);     //todo
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

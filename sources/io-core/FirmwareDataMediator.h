@@ -119,6 +119,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetIACCorrMap(int i_index, const float* i_values);
   void GetIATCLTMap(int i_index, float* op_values, bool i_original = false);
   void SetIATCLTMap(int i_index, const float* i_values);
+  void GetTpsswtMap(int i_index, float* op_values, bool i_original = false);
+  void SetTpsswtMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

@@ -76,6 +76,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIACCMap(bool i_original);
   float* GetIACCWMap(bool i_original);
   float* GetIATCLTMap(bool i_original);
+  float* GetTpsswtMap(bool i_original);
 
   float* GetRPMGrid(void);
 
@@ -123,6 +124,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIACCMap();
   afx_msg void OnViewIACCWMap();
   afx_msg void OnViewIATCLTMap();
+  afx_msg void OnViewTpsswtMap();
 
   afx_msg void OnGridModeEditing();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -146,6 +148,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewIACCMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIACCWMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIATCLTMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewTpsswtMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
@@ -187,6 +190,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_iacc_map_btn;
   CButton m_view_iaccw_map_btn;
   CButton m_view_iatclt_map_btn;
+  CButton m_view_tpsswt_map_btn;
 
   CButton m_grid_mode_editing_check;
   std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
@@ -245,6 +249,8 @@ private:
   static void __cdecl OnChangeIATCLTMap(void* i_param);
   static void __cdecl OnCloseIATCLTMap(void* i_param);
   static void __cdecl OnChangeIATCLTXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnChangeTpsswtMap(void* i_param);
+  static void __cdecl OnCloseTpsswtMap(void* i_param);
 
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
@@ -263,6 +269,7 @@ private:
   static void __cdecl OnWndActivationIACCMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIACCWMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIATCLTMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationTpsswtMap(void* i_param, long cmd);
 
   void OnGridMapChanged(int mapType);
   void OnGridMapClosed(HWND, int);
@@ -291,6 +298,7 @@ private:
   int m_iacc_map_chart_state;
   int m_iaccw_map_chart_state;
   int m_iatclt_map_chart_state;
+  int m_tpsswt_map_chart_state;
 
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
@@ -313,6 +321,7 @@ private:
   HWND m_iacc_map_wnd_handle;
   HWND m_iaccw_map_wnd_handle;
   HWND m_iatclt_map_wnd_handle;
+  HWND m_tpsswt_map_wnd_handle;
 
   float m_start_map_active[16];
   float m_start_map_original[16];
@@ -358,6 +367,8 @@ private:
   float m_iaccw_map_original[16+2];
   float m_iatclt_map_active[8+2];
   float m_iatclt_map_original[8+2];
+  float m_tpsswt_map_active[16];
+  float m_tpsswt_map_original[16];
 
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;

@@ -319,3 +319,6 @@
 #define IDS_MAPS_COEFFP_UNIT            5578
 #define IDC_TD_VIEW_MANIGNTIM_MAP       5579
 #define IDS_MANIGNTIM_MAP               5580
+#define IDC_TD_VIEW_TPSSWT_MAP          5581
+#define IDS_MAPS_TPSSWT_UNIT            5582
+#define IDS_TPSSWT_MAP                  5583

@@ -1109,6 +1109,31 @@ void CFirmwareDataMediator::SetIATCLTMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_iatclt_corr[i] = MathHelpers::Round(ip_values[i] / 32.0f);
 }
 
+
+void CFirmwareDataMediator::GetTpsswtMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_tpsswt[i]) / TPSSWT_MAPS_M_FACTOR;
+}
+
+void CFirmwareDataMediator::SetTpsswtMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
+  p_fd->tables[i_index].inj_tpsswt[i] = MathHelpers::Round((ip_values[i]*TPSSWT_MAPS_M_FACTOR));
+}
+
+
+
 //////////////////////////////////////////////////////////////////////////////////////
 SECU3IO::params_t* CFirmwareDataMediator::GetParamsPtr(void)
 {
@@ -1151,6 +1176,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetEGOCurveMap(i, op_fwd->maps[i].inj_ego_curve);
   GetIACCorrWMap(i, op_fwd->maps[i].inj_iac_corr_w);
   GetIACCorrMap(i, op_fwd->maps[i].inj_iac_corr);
+  GetTpsswtMap(i, op_fwd->maps[i].inj_tpsswt);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1201,6 +1227,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetEGOCurveMap(i, ip_fwd->maps[i].inj_ego_curve);
   SetIACCorrWMap(i, ip_fwd->maps[i].inj_iac_corr_w);
   SetIACCorrMap(i, ip_fwd->maps[i].inj_iac_corr);
+  SetTpsswtMap(i, ip_fwd->maps[i].inj_tpsswt);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);

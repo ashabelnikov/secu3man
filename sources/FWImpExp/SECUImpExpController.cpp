@@ -232,6 +232,9 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
   m_fwdm->GetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
+  m_fwdm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -272,6 +275,7 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -506,6 +510,9 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
   m_fwdm->SetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
+  m_fwdm->SetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -546,6 +553,7 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

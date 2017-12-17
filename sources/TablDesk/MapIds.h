@@ -48,20 +48,21 @@ enum EMapTypes
  TYPE_MAP_INJ_IACC     = 19, //must be = 19
  TYPE_MAP_INJ_IACCW    = 20, //must be = 20
  TYPE_MAP_INJ_IATCLT   = 21, //must be = 21
+ TYPE_MAP_INJ_TPSSWT   = 22, //must be = 22
 
  //separate maps
- TYPE_MAP_ATTENUATOR   = 22, //
- TYPE_MAP_DWELLCNTRL   = 23, //
- TYPE_MAP_CTS_CURVE    = 24, //
- TYPE_MAP_CHOKE_OP     = 25, //
- TYPE_MAP_ATS_CURVE    = 26, //
- TYPE_MAP_ATS_CORR     = 27, //
- TYPE_MAP_GASDOSE      = 28, //
- TYPE_MAP_BAROCORR     = 29, //
- TYPE_MAP_MANIGNTIM    = 30, //
+ TYPE_MAP_ATTENUATOR   = 23, //
+ TYPE_MAP_DWELLCNTRL   = 24, //
+ TYPE_MAP_CTS_CURVE    = 25, //
+ TYPE_MAP_CHOKE_OP     = 26, //
+ TYPE_MAP_ATS_CURVE    = 27, //
+ TYPE_MAP_ATS_CORR     = 28, //
+ TYPE_MAP_GASDOSE      = 29, //
+ TYPE_MAP_BAROCORR     = 30, //
+ TYPE_MAP_MANIGNTIM    = 31, //
 
  TYPE_MAP_GME_WND      = 32, //pseudo map, grid mode editing window
 
  TYPE_MAP_SET_START    = 1,
- TYPE_MAP_SET_END      = 21
+ TYPE_MAP_SET_END      = 22
 };

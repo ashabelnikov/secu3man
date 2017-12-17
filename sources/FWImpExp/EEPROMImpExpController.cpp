@@ -197,6 +197,9 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_IATCLT_MAP))
   m_eedm->GetIATCLTMap(other_sel, mp_fwd->maps[current_sel].inj_iatclt_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
+  m_eedm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
 }
 
 //Modal window has been activated - perform its initialization
@@ -237,6 +240,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORRW_MAP, true);
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);

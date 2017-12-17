@@ -63,8 +63,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,411,96,18
     CONTROL         "Корр. ТВ по ТОЖ",IDC_TD_VIEW_IATCLT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,431,96,18
+    CONTROL         "Точ.перек. ДПДЗ",IDC_TD_VIEW_TPSSWT_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,451,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,450,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,470,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -121,6 +123,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,256,96,18
     CONTROL         "Корр. ТВ по ТОЖ",IDC_TD_VIEW_IATCLT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,278,82,18
+    CONTROL         "Точ.перек. ДПДЗ",IDC_TD_VIEW_TPSSWT_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,278,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW |
                     BS_BITMAP | WS_TABSTOP,3,313,16,19
@@ -516,6 +520,8 @@ BEGIN
     IDS_BAROCORR_MAP        "Настройка барометрической коррекции"
     IDS_MAPS_ATMOPRESS_UNIT "Атмосферное давление (кПа)"
     IDS_MANIGNTIM_MAP       "Функция ручной коррекции УОЗ"
+    IDS_MAPS_TPSSWT_UNIT    "ДПДЗ (%)"
+    IDS_TPSSWT_MAP          "Положение дроссельной заслонки при котором достигается 100кПа"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -576,8 +582,10 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,411,96,18
     CONTROL         "IAT/CLT correction",IDC_TD_VIEW_IATCLT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,431,96,18
+    CONTROL         "TPS switch point",IDC_TD_VIEW_TPSSWT_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,451,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,450,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,470,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -634,6 +642,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,256,96,18
     CONTROL         "IAT/CLT correction",IDC_TD_VIEW_IATCLT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,278,82,18
+    CONTROL         "TPS switch point",IDC_TD_VIEW_TPSSWT_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,278,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
                     BS_BITMAP | WS_TABSTOP,3,313,16,19
@@ -1044,6 +1054,8 @@ BEGIN
     IDS_BAROCORR_MAP        "Tuning of barometric correction"
     IDS_MAPS_ATMOPRESS_UNIT "Atmospheric pressure (kPa)"
     IDS_MANIGNTIM_MAP       "Manual correction of ignition timing"
+    IDS_MAPS_TPSSWT_UNIT    "TPS (%)"
+    IDS_TPSSWT_MAP          "Throttle position at which MAP reaches 100kPa"
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -354,9 +354,10 @@ void CFunSetPageDlg::FillCBByLoadOpts(void)
 
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));
  m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPTPS));
 
  //for gas
- if (m_params.load_src_cfg < 2)
+ if (m_params.load_src_cfg < 3)
   m_load_src_combo.SetCurSel(m_params.load_src_cfg);
  else
   m_load_src_combo.SetCurSel(0);

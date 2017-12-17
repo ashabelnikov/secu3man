@@ -49,4 +49,5 @@ static const float EGO_CURVE_M_FACTOR = 128.0f;
 static const float IT_MAPS_M_FACTOR = 4.0f;
 static const float BAROCORR_MAPS_M_FACTOR = 4096.0f;
 static const float BAROCORR_MAPSX_M_FACTOR = 64.0f;
+static const float TPSSWT_MAPS_M_FACTOR = 2.0f;
 };

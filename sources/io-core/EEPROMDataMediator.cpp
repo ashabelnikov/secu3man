@@ -760,3 +760,25 @@ void EEPROMDataMediator::SetIATCLTMap(int i_index, const float* ip_values)
  for (; i < INJ_IATCLT_CORR_SIZE+2; i++ )
   p_maps[i_index].inj_iatclt_corr[i] = MathHelpers::Round(ip_values[i] / 32.0f);
 }
+
+void EEPROMDataMediator::GetTpsswtMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
+  op_values[i] = ((float)p_maps[i_index].inj_tpsswt[i]) / TPSSWT_MAPS_M_FACTOR;
+}
+
+void EEPROMDataMediator::SetTpsswtMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
+  p_maps[i_index].inj_tpsswt[i] = MathHelpers::Round((ip_values[i]*TPSSWT_MAPS_M_FACTOR));
+}

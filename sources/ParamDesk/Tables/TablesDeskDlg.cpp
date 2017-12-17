@@ -226,70 +226,12 @@ void CTablesDeskDlg::ShowSaveButton(bool i_show)
 void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
 {
  HWND hwnd;
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_VE);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFR);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_CRNK);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_WRMP);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_DEAD);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLR);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLC);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AETPS);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IT);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_RIGID);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = mp_ButtonsPanel->GetMapWindow(i);
+  if (hwnd)
+   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ }
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
  if (hwnd)
@@ -316,48 +258,12 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
 {
  m_children_charts = children;
  HWND hwnd;
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_VE);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFR);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_CRNK);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_WRMP);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_DEAD);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLR);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLC);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AETPS);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IT);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_RIGID);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
- _MakeWindowChild(hwnd, children);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT);
- _MakeWindowChild(hwnd, children);
+
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = mp_ButtonsPanel->GetMapWindow(i);
+  _MakeWindowChild(hwnd, children);
+ }
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND); //pseudo map
  _MakeWindowChild(hwnd, children);
@@ -391,49 +297,11 @@ void CTablesDeskDlg::SetRPMGrid(const float* values)
 void CTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_START);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_IDLE);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_WORK);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR);
- if (hwnd) ::DestroyWindow(hwnd);
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_VE);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFR);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_CRNK);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_WRMP);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_DEAD);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLR);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IDLC);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AETPS);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AERPM);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IT);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_RIGID);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACC);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IACCW);
- if (hwnd) ::DestroyWindow(hwnd);
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT);
- if (hwnd) ::DestroyWindow(hwnd);
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = mp_ButtonsPanel->GetMapWindow(i);
+  if (hwnd) ::DestroyWindow(hwnd);
+ }
 
  hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
  if (hwnd) ::DestroyWindow(hwnd);
@@ -552,6 +420,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
 
   case TYPE_MAP_INJ_IATCLT:
    return mp_ButtonsPanel->GetIATCLTMap(i_original);
+
+  case TYPE_MAP_INJ_TPSSWT:
+   return mp_ButtonsPanel->GetTpsswtMap(i_original);
 
   default:
   return NULL;

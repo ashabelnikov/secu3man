@@ -795,6 +795,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACC), TYPE_MAP_INJ_IACC);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT), TYPE_MAP_INJ_IATCLT);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
 
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
@@ -1083,6 +1084,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetIATCLTMap(m_current_funset_index,m_view->mp_TablesPanel->GetIATCLTMap(false),false);
  m_fwdm->GetIATCLTMap(m_current_funset_index,m_view->mp_TablesPanel->GetIATCLTMap(true),true);
+
+ m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(false),false);
+ m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1208,6 +1212,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_IATCLT:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetIATCLTMap(m_current_funset_index, m_view->mp_TablesPanel->GetIATCLTMap(false));
+   break;
+  case TYPE_MAP_INJ_TPSSWT:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetTpsswtMap(m_current_funset_index, m_view->mp_TablesPanel->GetTpsswtMap(false));
    break;
 
    //separate maps

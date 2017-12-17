@@ -334,6 +334,7 @@ namespace SECU3IO
  const int ETMT_IACC_MAP = 19;          //mixture correction vs IAC pos.
  const int ETMT_IACCW_MAP = 20;         //weight of mixture correction vs IAC pos.
  const int ETMT_IATCLT_MAP = 21;        //IAT/CLT correction vs air flow
+ const int ETMT_TPSSWT_MAP = 22;        //MAP/TPS switch point vs RPM
 
  struct SepTabPar
  {

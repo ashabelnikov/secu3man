@@ -1423,7 +1423,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_AETPS_MAP && m_EditTabPar.tab_id != ETMT_AERPM_MAP && m_EditTabPar.tab_id != ETMT_AFTSTR_MAP &&
      m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
      m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP &&
-     m_EditTabPar.tab_id != ETMT_IATCLT_MAP)
+     m_EditTabPar.tab_id != ETMT_IATCLT_MAP && m_EditTabPar.tab_id != ETMT_TPSSWT_MAP)
   return false;
 
  //check for 16-byte packets
@@ -1535,6 +1535,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = ((float)((unsigned char)value)) * 10.0f;
      else if (m_EditTabPar.tab_id == ETMT_IACCW_MAP)
       m_EditTabPar.table_data[i] =  (address >= INJ_IAC_CORR_W_SIZE) ? (((float)value) / 2.0f) : (((float)value) / 256.0f);
+     else if (m_EditTabPar.tab_id == ETMT_TPSSWT_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / TPSSWT_MAPS_M_FACTOR;
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -3023,6 +3025,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
    {
     int value = MathHelpers::Round((packet_data->address >= INJ_IATCLT_CORR_SIZE) ? (packet_data->table_data[i] / 32.0f) : (packet_data->table_data[i] * 8192.0f));
     mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+   }
+   else if (packet_data->tab_id == ETMT_TPSSWT_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * TPSSWT_MAPS_M_FACTOR);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
    else
    {  //default case

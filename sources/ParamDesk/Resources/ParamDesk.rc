@@ -191,7 +191,7 @@ BEGIN
     LTEXT           "%/В",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,138,137,18,11
 
     LTEXT           "Определ. нагрузку по:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,164,83,8
-    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,162,50,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,162,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 
     LTEXT           "Условие MAPSEL0 для бензина",IDC_PD_FUNSET_BENZIN_UNI_CAPTION,2,183,110,8
     COMBOBOX        IDC_PD_FUNSET_BENZIN_UNI_COMBO,115,182,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
@@ -473,7 +473,7 @@ BEGIN
     CONTROL         "Отрицат.",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,14,48,10
     CONTROL         "Полож.",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,28,41,10
     GROUPBOX        "Фронт ДНО",IDC_PD_REF_S_FRONT_GROUPBOX,87,3,59,39
-    CONTROL         "Искра по переднему фронту (для CDI)",IDC_PD_CKPS_RISING_SPARK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,44,148,12
+    CONTROL         "Искра по переднему фронту (для CDI)",IDC_PD_CKPS_RISING_SPARK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,43,148,12
     CONTROL         "Распределение искры трамблером",IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,54,148,12
     EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,70,25,16,ES_AUTOHSCROLL
     LTEXT           "Кол-во зубьев шкива",IDC_PD_CKPS_COGS_NUM_UNIT,50,65,39,25,NOT WS_GROUP
@@ -1291,7 +1291,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Скорость уменьшения УОЗ в градусах за один такт двигателя."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Скорость увеличения УОЗ в градусах за один такт двигателя."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Разрешить работу регулятора если на входе GAS_V высокий уровень"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД или ДПДЗ. Если выберите ДПДЗ, то это эквивалентно подлючению последнего вместо ДАД."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Выберите метод определения нагрузки двигателя: ДАД (Speed-density), ДПДЗ (Alpha-N), ДАД+ДПДЗ (смешанный). В смешанном режиме используется таблица переключения ДАД/ДПДЗ."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Выключать бензонасос при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Выключать форсунки при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Начало импульса относительно ВМТ (значение больше 0 соответствует началу импульса до ВМТ)"
@@ -1383,6 +1383,7 @@ BEGIN
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ (в градусах до ВМТ) система должна начинать впрыск. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
     IDS_PD_LOAD_OPT_TPS            "ДПДЗ"
     IDS_PD_LOAD_OPT_MAP            "ДАД"
+    IDS_PD_LOAD_OPT_MAPTPS         "ДАД+ДПДЗ"
     IDS_PD_NBO                     "УДК"
     IDS_PD_WBO                     "ШДК"
 END
@@ -1639,7 +1640,7 @@ BEGIN
     LTEXT           "%/V",IDC_PD_FUNSET_TPS_CURVE_GRADIENT_UNIT,138,135,19,11
 
     LTEXT           "Load measurement:",IDC_PD_FUNSET_LOAD_SRC_COMBO_CAPTION,2,162,83,8
-    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,160,50,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_PD_FUNSET_LOAD_SRC_COMBO,85,160,58,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 
     LTEXT           "MAPSEL0 condition for petrol",IDC_PD_FUNSET_BENZIN_UNI_CAPTION,2,183,110,8
     COMBOBOX        IDC_PD_FUNSET_BENZIN_UNI_COMBO,115,182,40,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
@@ -1921,7 +1922,7 @@ BEGIN
     CONTROL         "Falling",IDC_PD_REF_S_NEGFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_GROUP | WS_TABSTOP,93,14,48,10
     CONTROL         "Rising",IDC_PD_REF_S_POSFRONT_RADIOBOX,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,93,28,41,10
     GROUPBOX        "REF_S edge",IDC_PD_REF_S_FRONT_GROUPBOX,87,3,59,39
-    CONTROL         "Spark on the rising edge (for CDI)",IDC_PD_CKPS_RISING_SPARK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,44,148,12
+    CONTROL         "Spark on the rising edge (for CDI)",IDC_PD_CKPS_RISING_SPARK,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,43,148,12
     CONTROL         "Merge signals to single output",IDC_PD_CKPS_MERGE_IGN_OUTPUTS,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,16,54,148,12
     EDITTEXT        IDC_PD_CKPS_COGS_NUM_EDIT,9,70,25,16,ES_AUTOHSCROLL
     LTEXT           "Number of wheel's teeth",IDC_PD_CKPS_COGS_NUM_UNIT,50,65,39,25,NOT WS_GROUP
@@ -2770,7 +2771,7 @@ BEGIN
     IDS_PD_ANGLES_DECREASE_SPEED_EDIT_TT            "Specify decreasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_ANGLES_INCREASE_SPEED_EDIT_TT            "Specify increasing speed of ignition timing in crankshaft degrees per one engine stroke."
     IDS_PD_IDLREG_USE_ONGAS_TT                      "Enable working of regulator when on the GAS_V input is high level"
-    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP or TPS. Selecting a TPS is equal to connecting it instead of MAP."
+    IDS_PD_FUNSET_LOAD_SRC_COMBO_TT                 "Select engine load measuring method: using MAP (Speed-density), TPS (Alpha-N) or MAP+TPS (mixed). In mixed mode additional table used for switching between MAP and TPS."
     IDS_PD_MISC_FLPMP_OFFONGAS_CHECK_TT             "Turn off petrol fuel pump when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Turn off fuel injectors when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Beginning of pulse relatively to TDC (if value > 0, then before TDC)"
@@ -2862,6 +2863,7 @@ BEGIN
     IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft (BTDC) when system should start injection. This parameter will take effect only with synchronization from CKP sensor."
     IDS_PD_LOAD_OPT_TPS            "TPS"
     IDS_PD_LOAD_OPT_MAP            "MAP"
+    IDS_PD_LOAD_OPT_MAPTPS         "MAP+TPS"
     IDS_PD_NBO                     "NBO"
     IDS_PD_WBO                     "WBO"
 END

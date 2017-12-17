@@ -104,6 +104,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->inj_iac_corr_w;
   case TYPE_MAP_INJ_IATCLT:
    return p_maps->inj_iatclt_corr;
+  case TYPE_MAP_INJ_TPSSWT:
+   return p_maps->inj_tpsswt;
  }
  return NULL; //undefined type of map
 }
@@ -155,6 +157,8 @@ size_t _GetMapSize(int i_mapType)
    return INJ_IAC_CORR_W_SIZE+2;
   case TYPE_MAP_INJ_IATCLT:
    return INJ_IATCLT_CORR_SIZE+2;
+  case TYPE_MAP_INJ_TPSSWT:
+   return INJ_TPSSWT_SIZE;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -429,6 +433,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_IATCLT_MAP: //IAT/CLT correction vs air flow
    UpdateMap(m_maps->inj_iatclt_corr, m_maps_flags->inj_iatclt_corr, data);
+   break;
+  case ETMT_TPSSWT_MAP: //MAP/TPS switch point vs RPM
+   UpdateMap(m_maps->inj_tpsswt, m_maps_flags->inj_tpsswt, data);
    break;
 
   default: ASSERT(0);
