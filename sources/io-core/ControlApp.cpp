@@ -1135,15 +1135,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
- if (size != (mp_pdp->isHex() ? 23 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
-  return false;
-
- //Тип фронта ДПКВ
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_CKPSPar.ckps_edge_type))
-  return false;
-
- //Тип фронта ДНО (вход REF_S)
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_CKPSPar.ref_s_edge_type))
+ if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Количество зубьев до в.м.т.
@@ -1176,6 +1168,8 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_CKPSPar.ckps_rising_spark = CHECKBIT8(flags, 0);
  m_CKPSPar.ckps_use_cam_ref = CHECKBIT8(flags, 1);
+ m_CKPSPar.ckps_edge_type = CHECKBIT8(flags, 2);
+ m_CKPSPar.ref_s_edge_type = CHECKBIT8(flags, 3);
 
  //Hall shutter's window width
  int wnd_width;
@@ -2811,8 +2805,6 @@ void CControlApp::Build_ADCCOR_PAR(ADCCompenPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
 {
- mp_pdp->Bin4ToHex(packet_data->ckps_edge_type, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->ref_s_edge_type, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_cogs_btdc, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);
@@ -2822,6 +2814,8 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  unsigned char flags = 0; //not used now
  WRITEBIT8(flags, 0, packet_data->ckps_rising_spark);
  WRITEBIT8(flags, 1, packet_data->ckps_use_cam_ref);
+ WRITEBIT8(flags, 2, packet_data->ckps_edge_type);
+ WRITEBIT8(flags, 3, packet_data->ref_s_edge_type);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  int wnd_width = MathHelpers::Round(packet_data->hall_wnd_width * m_angle_multiplier);
  mp_pdp->Bin16ToHex(wnd_width, m_outgoing_packet);

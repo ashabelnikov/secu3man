@@ -101,6 +101,21 @@ void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value 
  }
 }
 
+void DDX_HELPERS_API DDX_Radio_bool(CDataExchange* pDX, int nIDC, bool& value )
+{
+ int b_value;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_Radio(pDX, nIDC, b_value);
+  value = (b_value) ? true : false;
+ }
+ else
+ {
+  b_value = (value) ? TRUE : FALSE;
+  DDX_Radio(pDX, nIDC, b_value);
+ }
+}
+
 void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, float& value, LPCTSTR OutFmt, LPCTSTR InFmt)
 {
  CString temp;

@@ -111,8 +111,8 @@ CCKPSPageDlg::CCKPSPageDlg(CWnd* pParent /*=NULL*/)
 , mp_scr(new CWndScroller)
 {
  m_params.ckps_cogs_btdc = 20;
- m_params.ckps_edge_type = 0;
- m_params.ref_s_edge_type = 0;
+ m_params.ckps_edge_type = false;
+ m_params.ref_s_edge_type = false;
  m_params.ckps_ignit_cogs = 20;
  m_params.ckps_merge_ign_outs = 0;
  m_params.ckps_cogs_num = 60;
@@ -172,8 +172,8 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  m_hall_degrees_btdc_edit.DDX_Value(pDX, IDC_PD_CKPS_DEGREES_BTDC_EDIT, m_params.hall_degrees_btdc);
  DDX_Text(pDX, IDC_PD_CKPS_COGS_NUM_EDIT, m_params.ckps_cogs_num);
  DDX_Text(pDX, IDC_PD_CKPS_MISS_NUM_EDIT, m_params.ckps_miss_num);
- DDX_Radio_UCHAR(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
- DDX_Radio_UCHAR(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
+ DDX_Radio_bool(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
+ DDX_Radio_bool(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
  DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
  DDX_Check_bool(pDX, IDC_PD_CKPS_RISING_SPARK, m_params.ckps_rising_spark);
  DDX_Check_bool(pDX, IDC_PD_CKPS_USE_CAM_REF, m_params.ckps_use_cam_ref);
@@ -429,11 +429,11 @@ void CCKPSPageDlg::SetValues(const SECU3IO::CKPSPar* i_values)
 
  //устанавливаем состояние контроллов фронта ДПКВ
  m_ckps_posfront_radio.SetCheck(m_params.ckps_edge_type);
- m_ckps_negfront_radio.SetCheck(~m_params.ckps_edge_type);
+ m_ckps_negfront_radio.SetCheck(!m_params.ckps_edge_type);
 
  //устанавливаем состояние контроллов фронта ДНО (входы REF_S)
  m_ref_s_posfront_radio.SetCheck(m_params.ref_s_edge_type);
- m_ref_s_negfront_radio.SetCheck(~m_params.ref_s_edge_type);
+ m_ref_s_negfront_radio.SetCheck(!m_params.ref_s_edge_type);
 
  UpdateData(FALSE); //копируем данные из переменных в диалог
 }

@@ -228,14 +228,14 @@ namespace SECU3IO
 
  struct CKPSPar
  {
-  unsigned char ckps_edge_type;
+  bool ckps_edge_type;
+  bool ref_s_edge_type;
   unsigned char ckps_cogs_btdc;
   unsigned char ckps_ignit_cogs;
   unsigned char ckps_engine_cyl;
   unsigned char ckps_merge_ign_outs;
   unsigned char ckps_cogs_num;
   unsigned char ckps_miss_num;
-  unsigned char ref_s_edge_type;
   float hall_wnd_width; 
   bool ckps_rising_spark;
   float hall_degrees_btdc;

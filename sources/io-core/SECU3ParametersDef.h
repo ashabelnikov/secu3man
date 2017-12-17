@@ -111,13 +111,11 @@ typedef struct params_t
  _int   ai2_adc_factor;                 // ADC error compensation factor for ADD_IO2 input
  _long  ai2_adc_correction;             // ADC error compensation correction for ADD_IO2 input
 
- _uchar ckps_edge_type;
  _uchar ckps_cogs_btdc;
  _uchar ckps_ignit_cogs;
  _uchar ckps_engine_cyl;                // number of engine cylinders
  _uchar ckps_cogs_num;                  // number of crank wheel's teeth 
  _uchar ckps_miss_num;                  // number of missing crank wheel's teeth
- _uchar ref_s_edge_type;                // REF_S edge type (тип фронта ДНО)
  _uchar hall_flags;                     // Hall sensor flags
  _int   hall_wnd_width;
 
@@ -261,7 +259,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[10];
+ _uchar reserved[12];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
