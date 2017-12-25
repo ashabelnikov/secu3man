@@ -60,25 +60,27 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataInjCfg();
+  afx_msg void OnChangeDataInjCfg_g();
   afx_msg void OnInjUseTimingMap();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInjTiming(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateInjTiming_g(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
-  void _FillInjCfgComboBox(void);
-  int  _GetInjCfgComboBoxSelection(void);
-  void _SetInjCfgComboBoxSelection(int i_sel);
+  void _FillInjCfgComboBox(int fi);
+  int  _GetInjCfgComboBoxSelection(int fi);
+  void _SetInjCfgComboBoxSelection(int i_sel, int fi);
   std::vector<std::pair<int, _TSTRING> > m_injcfgs;
 
-  void _FillSqrNumComboBox(void);
-  int  _GetSqrNumComboBoxSelection(void);
-  void _SetSqrNumComboBoxSelection(int i_sel);
-  std::vector<std::pair<int, _TSTRING> > m_sqrnum;
+  void _FillSqrNumComboBox(int fi);
+  int  _GetSqrNumComboBoxSelection(int fi);
+  void _SetSqrNumComboBoxSelection(int i_sel, int fi);
+  std::vector<std::pair<int, _TSTRING> > m_sqrnum[2];
 
-  void _FillAngleSpecsComboBox(void);
-  int  _GetAngleSpecsComboBoxSelection(void);
-  void _SetAngleSpecsComboBoxSelection(int i_sel);
+  void _FillAngleSpecsComboBox(int fi);
+  int  _GetAngleSpecsComboBoxSelection(int fi);
+  void _SetAngleSpecsComboBoxSelection(int i_sel, int fi);
   std::vector<std::pair<int, _TSTRING> > m_anglespecs;
 
  private:
@@ -87,20 +89,21 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CSpinButtonCtrlEx m_cyldisp_spin;
   CEditEx m_cyldisp_edit;
-  CSpinButtonCtrlEx m_flowrate_spin;
-  CEditEx m_flowrate_edit;
-  CComboBox m_injcfg_combo;
-  CComboBox m_sqrnum_combo;
-  CComboBox m_injas_combo;
-  CSpinButtonCtrlEx m_inj_timing_spin;
-  CEditEx m_inj_timing_edit;
-  CSpinButtonCtrlEx m_inj_timing_crk_spin;
-  CEditEx m_inj_timing_crk_edit;
-  CButton m_inj_usetimingmap_check;
+
+  CSpinButtonCtrlEx m_flowrate_spin[2];
+  CEditEx m_flowrate_edit[2];
+  CComboBox m_injcfg_combo[2];
+  CComboBox m_sqrnum_combo[2];
+  CComboBox m_injas_combo[2];
+  CSpinButtonCtrlEx m_inj_timing_spin[2];
+  CEditEx m_inj_timing_edit[2];
+  CSpinButtonCtrlEx m_inj_timing_crk_spin[2];
+  CEditEx m_inj_timing_crk_edit[2];
+  CButton m_inj_usetimingmap_check[2];
   CSpinButtonCtrlEx m_fff_const_spin;
   CEditEx m_fff_const_edit;
 
-  float m_fuel_density; //fuel density (g/cc)
+  float m_fuel_density[2];  //fuel density (g/cc)
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;

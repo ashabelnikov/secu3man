@@ -48,6 +48,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableFuelInjection(bool i_enable);
 
   void GetValues(SECU3IO::LambdaPar* o_values);
   void SetValues(const SECU3IO::LambdaPar* i_values);
@@ -60,11 +61,13 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateMsPerStp(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::LambdaPar m_params;
   bool m_enabled;
+  bool m_fuel_injection;
 
   CComboBox m_senstype_combo;
   CSpinButtonCtrlEx m_strperstp_spin;
@@ -89,6 +92,8 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_activdelay_edit;
   CSpinButtonCtrlEx m_deadband_spin;
   CEditEx m_deadband_edit;
+  CSpinButtonCtrlEx m_2stoichval_spin;
+  CEditEx m_2stoichval_edit;
   CButton m_htgdet_check;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;

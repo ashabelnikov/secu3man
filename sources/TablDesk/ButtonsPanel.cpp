@@ -1295,6 +1295,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_scrl_factor(3.4f)
 , m_fuel_injection(false)
 , m_gasdose(false)
+, m_carb_afr(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -2392,7 +2393,7 @@ void CButtonsPanel::OnUpdateViewEGOCrvMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose || m_carb_afr));
  pCmdUI->SetCheck( (m_egocrv_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2538,7 +2539,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_rigid_map_chart_state && ::IsWindow(m_rigid_map_wnd_handle))
   DLL::Chart2DEnable(m_rigid_map_wnd_handle, i_enable && IsAllowed());
  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
+  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_gasdose || m_carb_afr) && IsAllowed());
  if (m_iacc_map_chart_state && ::IsWindow(m_iacc_map_wnd_handle))
   DLL::Chart2DEnable(m_iacc_map_wnd_handle, i_enable && IsAllowed());
  if (m_iaccw_map_chart_state && ::IsWindow(m_iaccw_map_wnd_handle))
@@ -2571,7 +2572,17 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
 
  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection || m_carb_afr) && IsAllowed());
+}
+
+void CButtonsPanel::EnableCarbAfr(bool i_enable)
+{
+ m_carb_afr = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+
+ if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
+  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection || m_gasdose) && IsAllowed());
 }
 
 float* CButtonsPanel::GetStartMap(bool i_original)

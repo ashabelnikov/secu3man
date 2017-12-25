@@ -156,10 +156,10 @@ typedef struct params_t
 
  // Fuel injection
  _uchar  inj_flags;                     // Fuel injection related flags
- _uchar  inj_config;                    // Configuration of injection
- _uint   inj_flow_rate;                 // Injector flow rate (cc/min) * 64
+ _uchar  inj_config[2];                 // Configuration of injection
+ _uint   inj_flow_rate[2];              // Injector flow rate (cc/min) * 64
  _uint   inj_cyl_disp;                  // The displacement of one cylinder in liters * 16384
- _ulong  inj_sd_igl_const;              // Constant used in speed-density algorithm to calculate PW. Const = ((CYL_DISP * 3.482 * 18750000) / Ifr ) * (Ncyl / (Nsq * Ninj))
+ _ulong  inj_sd_igl_const[2];           // Constant used in speed-density algorithm to calculate PW. Const = ((CYL_DISP * 3.482 * 18750000) / Ifr ) * (Ncyl / (Nsq * Ninj))
 
  _uint   inj_prime_cold;                // Prime pulse at -30C
  _uint   inj_prime_hot;                 // Prime pulse at 70C
@@ -181,7 +181,7 @@ typedef struct params_t
 
  _uint   gd_steps;                      // Number of steps of gas dosator stepper motor
 
- _int    inj_timing;                    // Injection timing (phase)
+ _int    inj_timing[2];                 // Injection timing (phase)
 
  _uchar  flpmp_flags;                   // Fuel pump flags
 
@@ -190,7 +190,7 @@ typedef struct params_t
  _uint   revlim_lot;                    // rev.limitting lo threshold
  _uint   revlim_hit;                    // rev.limitting hi threshold
 
- _int    inj_timing_crk;                // Injection timing (phase) on cranking
+ _int    inj_timing_crk[2];             // Injection timing (phase) on cranking
 
  _uchar  gd_fc_closing;                 // Closing in fuel cut mode
 
@@ -259,7 +259,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[12];
+ _uchar reserved[1];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

@@ -346,6 +346,7 @@ void CPMTablesController::ApplyFWOptions(DWORD opt)
 {
  mp_view->mp_ButtonsPanel->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT));
  mp_view->mp_ButtonsPanel->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL));
+ mp_view->mp_ButtonsPanel->EnableCarbAfr(CHECKBIT32(opt, COPT_CARB_AFR));
 }
 
 //----------------------------------------------------------------

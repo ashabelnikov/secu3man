@@ -73,3 +73,13 @@ BYTE BITMASK_API MAKEBYTE(int hi, int lo)
 {
  return ((hi & 0xF) << 4) | (lo & 0xF);
 }
+
+BYTE BITMASK_API GETLO4BITS(BYTE byte)
+{
+ return byte & 0x0F;
+}
+
+BYTE BITMASK_API GETHI4BITS(BYTE byte)
+{
+ return (byte >> 4) & 0xF;
+}

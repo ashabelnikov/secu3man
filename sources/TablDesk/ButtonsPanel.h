@@ -92,6 +92,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   virtual void EnableGasdose(bool i_enable);
 
+  virtual void EnableCarbAfr(bool i_enable);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -374,4 +376,5 @@ private:
   bool m_en_aa_indication;
   bool m_fuel_injection;
   bool m_gasdose;
+  bool m_carb_afr;
 };

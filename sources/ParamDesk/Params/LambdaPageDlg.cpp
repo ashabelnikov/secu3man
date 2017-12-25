@@ -47,6 +47,7 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_LAMBDA_ACTIVDELAY_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_DEADBAND_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_LAMBDA_HTGDET_CHECK, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_2STOICHAFR_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_CAPTION,OnUpdateControls)
@@ -95,11 +96,16 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_DEADBAND_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_DEADBAND_UNIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_HTGDET_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_UNIT,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CLambdaPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_fuel_injection(false)
 , m_strperstp_edit(CEditEx::MODE_INT, true)
 , m_msperstp_edit(CEditEx::MODE_INT, true)
 , m_stepsize_p_edit(CEditEx::MODE_FLOAT, true)
@@ -111,6 +117,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 , m_rpmthrd_edit(CEditEx::MODE_INT, true)
 , m_activdelay_edit(CEditEx::MODE_INT, true)
 , m_deadband_edit(CEditEx::MODE_FLOAT, true)
+, m_2stoichval_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.lam_str_per_stp = 10;
@@ -126,6 +133,7 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_dead_band = 0.0f;
  m_params.lam_senstype = 0; //NBO
  m_params.lam_htgdet = false;
+ m_params.lam_2stoichval = 15.6f;
 }
 
 CLambdaPageDlg::~CLambdaPageDlg()
@@ -165,6 +173,8 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_EDIT, m_deadband_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_SPIN, m_deadband_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_HTGDET_CHECK, m_htgdet_check);
+ DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_2stoichval_edit);
+ DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_SPIN, m_2stoichval_spin);
 
  DDX_CBIndex_UCHAR(pDX, IDC_PD_LAMBDA_SENSTYPE_COMBO, m_params.lam_senstype);
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
@@ -178,6 +188,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  m_rpmthrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_RPMTHRD_EDIT, m_params.lam_rpm_thrd);
  m_activdelay_edit.DDX_Value(pDX, IDC_PD_LAMBDA_ACTIVDELAY_EDIT, m_params.lam_activ_delay);
  m_deadband_edit.DDX_Value(pDX, IDC_PD_LAMBDA_DEADBAND_EDIT, m_params.lam_dead_band);
+ m_2stoichval_edit.DDX_Value(pDX, IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_params.lam_2stoichval);
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_HTGDET_CHECK, m_params.lam_htgdet);
 }
 
@@ -189,6 +200,11 @@ void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CLambdaPageDlg::OnUpdateMsPerStp(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_params.lam_str_per_stp == 0);
+}
+
+void CLambdaPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -264,12 +280,18 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_deadband_spin.SetRangeAndDelta(0.0f, 5.00f, 0.01f);
  m_deadband_edit.SetRange(0.0f, 5.00f);
 
+ m_2stoichval_spin.SetBuddy(&m_2stoichval_edit);
+ m_2stoichval_edit.SetLimitText(4);
+ m_2stoichval_edit.SetDecimalPlaces(1);
+ m_2stoichval_spin.SetRangeAndDelta(8.0f, 22.00f, 0.1f);
+ m_2stoichval_edit.SetRange(8.0f, 22.00f);
+
  m_senstype_combo.AddString(MLL::LoadString(IDS_PD_NBO));
  m_senstype_combo.AddString(MLL::LoadString(IDS_PD_WBO));
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.72f);
+ mp_scr->SetViewSizeF(.0f, 1.88f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -298,6 +320,15 @@ void CLambdaPageDlg::OnChangeData()
 {
  UpdateData();
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CLambdaPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
 }
 
 //разрешение/запрещение контроллов (всех поголовно)

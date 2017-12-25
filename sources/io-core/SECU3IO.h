@@ -487,16 +487,16 @@ namespace SECU3IO
 
  struct InjctrPar
  {
-  bool inj_usetimingmap;              //Use timing map instead of constant parameter
-  int inj_config;                     //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
-  int inj_squirt_num;                 //Number of squirts per cycle
-  float inj_flow_rate;                //Injector flow rate
+  bool inj_usetimingmap[2];           //Use timing map instead of constant parameter
+  int inj_config[2];                  //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
+  int inj_squirt_num[2];              //Number of squirts per cycle
+  float inj_flow_rate[2];             //Injector flow rate
   float inj_cyl_disp;                 //The displacement of one cylinder in liters
-  float inj_sd_igl_const;             //precalculated constant
+  float inj_sd_igl_const[2];          //precalculated constant
   int cyl_num;                        //read-only parameter: number of cylinders
-  float inj_timing;                   //injection timing
-  float inj_timing_crk;               //injection timing on cranking
-  int inj_anglespec;                  //Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
+  float inj_timing[2];                //injection timing
+  float inj_timing_crk[2];            //injection timing on cranking
+  int inj_anglespec[2];               //Specifies how inj.timing coupled with inj.pulse (beginning, middle, end)
   float fff_const;                    //fuel consumption const.
  };
 
@@ -515,6 +515,7 @@ namespace SECU3IO
   int lam_activ_delay;                //Afterstart activation delay
   float lam_dead_band;                //Switch point dead band (in volts)
   bool lam_htgdet;                    //Determine heating by voltage
+  float lam_2stoichval;               //Stoichiometric value for 2-nd fuel
  };
 
  struct AccelPar

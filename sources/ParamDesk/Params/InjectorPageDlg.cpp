@@ -35,66 +35,112 @@ const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_WM_DESTROY()
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_COMBO, OnChangeDataInjCfg)
+ ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_G_COMBO, OnChangeDataInjCfg_g)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_G_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_ANGLESPEC_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_INJECTOR_ANGLESPEC_G_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_CYLDISP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_FLOWRATE_G_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_G_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FFFCONST_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
+ ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_UNIT,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_UNIT,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CAPTION,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_UNIT,OnUpdateInjTiming)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_G_EDIT,OnUpdateInjTiming_g)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_G_SPIN,OnUpdateInjTiming_g)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_G_CAPTION,OnUpdateInjTiming_g)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_G_UNIT,OnUpdateInjTiming_g)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_G_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_G_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_G_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_CRK_G_UNIT,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FFFCONST_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FFFCONST_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FFFCONST_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_G_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_INJCONFIG_G_CAPTION,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_G_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SQUIRTNUM_G_CAPTION,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK,OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_CAPTION,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_G_COMBO,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_G_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_SECONDFUEL_GROUP,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjectorPageDlg::IDD, pParent)
 , m_enabled(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
-, m_inj_timing_edit(CEditEx::MODE_FLOAT, true)
-, m_inj_timing_crk_edit(CEditEx::MODE_FLOAT, true)
-, m_flowrate_edit(CEditEx::MODE_FLOAT, true)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
-, m_fuel_density(0.71f) //petrol density (0.71 g/cc)
 , m_ovf_msgbox(false)
 , mp_scr(new CWndScroller)
 {
- m_params.inj_usetimingmap = 0;
- m_params.inj_config = SECU3IO::INJCFG_SIMULTANEOUS;
- m_params.inj_squirt_num = 4;
- m_params.inj_flow_rate = 200.0f;
+ m_fuel_density[0] = 0.710f; //petrol density (0.710 g/cc)
+ m_fuel_density[1] = 0.536f; //LPG density (0.536 g/cc)
+
+ for(int i = 0; i < 2; ++i)
+ {
+  //controls
+  m_flowrate_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_flowrate_edit[i].SetOwnDDV(true);
+  m_inj_timing_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_inj_timing_edit[i].SetOwnDDV(true);
+  m_inj_timing_crk_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_inj_timing_crk_edit[i].SetOwnDDV(true);
+  //params
+  m_params.inj_usetimingmap[i] = 0;
+  m_params.inj_config[i] = SECU3IO::INJCFG_SIMULTANEOUS;
+  m_params.inj_squirt_num[i] = 4;
+  m_params.inj_flow_rate[i] = 200.0f;
+  m_params.inj_sd_igl_const[i] = 0;
+  m_params.inj_timing[i] = 0; 
+  m_params.inj_timing_crk[i] = 0; 
+  m_params.inj_anglespec[i] = 0;
+ }
+
  m_params.inj_cyl_disp = 0.375f;
- m_params.inj_sd_igl_const = 0;
  m_params.cyl_num = 4;
- m_params.inj_timing = 0; 
- m_params.inj_timing_crk = 0; 
- m_params.inj_anglespec = 0;
  m_params.fff_const = 16000.0f;
 }
 
@@ -113,26 +159,53 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
  DDX_Control(pDX,IDC_PD_INJECTOR_CYLDISP_EDIT, m_cyldisp_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_CYLDISP_SPIN, m_cyldisp_spin);
- DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_EDIT, m_flowrate_edit);
- DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_SPIN, m_flowrate_spin);
- DDX_Control(pDX,IDC_PD_INJECTOR_INJCONFIG_COMBO, m_injcfg_combo);
- DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_COMBO, m_sqrnum_combo);
- DDX_Control(pDX,IDC_PD_INJECTOR_ANGLESPEC_COMBO, m_injas_combo);
- DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_EDIT, m_inj_timing_edit);
- DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin);
- DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_inj_timing_crk_edit);
- DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_SPIN, m_inj_timing_crk_spin);
- DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_inj_usetimingmap_check);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_EDIT, m_flowrate_edit[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_SPIN, m_flowrate_spin[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_G_EDIT, m_flowrate_edit[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_FLOWRATE_G_SPIN, m_flowrate_spin[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_INJCONFIG_COMBO, m_injcfg_combo[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_INJCONFIG_G_COMBO, m_injcfg_combo[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_COMBO, m_sqrnum_combo[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_SQUIRTNUM_G_COMBO, m_sqrnum_combo[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_ANGLESPEC_COMBO, m_injas_combo[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_ANGLESPEC_G_COMBO, m_injas_combo[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_EDIT, m_inj_timing_edit[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_SPIN, m_inj_timing_spin[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_G_EDIT, m_inj_timing_edit[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_G_SPIN, m_inj_timing_spin[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_inj_timing_crk_edit[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_SPIN, m_inj_timing_crk_spin[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, m_inj_timing_crk_edit[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_TIMING_CRK_G_SPIN, m_inj_timing_crk_spin[1]);
+
+ DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_inj_usetimingmap_check[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_inj_usetimingmap_check[1]);
+
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_EDIT, m_fff_const_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_SPIN, m_fff_const_spin);
 
- m_flowrate_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate);
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
- m_inj_timing_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing);
- m_inj_timing_crk_edit.DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_params.inj_timing_crk);
- DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap);
+
+ m_flowrate_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate[0]);
+ m_flowrate_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_G_EDIT, m_params.inj_flow_rate[1]);
+
+ m_inj_timing_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing[0]);
+ m_inj_timing_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_G_EDIT, m_params.inj_timing[1]);
+
+ m_inj_timing_crk_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_params.inj_timing_crk[0]);
+ m_inj_timing_crk_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, m_params.inj_timing_crk[1]);
+
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap[0]);
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_params.inj_usetimingmap[1]);
+
  m_fff_const_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FFFCONST_EDIT, m_params.fff_const);
 }
 
@@ -143,7 +216,12 @@ void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
 
 void CInjectorPageDlg::OnUpdateInjTiming(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && (m_inj_usetimingmap_check.GetCheck()!=BST_CHECKED));
+ pCmdUI->Enable(m_enabled && (m_inj_usetimingmap_check[0].GetCheck()!=BST_CHECKED));
+}
+
+void CInjectorPageDlg::OnUpdateInjTiming_g(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_inj_usetimingmap_check[1].GetCheck()!=BST_CHECKED));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -159,23 +237,26 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_cyldisp_spin.SetRangeAndDelta(0.05f, 8.0000f, 0.0001);
  m_cyldisp_edit.SetRange(0.05f, 8.0000f);
 
- m_flowrate_spin.SetBuddy(&m_flowrate_edit);
- m_flowrate_edit.SetLimitText(6);
- m_flowrate_edit.SetDecimalPlaces(2);
- m_flowrate_spin.SetRangeAndDelta(50.00f, 1000.00f, 0.02f);
- m_flowrate_edit.SetRange(50.00f, 1000.00f);
+ for (int i = 0; i < 2; ++i)
+ {
+  m_flowrate_spin[i].SetBuddy(&m_flowrate_edit[i]);
+  m_flowrate_edit[i].SetLimitText(6);
+  m_flowrate_edit[i].SetDecimalPlaces(2);
+  m_flowrate_spin[i].SetRangeAndDelta(50.00f, 1000.00f, 0.02f);
+  m_flowrate_edit[i].SetRange(50.00f, 1000.00f);
 
- m_inj_timing_spin.SetBuddy(&m_inj_timing_edit);
- m_inj_timing_edit.SetLimitText(4);
- m_inj_timing_edit.SetDecimalPlaces(0);
- m_inj_timing_spin.SetRangeAndDelta(0.0f, 720.0f, 1.0);
- m_inj_timing_edit.SetRange(0.0f, 720.0f);
+  m_inj_timing_spin[i].SetBuddy(&m_inj_timing_edit[i]);
+  m_inj_timing_edit[i].SetLimitText(4);
+  m_inj_timing_edit[i].SetDecimalPlaces(0);
+  m_inj_timing_spin[i].SetRangeAndDelta(0.0f, 720.0f, 1.0);
+  m_inj_timing_edit[i].SetRange(0.0f, 720.0f);
 
- m_inj_timing_crk_spin.SetBuddy(&m_inj_timing_crk_edit);
- m_inj_timing_crk_edit.SetLimitText(4);
- m_inj_timing_crk_edit.SetDecimalPlaces(0);
- m_inj_timing_crk_spin.SetRangeAndDelta(0.0f, 720.0f, 1.0);
- m_inj_timing_crk_edit.SetRange(0.0f, 720.0f);
+  m_inj_timing_crk_spin[i].SetBuddy(&m_inj_timing_crk_edit[i]);
+  m_inj_timing_crk_edit[i].SetLimitText(4);
+  m_inj_timing_crk_edit[i].SetDecimalPlaces(0);
+  m_inj_timing_crk_spin[i].SetRangeAndDelta(0.0f, 720.0f, 1.0);
+  m_inj_timing_crk_edit[i].SetRange(0.0f, 720.0f);
+ }
 
  m_fff_const_spin.SetBuddy(&m_fff_const_edit);
  m_fff_const_edit.SetLimitText(5);
@@ -188,21 +269,26 @@ BOOL CInjectorPageDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_edit, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_cyldisp_spin, MLL::GetString(IDS_PD_INJECTOR_CYLDISP_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo, MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit, MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin, MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo[0], MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_sqrnum_combo[1], MLL::GetString(IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
- _FillInjCfgComboBox();
- _FillSqrNumComboBox();
- _FillAngleSpecsComboBox();
+ for(int i = 0; i < 2; ++i)
+ {
+  _FillInjCfgComboBox(i);
+  _FillSqrNumComboBox(i);
+  _FillAngleSpecsComboBox(i);
+ }
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.3f));
+ mp_scr->SetViewSizeF(.0f, 2.2f);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -224,13 +310,27 @@ void CInjectorPageDlg::OnChangeData()
 void CInjectorPageDlg::OnChangeDataInjCfg()
 {
  UpdateData();
- m_params.inj_config = _GetInjCfgComboBoxSelection(); //update inj_config, because it will be used in _FillSqrNumComboBox()
+ m_params.inj_config[0] = _GetInjCfgComboBoxSelection(0); //update inj_config, because it will be used in _FillSqrNumComboBox()
 
  //SqrNum combobox depends on injection config and cylinder number,
  //Also we have to preserve selection
- int sel = _GetSqrNumComboBoxSelection();
- _FillSqrNumComboBox();
- _SetSqrNumComboBoxSelection(sel);
+ int sel = _GetSqrNumComboBoxSelection(0);
+ _FillSqrNumComboBox(0);
+ _SetSqrNumComboBoxSelection(sel, 0);
+
+ OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
+}
+
+void CInjectorPageDlg::OnChangeDataInjCfg_g()
+{
+ UpdateData();
+ m_params.inj_config[1] = _GetInjCfgComboBoxSelection(1); //update inj_config, because it will be used in _FillSqrNumComboBox()
+
+ //SqrNum combobox depends on injection config and cylinder number,
+ //Also we have to preserve selection
+ int sel = _GetSqrNumComboBoxSelection(1);
+ _FillSqrNumComboBox(1);
+ _SetSqrNumComboBoxSelection(sel, 1);
 
  OnChangeNotify(); //notify event receiver about change in view content(see class ParamPageEvents)
 }
@@ -264,63 +364,66 @@ void CInjectorPageDlg::GetValues(SECU3IO::InjctrPar* o_values)
  ASSERT(o_values);
  UpdateData(TRUE); //copy data from dialog to variables
 
- m_params.inj_config = _GetInjCfgComboBoxSelection();
- m_params.inj_squirt_num = _GetSqrNumComboBoxSelection();
- m_params.inj_anglespec = _GetAngleSpecsComboBoxSelection();
+ for(int i = 0; i < 2; ++i)
+ {
+  m_params.inj_config[i] = _GetInjCfgComboBoxSelection(i);
+  m_params.inj_squirt_num[i] = _GetSqrNumComboBoxSelection(i);
+  m_params.inj_anglespec[i] = _GetAngleSpecsComboBoxSelection(i);
 
- //----------------------------------------------------------------------------
- //convert inj.flow rate from cc/min to g/min
- float mifr = m_params.inj_flow_rate * m_fuel_density;
+  //----------------------------------------------------------------------------
+  //convert inj.flow rate from cc/min to g/min
+  float mifr = m_params.inj_flow_rate[i] * m_fuel_density[i];
 
- int inj_num = m_params.cyl_num;
- int bnk_num = m_params.cyl_num;
- if (m_params.inj_config == SECU3IO::INJCFG_THROTTLEBODY)
- {
-  inj_num = 1; //single injector
-  bnk_num = 1; //single bank
- }
- else if (m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
- {
-  inj_num = m_params.cyl_num; //= N cylinders
-  bnk_num = 1; //single bank
- }
- else if (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN) //available only for even cylinder number engines
- {
-  inj_num = m_params.cyl_num; //= N cylinders
-  bnk_num = 2;                // 2 banks
- }
- else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL) //available only for even cylinder number engines
- {
-  inj_num = m_params.cyl_num; //= N cylinders
-  bnk_num = m_params.cyl_num / 2;
- }
- else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQSEPAR) //available only for even cylinder number engines
- {
-  inj_num = m_params.cyl_num; //= N cylinders
-  bnk_num = m_params.cyl_num / 2;
- }
- else if (m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
- {
-  inj_num = m_params.cyl_num; //= N cylinders
-  bnk_num = m_params.cyl_num; //= N cylinders
- }
- else
-  ASSERT(0);
-
- //calculate constant (calculation of this value related to the ideal gas law, see firmware code for more information)
- m_params.inj_sd_igl_const = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * ((float(bnk_num) * float(m_params.cyl_num)) / (float(inj_num) * float(m_params.inj_squirt_num)));
- //----------------------------------------------------------------------------
-
- if (m_params.inj_sd_igl_const > 524288)
- {
-  m_params.inj_sd_igl_const = 524288;
-  if (!m_ovf_msgbox)
+  int inj_num = m_params.cyl_num;
+  int bnk_num = m_params.cyl_num;
+  if (m_params.inj_config[i] == SECU3IO::INJCFG_THROTTLEBODY)
   {
-   m_ovf_msgbox = true;
-   AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
-   m_ovf_msgbox = false;
+   inj_num = 1; //single injector
+   bnk_num = 1; //single bank
   }
- }
+  else if (m_params.inj_config[i] == SECU3IO::INJCFG_SIMULTANEOUS)
+  {
+   inj_num = m_params.cyl_num; //= N cylinders
+   bnk_num = 1; //single bank
+  }
+  else if (m_params.inj_config[i] == SECU3IO::INJCFG_2BANK_ALTERN) //available only for even cylinder number engines
+  {
+   inj_num = m_params.cyl_num; //= N cylinders
+   bnk_num = 2;                // 2 banks
+  }
+  else if (m_params.inj_config[i] == SECU3IO::INJCFG_SEMISEQUENTIAL) //available only for even cylinder number engines
+  {
+   inj_num = m_params.cyl_num; //= N cylinders
+   bnk_num = m_params.cyl_num / 2;
+  }
+  else if (m_params.inj_config[i] == SECU3IO::INJCFG_SEMISEQSEPAR) //available only for even cylinder number engines
+  {
+   inj_num = m_params.cyl_num; //= N cylinders
+   bnk_num = m_params.cyl_num / 2;
+  }
+  else if (m_params.inj_config[i] == SECU3IO::INGCFG_FULLSEQUENTIAL)
+  {
+   inj_num = m_params.cyl_num; //= N cylinders
+   bnk_num = m_params.cyl_num; //= N cylinders
+  }
+  else
+   ASSERT(0);
+
+  //calculate constant (calculation of this value related to the ideal gas law, see firmware code for more information)
+  m_params.inj_sd_igl_const[i] = ((m_params.inj_cyl_disp * 3.482f * 18750000.0f) / mifr) * ((float(bnk_num) * float(m_params.cyl_num)) / (float(inj_num) * float(m_params.inj_squirt_num[i])));
+  //----------------------------------------------------------------------------
+
+  if (m_params.inj_sd_igl_const[i] > 524288)
+  {
+   m_params.inj_sd_igl_const[i] = 524288;
+   if (!m_ovf_msgbox)
+   {
+    m_ovf_msgbox = true;
+    AfxMessageBox(_T("Overflow detected when calculating constant for the ideal gas law equation! Change configuration to eliminate this error."));
+    m_ovf_msgbox = false;
+   }
+  }
+ } //for
 
  memcpy(o_values,&m_params, sizeof(SECU3IO::InjctrPar));
 }
@@ -331,71 +434,74 @@ void CInjectorPageDlg::SetValues(const SECU3IO::InjctrPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::InjctrPar));
 
- //Because its contents depends on number of cylinders
- _FillInjCfgComboBox();
+ for (int i = 0; i < 2; ++i)
+ {
+  //Because its contents depends on number of cylinders
+  _FillInjCfgComboBox(i);
 
- //Fill it here because its contents depend on selected injection configuration & cylinder number
- //Note, selection will be set by following calls
- _FillSqrNumComboBox();
+  //Fill it here because its contents depend on selected injection configuration & cylinder number
+  //Note, selection will be set by following calls
+  _FillSqrNumComboBox(i);
 
- _SetInjCfgComboBoxSelection(m_params.inj_config);
- _SetSqrNumComboBoxSelection(m_params.inj_squirt_num);
- _SetAngleSpecsComboBoxSelection(m_params.inj_anglespec);
+  _SetInjCfgComboBoxSelection(m_params.inj_config[i], i);
+  _SetSqrNumComboBoxSelection(m_params.inj_squirt_num[i], i);
+  _SetAngleSpecsComboBoxSelection(m_params.inj_anglespec[i], i);
+ }
 
  UpdateData(FALSE); //copy data from variables to dialog controls
 }
 
-void CInjectorPageDlg::_FillAngleSpecsComboBox(void)
+void CInjectorPageDlg::_FillAngleSpecsComboBox(int fi)
 {
  m_anglespecs.clear();
  m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_BEGIN, MLL::GetString(IDS_INJ_ANGLESPEC_BEGIN)));
  m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_MIDDLE, MLL::GetString(IDS_INJ_ANGLESPEC_MIDDLE)));
  m_anglespecs.push_back(std::make_pair(SECU3IO::INJANGLESPEC_END, MLL::GetString(IDS_INJ_ANGLESPEC_END)));
 
- m_injas_combo.ResetContent();
+ m_injas_combo[fi].ResetContent();
  for(size_t i = 0; i < m_anglespecs.size(); i++)
  {
-  int index = m_injas_combo.AddString(m_anglespecs[i].second.c_str());
+  int index = m_injas_combo[fi].AddString(m_anglespecs[i].second.c_str());
   if (index==CB_ERR)
   {
    ASSERT(0);
    continue;
   }
-  m_injas_combo.SetItemData(index, i);
+  m_injas_combo[fi].SetItemData(index, i);
  }
 }
 
-int CInjectorPageDlg::_GetAngleSpecsComboBoxSelection(void)
+int CInjectorPageDlg::_GetAngleSpecsComboBoxSelection(int fi)
 {
- int index = m_injas_combo.GetCurSel();
+ int index = m_injas_combo[fi].GetCurSel();
  if (index==CB_ERR)
  {
   ASSERT(0);
   return 0;
  }
- int as_index = m_injas_combo.GetItemData(index);
+ int as_index = m_injas_combo[fi].GetItemData(index);
  return m_anglespecs[as_index].first;
 }
 
-void CInjectorPageDlg::_SetAngleSpecsComboBoxSelection(int i_sel)
+void CInjectorPageDlg::_SetAngleSpecsComboBoxSelection(int i_sel, int fi)
 {
  for(size_t i = 0; i < m_anglespecs.size(); i++)
  {
   if (m_anglespecs[i].first != i_sel) //find index in container for configuration
    continue;
   //find related index and select corresponding item
-  int count = m_injas_combo.GetCount();
+  int count = m_injas_combo[fi].GetCount();
   for(int ii = 0; ii < count; ii++)
-  if (m_injas_combo.GetItemData(ii) == i)
+  if (m_injas_combo[fi].GetItemData(ii) == i)
   {
-   m_injas_combo.SetCurSel(ii);
+   m_injas_combo[fi].SetCurSel(ii);
    return;
   }
  }
  ASSERT(0);
 }
 
-void CInjectorPageDlg::_FillInjCfgComboBox(void)
+void CInjectorPageDlg::_FillInjCfgComboBox(int fi)
 {
  m_injcfgs.clear();
  m_injcfgs.push_back(std::make_pair(SECU3IO::INJCFG_THROTTLEBODY, MLL::GetString(IDS_INJ_CFG_THROTTLEBODY)));
@@ -409,102 +515,102 @@ void CInjectorPageDlg::_FillInjCfgComboBox(void)
  }
  m_injcfgs.push_back(std::make_pair(SECU3IO::INGCFG_FULLSEQUENTIAL, MLL::GetString(IDS_INJ_CFG_FULLSEQUENTIAL)));
 
- m_injcfg_combo.ResetContent();
+ m_injcfg_combo[fi].ResetContent();
  for(size_t i = 0; i < m_injcfgs.size(); i++)
  {
-  int index = m_injcfg_combo.AddString(m_injcfgs[i].second.c_str());
+  int index = m_injcfg_combo[fi].AddString(m_injcfgs[i].second.c_str());
   if (index==CB_ERR)
   {
    ASSERT(0);
    continue;
   }
-  m_injcfg_combo.SetItemData(index, i);
+  m_injcfg_combo[fi].SetItemData(index, i);
  }
 
  //prevent setting wrong configuration
- if (((m_params.cyl_num == 1 || m_params.cyl_num == 2 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN)) ||
-     ((m_params.cyl_num == 1 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL || m_params.inj_config == SECU3IO::INJCFG_SEMISEQSEPAR)))
+ if (((m_params.cyl_num == 1 || m_params.cyl_num == 2 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config[fi] == SECU3IO::INJCFG_2BANK_ALTERN)) ||
+     ((m_params.cyl_num == 1 || m_params.cyl_num == 3 || m_params.cyl_num == 5) && (m_params.inj_config[fi] == SECU3IO::INJCFG_SEMISEQUENTIAL || m_params.inj_config[fi] == SECU3IO::INJCFG_SEMISEQSEPAR)))
  {
-  m_params.inj_config = SECU3IO::INJCFG_THROTTLEBODY;
-  _SetInjCfgComboBoxSelection(SECU3IO::INJCFG_THROTTLEBODY);
+  m_params.inj_config[fi] = SECU3IO::INJCFG_THROTTLEBODY;
+  _SetInjCfgComboBoxSelection(SECU3IO::INJCFG_THROTTLEBODY, fi);
   OnChangeNotify();
  }
 }
 
-int  CInjectorPageDlg::_GetInjCfgComboBoxSelection(void)
+int  CInjectorPageDlg::_GetInjCfgComboBoxSelection(int fi)
 {
- int index = m_injcfg_combo.GetCurSel();
+ int index = m_injcfg_combo[fi].GetCurSel();
  if (index==CB_ERR)
  {
   ASSERT(0);
   return 0;
  }
- int cfg_index = m_injcfg_combo.GetItemData(index);
+ int cfg_index = m_injcfg_combo[fi].GetItemData(index);
  return m_injcfgs[cfg_index].first;
 }
 
-void CInjectorPageDlg::_SetInjCfgComboBoxSelection(int i_sel)
+void CInjectorPageDlg::_SetInjCfgComboBoxSelection(int i_sel, int fi)
 {
  for(size_t i = 0; i < m_injcfgs.size(); i++)
  {
   if (m_injcfgs[i].first != i_sel) //find index in conntainer for configuration
    continue;
   //find related index and select corresponding item
-  int count = m_injcfg_combo.GetCount();
+  int count = m_injcfg_combo[fi].GetCount();
   for(int ii = 0; ii < count; ii++)
-  if (m_injcfg_combo.GetItemData(ii) == i)
+  if (m_injcfg_combo[fi].GetItemData(ii) == i)
   {
-   m_injcfg_combo.SetCurSel(ii);
+   m_injcfg_combo[fi].SetCurSel(ii);
    return;
   }
  }
  ASSERT(0);
 }
 
-void CInjectorPageDlg::_FillSqrNumComboBox(void)
+void CInjectorPageDlg::_FillSqrNumComboBox(int fi)
 {
- m_sqrnum.clear();
+ m_sqrnum[fi].clear();
 
  //Fill squirts number list depending of selected configuration and number of engine cylinders
- if (m_params.inj_config == SECU3IO::INJCFG_THROTTLEBODY || m_params.inj_config == SECU3IO::INJCFG_SIMULTANEOUS)
+ if (m_params.inj_config[fi] == SECU3IO::INJCFG_THROTTLEBODY || m_params.inj_config[fi] == SECU3IO::INJCFG_SIMULTANEOUS)
  {
   switch(m_params.cyl_num)
   {
    case 1:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
     break;
    case 2:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
     break;
    case 3:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(3, _T("3")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(3, _T("3")));
     break;
    case 4:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
     break;
    case 5:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(5, _T("5")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(5, _T("5")));
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(3, _T("3")));
-    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(3, _T("3")));
+    m_sqrnum[fi].push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
-    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(8, _T("8")));
     break;
   }
  }
- else if (m_params.inj_config == SECU3IO::INJCFG_2BANK_ALTERN)
+ else if (m_params.inj_config[fi] == SECU3IO::INJCFG_2BANK_ALTERN)
  {
   switch(m_params.cyl_num)
   {
@@ -518,24 +624,24 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 4:     //for 4 cyl engine this mode is the same as semi-sequential
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
     break;
    case 5:
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
-    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(8, _T("8")));
     break;
   }
  }
- else if (m_params.inj_config == SECU3IO::INJCFG_SEMISEQUENTIAL || m_params.inj_config == SECU3IO::INJCFG_SEMISEQSEPAR)
+ else if (m_params.inj_config[fi] == SECU3IO::INJCFG_SEMISEQUENTIAL || m_params.inj_config[fi] == SECU3IO::INJCFG_SEMISEQSEPAR)
  {
   switch(m_params.cyl_num)
   {
@@ -543,53 +649,53 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 2:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
     break;
    case 3:
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 4:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
     break;
    case 5:
     ASSERT(0); //not available on odd cyl. number engine
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(3, _T("3")));
-    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    m_sqrnum[fi].push_back(std::make_pair(3, _T("3")));
+    m_sqrnum[fi].push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
-    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(8, _T("8")));
     break;
   }
  }
- else if (m_params.inj_config == SECU3IO::INGCFG_FULLSEQUENTIAL)
+ else if (m_params.inj_config[fi] == SECU3IO::INGCFG_FULLSEQUENTIAL)
  {
   switch(m_params.cyl_num)
   {
    case 1:
-    m_sqrnum.push_back(std::make_pair(1, _T("1")));
+    m_sqrnum[fi].push_back(std::make_pair(1, _T("1")));
     break;
    case 2:
-    m_sqrnum.push_back(std::make_pair(2, _T("2")));
+    m_sqrnum[fi].push_back(std::make_pair(2, _T("2")));
     break;
    case 3:
-    m_sqrnum.push_back(std::make_pair(3, _T("3")));
+    m_sqrnum[fi].push_back(std::make_pair(3, _T("3")));
     break;
    case 4:
-    m_sqrnum.push_back(std::make_pair(4, _T("4")));
+    m_sqrnum[fi].push_back(std::make_pair(4, _T("4")));
     break;
    case 5:
-    m_sqrnum.push_back(std::make_pair(5, _T("5")));
+    m_sqrnum[fi].push_back(std::make_pair(5, _T("5")));
     break;
    case 6:
-    m_sqrnum.push_back(std::make_pair(6, _T("6")));
+    m_sqrnum[fi].push_back(std::make_pair(6, _T("6")));
     break;
    case 8:
-    m_sqrnum.push_back(std::make_pair(8, _T("8")));
+    m_sqrnum[fi].push_back(std::make_pair(8, _T("8")));
     break;
   }
  }
@@ -598,48 +704,48 @@ void CInjectorPageDlg::_FillSqrNumComboBox(void)
   ASSERT(0); //unknown configuration
  }
 
- m_sqrnum_combo.ResetContent();
- for(size_t i = 0; i < m_sqrnum.size(); i++)
+ m_sqrnum_combo[fi].ResetContent();
+ for(size_t i = 0; i < m_sqrnum[fi].size(); i++)
  {
-  int index = m_sqrnum_combo.AddString(m_sqrnum[i].second.c_str());
+  int index = m_sqrnum_combo[fi].AddString(m_sqrnum[fi][i].second.c_str());
   if (index==CB_ERR)
   {
    ASSERT(0);
    continue;
   }
-  m_sqrnum_combo.SetItemData(index, i);
+  m_sqrnum_combo[fi].SetItemData(index, i);
  }
 }
 
-int CInjectorPageDlg::_GetSqrNumComboBoxSelection(void)
+int CInjectorPageDlg::_GetSqrNumComboBoxSelection(int fi)
 {
- int index = m_sqrnum_combo.GetCurSel();
+ int index = m_sqrnum_combo[fi].GetCurSel();
  if (index==CB_ERR)
  {
   ASSERT(0);
   return 0;
  }
- int num_index = m_sqrnum_combo.GetItemData(index);
- return m_sqrnum[num_index].first;
+ int num_index = m_sqrnum_combo[fi].GetItemData(index);
+ return m_sqrnum[fi][num_index].first;
 }
 
-void CInjectorPageDlg::_SetSqrNumComboBoxSelection(int i_sel)
+void CInjectorPageDlg::_SetSqrNumComboBoxSelection(int i_sel, int fi)
 {
- for(size_t i = 0; i < m_sqrnum.size(); i++)
+ for(size_t i = 0; i < m_sqrnum[fi].size(); i++)
  {
-  if (m_sqrnum[i].first != i_sel) //find index in container
+  if (m_sqrnum[fi][i].first != i_sel) //find index in container
    continue;
   //find related index and select corresponding item
-  int count = m_sqrnum_combo.GetCount();
+  int count = m_sqrnum_combo[fi].GetCount();
   for(int ii = 0; ii < count; ii++)
-  if (m_sqrnum_combo.GetItemData(ii) == i)
+  if (m_sqrnum_combo[fi].GetItemData(ii) == i)
   {
-   m_sqrnum_combo.SetCurSel(ii);
+   m_sqrnum_combo[fi].SetCurSel(ii);
    return;
   }
  }
 
  //if we are not able to find corresponding number then select middle number
- int count = m_sqrnum_combo.GetCount();
- m_sqrnum_combo.SetCurSel(count/2);
+ int count = m_sqrnum_combo[fi].GetCount();
+ m_sqrnum_combo[fi].SetCurSel(count/2);
 }

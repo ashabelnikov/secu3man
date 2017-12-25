@@ -1815,7 +1815,7 @@ bool CControlApp::Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_GasdosePar.lam_corr_limit_m = (float(corrlimit_m) / 512.0f) * 100.0f;
 
- //Closing in fuel cut mode
+ //Stoichiometric value for gas
  int lam_stoichval = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_stoichval))
   return false;
@@ -1947,24 +1947,34 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 34 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 56 : 29))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_flags))
   return false;
- m_InjctrPar.inj_usetimingmap = (inj_flags & 0x01) != 0;
+ m_InjctrPar.inj_usetimingmap[0] = CHECKBIT8(inj_flags, 0);
+ m_InjctrPar.inj_usetimingmap[1] = CHECKBIT8(inj_flags, 1);
 
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
   return false;
- m_InjctrPar.inj_config = inj_config >> 4;        //configuration
- m_InjctrPar.inj_squirt_num = inj_config & 0x0F;  //number of squirts per cycle
+ m_InjctrPar.inj_config[0] = GETHI4BITS(inj_config);      //configuration
+ m_InjctrPar.inj_squirt_num[0] = GETLO4BITS(inj_config);  //number of squirts per cycle
+ //second fuel:
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
+  return false;
+ m_InjctrPar.inj_config[1] = GETHI4BITS(inj_config);      //configuration
+ m_InjctrPar.inj_squirt_num[1] = GETLO4BITS(inj_config);  //number of squirts per cycle
 
  int inj_flow_rate = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
   return false;
- m_InjctrPar.inj_flow_rate = float(inj_flow_rate) / 64.0f;
+ m_InjctrPar.inj_flow_rate[0] = float(inj_flow_rate) / 64.0f;
+ //second fuel:
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_flow_rate))
+  return false;
+ m_InjctrPar.inj_flow_rate[1] = float(inj_flow_rate) / 64.0f;
 
  int inj_cyl_disp = 0;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_cyl_disp))
@@ -1974,7 +1984,11 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  unsigned long inj_sd_igl_const = 0;
  if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
   return false;
- m_InjctrPar.inj_sd_igl_const = (float)inj_sd_igl_const;
+ m_InjctrPar.inj_sd_igl_const[0] = (float)inj_sd_igl_const;
+ //second fuel:
+ if (false == mp_pdp->Hex32ToBin(raw_packet, &inj_sd_igl_const))
+  return false;
+ m_InjctrPar.inj_sd_igl_const[1] = (float)inj_sd_igl_const;
 
  //read-only parameter: number of engine cylinders
  unsigned char cyl_num = 0;
@@ -1986,19 +2000,28 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  int  inj_begin_angle;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
   return false;
- m_InjctrPar.inj_timing = ((float)inj_begin_angle) / m_angle_multiplier;
+ m_InjctrPar.inj_timing[0] = ((float)inj_begin_angle) / m_angle_multiplier;
+ //second fuel:
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle, true))
+  return false;
+ m_InjctrPar.inj_timing[1] = ((float)inj_begin_angle) / m_angle_multiplier;
 
  //injection timing (phase) on cranking
  int  inj_begin_angle_crk;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
   return false;
- m_InjctrPar.inj_timing_crk = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ m_InjctrPar.inj_timing_crk[0] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
+ //second fuel:
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &inj_begin_angle_crk, true))
+  return false;
+ m_InjctrPar.inj_timing_crk[1] = ((float)inj_begin_angle_crk) / m_angle_multiplier;
 
  //inj.pulse origin
  unsigned char anglespec = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &anglespec))
   return false;
- m_InjctrPar.inj_anglespec = anglespec;
+ m_InjctrPar.inj_anglespec[0] = GETLO4BITS(anglespec);
+ m_InjctrPar.inj_anglespec[1] = GETHI4BITS(anglespec);  //second fuel
 
  //fff_const (fuel consumption)
  int  fff;
@@ -2013,7 +2036,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 38 : 19))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 42 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -2080,6 +2103,12 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &htgdet))
   return false;
  m_LambdaPar.lam_htgdet = htgdet;
+
+ //Stoichiometric value for second fuel
+ int lam_2stoichval = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_2stoichval))
+  return false;
+ m_LambdaPar.lam_2stoichval = ((float)lam_2stoichval) / 128.0f;
 
  return true;
 }
@@ -3170,22 +3199,41 @@ void CControlApp::Build_UNIOUT_PAR(UniOutPar* packet_data)
 void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 {
  unsigned char inj_flags = 0;
- WRITEBIT8(inj_flags, 0, packet_data->inj_usetimingmap); 
+ WRITEBIT8(inj_flags, 0, packet_data->inj_usetimingmap[0]); 
+ WRITEBIT8(inj_flags, 1, packet_data->inj_usetimingmap[1]); 
  mp_pdp->Bin8ToHex(inj_flags, m_outgoing_packet);
- unsigned char inj_config = (packet_data->inj_config << 4) | (packet_data->inj_squirt_num & 0x0F);
+
+ unsigned char inj_config = MAKEBYTE(packet_data->inj_config[0], packet_data->inj_squirt_num[0]);
  mp_pdp->Bin8ToHex(inj_config, m_outgoing_packet);
- int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate * 64.0f);
+ inj_config = MAKEBYTE(packet_data->inj_config[1], packet_data->inj_squirt_num[1]);
+ mp_pdp->Bin8ToHex(inj_config, m_outgoing_packet);
+
+ int inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate[0] * 64.0f);
  mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
+ inj_flow_rate = MathHelpers::Round(packet_data->inj_flow_rate[1] * 64.0f);
+ mp_pdp->Bin16ToHex(inj_flow_rate, m_outgoing_packet);
+
  int inj_cyl_disp = MathHelpers::Round(packet_data->inj_cyl_disp * 16384.0f);
  mp_pdp->Bin16ToHex(inj_cyl_disp, m_outgoing_packet);
- mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const, m_outgoing_packet);
+
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const[0], m_outgoing_packet);
+ mp_pdp->Bin32ToHex((unsigned long)packet_data->inj_sd_igl_const[1], m_outgoing_packet);
+
  mp_pdp->Bin8ToHex(0, m_outgoing_packet); //stub for cyl_num
- int inj_begin_angle = MathHelpers::Round(packet_data->inj_timing * m_angle_multiplier);
+
+ int inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[0] * m_angle_multiplier);
  mp_pdp->Bin16ToHex(inj_begin_angle, m_outgoing_packet);
- int inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk * m_angle_multiplier);
+ inj_begin_angle = MathHelpers::Round(packet_data->inj_timing[1] * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(inj_begin_angle, m_outgoing_packet);
+
+ int inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[0] * m_angle_multiplier);
  mp_pdp->Bin16ToHex(inj_begin_angle_crk, m_outgoing_packet);
- unsigned char inj_anglespec = packet_data->inj_anglespec;
+ inj_begin_angle_crk = MathHelpers::Round(packet_data->inj_timing_crk[1] * m_angle_multiplier);
+ mp_pdp->Bin16ToHex(inj_begin_angle_crk, m_outgoing_packet);
+
+ unsigned char inj_anglespec = MAKEBYTE(packet_data->inj_anglespec[1], packet_data->inj_anglespec[0]);
  mp_pdp->Bin8ToHex(inj_anglespec, m_outgoing_packet);
+
  int fff = MathHelpers::Round((packet_data->fff_const / (1000.0f*60.0f))*65536.0f);
  mp_pdp->Bin16ToHex(fff, m_outgoing_packet);
 }
@@ -3214,6 +3262,8 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->lam_ms_per_stp / 10, m_outgoing_packet);
  unsigned char lam_htgdet = packet_data->lam_htgdet;
  mp_pdp->Bin8ToHex(lam_htgdet, m_outgoing_packet);
+ int lam_2stoichval = MathHelpers::Round(packet_data->lam_2stoichval * 128.0f);
+ mp_pdp->Bin16ToHex(lam_2stoichval, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

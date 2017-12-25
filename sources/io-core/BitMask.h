@@ -55,3 +55,8 @@ bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum);
 
 //Makes byte from two 4-bit values
 BYTE BITMASK_API MAKEBYTE(int hi, int lo);
+
+//Get low 4 bits from a byte
+BYTE BITMASK_API GETLO4BITS(BYTE byte);
+//Get high 4 bits from a byte
+BYTE BITMASK_API GETHI4BITS(BYTE byte);

@@ -331,14 +331,27 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
   case INJCTR_PAR:
    {
     InjctrPar* p_in = (InjctrPar*)ip_values;
-    WRITEBIT8(p_params->inj_flags, 0, p_in->inj_usetimingmap);
-    p_params->inj_config = (p_in->inj_config << 4) | (p_in->inj_squirt_num & 0x0F);
-    p_params->inj_flow_rate = MathHelpers::Round(p_in->inj_flow_rate * 64.0f);
+    WRITEBIT8(p_params->inj_flags, 0, p_in->inj_usetimingmap[0]);
+    WRITEBIT8(p_params->inj_flags, 1, p_in->inj_usetimingmap[1]);
+
+    p_params->inj_config[0] = MAKEBYTE(p_in->inj_config[0], p_in->inj_squirt_num[0]);
+    p_params->inj_config[1] = MAKEBYTE(p_in->inj_config[1], p_in->inj_squirt_num[1]);
+
+    p_params->inj_flow_rate[0] = MathHelpers::Round(p_in->inj_flow_rate[0] * 64.0f);
+    p_params->inj_flow_rate[1] = MathHelpers::Round(p_in->inj_flow_rate[1] * 64.0f);
+
     p_params->inj_cyl_disp = MathHelpers::Round(p_in->inj_cyl_disp * 16384.0f);
-    p_params->inj_sd_igl_const = MathHelpers::Round(p_in->inj_sd_igl_const);
-    p_params->inj_timing = MathHelpers::Round(p_in->inj_timing * ANGLE_MULTIPLIER);
-    p_params->inj_timing_crk = MathHelpers::Round(p_in->inj_timing_crk * ANGLE_MULTIPLIER);
-    p_params->inj_anglespec = p_in->inj_anglespec;
+
+    p_params->inj_sd_igl_const[0] = MathHelpers::Round(p_in->inj_sd_igl_const[0]);
+    p_params->inj_sd_igl_const[1] = MathHelpers::Round(p_in->inj_sd_igl_const[1]);
+
+    p_params->inj_timing[0] = MathHelpers::Round(p_in->inj_timing[0] * ANGLE_MULTIPLIER);
+    p_params->inj_timing[1] = MathHelpers::Round(p_in->inj_timing[1] * ANGLE_MULTIPLIER);
+
+    p_params->inj_timing_crk[0] = MathHelpers::Round(p_in->inj_timing_crk[0] * ANGLE_MULTIPLIER);
+    p_params->inj_timing_crk[1] = MathHelpers::Round(p_in->inj_timing_crk[1] * ANGLE_MULTIPLIER);
+
+    p_params->inj_anglespec = MAKEBYTE(p_in->inj_anglespec[1], p_in->inj_anglespec[0]);
     p_params->fff_const = MathHelpers::Round((p_in->fff_const / (1000.0f*60.0f))*65536.0f);
    }
    break;
@@ -358,6 +371,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_lambda_senstype = p_in->lam_senstype;
     p_params->inj_lambda_ms_per_stp = p_in->lam_ms_per_stp / 10;
     p_params->inj_lambda_htgdet = p_in->lam_htgdet;
+    p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_2stoichval * 128.0f);
    }
    break;
   case ACCEL_PAR:
@@ -685,16 +699,34 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    {
     InjctrPar* p_out = (InjctrPar*)op_values;
 
-    p_out->inj_usetimingmap = CHECKBIT8(p_params->inj_flags, 0);
-    p_out->inj_config = p_params->inj_config >> 4;      //fuel injection configuration
-    p_out->inj_squirt_num = p_params->inj_config & 0x0F; //number of squirts per cycle
-    p_out->inj_flow_rate = float(p_params->inj_flow_rate) / 64.0f;
+    p_out->inj_usetimingmap[0] = CHECKBIT8(p_params->inj_flags, 0);
+    p_out->inj_usetimingmap[1] = CHECKBIT8(p_params->inj_flags, 1);
+
+    p_out->inj_config[0] = GETHI4BITS(p_params->inj_config[0]);      //fuel injection configuration
+    p_out->inj_squirt_num[0] = GETLO4BITS(p_params->inj_config[0]);  //number of squirts per cycle
+
+    p_out->inj_config[1] = GETHI4BITS(p_params->inj_config[1]);      //fuel injection configuration
+    p_out->inj_squirt_num[1] = GETLO4BITS(p_params->inj_config[1]);  //number of squirts per cycle
+
+    p_out->inj_flow_rate[0] = float(p_params->inj_flow_rate[0]) / 64.0f;
+    p_out->inj_flow_rate[1] = float(p_params->inj_flow_rate[1]) / 64.0f;
+
     p_out->inj_cyl_disp = float(p_params->inj_cyl_disp) / 16384.0f;
-    p_out->inj_sd_igl_const = (float)p_params->inj_sd_igl_const;
+
+    p_out->inj_sd_igl_const[0] = (float)p_params->inj_sd_igl_const[0];
+    p_out->inj_sd_igl_const[1] = (float)p_params->inj_sd_igl_const[1];
+
     p_out->cyl_num = p_params->ckps_engine_cyl; //read-only parameter, its value required for calculations
-    p_out->inj_timing = ((float)p_params->inj_timing) / ANGLE_MULTIPLIER;
-    p_out->inj_timing_crk = ((float)p_params->inj_timing_crk) / ANGLE_MULTIPLIER;
-    p_out->inj_anglespec = p_params->inj_anglespec;
+
+    p_out->inj_timing[0] = ((float)p_params->inj_timing[0]) / ANGLE_MULTIPLIER;
+    p_out->inj_timing[1] = ((float)p_params->inj_timing[1]) / ANGLE_MULTIPLIER;
+
+    p_out->inj_timing_crk[0] = ((float)p_params->inj_timing_crk[0]) / ANGLE_MULTIPLIER;
+    p_out->inj_timing_crk[1] = ((float)p_params->inj_timing_crk[1]) / ANGLE_MULTIPLIER;
+
+    p_out->inj_anglespec[0] = GETLO4BITS(p_params->inj_anglespec);
+    p_out->inj_anglespec[1] = GETHI4BITS(p_params->inj_anglespec);
+
     p_out->fff_const = ((float)p_params->fff_const/65536.0f)*(1000.0f*60.0f);
    }
    break;
@@ -714,6 +746,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->lam_senstype = p_params->inj_lambda_senstype;
     p_out->lam_ms_per_stp = p_params->inj_lambda_ms_per_stp * 10;
     p_out->lam_htgdet = p_params->inj_lambda_htgdet;
+    p_out->lam_2stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
    }
    break;
   case ACCEL_PAR:

@@ -695,6 +695,7 @@ void CParamDeskDlg::EnableFuelInjection(bool i_enable)
  m_pChokePageDlg->EnableFuelInjection(i_enable);
  m_pMiscPageDlg->EnableFuelInjection(i_enable);
  m_pIdlRegPageDlg->EnableFuelInjection(i_enable);
+ m_pLambdaPageDlg->EnableFuelInjection(i_enable || m_gasdose);
 }
 
 void CParamDeskDlg::EnableGasdose(bool i_enable)
@@ -708,6 +709,7 @@ void CParamDeskDlg::EnableGasdose(bool i_enable)
  m_pAccelEnrPageDlg->Enable((m_fuel_injection || i_enable) && m_enabled);
  m_pCarburPageDlg->EnableGasdose(i_enable);
  m_pStarterPageDlg->EnableGasdose(i_enable);
+ m_pLambdaPageDlg->EnableFuelInjection(i_enable || m_fuel_injection);
 }
 
 void CParamDeskDlg::EnableChokeCtrls(bool i_enable)
