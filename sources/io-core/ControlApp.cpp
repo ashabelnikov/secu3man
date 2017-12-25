@@ -1135,7 +1135,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::CKPSPar& m_CKPSPar = m_recepted_packet.m_CKPSPar;
- if (size != (mp_pdp->isHex() ? 21 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 20 : 10))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Количество зубьев до в.м.т.
@@ -1148,10 +1148,6 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
 
  //Кол-во цилиндров двигателя
  if (false == mp_pdp->Hex8ToBin(raw_packet,&m_CKPSPar.ckps_engine_cyl))
-  return false;
-
- //Флаг объединения выходов зажигания
- if (false == mp_pdp->Hex4ToBin(raw_packet, &m_CKPSPar.ckps_merge_ign_outs))
   return false;
 
  //Кол-во зубьев задающего шкива, включая пропущенные
@@ -1170,6 +1166,7 @@ bool CControlApp::Parse_CKPS_PAR(const BYTE* raw_packet, size_t size)
  m_CKPSPar.ckps_use_cam_ref = CHECKBIT8(flags, 1);
  m_CKPSPar.ckps_edge_type = CHECKBIT8(flags, 2);
  m_CKPSPar.ref_s_edge_type = CHECKBIT8(flags, 3);
+ m_CKPSPar.ckps_merge_ign_outs = CHECKBIT8(flags, 4);
 
  //Hall shutter's window width
  int wnd_width;
@@ -2837,7 +2834,6 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  mp_pdp->Bin8ToHex(packet_data->ckps_cogs_btdc, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_ignit_cogs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_engine_cyl, m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->ckps_merge_ign_outs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_cogs_num, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->ckps_miss_num, m_outgoing_packet);
  unsigned char flags = 0; //not used now
@@ -2845,6 +2841,7 @@ void CControlApp::Build_CKPS_PAR(CKPSPar* packet_data)
  WRITEBIT8(flags, 1, packet_data->ckps_use_cam_ref);
  WRITEBIT8(flags, 2, packet_data->ckps_edge_type);
  WRITEBIT8(flags, 3, packet_data->ref_s_edge_type);
+ WRITEBIT8(flags, 4, packet_data->ckps_merge_ign_outs);
  mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  int wnd_width = MathHelpers::Round(packet_data->hall_wnd_width * m_angle_multiplier);
  mp_pdp->Bin16ToHex(wnd_width, m_outgoing_packet);

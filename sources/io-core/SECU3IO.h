@@ -233,7 +233,7 @@ namespace SECU3IO
   unsigned char ckps_cogs_btdc;
   unsigned char ckps_ignit_cogs;
   unsigned char ckps_engine_cyl;
-  unsigned char ckps_merge_ign_outs;
+  bool ckps_merge_ign_outs;
   unsigned char ckps_cogs_num;
   unsigned char ckps_miss_num;
   float hall_wnd_width; 

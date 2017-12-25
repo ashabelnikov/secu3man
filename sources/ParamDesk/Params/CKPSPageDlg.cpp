@@ -174,7 +174,7 @@ void CCKPSPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text(pDX, IDC_PD_CKPS_MISS_NUM_EDIT, m_params.ckps_miss_num);
  DDX_Radio_bool(pDX, IDC_PD_CKPS_NEGFRONT_RADIOBOX, m_params.ckps_edge_type);
  DDX_Radio_bool(pDX, IDC_PD_REF_S_NEGFRONT_RADIOBOX, m_params.ref_s_edge_type);
- DDX_Check_UCHAR(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
+ DDX_Check_bool(pDX, IDC_PD_CKPS_MERGE_IGN_OUTPUTS, m_params.ckps_merge_ign_outs);
  DDX_Check_bool(pDX, IDC_PD_CKPS_RISING_SPARK, m_params.ckps_rising_spark);
  DDX_Check_bool(pDX, IDC_PD_CKPS_USE_CAM_REF, m_params.ckps_use_cam_ref);
 }
