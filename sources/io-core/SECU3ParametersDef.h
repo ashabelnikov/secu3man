@@ -91,11 +91,9 @@ typedef struct params_t
  _int   idlreg_max_angle;
  _int   idlreg_turn_on_temp;            // Idling regulator turn on temperature
 
- _uchar tmp_use;                        // признак комплектации ДТОЖ-ом
+ _uchar tmp_flags;                      // temperature flags
  _int   vent_on;                        // температура включения вентилятора
  _int   vent_off;                       // температура выключения вентилятора
- _uchar vent_pwm;                       // control ventilator by using pwm
- _uchar cts_use_map;                    // Flag which indicates using of lookup table for coolant temperature sensor
  _uint  vent_pwmfrq;                    // PWM frequency (value = 1/f * 524288)
 
  _int   map_adc_factor;
@@ -258,7 +256,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2];
+ _uchar reserved[4];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

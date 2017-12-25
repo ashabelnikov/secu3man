@@ -61,9 +61,9 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
   case TEMPER_PAR:
    {
     TemperPar* p_in = (TemperPar*)ip_values;
-    p_params->tmp_use  = p_in->tmp_use;
-    p_params->vent_pwm = p_in->vent_pwm;
-    p_params->cts_use_map = p_in->cts_use_map;
+    WRITEBIT8(p_params->tmp_flags, 0, p_in->tmp_use);
+    WRITEBIT8(p_params->tmp_flags, 1, p_in->cts_use_map);
+    WRITEBIT8(p_params->tmp_flags, 2, p_in->vent_pwm);
     p_params->vent_on  = MathHelpers::Round(p_in->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->vent_off = MathHelpers::Round(p_in->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
     p_params->vent_pwmfrq = MathHelpers::Round((1.0/p_in->vent_pwmfrq) * 524288.0);
@@ -403,9 +403,9 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
    case TEMPER_PAR:
     {
      TemperPar* p_out = (TemperPar*)op_values;
-     p_out->tmp_use  = p_params->tmp_use;
-     p_out->vent_pwm = p_params->vent_pwm;
-     p_out->cts_use_map = p_params->cts_use_map;
+     p_out->tmp_use  = CHECKBIT8(p_params->tmp_flags, 0);
+     p_out->cts_use_map  = CHECKBIT8(p_params->tmp_flags, 1);
+     p_out->vent_pwm  = CHECKBIT8(p_params->tmp_flags, 2);
      p_out->vent_on  = ((float)p_params->vent_on) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->vent_off = ((float)p_params->vent_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
      p_out->vent_pwmfrq = MathHelpers::Round(1.0/(((double)p_params->vent_pwmfrq) / 524288.0));

@@ -124,9 +124,9 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  m_vent_pwmfrq_edit.DDX_Value(pDX, IDC_PD_TEMPER_PWM_FRQ_EDIT, m_params.vent_pwmfrq);
  m_cond_pvt_on_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTON_EDIT, m_params.cond_pvt_on);
  m_cond_pvt_off_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTOFF_EDIT, m_params.cond_pvt_off);
- DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
- DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
- DDX_Check_UCHAR(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
+ DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
+ DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
+ DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
 }
 
 void CTemperPageDlg::OnUpdateControls(CCmdUI* pCmdUI)

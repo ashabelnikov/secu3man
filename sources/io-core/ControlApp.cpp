@@ -912,20 +912,20 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
- if (size != (mp_pdp->isHex() ? 23 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 22 : 11))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ //Temperature flags
+ unsigned char tmp_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet,&tmp_flags))
   return false;
 
  //Признак комплектации ДТОЖ (использования ДТОЖ)
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.tmp_use))
-  return false;
-
- //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.vent_pwm))
-  return false;
-
+ m_TemperPar.tmp_use = CHECKBIT8(tmp_flags, 0);
  //Флаг использования таблицы для задания зависимости температуры от напрящения ДТОЖ
- if (false == mp_pdp->Hex4ToBin(raw_packet,&m_TemperPar.cts_use_map))
-  return false;
+ m_TemperPar.cts_use_map = CHECKBIT8(tmp_flags, 1);
+ //Флаг использования ШИМ для управления вентилятором охлаждения двигателя
+ m_TemperPar.vent_pwm = CHECKBIT8(tmp_flags, 2);
 
  //Для удобства и повышения скорости обработки SECU-3 оперирует с температурой представленной
  //дискретами АЦП (как измеренное значение прямо с датчика)
@@ -2718,9 +2718,11 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
 
 void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
 {
- mp_pdp->Bin4ToHex(packet_data->tmp_use,m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->vent_pwm,m_outgoing_packet);
- mp_pdp->Bin4ToHex(packet_data->cts_use_map,m_outgoing_packet);
+ unsigned char flags = 0; //not used now
+ WRITEBIT8(flags, 0, packet_data->tmp_use);
+ WRITEBIT8(flags, 1, packet_data->cts_use_map);
+ WRITEBIT8(flags, 2, packet_data->vent_pwm);
+ mp_pdp->Bin8ToHex(flags, m_outgoing_packet);
  int vent_on = MathHelpers::Round(packet_data->vent_on * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  mp_pdp->Bin16ToHex(vent_on, m_outgoing_packet);
  int vent_off = MathHelpers::Round(packet_data->vent_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
