@@ -201,6 +201,20 @@ BEGIN
 
     LTEXT           "Барокоррекция",IDC_PD_FUNSET_BAROCORRTYPE_CAPTION,2,224,83,8
     COMBOBOX        IDC_PD_FUNSET_BAROCORRTYPE_COMBO,85,223,70,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "Настройка ДАД2",IDC_PD_FUNSET_MAP_SENSOR2_GROUP,1,244,157,39
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET2_EDIT,9,263,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,262,11,16
+    LTEXT           "Смещение кривой",IDC_PD_FUNSET_CURVE_OFFSET2_CAPTION,6,253,63,8
+    LTEXT           "В",IDC_PD_FUNSET_CURVE_OFFSET2_UNIT,53,266,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT,76,263,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,262,11,16
+    LTEXT           "Наклон кривой",IDC_PD_FUNSET_CURVE_GRADIENT2_CAPTION,76,253,66,8
+    LTEXT           "кПа/В",IDC_PD_FUNSET_CURVE_GRADIENT2_UNIT,118,266,24,11
+
+    CONTROL         "",IDC_PD_MAP_CALC2_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,263,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -1235,6 +1249,7 @@ BEGIN
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Максимальное положительное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Максимальное отрицательное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_SM_STEPS_NUM_EDIT_TT "Кол-во шагов ШД между полностью закрытым и открытым положениями дозатора. Обычно дозаторы газа имеют 256 шагов."
+    IDC_PD_MAP_CALC2_BUTTON_TT "Позволяет рассчитать 'смещение' и 'наклон' по двум известным показаниям датчика"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1683,6 +1698,20 @@ BEGIN
 
     LTEXT           "Barometric corr.",IDC_PD_FUNSET_BAROCORRTYPE_CAPTION,2,224,83,8
     COMBOBOX        IDC_PD_FUNSET_BAROCORRTYPE_COMBO,85,223,70,82,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
+
+    GROUPBOX        "MAP2 sensor tuning",IDC_PD_FUNSET_MAP_SENSOR2_GROUP,1,244,157,39
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_OFFSET2_EDIT,9,263,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_OFFSET2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,262,11,16
+    LTEXT           "Curve offset",IDC_PD_FUNSET_CURVE_OFFSET2_CAPTION,6,253,63,8
+    LTEXT           "V",IDC_PD_FUNSET_CURVE_OFFSET2_UNIT,53,266,12,10
+
+    EDITTEXT        IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT,76,263,30,14,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_FUNSET_CURVE_GRADIENT2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,106,262,11,16
+    LTEXT           "Curve gradient",IDC_PD_FUNSET_CURVE_GRADIENT2_CAPTION,76,253,66,8
+    LTEXT           "kPa/V",IDC_PD_FUNSET_CURVE_GRADIENT2_UNIT,118,266,24,11
+
+    CONTROL         "",IDC_PD_MAP_CALC2_BUTTON,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,142,263,15,18
 END
 
 IDD_PD_IDLREG_PAGE DIALOGEX 0, 0, 155, 158
@@ -2749,6 +2778,7 @@ BEGIN
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Maximum positive value of the EGO correction at warmup, which used by gas doser"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Maximum negative value of the EGO correction at warmup, which used by gas doser"
     IDS_PD_GASDOSE_SM_STEPS_NUM_EDIT_TT "Number of SM steps between fully closed and fully opend positions of the stepper gas valve. Usually, such valves are 256 steps"
+    IDC_PD_MAP_CALC2_BUTTON_TT "Calculate 'offset' and 'gradient' parameters using two known sensor readings"
 END
 
 STRINGTABLE DISCARDABLE 

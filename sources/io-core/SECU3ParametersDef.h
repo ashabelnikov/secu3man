@@ -57,6 +57,8 @@ typedef struct params_t
  _int   map_upper_pressure;             // верхнее значене ДАД по оси таблицы (кПа)
  _int   map_curve_offset;               // can be negative
  _int   map_curve_gradient;             // can be negative (in case of inverse characteristic curve)!
+ _int   map2_curve_offset;              // can be negative
+ _int   map2_curve_gradient;            // can be negative (in case of inverse characteristic curve)!
 
  _uchar carb_invers;                    // инверсия концевика на карбюраторе
  _int   tps_curve_offset;               // offset of curve in volts
@@ -256,7 +258,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4];
+//_uchar reserved[0];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

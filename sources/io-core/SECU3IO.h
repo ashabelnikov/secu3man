@@ -130,6 +130,8 @@ namespace SECU3IO
   float map_upper_pressure;
   float map_curve_offset;
   float map_curve_gradient;
+  float map2_curve_offset;
+  float map2_curve_gradient;
   float tps_curve_offset;
   float tps_curve_gradient;
   unsigned char load_src_cfg;

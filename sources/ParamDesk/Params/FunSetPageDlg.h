@@ -48,6 +48,8 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  //true - SECU-3T, false - SECU-3i
+  void EnableSECU3TItems(bool i_enable);
 
   void FillCBByFunNames(void);
   std::vector<_TSTRING>& AccessFunNames(void);
@@ -64,13 +66,16 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnMapCalcButton();
+  afx_msg void OnMap2CalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
   SECU3IO::FunSetPar m_params;
   std::vector<_TSTRING> m_fun_names;
   bool m_enabled;
+  bool m_enable_secu3t_features;
 
   CComboBox m_gas_maps_combo;
   CComboBox m_benzin_maps_combo;
@@ -91,6 +96,12 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_tps_curve_gradient_spin;
   CEditEx m_tps_curve_gradient_edit;
   CBitmapButton m_calc_map_btn;
+  CBitmapButton m_calc_map2_btn;
+
+  CSpinButtonCtrlEx m_map2_curve_offset_spin;
+  CEditEx m_map2_curve_offset_edit;
+  CSpinButtonCtrlEx m_map2_curve_gradient_spin;
+  CEditEx m_map2_curve_gradient_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;

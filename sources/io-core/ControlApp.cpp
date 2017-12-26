@@ -650,7 +650,7 @@ bool CControlApp::Parse_ANGLES_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::FunSetPar& m_FunSetPar = m_recepted_packet.m_FunSetPar;
- if (size != (mp_pdp->isHex() ? 33 : 17))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 41 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Номер семейства характеристик используемого для бензина
@@ -684,6 +684,18 @@ bool CControlApp::Parse_FUNSET_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map_curve_gradient, true))
   return false;
  m_FunSetPar.map_curve_gradient = ((float)map_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
+
+ //Смещение кривой ДАД2
+ int map2_curve_offset = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &map2_curve_offset, true))
+  return false;
+ m_FunSetPar.map2_curve_offset = ((float)map2_curve_offset) * m_adc_discrete;
+
+ //Наклон кривой ДАД2
+ int map2_curve_gradient = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &map2_curve_gradient, true))
+  return false;
+ m_FunSetPar.map2_curve_gradient = ((float)map2_curve_gradient) / (MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete * 128.0f);
 
  //TPS sensor curve offset
  int tps_curve_offset = 0;
@@ -2765,6 +2777,10 @@ void CControlApp::Build_FUNSET_PAR(FunSetPar* packet_data)
  mp_pdp->Bin16ToHex(map_curve_offset, m_outgoing_packet);
  int map_curve_gradient = MathHelpers::Round(128.0f * packet_data->map_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
  mp_pdp->Bin16ToHex(map_curve_gradient, m_outgoing_packet);
+ int map2_curve_offset = MathHelpers::Round(packet_data->map2_curve_offset / m_adc_discrete);
+ mp_pdp->Bin16ToHex(map2_curve_offset, m_outgoing_packet);
+ int map2_curve_gradient = MathHelpers::Round(128.0f * packet_data->map2_curve_gradient * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER * m_adc_discrete);
+ mp_pdp->Bin16ToHex(map2_curve_gradient, m_outgoing_packet);
  int tps_curve_offset = MathHelpers::Round(packet_data->tps_curve_offset / m_adc_discrete);
  mp_pdp->Bin16ToHex(tps_curve_offset, m_outgoing_packet);
  int tps_curve_gradient = MathHelpers::Round(128.0f * packet_data->tps_curve_gradient * (TPS_PHYSICAL_MAGNITUDE_MULTIPLIER*64) * m_adc_discrete);

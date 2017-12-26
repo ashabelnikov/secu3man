@@ -47,7 +47,10 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_OFFSET2_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MAP_CALC_BUTTON, OnMapCalcButton)
+ ON_BN_CLICKED(IDC_PD_MAP_CALC2_BUTTON, OnMap2CalcButton)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_SPIN,OnUpdateControls)
@@ -79,6 +82,12 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET2_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET2_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET2_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_OFFSET2_UNIT,OnUpdateControlsSECU3i)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_OFFSET_CAPTION,OnUpdateControls)
@@ -88,6 +97,14 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT2_SPIN,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT2_CAPTION,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_CURVE_GRADIENT2_UNIT,OnUpdateControlsSECU3i)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_SENSOR2_GROUP,OnUpdateControlsSECU3i)
+
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_CURVE_GRADIENT_CAPTION,OnUpdateControls)
@@ -98,15 +115,19 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_TPS_SENSOR_GROUP,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MAP_CALC2_BUTTON, OnUpdateControlsSECU3i)
 END_MESSAGE_MAP()
 
 CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CFunSetPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_enable_secu3t_features(false)
 , m_map_grad_edit(CEditEx::MODE_FLOAT, true)
 , m_press_swing_edit(CEditEx::MODE_FLOAT, true)
 , m_map_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_map_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
+, m_map2_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_map2_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , m_tps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
@@ -117,6 +138,8 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
  m_params.fn_gas = 1;
  m_params.map_curve_offset = 0.547f;
  m_params.map_curve_gradient = 20.9f;
+ m_params.map2_curve_offset = 0.547f;
+ m_params.map2_curve_gradient = 20.9f;
  m_params.tps_curve_offset = 0.4f; //(V)
  m_params.tps_curve_gradient = 25.64f; //(%/V)
  m_params.load_src_cfg = 0;
@@ -145,18 +168,25 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_map_grad_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_map_curve_offset_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET_SPIN, m_map_curve_offset_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET2_EDIT, m_map2_curve_offset_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_OFFSET2_SPIN, m_map2_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_map_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_SPIN, m_map_curve_gradient_spin);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, m_map2_curve_gradient_edit);
+ DDX_Control(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_SPIN, m_map2_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_tps_curve_offset_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_SPIN, m_tps_curve_offset_spin);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_tps_curve_gradient_edit);
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN, m_tps_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_MAP_CALC_BUTTON, m_calc_map_btn);
+ DDX_Control(pDX, IDC_PD_MAP_CALC2_BUTTON, m_calc_map2_btn);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
  m_map_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET_EDIT, m_params.map_curve_offset);
  m_map_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT_EDIT, m_params.map_curve_gradient);
+ m_map2_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_OFFSET2_EDIT, m_params.map2_curve_offset);
+ m_map2_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_CURVE_GRADIENT2_EDIT, m_params.map2_curve_gradient);
  m_tps_curve_offset_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_OFFSET_EDIT, m_params.tps_curve_offset);
  m_tps_curve_gradient_edit.DDX_Value(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT, m_params.tps_curve_gradient);
  DDX_CBIndex_UCHAR(pDX, IDC_PD_FUNSET_BENZIN_MAPS_COMBO, m_params.fn_benzin);
@@ -176,11 +206,19 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
+void CFunSetPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features);
+}
+
 BOOL CFunSetPageDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
  m_calc_map_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
+                            MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
+
+ m_calc_map2_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CALC_UP), MAKEINTRESOURCE(IDB_CALC_DOWN), 
                             MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
 
  m_map_grad_spin.SetBuddy(&m_map_grad_edit);
@@ -206,6 +244,18 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map_curve_gradient_edit.SetDecimalPlaces(3);
  m_map_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
  m_map_curve_gradient_edit.SetRange(-150.0f,150.0f);
+
+ m_map2_curve_offset_spin.SetBuddy(&m_map2_curve_offset_edit);
+ m_map2_curve_offset_edit.SetLimitText(5);
+ m_map2_curve_offset_edit.SetDecimalPlaces(3);
+ m_map2_curve_offset_spin.SetRangeAndDelta(-5.0f,5.0f,0.0025f);
+ m_map2_curve_offset_edit.SetRange(-5.0f,5.0f);
+
+ m_map2_curve_gradient_spin.SetBuddy(&m_map2_curve_gradient_edit);
+ m_map2_curve_gradient_edit.SetLimitText(5);
+ m_map2_curve_gradient_edit.SetDecimalPlaces(3);
+ m_map2_curve_gradient_spin.SetRangeAndDelta(-150.0f,150.0f,0.01f);
+ m_map2_curve_gradient_edit.SetRange(-150.0f,150.0f);
 
  m_tps_curve_offset_spin.SetBuddy(&m_tps_curve_offset_edit);
  m_tps_curve_offset_edit.SetLimitText(5);
@@ -236,7 +286,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.5f);
+ mp_scr->SetViewSizeF(.0f, 1.9f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -245,6 +295,11 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_map_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_map_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_map2_curve_offset_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map2_curve_offset_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map2_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_map2_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_press_swing_edit, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_press_swing_spin, MLL::GetString(IDS_PD_FUNSET_PRESS_SWING_EDIT_TT)));
@@ -256,6 +311,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_edit, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_tps_curve_gradient_spin, MLL::GetString(IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_calc_map_btn, MLL::GetString(IDS_PD_MAP_CALC_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_calc_map2_btn, MLL::GetString(IDC_PD_MAP_CALC2_BUTTON_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_maps_combo, MLL::GetString(IDS_PD_FUNSET_GAS_MAPS_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_benzin_maps_combo, MLL::GetString(IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT)));
 
@@ -296,6 +352,18 @@ void CFunSetPageDlg::OnMapCalcButton()
  }
 }
 
+void CFunSetPageDlg::OnMap2CalcButton()
+{
+ float offset = m_params.map2_curve_offset, gradient = m_params.map2_curve_gradient; 
+ if (CMAPCalcController::Calculate(offset, gradient))
+ {
+  m_params.map2_curve_offset = offset;
+  m_params.map2_curve_gradient = gradient;
+  UpdateData(false);
+  OnChangeNotify(); //notify event receiver about change
+ }
+}
+
 //enable/disable all controls
 void CFunSetPageDlg::Enable(bool enable)
 {
@@ -310,6 +378,18 @@ void CFunSetPageDlg::Enable(bool enable)
 bool CFunSetPageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CFunSetPageDlg::EnableSECU3TItems(bool i_enable)
+{
+ if (m_enable_secu3t_features == i_enable)
+  return; //already has needed state
+ m_enable_secu3t_features = i_enable;
+ if (::IsWindow(m_hWnd))
+ {
+  UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
 }
 
 //Fills comboboxes of sets of tables

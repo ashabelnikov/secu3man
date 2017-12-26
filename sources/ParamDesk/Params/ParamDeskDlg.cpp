@@ -617,6 +617,7 @@ void CParamDeskDlg::EnableSECU3TItems(bool i_enable)
  m_pADCCompenPageDlg->EnableSECU3TItems(i_enable);
  m_pMiscPageDlg->EnableSECU3TItems(i_enable);
  m_pTemperPageDlg->EnableSECU3TItems(i_enable);
+ m_pFunSetPageDlg->EnableSECU3TItems(i_enable);
 }
 
 void CParamDeskDlg::EnableExtraIO(bool i_enable)
