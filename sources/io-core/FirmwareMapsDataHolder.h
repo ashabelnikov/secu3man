@@ -113,6 +113,7 @@ struct FWMapsDataHolder
  float gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dosator position
  float barocorr_table[BAROCORR_SIZE+2]; //barometric correction
  float pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
+ float tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)

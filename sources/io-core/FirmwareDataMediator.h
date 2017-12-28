@@ -171,6 +171,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetManIgntimMap(float* op_values, bool i_original = false);
   void SetManIgntimMap(const float* i_values);
 
+  void GetTmp2CurveMap(float* op_values, bool i_original = false);
+  void SetTmp2CurveMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {
@@ -248,10 +251,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_INJ_O8     =  62,     // INJ_O8    (output)
    IOP3I_IGNTIM     =  63,     // IGNTIM    (input)
    IOP3I_MAP2       =  64,     // MAP2      (input)
-// IOP3I_RESERVED13 =  65,     // Reserved    ()
+   IOP3I_TMP2       =  65,     // TEMP2     (input)
 // IOP3I_RESERVED14 =  66,     // Reserved    ()
 // IOP3I_RESERVED15 =  67,     // Reserved    ()
-   IOP3I_COUNT      =  65,     //DON'T forget to update this value
+   IOP3I_COUNT      =  66,     //DON'T forget to update this value
 
    //SECU-3T:
    IOP_IGN_OUT1   =   0,     // IGN_OUT1    (output)

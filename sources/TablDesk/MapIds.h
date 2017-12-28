@@ -60,8 +60,9 @@ enum EMapTypes
  TYPE_MAP_GASDOSE      = 29, //
  TYPE_MAP_BAROCORR     = 30, //
  TYPE_MAP_MANIGNTIM    = 31, //
+ TYPE_MAP_TMP2_CURVE   = 32, //
 
- TYPE_MAP_GME_WND      = 32, //pseudo map, grid mode editing window
+ TYPE_MAP_GME_WND      = 33, //pseudo map, grid mode editing window
 
  TYPE_MAP_SET_START    = 1,
  TYPE_MAP_SET_END      = 22

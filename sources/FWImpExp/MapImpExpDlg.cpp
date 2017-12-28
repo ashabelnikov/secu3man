@@ -88,6 +88,7 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_GASDOSE_MAP] = FALSE;
  m_fwd_flags[FLAG_BAROCORR_MAP] = FALSE;
  m_fwd_flags[FLAG_MANIT_MAP] = FALSE;
+ m_fwd_flags[FLAG_TMP2CURVE_MAP] = FALSE;
 }
 
 void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
@@ -132,6 +133,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_GASDOSE_FLAG, m_fwd_flags[FLAG_GASDOSE_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_BAROCORR_FLAG, m_fwd_flags[FLAG_BAROCORR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_MANIT_FLAG, m_fwd_flags[FLAG_MANIT_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_TMP2CURVE_FLAG, m_fwd_flags[FLAG_TMP2CURVE_MAP]);
 
  //ignition
  DDX_Control(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags_buttons[FLAG_START_MAP]);
@@ -167,6 +169,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_GASDOSE_FLAG, m_fwd_flags_buttons[FLAG_GASDOSE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_BAROCORR_FLAG, m_fwd_flags_buttons[FLAG_BAROCORR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_MANIT_FLAG, m_fwd_flags_buttons[FLAG_MANIT_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_TMP2CURVE_FLAG, m_fwd_flags_buttons[FLAG_TMP2CURVE_MAP]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -411,6 +414,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_GASDOSE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_BAROCORR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_MANIT_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_TMP2CURVE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

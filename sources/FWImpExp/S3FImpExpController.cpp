@@ -143,6 +143,9 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
   memcpy(mp_fwd->gasdose_pos_table, mp_s3f_io->GetData().gasdose_pos_table, sizeof(float) * GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_TMP2CURVE_MAP))
+  memcpy(mp_fwd->tmp2_curve, mp_s3f_io->GetData().tmp2_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
@@ -267,6 +270,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0104 = (mp_s3f_io->GetVersion() > 0x0103);
  bool sv0105 = (mp_s3f_io->GetVersion() > 0x0104);
  bool sv0106 = (mp_s3f_io->GetVersion() > 0x0105);
+ bool sv0107 = (mp_s3f_io->GetVersion() > 0x0106);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps();
 
@@ -318,6 +322,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
  mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);
  mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -328,6 +333,8 @@ void S3FImportController::OnViewActivate(void)
 
  mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false && sepmap);  //since todo
  mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false && sepmap);     //since todo
+
+ mp_view->EnableFWDFlag(FLAG_TMP2CURVE_MAP, sv0107 && sepmap);  //since v01.07
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -445,6 +452,9 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GASDOSE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().gasdose_pos_table, mp_fwd->gasdose_pos_table, sizeof(float) * GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_TMP2CURVE_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().tmp2_curve, mp_fwd->tmp2_curve, sizeof(float) * (THERMISTOR_LOOKUP_TABLE_SIZE+2));
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -575,6 +585,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, false);    //todo
+ mp_view->EnableFWDFlag(FLAG_TPSSWT_MAP, false); //todo
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -583,8 +594,13 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
- mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);  //todo
- mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);     //todo
+ mp_view->SetFWDFlag(FLAG_BAROCORR_MAP, false);
+ mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
+
+ mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false);    //todo
+ mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false); //todo
+
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

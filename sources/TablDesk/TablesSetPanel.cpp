@@ -388,6 +388,57 @@ void __cdecl CTablesSetPanel::OnCloseManIgntimTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeTmp2CurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_TMP2_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseTmp2CurveTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_tmp2_curve_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_tmp2_curve_map_wnd_handle, TYPE_MAP_TMP2_CURVE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (i_type > 1)
+ {
+  ASSERT(0);
+ }
+ else
+  _this->GetTmp2CurveMap(false)[16 + i_type] = i_value;
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_TMP2_CURVE);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -400,8 +451,9 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_cts_curve_enabled(false)
 , m_choke_op_enabled(false)
 , m_gasdose_enabled(false)
+, m_tmp2_curve_enabled(false)
 {
- m_scrl_factor = 2.80f;
+ m_scrl_factor = 2.90f;
 
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
@@ -412,6 +464,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_gasdose_map_chart_state = 0;
  m_barocorr_map_chart_state = 0;
  m_manigntim_map_chart_state = 0;
+ m_tmp2_curve_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
@@ -422,6 +475,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_gasdose_map_wnd_handle = NULL;
  m_barocorr_map_wnd_handle = NULL;
  m_manigntim_map_wnd_handle = NULL;
+ m_tmp2_curve_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -450,6 +504,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, m_view_barocorr_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, m_view_manigntim_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, m_view_tmp2_curve_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -465,6 +520,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_EDIT_CEPAR, OnCESettingsButton)
  ON_BN_CLICKED(IDC_TD_VIEW_BAROCORR_MAP, OnViewBarocorrMap)
  ON_BN_CLICKED(IDC_TD_VIEW_MANIGNTIM_MAP, OnViewManIgntimMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_TMP2_CURVE, OnViewTmp2CurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -479,6 +535,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_EDIT_CEPAR, OnUpdateCESettingsButton)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_BAROCORR_MAP, OnUpdateViewBarocorrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_MANIGNTIM_MAP, OnUpdateViewManIgntimMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TMP2_CURVE, OnUpdateViewTmp2CurveMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -586,6 +643,14 @@ void CTablesSetPanel::OnUpdateViewManIgntimMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_manigntim_map_chart_state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewTmp2CurveMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_tmp2_curve_map_chart_state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -620,6 +685,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_barocorr_map_chart_state)
   DLL::Chart2DUpdate(m_barocorr_map_wnd_handle, GetBarocorrMap(true), GetBarocorrMap(false));
+
+ if (m_tmp2_curve_map_chart_state)
+  DLL::Chart2DUpdate(m_tmp2_curve_map_wnd_handle, GetTmp2CurveMap(true), GetTmp2CurveMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -658,6 +726,15 @@ void CTablesSetPanel::EnableGasdose(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_gasdose_map_chart_state && ::IsWindow(m_gasdose_map_wnd_handle))
   DLL::Chart3DEnable(m_gasdose_map_wnd_handle, enable && Super::IsAllowed());
+}
+
+void CTablesSetPanel::EnableTmp2Curve(bool enable)
+{
+ m_tmp2_curve_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_tmp2_curve_map_chart_state && ::IsWindow(m_tmp2_curve_map_wnd_handle))
+  DLL::Chart2DEnable(m_tmp2_curve_map_wnd_handle, enable && Super::IsAllowed());
 }
 
 //изменилось выделение в спимке семейств характеристик
@@ -986,6 +1063,44 @@ void CTablesSetPanel::OnViewBarocorrMap()
  }
 }
 
+void CTablesSetPanel::OnViewTmp2CurveMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_tmp2_curve_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_tmp2_curve_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_tmp2_curve_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_tmp2_curve_map_chart_state = 1;
+  m_tmp2_curve_map_wnd_handle = DLL::Chart2DCreate(GetTmp2CurveMap(true), GetTmp2CurveMap(false), -40.0, 120.0, NULL, 16,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_TMP2_CURVE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_tmp2_curve_map_wnd_handle, 1, _T("%.02f"));
+  DLL::Chart2DSetPtValuesFormat(m_tmp2_curve_map_wnd_handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_tmp2_curve_map_wnd_handle, 0.25f);
+  DLL::Chart2DSetAxisEdits(m_tmp2_curve_map_wnd_handle, 1, true, 0, 9.1f, 0, 9.1f, 0.01f, 5, 2, OnChangeTmp2CurveXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_tmp2_curve_map_wnd_handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_tmp2_curve_map_wnd_handle, OnChangeTmp2CurveTable, this);
+  DLL::Chart2DSetOnClose(m_tmp2_curve_map_wnd_handle, OnCloseTmp2CurveTable, this);
+  DLL::Chart2DUpdate(m_tmp2_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_tmp2_curve_map_wnd_handle, 1, GetTmp2CurveMap(false)[16], GetTmp2CurveMap(false)[16+1]);
+
+  //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_tmp2_curve_map_wnd_handle, TYPE_MAP_TMP2_CURVE);
+
+  DLL::Chart2DShow(m_tmp2_curve_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_tmp2_curve_map_wnd_handle);
+ }
+}
+
 void CTablesSetPanel::OnViewManIgntimMap()
 {
  //If button was released, then close editor's window
@@ -1136,6 +1251,14 @@ float* CTablesSetPanel::GetManIgntimMap(bool i_original)
   return m_manigntim_map_active;
 }
 
+float* CTablesSetPanel::GetTmp2CurveMap(bool i_original)
+{
+ if (i_original)
+  return m_tmp2_curve_map_original;
+ else
+  return m_tmp2_curve_map_active;
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -1162,6 +1285,8 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
   return m_barocorr_map_chart_state ? m_barocorr_map_wnd_handle : NULL;
  case TYPE_MAP_MANIGNTIM:
   return m_manigntim_map_chart_state ? m_manigntim_map_wnd_handle : NULL;
+ case TYPE_MAP_TMP2_CURVE:
+  return m_tmp2_curve_map_chart_state ? m_tmp2_curve_map_wnd_handle : NULL;
 
  default:
   return NULL;

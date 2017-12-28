@@ -807,6 +807,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_BAROCORR), TYPE_MAP_BAROCORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
@@ -861,6 +862,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
  m_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
  m_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ m_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
@@ -1017,6 +1019,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false),false);
  m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(true),true);
+
+ m_fwdm->GetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(false),false);
+ m_fwdm->GetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(true),true);
  
  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1246,6 +1251,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_MANIGNTIM:
    m_fwdm->SetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false));
+   break;
+  case TYPE_MAP_TMP2_CURVE:
+   m_fwdm->SetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(false));
    break;
  }
 }

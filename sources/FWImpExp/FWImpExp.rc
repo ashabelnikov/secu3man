@@ -65,6 +65,7 @@ BEGIN
     CONTROL         "Карта положения ДГ",IDC_MAP_IMPEXP_GASDOSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,252,90,8
     CONTROL         "Баромет. коррекция",IDC_MAP_IMPEXP_BAROCORR_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,266,90,8
     CONTROL         "Ручная октан.корр.",IDC_MAP_IMPEXP_MANIT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,280,90,8
+    CONTROL         "Табл. кривой ДТГ",IDC_MAP_IMPEXP_TMP2CURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,294,90,8
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END
 
@@ -159,7 +160,8 @@ BEGIN
     CONTROL         "Gas valve position",IDC_MAP_IMPEXP_GASDOSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,252,90,8
     CONTROL         "Barometric corr.",IDC_MAP_IMPEXP_BAROCORR_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,266,90,8
     CONTROL         "Manual ign.timing",IDC_MAP_IMPEXP_MANIT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,280,90,8
-    LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
+    CONTROL         "GTS curve",IDC_MAP_IMPEXP_TMP2CURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,294,90,8
+LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 END
 
 /////////////////////////////////////////////////////////////////////////////

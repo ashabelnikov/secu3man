@@ -179,10 +179,13 @@ typedef struct
  //table for manual setting of ign.timing
  _char pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
 
+ //Gas temperature (TEMP2) sensor lookup table, last two values are related voltage limits for x-axis
+ _int tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
+
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[296];
+ _uchar reserved[260];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1192,6 +1195,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetGasdosePosMap(op_fwd->gasdose_pos_table);   //GD
  GetBarocorrMap(op_fwd->barocorr_table);
  GetManIgntimMap(op_fwd->pa4_igntim_corr);
+ GetTmp2CurveMap(op_fwd->tmp2_curve);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1243,6 +1247,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetGasdosePosMap(ip_fwd->gasdose_pos_table); //GD
  SetBarocorrMap(ip_fwd->barocorr_table);
  SetManIgntimMap(ip_fwd->pa4_igntim_corr);
+ SetTmp2CurveMap(ip_fwd->tmp2_curve);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1593,6 +1598,35 @@ void CFirmwareDataMediator::SetManIgntimMap(const float* ip_values)
 
  for (int i = 0; i < PA4_LOOKUP_TABLE_SIZE; i++ )
   p_fd->exdata.pa4_igntim_corr[i] = MathHelpers::Round((ip_values[i]*AA_MAPS_M_FACTOR));
+}
+
+void CFirmwareDataMediator::GetTmp2CurveMap(float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
+  op_values[i] = ((float)p_fd->exdata.tmp2_curve[i]) / 4.0f;
+
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  op_values[i] = ((float)p_fd->exdata.tmp2_curve[i]) * ADC_DISCRETE;
+}
+
+void CFirmwareDataMediator::SetTmp2CurveMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ int i = 0;
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE; i++ )
+  p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
+ for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
+  p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

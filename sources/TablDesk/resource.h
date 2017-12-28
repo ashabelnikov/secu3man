@@ -322,3 +322,5 @@
 #define IDC_TD_VIEW_TPSSWT_MAP          5581
 #define IDS_MAPS_TPSSWT_UNIT            5582
 #define IDS_TPSSWT_MAP                  5583
+#define IDC_TD_VIEW_TMP2_CURVE          5584
+#define IDS_TMP2_CURVE_MAP              5585

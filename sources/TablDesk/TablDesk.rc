@@ -150,6 +150,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
     CONTROL         "Ручн.октан.корр.",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
+    CONTROL         "Настр. крив ДТГ",IDC_TD_VIEW_TMP2_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,423,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -522,6 +524,7 @@ BEGIN
     IDS_MANIGNTIM_MAP       "Функция ручной коррекции УОЗ"
     IDS_MAPS_TPSSWT_UNIT    "ДПДЗ (%)"
     IDS_TPSSWT_MAP          "Положение дроссельной заслонки при котором достигается 100кПа"
+    IDS_TMP2_CURVE_MAP      "Настройка кривой датчика температуры 2 (ДТГ)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -669,6 +672,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
     CONTROL         "Manual ign.timing",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
+    CONTROL         "Tune GTS curve",IDC_TD_VIEW_TMP2_CURVE,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,423,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1056,6 +1061,7 @@ BEGIN
     IDS_MANIGNTIM_MAP       "Manual correction of ignition timing"
     IDS_MAPS_TPSSWT_UNIT    "TPS (%)"
     IDS_TPSSWT_MAP          "Throttle position at which MAP reaches 100kPa"
+    IDS_TMP2_CURVE_MAP      "Tune TEMP2 temperature sensor curve"
 END
 
 /////////////////////////////////////////////////////////////////////////////

@@ -64,6 +64,7 @@ enum EFWDFlags
  FLAG_GASDOSE_MAP,  //separate
  FLAG_BAROCORR_MAP, //separate 
  FLAG_MANIT_MAP,    //separate 
+ FLAG_TMP2CURVE_MAP,//separate 
  FLAG_NR_OF_FLAGS
 };
 
