@@ -83,6 +83,9 @@ namespace SECU3IO
   float inj_pw;                         //injector pulse width in ms
 
   int tpsdot;                           //TPS dot (d%/dt)
+
+  float map2;                           // MAP2 (gas pressure)
+  float tmp2;                           // TMP2 (gas temperature)
  };
 
  struct DbgvarDat
