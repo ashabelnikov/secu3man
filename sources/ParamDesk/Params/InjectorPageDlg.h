@@ -49,6 +49,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void Enable(bool enable);
   bool IsEnabled(void);
+  void EnableSECU3TItems(bool i_enable);
 
   void GetValues(SECU3IO::InjctrPar* o_values);
   void SetValues(const SECU3IO::InjctrPar* i_values);
@@ -65,6 +66,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInjTiming(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInjTiming_g(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -86,6 +88,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  private:
   SECU3IO::InjctrPar m_params;
   bool m_enabled;
+  bool m_enable_secu3t_features;
 
   CSpinButtonCtrlEx m_cyldisp_spin;
   CEditEx m_cyldisp_edit;
@@ -102,6 +105,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_inj_usetimingmap_check[2];
   CSpinButtonCtrlEx m_fff_const_spin;
   CEditEx m_fff_const_edit;
+  CButton m_inj_useaddcorrs_check;
 
   float m_fuel_density[2];  //fuel density (g/cc)
 

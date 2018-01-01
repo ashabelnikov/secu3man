@@ -378,6 +378,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  m_view->mp_TablesPanel->EnableGasdose(true);
  m_view->mp_TablesPanel->EnableFuelInjection(true);
  m_view->mp_TablesPanel->EnableCarbAfr(true);
+ m_view->mp_TablesPanel->EnableGasCorr(true);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(true);
  m_view->mp_ParamDeskDlg->EnableCKPSItems(true);
  m_view->mp_ParamDeskDlg->EnableHallWndWidth(true);
@@ -498,6 +499,12 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetTpsswtMap(funset_index,m_view->mp_TablesPanel->GetTpsswtMap(false),false);
  m_eedm->GetTpsswtMap(funset_index,m_view->mp_TablesPanel->GetTpsswtMap(true),true);
+
+ m_eedm->GetGtscMap(funset_index,m_view->mp_TablesPanel->GetGtscMap(false),false);
+ m_eedm->GetGtscMap(funset_index,m_view->mp_TablesPanel->GetGtscMap(true),true);
+
+ m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
+ m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
 }
 
 
@@ -603,6 +610,12 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_TPSSWT:
    m_eedm->SetTpsswtMap(funset_index, m_view->mp_TablesPanel->GetTpsswtMap(false));
+   break;
+  case TYPE_MAP_INJ_GTSC:
+   m_eedm->SetGtscMap(funset_index, m_view->mp_TablesPanel->GetGtscMap(false));
+   break;
+  case TYPE_MAP_INJ_GPSC:
+   m_eedm->SetGpscMap(funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
    break;
  }
 }

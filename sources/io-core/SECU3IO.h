@@ -337,6 +337,8 @@ namespace SECU3IO
  const int ETMT_IACCW_MAP = 20;         //weight of mixture correction vs IAC pos.
  const int ETMT_IATCLT_MAP = 21;        //IAT/CLT correction vs air flow
  const int ETMT_TPSSWT_MAP = 22;        //MAP/TPS switch point vs RPM
+ const int ETMT_GTSC_MAP = 23;          //Inj. PW correction coefficient vs gas temperature
+ const int ETMT_GPSC_MAP = 24;          //Inj. PW correction coefficient vs gas pressure
 
  struct SepTabPar
  {
@@ -490,6 +492,7 @@ namespace SECU3IO
  struct InjctrPar
  {
   bool inj_usetimingmap[2];           //Use timing map instead of constant parameter
+  bool inj_useaddcorrs;               //Use additional corrections (gas.eq.)
   int inj_config[2];                  //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
   int inj_squirt_num[2];              //Number of squirts per cycle
   float inj_flow_rate[2];             //Injector flow rate

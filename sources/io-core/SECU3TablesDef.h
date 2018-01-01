@@ -72,7 +72,10 @@ typedef struct
 
  _uchar inj_tpsswt[INJ_TPSSWT_SIZE];                   // MAP/TPS switch point
 
- _uchar reserved[48];                                  // reserved bytes - for compatibility
+ _uchar inj_gts_corr[INJ_GTS_CORR_SIZE];               // PW correction from gas temperature sensor, value * 128, max. 1.99
+ _uchar inj_gps_corr[INJ_GPS_CORR_SIZE+2];             //PW correction from gas pressure sensor, value * 128, max. 1.99, last two values are pressures (value in kPa / 2)
+
+ _uchar reserved[21];                                  // reserved bytes - for compatibility
 }f_data_t;
 
 static int w12GetCell(BYTE* data, int cellOffset)

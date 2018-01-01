@@ -106,6 +106,10 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->inj_iatclt_corr;
   case TYPE_MAP_INJ_TPSSWT:
    return p_maps->inj_tpsswt;
+  case TYPE_MAP_INJ_GTSC:
+   return p_maps->inj_gts_corr;
+  case TYPE_MAP_INJ_GPSC:
+   return p_maps->inj_gps_corr;
  }
  return NULL; //undefined type of map
 }
@@ -159,6 +163,10 @@ size_t _GetMapSize(int i_mapType)
    return INJ_IATCLT_CORR_SIZE+2;
   case TYPE_MAP_INJ_TPSSWT:
    return INJ_TPSSWT_SIZE;
+  case TYPE_MAP_INJ_GTSC:
+   return INJ_GTS_CORR_SIZE;
+  case TYPE_MAP_INJ_GPSC:
+   return INJ_GPS_CORR_SIZE+2;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -347,6 +355,7 @@ void CPMTablesController::ApplyFWOptions(DWORD opt)
  mp_view->mp_ButtonsPanel->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT));
  mp_view->mp_ButtonsPanel->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL));
  mp_view->mp_ButtonsPanel->EnableCarbAfr(CHECKBIT32(opt, COPT_CARB_AFR));
+ mp_view->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, COPT_SECU3T));
 }
 
 //----------------------------------------------------------------
@@ -437,6 +446,12 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_TPSSWT_MAP: //MAP/TPS switch point vs RPM
    UpdateMap(m_maps->inj_tpsswt, m_maps_flags->inj_tpsswt, data);
+   break;
+  case ETMT_GTSC_MAP: //Inj. PW correction coefficient  vs gas temperature
+   UpdateMap(m_maps->inj_gts_corr, m_maps_flags->inj_gts_corr, data);
+   break;
+  case ETMT_GPSC_MAP: //Inj. PW correction coefficient  vs gas pressure
+   UpdateMap(m_maps->inj_gps_corr, m_maps_flags->inj_gps_corr, data);
    break;
 
   default: ASSERT(0);

@@ -796,6 +796,8 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT), TYPE_MAP_INJ_IATCLT);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GTSC), TYPE_MAP_INJ_GTSC);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GPSC), TYPE_MAP_INJ_GPSC);
 
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
@@ -863,6 +865,7 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
  m_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
  m_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ m_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
@@ -1093,6 +1096,12 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(false),false);
  m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(true),true);
+
+ m_fwdm->GetGtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGtscMap(false),false);
+ m_fwdm->GetGtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGtscMap(true),true);
+
+ m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
+ m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1222,6 +1231,14 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_TPSSWT:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetTpsswtMap(m_current_funset_index, m_view->mp_TablesPanel->GetTpsswtMap(false));
+   break;
+  case TYPE_MAP_INJ_GTSC:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetGtscMap(m_current_funset_index, m_view->mp_TablesPanel->GetGtscMap(false));
+   break;
+  case TYPE_MAP_INJ_GPSC:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetGpscMap(m_current_funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
    break;
 
    //separate maps

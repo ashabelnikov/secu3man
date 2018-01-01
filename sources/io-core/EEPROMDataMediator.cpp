@@ -782,3 +782,60 @@ void EEPROMDataMediator::SetTpsswtMap(int i_index,const float* ip_values)
  for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
   p_maps[i_index].inj_tpsswt[i] = MathHelpers::Round((ip_values[i]*TPSSWT_MAPS_M_FACTOR));
 }
+
+void EEPROMDataMediator::GetGtscMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_GTS_CORR_SIZE; i++ )
+  op_values[i] = ((float)p_maps->inj_gts_corr[i]) / 128.0f;
+}
+
+void EEPROMDataMediator::SetGtscMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_GTS_CORR_SIZE; i++ )
+  p_maps->inj_gts_corr[i] = MathHelpers::Round((ip_values[i]*128.0f));
+}
+
+void EEPROMDataMediator::GetGpscMap(int i_index, float* op_values, bool i_original /*= false*/)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_GPS_CORR_SIZE; i++ )
+ {
+  float value = (float)p_maps->inj_gps_corr[i];
+  op_values[i] = (value / 128.0f);
+ }
+
+ for (; i < INJ_GPS_CORR_SIZE+2; i++ )
+ {
+  float value = (float)p_maps->inj_gps_corr[i];
+  op_values[i] = value * 2.0f;
+ }
+}
+
+void EEPROMDataMediator::SetGpscMap(int i_index, const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ int i = 0;
+ for (; i < INJ_GPS_CORR_SIZE; i++ )
+  p_maps->inj_gps_corr[i] = MathHelpers::Round(ip_values[i] * 128.0f);
+ for (; i < INJ_GPS_CORR_SIZE+2; i++ )
+  p_maps->inj_gps_corr[i] = MathHelpers::Round(ip_values[i] / 2.0f);
+}

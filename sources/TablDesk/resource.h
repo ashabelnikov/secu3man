@@ -324,3 +324,8 @@
 #define IDS_TPSSWT_MAP                  5583
 #define IDC_TD_VIEW_TMP2_CURVE          5584
 #define IDS_TMP2_CURVE_MAP              5585
+#define IDC_TD_VIEW_GTSC_MAP            5586
+#define IDC_TD_VIEW_GPSC_MAP            5587
+#define IDS_GTSC_MAP                    5588
+#define IDS_GPSC_MAP                    5589
+#define IDS_MAPS_PRESS_UNIT             5590

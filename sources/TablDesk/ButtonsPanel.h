@@ -77,6 +77,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetIACCWMap(bool i_original);
   float* GetIATCLTMap(bool i_original);
   float* GetTpsswtMap(bool i_original);
+  float* GetGtscMap(bool i_original);
+  float* GetGpscMap(bool i_original);
 
   float* GetRPMGrid(void);
 
@@ -93,6 +95,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void EnableGasdose(bool i_enable);
 
   virtual void EnableCarbAfr(bool i_enable);
+
+  void EnableGasCorr(bool i_enable);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
@@ -127,6 +131,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewIACCWMap();
   afx_msg void OnViewIATCLTMap();
   afx_msg void OnViewTpsswtMap();
+  afx_msg void OnViewGtscMap();
+  afx_msg void OnViewGpscMap();
 
   afx_msg void OnGridModeEditing();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
@@ -151,6 +157,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewIACCWMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIATCLTMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewTpsswtMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewGtscMap(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateViewGpscMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
@@ -193,6 +201,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_iaccw_map_btn;
   CButton m_view_iatclt_map_btn;
   CButton m_view_tpsswt_map_btn;
+  CButton m_view_gtsc_map_btn;
+  CButton m_view_gpsc_map_btn;
 
   CButton m_grid_mode_editing_check;
   std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
@@ -253,6 +263,11 @@ private:
   static void __cdecl OnChangeIATCLTXAxisEdit(void* i_param, int i_type, float i_value);
   static void __cdecl OnChangeTpsswtMap(void* i_param);
   static void __cdecl OnCloseTpsswtMap(void* i_param);
+  static void __cdecl OnChangeGtscMap(void* i_param);
+  static void __cdecl OnCloseGtscMap(void* i_param);
+  static void __cdecl OnChangeGpscMap(void* i_param);
+  static void __cdecl OnCloseGpscMap(void* i_param);
+  static void __cdecl OnChangeGpscXAxisEdit(void* i_param, int i_type, float i_value);
 
   static void __cdecl OnWndActivationVEMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAFRMap(void* i_param, long cmd);
@@ -272,6 +287,8 @@ private:
   static void __cdecl OnWndActivationIACCWMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIATCLTMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationTpsswtMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationGtscMap(void* i_param, long cmd);
+  static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
 
   void OnGridMapChanged(int mapType);
   void OnGridMapClosed(HWND, int);
@@ -301,6 +318,8 @@ private:
   int m_iaccw_map_chart_state;
   int m_iatclt_map_chart_state;
   int m_tpsswt_map_chart_state;
+  int m_gtsc_map_chart_state;
+  int m_gpsc_map_chart_state;
 
   HWND m_start_map_wnd_handle;
   HWND m_idle_map_wnd_handle;
@@ -324,6 +343,8 @@ private:
   HWND m_iaccw_map_wnd_handle;
   HWND m_iatclt_map_wnd_handle;
   HWND m_tpsswt_map_wnd_handle;
+  HWND m_gtsc_map_wnd_handle;
+  HWND m_gpsc_map_wnd_handle;
 
   float m_start_map_active[16];
   float m_start_map_original[16];
@@ -371,10 +392,15 @@ private:
   float m_iatclt_map_original[8+2];
   float m_tpsswt_map_active[16];
   float m_tpsswt_map_original[16];
+  float m_gtsc_map_active[16];
+  float m_gtsc_map_original[16];
+  float m_gpsc_map_active[9+2];
+  float m_gpsc_map_original[9+2];
 
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
   bool m_fuel_injection;
   bool m_gasdose;
   bool m_carb_afr;
+  bool m_en_gas_corr;
 };

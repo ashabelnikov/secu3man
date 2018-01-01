@@ -138,7 +138,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_TpsswtMapWnd_Y(_T("TpsSwtMapWnd_Y"))
 , m_Name_Tmp2CurveMapWnd_X(_T("Tmp2CurveMapWnd_X"))
 , m_Name_Tmp2CurveMapWnd_Y(_T("Tmp2CurveMapWnd_Y"))
-
+, m_Name_GtscMapWnd_X(_T("GTSCMapWnd_X"))
+, m_Name_GtscMapWnd_Y(_T("GTSCMapWnd_Y"))
+, m_Name_GpscMapWnd_X(_T("GPSCMapWnd_X"))
+, m_Name_GpscMapWnd_Y(_T("GPSCMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -724,6 +727,12 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, Tmp2CurveMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, Tmp2CurveMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GtscMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GtscMapWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -1106,6 +1115,18 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optTmp2CurveMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_Tmp2CurveMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optGtscMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GtscMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGtscMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GtscMapWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGpscMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GpscMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGpscMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GpscMapWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -1234,6 +1255,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optTpsswtMapWnd_Y = i_wndSettings.m_TpsswtMapWnd_Y;
  m_optTmp2CurveMapWnd_X = i_wndSettings.m_Tmp2CurveMapWnd_X;
  m_optTmp2CurveMapWnd_Y = i_wndSettings.m_Tmp2CurveMapWnd_Y; 
+ m_optGtscMapWnd_X = i_wndSettings.m_GtscMapWnd_X;
+ m_optGtscMapWnd_Y = i_wndSettings.m_GtscMapWnd_Y;
+ m_optGpscMapWnd_X = i_wndSettings.m_GpscMapWnd_X;
+ m_optGpscMapWnd_Y = i_wndSettings.m_GpscMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -1308,6 +1333,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_TpsswtMapWnd_Y = m_optTpsswtMapWnd_Y;
  o_wndSettings.m_Tmp2CurveMapWnd_X = m_optTmp2CurveMapWnd_X;
  o_wndSettings.m_Tmp2CurveMapWnd_Y = m_optTmp2CurveMapWnd_Y;
+ o_wndSettings.m_GtscMapWnd_X = m_optGtscMapWnd_X;
+ o_wndSettings.m_GtscMapWnd_Y = m_optGtscMapWnd_Y;
+ o_wndSettings.m_GpscMapWnd_X = m_optGpscMapWnd_X;
+ o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

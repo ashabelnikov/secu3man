@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FFFCONST_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
+ ON_BN_CLICKED(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnChangeData) 
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -99,6 +100,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_CHECK,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnUpdateControlsSECU3i)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_CAPTION,OnUpdateControls)
@@ -111,6 +113,7 @@ END_MESSAGE_MAP()
 CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjectorPageDlg::IDD, pParent)
 , m_enabled(false)
+, m_enable_secu3t_features(false)
 , m_cyldisp_edit(CEditEx::MODE_FLOAT, true)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
 , m_ovf_msgbox(false)
@@ -142,6 +145,8 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_cyl_disp = 0.375f;
  m_params.cyl_num = 4;
  m_params.fff_const = 16000.0f;
+
+ m_params.inj_useaddcorrs = false;
 }
 
 CInjectorPageDlg::~CInjectorPageDlg()
@@ -186,6 +191,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_inj_usetimingmap_check[0]);
  DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_inj_usetimingmap_check[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_USEADDCORRS_CHECK, m_inj_useaddcorrs_check);
 
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_EDIT, m_fff_const_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_SPIN, m_fff_const_spin);
@@ -205,6 +211,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap[0]);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_params.inj_usetimingmap[1]);
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEADDCORRS_CHECK, m_params.inj_useaddcorrs);
 
  m_fff_const_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FFFCONST_EDIT, m_params.fff_const);
 }
@@ -222,6 +229,11 @@ void CInjectorPageDlg::OnUpdateInjTiming(CCmdUI* pCmdUI)
 void CInjectorPageDlg::OnUpdateInjTiming_g(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && (m_inj_usetimingmap_check[1].GetCheck()!=BST_CHECKED));
+}
+
+void CInjectorPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -288,7 +300,7 @@ BOOL CInjectorPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 2.2f);
+ mp_scr->SetViewSizeF(.0f, 2.3f);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -356,6 +368,18 @@ void CInjectorPageDlg::Enable(bool enable)
 bool CInjectorPageDlg::IsEnabled(void)
 {
  return m_enabled;
+}
+
+void CInjectorPageDlg::EnableSECU3TItems(bool i_enable)
+{
+ if (m_enable_secu3t_features == i_enable)
+  return; //already has needed state
+ m_enable_secu3t_features = i_enable;
+ if (::IsWindow(m_hWnd))
+ {
+  UpdateDialogControls(this, TRUE);
+  RedrawWindow(); //strange, without this function call spin buttons don't update correctly...
+ }
 }
 
 //эту функцию необходимо использовать когда надо получить данные из диалога

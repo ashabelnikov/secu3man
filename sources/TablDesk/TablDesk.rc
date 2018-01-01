@@ -65,8 +65,12 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,431,96,18
     CONTROL         "Точ.перек. ДПДЗ",IDC_TD_VIEW_TPSSWT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,451,96,18
+    CONTROL         "Корр. от ДТГ",IDC_TD_VIEW_GTSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,471,96,18
+    CONTROL         "Корр. от ДДГ",IDC_TD_VIEW_GPSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,491,96,18
     CONTROL         "В виде таблиц",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,470,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,510,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -74,7 +78,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif", 0, 0, 0x1
 BEGIN
-    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,210,301
+    GROUPBOX        "Семейства характеристик",IDC_TD_MAP_GROUPBOX,3,3,210,323
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
@@ -125,33 +129,37 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,278,82,18
     CONTROL         "Точ.перек. ДПДЗ",IDC_TD_VIEW_TPSSWT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,278,96,18
+    CONTROL         "Корр. от ДТГ",IDC_TD_VIEW_GTSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,82,18
+    CONTROL         "Корр. от ДДГ",IDC_TD_VIEW_GPSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,300,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW |
-                    BS_BITMAP | WS_TABSTOP,3,313,16,19
+                    BS_BITMAP | WS_TABSTOP,3,333,16,19
     CONTROL         "Настр. накопления",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,313,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,333,82,19
     CONTROL         "Настройка аттенюатора",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,313,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,333,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,335,16,19
+                    BS_BITMAP | WS_TABSTOP,3,355,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,335,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,355,82,19
     CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,335,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,355,95,19
     CONTROL         "Настр. крив. ДТВ",IDC_TD_VIEW_ATS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,357,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,377,82,19
     CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,357,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,377,95,19
     CONTROL         "Полож. доз. газа",IDC_TD_VIEW_GDP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,379,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,399,82,19
     CONTROL         "Параметры CE",IDC_TD_EDIT_CEPAR,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,399,95,19
     CONTROL         "Барокоррекция",IDC_TD_VIEW_BAROCORR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,421,82,19
     CONTROL         "Ручн.октан.корр.",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,421,95,19
     CONTROL         "Настр. крив ДТГ",IDC_TD_VIEW_TMP2_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,423,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,443,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -521,10 +529,13 @@ BEGIN
     IDS_MAPS_AIRFLOW_UNIT   "Расход воздуха (нагрузка*обороты)"
     IDS_BAROCORR_MAP        "Настройка барометрической коррекции"
     IDS_MAPS_ATMOPRESS_UNIT "Атмосферное давление (кПа)"
+    IDS_MAPS_PRESS_UNIT     "Давление (кПа)"
     IDS_MANIGNTIM_MAP       "Функция ручной коррекции УОЗ"
     IDS_MAPS_TPSSWT_UNIT    "ДПДЗ (%)"
     IDS_TPSSWT_MAP          "Положение дроссельной заслонки при котором достигается 100кПа"
     IDS_TMP2_CURVE_MAP      "Настройка кривой датчика температуры 2 (ДТГ)"
+    IDS_GTSC_MAP            "Коррекция впрыска от температуры газа"
+    IDS_GPSC_MAP            "Коррекция впрыска от давления газа"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -587,8 +598,12 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,431,96,18
     CONTROL         "TPS switch point",IDC_TD_VIEW_TPSSWT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,451,96,18
+    CONTROL         "GTS corr.",IDC_TD_VIEW_GTSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,471,96,18
+    CONTROL         "GPS corr.",IDC_TD_VIEW_GPSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,8,491,96,18
     CONTROL         "Grid view",IDC_TD_GME_CHECK,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,470,96,12
+                    BS_AUTOCHECKBOX | BS_CENTER | WS_TABSTOP,8,510,96,12
 END
 
 IDD_TD_ALLTABLES_PANEL DIALOGEX 0, 0, 225, 158
@@ -596,7 +611,7 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,210,301
+    GROUPBOX        "Sets of tables",IDC_TD_MAP_GROUPBOX,3,3,210,323
     CONTROL         "",IDC_TD_FUNSET_LIST,"SysListView32",LVS_LIST | 
                     LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
                     LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,9,15,93,61,
@@ -647,33 +662,37 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,278,82,18
     CONTROL         "TPS switch point",IDC_TD_VIEW_TPSSWT_MAP,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,278,96,18
+    CONTROL         "GTS corr.",IDC_TD_VIEW_GTSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,300,82,18
+    CONTROL         "GPS corr.",IDC_TD_VIEW_GPSC_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,109,300,96,18
 
     CONTROL         "",IDC_TD_DWELL_CALC_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,313,16,19
+                    BS_BITMAP | WS_TABSTOP,3,333,16,19
     CONTROL         "Tune dwell",IDC_TD_VIEW_DWELL_CONTROL,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,313,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,333,82,19
     CONTROL         "Tune attenuator",IDC_TD_VIEW_ATTENUATOR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,313,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,333,95,19
     CONTROL         "",IDC_TD_RPM_GRID_BUTTON,"Button",BS_OWNERDRAW | 
-                    BS_BITMAP | WS_TABSTOP,3,335,16,19
+                    BS_BITMAP | WS_TABSTOP,3,355,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,335,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,355,82,19
     CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,335,95,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,355,95,19
     CONTROL         "Tune ATS curve",IDC_TD_VIEW_ATS_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,357,82,19
+                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,377,82,19
     CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,357,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,377,95,19
     CONTROL         "Gas dose pos.",IDC_TD_VIEW_GDP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,379,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,399,82,19
     CONTROL         "CE settings",IDC_TD_EDIT_CEPAR,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,379,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,399,95,19
     CONTROL         "Barometric corr.",IDC_TD_VIEW_BAROCORR_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,401,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,421,82,19
     CONTROL         "Manual ign.timing",IDC_TD_VIEW_MANIGNTIM_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,401,95,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,421,95,19
     CONTROL         "Tune GTS curve",IDC_TD_VIEW_TMP2_CURVE,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,423,82,19
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,443,82,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1058,10 +1077,13 @@ BEGIN
     IDS_MAPS_AIRFLOW_UNIT   "Air flow (load*rpm)"
     IDS_BAROCORR_MAP        "Tuning of barometric correction"
     IDS_MAPS_ATMOPRESS_UNIT "Atmospheric pressure (kPa)"
+    IDS_MAPS_PRESS_UNIT     "Pressure (kPa)"
     IDS_MANIGNTIM_MAP       "Manual correction of ignition timing"
     IDS_MAPS_TPSSWT_UNIT    "TPS (%)"
     IDS_TPSSWT_MAP          "Throttle position at which MAP reaches 100kPa"
     IDS_TMP2_CURVE_MAP      "Tune TEMP2 temperature sensor curve"
+    IDS_GTSC_MAP            "Inj. PW correction vs gas temperature"
+    IDS_GPSC_MAP            "Inj. PW correction vs gas pressure"
 END
 
 /////////////////////////////////////////////////////////////////////////////

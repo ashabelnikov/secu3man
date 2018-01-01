@@ -166,6 +166,10 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_TpsswtMapWnd_Y;
   const CString m_Name_Tmp2CurveMapWnd_X;
   const CString m_Name_Tmp2CurveMapWnd_Y;
+  const CString m_Name_GtscMapWnd_X;
+  const CString m_Name_GtscMapWnd_Y;
+  const CString m_Name_GpscMapWnd_X;
+  const CString m_Name_GpscMapWnd_Y;
 
   //fixture settings
   const CString m_Name_Fixtures_Section;
@@ -319,6 +323,10 @@ class CAppSettingsModel : public ISettingsData
   int m_optTpsswtMapWnd_Y;
   int m_optTmp2CurveMapWnd_X;
   int m_optTmp2CurveMapWnd_Y;
+  int m_optGtscMapWnd_X;
+  int m_optGtscMapWnd_Y;
+  int m_optGpscMapWnd_X;
+  int m_optGpscMapWnd_Y;
 
   bool m_optUseDVFeatures;
   int m_optDVDeskUpdatePeriod;

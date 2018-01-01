@@ -453,7 +453,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_gasdose_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
- m_scrl_factor = 2.90f;
+ m_scrl_factor = 3.00f;
 
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;
@@ -647,7 +647,7 @@ void CTablesSetPanel::OnUpdateViewTmp2CurveMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && m_tmp2_curve_enabled);
  pCmdUI->SetCheck( (m_tmp2_curve_map_chart_state) ? TRUE : FALSE );
 }
 
