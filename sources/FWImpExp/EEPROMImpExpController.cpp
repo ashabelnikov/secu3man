@@ -200,6 +200,12 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   m_eedm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+
+ if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
+  m_eedm->GetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
+  m_eedm->GetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
 }
 
 //Modal window has been activated - perform its initialization
@@ -241,6 +247,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
@@ -260,6 +268,8 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false);
  mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
  mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false);
+ mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_TMP2CURVE_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)

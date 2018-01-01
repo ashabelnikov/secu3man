@@ -238,6 +238,12 @@ void SECU3ImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   m_fwdm->GetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+
+ if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
+  m_fwdm->GetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
+  m_fwdm->GetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -279,6 +285,8 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  //separate maps
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -520,6 +528,12 @@ void SECU3ExportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_TPSSWT_MAP))
   m_fwdm->SetTpsswtMap(other_sel, mp_fwd->maps[current_sel].inj_tpsswt);
+
+ if (mp_view->GetFWDFlag(FLAG_GTSC_MAP))
+  m_fwdm->SetGtscMap(other_sel, mp_fwd->maps[current_sel].inj_gts_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
+  m_fwdm->SetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
 }
 
 //модальное окно активировалось - проводим его инициализацию
@@ -561,6 +575,8 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_IACCORR_MAP, true);
  mp_view->SetFWDFlag(FLAG_IATCLT_MAP, true);
  mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

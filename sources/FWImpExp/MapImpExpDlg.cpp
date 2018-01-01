@@ -78,6 +78,8 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_IACCORR_MAP] = FALSE;
  m_fwd_flags[FLAG_IATCLT_MAP] = FALSE;
  m_fwd_flags[FLAG_TPSSWT_MAP] = FALSE;
+ m_fwd_flags[FLAG_GTSC_MAP] = FALSE;
+ m_fwd_flags[FLAG_GPSC_MAP] = FALSE;
  //separate maps
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
@@ -123,6 +125,8 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_IACCORR_FLAG, m_fwd_flags[FLAG_IACCORR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_IATCLT_FLAG, m_fwd_flags[FLAG_IATCLT_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_TPSSWT_FLAG, m_fwd_flags[FLAG_TPSSWT_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_GTSC_FLAG, m_fwd_flags[FLAG_GTSC_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_GPSC_FLAG, m_fwd_flags[FLAG_GPSC_MAP]);
  //separate
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
@@ -159,6 +163,8 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_IACCORR_FLAG, m_fwd_flags_buttons[FLAG_IACCORR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_IATCLT_FLAG, m_fwd_flags_buttons[FLAG_IATCLT_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_TPSSWT_FLAG, m_fwd_flags_buttons[FLAG_TPSSWT_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_GTSC_FLAG, m_fwd_flags_buttons[FLAG_GTSC_MAP]);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_GPSC_FLAG, m_fwd_flags_buttons[FLAG_GPSC_MAP]);
  //separate
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
@@ -345,7 +351,7 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
            (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_CHOKE_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_ATS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_ATSAAC_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_GASDOSE_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_BAROCORR_MAP].IsWindowEnabled()) ||
-           (m_fwd_flags_buttons[FLAG_MANIT_MAP].IsWindowEnabled()));
+           (m_fwd_flags_buttons[FLAG_MANIT_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_TMP2CURVE_MAP].IsWindowEnabled()));
  GetDlgItem(IDC_MAP_IMPEXP_SEPTAB_GROUP)->EnableWindow(enable);
 }
 
@@ -404,6 +410,8 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IACCORR_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_IATCLT_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_TPSSWT_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_GTSC_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_GPSC_MAP], MLL::GetString(IDS_MAP_IMPEXP_STARTMAP_FLAG_TT)));
  //separate
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DWLCNTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATTEN_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
@@ -421,7 +429,7 @@ BOOL CMapImpExpDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.1f);
+ mp_scr->SetViewSizeF(.0f, 1.16f);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
