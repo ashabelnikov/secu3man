@@ -2635,7 +2635,7 @@ void CButtonsPanel::OnUpdateViewTpsswtMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable /*&& m_fuel_injection*/); //required by ignition and fuel injection
  pCmdUI->SetCheck( (m_tpsswt_map_chart_state) ? TRUE : FALSE );
 }
 
