@@ -86,6 +86,7 @@ namespace SECU3IO
 
   float map2;                           // MAP2 (gas pressure)
   float tmp2;                           // TMP2 (gas temperature)
+  float mapd;                           // Diffrerential pressure = (MAP2 - MAP)
  };
 
  struct DbgvarDat

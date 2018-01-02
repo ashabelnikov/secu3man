@@ -501,6 +501,8 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &map2))
   return false;
  m_SensorDat.map2 = ((float)map2) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ //calculate here differential pressure
+ m_SensorDat.mapd = (m_SensorDat.map2 - m_SensorDat.pressure);
 
  //Температура газа
  int tmp2 = 0;
