@@ -72,6 +72,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void EnableDwellControl(bool enable);
   void EnableCTSCurve(bool enable);
   void EnableChokeOp(bool enable);
+  virtual void EnableFuelInjection(bool i_enable);
   virtual void EnableGasdose(bool enable);
   void EnableTmp2Curve(bool enable);
 
@@ -177,7 +178,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;
   bool m_choke_op_enabled;
-  bool m_gasdose_enabled;
   bool m_tmp2_curve_enabled;
 
   int m_attenuator_map_chart_state;

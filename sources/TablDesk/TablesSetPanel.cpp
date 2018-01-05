@@ -450,7 +450,6 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
 , m_choke_op_enabled(false)
-, m_gasdose_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
  m_scrl_factor = 3.00f;
@@ -617,7 +616,7 @@ void CTablesSetPanel::OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
  BOOL enable = (DLL::Chart3DCreate!=NULL) && opened;
- pCmdUI->Enable(enable && m_gasdose_enabled);
+ pCmdUI->Enable(enable && m_gasdose);
  pCmdUI->SetCheck( (m_gasdose_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -631,7 +630,7 @@ void CTablesSetPanel::OnUpdateViewBarocorrMap(CCmdUI* pCmdUI)
 {
  bool opened = m_IsAllowed ? m_IsAllowed() : false;
  BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
- pCmdUI->Enable(enable);
+ pCmdUI->Enable(enable && (m_gasdose || m_fuel_injection));
  pCmdUI->SetCheck( (m_barocorr_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -717,15 +716,24 @@ void CTablesSetPanel::EnableChokeOp(bool enable)
   DLL::Chart2DEnable(m_choke_map_wnd_handle, enable && Super::IsAllowed());
 }
 
+void CTablesSetPanel::EnableFuelInjection(bool i_enable)
+{
+ Super::EnableFuelInjection(i_enable);
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_barocorr_map_chart_state && ::IsWindow(m_barocorr_map_wnd_handle))
+  DLL::Chart2DEnable(m_barocorr_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
+}
+
 void CTablesSetPanel::EnableGasdose(bool enable)
 {
  Super::EnableGasdose(enable);
-
- m_gasdose_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
  if (m_gasdose_map_chart_state && ::IsWindow(m_gasdose_map_wnd_handle))
   DLL::Chart3DEnable(m_gasdose_map_wnd_handle, enable && Super::IsAllowed());
+ if (m_barocorr_map_chart_state && ::IsWindow(m_barocorr_map_wnd_handle))
+  DLL::Chart2DEnable(m_barocorr_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
 }
 
 void CTablesSetPanel::EnableTmp2Curve(bool enable)

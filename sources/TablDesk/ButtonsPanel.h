@@ -90,7 +90,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetDynamicValues(const CGridModeEditorDlg::DynVal& dv);
 
-  void EnableFuelInjection(bool i_enable);
+  virtual void EnableFuelInjection(bool i_enable);
 
   virtual void EnableGasdose(bool i_enable);
 
@@ -399,8 +399,9 @@ private:
 
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
-  bool m_fuel_injection;
-  bool m_gasdose;
   bool m_carb_afr;
   bool m_en_gas_corr;
+protected:
+  bool m_fuel_injection;
+  bool m_gasdose;
 };
