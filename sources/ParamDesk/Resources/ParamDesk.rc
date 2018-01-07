@@ -147,16 +147,16 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Настройка оси давл. в раб. табл.",IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,1,1,157,39
+    GROUPBOX        "Настройка оси нагруз. в раб.табл.",IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,1,1,157,39
 
     EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,9,20,35,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_MAP_GRAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,46,19,11,16
-    LTEXT           "Нижн. знач. давл.",IDC_PD_FUNSET_MAP_GRAD_CAPTION,7,10,63,8
+    LTEXT           "Нижн. знач. нагр.",IDC_PD_FUNSET_MAP_GRAD_CAPTION,7,10,63,8
     LTEXT           "кПа",IDC_PD_FUNSET_MAP_GRAD_UNIT,61,22,17,11
 
     EDITTEXT        IDC_PD_FUNSET_PRESS_SWING_EDIT,86,20,35,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_PRESS_SWING_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,123,19,11,16
-    LTEXT           "Верхн. знач. давл.",IDC_PD_FUNSET_PRESS_SWING_CAPTION,84,10,66,8
+    LTEXT           "Верхн. знач. нагр.",IDC_PD_FUNSET_PRESS_SWING_CAPTION,84,10,66,8
     LTEXT           "кПа",IDC_PD_FUNSET_PRESS_SWING_UNIT,138,22,17,10
 
     GROUPBOX        "Настройка ДАД",IDC_PD_FUNSET_MAP_SENSOR_GROUP,1,41,157,39
@@ -1279,6 +1279,7 @@ END
 
 STRINGTABLE
 BEGIN
+    IDS_PERCENT_UNIT "%"
     IDS_PA_UNIT     "Па"
     IDS_KPA_UNIT    "кПа"
     IDS_MMHG_UNIT   "мм рт.ст."
@@ -1316,8 +1317,8 @@ BEGIN
     IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "Температура двигателя, выше которой начнется работа регулятора (чтобы регулятор работал хотя бы на частично прогретом двигателе)"
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Набор таблиц используемый для газа. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Набор таблиц используемый для бензина. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
-    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Значение давления на впуске, соответствующее максимальной нагрузке (16-я кривая в рабочей таблице УОЗ или впрыска). Определить можно следующим образом. Трогаемся на высокой передаче, резко нажимаем педаль газа и смотрим давление."
-    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Значение давления на впуске, соответствующее минимальной нагрузке (1-я кривая в рабочей таблице УОЗ или впрыска). Определить можно на ПХХ. Разгоняемся, бросаем газ и смотрим значение давления."
+    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Если в качестве нагрузки выборан ДАД, то это значение давления на впуске, соответствующее максимальной нагрузке (16-я кривая в рабочей таблице УОЗ или впрыска). Определить можно следующим образом. Трогаемся на высокой передаче, резко нажимаем педаль газа и смотрим давление."
+    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Если в качестве нагрузки выборан ДАД, то это значение давления на впуске, соответствующее минимальной нагрузке (1-я кривая в рабочей таблице УОЗ или впрыска). Определить можно на ПХХ. Разгоняемся, бросаем газ и смотрим значение давления."
     IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "Включение ДТОЖ. Установите эту галочку если Вы используете ДТОЖ и он подключен. Если галочка не установлена, то работа некоторых функций, связанных с температурой двигателя будет ограничена."
     IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Установите эту галочку если Вы собираетесь управлять оборотами вентилятора при помощи ШИМ (с использованием блока SECU-FAN-PWM). Когда температура двигателя приблизится к порогу включения вентилятора ближе чем на 7.5°С, вентилятор включится на минимальные обороты. По мере увеличения температуры обороты будут возрастать, пока не будет достигнута точка равновесия."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "Если установить эту галочку, то импульсы зажигания будут выдаваться только на выход IGN_OUT1. Используется при распределении искры трамблером"
@@ -1645,16 +1646,16 @@ STYLE DS_CONTROL | WS_CHILD
 EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
-    GROUPBOX        "Tuning press. axis of work map",IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,3,1,155,39
+    GROUPBOX        "Tuning load axis of work maps",IDC_PD_FUNSET_PRESS_AXIS_PAR_GROUP,3,1,155,39
 
     EDITTEXT        IDC_PD_FUNSET_MAP_GRAD_EDIT,11,20,35,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_MAP_GRAD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,48,19,11,16
-    LTEXT           "Lower press. value",IDC_PD_FUNSET_MAP_GRAD_CAPTION,9,10,63,8
+    LTEXT           "Lower load value",IDC_PD_FUNSET_MAP_GRAD_CAPTION,9,10,63,8
     LTEXT           "kPa",IDC_PD_FUNSET_MAP_GRAD_UNIT,63,22,17,11
 
     EDITTEXT        IDC_PD_FUNSET_PRESS_SWING_EDIT,88,20,35,14,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_FUNSET_PRESS_SWING_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,125,19,11,16
-    LTEXT           "Upper press. value",IDC_PD_FUNSET_PRESS_SWING_CAPTION,86,10,66,8
+    LTEXT           "Upper load value",IDC_PD_FUNSET_PRESS_SWING_CAPTION,86,10,66,8
     LTEXT           "kPa",IDC_PD_FUNSET_PRESS_SWING_UNIT,140,22,17,10
 
     GROUPBOX        "MAP sensor tuning",IDC_PD_FUNSET_MAP_SENSOR_GROUP,3,41,155,39
@@ -2810,6 +2811,7 @@ END
 
 STRINGTABLE
 BEGIN
+    IDS_PERCENT_UNIT "%"
     IDS_PA_UNIT     "Pa"
     IDS_KPA_UNIT    "kPa"
     IDS_MMHG_UNIT   "mm Hg"
@@ -2850,8 +2852,8 @@ BEGIN
     IDS_PD_IDLREG_USE_REGULATOR_TT                  "When this check is set, controller will try to maintain target idling RPM by means of altering of ignition timing"
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
-    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Set the value of the pressure in the intake manifold at maximum load (trying to move on the 4th gear etc. - see the pressure value)"
-    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "Set the value of the pressure in the intake manifold when PQQ (accelerate, throwing gas pedal - see pressure)"
+    IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "If MAP is selected as load source, then this value set the pressure in the intake manifold at maximum load (trying to move on the 4th gear etc. - see the pressure value)"
+    IDS_PD_FUNSET_MAP_GRAD_EDIT_TT                  "If MAP is selected as load source, then this value set the pressure in the intake manifold when PQQ (accelerate, throwing gas pedal - see pressure)"
     IDS_PD_TEMPER_USE_VENT_PWM_TT                   "Check the box when using a fan speed control unit. Minimum speed will be turned on before 7.5 degrees to the temperature set value."
     IDS_PD_TEMPER_USE_TEMP_SENSOR_TT                "With set check, CLT correction of ignition timing and other functions will be turned on"
     IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Use with non-standart or thermistor based CLT sensor"

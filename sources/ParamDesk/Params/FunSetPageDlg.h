@@ -65,6 +65,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
   afx_msg void OnChangeData();
+  afx_msg void OnChangeDataLoadSrc();
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
@@ -72,6 +73,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   DECLARE_MESSAGE_MAP()
 
  private:
+  void UpdateLoadAxisUnits(void);
   SECU3IO::FunSetPar m_params;
   std::vector<_TSTRING> m_fun_names;
   bool m_enabled;

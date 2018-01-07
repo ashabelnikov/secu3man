@@ -37,7 +37,7 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_WM_DESTROY()
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnChangeData)
- ON_CBN_SELCHANGE(IDC_PD_FUNSET_LOAD_SRC_COMBO, OnChangeData)
+ ON_CBN_SELCHANGE(IDC_PD_FUNSET_LOAD_SRC_COMBO, OnChangeDataLoadSrc)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_UNI_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_UNI_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BAROCORRTYPE_COMBO, OnChangeData)
@@ -340,6 +340,20 @@ void CFunSetPageDlg::OnChangeData()
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
 }
 
+void CFunSetPageDlg::UpdateLoadAxisUnits(void)
+{
+ int ids = (m_params.load_src_cfg == 0) ? IDS_KPA_UNIT : IDS_PERCENT_UNIT;
+ GetDlgItem(IDC_PD_FUNSET_MAP_GRAD_UNIT)->SetWindowText(MLL::LoadString(ids));
+ GetDlgItem(IDC_PD_FUNSET_PRESS_SWING_UNIT)->SetWindowText(MLL::LoadString(ids));
+}
+
+void CFunSetPageDlg::OnChangeDataLoadSrc()
+{
+ UpdateData();
+ UpdateLoadAxisUnits();
+ OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+}
+
 void CFunSetPageDlg::OnMapCalcButton()
 {
  float offset = m_params.map_curve_offset, gradient = m_params.map_curve_gradient; 
@@ -462,4 +476,5 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::FunSetPar));
  UpdateData(false); //copy data from variables to dialog
+ UpdateLoadAxisUnits();
 }
