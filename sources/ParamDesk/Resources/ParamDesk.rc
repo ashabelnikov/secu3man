@@ -1491,6 +1491,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера начинает включаться (коэфф.заполнения ШИМ = 0%). Если расход воздуха меньше или равен этому значению, то клапан полностью выключен. Расход воздуха определяется как Обороты * Нагрузка."
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера полностью включен (коэфф.заполнения ШИМ = 100%). Если расход воздуха больше или равен этому значению, то клапан полностью включен. Расход воздуха определяется как Обороты * Нагрузка."
+    IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Назрузка на ХХ, которая вместе с оборотами определяет режимную точку. Если в качестве нагрузки выбран ДАД, то значение в кПа, иначе значение в %. Если вы используете в качестве нагрузки ДПДЗ или хотите чтобы режимная точка определялась только оборотами, то поставьте 0."
 END
 
 
@@ -1794,7 +1795,7 @@ BEGIN
 
     EDITTEXT        IDC_PD_IDLREG_MAPVALUE_EDIT,95,340,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_IDLREG_MAPVALUE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,340,13,17
-    LTEXT           "Pressure on idling",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,341,94,10
+    LTEXT           "Pressure (load) on idling",IDC_PD_IDLREG_MAPVALUE_CAPTION,0,341,94,10
     LTEXT           "kPa",IDC_PD_IDLREG_MAPVALUE_UNIT,140,341,30,10
 
     EDITTEXT        IDC_PD_IDLREG_IACMINPOS_EDIT,95,360,30,16,ES_AUTOHSCROLL
@@ -3021,6 +3022,7 @@ STRINGTABLE
 BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Air flow at which canister purge valve start to open (PWM duty = 0%). If air flow is less or equal to this value, than valve will be fully closed. Air flow is determined as RPM * Load"
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Air flow at which canister purge valve is fully opened (PWM duty = 100%). If air flow is above or equal to this value, than valve will be fully opened. Air flow is determined as RPM * Load"
+    IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Value of load on idling, which together with rpm defines target operation conditions. If MAP is selected as load source, then this value is in kPa, otherwise, this value is in %. If you selected TPS as load source or you want target oparation contions to be defined with rpm only, then set this value to zero."
 END
 
 STRINGTABLE
