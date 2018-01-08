@@ -110,6 +110,8 @@ float* CPMTablesController::_GetMap(int i_mapType, bool i_original, SECU3FWMapsI
    return p_maps->inj_gts_corr;
   case TYPE_MAP_INJ_GPSC:
    return p_maps->inj_gps_corr;
+  case TYPE_MAP_INJ_ATSC:
+   return p_maps->inj_ats_corr;
  }
  return NULL; //undefined type of map
 }
@@ -167,6 +169,8 @@ size_t _GetMapSize(int i_mapType)
    return INJ_GTS_CORR_SIZE;
   case TYPE_MAP_INJ_GPSC:
    return INJ_GPS_CORR_SIZE+2;
+  case TYPE_MAP_INJ_ATSC:
+   return INJ_ATS_CORR_SIZE;
  }
  ASSERT(0);
  return 0; //undefined type of map
@@ -452,6 +456,9 @@ void CPMTablesController::_UpdateCache(const EditTabPar* data)
    break;
   case ETMT_GPSC_MAP: //Inj. PW correction coefficient  vs gas pressure
    UpdateMap(m_maps->inj_gps_corr, m_maps_flags->inj_gps_corr, data);
+   break;
+  case ETMT_ATSC_MAP: //Inj. PW correction coefficient  vs air temperature
+   UpdateMap(m_maps->inj_ats_corr, m_maps_flags->inj_ats_corr, data);
    break;
 
   default: ASSERT(0);

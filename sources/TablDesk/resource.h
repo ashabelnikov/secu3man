@@ -329,3 +329,5 @@
 #define IDS_GTSC_MAP                    5588
 #define IDS_GPSC_MAP                    5589
 #define IDS_MAPS_PRESS_UNIT             5590
+#define IDC_TD_VIEW_ATSC_MAP            5591
+#define IDS_ATSC_MAP                    5592

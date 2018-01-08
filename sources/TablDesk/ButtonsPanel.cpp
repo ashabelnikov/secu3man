@@ -992,6 +992,38 @@ void __cdecl CButtonsPanel::OnChangeGpscXAxisEdit(void* i_param, int i_type, flo
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnChangeAtscMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_INJ_ATSC);
+ if (_this->mp_gridModeEditorDlg.get())
+  _this->mp_gridModeEditorDlg->UpdateView();
+}
+
+//------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnCloseAtscMap(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_atsc_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
+}
+
+//------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnWndActivationITMap(void* i_param, long cmd)
 {
  CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
@@ -1292,6 +1324,21 @@ void __cdecl CButtonsPanel::OnWndActivationGpscMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CButtonsPanel::OnWndActivationAtscMap(void* i_param, long cmd)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ if (_this->m_OnWndActivation)
+  _this->m_OnWndActivation(_this->m_atsc_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChanged(int mapType)
 {
  if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
@@ -1342,6 +1389,8 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
   DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, GetGtscMap(true), GetGtscMap(false));
  if (m_gpsc_map_chart_state && mapType == TYPE_MAP_INJ_GPSC)
   DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, GetGpscMap(true), GetGpscMap(false));
+ if (m_atsc_map_chart_state && mapType == TYPE_MAP_INJ_ATSC)
+  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, GetAtscMap(true), GetAtscMap(false));
 
  if (m_OnMapChanged)
   m_OnMapChanged(mapType);
@@ -1388,6 +1437,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_tpsswt_map_chart_state(0)
 , m_gtsc_map_chart_state(0)
 , m_gpsc_map_chart_state(0)
+, m_atsc_map_chart_state(0)
 , m_grid_map_state(0)
 , m_start_map_wnd_handle(NULL)
 , m_idle_map_wnd_handle(NULL)
@@ -1413,11 +1463,12 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_tpsswt_map_wnd_handle(NULL)
 , m_gtsc_map_wnd_handle(NULL)
 , m_gpsc_map_wnd_handle(NULL)
+, m_atsc_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_factor(3.4f)
+, m_scrl_factor(3.6f)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)
@@ -1472,6 +1523,8 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
  memset(m_gtsc_map_original, 0, 16 * sizeof(float));
  memset(m_gpsc_map_active, 0, (9+2) * sizeof(float));
  memset(m_gpsc_map_original, 0, (9+2) * sizeof(float));
+ memset(m_atsc_map_active, 0, 16 * sizeof(float));
+ memset(m_atsc_map_original, 0, 16 * sizeof(float));
 }
 
 CButtonsPanel::~CButtonsPanel()
@@ -1507,6 +1560,7 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_TPSSWT_MAP,  m_view_tpsswt_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_GTSC_MAP,  m_view_gtsc_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_GPSC_MAP,  m_view_gpsc_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_ATSC_MAP,  m_view_atsc_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
@@ -1535,6 +1589,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_TPSSWT_MAP, OnViewTpsswtMap)
  ON_BN_CLICKED(IDC_TD_VIEW_GTSC_MAP, OnViewGtscMap)
  ON_BN_CLICKED(IDC_TD_VIEW_GPSC_MAP, OnViewGpscMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_ATSC_MAP, OnViewAtscMap)
 
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_START_MAP,OnUpdateViewStartMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_IDLE_MAP, OnUpdateViewIdleMap)
@@ -1561,6 +1616,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GTSC_MAP, OnUpdateViewGtscMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GPSC_MAP, OnUpdateViewGpscMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_GME_CHECK, OnUpdateGridModeEditing)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATSC_MAP, OnUpdateViewAtscMap)
  ON_WM_TIMER()
  ON_WM_DESTROY()
 END_MESSAGE_MAP()
@@ -2432,6 +2488,42 @@ void CButtonsPanel::OnViewGpscMap()
 }
 
 //-----------------------------------------------------------------------------------------------
+void CButtonsPanel::OnViewAtscMap()
+{
+ //if button was released, then close editor's window
+ if (m_view_atsc_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_atsc_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_atsc_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_atsc_map_chart_state = 1;
+  m_atsc_map_wnd_handle = DLL::Chart2DCreate(GetAtscMap(true),GetAtscMap(false),0.5f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
+    MLL::GetString(IDS_ATSC_MAP).c_str(), false);
+  DLL::Chart2DSetPtValuesFormat(m_atsc_map_wnd_handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_atsc_map_wnd_handle, 0.01f);
+  DLL::Chart2DSetOnWndActivation(m_atsc_map_wnd_handle,OnWndActivationAtscMap,this);
+  DLL::Chart2DSetOnChange(m_atsc_map_wnd_handle,OnChangeAtscMap,this);
+  DLL::Chart2DSetOnClose(m_atsc_map_wnd_handle,OnCloseAtscMap,this);
+  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
+
+  DLL::Chart2DShow(m_atsc_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_atsc_map_wnd_handle);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
 void CButtonsPanel::OnGridModeEditing()
 {
  if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
@@ -2627,7 +2719,7 @@ void CButtonsPanel::OnUpdateViewIATCLTMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
  pCmdUI->SetCheck( (m_iatclt_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2653,6 +2745,14 @@ void CButtonsPanel::OnUpdateViewGpscMap(CCmdUI* pCmdUI)
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection && m_en_gas_corr);
  pCmdUI->SetCheck( (m_gpsc_map_chart_state) ? TRUE : FALSE );
+}
+
+void CButtonsPanel::OnUpdateViewAtscMap(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
+ pCmdUI->SetCheck( (m_atsc_map_chart_state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnTimer(UINT nIDEvent)
@@ -2720,6 +2820,8 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, GetGtscMap(true), GetGtscMap(false));
  if (m_gpsc_map_chart_state)
   DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, GetGpscMap(true), GetGpscMap(false));
+ if (m_atsc_map_chart_state)
+  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, GetAtscMap(true), GetAtscMap(false));
  if (mp_gridModeEditorDlg.get() && m_grid_map_state)
   mp_gridModeEditorDlg->UpdateView();
 }
@@ -2775,13 +2877,15 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_iaccw_map_chart_state && ::IsWindow(m_iaccw_map_wnd_handle))
   DLL::Chart2DEnable(m_iaccw_map_wnd_handle, i_enable && IsAllowed());
  if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
-  DLL::Chart2DEnable(m_iatclt_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_iatclt_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_tpsswt_map_chart_state && ::IsWindow(m_tpsswt_map_wnd_handle))
   DLL::Chart2DEnable(m_tpsswt_map_wnd_handle, i_enable && IsAllowed());
  if (m_gtsc_map_chart_state && ::IsWindow(m_gtsc_map_wnd_handle))
   DLL::Chart2DEnable(m_gtsc_map_wnd_handle, (i_enable && m_en_gas_corr) && IsAllowed());
  if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
   DLL::Chart2DEnable(m_gpsc_map_wnd_handle, (i_enable && m_en_gas_corr) && IsAllowed());
+ if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
+  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
 }
 
 void CButtonsPanel::EnableGasdose(bool i_enable)
@@ -2804,6 +2908,10 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
   DLL::Chart2DEnable(m_crnk_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
  if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
+  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
+  DLL::Chart2DEnable(m_iatclt_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
 
  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
   DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection || m_carb_afr) && IsAllowed());
@@ -3016,6 +3124,14 @@ float* CButtonsPanel::GetGtscMap(bool i_original)
   return m_gtsc_map_active;
 }
 
+float* CButtonsPanel::GetAtscMap(bool i_original)
+{
+ if (i_original)
+  return m_atsc_map_original;
+ else
+  return m_atsc_map_active;
+}
+
 float* CButtonsPanel::GetGpscMap(bool i_original)
 {
  if (i_original)
@@ -3082,6 +3198,8 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_gtsc_map_chart_state ? m_gtsc_map_wnd_handle : NULL;
  case TYPE_MAP_INJ_GPSC:
   return m_gpsc_map_chart_state ? m_gpsc_map_wnd_handle : NULL;
+ case TYPE_MAP_INJ_ATSC:
+  return m_atsc_map_chart_state ? m_atsc_map_wnd_handle : NULL;
  case TYPE_MAP_GME_WND: //pseudo map
   return (mp_gridModeEditorDlg.get() && m_grid_map_state) ? mp_gridModeEditorDlg->m_hWnd : NULL; 
  default:
@@ -3142,6 +3260,8 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart2DEnable(m_gtsc_map_wnd_handle, enable && IsAllowed());
   if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
    DLL::Chart2DEnable(m_gpsc_map_wnd_handle, enable && IsAllowed());
+  if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
+   DLL::Chart2DEnable(m_atsc_map_wnd_handle, enable && IsAllowed());
   if (mp_gridModeEditorDlg.get() && m_grid_map_state && ::IsWindow(mp_gridModeEditorDlg->m_hWnd))
    mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);
  }

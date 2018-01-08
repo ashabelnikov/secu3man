@@ -187,6 +187,10 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_GpscMapWnd_X = rc.left;
    ws.m_GpscMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_INJ_ATSC:
+   ws.m_AtscMapWnd_X = rc.left;
+   ws.m_AtscMapWnd_Y = rc.top;
+   break;
 
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
@@ -310,6 +314,9 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_INJ_GPSC:
    X = ws.m_GpscMapWnd_X, Y = ws.m_GpscMapWnd_Y;
+   break;
+  case TYPE_MAP_INJ_ATSC:
+   X = ws.m_AtscMapWnd_X, Y = ws.m_AtscMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

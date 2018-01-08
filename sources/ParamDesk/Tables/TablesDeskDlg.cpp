@@ -430,6 +430,9 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
   case TYPE_MAP_INJ_GPSC:
    return mp_ButtonsPanel->GetGpscMap(i_original);
 
+  case TYPE_MAP_INJ_ATSC:
+   return mp_ButtonsPanel->GetAtscMap(i_original);
+
   default:
   return NULL;
  }

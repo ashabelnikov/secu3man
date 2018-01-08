@@ -731,7 +731,7 @@ void EEPROMDataMediator::GetIATCLTMap(int i_index, float* op_values, bool i_orig
  ASSERT(op_values);
 
  //gets address of the sets of maps
- f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
 
  int i = 0;
  for (; i < INJ_IATCLT_CORR_SIZE; i++ )
@@ -766,7 +766,7 @@ void EEPROMDataMediator::GetTpsswtMap(int i_index,float* op_values, bool i_origi
  ASSERT(op_values);
 
  //gets address of the sets of maps
- f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < INJ_TPSSWT_SIZE; i++ )
   op_values[i] = ((float)p_maps[i_index].inj_tpsswt[i]) / TPSSWT_MAPS_M_FACTOR;
@@ -788,7 +788,7 @@ void EEPROMDataMediator::GetGtscMap(int i_index,float* op_values, bool i_origina
  ASSERT(op_values);
 
  //gets address of the sets of maps
- f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
 
  for (int i = 0; i < INJ_GTS_CORR_SIZE; i++ )
   op_values[i] = ((float)p_maps->inj_gts_corr[i]) / 128.0f;
@@ -810,7 +810,7 @@ void EEPROMDataMediator::GetGpscMap(int i_index, float* op_values, bool i_origin
  ASSERT(op_values);
 
  //gets address of the sets of maps
- f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
 
  int i = 0;
  for (; i < INJ_GPS_CORR_SIZE; i++ )
@@ -838,4 +838,26 @@ void EEPROMDataMediator::SetGpscMap(int i_index, const float* ip_values)
   p_maps->inj_gps_corr[i] = MathHelpers::Round(ip_values[i] * 128.0f);
  for (; i < INJ_GPS_CORR_SIZE+2; i++ )
   p_maps->inj_gps_corr[i] = MathHelpers::Round(ip_values[i] / 2.0f);
+}
+
+void EEPROMDataMediator::GetAtscMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes(i_original) + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  op_values[i] = ((float)p_maps->inj_ats_corr[i]) / 128.0f;
+}
+
+void EEPROMDataMediator::SetAtscMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //gets address of the sets of maps
+ f_data_t* p_maps = (f_data_t*)(getBytes() + EEPROM_REALTIME_TABLES_START);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  p_maps->inj_ats_corr[i] = MathHelpers::Round((ip_values[i]*128.0f));
 }

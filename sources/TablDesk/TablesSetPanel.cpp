@@ -452,7 +452,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_choke_op_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
- m_scrl_factor = 3.00f;
+ m_scrl_factor = 3.20f;
 
  m_attenuator_map_chart_state = 0;
  m_dwellcntrl_map_chart_state = 0;

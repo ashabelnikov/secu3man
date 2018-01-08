@@ -125,6 +125,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void SetGtscMap(int i_index, const float* i_values);
   void GetGpscMap(int i_index, float* op_values, bool i_original = false);
   void SetGpscMap(int i_index, const float* i_values);
+  void GetAtscMap(int i_index, float* op_values, bool i_original = false);
+  void SetAtscMap(int i_index, const float* i_values);
 
   void GetMapsData(struct FWMapsDataHolder* op_fwd);
   void SetMapsData(const struct FWMapsDataHolder* ip_fwd);

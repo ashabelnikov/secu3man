@@ -51,6 +51,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnChangeData) 
+ ON_BN_CLICKED(IDC_PD_INJECTOR_USEAIRDEN_CHECK,OnChangeData) 
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_CYLDISP_SPIN,OnUpdateControls)
@@ -101,6 +102,7 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_CHECK,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_USEAIRDEN_CHECK,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_ANGLESPEC_CAPTION,OnUpdateControls)
@@ -133,6 +135,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_inj_timing_crk_edit[i].SetOwnDDV(true);
   //params
   m_params.inj_usetimingmap[i] = 0;
+  m_params.inj_useairden = false;
   m_params.inj_config[i] = SECU3IO::INJCFG_SIMULTANEOUS;
   m_params.inj_squirt_num[i] = 4;
   m_params.inj_flow_rate[i] = 200.0f;
@@ -192,6 +195,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_inj_usetimingmap_check[0]);
  DDX_Control(pDX,IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_inj_usetimingmap_check[1]);
  DDX_Control(pDX,IDC_PD_INJECTOR_USEADDCORRS_CHECK, m_inj_useaddcorrs_check);
+ DDX_Control(pDX,IDC_PD_INJECTOR_USEAIRDEN_CHECK, m_inj_useairden_check);
 
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_EDIT, m_fff_const_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_SPIN, m_fff_const_spin);
@@ -212,6 +216,7 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap[0]);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_params.inj_usetimingmap[1]);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEADDCORRS_CHECK, m_params.inj_useaddcorrs);
+ DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEAIRDEN_CHECK, m_params.inj_useairden);
 
  m_fff_const_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FFFCONST_EDIT, m_params.fff_const);
 }
@@ -300,7 +305,7 @@ BOOL CInjectorPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 2.3f);
+ mp_scr->SetViewSizeF(.0f, 2.4f);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);

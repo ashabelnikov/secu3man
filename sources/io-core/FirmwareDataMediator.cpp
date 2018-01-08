@@ -1192,6 +1192,28 @@ void CFirmwareDataMediator::SetGpscMap(int i_index, const float* ip_values)
   p_fd->tables[i_index].inj_gps_corr[i] = MathHelpers::Round(ip_values[i] / 2.0f);
 }
 
+void CFirmwareDataMediator::GetAtscMap(int i_index,float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  op_values[i] = ((float)p_fd->tables[i_index].inj_ats_corr[i]) / 128.0f;
+}
+
+void CFirmwareDataMediator::SetAtscMap(int i_index,const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес начала таблиц семейств характеристик
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for (int i = 0; i < INJ_ATS_CORR_SIZE; i++ )
+  p_fd->tables[i_index].inj_ats_corr[i] = MathHelpers::Round((ip_values[i]*128.0f));
+}
+
 //////////////////////////////////////////////////////////////////////////////////////
 SECU3IO::params_t* CFirmwareDataMediator::GetParamsPtr(void)
 {
@@ -1237,6 +1259,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetTpsswtMap(i, op_fwd->maps[i].inj_tpsswt);
   GetGtscMap(i, op_fwd->maps[i].inj_gts_corr);
   GetGpscMap(i, op_fwd->maps[i].inj_gps_corr);
+  GetAtscMap(i, op_fwd->maps[i].inj_ats_corr);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1291,6 +1314,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetTpsswtMap(i, ip_fwd->maps[i].inj_tpsswt);
   SetGtscMap(i, ip_fwd->maps[i].inj_gts_corr);
   SetGpscMap(i, ip_fwd->maps[i].inj_gps_corr);
+  SetAtscMap(i, ip_fwd->maps[i].inj_ats_corr);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);

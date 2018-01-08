@@ -1442,7 +1442,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
      m_EditTabPar.tab_id != ETMT_IT_MAP && m_EditTabPar.tab_id != ETMT_ITRPM_MAP && m_EditTabPar.tab_id != ETMT_RIGID_MAP &&
      m_EditTabPar.tab_id != ETMT_EGOCRV_MAP && m_EditTabPar.tab_id != ETMT_IACC_MAP && m_EditTabPar.tab_id != ETMT_IACCW_MAP &&
      m_EditTabPar.tab_id != ETMT_IATCLT_MAP && m_EditTabPar.tab_id != ETMT_TPSSWT_MAP && m_EditTabPar.tab_id != ETMT_GTSC_MAP &&
-     m_EditTabPar.tab_id != ETMT_GPSC_MAP)
+     m_EditTabPar.tab_id != ETMT_GPSC_MAP && m_EditTabPar.tab_id != ETMT_ATSC_MAP)
   return false;
 
  //check for 16-byte packets
@@ -1560,6 +1560,8 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
       m_EditTabPar.table_data[i] = ((float)value) / 128.0f;
      else if (m_EditTabPar.tab_id == ETMT_GPSC_MAP)
       m_EditTabPar.table_data[i] =  (i >= INJ_GPS_CORR_SIZE) ? (((float)value) * 2.0f) : (((float)value) / 128.0f);
+     else if (m_EditTabPar.tab_id == ETMT_ATSC_MAP)
+      m_EditTabPar.table_data[i] = ((float)value) / 128.0f;
      else
       m_EditTabPar.table_data[i] = ((float)((signed char)value)) / AA_MAPS_M_FACTOR;
      ++data_size;
@@ -1985,6 +1987,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  m_InjctrPar.inj_usetimingmap[0] = CHECKBIT8(inj_flags, 0);
  m_InjctrPar.inj_usetimingmap[1] = CHECKBIT8(inj_flags, 1);
  m_InjctrPar.inj_useaddcorrs = CHECKBIT8(inj_flags, 2);
+ m_InjctrPar.inj_useairden = CHECKBIT8(inj_flags, 3);
 
  unsigned char inj_config = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_config))
@@ -3100,6 +3103,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
     int value = MathHelpers::Round((packet_data->address >= INJ_GPS_CORR_SIZE) ? (packet_data->table_data[i] / 2.0f) : (packet_data->table_data[i] * 128.0f));
     mp_pdp->Bin8ToHex(value, m_outgoing_packet);
    }
+   else if (packet_data->tab_id == ETMT_ATSC_MAP)
+   {
+    unsigned char value = MathHelpers::Round(packet_data->table_data[i] * 128.0f);
+    mp_pdp->Bin8ToHex(value, m_outgoing_packet);
+   }
    else
    {  //default case
     signed char value = MathHelpers::Round(packet_data->table_data[i] * AA_MAPS_M_FACTOR);
@@ -3248,6 +3256,7 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
  WRITEBIT8(inj_flags, 0, packet_data->inj_usetimingmap[0]); 
  WRITEBIT8(inj_flags, 1, packet_data->inj_usetimingmap[1]); 
  WRITEBIT8(inj_flags, 2, packet_data->inj_useaddcorrs); 
+ WRITEBIT8(inj_flags, 3, packet_data->inj_useairden); 
  mp_pdp->Bin8ToHex(inj_flags, m_outgoing_packet);
 
  unsigned char inj_config = MAKEBYTE(packet_data->inj_config[0], packet_data->inj_squirt_num[0]);

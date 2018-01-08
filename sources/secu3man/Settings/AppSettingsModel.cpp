@@ -142,6 +142,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_GtscMapWnd_Y(_T("GTSCMapWnd_Y"))
 , m_Name_GpscMapWnd_X(_T("GPSCMapWnd_X"))
 , m_Name_GpscMapWnd_Y(_T("GPSCMapWnd_Y"))
+, m_Name_AtscMapWnd_X(_T("AirDenMapWnd_X"))
+, m_Name_AtscMapWnd_Y(_T("AirDenMapWnd_Y"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_Name_Tachometer_Max(_T("Tachometer_Max"))
@@ -733,6 +735,9 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_Y, std::numeric_limits<int>::max());
 
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AtscMapWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, AtscMapWnd_Y, std::numeric_limits<int>::max());
+
  //-----------------------------------------
  GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
  if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
@@ -1127,6 +1132,12 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optGpscMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GpscMapWnd_Y,write_str,IniFileName);
 
+ write_str.Format(_T("%d"),m_optAtscMapWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AtscMapWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optAtscMapWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AtscMapWnd_Y,write_str,IniFileName);
+
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optTachometerMax);
  WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
@@ -1259,6 +1270,8 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optGtscMapWnd_Y = i_wndSettings.m_GtscMapWnd_Y;
  m_optGpscMapWnd_X = i_wndSettings.m_GpscMapWnd_X;
  m_optGpscMapWnd_Y = i_wndSettings.m_GpscMapWnd_Y;
+ m_optAtscMapWnd_X = i_wndSettings.m_AtscMapWnd_X;
+ m_optAtscMapWnd_Y = i_wndSettings.m_AtscMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -1337,6 +1350,8 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_GtscMapWnd_Y = m_optGtscMapWnd_Y;
  o_wndSettings.m_GpscMapWnd_X = m_optGpscMapWnd_X;
  o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd_Y;
+ o_wndSettings.m_AtscMapWnd_X = m_optAtscMapWnd_X;
+ o_wndSettings.m_AtscMapWnd_Y = m_optAtscMapWnd_Y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

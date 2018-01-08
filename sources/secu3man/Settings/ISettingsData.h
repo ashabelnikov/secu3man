@@ -104,6 +104,8 @@ struct WndSettings
  int m_GtscMapWnd_Y;
  int m_GpscMapWnd_X;
  int m_GpscMapWnd_Y;
+ int m_AtscMapWnd_X;
+ int m_AtscMapWnd_Y;
 };
 
 typedef enum EInterLang

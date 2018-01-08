@@ -64,6 +64,7 @@
 #define INJ_TPSSWT_SIZE        16
 #define INJ_GTS_CORR_SIZE      16
 #define INJ_GPS_CORR_SIZE      9
+#define INJ_ATS_CORR_SIZE      16
 
 //количество наборов характеристик хранимых в пам€ти программ
 #define TABLES_NUMBER          4
@@ -99,6 +100,7 @@ struct SECU3FWMapsItem
  float inj_tpsswt[INJ_TPSSWT_SIZE];             // MAP/TPS switch point vs RPM
  float inj_gts_corr[INJ_GTS_CORR_SIZE];         // PW correction vs gas temperature
  float inj_gps_corr[INJ_GPS_CORR_SIZE+2];       // PW correction vs gas pressure
+ float inj_ats_corr[INJ_ATS_CORR_SIZE];         // PW correction vs air temperature
 };
 
 //јппаратно независимое представление данных таблиц хранимых в прошивке SECU-3
@@ -122,7 +124,7 @@ struct FWMapsDataHolder
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
  {
-  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
+  static const SECU3FWMapsItem defval = {_TSTRING(_T("")),{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f},{.0f}};
   maps.assign(setNum, defval);
   std::fill(attenuator_table, attenuator_table + KC_ATTENUATOR_LOOKUP_TABLE_SIZE, .0f);
   std::fill(dwellcntrl_table, dwellcntrl_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);

@@ -505,6 +505,9 @@ void CEEPROMTabController::SetViewChartsValues(void)
 
  m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
  m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
+
+ m_eedm->GetAtscMap(funset_index,m_view->mp_TablesPanel->GetAtscMap(false),false);
+ m_eedm->GetAtscMap(funset_index,m_view->mp_TablesPanel->GetAtscMap(true),true);
 }
 
 
@@ -616,6 +619,9 @@ void CEEPROMTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_INJ_GPSC:
    m_eedm->SetGpscMap(funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
+   break;
+  case TYPE_MAP_INJ_ATSC:
+   m_eedm->SetAtscMap(funset_index, m_view->mp_TablesPanel->GetAtscMap(false));
    break;
  }
 }

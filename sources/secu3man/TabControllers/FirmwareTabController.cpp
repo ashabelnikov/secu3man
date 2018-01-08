@@ -798,6 +798,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GTSC), TYPE_MAP_INJ_GTSC);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GPSC), TYPE_MAP_INJ_GPSC);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ATSC), TYPE_MAP_INJ_ATSC);
 
  //separate
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
@@ -1102,6 +1103,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
  m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
+
+ m_fwdm->GetAtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetAtscMap(false),false);
+ m_fwdm->GetAtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetAtscMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1239,6 +1243,10 @@ void CFirmwareTabController::OnMapChanged(int i_type)
   case TYPE_MAP_INJ_GPSC:
    ASSERT(m_current_funset_index!=-1);
    m_fwdm->SetGpscMap(m_current_funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
+   break;
+  case TYPE_MAP_INJ_ATSC:
+   ASSERT(m_current_funset_index!=-1);
+   m_fwdm->SetAtscMap(m_current_funset_index, m_view->mp_TablesPanel->GetAtscMap(false));
    break;
 
    //separate maps
