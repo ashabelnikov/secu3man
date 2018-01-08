@@ -315,6 +315,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_GTSC_MAP, false);       //since todo
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, false);          //since todo
  mp_view->EnableFWDFlag(FLAG_GPSC_MAP, false);       //since todo
+ mp_view->SetFWDFlag(FLAG_ATSC_MAP, false);          //since todo
+ mp_view->EnableFWDFlag(FLAG_ATSC_MAP, false);       //since todo
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
@@ -593,6 +595,8 @@ void S3FExportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_GTSC_MAP, false);   //todo
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, false);      //todo
  mp_view->EnableFWDFlag(FLAG_GPSC_MAP, false);   //todo
+ mp_view->SetFWDFlag(FLAG_ATSC_MAP, false);      //todo
+ mp_view->EnableFWDFlag(FLAG_ATSC_MAP, false);   //todo
  //separate
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);

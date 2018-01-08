@@ -2500,7 +2500,7 @@ void CButtonsPanel::OnViewAtscMap()
  if ((!m_atsc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_atsc_map_chart_state = 1;
-  m_atsc_map_wnd_handle = DLL::Chart2DCreate(GetAtscMap(true),GetAtscMap(false),0.5f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+  m_atsc_map_wnd_handle = DLL::Chart2DCreate(GetAtscMap(true),GetAtscMap(false),0.5f,1.5f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_ATSC_MAP).c_str(), false);

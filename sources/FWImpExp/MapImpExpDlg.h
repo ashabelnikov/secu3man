@@ -57,6 +57,7 @@ enum EFWDFlags
  FLAG_TPSSWT_MAP,   //inj
  FLAG_GTSC_MAP,     //inj
  FLAG_GPSC_MAP,     //inj
+ FLAG_ATSC_MAP,     //inj
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate

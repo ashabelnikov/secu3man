@@ -206,6 +206,9 @@ void EEPROMImportController::OnExchangePressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_GPSC_MAP))
   m_eedm->GetGpscMap(other_sel, mp_fwd->maps[current_sel].inj_gps_corr);
+
+ if (mp_view->GetFWDFlag(FLAG_ATSC_MAP))
+  m_eedm->GetAtscMap(other_sel, mp_fwd->maps[current_sel].inj_ats_corr);
 }
 
 //Modal window has been activated - perform its initialization
@@ -249,6 +252,7 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_TPSSWT_MAP, true);
  mp_view->SetFWDFlag(FLAG_GTSC_MAP, true);
  mp_view->SetFWDFlag(FLAG_GPSC_MAP, true);
+ mp_view->SetFWDFlag(FLAG_ATSC_MAP, true);
  //disable separate map flags
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, false);
