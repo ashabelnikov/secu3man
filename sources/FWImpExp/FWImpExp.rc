@@ -217,7 +217,7 @@ BEGIN
     BLOCK "040904e4"
     BEGIN
       VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2017 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "LegalCopyright", "Copyright (C) 2007-2018 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
       VALUE "ProductName", "SECU-3 Manager"
     END
   END
