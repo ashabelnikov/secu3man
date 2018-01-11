@@ -53,6 +53,7 @@ using namespace SECU3IO::SECU3Types;
 #define GASDOSE_POS_TPS_SIZE             16
 #define BAROCORR_SIZE                    9
 #define PA4_LOOKUP_TABLE_SIZE            16
+#define CTS_CRKCORR_SIZE                 16
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -182,10 +183,13 @@ typedef struct
  //Gas temperature (TEMP2) sensor lookup table, last two values are related voltage limits for x-axis
  _int tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
 
+ //Coolant temperature correction of advance angle on cranking
+ _char cts_crkcorr[CTS_CRKCORR_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[52];
+ _uchar reserved[36];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1710,6 +1714,28 @@ void CFirmwareDataMediator::SetTmp2CurveMap(const float* ip_values)
   p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] * 4.0f);
  for (; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; i++ )
   p_fd->exdata.tmp2_curve[i] = MathHelpers::Round(ip_values[i] / ADC_DISCRETE);
+}
+
+void CFirmwareDataMediator::GetCrkTempMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CTS_CRKCORR_SIZE; i++)
+  op_values[i] = (p_fd->exdata.cts_crkcorr[i] / AA_MAPS_M_FACTOR);
+}
+
+void CFirmwareDataMediator::SetCrkTempMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CTS_CRKCORR_SIZE; i++)
+  p_fd->exdata.cts_crkcorr[i] = MathHelpers::Round(ip_values[i] * AA_MAPS_M_FACTOR);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

@@ -180,6 +180,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetTmp2CurveMap(float* op_values, bool i_original = false);
   void SetTmp2CurveMap(const float* i_values);
 
+  void GetCrkTempMap(float* op_values, bool i_original = false);
+  void SetCrkTempMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

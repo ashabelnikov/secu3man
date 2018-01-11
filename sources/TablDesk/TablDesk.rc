@@ -164,6 +164,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,443,95,19
     CONTROL         "Настр. крив ДТГ",IDC_TD_VIEW_TMP2_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,465,82,19
+    CONTROL         "Темп.корр.пуск.УОЗ",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,465,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -541,6 +543,7 @@ BEGIN
     IDS_GTSC_MAP            "Коррекция впрыска от температуры газа"
     IDS_GPSC_MAP            "Коррекция впрыска от давления газа"
     IDS_ATSC_MAP            "Коррекция плотности воздуха по ДТВ"
+    IDS_CRKTEMP_MAP         "Карта коррекции УОЗ по ДТОЖ на пуске"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -702,6 +705,8 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,443,95,19
     CONTROL         "Tune GTS curve",IDC_TD_VIEW_TMP2_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,465,82,19
+    CONTROL         "Cranking corr.vs CLT",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,465,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -1094,6 +1099,7 @@ BEGIN
     IDS_GTSC_MAP            "Inj. PW correction vs gas temperature"
     IDS_GPSC_MAP            "Inj. PW correction vs gas pressure"
     IDS_ATSC_MAP            "Air density correction vs MAT"
+    IDS_CRKTEMP_MAP         "Cranking ign.timing correction vs CLT"
 END
 
 /////////////////////////////////////////////////////////////////////////////

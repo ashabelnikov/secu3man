@@ -64,8 +64,9 @@ enum EMapTypes
  TYPE_MAP_BAROCORR     = 33, //
  TYPE_MAP_MANIGNTIM    = 34, //
  TYPE_MAP_TMP2_CURVE   = 35, //
+ TYPE_MAP_CRKCLT_CORR  = 36, //
 
- TYPE_MAP_GME_WND      = 36, //pseudo map, grid mode editing window
+ TYPE_MAP_GME_WND      = 37, //pseudo map, grid mode editing window
 
  TYPE_MAP_SET_START    = 1,
  TYPE_MAP_SET_END      = 25

@@ -331,3 +331,5 @@
 #define IDS_MAPS_PRESS_UNIT             5590
 #define IDC_TD_VIEW_ATSC_MAP            5591
 #define IDS_ATSC_MAP                    5592
+#define IDC_TD_VIEW_CRKTEMP_MAP         5593
+#define IDS_CRKTEMP_MAP                 5594

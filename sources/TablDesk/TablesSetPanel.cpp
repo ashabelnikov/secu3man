@@ -438,6 +438,37 @@ void __cdecl CTablesSetPanel::OnChangeTmp2CurveXAxisEdit(void* i_param, int i_ty
   _this->m_OnMapChanged(TYPE_MAP_TMP2_CURVE);
 }
 
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeCrkTempTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+  _this->m_OnMapChanged(TYPE_MAP_CRKCLT_CORR);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseCrkTempTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_crktemp_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_crktemp_map_wnd_handle, TYPE_MAP_CRKCLT_CORR);
+}
+
 //------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
@@ -464,6 +495,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_barocorr_map_chart_state = 0;
  m_manigntim_map_chart_state = 0;
  m_tmp2_curve_map_chart_state = 0;
+ m_crktemp_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
@@ -475,6 +507,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_barocorr_map_wnd_handle = NULL;
  m_manigntim_map_wnd_handle = NULL;
  m_tmp2_curve_map_wnd_handle = NULL;
+ m_crktemp_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -504,6 +537,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, m_view_barocorr_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, m_view_manigntim_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, m_view_tmp2_curve_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_CRKTEMP_MAP, m_view_crktemp_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -520,6 +554,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_BAROCORR_MAP, OnViewBarocorrMap)
  ON_BN_CLICKED(IDC_TD_VIEW_MANIGNTIM_MAP, OnViewManIgntimMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TMP2_CURVE, OnViewTmp2CurveMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_CRKTEMP_MAP, OnViewCrkTempMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -535,6 +570,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_BAROCORR_MAP, OnUpdateViewBarocorrMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_MANIGNTIM_MAP, OnUpdateViewManIgntimMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TMP2_CURVE, OnUpdateViewTmp2CurveMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CRKTEMP_MAP, OnUpdateViewCrkTempMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -650,6 +686,14 @@ void CTablesSetPanel::OnUpdateViewTmp2CurveMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_tmp2_curve_map_chart_state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewCrkTempMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_crktemp_map_chart_state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -687,6 +731,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_tmp2_curve_map_chart_state)
   DLL::Chart2DUpdate(m_tmp2_curve_map_wnd_handle, GetTmp2CurveMap(true), GetTmp2CurveMap(false));
+
+ if (m_crktemp_map_chart_state)
+  DLL::Chart2DUpdate(m_crktemp_map_wnd_handle, GetCrkTempMap(true), GetCrkTempMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1144,6 +1191,38 @@ void CTablesSetPanel::OnViewManIgntimMap()
  }
 }
 
+void CTablesSetPanel::OnViewCrkTempMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_crktemp_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_crktemp_map_wnd_handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_crktemp_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_crktemp_map_chart_state = 1;
+  m_crktemp_map_wnd_handle = DLL::Chart2DCreate(GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
+    MLL::GetString(IDS_CRKTEMP_MAP).c_str(), false);
+  DLL::Chart2DSetOnChange(m_crktemp_map_wnd_handle,OnChangeCrkTempTable,this);
+  DLL::Chart2DSetOnClose(m_crktemp_map_wnd_handle,OnCloseCrkTempTable,this);
+  DLL::Chart2DUpdate(m_crktemp_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_crktemp_map_wnd_handle, TYPE_MAP_CRKCLT_CORR);
+
+  DLL::Chart2DShow(m_crktemp_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_crktemp_map_wnd_handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -1267,6 +1346,14 @@ float* CTablesSetPanel::GetTmp2CurveMap(bool i_original)
   return m_tmp2_curve_map_active;
 }
 
+float* CTablesSetPanel::GetCrkTempMap(bool i_original)
+{
+ if (i_original)
+  return m_crktemp_map_original;
+ else
+  return m_crktemp_map_active;
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -1295,6 +1382,8 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
   return m_manigntim_map_chart_state ? m_manigntim_map_wnd_handle : NULL;
  case TYPE_MAP_TMP2_CURVE:
   return m_tmp2_curve_map_chart_state ? m_tmp2_curve_map_wnd_handle : NULL;
+ case TYPE_MAP_CRKCLT_CORR:
+  return m_crktemp_map_chart_state ? m_crktemp_map_wnd_handle : NULL;
 
  default:
   return NULL;
