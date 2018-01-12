@@ -577,7 +577,8 @@ void CGridModeEditorDlg::OnPaint()
    _DrawRect(m_idl_grid[pt[i]], dc);
  }
 
- if (m_curDV.temp_use)
+ //Don't draw frame around temp.map cells during cranking because other temp.map is used on cranking
+ if (m_curDV.temp_use && !m_curDV.strt_use)
  {
   _2DLookup(m_curDV.temp, SECU3IO::temp_map_tmp_slots, pt);
   for(size_t i = 0; i < pt.size(); ++i)
