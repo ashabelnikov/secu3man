@@ -27,10 +27,12 @@
 #include "Resources/resource.h"
 #include "StarterPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/WndScroller.h"
 
 const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
+ ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
@@ -38,6 +40,7 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMECOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMEHOT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_PRIMEDELAY_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_FLDCLRTPS_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_SMAP_ABANDON_RPM_CAPTION,OnUpdateControls)
@@ -73,6 +76,11 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_UNIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_EDIT,OnUpdateFuelInjectionControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_SPIN,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_CAPTION,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_UNIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_EDIT,OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
@@ -87,6 +95,8 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_primecold_edit(CEditEx::MODE_FLOAT, true)
 , m_primehot_edit(CEditEx::MODE_FLOAT, true)
 , m_primedelay_edit(CEditEx::MODE_FLOAT, true)
+, m_fldclrtps_edit(CEditEx::MODE_FLOAT, true)
+, mp_scr(new CWndScroller)
 {
  m_params.starter_off  = 600;
  m_params.smap_abandon = 700;
@@ -95,6 +105,7 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_prime_cold =6.0f;
  m_params.inj_prime_hot = 2.0f;
  m_params.inj_prime_delay = 2.0f;
+ m_params.inj_floodclear_tps = 75.0f;
 }
 
 LPCTSTR CStarterPageDlg::GetDialogID(void) const
@@ -119,6 +130,8 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_STARTER_PRIMEHOT_SPIN, m_primehot_spin);
  DDX_Control(pDX, IDC_PD_STARTER_PRIMEDELAY_EDIT, m_primedelay_edit);
  DDX_Control(pDX, IDC_PD_STARTER_PRIMEDELAY_SPIN, m_primedelay_spin);
+ DDX_Control(pDX, IDC_PD_STARTER_FLDCLRTPS_EDIT, m_fldclrtps_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_FLDCLRTPS_SPIN, m_fldclrtps_spin);
 
  m_starter_off_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_OFF_RPM_EDIT, m_params.starter_off);
  m_smap_abandon_rpm_edit.DDX_Value(pDX, IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, m_params.smap_abandon);
@@ -127,6 +140,7 @@ void CStarterPageDlg::DoDataExchange(CDataExchange* pDX)
  m_primecold_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMECOLD_EDIT, m_params.inj_prime_cold);
  m_primehot_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEHOT_EDIT, m_params.inj_prime_hot);
  m_primedelay_edit.DDX_Value(pDX, IDC_PD_STARTER_PRIMEDELAY_EDIT, m_params.inj_prime_delay);
+ m_fldclrtps_edit.DDX_Value(pDX, IDC_PD_STARTER_FLDCLRTPS_EDIT, m_params.inj_floodclear_tps);
 }
 
 void CStarterPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -190,6 +204,12 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_primedelay_spin.SetRangeAndDelta(.0f, 25.0f, 0.1f);
  m_primedelay_edit.SetRange(0, 25.0f);
 
+ m_fldclrtps_edit.SetLimitText(5);
+ m_fldclrtps_spin.SetBuddy(&m_fldclrtps_edit);
+ m_fldclrtps_edit.SetDecimalPlaces(1);
+ m_fldclrtps_spin.SetRangeAndDelta(.0f, 100.0f, 0.5f);
+ m_fldclrtps_edit.SetRange(0, 100.0f);
+
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
 
@@ -221,7 +241,17 @@ BOOL CStarterPageDlg::OnInitDialog()
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 
+ //initialize window scroller
+ mp_scr->Init(this);
+ mp_scr->SetViewSizeF(.0f, 1.2f);
+
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CStarterPageDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ mp_scr->Close();
 }
 
 void CStarterPageDlg::OnChangeData()

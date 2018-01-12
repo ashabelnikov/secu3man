@@ -159,6 +159,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_prime_cold = MathHelpers::Round((p_in->inj_prime_cold * 1000.0f) / discrete);
     p_params->inj_prime_hot = MathHelpers::Round((p_in->inj_prime_hot * 1000.0f) / discrete);
     p_params->inj_prime_delay = MathHelpers::Round(p_in->inj_prime_delay * 10.0f);
+    p_params->inj_floodclear_tps = MathHelpers::Round(p_in->inj_floodclear_tps * 2.0f);
    }
    break;
   case ADCCOR_PAR:
@@ -509,6 +510,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->inj_prime_cold = (float(p_params->inj_prime_cold) * discrete) / 1000.0f;  //convert to ms
      p_out->inj_prime_hot = (float(p_params->inj_prime_hot) * discrete) / 1000.0f;  //convert to ms
      p_out->inj_prime_delay = float(p_params->inj_prime_delay) / 10.0f; //convert to seconds
+     p_out->inj_floodclear_tps = float(p_params->inj_floodclear_tps) / 2.0f;
     }
     break;
    case ADCCOR_PAR:

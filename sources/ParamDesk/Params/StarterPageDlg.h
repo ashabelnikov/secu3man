@@ -35,6 +35,7 @@
 #include "ui-core/TabDialog.h"
 
 class CToolTipCtrlEx;
+class CWndScroller;
 
 class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 {
@@ -58,6 +59,7 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
@@ -84,6 +86,9 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_primehot_edit;
   CSpinButtonCtrlEx m_primedelay_spin;
   CEditEx m_primedelay_edit;
+  CSpinButtonCtrlEx m_fldclrtps_spin;
+  CEditEx m_fldclrtps_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  std::auto_ptr<CWndScroller> mp_scr;
 };

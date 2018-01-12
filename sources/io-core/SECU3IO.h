@@ -113,6 +113,7 @@ namespace SECU3IO
   float inj_prime_cold;                 //prime pulse width at -30C
   float inj_prime_hot;                  //prime pulse width at 70C
   float inj_prime_delay;                //prime pulse delay
+  float inj_floodclear_tps;             //flood clear mode threshold
  };
 
  struct AnglesPar

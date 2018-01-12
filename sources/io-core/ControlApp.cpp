@@ -573,7 +573,7 @@ bool CControlApp::Parse_FNNAME_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::StartrPar& m_StartrPar = m_recepted_packet.m_StartrPar;
- if (size != (mp_pdp->isHex() ? 24 : 12))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 26 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Обороты при которых стартер будет выключен
@@ -612,6 +612,12 @@ bool CControlApp::Parse_STARTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &prime_delay))
   return false;
  m_StartrPar.inj_prime_delay = float(prime_delay) / 10.0f;            //convert to seconds
+
+ //flood clear mode entering threshold (% of TPS)
+ unsigned char inj_floodclear_tps = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_floodclear_tps))
+  return false;
+ m_StartrPar.inj_floodclear_tps = float(inj_floodclear_tps) / 2.0f;
 
  return true;
 }
@@ -2750,6 +2756,8 @@ void CControlApp::Build_STARTR_PAR(StartrPar* packet_data)
  mp_pdp->Bin16ToHex(prime_hot, m_outgoing_packet);
  int prime_delay = MathHelpers::Round(packet_data->inj_prime_delay * 10.0f);
  mp_pdp->Bin8ToHex(prime_delay, m_outgoing_packet);
+ int inj_floodclear_tps = MathHelpers::Round(packet_data->inj_floodclear_tps * 2.0f);
+ mp_pdp->Bin8ToHex(inj_floodclear_tps, m_outgoing_packet);
 }
 //-----------------------------------------------------------------------
 
