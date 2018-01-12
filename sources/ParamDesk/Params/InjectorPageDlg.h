@@ -107,6 +107,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_fff_const_edit;
   CButton m_inj_useaddcorrs_check;
   CButton m_inj_useairden_check;
+  CButton m_inj_usediffpress_check;
 
   float m_fuel_density[2];  //fuel density (g/cc)
 
