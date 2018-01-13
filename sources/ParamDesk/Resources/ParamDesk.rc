@@ -395,20 +395,25 @@ BEGIN
     LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
     LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 
-    EDITTEXT        IDC_PD_TEMPER_PWM_FRQ_EDIT,98,128,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_PWM_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,128,13,17
-    LTEXT           "Чaстота ШИМ",IDC_PD_TEMPER_PWM_FRQ_CAPTION,3,129,94,10
-    LTEXT           "Гц",IDC_PD_TEMPER_PWM_FRQ_UNIT,146,129,30,10
+    EDITTEXT        IDC_PD_TEMPER_PWM_FRQ_EDIT,95,128,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_PWM_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,128,13,17
+    LTEXT           "Чaстота ШИМ",IDC_PD_TEMPER_PWM_FRQ_CAPTION,0,129,94,10
+    LTEXT           "Гц",IDC_PD_TEMPER_PWM_FRQ_UNIT,140,129,30,10
 
-    EDITTEXT        IDC_PD_TEMPER_CONDPVTON_EDIT,98,150,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_CONDPVTON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,150,13,17
-    LTEXT           "Порог вкл. кондиционера",IDC_PD_TEMPER_CONDPVTON_CAPTION,3,151,94,10
-    LTEXT           "В",IDC_PD_TEMPER_CONDPVTON_UNIT,146,151,30,10
+    EDITTEXT        IDC_PD_TEMPER_CONDPVTON_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDPVTON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Порог вкл. кондиционера",IDC_PD_TEMPER_CONDPVTON_CAPTION,0,151,94,10
+    LTEXT           "В",IDC_PD_TEMPER_CONDPVTON_UNIT,140,151,30,10
 
-    EDITTEXT        IDC_PD_TEMPER_CONDPVTOFF_EDIT,98,170,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_CONDPVTOFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,170,13,17
-    LTEXT           "Порог выкл. кондиционера",IDC_PD_TEMPER_CONDPVTOFF_CAPTION,3,171,94,10
-    LTEXT           "В",IDC_PD_TEMPER_CONDPVTOFF_UNIT,146,171,30,10
+    EDITTEXT        IDC_PD_TEMPER_CONDPVTOFF_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDPVTOFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Порог выкл. кондиционера",IDC_PD_TEMPER_CONDPVTOFF_CAPTION,0,171,94,10
+    LTEXT           "В",IDC_PD_TEMPER_CONDPVTOFF_UNIT,140,171,30,10
+
+    EDITTEXT        IDC_PD_TEMPER_CONDMINRPM_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDMINRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Мин.обороты. вкл.кондиц.",IDC_PD_TEMPER_CONDMINRPM_CAPTION,0,191,94,10
+    LTEXT           "мин-1",IDC_PD_TEMPER_CONDMINRPM_UNIT,140,191,30,10
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
@@ -1312,7 +1317,7 @@ END
 
 STRINGTABLE
 BEGIN
-    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Значение оборотов ХХ, которое будет стремиться поддерживать регулятор. Карбюратор должен быть настроен на такие же обороты на прогретом двигателе с отключенной нагрузкой (фары, вентилятор охлаждения и т.д.)."
+    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Значение оборотов ХХ, которое будет стремиться поддерживать регулятор. Карбюратор должен быть настроен на такие же обороты на прогретом двигателе с отключенной нагрузкой (фары, вентилятор охлаждения и т.д.). Если поставить значение 0, то будет использоваться таблица (впрыск)."
     IDS_PD_IDLREG_FACTOR_EDIT_TT                    "Коэффициент, определяющий величину и скорость реакции регулятора на отклонение оборотов от заданного значения. Слишком большое значение может приводить к колебаниям оборотов ХХ. Слишком малое значение не будет давать эффекта."
     IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Указывает что зависимость показаний от напряжения на датчике задается таблицей. При помощи таблицы систему можно настроить практически под любой датчик (как с линейной, так и с нелинейной зависимостью)."
     IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "Этот параметр используется только для обычных коммутаторов. Для BIP373, SECU-Igniters и катушек со встроенными драйверами неоходимо использовать прошивку управляющую временем накопления! (_dwell в названии файла прошивки)"
@@ -1323,7 +1328,7 @@ BEGIN
     IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Смена фронта равноценна изменению порядка подключения проводов к датчику ДНО"
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Ограничение значения коррекции УОЗ формируемой регулятором ХХ. Правильно подобранное значение, позволит регулятору сохранять устойчивость."
     IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора. Исключает чувствительность регулятора к небольшим изменениям оборотов."
-    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "Температура двигателя, выше которой начнется работа регулятора (чтобы регулятор работал хотя бы на частично прогретом двигателе)"
+    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "Температура двигателя, выше которой начнется работа регулятора (чтобы регулятор работал хотя бы на частично прогретом двигателе). Этот параметр не учитывается если используется таблица целевых оборотов от температуры (впрыск)."
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "Набор таблиц используемый для газа. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "Набор таблиц используемый для бензина. Первые 4 набора таблиц хранятся в прошивке, последний 5-й набор в EEPROM (доступный для редактирования в онлайне)."
     IDS_PD_FUNSET_PRESS_SWING_EDIT_TT               "Если в качестве нагрузки выборан ДАД, то это значение давления на впуске, соответствующее максимальной нагрузке (16-я кривая в рабочей таблице УОЗ или впрыска). Определить можно следующим образом. Трогаемся на высокой передаче, резко нажимаем педаль газа и смотрим давление."
@@ -1905,20 +1910,25 @@ BEGIN
     LTEXT           "°C",IDC_PD_TEMPER_VENT_ON_THRESHOLD_UNIT,68,33,16,14
     LTEXT           "°C",IDC_PD_TEMPER_VENT_OFF_THRESHOLD_UNIT,147,33,15,14
 
-    EDITTEXT        IDC_PD_TEMPER_PWM_FRQ_EDIT,98,128,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_PWM_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,128,13,17
-    LTEXT           "PWM frequency",IDC_PD_TEMPER_PWM_FRQ_CAPTION,3,129,94,10
-    LTEXT           "Hz",IDC_PD_TEMPER_PWM_FRQ_UNIT,146,129,30,10
+    EDITTEXT        IDC_PD_TEMPER_PWM_FRQ_EDIT,95,128,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_PWM_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,128,13,17
+    LTEXT           "PWM frequency",IDC_PD_TEMPER_PWM_FRQ_CAPTION,0,129,94,10
+    LTEXT           "Hz",IDC_PD_TEMPER_PWM_FRQ_UNIT,140,129,30,10
 
-    EDITTEXT        IDC_PD_TEMPER_CONDPVTON_EDIT,98,150,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_CONDPVTON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,150,13,17
-    LTEXT           "Air cond. turn on threshold",IDC_PD_TEMPER_CONDPVTON_CAPTION,3,151,94,10
-    LTEXT           "V",IDC_PD_TEMPER_CONDPVTON_UNIT,146,151,30,10
+    EDITTEXT        IDC_PD_TEMPER_CONDPVTON_EDIT,95,150,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDPVTON_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,150,13,17
+    LTEXT           "Air cond. turn on threshold",IDC_PD_TEMPER_CONDPVTON_CAPTION,0,151,94,10
+    LTEXT           "V",IDC_PD_TEMPER_CONDPVTON_UNIT,140,151,30,10
 
-    EDITTEXT        IDC_PD_TEMPER_CONDPVTOFF_EDIT,98,170,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_TEMPER_CONDPVTOFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,132,170,13,17
-    LTEXT           "Air cond. turn off threshold",IDC_PD_TEMPER_CONDPVTOFF_CAPTION,3,171,94,10
-    LTEXT           "V",IDC_PD_TEMPER_CONDPVTOFF_UNIT,146,171,30,10
+    EDITTEXT        IDC_PD_TEMPER_CONDPVTOFF_EDIT,95,170,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDPVTOFF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,170,13,17
+    LTEXT           "Air cond. turn off threshold",IDC_PD_TEMPER_CONDPVTOFF_CAPTION,0,171,94,10
+    LTEXT           "V",IDC_PD_TEMPER_CONDPVTOFF_UNIT,140,171,30,10
+
+    EDITTEXT        IDC_PD_TEMPER_CONDMINRPM_EDIT,95,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_TEMPER_CONDMINRPM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,190,13,17
+    LTEXT           "Air cond. turn on min. rpm",IDC_PD_TEMPER_CONDMINRPM_CAPTION,0,191,94,10
+    LTEXT           "min-1",IDC_PD_TEMPER_CONDMINRPM_UNIT,140,191,30,10
 END
 
 IDD_PD_ADCCOMPEN_PAGE DIALOGEX 0, 0, 175, 158
@@ -2865,9 +2875,9 @@ BEGIN
     IDS_PD_ANGLES_ZEROAA_CHECK_TT                   "When this check is set, ignition timing will be zero at all conditions. Use for setting of null advance angle by means of marks and stroboscope"
     IDS_PD_IDLREG_FACTOR_EDIT_TT                    "The higher the value, the faster controller will change the ignition timing when RPM differs from target value (bigger value - stronger reaction of regulator)."
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Sets limits, in which idling regulator will alter ignition timing to maintain target RPM"
-    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Set the target RPM of the idling regulator. It should match the setting of the carburettor on warmed up engine and without load (lights, cooling fan, heater motor, etc.)."
+    IDS_PD_IDLREG_GOAL_RPM_EDIT_TT                  "Set the target RPM of the idling regulator. It should match the setting of the carburettor on warmed up engine and without load (lights, cooling fan, heater motor, etc.). If you set value to zero, then look up table will be used (injection)."
     IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Dead band of regulator"
-    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "During warm up idling regulator will be turned on after CLT reach this value."
+    IDS_PD_IDLREG_TURN_ON_TEMP_EDIT_TT              "During warm up idling regulator will be turned on after CLT reach this value. This parameter is ignored if target rpm vs coolant temp. lookup table used."
     IDS_PD_IDLREG_USE_REGULATOR_TT                  "When this check is set, controller will try to maintain target idling RPM by means of altering of ignition timing"
     IDS_PD_FUNSET_BENZIN_MAPS_COMBO_TT              "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"
     IDS_PD_FUNSET_GAS_MAPS_COMBO_TT                 "First four sets of maps are in the firmware, last one in the EEPROM - which you can edit in the real time. Select which set will be used after turning on of ignition"

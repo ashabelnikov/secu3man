@@ -54,6 +54,7 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void EnableUseCTSCurveMap(bool enable);
 
   void EnableSECU3TItems(bool i_enable);
+  void EnableFuelInjection(bool enable);
 
  // Implementation
  protected:
@@ -70,7 +71,8 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateVentOff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseVentPwm(CCmdUI* pCmdUI);
   afx_msg void OnUpdateUseCurveMap(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsSECU3iFI(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -82,6 +84,7 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_use_vent_pwm_enabled;
   bool m_use_curve_map_enabled;
   bool m_enable_secu3t_features;
+  bool m_fuel_injection;
 
   CButton m_use_temp_sensor;
   CButton m_use_vent_pwm;
@@ -96,4 +99,6 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_cond_pvt_on_edit;
   CSpinButtonCtrlEx m_cond_pvt_off_spin;
   CEditEx m_cond_pvt_off_edit;
+  CSpinButtonCtrlEx m_cond_min_rpm_spin;
+  CEditEx m_cond_min_rpm_edit;
 };

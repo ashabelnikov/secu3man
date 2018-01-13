@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_PWM_FRQ_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_TEMPER_CONDPVTON_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_TEMPER_CONDPVTOFF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_TEMPER_CONDMINRPM_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_VENT_PWM, OnPdTemperUseVentPwm)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_CURVE_MAP, OnPdTemperUseCurveMap)
@@ -63,15 +64,20 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_CAPTION, OnUpdateUseVentPwm)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_PWM_FRQ_UNIT, OnUpdateUseVentPwm)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_EDIT, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_SPIN, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_CAPTION, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_UNIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_EDIT, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_SPIN, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_CAPTION, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTON_UNIT, OnUpdateControlsSECU3iFI)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_EDIT, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_SPIN, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_CAPTION, OnUpdateControlsSECU3i)
- ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_UNIT, OnUpdateControlsSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_EDIT, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_SPIN, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_CAPTION, OnUpdateControlsSECU3iFI)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDPVTOFF_UNIT, OnUpdateControlsSECU3iFI)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_EDIT, OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_SPIN, OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_CAPTION, OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_UNIT, OnUpdateFuelInjectionControls)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
@@ -80,11 +86,13 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 , m_enable_secu3t_features(false)
 , m_use_vent_pwm_enabled(false)
 , m_use_curve_map_enabled(false)
+, m_fuel_injection(false)
 , m_vent_on_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_vent_off_threshold_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_vent_pwmfrq_edit(CEditEx::MODE_INT, true)
 , m_cond_pvt_on_edit(CEditEx::MODE_FLOAT, true)
 , m_cond_pvt_off_edit(CEditEx::MODE_FLOAT, true)
+, m_cond_min_rpm_edit(CEditEx::MODE_INT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.vent_on = 95.0f;
@@ -95,6 +103,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
  m_params.vent_pwmfrq = 5000;
  m_params.cond_pvt_on = 1.6f;
  m_params.cond_pvt_off = 2.5f;
+ m_params.cond_min_rpm = 1200;
 }
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
@@ -118,12 +127,15 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_TEMPER_CONDPVTON_EDIT, m_cond_pvt_on_edit);
  DDX_Control(pDX, IDC_PD_TEMPER_CONDPVTOFF_SPIN, m_cond_pvt_off_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_CONDPVTOFF_EDIT, m_cond_pvt_off_edit);
+ DDX_Control(pDX, IDC_PD_TEMPER_CONDMINRPM_SPIN, m_cond_min_rpm_spin);
+ DDX_Control(pDX, IDC_PD_TEMPER_CONDMINRPM_EDIT, m_cond_min_rpm_edit);
 
  m_vent_on_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, m_params.vent_on);
  m_vent_off_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_params.vent_off);
  m_vent_pwmfrq_edit.DDX_Value(pDX, IDC_PD_TEMPER_PWM_FRQ_EDIT, m_params.vent_pwmfrq);
  m_cond_pvt_on_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTON_EDIT, m_params.cond_pvt_on);
  m_cond_pvt_off_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTOFF_EDIT, m_params.cond_pvt_off);
+ m_cond_min_rpm_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDMINRPM_EDIT, m_params.cond_min_rpm);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
@@ -149,9 +161,14 @@ void CTemperPageDlg::OnUpdateUseCurveMap(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled && m_use_curve_map_enabled);
 }
 
-void CTemperPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
+void CTemperPageDlg::OnUpdateControlsSECU3iFI(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && !m_enable_secu3t_features);
+ pCmdUI->Enable(m_enabled && !m_enable_secu3t_features && m_fuel_injection);
+}
+
+void CTemperPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_fuel_injection);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -190,6 +207,12 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_cond_pvt_off_edit.SetDecimalPlaces(4);
  m_cond_pvt_off_spin.SetRangeAndDelta(.0, 5.0, 0.01);
  m_cond_pvt_off_edit.SetRange(.0, 5.0);
+
+ m_cond_min_rpm_spin.SetBuddy(&m_cond_min_rpm_edit);
+ m_cond_min_rpm_edit.SetLimitText(4);
+ m_cond_min_rpm_edit.SetDecimalPlaces(0);
+ m_cond_min_rpm_spin.SetRangeAndDelta(500, 3000, 10);
+ m_cond_min_rpm_edit.SetRange(500, 3000);
 
  UpdateData(FALSE);
 
@@ -331,5 +354,14 @@ void CTemperPageDlg::EnableSECU3TItems(bool i_enable)
   return; //already has needed state
  m_enable_secu3t_features = i_enable;
  if (::IsWindow(m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CTemperPageDlg::EnableFuelInjection(bool i_enable)
+{
+ if (m_fuel_injection == i_enable)
+  return; //already has needed state
+ m_fuel_injection = i_enable;
+ if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }
