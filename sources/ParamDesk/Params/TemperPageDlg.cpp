@@ -41,6 +41,7 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_TEMPER_CONDPVTON_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_TEMPER_CONDPVTOFF_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_TEMPER_CONDMINRPM_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_TEMPER_VENTTIMER_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_TEMP_SENSOR, OnPdTemperUseTempSensor)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_VENT_PWM, OnPdTemperUseVentPwm)
  ON_BN_CLICKED(IDC_PD_TEMPER_USE_CURVE_MAP, OnPdTemperUseCurveMap)
@@ -78,6 +79,11 @@ BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_SPIN, OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_CAPTION, OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_CONDMINRPM_UNIT, OnUpdateFuelInjectionControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENTTIMER_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENTTIMER_SPIN, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENTTIMER_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_TEMPER_VENTTIMER_UNIT, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
@@ -93,6 +99,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
 , m_cond_pvt_on_edit(CEditEx::MODE_FLOAT, true)
 , m_cond_pvt_off_edit(CEditEx::MODE_FLOAT, true)
 , m_cond_min_rpm_edit(CEditEx::MODE_INT, true)
+, m_vent_timer_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.vent_on = 95.0f;
@@ -104,6 +111,7 @@ CTemperPageDlg::CTemperPageDlg(CWnd* pParent /*=NULL*/)
  m_params.cond_pvt_on = 1.6f;
  m_params.cond_pvt_off = 2.5f;
  m_params.cond_min_rpm = 1200;
+ m_params.vent_tmr = 60.0f;
 }
 
 LPCTSTR CTemperPageDlg::GetDialogID(void) const
@@ -129,6 +137,8 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_TEMPER_CONDPVTOFF_EDIT, m_cond_pvt_off_edit);
  DDX_Control(pDX, IDC_PD_TEMPER_CONDMINRPM_SPIN, m_cond_min_rpm_spin);
  DDX_Control(pDX, IDC_PD_TEMPER_CONDMINRPM_EDIT, m_cond_min_rpm_edit);
+ DDX_Control(pDX, IDC_PD_TEMPER_VENTTIMER_SPIN, m_vent_timer_spin);
+ DDX_Control(pDX, IDC_PD_TEMPER_VENTTIMER_EDIT, m_vent_timer_edit);
 
  m_vent_on_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, m_params.vent_on);
  m_vent_off_threshold_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, m_params.vent_off);
@@ -136,6 +146,7 @@ void CTemperPageDlg::DoDataExchange(CDataExchange* pDX)
  m_cond_pvt_on_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTON_EDIT, m_params.cond_pvt_on);
  m_cond_pvt_off_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDPVTOFF_EDIT, m_params.cond_pvt_off);
  m_cond_min_rpm_edit.DDX_Value(pDX, IDC_PD_TEMPER_CONDMINRPM_EDIT, m_params.cond_min_rpm);
+ m_vent_timer_edit.DDX_Value(pDX, IDC_PD_TEMPER_VENTTIMER_EDIT, m_params.vent_tmr);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_TEMP_SENSOR, m_params.tmp_use);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_VENT_PWM, m_params.vent_pwm);
  DDX_Check_bool(pDX, IDC_PD_TEMPER_USE_CURVE_MAP, m_params.cts_use_map);
@@ -214,6 +225,12 @@ BOOL CTemperPageDlg::OnInitDialog()
  m_cond_min_rpm_spin.SetRangeAndDelta(500, 3000, 10);
  m_cond_min_rpm_edit.SetRange(500, 3000);
 
+ m_vent_timer_spin.SetBuddy(&m_vent_timer_edit);
+ m_vent_timer_edit.SetLimitText(3);
+ m_vent_timer_edit.SetDecimalPlaces(0);
+ m_vent_timer_spin.SetRangeAndDelta(.0, 600.0, 1.0);
+ m_vent_timer_edit.SetRange(.0, 600.0);
+
  UpdateData(FALSE);
 
  //create tooltip control
@@ -236,7 +253,7 @@ BOOL CTemperPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.4f);
+ mp_scr->SetViewSizeF(.0f, 1.5f);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control

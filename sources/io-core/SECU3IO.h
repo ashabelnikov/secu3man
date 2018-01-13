@@ -199,6 +199,7 @@ namespace SECU3IO
   float cond_pvt_on;
   float cond_pvt_off;
   int cond_min_rpm;
+  float vent_tmr;
  };
 
  struct ADCCompenPar

@@ -101,4 +101,6 @@ class CTemperPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_cond_pvt_off_edit;
   CSpinButtonCtrlEx m_cond_min_rpm_spin;
   CEditEx m_cond_min_rpm_edit;
+  CSpinButtonCtrlEx m_vent_timer_spin;
+  CEditEx m_vent_timer_edit;
 };

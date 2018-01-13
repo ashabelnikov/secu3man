@@ -945,7 +945,7 @@ bool CControlApp::Parse_CARBUR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::TemperPar& m_TemperPar = m_recepted_packet.m_TemperPar;
- if (size != (mp_pdp->isHex() ? 26 : 13))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 30 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Temperature flags
@@ -997,6 +997,12 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &cond_min_rpm))
   return false;
  m_TemperPar.cond_min_rpm = cond_min_rpm;
+
+ //Cooling fan's timer (sec.)
+ int vent_tmr = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &vent_tmr))
+  return false;
+ m_TemperPar.vent_tmr = vent_tmr / 100.0f;
 
  return true;
 }
@@ -2786,6 +2792,8 @@ void CControlApp::Build_TEMPER_PAR(TemperPar* packet_data)
  int cond_pvt_off = MathHelpers::Round(((float)packet_data->cond_pvt_off) / m_adc_discrete);
  mp_pdp->Bin16ToHex(cond_pvt_off, m_outgoing_packet);
  mp_pdp->Bin16ToHex(packet_data->cond_min_rpm, m_outgoing_packet);
+ int vent_tmr = MathHelpers::Round(((float)packet_data->vent_tmr) * 100.0f);
+ mp_pdp->Bin16ToHex(vent_tmr, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

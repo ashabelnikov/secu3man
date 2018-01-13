@@ -71,6 +71,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->cond_pvt_on = MathHelpers::Round(((float)p_in->cond_pvt_on) / ADC_DISCRETE);
     p_params->cond_pvt_off = MathHelpers::Round(((float)p_in->cond_pvt_off) / ADC_DISCRETE);    
     p_params->cond_min_rpm = p_in->cond_min_rpm;    
+    p_params->vent_tmr = MathHelpers::Round(((float)p_in->vent_tmr) * 100.0);    
    }
    break;
   case CARBUR_PAR:
@@ -420,6 +421,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->cond_pvt_on = ((float)p_params->cond_pvt_on) * ADC_DISCRETE;
      p_out->cond_pvt_off = ((float)p_params->cond_pvt_off) * ADC_DISCRETE;
      p_out->cond_min_rpm = p_params->cond_min_rpm;
+     p_out->vent_tmr = ((float)p_params->vent_tmr) / 100.0f;
     }
     break;
    case CARBUR_PAR:
