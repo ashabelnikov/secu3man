@@ -731,6 +731,7 @@ void CParamDeskDlg::EnableChoke(bool i_enable)
  m_choke = i_enable;
  m_tab_control.EnableItem(m_choke_tab_idx, i_enable && m_enabled);
  m_pChokePageDlg->Enable(i_enable && m_enabled);
+ m_pStarterPageDlg->EnableChoke(i_enable);
 }
 
 void CParamDeskDlg::EnableLambda(bool i_enable)

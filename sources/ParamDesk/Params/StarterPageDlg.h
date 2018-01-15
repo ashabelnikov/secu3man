@@ -54,6 +54,7 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   void EnableFuelInjection(bool i_enable);
   void EnableGasdose(bool i_enable);
+  void EnableChoke(bool enable);
 
  // Implementation
  protected:
@@ -64,6 +65,7 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateInjGasControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateInjGasChokeControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -71,6 +73,7 @@ class CStarterPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_enabled;
   bool m_fuel_injection;
   bool m_gasdose;
+  bool m_choke;
 
   CSpinButtonCtrlEx m_smap_abandon_rpm_spin;
   CEditEx m_smap_abandon_rpm_edit;

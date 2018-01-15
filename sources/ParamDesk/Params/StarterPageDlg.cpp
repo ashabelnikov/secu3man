@@ -77,10 +77,10 @@ BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_UNIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_PRIMEDELAY_EDIT,OnUpdateFuelInjectionControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_SPIN,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_CAPTION,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_UNIT,OnUpdateFuelInjectionControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_EDIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_SPIN,OnUpdateInjGasChokeControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_CAPTION,OnUpdateInjGasChokeControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_UNIT,OnUpdateInjGasChokeControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_FLDCLRTPS_EDIT,OnUpdateInjGasChokeControls)
 END_MESSAGE_MAP()
 
 CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
@@ -88,6 +88,7 @@ CStarterPageDlg::CStarterPageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_fuel_injection(false)
 , m_gasdose(false)
+, m_choke(false)
 , m_starter_off_rpm_edit(CEditEx::MODE_INT, true)
 , m_smap_abandon_rpm_edit(CEditEx::MODE_INT, true)
 , m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
@@ -156,6 +157,11 @@ void CStarterPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
 void CStarterPageDlg::OnUpdateInjGasControls(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && (m_fuel_injection || m_gasdose));
+}
+
+void CStarterPageDlg::OnUpdateInjGasChokeControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_fuel_injection || m_gasdose || m_choke));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -306,6 +312,15 @@ void CStarterPageDlg::EnableGasdose(bool i_enable)
  if (m_gasdose == i_enable)
   return; //already has needed state
  m_gasdose = i_enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+}
+
+void CStarterPageDlg::EnableChoke(bool i_enable)
+{
+ if (m_choke == i_enable)
+  return; //already has needed state
+ m_choke = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 }
