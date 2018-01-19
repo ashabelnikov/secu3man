@@ -1028,6 +1028,10 @@ void CAnalogMeter::GetState(enum MeterMemberEnum meter_member, bool* pState) con
   case meter_unit:
    *pState = m_swUnit;
    break;
+
+  case meter_needle:
+   *pState = m_swNeedle;
+   break;
  }
 }
 
