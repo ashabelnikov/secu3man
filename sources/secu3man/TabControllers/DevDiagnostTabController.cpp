@@ -46,6 +46,7 @@ namespace {
 class ITstMode
 {
  public:
+  virtual ~ITstMode() {};
   virtual void Reset(void) = 0;
   virtual bool Next(void) = 0;  
   virtual void SetMode(bool mode) = 0;
