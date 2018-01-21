@@ -379,6 +379,7 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  m_view->mp_TablesPanel->EnableFuelInjection(true);
  m_view->mp_TablesPanel->EnableCarbAfr(true);
  m_view->mp_TablesPanel->EnableGasCorr(true);
+ m_view->mp_TablesPanel->EnableChokeOp(true);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(true);
  m_view->mp_ParamDeskDlg->EnableCKPSItems(true);
  m_view->mp_ParamDeskDlg->EnableHallWndWidth(true);

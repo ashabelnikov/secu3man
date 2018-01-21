@@ -1473,6 +1473,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_gasdose(false)
 , m_carb_afr(false)
 , m_en_gas_corr(false)
+, m_choke_op_enabled(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -2751,7 +2752,7 @@ void CButtonsPanel::OnUpdateViewAtscMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
+ pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose || m_choke_op_enabled));
  pCmdUI->SetCheck( (m_atsc_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2885,7 +2886,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
   DLL::Chart2DEnable(m_gpsc_map_wnd_handle, (i_enable && m_en_gas_corr) && IsAllowed());
  if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
+  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_gasdose || m_choke_op_enabled) && IsAllowed());
 }
 
 void CButtonsPanel::EnableGasdose(bool i_enable)
@@ -2909,7 +2910,7 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
  if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
  if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
+  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_fuel_injection || m_choke_op_enabled) && IsAllowed());
  if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
   DLL::Chart2DEnable(m_iatclt_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
 
@@ -2937,6 +2938,15 @@ void CButtonsPanel::EnableGasCorr(bool i_enable)
   DLL::Chart2DEnable(m_gtsc_map_wnd_handle, (i_enable && m_fuel_injection) && IsAllowed());
  if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
   DLL::Chart2DEnable(m_gpsc_map_wnd_handle, (i_enable && m_fuel_injection) && IsAllowed());
+}
+
+void CButtonsPanel::EnableChokeOp(bool enable)
+{
+ m_choke_op_enabled = enable;
+ if (::IsWindow(this->m_hWnd))
+  UpdateDialogControls(this, TRUE);
+ if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
+  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (enable || m_gasdose || m_fuel_injection) && IsAllowed());
 }
 
 

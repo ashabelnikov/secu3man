@@ -360,6 +360,7 @@ void CPMTablesController::ApplyFWOptions(DWORD opt)
  mp_view->mp_ButtonsPanel->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL));
  mp_view->mp_ButtonsPanel->EnableCarbAfr(CHECKBIT32(opt, COPT_CARB_AFR));
  mp_view->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, COPT_SECU3T));
+ mp_view->mp_ButtonsPanel->EnableChokeOp(CHECKBIT32(opt, COPT_SM_CONTROL));
 }
 
 //----------------------------------------------------------------

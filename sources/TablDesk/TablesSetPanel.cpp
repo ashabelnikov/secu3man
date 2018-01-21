@@ -480,7 +480,6 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 : Super(CTablesSetPanel::IDD, pParent)
 , m_dwellcntrl_enabled(false)
 , m_cts_curve_enabled(false)
-, m_choke_op_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
  m_scrl_factor = 3.20f;
@@ -756,7 +755,7 @@ void CTablesSetPanel::EnableCTSCurve(bool enable)
 
 void CTablesSetPanel::EnableChokeOp(bool enable)
 {
- m_choke_op_enabled = enable;
+ Super::EnableChokeOp(enable);
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
  if (m_choke_map_chart_state && ::IsWindow(m_choke_map_wnd_handle))
