@@ -69,6 +69,7 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnMapCalcButton();
   afx_msg void OnMap2CalcButton();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsUpper(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3i(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 

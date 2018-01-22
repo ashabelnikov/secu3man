@@ -57,10 +57,10 @@ BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_MAP_GRAD_UNIT,OnUpdateControls)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_UNIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_EDIT,OnUpdateControlsUpper)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_SPIN,OnUpdateControlsUpper)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_CAPTION,OnUpdateControlsUpper)
+ ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_PRESS_SWING_UNIT,OnUpdateControlsUpper)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BENZIN_MAPS_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_FUNSET_BENZIN_MAPS_COMBO_CAPTION,OnUpdateControls)
@@ -206,6 +206,11 @@ void CFunSetPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(m_enabled);
 }
 
+void CFunSetPageDlg::OnUpdateControlsUpper(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && (m_params.load_src_cfg != 1)); //disabled if MAP(baro) selected as load type
+}
+
 void CFunSetPageDlg::OnUpdateControlsSECU3i(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && !m_enable_secu3t_features);
@@ -342,7 +347,7 @@ void CFunSetPageDlg::OnChangeData()
 
 void CFunSetPageDlg::UpdateLoadAxisUnits(void)
 {
- int ids = (m_params.load_src_cfg == 0) ? IDS_KPA_UNIT : IDS_PERCENT_UNIT;
+ int ids = (m_params.load_src_cfg < 2) ? IDS_KPA_UNIT : IDS_PERCENT_UNIT;
  GetDlgItem(IDC_PD_FUNSET_MAP_GRAD_UNIT)->SetWindowText(MLL::LoadString(ids));
  GetDlgItem(IDC_PD_FUNSET_PRESS_SWING_UNIT)->SetWindowText(MLL::LoadString(ids));
 }
@@ -352,6 +357,7 @@ void CFunSetPageDlg::OnChangeDataLoadSrc()
  UpdateData();
  UpdateLoadAxisUnits();
  OnChangeNotify(); //notify event receiver about change of view content(see class ParamPageEvents)
+ UpdateDialogControls(this, TRUE);
 }
 
 void CFunSetPageDlg::OnMapCalcButton()
@@ -446,12 +452,13 @@ void CFunSetPageDlg::FillCBByLoadOpts(void)
 
  m_load_src_combo.ResetContent();
 
- m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));
- m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));
- m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPTPS));
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAP));       //MAP
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPBARO));   //MAP(baro)
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_TPS));       //TPS
+ m_load_src_combo.AddString(MLL::LoadString(IDS_PD_LOAD_OPT_MAPTPS));    //MAP+TPS
 
  //for gas
- if (m_params.load_src_cfg < 3)
+ if (m_params.load_src_cfg < 4)
   m_load_src_combo.SetCurSel(m_params.load_src_cfg);
  else
   m_load_src_combo.SetCurSel(0);
@@ -477,4 +484,5 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
  memcpy(&m_params,i_values, sizeof(SECU3IO::FunSetPar));
  UpdateData(false); //copy data from variables to dialog
  UpdateLoadAxisUnits();
+ UpdateDialogControls(this, TRUE);
 }
