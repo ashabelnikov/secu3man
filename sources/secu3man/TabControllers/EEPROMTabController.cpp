@@ -67,7 +67,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  m_epp = holder.GetEepromParameters();
  m_eedm = new EEPROMDataMediator(holder.GetEepromParameters());
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- m_eedm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  ASSERT(m_eedm);
 
@@ -102,7 +102,7 @@ CEEPROMTabController::~CEEPROMTabController()
 void CEEPROMTabController::OnSettingsChanged(void)
 {
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- m_eedm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);

@@ -37,6 +37,7 @@ typedef enum EECUPlatform
  EP_ATMEGA64,
  EP_ATMEGA128,
  EP_ATMEGA644,            //redundant to EP_ATMEGA64 by firmware and EEPROM sizes
+ EP_ATMEGA1284,           //redundant to EP_ATMEGA128 by firmware and EEPROM sizes
  EP_NR_OF_PLATFORMS       //must be last!
 };
 
@@ -81,6 +82,12 @@ class IOCORE_API PlatformParamHolder
   static bool GetPlatformIdByEEPROMSize(int fwSize, EECUPlatform& o_platform);
   //get platform ID by magic number placed in last 4 bytes of EEPROM
   static bool GetPlatformIdByEEPROMMagic(const BYTE* p_buff, int fwSize, EECUPlatform& o_platform);
+
+  //returns quartz frequency in Hz
+  static size_t GetQuartzFreq(EECUPlatform platid);
+
+  //returns quartz frequency factor
+  static float GetQuartzFact(EECUPlatform platid);
 
  private:
   PPEepromParam m_ep;

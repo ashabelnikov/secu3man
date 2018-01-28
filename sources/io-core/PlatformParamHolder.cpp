@@ -116,6 +116,22 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_platform_id = EP_ATMEGA128;
    break;
 
+  case EP_ATMEGA1284:
+   m_fp.m_page_size = 256;
+   m_fp.m_total_size = 131072;
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
+   m_fp.m_bl_section_size = 2048; //1024 words
+   m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //eeprom
+   m_ep.m_size = 4096;
+   m_ep.m_platform_id = EP_ATMEGA1284;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 20000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "1284", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA1284;
+   break;
+
   default:
    ASSERT(0);
    memset(&m_fp, 0, sizeof(PPFlashParam));
@@ -212,4 +228,14 @@ bool PlatformParamHolder::GetPlatformIdByEEPROMMagic(const BYTE* p_buff, int fwS
   }
  }
  return false; //error
+}
+
+size_t PlatformParamHolder::GetQuartzFreq(EECUPlatform platid)
+{
+ return (EP_ATMEGA644==platid || EP_ATMEGA1284==platid) ? 20000000 : 16000000;
+}
+
+float PlatformParamHolder::GetQuartzFact(EECUPlatform platid)
+{
+ return (EP_ATMEGA644==platid || EP_ATMEGA1284==platid) ? 3.2f : 4.0f;
 }

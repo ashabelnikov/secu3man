@@ -98,7 +98,7 @@ bool CCommunicationManager::Init(void)
  //Set parameters for speed sensor calculations
  m_pControlApp->SetNumPulsesPer1Km(m_pSettings->GetNumPulsesPer1Km());
  //Set clock frequency (16 or 20 mHz)
- m_pControlApp->SetQuartzFrq((EP_ATMEGA644==m_pSettings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_pControlApp->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(m_pSettings->GetECUPlatformType()));
  //Set units for speed and distance
  m_pControlApp->SetSpeedUnit(m_pSettings->GetSpeedUnit()); 
 

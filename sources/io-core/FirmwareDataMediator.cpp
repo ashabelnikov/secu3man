@@ -713,7 +713,7 @@ void CFirmwareDataMediator::GetCrnkMap(int i_index, float* op_values, bool i_ori
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; i++)
   op_values[i] = (p_fd->tables[i_index].inj_cranking[i] * discrete) / 1000.0f; //convert to ms
 }
@@ -727,7 +727,7 @@ void CFirmwareDataMediator::SetCrnkMap(int i_index, const float* ip_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_CRANKING_LOOKUP_TABLE_SIZE; i++)
   p_fd->tables[i_index].inj_cranking[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
@@ -763,7 +763,7 @@ void CFirmwareDataMediator::GetDeadMap(int i_index, float* op_values, bool i_ori
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; i++)
   op_values[i] = (p_fd->tables[i_index].inj_dead_time[i] * discrete) / 1000.0f; //convert to ms
 }
@@ -777,7 +777,7 @@ void CFirmwareDataMediator::SetDeadMap(int i_index, const float* ip_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; i++)
   p_fd->tables[i_index].inj_dead_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
@@ -1391,7 +1391,7 @@ void CFirmwareDataMediator::GetDwellCntrlMap(float* op_values, bool i_original /
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
   op_values[i] = (p_fd->exdata.coil_on_time[i] * discrete) / 1000.0f; //convert to ms
 }
@@ -1405,7 +1405,7 @@ void CFirmwareDataMediator::SetDwellCntrlMap(const float* ip_values)
  //получаем адрес структуры дополнительных данных
  fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
 
- float discrete = (m_fpp->m_platform_id == EP_ATMEGA644) ? 3.2f : 4.0f; //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+ float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
   p_fd->exdata.coil_on_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }

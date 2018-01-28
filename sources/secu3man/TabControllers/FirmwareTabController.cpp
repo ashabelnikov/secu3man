@@ -87,10 +87,10 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  ASSERT(m_fwdm);
  //Set parameters for speed sensor calculations and set clock frequency (16 or 20 mHz)
  m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
  m_edm = new EEPROMDataMediator(holder.GetEepromParameters());
  m_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- m_edm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
  ASSERT(m_edm);
 
  m_bl_data = new BYTE[m_fpp.m_total_size + 1];
@@ -169,10 +169,10 @@ void CFirmwareTabController::OnSettingsChanged(void)
  //Set parameters for speed sensor calculations
  m_fwdm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  //Set clock frequency (16 or 20 mHz)
- m_fwdm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_fwdm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
  m_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
- m_edm->SetQuartzFrq((EP_ATMEGA644==mp_settings->GetECUPlatformType()) ? 20000000 : 16000000);
+ m_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -647,7 +647,8 @@ bool CFirmwareTabController::_CheckQuartzCompatibilityAndAskUser(BYTE* ip_buff, 
  EECUPlatform platform_id;
  if (PlatformParamHolder::GetPlatformIdByFirmwareMagic(ip_buff, fwSize, platform_id))
  {
-  if (platform_id != m_fpp.m_platform_id && platform_id == EP_ATMEGA644)
+  PlatformParamHolder pph(platform_id);
+  if (m_fpp.m_fcpu_hz != pph.GetFlashParameters().m_fcpu_hz)
   {
    if (IDNO==AfxMessageBox(MLL::LoadString(IDS_INCOMPATIBLE_QUARTZ), MB_YESNO | MB_ICONEXCLAMATION))
     return false; //aborted by user
