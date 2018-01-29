@@ -100,6 +100,7 @@ CChart2D::~CChart2D()
 BEGIN_MESSAGE_MAP(CChart2D, Super)
  ON_WM_PAINT()
  ON_WM_ENABLE()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
@@ -124,6 +125,16 @@ BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  }
 
  return result;
+}
+
+void CChart2D::OnDestroy()
+{
+ delete mp_titleFont;
+ delete mp_legendFontX;
+ delete mp_legendFontY;
+ mp_titleFont = NULL;
+ mp_legendFontX = NULL;
+ mp_legendFontY = NULL;
 }
 
 void CChart2D::_CalcRect(void)

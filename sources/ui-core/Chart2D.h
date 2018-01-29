@@ -109,6 +109,7 @@ class AFX_EXT_CLASS CChart2D : public CWnd
  protected:
   afx_msg void OnPaint();
   afx_msg void OnEnable(BOOL bEnable);
+  afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
  private:
