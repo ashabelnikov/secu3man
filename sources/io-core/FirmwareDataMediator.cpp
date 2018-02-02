@@ -150,9 +150,6 @@ typedef struct
  _uint cts_vl_begin;
  _uint cts_vl_end;
 
- //Choke closing versus coolant temperature
- _uchar choke_closing[CHOKE_CLOSING_LOOKUP_TABLE_SIZE];
-
  //Air temperature sensor lookup table
  _int ats_curve[THERMISTOR_LOOKUP_TABLE_SIZE];
  //Voltage corresponding to the beginning of axis
@@ -189,7 +186,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[51];
+ _uchar reserved[67];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1275,7 +1272,6 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  op_fwd->atscurve_vlimits[0] = GetATSMapVoltageLimit(0);
  op_fwd->atscurve_vlimits[1] = GetATSMapVoltageLimit(1);
  GetATSAACMap(op_fwd->ats_corr_table);
- GetChokeOpMap(op_fwd->choke_op_table);
  GetGasdosePosMap(op_fwd->gasdose_pos_table);   //GD
  GetBarocorrMap(op_fwd->barocorr_table);
  GetManIgntimMap(op_fwd->pa4_igntim_corr);
@@ -1330,7 +1326,6 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetATSMapVoltageLimit(0, ip_fwd->atscurve_vlimits[0]);
  SetATSMapVoltageLimit(1, ip_fwd->atscurve_vlimits[1]);
  SetATSAACMap(ip_fwd->ats_corr_table);
- SetChokeOpMap(ip_fwd->choke_op_table);
  SetGasdosePosMap(ip_fwd->gasdose_pos_table); //GD
  SetBarocorrMap(ip_fwd->barocorr_table);
  SetManIgntimMap(ip_fwd->pa4_igntim_corr);
@@ -1516,32 +1511,6 @@ void  CFirmwareDataMediator::SetATSMapVoltageLimit(int i_type, float i_value)
  {
   ASSERT(0); //wrong i_type value
  }
-}
-
-void CFirmwareDataMediator::GetChokeOpMap(float* op_values, bool i_original /* = false */)
-{
- ASSERT(op_values);
- if (!op_values)
-  return;
-
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
-
- for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
-  op_values[i] = (p_fd->exdata.choke_closing[i] / 2.0f);
-}
-
-void CFirmwareDataMediator::SetChokeOpMap(const float* ip_values)
-{
- ASSERT(ip_values);
- if (!ip_values)
-  return;
-
- //получаем адрес структуры дополнительных данных
- fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
-
- for(size_t i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; i++)
-  p_fd->exdata.choke_closing[i] = (_uchar)MathHelpers::Round(ip_values[i] * 2.0);
 }
 
 const PPFlashParam& CFirmwareDataMediator::GetPlatformParams(void) const

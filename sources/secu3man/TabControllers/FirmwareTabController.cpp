@@ -1011,9 +1011,6 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(true),true);
  m_view->mp_TablesPanel->SetATSXAxisEdits(m_fwdm->GetATSMapVoltageLimit(0), m_fwdm->GetATSMapVoltageLimit(1));
 
- m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false),false);
- m_fwdm->GetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(true),true);
-
  m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false),false);
  m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(true),true);
 
@@ -1266,9 +1263,6 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_ATS_CURVE:
    m_fwdm->SetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(false));
-   break;
-  case TYPE_MAP_CHOKE_OP:
-   m_fwdm->SetChokeOpMap(m_view->mp_TablesPanel->GetChokeOpMap(false));
    break;
   case TYPE_MAP_ATS_CORR:
    m_fwdm->SetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false));

@@ -85,23 +85,14 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_sm_test_check;
   CSpinButtonCtrl m_man_ctrl_spin;
 
-  CSpinButtonCtrlEx m_strt_add_spin;
-  CEditEx m_strt_add_edit;
-
-  CSpinButtonCtrlEx m_rpmreg_1stpt_spin;
-  CEditEx m_rpmreg_1stpt_edit;
-
-  CSpinButtonCtrlEx m_rpmreg_2ndpt_spin;
-  CEditEx m_rpmreg_2ndpt_edit;
-
   CSpinButtonCtrlEx m_rpmreg_if_spin;
   CEditEx m_rpmreg_if_edit;
 
-  CSpinButtonCtrlEx m_strt_add_tm_spin;
-  CEditEx m_strt_add_tm_edit;
+  CSpinButtonCtrlEx m_strt_add_tm1_spin;
+  CEditEx m_strt_add_tm1_edit;
 
-  CSpinButtonCtrlEx m_strt_add_tmp_spin;
-  CEditEx m_strt_add_tmp_edit;
+  CSpinButtonCtrlEx m_strt_add_tm2_spin;
+  CEditEx m_strt_add_tm2_edit;
 
   CButton m_offstrtadd_ongas_check;
   CButton m_offrpmreg_ongas_check;

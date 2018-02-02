@@ -148,8 +148,8 @@ BEGIN
                     BS_BITMAP | WS_TABSTOP,3,377,16,19
     CONTROL         "Настр. крив. ДТОЖ",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,377,82,19
-    CONTROL         "Настр. открытия ВЗ",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,377,95,19
+    CONTROL         "Темп.корр.пуск.УОЗ",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,377,95,19
     CONTROL         "Настр. крив. ДТВ",IDC_TD_VIEW_ATS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,399,82,19
     CONTROL         "ДТВ коррекция",IDC_TD_VIEW_ATS_MAP,"Button",
@@ -164,8 +164,6 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,443,95,19
     CONTROL         "Настр. крив ДТГ",IDC_TD_VIEW_TMP2_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,465,82,19
-    CONTROL         "Темп.корр.пуск.УОЗ",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,465,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116
@@ -689,8 +687,8 @@ BEGIN
                     BS_BITMAP | WS_TABSTOP,3,377,16,19
     CONTROL         "Tune CTS curve",IDC_TD_VIEW_CTS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,377,82,19
-    CONTROL         "Tune choke opening",IDC_TD_VIEW_CHOKE_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,109,377,95,19
+    CONTROL         "Cranking corr.vs CLT",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
+                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,377,95,19
     CONTROL         "Tune ATS curve",IDC_TD_VIEW_ATS_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,20,399,82,19
     CONTROL         "Tune ATS corr.",IDC_TD_VIEW_ATS_MAP,"Button",
@@ -705,8 +703,6 @@ BEGIN
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,443,95,19
     CONTROL         "Tune GTS curve",IDC_TD_VIEW_TMP2_CURVE,"Button",
                     BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,20,465,82,19
-    CONTROL         "Cranking corr.vs CLT",IDC_TD_VIEW_CRKTEMP_MAP,"Button",
-                    BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,110,465,95,19
 END
 
 IDD_DWELL_CALC DIALOGEX 0, 0, 171, 116

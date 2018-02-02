@@ -156,9 +156,6 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   float GetATSMapVoltageLimit(int i_type);
   void  SetATSMapVoltageLimit(int i_type, float i_value);
 
-  void GetChokeOpMap(float* op_values, bool i_original = false);
-  void SetChokeOpMap(const float* i_values);
-
   void GetRPMGridMap(float* op_values);
   void SetRPMGridMap(const float* i_values);
 

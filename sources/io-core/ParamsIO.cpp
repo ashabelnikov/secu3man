@@ -280,13 +280,10 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
    {
     ChokePar* p_in = (ChokePar*)ip_values;
     p_params->sm_steps  = p_in->sm_steps;
-    p_params->choke_rpm[0] = p_in->choke_rpm[0];
-    p_params->choke_rpm[1] = p_in->choke_rpm[1];
-    p_params->choke_startup_corr = MathHelpers::Round(p_in->strt_add * 2.0f);
     p_params->choke_rpm_if = MathHelpers::Round(p_in->choke_rpm_if * 1024.0f);
-    p_params->choke_corr_time = MathHelpers::Round(p_in->choke_corr_time * 100.0f);
-    p_params->choke_corr_temp = MathHelpers::Round(p_in->choke_corr_temp * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
-    WRITEBIT8(p_params->choke_flags, 0, p_in->offstrtadd_ongas);
+    p_params->choke_corr_time[0] = MathHelpers::Round(p_in->choke_corr_time[0] * 100.0f);
+    p_params->choke_corr_time[1] = MathHelpers::Round(p_in->choke_corr_time[1] * 100.0f);
+    WRITEBIT8(p_params->choke_flags, 0, p_in->useclrpmreg);
     WRITEBIT8(p_params->choke_flags, 1, p_in->offrpmreg_ongas);
     WRITEBIT8(p_params->choke_flags, 2, p_in->usethrottle_pos);
     WRITEBIT8(p_params->choke_flags, 3, p_in->sm_maxfreqinit);
@@ -653,13 +650,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     {
      ChokePar* p_out = (ChokePar*)op_values;
      p_out->sm_steps = p_params->sm_steps;
-     p_out->choke_rpm[0] = p_params->choke_rpm[0];
-     p_out->choke_rpm[1] = p_params->choke_rpm[1];
-     p_out->strt_add = p_params->choke_startup_corr / 2.0f;
      p_out->choke_rpm_if = p_params->choke_rpm_if / 1024.0f;
-     p_out->choke_corr_time = p_params->choke_corr_time / 100.0f;
-     p_out->choke_corr_temp = ((float)p_params->choke_corr_temp) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
-     p_out->offstrtadd_ongas = CHECKBIT8(p_params->choke_flags, 0);
+     p_out->choke_corr_time[0] = p_params->choke_corr_time[0] / 100.0f;
+     p_out->choke_corr_time[1] = p_params->choke_corr_time[1] / 100.0f;
+     p_out->useclrpmreg = CHECKBIT8(p_params->choke_flags, 0);
      p_out->offrpmreg_ongas = CHECKBIT8(p_params->choke_flags, 1);
      p_out->usethrottle_pos = CHECKBIT8(p_params->choke_flags, 2);
      p_out->sm_maxfreqinit = CHECKBIT8(p_params->choke_flags, 3);

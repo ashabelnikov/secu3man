@@ -127,9 +127,6 @@ void S3FImportController::OnOkPressed(void)
   mp_fwd->ctscurve_vlimits[1] = mp_s3f_io->GetData().ctscurve_vlimits[1];
  }
 
- if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
-  memcpy(mp_fwd->choke_op_table, mp_s3f_io->GetData().choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE); 
-
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
  {
   memcpy(mp_fwd->atscurve_table, mp_s3f_io->GetData().atscurve_table, sizeof(float) * THERMISTOR_LOOKUP_TABLE_SIZE);
@@ -321,7 +318,6 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);
@@ -332,7 +328,6 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
- mp_view->EnableFWDFlag(FLAG_CHOKE_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATS_MAP, injen && sepmap);       //since v01.03
  mp_view->EnableFWDFlag(FLAG_ATSAAC_MAP, injen && sepmap);    //since v01.03
  mp_view->EnableFWDFlag(FLAG_GASDOSE_MAP, sv0104 && sepmap);  //since v01.04
@@ -444,9 +439,6 @@ void S3FExportController::OnOkPressed(void)
   mp_s3f_io->GetDataLeft().ctscurve_vlimits[0] = mp_fwd->ctscurve_vlimits[0];
   mp_s3f_io->GetDataLeft().ctscurve_vlimits[1] = mp_fwd->ctscurve_vlimits[1];
  }
-
- if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
-  memcpy(mp_s3f_io->GetDataLeft().choke_op_table, mp_fwd->choke_op_table, sizeof(float) * CHOKE_CLOSING_LOOKUP_TABLE_SIZE);
 
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
  {
@@ -604,7 +596,6 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false);

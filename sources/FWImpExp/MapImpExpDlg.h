@@ -61,7 +61,6 @@ enum EFWDFlags
  FLAG_DWLCNTR_MAP,  //separate
  FLAG_ATTEN_MAP,    //separate
  FLAG_CTS_MAP,      //separate
- FLAG_CHOKE_MAP,    //separate
  FLAG_ATS_MAP,      //separate
  FLAG_ATSAAC_MAP,   //separate
  FLAG_GASDOSE_MAP,  //separate

@@ -35,11 +35,8 @@ const UINT CChokePageDlg::IDD = IDD_PD_CHOKE_PAGE;
 BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_WM_DESTROY()
  ON_EN_CHANGE(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, OnChangePdChokeSMStepsNumEdit)
- ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TMP_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_1STPT_EDIT, OnChangeData)
- ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_2NDPT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_IF_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_SM_TEST_CHECK, OnSMTestButton)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnChangeData)
@@ -57,29 +54,15 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_MANUAL_POS_CAPTION,OnUpdateChokeManPosBtn)
  ON_NOTIFY(UDN_DELTAPOS, IDC_PD_CHOKE_MANUAL_POS_SPIN, OnManualDeltapos)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_EDIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_SPIN,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_UNIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_CAPTION,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM1_EDIT,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM1_SPIN,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM1_UNIT,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM1_CAPTION,OnUpdateControlsCarb)
 
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM_EDIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM_SPIN,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM_UNIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM_CAPTION,OnUpdateControlsCarb)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TMP_EDIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TMP_SPIN,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TMP_UNIT,OnUpdateControlsCarb)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_1STPT_EDIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_1STPT_SPIN,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_1STPT_UNIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_1STPT_TEMP,OnUpdateControlsCarb)
-
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_2NDPT_EDIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_2NDPT_SPIN,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_2NDPT_UNIT,OnUpdateControlsCarb)
- ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_2NDPT_TEMP,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM2_EDIT,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM2_SPIN,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM2_UNIT,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_STRT_ADD_TM2_CAPTION,OnUpdateControlsCarb)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_IF_EDIT,OnUpdateControlsCarb)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_RPMREG_IF_SPIN,OnUpdateControlsCarb)
@@ -101,11 +84,8 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(false)
 , m_fuel_injection(false)
 , m_sm_steps_num_edit(CEditEx::MODE_INT, true)
-, m_strt_add_edit(CEditEx::MODE_FLOAT, true)
-, m_strt_add_tm_edit(CEditEx::MODE_FLOAT, true)
-, m_strt_add_tmp_edit(CEditEx::MODE_FLOAT, true)
-, m_rpmreg_1stpt_edit(CEditEx::MODE_INT, true)
-, m_rpmreg_2ndpt_edit(CEditEx::MODE_INT, true)
+, m_strt_add_tm1_edit(CEditEx::MODE_FLOAT, true)
+, m_strt_add_tm2_edit(CEditEx::MODE_FLOAT, true)
 , m_rpmreg_if_edit(CEditEx::MODE_FLOAT, true)
 , m_choketst_enabled(false)
 , m_chokemanpos_enabled(false)
@@ -115,13 +95,10 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
  m_params.sm_steps = 700;
  m_params.testing = 0;
  m_params.manual_delta = 0;  //See also code in PMParamsController.cpp
- m_params.strt_add = 10.0f; //10%
- m_params.choke_rpm[0] = 2000;
- m_params.choke_rpm[1] = 1000;
  m_params.choke_rpm_if = 0.05f;
- m_params.choke_corr_time = 3.0f;
- m_params.choke_corr_temp = 10.0f;
- m_params.offstrtadd_ongas = false;
+ m_params.choke_corr_time[0] = 5.0f;
+ m_params.choke_corr_time[1] = 2.5f;
+ m_params.useclrpmreg = false;
  m_params.offrpmreg_ongas = false;
  m_params.usethrottle_pos = false;
  m_params.sm_freq = 0;
@@ -141,17 +118,12 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_sm_test_check);
  DDX_Control(pDX, IDC_PD_CHOKE_MANUAL_POS_SPIN, m_man_ctrl_spin);
 
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_SPIN, m_strt_add_spin);
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_EDIT, m_strt_add_edit);
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM_SPIN, m_strt_add_tm_spin);
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM_EDIT, m_strt_add_tm_edit);
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TMP_SPIN, m_strt_add_tmp_spin);
- DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TMP_EDIT, m_strt_add_tmp_edit);
+ DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM1_SPIN, m_strt_add_tm1_spin);
+ DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, m_strt_add_tm1_edit);
 
- DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_1STPT_SPIN, m_rpmreg_1stpt_spin);
- DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_1STPT_EDIT, m_rpmreg_1stpt_edit);
- DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_2NDPT_SPIN, m_rpmreg_2ndpt_spin);
- DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_2NDPT_EDIT, m_rpmreg_2ndpt_edit);
+ DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM2_SPIN, m_strt_add_tm2_spin);
+ DDX_Control(pDX, IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, m_strt_add_tm2_edit);
+
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_rpmreg_if_edit);
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_SPIN, m_rpmreg_if_spin);
 
@@ -163,15 +135,12 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_SM_FREQ_COMBO, m_sm_freq_combo);
 
  m_sm_steps_num_edit.DDX_Value(pDX, IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, m_params.sm_steps);
- m_strt_add_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_EDIT, m_params.strt_add);
- m_strt_add_tm_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM_EDIT, m_params.choke_corr_time);
- m_strt_add_tmp_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TMP_EDIT, m_params.choke_corr_temp);
- m_rpmreg_1stpt_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_1STPT_EDIT, m_params.choke_rpm[0]);
- m_rpmreg_2ndpt_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_2NDPT_EDIT, m_params.choke_rpm[1]);
+ m_strt_add_tm1_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, m_params.choke_corr_time[0]);
+ m_strt_add_tm2_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, m_params.choke_corr_time[1]);
  m_rpmreg_if_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_params.choke_rpm_if);
  DDX_Check_UCHAR(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_params.testing);
 
- DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.offstrtadd_ongas);
+ DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.useclrpmreg);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_params.offrpmreg_ongas);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_params.usethrottle_pos);
  DDX_Check_bool(pDX, IDC_PD_CHOKE_MAXFREQINIT_CHECK, m_params.sm_maxfreqinit);
@@ -214,33 +183,17 @@ BOOL CChokePageDlg::OnInitDialog()
  m_sm_steps_num_spin.SetRangeAndDelta(50, 2000, 1);
  m_sm_steps_num_edit.SetRange(50, 2000);
 
- m_strt_add_edit.SetLimitText(5);
- m_strt_add_spin.SetBuddy(&m_strt_add_edit);
- m_strt_add_edit.SetDecimalPlaces(1);
- m_strt_add_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
- m_strt_add_edit.SetRange(0.0f, 100.0f);
+ m_strt_add_tm1_edit.SetLimitText(4);
+ m_strt_add_tm1_spin.SetBuddy(&m_strt_add_tm1_edit);
+ m_strt_add_tm1_edit.SetDecimalPlaces(1);
+ m_strt_add_tm1_spin.SetRangeAndDelta(0.1f, 10.0f, 0.1f);
+ m_strt_add_tm1_edit.SetRange(0.1f, 10.0f);
 
- m_strt_add_tm_edit.SetLimitText(4);
- m_strt_add_tm_spin.SetBuddy(&m_strt_add_tm_edit);
- m_strt_add_tm_edit.SetDecimalPlaces(1);
- m_strt_add_tm_spin.SetRangeAndDelta(0.1f, 10.0f, 0.1f);
- m_strt_add_tm_edit.SetRange(0.1f, 10.0f);
-
- m_strt_add_tmp_edit.SetLimitText(6);
- m_strt_add_tmp_spin.SetBuddy(&m_strt_add_tmp_edit);
- m_strt_add_tmp_edit.SetDecimalPlaces(2);
- m_strt_add_tmp_spin.SetRangeAndDelta(-10.0f, 70.0f, 0.25f);
- m_strt_add_tmp_edit.SetRange(-10.0f, 70.0f);
-
- m_rpmreg_1stpt_edit.SetLimitText(4);
- m_rpmreg_1stpt_spin.SetBuddy(&m_rpmreg_1stpt_edit);
- m_rpmreg_1stpt_spin.SetRangeAndDelta(0, 3000, 10);
- m_rpmreg_1stpt_edit.SetRange(0, 3000);
-
- m_rpmreg_2ndpt_edit.SetLimitText(4);
- m_rpmreg_2ndpt_spin.SetBuddy(&m_rpmreg_2ndpt_edit);
- m_rpmreg_2ndpt_spin.SetRangeAndDelta(500, 3000, 10);
- m_rpmreg_2ndpt_edit.SetRange(500, 3000);
+ m_strt_add_tm2_edit.SetLimitText(4);
+ m_strt_add_tm2_spin.SetBuddy(&m_strt_add_tm2_edit);
+ m_strt_add_tm2_edit.SetDecimalPlaces(1);
+ m_strt_add_tm2_spin.SetRangeAndDelta(0.1f, 10.0f, 0.1f);
+ m_strt_add_tm2_edit.SetRange(0.1f, 10.0f);
 
  m_rpmreg_if_edit.SetLimitText(4);
  m_rpmreg_if_spin.SetBuddy(&m_rpmreg_if_edit);
@@ -269,16 +222,10 @@ BOOL CChokePageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_sm_steps_num_spin, MLL::GetString(IDS_PD_CHOKE_SM_STEPS_NUM_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_sm_test_check, MLL::GetString(IDS_PD_CHOKE_SM_TEST_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_man_ctrl_spin, MLL::GetString(IDS_PD_CHOKE_MANUAL_POS_SPIN_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_rpmreg_1stpt_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_rpmreg_1stpt_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_rpmreg_2ndpt_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_rpmreg_2ndpt_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_tm_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_tm_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_tmp_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_strt_add_tmp_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm1_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm1_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm2_edit, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_strt_add_tm2_spin, MLL::GetString(IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_edit, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_rpmreg_if_spin, MLL::GetString(IDS_PD_CHOKE_RPMREG_IF_EDIT_TT)));
  //check boxes

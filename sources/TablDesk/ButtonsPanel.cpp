@@ -2632,7 +2632,7 @@ void CButtonsPanel::OnUpdateViewIdlrMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
  pCmdUI->SetCheck( (m_idlr_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2640,7 +2640,7 @@ void CButtonsPanel::OnUpdateViewIdlcMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
  pCmdUI->SetCheck( (m_idlc_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2680,7 +2680,7 @@ void CButtonsPanel::OnUpdateViewITRPMMap(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
- pCmdUI->Enable(enable && m_fuel_injection);
+ pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
  pCmdUI->SetCheck( (m_itrpm_map_chart_state) ? TRUE : FALSE );
 }
 
@@ -2856,9 +2856,9 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
   DLL::Chart2DEnable(m_dead_map_wnd_handle, i_enable && IsAllowed());
  if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlr_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_idlr_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
  if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlc_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_idlc_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
  if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
   DLL::Chart2DEnable(m_aetps_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
  if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
@@ -2868,7 +2868,7 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  if (m_it_map_chart_state && ::IsWindow(m_it_map_wnd_handle))
   DLL::Chart3DEnable(m_it_map_wnd_handle, i_enable && IsAllowed());
  if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_itrpm_map_wnd_handle, i_enable && IsAllowed());
+  DLL::Chart2DEnable(m_itrpm_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
  if (m_rigid_map_chart_state && ::IsWindow(m_rigid_map_wnd_handle))
   DLL::Chart2DEnable(m_rigid_map_wnd_handle, i_enable && IsAllowed());
  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
@@ -2947,6 +2947,12 @@ void CButtonsPanel::EnableChokeOp(bool enable)
   UpdateDialogControls(this, TRUE);
  if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
   DLL::Chart2DEnable(m_atsc_map_wnd_handle, (enable || m_gasdose || m_fuel_injection) && IsAllowed());
+ if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
+  DLL::Chart2DEnable(m_idlr_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
+ if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
+  DLL::Chart2DEnable(m_idlc_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
+ if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
+  DLL::Chart2DEnable(m_itrpm_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
 }
 
 

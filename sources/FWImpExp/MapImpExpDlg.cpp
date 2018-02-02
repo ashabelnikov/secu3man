@@ -85,7 +85,6 @@ CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
  m_fwd_flags[FLAG_DWLCNTR_MAP] = FALSE;
  m_fwd_flags[FLAG_ATTEN_MAP] = FALSE;
  m_fwd_flags[FLAG_CTS_MAP] = FALSE;
- m_fwd_flags[FLAG_CHOKE_MAP] = FALSE;
  m_fwd_flags[FLAG_ATS_MAP] = FALSE;
  m_fwd_flags[FLAG_ATSAAC_MAP] = FALSE;
  m_fwd_flags[FLAG_GASDOSE_MAP] = FALSE;
@@ -134,7 +133,6 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags[FLAG_DWLCNTR_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags[FLAG_ATTEN_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags[FLAG_CTS_MAP]);
- DDX_Check(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags[FLAG_CHOKE_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATS_FLAG, m_fwd_flags[FLAG_ATS_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_ATSAAC_FLAG, m_fwd_flags[FLAG_ATSAAC_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_GASDOSE_FLAG, m_fwd_flags[FLAG_GASDOSE_MAP]);
@@ -174,7 +172,6 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_DWELLCNTRL_FLAG, m_fwd_flags_buttons[FLAG_DWLCNTR_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATTENUATOR_FLAG, m_fwd_flags_buttons[FLAG_ATTEN_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CTS_FLAG, m_fwd_flags_buttons[FLAG_CTS_MAP]);
- DDX_Control(pDX, IDC_MAP_IMPEXP_CHOKE_FLAG, m_fwd_flags_buttons[FLAG_CHOKE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATS_FLAG, m_fwd_flags_buttons[FLAG_ATS_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_ATSAAC_FLAG, m_fwd_flags_buttons[FLAG_ATSAAC_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_GASDOSE_FLAG, m_fwd_flags_buttons[FLAG_GASDOSE_MAP]);
@@ -354,7 +351,7 @@ void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
 
  //if all check boxes are disabled then disable corresponding group box
  enable = ((m_fwd_flags_buttons[FLAG_ATTEN_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_DWLCNTR_MAP].IsWindowEnabled()) ||
-           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_CHOKE_MAP].IsWindowEnabled()) ||
+           (m_fwd_flags_buttons[FLAG_CTS_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_ATS_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_ATSAAC_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_GASDOSE_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_BAROCORR_MAP].IsWindowEnabled()) ||
            (m_fwd_flags_buttons[FLAG_MANIT_MAP].IsWindowEnabled()) || (m_fwd_flags_buttons[FLAG_TMP2CURVE_MAP].IsWindowEnabled()) ||
@@ -424,7 +421,6 @@ BOOL CMapImpExpDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_DWLCNTR_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATTEN_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CTS_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
- VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_CHOKE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATS_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_ATSAAC_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));
  VERIFY(mp_ttc->AddWindow(&m_fwd_flags_buttons[FLAG_GASDOSE_MAP], MLL::GetString(IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT)));

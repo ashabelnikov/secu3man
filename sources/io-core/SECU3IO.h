@@ -394,12 +394,9 @@ namespace SECU3IO
   int sm_steps;                         //number of stepper motor steps
   unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
   signed char manual_delta;             //delta position value for manual choke control
-  float strt_add;                       //Startup addition value used for choke (0...100%)  
-  int choke_rpm[2];                     //two points which define RPM vs temperature function 
   float choke_rpm_if;                   //Integral choke RPM regulator factor
-  float choke_corr_time;                //Startup corretion time
-  float choke_corr_temp;                //Startup corretion temperature threshold
-  bool  offstrtadd_ongas;               //Turn off additional startup closing when fuel type is gas
+  float choke_corr_time[2];             //Startup corretion time
+  bool  useclrpmreg;                    //Use closed loop RPM regulator (I-regulator)
   bool  offrpmreg_ongas;                //Turn off RPM regulator when fuel type is gas
   bool  usethrottle_pos;                //Use throttle position in choke initialization
   int   sm_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
@@ -409,8 +406,8 @@ namespace SECU3IO
  struct GasdosePar
  {
   int gd_steps;                         //number of gas dose stepper motor steps
-  unsigned char testing;                //not a parameter, (flag) indicates that system is in choke testng mode
-  signed char manual_delta;             //delta position value for manual choke control
+  unsigned char testing;                //not a parameter, (flag) indicates that system is in GD testng mode
+  signed char manual_delta;             //delta position value for manual GD control
   float fc_closing;                     //How much close gas doser in fuel cut mode (%)
   float lam_corr_limit_p;               //"+" correction limit
   float lam_corr_limit_m;               //"-" correction limit
@@ -673,8 +670,6 @@ namespace SECU3IO
  const float temp_map_tmp_slots[16]  = {-30,-20,-10,0,10,20,30,40,50,60,70,80,90,100,110,120};
  const float dwellcntrl_map_slots[32] = { 5.4f, 5.8f, 6.2f, 6.6f, 7.0f, 7.4f, 7.8f, 8.2f, 8.6f, 9.0f, 9.4f, 9.8f,10.2f,10.6f,11.0f,11.4f,
                                         11.8f,12.2f,12.6f,13.0f,13.4f,13.8f,14.2f,14.6f,15.0f,15.4f,15.8f,16.2f,16.6f,17.0f,17.4f,17.8f};
- const float choke_op_map_slots[16]  = {-5, 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 60, 65, 70};
-
  const float rigid_map_slots[8]  = {1,2,3,4,5,6,7,8};
  const float manigntim_map_slots[16]  = {.0f,0.33f,0.66f,1.00f,1.33f,1.66f,2.00f,2.33f,2.66f,3.00f,3.33f,3.66f,4.00f,4.33f,4.66f,5.0f};
 

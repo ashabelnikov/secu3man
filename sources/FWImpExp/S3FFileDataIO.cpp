@@ -41,7 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0107 //01.07
+#define CURRENT_VERSION 0x0108 //01.08
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -70,6 +70,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.06 - Rest fuel injection maps were added (28.09.2017)
 // 01.07 - Added ability to store single set of maps and no separate maps. (23.10.2017)
 // 01.07 - Added TEMP2 curve map (28.12.2017)
+// 01.08 - Abandoned choke opening map (body of map left for compatibility reasons)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -127,7 +128,7 @@ struct S3FSepMaps
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
  s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
- s3f_int32_t choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE]; //choke opening map (appeared in version 1.01, reserved bytes were utilized)
+ s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
  s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
  s3f_int32_t atscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //intake air temperature sensor look up table, since v01.03
  s3f_int32_t atscurve_vlimits[2]; //volatge limits for intake air temperature sensor look up table, since v01.03
@@ -155,7 +156,7 @@ struct S3FSepMaps_v0102
  s3f_int32_t dwellcntrl_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];  //dwell control look up table
  s3f_int32_t ctscurve_table[THERMISTOR_LOOKUP_TABLE_SIZE];      //coolant sensor look up table
  s3f_int32_t ctscurve_vlimits[2]; //volatge limits for coolant sensor look up table
- s3f_int32_t choke_op_table[CHOKE_CLOSING_LOOKUP_TABLE_SIZE]; //choke opening map (appeared in version 1.01, reserved bytes were utilized)
+ s3f_int32_t choke_op_table[16]; //choke opening map (appeared in version 1.01, abandoned 02 Feb 2018 and left for compatibility reasons)
  s3f_int32_t rpm_slots[F_RPM_SLOTS]; //RPM grid (appeared in version 1.02, reserved bytes were utilized)
  s3f_int32_t reserved[96];       //reserved bytes, = 0
 };
@@ -324,8 +325,8 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ctscurve_table[i] = MathHelpers::Round(m_data.ctscurve_table[i] * INT_MULTIPLIER);
  for(i = 0; i < 2; ++i)
   p_sepMaps->ctscurve_vlimits[i] = MathHelpers::Round(m_data.ctscurve_vlimits[i] * INT_MULTIPLIER);
- for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
-  p_sepMaps->choke_op_table[i] = MathHelpers::Round(m_data.choke_op_table[i] * INT_MULTIPLIER);
+ for(i = 0; i < 16; ++i)
+  p_sepMaps->choke_op_table[i] = MathHelpers::Round(0 * INT_MULTIPLIER); //abandoned, fill with 0.0
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->atscurve_table[i] = MathHelpers::Round(m_data.atscurve_table[i] * INT_MULTIPLIER);
  for(i = 0; i < 2; ++i)
@@ -451,8 +452,6 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
   m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
- for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
-  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE; ++i)
   m_data.atscurve_table[i] = p_sepMaps->atscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
@@ -513,8 +512,6 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
   m_data.ctscurve_table[i] = p_sepMaps->ctscurve_table[i] / INT_MULTIPLIER;
  for(i = 0; i < 2; ++i)
   m_data.ctscurve_vlimits[i] = p_sepMaps->ctscurve_vlimits[i] / INT_MULTIPLIER;
- for(i = 0; i < CHOKE_CLOSING_LOOKUP_TABLE_SIZE; ++i)
-  m_data.choke_op_table[i] = p_sepMaps->choke_op_table[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  bool empty = true;

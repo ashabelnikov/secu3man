@@ -36,7 +36,6 @@
 #define IDS_CTS_CURVE_MAP               5036
 #define IDS_TD_DWELL_CALC_BUTTON_TT     5037
 #define IDS_TD_VIEW_DWELL_CONTROL_TT    5038
-#define IDC_TD_VIEW_CHOKE_MAP           5039
 #define IDS_CHOKE_OP_UNIT               5040
 #define IDS_CHOKE_OP_MAP                5041
 #define IDD_RPM_GRID_EDITOR             5042

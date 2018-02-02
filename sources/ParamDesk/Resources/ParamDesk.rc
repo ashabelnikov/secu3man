@@ -623,42 +623,28 @@ BEGIN
     CONTROL         "",IDC_PD_CHOKE_MANUAL_POS_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP | UDS_HORZ,9,15,35,20
     LTEXT           "Ручное управл.",IDC_PD_CHOKE_MANUAL_POS_CAPTION,48,16,26,20
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM_EDIT,94,26,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,25,13,17
-    LTEXT           "Добав.пуск.врем.",IDC_PD_CHOKE_STRT_ADD_TM_CAPTION,90,15,105,10
-    LTEXT           "сек",IDC_PD_CHOKE_STRT_ADD_TM_UNIT,142,29,20,10
-
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,6,58,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,39,57,13,17
     LTEXT           "Кол-во шагов ШД",IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,7,47,105,10
     CONTROL         "ТЕСТ",IDC_PD_CHOKE_SM_TEST_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_PUSHLIKE,54,58,28,15
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_EDIT,94,58,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,57,13,17
-    LTEXT           "Добав.пуск.закр.",IDC_PD_CHOKE_STRT_ADD_CAPTION,90,47,105,10
-    LTEXT           "%",IDC_PD_CHOKE_STRT_ADD_UNIT,142,60,10,10
-
     EDITTEXT        IDC_PD_CHOKE_RPMREG_IF_EDIT,6,83,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CHOKE_RPMREG_IF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,39,83,13,17
     LTEXT           "Коэфф. регул.",IDC_PD_CHOKE_RPMREG_IF_CAPTION,54,83,40,20
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TMP_EDIT,94,83,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TMP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,83,13,17
-    LTEXT           "°C",IDC_PD_CHOKE_STRT_ADD_TMP_UNIT,142,85,20,10
+    LTEXT           "Завис.врем.действия пуск.табл. от темп.",IDC_PD_CHOKE_RPMREG_TITLE,6,105,150,10
 
-    LTEXT           "Зависимость оборотов прогрева от темп.",IDC_PD_CHOKE_RPMREG_TITLE,6,105,150,10
+    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM1_EDIT,6,116,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,39,115,13,17
+    LTEXT           "сек",IDC_PD_CHOKE_STRT_ADD_TM1_UNIT,52,118,25,10
+    CTEXT           "-30°C",IDC_PD_CHOKE_STRT_ADD_TM1_CAPTION,7,132,25,10
 
-    EDITTEXT        IDC_PD_CHOKE_RPMREG_1STPT_EDIT,6,116,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_RPMREG_1STPT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,39,115,13,17
-    LTEXT           "мин-1",IDC_PD_CHOKE_RPMREG_1STPT_UNIT,52,118,25,10
-    CTEXT           "-5°C",IDC_PD_CHOKE_RPMREG_1STPT_TEMP,7,132,25,10
+    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM2_EDIT,94,116,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,115,13,17
+    LTEXT           "сек",IDC_PD_CHOKE_STRT_ADD_TM2_UNIT,140,118,25,10
+    CTEXT           "120°C",IDC_PD_CHOKE_STRT_ADD_TM2_CAPTION,97,132,25,10
 
-    EDITTEXT        IDC_PD_CHOKE_RPMREG_2NDPT_EDIT,94,116,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_RPMREG_2NDPT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,115,13,17
-    LTEXT           "мин-1",IDC_PD_CHOKE_RPMREG_2NDPT_UNIT,140,118,25,10
-    CTEXT           "70°C",IDC_PD_CHOKE_RPMREG_2NDPT_TEMP,97,132,25,10
-
-    CONTROL         "Не использовать доп.прикр. на газу",IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,147,145,10
+    CONTROL         "Использовать регулятор оборотов",IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,147,145,10
     CONTROL         "Не использовать рег.обор. на газу",IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,162,145,10
     CONTROL         "Использовать полож.дросс.при иниц.",IDC_PD_CHOKE_USETHROTTLEPOS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,177,145,10
     CONTROL         "Максимальная частота при иниц.",IDC_PD_CHOKE_MAXFREQINIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,192,145,10
@@ -1261,11 +1247,8 @@ BEGIN
     IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Изменение положения ВЗ вручную. После первого нажатия на кнопку система входит в ручной режим управл. ВЗ, который будет действовать до выкл. зажигания."
     IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В."
     IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Задает насколько будут изменяться показания при изменении напряжения на 1В. Поставьте 0, если используется концевик."
-    IDS_PD_CHOKE_STRT_ADD_EDIT_TT "Задает на сколько % заслонка будет дополнительно прикрыта на пуске"
-    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "Первая точка задающая зависимость оборотов прогрева от температуры. Поставьте в 0 если хотите отключить регулятор оборотов."
-    IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT "Вторая точка задающая зависимость оборотов прогрева от температуры."
-    IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "Задает время добав. пуск. закрытия. По истечении этого времени включится регулятор оборотов."
-    IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "Температура после которой добав. пуск. закрытие не будет применяться. При температуре меньше 0 заслонка полностью закрыта."
+    IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT "Первая точка, задающая зависимость времени действия пусковой карты от температуры."
+    IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT "Вторая точка, задающая зависимость времени действия пусковой карты от температуры."
     IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "Коэффициент И-регулятора используемого для регулирования оборотов при прогреве."
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Максимальное положительное значение лямбда коррекции на прогреве, используемое для газового дозатора"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Максимальное отрицательное значение лямбда коррекции на прогреве, используемое для газового дозатора"
@@ -1353,6 +1336,7 @@ BEGIN
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "Нижний порог оборотов ЭПХХ. Должен быть меньше чем верхний порог. Чем меньше значение тем больше экономия топлива при ПХХ, Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "Верхний порог оборотов ЭПХХ. Должен быть больше чем нижний порог. Чем меньше значения тем больше экономия топлива при ПХХ. Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа желтый индикатор 'ДПДЗ' на вкладке 'Параметры и монитор' был черного цвета, а при нажатии на педаль загорался желтым цветом."
+    IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Ограничение максимального численного значения ошибки (ошибка определяется как разность между целевыми оборотами ХХ и текущими)."
 END
 
 STRINGTABLE
@@ -1366,7 +1350,7 @@ BEGIN
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Выключать форсунки при переходе на газ (высокий уровень на входе GAS_V)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Начало импульса относительно ВМТ (значение больше 0 соответствует началу импульса до ВМТ)"
     IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT           "Длительность импульса"
-    IDS_PD_CHOKE_OFFSTRTADDONGAS_CHECK_TT           "Не использовать дополнительное прикрытие (обогащение) на газу (когда на входе GAS_V высокий уровень)"
+    IDS_PD_CHOKE_OFFSTRTADDONGAS_CHECK_TT           "Использовать регулятор оборотов. Система будет поддерживать заданные обороты прогрева используя воздушную заслонку."
     IDS_PD_CHOKE_OFFRPMREGONGAS_CHECK_TT            "Не использовать регулятор оборотов на газу (когда на входе GAS_V высокий уровень)"
     IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT            "Использовать положение дроссельной заслонки (открыта/закрыта) при инициализации положения ВЗ"
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Установите галочку чтобы в блютуз записались настройки или можно было изменить его имя и пароль. Также, настройки будут загружаться в блютуз каждый раз при сбросе EEPROM." 
@@ -2146,11 +2130,6 @@ BEGIN
                     "msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK | WS_TABSTOP | UDS_HORZ,10,15,35,20
     LTEXT           "Manual control",IDC_PD_CHOKE_MANUAL_POS_CAPTION,49,16,26,20
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM_EDIT,95,26,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,25,13,17
-    LTEXT           "Add.startup time",IDC_PD_CHOKE_STRT_ADD_TM_CAPTION,91,15,105,10
-    LTEXT           "sec",IDC_PD_CHOKE_STRT_ADD_TM_UNIT,143,29,20,10
-
     EDITTEXT        IDC_PD_CHOKE_SM_STEPS_NUM_EDIT,7,58,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CHOKE_SM_STEPS_NUM_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,57,13,17
     LTEXT           "Num of SM steps",IDC_PD_CHOKE_SM_STEPS_NUM_CAPTION,8,47,105,10
@@ -2158,32 +2137,23 @@ BEGIN
     CONTROL         "TEST",IDC_PD_CHOKE_SM_TEST_CHECK,
                     "Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_PUSHLIKE,55,58,28,15
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_EDIT,95,58,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,57,13,17
-    LTEXT           "Add.startup closing",IDC_PD_CHOKE_STRT_ADD_CAPTION,91,47,105,10
-    LTEXT           "%",IDC_PD_CHOKE_STRT_ADD_UNIT,143,60,10,10
-
     EDITTEXT        IDC_PD_CHOKE_RPMREG_IF_EDIT,7,83,30,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PD_CHOKE_RPMREG_IF_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,83,13,17
     LTEXT           "Regul. factor",IDC_PD_CHOKE_RPMREG_IF_CAPTION,55,83,40,20
 
-    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TMP_EDIT,95,83,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TMP_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,83,13,17
-    LTEXT           "°C",IDC_PD_CHOKE_STRT_ADD_TMP_UNIT,143,85,20,10
+    LTEXT           "Cranking map lasting vs temperature",IDC_PD_CHOKE_RPMREG_TITLE,7,105,150,10
 
-    LTEXT           "Warming-up RPM vs temperature",IDC_PD_CHOKE_RPMREG_TITLE,7,105,150,10
+    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM1_EDIT,7,116,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM1_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,115,13,17
+    LTEXT           "min-1",IDC_PD_CHOKE_STRT_ADD_TM1_UNIT,53,118,25,10
+    CTEXT           "-5°C",IDC_PD_CHOKE_STRT_ADD_TM1_CAPTION,8,132,25,10
 
-    EDITTEXT        IDC_PD_CHOKE_RPMREG_1STPT_EDIT,7,116,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_RPMREG_1STPT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,40,115,13,17
-    LTEXT           "min-1",IDC_PD_CHOKE_RPMREG_1STPT_UNIT,53,118,25,10
-    CTEXT           "-5°C",IDC_PD_CHOKE_RPMREG_1STPT_TEMP,8,132,25,10
+    EDITTEXT        IDC_PD_CHOKE_STRT_ADD_TM2_EDIT,95,116,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CHOKE_STRT_ADD_TM2_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,115,13,17
+    LTEXT           "min-1",IDC_PD_CHOKE_STRT_ADD_TM2_UNIT,142,118,25,10
+    CTEXT           "70°C",IDC_PD_CHOKE_STRT_ADD_TM2_CAPTION,98,132,25,10
 
-    EDITTEXT        IDC_PD_CHOKE_RPMREG_2NDPT_EDIT,95,116,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CHOKE_RPMREG_2NDPT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,129,115,13,17
-    LTEXT           "min-1",IDC_PD_CHOKE_RPMREG_2NDPT_UNIT,142,118,25,10
-    CTEXT           "70°C",IDC_PD_CHOKE_RPMREG_2NDPT_TEMP,98,132,25,10
-
-    CONTROL         "Don't use add. closing on gas",IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,147,145,10
+    CONTROL         "Use closed loop RPM regulator",IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,147,145,10
     CONTROL         "Don't use RPM regulator on gas",IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,162,145,10
     CONTROL         "Use throttle pos. in choke init",IDC_PD_CHOKE_USETHROTTLEPOS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,177,145,10
     CONTROL         "Maximum STEP frequency at init.",IDC_PD_CHOKE_MAXFREQINIT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,6,192,145,10
@@ -2814,11 +2784,8 @@ BEGIN
     IDS_PD_CHOKE_MANUAL_POS_SPIN_TT "Manual choke control. System will enter manual control mode after first click, this mode will be active while ignition is ON"
     IDS_PD_FUNSET_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V."
     IDS_PD_FUNSET_TPS_CURVE_GRADIENT_EDIT_TT "Sets how output should change when input voltage changes by 1V. Set to zero if limit switch is used."
-    IDS_PD_CHOKE_STRT_ADD_EDIT_TT "Set how much in % choke will be additionally closed at startup."
-    IDS_PD_CHOKE_RPMREG_1STPT_EDIT_TT "First point which set warm up RPM vs temperature dependance. Set to 0 if you want to turn off RPM regulator."
-    IDS_PD_CHOKE_RPMREG_2NDPT_EDIT_TT "Second point which set warm up RPM vs temperature dependance."
-    IDS_PD_CHOKE_STRT_ADD_TM_EDIT_TT "During this time choke will be additionally closed at startup. After this time RPM regulator will be turned on."
-    IDS_PD_CHOKE_STRT_ADD_TMP_EDIT_TT "After this temperature choke will not be additionally closed at startup. Choke will be fully closed when temperature < 0°C"
+    IDS_PD_CHOKE_STRT_ADD_TM1_EDIT_TT "First point which set dependance of lasting of cranking position map vs coolant temperature."
+    IDS_PD_CHOKE_STRT_ADD_TM2_EDIT_TT "Second point which set dependance of lasting of cranking position map vs coolant temperature."
     IDS_PD_CHOKE_RPMREG_IF_EDIT_TT "I-regulator factor (integral gain) used for RPM regulation during warm up."
     IDS_PD_GASDOSE_CORRLIMIT_P_EDIT_TT "Maximum positive value of the EGO correction at warmup, which used by gas doser"
     IDS_PD_GASDOSE_CORRLIMIT_M_EDIT_TT "Maximum negative value of the EGO correction at warmup, which used by gas doser"
@@ -2905,6 +2872,7 @@ BEGIN
     IDS_PD_ADCCOMPEN_FACTOR_TT                      "If necessary, alter factors for matching of raw values and real value at the inputs on unit"
     IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"
+    IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Limitation of RPM error (error calculated as difference between target and current RPMs)."
 END
 
 STRINGTABLE
@@ -2918,7 +2886,7 @@ BEGIN
     IDS_PD_MISC_INJ_OFFONGAS_CHECK_TT               "Turn off fuel injectors when switching ot gas (high level at the GAS_V input)"
     IDS_PD_MISC_HALL_OUTPUT_START_EDIT_TT           "Beginning of pulse relatively to TDC (if value > 0, then before TDC)"
     IDS_PD_MISC_HALL_OUTPUT_DURAT_EDIT_TT           "Pulse width in teeth of crank wheel"
-    IDS_PD_CHOKE_OFFSTRTADDONGAS_CHECK_TT           "Don't use additional closing of choke (enrichment) when current fuel is gas (high level on the GAS_V input)"
+    IDS_PD_CHOKE_OFFSTRTADDONGAS_CHECK_TT           "Use closed loop RPM regulator. System will maintain set RPM by alternating position of choke."
     IDS_PD_CHOKE_OFFRPMREGONGAS_CHECK_TT            "Don't use RPM regulator when current fuel is gas (high level on the GAS_V input)"
     IDS_PD_CHOKE_USETHROTTLEPOS_CHECK_TT            "Use throttle position (opened/closed) for initialization of choke"
     IDS_PD_SECUR_BT_USE_CHECK_TT                    "Set this check for loading settings into a Bluetooth or to make possible to change the name and password of Bluetooth. Also, settings will be loaded into a Bluetooth each time you reset EEPROM." 

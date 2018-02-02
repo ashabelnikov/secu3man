@@ -428,6 +428,9 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_mapvalue_edit, MLL::GetString(IDC_PD_IDLREG_MAPVALUE_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_mapvalue_spin, MLL::GetString(IDC_PD_IDLREG_MAPVALUE_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_intrpmlim_edit, MLL::GetString(IDS_PD_IDLREG_INTRPMLIM_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_intrpmlim_spin, MLL::GetString(IDS_PD_IDLREG_INTRPMLIM_EDIT_TT)));
  
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);

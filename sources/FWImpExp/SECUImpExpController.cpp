@@ -119,9 +119,6 @@ void SECU3ImportController::OnOkPressed(void)
   mp_fwd->ctscurve_vlimits[1] = m_fwdm->GetCTSMapVoltageLimit(1);
  }
 
- if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
-  m_fwdm->GetChokeOpMap(mp_fwd->choke_op_table);
-
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
  {
   m_fwdm->GetATSCurveMap(mp_fwd->atscurve_table);
@@ -298,7 +295,6 @@ void SECU3ImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false); //GD
@@ -406,10 +402,6 @@ void SECU3ExportController::OnOkPressed(void)
   m_fwdm->SetCTSMapVoltageLimit(1, mp_fwd->ctscurve_vlimits[1]);
  }
  
- if (mp_view->GetFWDFlag(FLAG_CHOKE_MAP))
-  m_fwdm->SetChokeOpMap(mp_fwd->choke_op_table);
-
-
  if (mp_view->GetFWDFlag(FLAG_ATS_MAP))
  {
   m_fwdm->SetATSCurveMap(mp_fwd->atscurve_table);
@@ -596,7 +588,6 @@ void SECU3ExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_DWLCNTR_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATTEN_MAP, false);
  mp_view->SetFWDFlag(FLAG_CTS_MAP, false);
- mp_view->SetFWDFlag(FLAG_CHOKE_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATS_MAP, false);
  mp_view->SetFWDFlag(FLAG_ATSAAC_MAP, false);
  mp_view->SetFWDFlag(FLAG_GASDOSE_MAP, false); //GD

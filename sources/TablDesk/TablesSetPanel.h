@@ -54,7 +54,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   float* GetAttenuatorMap(bool i_original);
   float* GetDwellCntrlMap(bool i_original);
   float* GetCTSCurveMap(bool i_original);
-  float* GetChokeOpMap(bool i_original);
   float* GetATSCurveMap(bool i_original);
   float* GetATSAACMap(bool i_original);
   void SetCTSXAxisEdits(float i_begin, float i_end);
@@ -92,7 +91,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewAttenuatorMap();
   afx_msg void OnViewDwellCntrlMap();
   afx_msg void OnViewCTSCurveMap();
-  afx_msg void OnViewChokeOpMap();
   afx_msg void OnDwellCalcButton();
   afx_msg void OnViewATSCurveMap();
   afx_msg void OnViewATSAACMap();
@@ -108,7 +106,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnUpdateViewCTSCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewATSCurveMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewATSAACMap(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateViewChokeOpMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGasdosePosMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateCESettingsButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewBarocorrMap(CCmdUI* pCmdUI);
@@ -129,7 +126,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_cts_curve_map_btn;
   CButton   m_view_ats_curve_map_btn;
   CButton   m_view_ats_aac_map_btn;
-  CButton   m_view_choke_op_map_btn;
   CButton   m_view_gasdose_map_btn;
   CButton   m_edit_cesettings_btn;
   CButton   m_view_barocorr_map_btn;
@@ -153,8 +149,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   static void __cdecl OnCloseDwellCntrlTable(void* i_param);
   static void __cdecl OnChangeCTSCurveTable(void* i_param);
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
-  static void __cdecl OnChangeChokeOpTable(void* i_param);
-  static void __cdecl OnCloseChokeOpTable(void* i_param);
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
@@ -191,7 +185,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   int m_cts_curve_map_chart_state;
   int m_ats_curve_map_chart_state;
   int m_ats_aac_map_chart_state;
-  int m_choke_map_chart_state;
   int m_gasdose_map_chart_state;
   int m_barocorr_map_chart_state;
   int m_manigntim_map_chart_state;
@@ -204,7 +197,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   HWND m_ats_curve_map_wnd_handle;
   HWND m_ats_aac_map_wnd_handle;
   HWND m_gasdose_map_wnd_handle;
-  HWND m_choke_map_wnd_handle;
   HWND m_barocorr_map_wnd_handle;
   HWND m_manigntim_map_wnd_handle;
   HWND m_tmp2_curve_map_wnd_handle;
@@ -230,9 +222,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   float m_ats_aac_map_active[16];
   float m_ats_aac_map_original[16];
-
-  float m_choke_map_active[16];
-  float m_choke_map_original[16];
 
   float m_gasdose_map_active[16][16];
   float m_gasdose_map_original[16][16];

@@ -141,11 +141,8 @@ typedef struct params_t
  _uchar knock_recovery_delay;           // задержка восстановления УОЗ в рабочих циклах двигателя
 
  _uint  sm_steps;                       // Number of steps of choke stepper motor
- _uint  choke_rpm[2];                   // Values of RPM needed for RPM-based control of choke position
- _uchar choke_startup_corr;             // Startup correction value for choke
  _uint  choke_rpm_if;                   // Integral factor for RPM-based control of choke position (factor * 1024)
- _uint  choke_corr_time;                // Time for startup correction to be applied
- _int   choke_corr_temp;                // Temperature threshold for startup correction
+ _uint  choke_corr_time[2];             // Time for startup correction to be applied
 
  _uchar bt_flags;                       // Bluetooth and security related flags
  _uchar ibtn_keys[2][6];                // iButton keys for immobilizer
@@ -262,7 +259,7 @@ typedef struct params_t
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2];
+ _uchar reserved[7];
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;
