@@ -107,22 +107,22 @@ class TstMode1 : public ITstMode
     m_items.push_back(CDevDiagnostTabDlg::OID_IGN_O3);
     m_items.push_back(CDevDiagnostTabDlg::OID_IGN_O4);
     m_items.push_back(CDevDiagnostTabDlg::OID_IGN_O5);
-    m_items.push_back(CDevDiagnostTabDlg::OID_ECFO);
     m_items.push_back(CDevDiagnostTabDlg::OID_INJ_O1);
     m_items.push_back(CDevDiagnostTabDlg::OID_INJ_O2);
     m_items.push_back(CDevDiagnostTabDlg::OID_INJ_O3);
     m_items.push_back(CDevDiagnostTabDlg::OID_INJ_O4);
     m_items.push_back(CDevDiagnostTabDlg::OID_INJ_O5);
-    m_items.push_back(CDevDiagnostTabDlg::OID_BL);
-    m_items.push_back(CDevDiagnostTabDlg::OID_DE);
+    m_items.push_back(CDevDiagnostTabDlg::OID_ECFO);
+    m_items.push_back(CDevDiagnostTabDlg::OID_ADD_O2);
+    m_items.push_back(CDevDiagnostTabDlg::OID_EVAP_O);
+    m_items.push_back(CDevDiagnostTabDlg::OID_O2SH_O);
+    m_items.push_back(CDevDiagnostTabDlg::OID_COND_O);
     m_items.push_back(CDevDiagnostTabDlg::OID_STBL_O);
     m_items.push_back(CDevDiagnostTabDlg::OID_CEL_O);
     m_items.push_back(CDevDiagnostTabDlg::OID_FPMP_O);
     m_items.push_back(CDevDiagnostTabDlg::OID_PWRR_O);
-    m_items.push_back(CDevDiagnostTabDlg::OID_EVAP_O);
-    m_items.push_back(CDevDiagnostTabDlg::OID_O2SH_O);
-    m_items.push_back(CDevDiagnostTabDlg::OID_COND_O);
-    m_items.push_back(CDevDiagnostTabDlg::OID_ADD_O2);
+    m_items.push_back(CDevDiagnostTabDlg::OID_BL);
+    m_items.push_back(CDevDiagnostTabDlg::OID_DE);
     ASSERT(m_items.size()==CDevDiagnostTabDlg::OID_SECU3i_NUM);
    }
    else
