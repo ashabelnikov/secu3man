@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "InjectorPageDlg.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
@@ -311,6 +312,10 @@ BOOL CInjectorPageDlg::OnInitDialog()
  //initialize window scroller
  mp_scr->Init(this);
  mp_scr->SetViewSizeF(.0f, 2.5f);
+
+ //Set bold font
+ CloneWndFont(this, &m_boldDlgFont, -1, true);
+ GetDlgItem(IDC_PD_INJECTOR_SECONDFUEL_GROUP)->SetFont(&m_boldDlgFont);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
