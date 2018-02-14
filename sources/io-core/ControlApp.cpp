@@ -1760,7 +1760,7 @@ bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::ChokePar& m_ChokePar = m_recepted_packet.m_ChokePar;
- if (size != (mp_pdp->isHex() ? 23 : 12))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Number of stepper motor steps
@@ -1807,6 +1807,12 @@ bool CControlApp::Parse_CHOKE_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet, &sm_freq))
   return false;
  m_ChokePar.sm_freq = sm_freq;
+
+ //IAC Crank to run time
+ int cranktorun_time = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &cranktorun_time))
+  return false;
+ m_ChokePar.inj_cranktorun_time = float(cranktorun_time) / 100.0f;
 
  return true;
 }
@@ -3180,6 +3186,9 @@ void CControlApp::Build_CHOKE_PAR(ChokePar* packet_data)
 
  BYTE sm_freq = packet_data->sm_freq;
  mp_pdp->Bin8ToHex(sm_freq, m_outgoing_packet);
+
+ int cranktorun_time = MathHelpers::Round(packet_data->inj_cranktorun_time * 100.0f);
+ mp_pdp->Bin16ToHex(cranktorun_time, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

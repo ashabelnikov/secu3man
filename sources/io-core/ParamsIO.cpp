@@ -288,6 +288,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->choke_flags, 2, p_in->usethrottle_pos);
     WRITEBIT8(p_params->choke_flags, 3, p_in->sm_maxfreqinit);
     p_params->sm_freq = p_in->sm_freq;
+    p_params->inj_cranktorun_time = MathHelpers::Round(p_in->inj_cranktorun_time * 100.0f);
    }
    break;
   case GASDOSE_PAR:
@@ -658,6 +659,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
      p_out->usethrottle_pos = CHECKBIT8(p_params->choke_flags, 2);
      p_out->sm_maxfreqinit = CHECKBIT8(p_params->choke_flags, 3);
      p_out->sm_freq = p_params->sm_freq;
+     p_out->inj_cranktorun_time = float(p_params->inj_cranktorun_time) / 100.0f;
     }
     break;
    case GASDOSE_PAR:

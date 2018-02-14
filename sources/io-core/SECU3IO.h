@@ -401,6 +401,7 @@ namespace SECU3IO
   bool  usethrottle_pos;                //Use throttle position in choke initialization
   int   sm_freq;                        //Frequency of stepper motor's pulses (allowed values: 0,1,2,3)
   bool  sm_maxfreqinit;                 //Use maximum STEP frequency at initialization of SM
+  float inj_cranktorun_time;            //sec.
  };
 
  struct GasdosePar

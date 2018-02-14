@@ -94,6 +94,9 @@ class CChokePageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_strt_add_tm2_spin;
   CEditEx m_strt_add_tm2_edit;
 
+  CSpinButtonCtrlEx m_cranktoruntime_spin;
+  CEditEx m_cranktoruntime_edit;
+
   CButton m_offstrtadd_ongas_check;
   CButton m_offrpmreg_ongas_check;
   CButton m_usethrottle_pos_check;

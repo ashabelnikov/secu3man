@@ -38,6 +38,7 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_RPMREG_IF_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_SM_TEST_CHECK, OnSMTestButton)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, OnChangeData)
@@ -77,6 +78,11 @@ BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_CHOKE_SM_FREQ_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_SPIN,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_CAPTION,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_UNIT,OnUpdateControlsCarb)
+ ON_UPDATE_COMMAND_UI(IDC_PD_STARTER_CRANKTORUNTIME_EDIT,OnUpdateControlsCarb)
 END_MESSAGE_MAP()
 
 CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
@@ -87,6 +93,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
 , m_strt_add_tm1_edit(CEditEx::MODE_FLOAT, true)
 , m_strt_add_tm2_edit(CEditEx::MODE_FLOAT, true)
 , m_rpmreg_if_edit(CEditEx::MODE_FLOAT, true)
+, m_cranktoruntime_edit(CEditEx::MODE_FLOAT, true)
 , m_choketst_enabled(false)
 , m_chokemanpos_enabled(false)
 , m_lock_ui_update(false) //UI update is not locked
@@ -103,6 +110,7 @@ CChokePageDlg::CChokePageDlg(CWnd* pParent /*=NULL*/)
  m_params.usethrottle_pos = false;
  m_params.sm_freq = 0;
  m_params.sm_maxfreqinit = false;
+ m_params.inj_cranktorun_time = 3.00f;
 }
 
 LPCTSTR CChokePageDlg::GetDialogID(void) const
@@ -127,6 +135,9 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_rpmreg_if_edit);
  DDX_Control(pDX, IDC_PD_CHOKE_RPMREG_IF_SPIN, m_rpmreg_if_spin);
 
+ DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_cranktoruntime_edit);
+ DDX_Control(pDX, IDC_PD_STARTER_CRANKTORUNTIME_SPIN, m_cranktoruntime_spin);
+
  DDX_Control(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_offstrtadd_ongas_check);
  DDX_Control(pDX, IDC_PD_CHOKE_OFFRPMREGONGAS_CHECK, m_offrpmreg_ongas_check);
  DDX_Control(pDX, IDC_PD_CHOKE_USETHROTTLEPOS_CHECK, m_usethrottle_pos_check);
@@ -138,6 +149,7 @@ void CChokePageDlg::DoDataExchange(CDataExchange* pDX)
  m_strt_add_tm1_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, m_params.choke_corr_time[0]);
  m_strt_add_tm2_edit.DDX_Value(pDX, IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, m_params.choke_corr_time[1]);
  m_rpmreg_if_edit.DDX_Value(pDX, IDC_PD_CHOKE_RPMREG_IF_EDIT, m_params.choke_rpm_if);
+ m_cranktoruntime_edit.DDX_Value(pDX, IDC_PD_STARTER_CRANKTORUNTIME_EDIT, m_params.inj_cranktorun_time);
  DDX_Check_UCHAR(pDX, IDC_PD_CHOKE_SM_TEST_CHECK, m_params.testing);
 
  DDX_Check_bool(pDX, IDC_PD_CHOKE_OFFSTRTADDONGAS_CHECK, m_params.useclrpmreg);
@@ -201,6 +213,12 @@ BOOL CChokePageDlg::OnInitDialog()
  m_rpmreg_if_spin.SetRangeAndDelta(0.01f, 1.0f, 0.01f);
  m_rpmreg_if_edit.SetRange(0.01f, 1.0f);
 
+ m_cranktoruntime_edit.SetLimitText(5);
+ m_cranktoruntime_spin.SetBuddy(&m_cranktoruntime_edit);
+ m_cranktoruntime_edit.SetDecimalPlaces(2);
+ m_cranktoruntime_spin.SetRangeAndDelta(0.10f,99.00f, 0.01f);
+ m_cranktoruntime_edit.SetRange(0.10f, 99.00f);
+
  m_man_ctrl_spin.SetBuddy(&m_man_ctrl_spin); //loves himself
 
  //-----------------------------------------------------------------
@@ -213,7 +231,7 @@ BOOL CChokePageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.4f);
+ mp_scr->SetViewSizeF(.0f, 1.6f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
