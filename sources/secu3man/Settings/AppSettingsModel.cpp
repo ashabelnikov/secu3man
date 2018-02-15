@@ -170,6 +170,8 @@ CAppSettingsModel::CAppSettingsModel()
   str.Format(_T("COM%d"),i);
   m_AllowablePorts.push_back(_TSTRING(str));
  }
+ m_AllowablePorts.push_back(_T("/dev/ttyUSB0"));
+ m_AllowablePorts.push_back(_T("/dev/ttyUSB1"));
 
  _tcscpy(m_current_directory,_T(""));
 

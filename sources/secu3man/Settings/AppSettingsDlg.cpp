@@ -43,7 +43,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
- m_port_number = -1;
+ m_port_number = _T("COM1");
  m_log_csv_sepsymbol_index = -1;
  m_log_files_folder = _T("");
  m_use_app_folder = BST_UNCHECKED;
@@ -79,7 +79,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
- DDX_CBIndex(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
+ DDX_CBString(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_index);
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, m_ecu_platform_selection);
@@ -289,9 +289,7 @@ void CAppSettingsDlg::FillCtrlsWithAllowableECUPlatformTypes(std::vector<std::pa
 //"Set" methods (model => view data transfer)
 void CAppSettingsDlg::SetPortName(_TSTRING i_PortName)
 {
- int result = m_port_selection_combo.FindString(-1,i_PortName.c_str());
- if (result!=LB_ERR)
-  m_port_number = result;
+ m_port_number = i_PortName.c_str();
 }
 
 void CAppSettingsDlg::SetBaudRateApplication(DWORD i_app_baud)
@@ -330,9 +328,7 @@ void CAppSettingsDlg::SetCSVSepSymbol(size_t i_index)
 //"Get" methods (view => model data transfer)
 _TSTRING CAppSettingsDlg::GetPortName(void)
 {
- CString str;
- m_port_selection_combo.GetLBText(m_port_number,str);
- return _TSTRING(str);
+ return m_port_number.GetBuffer(1024);
 }
 
 DWORD CAppSettingsDlg::GetBaudRateApplication(void)

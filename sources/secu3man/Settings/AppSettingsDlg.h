@@ -140,7 +140,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CStatic m_info_text;
   int m_app_baudrate;
   int m_bl_baudrate;
-  int m_port_number;
+  CString m_port_number;
   CString m_log_files_folder;
   int m_use_app_folder;
   int m_always_write_log;
