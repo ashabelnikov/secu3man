@@ -86,6 +86,21 @@ void DDX_HELPERS_API DDX_CBIndex_int(CDataExchange* pDX, int nIDC, int& index)
  }
 }
 
+void DDX_HELPERS_API DDX_CBIndex_bool(CDataExchange* pDX, int nIDC, bool& index)
+{
+ int i_index;
+ if (pDX->m_bSaveAndValidate)
+ {
+  DDX_CBIndex(pDX, nIDC, i_index);
+  index = (bool)i_index;
+ }
+ else
+ {
+  i_index = (int)index;
+  DDX_CBIndex(pDX, nIDC, i_index);
+ }
+}
+
 void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value )
 {
  int b_value;

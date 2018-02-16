@@ -429,6 +429,7 @@ namespace SECU3IO
   bool use_imm;                         //flag specifying to use or not to use immobilizer
   bool use_respar;                      //use reserve parameters (from FLASH only)
   bool chk_fwcrc;                       //check integrity of firmware
+  bool bt_type;                         //Bluetooth type: 0 - BC417, 1 - BK3231
   BYTE ibtn_keys[IBTN_KEYS_NUM][IBTN_KEY_SIZE];//iButton keys
  };
 

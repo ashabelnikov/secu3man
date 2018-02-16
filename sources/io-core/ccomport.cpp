@@ -171,6 +171,9 @@ bool CComPort::Initialize(DWORD baud, BYTE parity, BYTE stopbit, int Dtr, int Rt
 
  if (m_bPortReady)
  {
+  ZeroMemory(&m_dcb, sizeof(DCB));
+  m_dcb.DCBlength = sizeof(DCB);
+
   m_bPortReady = GetCommState(m_hCom, &m_dcb);
   if (!m_bPortReady)
   {

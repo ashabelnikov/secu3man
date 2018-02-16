@@ -32,6 +32,7 @@
 const UINT CSecurPageDlg::IDD = IDD_PD_SECUR_PAGE;
 
 BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
+ ON_CBN_SELCHANGE(IDC_PD_SECUR_BT_TYPE_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_APPLY_BUTTON, OnChangeDataApply)
  ON_BN_CLICKED(IDC_PD_SECUR_BT_USE_CHECK, OnChangeDataUseBtCheck)
  ON_BN_CLICKED(IDC_PD_SECUR_IMM_USE_CHECK, OnChangeData)
@@ -56,6 +57,8 @@ BEGIN_MESSAGE_MAP(CSecurPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_IBTN_KEYS_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_USE_RESPAR_CHECK, OnUpdateUseResPar) //
  ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_CHK_FWCRC_CHECK, OnUpdateUseResPar)  //
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_TYPE_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_SECUR_BT_TYPE_COMBO_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
@@ -74,6 +77,7 @@ CSecurPageDlg::CSecurPageDlg(CWnd* pParent /*=NULL*/)
  m_params.use_imm = false;
  m_params.use_respar = false;
  m_params.chk_fwcrc = true;
+ m_params.bt_type = false;
  for(int j = 0; j < SECU3IO::IBTN_KEYS_NUM; ++j)
   memset(m_params.ibtn_keys[j], 0, SECU3IO::IBTN_KEY_SIZE);
 }
@@ -98,6 +102,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_SECUR_IBTN_KEY2_EDIT, m_ibtn_key2_edit);
  DDX_Control(pDX, IDC_PD_SECUR_USE_RESPAR_CHECK, m_use_respar_check);
  DDX_Control(pDX, IDC_PD_SECUR_CHK_FWCRC_CHECK, m_chk_fwcrc_check);
+ DDX_Control(pDX, IDC_PD_SECUR_BT_TYPE_COMBO, m_bt_type_combo);
 
  CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
@@ -110,6 +115,7 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
  DDX_Check_bool(pDX, IDC_PD_SECUR_USE_RESPAR_CHECK, m_params.use_respar);
  DDX_Check_bool(pDX, IDC_PD_SECUR_CHK_FWCRC_CHECK, m_params.chk_fwcrc);
+ DDX_CBIndex_bool(pDX, IDC_PD_SECUR_BT_TYPE_COMBO, m_params.bt_type);
 }
 
 void CSecurPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -156,6 +162,9 @@ BOOL CSecurPageDlg::OnInitDialog()
 
  mp_ttc->SetMaxTipWidth(150); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ m_bt_type_combo.AddString(_T("BC417"));
+ m_bt_type_combo.AddString(_T("BK3231"));
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);

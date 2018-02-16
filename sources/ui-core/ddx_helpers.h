@@ -35,6 +35,7 @@ void DDX_HELPERS_API DDX_Check_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value)
 void DDX_HELPERS_API DDX_Check_bool(CDataExchange* pDX, int nIDC, bool& value);
 void DDX_HELPERS_API DDX_CBIndex_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& index);
 void DDX_HELPERS_API DDX_CBIndex_int(CDataExchange* pDX, int nIDC, int& index);
+void DDX_HELPERS_API DDX_CBIndex_bool(CDataExchange* pDX, int nIDC, bool& index);
 void DDX_HELPERS_API DDX_Radio_UCHAR(CDataExchange* pDX, int nIDC, UCHAR& value);
 void DDX_HELPERS_API DDX_Radio_bool(CDataExchange* pDX, int nIDC, bool& value);
 void DDX_HELPERS_API DDX_Text_Fmt(CDataExchange* pDX, int nIDC, float& value, LPCTSTR OutFmt=_T("%f"), LPCTSTR InFmt=_T("%f"));

@@ -92,5 +92,7 @@ class CSecurPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_ibtn_key1_edit;
   CEditEx m_ibtn_key2_edit;
 
+  CComboBox m_bt_type_combo;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };
