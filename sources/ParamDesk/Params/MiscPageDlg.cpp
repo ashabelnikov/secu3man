@@ -42,6 +42,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_DURAT_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_EVAP_AFBEGIN_EDIT, OnChangeDataAfBegin)
  ON_EN_CHANGE(IDC_PD_MISC_EVAP_AFEND_EDIT, OnChangeDataAfEnd)
+ ON_EN_CHANGE(IDC_PD_MISC_FLPMP_TIMEOUT_EDIT, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_MISC_UART_SPEED_COMBO, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
  ON_BN_CLICKED(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnChangeData)
@@ -80,6 +81,11 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_CAPTION, OnUpdateControlsSECU3iInj)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_UNIT, OnUpdateControlsSECU3iInj)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFEND_SPIN, OnUpdateControlsSECU3iInj)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_TIMEOUT_EDIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_TIMEOUT_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_TIMEOUT_UNIT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_TIMEOUT_SPIN, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
@@ -95,6 +101,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
 , m_hop_durat_edit(CEditEx::MODE_INT, true)
 , m_evap_afbegin_edit(CEditEx::MODE_INT, true)
 , m_evap_afend_edit(CEditEx::MODE_INT, true)
+, m_fp_timeout_strt_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.baud_rate = CBR_57600;
@@ -107,6 +114,7 @@ CMiscPageDlg::CMiscPageDlg(CWnd* pParent /*=NULL*/)
  m_params.inj_offongas = false;
  m_params.evap_afbegin = 5000;
  m_params.evap_afslope = 0.000188351f;
+ m_params.fp_timeout_strt = 5.0f;
 }
 
 LPCTSTR CMiscPageDlg::GetDialogID(void) const
@@ -159,6 +167,9 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_MISC_EVAP_AFEND_EDIT, m_evap_afend_edit);
  DDX_Control(pDX,IDC_PD_MISC_EVAP_AFEND_SPIN, m_evap_afend_spin);
 
+ DDX_Control(pDX,IDC_PD_MISC_FLPMP_TIMEOUT_EDIT, m_fp_timeout_strt_edit);
+ DDX_Control(pDX,IDC_PD_MISC_FLPMP_TIMEOUT_SPIN, m_fp_timeout_strt_spin);
+
  DDX_CBIndex(pDX, IDC_PD_MISC_UART_SPEED_COMBO, m_uart_speed_cb_index);
  m_packet_period_edit.DDX_Value(pDX, IDC_PD_MISC_PACKET_PERIOD_EDIT, m_params.period_ms);
  m_igncutoff_rpm_edit.DDX_Value(pDX, IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, m_params.ign_cutoff_thrd);
@@ -172,6 +183,8 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  float afend = _calcAfEnd(); //convert afslope to afend
  m_evap_afend_edit.DDX_Value(pDX, IDC_PD_MISC_EVAP_AFEND_EDIT, afend);
  m_params.evap_afslope = _calcAfSlope(afend); //convert afend to afslope
+
+ m_fp_timeout_strt_edit.DDX_Value(pDX, IDC_PD_MISC_FLPMP_TIMEOUT_EDIT, m_params.fp_timeout_strt);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -271,6 +284,12 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_evap_afend_spin.SetRangeAndDelta(100, 2000000, 1);
  m_evap_afend_edit.SetRange(100, 2000000);
 
+ m_fp_timeout_strt_edit.SetLimitText(4);
+ m_fp_timeout_strt_edit.SetDecimalPlaces(1);
+ m_fp_timeout_strt_spin.SetBuddy(&m_fp_timeout_strt_edit);
+ m_fp_timeout_strt_spin.SetRangeAndDelta(0.1f, 25.0f, 0.1f);
+ m_fp_timeout_strt_edit.SetRange(0.1f, 25.0f);
+
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)
   br.push_back(SECU3IO::secu3_allowable_uart_divisors[i].first);
@@ -303,12 +322,15 @@ BOOL CMiscPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_evap_afend_edit, MLL::GetString(IDS_PD_MISC_EVAP_AFEND_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_evap_afend_spin, MLL::GetString(IDS_PD_MISC_EVAP_AFEND_EDIT_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_fp_timeout_strt_edit, MLL::GetString(IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fp_timeout_strt_spin, MLL::GetString(IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(0.0f, 1.35f);
+ mp_scr->SetViewSizeF(0.0f, 1.55f);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control

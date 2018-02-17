@@ -119,4 +119,6 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_evap_afbegin_edit;
   CSpinButtonCtrlEx m_evap_afend_spin;
   CEditEx m_evap_afend_edit;
+  CSpinButtonCtrlEx m_fp_timeout_strt_spin;
+  CEditEx m_fp_timeout_strt_edit;
 };

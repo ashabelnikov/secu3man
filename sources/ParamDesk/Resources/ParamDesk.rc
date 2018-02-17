@@ -613,6 +613,11 @@ BEGIN
     CONTROL         "",IDC_PD_MISC_EVAP_AFEND_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,170,13,17
     LTEXT           "Кон.расход воздуха",IDC_PD_MISC_EVAP_AFEND_CAPTION,1,171,88,10
     LTEXT           "RxL",IDC_PD_MISC_EVAP_AFEND_UNIT,144,171,20,10
+
+    EDITTEXT        IDC_PD_MISC_FLPMP_TIMEOUT_EDIT,96,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_MISC_FLPMP_TIMEOUT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,190,13,17
+    LTEXT           "Время раб. бензонасоса",IDC_PD_MISC_FLPMP_TIMEOUT_CAPTION,1,191,94,10
+    LTEXT           "сек",IDC_PD_MISC_FLPMP_TIMEOUT_UNIT,144,191,20,10
 END
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 183
@@ -1503,6 +1508,7 @@ BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера начинает включаться (коэфф.заполнения ШИМ = 0%). Если расход воздуха меньше или равен этому значению, то клапан полностью выключен. Расход воздуха определяется как Обороты * Нагрузка."
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера полностью включен (коэфф.заполнения ШИМ = 100%). Если расход воздуха больше или равен этому значению, то клапан полностью включен. Расход воздуха определяется как Обороты * Нагрузка."
     IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Назрузка на ХХ, которая вместе с оборотами определяет режимную точку. Если в качестве нагрузки выбран ДАД, то значение в кПа, иначе значение в %. Если вы используете в качестве нагрузки ДПДЗ или хотите чтобы режимная точка определялась только оборотами, то поставьте 0."
+    IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Время, на которое включится бензонасос после включения зажигания"
 END
 
 
@@ -2126,6 +2132,11 @@ BEGIN
     CONTROL         "",IDC_PD_MISC_EVAP_AFEND_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,170,13,17
     LTEXT           "EVAP ending air flow",IDC_PD_MISC_EVAP_AFEND_CAPTION,1,171,88,10
     LTEXT           "RxL",IDC_PD_MISC_EVAP_AFEND_UNIT,144,171,20,10
+
+    EDITTEXT        IDC_PD_MISC_FLPMP_TIMEOUT_EDIT,96,190,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_MISC_FLPMP_TIMEOUT_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,190,13,17
+    LTEXT           "Fuel pump working time",IDC_PD_MISC_FLPMP_TIMEOUT_CAPTION,1,191,94,10
+    LTEXT           "sec",IDC_PD_MISC_FLPMP_TIMEOUT_UNIT,144,191,20,10
 END
 
 IDD_PD_CHOKE_PAGE DIALOGEX 0, 0, 155, 183
@@ -3045,6 +3056,7 @@ BEGIN
     IDS_PD_MISC_EVAP_AFBEGIN_EDIT_TT "Air flow at which canister purge valve start to open (PWM duty = 0%). If air flow is less or equal to this value, than valve will be fully closed. Air flow is determined as RPM * Load"
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Air flow at which canister purge valve is fully opened (PWM duty = 100%). If air flow is above or equal to this value, than valve will be fully opened. Air flow is determined as RPM * Load"
     IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Value of load on idling, which together with rpm defines target operation conditions. If MAP is selected as load source, then this value is in kPa, otherwise, this value is in %. If you selected TPS as load source or you want target oparation contions to be defined with rpm only, then set this value to zero."
+    IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Fuel pump will work during this time after turning on of ignition"
 END
 
 STRINGTABLE

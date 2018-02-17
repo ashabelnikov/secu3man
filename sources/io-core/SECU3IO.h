@@ -307,6 +307,7 @@ namespace SECU3IO
   bool inj_offongas;                    //Turn off injector(s) on gas
   float evap_afbegin;
   float evap_afslope;
+  float fp_timeout_strt;                //Fuel pump timeout for cranking (sec.)
  };
 
  struct EditTabPar
