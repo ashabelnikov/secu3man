@@ -195,14 +195,14 @@ BOOL CStarterPageDlg::OnInitDialog()
  m_primecold_edit.SetLimitText(4);
  m_primecold_spin.SetBuddy(&m_primecold_edit);
  m_primecold_edit.SetDecimalPlaces(1);
- m_primecold_spin.SetRangeAndDelta(.0f, 65.0f, 0.1f);
- m_primecold_edit.SetRange(0, 65.0f);
+ m_primecold_spin.SetRangeAndDelta(.0f, 100.0f, 0.1f);
+ m_primecold_edit.SetRange(0, 100.0f);
 
  m_primehot_edit.SetLimitText(4);
  m_primehot_spin.SetBuddy(&m_primehot_edit);
  m_primehot_edit.SetDecimalPlaces(1);
- m_primehot_spin.SetRangeAndDelta(.0f, 65.0f, 0.1f);
- m_primehot_edit.SetRange(0, 65.0f);
+ m_primehot_spin.SetRangeAndDelta(.0f, 100.0f, 0.1f);
+ m_primehot_edit.SetRange(0, 100.0f);
 
  m_primedelay_edit.SetLimitText(4);
  m_primedelay_spin.SetBuddy(&m_primedelay_edit);
