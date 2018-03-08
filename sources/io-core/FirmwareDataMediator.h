@@ -329,9 +329,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP_INJ_OUT5   =  63,     // INJ_OUT5    (output)
    IOP_INJ_OUT6   =  64,     // INJ_OUT6    (output)
    IOP_COND_I     =  65,     // COND_I      (input)
-// IOP_RESERVED27 =  66,     // Reserved    ()
+   IOP_O2SH_O     =  66,     // O2SH_O      (output)
 // IOP_RESERVED28 =  67,     // Reserved    ()
-   IOP_COUNT      =  66,     // Number of plugs used in I/O remapping
+   IOP_COUNT      =  67,     // Number of plugs used in I/O remapping
    IOP_NA         =  255     //
   };
 
