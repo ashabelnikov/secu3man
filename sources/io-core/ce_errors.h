@@ -42,8 +42,9 @@
 #define ECUERROR_ADD_I2_SENSOR       12
 #define ECUERROR_ADD_I3_SENSOR       13
 #define ECUERROR_ADD_I4_SENSOR       14
+#define ECUERROR_SYS_START           15
 
-const int SECU3_CE_ERRCODES_COUNT   = 15;
+const int SECU3_CE_ERRCODES_COUNT   = 16;
  //<bitnumber, error code>
 #define _SD std::pair<int, int>
  static std::pair<int, int> secu3_ce_error_codes[SECU3_CE_ERRCODES_COUNT] =
@@ -63,6 +64,7 @@ const int SECU3_CE_ERRCODES_COUNT   = 15;
   _SD(ECUERROR_ADD_I2_SENSOR,       28), //sensor
   _SD(ECUERROR_ADD_I3_SENSOR,       51), //sensor
   _SD(ECUERROR_ADD_I4_SENSOR,       52), //sensor
+  _SD(ECUERROR_SYS_START,           00), //not actually an error
  };
 #undef _SD
 

@@ -153,6 +153,7 @@ BEGIN
     IDS_CED_ADD_I2_SENSOR_TT       "Неисправность датчика на входе ADD_I2"
     IDS_CED_ADD_I3_SENSOR_TT       "Неисправность датчика на входе ADD_I3"
     IDS_CED_ADD_I4_SENSOR_TT       "Неисправность датчика на входе ADD_I4"
+    IDS_CED_SYS_START_TT           "Старт прошивки (перезапуск процессора)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -338,6 +339,7 @@ BEGIN
     IDS_CED_ADD_I2_SENSOR_TT       "ADD_I2 input's sensor failure"
     IDS_CED_ADD_I3_SENSOR_TT       "ADD_I3 input's sensor failure"
     IDS_CED_ADD_I4_SENSOR_TT       "ADD_I4 input's sensor failure"
+    IDS_CED_SYS_START_TT           "Firmware start (reset of processor)"
 END
 
 STRINGTABLE DISCARDABLE 

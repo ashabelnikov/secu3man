@@ -417,6 +417,7 @@ BEGIN
     IDS_ECUERROR_ADD_I4_SENSOR     "Неисправность датчика на входе ADD_I4"   
     IDS_INCOMPATIBLE_FIRMWARE      "Обнаружена несовместимость версии прошивки с версией данной программы. Продолжить?"
     IDS_INCOMPATIBLE_QUARTZ        "Обнаружена несовместимость тактовой частоты, некоторые данные и параметры могут стать неверными. Продолжить?"
+    IDS_ECUERROR_SYS_START         "Старт прошивки (перезапуск процессора)"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1084,6 +1085,7 @@ BEGIN
     IDS_ECUERROR_ADD_I4_SENSOR     "ADD_I4 input's sensor failure"   
     IDS_INCOMPATIBLE_FIRMWARE      "Incompatibility between versions of firmware and this program discovered. Do you want to continue?"
     IDS_INCOMPATIBLE_QUARTZ        "Incompatibility of clock frequency has detected, some data and parameters may become invalid. Do you want to continue?"
+    IDS_ECUERROR_SYS_START         "Firmware start (reset of processor)"
 END
 
 STRINGTABLE DISCARDABLE 
