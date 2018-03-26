@@ -100,38 +100,47 @@ typedef struct
  _uint map_v_min;                //minimum correct value
  _uint map_v_max;                //maximum correct value
  _uint map_v_em;                 //emergency value, used in case of error
+ _uchar map_v_flg;
 
  _uint vbat_v_min;
  _uint vbat_v_max;
  _uint vbat_v_em;
+ _uchar vbat_v_flg;
 
  _uint cts_v_min;
  _uint cts_v_max;
  _uint cts_v_em;
+ _uchar cts_v_flg;
 
  _uint ks_v_min;
  _uint ks_v_max;
  _uint ks_v_em;
+ _uchar ks_v_flg;
 
  _uint tps_v_min;
  _uint tps_v_max;
  _uint tps_v_em;
+ _uchar tps_v_flg;
 
  _uint add_i1_v_min;
  _uint add_i1_v_max;
  _uint add_i1_v_em;
+ _uchar add_i1_v_flg;
 
  _uint add_i2_v_min;
  _uint add_i2_v_max;
  _uint add_i2_v_em;
+ _uchar add_i2_v_flg;
 
  _uint add_i3_v_min;
  _uint add_i3_v_max;
  _uint add_i3_v_em;
+ _uchar add_i3_v_flg;
 
  _uint add_i4_v_min;
  _uint add_i4_v_max;
  _uint add_i4_v_em;
+ _uchar add_i4_v_flg;
 }ce_sett_t;
 
 //описывает дополнительные данные хранимые в прошивке
@@ -183,10 +192,13 @@ typedef struct
  //Coolant temperature correction of advance angle on cranking
  _char cts_crkcorr[CTS_CRKCORR_SIZE];
 
+ //pause curve for EGO heater control
+ _uchar eh_pause[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[67];
+ _uchar reserved[26];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1884,38 +1896,47 @@ void CFirmwareDataMediator::GetCESettingsData(CESettingsData& o_data) const
  o_data.map_v_min = ((float)p_fd->exdata.cesd.map_v_min) * ADC_DISCRETE;
  o_data.map_v_max = ((float)p_fd->exdata.cesd.map_v_max) * ADC_DISCRETE;
  o_data.map_v_em  = ((float)p_fd->exdata.cesd.map_v_em) * ADC_DISCRETE;
+ o_data.map_v_useem = CHECKBIT8(p_fd->exdata.cesd.map_v_flg, 0); 
 
  o_data.vbat_v_min = ((float)p_fd->exdata.cesd.vbat_v_min) * ADC_DISCRETE;
  o_data.vbat_v_max = ((float)p_fd->exdata.cesd.vbat_v_max) * ADC_DISCRETE;
  o_data.vbat_v_em  = ((float)p_fd->exdata.cesd.vbat_v_em) * ADC_DISCRETE;
+ o_data.vbat_v_useem = CHECKBIT8(p_fd->exdata.cesd.vbat_v_flg, 0); 
 
  o_data.cts_v_min = ((float)p_fd->exdata.cesd.cts_v_min) * ADC_DISCRETE;
  o_data.cts_v_max = ((float)p_fd->exdata.cesd.cts_v_max) * ADC_DISCRETE;
  o_data.cts_v_em  = ((float)p_fd->exdata.cesd.cts_v_em) * ADC_DISCRETE;
+ o_data.cts_v_useem = CHECKBIT8(p_fd->exdata.cesd.cts_v_flg, 0); 
 
  o_data.ks_v_min = ((float)p_fd->exdata.cesd.ks_v_min) * ADC_DISCRETE;
  o_data.ks_v_max = ((float)p_fd->exdata.cesd.ks_v_max) * ADC_DISCRETE;
  o_data.ks_v_em  = ((float)p_fd->exdata.cesd.ks_v_em) * ADC_DISCRETE;
+ o_data.ks_v_useem = CHECKBIT8(p_fd->exdata.cesd.ks_v_flg, 0); 
 
  o_data.tps_v_min = ((float)p_fd->exdata.cesd.tps_v_min) * ADC_DISCRETE;
  o_data.tps_v_max = ((float)p_fd->exdata.cesd.tps_v_max) * ADC_DISCRETE;
  o_data.tps_v_em  = ((float)p_fd->exdata.cesd.tps_v_em) * ADC_DISCRETE;
+ o_data.tps_v_useem = CHECKBIT8(p_fd->exdata.cesd.tps_v_flg, 0); 
 
  o_data.add_i1_v_min = ((float)p_fd->exdata.cesd.add_i1_v_min) * ADC_DISCRETE;
  o_data.add_i1_v_max = ((float)p_fd->exdata.cesd.add_i1_v_max) * ADC_DISCRETE;
  o_data.add_i1_v_em  = ((float)p_fd->exdata.cesd.add_i1_v_em) * ADC_DISCRETE;
+ o_data.add_i1_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i1_v_flg, 0); 
 
  o_data.add_i2_v_min = ((float)p_fd->exdata.cesd.add_i2_v_min) * ADC_DISCRETE;
  o_data.add_i2_v_max = ((float)p_fd->exdata.cesd.add_i2_v_max) * ADC_DISCRETE;
  o_data.add_i2_v_em  = ((float)p_fd->exdata.cesd.add_i2_v_em) * ADC_DISCRETE;
+ o_data.add_i2_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i2_v_flg, 0); 
 
  o_data.add_i3_v_min = ((float)p_fd->exdata.cesd.add_i3_v_min) * ADC_DISCRETE;
  o_data.add_i3_v_max = ((float)p_fd->exdata.cesd.add_i3_v_max) * ADC_DISCRETE;
  o_data.add_i3_v_em  = ((float)p_fd->exdata.cesd.add_i3_v_em) * ADC_DISCRETE;
+ o_data.add_i3_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i3_v_flg, 0); 
 
  o_data.add_i4_v_min = ((float)p_fd->exdata.cesd.add_i4_v_min) * ADC_DISCRETE;
  o_data.add_i4_v_max = ((float)p_fd->exdata.cesd.add_i4_v_max) * ADC_DISCRETE;
  o_data.add_i4_v_em  = ((float)p_fd->exdata.cesd.add_i4_v_em) * ADC_DISCRETE;
+ o_data.add_i4_v_useem = CHECKBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0); 
 }
 
 void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
@@ -1925,36 +1946,45 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->exdata.cesd.map_v_min = MathHelpers::Round((i_data.map_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.map_v_max = MathHelpers::Round((i_data.map_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.map_v_em  = MathHelpers::Round((i_data.map_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.map_v_flg, 0, i_data.map_v_useem);
 
  p_fd->exdata.cesd.vbat_v_min = MathHelpers::Round((i_data.vbat_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.vbat_v_max = MathHelpers::Round((i_data.vbat_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.vbat_v_em  = MathHelpers::Round((i_data.vbat_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.vbat_v_flg, 0, i_data.vbat_v_useem);
 
  p_fd->exdata.cesd.cts_v_min = MathHelpers::Round((i_data.cts_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.cts_v_max = MathHelpers::Round((i_data.cts_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.cts_v_em  = MathHelpers::Round((i_data.cts_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.cts_v_flg, 0, i_data.cts_v_useem);
 
  p_fd->exdata.cesd.ks_v_min = MathHelpers::Round((i_data.ks_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.ks_v_max = MathHelpers::Round((i_data.ks_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.ks_v_em  = MathHelpers::Round((i_data.ks_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.ks_v_flg, 0, i_data.ks_v_useem);
 
  p_fd->exdata.cesd.tps_v_min = MathHelpers::Round((i_data.tps_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.tps_v_max = MathHelpers::Round((i_data.tps_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.tps_v_em  = MathHelpers::Round((i_data.tps_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.tps_v_flg, 0, i_data.tps_v_useem);
 
  p_fd->exdata.cesd.add_i1_v_min = MathHelpers::Round((i_data.add_i1_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i1_v_max = MathHelpers::Round((i_data.add_i1_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i1_v_em  = MathHelpers::Round((i_data.add_i1_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i1_v_flg, 0, i_data.add_i1_v_useem);
 
  p_fd->exdata.cesd.add_i2_v_min = MathHelpers::Round((i_data.add_i2_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i2_v_max = MathHelpers::Round((i_data.add_i2_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i2_v_em  = MathHelpers::Round((i_data.add_i2_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i2_v_flg, 0, i_data.add_i2_v_useem);
 
  p_fd->exdata.cesd.add_i3_v_min = MathHelpers::Round((i_data.add_i3_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i3_v_max = MathHelpers::Round((i_data.add_i3_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i3_v_em  = MathHelpers::Round((i_data.add_i3_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i3_v_flg, 0, i_data.add_i3_v_useem);
 
  p_fd->exdata.cesd.add_i4_v_min = MathHelpers::Round((i_data.add_i4_v_min / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
+ WRITEBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0, i_data.add_i4_v_useem);
 }

@@ -31,6 +31,7 @@
 #include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ddx_helpers.h"
 
 #undef max   //avoid conflicts with C++
 
@@ -53,6 +54,7 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_CAPTION, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MAX_CAPTION, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_EM_CAPTION, OnUpdateSECU3i)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_USEEM_CHECK, OnUpdateSECU3i)
 
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MIN_EDIT, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MIN_SPIN, OnUpdateSECU3iEx)
@@ -64,6 +66,7 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MIN_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MAX_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_EM_CAPTION, OnUpdateSECU3iEx)
+ ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_USEEM_CHECK, OnUpdateSECU3iEx)
 
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
 END_MESSAGE_MAP()
@@ -121,6 +124,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_MAP_V_MAX_SPIN, m_map_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_MAP_V_EM_EDIT, m_map_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_MAP_V_EM_SPIN, m_map_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_MAP_V_USEEM_CHECK, m_map_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_VBAT_V_MIN_EDIT, m_vbat_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_VBAT_V_MIN_SPIN, m_vbat_v_min_spin);
@@ -128,6 +132,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_VBAT_V_MAX_SPIN, m_vbat_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_VBAT_V_EM_EDIT, m_vbat_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_VBAT_V_EM_SPIN, m_vbat_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_VBAT_V_USEEM_CHECK, m_vbat_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_CTS_V_MIN_EDIT, m_cts_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_CTS_V_MIN_SPIN, m_cts_v_min_spin);
@@ -135,6 +140,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_CTS_V_MAX_SPIN, m_cts_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_CTS_V_EM_EDIT, m_cts_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_CTS_V_EM_SPIN, m_cts_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_CTS_V_USEEM_CHECK, m_cts_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_KS_V_MIN_EDIT, m_ks_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_KS_V_MIN_SPIN, m_ks_v_min_spin);
@@ -142,6 +148,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_KS_V_MAX_SPIN, m_ks_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_KS_V_EM_EDIT, m_ks_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_KS_V_EM_SPIN, m_ks_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_KS_V_USEEM_CHECK, m_ks_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_TPS_V_MIN_EDIT, m_tps_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_TPS_V_MIN_SPIN, m_tps_v_min_spin);
@@ -149,6 +156,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_TPS_V_MAX_SPIN, m_tps_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_TPS_V_EM_EDIT, m_tps_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_TPS_V_EM_SPIN, m_tps_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_TPS_V_USEEM_CHECK, m_tps_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_ADD_I1_V_MIN_EDIT, m_add_i1_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I1_V_MIN_SPIN, m_add_i1_v_min_spin);
@@ -156,6 +164,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I1_V_MAX_SPIN, m_add_i1_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I1_V_EM_EDIT, m_add_i1_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I1_V_EM_SPIN, m_add_i1_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I1_V_USEEM_CHECK, m_add_i1_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_ADD_I2_V_MIN_EDIT, m_add_i2_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I2_V_MIN_SPIN, m_add_i2_v_min_spin);
@@ -163,6 +172,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I2_V_MAX_SPIN, m_add_i2_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I2_V_EM_EDIT, m_add_i2_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I2_V_EM_SPIN, m_add_i2_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I2_V_USEEM_CHECK, m_add_i2_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_ADD_I3_V_MIN_EDIT, m_add_i3_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I3_V_MIN_SPIN, m_add_i3_v_min_spin);
@@ -170,6 +180,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I3_V_MAX_SPIN, m_add_i3_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I3_V_EM_EDIT, m_add_i3_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I3_V_EM_SPIN, m_add_i3_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I3_V_USEEM_CHECK, m_add_i3_v_useem_check);
 
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_MIN_EDIT, m_add_i4_v_min_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_MIN_SPIN, m_add_i4_v_min_spin);
@@ -177,6 +188,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_MAX_SPIN, m_add_i4_v_max_spin);
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_EM_EDIT, m_add_i4_v_em_edit);
  DDX_Control(pDX, IDC_CESETT_ADD_I4_V_EM_SPIN, m_add_i4_v_em_spin);
+ DDX_Control(pDX, IDC_CESETT_ADD_I4_V_USEEM_CHECK, m_add_i4_v_useem_check);
 
  //Do data exchange and validation
  m_map_v_min_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_MIN_EDIT, mp_data->map_v_min);
@@ -185,6 +197,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->map_v_max, 0.0f, 5.5f);
  m_map_v_em_edit.DDX_Value(pDX, IDC_CESETT_MAP_V_EM_EDIT, mp_data->map_v_em);
  DDV_MinMaxFloat(pDX, mp_data->map_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_MAP_V_USEEM_CHECK, mp_data->map_v_useem);
 
  m_vbat_v_min_edit.DDX_Value(pDX, IDC_CESETT_VBAT_V_MIN_EDIT, mp_data->vbat_v_min);
  DDV_MinMaxFloat(pDX, mp_data->vbat_v_min, 8.0f, 18.0f);
@@ -192,6 +205,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->vbat_v_max, 8.0f, 18.0f);
  m_vbat_v_em_edit.DDX_Value(pDX, IDC_CESETT_VBAT_V_EM_EDIT, mp_data->vbat_v_em);
  DDV_MinMaxFloat(pDX, mp_data->vbat_v_em, 8.0f, 18.0f);
+ DDX_Check_bool(pDX, IDC_CESETT_VBAT_V_USEEM_CHECK, mp_data->vbat_v_useem);
 
  m_cts_v_min_edit.DDX_Value(pDX, IDC_CESETT_CTS_V_MIN_EDIT, mp_data->cts_v_min);
  DDV_MinMaxFloat(pDX, mp_data->cts_v_min, 0.0f, 5.5f);
@@ -199,6 +213,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->cts_v_max, 0.0f, 5.5f);
  m_cts_v_em_edit.DDX_Value(pDX, IDC_CESETT_CTS_V_EM_EDIT, mp_data->cts_v_em);
  DDV_MinMaxFloat(pDX, mp_data->cts_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_CTS_V_USEEM_CHECK, mp_data->cts_v_useem);
 
  m_ks_v_min_edit.DDX_Value(pDX, IDC_CESETT_KS_V_MIN_EDIT, mp_data->ks_v_min);
  DDV_MinMaxFloat(pDX, mp_data->ks_v_min, 0.0f, 5.5f);
@@ -206,6 +221,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->ks_v_max, 0.0f, 5.5f);
  m_ks_v_em_edit.DDX_Value(pDX, IDC_CESETT_KS_V_EM_EDIT, mp_data->ks_v_em);
  DDV_MinMaxFloat(pDX, mp_data->ks_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_KS_V_USEEM_CHECK, mp_data->ks_v_useem);
 
  m_tps_v_min_edit.DDX_Value(pDX, IDC_CESETT_TPS_V_MIN_EDIT, mp_data->tps_v_min);
  DDV_MinMaxFloat(pDX, mp_data->tps_v_min, 0.0f, 5.5f);
@@ -213,6 +229,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->tps_v_max, 0.0f, 5.5f);
  m_tps_v_em_edit.DDX_Value(pDX, IDC_CESETT_TPS_V_EM_EDIT, mp_data->tps_v_em);
  DDV_MinMaxFloat(pDX, mp_data->tps_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_TPS_V_USEEM_CHECK, mp_data->tps_v_useem);
 
  m_add_i1_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I1_V_MIN_EDIT, mp_data->add_i1_v_min);
  DDV_MinMaxFloat(pDX, mp_data->add_i1_v_min, 0.0f, 5.5f);
@@ -220,6 +237,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->add_i1_v_max, 0.0f, 5.5f);
  m_add_i1_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I1_V_EM_EDIT, mp_data->add_i1_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i1_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I1_V_USEEM_CHECK, mp_data->add_i1_v_useem);
 
  m_add_i2_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I2_V_MIN_EDIT, mp_data->add_i2_v_min);
  DDV_MinMaxFloat(pDX, mp_data->add_i2_v_min, 0.0f, 5.5f);
@@ -227,6 +245,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->add_i2_v_max, 0.0f, 5.5f);
  m_add_i2_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I2_V_EM_EDIT, mp_data->add_i2_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i2_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I2_V_USEEM_CHECK, mp_data->add_i2_v_useem);
 
  m_add_i3_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I3_V_MIN_EDIT, mp_data->add_i3_v_min);
  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_min, 0.0f, 5.5f);
@@ -234,6 +253,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_max, 0.0f, 5.5f);
  m_add_i3_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I3_V_EM_EDIT, mp_data->add_i3_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i3_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I3_V_USEEM_CHECK, mp_data->add_i3_v_useem);
 
  m_add_i4_v_min_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_MIN_EDIT, mp_data->add_i4_v_min);
  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_min, 0.0f, 5.5f);
@@ -241,6 +261,7 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_max, 0.0f, 5.5f);
  m_add_i4_v_em_edit.DDX_Value(pDX, IDC_CESETT_ADD_I4_V_EM_EDIT, mp_data->add_i4_v_em);
  DDV_MinMaxFloat(pDX, mp_data->add_i4_v_em, 0.0f, 5.5f);
+ DDX_Check_bool(pDX, IDC_CESETT_ADD_I4_V_USEEM_CHECK, mp_data->add_i4_v_useem);
 }
 
 /////////////////////////////////////////////////////////////////////////////

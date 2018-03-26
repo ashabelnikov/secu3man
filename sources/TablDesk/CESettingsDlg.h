@@ -77,6 +77,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_map_v_max_spin;
   CEditEx m_map_v_em_edit;
   CSpinButtonCtrlEx m_map_v_em_spin;
+  CButton m_map_v_useem_check;
 
   CEditEx m_vbat_v_min_edit;
   CSpinButtonCtrlEx m_vbat_v_min_spin;
@@ -84,6 +85,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_vbat_v_max_spin;
   CEditEx m_vbat_v_em_edit;
   CSpinButtonCtrlEx m_vbat_v_em_spin;
+  CButton m_vbat_v_useem_check;
 
   CEditEx m_cts_v_min_edit;
   CSpinButtonCtrlEx m_cts_v_min_spin;
@@ -91,6 +93,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_cts_v_max_spin;
   CEditEx m_cts_v_em_edit;
   CSpinButtonCtrlEx m_cts_v_em_spin;
+  CButton m_cts_v_useem_check;
 
   CEditEx m_ks_v_min_edit;
   CSpinButtonCtrlEx m_ks_v_min_spin;
@@ -98,6 +101,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_ks_v_max_spin;
   CEditEx m_ks_v_em_edit;
   CSpinButtonCtrlEx m_ks_v_em_spin;
+  CButton m_ks_v_useem_check;
 
   CEditEx m_tps_v_min_edit;
   CSpinButtonCtrlEx m_tps_v_min_spin;
@@ -105,6 +109,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_tps_v_max_spin;
   CEditEx m_tps_v_em_edit;
   CSpinButtonCtrlEx m_tps_v_em_spin;
+  CButton m_tps_v_useem_check;
 
   CEditEx m_add_i1_v_min_edit;
   CSpinButtonCtrlEx m_add_i1_v_min_spin;
@@ -112,6 +117,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i1_v_max_spin;
   CEditEx m_add_i1_v_em_edit;
   CSpinButtonCtrlEx m_add_i1_v_em_spin;
+  CButton m_add_i1_v_useem_check;
 
   CEditEx m_add_i2_v_min_edit;
   CSpinButtonCtrlEx m_add_i2_v_min_spin;
@@ -119,6 +125,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i2_v_max_spin;
   CEditEx m_add_i2_v_em_edit;
   CSpinButtonCtrlEx m_add_i2_v_em_spin;
+  CButton m_add_i2_v_useem_check;
 
   CEditEx m_add_i3_v_min_edit;
   CSpinButtonCtrlEx m_add_i3_v_min_spin;
@@ -126,6 +133,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i3_v_max_spin;
   CEditEx m_add_i3_v_em_edit;
   CSpinButtonCtrlEx m_add_i3_v_em_spin;
+  CButton m_add_i3_v_useem_check;
 
   CEditEx m_add_i4_v_min_edit;
   CSpinButtonCtrlEx m_add_i4_v_min_spin;
@@ -133,6 +141,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CSpinButtonCtrlEx m_add_i4_v_max_spin;
   CEditEx m_add_i4_v_em_edit;
   CSpinButtonCtrlEx m_add_i4_v_em_spin;
+  CButton m_add_i4_v_useem_check;
 
   CPoint m_wndPos;
 };
