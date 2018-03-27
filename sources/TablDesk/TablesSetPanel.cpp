@@ -439,6 +439,36 @@ void __cdecl CTablesSetPanel::OnCloseCrkTempTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeEHPauseTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_EH_PAUSE);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseEHPauseTable(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_eh_pause_map_chart_state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_eh_pause_map_wnd_handle, TYPE_MAP_EH_PAUSE);
+}
+
+//------------------------------------------------------------------------
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -463,6 +493,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_manigntim_map_chart_state = 0;
  m_tmp2_curve_map_chart_state = 0;
  m_crktemp_map_chart_state = 0;
+ m_eh_pause_map_chart_state = 0;
 
  m_attenuator_map_wnd_handle = NULL;
  m_dwellcntrl_map_wnd_handle = NULL;
@@ -474,6 +505,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
  m_manigntim_map_wnd_handle = NULL;
  m_tmp2_curve_map_wnd_handle = NULL;
  m_crktemp_map_wnd_handle = NULL;
+ m_eh_pause_map_wnd_handle = NULL;
 
  int rpm = 200;
  for(size_t i = 0; i < 128; i++)
@@ -503,6 +535,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_MANIGNTIM_MAP, m_view_manigntim_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, m_view_tmp2_curve_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CRKTEMP_MAP, m_view_crktemp_map_btn);
+ DDX_Control(pDX, IDC_TD_VIEW_EH_PAUSE_MAP, m_view_eh_pause_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -519,6 +552,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_MANIGNTIM_MAP, OnViewManIgntimMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TMP2_CURVE, OnViewTmp2CurveMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CRKTEMP_MAP, OnViewCrkTempMap)
+ ON_BN_CLICKED(IDC_TD_VIEW_EH_PAUSE_MAP, OnViewEHPauseMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -534,6 +568,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_MANIGNTIM_MAP, OnUpdateViewManIgntimMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TMP2_CURVE, OnUpdateViewTmp2CurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CRKTEMP_MAP, OnUpdateViewCrkTempMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_EH_PAUSE_MAP, OnUpdateViewEHPauseMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
 END_MESSAGE_MAP()
@@ -649,6 +684,14 @@ void CTablesSetPanel::OnUpdateViewCrkTempMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_crktemp_map_chart_state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewEHPauseMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_eh_pause_map_chart_state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -687,6 +730,9 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_crktemp_map_chart_state)
   DLL::Chart2DUpdate(m_crktemp_map_wnd_handle, GetCrkTempMap(true), GetCrkTempMap(false));
+
+ if (m_eh_pause_map_chart_state)
+  DLL::Chart2DUpdate(m_eh_pause_map_wnd_handle, GetEHPauseMap(true), GetEHPauseMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1141,6 +1187,41 @@ void CTablesSetPanel::OnViewCrkTempMap()
  }
 }
 
+void CTablesSetPanel::OnViewEHPauseMap()
+{
+ //If button was released, then close editor's window
+ if (m_view_eh_pause_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_eh_pause_map_wnd_handle, WM_CLOSE, 0, 0);
+  return;
+ }
+
+ if ((!m_eh_pause_map_chart_state)&&(DLL::Chart2DCreate))
+ {
+  m_eh_pause_map_chart_state = 1;
+  m_eh_pause_map_wnd_handle = DLL::Chart2DCreate(GetEHPauseMap(true), GetEHPauseMap(false), 0.01f, 2.55f, SECU3IO::dwellcntrl_map_slots, 32,
+    MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_EH_PAUSE_UNIT).c_str(),
+    MLL::GetString(IDS_EH_PAUSE_MAP).c_str(), false);
+  DLL::Chart2DSetAxisValuesFormat(m_eh_pause_map_wnd_handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_eh_pause_map_wnd_handle, OnChangeEHPauseTable, this);
+  DLL::Chart2DSetOnClose(m_eh_pause_map_wnd_handle, OnCloseEHPauseTable, this);
+  DLL::Chart2DSetPtValuesFormat(m_eh_pause_map_wnd_handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_eh_pause_map_wnd_handle, 0.01f);
+  DLL::Chart2DUpdate(m_eh_pause_map_wnd_handle, NULL, NULL); //<--actuate changes
+
+  //allow controller to detect closing of this window
+  if (m_OnOpenMapWnd)
+   m_OnOpenMapWnd(m_eh_pause_map_wnd_handle, TYPE_MAP_EH_PAUSE);
+
+  DLL::Chart2DShow(m_eh_pause_map_wnd_handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_eh_pause_map_wnd_handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -1264,6 +1345,14 @@ float* CTablesSetPanel::GetCrkTempMap(bool i_original)
   return m_crktemp_map_active;
 }
 
+float* CTablesSetPanel::GetEHPauseMap(bool i_original)
+{
+ if (i_original)
+  return m_eh_pause_map_original;
+ else
+  return m_eh_pause_map_active;
+}
+
 HWND CTablesSetPanel::GetMapWindow(int wndType)
 {
  HWND hwnd = Super::GetMapWindow(wndType);
@@ -1292,6 +1381,8 @@ HWND CTablesSetPanel::GetMapWindow(int wndType)
   return m_tmp2_curve_map_chart_state ? m_tmp2_curve_map_wnd_handle : NULL;
  case TYPE_MAP_CRKCLT_CORR:
   return m_crktemp_map_chart_state ? m_crktemp_map_wnd_handle : NULL;
+ case TYPE_MAP_EH_PAUSE:
+  return m_eh_pause_map_chart_state ? m_eh_pause_map_wnd_handle : NULL;
 
  default:
   return NULL;

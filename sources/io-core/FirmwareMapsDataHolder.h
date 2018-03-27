@@ -120,6 +120,7 @@ struct FWMapsDataHolder
  float pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
  float tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
  float ctscrk_corr[CTS_CRKCORR_SIZE];
+ float eh_pause_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
@@ -139,6 +140,7 @@ struct FWMapsDataHolder
   std::fill(pa4_igntim_corr, pa4_igntim_corr + PA4_LOOKUP_TABLE_SIZE, .0f);
   std::fill(tmp2_curve, tmp2_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(ctscrk_corr, ctscrk_corr + CTS_CRKCORR_SIZE, .0f);
+  std::fill(eh_pause_table, eh_pause_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

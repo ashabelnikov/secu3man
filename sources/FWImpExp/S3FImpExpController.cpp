@@ -325,6 +325,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
  mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_CRKTEMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EHPAUSE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -338,6 +339,8 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_TMP2CURVE_MAP, sv0107 && sepmap);  //since v01.07
 
  mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, false && sepmap);   //since todo
+
+ mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, false && sepmap);   //since todo
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -603,10 +606,12 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_MANIT_MAP, false);
  mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_CRKTEMP_MAP, false);
+ mp_view->SetFWDFlag(FLAG_EHPAUSE_MAP, false);
 
  mp_view->EnableFWDFlag(FLAG_MANIT_MAP, false);    //todo
  mp_view->EnableFWDFlag(FLAG_BAROCORR_MAP, false); //todo
  mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, false);  //todo
+ mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, false);  //todo
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

@@ -68,6 +68,7 @@ enum EFWDFlags
  FLAG_MANIT_MAP,    //separate 
  FLAG_TMP2CURVE_MAP,//separate 
  FLAG_CRKTEMP_MAP,  //separate 
+ FLAG_EHPAUSE_MAP,  //separate 
  FLAG_NR_OF_FLAGS
 };
 

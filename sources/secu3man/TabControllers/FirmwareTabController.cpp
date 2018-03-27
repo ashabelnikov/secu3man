@@ -813,6 +813,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
@@ -1028,6 +1029,9 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(false),false);
  m_fwdm->GetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(true),true);
+
+ m_fwdm->GetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(false),false);
+ m_fwdm->GetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(true),true);
  
  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1281,6 +1285,9 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_CRKCLT_CORR:
    m_fwdm->SetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(false));
+   break;
+  case TYPE_MAP_EH_PAUSE:
+   m_fwdm->SetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(false));
    break;
  }
 }

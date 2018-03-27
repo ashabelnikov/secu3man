@@ -180,6 +180,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetCrkTempMap(float* op_values, bool i_original = false);
   void SetCrkTempMap(const float* i_values);
 
+  void GetEHPauseMap(float* op_values, bool i_original = false);
+  void SetEHPauseMap(const float* i_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

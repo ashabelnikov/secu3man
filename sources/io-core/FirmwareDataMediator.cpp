@@ -1288,6 +1288,8 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetBarocorrMap(op_fwd->barocorr_table);
  GetManIgntimMap(op_fwd->pa4_igntim_corr);
  GetTmp2CurveMap(op_fwd->tmp2_curve);
+ GetCrkTempMap(op_fwd->ctscrk_corr);
+ GetEHPauseMap(op_fwd->eh_pause_table);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1342,6 +1344,8 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetBarocorrMap(ip_fwd->barocorr_table);
  SetManIgntimMap(ip_fwd->pa4_igntim_corr);
  SetTmp2CurveMap(ip_fwd->tmp2_curve);
+ SetCrkTempMap(ip_fwd->ctscrk_corr);
+ SetEHPauseMap(ip_fwd->eh_pause_table);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1717,6 +1721,32 @@ void CFirmwareDataMediator::SetCrkTempMap(const float* ip_values)
 
  for(size_t i = 0; i < CTS_CRKCORR_SIZE; i++)
   p_fd->exdata.cts_crkcorr[i] = MathHelpers::Round(ip_values[i] * AA_MAPS_M_FACTOR);
+}
+
+void CFirmwareDataMediator::GetEHPauseMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
+  op_values[i] = p_fd->exdata.eh_pause[i] / 100.0f; //convert to seconds
+}
+
+void CFirmwareDataMediator::SetEHPauseMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
+  p_fd->exdata.eh_pause[i] = (_uchar)MathHelpers::Round(ip_values[i] * 100.0f);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

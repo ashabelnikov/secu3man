@@ -195,6 +195,11 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_CrkTempMapWnd_X = rc.left;
    ws.m_CrkTempMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_EH_PAUSE:
+   ws.m_EHPauseMapWnd_X = rc.left;
+   ws.m_EHPauseMapWnd_Y = rc.top;
+   break;
+
 
   case TYPE_MAP_GME_WND: //pseudo map
    ws.m_GridMapWnd_X = rc.left;
@@ -324,6 +329,9 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_CRKCLT_CORR:
    X = ws.m_CrkTempMapWnd_X, Y = ws.m_CrkTempMapWnd_Y;
+   break;
+  case TYPE_MAP_EH_PAUSE:
+   X = ws.m_EHPauseMapWnd_X, Y = ws.m_EHPauseMapWnd_Y;
    break;
 
   case TYPE_MAP_GME_WND:

@@ -108,6 +108,8 @@ struct WndSettings
  int m_AtscMapWnd_Y;
  int m_CrkTempMapWnd_X;
  int m_CrkTempMapWnd_Y;
+ int m_EHPauseMapWnd_X;
+ int m_EHPauseMapWnd_Y;
 };
 
 typedef enum EInterLang
