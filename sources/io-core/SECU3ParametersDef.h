@@ -98,17 +98,17 @@ typedef struct params_t
  _int   vent_off;                       // температура выключения вентилятора
  _uint  vent_pwmfrq;                    // PWM frequency (value = 1/f * 524288)
 
- _int   map_adc_factor;
+ _uint  map_adc_factor;
  _long  map_adc_correction;
- _int   ubat_adc_factor;
+ _uint  ubat_adc_factor;
  _long  ubat_adc_correction;
- _int   temp_adc_factor;
+ _uint  temp_adc_factor;
  _long  temp_adc_correction;
- _int   tps_adc_factor;                 // ADC error compensation factor for TPS
+ _uint  tps_adc_factor;                 // ADC error compensation factor for TPS
  _long  tps_adc_correction;             // ADC error compensation correction for TPS
- _int   ai1_adc_factor;                 // ADC error compensation factor for ADD_IO1 input
+ _uint  ai1_adc_factor;                 // ADC error compensation factor for ADD_IO1 input
  _long  ai1_adc_correction;             // ADC error compensation correction for ADD_IO1 input
- _int   ai2_adc_factor;                 // ADC error compensation factor for ADD_IO2 input
+ _uint  ai2_adc_factor;                 // ADC error compensation factor for ADD_IO2 input
  _long  ai2_adc_correction;             // ADC error compensation correction for ADD_IO2 input
 
  _uchar ckps_cogs_btdc;
@@ -228,9 +228,9 @@ typedef struct params_t
 
  _uchar  sm_freq;
 
- _int   ai3_adc_factor;                 // ADC error compensation factor for ADD_I3 input
+ _uint  ai3_adc_factor;                 // ADC error compensation factor for ADD_I3 input
  _long  ai3_adc_correction;             // ADC error compensation correction for ADD_I3 input
- _int   ai4_adc_factor;                 // ADC error compensation factor for ADD_I4 input
+ _uint  ai4_adc_factor;                 // ADC error compensation factor for ADD_I4 input
  _long  ai4_adc_correction;             // ADC error compensation correction for ADD_I4 input
 
  _uint  cond_pvt_on;

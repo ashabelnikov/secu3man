@@ -1081,7 +1081,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
   return false;
 
  signed int map_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&map_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&map_adc_factor))
   return false;
  m_ADCCompenPar.map_adc_factor = ((float)map_adc_factor) / 16384;
 
@@ -1092,7 +1092,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  m_ADCCompenPar.map_adc_correction*=m_adc_discrete; //ג גמכüעû
 
  signed int ubat_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ubat_adc_factor))
   return false;
  m_ADCCompenPar.ubat_adc_factor = ((float)ubat_adc_factor) / 16384;
 
@@ -1103,7 +1103,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  m_ADCCompenPar.ubat_adc_correction*=m_adc_discrete; //ג גמכüעû
 
  signed int temp_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&temp_adc_factor))
   return false;
  m_ADCCompenPar.temp_adc_factor = ((float)temp_adc_factor) / 16384;
 
@@ -1115,7 +1115,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
  
  //TPS sensor
  signed int tps_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&tps_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&tps_adc_factor))
   return false;
  m_ADCCompenPar.tps_adc_factor = ((float)tps_adc_factor) / 16384;
 
@@ -1127,7 +1127,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 
  //ADD_I1 input
  signed int ai1_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&ai1_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai1_adc_factor))
   return false;
  m_ADCCompenPar.ai1_adc_factor = ((float)ai1_adc_factor) / 16384;
 
@@ -1139,7 +1139,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 
  //ADD_I2 input
  signed int ai2_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&ai2_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai2_adc_factor))
   return false;
  m_ADCCompenPar.ai2_adc_factor = ((float)ai2_adc_factor) / 16384;
 
@@ -1151,7 +1151,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 
  //ADD_I3 input
  signed int ai3_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&ai3_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai3_adc_factor))
   return false;
  m_ADCCompenPar.ai3_adc_factor = ((float)ai3_adc_factor) / 16384;
 
@@ -1163,7 +1163,7 @@ bool CControlApp::Parse_ADCCOR_PAR(const BYTE* raw_packet, size_t size)
 
  //ADD_I4 input
  signed int ai4_adc_factor = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet,&ai4_adc_factor,true))
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&ai4_adc_factor))
   return false;
  m_ADCCompenPar.ai4_adc_factor = ((float)ai4_adc_factor) / 16384;
 

@@ -239,8 +239,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_map_factor_spin.SetBuddy(&m_map_factor_edit);
  m_map_factor_edit.SetLimitText(6);
  m_map_factor_edit.SetDecimalPlaces(3);
- m_map_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_map_factor_edit.SetRange(-2.0f,1.999f);
+ m_map_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_map_factor_edit.SetRange(0.0f,3.999f);
 
  m_map_correction_spin.SetBuddy(&m_map_correction_edit);
  m_map_correction_edit.SetLimitText(6);
@@ -251,8 +251,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ubat_factor_spin.SetBuddy(&m_ubat_factor_edit);
  m_ubat_factor_edit.SetLimitText(6);
  m_ubat_factor_edit.SetDecimalPlaces(3);
- m_ubat_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_ubat_factor_edit.SetRange(-2.0f,1.999f);
+ m_ubat_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_ubat_factor_edit.SetRange(0.0f,3.999f);
 
  m_ubat_correction_spin.SetBuddy(&m_ubat_correction_edit);
  m_ubat_correction_edit.SetLimitText(6);
@@ -263,8 +263,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_temp_factor_spin.SetBuddy(&m_temp_factor_edit);
  m_temp_factor_edit.SetLimitText(6);
  m_temp_factor_edit.SetDecimalPlaces(3);
- m_temp_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_temp_factor_edit.SetRange(-2.0f,1.999f);
+ m_temp_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_temp_factor_edit.SetRange(0.0f,3.999f);
 
  m_temp_correction_spin.SetBuddy(&m_temp_correction_edit);
  m_temp_correction_edit.SetLimitText(6);
@@ -275,8 +275,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_tps_factor_spin.SetBuddy(&m_tps_factor_edit);
  m_tps_factor_edit.SetLimitText(6);
  m_tps_factor_edit.SetDecimalPlaces(3);
- m_tps_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_tps_factor_edit.SetRange(-2.0f,1.999f);
+ m_tps_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_tps_factor_edit.SetRange(0.0f,3.999f);
 
  m_tps_correction_spin.SetBuddy(&m_tps_correction_edit);
  m_tps_correction_edit.SetLimitText(6);
@@ -287,8 +287,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai1_factor_spin.SetBuddy(&m_ai1_factor_edit);
  m_ai1_factor_edit.SetLimitText(6);
  m_ai1_factor_edit.SetDecimalPlaces(3);
- m_ai1_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_ai1_factor_edit.SetRange(-2.0f,1.999f);
+ m_ai1_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_ai1_factor_edit.SetRange(0.0f,3.999f);
 
  m_ai1_correction_spin.SetBuddy(&m_ai1_correction_edit);
  m_ai1_correction_edit.SetLimitText(6);
@@ -299,8 +299,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai2_factor_spin.SetBuddy(&m_ai2_factor_edit);
  m_ai2_factor_edit.SetLimitText(6);
  m_ai2_factor_edit.SetDecimalPlaces(3);
- m_ai2_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_ai2_factor_edit.SetRange(-2.0f,1.999f);
+ m_ai2_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_ai2_factor_edit.SetRange(0.0f,3.999f);
 
  m_ai2_correction_spin.SetBuddy(&m_ai2_correction_edit);
  m_ai2_correction_edit.SetLimitText(6);
@@ -311,8 +311,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai3_factor_spin.SetBuddy(&m_ai3_factor_edit);
  m_ai3_factor_edit.SetLimitText(6);
  m_ai3_factor_edit.SetDecimalPlaces(3);
- m_ai3_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_ai3_factor_edit.SetRange(-2.0f,1.999f);
+ m_ai3_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_ai3_factor_edit.SetRange(0.0f,3.999f);
 
  m_ai3_correction_spin.SetBuddy(&m_ai3_correction_edit);
  m_ai3_correction_edit.SetLimitText(6);
@@ -323,8 +323,8 @@ BOOL CADCCompenPageDlg::OnInitDialog()
  m_ai4_factor_spin.SetBuddy(&m_ai4_factor_edit);
  m_ai4_factor_edit.SetLimitText(6);
  m_ai4_factor_edit.SetDecimalPlaces(3);
- m_ai4_factor_spin.SetRangeAndDelta(-2.0f,1.999f,0.001f);
- m_ai4_factor_edit.SetRange(-2.0f,1.999f);
+ m_ai4_factor_spin.SetRangeAndDelta(0.0f,3.999f,0.001f);
+ m_ai4_factor_edit.SetRange(0.0f,3.999f);
 
  m_ai4_correction_spin.SetBuddy(&m_ai4_correction_edit);
  m_ai4_correction_edit.SetLimitText(6);
