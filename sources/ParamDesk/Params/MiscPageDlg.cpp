@@ -287,8 +287,8 @@ BOOL CMiscPageDlg::OnInitDialog()
  m_fp_timeout_strt_edit.SetLimitText(4);
  m_fp_timeout_strt_edit.SetDecimalPlaces(1);
  m_fp_timeout_strt_spin.SetBuddy(&m_fp_timeout_strt_edit);
- m_fp_timeout_strt_spin.SetRangeAndDelta(0.1f, 25.0f, 0.1f);
- m_fp_timeout_strt_edit.SetRange(0.1f, 25.0f);
+ m_fp_timeout_strt_spin.SetRangeAndDelta(0.1f, 25.5f, 0.1f);
+ m_fp_timeout_strt_edit.SetRange(0.1f, 25.5f);
 
  BRCType br;
  for(size_t i = 0; i < SECU3IO::SECU3_ALLOWABLE_UART_DIVISORS_COUNT; ++i)

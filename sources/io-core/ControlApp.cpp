@@ -1374,7 +1374,7 @@ bool CControlApp::Parse_FWINFO_DAT(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::MiscelPar& m_MiscPar = m_recepted_packet.m_MiscelPar;
- if (size != (mp_pdp->isHex() ? 29 : 15))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 27 : 14))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //Делитель для UART-а
@@ -1438,10 +1438,10 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  m_MiscPar.evap_afslope = (((float)evap_afslope) / 1048576.0f) / 32.0f; //2^20
 
  //Fuel pump timeout for cranking
- int fp_timeout_strt = 0;
- if (false == mp_pdp->Hex16ToBin(raw_packet, &fp_timeout_strt))
+ BYTE fp_timeout_strt = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &fp_timeout_strt))
   return false;
- m_MiscPar.fp_timeout_strt = (((float)fp_timeout_strt) / 100.0f);
+ m_MiscPar.fp_timeout_strt = (((float)fp_timeout_strt) / 10.0f);
 
  return true;
 }
@@ -2979,8 +2979,8 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  int evap_afslope = MathHelpers::Round(packet_data->evap_afslope * 1048576.0f * 32.0f); //2^20
  mp_pdp->Bin16ToHex(evap_afslope, m_outgoing_packet);
 
- int fp_timeout_strt = MathHelpers::Round(packet_data->fp_timeout_strt * 100.0f);
- mp_pdp->Bin16ToHex(fp_timeout_strt, m_outgoing_packet);
+ BYTE fp_timeout_strt = MathHelpers::Round(packet_data->fp_timeout_strt * 10.0f);
+ mp_pdp->Bin8ToHex(fp_timeout_strt, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
