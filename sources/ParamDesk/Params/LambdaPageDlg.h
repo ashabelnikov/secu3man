@@ -95,7 +95,20 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CSpinButtonCtrlEx m_2stoichval_spin;
   CEditEx m_2stoichval_edit;
   CButton m_htgdet_check;
+  //heating
+  CSpinButtonCtrlEx m_eh_ht_cold_spin;
+  CEditEx m_eh_ht_cold_edit;
+  CSpinButtonCtrlEx m_eh_ht_hot_spin;
+  CEditEx m_eh_ht_hot_edit;
+  CSpinButtonCtrlEx m_eh_temper_thrd_spin;
+  CEditEx m_eh_temper_thrd_edit;
+  CSpinButtonCtrlEx m_eh_heating_act_spin;
+  CEditEx m_eh_heating_act_edit;
+  CSpinButtonCtrlEx m_eh_aflow_thrd_spin;
+  CEditEx m_eh_aflow_thrd_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CWndScroller> mp_scr;
+
+  CFont m_boldDlgFont;
 };

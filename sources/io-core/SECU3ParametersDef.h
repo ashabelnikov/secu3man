@@ -258,10 +258,15 @@ typedef struct params_t
 
  _uchar  fp_timeout_strt;
 
+ _uchar eh_heating_time[2];             // Heating time without PWM at low(0) and high(1) temperatures (see also temperature threshold)
+ _uchar eh_temper_thrd;                 // Low/high temperature threshold, value in 1C derg. units
+ _uchar eh_heating_act;                 // During this time heater is on in PWM mode (see also pause lookup table)
+ _uint  eh_aflow_thrd;                  // Air flow threshold above which heater will be turned off to prevent overheating
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[6];
+/* _uchar reserved[0];*/
 
  _uint crc;                          //контрольная сумма данных этой структуры (для проверки корректности данных после считывания из EEPROM)
 }params_t;

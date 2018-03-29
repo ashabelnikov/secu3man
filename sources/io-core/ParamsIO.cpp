@@ -380,6 +380,12 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_lambda_ms_per_stp = p_in->lam_ms_per_stp / 10;
     p_params->inj_lambda_htgdet = p_in->lam_htgdet;
     p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_2stoichval * 128.0f);
+    //heating:
+    p_params->eh_heating_time[0] = MathHelpers::Round(p_in->eh_heating_time[0]);
+    p_params->eh_heating_time[1] = MathHelpers::Round(p_in->eh_heating_time[1]);   
+    p_params->eh_temper_thrd = MathHelpers::Round(p_in->eh_temper_thrd);
+    p_params->eh_heating_act = MathHelpers::Round(p_in->eh_heating_act * 100.0f);
+    p_params->eh_aflow_thrd = MathHelpers::Round(p_in->eh_aflow_thrd / 32.0f);
    }
    break;
   case ACCEL_PAR:
@@ -763,6 +769,12 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->lam_ms_per_stp = p_params->inj_lambda_ms_per_stp * 10;
     p_out->lam_htgdet = p_params->inj_lambda_htgdet;
     p_out->lam_2stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
+    //heating:
+    p_out->eh_heating_time[0] = (float)p_params->eh_heating_time[0];
+    p_out->eh_heating_time[1] = (float)p_params->eh_heating_time[1];
+    p_out->eh_temper_thrd = (float)p_params->eh_temper_thrd;
+    p_out->eh_heating_act = (float)p_params->eh_heating_act / 100.0f;
+    p_out->eh_aflow_thrd = (float)p_params->eh_aflow_thrd * 32.0f;
    }
    break;
   case ACCEL_PAR:

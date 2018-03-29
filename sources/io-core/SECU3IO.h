@@ -531,6 +531,11 @@ namespace SECU3IO
   float lam_dead_band;                //Switch point dead band (in volts)
   bool lam_htgdet;                    //Determine heating by voltage
   float lam_2stoichval;               //Stoichiometric value for 2-nd fuel
+  //heating:
+  float eh_heating_time[2];
+  float eh_temper_thrd;
+  float eh_heating_act;
+  float eh_aflow_thrd;
  };
 
  struct AccelPar

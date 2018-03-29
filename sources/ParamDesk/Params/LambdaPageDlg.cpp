@@ -29,6 +29,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
@@ -48,6 +49,12 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_LAMBDA_DEADBAND_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_LAMBDA_HTGDET_CHECK, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_2STOICHAFR_EDIT, OnChangeData)
+ //heating:
+ ON_EN_CHANGE(IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_EH_TIME_HOT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_EH_TEMPER_THRD_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_EH_HEATING_ACT_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_LAMBDA_EH_AFLOW_THRD_EDIT, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_COMBO,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_SENSTYPE_CAPTION,OnUpdateControls)
@@ -100,6 +107,11 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_CAPTION,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_UNIT,OnUpdateFuelInjectionControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_TIME_COLD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_TIME_HOT_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_TEMPER_THRD_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_HEATING_ACT_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_EH_AFLOW_THRD_EDIT,OnUpdateControls)
 END_MESSAGE_MAP()
 
 CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
@@ -118,6 +130,12 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
 , m_activdelay_edit(CEditEx::MODE_INT, true)
 , m_deadband_edit(CEditEx::MODE_FLOAT, true)
 , m_2stoichval_edit(CEditEx::MODE_FLOAT, true)
+//heating:
+, m_eh_ht_cold_edit(CEditEx::MODE_FLOAT, true)
+, m_eh_ht_hot_edit(CEditEx::MODE_FLOAT, true)
+, m_eh_temper_thrd_edit(CEditEx::MODE_FLOAT, true)
+, m_eh_heating_act_edit(CEditEx::MODE_FLOAT, true)
+, m_eh_aflow_thrd_edit(CEditEx::MODE_INT, true)
 , mp_scr(new CWndScroller)
 {
  m_params.lam_str_per_stp = 10;
@@ -134,6 +152,12 @@ CLambdaPageDlg::CLambdaPageDlg(CWnd* pParent /*=NULL*/)
  m_params.lam_senstype = 0; //NBO
  m_params.lam_htgdet = false;
  m_params.lam_2stoichval = 15.6f;
+ //heating
+ m_params.eh_heating_time[0] = 15.0f;
+ m_params.eh_heating_time[1] = 30.0f;
+ m_params.eh_temper_thrd = 70.0f;
+ m_params.eh_heating_act = 0.06f;
+ m_params.eh_aflow_thrd = 320000.0f; 
 }
 
 CLambdaPageDlg::~CLambdaPageDlg()
@@ -175,6 +199,16 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_HTGDET_CHECK, m_htgdet_check);
  DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_2stoichval_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_SPIN, m_2stoichval_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, m_eh_ht_cold_edit);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_SPIN, m_eh_ht_cold_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TIME_HOT_EDIT, m_eh_ht_hot_edit);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TIME_HOT_SPIN, m_eh_ht_hot_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TEMPER_THRD_EDIT, m_eh_temper_thrd_edit);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_TEMPER_THRD_SPIN, m_eh_temper_thrd_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_HEATING_ACT_EDIT, m_eh_heating_act_edit);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_HEATING_ACT_SPIN, m_eh_heating_act_spin);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_AFLOW_THRD_EDIT, m_eh_aflow_thrd_edit);
+ DDX_Control(pDX, IDC_PD_LAMBDA_EH_AFLOW_THRD_SPIN, m_eh_aflow_thrd_spin);
 
  DDX_CBIndex_UCHAR(pDX, IDC_PD_LAMBDA_SENSTYPE_COMBO, m_params.lam_senstype);
  m_strperstp_edit.DDX_Value(pDX, IDC_PD_LAMBDA_STRPERSTP_EDIT, m_params.lam_str_per_stp);
@@ -190,6 +224,12 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  m_deadband_edit.DDX_Value(pDX, IDC_PD_LAMBDA_DEADBAND_EDIT, m_params.lam_dead_band);
  m_2stoichval_edit.DDX_Value(pDX, IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_params.lam_2stoichval);
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_HTGDET_CHECK, m_params.lam_htgdet);
+ //heating:
+ m_eh_ht_cold_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, m_params.eh_heating_time[0]);
+ m_eh_ht_hot_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_HOT_EDIT, m_params.eh_heating_time[1]);
+ m_eh_temper_thrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TEMPER_THRD_EDIT, m_params.eh_temper_thrd);
+ m_eh_heating_act_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_HEATING_ACT_EDIT, m_params.eh_heating_act);
+ m_eh_aflow_thrd_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_AFLOW_THRD_EDIT, m_params.eh_aflow_thrd);
 }
 
 void CLambdaPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -286,12 +326,42 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_2stoichval_spin.SetRangeAndDelta(8.0f, 22.00f, 0.1f);
  m_2stoichval_edit.SetRange(8.0f, 22.00f);
 
+ m_eh_ht_cold_spin.SetBuddy(&m_eh_ht_cold_edit);
+ m_eh_ht_cold_edit.SetLimitText(3);
+ m_eh_ht_cold_edit.SetDecimalPlaces(0);
+ m_eh_ht_cold_spin.SetRangeAndDelta(0.0f, 255.00f, 1.0f);
+ m_eh_ht_cold_edit.SetRange(0.0f, 255.00f);
+
+ m_eh_ht_hot_spin.SetBuddy(&m_eh_ht_hot_edit);
+ m_eh_ht_hot_edit.SetLimitText(3);
+ m_eh_ht_hot_edit.SetDecimalPlaces(0);
+ m_eh_ht_hot_spin.SetRangeAndDelta(0.0f, 255.00f, 1.0f);
+ m_eh_ht_hot_edit.SetRange(0.0f, 255.00f);
+
+ m_eh_temper_thrd_spin.SetBuddy(&m_eh_temper_thrd_edit);
+ m_eh_temper_thrd_edit.SetLimitText(3);
+ m_eh_temper_thrd_edit.SetDecimalPlaces(0);
+ m_eh_temper_thrd_spin.SetRangeAndDelta(0.0f, 200.00f, 1.0f);
+ m_eh_temper_thrd_edit.SetRange(0.0f, 200.00f);
+
+ m_eh_heating_act_spin.SetBuddy(&m_eh_heating_act_edit);
+ m_eh_heating_act_edit.SetLimitText(4);
+ m_eh_heating_act_edit.SetDecimalPlaces(2);
+ m_eh_heating_act_spin.SetRangeAndDelta(0.0f, 2.55f, 0.01f);
+ m_eh_heating_act_edit.SetRange(0.0f, 2.55f);
+
+ m_eh_aflow_thrd_spin.SetBuddy(&m_eh_aflow_thrd_edit);
+ m_eh_aflow_thrd_edit.SetLimitText(7);
+ m_eh_aflow_thrd_edit.SetDecimalPlaces(7);
+ m_eh_aflow_thrd_spin.SetRangeAndDelta(100.0f, 2000000.0f, 10.0f);
+ m_eh_aflow_thrd_edit.SetRange(100.0f, 2000000.0f);
+
  m_senstype_combo.AddString(MLL::LoadString(IDS_PD_NBO));
  m_senstype_combo.AddString(MLL::LoadString(IDS_PD_WBO));
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.88f);
+ mp_scr->SetViewSizeF(.0f, 2.6f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -304,6 +374,10 @@ BOOL CLambdaPageDlg::OnInitDialog()
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //Set bold font
+ CloneWndFont(this, &m_boldDlgFont, -1, true);
+ GetDlgItem(IDC_PD_LAMBDA_HEATING_GROUP)->SetFont(&m_boldDlgFont);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);

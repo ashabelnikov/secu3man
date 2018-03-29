@@ -2085,7 +2085,7 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LambdaPar& m_LambdaPar = m_recepted_packet.m_LambdaPar;
- if (size != (mp_pdp->isHex() ? 42 : 21))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 54 : 27))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char strperstp = 0;
@@ -2158,6 +2158,31 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &lam_2stoichval))
   return false;
  m_LambdaPar.lam_2stoichval = ((float)lam_2stoichval) / 128.0f;
+
+ //heating:
+ unsigned char eh_heating_time[2] = {0, 0};
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_time[0]))
+  return false;
+ m_LambdaPar.eh_heating_time[0] = eh_heating_time[0];
+
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_time[1]))
+  return false;
+ m_LambdaPar.eh_heating_time[1] = eh_heating_time[1];
+
+ unsigned char eh_temper_thrd = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_temper_thrd))
+  return false;
+ m_LambdaPar.eh_temper_thrd = (float)eh_temper_thrd;
+
+ unsigned char eh_heating_act = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &eh_heating_act))
+  return false;
+ m_LambdaPar.eh_heating_act = ((float)eh_heating_act) / 100.0f;
+
+ int eh_aflow_thrd = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &eh_aflow_thrd))
+  return false;
+ m_LambdaPar.eh_aflow_thrd = float(eh_aflow_thrd) * 32.0f;
 
  return true;
 }
@@ -3345,6 +3370,14 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  mp_pdp->Bin8ToHex(lam_htgdet, m_outgoing_packet);
  int lam_2stoichval = MathHelpers::Round(packet_data->lam_2stoichval * 128.0f);
  mp_pdp->Bin16ToHex(lam_2stoichval, m_outgoing_packet);
+ //heating
+ mp_pdp->Bin8ToHex((BYTE)packet_data->eh_heating_time[0], m_outgoing_packet);
+ mp_pdp->Bin8ToHex((BYTE)packet_data->eh_heating_time[1], m_outgoing_packet);
+ mp_pdp->Bin8ToHex((BYTE)packet_data->eh_temper_thrd, m_outgoing_packet);
+ BYTE eh_heating_act = MathHelpers::Round(packet_data->eh_heating_act * 100.0f);
+ mp_pdp->Bin8ToHex(eh_heating_act, m_outgoing_packet);
+ int eh_aflow_thrd = MathHelpers::Round(packet_data->eh_aflow_thrd / 32.0f);
+ mp_pdp->Bin16ToHex(eh_aflow_thrd, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------
