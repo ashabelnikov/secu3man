@@ -178,22 +178,8 @@ void CChildViewManager::OnCloseNotify(void)
   list[i]->OnCloseNotify();
 }
 
-bool CChildViewManager::OnAskFullScreen(void)
-{
- ASSERT(mp_MainTabController->GetActiveController());
- return mp_MainTabController->GetActiveController()->OnAskFullScreen();
-}
-
 void CChildViewManager::OnFullScreen(bool i_what)
 {
- //Запрещаем таб-контрол на всемя пока окно развернуто на весь экран. При входе в полноэкранный режим
- //ставим фокус на активную вкладку, при выходе, ставим фокус на таб-контрол.
- mp_wndView->EnableTabControl(!i_what);
- mp_wndView->SetFocus(i_what);
-
- //оповещаем контроллер активной вкладки о включении/выключении полноэкранного режима
- CRect rect;
- mp_wndView->GetClientRect(rect); 
  ASSERT(mp_MainTabController->GetActiveController());
- mp_MainTabController->GetActiveController()->OnFullScreen(i_what, rect);
+ mp_MainTabController->GetActiveController()->OnFullScreen(i_what);
 }

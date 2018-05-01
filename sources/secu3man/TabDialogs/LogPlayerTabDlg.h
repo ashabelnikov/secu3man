@@ -47,7 +47,6 @@ class CLogPlayerTabDlg : public CTabDialog
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
-  void EnlargeMonitor(bool i_enlarge, bool i_exfixtures);
   void ShowExFixtures(bool i_exfixtures); //applicable only in the fullscreen mode
 
   void AppendKnockValue(double i_value, bool i_reverse);
@@ -70,16 +69,17 @@ class CLogPlayerTabDlg : public CTabDialog
   void _InitializeOscilloscopeControl(void);
 
   virtual BOOL OnInitDialog();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   virtual void DoDataExchange(CDataExchange* pDX);
   afx_msg void OnDropFiles(HDROP hDropInfo);
+  afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
 
   EventString m_OnDropFile;
 
   CRect m_original_mi_rect;
   CRect m_original_ce_rect;
-  bool m_enlarged;
-  bool m_exfixtures;
+  bool m_initialized;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

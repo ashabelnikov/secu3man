@@ -66,6 +66,7 @@ class CCheckEngineTabDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnClose();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnRealTimeErrorsCheckbox();
   afx_msg void OnReadSavedErrors();
   afx_msg void OnWriteSavedErrors();
@@ -103,6 +104,7 @@ class CCheckEngineTabDlg : public CTabDialog
 
   bool m_all_enabled;
   bool m_rw_buttons_enabled;
+  bool m_initialized;
 
   COLORREF m_gray_text_color;
   COLORREF m_normal_text_color;

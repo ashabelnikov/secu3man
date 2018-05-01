@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "DevDiagInpsDlg.h"
 
+#include "common/DPIAware.h"
 #include "common/FastDelegate.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
@@ -51,6 +52,7 @@ const UINT InputsCaptionEnd1 = IDC_DEV_DIAG_ADD_I4_CAPTION;    //secu-3i
 BEGIN_MESSAGE_MAP(CDevDiagInpsDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
+ ON_WM_SIZE()
 
  ON_UPDATE_COMMAND_UI_RANGE(InputsTextStart, InputsTextEnd, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI_RANGE(InputsCaptionStart, InputsCaptionEnd, OnUpdateDiagControls)
@@ -115,7 +117,7 @@ BOOL CDevDiagInpsDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.0f);
+ _UpdateScrlViewSize();
 
  return TRUE;
 }
@@ -167,7 +169,7 @@ void CDevDiagInpsDlg::EnableSECU3TFeatures(bool i_enable)
 {
  m_enable_secu3t_features = i_enable;
 
- mp_scr->SetViewSizeF(.0f, i_enable ? 1.0f : 1.28f);
+ _UpdateScrlViewSize();
 
  GetDlgItem(IDC_DEV_DIAG_ADD_I3)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
  GetDlgItem(IDC_DEV_DIAG_ADD_I4)->ShowWindow(i_enable ? SW_HIDE : SW_SHOW);
@@ -202,4 +204,17 @@ void CDevDiagInpsDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)
 void CDevDiagInpsDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
 {
  SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
+}
+
+void CDevDiagInpsDlg::_UpdateScrlViewSize(void)
+{
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(250) : da.ScaleY(360));
+}
+
+void CDevDiagInpsDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ _UpdateScrlViewSize();
 }

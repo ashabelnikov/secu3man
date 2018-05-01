@@ -33,7 +33,7 @@ class IMeasInstrument
 
   //interface for measurement instrument
   virtual void Create(void) = 0;
-  virtual void Scale(float i_x_factor, float i_y_factor) = 0;
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true) = 0;
 
   virtual void SetValue(float value) = 0;
   virtual float GetValue(void) = 0;

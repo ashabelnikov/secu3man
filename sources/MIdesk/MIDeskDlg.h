@@ -56,6 +56,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
 
+  BOOL Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect);
+
   //--------interface implementation---------------
   virtual void Show(bool show, bool show_exf = false);
   virtual void Enable(bool enable);
@@ -76,10 +78,10 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetDistanceUnit(int i_unit); //0 - km, 1 - mi
 
   //изменение размеров окна
-  void Resize(const CRect& i_rect, const CRect& i_src = CRect(0,0,0,0));
+  void Resize(const CRect& i_rect);
 
   //Show/hide extended fixtures
-  void ShowExFixtures(bool i_show);
+  void ShowExFixtures(bool i_show, const CRect& i_rect);
 
   //Show/hide choke position indicator
   void ShowChokePos(bool i_show);
@@ -100,6 +102,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
   afx_msg void OnDestroy();    //deactivate
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -130,6 +133,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_enabled;
   bool m_show;
   bool m_show_exf;
+  CRect m_origRect;
 
   int m_rpm_rb[32];    //ring buffer for RPM averaging, max. 32
   float m_volt_rb[32]; //ring buffer for voltage averaging, max 32

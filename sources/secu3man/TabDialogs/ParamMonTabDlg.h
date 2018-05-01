@@ -52,9 +52,7 @@ class CParamMonTabDlg : public CTabDialog
 
   void EnableEditTablesCheck(bool enable);
 
-  void MakePDFloating(bool i_floating);
-  void EnlargeMonitor(bool i_enlarge, bool i_exfixtures);
-  void ShowExFixtures(bool i_exfixtures); //applicable only in the fullscreen mode
+  void ShowExFixtures(bool i_exfixtures);
 
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);
@@ -69,13 +67,16 @@ class CParamMonTabDlg : public CTabDialog
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnPmShowRawSensors();
   afx_msg void OnPmEditTables();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
   DECLARE_MESSAGE_MAP()
 
  private:
-  void _ResizeRect(const CRect& i_external, CRect& io_victim);
-
   CButton m_raw_sensors_check;
   CButton m_edit_tables_check;
   std::auto_ptr<CLabel> mp_secu3orgLink;
@@ -83,15 +84,13 @@ class CParamMonTabDlg : public CTabDialog
   EventHandler m_OnRawSensorsCheck;
   EventHandler m_OnEditTablesCheck;
 
-  CRect m_original_mi_rect;
-  CRect m_original_rs_rect;
-  CRect m_original_ce_rect;
-  CPoint m_original_check_pos;
-  CPoint m_original_button_pos;
-  CPoint m_original_link_pos;
-  bool m_floating;
-  bool m_enlarged;
-  bool m_exfixtures;
+  bool m_initialized;
+  int m_miMargin;
+  
+  bool m_moveSplitter;
+  CPoint m_moveStart;
+  int m_moveStrtWidthPD;
+  CRect m_moveStrtRectMI;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

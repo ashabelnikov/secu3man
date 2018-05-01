@@ -75,6 +75,4 @@ class ITablesDeskView
    float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
    float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use) = 0;
   virtual void EnableAdvanceAngleIndication(bool i_enable) = 0;   //enable/disable grid mode editing window
-
-  virtual void Resize(int cx, int cy) = 0;
 };

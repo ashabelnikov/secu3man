@@ -29,6 +29,8 @@
 
 #include "about/secu-3about.h"
 #include "common/FastDelegate.h"
+#include "common/GDIHelpers.h"
+#include "common/DPIAware.h"
 #include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/OScopeCtrl.h"
@@ -46,6 +48,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_WM_TIMER()
  ON_WM_CONTEXTMENU()
  ON_WM_INITMENUPOPUP()
+ ON_WM_SIZE()
 
  ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
@@ -76,6 +79,7 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , mp_outsDlg(new CDevDiagOutsDlg(NULL))
 , m_start_autotst_enabled(false)
 , m_stop_autotst_enabled(false)
+, m_initialized(false)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -91,6 +95,9 @@ void CDevDiagnostTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_DEV_DIAG_ENTER_CHECK, m_enter_button);
+ DDX_Control(pDX, IDC_DEV_DIAG_OUTPUTS_GROUP, m_outputs_group);
+ DDX_Control(pDX, IDC_DEV_DIAG_WARNING_TEXT, m_warning_text);
+ DDX_Control(pDX, IDC_DEV_DIAG_INPUTS_GROUP, m_inputs_group);
 }
 
 LPCTSTR CDevDiagnostTabDlg::GetDialogID(void) const
@@ -130,6 +137,7 @@ BOOL CDevDiagnostTabDlg::OnInitDialog()
  { GetParent()->DestroyWindow(); }
  //=================================================================
 
+ m_initialized = true;
  return TRUE;
 }
 
@@ -171,6 +179,7 @@ void CDevDiagnostTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  KillTimer(TIMER_ID);
+ m_initialized = false;
 }
 
 void CDevDiagnostTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
@@ -347,4 +356,51 @@ void CDevDiagnostTabDlg::EnableStartAutoTstMenuItem(bool i_enable)
 void CDevDiagnostTabDlg::EnableStopAutoTstMenuItem(bool i_enable)
 {
  m_stop_autotst_enabled = i_enable;
+}
+
+void CDevDiagnostTabDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  CRect rc1, rc2, wt_rc;
+
+  DPIAware da;
+  rc1 = GDIHelpers::GetChildWndRect(&m_enter_button);
+  m_enter_button.MoveWindow(rc1.left, cy - rc1.Height() - da.ScaleY(10), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_warning_text);
+  m_warning_text.MoveWindow(rc1.left, cy - rc1.Height()- da.ScaleY(2), rc1.Width(), rc1.Height());
+
+  GetClientRect(&rc2);
+  
+  rc1 = GDIHelpers::GetChildWndRect(&m_outputs_group);
+  m_outputs_group.SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.bottom - rc1.top - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
+
+  wt_rc = GDIHelpers::GetChildWndRect(&m_warning_text);
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_inputs_group);
+  m_inputs_group.SetWindowPos(NULL, 0, 0, cx - rc1.left - da.ScaleX(3), wt_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  //outputs dialog
+  rc1 = GDIHelpers::GetChildWndRect(mp_outsDlg.get());
+  rc2 = GDIHelpers::GetChildWndRect(&m_outputs_group);
+  mp_outsDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.bottom - rc1.top - da.ScaleY(8), SWP_NOMOVE | SWP_NOZORDER);
+
+  //inputs dialog
+  rc1 = GDIHelpers::GetChildWndRect(mp_inpsDlg.get());
+  rc2 = GDIHelpers::GetChildWndRect(&m_inputs_group);
+  mp_inpsDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.bottom - rc1.top - da.ScaleY(8), SWP_NOMOVE | SWP_NOZORDER);
+
+  //oscill1
+  rc1 = GDIHelpers::GetChildWndRect(mp_OScopeCtrl1.get());
+  rc2 = GDIHelpers::GetChildWndRect(&m_inputs_group);
+  mp_OScopeCtrl1->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleY(8), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+  //oscill2
+  rc1 = GDIHelpers::GetChildWndRect(mp_OScopeCtrl2.get());
+  rc2 = GDIHelpers::GetChildWndRect(&m_inputs_group);
+  mp_OScopeCtrl2->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleY(8), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
+ }
+
+ Super::OnSize(nType, cx, cy);
 }

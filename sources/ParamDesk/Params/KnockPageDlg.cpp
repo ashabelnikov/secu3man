@@ -28,6 +28,7 @@
 #include "KnockPageDlg.h"
 
 #include <vector>
+#include "common/dpiaware.h"
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -94,6 +95,7 @@ BEGIN_MESSAGE_MAP(CKnockPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_KNOCK_RECOVERY_DELAY_UNIT, OnUpdateControls)
 
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 CKnockPageDlg::CKnockPageDlg(CWnd* pParent /*=NULL*/)
@@ -183,8 +185,6 @@ BOOL CKnockPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.45f));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -329,3 +329,13 @@ void CKnockPageDlg::OnDestroy()
  Super::OnDestroy();
  mp_scr->Close();
 }
+
+void CKnockPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(360));
+}
+

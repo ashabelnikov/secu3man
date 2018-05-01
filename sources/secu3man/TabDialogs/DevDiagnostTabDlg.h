@@ -140,6 +140,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnEnterButton();
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnStartOutputsAutoTesting();
   afx_msg void OnStopOutputsAutoTesting();
   afx_msg void OnEnableBLDETesting();
@@ -157,6 +158,9 @@ class CDevDiagnostTabDlg : public CTabDialog
   std::auto_ptr<CDevDiagOutsDlg> mp_outsDlg;
 
   CButton m_enter_button;
+  CStatic m_outputs_group;
+  CStatic m_inputs_group;
+  CStatic m_warning_text;
   EventOutputToggle m_on_output_check;
   EventHandler m_on_enter_button;
   EventHandler m_on_start_outauto_tst;
@@ -168,4 +172,6 @@ class CDevDiagnostTabDlg : public CTabDialog
   bool m_enable_blde_testing;
   bool m_start_autotst_enabled;
   bool m_stop_autotst_enabled;
+  
+  bool m_initialized;
 };

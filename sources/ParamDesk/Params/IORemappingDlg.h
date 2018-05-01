@@ -68,6 +68,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
  protected:
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsChecks(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsCommon(CCmdUI* pCmdUI);
@@ -79,6 +80,7 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   void _FillControls(void);
   void _SetTooltips(void);
   void _ShowControls(void);
+  void _UpdateScrlViewSize(void);
   CComboBox* _GetCBbyIOSID(const std::map<UINT, int>& map, int iosId) const;
 
   bool m_enabled;

@@ -64,9 +64,11 @@ class CDevDiagOutsDlg : public CDialog
   afx_msg void OnOutputCheckToggle(UINT nID);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _UpdateScrlViewSize(void);
   EventOutputToggle m_on_output_check;
 
   bool m_enable_diag_controls;

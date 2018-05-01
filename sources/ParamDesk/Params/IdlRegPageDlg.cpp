@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "IdlRegPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
@@ -34,6 +35,7 @@ const UINT CIdlRegPageDlg::IDD = IDD_PD_IDLREG_PAGE;
 
 BEGIN_MESSAGE_MAP(CIdlRegPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_IDLREG_DEAD_BAND_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_NEG_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_IDLREG_FACTOR_POS_EDIT, OnChangeData)
@@ -393,8 +395,6 @@ BOOL CIdlRegPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 2.7f));
 
  //Create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -490,4 +490,13 @@ void CIdlRegPageDlg::EnableFuelInjection(bool i_enable)
  m_fuel_injection = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CIdlRegPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(700));
 }

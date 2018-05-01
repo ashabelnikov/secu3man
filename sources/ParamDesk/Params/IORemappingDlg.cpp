@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "IORemappingDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
@@ -78,6 +79,7 @@ BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
 
  ON_UPDATE_COMMAND_UI(IDC_IO_REMAPPING_CAPTION, OnUpdateControlsCommon)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -109,8 +111,7 @@ BOOL CIORemappingDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.32f : 2.20f);
-
+ 
  _ShowControls();
 
  UpdateDialogControls(this, TRUE);
@@ -119,6 +120,7 @@ BOOL CIORemappingDlg::OnInitDialog()
 
 void CIORemappingDlg::OnDestroy()
 {
+ Super::OnDestroy();
  mp_scr->Close();
 }
 
@@ -258,7 +260,7 @@ void CIORemappingDlg::EnableSECU3TItems(bool i_enable)
 {
  m_enable_secu3t_features = i_enable; //update controls flag
 
- mp_scr->SetViewSizeF(.0f, i_enable ? 1.32f : 2.20f);
+ _UpdateScrlViewSize();
 
  _FillControls();
  _SetTooltips();
@@ -379,4 +381,17 @@ void CIORemappingDlg::_ShowControls(void)
   GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_HIDE : SW_SHOW);
  for(int i = IOCaptionStart3I; i <= IOCaptionEnd3I; ++i)
   GetDlgItem(i)->ShowWindow(m_enable_secu3t_features ? SW_HIDE : SW_SHOW); 
+}
+
+void CIORemappingDlg::_UpdateScrlViewSize(void)
+{
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(450) : da.ScaleY(730));
+}
+
+void CIORemappingDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ _UpdateScrlViewSize();
 }

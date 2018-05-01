@@ -33,6 +33,7 @@ class CDVDeskDlg;
 
 class CMainFrame : public CFrameWnd
 {
+ typedef CFrameWnd Super;
  typedef fastdelegate::FastDelegate0<> EventHandler;
  typedef fastdelegate::FastDelegate0<bool> EventResult;
  typedef fastdelegate::FastDelegate1<bool> EventHandler1;
@@ -67,8 +68,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppEndLog(EventHandler i_OnFunction);
   void setIsBeginLoggingAllowed(EventResult i_OnFunction);
   void setIsEndLoggingAllowed(EventResult i_OnFunction);
-  void setOnAskFullScreen(EventResult i_OnAskFullScreen);
-  void setOnFullScreen(EventResult i_OnFullScreen);
+  void setOnFullScreen(EventHandler1 i_OnFullScreen);
   void setOnFullScreenNotify(EventHandler1 i_OnFullScreenNotify);
   void setOnActivate(EventHandler1 i_OnActivate);
   void setOnCreate(EventHandler i_OnCreate);
@@ -101,10 +101,10 @@ protected:
   afx_msg void OnAppLogFormat();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
-  afx_msg void OnFullScreen();
-  afx_msg void OnUpdateOnFullScreen(CCmdUI* pCmdUI);
   afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -123,8 +123,7 @@ private:
   EventHandler m_OnAppLogFormat;
   EventResult  m_IsBeginLoggingAllowed;
   EventResult  m_IsEndLoggingAllowed;
-  EventResult  m_OnAskFullScreen;
-  EventResult  m_OnFullScreen;
+  EventHandler1 m_OnFullScreen;
   EventHandler1 m_OnFullScreenNotify;
   EventHandler1 m_OnActivate;
   EventHandler m_OnCreate;
@@ -135,6 +134,7 @@ private:
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;
+  CSize m_createSize;
 };
 
 /////////////////////////////////////////////////////////////////////////////

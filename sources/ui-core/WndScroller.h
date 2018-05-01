@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CWndScroller : private CWindowSubClasser
   void   SetViewSizeF(float coefWidth, float coefHeight);
 
   //Reset scroll position
-  void ResetScrollPos(void);
+  void ResetScrollPos(bool updateScrl = true);
 
   //Get current scroll position
   const CSize& GetScrollPos(void) const;

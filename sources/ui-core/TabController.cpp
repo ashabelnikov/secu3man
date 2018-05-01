@@ -294,6 +294,9 @@ void CTabController::OnSelchangingTabctl(NMHDR* pNMHDR, LRESULT* pResult)
 //при изменении размера CTabCtrl необходимо подгонять размеры текущей вкладки
 void CTabController::OnSize( UINT nType, int cx, int cy )
 {
+ //позволяем родительскому классу тоже изменить размер
+ CTabCtrl::OnSize(nType, cx, cy);
+
  CRect rect(0,0,0,0);
 
  int index = GetCurSel();
@@ -306,10 +309,7 @@ void CTabController::OnSize( UINT nType, int cx, int cy )
   return;
 
  CalculatePageRect(index, rect);
- pItemData->pDialogClass->MoveWindow(rect);
-
- //позволяем родительскому классу тоже изменить размер
- CTabCtrl::OnSize(nType, cx, cy);
+ pItemData->pDialogClass->SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(), SWP_NOMOVE | SWP_NOZORDER);
 }
 
 void CTabController::OnDestroy()

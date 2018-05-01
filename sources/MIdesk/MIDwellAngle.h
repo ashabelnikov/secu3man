@@ -38,7 +38,7 @@ class AFX_EXT_CLASS CMIDwellAngle : public IMeasInstrument
 
   //-------interface-----------------------
   virtual void Create(void);
-  virtual void Scale(float i_x_factor, float i_y_factor);
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true);
   virtual void SetValue(float value);
   virtual float GetValue(void);
   virtual void Show(bool show);
@@ -51,4 +51,5 @@ class AFX_EXT_CLASS CMIDwellAngle : public IMeasInstrument
 
  private:
   CAnalogMeterCtrl m_meter;
+  CRect m_rect;
 };

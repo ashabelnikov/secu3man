@@ -28,6 +28,7 @@
 #include "FirmwareTabDlg.h"
 
 #include "about/secu-3about.h"
+#include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "FirmwareContextMenuManager.h"
 #include "ParamDesk/Params/IDeskView.h"
@@ -64,6 +65,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
 , mp_ContextMenuManager(new CFirmwareModeContextMenuManager())
 , mp_TablesPanel(new CTablesSetPanel(NULL))
 , m_tab_selection(0) //<-- "default parameters" is selected by default
+, m_initialized(false)
 {
  mp_ContextMenuManager->CreateContent();
  //create list of tabs
@@ -87,6 +89,7 @@ void CFirmwareTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FW_MODIFICATION_FLAG, m_modification_flag);
  DDX_Control(pDX, IDC_FW_PROG_ONLY_CODE, m_prog_only_code_checkbox);
  DDX_Control(pDX, IDC_FW_PARAM_SEL_TAB, m_param_sel_tab);
+ DDX_Control(pDX, IDC_FW_POPUPMENU_BUTTON, m_fw_popup_menu_button);
 }
 
 LPCTSTR CFirmwareTabDlg::GetDialogID(void) const
@@ -102,6 +105,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_WM_INITMENUPOPUP()
  ON_WM_TIMER()
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_COMMAND(IDM_READ_BOOTLOADER_SIGNATURE, OnBootLoaderInfo)
  ON_COMMAND(IDM_READ_EEPROM_TO_FILE, OnReadEepromToFile)
  ON_COMMAND(IDM_WRITE_EEPROM_FROM_FILE, OnWriteEepromFromFile)
@@ -184,19 +188,16 @@ BOOL CFirmwareTabDlg::OnInitDialog()
 
  //create parameters desk
  CRect rect;
- GetDlgItem(IDC_FW_PD_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
+ rect = GDIHelpers::GetChildWndRect(this, IDC_FW_PD_FRAME);
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_FW_RESERVE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
  mp_ParamDeskDlg->EnableUseResParCheck(true);
- mp_ParamDeskDlg->Resize(rect.Width(), rect.Height());
  mp_ParamDeskDlg->ShowWindow(SW_HIDE);
 
  //create IO remapping desk
- GetDlgItem(IDC_FW_PD_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
+ rect = GDIHelpers::GetChildWndRect(this, IDC_FW_PD_FRAME);
  mp_IORemappingDlg->Create(CIORemappingDlg::IDD,this);
  mp_IORemappingDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_IORemappingDlg->ShowWindow(SW_HIDE);
@@ -206,8 +207,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  m_tabs[m_tab_selection].first->Show(true);
 
  //create tables desk
- GetDlgItem(IDC_FW_TD_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect); 
+ rect = GDIHelpers::GetChildWndRect(this, IDC_FW_TD_FRAME);
  mp_TablesPanel->Create(CTablesSetPanel::IDD, this);
  mp_TablesPanel->SetPosition(rect.TopLeft().x,rect.TopLeft().y, GetDlgItem(IDC_FW_VIEW_FWOPT));
  mp_TablesPanel->ShowWindow(SW_SHOWNORMAL);
@@ -233,6 +233,7 @@ BOOL CFirmwareTabDlg::OnInitDialog()
  DragAcceptFiles(true);
 
  UpdateDialogControls(this,TRUE);
+ m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -244,7 +245,7 @@ void CFirmwareTabDlg::OnContextMenu(CWnd* pWnd, CPoint point)
 void CFirmwareTabDlg::OnPopupMenuButton()
 {
  CRect rc;
- GetDlgItem(IDC_FW_POPUPMENU_BUTTON)->GetWindowRect(rc);
+ m_fw_popup_menu_button.GetWindowRect(rc);
  mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top, false); //bottom align
 }
 
@@ -345,6 +346,7 @@ void CFirmwareTabDlg::OnDestroy()
  KillTimer(TIMER_ID);
  m_hot_keys_supplier->Close();
  m_tab_selection = m_param_sel_tab.GetCurSel(); //remember last selected tab
+ m_initialized = false;
 }
 
 //делегаты
@@ -762,3 +764,33 @@ void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setOnDropFile(EventString OnFunction)
 {m_OnDropFile = OnFunction;}
+
+void CFirmwareTabDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  CRect rc1, pmb_rc;
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_prog_only_code_checkbox);
+  m_prog_only_code_checkbox.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_bl_started_emergency);
+  m_bl_started_emergency.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_fw_popup_menu_button);
+  m_fw_popup_menu_button.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  pmb_rc = GDIHelpers::GetChildWndRect(&m_bl_started_emergency);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_IORemappingDlg.get());
+  mp_IORemappingDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_TablesPanel.get());
+  mp_TablesPanel->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+ }
+
+ Super::OnSize(nType, cx, cy);
+}

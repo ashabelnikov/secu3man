@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIPressure.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -57,6 +57,8 @@ void CMIPressure::Create(void)
  m_meter.AddAlertZone(90,110,RGB(180,130,130));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
+
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMIPressure::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -123,9 +125,9 @@ void CMIPressure::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMIPressure::Scale(float i_x_factor, float i_y_factor)
+void CMIPressure::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }

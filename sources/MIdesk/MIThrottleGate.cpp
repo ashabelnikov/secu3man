@@ -25,7 +25,7 @@
 
 #include "stdafx.h"
 #include "MIThrottleGate.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "resource.h"
 #include <float.h>
 
@@ -56,6 +56,9 @@ void CMIThrottleGate::Create(void)
  Enable(m_prev_enable);
 
  m_value = FLT_MAX; //reset cache
+
+ m_rect[0] = GDIHelpers::GetChildWndRect(&m_led);
+ m_rect[1] = GDIHelpers::GetChildWndRect(&m_caption);
 }
 
 //--------------------interface-----------------------
@@ -138,15 +141,15 @@ void CMIThrottleGate::DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_ca
  DDX_Control(pDX, nIDC_caption, m_caption);
 }
 
-void CMIThrottleGate::Scale(float i_x_factor, float i_y_factor)
+void CMIThrottleGate::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
  CRect rect;
 
- rect = MIHelpers::GetChildWndRect(&m_led);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_led.MoveWindow(rect);
+ rect = m_rect[0];
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_led.MoveWindow(rect, repaint);
 
- rect = MIHelpers::GetChildWndRect(&m_caption);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect);
+ rect = m_rect[1];
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_caption.MoveWindow(rect, repaint);
 }

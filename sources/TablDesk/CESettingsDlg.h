@@ -59,6 +59,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   virtual void OnCancel();
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdateSECU3i(CCmdUI* pCmdUI);
@@ -66,6 +68,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _UpdateScrlViewSize(void);
   SECU3IO::CESettingsData* mp_data;
   std::auto_ptr<CWndScroller> mp_scr;
   bool m_enable_secu3t_features;
@@ -144,4 +147,6 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CButton m_add_i4_v_useem_check;
 
   CPoint m_wndPos;
+  CSize m_createSize;
+  bool m_initialized;
 };

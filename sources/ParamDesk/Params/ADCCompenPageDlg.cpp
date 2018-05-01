@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "ADCCompenPageDlg.h"
+#include "common/dpiaware.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
@@ -34,6 +35,7 @@ const UINT CADCCompenPageDlg::IDD = IDD_PD_ADCCOMPEN_PAGE;
 
 BEGIN_MESSAGE_MAP(CADCCompenPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_FACTOR_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_MAP_CORRECTION_EDIT, OnChangeEdit)
  ON_EN_CHANGE(IDC_PD_ADCCOMPEN_UBAT_FACTOR_EDIT, OnChangeEdit)
@@ -380,7 +382,6 @@ BOOL CADCCompenPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.25f);
 
  mp_ttc->SetMaxTipWidth(250); //Set width for text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -458,4 +459,13 @@ void CADCCompenPageDlg::SetValues(const SECU3IO::ADCCompenPar* i_values)
  ASSERT(i_values);
  memcpy(&m_params,i_values, sizeof(SECU3IO::ADCCompenPar));
  UpdateData(FALSE); //копируем данные из переменных в диалог
+}
+
+void CADCCompenPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(340));
 }

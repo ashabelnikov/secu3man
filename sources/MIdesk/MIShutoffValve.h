@@ -38,7 +38,7 @@ class AFX_EXT_CLASS CMIShutoffValve : public IMeasInstrument
 
   //-------interface-----------------------
   virtual void Create(void);
-  virtual void Scale(float i_x_factor, float i_y_factor);
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true);
   virtual void SetValue(float value);
   virtual float GetValue(void);
   virtual void Show(bool show);
@@ -53,4 +53,5 @@ class AFX_EXT_CLASS CMIShutoffValve : public IMeasInstrument
   bool m_prev_enable;
   CLEDIndicator m_led;
   CStatic m_caption;
+  CRect m_rect[2];
 };

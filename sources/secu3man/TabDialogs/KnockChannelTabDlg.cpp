@@ -31,7 +31,9 @@
 #include <math.h>
 #include <limits>
 #include "about/secu-3about.h"
+#include "common/DPIAware.h"
 #include "common/FastDelegate.h"
+#include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "KnockContextMenuManager.h"
 #include "ParamDesk/Params/KnockPageDlg.h"
@@ -61,6 +63,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , m_copy_to_attenuator_table_button_state(true)
 , m_clear_function_button_state(true)
 , m_dlsm_checkbox_state(true)
+, m_initialized(false)
 {
  mp_RTChart->AddSerie(100);    //signal serie
  mp_RTChart->AddSerie(2);      //level serie (horiz. line)
@@ -106,6 +109,7 @@ BEGIN_MESSAGE_MAP(CKnockChannelTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_INITMENUPOPUP()
  ON_WM_CONTEXTMENU()
+ ON_WM_SIZE()
  ON_BN_CLICKED(IDC_KC_SAVE_PARAM_BUTTON, OnSaveParameters)
  ON_UPDATE_COMMAND_UI(IDC_KC_SAVE_PARAM_BUTTON, OnUpdateControls)
  ON_BN_CLICKED(IDC_KC_COPY_TO_ATTENUATOR_TABLE, OnCopyToAttenuatorTable)
@@ -165,6 +169,7 @@ BOOL CKnockChannelTabDlg::OnInitDialog()
 
  mp_ContextMenuManager->Attach(this);
 
+ m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -172,6 +177,7 @@ void CKnockChannelTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  KillTimer(TIMER_ID);
+ m_initialized = false;
 }
 
 void CKnockChannelTabDlg::OnInitMenuPopup(CMenu* pMenu, UINT nIndex, BOOL bSysMenu)
@@ -557,4 +563,27 @@ void CKnockChannelTabDlg::OnListSavePoints()
 {
  if (m_OnSavePoints)
   m_OnSavePoints();
+}
+
+void CKnockChannelTabDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  CRect rc1, rc2;
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_knock_parameters_dlg.get());
+  GetClientRect(&rc2);
+  mp_knock_parameters_dlg->SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.bottom - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  DPIAware da;
+  rc1 = GDIHelpers::GetChildWndRect(mp_OScopeCtrl.get());
+  GetClientRect(&rc2);
+  mp_OScopeCtrl->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc2.bottom - rc1.top  - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_RTChart.get());
+  GetClientRect(&rc2);
+  mp_RTChart->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
+ }
+
+ Super::OnSize(nType, cx, cy);
 }

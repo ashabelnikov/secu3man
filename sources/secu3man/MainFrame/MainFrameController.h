@@ -62,7 +62,7 @@ class MainFrameController : public IAPPEventHandler
   void OnAppLogMark(int mark);
   void OnAppLogFormat();
   void OnActivate(bool i_state);
-  bool OnFullScreen();
+  void OnFullScreen(bool i_what);
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
   bool OnClose(void);
@@ -75,8 +75,6 @@ class MainFrameController : public IAPPEventHandler
   //called when new port device arrived
   void OnPortDevArrived(const _TSTRING& devName);
 
-  CRect _GetScreenRect(void) const;
-
   //You have to call this function before using of this controller!
   void _SetDelegates(void);
 
@@ -86,9 +84,4 @@ class MainFrameController : public IAPPEventHandler
   CStatusBarManager*     m_pStatusBarManager;
   LogWriter*             m_pLogWriter;
   CObjectTimer<MainFrameController> m_welcome_timer;
-
-  //true, если установлен полноэкранный режим
-  bool m_full_screen_mode;
-  //запоминает размеры и позицию окна перед переходом в полноэкранный режим
-  CRect m_last_wnd_rect;
 };

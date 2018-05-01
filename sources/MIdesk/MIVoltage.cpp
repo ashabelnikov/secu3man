@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIVoltage.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -64,6 +64,8 @@ void CMIVoltage::Create(void)
  VERIFY(mp_ttc->AddWindow(&m_meter, m_ttText.c_str()));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMIVoltage::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -125,11 +127,11 @@ void CMIVoltage::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMIVoltage::Scale(float i_x_factor, float i_y_factor)
+void CMIVoltage::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }
 
 void CMIVoltage::SetTitle(const _TSTRING& title)

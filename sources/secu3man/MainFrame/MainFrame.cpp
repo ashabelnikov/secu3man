@@ -46,6 +46,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_CREATE()
  ON_WM_SETFOCUS()
  ON_WM_CLOSE()
+ ON_WM_GETMINMAXINFO()
+ ON_WM_SYSCOMMAND()
  ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
  ON_COMMAND(ID_APP_DEV_SITE, OnAppDevSite)
  ON_COMMAND(ID_APP_DEV_FORUM, OnAppDevForum)
@@ -58,11 +60,9 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_LOG_MARK2, OnAppLogMark2)
  ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
  ON_COMMAND(ID_APP_LOG_FORMAT, OnAppLogFormat)
- ON_COMMAND(ID_FULL_SCREEN, OnFullScreen)
 
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
- ON_UPDATE_COMMAND_UI(ID_FULL_SCREEN, OnUpdateOnFullScreen)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK2,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK3,OnUpdateOnAppEndLog)
@@ -89,6 +89,9 @@ int CMainFrame::OnCreate(LPCREATESTRUCT lpCreateStruct)
 {
  if (CFrameWnd::OnCreate(lpCreateStruct) == -1)
   return -1;
+
+ m_createSize.cx = lpCreateStruct->cx;
+ m_createSize.cy = lpCreateStruct->cy;
 
  if (m_OnCreate)
   m_OnCreate();  //notify controller about creation of this window
@@ -356,11 +359,17 @@ BOOL CMainFrame::PreCreateWindow(CREATESTRUCT& cs)
    break;
  }
  
- cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX;
+ cs.style = WS_OVERLAPPED | WS_CAPTION | WS_SYSMENU | WS_MINIMIZEBOX | WS_MAXIMIZEBOX | WS_THICKFRAME;
  cs.dwExStyle &= ~WS_EX_CLIENTEDGE;
  cs.dwExStyle |= WS_EX_CONTROLPARENT;
  cs.lpszClass = AfxRegisterWndClass(0);
  return TRUE;
+}
+
+void CMainFrame::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ lpMMI->ptMinTrackSize.x = m_createSize.cx;
+ lpMMI->ptMinTrackSize.y = m_createSize.cy;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -403,12 +412,7 @@ void CMainFrame::addOnClose(EventResult i_OnClose)
  m_OnClose.push_back(i_OnClose);
 }
 
-void CMainFrame::setOnAskFullScreen(EventResult i_OnAskFullScreen)
-{
- m_OnAskFullScreen = i_OnAskFullScreen;
-}
-
-void CMainFrame::setOnFullScreen(EventResult i_OnFullScreen)
+void CMainFrame::setOnFullScreen(EventHandler1 i_OnFullScreen)
 {
  m_OnFullScreen = i_OnFullScreen;
 }
@@ -636,8 +640,19 @@ void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
   m_OnActivate(bActive == TRUE);
 }
 
-void CMainFrame::OnFullScreen()
+void CMainFrame::OnSysCommand(UINT nID, LPARAM lParam)
 {
+ Super::OnSysCommand(nID, lParam);
+
+ bool what = false;
+ if ((nID == SC_MAXIMIZE) || (nID == SC_RESTORE))
+ {
+  DWORD style = GetStyle();
+  what = (style & WS_MAXIMIZE);
+ }
+ else
+  return; //do nothing
+
  //=================================================================
  if (!CheckAppTitle(AfxGetMainWnd()))
   return;
@@ -645,21 +660,11 @@ void CMainFrame::OnFullScreen()
   return;
  //=================================================================
 
- bool what = false;
  if (m_OnFullScreen)
-  what = m_OnFullScreen();
+  m_OnFullScreen(what);  //notify controller
 
  if (m_OnFullScreenNotify)
   m_OnFullScreenNotify(what);
-}
-
-void CMainFrame::OnUpdateOnFullScreen(CCmdUI* pCmdUI)
-{
- bool enable = false;
- if (m_OnAskFullScreen)
-  enable = m_OnAskFullScreen();
-
- pCmdUI->Enable(enable);
 }
 
 //Стандартный вызов ON_UPDATE_COMMAND_UI запрещает элементы меню, но не делает их grayed.

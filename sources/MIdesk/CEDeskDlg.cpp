@@ -30,7 +30,7 @@
 #include "io-core/bitmask.h"
 #include "io-core/ce_errors.h"
 #include "io-core/SECU3IO.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
@@ -118,15 +118,15 @@ void CCEDeskDlg::Resize(const CRect& i_rect)
  CRect old_rect;
  float Xf, Yf;
  GetWindowRect(old_rect);
- MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
+ GDIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
 
  MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
 
  //resize controls
  CRect rect;
 #define _RESIZE(wnd)\
- rect = MIHelpers::GetChildWndRect(&wnd);\
- MIHelpers::ScaleRect(rect, Xf, Yf);\
+ rect = GDIHelpers::GetChildWndRect(&wnd);\
+ GDIHelpers::ScaleRect(rect, Xf, Yf);\
  wnd.MoveWindow(rect);
 
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i) {

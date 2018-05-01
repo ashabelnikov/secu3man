@@ -337,12 +337,7 @@ void CKnockChannelTabController::OnCloseNotify(void)
   //empty
 }
 
-bool CKnockChannelTabController::OnAskFullScreen(void)
-{
- return false;
-}
-
-void CKnockChannelTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+void CKnockChannelTabController::OnFullScreen(bool i_what)
 {
  //empty
 }

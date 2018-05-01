@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MITachometer.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -61,6 +61,8 @@ void CMITachometer::Create(void)
  m_meter.AddAlertZone(6000,8000,RGB(255,100,100));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
+
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMITachometer::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -129,11 +131,11 @@ void CMITachometer::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMITachometer::Scale(float i_x_factor, float i_y_factor)
+void CMITachometer::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }
 
 void CMITachometer::SetSpeed(float value, bool redraw /*= false*/)

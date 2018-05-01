@@ -86,6 +86,7 @@ class CKnockChannelTabDlg : public CTabDialog
   virtual BOOL OnInitDialog();
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
   afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
   afx_msg void OnSaveParameters();
@@ -139,4 +140,5 @@ class CKnockChannelTabDlg : public CTabDialog
   bool m_copy_to_attenuator_table_button_state;
   bool m_clear_function_button_state;
   bool m_dlsm_checkbox_state;
+  bool m_initialized;
 };

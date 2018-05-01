@@ -38,7 +38,7 @@ class AFX_EXT_CLASS CMITemperature : public IMeasInstrument
 
   //-------interface-----------------------
   virtual void Create(void);
-  virtual void Scale(float i_x_factor, float i_y_factor);
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true);
   virtual void SetValue(float value);
   virtual float GetValue(void);
   virtual void Show(bool show);
@@ -62,4 +62,5 @@ class AFX_EXT_CLASS CMITemperature : public IMeasInstrument
   CAnalogMeterCtrl m_meter;
   bool m_showChokePos;
   bool m_showGDPos;
+  CRect m_rect;
 };

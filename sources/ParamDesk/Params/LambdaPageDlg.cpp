@@ -30,11 +30,13 @@
 #include "ui-core/WndScroller.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
+#include "common/dpiaware.h"
 
 const UINT CLambdaPageDlg::IDD = IDD_PD_LAMBDA_PAGE;
 
 BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_CBN_SELCHANGE(IDC_PD_LAMBDA_SENSTYPE_COMBO, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_STRPERSTP_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_MSPERSTP_EDIT, OnChangeData)
@@ -361,7 +363,6 @@ BOOL CLambdaPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 2.6f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -436,4 +437,13 @@ void CLambdaPageDlg::SetValues(const SECU3IO::LambdaPar* i_values)
  memcpy(&m_params,i_values, sizeof(SECU3IO::LambdaPar));
  UpdateData(FALSE); //copy data from variables to dialog controls
  UpdateDialogControls(this, TRUE);
+}
+
+void CLambdaPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(700));
 }

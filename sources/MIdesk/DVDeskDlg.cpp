@@ -28,7 +28,7 @@
 #include "DVDeskDlg.h"
 
 #include "io-core/SECU3IO.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 

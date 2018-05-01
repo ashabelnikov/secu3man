@@ -110,6 +110,7 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   afx_msg void OnPaint();
   afx_msg void OnEnable(BOOL bEnable);
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -160,4 +161,5 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   std::pair<double, double> m_rangeY; //min, max for vertical axis
   std::pair<double, double> m_rangeX; //min, max for horizontal axis
   bool m_updateBackground;
+  bool m_updateBkBitmap;
 };

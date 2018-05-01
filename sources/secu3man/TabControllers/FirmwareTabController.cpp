@@ -828,12 +828,7 @@ void CFirmwareTabController::OnCloseNotify(void)
   //empty
 }
 
-bool CFirmwareTabController::OnAskFullScreen(void)
-{
- return false;
-}
-
-void CFirmwareTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+void CFirmwareTabController::OnFullScreen(bool i_what)
 {
  //empty
 }

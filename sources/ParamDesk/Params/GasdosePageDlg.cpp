@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "GasdosePageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -34,6 +35,7 @@ const UINT CGasdosePageDlg::IDD = IDD_PD_GASDOSE_PAGE;
 
 BEGIN_MESSAGE_MAP(CGasdosePageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_GASDOSE_SM_STEPS_NUM_EDIT, OnChangePdSMStepsNumEdit)
  ON_EN_CHANGE(IDC_PD_GASDOSE_FC_CLOSING_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_GASDOSE_CORRLIMIT_P_EDIT, OnChangeData)
@@ -217,7 +219,6 @@ BOOL CGasdosePageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.2f);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -316,4 +317,13 @@ void CGasdosePageDlg::SetValues(const SECU3IO::GasdosePar* i_values)
 void CGasdosePageDlg::LockUIUpdate(bool lock)
 {
  m_lock_ui_update = lock;
+}
+
+void CGasdosePageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(350));
 }

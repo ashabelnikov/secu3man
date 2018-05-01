@@ -30,15 +30,17 @@
 #include <algorithm>
 #include <map>
 #include <math.h>
-#include "ui-core/ToolTipCtrlEx.h"
+#include "common/dpiaware.h"
 #include "common/MathHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
+#include "ui-core/ToolTipCtrlEx.h"
 
 const UINT CCKPSPageDlg::IDD = IDD_PD_CKPS_PAGE;
 
 BEGIN_MESSAGE_MAP(CCKPSPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_CBN_SELCHANGE(IDC_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_CKPS_ENGINE_CYL_COMBOBOX, OnChangeDataCylNum)
  ON_EN_CHANGE(IDC_PD_CKPS_IGNITION_COGS_EDIT, OnChangeData)
@@ -293,7 +295,6 @@ BOOL CCKPSPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.4f);
 
  UpdateDialogControls(this, TRUE);
 
@@ -664,4 +665,13 @@ void CCKPSPageDlg::_SetCKPSEngineCylComboBoxSelection(int i_sel)
   }
  }
  ASSERT(0);
+}
+
+void CCKPSPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(355));
 }

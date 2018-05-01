@@ -38,7 +38,7 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
 
   //-------interface-----------------------
   virtual void Create(void);
-  virtual void Scale(float i_x_factor, float i_y_factor);
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true);
   virtual void SetValue(float value);
   virtual float GetValue(void);
   virtual void Show(bool show);
@@ -59,4 +59,5 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
   float m_loLimit;
   float m_upLimit;
   float m_value;
+  CRect m_rect[2];
 };

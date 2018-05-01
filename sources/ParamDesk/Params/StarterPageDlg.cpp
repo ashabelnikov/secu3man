@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "StarterPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
@@ -33,6 +34,7 @@ const UINT CStarterPageDlg::IDD = IDD_PD_STARTER_PAGE;
 
 BEGIN_MESSAGE_MAP(CStarterPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_STARTER_OFF_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_SMAP_ABANDON_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_STARTER_CRANKTORUNTIME_EDIT, OnChangeData)
@@ -249,7 +251,6 @@ BOOL CStarterPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.2f);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -323,4 +324,13 @@ void CStarterPageDlg::EnableChoke(bool i_enable)
  m_choke = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CStarterPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(305));
 }

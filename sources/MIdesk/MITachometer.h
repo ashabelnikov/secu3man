@@ -38,7 +38,7 @@ class AFX_EXT_CLASS CMITachometer : public IMeasInstrument
 
   //-------interface-----------------------
   virtual void Create(void);
-  virtual void Scale(float i_x_factor, float i_y_factor);
+  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true);
   virtual void SetValue(float value);
   virtual float GetValue(void);
   virtual void Show(bool show);
@@ -67,4 +67,5 @@ class AFX_EXT_CLASS CMITachometer : public IMeasInstrument
   bool m_showDistance;
   _TSTRING m_speedUnit;
   _TSTRING m_distanceUnit;
+  CRect m_rect;
 };

@@ -27,7 +27,7 @@
 #include "resource.h"
 #include "LMDeskDlg.h"
 
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 

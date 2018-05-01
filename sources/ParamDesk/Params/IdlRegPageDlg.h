@@ -58,6 +58,7 @@ class CIdlRegPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnChangeData();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateFuelInjectionControls(CCmdUI* pCmdUI);

@@ -418,13 +418,7 @@ void CDevDiagnostTabController::OnCloseNotify(void)
   //empty
 }
 
-bool CDevDiagnostTabController::OnAskFullScreen(void)
-{
- //not available in this mode
- return false;
-}
-
-void CDevDiagnostTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+void CDevDiagnostTabController::OnFullScreen(bool i_what)
 {
  //empty. Not applicable in this tab
 }

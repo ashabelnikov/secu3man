@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIDwellAngle.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -58,6 +58,8 @@ void CMIDwellAngle::Create(void)
  m_meter.SetNeedleValue(-15.0);
  m_meter.Update();
  m_meter.SetMeterSize(145);
+
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMIDwellAngle::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -119,9 +121,9 @@ void CMIDwellAngle::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMIDwellAngle::Scale(float i_x_factor, float i_y_factor)
+void CMIDwellAngle::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }

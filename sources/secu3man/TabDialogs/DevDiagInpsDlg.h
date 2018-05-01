@@ -56,9 +56,12 @@ class CDevDiagInpsDlg : public CDialog
   afx_msg void OnUpdateDiagControls(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _UpdateScrlViewSize(void);
+
   bool m_enable_diag_controls;
   bool m_enable_secu3t_features;
   bool m_enable_extraio;

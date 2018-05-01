@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIIAT.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -58,6 +58,7 @@ void CMIIAT::Create(void)
  m_meter.SetTRPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMIIAT::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -119,9 +120,9 @@ void CMIIAT::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMIIAT::Scale(float i_x_factor, float i_y_factor)
+void CMIIAT::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }

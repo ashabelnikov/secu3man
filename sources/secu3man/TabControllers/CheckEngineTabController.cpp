@@ -200,12 +200,7 @@ void CCheckEngineTabController::OnCloseNotify(void)
   //empty
 }
 
-bool CCheckEngineTabController::OnAskFullScreen(void)
-{
- return false;
-}
-
-void CCheckEngineTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+void CCheckEngineTabController::OnFullScreen(bool i_what)
 {
  //empty
 }

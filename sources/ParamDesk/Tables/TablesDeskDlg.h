@@ -49,7 +49,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   CTablesDeskDlg(CWnd* pParent = NULL);
   virtual ~CTablesDeskDlg();
   static UINT IDD;
-  static UINT IDD_F;
 
   //note: wnd_insert_after parameter may be used to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
@@ -90,7 +89,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
    float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
    float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use);
   virtual void EnableAdvanceAngleIndication(bool i_enable);
-  virtual void Resize(int cx, int cy);
   //-------------------------------------------------------------
 
   //CButtonsPanel
@@ -113,6 +111,7 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   afx_msg void OnEditKillFocus();
   afx_msg void OnChangeTablesSetName();
   virtual BOOL PreTranslateMessage(MSG* pMsg);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:

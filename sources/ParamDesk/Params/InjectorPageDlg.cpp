@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "InjectorPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
@@ -35,6 +36,7 @@ const UINT CInjectorPageDlg::IDD = IDD_PD_INJECTOR_PAGE;
 
 BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_COMBO, OnChangeDataInjCfg)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_INJCONFIG_G_COMBO, OnChangeDataInjCfg_g)
  ON_CBN_SELCHANGE(IDC_PD_INJECTOR_SQUIRTNUM_COMBO, OnChangeData)
@@ -311,7 +313,6 @@ BOOL CInjectorPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 2.5f);
 
  //Set bold font
  CloneWndFont(this, &m_boldDlgFont, -1, true);
@@ -787,4 +788,13 @@ void CInjectorPageDlg::_SetSqrNumComboBoxSelection(int i_sel, int fi)
  //if we are not able to find corresponding number then select middle number
  int count = m_sqrnum_combo[fi].GetCount();
  m_sqrnum_combo[fi].SetCurSel(count/2);
+}
+
+void CInjectorPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(660));
 }

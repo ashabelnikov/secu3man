@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "MiscPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
@@ -36,6 +37,7 @@ const UINT CMiscPageDlg::IDD = IDD_PD_MISC_PAGE;
 
 BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_MISC_PACKET_PERIOD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_IGNCUTOFF_RPM_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_MISC_HALL_OUTPUT_START_EDIT, OnChangeData)
@@ -330,7 +332,6 @@ BOOL CMiscPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(0.0f, 1.55f);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -447,4 +448,13 @@ int CMiscPageDlg::_GetIndexFromComboBoxByBR(int i_baudrate)
  }
  ASSERT(0); //WOW! Unknown baud rate?
  return 0;
+}
+
+void CMiscPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(365));
 }

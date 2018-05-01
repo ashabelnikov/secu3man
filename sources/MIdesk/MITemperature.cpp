@@ -26,7 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MITemperature.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -61,6 +61,8 @@ void CMITemperature::Create(void)
  m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
+
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 void CMITemperature::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
@@ -124,11 +126,11 @@ void CMITemperature::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMITemperature::Scale(float i_x_factor, float i_y_factor)
+void CMITemperature::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect = MIHelpers::GetChildWndRect(&m_meter);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect);
+ CRect rect = m_rect;
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_meter.MoveWindow(rect, repaint);
 }
 
 void CMITemperature::SetChokePos(float value, bool redraw /*= false*/)

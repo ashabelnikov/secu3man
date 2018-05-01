@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "ButtonsPanel.h"
+#include "common/dpiaware.h"
 #include "common/MathHelpers.h"
 #include "DLLLinkedFunctions.h"
 #include "GridModeEditorDlg.h"
@@ -1468,7 +1469,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_factor(3.6f)
+, m_scrl_view(900)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)
@@ -1620,6 +1621,7 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATSC_MAP, OnUpdateViewAtscMap)
  ON_WM_TIMER()
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1633,8 +1635,6 @@ BOOL CButtonsPanel::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * m_scrl_factor));
 
  UpdateDialogControls(this,TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -3311,3 +3311,12 @@ void CButtonsPanel::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=
 
 void CButtonsPanel::setOnWndActivation(EventWithHWNDLong OnFunction)
 { m_OnWndActivation = OnFunction; }
+
+void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(m_scrl_view));
+}

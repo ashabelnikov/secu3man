@@ -75,6 +75,7 @@ class CEEPROMTabDlg : public CTabDialog
   virtual BOOL OnInitDialog();
   afx_msg void OnClose();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDropFiles(HDROP hDropInfo);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
@@ -98,8 +99,10 @@ class CEEPROMTabDlg : public CTabDialog
   CEdit     m_ee_name;
   CEdit     m_ee_mapset_name;
   CStatic   m_modification_flag;
+  CButton   m_ee_popup_menu_button;
 
   bool m_is_bl_items_available;
+  bool m_initialized;
 
   EventResult  m_IsEEPROMOpened;
   EventHandler m_OnOpenEEPROMFromFile;

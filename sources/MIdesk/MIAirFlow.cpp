@@ -25,7 +25,7 @@
 
 #include "stdafx.h"
 #include "MIAirFlow.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/fnt_helpers.h"
 
 //////////////////////////////////////////////////////////////////////
@@ -61,6 +61,10 @@ void CMIAirFlow::Create()
  m_digits.SetFont(&m_textFont);
 
  Enable(m_prev_enable);
+
+ m_rect[0] = GDIHelpers::GetChildWndRect(&m_progress);
+ m_rect[1] = GDIHelpers::GetChildWndRect(&m_digits);
+ m_rect[2] = GDIHelpers::GetChildWndRect(&m_caption);
 }
 
 //--------------------interface-----------------------
@@ -127,19 +131,19 @@ void CMIAirFlow::SetTicks(int number)
 }
 //----------------------------------------------------
 
-void CMIAirFlow::Scale(float i_x_factor, float i_y_factor)
+void CMIAirFlow::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
  CRect rect;
 
- rect = MIHelpers::GetChildWndRect(&m_progress);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_progress.MoveWindow(rect);
+ rect = m_rect[0];
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_progress.MoveWindow(rect, repaint);
 
- rect = MIHelpers::GetChildWndRect(&m_digits);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_digits.MoveWindow(rect);
+ rect = m_rect[1];
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_digits.MoveWindow(rect, repaint);
 
- rect = MIHelpers::GetChildWndRect(&m_caption);
- MIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect);
+ rect = m_rect[2];
+ GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
+ m_caption.MoveWindow(rect, repaint);
 }

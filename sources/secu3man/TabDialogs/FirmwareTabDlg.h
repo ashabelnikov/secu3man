@@ -119,6 +119,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
   afx_msg void OnPopupMenuButton();
   afx_msg void OnUpdatePopupMenu_bl(CCmdUI* pCmdUI);
@@ -167,6 +168,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   CButton   m_bl_started_emergency;
   CButton   m_prog_only_code_checkbox;
   CButton   m_fw_options_btn;
+  CButton   m_fw_popup_menu_button;
   CEdit     m_fw_information_edit;
   CEdit     m_fw_name;
   CStatic   m_fw_crc;
@@ -209,6 +211,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   bool m_is_bl_started_emergency_available;
   bool m_is_bl_items_available;
   bool m_is_app_items_available;
+  bool m_initialized;
 
   void _RegisterHotKeys(void);
   std::auto_ptr<CHotKeysToCmdRouter> m_hot_keys_supplier;

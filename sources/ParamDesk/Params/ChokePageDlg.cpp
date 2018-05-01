@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "ChokePageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -34,6 +35,7 @@ const UINT CChokePageDlg::IDD = IDD_PD_CHOKE_PAGE;
 
 BEGIN_MESSAGE_MAP(CChokePageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_CHOKE_SM_STEPS_NUM_EDIT, OnChangePdChokeSMStepsNumEdit)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM1_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CHOKE_STRT_ADD_TM2_EDIT, OnChangeData)
@@ -231,7 +233,6 @@ BOOL CChokePageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.6f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -360,4 +361,13 @@ void CChokePageDlg::EnableFuelInjection(bool enable)
  m_fuel_injection = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CChokePageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(440));
 }

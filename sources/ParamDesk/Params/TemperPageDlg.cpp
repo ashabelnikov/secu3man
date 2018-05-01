@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "TemperPageDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
@@ -35,6 +36,7 @@ const float TEMP_HYSTERESIS = 0.25f;
 
 BEGIN_MESSAGE_MAP(CTemperPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_ON_THRESHOLD_EDIT, OnChangePdTemperVentOnThresholdEdit)
  ON_EN_CHANGE(IDC_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT, OnChangePdTemperVentOffThresholdEdit)
  ON_EN_CHANGE(IDC_PD_TEMPER_PWM_FRQ_EDIT, OnChangeData)
@@ -253,7 +255,6 @@ BOOL CTemperPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.5f);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -381,4 +382,13 @@ void CTemperPageDlg::EnableFuelInjection(bool i_enable)
  m_fuel_injection = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CTemperPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(400));
 }

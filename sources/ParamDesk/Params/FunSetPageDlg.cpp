@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "FunSetPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -35,6 +36,7 @@ const UINT CFunSetPageDlg::IDD = IDD_PD_FUNSET_PAGE;
 
 BEGIN_MESSAGE_MAP(CFunSetPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_BENZIN_MAPS_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_GAS_MAPS_COMBO, OnChangeData)
  ON_CBN_SELCHANGE(IDC_PD_FUNSET_LOAD_SRC_COMBO, OnChangeDataLoadSrc)
@@ -291,7 +293,6 @@ BOOL CFunSetPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.9f);
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -485,4 +486,13 @@ void CFunSetPageDlg::SetValues(const SECU3IO::FunSetPar* i_values)
  UpdateData(false); //copy data from variables to dialog
  UpdateLoadAxisUnits();
  UpdateDialogControls(this, TRUE);
+}
+
+void CFunSetPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(490));
 }

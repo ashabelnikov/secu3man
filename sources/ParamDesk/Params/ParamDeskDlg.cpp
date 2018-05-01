@@ -64,7 +64,6 @@ using namespace fastdelegate;
 // CParamDeskDlg dialog
 
 const UINT CParamDeskDlg::IDD = IDD_PARAMETERS_DESK;
-const UINT CParamDeskDlg::IDD_F = IDD_PARAMETERS_DESK_FLOATING;
 
 CParamDeskDlg::CParamDeskDlg(CWnd* pParent /*=NULL*/, bool i_show_knock_page /* = false*/)
 : Super(CParamDeskDlg::IDD, pParent)
@@ -176,6 +175,7 @@ void CParamDeskDlg::DoDataExchange(CDataExchange* pDX)
 BEGIN_MESSAGE_MAP(CParamDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SYSCOMMAND()
+ ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_PARAMETERS_DESK_TITLE,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_TAB_CTRL,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_SAVE_BUTTON,OnUpdateControls)
@@ -853,24 +853,20 @@ OnHK_XXX(KNOCK_PAR)
 OnHK_XXX(MISCEL_PAR)
 OnHK_XXX(CHOKE_PAR)
 
-void CParamDeskDlg::Resize(int cx, int cy)
+void CParamDeskDlg::OnSize( UINT nType, int cx, int cy )
 {
-// TODO:  replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
-// add more rect related functions
+ Super::OnSize(nType, cx, cy);
 
- //resize dialog vertically
- CRect wndRectDlg, wndRectTab;
- GetWindowRect(&wndRectDlg);
- GetParent()->ScreenToClient(&wndRectDlg);
- wndRectDlg.right = wndRectDlg.left + cx;
- wndRectDlg.bottom = wndRectDlg.top + cy;
- MoveWindow(wndRectDlg);
-
- //resize tab control vertically
- GetClientRect(&wndRectDlg);
- m_tab_control.GetWindowRect(&wndRectTab);
- ScreenToClient(&wndRectTab);
- wndRectTab.right = wndRectDlg.right - m_tabLRMargin.cx;
- wndRectTab.bottom = wndRectDlg.bottom - m_tabLRMargin.cy;
- m_tab_control.MoveWindow(wndRectTab);
+ //resize tab control
+ if (::IsWindow(m_tab_control.m_hWnd))
+ {
+  CRect wndRectDlg, wndRectTab;
+  GetClientRect(&wndRectDlg);
+  m_tab_control.GetWindowRect(&wndRectTab);
+  ScreenToClient(&wndRectTab);
+  wndRectTab.right = wndRectDlg.right - m_tabLRMargin.cx;
+  wndRectTab.bottom = wndRectDlg.bottom - m_tabLRMargin.cy;
+  m_tab_control.MoveWindow(wndRectTab);
+ }
 }
+

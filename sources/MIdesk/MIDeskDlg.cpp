@@ -29,12 +29,13 @@
 #include <numeric>
 #include "MIDeskDlg.h"
 
+#include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
-#include "MIHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
@@ -96,6 +97,21 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
 }
 
+BOOL CMIDeskDlg::Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect)
+{
+ BOOL result = Super::Create(nIDTemplate, pParentWnd);
+ if (!result)
+  return FALSE;
+
+ SetWindowPos(NULL, rect.TopLeft().x,rect.TopLeft().y, rect.Width(), rect.Height(), SWP_NOZORDER);
+
+ GetClientRect(m_origRect);
+
+ m_was_initialized = true;
+
+ return result;
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg message handlers
 
@@ -127,7 +143,6 @@ BOOL CMIDeskDlg::OnInitDialog()
 
  m_update_timer.SetTimer(this, &CMIDeskDlg::OnUpdateTimer, m_update_period);
 
- m_was_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -331,41 +346,34 @@ void CMIDeskDlg::SetDistanceUnit(int i_unit)
  m_tachometer.SetDistanceUnit((i_unit == 0) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI));
 }
 
-void CMIDeskDlg::Resize(const CRect& i_rect, const CRect& i_src)
+void CMIDeskDlg::Resize(const CRect& i_rect)
 {
- //на основе предыдущего размера окна высчитываем коэффициенты масштабирования
- CRect old_rect;
+ //Calculate scale factors basing on original rect
  float Xf, Yf;
- if (i_src.IsRectNull())
-  GetWindowRect(old_rect);
- else
-  old_rect = i_src;
- MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
-
- //изменяем размеры окна
- MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
+ GDIHelpers::CalcRectToRectRatio(i_rect, m_origRect, Xf, Yf);
 
  //ресайзим контроллы
- m_tachometer.Scale(Xf, Yf);
- m_pressure.Scale(Xf, Yf);
- m_voltmeter.Scale(Xf, Yf);
- m_dwell_angle.Scale(Xf, Yf);
- m_gas_valve.Scale(Xf, Yf);
- m_shutoff_valve.Scale(Xf, Yf);
- m_power_valve.Scale(Xf, Yf);
- m_throttle_gate.Scale(Xf, Yf);
- m_air_flow.Scale(Xf, Yf);
- m_temperature.Scale(Xf, Yf);
- m_add_i1.Scale(Xf, Yf);
- m_add_i2.Scale(Xf, Yf);
- m_iat.Scale(Xf, Yf);
- m_inj_pw.Scale(Xf, Yf);
- m_ego_corr.Scale(Xf, Yf);
+ bool redraw = false;
+ m_tachometer.Scale(Xf, Yf, redraw);
+ m_pressure.Scale(Xf, Yf, redraw);
+ m_voltmeter.Scale(Xf, Yf, redraw);
+ m_dwell_angle.Scale(Xf, Yf, redraw);
+ m_gas_valve.Scale(Xf, Yf, redraw);
+ m_shutoff_valve.Scale(Xf, Yf, redraw);
+ m_power_valve.Scale(Xf, Yf, redraw);
+ m_throttle_gate.Scale(Xf, Yf, redraw);
+ m_air_flow.Scale(Xf, Yf, redraw);
+ m_temperature.Scale(Xf, Yf, redraw);
+ m_add_i1.Scale(Xf, Yf, redraw);
+ m_add_i2.Scale(Xf, Yf, redraw);
+ m_iat.Scale(Xf, Yf, redraw);
+ m_inj_pw.Scale(Xf, Yf, redraw);
+ m_ego_corr.Scale(Xf, Yf, redraw);
 
  RedrawWindow();
 }
 
-void CMIDeskDlg::ShowExFixtures(bool i_show)
+void CMIDeskDlg::ShowExFixtures(bool i_show, const CRect& i_rect)
 {
  m_show_exf = i_show; //save flag
  m_add_i1.Show(i_show);
@@ -373,6 +381,12 @@ void CMIDeskDlg::ShowExFixtures(bool i_show)
  m_iat.Show(i_show && m_values.add_i2_mode);
  m_inj_pw.Show(i_show);
  m_ego_corr.Show(i_show);
+
+ m_origRect = i_rect;
+
+ CRect rect;
+ GetClientRect(&rect);
+ Resize(rect);
 }
 
 void CMIDeskDlg::ShowChokePos(bool i_show)
@@ -414,4 +428,16 @@ void CMIDeskDlg::SetAI1AverageNum(int avnum)
 void CMIDeskDlg::SetTPSAverageNum(int avnum)
 {
  m_tps_avnum = avnum;
+}
+
+void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_was_initialized)
+ {
+  CRect rect;
+  GetClientRect(&rect);
+  if (!rect.IsRectNull())
+   Resize(rect);
+ }
 }

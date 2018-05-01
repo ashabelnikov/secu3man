@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "CarburPageDlg.h"
+#include "common/dpiaware.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
@@ -34,6 +35,7 @@ const UINT CCarburPageDlg::IDD = IDD_PD_CARBUR_PAGE;
 
 BEGIN_MESSAGE_MAP(CCarburPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_HI_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_SHUTOFF_LO_THRESHOLD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_CARBUR_EPM_ON_THRESHOLD_EDIT, OnChangeData)
@@ -287,8 +289,6 @@ BOOL CCarburPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.63f));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -384,4 +384,13 @@ void CCarburPageDlg::EnableGasdose(bool i_enable)
  m_gasdose = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
+}
+
+void CCarburPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(440));
 }

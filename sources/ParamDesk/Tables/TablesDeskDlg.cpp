@@ -41,7 +41,6 @@ using namespace fastdelegate;
 // CTablesDeskDlg dialog
 
 UINT CTablesDeskDlg::IDD = IDD_TABLES_DESK;
-UINT CTablesDeskDlg::IDD_F = IDD_TABLES_DESK_FLOATING;
 
 CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CTablesDeskDlg::IDD, pParent)
@@ -83,6 +82,7 @@ BEGIN_MESSAGE_MAP(CTablesDeskDlg, Super)
  ON_WM_SYSCOMMAND()
  ON_WM_CONTEXTMENU()
  ON_WM_INITMENUPOPUP()
+ ON_WM_SIZE()
  ON_UPDATE_COMMAND_UI(IDC_TABLES_DESK_TITLE, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_SAVE_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_TD_LOAD_NAMES_RESERVED0, IDM_TD_LOAD_NAMES_RESERVED15, OnUpdateControls)
@@ -595,24 +595,19 @@ void CTablesDeskDlg::OnChangeTablesSetName()
  }
 }
 
-void CTablesDeskDlg::Resize(int cx, int cy)
+void CTablesDeskDlg::OnSize( UINT nType, int cx, int cy )
 {
-// TODO:  replace by MIHelpers (see MIHelpers.h) or even more all releted functions to common
-// add more rect related functions
-
- //resize dialog vertically
- CRect wndRectDlg, wndRectBP;
- GetWindowRect(&wndRectDlg);
- GetParent()->ScreenToClient(&wndRectDlg);
- wndRectDlg.right = wndRectDlg.left + cx;
- wndRectDlg.bottom = wndRectDlg.top + cy;
- MoveWindow(wndRectDlg);
-
- //resize tab control vertically
- GetClientRect(&wndRectDlg);
- mp_ButtonsPanel->GetWindowRect(&wndRectBP);
- ScreenToClient(&wndRectBP);
- wndRectBP.right = wndRectDlg.right - m_bpLRMargin.cx;
- wndRectBP.bottom = wndRectDlg.bottom - m_bpLRMargin.cy;
- mp_ButtonsPanel->MoveWindow(wndRectBP);
+ Super::OnSize(nType, cx, cy);
+ 
+//resize tab control
+ if (mp_ButtonsPanel.get() && ::IsWindow(mp_ButtonsPanel->m_hWnd))
+ {
+  CRect wndRectDlg, wndRectBP;
+  GetClientRect(&wndRectDlg);
+  mp_ButtonsPanel->GetWindowRect(&wndRectBP);
+  ScreenToClient(&wndRectBP);
+  wndRectBP.right = wndRectDlg.right - m_bpLRMargin.cx;
+  wndRectBP.bottom = wndRectDlg.bottom - m_bpLRMargin.cy;
+  mp_ButtonsPanel->MoveWindow(wndRectBP);
+ }
 }

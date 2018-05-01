@@ -103,13 +103,11 @@ const CSize& CWndScroller::GetScrollPos(void) const
  return m_scrlPos;
 }
 
-void CWndScroller::ResetScrollPos(void)
+void CWndScroller::ResetScrollPos(bool updateScrl /* = true*/)
 {
- if (::IsWindow(mp_origWnd->m_hWnd))
- {
-  m_scrlPos = CSize(0,0);
+ m_scrlPos = CSize(0,0);
+ if (updateScrl && ::IsWindow(mp_origWnd->m_hWnd))
   _UpdateScrollInfo();
- }
 }
 
 void CWndScroller::_OnHScroll(UINT nSBCode, UINT nPos, HWND hWnd)

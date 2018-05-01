@@ -28,6 +28,7 @@
 #include "CheckEngineTabDlg.h"
 #include "about/secu-3about.h"
 #include "common/DPIAware.h"
+#include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
 #include "ui-core/HeaderCtrlEx.h"
 
@@ -39,6 +40,7 @@ CCheckEngineTabDlg::CCheckEngineTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CCheckEngineTabDlg::IDD, pParent)
 , m_all_enabled(false)
 , m_rw_buttons_enabled(false)
+, m_initialized(false)
 , m_header_ctrl(new CHeaderCtrlEx())
 {
  m_image_list.Create(IDB_CE_LIST_ICONS, 16, 2, RGB(255,255,255));
@@ -71,6 +73,7 @@ LPCTSTR CCheckEngineTabDlg::GetDialogID(void) const
 BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
+ ON_WM_SIZE()
  ON_BN_CLICKED(IDC_CE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
  ON_BN_CLICKED(IDC_CE_READ_ERRORS_BUTTON, OnReadSavedErrors)
  ON_BN_CLICKED(IDC_CE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
@@ -121,6 +124,7 @@ BOOL CCheckEngineTabDlg::OnInitDialog()
  { GetParent()->DestroyWindow(); }
  //=================================================================
 
+ m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -222,6 +226,7 @@ void CCheckEngineTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  KillTimer(TIMER_ID);
+ m_initialized = false;
 }
 
 void CCheckEngineTabDlg::OnTimer(UINT nIDEvent)
@@ -290,4 +295,38 @@ void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
 
   *pResult = CDRF_DODEFAULT;
  }
+}
+
+void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  CRect rc1, rc2;
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_quick_help_text);
+  m_quick_help_text.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_read_saved_button);
+  rc2 = GDIHelpers::GetChildWndRect(&m_quick_help_text);
+  m_read_saved_button.MoveWindow(rc1.left, rc2.top  - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_write_saved_button);
+  rc2 = GDIHelpers::GetChildWndRect(&m_quick_help_text);
+  m_write_saved_button.MoveWindow(rc1.left, rc2.top  - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_realtime_checkbox);
+  rc2 = GDIHelpers::GetChildWndRect(&m_quick_help_text);
+  m_realtime_checkbox.MoveWindow(rc1.left, rc2.top  - rc1.Height(), rc1.Width(), rc1.Height());
+
+  DPIAware da;
+  rc1 = GDIHelpers::GetChildWndRect(&m_errors_list);
+  rc2 = GDIHelpers::GetChildWndRect(&m_read_saved_button);
+  m_errors_list.SetWindowPos(NULL, 0, 0, rc1.Width(), rc2.top - rc1.top - da.ScaleY(3), SWP_NOMOVE | SWP_NOZORDER);
+
+  m_write_saved_button.Invalidate();
+  m_read_saved_button.Invalidate();
+  m_realtime_checkbox.Invalidate();
+ }
+
+ Super::OnSize(nType, cx, cy);
 }

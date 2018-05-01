@@ -28,14 +28,31 @@
 #include "RSDeskDlg.h"
 
 #include "io-core/SECU3IO.h"
-#include "MIHelpers.h"
+#include "common/GDIHelpers.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/WndScroller.h"
 
 
+void CRSDeskDlg::Input::StoreRects(void)
+{
+ for (int i = 0; i < 3; ++i)
+  rect[i] = GDIHelpers::GetChildWndRect(&ctrl[i]);
+}
+
+void CRSDeskDlg::Input::Scale(float Xf, float Yf)
+{
+ for (int i = 0; i < 3; ++i)
+ {
+  CRect rc = rect[i];
+  GDIHelpers::ScaleRect(rc, Xf, Yf);
+  ctrl[i].MoveWindow(rc);
+ }
+}
+
 BEGIN_MESSAGE_MAP(CRSDeskDlg, CDialog)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
@@ -45,18 +62,10 @@ const UINT CRSDeskDlg::IDD = IDD_RAW_SENSORS_DESK;
 
 CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CRSDeskDlg::IDD, pParent)
-, m_map_value(0.0f)
-, m_ubat_value(0.0f)
-, m_temp_value(0.0f)
-, m_knock_value(0.0f)
-, m_tps_value(0.0f)
-, m_add_i1_value(0.0f)
-, m_add_i2_value(0.0f)
-, m_add_i3_value(0.0f)
-, m_add_i4_value(0.0f)
 , m_enabled(-1)
 , m_enable_secu3t_features(false)
 , m_enable_extraio(false)
+, m_was_initialized(false)
 , mp_scr(new CWndScroller)
 {
  //empty
@@ -71,45 +80,48 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_field);
- DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_field);
- DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_field);
- DDX_Control(pDX, IDC_RS_KNOCK_VALUE, m_knock_field);
- DDX_Control(pDX, IDC_RS_TPS_VALUE, m_tps_field);
- DDX_Control(pDX, IDC_RS_ADD_I1_VALUE, m_add_i1_field);
- DDX_Control(pDX, IDC_RS_ADD_I2_VALUE, m_add_i2_field);
- DDX_Control(pDX, IDC_RS_ADD_I3_VALUE, m_add_i3_field);
- DDX_Control(pDX, IDC_RS_ADD_I4_VALUE, m_add_i4_field);
+ //field
+ DDX_Control(pDX, IDC_RS_MAP_VALUE, m_map_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_UBAT_VALUE, m_ubat_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_TEMP_VALUE, m_temp_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_KNOCK_VALUE, m_knock_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_TPS_VALUE, m_tps_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I1_VALUE, m_add_i1_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I2_VALUE, m_add_i2_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I3_VALUE, m_add_i3_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I4_VALUE, m_add_i4_inp.ctrl[0]);
 
- DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_caption);
- DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_caption);
- DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_caption);
- DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_caption);
- DDX_Control(pDX, IDC_RS_TPS_CAPTION, m_tps_caption);
- DDX_Control(pDX, IDC_RS_ADD_I1_CAPTION, m_add_i1_caption);
- DDX_Control(pDX, IDC_RS_ADD_I2_CAPTION, m_add_i2_caption);
- DDX_Control(pDX, IDC_RS_ADD_I3_CAPTION, m_add_i3_caption);
- DDX_Control(pDX, IDC_RS_ADD_I4_CAPTION, m_add_i4_caption);
+ //caption
+ DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_UBAT_CAPTION, m_ubat_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_TEMP_CAPTION, m_temp_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_KNOCK_CAPTION, m_knock_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_TPS_CAPTION, m_tps_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I1_CAPTION, m_add_i1_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I2_CAPTION, m_add_i2_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I3_CAPTION, m_add_i3_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I4_CAPTION, m_add_i4_inp.ctrl[1]);
 
- DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_unit);
- DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_unit);
- DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_unit);
- DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_unit);
- DDX_Control(pDX, IDC_RS_TPS_UNIT, m_tps_unit);
- DDX_Control(pDX, IDC_RS_ADD_I1_UNIT, m_add_i1_unit);
- DDX_Control(pDX, IDC_RS_ADD_I2_UNIT, m_add_i2_unit);
- DDX_Control(pDX, IDC_RS_ADD_I3_UNIT, m_add_i3_unit);
- DDX_Control(pDX, IDC_RS_ADD_I4_UNIT, m_add_i4_unit);
+ //unit
+ DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_UBAT_UNIT, m_ubat_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_TEMP_UNIT, m_temp_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_KNOCK_UNIT, m_knock_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_TPS_UNIT, m_tps_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I1_UNIT, m_add_i1_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I2_UNIT, m_add_i2_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I3_UNIT, m_add_i3_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I4_UNIT, m_add_i4_inp.ctrl[2]);
 
- DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_TEMP_VALUE, m_temp_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_KNOCK_VALUE, m_knock_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_TPS_VALUE, m_tps_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I1_VALUE, m_add_i1_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I2_VALUE, m_add_i2_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I3_VALUE, m_add_i3_value, _T("%.3f"));
- DDX_Text_Fmt(pDX,IDC_RS_ADD_I4_VALUE, m_add_i4_value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_TEMP_VALUE, m_temp_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_KNOCK_VALUE, m_knock_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_TPS_VALUE, m_tps_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I1_VALUE, m_add_i1_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I2_VALUE, m_add_i2_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I3_VALUE, m_add_i3_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I4_VALUE, m_add_i4_inp.value, _T("%.3f"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -120,24 +132,41 @@ BOOL CRSDeskDlg::OnInitDialog()
  Super::OnInitDialog();
  m_enabled = -1; //reset cache flag
 
- CloneWndFont(&m_map_field, &m_fieldFont, 16, true);
+ CloneWndFont(&m_map_inp.ctrl[0], &m_fieldFont, 16, true);
 
- m_map_field.SetFont(&m_fieldFont);
- m_ubat_field.SetFont(&m_fieldFont);
- m_temp_field.SetFont(&m_fieldFont);
- m_knock_field.SetFont(&m_fieldFont);
- m_tps_field.SetFont(&m_fieldFont);
- m_add_i1_field.SetFont(&m_fieldFont);
- m_add_i2_field.SetFont(&m_fieldFont);
- m_add_i3_field.SetFont(&m_fieldFont);
- m_add_i4_field.SetFont(&m_fieldFont);
+ m_map_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_ubat_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_temp_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_knock_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_tps_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i1_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i2_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i3_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i4_inp.ctrl[0].SetFont(&m_fieldFont);
 
  //initialize window scroller
  mp_scr->Init(this);
- updateScrollerSize();
 
  Enable(false);
  UpdateData(FALSE);
+
+ //Store iriginal rects
+ m_map_inp.StoreRects();
+ m_ubat_inp.StoreRects();
+ m_temp_inp.StoreRects(); 
+ m_knock_inp.StoreRects();
+ m_tps_inp.StoreRects();
+ m_add_i1_inp.StoreRects();
+ m_add_i2_inp.StoreRects();
+ m_add_i3_inp.StoreRects();
+ m_add_i4_inp.StoreRects();
+
+ GetClientRect(m_origRect);
+
+ m_was_initialized = true;
+
+ updateScrollerSize();
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -145,6 +174,7 @@ void CRSDeskDlg::OnDestroy()
 {
  Super::OnDestroy();
  mp_scr->Close();
+ m_was_initialized = false;
 }
 
 //разрешение/запрещение приборов
@@ -153,35 +183,19 @@ void CRSDeskDlg::Enable(bool enable)
  if (((int)enable) == m_enabled)
   return; //already has needed state
  m_enabled = enable;
- m_map_field.EnableWindow(enable);
- m_ubat_field.EnableWindow(enable);
- m_temp_field.EnableWindow(enable);
- m_knock_field.EnableWindow(enable);
- m_tps_field.EnableWindow(enable);
- m_add_i1_field.EnableWindow(enable);
- m_add_i2_field.EnableWindow(enable);
- m_add_i3_field.EnableWindow(enable && !m_enable_secu3t_features);
- m_add_i4_field.EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
 
- m_map_caption.EnableWindow(enable);
- m_ubat_caption.EnableWindow(enable);
- m_temp_caption.EnableWindow(enable);
- m_knock_caption.EnableWindow(enable);
- m_tps_caption.EnableWindow(enable);
- m_add_i1_caption.EnableWindow(enable);
- m_add_i2_caption.EnableWindow(enable);
- m_add_i3_caption.EnableWindow(enable && !m_enable_secu3t_features);
- m_add_i4_caption.EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
-
- m_map_unit.EnableWindow(enable);
- m_ubat_unit.EnableWindow(enable);
- m_temp_unit.EnableWindow(enable);
- m_knock_unit.EnableWindow(enable);
- m_tps_unit.EnableWindow(enable);
- m_add_i1_unit.EnableWindow(enable);
- m_add_i2_unit.EnableWindow(enable);
- m_add_i3_unit.EnableWindow(enable && !m_enable_secu3t_features);
- m_add_i4_unit.EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
+ for (int i = 0; i < 3; ++i)
+ {
+  m_map_inp.ctrl[i].EnableWindow(enable);
+  m_ubat_inp.ctrl[i].EnableWindow(enable);
+  m_temp_inp.ctrl[i].EnableWindow(enable);
+  m_knock_inp.ctrl[i].EnableWindow(enable);
+  m_tps_inp.ctrl[i].EnableWindow(enable);
+  m_add_i1_inp.ctrl[i].EnableWindow(enable);
+  m_add_i2_inp.ctrl[i].EnableWindow(enable);
+  m_add_i3_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features);
+  m_add_i4_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
+ }
 }
 
 void CRSDeskDlg::Show(bool show)
@@ -189,65 +203,48 @@ void CRSDeskDlg::Show(bool show)
  int sw = ((show) ? SW_SHOW : SW_HIDE);
  int sw3i = ((show && !m_enable_secu3t_features) ? SW_SHOW : SW_HIDE);
 
- m_map_field.ShowWindow(sw);
- m_ubat_field.ShowWindow(sw);
- m_temp_field.ShowWindow(sw);
- m_knock_field.ShowWindow(sw);
- m_tps_field.ShowWindow(sw);
- m_add_i1_field.ShowWindow(sw);
- m_add_i2_field.ShowWindow(sw);
- m_add_i3_field.ShowWindow(sw3i);
- m_add_i4_field.ShowWindow(sw3i);
-
- m_map_caption.ShowWindow(sw);
- m_ubat_caption.ShowWindow(sw);
- m_temp_caption.ShowWindow(sw);
- m_knock_caption.ShowWindow(sw);
- m_tps_caption.ShowWindow(sw);
- m_add_i1_caption.ShowWindow(sw);
- m_add_i2_caption.ShowWindow(sw);
- m_add_i3_caption.ShowWindow(sw3i);
- m_add_i4_caption.ShowWindow(sw3i);
-
- m_map_unit.ShowWindow(sw);
- m_ubat_unit.ShowWindow(sw);
- m_temp_unit.ShowWindow(sw);
- m_knock_unit.ShowWindow(sw);
- m_tps_unit.ShowWindow(sw);
- m_add_i1_unit.ShowWindow(sw);
- m_add_i2_unit.ShowWindow(sw);
- m_add_i3_unit.ShowWindow(sw3i);
- m_add_i4_unit.ShowWindow(sw3i);
+ for (int i = 0; i < 3; ++i)
+ {
+  m_map_inp.ctrl[i].ShowWindow(sw);
+  m_ubat_inp.ctrl[i].ShowWindow(sw);
+  m_temp_inp.ctrl[i].ShowWindow(sw);
+  m_knock_inp.ctrl[i].ShowWindow(sw);
+  m_tps_inp.ctrl[i].ShowWindow(sw);
+  m_add_i1_inp.ctrl[i].ShowWindow(sw);
+  m_add_i2_inp.ctrl[i].ShowWindow(sw);
+  m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
+ }
 }
 
 using namespace SECU3IO;
 
 void CRSDeskDlg::SetValues(const RawSensDat* i_values)
 {
- m_map_value = i_values->map_value;
- m_ubat_value = i_values->ubat_value;
- m_temp_value = i_values->temp_value;
- m_knock_value = i_values->knock_value;
- m_tps_value = i_values->tps_value;
- m_add_i1_value = i_values->add_i1_value;
- m_add_i2_value = i_values->add_i2_value;
- m_add_i3_value = i_values->add_i3_value;
- m_add_i4_value = i_values->add_i4_value;
+ m_map_inp.value = i_values->map_value;
+ m_ubat_inp.value = i_values->ubat_value;
+ m_temp_inp.value = i_values->temp_value;
+ m_knock_inp.value = i_values->knock_value;
+ m_tps_inp.value = i_values->tps_value;
+ m_add_i1_inp.value = i_values->add_i1_value;
+ m_add_i2_inp.value = i_values->add_i2_value;
+ m_add_i3_inp.value = i_values->add_i3_value;
+ m_add_i4_inp.value = i_values->add_i4_value;
  UpdateData(FALSE);
 }
 
 void CRSDeskDlg::GetValues(RawSensDat* o_values)
 {
  UpdateData();
- o_values->map_value = m_map_value;
- o_values->ubat_value = m_ubat_value;
- o_values->temp_value = m_temp_value;
- o_values->knock_value = m_knock_value;
- o_values->tps_value = m_tps_value;
- o_values->add_i1_value = m_add_i1_value;
- o_values->add_i2_value = m_add_i2_value;
- o_values->add_i3_value = m_add_i3_value;
- o_values->add_i4_value = m_add_i4_value;
+ o_values->map_value = m_map_inp.value;
+ o_values->ubat_value = m_ubat_inp.value;
+ o_values->temp_value = m_temp_inp.value;
+ o_values->knock_value = m_knock_inp.value;
+ o_values->tps_value = m_tps_inp.value;
+ o_values->add_i1_value = m_add_i1_inp.value;
+ o_values->add_i2_value = m_add_i2_inp.value;
+ o_values->add_i3_value = m_add_i3_inp.value;
+ o_values->add_i4_value = m_add_i4_inp.value;
 }
 
 void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
@@ -259,20 +256,14 @@ void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
  updateScrollerSize();
 
  //in the SECU-3i only
- m_add_i3_caption.EnableWindow(m_enabled && !i_enable);
- m_add_i3_field.EnableWindow(m_enabled && !i_enable);
- m_add_i3_unit.EnableWindow(m_enabled && !i_enable);
- m_add_i4_caption.EnableWindow(m_enabled && !i_enable && m_enable_extraio);
- m_add_i4_field.EnableWindow(m_enabled && !i_enable && m_enable_extraio);
- m_add_i4_unit.EnableWindow(m_enabled && !i_enable && m_enable_extraio);
-
- int sw3i = ((i_enable && !m_enable_secu3t_features) ? SW_SHOW : SW_HIDE);
- m_add_i3_caption.ShowWindow(sw3i);
- m_add_i3_field.ShowWindow(sw3i);
- m_add_i3_unit.ShowWindow(sw3i);
- m_add_i4_caption.ShowWindow(sw3i);
- m_add_i4_field.ShowWindow(sw3i);
- m_add_i4_unit.ShowWindow(sw3i);
+ for (int i = 0; i < 3; ++i)
+ {
+  m_add_i3_inp.ctrl[i].EnableWindow(m_enabled && !i_enable);
+  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_extraio);
+  int sw3i = ((i_enable && !m_enable_secu3t_features) ? SW_SHOW : SW_HIDE);
+  m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
+ }
 }
 
 void CRSDeskDlg::EnableExtraIO(bool i_enable)
@@ -281,68 +272,46 @@ void CRSDeskDlg::EnableExtraIO(bool i_enable)
   return; //already has needed state
  m_enable_extraio = i_enable;
  //in the SECU-3i only
- m_add_i4_caption.EnableWindow(m_enabled && !i_enable && !m_enable_secu3t_features);
- m_add_i4_field.EnableWindow(m_enabled && !i_enable && !m_enable_secu3t_features);
- m_add_i4_unit.EnableWindow(m_enabled && !i_enable && !m_enable_secu3t_features);
+ for (int i = 0; i < 3; ++i)
+  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && !m_enable_secu3t_features);
 }
 
 void CRSDeskDlg::Resize(const CRect& i_rect)
 {
- mp_scr->ResetScrollPos();
-
  //Calculate scale factors basing on the previous size of window
- CRect old_rect;
  float Xf, Yf;
- GetWindowRect(old_rect);
- MIHelpers::CalcRectToRectRatio(i_rect, old_rect, Xf, Yf);
-
- MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
+ GDIHelpers::CalcRectToRectRatio(i_rect, m_origRect, Xf, Yf);
 
  //Resize controls
- CRect rect;
-#define _RESIZE(wnd)\
- rect = MIHelpers::GetChildWndRect(&wnd);\
- MIHelpers::ScaleRect(rect, Xf, Yf);\
- wnd.MoveWindow(rect);
-
- _RESIZE(m_map_field);
- _RESIZE(m_ubat_field);
- _RESIZE(m_temp_field);
- _RESIZE(m_knock_field);
- _RESIZE(m_tps_field);
- _RESIZE(m_add_i1_field);
- _RESIZE(m_add_i2_field);
- _RESIZE(m_add_i3_field);
- _RESIZE(m_add_i4_field);
-
- _RESIZE(m_map_caption);
- _RESIZE(m_ubat_caption);
- _RESIZE(m_temp_caption);
- _RESIZE(m_knock_caption);
- _RESIZE(m_tps_caption);
- _RESIZE(m_add_i1_caption);
- _RESIZE(m_add_i2_caption);
- _RESIZE(m_add_i3_caption);
- _RESIZE(m_add_i4_caption);
-
- _RESIZE(m_map_unit);
- _RESIZE(m_ubat_unit);
- _RESIZE(m_temp_unit);
- _RESIZE(m_knock_unit);
- _RESIZE(m_tps_unit);
- _RESIZE(m_add_i1_unit);
- _RESIZE(m_add_i2_unit);
- _RESIZE(m_add_i3_unit);
- _RESIZE(m_add_i4_unit);
-
-#undef _RESIZE
+ m_map_inp.Scale(Xf, Yf);
+ m_ubat_inp.Scale(Xf, Yf);
+ m_temp_inp.Scale(Xf, Yf);
+ m_knock_inp.Scale(Xf, Yf);
+ m_tps_inp.Scale(Xf, Yf);
+ m_add_i1_inp.Scale(Xf, Yf);
+ m_add_i2_inp.Scale(Xf, Yf);
+ m_add_i3_inp.Scale(Xf, Yf);
+ m_add_i4_inp.Scale(Xf, Yf); 
 
  RedrawWindow();
-
- updateScrollerSize();
 }
 
 void CRSDeskDlg::updateScrollerSize(void)
 {
  mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.25f);
+}
+
+void CRSDeskDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ if (m_was_initialized)
+ {
+  CRect rect;
+  GetClientRect(&rect);
+  if (!rect.IsRectNull())
+   Resize(rect);
+
+  mp_scr->ResetScrollPos(false);
+  updateScrollerSize();
+ }
 }

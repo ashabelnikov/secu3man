@@ -158,6 +158,8 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->ShowChokePos(true);
  mp_view->mp_MIDeskDlg->ShowGDPos(true);
  mp_view->mp_MIDeskDlg->ShowSpeedAndDistance(true);
+
+ mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
 }
 
 //from MainTabController
@@ -211,21 +213,9 @@ void CLogPlayerTabController::OnCloseNotify(void)
  //empty
 }
 
-bool CLogPlayerTabController::OnAskFullScreen(void)
+void CLogPlayerTabController::OnFullScreen(bool i_what)
 {
- return true;
-}
-
-void CLogPlayerTabController::OnFullScreen(bool i_what, const CRect& i_rect)
-{
- //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
- //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
- //вкладку к нужному размеру.
-
- if (i_what)
-  mp_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
-
- mp_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
+ //not used
 }
 
 bool CLogPlayerTabController::OnAskChangeTab(void)

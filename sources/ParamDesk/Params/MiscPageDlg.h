@@ -62,6 +62,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   virtual void DoDataExchange(CDataExchange* pDX);
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHOP(CCmdUI* pCmdUI);

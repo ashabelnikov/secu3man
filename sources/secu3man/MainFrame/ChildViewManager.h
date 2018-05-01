@@ -41,7 +41,6 @@ class CChildViewManager
 
   virtual bool OnClose(void);
   virtual void OnCloseNotify(void);
-  virtual bool OnAskFullScreen(void);
   virtual void OnFullScreen(bool i_what);
 
  private:

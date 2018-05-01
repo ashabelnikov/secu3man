@@ -27,6 +27,7 @@
 #include <limits>
 #include <afxpriv.h>
 #include "resource.h"
+#include "common/dpiaware.h"
 #include "CESettingsDlg.h"
 #include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
@@ -42,6 +43,8 @@ const UINT CCESettingsDlg::IDD = IDD_CESETTINGS_EDITOR;
 
 BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
+ ON_WM_GETMINMAXINFO()
  ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
 
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_EDIT, OnUpdateSECU3i)
@@ -105,6 +108,7 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_add_i4_v_max_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_em_edit(CEditEx::MODE_FLOAT)
 , m_wndPos(0, 0)
+, m_initialized(false)
 {
  //empty
 }
@@ -422,7 +426,13 @@ BOOL CCESettingsDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(0, 1.2f);
+ _UpdateScrlViewSize();
+
+ CRect rc;
+ GetWindowRect(&rc);
+ m_createSize = rc.Size();
+
+ m_initialized = true;
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -475,4 +485,29 @@ void CCESettingsDlg::SetWndPosition(int x, int y)
 const CPoint& CCESettingsDlg::GetWndPosition(void)
 {
  return m_wndPos;
+}
+
+void CCESettingsDlg::_UpdateScrlViewSize(void)
+{
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(590));
+}
+
+void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+ _UpdateScrlViewSize();
+}
+
+void CCESettingsDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ if (m_initialized)
+ {
+  lpMMI->ptMinTrackSize.x = m_createSize.cx;
+  lpMMI->ptMinTrackSize.y = m_createSize.cy;
+
+  lpMMI->ptMaxTrackSize.x = m_createSize.cx;
+  lpMMI->ptMaxTrackSize.y = m_createSize.cy * 1.35f;
+ }
 }

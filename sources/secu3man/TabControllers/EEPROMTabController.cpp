@@ -218,12 +218,7 @@ void CEEPROMTabController::OnCloseNotify(void)
   //empty
 }
 
-bool CEEPROMTabController::OnAskFullScreen(void)
-{
- return false;
-}
-
-void CEEPROMTabController::OnFullScreen(bool i_what, const CRect& i_rect)
+void CEEPROMTabController::OnFullScreen(bool i_what)
 {
  //empty
 }

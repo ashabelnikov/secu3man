@@ -27,7 +27,9 @@
 #include "Resources/resource.h"
 #include "ParamMonTabDlg.h"
 
+#include "common/dpiaware.h"
 #include "common/FastDelegate.h"
+#include "common/gdihelpers.h"
 #include "common/MathHelpers.h"
 #include "MIDesk/CEDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
@@ -43,6 +45,11 @@ using namespace fastdelegate;
 BEGIN_MESSAGE_MAP(CParamMonTabDlg, Super)
  ON_BN_CLICKED(IDC_PM_SHOW_RAW_SENSORS, OnPmShowRawSensors)
  ON_BN_CLICKED(IDC_PM_EDIT_TABLES, OnPmEditTables)
+ ON_WM_SIZE()
+ ON_WM_MOUSEMOVE()
+ ON_WM_LBUTTONDOWN()
+ ON_WM_LBUTTONUP()
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 const UINT CParamMonTabDlg::IDD = IDD_PARAMETERS_AND_MONITOR;
@@ -55,9 +62,8 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_ParamDeskDlg(new CParamDeskDlg())
 , mp_TablesDeskDlg(new CTablesDeskDlg())
 , mp_secu3orgLink(new CLabel)
-, m_floating(false)
-, m_enlarged(false)
-, m_exfixtures(false)
+, m_moveSplitter(false)
+, m_initialized(false)
 {
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout())
@@ -85,41 +91,31 @@ BOOL CParamMonTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- CRect rect;
- GetDlgItem(IDC_PM_MIDESK_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
-
- mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this);
- mp_MIDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y, rect.Width(), rect.Height(), SWP_NOZORDER | SWP_SHOWWINDOW);
+ CRect rect = GDIHelpers::GetChildWndRect(this, IDC_PM_MIDESK_FRAME);
+ mp_MIDeskDlg->Create(CMIDeskDlg::IDD, this, rect);
  mp_MIDeskDlg->Show(true);
 
  mp_RSDeskDlg->Create(CRSDeskDlg::IDD, this);
- mp_RSDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_HIDEWINDOW);
  mp_RSDeskDlg->Show(true);
 
- GetDlgItem(IDC_PM_CEDESK_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
+ rect = GDIHelpers::GetChildWndRect(this, IDC_PM_CEDESK_FRAME);
  mp_CEDeskDlg->Create(CCEDeskDlg::IDD, this);
  mp_CEDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_CEDeskDlg->Show(true);
 
  bool check_state = GetEditTablesCheckState();
 
- GetDlgItem(IDC_PM_PARAMDESK_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
+ rect = GDIHelpers::GetChildWndRect(this, IDC_PM_PARAMDESK_FRAME);
  mp_ParamDeskDlg->Create(CParamDeskDlg::IDD,this);
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
- mp_ParamDeskDlg->Resize(rect.Width(), rect.Height());
  mp_ParamDeskDlg->Show(!check_state);
 
  //create tables desk
- GetDlgItem(IDC_PM_PARAMDESK_FRAME)->GetWindowRect(rect);
- ScreenToClient(rect);
+ rect = GDIHelpers::GetChildWndRect(this, IDC_PM_PARAMDESK_FRAME);
  mp_TablesDeskDlg->Create(CTablesDeskDlg::IDD,this);
  mp_TablesDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
- mp_TablesDeskDlg->Resize(rect.Width(), rect.Height());
  mp_TablesDeskDlg->Show(check_state);
  
  //create a tooltip control and assign tooltips
@@ -143,7 +139,21 @@ BOOL CParamMonTabDlg::OnInitDialog()
   DestroyWindow();
  //=================================================================
 
+ ///////////////////////////////////////////////
+ CRect rcMI, rc;
+ mp_MIDeskDlg->GetWindowRect(&rcMI);
+ mp_CEDeskDlg->GetWindowRect(&rc);
+ m_miMargin = rc.top - rcMI.bottom;
+ ///////////////////////////////////////////////
+
+ m_initialized = true;
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CParamMonTabDlg::OnDestroy()
+{
+ Super::OnDestroy();
+ m_initialized = false;
 }
 
 void CParamMonTabDlg::OnPmShowRawSensors()
@@ -171,12 +181,10 @@ void CParamMonTabDlg::OnPmEditTables()
  //=================================================================
 
  bool check_state = GetEditTablesCheckState();
- if (false==m_floating)
-  mp_ParamDeskDlg->Show(!check_state);
+ mp_ParamDeskDlg->Show(!check_state);
  mp_TablesDeskDlg->Show(check_state);
  mp_TablesDeskDlg->ShowOpenedCharts(check_state);
- if (check_state)
-  mp_TablesDeskDlg->MakeChartsChildren(m_floating);
+ mp_TablesDeskDlg->MakeChartsChildren(true);
 
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
@@ -199,126 +207,6 @@ void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
  m_edit_tables_check.EnableWindow(enable);
 }
 
-void CParamMonTabDlg::MakePDFloating(bool i_floating)
-{
- m_floating = i_floating;
- ///////////////////////////////////////////////////////////////
- //запоминаем номер последней выбранной вкладки
- int lastSelPD = mp_ParamDeskDlg->GetCurSel();
- ///////////////////////////////////////////////////////////////
-
- mp_ParamDeskDlg->DestroyWindow();
- mp_ParamDeskDlg->Create(i_floating ? CParamDeskDlg::IDD_F : CParamDeskDlg::IDD, i_floating ? AfxGetMainWnd() : this);
- ::SetClassLong(mp_ParamDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
- mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_PM_EEPROM_PARAMETERS));
- if (i_floating)
- {
-  mp_ParamDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE);
-  mp_ParamDeskDlg->Show(true);
- }
- else
-  mp_ParamDeskDlg->Show(!GetEditTablesCheckState());
-
- mp_TablesDeskDlg->DestroyWindow();
- mp_TablesDeskDlg->Create(i_floating ? CTablesDeskDlg::IDD_F : CTablesDeskDlg::IDD, i_floating ? AfxGetMainWnd() : this);
- ::SetClassLong(mp_TablesDeskDlg->m_hWnd ,GCL_STYLE, CS_NOCLOSE);
- mp_TablesDeskDlg->SetTitle(MLL::LoadString(IDS_PM_TABLES_IN_RAM));
- mp_TablesDeskDlg->ShowOpenedCharts(GetEditTablesCheckState());
-
- if (i_floating)
- {
-  CRect rect;
-  mp_ParamDeskDlg->GetWindowRect(rect); 
-  mp_TablesDeskDlg->SetPosition(rect.right,rect.top, NULL);
-  mp_TablesDeskDlg->SetWindowPos(&wndTop, 0,0,0,0, SWP_NOSIZE | SWP_NOMOVE); 
- }
- mp_TablesDeskDlg->Show(GetEditTablesCheckState());
- mp_TablesDeskDlg->MakeChartsChildren(i_floating);
-
- ///////////////////////////////////////////////////////////////
- VERIFY(mp_ParamDeskDlg->SetCurSel(lastSelPD));
- ///////////////////////////////////////////////////////////////
-}
-
-void CParamMonTabDlg::EnlargeMonitor(bool i_enlarge, bool i_exfixtures)
-{
- CRect rect;
- GetClientRect(rect);
- m_enlarged = i_enlarge;
- m_exfixtures = i_exfixtures;
-
- if (i_enlarge)
- {//remember original positions
-  mp_MIDeskDlg->GetWindowRect(m_original_mi_rect);
-  ScreenToClient(m_original_mi_rect);
-  mp_RSDeskDlg->GetWindowRect(m_original_rs_rect);
-  ScreenToClient(m_original_rs_rect);
-  mp_CEDeskDlg->GetWindowRect(m_original_ce_rect);
-  ScreenToClient(m_original_ce_rect);
-  
-  CRect check_rect;
-  m_raw_sensors_check.GetWindowRect(check_rect);
-  ScreenToClient(check_rect); //check rect
-  CRect button_rect;
-  m_edit_tables_check.GetWindowRect(button_rect);
-  ScreenToClient(button_rect);//button rect 
-  CRect link_rect;
-  mp_secu3orgLink->GetWindowRect(link_rect);
-  ScreenToClient(link_rect);//link rect 
-  rect.bottom-= max(check_rect.Height(), button_rect.Height());
-  m_raw_sensors_check.SetWindowPos(0,check_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_original_check_pos = CPoint(check_rect.left, check_rect.top); //save it!  
-  m_edit_tables_check.SetWindowPos(0,button_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_original_button_pos = CPoint(button_rect.left, button_rect.top); //save it!
-  mp_secu3orgLink->SetWindowPos(0,link_rect.left,rect.bottom,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_original_link_pos = CPoint(link_rect.left, link_rect.top); //save it!  
-
-  //move CE panel, don't resize it
-  rect.bottom-= m_original_ce_rect.Height();
-  int ce_panel_x = rect.CenterPoint().x - (m_original_ce_rect.Width()/2);
-  mp_CEDeskDlg->SetWindowPos(0, ce_panel_x, rect.bottom, 0, 0, SWP_NOSIZE|SWP_NOZORDER);
-
-  CRect mi_rect, mi_rect_o;
-  if (i_exfixtures)
-  { //extended
-   GetDlgItem(IDC_PM_MIDESK_FRAME_F)->GetWindowRect(mi_rect);
-   ScreenToClient(mi_rect);
-  }
-  else //regular
-   mi_rect = m_original_mi_rect;
-  mi_rect_o = mi_rect;
-  _ResizeRect(rect, mi_rect);
-  mp_MIDeskDlg->Resize(mi_rect, mi_rect_o);
-  mp_MIDeskDlg->ShowExFixtures(i_exfixtures);
-
-  CRect rs_rect = m_original_rs_rect;
-  _ResizeRect(rect, rs_rect);
-  mp_RSDeskDlg->Resize(rs_rect);
- }
- else
- {
-  m_raw_sensors_check.SetWindowPos(0,m_original_check_pos.x,m_original_check_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  m_edit_tables_check.SetWindowPos(0,m_original_button_pos.x,m_original_button_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
-  mp_secu3orgLink->SetWindowPos(0,m_original_link_pos.x,m_original_link_pos.y,0,0,SWP_NOSIZE|SWP_NOZORDER);
-
-  CRect rc_s;
-  mp_MIDeskDlg->GetWindowRect(rc_s); 
-  ScreenToClient(rc_s); 
-  if (i_exfixtures)
-  {
-   CRect rc_o, rc_f;
-   GetDlgItem(IDC_PM_MIDESK_FRAME)->GetWindowRect(rc_o);
-   GetDlgItem(IDC_PM_MIDESK_FRAME_F)->GetWindowRect(rc_f);   
-   float rx = (((float)rc_f.Width())/rc_o.Width());
-   rc_s.right = MathHelpers::Round(((float)rc_s.left) + (((float)rc_s.Width())/rx));
-  }
-  mp_MIDeskDlg->Resize(m_original_mi_rect, rc_s);
-  mp_RSDeskDlg->Resize(m_original_rs_rect);
-  mp_CEDeskDlg->Resize(m_original_ce_rect);
-  mp_MIDeskDlg->ShowExFixtures(false);
- }
-}
-
 void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)
 {
  //=================================================================
@@ -328,11 +216,8 @@ void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)
   return;
  //=================================================================
 
- if (m_enlarged && (m_exfixtures!=i_exfixtures))
- {
-  EnlargeMonitor(false, !i_exfixtures);
-  EnlargeMonitor(true, i_exfixtures);
- }
+ CRect rect = GDIHelpers::GetChildWndRect(this, i_exfixtures ? IDC_PM_MIDESK_FRAME_F : IDC_PM_MIDESK_FRAME);
+ mp_MIDeskDlg->ShowExFixtures(i_exfixtures, rect);
 }
 
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
@@ -345,18 +230,106 @@ void CParamMonTabDlg::setOnEditTablesCheck(EventHandler i_Function)
  m_OnEditTablesCheck = i_Function;
 }
 
-void CParamMonTabDlg::_ResizeRect(const CRect& i_external, CRect& io_victim)
+void CParamMonTabDlg::OnSize( UINT nType, int cx, int cy )
 {
- float Xf = ((float)i_external.Width()) / io_victim.Width();
- float Yf = ((float)i_external.Height()) / io_victim.Height();
- float factor = min(Xf, Yf);
- //масштабируем
- io_victim.right = MathHelpers::Round((io_victim.Width() * factor));
- io_victim.bottom = MathHelpers::Round((io_victim.Height() * factor));
- io_victim.left = 0;
- io_victim.top = 0;
- //центрируем
- CPoint center_external = i_external.CenterPoint();
- CPoint center_victim = io_victim.CenterPoint();
- io_victim.OffsetRect(center_external - center_victim);
+ if (m_initialized)
+ {
+  CRect rc1, rc2, etc_rc;
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_secu3orgLink.get());
+  mp_secu3orgLink->MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_edit_tables_check);
+  m_edit_tables_check.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  etc_rc = GDIHelpers::GetChildWndRect(&m_edit_tables_check);
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_raw_sensors_check);
+  m_raw_sensors_check.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), etc_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_TablesDeskDlg.get());
+  mp_TablesDeskDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), etc_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+  mp_CEDeskDlg->MoveWindow(rc1.left, etc_rc.top  - rc1.Height(), rc1.Width(), rc1.Height());
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+  rc2 = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+  mp_MIDeskDlg->SetWindowPos(NULL, 0, 0, cx - rc1.left - m_miMargin, rc2.top - rc1.top - m_miMargin, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
+  mp_RSDeskDlg->SetWindowPos(NULL, 0, 0, cx - rc1.left - m_miMargin, etc_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+ }
+
+ Super::OnSize(nType, cx, cy);
+}
+
+void CParamMonTabDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
+
+ if (captRect.PtInRect(point))
+  ::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+
+ if (m_moveSplitter)
+ {
+  DPIAware da;
+  CRect rc;
+  GetClientRect(&rc);
+
+  //restrict splitter position
+  int x = point.x;
+  if (x < da.ScaleX(5))
+   x = da.ScaleX(5);
+  if (x > rc.right - m_miMargin - da.ScaleX(5))
+   x = rc.right - m_miMargin - da.ScaleX(5);
+
+  int dx = x - m_moveStart.x;
+
+  rc = GDIHelpers::GetChildWndRect(mp_TablesDeskDlg.get());
+  mp_TablesDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, pd_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+  rc = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+  mp_MIDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+
+  mp_CEDeskDlg->SetWindowPos(NULL, m_moveStrtRectMI.left + dx, ce_rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+  rc = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
+  mp_RSDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+ }
+
+ Super::OnMouseMove(nFlags, point);
+}
+
+void CParamMonTabDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
+
+ if (captRect.PtInRect(point))
+ {
+  ::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+  m_moveSplitter = true;
+  m_moveStart = point;
+  m_moveStrtWidthPD = pd_rc.Width();
+  m_moveStrtRectMI = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+  SetCapture();
+ }
+
+ return Super::OnLButtonDown(nFlags, point);
+}
+
+void CParamMonTabDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+ Super::OnLButtonUp(nFlags, point);
+ m_moveSplitter = false;
+ ReleaseCapture();
 }

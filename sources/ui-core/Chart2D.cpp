@@ -83,7 +83,9 @@ CChart2D::CChart2D()
 , mp_legendFontX(NULL)
 , mp_titleFont(NULL)
 , m_updateBackground(true)
+, m_updateBkBitmap(true)
 , m_axisFmtX("%5.1f")
+, mp_oldBkBitmap(NULL)
 {
  SetRange(-10, 10, -10, 10);
 }
@@ -101,6 +103,7 @@ BEGIN_MESSAGE_MAP(CChart2D, Super)
  ON_WM_PAINT()
  ON_WM_ENABLE()
  ON_WM_DESTROY()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
@@ -110,10 +113,7 @@ BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  if (!result)
   AfxMessageBox(_T("Error creating Chart2D control's window!"));
 
- m_ctlRect = rect;
- m_ctlRect.DeflateRect(2, 2, 2, 2);
- pParent->ClientToScreen(m_ctlRect);
- ScreenToClient(m_ctlRect);
+ GetClientRect(&m_ctlRect);
  _CreateFont();
  _CalcRect();
  _CalcMapFactors();
@@ -540,10 +540,17 @@ void CChart2D::_SetStateColors(bool state)
 void CChart2D::_DrawBackground(CDC *pDC)
 {
  if(memBkDC.GetSafeHdc() == NULL)
- {
   memBkDC.CreateCompatibleDC(pDC);
-  m_bkBitmap.CreateCompatibleBitmap(pDC, m_ctlRect.Width(), m_ctlRect.Height());
+
+ if (m_updateBkBitmap && mp_oldBkBitmap && memBkDC.GetSafeHdc())
+ {
+  memBkDC.SelectObject(mp_oldBkBitmap);
+  m_bkBitmap.DeleteObject();
+  m_updateBkBitmap = false;
  }
+
+ if (m_bkBitmap.GetSafeHandle() == NULL)
+  m_bkBitmap.CreateCompatibleBitmap(pDC, m_ctlRect.Width(), m_ctlRect.Height());
 
  mp_oldBkBitmap = (CBitmap*)memBkDC.SelectObject(&m_bkBitmap);
  _DrawBorder(&memBkDC);
@@ -637,4 +644,15 @@ void CChart2D::SetSerieVisibility(int serieIdx, bool visible)
   _SetStateColors(IsWindowEnabled());
   Invalidate();
  } 
+}
+
+void CChart2D::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+ GetClientRect(&m_ctlRect);
+ _CalcRect();
+ _CalcMapFactors();
+ m_updateBackground = true;
+ m_updateBkBitmap = true;
+ RedrawWindow();
 }

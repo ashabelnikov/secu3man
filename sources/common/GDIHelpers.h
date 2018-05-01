@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file MIHelpers.h
+/** \file GDIHelpers.h
  * \author Alexey A. Shabelnikov
  */
 
@@ -27,7 +27,7 @@
 
 #include "common/MathHelpers.h"
 
-struct MIHelpers
+struct GDIHelpers
 {
 
  //Obtains window coordinates relatively to parent's window coordinates
@@ -40,6 +40,18 @@ struct MIHelpers
   return rect;
  }
 
+ //Obtains window coordinates relatively to parent's window coordinates (version for control ID)
+ static CRect GetChildWndRect(CWnd* p_parent, UINT nCtrlID)
+ {
+  ASSERT(p_parent);
+  CWnd* p_wnd = p_parent->GetDlgItem(nCtrlID);
+  ASSERT(p_wnd);
+  CRect rect;
+  p_wnd->GetWindowRect(rect);
+  p_parent->ScreenToClient(rect);
+  return rect;
+ }
+
  //Scales all rectangle points
  static void ScaleRect(CRect& io_rect, float i_x_factor, float i_y_factor)
  {
@@ -49,10 +61,37 @@ struct MIHelpers
   io_rect.bottom = MathHelpers::Round(io_rect.bottom * i_y_factor);
  }
 
+ //Calculates width and height ratios between two rects
  static void CalcRectToRectRatio(const CRect& i_dividend, const CRect& i_divisor, float& o_x_factor, float& o_y_factor)
  {
   o_x_factor = ((float)i_dividend.Width()) / (float)i_divisor.Width();
   o_y_factor = ((float)i_dividend.Height()) / (float)i_divisor.Height();
+ }
+
+ //Resize and center rect
+ void ResizeAndCenterRect(const CRect& i_external, CRect& io_victim)
+ {
+  float Xf = ((float)i_external.Width()) / io_victim.Width();
+  float Yf = ((float)i_external.Height()) / io_victim.Height();
+  float factor = min(Xf, Yf);
+  //scale
+  io_victim.right = MathHelpers::Round((io_victim.Width() * factor));
+  io_victim.bottom = MathHelpers::Round((io_victim.Height() * factor));
+  io_victim.left = 0;
+  io_victim.top = 0;
+  //center
+  CPoint center_external = i_external.CenterPoint();
+  CPoint center_victim = io_victim.CenterPoint();
+  io_victim.OffsetRect(center_external - center_victim);
+ }
+
+ //get screen resolution
+ CRect GetScreenRect(CWnd* p_wnd) const
+ {
+  CDC* pDC = p_wnd->GetDC();
+  int x_resolution = pDC->GetDeviceCaps(HORZRES);
+  int y_resolution = pDC->GetDeviceCaps(VERTRES);
+  return CRect(0, 0, x_resolution, y_resolution);
  }
 
 };

@@ -112,6 +112,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnViewStartMap();
   afx_msg void OnViewIdleMap();
   afx_msg void OnViewWorkMap();
@@ -180,7 +181,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   EventResult   m_IsAllowed;
   EventWithHWNDLong m_OnWndActivation;
 
-  float m_scrl_factor;
+  int m_scrl_view;
  private:
   std::auto_ptr<CWndScroller> mp_scr;
 

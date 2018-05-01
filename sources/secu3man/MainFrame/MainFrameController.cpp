@@ -60,7 +60,6 @@ MainFrameController::MainFrameController(CCommunicationManager* i_pCommunication
 , m_pStatusBarManager(i_pStatusBarManager)
 , m_pLogWriter(i_pLogWriter)
 , mp_view(ip_view)
-, m_full_screen_mode(false)
 {
  _ASSERTE(i_pCommunicationManager);
  _ASSERTE(i_pAppSettingsManager);
@@ -271,22 +270,9 @@ void MainFrameController::OnConnection(const bool i_online)
  }
 }
 
-bool MainFrameController::OnFullScreen()
+void MainFrameController::OnFullScreen(bool i_what)
 {
- if (!m_full_screen_mode)
- {
-  mp_view->GetWindowRect(m_last_wnd_rect);
-  CRect rect = _GetScreenRect();
-  mp_view->MoveWindow(rect.left,rect.top,rect.Width(), rect.Height());
-  m_full_screen_mode = true;
- }
- else
- {
-  mp_view->MoveWindow(m_last_wnd_rect.left,m_last_wnd_rect.top,
-      m_last_wnd_rect.Width(), m_last_wnd_rect.Height());
-  m_full_screen_mode = false;
- }
- return m_full_screen_mode;
+ //not used
 }
 
 void MainFrameController::OnActivate(bool i_state)
@@ -296,14 +282,6 @@ void MainFrameController::OnActivate(bool i_state)
 
  if (true==i_state && false==HotKeysManager::GetInstance()->IsActive())
   HotKeysManager::GetInstance()->ActivateAllHotKeys();
-}
-
-CRect MainFrameController::_GetScreenRect(void) const
-{
- CDC* pDC = mp_view->GetDC();
- int x_resolution = pDC->GetDeviceCaps(HORZRES);
- int y_resolution = pDC->GetDeviceCaps(VERTRES);
- return CRect(0, 0, x_resolution, y_resolution);
 }
 
 void MainFrameController::OnCreate(void)

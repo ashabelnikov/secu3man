@@ -134,6 +134,8 @@ void CParamMonTabController::OnActivate(void)
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  OnConnection(mp_comm->m_pControlApp->GetOnlineStatus());
+
+ mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
 }
 
 //from MainTabController
@@ -256,22 +258,9 @@ void CParamMonTabController::OnCloseNotify(void)
   mp_tabcntr->OnCloseNotify();
 }
 
-bool CParamMonTabController::OnAskFullScreen(void)
+void CParamMonTabController::OnFullScreen(bool i_what)
 {
- return true; //отвечаем что полноэкранный режим для этой вкладки разрешен
-}
-
-void CParamMonTabController::OnFullScreen(bool i_what, const CRect& i_rect)
-{
- //При включении полноэкранного режима ресайзим окно вкладки так чтобы оно было
- //поверх таб контрола. При выключении полноэкранного режима таб контрол сам ресайзит
- //вкладку к нужному размеру.
-
- if (i_what)
-  mp_view->MoveWindow(i_rect.left, i_rect.top, i_rect.Width(), i_rect.Height());
-
- mp_view->MakePDFloating(i_what);
- mp_view->EnlargeMonitor(i_what, mp_settings->GetShowExFixtures());
+ //not used
 }
 
 bool CParamMonTabController::OnAskChangeTab(void)

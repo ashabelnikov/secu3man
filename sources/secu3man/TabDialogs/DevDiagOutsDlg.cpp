@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "DevDiagOutsDlg.h"
 
+#include "common/DPIAware.h"
 #include "common/FastDelegate.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/WndScroller.h"
@@ -45,6 +46,7 @@ const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_ADD_O2_CHECK1;      //secu-3i
 BEGIN_MESSAGE_MAP(CDevDiagOutsDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
+ ON_WM_SIZE()
  ON_COMMAND_RANGE(OutputsCheckStart, OutputsCheckEnd, OnOutputCheckToggle)
  ON_COMMAND_RANGE(OutputsCheckStart1, OutputsCheckEnd1, OnOutputCheckToggle) //secu-3i
  ON_UPDATE_COMMAND_UI_RANGE(OutputsCheckStart, OutputsCheckEnd, OnUpdateDiagControls)
@@ -81,7 +83,7 @@ BOOL CDevDiagOutsDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.0f);
+ _UpdateScrlViewSize();
 
  return TRUE;
 }
@@ -137,7 +139,7 @@ void CDevDiagOutsDlg::EnableSECU3TFeatures(bool i_enable)
 {
  m_enable_secu3t_features = i_enable;
 
- mp_scr->SetViewSizeF(.0f, i_enable ? 1.0f : 1.6f);
+ _UpdateScrlViewSize();
 
  for(int i = OutputsCheckStart; i <= OutputsCheckEnd; ++i)
   GetDlgItem(i)->ShowWindow(i_enable ? SW_SHOW : SW_HIDE);
@@ -167,4 +169,17 @@ void CDevDiagOutsDlg::SetOutputValue(int id, bool state)
 void CDevDiagOutsDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
 {
  SetWindowPos(wnd_insert_after, x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
+}
+
+void CDevDiagOutsDlg::_UpdateScrlViewSize(void)
+{
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(300) : da.ScaleY(550));
+}
+
+void CDevDiagOutsDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+ _UpdateScrlViewSize();
 }

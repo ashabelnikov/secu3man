@@ -150,7 +150,7 @@ void COScopeCtrl::SetBackgroundColor(COLORREF color)
  InvalidateCtrl();
 }
 
-void COScopeCtrl::InvalidateCtrl()
+void COScopeCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateBmpPlot /*=false*/)
 {
  // This is all being drawn (only once) to a bitmap.  The result is then BitBlt'd to the control whenever needed.
  int i, nCharacters;
@@ -163,10 +163,17 @@ void COScopeCtrl::InvalidateCtrl()
  // in case we haven't established the memory dc's
  CClientDC dc(this);
 
- // if we don't have one yet, set up a memory dc for the grid
  if (m_dcGrid.GetSafeHdc() == NULL)
- {
   m_dcGrid.CreateCompatibleDC(&dc);
+
+ if (recreateBmpGrid && m_pbitmapOldGrid && m_dcGrid.GetSafeHdc())
+ {
+  m_dcGrid.SelectObject(m_pbitmapOldGrid);
+  m_bitmapGrid.DeleteObject();
+ }
+
+ if (m_bitmapGrid.GetSafeHandle() == NULL)
+ {
   m_bitmapGrid.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
   m_pbitmapOldGrid = m_dcGrid.SelectObject(&m_bitmapGrid);
  }
@@ -265,10 +272,17 @@ void COScopeCtrl::InvalidateCtrl()
  // at this point we are done filling the the grid bitmap,
  // no more drawing to this bitmap is needed until the setting are changed
 
- // if we don't have one yet, set up a memory dc for the plot
- if (m_dcPlot.GetSafeHdc() == NULL)
- {
+if (m_dcPlot.GetSafeHdc() == NULL)
   m_dcPlot.CreateCompatibleDC(&dc);
+
+ if (recreateBmpPlot && m_pbitmapOldPlot && m_dcPlot.GetSafeHdc())
+ {
+  m_dcPlot.SelectObject(m_pbitmapOldPlot);
+  m_bitmapPlot.DeleteObject();
+ }
+
+ if (m_bitmapPlot.GetSafeHandle() == NULL)
+ {
   m_bitmapPlot.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
   m_pbitmapOldPlot = m_dcPlot.SelectObject(&m_bitmapPlot);
  }
@@ -332,34 +346,27 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 
 void COScopeCtrl::OnPaint()
 {
- CPaintDC dc(this);  // device context for painting
+ CPaintDC dc(this);
  CDC memDC;
- CBitmap memBitmap;
- CBitmap* oldBitmap; // bitmap originally found in CMemDC
+ CBitmap memBmp;
+ CBitmap* oldBmp;
 
- // no real plotting work is performed here,
- // just putting the existing bitmaps on the client
-
- // to avoid flicker, establish a memory dc, draw to it
- // and then BitBlt it to the client
+ //Draw all data onto memory DC
  memDC.CreateCompatibleDC(&dc);
- memBitmap.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
- oldBitmap = (CBitmap *)memDC.SelectObject(&memBitmap);
+ memBmp.CreateCompatibleBitmap(&dc, m_rectClient.Width(), m_rectClient.Height());
+ oldBmp = (CBitmap *)memDC.SelectObject(&memBmp);
 
  if (memDC.GetSafeHdc() != NULL)
  {
-  // first drop the grid on the memory dc
-  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
-               &m_dcGrid, 0, 0, SRCCOPY);
-  // now add the plot on top as a "pattern" via SRCPAINT.
-  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
-               &m_dcPlot, 0, 0, SRCPAINT);  //SRCPAINT
-  // finally send the result to the display
-  dc.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),
-            &memDC, 0, 0, SRCCOPY);
+  // draw the grid on the memory DC
+  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(), &m_dcGrid, 0, 0, SRCCOPY);
+  // draw the plot on the memory DC
+  memDC.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),&m_dcPlot, 0, 0, SRCPAINT);
+  // finally, output memory DC to display
+  dc.BitBlt(0, 0, m_rectClient.Width(), m_rectClient.Height(),&memDC, 0, 0, SRCCOPY);
  }
 
- memDC.SelectObject(oldBitmap);
+ memDC.SelectObject(oldBmp);
 }
 
 void COScopeCtrl::DrawPoint(bool i_reverse)
@@ -446,8 +453,6 @@ void COScopeCtrl::OnSize(UINT nType, int cx, int cy)
 {
  CWnd::OnSize(nType, cx, cy);
 
- // NOTE: OnSize automatically gets called during the setup of the control
-
  GetClientRect(m_rectClient);
 
  // the "left" coordinate and "width" will be modified in
@@ -460,6 +465,7 @@ void COScopeCtrl::OnSize(UINT nType, int cx, int cy)
  // set the scaling factor for now, this can be adjusted
  // in the SetRange functions
  m_dVerticalFactor = (double)m_rectPlot.Height() / m_dRange;
+ InvalidateCtrl(true, true);
 }
 
 void COScopeCtrl::OnEnable(BOOL bEnable)
@@ -473,9 +479,7 @@ void COScopeCtrl::Reset()
  m_point_position = 0;
  m_points.clear();
  m_dPreviousPosition = 0.0;
- // to clear the existing data (in the form of a bitmap)
- // simply invalidate the entire control
- InvalidateCtrl();
+ InvalidateCtrl(); //clear all data
 }
 
 size_t COScopeCtrl::_GetPtCount(void)

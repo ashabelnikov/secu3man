@@ -60,6 +60,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
   void updateScrollerSize(void);
@@ -68,47 +69,31 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   int  m_enabled;
   bool m_enable_secu3t_features;
   bool m_enable_extraio;
-  float m_map_value;
-  float m_ubat_value;
-  float m_temp_value;
-  float m_knock_value;
-  float m_tps_value;
-  float m_add_i1_value;
-  float m_add_i2_value;
-  float m_add_i3_value;
-  float m_add_i4_value;
+  bool m_was_initialized;
+
+  struct Input
+  {
+   Input() : value(.0f) {}
+   void StoreRects(void);
+   void Scale(float Xf, float Yf);
+   CStatic ctrl[3]; //field, caption, unit
+   CRect rect[3];   //field, caption, unit
+   float value;
+  };
+
+  Input m_map_inp;
+  Input m_ubat_inp;
+  Input m_temp_inp;
+  Input m_knock_inp;
+  Input m_tps_inp;
+  Input m_add_i1_inp;
+  Input m_add_i2_inp;
+  Input m_add_i3_inp;
+  Input m_add_i4_inp;
+
   CFont m_fieldFont;
-
-  CStatic m_map_field;
-  CStatic m_ubat_field;
-  CStatic m_temp_field;
-  CStatic m_knock_field;
-  CStatic m_tps_field;
-  CStatic m_add_i1_field;
-  CStatic m_add_i2_field;
-  CStatic m_add_i3_field;
-  CStatic m_add_i4_field;
-
-  CStatic m_map_caption;
-  CStatic m_ubat_caption;
-  CStatic m_temp_caption;
-  CStatic m_knock_caption;
-  CStatic m_tps_caption;
-  CStatic m_add_i1_caption;
-  CStatic m_add_i2_caption;
-  CStatic m_add_i3_caption;
-  CStatic m_add_i4_caption;
-
-  CStatic m_map_unit;
-  CStatic m_ubat_unit;
-  CStatic m_temp_unit;
-  CStatic m_knock_unit;
-  CStatic m_tps_unit;
-  CStatic m_add_i1_unit;
-  CStatic m_add_i2_unit;
-  CStatic m_add_i3_unit;
-  CStatic m_add_i4_unit;
-
+  CRect m_origRect;
+  
   std::auto_ptr<CWndScroller> mp_scr;
 };
 

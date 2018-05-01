@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "Resources/resource.h"
+#include "common/dpiaware.h"
 #include "UniOutPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
@@ -34,6 +35,7 @@ const UINT CUniOutPageDlg::IDD = IDD_PD_UNIOUT_PAGE;
 
 BEGIN_MESSAGE_MAP(CUniOutPageDlg, Super)
  ON_WM_DESTROY()
+ ON_WM_SIZE()
  ON_BN_CLICKED(IDC_PD_UNIOUT_1_COND1_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_1_COND2_INV_CHECK, OnChangeInvFlags)
  ON_BN_CLICKED(IDC_PD_UNIOUT_2_COND1_INV_CHECK, OnChangeInvFlags)
@@ -212,8 +214,6 @@ BOOL CUniOutPageDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- CRect wndRect; GetWindowRect(&wndRect);
- mp_scr->SetViewSize(0, int(wndRect.Height() * 1.96f));
 
 //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -542,4 +542,13 @@ void CUniOutPageDlg::_GetLogicFunc12ComboBoxSel(void)
   int index = lf12_combo.GetCurSel();
   m_params.logicFunc12 = (unsigned char)lf12_combo.GetItemData(index);
  }
+}
+
+void CUniOutPageDlg::OnSize( UINT nType, int cx, int cy )
+{
+ Super::OnSize(nType, cx, cy);
+
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(cx, da.ScaleY(520));
 }

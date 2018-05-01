@@ -47,7 +47,6 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   CParamDeskDlg(CWnd* pParent = NULL, bool i_show_knock_page = false);
   virtual ~CParamDeskDlg();
   static const UINT IDD;
-  static const UINT IDD_F;
 
   //note: wnd_insert_after parameter may be used to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
@@ -101,8 +100,6 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
   virtual int GetCurSel(void);
-
-  virtual void Resize(int cx, int cy);
   //-------------------------------------------------------------
 
  // Implementation
@@ -113,6 +110,7 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnSaveButton();
   afx_msg void OnSysCommand(UINT, LONG);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnHK_STARTR_PAR();
   afx_msg void OnHK_ANGLES_PAR();
   afx_msg void OnHK_IDLREG_PAR();

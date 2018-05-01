@@ -28,6 +28,7 @@
 #include "EEPROMTabDlg.h"
 #include "about/secu-3about.h"
 #include "common/DPIAware.h"
+#include "common/GDIHelpers.h"
 #include "common/unicodesupport.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
 #include "tabldesk/ButtonsPanel.h"
@@ -43,6 +44,7 @@ CEEPROMTabDlg::CEEPROMTabDlg(CWnd* pParent /*=NULL*/)
 , mp_ContextMenuManager(new CEEPROMContextMenuManager())
 , mp_TablesPanel(new CButtonsPanel(0, NULL))
 , m_is_bl_items_available(false)
+, m_initialized(false)
 {
  mp_ContextMenuManager->CreateContent();
 
@@ -58,6 +60,7 @@ void CEEPROMTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EE_EE_NAME,m_ee_name);
  DDX_Control(pDX, IDC_EE_MODIFICATION_FLAG, m_modification_flag);
  DDX_Control(pDX, IDC_EE_MAPSET_NAME, m_ee_mapset_name);
+ DDX_Control(pDX, IDC_EE_POPUPMENU_BUTTON, m_ee_popup_menu_button);
 }
 
 LPCTSTR CEEPROMTabDlg::GetDialogID(void) const
@@ -71,6 +74,7 @@ BEGIN_MESSAGE_MAP(CEEPROMTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_WM_DROPFILES()
+ ON_WM_SIZE()
  ON_BN_CLICKED(IDC_EE_POPUPMENU_BUTTON, OnPopupMenuButton)
  ON_BN_CLICKED(IDC_EE_CE_ERRORS_BTN, OnCEErrorsButton)
  ON_COMMAND(IDM_EE_OPEN_EEPROM, OnOpenEEPROMFromFile)
@@ -102,7 +106,6 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  mp_ParamDeskDlg->SetPosition(rect.TopLeft().x,rect.TopLeft().y);
  mp_ParamDeskDlg->SetTitle(MLL::LoadString(IDS_EE_PARAMETERS));
  mp_ParamDeskDlg->ShowSaveButton(false);
- mp_ParamDeskDlg->Resize(rect.Width(), rect.Height());
  mp_ParamDeskDlg->ShowWindow(SW_SHOW);
 
  //create tables desk
@@ -128,6 +131,8 @@ BOOL CEEPROMTabDlg::OnInitDialog()
  //Enable drap & drop functionality
  DragAcceptFiles(true);
 
+ m_initialized = true;
+
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
@@ -135,6 +140,7 @@ void CEEPROMTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  KillTimer(TIMER_ID);
+ m_initialized = false;
 }
 
 void CEEPROMTabDlg::OnTimer(UINT nIDEvent)
@@ -186,7 +192,7 @@ void CEEPROMTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
 void CEEPROMTabDlg::OnPopupMenuButton()
 {
  CRect rc;
- GetDlgItem(IDC_EE_POPUPMENU_BUTTON)->GetWindowRect(rc);
+ m_ee_popup_menu_button.GetWindowRect(rc);
  mp_ContextMenuManager->TrackPopupMenu(rc.left, rc.top, false); //bottom align
 }
 
@@ -340,3 +346,24 @@ void CEEPROMTabDlg::setOnMapsetNameChanged(EventHandler OnFunction)
 
 void CEEPROMTabDlg::setOnShowCEErrors(EventHandler OnFunction)
 {m_OnShowCEErrors = OnFunction;}
+
+void CEEPROMTabDlg::OnSize( UINT nType, int cx, int cy )
+{
+ if (m_initialized)
+ {
+  CRect rc1, pmb_rc;
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_ee_popup_menu_button);
+  m_ee_popup_menu_button.MoveWindow(rc1.left, cy - rc1.Height(), rc1.Width(), rc1.Height());
+
+  pmb_rc = GDIHelpers::GetChildWndRect(&m_ee_popup_menu_button);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(mp_TablesPanel.get());
+  mp_TablesPanel->SetWindowPos(NULL, 0, 0, rc1.Width(), pmb_rc.top - rc1.top, SWP_NOMOVE | SWP_NOZORDER);
+ }
+
+ Super::OnSize(nType, cx, cy);
+}
