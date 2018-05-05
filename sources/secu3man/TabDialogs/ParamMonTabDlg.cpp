@@ -64,6 +64,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , mp_secu3orgLink(new CLabel)
 , m_moveSplitter(false)
 , m_initialized(false)
+, m_enMakeChartsChildren(false)
 {
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout())
@@ -184,7 +185,7 @@ void CParamMonTabDlg::OnPmEditTables()
  mp_ParamDeskDlg->Show(!check_state);
  mp_TablesDeskDlg->Show(check_state);
  mp_TablesDeskDlg->ShowOpenedCharts(check_state);
- mp_TablesDeskDlg->MakeChartsChildren(true);
+ mp_TablesDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
 
  if (m_OnEditTablesCheck)
   m_OnEditTablesCheck();
@@ -205,6 +206,13 @@ bool CParamMonTabDlg::GetEditTablesCheckState(void)
 void CParamMonTabDlg::EnableEditTablesCheck(bool enable)
 {
  m_edit_tables_check.EnableWindow(enable);
+}
+
+void CParamMonTabDlg::EnableMakingChartsChildren(bool enable)
+{
+ m_enMakeChartsChildren = enable;
+ if (mp_TablesDeskDlg.get() && ::IsWindow(mp_TablesDeskDlg->m_hWnd))
+  mp_TablesDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
 }
 
 void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)

@@ -93,6 +93,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AutoDiagEnter;
   const CString m_Name_SaveWarning;
   const CString m_Name_AutoCERead;
+  const CString m_Name_ChildCharts;
 
   //позиции окон таблиц УОЗ
   const CString m_Name_WndSettings_Section;
@@ -209,6 +210,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetAutoDiagEnter(void) const;
   virtual bool GetSaveWarning(void) const;
   virtual bool GetAutoCERead(void) const;
+  virtual bool GetChildCharts(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -258,6 +260,7 @@ class CAppSettingsModel : public ISettingsData
   bool m_optAutoDiagEnter;
   bool m_optSaveWarning;
   bool m_optAutoCERead;
+  bool m_optChildCharts;
 
   int m_optStrtMapWnd_X;
   int m_optStrtMapWnd_Y;

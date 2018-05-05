@@ -66,6 +66,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_AutoDiagEnter(_T("AutoDiagEnter"))
 , m_Name_SaveWarning(_T("SaveWarning"))
 , m_Name_AutoCERead(_T("AutoCERead"))
+, m_Name_ChildCharts(_T("ChildCharts"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
@@ -613,6 +614,20 @@ bool CAppSettingsModel::ReadSettings(void)
   m_optAutoCERead = i_val;
  }
 
+ //-----------------------------------------
+ GetPrivateProfileString(m_Name_Options_Section,m_Name_ChildCharts,_T("1"),read_str,255,IniFileName);
+ i_val = _ttoi(read_str);
+
+ if (i_val != 0 && i_val != 1)
+ {
+  status = false;
+  m_optChildCharts = 0;
+ }
+ else
+ {
+  m_optChildCharts = i_val;
+ }
+
 
  //Positions of windows
 #define _GETWNDPOSITION(sectName, fldName, defVal) \
@@ -918,6 +933,10 @@ bool CAppSettingsModel::WriteSettings(void)
  //-----------------------------------------
  write_str.Format(_T("%d"),(int)m_optAutoCERead);
  WritePrivateProfileString(m_Name_Options_Section,m_Name_AutoCERead,write_str,IniFileName);
+
+ //-----------------------------------------
+ write_str.Format(_T("%d"),(int)m_optChildCharts);
+ WritePrivateProfileString(m_Name_Options_Section,m_Name_ChildCharts,write_str,IniFileName);
 
  //-----------------------------------------
 
@@ -1501,4 +1520,9 @@ bool CAppSettingsModel::GetSaveWarning(void) const
 bool CAppSettingsModel::GetAutoCERead(void) const
 {
  return m_optAutoCERead;
+}
+
+bool CAppSettingsModel::GetChildCharts(void) const
+{
+ return m_optChildCharts;
 }

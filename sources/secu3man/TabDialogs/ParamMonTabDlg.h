@@ -51,6 +51,7 @@ class CParamMonTabDlg : public CTabDialog
   bool GetEditTablesCheckState(void);
 
   void EnableEditTablesCheck(bool enable);
+  void EnableMakingChartsChildren(bool enable);
 
   void ShowExFixtures(bool i_exfixtures);
 
@@ -84,6 +85,7 @@ class CParamMonTabDlg : public CTabDialog
   EventHandler m_OnRawSensorsCheck;
   EventHandler m_OnEditTablesCheck;
 
+  bool m_enMakeChartsChildren;
   bool m_initialized;
   int m_miMargin;
   

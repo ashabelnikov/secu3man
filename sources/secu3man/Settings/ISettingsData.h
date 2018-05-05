@@ -149,6 +149,7 @@ class ISettingsData
   virtual bool GetAutoDiagEnter(void) const = 0;
   virtual bool GetSaveWarning(void) const = 0;
   virtual bool GetAutoCERead(void) const = 0;
+  virtual bool GetChildCharts(void) const = 0;
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;

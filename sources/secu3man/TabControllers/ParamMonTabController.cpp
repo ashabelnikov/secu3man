@@ -136,6 +136,8 @@ void CParamMonTabController::OnActivate(void)
  OnConnection(mp_comm->m_pControlApp->GetOnlineStatus());
 
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
+
+ mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
 }
 
 //from MainTabController
