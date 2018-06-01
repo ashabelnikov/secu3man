@@ -19,6 +19,10 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Chart2D.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
 #include "stdafx.h"
 #include "Chart2D.h"
 #include "math.h"

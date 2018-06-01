@@ -19,9 +19,13 @@
               email: shabelnikov@secu-3.org
 */
 
+/** \file Chart2D.h
+ * \author Alexey A. Shabelnikov
+ */
+
 #pragma once
 
-#include "vector"
+#include <vector>
 
 //Represents state and data of one serie
 class CSerieData

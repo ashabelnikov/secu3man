@@ -814,7 +814,8 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
  OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_WND), TYPE_MAP_GME_WND);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
   if (!ErrorMsg::AskUserAboutTabLeaving())

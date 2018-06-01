@@ -1,0 +1,94 @@
+/* SECU-3  - An open source, free engine control unit
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+              http://secu-3.org
+              email: shabelnikov@secu-3.org
+*/
+
+/** \file GridModeEditorInjDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
+#pragma once
+
+#include <memory>
+#include "common/FastDelegate.h"
+#include "common/UnicodeSupport.h"
+#include "ui-core/TabController.h"
+#include "DynamicValues.h"
+
+class CGMEInjVEDlg;
+class CGMEInjAFRDlg;
+class CGMEInjITDlg;
+class CGMEInjIRegDlg;
+class CGMEInjEnrDlg;
+class CGMEInjOtherDlg;
+
+class CGridModeEditorInjDlg : public CDialog
+{
+  typedef CDialog Super;
+  typedef fastdelegate::FastDelegate0<bool> EventResult;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
+  typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
+
+ public:
+  CGridModeEditorInjDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CGridModeEditorInjDlg();
+  static const UINT IDD;
+
+  void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc);
+  void BindRPMGrid(float* pGrid);
+  void UpdateView(void);
+  void UpdateDialogControls(void);
+
+  void SetDynamicValues(const TablDesk::DynVal& dv);
+
+ public:
+  void setIsAllowed(EventResult IsFunction);
+  void setOnMapChanged(EventWithCode OnFunction);
+  void setOnOpenMapWnd(EventWithHWND OnFunction); 
+  void setOnCloseMapWnd(EventWithHWND OnFunction);
+
+ // Implementation
+ protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+  virtual BOOL OnInitDialog();
+  afx_msg void OnClose();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  DECLARE_MESSAGE_MAP()
+
+ private:
+  void OnChangeVE(void);
+  void OnChangeAFR(void);
+  void OnChangeIT(void);
+  void OnChangeIReg(int mapId);
+  void OnChangeEnr(int mapId);
+  void OnChangeOther(int mapId);
+
+  EventResult   m_IsAllowed;
+  EventWithCode m_OnMapChanged;
+  EventWithHWND m_OnOpenMapWnd;
+  EventWithHWND m_OnCloseMapWnd;
+
+  CTabController m_tab_control;
+  std::auto_ptr<CGMEInjVEDlg> m_pVEPageDlg;
+  std::auto_ptr<CGMEInjAFRDlg> m_pAFRPageDlg;
+  std::auto_ptr<CGMEInjITDlg> m_pITPageDlg;
+  std::auto_ptr<CGMEInjIRegDlg> m_pIRegPageDlg;
+  std::auto_ptr<CGMEInjEnrDlg> m_pEnrPageDlg;
+  std::auto_ptr<CGMEInjOtherDlg> m_pOtherPageDlg;
+};

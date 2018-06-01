@@ -508,6 +508,6 @@ void CCESettingsDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.y = m_createSize.cy;
 
   lpMMI->ptMaxTrackSize.x = m_createSize.cx;
-  lpMMI->ptMaxTrackSize.y = m_createSize.cy * 1.35f;
+  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.35f);
  }
 }

@@ -29,7 +29,7 @@
 #include "common/dpiaware.h"
 #include "common/MathHelpers.h"
 #include "DLLLinkedFunctions.h"
-#include "GridModeEditorDlg.h"
+#include "GridModeEditorIgnDlg.h"
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 #include "ui-core/WndScroller.h"
@@ -47,8 +47,8 @@ void __cdecl CButtonsPanel::OnChangeStartMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_START);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorIgnDlg.get())
+  _this->mp_gridModeEditorIgnDlg->UpdateView();
 }
 
 void __cdecl CButtonsPanel::OnCloseStartMap(void* i_param)
@@ -78,8 +78,8 @@ void __cdecl CButtonsPanel::OnChangeIdleMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_IDLE);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorIgnDlg.get())
+  _this->mp_gridModeEditorIgnDlg->UpdateView();
 }
 
 void __cdecl CButtonsPanel::OnCloseIdleMap(void* i_param)
@@ -109,8 +109,8 @@ void __cdecl CButtonsPanel::OnChangeWorkMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_WORK);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorIgnDlg.get())
+  _this->mp_gridModeEditorIgnDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -141,8 +141,8 @@ void __cdecl CButtonsPanel::OnChangeTempMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_DA_TEMP_CORR);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorIgnDlg.get())
+  _this->mp_gridModeEditorIgnDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -245,8 +245,8 @@ void __cdecl CButtonsPanel::OnChangeVEMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_VE);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -277,8 +277,8 @@ void __cdecl CButtonsPanel::OnChangeAFRMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_AFR);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -309,8 +309,8 @@ void __cdecl CButtonsPanel::OnChangeCrnkMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_CRNK);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -341,8 +341,8 @@ void __cdecl CButtonsPanel::OnChangeWrmpMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_WRMP);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -373,8 +373,8 @@ void __cdecl CButtonsPanel::OnChangeDeadMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_DEAD);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -405,8 +405,8 @@ void __cdecl CButtonsPanel::OnChangeIdlrMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IDLR);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -437,8 +437,8 @@ void __cdecl CButtonsPanel::OnChangeIdlcMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IDLC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -469,8 +469,8 @@ void __cdecl CButtonsPanel::OnChangeAETPSMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_AETPS);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -501,8 +501,8 @@ void __cdecl CButtonsPanel::OnChangeAERPMMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_AERPM);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -533,8 +533,8 @@ void __cdecl CButtonsPanel::OnChangeAftstrMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_AFTSTR);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -565,8 +565,8 @@ void __cdecl CButtonsPanel::OnChangeITMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IT);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -585,8 +585,6 @@ void __cdecl CButtonsPanel::OnCloseITMap(void* i_param)
   _this->m_OnCloseMapWnd(_this->m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
 }
 
-
-
 //------------------------------------------------------------------------
 void __cdecl CButtonsPanel::OnChangeITRPMMap(void* i_param)
 {
@@ -599,8 +597,8 @@ void __cdecl CButtonsPanel::OnChangeITRPMMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_ITRPM);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -632,8 +630,8 @@ void __cdecl CButtonsPanel::OnChangeRigidMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_RIGID);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -665,8 +663,8 @@ void __cdecl CButtonsPanel::OnChangeEGOCrvMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_EGOCRV);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -704,8 +702,8 @@ void __cdecl CButtonsPanel::OnChangeEGOCrvXAxisEdit(void* i_param, int i_type, f
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_EGOCRV);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -720,8 +718,8 @@ void __cdecl CButtonsPanel::OnChangeIACCMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IACC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -759,8 +757,8 @@ void __cdecl CButtonsPanel::OnChangeIACCXAxisEdit(void* i_param, int i_type, flo
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IACC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -775,8 +773,8 @@ void __cdecl CButtonsPanel::OnChangeIACCWMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IACCW);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -814,8 +812,8 @@ void __cdecl CButtonsPanel::OnChangeIACCWXAxisEdit(void* i_param, int i_type, fl
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IACCW);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -830,8 +828,8 @@ void __cdecl CButtonsPanel::OnChangeIATCLTMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IATCLT);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -869,8 +867,8 @@ void __cdecl CButtonsPanel::OnChangeIATCLTXAxisEdit(void* i_param, int i_type, f
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_IATCLT);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -885,8 +883,8 @@ void __cdecl CButtonsPanel::OnChangeTpsswtMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_TPSSWT);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -917,8 +915,8 @@ void __cdecl CButtonsPanel::OnChangeGtscMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_GTSC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -949,8 +947,8 @@ void __cdecl CButtonsPanel::OnChangeGpscMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_GPSC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -988,8 +986,8 @@ void __cdecl CButtonsPanel::OnChangeGpscXAxisEdit(void* i_param, int i_type, flo
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_GPSC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -1004,8 +1002,8 @@ void __cdecl CButtonsPanel::OnChangeAtscMap(void* i_param)
 
  if (_this->m_OnMapChanged)
   _this->m_OnMapChanged(TYPE_MAP_INJ_ATSC);
- if (_this->mp_gridModeEditorDlg.get())
-  _this->mp_gridModeEditorDlg->UpdateView();
+ if (_this->mp_gridModeEditorInjDlg.get())
+  _this->mp_gridModeEditorInjDlg->UpdateView();
 }
 
 //------------------------------------------------------------------------
@@ -1340,7 +1338,7 @@ void __cdecl CButtonsPanel::OnWndActivationAtscMap(void* i_param, long cmd)
 }
 
 //------------------------------------------------------------------------
-void CButtonsPanel::OnGridMapChanged(int mapType)
+void CButtonsPanel::OnGridMapChangedIgn(int mapType)
 {
  if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
   DLL::Chart2DUpdate(m_start_map_wnd_handle, GetStartMap(true), GetStartMap(false));
@@ -1350,6 +1348,22 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
   DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
  if (m_temp_map_chart_state && mapType == TYPE_MAP_DA_TEMP_CORR)
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapType);
+}
+
+//------------------------------------------------------------------------
+void CButtonsPanel::OnGridMapClosedIgn(HWND hwnd, int mapType)
+{
+ m_grid_map_state_ign = 0;
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
+}
+
+//------------------------------------------------------------------------
+void CButtonsPanel::OnGridMapChangedInj(int mapType)
+{
  if (m_ve_map_chart_state && mapType == TYPE_MAP_INJ_VE)
   DLL::Chart3DUpdate(m_ve_map_wnd_handle, GetVEMap(true), GetVEMap(false));
  if (m_afr_map_chart_state && mapType == TYPE_MAP_INJ_AFR)
@@ -1398,11 +1412,11 @@ void CButtonsPanel::OnGridMapChanged(int mapType)
 }
 
 //------------------------------------------------------------------------
-void CButtonsPanel::OnGridMapClosed(HWND hwnd, int mapType)
+void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
 {
- m_grid_map_state = 0;
+ m_grid_map_state_inj = 0;
  if (m_OnCloseMapWnd)
-  m_OnCloseMapWnd(mp_gridModeEditorDlg->m_hWnd, TYPE_MAP_GME_WND);
+  m_OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
 }
 
 //------------------------------------------------------------------------
@@ -1439,7 +1453,8 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_gtsc_map_chart_state(0)
 , m_gpsc_map_chart_state(0)
 , m_atsc_map_chart_state(0)
-, m_grid_map_state(0)
+, m_grid_map_state_ign(0)
+, m_grid_map_state_inj(0)
 , m_start_map_wnd_handle(NULL)
 , m_idle_map_wnd_handle(NULL)
 , m_work_map_wnd_handle(NULL)
@@ -1469,7 +1484,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_view(900)
+, m_scrl_view(910)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)
@@ -1541,7 +1556,8 @@ void CButtonsPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_TEMP_MAP,  m_view_temp_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_START_MAP, m_view_start_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_IDLE_MAP,  m_view_idle_map_btn);
- DDX_Control(pDX, IDC_TD_GME_CHECK, m_grid_mode_editing_check);
+ DDX_Control(pDX, IDC_TD_GME_IGN_CHECK, m_grid_mode_editing_ign_check);
+ DDX_Control(pDX, IDC_TD_GME_INJ_CHECK, m_grid_mode_editing_inj_check);
  DDX_Control(pDX, IDC_TD_VIEW_VE_MAP,  m_view_ve_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_AFR_MAP,  m_view_afr_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CRNK_MAP,  m_view_crnk_map_btn);
@@ -1570,7 +1586,8 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_IDLE_MAP, OnViewIdleMap)
  ON_BN_CLICKED(IDC_TD_VIEW_WORK_MAP, OnViewWorkMap)
  ON_BN_CLICKED(IDC_TD_VIEW_TEMP_MAP, OnViewTempMap)
- ON_BN_CLICKED(IDC_TD_GME_CHECK, OnGridModeEditing)
+ ON_BN_CLICKED(IDC_TD_GME_IGN_CHECK, OnGridModeEditingIgn)
+ ON_BN_CLICKED(IDC_TD_GME_INJ_CHECK, OnGridModeEditingInj)
  ON_BN_CLICKED(IDC_TD_VIEW_VE_MAP, OnViewVEMap)
  ON_BN_CLICKED(IDC_TD_VIEW_AFR_MAP, OnViewAFRMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CRNK_MAP, OnViewCrnkMap)
@@ -1617,7 +1634,8 @@ BEGIN_MESSAGE_MAP(CButtonsPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TPSSWT_MAP, OnUpdateViewTpsswtMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GTSC_MAP, OnUpdateViewGtscMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GPSC_MAP, OnUpdateViewGpscMap)
- ON_UPDATE_COMMAND_UI(IDC_TD_GME_CHECK, OnUpdateGridModeEditing)
+ ON_UPDATE_COMMAND_UI(IDC_TD_GME_IGN_CHECK, OnUpdateGridModeEditingIgn)
+ ON_UPDATE_COMMAND_UI(IDC_TD_GME_INJ_CHECK, OnUpdateGridModeEditingInj)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATSC_MAP, OnUpdateViewAtscMap)
  ON_WM_TIMER()
  ON_WM_DESTROY()
@@ -2525,27 +2543,55 @@ void CButtonsPanel::OnViewAtscMap()
 }
 
 //-----------------------------------------------------------------------------------------------
-void CButtonsPanel::OnGridModeEditing()
+void CButtonsPanel::OnGridModeEditingIgn()
 {
- if (m_grid_mode_editing_check.GetCheck()==BST_CHECKED)
+ if (m_grid_mode_editing_ign_check.GetCheck()==BST_CHECKED)
  {
-  mp_gridModeEditorDlg.reset(new CGridModeEditorDlg());
-  mp_gridModeEditorDlg->BindMaps(m_start_map_active, m_idle_map_active, &m_work_map_active[0][0], m_temp_map_active);
-  mp_gridModeEditorDlg->BindRPMGrid(GetRPMGrid());
-  mp_gridModeEditorDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
-  mp_gridModeEditorDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChanged));
-  mp_gridModeEditorDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosed));
-  mp_gridModeEditorDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
-  mp_gridModeEditorDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
-  mp_gridModeEditorDlg->Create(CGridModeEditorDlg::IDD, NULL);
-  mp_gridModeEditorDlg->ShowWindow(SW_SHOW);
-  m_grid_map_state = 1;
+  mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
+  mp_gridModeEditorIgnDlg->BindMaps(m_start_map_active, m_idle_map_active, &m_work_map_active[0][0], m_temp_map_active);
+  mp_gridModeEditorIgnDlg->BindRPMGrid(GetRPMGrid());
+  mp_gridModeEditorIgnDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
+  mp_gridModeEditorIgnDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedIgn));
+  mp_gridModeEditorIgnDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedIgn));
+  mp_gridModeEditorIgnDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
+  mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
+  mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL);
+  mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
+  m_grid_map_state_ign = 1;
  }
  else
  {
-  OnGridMapClosed(mp_gridModeEditorDlg->m_hWnd, TYPE_MAP_GME_WND);
-  mp_gridModeEditorDlg->DestroyWindow();
-  mp_gridModeEditorDlg.reset(NULL);
+  OnGridMapClosedIgn(mp_gridModeEditorIgnDlg->m_hWnd, TYPE_MAP_GME_IGN_WND);
+  mp_gridModeEditorIgnDlg->DestroyWindow();
+  mp_gridModeEditorIgnDlg.reset(NULL);
+ }
+}
+
+//-----------------------------------------------------------------------------------------------
+void CButtonsPanel::OnGridModeEditingInj()
+{
+ if (m_grid_mode_editing_inj_check.GetCheck()==BST_CHECKED)
+ {
+  mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
+
+  mp_gridModeEditorInjDlg->BindMaps(GetVEMap(false), GetAFRMap(false), GetITMap(false), GetIdlcMap(false), GetIdlrMap(false), GetITRPMMap(false), GetRigidMap(false),
+                                    GetIACCMap(false), GetIACCWMap(false), GetAftstrMap(false), GetWrmpMap(false), GetAETPSMap(false), GetAERPMMap(false),
+                                    GetCrnkMap(false), GetDeadMap(false), GetEGOCurveMap(false), GetIATCLTMap(false), GetTpsswtMap(false), GetAtscMap(false), GetGtscMap(false), GetGpscMap(false));
+  mp_gridModeEditorInjDlg->BindRPMGrid(GetRPMGrid());
+  mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
+  mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
+  mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
+  mp_gridModeEditorInjDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
+  VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
+  mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
+
+  m_grid_map_state_inj = 1;
+ }
+ else
+ {
+  OnGridMapClosedInj(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
+  mp_gridModeEditorInjDlg->DestroyWindow();
+  mp_gridModeEditorInjDlg.reset(NULL);
  }
 }
 
@@ -2581,11 +2627,18 @@ void CButtonsPanel::OnUpdateViewTempMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );
 }
 
-void CButtonsPanel::OnUpdateGridModeEditing(CCmdUI* pCmdUI)
+void CButtonsPanel::OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI)
 {
  bool allowed = IsAllowed();
  pCmdUI->Enable(allowed);
- pCmdUI->SetCheck((mp_gridModeEditorDlg.get() && m_grid_map_state) ? TRUE : FALSE);
+ pCmdUI->SetCheck((mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? TRUE : FALSE);
+}
+
+void CButtonsPanel::OnUpdateGridModeEditingInj(CCmdUI* pCmdUI)
+{
+ bool allowed = IsAllowed();
+ pCmdUI->Enable(allowed);
+ pCmdUI->SetCheck((mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? TRUE : FALSE);
 }
 
 void CButtonsPanel::OnUpdateViewVEMap(CCmdUI* pCmdUI)
@@ -2823,21 +2876,25 @@ void CButtonsPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, GetGpscMap(true), GetGpscMap(false));
  if (m_atsc_map_chart_state)
   DLL::Chart2DUpdate(m_atsc_map_wnd_handle, GetAtscMap(true), GetAtscMap(false));
- if (mp_gridModeEditorDlg.get() && m_grid_map_state)
-  mp_gridModeEditorDlg->UpdateView();
+ if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign)
+  mp_gridModeEditorIgnDlg->UpdateView();
+ if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj)
+  mp_gridModeEditorInjDlg->UpdateView();
 }
 
 void CButtonsPanel::EnableAdvanceAngleIndication(bool i_enable)
 {
  m_en_aa_indication = i_enable;
- if (mp_gridModeEditorDlg.get())
-  mp_gridModeEditorDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
+ if (mp_gridModeEditorIgnDlg.get())
+  mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
 }
 
-void CButtonsPanel::SetDynamicValues(const CGridModeEditorDlg::DynVal& dv)
+void CButtonsPanel::SetDynamicValues(const TablDesk::DynVal& dv)
 {
- if (mp_gridModeEditorDlg.get())
-  mp_gridModeEditorDlg->SetDynamicValues(dv);
+ if (mp_gridModeEditorIgnDlg.get())
+  mp_gridModeEditorIgnDlg->SetDynamicValues(dv);
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetDynamicValues(dv);
 }
 
 void CButtonsPanel::EnableFuelInjection(bool i_enable)
@@ -3216,8 +3273,10 @@ HWND CButtonsPanel::GetMapWindow(int wndType)
   return m_gpsc_map_chart_state ? m_gpsc_map_wnd_handle : NULL;
  case TYPE_MAP_INJ_ATSC:
   return m_atsc_map_chart_state ? m_atsc_map_wnd_handle : NULL;
- case TYPE_MAP_GME_WND: //pseudo map
-  return (mp_gridModeEditorDlg.get() && m_grid_map_state) ? mp_gridModeEditorDlg->m_hWnd : NULL; 
+ case TYPE_MAP_GME_IGN_WND: //pseudo map
+  return (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? mp_gridModeEditorIgnDlg->m_hWnd : NULL; 
+ case TYPE_MAP_GME_INJ_WND: //pseudo map
+  return (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? mp_gridModeEditorInjDlg->m_hWnd : NULL; 
  default:
   return NULL;
  }
@@ -3278,8 +3337,10 @@ void CButtonsPanel::_EnableCharts(bool enable)
    DLL::Chart2DEnable(m_gpsc_map_wnd_handle, enable && IsAllowed());
   if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
    DLL::Chart2DEnable(m_atsc_map_wnd_handle, enable && IsAllowed());
-  if (mp_gridModeEditorDlg.get() && m_grid_map_state && ::IsWindow(mp_gridModeEditorDlg->m_hWnd))
-   mp_gridModeEditorDlg->UpdateDialogControls(mp_gridModeEditorDlg.get(), TRUE);
+  if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign && ::IsWindow(mp_gridModeEditorIgnDlg->m_hWnd))
+   mp_gridModeEditorIgnDlg->UpdateDialogControls(mp_gridModeEditorIgnDlg.get(), TRUE);
+  if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj && ::IsWindow(mp_gridModeEditorInjDlg->m_hWnd))
+   mp_gridModeEditorInjDlg->UpdateDialogControls();
  }
 
  m_charts_enabled = enable;

@@ -27,7 +27,15 @@ set(HEADERS
   CESettingsDlg.h
   DLLLinkedFunctions.h
   DwellCalcDlg.h
-  GridModeEditorDlg.h
+  DynamicValues.h
+  GridModeEditorIgnDlg.h
+  GridModeEditorInjDlg.h
+  GMEInjVEDlg.h
+  GMEInjAFRDlg.h
+  GMEInjITDlg.h
+  GMEInjIRegDlg.h
+  GMEInjEnrDlg.h
+  GMEInjOtherDlg.h
   MapIds.h
   resource.h
   RPMGridEditDlg.h
@@ -40,7 +48,14 @@ set(SOURCES
   CESettingsDlg.cpp
   DLLLinkedFunctions.cpp
   DwellCalcDlg.cpp
-  GridModeEditorDlg.cpp
+  GridModeEditorIgnDlg.cpp
+  GridModeEditorInjDlg.cpp
+  GMEInjVEDlg.cpp
+  GMEInjAFRDlg.cpp
+  GMEInjITDlg.cpp
+  GMEInjIRegDlg.cpp
+  GMEInjEnrDlg.cpp
+  GMEInjOtherDlg.cpp
   RPMGridEditDlg.cpp
   StdAfx.cpp
   TablDesk.cpp

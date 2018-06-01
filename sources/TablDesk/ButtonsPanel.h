@@ -27,7 +27,8 @@
 
 #include <memory>
 #include "common/FastDelegate.h"
-#include "GridModeEditorDlg.h"
+#include "GridModeEditorIgnDlg.h"
+#include "GridModeEditorInjDlg.h"
 
 class CWndScroller;
 
@@ -89,7 +90,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   //used for grid mode editing window
   void EnableAdvanceAngleIndication(bool i_enable);
 
-  void SetDynamicValues(const CGridModeEditorDlg::DynVal& dv);
+  void SetDynamicValues(const TablDesk::DynVal& dv);
 
   virtual void EnableFuelInjection(bool i_enable);
 
@@ -139,7 +140,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnViewGpscMap();
   afx_msg void OnViewAtscMap();
 
-  afx_msg void OnGridModeEditing();
+  afx_msg void OnGridModeEditingIgn();
+  afx_msg void OnGridModeEditingInj();
   afx_msg void OnUpdateViewStartMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewIdleMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewWorkMap(CCmdUI* pCmdUI);
@@ -165,7 +167,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   afx_msg void OnUpdateViewGtscMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewGpscMap(CCmdUI* pCmdUI);
   afx_msg void OnUpdateViewAtscMap(CCmdUI* pCmdUI);
-  afx_msg void OnUpdateGridModeEditing(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateGridModeEditingInj(CCmdUI* pCmdUI);
   afx_msg void OnTimer(UINT nIDEvent);
   afx_msg void OnDestroy();
   DECLARE_MESSAGE_MAP()
@@ -211,8 +214,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_view_gpsc_map_btn;
   CButton m_view_atsc_map_btn;
 
-  CButton m_grid_mode_editing_check;
-  std::auto_ptr<CGridModeEditorDlg> mp_gridModeEditorDlg;
+  CButton m_grid_mode_editing_ign_check;
+  CButton m_grid_mode_editing_inj_check;
+  std::auto_ptr<CGridModeEditorIgnDlg> mp_gridModeEditorIgnDlg;
+  std::auto_ptr<CGridModeEditorInjDlg> mp_gridModeEditorInjDlg;
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);
@@ -300,8 +305,11 @@ private:
   static void __cdecl OnWndActivationGpscMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationAtscMap(void* i_param, long cmd);
 
-  void OnGridMapChanged(int mapType);
-  void OnGridMapClosed(HWND, int);
+  void OnGridMapChangedIgn(int mapType);
+  void OnGridMapClosedIgn(HWND, int);
+
+  void OnGridMapChangedInj(int mapType);
+  void OnGridMapClosedInj(HWND, int);
 
   int m_charts_enabled;
   ///////////////////////////////////////////////////////
@@ -309,7 +317,8 @@ private:
   int m_temp_map_chart_state;
   int m_start_map_chart_state;
   int m_idle_map_chart_state;
-  int m_grid_map_state;
+  int m_grid_map_state_ign;
+  int m_grid_map_state_inj;
   int m_ve_map_chart_state;
   int m_afr_map_chart_state;
   int m_crnk_map_chart_state;

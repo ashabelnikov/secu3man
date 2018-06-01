@@ -37,9 +37,14 @@ void RegisterOwnClasses(HINSTANCE hInstance)
  ::GetClassInfo(hInstance, _T("#32770"), &wc);
 
  // Change the name of the class.
- wc.lpszClassName = _T("SECU-3GridModeEditWnd");
+ wc.lpszClassName = _T("SECU-3GridModeEditWndIgn");
 
  // Register this class so that MFC can use it.
+ AfxRegisterClass(&wc);	
+
+ //Same for injection window
+ ::GetClassInfo(hInstance, _T("#32770"), &wc);
+ wc.lpszClassName = _T("SECU-3GridModeEditWndInj");
  AfxRegisterClass(&wc);	
 }
 

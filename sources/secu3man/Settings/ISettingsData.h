@@ -48,8 +48,10 @@ struct WndSettings
  int m_CTSCurveMapWnd_Y;
  int m_ChokeOpMapWnd_X;
  int m_ChokeOpMapWnd_Y;
- int m_GridMapWnd_X;
- int m_GridMapWnd_Y;
+ int m_GridMapIgnWnd_X;
+ int m_GridMapIgnWnd_Y;
+ int m_GridMapInjWnd_X;
+ int m_GridMapInjWnd_Y;
  int m_VEMapWnd_X;
  int m_VEMapWnd_Y;
  int m_AFRMapWnd_X;

@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file GridModeEditorDlg.cpp
+/** \file GridModeEditorIgnDlg.cpp
  * \author Alexey A. Shabelnikov
  */
 
@@ -27,7 +27,7 @@
 #include "resource.h"
 #include "common/Dll.h"
 #include "common/MathHelpers.h"
-#include "GridModeEditorDlg.h"
+#include "GridModeEditorIgnDlg.h"
 #include "io-core/SECU3IO.h"
 #include "MapIds.h"
 #include "ui-core/EditEx.h"
@@ -172,12 +172,12 @@ BEGIN_MESSAGE_MAP(CEditExCustomKeys, CEditEx)
  ON_WM_KILLFOCUS()
 END_MESSAGE_MAP()
 
-const UINT CGridModeEditorDlg::IDD = IDD_GRID_MODE_EDITOR;
+const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
 /////////////////////////////////////////////////////////////////////////////
-// CGridModeEditorDlg dialog
+// CGridModeEditorIgnDlg dialog
 
-BEGIN_MESSAGE_MAP(CGridModeEditorDlg, Super)
+BEGIN_MESSAGE_MAP(CGridModeEditorIgnDlg, Super)
  ON_WM_PAINT()
  ON_WM_CLOSE()
  ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_WRK_START, IDC_GME_WRK_START+16*16, OnUpdateControls)
@@ -211,8 +211,8 @@ BEGIN_MESSAGE_MAP(CGridModeEditorDlg, Super)
  ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
-CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
-: Super(CGridModeEditorDlg::IDD, pParent)
+CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
+: Super(CGridModeEditorIgnDlg::IDD, pParent)
 , m_wpiPen(PS_SOLID, 3, RGB(255, 64, 64))
 , mp_startMap(NULL)
 , mp_idleMap(NULL)
@@ -228,22 +228,22 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
  {
   for(j = 0; j < 16; ++j)
   {
-   m_wrk_grid[i][j].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar),
-                                                fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditKill), TYPE_MAP_DA_WORK));
+   m_wrk_grid[i][j].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
+                                                fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_WORK));
    m_wrk_grid[i][j]->SetDecimalPlaces(2);
   }
  }
 
  for(i = 0; i < 16; ++i)
  {
-  m_idl_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditKill), TYPE_MAP_DA_IDLE));
+  m_idl_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
+                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_IDLE));
   m_idl_grid[i]->SetDecimalPlaces(2);
-  m_str_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditKill), TYPE_MAP_DA_START));
+  m_str_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
+                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_START));
   m_str_grid[i]->SetDecimalPlaces(2);
-  m_tmp_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorDlg::OnEditKill), TYPE_MAP_DA_TEMP_CORR));
+  m_tmp_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
+                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_TEMP_CORR));
   m_tmp_grid[i]->SetDecimalPlaces(2);
  }
 
@@ -283,12 +283,12 @@ CGridModeEditorDlg::CGridModeEditorDlg(CWnd* pParent /*=NULL*/)
   m_gradBrush[i].CreateSolidBrush(gradColor[i]);
 }
 
-CGridModeEditorDlg::~CGridModeEditorDlg()
+CGridModeEditorIgnDlg::~CGridModeEditorIgnDlg()
 {
  //empty
 }
 
-void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
+void CGridModeEditorIgnDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
@@ -332,9 +332,9 @@ void CGridModeEditorDlg::DoDataExchange(CDataExchange* pDX)
 }
 
 /////////////////////////////////////////////////////////////////////////////
-// CGridModeEditorDlg message handlers
+// CGridModeEditorIgnDlg message handlers
 
-BOOL CGridModeEditorDlg::OnInitDialog()
+BOOL CGridModeEditorIgnDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
@@ -395,7 +395,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
  }
 
  if (m_OnOpenMapWnd)
-  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_WND);
+  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
 
  SetIcon(::LoadIcon(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH)), TRUE);
 
@@ -404,7 +404,7 @@ BOOL CGridModeEditorDlg::OnInitDialog()
  return TRUE;  // return TRUE unless you set the focus to a control
 }
 
-void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
+void CGridModeEditorIgnDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
  if (!allowed)
@@ -413,7 +413,7 @@ void CGridModeEditorDlg::OnUpdateControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(allowed);
 }
 
-void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
+void CGridModeEditorIgnDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
  bool flag = true;
@@ -429,7 +429,7 @@ void CGridModeEditorDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(allowed && m_en_aa_indication && flag);
 }
 
-int CGridModeEditorDlg::_CalcGradIndex(float value)
+int CGridModeEditorIgnDlg::_CalcGradIndex(float value)
 {
  int index = MathHelpers::Round((value - (wrkMinVal)) / ((wrkMaxVal - wrkMinVal)/16.0f));
  if (index < 0) index = 0;
@@ -437,7 +437,7 @@ int CGridModeEditorDlg::_CalcGradIndex(float value)
  return index;
 }
 
-HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
+HBRUSH CGridModeEditorIgnDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
  HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
  if (nCtlColor == CTLCOLOR_EDIT)
@@ -512,7 +512,7 @@ HBRUSH CGridModeEditorDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
  return hbr;
 }
 
-void CGridModeEditorDlg::_2DLookup(float x, const float* grid, std::vector<int>& pt)
+void CGridModeEditorIgnDlg::_2DLookup(float x, const float* grid, std::vector<int>& pt)
 {
  pt.clear();
  if (x <= grid[0]) { pt.push_back(0); return; }
@@ -531,7 +531,7 @@ void CGridModeEditorDlg::_2DLookup(float x, const float* grid, std::vector<int>&
  }
 }
 
-void CGridModeEditorDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc)
+void CGridModeEditorIgnDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc)
 {
  CRect rc;
  wnd->GetWindowRect(rc);
@@ -540,13 +540,13 @@ void CGridModeEditorDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& d
  dc.Rectangle(rc);
 }
 
-void CGridModeEditorDlg::_ResetUseFlags(void)
+void CGridModeEditorIgnDlg::_ResetUseFlags(void)
 {
  m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use =
  m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
 }
 
-void CGridModeEditorDlg::OnPaint()
+void CGridModeEditorIgnDlg::OnPaint()
 {
  Super::OnPaint();
  CClientDC dc(this);
@@ -586,15 +586,15 @@ void CGridModeEditorDlg::OnPaint()
  }
 }
 
-void CGridModeEditorDlg::OnClose()
+void CGridModeEditorIgnDlg::OnClose()
 {
  m_closing_wnd = true; //set flag indicating that window is being closing
  if (m_OnCloseMapWnd)
-  m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_WND);
+  m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
  Super::OnClose(); //close window
 }
 
-void CGridModeEditorDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp)
+void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp)
 {
  mp_startMap = pStart;
  mp_idleMap = pIdle;
@@ -602,18 +602,18 @@ void CGridModeEditorDlg::BindMaps(float* pStart, float* pIdle, float* pWork, flo
  mp_tempMap = pTemp;
 }
 
-void CGridModeEditorDlg::BindRPMGrid(float* pGrid)
+void CGridModeEditorIgnDlg::BindRPMGrid(float* pGrid)
 {
  mp_rpmGrid = pGrid;
 }
 
-void CGridModeEditorDlg::UpdateView(void)
+void CGridModeEditorIgnDlg::UpdateView(void)
 {
  if (::IsWindow(this->m_hWnd))
   UpdateData(FALSE); //update dialog controls
 }
 
-void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
+void CGridModeEditorIgnDlg::EnableAdvanceAngleIndication(bool i_enable)
 {
  m_en_aa_indication = i_enable;
  bool is_wnd = ::IsWindow(this->m_hWnd);
@@ -629,7 +629,7 @@ void CGridModeEditorDlg::EnableAdvanceAngleIndication(bool i_enable)
   UpdateDialogControls(this, true);
 }
 
-void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
+void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 {
  CString str;
  str.Format(_T("%0.2f"), dv.adv_ang), m_aa_value.SetWindowText(str);
@@ -645,19 +645,19 @@ void CGridModeEditorDlg::SetDynamicValues(const DynVal& dv)
  Invalidate(); //shit
 }
 
-void CGridModeEditorDlg::setIsAllowed(EventResult IsFunction)
+void CGridModeEditorIgnDlg::setIsAllowed(EventResult IsFunction)
 {m_IsAllowed = IsFunction;}
 
-void CGridModeEditorDlg::setOnMapChanged(EventWithCode OnFunction)
+void CGridModeEditorIgnDlg::setOnMapChanged(EventWithCode OnFunction)
 {m_OnMapChanged = OnFunction;}
 
-void CGridModeEditorDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
+void CGridModeEditorIgnDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
 { m_OnOpenMapWnd = OnFunction; }
 
-void CGridModeEditorDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
+void CGridModeEditorIgnDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
 { m_OnCloseMapWnd = OnFunction; }
 
-void CGridModeEditorDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
+void CGridModeEditorIgnDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
 {
  if (NULL==pSender)
   return;
@@ -703,7 +703,7 @@ void CGridModeEditorDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
  }
 }
 
-void CGridModeEditorDlg::OnEditKill(CEditExCustomKeys* pSender)
+void CGridModeEditorIgnDlg::OnEditKill(CEditExCustomKeys* pSender)
 {
  if (m_closing_wnd)
   return; //do not perform validation and update of values if window is being closed
@@ -720,7 +720,7 @@ void CGridModeEditorDlg::OnEditKill(CEditExCustomKeys* pSender)
  }
 }
 
-bool CGridModeEditorDlg::_ValidateItem(CEditExCustomKeys* pItem)
+bool CGridModeEditorIgnDlg::_ValidateItem(CEditExCustomKeys* pItem)
 {
  float value = 0;
  bool convres = pItem->GetValue(value); 

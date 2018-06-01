@@ -199,12 +199,15 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_EHPauseMapWnd_X = rc.left;
    ws.m_EHPauseMapWnd_Y = rc.top;
    break;
-
-
-  case TYPE_MAP_GME_WND: //pseudo map
-   ws.m_GridMapWnd_X = rc.left;
-   ws.m_GridMapWnd_Y = rc.top;
+  case TYPE_MAP_GME_IGN_WND: //pseudo map
+   ws.m_GridMapIgnWnd_X = rc.left;
+   ws.m_GridMapIgnWnd_Y = rc.top;
    break;
+  case TYPE_MAP_GME_INJ_WND: //pseudo map
+   ws.m_GridMapInjWnd_X = rc.left;
+   ws.m_GridMapInjWnd_Y = rc.top;
+   break;
+
  };
 
  mp_settings->SetWndSettings(ws);
@@ -333,10 +336,13 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_EH_PAUSE:
    X = ws.m_EHPauseMapWnd_X, Y = ws.m_EHPauseMapWnd_Y;
    break;
-
-  case TYPE_MAP_GME_WND:
-   X = ws.m_GridMapWnd_X, Y = ws.m_GridMapWnd_Y;
+  case TYPE_MAP_GME_IGN_WND:
+   X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;
    break;
+  case TYPE_MAP_GME_INJ_WND:
+   X = ws.m_GridMapInjWnd_X, Y = ws.m_GridMapInjWnd_Y;
+   break;
+
   default:
    return; //undefined case...
  };

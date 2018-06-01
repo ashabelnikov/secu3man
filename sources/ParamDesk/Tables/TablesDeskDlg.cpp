@@ -233,7 +233,11 @@ void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
    ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
  }
 
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND);
  if (hwnd)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
 }
@@ -265,7 +269,10 @@ void CTablesDeskDlg::MakeChartsChildren(bool children)
   _MakeWindowChild(hwnd, children);
  }
 
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND); //pseudo map
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND); //pseudo map
+ _MakeWindowChild(hwnd, children);
+
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND); //pseudo map
  _MakeWindowChild(hwnd, children);
 }
 
@@ -303,7 +310,10 @@ void CTablesDeskDlg::CloseAllCharts(void)
   if (hwnd) ::DestroyWindow(hwnd);
  }
 
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_WND);
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND);
+ if (hwnd) ::DestroyWindow(hwnd);
+
+ hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND);
  if (hwnd) ::DestroyWindow(hwnd);
 }
 
@@ -440,10 +450,11 @@ float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)
 
 void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float adv_ang, float knock_retard, bool knkret_use,
  float strt_aalt, bool strt_use, float idle_aalt, bool idle_use, float work_aalt, bool work_use, float temp_aalt, bool temp_use,
- float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use)
+ float airt_aalt, bool airt_use, float idlreg_aac, bool idlreg_use, float octan_aac, bool octan_use, float tps, float iac_pos,
+ int tpsdot, float voltage, float add_i1, float tmp2)
 {
  if (!mp_ButtonsPanel.get()) return;
- CGridModeEditorDlg::DynVal dv;
+ TablDesk::DynVal dv;
  dv.rpm = rpm;
  dv.temp = temp;
  dv.air_flow = air_flow;
@@ -464,6 +475,12 @@ void CTablesDeskDlg::SetDynamicValues(int rpm, float temp, int air_flow, float a
  dv.idlreg_use = idlreg_use;
  dv.octan_aac = octan_aac;
  dv.octan_use = octan_use;
+ dv.tps = tps;
+ dv.iac_pos = iac_pos;
+ dv.tpsdot = tpsdot;
+ dv.voltage = voltage;
+ dv.add_i1 = add_i1;
+ dv.tmp2 = tmp2;
  mp_ButtonsPanel->SetDynamicValues(dv);
 }
 

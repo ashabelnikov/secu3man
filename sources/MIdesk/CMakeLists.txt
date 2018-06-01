@@ -35,7 +35,6 @@ set(HEADERS
   MIDwellAngle.h
   MIEGOCorr.h
   MIGasValve.h
-  MIHelpers.h
   MIIAT.h
   MIInjPW.h
   MIPressure.h

@@ -19,7 +19,7 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file GridModeEditorDlg.h
+/** \file GridModeEditorIgnDlg.h
  * \author Alexey A. Shabelnikov
  */
 
@@ -29,10 +29,11 @@
 #include <vector>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
+#include "DynamicValues.h"
 
 class CEditExCustomKeys;
 
-class CGridModeEditorDlg : public CDialog
+class CGridModeEditorIgnDlg : public CDialog
 {
   typedef CDialog Super;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
@@ -40,8 +41,8 @@ class CGridModeEditorDlg : public CDialog
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
 
  public:
-  CGridModeEditorDlg(CWnd* pParent = NULL);   // standard constructor
- ~CGridModeEditorDlg();
+  CGridModeEditorIgnDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CGridModeEditorIgnDlg();
   static const UINT IDD;
 
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
@@ -50,32 +51,7 @@ class CGridModeEditorDlg : public CDialog
 
   void EnableAdvanceAngleIndication(bool i_enable);
 
-  struct DynVal
-  {
-   int rpm;
-   float temp;
-   int air_flow;
-
-   float adv_ang;
-   float knock_retard;
-   bool knkret_use;
-   float strt_aalt;
-   bool strt_use;
-   float idle_aalt;
-   bool idle_use;
-   float work_aalt;
-   bool work_use;
-   float temp_aalt;
-   bool temp_use;
-   float airt_aalt;
-   bool airt_use;
-   float idlreg_aac;
-   bool idlreg_use;
-   float octan_aac;
-   bool octan_use;
-  };
-
-  void SetDynamicValues(const DynVal& dv);
+  void SetDynamicValues(const TablDesk::DynVal& dv);
 
  public:
   void setIsAllowed(EventResult IsFunction);
@@ -137,6 +113,6 @@ class CGridModeEditorDlg : public CDialog
   CFont m_font;
   CFont m_fieldFont;
   CPen m_wpiPen;
-  DynVal m_curDV;
+  TablDesk::DynVal m_curDV;
   CBrush m_gradBrush[16];
 };

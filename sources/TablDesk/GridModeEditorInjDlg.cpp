@@ -1,0 +1,272 @@
+/* SECU-3  - An open source, free engine control unit
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+              http://secu-3.org
+              email: shabelnikov@secu-3.org
+*/
+
+/** \file GridModeEditorInjDlg.cpp
+ * \author Alexey A. Shabelnikov
+ */
+
+#include "stdafx.h"
+#include "resource.h"
+#include "GridModeEditorInjDlg.h"
+#include "common/Dll.h"
+#include "MapIds.h"
+#include "GMEInjVEDlg.h"
+#include "GMEInjAFRDlg.h"
+#include "GMEInjITDlg.h"
+#include "GMEInjIRegDlg.h"
+#include "GMEInjEnrDlg.h"
+#include "GMEInjOtherDlg.h"
+#include "io-core/SECU3IO.h"
+
+const UINT CGridModeEditorInjDlg::IDD = IDD_GRID_MODE_EDITOR_INJ;
+
+float work_map_load_slots[16]  = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
+
+/////////////////////////////////////////////////////////////////////////////
+// CGridModeEditorInjDlg dialog
+
+BEGIN_MESSAGE_MAP(CGridModeEditorInjDlg, Super)
+ ON_WM_CLOSE()
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_TAB_CTRL, OnUpdateControls)
+END_MESSAGE_MAP()
+
+CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
+: Super(CGridModeEditorInjDlg::IDD, pParent)
+{
+ m_pVEPageDlg.reset(new CGMEInjVEDlg());
+ m_pVEPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pVEPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeVE));
+
+ m_pAFRPageDlg.reset(new CGMEInjAFRDlg());
+ m_pAFRPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pAFRPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeAFR));
+
+ m_pITPageDlg.reset(new CGMEInjITDlg());
+ m_pITPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pITPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIT));
+
+ m_pIRegPageDlg.reset(new CGMEInjIRegDlg());
+ m_pIRegPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
+ m_pIRegPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIReg));
+
+ m_pEnrPageDlg.reset(new CGMEInjEnrDlg());
+ m_pEnrPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
+ m_pEnrPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeEnr));
+
+ m_pOtherPageDlg.reset(new CGMEInjOtherDlg());
+ m_pOtherPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
+ m_pOtherPageDlg->BindDeadGrid(const_cast<float*>(SECU3IO::dwellcntrl_map_slots));
+ m_pOtherPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeOther));
+}
+
+CGridModeEditorInjDlg::~CGridModeEditorInjDlg()
+{
+ //empty
+}
+
+void CGridModeEditorInjDlg::DoDataExchange(CDataExchange* pDX)
+{
+ Super::DoDataExchange(pDX);
+
+ DDX_Control(pDX, IDC_GME_INJ_TAB_CTRL, m_tab_control);
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CGridModeEditorInjDlg message handlers
+
+BOOL CGridModeEditorInjDlg::OnInitDialog()
+{
+ Super::OnInitDialog();
+
+ m_tab_control.SetResourceModule(DLL::GetModuleHandle());
+ m_tab_control.Init();
+
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_VE_TAB), m_pVEPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_AFR_TAB), m_pAFRPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_IT_TAB), m_pITPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_IREG_TAB), m_pIRegPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_ENR_TAB), m_pEnrPageDlg.get(), 0);
+ m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_OTHER_TAB), m_pOtherPageDlg.get(), 0);
+
+ if (m_OnOpenMapWnd)
+  m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
+
+ SetIcon(::LoadIcon(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH)), TRUE);
+
+ Super::UpdateDialogControls(this, true);
+ UpdateData(FALSE);
+ return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CGridModeEditorInjDlg::UpdateDialogControls(void)
+{
+ Super::UpdateDialogControls(this, true);
+
+ bool allowed = m_IsAllowed ? m_IsAllowed() : false;
+ m_tab_control.EnableItem(-1, allowed);
+
+ if (m_pVEPageDlg->GetSafeHwnd())
+ {
+  m_pVEPageDlg->EnableWindow(allowed);
+  m_pVEPageDlg->UpdateDialogControls(this, true);
+ }
+
+ if (m_pAFRPageDlg->GetSafeHwnd())
+ {
+  m_pAFRPageDlg->EnableWindow(allowed);
+  m_pAFRPageDlg->UpdateDialogControls(this, true);
+ }
+
+ if (m_pITPageDlg->GetSafeHwnd())
+ {
+  m_pITPageDlg->EnableWindow(allowed);
+  m_pITPageDlg->UpdateDialogControls(this, true);
+ }
+
+ if (m_pIRegPageDlg->GetSafeHwnd())
+ {
+  m_pIRegPageDlg->EnableWindow(allowed);
+  m_pIRegPageDlg->UpdateDialogControls(this, true);
+ }
+
+ if (m_pEnrPageDlg->GetSafeHwnd())
+ {
+  m_pEnrPageDlg->EnableWindow(allowed);
+  m_pEnrPageDlg->UpdateDialogControls(this, true);
+ }
+
+ if (m_pOtherPageDlg->GetSafeHwnd())
+ {
+  m_pOtherPageDlg->EnableWindow(allowed);
+  m_pOtherPageDlg->UpdateDialogControls(this, true);
+ }
+}
+
+void CGridModeEditorInjDlg::OnUpdateControls(CCmdUI* pCmdUI)
+{
+ bool allowed = m_IsAllowed ? m_IsAllowed() : false;
+ pCmdUI->Enable(allowed);
+}
+
+void CGridModeEditorInjDlg::OnClose()
+{
+ if (m_OnCloseMapWnd)
+  m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
+
+ Super::OnClose(); //close window
+}
+
+void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc)
+{
+ m_pVEPageDlg->BindMaps(pVE);
+ m_pAFRPageDlg->BindMaps(pAFR);
+ m_pITPageDlg->BindMaps(pIT);
+ m_pIRegPageDlg->BindMaps(pIdlc, pIdlr, pITRPM, pRigid, pIACC, pIACCW);
+ m_pEnrPageDlg->BindMaps(pAftstr, pWrmp, pAETPS, pAERPM);
+ m_pOtherPageDlg->BindMaps(pCrnk, pDead, pEGOCrv, pIATCLT, pTpsswt, pAtsc, pGtsc, pGpsc);
+}
+
+void CGridModeEditorInjDlg::BindRPMGrid(float* pGrid)
+{
+ m_pVEPageDlg->BindRPMGrid(pGrid);
+ m_pAFRPageDlg->BindRPMGrid(pGrid);
+ m_pITPageDlg->BindRPMGrid(pGrid);
+ m_pOtherPageDlg->BindRPMGrid(pGrid);
+}
+
+void CGridModeEditorInjDlg::UpdateView(void)
+{
+ if (::IsWindow(this->m_hWnd))
+ {
+  if (::IsWindow(m_pVEPageDlg->m_hWnd))
+   m_pVEPageDlg->UpdateView(); 
+  if (::IsWindow(m_pAFRPageDlg->m_hWnd))
+   m_pAFRPageDlg->UpdateView(); 
+  if (::IsWindow(m_pITPageDlg->m_hWnd))
+   m_pITPageDlg->UpdateView(); 
+  if (::IsWindow(m_pIRegPageDlg->m_hWnd))
+   m_pIRegPageDlg->UpdateView(); 
+  if (::IsWindow(m_pEnrPageDlg->m_hWnd))
+   m_pEnrPageDlg->UpdateView(); 
+  if (::IsWindow(m_pOtherPageDlg->m_hWnd))
+   m_pOtherPageDlg->UpdateView(); 
+ } 
+}
+
+void CGridModeEditorInjDlg::OnChangeVE(void)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(TYPE_MAP_INJ_VE);
+}
+
+void CGridModeEditorInjDlg::OnChangeAFR(void)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(TYPE_MAP_INJ_AFR);
+}
+
+void CGridModeEditorInjDlg::OnChangeIT(void)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(TYPE_MAP_INJ_IT);
+}
+
+void CGridModeEditorInjDlg::OnChangeIReg(int mapId)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapId);
+}
+
+void CGridModeEditorInjDlg::OnChangeEnr(int mapId)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapId);
+}
+
+void CGridModeEditorInjDlg::OnChangeOther(int mapId)
+{
+ if (m_OnMapChanged)
+  m_OnMapChanged(mapId);
+}
+
+void CGridModeEditorInjDlg::setIsAllowed(EventResult IsFunction)
+{m_IsAllowed = IsFunction;}
+
+void CGridModeEditorInjDlg::setOnMapChanged(EventWithCode OnFunction)
+{
+ m_OnMapChanged = OnFunction;
+}
+
+void CGridModeEditorInjDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
+{ m_OnOpenMapWnd = OnFunction; }
+
+void CGridModeEditorInjDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
+{ m_OnCloseMapWnd = OnFunction; }
+
+void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
+{
+ m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
+ m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
+ m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
+ m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos);
+ m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm);
+ m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2);
+}

@@ -38,6 +38,7 @@ set(HEADERS
   ITabControllerEvent.h
   Label.h
   LEDIndicator.h
+  MapEditorCtrl.h
   OScopeCtrl.h
   ProgressCtrlEx.h
   SpinButtonctrlEx.h
@@ -67,6 +68,7 @@ set(SOURCES
   ITabControllerEvent.cpp
   Label.cpp
   LEDIndicator.cpp
+  MapEditorCtrl.cpp
   OScopeCtrl.cpp
   ProgressCtrlEx.cpp
   SpinButtonctrlEx.cpp

@@ -87,8 +87,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_CTSCurveMapWnd_Y(_T("CTSCurveMapWnd_Y"))
 , m_Name_ChokeOpMapWnd_X(_T("ChokeOpMapWnd_X"))
 , m_Name_ChokeOpMapWnd_Y(_T("ChokeOpMapWnd_Y"))
-, m_Name_GridMapWnd_X(_T("GridMapWnd_X"))
-, m_Name_GridMapWnd_Y(_T("GridMapWnd_Y"))
+, m_Name_GridMapIgnWnd_X(_T("GridMapIgnWnd_X"))
+, m_Name_GridMapIgnWnd_Y(_T("GridMapIgnWnd_Y"))
+, m_Name_GridMapInjWnd_X(_T("GridMapInjWnd_X"))
+, m_Name_GridMapInjWnd_Y(_T("GridMapInjWnd_Y"))
 , m_Name_VEMapWnd_X(_T("VEMapWnd_X"))
 , m_Name_VEMapWnd_Y(_T("VEMapWnd_Y"))
 , m_Name_AFRMapWnd_X(_T("AFRMapWnd_X"))
@@ -674,8 +676,11 @@ bool CAppSettingsModel::ReadSettings(void)
  _GETWNDPOSITION(m_Name_WndSettings_Section, ChokeOpMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, ChokeOpMapWnd_Y, std::numeric_limits<int>::max());
 
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapWnd_Y, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapIgnWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapIgnWnd_Y, std::numeric_limits<int>::max());
+
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapInjWnd_X, std::numeric_limits<int>::max());
+ _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapInjWnd_Y, std::numeric_limits<int>::max());
 
  _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_X, std::numeric_limits<int>::max());
  _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_Y, std::numeric_limits<int>::max());
@@ -997,11 +1002,17 @@ bool CAppSettingsModel::WriteSettings(void)
  write_str.Format(_T("%d"),m_optChokeOpMapWnd_Y);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ChokeOpMapWnd_Y,write_str,IniFileName);
 
- write_str.Format(_T("%d"),m_optGridMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapWnd_X,write_str,IniFileName);
+ write_str.Format(_T("%d"),m_optGridMapIgnWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapIgnWnd_X,write_str,IniFileName);
 
- write_str.Format(_T("%d"),m_optGridMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapWnd_Y,write_str,IniFileName);
+ write_str.Format(_T("%d"),m_optGridMapIgnWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapIgnWnd_Y,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGridMapInjWnd_X);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapInjWnd_X,write_str,IniFileName);
+
+ write_str.Format(_T("%d"),m_optGridMapInjWnd_Y);
+ WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapInjWnd_Y,write_str,IniFileName);
 
  write_str.Format(_T("%d"),m_optVEMapWnd_X);
  WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_VEMapWnd_X,write_str,IniFileName);
@@ -1259,8 +1270,10 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optCTSCurveMapWnd_Y = i_wndSettings.m_CTSCurveMapWnd_Y;
  m_optChokeOpMapWnd_X = i_wndSettings.m_ChokeOpMapWnd_X;
  m_optChokeOpMapWnd_Y = i_wndSettings.m_ChokeOpMapWnd_Y;
- m_optGridMapWnd_X = i_wndSettings.m_GridMapWnd_X;
- m_optGridMapWnd_Y = i_wndSettings.m_GridMapWnd_Y;
+ m_optGridMapIgnWnd_X = i_wndSettings.m_GridMapIgnWnd_X;
+ m_optGridMapIgnWnd_Y = i_wndSettings.m_GridMapIgnWnd_Y;
+ m_optGridMapInjWnd_X = i_wndSettings.m_GridMapInjWnd_X;
+ m_optGridMapInjWnd_Y = i_wndSettings.m_GridMapInjWnd_Y;
  m_optVEMapWnd_X = i_wndSettings.m_VEMapWnd_X;
  m_optVEMapWnd_Y = i_wndSettings.m_VEMapWnd_Y;
  m_optAFRMapWnd_X = i_wndSettings.m_AFRMapWnd_X;
@@ -1343,8 +1356,10 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CTSCurveMapWnd_Y = m_optCTSCurveMapWnd_Y;
  o_wndSettings.m_ChokeOpMapWnd_X = m_optChokeOpMapWnd_X;
  o_wndSettings.m_ChokeOpMapWnd_Y = m_optChokeOpMapWnd_Y;
- o_wndSettings.m_GridMapWnd_X = m_optGridMapWnd_X;
- o_wndSettings.m_GridMapWnd_Y = m_optGridMapWnd_Y;
+ o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd_X;
+ o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd_Y;
+ o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd_X;
+ o_wndSettings.m_GridMapInjWnd_Y = m_optGridMapInjWnd_Y;
  o_wndSettings.m_VEMapWnd_X = m_optVEMapWnd_X;
  o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd_Y;
  o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd_X;

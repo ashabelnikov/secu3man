@@ -20,7 +20,7 @@ SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_hel
   ITabControllerEvent.cpp Label.cpp LEDIndicator.cpp TextPane.cpp StatusBarEx.cpp OScopeCtrl.cpp \
   ProgressCtrlEx.cpp SpinButtonctrlEx.cpp TabController.cpp TabDialog.cpp ToolTipCtrlEx.cpp \
   UpdatableDialog.cpp WindowSubClasser.cpp XBrowseForFolder.cpp uicore.cpp WndScroller.cpp \
-  Chart2D.cpp
+  Chart2D.cpp MapEditorCtrl.cpp
 
 # DLL building
 all: uicore

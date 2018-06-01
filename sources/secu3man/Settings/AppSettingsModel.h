@@ -115,8 +115,10 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_CTSCurveMapWnd_Y;
   const CString m_Name_ChokeOpMapWnd_X;
   const CString m_Name_ChokeOpMapWnd_Y;
-  const CString m_Name_GridMapWnd_X;
-  const CString m_Name_GridMapWnd_Y;
+  const CString m_Name_GridMapIgnWnd_X;
+  const CString m_Name_GridMapIgnWnd_Y;
+  const CString m_Name_GridMapInjWnd_X;
+  const CString m_Name_GridMapInjWnd_Y;
   const CString m_Name_VEMapWnd_X;
   const CString m_Name_VEMapWnd_Y;
   const CString m_Name_AFRMapWnd_X;
@@ -280,8 +282,10 @@ class CAppSettingsModel : public ISettingsData
   int m_optCTSCurveMapWnd_Y;
   int m_optChokeOpMapWnd_X;
   int m_optChokeOpMapWnd_Y;
-  int m_optGridMapWnd_X;
-  int m_optGridMapWnd_Y;
+  int m_optGridMapIgnWnd_X;
+  int m_optGridMapIgnWnd_Y;
+  int m_optGridMapInjWnd_X;
+  int m_optGridMapInjWnd_Y;
   int m_optVEMapWnd_X;
   int m_optVEMapWnd_Y;
   int m_optAFRMapWnd_X;
