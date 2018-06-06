@@ -50,6 +50,7 @@ set(HEADERS
   Settings/AppSettingsManager.h
   Settings/AppSettingsModel.h
   Settings/IAppSettingsDlg.h
+  Settings/IniFileIO.h
   Settings/ISettingsData.h
   TabControllers/CEErrorIdStr.h
   TabControllers/ErrorMsg.h

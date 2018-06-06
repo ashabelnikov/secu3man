@@ -78,7 +78,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int GetNumPulsesPer1Km(void) const;
 
   //logs
-  virtual void SetLogFilesFolder(const CString& i_folder);
+  virtual void SetLogFilesFolder(const _TSTRING& i_folder);
   virtual CString GetLogFilesFolder(void) const;
   virtual void SetUseAppFolder(bool i_use);
   virtual bool GetUseAppFolder(void) const;

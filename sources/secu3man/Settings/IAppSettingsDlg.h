@@ -44,7 +44,7 @@ class IAppSettingsDlg
   virtual void SetPortName(_TSTRING i_PortName) = 0;
   virtual void SetBaudRateApplication(DWORD i_app_baud) = 0;
   virtual void SetBaudRateBootloader(DWORD i_bl_baud) = 0;
-  virtual void SetLogFilesFolder(const CString& i_folder) = 0;
+  virtual void SetLogFilesFolder(const _TSTRING& i_folder) = 0;
   virtual void SetUseAppFolder(bool i_use) = 0;
   virtual void SetAlwaysWriteLog(bool i_always) = 0;
   virtual bool GetAlwaysWriteLog(void) const = 0;

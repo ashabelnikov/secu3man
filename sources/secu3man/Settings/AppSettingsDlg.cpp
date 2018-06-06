@@ -345,9 +345,9 @@ DWORD CAppSettingsDlg::GetBaudRateBootloader(void)
  return _ttoi(str);
 }
 
-void CAppSettingsDlg::SetLogFilesFolder(const CString& i_folder)
+void CAppSettingsDlg::SetLogFilesFolder(const _TSTRING& i_folder)
 {
- m_log_files_folder = i_folder;
+ m_log_files_folder = i_folder.c_str();
 }
 
 CString CAppSettingsDlg::GetLogFilesFolder(void) const

@@ -50,29 +50,29 @@ void CAppSettingsController::OnOk(void)
 {
  //save data from view into the model
  ASSERT((m_pModel!=NULL)&&(m_pView!=NULL));
- m_pModel->m_optPortName = m_pView->GetPortName();
- m_pModel->m_optBaudRateApplication = m_pView->GetBaudRateApplication();
- m_pModel->m_optBaudRateBootloader = m_pView->GetBaudRateBootloader();
- m_pModel->m_optLogFilesFolder = m_pView->GetLogFilesFolder();
- m_pModel->m_optUseAppFolder = m_pView->GetUseAppFolder();
- m_pModel->m_optAlwaysWriteLog = m_pView->GetAlwaysWriteLog();
- m_pModel->m_optMIDeskUpdatePeriod = m_pView->GetMIDeskUpdatePeriod();
- m_pModel->m_optUseDVFeatures = m_pView->GetUseDVFeatures();
- m_pModel->m_optDVDeskUpdatePeriod = m_pView->GetDVDeskUpdatePeriod();
- m_pModel->m_optShowToolTips = m_pView->GetShowToolTips();
- m_pModel->m_optShowExFixtures = m_pView->GetShowExFixtures();
- m_pModel->m_optHexDataMode = m_pView->GetHexDataMode();
+ m_pModel->m_optPortName.value = m_pView->GetPortName();
+ m_pModel->m_optBaudRateApplication.value = m_pView->GetBaudRateApplication();
+ m_pModel->m_optBaudRateBootloader.value = m_pView->GetBaudRateBootloader();
+ m_pModel->m_optLogFilesFolder.value = m_pView->GetLogFilesFolder();
+ m_pModel->m_optUseAppFolder.value = m_pView->GetUseAppFolder();
+ m_pModel->m_optAlwaysWriteLog.value = m_pView->GetAlwaysWriteLog();
+ m_pModel->m_optMIDeskUpdatePeriod.value = m_pView->GetMIDeskUpdatePeriod();
+ m_pModel->m_optUseDVFeatures.value = m_pView->GetUseDVFeatures();
+ m_pModel->m_optDVDeskUpdatePeriod.value = m_pView->GetDVDeskUpdatePeriod();
+ m_pModel->m_optShowToolTips.value = m_pView->GetShowToolTips();
+ m_pModel->m_optShowExFixtures.value = m_pView->GetShowExFixtures();
+ m_pModel->m_optHexDataMode.value = m_pView->GetHexDataMode();
 
  size_t index = m_pView->GetCSVSepSymbol();
- m_pModel->m_optCSVSepSymbol = m_pModel->m_AllowaleCSVSepSymbols[index].second;
+ m_pModel->m_optCSVSepSymbol.value = m_pModel->m_AllowaleCSVSepSymbols[index].second;
 
- m_pModel->m_optInterLang = (EInterLang)m_pView->GetInterfaceLanguage();
- m_pModel->m_optECUPlatformType = (EECUPlatform)m_pView->GetECUPlatformType();
+ m_pModel->m_optInterfaceLang.value = m_pView->GetInterfaceLanguage();
+ m_pModel->m_optECUPlatformType.value = m_pView->GetECUPlatformType();
 
- m_pModel->m_optTachometerMax = m_pView->GetTachometerMax();
- m_pModel->m_optPressureMax = m_pView->GetPressureMax();
+ m_pModel->m_optTachometerMax.value = m_pView->GetTachometerMax();
+ m_pModel->m_optPressureMax.value = m_pView->GetPressureMax();
 
- m_pModel->m_optPulsesPer1Km = m_pView->GetNumPulsesPer1Km();
+ m_pModel->m_optPulsesPer1Km.value = m_pView->GetNumPulsesPer1Km();
 }
 
 void CAppSettingsController::OnCancel(void)
@@ -90,31 +90,31 @@ void CAppSettingsController::OnActivate(void)
  m_pView->FillCtrlsWithAllowableInterfaceLanguages(m_pModel->m_AllowableLanguages);
  m_pView->FillCtrlsWithAllowableECUPlatformTypes(m_pModel->m_AllowablePlatforms);
 
- m_pView->SetPortName(m_pModel->m_optPortName);
- m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication);
- m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader);
- m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder);
- m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder);
- m_pView->SetAlwaysWriteLog(m_pModel->m_optAlwaysWriteLog);
- m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod);
- m_pView->SetUseDVFeatures(m_pModel->m_optUseDVFeatures);
- m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod);
- m_pView->SetShowToolTips(m_pModel->m_optShowToolTips);
- m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures);
- m_pView->SetHexDataMode(m_pModel->m_optHexDataMode);
+ m_pView->SetPortName(m_pModel->m_optPortName.value);
+ m_pView->SetBaudRateApplication(m_pModel->m_optBaudRateApplication.value);
+ m_pView->SetBaudRateBootloader(m_pModel->m_optBaudRateBootloader.value);
+ m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder.value);
+ m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder.value);
+ m_pView->SetAlwaysWriteLog(m_pModel->m_optAlwaysWriteLog.value);
+ m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod.value);
+ m_pView->SetUseDVFeatures(m_pModel->m_optUseDVFeatures.value);
+ m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod.value);
+ m_pView->SetShowToolTips(m_pModel->m_optShowToolTips.value);
+ m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures.value);
+ m_pView->SetHexDataMode(m_pModel->m_optHexDataMode.value);
 
  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)
-  if (m_pModel->m_optCSVSepSymbol == m_pModel->m_AllowaleCSVSepSymbols[i].second)
+  if (m_pModel->m_optCSVSepSymbol.value == m_pModel->m_AllowaleCSVSepSymbols[i].second)
    m_pView->SetCSVSepSymbol(i);
 
- m_pView->SetInterfaceLanguage(m_pModel->m_optInterLang);
- m_pView->SetECUPlatformType(m_pModel->m_optECUPlatformType);
+ m_pView->SetInterfaceLanguage(m_pModel->m_optInterfaceLang.value);
+ m_pView->SetECUPlatformType(m_pModel->m_optECUPlatformType.value);
 
- m_pView->SetTachometerMax(m_pModel->m_optTachometerMax);
- m_pView->SetPressureMax(m_pModel->m_optPressureMax);
+ m_pView->SetTachometerMax(m_pModel->m_optTachometerMax.value);
+ m_pView->SetPressureMax(m_pModel->m_optPressureMax.value);
 
- m_pView->SetNumPulsesPer1Km(m_pModel->m_optPulsesPer1Km);
+ m_pView->SetNumPulsesPer1Km(m_pModel->m_optPulsesPer1Km.value);
 }
 
 int CAppSettingsController::ShowDialog(void)

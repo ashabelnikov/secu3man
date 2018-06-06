@@ -133,7 +133,7 @@ class ISettingsData
   virtual const _TSTRING& GetPortName(void) const = 0;
   virtual DWORD GetBaudRateApplication(void) const = 0;
   virtual DWORD GetBaudRateBootloader(void) const = 0;
-  virtual const CString& GetLogFilesFolder(void) const = 0;
+  virtual const _TSTRING& GetLogFilesFolder(void) const = 0;
   virtual bool  GetUseAppFolder(void) const = 0;
   virtual bool  GetAlwaysWriteLog(void) const = 0;
   virtual char  GetCSVSepSymbol(void) const = 0;

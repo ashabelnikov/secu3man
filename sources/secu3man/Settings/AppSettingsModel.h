@@ -29,6 +29,7 @@
 #include <vector>
 #include "common/unicodesupport.h"
 #include "ISettingsData.h"
+#include "IniFileIO.h"
 
 class CAppSettingsController;
 
@@ -50,13 +51,11 @@ class CAppSettingsModel : public ISettingsData
   //<<UIString, INIString>, ID>
   std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowablePlatforms;
 
+  //<<UIString, INIString>, ID>
+  std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowableSpeedUnits;
+
   CAppSettingsModel();
   virtual ~CAppSettingsModel();
-
-  ////////////////////////////////////////////////////
-  //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
-  //запущена программа.
-  CString GetINIFileFullName(void) const;
 
   //read settings from INI-file
   bool ReadSettings(void);
@@ -64,134 +63,11 @@ class CAppSettingsModel : public ISettingsData
   //write settings into INI-file
   bool WriteSettings(void);
 
-  //Section and fields names
-  const CString m_Name_Options_Section;
-  const CString m_Name_PortName;
-  const CString m_Name_BaudRateApplication;
-  const CString m_Name_BaudRateBootloader;
-  const CString m_Name_LogFilesFolder;
-  const CString m_Name_UseAppFolder;
-  const CString m_Name_AlwaysWriteLog;
-  const CString m_Name_CSVSepSymbol;
-  const CString m_Name_MIDeskUpdatePeriod;
-  const CString m_Name_InterfaceLang;
-  const CString m_Name_ECUPlatformType;
-  const CString m_Name_UseDVFeatures;
-  const CString m_Name_DVDeskUpdatePeriod;
-  const CString m_Name_ShowToolTips;
-  const CString m_Name_ShowExFixtures;
-  const CString m_Name_HexDataMode;
-  const CString m_Name_COMPortBother;
-  const CString m_Name_UseHotKeys;
-  const CString m_Name_ShowWelcome;
-  const CString m_Name_RPMAverage;
-  const CString m_Name_VoltAverage;
-  const CString m_Name_MAPAverage;
-  const CString m_Name_AI1Average;
-  const CString m_Name_TPSAverage;
-  const CString m_Name_AllowVisualTheme;
-  const CString m_Name_AutoDiagEnter;
-  const CString m_Name_SaveWarning;
-  const CString m_Name_AutoCERead;
-  const CString m_Name_ChildCharts;
-
-  //позиции окон таблиц УОЗ
-  const CString m_Name_WndSettings_Section;
-  const CString m_Name_StrtMapWnd_X;
-  const CString m_Name_StrtMapWnd_Y;
-  const CString m_Name_IdleMapWnd_X;
-  const CString m_Name_IdleMapWnd_Y;
-  const CString m_Name_WorkMapWnd_X;
-  const CString m_Name_WorkMapWnd_Y;
-  const CString m_Name_TempMapWnd_X;
-  const CString m_Name_TempMapWnd_Y;
-  const CString m_Name_AttenMapWnd_X;
-  const CString m_Name_AttenMapWnd_Y;
-  const CString m_Name_MainFrmWnd_X;
-  const CString m_Name_MainFrmWnd_Y;
-  const CString m_Name_DwellCntrlMapWnd_X;
-  const CString m_Name_DwellCntrlMapWnd_Y;
-  const CString m_Name_CTSCurveMapWnd_X;
-  const CString m_Name_CTSCurveMapWnd_Y;
-  const CString m_Name_ChokeOpMapWnd_X;
-  const CString m_Name_ChokeOpMapWnd_Y;
-  const CString m_Name_GridMapIgnWnd_X;
-  const CString m_Name_GridMapIgnWnd_Y;
-  const CString m_Name_GridMapInjWnd_X;
-  const CString m_Name_GridMapInjWnd_Y;
-  const CString m_Name_VEMapWnd_X;
-  const CString m_Name_VEMapWnd_Y;
-  const CString m_Name_AFRMapWnd_X;
-  const CString m_Name_AFRMapWnd_Y;
-  const CString m_Name_CrnkMapWnd_X;
-  const CString m_Name_CrnkMapWnd_Y;
-  const CString m_Name_WrmpMapWnd_X;
-  const CString m_Name_WrmpMapWnd_Y;
-  const CString m_Name_DeadMapWnd_X;
-  const CString m_Name_DeadMapWnd_Y;
-  const CString m_Name_IdlrMapWnd_X;
-  const CString m_Name_IdlrMapWnd_Y;
-  const CString m_Name_IdlcMapWnd_X;
-  const CString m_Name_IdlcMapWnd_Y;
-  const CString m_Name_ATSCurvMapWnd_X;
-  const CString m_Name_ATSCurvMapWnd_Y;
-  const CString m_Name_ATSCorrMapWnd_X;
-  const CString m_Name_ATSCorrMapWnd_Y;
-  const CString m_Name_AETPSMapWnd_X;
-  const CString m_Name_AETPSMapWnd_Y;
-  const CString m_Name_AERPMMapWnd_X;
-  const CString m_Name_AERPMMapWnd_Y;
-  const CString m_Name_AftstrMapWnd_X;
-  const CString m_Name_AftstrMapWnd_Y;
-  const CString m_Name_GasdoseMapWnd_X;
-  const CString m_Name_GasdoseMapWnd_Y;
-  const CString m_Name_ITMapWnd_X;
-  const CString m_Name_ITMapWnd_Y;
-  const CString m_Name_ITRPMMapWnd_X;
-  const CString m_Name_ITRPMMapWnd_Y;
-  const CString m_Name_RigidMapWnd_X;
-  const CString m_Name_RigidMapWnd_Y;
-  const CString m_Name_EGOCrvMapWnd_X;
-  const CString m_Name_EGOCrvMapWnd_Y;
-  const CString m_Name_IACCMapWnd_X;
-  const CString m_Name_IACCMapWnd_Y;
-  const CString m_Name_IACCWMapWnd_X;
-  const CString m_Name_IACCWMapWnd_Y;
-  const CString m_Name_IATCLTMapWnd_X;
-  const CString m_Name_IATCLTMapWnd_Y;
-  const CString m_Name_BarocorrMapWnd_X;
-  const CString m_Name_BarocorrMapWnd_Y;
-  const CString m_Name_ManIgntimMapWnd_X;
-  const CString m_Name_ManIgntimMapWnd_Y;
-  const CString m_Name_CESettingsWnd_X;
-  const CString m_Name_CESettingsWnd_Y;
-  const CString m_Name_TpsswtMapWnd_X;
-  const CString m_Name_TpsswtMapWnd_Y;
-  const CString m_Name_Tmp2CurveMapWnd_X;
-  const CString m_Name_Tmp2CurveMapWnd_Y;
-  const CString m_Name_GtscMapWnd_X;
-  const CString m_Name_GtscMapWnd_Y;
-  const CString m_Name_GpscMapWnd_X;
-  const CString m_Name_GpscMapWnd_Y;
-  const CString m_Name_AtscMapWnd_X;
-  const CString m_Name_AtscMapWnd_Y;
-  const CString m_Name_CrkTempMapWnd_X;
-  const CString m_Name_CrkTempMapWnd_Y;
-  const CString m_Name_EHPauseMapWnd_X;
-  const CString m_Name_EHPauseMapWnd_Y;
-
-  //fixture settings
-  const CString m_Name_Fixtures_Section;
-  const CString m_Name_Tachometer_Max;
-  const CString m_Name_Pressure_Max;
-  const CString m_Name_PulsesPer1Km;
-  const CString m_Name_SpeedUnit;
-
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;
   virtual DWORD GetBaudRateApplication(void) const;
   virtual DWORD GetBaudRateBootloader(void) const;
-  virtual const CString& GetLogFilesFolder(void) const;
+  virtual const _TSTRING& GetLogFilesFolder(void) const;
   virtual bool  GetUseAppFolder(void) const;
   virtual bool  GetAlwaysWriteLog(void) const;
   virtual char  GetCSVSepSymbol(void) const;
@@ -235,131 +111,93 @@ class CAppSettingsModel : public ISettingsData
   ////////////////////////////////////////////////////
 
  private:
-  //data which stored in the INI-file
-  _TSTRING m_optPortName;
-  DWORD m_optBaudRateApplication;
-  DWORD m_optBaudRateBootloader;
-  CString m_optLogFilesFolder;
-  bool  m_optUseAppFolder;
-  bool  m_optAlwaysWriteLog;
-  char  m_optCSVSepSymbol;
-  int   m_optMIDeskUpdatePeriod;
-  EInterLang m_optInterLang;
-  EECUPlatform m_optECUPlatformType;
-  int m_optTachometerMax;
-  int m_optPressureMax;
-  int m_optPulsesPer1Km;
-  ESpeedUnit m_optSpeedUnit;
-  bool m_optCOMPortBother;
-  bool m_optUseHotKeys;
-  bool m_optShowWelcome;
-  int  m_optRPMAverage;
-  int  m_optVoltAverage;
-  int  m_optMAPAverage;
-  int  m_optAI1Average;
-  int  m_optTPSAverage;
-  bool m_optAllowVisualTheme;
-  bool m_optAutoDiagEnter;
-  bool m_optSaveWarning;
-  bool m_optAutoCERead;
-  bool m_optChildCharts;
+  //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
+  //запущена программа.
+  CString GetINIFileFullName(void) const;
 
-  int m_optStrtMapWnd_X;
-  int m_optStrtMapWnd_Y;
-  int m_optIdleMapWnd_X;
-  int m_optIdleMapWnd_Y;
-  int m_optWorkMapWnd_X;
-  int m_optWorkMapWnd_Y;
-  int m_optTempMapWnd_X;
-  int m_optTempMapWnd_Y;
-  int m_optAttenMapWnd_X;
-  int m_optAttenMapWnd_Y;
-  int m_optMainFrmWnd_X;
-  int m_optMainFrmWnd_Y;
-  int m_optDwellCntrlMapWnd_X;
-  int m_optDwellCntrlMapWnd_Y;
-  int m_optCTSCurveMapWnd_X;
-  int m_optCTSCurveMapWnd_Y;
-  int m_optChokeOpMapWnd_X;
-  int m_optChokeOpMapWnd_Y;
-  int m_optGridMapIgnWnd_X;
-  int m_optGridMapIgnWnd_Y;
-  int m_optGridMapInjWnd_X;
-  int m_optGridMapInjWnd_Y;
-  int m_optVEMapWnd_X;
-  int m_optVEMapWnd_Y;
-  int m_optAFRMapWnd_X;
-  int m_optAFRMapWnd_Y;
-  int m_optCrnkMapWnd_X;
-  int m_optCrnkMapWnd_Y;
-  int m_optWrmpMapWnd_X;
-  int m_optWrmpMapWnd_Y;
-  int m_optDeadMapWnd_X;
-  int m_optDeadMapWnd_Y;
-  int m_optIdlrMapWnd_X;
-  int m_optIdlrMapWnd_Y;
-  int m_optIdlcMapWnd_X;
-  int m_optIdlcMapWnd_Y;
-  int m_optATSCurvMapWnd_X;
-  int m_optATSCurvMapWnd_Y;
-  int m_optATSCorrMapWnd_X;
-  int m_optATSCorrMapWnd_Y;
-  int m_optAETPSMapWnd_X;
-  int m_optAETPSMapWnd_Y;
-  int m_optAERPMMapWnd_X;
-  int m_optAERPMMapWnd_Y;
-  int m_optAftstrMapWnd_X;
-  int m_optAftstrMapWnd_Y;
-  int m_optGasdoseMapWnd_X;
-  int m_optGasdoseMapWnd_Y;
-  int m_optITMapWnd_X;
-  int m_optITMapWnd_Y;
-  int m_optITRPMMapWnd_X;
-  int m_optITRPMMapWnd_Y;
-  int m_optRigidMapWnd_X;
-  int m_optRigidMapWnd_Y;
-  int m_optEGOCrvMapWnd_X;
-  int m_optEGOCrvMapWnd_Y;
-  int m_optIACCMapWnd_X;
-  int m_optIACCMapWnd_Y;
-  int m_optIACCWMapWnd_X;
-  int m_optIACCWMapWnd_Y;
-  int m_optIATCLTMapWnd_X;
-  int m_optIATCLTMapWnd_Y;
-  int m_optBarocorrMapWnd_X;
-  int m_optBarocorrMapWnd_Y;
-  int m_optManIgntimMapWnd_X;
-  int m_optManIgntimMapWnd_Y;
-  int m_optCESettingsWnd_X;
-  int m_optCESettingsWnd_Y;
-  int m_optTpsswtMapWnd_X;
-  int m_optTpsswtMapWnd_Y;
-  int m_optTmp2CurveMapWnd_X;
-  int m_optTmp2CurveMapWnd_Y;
-  int m_optGtscMapWnd_X;
-  int m_optGtscMapWnd_Y;
-  int m_optGpscMapWnd_X;
-  int m_optGpscMapWnd_Y;
-  int m_optAtscMapWnd_X;
-  int m_optAtscMapWnd_Y;
-  int m_optCrkTempMapWnd_X;
-  int m_optCrkTempMapWnd_Y;
-  int m_optEHPauseMapWnd_X;
-  int m_optEHPauseMapWnd_Y;
+  //data which stored in the INI-file:
+  //Section names
+  const CString m_Name_Options_Section;
+  const CString m_Name_WndSettings_Section;  
+  const CString m_Name_Fixtures_Section;
 
-  bool m_optUseDVFeatures;
-  int m_optDVDeskUpdatePeriod;
+  //Options
+  OptField_t<_TSTRING> m_optPortName;
+  OptField_t<DWORD> m_optBaudRateApplication;
+  OptField_t<DWORD> m_optBaudRateBootloader;
+  OptField_t<int> m_optInterfaceLang;
+  OptField_t<int> m_optECUPlatformType;
+  OptField_t<char> m_optCSVSepSymbol;
+  OptField_t<_TSTRING> m_optLogFilesFolder;
+  OptField_t<bool> m_optUseAppFolder;
+  OptField_t<bool>  m_optAlwaysWriteLog;
+  OptField_t<int> m_optMIDeskUpdatePeriod;
+  OptField_t<int> m_optTachometerMax;
+  OptField_t<int> m_optPressureMax;
+  OptField_t<int> m_optPulsesPer1Km;
+  OptField_t<int> m_optSpeedUnit;
+  OptField_t<bool> m_optCOMPortBother;
+  OptField_t<bool> m_optUseHotKeys;
+  OptField_t<bool> m_optShowWelcome;
+  OptField_t<bool> m_optAllowVisualTheme;
+  OptField_t<bool> m_optAutoDiagEnter;
+  OptField_t<bool> m_optSaveWarning;
+  OptField_t<bool> m_optAutoCERead;
+  OptField_t<bool> m_optChildCharts;
+  //fixtures
+  OptField_t<bool> m_optUseDVFeatures;
+  OptField_t<int> m_optDVDeskUpdatePeriod;
+  OptField_t<bool> m_optShowToolTips;
+  OptField_t<bool> m_optShowExFixtures;
+  OptField_t<bool> m_optHexDataMode;
+  OptField_t<int>  m_optRPMAverage;
+  OptField_t<int>  m_optVoltAverage;
+  OptField_t<int>  m_optMAPAverage;
+  OptField_t<int>  m_optAI1Average;
+  OptField_t<int>  m_optTPSAverage;
+  //windows' positions
+  OptField_t<POINT> m_optStrtMapWnd;
+  OptField_t<POINT> m_optIdleMapWnd;
+  OptField_t<POINT> m_optWorkMapWnd;
+  OptField_t<POINT> m_optTempMapWnd;
+  OptField_t<POINT> m_optAttenMapWnd;
+  OptField_t<POINT> m_optMainFrmWnd;
+  OptField_t<POINT> m_optDwellCntrlMapWnd;
+  OptField_t<POINT> m_optCTSCurveMapWnd;
+  OptField_t<POINT> m_optChokeOpMapWnd;
+  OptField_t<POINT> m_optGridMapIgnWnd;
+  OptField_t<POINT> m_optGridMapInjWnd;
+  OptField_t<POINT> m_optVEMapWnd;
+  OptField_t<POINT> m_optAFRMapWnd;
+  OptField_t<POINT> m_optCrnkMapWnd;
+  OptField_t<POINT> m_optWrmpMapWnd;
+  OptField_t<POINT> m_optDeadMapWnd;
+  OptField_t<POINT> m_optIdlrMapWnd;
+  OptField_t<POINT> m_optIdlcMapWnd;
+  OptField_t<POINT> m_optATSCurvMapWnd;
+  OptField_t<POINT> m_optATSCorrMapWnd;
+  OptField_t<POINT> m_optAETPSMapWnd;
+  OptField_t<POINT> m_optAERPMMapWnd;
+  OptField_t<POINT> m_optAftstrMapWnd;
+  OptField_t<POINT> m_optGasdoseMapWnd;
+  OptField_t<POINT> m_optITMapWnd;
+  OptField_t<POINT> m_optITRPMMapWnd;
+  OptField_t<POINT> m_optRigidMapWnd;
+  OptField_t<POINT> m_optEGOCrvMapWnd;
+  OptField_t<POINT> m_optIACCMapWnd;
+  OptField_t<POINT> m_optIACCWMapWnd;
+  OptField_t<POINT> m_optIATCLTMapWnd;
+  OptField_t<POINT> m_optBarocorrMapWnd;
+  OptField_t<POINT> m_optManIgntimMapWnd;
+  OptField_t<POINT> m_optCESettingsWnd;
+  OptField_t<POINT> m_optTpsswtMapWnd;
+  OptField_t<POINT> m_optTmp2CurveMapWnd;
+  OptField_t<POINT> m_optGtscMapWnd;
+  OptField_t<POINT> m_optGpscMapWnd;
+  OptField_t<POINT> m_optAtscMapWnd;
+  OptField_t<POINT> m_optCrkTempMapWnd;
+  OptField_t<POINT> m_optEHPauseMapWnd;
 
-  bool m_optShowToolTips;
-  bool m_optShowExFixtures;
-  bool m_optHexDataMode;
-
-  //проверяет указанное значение скорости на соответствие стандарту
-  bool CheckAllowableBaudRate(DWORD baud);
-  bool CheckAllowableCSVSepSymbol(char i_symbol);
-  bool CheckAllowableLanguage(const _TSTRING& i_string, EInterLang& o_language_id);
-  bool CheckAllowablePlatform(const _TSTRING& i_string, EECUPlatform& o_platform_id);
-
-  //директория из которой было запущено приложение
+  //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];
 };

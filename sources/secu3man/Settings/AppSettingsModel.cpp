@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "AppSettingsModel.h"
+#include "IniFileIO.h"
 
 #include <limits>
 #include <algorithm>
@@ -33,131 +34,85 @@
 
 #define SECU3_CBR_500000 500000
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
-
 CAppSettingsModel::CAppSettingsModel()
 : m_Name_Options_Section(_T("Options"))
-, m_Name_BaudRateApplication(_T("Application_baud_rate"))
-, m_Name_BaudRateBootloader(_T("Boot_loader_baud_rate"))
-, m_Name_PortName(_T("COM_port"))
-, m_Name_LogFilesFolder(_T("LogFilesFolder"))
-, m_Name_UseAppFolder(_T("UseAppFolder"))
-, m_Name_AlwaysWriteLog(_T("AlwaysWriteLog"))
-, m_Name_CSVSepSymbol(_T("CSVSeparatingSymbol"))
-, m_Name_MIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
-, m_Name_InterfaceLang(_T("InterfaceLanguage"))
-, m_Name_ECUPlatformType(_T("ECUPlatformType"))
-, m_Name_UseDVFeatures(_T("UseDVFeatures"))
-, m_Name_ShowToolTips(_T("ShowToolTips"))
-, m_Name_ShowExFixtures(_T("ExFixtures"))
-, m_Name_HexDataMode(_T("HexDataMode"))
-, m_Name_DVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
-, m_Name_COMPortBother(_T("COMPortBother"))
-, m_Name_UseHotKeys(_T("UseHotKeys"))
-, m_Name_ShowWelcome(_T("ShowWelcome"))
-, m_Name_RPMAverage(_T("RPMAverage"))
-, m_Name_VoltAverage(_T("VoltAverage"))
-, m_Name_MAPAverage(_T("MAPAverage"))
-, m_Name_AI1Average(_T("AI1Average"))
-, m_Name_TPSAverage(_T("TPSAverage"))
-, m_Name_AllowVisualTheme(_T("AllowVisualTheme"))
-, m_Name_AutoDiagEnter(_T("AutoDiagEnter"))
-, m_Name_SaveWarning(_T("SaveWarning"))
-, m_Name_AutoCERead(_T("AutoCERead"))
-, m_Name_ChildCharts(_T("ChildCharts"))
-//positions of windows
-, m_Name_WndSettings_Section(_T("WndSettings"))
-, m_Name_StrtMapWnd_X(_T("StrtMapWnd_X"))
-, m_Name_StrtMapWnd_Y(_T("StrtMapWnd_Y"))
-, m_Name_IdleMapWnd_X(_T("IdleMapWnd_X"))
-, m_Name_IdleMapWnd_Y(_T("IdleMapWnd_Y"))
-, m_Name_WorkMapWnd_X(_T("WorkMapWnd_X"))
-, m_Name_WorkMapWnd_Y(_T("WorkMapWnd_Y"))
-, m_Name_TempMapWnd_X(_T("TempMapWnd_X"))
-, m_Name_TempMapWnd_Y(_T("TempMapWnd_Y"))
-, m_Name_AttenMapWnd_X(_T("AttenMapWnd_X"))
-, m_Name_AttenMapWnd_Y(_T("AttenMapWnd_Y"))
-, m_Name_MainFrmWnd_X(_T("MainFrmWnd_X"))
-, m_Name_MainFrmWnd_Y(_T("MainFrmWnd_Y"))
-, m_Name_DwellCntrlMapWnd_X(_T("DwellCntrlMapWnd_X"))
-, m_Name_DwellCntrlMapWnd_Y(_T("DwellCntrlMapWnd_Y"))
-, m_Name_CTSCurveMapWnd_X(_T("CTSCurveMapWnd_X"))
-, m_Name_CTSCurveMapWnd_Y(_T("CTSCurveMapWnd_Y"))
-, m_Name_ChokeOpMapWnd_X(_T("ChokeOpMapWnd_X"))
-, m_Name_ChokeOpMapWnd_Y(_T("ChokeOpMapWnd_Y"))
-, m_Name_GridMapIgnWnd_X(_T("GridMapIgnWnd_X"))
-, m_Name_GridMapIgnWnd_Y(_T("GridMapIgnWnd_Y"))
-, m_Name_GridMapInjWnd_X(_T("GridMapInjWnd_X"))
-, m_Name_GridMapInjWnd_Y(_T("GridMapInjWnd_Y"))
-, m_Name_VEMapWnd_X(_T("VEMapWnd_X"))
-, m_Name_VEMapWnd_Y(_T("VEMapWnd_Y"))
-, m_Name_AFRMapWnd_X(_T("AFRMapWnd_X"))
-, m_Name_AFRMapWnd_Y(_T("AFRMapWnd_Y"))
-, m_Name_CrnkMapWnd_X(_T("CrnkMapWnd_X"))
-, m_Name_CrnkMapWnd_Y(_T("CrnkMapWnd_Y"))
-, m_Name_WrmpMapWnd_X(_T("WrmpMapWnd_X"))
-, m_Name_WrmpMapWnd_Y(_T("WrmpMapWnd_Y"))
-, m_Name_DeadMapWnd_X(_T("DeadMapWnd_X"))
-, m_Name_DeadMapWnd_Y(_T("DeadMapWnd_Y"))
-, m_Name_IdlrMapWnd_X(_T("IdlrMapWnd_X"))
-, m_Name_IdlrMapWnd_Y(_T("IdlrMapWnd_Y"))
-, m_Name_IdlcMapWnd_X(_T("IdlcMapWnd_X"))
-, m_Name_IdlcMapWnd_Y(_T("IdlcMapWnd_Y"))
-, m_Name_ATSCurvMapWnd_X(_T("ATSCurvMapWnd_X"))
-, m_Name_ATSCurvMapWnd_Y(_T("ATSCurvMapWnd_Y"))
-, m_Name_ATSCorrMapWnd_X(_T("ATSCorrMapWnd_X"))
-, m_Name_ATSCorrMapWnd_Y(_T("ATSCorrMapWnd_Y"))
-, m_Name_AETPSMapWnd_X(_T("AETPSMapWnd_X"))
-, m_Name_AETPSMapWnd_Y(_T("AETPSMapWnd_Y"))
-, m_Name_AERPMMapWnd_X(_T("AERPMMapWnd_X"))
-, m_Name_AERPMMapWnd_Y(_T("AERPMMapWnd_Y"))
-, m_Name_AftstrMapWnd_X(_T("AftstrMapWnd_X"))
-, m_Name_AftstrMapWnd_Y(_T("AftstrMapWnd_Y"))
-, m_Name_GasdoseMapWnd_X(_T("GasdoseMapWnd_X"))
-, m_Name_GasdoseMapWnd_Y(_T("GasdoseMapWnd_Y"))
-, m_Name_ITMapWnd_X(_T("ITMapWnd_X"))
-, m_Name_ITMapWnd_Y(_T("ITMapWnd_Y"))
-, m_Name_ITRPMMapWnd_X(_T("ITRPMMapWnd_X"))
-, m_Name_ITRPMMapWnd_Y(_T("ITRPMMapWnd_Y"))
-, m_Name_RigidMapWnd_X(_T("RigidMapWnd_X"))
-, m_Name_RigidMapWnd_Y(_T("RigidMapWnd_Y"))
-, m_Name_EGOCrvMapWnd_X(_T("EGOCrvMapWnd_X"))
-, m_Name_EGOCrvMapWnd_Y(_T("EGOCrvMapWnd_Y"))
-, m_Name_IACCMapWnd_X(_T("IACCMapWnd_X"))
-, m_Name_IACCMapWnd_Y(_T("IACCMapWnd_Y"))
-, m_Name_IACCWMapWnd_X(_T("IACCWMapWnd_X"))
-, m_Name_IACCWMapWnd_Y(_T("IACCWMapWnd_Y"))
-, m_Name_IATCLTMapWnd_X(_T("IATCLTCorrMapWnd_X"))
-, m_Name_IATCLTMapWnd_Y(_T("IATCLTCorrMapWnd_Y"))
-, m_Name_BarocorrMapWnd_X(_T("BarocorrMapWnd_X"))
-, m_Name_BarocorrMapWnd_Y(_T("BarocorrMapWnd_Y"))
-, m_Name_ManIgntimMapWnd_X(_T("ManIgntimMapWnd_X"))
-, m_Name_ManIgntimMapWnd_Y(_T("ManIgntimMapWnd_Y"))
-, m_Name_CESettingsWnd_X(_T("CESettingsWnd_X"))
-, m_Name_CESettingsWnd_Y(_T("CESettingsWnd_Y"))
-, m_Name_TpsswtMapWnd_X(_T("TpsSwtMapWnd_X"))
-, m_Name_TpsswtMapWnd_Y(_T("TpsSwtMapWnd_Y"))
-, m_Name_Tmp2CurveMapWnd_X(_T("Tmp2CurveMapWnd_X"))
-, m_Name_Tmp2CurveMapWnd_Y(_T("Tmp2CurveMapWnd_Y"))
-, m_Name_GtscMapWnd_X(_T("GTSCMapWnd_X"))
-, m_Name_GtscMapWnd_Y(_T("GTSCMapWnd_Y"))
-, m_Name_GpscMapWnd_X(_T("GPSCMapWnd_X"))
-, m_Name_GpscMapWnd_Y(_T("GPSCMapWnd_Y"))
-, m_Name_AtscMapWnd_X(_T("AirDenMapWnd_X"))
-, m_Name_AtscMapWnd_Y(_T("AirDenMapWnd_Y"))
-, m_Name_CrkTempMapWnd_X(_T("CrkTempMapWnd_X"))
-, m_Name_CrkTempMapWnd_Y(_T("CrkTempMapWnd_Y"))
-, m_Name_EHPauseMapWnd_X(_T("EHPauseMapWnd_X"))
-, m_Name_EHPauseMapWnd_Y(_T("EHPauseMapWnd_Y"))
-
+, m_optBaudRateApplication(_T("Application_baud_rate"))
+, m_optBaudRateBootloader(_T("Boot_loader_baud_rate"))
+, m_optPortName(_T("COM_port"))
+, m_optLogFilesFolder(_T("LogFilesFolder"))
+, m_optUseAppFolder(_T("UseAppFolder"))
+, m_optAlwaysWriteLog(_T("AlwaysWriteLog"))
+, m_optCSVSepSymbol(_T("CSVSeparatingSymbol"))
+, m_optMIDeskUpdatePeriod(_T("MI_Desk_UpdatePeriod"))
+, m_optInterfaceLang(_T("InterfaceLanguage"))
+, m_optECUPlatformType(_T("ECUPlatformType"))
+, m_optUseDVFeatures(_T("UseDVFeatures"))
+, m_optShowToolTips(_T("ShowToolTips"))
+, m_optShowExFixtures(_T("ExFixtures"))
+, m_optHexDataMode(_T("HexDataMode"))
+, m_optDVDeskUpdatePeriod(_T("DVDeskUpdatePeriod"))
+, m_optCOMPortBother(_T("COMPortBother"))
+, m_optUseHotKeys(_T("UseHotKeys"))
+, m_optShowWelcome(_T("ShowWelcome"))
+, m_optAllowVisualTheme(_T("AllowVisualTheme"))
+, m_optAutoDiagEnter(_T("AutoDiagEnter"))
+, m_optSaveWarning(_T("SaveWarning"))
+, m_optAutoCERead(_T("AutoCERead"))
+, m_optChildCharts(_T("ChildCharts"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
-, m_Name_Tachometer_Max(_T("Tachometer_Max"))
-, m_Name_Pressure_Max(_T("Pressure_Max"))
-, m_Name_PulsesPer1Km(_T("PulsesPer1Km"))
-, m_Name_SpeedUnit(_T("SpeedUnit"))
+, m_optTachometerMax(_T("Tachometer_Max"))
+, m_optPressureMax(_T("Pressure_Max"))
+, m_optPulsesPer1Km(_T("PulsesPer1Km"))
+, m_optSpeedUnit(_T("SpeedUnit"))
+, m_optRPMAverage(_T("RPMAverage"))
+, m_optVoltAverage(_T("VoltAverage"))
+, m_optMAPAverage(_T("MAPAverage"))
+, m_optAI1Average(_T("AI1Average"))
+, m_optTPSAverage(_T("TPSAverage"))
+//positions of windows
+, m_Name_WndSettings_Section(_T("WndSettings"))
+, m_optStrtMapWnd(_T("StrtMapWnd"))
+, m_optIdleMapWnd(_T("IdleMapWnd"))
+, m_optWorkMapWnd(_T("WorkMapWnd"))
+, m_optTempMapWnd(_T("TempMapWnd"))
+, m_optAttenMapWnd(_T("AttenMapWnd"))
+, m_optMainFrmWnd(_T("MainFrmWnd"))
+, m_optDwellCntrlMapWnd(_T("DwellCntrlMapWnd"))
+, m_optCTSCurveMapWnd(_T("CTSCurveMapWnd"))
+, m_optChokeOpMapWnd(_T("ChokeOpMapWnd"))
+, m_optGridMapIgnWnd(_T("GridMapIgnWnd"))
+, m_optGridMapInjWnd(_T("GridMapInjWnd"))
+, m_optVEMapWnd(_T("VEMapWnd"))
+, m_optAFRMapWnd(_T("AFRMapWnd"))
+, m_optCrnkMapWnd(_T("CrnkMapWnd"))
+, m_optWrmpMapWnd(_T("WrmpMapWnd"))
+, m_optDeadMapWnd(_T("DeadMapWnd"))
+, m_optIdlrMapWnd(_T("IdlrMapWnd"))
+, m_optIdlcMapWnd(_T("IdlcMapWnd"))
+, m_optATSCurvMapWnd(_T("ATSCurvMapWnd"))
+, m_optATSCorrMapWnd(_T("ATSCorrMapWnd"))
+, m_optAETPSMapWnd(_T("AETPSMapWnd"))
+, m_optAERPMMapWnd(_T("AERPMMapWnd"))
+, m_optAftstrMapWnd(_T("AftstrMapWnd"))
+, m_optGasdoseMapWnd(_T("GasdoseMapWnd"))
+, m_optITMapWnd(_T("ITMapWnd"))
+, m_optITRPMMapWnd(_T("ITRPMMapWnd"))
+, m_optRigidMapWnd(_T("RigidMapWnd"))
+, m_optEGOCrvMapWnd(_T("EGOCrvMapWnd"))
+, m_optIACCMapWnd(_T("IACCMapWnd"))
+, m_optIACCWMapWnd(_T("IACCWMapWnd"))
+, m_optIATCLTMapWnd(_T("IATCLTCorrMapWnd"))
+, m_optBarocorrMapWnd(_T("BarocorrMapWnd"))
+, m_optManIgntimMapWnd(_T("ManIgntimMapWnd"))
+, m_optCESettingsWnd(_T("CESettingsWnd"))
+, m_optTpsswtMapWnd(_T("TpsSwtMapWnd"))
+, m_optTmp2CurveMapWnd(_T("Tmp2CurveMapWnd"))
+, m_optGtscMapWnd(_T("GTSCMapWnd"))
+, m_optGpscMapWnd(_T("GPSCMapWnd"))
+, m_optAtscMapWnd(_T("AirDenMapWnd"))
+, m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
+, m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
 {
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_9600);
@@ -193,12 +148,13 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("English")), _TSTRING(_T("english"))), IL_ENGLISH) );
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Russian")), _TSTRING(_T("russian"))), IL_RUSSIAN) );
 
-//m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega16")), _TSTRING(_T("atmega16"))), EP_ATMEGA16) );
-//m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega32")), _TSTRING(_T("atmega32"))), EP_ATMEGA32) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega64")), _TSTRING(_T("atmega64"))), EP_ATMEGA64) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega644")), _TSTRING(_T("atmega644"))), EP_ATMEGA644) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega128")), _TSTRING(_T("atmega128"))), EP_ATMEGA128) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega1284")), _TSTRING(_T("atmega1284"))), EP_ATMEGA1284) );
+
+ m_AllowableSpeedUnits.push_back(std::make_pair(std::make_pair(_TSTRING(_T("km/h")), _TSTRING(_T("kmh"))), SU_KMH));
+ m_AllowableSpeedUnits.push_back(std::make_pair(std::make_pair(_TSTRING(_T("m/h")), _TSTRING(_T("mph"))), SU_MPH));
 }
 
 CAppSettingsModel::~CAppSettingsModel()
@@ -224,595 +180,95 @@ CString CAppSettingsModel::GetAppDirectory(void) const
  return m_current_directory;
 }
 
-bool CAppSettingsModel::CheckAllowableBaudRate(DWORD baud)
-{
- std::vector<DWORD>::iterator it;
- it = std::find(m_AllowableBaudRates.begin(),m_AllowableBaudRates.end(),baud);
- if (it != m_AllowableBaudRates.end())
-  return true;
- return false; //invalid baud rate
-}
-
-bool CAppSettingsModel::CheckAllowableCSVSepSymbol(char i_symbol)
-{
- size_t count = m_AllowaleCSVSepSymbols.size();
- for(size_t i = 0; i < count; i++)
-  if (i_symbol == m_AllowaleCSVSepSymbols[i].second)
-   return true;
- return false;
-}
-
-bool CAppSettingsModel::CheckAllowableLanguage(const _TSTRING& i_string, EInterLang& o_language_id)
-{
- size_t count = m_AllowableLanguages.size();
- for(size_t i = 0; i < count; ++i)
-  if (i_string == m_AllowableLanguages[i].first.second)
-  {
-   o_language_id = (EInterLang)m_AllowableLanguages[i].second;
-   return true;
-  }
- return false;
-}
-
-bool CAppSettingsModel::CheckAllowablePlatform(const _TSTRING& i_string, EECUPlatform& o_platform_id)
-{
- size_t count = m_AllowablePlatforms.size();
- for(size_t i = 0; i < count; ++i)
-  if (i_string == m_AllowablePlatforms[i].first.second)
-  {
-   o_platform_id = (EECUPlatform)m_AllowablePlatforms[i].second;
-   return true;
-  }
- return false;
-}
-
-
 bool CAppSettingsModel::ReadSettings(void)
 {
  CString IniFileName = GetINIFileFullName();
  bool status = true;
- TCHAR read_str[1024];
 
- int i_val = 0;  float f_val = 0;
+ //Options
+ IniIO os(IniFileName, m_Name_Options_Section);
 
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_PortName,_T("COM1"),read_str,255,IniFileName);
- m_optPortName = read_str;
+ os.ReadString(m_optPortName, _T("COM1"));
+ os.ReadDword(m_optBaudRateApplication, _T("57600"), m_AllowableBaudRates);
+ os.ReadDword(m_optBaudRateBootloader, _T("57600"), m_AllowableBaudRates);
+ os.ReadString(m_optLogFilesFolder, m_current_directory);
+ os.ReadInt(m_optCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
+ os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);
+ os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
+ os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
+ os.ReadEnum(m_optInterfaceLang, 0, m_AllowableLanguages);
+ os.ReadEnum(m_optECUPlatformType, 1, m_AllowablePlatforms); //644
+ os.ReadInt(m_optDVDeskUpdatePeriod, _T("40"), 0, 1000);
+ os.ReadInt(m_optUseDVFeatures, _T("0"), 0, 1);
+ os.ReadInt(m_optShowToolTips, _T("1"), 0, 1);
+ os.ReadInt(m_optHexDataMode, _T("0"), 0, 1);
+ os.ReadInt(m_optCOMPortBother, _T("1"), 0, 1);
+ os.ReadInt(m_optUseHotKeys, _T("1"), 0, 1);
+ os.ReadInt(m_optShowWelcome, _T("1"), 0, 1);
+ os.ReadInt(m_optAllowVisualTheme, _T("1"), 0, 1);
+ os.ReadInt(m_optAutoDiagEnter, _T("0"), 0, 1);
+ os.ReadInt(m_optSaveWarning, _T("1"), 0, 1);
+ os.ReadInt(m_optAutoCERead, _T("0"), 0, 1);
+ os.ReadInt(m_optChildCharts, _T("1"), 0, 1);
 
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,_T("57600"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
+ //fixtures
+ IniIO fs(IniFileName, m_Name_Fixtures_Section);
 
- if (!CheckAllowableBaudRate(i_val))
- {
-  status = false;
-  m_optBaudRateApplication = 57600;
- }
- else
- {
-  m_optBaudRateApplication = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,_T("57600"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (!CheckAllowableBaudRate(i_val))
- {
-  status = false;
-  m_optBaudRateBootloader = 57600;
- }
- else
- {
-  m_optBaudRateBootloader = i_val;
- }
-
- //-----------------------------------------
- CString def_value = m_current_directory;
- GetPrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,def_value,read_str,MAX_PATH,IniFileName);
- m_optLogFilesFolder = read_str;
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optUseAppFolder = 0;
- }
- else
- {
-  m_optUseAppFolder = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_AlwaysWriteLog,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optAlwaysWriteLog = 1;
- }
- else
- {
-  m_optAlwaysWriteLog = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,_T("44"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (!CheckAllowableCSVSepSymbol(i_val))
- {
-  status = false;
-  m_optCSVSepSymbol = 44; //comma by default
- }
- else
- {
-  m_optCSVSepSymbol = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,_T("40"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0)
-  m_optMIDeskUpdatePeriod = i_val;
- else
- { //error
-  status = false;
-  m_optMIDeskUpdatePeriod = 40;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_InterfaceLang,m_AllowableLanguages[0].first.second.c_str(),read_str,255,IniFileName);
-
- if (!CheckAllowableLanguage(read_str, m_optInterLang))
- {
-  status = false;
-  m_optInterLang = (EInterLang)m_AllowableLanguages[0].second; //english by default
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,m_AllowablePlatforms[3].first.second.c_str(),read_str,255,IniFileName);
-
- if (!CheckAllowablePlatform(read_str, m_optECUPlatformType))
- {
-  status = false;
-  m_optECUPlatformType = (EECUPlatform)m_AllowablePlatforms[1].second; //atmega32 by default
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_DVDeskUpdatePeriod,_T("40"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0)
-  m_optDVDeskUpdatePeriod = i_val;
- else
- { //error
-  status = false;
-  m_optDVDeskUpdatePeriod = 40;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_UseDVFeatures,_T("0"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optUseDVFeatures = 0;
- }
- else
- {
-  m_optUseDVFeatures = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optShowToolTips = 0;
- }
- else
- {
-  m_optShowToolTips = i_val;
- }
-
-//-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_HexDataMode,_T("0"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optHexDataMode = 0;
- }
- else
- {
-  m_optHexDataMode = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_COMPortBother,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optCOMPortBother = 0;
- }
- else
- {
-  m_optCOMPortBother = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_UseHotKeys,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optUseHotKeys = 0;
- }
- else
- {
-  m_optUseHotKeys = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ShowWelcome,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optShowWelcome = 0;
- }
- else
- {
-  m_optShowWelcome = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_ShowExFixtures,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optShowExFixtures = 0;
- }
- else
- {
-  m_optShowExFixtures = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_RPMAverage,_T("4"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val < 0 || i_val > 16)
- {
-  status = false;
-  m_optRPMAverage = 0; //no avaraging
- }
- else
- {
-  m_optRPMAverage = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,_T("4"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val < 0 || i_val > 16)
- {
-  status = false;
-  m_optVoltAverage = 0; //no avaraging
- }
- else
- {
-  m_optVoltAverage = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_MAPAverage,_T("4"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val < 0 || i_val > 16)
- {
-  status = false;
-  m_optMAPAverage = 0; //no avaraging
- }
- else
- {
-  m_optMAPAverage = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_AI1Average,_T("4"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val < 0 || i_val > 16)
- {
-  status = false;
-  m_optAI1Average = 0; //no avaraging
- }
- else
- {
-  m_optAI1Average = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_TPSAverage,_T("4"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val < 0 || i_val > 16)
- {
-  status = false;
-  m_optTPSAverage = 0; //no avaraging
- }
- else
- {
-  m_optTPSAverage = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optAllowVisualTheme = 0;
- }
- else
- {
-  m_optAllowVisualTheme = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_AutoDiagEnter,_T("0"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optAutoDiagEnter = 0;
- }
- else
- {
-  m_optAutoDiagEnter = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_SaveWarning,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optSaveWarning = 0;
- }
- else
- {
-  m_optSaveWarning = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_AutoCERead,_T("0"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optAutoCERead = 0;
- }
- else
- {
-  m_optAutoCERead = i_val;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Options_Section,m_Name_ChildCharts,_T("1"),read_str,255,IniFileName);
- i_val = _ttoi(read_str);
-
- if (i_val != 0 && i_val != 1)
- {
-  status = false;
-  m_optChildCharts = 0;
- }
- else
- {
-  m_optChildCharts = i_val;
- }
-
+ fs.ReadInt(m_optShowExFixtures, _T("1"), 0, 1);
+ fs.ReadInt(m_optRPMAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optVoltAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optAI1Average, _T("4"), 0, 16);
+ fs.ReadInt(m_optTPSAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
+ fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
+ fs.ReadInt(m_optPulsesPer1Km, _T("6000"), 0, 60000);
+ fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
 
  //Positions of windows
-#define _GETWNDPOSITION(sectName, fldName, defVal) \
- {\
-  std::vector<TCHAR> strDefVal(32);\
-  GetPrivateProfileString((sectName),m_Name_##fldName,_itot((defVal), &strDefVal[0], 10),read_str,255,IniFileName);\
-  i_val = _ttoi(read_str);\
-  if (i_val < -10000 || i_val > 10000)\
-  {\
-   status = false;\
-   m_opt##fldName = (defVal);\
-  }\
-  else\
-  {\
-   m_opt##fldName = i_val;\
-  }\
- }
+ IniIO ws(IniFileName, m_Name_WndSettings_Section);
 
- _GETWNDPOSITION(m_Name_WndSettings_Section, StrtMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, StrtMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdleMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdleMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, WorkMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, WorkMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, TempMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, TempMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AttenMapWnd_Y, std::numeric_limits<int>::max());
-
- //Main frame window
- _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, MainFrmWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, DwellCntrlMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, CTSCurveMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, CTSCurveMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ChokeOpMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ChokeOpMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapIgnWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapIgnWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapInjWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GridMapInjWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, VEMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AFRMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AFRMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, CrnkMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, CrnkMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, WrmpMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, WrmpMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, DeadMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, DeadMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdlrMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdlrMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdlcMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IdlcMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AETPSMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AETPSMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AERPMMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AERPMMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AftstrMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AftstrMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCurvMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ATSCorrMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, GasdoseMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GasdoseMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ITMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ITMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ITRPMMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ITRPMMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, RigidMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, RigidMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, EGOCrvMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, EGOCrvMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IACCMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IACCMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IACCWMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IACCWMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, IATCLTMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, IATCLTMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, BarocorrMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, BarocorrMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, ManIgntimMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, ManIgntimMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, CESettingsWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, CESettingsWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, TpsswtMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, TpsswtMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, Tmp2CurveMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, Tmp2CurveMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, GtscMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GtscMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, GpscMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, AtscMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, AtscMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, CrkTempMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, CrkTempMapWnd_Y, std::numeric_limits<int>::max());
-
- _GETWNDPOSITION(m_Name_WndSettings_Section, EHPauseMapWnd_X, std::numeric_limits<int>::max());
- _GETWNDPOSITION(m_Name_WndSettings_Section, EHPauseMapWnd_Y, std::numeric_limits<int>::max());
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,_T("8000"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 15000)
-  m_optTachometerMax = i_val;
- else
- { //error
-  status = false;
-  m_optTachometerMax = 8000;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,_T("110"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 500)
-  m_optPressureMax = i_val;
- else
- { //error
-  status = false;
-  m_optPressureMax = 110;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_PulsesPer1Km,_T("6000"),read_str,255,IniFileName);
- if (_stscanf(read_str, _T("%d"), &i_val) == 1 && i_val >= 0 && i_val <= 60000)
-  m_optPulsesPer1Km = i_val;
- else
- { //error
-  status = false;
-  m_optPulsesPer1Km = 6000;
- }
-
- //-----------------------------------------
- GetPrivateProfileString(m_Name_Fixtures_Section,m_Name_SpeedUnit,_T("kmh"),read_str,255,IniFileName);
- if (_TSTRING(read_str)==_T("kmh"))
-  m_optSpeedUnit = SU_KMH;
- else if (_TSTRING(read_str)==_T("mph"))
-  m_optSpeedUnit = SU_MPH;
- else
- {
-  status = false;
-  m_optSpeedUnit = SU_KMH;
- }
+ ws.ReadWndPos(m_optStrtMapWnd);
+ ws.ReadWndPos(m_optIdleMapWnd);
+ ws.ReadWndPos(m_optWorkMapWnd);
+ ws.ReadWndPos(m_optTempMapWnd);
+ ws.ReadWndPos(m_optAttenMapWnd); 
+ ws.ReadWndPos(m_optMainFrmWnd); //Main frame window
+ ws.ReadWndPos(m_optDwellCntrlMapWnd);
+ ws.ReadWndPos(m_optCTSCurveMapWnd);
+ ws.ReadWndPos(m_optChokeOpMapWnd);
+ ws.ReadWndPos(m_optGridMapIgnWnd);
+ ws.ReadWndPos(m_optGridMapInjWnd);
+ ws.ReadWndPos(m_optVEMapWnd);
+ ws.ReadWndPos(m_optAFRMapWnd);
+ ws.ReadWndPos(m_optCrnkMapWnd);
+ ws.ReadWndPos(m_optWrmpMapWnd);
+ ws.ReadWndPos(m_optDeadMapWnd);
+ ws.ReadWndPos(m_optIdlrMapWnd);
+ ws.ReadWndPos(m_optIdlcMapWnd);
+ ws.ReadWndPos(m_optAETPSMapWnd);
+ ws.ReadWndPos(m_optAERPMMapWnd);
+ ws.ReadWndPos(m_optAftstrMapWnd);
+ ws.ReadWndPos(m_optATSCurvMapWnd);
+ ws.ReadWndPos(m_optATSCorrMapWnd);
+ ws.ReadWndPos(m_optGasdoseMapWnd);
+ ws.ReadWndPos(m_optITMapWnd);
+ ws.ReadWndPos(m_optITRPMMapWnd);
+ ws.ReadWndPos(m_optRigidMapWnd);
+ ws.ReadWndPos(m_optEGOCrvMapWnd);
+ ws.ReadWndPos(m_optIACCMapWnd);
+ ws.ReadWndPos(m_optIACCWMapWnd);
+ ws.ReadWndPos(m_optIATCLTMapWnd);
+ ws.ReadWndPos(m_optBarocorrMapWnd);
+ ws.ReadWndPos(m_optManIgntimMapWnd);
+ ws.ReadWndPos(m_optCESettingsWnd);
+ ws.ReadWndPos(m_optTpsswtMapWnd);
+ ws.ReadWndPos(m_optTmp2CurveMapWnd);
+ ws.ReadWndPos(m_optGtscMapWnd);
+ ws.ReadWndPos(m_optGpscMapWnd);
+ ws.ReadWndPos(m_optAtscMapWnd);
+ ws.ReadWndPos(m_optCrkTempMapWnd);
+ ws.ReadWndPos(m_optEHPauseMapWnd);
 
  return status;
 }
@@ -821,723 +277,425 @@ bool CAppSettingsModel::WriteSettings(void)
 {
  CString IniFileName = GetINIFileFullName();
  bool status = true;
- CString write_str;
 
- //пересоздание секции (или создание заново)
- WritePrivateProfileSection(m_Name_Options_Section,_T(""),IniFileName);
+ IniIO os(IniFileName, m_Name_Options_Section);
+ os.CreateSection(); //create section
 
- //-----------------------------------------
- write_str = m_optPortName.c_str();
- WritePrivateProfileString(m_Name_Options_Section,m_Name_PortName,write_str,IniFileName);
+ os.WriteString(m_optPortName);
+ os.WriteDword(m_optBaudRateApplication);
+ os.WriteDword(m_optBaudRateBootloader);
+ os.WriteString(m_optLogFilesFolder);
+ os.WriteInt(m_optUseAppFolder);
+ os.WriteInt(m_optAlwaysWriteLog);
+ os.WriteInt(m_optCSVSepSymbol);
+ os.WriteInt(m_optMIDeskUpdatePeriod);
+ os.WriteEnum(m_optInterfaceLang, m_AllowableLanguages);
+ os.WriteEnum(m_optECUPlatformType, m_AllowablePlatforms);
+ os.WriteInt(m_optUseDVFeatures);
+ os.WriteInt(m_optDVDeskUpdatePeriod);
+ os.WriteInt(m_optShowToolTips); 
+ os.WriteInt(m_optHexDataMode); 
+ os.WriteInt(m_optCOMPortBother); 
+ os.WriteInt(m_optUseHotKeys); 
+ m_optShowWelcome.value = 0; //<--Will be not shown next time
+ os.WriteInt(m_optShowWelcome); 
+ os.WriteInt(m_optAllowVisualTheme); 
+ os.WriteInt(m_optAutoDiagEnter); 
+ os.WriteInt(m_optSaveWarning); 
+ os.WriteInt(m_optAutoCERead); 
+ os.WriteInt(m_optChildCharts); 
 
- //-----------------------------------------
- write_str.Format(_T("%d"),m_optBaudRateApplication);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateApplication,write_str,IniFileName);
+ IniIO fs(IniFileName, m_Name_Fixtures_Section);
+ fs.CreateSection();
 
- //-----------------------------------------
- write_str.Format(_T("%d"),m_optBaudRateBootloader);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_BaudRateBootloader,write_str,IniFileName);
-
- //-----------------------------------------
- write_str = m_optLogFilesFolder;
- WritePrivateProfileString(m_Name_Options_Section,m_Name_LogFilesFolder,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optUseAppFolder);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_UseAppFolder,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optAlwaysWriteLog);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_AlwaysWriteLog,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optCSVSepSymbol);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_CSVSepSymbol,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optMIDeskUpdatePeriod);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_MIDeskUpdatePeriod,write_str,IniFileName);
-
- //-----------------------------------------
- size_t i;
- for(i = 0; i < m_AllowableLanguages.size(); ++i)
-  if (m_optInterLang == m_AllowableLanguages[i].second)
-   write_str = m_AllowableLanguages[i].first.second.c_str();
- WritePrivateProfileString(m_Name_Options_Section,m_Name_InterfaceLang,write_str,IniFileName);
-
- //-----------------------------------------
- for(i = 0; i < m_AllowablePlatforms.size(); ++i)
-  if (m_optECUPlatformType == m_AllowablePlatforms[i].second)
-   write_str = m_AllowablePlatforms[i].first.second.c_str();
- WritePrivateProfileString(m_Name_Options_Section,m_Name_ECUPlatformType,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optUseDVFeatures);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_UseDVFeatures,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optDVDeskUpdatePeriod);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_DVDeskUpdatePeriod,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optShowToolTips);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_ShowToolTips,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optHexDataMode);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_HexDataMode,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optCOMPortBother);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_COMPortBother,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optUseHotKeys);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_UseHotKeys,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)/*m_optShowWelcome*/0);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_ShowWelcome,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optShowExFixtures);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_ShowExFixtures,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optRPMAverage);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_RPMAverage,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optVoltAverage);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_VoltAverage,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optMAPAverage);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_MAPAverage,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optAI1Average);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_AI1Average,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optTPSAverage);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_TPSAverage,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optAllowVisualTheme);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_AllowVisualTheme,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optAutoDiagEnter);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_AutoDiagEnter,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optSaveWarning);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_SaveWarning,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optAutoCERead);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_AutoCERead,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optChildCharts);
- WritePrivateProfileString(m_Name_Options_Section,m_Name_ChildCharts,write_str,IniFileName);
-
- //-----------------------------------------
+ fs.WriteInt(m_optShowExFixtures); 
+ fs.WriteInt(m_optRPMAverage); 
+ fs.WriteInt(m_optVoltAverage); 
+ fs.WriteInt(m_optMAPAverage); 
+ fs.WriteInt(m_optAI1Average); 
+ fs.WriteInt(m_optTPSAverage); 
+ fs.WriteInt(m_optTachometerMax); 
+ fs.WriteInt(m_optPressureMax); 
+ fs.WriteInt(m_optPulsesPer1Km); 
+ fs.WriteEnum(m_optSpeedUnit, m_AllowableSpeedUnits);
 
  //Positions of windows
- WritePrivateProfileSection(m_Name_WndSettings_Section,_T(""),IniFileName);
-
- write_str.Format(_T("%d"),m_optStrtMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optStrtMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_StrtMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdleMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdleMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdleMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdleMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optWorkMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WorkMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optWorkMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WorkMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTempMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TempMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTempMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TempMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAttenMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AttenMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAttenMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AttenMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optMainFrmWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optMainFrmWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_MainFrmWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optDwellCntrlMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DwellCntrlMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optDwellCntrlMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DwellCntrlMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCTSCurveMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CTSCurveMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCTSCurveMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CTSCurveMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optChokeOpMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ChokeOpMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optChokeOpMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ChokeOpMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGridMapIgnWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapIgnWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGridMapIgnWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapIgnWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGridMapInjWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapInjWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGridMapInjWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GridMapInjWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optVEMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_VEMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optVEMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_VEMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAFRMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AFRMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAFRMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AFRMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCrnkMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrnkMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCrnkMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrnkMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optWrmpMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WrmpMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optWrmpMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_WrmpMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optDeadMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DeadMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optDeadMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_DeadMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdlrMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlrMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdlrMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlrMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdlcMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlcMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIdlcMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IdlcMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAETPSMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AETPSMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAETPSMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AETPSMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAERPMMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AERPMMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAERPMMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AERPMMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAftstrMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AftstrMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAftstrMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AftstrMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optATSCurvMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCurvMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optATSCurvMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCurvMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optATSCorrMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCorrMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optATSCorrMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ATSCorrMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGasdoseMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GasdoseMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGasdoseMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GasdoseMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optITMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ITMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optITMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ITMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optITRPMMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ITRPMMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optITRPMMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ITRPMMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optRigidMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_RigidMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optRigidMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_RigidMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optEGOCrvMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_EGOCrvMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optEGOCrvMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_EGOCrvMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIACCMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIACCMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIACCWMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCWMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIACCWMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IACCWMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIATCLTMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IATCLTMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optIATCLTMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_IATCLTMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optBarocorrMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_BarocorrMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optBarocorrMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_BarocorrMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optManIgntimMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ManIgntimMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optManIgntimMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_ManIgntimMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCESettingsWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CESettingsWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCESettingsWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CESettingsWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTpsswtMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TpsswtMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTpsswtMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_TpsswtMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTmp2CurveMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_Tmp2CurveMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optTmp2CurveMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_Tmp2CurveMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGtscMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GtscMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGtscMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GtscMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGpscMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GpscMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optGpscMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_GpscMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAtscMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AtscMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optAtscMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_AtscMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCrkTempMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrkTempMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optCrkTempMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_CrkTempMapWnd_Y,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optEHPauseMapWnd_X);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_EHPauseMapWnd_X,write_str,IniFileName);
-
- write_str.Format(_T("%d"),m_optEHPauseMapWnd_Y);
- WritePrivateProfileString(m_Name_WndSettings_Section,m_Name_EHPauseMapWnd_Y,write_str,IniFileName);
-
- //-----------------------------------------
- write_str.Format(_T("%d"),(int)m_optTachometerMax);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Tachometer_Max,write_str,IniFileName);
-
- write_str.Format(_T("%d"),(int)m_optPressureMax);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_Pressure_Max,write_str,IniFileName);
-
- write_str.Format(_T("%d"),(int)m_optPulsesPer1Km);
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_PulsesPer1Km,write_str,IniFileName);
-
- write_str = (m_optSpeedUnit == SU_KMH) ? _T("kmh") : _T("mph");
- WritePrivateProfileString(m_Name_Fixtures_Section,m_Name_SpeedUnit,write_str,IniFileName);
+ IniIO ws(IniFileName, m_Name_WndSettings_Section);
+ ws.CreateSection();
+
+ ws.WriteWndPos(m_optStrtMapWnd);
+ ws.WriteWndPos(m_optIdleMapWnd);
+ ws.WriteWndPos(m_optWorkMapWnd);
+ ws.WriteWndPos(m_optTempMapWnd);
+ ws.WriteWndPos(m_optAttenMapWnd);
+ ws.WriteWndPos(m_optMainFrmWnd);
+ ws.WriteWndPos(m_optDwellCntrlMapWnd);
+ ws.WriteWndPos(m_optCTSCurveMapWnd);
+ ws.WriteWndPos(m_optChokeOpMapWnd);
+ ws.WriteWndPos(m_optGridMapIgnWnd);
+ ws.WriteWndPos(m_optGridMapInjWnd);
+ ws.WriteWndPos(m_optVEMapWnd);
+ ws.WriteWndPos(m_optAFRMapWnd);
+ ws.WriteWndPos(m_optCrnkMapWnd);
+ ws.WriteWndPos(m_optWrmpMapWnd);
+ ws.WriteWndPos(m_optDeadMapWnd);
+ ws.WriteWndPos(m_optIdlrMapWnd);
+ ws.WriteWndPos(m_optIdlcMapWnd);
+ ws.WriteWndPos(m_optAETPSMapWnd);
+ ws.WriteWndPos(m_optAERPMMapWnd);
+ ws.WriteWndPos(m_optAftstrMapWnd);
+ ws.WriteWndPos(m_optATSCurvMapWnd);
+ ws.WriteWndPos(m_optATSCorrMapWnd);
+ ws.WriteWndPos(m_optGasdoseMapWnd);
+ ws.WriteWndPos(m_optITMapWnd);
+ ws.WriteWndPos(m_optITRPMMapWnd);
+ ws.WriteWndPos(m_optRigidMapWnd);
+ ws.WriteWndPos(m_optEGOCrvMapWnd);
+ ws.WriteWndPos(m_optIACCMapWnd);
+ ws.WriteWndPos(m_optIACCWMapWnd);
+ ws.WriteWndPos(m_optIATCLTMapWnd);
+ ws.WriteWndPos(m_optBarocorrMapWnd);
+ ws.WriteWndPos(m_optManIgntimMapWnd);
+ ws.WriteWndPos(m_optCESettingsWnd);
+ ws.WriteWndPos(m_optTpsswtMapWnd);
+ ws.WriteWndPos(m_optTmp2CurveMapWnd);
+ ws.WriteWndPos(m_optGtscMapWnd);
+ ws.WriteWndPos(m_optGpscMapWnd);
+ ws.WriteWndPos(m_optAtscMapWnd);
+ ws.WriteWndPos(m_optCrkTempMapWnd);
+ ws.WriteWndPos(m_optEHPauseMapWnd);
 
  return status;
 }
 
 const _TSTRING& CAppSettingsModel::GetPortName(void) const
 {
- return m_optPortName;
+ return m_optPortName.value;
 }
 
 DWORD CAppSettingsModel::GetBaudRateApplication(void) const
 {
- return m_optBaudRateApplication;
+ return m_optBaudRateApplication.value;
 }
 
 DWORD CAppSettingsModel::GetBaudRateBootloader(void) const
 {
- return m_optBaudRateBootloader;
+ return m_optBaudRateBootloader.value;
 }
 
-const CString& CAppSettingsModel::GetLogFilesFolder(void) const
+const _TSTRING& CAppSettingsModel::GetLogFilesFolder(void) const
 {
- return m_optLogFilesFolder;
+ return m_optLogFilesFolder.value;
 }
 
 bool CAppSettingsModel::GetUseAppFolder(void) const
 {
- return m_optUseAppFolder;
+ return m_optUseAppFolder.value;
 }
 
 bool CAppSettingsModel::GetAlwaysWriteLog(void) const
 {
- return m_optAlwaysWriteLog;
+ return m_optAlwaysWriteLog.value;
 }
 
 char CAppSettingsModel::GetCSVSepSymbol(void) const
 {
- return m_optCSVSepSymbol;
+ return m_optCSVSepSymbol.value;
 }
 
 int  CAppSettingsModel::GetMIDeskUpdatePeriod(void) const
 {
- return m_optMIDeskUpdatePeriod;
+ return m_optMIDeskUpdatePeriod.value;
 }
 
 void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
 {
- m_optStrtMapWnd_X = i_wndSettings.m_StrtMapWnd_X;
- m_optStrtMapWnd_Y = i_wndSettings.m_StrtMapWnd_Y;
- m_optIdleMapWnd_X = i_wndSettings.m_IdleMapWnd_X;
- m_optIdleMapWnd_Y = i_wndSettings.m_IdleMapWnd_Y;
- m_optWorkMapWnd_X = i_wndSettings.m_WorkMapWnd_X;
- m_optWorkMapWnd_Y = i_wndSettings.m_WorkMapWnd_Y;
- m_optTempMapWnd_X = i_wndSettings.m_TempMapWnd_X;
- m_optTempMapWnd_Y = i_wndSettings.m_TempMapWnd_Y;
- m_optAttenMapWnd_X = i_wndSettings.m_AttenuatorMapWnd_X;
- m_optAttenMapWnd_Y = i_wndSettings.m_AttenuatorMapWnd_Y;
- m_optMainFrmWnd_X = i_wndSettings.m_MainFrmWnd_X;
- m_optMainFrmWnd_Y = i_wndSettings.m_MainFrmWnd_Y;
- m_optDwellCntrlMapWnd_X = i_wndSettings.m_DwellCntrlMapWnd_X;
- m_optDwellCntrlMapWnd_Y = i_wndSettings.m_DwellCntrlMapWnd_Y;
- m_optCTSCurveMapWnd_X = i_wndSettings.m_CTSCurveMapWnd_X;
- m_optCTSCurveMapWnd_Y = i_wndSettings.m_CTSCurveMapWnd_Y;
- m_optChokeOpMapWnd_X = i_wndSettings.m_ChokeOpMapWnd_X;
- m_optChokeOpMapWnd_Y = i_wndSettings.m_ChokeOpMapWnd_Y;
- m_optGridMapIgnWnd_X = i_wndSettings.m_GridMapIgnWnd_X;
- m_optGridMapIgnWnd_Y = i_wndSettings.m_GridMapIgnWnd_Y;
- m_optGridMapInjWnd_X = i_wndSettings.m_GridMapInjWnd_X;
- m_optGridMapInjWnd_Y = i_wndSettings.m_GridMapInjWnd_Y;
- m_optVEMapWnd_X = i_wndSettings.m_VEMapWnd_X;
- m_optVEMapWnd_Y = i_wndSettings.m_VEMapWnd_Y;
- m_optAFRMapWnd_X = i_wndSettings.m_AFRMapWnd_X;
- m_optAFRMapWnd_Y = i_wndSettings.m_AFRMapWnd_Y;
- m_optCrnkMapWnd_X = i_wndSettings.m_CrnkMapWnd_X;
- m_optCrnkMapWnd_Y = i_wndSettings.m_CrnkMapWnd_Y;
- m_optWrmpMapWnd_X = i_wndSettings.m_WrmpMapWnd_X;
- m_optWrmpMapWnd_Y = i_wndSettings.m_WrmpMapWnd_Y;
- m_optDeadMapWnd_X = i_wndSettings.m_DeadMapWnd_X;
- m_optDeadMapWnd_Y = i_wndSettings.m_DeadMapWnd_Y;
- m_optIdlrMapWnd_X = i_wndSettings.m_IdlrMapWnd_X;
- m_optIdlrMapWnd_Y = i_wndSettings.m_IdlrMapWnd_Y;
- m_optIdlcMapWnd_X = i_wndSettings.m_IdlcMapWnd_X;
- m_optIdlcMapWnd_Y = i_wndSettings.m_IdlcMapWnd_Y;
- m_optAETPSMapWnd_X = i_wndSettings.m_AETPSMapWnd_X;
- m_optAETPSMapWnd_Y = i_wndSettings.m_AETPSMapWnd_Y; 
- m_optAERPMMapWnd_X = i_wndSettings.m_AERPMMapWnd_X;
- m_optAERPMMapWnd_Y = i_wndSettings.m_AERPMMapWnd_Y; 
- m_optAftstrMapWnd_X = i_wndSettings.m_AftstrMapWnd_X;
- m_optAftstrMapWnd_Y = i_wndSettings.m_AftstrMapWnd_Y; 
- m_optATSCurvMapWnd_X = i_wndSettings.m_ATSCurvMapWnd_X;
- m_optATSCurvMapWnd_Y = i_wndSettings.m_ATSCurvMapWnd_Y;
- m_optATSCorrMapWnd_X = i_wndSettings.m_ATSCorrMapWnd_X;
- m_optATSCorrMapWnd_Y = i_wndSettings.m_ATSCorrMapWnd_Y; 
- m_optGasdoseMapWnd_X = i_wndSettings.m_GasdoseMapWnd_X;
- m_optGasdoseMapWnd_Y = i_wndSettings.m_GasdoseMapWnd_Y; 
- m_optITMapWnd_X = i_wndSettings.m_ITMapWnd_X;
- m_optITMapWnd_Y = i_wndSettings.m_ITMapWnd_Y;
- m_optITRPMMapWnd_X = i_wndSettings.m_ITRPMMapWnd_X;
- m_optITRPMMapWnd_Y = i_wndSettings.m_ITRPMMapWnd_Y;
- m_optRigidMapWnd_X = i_wndSettings.m_RigidMapWnd_X;
- m_optRigidMapWnd_Y = i_wndSettings.m_RigidMapWnd_Y;
- m_optEGOCrvMapWnd_X = i_wndSettings.m_EGOCrvMapWnd_X;
- m_optEGOCrvMapWnd_Y = i_wndSettings.m_EGOCrvMapWnd_Y;
- m_optIACCMapWnd_X = i_wndSettings.m_IACCMapWnd_X;
- m_optIACCMapWnd_Y = i_wndSettings.m_IACCMapWnd_Y;
- m_optIACCWMapWnd_X = i_wndSettings.m_IACCWMapWnd_X;
- m_optIACCWMapWnd_Y = i_wndSettings.m_IACCWMapWnd_Y;
- m_optIATCLTMapWnd_X = i_wndSettings.m_IATCLTMapWnd_X;
- m_optIATCLTMapWnd_Y = i_wndSettings.m_IATCLTMapWnd_Y;
- m_optBarocorrMapWnd_X = i_wndSettings.m_BarocorrMapWnd_X;
- m_optBarocorrMapWnd_Y = i_wndSettings.m_BarocorrMapWnd_Y; 
- m_optManIgntimMapWnd_X = i_wndSettings.m_ManIgntimMapWnd_X;
- m_optManIgntimMapWnd_Y = i_wndSettings.m_ManIgntimMapWnd_Y; 
- m_optCESettingsWnd_X = i_wndSettings.m_CESettingsWnd_X;
- m_optCESettingsWnd_Y = i_wndSettings.m_CESettingsWnd_Y; 
- m_optTpsswtMapWnd_X = i_wndSettings.m_TpsswtMapWnd_X;
- m_optTpsswtMapWnd_Y = i_wndSettings.m_TpsswtMapWnd_Y;
- m_optTmp2CurveMapWnd_X = i_wndSettings.m_Tmp2CurveMapWnd_X;
- m_optTmp2CurveMapWnd_Y = i_wndSettings.m_Tmp2CurveMapWnd_Y; 
- m_optGtscMapWnd_X = i_wndSettings.m_GtscMapWnd_X;
- m_optGtscMapWnd_Y = i_wndSettings.m_GtscMapWnd_Y;
- m_optGpscMapWnd_X = i_wndSettings.m_GpscMapWnd_X;
- m_optGpscMapWnd_Y = i_wndSettings.m_GpscMapWnd_Y;
- m_optAtscMapWnd_X = i_wndSettings.m_AtscMapWnd_X;
- m_optAtscMapWnd_Y = i_wndSettings.m_AtscMapWnd_Y;
- m_optCrkTempMapWnd_X = i_wndSettings.m_CrkTempMapWnd_X;
- m_optCrkTempMapWnd_Y = i_wndSettings.m_CrkTempMapWnd_Y;
- m_optEHPauseMapWnd_X = i_wndSettings.m_EHPauseMapWnd_X;
- m_optEHPauseMapWnd_Y = i_wndSettings.m_EHPauseMapWnd_Y;
+ m_optStrtMapWnd.value.x = i_wndSettings.m_StrtMapWnd_X;
+ m_optStrtMapWnd.value.y = i_wndSettings.m_StrtMapWnd_Y;
+ m_optIdleMapWnd.value.x = i_wndSettings.m_IdleMapWnd_X;
+ m_optIdleMapWnd.value.y = i_wndSettings.m_IdleMapWnd_Y;
+ m_optWorkMapWnd.value.x = i_wndSettings.m_WorkMapWnd_X;
+ m_optWorkMapWnd.value.y = i_wndSettings.m_WorkMapWnd_Y;
+ m_optTempMapWnd.value.x = i_wndSettings.m_TempMapWnd_X;
+ m_optTempMapWnd.value.y = i_wndSettings.m_TempMapWnd_Y;
+ m_optAttenMapWnd.value.x = i_wndSettings.m_AttenuatorMapWnd_X;
+ m_optAttenMapWnd.value.y = i_wndSettings.m_AttenuatorMapWnd_Y;
+ m_optMainFrmWnd.value.x = i_wndSettings.m_MainFrmWnd_X;
+ m_optMainFrmWnd.value.y = i_wndSettings.m_MainFrmWnd_Y;
+ m_optDwellCntrlMapWnd.value.x = i_wndSettings.m_DwellCntrlMapWnd_X;
+ m_optDwellCntrlMapWnd.value.y = i_wndSettings.m_DwellCntrlMapWnd_Y;
+ m_optCTSCurveMapWnd.value.x = i_wndSettings.m_CTSCurveMapWnd_X;
+ m_optCTSCurveMapWnd.value.y = i_wndSettings.m_CTSCurveMapWnd_Y;
+ m_optChokeOpMapWnd.value.x = i_wndSettings.m_ChokeOpMapWnd_X;
+ m_optChokeOpMapWnd.value.y = i_wndSettings.m_ChokeOpMapWnd_Y;
+ m_optGridMapIgnWnd.value.x = i_wndSettings.m_GridMapIgnWnd_X;
+ m_optGridMapIgnWnd.value.y = i_wndSettings.m_GridMapIgnWnd_Y;
+ m_optGridMapInjWnd.value.x = i_wndSettings.m_GridMapInjWnd_X;
+ m_optGridMapInjWnd.value.y = i_wndSettings.m_GridMapInjWnd_Y;
+ m_optVEMapWnd.value.x = i_wndSettings.m_VEMapWnd_X;
+ m_optVEMapWnd.value.y = i_wndSettings.m_VEMapWnd_Y;
+ m_optAFRMapWnd.value.x = i_wndSettings.m_AFRMapWnd_X;
+ m_optAFRMapWnd.value.y = i_wndSettings.m_AFRMapWnd_Y;
+ m_optCrnkMapWnd.value.x = i_wndSettings.m_CrnkMapWnd_X;
+ m_optCrnkMapWnd.value.y = i_wndSettings.m_CrnkMapWnd_Y;
+ m_optWrmpMapWnd.value.x = i_wndSettings.m_WrmpMapWnd_X;
+ m_optWrmpMapWnd.value.y = i_wndSettings.m_WrmpMapWnd_Y;
+ m_optDeadMapWnd.value.x = i_wndSettings.m_DeadMapWnd_X;
+ m_optDeadMapWnd.value.y = i_wndSettings.m_DeadMapWnd_Y;
+ m_optIdlrMapWnd.value.x = i_wndSettings.m_IdlrMapWnd_X;
+ m_optIdlrMapWnd.value.y = i_wndSettings.m_IdlrMapWnd_Y;
+ m_optIdlcMapWnd.value.x = i_wndSettings.m_IdlcMapWnd_X;
+ m_optIdlcMapWnd.value.y = i_wndSettings.m_IdlcMapWnd_Y;
+ m_optAETPSMapWnd.value.x = i_wndSettings.m_AETPSMapWnd_X;
+ m_optAETPSMapWnd.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
+ m_optAERPMMapWnd.value.x = i_wndSettings.m_AERPMMapWnd_X;
+ m_optAERPMMapWnd.value.y = i_wndSettings.m_AERPMMapWnd_Y; 
+ m_optAftstrMapWnd.value.x = i_wndSettings.m_AftstrMapWnd_X;
+ m_optAftstrMapWnd.value.y = i_wndSettings.m_AftstrMapWnd_Y; 
+ m_optATSCurvMapWnd.value.x = i_wndSettings.m_ATSCurvMapWnd_X;
+ m_optATSCurvMapWnd.value.y = i_wndSettings.m_ATSCurvMapWnd_Y;
+ m_optATSCorrMapWnd.value.x = i_wndSettings.m_ATSCorrMapWnd_X;
+ m_optATSCorrMapWnd.value.y = i_wndSettings.m_ATSCorrMapWnd_Y; 
+ m_optGasdoseMapWnd.value.x = i_wndSettings.m_GasdoseMapWnd_X;
+ m_optGasdoseMapWnd.value.y = i_wndSettings.m_GasdoseMapWnd_Y; 
+ m_optITMapWnd.value.x = i_wndSettings.m_ITMapWnd_X;
+ m_optITMapWnd.value.y = i_wndSettings.m_ITMapWnd_Y;
+ m_optITRPMMapWnd.value.x = i_wndSettings.m_ITRPMMapWnd_X;
+ m_optITRPMMapWnd.value.y = i_wndSettings.m_ITRPMMapWnd_Y;
+ m_optRigidMapWnd.value.x = i_wndSettings.m_RigidMapWnd_X;
+ m_optRigidMapWnd.value.y = i_wndSettings.m_RigidMapWnd_Y;
+ m_optEGOCrvMapWnd.value.x = i_wndSettings.m_EGOCrvMapWnd_X;
+ m_optEGOCrvMapWnd.value.y = i_wndSettings.m_EGOCrvMapWnd_Y;
+ m_optIACCMapWnd.value.x = i_wndSettings.m_IACCMapWnd_X;
+ m_optIACCMapWnd.value.y = i_wndSettings.m_IACCMapWnd_Y;
+ m_optIACCWMapWnd.value.x = i_wndSettings.m_IACCWMapWnd_X;
+ m_optIACCWMapWnd.value.y = i_wndSettings.m_IACCWMapWnd_Y;
+ m_optIATCLTMapWnd.value.x = i_wndSettings.m_IATCLTMapWnd_X;
+ m_optIATCLTMapWnd.value.y = i_wndSettings.m_IATCLTMapWnd_Y;
+ m_optBarocorrMapWnd.value.x = i_wndSettings.m_BarocorrMapWnd_X;
+ m_optBarocorrMapWnd.value.y = i_wndSettings.m_BarocorrMapWnd_Y; 
+ m_optManIgntimMapWnd.value.x = i_wndSettings.m_ManIgntimMapWnd_X;
+ m_optManIgntimMapWnd.value.y = i_wndSettings.m_ManIgntimMapWnd_Y; 
+ m_optCESettingsWnd.value.x = i_wndSettings.m_CESettingsWnd_X;
+ m_optCESettingsWnd.value.y = i_wndSettings.m_CESettingsWnd_Y; 
+ m_optTpsswtMapWnd.value.x = i_wndSettings.m_TpsswtMapWnd_X;
+ m_optTpsswtMapWnd.value.y = i_wndSettings.m_TpsswtMapWnd_Y;
+ m_optTmp2CurveMapWnd.value.x = i_wndSettings.m_Tmp2CurveMapWnd_X;
+ m_optTmp2CurveMapWnd.value.y = i_wndSettings.m_Tmp2CurveMapWnd_Y; 
+ m_optGtscMapWnd.value.x = i_wndSettings.m_GtscMapWnd_X;
+ m_optGtscMapWnd.value.y = i_wndSettings.m_GtscMapWnd_Y;
+ m_optGpscMapWnd.value.x = i_wndSettings.m_GpscMapWnd_X;
+ m_optGpscMapWnd.value.y = i_wndSettings.m_GpscMapWnd_Y;
+ m_optAtscMapWnd.value.x = i_wndSettings.m_AtscMapWnd_X;
+ m_optAtscMapWnd.value.y = i_wndSettings.m_AtscMapWnd_Y;
+ m_optCrkTempMapWnd.value.x = i_wndSettings.m_CrkTempMapWnd_X;
+ m_optCrkTempMapWnd.value.y = i_wndSettings.m_CrkTempMapWnd_Y;
+ m_optEHPauseMapWnd.value.x = i_wndSettings.m_EHPauseMapWnd_X;
+ m_optEHPauseMapWnd.value.y = i_wndSettings.m_EHPauseMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
 {
- o_wndSettings.m_StrtMapWnd_X = m_optStrtMapWnd_X;
- o_wndSettings.m_StrtMapWnd_Y = m_optStrtMapWnd_Y;
- o_wndSettings.m_IdleMapWnd_X = m_optIdleMapWnd_X;
- o_wndSettings.m_IdleMapWnd_Y = m_optIdleMapWnd_Y;
- o_wndSettings.m_WorkMapWnd_X = m_optWorkMapWnd_X;
- o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd_Y;
- o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd_X;
- o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd_Y;
- o_wndSettings.m_AttenuatorMapWnd_X = m_optAttenMapWnd_X;
- o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd_Y;
- o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd_X;
- o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd_Y;
- o_wndSettings.m_DwellCntrlMapWnd_X = m_optDwellCntrlMapWnd_X;
- o_wndSettings.m_DwellCntrlMapWnd_Y = m_optDwellCntrlMapWnd_Y;
- o_wndSettings.m_CTSCurveMapWnd_X = m_optCTSCurveMapWnd_X;
- o_wndSettings.m_CTSCurveMapWnd_Y = m_optCTSCurveMapWnd_Y;
- o_wndSettings.m_ChokeOpMapWnd_X = m_optChokeOpMapWnd_X;
- o_wndSettings.m_ChokeOpMapWnd_Y = m_optChokeOpMapWnd_Y;
- o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd_X;
- o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd_Y;
- o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd_X;
- o_wndSettings.m_GridMapInjWnd_Y = m_optGridMapInjWnd_Y;
- o_wndSettings.m_VEMapWnd_X = m_optVEMapWnd_X;
- o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd_Y;
- o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd_X;
- o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd_Y;
- o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd_X;
- o_wndSettings.m_CrnkMapWnd_Y = m_optCrnkMapWnd_Y;
- o_wndSettings.m_WrmpMapWnd_X = m_optWrmpMapWnd_X;
- o_wndSettings.m_WrmpMapWnd_Y = m_optWrmpMapWnd_Y;
- o_wndSettings.m_DeadMapWnd_X = m_optDeadMapWnd_X;
- o_wndSettings.m_DeadMapWnd_Y = m_optDeadMapWnd_Y;
- o_wndSettings.m_IdlrMapWnd_X = m_optIdlrMapWnd_X;
- o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd_Y;
- o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd_X;
- o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd_Y;
- o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd_X;
- o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd_Y;
- o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd_X;
- o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd_Y;
- o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd_X;
- o_wndSettings.m_AftstrMapWnd_Y = m_optAftstrMapWnd_Y;
- o_wndSettings.m_ATSCurvMapWnd_X = m_optATSCurvMapWnd_X;
- o_wndSettings.m_ATSCurvMapWnd_Y = m_optATSCurvMapWnd_Y;
- o_wndSettings.m_ATSCorrMapWnd_X = m_optATSCorrMapWnd_X;
- o_wndSettings.m_ATSCorrMapWnd_Y = m_optATSCorrMapWnd_Y;
- o_wndSettings.m_GasdoseMapWnd_X = m_optGasdoseMapWnd_X;
- o_wndSettings.m_GasdoseMapWnd_Y = m_optGasdoseMapWnd_Y;
- o_wndSettings.m_ITMapWnd_X = m_optITMapWnd_X;
- o_wndSettings.m_ITMapWnd_Y = m_optITMapWnd_Y;
- o_wndSettings.m_ITRPMMapWnd_X = m_optITRPMMapWnd_X;
- o_wndSettings.m_ITRPMMapWnd_Y = m_optITRPMMapWnd_Y;
- o_wndSettings.m_RigidMapWnd_X = m_optRigidMapWnd_X;
- o_wndSettings.m_RigidMapWnd_Y = m_optRigidMapWnd_Y;
- o_wndSettings.m_EGOCrvMapWnd_X = m_optEGOCrvMapWnd_X;
- o_wndSettings.m_EGOCrvMapWnd_Y = m_optEGOCrvMapWnd_Y;
- o_wndSettings.m_IACCMapWnd_X = m_optIACCMapWnd_X;
- o_wndSettings.m_IACCMapWnd_Y = m_optIACCMapWnd_Y;
- o_wndSettings.m_IACCWMapWnd_X = m_optIACCWMapWnd_X;
- o_wndSettings.m_IACCWMapWnd_Y = m_optIACCWMapWnd_Y;
- o_wndSettings.m_IATCLTMapWnd_X = m_optIATCLTMapWnd_X;
- o_wndSettings.m_IATCLTMapWnd_Y = m_optIATCLTMapWnd_Y;
- o_wndSettings.m_BarocorrMapWnd_X = m_optBarocorrMapWnd_X;
- o_wndSettings.m_BarocorrMapWnd_Y = m_optBarocorrMapWnd_Y;
- o_wndSettings.m_ManIgntimMapWnd_X = m_optManIgntimMapWnd_X;
- o_wndSettings.m_ManIgntimMapWnd_Y = m_optManIgntimMapWnd_Y;
- o_wndSettings.m_CESettingsWnd_X = m_optCESettingsWnd_X;
- o_wndSettings.m_CESettingsWnd_Y = m_optCESettingsWnd_Y;
- o_wndSettings.m_TpsswtMapWnd_X = m_optTpsswtMapWnd_X;
- o_wndSettings.m_TpsswtMapWnd_Y = m_optTpsswtMapWnd_Y;
- o_wndSettings.m_Tmp2CurveMapWnd_X = m_optTmp2CurveMapWnd_X;
- o_wndSettings.m_Tmp2CurveMapWnd_Y = m_optTmp2CurveMapWnd_Y;
- o_wndSettings.m_GtscMapWnd_X = m_optGtscMapWnd_X;
- o_wndSettings.m_GtscMapWnd_Y = m_optGtscMapWnd_Y;
- o_wndSettings.m_GpscMapWnd_X = m_optGpscMapWnd_X;
- o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd_Y;
- o_wndSettings.m_AtscMapWnd_X = m_optAtscMapWnd_X;
- o_wndSettings.m_AtscMapWnd_Y = m_optAtscMapWnd_Y;
- o_wndSettings.m_CrkTempMapWnd_X = m_optCrkTempMapWnd_X;
- o_wndSettings.m_CrkTempMapWnd_Y = m_optCrkTempMapWnd_Y;
- o_wndSettings.m_EHPauseMapWnd_X = m_optEHPauseMapWnd_X;
- o_wndSettings.m_EHPauseMapWnd_Y = m_optEHPauseMapWnd_Y;
+ o_wndSettings.m_StrtMapWnd_X = m_optStrtMapWnd.value.x;
+ o_wndSettings.m_StrtMapWnd_Y = m_optStrtMapWnd.value.y;
+ o_wndSettings.m_IdleMapWnd_X = m_optIdleMapWnd.value.x;
+ o_wndSettings.m_IdleMapWnd_Y = m_optIdleMapWnd.value.y;
+ o_wndSettings.m_WorkMapWnd_X = m_optWorkMapWnd.value.x;
+ o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd.value.y;
+ o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd.value.x;
+ o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd.value.y;
+ o_wndSettings.m_AttenuatorMapWnd_X = m_optAttenMapWnd.value.x;
+ o_wndSettings.m_AttenuatorMapWnd_Y = m_optAttenMapWnd.value.y;
+ o_wndSettings.m_MainFrmWnd_X = m_optMainFrmWnd.value.x;
+ o_wndSettings.m_MainFrmWnd_Y = m_optMainFrmWnd.value.y;
+ o_wndSettings.m_DwellCntrlMapWnd_X = m_optDwellCntrlMapWnd.value.x;
+ o_wndSettings.m_DwellCntrlMapWnd_Y = m_optDwellCntrlMapWnd.value.y;
+ o_wndSettings.m_CTSCurveMapWnd_X = m_optCTSCurveMapWnd.value.x;
+ o_wndSettings.m_CTSCurveMapWnd_Y = m_optCTSCurveMapWnd.value.y;
+ o_wndSettings.m_ChokeOpMapWnd_X = m_optChokeOpMapWnd.value.x;
+ o_wndSettings.m_ChokeOpMapWnd_Y = m_optChokeOpMapWnd.value.y;
+ o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd.value.x;
+ o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd.value.y;
+ o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd.value.x;
+ o_wndSettings.m_GridMapInjWnd_Y = m_optGridMapInjWnd.value.y;
+ o_wndSettings.m_VEMapWnd_X = m_optVEMapWnd.value.x;
+ o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd.value.y;
+ o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd.value.x;
+ o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd.value.y;
+ o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd.value.x;
+ o_wndSettings.m_CrnkMapWnd_Y = m_optCrnkMapWnd.value.y;
+ o_wndSettings.m_WrmpMapWnd_X = m_optWrmpMapWnd.value.x;
+ o_wndSettings.m_WrmpMapWnd_Y = m_optWrmpMapWnd.value.y;
+ o_wndSettings.m_DeadMapWnd_X = m_optDeadMapWnd.value.x;
+ o_wndSettings.m_DeadMapWnd_Y = m_optDeadMapWnd.value.y;
+ o_wndSettings.m_IdlrMapWnd_X = m_optIdlrMapWnd.value.x;
+ o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd.value.y;
+ o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd.value.x;
+ o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd.value.y;
+ o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd.value.x;
+ o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd.value.y;
+ o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd.value.x;
+ o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd.value.y;
+ o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd.value.x;
+ o_wndSettings.m_AftstrMapWnd_Y = m_optAftstrMapWnd.value.y;
+ o_wndSettings.m_ATSCurvMapWnd_X = m_optATSCurvMapWnd.value.x;
+ o_wndSettings.m_ATSCurvMapWnd_Y = m_optATSCurvMapWnd.value.y;
+ o_wndSettings.m_ATSCorrMapWnd_X = m_optATSCorrMapWnd.value.x;
+ o_wndSettings.m_ATSCorrMapWnd_Y = m_optATSCorrMapWnd.value.y;
+ o_wndSettings.m_GasdoseMapWnd_X = m_optGasdoseMapWnd.value.x;
+ o_wndSettings.m_GasdoseMapWnd_Y = m_optGasdoseMapWnd.value.y;
+ o_wndSettings.m_ITMapWnd_X = m_optITMapWnd.value.x;
+ o_wndSettings.m_ITMapWnd_Y = m_optITMapWnd.value.y;
+ o_wndSettings.m_ITRPMMapWnd_X = m_optITRPMMapWnd.value.x;
+ o_wndSettings.m_ITRPMMapWnd_Y = m_optITRPMMapWnd.value.y;
+ o_wndSettings.m_RigidMapWnd_X = m_optRigidMapWnd.value.x;
+ o_wndSettings.m_RigidMapWnd_Y = m_optRigidMapWnd.value.y;
+ o_wndSettings.m_EGOCrvMapWnd_X = m_optEGOCrvMapWnd.value.x;
+ o_wndSettings.m_EGOCrvMapWnd_Y = m_optEGOCrvMapWnd.value.y;
+ o_wndSettings.m_IACCMapWnd_X = m_optIACCMapWnd.value.x;
+ o_wndSettings.m_IACCMapWnd_Y = m_optIACCMapWnd.value.y;
+ o_wndSettings.m_IACCWMapWnd_X = m_optIACCWMapWnd.value.x;
+ o_wndSettings.m_IACCWMapWnd_Y = m_optIACCWMapWnd.value.y;
+ o_wndSettings.m_IATCLTMapWnd_X = m_optIATCLTMapWnd.value.x;
+ o_wndSettings.m_IATCLTMapWnd_Y = m_optIATCLTMapWnd.value.y;
+ o_wndSettings.m_BarocorrMapWnd_X = m_optBarocorrMapWnd.value.x;
+ o_wndSettings.m_BarocorrMapWnd_Y = m_optBarocorrMapWnd.value.y;
+ o_wndSettings.m_ManIgntimMapWnd_X = m_optManIgntimMapWnd.value.x;
+ o_wndSettings.m_ManIgntimMapWnd_Y = m_optManIgntimMapWnd.value.y;
+ o_wndSettings.m_CESettingsWnd_X = m_optCESettingsWnd.value.x;
+ o_wndSettings.m_CESettingsWnd_Y = m_optCESettingsWnd.value.y;
+ o_wndSettings.m_TpsswtMapWnd_X = m_optTpsswtMapWnd.value.x;
+ o_wndSettings.m_TpsswtMapWnd_Y = m_optTpsswtMapWnd.value.y;
+ o_wndSettings.m_Tmp2CurveMapWnd_X = m_optTmp2CurveMapWnd.value.x;
+ o_wndSettings.m_Tmp2CurveMapWnd_Y = m_optTmp2CurveMapWnd.value.y;
+ o_wndSettings.m_GtscMapWnd_X = m_optGtscMapWnd.value.x;
+ o_wndSettings.m_GtscMapWnd_Y = m_optGtscMapWnd.value.y;
+ o_wndSettings.m_GpscMapWnd_X = m_optGpscMapWnd.value.x;
+ o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd.value.y;
+ o_wndSettings.m_AtscMapWnd_X = m_optAtscMapWnd.value.x;
+ o_wndSettings.m_AtscMapWnd_Y = m_optAtscMapWnd.value.y;
+ o_wndSettings.m_CrkTempMapWnd_X = m_optCrkTempMapWnd.value.x;
+ o_wndSettings.m_CrkTempMapWnd_Y = m_optCrkTempMapWnd.value.y;
+ o_wndSettings.m_EHPauseMapWnd_X = m_optEHPauseMapWnd.value.x;
+ o_wndSettings.m_EHPauseMapWnd_Y = m_optEHPauseMapWnd.value.y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const
 {
- return m_optInterLang;
+ return (EInterLang)m_optInterfaceLang.value;
 }
 
 EECUPlatform CAppSettingsModel::GetECUPlatformType(void) const
 {
- return m_optECUPlatformType;
+ return (EECUPlatform)m_optECUPlatformType.value;
 }
 
 int CAppSettingsModel::GetTachometerMax(void) const
 {
- return m_optTachometerMax;
+ return m_optTachometerMax.value;
 }
 
 int CAppSettingsModel::GetPressureMax(void) const
 {
- return m_optPressureMax;
+ return m_optPressureMax.value;
 }
 
 ESpeedUnit CAppSettingsModel::GetSpeedUnit(void) const
 {
- return m_optSpeedUnit;
+ return (ESpeedUnit)m_optSpeedUnit.value;
 }
 
 bool CAppSettingsModel::GetUseDVFeatures(void) const
 {
- return m_optUseDVFeatures;
+ return m_optUseDVFeatures.value;
 }
 
 int CAppSettingsModel::GetDVDeskUpdatePeriod(void) const
 {
- return m_optDVDeskUpdatePeriod;
+ return m_optDVDeskUpdatePeriod.value;
 }
 
 bool CAppSettingsModel::GetShowToolTips(void) const
 {
- return m_optShowToolTips;
+ return m_optShowToolTips.value;
 }
 
 bool CAppSettingsModel::GetShowExFixtures(void) const
 {
- return m_optShowExFixtures;
+ return m_optShowExFixtures.value;
 }
 
 bool CAppSettingsModel::GetHexDataMode(void) const
 {
- return m_optHexDataMode;
+ return m_optHexDataMode.value;
 }
 
 int CAppSettingsModel::GetNumPulsesPer1Km(void) const
 {
- return m_optPulsesPer1Km;
+ return m_optPulsesPer1Km.value;
 }
 
 bool CAppSettingsModel::GetCOMPortBother(void) const
 {
- return m_optCOMPortBother;
+ return m_optCOMPortBother.value;
 }
 
 bool CAppSettingsModel::GetUseHotKeys(void) const
 {
- return m_optUseHotKeys;
+ return m_optUseHotKeys.value;
 }
 
 bool CAppSettingsModel::GetShowWelcome(void) const
 {
- return m_optShowWelcome;
+ return m_optShowWelcome.value;
 }
 
 int CAppSettingsModel::GetRPMAverage(void) const
 {
- return m_optRPMAverage;
+ return m_optRPMAverage.value;
 }
 
 int CAppSettingsModel::GetVoltAverage(void) const
 {
- return m_optVoltAverage;
+ return m_optVoltAverage.value;
 }
 
 int CAppSettingsModel::GetMAPAverage(void) const
 {
- return m_optMAPAverage;
+ return m_optMAPAverage.value;
 }
 
 int CAppSettingsModel::GetAI1Average(void) const
 {
- return m_optAI1Average;
+ return m_optAI1Average.value;
 }
 
 int CAppSettingsModel::GetTPSAverage(void) const
 {
- return m_optTPSAverage;
+ return m_optTPSAverage.value;
 }
 
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
 {
- return m_optAllowVisualTheme;
+ return m_optAllowVisualTheme.value;
 }
 
 bool CAppSettingsModel::GetAutoDiagEnter(void) const
 {
- return m_optAutoDiagEnter;
+ return m_optAutoDiagEnter.value;
 }
 
 bool CAppSettingsModel::GetSaveWarning(void) const
 {
- return m_optSaveWarning;
+ return m_optSaveWarning.value;
 }
 
 bool CAppSettingsModel::GetAutoCERead(void) const
 {
- return m_optAutoCERead;
+ return m_optAutoCERead.value;
 }
 
 bool CAppSettingsModel::GetChildCharts(void) const
 {
- return m_optChildCharts;
+ return m_optChildCharts.value;
 }
