@@ -527,8 +527,8 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  }
  else*/
  { //non-missing teeth wheel
-  degBTDC.insert(std::make_pair(1, 330.0f));
-  degBTDC.insert(std::make_pair(2, 330.0f));
+  degBTDC.insert(std::make_pair(1, 540.0f));
+  degBTDC.insert(std::make_pair(2, 540.0f));
   degBTDC.insert(std::make_pair(3, 330.0f));
   degBTDC.insert(std::make_pair(4, 330.0f));
   degBTDC.insert(std::make_pair(5, 330.0f));

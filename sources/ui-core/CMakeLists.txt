@@ -39,6 +39,7 @@ set(HEADERS
   Label.h
   LEDIndicator.h
   MapEditorCtrl.h
+  MultiLEDCtrl.h
   OScopeCtrl.h
   ProgressCtrlEx.h
   SpinButtonctrlEx.h
@@ -69,6 +70,7 @@ set(SOURCES
   Label.cpp
   LEDIndicator.cpp
   MapEditorCtrl.cpp
+  MultiLEDCtrl.cpp
   OScopeCtrl.cpp
   ProgressCtrlEx.cpp
   SpinButtonctrlEx.cpp
