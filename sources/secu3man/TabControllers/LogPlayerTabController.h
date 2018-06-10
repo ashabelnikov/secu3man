@@ -107,6 +107,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //Переустанавливет период таймера, если нужно
   void _UpdateTimerPeriod(bool i_set_timer);
 
+  void ConfigureIndicators(void);
+
  private:
   CLogPlayerTabDlg*  mp_view;
   CCommunicationManager* mp_comm;

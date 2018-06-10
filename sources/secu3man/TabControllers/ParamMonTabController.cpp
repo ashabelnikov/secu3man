@@ -108,6 +108,7 @@ void CParamMonTabController::OnSettingsChanged(void)
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  mp_moncntr->OnSettingsChanged();
+ ConfigureIndicators();
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
 }
@@ -135,6 +136,7 @@ void CParamMonTabController::OnActivate(void)
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  OnConnection(mp_comm->m_pControlApp->GetOnlineStatus());
 
+ ConfigureIndicators();
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
@@ -294,4 +296,12 @@ void CParamMonTabController::_StartScenario(const std::vector<CPMStateMachineSta
  m_state_machine = scenario;
  m_current_state = m_state_machine.begin();
  (*m_current_state)->StartDataCollection();
+}
+
+void CParamMonTabController::ConfigureIndicators(void)
+{
+ int idx = (int)mp_settings->GetShowExFixtures();
+ IndicatorsCfg cfg;
+ mp_settings->GetIndicatorsConfig(cfg);
+ mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg.m_optIndRows[idx], cfg.m_optIndGas_v[idx], cfg.m_optIndCarb[idx], cfg.m_optIndIdleValve[idx], cfg.m_optIndPowerValve[idx], cfg.m_optStBlock[idx], cfg.m_optAE[idx], cfg.m_optCoolingFan[idx]);
 }

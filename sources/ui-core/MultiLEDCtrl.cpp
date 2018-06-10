@@ -101,12 +101,14 @@ void CMultiLEDCtrl::OnPaint()
 
  COLORREF text_color = GetSysColor(COLOR_BTNTEXT);
  COLORREF gray_color = GetSysColor(COLOR_GRAYTEXT);
-
+ 
  for (size_t i = 0; i < m_items.size(); ++i)
  {
   CRect rc = _GetItemRect((int)i);
-  if (m_items[i].m_state)
+  if (m_items[i].m_state) //on
    dc.FillRect(rc, IsWindowEnabled() ? m_items[i].mp_brush : &m_bkBrush);
+  else //off
+   dc.FillRect(rc, IsWindowEnabled() ? &m_bkBrush : &m_bkBrush);
   dc.Draw3dRect(&rc, RGB(255,255,255), RGB(0,0,0));
   dc.SetBkMode(TRANSPARENT);
   dc.SetTextColor(IsWindowEnabled() ? text_color : gray_color);
@@ -194,5 +196,12 @@ void CMultiLEDCtrl::SetItemState(int idx, bool state, bool invalidate /*= true*/
 
  m_items[idx].m_state = state;
  if (invalidate)
-  InvalidateRect(_GetItemRect(idx));
+  InvalidateRect(_GetItemRect(idx));  
+}
+
+void CMultiLEDCtrl::Clear(void)
+{
+ for(size_t i = 0; i < m_items.size(); ++i)
+  delete m_items[i].mp_brush;
+ m_items.clear();
 }

@@ -26,7 +26,7 @@
 #pragma once
 #include <vector>
 
-class CMultiLEDCtrl : public CWnd
+class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
 {
   typedef CWnd Super;
 
@@ -39,6 +39,7 @@ class CMultiLEDCtrl : public CWnd
   BOOL Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id);
 
   void SetNumRows(int rows);
+  void Clear(void);
   void AddItem(const CString& text, COLORREF color = RGB(0,255,0));
   void SetItemState(int idx, bool state, bool invalidate = true);
 

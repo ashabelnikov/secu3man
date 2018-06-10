@@ -34,11 +34,9 @@ set(HEADERS
   MIDeskDlg.h
   MIDwellAngle.h
   MIEGOCorr.h
-  MIGasValve.h
   MIIAT.h
   MIInjPW.h
   MIPressure.h
-  MIShutoffValve.h
   MITachometer.h
   MITemperature.h
   MIThrottleGate.h
@@ -58,11 +56,9 @@ set (SOURCES
   MIDesk.cpp
   MIDwellAngle.cpp
   MIEGOCorr.cpp
-  MIGasValve.cpp
   MIIAT.cpp
   MIInjPW.cpp
   MIPressure.cpp
-  MIShutoffValve.cpp
   MITachometer.cpp
   MITemperature.cpp
   MIThrottleGate.cpp

@@ -27,17 +27,12 @@
 #include "MIThrottleGate.h"
 #include "common/GDIHelpers.h"
 #include "resource.h"
-#include <float.h>
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMIThrottleGate::CMIThrottleGate()
-: m_led(true)
-, m_loLimit(.0f)
-, m_upLimit(.0f)
-, m_value(FLT_MAX)
 {
  //empty
 }
@@ -49,107 +44,97 @@ CMIThrottleGate::~CMIThrottleGate()
 
 void CMIThrottleGate::Create(void)
 {
- m_led.SetColor(led_rect,RGB(0,0,0));
- m_led.SetColor(led_on,RGB(255,255,0));
- m_led.SetColor(led_off,RGB(40,40,40));
+ m_meter.SetRange (.0, 100.0) ;
+ m_meter.SetLabelsDecimals(1) ;
+ m_meter.SetValueDecimals(1) ;
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_THROTTLE_GATE_TITLE)) ;
+ m_meter.SetFontScale(80);
+ m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetUnit(MLL::LoadString(IDS_MI_PERCENT_UNIT));
+ m_meter.SetTickNumber(16);
+ m_meter.AddAlertZone(0,5,RGB(130,130,180));
+ m_meter.AddAlertZone(5,75,RGB(120,180,150));
+ m_meter.AddAlertZone(75,100,RGB(230,130,130));
+ m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetTLPane(_T("n/a"));
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
 
- Enable(m_prev_enable);
-
- m_value = FLT_MAX; //reset cache
-
- m_rect[0] = GDIHelpers::GetChildWndRect(&m_led);
- m_rect[1] = GDIHelpers::GetChildWndRect(&m_caption);
+ m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
 //--------------------interface-----------------------
 void CMIThrottleGate::SetValue(float value)
 {
- m_led.SetState((value) ? true : false);
+ m_meter.SetNeedleValue((double)value);
+ m_meter.Update();
 }
 
 float CMIThrottleGate::GetValue(void)
 {
- bool state = m_led.GetState();
- return ((state) ? 1.0f : 0.0f);
+ return (float)m_meter.GetNeedlePos();
 }
 
 void CMIThrottleGate::Show(bool show)
 {
- int nCmdShow = (show) ? SW_SHOW : SW_HIDE;
- m_led.ShowWindow(nCmdShow);
- m_caption.ShowWindow(nCmdShow);
+ m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
 
 void CMIThrottleGate::Enable(bool enable)
 {
- int b_enable = (enable) ? TRUE : FALSE ;
- m_led.EnableWindow(b_enable);
- m_caption.EnableWindow(b_enable);
- m_led.InvalidateRect(NULL,TRUE);
+ m_meter.SetState(meter_needle, enable);
+ m_meter.SetState(meter_value, enable);
+ m_meter.SetState(meter_grid, enable);
+ m_meter.SetState(meter_labels, enable);
+ m_meter.SetState(meter_unit, enable);
+ m_meter.SetState(meter_trpane, false);
+ m_meter.SetState(meter_tlpane, enable);
+ COLORREF bk_color;
+ m_meter.GetColor(meter_bground, &bk_color);
+ m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
 
- m_prev_enable = enable;
+ m_meter.Redraw();
 }
 
 bool CMIThrottleGate::IsVisible(void)
 {
- BOOL state = m_led.IsWindowVisible();
- return ((state) ? true : false);
+ return (m_meter.IsWindowVisible()) ? true : false;
 }
 
 bool CMIThrottleGate::IsEnabled(void)
 {
- BOOL state = m_led.IsWindowEnabled();
- return ((state) ? true : false);
+ bool State = false;
+ m_meter.GetState(meter_needle, &State);
+ return State;
 }
 
 void CMIThrottleGate::SetLimits(float loLimit, float upLimit)
 {
- m_loLimit = loLimit;
- m_upLimit = upLimit;
+ m_meter.SetRange(loLimit, upLimit);
 }
 
 void CMIThrottleGate::SetTicks(int number)
 {
- //not used by LED
+ m_meter.SetTickNumber(number);
 }
 //----------------------------------------------------
 
-void CMIThrottleGate::SetPosition(float value)
+void CMIThrottleGate::SetAirFlow(float value, bool redraw /*= false*/)
 {
- if (value < m_loLimit) value = m_loLimit;
- if (value > m_upLimit) value = m_upLimit;
- m_led.SetPosition(((m_upLimit - m_loLimit) / 100.0f) * (value-m_loLimit));
-
- if (m_value!=value)
- {
-  std::string fmt(MLL::GetString(IDS_MI_TPS_FMT_STR));
-  TCHAR buff[32];
-  _stprintf(buff, fmt.c_str(), value);
-  m_caption.SetWindowText(buff);
-  m_value = value;
- }
+ CString str;
+ str.Format(_T("%d"), (int)value);
+ m_meter.SetTLPane(str);
+ if (redraw) m_meter.Update();
 }
 
-float CMIThrottleGate::GetPosition(void) const
+void CMIThrottleGate::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
 {
- return m_led.GetPosition();
-}
-
-void CMIThrottleGate::DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_caption)
-{
- DDX_Control(pDX, nIDC_led, m_led);
- DDX_Control(pDX, nIDC_caption, m_caption);
+ DDX_Control(pDX, nIDC_meter, m_meter);
 }
 
 void CMIThrottleGate::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
 {
- CRect rect;
-
- rect = m_rect[0];
+ CRect rect = m_rect;
  GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_led.MoveWindow(rect, repaint);
-
- rect = m_rect[1];
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect, repaint);
+ m_meter.MoveWindow(rect, repaint);
 }

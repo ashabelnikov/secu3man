@@ -18,7 +18,7 @@ LIBS    = ui-core.lib
 LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/midesk.dll /IMPLIB:../../libraries/midesk.lib /LIBPATH:../../libraries midesk.res 
 # source files
 SOURCES = StdAfx.cpp CEDeskDlg.cpp DVDeskDlg.cpp MIAirFlow.cpp MIDeskDlg.cpp MIDesk.cpp \
-  MIDwellAngle.cpp MIGasValve.cpp MIPressure.cpp MIShutoffValve.cpp MITachometer.cpp \
+  MIDwellAngle.cpp MIPressure.cpp MITachometer.cpp \
   MITemperature.cpp MIThrottleGate.cpp MIVoltage.cpp MIVoltMeter.cpp RSDeskDlg.cpp LMDeskDlg.cpp \
   MIInjPW.cpp MIIAT.cpp MIEGOCorr.cpp
 

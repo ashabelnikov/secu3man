@@ -171,6 +171,7 @@ void CTabController::DestroyTabPage(void)
  {
   if (IsWindow(mp_CurDlg->m_hWnd)) //только если окно было создано (предотвращаем повторное закрытие окна)
    mp_CurDlg->DestroyWindow();
+  mp_CurDlg = NULL;
  }
 }
 
@@ -202,12 +203,6 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg)
  }
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM,m_tab_item_index,name,0,(LPARAM)pPageData);
-
- if (0 == m_tab_item_index)
- { //выбираем первую вкладку
-  CreateTabPage();
- }
-
  return m_tab_item_index++;
 }
 
@@ -238,13 +233,6 @@ int CTabController::AddPage(CString name,CTabDialog* pPageDlg,const int nImage)
 
  //добавление непосредственно вкладки
  InsertItem(TCIF_TEXT|TCIF_PARAM|TCIF_IMAGE,m_tab_item_index,name,nImage,(LPARAM)pPageData);
-
- if (0 == m_tab_item_index)
- {
-  //выбираем первую вкладку
-  CreateTabPage();
- }
-
  return m_tab_item_index++;
 }
 
@@ -309,7 +297,8 @@ void CTabController::OnSize( UINT nType, int cx, int cy )
   return;
 
  CalculatePageRect(index, rect);
- pItemData->pDialogClass->SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(), SWP_NOMOVE | SWP_NOZORDER);
+ if (pItemData->pDialogClass->GetSafeHwnd())
+  pItemData->pDialogClass->SetWindowPos(NULL, 0, 0, rect.Width(), rect.Height(), SWP_NOMOVE | SWP_NOZORDER);
 }
 
 void CTabController::OnDestroy()
@@ -516,14 +505,18 @@ int CTabController::PrevEnabledTab(int iCurrentTab, bool bWrap)
 // messages to tell parent I am changing the tab; SetCurSel does not do this!
 bool CTabController::SetCurSel(UINT iNewTab)
 {
- //=====================================================================
- if (m_pEventHandler)
-  if (!m_pEventHandler->OnSelchangingTabctl()) //Send event!
-   return false; //not allowed by listener
- //=====================================================================
+ if (mp_CurDlg)
+ {
+  //=====================================================================
+  if (m_pEventHandler)
+   if (!m_pEventHandler->OnSelchangingTabctl()) //Send event!
+    return false; //not allowed by listener
+  //=====================================================================
 
- DestroyTabPage(); //удаление предыдущей вкладки
- int previos_selected_item = CTabCtrl::SetCurSel(iNewTab); //выбор новой вкладки
+  DestroyTabPage(); //удаление предыдущей вкладки
+ }
+
+ CTabCtrl::SetCurSel(iNewTab); //выбор новой вкладки
  CreateTabPage(); //отображение новой - выбранной вкладки
 
  //=====================================================================

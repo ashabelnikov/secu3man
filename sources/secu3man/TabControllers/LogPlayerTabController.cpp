@@ -116,6 +116,7 @@ void CLogPlayerTabController::OnSettingsChanged(void)
  mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
 
+ ConfigureIndicators();
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
 }
@@ -159,6 +160,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->ShowGDPos(true);
  mp_view->mp_MIDeskDlg->ShowSpeedAndDistance(true);
 
+ ConfigureIndicators();
  mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
 }
 
@@ -582,3 +584,12 @@ void CLogPlayerTabController::_UpdateButtons(void)
  if (mp_view->mp_LPPanelDlg->IsPlayButtonEnabled()!=mp_log_reader->IsNextPossible())
   mp_view->mp_LPPanelDlg->EnablePlayButton(mp_log_reader->IsNextPossible());
 }
+
+void CLogPlayerTabController::ConfigureIndicators(void)
+{
+ int idx = (int)mp_settings->GetShowExFixtures();
+ IndicatorsCfg cfg;
+ mp_settings->GetIndicatorsConfig(cfg);
+ mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg.m_optIndRows[idx], cfg.m_optIndGas_v[idx], cfg.m_optIndCarb[idx], cfg.m_optIndIdleValve[idx], cfg.m_optIndPowerValve[idx], cfg.m_optStBlock[idx], cfg.m_optAE[idx], cfg.m_optCoolingFan[idx]);
+}
+

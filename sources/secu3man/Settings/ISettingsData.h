@@ -114,6 +114,18 @@ struct WndSettings
  int m_EHPauseMapWnd_Y;
 };
 
+struct IndicatorsCfg
+{
+ int m_optIndRows[2];
+ int m_optIndGas_v[2];
+ int m_optIndCarb[2];
+ int m_optIndIdleValve[2];
+ int m_optIndPowerValve[2];
+ int m_optStBlock[2];
+ int m_optAE[2];
+ int m_optCoolingFan[2];
+};
+
 typedef enum EInterLang
 {
  IL_ENGLISH = 0,
@@ -169,4 +181,7 @@ class ISettingsData
   virtual bool GetShowExFixtures(void) const = 0;
   virtual bool GetHexDataMode(void) const = 0;
   virtual int GetNumPulsesPer1Km(void) const = 0;
+
+  //Indicators
+  virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;
 };

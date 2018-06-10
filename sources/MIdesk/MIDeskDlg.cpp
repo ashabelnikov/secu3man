@@ -27,11 +27,14 @@
 #include "resource.h"
 #include <algorithm>
 #include <numeric>
+#include <limits>
 #include "MIDeskDlg.h"
 
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
+
+#undef max
 
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
@@ -86,15 +89,11 @@ void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
  m_iat.DDX_Controls(pDX, IDC_MI_IAT);
  m_inj_pw.DDX_Controls(pDX, IDC_MI_INJ_PW);
  m_ego_corr.DDX_Controls(pDX, IDC_MI_EGO_CORR);
+ m_throttle_gate.DDX_Controls(pDX, IDC_MI_TPS);
+ //LED indicators
+ DDX_Control(pDX, IDC_MI_INDICATORS, m_leds);
 
- //Булевские приборы (лампочка)
- m_gas_valve.DDX_Controls(pDX,IDC_MI_GAS_VALVE,IDC_MI_GAS_VALVE_CAPTION);
- m_throttle_gate.DDX_Controls(pDX, IDC_MI_THROTTLE_GATE, IDC_MI_THROTTLE_GATE_CAPTION);
- m_shutoff_valve.DDX_Controls(pDX, IDC_MI_SHUTOFF_VALVE, IDC_MI_SHUTOFF_VALVE_CAPTION);
- m_power_valve.DDX_Controls(pDX, IDC_MI_POWER_VALVE, IDC_MI_POWER_VALVE_CAPTION);
-
- //расход воздуха
- m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
+//m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
 }
 
 BOOL CMIDeskDlg::Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect)
@@ -119,17 +118,25 @@ BOOL CMIDeskDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ if (!m_font.GetSafeHandle())
+ {
+  LOGFONT LogFont;
+  memset(&LogFont, 0x00, sizeof(LogFont));
+  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
+  LogFont.lfHeight = 8;
+  m_font.CreateFontIndirect(&LogFont);
+ }
+
+ m_leds.SetFont(&m_font);
+ m_ledsRect = GDIHelpers::GetChildWndRect(&m_leds);
+ 
  //создаем приборы (оконные образы)
  m_tachometer.Create();
  m_pressure.Create();
  m_voltmeter.Create();
  m_dwell_angle.Create();
- m_gas_valve.Create();
- m_shutoff_valve.Create();
- m_power_valve.Create();
  m_throttle_gate.Create();
- m_throttle_gate.SetLimits(0,100);
- m_air_flow.Create();
+ //m_air_flow.Create();
  m_temperature.Create();
  m_add_i1.Create();
  m_add_i2.Create();
@@ -151,6 +158,7 @@ void CMIDeskDlg::OnDestroy()
  m_was_initialized = false;
  Super::OnDestroy();
  m_update_timer.KillTimer();
+ m_enabled = -1;
 }
 
 //разрешение/запрещение приборов
@@ -163,17 +171,15 @@ void CMIDeskDlg::Enable(bool enable)
  m_pressure.Enable(enable);
  m_voltmeter.Enable(enable);
  m_dwell_angle.Enable(enable);
- m_gas_valve.Enable(enable);
- m_shutoff_valve.Enable(enable);
- m_power_valve.Enable(enable);
  m_throttle_gate.Enable(enable);
- m_air_flow.Enable(enable);
+ //m_air_flow.Enable(enable);
  m_temperature.Enable(enable);
  m_add_i1.Enable(enable);
  m_add_i2.Enable(enable);
  m_iat.Enable(enable);
  m_inj_pw.Enable(enable);
  m_ego_corr.Enable(enable);
+ m_leds.EnableWindow(enable);
 }
 
 void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
@@ -184,18 +190,16 @@ void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
  m_pressure.Show(show);
  m_voltmeter.Show(show);
  m_dwell_angle.Show(show);
- m_gas_valve.Show(show);
- m_shutoff_valve.Show(show);
- m_power_valve.Show(show);
  m_throttle_gate.Show(show);
- m_air_flow.Show(show);
  m_temperature.Show(show);
+//m_air_flow.Show(show);
  //extended fixtures
  m_add_i1.Show(show && show_exf);
  m_add_i2.Show(show && show_exf && !m_values.add_i2_mode);
  m_iat.Show(show && show_exf && m_values.add_i2_mode);
  m_inj_pw.Show(show && show_exf);
  m_ego_corr.Show(show && show_exf);
+ m_leds.ShowWindow(show ? SW_SHOW : SW_HIDE);
 }
 
 using namespace SECU3IO;
@@ -282,20 +286,17 @@ void CMIDeskDlg::OnUpdateTimer(void)
   m_voltmeter.SetValue(m_values.voltage);
 
  m_dwell_angle.SetValue(m_values.adv_angle);
- m_gas_valve.SetValue(m_values.gas);
- m_shutoff_valve.SetValue(m_values.ephh_valve);
- m_power_valve.SetValue(m_values.epm_valve);
- m_throttle_gate.SetValue(m_values.carb);
+ m_throttle_gate.SetAirFlow(m_values.air_flow);
 
  if (m_tps_avnum > 0)
  {
   float tps = std::accumulate(m_tps_rb, m_tps_rb + m_tps_avnum, 0.0f);
-  m_throttle_gate.SetPosition(tps / m_tps_avnum);
+  m_throttle_gate.SetValue(tps / m_tps_avnum);
  }
  else
-  m_throttle_gate.SetPosition(m_values.tps);
-
- m_air_flow.SetValue(m_values.air_flow);
+  m_throttle_gate.SetValue(m_values.tps);
+ 
+// m_air_flow.SetValue(m_values.air_flow);
  m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
  m_temperature.SetGDPos(m_values.gasdose_pos); //top-left pane
  m_temperature.SetValue(m_values.temperat);
@@ -314,6 +315,11 @@ void CMIDeskDlg::OnUpdateTimer(void)
   m_iat.SetValue(m_values.air_temp);
  m_inj_pw.SetValue(m_values.inj_pw);
  m_ego_corr.SetValue(m_values.lambda_corr);
+
+ IndFields_t::iterator it;
+ int idx = 0;
+ for(it = m_indFields.begin(); it != m_indFields.end(); ++it, ++idx)
+  m_leds.SetItemState(idx, *it->second.second, true);
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -358,17 +364,21 @@ void CMIDeskDlg::Resize(const CRect& i_rect)
  m_pressure.Scale(Xf, Yf, redraw);
  m_voltmeter.Scale(Xf, Yf, redraw);
  m_dwell_angle.Scale(Xf, Yf, redraw);
- m_gas_valve.Scale(Xf, Yf, redraw);
- m_shutoff_valve.Scale(Xf, Yf, redraw);
- m_power_valve.Scale(Xf, Yf, redraw);
  m_throttle_gate.Scale(Xf, Yf, redraw);
- m_air_flow.Scale(Xf, Yf, redraw);
+ //m_air_flow.Scale(Xf, Yf, redraw);
  m_temperature.Scale(Xf, Yf, redraw);
  m_add_i1.Scale(Xf, Yf, redraw);
  m_add_i2.Scale(Xf, Yf, redraw);
  m_iat.Scale(Xf, Yf, redraw);
  m_inj_pw.Scale(Xf, Yf, redraw);
  m_ego_corr.Scale(Xf, Yf, redraw);
+ 
+ //scale LED's panel
+ CRect rect = m_ledsRect;
+ if (m_show_exf)
+  rect.right = rect.left + MathHelpers::Round(rect.Width()*1.664f); //todo: remove after full implementation of custom fixtures
+ GDIHelpers::ScaleRect(rect, Xf, Yf);
+ m_leds.MoveWindow(rect, redraw);
 
  RedrawWindow();
 }
@@ -440,4 +450,36 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
   if (!rect.IsRectNull())
    Resize(rect);
  }
+}
+
+void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan)
+{
+ m_leds.SetNumRows(IndRows);
+ m_indFields.clear();
+
+ if (IndGas_v != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndGas_v, std::make_pair(MLL::GetString(IDS_MI_IND_GAS_V), &m_values.gas)));
+
+ if (IndCarb != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCarb, std::make_pair(MLL::GetString(IDS_MI_IND_CARB), &m_values.carb)));
+
+ if (IndIdleValve != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndIdleValve, std::make_pair(MLL::GetString(IDS_MI_IND_IDLEVALVE), &m_values.ephh_valve)));
+
+ if (IndPowerValve != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndPowerValve, std::make_pair(MLL::GetString(IDS_MI_IND_POWERVALVE), &m_values.epm_valve)));
+
+ if (StBlock != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(StBlock, std::make_pair(MLL::GetString(IDS_MI_IND_STBLOCK), &m_values.st_block)));
+
+ if (AE != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(AE, std::make_pair(MLL::GetString(IDS_MI_IND_AE), &m_values.acceleration)));
+
+ if (CoolingFan != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(CoolingFan, std::make_pair(MLL::GetString(IDS_MI_IND_COOLINGFAN), &m_values.cool_fan)));
+
+ m_leds.Clear();
+ IndFields_t::iterator it;
+ for(it = m_indFields.begin(); it != m_indFields.end(); ++it)
+  m_leds.AddItem(it->second.first.c_str());
 }

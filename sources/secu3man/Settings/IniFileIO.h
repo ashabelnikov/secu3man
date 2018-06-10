@@ -32,12 +32,11 @@
 
 template <class T> struct OptField_t
 {
- OptField_t(const _TSTRING& n)
-  : name(n) {}
- const _TSTRING name;
+ OptField_t() {}
+ OptField_t(const _TSTRING& n) : name(n) {}
+ _TSTRING name;
  T value;
 };
-
 
 class IniIO
 {
@@ -137,15 +136,21 @@ class IniIO
    return false;
   }
 
+  //Result will be std::numeric_limits<int>::max() if field is empty and stubIfEmpty == true
   template <class T>
-  bool ReadInt(OptField_t<T>& field, const _TSTRING& defVal, int minVal, int maxVal)
+  bool ReadInt(OptField_t<T>& field, const _TSTRING& defVal, int minVal, int maxVal, bool stubIfEmpty = false)
   {
    TCHAR read_str[256];
    int value = 0;
    GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   if (ltrim(read_str).empty() && stubIfEmpty)
+   {
+    field.value = std::numeric_limits<int>::max();
+    return true; //ok
+   }
    if (_stscanf(read_str, _T("%d"), &value) != 1 || ((int)value) < minVal || ((int)value) > maxVal)
    {
-    field.value = _ttoi(read_str);
+    field.value = _ttoi(defVal.c_str());
     return false;
    }
    field.value = value;
@@ -156,11 +161,13 @@ class IniIO
   bool WriteInt(const OptField_t<T>& field)
   {
    CString str;
-   str.Format(_T("%d"), (int)field.value);
+   if ((int)field.value != std::numeric_limits<int>::max())
+    str.Format(_T("%d"), (int)field.value);
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
 
+  //Result will be std::numeric_limits<int>::max() if field is empty or value is incorrect
   bool ReadWndPos(OptField_t<POINT>& field)
   {
    int value_x = 0, value_y = 0;
@@ -188,6 +195,14 @@ class IniIO
   }
 
  private:
+  _TSTRING ltrim(const _TSTRING& str)
+  {
+   size_t first = str.find_first_not_of(_T(' '));
+   if (_TSTRING::npos == first)
+    return str;
+   return str.substr(first, _TSTRING::npos);
+  }
+
   const _TSTRING m_sectionName;
   const _TSTRING m_fileName;
 };

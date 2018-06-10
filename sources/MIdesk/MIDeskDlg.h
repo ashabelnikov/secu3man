@@ -32,11 +32,9 @@
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
 #include "MIEGOCorr.h"
-#include "MIGasValve.h"
 #include "MIIAT.h"
 #include "MIInjPW.h"
 #include "MIPressure.h"
-#include "MIShutoffValve.h"
 #include "MITachometer.h"
 #include "MITemperature.h"
 #include "MIThrottleGate.h"
@@ -44,6 +42,7 @@
 #include "MIVoltmeter.h"
 
 #include "ui-core/DialogWithAccelerators.h"
+#include "ui-core/MultiLEDCtrl.h"
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog
@@ -98,6 +97,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetAI1AverageNum(int avnum);
   void SetTPSAverageNum(int avnum);
 
+  void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -120,11 +121,11 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CMIIAT          m_iat;
   CMIEGOCorr      m_ego_corr;
 
-  CMIAirFlow      m_air_flow;
-  CMIGasValve     m_gas_valve;
   CMIThrottleGate m_throttle_gate;
-  CMIShutoffValve m_shutoff_valve;
-  CMIShutoffValve m_power_valve;
+  //CMIAirFlow      m_air_flow;
+  CMultiLEDCtrl m_leds;
+  CFont m_font;
+  CRect m_ledsRect;
 
   SECU3IO::SensorDat m_values;
   CObjectTimer<CMIDeskDlg> m_update_timer;
@@ -150,6 +151,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_map_avnum;
   int m_ai1_avnum;
   int m_tps_avnum;
+
+  typedef std::map<int, std::pair<_TSTRING, unsigned char*> > IndFields_t;
+  IndFields_t m_indFields;
 };
 
 /////////////////////////////////////////////////////////////////////////////

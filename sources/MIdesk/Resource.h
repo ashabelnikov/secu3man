@@ -1,12 +1,8 @@
-#define IDC_MI_AIR_FLOW                 2001
-#define IDC_MI_GAS_VALVE                2002
-#define IDC_MI_THROTTLE_GATE            2003
-#define IDC_MI_SHUTOFF_VALVE            2004
-#define IDC_MI_GAS_VALVE_CAPTION        2005
-#define IDC_MI_THROTTLE_GATE_CAPTION    2006
-#define IDC_MI_SHUTOFF_VALVE_CAPTION    2007
-#define IDC_MI_AIR_FLOW_NUM             2008
-#define IDC_MI_AIR_FLOW_CAPTION         2009
+//#define IDC_MI_AIR_FLOW               2005
+//#define IDC_MI_AIR_FLOW_CAPTION       2006
+#define IDS_MI_THROTTLE_GATE_TITLE      2007
+#define IDC_MI_INDICATORS               2008
+#define IDC_MI_TPS                      2009
 #define IDC_MI_TACHOMETER               2010
 #define IDC_MI_MAP                      2011
 #define IDC_MI_VOLTMETER                2012
@@ -77,8 +73,6 @@
 #define IDC_CE_DESK_14                  2077
 #define IDC_CE_DESK_15                  2078
 #define IDS_CE_ERRORS_DESK_TT           2079
-#define IDC_MI_POWER_VALVE              2080
-#define IDC_MI_POWER_VALVE_CAPTION      2081
 #define IDC_MI_ADD_I1                   2082
 #define IDC_MI_ADD_I2                   2083
 #define IDS_MI_ADD_I1_TITLE             2084
@@ -125,3 +119,10 @@
 #define IDC_RS_ADD_I4_VALUE             2125
 #define IDC_RS_ADD_I4_CAPTION           2126
 #define IDC_RS_ADD_I4_UNIT              2127
+#define IDS_MI_IND_GAS_V                2128
+#define IDS_MI_IND_CARB                 2129
+#define IDS_MI_IND_IDLEVALVE            2130
+#define IDS_MI_IND_POWERVALVE           2131
+#define IDS_MI_IND_STBLOCK              2132
+#define IDS_MI_IND_AE                   2133
+#define IDS_MI_IND_COOLINGFAN           2134

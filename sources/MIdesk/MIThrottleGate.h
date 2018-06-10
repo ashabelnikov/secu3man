@@ -26,7 +26,7 @@
 #pragma once
 
 #include "IMeasInstrument.h"
-#include "ui-core/LEDIndicator.h"
+#include "ui-core/AnalogMeterCtrl.h"
 
 class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
 {
@@ -34,7 +34,7 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
   CMIThrottleGate();
   virtual ~CMIThrottleGate();
 
-  void DDX_Controls(CDataExchange* pDX, int nIDC_led, int nIDC_caption);
+  void DDX_Controls(CDataExchange* pDX, int nIDC_meter);
 
   //-------interface-----------------------
   virtual void Create(void);
@@ -49,15 +49,9 @@ class AFX_EXT_CLASS CMIThrottleGate : public IMeasInstrument
   virtual void SetTicks(int number);
   //---------------------------------------
 
-  void SetPosition(float value); //specific function
-  float GetPosition(void) const; //specific function
+  void SetAirFlow(float value, bool redraw = false); //specific function
 
  private:
-  bool m_prev_enable;
-  CLEDIndicator m_led;
-  CStatic m_caption;
-  float m_loLimit;
-  float m_upLimit;
-  float m_value;
-  CRect m_rect[2];
+  CAnalogMeterCtrl m_meter;
+  CRect m_rect;
 };

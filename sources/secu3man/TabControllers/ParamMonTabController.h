@@ -73,6 +73,8 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   //from CPMParamsController sub-controller
   void OnPDRequestsDataCollection();
 
+  void ConfigureIndicators(void);
+
  private:
   CParamMonTabDlg*  mp_view;
   CCommunicationManager* mp_comm;

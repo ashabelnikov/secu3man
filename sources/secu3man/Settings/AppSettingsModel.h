@@ -109,6 +109,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetHexDataMode(void) const;
   virtual int GetNumPulsesPer1Km(void) const;
   ////////////////////////////////////////////////////
+  virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -120,6 +121,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Options_Section;
   const CString m_Name_WndSettings_Section;  
   const CString m_Name_Fixtures_Section;
+  CString m_Name_Indicators_Section[2];
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -197,6 +199,15 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWnd;
   OptField_t<POINT> m_optCrkTempMapWnd;
   OptField_t<POINT> m_optEHPauseMapWnd;
+  //indicators
+  OptField_t<int> m_optIndRows[2];
+  OptField_t<int> m_optIndGas_v[2];
+  OptField_t<int> m_optIndCarb[2];
+  OptField_t<int> m_optIndIdleValve[2];
+  OptField_t<int> m_optIndPowerValve[2];
+  OptField_t<int> m_optStBlock[2];
+  OptField_t<int> m_optAE[2];
+  OptField_t<int> m_optCoolingFan[2];
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

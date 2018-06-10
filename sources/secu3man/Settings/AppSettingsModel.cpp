@@ -114,6 +114,21 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
 , m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
 {
+ m_Name_Indicators_Section[0] = _T("Indicators");
+ m_Name_Indicators_Section[1] = _T("IndicatorsEx");
+
+ for(int i = 0; i < 2; ++i)
+ {
+  m_optIndRows[i].name = _T("IndRows");
+  m_optIndGas_v[i].name = _T("IndGas_v");;
+  m_optIndCarb[i].name = _T("IndThrottle");
+  m_optIndIdleValve[i].name = _T("IndIdleCutoff");
+  m_optIndPowerValve[i].name = _T("IndPowerValve");
+  m_optStBlock[i].name = _T("IndStBlock");
+  m_optAE[i].name = _T("IndAE");
+  m_optCoolingFan[i].name = _T("IndCoolingFan");
+ }
+
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_9600);
  m_AllowableBaudRates.push_back(CBR_14400);
@@ -270,6 +285,20 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optCrkTempMapWnd);
  ws.ReadWndPos(m_optEHPauseMapWnd);
 
+ //Indicators
+ for(int i = 0; i < 2; ++i)
+ {
+  IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
+  ii.ReadInt(m_optIndRows[i],_T("1"), 1, 10);
+  ii.ReadInt(m_optIndGas_v[i],_T("0"), 0, 32, true);
+  ii.ReadInt(m_optIndCarb[i],_T("1"), 0, 32, true);
+  ii.ReadInt(m_optIndIdleValve[i],_T("2"), 0, 32, true);
+  ii.ReadInt(m_optIndPowerValve[i],_T("3"), 0, 32, true);
+  ii.ReadInt(m_optStBlock[i],_T("4"), 0, 32, true);
+  ii.ReadInt(m_optAE[i],_T("5"), 0, 32, true);
+  ii.ReadInt(m_optCoolingFan[i],_T("6"), 0, 32, true);
+ }
+
  return status;
 }
 
@@ -364,6 +393,20 @@ bool CAppSettingsModel::WriteSettings(void)
  ws.WriteWndPos(m_optAtscMapWnd);
  ws.WriteWndPos(m_optCrkTempMapWnd);
  ws.WriteWndPos(m_optEHPauseMapWnd);
+
+ //Indicators
+ for(int i = 0; i < 2; ++i)
+ {
+  IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
+  ii.WriteInt(m_optIndRows[i]);
+  ii.WriteInt(m_optIndGas_v[i]);
+  ii.WriteInt(m_optIndCarb[i]);
+  ii.WriteInt(m_optIndIdleValve[i]);
+  ii.WriteInt(m_optIndPowerValve[i]);
+  ii.WriteInt(m_optStBlock[i]);
+  ii.WriteInt(m_optAE[i]);
+  ii.WriteInt(m_optCoolingFan[i]);
+ }
 
  return status;
 }
@@ -698,4 +741,19 @@ bool CAppSettingsModel::GetAutoCERead(void) const
 bool CAppSettingsModel::GetChildCharts(void) const
 {
  return m_optChildCharts.value;
+}
+
+void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
+{
+ for(int i = 0; i < 2; ++i)
+ {
+  o_cfg.m_optIndRows[i] = m_optIndRows[i].value;
+  o_cfg.m_optIndGas_v[i] = m_optIndGas_v[i].value;
+  o_cfg.m_optIndCarb[i] = m_optIndCarb[i].value;
+  o_cfg.m_optIndIdleValve[i] = m_optIndIdleValve[i].value;
+  o_cfg.m_optIndPowerValve[i] = m_optIndPowerValve[i].value;
+  o_cfg.m_optStBlock[i] = m_optStBlock[i].value;
+  o_cfg.m_optAE[i] = m_optAE[i].value;
+  o_cfg.m_optCoolingFan[i] = m_optCoolingFan[i].value;
+ }
 }
