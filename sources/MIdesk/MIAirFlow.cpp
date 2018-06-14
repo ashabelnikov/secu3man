@@ -24,17 +24,10 @@
  */
 
 #include "stdafx.h"
+#include "resource.h"
 #include "MIAirFlow.h"
-#include "common/GDIHelpers.h"
-#include "ui-core/fnt_helpers.h"
-
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
 
 CMIAirFlow::CMIAirFlow()
-: m_loLimit(0.0f)
-, m_upLimit(16.0f)
 {
  //empty
 }
@@ -44,106 +37,39 @@ CMIAirFlow::~CMIAirFlow()
  //empty
 }
 
-void CMIAirFlow::DDX_Controls(CDataExchange* pDX, int nIDC_progress, int nIDC_digits, int nIDC_caption )
+void CMIAirFlow::Create(CWnd* pParent)
 {
- DDX_Control(pDX, nIDC_progress, m_progress);
- DDX_Control(pDX, nIDC_digits, m_digits);
- DDX_Control(pDX, nIDC_caption, m_caption);
-}
+ MeasInstrBase::Create(pParent, IDC_MI_AIR_FLOW); //create window
 
-void CMIAirFlow::Create()
-{
- m_progress.SetRange((int)m_loLimit,(int)m_upLimit);
- m_progress.SetPos(0);
- m_digits.SetWindowText(_T("00"));
+ m_tlpFmt = _T("%0.0f ");
 
- CloneWndFont(&m_digits, &m_textFont, 11, true);
- m_digits.SetFont(&m_textFont);
-
- Enable(m_prev_enable);
-
- m_rect[0] = GDIHelpers::GetChildWndRect(&m_progress);
- m_rect[1] = GDIHelpers::GetChildWndRect(&m_digits);
- m_rect[2] = GDIHelpers::GetChildWndRect(&m_caption);
-}
-
-//--------------------interface-----------------------
-void CMIAirFlow::SetValue(float value)
-{
- if ((value > m_upLimit)|| (value < m_loLimit))
-  return;
-
- if (m_progress.GetPos()==((int)value))
-  return; //avoid flickering
-
- CString cs;
- cs.Format(_T("%02d"),(int)value);
- m_progress.SetPos((int)value);
- m_digits.SetWindowText(cs);
-}
-
-float CMIAirFlow::GetValue(void)
-{
- return (float)m_progress.GetPos();
-}
-
-void CMIAirFlow::Show(bool show)
-{
- BOOL enable = ((show) ? TRUE : FALSE);
- m_progress.ShowWindow(enable);
- m_digits.ShowWindow(enable);
- m_caption.ShowWindow(enable);
-}
-
-void CMIAirFlow::Enable(bool enable)
-{
- BOOL b_enable = ((enable) ? TRUE : FALSE);
- m_progress.EnableWindow(b_enable);
- m_digits.EnableWindow(b_enable);
- m_caption.EnableWindow(b_enable);
- m_progress.Invalidate();
-
- m_prev_enable = enable;
-}
-
-bool CMIAirFlow::IsVisible(void)
-{
- BOOL state = m_progress.IsWindowVisible();
- return  ((state) ? TRUE : FALSE);
-}
-
-bool CMIAirFlow::IsEnabled(void)
-{
- BOOL state = m_progress.IsWindowEnabled();
- return  ((state) ? TRUE : FALSE);
-}
-
-void CMIAirFlow::SetLimits(float loLimit, float upLimit)
-{
- m_loLimit = loLimit;
- m_upLimit = upLimit;
- m_progress.SetRange((int)loLimit,(int)upLimit);
-}
-
-void CMIAirFlow::SetTicks(int number)
-{
- //not used
-}
-//----------------------------------------------------
-
-void CMIAirFlow::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect;
-
- rect = m_rect[0];
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_progress.MoveWindow(rect, repaint);
-
- rect = m_rect[1];
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_digits.MoveWindow(rect, repaint);
-
- rect = m_rect[2];
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_caption.MoveWindow(rect, repaint);
+ m_meter.SetRange (0.0, 16.0);
+ m_meter.SetLabelsDecimals(0);
+ m_meter.SetValueDecimals(0);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_AIR_FLOW_TITLE));
+ m_meter.SetFontScale(80);
+ m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetUnit(MLL::LoadString(IDS_MI_AIR_FLOW_UNIT));
+ m_meter.SetTickNumber(16);
+ m_meter.AddAlertZone(0,1,RGB(190,150,150));
+ m_meter.AddAlertZone(1,2,RGB(180,150,160));
+ m_meter.AddAlertZone(2,3,RGB(170,150,170));
+ m_meter.AddAlertZone(3,4,RGB(160,150,180));
+ m_meter.AddAlertZone(4,5,RGB(150,150,190));
+ m_meter.AddAlertZone(5,6,RGB(150,150,200));
+ m_meter.AddAlertZone(6,7,RGB(150,150,210));
+ m_meter.AddAlertZone(7,8,RGB(150,150,220));
+ m_meter.AddAlertZone(8,9,RGB(150,150,230));
+ m_meter.AddAlertZone(9,10,RGB(150,150,230));
+ m_meter.AddAlertZone(10,11,RGB(150,150,240));
+ m_meter.AddAlertZone(11,12,RGB(150,150,250));
+ m_meter.AddAlertZone(12,13,RGB(150,150,255));
+ m_meter.AddAlertZone(13,14,RGB(150,150,255));
+ m_meter.AddAlertZone(14,15,RGB(150,150,255));
+ m_meter.AddAlertZone(15,16,RGB(150,150,255));
+ m_meter.SetTRPane(_T("n/a"));
+ m_meter.SetTLPane(_T("n/a"));
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
 }

@@ -135,12 +135,6 @@ void CLogPlayerTabDlg::OnDestroy()
  m_initialized = false;
 }
 
-void CLogPlayerTabDlg::ShowExFixtures(bool i_exfixtures)
-{
- CRect rect = GDIHelpers::GetChildWndRect(this, i_exfixtures ? IDC_LP_MIDESK_FRAME_F : IDC_LP_MIDESK_FRAME);
- mp_MIDeskDlg->ShowExFixtures(i_exfixtures, rect);
-}
-
 //инициализация осциллографа для сигнала ДД
 void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
 {

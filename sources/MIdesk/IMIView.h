@@ -34,7 +34,7 @@ namespace SECU3IO
 class IMIView
 {
  public:
-  virtual void Show(bool show, bool show_exf = false) = 0;         //show/hide content of view
+  virtual void Show(bool show) = 0;         //show/hide content of view
   virtual void Enable(bool enable) = 0;                            //enable/disable view
   virtual void SetValues(const SECU3IO::SensorDat* i_values) = 0;  //set view values
 };

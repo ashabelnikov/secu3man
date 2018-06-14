@@ -26,15 +26,13 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIVoltage.h"
-#include "common/GDIHelpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CMIVoltage::CMIVoltage(const _TSTRING& ttText)
-: m_ttText(ttText)
+CMIVoltage::CMIVoltage()
 {
  //empty
 }
@@ -44,13 +42,16 @@ CMIVoltage::~CMIVoltage()
  //empty
 }
 
-void CMIVoltage::Create(void)
+void CMIVoltage::Create(CWnd* pParent, UINT id)
 {
- m_meter.SetRange (0.0, 5.0) ;
- m_meter.SetLabelsDecimals(1) ;
- m_meter.SetValueDecimals(2) ;
+ MeasInstrBase::Create(pParent, id); //create window
+
+ m_meter.SetRange (0.0, 5.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(2);
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
  m_meter.SetTickNumber(20);
  m_meter.AddAlertZone(0.0,5.0,RGB(180,180,230));
@@ -61,80 +62,21 @@ void CMIVoltage::Create(void)
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(&m_meter, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_meter, m_ttText.c_str()));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
-
- m_rect = GDIHelpers::GetChildWndRect(&m_meter);
 }
 
-void CMIVoltage::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
+
+void CMIAddI1::Create(CWnd* pParent)
 {
- DDX_Control(pDX, nIDC_meter, m_meter);
+ CMIVoltage::Create(pParent, IDC_MI_ADD_I1);
+ m_meter.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE).c_str());
+ VERIFY(mp_ttc->AddWindow(&m_meter, MLL::GetString(IDS_MI_ADD_I1_TT)));
 }
 
-//--------------------interface-----------------------
-void CMIVoltage::SetValue(float value)
+void CMIAddI2::Create(CWnd* pParent)
 {
- m_meter.SetNeedleValue((double)value);
- m_meter.Update();
-}
-
-float CMIVoltage::GetValue(void)
-{
- return (float)m_meter.GetNeedlePos();
-}
-
-void CMIVoltage::Show(bool show)
-{
- m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-void CMIVoltage::Enable(bool enable)
-{
- m_meter.SetState(meter_needle, enable);
- m_meter.SetState(meter_value, enable);
- m_meter.SetState(meter_grid, enable);
- m_meter.SetState(meter_labels, enable);
- m_meter.SetState(meter_unit, enable);
- COLORREF bk_color;
- m_meter.GetColor(meter_bground, &bk_color);
- m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
-
- m_meter.Redraw();
-}
-
-bool CMIVoltage::IsVisible(void)
-{
- return (m_meter.IsWindowVisible()) ? true : false;
-}
-
-bool CMIVoltage::IsEnabled(void)
-{
- bool State = false;
- m_meter.GetState(meter_needle, &State);
- return State;
-}
-
-void CMIVoltage::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit);
-}
-
-void CMIVoltage::SetTicks(int number)
-{
- m_meter.SetTickNumber(number);
-}
-//----------------------------------------------------
-
-void CMIVoltage::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect = m_rect;
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect, repaint);
-}
-
-void CMIVoltage::SetTitle(const _TSTRING& title)
-{
- m_meter.SetTitle(title.c_str());
+ CMIVoltage::Create(pParent, IDC_MI_ADD_I2);
+ m_meter.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE).c_str());
+ VERIFY(mp_ttc->AddWindow(&m_meter, MLL::GetString(IDS_MI_ADD_I2_TT)));
 }

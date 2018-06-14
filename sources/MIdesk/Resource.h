@@ -1,5 +1,5 @@
-//#define IDC_MI_AIR_FLOW               2005
-//#define IDC_MI_AIR_FLOW_CAPTION       2006
+#define IDC_MI_AIR_FLOW                 2005
+#define IDS_MI_AIR_FLOW_TITLE           2006
 #define IDS_MI_THROTTLE_GATE_TITLE      2007
 #define IDC_MI_INDICATORS               2008
 #define IDC_MI_TPS                      2009
@@ -126,3 +126,4 @@
 #define IDS_MI_IND_STBLOCK              2132
 #define IDS_MI_IND_AE                   2133
 #define IDS_MI_IND_COOLINGFAN           2134
+#define IDS_MI_AIR_FLOW_UNIT            2135

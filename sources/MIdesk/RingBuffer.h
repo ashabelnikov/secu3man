@@ -19,40 +19,49 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file IMeasInstrument.h
+/** \file RingBuffer.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-class IMeasInstrument
+#include <numeric>
+
+#define RINGBUFF_SIZE 32
+
+struct RingBuffItem
 {
- public:
-  IMeasInstrument() {};
-  virtual ~IMeasInstrument() {};
+ RingBuffItem()
+ : m_idx(0)
+ , m_result(0)
+ , m_avnum(0)
+ {
+  std::fill(m_buff, m_buff + RINGBUFF_SIZE, 0.0f);
+ }
 
-  //interface for measurement instrument
-  virtual void Create(void) = 0;
-  virtual void Scale(float i_x_factor, float i_y_factor, bool repaint = true) = 0;
+ void Append(float value) //update ring buffer
+ {
+  if (m_avnum > 0)
+  {     
+   m_buff[m_idx++] = value;
+   if (m_idx >= m_avnum)
+    m_idx = 0;
+  }
+  else
+   m_result = value;
+ }
 
-  virtual void SetValue(float value) = 0;
-  virtual float GetValue(void) = 0;
+ void Calculate(void)
+ {
+  if (m_avnum > 0)
+  {
+   float sum = std::accumulate(m_buff, m_buff + m_avnum, 0.0f);
+   m_result = sum / m_avnum;
+  }
+ }
 
-  //скрытие/отображение прибора
-  virtual void Show(bool show) = 0;
-
-  //разрешение/запрещение прибора
-  virtual void Enable(bool enable) = 0;
-
-  //прибор видим или скрыт ?
-  virtual bool IsVisible(void) = 0;
-
-  //прибор разрешен или запрещен ?
-  virtual bool IsEnabled(void) = 0;
-
-  //установка пределов измерения
-  virtual void SetLimits(float loLimit, float upLimit) = 0;
-
-  //установка количества делений
-  virtual void SetTicks(int number) = 0;
+ float m_buff[RINGBUFF_SIZE];
+ int m_idx;
+ int m_avnum;
+ float m_result;
 };

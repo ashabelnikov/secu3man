@@ -28,18 +28,8 @@
 #include "common/ObjectTimer.h"
 #include "IMIView.h"
 #include "io-core/SECU3IO.h"
-
-#include "MIAirFlow.h"
-#include "MIDwellAngle.h"
-#include "MIEGOCorr.h"
-#include "MIIAT.h"
-#include "MIInjPW.h"
-#include "MIPressure.h"
-#include "MITachometer.h"
-#include "MITemperature.h"
-#include "MIThrottleGate.h"
-#include "MIVoltage.h"
-#include "MIVoltmeter.h"
+#include "MeasInstrBase.h"
+#include "RingBuffer.h"
 
 #include "ui-core/DialogWithAccelerators.h"
 #include "ui-core/MultiLEDCtrl.h"
@@ -53,12 +43,13 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
  public:
   CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
+ ~CMIDeskDlg();
   static const UINT IDD;
 
   BOOL Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect);
 
   //--------interface implementation---------------
-  virtual void Show(bool show, bool show_exf = false);
+  virtual void Show(bool show);
   virtual void Enable(bool enable);
   virtual void SetValues(const SECU3IO::SensorDat* i_values);
   //-----------------------------------------------
@@ -79,9 +70,6 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //изменение размеров окна
   void Resize(const CRect& i_rect);
 
-  //Show/hide extended fixtures
-  void ShowExFixtures(bool i_show, const CRect& i_rect);
-
   //Show/hide choke position indicator
   void ShowChokePos(bool i_show);
 
@@ -99,6 +87,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan);
 
+  void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
+                    int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -110,50 +101,38 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   // Implementation
  private:
-  CMITachometer   m_tachometer;
-  CMIPressure     m_pressure;
-  CMIVoltmeter    m_voltmeter;
-  CMIDwellAngle   m_dwell_angle;
-  CMITemperature  m_temperature;
-  CMIVoltage      m_add_i1;
-  CMIVoltage      m_add_i2;
-  CMIInjPW        m_inj_pw;
-  CMIIAT          m_iat;
-  CMIEGOCorr      m_ego_corr;
-
-  CMIThrottleGate m_throttle_gate;
-  //CMIAirFlow      m_air_flow;
+  CRect _GetMetItemRect(int idx);
+  void _MetCleanUp(void);
+  typedef std::map<int, MeasInstrBase*> MetFields_t;
+  MetFields_t m_metFields;
+  int m_metRows;
+  
+  typedef std::map<int, std::pair<_TSTRING, unsigned char*> > IndFields_t;
+  IndFields_t m_indFields;
   CMultiLEDCtrl m_leds;
   CFont m_font;
-  CRect m_ledsRect;
 
   SECU3IO::SensorDat m_values;
+  float m_air_flow;
   CObjectTimer<CMIDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;
   int m_enabled;
-  bool m_show;
-  bool m_show_exf;
-  CRect m_origRect;
 
-  int m_rpm_rb[32];    //ring buffer for RPM averaging, max. 32
-  float m_volt_rb[32]; //ring buffer for voltage averaging, max 32
-  float m_map_rb[32];  //ring buffer for pressure averaging, max 32
-  float m_ai1_rb[32];  //ring buffer for ADD_I1 averaging, max 32
-  float m_tps_rb[32];  //ring buffer for TPS averaging, max 32
-  int m_rpm_idx;       //ring buffer index for RPM
-  int m_volt_idx;      //ring buffer index for voltage
-  int m_map_idx;       //ring buffer index for pressure
-  int m_ai1_idx;       //ring buffer index for ADD_I1
-  int m_tps_idx;       //ring buffer index for TPS
-  int m_rpm_avnum;
-  int m_volt_avnum;
-  int m_map_avnum;
-  int m_ai1_avnum;
-  int m_tps_avnum;
+  RingBuffItem m_ringRPM;
+  RingBuffItem m_ringVBat;
+  RingBuffItem m_ringMAP;
+  RingBuffItem m_ringAddI1;
+  RingBuffItem m_ringTPS;
 
-  typedef std::map<int, std::pair<_TSTRING, unsigned char*> > IndFields_t;
-  IndFields_t m_indFields;
+  bool m_showSpeedAndDistance;
+  bool m_showChokePos;
+  bool m_showGDPos;
+  _TSTRING m_speedUnit;
+  _TSTRING m_distanceUnit;
+  int m_tachoMax;
+  int m_pressMax;
+  MeasInstrBase* mp_miTemperat;
 };
 
 /////////////////////////////////////////////////////////////////////////////

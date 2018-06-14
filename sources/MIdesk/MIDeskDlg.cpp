@@ -34,7 +34,21 @@
 #include "common/MathHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
+#include "MIAirFlow.h"
+#include "MIDwellAngle.h"
+#include "MIEGOCorr.h"
+#include "MIIAT.h"
+#include "MIInjPW.h"
+#include "MIPressure.h"
+#include "MITachometer.h"
+#include "MITemperature.h"
+#include "MIThrottleGate.h"
+#include "MIVoltage.h"
+#include "MIVoltmeter.h"
+
 #undef max
+
+static const float IndHeightCoeff = 0.10f;
 
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
@@ -51,49 +65,26 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_update_period(100)
 , m_was_initialized(false)
 , m_enabled(-1)
-, m_add_i1(MLL::GetString(IDS_MI_ADD_I1_TT))
-, m_add_i2(MLL::GetString(IDS_MI_ADD_I2_TT))
-, m_show_exf(false)
-, m_show(false)
-, m_rpm_idx(0)
-, m_volt_idx(0)
-, m_map_idx(0)
-, m_ai1_idx(0)
-, m_tps_idx(0)
-, m_rpm_avnum(0)
-, m_volt_avnum(0)
-, m_map_avnum(0)
-, m_ai1_avnum(0)
-, m_tps_avnum(0)
+, m_metRows(0)
+, m_showSpeedAndDistance(false)
+, m_showChokePos(false)
+, m_showGDPos(false)
+, m_air_flow(0)
+, mp_miTemperat(NULL)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
- std::fill(m_rpm_rb, m_rpm_rb + 32, 0);
- std::fill(m_volt_rb, m_volt_rb + 32, 0.0f);
- std::fill(m_map_rb, m_map_rb + 32, 0.0f);
- std::fill(m_ai1_rb, m_ai1_rb + 32, 0.0f);
- std::fill(m_tps_rb, m_tps_rb + 32, 0.0f);
+}
+
+CMIDeskDlg::~CMIDeskDlg()
+{
+ _MetCleanUp();
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- //Analog fixtures
- m_tachometer.DDX_Controls(pDX, IDC_MI_TACHOMETER);
- m_pressure.DDX_Controls(pDX, IDC_MI_MAP);
- m_voltmeter.DDX_Controls(pDX, IDC_MI_VOLTMETER);
- m_dwell_angle.DDX_Controls(pDX, IDC_MI_DWELL_ANGLE);
- m_temperature.DDX_Controls(pDX, IDC_MI_TEMPERATURE);
- m_add_i1.DDX_Controls(pDX, IDC_MI_ADD_I1);
- m_add_i2.DDX_Controls(pDX, IDC_MI_ADD_I2);
- m_iat.DDX_Controls(pDX, IDC_MI_IAT);
- m_inj_pw.DDX_Controls(pDX, IDC_MI_INJ_PW);
- m_ego_corr.DDX_Controls(pDX, IDC_MI_EGO_CORR);
- m_throttle_gate.DDX_Controls(pDX, IDC_MI_TPS);
- //LED indicators
  DDX_Control(pDX, IDC_MI_INDICATORS, m_leds);
-
-//m_air_flow.DDX_Controls(pDX, IDC_MI_AIR_FLOW, IDC_MI_AIR_FLOW_NUM, IDC_MI_AIR_FLOW_CAPTION);
 }
 
 BOOL CMIDeskDlg::Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect)
@@ -103,8 +94,6 @@ BOOL CMIDeskDlg::Create(UINT nIDTemplate, CWnd* pParentWnd, CRect& rect)
   return FALSE;
 
  SetWindowPos(NULL, rect.TopLeft().x,rect.TopLeft().y, rect.Width(), rect.Height(), SWP_NOZORDER);
-
- GetClientRect(m_origRect);
 
  m_was_initialized = true;
 
@@ -128,24 +117,7 @@ BOOL CMIDeskDlg::OnInitDialog()
  }
 
  m_leds.SetFont(&m_font);
- m_ledsRect = GDIHelpers::GetChildWndRect(&m_leds);
  
- //создаем приборы (оконные образы)
- m_tachometer.Create();
- m_pressure.Create();
- m_voltmeter.Create();
- m_dwell_angle.Create();
- m_throttle_gate.Create();
- //m_air_flow.Create();
- m_temperature.Create();
- m_add_i1.Create();
- m_add_i2.Create();
- m_iat.Create();
- m_add_i1.SetTitle(MLL::GetString(IDS_MI_ADD_I1_TITLE));
- m_add_i2.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE));
- m_inj_pw.Create();
- m_ego_corr.Create();
-
  Enable(false);
 
  m_update_timer.SetTimer(this, &CMIDeskDlg::OnUpdateTimer, m_update_period);
@@ -156,6 +128,7 @@ BOOL CMIDeskDlg::OnInitDialog()
 void CMIDeskDlg::OnDestroy()
 {
  m_was_initialized = false;
+ _MetCleanUp();
  Super::OnDestroy();
  m_update_timer.KillTimer();
  m_enabled = -1;
@@ -167,38 +140,21 @@ void CMIDeskDlg::Enable(bool enable)
  if (((int)enable) == m_enabled)
   return; //already has needed state
  m_enabled = enable;
- m_tachometer.Enable(enable);
- m_pressure.Enable(enable);
- m_voltmeter.Enable(enable);
- m_dwell_angle.Enable(enable);
- m_throttle_gate.Enable(enable);
- //m_air_flow.Enable(enable);
- m_temperature.Enable(enable);
- m_add_i1.Enable(enable);
- m_add_i2.Enable(enable);
- m_iat.Enable(enable);
- m_inj_pw.Enable(enable);
- m_ego_corr.Enable(enable);
+ //meters
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Enable(enable);
+ //indicators
  m_leds.EnableWindow(enable);
 }
 
-void CMIDeskDlg::Show(bool show, bool show_exf /*=false*/)
+void CMIDeskDlg::Show(bool show)
 {
- m_show_exf = show_exf; //save flag
- m_show = show;
- m_tachometer.Show(show);
- m_pressure.Show(show);
- m_voltmeter.Show(show);
- m_dwell_angle.Show(show);
- m_throttle_gate.Show(show);
- m_temperature.Show(show);
-//m_air_flow.Show(show);
- //extended fixtures
- m_add_i1.Show(show && show_exf);
- m_add_i2.Show(show && show_exf && !m_values.add_i2_mode);
- m_iat.Show(show && show_exf && m_values.add_i2_mode);
- m_inj_pw.Show(show && show_exf);
- m_ego_corr.Show(show && show_exf);
+ //meters
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Show(show);
+ //indicators
  m_leds.ShowWindow(show ? SW_SHOW : SW_HIDE);
 }
 
@@ -206,116 +162,33 @@ using namespace SECU3IO;
 
 void CMIDeskDlg::SetValues(const SensorDat* i_values)
 {
- if (m_values.add_i2_mode != i_values->add_i2_mode)
- {
-  m_add_i2.Show(m_show && m_show_exf && !i_values->add_i2_mode);
-  m_iat.Show(m_show && m_show_exf && i_values->add_i2_mode); 
- }
  m_values = *i_values;
+ m_air_flow = (float)i_values->air_flow;
 
- if (m_rpm_avnum > 0)
- {
-  //update RPM ring buffer
-  m_rpm_rb[m_rpm_idx++] = i_values->frequen;
-  if (m_rpm_idx >= m_rpm_avnum)
-   m_rpm_idx = 0;
- }
- 
- if (m_volt_avnum > 0)
- {
-  //update voltage ring buffer
-  m_volt_rb[m_volt_idx++] = i_values->voltage;
-  if (m_volt_idx >= m_volt_avnum)
-   m_volt_idx = 0;
- }
-
- if (m_map_avnum > 0)
- {
-  //update pressure ring buffer
-  m_map_rb[m_map_idx++] = i_values->pressure;
-  if (m_map_idx >= m_map_avnum)
-   m_map_idx = 0;
- }
-
- if (m_ai1_avnum > 0)
- {
-  //update ADD_I1 ring buffer
-  m_ai1_rb[m_ai1_idx++] = i_values->add_i1;
-  if (m_ai1_idx >= m_ai1_avnum)
-   m_ai1_idx = 0;
- }
-
- if (m_tps_avnum > 0)
- {
-  //update ADD_I1 ring buffer
-  m_tps_rb[m_tps_idx++] = i_values->tps;
-  if (m_tps_idx >= m_tps_avnum)
-   m_tps_idx = 0;
- }
+ m_ringRPM.Append((float)i_values->frequen);
+ m_ringVBat.Append(i_values->voltage);
+ m_ringMAP.Append(i_values->pressure);
+ m_ringAddI1.Append(i_values->add_i1);
+ m_ringTPS.Append(i_values->tps);
 }
 
 void CMIDeskDlg::OnUpdateTimer(void)
 {
  if (!m_was_initialized)
   return;
- m_tachometer.SetSpeed(m_values.speed);   //top-left pane
- m_tachometer.SetDistance(m_values.distance); //top-right pane
 
- if (m_rpm_avnum > 0)
- {
-  int frequen = std::accumulate(m_rpm_rb, m_rpm_rb + m_rpm_avnum, 0);
-  m_tachometer.SetValue((float)(frequen / m_rpm_avnum));
- }
- else
-  m_tachometer.SetValue((float)m_values.frequen);
+ m_ringRPM.Calculate();
+ m_ringVBat.Calculate();
+ m_ringMAP.Calculate();
+ m_ringAddI1.Calculate();
+ m_ringTPS.Calculate();
 
- if (m_map_avnum > 0)
- {
-  float pressure = std::accumulate(m_map_rb, m_map_rb + m_map_avnum, 0.0f);
-  m_pressure.SetValue(pressure / m_map_avnum);
- }
- else
-  m_pressure.SetValue(m_values.pressure);
+ //meters
+ MetFields_t::iterator mm;
+ for(mm = m_metFields.begin(); mm != m_metFields.end(); ++mm)
+  mm->second->SetValues();
 
- if (m_volt_avnum > 0)
- {
-  float voltage = std::accumulate(m_volt_rb, m_volt_rb + m_volt_avnum, 0.0f);
-  m_voltmeter.SetValue(voltage / m_volt_avnum);
- }
- else
-  m_voltmeter.SetValue(m_values.voltage);
-
- m_dwell_angle.SetValue(m_values.adv_angle);
- m_throttle_gate.SetAirFlow(m_values.air_flow);
-
- if (m_tps_avnum > 0)
- {
-  float tps = std::accumulate(m_tps_rb, m_tps_rb + m_tps_avnum, 0.0f);
-  m_throttle_gate.SetValue(tps / m_tps_avnum);
- }
- else
-  m_throttle_gate.SetValue(m_values.tps);
- 
-// m_air_flow.SetValue(m_values.air_flow);
- m_temperature.SetChokePos(m_values.choke_pos); //top-right pane
- m_temperature.SetGDPos(m_values.gasdose_pos); //top-left pane
- m_temperature.SetValue(m_values.temperat);
-
- if (m_ai1_avnum > 0)
- {
-  float add_i1 = std::accumulate(m_ai1_rb, m_ai1_rb + m_ai1_avnum, 0.0f);
-  m_add_i1.SetValue(add_i1 / m_ai1_avnum);
- }
- else
-  m_pressure.SetValue(m_values.add_i1);
-
- if (!m_values.add_i2_mode)
-  m_add_i2.SetValue(m_values.add_i2);
- else
-  m_iat.SetValue(m_values.air_temp);
- m_inj_pw.SetValue(m_values.inj_pw);
- m_ego_corr.SetValue(m_values.lambda_corr);
-
+ //indicators
  IndFields_t::iterator it;
  int idx = 0;
  for(it = m_indFields.begin(); it != m_indFields.end(); ++it, ++idx)
@@ -334,110 +207,83 @@ void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
 
 void CMIDeskDlg::SetTachometerMax(int i_max)
 {
- m_tachometer.SetLimits(0, (float)i_max);
+ m_tachoMax = i_max;
 }
 
 void CMIDeskDlg::SetPressureMax(int i_max)
 {
- m_pressure.SetLimits(10, (float)i_max);
+ m_pressMax = i_max;
 }
 
 void CMIDeskDlg::SetSpeedUnit(int i_unit)
 {
- m_tachometer.SetSpeedUnit((i_unit == 0) ? MLL::GetString(IDS_MI_KM_H) : MLL::GetString(IDS_MI_MP_H));
+ m_speedUnit = (i_unit == 0) ? MLL::GetString(IDS_MI_KM_H) : MLL::GetString(IDS_MI_MP_H);
 }
 
 void CMIDeskDlg::SetDistanceUnit(int i_unit)
 {
- m_tachometer.SetDistanceUnit((i_unit == 0) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI));
+ m_distanceUnit = (i_unit == 0) ? MLL::GetString(IDS_MI_KM) : MLL::GetString(IDS_MI_MI);
 }
 
 void CMIDeskDlg::Resize(const CRect& i_rect)
 {
- //Calculate scale factors basing on original rect
- float Xf, Yf;
- GDIHelpers::CalcRectToRectRatio(i_rect, m_origRect, Xf, Yf);
-
- //ресайзим контроллы
  bool redraw = false;
- m_tachometer.Scale(Xf, Yf, redraw);
- m_pressure.Scale(Xf, Yf, redraw);
- m_voltmeter.Scale(Xf, Yf, redraw);
- m_dwell_angle.Scale(Xf, Yf, redraw);
- m_throttle_gate.Scale(Xf, Yf, redraw);
- //m_air_flow.Scale(Xf, Yf, redraw);
- m_temperature.Scale(Xf, Yf, redraw);
- m_add_i1.Scale(Xf, Yf, redraw);
- m_add_i2.Scale(Xf, Yf, redraw);
- m_iat.Scale(Xf, Yf, redraw);
- m_inj_pw.Scale(Xf, Yf, redraw);
- m_ego_corr.Scale(Xf, Yf, redraw);
  
- //scale LED's panel
- CRect rect = m_ledsRect;
- if (m_show_exf)
-  rect.right = rect.left + MathHelpers::Round(rect.Width()*1.664f); //todo: remove after full implementation of custom fixtures
- GDIHelpers::ScaleRect(rect, Xf, Yf);
+ //meters
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Resize(_GetMetItemRect(it->first), redraw);
+
+ //Indicators
+ CRect rect = i_rect;
+ rect.top = rect.bottom - MathHelpers::Round(rect.Height() * IndHeightCoeff);
  m_leds.MoveWindow(rect, redraw);
 
  RedrawWindow();
 }
 
-void CMIDeskDlg::ShowExFixtures(bool i_show, const CRect& i_rect)
-{
- m_show_exf = i_show; //save flag
- m_add_i1.Show(i_show);
- m_add_i2.Show(i_show && !m_values.add_i2_mode);
- m_iat.Show(i_show && m_values.add_i2_mode);
- m_inj_pw.Show(i_show);
- m_ego_corr.Show(i_show);
-
- m_origRect = i_rect;
-
- CRect rect;
- GetClientRect(&rect);
- Resize(rect);
-}
-
 void CMIDeskDlg::ShowChokePos(bool i_show)
 {
- m_temperature.ShowChokePos(i_show);
+ m_showChokePos = i_show;
+ if (mp_miTemperat!=NULL)
+  mp_miTemperat->ShowTRP(i_show);
 }
 
 void CMIDeskDlg::ShowGDPos(bool i_show)
 {
- m_temperature.ShowGDPos(i_show);
+ m_showGDPos = i_show;
+ if (mp_miTemperat!=NULL)
+  mp_miTemperat->ShowTLP(i_show);
 }
 
 void CMIDeskDlg::ShowSpeedAndDistance(bool i_show)
 {
- m_tachometer.ShowSpeed(i_show);
- m_tachometer.ShowDistance(i_show);
+ m_showSpeedAndDistance = i_show;
 }
 
 void CMIDeskDlg::SetRPMAverageNum(int avnum)
 {
- m_rpm_avnum = avnum;
+ m_ringRPM.m_avnum = avnum;
 }
 
 void CMIDeskDlg::SetVoltAverageNum(int avnum)
 {
- m_volt_avnum = avnum;
+ m_ringVBat.m_avnum = avnum;
 }
 
 void CMIDeskDlg::SetMAPAverageNum(int avnum)
 {
- m_map_avnum = avnum;
+ m_ringMAP.m_avnum = avnum;
 }
 
 void CMIDeskDlg::SetAI1AverageNum(int avnum)
 {
- m_ai1_avnum = avnum;
+ m_ringAddI1.m_avnum = avnum;
 }
 
 void CMIDeskDlg::SetTPSAverageNum(int avnum)
 {
- m_tps_avnum = avnum;
+ m_ringTPS.m_avnum = avnum;
 }
 
 void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
@@ -482,4 +328,153 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int In
  IndFields_t::iterator it;
  for(it = m_indFields.begin(); it != m_indFields.end(); ++it)
   m_leds.AddItem(it->second.first.c_str());
+}
+
+void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
+                              int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow)
+{
+ m_metRows = MetRows;
+
+ //destroy current widgets and clear list
+ _MetCleanUp();
+ 
+ if (MetRPM != std::numeric_limits<int>::max())
+ {
+  CMITachometer* widget = new CMITachometer();
+  widget->Create(this);
+  widget->BindVars(&m_ringRPM.m_result, &m_values.speed, &m_values.distance);
+  widget->ShowTLP(m_showSpeedAndDistance);
+  widget->ShowTRP(m_showSpeedAndDistance);
+  widget->SetPaneUnit(m_speedUnit, m_distanceUnit);
+  widget->SetLimits(0, (float)m_tachoMax);
+  m_metFields.insert(std::make_pair(MetRPM, widget));
+ }
+
+ if (MetMAP != std::numeric_limits<int>::max())
+ {
+  CMIPressure* widget = new CMIPressure();
+  widget->Create(this);
+  widget->BindVars(&m_ringMAP.m_result, NULL, NULL);
+  widget->SetLimits(10, (float)m_pressMax);
+  m_metFields.insert(std::make_pair(MetMAP, widget));
+ }
+
+ if (MetVBat != std::numeric_limits<int>::max())
+ {
+  CMIVoltmeter* widget = new CMIVoltmeter();
+  widget->Create(this);
+  widget->BindVars(&m_ringVBat.m_result, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetVBat, widget));
+ }
+
+ if (MetIgnTim != std::numeric_limits<int>::max())
+ {
+  CMIDwellAngle* widget = new CMIDwellAngle();
+  widget->Create(this);
+  widget->BindVars(&m_values.adv_angle, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetIgnTim, widget));
+ }
+
+ if (MetCLT != std::numeric_limits<int>::max())
+ {
+  CMITemperature* widget = new CMITemperature();
+  widget->Create(this);
+  widget->BindVars(&m_values.temperat, &m_values.gasdose_pos, &m_values.choke_pos);  
+  widget->ShowTLP(m_showGDPos);
+  widget->ShowTRP(m_showChokePos);
+  m_metFields.insert(std::make_pair(MetCLT, widget));
+  mp_miTemperat = widget;
+ }
+ else
+  mp_miTemperat = NULL;
+
+ if (MetAddI1 != std::numeric_limits<int>::max())
+ {
+  CMIAddI1* widget = new CMIAddI1();
+  widget->Create(this);
+  widget->BindVars(&m_ringAddI1.m_result, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetAddI1, widget));
+ }
+
+ if (MetAddI2 != std::numeric_limits<int>::max())
+ {
+  CMIAddI2* widget = new CMIAddI2();
+  widget->Create(this);
+  widget->BindVars(&m_values.add_i2, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetAddI2, widget));
+ }
+
+ if (MetInjPW != std::numeric_limits<int>::max())
+ {
+  CMIInjPW* widget = new CMIInjPW();
+  widget->Create(this);
+  widget->BindVars(&m_values.inj_pw, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetInjPW, widget));
+ }
+
+ if (MetIAT != std::numeric_limits<int>::max())
+ {
+  CMIIAT* widget = new CMIIAT();
+  widget->Create(this);
+  widget->BindVars(&m_values.air_temp, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetIAT, widget));
+ }
+
+ if (MetEGOCorr != std::numeric_limits<int>::max())
+ {
+  CMIEGOCorr* widget = new CMIEGOCorr();
+  widget->Create(this);
+  widget->BindVars(&m_values.lambda_corr, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetEGOCorr, widget));
+ }
+
+ if (MetTPS != std::numeric_limits<int>::max())
+ {
+  CMIThrottleGate* widget = new CMIThrottleGate();
+  widget->Create(this);
+  widget->BindVars(&m_ringTPS.m_result, &m_air_flow, NULL);
+  widget->ShowTLP(true);
+  m_metFields.insert(std::make_pair(MetTPS, widget));
+ }
+
+ if (MetAirFlow != std::numeric_limits<int>::max())
+ {
+  CMIAirFlow* widget = new CMIAirFlow();
+  widget->Create(this);
+  widget->BindVars(&m_air_flow, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetAirFlow, widget));
+ }
+
+ //enable/disable
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  it->second->Enable(m_enabled, false);
+
+ CRect rect;
+ GetClientRect(&rect);
+ Resize(rect);
+}
+
+void CMIDeskDlg::_MetCleanUp(void)
+{
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  delete it->second;
+ m_metFields.clear();
+ mp_miTemperat = NULL;
+}
+
+CRect CMIDeskDlg::_GetMetItemRect(int idx)
+{
+ //calculate number of columns from number of items and rows
+ int cols = ((int)m_metFields.size() / m_metRows) + ((int)m_metFields.size() % m_metRows ? 1 : 0);
+ int i = idx / cols;
+ int j = idx % cols;
+ CRect rc;
+ GetClientRect(&rc);
+ rc.bottom = rc.bottom - MathHelpers::Round(rc.Height() * IndHeightCoeff);
+ int space  = 0;
+ float width  = ((float)(rc.right - rc.left) - ((float)cols)*space) / ((float)cols);
+ float height = ((float)(rc.bottom - rc.top) - ((float)m_metRows)*space) / ((float)m_metRows);
+ return CRect(MathHelpers::Round(j*(width+space)), MathHelpers::Round(i*(height+space)), MathHelpers::Round(j*(width+space) + width), MathHelpers::Round(i*(height+space) + height));
 }

@@ -39,9 +39,9 @@ namespace SECU3IO
   float voltage;                        //напряжение бортовой сети (усредненное)
   float temperat;                       //температура охлаждающей жидкости (усредненная)
   float adv_angle;                      //текущий УОЗ
+  unsigned char air_flow;               //расход воздуха
   unsigned char carb;                   //состояние концевика карбюратора
   unsigned char gas;                    //состояние газового клапана
-  unsigned char air_flow;               //расход воздуха
   unsigned char ephh_valve;             //состояние клапана ЭПХХ
   unsigned char epm_valve;              //состояние клапана ЭМР
   unsigned char cool_fan;               //состояние вентилятора (включен/выключен)

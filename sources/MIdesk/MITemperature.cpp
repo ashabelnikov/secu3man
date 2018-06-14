@@ -26,15 +26,12 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MITemperature.h"
-#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
 CMITemperature::CMITemperature()
-: m_showChokePos(false)
-, m_showGDPos(false)
 {
  //empty
 }
@@ -44,14 +41,23 @@ CMITemperature::~CMITemperature()
  //empty
 }
 
-void CMITemperature::Create(void)
+void CMITemperature::Create(CWnd* pParent)
 {
+ MeasInstrBase::Create(pParent, IDC_MI_TEMPERATURE); //create window
+ 
+ m_tlpFmt = _T("%0.1f ");
+ m_trpFmt = _T("%0.1f ");
+
+ m_tlpUnit = _T("%%");
+ m_trpUnit = _T("%%");
+
  m_meter.SetRange (-40.0, 120.0) ;
  m_meter.SetLabelsDecimals(1) ;
  m_meter.SetValueDecimals(1) ;
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TEMPERATURE_TITLE)) ;
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(-40,50,RGB(130,130,180));
@@ -61,114 +67,4 @@ void CMITemperature::Create(void)
  m_meter.SetTLPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
-
- m_rect = GDIHelpers::GetChildWndRect(&m_meter);
-}
-
-void CMITemperature::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
-{
- DDX_Control(pDX, nIDC_meter, m_meter);
-}
-
-//--------------------interface-----------------------
-void CMITemperature::SetValue(float value)
-{
- m_meter.SetNeedleValue((double)value);
- m_meter.Update();
-}
-
-float CMITemperature::GetValue(void)
-{
- return (float)m_meter.GetNeedlePos();
-}
-
-void CMITemperature::Show(bool show)
-{
- m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-void CMITemperature::Enable(bool enable)
-{
- m_meter.SetState(meter_needle, enable);
- m_meter.SetState(meter_value, enable);
- m_meter.SetState(meter_grid, enable);
- m_meter.SetState(meter_labels, enable);
- m_meter.SetState(meter_unit, enable);
- m_meter.SetState(meter_trpane, enable && m_showChokePos);
- m_meter.SetState(meter_tlpane, enable && m_showGDPos);
- COLORREF bk_color;
- m_meter.GetColor(meter_bground, &bk_color);
- m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
-
- m_meter.Redraw();
-}
-
-bool CMITemperature::IsVisible(void)
-{
- return (m_meter.IsWindowVisible()) ? true : false;
-}
-
-bool CMITemperature::IsEnabled(void)
-{
- bool State = false;
- m_meter.GetState(meter_needle, &State);
- return State;
-}
-
-void CMITemperature::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit);
-}
-
-void CMITemperature::SetTicks(int number)
-{
- m_meter.SetTickNumber(number);
-}
-//----------------------------------------------------
-
-void CMITemperature::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect = m_rect;
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect, repaint);
-}
-
-void CMITemperature::SetChokePos(float value, bool redraw /*= false*/)
-{
- CString str;
- str.Format(_T("%0.1f%%"), value);
- m_meter.SetTRPane(str);
- if (redraw) m_meter.Update();
-}
-
-float CMITemperature::GetChokePos(void) const
-{
- CString str = m_meter.GetTRPane();
- float f_value = 0.0f;
- _stscanf(str.GetBuffer(), _T("%f"), &f_value);
- return f_value;
-}
-
-void CMITemperature::ShowChokePos(bool i_show, bool redraw /*= false*/)
-{
- m_showChokePos = i_show;
- m_meter.SetState(meter_trpane, IsEnabled() && i_show);
- if (redraw)
-  m_meter.Redraw();
-}
-
-void CMITemperature::SetGDPos(float value, bool redraw /*= false*/)
-{
- CString str;
- str.Format(_T("%0.1f%%"), value);
- m_meter.SetTLPane(str);
- if (redraw) m_meter.Update();
-}
-
-void CMITemperature::ShowGDPos(bool i_show, bool redraw /*= false*/)
-{
- m_showGDPos = i_show;
- m_meter.SetState(meter_tlpane, IsEnabled() && i_show);
- if (redraw)
-  m_meter.Redraw();
 }

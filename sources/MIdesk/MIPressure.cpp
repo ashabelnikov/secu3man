@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIPressure.h"
-#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -42,14 +41,17 @@ CMIPressure::~CMIPressure()
  //empty
 }
 
-void CMIPressure::Create(void)
+void CMIPressure::Create(CWnd* pParent)
 {
- m_meter.SetRange (10.0, 110.0) ;
- m_meter.SetLabelsDecimals(0) ;
- m_meter.SetValueDecimals(0) ;
- m_meter.SetTitle(MLL::LoadString(IDS_MI_PRESSURE_TITLE)) ;
+ MeasInstrBase::Create(pParent, IDC_MI_MAP); //create window
+
+ m_meter.SetRange (10.0, 110.0);
+ m_meter.SetLabelsDecimals(0);
+ m_meter.SetValueDecimals(0);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_PRESSURE_TITLE));
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_PRESSURE_UNIT));
  m_meter.SetTickNumber(20);
  m_meter.AddAlertZone(10,30,RGB(180,130,130));
@@ -57,56 +59,6 @@ void CMIPressure::Create(void)
  m_meter.AddAlertZone(90,110,RGB(180,130,130));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
-
- m_rect = GDIHelpers::GetChildWndRect(&m_meter);
-}
-
-void CMIPressure::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
-{
- DDX_Control(pDX, nIDC_meter, m_meter);
-}
-
-//--------------------interface-----------------------
-void CMIPressure::SetValue(float value)
-{
- m_meter.SetNeedleValue((double)value);
- m_meter.Update();
-}
-
-float CMIPressure::GetValue(void)
-{
- return (float)m_meter.GetNeedlePos();
-}
-
-void CMIPressure::Show(bool show)
-{
- m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-void CMIPressure::Enable(bool enable)
-{
- m_meter.SetState(meter_needle, enable);
- m_meter.SetState(meter_value, enable);
- m_meter.SetState(meter_grid, enable);
- m_meter.SetState(meter_labels, enable);
- m_meter.SetState(meter_unit, enable);
- COLORREF bk_color;
- m_meter.GetColor(meter_bground, &bk_color);
- m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
-
- m_meter.Redraw();
-}
-
-bool CMIPressure::IsVisible(void)
-{
- return (m_meter.IsWindowVisible()) ? true : false;
-}
-
-bool CMIPressure::IsEnabled(void)
-{
- bool State = false;
- m_meter.GetState(meter_needle, &State);
- return State;
 }
 
 void CMIPressure::SetLimits(float loLimit, float upLimit)
@@ -117,17 +69,4 @@ void CMIPressure::SetLimits(float loLimit, float upLimit)
  m_meter.AddAlertZone(upLimit * 0.8181, upLimit, RGB(180,130,130));
 
  m_meter.SetRange(loLimit, upLimit);
-}
-
-void CMIPressure::SetTicks(int number)
-{
- m_meter.SetTickNumber(number);
-}
-//----------------------------------------------------
-
-void CMIPressure::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect = m_rect;
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect, repaint);
 }

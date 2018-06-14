@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIInjPW.h"
-#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -42,14 +41,17 @@ CMIInjPW::~CMIInjPW()
  //empty
 }
 
-void CMIInjPW::Create(void)
+void CMIInjPW::Create(CWnd* pParent)
 {
+ MeasInstrBase::Create(pParent, IDC_MI_INJ_PW); //create window
+
  m_meter.SetRange (0, 24.00);
  m_meter.SetLabelsDecimals(0);
  m_meter.SetValueDecimals(2);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_INJ_PW_TITLE));
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_MS_UNIT));
  m_meter.SetTickNumber(24);
  m_meter.AddAlertZone(0,1.0,RGB(255,100,100));
@@ -57,56 +59,6 @@ void CMIInjPW::Create(void)
  m_meter.AddAlertZone(10.0,24,RGB(150,150,250));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
-
- m_rect = GDIHelpers::GetChildWndRect(&m_meter);
-}
-
-void CMIInjPW::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
-{
- DDX_Control(pDX, nIDC_meter, m_meter);
-}
-
-//--------------------interface-----------------------
-void CMIInjPW::SetValue(float value)
-{
- m_meter.SetNeedleValue((double)value);
- m_meter.Update();
-}
-
-float CMIInjPW::GetValue(void)
-{
- return (float)m_meter.GetNeedlePos();
-}
-
-void CMIInjPW::Show(bool show)
-{
- m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-void CMIInjPW::Enable(bool enable)
-{
- m_meter.SetState(meter_needle, enable);
- m_meter.SetState(meter_value, enable);
- m_meter.SetState(meter_grid, enable);
- m_meter.SetState(meter_labels, enable);
- m_meter.SetState(meter_unit, enable);
- COLORREF bk_color;
- m_meter.GetColor(meter_bground, &bk_color);
- m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
-
- m_meter.Redraw();
-}
-
-bool CMIInjPW::IsVisible(void)
-{
- return (m_meter.IsWindowVisible()) ? true : false;
-}
-
-bool CMIInjPW::IsEnabled(void)
-{
- bool State = false;
- m_meter.GetState(meter_needle, &State);
- return State;
 }
 
 void CMIInjPW::SetLimits(float loLimit, float upLimit)
@@ -117,17 +69,4 @@ void CMIInjPW::SetLimits(float loLimit, float upLimit)
  m_meter.AddAlertZone(upLimit * 0.75, upLimit, RGB(255,100,100));
 
  m_meter.SetRange(loLimit, upLimit);
-}
-
-void CMIInjPW::SetTicks(int number)
-{
- m_meter.SetTickNumber(number);
-}
-//----------------------------------------------------
-
-void CMIInjPW::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect = m_rect;
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect, repaint);
 }

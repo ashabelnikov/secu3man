@@ -129,6 +129,26 @@ CAppSettingsModel::CAppSettingsModel()
   m_optCoolingFan[i].name = _T("IndCoolingFan");
  }
 
+ m_Name_Meters_Section[0] = _T("Meters");
+ m_Name_Meters_Section[1] = _T("MetersEx");
+
+ for(int i = 0; i < 2; ++i)
+ {
+  m_optMetRows[i].name = _T("MetRows");
+  m_optMetRPM[i].name = _T("MetRPM");
+  m_optMetMAP[i].name = _T("MetMAP");
+  m_optMetVBat[i].name = _T("MetVBat");
+  m_optMetIgnTim[i].name = _T("MetIgnTim");
+  m_optMetCLT[i].name = _T("MetCLT");
+  m_optMetAddI1[i].name = _T("MetAddI1");
+  m_optMetAddI2[i].name = _T("MetAddI2");
+  m_optMetInjPW[i].name = _T("MetInjPW");
+  m_optMetIAT[i].name = _T("MetIAT");
+  m_optMetEGOCorr[i].name = _T("MetEGOCorr");
+  m_optMetTPS[i].name = _T("MetTPS");
+  m_optMetAirFlow[i].name = _T("MetAirFlow");
+ }
+
  //заполняем базу данных допустимых скоростей для COM-порта
  m_AllowableBaudRates.push_back(CBR_9600);
  m_AllowableBaudRates.push_back(CBR_14400);
@@ -299,6 +319,25 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optCoolingFan[i],_T("6"), 0, 32, true);
  }
 
+ //Meters
+ for(int i = 0; i < 2; ++i)
+ {
+  IniIO mm(IniFileName, m_Name_Meters_Section[i]);
+  mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
+  mm.ReadInt(m_optMetRPM[i],_T("0"), 0, 32, true);
+  mm.ReadInt(m_optMetMAP[i],_T("1"), 0, 32, true);
+  mm.ReadInt(m_optMetVBat[i],_T("2"), 0, 32, true);
+  mm.ReadInt(m_optMetIgnTim[i],_T("3"), 0, 32, true);
+  mm.ReadInt(m_optMetTPS[i],_T("4"), 0, 32, true);
+  mm.ReadInt(m_optMetCLT[i],_T("5"), 0, 32, true);
+  mm.ReadInt(m_optMetAddI1[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetAddI2[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetInjPW[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetIAT[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetEGOCorr[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetAirFlow[i],_T(""), 0, 32, true);
+ }
+
  return status;
 }
 
@@ -398,6 +437,7 @@ bool CAppSettingsModel::WriteSettings(void)
  for(int i = 0; i < 2; ++i)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
+  ii.CreateSection();
   ii.WriteInt(m_optIndRows[i]);
   ii.WriteInt(m_optIndGas_v[i]);
   ii.WriteInt(m_optIndCarb[i]);
@@ -406,6 +446,26 @@ bool CAppSettingsModel::WriteSettings(void)
   ii.WriteInt(m_optStBlock[i]);
   ii.WriteInt(m_optAE[i]);
   ii.WriteInt(m_optCoolingFan[i]);
+ }
+
+ //Meters
+ for(int i = 0; i < 2; ++i)
+ {
+  IniIO mm(IniFileName, m_Name_Meters_Section[i]);
+  mm.CreateSection();
+  mm.WriteInt(m_optMetRows[i]);
+  mm.WriteInt(m_optMetRPM[i]);
+  mm.WriteInt(m_optMetMAP[i]);
+  mm.WriteInt(m_optMetVBat[i]);
+  mm.WriteInt(m_optMetIgnTim[i]);
+  mm.WriteInt(m_optMetTPS[i]);
+  mm.WriteInt(m_optMetCLT[i]);
+  mm.WriteInt(m_optMetAddI1[i]);
+  mm.WriteInt(m_optMetAddI2[i]);
+  mm.WriteInt(m_optMetInjPW[i]);
+  mm.WriteInt(m_optMetIAT[i]);
+  mm.WriteInt(m_optMetEGOCorr[i]);
+  mm.WriteInt(m_optMetAirFlow[i]);
  }
 
  return status;
@@ -755,5 +815,25 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optStBlock[i] = m_optStBlock[i].value;
   o_cfg.m_optAE[i] = m_optAE[i].value;
   o_cfg.m_optCoolingFan[i] = m_optCoolingFan[i].value;
+ }
+}
+
+void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
+{
+ for(int i = 0; i < 2; ++i)
+ {
+  o_cfg.m_optMetRows[i] = m_optMetRows[i].value; 
+  o_cfg.m_optMetRPM[i] = m_optMetRPM[i].value;
+  o_cfg.m_optMetMAP[i] = m_optMetMAP[i].value;
+  o_cfg.m_optMetVBat[i] = m_optMetVBat[i].value;
+  o_cfg.m_optMetIgnTim[i] = m_optMetIgnTim[i].value;
+  o_cfg.m_optMetCLT[i] = m_optMetCLT[i].value;
+  o_cfg.m_optMetAddI1[i] = m_optMetAddI1[i].value;
+  o_cfg.m_optMetAddI2[i] = m_optMetAddI2[i].value;
+  o_cfg.m_optInjPW[i] = m_optMetInjPW[i].value;
+  o_cfg.m_optMetIAT[i] = m_optMetIAT[i].value;
+  o_cfg.m_optMetEGOCorr[i] = m_optMetEGOCorr[i].value;
+  o_cfg.m_optMetTPS[i] = m_optMetTPS[i].value;
+  o_cfg.m_optMetAirFlow[i] = m_optMetAirFlow[i].value;
  }
 }

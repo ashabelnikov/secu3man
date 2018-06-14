@@ -215,19 +215,6 @@ void CParamMonTabDlg::EnableMakingChartsChildren(bool enable)
   mp_TablesDeskDlg->MakeChartsChildren(m_enMakeChartsChildren);
 }
 
-void CParamMonTabDlg::ShowExFixtures(bool i_exfixtures)
-{
- //=================================================================
- CString str;
- mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl(str.GetBuffer(100)))
-  return;
- //=================================================================
-
- CRect rect = GDIHelpers::GetChildWndRect(this, i_exfixtures ? IDC_PM_MIDESK_FRAME_F : IDC_PM_MIDESK_FRAME);
- mp_MIDeskDlg->ShowExFixtures(i_exfixtures, rect);
-}
-
 void CParamMonTabDlg::setOnRawSensorsCheck(EventHandler i_Function)
 {
  m_OnRawSensorsCheck = i_Function;

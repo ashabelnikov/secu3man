@@ -110,6 +110,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetNumPulsesPer1Km(void) const;
   ////////////////////////////////////////////////////
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
+  virtual void GetMetersConfig(MetersCfg& o_cfg) const;
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -122,6 +123,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_WndSettings_Section;  
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
+  CString m_Name_Meters_Section[2];
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -208,6 +210,20 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optStBlock[2];
   OptField_t<int> m_optAE[2];
   OptField_t<int> m_optCoolingFan[2];
+  //meters
+  OptField_t<int> m_optMetRows[2];
+  OptField_t<int> m_optMetRPM[2];
+  OptField_t<int> m_optMetMAP[2];
+  OptField_t<int> m_optMetVBat[2];
+  OptField_t<int> m_optMetIgnTim[2];
+  OptField_t<int> m_optMetCLT[2];
+  OptField_t<int> m_optMetAddI1[2];
+  OptField_t<int> m_optMetAddI2[2];
+  OptField_t<int> m_optMetInjPW[2];
+  OptField_t<int> m_optMetIAT[2];
+  OptField_t<int> m_optMetEGOCorr[2];
+  OptField_t<int> m_optMetTPS[2];
+  OptField_t<int> m_optMetAirFlow[2];
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

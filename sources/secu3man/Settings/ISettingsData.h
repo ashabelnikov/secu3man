@@ -126,6 +126,23 @@ struct IndicatorsCfg
  int m_optCoolingFan[2];
 };
 
+struct MetersCfg
+{
+ int m_optMetRows[2];
+ int m_optMetRPM[2];
+ int m_optMetMAP[2];
+ int m_optMetVBat[2];
+ int m_optMetIgnTim[2];
+ int m_optMetCLT[2];
+ int m_optMetAddI1[2];
+ int m_optMetAddI2[2];
+ int m_optInjPW[2];
+ int m_optMetIAT[2];
+ int m_optMetEGOCorr[2];
+ int m_optMetTPS[2];
+ int m_optMetAirFlow[2];
+};
+
 typedef enum EInterLang
 {
  IL_ENGLISH = 0,
@@ -184,4 +201,6 @@ class ISettingsData
 
   //Indicators
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;
+  //Meters
+  virtual void GetMetersConfig(MetersCfg& o_cfg) const = 0;
 };

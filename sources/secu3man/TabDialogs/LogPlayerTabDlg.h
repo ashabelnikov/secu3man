@@ -47,8 +47,6 @@ class CLogPlayerTabDlg : public CTabDialog
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
-  void ShowExFixtures(bool i_exfixtures); //applicable only in the fullscreen mode
-
   void AppendKnockValue(double i_value, bool i_reverse);
   void ResetKnockOscilloscope(void);
 

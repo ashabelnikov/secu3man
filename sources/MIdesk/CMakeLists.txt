@@ -25,7 +25,7 @@ set(HEADERS
   CEDeskDlg.h
   DVDeskDlg.h
   IDVView.h
-  IMeasInstrument.h
+  MeasInstrBase.h
   IMIView.h
   StdAfx.h
   IRSView.h
@@ -44,6 +44,7 @@ set(HEADERS
   MIVoltMeter.h
   Resource.h
   RSDeskDlg.h
+  RingBuffer.h
   StdAfx.h
   )
 

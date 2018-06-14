@@ -109,7 +109,6 @@ void CParamMonTabController::OnSettingsChanged(void)
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  mp_moncntr->OnSettingsChanged();
  ConfigureIndicators();
- mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
  mp_view->Invalidate();
 }
 
@@ -137,8 +136,6 @@ void CParamMonTabController::OnActivate(void)
  OnConnection(mp_comm->m_pControlApp->GetOnlineStatus());
 
  ConfigureIndicators();
- mp_view->ShowExFixtures(mp_settings->GetShowExFixtures());
-
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
 }
 
@@ -301,7 +298,12 @@ void CParamMonTabController::_StartScenario(const std::vector<CPMStateMachineSta
 void CParamMonTabController::ConfigureIndicators(void)
 {
  int idx = (int)mp_settings->GetShowExFixtures();
- IndicatorsCfg cfg;
- mp_settings->GetIndicatorsConfig(cfg);
- mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg.m_optIndRows[idx], cfg.m_optIndGas_v[idx], cfg.m_optIndCarb[idx], cfg.m_optIndIdleValve[idx], cfg.m_optIndPowerValve[idx], cfg.m_optStBlock[idx], cfg.m_optAE[idx], cfg.m_optCoolingFan[idx]);
+ IndicatorsCfg cfg0;
+ mp_settings->GetIndicatorsConfig(cfg0);
+ mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg0.m_optIndRows[idx], cfg0.m_optIndGas_v[idx], cfg0.m_optIndCarb[idx], cfg0.m_optIndIdleValve[idx], cfg0.m_optIndPowerValve[idx], cfg0.m_optStBlock[idx], cfg0.m_optAE[idx], cfg0.m_optCoolingFan[idx]);
+
+ MetersCfg cfg1;
+ mp_settings->GetMetersConfig(cfg1);
+ mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1.m_optMetRows[idx], cfg1.m_optMetRPM[idx], cfg1.m_optMetMAP[idx], cfg1.m_optMetVBat[idx], cfg1.m_optMetIgnTim[idx], cfg1.m_optMetCLT[idx], cfg1.m_optMetAddI1[idx], cfg1.m_optMetAddI2[idx],
+  cfg1.m_optInjPW[idx], cfg1.m_optMetIAT[idx], cfg1.m_optMetEGOCorr[idx], cfg1.m_optMetTPS[idx], cfg1.m_optMetAirFlow[idx]);
 }

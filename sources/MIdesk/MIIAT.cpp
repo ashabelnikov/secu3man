@@ -26,7 +26,6 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIIAT.h"
-#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -42,14 +41,17 @@ CMIIAT::~CMIIAT()
  //empty
 }
 
-void CMIIAT::Create(void)
+void CMIIAT::Create(CWnd* pParent)
 {
- m_meter.SetRange (-40.0, 120.0) ;
- m_meter.SetLabelsDecimals(1) ;
- m_meter.SetValueDecimals(1) ;
- m_meter.SetTitle(MLL::LoadString(IDS_MI_IAT_TITLE)) ;
+ MeasInstrBase::Create(pParent, IDC_MI_IAT); //create window
+
+ m_meter.SetRange (-40.0, 120.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(1);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_IAT_TITLE));
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TEMPERATURE_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(-40,50,RGB(130,130,180));
@@ -58,71 +60,4 @@ void CMIIAT::Create(void)
  m_meter.SetTRPane(_T("n/a"));
  m_meter.SetNeedleValue(-40.0);
  m_meter.Update();
- m_rect = GDIHelpers::GetChildWndRect(&m_meter);
-}
-
-void CMIIAT::DDX_Controls(CDataExchange* pDX, int nIDC_meter)
-{
- DDX_Control(pDX, nIDC_meter, m_meter);
-}
-
-//--------------------interface-----------------------
-void CMIIAT::SetValue(float value)
-{
- m_meter.SetNeedleValue((double)value);
- m_meter.Update();
-}
-
-float CMIIAT::GetValue(void)
-{
- return (float)m_meter.GetNeedlePos();
-}
-
-void CMIIAT::Show(bool show)
-{
- m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-void CMIIAT::Enable(bool enable)
-{
- m_meter.SetState(meter_needle, enable);
- m_meter.SetState(meter_value, enable);
- m_meter.SetState(meter_grid, enable);
- m_meter.SetState(meter_labels, enable);
- m_meter.SetState(meter_unit, enable);
- COLORREF bk_color;
- m_meter.GetColor(meter_bground, &bk_color);
- m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
-
- m_meter.Redraw();
-}
-
-bool CMIIAT::IsVisible(void)
-{
- return (m_meter.IsWindowVisible()) ? true : false;
-}
-
-bool CMIIAT::IsEnabled(void)
-{
- bool State = false;
- m_meter.GetState(meter_needle, &State);
- return State;
-}
-
-void CMIIAT::SetLimits(float loLimit, float upLimit)
-{
- m_meter.SetRange(loLimit, upLimit);
-}
-
-void CMIIAT::SetTicks(int number)
-{
- m_meter.SetTickNumber(number);
-}
-//----------------------------------------------------
-
-void CMIIAT::Scale(float i_x_factor, float i_y_factor, bool repaint /*= true*/)
-{
- CRect rect = m_rect;
- GDIHelpers::ScaleRect(rect, i_x_factor, i_y_factor);
- m_meter.MoveWindow(rect, repaint);
 }
