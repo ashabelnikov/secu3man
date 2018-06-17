@@ -42,6 +42,14 @@ set(HEADERS
   MIThrottleGate.h
   MIVoltage.h
   MIVoltMeter.h
+  MIVehicleSpeed.h
+  MITPSDot.h
+  MIMap2.h
+  MIMapD.h
+  MITemp2.h
+  MIFuelConsum.h
+  MIKnockRetard.h
+  MIKnockGraph.h
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
@@ -65,6 +73,14 @@ set (SOURCES
   MIThrottleGate.cpp
   MIVoltage.cpp
   MIVoltMeter.cpp
+  MIVehicleSpeed.cpp
+  MITPSDot.cpp
+  MIMap2.cpp
+  MIMapD.cpp
+  MITemp2.cpp
+  MIFuelConsum.cpp
+  MIKnockRetard.cpp
+  MIKnockGraph.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
   MIDesk.rc

@@ -141,6 +141,14 @@ struct MetersCfg
  int m_optMetEGOCorr[2];
  int m_optMetTPS[2];
  int m_optMetAirFlow[2];
+ int m_optMetVehicleSpeed[2];
+ int m_optMetTPSDot[2];
+ int m_optMetMAP2[2];
+ int m_optMetMAPD[2];
+ int m_optMetTmp2[2];
+ int m_optMetFuelConsum[2];
+ int m_optMetKnockRetard[2];
+ int m_optMetKnockGraph[2];
 };
 
 typedef enum EInterLang

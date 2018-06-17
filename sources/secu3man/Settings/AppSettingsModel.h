@@ -224,6 +224,14 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetEGOCorr[2];
   OptField_t<int> m_optMetTPS[2];
   OptField_t<int> m_optMetAirFlow[2];
+  OptField_t<int> m_optMetVehicleSpeed[2];
+  OptField_t<int> m_optMetTPSDot[2];
+  OptField_t<int> m_optMetMAP2[2];
+  OptField_t<int> m_optMetMAPD[2];
+  OptField_t<int> m_optMetTmp2[2];
+  OptField_t<int> m_optMetFuelConsum[2];
+  OptField_t<int> m_optMetKnockRetard[2];
+  OptField_t<int> m_optMetKnockGraph[2];
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

@@ -88,7 +88,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan);
 
   void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
-                    int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow);
+                    int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot, int MetMAP2,
+                    int MetMapD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -113,7 +114,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   CFont m_font;
 
   SECU3IO::SensorDat m_values;
-  float m_air_flow;
+  float m_air_flow; //todo: replace by direct value fron SensorDat
+  float m_tps_dot;  //todo: replace by direct value fron SensorDat
   CObjectTimer<CMIDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;

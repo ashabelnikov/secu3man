@@ -147,6 +147,14 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetEGOCorr[i].name = _T("MetEGOCorr");
   m_optMetTPS[i].name = _T("MetTPS");
   m_optMetAirFlow[i].name = _T("MetAirFlow");
+  m_optMetVehicleSpeed[i].name = _T("MetVehicleSpeed");
+  m_optMetTPSDot[i].name = _T("MetTPSDot");
+  m_optMetMAP2[i].name = _T("MetMAP2");
+  m_optMetMAPD[i].name = _T("MetMAPD");
+  m_optMetTmp2[i].name = _T("MetTmp2");
+  m_optMetFuelConsum[i].name = _T("MetFuelConsum");
+  m_optMetKnockRetard[i].name = _T("MetKnockRetard");
+  m_optMetKnockGraph[i].name = _T("MetKnockGraph");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -336,6 +344,14 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetIAT[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetEGOCorr[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetAirFlow[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetVehicleSpeed[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetTPSDot[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetMAP2[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetMAPD[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetTmp2[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetFuelConsum[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetKnockRetard[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetKnockGraph[i],_T(""), 0, 32, true);
  }
 
  return status;
@@ -466,6 +482,14 @@ bool CAppSettingsModel::WriteSettings(void)
   mm.WriteInt(m_optMetIAT[i]);
   mm.WriteInt(m_optMetEGOCorr[i]);
   mm.WriteInt(m_optMetAirFlow[i]);
+  mm.WriteInt(m_optMetVehicleSpeed[i]);
+  mm.WriteInt(m_optMetTPSDot[i]);
+  mm.WriteInt(m_optMetMAP2[i]);
+  mm.WriteInt(m_optMetMAPD[i]);
+  mm.WriteInt(m_optMetTmp2[i]);
+  mm.WriteInt(m_optMetFuelConsum[i]);
+  mm.WriteInt(m_optMetKnockRetard[i]);
+  mm.WriteInt(m_optMetKnockGraph[i]);
  }
 
  return status;
@@ -835,5 +859,13 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetEGOCorr[i] = m_optMetEGOCorr[i].value;
   o_cfg.m_optMetTPS[i] = m_optMetTPS[i].value;
   o_cfg.m_optMetAirFlow[i] = m_optMetAirFlow[i].value;
+  o_cfg.m_optMetVehicleSpeed[i] = m_optMetVehicleSpeed[i].value;
+  o_cfg.m_optMetTPSDot[i] = m_optMetTPSDot[i].value;
+  o_cfg.m_optMetMAP2[i] = m_optMetMAP2[i].value;
+  o_cfg.m_optMetMAPD[i] = m_optMetMAPD[i].value;
+  o_cfg.m_optMetTmp2[i] = m_optMetTmp2[i].value;
+  o_cfg.m_optMetFuelConsum[i] = m_optMetFuelConsum[i].value;
+  o_cfg.m_optMetKnockRetard[i] = m_optMetKnockRetard[i].value;
+  o_cfg.m_optMetKnockGraph[i] = m_optMetKnockGraph[i].value;
  }
 }

@@ -150,6 +150,11 @@ class MeasInstrBase
    m_trpUnit = trpUnit;
   }
 
+  virtual void SetMeterUnit(const _TSTRING& metUnit)
+  {
+   m_meter.SetUnit(metUnit.c_str());
+  }
+
 protected:
   CAnalogMeterCtrl m_meter;
   _TSTRING m_tlpFmt;
@@ -157,7 +162,6 @@ protected:
   _TSTRING m_tlpUnit;
   _TSTRING m_trpUnit;
 
-private:
   float* m_metVal;
   float* m_tlpVal;
   float* m_trpVal;

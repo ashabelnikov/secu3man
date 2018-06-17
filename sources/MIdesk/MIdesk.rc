@@ -171,6 +171,17 @@ BEGIN
     IDS_MI_THROTTLE_GATE_TITLE "Дроссельная заслонка"
     IDS_MI_AIR_FLOW_TITLE   "Расход воздуха"
     IDS_MI_AIR_FLOW_UNIT    "N кривой"
+    IDS_MI_VSS_TITLE        "Скорость авто"
+    IDS_MI_TPSDOT_TITLE     "Cкорость ДЗ"
+    IDS_MI_TPSDOT_UNIT      "%/сек"
+    IDS_MI_MAP2_TITLE       "ДАД2"
+    IDS_MI_MAPD_TITLE       "Дифф.давление"
+    IDS_MI_TMP2_TITLE       "ДТВ2"
+    IDS_MI_FUELCONSUM_TITLE "Расход топлива"
+    IDS_MI_FUELCONSUM_UNIT  "Л/100км"
+    IDS_MI_KNOCKRETARD_TITLE "Корр. УОЗ от ДД"
+    IDS_MI_KNOCKGRAPH_V_UNIT "В"
+    IDS_MI_KNOCKGRAPH_H_UNIT "Выборки"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -350,6 +361,17 @@ BEGIN
     IDS_MI_THROTTLE_GATE_TITLE "Throttle gate"
     IDS_MI_AIR_FLOW_TITLE   "Air flow"
     IDS_MI_AIR_FLOW_UNIT    "Curve N"
+    IDS_MI_VSS_TITLE        "Vehicle speed"
+    IDS_MI_TPSDOT_TITLE     "TPS dot"
+    IDS_MI_TPSDOT_UNIT      "%/sec"
+    IDS_MI_MAP2_TITLE       "MAP2"
+    IDS_MI_MAPD_TITLE       "Diff.Pressure"
+    IDS_MI_TMP2_TITLE       "IAT2"
+    IDS_MI_FUELCONSUM_TITLE "Fuel consumption"
+    IDS_MI_FUELCONSUM_UNIT  "L/100km"
+    IDS_MI_KNOCKRETARD_TITLE "Knock retard"
+    IDS_MI_KNOCKGRAPH_V_UNIT "V"
+    IDS_MI_KNOCKGRAPH_H_UNIT "Samples"
 END
 
 STRINGTABLE DISCARDABLE 

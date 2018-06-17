@@ -45,6 +45,14 @@
 #include "MIThrottleGate.h"
 #include "MIVoltage.h"
 #include "MIVoltmeter.h"
+#include "MIVehicleSpeed.h"
+#include "MITPSDot.h"
+#include "MIMap2.h"
+#include "MIMapD.h"
+#include "MITemp2.h"
+#include "MIFuelConsum.h"
+#include "MIKnockRetard.h"
+#include "MIKnockGraph.h"
 
 #undef max
 
@@ -70,6 +78,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_showChokePos(false)
 , m_showGDPos(false)
 , m_air_flow(0)
+, m_tps_dot(0)
 , mp_miTemperat(NULL)
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
@@ -164,6 +173,7 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values)
 {
  m_values = *i_values;
  m_air_flow = (float)i_values->air_flow;
+ m_tps_dot = (float)i_values->tpsdot;
 
  m_ringRPM.Append((float)i_values->frequen);
  m_ringVBat.Append(i_values->voltage);
@@ -331,7 +341,8 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int In
 }
 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
-                              int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow)
+                              int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
+                              int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph)
 {
  m_metRows = MetRows;
 
@@ -443,6 +454,71 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
   widget->Create(this);
   widget->BindVars(&m_air_flow, NULL, NULL);
   m_metFields.insert(std::make_pair(MetAirFlow, widget));
+ }
+
+ if (MetVehicleSpeed != std::numeric_limits<int>::max())
+ {
+  CMIVehicleSpeed* widget = new CMIVehicleSpeed();
+  widget->Create(this);
+  widget->BindVars(&m_values.speed, NULL, NULL);
+  widget->SetMeterUnit(m_speedUnit);
+  m_metFields.insert(std::make_pair(MetVehicleSpeed, widget));
+ }
+
+ if (MetTPSDot != std::numeric_limits<int>::max())
+ {
+  CMITPSDot* widget = new CMITPSDot();
+  widget->Create(this);
+  widget->BindVars(&m_tps_dot, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetTPSDot, widget));
+ }
+
+ if (MetMAP2 != std::numeric_limits<int>::max())
+ {
+  CMIMap2* widget = new CMIMap2();
+  widget->Create(this);
+  widget->BindVars(&m_values.map2, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetMAP2, widget));
+ }
+
+ if (MetMAPD != std::numeric_limits<int>::max())
+ {
+  CMIMapD* widget = new CMIMapD();
+  widget->Create(this);
+  widget->BindVars(&m_values.mapd, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetMAPD, widget));
+ }
+
+ if (MetTmp2 != std::numeric_limits<int>::max())
+ {
+  CMITemp2* widget = new CMITemp2();
+  widget->Create(this);
+  widget->BindVars(&m_values.tmp2, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetTmp2, widget));
+ }
+
+ if (MetFuelConsum != std::numeric_limits<int>::max())
+ {
+  CMIFuelConsum* widget = new CMIFuelConsum();
+  widget->Create(this);
+  widget->BindVars(&m_values.inj_ffd, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetFuelConsum, widget));
+ }
+
+ if (MetKnockRetard != std::numeric_limits<int>::max())
+ {
+  CMIKnockRetard* widget = new CMIKnockRetard();
+  widget->Create(this);
+  widget->BindVars(&m_values.knock_retard, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetKnockRetard, widget));
+ }
+
+ if (MetKnockGraph != std::numeric_limits<int>::max())
+ {
+  CMIKnockGraph* widget = new CMIKnockGraph();
+  widget->Create(this);
+  widget->BindVars(&m_values.knock_k, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetKnockGraph, widget));
  }
 
  //enable/disable
