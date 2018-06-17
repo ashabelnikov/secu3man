@@ -175,7 +175,7 @@ static const COLORREF gradColor[GRADSTEPSNUM] = {0xA88CD5, 0xD26EDC, 0xC38CBE, 0
                                                  0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
 
 
-CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/)
+CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/)
 : m_rows(rows)
 , m_cols(cols)
 , m_minVal(0.0f)
@@ -198,7 +198,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_increment(0.5f)
 , m_invDataRowsOrder(invDataRowsOrder)
 {
- _RegisterWindowClass();
+ _RegisterWindowClass(hMod);
 
  //Create gradient brushes
  for(int i = 0; i < GRADSTEPSNUM; ++i)
@@ -233,10 +233,10 @@ BOOL CMapEditorCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  return result;
 }
 
-bool CMapEditorCtrl::_RegisterWindowClass()
+bool CMapEditorCtrl::_RegisterWindowClass(HMODULE hMod /*= NULL*/)
 {
  WNDCLASS wndcls;
- HINSTANCE hInst = AfxGetInstanceHandle();
+ HINSTANCE hInst = hMod ? hMod : AfxGetResourceHandle();
 
  if (!(::GetClassInfo(hInst, MAPEDITORCTRL_CLASSNAME, &wndcls)))
  {

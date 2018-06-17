@@ -32,7 +32,7 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
 
  public:
 
-  CMultiLEDCtrl();
+  CMultiLEDCtrl(HMODULE hMod = NULL);
   virtual ~CMultiLEDCtrl();
 
   //Creates control dynamically
@@ -52,7 +52,7 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
   DECLARE_MESSAGE_MAP()
 
  private:
-  bool _RegisterWindowClass(void);
+  bool _RegisterWindowClass(HMODULE hMod = NULL);
   CRect _GetItemRect(int idx);
 
   struct LEDItem

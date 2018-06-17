@@ -31,11 +31,11 @@
 #define MAPEDITORCTRL_CLASSNAME  _T("MultiLEDCtrl")  // Window class name
 
 
-CMultiLEDCtrl::CMultiLEDCtrl()
+CMultiLEDCtrl::CMultiLEDCtrl(HMODULE hMod /*= NULL*/)
 : m_rows(0)
 , m_cols(0)
 {
- _RegisterWindowClass();
+ _RegisterWindowClass(hMod);
  m_bkBrush.CreateSolidBrush(GetSysColor(COLOR_3DFACE));
 }
 
@@ -63,10 +63,10 @@ BOOL CMultiLEDCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  return result;
 }
 
-bool CMultiLEDCtrl::_RegisterWindowClass()
+bool CMultiLEDCtrl::_RegisterWindowClass(HMODULE hMod /*= NULL*/)
 {
  WNDCLASS wndcls;
- HINSTANCE hInst = AfxGetInstanceHandle();
+ HINSTANCE hInst = hMod ? hMod : AfxGetInstanceHandle();
 
  if (!(::GetClassInfo(hInst, MAPEDITORCTRL_CLASSNAME, &wndcls)))
  {

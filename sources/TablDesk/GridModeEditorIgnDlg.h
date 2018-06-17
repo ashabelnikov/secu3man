@@ -27,10 +27,33 @@
 
 #include <memory>
 #include <vector>
+#include <limits>
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 #include "DynamicValues.h"
 #include "ui-core/MapEditorCtrl.h"
+
+#undef max
+
+class CStaticDisp : public CStatic
+{
+ public:
+  CStaticDisp() : m_value(std::numeric_limits<float>::max()) {}
+
+  void SetValue(float value)
+  {
+   if (value != m_value)
+   {
+    CString str;
+    str.Format(_T("%0.2f"), value), SetWindowText(str);
+    m_value = value;
+   }
+  }
+
+ private:
+  float m_value; //cached value
+};
+
 
 class CGridModeEditorIgnDlg : public CDialog
 {
@@ -90,14 +113,14 @@ class CGridModeEditorIgnDlg : public CDialog
   CMapEditorCtrl m_work_map;
   CMapEditorCtrl m_temp_map;
 
-  CStatic m_aa_value;
-  CStatic m_wm_value;
-  CStatic m_oc_value;
-  CStatic m_tc_value;
-  CStatic m_kc_value;
-  CStatic m_im_value;
-  CStatic m_ic_value;
-  CStatic m_ac_value;
+  CStaticDisp m_aa_value;
+  CStaticDisp m_wm_value;
+  CStaticDisp m_oc_value;
+  CStaticDisp m_tc_value;
+  CStaticDisp m_kc_value;
+  CStaticDisp m_im_value;
+  CStaticDisp m_ic_value;
+  CStaticDisp m_ac_value;
 
   float* mp_startMap;
   float* mp_idleMap;

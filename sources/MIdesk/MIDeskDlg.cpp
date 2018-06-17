@@ -30,6 +30,7 @@
 #include <limits>
 #include "MIDeskDlg.h"
 
+#include "common/Dll.h"
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
@@ -80,6 +81,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_air_flow(0)
 , m_tps_dot(0)
 , mp_miTemperat(NULL)
+, m_leds(DLL::GetModuleHandle())
 {
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
 }

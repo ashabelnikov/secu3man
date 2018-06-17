@@ -79,10 +79,10 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , mp_tempMap(NULL)
 , mp_rpmGrid(NULL)
 , m_en_aa_indication(false)
-, m_start_map(1, 16)
-, m_idle_map(1, 16)
-, m_work_map(16, 16)
-, m_temp_map(1, 16)
+, m_start_map(1, 16, false, DLL::GetModuleHandle())
+, m_idle_map(1, 16, false, DLL::GetModuleHandle())
+, m_work_map(16, 16, true, DLL::GetModuleHandle())
+, m_temp_map(1, 16, false, DLL::GetModuleHandle())
 {
  _ResetUseFlags();
 }
@@ -272,18 +272,31 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 {
  if (!GetSafeHwnd())
   return;
- CString str;
- str.Format(_T("%0.2f"), dv.adv_ang), m_aa_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.knock_retard), m_kc_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.idle_aalt), m_im_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.work_aalt), m_wm_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.temp_aalt), m_tc_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.airt_aalt), m_ac_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.idlreg_aac), m_ic_value.SetWindowText(str);
- str.Format(_T("%0.2f"), dv.octan_aac), m_oc_value.SetWindowText(str);
+
+ m_aa_value.SetValue(dv.adv_ang);
+ m_kc_value.SetValue(dv.knock_retard);
+ m_im_value.SetValue(dv.idle_aalt);
+ m_wm_value.SetValue(dv.work_aalt);
+ m_tc_value.SetValue(dv.temp_aalt);
+ m_ac_value.SetValue(dv.airt_aalt);
+ m_ic_value.SetValue(dv.idlreg_aac);
+ m_oc_value.SetValue(dv.octan_aac);
+
  m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
- Invalidate(); //shit
+
+ //updating work points:
+ m_start_map.ShowMarkers(dv.strt_use, false);
+ m_start_map.SetArguments(0, (float)dv.rpm);
+
+ m_idle_map.ShowMarkers(dv.idle_use, false);
+ m_idle_map.SetArguments(0, (float)dv.rpm);
+
+ m_temp_map.ShowMarkers(dv.temp_use, false);
+ m_temp_map.SetArguments(0, dv.temp);
+
+ m_work_map.ShowMarkers(dv.work_use && dv.air_flow, false);
+ m_work_map.SetArguments((float)dv.air_flow, (float)dv.rpm);
 }
 
 void CGridModeEditorIgnDlg::setIsAllowed(EventResult IsFunction)

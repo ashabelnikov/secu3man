@@ -45,7 +45,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
 
-  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false);
+  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL);
   virtual ~CMapEditorCtrl();
 
   void SetRange(float i_min, float i_max);
@@ -83,7 +83,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void _ActivateEdit(void);
   void _DeactivateEdit(void);
   bool _ValidateItem(CEditExCustomKeys* pItem, float* p_value = NULL);
-  bool _RegisterWindowClass(void);
+  bool _RegisterWindowClass(HMODULE hMod = NULL);
   void _DrawItem(CDC& dc, const CRect& rect, LPCTSTR text);
   int _GetGradIndex(float value);
   float _GetItem(int i, int j); // i - row, j - column
