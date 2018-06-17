@@ -106,6 +106,8 @@ BOOL CGridModeEditorInjDlg::OnInitDialog()
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_ENR_TAB), m_pEnrPageDlg.get(), 0);
  m_tab_control.AddPage(MLL::LoadString(IDS_GME_INJ_OTHER_TAB), m_pOtherPageDlg.get(), 0);
 
+ m_tab_control.SetCurSel(0);
+
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
 
