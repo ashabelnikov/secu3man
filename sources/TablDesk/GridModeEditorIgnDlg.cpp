@@ -592,6 +592,7 @@ void CGridModeEditorIgnDlg::OnClose()
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
  Super::OnClose(); //close window
+ DestroyWindow();
 }
 
 void CGridModeEditorIgnDlg::BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp)
@@ -631,6 +632,8 @@ void CGridModeEditorIgnDlg::EnableAdvanceAngleIndication(bool i_enable)
 
 void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 {
+ if (!GetSafeHwnd())
+  return;
  CString str;
  str.Format(_T("%0.2f"), dv.adv_ang), m_aa_value.SetWindowText(str);
  str.Format(_T("%0.2f"), dv.knock_retard), m_kc_value.SetWindowText(str);

@@ -174,6 +174,7 @@ void CGridModeEditorInjDlg::OnClose()
   m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_INJ_WND);
 
  Super::OnClose(); //close window
+ DestroyWindow();
 }
 
 void CGridModeEditorInjDlg::BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc)
