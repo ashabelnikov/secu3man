@@ -30,147 +30,9 @@
 #include "GridModeEditorIgnDlg.h"
 #include "io-core/SECU3IO.h"
 #include "MapIds.h"
-#include "ui-core/EditEx.h"
 #include "ui-core/fnt_helpers.h"
 
-static const COLORREF itemErrColor = RGB(255,120,120);
-static const float wrkMinVal = -15.0f;
-static const float wrkMaxVal = 55.0f;
-static const COLORREF gradColor[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
-                                      0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
-
-namespace {
-class MapLimits
-{
- public:
-  MapLimits(int mapType) : m_mapType(mapType) {}
-
-  float getLoLimit(void) const
-  {
-   switch(m_mapType)
-   {
-    case TYPE_MAP_DA_START:
-    case TYPE_MAP_DA_IDLE:
-    case TYPE_MAP_DA_WORK:
-     return wrkMinVal;
-    case TYPE_MAP_DA_TEMP_CORR:
-     return -15.0f;
-    default:
-     ASSERT(0);
-     return 0;
-   }
-  }
-
-  float getHiLimit(void) const
-  {
-   switch(m_mapType)
-   {
-    case TYPE_MAP_DA_START:
-    case TYPE_MAP_DA_IDLE:
-    case TYPE_MAP_DA_WORK:
-     return wrkMaxVal;
-    case TYPE_MAP_DA_TEMP_CORR:
-     return 25.0f;
-    default:
-     ASSERT(0);
-     return 0;
-   }
-  }
- private:
-  int m_mapType;
-};
-}
-
-//We need this descendant to have ability to handle some keyboard keys
-class CEditExCustomKeys : public CEditEx
-{
-  typedef fastdelegate::FastDelegate2<UINT, CEditExCustomKeys*> EventHandler2;
-  typedef fastdelegate::FastDelegate1<CEditExCustomKeys*> EventHandler1;
-  void OnChar(UINT nChar, UINT nRepCnt, UINT nFlags)
-  {
-   CEditEx::OnChar(nChar, nRepCnt, nFlags);
-   if (nChar==VK_RETURN)
-    m_onChar(nChar, this);
-   else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
-   {
-    CWnd* pWnd = GetNextWindow((GetKeyState(VK_SHIFT)&0x8000)?GW_HWNDPREV:GW_HWNDNEXT);
-    pWnd->SetFocus();
-    CEditExCustomKeys* pThisClsWnd = dynamic_cast<CEditExCustomKeys*>(pWnd);
-    if (pThisClsWnd)
-     pThisClsWnd->SetSel(0, -1);
-   }
-  }
-  void IncrementEdit(float incVal)
-  {
-   MapLimits lim(m_mapType);
-   float value = 0;
-   if (GetValue(value))
-   {   
-    value+=incVal;
-    if (value < lim.getLoLimit())
-     value = lim.getLoLimit();
-    else if  (value > lim.getHiLimit())
-     value = lim.getHiLimit();
-    SetValue(value);
-   }
-   else
-    SetValue(0.0f);
-  }
-  void OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
-  {
-   if (nChar==VK_LEFT || nChar==VK_RIGHT || nChar==VK_UP || nChar==VK_DOWN)
-   {
-    int nStartChar, nEndChar;
-    GetSel(nStartChar, nEndChar);
-    if (nChar==VK_LEFT)
-    {
-     if (nStartChar <= 0)
-      m_onChar(nChar, this);
-    }
-    else if (nChar==VK_RIGHT)
-    {
-     CString str;
-     GetWindowText(str);
-     if (nStartChar >= str.GetLength())
-      m_onChar(nChar, this);
-    }
-    else
-     m_onChar(nChar, this);
-   }
-   else if (nChar==VK_OEM_6)
-    IncrementEdit(0.5f);
-   else if (nChar==VK_OEM_5)
-    IncrementEdit(-0.5f);
-
-   CEditEx::OnKeyDown(nChar, nRepCnt, nFlags);
-  }
-  void OnKillFocus(CWnd* cwnd)
-  {
-   CEditEx::OnKillFocus(cwnd);
-   m_onKillFocus(this);
-  }
-  UINT OnGetDlgCode()
-  {
-   return CEditEx::OnGetDlgCode() | DLGC_WANTALLKEYS;
-  }
-  EventHandler2 m_onChar;
-  EventHandler1 m_onKillFocus;
-  DECLARE_MESSAGE_MAP()
- public:
-  CEditExCustomKeys(const EventHandler2& onChar, const EventHandler1& onKillFocus, int mapType)
-  : CEditEx(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED), m_onChar(onChar), m_onKillFocus(onKillFocus),
-  m_ln(NULL), m_rn(NULL), m_un(NULL), m_dn(NULL), m_error(false), m_mapType(mapType) {}
-  CEditExCustomKeys* m_ln, *m_rn, *m_un, *m_dn; //neighbours
-  bool m_error;
-  int m_mapType;
-};
-
-BEGIN_MESSAGE_MAP(CEditExCustomKeys, CEditEx)
- ON_WM_CHAR()
- ON_WM_KEYDOWN()
- ON_WM_GETDLGCODE()
- ON_WM_KILLFOCUS()
-END_MESSAGE_MAP()
+static float work_map_load_slots[16]  = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 
 const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
@@ -178,12 +40,11 @@ const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 // CGridModeEditorIgnDlg dialog
 
 BEGIN_MESSAGE_MAP(CGridModeEditorIgnDlg, Super)
- ON_WM_PAINT()
  ON_WM_CLOSE()
- ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_WRK_START, IDC_GME_WRK_START+16*16, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_IDL_0, IDC_GME_IDL_15, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_STR_0, IDC_GME_STR_15, OnUpdateControls)
- ON_UPDATE_COMMAND_UI_RANGE(IDC_GME_TMP_0, IDC_GME_TMP_15, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_STR, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_IDL, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_WRK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IGN_TMP, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_AA_CAPTION, OnUpdateAAControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_WM_CAPTION, OnUpdateAAControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_OC_CAPTION, OnUpdateAAControls)
@@ -208,79 +69,22 @@ BEGIN_MESSAGE_MAP(CGridModeEditorIgnDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_ICP_TEXT, OnUpdateAAControls)
  ON_UPDATE_COMMAND_UI(IDC_GME_AC_VALUE, OnUpdateAAControls)   //air temper. corr.
  ON_UPDATE_COMMAND_UI(IDC_GME_AA_UNIT, OnUpdateAAControls)
- ON_WM_CTLCOLOR()
 END_MESSAGE_MAP()
 
 CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 : Super(CGridModeEditorIgnDlg::IDD, pParent)
-, m_wpiPen(PS_SOLID, 3, RGB(255, 64, 64))
 , mp_startMap(NULL)
 , mp_idleMap(NULL)
 , mp_workMap(NULL)
 , mp_tempMap(NULL)
 , mp_rpmGrid(NULL)
-, m_redBrush(itemErrColor)
-, m_closing_wnd(false)
 , m_en_aa_indication(false)
+, m_start_map(1, 16)
+, m_idle_map(1, 16)
+, m_work_map(16, 16)
+, m_temp_map(1, 16)
 {
- int i,j;
- for(i = 0; i < 16; ++i)
- {
-  for(j = 0; j < 16; ++j)
-  {
-   m_wrk_grid[i][j].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
-                                                fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_WORK));
-   m_wrk_grid[i][j]->SetDecimalPlaces(2);
-  }
- }
-
- for(i = 0; i < 16; ++i)
- {
-  m_idl_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_IDLE));
-  m_idl_grid[i]->SetDecimalPlaces(2);
-  m_str_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_START));
-  m_str_grid[i]->SetDecimalPlaces(2);
-  m_tmp_grid[i].reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditChar),
-                                            fastdelegate::MakeDelegate(this, &CGridModeEditorIgnDlg::OnEditKill), TYPE_MAP_DA_TEMP_CORR));
-  m_tmp_grid[i]->SetDecimalPlaces(2);
- }
-
- //set neighbours :-)
- for(i = 0; i < 16; ++i)
- {
-  for(j = 0; j < 16; ++j)
-  {
-   m_wrk_grid[i][j]->m_un = i > 0 ? m_wrk_grid[i-1][j].get() : NULL;
-   m_wrk_grid[i][j]->m_dn = i < 15 ? m_wrk_grid[i+1][j].get() : m_idl_grid[j].get();
-   m_wrk_grid[i][j]->m_ln = j > 0 ? m_wrk_grid[i][j-1].get() : NULL;
-   m_wrk_grid[i][j]->m_rn = j < 15 ? m_wrk_grid[i][j+1].get() : NULL;
-  }
- }
- 
- for(j = 0; j < 16; ++j)
- {
-  m_idl_grid[j]->m_un = m_wrk_grid[15][j].get();
-  m_idl_grid[j]->m_dn = m_tmp_grid[j].get();
-  m_idl_grid[j]->m_ln = j > 0 ? m_idl_grid[j-1].get() : NULL;
-  m_idl_grid[j]->m_rn = j < 15 ? m_idl_grid[j+1].get() : NULL;
-
-  m_tmp_grid[j]->m_un = m_idl_grid[j].get();
-  m_tmp_grid[j]->m_dn = m_str_grid[j].get();
-  m_tmp_grid[j]->m_ln = j > 0 ? m_tmp_grid[j-1].get() : NULL;
-  m_tmp_grid[j]->m_rn = j < 15 ? m_tmp_grid[j+1].get() : NULL;
-
-  m_str_grid[j]->m_un = m_tmp_grid[j].get();
-  m_str_grid[j]->m_ln = j > 0 ? m_str_grid[j-1].get() : NULL;
-  m_str_grid[j]->m_rn = j < 15 ? m_str_grid[j+1].get() : NULL;
- }
-
  _ResetUseFlags();
-
- //Create gradient brushes
- for(i = 0; i < 16; ++i)
-  m_gradBrush[i].CreateSolidBrush(gradColor[i]);
 }
 
 CGridModeEditorIgnDlg::~CGridModeEditorIgnDlg()
@@ -292,33 +96,11 @@ void CGridModeEditorIgnDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
 
- if (::IsWindow(m_wrk_grid[0][0]->m_hWnd))
- {
-  for(int i = 0; i < 16; ++i)
-   for(int j = 0; j < 16; ++j)
-    if (!m_wrk_grid[i][j]->m_error)
-     m_wrk_grid[i][j]->DDX_Value(pDX, IDC_GME_WRK_START+i*16+j, mp_workMap[i*16+j]);
- }
-
- for(int i = 0; i < 16; ++i)
- {
-  DDX_Control(pDX, IDC_GME_IDL_0 + i, *m_idl_grid[i]);
-  if (!m_idl_grid[i]->m_error)
-   m_idl_grid[i]->DDX_Value(pDX, IDC_GME_IDL_0 + i, mp_idleMap[i]);
-  DDX_Control(pDX, IDC_GME_STR_0 + i, *m_str_grid[i]);
-  if (!m_str_grid[i]->m_error)
-   m_str_grid[i]->DDX_Value(pDX, IDC_GME_STR_0 + i, mp_startMap[i]);
-  DDX_Control(pDX, IDC_GME_TMP_0 + i, *m_tmp_grid[i]);
-  if (!m_tmp_grid[i]->m_error)
-   m_tmp_grid[i]->DDX_Value(pDX, IDC_GME_TMP_0 + i, mp_tempMap[i]);
- }
-
- //RPM grid
- for(int i = 0; i < 16; ++i)
- {
-  int value = MathHelpers::Round(mp_rpmGrid[i]);
-  DDX_Text(pDX, IDC_GME_WRKL_0 + i, value);
- }
+ //grid controls
+ DDX_Control(pDX, IDC_GME_IGN_WRK, m_work_map);
+ DDX_Control(pDX, IDC_GME_IGN_IDL, m_idle_map);
+ DDX_Control(pDX, IDC_GME_IGN_TMP, m_temp_map);
+ DDX_Control(pDX, IDC_GME_IGN_STR, m_start_map);
 
  //Advance angle indication controls
  DDX_Control(pDX, IDC_GME_AA_VALUE, m_aa_value);
@@ -355,44 +137,50 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  LogFont.lfHeight = 8;
  m_font.CreateFontIndirect(&LogFont);
 
- CRect rc;
- GetDlgItem(IDC_GME_WRK_FRAME)->GetWindowRect(&rc);
- int space  = 2;
- int width  = MathHelpers::Round(((float)(rc.right - rc.left) - 16.0f*space) / 16.0f);
- int height = MathHelpers::Round(((float)(rc.bottom - rc.top) - 16.0f*space) / 16.0f);
- ScreenToClient(&rc);
+ //start
+ m_start_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeStart));
+ m_start_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveStart));
+ m_start_map.SetRange(-15.0f, 55.0f);
+ m_start_map.AttachMap(mp_startMap);
+ m_start_map.AttachLabels(SECU3IO::start_map_rpm_slots, NULL);
+ m_start_map.ShowLabels(true, false);
+ m_start_map.SetFont(&m_font);
+ m_start_map.EnableAbroadMove(true, false);
+ m_start_map.SetValueIncrement(0.5f);
 
- //create work map edit boxes
- size_t i, j;
- for(i = 0; i < 16; ++i)
-  for(j = 0; j < 16; ++j)
-  {
-   CRect wrk_rect(j*(width+space), i*(height+space), j*(width+space) + width, i*(height+space) + height);
-   wrk_rect.OffsetRect(rc.left, rc.top);
-   m_wrk_grid[i][j]->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | WS_TABSTOP, wrk_rect, this, IDC_GME_WRK_START+i*16+j);
-   m_wrk_grid[i][j]->SetFont(&m_font);
-  }
+ //idle
+ m_idle_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeIdle));
+ m_idle_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveIdle));
+ m_idle_map.SetRange(-15.0f, 55.0f);
+ m_idle_map.AttachMap(mp_idleMap);
+ m_idle_map.AttachLabels(mp_rpmGrid, NULL);
+ m_idle_map.ShowLabels(false, false);
+ m_idle_map.SetFont(&m_font);
+ m_idle_map.EnableAbroadMove(true, true);
+ m_idle_map.SetValueIncrement(0.5f);
 
- //set position of idle, temperature and start map edits
- CRect rc_idle,rc_strt,rc_temp;
- m_idl_grid[0]->GetWindowRect(rc_idle); ScreenToClient(rc_idle);
- m_str_grid[0]->GetWindowRect(rc_strt); ScreenToClient(rc_strt);
- m_tmp_grid[0]->GetWindowRect(rc_temp); ScreenToClient(rc_temp);
- for(j = 0; j < 16; ++j)
- {
-  m_idl_grid[j]->SetWindowPos(NULL, rc_idle.left + (j*(width+space)), rc_idle.top, width, height, SWP_NOZORDER);
-  m_str_grid[j]->SetWindowPos(NULL, rc_strt.left + (j*(width+space)), rc_strt.top, width, height, SWP_NOZORDER);
-  m_tmp_grid[j]->SetWindowPos(NULL, rc_temp.left + (j*(width+space)), rc_temp.top, width, height, SWP_NOZORDER);
- }
+ //temp
+ m_temp_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeTemp));
+ m_temp_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveTemp));
+ m_temp_map.SetRange(-15.0f, 25.0f);
+ m_temp_map.AttachMap(mp_tempMap);
+ m_temp_map.AttachLabels(SECU3IO::temp_map_tmp_slots, NULL);
+ m_temp_map.ShowLabels(true, false);
+ m_temp_map.SetFont(&m_font);
+ m_temp_map.EnableAbroadMove(true, true);
+ m_temp_map.SetValueIncrement(0.5f);
 
- //map labels
- for(i = 0; i < 16; ++i)
- {
-  CRect lab_rect(rc.left - width, rc.top+(i*(height+space)), rc.left, rc.top + (i*(height+space) + height));
-  CString cs; cs.Format(_T("%d "), 16-i);
-  m_wrk_map_labels[i].Create(cs.GetBuffer(0),WS_CHILD | WS_VISIBLE | SS_RIGHT, lab_rect, this);
-  m_wrk_map_labels[i].SetFont(&m_font);
- }
+ //work
+ m_work_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeWork));
+ m_work_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveWork));
+ m_work_map.SetRange(-15.0f, 55.00f);
+ m_work_map.AttachMap(mp_workMap);
+ m_work_map.AttachLabels(mp_rpmGrid, work_map_load_slots);
+ m_work_map.ShowLabels(true, true);
+ m_work_map.SetDecimalPlaces(2, 0, 0);
+ m_work_map.SetFont(&m_font);
+ m_work_map.EnableAbroadMove(false, true);
+ m_work_map.SetValueIncrement(0.5f);
 
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
@@ -407,9 +195,6 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
 void CGridModeEditorIgnDlg::OnUpdateControls(CCmdUI* pCmdUI)
 {
  bool allowed = m_IsAllowed ? m_IsAllowed() : false;
- if (!allowed)
-  m_wrk_grid[15][15]->SetFocus(); //hack
-
  pCmdUI->Enable(allowed);
 }
 
@@ -429,166 +214,14 @@ void CGridModeEditorIgnDlg::OnUpdateAAControls(CCmdUI* pCmdUI)
  pCmdUI->Enable(allowed && m_en_aa_indication && flag);
 }
 
-int CGridModeEditorIgnDlg::_CalcGradIndex(float value)
-{
- int index = MathHelpers::Round((value - (wrkMinVal)) / ((wrkMaxVal - wrkMinVal)/16.0f));
- if (index < 0) index = 0;
- if (index > 15) index = 15;
- return index;
-}
-
-HBRUSH CGridModeEditorIgnDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
-{
- HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
- if (nCtlColor == CTLCOLOR_EDIT)
- {
-  for(size_t i = 0; i < 16; ++i)
-  {
-   //work map
-   for(size_t j = 0; j < 16; ++j)
-   {
-    if (pWnd->m_hWnd == m_wrk_grid[i][j]->m_hWnd)
-    {
-     if (true==m_wrk_grid[i][j]->m_error)
-     {//use error color
-      pDC->SetBkColor(itemErrColor);
-      hbr = m_redBrush;
-     }
-     else
-     {//use gradient colors
-      int index = _CalcGradIndex(mp_workMap[(i*16)+j]);
-      pDC->SetBkColor(gradColor[index]);
-      hbr = m_gradBrush[index];
-     }
-    }
-   }
-   //Idle map
-   if (pWnd->m_hWnd == m_idl_grid[i]->m_hWnd)
-   {
-    if (true==m_idl_grid[i]->m_error)
-    { //error
-     pDC->SetBkColor(itemErrColor);
-     hbr = m_redBrush;
-    }
-    else
-    {//gradient
-     int index = _CalcGradIndex(mp_idleMap[i]);
-     pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];
-    }
-   }
-   //Start map
-   if (pWnd->m_hWnd == m_str_grid[i]->m_hWnd)
-   {
-    if (true==m_str_grid[i]->m_error)
-    {//error
-     pDC->SetBkColor(itemErrColor);
-     hbr = m_redBrush;
-    }
-    else
-    {//gradient
-     int index = _CalcGradIndex(mp_startMap[i]);
-     pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];
-    }
-   }
-   //Coolant temperature map
-   if (pWnd->m_hWnd == m_tmp_grid[i]->m_hWnd)
-   {
-    if (true==m_tmp_grid[i]->m_error)
-    {//error
-     pDC->SetBkColor(itemErrColor);
-     hbr = m_redBrush;
-    }
-    else
-    {//gradient
-     int index = _CalcGradIndex(mp_tempMap[i]);
-     pDC->SetBkColor(gradColor[index]);
-     hbr = m_gradBrush[index];
-    }
-   }
-  }
- }
- return hbr;
-}
-
-void CGridModeEditorIgnDlg::_2DLookup(float x, const float* grid, std::vector<int>& pt)
-{
- pt.clear();
- if (x <= grid[0]) { pt.push_back(0); return; }
- if (x >= grid[15]) { pt.push_back(15); return; }
-
- for(int i = 0; i < 16; ++i)
- {
-  float d = grid[i] - grid[i-1];
-  if (x <= grid[i])
-  {
-   if (x < (grid[i-1] + d/5)) pt.push_back(i-1);
-   else if (x > (grid[i] - d/5)) pt.push_back(i);
-   else { pt.push_back(i-1); pt.push_back(i); }
-   break;
-  }
- }
-}
-
-void CGridModeEditorIgnDlg::_DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc)
-{
- CRect rc;
- wnd->GetWindowRect(rc);
- ScreenToClient(rc);
- rc.InflateRect(2,2,2,2);
- dc.Rectangle(rc);
-}
-
 void CGridModeEditorIgnDlg::_ResetUseFlags(void)
 {
  m_curDV.strt_use = m_curDV.work_use = m_curDV.idle_use = m_curDV.temp_use =
  m_curDV.airt_use = m_curDV.idlreg_use = m_curDV.octan_use = m_curDV.knkret_use = false;
 }
 
-void CGridModeEditorIgnDlg::OnPaint()
-{
- Super::OnPaint();
- CClientDC dc(this);
- dc.SelectObject(&m_wpiPen);
-
- std::vector<int> pt;
- if (m_curDV.strt_use && m_curDV.work_use && m_curDV.idle_use && m_curDV.temp_use)
-  return;
-
- if (m_curDV.strt_use)
- {
-  _2DLookup((float)m_curDV.rpm, SECU3IO::start_map_rpm_slots, pt);
-  for(size_t i = 0; i < pt.size(); ++i)
-   _DrawRect(m_str_grid[pt[i]], dc);
- }
-
- if (m_curDV.work_use && m_curDV.air_flow)
- {
-  _2DLookup((float)m_curDV.rpm, mp_rpmGrid, pt);
-  for(size_t i = 0; i < pt.size(); ++i)
-   _DrawRect(m_wrk_grid[16-m_curDV.air_flow][pt[i]], dc);
- }
-
- if (m_curDV.idle_use)
- {
-  _2DLookup((float)m_curDV.rpm, mp_rpmGrid, pt);
-  for(size_t i = 0; i < pt.size(); ++i)
-   _DrawRect(m_idl_grid[pt[i]], dc);
- }
-
- //Don't draw frame around temp.map cells during cranking because other temp.map is used on cranking
- if (m_curDV.temp_use && !m_curDV.strt_use)
- {
-  _2DLookup(m_curDV.temp, SECU3IO::temp_map_tmp_slots, pt);
-  for(size_t i = 0; i < pt.size(); ++i)
-   _DrawRect(m_tmp_grid[pt[i]], dc);
- }
-}
-
 void CGridModeEditorIgnDlg::OnClose()
 {
- m_closing_wnd = true; //set flag indicating that window is being closing
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
  Super::OnClose(); //close window
@@ -611,7 +244,12 @@ void CGridModeEditorIgnDlg::BindRPMGrid(float* pGrid)
 void CGridModeEditorIgnDlg::UpdateView(void)
 {
  if (::IsWindow(this->m_hWnd))
-  UpdateData(FALSE); //update dialog controls
+ {
+  m_start_map.UpdateDisplay();
+  m_idle_map.UpdateDisplay();
+  m_work_map.UpdateDisplay();
+  m_temp_map.UpdateDisplay();
+ }
 }
 
 void CGridModeEditorIgnDlg::EnableAdvanceAngleIndication(bool i_enable)
@@ -660,75 +298,50 @@ void CGridModeEditorIgnDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
 void CGridModeEditorIgnDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
 { m_OnCloseMapWnd = OnFunction; }
 
-void CGridModeEditorIgnDlg::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
+void CGridModeEditorIgnDlg::OnChangeStart(void)
 {
- if (NULL==pSender)
-  return;
- if (!_ValidateItem(pSender))
-  return;
- switch(nChar)
- {
-  case VK_UP:
-   if (pSender->m_un)
-   {
-    pSender->m_un->SetFocus();
-    pSender->m_un->SetSel(0, -1); //select all text
-   }
-   break;
-  case VK_RETURN:                 //move down if user pressed Enter key
-  case VK_DOWN:
-   if (pSender->m_dn)
-   {
-    pSender->m_dn->SetFocus();
-    pSender->m_dn->SetSel(0, -1);
-   }
-   break;
-  case VK_LEFT:
-   if (pSender->m_ln)
-   {
-    pSender->m_ln->SetFocus();
-    pSender->m_ln->SetSel(0, -1);
-   }
-   break;
-  case VK_RIGHT:
-   if (pSender->m_rn)
-   {
-    pSender->m_rn->SetFocus();
-    pSender->m_rn->SetSel(0, -1);
-   }
-   break;
- }
- 
- if (m_OnMapChanged)
- {
-  UpdateData();
-  m_OnMapChanged(pSender->m_mapType);
- }
+ m_OnMapChanged(TYPE_MAP_DA_START);
 }
 
-void CGridModeEditorIgnDlg::OnEditKill(CEditExCustomKeys* pSender)
+void CGridModeEditorIgnDlg::OnChangeIdle(void)
 {
- if (m_closing_wnd)
-  return; //do not perform validation and update of values if window is being closed
-
- if (!_ValidateItem(pSender))
- {
-  pSender->SetFocus();
-  return; //validation failed
- }
- if (m_OnMapChanged)
- {
-  UpdateData();
-  m_OnMapChanged(pSender->m_mapType);
- }
+ m_OnMapChanged(TYPE_MAP_DA_IDLE);
 }
 
-bool CGridModeEditorIgnDlg::_ValidateItem(CEditExCustomKeys* pItem)
+void CGridModeEditorIgnDlg::OnChangeWork(void)
 {
- float value = 0;
- bool convres = pItem->GetValue(value); 
- MapLimits lim(pItem->m_mapType);
- pItem->m_error = !(convres && value >= lim.getLoLimit() && value <= lim.getHiLimit());
- pItem->Invalidate();
- return !pItem->m_error;
+ m_OnMapChanged(TYPE_MAP_DA_WORK);
+}
+
+void CGridModeEditorIgnDlg::OnChangeTemp(void)
+{
+ m_OnMapChanged(TYPE_MAP_DA_TEMP_CORR);
+}
+
+void CGridModeEditorIgnDlg::OnAbroadMoveStart(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_temp_map.SetSelection(0, column);
+}
+
+void CGridModeEditorIgnDlg::OnAbroadMoveIdle(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_work_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_temp_map.SetSelection(0, column);
+}
+
+void CGridModeEditorIgnDlg::OnAbroadMoveWork(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_idle_map.SetSelection(0, column);
+}
+
+void CGridModeEditorIgnDlg::OnAbroadMoveTemp(CMapEditorCtrl::AbroadDir direction, int column)
+{
+ if (direction==CMapEditorCtrl::ABROAD_UP)
+  m_idle_map.SetSelection(0, column);
+ if (direction==CMapEditorCtrl::ABROAD_DOWN)
+  m_start_map.SetSelection(0, column);
 }

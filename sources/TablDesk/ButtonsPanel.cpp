@@ -2555,7 +2555,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedIgn));
   mp_gridModeEditorIgnDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
-  mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL);
+  VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
   m_grid_map_state_ign = 1;
  }

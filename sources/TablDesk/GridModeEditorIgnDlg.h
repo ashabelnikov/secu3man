@@ -30,8 +30,7 @@
 #include "common/FastDelegate.h"
 #include "common/UnicodeSupport.h"
 #include "DynamicValues.h"
-
-class CEditExCustomKeys;
+#include "ui-core/MapEditorCtrl.h"
 
 class CGridModeEditorIgnDlg : public CDialog
 {
@@ -65,8 +64,6 @@ class CGridModeEditorIgnDlg : public CDialog
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateAAControls(CCmdUI* pCmdUI);
-  afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
-  afx_msg void OnPaint();
   afx_msg void OnClose();
   DECLARE_MESSAGE_MAP()
 
@@ -75,21 +72,23 @@ class CGridModeEditorIgnDlg : public CDialog
   EventWithHWND m_OnOpenMapWnd;
   EventWithHWND m_OnCloseMapWnd;
 
-  void OnEditChar(UINT nChar, CEditExCustomKeys*);
-  void OnEditKill(CEditExCustomKeys*);
-  bool _ValidateItem(CEditExCustomKeys* pItem);
-
  private:
-  void _2DLookup(float x, const float* grid, std::vector<int>& pt);
-  void _DrawRect(std::auto_ptr<CEditExCustomKeys>& wnd, CDC& dc);
-  int _CalcGradIndex(float value);
   void _ResetUseFlags(void);
 
-  std::auto_ptr<CEditExCustomKeys> m_wrk_grid[16][16];
-  CStatic m_wrk_map_labels[16];
-  std::auto_ptr<CEditExCustomKeys> m_idl_grid[16];
-  std::auto_ptr<CEditExCustomKeys> m_str_grid[16];
-  std::auto_ptr<CEditExCustomKeys> m_tmp_grid[16];
+  void OnChangeStart(void);
+  void OnChangeIdle(void);
+  void OnChangeWork(void);
+  void OnChangeTemp(void);
+
+  void OnAbroadMoveStart(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveIdle(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveWork(CMapEditorCtrl::AbroadDir direction, int column);
+  void OnAbroadMoveTemp(CMapEditorCtrl::AbroadDir direction, int column);
+
+  CMapEditorCtrl m_start_map;
+  CMapEditorCtrl m_idle_map;
+  CMapEditorCtrl m_work_map;
+  CMapEditorCtrl m_temp_map;
 
   CStatic m_aa_value;
   CStatic m_wm_value;
@@ -105,14 +104,8 @@ class CGridModeEditorIgnDlg : public CDialog
   float* mp_workMap;
   float* mp_tempMap;
   float* mp_rpmGrid;
-
-  CBrush m_redBrush;
-  bool m_closing_wnd;
   bool m_en_aa_indication;
-
   CFont m_font;
   CFont m_fieldFont;
-  CPen m_wpiPen;
   TablDesk::DynVal m_curDV;
-  CBrush m_gradBrush[16];
 };
