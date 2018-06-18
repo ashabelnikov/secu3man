@@ -207,9 +207,10 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optIndCarb[2];
   OptField_t<int> m_optIndIdleValve[2];
   OptField_t<int> m_optIndPowerValve[2];
-  OptField_t<int> m_optStBlock[2];
-  OptField_t<int> m_optAE[2];
-  OptField_t<int> m_optCoolingFan[2];
+  OptField_t<int> m_optIndStBlock[2];
+  OptField_t<int> m_optIndAE[2];
+  OptField_t<int> m_optIndCoolingFan[2];
+  OptField_t<int> m_optIndCE[2];
   //meters
   OptField_t<int> m_optMetRows[2];
   OptField_t<int> m_optMetRPM[2];
@@ -232,6 +233,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetFuelConsum[2];
   OptField_t<int> m_optMetKnockRetard[2];
   OptField_t<int> m_optMetKnockGraph[2];
+  OptField_t<int> m_optMetSensAFR[2];
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

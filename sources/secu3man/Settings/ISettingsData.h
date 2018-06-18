@@ -121,9 +121,10 @@ struct IndicatorsCfg
  int m_optIndCarb[2];
  int m_optIndIdleValve[2];
  int m_optIndPowerValve[2];
- int m_optStBlock[2];
- int m_optAE[2];
- int m_optCoolingFan[2];
+ int m_optIndStBlock[2];
+ int m_optIndAE[2];
+ int m_optIndCoolingFan[2];
+ int m_optIndCE[2];
 };
 
 struct MetersCfg
@@ -149,6 +150,7 @@ struct MetersCfg
  int m_optMetFuelConsum[2];
  int m_optMetKnockRetard[2];
  int m_optMetKnockGraph[2];
+ int m_optMetSensAFR[2];
 };
 
 typedef enum EInterLang

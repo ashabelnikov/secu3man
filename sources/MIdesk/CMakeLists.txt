@@ -50,6 +50,7 @@ set(HEADERS
   MIFuelConsum.h
   MIKnockRetard.h
   MIKnockGraph.h
+  MISensAFR.h
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
@@ -81,6 +82,7 @@ set (SOURCES
   MIFuelConsum.cpp
   MIKnockRetard.cpp
   MIKnockGraph.cpp
+  MISensAFR.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
   MIDesk.rc

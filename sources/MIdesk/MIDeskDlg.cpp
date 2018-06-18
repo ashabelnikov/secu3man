@@ -54,6 +54,7 @@
 #include "MIFuelConsum.h"
 #include "MIKnockRetard.h"
 #include "MIKnockGraph.h"
+#include "MISensAFR.h"
 
 #undef max
 
@@ -310,7 +311,7 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
  }
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan)
+void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE)
 {
  m_leds.SetNumRows(IndRows);
  m_indFields.clear();
@@ -327,14 +328,17 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int In
  if (IndPowerValve != std::numeric_limits<int>::max())
   m_indFields.insert(std::make_pair(IndPowerValve, std::make_pair(MLL::GetString(IDS_MI_IND_POWERVALVE), &m_values.epm_valve)));
 
- if (StBlock != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(StBlock, std::make_pair(MLL::GetString(IDS_MI_IND_STBLOCK), &m_values.st_block)));
+ if (IndStBlock != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndStBlock, std::make_pair(MLL::GetString(IDS_MI_IND_STBLOCK), &m_values.st_block)));
 
- if (AE != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(AE, std::make_pair(MLL::GetString(IDS_MI_IND_AE), &m_values.acceleration)));
+ if (IndAE != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndAE, std::make_pair(MLL::GetString(IDS_MI_IND_AE), &m_values.acceleration)));
 
- if (CoolingFan != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(CoolingFan, std::make_pair(MLL::GetString(IDS_MI_IND_COOLINGFAN), &m_values.cool_fan)));
+ if (IndCoolingFan != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCoolingFan, std::make_pair(MLL::GetString(IDS_MI_IND_COOLINGFAN), &m_values.cool_fan)));
+
+ if (IndCE != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCE, std::make_pair(MLL::GetString(IDS_MI_IND_CE), &m_values.ce_state)));
 
  m_leds.Clear();
  IndFields_t::iterator it;
@@ -344,7 +348,7 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int In
 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                               int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
-                              int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph)
+                              int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph, int MetSensAFR)
 {
  m_metRows = MetRows;
 
@@ -521,6 +525,14 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
   widget->Create(this);
   widget->BindVars(&m_values.knock_k, NULL, NULL);
   m_metFields.insert(std::make_pair(MetKnockGraph, widget));
+ }
+
+ if (MetSensAFR != std::numeric_limits<int>::max())
+ {
+  CMISensAFR* widget = new CMISensAFR();
+  widget->Create(this);
+  widget->BindVars(&m_values.afr, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetSensAFR, widget));
  }
 
  //enable/disable

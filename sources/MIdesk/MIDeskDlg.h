@@ -85,11 +85,11 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetAI1AverageNum(int avnum);
   void SetTPSAverageNum(int avnum);
 
-  void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int StBlock, int AE, int CoolingFan);
+  void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE);
 
   void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                     int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot, int MetMAP2,
-                    int MetMapD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph);
+                    int MetMapD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph, int MetSensAFR);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

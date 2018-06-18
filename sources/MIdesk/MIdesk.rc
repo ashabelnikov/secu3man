@@ -182,6 +182,8 @@ BEGIN
     IDS_MI_KNOCKRETARD_TITLE "Корр. УОЗ от ДД"
     IDS_MI_KNOCKGRAPH_V_UNIT "В"
     IDS_MI_KNOCKGRAPH_H_UNIT "Выборки"
+    IDS_MI_SENSAFR_TITLE     "Воздух/топливо ШДК"
+    IDS_MI_SENSAFR_UNIT      "в/т"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -193,6 +195,7 @@ BEGIN
     IDS_MI_IND_STBLOCK      "Блокир.стартера"
     IDS_MI_IND_AE           "Обогащ.при ускор."
     IDS_MI_IND_COOLINGFAN   "Вентилятор"
+    IDS_MI_IND_CE           "Check Engine"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -372,6 +375,8 @@ BEGIN
     IDS_MI_KNOCKRETARD_TITLE "Knock retard"
     IDS_MI_KNOCKGRAPH_V_UNIT "V"
     IDS_MI_KNOCKGRAPH_H_UNIT "Samples"
+    IDS_MI_SENSAFR_TITLE     "WBO AFR"
+    IDS_MI_SENSAFR_UNIT      "a/f"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -383,6 +388,7 @@ BEGIN
     IDS_MI_IND_STBLOCK      "Starter blocking"
     IDS_MI_IND_AE           "AE"
     IDS_MI_IND_COOLINGFAN   "Cooling fan"
+    IDS_MI_IND_CE           "Check Engine"
 END
 
 /////////////////////////////////////////////////////////////////////////////

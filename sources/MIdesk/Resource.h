@@ -146,3 +146,7 @@
 #define IDC_MI_KNOCKGRAPH               2152
 #define IDS_MI_KNOCKGRAPH_V_UNIT        2153
 #define IDS_MI_KNOCKGRAPH_H_UNIT        2154
+#define IDC_MI_SENSAFR                  2155
+#define IDS_MI_SENSAFR_TITLE            2156
+#define IDS_MI_SENSAFR_UNIT             2157
+#define IDS_MI_IND_CE                   2158

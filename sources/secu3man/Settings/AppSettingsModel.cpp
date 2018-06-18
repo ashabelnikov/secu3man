@@ -124,9 +124,10 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndCarb[i].name = _T("IndThrottle");
   m_optIndIdleValve[i].name = _T("IndIdleCutoff");
   m_optIndPowerValve[i].name = _T("IndPowerValve");
-  m_optStBlock[i].name = _T("IndStBlock");
-  m_optAE[i].name = _T("IndAE");
-  m_optCoolingFan[i].name = _T("IndCoolingFan");
+  m_optIndStBlock[i].name = _T("IndStBlock");
+  m_optIndAE[i].name = _T("IndAE");
+  m_optIndCoolingFan[i].name = _T("IndCoolingFan");
+  m_optIndCE[i].name = _T("IndCE");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -155,6 +156,7 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetFuelConsum[i].name = _T("MetFuelConsum");
   m_optMetKnockRetard[i].name = _T("MetKnockRetard");
   m_optMetKnockGraph[i].name = _T("MetKnockGraph");
+  m_optMetSensAFR[i].name = _T("MetSensAFR");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -322,9 +324,10 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndCarb[i],_T("1"), 0, 32, true);
   ii.ReadInt(m_optIndIdleValve[i],_T("2"), 0, 32, true);
   ii.ReadInt(m_optIndPowerValve[i],_T("3"), 0, 32, true);
-  ii.ReadInt(m_optStBlock[i],_T("4"), 0, 32, true);
-  ii.ReadInt(m_optAE[i],_T("5"), 0, 32, true);
-  ii.ReadInt(m_optCoolingFan[i],_T("6"), 0, 32, true);
+  ii.ReadInt(m_optIndStBlock[i],_T("4"), 0, 32, true);
+  ii.ReadInt(m_optIndAE[i],_T("5"), 0, 32, true);
+  ii.ReadInt(m_optIndCoolingFan[i],_T("6"), 0, 32, true);
+  ii.ReadInt(m_optIndCE[i],_T("7"), 0, 32, true);
  }
 
  //Meters
@@ -352,6 +355,7 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetFuelConsum[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetKnockRetard[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetKnockGraph[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetSensAFR[i],_T(""), 0, 32, true);
  }
 
  return status;
@@ -459,9 +463,10 @@ bool CAppSettingsModel::WriteSettings(void)
   ii.WriteInt(m_optIndCarb[i]);
   ii.WriteInt(m_optIndIdleValve[i]);
   ii.WriteInt(m_optIndPowerValve[i]);
-  ii.WriteInt(m_optStBlock[i]);
-  ii.WriteInt(m_optAE[i]);
-  ii.WriteInt(m_optCoolingFan[i]);
+  ii.WriteInt(m_optIndStBlock[i]);
+  ii.WriteInt(m_optIndAE[i]);
+  ii.WriteInt(m_optIndCoolingFan[i]);
+  ii.WriteInt(m_optIndCE[i]);
  }
 
  //Meters
@@ -490,6 +495,7 @@ bool CAppSettingsModel::WriteSettings(void)
   mm.WriteInt(m_optMetFuelConsum[i]);
   mm.WriteInt(m_optMetKnockRetard[i]);
   mm.WriteInt(m_optMetKnockGraph[i]);
+  mm.WriteInt(m_optMetSensAFR[i]);
  }
 
  return status;
@@ -836,9 +842,10 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndCarb[i] = m_optIndCarb[i].value;
   o_cfg.m_optIndIdleValve[i] = m_optIndIdleValve[i].value;
   o_cfg.m_optIndPowerValve[i] = m_optIndPowerValve[i].value;
-  o_cfg.m_optStBlock[i] = m_optStBlock[i].value;
-  o_cfg.m_optAE[i] = m_optAE[i].value;
-  o_cfg.m_optCoolingFan[i] = m_optCoolingFan[i].value;
+  o_cfg.m_optIndStBlock[i] = m_optIndStBlock[i].value;
+  o_cfg.m_optIndAE[i] = m_optIndAE[i].value;
+  o_cfg.m_optIndCoolingFan[i] = m_optIndCoolingFan[i].value;
+  o_cfg.m_optIndCE[i] = m_optIndCE[i].value;
  }
 }
 
@@ -867,5 +874,6 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetFuelConsum[i] = m_optMetFuelConsum[i].value;
   o_cfg.m_optMetKnockRetard[i] = m_optMetKnockRetard[i].value;
   o_cfg.m_optMetKnockGraph[i] = m_optMetKnockGraph[i].value;
+  o_cfg.m_optMetSensAFR[i] = m_optMetSensAFR[i].value;
  }
 }
