@@ -117,17 +117,17 @@ struct WndSettings
 struct IndicatorsCfg
 {
  int m_optIndRows[2];
- int m_optIndGas_v[2];
- int m_optIndCarb[2];
- int m_optIndIdleValve[2];
- int m_optIndPowerValve[2];
- int m_optIndStBlock[2];
- int m_optIndAE[2];
- int m_optIndCoolingFan[2];
- int m_optIndCE[2]; 
- int m_optIndFCRevLim[2];
- int m_optIndFloodClear[2];
- int m_optIndSysLocked[2];
+ std::pair<int, COLORREF> m_optIndGas_v[2];
+ std::pair<int, COLORREF> m_optIndCarb[2];
+ std::pair<int, COLORREF> m_optIndIdleValve[2];
+ std::pair<int, COLORREF> m_optIndPowerValve[2];
+ std::pair<int, COLORREF> m_optIndStBlock[2];
+ std::pair<int, COLORREF> m_optIndAE[2];
+ std::pair<int, COLORREF> m_optIndCoolingFan[2];
+ std::pair<int, COLORREF> m_optIndCE[2]; 
+ std::pair<int, COLORREF> m_optIndFCRevLim[2];
+ std::pair<int, COLORREF> m_optIndFloodClear[2];
+ std::pair<int, COLORREF> m_optIndSysLocked[2];
 };
 
 struct MetersCfg

@@ -205,7 +205,7 @@ void CMIDeskDlg::OnUpdateTimer(void)
  IndFields_t::iterator it;
  int idx = 0;
  for(it = m_indFields.begin(); it != m_indFields.end(); ++it, ++idx)
-  m_leds.SetItemState(idx, *it->second.second, true);
+  m_leds.SetItemState(idx, *it->second.p_value, true);
 }
 
 void CMIDeskDlg::SetUpdatePeriod(unsigned int i_period)
@@ -311,48 +311,48 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
  }
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE, int IndFCRevLim, int IndFloodClear, int IndSysLocked)
+void CMIDeskDlg::SetIndicatorsCfg(int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked)
 {
  m_leds.SetNumRows(IndRows);
  m_indFields.clear();
 
- if (IndGas_v != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndGas_v, std::make_pair(MLL::GetString(IDS_MI_IND_GAS_V), &m_values.gas)));
+ if (IndGas_v.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndGas_v.first, IndFieldData(MLL::GetString(IDS_MI_IND_GAS_V), IndGas_v.second, &m_values.gas)));
 
- if (IndCarb != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndCarb, std::make_pair(MLL::GetString(IDS_MI_IND_CARB), &m_values.carb)));
+ if (IndCarb.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCarb.first, IndFieldData(MLL::GetString(IDS_MI_IND_CARB), IndCarb.second, &m_values.carb)));
 
- if (IndIdleValve != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndIdleValve, std::make_pair(MLL::GetString(IDS_MI_IND_IDLEVALVE), &m_values.ephh_valve)));
+ if (IndIdleValve.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndIdleValve.first, IndFieldData(MLL::GetString(IDS_MI_IND_IDLEVALVE), IndIdleValve.second, &m_values.ephh_valve)));
 
- if (IndPowerValve != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndPowerValve, std::make_pair(MLL::GetString(IDS_MI_IND_POWERVALVE), &m_values.epm_valve)));
+ if (IndPowerValve.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndPowerValve.first, IndFieldData(MLL::GetString(IDS_MI_IND_POWERVALVE), IndPowerValve.second, &m_values.epm_valve)));
 
- if (IndStBlock != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndStBlock, std::make_pair(MLL::GetString(IDS_MI_IND_STBLOCK), &m_values.st_block)));
+ if (IndStBlock.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndStBlock.first, IndFieldData(MLL::GetString(IDS_MI_IND_STBLOCK), IndStBlock.second, &m_values.st_block)));
 
- if (IndAE != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndAE, std::make_pair(MLL::GetString(IDS_MI_IND_AE), &m_values.acceleration)));
+ if (IndAE.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndAE.first, IndFieldData(MLL::GetString(IDS_MI_IND_AE), IndAE.second, &m_values.acceleration)));
 
- if (IndCoolingFan != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndCoolingFan, std::make_pair(MLL::GetString(IDS_MI_IND_COOLINGFAN), &m_values.cool_fan)));
+ if (IndCoolingFan.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCoolingFan.first, IndFieldData(MLL::GetString(IDS_MI_IND_COOLINGFAN), IndCoolingFan.second, &m_values.cool_fan)));
 
- if (IndCE != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndCE, std::make_pair(MLL::GetString(IDS_MI_IND_CE), &m_values.ce_state)));
+ if (IndCE.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndCE.first, IndFieldData(MLL::GetString(IDS_MI_IND_CE), IndCE.second, &m_values.ce_state)));
 
- if (IndFCRevLim != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndFCRevLim, std::make_pair(MLL::GetString(IDS_MI_IND_FCREVLIM), &m_values.fc_revlim)));
+ if (IndFCRevLim.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndFCRevLim.first, IndFieldData(MLL::GetString(IDS_MI_IND_FCREVLIM), IndFCRevLim.second, &m_values.fc_revlim)));
 
- if (IndFloodClear != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndFloodClear, std::make_pair(MLL::GetString(IDS_MI_IND_FLOODCLEAR), &m_values.floodclear)));
+ if (IndFloodClear.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndFloodClear.first, IndFieldData(MLL::GetString(IDS_MI_IND_FLOODCLEAR), IndFloodClear.second, &m_values.floodclear)));
 
- if (IndSysLocked != std::numeric_limits<int>::max())
-  m_indFields.insert(std::make_pair(IndSysLocked, std::make_pair(MLL::GetString(IDS_MI_IND_SYSLOCKED), &m_values.sys_locked)));
+ if (IndSysLocked.first != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndSysLocked.first, IndFieldData(MLL::GetString(IDS_MI_IND_SYSLOCKED), IndSysLocked.second, &m_values.sys_locked)));
 
  m_leds.Clear();
  IndFields_t::iterator it;
  for(it = m_indFields.begin(); it != m_indFields.end(); ++it)
-  m_leds.AddItem(it->second.first.c_str());
+  m_leds.AddItem(it->second.caption.c_str(), it->second.color);
 }
 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,

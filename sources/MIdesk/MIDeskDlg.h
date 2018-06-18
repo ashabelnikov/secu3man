@@ -84,8 +84,11 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetMAPAverageNum(int avnum);
   void SetAI1AverageNum(int avnum);
   void SetTPSAverageNum(int avnum);
+  
+  typedef std::pair<int, COLORREF> IndCfg_t;
 
-  void SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE, int IndFCRevLim, int IndFloodClear, int IndSysLocked);
+  void SetIndicatorsCfg(int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
+                        IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked);
 
   void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                     int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot, int MetMAP2,
@@ -108,7 +111,15 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   MetFields_t m_metFields;
   int m_metRows;
   
-  typedef std::map<int, std::pair<_TSTRING, unsigned char*> > IndFields_t;
+  struct IndFieldData
+  {
+   IndFieldData(const _TSTRING& cap, COLORREF col, unsigned char* val) : caption(cap), p_value(val), color(col) {};
+   _TSTRING caption;
+   unsigned char *p_value;
+   COLORREF color;
+  };
+
+  typedef std::map<int, IndFieldData> IndFields_t;
   IndFields_t m_indFields;
   CMultiLEDCtrl m_leds;
   CFont m_font;

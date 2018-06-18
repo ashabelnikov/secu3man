@@ -79,6 +79,29 @@ class IniIO
    return true;
   }
 
+  bool ReadColor(OptField_t<DWORD>& field, const _TSTRING& defVal)
+  {
+   bool status = true;
+   TCHAR read_str[256];
+   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   field.value = _tcstol(read_str, NULL, 16);
+   if (field.value > 0xFFFFFF)
+   {
+    field.value = 0xFFFFFF;
+    status = false;
+   }
+   field.value = swapRB(field.value); //swap R and B components
+   return status;
+  }
+
+  bool WriteColor(const OptField_t<DWORD>& field)
+  {
+   CString str;
+   str.Format(_T("%06X"), (int)swapRB(field.value));
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   return true;
+  }
+
   bool WriteString(const OptField_t<_TSTRING>& field)
   {
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), field.value.c_str(), m_fileName.c_str());
@@ -201,6 +224,11 @@ class IniIO
    if (_TSTRING::npos == first)
     return str;
    return str.substr(first, _TSTRING::npos);
+  }
+
+  COLORREF swapRB(DWORD rgb)
+  {
+   return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb));
   }
 
   const _TSTRING m_sectionName;

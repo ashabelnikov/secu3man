@@ -113,6 +113,19 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAtscMapWnd(_T("AirDenMapWnd"))
 , m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
 , m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
+//Colors of indicators
+, m_Name_IndColors_Section(_T("IndColors"))
+, m_optColGas_v(_T("IndGas_v"))
+, m_optColCarb(_T("IndThrottle"))
+, m_optColIdleValve(_T("IndIdleCutoff"))
+, m_optColPowerValve(_T("IndPowerValve"))
+, m_optColStBlock(_T("IndStBlock"))
+, m_optColAE(_T("IndAE"))
+, m_optColCoolingFan(_T("IndCoolingFan"))
+, m_optColCE(_T("IndCE"))
+, m_optColFCRevLim(_T("IndFCRevLim"))
+, m_optColFloodClear(_T("IndFloodClear"))
+, m_optColSysLocked(_T("IndSysLocked"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -336,6 +349,19 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndSysLocked[i],_T("10"), 0, 32, true);
  }
 
+ IniIO ic(IniFileName, m_Name_IndColors_Section);
+ ic.ReadColor(m_optColGas_v,_T("00FF00"));
+ ic.ReadColor(m_optColCarb,_T("00FF00"));
+ ic.ReadColor(m_optColIdleValve,_T("00FF00"));
+ ic.ReadColor(m_optColPowerValve,_T("00FF00"));
+ ic.ReadColor(m_optColStBlock,_T("00FF00"));
+ ic.ReadColor(m_optColAE,_T("00FF00"));
+ ic.ReadColor(m_optColCoolingFan,_T("00FF00"));
+ ic.ReadColor(m_optColCE,_T("00FF00"));
+ ic.ReadColor(m_optColFCRevLim,_T("00FF00"));
+ ic.ReadColor(m_optColFloodClear,_T("00FF00"));
+ ic.ReadColor(m_optColSysLocked,_T("00FF00"));
+
  //Meters
  for(int i = 0; i < 2; ++i)
  {
@@ -477,6 +503,19 @@ bool CAppSettingsModel::WriteSettings(void)
   ii.WriteInt(m_optIndFloodClear[i]);
   ii.WriteInt(m_optIndSysLocked[i]);
  }
+
+ IniIO ic(IniFileName, m_Name_IndColors_Section);
+ ic.WriteColor(m_optColGas_v);
+ ic.WriteColor(m_optColCarb);
+ ic.WriteColor(m_optColIdleValve);
+ ic.WriteColor(m_optColPowerValve);
+ ic.WriteColor(m_optColStBlock);
+ ic.WriteColor(m_optColAE);
+ ic.WriteColor(m_optColCoolingFan);
+ ic.WriteColor(m_optColCE);
+ ic.WriteColor(m_optColFCRevLim);
+ ic.WriteColor(m_optColFloodClear);
+ ic.WriteColor(m_optColSysLocked);
 
  //Meters
  for(int i = 0; i < 2; ++i)
@@ -847,17 +886,17 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
  for(int i = 0; i < 2; ++i)
  {
   o_cfg.m_optIndRows[i] = m_optIndRows[i].value;
-  o_cfg.m_optIndGas_v[i] = m_optIndGas_v[i].value;
-  o_cfg.m_optIndCarb[i] = m_optIndCarb[i].value;
-  o_cfg.m_optIndIdleValve[i] = m_optIndIdleValve[i].value;
-  o_cfg.m_optIndPowerValve[i] = m_optIndPowerValve[i].value;
-  o_cfg.m_optIndStBlock[i] = m_optIndStBlock[i].value;
-  o_cfg.m_optIndAE[i] = m_optIndAE[i].value;
-  o_cfg.m_optIndCoolingFan[i] = m_optIndCoolingFan[i].value;
-  o_cfg.m_optIndCE[i] = m_optIndCE[i].value;
-  o_cfg.m_optIndFCRevLim[i] = m_optIndFCRevLim[i].value;
-  o_cfg.m_optIndFloodClear[i] = m_optIndFloodClear[i].value;
-  o_cfg.m_optIndSysLocked[i] = m_optIndSysLocked[i].value;
+  o_cfg.m_optIndGas_v[i] = std::make_pair(m_optIndGas_v[i].value, m_optColGas_v.value);
+  o_cfg.m_optIndCarb[i] = std::make_pair(m_optIndCarb[i].value, m_optColCarb.value);
+  o_cfg.m_optIndIdleValve[i] = std::make_pair(m_optIndIdleValve[i].value, m_optColIdleValve.value);
+  o_cfg.m_optIndPowerValve[i] = std::make_pair(m_optIndPowerValve[i].value, m_optColPowerValve.value);
+  o_cfg.m_optIndStBlock[i] = std::make_pair(m_optIndStBlock[i].value, m_optColStBlock.value);
+  o_cfg.m_optIndAE[i] = std::make_pair(m_optIndAE[i].value, m_optColAE.value);
+  o_cfg.m_optIndCoolingFan[i] = std::make_pair(m_optIndCoolingFan[i].value, m_optColCoolingFan.value);
+  o_cfg.m_optIndCE[i] = std::make_pair(m_optIndCE[i].value, m_optColCE.value);
+  o_cfg.m_optIndFCRevLim[i] = std::make_pair(m_optIndFCRevLim[i].value, m_optColFCRevLim.value);
+  o_cfg.m_optIndFloodClear[i] = std::make_pair(m_optIndFloodClear[i].value, m_optColFloodClear.value);
+  o_cfg.m_optIndSysLocked[i] = std::make_pair(m_optIndSysLocked[i].value, m_optColSysLocked.value);
  }
 }
 

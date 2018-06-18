@@ -124,6 +124,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
+  CString m_Name_IndColors_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -237,6 +238,18 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetKnockRetard[2];
   OptField_t<int> m_optMetKnockGraph[2];
   OptField_t<int> m_optMetSensAFR[2];
+  //colors od indicators
+  OptField_t<COLORREF> m_optColGas_v;
+  OptField_t<COLORREF> m_optColCarb;
+  OptField_t<COLORREF> m_optColIdleValve;
+  OptField_t<COLORREF> m_optColPowerValve;
+  OptField_t<COLORREF> m_optColStBlock;
+  OptField_t<COLORREF> m_optColAE;
+  OptField_t<COLORREF> m_optColCoolingFan;
+  OptField_t<COLORREF> m_optColCE;
+  OptField_t<COLORREF> m_optColFCRevLim;
+  OptField_t<COLORREF> m_optColFloodClear;
+  OptField_t<COLORREF> m_optColSysLocked;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];
