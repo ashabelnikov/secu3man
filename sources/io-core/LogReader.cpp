@@ -33,13 +33,13 @@
 using namespace SECU3IO;
 
 //максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 310
+#define MAX_REC_BUF 330
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4
 
 //кол-во переменных в поле данных
-#define CSV_COUNT_DATA_VAL 41
+#define CSV_COUNT_DATA_VAL 45
 
 //смещение данных относительно начала строки
 #define CSV_TIME_PANE_LEN 11
@@ -47,7 +47,7 @@ using namespace SECU3IO;
 //"hh:mm:ss.ms", ms - сотые доли секунды
 const char cCSVTimeTemplateString[] = "%02d:%02d:%02d.%02d";
 //данные
-const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%d%c%%s\r\n";
+const char cCSVDataTemplateString[] = "%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%d%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%f%c%%d%c%%f%c%%f%c%%f%c%%f%c%%d%c%%s\r\n";
 
 LogReader::LogReader()
 : m_file_handle(NULL)
@@ -143,7 +143,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_time.wSecond = wSecond;
  o_time.wMilliseconds = wMilliseconds * 10; //переводим из сотых в миллисекунды
 
- int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,acceleration,log_mark = 0;
+ int frequen,carb,gas,air_flow,ephh_valve,epm_valve,cool_fan,st_block,acceleration,fc_revlim,floodclear,sys_locked,ce_state,log_mark = 0;
  int tpsdot = 0;
  float pressure,voltage,temperat,adv_angle,knock_k, knock_retard, tps, add_i1, add_i2, choke_pos, gasdose_pos;
  float strt_aalt, idle_aalt, work_aalt, temp_aalt, airt_aalt, idlreg_aac, octan_aac;
@@ -166,6 +166,10 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
                 &cool_fan,
                 &st_block,
                 &acceleration,
+                &fc_revlim,
+                &floodclear,
+                &sys_locked,
+                &ce_state,
                 &tps,
                 &add_i1,
                 &add_i2,
@@ -247,6 +251,10 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  o_data.tmp2 = tmp2;
  o_data.mapd = mapd;
  o_data.afr = afr;
+ o_data.fc_revlim = fc_revlim;
+ o_data.floodclear = floodclear;
+ o_data.sys_locked = sys_locked;
+ o_data.ce_state = ce_state;
 
  //all read without errors
  return true;
@@ -279,7 +287,7 @@ unsigned long LogReader::GetCount(void) const
 void LogReader::SetSeparatingSymbol(char i_sep_symbol)
 {
  int x = m_csv_separating_symbol = i_sep_symbol;
- sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
+ sprintf (m_csv_data_template, cCSVDataTemplateString, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x, x);
 }
 
 bool LogReader::IsNextPossible(void) const

@@ -40,6 +40,7 @@ namespace SECU3IO
   float temperat;                       //температура охлаждающей жидкости (усредненная)
   float adv_angle;                      //текущий УОЗ
   unsigned char air_flow;               //расход воздуха
+
   unsigned char carb;                   //состояние концевика карбюратора
   unsigned char gas;                    //состояние газового клапана
   unsigned char ephh_valve;             //состояние клапана ЭПХХ
@@ -47,9 +48,13 @@ namespace SECU3IO
   unsigned char cool_fan;               //состояние вентилятора (включен/выключен)
   unsigned char st_block;               //состояние выхода блокировки стартера
   unsigned char acceleration;           //acceleration/deceleration mode
+  unsigned char ce_state;               // !currently is not used!
+  unsigned char fc_revlim;              // fuel cut rev.lim. flag
+  unsigned char floodclear;             // flood clear mode flag   
+  unsigned char sys_locked;             // system locked flag (immobilizer)
+
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации
-  unsigned char ce_state;               // !currently is not used!
   WORD ce_errors;                       //биты ошибок СЕ
   float tps;                            //ДПДЗ (TPS sensor value)
   float add_i1;                         //ADD_I1 voltage

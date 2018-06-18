@@ -196,6 +196,9 @@ BEGIN
     IDS_MI_IND_AE           "Обогащ.при ускор."
     IDS_MI_IND_COOLINGFAN   "Вентилятор"
     IDS_MI_IND_CE           "Check Engine"
+    IDS_MI_IND_FCREVLIM     "Отсеч.топл.по обор."
+    IDS_MI_IND_FLOODCLEAR   "Продувка двигателя"
+    IDS_MI_IND_SYSLOCKED    "Система заблокир."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -389,6 +392,9 @@ BEGIN
     IDS_MI_IND_AE           "AE"
     IDS_MI_IND_COOLINGFAN   "Cooling fan"
     IDS_MI_IND_CE           "Check Engine"
+    IDS_MI_IND_FCREVLIM     "Rev.lim.fuel cut"
+    IDS_MI_IND_FLOODCLEAR   "Flood clear mode"
+    IDS_MI_IND_SYSLOCKED    "System locked"
 END
 
 /////////////////////////////////////////////////////////////////////////////

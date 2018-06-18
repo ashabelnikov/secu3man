@@ -128,6 +128,9 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndAE[i].name = _T("IndAE");
   m_optIndCoolingFan[i].name = _T("IndCoolingFan");
   m_optIndCE[i].name = _T("IndCE");
+  m_optIndFCRevLim[i].name = _T("IndFCRevLim");
+  m_optIndFloodClear[i].name = _T("IndFloodClear");
+  m_optIndSysLocked[i].name = _T("IndSysLocked");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -328,6 +331,9 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndAE[i],_T("5"), 0, 32, true);
   ii.ReadInt(m_optIndCoolingFan[i],_T("6"), 0, 32, true);
   ii.ReadInt(m_optIndCE[i],_T("7"), 0, 32, true);
+  ii.ReadInt(m_optIndFCRevLim[i],_T("8"), 0, 32, true);
+  ii.ReadInt(m_optIndFloodClear[i],_T("9"), 0, 32, true);
+  ii.ReadInt(m_optIndSysLocked[i],_T("10"), 0, 32, true);
  }
 
  //Meters
@@ -467,6 +473,9 @@ bool CAppSettingsModel::WriteSettings(void)
   ii.WriteInt(m_optIndAE[i]);
   ii.WriteInt(m_optIndCoolingFan[i]);
   ii.WriteInt(m_optIndCE[i]);
+  ii.WriteInt(m_optIndFCRevLim[i]);
+  ii.WriteInt(m_optIndFloodClear[i]);
+  ii.WriteInt(m_optIndSysLocked[i]);
  }
 
  //Meters
@@ -846,6 +855,9 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndAE[i] = m_optIndAE[i].value;
   o_cfg.m_optIndCoolingFan[i] = m_optIndCoolingFan[i].value;
   o_cfg.m_optIndCE[i] = m_optIndCE[i].value;
+  o_cfg.m_optIndFCRevLim[i] = m_optIndFCRevLim[i].value;
+  o_cfg.m_optIndFloodClear[i] = m_optIndFloodClear[i].value;
+  o_cfg.m_optIndSysLocked[i] = m_optIndSysLocked[i].value;
  }
 }
 

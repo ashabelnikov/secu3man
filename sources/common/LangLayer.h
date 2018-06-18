@@ -35,7 +35,7 @@ class MLL //Multy Language Layer
   //std version
   static _TSTRING GetString(UINT i_id)
   {
-#define SIZE 1024
+#define SIZE 2048
    TCHAR buffer[SIZE];
    HINSTANCE hInst = GetModuleBaseAddress();
    int real_size = ::LoadString(hInst, i_id, buffer, SIZE);

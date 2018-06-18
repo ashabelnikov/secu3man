@@ -150,3 +150,6 @@
 #define IDS_MI_SENSAFR_TITLE            2156
 #define IDS_MI_SENSAFR_UNIT             2157
 #define IDS_MI_IND_CE                   2158
+#define IDS_MI_IND_FCREVLIM             2159
+#define IDS_MI_IND_FLOODCLEAR           2160
+#define IDS_MI_IND_SYSLOCKED            2161

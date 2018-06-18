@@ -211,6 +211,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optIndAE[2];
   OptField_t<int> m_optIndCoolingFan[2];
   OptField_t<int> m_optIndCE[2];
+  OptField_t<int> m_optIndFCRevLim[2];
+  OptField_t<int> m_optIndFloodClear[2];
+  OptField_t<int> m_optIndSysLocked[2];
   //meters
   OptField_t<int> m_optMetRows[2];
   OptField_t<int> m_optMetRPM[2];

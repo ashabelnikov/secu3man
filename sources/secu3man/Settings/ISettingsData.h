@@ -124,7 +124,10 @@ struct IndicatorsCfg
  int m_optIndStBlock[2];
  int m_optIndAE[2];
  int m_optIndCoolingFan[2];
- int m_optIndCE[2];
+ int m_optIndCE[2]; 
+ int m_optIndFCRevLim[2];
+ int m_optIndFloodClear[2];
+ int m_optIndSysLocked[2];
 };
 
 struct MetersCfg

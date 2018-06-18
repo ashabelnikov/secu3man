@@ -311,7 +311,7 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
  }
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE)
+void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int IndIdleValve, int IndPowerValve, int IndStBlock, int IndAE, int IndCoolingFan, int IndCE, int IndFCRevLim, int IndFloodClear, int IndSysLocked)
 {
  m_leds.SetNumRows(IndRows);
  m_indFields.clear();
@@ -339,6 +339,15 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, int IndGas_v, int IndCarb, int In
 
  if (IndCE != std::numeric_limits<int>::max())
   m_indFields.insert(std::make_pair(IndCE, std::make_pair(MLL::GetString(IDS_MI_IND_CE), &m_values.ce_state)));
+
+ if (IndFCRevLim != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndFCRevLim, std::make_pair(MLL::GetString(IDS_MI_IND_FCREVLIM), &m_values.fc_revlim)));
+
+ if (IndFloodClear != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndFloodClear, std::make_pair(MLL::GetString(IDS_MI_IND_FLOODCLEAR), &m_values.floodclear)));
+
+ if (IndSysLocked != std::numeric_limits<int>::max())
+  m_indFields.insert(std::make_pair(IndSysLocked, std::make_pair(MLL::GetString(IDS_MI_IND_SYSLOCKED), &m_values.sys_locked)));
 
  m_leds.Clear();
  IndFields_t::iterator it;

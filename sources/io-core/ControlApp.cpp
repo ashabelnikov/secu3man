@@ -271,7 +271,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 120 : 60))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 122 : 61))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -320,21 +320,23 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex8ToBin(raw_packet,&m_SensorDat.air_flow))
   return false;
 
- //Байт с флажками
- unsigned char byte = 0;
- if (false == mp_pdp->Hex8ToBin(raw_packet,&byte))
+ //16 bit flags
+ int flags = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &flags))
   return false;
 
- //Состояние клапана ЭПХХ, Состояние дроссельной заслонки, Состояние газового клапана
- //Состояние клапана ЭМР, Состояние лампы "CE"
- m_SensorDat.ephh_valve   = CHECKBIT8(byte, 0);
- m_SensorDat.carb         = CHECKBIT8(byte, 1);
- m_SensorDat.gas          = CHECKBIT8(byte, 2);
- m_SensorDat.epm_valve    = CHECKBIT8(byte, 3);
- m_SensorDat.ce_state     = CHECKBIT8(byte, 4);
- m_SensorDat.cool_fan     = CHECKBIT8(byte, 5);
- m_SensorDat.st_block     = CHECKBIT8(byte, 6);
- m_SensorDat.acceleration = CHECKBIT8(byte, 7);
+ //flags
+ m_SensorDat.ephh_valve   = CHECKBIT16(flags, 0);
+ m_SensorDat.carb         = CHECKBIT16(flags, 1);
+ m_SensorDat.gas          = CHECKBIT16(flags, 2);
+ m_SensorDat.epm_valve    = CHECKBIT16(flags, 3);
+ m_SensorDat.ce_state     = CHECKBIT16(flags, 4);
+ m_SensorDat.cool_fan     = CHECKBIT16(flags, 5);
+ m_SensorDat.st_block     = CHECKBIT16(flags, 6);
+ m_SensorDat.acceleration = CHECKBIT16(flags, 7);
+ m_SensorDat.fc_revlim    = CHECKBIT16(flags, 8);
+ m_SensorDat.floodclear   = CHECKBIT16(flags, 9);
+ m_SensorDat.sys_locked   = CHECKBIT16(flags, 10);
 
  //TPS sensor
  unsigned char tps = 0;
