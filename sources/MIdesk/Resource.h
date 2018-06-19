@@ -153,3 +153,7 @@
 #define IDS_MI_IND_FCREVLIM             2159
 #define IDS_MI_IND_FLOODCLEAR           2160
 #define IDS_MI_IND_SYSLOCKED            2161
+#define IDC_MI_CHOKEPOS                 2162
+#define IDS_MI_CHOKEPOS_TITLE           2163
+#define IDC_MI_GDPOS                    2164
+#define IDS_MI_GDPOS_TITLE              2165

@@ -184,6 +184,8 @@ BEGIN
     IDS_MI_KNOCKGRAPH_H_UNIT "Выборки"
     IDS_MI_SENSAFR_TITLE     "Воздух/топливо ШДК"
     IDS_MI_SENSAFR_UNIT      "в/т"
+    IDS_MI_CHOKEPOS_TITLE    "ВЗ/РДВ"
+    IDS_MI_GDPOS_TITLE       "Дозатор газа"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -380,6 +382,8 @@ BEGIN
     IDS_MI_KNOCKGRAPH_H_UNIT "Samples"
     IDS_MI_SENSAFR_TITLE     "WBO AFR"
     IDS_MI_SENSAFR_UNIT      "a/f"
+    IDS_MI_CHOKEPOS_TITLE    "IAC valve"
+    IDS_MI_GDPOS_TITLE       "Gas dispenser"
 END
 
 STRINGTABLE DISCARDABLE 

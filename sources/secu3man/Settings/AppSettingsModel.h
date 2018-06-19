@@ -238,7 +238,10 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetKnockRetard[2];
   OptField_t<int> m_optMetKnockGraph[2];
   OptField_t<int> m_optMetSensAFR[2];
-  //colors od indicators
+  OptField_t<int> m_optMetChokePos[2];
+  OptField_t<int> m_optMetGDPos[2];
+
+  //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;
   OptField_t<COLORREF> m_optColCarb;
   OptField_t<COLORREF> m_optColIdleValve;

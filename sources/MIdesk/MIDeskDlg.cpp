@@ -55,6 +55,7 @@
 #include "MIKnockRetard.h"
 #include "MIKnockGraph.h"
 #include "MISensAFR.h"
+#include "MIChokePos.h"
 
 #undef max
 
@@ -357,7 +358,8 @@ void CMIDeskDlg::SetIndicatorsCfg(int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCa
 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                               int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
-                              int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph, int MetSensAFR)
+                              int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph,
+                              int MetSensAFR, int MetChokePos, int MetGDPos)
 {
  m_metRows = MetRows;
 
@@ -542,6 +544,22 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
   widget->Create(this);
   widget->BindVars(&m_values.afr, NULL, NULL);
   m_metFields.insert(std::make_pair(MetSensAFR, widget));
+ }
+
+ if (MetChokePos != std::numeric_limits<int>::max())
+ {
+  CMIChokePos* widget = new CMIChokePos();
+  widget->Create(this);
+  widget->BindVars(&m_values.choke_pos, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetChokePos, widget));
+ }
+
+ if (MetGDPos != std::numeric_limits<int>::max())
+ {
+  CMIGDPos* widget = new CMIGDPos();
+  widget->Create(this);
+  widget->BindVars(&m_values.gasdose_pos, NULL, NULL);
+  m_metFields.insert(std::make_pair(MetGDPos, widget));
  }
 
  //enable/disable

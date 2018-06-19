@@ -306,5 +306,5 @@ void CParamMonTabController::ConfigureIndicators(void)
  mp_settings->GetMetersConfig(cfg1);
  mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1.m_optMetRows[idx], cfg1.m_optMetRPM[idx], cfg1.m_optMetMAP[idx], cfg1.m_optMetVBat[idx], cfg1.m_optMetIgnTim[idx], cfg1.m_optMetCLT[idx], cfg1.m_optMetAddI1[idx], cfg1.m_optMetAddI2[idx],
   cfg1.m_optInjPW[idx], cfg1.m_optMetIAT[idx], cfg1.m_optMetEGOCorr[idx], cfg1.m_optMetTPS[idx], cfg1.m_optMetAirFlow[idx], cfg1.m_optMetVehicleSpeed[idx], cfg1.m_optMetTPSDot[idx], cfg1.m_optMetMAP2[idx], cfg1.m_optMetMAPD[idx],
-  cfg1.m_optMetTmp2[idx], cfg1.m_optMetFuelConsum[idx], cfg1.m_optMetKnockRetard[idx], cfg1.m_optMetKnockGraph[idx], cfg1.m_optMetSensAFR[idx]);
+  cfg1.m_optMetTmp2[idx], cfg1.m_optMetFuelConsum[idx], cfg1.m_optMetKnockRetard[idx], cfg1.m_optMetKnockGraph[idx], cfg1.m_optMetSensAFR[idx], cfg1.m_optMetChokePos[idx], cfg1.m_optMetGDPos[idx]);
 }
