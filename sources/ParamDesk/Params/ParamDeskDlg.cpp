@@ -865,6 +865,8 @@ void CParamDeskDlg::OnSize( UINT nType, int cx, int cy )
   m_tab_control.GetWindowRect(&wndRectTab);
   ScreenToClient(&wndRectTab);
   wndRectTab.right = wndRectDlg.right - m_tabLRMargin.cx;
+  if (wndRectTab.right <= wndRectTab.left)
+   wndRectTab.right = wndRectTab.left + 1; //prevent zero width
   wndRectTab.bottom = wndRectDlg.bottom - m_tabLRMargin.cy;
   m_tab_control.MoveWindow(wndRectTab);
  }
