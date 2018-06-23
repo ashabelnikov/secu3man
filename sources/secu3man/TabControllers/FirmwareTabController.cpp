@@ -864,8 +864,9 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  m_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
  m_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
  m_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
- m_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
- m_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ m_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T)); 
+ bool en_for_gd = (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
+ m_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && en_for_gd);
  m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
  m_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
  m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));

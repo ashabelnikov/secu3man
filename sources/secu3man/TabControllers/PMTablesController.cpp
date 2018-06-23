@@ -359,7 +359,8 @@ void CPMTablesController::ApplyFWOptions(DWORD opt)
  mp_view->mp_ButtonsPanel->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT));
  mp_view->mp_ButtonsPanel->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL));
  mp_view->mp_ButtonsPanel->EnableCarbAfr(CHECKBIT32(opt, COPT_CARB_AFR));
- mp_view->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, COPT_SECU3T));
+ bool en_for_gd = (CHECKBIT32(opt, COPT_ATMEGA1284) || CHECKBIT32(opt, COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
+ mp_view->mp_ButtonsPanel->EnableGasCorr(!CHECKBIT32(opt, COPT_SECU3T) && en_for_gd);
  mp_view->mp_ButtonsPanel->EnableChokeOp(CHECKBIT32(opt, COPT_SM_CONTROL));
 }
 
