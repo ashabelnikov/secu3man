@@ -132,6 +132,7 @@ CAppSettingsModel::CAppSettingsModel()
 
  for(int i = 0; i < 2; ++i)
  {
+  m_optIndHeightPercent[i].name = _T("IndHeightPercent");
   m_optIndRows[i].name = _T("IndRows");
   m_optIndGas_v[i].name = _T("IndGas_v");;
   m_optIndCarb[i].name = _T("IndThrottle");
@@ -337,6 +338,7 @@ bool CAppSettingsModel::ReadSettings(void)
  for(int i = 0; i < 2; ++i)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
+  ii.ReadFlt(m_optIndHeightPercent[i],_T("10.0"), 1.0, 100.0);
   ii.ReadInt(m_optIndRows[i],_T("1"), 1, 10);
   ii.ReadInt(m_optIndGas_v[i],_T("0"), 0, 32, true);
   ii.ReadInt(m_optIndCarb[i],_T("1"), 0, 32, true);
@@ -494,6 +496,7 @@ bool CAppSettingsModel::WriteSettings(void)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
   ii.CreateSection();
+  ii.WriteFlt(m_optIndHeightPercent[i], 2);
   ii.WriteInt(m_optIndRows[i]);
   ii.WriteInt(m_optIndGas_v[i]);
   ii.WriteInt(m_optIndCarb[i]);
@@ -891,6 +894,7 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
 {
  for(int i = 0; i < 2; ++i)
  {
+  o_cfg.m_optIndHeightPercent[i] = m_optIndHeightPercent[i].value;
   o_cfg.m_optIndRows[i] = m_optIndRows[i].value;
   o_cfg.m_optIndGas_v[i] = std::make_pair(m_optIndGas_v[i].value, m_optColGas_v.value);
   o_cfg.m_optIndCarb[i] = std::make_pair(m_optIndCarb[i].value, m_optColCarb.value);

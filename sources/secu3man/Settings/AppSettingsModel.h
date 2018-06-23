@@ -203,6 +203,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optCrkTempMapWnd;
   OptField_t<POINT> m_optEHPauseMapWnd;
   //indicators
+  OptField_t<float> m_optIndHeightPercent[2];
   OptField_t<int> m_optIndRows[2];
   OptField_t<int> m_optIndGas_v[2];
   OptField_t<int> m_optIndCarb[2];

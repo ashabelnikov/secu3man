@@ -87,7 +87,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   
   typedef std::pair<int, COLORREF> IndCfg_t;
 
-  void SetIndicatorsCfg(int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
+  void SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
                         IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked);
 
   void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
@@ -147,6 +147,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_tachoMax;
   int m_pressMax;
   MeasInstrBase* mp_miTemperat;
+  float IndHeightCoeff;
 };
 
 /////////////////////////////////////////////////////////////////////////////

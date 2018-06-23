@@ -217,6 +217,26 @@ class IniIO
    return true;
   }
 
+  bool ReadFlt(OptField_t<float>& field, const _TSTRING& defVal, float minVal, float maxVal)
+  {
+   TCHAR read_str[256];
+   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   if (_stscanf(read_str, _T("%f"), &field.value) != 1 || field.value < minVal || field.value > maxVal)
+   {
+    _stscanf(defVal.c_str(), _T("%f"), &field.value);
+    return false;
+   }
+   return true;
+  }
+
+  bool WriteFlt(const OptField_t<float>& field, int decPlaces)
+  {
+   CString str;
+   str.Format(_T("%.*f"), decPlaces, field.value);
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   return true;
+  }
+
  private:
   _TSTRING ltrim(const _TSTRING& str)
   {

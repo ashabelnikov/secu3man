@@ -588,7 +588,7 @@ void CLogPlayerTabController::ConfigureIndicators(void)
  int idx = (int)mp_settings->GetShowExFixtures();
  IndicatorsCfg cfg0;
  mp_settings->GetIndicatorsConfig(cfg0);
- mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg0.m_optIndRows[idx], cfg0.m_optIndGas_v[idx], cfg0.m_optIndCarb[idx], cfg0.m_optIndIdleValve[idx], cfg0.m_optIndPowerValve[idx], cfg0.m_optIndStBlock[idx], cfg0.m_optIndAE[idx], cfg0.m_optIndCoolingFan[idx], cfg0.m_optIndCE[idx], cfg0.m_optIndFCRevLim[idx], cfg0.m_optIndFloodClear[idx], cfg0.m_optIndSysLocked[idx]);
+ mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg0.m_optIndHeightPercent[idx], cfg0.m_optIndRows[idx], cfg0.m_optIndGas_v[idx], cfg0.m_optIndCarb[idx], cfg0.m_optIndIdleValve[idx], cfg0.m_optIndPowerValve[idx], cfg0.m_optIndStBlock[idx], cfg0.m_optIndAE[idx], cfg0.m_optIndCoolingFan[idx], cfg0.m_optIndCE[idx], cfg0.m_optIndFCRevLim[idx], cfg0.m_optIndFloodClear[idx], cfg0.m_optIndSysLocked[idx]);
 
  MetersCfg cfg1;
  mp_settings->GetMetersConfig(cfg1);

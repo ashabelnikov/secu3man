@@ -59,8 +59,6 @@
 
 #undef max
 
-static const float IndHeightCoeff = 0.10f;
-
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
@@ -312,8 +310,10 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
  }
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked)
+void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked)
 {
+ IndHeightCoeff = IndHeingtPercent / 100.0f;
+
  m_leds.SetNumRows(IndRows);
  m_indFields.clear();
 

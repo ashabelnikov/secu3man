@@ -116,6 +116,7 @@ struct WndSettings
 
 struct IndicatorsCfg
 {
+ float m_optIndHeightPercent[2];
  int m_optIndRows[2];
  std::pair<int, COLORREF> m_optIndGas_v[2];
  std::pair<int, COLORREF> m_optIndCarb[2];
