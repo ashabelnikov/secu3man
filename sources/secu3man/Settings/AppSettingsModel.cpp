@@ -113,6 +113,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAtscMapWnd(_T("AirDenMapWnd"))
 , m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
 , m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
+//size of windows
+, m_Name_WndSize_Section(_T("WndSize"))
+, m_optMainFrmWndSize(_T("MainFrmWnd"))
 //Colors of indicators
 , m_Name_IndColors_Section(_T("IndColors"))
 , m_optColGas_v(_T("IndGas_v"))
@@ -334,6 +337,10 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optCrkTempMapWnd);
  ws.ReadWndPos(m_optEHPauseMapWnd);
 
+ //Sizes of windows
+ IniIO sz(IniFileName, m_Name_WndSize_Section);
+ sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
+
  //Indicators
  for(int i = 0; i < 2; ++i)
  {
@@ -490,6 +497,12 @@ bool CAppSettingsModel::WriteSettings(void)
  ws.WriteWndPos(m_optAtscMapWnd);
  ws.WriteWndPos(m_optCrkTempMapWnd);
  ws.WriteWndPos(m_optEHPauseMapWnd);
+
+ //Sizes of windows
+ IniIO sz(IniFileName, m_Name_WndSize_Section);
+ sz.CreateSection();
+
+ sz.WriteWndPos(m_optMainFrmWndSize);
 
  //Indicators
  for(int i = 0; i < 2; ++i)
@@ -768,6 +781,18 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CrkTempMapWnd_Y = m_optCrkTempMapWnd.value.y;
  o_wndSettings.m_EHPauseMapWnd_X = m_optEHPauseMapWnd.value.x;
  o_wndSettings.m_EHPauseMapWnd_Y = m_optEHPauseMapWnd.value.y;
+}
+
+void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)
+{
+ m_optMainFrmWndSize.value.x = i_wndSize.m_MainFrmWnd_W;
+ m_optMainFrmWndSize.value.y = i_wndSize.m_MainFrmWnd_H;
+}
+
+void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
+{
+ o_wndSize.m_MainFrmWnd_W = m_optMainFrmWndSize.value.x;
+ o_wndSize.m_MainFrmWnd_H = m_optMainFrmWndSize.value.y;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

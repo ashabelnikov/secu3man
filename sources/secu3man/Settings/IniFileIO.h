@@ -191,13 +191,13 @@ class IniIO
   }
 
   //Result will be std::numeric_limits<int>::max() if field is empty or value is incorrect
-  bool ReadWndPos(OptField_t<POINT>& field)
+  bool ReadWndPos(OptField_t<POINT>& field, int minVal = -10000, int maxVal = 10000)
   {
    int value_x = 0, value_y = 0;
    TCHAR read_str[256];
    GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), _T(""), read_str, 255, m_fileName.c_str());
    int result = _stscanf(read_str, _T("%d,%d"), &value_x, &value_y);
-   if (result != 2 || (value_x < -10000) || (value_x > 10000) || (value_y < -10000) || (value_y > 10000))
+   if (result != 2 || (value_x < minVal) || (value_x > maxVal) || (value_y < minVal) || (value_y > maxVal))
    {
     field.value.x = std::numeric_limits<int>::max();
     field.value.y = std::numeric_limits<int>::max();

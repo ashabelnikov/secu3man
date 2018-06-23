@@ -27,6 +27,7 @@
 #include "Resources/resource.h"
 #include "MainFrameController.h"
 
+#include <limits>
 #include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/fastdelegate.h"
@@ -43,6 +44,7 @@
 
 using namespace fastdelegate;
 
+#undef max
 #define EHKEY _T("LogWriter")
 #define MFKEY _T("MFCntr")
 
@@ -295,6 +297,12 @@ void MainFrameController::OnCreate(void)
  VERIFY(mp_view->CreateDVDesk(settings->GetUseDVFeatures()));
  if (mp_view->GetDVDesk())
   mp_view->GetDVDesk()->Show(settings->GetUseDVFeatures());
+
+ //Restore saved size of the window
+ WndSize sz;
+ settings->GetWndSize(sz);
+ if (sz.m_MainFrmWnd_W != std::numeric_limits<int>::max() && sz.m_MainFrmWnd_H != std::numeric_limits<int>::max())
+  mp_view->SetWindowPos(NULL, 0, 0, sz.m_MainFrmWnd_W, sz.m_MainFrmWnd_H, SWP_NOZORDER | SWP_NOMOVE);
 }
 
 bool MainFrameController::OnClose(void)
@@ -310,6 +318,13 @@ bool MainFrameController::OnClose(void)
 
  //store last position of main window
  settings->SetWndSettings(ws);
+
+ //store size of the window
+ WndSize sz;
+ settings->GetWndSize(sz);
+ sz.m_MainFrmWnd_W = rc.Width();
+ sz.m_MainFrmWnd_H = rc.Height();
+ settings->SetWndSize(sz);
 
  return true;
 }

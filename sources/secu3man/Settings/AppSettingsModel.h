@@ -93,6 +93,10 @@ class CAppSettingsModel : public ISettingsData
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
   virtual void GetWndSettings(WndSettings& o_wndSettings) const;
+  //windows' size
+  virtual void SetWndSize(const WndSize& i_wndSize);
+  virtual void GetWndSize(WndSize& o_wndSize) const;
+
   //язык интерфейса и тип платформы
   virtual EInterLang GetInterfaceLanguage(void) const;
   virtual EECUPlatform GetECUPlatformType(void) const;
@@ -121,6 +125,7 @@ class CAppSettingsModel : public ISettingsData
   //Section names
   const CString m_Name_Options_Section;
   const CString m_Name_WndSettings_Section;  
+  const CString m_Name_WndSize_Section;  
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
@@ -202,6 +207,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWnd;
   OptField_t<POINT> m_optCrkTempMapWnd;
   OptField_t<POINT> m_optEHPauseMapWnd;
+  //window size
+  OptField_t<POINT> m_optMainFrmWndSize;
   //indicators
   OptField_t<float> m_optIndHeightPercent[2];
   OptField_t<int> m_optIndRows[2];

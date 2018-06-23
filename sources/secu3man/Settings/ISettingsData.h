@@ -114,6 +114,13 @@ struct WndSettings
  int m_EHPauseMapWnd_Y;
 };
 
+//Holds windows's size data
+struct WndSize
+{
+ int m_MainFrmWnd_W;
+ int m_MainFrmWnd_H;
+};
+
 struct IndicatorsCfg
 {
  float m_optIndHeightPercent[2];
@@ -219,4 +226,7 @@ class ISettingsData
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;
   //Meters
   virtual void GetMetersConfig(MetersCfg& o_cfg) const = 0;
+
+  virtual void SetWndSize(const WndSize& i_wndSize) = 0;
+  virtual void GetWndSize(WndSize& o_wndSize) const = 0;
 };
