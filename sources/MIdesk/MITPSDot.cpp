@@ -43,7 +43,7 @@ void CMITPSDot::Create(CWnd* pParent)
 
  m_tlpFmt = _T("%0.0f ");
 
- m_meter.SetRange (0.0, 500.0);
+ m_meter.SetRange (-500.0, 500.0);
  m_meter.SetLabelsDecimals(0);
  m_meter.SetValueDecimals(0);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TPSDOT_TITLE));
@@ -52,6 +52,9 @@ void CMITPSDot::Create(CWnd* pParent)
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TPSDOT_UNIT));
  m_meter.SetTickNumber(10);
+ m_meter.AddAlertZone(-500,-200,RGB(250,100,100));
+ m_meter.AddAlertZone(-200,-50,RGB(100,250,100));
+ m_meter.AddAlertZone(-50,0,RGB(100,100,250));
  m_meter.AddAlertZone(0,50,RGB(100,100,250));
  m_meter.AddAlertZone(50,200,RGB(100,250,100));
  m_meter.AddAlertZone(200,500,RGB(250,100,100));
