@@ -2,7 +2,38 @@
 // Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 // http://secu-3.org
 
+#include "resource.h"
 #include "winres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian resources
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+IDD_SCRLMSGBOX DIALOGEX 0, 0, 210, 260
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "MessageBox"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,80,240,50,14
+    EDITTEXT        IDC_SCRLMSGBOX_EDIT,26,5,180,228,ES_AUTOVSCROLL | ES_MULTILINE | ES_READONLY | WS_VSCROLL
+END
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+IDD_SCRLMSGBOX DIALOGEX 0, 0, 210, 260
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "MessageBox"
+FONT 8, "MS Sans Serif"
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,80,240,50,14
+    EDITTEXT        IDC_SCRLMSGBOX_EDIT,26,5,180,228,ES_AUTOVSCROLL | ES_MULTILINE | ES_READONLY | WS_VSCROLL
+END
 
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources

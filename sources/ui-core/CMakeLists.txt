@@ -53,6 +53,7 @@ set(HEADERS
   WndScroller.h
   WindowSubClasser.h
   XBrowseForFolder.h
+  ScrlMessageBox.h
   )
 
 set(SOURCES
@@ -84,6 +85,7 @@ set(SOURCES
   WndScroller.cpp
   WindowSubClasser.cpp
   XBrowseForFolder.cpp
+  ScrlMessageBox.cpp
   uicore.cpp
   uicore.rc
   )

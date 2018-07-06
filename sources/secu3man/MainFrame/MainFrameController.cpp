@@ -41,6 +41,7 @@
 #include "TablDesk/DLLLinkedFunctions.h"  //for ShowHints()
 #include "ui-core/HotKeysManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "ui-core/ScrlMessageBox.h"
 
 using namespace fastdelegate;
 
@@ -208,7 +209,8 @@ void MainFrameController::OnAppLogMark(int mark)
 
 void MainFrameController::OnAppLogFormat()
 {
- AfxMessageBox(MLL::GetString(IDS_LOG_FORMAT_DESC).c_str(), MB_OK|MB_ICONINFORMATION);
+ CScrlMessageBox msgbox(NULL, AfxGetAppName(), MLL::GetString(IDS_LOG_FORMAT_DESC), IDI_INFORMATION);
+ msgbox.DoModal();
 }
 
 bool MainFrameController::IsBeginLoggingAllowed(void)
