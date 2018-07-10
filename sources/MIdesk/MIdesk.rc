@@ -186,6 +186,7 @@ BEGIN
     IDS_MI_SENSAFR_UNIT      "в/т"
     IDS_MI_CHOKEPOS_TITLE    "ВЗ/РДВ"
     IDS_MI_GDPOS_TITLE       "Дозатор газа"
+    IDS_MI_LOAD_TITLE        "Синтет. нагрузка"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -384,6 +385,7 @@ BEGIN
     IDS_MI_SENSAFR_UNIT      "a/f"
     IDS_MI_CHOKEPOS_TITLE    "IAC valve"
     IDS_MI_GDPOS_TITLE       "Gas dispenser"
+    IDS_MI_LOAD_TITLE        "Synthetic load"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -94,6 +94,8 @@ namespace SECU3IO
   float mapd;                           // Diffrerential pressure = (MAP2 - MAP)
 
   float afr;                            // AFR calculated from lambda sensor
+
+  float load;                           // Load value (MAP or TPS or synthetic MAP+TPS)
  };
 
  struct DbgvarDat

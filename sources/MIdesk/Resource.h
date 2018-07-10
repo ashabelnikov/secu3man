@@ -157,3 +157,5 @@
 #define IDS_MI_CHOKEPOS_TITLE           2163
 #define IDC_MI_GDPOS                    2164
 #define IDS_MI_GDPOS_TITLE              2165
+#define IDC_MI_LOAD                     2266
+#define IDS_MI_LOAD_TITLE               2267

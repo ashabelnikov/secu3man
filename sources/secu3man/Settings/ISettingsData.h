@@ -164,6 +164,7 @@ struct MetersCfg
  int m_optMetSensAFR[2];
  int m_optMetChokePos[2];
  int m_optMetGDPos[2];
+ int m_optMetSynLoad[2];
 };
 
 typedef enum EInterLang

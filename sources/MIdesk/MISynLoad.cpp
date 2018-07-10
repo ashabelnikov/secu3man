@@ -19,54 +19,43 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file MIPressure.cpp
+/** \file MISynLoad.cpp
  * \author Alexey A. Shabelnikov
  */
 
 #include "stdafx.h"
 #include "resource.h"
-#include "MIPressure.h"
+#include "MISynLoad.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
-CMIPressure::CMIPressure()
+CMISynLoad::CMISynLoad()
 {
  //empty
 }
 
-CMIPressure::~CMIPressure()
+CMISynLoad::~CMISynLoad()
 {
  //empty
 }
 
-void CMIPressure::Create(CWnd* pParent)
+void CMISynLoad::Create(CWnd* pParent)
 {
- MeasInstrBase::Create(pParent, IDC_MI_MAP); //create window
+ MeasInstrBase::Create(pParent, IDC_MI_LOAD); //create window
 
- m_meter.SetRange (10.0, 110.0);
+ m_meter.SetRange (0.0, 250.0);
  m_meter.SetLabelsDecimals(0);
- m_meter.SetValueDecimals(1);
- m_meter.SetTitle(MLL::LoadString(IDS_MI_PRESSURE_TITLE));
+ m_meter.SetValueDecimals(2);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_LOAD_TITLE));
  m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
- m_meter.SetUnit(MLL::LoadString(IDS_MI_PRESSURE_UNIT));
+// m_meter.SetUnit(MLL::LoadString(IDS_MI_???_UNIT));
  m_meter.SetTickNumber(20);
- m_meter.AddAlertZone(10,30,RGB(180,130,130));
- m_meter.AddAlertZone(30,90,RGB(120,200,120));
- m_meter.AddAlertZone(90,110,RGB(180,130,130));
+ m_meter.AddAlertZone(0,100,RGB(130,250,130));
+ m_meter.AddAlertZone(100,250,RGB(250,130,130));
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
-}
-
-void CMIPressure::SetLimits(float loLimit, float upLimit)
-{
- m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.2727, RGB(180,130,130));
- m_meter.AddAlertZone(upLimit * 0.2727, upLimit * 0.8181, RGB(120,200,120));
- m_meter.AddAlertZone(upLimit * 0.8181, upLimit, RGB(180,130,130));
-
- m_meter.SetRange(loLimit, upLimit);
 }

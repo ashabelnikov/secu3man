@@ -248,6 +248,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMetSensAFR[2];
   OptField_t<int> m_optMetChokePos[2];
   OptField_t<int> m_optMetGDPos[2];
+  OptField_t<int> m_optMetSynLoad[2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;

@@ -52,6 +52,7 @@ set(HEADERS
   MIKnockGraph.h
   MISensAFR.h
   MIChokePos.h
+  MISynLoad.h
   Resource.h
   RSDeskDlg.h
   RingBuffer.h
@@ -85,6 +86,7 @@ set (SOURCES
   MIKnockGraph.cpp
   MISensAFR.cpp
   MIChokePos.cpp
+  MISynLoad.cpp
   RSDeskDlg.cpp
   StdAfx.cpp
   MIDesk.rc

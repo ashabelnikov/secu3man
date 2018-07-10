@@ -271,7 +271,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 122 : 61))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 126 : 63))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -518,6 +518,12 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &afr))
   return false;
  m_SensorDat.afr = ((float)afr) / AFR_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //Load value
+ int load = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &load))
+  return false;
+ m_SensorDat.load = ((float)load) / LOAD_PHYSICAL_MAGNITUDE_MULTIPLIER;
 
  return true;
 }

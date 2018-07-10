@@ -179,6 +179,7 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetSensAFR[i].name = _T("MetSensAFR");
   m_optMetChokePos[i].name = _T("MetIACPos");
   m_optMetGDPos[i].name = _T("MetGDPos");
+  m_optMetSynLoad[i].name = _T("MetSynLoad");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -401,6 +402,7 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetSensAFR[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetChokePos[i],_T(""), 0, 32, true);
   mm.ReadInt(m_optMetGDPos[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetSynLoad[i],_T(""), 0, 32, true);
  }
 
  return status;
@@ -566,6 +568,7 @@ bool CAppSettingsModel::WriteSettings(void)
   mm.WriteInt(m_optMetSensAFR[i]);
   mm.WriteInt(m_optMetChokePos[i]);
   mm.WriteInt(m_optMetGDPos[i]);
+  mm.WriteInt(m_optMetSynLoad[i]);
  }
 
  return status;
@@ -963,5 +966,6 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetSensAFR[i] = m_optMetSensAFR[i].value;
   o_cfg.m_optMetChokePos[i] = m_optMetChokePos[i].value;
   o_cfg.m_optMetGDPos[i] = m_optMetGDPos[i].value;
+  o_cfg.m_optMetSynLoad[i] = m_optMetSynLoad[i].value;
  }
 }

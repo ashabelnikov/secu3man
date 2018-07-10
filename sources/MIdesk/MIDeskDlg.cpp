@@ -56,6 +56,7 @@
 #include "MIKnockGraph.h"
 #include "MISensAFR.h"
 #include "MIChokePos.h"
+#include "MISynLoad.h"
 
 #undef max
 
@@ -359,7 +360,7 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                               int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
                               int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph,
-                              int MetSensAFR, int MetChokePos, int MetGDPos)
+                              int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad)
 {
  m_metRows = MetRows;
 
@@ -560,6 +561,14 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
   widget->Create(this);
   widget->BindVars(&m_values.gasdose_pos, NULL, NULL);
   m_metFields.insert(std::make_pair(MetGDPos, widget));
+ }
+
+ if (MetSynLoad != std::numeric_limits<int>::max())
+ {
+  CMISynLoad* widget = new CMISynLoad();
+  widget->Create(this);
+  widget->BindVars(&m_values.load, NULL, NULL);  
+  m_metFields.insert(std::make_pair(MetSynLoad, widget));
  }
 
  //enable/disable
