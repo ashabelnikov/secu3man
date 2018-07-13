@@ -69,7 +69,7 @@ struct GDIHelpers
  }
 
  //Resize and center rect
- void ResizeAndCenterRect(const CRect& i_external, CRect& io_victim)
+ static void ResizeAndCenterRect(const CRect& i_external, CRect& io_victim)
  {
   float Xf = ((float)i_external.Width()) / io_victim.Width();
   float Yf = ((float)i_external.Height()) / io_victim.Height();
@@ -86,7 +86,7 @@ struct GDIHelpers
  }
 
  //get screen resolution
- CRect GetScreenRect(CWnd* p_wnd) const
+ static CRect GetScreenRect(CWnd* p_wnd)
  {
   CDC* pDC = p_wnd->GetDC();
   int x_resolution = pDC->GetDeviceCaps(HORZRES);
@@ -94,4 +94,34 @@ struct GDIHelpers
   return CRect(0, 0, x_resolution, y_resolution);
  }
 
+ static std::vector<COLORREF> GenerateGradientList(int start, int end, int items, int offset)
+ {
+  if (end > 511) end = 511;
+  if (start < 0) start = 0;
+  std::vector<COLORREF> colors;
+  for (int i = 0; i < items; i++)
+  {
+   COLORREF c;
+   int value = MathHelpers::Round(((float)(end - start) * i) / items);
+   value += start;
+
+   if (value <= 255)
+    c = RGB(0, value, (255 - value));
+   if (value > 255)
+    c = RGB((value - 255), (255 - (value - 255)), 0);
+
+   int r = GetRValue(c);
+   r+=offset;
+   if (r > 255) r = 255;
+   int g = GetGValue(c);
+   g+=offset;
+   if (g > 255) g = 255;
+   int b = GetBValue(c);
+   b+=offset;
+   if (b > 255) b = 255;
+
+   colors.push_back(RGB(r,g,b));
+  }
+  return colors;
+ }
 };

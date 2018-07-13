@@ -58,6 +58,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void UpdateDisplay(void); //call if data changed outside control and thus control should be updated
   void ShowMarkers(bool show, bool invalidate = true);
   void SetValueIncrement(float inc);
+  void SetGradientList(const std::vector<COLORREF>& colors);
 
   //Creates control dynamically
   BOOL Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id);
@@ -128,4 +129,6 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int m_minLabelWidthInChars;
 
   friend class CEditExCustomKeys;
+
+  std::vector<COLORREF> m_gradColor;
 };

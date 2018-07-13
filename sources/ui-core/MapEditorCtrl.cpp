@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include "MapEditorCtrl.h"
+#include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
 #include "common/fastdelegate.h"
 #include "ui-core/EditEx.h"
@@ -173,10 +174,6 @@ END_MESSAGE_MAP()
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MFCMapEditorCtrl")  // Window class name
 
-#define GRADSTEPSNUM 16
-static const COLORREF gradColor[GRADSTEPSNUM] = {0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
-                                                 0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
-
 CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/)
 : m_rows(rows)
 , m_cols(cols)
@@ -202,6 +199,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_minLabelWidthInChars(minLabelWidthInChars)
 {
  _RegisterWindowClass(hMod);
+ m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 100);
 }
 
 CMapEditorCtrl::~CMapEditorCtrl()
@@ -275,9 +273,9 @@ void CMapEditorCtrl::OnPaint()
    float value = _GetItem(i,j);
    CRect rect = _GetItemRect(i, j);
    int index = _GetGradIndex(value);
-   dc.SetBkColor(IsWindowEnabled() ? gradColor[index] : GetSysColor(COLOR_3DFACE));
+   dc.SetBkColor(IsWindowEnabled() ? m_gradColor[index] : GetSysColor(COLOR_3DFACE));
    dc.SetBkMode(TRANSPARENT);
-   dc.FillSolidRect(rect, IsWindowEnabled() ? gradColor[index] : GetSysColor(COLOR_3DFACE));
+   dc.FillSolidRect(rect, IsWindowEnabled() ? m_gradColor[index] : GetSysColor(COLOR_3DFACE));
    _DrawItem(dc, rect, _FloatToStr(value, m_decPlaces));
   }
  }
@@ -336,9 +334,9 @@ void CMapEditorCtrl::SetRange(float i_min, float i_max)
 
 int CMapEditorCtrl::_GetGradIndex(float value)
 {
- int index = MathHelpers::Round((value - (m_minVal)) / ((m_maxVal - m_minVal)/((float)GRADSTEPSNUM)));
+ int index = MathHelpers::Round((value - (m_minVal)) / ((m_maxVal - m_minVal)/((float)m_gradColor.size())));
  if (index < 0) index = 0;
- if (index > GRADSTEPSNUM-1) index = GRADSTEPSNUM-1;
+ if (index > (int)m_gradColor.size()-1) index = (int)m_gradColor.size()-1;
  return index;
 }
 
@@ -822,3 +820,9 @@ void CMapEditorCtrl::SetValueIncrement(float inc)
 {
  m_increment = inc;
 }
+
+void CMapEditorCtrl::SetGradientList(const std::vector<COLORREF>& colors)
+{
+ m_gradColor = colors;
+}
+
