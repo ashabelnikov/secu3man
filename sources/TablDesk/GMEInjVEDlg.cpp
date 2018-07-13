@@ -38,7 +38,7 @@ END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 : Super(CGMEInjVEDlg::IDD, pParent)
-, m_ve_map(16, 16, true)
+, m_ve_map(16, 16, true, NULL, 3)
 , mp_VEMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
