@@ -35,10 +35,12 @@
 #include "GMEInjEnrDlg.h"
 #include "GMEInjOtherDlg.h"
 #include "io-core/SECU3IO.h"
+#include "common/MathHelpers.h"
+#include <limits>
+
+#undef max
 
 const UINT CGridModeEditorInjDlg::IDD = IDD_GRID_MODE_EDITOR_INJ;
-
-float work_map_load_slots[16]  = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
 
 /////////////////////////////////////////////////////////////////////////////
 // CGridModeEditorInjDlg dialog
@@ -50,17 +52,23 @@ END_MESSAGE_MAP()
 
 CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 : Super(CGridModeEditorInjDlg::IDD, pParent)
+, m_ldaxMin(1.0f)
+, m_ldaxMax(16.0f)
+, m_ldaxNeedsUpdate(false)
+, m_baro_press(101.3f) //sea level atmospheric pressure by default
 {
+ work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
+
  m_pVEPageDlg.reset(new CGMEInjVEDlg());
- m_pVEPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pVEPageDlg->BindLoadGrid(&work_map_load_slots[0]);
  m_pVEPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeVE));
 
  m_pAFRPageDlg.reset(new CGMEInjAFRDlg());
- m_pAFRPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pAFRPageDlg->BindLoadGrid(&work_map_load_slots[0]);
  m_pAFRPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeAFR));
 
  m_pITPageDlg.reset(new CGMEInjITDlg());
- m_pITPageDlg->BindLoadGrid(work_map_load_slots);
+ m_pITPageDlg->BindLoadGrid(&work_map_load_slots[0]);
  m_pITPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIT));
 
  m_pIRegPageDlg.reset(new CGMEInjIRegDlg());
@@ -266,10 +274,31 @@ void CGridModeEditorInjDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
 
 void CGridModeEditorInjDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 {
- m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
- m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
- m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use);
+ //Update vertical axis of work map
+ bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
+ if (m_ldaxNeedsUpdate || ((m_baro_press != dv.baro_press) && useBaroMax))
+ {
+  work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? dv.baro_press : m_ldaxMax, 16);
+  m_pVEPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
+  m_pAFRPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
+  m_pITPageDlg->BindLoadGrid(&work_map_load_slots[0], true);
+  m_ldaxNeedsUpdate = false;
+ }
+
+ m_baro_press = dv.baro_press;
+
+ m_pVEPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
+ m_pAFRPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
+ m_pITPageDlg->SetArguments(dv.rpm, dv.air_flow, dv.strt_use, dv.load);
  m_pIRegPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tps, dv.iac_pos);
  m_pEnrPageDlg->SetArguments(dv.strt_use, dv.temp, dv.tpsdot, dv.rpm);
  m_pOtherPageDlg->SetArguments(dv.strt_use, dv.temp, dv.voltage, dv.add_i1, dv.rpm, dv.tmp2);
+}
+
+void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal)
+{
+ if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal))
+  m_ldaxNeedsUpdate = true;
+ m_ldaxMin = minVal;
+ m_ldaxMax = maxVal;
 }

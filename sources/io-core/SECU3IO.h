@@ -96,6 +96,7 @@ namespace SECU3IO
   float afr;                            // AFR calculated from lambda sensor
 
   float load;                           // Load value (MAP or TPS or synthetic MAP+TPS)
+  float baro_press;                     // Baro pressure
  };
 
  struct DbgvarDat

@@ -33,7 +33,7 @@ class CCommunicationManager;
 class CStatusBarManager;
 class CTablesDeskDlg;
 struct SECU3FWMapsItem;
-namespace SECU3IO {struct EditTabPar;}
+namespace SECU3IO {struct EditTabPar; struct FunSetPar;}
 
 class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
 {
@@ -64,6 +64,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
   void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames); //names of read-only and read/write tables
 
   void ApplyFWOptions(DWORD opt);
+
+  void OnFunSetChanged(const SECU3IO::FunSetPar* data);
 
  private:
   //Events from view

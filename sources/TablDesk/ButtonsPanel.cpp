@@ -2556,6 +2556,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
   VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
   mp_gridModeEditorIgnDlg->ShowWindow(SW_SHOW);
   m_grid_map_state_ign = 1;
  }
@@ -2583,6 +2584,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
   mp_gridModeEditorInjDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
 
   m_grid_map_state_inj = 1;
@@ -3386,4 +3388,17 @@ void CButtonsPanel::OnSize( UINT nType, int cx, int cy )
  DPIAware da;
  if (mp_scr.get())
   mp_scr->SetViewSize(cx, da.ScaleY(m_scrl_view));
+}
+
+void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc)
+{
+ m_ldaxMinVal = minVal;
+ m_ldaxMaxVal = maxVal;
+ m_ldaxCfg = loadSrc;
+
+ if (mp_gridModeEditorIgnDlg.get())
+  mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
 }

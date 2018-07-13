@@ -110,10 +110,16 @@ void CGMEInjVEDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjVEDlg::BindLoadGrid(float* pGrid)
+void CGMEInjVEDlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);
+ if (updateLabels)
+ {
+  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  if (m_ve_map.GetSafeHwnd())
+   m_ve_map.UpdateDisplay(); 
+ }
 }
 
 void CGMEInjVEDlg::setOnChange(EventHandler OnCB)
@@ -126,11 +132,12 @@ void CGMEInjVEDlg::UpdateView(void)
  m_ve_map.UpdateDisplay();
 }
 
-void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use)
+void CGMEInjVEDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load)
 {
  if (m_ve_map.GetSafeHwnd())
  {
   m_ve_map.ShowMarkers(!strt_use, false);
-  m_ve_map.SetArguments((float)air_flow, (float)rpm);
+  m_ve_map.SetArguments(load, (float)rpm);
  }
 }
+

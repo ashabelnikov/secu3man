@@ -38,13 +38,14 @@
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection)
+CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged)
 : Super(ip_view)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 , m_parameters_changed(false)
 , m_lastSel(0)
 , m_RequestDataCollection(RequestDataCollection)
+, m_ParametersChanged(ParametersChanged)
 {
  mp_view->SetOnTabActivate(MakeDelegate(this, &CPMParamsController::OnParamDeskTabActivate));
  mp_view->SetOnChangeInTab(MakeDelegate(this, &CPMParamsController::OnParamDeskChangeInTab));
@@ -193,6 +194,10 @@ void CPMParamsController::OnParamDeskChangesTimer(void)
 
   //послали измененные пользователем данные (эта операция блокирует поток, поэтому за данные в стеке можно не беспокоиться)
   mp_comm->m_pControlApp->SendPacket(view_descriptor, &packet_data);
+
+  if (m_ParametersChanged)
+   m_ParametersChanged(view_descriptor, &packet_data); //notify parent controller
+
   if (view_descriptor == CHOKE_PAR)
   {
    packet_data.m_ChokePar.manual_delta = 0; //reset accumulated value

@@ -230,14 +230,14 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "work map",IDC_GME_IGN_WRK,"MFCMapEditorCtrl",WS_TABSTOP,8,5,505,230,WS_EX_STATICEDGE
 
-    CTEXT           "ХХ", IDC_GME_IDL_TITLE, 0, 245, 15, 12
-    CONTROL         "idle map",IDC_GME_IGN_IDL,"MFCMapEditorCtrl",WS_TABSTOP,18,243,495,16,WS_EX_STATICEDGE
+    CTEXT           "ХХ", IDC_GME_IDL_TITLE, 5, 245, 15, 12
+    CONTROL         "idle map",IDC_GME_IGN_IDL,"MFCMapEditorCtrl",WS_TABSTOP,24,243,489,16,WS_EX_STATICEDGE
 
-    CTEXT           "Tкор", IDC_GME_TMP_TITLE, 0, 262, 17, 12
-    CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,18,262,495,25,WS_EX_STATICEDGE
+    CTEXT           "Tкор", IDC_GME_TMP_TITLE, 5, 262, 17, 12
+    CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,24,262,489,25,WS_EX_STATICEDGE
 
-    CTEXT           "Пуск", IDC_GME_STR_TITLE, 0, 290, 18, 12
-    CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,18,290,495,25,WS_EX_STATICEDGE
+    CTEXT           "Пуск", IDC_GME_STR_TITLE, 5, 290, 18, 12
+    CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,24,290,489,25,WS_EX_STATICEDGE
 
     CTEXT           "УОЗ",IDC_GME_AA_CAPTION,18,320,35,10
     CTEXT           "Рабочая",IDC_GME_WM_CAPTION,58,320,35,10
@@ -801,14 +801,14 @@ FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "work map",IDC_GME_IGN_WRK,"MFCMapEditorCtrl",WS_TABSTOP,8,5,505,230,WS_EX_STATICEDGE
 
-    CTEXT           "Idle", IDC_GME_IDL_TITLE, 0, 245, 15, 12
-    CONTROL         "idle map",IDC_GME_IGN_IDL,"MFCMapEditorCtrl",WS_TABSTOP,18,243,495,16,WS_EX_STATICEDGE
+    CTEXT           "Idle", IDC_GME_IDL_TITLE, 5, 245, 15, 12
+    CONTROL         "idle map",IDC_GME_IGN_IDL,"MFCMapEditorCtrl",WS_TABSTOP,24,243,489,16,WS_EX_STATICEDGE
 
-    CTEXT           "Tcorr", IDC_GME_TMP_TITLE, 0, 262, 17, 12
-    CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,18,262,495,25,WS_EX_STATICEDGE
+    CTEXT           "Tcorr", IDC_GME_TMP_TITLE, 5, 262, 17, 12
+    CONTROL         "temp map",IDC_GME_IGN_TMP,"MFCMapEditorCtrl",WS_TABSTOP,24,262,489,25,WS_EX_STATICEDGE
 
-    CTEXT           "Start", IDC_GME_STR_TITLE, 0, 290, 18, 12
-    CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,18,290,495,25,WS_EX_STATICEDGE
+    CTEXT           "Start", IDC_GME_STR_TITLE, 5, 290, 18, 12
+    CONTROL         "start map",IDC_GME_IGN_STR,"MFCMapEditorCtrl",WS_TABSTOP,24,290,489,25,WS_EX_STATICEDGE
 
     CTEXT           "Adv.ang.",IDC_GME_AA_CAPTION,18,320,35,10
     CTEXT           "Work",IDC_GME_WM_CAPTION,58,320,35,10

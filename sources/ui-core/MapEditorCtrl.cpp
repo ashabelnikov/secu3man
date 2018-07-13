@@ -29,6 +29,8 @@
 #include "common/fastdelegate.h"
 #include "ui-core/EditEx.h"
 
+static TCHAR templateStr[] = _T("88888888888888");
+
 static const COLORREF itemErrColor = RGB(255,120,120);
 CBrush redBrush(itemErrColor);
 CPen redPen(PS_SOLID, 3, RGB(255, 64, 64));
@@ -171,11 +173,11 @@ END_MESSAGE_MAP()
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MFCMapEditorCtrl")  // Window class name
 
+#define GRADSTEPSNUM 16
 static const COLORREF gradColor[GRADSTEPSNUM] = {0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491, 0xC8AA85, 0xCDC38F, 0xD3D48F, 0xB2D573,
                                                  0x87DCA3, 0x87e4A3, 0x99E9A3, 0x5DF3DF, 0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
 
-
-CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/)
+CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/)
 : m_rows(rows)
 , m_cols(cols)
 , m_minVal(0.0f)
@@ -197,14 +199,9 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_showMarkers(false)
 , m_increment(0.5f)
 , m_invDataRowsOrder(invDataRowsOrder)
+, m_minLabelWidthInChars(minLabelWidthInChars)
 {
  _RegisterWindowClass(hMod);
-
- //Create gradient brushes
- for(int i = 0; i < GRADSTEPSNUM; ++i)
-  m_gradBrush[i].CreateSolidBrush(gradColor[i]);
-
- m_bkBrush.CreateSolidBrush(GetSysColor(COLOR_3DFACE));
 }
 
 CMapEditorCtrl::~CMapEditorCtrl()
@@ -280,7 +277,7 @@ void CMapEditorCtrl::OnPaint()
    int index = _GetGradIndex(value);
    dc.SetBkColor(IsWindowEnabled() ? gradColor[index] : GetSysColor(COLOR_3DFACE));
    dc.SetBkMode(TRANSPARENT);
-   dc.FillRect(rect, IsWindowEnabled() ? &m_gradBrush[index] : &m_bkBrush);
+   dc.FillSolidRect(rect, IsWindowEnabled() ? gradColor[index] : GetSysColor(COLOR_3DFACE));
    _DrawItem(dc, rect, _FloatToStr(value, m_decPlaces));
   }
  }
@@ -643,15 +640,20 @@ int CMapEditorCtrl::_GetLabelWidth(void)
  m_label_width = 0;
  if (mp_vertLabels && m_vertShow)
  {
-  CDC* pDC = GetDC();
+  CDC* pDC = GetDC();  
   for (size_t i = 0; i < m_vertLabels.size(); ++i)
   {
    CSize sz = pDC->GetTextExtent(m_vertLabels[i]);
    if (sz.cx > m_label_width)
     m_label_width = sz.cx;
   }
- }
  
+  //apply mimimum label's width
+  CSize sz = pDC->GetTextExtent(templateStr, m_minLabelWidthInChars);
+  if (sz.cx > m_label_width)
+   m_label_width = sz.cx;
+ }
+   
  return m_label_width;
 }
 

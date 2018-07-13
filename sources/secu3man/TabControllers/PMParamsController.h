@@ -38,9 +38,10 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 {
   typedef CPMControllerBase<VIEW> Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate2<const BYTE, const void*> EventPacket;
 
  public:
-  CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection);
+  CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged);
   virtual ~CPMParamsController();
 
   //начало работы контроллера
@@ -75,6 +76,7 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 
   CObjectTimer<CPMParamsController> m_pd_changes_timer; 
   EventHandler m_RequestDataCollection;
+  EventPacket m_ParametersChanged;
   bool m_parameters_changed;       //этот флаг устанавливается при изменении на любой из вкладок параметров и сбрасывается после посылки измененных данных в SECU
   int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
 };

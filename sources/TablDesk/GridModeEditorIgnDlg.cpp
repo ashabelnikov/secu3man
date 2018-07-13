@@ -32,8 +32,6 @@
 #include "MapIds.h"
 #include "ui-core/fnt_helpers.h"
 
-static float work_map_load_slots[16]  = {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16};
-
 const UINT CGridModeEditorIgnDlg::IDD = IDD_GRID_MODE_EDITOR_IGN;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -81,10 +79,15 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , m_en_aa_indication(false)
 , m_start_map(1, 16, false, DLL::GetModuleHandle())
 , m_idle_map(1, 16, false, DLL::GetModuleHandle())
-, m_work_map(16, 16, true, DLL::GetModuleHandle())
+, m_work_map(16, 16, true, DLL::GetModuleHandle(), 3)
 , m_temp_map(1, 16, false, DLL::GetModuleHandle())
+, m_ldaxMin(1.0f)
+, m_ldaxMax(16.0f)
+, m_ldaxNeedsUpdate(false)
 {
  _ResetUseFlags();
+ work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
+ m_curDV.baro_press = 101.3f; //sea level atmospheric pressure by default
 }
 
 CGridModeEditorIgnDlg::~CGridModeEditorIgnDlg()
@@ -175,7 +178,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_work_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveWork));
  m_work_map.SetRange(-15.0f, 55.00f);
  m_work_map.AttachMap(mp_workMap);
- m_work_map.AttachLabels(mp_rpmGrid, work_map_load_slots);
+ m_work_map.AttachLabels(mp_rpmGrid, &work_map_load_slots[0]);
  m_work_map.ShowLabels(true, true);
  m_work_map.SetDecimalPlaces(2, 0, 0);
  m_work_map.SetFont(&m_font);
@@ -270,6 +273,7 @@ void CGridModeEditorIgnDlg::EnableAdvanceAngleIndication(bool i_enable)
 
 void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
 {
+ bool baroChanged = false;
  if (!GetSafeHwnd())
   return;
 
@@ -281,6 +285,9 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_ac_value.SetValue(dv.airt_aalt);
  m_ic_value.SetValue(dv.idlreg_aac);
  m_oc_value.SetValue(dv.octan_aac);
+
+ if (m_curDV.baro_press != dv.baro_press)
+  baroChanged = true;
 
  m_curDV = dv;
  UpdateDialogControls(this, true);  //todo: check it for perfomance issues
@@ -296,7 +303,25 @@ void CGridModeEditorIgnDlg::SetDynamicValues(const TablDesk::DynVal& dv)
  m_temp_map.SetArguments(0, dv.temp);
 
  m_work_map.ShowMarkers(dv.work_use && dv.air_flow, false);
- m_work_map.SetArguments((float)dv.air_flow, (float)dv.rpm);
+ m_work_map.SetArguments(dv.load, (float)dv.rpm);
+
+ //Update vertical axis of work map
+ bool useBaroMax = (m_ldaxMax == std::numeric_limits<float>::max());
+ if (m_ldaxNeedsUpdate || (baroChanged && useBaroMax))
+ {
+  work_map_load_slots = MathHelpers::BuildGridFromRange(m_ldaxMin, useBaroMax ? m_curDV.baro_press : m_ldaxMax, 16);
+  m_work_map.AttachLabels(mp_rpmGrid, &work_map_load_slots[0]);
+  m_work_map.UpdateDisplay();
+  m_ldaxNeedsUpdate = false;
+ }
+}
+
+void CGridModeEditorIgnDlg::SetLoadAxisCfg(float minVal, float maxVal)
+{
+ if ((m_ldaxMin != minVal) || (m_ldaxMax != maxVal))
+  m_ldaxNeedsUpdate = true;
+ m_ldaxMin = minVal;
+ m_ldaxMax = maxVal;
 }
 
 void CGridModeEditorIgnDlg::setIsAllowed(EventResult IsFunction)

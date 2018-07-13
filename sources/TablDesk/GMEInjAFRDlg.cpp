@@ -110,10 +110,16 @@ void CGMEInjAFRDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjAFRDlg::BindLoadGrid(float* pGrid)
+void CGMEInjAFRDlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);
+ if (updateLabels)
+ {
+  m_afr_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  if (m_afr_map.GetSafeHwnd())
+   m_afr_map.UpdateDisplay(); 
+ }
 }
 
 void CGMEInjAFRDlg::setOnChange(EventHandler OnCB)
@@ -126,11 +132,11 @@ void CGMEInjAFRDlg::UpdateView(void)
  m_afr_map.UpdateDisplay();
 }
 
-void CGMEInjAFRDlg::SetArguments(int rpm, int air_flow, bool strt_use)
+void CGMEInjAFRDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load)
 {
  if (m_afr_map.GetSafeHwnd())
  {
   m_afr_map.ShowMarkers(!strt_use, false);
-  m_afr_map.SetArguments((float)air_flow, (float)rpm);
+  m_afr_map.SetArguments(load, (float)rpm);
  }
 }

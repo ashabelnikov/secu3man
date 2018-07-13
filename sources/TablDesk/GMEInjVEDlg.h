@@ -41,11 +41,11 @@ class CGMEInjVEDlg : public CTabDialog
 
   void BindMaps(float* pVE);
   void BindRPMGrid(float* pGrid);
-  void BindLoadGrid(float* pGrid);
+  void BindLoadGrid(float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void UpdateView(void);
 
-  void SetArguments(int rpm, int air_flow, bool strt_use);
+  void SetArguments(int rpm, int air_flow, bool strt_use, float load);
 
  public:
 

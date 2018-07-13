@@ -110,10 +110,16 @@ void CGMEInjITDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
-void CGMEInjITDlg::BindLoadGrid(float* pGrid)
+void CGMEInjITDlg::BindLoadGrid(float* pGrid, bool updateLabels /*= false*/)
 {
  mp_loadGrid = pGrid;
  ASSERT(pGrid);
+ if (updateLabels)
+ {
+  m_it_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
+  if (m_it_map.GetSafeHwnd())
+   m_it_map.UpdateDisplay(); 
+ }
 }
 
 void CGMEInjITDlg::setOnChange(EventHandler OnCB)
@@ -126,11 +132,11 @@ void CGMEInjITDlg::UpdateView(void)
  m_it_map.UpdateDisplay();
 }
 
-void CGMEInjITDlg::SetArguments(int rpm, int air_flow, bool strt_use)
+void CGMEInjITDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load)
 {
  if (m_it_map.GetSafeHwnd())
  {
   m_it_map.ShowMarkers(!strt_use, false);
-  m_it_map.SetArguments((float)air_flow, (float)rpm);
+  m_it_map.SetArguments(load, (float)rpm);
  }
 }

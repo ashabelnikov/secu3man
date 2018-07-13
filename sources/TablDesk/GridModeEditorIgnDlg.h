@@ -75,6 +75,8 @@ class CGridModeEditorIgnDlg : public CDialog
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
+  void SetLoadAxisCfg(float minVal, float maxVal);
+
  public:
   void setIsAllowed(EventResult IsFunction);
   void setOnMapChanged(EventWithCode OnFunction);
@@ -131,4 +133,9 @@ class CGridModeEditorIgnDlg : public CDialog
   CFont m_font;
   CFont m_fieldFont;
   TablDesk::DynVal m_curDV;
+
+  float m_ldaxMin;
+  float m_ldaxMax;
+  bool m_ldaxNeedsUpdate;
+  std::vector<float> work_map_load_slots;
 };

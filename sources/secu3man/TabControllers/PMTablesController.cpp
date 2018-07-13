@@ -288,7 +288,19 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
 {
  switch(m_operation_state)
  {
-  case 0: //Read out RPM grid
+  case 0: //Read out FUNSET_PAR
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_PARAMS));
+   if (i_descriptor != FUNSET_PAR)
+    mp_comm->m_pControlApp->ChangeContext(FUNSET_PAR);
+   else
+   {//save read parameters
+    const FunSetPar* data = (const FunSetPar*)i_packet_data;
+    mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg);
+    m_operation_state = 1;
+   }
+   break;
+
+  case 1: //Read out RPM grid
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMRGD));
    if (i_descriptor != RPMGRD_PAR)
     mp_comm->m_pControlApp->ChangeContext(RPMGRD_PAR);
@@ -296,11 +308,11 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    {//save RPM grid
     const SepTabPar* data = (const SepTabPar*)i_packet_data;
     memcpy(m_rpmGrid, data->table_data, F_RPM_SLOTS*sizeof(float)); //save RPM grid
-    m_operation_state = 1;
+    m_operation_state = 2;
    }
    break;
 
-  case 1:
+  case 2:
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    if (i_descriptor != EDITAB_PAR)
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
@@ -309,15 +321,15 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
-    m_operation_state = 2;
+    m_operation_state = 3;
    }
    break;
 
-  case 2:
+  case 3:
    {
     if (i_descriptor != EDITAB_PAR)
     {
-     m_operation_state = 1;
+     m_operation_state = 2;
      break;
     }
 
@@ -737,5 +749,10 @@ void CPMTablesController::OnTableDeskChangesTimer(void)
 void CPMTablesController::OnCloseNotify()
 {
  mp_view->CloseAllCharts();
+}
+
+void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
+{
+ mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg);
 }
 

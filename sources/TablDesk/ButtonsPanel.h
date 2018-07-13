@@ -92,6 +92,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetDynamicValues(const TablDesk::DynVal& dv);
 
+  void SetLoadAxisCfg(float minVal, float maxVal, int loadSrc);
+
   virtual void EnableFuelInjection(bool i_enable);
 
   virtual void EnableGasdose(bool i_enable);
@@ -428,4 +430,8 @@ protected:
   bool m_fuel_injection;
   bool m_gasdose;
   bool m_choke_op_enabled;
+
+  float m_ldaxMinVal;
+  float m_ldaxMaxVal;
+  int m_ldaxCfg;
 };

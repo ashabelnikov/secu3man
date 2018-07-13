@@ -73,6 +73,8 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   //from CPMParamsController sub-controller
   void OnPDRequestsDataCollection();
 
+  void OnParametersChanged(const BYTE i_descriptor, const void* ip_packet);
+
   void ConfigureIndicators(void);
 
  private:

@@ -28,7 +28,6 @@
 #include <vector>
 #include "common/fastdelegate.h"
 
-#define GRADSTEPSNUM 16
 class CEditExCustomKeys;
 
 class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
@@ -45,7 +44,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
 
-  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL);
+  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0);
   virtual ~CMapEditorCtrl();
 
   void SetRange(float i_min, float i_max);
@@ -101,8 +100,6 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int m_cols;  //number of columns
   float m_minVal; //minimum allowed value
   float m_maxVal; //maximum allowed value
-  CBrush m_gradBrush[GRADSTEPSNUM];
-  CBrush m_bkBrush;
   float* mp_map; //array of data for editing
   int m_decPlaces; // number for decimal places
   int m_decPlacesH;
@@ -128,6 +125,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   bool m_showMarkers;
   float m_increment;
   bool m_invDataRowsOrder;
+  int m_minLabelWidthInChars;
 
   friend class CEditExCustomKeys;
 };

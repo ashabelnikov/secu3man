@@ -58,5 +58,7 @@ namespace TablDesk
   float voltage;
   float add_i1;  //lambda sensor
   float tmp2;
+  float baro_press;
+  float load;
  };
 }
