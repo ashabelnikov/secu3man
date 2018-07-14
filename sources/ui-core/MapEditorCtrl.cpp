@@ -199,7 +199,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_minLabelWidthInChars(minLabelWidthInChars)
 {
  _RegisterWindowClass(hMod);
- m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 100);
+ m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 110, 230);
 }
 
 CMapEditorCtrl::~CMapEditorCtrl()

@@ -94,33 +94,58 @@ struct GDIHelpers
   return CRect(0, 0, x_resolution, y_resolution);
  }
 
- static std::vector<COLORREF> GenerateGradientList(int start, int end, int items, int offset)
+ static COLORREF HSBToRGB(int index, int saturation, int brightness)
+ {
+  if (index > 767)
+   index = 767;
+  if (index < 0)
+   index = 0;
+
+  int index_m = index % 256;
+  int r, g, b;
+
+  if (index < 256) //0...255
+  {
+   r = 255 - index_m;
+   g = index_m;
+   b = 0;
+  }
+  else if (index < 512) //256...511
+  {
+   r = 0;
+   g = 255 - index_m;
+   b = index_m;
+  }
+  else //512...767
+  {
+   r = index_m;
+   g = 0;
+   b = 255 - index_m;
+  }
+
+  //apply saturation
+  r = ((r * saturation) / 255) + (255 - saturation);
+  g = ((g * saturation) / 255) + (255 - saturation);
+  b = ((b * saturation) / 255) + (255 - saturation);
+
+  //apply britness
+  r = (r * brightness) / 255;
+  g = (g * brightness) / 255;
+  b = (b * brightness) / 255;
+
+  return RGB(r, g, b);
+ }
+
+ static std::vector<COLORREF> GenerateGradientList(int start, int end, int items, int saturation, int britness)
  {
   if (end > 511) end = 511;
   if (start < 0) start = 0;
   std::vector<COLORREF> colors;
   for (int i = 0; i < items; i++)
-  {
-   COLORREF c;
+  {   
    int value = MathHelpers::Round(((float)(end - start) * i) / items);
    value += start;
-
-   if (value <= 255)
-    c = RGB(0, value, (255 - value));
-   if (value > 255)
-    c = RGB((value - 255), (255 - (value - 255)), 0);
-
-   int r = GetRValue(c);
-   r+=offset;
-   if (r > 255) r = 255;
-   int g = GetGValue(c);
-   g+=offset;
-   if (g > 255) g = 255;
-   int b = GetBValue(c);
-   b+=offset;
-   if (b > 255) b = 255;
-
-   colors.push_back(RGB(r,g,b));
+   colors.push_back(HSBToRGB(511 - value, saturation, britness));
   }
   return colors;
  }
