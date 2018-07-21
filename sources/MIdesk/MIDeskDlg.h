@@ -108,7 +108,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
  private:
   CRect _GetMetItemRect(int idx);
   void _MetCleanUp(void);
-  typedef std::map<int, MeasInstrBase*> MetFields_t;
+  void _MetRearrangeKeys(void);
+  typedef std::multimap<int, MeasInstrBase*> MetFields_t;
   MetFields_t m_metFields;
   int m_metRows;
   
@@ -120,7 +121,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
    COLORREF color;
   };
 
-  typedef std::map<int, IndFieldData> IndFields_t;
+  typedef std::multimap<int, IndFieldData> IndFields_t;
   IndFields_t m_indFields;
   CMultiLEDCtrl m_leds;
   CFont m_font;

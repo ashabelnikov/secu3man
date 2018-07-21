@@ -571,6 +571,8 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
   m_metFields.insert(std::make_pair(MetSynLoad, widget));
  }
 
+ _MetRearrangeKeys();
+
  //enable/disable
  MetFields_t::iterator it;
  for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
@@ -603,4 +605,14 @@ CRect CMIDeskDlg::_GetMetItemRect(int idx)
  float width  = ((float)(rc.right - rc.left) - ((float)cols)*space) / ((float)cols);
  float height = ((float)(rc.bottom - rc.top) - ((float)m_metRows)*space) / ((float)m_metRows);
  return CRect(MathHelpers::Round(j*(width+space)), MathHelpers::Round(i*(height+space)), MathHelpers::Round(j*(width+space) + width), MathHelpers::Round(i*(height+space) + height));
+}
+
+void CMIDeskDlg::_MetRearrangeKeys(void)
+{
+ int i = 0;
+ MetFields_t new_map;
+ MetFields_t::iterator it;
+ for(it = m_metFields.begin(); it != m_metFields.end(); ++it)
+  new_map.insert(std::make_pair(i++, it->second));
+ m_metFields = new_map;
 }
