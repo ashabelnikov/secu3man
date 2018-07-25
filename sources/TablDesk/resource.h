@@ -287,3 +287,17 @@
 #define IDC_GME_INJ_ATSC                5641
 #define IDC_GME_INJ_GTSC                5642
 #define IDC_GME_INJ_GPSC                5643
+#define IDC_GME_INJ_LAMDEL_BTN          5644
+#define IDC_GME_INJ_CELWGT_BTN          5645
+#define IDC_GME_INJ_STRSTP_BTN          5646
+#define IDC_GME_INJ_RSTSTT_BTN          5647
+#define IDC_GME_AUTOTUNE_GROUPBOX       5648
+#define IDC_GME_INJ_LAMDEL_MAP          5649
+#define IDC_GME_INJ_CELWGT_MAP          5650
+#define IDC_GME_INJ_STATUS_TEXT         5651
+#define IDS_GME_INJ_STATUS_INIFIFO      5652
+#define IDS_GME_INJ_STATUS_STOP         5653
+#define IDS_GME_INJ_BUTTON_STOP         5654
+#define IDS_GME_INJ_BUTTON_START        5655
+#define IDS_GME_INJ_STATUS_EGOCFG       5656
+

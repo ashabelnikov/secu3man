@@ -1,5 +1,4 @@
-
-/* SECU-3  - An open source, free engine control unit
+/* Common utilities - language layer
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
 
    This program is free software: you can redistribute it and/or modify
@@ -16,51 +15,33 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
    contacts:
-              http://secu-3.org
-              email: shabelnikov@secu-3.org
+             http://secu-3.org
+             e-mail: shabelnikov@secu-3.org
+             Microprocessor systems - design & programming.
 */
 
-/** \file DynamicValues.h
+/** \file StrUtils.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-namespace TablDesk
+#include <vector>
+#include "UnicodeSupport.h"
+
+class StrUtils
 {
- struct DynVal
- {
-  int rpm;
-  float temp;
-  int air_flow;
-
-  float adv_ang;
-  float knock_retard;
-  bool knkret_use;
-  float strt_aalt;
-  bool strt_use;
-  float idle_aalt;
-  bool idle_use;
-  float work_aalt;
-  bool work_use;
-  float temp_aalt;
-  bool temp_use;
-  float airt_aalt;
-  bool airt_use;
-  float idlreg_aac;
-  bool idlreg_use;
-  float octan_aac;
-  bool octan_use;
-
-  float tps;
-  float iac_pos;
-  int tpsdot;
-  float voltage;
-  float add_i1;  //lambda sensor
-  float tmp2;
-  float baro_press;
-  float load;
-
-  float afr;
- };
-}
+ public:
+  static std::vector<_TSTRING> TokenizeStr(const TCHAR *s, TCHAR c = _T(' '))
+  {
+   std::vector<_TSTRING> result;
+   do
+   {
+    const TCHAR *begin = s;
+    while(*s && *s != c)
+     s++;
+    result.push_back(_TSTRING(begin, s));
+   } while (0 != *s++);
+   return result;
+  }
+};

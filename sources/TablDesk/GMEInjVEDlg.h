@@ -33,6 +33,7 @@ class CGMEInjVEDlg : public CTabDialog
 {
   typedef CTabDialog Super;
   typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate0<bool> EventResult;
 
  public:
   CGMEInjVEDlg(CWnd* pParent = NULL);   // standard constructor
@@ -47,6 +48,18 @@ class CGMEInjVEDlg : public CTabDialog
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load);
 
+  //Used by CAutoTuneController:
+  void BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* p_loadGridLD);
+  void BindCelWgtMap(float* p_CelWgtMap);
+  void setOnViewActivate(EventHandler OnCB);
+  void setOnStrStp(EventHandler OnCB);
+  void setOnRstStt(EventHandler OnCB);
+  void setIsReady(EventResult OnCB);
+  void setOnChangeLamDel(EventHandler OnCB);
+  void SetStatusText(const _TSTRING& str);
+  void SetStrStpCaption(const _TSTRING& str);
+  void UpdateCelWgtMapCell(int l, int r);
+
  public:
 
  // Implementation
@@ -54,15 +67,44 @@ class CGMEInjVEDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAutoTune(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAutoTune1(CCmdUI* pCmdUI);
+  afx_msg void OnLamDelButton();
+  afx_msg void OnCelWgtButton();
+  afx_msg void OnStrStpButton();
+  afx_msg void OnRstSttButton();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
 
+  void OnChangeLamDel(void);
+
  private:
+  CButton m_lamdel_button;
+  CButton m_celwgt_button;
+  CButton m_strstp_button;
+  CButton m_rststt_button;
+
+  CStatic m_status_text;
+  _TSTRING m_status_cache;
+
   CMapEditorCtrl m_ve_map;
+  CMapEditorCtrl m_lamdel_map;
+  CMapEditorCtrl m_celwgt_map;
   CFont m_font;
 
   float* mp_VEMap;
   float* mp_rpmGrid;
   float* mp_loadGrid;
+
+  float* mp_LamDelMap;
+  float* mp_rpmGridLD;
+  float* mp_loadGridLD;
+  float* mp_CelWgtMap;
+
+  EventHandler m_OnViewActivate;
+  EventHandler m_OnStrStp;
+  EventHandler m_OnRstStt;
+  EventHandler m_OnChangeLamDel;
+  EventResult  m_IsReady; //if this CB is not initialized all autotune related controls will be disabled
 };

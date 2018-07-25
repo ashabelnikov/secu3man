@@ -128,8 +128,46 @@ namespace MathHelpers
  std::vector<T> BuildGridFromRange(T begin, T end, size_t num)
  {
   std::vector<T> grid;
-  for (size_t i = 0; i < num; ++i)
-   grid.push_back(begin + ((end - begin) * i) / (num - 1));
+   for (size_t i = 0; i < num; ++i)
+    grid.push_back(begin + ((end - begin) * i) / (num - 1));
   return grid; 
+ }
+
+ static void AxisCellLookup(float& arg, const float *Bins, int size, int& p1, int& p2)
+ {
+  int i;
+
+  if (arg > Bins[size-1])
+   arg = Bins[size-1];
+  if (arg < Bins[0])
+   arg = Bins[0];
+
+  for(i = size - 2; i >= 0; --i)
+   if (arg >= Bins[i]) break; 
+
+  p1 = i, p2 = i + 1; //save results
+ }
+
+ //NOTE: this function uses inverted order of rows in function
+ template<int ySize, int xSize>
+ float static BilinearInterpolation(float x, float y, float (&function)[ySize][xSize], float* xBins, float* yBins)
+ {
+  int xi, yi, xi1, yi1, j, j1;
+
+  AxisCellLookup(x, xBins, xSize, xi, xi1);
+  AxisCellLookup(y, yBins, ySize, yi, yi1);
+
+  j  = (ySize-1) - yi;  //inverted order of rows in function array
+  j1 = (ySize-1) - yi1; //
+
+  float f2 = function[j1][xi] + ((function[j1][xi1] - function[j1][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
+  float f1 = function[j][xi] + ((function[j][xi1] - function[j][xi]) * (x - xBins[xi])) / (xBins[xi1] - xBins[xi]);
+  return f1 + ((f2 - f1) * (y - yBins[yi])) / (yBins[yi1] - yBins[yi]);
+ }
+
+ template <class T>
+ static T Distance(T x, T y, T x0, T y0)
+ {
+  return sqrt(pow((x - x0), (T)2) + pow((y - y0), (T)2));
  }
 }

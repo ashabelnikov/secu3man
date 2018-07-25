@@ -99,4 +99,6 @@ class CGridModeEditorInjDlg : public CDialog
   bool m_ldaxNeedsUpdate;
   float m_baro_press;
   std::vector<float> work_map_load_slots;
+
+  friend class CAutoTuneController;
 };

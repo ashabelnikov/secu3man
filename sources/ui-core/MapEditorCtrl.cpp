@@ -174,7 +174,7 @@ END_MESSAGE_MAP()
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MFCMapEditorCtrl")  // Window class name
 
-CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/)
+CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/, bool readOnly /*= false*/)
 : m_rows(rows)
 , m_cols(cols)
 , m_minVal(0.0f)
@@ -197,6 +197,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_increment(0.5f)
 , m_invDataRowsOrder(invDataRowsOrder)
 , m_minLabelWidthInChars(minLabelWidthInChars)
+, m_readOnly(readOnly)
 {
  _RegisterWindowClass(hMod);
  m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 110, 230);
@@ -545,6 +546,7 @@ void CMapEditorCtrl::OnKillFocus(CWnd* pNewWnd)
 
 void CMapEditorCtrl::_ActivateEdit(void)
 { 
+ if (m_readOnly) return;
 //ASSERT(!mp_edit.get());
  mp_edit.reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditChar), fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditKill), m_minVal, m_maxVal, m_increment));
  CRect rect = _GetItemRect(m_cur_i, m_cur_j);
@@ -787,12 +789,19 @@ void CMapEditorCtrl::EnableAbroadMove(bool up, bool down)
  m_enAbroadDown = down;
 }
 
-void CMapEditorCtrl::UpdateDisplay(void)
+void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
 {
+ bool upd_all = (i == -1 || j == -1);
  if (mp_edit.get() && mp_edit->GetSafeHwnd())
-  mp_edit->SetValue(_GetItem(m_cur_i, m_cur_j));
+ {
+  if (upd_all || (m_cur_i == i && m_cur_j == j))
+   mp_edit->SetValue(_GetItem(m_cur_i, m_cur_j));
+ }
 
- Invalidate();
+ if (upd_all)
+  Invalidate();
+ else
+  InvalidateRect(_GetItemRect(i,j));
 }
 
 void CMapEditorCtrl::OnEnable(BOOL bEnable)

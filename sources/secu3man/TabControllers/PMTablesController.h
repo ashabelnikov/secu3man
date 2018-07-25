@@ -33,13 +33,14 @@ class CCommunicationManager;
 class CStatusBarManager;
 class CTablesDeskDlg;
 struct SECU3FWMapsItem;
+class ISettingsData;
 namespace SECU3IO {struct EditTabPar; struct FunSetPar;}
 
 class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
 {
   typedef CPMControllerBase<VIEW> Super;
  public:
-  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
+  CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CPMTablesController();
 
   //beginning of controller's work
@@ -103,6 +104,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
  private:
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
+  ISettingsData* mp_settings;
 
   //кеш таблиц
   SECU3FWMapsItem* m_maps;  //current

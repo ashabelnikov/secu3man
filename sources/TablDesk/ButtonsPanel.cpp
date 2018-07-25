@@ -33,6 +33,7 @@
 #include "io-core/secu3io.h"
 #include "MapIds.h"
 #include "ui-core/WndScroller.h"
+#include "AutoTuneController.h"
 
 #define TIMER_ID 0
 
@@ -1414,6 +1415,9 @@ void CButtonsPanel::OnGridMapChangedInj(int mapType)
 //------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
 {
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->Deactivate();
+
  m_grid_map_state_inj = 0;
  if (m_OnCloseMapWnd)
   m_OnCloseMapWnd(mp_gridModeEditorInjDlg->m_hWnd, TYPE_MAP_GME_INJ_WND);
@@ -1426,7 +1430,7 @@ void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
 
-CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
+CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enableAutoTune /*=false*/)
 : Super(dialog_id, pParent)
 , m_work_map_chart_state(0)
 , m_temp_map_chart_state(0)
@@ -1490,6 +1494,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/)
 , m_carb_afr(false)
 , m_en_gas_corr(false)
 , m_choke_op_enabled(false)
+, mp_autoTuneCntr(enableAutoTune ? new CAutoTuneController() : NULL)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -2574,7 +2579,15 @@ void CButtonsPanel::OnGridModeEditingInj()
  if (m_grid_mode_editing_inj_check.GetCheck()==BST_CHECKED)
  {
   mp_gridModeEditorInjDlg.reset(new CGridModeEditorInjDlg());
-
+  if (mp_autoTuneCntr.get())
+  {
+   mp_autoTuneCntr->SetView(mp_gridModeEditorInjDlg.get());
+   mp_autoTuneCntr->BindRPMGrid(GetRPMGrid());
+   mp_autoTuneCntr->BindMaps(GetVEMap(false), GetAFRMap(false));
+   mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+   mp_autoTuneCntr->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
+   mp_autoTuneCntr->Init();
+  }
   mp_gridModeEditorInjDlg->BindMaps(GetVEMap(false), GetAFRMap(false), GetITMap(false), GetIdlcMap(false), GetIdlrMap(false), GetITRPMMap(false), GetRigidMap(false),
                                     GetIACCMap(false), GetIACCWMap(false), GetAftstrMap(false), GetWrmpMap(false), GetAETPSMap(false), GetAERPMMap(false),
                                     GetCrnkMap(false), GetDeadMap(false), GetEGOCurveMap(false), GetIATCLTMap(false), GetTpsswtMap(false), GetAtscMap(false), GetGtscMap(false), GetGpscMap(false));
@@ -2587,6 +2600,8 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
 
+  if (mp_autoTuneCntr.get())
+   mp_autoTuneCntr->Activate();
   m_grid_map_state_inj = 1;
  }
  else
@@ -2897,6 +2912,8 @@ void CButtonsPanel::SetDynamicValues(const TablDesk::DynVal& dv)
   mp_gridModeEditorIgnDlg->SetDynamicValues(dv);
  if (mp_gridModeEditorInjDlg.get())
   mp_gridModeEditorInjDlg->SetDynamicValues(dv);
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetDynamicValues(dv);
 }
 
 void CButtonsPanel::EnableFuelInjection(bool i_enable)
@@ -3401,4 +3418,20 @@ void CButtonsPanel::SetLoadAxisCfg(float minVal, float maxVal, int loadSrc)
 
  if (mp_gridModeEditorInjDlg.get())
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
 }
+
+float* CButtonsPanel::GetLamDelMap(int id)
+{
+ ASSERT(mp_autoTuneCntr.get());
+ return mp_autoTuneCntr->GetLamDelMap(id);
+}
+
+void CButtonsPanel::SetAFRError(float afrError)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetAFRError(afrError);
+}
+

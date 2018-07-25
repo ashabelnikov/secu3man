@@ -37,8 +37,8 @@ template<class T> class CObjectTimer
  public:
   typedef void (T::*msgHandlerType) (void);
 
-  CObjectTimer(T* ip) : m_pDispatcher(ip), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
-  CObjectTimer()      : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
+  CObjectTimer(T* ip, msgHandlerType i_function) : m_pDispatcher(ip), msgHandler(i_function), m_interval_ms(0), m_timer_id(0) {};
+  CObjectTimer() : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
 
   //при удалении очередного объекта-таймера мапа становится меньше на один элемент
   virtual ~CObjectTimer()

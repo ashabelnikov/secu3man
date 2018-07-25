@@ -74,7 +74,7 @@ BOOL CGMEInjAFRDlg::OnInitDialog()
   m_font.CreateFontIndirect(&LogFont);
  }
 
- m_afr_map.SetRange(.0f, 22.0f);
+ m_afr_map.SetRange(8.0f, 22.0f);
  m_afr_map.AttachMap(mp_AFRMap);
  m_afr_map.AttachLabels(mp_rpmGrid, mp_loadGrid);
  m_afr_map.ShowLabels(true, true);

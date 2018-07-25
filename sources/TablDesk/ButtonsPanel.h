@@ -31,6 +31,7 @@
 #include "GridModeEditorInjDlg.h"
 
 class CWndScroller;
+class CAutoTuneController;
 
 /////////////////////////////////////////////////////////////////////////////
 // CButtonsPanel dialog
@@ -45,7 +46,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
   typedef fastdelegate::FastDelegate2<HWND, long> EventWithHWNDLong;
 
-  CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL);   // standard constructor
+  CButtonsPanel(UINT dialog_id, CWnd* pParent = NULL, bool enableAutoTune = false);   // standard constructor
   /*static*/ const UINT IDD;
   ~CButtonsPanel();
 
@@ -103,6 +104,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void EnableChokeOp(bool enable);
 
   void EnableGasCorr(bool i_enable);
+
+  float* GetLamDelMap(int id); // 0 - map, 1 - rpm bins, 2 - load bins
+  
+  void SetAFRError(float afrError);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
@@ -220,6 +225,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   CButton m_grid_mode_editing_inj_check;
   std::auto_ptr<CGridModeEditorIgnDlg> mp_gridModeEditorIgnDlg;
   std::auto_ptr<CGridModeEditorInjDlg> mp_gridModeEditorInjDlg;
+  std::auto_ptr<CAutoTuneController> mp_autoTuneCntr;
 
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);

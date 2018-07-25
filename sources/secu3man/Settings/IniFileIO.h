@@ -27,6 +27,7 @@
 #include <algorithm>
 #include <vector>
 #include <limits>
+#include "common/StrUtils.h"
 
 #undef max //avoid conflicts with C++
 
@@ -233,6 +234,47 @@ class IniIO
   {
    CString str;
    str.Format(_T("%.*f"), decPlaces, field.value);
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
+   return true;
+  }
+
+  bool ReadVector(OptField_t<std::vector<int> >& field, const _TSTRING& defVal, int minVal, int maxVal, int num)
+  {
+   int value = 0;
+   TCHAR read_str[1024];
+   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 1023, m_fileName.c_str());
+   std::vector<int> vect;
+   std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
+   for (size_t i = 0; i < tokens.size(); ++i)
+   {
+    int result = _stscanf(tokens[i].c_str(), _T("%d"), &value);
+    vect.push_back(value);
+    if (result != 1 || (value < minVal) || (value > maxVal))
+    {
+     std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(defVal.c_str(), _T(','));
+     field.value.clear(); 
+     for (size_t i = 0; i < tokens.size(); ++i)
+     {
+      _stscanf(tokens[i].c_str(), _T("%d"), &value);
+      field.value.push_back(value);
+     }
+     return false;
+    }
+   }
+   field.value = vect;
+   return true;
+  }
+
+  bool WriteVector(const OptField_t<std::vector<int> >& field)
+  {
+   CString str;
+   for(size_t i = 0; i < field.value.size(); ++i)
+   {
+    CString s;
+    if (i!=0) str+=_T(",");
+    s.Format(_T("%d"), field.value[i]);
+    str+=s;
+   }
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }

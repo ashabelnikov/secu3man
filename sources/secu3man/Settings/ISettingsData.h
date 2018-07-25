@@ -230,4 +230,8 @@ class ISettingsData
 
   virtual void SetWndSize(const WndSize& i_wndSize) = 0;
   virtual void GetWndSize(WndSize& o_wndSize) const = 0;
+
+  virtual void SetLamDelMap(float* map, float* rb, float* lb) = 0;
+  virtual void GetLamDelMap(float* map, float* rb, float* lb) = 0;
+  virtual float GetAFRError(void) = 0;
 };

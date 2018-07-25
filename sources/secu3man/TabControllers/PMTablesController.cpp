@@ -40,6 +40,7 @@
 #include "TablDesk/MapIds.h"
 #include "fwimpexp/S3FFileDataIO.h"
 #include "fwimpexp/S3FImpExpController.h"
+#include "Settings/IsettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -222,11 +223,12 @@ void CPMTablesController::_SetTablesSetName(const _TSTRING name)
 }
 
 //-----------------------------------------------------------------------------------
-CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
+CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : Super(ip_view)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 , m_valid_cache(false)
+, mp_settings(ip_settings)
 {
  //устанавливаем обработчики событий от view
  mp_view->setOnMapChanged(MakeDelegate(this, &CPMTablesController::OnMapChanged));
@@ -246,6 +248,9 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  m_omaps = new SECU3FWMapsItem;
  //флаги сбора информации
  m_maps_flags = new SECU3FWMapsItem;
+
+ mp_settings->GetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
+ mp_view->mp_ButtonsPanel->SetAFRError(mp_settings->GetAFRError());
 }
 
 CPMTablesController::~CPMTablesController()
@@ -589,12 +594,15 @@ void CPMTablesController::OnMapChanged(int i_mapType)
 
 void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 {
- //todo
+ if (i_mapType == TYPE_MAP_GME_INJ_WND)
+ {
+  mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
+ }
 }
 
 void CPMTablesController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
- //todo
+ //empty
 }
 
 void CPMTablesController::OnTabActivate(void)
@@ -749,6 +757,7 @@ void CPMTablesController::OnTableDeskChangesTimer(void)
 void CPMTablesController::OnCloseNotify()
 {
  mp_view->CloseAllCharts();
+ mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
 }
 
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)

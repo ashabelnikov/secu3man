@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
 
-  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0);
+  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false);
   virtual ~CMapEditorCtrl();
 
   void SetRange(float i_min, float i_max);
@@ -55,7 +55,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void SetArguments(float i_arg, float j_arg);
   void SetSelection(int i, int j); // i - row, j - column
   void EnableAbroadMove(bool up, bool down);
-  void UpdateDisplay(void); //call if data changed outside control and thus control should be updated
+  void UpdateDisplay(int i = -1, int j = -1); //call if data changed outside control and thus control should be updated
   void ShowMarkers(bool show, bool invalidate = true);
   void SetValueIncrement(float inc);
   void SetGradientList(const std::vector<COLORREF>& colors);
@@ -126,6 +126,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   bool m_showMarkers;
   float m_increment;
   bool m_invDataRowsOrder;
+  bool m_readOnly;
   int m_minLabelWidthInChars;
 
   friend class CEditExCustomKeys;

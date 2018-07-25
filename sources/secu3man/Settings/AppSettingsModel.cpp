@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "AppSettingsModel.h"
 #include "IniFileIO.h"
+#include "common/MathHelpers.h"
 
 #include <limits>
 #include <algorithm>
@@ -129,6 +130,12 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optColFCRevLim(_T("IndFCRevLim"))
 , m_optColFloodClear(_T("IndFloodClear"))
 , m_optColSysLocked(_T("IndSysLocked"))
+//Autotune
+, m_Name_AutoTune_Section(_T("AutoTune"))
+, m_optLambdaDelay(_T("LambdaDelay"))
+, m_optLambdaDelayL(_T("LambdaDelayL"))
+, m_optLambdaDelayR(_T("LambdaDelayR"))
+, m_optAFRError(_T("AFRError"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -405,6 +412,12 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetSynLoad[i],_T(""), 0, 32, true);
  }
 
+ IniIO at(IniFileName, m_Name_AutoTune_Section);
+ at.ReadVector(m_optLambdaDelay,_T("200,70,40,250,150,100,350,300,200"),10, 3000, 9);
+ at.ReadVector(m_optLambdaDelayL,_T("30,115,200"), 5, 500, 3);
+ at.ReadVector(m_optLambdaDelayR,_T("500,4000,7500"), 100, 15000, 3);
+ at.ReadFlt(m_optAFRError,_T("0.1"), 0.01f, 10.0f);
+
  return status;
 }
 
@@ -570,6 +583,12 @@ bool CAppSettingsModel::WriteSettings(void)
   mm.WriteInt(m_optMetGDPos[i]);
   mm.WriteInt(m_optMetSynLoad[i]);
  }
+
+ IniIO at(IniFileName, m_Name_AutoTune_Section);
+ at.WriteVector(m_optLambdaDelay);
+ at.WriteVector(m_optLambdaDelayL);
+ at.WriteVector(m_optLambdaDelayR);
+ at.WriteFlt(m_optAFRError, 2);
 
  return status;
 }
@@ -968,4 +987,29 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetGDPos[i] = m_optMetGDPos[i].value;
   o_cfg.m_optMetSynLoad[i] = m_optMetSynLoad[i].value;
  }
+}
+
+void CAppSettingsModel::SetLamDelMap(float* map, float* rb, float* lb)
+{
+ for(size_t i = 0; i < m_optLambdaDelay.value.size(); ++i)
+  m_optLambdaDelay.value[i] = MathHelpers::Round(map[i]); 
+ for(size_t i = 0; i < m_optLambdaDelayL.value.size(); ++i)
+  m_optLambdaDelayL.value[i] = MathHelpers::Round(lb[i]); 
+ for(size_t i = 0; i < m_optLambdaDelayR.value.size(); ++i)
+  m_optLambdaDelayR.value[i] = MathHelpers::Round(rb[i]); 
+}
+
+void CAppSettingsModel::GetLamDelMap(float* map, float* rb, float* lb)
+{
+ for(size_t i = 0; i < m_optLambdaDelay.value.size(); ++i)
+  map[i] = (float)m_optLambdaDelay.value[i];
+ for(size_t i = 0; i < m_optLambdaDelayL.value.size(); ++i)
+  lb[i] = (float)m_optLambdaDelayL.value[i];
+ for(size_t i = 0; i < m_optLambdaDelayR.value.size(); ++i)
+  rb[i] = (float)m_optLambdaDelayR.value[i];
+}
+
+float CAppSettingsModel::GetAFRError(void)
+{
+ return m_optAFRError.value;
 }

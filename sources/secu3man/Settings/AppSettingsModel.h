@@ -116,6 +116,11 @@ class CAppSettingsModel : public ISettingsData
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
   virtual void GetMetersConfig(MetersCfg& o_cfg) const;
 
+  virtual void SetLamDelMap(float* map, float* rb, float* lb);
+  virtual void GetLamDelMap(float* map, float* rb, float* lb);
+
+  virtual float GetAFRError(void);
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -130,6 +135,7 @@ class CAppSettingsModel : public ISettingsData
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
   CString m_Name_IndColors_Section;
+  CString m_Name_AutoTune_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -262,6 +268,12 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<COLORREF> m_optColFCRevLim;
   OptField_t<COLORREF> m_optColFloodClear;
   OptField_t<COLORREF> m_optColSysLocked;
+
+  //AutoTune
+  OptField_t<std::vector<int> > m_optLambdaDelay;
+  OptField_t<std::vector<int> > m_optLambdaDelayL;
+  OptField_t<std::vector<int> > m_optLambdaDelayR;
+  OptField_t<float> m_optAFRError;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

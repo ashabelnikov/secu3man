@@ -23,6 +23,7 @@ include_directories(../)
 project(${PROJECT})
 
 set(HEADERS
+  AutoTuneController.h
   ButtonsPanel.h
   CESettingsDlg.h
   DLLLinkedFunctions.h
@@ -44,6 +45,7 @@ set(HEADERS
   )
 
 set(SOURCES
+  AutoTuneController.cpp
   ButtonsPanel.cpp
   CESettingsDlg.cpp
   DLLLinkedFunctions.cpp

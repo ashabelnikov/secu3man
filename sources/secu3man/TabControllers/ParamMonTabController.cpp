@@ -61,7 +61,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
 , mp_idccntr(new CPMInitDataCollector(ip_comm, ip_sbar))
 , mp_moncntr(new CPMMonitorController(ip_view->mp_MIDeskDlg.get(),ip_view->mp_RSDeskDlg.get(), ip_view->mp_CEDeskDlg.get(), ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
 , mp_parcntr(new CPMParamsController(ip_view->mp_ParamDeskDlg.get(), ip_comm, ip_sbar, MakeDelegate(this, &CParamMonTabController::OnPDRequestsDataCollection), MakeDelegate(this, &CParamMonTabController::OnParametersChanged)))
-, mp_tabcntr(new CPMTablesController(ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar))
+, mp_tabcntr(new CPMTablesController(ip_view->mp_TablesDeskDlg.get(), ip_comm, ip_sbar, ip_settings))
 , m_current_state(m_state_machine.end())
 {
  //=================================================================
