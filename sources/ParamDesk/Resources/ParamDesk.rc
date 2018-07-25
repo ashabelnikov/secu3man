@@ -1428,6 +1428,8 @@ BEGIN
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "Сколько раз впрыскивается топливо (число событий впрыска за цикл), не зависит от числа каналов и форсунок."
     IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Тип используемого датчика кислорода (узкополосный или широкополосный). Если выбран УДК, то смесь будет корректироваться только в тех режимах, для которых в таблице AFR установлено значение соответствующее точке переключения (14.7 для бензина). Под ШДК понимается его эмуляция при помощи узкополосного ДК и таблицы или использование ШДК с контроллером, который выдает напряжение линейно зависящие от соотношения воздух/топливо."
     IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Задержка в миллисекундах после каждого обновления коррекции."
+    IDS_PD_LAMBDA_RPMTHRD_EDIT_TT   "Лямбда коррекция будет работать только если обороты выше этого значения."
+    IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT  "Лямбда коррекция будет работать только если температура двигателя выше этого значения."
 END
 
 STRINGTABLE
@@ -2978,6 +2980,8 @@ BEGIN
     IDS_PD_INJECTOR_SQUIRTNUM_COMBO_TT "How many times fuel injected into the intake manifold (number of injection events per cycle), not depending on injectors and channels number."
     IDS_PD_LAMBDA_SENSTYPE_COMBO_TT "Type of used oxygen sensor (narrow band or wide band). If NBO is selected, then mixture will be corrected only in modes for which in the AFR table specified value corresponding to switch point (e.g. 14.7 for petrol). WBO means its emulation using narrow band sensor and lookup table or using of wide band sensor with controller, which outputs voltage linearly dependent on the AFR."
     IDS_PD_LAMBDA_MSPERSTP_EDIT_TT  "Delay in milliseconds after each update of correction."
+    IDS_PD_LAMBDA_RPMTHRD_EDIT_TT   "Lambda correction will work only if RPM is greater than this value."
+    IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT  "Lambda correction will work only if coolant temperature is greater than this value."
 END
 
 STRINGTABLE

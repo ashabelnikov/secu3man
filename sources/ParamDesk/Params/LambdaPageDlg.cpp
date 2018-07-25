@@ -271,14 +271,14 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_stepsize_p_spin.SetBuddy(&m_stepsize_p_edit);
  m_stepsize_p_edit.SetLimitText(5);
  m_stepsize_p_edit.SetDecimalPlaces(2);
- m_stepsize_p_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
- m_stepsize_p_edit.SetRange(0.25f, 45.00f);
+ m_stepsize_p_spin.SetRangeAndDelta(0.0f, 45.00f, 0.25f);
+ m_stepsize_p_edit.SetRange(0.0f, 45.00f);
 
  m_stepsize_m_spin.SetBuddy(&m_stepsize_m_edit);
  m_stepsize_m_edit.SetLimitText(5);
  m_stepsize_m_edit.SetDecimalPlaces(2);
- m_stepsize_m_spin.SetRangeAndDelta(0.25f, 45.00f, 0.25f);
- m_stepsize_m_edit.SetRange(0.25f, 45.00f);
+ m_stepsize_m_spin.SetRangeAndDelta(0.0f, 45.00f, 0.25f);
+ m_stepsize_m_edit.SetRange(0.0f, 45.00f);
 
  m_corrlimit_p_spin.SetBuddy(&m_corrlimit_p_edit);
  m_corrlimit_p_edit.SetLimitText(6);
@@ -301,14 +301,14 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_tempthrd_spin.SetBuddy(&m_tempthrd_edit);
  m_tempthrd_edit.SetLimitText(5);
  m_tempthrd_edit.SetDecimalPlaces(2);
- m_tempthrd_spin.SetRangeAndDelta(0.00f, 100.00f, 0.25f);
- m_tempthrd_edit.SetRange(0.00f, 100.00f);
+ m_tempthrd_spin.SetRangeAndDelta(0.00f, 200.00f, 0.25f);
+ m_tempthrd_edit.SetRange(0.00f, 200.00f);
 
  m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
  m_rpmthrd_edit.SetLimitText(4);
  m_rpmthrd_edit.SetDecimalPlaces(5);
- m_rpmthrd_spin.SetRangeAndDelta(100, 5000, 50);
- m_rpmthrd_edit.SetRange(100, 5000);
+ m_rpmthrd_spin.SetRangeAndDelta(100, 15000, 50);
+ m_rpmthrd_edit.SetRange(100, 15000);
 
  m_activdelay_spin.SetBuddy(&m_activdelay_edit);
  m_activdelay_edit.SetLimitText(3);
@@ -372,6 +372,10 @@ BOOL CLambdaPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_senstype_combo, MLL::GetString(IDS_PD_LAMBDA_SENSTYPE_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_msperstp_edit, MLL::GetString(IDS_PD_LAMBDA_MSPERSTP_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_msperstp_spin, MLL::GetString(IDS_PD_LAMBDA_MSPERSTP_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmthrd_edit, MLL::GetString(IDS_PD_LAMBDA_RPMTHRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_rpmthrd_spin, MLL::GetString(IDS_PD_LAMBDA_RPMTHRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tempthrd_edit, MLL::GetString(IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_tempthrd_spin, MLL::GetString(IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
