@@ -51,6 +51,7 @@ class CGMEInjVEDlg : public CTabDialog
   //Used by CAutoTuneController:
   void BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* p_loadGridLD);
   void BindCelWgtMap(float* p_CelWgtMap);
+  void BindCelBlkMap(bool *p_CelBlkMap);
   void setOnViewActivate(EventHandler OnCB);
   void setOnStrStp(EventHandler OnCB);
   void setOnRstStt(EventHandler OnCB);
@@ -69,21 +70,25 @@ class CGMEInjVEDlg : public CTabDialog
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsAutoTune1(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsAutoTune2(CCmdUI* pCmdUI);
   afx_msg void OnLamDelButton();
   afx_msg void OnCelWgtButton();
   afx_msg void OnStrStpButton();
   afx_msg void OnRstSttButton();
+  afx_msg void OnCelBlkButton();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
 
   void OnChangeLamDel(void);
+  void OnSelChangeVE(void);
 
  private:
   CButton m_lamdel_button;
   CButton m_celwgt_button;
   CButton m_strstp_button;
   CButton m_rststt_button;
+  CButton m_celblk_button;
 
   CStatic m_status_text;
   _TSTRING m_status_cache;
@@ -101,6 +106,7 @@ class CGMEInjVEDlg : public CTabDialog
   float* mp_rpmGridLD;
   float* mp_loadGridLD;
   float* mp_CelWgtMap;
+  bool* mp_CelBlkMap;
 
   EventHandler m_OnViewActivate;
   EventHandler m_OnStrStp;

@@ -198,14 +198,17 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_invDataRowsOrder(invDataRowsOrder)
 , m_minLabelWidthInChars(minLabelWidthInChars)
 , m_readOnly(readOnly)
+, mp_itemColors(new DWORD[rows*cols])
 {
  _RegisterWindowClass(hMod);
  m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 110, 230);
+ for(int i = 0; i < (rows*cols); ++i)
+  mp_itemColors[i] = 0;
 }
 
 CMapEditorCtrl::~CMapEditorCtrl()
 {
- //empty
+ delete[] mp_itemColors;
 }
 
 BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
@@ -271,12 +274,13 @@ void CMapEditorCtrl::OnPaint()
  {
   for(int j = 0; j < m_cols; ++j)
   {
-   float value = _GetItem(i,j);
+   float value = _GetItem<float>(mp_map, i,j);
    CRect rect = _GetItemRect(i, j);
    int index = _GetGradIndex(value);
-   dc.SetBkColor(IsWindowEnabled() ? m_gradColor[index] : GetSysColor(COLOR_3DFACE));
+   COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, i, j);
+   dc.SetBkColor(IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
    dc.SetBkMode(TRANSPARENT);
-   dc.FillSolidRect(rect, IsWindowEnabled() ? m_gradColor[index] : GetSysColor(COLOR_3DFACE));
+   dc.FillSolidRect(rect, IsWindowEnabled() ? (customColor ? customColor : m_gradColor[index]) : GetSysColor(COLOR_3DFACE));
    _DrawItem(dc, rect, _FloatToStr(value, m_decPlaces));
   }
  }
@@ -347,20 +351,6 @@ void CMapEditorCtrl::AttachMap(float* p_map)
  mp_map = p_map;
 }
 
-float CMapEditorCtrl::_GetItem(int i, int j)
-{
- ASSERT(mp_map);
- int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
- return mp_map[(ii*m_cols)+j];
-}
-
-void CMapEditorCtrl::_SetItem(int i, int j, float value)
-{
- ASSERT(mp_map);
- int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
- mp_map[(ii*m_cols)+j] = value;
-}
-
 void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
 {
  for(int i = 0; i < m_rows; ++i)
@@ -377,8 +367,8 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
      {
       if (m_OnChange)
       {
-       float previousValue = _GetItem(m_cur_i, m_cur_j);
-       _SetItem(m_cur_i, m_cur_j, value); //save result
+       float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
+       _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
        if (previousValue != value)
         m_OnChange();
       }
@@ -438,8 +428,8 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
 
  if (m_OnChange)
  {
-  float previousValue = _GetItem(m_cur_i, m_cur_j);
-  _SetItem(m_cur_i, m_cur_j, value); //save result
+  float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
+  _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
    m_OnChange();
  }
@@ -511,8 +501,8 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
 
  if (m_OnChange)
  {
-  float previousValue = _GetItem(m_cur_i, m_cur_j);
-  _SetItem(m_cur_i, m_cur_j, value); //save result
+  float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
+  _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
    m_OnChange();
  }
@@ -552,10 +542,13 @@ void CMapEditorCtrl::_ActivateEdit(void)
  CRect rect = _GetItemRect(m_cur_i, m_cur_j);
  mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE, rect, this, 0);
  mp_edit->SetDecimalPlaces(m_decPlaces);
- mp_edit->SetValue(_GetItem(m_cur_i, m_cur_j));
+ mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
  mp_edit->SetFocus();
  mp_edit->SetSel(0, -1); //select all text
  mp_edit->SetFont(GetFont(), TRUE);
+
+ if (m_OnSelChange)
+  m_OnSelChange();
 }
 
 void CMapEditorCtrl::_DeactivateEdit(void)
@@ -783,6 +776,14 @@ void CMapEditorCtrl::SetSelection(int i, int j)
  _ActivateEdit();
 }
 
+std::pair<int, int> CMapEditorCtrl::GetSelection(void)
+{
+ if (mp_edit.get())
+  return std::make_pair(m_cur_i, m_cur_j);
+ else
+  return std::make_pair(-1, -1);
+}
+
 void CMapEditorCtrl::EnableAbroadMove(bool up, bool down)
 {
  m_enAbroadUp = up;
@@ -795,7 +796,7 @@ void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
  if (mp_edit.get() && mp_edit->GetSafeHwnd())
  {
   if (upd_all || (m_cur_i == i && m_cur_j == j))
-   mp_edit->SetValue(_GetItem(m_cur_i, m_cur_j));
+   mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
  }
 
  if (upd_all)
@@ -833,5 +834,15 @@ void CMapEditorCtrl::SetValueIncrement(float inc)
 void CMapEditorCtrl::SetGradientList(const std::vector<COLORREF>& colors)
 {
  m_gradColor = colors;
+}
+
+void CMapEditorCtrl::SetItemColor(int i, int j, COLORREF color)
+{
+ _SetItem<COLORREF>(mp_itemColors, i, j, color);
+}
+
+void CMapEditorCtrl::setOnSelChange(EventHandler OnCB)
+{
+ m_OnSelChange = OnCB;
 }
 

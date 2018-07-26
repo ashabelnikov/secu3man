@@ -35,13 +35,15 @@ class StrUtils
   static std::vector<_TSTRING> TokenizeStr(const TCHAR *s, TCHAR c = _T(' '))
   {
    std::vector<_TSTRING> result;
+   if (0 == *s)
+    return result;
    do
    {
     const TCHAR *begin = s;
     while(*s && *s != c)
      s++;
-    result.push_back(_TSTRING(begin, s));
-   } while (0 != *s++);
+    result.push_back(_TSTRING(begin, s));    
+   }while(*s++);
    return result;
   }
 };

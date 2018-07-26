@@ -249,7 +249,7 @@ class IniIO
    {
     int result = _stscanf(tokens[i].c_str(), _T("%d"), &value);
     vect.push_back(value);
-    if (result != 1 || (value < minVal) || (value > maxVal))
+    if (result != 1 || (value < minVal) || (value > maxVal) || (num != -1 && tokens.size() != num))
     {
      std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(defVal.c_str(), _T(','));
      field.value.clear(); 

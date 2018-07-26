@@ -3435,3 +3435,8 @@ void CButtonsPanel::SetAFRError(float afrError)
   mp_autoTuneCntr->SetAFRError(afrError);
 }
 
+bool* CButtonsPanel::GetBlockedCells(void)
+{
+ ASSERT(mp_autoTuneCntr.get());
+ return mp_autoTuneCntr->GetBlockedCells();
+}

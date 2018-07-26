@@ -136,6 +136,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLambdaDelayL(_T("LambdaDelayL"))
 , m_optLambdaDelayR(_T("LambdaDelayR"))
 , m_optAFRError(_T("AFRError"))
+, m_optBlockedCells(_T("BlockedCells"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -417,6 +418,7 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadVector(m_optLambdaDelayL,_T("30,115,200"), 5, 500, 3);
  at.ReadVector(m_optLambdaDelayR,_T("500,4000,7500"), 100, 15000, 3);
  at.ReadFlt(m_optAFRError,_T("0.1"), 0.01f, 10.0f);
+ at.ReadVector(m_optBlockedCells,_T(""), 0, 255, -1);
 
  return status;
 }
@@ -589,6 +591,7 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteVector(m_optLambdaDelayL);
  at.WriteVector(m_optLambdaDelayR);
  at.WriteFlt(m_optAFRError, 2);
+ at.WriteVector(m_optBlockedCells);
 
  return status;
 }
@@ -1012,4 +1015,22 @@ void CAppSettingsModel::GetLamDelMap(float* map, float* rb, float* lb)
 float CAppSettingsModel::GetAFRError(void)
 {
  return m_optAFRError.value;
+}
+
+void CAppSettingsModel::SetBlockedCells(const bool* blList)
+{
+ m_optBlockedCells.value.clear();
+ for(size_t i = 0; i < (16*16); ++i)
+ {
+  if (true == blList[i])
+   m_optBlockedCells.value.push_back(i);
+ }
+}
+
+void CAppSettingsModel::GetBlockedCells(bool* blList)
+{
+ for(size_t i = 0; i < (16*16); ++i)
+  blList[i] = false;
+ for(size_t i = 0; i < m_optBlockedCells.value.size(); ++i)
+  blList[m_optBlockedCells.value[i]] = true;
 }

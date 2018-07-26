@@ -54,16 +54,19 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void SetDecimalPlaces(int value, int horiz, int vert);
   void SetArguments(float i_arg, float j_arg);
   void SetSelection(int i, int j); // i - row, j - column
+  std::pair<int, int> GetSelection(void); // first - row, second - column
   void EnableAbroadMove(bool up, bool down);
   void UpdateDisplay(int i = -1, int j = -1); //call if data changed outside control and thus control should be updated
   void ShowMarkers(bool show, bool invalidate = true);
   void SetValueIncrement(float inc);
   void SetGradientList(const std::vector<COLORREF>& colors);
+  void SetItemColor(int i, int j, COLORREF color); // i - row, j - column
 
   //Creates control dynamically
   BOOL Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id);
   void setOnAbroadMove(EventHandler2 OnCB);
   void setOnChange(EventHandler OnCB);
+  void setOnSelChange(EventHandler OnCB);
 
  protected:
   afx_msg void OnPaint();
@@ -95,6 +98,22 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int _GetLabelHeight(void);
   void _DrawMarker(CDC* pDC, int i, int j);
 
+  template <class T>
+  T _GetItem(T* p_array, int i, int j)
+  {
+   ASSERT(p_array);
+   int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
+   return p_array[(ii*m_cols)+j];
+  }
+
+  template <class T>
+  void _SetItem(T* p_array, int i, int j, T value)
+  {
+   ASSERT(p_array);
+   int ii = m_invDataRowsOrder ? (m_rows - 1) - i : i;
+   p_array[(ii*m_cols)+j] = value;
+  }
+
   int m_cur_i; //current row index
   int m_cur_j; //current column index
   int m_rows;  //number of rows
@@ -109,6 +128,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   EventHandler2 m_OnAbroadMove;
   EventHandler m_OnChange;
+  EventHandler m_OnSelChange;
   CFont m_cFont;
   float* mp_horizLabels;
   float* mp_vertLabels;
@@ -132,4 +152,5 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   friend class CEditExCustomKeys;
 
   std::vector<COLORREF> m_gradColor;
+  DWORD* mp_itemColors;
 };

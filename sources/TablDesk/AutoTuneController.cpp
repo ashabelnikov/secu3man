@@ -200,7 +200,7 @@ bool CAutoTuneController::_ApplyCorrection(void)
   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
   {
    ScatterItem_t& node = m_scatter[l][r];
-   if (node.size() == PTS_PER_NODE)
+   if (node.size() == PTS_PER_NODE && false==m_blocked[l][r])
    { //apply correction to corresponding cell in the VE map and reset points accumulated for node
     float avdist = .0f;
     float corr = _ShepardInterpolation(mp_rpmGrid[r], mp_loadGrid[l], node, 0.3, 0.01, avdist);
@@ -356,6 +356,7 @@ void CAutoTuneController::Init(void)
 {
  mp_view->BindLamDelMap(&m_lamDelay[0][0], m_lamDelayRPMBins, m_lamDelayLoadBins);
  mp_view->BindCelWgtMap(&m_afrhits[0][0]);
+ mp_view->BindCelBlkMap(&m_blocked[0][0]);
  mp_view->setOnRstStt(fastdelegate::MakeDelegate(this, CAutoTuneController::ResetStat));
  mp_view->setOnStrStp(fastdelegate::MakeDelegate(this, CAutoTuneController::StartStop));
  mp_view->setIsReady(fastdelegate::MakeDelegate(this, CAutoTuneController::isFIFOReady));
@@ -416,5 +417,11 @@ void CAutoTuneController::BindMaps(float* pVE, float* pAFR)
  mp_ve = pVE;
  mp_afr = pAFR;
 }
+
+bool* CAutoTuneController::GetBlockedCells(void)
+{
+ return &m_blocked[0][0];
+}
+
 
 

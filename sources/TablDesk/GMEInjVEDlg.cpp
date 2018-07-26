@@ -44,6 +44,8 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_RSTSTT_BTN,OnUpdateControlsAutoTune)
  ON_BN_CLICKED(IDC_GME_INJ_RSTSTT_BTN,OnRstSttButton)
  ON_UPDATE_COMMAND_UI(IDC_GME_AUTOTUNE_GROUPBOX, OnUpdateControlsAutoTune1)
+ ON_BN_CLICKED(IDC_GME_INJ_CELBLK_BTN,OnCelBlkButton)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_CELBLK_BTN,OnUpdateControlsAutoTune2)
 END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
@@ -58,6 +60,7 @@ CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
 , mp_LamDelMap(NULL)
 , mp_rpmGridLD(NULL)
 , mp_loadGridLD(NULL)
+, mp_CelBlkMap(NULL)
 {
  //empty
 }
@@ -79,6 +82,7 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_CELWGT_BTN, m_celwgt_button);
  DDX_Control(pDX, IDC_GME_INJ_STRSTP_BTN, m_strstp_button);
  DDX_Control(pDX, IDC_GME_INJ_RSTSTT_BTN, m_rststt_button);
+ DDX_Control(pDX, IDC_GME_INJ_CELBLK_BTN, m_celblk_button);
 
  DDX_Control(pDX, IDC_GME_INJ_STATUS_TEXT, m_status_text);
 }
@@ -107,6 +111,14 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  m_ve_map.SetFont(&m_font);
  m_ve_map.EnableAbroadMove(false, false);
  m_ve_map.SetValueIncrement(0.01f);
+ m_ve_map.setOnSelChange(fastdelegate::MakeDelegate(this, CGMEInjVEDlg::OnSelChangeVE));
+
+ if (mp_CelBlkMap)
+ {
+  for (int l = 0; l < 16; ++l)
+   for (int r = 0; r < 16; ++r)
+    m_ve_map.SetItemColor(l,r, mp_CelBlkMap[(l * 16) + r] ? RGB(100,100,100) : 0);
+ }
 
  if (mp_LamDelMap)
  {
@@ -154,6 +166,11 @@ void CGMEInjVEDlg::OnUpdateControlsAutoTune(CCmdUI* pCmdUI)
 void CGMEInjVEDlg::OnUpdateControlsAutoTune1(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_IsReady && IsWindowEnabled());
+}
+
+void CGMEInjVEDlg::OnUpdateControlsAutoTune2(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_IsReady && IsWindowEnabled() && (m_ve_map.GetSelection().first != -1));
 }
 
 LPCTSTR CGMEInjVEDlg::GetDialogID(void) const
@@ -251,6 +268,42 @@ void CGMEInjVEDlg::OnRstSttButton()
   m_OnRstStt();
 }
 
+void CGMEInjVEDlg::OnCelBlkButton()
+{
+ if (!mp_CelBlkMap)
+  return;
+ std::pair<int, int> sel = m_ve_map.GetSelection();
+ bool* p_cell = &mp_CelBlkMap[(sel.first * 16) + sel.second];
+ if (*p_cell == true)
+ {
+  *p_cell = false;
+  m_ve_map.SetItemColor(sel.first, sel.second, 0);
+  m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELBLK));
+ }
+ else
+ {
+  *p_cell = true;
+  m_ve_map.SetItemColor(sel.first, sel.second, RGB(100,100,100));
+  m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELUNBLK));
+ }
+ m_ve_map.UpdateDisplay(sel.first, sel.second);
+}
+
+void CGMEInjVEDlg::OnSelChangeVE(void)
+{
+ if (!mp_CelBlkMap)
+  return;
+ std::pair<int, int> sel = m_ve_map.GetSelection();
+ bool* p_cell = &mp_CelBlkMap[(sel.first * 16) + sel.second];
+
+ UpdateDialogControls(this, true);
+
+ if (*p_cell == true)
+  m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELUNBLK));
+ else
+  m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELBLK));
+}
+
 void CGMEInjVEDlg::BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* p_loadGridLD)
 {
  mp_LamDelMap = p_LamDelMap;
@@ -261,6 +314,11 @@ void CGMEInjVEDlg::BindLamDelMap(float* p_LamDelMap, float* p_rpmGridLD, float* 
 void CGMEInjVEDlg::BindCelWgtMap(float* p_CelWgtMap)
 {
  mp_CelWgtMap = p_CelWgtMap;
+}
+
+void CGMEInjVEDlg::BindCelBlkMap(bool *p_CelBlkMap)
+{
+ mp_CelBlkMap = p_CelBlkMap;
 }
 
 void CGMEInjVEDlg::OnChangeLamDel(void)

@@ -118,8 +118,9 @@ class CAppSettingsModel : public ISettingsData
 
   virtual void SetLamDelMap(float* map, float* rb, float* lb);
   virtual void GetLamDelMap(float* map, float* rb, float* lb);
-
   virtual float GetAFRError(void);
+  virtual void SetBlockedCells(const bool* blList);
+  virtual void GetBlockedCells(bool* blList);
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -274,6 +275,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<std::vector<int> > m_optLambdaDelayL;
   OptField_t<std::vector<int> > m_optLambdaDelayR;
   OptField_t<float> m_optAFRError;
+  OptField_t<std::vector<int> > m_optBlockedCells;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

@@ -80,6 +80,7 @@ class CAutoTuneController
  void SetAFRError(float afrError);
 
  float* GetLamDelMap(int id);
+ bool* GetBlockedCells(void);
 
  bool isFIFOReady(void);
 
@@ -119,6 +120,7 @@ class CAutoTuneController
   float m_avdists[VEMAP_LOAD_SIZE][VEMAP_RPM_SIZE];
   float m_afrhits[VEMAP_LOAD_SIZE][VEMAP_RPM_SIZE];
   DWORD m_lastchg[VEMAP_LOAD_SIZE][VEMAP_RPM_SIZE]; //time of last change of related VE cell
+  bool m_blocked[VEMAP_LOAD_SIZE][VEMAP_RPM_SIZE];
 
   bool m_active;
   float* mp_rpmGrid;

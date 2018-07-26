@@ -300,4 +300,6 @@
 #define IDS_GME_INJ_BUTTON_STOP         5654
 #define IDS_GME_INJ_BUTTON_START        5655
 #define IDS_GME_INJ_STATUS_EGOCFG       5656
-
+#define IDC_GME_INJ_CELBLK_BTN          5657
+#define IDS_GME_INJ_CELBLK              5658
+#define IDS_GME_INJ_CELUNBLK            5659

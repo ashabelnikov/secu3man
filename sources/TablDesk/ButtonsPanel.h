@@ -109,6 +109,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   
   void SetAFRError(float afrError);
 
+  bool* GetBlockedCells(void);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);

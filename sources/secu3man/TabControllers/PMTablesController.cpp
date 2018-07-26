@@ -251,6 +251,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
 
  mp_settings->GetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
  mp_view->mp_ButtonsPanel->SetAFRError(mp_settings->GetAFRError());
+ mp_settings->GetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
 }
 
 CPMTablesController::~CPMTablesController()
@@ -597,6 +598,7 @@ void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
  if (i_mapType == TYPE_MAP_GME_INJ_WND)
  {
   mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
+  mp_settings->SetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
  }
 }
 
@@ -758,6 +760,7 @@ void CPMTablesController::OnCloseNotify()
 {
  mp_view->CloseAllCharts();
  mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
+ mp_settings->SetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
 }
 
 void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
