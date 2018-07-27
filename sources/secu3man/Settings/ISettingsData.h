@@ -234,7 +234,8 @@ class ISettingsData
   virtual void SetLamDelMap(float* map, float* rb, float* lb) = 0;
   virtual void GetLamDelMap(float* map, float* rb, float* lb) = 0;
   virtual float GetAFRError(void) = 0;
-
   virtual void SetBlockedCells(const bool* blList) = 0;
   virtual void GetBlockedCells(bool* blList) = 0;
+  virtual int GetStatSize(void) = 0;
+  virtual int GetAutoBlockThrd(void) = 0;
 };

@@ -212,6 +212,13 @@ void CGMEInjVEDlg::setOnChange(EventHandler OnCB)
 
 void CGMEInjVEDlg::UpdateView(void)
 {
+ if (mp_CelBlkMap)
+ {
+  for (int l = 0; l < 16; ++l)
+   for (int r = 0; r < 16; ++r)
+    m_ve_map.SetItemColor(l, r, mp_CelBlkMap[(l * 16) + r] ? RGB(100, 100, 100) : 0);
+ }
+
  m_ve_map.UpdateDisplay();
 }
 

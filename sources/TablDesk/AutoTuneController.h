@@ -78,6 +78,8 @@ class CAutoTuneController
  void BindRPMGrid(float* pGrid);
  void SetLoadAxisCfg(float minVal, float maxVal);
  void SetAFRError(float afrError);
+ void SetStatSize(int statSize);
+ void SetAutoBlockThrd(int thrd);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -135,4 +137,6 @@ class CAutoTuneController
   CGMEInjVEDlg* mp_view;
   bool m_fifoReady;
   float m_maxLamDel;
+  int m_statSize;
+  int m_autoBlockThrd;
 };

@@ -3440,3 +3440,15 @@ bool* CButtonsPanel::GetBlockedCells(void)
  ASSERT(mp_autoTuneCntr.get());
  return mp_autoTuneCntr->GetBlockedCells();
 }
+
+void CButtonsPanel::SetStatSize(int statSize)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetStatSize(statSize);
+}
+
+void CButtonsPanel::SetAutoBlockThrd(int thrd)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetAutoBlockThrd(thrd);
+}

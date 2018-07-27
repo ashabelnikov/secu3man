@@ -137,6 +137,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLambdaDelayR(_T("LambdaDelayR"))
 , m_optAFRError(_T("AFRError"))
 , m_optBlockedCells(_T("BlockedCells"))
+, m_optStatSize(_T("StatSize"))
+, m_optAutoBlockThrd(_T("AutoBlockThrd"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -419,6 +421,8 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadVector(m_optLambdaDelayR,_T("500,4000,7500"), 100, 15000, 3);
  at.ReadFlt(m_optAFRError,_T("0.1"), 0.01f, 10.0f);
  at.ReadVector(m_optBlockedCells,_T(""), 0, 255, -1);
+ at.ReadInt(m_optStatSize, _T("16"), 0, 64, false);
+ at.ReadInt(m_optAutoBlockThrd, _T("50"), 0, 255, false);
 
  return status;
 }
@@ -592,6 +596,8 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteVector(m_optLambdaDelayR);
  at.WriteFlt(m_optAFRError, 2);
  at.WriteVector(m_optBlockedCells);
+ at.WriteInt(m_optStatSize);
+ at.WriteInt(m_optAutoBlockThrd);
 
  return status;
 }
@@ -1033,4 +1039,14 @@ void CAppSettingsModel::GetBlockedCells(bool* blList)
   blList[i] = false;
  for(size_t i = 0; i < m_optBlockedCells.value.size(); ++i)
   blList[m_optBlockedCells.value[i]] = true;
+}
+
+int CAppSettingsModel::GetStatSize(void)
+{
+ return m_optStatSize.value;
+}
+
+int CAppSettingsModel::GetAutoBlockThrd(void)
+{
+ return m_optAutoBlockThrd.value;
 }

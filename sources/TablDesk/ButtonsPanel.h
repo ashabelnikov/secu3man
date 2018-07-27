@@ -105,10 +105,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void EnableGasCorr(bool i_enable);
 
-  float* GetLamDelMap(int id); // 0 - map, 1 - rpm bins, 2 - load bins
-  
+  float* GetLamDelMap(int id); // 0 - map, 1 - rpm bins, 2 - load bins  
   void SetAFRError(float afrError);
-
+  void SetStatSize(int statSize);
+  void SetAutoBlockThrd(int thrd);
   bool* GetBlockedCells(void);
 
  public: //установка обработчиков событий

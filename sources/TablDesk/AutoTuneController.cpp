@@ -57,6 +57,8 @@ CAutoTuneController::CAutoTuneController()
 , m_fifoReady(false)
 , m_maxLamDel(5000.0f) //5 sec.
 , m_timer(this, &CAutoTuneController::OnTimer)
+, m_statSize(PTS_PER_NODE)
+, m_autoBlockThrd(0)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -165,7 +167,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss)
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
-  if (node.size() < PTS_PER_NODE)
+  if (node.size() < m_statSize)
    node.push_back(NodePoint(corrFactor, e.rpm, e.load));
   else
   {
@@ -200,11 +202,11 @@ bool CAutoTuneController::_ApplyCorrection(void)
   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
   {
    ScatterItem_t& node = m_scatter[l][r];
-   if (node.size() == PTS_PER_NODE && false==m_blocked[l][r])
+   if (node.size() == m_statSize && false==m_blocked[l][r])
    { //apply correction to corresponding cell in the VE map and reset points accumulated for node
     float avdist = .0f;
     float corr = _ShepardInterpolation(mp_rpmGrid[r], mp_loadGrid[l], node, 0.3, 0.01, avdist);
-    if (avdist < m_avdists[l][r])
+    if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < 10))
     {
      m_avdists[l][r] = avdist;
      float& ve = _GetVEItem(l, r);
@@ -225,21 +227,43 @@ bool CAutoTuneController::_ApplyCorrection(void)
 
 void CAutoTuneController::OnTimer(void)
 {
+ bool update_view = false;
+
  //Apply accumulated statistics to the current VE cell
- if (!_ApplyCorrection())
-  return; //nothing to do
+ if (_ApplyCorrection())
+ {
+  //Update views and send data to SECU. This call plocks execution thread for relatively long time
+  if (m_OnMapChanged)
+   m_OnMapChanged(TYPE_MAP_INJ_VE);
 
- //Update views and send data to SECU. This call plocks execution thread for relatively long time
- if (m_OnMapChanged)
-  m_OnMapChanged(TYPE_MAP_INJ_VE);
+  //assign time to assiciated changed VE cells
+  for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
+   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
+    if (m_lastchg[l][r] == 0xFFFFFFFF)
+     m_lastchg[l][r] = GetTickCount();
+  
+  update_view = true;
+ }
 
- //assign time to assiciated changed VE cells
- for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
-  for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
-   if (m_lastchg[l][r] == 0xFFFFFFFF)
-    m_lastchg[l][r] = GetTickCount();
- 
- mp_view->UpdateView(); //Update our view
+ //automaticvally block cells
+ if (0 != m_autoBlockThrd)
+ {
+  for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
+  {
+   for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
+   {
+    if (m_afrhits[l][r] > m_autoBlockThrd)
+    {
+     if (!m_blocked[l][r])
+      update_view = true;
+     m_blocked[l][r] = true;
+    }
+   }
+  }
+ }
+
+ if (update_view)
+  mp_view->UpdateView(); //Update our view
 }
 
 bool CAutoTuneController::isFIFOReady(void)
@@ -259,6 +283,7 @@ void CAutoTuneController::Deactivate(void)
  m_active = false;
  m_logdata.clear();
  m_fifoReady = false;
+ m_timer.KillTimer();
 }
 
 void CAutoTuneController::ResetStat(void)
@@ -423,5 +448,12 @@ bool* CAutoTuneController::GetBlockedCells(void)
  return &m_blocked[0][0];
 }
 
+void CAutoTuneController::SetStatSize(int statSize)
+{
+ m_statSize = statSize;
+}
 
-
+void CAutoTuneController::SetAutoBlockThrd(int thrd)
+{
+ m_autoBlockThrd = thrd;
+}
