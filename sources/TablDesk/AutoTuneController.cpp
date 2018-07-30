@@ -104,6 +104,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  lde.rpm = (float)dv.rpm;
  lde.load = dv.load;
  lde.afr = dv.afr;
+ lde.ae = dv.acceleration; //acceleration/deceleration
  lde.time = GetTickCount(); //time when data entry arrived
 
  m_logdata.push_front(lde);
@@ -168,7 +169,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  //if growing mode enebled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing)
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae)
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < m_statSize)

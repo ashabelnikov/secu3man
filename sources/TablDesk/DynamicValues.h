@@ -62,5 +62,6 @@ namespace TablDesk
   float load;
 
   float afr;
+  bool acceleration; //acceleration/deceleration
  };
 }

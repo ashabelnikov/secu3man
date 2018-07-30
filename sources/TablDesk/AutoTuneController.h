@@ -41,6 +41,7 @@ struct LogDataEntry
  float load;
  float afr;
  DWORD time; //ms
+ bool ae;
 };
 
 struct NodePoint
