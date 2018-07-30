@@ -238,4 +238,5 @@ class ISettingsData
   virtual void GetBlockedCells(bool* blList) = 0;
   virtual int GetStatSize(void) = 0;
   virtual int GetAutoBlockThrd(void) = 0;
+  virtual bool GetGrowingMode(void) = 0;
 };

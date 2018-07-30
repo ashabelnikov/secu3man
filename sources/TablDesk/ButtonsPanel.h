@@ -110,6 +110,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetStatSize(int statSize);
   void SetAutoBlockThrd(int thrd);
   bool* GetBlockedCells(void);
+  void SetGrowingMode(bool growing);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);

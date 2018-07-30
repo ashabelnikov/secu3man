@@ -80,6 +80,7 @@ class CAutoTuneController
  void SetAFRError(float afrError);
  void SetStatSize(int statSize);
  void SetAutoBlockThrd(int thrd);
+ void SetGrowingMode(bool growing);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -139,4 +140,5 @@ class CAutoTuneController
   float m_maxLamDel;
   int m_statSize;
   int m_autoBlockThrd;
+  bool m_growingMode;
 };

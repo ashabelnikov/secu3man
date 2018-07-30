@@ -3452,3 +3452,9 @@ void CButtonsPanel::SetAutoBlockThrd(int thrd)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetAutoBlockThrd(thrd);
 }
+
+void CButtonsPanel::SetGrowingMode(bool growing)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetGrowingMode(growing);
+}

@@ -59,6 +59,7 @@ CAutoTuneController::CAutoTuneController()
 , m_timer(this, &CAutoTuneController::OnTimer)
 , m_statSize(PTS_PER_NODE)
 , m_autoBlockThrd(0)
+, m_growingMode(false)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -164,7 +165,10 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  int r_idx = _FindNearestGridPoint(e.rpm, mp_rpmGrid, VEMAP_RPM_SIZE);
  int l_idx = _FindNearestGridPoint(e.load, &mp_loadGrid[0], VEMAP_LOAD_SIZE);
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss)
+ //if growing mode enebled, state depends on relationship of current and previous RPMs
+ bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
+
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing)
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < m_statSize)
@@ -457,3 +461,9 @@ void CAutoTuneController::SetAutoBlockThrd(int thrd)
 {
  m_autoBlockThrd = thrd;
 }
+
+void CAutoTuneController::SetGrowingMode(bool growing)
+{
+ m_growingMode = growing;
+}
+

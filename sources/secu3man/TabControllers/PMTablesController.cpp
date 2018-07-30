@@ -253,6 +253,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetAFRError(mp_settings->GetAFRError());
  mp_view->mp_ButtonsPanel->SetStatSize(mp_settings->GetStatSize());
  mp_view->mp_ButtonsPanel->SetAutoBlockThrd(mp_settings->GetAutoBlockThrd());
+ mp_view->mp_ButtonsPanel->SetGrowingMode(mp_settings->GetGrowingMode());
  mp_settings->GetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
 }
 

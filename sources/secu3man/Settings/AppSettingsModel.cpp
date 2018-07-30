@@ -139,6 +139,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optBlockedCells(_T("BlockedCells"))
 , m_optStatSize(_T("StatSize"))
 , m_optAutoBlockThrd(_T("AutoBlockThrd"))
+, m_optGrowingMode(_T("GrowingMode"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -423,6 +424,7 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadVector(m_optBlockedCells,_T(""), 0, 255, -1);
  at.ReadInt(m_optStatSize, _T("16"), 0, 64, false);
  at.ReadInt(m_optAutoBlockThrd, _T("50"), 0, 255, false);
+ at.ReadInt(m_optGrowingMode, _T("0"), 0, 1);
 
  return status;
 }
@@ -598,6 +600,7 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteVector(m_optBlockedCells);
  at.WriteInt(m_optStatSize);
  at.WriteInt(m_optAutoBlockThrd);
+ at.WriteInt(m_optGrowingMode);
 
  return status;
 }
@@ -1049,4 +1052,9 @@ int CAppSettingsModel::GetStatSize(void)
 int CAppSettingsModel::GetAutoBlockThrd(void)
 {
  return m_optAutoBlockThrd.value;
+}
+
+bool CAppSettingsModel::GetGrowingMode(void)
+{
+ return m_optGrowingMode.value;
 }
