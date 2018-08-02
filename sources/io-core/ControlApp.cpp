@@ -3500,6 +3500,8 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_ATS: return MathHelpers::Round(val * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
   case UNIOUT_COND_AI1: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_AI2: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI3: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI4: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_GASV: return MathHelpers::Round(val);
   case UNIOUT_COND_IPW: return MathHelpers::Round((val * 1000.0f) / 3.2);
   case UNIOUT_COND_CE: return MathHelpers::Round(val);
@@ -3535,6 +3537,8 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_ATS: return ((float)val) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
   case UNIOUT_COND_AI1: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_AI2: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI3: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI4: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_GASV: return (float)val;
   case UNIOUT_COND_IPW: return (val * 3.2f) / 1000.0f;
   case UNIOUT_COND_CE: return (float)val;

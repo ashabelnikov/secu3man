@@ -494,6 +494,8 @@ namespace SECU3IO
  const int UNIOUT_COND_IPW = 18;      //injector pulse width
  const int UNIOUT_COND_CE = 19;       //CE state
  const int UNIOUT_COND_OFTMR = 20;    //On/Off delay timer
+ const int UNIOUT_COND_AI3 = 21;      //analog input 3
+ const int UNIOUT_COND_AI4 = 22;      //analog input 4
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders
