@@ -255,6 +255,8 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetAutoBlockThrd(mp_settings->GetAutoBlockThrd());
  mp_view->mp_ButtonsPanel->SetGrowingMode(mp_settings->GetGrowingMode());
  mp_settings->GetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
+ mp_view->mp_ButtonsPanel->SetMinAFR(mp_settings->GetMinAFR());
+ mp_view->mp_ButtonsPanel->SetMaxAFR(mp_settings->GetMaxAFR());
 }
 
 CPMTablesController::~CPMTablesController()

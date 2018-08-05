@@ -239,4 +239,6 @@ class ISettingsData
   virtual int GetStatSize(void) = 0;
   virtual int GetAutoBlockThrd(void) = 0;
   virtual bool GetGrowingMode(void) = 0;
+  virtual float GetMinAFR(void) = 0;
+  virtual float GetMaxAFR(void) = 0;
 };

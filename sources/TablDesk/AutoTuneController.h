@@ -82,6 +82,8 @@ class CAutoTuneController
  void SetStatSize(int statSize);
  void SetAutoBlockThrd(int thrd);
  void SetGrowingMode(bool growing);
+ void SetMinAFR(float afr);
+ void SetMaxAFR(float afr);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -142,4 +144,7 @@ class CAutoTuneController
   int m_statSize;
   int m_autoBlockThrd;
   bool m_growingMode;
+
+  float m_minAFR;
+  float m_maxAFR;
 };

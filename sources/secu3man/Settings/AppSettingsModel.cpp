@@ -140,6 +140,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optStatSize(_T("StatSize"))
 , m_optAutoBlockThrd(_T("AutoBlockThrd"))
 , m_optGrowingMode(_T("GrowingMode"))
+, m_optMinAFR(_T("MinAFR"))
+, m_optMaxAFR(_T("MaxAFR"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -425,6 +427,8 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadInt(m_optStatSize, _T("16"), 0, 64, false);
  at.ReadInt(m_optAutoBlockThrd, _T("50"), 0, 255, false);
  at.ReadInt(m_optGrowingMode, _T("0"), 0, 1);
+ at.ReadFlt(m_optMinAFR,_T("8.0"), 8.0f, 22.0f);
+ at.ReadFlt(m_optMaxAFR,_T("22.0"), 8.0f, 22.0f);
 
  return status;
 }
@@ -601,6 +605,8 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteInt(m_optStatSize);
  at.WriteInt(m_optAutoBlockThrd);
  at.WriteInt(m_optGrowingMode);
+ at.WriteFlt(m_optMinAFR, 1);
+ at.WriteFlt(m_optMaxAFR, 1);
 
  return status;
 }
@@ -1057,4 +1063,14 @@ int CAppSettingsModel::GetAutoBlockThrd(void)
 bool CAppSettingsModel::GetGrowingMode(void)
 {
  return m_optGrowingMode.value;
+}
+
+float CAppSettingsModel::GetMinAFR(void)
+{
+ return m_optMinAFR.value;
+}
+
+float CAppSettingsModel::GetMaxAFR(void)
+{
+ return m_optMaxAFR.value;
 }

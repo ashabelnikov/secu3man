@@ -60,6 +60,8 @@ CAutoTuneController::CAutoTuneController()
 , m_statSize(PTS_PER_NODE)
 , m_autoBlockThrd(0)
 , m_growingMode(false)
+, m_minAFR(8.0)
+, m_maxAFR(22.0)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -169,7 +171,10 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  //if growing mode enebled, state depends on relationship of current and previous RPMs
  bool growing = (!m_growingMode || (((i+1) < m_logdata.size()) && e.rpm > m_logdata[i+1].rpm));
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae)
+ //skip if AFR is outside set range
+ bool afr_in_range = (lde.afr >= m_minAFR) && (lde.afr <= m_maxAFR);
+
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && afr_in_range)
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < m_statSize)
@@ -468,3 +473,12 @@ void CAutoTuneController::SetGrowingMode(bool growing)
  m_growingMode = growing;
 }
 
+void CAutoTuneController::SetMinAFR(float afr)
+{
+ m_minAFR = afr;
+}
+
+void CAutoTuneController::SetMaxAFR(float afr)
+{
+ m_maxAFR = afr;
+}

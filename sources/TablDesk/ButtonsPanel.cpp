@@ -3458,3 +3458,15 @@ void CButtonsPanel::SetGrowingMode(bool growing)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetGrowingMode(growing);
 }
+
+void CButtonsPanel::SetMinAFR(float afr)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetMinAFR(afr);
+}
+
+void CButtonsPanel::SetMaxAFR(float afr)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetMaxAFR(afr);
+}
