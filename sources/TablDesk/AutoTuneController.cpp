@@ -174,7 +174,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  //skip if AFR is outside set range
  bool afr_in_range = (lde.afr >= m_minAFR) && (lde.afr <= m_maxAFR);
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && afr_in_range)
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && afr_in_range && !m_blocked[l_idx][r_idx])
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < m_statSize)
@@ -230,6 +230,8 @@ bool CAutoTuneController::_ApplyCorrection(void)
      any_change = true;
     }
    }
+   if (true==m_blocked[l][r])
+    m_scatter[l][r].clear();
   }
  }
  return any_change;
@@ -267,6 +269,7 @@ void CAutoTuneController::OnTimer(void)
      if (!m_blocked[l][r])
       update_view = true;
      m_blocked[l][r] = true;
+     m_scatter[l][r].clear(); //reset statistics
     }
    }
   }
