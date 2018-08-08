@@ -241,4 +241,5 @@ class ISettingsData
   virtual bool GetGrowingMode(void) = 0;
   virtual float GetMinAFR(void) = 0;
   virtual float GetMaxAFR(void) = 0;
+  virtual int GetMinDistThrd(void) = 0;
 };

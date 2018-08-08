@@ -126,6 +126,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetGrowingMode(void);
   virtual float GetMinAFR(void);
   virtual float GetMaxAFR(void);
+  virtual int GetMinDistThrd(void);
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -286,6 +287,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optGrowingMode;
   OptField_t<float> m_optMinAFR;
   OptField_t<float> m_optMaxAFR;
+  OptField_t<int> m_optMinDistThrd;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

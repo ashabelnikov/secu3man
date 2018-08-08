@@ -3470,3 +3470,9 @@ void CButtonsPanel::SetMaxAFR(float afr)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetMaxAFR(afr);
 }
+
+void CButtonsPanel::SetMinDistThrd(int thrd)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetMinDistThrd(thrd);
+}

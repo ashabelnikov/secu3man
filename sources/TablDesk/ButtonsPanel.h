@@ -113,6 +113,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetGrowingMode(bool growing);
   void SetMinAFR(float afr);
   void SetMaxAFR(float afr);
+  void SetMinDistThrd(int thrd);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);

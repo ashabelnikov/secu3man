@@ -62,6 +62,7 @@ CAutoTuneController::CAutoTuneController()
 , m_growingMode(false)
 , m_minAFR(8.0)
 , m_maxAFR(22.0)
+, m_MinDistThrd(10)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -216,7 +217,7 @@ bool CAutoTuneController::_ApplyCorrection(void)
    { //apply correction to corresponding cell in the VE map and reset points accumulated for node
     float avdist = .0f;
     float corr = _ShepardInterpolation(mp_rpmGrid[r], mp_loadGrid[l], node, 0.3, 0.01, avdist);
-    if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < 10))
+    if (avdist < m_avdists[l][r] || (m_afrhits[l][r] < m_MinDistThrd))
     {
      m_avdists[l][r] = avdist;
      float& ve = _GetVEItem(l, r);
@@ -484,4 +485,9 @@ void CAutoTuneController::SetMinAFR(float afr)
 void CAutoTuneController::SetMaxAFR(float afr)
 {
  m_maxAFR = afr;
+}
+
+void CAutoTuneController::SetMinDistThrd(int thrd)
+{
+ m_MinDistThrd = thrd;
 }
