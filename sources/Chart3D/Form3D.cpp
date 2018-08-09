@@ -347,16 +347,10 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   LabelAfv->Enabled = false;
   CheckBoxBv->Enabled = true;
   CheckBoxBvClick(NULL);
-  ButtonAngleUp->Enabled = false;
-  ButtonAngleDown->Enabled = false;
-  ButtonAngleUp->Visible = false;
-  ButtonAngleDown->Visible = false;
-  Smoothing3x->Enabled = false;
-  Smoothing5x->Enabled = false;
-  Smoothing3x->Visible = false;
-  Smoothing5x->Visible = false;
   for (int i = 0; i < PopupMenu->Items->Count; i++)
    PopupMenu->Items->Items[i]->Enabled = false;
+  PM_ZeroAllCurves->Enabled = true;
+  PM_SetPtMovStep->Enabled = true;
  }
  else
  {
@@ -367,14 +361,6 @@ void __fastcall TForm3D::CheckBox3dClick(TObject *Sender)
   LabelAfv->Enabled = true;
   CheckBoxBv->Enabled = false;
   FillChart(0,0);
-  ButtonAngleUp->Enabled = true;
-  ButtonAngleDown->Enabled = true;
-  ButtonAngleUp->Visible = true;
-  ButtonAngleDown->Visible = true;
-  Smoothing3x->Enabled = true;
-  Smoothing5x->Enabled = true;
-  Smoothing3x->Visible = true;
-  Smoothing5x->Visible = true;
   for (int i = 0; i < PopupMenu->Items->Count; i++)
    PopupMenu->Items->Items[i]->Enabled = true;
  }
@@ -401,8 +387,18 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 {
- for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] + m_pt_moving_step);
+ if (!CheckBox3d->Checked)
+ { //2D
+  for (int i = 0; i < 16; i++ )
+   RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] + m_pt_moving_step);
+ }
+ else
+ { //3D
+  for (int i = 0; i < m_count_z; i++ )
+   for (int j = 0; j < m_count_x; j++ )
+    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j) + m_pt_moving_step);
+ }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -410,8 +406,18 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 {
- for (int i = 0; i < 16; i++ )
-  RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] - m_pt_moving_step);
+ if (!CheckBox3d->Checked)
+ { //2D
+  for (int i = 0; i < 16; i++ )
+   RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] - m_pt_moving_step);
+ }
+ else
+ {//3D
+  for (int i = 0; i < m_count_z; i++ )
+   for (int j = 0; j < m_count_x; j++ )
+    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j) - m_pt_moving_step);
+ }
+
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
 }
@@ -419,13 +425,27 @@ void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
 {
- float* p_source_function = new float[m_count_x];
- for (int i = 0; i < m_count_x; ++i)
-  p_source_function[i] = GetItem_m(m_air_flow_position, i);
- MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3);
- delete[] p_source_function;
- for (int i = 0; i < m_count_x; i++ )
-  RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+ if (!CheckBox3d->Checked)
+ { //2D
+  float* p_source_function = new float[m_count_x];
+  for (int i = 0; i < m_count_x; ++i)
+   p_source_function[i] = GetItem_m(m_air_flow_position, i);
+  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3);
+  delete[] p_source_function;
+  for (int i = 0; i < m_count_x; i++ )
+   RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+ }
+ else
+ {//3D
+  float* p_source_function = new float[m_count_z * m_count_x];
+  for (int i = 0; i < m_count_z * m_count_x; ++i)
+   p_source_function[i] = mp_modified_function[i];  
+  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 3);
+  delete[] p_source_function;
+  for (int i = 0; i < m_count_z; i++ )
+   for (int j = 0; j < m_count_x; j++ )
+    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j));
+ }
 
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -434,13 +454,27 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
 //---------------------------------------------------------------------------
 void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
 {
- float* p_source_function = new float[m_count_x];
- for (int i = 0; i < m_count_x; ++i)
-  p_source_function[i] = GetItem_m(m_air_flow_position, i);
- MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5);
- delete[] p_source_function;
- for (int i = 0; i < m_count_x; i++ )
-  RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+ if (!CheckBox3d->Checked)
+ { //2D
+  float* p_source_function = new float[m_count_x];
+  for (int i = 0; i < m_count_x; ++i)
+   p_source_function[i] = GetItem_m(m_air_flow_position, i);
+  MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5);
+  delete[] p_source_function;
+  for (int i = 0; i < m_count_x; i++ )
+   RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+ }
+ else
+ { //3D
+  float* p_source_function = new float[m_count_z * m_count_x];
+  for (int i = 0; i < m_count_z * m_count_x; ++i)
+   p_source_function[i] = mp_modified_function[i];  
+  MathHelpers::Smooth2D(p_source_function, mp_modified_function, m_count_z, m_count_x, 5);
+  delete[] p_source_function;
+  for (int i = 0; i < m_count_z; i++ )
+   for (int j = 0; j < m_count_x; j++ )
+    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j)); 
+ }
 
  if (m_pOnChange)
   m_pOnChange(m_param_on_change);
@@ -603,6 +637,14 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(m_air_flow_position, index, v);
  Chart1->Series[GetCurveSelIndex() + m_count_z]->YValue[index] = v;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::RestrictAndSetChartValue(int index_z, int index_x, double v)
+{
+ v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
+ SetItem(index_z, index_x, v);
+ Chart1->Series[(!CheckBoxBv->Checked ? m_count_z - 1 - index_z : index_z) + m_count_z]->YValue[index_x] = v;
 }
 
 //---------------------------------------------------------------------------

@@ -213,6 +213,7 @@ class TForm3D : public TForm
   void __fastcall SelRightArrow(bool i_shift);
 
   void RestrictAndSetChartValue(int index, double v);
+  void RestrictAndSetChartValue(int index_z, int index_x, double v);
   void __fastcall CopyCurve(int fromIndex, int toIndex);
   double GetChartValue(int z, int index);
   void SetChartValue(int z, int index, double value);
