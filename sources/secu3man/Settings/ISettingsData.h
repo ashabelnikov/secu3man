@@ -242,4 +242,6 @@ class ISettingsData
   virtual float GetMinAFR(void) = 0;
   virtual float GetMaxAFR(void) = 0;
   virtual int GetMinDistThrd(void) = 0;
+  virtual float GetMinTPS(void) = 0;
+  virtual float GetMaxTPS(void) = 0;
 };

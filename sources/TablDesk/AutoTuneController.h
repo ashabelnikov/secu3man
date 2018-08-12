@@ -42,6 +42,8 @@ struct LogDataEntry
  float afr;
  DWORD time; //ms
  bool ae;
+ bool ie;
+ float tps;
 };
 
 struct NodePoint
@@ -85,6 +87,8 @@ class CAutoTuneController
  void SetMinAFR(float afr);
  void SetMaxAFR(float afr);
  void SetMinDistThrd(int thrd);
+ void SetMinTPS(float tps);
+ void SetMaxTPS(float tps);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -96,6 +100,7 @@ class CAutoTuneController
 
  void ResetStat(void);
  void StartStop(void);
+ void Smoothing(void);
 
  void SetView(CGridModeEditorInjDlg* pView);
 
@@ -149,4 +154,7 @@ class CAutoTuneController
   float m_minAFR;
   float m_maxAFR;
   int m_MinDistThrd;
+
+  float m_minTPS;
+  float m_maxTPS;
 };

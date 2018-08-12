@@ -63,6 +63,8 @@ CAutoTuneController::CAutoTuneController()
 , m_minAFR(8.0)
 , m_maxAFR(22.0)
 , m_MinDistThrd(10)
+, m_minTPS(0.0)
+, m_maxTPS(100.0)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -108,6 +110,8 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  lde.load = dv.load;
  lde.afr = dv.afr;
  lde.ae = dv.acceleration; //acceleration/deceleration
+ lde.ie = dv.ie;  //fuel cut
+ lde.tps = dv.tps;
  lde.time = GetTickCount(); //time when data entry arrived
 
  m_logdata.push_front(lde);
@@ -175,10 +179,12 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  //skip if AFR is outside set range
  bool afr_in_range = (lde.afr >= m_minAFR) && (lde.afr <= m_maxAFR);
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && afr_in_range && !m_blocked[l_idx][r_idx])
+ bool tps_in_range = (lde.tps >= m_minTPS) && (lde.tps <= m_maxTPS);
+
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && !e.ie && afr_in_range && tps_in_range && !m_blocked[l_idx][r_idx])
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
-  if (node.size() < m_statSize)
+  if (node.size() < (size_t)m_statSize)
    node.push_back(NodePoint(corrFactor, e.rpm, e.load));
   else
   {
@@ -337,6 +343,69 @@ void CAutoTuneController::StartStop(void)
  }
 }
 
+void CAutoTuneController::Smoothing(void)
+{/*
+ //find begin and end positions
+ int begin, end, i;
+ for(begin = 0; begin < (int)m_rpm_knock_signal.size(); ++begin)
+  if (m_rpm_knock_signal[begin].size() > 0)
+   break;
+ for(end = m_rpm_knock_signal.size() - 1; end > begin; --end)
+  if (m_rpm_knock_signal[end].size() > 0)
+   break;
+
+ //at least 30% of points must be valid
+ if ((begin > end) || (end - begin) < (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS/3))
+ { 
+  AfxMessageBox(IDS_KC_PLEASE_COLLECT_MORE_STAT);
+  return;
+ }
+
+ //apply sliding window
+ int ks = 5;
+ for(i = begin; i <= end; ++i)
+ {
+  //skip points which have no statistics
+  if (0==m_rpm_knock_signal[i].size()) continue;
+
+  //calculate arithmetic mean
+  float m = 0.f; int k, n;
+  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
+   m+=_AverageKnockValue(k), ++n;
+  }
+  if (0==n) continue;
+  m/=n; 
+  //calculate standard deviation
+  float s = 0.f;
+  for(k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
+   s+= pow(_AverageKnockValue(k) - m, 2.0f);
+  }
+  s = sqrt(s / ((float)n));
+  //filter points using "3 sigma rule"
+  m = 0.f;
+  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
+  {
+   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;   
+   float x = _AverageKnockValue(k);
+   if (x  < _AverageKnockValue(i) + (3.0f * s))
+    m+=x, ++n;
+  }
+  if (0==n) continue;
+  m/=n;
+  m_rpm_knock_signal[i].clear();
+  m_rpm_knock_signal[i].push_back(m);
+  m_rpm_knock_signal_ii[i] = 0;
+ }
+ //
+ std::vector<float> values;
+ _PerformAverageOfRPMKnockFunctionValues(values);
+ mp_view->SetRPMKnockSignal(values);*/
+}
+
 int CAutoTuneController::_FindNearestGridPoint(float arg, float *grid, int gSize)
 {
  int i, i1;
@@ -400,6 +469,7 @@ void CAutoTuneController::Init(void)
  mp_view->setOnStrStp(fastdelegate::MakeDelegate(this, CAutoTuneController::StartStop));
  mp_view->setIsReady(fastdelegate::MakeDelegate(this, CAutoTuneController::isFIFOReady));
  mp_view->setOnViewActivate(fastdelegate::MakeDelegate(this, CAutoTuneController::OnViewActivate));
+ mp_view->setOnSmooth(fastdelegate::MakeDelegate(this, CAutoTuneController::Smoothing));
 
  mp_view->setOnChangeLamDel(fastdelegate::MakeDelegate(this, CAutoTuneController::OnChangeLamDel));
 }
@@ -490,4 +560,14 @@ void CAutoTuneController::SetMaxAFR(float afr)
 void CAutoTuneController::SetMinDistThrd(int thrd)
 {
  m_MinDistThrd = thrd;
+}
+
+void CAutoTuneController::SetMinTPS(float tps)
+{
+ m_minTPS = tps;
+}
+
+void CAutoTuneController::SetMaxTPS(float tps)
+{
+ m_maxTPS = tps;
 }

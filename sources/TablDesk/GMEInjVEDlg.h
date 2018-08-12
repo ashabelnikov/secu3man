@@ -60,6 +60,7 @@ class CGMEInjVEDlg : public CTabDialog
   void SetStatusText(const _TSTRING& str);
   void SetStrStpCaption(const _TSTRING& str);
   void UpdateCelWgtMapCell(int l, int r);
+  void setOnSmooth(EventHandler OnCB);
 
  public:
 
@@ -76,6 +77,7 @@ class CGMEInjVEDlg : public CTabDialog
   afx_msg void OnStrStpButton();
   afx_msg void OnRstSttButton();
   afx_msg void OnCelBlkButton();
+  afx_msg void OnSmoothButton();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
@@ -89,6 +91,7 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_strstp_button;
   CButton m_rststt_button;
   CButton m_celblk_button;
+  CButton m_smooth_button;
 
   CStatic m_status_text;
   _TSTRING m_status_cache;
@@ -113,4 +116,5 @@ class CGMEInjVEDlg : public CTabDialog
   EventHandler m_OnRstStt;
   EventHandler m_OnChangeLamDel;
   EventResult  m_IsReady; //if this CB is not initialized all autotune related controls will be disabled
+  EventHandler m_OnSmooth;
 };

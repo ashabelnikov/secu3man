@@ -303,3 +303,4 @@
 #define IDC_GME_INJ_CELBLK_BTN          5657
 #define IDS_GME_INJ_CELBLK              5658
 #define IDS_GME_INJ_CELUNBLK            5659
+#define IDC_GME_INJ_SMOOTH_BTN          5660

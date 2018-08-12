@@ -114,6 +114,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetMinAFR(float afr);
   void SetMaxAFR(float afr);
   void SetMinDistThrd(int thrd);
+  void SetMinTPS(float tps);
+  void SetMaxTPS(float tps);
 
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);

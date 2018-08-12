@@ -3476,3 +3476,15 @@ void CButtonsPanel::SetMinDistThrd(int thrd)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetMinDistThrd(thrd);
 }
+
+void CButtonsPanel::SetMinTPS(float tps)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetMinTPS(tps);
+}
+
+void CButtonsPanel::SetMaxTPS(float tps)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetMaxTPS(tps);
+}

@@ -46,6 +46,8 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_AUTOTUNE_GROUPBOX, OnUpdateControlsAutoTune1)
  ON_BN_CLICKED(IDC_GME_INJ_CELBLK_BTN,OnCelBlkButton)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_CELBLK_BTN,OnUpdateControlsAutoTune2)
+ ON_BN_CLICKED(IDC_GME_INJ_SMOOTH_BTN,OnSmoothButton)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_SMOOTH_BTN,OnUpdateControlsAutoTune1)
 END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
@@ -83,6 +85,7 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_STRSTP_BTN, m_strstp_button);
  DDX_Control(pDX, IDC_GME_INJ_RSTSTT_BTN, m_rststt_button);
  DDX_Control(pDX, IDC_GME_INJ_CELBLK_BTN, m_celblk_button);
+ DDX_Control(pDX, IDC_GME_INJ_SMOOTH_BTN, m_smooth_button);
 
  DDX_Control(pDX, IDC_GME_INJ_STATUS_TEXT, m_status_text);
 }
@@ -296,6 +299,12 @@ void CGMEInjVEDlg::OnCelBlkButton()
  m_ve_map.UpdateDisplay(sel.first, sel.second);
 }
 
+void CGMEInjVEDlg::OnSmoothButton()
+{
+ if (m_OnSmooth)
+  m_OnSmooth();
+}
+
 void CGMEInjVEDlg::OnSelChangeVE(void)
 {
  if (!mp_CelBlkMap)
@@ -357,6 +366,11 @@ void CGMEInjVEDlg::setOnChangeLamDel(EventHandler OnCB)
 void CGMEInjVEDlg::setOnViewActivate(EventHandler OnCB)
 {
  m_OnViewActivate = OnCB;
+}
+
+void CGMEInjVEDlg::setOnSmooth(EventHandler OnCB)
+{
+ m_OnSmooth = OnCB;
 }
 
 void CGMEInjVEDlg::SetStatusText(const _TSTRING& str)
