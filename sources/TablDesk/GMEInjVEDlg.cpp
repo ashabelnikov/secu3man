@@ -48,6 +48,8 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_CELBLK_BTN,OnUpdateControlsAutoTune2)
  ON_BN_CLICKED(IDC_GME_INJ_SMOOTH_BTN,OnSmoothButton)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_SMOOTH_BTN,OnUpdateControlsAutoTune1)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_BLKALL_CHECK,OnUpdateControlsAutoTune2)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_FINISH_CHECK,OnUpdateControlsAutoTune1)
 END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
@@ -86,6 +88,8 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_RSTSTT_BTN, m_rststt_button);
  DDX_Control(pDX, IDC_GME_INJ_CELBLK_BTN, m_celblk_button);
  DDX_Control(pDX, IDC_GME_INJ_SMOOTH_BTN, m_smooth_button);
+ DDX_Control(pDX, IDC_GME_INJ_BLKALL_CHECK, m_blkall_check);
+ DDX_Control(pDX, IDC_GME_INJ_FINISH_CHECK, m_finish_check);
 
  DDX_Control(pDX, IDC_GME_INJ_STATUS_TEXT, m_status_text);
 }
@@ -296,7 +300,21 @@ void CGMEInjVEDlg::OnCelBlkButton()
   m_ve_map.SetItemColor(sel.first, sel.second, RGB(100,100,100));
   m_celblk_button.SetWindowText(MLL::LoadString(IDS_GME_INJ_CELUNBLK));
  }
- m_ve_map.UpdateDisplay(sel.first, sel.second);
+
+ if (GetBlkAllCheck())
+ { //block/unblock all cells
+  for (int l = 0; l < 16; ++l)
+  {
+   for (int r = 0; r < 16; ++r)
+   {
+    mp_CelBlkMap[(l * 16) + r] = *p_cell;
+    m_ve_map.SetItemColor(l, r, *p_cell ? RGB(100,100,100) : 0);
+   }
+  }
+  m_ve_map.UpdateDisplay(); //all cells
+ }
+ else
+  m_ve_map.UpdateDisplay(sel.first, sel.second);
 }
 
 void CGMEInjVEDlg::OnSmoothButton()
@@ -393,3 +411,12 @@ void CGMEInjVEDlg::UpdateCelWgtMapCell(int l, int r)
   m_celwgt_map.UpdateDisplay(l, r);
 }
 
+bool CGMEInjVEDlg::GetBlkAllCheck(void)
+{
+ return m_blkall_check.GetCheck() == BST_CHECKED;
+}
+
+bool CGMEInjVEDlg::GetFinishCheck(void)
+{
+ return m_finish_check.GetCheck() == BST_CHECKED;
+}

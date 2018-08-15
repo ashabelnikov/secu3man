@@ -61,6 +61,8 @@ class CGMEInjVEDlg : public CTabDialog
   void SetStrStpCaption(const _TSTRING& str);
   void UpdateCelWgtMapCell(int l, int r);
   void setOnSmooth(EventHandler OnCB);
+  bool GetBlkAllCheck(void);
+  bool GetFinishCheck(void);
 
  public:
 
@@ -92,6 +94,8 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_rststt_button;
   CButton m_celblk_button;
   CButton m_smooth_button;
+  CButton m_blkall_check;
+  CButton m_finish_check;
 
   CStatic m_status_text;
   _TSTRING m_status_cache;

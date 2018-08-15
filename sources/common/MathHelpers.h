@@ -27,6 +27,7 @@
 #pragma once
 #include <math.h>
 #include <vector>
+#include <algorithm>
 
 namespace MathHelpers
 {
@@ -155,6 +156,106 @@ namespace MathHelpers
      }
     }
     out[i*xSize + j]/= divisor;
+   }
+  }
+  return true;
+ }
+
+ //Sigma-filter for 2D function using mooving avarage method with symmetrical kernel
+ //in - input buffer
+ //out - output buffer (result)
+ //ySize - number of rows
+ //xSize - number of columns
+ //i_kernel_size - must be odd number! e.g. 1,3,5,7...
+ //
+ // | . . . .
+ // y . . . .
+ // | . . . .
+ //  ---X---
+ template <class T>
+ bool SigmaFilter2D(T *in, T* out, int ySize, int xSize, size_t i_kernel_size, bool median = false)
+ {
+  //Check input parameters
+  if (!(i_kernel_size & 1) || i_kernel_size == 0)
+   return false;
+  if(ySize <=0 || xSize <=0)
+   return false;
+
+  int ii, jj, ki, kj, k2 = i_kernel_size / 2, n;
+
+  for(int i = 0; i < ySize; ++i)
+  {
+   for(int j = 0; j < xSize; ++j)
+   {
+    //calculate arithmetic mean
+    T m = 0; n = 0;
+    for(ki = -k2; ki <= k2; ++ki)
+    {
+     for(kj = -k2; kj <= k2; ++kj)
+     {
+      ii = (i + ki);
+      jj = (j + kj);
+      if (ii >= 0 && ii < xSize && jj >= 0 && jj < ySize)
+      {
+       m+= in[ii*xSize + jj];
+       n++;
+      }
+     }
+    }
+    m/=((T)n);
+    //calculate standard deviation
+    T s = 0;
+    for(ki = -k2; ki <= k2; ++ki)
+    {
+     for(kj = -k2; kj <= k2; ++kj)
+     {
+      ii = (i + ki);
+      jj = (j + kj);
+      if (ii >= 0 && ii < xSize && jj >= 0 && jj < ySize)
+       s+= pow(in[ii*xSize + jj] - m, 2.0f);
+     }
+    }
+    s = sqrt(s / ((T)n));
+
+    if (median)
+    {
+     std::vector<T> v;
+     //filter values using median filter
+     for(ki = -k2; ki <= k2; ++ki)
+     {
+      for(kj = -k2; kj <= k2; ++kj)
+      {
+       ii = (i + ki);
+       jj = (j + kj);
+       if (ii >= 0 && ii < xSize && jj >= 0 && jj < ySize)
+        v.push_back(in[ii*xSize + jj]);      
+      }
+     }
+     std::sort(v.begin(), v.end());
+     out[i*xSize + j] = v[v.size()/2];
+    }
+    else
+    {
+     //filter values using "3 sigma rule"
+     m = 0, n= 0;
+     for(ki = -k2; ki <= k2; ++ki)
+     {
+      for(kj = -k2; kj <= k2; ++kj)
+      {
+       ii = (i + ki);
+       jj = (j + kj);
+       if (ii >= 0 && ii < xSize && jj >= 0 && jj < ySize)
+       {
+        if (fabs(in[ii*xSize + jj] - in[i*xSize + j]) < (3.0f * s))
+         m+=in[ii*xSize + jj], ++n;
+       }
+      }
+     }
+     if (n > 0)
+      out[i*xSize + j] = m / n;
+     else
+      out[i*xSize + j] = in[i*xSize + j];
+    }  
    }
   }
   return true;

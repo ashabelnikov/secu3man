@@ -181,7 +181,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
 
  bool tps_in_range = (lde.tps >= m_minTPS) && (lde.tps <= m_maxTPS);
 
- if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && !e.ie && afr_in_range && tps_in_range && !m_blocked[l_idx][r_idx])
+ if (m_lastchg[l_idx][r_idx] != 0xFFFFFFFF && (GetTickCount() - m_lastchg[l_idx][r_idx]) > ss && growing && !e.ae && e.ie && afr_in_range && tps_in_range && !m_blocked[l_idx][r_idx])
  {
   ScatterItem_t& node = m_scatter[l_idx][r_idx];
   if (node.size() < (size_t)m_statSize)
@@ -255,7 +255,7 @@ void CAutoTuneController::OnTimer(void)
   if (m_OnMapChanged)
    m_OnMapChanged(TYPE_MAP_INJ_VE);
 
-  //assign time to assiciated changed VE cells
+  //assign time to associated changed VE cells
   for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
    for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
     if (m_lastchg[l][r] == 0xFFFFFFFF)
@@ -344,66 +344,55 @@ void CAutoTuneController::StartStop(void)
 }
 
 void CAutoTuneController::Smoothing(void)
-{/*
- //find begin and end positions
- int begin, end, i;
- for(begin = 0; begin < (int)m_rpm_knock_signal.size(); ++begin)
-  if (m_rpm_knock_signal[begin].size() > 0)
-   break;
- for(end = m_rpm_knock_signal.size() - 1; end > begin; --end)
-  if (m_rpm_knock_signal[end].size() > 0)
-   break;
-
- //at least 30% of points must be valid
- if ((begin > end) || (end - begin) < (CKnockChannelTabDlg::RPM_KNOCK_SIGNAL_POINTS/3))
- { 
-  AfxMessageBox(IDS_KC_PLEASE_COLLECT_MORE_STAT);
-  return;
- }
-
- //apply sliding window
- int ks = 5;
- for(i = begin; i <= end; ++i)
+{
+ if (mp_view->GetFinishCheck())
  {
-  //skip points which have no statistics
-  if (0==m_rpm_knock_signal[i].size()) continue;
-
-  //calculate arithmetic mean
-  float m = 0.f; int k, n;
-  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
+  //build list of available points
+  std::vector<NodePoint> nd;
+  for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
   {
-   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
-   m+=_AverageKnockValue(k), ++n;
+   for (int r = 0; r < VEMAP_RPM_SIZE; ++r)
+   {
+    if (m_afrhits[l][r] >= m_MinDistThrd)
+     nd.push_back(NodePoint(_GetVEItem(l, r), (float)r, (float)l));
+   }
   }
-  if (0==n) continue;
-  m/=n; 
-  //calculate standard deviation
-  float s = 0.f;
-  for(k = (i - ks); k <= (i + ks); ++k)
+  if (nd.size())
   {
-   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;
-   s+= pow(_AverageKnockValue(k) - m, 2.0f);
+   //IDW interpolation based on existing points
+   for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
+   {
+    for (int r = 0; r < VEMAP_RPM_SIZE; ++r)
+    {
+     float avd = 0;
+     _GetVEItem(l, r) = _ShepardInterpolation((float)r, (float)l, nd, 2.0, 0.01, avd);
+    }
+   }
   }
-  s = sqrt(s / ((float)n));
-  //filter points using "3 sigma rule"
-  m = 0.f;
-  for(n = 0, k = (i - ks); k <= (i + ks); ++k)
-  {
-   if (k < begin || k > end || 0==m_rpm_knock_signal[k].size()) continue;   
-   float x = _AverageKnockValue(k);
-   if (x  < _AverageKnockValue(i) + (3.0f * s))
-    m+=x, ++n;
-  }
-  if (0==n) continue;
-  m/=n;
-  m_rpm_knock_signal[i].clear();
-  m_rpm_knock_signal[i].push_back(m);
-  m_rpm_knock_signal_ii[i] = 0;
  }
- //
- std::vector<float> values;
- _PerformAverageOfRPMKnockFunctionValues(values);
- mp_view->SetRPMKnockSignal(values);*/
+
+ float orig[VEMAP_LOAD_SIZE*VEMAP_RPM_SIZE] = {0};
+ float modif[VEMAP_LOAD_SIZE*VEMAP_RPM_SIZE] = {0};
+ std::copy(mp_ve, mp_ve + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), orig);
+
+ bool result = MathHelpers::SigmaFilter2D(orig, modif, VEMAP_LOAD_SIZE, VEMAP_RPM_SIZE, 3, true); //use median filter
+
+ if (!result)
+  return;
+
+ //bool result1 = MathHelpers::Smooth2D(modif, mp_ve, VEMAP_LOAD_SIZE, VEMAP_RPM_SIZE, 3);
+ std::copy(modif, modif + (VEMAP_LOAD_SIZE * VEMAP_RPM_SIZE), mp_ve);
+
+ if (m_OnMapChanged) //Update views and send data to SECU. This call blocks execution thread for relatively long time
+  m_OnMapChanged(TYPE_MAP_INJ_VE);
+
+ //assign time to associated changed VE cells
+ for(size_t l = 0; l < VEMAP_LOAD_SIZE; ++l)
+  for(size_t r = 0; r < VEMAP_RPM_SIZE; ++r)
+   if (_GetVEItem(l, r) != orig[(((VEMAP_LOAD_SIZE - 1) - l)*VEMAP_RPM_SIZE)+r])
+    m_lastchg[l][r] = GetTickCount();
+
+ mp_view->UpdateView(); //Update our view
 }
 
 int CAutoTuneController::_FindNearestGridPoint(float arg, float *grid, int gSize)
