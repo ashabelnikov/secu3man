@@ -129,6 +129,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetMinDistThrd(void);
   virtual float GetMinTPS(void);
   virtual float GetMaxTPS(void);
+  virtual float GetCLTThrd(void);
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -292,6 +293,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMinDistThrd;
   OptField_t<float> m_optMinTPS;
   OptField_t<float> m_optMaxTPS;
+  OptField_t<float> m_optCLTThrd;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

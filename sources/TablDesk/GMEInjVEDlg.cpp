@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CGMEInjVEDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_SMOOTH_BTN,OnUpdateControlsAutoTune1)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_BLKALL_CHECK,OnUpdateControlsAutoTune2)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_FINISH_CHECK,OnUpdateControlsAutoTune1)
+ ON_UPDATE_COMMAND_UI(IDC_GME_INJ_RSTALL_CHECK,OnUpdateControlsAutoTune)
 END_MESSAGE_MAP()
 
 CGMEInjVEDlg::CGMEInjVEDlg(CWnd* pParent /*=NULL*/)
@@ -90,6 +91,7 @@ void CGMEInjVEDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_GME_INJ_SMOOTH_BTN, m_smooth_button);
  DDX_Control(pDX, IDC_GME_INJ_BLKALL_CHECK, m_blkall_check);
  DDX_Control(pDX, IDC_GME_INJ_FINISH_CHECK, m_finish_check);
+ DDX_Control(pDX, IDC_GME_INJ_RSTALL_CHECK, m_rstall_check);
 
  DDX_Control(pDX, IDC_GME_INJ_STATUS_TEXT, m_status_text);
 }
@@ -419,4 +421,14 @@ bool CGMEInjVEDlg::GetBlkAllCheck(void)
 bool CGMEInjVEDlg::GetFinishCheck(void)
 {
  return m_finish_check.GetCheck() == BST_CHECKED;
+}
+
+bool CGMEInjVEDlg::GetRstAllCheck(void)
+{
+ return m_rstall_check.GetCheck() == BST_CHECKED;
+}
+
+std::pair<int, int> CGMEInjVEDlg::GetVESelection(void)
+{
+ return m_ve_map.GetSelection();
 }

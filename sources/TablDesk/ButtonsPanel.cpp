@@ -3488,3 +3488,9 @@ void CButtonsPanel::SetMaxTPS(float tps)
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetMaxTPS(tps);
 }
+
+void CButtonsPanel::SetCLTThrd(float clt)
+{
+ if (mp_autoTuneCntr.get())
+  mp_autoTuneCntr->SetCLTThrd(clt);
+}

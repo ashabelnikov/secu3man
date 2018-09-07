@@ -244,4 +244,5 @@ class ISettingsData
   virtual int GetMinDistThrd(void) = 0;
   virtual float GetMinTPS(void) = 0;
   virtual float GetMaxTPS(void) = 0;
+  virtual float GetCLTThrd(void) = 0;
 };

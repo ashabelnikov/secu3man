@@ -65,6 +65,7 @@ CAutoTuneController::CAutoTuneController()
 , m_MinDistThrd(10)
 , m_minTPS(0.0)
 , m_maxTPS(100.0)
+, m_cltThrd(70.0)
 {
  mp_loadGrid = MathHelpers::BuildGridFromRange(1.0f, 16.0f, VEMAP_LOAD_SIZE);
 
@@ -112,6 +113,7 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  lde.ae = dv.acceleration; //acceleration/deceleration
  lde.ie = dv.ie;  //fuel cut
  lde.tps = dv.tps;
+ lde.clt = dv.temp; //coolant temperature
  lde.time = GetTickCount(); //time when data entry arrived
 
  m_logdata.push_front(lde);
@@ -165,6 +167,11 @@ void CAutoTuneController::SetDynamicValues(const TablDesk::DynVal& dv)
  {
   mp_view->SetStatusText(MLL::GetString(IDS_GME_INJ_STATUS_EGOCFG));
   return; //system has no information about AFR (e.g. sensor not enabled etc)
+ }
+ else if (lde.clt < m_cltThrd)
+ {
+  mp_view->SetStatusText(MLL::GetString(IDS_GME_INJ_STATUS_CLTTH));
+  return; //engine is not warmed up
  }
  else
   mp_view->SetStatusText(_T(""));
@@ -308,17 +315,30 @@ void CAutoTuneController::Deactivate(void)
 
 void CAutoTuneController::ResetStat(void)
 {
- for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
- {
-  for (int r = 0; r < VEMAP_RPM_SIZE; ++r)
+ if (mp_view->GetRstAllCheck())
+ { //all
+  for (int l = 0; l < VEMAP_LOAD_SIZE; ++l)
   {
-   m_scatter[l][r].clear();
-   m_avdists[l][r] = std::numeric_limits<float>::max();
-   m_afrhits[l][r] = 0;
-   m_lastchg[l][r] = 0; //any cell allowed for changes
+   for (int r = 0; r < VEMAP_RPM_SIZE; ++r)
+   {
+    m_scatter[l][r].clear();
+    m_avdists[l][r] = std::numeric_limits<float>::max();
+    m_afrhits[l][r] = 0;
+    m_lastchg[l][r] = 0; //any cell allowed for changes
+   }
   }
+  mp_view->UpdateCelWgtMapCell(-1, -1); //update all cells
  }
- mp_view->UpdateCelWgtMapCell(-1, -1); //update all cells
+ else
+ {
+  std::pair<int, int> sel = mp_view->GetVESelection();
+  int l = sel.first, r = sel.second;
+  m_scatter[l][r].clear();
+  m_avdists[l][r] = std::numeric_limits<float>::max();
+  m_afrhits[l][r] = 0;
+  m_lastchg[l][r] = 0; //any cell allowed for changes
+  mp_view->UpdateCelWgtMapCell(l, r); //update selected cell
+ }
 }
 
 void CAutoTuneController::StartStop(void)
@@ -559,4 +579,9 @@ void CAutoTuneController::SetMinTPS(float tps)
 void CAutoTuneController::SetMaxTPS(float tps)
 {
  m_maxTPS = tps;
+}
+
+void CAutoTuneController::SetCLTThrd(float clt)
+{
+ m_cltThrd = clt;
 }

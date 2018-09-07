@@ -63,6 +63,8 @@ class CGMEInjVEDlg : public CTabDialog
   void setOnSmooth(EventHandler OnCB);
   bool GetBlkAllCheck(void);
   bool GetFinishCheck(void);
+  bool GetRstAllCheck(void);
+  std::pair<int, int> GetVESelection(void);
 
  public:
 
@@ -94,6 +96,7 @@ class CGMEInjVEDlg : public CTabDialog
   CButton m_rststt_button;
   CButton m_celblk_button;
   CButton m_smooth_button;
+  CButton m_rstall_check;
   CButton m_blkall_check;
   CButton m_finish_check;
 

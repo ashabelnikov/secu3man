@@ -44,6 +44,7 @@ struct LogDataEntry
  bool ae;
  bool ie;
  float tps;
+ float clt;
 };
 
 struct NodePoint
@@ -89,6 +90,7 @@ class CAutoTuneController
  void SetMinDistThrd(int thrd);
  void SetMinTPS(float tps);
  void SetMaxTPS(float tps);
+ void SetCLTThrd(float clt);
 
  float* GetLamDelMap(int id);
  bool* GetBlockedCells(void);
@@ -157,4 +159,6 @@ class CAutoTuneController
 
   float m_minTPS;
   float m_maxTPS;
+ 
+  float m_cltThrd;
 };

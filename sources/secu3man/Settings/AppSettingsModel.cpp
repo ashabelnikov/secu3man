@@ -145,6 +145,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMinDistThrd(_T("MinDistThrd"))
 , m_optMinTPS(_T("MinTPS"))
 , m_optMaxTPS(_T("MaxTPS"))
+, m_optCLTThrd(_T("CLTThrd"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -435,6 +436,7 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadInt(m_optMinDistThrd, _T("10"), 0, 255, false);
  at.ReadFlt(m_optMinTPS,_T("0.0"), 0.0f, 100.0f);
  at.ReadFlt(m_optMaxTPS,_T("100.0"), 0.0f, 100.0f);
+ at.ReadFlt(m_optCLTThrd,_T("70.0"), 0.0f, 180.0f);
 
  return status;
 }
@@ -616,6 +618,7 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteInt(m_optMinDistThrd);
  at.WriteFlt(m_optMinTPS, 1);
  at.WriteFlt(m_optMaxTPS, 1);
+ at.WriteFlt(m_optCLTThrd, 1);
 
  return status;
 }
@@ -1097,4 +1100,9 @@ float CAppSettingsModel::GetMinTPS(void)
 float CAppSettingsModel::GetMaxTPS(void)
 {
  return m_optMaxTPS.value;
+}
+
+float CAppSettingsModel::GetCLTThrd(void)
+{
+ return m_optCLTThrd.value;
 }

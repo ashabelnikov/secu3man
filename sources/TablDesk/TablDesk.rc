@@ -290,6 +290,7 @@ BEGIN
     CONTROL         "Вес ячеек",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
     PUSHBUTTON      "Старт/Стоп",IDC_GME_INJ_STRSTP_BTN,180,281,70,20
     PUSHBUTTON      "Сброс стат.",IDC_GME_INJ_RSTSTT_BTN,260,281,70,20
+    CONTROL         "Все",IDC_GME_INJ_RSTALL_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,260,303,30,10
     PUSHBUTTON      "Блокировать",IDC_GME_INJ_CELBLK_BTN,340,281,70,20
     CONTROL         "Все",IDC_GME_INJ_BLKALL_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,340,303,30,10
     PUSHBUTTON      "Сгладить",IDC_GME_INJ_SMOOTH_BTN,420,281,70,20
@@ -593,6 +594,7 @@ BEGIN
     IDS_GME_INJ_STATUS_EGOCFG "Нет данных с ДК"
     IDS_GME_INJ_CELBLK      "Блокировать"
     IDS_GME_INJ_CELUNBLK    "Разблокировать"
+    IDS_GME_INJ_STATUS_CLTTH "Двигатель не прогрет"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -878,6 +880,7 @@ BEGIN
     CONTROL         "Cell weighting",IDC_GME_INJ_CELWGT_BTN,"Button",BS_AUTOCHECKBOX | BS_CENTER | BS_PUSHLIKE | WS_TABSTOP,100,281,70,20
     PUSHBUTTON      "Start/Stop",IDC_GME_INJ_STRSTP_BTN,180,281,70,20
     PUSHBUTTON      "Reset stat.",IDC_GME_INJ_RSTSTT_BTN,260,281,70,20
+    CONTROL         "All",IDC_GME_INJ_RSTALL_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,260,303,30,10
     PUSHBUTTON      "Block cell",IDC_GME_INJ_CELBLK_BTN,340,281,70,20
     CONTROL         "All",IDC_GME_INJ_BLKALL_CHECK,"Button", BS_AUTOCHECKBOX | WS_TABSTOP,340,303,30,10
     PUSHBUTTON      "Smoothing",IDC_GME_INJ_SMOOTH_BTN,420,281,70,20
@@ -1197,6 +1200,7 @@ BEGIN
     IDS_GME_INJ_STATUS_EGOCFG "No data from lambda sensor."
     IDS_GME_INJ_CELBLK      "Block cell"
     IDS_GME_INJ_CELUNBLK    "Unblock cell"
+    IDS_GME_INJ_STATUS_CLTTH "Engine is not warmed up"
 END
 
 /////////////////////////////////////////////////////////////////////////////
