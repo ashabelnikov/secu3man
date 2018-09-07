@@ -1905,7 +1905,7 @@ void CFirmwareDataMediator::LoadCodeData(const BYTE* ip_source_bytes, size_t i_s
     {
      pDst->iorem.i_plugs[p] = pDst->iorem.s_stub;
      //Use input stub if source has input stub
-     if (pSrc->iorem.v_plugs[p] == pDst->iorem.g_stub)
+     if (pSrc->iorem.v_plugs[p] == pSrc->iorem.g_stub)
       pDst->iorem.v_plugs[p] = pDst->iorem.g_stub;
      else
       pDst->iorem.v_plugs[p] = pDst->iorem.s_stub;
