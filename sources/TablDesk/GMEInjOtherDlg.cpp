@@ -294,7 +294,7 @@ void CGMEInjOtherDlg::UpdateView(void)
 }
 
 
-void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2)
+void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat)
 {
  if (m_crnk_map.GetSafeHwnd())
  {
@@ -334,7 +334,7 @@ void CGMEInjOtherDlg::SetArguments(bool strt_use, float clt, float voltage, floa
  if (m_atsc_map.GetSafeHwnd())
  {
   m_atsc_map.ShowMarkers(!strt_use, false);
-  m_atsc_map.SetArguments(0, clt);
+  m_atsc_map.SetArguments(0, iat);
  }
 
  if (m_gtsc_map.GetSafeHwnd())

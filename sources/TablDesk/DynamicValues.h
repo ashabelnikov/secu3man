@@ -64,5 +64,7 @@ namespace TablDesk
   float afr;
   bool acceleration; //acceleration/deceleration
   bool ie; //fuel cut if = 0
+
+  float air_temp; //IAT
  };
 }

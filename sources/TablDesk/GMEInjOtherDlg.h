@@ -46,7 +46,7 @@ class CGMEInjOtherDlg : public CTabDialog
   void setOnChange(EventWithCode OnCB);
   void UpdateView(void);
 
-  void SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2);
+  void SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat);
 
  public:
 
