@@ -238,10 +238,10 @@ BOOL CCarburPageDlg::OnInitDialog()
  m_shutoff_hi_threshold_edit.SetRange(250,7500);
 
  m_epm_on_threshold_spin.SetBuddy(&m_epm_on_threshold_edit);
- m_epm_on_threshold_edit.SetLimitText(4);
- m_epm_on_threshold_edit.SetDecimalPlaces(2);
- m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,50.0f,0.1f);
- m_epm_on_threshold_edit.SetRange(0.0f,50.0f);
+ m_epm_on_threshold_edit.SetLimitText(5);
+ m_epm_on_threshold_edit.SetDecimalPlaces(1);
+ m_epm_on_threshold_spin.SetRangeAndDelta(0.0f,500.0f,0.1f);
+ m_epm_on_threshold_edit.SetRange(0.0f,500.0f);
 
  m_shutoff_lo_threshold_edit_g.SetLimitText(4);
  m_shutoff_lo_threshold_spin_g.SetBuddy(&m_shutoff_lo_threshold_edit_g);
