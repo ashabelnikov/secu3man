@@ -1273,6 +1273,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
   GetGtscMap(i, op_fwd->maps[i].inj_gts_corr);
   GetGpscMap(i, op_fwd->maps[i].inj_gps_corr);
   GetAtscMap(i, op_fwd->maps[i].inj_ats_corr);
+  GetIATCLTMap(i, op_fwd->maps[i].inj_iatclt_corr);
  }
  //separate tables
  GetAttenuatorMap(op_fwd->attenuator_table);
@@ -1329,6 +1330,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
   SetGtscMap(i, ip_fwd->maps[i].inj_gts_corr);
   SetGpscMap(i, ip_fwd->maps[i].inj_gps_corr);
   SetAtscMap(i, ip_fwd->maps[i].inj_ats_corr);
+  SetIATCLTMap(i, ip_fwd->maps[i].inj_iatclt_corr);
  }
  //separate tables
  SetAttenuatorMap(ip_fwd->attenuator_table);
