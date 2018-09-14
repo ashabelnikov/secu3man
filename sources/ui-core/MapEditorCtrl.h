@@ -44,7 +44,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
 
-  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false);
+  CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false, bool absGrad = false);
   virtual ~CMapEditorCtrl();
 
   void SetRange(float i_min, float i_max);
@@ -83,6 +83,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void OnEditChar(UINT nChar, CEditExCustomKeys*);
   void OnEditKill(CEditExCustomKeys*);
 
+  void _UpdateMinMaxElems(void);
   void _ActivateEdit(void);
   void _DeactivateEdit(void);
   bool _ValidateItem(CEditExCustomKeys* pItem, float* p_value = NULL);
@@ -120,6 +121,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int m_cols;  //number of columns
   float m_minVal; //minimum allowed value
   float m_maxVal; //maximum allowed value
+  float m_vMinVal;
+  float m_vMaxVal;
   float* mp_map; //array of data for editing
   int m_decPlaces; // number for decimal places
   int m_decPlacesH;
@@ -147,6 +150,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   float m_increment;
   bool m_invDataRowsOrder;
   bool m_readOnly;
+  bool m_absGrad;
   int m_minLabelWidthInChars;
 
   friend class CEditExCustomKeys;

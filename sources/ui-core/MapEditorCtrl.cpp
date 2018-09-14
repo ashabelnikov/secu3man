@@ -174,11 +174,13 @@ END_MESSAGE_MAP()
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MFCMapEditorCtrl")  // Window class name
 
-CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/, bool readOnly /*= false*/)
+CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= false*/, HMODULE hMod /*= NULL*/, int minLabelWidthInChars /*= 0*/, bool readOnly /*= false*/, bool absGrad /*= false*/)
 : m_rows(rows)
 , m_cols(cols)
 , m_minVal(0.0f)
 , m_maxVal(10.0f)
+, m_vMinVal(0.0f)
+, m_vMaxVal(10.0f)
 , mp_map(NULL)
 , mp_horizLabels(NULL)
 , mp_vertLabels(NULL)
@@ -199,9 +201,10 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_minLabelWidthInChars(minLabelWidthInChars)
 , m_readOnly(readOnly)
 , mp_itemColors(new DWORD[rows*cols])
+, m_absGrad(absGrad)
 {
  _RegisterWindowClass(hMod);
- m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 110, 230);
+ m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 160, 255);
  for(int i = 0; i < (rows*cols); ++i)
   mp_itemColors[i] = 0;
 }
@@ -339,7 +342,10 @@ void CMapEditorCtrl::SetRange(float i_min, float i_max)
 
 int CMapEditorCtrl::_GetGradIndex(float value)
 {
- int index = MathHelpers::Round((value - (m_minVal)) / ((m_maxVal - m_minVal)/((float)m_gradColor.size())));
+ float minVal = m_absGrad ? m_minVal : m_vMinVal;
+ float maxVal = m_absGrad ? m_maxVal : m_vMaxVal;
+ float div = ((maxVal - minVal)/((float)m_gradColor.size()));
+ int index = MathHelpers::Round((value - (minVal)) / (div == 0 ? 0.000001f : div));
  if (index < 0) index = 0;
  if (index > (int)m_gradColor.size()-1) index = (int)m_gradColor.size()-1;
  return index;
@@ -349,6 +355,7 @@ void CMapEditorCtrl::AttachMap(float* p_map)
 {
  ASSERT(p_map);
  mp_map = p_map;
+ _UpdateMinMaxElems();
 }
 
 void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
@@ -370,7 +377,14 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
        float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
        _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
        if (previousValue != value)
+       {
         m_OnChange();
+        if (!m_absGrad)
+        {
+         _UpdateMinMaxElems();
+         Invalidate(); //make redraw whole control because gradient should be updated
+        }
+       }
       }
       _DeactivateEdit();
       m_cur_i = i; m_cur_j = j;
@@ -431,7 +445,14 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
   float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
   _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
+  {
    m_OnChange();
+   if (!m_absGrad)
+   {
+    _UpdateMinMaxElems();
+    Invalidate(); //make redraw whole control because gradient should be updated
+   }
+  }
  }
 
  switch(nChar)
@@ -504,7 +525,14 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
   float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
   _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
+  {
    m_OnChange();
+   if (!m_absGrad)
+   {
+    _UpdateMinMaxElems();
+    Invalidate(); //make redraw whole control because gradient should be updated
+   }
+  }
  }
 }
 
@@ -515,7 +543,7 @@ bool CMapEditorCtrl::_ValidateItem(CEditExCustomKeys* pItem, float* p_value /*= 
  pItem->m_error = !(convres && value >= m_minVal && value <= m_maxVal);
  pItem->Invalidate();
  if (p_value && !pItem->m_error)
-  *p_value = value; //save result of thre are no errors
+  *p_value = value; //save result of there are no errors
  return !pItem->m_error;
 }
 
@@ -799,6 +827,8 @@ void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
    mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
  }
 
+ _UpdateMinMaxElems();
+
  if (upd_all)
   Invalidate();
  else
@@ -844,5 +874,13 @@ void CMapEditorCtrl::SetItemColor(int i, int j, COLORREF color)
 void CMapEditorCtrl::setOnSelChange(EventHandler OnCB)
 {
  m_OnSelChange = OnCB;
+}
+
+void CMapEditorCtrl::_UpdateMinMaxElems(void)
+{
+ if (m_absGrad)
+  return;
+ m_vMinVal = *std::min_element(mp_map, mp_map + (m_rows* m_cols));
+ m_vMaxVal = *std::max_element(mp_map, mp_map + (m_rows* m_cols));
 }
 
