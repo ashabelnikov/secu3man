@@ -111,7 +111,7 @@ CControlApp::CControlApp()
 , m_hAwakeEvent(NULL)
 , m_hSleepEvent(NULL)
 , m_is_thread_must_exit(false)
-, m_uart_speed(CBR_9600)
+, m_uart_speed(CBR_57600)
 , m_packets_parse_state(0)
 , m_hTimer(NULL)
 , mp_csection(NULL)
@@ -2405,13 +2405,23 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   SetEvent(p_capp->m_hSleepEvent);
   WaitForSingleObject(p_capp->m_hAwakeEvent,INFINITE); //sleep if need
 
+  if (p_capp->m_is_thread_must_exit)
+   break;  //поступила команда завершения работы потока
+
   //если порт не открыт, то для того чтобы не грузить процессор, засыпаем
   //на 100мс в каждом цикле
   if (p_port->GetHandle()==INVALID_HANDLE_VALUE)
+  {
    Sleep(100);
-
-  if (p_capp->m_is_thread_must_exit)
-   break;  //поступила команда завершения работы потока
+   try
+   {
+    p_port->Initialize(p_capp->m_uart_speed, NOPARITY, ONESTOPBIT, false, true);
+   }
+   catch(CComPort::xInitialize e)
+   {
+   }
+   continue;
+  }
 
   pEventHandler = p_capp->m_pEventHandler;
   ASSERT(pEventHandler); //перед тем как обрабатывать пакеты, необходимо приаттачить обработчик событий
@@ -2439,6 +2449,8 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   {
    if ((p_capp->m_online_state==true)||(p_capp->m_force_notify_about_connection)) //мы были в онлайне... надо известить пользователя о переходе в оффлайн...
    {
+    if (p_capp->m_online_state)
+     p_port->Terminate();
     p_capp->m_online_state = false;
     pEventHandler->OnConnection(p_capp->m_online_state);
     p_capp->m_force_notify_about_connection = false;

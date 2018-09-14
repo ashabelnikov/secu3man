@@ -31,6 +31,8 @@
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
 
+class CToolTipCtrlEx;
+
 class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
 {
  public:
@@ -158,4 +160,6 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_tachometer_max;
   int m_pressure_max;
   int m_wheel_pulses;
+
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

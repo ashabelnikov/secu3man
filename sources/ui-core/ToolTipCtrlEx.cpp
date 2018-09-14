@@ -86,7 +86,8 @@ bool CToolTipCtrlEx::UpdateText(CWnd* pWnd, const _TSTRING& text)
  std::list<CToolTipCtrlEx*>::iterator it;
  for(it = m_insts.begin(); it != m_insts.end(); ++it)
  {
-  (*it)->Activate((*it)->m_activated && m_activated_all);
+  if (IsWindow((*it)->m_hWnd))
+   (*it)->Activate((*it)->m_activated && m_activated_all);
  }
 }
 

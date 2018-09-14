@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "AppSettingsDlg.h"
+#include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/XBrowseForFolder.h"
 
 const UINT CAppSettingsDlg::IDD = IDD_APP_SETTINGS;
@@ -181,6 +182,14 @@ BOOL CAppSettingsDlg::OnInitDialog()
 
  OnAppSettingsLogfolderUseappfolder();
  OnAppSettingsLogfolderUseDVFeatures();
+
+ mp_ttc.reset(new CToolTipCtrlEx());
+ VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
+ VERIFY(mp_ttc->AddWindow(&m_port_selection_combo, MLL::GetString(IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_app_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_bl_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO_TT)));
+ mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
+ mp_ttc->ActivateToolTips(true);
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
