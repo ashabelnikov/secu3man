@@ -1106,3 +1106,8 @@ float CAppSettingsModel::GetCLTThrd(void)
 {
  return m_optCLTThrd.value;
 }
+
+void CAppSettingsModel::SetShowExFixtures(bool i_show)
+{
+ m_optShowExFixtures.value = i_show;
+}

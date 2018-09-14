@@ -99,7 +99,7 @@ CLogPlayerTabController::~CLogPlayerTabController()
 }
 
 //изменились настройки программы!
-void CLogPlayerTabController::OnSettingsChanged(void)
+void CLogPlayerTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);

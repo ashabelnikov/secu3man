@@ -161,7 +161,7 @@ CFirmwareTabController::~CFirmwareTabController()
 }
 
 //изменились настройки
-void CFirmwareTabController::OnSettingsChanged(void)
+void CFirmwareTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);

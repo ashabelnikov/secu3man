@@ -110,6 +110,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetDVDeskUpdatePeriod(void) const;
   virtual bool GetShowToolTips(void) const;
   virtual bool GetShowExFixtures(void) const;
+  virtual void SetShowExFixtures(bool i_show);
   virtual bool GetHexDataMode(void) const;
   virtual int GetNumPulsesPer1Km(void) const;
   ////////////////////////////////////////////////////

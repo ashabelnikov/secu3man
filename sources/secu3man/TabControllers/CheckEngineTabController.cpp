@@ -73,7 +73,7 @@ CCheckEngineTabController::~CCheckEngineTabController()
 }
 
 //изменились настройки программы!
-void CCheckEngineTabController::OnSettingsChanged(void)
+void CCheckEngineTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);

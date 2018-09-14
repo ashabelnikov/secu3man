@@ -103,11 +103,15 @@ CParamMonTabController::~CParamMonTabController()
 }
 
 //изменились настройки программы!
-void CParamMonTabController::OnSettingsChanged(void)
+void CParamMonTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
- mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
- mp_moncntr->OnSettingsChanged();
+ if (action != 1)
+ { //will be skipped if only ExFixtures check has been changed (see MainFrameController::OnAppSwitchDashboards() for more info)
+  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+  mp_moncntr->OnSettingsChanged();
+ }
+
  ConfigureIndicators();
  mp_view->Invalidate();
 }

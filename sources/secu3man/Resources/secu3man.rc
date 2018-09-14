@@ -32,6 +32,10 @@ BEGIN
         MENUITEM "Вставить метку 2    Ctrl + 2", ID_APP_LOG_MARK2
         MENUITEM "Вставить метку 3    Ctrl + 3", ID_APP_LOG_MARK3
     END
+    POPUP "&Вид"
+    BEGIN
+        MENUITEM "Переключить панели приборов", ID_APP_SWITCH_DASHBOARD
+    END
     POPUP "&Help"
     BEGIN
         MENUITEM "&About SECU-3 Manager...", ID_APP_ABOUT
@@ -643,6 +647,10 @@ BEGIN
         MENUITEM "Insert mark 1    Ctrl + 1", ID_APP_LOG_MARK1
         MENUITEM "Insert mark 2    Ctrl + 2", ID_APP_LOG_MARK2
         MENUITEM "Insert mark 3    Ctrl + 3", ID_APP_LOG_MARK3
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "Switch dash boards", ID_APP_SWITCH_DASHBOARD
     END
     POPUP "&Help"
     BEGIN

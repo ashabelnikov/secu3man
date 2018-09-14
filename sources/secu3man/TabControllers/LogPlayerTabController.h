@@ -58,7 +58,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   virtual void OnConnection(const bool i_online);
 
   //от представления (диалога)
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
   void OnOpenFileButton(void);
   void OnPlayButton(void);
   void OnNextButton(void);

@@ -54,6 +54,7 @@ class CMainFrame : public CFrameWnd
 #endif
 
   void SetView(CChildView* i_pChildView);
+  void CheckOnAppSwitchDashboards(bool checked);
 
   //устанавливают обработчики событий
   void setOnGetInitialPos(EventHandler2 i_OnGetInitialPos);
@@ -76,6 +77,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppLogMark(EventHandler4 i_OnFunction);
   void setOnAppLogFormat(EventHandler i_OnFunction);
   void setOnCloseNotify(EventHandler i_OnFunction);
+  void setOnAppSwitchDashboards(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -99,8 +101,10 @@ protected:
   afx_msg void OnAppLogMark2();
   afx_msg void OnAppLogMark3();
   afx_msg void OnAppLogFormat();
+  afx_msg void OnAppSwitchDashboards();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
   afx_msg void OnActivateApp(BOOL bActive, DWORD dwThreadID);
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
@@ -130,6 +134,7 @@ private:
   EventHandler3 m_OnPortDevArrived;
   EventHandler4 m_OnAppLogMark;
   EventHandler m_OnCloseNotify;
+  EventHandler m_OnSwitchDashboards;
 
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;

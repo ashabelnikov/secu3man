@@ -47,7 +47,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   virtual void OnConnection(const bool i_online);
 
   //настройки программы изменились
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
 
   //появление/закрытие вкладки Check Engine
   virtual void OnActivate(void);

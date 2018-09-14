@@ -37,7 +37,7 @@ class ISettingsData;
 
 class CCommunicationManager
 {
-  typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
 
  public:
   CCommunicationManager();
@@ -45,7 +45,9 @@ class CCommunicationManager
 
   bool Init(void);
   bool Terminate(void);
-  void setOnSettingsChanged(EventHandler i_OnSettingsChanged);
+  void setOnSettingsChanged(EventWithCode i_OnSettingsChanged);
+
+  void NotifySettingsChanged(int action = 0);
 
   enum
   {
@@ -70,5 +72,5 @@ class CCommunicationManager
   const int m_recv_buff_size;
   const int m_send_buff_size;
 
-  EventHandler m_OnSettingsChanged;
+  EventWithCode m_OnSettingsChanged;
 };

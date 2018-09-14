@@ -61,7 +61,7 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   virtual void OnConnection(const bool i_online);
 
   //от представления (диалога)
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
   void OnOutputToggle(int output_id, bool state);
   void OnEnterButton(void);
   void OnStartOutputsAutoTesting(void);

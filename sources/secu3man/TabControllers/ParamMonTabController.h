@@ -50,7 +50,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
 
  private:
   //called when settings are being changed
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
   
   //появление/закрытие вкладки параметров и монитора
   virtual void OnActivate(void);

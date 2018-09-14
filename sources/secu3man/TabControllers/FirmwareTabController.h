@@ -74,7 +74,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   virtual void OnBegin(const int opcode,const int status);
   virtual void OnEnd(const int opcode,const int status);
 
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
 
   bool CheckChangesAskAndSaveFirmware(void);
   void SetViewFirmwareValues(void);

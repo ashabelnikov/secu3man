@@ -220,6 +220,7 @@ class ISettingsData
   virtual int GetDVDeskUpdatePeriod(void) const = 0;
   virtual bool GetShowToolTips(void) const = 0;
   virtual bool GetShowExFixtures(void) const = 0;
+  virtual void SetShowExFixtures(bool i_show) = 0;
   virtual bool GetHexDataMode(void) const = 0;
   virtual int GetNumPulsesPer1Km(void) const = 0;
 

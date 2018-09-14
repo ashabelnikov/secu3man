@@ -150,7 +150,7 @@ bool CCommunicationManager::Init(void)
  //оповещаем объект слушателя об изменении настроек. Получатель этого оповещения должен активировать
  //необходимый ему коммуникационный контроллер.
  if (m_OnSettingsChanged)
-  m_OnSettingsChanged();
+  m_OnSettingsChanged(0);
 
  return status;
 }
@@ -183,7 +183,13 @@ void CCommunicationManager::SwitchOn(size_t i_cntr, bool i_force_reinit  /* = fa
  }
 }
 
-void CCommunicationManager::setOnSettingsChanged(EventHandler i_OnSettingsChanged)
+void CCommunicationManager::setOnSettingsChanged(EventWithCode i_OnSettingsChanged)
 {
  m_OnSettingsChanged = i_OnSettingsChanged;
+}
+
+void CCommunicationManager::NotifySettingsChanged(int action /*= 0*/)
+{
+ if (m_OnSettingsChanged)
+  m_OnSettingsChanged(action);
 }

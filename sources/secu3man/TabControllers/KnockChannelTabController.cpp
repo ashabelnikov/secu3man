@@ -115,7 +115,7 @@ CKnockChannelTabController::~CKnockChannelTabController()
 }
 
 //изменились настройки программы!
-void CKnockChannelTabController::OnSettingsChanged(void)
+void CKnockChannelTabController::OnSettingsChanged(int action)
 {
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);

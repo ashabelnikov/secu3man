@@ -68,7 +68,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   void OnListSetAllErrors(void);
   void OnListClearAllErrors(void);
 
-  void OnSettingsChanged(void);
+  void OnSettingsChanged(int action);
 
   //data
   CCheckEngineTabDlg*  m_view;

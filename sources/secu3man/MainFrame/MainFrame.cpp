@@ -60,12 +60,14 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_LOG_MARK2, OnAppLogMark2)
  ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
  ON_COMMAND(ID_APP_LOG_FORMAT, OnAppLogFormat)
+ ON_COMMAND(ID_APP_SWITCH_DASHBOARD, OnAppSwitchDashboards)
 
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK2,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK3,OnUpdateOnAppEndLog)
+ ON_UPDATE_COMMAND_UI(ID_APP_SWITCH_DASHBOARD,OnUpdateOnAppSwitchDashboards)
  ON_WM_ACTIVATEAPP()
  ON_WM_DEVICECHANGE()
 END_MESSAGE_MAP()
@@ -310,6 +312,11 @@ void CMainFrame::setOnCloseNotify(EventHandler i_OnFunction)
  m_OnCloseNotify = i_OnFunction;
 }
 
+void CMainFrame::setOnAppSwitchDashboards(EventHandler i_OnFunction)
+{
+ m_OnSwitchDashboards = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -436,6 +443,11 @@ void CMainFrame::OnUpdateOnAppEndLog(CCmdUI* pCmdUI)
  pCmdUI->Enable(enable);
 }
 
+void CMainFrame::OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(true);
+}
+
 void CMainFrame::OnActivateApp(BOOL bActive, DWORD dwThreadID)
 {
  ASSERT(m_OnActivate);
@@ -528,4 +540,15 @@ BOOL CMainFrame::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
   } 
  }
  return TRUE;
+}
+
+void CMainFrame::OnAppSwitchDashboards()
+{
+ if (m_OnSwitchDashboards)
+  m_OnSwitchDashboards();
+}
+
+void CMainFrame::CheckOnAppSwitchDashboards(bool checked)
+{
+ GetMenu()->CheckMenuItem(ID_APP_SWITCH_DASHBOARD, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
 }

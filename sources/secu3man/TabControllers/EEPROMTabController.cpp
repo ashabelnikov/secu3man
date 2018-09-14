@@ -99,7 +99,7 @@ CEEPROMTabController::~CEEPROMTabController()
 }
 
 //изменились настройки программы!
-void CEEPROMTabController::OnSettingsChanged(void)
+void CEEPROMTabController::OnSettingsChanged(int action)
 {
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));

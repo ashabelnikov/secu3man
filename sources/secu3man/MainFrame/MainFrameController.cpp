@@ -98,6 +98,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnPortDevArrived(MakeDelegate(this, &MainFrameController::OnPortDevArrived));
  mp_view->setOnAppLogMark(MakeDelegate(this, &MainFrameController::OnAppLogMark));
  mp_view->setOnAppLogFormat(MakeDelegate(this, &MainFrameController::OnAppLogFormat));
+ mp_view->setOnAppSwitchDashboards(MakeDelegate(this, &MainFrameController::OnAppSwitchDashboards));
 }
 
 MainFrameController::~MainFrameController()
@@ -161,6 +162,8 @@ void MainFrameController::OnAppSettings()
   //Start logging if user selected always to write log  
   if (settings->GetAlwaysWriteLog() && IsBeginLoggingAllowed())
    OnAppBeginLog();
+
+  mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
  }
 }
 
@@ -305,6 +308,8 @@ void MainFrameController::OnCreate(void)
  settings->GetWndSize(sz);
  if (sz.m_MainFrmWnd_W != std::numeric_limits<int>::max() && sz.m_MainFrmWnd_H != std::numeric_limits<int>::max())
   mp_view->SetWindowPos(NULL, 0, 0, sz.m_MainFrmWnd_W, sz.m_MainFrmWnd_H, SWP_NOZORDER | SWP_NOMOVE);
+
+ mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
 }
 
 bool MainFrameController::OnClose(void)
@@ -349,4 +354,13 @@ void MainFrameController::OnPortDevArrived(const _TSTRING& devName)
   m_pCommunicationManager->Init();
   mp_view->EndWaitCursor();
  }
+}
+
+void MainFrameController::OnAppSwitchDashboards()
+{
+ bool exf = m_pAppSettingsManager->GetSettings()->GetShowExFixtures();
+ exf = exf ? false : true;
+ mp_view->CheckOnAppSwitchDashboards(exf);
+ m_pAppSettingsManager->GetSettings()->SetShowExFixtures(exf);
+ m_pCommunicationManager->NotifySettingsChanged(1); //only ExFixtures check changed
 }
