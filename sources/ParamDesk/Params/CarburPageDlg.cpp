@@ -220,7 +220,7 @@ void CCarburPageDlg::OnUpdateFuelInjectionControls(CCmdUI* pCmdUI)
 
 void CCarburPageDlg::OnUpdateCarburetorControls(CCmdUI* pCmdUI)
 {
- pCmdUI->Enable(m_enabled && (!m_fuel_injection || m_gasdose));
+ pCmdUI->Enable(m_enabled);
 }
 
 BOOL CCarburPageDlg::OnInitDialog()
