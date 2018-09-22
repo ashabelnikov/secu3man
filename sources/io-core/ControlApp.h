@@ -81,6 +81,7 @@ class IOCORE_API CControlApp
   void SwitchOn(bool state, bool i_force_reinit = false);
   void SetProtocolDataMode(bool i_mode);
   void SetQuartzFrq(long frq);
+  void SetPortAutoReopen(bool reopen);
   bool SendPacket(const BYTE i_descriptor, const void* i_packet_data);
   bool ChangeContext(const BYTE i_new_descriptor);
   bool StartBootLoader();
@@ -135,6 +136,7 @@ class IOCORE_API CControlApp
   bool m_online_state;                  //хранит текущее состояние (онлайн или оффлайн)
   bool m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
   bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn();
+  bool m_portAutoReopen;                //flag, makes thread to do auto reopening of COM port (each 100ms if port is not opened)
 
   PacketDataProxy* mp_pdp;
 

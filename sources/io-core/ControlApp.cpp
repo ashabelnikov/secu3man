@@ -119,6 +119,7 @@ CControlApp::CControlApp()
 , m_period_distance(0.166666f)   //for speed sensor calculations
 , m_quartz_frq(20000000)    //default clock is 20mHz
 , m_speedUnit(0) //km/h
+, m_portAutoReopen(true)
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -2413,12 +2414,15 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   if (p_port->GetHandle()==INVALID_HANDLE_VALUE)
   {
    Sleep(100);
-   try
+   if (p_capp->m_portAutoReopen)
    {
-    p_port->Initialize(p_capp->m_uart_speed, NOPARITY, ONESTOPBIT, false, true);
-   }
-   catch(CComPort::xInitialize e)
-   {
+    try
+    {
+     p_port->Initialize(p_capp->m_uart_speed, NOPARITY, ONESTOPBIT, false, true);
+    }
+    catch(CComPort::xInitialize e)
+    {
+    }
    }
    continue;
   }
@@ -2601,6 +2605,12 @@ void CControlApp::SetProtocolDataMode(bool i_mode)
 void CControlApp::SetQuartzFrq(long frq)
 {
  m_quartz_frq = frq;
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::SetPortAutoReopen(bool reopen)
+{
+ m_portAutoReopen = reopen;
 }
 
 //-----------------------------------------------------------------------

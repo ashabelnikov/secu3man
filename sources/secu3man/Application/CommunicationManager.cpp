@@ -101,6 +101,8 @@ bool CCommunicationManager::Init(void)
  m_pControlApp->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(m_pSettings->GetECUPlatformType()));
  //Set units for speed and distance
  m_pControlApp->SetSpeedUnit(m_pSettings->GetSpeedUnit()); 
+ //Set auto reopening of port
+ m_pControlApp->SetPortAutoReopen(m_pSettings->GetPortAutoReopen());
 
  try
  {

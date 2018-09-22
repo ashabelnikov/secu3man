@@ -89,6 +89,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetSaveWarning(void) const;
   virtual bool GetAutoCERead(void) const;
   virtual bool GetChildCharts(void) const;
+  virtual bool GetPortAutoReopen(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -171,6 +172,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optSaveWarning;
   OptField_t<bool> m_optAutoCERead;
   OptField_t<bool> m_optChildCharts;
+  OptField_t<bool> m_optPortAutoReopen;  
+
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;
   OptField_t<int> m_optDVDeskUpdatePeriod;

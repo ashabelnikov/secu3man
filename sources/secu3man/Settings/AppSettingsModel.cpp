@@ -60,6 +60,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optSaveWarning(_T("SaveWarning"))
 , m_optAutoCERead(_T("AutoCERead"))
 , m_optChildCharts(_T("ChildCharts"))
+, m_optPortAutoReopen(_T("PortAutoReopen"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -295,6 +296,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optSaveWarning, _T("1"), 0, 1);
  os.ReadInt(m_optAutoCERead, _T("0"), 0, 1);
  os.ReadInt(m_optChildCharts, _T("1"), 0, 1);
+ os.ReadInt(m_optPortAutoReopen, _T("1"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -472,6 +474,7 @@ bool CAppSettingsModel::WriteSettings(void)
  os.WriteInt(m_optSaveWarning); 
  os.WriteInt(m_optAutoCERead); 
  os.WriteInt(m_optChildCharts); 
+ os.WriteInt(m_optPortAutoReopen); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
  fs.CreateSection();
@@ -1110,4 +1113,9 @@ float CAppSettingsModel::GetCLTThrd(void)
 void CAppSettingsModel::SetShowExFixtures(bool i_show)
 {
  m_optShowExFixtures.value = i_show;
+}
+
+bool CAppSettingsModel::GetPortAutoReopen(void) const
+{
+ return m_optPortAutoReopen.value;
 }
