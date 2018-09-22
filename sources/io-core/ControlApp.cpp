@@ -2453,7 +2453,7 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
   {
    if ((p_capp->m_online_state==true)||(p_capp->m_force_notify_about_connection)) //мы были в онлайне... надо известить пользователя о переходе в оффлайн...
    {
-    if (p_capp->m_online_state)
+    if (p_capp->m_online_state && p_capp->m_portAutoReopen)
      p_port->Terminate();
     p_capp->m_online_state = false;
     pEventHandler->OnConnection(p_capp->m_online_state);
