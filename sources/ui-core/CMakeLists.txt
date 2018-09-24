@@ -9,6 +9,7 @@ ADD_DEFINITIONS(-D_AFXEXT)
 ADD_DEFINITIONS(-D_WINDLL)
 ADD_DEFINITIONS(-DDDX_HELPERS_EXPORTS)
 ADD_DEFINITIONS(-DFNT_HELPERS_EXPORTS)
+ADD_DEFINITIONS(-DIMAGE_UTILS_EXPORTS)
 ADD_DEFINITIONS(-DXBROWSEFORFOLDER_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
@@ -35,6 +36,7 @@ set(HEADERS
   HeaderCtrlEx.h
   HotKeysManager.h
   HotKeysToCmdRouter.h
+  ImageUtils.h
   ITabControllerEvent.h
   Label.h
   LEDIndicator.h
@@ -67,6 +69,7 @@ set(SOURCES
   HeaderCtrlEx.cpp
   HotKeysManager.cpp
   HotKeysToCmdRouter.cpp
+  ImageUtils.cpp
   ITabControllerEvent.cpp
   Label.cpp
   LEDIndicator.cpp

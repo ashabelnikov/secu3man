@@ -35,6 +35,7 @@
 #endif // _AFX_NO_AFXCMN_SUPPORT
 
 #include <Afxmt.h>
+#include <atlimage.h>
 
 #if (_MSC_VER <1300)
  #pragma warning( disable : 4786 ) // : identifier was truncated to '255' characters in the debug information

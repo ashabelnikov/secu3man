@@ -61,7 +61,8 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
  ON_COMMAND(ID_APP_LOG_FORMAT, OnAppLogFormat)
  ON_COMMAND(ID_APP_SWITCH_DASHBOARD, OnAppSwitchDashboards)
-
+ ON_COMMAND(ID_APP_SAVESCR, OnAppSaveScreenshot)
+ ON_COMMAND(ID_APP_SAVEINI, OnAppSaveSettings)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
  ON_UPDATE_COMMAND_UI(ID_APP_END_LOG,OnUpdateOnAppEndLog)
  ON_UPDATE_COMMAND_UI(ID_APP_LOG_MARK1,OnUpdateOnAppEndLog)
@@ -317,6 +318,16 @@ void CMainFrame::setOnAppSwitchDashboards(EventHandler i_OnFunction)
  m_OnSwitchDashboards = i_OnFunction;
 }
 
+void CMainFrame::setOnAppSaveScreenshot(EventHandler i_OnFunction)
+{
+ m_OnSaveScreenshot = i_OnFunction;
+}
+
+void CMainFrame::setOnAppSaveSettings(EventHandler i_OnFunction)
+{
+ m_OnSaveSettings = i_OnFunction;
+}
+
 void CMainFrame::OnClose()
 {
  bool result = true;
@@ -551,4 +562,16 @@ void CMainFrame::OnAppSwitchDashboards()
 void CMainFrame::CheckOnAppSwitchDashboards(bool checked)
 {
  GetMenu()->CheckMenuItem(ID_APP_SWITCH_DASHBOARD, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
+}
+
+void CMainFrame::OnAppSaveScreenshot()
+{
+ if (m_OnSaveScreenshot)
+  m_OnSaveScreenshot();
+}
+
+void CMainFrame::OnAppSaveSettings()
+{
+ if (m_OnSaveSettings)
+  m_OnSaveSettings();
 }

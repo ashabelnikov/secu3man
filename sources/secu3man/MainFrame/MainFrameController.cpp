@@ -42,6 +42,7 @@
 #include "ui-core/HotKeysManager.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ScrlMessageBox.h"
+#include "ui-core/ImageUtils.h"
 
 using namespace fastdelegate;
 
@@ -99,6 +100,8 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppLogMark(MakeDelegate(this, &MainFrameController::OnAppLogMark));
  mp_view->setOnAppLogFormat(MakeDelegate(this, &MainFrameController::OnAppLogFormat));
  mp_view->setOnAppSwitchDashboards(MakeDelegate(this, &MainFrameController::OnAppSwitchDashboards));
+ mp_view->setOnAppSaveScreenshot(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot));
+ mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
 }
 
 MainFrameController::~MainFrameController()
@@ -364,4 +367,16 @@ void MainFrameController::OnAppSwitchDashboards()
  mp_view->CheckOnAppSwitchDashboards(exf);
  m_pAppSettingsManager->GetSettings()->SetShowExFixtures(exf);
  m_pCommunicationManager->NotifySettingsChanged(1); //only ExFixtures check changed
+}
+
+void MainFrameController::OnAppSaveScreenshot()
+{
+ SaveScreenshot(AfxGetMainWnd(), true);
+}
+
+void MainFrameController::OnAppSaveSettings()
+{
+ mp_view->BeginWaitCursor();
+ m_pAppSettingsManager->WriteSettings();
+ mp_view->EndWaitCursor();
 }

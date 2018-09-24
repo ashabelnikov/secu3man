@@ -78,6 +78,8 @@ class CMainFrame : public CFrameWnd
   void setOnAppLogFormat(EventHandler i_OnFunction);
   void setOnCloseNotify(EventHandler i_OnFunction);
   void setOnAppSwitchDashboards(EventHandler i_OnFunction);
+  void setOnAppSaveScreenshot(EventHandler i_OnFunction);
+  void setOnAppSaveSettings(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -102,6 +104,8 @@ protected:
   afx_msg void OnAppLogMark3();
   afx_msg void OnAppLogFormat();
   afx_msg void OnAppSwitchDashboards();
+  afx_msg void OnAppSaveScreenshot();
+  afx_msg void OnAppSaveSettings();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppEndLog(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOnAppSwitchDashboards(CCmdUI* pCmdUI);
@@ -135,7 +139,8 @@ private:
   EventHandler4 m_OnAppLogMark;
   EventHandler m_OnCloseNotify;
   EventHandler m_OnSwitchDashboards;
-
+  EventHandler m_OnSaveScreenshot;
+  EventHandler m_OnSaveSettings;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;

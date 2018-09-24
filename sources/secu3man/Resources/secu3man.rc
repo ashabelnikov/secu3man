@@ -20,6 +20,8 @@ IDR_MAINFRAME MENU PRELOAD DISCARDABLE
 BEGIN
     POPUP "&Программа"
     BEGIN
+        MENUITEM "Сохранить скриншот", ID_APP_SAVESCR
+        MENUITEM "Сохранить настройки", ID_APP_SAVEINI
         MENUITEM "Выход    Ctrl + Q", ID_APP_EXIT
     END
     MENUITEM "&Настройки", ID_APP_SETTINGS
@@ -346,7 +348,7 @@ BEGIN
     GROUPBOX        "Входы",IDC_DEV_DIAG_INPUTS_GROUP,100,2,371,183
     CONTROL         "",IDC_DEV_DIAG_INPUTS_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,102,12,214,128
     CONTROL         "Enter diagnostic mode",IDC_DEV_DIAG_ENTER_CHECK,"Button",BS_CHECKBOX | BS_PUSHLIKE | WS_TABSTOP,100,191,88,22
-    LTEXT           "ВНИМАНИЕ! Отключите катушки зажиг. и форсунки перед входом в диагност. режим. Перед тестиров. вых. BL, DE убедитесь что перемычки сняты!\nВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (есть отличия).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
+    LTEXT           "ВНИМАНИЕ! Отключите катушки зажиг. и форсунки перед входом в диагност. режим. Перед тестиров. вых. BL и DE убедитесь, что перемычки сняты!\nВНИМАНИЕ! Значения входов показываются на выводах МК, а не на внешнем разъеме (есть отличия).",IDC_DEV_DIAG_WARNING_TEXT,201,190,268,32
 END
 
 IDD_KC_KNOCK_FRQ_CALC DIALOGEX 0, 0, 70, 25
@@ -636,6 +638,8 @@ IDR_MAINFRAME MENU PRELOAD DISCARDABLE
 BEGIN
     POPUP "&Program"
     BEGIN
+        MENUITEM "Save screenshot", ID_APP_SAVESCR
+        MENUITEM "Save settings", ID_APP_SAVEINI
         MENUITEM "Exit    Ctrl + Q", ID_APP_EXIT
     END
     MENUITEM "&Settings", ID_APP_SETTINGS
