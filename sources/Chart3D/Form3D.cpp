@@ -997,6 +997,8 @@ void __fastcall TForm3D::OnCopyToCurve(TObject *Sender)
  else if (Sender == PM_CopyToCurve14) CopyCurve(m_air_flow_position, 14);
  else if (Sender == PM_CopyToCurve15) CopyCurve(m_air_flow_position, 15);
  else return;
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
@@ -1019,6 +1021,8 @@ void __fastcall TForm3D::OnCopyFromCurve(TObject *Sender)
  else if (Sender == PM_CopyFromCurve14) CopyCurve(14, m_air_flow_position);
  else if (Sender == PM_CopyFromCurve15) CopyCurve(15, m_air_flow_position);
  else return;
+ if (m_pOnChange)
+  m_pOnChange(m_param_on_change);
 }
 
 //---------------------------------------------------------------------------
