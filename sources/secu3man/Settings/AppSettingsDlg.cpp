@@ -154,6 +154,8 @@ BOOL CAppSettingsDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
 
+ m_port_selection_combo.LimitText(200);
+
  m_midesk_update_period_edit.SetLimitText(4);
  m_midesk_update_period_spin.SetBuddy(&m_midesk_update_period_edit);
  m_midesk_update_period_spin.SetRangeAndDelta(10,1000,10);
