@@ -1880,7 +1880,7 @@ void CButtonsPanel::OnViewCrnkMap()
  if ((!m_crnk_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_crnk_map_chart_state = 1;
-  m_crnk_map_wnd_handle = DLL::Chart2DCreate(GetCrnkMap(true), GetCrnkMap(false), 0.25f, 26.0, SECU3IO::temp_map_tmp_slots, 16,
+  m_crnk_map_wnd_handle = DLL::Chart2DCreate(GetCrnkMap(true), GetCrnkMap(false), 0.25f, 50.0, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_CRNK_MAP).c_str(), false);
