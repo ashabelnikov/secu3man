@@ -118,6 +118,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   void SetMaxTPS(float tps);
   void SetCLTThrd(float clt);
 
+  void SetMapEditorSettings(int gradSat, int gradBrt);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);

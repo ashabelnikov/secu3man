@@ -68,6 +68,8 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnChange(EventHandler OnCB);
   void setOnSelChange(EventHandler OnCB);
 
+  static SetSettings(int gradSat, int gradBrt);
+
  protected:
   afx_msg void OnPaint();
   afx_msg void OnDestroy();
@@ -157,4 +159,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   std::vector<COLORREF> m_gradColor;
   DWORD* mp_itemColors;
+
+  static int m_gradSaturation;
+  static int m_gradBrightness;
 };

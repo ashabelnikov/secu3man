@@ -261,6 +261,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetMinTPS(mp_settings->GetMinTPS());
  mp_view->mp_ButtonsPanel->SetMaxTPS(mp_settings->GetMaxTPS());
  mp_view->mp_ButtonsPanel->SetCLTThrd(mp_settings->GetCLTThrd());
+ mp_view->mp_ButtonsPanel->SetMapEditorSettings(mp_settings->GetGradSaturation(), mp_settings->GetGradBrightness());
 }
 
 CPMTablesController::~CPMTablesController()

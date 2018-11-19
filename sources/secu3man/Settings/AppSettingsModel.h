@@ -133,6 +133,9 @@ class CAppSettingsModel : public ISettingsData
   virtual float GetMaxTPS(void);
   virtual float GetCLTThrd(void);
 
+  virtual int GetGradSaturation(void);
+  virtual int GetGradBrightness(void);
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -146,8 +149,9 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
-  CString m_Name_IndColors_Section;
-  CString m_Name_AutoTune_Section;
+  const CString m_Name_IndColors_Section;
+  const CString m_Name_AutoTune_Section;
+  const CString m_Name_MapEditor_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -298,6 +302,10 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optMinTPS;
   OptField_t<float> m_optMaxTPS;
   OptField_t<float> m_optCLTThrd;
+
+  //Map editor
+  OptField_t<int> m_optGradSaturation;
+  OptField_t<int> m_optGradBrightness;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

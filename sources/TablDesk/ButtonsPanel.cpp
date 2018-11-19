@@ -34,6 +34,7 @@
 #include "MapIds.h"
 #include "ui-core/WndScroller.h"
 #include "AutoTuneController.h"
+#include "ui-core/MapEditorCtrl.h"
 
 #define TIMER_ID 0
 
@@ -3493,4 +3494,9 @@ void CButtonsPanel::SetCLTThrd(float clt)
 {
  if (mp_autoTuneCntr.get())
   mp_autoTuneCntr->SetCLTThrd(clt);
+}
+
+void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt)
+{
+ CMapEditorCtrl::SetSettings(gradSat, gradBrt);
 }

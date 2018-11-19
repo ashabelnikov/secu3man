@@ -170,6 +170,14 @@ BEGIN_MESSAGE_MAP(CEditExCustomKeys, CEditEx)
 END_MESSAGE_MAP()
 
 
+int CMapEditorCtrl::m_gradSaturation = 120;
+int CMapEditorCtrl::m_gradBrightness = 255;
+ 
+CMapEditorCtrl::SetSettings(int gradSat, int gradBrt)
+{
+ CMapEditorCtrl::m_gradSaturation = gradSat;
+ CMapEditorCtrl::m_gradBrightness = gradBrt;
+}
 
 //if you create control via resource editor, you must specify this class name in the control's properties
 #define MAPEDITORCTRL_CLASSNAME  _T("MFCMapEditorCtrl")  // Window class name
@@ -204,7 +212,7 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , m_absGrad(absGrad)
 {
  _RegisterWindowClass(hMod);
- m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, 160, 255);
+ m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, m_gradSaturation, m_gradBrightness);
  for(int i = 0; i < (rows*cols); ++i)
   mp_itemColors[i] = 0;
 }
@@ -329,7 +337,7 @@ void CMapEditorCtrl::_DrawItem(CDC& dc, const CRect& rect, LPCTSTR text)
  dc.Draw3dRect(&rect, RGB(0,0,0), RGB(0,0,0));
  CFont* oldFont = dc.SelectObject(&m_cFont);
  dc.SetTextColor(GetSysColor(IsWindowEnabled() ? COLOR_WINDOWTEXT : COLOR_GRAYTEXT));
- dc.TextOut(rect.left, rect.top, text);
+ dc.DrawText(text, (LPRECT)&rect, DT_CENTER | DT_VCENTER | DT_SINGLELINE); 
  dc.SetTextColor(GetSysColor(COLOR_WINDOWTEXT));
  dc.SelectObject(oldFont);
 }
@@ -568,7 +576,7 @@ void CMapEditorCtrl::_ActivateEdit(void)
 //ASSERT(!mp_edit.get());
  mp_edit.reset(new CEditExCustomKeys(fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditChar), fastdelegate::MakeDelegate(this, &CMapEditorCtrl::OnEditKill), m_minVal, m_maxVal, m_increment));
  CRect rect = _GetItemRect(m_cur_i, m_cur_j);
- mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE, rect, this, 0);
+ mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | ES_CENTER, rect, this, 0);
  mp_edit->SetDecimalPlaces(m_decPlaces);
  mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
  mp_edit->SetFocus();

@@ -147,6 +147,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMinTPS(_T("MinTPS"))
 , m_optMaxTPS(_T("MaxTPS"))
 , m_optCLTThrd(_T("CLTThrd"))
+//Map editor
+, m_Name_MapEditor_Section(_T("MapEditor"))
+, m_optGradSaturation(_T("GradSaturation"))
+, m_optGradBrightness(_T("GradBrightness"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -424,6 +428,7 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetSynLoad[i],_T(""), 0, 32, true);
  }
 
+ //Auto tune
  IniIO at(IniFileName, m_Name_AutoTune_Section);
  at.ReadVector(m_optLambdaDelay,_T("200,70,40,250,150,100,350,300,200"),10, 3000, 9);
  at.ReadVector(m_optLambdaDelayL,_T("30,115,200"), 5, 500, 3);
@@ -439,6 +444,11 @@ bool CAppSettingsModel::ReadSettings(void)
  at.ReadFlt(m_optMinTPS,_T("0.0"), 0.0f, 100.0f);
  at.ReadFlt(m_optMaxTPS,_T("100.0"), 0.0f, 100.0f);
  at.ReadFlt(m_optCLTThrd,_T("70.0"), 0.0f, 180.0f);
+
+ //Map editor
+ IniIO me(IniFileName, m_Name_MapEditor_Section);
+ me.ReadInt(m_optGradSaturation, _T("120"), 0, 255);
+ me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
 
  return status;
 }
@@ -622,6 +632,11 @@ bool CAppSettingsModel::WriteSettings(void)
  at.WriteFlt(m_optMinTPS, 1);
  at.WriteFlt(m_optMaxTPS, 1);
  at.WriteFlt(m_optCLTThrd, 1);
+
+ //Map editor
+ IniIO me(IniFileName, m_Name_MapEditor_Section);
+ me.WriteInt(m_optGradSaturation);
+ me.WriteInt(m_optGradBrightness);
 
  return status;
 }
@@ -1118,4 +1133,14 @@ void CAppSettingsModel::SetShowExFixtures(bool i_show)
 bool CAppSettingsModel::GetPortAutoReopen(void) const
 {
  return m_optPortAutoReopen.value;
+}
+
+int CAppSettingsModel::GetGradSaturation(void)
+{
+ return m_optGradSaturation.value;
+}
+
+int CAppSettingsModel::GetGradBrightness(void)
+{
+ return m_optGradBrightness.value;
 }
