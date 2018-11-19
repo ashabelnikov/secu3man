@@ -151,6 +151,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_Name_MapEditor_Section(_T("MapEditor"))
 , m_optGradSaturation(_T("GradSaturation"))
 , m_optGradBrightness(_T("GradBrightness"))
+, m_optBoldFont(_T("BoldFont"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -449,6 +450,7 @@ bool CAppSettingsModel::ReadSettings(void)
  IniIO me(IniFileName, m_Name_MapEditor_Section);
  me.ReadInt(m_optGradSaturation, _T("120"), 0, 255);
  me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
+ me.ReadInt(m_optBoldFont, _T("0"), 0, 1);
 
  return status;
 }
@@ -637,6 +639,7 @@ bool CAppSettingsModel::WriteSettings(void)
  IniIO me(IniFileName, m_Name_MapEditor_Section);
  me.WriteInt(m_optGradSaturation);
  me.WriteInt(m_optGradBrightness);
+ me.WriteInt(m_optBoldFont);
 
  return status;
 }
@@ -1143,4 +1146,9 @@ int CAppSettingsModel::GetGradSaturation(void)
 int CAppSettingsModel::GetGradBrightness(void)
 {
  return m_optGradBrightness.value;
+}
+
+int CAppSettingsModel::GetBoldFont(void)
+{
+ return m_optBoldFont.value;
 }

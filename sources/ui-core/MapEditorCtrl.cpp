@@ -172,11 +172,13 @@ END_MESSAGE_MAP()
 
 int CMapEditorCtrl::m_gradSaturation = 120;
 int CMapEditorCtrl::m_gradBrightness = 255;
+bool CMapEditorCtrl::m_boldFont = false;
  
-CMapEditorCtrl::SetSettings(int gradSat, int gradBrt)
+CMapEditorCtrl::SetSettings(int gradSat, int gradBrt, bool boldFont)
 {
  CMapEditorCtrl::m_gradSaturation = gradSat;
  CMapEditorCtrl::m_gradBrightness = gradBrt;
+ CMapEditorCtrl::m_boldFont = boldFont;
 }
 
 //if you create control via resource editor, you must specify this class name in the control's properties
@@ -610,6 +612,8 @@ LRESULT CMapEditorCtrl::OnWMSetFont(WPARAM wParam, LPARAM lParam)
      m_cFont.DeleteObject();
      ASSERT((HFONT)m_cFont == NULL);
     }	
+    if (m_boldFont)
+     tLogFont.lfWeight = 700;
     m_cFont.CreateFontIndirect(&tLogFont);
    }
   }

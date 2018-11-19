@@ -68,7 +68,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnChange(EventHandler OnCB);
   void setOnSelChange(EventHandler OnCB);
 
-  static SetSettings(int gradSat, int gradBrt);
+  static SetSettings(int gradSat, int gradBrt, bool boldFont);
 
  protected:
   afx_msg void OnPaint();
@@ -162,4 +162,5 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   static int m_gradSaturation;
   static int m_gradBrightness;
+  static bool m_boldFont;
 };

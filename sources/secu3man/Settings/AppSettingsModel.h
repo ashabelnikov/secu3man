@@ -135,6 +135,7 @@ class CAppSettingsModel : public ISettingsData
 
   virtual int GetGradSaturation(void);
   virtual int GetGradBrightness(void);
+  virtual int GetBoldFont(void);
 
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
@@ -306,6 +307,7 @@ class CAppSettingsModel : public ISettingsData
   //Map editor
   OptField_t<int> m_optGradSaturation;
   OptField_t<int> m_optGradBrightness;
+  OptField_t<int> m_optBoldFont;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

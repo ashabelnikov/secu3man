@@ -3496,7 +3496,7 @@ void CButtonsPanel::SetCLTThrd(float clt)
   mp_autoTuneCntr->SetCLTThrd(clt);
 }
 
-void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt)
+void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold)
 {
- CMapEditorCtrl::SetSettings(gradSat, gradBrt);
+ CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold);
 }

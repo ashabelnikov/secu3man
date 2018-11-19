@@ -250,4 +250,5 @@ class ISettingsData
 
   virtual int GetGradSaturation(void) = 0;
   virtual int GetGradBrightness(void) = 0;
+  virtual int GetBoldFont(void) = 0;
 };
