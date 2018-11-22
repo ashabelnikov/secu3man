@@ -43,8 +43,9 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
  if (!i_hwnd)
   return;
 
- RECT rc;
- GetWindowRect(i_hwnd, &rc);
+ WINDOWPLACEMENT wpl;
+ GetWindowPlacement(i_hwnd, &wpl);
+ RECT rc = wpl.rcNormalPosition;
 
  WndSettings ws;
  mp_settings->GetWndSettings(ws);
@@ -348,5 +349,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
  };
 
  if (X != std::numeric_limits<int>::max() && Y != std::numeric_limits<int>::max())
-  SetWindowPos(i_hwnd, NULL, X, Y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+ { 
+  WINDOWPLACEMENT wpl;
+  GetWindowPlacement(i_hwnd, &wpl);
+  wpl.rcNormalPosition = CRect(X, Y, X + (wpl.rcNormalPosition.right - wpl.rcNormalPosition.left), Y + (wpl.rcNormalPosition.bottom - wpl.rcNormalPosition.top));
+  SetWindowPlacement(i_hwnd, &wpl);
+ }
 }
