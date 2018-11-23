@@ -71,5 +71,7 @@ enum EMapTypes
  TYPE_MAP_GME_INJ_WND  = 39, //pseudo map, grid mode editing window for injection maps
 
  TYPE_MAP_SET_START    = 1,
- TYPE_MAP_SET_END      = 25
+ TYPE_MAP_SET_END      = 25,
+ TYPE_MAP_ALL_START    = 1,
+ TYPE_MAP_ALL_END      = 39
 };

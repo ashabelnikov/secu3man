@@ -120,6 +120,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetMapEditorSettings(int gradSat, int gradBrt, bool bold);
 
+  virtual void MakeChartsChildren(bool children);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -204,6 +206,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   int m_scrl_view;
  private:
+  void _MakeWindowChild(HWND hwnd, bool child);
+
   std::auto_ptr<CWndScroller> mp_scr;
 
   CButton m_view_work_map_btn;
@@ -444,6 +448,9 @@ private:
   bool m_carb_afr;
   bool m_en_gas_corr;
 protected:
+  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
+  void OnWndActivation(HWND i_hwnd, long cmd);
+
   bool m_fuel_injection;
   bool m_gasdose;
   bool m_choke_op_enabled;
@@ -451,4 +458,6 @@ protected:
   float m_ldaxMinVal;
   float m_ldaxMaxVal;
   int m_ldaxCfg;
+
+  bool m_children_charts;
 };

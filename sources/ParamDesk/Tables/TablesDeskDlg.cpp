@@ -46,7 +46,6 @@ CTablesDeskDlg::CTablesDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CTablesDeskDlg::IDD, pParent)
 , m_enabled(false)
 , mp_ContextMenuManager(new CTDContextMenuManager())
-, m_children_charts(false)
 , m_tsneb_readonly(false)
 , m_lock_enchange(false)
 , m_lock_killfocus(true)
@@ -260,20 +259,7 @@ void CTablesDeskDlg::SetModificationFlag(bool value)
 
 void CTablesDeskDlg::MakeChartsChildren(bool children)
 {
- m_children_charts = children;
- HWND hwnd;
-
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
- {
-  hwnd = mp_ButtonsPanel->GetMapWindow(i);
-  _MakeWindowChild(hwnd, children);
- }
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND); //pseudo map
- _MakeWindowChild(hwnd, children);
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND); //pseudo map
- _MakeWindowChild(hwnd, children);
+ mp_ButtonsPanel->MakeChartsChildren(children);
 }
 
 void CTablesDeskDlg::SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index)
@@ -576,30 +562,13 @@ void CTablesDeskDlg::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 
 void CTablesDeskDlg::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
- _MakeWindowChild(i_hwnd, m_children_charts);
- 
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(i_hwnd, i_mapType);
 }
 
 void CTablesDeskDlg::OnWndActivation(HWND i_hwnd, long cmd)
 {
- if (m_children_charts && cmd == SC_MINIMIZE && NULL != i_hwnd)
-  CWnd::FromHandle(i_hwnd)->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
-}
-
-//------------------------------------------------------------------------
-void CTablesDeskDlg::_MakeWindowChild(HWND hwnd, bool child)
-{
- if (hwnd)
- {
-  if (child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_POPUP);
-  else
-   CWnd::FromHandle(hwnd)->ModifyStyle(WS_POPUP, 0);
-
-  CWnd::FromHandle(hwnd)->SetParent(child ? AfxGetMainWnd() : NULL);
- }
+ //empty
 }
 
 //from CButtonsPanel

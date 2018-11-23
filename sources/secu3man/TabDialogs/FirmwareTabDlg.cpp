@@ -71,7 +71,7 @@ CFirmwareTabDlg::CFirmwareTabDlg(CWnd* pParent /*=NULL*/)
  //create list of tabs
  m_tabs.insert(std::make_pair(PSTID_DEF_PARAMETERS, std::make_pair(mp_ParamDeskDlg.get(), MLL::GetString(IDS_FW_DEF_PARAMETR))));
  m_tabs.insert(std::make_pair(PSTID_IO_REMAPPING, std::make_pair(mp_IORemappingDlg.get(), MLL::GetString(IDS_FW_IO_REMAPPING))));
- 
+
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu() || !CheckAppLogo() || !CheckAbout())
   delete this;
@@ -498,21 +498,27 @@ void CFirmwareTabDlg::SetFirmwareName(_TSTRING i_name)
 
 void CFirmwareTabDlg::SetModified(bool i_modified)
 {
- if (i_modified)
-  m_modification_flag.SetWindowText(_T("*"));
- else
-  m_modification_flag.SetWindowText(_T(" "));
+ if (m_modification_flag.GetSafeHwnd())
+ {
+  if (i_modified)
+   m_modification_flag.SetWindowText(_T("*"));
+  else
+   m_modification_flag.SetWindowText(_T(" "));
+ }
 }
 
 void CFirmwareTabDlg::SetFirmwareCRCs(unsigned int crc_stored_in_fw, unsigned int actual_crc_of_fw)
 {
- CString string, string_stored, string_actual;
- string_stored.Format(_T("%04x"),crc_stored_in_fw);
- string_stored.MakeUpper();
- string_actual.Format(_T("%04x"),actual_crc_of_fw);
- string_actual.MakeUpper();
- string.Format(_T("CRC16: %s/%s"),string_stored,string_actual);
- m_fw_crc.SetWindowText(string);
+ if (m_fw_crc.GetSafeHwnd())
+ {
+  CString string, string_stored, string_actual;
+  string_stored.Format(_T("%04x"),crc_stored_in_fw);
+  string_stored.MakeUpper();
+  string_actual.Format(_T("%04x"),actual_crc_of_fw);
+  string_actual.MakeUpper();
+  string.Format(_T("CRC16: %s/%s"),string_stored,string_actual);
+  m_fw_crc.SetWindowText(string);
+ }
 }
 
 void CFirmwareTabDlg::OnImportDataFromAnotherFW()
@@ -793,4 +799,10 @@ void CFirmwareTabDlg::OnSize( UINT nType, int cx, int cy )
  }
 
  Super::OnSize(nType, cx, cy);
+}
+
+void CFirmwareTabDlg::EnableMakingChartsChildren(bool enable)
+{
+ if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
+  mp_TablesPanel->MakeChartsChildren(enable);
 }

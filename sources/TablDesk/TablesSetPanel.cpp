@@ -469,6 +469,158 @@ void __cdecl CTablesSetPanel::OnCloseEHPauseTable(void* i_param)
 }
 
 //------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationAttenuatorTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_attenuator_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationDwellCntrlTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_dwellcntrl_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationCTSCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_cts_curve_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationATSCurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_ats_curve_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationATSAACTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_ats_aac_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationGasdoseTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_gasdose_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationBarocorrTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_barocorr_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationManIgntimTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_manigntim_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationTmp2CurveTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_tmp2_curve_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationCrkTempTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_crktemp_map_wnd_handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationEHPauseTable(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_eh_pause_map_wnd_handle, cmd);
+}
 
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
@@ -571,6 +723,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_EH_PAUSE_MAP, OnUpdateViewEHPauseMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
+ ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -596,6 +749,12 @@ BOOL CTablesSetPanel::OnInitDialog()
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CTablesSetPanel::OnDestroy()
+{
+ Super::OnDestroy();
+ _DestroyCharts();
 }
 
 void CTablesSetPanel::OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI)
@@ -857,14 +1016,14 @@ void CTablesSetPanel::OnViewAttenuatorMap()
   DLL::Chart2DSetMarksVisible(m_attenuator_map_wnd_handle,1, false); //пр€чем надписи над узловыми точками функции
   DLL::Chart2DSetOnChange(m_attenuator_map_wnd_handle,OnChangeAttenuatorTable, this);
   DLL::Chart2DSetOnClose(m_attenuator_map_wnd_handle,OnCloseAttenuatorTable, this);
+  DLL::Chart2DSetOnWndActivation(m_attenuator_map_wnd_handle, OnWndActivationAttenuatorTable, this);
   DLL::Chart2DSetOnGetAxisLabel(m_attenuator_map_wnd_handle, 0, OnGetYAxisLabel, this);
   DLL::Chart2DSetAxisValuesFormat(m_attenuator_map_wnd_handle, 0, _T("#0.00"));
   DLL::Chart2DInverseAxis(m_attenuator_map_wnd_handle, 0, true);
   DLL::Chart2DUpdate(m_attenuator_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
+  OnOpenMapWnd(m_attenuator_map_wnd_handle, TYPE_MAP_ATTENUATOR);
 
   DLL::Chart2DShow(m_attenuator_map_wnd_handle, true);
  }
@@ -893,11 +1052,11 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
   DLL::Chart2DSetAxisValuesFormat(m_dwellcntrl_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_dwellcntrl_map_wnd_handle, OnChangeDwellCntrlTable, this);
   DLL::Chart2DSetOnClose(m_dwellcntrl_map_wnd_handle, OnCloseDwellCntrlTable, this);
+  DLL::Chart2DSetOnWndActivation(m_dwellcntrl_map_wnd_handle, OnWndActivationDwellCntrlTable, this);
   DLL::Chart2DUpdate(m_dwellcntrl_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_dwellcntrl_map_wnd_handle, TYPE_MAP_DWELLCNTRL);
+  OnOpenMapWnd(m_dwellcntrl_map_wnd_handle, TYPE_MAP_DWELLCNTRL);
 
   DLL::Chart2DShow(m_dwellcntrl_map_wnd_handle, true);
  }
@@ -928,12 +1087,12 @@ void CTablesSetPanel::OnViewCTSCurveMap()
   DLL::Chart2DSetOnGetAxisLabel(m_cts_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
   DLL::Chart2DSetOnChange(m_cts_curve_map_wnd_handle, OnChangeCTSCurveTable, this);
   DLL::Chart2DSetOnClose(m_cts_curve_map_wnd_handle, OnCloseCTSCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_cts_curve_map_wnd_handle, OnWndActivationCTSCurveTable, this);
   DLL::Chart2DUpdate(m_cts_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_cts_curve_map_wnd_handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_cts_curve_map_wnd_handle, TYPE_MAP_CTS_CURVE);
+  OnOpenMapWnd(m_cts_curve_map_wnd_handle, TYPE_MAP_CTS_CURVE);
 
   DLL::Chart2DShow(m_cts_curve_map_wnd_handle, true);
  }
@@ -964,12 +1123,12 @@ void CTablesSetPanel::OnViewATSCurveMap()
   DLL::Chart2DSetOnGetAxisLabel(m_ats_curve_map_wnd_handle, 1, OnGetXAxisLabel, this);
   DLL::Chart2DSetOnChange(m_ats_curve_map_wnd_handle, OnChangeATSCurveTable, this);
   DLL::Chart2DSetOnClose(m_ats_curve_map_wnd_handle, OnCloseATSCurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_ats_curve_map_wnd_handle, OnWndActivationATSCurveTable, this);
   DLL::Chart2DUpdate(m_ats_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_ats_curve_map_wnd_handle, 1, m_ats_curve_x_axis_limits[0], m_ats_curve_x_axis_limits[1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_ats_curve_map_wnd_handle, TYPE_MAP_ATS_CURVE);
+  OnOpenMapWnd(m_ats_curve_map_wnd_handle, TYPE_MAP_ATS_CURVE);
 
   DLL::Chart2DShow(m_ats_curve_map_wnd_handle, true);
  }
@@ -997,11 +1156,11 @@ void CTablesSetPanel::OnViewATSAACMap()
     MLL::GetString(IDS_ATSCORR_MAP).c_str(), false);
   DLL::Chart2DSetOnChange(m_ats_aac_map_wnd_handle,OnChangeATSAACTable,this);
   DLL::Chart2DSetOnClose(m_ats_aac_map_wnd_handle,OnCloseATSAACTable,this);
+  DLL::Chart2DSetOnWndActivation(m_ats_aac_map_wnd_handle, OnWndActivationATSAACTable, this);
   DLL::Chart2DUpdate(m_ats_aac_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_ats_aac_map_wnd_handle, TYPE_MAP_ATS_CORR);
+  OnOpenMapWnd(m_ats_aac_map_wnd_handle, TYPE_MAP_ATS_CORR);
 
   DLL::Chart2DShow(m_ats_aac_map_wnd_handle, true);
  }
@@ -1027,14 +1186,13 @@ void CTablesSetPanel::OnViewGasdosePosMap()
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_GDP_UNIT).c_str(),
     MLL::GetString(IDS_GDP_MAP).c_str());
-  //DLL::Chart3DSetOnWndActivation(m_gasdose_map_wnd_handle, OnWndActivationGasdoseMap, this);
   DLL::Chart3DSetOnGetAxisLabel(m_gasdose_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_gasdose_map_wnd_handle,OnChangeGasdoseTable,this);
   DLL::Chart3DSetOnClose(m_gasdose_map_wnd_handle,OnCloseGasdoseTable,this);
+  DLL::Chart3DSetOnWndActivation(m_gasdose_map_wnd_handle, OnWndActivationGasdoseTable, this);
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_gasdose_map_wnd_handle, TYPE_MAP_GASDOSE);
+  OnOpenMapWnd(m_gasdose_map_wnd_handle, TYPE_MAP_GASDOSE);
 
   DLL::Chart3DShow(m_gasdose_map_wnd_handle, true);
  }
@@ -1067,12 +1225,12 @@ void CTablesSetPanel::OnViewBarocorrMap()
   DLL::Chart2DSetOnGetAxisLabel(m_barocorr_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_barocorr_map_wnd_handle, OnChangeBarocorrTable, this);
   DLL::Chart2DSetOnClose(m_barocorr_map_wnd_handle, OnCloseBarocorrTable, this);
+  DLL::Chart2DSetOnWndActivation(m_barocorr_map_wnd_handle, OnWndActivationBarocorrTable, this);
   DLL::Chart2DUpdate(m_barocorr_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_barocorr_map_wnd_handle, 1, GetBarocorrMap(false)[9], GetBarocorrMap(false)[9+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_barocorr_map_wnd_handle, TYPE_MAP_BAROCORR);
+  OnOpenMapWnd(m_barocorr_map_wnd_handle, TYPE_MAP_BAROCORR);
 
   DLL::Chart2DShow(m_barocorr_map_wnd_handle, true);
  }
@@ -1105,12 +1263,12 @@ void CTablesSetPanel::OnViewTmp2CurveMap()
   DLL::Chart2DSetOnGetAxisLabel(m_tmp2_curve_map_wnd_handle, 1, NULL, NULL);
   DLL::Chart2DSetOnChange(m_tmp2_curve_map_wnd_handle, OnChangeTmp2CurveTable, this);
   DLL::Chart2DSetOnClose(m_tmp2_curve_map_wnd_handle, OnCloseTmp2CurveTable, this);
+  DLL::Chart2DSetOnWndActivation(m_tmp2_curve_map_wnd_handle, OnWndActivationTmp2CurveTable, this);
   DLL::Chart2DUpdate(m_tmp2_curve_map_wnd_handle, NULL, NULL); //<--actuate changes
   DLL::Chart2DUpdateAxisEdits(m_tmp2_curve_map_wnd_handle, 1, GetTmp2CurveMap(false)[16], GetTmp2CurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_tmp2_curve_map_wnd_handle, TYPE_MAP_TMP2_CURVE);
+  OnOpenMapWnd(m_tmp2_curve_map_wnd_handle, TYPE_MAP_TMP2_CURVE);
 
   DLL::Chart2DShow(m_tmp2_curve_map_wnd_handle, true);
  }
@@ -1141,11 +1299,11 @@ void CTablesSetPanel::OnViewManIgntimMap()
   DLL::Chart2DSetPtMovingStep(m_manigntim_map_wnd_handle, 0.5f);
   DLL::Chart2DSetOnChange(m_manigntim_map_wnd_handle,OnChangeManIgntimTable,this);
   DLL::Chart2DSetOnClose(m_manigntim_map_wnd_handle,OnCloseManIgntimTable,this);
+  DLL::Chart2DSetOnWndActivation(m_manigntim_map_wnd_handle, OnWndActivationManIgntimTable, this);
   DLL::Chart2DUpdate(m_manigntim_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_manigntim_map_wnd_handle, TYPE_MAP_MANIGNTIM);
+  OnOpenMapWnd(m_manigntim_map_wnd_handle, TYPE_MAP_MANIGNTIM);
 
   DLL::Chart2DShow(m_manigntim_map_wnd_handle, true);
  }
@@ -1173,11 +1331,11 @@ void CTablesSetPanel::OnViewCrkTempMap()
     MLL::GetString(IDS_CRKTEMP_MAP).c_str(), false);
   DLL::Chart2DSetOnChange(m_crktemp_map_wnd_handle,OnChangeCrkTempTable,this);
   DLL::Chart2DSetOnClose(m_crktemp_map_wnd_handle,OnCloseCrkTempTable,this);
+  DLL::Chart2DSetOnWndActivation(m_crktemp_map_wnd_handle, OnWndActivationCrkTempTable, this);
   DLL::Chart2DUpdate(m_crktemp_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_crktemp_map_wnd_handle, TYPE_MAP_CRKCLT_CORR);
+  OnOpenMapWnd(m_crktemp_map_wnd_handle, TYPE_MAP_CRKCLT_CORR);
 
   DLL::Chart2DShow(m_crktemp_map_wnd_handle, true);
  }
@@ -1206,13 +1364,13 @@ void CTablesSetPanel::OnViewEHPauseMap()
   DLL::Chart2DSetAxisValuesFormat(m_eh_pause_map_wnd_handle, 1, _T("%.01f"));
   DLL::Chart2DSetOnChange(m_eh_pause_map_wnd_handle, OnChangeEHPauseTable, this);
   DLL::Chart2DSetOnClose(m_eh_pause_map_wnd_handle, OnCloseEHPauseTable, this);
+  DLL::Chart2DSetOnWndActivation(m_eh_pause_map_wnd_handle, OnWndActivationEHPauseTable, this);
   DLL::Chart2DSetPtValuesFormat(m_eh_pause_map_wnd_handle, _T("#0.00"));
   DLL::Chart2DSetPtMovingStep(m_eh_pause_map_wnd_handle, 0.01f);
   DLL::Chart2DUpdate(m_eh_pause_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_eh_pause_map_wnd_handle, TYPE_MAP_EH_PAUSE);
+  OnOpenMapWnd(m_eh_pause_map_wnd_handle, TYPE_MAP_EH_PAUSE);
 
   DLL::Chart2DShow(m_eh_pause_map_wnd_handle, true);
  }
@@ -1411,3 +1569,13 @@ void CTablesSetPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 
 void CTablesSetPanel::setOnCESettingsButton(EventHandler OnFunction)
 {m_OnCESettingsButton = OnFunction;}
+
+void CTablesSetPanel::_DestroyCharts(void)
+{
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END; ++i)
+ {
+  HWND hwnd = GetMapWindow(i);
+  if (hwnd)
+   ::DestroyWindow(hwnd);
+ }
+}

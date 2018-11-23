@@ -367,3 +367,9 @@ void CEEPROMTabDlg::OnSize( UINT nType, int cx, int cy )
 
  Super::OnSize(nType, cx, cy);
 }
+
+void CEEPROMTabDlg::EnableMakingChartsChildren(bool enable)
+{
+ if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
+  mp_TablesPanel->MakeChartsChildren(enable);
+}

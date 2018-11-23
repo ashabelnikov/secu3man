@@ -115,6 +115,8 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   //Drag and Drop
   void setOnDropFile(EventString OnFunction);
 
+  void EnableMakingChartsChildren(bool enable);
+
 // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support

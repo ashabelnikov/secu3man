@@ -125,9 +125,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   //from CButtonsPanel
   bool IsAllowed(void);
 
-  void _MakeWindowChild(HWND hwnd, bool child);
-
-  bool m_children_charts;
   bool m_enabled;
   bool m_tsneb_readonly;
   bool m_lock_enchange;

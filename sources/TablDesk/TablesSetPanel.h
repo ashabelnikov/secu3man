@@ -89,6 +89,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
   afx_msg void OnViewAttenuatorMap();
   afx_msg void OnViewDwellCntrlMap();
   afx_msg void OnViewCTSCurveMap();
@@ -147,12 +148,20 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   EventHandler m_OnRPMGridEditButton;
   EventHandler m_OnCESettingsButton;
 
+  void _DestroyCharts(void);
+
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);
+  static void __cdecl OnWndActivationAttenuatorTable(void* i_param, long cmd);
+
   static void __cdecl OnChangeDwellCntrlTable(void* i_param);
   static void __cdecl OnCloseDwellCntrlTable(void* i_param);
+  static void __cdecl OnWndActivationDwellCntrlTable(void* i_param, long cmd);
+
   static void __cdecl OnChangeCTSCurveTable(void* i_param);
   static void __cdecl OnCloseCTSCurveTable(void* i_param);
+  static void __cdecl OnWndActivationCTSCurveTable(void* i_param, long cmd);
+
   static void __cdecl OnGetYAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnGetXAxisLabel(LPTSTR io_label_string, int index, void* i_param);
   static void __cdecl OnChangeCTSXAxisEdit(void* i_param, int type, float value);
@@ -160,28 +169,37 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
 
   static void __cdecl OnChangeATSCurveTable(void* i_param);
   static void __cdecl OnCloseATSCurveTable(void* i_param);
+  static void __cdecl OnWndActivationATSCurveTable(void* i_param, long cmd);
+
   static void __cdecl OnChangeATSAACTable(void* i_param);
   static void __cdecl OnCloseATSAACTable(void* i_param);
+  static void __cdecl OnWndActivationATSAACTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeGasdoseTable(void* i_param);
   static void __cdecl OnCloseGasdoseTable(void* i_param);
+  static void __cdecl OnWndActivationGasdoseTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeBarocorrTable(void* i_param);
   static void __cdecl OnCloseBarocorrTable(void* i_param);
   static void __cdecl OnChangeBarocorrXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationBarocorrTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeManIgntimTable(void* i_param);
   static void __cdecl OnCloseManIgntimTable(void* i_param);
+  static void __cdecl OnWndActivationManIgntimTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeTmp2CurveTable(void* i_param);
   static void __cdecl OnCloseTmp2CurveTable(void* i_param);
   static void __cdecl OnChangeTmp2CurveXAxisEdit(void* i_param, int i_type, float i_value);
+  static void __cdecl OnWndActivationTmp2CurveTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeCrkTempTable(void* i_param);
   static void __cdecl OnCloseCrkTempTable(void* i_param);
+  static void __cdecl OnWndActivationCrkTempTable(void* i_param, long cmd);
 
   static void __cdecl OnChangeEHPauseTable(void* i_param);
   static void __cdecl OnCloseEHPauseTable(void* i_param);
+  static void __cdecl OnWndActivationEHPauseTable(void* i_param, long cmd);
 
   bool m_dwellcntrl_enabled;
   bool m_cts_curve_enabled;

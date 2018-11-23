@@ -65,6 +65,8 @@ class CEEPROMTabDlg : public CTabDialog
   void setOnMapsetNameChanged(EventHandler OnFunction);
   void setOnShowCEErrors(EventHandler OnFunction);
 
+  void EnableMakingChartsChildren(bool enable);
+
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
   std::auto_ptr<CEEPROMContextMenuManager> mp_ContextMenuManager;
   std::auto_ptr<CButtonsPanel> mp_TablesPanel;

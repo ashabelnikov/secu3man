@@ -186,8 +186,7 @@ void __cdecl CButtonsPanel::OnWndActivationStartMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_start_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_start_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -201,8 +200,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdleMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_idle_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_idle_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -216,8 +214,7 @@ void __cdecl CButtonsPanel::OnWndActivationWorkMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_work_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_work_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -231,8 +228,7 @@ void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1035,8 +1031,7 @@ void __cdecl CButtonsPanel::OnWndActivationITMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_it_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_it_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1050,8 +1045,7 @@ void __cdecl CButtonsPanel::OnWndActivationVEMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_ve_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_ve_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1065,8 +1059,7 @@ void __cdecl CButtonsPanel::OnWndActivationAFRMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_afr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_afr_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1080,8 +1073,7 @@ void __cdecl CButtonsPanel::OnWndActivationCrnkMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_crnk_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_crnk_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1095,8 +1087,7 @@ void __cdecl CButtonsPanel::OnWndActivationWrmpMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_wrmp_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_wrmp_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1110,8 +1101,7 @@ void __cdecl CButtonsPanel::OnWndActivationDeadMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_dead_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_dead_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1125,8 +1115,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdlrMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_idlr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_idlr_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1140,8 +1129,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdlcMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_idlc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_idlc_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1155,8 +1143,7 @@ void __cdecl CButtonsPanel::OnWndActivationAETPSMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_aetps_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_aetps_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1170,8 +1157,7 @@ void __cdecl CButtonsPanel::OnWndActivationAERPMMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_aerpm_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_aerpm_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1185,8 +1171,7 @@ void __cdecl CButtonsPanel::OnWndActivationAftstrMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_aftstr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_aftstr_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1200,8 +1185,7 @@ void __cdecl CButtonsPanel::OnWndActivationITRPMMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_itrpm_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_itrpm_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1215,8 +1199,7 @@ void __cdecl CButtonsPanel::OnWndActivationRigidMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_rigid_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_rigid_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1230,8 +1213,7 @@ void __cdecl CButtonsPanel::OnWndActivationEGOCrvMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_egocrv_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_egocrv_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1245,8 +1227,7 @@ void __cdecl CButtonsPanel::OnWndActivationIACCMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_iacc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_iacc_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1260,8 +1241,7 @@ void __cdecl CButtonsPanel::OnWndActivationIACCWMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_iaccw_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_iaccw_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1275,8 +1255,7 @@ void __cdecl CButtonsPanel::OnWndActivationIATCLTMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_iatclt_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_iatclt_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1290,8 +1269,7 @@ void __cdecl CButtonsPanel::OnWndActivationTpsswtMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_tpsswt_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_tpsswt_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1305,8 +1283,7 @@ void __cdecl CButtonsPanel::OnWndActivationGtscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_gtsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_gtsc_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1320,8 +1297,7 @@ void __cdecl CButtonsPanel::OnWndActivationGpscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_gpsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_gpsc_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1335,8 +1311,7 @@ void __cdecl CButtonsPanel::OnWndActivationAtscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- if (_this->m_OnWndActivation)
-  _this->m_OnWndActivation(_this->m_atsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_atsc_map_wnd_handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1496,6 +1471,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_en_gas_corr(false)
 , m_choke_op_enabled(false)
 , mp_autoTuneCntr(enableAutoTune ? new CAutoTuneController() : NULL)
+, m_children_charts(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -1687,8 +1663,7 @@ void CButtonsPanel::OnViewStartMap()
   DLL::Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_start_map_wnd_handle, TYPE_MAP_DA_START);
+  OnOpenMapWnd(m_start_map_wnd_handle, TYPE_MAP_DA_START);
 
   DLL::Chart2DShow(m_start_map_wnd_handle, true);
  }
@@ -1722,8 +1697,7 @@ void CButtonsPanel::OnViewIdleMap()
   DLL::Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
+  OnOpenMapWnd(m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
 
   DLL::Chart2DShow(m_idle_map_wnd_handle, true);
  }
@@ -1755,8 +1729,7 @@ void CButtonsPanel::OnViewWorkMap()
   DLL::Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
+  OnOpenMapWnd(m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
 
   DLL::Chart3DShow(m_work_map_wnd_handle, true);
  }
@@ -1788,8 +1761,7 @@ void CButtonsPanel::OnViewTempMap()
   DLL::Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
+  OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
 
   DLL::Chart2DShow(m_temp_map_wnd_handle, true);
  }
@@ -1823,8 +1795,7 @@ void CButtonsPanel::OnViewVEMap()
   DLL::Chart3DSetOnClose(m_ve_map_wnd_handle,OnCloseVEMap,this);
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
+  OnOpenMapWnd(m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
 
   DLL::Chart3DShow(m_ve_map_wnd_handle, true);
  }
@@ -1858,8 +1829,7 @@ void CButtonsPanel::OnViewAFRMap()
   DLL::Chart3DSetOnClose(m_afr_map_wnd_handle,OnCloseAFRMap,this);
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
+  OnOpenMapWnd(m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
 
   DLL::Chart3DShow(m_afr_map_wnd_handle, true);
  }
@@ -1892,8 +1862,7 @@ void CButtonsPanel::OnViewCrnkMap()
   DLL::Chart2DUpdate(m_crnk_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
+  OnOpenMapWnd(m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
 
   DLL::Chart2DShow(m_crnk_map_wnd_handle, true);
  }
@@ -1926,8 +1895,7 @@ void CButtonsPanel::OnViewWrmpMap()
   DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
+  OnOpenMapWnd(m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
 
   DLL::Chart2DShow(m_wrmp_map_wnd_handle, true);
  }
@@ -1962,8 +1930,7 @@ void CButtonsPanel::OnViewDeadMap()
   DLL::Chart2DUpdate(m_dead_map_wnd_handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
+  OnOpenMapWnd(m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
 
   DLL::Chart2DShow(m_dead_map_wnd_handle, true);
  }
@@ -1996,8 +1963,7 @@ void CButtonsPanel::OnViewIdlrMap()
   DLL::Chart2DUpdate(m_idlr_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
+  OnOpenMapWnd(m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
 
   DLL::Chart2DShow(m_idlr_map_wnd_handle, true);
  }
@@ -2030,8 +1996,7 @@ void CButtonsPanel::OnViewIdlcMap()
   DLL::Chart2DUpdate(m_idlc_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+  OnOpenMapWnd(m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
 
   DLL::Chart2DShow(m_idlc_map_wnd_handle, true);
  }
@@ -2065,8 +2030,7 @@ void CButtonsPanel::OnViewAETPSMap()
   DLL::Chart2DUpdate(m_aetps_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_aetps_map_wnd_handle, TYPE_MAP_INJ_AETPS);
+  OnOpenMapWnd(m_aetps_map_wnd_handle, TYPE_MAP_INJ_AETPS);
 
   DLL::Chart2DShow(m_aetps_map_wnd_handle, true);
  }
@@ -2100,8 +2064,7 @@ void CButtonsPanel::OnViewAERPMMap()
   DLL::Chart2DUpdate(m_aerpm_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_aerpm_map_wnd_handle, TYPE_MAP_INJ_AERPM);
+  OnOpenMapWnd(m_aerpm_map_wnd_handle, TYPE_MAP_INJ_AERPM);
 
   DLL::Chart2DShow(m_aerpm_map_wnd_handle, true);
  }
@@ -2134,8 +2097,7 @@ void CButtonsPanel::OnViewAftstrMap()
   DLL::Chart2DUpdate(m_aftstr_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_aftstr_map_wnd_handle, TYPE_MAP_INJ_AFTSTR);
+  OnOpenMapWnd(m_aftstr_map_wnd_handle, TYPE_MAP_INJ_AFTSTR);
 
   DLL::Chart2DShow(m_aftstr_map_wnd_handle, true);
  }
@@ -2168,8 +2130,7 @@ void CButtonsPanel::OnViewITMap()
   DLL::Chart3DSetOnClose(m_it_map_wnd_handle,OnCloseITMap,this);
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
+  OnOpenMapWnd(m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
 
   DLL::Chart3DShow(m_it_map_wnd_handle, true);
  }
@@ -2203,8 +2164,7 @@ void CButtonsPanel::OnViewITRPMMap()
   DLL::Chart2DUpdate(m_itrpm_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_itrpm_map_wnd_handle, TYPE_MAP_INJ_ITRPM);
+  OnOpenMapWnd(m_itrpm_map_wnd_handle, TYPE_MAP_INJ_ITRPM);
 
   DLL::Chart2DShow(m_itrpm_map_wnd_handle, true);
  }
@@ -2238,8 +2198,7 @@ void CButtonsPanel::OnViewRigidMap()
   DLL::Chart2DUpdate(m_rigid_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_rigid_map_wnd_handle, TYPE_MAP_INJ_RIGID);
+  OnOpenMapWnd(m_rigid_map_wnd_handle, TYPE_MAP_INJ_RIGID);
 
   DLL::Chart2DShow(m_rigid_map_wnd_handle, true);
  }
@@ -2276,8 +2235,7 @@ void CButtonsPanel::OnViewEGOCrvMap()
   DLL::Chart2DUpdateAxisEdits(m_egocrv_map_wnd_handle, 1, GetEGOCurveMap(false)[16], GetEGOCurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_egocrv_map_wnd_handle, TYPE_MAP_INJ_EGOCRV);
+  OnOpenMapWnd(m_egocrv_map_wnd_handle, TYPE_MAP_INJ_EGOCRV);
 
   DLL::Chart2DShow(m_egocrv_map_wnd_handle, true);
  }
@@ -2315,8 +2273,7 @@ void CButtonsPanel::OnViewIACCMap()
   DLL::Chart2DUpdateAxisEdits(m_iacc_map_wnd_handle, 1, GetIACCMap(false)[8], GetIACCMap(false)[8+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_iacc_map_wnd_handle, TYPE_MAP_INJ_IACC);
+  OnOpenMapWnd(m_iacc_map_wnd_handle, TYPE_MAP_INJ_IACC);
 
   DLL::Chart2DShow(m_iacc_map_wnd_handle, true);
  }
@@ -2354,8 +2311,7 @@ void CButtonsPanel::OnViewIACCWMap()
   DLL::Chart2DUpdateAxisEdits(m_iaccw_map_wnd_handle, 1, GetIACCWMap(false)[16], GetIACCWMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_iaccw_map_wnd_handle, TYPE_MAP_INJ_IACCW);
+  OnOpenMapWnd(m_iaccw_map_wnd_handle, TYPE_MAP_INJ_IACCW);
 
   DLL::Chart2DShow(m_iaccw_map_wnd_handle, true);
  }
@@ -2392,8 +2348,7 @@ void CButtonsPanel::OnViewIATCLTMap()
   DLL::Chart2DUpdateAxisEdits(m_iatclt_map_wnd_handle, 1, GetIATCLTMap(false)[8], GetIATCLTMap(false)[8+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_iatclt_map_wnd_handle, TYPE_MAP_INJ_IATCLT);
+  OnOpenMapWnd(m_iatclt_map_wnd_handle, TYPE_MAP_INJ_IATCLT);
 
   DLL::Chart2DShow(m_iatclt_map_wnd_handle, true);
  }
@@ -2427,8 +2382,7 @@ void CButtonsPanel::OnViewTpsswtMap()
   DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
+  OnOpenMapWnd(m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
 
   DLL::Chart2DShow(m_tpsswt_map_wnd_handle, true);
  }
@@ -2463,8 +2417,7 @@ void CButtonsPanel::OnViewGtscMap()
   DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_gtsc_map_wnd_handle, TYPE_MAP_INJ_GTSC);
+  OnOpenMapWnd(m_gtsc_map_wnd_handle, TYPE_MAP_INJ_GTSC);
 
   DLL::Chart2DShow(m_gtsc_map_wnd_handle, true);
  }
@@ -2501,8 +2454,7 @@ void CButtonsPanel::OnViewGpscMap()
   DLL::Chart2DUpdateAxisEdits(m_gpsc_map_wnd_handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
 
   //allow controller to detect closing of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_gpsc_map_wnd_handle, TYPE_MAP_INJ_GPSC);
+  OnOpenMapWnd(m_gpsc_map_wnd_handle, TYPE_MAP_INJ_GPSC);
 
   DLL::Chart2DShow(m_gpsc_map_wnd_handle, true);
  }
@@ -2537,8 +2489,7 @@ void CButtonsPanel::OnViewAtscMap()
   DLL::Chart2DUpdate(m_atsc_map_wnd_handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  if (m_OnOpenMapWnd)
-   m_OnOpenMapWnd(m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
+  OnOpenMapWnd(m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
 
   DLL::Chart2DShow(m_atsc_map_wnd_handle, true);
  }
@@ -2559,7 +2510,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
   mp_gridModeEditorIgnDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorIgnDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedIgn));
   mp_gridModeEditorIgnDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedIgn));
-  mp_gridModeEditorIgnDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
+  mp_gridModeEditorIgnDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   mp_gridModeEditorIgnDlg->EnableAdvanceAngleIndication(m_en_aa_indication);
   VERIFY(mp_gridModeEditorIgnDlg->Create(CGridModeEditorIgnDlg::IDD, NULL));
   mp_gridModeEditorIgnDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
@@ -2596,7 +2547,7 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
-  mp_gridModeEditorInjDlg->setOnOpenMapWnd(m_OnOpenMapWnd);
+  mp_gridModeEditorInjDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
@@ -3499,4 +3450,52 @@ void CButtonsPanel::SetCLTThrd(float clt)
 void CButtonsPanel::SetMapEditorSettings(int gradSat, int gradBrt, bool bold)
 {
  CMapEditorCtrl::SetSettings(gradSat, gradBrt, bold);
+}
+
+void CButtonsPanel::MakeChartsChildren(bool children)
+{
+ m_children_charts = children;
+ HWND hwnd;
+
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = GetMapWindow(i);
+  _MakeWindowChild(hwnd, children);
+ }
+
+ hwnd = GetMapWindow(TYPE_MAP_GME_IGN_WND); //pseudo map
+ _MakeWindowChild(hwnd, children);
+
+ hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND); //pseudo map
+ _MakeWindowChild(hwnd, children);
+}
+
+void CButtonsPanel::_MakeWindowChild(HWND hwnd, bool child)
+{
+ if (hwnd)
+ {
+ /* if (child)
+   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_POPUP);
+  else
+   CWnd::FromHandle(hwnd)->ModifyStyle(WS_POPUP, 0);*/
+   
+  CWnd::FromHandle(hwnd)->SetParent(child ? AfxGetMainWnd() : NULL);
+ }
+}
+
+void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
+{
+ _MakeWindowChild(i_hwnd, m_children_charts);
+
+ if (m_OnOpenMapWnd)
+  m_OnOpenMapWnd(i_hwnd, i_mapType);
+}
+
+void CButtonsPanel::OnWndActivation(HWND i_hwnd, long cmd)
+{
+ if (m_OnWndActivation)
+  m_OnWndActivation(i_hwnd, cmd);
+
+ if (m_children_charts && cmd == SC_MINIMIZE && NULL != i_hwnd)
+  CWnd::FromHandle(i_hwnd)->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
 }

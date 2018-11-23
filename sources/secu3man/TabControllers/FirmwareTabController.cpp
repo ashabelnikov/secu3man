@@ -197,6 +197,8 @@ void CFirmwareTabController::OnActivate(void)
 
  SetViewFirmwareValues();
 
+ m_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
