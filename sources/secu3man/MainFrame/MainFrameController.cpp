@@ -317,24 +317,28 @@ void MainFrameController::OnCreate(void)
 
 bool MainFrameController::OnClose(void)
 {
- ISettingsData* settings = m_pAppSettingsManager->GetSettings();
- WndSettings ws;
- settings->GetWndSettings(ws);
+ mp_view->ShowWindow(SW_SHOWNORMAL); //normalize window pos, otherwise saved position will be wrong
+ if (!mp_view->IsIconic())
+ {
+  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+  WndSettings ws;
+  settings->GetWndSettings(ws);
 
- CRect rc;
- mp_view->GetWindowRect(rc);
- ws.m_MainFrmWnd_X = rc.left;
- ws.m_MainFrmWnd_Y = rc.top;
+  CRect rc;
+  mp_view->GetWindowRect(rc);
+  ws.m_MainFrmWnd_X = rc.left;
+  ws.m_MainFrmWnd_Y = rc.top;
 
- //store last position of main window
- settings->SetWndSettings(ws);
+  //store last position of main window
+  settings->SetWndSettings(ws);
 
- //store size of the window
- WndSize sz;
- settings->GetWndSize(sz);
- sz.m_MainFrmWnd_W = rc.Width();
- sz.m_MainFrmWnd_H = rc.Height();
- settings->SetWndSize(sz);
+  //store size of the window
+  WndSize sz;
+  settings->GetWndSize(sz);
+  sz.m_MainFrmWnd_W = rc.Width();
+  sz.m_MainFrmWnd_H = rc.Height();
+  settings->SetWndSize(sz);
+ }
 
  return true;
 }
