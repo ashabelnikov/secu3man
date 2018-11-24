@@ -148,7 +148,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   PPFlashParam  m_fpp;
   PPEepromParam m_epp;
 
-  CFirmwareTabDlg*  m_view;
+  CFirmwareTabDlg*  mp_view;
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CFirmwareDataMediator* m_fwdm;

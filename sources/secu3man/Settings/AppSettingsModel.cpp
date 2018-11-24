@@ -61,6 +61,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAutoCERead(_T("AutoCERead"))
 , m_optChildCharts(_T("ChildCharts"))
 , m_optPortAutoReopen(_T("PortAutoReopen"))
+, m_optToggleMapWnd(_T("ToggleMapWnd"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -337,6 +338,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optAutoCERead, _T("0"), 0, 1);
  os.ReadInt(m_optChildCharts, _T("1"), 0, 1);
  os.ReadInt(m_optPortAutoReopen, _T("1"), 0, 1);
+ os.ReadInt(m_optToggleMapWnd, _T("0"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -556,6 +558,7 @@ bool CAppSettingsModel::WriteSettings(void)
  os.WriteInt(m_optAutoCERead); 
  os.WriteInt(m_optChildCharts); 
  os.WriteInt(m_optPortAutoReopen); 
+ os.WriteInt(m_optToggleMapWnd); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
  fs.CreateSection();
@@ -1379,4 +1382,9 @@ int CAppSettingsModel::GetGradBrightness(void)
 int CAppSettingsModel::GetBoldFont(void)
 {
  return m_optBoldFont.value;
+}
+
+bool CAppSettingsModel::GetToggleMapWnd(void) const
+{
+ return m_optToggleMapWnd.value;
 }

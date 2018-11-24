@@ -54,7 +54,7 @@ using namespace SECU3IO;
 //////////////////////////////////////////////////////////////////////
 
 CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
-: m_view(i_view)
+: mp_view(i_view)
 , m_comm(i_comm)
 , m_sbar(i_sbar)
 , mp_settings(ip_settings)
@@ -74,22 +74,22 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  m_bl_data = new BYTE[m_epp.m_size + 1];
  ASSERT(m_bl_data);
 
- m_view->setOnReadEEPROMFromSECU(MakeDelegate(this, &CEEPROMTabController::OnReadEEPROMFromSECU));
- m_view->setOnWriteEEPROMToSECU(MakeDelegate(this, &CEEPROMTabController::OnWriteEEPROMToSECU));
- m_view->setOnOpenEEPROMFromFile(MakeDelegate(this, &CEEPROMTabController::OnOpenEEPROMFromFile));
- m_view->setOnSaveEEPROMToFile(MakeDelegate(this, &CEEPROMTabController::OnSaveEEPROMToFile));
- m_view->setOnDropFile(MakeDelegate(this, &CEEPROMTabController::OnDropFile));
- m_view->setOnMapsetNameChanged(MakeDelegate(this, &CEEPROMTabController::OnMapselNameChanged));
- m_view->setIsEEPROMOpened(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
- m_view->setOnShowCEErrors(MakeDelegate(this, &CEEPROMTabController::OnShowCEErrors));
+ mp_view->setOnReadEEPROMFromSECU(MakeDelegate(this, &CEEPROMTabController::OnReadEEPROMFromSECU));
+ mp_view->setOnWriteEEPROMToSECU(MakeDelegate(this, &CEEPROMTabController::OnWriteEEPROMToSECU));
+ mp_view->setOnOpenEEPROMFromFile(MakeDelegate(this, &CEEPROMTabController::OnOpenEEPROMFromFile));
+ mp_view->setOnSaveEEPROMToFile(MakeDelegate(this, &CEEPROMTabController::OnSaveEEPROMToFile));
+ mp_view->setOnDropFile(MakeDelegate(this, &CEEPROMTabController::OnDropFile));
+ mp_view->setOnMapsetNameChanged(MakeDelegate(this, &CEEPROMTabController::OnMapselNameChanged));
+ mp_view->setIsEEPROMOpened(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
+ mp_view->setOnShowCEErrors(MakeDelegate(this, &CEEPROMTabController::OnShowCEErrors));
 
- m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CEEPROMTabController::OnParamDeskTabActivate));
- m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CEEPROMTabController::OnParamDeskChangeInTab));
+ mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CEEPROMTabController::OnParamDeskTabActivate));
+ mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CEEPROMTabController::OnParamDeskChangeInTab));
 
- m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CEEPROMTabController::OnMapChanged));
- m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CEEPROMTabController::OnCloseMapWnd));
- m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CEEPROMTabController::OnOpenMapWnd));
- m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
+ mp_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CEEPROMTabController::OnMapChanged));
+ mp_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CEEPROMTabController::OnCloseMapWnd));
+ mp_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CEEPROMTabController::OnOpenMapWnd));
+ mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
 }
 
 CEEPROMTabController::~CEEPROMTabController()
@@ -112,7 +112,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
 void CEEPROMTabController::OnActivate(void)
 {
  //выбираем ранее выбранную вкладку на панели параметров
- bool result = m_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
+ bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
  m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  m_comm->m_pBldAdapter->SetEventHandler(this);
@@ -125,7 +125,8 @@ void CEEPROMTabController::OnActivate(void)
 
  SetViewValues();
 
- m_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+ mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+ mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -143,7 +144,7 @@ void CEEPROMTabController::OnDeactivate(void)
  m_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
- m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
+ m_lastSel = mp_view->mp_ParamDeskDlg->GetCurSel();
 }
 
 void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -188,7 +189,7 @@ void CEEPROMTabController::OnConnection(const bool i_online)
   state = CStatusBarManager::STATE_ONLINE;
 
   //в онлайне элементы меню связанные с бутлоадером всегда разрешены
-  m_view->EnableBLItems(true);
+  mp_view->EnableBLItems(true);
  }
  else
  {
@@ -198,7 +199,7 @@ void CEEPROMTabController::OnConnection(const bool i_online)
  //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигурация
  if (i_online==false)
  {
-  m_view->EnableBLItems(false);
+  mp_view->EnableBLItems(false);
  }
 
  //если бутлоадер активен (выполняется выбранная из меню операция), то будем отображать именно
@@ -318,11 +319,11 @@ void CEEPROMTabController::OnSaveEEPROMToFile(void)
 
   //после сохранения "Save As" обновляем имя открытого файла
   m_eedm->SetEEFileName(_TSTRING(opened_file_name));
-  m_view->SetEEFileName(m_eedm->GetEEFileName());
+  mp_view->SetEEFileName(m_eedm->GetEEFileName());
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
-  m_view->mp_TablesPanel->UpdateOpenedCharts();
+  mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
 
@@ -372,29 +373,29 @@ void CEEPROMTabController::PrepareOnLoadEEPROM(const BYTE* i_buff, const _TSTRIN
  }
 
  //enable all tables
- m_view->mp_TablesPanel->EnableGasdose(true);
- m_view->mp_TablesPanel->EnableFuelInjection(true);
- m_view->mp_TablesPanel->EnableCarbAfr(true);
- m_view->mp_TablesPanel->EnableGasCorr(true);
- m_view->mp_TablesPanel->EnableChokeOp(true);
- m_view->mp_ParamDeskDlg->EnableIgnitionCogs(true);
- m_view->mp_ParamDeskDlg->EnableCKPSItems(true);
- m_view->mp_ParamDeskDlg->EnableHallWndWidth(true);
- m_view->mp_ParamDeskDlg->SetMaxCylinders(8);
- m_view->mp_ParamDeskDlg->EnableOddCylinders(true);
- m_view->mp_ParamDeskDlg->EnableUseVentPwm(true);
- m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(true);
- m_view->mp_ParamDeskDlg->EnableHallOutputParams(true);
- m_view->mp_ParamDeskDlg->EnableSECU3TItems(false); //SECU-3i: all functionality
- m_view->mp_ParamDeskDlg->EnableExtraIO(true);
- m_view->mp_ParamDeskDlg->EnableInputsMerging(true);
- m_view->mp_ParamDeskDlg->EnableRisingSpark(true);
- m_view->mp_ParamDeskDlg->EnableUseCamRef(true);
- m_view->mp_ParamDeskDlg->EnableFuelInjection(true);
- m_view->mp_ParamDeskDlg->EnableLambda(true);
- m_view->mp_ParamDeskDlg->EnableGasdose(true);
- m_view->mp_ParamDeskDlg->EnableChoke(true);
- m_view->mp_ParamDeskDlg->EnableChokeCtrls(true);
+ mp_view->mp_TablesPanel->EnableGasdose(true);
+ mp_view->mp_TablesPanel->EnableFuelInjection(true);
+ mp_view->mp_TablesPanel->EnableCarbAfr(true);
+ mp_view->mp_TablesPanel->EnableGasCorr(true);
+ mp_view->mp_TablesPanel->EnableChokeOp(true);
+ mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(true);
+ mp_view->mp_ParamDeskDlg->EnableCKPSItems(true);
+ mp_view->mp_ParamDeskDlg->EnableHallWndWidth(true);
+ mp_view->mp_ParamDeskDlg->SetMaxCylinders(8);
+ mp_view->mp_ParamDeskDlg->EnableOddCylinders(true);
+ mp_view->mp_ParamDeskDlg->EnableUseVentPwm(true);
+ mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(true);
+ mp_view->mp_ParamDeskDlg->EnableHallOutputParams(true);
+ mp_view->mp_ParamDeskDlg->EnableSECU3TItems(false); //SECU-3i: all functionality
+ mp_view->mp_ParamDeskDlg->EnableExtraIO(true);
+ mp_view->mp_ParamDeskDlg->EnableInputsMerging(true);
+ mp_view->mp_ParamDeskDlg->EnableRisingSpark(true);
+ mp_view->mp_ParamDeskDlg->EnableUseCamRef(true);
+ mp_view->mp_ParamDeskDlg->EnableFuelInjection(true);
+ mp_view->mp_ParamDeskDlg->EnableLambda(true);
+ mp_view->mp_ParamDeskDlg->EnableGasdose(true);
+ mp_view->mp_ParamDeskDlg->EnableChoke(true);
+ mp_view->mp_ParamDeskDlg->EnableChokeCtrls(true);
 
  SetViewValues();
 }
@@ -427,85 +428,85 @@ bool CEEPROMTabController::CheckChangesAskAndSaveEEPROM(void)
 void CEEPROMTabController::SetViewChartsValues(void)
 {
  //Can't set RPM grid, because it is stored in the firmware
- //m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
+ //m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
 
  int funset_index = 0;
 
- m_eedm->GetStartMap(funset_index,m_view->mp_TablesPanel->GetStartMap(false),false);
- m_eedm->GetStartMap(funset_index,m_view->mp_TablesPanel->GetStartMap(true),true);
+ m_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
+ m_eedm->GetStartMap(funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
 
- m_eedm->GetIdleMap(funset_index,m_view->mp_TablesPanel->GetIdleMap(false),false);
- m_eedm->GetIdleMap(funset_index,m_view->mp_TablesPanel->GetIdleMap(true),true);
+ m_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
+ m_eedm->GetIdleMap(funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
 
- m_eedm->GetWorkMap(funset_index,m_view->mp_TablesPanel->GetWorkMap(false),false);
- m_eedm->GetWorkMap(funset_index,m_view->mp_TablesPanel->GetWorkMap(true),true);
+ m_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
+ m_eedm->GetWorkMap(funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
 
- m_eedm->GetTempMap(funset_index,m_view->mp_TablesPanel->GetTempMap(false),false);
- m_eedm->GetTempMap(funset_index,m_view->mp_TablesPanel->GetTempMap(true),true);
+ m_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
+ m_eedm->GetTempMap(funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
 
  //fuel injection
- m_eedm->GetVEMap(funset_index,m_view->mp_TablesPanel->GetVEMap(false),false);
- m_eedm->GetVEMap(funset_index,m_view->mp_TablesPanel->GetVEMap(true),true);
+ m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
+ m_eedm->GetVEMap(funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
 
- m_eedm->GetAFRMap(funset_index,m_view->mp_TablesPanel->GetAFRMap(false),false);
- m_eedm->GetAFRMap(funset_index,m_view->mp_TablesPanel->GetAFRMap(true),true);
+ m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
+ m_eedm->GetAFRMap(funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
 
- m_eedm->GetCrnkMap(funset_index,m_view->mp_TablesPanel->GetCrnkMap(false),false);
- m_eedm->GetCrnkMap(funset_index,m_view->mp_TablesPanel->GetCrnkMap(true),true);
+ m_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
+ m_eedm->GetCrnkMap(funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
 
- m_eedm->GetWrmpMap(funset_index,m_view->mp_TablesPanel->GetWrmpMap(false),false);
- m_eedm->GetWrmpMap(funset_index,m_view->mp_TablesPanel->GetWrmpMap(true),true);
+ m_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
+ m_eedm->GetWrmpMap(funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
 
- m_eedm->GetDeadMap(funset_index,m_view->mp_TablesPanel->GetDeadMap(false),false);
- m_eedm->GetDeadMap(funset_index,m_view->mp_TablesPanel->GetDeadMap(true),true);
+ m_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
+ m_eedm->GetDeadMap(funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
 
- m_eedm->GetIdlrMap(funset_index,m_view->mp_TablesPanel->GetIdlrMap(false),false);
- m_eedm->GetIdlrMap(funset_index,m_view->mp_TablesPanel->GetIdlrMap(true),true);
+ m_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
+ m_eedm->GetIdlrMap(funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
 
- m_eedm->GetIdlcMap(funset_index,m_view->mp_TablesPanel->GetIdlcMap(false),false);
- m_eedm->GetIdlcMap(funset_index,m_view->mp_TablesPanel->GetIdlcMap(true),true);
+ m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
+ m_eedm->GetIdlcMap(funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
 
- m_eedm->GetAETPSMap(funset_index,m_view->mp_TablesPanel->GetAETPSMap(false),false);
- m_eedm->GetAETPSMap(funset_index,m_view->mp_TablesPanel->GetAETPSMap(true),true);
+ m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
+ m_eedm->GetAETPSMap(funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
 
- m_eedm->GetAERPMMap(funset_index,m_view->mp_TablesPanel->GetAERPMMap(false),false);
- m_eedm->GetAERPMMap(funset_index,m_view->mp_TablesPanel->GetAERPMMap(true),true);
+ m_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
+ m_eedm->GetAERPMMap(funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
 
- m_eedm->GetAftstrMap(funset_index,m_view->mp_TablesPanel->GetAftstrMap(false),false);
- m_eedm->GetAftstrMap(funset_index,m_view->mp_TablesPanel->GetAftstrMap(true),true);
+ m_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
+ m_eedm->GetAftstrMap(funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
 
- m_eedm->GetITMap(funset_index,m_view->mp_TablesPanel->GetITMap(false),false);
- m_eedm->GetITMap(funset_index,m_view->mp_TablesPanel->GetITMap(true),true);
+ m_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
+ m_eedm->GetITMap(funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
 
- m_eedm->GetITRPMMap(funset_index,m_view->mp_TablesPanel->GetITRPMMap(false),false);
- m_eedm->GetITRPMMap(funset_index,m_view->mp_TablesPanel->GetITRPMMap(true),true);
+ m_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
+ m_eedm->GetITRPMMap(funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
 
- m_eedm->GetRigidMap(funset_index,m_view->mp_TablesPanel->GetRigidMap(false),false);
- m_eedm->GetRigidMap(funset_index,m_view->mp_TablesPanel->GetRigidMap(true),true);
+ m_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
+ m_eedm->GetRigidMap(funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
 
- m_eedm->GetEGOCurveMap(funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(false),false);
- m_eedm->GetEGOCurveMap(funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+ m_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
+ m_eedm->GetEGOCurveMap(funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
 
- m_eedm->GetIACCorrMap(funset_index,m_view->mp_TablesPanel->GetIACCMap(false),false);
- m_eedm->GetIACCorrMap(funset_index,m_view->mp_TablesPanel->GetIACCMap(true),true);
+ m_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
+ m_eedm->GetIACCorrMap(funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
 
- m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(false),false);
- m_eedm->GetIACCorrWMap(funset_index,m_view->mp_TablesPanel->GetIACCWMap(true),true);
+ m_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
+ m_eedm->GetIACCorrWMap(funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
 
- m_eedm->GetIATCLTMap(funset_index,m_view->mp_TablesPanel->GetIATCLTMap(false),false);
- m_eedm->GetIATCLTMap(funset_index,m_view->mp_TablesPanel->GetIATCLTMap(true),true);
+ m_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
+ m_eedm->GetIATCLTMap(funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
 
- m_eedm->GetTpsswtMap(funset_index,m_view->mp_TablesPanel->GetTpsswtMap(false),false);
- m_eedm->GetTpsswtMap(funset_index,m_view->mp_TablesPanel->GetTpsswtMap(true),true);
+ m_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
+ m_eedm->GetTpsswtMap(funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
 
- m_eedm->GetGtscMap(funset_index,m_view->mp_TablesPanel->GetGtscMap(false),false);
- m_eedm->GetGtscMap(funset_index,m_view->mp_TablesPanel->GetGtscMap(true),true);
+ m_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
+ m_eedm->GetGtscMap(funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
 
- m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
- m_eedm->GetGpscMap(funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
+ m_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
+ m_eedm->GetGpscMap(funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
 
- m_eedm->GetAtscMap(funset_index,m_view->mp_TablesPanel->GetAtscMap(false),false);
- m_eedm->GetAtscMap(funset_index,m_view->mp_TablesPanel->GetAtscMap(true),true);
+ m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
+ m_eedm->GetAtscMap(funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
 }
 
 
@@ -515,10 +516,10 @@ void CEEPROMTabController::SetViewValues(void)
   return;
 
  std::vector<_TSTRING> str = m_eedm->GetFunctionsSetNames();
- m_view->SetMapsetName(str[0].c_str());
+ mp_view->SetMapsetName(str[0].c_str());
  SetViewChartsValues();
- m_view->mp_TablesPanel->UpdateOpenedCharts();
- m_view->SetEEFileName(m_eedm->GetEEFileName());
+ mp_view->mp_TablesPanel->UpdateOpenedCharts();
+ mp_view->SetEEFileName(m_eedm->GetEEFileName());
 
  std::vector<_TSTRING> funset_names;
  funset_names.push_back(_T("firmware_set1")); //stub, because stored in the firmware
@@ -527,11 +528,11 @@ void CEEPROMTabController::SetViewValues(void)
  funset_names.push_back(_T("firmware_set4")); //stub
  funset_names.push_back(str[0]);
 
- m_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
  m_eedm->GetDefParamValues(descriptor, paramdata);
- m_view->mp_ParamDeskDlg->SetValues(descriptor, paramdata);
+ mp_view->mp_ParamDeskDlg->SetValues(descriptor, paramdata);
 }
 
 bool CEEPROMTabController::IsEEPROMOpened()
@@ -546,80 +547,80 @@ void CEEPROMTabController::OnMapChanged(int i_type)
  {
    //ignition maps
   case TYPE_MAP_DA_START:
-   m_eedm->SetStartMap(funset_index, m_view->mp_TablesPanel->GetStartMap(false));
+   m_eedm->SetStartMap(funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
-   m_eedm->SetIdleMap(funset_index, m_view->mp_TablesPanel->GetIdleMap(false));
+   m_eedm->SetIdleMap(funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
-   m_eedm->SetWorkMap(funset_index, m_view->mp_TablesPanel->GetWorkMap(false));
+   m_eedm->SetWorkMap(funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
-   m_eedm->SetTempMap(funset_index, m_view->mp_TablesPanel->GetTempMap(false));
+   m_eedm->SetTempMap(funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
    break;
    //fuel injection maps
   case TYPE_MAP_INJ_VE:
-   m_eedm->SetVEMap(funset_index, m_view->mp_TablesPanel->GetVEMap(false));
+   m_eedm->SetVEMap(funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
    break;
   case TYPE_MAP_INJ_AFR:
-   m_eedm->SetAFRMap(funset_index, m_view->mp_TablesPanel->GetAFRMap(false));
+   m_eedm->SetAFRMap(funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
    break;
   case TYPE_MAP_INJ_CRNK:
-   m_eedm->SetCrnkMap(funset_index, m_view->mp_TablesPanel->GetCrnkMap(false));
+   m_eedm->SetCrnkMap(funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
    break;
   case TYPE_MAP_INJ_WRMP:
-   m_eedm->SetWrmpMap(funset_index, m_view->mp_TablesPanel->GetWrmpMap(false));
+   m_eedm->SetWrmpMap(funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
    break;
   case TYPE_MAP_INJ_DEAD:
-   m_eedm->SetDeadMap(funset_index, m_view->mp_TablesPanel->GetDeadMap(false));
+   m_eedm->SetDeadMap(funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
    break;
   case TYPE_MAP_INJ_IDLR:
-   m_eedm->SetIdlrMap(funset_index, m_view->mp_TablesPanel->GetIdlrMap(false));
+   m_eedm->SetIdlrMap(funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
    break;
   case TYPE_MAP_INJ_IDLC:
-   m_eedm->SetIdlcMap(funset_index, m_view->mp_TablesPanel->GetIdlcMap(false));
+   m_eedm->SetIdlcMap(funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
    break;
   case TYPE_MAP_INJ_AETPS:
-   m_eedm->SetAETPSMap(funset_index, m_view->mp_TablesPanel->GetAETPSMap(false));
+   m_eedm->SetAETPSMap(funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
    break;
   case TYPE_MAP_INJ_AERPM:
-   m_eedm->SetAERPMMap(funset_index, m_view->mp_TablesPanel->GetAERPMMap(false));
+   m_eedm->SetAERPMMap(funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
    break;
   case TYPE_MAP_INJ_AFTSTR:
-   m_eedm->SetAftstrMap(funset_index, m_view->mp_TablesPanel->GetAftstrMap(false));
+   m_eedm->SetAftstrMap(funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
    break;
   case TYPE_MAP_INJ_IT:
-   m_eedm->SetITMap(funset_index, m_view->mp_TablesPanel->GetITMap(false));
+   m_eedm->SetITMap(funset_index, mp_view->mp_TablesPanel->GetITMap(false));
    break;
   case TYPE_MAP_INJ_ITRPM:
-   m_eedm->SetITRPMMap(funset_index, m_view->mp_TablesPanel->GetITRPMMap(false));
+   m_eedm->SetITRPMMap(funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
    break;
   case TYPE_MAP_INJ_RIGID:
-   m_eedm->SetRigidMap(funset_index, m_view->mp_TablesPanel->GetRigidMap(false));
+   m_eedm->SetRigidMap(funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
    break;
   case TYPE_MAP_INJ_EGOCRV:
-   m_eedm->SetEGOCurveMap(funset_index, m_view->mp_TablesPanel->GetEGOCurveMap(false));
+   m_eedm->SetEGOCurveMap(funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
    break;
   case TYPE_MAP_INJ_IACC:
-   m_eedm->SetIACCorrMap(funset_index, m_view->mp_TablesPanel->GetIACCMap(false));
+   m_eedm->SetIACCorrMap(funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
    break;
   case TYPE_MAP_INJ_IACCW:
-   m_eedm->SetIACCorrWMap(funset_index, m_view->mp_TablesPanel->GetIACCWMap(false));
+   m_eedm->SetIACCorrWMap(funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
    break;
   case TYPE_MAP_INJ_IATCLT:
-   m_eedm->SetIATCLTMap(funset_index, m_view->mp_TablesPanel->GetIATCLTMap(false));
+   m_eedm->SetIATCLTMap(funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
    break;
   case TYPE_MAP_INJ_TPSSWT:
-   m_eedm->SetTpsswtMap(funset_index, m_view->mp_TablesPanel->GetTpsswtMap(false));
+   m_eedm->SetTpsswtMap(funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
    break;
   case TYPE_MAP_INJ_GTSC:
-   m_eedm->SetGtscMap(funset_index, m_view->mp_TablesPanel->GetGtscMap(false));
+   m_eedm->SetGtscMap(funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
    break;
   case TYPE_MAP_INJ_GPSC:
-   m_eedm->SetGpscMap(funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
+   m_eedm->SetGpscMap(funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
    break;
   case TYPE_MAP_INJ_ATSC:
-   m_eedm->SetAtscMap(funset_index, m_view->mp_TablesPanel->GetAtscMap(false));
+   m_eedm->SetAtscMap(funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
    break;
  }
 }
@@ -627,30 +628,30 @@ void CEEPROMTabController::OnMapChanged(int i_type)
 void CEEPROMTabController::OnModificationCheckTimer(void)
 {
  bool modified = m_eedm->IsModified();
- m_view->SetModified(modified);
+ mp_view->SetModified(modified);
 }
 
 void CEEPROMTabController::OnMapselNameChanged(void)
 {
- CString string = m_view->GetMapsetName();
+ CString string = mp_view->GetMapsetName();
  m_eedm->SetFunctionsSetName(0, _TSTRING(string));
 }
 
 //from ParamDesk
 void CEEPROMTabController::OnParamDeskTabActivate(void)
 {
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
  m_eedm->GetDefParamValues(descriptor,paramdata);
- m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 }
 
 //from ParamDesk
 void CEEPROMTabController::OnParamDeskChangeInTab(void)
 {
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
- m_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
  m_eedm->SetDefParamValues(descriptor,paramdata);
 }
 
@@ -747,7 +748,7 @@ void CEEPROMTabController::OnBegin(const int opcode,const int status)
   //Exiting from boot loader...
  }
 
- m_view->EnableBLItems(false);
+ mp_view->EnableBLItems(false);
 }
 
 void CEEPROMTabController::OnEnd(const int opcode,const int status)

@@ -100,7 +100,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   void finishOnWriteEepromToSECU();
 
   //data
-  CEEPROMTabDlg*  m_view;
+  CEEPROMTabDlg*  mp_view;
   CCommunicationManager* m_comm;
   CStatusBarManager*  m_sbar;
   CControlAppAdapter* m_pAdapter;

@@ -93,6 +93,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetAutoCERead(void) const;
   virtual bool GetChildCharts(void) const;
   virtual bool GetPortAutoReopen(void) const;
+  virtual bool GetToggleMapWnd(void) const;
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -190,6 +191,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optAutoCERead;
   OptField_t<bool> m_optChildCharts;
   OptField_t<bool> m_optPortAutoReopen;  
+  OptField_t<int> m_optToggleMapWnd;
 
   //fixtures
   OptField_t<bool> m_optUseDVFeatures;

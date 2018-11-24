@@ -141,6 +141,7 @@ void CParamMonTabController::OnActivate(void)
 
  ConfigureIndicators();
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+ mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 }
 
 //from MainTabController

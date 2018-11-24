@@ -603,3 +603,9 @@ void CTablesDeskDlg::OnSize( UINT nType, int cx, int cy )
   mp_ButtonsPanel->MoveWindow(wndRectBP);
  }
 }
+
+void CTablesDeskDlg::EnableToggleMapWnd(bool toggle)
+{
+ mp_ButtonsPanel->EnableToggleMapWnd(toggle);
+}
+

@@ -49,6 +49,7 @@ class ITablesDeskView
   virtual void SetReadOnlyTablesSetName(bool readonly) = 0;       //enable/disable tables set's name edit box
   virtual void SetModificationFlag(bool value) = 0;               //set/reset modification flag
   virtual void MakeChartsChildren(bool children) = 0;             //make charts children to "parameters and monitor" window
+  virtual void EnableToggleMapWnd(bool toggle) = 0;               //enabling toggling of map windows/buttos
   virtual void SetFunctionsNames(const std::vector<_TSTRING>& i_fwnames, const std::vector<_TSTRING>& i_eenames, int sep_index) = 0; //Set names of read-only and read/write tables
   virtual void SetRPMGrid(const float* values) = 0;               //Set RPM grid for horizontal axis of tables
   virtual void CloseAllCharts(void) = 0;                          //close all charts' windows

@@ -328,3 +328,8 @@ void CParamMonTabDlg::OnLButtonUp(UINT nFlags, CPoint point)
  m_moveSplitter = false;
  ReleaseCapture();
 }
+
+void CParamMonTabDlg::EnableToggleMapWnd(bool toggle)
+{
+ mp_TablesDeskDlg->EnableToggleMapWnd(toggle);
+}

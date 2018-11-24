@@ -52,6 +52,7 @@ class CParamMonTabDlg : public CTabDialog
 
   void EnableEditTablesCheck(bool enable);
   void EnableMakingChartsChildren(bool enable);
+  void EnableToggleMapWnd(bool toggle);
 
   void setOnRawSensorsCheck(EventHandler i_Function);
   void setOnEditTablesCheck(EventHandler i_Function);

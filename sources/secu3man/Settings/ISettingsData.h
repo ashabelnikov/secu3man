@@ -210,6 +210,8 @@ class ISettingsData
   virtual bool GetAutoCERead(void) const = 0;
   virtual bool GetChildCharts(void) const = 0;
   virtual bool GetPortAutoReopen(void) const = 0;
+  virtual bool GetToggleMapWnd(void) const = 0;
+
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;

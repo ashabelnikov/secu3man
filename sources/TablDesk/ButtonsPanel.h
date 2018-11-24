@@ -122,6 +122,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   virtual void MakeChartsChildren(bool children);
 
+  void EnableToggleMapWnd(bool toggle);
+
  public: //установка обработчиков событий
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
@@ -460,4 +462,7 @@ protected:
   int m_ldaxCfg;
 
   bool m_children_charts;
+
+  HWND m_openedChart;
+  bool m_toggleMapWnd;
 };

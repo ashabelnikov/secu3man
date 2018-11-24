@@ -116,6 +116,7 @@ class CFirmwareTabDlg : public CTabDialog, private ITabControllerEvent
   void setOnDropFile(EventString OnFunction);
 
   void EnableMakingChartsChildren(bool enable);
+  void EnableToggleMapWnd(bool toggle);
 
 // Implementation
  protected:

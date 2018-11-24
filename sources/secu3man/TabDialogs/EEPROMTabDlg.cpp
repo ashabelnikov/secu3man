@@ -373,3 +373,9 @@ void CEEPROMTabDlg::EnableMakingChartsChildren(bool enable)
  if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
   mp_TablesPanel->MakeChartsChildren(enable);
 }
+
+void CEEPROMTabDlg::EnableToggleMapWnd(bool toggle)
+{
+ if (mp_TablesPanel.get() && ::IsWindow(mp_TablesPanel->m_hWnd))
+  mp_TablesPanel->EnableToggleMapWnd(toggle);
+}

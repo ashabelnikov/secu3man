@@ -1472,6 +1472,8 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_choke_op_enabled(false)
 , mp_autoTuneCntr(enableAutoTune ? new CAutoTuneController() : NULL)
 , m_children_charts(false)
+, m_openedChart(NULL)
+, m_toggleMapWnd(false)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -3485,6 +3487,13 @@ void CButtonsPanel::_MakeWindowChild(HWND hwnd, bool child)
 
 void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
+ if (m_toggleMapWnd)
+ {
+  if (m_openedChart)
+   ::SendMessage(m_openedChart,WM_CLOSE,0,0);
+  m_openedChart = i_hwnd;
+ }
+
  _MakeWindowChild(i_hwnd, m_children_charts);
 
  if (m_OnOpenMapWnd)
@@ -3498,4 +3507,9 @@ void CButtonsPanel::OnWndActivation(HWND i_hwnd, long cmd)
 
  if (m_children_charts && cmd == SC_MINIMIZE && NULL != i_hwnd)
   CWnd::FromHandle(i_hwnd)->SetWindowPos(&wndTop, 0, 0, 0, 0, SWP_NOSIZE | SWP_NOMOVE);
+}
+
+void CButtonsPanel::EnableToggleMapWnd(bool toggle)
+{
+ m_toggleMapWnd = toggle;
 }

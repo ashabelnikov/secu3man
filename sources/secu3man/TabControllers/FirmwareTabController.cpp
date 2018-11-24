@@ -65,7 +65,7 @@ using namespace fastdelegate;
 //////////////////////////////////////////////////////////////////////
 
 CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
-: m_view(i_view)
+: mp_view(i_view)
 , m_comm(i_comm)
 , m_sbar(i_sbar)
 , mp_settings(ip_settings)
@@ -104,49 +104,49 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  //========================================================
 
  //устанавливаем делегаты (обработчики событий от представления)
- m_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));
- m_view->setOnReadEepromToFile(MakeDelegate(this, &CFirmwareTabController::OnReadEepromToFile));
- m_view->setOnWriteEepromFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteEepromFromFile));
- m_view->setOnResetEeprom(MakeDelegate(this, &CFirmwareTabController::OnResetEeprom));
- m_view->setOnReadFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnReadFlashToFile));
- m_view->setOnWriteFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashFromFile));
- m_view->setOnBLStartedEmergency(MakeDelegate(this, &CFirmwareTabController::OnBLStartedEmergency));
- m_view->setOnOpenFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnOpenFlashFromFile));
- m_view->setOnFWInformationTextChanged(MakeDelegate(this, &CFirmwareTabController::OnFWInformationTextChanged));
- m_view->setOnSaveFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnSaveFlashToFile));
- m_view->setIsFirmwareOpened(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
- m_view->setOnImportDataFromAnotherFW(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromAnotherFW));
- m_view->setOnImportDataFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromSECU3));
- m_view->setOnReadFlashFromSECU(MakeDelegate(this, &CFirmwareTabController::OnReadFlashFromSECU));
- m_view->setOnWriteFlashToSECU(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashToSECU));
- m_view->setOnImportMapsFromMPSZ(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromMPSZ));
- m_view->setOnImportMapsFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromSECU3));
- m_view->setOnImportMapsFromS3F(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromS3F));
- m_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
- m_view->setOnImportTablesFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportTablesFromEEPROMFile));
- m_view->setOnExportMapsToMPSZ(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToMPSZ));
- m_view->setOnExportMapsToSECU3(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToSECU3));
- m_view->setOnExportMapsToS3F(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToS3F));
- m_view->setOnFirmwareInfo(MakeDelegate(this, &CFirmwareTabController::OnFirmwareInfo));
- m_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
- m_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
- m_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
- m_view->setOnDropFile(MakeDelegate(this, &CFirmwareTabController::OnDropFile));
+ mp_view->setOnBootLoaderInfo(MakeDelegate(this, &CFirmwareTabController::OnBootLoaderInfo));
+ mp_view->setOnReadEepromToFile(MakeDelegate(this, &CFirmwareTabController::OnReadEepromToFile));
+ mp_view->setOnWriteEepromFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteEepromFromFile));
+ mp_view->setOnResetEeprom(MakeDelegate(this, &CFirmwareTabController::OnResetEeprom));
+ mp_view->setOnReadFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnReadFlashToFile));
+ mp_view->setOnWriteFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashFromFile));
+ mp_view->setOnBLStartedEmergency(MakeDelegate(this, &CFirmwareTabController::OnBLStartedEmergency));
+ mp_view->setOnOpenFlashFromFile(MakeDelegate(this, &CFirmwareTabController::OnOpenFlashFromFile));
+ mp_view->setOnFWInformationTextChanged(MakeDelegate(this, &CFirmwareTabController::OnFWInformationTextChanged));
+ mp_view->setOnSaveFlashToFile(MakeDelegate(this, &CFirmwareTabController::OnSaveFlashToFile));
+ mp_view->setIsFirmwareOpened(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
+ mp_view->setOnImportDataFromAnotherFW(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromAnotherFW));
+ mp_view->setOnImportDataFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportDataFromSECU3));
+ mp_view->setOnReadFlashFromSECU(MakeDelegate(this, &CFirmwareTabController::OnReadFlashFromSECU));
+ mp_view->setOnWriteFlashToSECU(MakeDelegate(this, &CFirmwareTabController::OnWriteFlashToSECU));
+ mp_view->setOnImportMapsFromMPSZ(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromMPSZ));
+ mp_view->setOnImportMapsFromSECU3(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromSECU3));
+ mp_view->setOnImportMapsFromS3F(MakeDelegate(this, &CFirmwareTabController::OnImportMapsFromS3F));
+ mp_view->setOnImportDefParamsFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportDefParamsFromEEPROMFile));
+ mp_view->setOnImportTablesFromEEPROMFile(MakeDelegate(this, &CFirmwareTabController::OnImportTablesFromEEPROMFile));
+ mp_view->setOnExportMapsToMPSZ(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToMPSZ));
+ mp_view->setOnExportMapsToSECU3(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToSECU3));
+ mp_view->setOnExportMapsToS3F(MakeDelegate(this, &CFirmwareTabController::OnExportMapsToS3F));
+ mp_view->setOnFirmwareInfo(MakeDelegate(this, &CFirmwareTabController::OnFirmwareInfo));
+ mp_view->setOnViewFWOptions(MakeDelegate(this, &CFirmwareTabController::OnViewFWOptions));
+ mp_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
+ mp_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
+ mp_view->setOnDropFile(MakeDelegate(this, &CFirmwareTabController::OnDropFile));
 
- m_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
- m_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
- m_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetNamechanged));
- m_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
- m_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
- m_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
- m_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
- m_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
- m_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
- m_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
- m_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
+ mp_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
+ mp_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
+ mp_view->mp_TablesPanel->setOnFunSetNamechanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetNamechanged));
+ mp_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &MapWndScrPos::OnCloseMapWnd));
+ mp_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &MapWndScrPos::OnOpenMapWnd));
+ mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CFirmwareTabController::IsFirmwareOpened));
+ mp_view->mp_TablesPanel->setOnCTSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnCTSXAxisEditChanged));
+ mp_view->mp_TablesPanel->setOnATSXAxisEditChanged(MakeDelegate(this, &CFirmwareTabController::OnATSXAxisEditChanged));
+ mp_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
+ mp_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
+ mp_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
 
- m_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
- m_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
+ mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
+ mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
 
  //register controller!
  TabControllersCommunicator::GetInstance()->AddReference(this, TCC_FIRMWARE_TAB_CONTROLLER);
@@ -178,7 +178,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 void CFirmwareTabController::OnActivate(void)
 {
  //выбираем ранее выбранную вкладку на панели параметров
- bool result = m_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
+ bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
  //////////////////////////////////////////////////////////////////
  //подключаем контроллер к потоку данных идущих от SECU-3
@@ -197,7 +197,8 @@ void CFirmwareTabController::OnActivate(void)
 
  SetViewFirmwareValues();
 
- m_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+ mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+ mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -213,7 +214,7 @@ void CFirmwareTabController::OnDeactivate(void)
  m_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
- m_lastSel = m_view->mp_ParamDeskDlg->GetCurSel();
+ m_lastSel = mp_view->mp_ParamDeskDlg->GetCurSel();
 
  //Deactivate children controllers
  mp_iorCntr->OnDeactivate();
@@ -277,16 +278,16 @@ void CFirmwareTabController::OnConnection(const bool i_online)
  if (i_online) //перешли в онлайн
  {
   state = CStatusBarManager::STATE_ONLINE;
-  m_view->EnableBLStartedEmergency(false);
+  mp_view->EnableBLStartedEmergency(false);
 
   //в онлайне элементы меню связанные с бутлоадером всегда разрешены
-  m_view->EnableBLItems(true);
+  mp_view->EnableBLItems(true);
 
   //если мы перешли в онлайн, то убираем чекбокс - пользователь нас обманывает:
   //он указал что бутлоадер запущен аварийно и в тоже время запущен Application
-  m_view->SetBLStartedEmergency(false);
+  mp_view->SetBLStartedEmergency(false);
 
-  m_view->EnableAppItems(true);
+  mp_view->EnableAppItems(true);
   if (m_clear_sbar_txt_on_conn)
   {
    m_sbar->SetInformationText(_T(""));
@@ -296,18 +297,18 @@ void CFirmwareTabController::OnConnection(const bool i_online)
  else
  { //перешли в оффлайн
   if (!m_comm->m_pBootLoader->GetWorkState()) //разрешаем чекбокс только если мы в оффлайне сразу после онлайна
-   m_view->EnableBLStartedEmergency(true);
+   mp_view->EnableBLStartedEmergency(true);
 
   //в оффлайне состояние элементов меню связанных с бутлоадером зависит от состояния чекбокса
-  bool enable = m_view->IsBLStartedEmergency();
-  m_view->EnableBLItems(enable);
+  bool enable = mp_view->IsBLStartedEmergency();
+  mp_view->EnableBLItems(enable);
 
   if (enable)
    state = CStatusBarManager::STATE_BOOTLOADER; //чтобы иконка бутлоадера не пропадала после завершения операции
   else
    state = CStatusBarManager::STATE_OFFLINE;
 
-  m_view->EnableAppItems(false);
+  mp_view->EnableAppItems(false);
  }
 
  //если бутлоадер активен (выполняется выбранная из меню операция), то будем отображать именно
@@ -355,8 +356,8 @@ void CFirmwareTabController::OnBegin(const int opcode,const int status)
   //Exiting from boot loader...
  }
 
- m_view->EnableBLItems(false);
- m_view->EnableBLStartedEmergency(false);
+ mp_view->EnableBLItems(false);
+ mp_view->EnableBLStartedEmergency(false);
 }
 
 void CFirmwareTabController::OnEnd(const int opcode,const int status)
@@ -542,8 +543,8 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
  //контроллер приложения.  А зачем???  TODO.
  if (m_bl_started_emergency)
  {
-  m_view->EnableBLItems(true);
-  m_view->EnableBLStartedEmergency(true);
+  mp_view->EnableBLItems(true);
+  mp_view->EnableBLStartedEmergency(true);
 
   m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
  }
@@ -696,8 +697,8 @@ void CFirmwareTabController::OnBLStartedEmergency(void)
   return;
 
  //если оффлайн, то состояние элементов меню зависит от состояния чекбокса
- bool emergency = m_view->IsBLStartedEmergency();
- m_view->EnableBLItems(emergency);
+ bool emergency = mp_view->IsBLStartedEmergency();
+ mp_view->EnableBLItems(emergency);
 
  //если он уже запущен, то при установленом чекбоксе в статусе будет всегда иконка бутлоадера
  if (emergency)
@@ -710,7 +711,7 @@ bool CFirmwareTabController::IsBLStartedEmergency(void)
 {
  //если чекбокс запрещен то всегда возвращаем отрицательный результат, а запрещен чекбокс
  //если мы в онлайне или запущен бутлоадер
- return m_view->IsBLStartedEmergency() && m_view->IsBLStartedEmergencyEnabled();
+ return mp_view->IsBLStartedEmergency() && mp_view->IsBLStartedEmergencyEnabled();
 }
 
 bool CFirmwareTabController::StartBootLoader(void)
@@ -776,47 +777,47 @@ bool CFirmwareTabController::OnClose(void)
 {
  //сохраняем позиции открытых окон!
  //ignition
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_START), TYPE_MAP_DA_START);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_IDLE),  TYPE_MAP_DA_IDLE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_WORK),  TYPE_MAP_DA_WORK);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DA_TEMP_CORR), TYPE_MAP_DA_TEMP_CORR);
  //fuel injection
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_VE), TYPE_MAP_INJ_VE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFR), TYPE_MAP_INJ_AFR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_CRNK), TYPE_MAP_INJ_CRNK);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_WRMP), TYPE_MAP_INJ_WRMP);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_DEAD), TYPE_MAP_INJ_DEAD);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLR), TYPE_MAP_INJ_IDLR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLC), TYPE_MAP_INJ_IDLC);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AETPS), TYPE_MAP_INJ_AETPS);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV), TYPE_MAP_INJ_EGOCRV);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACC), TYPE_MAP_INJ_IACC);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT), TYPE_MAP_INJ_IATCLT);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GTSC), TYPE_MAP_INJ_GTSC);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GPSC), TYPE_MAP_INJ_GPSC);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ATSC), TYPE_MAP_INJ_ATSC);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_VE), TYPE_MAP_INJ_VE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFR), TYPE_MAP_INJ_AFR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_CRNK), TYPE_MAP_INJ_CRNK);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_WRMP), TYPE_MAP_INJ_WRMP);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_DEAD), TYPE_MAP_INJ_DEAD);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLR), TYPE_MAP_INJ_IDLR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IDLC), TYPE_MAP_INJ_IDLC);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AETPS), TYPE_MAP_INJ_AETPS);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AERPM), TYPE_MAP_INJ_AERPM);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_AFTSTR), TYPE_MAP_INJ_AFTSTR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IT), TYPE_MAP_INJ_IT);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ITRPM), TYPE_MAP_INJ_ITRPM);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_RIGID), TYPE_MAP_INJ_RIGID);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_EGOCRV), TYPE_MAP_INJ_EGOCRV);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACC), TYPE_MAP_INJ_IACC);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IACCW), TYPE_MAP_INJ_IACCW);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_IATCLT), TYPE_MAP_INJ_IATCLT);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_TPSSWT), TYPE_MAP_INJ_TPSSWT);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GTSC), TYPE_MAP_INJ_GTSC);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_GPSC), TYPE_MAP_INJ_GPSC);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_INJ_ATSC), TYPE_MAP_INJ_ATSC);
 
  //separate
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CURVE), TYPE_MAP_ATS_CURVE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_BAROCORR), TYPE_MAP_BAROCORR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
- OnCloseMapWnd(m_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATTENUATOR), TYPE_MAP_ATTENUATOR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_DWELLCNTRL), TYPE_MAP_DWELLCNTRL);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CTS_CURVE), TYPE_MAP_CTS_CURVE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CURVE), TYPE_MAP_ATS_CURVE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_ATS_CORR), TYPE_MAP_ATS_CORR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GASDOSE), TYPE_MAP_GASDOSE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_BAROCORR), TYPE_MAP_BAROCORR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_MANIGNTIM), TYPE_MAP_MANIGNTIM);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 
  if (!m_comm->m_pBootLoader->IsIdle())
   if (!ErrorMsg::AskUserAboutTabLeaving())
@@ -859,46 +860,46 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
  }
 
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
- m_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL));
- m_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
- m_view->mp_TablesPanel->EnableChokeOp(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
- m_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
- m_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
- m_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
- m_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T)); 
+ mp_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL));
+ mp_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_TablesPanel->EnableChokeOp(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
+ mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T)); 
  bool en_for_gd = (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
- m_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && en_for_gd);
- m_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- m_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
- m_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
- m_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- m_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
- m_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
+ mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && en_for_gd);
+ mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
+ mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
+ mp_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
  if (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T))
-  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
  else //SECU-3i:
-  m_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //also if hall sensor synchronization is used
- m_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC));
+ mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC));
 
  this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
  this->mp_iorCntr->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101)); 
  this->mp_iorCntr->Enable(true);
 
- m_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- m_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- m_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- m_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- m_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASE_SENSOR));
+ mp_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASE_SENSOR));
 
- m_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
- m_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
- m_view->mp_ParamDeskDlg->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL)); //GD
- m_view->mp_ParamDeskDlg->EnableChoke(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_ParamDeskDlg->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL)); //GD
+ mp_view->mp_ParamDeskDlg->EnableChoke(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
 
- m_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
 
  SetViewFirmwareValues();
 }
@@ -972,19 +973,19 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
 
   //после сохранения "Save As" обновляем имя открытого файла
   m_fwdm->SetFWFileName(_TSTRING(opened_file_name));
-  m_view->SetFirmwareName(m_fwdm->GetFWFileName());
+  mp_view->SetFirmwareName(m_fwdm->GetFWFileName());
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
-  m_view->mp_TablesPanel->UpdateOpenedCharts();
+  mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
-  m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+  mp_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
  }
 }
 
 void CFirmwareTabController::OnFWInformationTextChanged(void)
 {
- CString string = m_view->GetFWInformationText();
+ CString string = mp_view->GetFWInformationText();
  m_fwdm->SetSignatureInfo(_TSTRING(string));
 }
 
@@ -996,120 +997,120 @@ bool CFirmwareTabController::IsFirmwareOpened()
 //эта функция не обновляет графики, нужно еще вызывать UpdateOpenedCharts()!
 void CFirmwareTabController::SetViewChartsValues(void)
 {
- m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false),false);
- m_fwdm->GetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(true),true);
+ m_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(false),false);
+ m_fwdm->GetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(true),true);
 
- m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false),false);
- m_fwdm->GetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(true),true);
+ m_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(false),false);
+ m_fwdm->GetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(true),true);
 
- m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false),false);
- m_fwdm->GetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(true),true);
- m_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
+ m_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(false),false);
+ m_fwdm->GetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(true),true);
+ mp_view->mp_TablesPanel->SetCTSXAxisEdits(m_fwdm->GetCTSMapVoltageLimit(0), m_fwdm->GetCTSMapVoltageLimit(1));
 
- m_fwdm->GetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(false),false);
- m_fwdm->GetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(true),true);
- m_view->mp_TablesPanel->SetATSXAxisEdits(m_fwdm->GetATSMapVoltageLimit(0), m_fwdm->GetATSMapVoltageLimit(1));
+ m_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(false),false);
+ m_fwdm->GetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(true),true);
+ mp_view->mp_TablesPanel->SetATSXAxisEdits(m_fwdm->GetATSMapVoltageLimit(0), m_fwdm->GetATSMapVoltageLimit(1));
 
- m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false),false);
- m_fwdm->GetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(true),true);
+ m_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(false),false);
+ m_fwdm->GetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(true),true);
 
- m_fwdm->GetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(false),false);
- m_fwdm->GetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(true),true);
+ m_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(false),false);
+ m_fwdm->GetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(true),true);
 
- m_fwdm->GetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(false),false);
- m_fwdm->GetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(true),true);
+ m_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(false),false);
+ m_fwdm->GetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(true),true);
 
- m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false),false);
- m_fwdm->GetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(true),true);
+ m_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(false),false);
+ m_fwdm->GetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(true),true);
 
- m_fwdm->GetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(false),false);
- m_fwdm->GetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(true),true);
+ m_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(false),false);
+ m_fwdm->GetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(true),true);
 
- m_fwdm->GetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(false),false);
- m_fwdm->GetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(true),true);
+ m_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(false),false);
+ m_fwdm->GetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(true),true);
 
- m_fwdm->GetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(false),false);
- m_fwdm->GetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(true),true);
+ m_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false),false);
+ m_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(true),true);
  
- m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
+ m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
 
  if (m_current_funset_index==-1)
   return;
- m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(false),false);
- m_fwdm->GetStartMap(m_current_funset_index,m_view->mp_TablesPanel->GetStartMap(true),true);
+ m_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->GetStartMap(false),false);
+ m_fwdm->GetStartMap(m_current_funset_index,mp_view->mp_TablesPanel->GetStartMap(true),true);
 
- m_fwdm->GetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(false),false);
- m_fwdm->GetIdleMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdleMap(true),true);
+ m_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdleMap(false),false);
+ m_fwdm->GetIdleMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdleMap(true),true);
 
- m_fwdm->GetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(false),false);
- m_fwdm->GetWorkMap(m_current_funset_index,m_view->mp_TablesPanel->GetWorkMap(true),true);
+ m_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWorkMap(false),false);
+ m_fwdm->GetWorkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWorkMap(true),true);
 
- m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(false),false);
- m_fwdm->GetTempMap(m_current_funset_index,m_view->mp_TablesPanel->GetTempMap(true),true);
+ m_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempMap(false),false);
+ m_fwdm->GetTempMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTempMap(true),true);
 
  //fuel injection
- m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(false),false);
- m_fwdm->GetVEMap(m_current_funset_index,m_view->mp_TablesPanel->GetVEMap(true),true);
+ m_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->GetVEMap(false),false);
+ m_fwdm->GetVEMap(m_current_funset_index,mp_view->mp_TablesPanel->GetVEMap(true),true);
 
- m_fwdm->GetAFRMap(m_current_funset_index,m_view->mp_TablesPanel->GetAFRMap(false),false);
- m_fwdm->GetAFRMap(m_current_funset_index,m_view->mp_TablesPanel->GetAFRMap(true),true);
+ m_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAFRMap(false),false);
+ m_fwdm->GetAFRMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAFRMap(true),true);
 
- m_fwdm->GetCrnkMap(m_current_funset_index,m_view->mp_TablesPanel->GetCrnkMap(false),false);
- m_fwdm->GetCrnkMap(m_current_funset_index,m_view->mp_TablesPanel->GetCrnkMap(true),true);
+ m_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCrnkMap(false),false);
+ m_fwdm->GetCrnkMap(m_current_funset_index,mp_view->mp_TablesPanel->GetCrnkMap(true),true);
 
- m_fwdm->GetWrmpMap(m_current_funset_index,m_view->mp_TablesPanel->GetWrmpMap(false),false);
- m_fwdm->GetWrmpMap(m_current_funset_index,m_view->mp_TablesPanel->GetWrmpMap(true),true);
+ m_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWrmpMap(false),false);
+ m_fwdm->GetWrmpMap(m_current_funset_index,mp_view->mp_TablesPanel->GetWrmpMap(true),true);
 
- m_fwdm->GetDeadMap(m_current_funset_index,m_view->mp_TablesPanel->GetDeadMap(false),false);
- m_fwdm->GetDeadMap(m_current_funset_index,m_view->mp_TablesPanel->GetDeadMap(true),true);
+ m_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->GetDeadMap(false),false);
+ m_fwdm->GetDeadMap(m_current_funset_index,mp_view->mp_TablesPanel->GetDeadMap(true),true);
 
- m_fwdm->GetIdlrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlrMap(false),false);
- m_fwdm->GetIdlrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlrMap(true),true);
+ m_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlrMap(false),false);
+ m_fwdm->GetIdlrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlrMap(true),true);
 
- m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(false),false);
- m_fwdm->GetIdlcMap(m_current_funset_index,m_view->mp_TablesPanel->GetIdlcMap(true),true);
+ m_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlcMap(false),false);
+ m_fwdm->GetIdlcMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIdlcMap(true),true);
 
- m_fwdm->GetAETPSMap(m_current_funset_index,m_view->mp_TablesPanel->GetAETPSMap(false),false);
- m_fwdm->GetAETPSMap(m_current_funset_index,m_view->mp_TablesPanel->GetAETPSMap(true),true);
+ m_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAETPSMap(false),false);
+ m_fwdm->GetAETPSMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAETPSMap(true),true);
 
- m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(false),false);
- m_fwdm->GetAERPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetAERPMMap(true),true);
+ m_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAERPMMap(false),false);
+ m_fwdm->GetAERPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAERPMMap(true),true);
 
- m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(false),false);
- m_fwdm->GetAftstrMap(m_current_funset_index,m_view->mp_TablesPanel->GetAftstrMap(true),true);
+ m_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAftstrMap(false),false);
+ m_fwdm->GetAftstrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAftstrMap(true),true);
 
- m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(false),false);
- m_fwdm->GetITMap(m_current_funset_index,m_view->mp_TablesPanel->GetITMap(true),true);
+ m_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITMap(false),false);
+ m_fwdm->GetITMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITMap(true),true);
 
- m_fwdm->GetITRPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetITRPMMap(false),false);
- m_fwdm->GetITRPMMap(m_current_funset_index,m_view->mp_TablesPanel->GetITRPMMap(true),true);
+ m_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITRPMMap(false),false);
+ m_fwdm->GetITRPMMap(m_current_funset_index,mp_view->mp_TablesPanel->GetITRPMMap(true),true);
 
- m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(false),false);
- m_fwdm->GetRigidMap(m_current_funset_index,m_view->mp_TablesPanel->GetRigidMap(true),true);
+ m_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->GetRigidMap(false),false);
+ m_fwdm->GetRigidMap(m_current_funset_index,mp_view->mp_TablesPanel->GetRigidMap(true),true);
 
- m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(false),false);
- m_fwdm->GetEGOCurveMap(m_current_funset_index,m_view->mp_TablesPanel->GetEGOCurveMap(true),true);
+ m_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(false),false);
+ m_fwdm->GetEGOCurveMap(m_current_funset_index,mp_view->mp_TablesPanel->GetEGOCurveMap(true),true);
 
- m_fwdm->GetIACCorrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCMap(false),false);
- m_fwdm->GetIACCorrMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCMap(true),true);
+ m_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCMap(false),false);
+ m_fwdm->GetIACCorrMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCMap(true),true);
 
- m_fwdm->GetIACCorrWMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCWMap(false),false);
- m_fwdm->GetIACCorrWMap(m_current_funset_index,m_view->mp_TablesPanel->GetIACCWMap(true),true);
+ m_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCWMap(false),false);
+ m_fwdm->GetIACCorrWMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIACCWMap(true),true);
 
- m_fwdm->GetIATCLTMap(m_current_funset_index,m_view->mp_TablesPanel->GetIATCLTMap(false),false);
- m_fwdm->GetIATCLTMap(m_current_funset_index,m_view->mp_TablesPanel->GetIATCLTMap(true),true);
+ m_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(false),false);
+ m_fwdm->GetIATCLTMap(m_current_funset_index,mp_view->mp_TablesPanel->GetIATCLTMap(true),true);
 
- m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(false),false);
- m_fwdm->GetTpsswtMap(m_current_funset_index,m_view->mp_TablesPanel->GetTpsswtMap(true),true);
+ m_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(false),false);
+ m_fwdm->GetTpsswtMap(m_current_funset_index,mp_view->mp_TablesPanel->GetTpsswtMap(true),true);
 
- m_fwdm->GetGtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGtscMap(false),false);
- m_fwdm->GetGtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGtscMap(true),true);
+ m_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGtscMap(false),false);
+ m_fwdm->GetGtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGtscMap(true),true);
 
- m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(false),false);
- m_fwdm->GetGpscMap(m_current_funset_index,m_view->mp_TablesPanel->GetGpscMap(true),true);
+ m_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGpscMap(false),false);
+ m_fwdm->GetGpscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetGpscMap(true),true);
 
- m_fwdm->GetAtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetAtscMap(false),false);
- m_fwdm->GetAtscMap(m_current_funset_index,m_view->mp_TablesPanel->GetAtscMap(true),true);
+ m_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(false),false);
+ m_fwdm->GetAtscMap(m_current_funset_index,mp_view->mp_TablesPanel->GetAtscMap(true),true);
 }
 
 void CFirmwareTabController::SetViewFirmwareValues(void)
@@ -1118,27 +1119,27 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
   return;
 
  CString string = m_fwdm->GetSignatureInfo().c_str();
- m_view->SetFWInformationText(string);
+ mp_view->SetFWInformationText(string);
 
  SetViewChartsValues();
 
  std::vector<_TSTRING> funset_names = m_fwdm->GetFunctionsSetNames();
- m_view->mp_TablesPanel->SetFunSetListBox(funset_names);
+ mp_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
- m_view->mp_TablesPanel->UpdateOpenedCharts();
+ mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
  //если было выделение в списке, то восстанавлваем его
- m_view->mp_TablesPanel->SetFunSetListBoxSelection(m_current_funset_index);
+ mp_view->mp_TablesPanel->SetFunSetListBoxSelection(m_current_funset_index);
 
- m_view->SetFirmwareName(m_fwdm->GetFWFileName());
+ mp_view->SetFirmwareName(m_fwdm->GetFWFileName());
 
- m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+ mp_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
 
- m_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ mp_view->mp_ParamDeskDlg->SetFunctionsNames(funset_names);
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
  m_fwdm->GetDefParamValues(descriptor,paramdata);
- m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 
  //Attach fwdm to children controllers
  this->mp_iorCntr->AttachFWDM(m_fwdm);
@@ -1153,139 +1154,139 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    //ignition maps
   case TYPE_MAP_DA_START:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetStartMap(m_current_funset_index, m_view->mp_TablesPanel->GetStartMap(false));
+   m_fwdm->SetStartMap(m_current_funset_index, mp_view->mp_TablesPanel->GetStartMap(false));
    break;
   case TYPE_MAP_DA_IDLE:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIdleMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdleMap(false));
+   m_fwdm->SetIdleMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdleMap(false));
    break;
   case TYPE_MAP_DA_WORK:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetWorkMap(m_current_funset_index, m_view->mp_TablesPanel->GetWorkMap(false));
+   m_fwdm->SetWorkMap(m_current_funset_index, mp_view->mp_TablesPanel->GetWorkMap(false));
    break;
   case TYPE_MAP_DA_TEMP_CORR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetTempMap(m_current_funset_index, m_view->mp_TablesPanel->GetTempMap(false));
+   m_fwdm->SetTempMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTempMap(false));
    break;
    //fuel injection maps
   case TYPE_MAP_INJ_VE:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetVEMap(m_current_funset_index, m_view->mp_TablesPanel->GetVEMap(false));
+   m_fwdm->SetVEMap(m_current_funset_index, mp_view->mp_TablesPanel->GetVEMap(false));
    break;
   case TYPE_MAP_INJ_AFR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetAFRMap(m_current_funset_index, m_view->mp_TablesPanel->GetAFRMap(false));
+   m_fwdm->SetAFRMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAFRMap(false));
    break;
   case TYPE_MAP_INJ_CRNK:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetCrnkMap(m_current_funset_index, m_view->mp_TablesPanel->GetCrnkMap(false));
+   m_fwdm->SetCrnkMap(m_current_funset_index, mp_view->mp_TablesPanel->GetCrnkMap(false));
    break;
   case TYPE_MAP_INJ_WRMP:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetWrmpMap(m_current_funset_index, m_view->mp_TablesPanel->GetWrmpMap(false));
+   m_fwdm->SetWrmpMap(m_current_funset_index, mp_view->mp_TablesPanel->GetWrmpMap(false));
    break;
   case TYPE_MAP_INJ_DEAD:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetDeadMap(m_current_funset_index, m_view->mp_TablesPanel->GetDeadMap(false));
+   m_fwdm->SetDeadMap(m_current_funset_index, mp_view->mp_TablesPanel->GetDeadMap(false));
    break;
   case TYPE_MAP_INJ_IDLR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIdlrMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdlrMap(false));
+   m_fwdm->SetIdlrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdlrMap(false));
    break;
   case TYPE_MAP_INJ_IDLC:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIdlcMap(m_current_funset_index, m_view->mp_TablesPanel->GetIdlcMap(false));
+   m_fwdm->SetIdlcMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIdlcMap(false));
    break;
   case TYPE_MAP_INJ_AETPS:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetAETPSMap(m_current_funset_index, m_view->mp_TablesPanel->GetAETPSMap(false));
+   m_fwdm->SetAETPSMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAETPSMap(false));
    break;
   case TYPE_MAP_INJ_AERPM:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetAERPMMap(m_current_funset_index, m_view->mp_TablesPanel->GetAERPMMap(false));
+   m_fwdm->SetAERPMMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAERPMMap(false));
    break;
   case TYPE_MAP_INJ_AFTSTR:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetAftstrMap(m_current_funset_index, m_view->mp_TablesPanel->GetAftstrMap(false));
+   m_fwdm->SetAftstrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAftstrMap(false));
    break;
   case TYPE_MAP_INJ_IT:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetITMap(m_current_funset_index, m_view->mp_TablesPanel->GetITMap(false));
+   m_fwdm->SetITMap(m_current_funset_index, mp_view->mp_TablesPanel->GetITMap(false));
    break;
   case TYPE_MAP_INJ_ITRPM:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetITRPMMap(m_current_funset_index, m_view->mp_TablesPanel->GetITRPMMap(false));
+   m_fwdm->SetITRPMMap(m_current_funset_index, mp_view->mp_TablesPanel->GetITRPMMap(false));
    break;
   case TYPE_MAP_INJ_RIGID:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetRigidMap(m_current_funset_index, m_view->mp_TablesPanel->GetRigidMap(false));
+   m_fwdm->SetRigidMap(m_current_funset_index, mp_view->mp_TablesPanel->GetRigidMap(false));
    break;
   case TYPE_MAP_INJ_EGOCRV:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetEGOCurveMap(m_current_funset_index, m_view->mp_TablesPanel->GetEGOCurveMap(false));
+   m_fwdm->SetEGOCurveMap(m_current_funset_index, mp_view->mp_TablesPanel->GetEGOCurveMap(false));
    break;
   case TYPE_MAP_INJ_IACC:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIACCorrMap(m_current_funset_index, m_view->mp_TablesPanel->GetIACCMap(false));
+   m_fwdm->SetIACCorrMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACCMap(false));
    break;
   case TYPE_MAP_INJ_IACCW:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIACCorrWMap(m_current_funset_index, m_view->mp_TablesPanel->GetIACCWMap(false));
+   m_fwdm->SetIACCorrWMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIACCWMap(false));
    break;
   case TYPE_MAP_INJ_IATCLT:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetIATCLTMap(m_current_funset_index, m_view->mp_TablesPanel->GetIATCLTMap(false));
+   m_fwdm->SetIATCLTMap(m_current_funset_index, mp_view->mp_TablesPanel->GetIATCLTMap(false));
    break;
   case TYPE_MAP_INJ_TPSSWT:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetTpsswtMap(m_current_funset_index, m_view->mp_TablesPanel->GetTpsswtMap(false));
+   m_fwdm->SetTpsswtMap(m_current_funset_index, mp_view->mp_TablesPanel->GetTpsswtMap(false));
    break;
   case TYPE_MAP_INJ_GTSC:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetGtscMap(m_current_funset_index, m_view->mp_TablesPanel->GetGtscMap(false));
+   m_fwdm->SetGtscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetGtscMap(false));
    break;
   case TYPE_MAP_INJ_GPSC:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetGpscMap(m_current_funset_index, m_view->mp_TablesPanel->GetGpscMap(false));
+   m_fwdm->SetGpscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetGpscMap(false));
    break;
   case TYPE_MAP_INJ_ATSC:
    ASSERT(m_current_funset_index!=-1);
-   m_fwdm->SetAtscMap(m_current_funset_index, m_view->mp_TablesPanel->GetAtscMap(false));
+   m_fwdm->SetAtscMap(m_current_funset_index, mp_view->mp_TablesPanel->GetAtscMap(false));
    break;
 
    //separate maps
   case TYPE_MAP_ATTENUATOR:
-   m_fwdm->SetAttenuatorMap(m_view->mp_TablesPanel->GetAttenuatorMap(false));
+   m_fwdm->SetAttenuatorMap(mp_view->mp_TablesPanel->GetAttenuatorMap(false));
    break;
   case TYPE_MAP_DWELLCNTRL:
-   m_fwdm->SetDwellCntrlMap(m_view->mp_TablesPanel->GetDwellCntrlMap(false));
+   m_fwdm->SetDwellCntrlMap(mp_view->mp_TablesPanel->GetDwellCntrlMap(false));
    break;
   case TYPE_MAP_CTS_CURVE:
-   m_fwdm->SetCTSCurveMap(m_view->mp_TablesPanel->GetCTSCurveMap(false));
+   m_fwdm->SetCTSCurveMap(mp_view->mp_TablesPanel->GetCTSCurveMap(false));
    break;
   case TYPE_MAP_ATS_CURVE:
-   m_fwdm->SetATSCurveMap(m_view->mp_TablesPanel->GetATSCurveMap(false));
+   m_fwdm->SetATSCurveMap(mp_view->mp_TablesPanel->GetATSCurveMap(false));
    break;
   case TYPE_MAP_ATS_CORR:
-   m_fwdm->SetATSAACMap(m_view->mp_TablesPanel->GetATSAACMap(false));
+   m_fwdm->SetATSAACMap(mp_view->mp_TablesPanel->GetATSAACMap(false));
    break;
   case TYPE_MAP_GASDOSE:
-   m_fwdm->SetGasdosePosMap(m_view->mp_TablesPanel->GetGasdosePosMap(false));
+   m_fwdm->SetGasdosePosMap(mp_view->mp_TablesPanel->GetGasdosePosMap(false));
    break;
   case TYPE_MAP_BAROCORR:
-   m_fwdm->SetBarocorrMap(m_view->mp_TablesPanel->GetBarocorrMap(false));
+   m_fwdm->SetBarocorrMap(mp_view->mp_TablesPanel->GetBarocorrMap(false));
    break;
   case TYPE_MAP_MANIGNTIM:
-   m_fwdm->SetManIgntimMap(m_view->mp_TablesPanel->GetManIgntimMap(false));
+   m_fwdm->SetManIgntimMap(mp_view->mp_TablesPanel->GetManIgntimMap(false));
    break;
   case TYPE_MAP_TMP2_CURVE:
-   m_fwdm->SetTmp2CurveMap(m_view->mp_TablesPanel->GetTmp2CurveMap(false));
+   m_fwdm->SetTmp2CurveMap(mp_view->mp_TablesPanel->GetTmp2CurveMap(false));
    break;
   case TYPE_MAP_CRKCLT_CORR:
-   m_fwdm->SetCrkTempMap(m_view->mp_TablesPanel->GetCrkTempMap(false));
+   m_fwdm->SetCrkTempMap(mp_view->mp_TablesPanel->GetCrkTempMap(false));
    break;
   case TYPE_MAP_EH_PAUSE:
-   m_fwdm->SetEHPauseMap(m_view->mp_TablesPanel->GetEHPauseMap(false));
+   m_fwdm->SetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false));
    break;
  }
 }
@@ -1299,7 +1300,7 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
  if (m_current_funset_index != -1)
  { //только если в списке выбрано
   SetViewChartsValues();
-  m_view->mp_TablesPanel->UpdateOpenedCharts();
+  mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
 
@@ -1321,9 +1322,9 @@ void CFirmwareTabController::OnATSXAxisEditChanged(int i_type, float i_value)
 void CFirmwareTabController::OnModificationCheckTimer(void)
 {
  bool modified = m_fwdm->IsModified();
- m_view->SetModified(modified);
+ mp_view->SetModified(modified);
  if (m_fwdm->IsLoaded())
-  m_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
+  mp_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
 }
 
 void CFirmwareTabController::OnReadFlashFromSECU(void)
@@ -1382,18 +1383,18 @@ void CFirmwareTabController::OnImportDataFromSECU3(void)
 
 void CFirmwareTabController::OnParamDeskTabActivate(void)
 {
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
  m_fwdm->GetDefParamValues(descriptor,paramdata);
- m_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->SetValues(descriptor,paramdata);
 }
 
 //from ParamDesk
 void CFirmwareTabController::OnParamDeskChangeInTab(void)
 {
- BYTE descriptor = m_view->mp_ParamDeskDlg->GetCurrentDescriptor();
+ BYTE descriptor = mp_view->mp_ParamDeskDlg->GetCurrentDescriptor();
  BYTE paramdata[256];
- m_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
+ mp_view->mp_ParamDeskDlg->GetValues(descriptor,paramdata);
  m_fwdm->SetDefParamValues(descriptor,paramdata);
 }
 
@@ -1505,8 +1506,8 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  cntr.AttachFWDM(m_fwdm);
  if (IDOK == cntr.Edit())
  {
-  m_fwdm->GetRPMGridMap(m_view->mp_TablesPanel->GetRPMGrid());
-  m_view->mp_TablesPanel->UpdateOpenedCharts();
+  m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
+  mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
 
@@ -1540,7 +1541,7 @@ void CFirmwareTabController::SetAttenuatorMap(const float* i_values)
 {
  m_fwdm->SetAttenuatorMap(i_values);
  SetViewChartsValues();
- m_view->mp_TablesPanel->UpdateOpenedCharts();
+ mp_view->mp_TablesPanel->UpdateOpenedCharts();
 }
 
 void CFirmwareTabController::GetAttenuatorMap(float* o_values)
@@ -1630,7 +1631,7 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
  //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
- if (m_view->IsProgrammeOnlyCode())
+ if (mp_view->IsProgrammeOnlyCode())
  {
   //Мы программируем только код, одако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
   //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать.
