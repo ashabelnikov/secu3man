@@ -46,8 +46,6 @@ struct WndSettings
  int m_DwellCntrlMapWnd_Y;
  int m_CTSCurveMapWnd_X;
  int m_CTSCurveMapWnd_Y;
- int m_ChokeOpMapWnd_X;
- int m_ChokeOpMapWnd_Y;
  int m_GridMapIgnWnd_X;
  int m_GridMapIgnWnd_Y;
  int m_GridMapInjWnd_X;
@@ -209,6 +207,9 @@ class ISettingsData
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;
+  virtual void SetWndSettings1(const WndSettings& i_wndSettings) = 0; //online
+  virtual void GetWndSettings1(WndSettings& o_wndSettings) const = 0; //online
+
   //Interface language and SECU-3 platform type
   virtual EInterLang GetInterfaceLanguage(void) const = 0;
   virtual EECUPlatform GetECUPlatformType(void) const = 0;

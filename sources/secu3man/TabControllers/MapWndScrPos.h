@@ -31,12 +31,13 @@ class ISettingsData;
 class MapWndScrPos
 {
  public:
-  MapWndScrPos(ISettingsData*);
+  MapWndScrPos(ISettingsData*, bool online = false);
 
  public:
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
+  virtual void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
+  virtual void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
 
  private:
   ISettingsData* mp_settings;
+  bool m_online;
 };

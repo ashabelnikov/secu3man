@@ -32,8 +32,9 @@
 
 #undef max   //avoid conflicts with C++
 
-MapWndScrPos::MapWndScrPos(ISettingsData* ip_settings)
+MapWndScrPos::MapWndScrPos(ISettingsData* ip_settings, bool online /*=false*/)
 : mp_settings(ip_settings)
+, m_online(online)
 {
  //empty
 }
@@ -48,7 +49,10 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
  RECT rc = wpl.rcNormalPosition;
 
  WndSettings ws;
- mp_settings->GetWndSettings(ws);
+ if (m_online)
+  mp_settings->GetWndSettings1(ws);
+ else
+  mp_settings->GetWndSettings(ws);
 
  switch(i_mapType)
  {
@@ -79,10 +83,6 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
   case TYPE_MAP_CTS_CURVE:
    ws.m_CTSCurveMapWnd_X = rc.left;
    ws.m_CTSCurveMapWnd_Y = rc.top;
-   break;
-  case TYPE_MAP_CHOKE_OP:
-   ws.m_ChokeOpMapWnd_X = rc.left;
-   ws.m_ChokeOpMapWnd_Y = rc.top;
    break;
   case TYPE_MAP_INJ_VE:
    ws.m_VEMapWnd_X = rc.left;
@@ -211,7 +211,10 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 
  };
 
- mp_settings->SetWndSettings(ws);
+ if (m_online)
+  mp_settings->SetWndSettings1(ws);
+ else
+  mp_settings->SetWndSettings(ws);
 }
 
 void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
@@ -220,7 +223,10 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
   return;
 
  WndSettings ws;
- mp_settings->GetWndSettings(ws);
+ if (m_online)
+  mp_settings->GetWndSettings1(ws);
+ else
+  mp_settings->GetWndSettings(ws);
 
  int X = 0, Y = 0;
 
@@ -246,9 +252,6 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_CTS_CURVE:
    X = ws.m_CTSCurveMapWnd_X, Y = ws.m_CTSCurveMapWnd_Y;
-   break;
-  case TYPE_MAP_CHOKE_OP:
-   X = ws.m_ChokeOpMapWnd_X, Y = ws.m_ChokeOpMapWnd_Y;
    break;
   case TYPE_MAP_INJ_VE:
    X = ws.m_VEMapWnd_X, Y = ws.m_VEMapWnd_Y;

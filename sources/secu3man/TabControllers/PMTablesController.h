@@ -28,6 +28,7 @@
 #include <vector>
 #include "common/ObjectTimer.h"
 #include "PMControllerBase.h"
+#include "MapWndScrPos.h"
 
 class CCommunicationManager;
 class CStatusBarManager;
@@ -36,7 +37,7 @@ struct SECU3FWMapsItem;
 class ISettingsData;
 namespace SECU3IO {struct EditTabPar; struct FunSetPar;}
 
-class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
+class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public MapWndScrPos
 {
   typedef CPMControllerBase<VIEW> Super;
  public:
@@ -71,8 +72,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>
  private:
   //Events from view
   void OnMapChanged(int i_mapType);
-  void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
-  void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
+  virtual void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
+  virtual void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnTabActivate(void);
   void OnSaveButton(void);
   void OnChangeTablesSetName(void);

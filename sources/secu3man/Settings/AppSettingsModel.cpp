@@ -82,7 +82,6 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMainFrmWnd(_T("MainFrmWnd"))
 , m_optDwellCntrlMapWnd(_T("DwellCntrlMapWnd"))
 , m_optCTSCurveMapWnd(_T("CTSCurveMapWnd"))
-, m_optChokeOpMapWnd(_T("ChokeOpMapWnd"))
 , m_optGridMapIgnWnd(_T("GridMapIgnWnd"))
 , m_optGridMapInjWnd(_T("GridMapInjWnd"))
 , m_optVEMapWnd(_T("VEMapWnd"))
@@ -115,6 +114,35 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAtscMapWnd(_T("AirDenMapWnd"))
 , m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
 , m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
+//positions of windows (online tables)
+, m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
+, m_optStrtMapWnd1(_T("StrtMapWnd"))
+, m_optIdleMapWnd1(_T("IdleMapWnd"))
+, m_optWorkMapWnd1(_T("WorkMapWnd"))
+, m_optTempMapWnd1(_T("TempMapWnd"))
+, m_optGridMapIgnWnd1(_T("GridMapIgnWnd"))
+, m_optGridMapInjWnd1(_T("GridMapInjWnd"))
+, m_optVEMapWnd1(_T("VEMapWnd"))
+, m_optAFRMapWnd1(_T("AFRMapWnd"))
+, m_optCrnkMapWnd1(_T("CrnkMapWnd"))
+, m_optWrmpMapWnd1(_T("WrmpMapWnd"))
+, m_optDeadMapWnd1(_T("DeadMapWnd"))
+, m_optIdlrMapWnd1(_T("IdlrMapWnd"))
+, m_optIdlcMapWnd1(_T("IdlcMapWnd"))
+, m_optAETPSMapWnd1(_T("AETPSMapWnd"))
+, m_optAERPMMapWnd1(_T("AERPMMapWnd"))
+, m_optAftstrMapWnd1(_T("AftstrMapWnd"))
+, m_optITMapWnd1(_T("ITMapWnd"))
+, m_optITRPMMapWnd1(_T("ITRPMMapWnd"))
+, m_optRigidMapWnd1(_T("RigidMapWnd"))
+, m_optEGOCrvMapWnd1(_T("EGOCrvMapWnd"))
+, m_optIACCMapWnd1(_T("IACCMapWnd"))
+, m_optIACCWMapWnd1(_T("IACCWMapWnd"))
+, m_optIATCLTMapWnd1(_T("IATCLTCorrMapWnd"))
+, m_optTpsswtMapWnd1(_T("TpsSwtMapWnd"))
+, m_optGtscMapWnd1(_T("GTSCMapWnd"))
+, m_optGpscMapWnd1(_T("GPSCMapWnd"))
+, m_optAtscMapWnd1(_T("AirDenMapWnd"))
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
@@ -328,7 +356,6 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optMainFrmWnd); //Main frame window
  ws.ReadWndPos(m_optDwellCntrlMapWnd);
  ws.ReadWndPos(m_optCTSCurveMapWnd);
- ws.ReadWndPos(m_optChokeOpMapWnd);
  ws.ReadWndPos(m_optGridMapIgnWnd);
  ws.ReadWndPos(m_optGridMapInjWnd);
  ws.ReadWndPos(m_optVEMapWnd);
@@ -361,6 +388,37 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optAtscMapWnd);
  ws.ReadWndPos(m_optCrkTempMapWnd);
  ws.ReadWndPos(m_optEHPauseMapWnd);
+
+ //Positions of windows (online tables)
+ IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
+
+ ws1.ReadWndPos(m_optStrtMapWnd1);
+ ws1.ReadWndPos(m_optIdleMapWnd1);
+ ws1.ReadWndPos(m_optWorkMapWnd1);
+ ws1.ReadWndPos(m_optTempMapWnd1);
+ ws1.ReadWndPos(m_optGridMapIgnWnd1);
+ ws1.ReadWndPos(m_optGridMapInjWnd1);
+ ws1.ReadWndPos(m_optVEMapWnd1);
+ ws1.ReadWndPos(m_optAFRMapWnd1);
+ ws1.ReadWndPos(m_optCrnkMapWnd1);
+ ws1.ReadWndPos(m_optWrmpMapWnd1);
+ ws1.ReadWndPos(m_optDeadMapWnd1);
+ ws1.ReadWndPos(m_optIdlrMapWnd1);
+ ws1.ReadWndPos(m_optIdlcMapWnd1);
+ ws1.ReadWndPos(m_optAETPSMapWnd1);
+ ws1.ReadWndPos(m_optAERPMMapWnd1);
+ ws1.ReadWndPos(m_optAftstrMapWnd1);
+ ws1.ReadWndPos(m_optITMapWnd1);
+ ws1.ReadWndPos(m_optITRPMMapWnd1);
+ ws1.ReadWndPos(m_optRigidMapWnd1);
+ ws1.ReadWndPos(m_optEGOCrvMapWnd1);
+ ws1.ReadWndPos(m_optIACCMapWnd1);
+ ws1.ReadWndPos(m_optIACCWMapWnd1);
+ ws1.ReadWndPos(m_optIATCLTMapWnd1);
+ ws1.ReadWndPos(m_optTpsswtMapWnd1);
+ ws1.ReadWndPos(m_optGtscMapWnd1);
+ ws1.ReadWndPos(m_optGpscMapWnd1);
+ ws1.ReadWndPos(m_optAtscMapWnd1);
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -514,7 +572,6 @@ bool CAppSettingsModel::WriteSettings(void)
  ws.WriteWndPos(m_optMainFrmWnd);
  ws.WriteWndPos(m_optDwellCntrlMapWnd);
  ws.WriteWndPos(m_optCTSCurveMapWnd);
- ws.WriteWndPos(m_optChokeOpMapWnd);
  ws.WriteWndPos(m_optGridMapIgnWnd);
  ws.WriteWndPos(m_optGridMapInjWnd);
  ws.WriteWndPos(m_optVEMapWnd);
@@ -547,6 +604,38 @@ bool CAppSettingsModel::WriteSettings(void)
  ws.WriteWndPos(m_optAtscMapWnd);
  ws.WriteWndPos(m_optCrkTempMapWnd);
  ws.WriteWndPos(m_optEHPauseMapWnd);
+
+ //Positions of windows
+ IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
+ ws1.CreateSection();
+
+ ws1.WriteWndPos(m_optStrtMapWnd1);
+ ws1.WriteWndPos(m_optIdleMapWnd1);
+ ws1.WriteWndPos(m_optWorkMapWnd1);
+ ws1.WriteWndPos(m_optTempMapWnd1);
+ ws1.WriteWndPos(m_optGridMapIgnWnd1);
+ ws1.WriteWndPos(m_optGridMapInjWnd1);
+ ws1.WriteWndPos(m_optVEMapWnd1);
+ ws1.WriteWndPos(m_optAFRMapWnd1);
+ ws1.WriteWndPos(m_optCrnkMapWnd1);
+ ws1.WriteWndPos(m_optWrmpMapWnd1);
+ ws1.WriteWndPos(m_optDeadMapWnd1);
+ ws1.WriteWndPos(m_optIdlrMapWnd1);
+ ws1.WriteWndPos(m_optIdlcMapWnd1);
+ ws1.WriteWndPos(m_optAETPSMapWnd1);
+ ws1.WriteWndPos(m_optAERPMMapWnd1);
+ ws1.WriteWndPos(m_optAftstrMapWnd1);
+ ws1.WriteWndPos(m_optITMapWnd1);
+ ws1.WriteWndPos(m_optITRPMMapWnd1);
+ ws1.WriteWndPos(m_optRigidMapWnd1);
+ ws1.WriteWndPos(m_optEGOCrvMapWnd1);
+ ws1.WriteWndPos(m_optIACCMapWnd1);
+ ws1.WriteWndPos(m_optIACCWMapWnd1);
+ ws1.WriteWndPos(m_optIATCLTMapWnd1);
+ ws1.WriteWndPos(m_optTpsswtMapWnd1);
+ ws1.WriteWndPos(m_optGtscMapWnd1);
+ ws1.WriteWndPos(m_optGpscMapWnd1);
+ ws1.WriteWndPos(m_optAtscMapWnd1);
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
@@ -702,8 +791,6 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optDwellCntrlMapWnd.value.y = i_wndSettings.m_DwellCntrlMapWnd_Y;
  m_optCTSCurveMapWnd.value.x = i_wndSettings.m_CTSCurveMapWnd_X;
  m_optCTSCurveMapWnd.value.y = i_wndSettings.m_CTSCurveMapWnd_Y;
- m_optChokeOpMapWnd.value.x = i_wndSettings.m_ChokeOpMapWnd_X;
- m_optChokeOpMapWnd.value.y = i_wndSettings.m_ChokeOpMapWnd_Y;
  m_optGridMapIgnWnd.value.x = i_wndSettings.m_GridMapIgnWnd_X;
  m_optGridMapIgnWnd.value.y = i_wndSettings.m_GridMapIgnWnd_Y;
  m_optGridMapInjWnd.value.x = i_wndSettings.m_GridMapInjWnd_X;
@@ -788,8 +875,6 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_DwellCntrlMapWnd_Y = m_optDwellCntrlMapWnd.value.y;
  o_wndSettings.m_CTSCurveMapWnd_X = m_optCTSCurveMapWnd.value.x;
  o_wndSettings.m_CTSCurveMapWnd_Y = m_optCTSCurveMapWnd.value.y;
- o_wndSettings.m_ChokeOpMapWnd_X = m_optChokeOpMapWnd.value.x;
- o_wndSettings.m_ChokeOpMapWnd_Y = m_optChokeOpMapWnd.value.y;
  o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd.value.x;
  o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd.value.y;
  o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd.value.x;
@@ -854,6 +939,122 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CrkTempMapWnd_Y = m_optCrkTempMapWnd.value.y;
  o_wndSettings.m_EHPauseMapWnd_X = m_optEHPauseMapWnd.value.x;
  o_wndSettings.m_EHPauseMapWnd_Y = m_optEHPauseMapWnd.value.y;
+}
+
+void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
+{
+ m_optStrtMapWnd1.value.x = i_wndSettings.m_StrtMapWnd_X;
+ m_optStrtMapWnd1.value.y = i_wndSettings.m_StrtMapWnd_Y;
+ m_optIdleMapWnd1.value.x = i_wndSettings.m_IdleMapWnd_X;
+ m_optIdleMapWnd1.value.y = i_wndSettings.m_IdleMapWnd_Y;
+ m_optWorkMapWnd1.value.x = i_wndSettings.m_WorkMapWnd_X;
+ m_optWorkMapWnd1.value.y = i_wndSettings.m_WorkMapWnd_Y;
+ m_optTempMapWnd1.value.x = i_wndSettings.m_TempMapWnd_X;
+ m_optTempMapWnd1.value.y = i_wndSettings.m_TempMapWnd_Y;
+ m_optGridMapIgnWnd1.value.x = i_wndSettings.m_GridMapIgnWnd_X;
+ m_optGridMapIgnWnd1.value.y = i_wndSettings.m_GridMapIgnWnd_Y;
+ m_optGridMapInjWnd1.value.x = i_wndSettings.m_GridMapInjWnd_X;
+ m_optGridMapInjWnd1.value.y = i_wndSettings.m_GridMapInjWnd_Y;
+ m_optVEMapWnd1.value.x = i_wndSettings.m_VEMapWnd_X;
+ m_optVEMapWnd1.value.y = i_wndSettings.m_VEMapWnd_Y;
+ m_optAFRMapWnd1.value.x = i_wndSettings.m_AFRMapWnd_X;
+ m_optAFRMapWnd1.value.y = i_wndSettings.m_AFRMapWnd_Y;
+ m_optCrnkMapWnd1.value.x = i_wndSettings.m_CrnkMapWnd_X;
+ m_optCrnkMapWnd1.value.y = i_wndSettings.m_CrnkMapWnd_Y;
+ m_optWrmpMapWnd1.value.x = i_wndSettings.m_WrmpMapWnd_X;
+ m_optWrmpMapWnd1.value.y = i_wndSettings.m_WrmpMapWnd_Y;
+ m_optDeadMapWnd1.value.x = i_wndSettings.m_DeadMapWnd_X;
+ m_optDeadMapWnd1.value.y = i_wndSettings.m_DeadMapWnd_Y;
+ m_optIdlrMapWnd1.value.x = i_wndSettings.m_IdlrMapWnd_X;
+ m_optIdlrMapWnd1.value.y = i_wndSettings.m_IdlrMapWnd_Y;
+ m_optIdlcMapWnd1.value.x = i_wndSettings.m_IdlcMapWnd_X;
+ m_optIdlcMapWnd1.value.y = i_wndSettings.m_IdlcMapWnd_Y;
+ m_optAETPSMapWnd1.value.x = i_wndSettings.m_AETPSMapWnd_X;
+ m_optAETPSMapWnd1.value.y = i_wndSettings.m_AETPSMapWnd_Y; 
+ m_optAERPMMapWnd1.value.x = i_wndSettings.m_AERPMMapWnd_X;
+ m_optAERPMMapWnd1.value.y = i_wndSettings.m_AERPMMapWnd_Y; 
+ m_optAftstrMapWnd1.value.x = i_wndSettings.m_AftstrMapWnd_X;
+ m_optAftstrMapWnd1.value.y = i_wndSettings.m_AftstrMapWnd_Y; 
+ m_optITMapWnd1.value.x = i_wndSettings.m_ITMapWnd_X;
+ m_optITMapWnd1.value.y = i_wndSettings.m_ITMapWnd_Y;
+ m_optITRPMMapWnd1.value.x = i_wndSettings.m_ITRPMMapWnd_X;
+ m_optITRPMMapWnd1.value.y = i_wndSettings.m_ITRPMMapWnd_Y;
+ m_optRigidMapWnd1.value.x = i_wndSettings.m_RigidMapWnd_X;
+ m_optRigidMapWnd1.value.y = i_wndSettings.m_RigidMapWnd_Y;
+ m_optEGOCrvMapWnd1.value.x = i_wndSettings.m_EGOCrvMapWnd_X;
+ m_optEGOCrvMapWnd1.value.y = i_wndSettings.m_EGOCrvMapWnd_Y;
+ m_optIACCMapWnd1.value.x = i_wndSettings.m_IACCMapWnd_X;
+ m_optIACCMapWnd1.value.y = i_wndSettings.m_IACCMapWnd_Y;
+ m_optIACCWMapWnd1.value.x = i_wndSettings.m_IACCWMapWnd_X;
+ m_optIACCWMapWnd1.value.y = i_wndSettings.m_IACCWMapWnd_Y;
+ m_optIATCLTMapWnd1.value.x = i_wndSettings.m_IATCLTMapWnd_X;
+ m_optIATCLTMapWnd1.value.y = i_wndSettings.m_IATCLTMapWnd_Y;
+ m_optTpsswtMapWnd1.value.x = i_wndSettings.m_TpsswtMapWnd_X;
+ m_optTpsswtMapWnd1.value.y = i_wndSettings.m_TpsswtMapWnd_Y;
+ m_optGtscMapWnd1.value.x = i_wndSettings.m_GtscMapWnd_X;
+ m_optGtscMapWnd1.value.y = i_wndSettings.m_GtscMapWnd_Y;
+ m_optGpscMapWnd1.value.x = i_wndSettings.m_GpscMapWnd_X;
+ m_optGpscMapWnd1.value.y = i_wndSettings.m_GpscMapWnd_Y;
+ m_optAtscMapWnd1.value.x = i_wndSettings.m_AtscMapWnd_X;
+ m_optAtscMapWnd1.value.y = i_wndSettings.m_AtscMapWnd_Y;
+}
+
+void CAppSettingsModel::GetWndSettings1(WndSettings& o_wndSettings) const
+{
+ o_wndSettings.m_StrtMapWnd_X = m_optStrtMapWnd1.value.x;
+ o_wndSettings.m_StrtMapWnd_Y = m_optStrtMapWnd1.value.y;
+ o_wndSettings.m_IdleMapWnd_X = m_optIdleMapWnd1.value.x;
+ o_wndSettings.m_IdleMapWnd_Y = m_optIdleMapWnd1.value.y;
+ o_wndSettings.m_WorkMapWnd_X = m_optWorkMapWnd1.value.x;
+ o_wndSettings.m_WorkMapWnd_Y = m_optWorkMapWnd1.value.y;
+ o_wndSettings.m_TempMapWnd_X = m_optTempMapWnd1.value.x;
+ o_wndSettings.m_TempMapWnd_Y = m_optTempMapWnd1.value.y;
+ o_wndSettings.m_GridMapIgnWnd_X = m_optGridMapIgnWnd1.value.x;
+ o_wndSettings.m_GridMapIgnWnd_Y = m_optGridMapIgnWnd1.value.y;
+ o_wndSettings.m_GridMapInjWnd_X = m_optGridMapInjWnd1.value.x;
+ o_wndSettings.m_GridMapInjWnd_Y = m_optGridMapInjWnd1.value.y;
+ o_wndSettings.m_VEMapWnd_X = m_optVEMapWnd1.value.x;
+ o_wndSettings.m_VEMapWnd_Y = m_optVEMapWnd1.value.y;
+ o_wndSettings.m_AFRMapWnd_X = m_optAFRMapWnd1.value.x;
+ o_wndSettings.m_AFRMapWnd_Y = m_optAFRMapWnd1.value.y;
+ o_wndSettings.m_CrnkMapWnd_X = m_optCrnkMapWnd1.value.x;
+ o_wndSettings.m_CrnkMapWnd_Y = m_optCrnkMapWnd1.value.y;
+ o_wndSettings.m_WrmpMapWnd_X = m_optWrmpMapWnd1.value.x;
+ o_wndSettings.m_WrmpMapWnd_Y = m_optWrmpMapWnd1.value.y;
+ o_wndSettings.m_DeadMapWnd_X = m_optDeadMapWnd1.value.x;
+ o_wndSettings.m_DeadMapWnd_Y = m_optDeadMapWnd1.value.y;
+ o_wndSettings.m_IdlrMapWnd_X = m_optIdlrMapWnd1.value.x;
+ o_wndSettings.m_IdlrMapWnd_Y = m_optIdlrMapWnd1.value.y;
+ o_wndSettings.m_IdlcMapWnd_X = m_optIdlcMapWnd1.value.x;
+ o_wndSettings.m_IdlcMapWnd_Y = m_optIdlcMapWnd1.value.y;
+ o_wndSettings.m_AETPSMapWnd_X = m_optAETPSMapWnd1.value.x;
+ o_wndSettings.m_AETPSMapWnd_Y = m_optAETPSMapWnd1.value.y;
+ o_wndSettings.m_AERPMMapWnd_X = m_optAERPMMapWnd1.value.x;
+ o_wndSettings.m_AERPMMapWnd_Y = m_optAERPMMapWnd1.value.y;
+ o_wndSettings.m_AftstrMapWnd_X = m_optAftstrMapWnd1.value.x;
+ o_wndSettings.m_AftstrMapWnd_Y = m_optAftstrMapWnd1.value.y;
+ o_wndSettings.m_ITMapWnd_X = m_optITMapWnd1.value.x;
+ o_wndSettings.m_ITMapWnd_Y = m_optITMapWnd1.value.y;
+ o_wndSettings.m_ITRPMMapWnd_X = m_optITRPMMapWnd1.value.x;
+ o_wndSettings.m_ITRPMMapWnd_Y = m_optITRPMMapWnd1.value.y;
+ o_wndSettings.m_RigidMapWnd_X = m_optRigidMapWnd1.value.x;
+ o_wndSettings.m_RigidMapWnd_Y = m_optRigidMapWnd1.value.y;
+ o_wndSettings.m_EGOCrvMapWnd_X = m_optEGOCrvMapWnd1.value.x;
+ o_wndSettings.m_EGOCrvMapWnd_Y = m_optEGOCrvMapWnd1.value.y;
+ o_wndSettings.m_IACCMapWnd_X = m_optIACCMapWnd1.value.x;
+ o_wndSettings.m_IACCMapWnd_Y = m_optIACCMapWnd1.value.y;
+ o_wndSettings.m_IACCWMapWnd_X = m_optIACCWMapWnd1.value.x;
+ o_wndSettings.m_IACCWMapWnd_Y = m_optIACCWMapWnd1.value.y;
+ o_wndSettings.m_IATCLTMapWnd_X = m_optIATCLTMapWnd1.value.x;
+ o_wndSettings.m_IATCLTMapWnd_Y = m_optIATCLTMapWnd1.value.y;
+ o_wndSettings.m_TpsswtMapWnd_X = m_optTpsswtMapWnd1.value.x;
+ o_wndSettings.m_TpsswtMapWnd_Y = m_optTpsswtMapWnd1.value.y;
+ o_wndSettings.m_GtscMapWnd_X = m_optGtscMapWnd1.value.x;
+ o_wndSettings.m_GtscMapWnd_Y = m_optGtscMapWnd1.value.y;
+ o_wndSettings.m_GpscMapWnd_X = m_optGpscMapWnd1.value.x;
+ o_wndSettings.m_GpscMapWnd_Y = m_optGpscMapWnd1.value.y;
+ o_wndSettings.m_AtscMapWnd_X = m_optAtscMapWnd1.value.x;
+ o_wndSettings.m_AtscMapWnd_Y = m_optAtscMapWnd1.value.y;
 }
 
 void CAppSettingsModel::SetWndSize(const WndSize& i_wndSize)

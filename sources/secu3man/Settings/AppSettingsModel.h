@@ -94,6 +94,10 @@ class CAppSettingsModel : public ISettingsData
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
   virtual void GetWndSettings(WndSettings& o_wndSettings) const;
+
+  virtual void SetWndSettings1(const WndSettings& i_wndSettings);
+  virtual void GetWndSettings1(WndSettings& o_wndSettings) const;
+
   //windows' size
   virtual void SetWndSize(const WndSize& i_wndSize);
   virtual void GetWndSize(WndSize& o_wndSize) const;
@@ -146,6 +150,7 @@ class CAppSettingsModel : public ISettingsData
   //Section names
   const CString m_Name_Options_Section;
   const CString m_Name_WndSettings_Section;  
+  const CString m_Name_WndSettings_Section1;  //online
   const CString m_Name_WndSize_Section;  
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
@@ -199,7 +204,6 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optMainFrmWnd;
   OptField_t<POINT> m_optDwellCntrlMapWnd;
   OptField_t<POINT> m_optCTSCurveMapWnd;
-  OptField_t<POINT> m_optChokeOpMapWnd;
   OptField_t<POINT> m_optGridMapIgnWnd;
   OptField_t<POINT> m_optGridMapInjWnd;
   OptField_t<POINT> m_optVEMapWnd;
@@ -232,6 +236,36 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWnd;
   OptField_t<POINT> m_optCrkTempMapWnd;
   OptField_t<POINT> m_optEHPauseMapWnd;
+
+  //windows' positions (online tables)
+  OptField_t<POINT> m_optStrtMapWnd1;
+  OptField_t<POINT> m_optIdleMapWnd1;
+  OptField_t<POINT> m_optWorkMapWnd1;
+  OptField_t<POINT> m_optTempMapWnd1;
+  OptField_t<POINT> m_optGridMapIgnWnd1;
+  OptField_t<POINT> m_optGridMapInjWnd1;
+  OptField_t<POINT> m_optVEMapWnd1;
+  OptField_t<POINT> m_optAFRMapWnd1;
+  OptField_t<POINT> m_optCrnkMapWnd1;
+  OptField_t<POINT> m_optWrmpMapWnd1;
+  OptField_t<POINT> m_optDeadMapWnd1;
+  OptField_t<POINT> m_optIdlrMapWnd1;
+  OptField_t<POINT> m_optIdlcMapWnd1;
+  OptField_t<POINT> m_optAETPSMapWnd1;
+  OptField_t<POINT> m_optAERPMMapWnd1;
+  OptField_t<POINT> m_optAftstrMapWnd1;
+  OptField_t<POINT> m_optITMapWnd1;
+  OptField_t<POINT> m_optITRPMMapWnd1;
+  OptField_t<POINT> m_optRigidMapWnd1;
+  OptField_t<POINT> m_optEGOCrvMapWnd1;
+  OptField_t<POINT> m_optIACCMapWnd1;
+  OptField_t<POINT> m_optIACCWMapWnd1;
+  OptField_t<POINT> m_optIATCLTMapWnd1;
+  OptField_t<POINT> m_optTpsswtMapWnd1;
+  OptField_t<POINT> m_optGtscMapWnd1;
+  OptField_t<POINT> m_optGpscMapWnd1;
+  OptField_t<POINT> m_optAtscMapWnd1;
+
   //window size
   OptField_t<POINT> m_optMainFrmWndSize;
   //indicators

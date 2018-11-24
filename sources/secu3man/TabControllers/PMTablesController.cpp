@@ -229,6 +229,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
 , mp_sbar(ip_sbar)
 , m_valid_cache(false)
 , mp_settings(ip_settings)
+, MapWndScrPos(ip_settings, true)
 {
  //устанавливаем обработчики событий от view
  mp_view->setOnMapChanged(MakeDelegate(this, &CPMTablesController::OnMapChanged));
@@ -610,11 +611,13 @@ void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
   mp_settings->SetLamDelMap(mp_view->mp_ButtonsPanel->GetLamDelMap(0), mp_view->mp_ButtonsPanel->GetLamDelMap(1), mp_view->mp_ButtonsPanel->GetLamDelMap(2));
   mp_settings->SetBlockedCells(mp_view->mp_ButtonsPanel->GetBlockedCells());
  }
+
+ MapWndScrPos::OnCloseMapWnd(i_hwnd, i_mapType);
 }
 
 void CPMTablesController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
- //empty
+ MapWndScrPos::OnOpenMapWnd(i_hwnd, i_mapType);
 }
 
 void CPMTablesController::OnTabActivate(void)
