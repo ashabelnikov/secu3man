@@ -49,6 +49,9 @@ class CAppSettingsModel : public ISettingsData
   std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowableLanguages;
 
   //<<UIString, INIString>, ID>
+  std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowableWndStates;
+
+  //<<UIString, INIString>, ID>
   std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> > m_AllowablePlatforms;
 
   //<<UIString, INIString>, ID>
@@ -101,6 +104,9 @@ class CAppSettingsModel : public ISettingsData
   //windows' size
   virtual void SetWndSize(const WndSize& i_wndSize);
   virtual void GetWndSize(WndSize& o_wndSize) const;
+  //windows' state
+  virtual void SetWndState(const WndState& i_wndState);
+  virtual void GetWndState(WndState& o_wndState) const;
 
   //язык интерфейса и тип платформы
   virtual EInterLang GetInterfaceLanguage(void) const;
@@ -152,6 +158,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_WndSettings_Section;  
   const CString m_Name_WndSettings_Section1;  //online
   const CString m_Name_WndSize_Section;  
+  const CString m_Name_WndState_Section;  
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
@@ -268,6 +275,10 @@ class CAppSettingsModel : public ISettingsData
 
   //window size
   OptField_t<POINT> m_optMainFrmWndSize;
+
+  //window state
+  OptField_t<int> m_optMainFrmWndState;
+
   //indicators
   OptField_t<float> m_optIndHeightPercent[2];
   OptField_t<int> m_optIndRows[2];

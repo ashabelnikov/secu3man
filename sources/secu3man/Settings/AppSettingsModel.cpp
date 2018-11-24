@@ -146,6 +146,9 @@ CAppSettingsModel::CAppSettingsModel()
 //size of windows
 , m_Name_WndSize_Section(_T("WndSize"))
 , m_optMainFrmWndSize(_T("MainFrmWnd"))
+//state of windows (minimized, normal, maximized)
+, m_Name_WndState_Section(_T("WndState"))
+, m_optMainFrmWndState(_T("MainFrmWnd"))
 //Colors of indicators
 , m_Name_IndColors_Section(_T("IndColors"))
 , m_optColGas_v(_T("IndGas_v"))
@@ -266,6 +269,10 @@ CAppSettingsModel::CAppSettingsModel()
 
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("English")), _TSTRING(_T("english"))), IL_ENGLISH) );
  m_AllowableLanguages.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Russian")), _TSTRING(_T("russian"))), IL_RUSSIAN) );
+
+ m_AllowableWndStates.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Minimized")), _TSTRING(_T("minimized"))), 0) );
+ m_AllowableWndStates.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Normal")), _TSTRING(_T("normal"))), 1) );
+ m_AllowableWndStates.push_back(std::make_pair(std::make_pair(_TSTRING(_T("Maximized")), _TSTRING(_T("maximized"))), 2) );
 
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega64")), _TSTRING(_T("atmega64"))), EP_ATMEGA64) );
  m_AllowablePlatforms.push_back(std::make_pair(std::make_pair(_TSTRING(_T("ATMega644")), _TSTRING(_T("atmega644"))), EP_ATMEGA644) );
@@ -423,6 +430,10 @@ bool CAppSettingsModel::ReadSettings(void)
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
  sz.ReadWndPos(m_optMainFrmWndSize, 0, 10000); //Main frame window
+
+ //State of windows
+ IniIO sw(IniFileName, m_Name_WndState_Section);
+ sw.ReadEnum(m_optMainFrmWndState, 1, m_AllowableWndStates); //Main frame window
 
  //Indicators
  for(int i = 0; i < 2; ++i)
@@ -642,6 +653,12 @@ bool CAppSettingsModel::WriteSettings(void)
  sz.CreateSection();
 
  sz.WriteWndPos(m_optMainFrmWndSize);
+
+ //States of windows
+ IniIO sw(IniFileName, m_Name_WndState_Section);
+ sw.CreateSection();
+
+ sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates);
 
  //Indicators
  for(int i = 0; i < 2; ++i)
@@ -1067,6 +1084,16 @@ void CAppSettingsModel::GetWndSize(WndSize& o_wndSize) const
 {
  o_wndSize.m_MainFrmWnd_W = m_optMainFrmWndSize.value.x;
  o_wndSize.m_MainFrmWnd_H = m_optMainFrmWndSize.value.y;
+}
+
+void CAppSettingsModel::SetWndState(const WndState& i_wndState)
+{
+ m_optMainFrmWndState.value = i_wndState.m_MainFrmWnd;
+}
+
+void CAppSettingsModel::GetWndState(WndState& o_wndState) const
+{
+ o_wndState.m_MainFrmWnd = m_optMainFrmWndState.value;
 }
 
 EInterLang CAppSettingsModel::GetInterfaceLanguage(void) const

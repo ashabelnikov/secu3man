@@ -49,6 +49,8 @@ class MainFrameController : public IAPPEventHandler
   virtual void OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet);
   virtual void OnConnection(const bool i_online);
 
+  void OnAfterCreate(void);
+
  private:
   //from view
   void OnAppAbout();

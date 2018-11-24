@@ -317,10 +317,21 @@ void MainFrameController::OnCreate(void)
 
 bool MainFrameController::OnClose(void)
 {
+ ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+
+ //Save state of the main window
+ WndState sw;
+ settings->GetWndState(sw);
+ sw.m_MainFrmWnd = 1; //normal state
+ if (mp_view->IsIconic())
+  sw.m_MainFrmWnd = 0;
+ if (mp_view->IsZoomed())
+  sw.m_MainFrmWnd = 2; 
+ settings->SetWndState(sw);
+
  mp_view->ShowWindow(SW_SHOWNORMAL); //normalize window pos, otherwise saved position will be wrong
- if (!mp_view->IsIconic())
+ if (!mp_view->IsIconic() && !mp_view->IsZoomed())
  {
-  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
   WndSettings ws;
   settings->GetWndSettings(ws);
 
@@ -341,6 +352,22 @@ bool MainFrameController::OnClose(void)
  }
 
  return true;
+}
+
+void MainFrameController::OnAfterCreate(void)
+{
+ ISettingsData* settings = m_pAppSettingsManager->GetSettings();
+ WndState sw;
+ settings->GetWndState(sw);
+ int nCmdShow = SW_SHOW;
+ if (sw.m_MainFrmWnd == 0)
+  nCmdShow = SW_MINIMIZE;
+ if (sw.m_MainFrmWnd == 2)
+  nCmdShow = SW_MAXIMIZE;
+
+ // The one and only window has been initialized, so show and update it.
+ mp_view->ShowWindow(nCmdShow);
+ mp_view->UpdateWindow();
 }
 
 void MainFrameController::OnGetInitialPos(CPoint& o_point)

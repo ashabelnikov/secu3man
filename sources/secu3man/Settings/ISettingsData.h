@@ -119,6 +119,12 @@ struct WndSize
  int m_MainFrmWnd_H;
 };
 
+//Holds windows's state data
+struct WndState
+{
+ int m_MainFrmWnd;
+};
+
 struct IndicatorsCfg
 {
  float m_optIndHeightPercent[2];
@@ -233,6 +239,9 @@ class ISettingsData
 
   virtual void SetWndSize(const WndSize& i_wndSize) = 0;
   virtual void GetWndSize(WndSize& o_wndSize) const = 0;
+
+  virtual void SetWndState(const WndState& i_wndState) = 0;
+  virtual void GetWndState(WndState& o_wndState) const = 0;
 
   virtual void SetLamDelMap(float* map, float* rb, float* lb) = 0;
   virtual void GetLamDelMap(float* map, float* rb, float* lb) = 0;

@@ -82,13 +82,11 @@ bool CMainFrameManager::Init(CWnd* &o_pMainWnd)
  //инициализируем иерархию менеджеров UI
  m_pChildViewManager->Init(m_pMainFrame);
 
- // The one and only window has been initialized, so show and update it.
- m_pMainFrame->ShowWindow(SW_SHOW);
- m_pMainFrame->UpdateWindow();
-
  m_pMainFrame->addOnClose(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnClose));
  m_pMainFrame->setOnCloseNotify(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnCloseNotify));
  m_pMainFrame->setOnFullScreenNotify(MakeDelegate(m_pChildViewManager,&CChildViewManager::OnFullScreen));
+
+ m_pMainFrameController->OnAfterCreate();
 
  return true;
 }
