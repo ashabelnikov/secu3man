@@ -63,8 +63,13 @@ class CParamMonTabDlg : public CTabDialog
   std::auto_ptr<CParamDeskDlg> mp_ParamDeskDlg;
   std::auto_ptr<CTablesDeskDlg> mp_TablesDeskDlg;
 
+  void SetSplitterPos(int pos);
+  int GetSplitterPos(void) const;
+
  // Implementation
  protected:
+  void _MoveSplitter(int x, int start_x);
+
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
@@ -94,4 +99,6 @@ class CParamMonTabDlg : public CTabDialog
   CRect m_moveStrtRectMI;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
+  int m_splitterPos;
 };

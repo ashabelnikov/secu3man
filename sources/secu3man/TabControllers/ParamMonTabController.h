@@ -31,6 +31,7 @@
 #include "io-core/ControlAppAdapter.h"
 #include "io-core/ufcodes.h"
 #include "TabsManagement/ITabController.h"
+#include "common/ObjectTimer.h"
 
 class CCommunicationManager;
 class CParamMonTabDlg;      //view
@@ -78,6 +79,8 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   void ConfigureIndicators(void);
 
  private:
+  void _OnOneShotTimer(void);
+
   CParamMonTabDlg*  mp_view;
   CCommunicationManager* mp_comm;
   CStatusBarManager*  mp_sbar;
@@ -99,4 +102,6 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   //машина состояний
   std::vector<CPMStateMachineState*> m_state_machine;
   std::vector<CPMStateMachineState*>::iterator m_current_state;
+
+  CObjectTimer<CParamMonTabController> m_one_shot_timer; 
 };

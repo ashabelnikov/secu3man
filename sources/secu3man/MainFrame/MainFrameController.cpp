@@ -356,17 +356,17 @@ bool MainFrameController::OnClose(void)
 
 void MainFrameController::OnAfterCreate(void)
 {
+ mp_view->ShowWindow(SW_SHOW); //show it first to ensure correct initialization
+
  ISettingsData* settings = m_pAppSettingsManager->GetSettings();
  WndState sw;
  settings->GetWndState(sw);
- int nCmdShow = SW_SHOW;
- if (sw.m_MainFrmWnd == 0)
-  nCmdShow = SW_MINIMIZE;
- if (sw.m_MainFrmWnd == 2)
-  nCmdShow = SW_MAXIMIZE;
 
- // The one and only window has been initialized, so show and update it.
- mp_view->ShowWindow(nCmdShow);
+ if (sw.m_MainFrmWnd == 0)
+  mp_view->ShowWindow(SW_MINIMIZE);
+ if (sw.m_MainFrmWnd == 2)
+  mp_view->ShowWindow(SW_MAXIMIZE);
+
  mp_view->UpdateWindow();
 }
 

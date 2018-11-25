@@ -211,6 +211,8 @@ class ISettingsData
   virtual bool GetChildCharts(void) const = 0;
   virtual bool GetPortAutoReopen(void) const = 0;
   virtual bool GetToggleMapWnd(void) const = 0;
+  virtual int GetParamMonVert(void) const = 0;
+  virtual void SetParamMonVert(int pos) = 0;
 
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;

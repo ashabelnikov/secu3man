@@ -65,6 +65,7 @@ CParamMonTabDlg::CParamMonTabDlg(CWnd* pParent /*=NULL*/)
 , m_moveSplitter(false)
 , m_initialized(false)
 , m_enMakeChartsChildren(false)
+, m_splitterPos(279)
 {
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu() || !CheckAbout())
@@ -273,31 +274,12 @@ void CParamMonTabDlg::OnMouseMove(UINT nFlags, CPoint point)
 
  if (m_moveSplitter)
  {
-  DPIAware da;
-  CRect rc;
-  GetClientRect(&rc);
-
-  //restrict splitter position
-  int x = point.x;
-  if (x < da.ScaleX(5))
-   x = da.ScaleX(5);
-  if (x > rc.right - m_miMargin - da.ScaleX(5))
-   x = rc.right - m_miMargin - da.ScaleX(5);
-
-  int dx = x - m_moveStart.x;
-
-  rc = GDIHelpers::GetChildWndRect(mp_TablesDeskDlg.get());
-  mp_TablesDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
-
-  mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, pd_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
-
-  rc = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
-  mp_MIDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
-
-  mp_CEDeskDlg->SetWindowPos(NULL, m_moveStrtRectMI.left + dx, ce_rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
-  rc = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
-  mp_RSDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+  _MoveSplitter(point.x, m_moveStart.x);
+  
+  //Update saved position 
+  pd_rc = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+  ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+  m_splitterPos = (pd_rc.right + ce_rc.left) / 2;
  }
 
  Super::OnMouseMove(nFlags, point);
@@ -332,4 +314,54 @@ void CParamMonTabDlg::OnLButtonUp(UINT nFlags, CPoint point)
 void CParamMonTabDlg::EnableToggleMapWnd(bool toggle)
 {
  mp_TablesDeskDlg->EnableToggleMapWnd(toggle);
+}
+
+void CParamMonTabDlg::SetSplitterPos(int pos)
+{
+ DPIAware da;
+ m_splitterPos = da.ScaleX(pos);
+
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ m_moveStrtRectMI = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+ m_moveStrtWidthPD = pd_rc.Width();
+
+ _MoveSplitter(m_splitterPos, (pd_rc.right + ce_rc.left) / 2);
+}
+
+int CParamMonTabDlg::GetSplitterPos(void) const
+{
+ DPIAware da;
+ return da.UnScaleX(m_splitterPos);
+}
+
+void CParamMonTabDlg::_MoveSplitter(int x, int start_x)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_ParamDeskDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+
+ DPIAware da;
+ CRect rc;
+ GetClientRect(&rc);
+
+ //restrict splitter position
+ if (x < da.ScaleX(5))
+  x = da.ScaleX(5);
+ if (x > rc.right - m_miMargin - da.ScaleX(5))
+  x = rc.right - m_miMargin - da.ScaleX(5);
+
+ int dx = x - start_x;
+
+ rc = GDIHelpers::GetChildWndRect(mp_TablesDeskDlg.get());
+ mp_TablesDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+ mp_ParamDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, pd_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+ rc = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+ mp_MIDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+
+ mp_CEDeskDlg->SetWindowPos(NULL, m_moveStrtRectMI.left + dx, ce_rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+ rc = GDIHelpers::GetChildWndRect(mp_RSDeskDlg.get());
+ mp_RSDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
 }

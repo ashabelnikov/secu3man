@@ -29,6 +29,7 @@
 
 #include <algorithm>
 #include <map>
+#include <limits>
 #include "about/secu-3about.h"
 #include "Application/CommunicationManager.h"
 #include "common/FastDelegate.h"
@@ -47,6 +48,7 @@
 
 using namespace fastdelegate;
 using namespace SECU3IO;
+#undef max
 
 #define EHKEY _T("ParamMonCntr")
 
@@ -142,6 +144,15 @@ void CParamMonTabController::OnActivate(void)
  ConfigureIndicators();
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+
+ m_one_shot_timer.SetTimer(this, &CParamMonTabController::_OnOneShotTimer, 0);
+}
+
+void CParamMonTabController::_OnOneShotTimer(void)
+{
+ m_one_shot_timer.KillTimer();
+ if (mp_settings->GetParamMonVert() != std::numeric_limits<int>::max())
+  mp_view->SetSplitterPos(mp_settings->GetParamMonVert());
 }
 
 //from MainTabController
@@ -155,6 +166,8 @@ void CParamMonTabController::OnDeactivate(void)
  mp_tabcntr->OnDeactivate();
  
  mp_sbar->SetInformationText(_T(""));
+
+ mp_settings->SetParamMonVert(mp_view->GetSplitterPos());
 }
 
 void CParamMonTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -256,6 +269,7 @@ void CParamMonTabController::OnConnection(const bool i_online)
 
 bool CParamMonTabController::OnClose(void)
 {
+ mp_settings->SetParamMonVert(mp_view->GetSplitterPos());
  return true; //отвечаем что данная вкладка готова к закрытию приложения
 }
 

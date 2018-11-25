@@ -40,6 +40,9 @@ class DPIAware
   int ScaleX(int x) { _Init(); return MulDiv(x, m_dpiX, 96); }
   int ScaleY(int y) { _Init(); return MulDiv(y, m_dpiY, 96); }
 
+  int UnScaleX(int x) { _Init(); return MulDiv(x, 96, m_dpiX); }
+  int UnScaleY(int y) { _Init(); return MulDiv(y, 96, m_dpiY); }
+
  private:
   void _Init()
   {

@@ -184,6 +184,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGradSaturation(_T("GradSaturation"))
 , m_optGradBrightness(_T("GradBrightness"))
 , m_optBoldFont(_T("BoldFont"))
+, m_Name_Splitters_Section(_T("Splitters"))
+, m_optParamMonVert(_T("ParamMonVert"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -523,6 +525,10 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
  me.ReadInt(m_optBoldFont, _T("0"), 0, 1);
 
+ //Splitters
+ IniIO sp(IniFileName, m_Name_Splitters_Section);
+ sp.ReadInt(m_optParamMonVert, _T("279"), 0, 10000, true);
+
  return status;
 }
 
@@ -749,6 +755,12 @@ bool CAppSettingsModel::WriteSettings(void)
  me.WriteInt(m_optGradSaturation);
  me.WriteInt(m_optGradBrightness);
  me.WriteInt(m_optBoldFont);
+
+ //Splitters
+ IniIO sp(IniFileName, m_Name_Splitters_Section);
+ sp.CreateSection();
+
+ sp.WriteInt(m_optParamMonVert);
 
  return status;
 }
@@ -1387,4 +1399,14 @@ int CAppSettingsModel::GetBoldFont(void)
 bool CAppSettingsModel::GetToggleMapWnd(void) const
 {
  return m_optToggleMapWnd.value;
+}
+
+int CAppSettingsModel::GetParamMonVert(void) const
+{
+ return m_optParamMonVert.value;
+}
+
+void CAppSettingsModel::SetParamMonVert(int pos)
+{
+ m_optParamMonVert.value = pos;
 }

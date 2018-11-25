@@ -94,6 +94,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetChildCharts(void) const;
   virtual bool GetPortAutoReopen(void) const;
   virtual bool GetToggleMapWnd(void) const;
+  virtual int GetParamMonVert(void) const;
+  virtual void SetParamMonVert(int pos);
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);
@@ -166,6 +168,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_IndColors_Section;
   const CString m_Name_AutoTune_Section;
   const CString m_Name_MapEditor_Section;
+  const CString m_Name_Splitters_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -355,6 +358,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optGradSaturation;
   OptField_t<int> m_optGradBrightness;
   OptField_t<int> m_optBoldFont;
+
+  //Splitters
+  OptField_t<int> m_optParamMonVert;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];
