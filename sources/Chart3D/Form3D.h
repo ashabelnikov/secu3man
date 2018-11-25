@@ -165,6 +165,7 @@ class TForm3D : public TForm
   void __fastcall LineSeriesGetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnHideMarks(TObject *Sender);
   void __fastcall OnHideOldCurve(TObject *Sender);
+  void __fastcall FormDeactivate(TObject *Sender);
 
  public:
   __fastcall TForm3D(HWND parent);

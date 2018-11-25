@@ -110,6 +110,7 @@ class TForm2D : public TForm
   void __fastcall LineSeries2GetMarkText(TChartSeries *Sender, int ValueIndex, AnsiString &LabelText);
   void __fastcall OnHideMarks(TObject *Sender);
   void __fastcall OnHideOldCurve(TObject *Sender);
+  void __fastcall FormDeactivate(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);

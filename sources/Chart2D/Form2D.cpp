@@ -824,10 +824,18 @@ void __fastcall TForm2D::OnExitChart(TObject* Sender)
 void __fastcall TForm2D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
  if (ActiveControl != Chart1)
- {
   ActiveControl = Chart1;
-  Chart1->SetFocus();
- }
+
+ OnEnterChart(NULL);
+
+ if (!Active)
+  SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm2D::FormDeactivate(TObject *Sender)
+{
+ OnExitChart(NULL);
 }
 
 //---------------------------------------------------------------------------

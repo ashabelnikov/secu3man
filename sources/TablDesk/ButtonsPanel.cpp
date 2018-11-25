@@ -3524,3 +3524,4 @@ HWND CButtonsPanel::_ChartParentHwnd(void)
 {
  return m_children_charts ? AfxGetMainWnd()->GetSafeHwnd() : NULL;
 }
+

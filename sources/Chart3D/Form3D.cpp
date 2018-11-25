@@ -67,7 +67,7 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_val_n(0)
 , m_air_flow_position(0)
 , m_values_format_x("%.00f")  //integer 
-, m_chart_active(true)
+, m_chart_active(false)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
 {
@@ -974,8 +974,18 @@ void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, 
  {
   ActiveControl = Chart1;
   m_chart_active = true;
-  Chart1->SetFocus();
  }
+
+ OnEnterChart(NULL);
+
+ if (!Active)
+  SetFocus();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::FormDeactivate(TObject *Sender)
+{
+ OnExitChart(NULL);
 }
 
 //---------------------------------------------------------------------------

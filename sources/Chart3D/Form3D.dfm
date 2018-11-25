@@ -54,6 +54,7 @@ object Form3D: TForm3D
   PopupMenu = PopupMenu
   Position = poDefault
   OnClose = OnCloseForm
+  OnDeactivate = FormDeactivate
   PixelsPerInch = 120
   TextHeight = 16
   object LabelAfv: TLabel

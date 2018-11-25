@@ -50,7 +50,8 @@ object Form2D: TForm2D
   OldCreateOrder = False
   PopupMenu = PopupMenu
   Position = poDefault
-  OnClose = FormClose  
+  OnClose = FormClose
+  OnDeactivate = FormDeactivate
   PixelsPerInch = 96
   TextHeight = 13
   object Chart1: TChartEx
