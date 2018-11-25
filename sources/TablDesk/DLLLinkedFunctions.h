@@ -38,7 +38,7 @@ namespace DLL
  typedef void (__cdecl *OnWndActivation)(void* i_param, long i_cmd);
  typedef void (__cdecl *OnChangeValue)(void* i_param, int i_type, float i_value);
  //2D
- typedef HWND (__cdecl *Chart2DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int bins_mode);
+ typedef HWND (__cdecl *Chart2DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int bins_mode);
  typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart2DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
@@ -57,7 +57,7 @@ namespace DLL
  typedef void (__cdecl *Chart2DSetPtMovingStep_Addr) (HWND hWnd, float step);
 
  //3D
- typedef HWND (__cdecl *Chart3DCreate_Addr) (const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
+ typedef HWND (__cdecl *Chart3DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
  typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart3DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart3DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);

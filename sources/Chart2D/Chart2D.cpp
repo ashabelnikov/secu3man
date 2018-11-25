@@ -39,7 +39,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode);
+ HWND  __declspec(dllexport)  __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
@@ -122,7 +122,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 }
 
 //---------------------------------------------------------------------------
-HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode)
+HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode)
 {
   if (info[0]!=0x53)
    return NULL;
@@ -134,7 +134,7 @@ HWND __cdecl Chart2DCreate(const float *ip_original_function, float *iop_modifie
 
  //Create a form
  TForm2D* pForm;
- pForm = new TForm2D((TComponent *)NULL);
+ pForm = new TForm2D(parent);
  pForm->m_count_of_function_points = i_count_of_points;
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;

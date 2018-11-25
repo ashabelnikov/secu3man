@@ -44,8 +44,8 @@ long col[16] ={0xA88CD5, 0xD26EDC, 0xC38CBE, 0xCB9491,
                0x3ACDE9, 0x78AFE9, 0x5D94EB, 0x555AFD};
 
 //---------------------------------------------------------------------------
-__fastcall TForm3D::TForm3D(TComponent* Owner)
-: TForm(Owner)
+__fastcall TForm3D::TForm3D(HWND parent)
+: TForm(parent)
 , m_count_x(0)
 , m_count_z(0)
 , m_fnc_min(0)
@@ -974,6 +974,7 @@ void __fastcall TForm3D::OnChartMouseDown(TObject *Sender, TMouseButton Button, 
  {
   ActiveControl = Chart1;
   m_chart_active = true;
+  Chart1->SetFocus();
  }
 }
 

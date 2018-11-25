@@ -39,8 +39,8 @@
 
 bool RemoveInstanceByHWND(HWND hWnd);
 //---------------------------------------------------------------------------
-__fastcall TForm2D::TForm2D(TComponent* Owner)
-: TForm(Owner)
+__fastcall TForm2D::TForm2D(HWND parent)
+: TForm(parent)
 , m_count_of_function_points(0)
 , m_fnc_min(0.0f), m_fnc_max(0.0f)
 , mp_original_function(NULL)
@@ -824,7 +824,10 @@ void __fastcall TForm2D::OnExitChart(TObject* Sender)
 void __fastcall TForm2D::OnChartMouseDown(TObject *Sender, TMouseButton Button, TShiftState Shift, int X, int Y)
 {
  if (ActiveControl != Chart1)
+ {
   ActiveControl = Chart1;
+  Chart1->SetFocus();
+ }
 }
 
 //---------------------------------------------------------------------------

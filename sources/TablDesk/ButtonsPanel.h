@@ -450,6 +450,7 @@ private:
   bool m_carb_afr;
   bool m_en_gas_corr;
 protected:
+  HWND _ChartParentHwnd(void);
   void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
   void OnWndActivation(HWND i_hwnd, long cmd);
 

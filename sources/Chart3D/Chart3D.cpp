@@ -38,7 +38,7 @@
 
 extern "C"
 {
- HWND  __declspec(dllexport)  __cdecl Chart3DCreate(float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title);
+ HWND  __declspec(dllexport)  __cdecl Chart3DCreate(HWND parent, float *original_function, float *modified_function,const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title);
  void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
@@ -119,7 +119,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 // y = F(x,z)
 
 //original_function and modified_function - addresses of 2D arrays containing values of functions
-HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
+HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modified_function, const float *x_axis_grid_values, int x_count_of_points, int z_count_of_points,float fnc_min,float fnc_max, LPCTSTR x_axis_title, LPCTSTR y_axis_title, LPCTSTR chart_title)
 {
  if (info[0]!=0x53)
   return NULL;
@@ -130,7 +130,7 @@ HWND __cdecl Chart3DCreate(float *original_function, float *modified_function, c
  g_form_delete.clear();
 
  //Create a form
- TForm3D *pForm = new TForm3D((TComponent *)NULL);
+ TForm3D *pForm = new TForm3D(parent);
  pForm->m_count_x = x_count_of_points;
  pForm->m_count_z = z_count_of_points;
  pForm->m_u_title = chart_title;

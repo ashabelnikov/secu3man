@@ -1009,7 +1009,7 @@ void CTablesSetPanel::OnViewAttenuatorMap()
  if ((!m_attenuator_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_attenuator_map_chart_state = 1;
-  m_attenuator_map_wnd_handle = DLL::Chart2DCreate(GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
+  m_attenuator_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAttenuatorMap(true),GetAttenuatorMap(false),0.0f,63,m_attenuator_table_slots,128,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ATTENUATOR_GAIN_UNIT).c_str(),
     MLL::GetString(IDS_ATTENUATOR_MAP).c_str(), false);
@@ -1045,7 +1045,7 @@ void CTablesSetPanel::OnViewDwellCntrlMap()
  if ((!m_dwellcntrl_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_dwellcntrl_map_chart_state = 1;
-  m_dwellcntrl_map_wnd_handle = DLL::Chart2DCreate(GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
+  m_dwellcntrl_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDwellCntrlMap(true), GetDwellCntrlMap(false), 0.25f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DWELLCNTRL_UNIT).c_str(),
     MLL::GetString(IDS_DWELLCNTRL_MAP).c_str(), false);
@@ -1078,7 +1078,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
  if ((!m_cts_curve_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_cts_curve_map_chart_state = 1;
-  m_cts_curve_map_wnd_handle = DLL::Chart2DCreate(GetCTSCurveMap(true), GetCTSCurveMap(false), -40.0, 120.0, NULL, 16,
+  m_cts_curve_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCTSCurveMap(true), GetCTSCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
@@ -1114,7 +1114,7 @@ void CTablesSetPanel::OnViewATSCurveMap()
  if ((!m_ats_curve_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_ats_curve_map_chart_state = 1;
-  m_ats_curve_map_wnd_handle = DLL::Chart2DCreate(GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
+  m_ats_curve_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSCurveMap(true), GetATSCurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_ATS_CURVE_MAP).c_str(), false);
@@ -1150,7 +1150,7 @@ void CTablesSetPanel::OnViewATSAACMap()
  if ((!m_ats_aac_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_ats_aac_map_chart_state = 1;
-  m_ats_aac_map_wnd_handle = DLL::Chart2DCreate(GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  m_ats_aac_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetATSAACMap(true),GetATSAACMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_ATSCORR_MAP).c_str(), false);
@@ -1182,7 +1182,7 @@ void CTablesSetPanel::OnViewGasdosePosMap()
  if ((!m_gasdose_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_gasdose_map_chart_state = 1;
-  m_gasdose_map_wnd_handle = DLL::Chart3DCreate(GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
+  m_gasdose_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetGasdosePosMap(true),GetGasdosePosMap(false),GetRPMGrid(),16,16,0,100.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_GDP_UNIT).c_str(),
     MLL::GetString(IDS_GDP_MAP).c_str());
@@ -1214,7 +1214,7 @@ void CTablesSetPanel::OnViewBarocorrMap()
  if ((!m_barocorr_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_barocorr_map_chart_state = 1;
-  m_barocorr_map_wnd_handle = DLL::Chart2DCreate(GetBarocorrMap(true), GetBarocorrMap(false), 80.0, 120.0, NULL, 9,
+  m_barocorr_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetBarocorrMap(true), GetBarocorrMap(false), 80.0, 120.0, NULL, 9,
     MLL::GetString(IDS_MAPS_ATMOPRESS_UNIT).c_str(),  //horizontal axis
     MLL::GetString(IDS_MAPS_COEFFP_UNIT).c_str(),     //vertical axis
     MLL::GetString(IDS_BAROCORR_MAP).c_str(), false);
@@ -1252,7 +1252,7 @@ void CTablesSetPanel::OnViewTmp2CurveMap()
  if ((!m_tmp2_curve_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_tmp2_curve_map_chart_state = 1;
-  m_tmp2_curve_map_wnd_handle = DLL::Chart2DCreate(GetTmp2CurveMap(true), GetTmp2CurveMap(false), -40.0, 120.0, NULL, 16,
+  m_tmp2_curve_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTmp2CurveMap(true), GetTmp2CurveMap(false), -40.0, 120.0, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_TMP2_CURVE_MAP).c_str(), false);
@@ -1290,7 +1290,7 @@ void CTablesSetPanel::OnViewManIgntimMap()
  if ((!m_manigntim_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_manigntim_map_chart_state = 1;
-  m_manigntim_map_wnd_handle = DLL::Chart2DCreate(GetManIgntimMap(true),GetManIgntimMap(false),-15.0,15.0,SECU3IO::manigntim_map_slots,16,
+  m_manigntim_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetManIgntimMap(true),GetManIgntimMap(false),-15.0,15.0,SECU3IO::manigntim_map_slots,16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_MANIGNTIM_MAP).c_str(), false);
@@ -1325,7 +1325,7 @@ void CTablesSetPanel::OnViewCrkTempMap()
  if ((!m_crktemp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_crktemp_map_chart_state = 1;
-  m_crktemp_map_wnd_handle = DLL::Chart2DCreate(GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  m_crktemp_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_CRKTEMP_MAP).c_str(), false);
@@ -1357,7 +1357,7 @@ void CTablesSetPanel::OnViewEHPauseMap()
  if ((!m_eh_pause_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_eh_pause_map_chart_state = 1;
-  m_eh_pause_map_wnd_handle = DLL::Chart2DCreate(GetEHPauseMap(true), GetEHPauseMap(false), 0.01f, 2.55f, SECU3IO::dwellcntrl_map_slots, 32,
+  m_eh_pause_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEHPauseMap(true), GetEHPauseMap(false), 0.01f, 2.55f, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_EH_PAUSE_UNIT).c_str(),
     MLL::GetString(IDS_EH_PAUSE_MAP).c_str(), false);

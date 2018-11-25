@@ -1655,7 +1655,7 @@ void CButtonsPanel::OnViewStartMap()
  if ((!m_start_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_start_map_chart_state = 1;
-  m_start_map_wnd_handle = DLL::Chart2DCreate(GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
+  m_start_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_START_MAP).c_str(), false);
@@ -1688,7 +1688,7 @@ void CButtonsPanel::OnViewIdleMap()
  if ((!m_idle_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_idle_map_chart_state = 1;
-  m_idle_map_wnd_handle = DLL::Chart2DCreate(GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
+  m_idle_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str(), false);
@@ -1721,7 +1721,7 @@ void CButtonsPanel::OnViewWorkMap()
  if ((!m_work_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_work_map_chart_state = 1;
-  m_work_map_wnd_handle = DLL::Chart3DCreate(GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
+  m_work_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
@@ -1753,7 +1753,7 @@ void CButtonsPanel::OnViewTempMap()
  if ((!m_temp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_temp_map_chart_state = 1;
-  m_temp_map_wnd_handle = DLL::Chart2DCreate(GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  m_temp_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORR_MAP).c_str(), false);
@@ -1785,7 +1785,7 @@ void CButtonsPanel::OnViewVEMap()
  if ((!m_ve_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_ve_map_chart_state = 1;
-  m_ve_map_wnd_handle = DLL::Chart3DCreate(GetVEMap(true),GetVEMap(false),GetRPMGrid(),16,16,0.0f,1.99f,
+  m_ve_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetVEMap(true),GetVEMap(false),GetRPMGrid(),16,16,0.0f,1.99f,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_VE_UNIT).c_str(),
     MLL::GetString(IDS_VE_MAP).c_str());
@@ -1819,7 +1819,7 @@ void CButtonsPanel::OnViewAFRMap()
  if ((!m_afr_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_afr_map_chart_state = 1;
-  m_afr_map_wnd_handle = DLL::Chart3DCreate(GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.0f,22.0f,
+  m_afr_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.0f,22.0f,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
     MLL::GetString(IDS_AFR_MAP).c_str());
@@ -1853,7 +1853,7 @@ void CButtonsPanel::OnViewCrnkMap()
  if ((!m_crnk_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_crnk_map_chart_state = 1;
-  m_crnk_map_wnd_handle = DLL::Chart2DCreate(GetCrnkMap(true), GetCrnkMap(false), 0.25f, 50.0, SECU3IO::temp_map_tmp_slots, 16,
+  m_crnk_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrnkMap(true), GetCrnkMap(false), 0.25f, 50.0, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_CRNK_MAP).c_str(), false);
@@ -1886,7 +1886,7 @@ void CButtonsPanel::OnViewWrmpMap()
  if ((!m_wrmp_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_wrmp_map_chart_state = 1;
-  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(GetWrmpMap(true),GetWrmpMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetWrmpMap(true),GetWrmpMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
     MLL::GetString(IDS_WRMP_MAP).c_str(), false);
@@ -1919,7 +1919,7 @@ void CButtonsPanel::OnViewDeadMap()
  if ((!m_dead_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_dead_map_chart_state = 1;
-  m_dead_map_wnd_handle = DLL::Chart2DCreate(GetDeadMap(true), GetDeadMap(false), 0.20f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
+  m_dead_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDeadMap(true), GetDeadMap(false), 0.20f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
     MLL::GetString(IDS_DEAD_MAP).c_str(), false);
@@ -1954,7 +1954,7 @@ void CButtonsPanel::OnViewIdlrMap()
  if ((!m_idlr_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_idlr_map_chart_state = 1;
-  m_idlr_map_wnd_handle = DLL::Chart2DCreate(GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_idlr_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLR_MAP).c_str(), false);
@@ -1987,7 +1987,7 @@ void CButtonsPanel::OnViewIdlcMap()
  if ((!m_idlc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_idlc_map_chart_state = 1;
-  m_idlc_map_wnd_handle = DLL::Chart2DCreate(GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_idlc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLC_MAP).c_str(), false);
@@ -2021,7 +2021,7 @@ void CButtonsPanel::OnViewAETPSMap()
  {
   m_aetps_map_chart_state = 1;
   const float bins_lims[5] = {-1000.0f, 1000.0f, 1.0f, 0.0f, 10.0f}; //min -1000%, max 1000%, inc 1%, 0 dec places, min diff 10%
-  m_aetps_map_wnd_handle = DLL::Chart2DCreate(GetAETPSMap(true),GetAETPSMap(false),-55.0f,199.0f,bins_lims,8,
+  m_aetps_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAETPSMap(true),GetAETPSMap(false),-55.0f,199.0f,bins_lims,8,
     MLL::GetString(IDS_MAPS_DPDT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AETPS_UNIT).c_str(),
     MLL::GetString(IDS_AETPS_MAP).c_str(), true); //<-- use horizontal axis bins
@@ -2055,7 +2055,7 @@ void CButtonsPanel::OnViewAERPMMap()
  {
   m_aerpm_map_chart_state = 1;
   const float bins_lims[5] = {0.0f, 25000.0f, 100.0f, 0.0f, 100.0f}; //min 0min-1, max 25000min-1, inc 100min-1, 0 dec places, min diff 100min-1
-  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,4,
+  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,4,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AERPM_UNIT).c_str(),
     MLL::GetString(IDS_AERPM_MAP).c_str(), true); //<--use horizontal axis bins
@@ -2088,7 +2088,7 @@ void CButtonsPanel::OnViewAftstrMap()
  if ((!m_aftstr_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_aftstr_map_chart_state = 1;
-  m_aftstr_map_wnd_handle = DLL::Chart2DCreate(GetAftstrMap(true),GetAftstrMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_aftstr_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrMap(true),GetAftstrMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFTSTR_UNIT).c_str(),
     MLL::GetString(IDS_AFTSTR_MAP).c_str(), false);
@@ -2121,7 +2121,7 @@ void CButtonsPanel::OnViewITMap()
  if ((!m_it_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_it_map_chart_state = 1;
-  m_it_map_wnd_handle = DLL::Chart3DCreate(GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,0.0,720.0,
+  m_it_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,0.0,720.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJTIM_UNIT).c_str(),
     MLL::GetString(IDS_IT_MAP).c_str());
@@ -2154,7 +2154,7 @@ void CButtonsPanel::OnViewITRPMMap()
  if ((!m_itrpm_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_itrpm_map_chart_state = 1;
-  m_itrpm_map_wnd_handle = DLL::Chart2DCreate(GetITRPMMap(true),GetITRPMMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_itrpm_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetITRPMMap(true),GetITRPMMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_ITRPM_MAP).c_str(), false);
@@ -2188,7 +2188,7 @@ void CButtonsPanel::OnViewRigidMap()
  if ((!m_rigid_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_rigid_map_chart_state = 1;
-  m_rigid_map_wnd_handle = DLL::Chart2DCreate(GetRigidMap(true),GetRigidMap(false),0.0f,5.0f,SECU3IO::rigid_map_slots,8,
+  m_rigid_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetRigidMap(true),GetRigidMap(false),0.0f,5.0f,SECU3IO::rigid_map_slots,8,
     MLL::GetString(IDS_MAPS_RIGID_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_RIGID_MAP).c_str(), false);
@@ -2222,7 +2222,7 @@ void CButtonsPanel::OnViewEGOCrvMap()
  if ((!m_egocrv_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_egocrv_map_chart_state = 1;
-  m_egocrv_map_wnd_handle = DLL::Chart2DCreate(GetEGOCurveMap(true), GetEGOCurveMap(false), 6.00, 24.00, NULL, 16,
+  m_egocrv_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEGOCurveMap(true), GetEGOCurveMap(false), 6.00, 24.00, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
     MLL::GetString(IDS_EGO_CURVE_MAP).c_str(), false);
@@ -2259,7 +2259,7 @@ void CButtonsPanel::OnViewIACCMap()
  if ((!m_iacc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_iacc_map_chart_state = 1;
-  m_iacc_map_wnd_handle = DLL::Chart2DCreate(GetIACCMap(true), GetIACCMap(false), 0.00f, 1.99f, NULL, 8,
+  m_iacc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCMap(true), GetIACCMap(false), 0.00f, 1.99f, NULL, 8,
     MLL::GetString(IDS_MAPS_IACPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), false);
@@ -2297,7 +2297,7 @@ void CButtonsPanel::OnViewIACCWMap()
  if ((!m_iaccw_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_iaccw_map_chart_state = 1;
-  m_iaccw_map_wnd_handle = DLL::Chart2DCreate(GetIACCWMap(true), GetIACCWMap(false), 0.00, 1.00, NULL, 16,
+  m_iaccw_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCWMap(true), GetIACCWMap(false), 0.00, 1.00, NULL, 16,
     MLL::GetString(IDS_MAPS_TPSPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACCW_CURVE_MAP).c_str(), false);
@@ -2335,7 +2335,7 @@ void CButtonsPanel::OnViewIATCLTMap()
  if ((!m_iatclt_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_iatclt_map_chart_state = 1;
-  m_iatclt_map_wnd_handle = DLL::Chart2DCreate(GetIATCLTMap(true), GetIATCLTMap(false), 0.00, 1.00, NULL, 8,
+  m_iatclt_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIATCLTMap(true), GetIATCLTMap(false), 0.00, 1.00, NULL, 8,
     MLL::GetString(IDS_MAPS_AIRFLOW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IATCLT_CORR_MAP).c_str(), false);
@@ -2373,7 +2373,7 @@ void CButtonsPanel::OnViewTpsswtMap()
  if ((!m_tpsswt_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_tpsswt_map_chart_state = 1;
-  m_tpsswt_map_wnd_handle = DLL::Chart2DCreate(GetTpsswtMap(true),GetTpsswtMap(false),0.0,100.0,GetRPMGrid(),16,
+  m_tpsswt_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTpsswtMap(true),GetTpsswtMap(false),0.0,100.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TPSSWT_UNIT).c_str(),
     MLL::GetString(IDS_TPSSWT_MAP).c_str(), false);
@@ -2407,7 +2407,7 @@ void CButtonsPanel::OnViewGtscMap()
  if ((!m_gtsc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_gtsc_map_chart_state = 1;
-  m_gtsc_map_wnd_handle = DLL::Chart2DCreate(GetGtscMap(true),GetGtscMap(false),0.01f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+  m_gtsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGtscMap(true),GetGtscMap(false),0.01f,1.99f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_GTSC_MAP).c_str(), false);
@@ -2441,7 +2441,7 @@ void CButtonsPanel::OnViewGpscMap()
  if ((!m_gpsc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_gpsc_map_chart_state = 1;
-  m_gpsc_map_wnd_handle = DLL::Chart2DCreate(GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 9,
+  m_gpsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 9,
     MLL::GetString(IDS_MAPS_PRESS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_GPSC_MAP).c_str(), false);
@@ -2479,7 +2479,7 @@ void CButtonsPanel::OnViewAtscMap()
  if ((!m_atsc_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_atsc_map_chart_state = 1;
-  m_atsc_map_wnd_handle = DLL::Chart2DCreate(GetAtscMap(true),GetAtscMap(false),0.5f,1.5f,SECU3IO::temp_map_tmp_slots,16,
+  m_atsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAtscMap(true),GetAtscMap(false),0.5f,1.5f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_ATSC_MAP).c_str(), false);
@@ -3474,19 +3474,19 @@ void CButtonsPanel::MakeChartsChildren(bool children)
 
 void CButtonsPanel::_MakeWindowChild(HWND hwnd, bool child)
 {
- if (hwnd)
+ if (hwnd && (NULL!=::GetParent(hwnd) != child))
  {
   //For compatibility reasons, SetParent does not modify the WS_CHILD or WS_POPUP window styles of the window whose parent is being changed.
   //Therefore, if hWndNewParent is NULL, you should also clear the WS_CHILD bit and set the WS_POPUP style after calling SetParent.
   //Conversely, if hWndNewParent is not NULL and the window was previously a child of the desktop, you should clear the WS_POPUP style and
   //set the WS_CHILD style before calling SetParent.
   if (child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(WS_POPUP, WS_CHILD, 0);
+   CWnd::FromHandle(hwnd)->ModifyStyle(0, WS_CHILD, 0);
 
-  CWnd::FromHandle(hwnd)->SetParent(child ? AfxGetMainWnd() : NULL);
+  ::SetParent(hwnd, _ChartParentHwnd());
 
   if (!child)
-   CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD, WS_POPUP, 0);   
+   CWnd::FromHandle(hwnd)->ModifyStyle(WS_CHILD, 0, 0);   
  }
 }
 
@@ -3500,6 +3500,7 @@ void CButtonsPanel::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
  }
 
  _MakeWindowChild(i_hwnd, m_children_charts);
+ ::SendMessage(i_hwnd, WM_NCACTIVATE, TRUE, -1);
 
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(i_hwnd, i_mapType);
@@ -3517,4 +3518,9 @@ void CButtonsPanel::OnWndActivation(HWND i_hwnd, long cmd)
 void CButtonsPanel::EnableToggleMapWnd(bool toggle)
 {
  m_toggleMapWnd = toggle;
+}
+
+HWND CButtonsPanel::_ChartParentHwnd(void)
+{
+ return m_children_charts ? AfxGetMainWnd()->GetSafeHwnd() : NULL;
 }

@@ -167,7 +167,7 @@ class TForm3D : public TForm
   void __fastcall OnHideOldCurve(TObject *Sender);
 
  public:
-  __fastcall TForm3D(TComponent* Owner);
+  __fastcall TForm3D(HWND parent);
   void DataPrepare();
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
