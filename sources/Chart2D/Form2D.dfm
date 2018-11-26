@@ -387,6 +387,7 @@ object Form2D: TForm2D
       Text = '0'
       TabOrder = 11
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -412,6 +413,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 13
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -437,6 +439,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 15
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -462,6 +465,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 17
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -487,6 +491,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 19
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -512,6 +517,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 21
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -537,6 +543,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 23
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end
@@ -562,6 +569,7 @@ object Form2D: TForm2D
       Height = 25
       TabOrder = 25
       Text = '0'
+      TabStop = True
       Visible = False
       OnChange = BinsEditOnChange
     end

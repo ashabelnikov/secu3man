@@ -286,7 +286,10 @@ void __cdecl Chart2DShow(HWND hWnd, int i_show)
  if (NULL==pForm)
   return;
  if (1 == i_show)
-   pForm->Show();
+ {
+  pForm->Show();
+  pForm->Chart1->SetFocus();
+ }
  else if  (0 == i_show)
    pForm->Hide();
  else
