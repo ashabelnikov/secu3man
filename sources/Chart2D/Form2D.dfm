@@ -1,11 +1,11 @@
 object Form2D: TForm2D
   Left = 226
   Top = 115
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  Width = 623
+  Height = 390
+  BorderIcons = [biSystemMenu, biMinimize, biMaximize]
+  BorderStyle = bsSizeable
   Caption = 'Редактирование карт УОЗ'
-  ClientHeight = 357
-  ClientWidth = 613
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
@@ -49,9 +49,10 @@ object Form2D: TForm2D
     0000FEFF0000FC7F0000FEFF0000FFFF0000FFFF0000}
   OldCreateOrder = False
   PopupMenu = PopupMenu
-  Position = poDefault
+  Position = poDesigned
   OnClose = FormClose
   OnDeactivate = FormDeactivate
+  OnResize = FormResize
   PixelsPerInch = 96
   TextHeight = 13
   object Chart1: TChartEx
@@ -59,6 +60,7 @@ object Form2D: TForm2D
     Top = 1
     Width = 585
     Height = 352
+    Anchors = [akTop, akLeft, akBottom, akRight]
     AllowPanning = pmNone
     AllowZoom = True
     BackWall.Brush.Color = clWhite
@@ -133,6 +135,7 @@ object Form2D: TForm2D
     Height = 33
     TabOrder = 1
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = ButtonAngleUpClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -190,6 +193,7 @@ object Form2D: TForm2D
     Height = 33
     TabOrder = 2
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = ButtonAngleDownClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -248,6 +252,7 @@ object Form2D: TForm2D
     Caption = '3x'
     TabOrder = 3
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
   end
@@ -259,6 +264,7 @@ object Form2D: TForm2D
     Caption = '5x'
     TabOrder = 4
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
   end
@@ -269,6 +275,7 @@ object Form2D: TForm2D
     Height = 25
     TabOrder = 5
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = ButtonShowBinsClick
     OnKeyDown = CtrlKeyDown
     Visible = False
@@ -325,6 +332,7 @@ object Form2D: TForm2D
     ShowHint = True    
     OnChange = EditXBeginOnChange
     OnKeyDown = CtrlKeyDown
+    Anchors = [akLeft, akBottom]
   end
   object EditXEnd: TEdit
     Left = 528
@@ -338,6 +346,7 @@ object Form2D: TForm2D
     ShowHint = True    
     OnChange = EditXEndOnChange
     OnKeyDown = CtrlKeyDown
+    Anchors = [akRight, akBottom]
   end
   object SpinXBegin: TFloatUpDown
     Left = 89
@@ -354,6 +363,7 @@ object Form2D: TForm2D
     Wrap = False
     ArrowKeys = True
     ShowHint = True    
+    Anchors = [akLeft, akBottom]
   end
  object SpinXEnd: TFloatUpDown
     Left = 569
@@ -370,6 +380,7 @@ object Form2D: TForm2D
     Wrap = False
     ArrowKeys = True
     ShowHint = True    
+    Anchors = [akRight, akBottom]
   end
   object PanelBins: TPanel
     Left = 49
@@ -379,6 +390,7 @@ object Form2D: TForm2D
     TabOrder = 10
     TabStop = False
     Visible = False
+    Anchors = [akLeft, akRight, akBottom]
     object Edit1: TEdit
       Left = 16
       Top = 8

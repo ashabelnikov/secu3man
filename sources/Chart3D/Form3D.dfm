@@ -1,18 +1,17 @@
 object Form3D: TForm3D
-  Left = 877
-  Top = 273
-  Cursor = crHSplit
+  Left = 226
+  Top = 115
+  Width = 623
+  Height = 422
   HorzScrollBar.Color = clInfoBk
   HorzScrollBar.ParentColor = False
-  BorderIcons = [biSystemMenu, biMinimize]
-  BorderStyle = bsSingle
+  BorderIcons = [biSystemMenu, biMinimize, biMaximize]
+  BorderStyle = bsSizeable
   Caption = 'Редактирование карт УОЗ'
-  ClientHeight = 481
-  ClientWidth = 737
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -14
+  Font.Height = -11
   Font.Name = 'MS Sans Serif'
   Font.Style = []
   Icon.Data = {
@@ -52,43 +51,89 @@ object Form3D: TForm3D
     0000FEFF0000FC7F0000FEFF0000FFFF0000FFFF0000}
   OldCreateOrder = False
   PopupMenu = PopupMenu
-  Position = poDefault
+  Position = poDesigned
   OnClose = OnCloseForm
   OnDeactivate = FormDeactivate
-  PixelsPerInch = 120
-  TextHeight = 16
+  PixelsPerInch = 96
+  TextHeight = 13
+  object LabelAfc: TLabel
+    Left = 25
+    Top = 362
+    Width = 137
+    Height = 15
+    Caption = 'Расход воздуха:'
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
+    ParentFont = False
+    Anchors = [akBottom]
+  end
   object LabelAfv: TLabel
-    Left = 442
-    Top = 449
+    Left = 400
+    Top = 362
     Width = 23
-    Height = 20
+    Height = 15
     Alignment = taRightJustify
     Caption = '16'
     Font.Charset = DEFAULT_CHARSET
     Font.Color = clWindowText
-    Font.Height = -17
+    Font.Height = -11
     Font.Name = 'MS Sans Serif'
     Font.Style = [fsBold]
     ParentFont = False
+    Anchors = [akBottom]
   end
-  object LabelAfc: TLabel
-    Left = 39
-    Top = 444
-    Width = 137
-    Height = 20
-    Caption = 'Расход воздуха:'
-    Font.Charset = DEFAULT_CHARSET
-    Font.Color = clWindowText
-    Font.Height = -17
-    Font.Name = 'MS Sans Serif'
-    Font.Style = []
-    ParentFont = False
+  object TrackBarAf: TTrackBar
+    Left = 120
+    Top = 353
+    Width = 280
+    Height = 30
+    Max = 15
+    Orientation = trHorizontal
+    Frequency = 1
+    Position = 1
+    SelEnd = 0
+    SelStart = 0
+    TabOrder = 5
+    ThumbLength = 15
+    TickMarks = tmTopLeft
+    TickStyle = tsAuto
+    ShowHint = True    
+    OnChange = TrackBarAfChange
+    OnKeyDown = CtrlKeyDown
+    Anchors = [akBottom]
+  end
+  object CheckBox3d: TCheckBox
+    Left = 455
+    Top = 362
+    Width = 50
+    Height = 15
+    Caption = '3D'
+    TabOrder = 6
+    ShowHint = True    
+    OnClick = CheckBox3dClick
+    OnKeyDown = CtrlKeyDown
+    Anchors = [akBottom]
+  end
+  object CheckBoxBv: TCheckBox
+    Left = 505
+    Top = 362
+    Width = 100
+    Height = 15
+    Caption = 'вид сзади'
+    TabOrder = 7
+    ShowHint = True    
+    OnClick = CheckBoxBvClick
+    OnKeyDown = CtrlKeyDown
+    Anchors = [akBottom]
   end
   object Chart1: TChartEx
     Left = 1
     Top = 1
-    Width = 700
-    Height = 434
+    Width = 585
+    Height = 352
     AllowZoom = True
     AnimatedZoomSteps = 4
     BackWall.Brush.Color = clWhite
@@ -116,6 +161,7 @@ object Form3D: TForm3D
     OnEnter = OnEnterChart
     OnExit = OnExitChart
     OnMouseDown = OnChartMouseDown
+    Anchors = [akTop, akLeft, akBottom, akRight]
     object Series1: TLineSeries
       Marks.ArrowLength = 8
       Marks.Frame.Visible = False
@@ -773,54 +819,15 @@ object Form3D: TForm3D
       OnGetMarkText = LineSeriesGetMarkText
     end
   end
-  object TrackBarAf: TTrackBar
-    Left = 197
-    Top = 436
-    Width = 237
-    Height = 41
-    Max = 15
-    Orientation = trHorizontal
-    Frequency = 1
-    Position = 1
-    SelEnd = 0
-    SelStart = 0
-    TabOrder = 5
-    ThumbLength = 15
-    TickMarks = tmTopLeft
-    TickStyle = tsAuto
-    ShowHint = True    
-    OnChange = TrackBarAfChange
-    OnKeyDown = CtrlKeyDown
-  end
-  object CheckBox3d: TCheckBox
-    Left = 495
-    Top = 447
-    Width = 50
-    Height = 21
-    Caption = '3D'
-    TabOrder = 6
-    ShowHint = True    
-    OnClick = CheckBox3dClick
-    OnKeyDown = CtrlKeyDown
-  end
-  object CheckBoxBv: TCheckBox
-    Left = 571
-    Top = 442
-    Width = 100
-    Height = 31
-    Caption = 'вид сзади'
-    TabOrder = 7
-    ShowHint = True    
-    OnClick = CheckBoxBvClick
-    OnKeyDown = CtrlKeyDown
-  end
   object ButtonAngleUp: TBitBtn
-    Left = 702
-    Top = 98
-    Width = 31
-    Height = 41
+    Left = 587
+    Top = 88
+    Width = 25
+    Height = 33
+    TabOrder = 1
     TabOrder = 1
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = ButtonAngleUpClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -872,12 +879,13 @@ object Form3D: TForm3D
       0000}
   end
   object ButtonAngleDown: TBitBtn
-    Left = 702
-    Top = 236
-    Width = 31
-    Height = 41
+    Left = 587
+    Top = 192
+    Width = 25
+    Height = 33
     TabOrder = 2
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = ButtonAngleDownClick
     OnKeyDown = CtrlKeyDown
     Glyph.Data = {
@@ -929,24 +937,26 @@ object Form3D: TForm3D
       0000}
   end
   object Smoothing3x: TButton
-    Left = 703
-    Top = 320
-    Width = 30
-    Height = 31
+    Left = 587
+    Top = 256
+    Width = 25
+    Height = 25
     Caption = '3x'
     TabOrder = 3
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
   end
   object Smoothing5x: TButton
-    Left = 703
-    Top = 360
-    Width = 30
-    Height = 30
+    Left = 587
+    Top = 288
+    Width = 25
+    Height = 25
     Caption = '5x'
     TabOrder = 4
     ShowHint = True    
+    Anchors = [akRight]
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
   end

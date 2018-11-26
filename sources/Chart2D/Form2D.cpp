@@ -285,15 +285,7 @@ void TForm2D::InitBins(void)
  m_binsEdit[7] = Edit8; m_binsUpDown[7] = UpDown8;
  
  //Set position of edit boxes
- float lr_space = 5;
- float horz_step = (float(PanelBins->Width)-(lr_space*2)-(Edit1->Width+UpDown1->Width)) /  float(m_count_of_function_points-1);
- for(int i = 0; i < m_count_of_function_points; ++i)
- {
-  m_binsUpDown[i]->Visible = True;
-  m_binsEdit[i]->Visible = True;
-  m_binsEdit[i]->Left = lr_space + (i * horz_step);
-  m_binsUpDown[i]->Left = m_binsEdit[i]->Left + m_binsEdit[i]->Width;
- }
+ UpdateBinsPosition();
 
  //hide unnecessary edit boxes
  for(int i = m_count_of_function_points; i < 8; ++i)
@@ -884,3 +876,23 @@ void __fastcall TForm2D::OnHideOldCurve(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+
+void __fastcall TForm2D::FormResize(TObject *Sender)
+{
+ if ( ButtonShowBins->Visible == true)
+  UpdateBinsPosition();
+}
+
+void __fastcall TForm2D::UpdateBinsPosition(void)
+{
+ //Set position of edit boxes
+ float lr_space = 5;
+ float horz_step = (float(PanelBins->Width)-(lr_space*2)-(Edit1->Width+UpDown1->Width)) /  float(m_count_of_function_points-1);
+ for(int i = 0; i < m_count_of_function_points; ++i)
+ {
+  m_binsUpDown[i]->Visible = True;
+  m_binsEdit[i]->Visible = True;
+  m_binsEdit[i]->Left = lr_space + (i * horz_step);
+  m_binsUpDown[i]->Left = m_binsEdit[i]->Left + m_binsEdit[i]->Width;
+ }
+}

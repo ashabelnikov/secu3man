@@ -111,6 +111,7 @@ class TForm2D : public TForm
   void __fastcall OnHideMarks(TObject *Sender);
   void __fastcall OnHideOldCurve(TObject *Sender);
   void __fastcall FormDeactivate(TObject *Sender);
+  void __fastcall FormResize(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);
@@ -150,6 +151,7 @@ class TForm2D : public TForm
   TEdit* m_binsEdit[8];
   TFloatUpDown* m_binsUpDown[8];
 
+  void __fastcall UpdateBinsPosition(void);
   void RestrictAndSetValue(int index, double v);
   void __fastcall ShiftFunction(float i_value);
   void __fastcall ShiftPoints(float i_value);

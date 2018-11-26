@@ -60,6 +60,7 @@ class TFloatUpDown : public TCustomUpDown
   __property OnMouseDown;
   __property OnMouseMove;
   __property OnMouseUp;
+  __property Anchors;
 
  public:
   __fastcall TFloatUpDown(TComponent* Owner);
