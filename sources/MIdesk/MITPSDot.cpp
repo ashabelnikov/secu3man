@@ -47,7 +47,6 @@ void CMITPSDot::Create(CWnd* pParent)
  m_meter.SetLabelsDecimals(0);
  m_meter.SetValueDecimals(0);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TPSDOT_TITLE));
- m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TPSDOT_UNIT));

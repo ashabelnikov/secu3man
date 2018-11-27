@@ -26,7 +26,10 @@
 
 #include "stdafx.h"
 #include <math.h>
+#include <algorithm>
 #include "AnalogMeter.h"
+#include "common/MathHelpers.h"
+#include "common/DPIAware.h"
 
 #undef min //fucking stuff
 #undef max
@@ -34,8 +37,6 @@
 //IF You use _UNICODE:
 //In the Output category of the Link tab in the Project Settings dialog box,
 //set the Entry Point Symbol to wWinMainCRTStartup.
-
-#define ROUND(x) (int)((x) + 0.5 - (double)((x) < 0))
 
 //переводот из градусов в радианы
 double CAnalogMeter::DegToRad(double deg)
@@ -47,7 +48,7 @@ CAnalogMeter::CAnalogMeter()
 : m_dPI(4.0 * atan(1.0))  // for trig calculations
 , m_dLimitAngleDeg(145)
 , m_nGridLineWidth(1)
-, m_fontType(_T("Times New Roman"))
+, m_fontType(_T("Sans Serif"))
 , m_pbitmapOldGrid(NULL)
 , m_pbitmapOldNeedle(NULL)
  // default unit, scaling and needle position
@@ -63,6 +64,9 @@ CAnalogMeter::CAnalogMeter()
 , m_strUnit("")
  // for numerical values
 , m_nFontScale(100)
+, m_nFontScaleVal(100)
+, m_nFontScalePane(100)
+, m_nFontScaleLabel(100)
 , m_nLabelsDecimals(1)
 , m_nValueDecimals(1)
 , m_nTickNumber(20)
@@ -275,44 +279,34 @@ void CAnalogMeter::DrawScale()
  if(m_rectGfx.Height() < m_rectGfx.Width())
   m_rectGfx.DeflateRect((m_rectGfx.Width() - m_rectGfx.Height())/2, 0);
 
- //  create font
-
- m_nFontHeight = m_rectGfx.Height()/4;
-
+ //  create fonts
  if(((m_rectGfx.Width()) > 0) && ((m_rectGfx.Height()) > 0))
  {
-  int    height = 0;
-  int    width  = 0;
-  double scale = 1.0;
-  do
-  {
-   m_nFontHeight = (int)((double)m_nFontHeight * scale);
-   m_fontValue.DeleteObject() ;
-   if(!m_fontValue.CreateFont (m_nFontHeight, 0, 0, 0, 400,
-     false, false, 0, RUSSIAN_CHARSET,
-     OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
-     DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
-    return;
-
-   tempString.Format(_T("%.*f"), m_nLabelsDecimals, m_dMinScale);
-   int len1 = tempString.GetLength();
-   tempString.Format(_T("%.*f"), m_nLabelsDecimals, m_dMaxScale);
-   int len2 = tempString.GetLength();
-
-   if (len1 > len2)
-    width = len1;
-   else
-    width = len2;
-
-   TEXTMETRIC TM;
-   pFontOld = m_dcGrid.SelectObject(&m_fontValue);
-   m_dcGrid.GetTextMetrics(&TM);
-   height = TM.tmHeight;
-   width  = TM.tmAveCharWidth * width;
-   m_dcGrid.SelectObject(pFontOld) ;
-
-   scale -= 0.01;
-  } while(((height > (m_rectGfx.Height()/8)*m_nFontScale/100) || (width > (m_rectGfx.Width()/3))) && (scale > 0.0));
+  DPIAware dpi;
+  //font for title
+  m_nFontHeight = dpi.FontHeight((m_rectGfx.Height()*m_nFontScale)/1250);
+  m_fontValue.DeleteObject();
+  if(!m_fontValue.CreateFont (m_nFontHeight, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
+   return;
+  //font for values
+  m_nFontHeightVal = dpi.FontHeight((m_rectGfx.Height()*m_nFontScaleVal)/1250);
+  m_fontValueVal.DeleteObject();
+  if(!m_fontValueVal.CreateFont (m_nFontHeightVal, 0, 0, 0, 700, false, false, 0, RUSSIAN_CHARSET,
+       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
+   return;
+  //font for panes
+  m_nFontHeightPane = dpi.FontHeight((m_rectGfx.Height()*m_nFontScalePane)/1250);
+  m_fontValuePane.DeleteObject();
+  if(!m_fontValuePane.CreateFont (m_nFontHeightPane, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
+   return;
+  //font for labels
+  m_nFontHeightLabel = dpi.FontHeight((m_rectGfx.Height()*m_nFontScaleLabel)/1250);
+  m_fontValueLabel.DeleteObject();
+  if(!m_fontValueLabel.CreateFont (m_nFontHeightLabel, 0, 0, 0, 400, false, false, 0, RUSSIAN_CHARSET,
+       OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH|FF_SWISS, m_fontType))
+   return;
  }
 
  // place for title
@@ -338,19 +332,19 @@ void CAnalogMeter::DrawScale()
  m_nRadiusPix     = m_rectGfx.Height()*50/100;
  m_nHalfBaseWidth = m_nRadiusPix/50;
  dTemp = m_nCXPix - m_nRadiusPix*sin(m_dLimitAngleRad);
- m_nLeftLimitXPix = ROUND(dTemp);
+ m_nLeftLimitXPix = MathHelpers::Round(dTemp);
  dTemp = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad);
- m_nLeftLimitYPix = ROUND(dTemp);
+ m_nLeftLimitYPix = MathHelpers::Round(dTemp);
 
  dTemp = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad);
- m_nRightLimitXPix = ROUND(dTemp);
+ m_nRightLimitXPix = MathHelpers::Round(dTemp);
  m_nRightLimitYPix = m_nLeftLimitYPix;
 
  // determine the placement of the current value text
  m_rectValue.left   = m_rectGfx.left  + 10;
  m_rectValue.top    = m_rectGfx.top   + 10;
  m_rectValue.right  = m_rectGfx.right - 10;
- m_rectValue.bottom = ROUND(m_nCYPix + m_nRadiusPix * 0.9);
+ m_rectValue.bottom = MathHelpers::Round(m_nCYPix + m_nRadiusPix * 0.9);
 
  // determine the placement of the minimum value
  m_rectMinValue.left   = m_rectGfx.left + 1;
@@ -370,13 +364,9 @@ void CAnalogMeter::DrawScale()
  nLeftBoundY  = m_nCYPix - m_nRadiusPix;
  nRightBoundY = m_nCYPix + m_nRadiusPix;
 
- if(m_strUnit == "")
-  m_rectValue.bottom += m_nFontHeight;
- else
-  m_rectValue.bottom += m_nFontHeight/2;
+ m_rectValue.bottom += m_nFontHeightVal / 2;
 
  //  draw grid
-
  CRect Bounds(nLeftBoundX,nLeftBoundY,nRightBoundX,nRightBoundY);
 
  DrawAlertZones(Bounds);
@@ -399,6 +389,7 @@ void CAnalogMeter::DrawScale()
   m_rectGfx.top - 3, m_strTitle);
  }
 
+ m_dcGrid.SelectObject(&m_fontValueLabel); //use label's font for unit
  if(!disable_unit && m_swUnit && m_strUnit != "")
  {
   // show the unit
@@ -432,8 +423,8 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
 
  Circle.DeflateRect(r,r,r,r);
 
- CPoint ptStart(ROUND(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
- ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)));
+ CPoint ptStart(MathHelpers::Round(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
+ MathHelpers::Round(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)));
  CPoint ptEnd(m_nLeftLimitXPix, m_nLeftLimitYPix);
 
  pBrushOld = m_dcGrid.SelectObject(&chord_brush);
@@ -478,8 +469,8 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
  {
   // arc
   m_dcGrid.Arc(Bounds.left,Bounds.top,Bounds.right+1,Bounds.bottom+1,
-     ROUND(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
-     ROUND(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)),
+     MathHelpers::Round(m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad)),
+     MathHelpers::Round(m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad)),
      m_nLeftLimitXPix, m_nLeftLimitYPix) ;
  }
 
@@ -497,14 +488,14 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
   //-------draw ticks ---------------
   dX = m_nCXPix + m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
   dY = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
-  if(m_swGrid) m_dcGrid.MoveTo(ROUND(dX), ROUND(dY)) ;
+  if(m_swGrid) m_dcGrid.MoveTo(MathHelpers::Round(dX), MathHelpers::Round(dY)) ;
   if (tick % 2)
    len = 1.0;    //short tick
   else
    len = 0.95;   //long tick
   dX = m_nCXPix + 0.92*len*m_nRadiusPix*sin(m_dLimitAngleRad*tick*rad_per_tick);
   dY = m_nCYPix - 0.92*len*m_nRadiusPix*cos(m_dLimitAngleRad*tick*rad_per_tick);
-  if(m_swGrid) m_dcGrid.LineTo(ROUND(dX), ROUND(dY)) ;
+  if(m_swGrid) m_dcGrid.LineTo(MathHelpers::Round(dX), MathHelpers::Round(dY)) ;
 
   if (!m_swLabels) //нужно ли рисовать подписи?
    continue;
@@ -516,7 +507,7 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    cs.Format(_T("%.*f"),m_nLabelsDecimals,tick_value);
    TEXTMETRIC TM;
 
-   pFontOld = m_dcGrid.SelectObject(&m_fontValue);
+   pFontOld = m_dcGrid.SelectObject(&m_fontValueLabel);
    m_dcGrid.GetTextMetrics(&TM);
 
    double tw = (double)(TM.tmAveCharWidth * cs.GetLength());
@@ -576,10 +567,10 @@ void CAnalogMeter::DrawPie(const CRect& Bounds,double start_value, double end_va
  pPenOld = m_dcGrid.SelectObject(&pie_pen);
 
  m_dcGrid.Pie(Bounds.left,Bounds.top,Bounds.right+1,Bounds.bottom+1,
-     ROUND(m_nCXPix + m_nRadiusPix*sin(end_radian)),
-     ROUND(m_nCYPix - m_nRadiusPix*cos(end_radian)),
-     ROUND(m_nCXPix - m_nRadiusPix*sin(start_radian)),
-     ROUND(m_nCYPix - m_nRadiusPix*cos(start_radian)));
+     MathHelpers::Round(m_nCXPix + m_nRadiusPix*sin(end_radian)),
+     MathHelpers::Round(m_nCYPix - m_nRadiusPix*cos(end_radian)),
+     MathHelpers::Round(m_nCXPix - m_nRadiusPix*sin(start_radian)),
+     MathHelpers::Round(m_nCYPix - m_nRadiusPix*cos(start_radian)));
 
  m_dcGrid.SelectObject(pPenOld);
  m_dcGrid.SelectObject(pBrushOld);
@@ -636,21 +627,18 @@ void CAnalogMeter::DrawNeedle()
 
  if(!disable_value && m_swValue)
  {
-  pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
+  pFontOld = m_dcNeedle.SelectObject(&m_fontValueVal);
   m_dcNeedle.SetTextAlign(TA_CENTER|TA_BASELINE);
   m_dcNeedle.SetTextColor(m_colorValue^m_colorBGround);
   m_dcNeedle.SetBkColor(RGB(0,0,0));
   tempString.Format(_T("%.*f"), m_nValueDecimals, m_dNeedlePos);
-
-  m_dcNeedle.TextOut((m_rectValue.right+m_rectValue.left)/2,
-      m_rectValue.bottom-m_nTextBaseSpacing, tempString);
-
+  m_dcNeedle.TextOut((m_rectValue.right+m_rectValue.left)/2, m_rectValue.bottom-m_nTextBaseSpacing, tempString);
   m_dcNeedle.SelectObject(pFontOld);
  }
 
  if (!disable_tlpane && m_swTLPane) //top-left pane
  {
-  pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
+  pFontOld = m_dcNeedle.SelectObject(&m_fontValuePane);
   m_dcNeedle.SetTextAlign(TA_LEFT | TA_TOP);
   m_dcNeedle.SetTextColor(m_colorTLPane^m_colorBGround);
   m_dcNeedle.SetBkColor(RGB(0,0,0)); 
@@ -662,7 +650,7 @@ void CAnalogMeter::DrawNeedle()
 
  if (!disable_trpane && m_swTRPane) //top-right pane
  {
-  pFontOld = m_dcNeedle.SelectObject(&m_fontValue);
+  pFontOld = m_dcNeedle.SelectObject(&m_fontValuePane);
   m_dcNeedle.SetTextAlign(TA_RIGHT | TA_TOP);
   m_dcNeedle.SetTextColor(m_colorTRPane^m_colorBGround);
   m_dcNeedle.SetBkColor(RGB(0,0,0)); 
@@ -681,14 +669,14 @@ void CAnalogMeter::DrawNeedle()
  // tip
  dX = m_nCXPix + m_nRadiusPix*dSinAngle;
  dY = m_nCYPix - m_nRadiusPix*dCosAngle;
- pPoints[0].x = ROUND(dX);
- pPoints[0].y = ROUND(dY);
+ pPoints[0].x = MathHelpers::Round(dX);
+ pPoints[0].y = MathHelpers::Round(dY);
 
  // left base
  dX = m_nCXPix - m_nHalfBaseWidth*dCosAngle;
  dY = m_nCYPix - m_nHalfBaseWidth*dSinAngle;
- pPoints[1].x = ROUND(dX);
- pPoints[1].y = ROUND(dY);
+ pPoints[1].x = MathHelpers::Round(dX);
+ pPoints[1].y = MathHelpers::Round(dY);
 
  // right base
  pPoints[2].x = m_nCXPix + (m_nCXPix-pPoints[1].x);
@@ -918,20 +906,38 @@ void CAnalogMeter::SetTRPane(CString strPane)
  m_strTRPane_n = strPane;
 }
 
-void CAnalogMeter::SetFontScale(int nFontScale)
+void CAnalogMeter::SetFontScale(enum MeterMemberEnum meter_member, int nFontScale)
 {
- // function doesn't force the re-drawing of the meter.
- if(m_nFontScale < 1)   m_nFontScale = 1;
- if(m_nFontScale > 100) m_nFontScale = 100;
- m_nFontScale = nFontScale;
+ if(nFontScale < 1)   nFontScale = 1;
+ if(nFontScale > 200) nFontScale = 200;
+ switch(meter_member)
+ {
+  case meter_title:
+   m_nFontScale = nFontScale;
+   break;
+
+  case meter_labels:
+  case meter_unit:
+   m_nFontScaleLabel = nFontScale;
+   break;
+
+  case meter_tlpane:
+  case meter_trpane:
+   m_nFontScalePane = nFontScale;
+   break;
+
+  case meter_value:
+   m_nFontScaleVal = nFontScale;
+   break;
+ }
  m_boolForceRedraw = true;
 }
 
 void CAnalogMeter::SetLabelsDecimals(int nLabelsDecimals)
 {
  // function doesn't force the re-drawing of the meter.
- if(m_nLabelsDecimals < 0)   m_nLabelsDecimals = 0;
- if(m_nLabelsDecimals > 100) m_nLabelsDecimals = 100;
+ if(nLabelsDecimals < 0)   nLabelsDecimals = 0;
+ if(nLabelsDecimals > 100) nLabelsDecimals = 100;
  m_nLabelsDecimals = nLabelsDecimals;
  m_boolForceRedraw = true;
 }
@@ -939,8 +945,8 @@ void CAnalogMeter::SetLabelsDecimals(int nLabelsDecimals)
 void CAnalogMeter::SetValueDecimals(int nValueDecimals)
 {
  // function doesn't force the re-drawing of the meter.
- if(m_nValueDecimals < 0)   m_nValueDecimals = 0;
- if(m_nValueDecimals > 100) m_nValueDecimals = 100;
+ if(nValueDecimals < 0)   nValueDecimals = 0;
+ if(nValueDecimals > 100) nValueDecimals = 100;
  m_nValueDecimals = nValueDecimals;
  m_boolForceRedraw = true;
 }

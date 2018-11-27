@@ -49,7 +49,6 @@ void CMIVoltage::Create(CWnd* pParent, UINT id)
  m_meter.SetRange (0.0, 5.0);
  m_meter.SetLabelsDecimals(1);
  m_meter.SetValueDecimals(2);
- m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));

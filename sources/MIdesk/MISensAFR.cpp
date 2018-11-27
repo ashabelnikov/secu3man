@@ -49,7 +49,6 @@ void CMISensAFR::Create(CWnd* pParent)
  m_meter.SetLabelsDecimals(1);
  m_meter.SetValueDecimals(2);
  m_meter.SetTitle(MLL::LoadString(IDS_MI_SENSAFR_TITLE));
- m_meter.SetFontScale(80);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_SENSAFR_UNIT));

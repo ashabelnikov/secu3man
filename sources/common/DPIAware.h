@@ -43,6 +43,8 @@ class DPIAware
   int UnScaleX(int x) { _Init(); return MulDiv(x, 96, m_dpiX); }
   int UnScaleY(int y) { _Init(); return MulDiv(y, 96, m_dpiY); }
 
+  int FontHeight(int pixels) { _Init(); return MulDiv(pixels, m_dpiX, 72); }
+
  private:
   void _Init()
   {

@@ -199,11 +199,6 @@ class ISettingsData
   virtual bool GetCOMPortBother(void) const = 0;
   virtual bool GetUseHotKeys(void) const = 0;
   virtual bool GetShowWelcome(void) const = 0;
-  virtual int GetRPMAverage(void) const = 0;
-  virtual int GetVoltAverage(void) const = 0;
-  virtual int GetMAPAverage(void) const = 0;
-  virtual int GetAI1Average(void) const = 0;
-  virtual int GetTPSAverage(void) const = 0;
   virtual bool GetAllowVisualTheme(void) const = 0;
   virtual bool GetAutoDiagEnter(void) const = 0;
   virtual bool GetSaveWarning(void) const = 0;
@@ -214,6 +209,20 @@ class ISettingsData
   virtual int GetParamMonVert(void) const = 0;
   virtual void SetParamMonVert(int pos) = 0;
 
+  //Fixtures's customization settings
+  virtual int GetTachometerMax(void) const = 0;
+  virtual int GetPressureMax(void) const = 0;
+  virtual ESpeedUnit GetSpeedUnit(void) const = 0;
+  virtual int GetRPMAverage(void) const = 0;
+  virtual int GetVoltAverage(void) const = 0;
+  virtual int GetMAPAverage(void) const = 0;
+  virtual int GetAI1Average(void) const = 0;
+  virtual int GetTPSAverage(void) const = 0;
+  virtual int GetTitleFontSize(void) const = 0;
+  virtual int GetValueFontSize(void) const = 0;
+  virtual int GetPaneFontSize(void) const = 0;
+  virtual int GetLabelFontSize(void) const = 0;
+  
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
   virtual void GetWndSettings(WndSettings& o_wndSettings) const = 0;
@@ -223,10 +232,6 @@ class ISettingsData
   //Interface language and SECU-3 platform type
   virtual EInterLang GetInterfaceLanguage(void) const = 0;
   virtual EECUPlatform GetECUPlatformType(void) const = 0;
-  //Fixtures's customization settings
-  virtual int GetTachometerMax(void) const = 0;
-  virtual int GetPressureMax(void) const = 0;
-  virtual ESpeedUnit GetSpeedUnit(void) const = 0;
   //Debug features
   virtual bool GetUseDVFeatures(void) const = 0;
   virtual int GetDVDeskUpdatePeriod(void) const = 0;

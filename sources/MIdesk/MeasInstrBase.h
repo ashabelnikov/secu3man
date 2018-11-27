@@ -36,6 +36,14 @@ class MeasInstrBase
    m_meter.DestroyWindow();
   };
 
+  void SetFontSize(int title, int value, int pane, int label)
+  {
+   m_meter.SetFontScale(meter_title, title);
+   m_meter.SetFontScale(meter_value, value);
+   m_meter.SetFontScale(meter_trpane, pane);
+   m_meter.SetFontScale(meter_labels, label);
+  }
+
   //interface for measurement instrument
   virtual void Create(CWnd* pParent, UINT id)
   {

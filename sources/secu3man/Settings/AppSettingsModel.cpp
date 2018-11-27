@@ -73,6 +73,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMAPAverage(_T("MAPAverage"))
 , m_optAI1Average(_T("AI1Average"))
 , m_optTPSAverage(_T("TPSAverage"))
+, m_optTitleFontSize(_T("TitleFrontSize"))
+, m_optValueFontSize(_T("ValueFrontSize"))
+, m_optPaneFontSize(_T("PaneFrontSize"))
+, m_optLabelFontSize(_T("LabelFrontSize"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_optStrtMapWnd(_T("StrtMapWnd"))
@@ -355,6 +359,10 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
  fs.ReadInt(m_optPulsesPer1Km, _T("6000"), 0, 60000);
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
+ fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
+ fs.ReadInt(m_optValueFontSize, _T("130"), 10, 200);
+ fs.ReadInt(m_optPaneFontSize, _T("100"), 10, 200);
+ fs.ReadInt(m_optLabelFontSize, _T("100"), 10, 200);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -579,6 +587,10 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optPressureMax); 
  fs.WriteInt(m_optPulsesPer1Km); 
  fs.WriteEnum(m_optSpeedUnit, m_AllowableSpeedUnits);
+ fs.WriteInt(m_optTitleFontSize); 
+ fs.WriteInt(m_optValueFontSize); 
+ fs.WriteInt(m_optPaneFontSize); 
+ fs.WriteInt(m_optLabelFontSize); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -1409,4 +1421,24 @@ int CAppSettingsModel::GetParamMonVert(void) const
 void CAppSettingsModel::SetParamMonVert(int pos)
 {
  m_optParamMonVert.value = pos;
+}
+
+int CAppSettingsModel::GetTitleFontSize(void) const
+{
+ return m_optTitleFontSize.value;
+}
+
+int CAppSettingsModel::GetValueFontSize(void) const
+{
+ return m_optValueFontSize.value;
+}
+
+int CAppSettingsModel::GetPaneFontSize(void) const
+{
+ return m_optPaneFontSize.value;
+}
+
+int CAppSettingsModel::GetLabelFontSize(void) const
+{
+ return m_optLabelFontSize.value;
 }

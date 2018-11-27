@@ -360,7 +360,7 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                               int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
                               int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph,
-                              int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad)
+                              int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
 {
  m_metRows = MetRows;
 
@@ -370,6 +370,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetRPM != std::numeric_limits<int>::max())
  {
   CMITachometer* widget = new CMITachometer();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_ringRPM.m_result, &m_values.speed, &m_values.distance);
   widget->ShowTLP(m_showSpeedAndDistance);
@@ -382,6 +383,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetMAP != std::numeric_limits<int>::max())
  {
   CMIPressure* widget = new CMIPressure();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_ringMAP.m_result, NULL, NULL);
   widget->SetLimits(10, (float)m_pressMax);
@@ -391,6 +393,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetVBat != std::numeric_limits<int>::max())
  {
   CMIVoltmeter* widget = new CMIVoltmeter();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_ringVBat.m_result, NULL, NULL);
   m_metFields.insert(std::make_pair(MetVBat, widget));
@@ -399,6 +402,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetIgnTim != std::numeric_limits<int>::max())
  {
   CMIDwellAngle* widget = new CMIDwellAngle();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.adv_angle, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetIgnTim, widget));
@@ -407,6 +411,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetCLT != std::numeric_limits<int>::max())
  {
   CMITemperature* widget = new CMITemperature();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.temperat, &m_values.gasdose_pos, &m_values.choke_pos);  
   widget->ShowTLP(m_showGDPos);
@@ -420,6 +425,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetAddI1 != std::numeric_limits<int>::max())
  {
   CMIAddI1* widget = new CMIAddI1();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_ringAddI1.m_result, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetAddI1, widget));
@@ -428,6 +434,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetAddI2 != std::numeric_limits<int>::max())
  {
   CMIAddI2* widget = new CMIAddI2();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.add_i2, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetAddI2, widget));
@@ -436,6 +443,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetInjPW != std::numeric_limits<int>::max())
  {
   CMIInjPW* widget = new CMIInjPW();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.inj_pw, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetInjPW, widget));
@@ -444,6 +452,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetIAT != std::numeric_limits<int>::max())
  {
   CMIIAT* widget = new CMIIAT();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.air_temp, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetIAT, widget));
@@ -452,6 +461,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetEGOCorr != std::numeric_limits<int>::max())
  {
   CMIEGOCorr* widget = new CMIEGOCorr();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.lambda_corr, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetEGOCorr, widget));
@@ -460,6 +470,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetTPS != std::numeric_limits<int>::max())
  {
   CMIThrottleGate* widget = new CMIThrottleGate();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_ringTPS.m_result, &m_air_flow, NULL);
   widget->ShowTLP(true);
@@ -469,6 +480,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetAirFlow != std::numeric_limits<int>::max())
  {
   CMIAirFlow* widget = new CMIAirFlow();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_air_flow, NULL, NULL);
   m_metFields.insert(std::make_pair(MetAirFlow, widget));
@@ -477,6 +489,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetVehicleSpeed != std::numeric_limits<int>::max())
  {
   CMIVehicleSpeed* widget = new CMIVehicleSpeed();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.speed, NULL, NULL);
   widget->SetMeterUnit(m_speedUnit);
@@ -486,6 +499,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetTPSDot != std::numeric_limits<int>::max())
  {
   CMITPSDot* widget = new CMITPSDot();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_tps_dot, NULL, NULL);
   m_metFields.insert(std::make_pair(MetTPSDot, widget));
@@ -494,6 +508,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetMAP2 != std::numeric_limits<int>::max())
  {
   CMIMap2* widget = new CMIMap2();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.map2, NULL, NULL);
   m_metFields.insert(std::make_pair(MetMAP2, widget));
@@ -502,6 +517,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetMAPD != std::numeric_limits<int>::max())
  {
   CMIMapD* widget = new CMIMapD();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.mapd, NULL, NULL);
   m_metFields.insert(std::make_pair(MetMAPD, widget));
@@ -510,6 +526,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetTmp2 != std::numeric_limits<int>::max())
  {
   CMITemp2* widget = new CMITemp2();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.tmp2, NULL, NULL);
   m_metFields.insert(std::make_pair(MetTmp2, widget));
@@ -518,6 +535,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetFuelConsum != std::numeric_limits<int>::max())
  {
   CMIFuelConsum* widget = new CMIFuelConsum();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.inj_ffd, NULL, NULL);
   m_metFields.insert(std::make_pair(MetFuelConsum, widget));
@@ -526,6 +544,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetKnockRetard != std::numeric_limits<int>::max())
  {
   CMIKnockRetard* widget = new CMIKnockRetard();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.knock_retard, NULL, NULL);
   m_metFields.insert(std::make_pair(MetKnockRetard, widget));
@@ -534,6 +553,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetKnockGraph != std::numeric_limits<int>::max())
  {
   CMIKnockGraph* widget = new CMIKnockGraph();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.knock_k, NULL, NULL);
   m_metFields.insert(std::make_pair(MetKnockGraph, widget));
@@ -542,6 +562,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetSensAFR != std::numeric_limits<int>::max())
  {
   CMISensAFR* widget = new CMISensAFR();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.afr, NULL, NULL);
   m_metFields.insert(std::make_pair(MetSensAFR, widget));
@@ -550,6 +571,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetChokePos != std::numeric_limits<int>::max())
  {
   CMIChokePos* widget = new CMIChokePos();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.choke_pos, NULL, NULL);
   m_metFields.insert(std::make_pair(MetChokePos, widget));
@@ -558,6 +580,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetGDPos != std::numeric_limits<int>::max())
  {
   CMIGDPos* widget = new CMIGDPos();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.gasdose_pos, NULL, NULL);
   m_metFields.insert(std::make_pair(MetGDPos, widget));
@@ -566,6 +589,7 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  if (MetSynLoad != std::numeric_limits<int>::max())
  {
   CMISynLoad* widget = new CMISynLoad();
+  widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
   widget->Create(this);
   widget->BindVars(&m_values.load, NULL, NULL);  
   m_metFields.insert(std::make_pair(MetSynLoad, widget));

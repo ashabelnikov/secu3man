@@ -82,11 +82,6 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetCOMPortBother(void) const;
   virtual bool GetUseHotKeys(void) const;
   virtual bool GetShowWelcome(void) const;
-  virtual int GetRPMAverage(void) const;
-  virtual int GetVoltAverage(void) const;
-  virtual int GetMAPAverage(void) const;
-  virtual int GetAI1Average(void) const;
-  virtual int GetTPSAverage(void) const;
   virtual bool GetAllowVisualTheme(void) const;
   virtual bool GetAutoDiagEnter(void) const;
   virtual bool GetSaveWarning(void) const;
@@ -114,10 +109,20 @@ class CAppSettingsModel : public ISettingsData
   //язык интерфейса и тип платформы
   virtual EInterLang GetInterfaceLanguage(void) const;
   virtual EECUPlatform GetECUPlatformType(void) const;
+
   //fixtures's customization
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
   virtual ESpeedUnit GetSpeedUnit(void) const;
+  virtual int GetRPMAverage(void) const;
+  virtual int GetVoltAverage(void) const;
+  virtual int GetMAPAverage(void) const;
+  virtual int GetAI1Average(void) const;
+  virtual int GetTPSAverage(void) const;
+  virtual int GetTitleFontSize(void) const;
+  virtual int GetValueFontSize(void) const;
+  virtual int GetPaneFontSize(void) const;
+  virtual int GetLabelFontSize(void) const;
 
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
@@ -207,6 +212,11 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int>  m_optMAPAverage;
   OptField_t<int>  m_optAI1Average;
   OptField_t<int>  m_optTPSAverage;
+  OptField_t<int> m_optTitleFontSize;
+  OptField_t<int> m_optValueFontSize;
+  OptField_t<int> m_optPaneFontSize;
+  OptField_t<int> m_optLabelFontSize;
+
   //windows' positions
   OptField_t<POINT> m_optStrtMapWnd;
   OptField_t<POINT> m_optIdleMapWnd;

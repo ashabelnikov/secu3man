@@ -61,7 +61,7 @@ class AFX_EXT_CLASS CAnalogMeter
   void SetNeedleValue(double value);
   void SetTLPane(CString strPane);
   void SetTRPane(CString strPane);
-  void SetFontScale(int nFontScale);
+  void SetFontScale(enum MeterMemberEnum meter_member, int nFontScale);
   void SetLabelsDecimals(int nRangeDecimals);
   void SetValueDecimals(int nValueDecimals);
   void SetTitle(CString strTitle);
@@ -80,17 +80,7 @@ class AFX_EXT_CLASS CAnalogMeter
 
   void    GetColor(enum MeterMemberEnum meter_member, COLORREF* pColor) const;
   void    GetState(enum MeterMemberEnum meter_member, bool* pState) const;
-  double  GetMinRange() const {return m_dMinScale; };
-  double  GetMaxRange() const {return m_dMaxScale; };
-  int     GetFontScale() const {return m_nFontScale; };
-  int     GetRangeDecimals() const {return m_nLabelsDecimals; };
-  int     GetValueDecimals() const {return m_nValueDecimals; };
-  CString GetTitle() const {return m_strTitle; };
-  CString GetTLPane() const {return m_strTLPane_n; };
-  CString GetTRPane() const {return m_strTRPane_n; };
-  CString GetUnit() const {return m_strUnit; };
-  double  GetNeedlePos(void) const {return m_dNeedlePos_n;};
-
+ 
  protected:
   bool m_boolUseBitmaps;
   bool m_boolForceRedraw;
@@ -136,6 +126,9 @@ class AFX_EXT_CLASS CAnalogMeter
   COLORREF m_colorBGround;
 
   int m_nFontScale;
+  int m_nFontScaleVal;
+  int m_nFontScalePane;
+  int m_nFontScaleLabel;
   int m_nLabelsDecimals;
   int m_nValueDecimals;
   int m_nRectWidth;
@@ -150,6 +143,9 @@ class AFX_EXT_CLASS CAnalogMeter
   int m_nHalfBaseWidth;
   int m_nTextBaseSpacing;
   int m_nFontHeight;
+  int m_nFontHeightVal;
+  int m_nFontHeightPane;
+  int m_nFontHeightLabel;
   int m_nGridLineWidth;
   int m_nTickNumber;
 
@@ -185,6 +181,10 @@ class AFX_EXT_CLASS CAnalogMeter
   CRect m_rectValue;
 
   CFont m_fontValue;
+  CFont m_fontValueVal;
+  CFont m_fontValuePane;
+  CFont m_fontValueLabel;
+
   CString m_fontType;
 
   CPen    m_PenG_Grid;
