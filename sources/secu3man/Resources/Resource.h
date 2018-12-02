@@ -426,3 +426,5 @@
 #define ID_APP_SWITCH_DASHBOARD         4446
 #define ID_APP_SAVESCR                  4447
 #define ID_APP_SAVEINI                  4448
+#define IDS_SAVING_APP_SETTINGS         4449
+#define IDS_SAVED_APP_SETTINGS          4450

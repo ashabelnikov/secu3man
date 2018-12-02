@@ -73,10 +73,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMAPAverage(_T("MAPAverage"))
 , m_optAI1Average(_T("AI1Average"))
 , m_optTPSAverage(_T("TPSAverage"))
-, m_optTitleFontSize(_T("TitleFrontSize"))
-, m_optValueFontSize(_T("ValueFrontSize"))
-, m_optPaneFontSize(_T("PaneFrontSize"))
-, m_optLabelFontSize(_T("LabelFrontSize"))
+, m_optTitleFontSize(_T("TitleFontSize"))
+, m_optValueFontSize(_T("ValueFontSize"))
+, m_optPaneFontSize(_T("PaneFontSize"))
+, m_optLabelFontSize(_T("LabelFontSize"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_optStrtMapWnd(_T("StrtMapWnd"))
@@ -546,232 +546,339 @@ bool CAppSettingsModel::WriteSettings(void)
  bool status = true;
 
  IniIO os(IniFileName, m_Name_Options_Section);
+ VERIFY(os.WriteComment(_T("*** General settings ***"), true, true)); //<-- empty file
  os.CreateSection(); //create section
-
+ 
+ os.WriteComment(_T("Name of COM port or a device (e.g. /dev/ttyUSB0)"));
  os.WriteString(m_optPortName);
+ 
+ os.WriteComment(_T("COM port speed for firmware (baud)"));
  os.WriteDword(m_optBaudRateApplication);
+ 
+ os.WriteComment(_T("COM port speed for boot loader (baud)"));
  os.WriteDword(m_optBaudRateBootloader);
+
+ os.WriteComment(_T("Full path to folder for writing CSV log files. UseAppFolder must be set to 0."));
  os.WriteString(m_optLogFilesFolder);
+
+ os.WriteComment(_T("If set to 1, then log files will be created in the folder containing application. Set to 0 if you want to use LogFilesFolder"));
  os.WriteInt(m_optUseAppFolder);
+
+ os.WriteComment(_T("Automatically write log files. Set to 0 for disabling this feature."));
  os.WriteInt(m_optAlwaysWriteLog);
+
+ os.WriteComment(_T("Symbol used to separate fields in the CSV file."));
  os.WriteInt(m_optCSVSepSymbol);
+
+ os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
  os.WriteInt(m_optMIDeskUpdatePeriod);
+
+ os.WriteComment(_T("Interface language. Set to english for English and set to russian for Russian. Default is english."));
  os.WriteEnum(m_optInterfaceLang, m_AllowableLanguages);
+
+ os.WriteComment(_T("Specify model of processor of your SECU-3 unit. Supported values are: atmega64, atmega128, atmega644, atmega1284."));
  os.WriteEnum(m_optECUPlatformType, m_AllowablePlatforms);
+
+ os.WriteComment(_T("Use debug features (for developers). If set to 1, the small floating window will be displayed inside the main window. See also DVDeskUpdatePeriod."));
  os.WriteInt(m_optUseDVFeatures);
+
+ os.WriteComment(_T("Specifies how frequently debug floating window will be updated (redraw). Value in the milliseconds"));
  os.WriteInt(m_optDVDeskUpdatePeriod);
+
+ os.WriteComment(_T("Controls displaying of tool tips (hints). Set to 0 if you want to disable showing of tool tips."));
  os.WriteInt(m_optShowToolTips); 
+
+ os.WriteComment(_T("Specifies which format of data uses your SECU-3 firmware when sends and receives packets. Set to 0 for binary format (default)."));
  os.WriteInt(m_optHexDataMode); 
+
+ os.WriteComment(_T("Set to 0 if you don't want to be bothred by error messages related to COM port. Recommended only for experienced users."));
  os.WriteInt(m_optCOMPortBother); 
+
+ os.WriteComment(_T("Use or not to use hot keys. Set to 0 if you want to disable hot keys."));
  os.WriteInt(m_optUseHotKeys); 
+
+ os.WriteComment(_T("Show welcome"));
  m_optShowWelcome.value = 0; //<--Will be not shown next time
  os.WriteInt(m_optShowWelcome); 
+
+ os.WriteComment(_T("Allow visual theme (appeared since Windows XP). Set to 0 if you want ot disable using of visual themes."));
  os.WriteInt(m_optAllowVisualTheme); 
- os.WriteInt(m_optAutoDiagEnter); 
+
+ os.WriteComment(_T("Set ot 1 if you want to automatically enter diagnostic mode after opening of \"Diagnostics\" tab. For experienced users only."));
+ os.WriteInt(m_optAutoDiagEnter);
+
+ os.WriteComment(_T("Set to 0 if you don't want to be bothered by warning messages related to saving of files."));
  os.WriteInt(m_optSaveWarning); 
+
+ os.WriteComment(_T("Set to 1 if you want to automatically read CE errors from firmware after opening of \"Check engine\" tab."));
  os.WriteInt(m_optAutoCERead); 
+
+ os.WriteComment(_T("Enable/disable children windows of 2D and 3D chards. If set to 1, then mentioned windows will belong to main window (parent). Set to 0 and windows will belong to desktop."));
  os.WriteInt(m_optChildCharts); 
+
+ os.WriteComment(_T("Automatically reopen COM port after plugging of USB cable or Bluetooth. Set to 0 to disable this feature."));
  os.WriteInt(m_optPortAutoReopen); 
+
+ os.WriteComment(_T("When set to 1, only one 2D or 3D chart window will be displayed at a time (buttons will be toggled). By default is set to 0 (disabled)."));
  os.WriteInt(m_optToggleMapWnd); 
 
- IniIO fs(IniFileName, m_Name_Fixtures_Section);
+ IniIO fs(IniFileName, m_Name_Fixtures_Section); 
+ fs.WriteComment(_T("*** General settings for virtual fixtures and indicators ***"), false, true);
  fs.CreateSection();
 
+ fs.WriteComment(_T("Switch between two separately configured profiles of virtual gauges and indicators (See Meters and MetersEx sections, see also Indicators and IndicatorsEx). Allowed values: 0 and 1"));
  fs.WriteInt(m_optShowExFixtures); 
+
+ fs.WriteComment(_T("Size of the moving avarage filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  fs.WriteInt(m_optRPMAverage); 
+
+ fs.WriteComment(_T("Size of the moving avarage filter used for voltage values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  fs.WriteInt(m_optVoltAverage); 
+
+ fs.WriteComment(_T("Size of the moving avarage filter used for MAP values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  fs.WriteInt(m_optMAPAverage); 
+
+ fs.WriteComment(_T("Size of the moving avarage filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  fs.WriteInt(m_optAI1Average); 
+
+ fs.WriteComment(_T("Size of the moving avarage filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  fs.WriteInt(m_optTPSAverage); 
+
+ fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
  fs.WriteInt(m_optTachometerMax); 
+
+ fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the MAP gauge (e.g. 100 kPa)."));
  fs.WriteInt(m_optPressureMax); 
+
+ fs.WriteComment(_T("This value used in calculations of speed and distance using VSS. Number of pulses from VSS sensor per 1km of passed distance."));
  fs.WriteInt(m_optPulsesPer1Km); 
+
+ fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
  fs.WriteEnum(m_optSpeedUnit, m_AllowableSpeedUnits);
+
+ fs.WriteComment(_T("Size of font used for displaying of titles in virtual gauges. Default is 100% (normal traditional size)"));
  fs.WriteInt(m_optTitleFontSize); 
+
+ fs.WriteComment(_T("Size of font used for displaying of digital values at the bottom of virtual gauges. Default is 130%"));
  fs.WriteInt(m_optValueFontSize); 
+
+ fs.WriteComment(_T("Size of font used for displaying of digital values at the left-top and right-top corners of virtual gauges. Default is 100%"));
  fs.WriteInt(m_optPaneFontSize); 
+
+ fs.WriteComment(_T("Size of font used for displaying of grid labels and units in virtual gauges. Default is 100%"));
  fs.WriteInt(m_optLabelFontSize); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
+ ws.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Firmware data\" and \"EEPROM\" tabs), including position of the main window ***"), false, true);
  ws.CreateSection();
-
- ws.WriteWndPos(m_optStrtMapWnd);
- ws.WriteWndPos(m_optIdleMapWnd);
- ws.WriteWndPos(m_optWorkMapWnd);
- ws.WriteWndPos(m_optTempMapWnd);
- ws.WriteWndPos(m_optAttenMapWnd);
- ws.WriteWndPos(m_optMainFrmWnd);
- ws.WriteWndPos(m_optDwellCntrlMapWnd);
- ws.WriteWndPos(m_optCTSCurveMapWnd);
- ws.WriteWndPos(m_optGridMapIgnWnd);
- ws.WriteWndPos(m_optGridMapInjWnd);
- ws.WriteWndPos(m_optVEMapWnd);
- ws.WriteWndPos(m_optAFRMapWnd);
- ws.WriteWndPos(m_optCrnkMapWnd);
- ws.WriteWndPos(m_optWrmpMapWnd);
- ws.WriteWndPos(m_optDeadMapWnd);
- ws.WriteWndPos(m_optIdlrMapWnd);
- ws.WriteWndPos(m_optIdlcMapWnd);
- ws.WriteWndPos(m_optAETPSMapWnd);
- ws.WriteWndPos(m_optAERPMMapWnd);
- ws.WriteWndPos(m_optAftstrMapWnd);
- ws.WriteWndPos(m_optATSCurvMapWnd);
- ws.WriteWndPos(m_optATSCorrMapWnd);
- ws.WriteWndPos(m_optGasdoseMapWnd);
- ws.WriteWndPos(m_optITMapWnd);
- ws.WriteWndPos(m_optITRPMMapWnd);
- ws.WriteWndPos(m_optRigidMapWnd);
- ws.WriteWndPos(m_optEGOCrvMapWnd);
- ws.WriteWndPos(m_optIACCMapWnd);
- ws.WriteWndPos(m_optIACCWMapWnd);
- ws.WriteWndPos(m_optIATCLTMapWnd);
- ws.WriteWndPos(m_optBarocorrMapWnd);
- ws.WriteWndPos(m_optManIgntimMapWnd);
- ws.WriteWndPos(m_optCESettingsWnd);
- ws.WriteWndPos(m_optTpsswtMapWnd);
- ws.WriteWndPos(m_optTmp2CurveMapWnd);
- ws.WriteWndPos(m_optGtscMapWnd);
- ws.WriteWndPos(m_optGpscMapWnd);
- ws.WriteWndPos(m_optAtscMapWnd);
- ws.WriteWndPos(m_optCrkTempMapWnd);
- ws.WriteWndPos(m_optEHPauseMapWnd);
+ ws.WriteWndPos(m_optMainFrmWnd, _T("Main window"));
+ ws.WriteWndPos(m_optStrtMapWnd, _T("Cranking ignition timing map"));
+ ws.WriteWndPos(m_optIdleMapWnd, _T("Idling ignition timing map"));
+ ws.WriteWndPos(m_optWorkMapWnd, _T("Work ignition timing map"));
+ ws.WriteWndPos(m_optTempMapWnd, _T("Ign. timing vs CLT correction map"));
+ ws.WriteWndPos(m_optGridMapIgnWnd, _T("Grid editing window for ign.timing maps"));
+ ws.WriteWndPos(m_optGridMapInjWnd, _T("Grid editing window for injection maps"));
+ ws.WriteWndPos(m_optAttenMapWnd, _T("Attenuator's curve of amplification"));
+ ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Dwell time map"));
+ ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Coolant temperature sensor table"));
+ ws.WriteWndPos(m_optVEMapWnd, _T("VE map"));
+ ws.WriteWndPos(m_optAFRMapWnd, _T("AFR map"));
+ ws.WriteWndPos(m_optCrnkMapWnd, _T("Injection PW on cranking"));
+ ws.WriteWndPos(m_optWrmpMapWnd, _T("Warmup enrichment map"));
+ ws.WriteWndPos(m_optDeadMapWnd, _T("Injector's lag map"));
+ ws.WriteWndPos(m_optIdlrMapWnd, _T("IAC position (working)"));
+ ws.WriteWndPos(m_optIdlcMapWnd, _T("IAC position (cranking)"));
+ ws.WriteWndPos(m_optAETPSMapWnd, _T("Enrichment vs throttle speed map"));
+ ws.WriteWndPos(m_optAERPMMapWnd, _T("Enrichment vs engine speed map"));
+ ws.WriteWndPos(m_optAftstrMapWnd, _T("Afterstart enrichment map"));
+ ws.WriteWndPos(m_optATSCurvMapWnd, _T("MAT sensor table"));
+ ws.WriteWndPos(m_optATSCorrMapWnd, _T("Ign.timing correction vs MAT map"));
+ ws.WriteWndPos(m_optGasdoseMapWnd, _T("Gas valve position vs RPM,TPS map"));
+ ws.WriteWndPos(m_optITMapWnd, _T("Injection timing map"));
+ ws.WriteWndPos(m_optITRPMMapWnd, _T("Target idling RPM"));
+ ws.WriteWndPos(m_optRigidMapWnd, _T("Idling regulator's rigidity map"));
+ ws.WriteWndPos(m_optEGOCrvMapWnd, _T("EGO sensor curve"));
+ ws.WriteWndPos(m_optIACCMapWnd, _T("Mixture correction vs IAC pos"));
+ ws.WriteWndPos(m_optIACCWMapWnd, _T("Weight of mixture correction vs IAC pos"));
+ ws.WriteWndPos(m_optIATCLTMapWnd, _T("CLT to MAT influence factor"));
+ ws.WriteWndPos(m_optBarocorrMapWnd, _T("Barometric correction map"));
+ ws.WriteWndPos(m_optManIgntimMapWnd, _T("Manual ignition timing corr. map"));
+ ws.WriteWndPos(m_optCESettingsWnd, _T("CE settings window"));
+ ws.WriteWndPos(m_optTpsswtMapWnd, _T("TPS switch point map"));
+ ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("TMP2 sensor table"));
+ ws.WriteWndPos(m_optGtscMapWnd, _T("Gas temperature correction map"));
+ ws.WriteWndPos(m_optGpscMapWnd, _T("Gas pressure correction map"));
+ ws.WriteWndPos(m_optAtscMapWnd, _T("Air density correction map"));
+ ws.WriteWndPos(m_optCrkTempMapWnd, _T("Ign.timing vs CLT correction on cranking"));
+ ws.WriteWndPos(m_optEHPauseMapWnd, _T("EGO heater's pause map (for PWM)"));
 
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
+ ws1.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Parameters and monitor\" tab), including position of the main window ***"), false, true);
  ws1.CreateSection();
 
- ws1.WriteWndPos(m_optStrtMapWnd1);
- ws1.WriteWndPos(m_optIdleMapWnd1);
- ws1.WriteWndPos(m_optWorkMapWnd1);
- ws1.WriteWndPos(m_optTempMapWnd1);
- ws1.WriteWndPos(m_optGridMapIgnWnd1);
- ws1.WriteWndPos(m_optGridMapInjWnd1);
- ws1.WriteWndPos(m_optVEMapWnd1);
- ws1.WriteWndPos(m_optAFRMapWnd1);
- ws1.WriteWndPos(m_optCrnkMapWnd1);
- ws1.WriteWndPos(m_optWrmpMapWnd1);
- ws1.WriteWndPos(m_optDeadMapWnd1);
- ws1.WriteWndPos(m_optIdlrMapWnd1);
- ws1.WriteWndPos(m_optIdlcMapWnd1);
- ws1.WriteWndPos(m_optAETPSMapWnd1);
- ws1.WriteWndPos(m_optAERPMMapWnd1);
- ws1.WriteWndPos(m_optAftstrMapWnd1);
- ws1.WriteWndPos(m_optITMapWnd1);
- ws1.WriteWndPos(m_optITRPMMapWnd1);
- ws1.WriteWndPos(m_optRigidMapWnd1);
- ws1.WriteWndPos(m_optEGOCrvMapWnd1);
- ws1.WriteWndPos(m_optIACCMapWnd1);
- ws1.WriteWndPos(m_optIACCWMapWnd1);
- ws1.WriteWndPos(m_optIATCLTMapWnd1);
- ws1.WriteWndPos(m_optTpsswtMapWnd1);
- ws1.WriteWndPos(m_optGtscMapWnd1);
- ws1.WriteWndPos(m_optGpscMapWnd1);
- ws1.WriteWndPos(m_optAtscMapWnd1);
+ ws1.WriteWndPos(m_optStrtMapWnd1, _T("Cranking ignition timing map"));
+ ws1.WriteWndPos(m_optIdleMapWnd1, _T("Idling ignition timing map"));
+ ws1.WriteWndPos(m_optWorkMapWnd1, _T("Work ignition timing map"));
+ ws1.WriteWndPos(m_optTempMapWnd1, _T("Ign. timing vs CLT correction map"));
+ ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Grid editing window for ign.timing maps"));
+ ws1.WriteWndPos(m_optGridMapInjWnd1, _T("Grid editing window for injection maps"));
+ ws1.WriteWndPos(m_optVEMapWnd1, _T("VE map"));
+ ws1.WriteWndPos(m_optAFRMapWnd1, _T("AFR map"));
+ ws1.WriteWndPos(m_optCrnkMapWnd1, _T("Injection PW on cranking"));
+ ws1.WriteWndPos(m_optWrmpMapWnd1, _T("Warmup enrichment map"));
+ ws1.WriteWndPos(m_optDeadMapWnd1, _T("Injector's lag map"));
+ ws1.WriteWndPos(m_optIdlrMapWnd1, _T("IAC position (working)"));
+ ws1.WriteWndPos(m_optIdlcMapWnd1, _T("IAC position (cranking)"));
+ ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Enrichment vs throttle speed map"));
+ ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Enrichment vs engine speed"));
+ ws1.WriteWndPos(m_optAftstrMapWnd1, _T("Afterstart enrichment map"));
+ ws1.WriteWndPos(m_optITMapWnd1, _T("Injection timing map"));
+ ws1.WriteWndPos(m_optITRPMMapWnd1, _T("Target idling RPM"));
+ ws1.WriteWndPos(m_optRigidMapWnd1, _T("Idling regulator's rigidity map"));
+ ws1.WriteWndPos(m_optEGOCrvMapWnd1, _T("EGO sensor curve"));
+ ws1.WriteWndPos(m_optIACCMapWnd1, _T("Mixture correction vs IAC pos"));
+ ws1.WriteWndPos(m_optIACCWMapWnd1, _T("Weight of mixture correction vs IAC pos"));
+ ws1.WriteWndPos(m_optIATCLTMapWnd1, _T("CLT to MAT influence factor"));
+ ws1.WriteWndPos(m_optTpsswtMapWnd1, _T("TPS switch point map"));
+ ws1.WriteWndPos(m_optGtscMapWnd1, _T("Gas temperature correction map"));
+ ws1.WriteWndPos(m_optGpscMapWnd1, _T("Gas pressure correction map"));
+ ws1.WriteWndPos(m_optAtscMapWnd1, _T("Air density correction map"));
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
+ sz.WriteComment(_T("*** Remembered sizes of windows ***"), false, true);
  sz.CreateSection();
 
- sz.WriteWndPos(m_optMainFrmWndSize);
+ sz.WriteWndPos(m_optMainFrmWndSize, _T("Main window"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
+ sw.WriteComment(_T("*** Remembered states of windows ***"), false, true);
  sw.CreateSection();
 
- sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates);
+ sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("State of the main window. Allowed values are: minimized, normal and maximized"));
 
+ _TSTRING ii_comment[2] = {_T("*** Configuration of virtual On\\Off indicators (1-st profile) ***"), _T("*** Configuration of virtual On\\Off indicators (2-nd profile) ***")};
  //Indicators
  for(int i = 0; i < 2; ++i)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
+  ii.WriteComment(ii_comment[i], false, true);
   ii.CreateSection();
   ii.WriteFlt(m_optIndHeightPercent[i], 2);
-  ii.WriteInt(m_optIndRows[i]);
-  ii.WriteInt(m_optIndGas_v[i]);
-  ii.WriteInt(m_optIndCarb[i]);
-  ii.WriteInt(m_optIndIdleValve[i]);
-  ii.WriteInt(m_optIndPowerValve[i]);
-  ii.WriteInt(m_optIndStBlock[i]);
-  ii.WriteInt(m_optIndAE[i]);
-  ii.WriteInt(m_optIndCoolingFan[i]);
-  ii.WriteInt(m_optIndCE[i]);
-  ii.WriteInt(m_optIndFCRevLim[i]);
-  ii.WriteInt(m_optIndFloodClear[i]);
-  ii.WriteInt(m_optIndSysLocked[i]);
+  ii.WriteInt(m_optIndRows[i], _T("Number of rows in the virtual indicators panel"));
+  ii.WriteInt(m_optIndGas_v[i], _T("GAS_V input"));
+  ii.WriteInt(m_optIndCarb[i], _T("CARB input"));
+  ii.WriteInt(m_optIndIdleValve[i], _T("Idle cutoff valve"));
+  ii.WriteInt(m_optIndPowerValve[i], _T("Power valve"));
+  ii.WriteInt(m_optIndStBlock[i], _T("Starter relay"));
+  ii.WriteInt(m_optIndAE[i], _T("Acceleration enrichment"));
+  ii.WriteInt(m_optIndCoolingFan[i], _T("Cooling fan"));
+  ii.WriteInt(m_optIndCE[i], _T("Check Engine"));
+  ii.WriteInt(m_optIndFCRevLim[i], _T("Rev. limitter"));
+  ii.WriteInt(m_optIndFloodClear[i], _T("Flood clear"));
+  ii.WriteInt(m_optIndSysLocked[i], _T("System locked"));
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
- ic.WriteColor(m_optColGas_v);
- ic.WriteColor(m_optColCarb);
- ic.WriteColor(m_optColIdleValve);
- ic.WriteColor(m_optColPowerValve);
- ic.WriteColor(m_optColStBlock);
- ic.WriteColor(m_optColAE);
- ic.WriteColor(m_optColCoolingFan);
- ic.WriteColor(m_optColCE);
- ic.WriteColor(m_optColFCRevLim);
- ic.WriteColor(m_optColFloodClear);
- ic.WriteColor(m_optColSysLocked);
+ ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***"), false, true);
+ ic.WriteColor(m_optColGas_v, _T("GAS_V input"));
+ ic.WriteColor(m_optColCarb, _T("CARB input"));
+ ic.WriteColor(m_optColIdleValve, _T("Idle cutoff valve"));
+ ic.WriteColor(m_optColPowerValve, _T("Power valve"));
+ ic.WriteColor(m_optColStBlock, _T("Starter relay"));
+ ic.WriteColor(m_optColAE, _T("Acceleration enrichment"));
+ ic.WriteColor(m_optColCoolingFan, _T("Cooling fan"));
+ ic.WriteColor(m_optColCE, _T("Check Engine"));
+ ic.WriteColor(m_optColFCRevLim, _T("Rev. limitter"));
+ ic.WriteColor(m_optColFloodClear, _T("Flood clear"));
+ ic.WriteColor(m_optColSysLocked, _T("System locked"));
 
+ _TSTRING mm_comment[2] = {_T("*** Configuration of virtual gauges (1-st profile) ***"), _T("*** Configuration of virtual gauges (2-nd profile) ***")};
  //Meters
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
+  mm.WriteComment(mm_comment[i], false, true);
   mm.CreateSection();
-  mm.WriteInt(m_optMetRows[i]);
-  mm.WriteInt(m_optMetRPM[i]);
-  mm.WriteInt(m_optMetMAP[i]);
-  mm.WriteInt(m_optMetVBat[i]);
-  mm.WriteInt(m_optMetIgnTim[i]);
-  mm.WriteInt(m_optMetTPS[i]);
-  mm.WriteInt(m_optMetCLT[i]);
-  mm.WriteInt(m_optMetAddI1[i]);
-  mm.WriteInt(m_optMetAddI2[i]);
-  mm.WriteInt(m_optMetInjPW[i]);
-  mm.WriteInt(m_optMetIAT[i]);
-  mm.WriteInt(m_optMetEGOCorr[i]);
-  mm.WriteInt(m_optMetAirFlow[i]);
-  mm.WriteInt(m_optMetVehicleSpeed[i]);
-  mm.WriteInt(m_optMetTPSDot[i]);
-  mm.WriteInt(m_optMetMAP2[i]);
-  mm.WriteInt(m_optMetMAPD[i]);
-  mm.WriteInt(m_optMetTmp2[i]);
-  mm.WriteInt(m_optMetFuelConsum[i]);
-  mm.WriteInt(m_optMetKnockRetard[i]);
-  mm.WriteInt(m_optMetKnockGraph[i]);
-  mm.WriteInt(m_optMetSensAFR[i]);
-  mm.WriteInt(m_optMetChokePos[i]);
-  mm.WriteInt(m_optMetGDPos[i]);
-  mm.WriteInt(m_optMetSynLoad[i]);
+  mm.WriteInt(m_optMetRows[i], _T("Number of rows in the virtual gauges panel"));
+  mm.WriteInt(m_optMetRPM[i], _T("RPM, speed, distance"));
+  mm.WriteInt(m_optMetMAP[i], _T("MAP sensor"));
+  mm.WriteInt(m_optMetVBat[i], _T("Board voltage"));
+  mm.WriteInt(m_optMetIgnTim[i], _T("Ignition timing"));
+  mm.WriteInt(m_optMetTPS[i], _T("TPS sensor"));
+  mm.WriteInt(m_optMetCLT[i], _T("CLT sensor"));
+  mm.WriteInt(m_optMetAddI1[i], _T("ADD_I1 input"));
+  mm.WriteInt(m_optMetAddI2[i], _T("ADD_I2 input"));
+  mm.WriteInt(m_optMetInjPW[i], _T("Injection pulse width"));
+  mm.WriteInt(m_optMetIAT[i], _T("MAT sensor"));
+  mm.WriteInt(m_optMetEGOCorr[i], _T("Lambda correction"));
+  mm.WriteInt(m_optMetAirFlow[i], _T("Air flow"));
+  mm.WriteInt(m_optMetVehicleSpeed[i], _T("Vehicle spped"));
+  mm.WriteInt(m_optMetTPSDot[i], _T("TPS speed"));
+  mm.WriteInt(m_optMetMAP2[i], _T("MAP2 sensor"));
+  mm.WriteInt(m_optMetMAPD[i], _T("Diff. pressure"));
+  mm.WriteInt(m_optMetTmp2[i], _T("TMP2 sensor"));
+  mm.WriteInt(m_optMetFuelConsum[i], _T("Fuel consumption"));
+  mm.WriteInt(m_optMetKnockRetard[i], _T("Knock retard"));
+  mm.WriteInt(m_optMetKnockGraph[i], _T("Knock graph"));
+  mm.WriteInt(m_optMetSensAFR[i], _T("AFR sensor"));
+  mm.WriteInt(m_optMetChokePos[i], _T("Choke/IAC position"));
+  mm.WriteInt(m_optMetGDPos[i], _T("Gas valve position"));
+  mm.WriteInt(m_optMetSynLoad[i], _T("Synthetic load"));
  }
 
  IniIO at(IniFileName, m_Name_AutoTune_Section);
+ at.WriteComment(_T("*** VE autotune settings ***"), false, true);
+ at.CreateSection();
+ at.WriteComment(_T("Lambda delay 3x3 map, packed in rows"));
  at.WriteVector(m_optLambdaDelay);
+ at.WriteComment(_T("Load bins for lambda delay map"));
  at.WriteVector(m_optLambdaDelayL);
+ at.WriteComment(_T("RPM bins for lambda delay map"));
  at.WriteVector(m_optLambdaDelayR);
+ at.WriteComment(_T("Target AFR error for autotune algothithm"));
  at.WriteFlt(m_optAFRError, 2);
+ at.WriteComment(_T("List of blocked cells. Numbering starts from 0 (value at the left-bottom corner of table in the user's interface)"));
  at.WriteVector(m_optBlockedCells);
+ at.WriteComment(_T("Number of sample points (statistics) per cell"));
  at.WriteInt(m_optStatSize);
+ at.WriteComment(_T("Cells will be automatically blocked if theirs weight is greater or equal to the specified value. Set to zero if you want to disable this feature. "));
  at.WriteInt(m_optAutoBlockThrd);
+ at.WriteComment(_T("If set to 1, then statistics will be gathered inly when RPM is rising. Set to 0 for disabling of this feature."));
  at.WriteInt(m_optGrowingMode);
+ at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if greater or equal to the specified value"));
  at.WriteFlt(m_optMinAFR, 1);
+ at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if less or equal to the specified value"));
  at.WriteFlt(m_optMaxAFR, 1);
+ at.WriteComment(_T("Threshold for the number of matches between real and target AFR, after reaching which cell's statistics will updated only if the average distance of new statistics points is less than the existing ones."));
  at.WriteInt(m_optMinDistThrd);
+ at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if greater or equal to the specified value"));
  at.WriteFlt(m_optMinTPS, 1);
+ at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if less or equal to the specified value"));
  at.WriteFlt(m_optMaxTPS, 1);
+ at.WriteComment(_T("Automatic tune will not start while CLT is less than following value."));
  at.WriteFlt(m_optCLTThrd, 1);
 
  //Map editor
  IniIO me(IniFileName, m_Name_MapEditor_Section);
+ me.WriteComment(_T("*** Grid map editors ***"), false, true);
+ me.CreateSection();
+ me.WriteComment(_T("Color saturation of gradient"));
  me.WriteInt(m_optGradSaturation);
+ me.WriteComment(_T("Brightness of gradient"));
  me.WriteInt(m_optGradBrightness);
+ me.WriteComment(_T("Use bold fonts. Set to 1 for bold fonts, set to 0 for normal fonts."));
  me.WriteInt(m_optBoldFont);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
+ sp.WriteComment(_T("*** Remembered positions of splitters ***"), false, true);
  sp.CreateSection();
 
+ sp.WriteComment(_T("Vertical splitter on the \"Parameters and monitor\" tab"));
  sp.WriteInt(m_optParamMonVert);
 
  return status;

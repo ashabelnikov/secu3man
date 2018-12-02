@@ -39,22 +39,37 @@ template <class T> struct OptField_t
  T value;
 };
 
+//Special wrapper function for skipping of line comments
+static DWORD GetPrivateProfileStringCT(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPCTSTR lpDefault, LPTSTR lpReturnedString, DWORD nSize, LPCTSTR lpFileName)
+{
+ DWORD result = GetPrivateProfileString(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
+ if (result)
+ {
+  TCHAR* p =_tcschr(lpReturnedString, ';');
+  if (p != NULL)
+   *p = NULL;
+ }
+ return result;
+}
+
 class IniIO
 {
  public:
   IniIO(const _TSTRING& fileName, const _TSTRING& sectionName)
   : m_sectionName(sectionName)
   , m_fileName(fileName)
+  , m_commentsIndent(30)
   {}
   IniIO(const CString& fileName, const CString& sectionName)
   : m_sectionName(sectionName)
   , m_fileName(fileName)
+  , m_commentsIndent(30)
   {}
 
   bool ReadString(OptField_t<_TSTRING>& field, const _TSTRING& defVal)
   {
    TCHAR read_str[1024];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 1023, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 1023, m_fileName.c_str());
    field.value = read_str;
    return true;
   }
@@ -62,7 +77,7 @@ class IniIO
   bool ReadDword(OptField_t<DWORD>& field, const _TSTRING& defVal, const std::vector<DWORD>& patterns)
   {
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
    field.value = _ttoi(read_str);
    if (patterns.end() == std::find(patterns.begin(), patterns.end(), field.value))
    {
@@ -72,10 +87,11 @@ class IniIO
    return true; //ok  
   }
 
-  bool WriteDword(const OptField_t<DWORD>& field)
+  bool WriteDword(const OptField_t<DWORD>& field, const _TSTRING& comment = _T(""))
   {
    CString str;
    str.Format(_T("%d"), field.value);
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
@@ -84,7 +100,7 @@ class IniIO
   {
    bool status = true;
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
    field.value = _tcstol(read_str, NULL, 16);
    if (field.value > 0xFFFFFF)
    {
@@ -95,17 +111,20 @@ class IniIO
    return status;
   }
 
-  bool WriteColor(const OptField_t<DWORD>& field)
+  bool WriteColor(const OptField_t<DWORD>& field, const _TSTRING& comment = _T(""))
   {
    CString str;
    str.Format(_T("%06X"), (int)swapRB(field.value));
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
 
-  bool WriteString(const OptField_t<_TSTRING>& field)
+  bool WriteString(const OptField_t<_TSTRING>& field, const _TSTRING& comment = _T(""))
   {
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), field.value.c_str(), m_fileName.c_str());
+   CString str = field.value.c_str();
+   AddComment(str, field.name, comment); //add optional comment
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
 
@@ -118,7 +137,7 @@ class IniIO
   bool ReadEnum(OptField_t<int>& field, size_t defValIdx, const std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> >& patterns)
   {
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), patterns[defValIdx].first.second.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), patterns[defValIdx].first.second.c_str(), read_str, 255, m_fileName.c_str());
    size_t count = patterns.size();
    for(size_t i = 0; i < count; ++i)
    {
@@ -132,15 +151,16 @@ class IniIO
    return false;
   }
 
-  bool WriteEnum(const OptField_t<int>& field, const std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> >& patterns)
+  bool WriteEnum(const OptField_t<int>& field, const std::vector<std::pair<std::pair<_TSTRING, _TSTRING>, int> >& patterns, const _TSTRING& comment = _T(""))
   {
-   _TSTRING write_str;
+   CString write_str;
    for(size_t i = 0; i < patterns.size(); ++i)
    {
     if (field.value == patterns[i].second)
      write_str = patterns[i].first.second.c_str();
    }
-   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), write_str.c_str(), m_fileName.c_str());
+   AddComment(write_str, field.name, comment); //add optional comment
+   WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), write_str, m_fileName.c_str());
    return true;
   }
 
@@ -148,7 +168,7 @@ class IniIO
   bool ReadInt(OptField_t<T>& field, const _TSTRING& defVal, const std::vector<std::pair<_TSTRING, T> >& patterns)
   {
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
    field.value = _ttoi(read_str);
    size_t count = patterns.size();
    for(size_t i = 0; i < count; i++)
@@ -166,7 +186,7 @@ class IniIO
   {
    TCHAR read_str[256];
    int value = 0;
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
    if (ltrim(read_str).empty() && stubIfEmpty)
    {
     field.value = std::numeric_limits<int>::max();
@@ -182,11 +202,12 @@ class IniIO
   }
 
   template <class T>
-  bool WriteInt(const OptField_t<T>& field)
+  bool WriteInt(const OptField_t<T>& field, const _TSTRING& comment = _T(""))
   {
    CString str;
    if ((int)field.value != std::numeric_limits<int>::max())
     str.Format(_T("%d"), (int)field.value);
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
@@ -196,7 +217,7 @@ class IniIO
   {
    int value_x = 0, value_y = 0;
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), _T(""), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), _T(""), read_str, 255, m_fileName.c_str());
    int result = _stscanf(read_str, _T("%d,%d"), &value_x, &value_y);
    if (result != 2 || (value_x < minVal) || (value_x > maxVal) || (value_y < minVal) || (value_y > maxVal))
    {
@@ -209,11 +230,12 @@ class IniIO
    return true;
   }
 
-  bool WriteWndPos(const OptField_t<POINT>& field)
+  bool WriteWndPos(const OptField_t<POINT>& field, const _TSTRING& comment = _T(""))
   {
    CString str;
    if (field.value.x != std::numeric_limits<int>::max() && field.value.y != std::numeric_limits<int>::max())
     str.Format(_T("%d,%d"), (int)field.value.x, (int)field.value.y);
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
@@ -221,7 +243,7 @@ class IniIO
   bool ReadFlt(OptField_t<float>& field, const _TSTRING& defVal, float minVal, float maxVal)
   {
    TCHAR read_str[256];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
    if (_stscanf(read_str, _T("%f"), &field.value) != 1 || field.value < minVal || field.value > maxVal)
    {
     _stscanf(defVal.c_str(), _T("%f"), &field.value);
@@ -230,10 +252,11 @@ class IniIO
    return true;
   }
 
-  bool WriteFlt(const OptField_t<float>& field, int decPlaces)
+  bool WriteFlt(const OptField_t<float>& field, int decPlaces, const _TSTRING& comment = _T(""))
   {
    CString str;
    str.Format(_T("%.*f"), decPlaces, field.value);
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
@@ -242,7 +265,7 @@ class IniIO
   {
    int value = 0;
    TCHAR read_str[1024];
-   GetPrivateProfileString(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 1023, m_fileName.c_str());
+   GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 1023, m_fileName.c_str());
    std::vector<int> vect;
    std::vector<_TSTRING> tokens = StrUtils::TokenizeStr(read_str, _T(','));
    for (size_t i = 0; i < tokens.size(); ++i)
@@ -265,7 +288,7 @@ class IniIO
    return true;
   }
 
-  bool WriteVector(const OptField_t<std::vector<int> >& field)
+  bool WriteVector(const OptField_t<std::vector<int> >& field, const _TSTRING& comment = _T(""))
   {
    CString str;
    for(size_t i = 0; i < field.value.size(); ++i)
@@ -275,11 +298,39 @@ class IniIO
     s.Format(_T("%d"), field.value[i]);
     str+=s;
    }
+   AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
   }
 
+  //Add to file a full line comment
+  bool WriteComment(const _TSTRING& text, bool empty = false, bool precedEmptyLine = false)
+  {
+   FILE* f = _tfopen(m_fileName.c_str(), empty ? _T("w") : _T("a+"));
+   if (f == NULL)
+    return false;
+   if (precedEmptyLine)
+    _ftprintf(f, _T("\r"));
+   if (_ftprintf(f, _T("; %s\r"), text.c_str()) < 0)
+   {
+    fclose(f);
+    return false;
+   }
+   fclose(f);
+   return true;
+  }
+
  private:
+  void AddComment(CString& str, const _TSTRING& fieldName, const _TSTRING& comment)
+  {
+   if (!comment.empty())
+   {
+    while((str.GetLength() + fieldName.size() + 3) < m_commentsIndent)
+     str+=_T(" ");
+    str = str + _T(" ;") + comment.c_str(); // append comment if exists
+   }
+  }
+
   _TSTRING ltrim(const _TSTRING& str)
   {
    size_t first = str.find_first_not_of(_T(' '));
@@ -295,4 +346,5 @@ class IniIO
 
   const _TSTRING m_sectionName;
   const _TSTRING m_fileName;
+  size_t m_commentsIndent;
 };

@@ -402,12 +402,15 @@ void MainFrameController::OnAppSwitchDashboards()
 
 void MainFrameController::OnAppSaveScreenshot()
 {
+ mp_view->RedrawWindow();
  SaveScreenshot(AfxGetMainWnd(), true);
 }
 
 void MainFrameController::OnAppSaveSettings()
 {
+ m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVING_APP_SETTINGS));
  mp_view->BeginWaitCursor();
  m_pAppSettingsManager->WriteSettings();
  mp_view->EndWaitCursor();
+ m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVED_APP_SETTINGS));
 }

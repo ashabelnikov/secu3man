@@ -621,6 +621,8 @@ BEGIN
     IDS_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO_TT "Скорость COM-порта для обмена данными с прошивкой. Если используется связь через Bluetooth, то это значение должно быть равно скорости обмена данными с загрузчиком."
     IDS_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO_TT "Скорость COM-порта для обмена данными с загрузчиком. Если используется связь через Bluetooth, то это значение должно быть равно скорости обмена данными с прошивкой."
     IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT "Выбор COM-порта для проводной или беспроводной связи с блоком SECU-3. Это может быть реальный физический COM-порт, USB виртуальный COM-порт или Bluetooth виртуальный COM-порт."
+    IDS_SAVING_APP_SETTINGS "Сохранение настроек программы..."
+    IDS_SAVED_APP_SETTINGS "Настройки сохранены."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1275,6 +1277,8 @@ BEGIN
     IDS_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO_TT "COM-port baud rate for communication with firmware. If connection via Bluetooth is used, then this value must be equal to boot loader's baud rate."
     IDS_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO_TT "COM-port baud rate for communication with boot loader. If connection via Bluetooth is used, then this value must be equal to firmware's baud rate."
     IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT "Select COM-port for wired or wireless communication with SECU-3 unit. Can be either a phisical (real COM port), USB virtual COM-port or Bluetooth virtual COM-port."
+    IDS_SAVING_APP_SETTINGS "Saving application settings..."
+    IDS_SAVED_APP_SETTINGS "Settings have been saved."
 END
 
 /////////////////////////////////////////////////////////////////////////////
