@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIKnockRetard.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -51,6 +52,7 @@ void CMIKnockRetard::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_KNOCKRETARD_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_ADVANGLE_UNIT));
  m_meter.SetTickNumber(15);
  m_meter.AddAlertZone(0,10,RGB(220,220,120));

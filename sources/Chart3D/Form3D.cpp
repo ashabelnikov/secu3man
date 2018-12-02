@@ -89,6 +89,20 @@ void TForm3D::DataPrepare()
  Chart1->BottomAxis->Title->Caption = m_x_title;
  Chart1->LeftAxis->Title->Caption = m_y_title;
 
+ Chart1->LeftAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->LeftAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ for(int i = 0; i < m_count_z; i++)
+ {
+  Chart1->Series[i]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+  Chart1->Series[i+m_count_z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ }
+ Chart1->Frame->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+
  //диапазон значений на графике будет немного шире чем требуемый...
  int range = m_fnc_max - m_fnc_min;
  Chart1->LeftAxis->Maximum = m_fnc_max + range / 15.0f;

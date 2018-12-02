@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIVehicleSpeed.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -51,6 +52,7 @@ void CMIVehicleSpeed::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_VSS_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetTickNumber(22);
  m_meter.AddAlertZone(0.0,60.0,RGB(100,255,100));
  m_meter.AddAlertZone(60.0,120.0,RGB(250,230,100));

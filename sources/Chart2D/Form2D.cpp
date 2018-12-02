@@ -84,6 +84,15 @@ void TForm2D::DataPrepare()
  Chart1->LeftAxis->Maximum = m_fnc_max;
  Chart1->LeftAxis->Minimum = m_fnc_min;
 
+ Chart1->LeftAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->LeftAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+
+ Chart1->Frame->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+
  Chart1->Title->Text->Clear();
  Chart1->Title->Text->Add(m_chart_title_text);
  Chart1->LeftAxis->Title->Caption = m_y_axis_title;
@@ -99,6 +108,9 @@ void TForm2D::DataPrepare()
   Series1->Add(mp_original_function[i], as, clAqua);
   Series2->Add(mp_modified_function[i], as, clRed);
  }
+
+ Series1->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Series2->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
 
  if (2==m_horizontal_axis_grid_mode)
   UpdateBins();

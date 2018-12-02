@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIKnockGraph.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction

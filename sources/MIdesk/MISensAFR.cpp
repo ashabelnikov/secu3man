@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MISensAFR.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -51,6 +52,7 @@ void CMISensAFR::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_SENSAFR_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_SENSAFR_UNIT));
  m_meter.SetTickNumber(18);
  m_meter.AddAlertZone(6.0,10.0,RGB(255,130,130));

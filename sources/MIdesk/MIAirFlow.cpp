@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MIAirFlow.h"
+#include "common/GDIHelpers.h"
 
 CMIAirFlow::CMIAirFlow()
 {
@@ -49,6 +50,7 @@ void CMIAirFlow::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_AIR_FLOW_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_AIR_FLOW_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(0,1,RGB(190,150,150));

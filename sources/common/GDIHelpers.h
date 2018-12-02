@@ -25,7 +25,7 @@
 
 #pragma once
 
-#include "common/MathHelpers.h"
+#include "MathHelpers.h"
 
 struct GDIHelpers
 {
@@ -149,4 +149,7 @@ struct GDIHelpers
   }
   return colors;
  }
+
+ static COLORREF InvRGB(BYTE r, BYTE g, BYTE b) { return (~RGB(r,g,b)) & 0xFFFFFF; }
+ static COLORREF InvColor(COLORREF color) { return (~color) & 0xFFFFFF; }
 };

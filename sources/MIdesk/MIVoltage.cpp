@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "MIVoltage.h"
 #include "ui-core/ToolTipCtrlEx.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -51,6 +52,7 @@ void CMIVoltage::Create(CWnd* pParent, UINT id)
  m_meter.SetValueDecimals(2);
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
  m_meter.SetTickNumber(20);
  m_meter.AddAlertZone(0.0,5.0,RGB(180,180,230));

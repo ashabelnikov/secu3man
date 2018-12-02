@@ -30,6 +30,7 @@
 #include "AnalogMeter.h"
 #include "common/MathHelpers.h"
 #include "common/DPIAware.h"
+#include "common/GDIHelpers.h"
 
 #undef min //fucking stuff
 #undef max
@@ -247,9 +248,9 @@ void CAnalogMeter::DrawScale()
 
  m_dcGrid.Rectangle(m_rectGfx);
  m_rectGfx.DeflateRect(3,3);
- m_dcGrid.Draw3dRect(m_rectGfx, (~RGB(255, 255, 255))&0xFFFFFF, (~RGB(0, 0, 0))&0xFFFFFF);
+ m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(255, 255, 255), GDIHelpers::InvRGB(0, 0, 0));
  m_rectGfx.DeflateRect(1,1);
- m_dcGrid.Draw3dRect(m_rectGfx, (~RGB(220, 220, 220))&0xFFFFFF, (~RGB(127, 127, 127))&0xFFFFFF);
+ m_dcGrid.Draw3dRect(m_rectGfx, GDIHelpers::InvRGB(220, 220, 220), GDIHelpers::InvRGB(127, 127, 127));
  m_rectGfx.DeflateRect(4,4);
 
  // old pen / brush
@@ -375,16 +376,16 @@ void CAnalogMeter::DrawScale()
 
  // grab the font and set the text color
  pFontOld = m_dcGrid.SelectObject(&m_fontValue);
- m_dcGrid.SetTextColor((~m_colorLabels)&0xFFFFFF);
- m_dcGrid.SetBkColor((~m_colorBGround)&0xFFFFFF);
+ m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_colorLabels));
+ m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
  m_nTextBaseSpacing = m_rectMinValue.Height()/4;
 
  if(!disable_title && m_swTitle && m_strTitle != "")
  {
   // show the title
   m_dcGrid.SetTextAlign(TA_CENTER|TA_BOTTOM);
-  m_dcGrid.SetTextColor((~m_colorTitle)&0xFFFFFF);
-  m_dcGrid.SetBkColor((~m_colorBGround)&0xFFFFFF);
+  m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_colorTitle));
+  m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
   m_dcGrid.TextOut ((m_rectGfx.left+m_rectGfx.right)/2,
   m_rectGfx.top - 3, m_strTitle);
  }
@@ -394,8 +395,8 @@ void CAnalogMeter::DrawScale()
  {
   // show the unit
   m_dcGrid.SetTextAlign(TA_CENTER|TA_BOTTOM);
-  m_dcGrid.SetTextColor((~m_colorValue)&0xFFFFFF);
-  m_dcGrid.SetBkColor((~m_colorBGround)&0xFFFFFF);
+  m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_colorValue));
+  m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
   m_dcGrid.TextOut ((m_rectGfx.left+m_rectGfx.right)/2,
   m_nCYPix - m_nRadiusPix/2 + m_nFontHeight + m_nFontHeight/2, m_strUnit);
  }
@@ -416,8 +417,8 @@ void CAnalogMeter::DrawChord(const CRect& Bounds)
  CBrush chord_brush;
  CPen   chord_pen;
 
- chord_brush.CreateSolidBrush((~m_colorBGround)&0xFFFFFF);
- chord_pen.CreatePen(PS_NULL,0,(~m_colorBGround)&0xFFFFFF);
+ chord_brush.CreateSolidBrush(GDIHelpers::InvColor(m_colorBGround));
+ chord_pen.CreatePen(PS_NULL,0,GDIHelpers::InvColor(m_colorBGround));
 
  int r = m_nRadiusPix / 5;
 
@@ -521,8 +522,8 @@ void CAnalogMeter::DrawGrid(const CRect& Bounds)
    double tx = fX - tw/2;
    double ty = fY - th/2;
 
-   m_dcGrid.SetTextColor((~m_colorLabels)&0xFFFFFF);
-   m_dcGrid.SetBkColor((~m_colorBGround)&0xFFFFFF);
+   m_dcGrid.SetTextColor(GDIHelpers::InvColor(m_colorLabels));
+   m_dcGrid.SetBkColor(GDIHelpers::InvColor(m_colorBGround));
    m_dcGrid.SetBkMode(TRANSPARENT);
 
    if (tick==0)
@@ -560,8 +561,8 @@ void CAnalogMeter::DrawPie(const CRect& Bounds,double start_value, double end_va
  double start_radian = DegToRad(m_dLimitAngleDeg - s_ang);
  double end_radian = DegToRad(e_ang-m_dLimitAngleDeg);
 
- pie_brush.CreateSolidBrush(~(color)&0xFFFFFF);
- pie_pen.CreatePen(PS_NULL,0,~(color)&0xFFFFFF);
+ pie_brush.CreateSolidBrush(GDIHelpers::InvColor(color));
+ pie_pen.CreatePen(PS_NULL,0,GDIHelpers::InvColor(color));
 
  pBrushOld = m_dcGrid.SelectObject(&pie_brush);
  pPenOld = m_dcGrid.SelectObject(&pie_pen);
@@ -759,25 +760,25 @@ void CAnalogMeter::ActuateColors()
   m_PenG_Grid.DeleteObject();
 
  if(m_PenG_Grid.m_hObject == NULL)
-  m_PenG_Grid.CreatePen(PS_SOLID, m_nGridLineWidth, (~m_colorGrid)&0xFFFFFF);
+  m_PenG_Grid.CreatePen(PS_SOLID, m_nGridLineWidth, GDIHelpers::InvColor(m_colorGrid));
 
  if(m_BrushG_Grid.m_hObject)
   m_BrushG_Grid.DeleteObject();
 
  if(m_BrushG_Grid.m_hObject == NULL)
-  m_BrushG_Grid.CreateSolidBrush((~m_colorGrid)&0xFFFFFF);
+  m_BrushG_Grid.CreateSolidBrush(GDIHelpers::InvColor(m_colorGrid));
 
  if(m_PenG_BGround.m_hObject)
   m_PenG_BGround.DeleteObject();
 
  if(m_PenG_BGround.m_hObject == NULL)
-  m_PenG_BGround.CreatePen(PS_SOLID, 1, (~m_colorBGround)&0xFFFFFF);
+  m_PenG_BGround.CreatePen(PS_SOLID, 1, GDIHelpers::InvColor(m_colorBGround));
 
  if(m_BrushG_BGround.m_hObject)
   m_BrushG_BGround.DeleteObject();
 
  if(m_BrushG_BGround.m_hObject == NULL)
-  m_BrushG_BGround.CreateSolidBrush((~m_colorBGround)&0xFFFFFF);
+  m_BrushG_BGround.CreateSolidBrush(GDIHelpers::InvColor(m_colorBGround));
 
  if(m_PenN_Needle.m_hObject)
   m_PenN_Needle.DeleteObject();

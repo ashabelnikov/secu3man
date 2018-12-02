@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "MITachometer.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -53,6 +54,7 @@ void CMITachometer::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_TACHOMETER_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_TACHOMETER_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(0,4000,RGB(100,255,100));

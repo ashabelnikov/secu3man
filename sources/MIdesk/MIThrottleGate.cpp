@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "MIThrottleGate.h"
 #include "resource.h"
+#include "common/GDIHelpers.h"
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -53,6 +54,7 @@ void CMIThrottleGate::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::LoadString(IDS_MI_THROTTLE_GATE_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
  m_meter.SetUnit(MLL::LoadString(IDS_MI_PERCENT_UNIT));
  m_meter.SetTickNumber(16);
  m_meter.AddAlertZone(0,5,RGB(130,130,180));
