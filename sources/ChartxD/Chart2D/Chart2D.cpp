@@ -32,10 +32,10 @@
 #include <Series.hpp>
 #include <TeEngine.hpp>
 #include <TeeProcs.hpp>
-#pragma hdrstop
-
 #include "Form2D.h"
 #include "resource.h"
+#include "../ManageFrm.h"
+#pragma hdrstop
 
 extern "C"
 {
@@ -48,26 +48,15 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DInverseAxis(HWND hWnd, int i_axis, bool i_inverted);
  void  __declspec(dllexport)  __cdecl Chart2DShow(HWND hWnd, int i_show);
- void  __declspec(dllexport)  __cdecl Chart2DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DEnable(HWND hWnd, bool i_enable);
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisEdits(HWND hWnd, int i_axis, int i_show, float i_beginMin, float i_beginMax, float i_endMin, float i_endMax, float i_spinStep, int limitText, int spinDecimalPlaces, OnChangeValue i_pOnChangeValue, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
- void  __declspec(dllexport)  __cdecl Chart2DShowHints(int i_show);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
 }
 
-std::map<HWND, TForm*> g_form_instances; //form instance DB
-std::vector<TForm*> g_form_delete;       //for garbage collection
-
-enum ELanguage
-{
- IL_ENGLISH = 0,
- IL_RUSSIAN = 1
-};
-
-HINSTANCE hInst = NULL;
+extern HINSTANCE hInst;
 extern volatile BYTE info[116];
 
 namespace MLL
@@ -81,60 +70,16 @@ namespace MLL
 }
 
 //---------------------------------------------------------------------------
-bool RemoveInstanceByHWND(HWND hWnd)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  g_form_delete.push_back(g_form_instances[hWnd]);
-  g_form_instances.erase(hWnd);
-  return true;
- }
- return false;
-}
-
-//---------------------------------------------------------------------------
-bool AddInstanceByHWND(HWND hWnd, TForm* i_pForm)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  return false; //why do you want to add redundant references?
- }
- g_form_instances[hWnd] = i_pForm;
- return true;
-}
-
-//---------------------------------------------------------------------------
-TForm* GetInstanceByHWND(HWND hWnd)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  return g_form_instances[hWnd];
- }
- return NULL;
-}
-
-//---------------------------------------------------------------------------
-#pragma argsused
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
-{
- hInst = hinstDLL;
- return 1;
-}
-
-//---------------------------------------------------------------------------
 HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode)
 {
-  if (info[0]!=0x53)
-   return NULL;
+ if (info[0]!=0x53)
+  return NULL;
 
  //Clean up previous instances of forms
- for(size_t i = 0; i < g_form_delete.size(); ++i)
-  delete g_form_delete[i];
- g_form_delete.clear();
+ CleaupGarbage();
 
  //Create a form
- TForm2D* pForm;
- pForm = new TForm2D(parent);
+ TForm2D* pForm = new TForm2D(parent);
  pForm->m_count_of_function_points = i_count_of_points;
  pForm->m_chart_title_text = i_chart_title;
  pForm->m_x_axis_title = i_x_axis_title;
@@ -297,20 +242,6 @@ void __cdecl Chart2DShow(HWND hWnd, int i_show)
 }
 
 //---------------------------------------------------------------------------
-void __cdecl Chart2DSetLanguage(int i_language)
-{
- switch(i_language)
- {
-  case IL_ENGLISH:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break;
-  case IL_RUSSIAN:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break;
- }
-}
-
-//---------------------------------------------------------------------------
 void __cdecl Chart2DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param)
 {
  TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
@@ -366,12 +297,6 @@ void __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float 
    MessageBox(hWnd, _T("Chart2DUpdateAxisEdits: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
    break;
  }
-}
-
-//---------------------------------------------------------------------------
-void __cdecl Chart2DShowHints(int i_show)
-{
- Application->ShowHint = i_show;
 }
 
 //---------------------------------------------------------------------------

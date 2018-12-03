@@ -26,15 +26,15 @@
 #include <vcl.h>
 #pragma hdrstop
 
-#include "../common/MathHelpers.h"
-#include "Form3D.h"
-#include "PtMovStepDlg.h"
 #include "resource.h"
+#include "Form3D.h"
+#include "../common/MathHelpers.h"
+#include "../PtmovStep/PtMovStepDlg.h"
+#include "../ManageFrm.h"
+
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-#pragma resource "*.dfm"
-
-bool RemoveInstanceByHWND(HWND hWnd);
+#pragma resource "Form3D.dfm"
 
 //---------------------------------------------------------------------------
 //цвета для 3D графика

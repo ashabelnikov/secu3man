@@ -340,14 +340,13 @@ bool ABOUT_API CheckVersion(void)
  std::map<size_t, BYTE*> hashdb;
  //note: size include first two bytes
  hashdb.insert(std::make_pair(0x10E, hash1)); //win98
- hashdb.insert(std::make_pair(0x12E, hash2)); //win98, chart2d & chart3d
- hashdb.insert(std::make_pair(0x1CB, hash3)); //XP, chart2d & chart3d
+ hashdb.insert(std::make_pair(0x12E, hash2)); //win98, chartxd
+ hashdb.insert(std::make_pair(0x1CB, hash3)); //XP, chartxd
  hashdb.insert(std::make_pair(0x1D3, hash4)); //XP
 
  std::vector<_TSTRING> mods;
  mods.push_back(ModuleName::about);
- mods.push_back(ModuleName::chart2d);
- mods.push_back(ModuleName::chart3d);
+ mods.push_back(ModuleName::chartxd);
  mods.push_back(ModuleName::fwimpexp);
  mods.push_back(ModuleName::hexutils);
  mods.push_back(ModuleName::iocore);

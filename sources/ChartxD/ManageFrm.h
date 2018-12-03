@@ -19,25 +19,24 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file TChartEx.h
+/** \file ManageFrm.h
  * \author Alexey A. Shabelnikov
  */
 
-#ifndef _CHARTEX_H_
-#define _CHARTEX_H_
+#ifndef _MANAGEFRM_H_
+#define _MANAGEFRM_H_
 
-#include <vcl\Chart.hpp>
-#include <vcl\TeEngine.hpp>
-#include <vcl\TeeProcs.hpp>
+#include <Forms.hpp>
 
-class TChartEx : public TChart
-{
- __published:
-  __property OnKeyDown;
-  __property OnMouseDown;
+//---------------------------------------------------------------------------
 
- public:
-  __fastcall TChartEx(TComponent* Owner);
-};
+bool RemoveInstanceByHWND(HWND hWnd);
 
-#endif //_CHARTEX_H_
+bool AddInstanceByHWND(HWND hWnd, TForm* i_pForm);
+
+TForm* GetInstanceByHWND(HWND hWnd);
+
+void CleaupGarbage(void);
+
+//---------------------------------------------------------------------------
+#endif //_MANAGEFRM_H_

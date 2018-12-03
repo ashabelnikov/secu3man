@@ -1,10 +1,0 @@
-USEUNIT("Chart2D.cpp");
-USEUNIT("TFloatUpDown.cpp");
-USEUNIT("TChartEx.cpp");USEFORM("Form2D.cpp", Form2D);
-USEDEF("Chart2D.def");
-USERES("Chart2D.res");
-USERC("resource.rc");
-//---------------------------------------------------------------------------
-This file is used by the project manager only and should be treated like the project file
-
-DllMain

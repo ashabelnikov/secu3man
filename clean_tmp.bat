@@ -27,10 +27,6 @@ call :RDIfExist fwimpexp\fwimpexp.dir
 call :DelIfExist fwimpexp\fwimpexp.ncb
 call :RDIfExist hexutils\hexutils.dir
 call :DelIfExist hexutils\hexutils.ncb
-call :RDIfExist propgrid\propgrid.dir
-call :DelIfExist propgrid\propgrid.ncb
-call :RDIfExist hiscctrl\hiscctrl.dir
-call :DelIfExist hiscctrl\hiscctrl.ncb
 call :RDIfExist tabldesk\tabldesk.dir
 call :DelIfExist tabldesk\tabldesk.ncb
 call :RDIfExist secu3man\secu3man.dir
@@ -40,20 +36,29 @@ cd ..
 
 if exist sources (
 cd sources
-call :DelIfExist Chart2D\*.obj
-call :DelIfExist Chart2D\*.~h
-call :DelIfExist Chart2D\*.~cpp
-call :DelIfExist Chart2D\*.~def
-call :DelIfExist Chart2D\*.~bpr
-call :DelIfExist Chart2D\*.~bpf
-call :DelIfExist Chart2D\*.res
-call :DelIfExist Chart3D\*.obj
-call :DelIfExist Chart3D\*.~h
-call :DelIfExist Chart3D\*.~cpp
-call :DelIfExist Chart3D\*.~def
-call :DelIfExist Chart3D\*.~bpr
-call :DelIfExist Chart3D\*.~bpf
-call :DelIfExist Chart3D\*.res
+call :DelIfExist ChartxD\*.obj
+call :DelIfExist ChartxD\*.res
+call :DelIfExist ChartxD\*.~h
+call :DelIfExist ChartxD\*.~cpp
+call :DelIfExist ChartxD\*.~def
+call :DelIfExist ChartxD\*.~bpr
+call :DelIfExist ChartxD\*.~bpf
+
+call :DelIfExist ChartxD\Chart2D\*.obj
+call :DelIfExist ChartxD\Chart2D\*.res
+call :DelIfExist ChartxD\Chart2D\*.~h
+call :DelIfExist ChartxD\Chart2D\*.~cpp
+
+call :DelIfExist ChartxD\Chart3D\*.obj
+call :DelIfExist ChartxD\Chart3D\*.res
+call :DelIfExist ChartxD\Chart3D\*.~h
+call :DelIfExist ChartxD\Chart3D\*.~cpp
+
+call :DelIfExist ChartxD\PtMovStep\*.obj
+call :DelIfExist ChartxD\PtMovStep\*.res
+call :DelIfExist ChartxD\PtMovStep\*.~h
+call :DelIfExist ChartxD\PtMovStep\*.~cpp
+
 cd ..
 )
 

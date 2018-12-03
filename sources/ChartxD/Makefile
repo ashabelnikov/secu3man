@@ -1,6 +1,6 @@
 # SECU-3  - An open source, free engine control unit
 #
-# Makefile for building of Chart2D DLL. Borland C Bulder is required.
+# Makefile for building of ChartxD DLL. Borland C Bulder is required.
 # Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
 
 # ----------------------------------------------------------------------------
@@ -10,11 +10,11 @@ VERSION = BCB.01
 BCB = $(MAKEDIR)\..
 !endif
 # ----------------------------------------------------------------------------
-PROJECT  = ..\..\binaries\Chart2D.dll
-OBJFILES = Form2D.obj Chart2D.obj TFloatUpDown.obj TChartEx.obj PtMovStepDlg.obj
-RESDEPEN = $(RESFILES) Form2D.dfm PtMovStepDlg.dfm
-RESFILES = resource.res
-DEFFILE  = Chart2D.def
+PROJECT  = ..\..\binaries\ChartxD.dll
+OBJFILES = ManageFrm.obj ChartxD.obj Chart2D\Form2D.obj Chart2D\Chart2D.obj Chart3D\Form3D.obj Chart3D\Chart3D.obj TChartEx.obj TFloatUpDown.obj PtMovStep\PtMovStepDlg.obj
+RESDEPEN = $(RESFILES) Chart2D\Form2D.dfm Chart3D\Form3D.dfm PtMovStep\PtMovStepDlg.dfm
+RESFILES = Chart2D\resource.res Chart3D\resource.res PtMovStep\resource.res resource.res
+DEFFILE  = ChartxD.def
 LIBFILES =
 # ----------------------------------------------------------------------------
 CFLAG1 = -Od -Hc -w -k -r- -y -v -vi- -c -a4 -b- -w-par -w-inl -Vx -Ve -x
@@ -24,7 +24,7 @@ PFLAGS = -U$(BCB)\lib\obj;$(BCB)\lib \
    -AWinTypes=Windows;WinProcs=Windows;DbiTypes=BDE;DbiProcs=BDE;DbiErrs=BDE -v \
    -$Y -$W -$O- -JPHNV -M
 RFLAGS = -i$(BCB)\include;$(BCB)\include\vcl 
-LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib -aa -Tpd -x -Gn -Gi -l..\..\libraries
+LFLAGS = -L$(BCB)\lib\obj;$(BCB)\lib;Chart2D;Chart3D;PtMovStep -aa -Tpd -x -Gn -Gi -l..\..\libraries
 IFLAGS =
 LINKER = ilink32
 # ----------------------------------------------------------------------------
@@ -61,8 +61,14 @@ $(PROJECT): $(OBJFILES) $(RESDEPEN) $(DEFFILE)
 #------------------------------------------------------------------------------
 
 clean:
-    @if exist ..\..\binaries\Chart2D.dll ( DEL /Q ..\..\binaries\Chart2D.dll )
-    @if exist ..\..\binaries\Chart2D.tds ( DEL /Q ..\..\binaries\Chart2D.tds )
-    @if exist ..\..\libraries\Chart2D.lib ( DEL /Q ..\..\libraries\Chart2D.lib )
+    @if exist ..\..\binaries\Chart3D.dll ( DEL /Q ..\..\binaries\Chart3D.dll )
+    @if exist ..\..\binaries\Chart3D.tds ( DEL /Q ..\..\binaries\Chart3D.tds )
+    @if exist ..\..\libraries\Chart3D.lib ( DEL /Q ..\..\libraries\Chart3D.lib )
     @if exist *.obj ( DEL /Q *.obj )
+    @if exist Chart2D\*.obj ( DEL /Q Chart2D\*.obj )
+    @if exist Chart3D\*.obj ( DEL /Q Chart3D\*.obj )
+    @if exist PtMovStep\*.obj ( DEL /Q PtMovStep\*.obj )
     @if exist *.res ( DEL /Q *.res )
+    @if exist Chart2D\*.res ( DEL /Q Chart2D\*.res )
+    @if exist Chart3D\*.res ( DEL /Q Chart3D\*.res )
+    @if exist PtMovStep\*.res ( DEL /Q PtMovStep\*.res )

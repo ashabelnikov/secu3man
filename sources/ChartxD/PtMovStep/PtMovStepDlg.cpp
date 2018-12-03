@@ -35,7 +35,7 @@
 
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-#pragma resource "*.dfm"
+#pragma resource "PtMovStepDlg.dfm"
 
 TPtMovStepDlg *PtMovStepDlg;
 

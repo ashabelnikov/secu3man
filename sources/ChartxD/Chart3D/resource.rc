@@ -31,7 +31,6 @@ stringtable
   IDS_TT_FUNC_VIEW_BACK, "Вид с обратной стороны (можно использ. клавишу B на клавиатуре)"
   IDS_TT_SELECT_CURVE, "Выбор кривой для редактирования (можно использ. клавиши Z,X на клавиатуре)"
   IDS_PM_SET_PTMOV_STEP, "Шаг смещения точек..."
-  IDS_DLG_PTMOV_STEP_CAPT, "Шаг смещения точек"
   IDS_PM_HIDE_MARKS, "Спрятать надписи"
   IDS_PM_HIDE_OLDCURVE, "Спрятать 'старую' кривую"
 }
@@ -61,26 +60,6 @@ stringtable
   IDS_TT_FUNC_VIEW_BACK, "Function back side view (you can use B key on the keyboard)"
   IDS_TT_SELECT_CURVE, "Select curve for editing (you can use Z,X keys on the keyboard)"
   IDS_PM_SET_PTMOV_STEP, "Points' moving step..."
-  IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
   IDS_PM_HIDE_MARKS, "Hide marks"
   IDS_PM_HIDE_OLDCURVE, "Hide 'old' curve"
 }
-
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1252)
-
-/////////////////////////////////////////////////////////////////////////////
-//Version information
-VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,7,0,0
-BEGIN
-  BLOCK "StringFileInfo"
-  BEGIN
-    BLOCK "040904e4"
-    BEGIN
-      VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2018 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
-      VALUE "ProductName", "SECU-3 Manager"
-    END
-  END
-END

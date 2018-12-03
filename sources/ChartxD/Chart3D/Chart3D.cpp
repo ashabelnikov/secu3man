@@ -34,6 +34,7 @@
 #include <TeeProcs.hpp>
 #include "Form3D.h"
 #include "resource.h"
+#include "../ManageFrm.h"
 #pragma hdrstop
 
 extern "C"
@@ -44,24 +45,13 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
- void  __declspec(dllexport)  __cdecl Chart3DSetLanguage(int i_language);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
- void  __declspec(dllexport)  __cdecl Chart3DShowHints(int i_show);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step);
 }
 
-std::map<HWND,TForm*> g_form_instances;  //form instance DB
-std::vector<TForm*> g_form_delete;       //for garbage collection
-
-enum ELanguage
-{
- IL_ENGLISH,
- IL_RUSSIAN
-};
-
-HINSTANCE hInst = NULL;
+extern HINSTANCE hInst;
 extern volatile BYTE info[116];
 
 namespace MLL
@@ -75,47 +65,6 @@ namespace MLL
 }
 
 //---------------------------------------------------------------------------
-bool RemoveInstanceByHWND(HWND hWnd)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  g_form_delete.push_back(g_form_instances[hWnd]);
-  g_form_instances.erase(hWnd);
-  return true;
- }
- return false;
-}
-
-//---------------------------------------------------------------------------
-bool AddInstanceByHWND(HWND hWnd, TForm* i_pForm)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  return false; //why do you want to add redundant references?
- }
- g_form_instances[hWnd] = i_pForm;
- return true;
-}
-
-//---------------------------------------------------------------------------
-TForm* GetInstanceByHWND(HWND hWnd)
-{
- if (g_form_instances.find(hWnd)!= g_form_instances.end())
- {
-  return g_form_instances[hWnd];
- }
- return NULL;
-}
-
-//---------------------------------------------------------------------------
-#pragma argsused
-BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
-{
- hInst = hinstDLL;
- return 1;
-}
-
-//---------------------------------------------------------------------------
 // y = F(x,z)
 
 //original_function and modified_function - addresses of 2D arrays containing values of functions
@@ -125,9 +74,7 @@ HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modifie
   return NULL;
 
  //Clean up previous instances of forms
- for(size_t i = 0; i < g_form_delete.size(); ++i)
-  delete g_form_delete[i];
- g_form_delete.clear();
+ CleaupGarbage();
 
  //Create a form
  TForm3D *pForm = new TForm3D(parent);
@@ -231,19 +178,6 @@ void __cdecl Chart3DShow(HWND hWnd, int i_show)
  else
   MessageBox(hWnd, _T("Chart3DShow: Unsupported \"i_show\" argument!"), _T("Error"), MB_OK);
 }
-//---------------------------------------------------------------------------
-void __cdecl Chart3DSetLanguage(int i_language)
-{
- switch(i_language)
- {
-  case IL_ENGLISH:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break;
-  case IL_RUSSIAN:
-   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
-   break;
- }
-}
 
 //---------------------------------------------------------------------------
 void __cdecl Chart3DEnable(HWND hWnd, bool enable)
@@ -252,12 +186,6 @@ void __cdecl Chart3DEnable(HWND hWnd, bool enable)
  if (NULL==pForm)
   return;
  pForm->Enable(enable);
-}
-
-//---------------------------------------------------------------------------
-void __cdecl Chart3DShowHints(int i_show)
-{
- Application->ShowHint = i_show;
 }
 
 //---------------------------------------------------------------------------

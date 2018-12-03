@@ -1,10 +1,0 @@
-USEUNIT("Chart3D.cpp");
-USEUNIT("TChartEx.cpp");
-USEFORM("Form3D.cpp", Form3D);
-USEDEF("Chart3D.def");
-USERES("Chart3D.res");
-USERC("resource.rc");
-//---------------------------------------------------------------------------
-This file is used by the project manager only and should be treated like the project file
-
-DllMain

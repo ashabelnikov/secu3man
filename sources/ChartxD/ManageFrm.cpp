@@ -19,41 +19,57 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file PtMovStepDlg.h
+/** \file ManageFrm.cpp
  * \author Alexey A. Shabelnikov
  */
 
-//---------------------------------------------------------------------------
+#include <map>
+#include <vector>
+#include <windows.h>
+#include "ManageFrm.h"
+#pragma hdrstop
 
-#ifndef _PTMOVSTEP_H_
-#define _PTMOVSTEP_H_
-//---------------------------------------------------------------------------
-#include <Classes.hpp>
-#include <Controls.hpp>
-#include <StdCtrls.hpp>
-#include <Forms.hpp>
-#include "TFloatUpDown.h"
+
+std::map<HWND, TForm*> g_form_instances; //form instance DB
+std::vector<TForm*> g_form_delete;       //for garbage collection
 
 //---------------------------------------------------------------------------
-class TPtMovStepDlg : public TForm
+bool RemoveInstanceByHWND(HWND hWnd)
 {
-__published:	// IDE-managed Components
-        TButton *ButtonOk;
-        TButton *ButtonCancel;
-        TEdit *EditStep;
-        TFloatUpDown *SpinStep;
-        void __fastcall FormCreate(TObject *Sender);
-        void __fastcall ButtonOkClick(TObject *Sender);
-        void __fastcall EditStepChange(TObject *Sender);
-public:		// User declarations
-        __fastcall TPtMovStepDlg(TComponent* Owner);
-        void SetValue(float val);
-        float GetValue(void) const;
-private:
-        double m_value;
-        AnsiString m_valFmt;
-};
+ if (g_form_instances.find(hWnd)!= g_form_instances.end())
+ {
+  g_form_delete.push_back(g_form_instances[hWnd]);
+  g_form_instances.erase(hWnd);
+  return true;
+ }
+ return false;
+}
+
 //---------------------------------------------------------------------------
-extern PACKAGE TPtMovStepDlg *PtMovStepDlg;
+bool AddInstanceByHWND(HWND hWnd, TForm* i_pForm)
+{
+ if (g_form_instances.find(hWnd)!= g_form_instances.end())
+ {
+  return false; //why do you want to add redundant references?
+ }
+ g_form_instances[hWnd] = i_pForm;
+ return true;
+}
+
 //---------------------------------------------------------------------------
-#endif //_PTMOVSTEP_H_
+TForm* GetInstanceByHWND(HWND hWnd)
+{
+ if (g_form_instances.find(hWnd)!= g_form_instances.end())
+ {
+  return g_form_instances[hWnd];
+ }
+ return NULL;
+}
+
+//---------------------------------------------------------------------------
+void CleaupGarbage(void)
+{
+ for(size_t i = 0; i < g_form_delete.size(); ++i)
+  delete g_form_delete[i];
+ g_form_delete.clear();
+}

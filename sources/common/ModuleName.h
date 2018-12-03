@@ -29,8 +29,7 @@
 namespace ModuleName {
 
  static LPCTSTR about     =  _T("about.dll");
- static LPCTSTR chart2d   =  _T("chart2d.dll");
- static LPCTSTR chart3d   =  _T("chart3d.dll");
+ static LPCTSTR chartxd   =  _T("chartxd.dll");
  static LPCTSTR fwimpexp  =  _T("fwimpexp.dll");
  static LPCTSTR hexutils  =  _T("hexutils.dll");
  static LPCTSTR iocore    =  _T("io-core.dll");

@@ -24,7 +24,6 @@ stringtable
   IDS_TT_MOVE_FUNC_DOWN, "—местить функцию вниз на 0.5"
   IDS_TT_H_AXIS_BEGIN_VAL, "«начение определ€ющее начало горизонтальной оси"
   IDS_TT_H_AXIS_END_VAL, "«начение определ€ющее конец горизонтальной оси"
-  IDS_DLG_PTMOV_STEP_CAPT, "Ўаг смещени€ точек"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -45,24 +44,4 @@ stringtable
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
   IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis"
   IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis"
-  IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
 }
-
-LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
-#pragma code_page(1252)
-
-/////////////////////////////////////////////////////////////////////////////
-//Version information
-VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,7,0,0
-BEGIN
-  BLOCK "StringFileInfo"
-  BEGIN
-    BLOCK "040904e4"
-    BEGIN
-      VALUE "CompanyName", "SECU-3.ORG"
-      VALUE "LegalCopyright", "Copyright (C) 2007-2018 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
-      VALUE "ProductName", "SECU-3 Manager"
-    END
-  END
-END

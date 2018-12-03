@@ -27,17 +27,17 @@
 #include <stdio.h>
 #include <tchar.h>
 #include <algorithm>
-#include "../common/MathHelpers.h"
-#include "resource.h"
 #pragma hdrstop
 
+#include "../common/MathHelpers.h"
+#include "resource.h"
 #include "Form2D.h"
-#include "PtMovStepDlg.h"
+#include "../PtMovStep/PtMovStepDlg.h"
+#include "../ManageFrm.h"
 //---------------------------------------------------------------------------
 #pragma package(smart_init)
-#pragma resource "*.dfm"
+#pragma resource "Form2D.dfm"
 
-bool RemoveInstanceByHWND(HWND hWnd);
 //---------------------------------------------------------------------------
 __fastcall TForm2D::TForm2D(HWND parent)
 : TForm(parent)

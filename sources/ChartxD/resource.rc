@@ -1,0 +1,20 @@
+// SECU-3  - An open source, free engine control unit
+//
+// Resource file for ChartxD DLL unit.
+// Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
+
+/////////////////////////////////////////////////////////////////////////////
+//Version information
+VS_VERSION_INFO     VERSIONINFO
+  PRODUCTVERSION    4,7,0,0
+BEGIN
+  BLOCK "StringFileInfo"
+  BEGIN
+    BLOCK "040904e4"
+    BEGIN
+      VALUE "CompanyName", "SECU-3.ORG"
+      VALUE "LegalCopyright", "Copyright (C) 2007-2018 Alexey A. Shabelnikov, SECU-3.ORG.  All rights reserved."
+      VALUE "ProductName", "SECU-3 Manager"
+    END
+  END
+END

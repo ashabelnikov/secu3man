@@ -1,0 +1,23 @@
+// SECU-3  - An open source, free engine control unit
+//
+// Resource file for PtMovStepDlg.
+// Created by Alexey A. Shabelnikov, UA, Kiev. http://secu-3.org
+
+#include "resource.h"
+
+
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+stringtable
+{
+  IDS_DLG_PTMOV_STEP_CAPT, "Шаг смещения точек"
+}
+
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+stringtable
+{
+  IDS_DLG_PTMOV_STEP_CAPT, "Specify points' moving step"
+}

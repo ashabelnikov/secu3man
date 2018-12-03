@@ -19,35 +19,53 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file TChartEx.cpp
+/** \file ChartxD.cpp
  * \author Alexey A. Shabelnikov
  */
 
-#include <vcl\vcl.h>
+#include <windows.h>
+#include <TeEngine.hpp>
+
 #pragma hdrstop
 
-#include "TChartEx.h"
+HINSTANCE hInst = NULL;
+
+enum ELanguage
+{
+ IL_ENGLISH = 0,
+ IL_RUSSIAN = 1
+};
+
+extern "C"
+{
+ void  __declspec(dllexport)  __cdecl ChartxDSetLanguage(int i_language);
+ void  __declspec(dllexport)  __cdecl ChartxDShowHints(int i_show);
+}
 
 //---------------------------------------------------------------------------
-namespace
+void __cdecl ChartxDSetLanguage(int i_language)
 {
- void __fastcall Register()
+ switch(i_language)
  {
-  TComponentClass classes[1] = {__classid(TChartEx)};
-  RegisterComponents("secu-3_vcl", classes, 0);
+  case IL_ENGLISH:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
+  case IL_RUSSIAN:
+   ::SetThreadLocale(MAKELCID(MAKELANGID(LANG_RUSSIAN, SUBLANG_ENGLISH_US), SORT_DEFAULT));
+   break;
  }
 }
 
 //---------------------------------------------------------------------------
-__fastcall TChartEx::TChartEx(TComponent* Owner)
-: TChart(Owner)
+void __cdecl ChartxDShowHints(int i_show)
 {
+ Application->ShowHint = i_show;
 }
 
 //---------------------------------------------------------------------------
-static inline TChartEx *ValidCtrCheck()
+#pragma argsused
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fwdreason, LPVOID lpvReserved)
 {
- return new TChartEx(NULL);
+ hInst = hinstDLL;
+ return 1;
 }
-
-//---------------------------------------------------------------------------

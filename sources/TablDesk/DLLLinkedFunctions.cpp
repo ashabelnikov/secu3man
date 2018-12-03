@@ -40,12 +40,10 @@ namespace DLL
  Chart2DSetOnGetAxisLabel_Addr   Chart2DSetOnGetAxisLabel = NULL;
  Chart2DInverseAxis_Addr         Chart2DInverseAxis = NULL;
  Chart2DShow_Addr                Chart2DShow = NULL;
- Chart2DSetLanguage_Addr         Chart2DSetLanguage = NULL;
  Chart2DSetOnWndActivation_Addr  Chart2DSetOnWndActivation = NULL;
  Chart2DEnable_Addr              Chart2DEnable = NULL;
  Chart2DSetAxisEdits_Addr        Chart2DSetAxisEdits = NULL;  
  Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
- Chart2DShowHints_Addr           Chart2DShowHints = NULL;
  Chart2DSetPtValuesFormat_Addr   Chart2DSetPtValuesFormat = NULL;
  Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep = NULL;
 
@@ -55,12 +53,13 @@ namespace DLL
  Chart3DSetOnClose_Addr          Chart3DSetOnClose = NULL;
  Chart3DSetOnGetAxisLabel_Addr   Chart3DSetOnGetAxisLabel = NULL;
  Chart3DShow_Addr                Chart3DShow = NULL;
- Chart3DSetLanguage_Addr         Chart3DSetLanguage = NULL;
  Chart3DSetOnWndActivation_Addr  Chart3DSetOnWndActivation = NULL;
  Chart3DEnable_Addr              Chart3DEnable = NULL;
- Chart3DShowHints_Addr           Chart3DShowHints = NULL;
  Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat = NULL;
  Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep = NULL;
+
+ ChartxDSetLanguage_Addr         ChartxDSetLanguage = NULL;
+ ChartxDShowHints_Addr           ChartxDShowHints = NULL;
 
  //---------------------------------------------------------
  //Loads one function
@@ -90,10 +89,10 @@ namespace DLL
   HMODULE hModule;
   bool status = true;
 
-  hModule = LoadLibrary(ModuleName::chart2d);
+  hModule = LoadLibrary(ModuleName::chartxd);
   if (hModule==NULL)
   {
-   AfxMessageBox(_T("Can't load library Chart2D.dll"), MB_OK|MB_ICONSTOP);
+   AfxMessageBox(_T("Can't load library ChartxD.dll"), MB_OK|MB_ICONSTOP);
    Chart2DCreate = NULL;
    Chart2DUpdate = NULL;
    Chart2DSetOnChange = NULL;
@@ -103,14 +102,26 @@ namespace DLL
    Chart2DSetOnGetAxisLabel = NULL;
    Chart2DInverseAxis = NULL;
    Chart2DShow = NULL;
-   Chart2DSetLanguage = NULL;
    Chart2DSetOnWndActivation = NULL;
    Chart2DEnable = NULL;
    Chart2DSetAxisEdits = NULL;
    Chart2DUpdateAxisEdits = NULL;
-   Chart2DShowHints = NULL;
    Chart2DSetPtValuesFormat = NULL;
    Chart2DSetPtMovingStep = NULL;
+   //3D
+   Chart3DCreate = NULL;
+   Chart3DUpdate = NULL;
+   Chart3DSetOnChange = NULL;
+   Chart3DSetOnClose = NULL;
+   Chart3DSetOnGetAxisLabel = NULL;
+   Chart3DShow = NULL;
+   Chart3DSetOnWndActivation = NULL;
+   Chart3DEnable = NULL;
+   Chart3DSetPtValuesFormat = NULL;
+   Chart3DSetPtMovingStep = NULL;
+   //common
+   ChartxDSetLanguage = NULL;
+   ChartxDShowHints = NULL;
    status = false;
   }
   else
@@ -124,48 +135,26 @@ namespace DLL
    LoadFunction(hModule, Chart2DSetOnGetAxisLabel, "Chart2DSetOnGetAxisLabel", status);
    LoadFunction(hModule, Chart2DInverseAxis, "Chart2DInverseAxis", status);
    LoadFunction(hModule, Chart2DShow, "Chart2DShow", status);
-   LoadFunction(hModule, Chart2DSetLanguage, "Chart2DSetLanguage", status);
    LoadFunction(hModule, Chart2DSetOnWndActivation, "Chart2DSetOnWndActivation", status);
    LoadFunction(hModule, Chart2DEnable, "Chart2DEnable", status);
    LoadFunction(hModule, Chart2DSetAxisEdits, "Chart2DSetAxisEdits", status);
    LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
-   LoadFunction(hModule, Chart2DShowHints, "Chart2DShowHints", status);
    LoadFunction(hModule, Chart2DSetPtValuesFormat, "Chart2DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
-  }
-
-  hModule = LoadLibrary(ModuleName::chart3d);
-  if (hModule==NULL)
-  {
-   AfxMessageBox(_T("Can't load library Chart3D.dll"), MB_OK|MB_ICONSTOP);
-   Chart3DCreate = NULL;
-   Chart3DUpdate = NULL;
-   Chart3DSetOnChange = NULL;
-   Chart3DSetOnClose = NULL;
-   Chart3DSetOnGetAxisLabel = NULL;
-   Chart3DShow = NULL;
-   Chart3DSetLanguage = NULL;
-   Chart3DSetOnWndActivation = NULL;
-   Chart3DEnable = NULL;
-   Chart3DShowHints = NULL;
-   Chart3DSetPtValuesFormat = NULL;
-   Chart3DSetPtMovingStep = NULL;
-   status = false;
-  }
-  else
-  {
+   //3D
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
    LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
    LoadFunction(hModule, Chart3DSetOnChange, "Chart3DSetOnChange", status);
    LoadFunction(hModule, Chart3DSetOnClose, "Chart3DSetOnClose", status);
    LoadFunction(hModule, Chart3DSetOnGetAxisLabel, "Chart3DSetOnGetAxisLabel", status);
    LoadFunction(hModule, Chart3DShow, "Chart3DShow", status);
-   LoadFunction(hModule, Chart3DSetLanguage, "Chart3DSetLanguage", status);
    LoadFunction(hModule, Chart3DSetOnWndActivation, "Chart3DSetOnWndActivation", status);
    LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
-   LoadFunction(hModule, Chart3DShowHints, "Chart3DShowHints", status);
    LoadFunction(hModule, Chart3DSetPtValuesFormat, "Chart3DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart3DSetPtMovingStep, "Chart3DSetPtMovingStep", status);
+   //common
+   LoadFunction(hModule, ChartxDSetLanguage, "ChartxDSetLanguage", status);
+   LoadFunction(hModule, ChartxDShowHints, "ChartxDShowHints", status);
   }
 
   return status;
@@ -173,18 +162,14 @@ namespace DLL
 
  void SetLanguage(int language)
  {
-  if (Chart2DSetLanguage)
-   DLL::Chart2DSetLanguage(language);
-  if (Chart3DSetLanguage)
-   DLL::Chart3DSetLanguage(language);
+  if (ChartxDSetLanguage)
+   DLL::ChartxDSetLanguage(language);
  }
 
  void ShowHints(bool i_show)
  {
-  if (Chart2DShowHints)
-   DLL::Chart2DShowHints(i_show);
-  if (Chart3DShowHints)
-   DLL::Chart3DShowHints(i_show);
+  if (ChartxDShowHints)
+   DLL::ChartxDShowHints(i_show);
  }
 
 };//namespace
