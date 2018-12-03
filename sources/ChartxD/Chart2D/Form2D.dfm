@@ -1,7 +1,7 @@
 object Form2D: TForm2D
   Left = 226
   Top = 115
-  Width = 623
+  Width = 628
   Height = 390
   BorderIcons = [biSystemMenu, biMinimize, biMaximize]
   BorderStyle = bsSizeable

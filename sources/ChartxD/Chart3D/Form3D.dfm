@@ -1,7 +1,7 @@
 object Form3D: TForm3D
   Left = 226
   Top = 115
-  Width = 623
+  Width = 628
   Height = 422
   HorzScrollBar.Color = clInfoBk
   HorzScrollBar.ParentColor = False
