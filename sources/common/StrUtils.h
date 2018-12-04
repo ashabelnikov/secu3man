@@ -46,4 +46,12 @@ class StrUtils
    }while(*s++);
    return result;
   }
+
+  static _TSTRING ltrim(const _TSTRING& str)
+  {
+   size_t first = str.find_first_not_of(_T(' '));
+   if (_TSTRING::npos == first)
+    return str;
+   return str.substr(first, _TSTRING::npos);
+  }
 };

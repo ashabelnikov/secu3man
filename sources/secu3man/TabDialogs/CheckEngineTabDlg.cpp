@@ -254,7 +254,7 @@ void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
 
  // Take the default processing unless we set this to something else below.
  *pResult = 0;
-
+/*
  bool is_enabled = ::IsWindowEnabled(m_errors_list.m_hWnd);
 
  // If this is the beginning of the control's paint cycle, request
@@ -289,12 +289,12 @@ void CCheckEngineTabDlg::OnCustomdrawList ( NMHDR* pNMHDR, LRESULT* pResult )
   int nImage = (nStateImageMask >> 12) - 1;
 
   //TODO: What is the magic number - 2?
-  DrawState(pDC->m_hDC,NULL,NULL,(LPARAM)m_image_list.ExtractIcon(nImage), 0,
-   rcIcon.left+2, rcIcon.top, rcIcon.Width(), rcIcon.Height(),
+  DrawState(pDC->GetSafeHdc(),NULL,NULL,(LPARAM)m_image_list.ExtractIcon(nImage), 0,
+   rcIcon.left, rcIcon.top, rcIcon.Width(), rcIcon.Height(),
    DST_ICON| (is_enabled ? 0 : DSS_DISABLED));
 
   *pResult = CDRF_DODEFAULT;
- }
+ }*/
 }
 
 void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )

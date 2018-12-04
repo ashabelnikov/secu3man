@@ -28,6 +28,7 @@
 #include <vector>
 #include <limits>
 #include "common/StrUtils.h"
+#include "common/GDIHelpers.h"
 
 #undef max //avoid conflicts with C++
 
@@ -45,9 +46,13 @@ static DWORD GetPrivateProfileStringCT(LPCTSTR lpAppName, LPCTSTR lpKeyName, LPC
  DWORD result = GetPrivateProfileString(lpAppName, lpKeyName, lpDefault, lpReturnedString, nSize, lpFileName);
  if (result)
  {
-  TCHAR* p =_tcschr(lpReturnedString, ';');
+  TCHAR* p =_tcschr(lpReturnedString, _T(';'));
   if (p != NULL)
-   *p = NULL;
+  {
+   do
+   { *p = NULL; p--; }
+   while(p >= lpReturnedString && *p == _T(' '));
+  }
  }
  return result;
 }
@@ -107,14 +112,14 @@ class IniIO
     field.value = 0xFFFFFF;
     status = false;
    }
-   field.value = swapRB(field.value); //swap R and B components
+   field.value = GDIHelpers::swapRB(field.value); //swap R and B components
    return status;
   }
 
   bool WriteColor(const OptField_t<DWORD>& field, const _TSTRING& comment = _T(""))
   {
    CString str;
-   str.Format(_T("%06X"), (int)swapRB(field.value));
+   str.Format(_T("%06X"), (int)GDIHelpers::swapRB(field.value));
    AddComment(str, field.name, comment); //add optional comment
    WritePrivateProfileString(m_sectionName.c_str(), field.name.c_str(), str, m_fileName.c_str());
    return true;
@@ -187,7 +192,7 @@ class IniIO
    TCHAR read_str[256];
    int value = 0;
    GetPrivateProfileStringCT(m_sectionName.c_str(), field.name.c_str(), defVal.c_str(), read_str, 255, m_fileName.c_str());
-   if (ltrim(read_str).empty() && stubIfEmpty)
+   if (StrUtils::ltrim(read_str).empty() && stubIfEmpty)
    {
     field.value = std::numeric_limits<int>::max();
     return true; //ok
@@ -329,19 +334,6 @@ class IniIO
      str+=_T(" ");
     str = str + _T(" ;") + comment.c_str(); // append comment if exists
    }
-  }
-
-  _TSTRING ltrim(const _TSTRING& str)
-  {
-   size_t first = str.find_first_not_of(_T(' '));
-   if (_TSTRING::npos == first)
-    return str;
-   return str.substr(first, _TSTRING::npos);
-  }
-
-  COLORREF swapRB(DWORD rgb)
-  {
-   return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb));
   }
 
   const _TSTRING m_sectionName;

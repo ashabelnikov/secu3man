@@ -1464,7 +1464,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
 , mp_scr(new CWndScroller)
-, m_scrl_view(910)
+, m_scrl_view(950)
 , m_fuel_injection(false)
 , m_gasdose(false)
 , m_carb_afr(false)

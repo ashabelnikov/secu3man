@@ -2,7 +2,7 @@ object Form2D: TForm2D
   Left = 226
   Top = 115
   Width = 633
-  Height = 395
+  Height = 415
   BorderIcons = [biSystemMenu, biMinimize, biMaximize]
   BorderStyle = bsSizeable
   Caption = 'Редактирование карт УОЗ'

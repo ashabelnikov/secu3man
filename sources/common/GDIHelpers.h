@@ -152,4 +152,5 @@ struct GDIHelpers
 
  static COLORREF InvRGB(BYTE r, BYTE g, BYTE b) { return (~RGB(r,g,b)) & 0xFFFFFF; }
  static COLORREF InvColor(COLORREF color) { return (~color) & 0xFFFFFF; }
+ static COLORREF swapRB(DWORD rgb) { return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)); }
 };
