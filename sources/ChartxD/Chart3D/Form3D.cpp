@@ -29,6 +29,7 @@
 #include "resource.h"
 #include "Form3D.h"
 #include "../common/MathHelpers.h"
+#include "../common/DPIAware.h"
 #include "../PtmovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
 
@@ -1092,6 +1093,13 @@ void __fastcall TForm3D::OnHideOldCurve(TObject *Sender)
  PM_HideOldCurve->Checked = PM_HideOldCurve->Checked ? false : true; //toggle check mark
  Chart1->Series[m_air_flow_position]->Active = !PM_HideOldCurve->Checked; //apply changes to current curve
  Chart1->Invalidate();
+}
+
+//---------------------------------------------------------------------------
+void __fastcall TForm3D::OnCreateForm(TObject *Sender)
+{
+ DPIAware da;
+ ChangeScale(96, da.GetDPIX());
 }
 
 //---------------------------------------------------------------------------

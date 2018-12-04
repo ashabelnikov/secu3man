@@ -9,8 +9,8 @@ object Form2D: TForm2D
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = 13
+  Font.Name = 'Arial'
   Font.Style = []
   Icon.Data = {
     0000010002002020100000000000E80200002600000010101000000000002801
@@ -53,8 +53,10 @@ object Form2D: TForm2D
   OnClose = FormClose
   OnDeactivate = FormDeactivate
   OnResize = FormResize
+  OnCreate = FormCreate
   PixelsPerInch = 96
   TextHeight = 13
+  Scaled=True
   object Chart1: TChartEx
     Left = 1
     Top = 1
@@ -255,6 +257,11 @@ object Form2D: TForm2D
     Anchors = [akRight]
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object Smoothing5x: TButton
     Left = 587
@@ -267,6 +274,11 @@ object Form2D: TForm2D
     Anchors = [akRight]
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object ButtonShowBins: TBitBtn
     Left = 587

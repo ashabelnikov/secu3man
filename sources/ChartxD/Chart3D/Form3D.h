@@ -166,6 +166,7 @@ class TForm3D : public TForm
   void __fastcall OnHideMarks(TObject *Sender);
   void __fastcall OnHideOldCurve(TObject *Sender);
   void __fastcall FormDeactivate(TObject *Sender);
+  void __fastcall OnCreateForm(TObject *Sender);
 
  public:
   __fastcall TForm3D(HWND parent);

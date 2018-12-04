@@ -11,8 +11,8 @@ object Form3D: TForm3D
   Color = clBtnFace
   Font.Charset = DEFAULT_CHARSET
   Font.Color = clWindowText
-  Font.Height = -11
-  Font.Name = 'MS Sans Serif'
+  Font.Height = 13
+  Font.Name = 'Arial'
   Font.Style = []
   Icon.Data = {
     0000010002002020100000000000E80200002600000010101000000000002801
@@ -53,9 +53,11 @@ object Form3D: TForm3D
   PopupMenu = PopupMenu
   Position = poDesigned
   OnClose = OnCloseForm
+  OnCreate = OnCreateForm
   OnDeactivate = FormDeactivate
   PixelsPerInch = 96
   TextHeight = 13
+  Scaled=True
   object LabelAfc: TLabel
     Left = 25
     Top = 362
@@ -107,7 +109,7 @@ object Form3D: TForm3D
   end
   object CheckBox3d: TCheckBox
     Left = 455
-    Top = 362
+    Top = 364
     Width = 50
     Height = 15
     Caption = '3D'
@@ -116,10 +118,15 @@ object Form3D: TForm3D
     OnClick = CheckBox3dClick
     OnKeyDown = CtrlKeyDown
     Anchors = [akBottom]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object CheckBoxBv: TCheckBox
     Left = 505
-    Top = 362
+    Top = 364
     Width = 100
     Height = 15
     Caption = 'גטה סחאהט'
@@ -128,6 +135,11 @@ object Form3D: TForm3D
     OnClick = CheckBoxBvClick
     OnKeyDown = CtrlKeyDown
     Anchors = [akBottom]
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object Chart1: TChartEx
     Left = 1
@@ -947,6 +959,11 @@ object Form3D: TForm3D
     Anchors = [akRight]
     OnClick = Smoothing3xClick
     OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object Smoothing5x: TButton
     Left = 587
@@ -959,6 +976,11 @@ object Form3D: TForm3D
     Anchors = [akRight]
     OnClick = Smoothing5xClick
     OnKeyDown = CtrlKeyDown
+    Font.Charset = DEFAULT_CHARSET
+    Font.Color = clWindowText
+    Font.Height = -11
+    Font.Name = 'MS Sans Serif'
+    Font.Style = []
   end
   object PopupMenu: TPopupMenu
     Left = 702

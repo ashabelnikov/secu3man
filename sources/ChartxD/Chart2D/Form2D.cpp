@@ -29,9 +29,10 @@
 #include <algorithm>
 #pragma hdrstop
 
-#include "../common/MathHelpers.h"
 #include "resource.h"
 #include "Form2D.h"
+#include "../common/MathHelpers.h"
+#include "../common/DPIAware.h"
 #include "../PtMovStep/PtMovStepDlg.h"
 #include "../ManageFrm.h"
 //---------------------------------------------------------------------------
@@ -907,4 +908,10 @@ void __fastcall TForm2D::UpdateBinsPosition(void)
   m_binsEdit[i]->Left = lr_space + (i * horz_step);
   m_binsUpDown[i]->Left = m_binsEdit[i]->Left + m_binsEdit[i]->Width;
  }
+}
+
+void __fastcall TForm2D::FormCreate(TObject *Sender)
+{
+ DPIAware da;
+ ChangeScale(96, da.GetDPIX());
 }

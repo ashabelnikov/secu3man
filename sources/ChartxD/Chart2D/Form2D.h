@@ -112,6 +112,7 @@ class TForm2D : public TForm
   void __fastcall OnHideOldCurve(TObject *Sender);
   void __fastcall FormDeactivate(TObject *Sender);
   void __fastcall FormResize(TObject *Sender);
+  void __fastcall FormCreate(TObject *Sender);
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);
