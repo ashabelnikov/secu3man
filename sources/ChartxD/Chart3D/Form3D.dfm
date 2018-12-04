@@ -1,8 +1,8 @@
 object Form3D: TForm3D
   Left = 226
   Top = 115
-  Width = 628
-  Height = 422
+  Width = 633
+  Height = 432
   HorzScrollBar.Color = clInfoBk
   HorzScrollBar.ParentColor = False
   BorderIcons = [biSystemMenu, biMinimize, biMaximize]
@@ -73,7 +73,7 @@ object Form3D: TForm3D
     Anchors = [akBottom]
   end
   object LabelAfv: TLabel
-    Left = 400
+    Left = 402
     Top = 362
     Width = 23
     Height = 15
@@ -109,9 +109,9 @@ object Form3D: TForm3D
   end
   object CheckBox3d: TCheckBox
     Left = 455
-    Top = 364
+    Top = 362
     Width = 50
-    Height = 15
+    Height = 20
     Caption = '3D'
     TabOrder = 6
     ShowHint = True    
@@ -126,9 +126,9 @@ object Form3D: TForm3D
   end
   object CheckBoxBv: TCheckBox
     Left = 505
-    Top = 364
+    Top = 362
     Width = 100
-    Height = 15
+    Height = 20
     Caption = 'גטה סחאהט'
     TabOrder = 7
     ShowHint = True    

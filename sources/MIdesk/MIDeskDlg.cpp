@@ -33,6 +33,7 @@
 #include "common/Dll.h"
 #include "common/GDIHelpers.h"
 #include "common/MathHelpers.h"
+#include "common/DPIAware.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
 #include "MIAirFlow.h"
@@ -363,6 +364,12 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
                               int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
 {
  m_metRows = MetRows;
+ DPIAware da;
+
+ TitleFontSize = da.UnScaleY(TitleFontSize);
+ ValueFontSize = da.UnScaleY(ValueFontSize);
+ PaneFontSize = da.UnScaleY(PaneFontSize);
+ LabelFontSize = da.UnScaleY(LabelFontSize);
 
  //destroy current widgets and clear list
  _MetCleanUp();

@@ -127,7 +127,7 @@ void CStatusBarManager::AddContent(void)
  //иконка коннекта
  mp_wndStatusBar->AddIndicator(4,ID_MSB_INDICATOR_ICON);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_ICON);
- mp_wndStatusBar->SetPaneWidth(idx,16);
+ mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(16));
  mp_wndStatusBar->SetPaneStyle(idx, SBPS_NORMAL);
 
  //текст коннекта
@@ -145,7 +145,7 @@ void CStatusBarManager::AddContent(void)
  //иконка индицирующая статус записи логов
  mp_wndStatusBar->AddIndicator(7,ID_MSB_INDICATOR_LOGWR);
  idx = mp_wndStatusBar->CommandToIndex(ID_MSB_INDICATOR_LOGWR);
- mp_wndStatusBar->SetPaneWidth(idx,16);
+ mp_wndStatusBar->SetPaneWidth(idx,dpia.ScaleX(16));
  mp_wndStatusBar->SetPaneStyle(idx, SBPS_NORMAL);
 
  //дальше расположены: CAP, NUM, SCRL
