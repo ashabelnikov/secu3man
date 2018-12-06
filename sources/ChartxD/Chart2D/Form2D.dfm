@@ -58,6 +58,10 @@ object Form2D: TForm2D
   TextHeight = 13
   Scaled=True
   object Chart1: TChartEx
+    MarginLeft = 1
+    MarginTop = 1
+    MarginRight = 2
+    MarginBottom = 3
     Left = 1
     Top = 1
     Width = 585

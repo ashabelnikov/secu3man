@@ -142,6 +142,10 @@ object Form3D: TForm3D
     Font.Style = []
   end
   object Chart1: TChartEx
+    MarginLeft = 1
+    MarginTop = 1
+    MarginRight = 2
+    MarginBottom = 1
     Left = 1
     Top = 1
     Width = 585
