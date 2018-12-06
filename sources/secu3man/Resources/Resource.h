@@ -428,3 +428,4 @@
 #define ID_APP_SAVEINI                  4448
 #define IDS_SAVING_APP_SETTINGS         4449
 #define IDS_SAVED_APP_SETTINGS          4450
+#define ID_APP_NIGHT_MODE               4451

@@ -61,6 +61,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_COMMAND(ID_APP_LOG_MARK3, OnAppLogMark3)
  ON_COMMAND(ID_APP_LOG_FORMAT, OnAppLogFormat)
  ON_COMMAND(ID_APP_SWITCH_DASHBOARD, OnAppSwitchDashboards)
+ ON_COMMAND(ID_APP_NIGHT_MODE, OnAppNightMode)
  ON_COMMAND(ID_APP_SAVESCR, OnAppSaveScreenshot)
  ON_COMMAND(ID_APP_SAVEINI, OnAppSaveSettings)
  ON_UPDATE_COMMAND_UI(ID_APP_BEGIN_LOG,OnUpdateOnAppBeginLog)
@@ -557,6 +558,23 @@ void CMainFrame::OnAppSwitchDashboards()
 {
  if (m_OnSwitchDashboards)
   m_OnSwitchDashboards();
+}
+
+void CMainFrame::OnAppNightMode()
+{
+ HIGHCONTRAST hc;
+ ZeroMemory(&hc, sizeof(HIGHCONTRAST));
+ hc.cbSize = sizeof(HIGHCONTRAST);
+ if (SystemParametersInfo(SPI_GETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0))
+ {
+  hc.dwFlags |= ((DWORD)HCF_HIGHCONTRASTON);
+  hc.lpszDefaultScheme = _T("High Contrast #1");
+  VERIFY(SystemParametersInfo(SPI_SETHIGHCONTRAST, sizeof(HIGHCONTRAST), &hc, 0));
+ }
+ else
+ {
+  ASSERT(0); //SPI_GETHIGHCONTRAST failed
+ }
 }
 
 void CMainFrame::CheckOnAppSwitchDashboards(bool checked)

@@ -37,6 +37,7 @@ BEGIN
     POPUP "&Вид"
     BEGIN
         MENUITEM "Переключить панели приборов", ID_APP_SWITCH_DASHBOARD
+        MENUITEM "Ночной режим", ID_APP_NIGHT_MODE
     END
     POPUP "&Help"
     BEGIN
@@ -657,6 +658,7 @@ BEGIN
     POPUP "&View"
     BEGIN
         MENUITEM "Switch dash boards", ID_APP_SWITCH_DASHBOARD
+        MENUITEM "Night mode", ID_APP_NIGHT_MODE
     END
     POPUP "&Help"
     BEGIN

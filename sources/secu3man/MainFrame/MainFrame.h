@@ -104,6 +104,7 @@ protected:
   afx_msg void OnAppLogMark3();
   afx_msg void OnAppLogFormat();
   afx_msg void OnAppSwitchDashboards();
+  afx_msg void OnAppNightMode();
   afx_msg void OnAppSaveScreenshot();
   afx_msg void OnAppSaveSettings();
   afx_msg void OnUpdateOnAppBeginLog(CCmdUI* pCmdUI);
