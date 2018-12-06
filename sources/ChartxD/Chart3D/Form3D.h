@@ -170,6 +170,7 @@ class TForm3D : public TForm
 
  public:
   __fastcall TForm3D(HWND parent);
+  __fastcall ~TForm3D();
   void DataPrepare();
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
@@ -220,6 +221,7 @@ class TForm3D : public TForm
   double GetChartValue(int z, int index);
   void SetChartValue(int z, int index, double value);
   virtual void __fastcall WndProc(Messages::TMessage &Message);
+  void UpdateSystemColors(void);
 
  private: // User declarations
   //адрес функции которая будет вызываться после изменения данных

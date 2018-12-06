@@ -75,9 +75,6 @@ HWND __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float
  if (info[0]!=0x53)
   return NULL;
 
- //Clean up previous instances of forms
- CleaupGarbage();
-
  //Create a form
  TForm2D* pForm = new TForm2D(parent);
  pForm->m_count_of_function_points = i_count_of_points;

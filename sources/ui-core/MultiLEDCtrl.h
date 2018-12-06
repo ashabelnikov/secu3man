@@ -68,4 +68,5 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
   CFont m_cFont;
   std::vector<LEDItem> m_items;
   CBrush m_bkBrush;
+  COLORREF m_bkBrushColor;
 };

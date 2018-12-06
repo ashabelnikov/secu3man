@@ -29,7 +29,8 @@
 CLabel::CLabel()
 : m_hCursor(NULL)
 , m_crText(GetSysColor(COLOR_WINDOWTEXT))
-, m_hBrush(::CreateSolidBrush(GetSysColor(COLOR_3DFACE)))
+, m_brushColor(GetSysColor(COLOR_3DFACE))
+, m_hBrush(::CreateSolidBrush(m_brushColor))
 {
  ::GetObject((HFONT)GetStockObject(DEFAULT_GUI_FONT), sizeof(m_lf), &m_lf);
  m_font.CreateFontIndirect(&m_lf);
@@ -49,6 +50,14 @@ END_MESSAGE_MAP()
 
 HBRUSH CLabel::CtlColor(CDC* pDC, UINT nCtlColor) 
 {
+ COLORREF newcolor = GetSysColor(COLOR_3DFACE);
+ if (m_brushColor != newcolor)
+ {
+  m_brushColor = newcolor;
+  ::DeleteObject(m_hBrush);
+  m_hBrush = CreateSolidBrush(m_brushColor);
+ }
+
  if (CTLCOLOR_STATIC == nCtlColor)
  {
   pDC->SelectObject(&m_font);

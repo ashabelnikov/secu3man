@@ -67,9 +67,3 @@ TForm* GetInstanceByHWND(HWND hWnd)
 }
 
 //---------------------------------------------------------------------------
-void CleaupGarbage(void)
-{
- for(size_t i = 0; i < g_form_delete.size(); ++i)
-  delete g_form_delete[i];
- g_form_delete.clear();
-}

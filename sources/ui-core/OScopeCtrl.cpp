@@ -150,7 +150,7 @@ void COScopeCtrl::SetBackgroundColor(COLORREF color)
  InvalidateCtrl();
 }
 
-void COScopeCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateBmpPlot /*=false*/)
+void COScopeCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateBmpPlot /*=false*/, bool invalidate /*= true*/)
 {
  // This is all being drawn (only once) to a bitmap.  The result is then BitBlt'd to the control whenever needed.
  int i, nCharacters;
@@ -292,7 +292,8 @@ if (m_dcPlot.GetSafeHdc() == NULL)
  m_dcPlot.FillRect(m_rectClient, &m_BlackBrush);
 
  // finally, force the plot area to redraw
- InvalidateRect(m_rectClient);
+ if (invalidate)
+  InvalidateRect(m_rectClient);
 }
 
 void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
@@ -345,7 +346,13 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 }
 
 void COScopeCtrl::OnPaint()
-{
+{ 
+ if (m_crBackColor != GetSysColor(COLOR_3DFACE) || m_crGridColor != GetSysColor(COLOR_GRAYTEXT))
+ {
+  _SetStateColors(IsWindowEnabled());
+  InvalidateCtrl(false, false, false);
+ }
+
  CPaintDC dc(this);
  CDC memDC;
  CBitmap memBmp;

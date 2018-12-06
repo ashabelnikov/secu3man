@@ -49,7 +49,7 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   void SetGridColor(COLORREF color);
   void SetPlotColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
-  void InvalidateCtrl(bool recreateBmpGrid = false, bool recreateBmpPlot = false);
+  void InvalidateCtrl(bool recreateBmpGrid = false, bool recreateBmpPlot = false, bool invalidate = true);
   void DrawPoint(bool i_reverse);
   void Reset();
 

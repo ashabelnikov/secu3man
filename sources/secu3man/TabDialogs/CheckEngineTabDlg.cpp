@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CCheckEngineTabDlg, Super)
  ON_WM_DESTROY()
  ON_WM_TIMER()
  ON_WM_SIZE()
+ ON_WM_PAINT()
  ON_BN_CLICKED(IDC_CE_READ_REALTIME_CHECKBOX, OnRealTimeErrorsCheckbox)
  ON_BN_CLICKED(IDC_CE_READ_ERRORS_BUTTON, OnReadSavedErrors)
  ON_BN_CLICKED(IDC_CE_WRITE_ERRORS_BUTTON, OnWriteSavedErrors)
@@ -329,4 +330,18 @@ void CCheckEngineTabDlg::OnSize( UINT nType, int cx, int cy )
  }
 
  Super::OnSize(nType, cx, cy);
+}
+
+void CCheckEngineTabDlg::OnPaint() 
+{
+ CPaintDC dc(this); // device context for painting
+
+ COLORREF gray_text_color = ::GetSysColor(COLOR_GRAYTEXT);
+ COLORREF normal_text_color = ::GetSysColor(COLOR_BTNTEXT);
+ if (gray_text_color != m_gray_text_color || normal_text_color != m_normal_text_color)
+ {
+  m_gray_text_color = gray_text_color;
+  m_normal_text_color = normal_text_color;
+  m_header_ctrl->SetTextColor(m_all_enabled ? m_normal_text_color : m_gray_text_color);
+ }
 }

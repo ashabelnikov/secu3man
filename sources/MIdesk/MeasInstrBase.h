@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include "common/GDIHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
 
 class MeasInstrBase
@@ -161,6 +162,13 @@ class MeasInstrBase
   virtual void SetMeterUnit(const _TSTRING& metUnit)
   {
    m_meter.SetUnit(metUnit.c_str());
+  }
+
+  virtual void UpdateColors(void)
+  {
+   m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+   m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
+   m_meter.Redraw();
   }
 
 protected:

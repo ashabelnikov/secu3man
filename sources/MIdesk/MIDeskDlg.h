@@ -100,6 +100,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   virtual BOOL OnInitDialog(); //activate
   afx_msg void OnDestroy();    //deactivate
   afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnPaint();
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
@@ -149,6 +150,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_pressMax;
   MeasInstrBase* mp_miTemperat;
   float IndHeightCoeff;
+
+  COLORREF m_COLOR_BTNFACE; //for detecting of system colors changing
 };
 
 /////////////////////////////////////////////////////////////////////////////

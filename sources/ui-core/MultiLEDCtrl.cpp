@@ -34,9 +34,10 @@
 CMultiLEDCtrl::CMultiLEDCtrl(HMODULE hMod /*= NULL*/)
 : m_rows(0)
 , m_cols(0)
+, m_bkBrushColor(GetSysColor(COLOR_3DFACE))
 {
  _RegisterWindowClass(hMod);
- m_bkBrush.CreateSolidBrush(GetSysColor(COLOR_3DFACE));
+ m_bkBrush.CreateSolidBrush(m_bkBrushColor);
 }
 
 CMultiLEDCtrl::~CMultiLEDCtrl()
@@ -98,6 +99,14 @@ void CMultiLEDCtrl::OnDestroy()
 void CMultiLEDCtrl::OnPaint()
 {
  CPaintDC dc(this); // device context for painting
+
+ COLORREF newcolor = GetSysColor(COLOR_3DFACE);
+ if (m_bkBrushColor != newcolor)
+ {
+  m_bkBrushColor = newcolor;
+  m_bkBrush.DeleteObject();
+  m_bkBrush.CreateSolidBrush(m_bkBrushColor);  
+ }
 
  COLORREF text_color = GetSysColor(COLOR_BTNTEXT);
  COLORREF gray_color = GetSysColor(COLOR_GRAYTEXT);

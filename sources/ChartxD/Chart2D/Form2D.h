@@ -116,6 +116,7 @@ class TForm2D : public TForm
 
  public:  // User declarations
   __fastcall TForm2D(HWND parent);
+  __fastcall ~TForm2D();
   void DataPrepare();
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
@@ -133,6 +134,7 @@ class TForm2D : public TForm
   void InitHints(HINSTANCE hInstance);
   void SetPtValuesFormat(LPCTSTR ptValFormat);
   void InitBins(void);
+  void UpdateSystemColors(void);
 
  public: //properties
   int m_count_of_function_points;

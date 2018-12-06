@@ -36,7 +36,5 @@ bool AddInstanceByHWND(HWND hWnd, TForm* i_pForm);
 
 TForm* GetInstanceByHWND(HWND hWnd);
 
-void CleaupGarbage(void);
-
 //---------------------------------------------------------------------------
 #endif //_MANAGEFRM_H_

@@ -64,6 +64,7 @@
 BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
+ ON_WM_PAINT()
 END_MESSAGE_MAP()
 
 const UINT CMIDeskDlg::IDD = IDD_MEAS_INSTRUMENT_DESK;
@@ -371,6 +372,9 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  PaneFontSize = da.UnScaleY(PaneFontSize);
  LabelFontSize = da.UnScaleY(LabelFontSize);
 
+ //remember color to have ability to detect changing of system solors (see OnPaint)
+ m_COLOR_BTNFACE = GetSysColor(COLOR_BTNFACE);
+
  //destroy current widgets and clear list
  _MetCleanUp();
  
@@ -647,3 +651,16 @@ void CMIDeskDlg::_MetRearrangeKeys(void)
   new_map.insert(std::make_pair(i++, it->second));
  m_metFields = new_map;
 }
+
+void CMIDeskDlg::OnPaint() 
+{
+ CPaintDC dc(this); // device context for painting
+ COLORREF newcolor = GetSysColor(COLOR_BTNFACE);
+ if (newcolor != m_COLOR_BTNFACE)
+ {
+  m_COLOR_BTNFACE = newcolor;
+  for(MetFields_t::iterator it = m_metFields.begin(); it != m_metFields.end(); ++it)
+   it->second->UpdateColors();
+ }
+}
+

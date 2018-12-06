@@ -583,6 +583,10 @@ void CKnockChannelTabDlg::OnSize( UINT nType, int cx, int cy )
   rc1 = GDIHelpers::GetChildWndRect(mp_RTChart.get());
   GetClientRect(&rc2);
   mp_RTChart->SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+  rc1 = GDIHelpers::GetChildWndRect(&m_RTList);
+  GetClientRect(&rc2);
+  m_RTList.SetWindowPos(NULL, 0, 0, rc2.right - rc1.left - da.ScaleX(3), rc1.Height(), SWP_NOMOVE | SWP_NOZORDER);
  }
 
  Super::OnSize(nType, cx, cy);

@@ -30,6 +30,7 @@
 #include "ButtonsPanel.h"
 #include "common/FastDelegate.h"
 #include "common/unicodesupport.h"
+#include "ui-core/ListCtrlEx.h"
 
 class CToolTipCtrlEx;
 
@@ -124,7 +125,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual bool IsAllowed(void);
 
  private:
-  CListCtrl m_funset_listbox;
+  CListCtrlEx m_funset_listbox;
   CButton   m_view_attenuator_map_btn;
   CButton   m_view_dwellcntrl_map_btn;
   CButton   m_view_cts_curve_map_btn;

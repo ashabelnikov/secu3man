@@ -49,6 +49,7 @@ class AFX_EXT_CLASS CLabel : public CStatic
  private:
   void _ReconstructFont(void);
 
+  COLORREF m_brushColor;
   COLORREF m_crText;
   HBRUSH  m_hBrush;
   HCURSOR m_hCursor;

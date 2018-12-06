@@ -71,6 +71,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_UPDATE_COMMAND_UI(ID_APP_SWITCH_DASHBOARD,OnUpdateOnAppSwitchDashboards)
  ON_WM_ACTIVATEAPP()
  ON_WM_DEVICECHANGE()
+ ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -573,4 +574,21 @@ void CMainFrame::OnAppSaveSettings()
 {
  if (m_OnSaveSettings)
   m_OnSaveSettings();
+}
+
+BOOL CALLBACK EnumChildProc(HWND hwnd, LPARAM lParam)
+{
+ if (AfxGetMainWnd()->GetSafeHwnd() == (HWND)lParam)
+ {
+  LONG style = GetWindowLong(hwnd, GWL_STYLE);
+  if (style & WS_SYSMENU)
+   SendMessage(hwnd, WM_SYSCOLORCHANGE, 0,0);
+ }
+ return TRUE; //continue enumaration
+}
+
+LRESULT CMainFrame::OnSysColorChange(WPARAM wParam, LPARAM lParam)
+{
+ EnumChildWindows(GetSafeHwnd(), EnumChildProc, (LPARAM)GetSafeHwnd());
+ return 0;
 }

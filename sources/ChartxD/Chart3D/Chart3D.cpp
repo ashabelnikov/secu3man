@@ -73,9 +73,6 @@ HWND __cdecl Chart3DCreate(HWND parent, float *original_function, float *modifie
  if (info[0]!=0x53)
   return NULL;
 
- //Clean up previous instances of forms
- CleaupGarbage();
-
  //Create a form
  TForm3D *pForm = new TForm3D(parent);
  pForm->m_count_x = x_count_of_points;

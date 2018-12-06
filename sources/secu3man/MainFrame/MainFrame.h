@@ -113,6 +113,7 @@ protected:
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
+  LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
   DECLARE_MESSAGE_MAP()
 
 private:

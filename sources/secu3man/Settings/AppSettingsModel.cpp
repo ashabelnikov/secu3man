@@ -760,14 +760,14 @@ bool CAppSettingsModel::WriteSettings(void)
 
  sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("State of the main window. Allowed values are: minimized, normal and maximized"));
 
- _TSTRING ii_comment[2] = {_T("*** Configuration of virtual On\\Off indicators (1-st profile) ***"), _T("*** Configuration of virtual On\\Off indicators (2-nd profile) ***")};
+ _TSTRING ii_comment[2] = {_T("*** Configuration of virtual On\\Off indicators (1-st profile) ***\r\n; Use IndRows to specify number of rows will be used for grouping of virtual indicators\r\n; Set index number for each field (order). Indicator fileds will be displayed in direction from left-top to right-bottom according to set order."), _T("*** Configuration of virtual On\\Off indicators (2-nd profile) ***")};
  //Indicators
  for(int i = 0; i < 2; ++i)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
   ii.WriteComment(ii_comment[i], false, true);
   ii.CreateSection();
-  ii.WriteFlt(m_optIndHeightPercent[i], 2);
+  ii.WriteFlt(m_optIndHeightPercent[i], 2, _T("Percent of height which indicators' panel will occupy"));
   ii.WriteInt(m_optIndRows[i], _T("Number of rows in the virtual indicators panel"));
   ii.WriteInt(m_optIndGas_v[i], _T("GAS_V input"));
   ii.WriteInt(m_optIndCarb[i], _T("CARB input"));
@@ -783,7 +783,7 @@ bool CAppSettingsModel::WriteSettings(void)
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
- ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***"), false, true);
+ ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***\r\n; You can obtain any color by combining different values of R, G and B components. For example: FF0000 - red, 00FF00 - green, D3D350 - dim yellow. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
  ic.WriteColor(m_optColGas_v, _T("GAS_V input"));
  ic.WriteColor(m_optColCarb, _T("CARB input"));
  ic.WriteColor(m_optColIdleValve, _T("Idle cutoff valve"));
@@ -796,7 +796,7 @@ bool CAppSettingsModel::WriteSettings(void)
  ic.WriteColor(m_optColFloodClear, _T("Flood clear"));
  ic.WriteColor(m_optColSysLocked, _T("System locked"));
 
- _TSTRING mm_comment[2] = {_T("*** Configuration of virtual gauges (1-st profile) ***"), _T("*** Configuration of virtual gauges (2-nd profile) ***")};
+ _TSTRING mm_comment[2] = {_T("*** Configuration of virtual gauges (1-st profile) ***\r\n; Use MetRows to specify number of rows will be used for grouping of virtual gauges\r\n; Set index number for each gauge (order). Gauges will be displayed in direction from left-top to right-bottom according to set order."), _T("*** Configuration of virtual gauges (2-nd profile) ***")};
  //Meters
  for(int i = 0; i < 2; ++i)
  {

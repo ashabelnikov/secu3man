@@ -76,6 +76,12 @@ __fastcall TForm3D::TForm3D(HWND parent)
 }
 
 //---------------------------------------------------------------------------
+__fastcall TForm3D::~TForm3D()
+{
+ //empty
+}
+
+//---------------------------------------------------------------------------
 void TForm3D::DataPrepare()
 {
  HideAllSeries();
@@ -90,19 +96,7 @@ void TForm3D::DataPrepare()
  Chart1->BottomAxis->Title->Caption = m_x_title;
  Chart1->LeftAxis->Title->Caption = m_y_title;
 
- Chart1->LeftAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- Chart1->LeftAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- Chart1->BottomAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- Chart1->BottomAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- for(int i = 0; i < m_count_z; i++)
- {
-  Chart1->Series[i]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
-  Chart1->Series[i+m_count_z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
- }
- Chart1->Frame->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
- Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
- Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
- Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ UpdateSystemColors();
 
  //диапазон значений на графике будет немного шире чем требуемый...
  int range = m_fnc_max - m_fnc_min;
@@ -397,6 +391,7 @@ void __fastcall TForm3D::OnCloseForm(TObject *Sender, TCloseAction &Action)
  if (m_pOnClose)
   m_pOnClose(m_param_on_close);
  RemoveInstanceByHWND(Handle);
+ Action = caFree; //close form and free resources
 }
 
 //---------------------------------------------------------------------------
@@ -691,6 +686,12 @@ void __fastcall TForm3D::WndProc(Messages::TMessage &Message)
 
  if (Message.Msg == WM_SYSCOMMAND && m_pOnWndActivation)
   m_pOnWndActivation(m_param_on_wnd_activation, Message.WParam);
+
+ if (Message.Msg == WM_SYSCOLORCHANGE)
+ {
+  UpdateSystemColors();
+  TrackBarAf->SetFocus(); //smal hack, for updating of colors of a track bar
+ }
 }
 
 //---------------------------------------------------------------------------
@@ -1103,3 +1104,20 @@ void __fastcall TForm3D::OnCreateForm(TObject *Sender)
 }
 
 //---------------------------------------------------------------------------
+void TForm3D::UpdateSystemColors(void)
+{
+ TrackBarAf->Brush->Color = TColor(GetSysColor(COLOR_BTNFACE));
+ Chart1->LeftAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->LeftAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->LabelsFont->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ Chart1->BottomAxis->Title->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ for(int i = 0; i < m_count_z; i++)
+ {
+  Chart1->Series[i]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+  Chart1->Series[i+m_count_z]->Marks->Font->Color = TColor(GetSysColor(COLOR_WINDOWTEXT));
+ }
+ Chart1->Frame->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+ Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+}

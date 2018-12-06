@@ -30,6 +30,7 @@
 #include "common/fastdelegate.h"
 #include "common/unicodesupport.h"
 #include "ui-core/TabDialog.h"
+#include "ui-core/ListCtrlEx.h"
 
 class CHeaderCtrlEx;
 
@@ -78,11 +79,12 @@ class CCheckEngineTabDlg : public CTabDialog
   afx_msg void OnListSetAllErrors();
   afx_msg void OnListClearAllErrors();
   afx_msg void OnCustomdrawList(NMHDR*, LRESULT*);
+  afx_msg void OnPaint();
   DECLARE_MESSAGE_MAP()
 
  private:
   CStatic m_quick_help_text;
-  CListCtrl m_errors_list;
+  CListCtrlEx m_errors_list;
   CImageList m_image_list;
   CButton m_realtime_checkbox;
   CButton m_show_with_inertness;
