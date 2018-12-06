@@ -33,43 +33,50 @@
 //типы флажков определ€ющих какие данные перемещать
 enum EFWDFlags
 {
- FLAG_START_MAP = 0,
- FLAG_IDLE_MAP,
- FLAG_WORK_MAP,
- FLAG_TEMP_MAP,
- FLAG_VE_MAP,       //inj
- FLAG_AFR_MAP,      //inj
- FLAG_CRNK_MAP,     //inj
- FLAG_WRMP_MAP,     //inj
- FLAG_DEAD_MAP,     //inj
- FLAG_IDLR_MAP,     //inj
- FLAG_IDLC_MAP,     //inj
- FLAG_AETPS_MAP,    //inj
- FLAG_AERPM_MAP,    //inj
- FLAG_AFTSTR_MAP,   //inj
- FLAG_IT_MAP,       //inj
- FLAG_ITRPM_MAP,    //inj
- FLAG_RIGID_MAP,    //inj
- FLAG_EGOCRV_MAP,   //inj
- FLAG_IACCORRW_MAP, //inj
- FLAG_IACCORR_MAP,  //inj
- FLAG_IATCLT_MAP,   //inj
- FLAG_TPSSWT_MAP,   //inj
- FLAG_GTSC_MAP,     //inj
- FLAG_GPSC_MAP,     //inj
- FLAG_ATSC_MAP,     //inj
- FLAG_DWLCNTR_MAP,  //separate
- FLAG_ATTEN_MAP,    //separate
- FLAG_CTS_MAP,      //separate
- FLAG_ATS_MAP,      //separate
- FLAG_ATSAAC_MAP,   //separate
- FLAG_GASDOSE_MAP,  //separate
- FLAG_BAROCORR_MAP, //separate 
- FLAG_MANIT_MAP,    //separate 
- FLAG_TMP2CURVE_MAP,//separate 
- FLAG_CRKTEMP_MAP,  //separate 
- FLAG_EHPAUSE_MAP,  //separate 
- FLAG_NR_OF_FLAGS
+ FLAG_START_MAP     = 0,     //-ign
+ FLAG_IDLE_MAP      = 1,     //-ign
+ FLAG_WORK_MAP      = 2,     //-ign
+ FLAG_TEMP_MAP      = 3,     //-ign
+ FLAG_VE_MAP        = 4,     //inj
+ FLAG_AFR_MAP       = 5,     //inj
+ FLAG_CRNK_MAP      = 6,     //inj
+ FLAG_WRMP_MAP      = 7,     //inj
+ FLAG_DEAD_MAP      = 8,     //inj
+ FLAG_IDLR_MAP      = 9,     //inj
+ FLAG_IDLC_MAP      = 10,    //inj
+ FLAG_AETPS_MAP     = 11,    //inj
+ FLAG_AERPM_MAP     = 12,    //inj
+ FLAG_AFTSTR_MAP    = 13,    //inj
+ FLAG_IT_MAP        = 14,    //inj
+ FLAG_ITRPM_MAP     = 15,    //inj
+ FLAG_RIGID_MAP     = 16,    //inj
+ FLAG_EGOCRV_MAP    = 17,    //inj
+ FLAG_IACCORRW_MAP  = 18,    //inj
+ FLAG_IACCORR_MAP   = 19,    //inj
+ FLAG_IATCLT_MAP    = 20,    //inj
+ FLAG_TPSSWT_MAP    = 21,    //inj
+ FLAG_GTSC_MAP      = 22,    //inj
+ FLAG_GPSC_MAP      = 23,    //inj
+ FLAG_ATSC_MAP      = 24,    //inj
+
+ FLAG_DWLCNTR_MAP   = 25,    //separate
+ FLAG_ATTEN_MAP     = 26,    //separate
+ FLAG_CTS_MAP       = 27,    //separate
+ FLAG_ATS_MAP       = 28,    //separate
+ FLAG_ATSAAC_MAP    = 29,    //separate
+ FLAG_GASDOSE_MAP   = 30,    //separate
+ FLAG_BAROCORR_MAP  = 31,    //separate 
+ FLAG_MANIT_MAP     = 32,    //separate 
+ FLAG_TMP2CURVE_MAP = 33,    //separate 
+ FLAG_CRKTEMP_MAP   = 34,    //separate 
+ FLAG_EHPAUSE_MAP   = 35,    //separate 
+
+ FLAG_NR_OF_FLAGS   = 36,    //total number of flags
+
+ FLAG_SET_START     = 0,
+ FLAG_SET_END       = 24,
+ FLAG_SEP_START     = 25,
+ FLAG_SEP_END       = 35,
 };
 
 class CToolTipCtrlEx;
@@ -128,15 +135,23 @@ class CMapImpExpDlg : public CDialog
   afx_msg void OnEndLabelEditFWDOtherList(NMHDR* pNMHDR, LRESULT* pResult);
   afx_msg void OnUpdateExchangeButton(CCmdUI* pCmdUI);
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
+  afx_msg void OnSetSetAllClick();
+  afx_msg void OnSepSetAllClick();
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
   DECLARE_MESSAGE_MAP()
 
  private:
+  void _UpdateScrlViewSize(void);
+
   CButton   m_exchange_button;
   CListCtrl m_other_fwd_list;
   CListCtrl m_current_fwd_list;
   CString   m_current_fwd_title_string;
   CString   m_other_fwd_title_string;
   CFont     m_exbtnFont;
+  CButton   m_set_all;
+  CButton   m_sep_all;
 
   BOOL m_fwd_flags[FLAG_NR_OF_FLAGS];
   CButton m_fwd_flags_buttons[FLAG_NR_OF_FLAGS];
@@ -153,4 +168,7 @@ class CMapImpExpDlg : public CDialog
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventResult m_IsExchengeButtonAllowed;
+
+  CSize m_createSize;
+  bool m_initialized;
 };

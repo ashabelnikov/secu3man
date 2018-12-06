@@ -30,6 +30,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/fnt_helpers.h"
 #include "ui-core/WndScroller.h"
+#include "common/DPIAware.h"
 
 const UINT CMapImpExpDlg::IDD = IDD_MAP_IMPEXP;
 
@@ -47,11 +48,16 @@ BEGIN_MESSAGE_MAP(CMapImpExpDlg, Super)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_MAP_IMPEXP_OTHER_FWD_LIST, OnEndLabelEditFWDOtherList)
  ON_UPDATE_COMMAND_UI(IDC_MAP_IMPEXP_EXCHANGE_BUTTON, OnUpdateExchangeButton )
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
+ ON_BN_CLICKED(IDC_MAP_IMPEXP_SET_SETALL, OnSetSetAllClick)
+ ON_BN_CLICKED(IDC_MAP_IMPEXP_SEP_SETALL, OnSepSetAllClick)
+ ON_WM_GETMINMAXINFO()
+ ON_WM_SIZE()
 END_MESSAGE_MAP()
 
 CMapImpExpDlg::CMapImpExpDlg(CWnd* pParent /*=NULL*/)
 : Super(CMapImpExpDlg::IDD, pParent)
 , mp_scr(new CWndScroller)
+, m_initialized(false)
 {
  m_current_fwd_title_string = _T("");
  m_other_fwd_title_string = _T("");
@@ -141,6 +147,7 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check(pDX, IDC_MAP_IMPEXP_MANIT_FLAG, m_fwd_flags[FLAG_MANIT_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_TMP2CURVE_FLAG, m_fwd_flags[FLAG_TMP2CURVE_MAP]);
  DDX_Check(pDX, IDC_MAP_IMPEXP_CRKTEMP_FLAG, m_fwd_flags[FLAG_CRKTEMP_MAP]);
+ DDX_Check(pDX, IDC_MAP_IMPEXP_EHPAUSE_FLAG, m_fwd_flags[FLAG_EHPAUSE_MAP]);
 
  //ignition
  DDX_Control(pDX, IDC_MAP_IMPEXP_STARTMAP_FLAG,m_fwd_flags_buttons[FLAG_START_MAP]);
@@ -181,6 +188,10 @@ void CMapImpExpDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_MAP_IMPEXP_TMP2CURVE_FLAG, m_fwd_flags_buttons[FLAG_TMP2CURVE_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_CRKTEMP_FLAG, m_fwd_flags_buttons[FLAG_CRKTEMP_MAP]);
  DDX_Control(pDX, IDC_MAP_IMPEXP_EHPAUSE_FLAG, m_fwd_flags_buttons[FLAG_EHPAUSE_MAP]);
+
+ //set/clear all checks
+ DDX_Control(pDX, IDC_MAP_IMPEXP_SET_SETALL, m_set_all);
+ DDX_Control(pDX, IDC_MAP_IMPEXP_SEP_SETALL, m_sep_all);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -437,7 +448,15 @@ BOOL CMapImpExpDlg::OnInitDialog()
 
  //initialize window scroller
  mp_scr->Init(this);
- mp_scr->SetViewSizeF(.0f, 1.18f);
+ _UpdateScrlViewSize();
+
+ m_set_all.SetCheck(BST_CHECKED);
+
+ CRect rc;
+ GetWindowRect(&rc);
+ m_createSize = rc.Size();
+
+ m_initialized = true;
 
  return TRUE;  // return TRUE unless you set the focus to a control
 }
@@ -451,4 +470,43 @@ void CMapImpExpDlg::OnDestroy()
 void CMapImpExpDlg::SetExchangeButtonCaption(const _TSTRING& i_text)
 {
  m_exchange_button.SetWindowText(i_text.c_str());
+}
+
+void CMapImpExpDlg::OnSetSetAllClick()
+{
+ bool checked = (m_set_all.GetCheck() == BST_CHECKED);
+ for(int i = FLAG_SET_START; i <= FLAG_SET_END; ++i)
+  SetFWDFlag((EFWDFlags)i, checked);
+}
+
+void CMapImpExpDlg::OnSepSetAllClick()
+{
+ bool checked = (m_sep_all.GetCheck() == BST_CHECKED);
+ for(int i = FLAG_SEP_START; i <= FLAG_SEP_END; ++i)
+  SetFWDFlag((EFWDFlags)i, checked);
+}
+
+void CMapImpExpDlg::_UpdateScrlViewSize(void)
+{
+ DPIAware da;
+ if (mp_scr.get())
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(590));
+}
+
+void CMapImpExpDlg::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+ _UpdateScrlViewSize();
+}
+
+void CMapImpExpDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+{
+ if (m_initialized)
+ {
+  lpMMI->ptMinTrackSize.x = m_createSize.cx;
+  lpMMI->ptMinTrackSize.y = m_createSize.cy;
+
+  lpMMI->ptMaxTrackSize.x = m_createSize.cx;
+  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.25f);
+ }
 }
