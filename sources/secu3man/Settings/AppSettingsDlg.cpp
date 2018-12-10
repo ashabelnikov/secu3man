@@ -28,8 +28,66 @@
 #include "AppSettingsDlg.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/XBrowseForFolder.h"
+#include "io-core/EnumPorts.h"
+#include <dbt.h>
 
 const UINT CAppSettingsDlg::IDD = IDD_APP_SETTINGS;
+
+namespace {
+_TSTRING _ComposePortDescr(const CEnumPorts::PortDescItem_t& item)
+{
+ return _TSTRING(item.first + _T(", ") + item.second);
+}
+}
+
+_TSTRING CAppSettingsDlg::_GetForExistingCBItem(const _TSTRING& portName)
+{
+ //try to select portName from existing list
+ for(size_t i = 0; i < m_existingList.size(); ++i)
+ {  
+  if (m_existingList[i].first.c_str() == portName)
+   return _ComposePortDescr(m_existingList[i]);
+ }
+ //try to select CP210x
+ for(size_t i = 0; i < m_existingList.size(); ++i)
+ {
+  if (_tcsstr(m_existingList[i].second.c_str(), _T("Silicon Labs CP210x")))
+   return _ComposePortDescr(m_existingList[i]);
+ }
+ return _T("");
+}
+
+
+_TSTRING CAppSettingsDlg::_GetForAllCBItem(const _TSTRING& portName)
+{
+ for(size_t i = 0; i < m_existingList.size(); ++i)
+ {
+  _TSTRING str = _ComposePortDescr(m_existingList[i]);
+  if (str == portName)
+   return m_existingList[i].first;
+ }
+ return (LPCTSTR)m_port_number;
+}
+
+void CAppSettingsDlg::DDX_CBStringPort(CDataExchange* pDX, CComboBox* p_port_selection_combo, CString& value)
+{
+ if (GetExistingPorts())
+ {
+  if (pDX->m_bSaveAndValidate)
+  { //get
+   CString cbStr;
+   DDX_CBString(pDX, p_port_selection_combo->GetDlgCtrlID(), cbStr);
+   value = _GetForAllCBItem((LPCTSTR)cbStr).c_str();
+  }
+  else //set
+  {
+   CString str = _GetForExistingCBItem((LPCTSTR)value).c_str();
+   DDX_CBString(pDX, p_port_selection_combo->GetDlgCtrlID(), str);
+  }
+ }
+ else
+  DDX_CBString(pDX, p_port_selection_combo->GetDlgCtrlID(), value); //just use standard
+}
 
 CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 : CDialog(CAppSettingsDlg::IDD, pParent)
@@ -41,6 +99,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_tachometer_max_edit(CEditEx::MODE_INT)
 , m_pressure_max_edit(CEditEx::MODE_INT)
 , m_wheel_pulses_edit(CEditEx::MODE_INT)
+, mp_port_selection_combo(&m_port_selection1_combo)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
@@ -62,7 +121,9 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 {
  CDialog::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_selection_combo);
+ DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION1_COMBO, m_port_selection1_combo); //all
+ DDX_Control(pDX, IDC_APP_SETTINGS_PORT_SELECTION2_COMBO, m_port_selection2_combo); //existing
+
  DDX_Control(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate_selection_combo);
  DDX_Control(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate_selection_combo);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_combo);
@@ -77,10 +138,11 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_SHOW_TOOLTIPS, m_show_tooltips_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_HEXMODE, m_hexdatamode_button);
+ DDX_Control(pDX, IDC_APP_SETTINGS_PRESPORTS, m_presports_button);
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO, m_app_baudrate);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO, m_bl_baudrate);
- DDX_CBString(pDX, IDC_APP_SETTINGS_PORT_SELECTION_COMBO, m_port_number);
+ DDX_CBStringPort(pDX, mp_port_selection_combo, m_port_number);
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO, m_log_csv_sepsymbol_index);
 
  DDX_CBIndex(pDX, IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, m_ecu_platform_selection);
@@ -120,12 +182,15 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
+ ON_WM_CTLCOLOR()
+ ON_WM_DEVICECHANGE()
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_BUTTON, OnAppSettingsLogfolderButton)
  ON_BN_CLICKED(IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, OnAppSettingsLogfolderUseappfolder)
  ON_BN_CLICKED(IDC_APP_SETTINGS_USEDEBUG_FEATURES, OnAppSettingsLogfolderUseDVFeatures)
- ON_WM_CTLCOLOR()
+ ON_BN_CLICKED(IDC_APP_SETTINGS_PRESPORTS, OnAppSettingsPresentPorts)
  ON_CBN_SELENDOK(IDC_APP_SETTINGS_LANG_SEL_COMBO, OnSelendokRestartPerameters)
  ON_CBN_SELENDOK(IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, OnSelendokRestartPerameters)
+ ON_CBN_DROPDOWN(IDC_APP_SETTINGS_PORT_SELECTION2_COMBO, OnDropDownPortSel)
 END_MESSAGE_MAP()
 
 HBRUSH CAppSettingsDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
@@ -154,7 +219,7 @@ BOOL CAppSettingsDlg::OnInitDialog()
 {
  CDialog::OnInitDialog();
 
- m_port_selection_combo.LimitText(200);
+ m_port_selection1_combo.LimitText(200);
 
  m_midesk_update_period_edit.SetLimitText(4);
  m_midesk_update_period_spin.SetBuddy(&m_midesk_update_period_edit);
@@ -178,8 +243,9 @@ BOOL CAppSettingsDlg::OnInitDialog()
  m_wheel_pulses_spin.SetRangeAndDelta(0, 30000, 1);
 
  if (m_OnActivate)
-  m_OnActivate(); //информируем слушателя о том что мы готовы к приему данных
+  m_OnActivate(); //информируем слушателя о том, что мы готовы к приему данных
 
+ _ShowCB(); //select right combo box
  UpdateData(FALSE);
 
  OnAppSettingsLogfolderUseappfolder();
@@ -187,7 +253,8 @@ BOOL CAppSettingsDlg::OnInitDialog()
 
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(&m_port_selection_combo, MLL::GetString(IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_port_selection1_combo, MLL::GetString(IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_port_selection2_combo, MLL::GetString(IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_app_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_APP_BAUDRATE_SELECTION_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_bl_baudrate_selection_combo, MLL::GetString(IDS_APP_SETTINGS_BL_BAUDRATE_SELECTION_COMBO_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
@@ -261,10 +328,21 @@ void CAppSettingsDlg::FillCtrlsWithAllowableBaudRates(std::vector<DWORD> i_Allow
 
 void CAppSettingsDlg::FillCtrlsWithAllowablePorts(std::vector<_TSTRING> i_AllowablePorts)
 {
- for(size_t i = 0; i < i_AllowablePorts.size(); i++)
+ //fill combo2
+ CEnumPorts ep;
+ BeginWaitCursor();
+ VERIFY(ep.Query());
+ EndWaitCursor();
+ ep.getPortsList(m_existingList);
+ m_port_selection2_combo.ResetContent();
+ for(size_t i = 0; i < m_existingList.size(); ++i)
  {
-  m_port_selection_combo.AddString(i_AllowablePorts[i].c_str());
+  _TSTRING str = _ComposePortDescr(m_existingList[i]);
+  m_port_selection2_combo.AddString(str.c_str());
  }
+ //fill combo1
+ for(size_t i = 0; i < i_AllowablePorts.size(); i++)
+  m_port_selection1_combo.AddString(i_AllowablePorts[i].c_str());
 }
 
 void CAppSettingsDlg::FillCtrlsWithAllowableCSVSepSymbols(std::vector<std::pair<_TSTRING, char> >  i_AllowableCSVSepSymbols)
@@ -339,7 +417,7 @@ void CAppSettingsDlg::SetCSVSepSymbol(size_t i_index)
 //"Get" methods (view => model data transfer)
 _TSTRING CAppSettingsDlg::GetPortName(void)
 {
- return m_port_number.GetBuffer(1024);
+ return (LPCTSTR)m_port_number;
 }
 
 DWORD CAppSettingsDlg::GetBaudRateApplication(void)
@@ -541,4 +619,96 @@ void CAppSettingsDlg::SetNumPulsesPer1Km(int i_pp1km)
 int CAppSettingsDlg::GetNumPulsesPer1Km(void) const
 {
  return m_wheel_pulses;
+}
+
+void CAppSettingsDlg::_ShowCB(void)
+{
+ if (m_presports_button.GetCheck() == BST_CHECKED)
+ {
+  mp_port_selection_combo = &m_port_selection2_combo;
+  m_port_selection1_combo.ShowWindow(SW_HIDE);
+  m_port_selection2_combo.ShowWindow(SW_SHOW);
+  m_port_selection2_combo.EnableWindow(m_existingList.size() > 0); //disable if list of existing ports is empty
+ }
+ else
+ {
+  mp_port_selection_combo = &m_port_selection1_combo;
+  m_port_selection1_combo.ShowWindow(SW_SHOW);
+  m_port_selection2_combo.ShowWindow(SW_HIDE);
+ }
+}
+
+void CAppSettingsDlg::OnAppSettingsPresentPorts()
+{
+ _ShowCB();
+ CString str;
+ if (m_presports_button.GetCheck() == BST_CHECKED)
+ {
+  m_port_selection1_combo.GetWindowText(str);
+  m_port_selection2_combo.SelectString(0,_GetForExistingCBItem((LPCTSTR)str).c_str());
+ }
+ else
+ {
+  m_port_selection2_combo.GetWindowText(str);
+  m_port_selection1_combo.SetWindowText(_GetForAllCBItem((LPCTSTR)str).c_str());
+ }
+ UpdateData(TRUE); //get
+}
+
+void CAppSettingsDlg::OnDropDownPortSel()
+{
+ //update list of ports on each opening of combo box, we also preserve selection
+ CEnumPorts ep;
+ BeginWaitCursor();
+ VERIFY(ep.Query());
+ EndWaitCursor();
+ ep.getPortsList(m_existingList);
+ CString str;
+ m_port_selection2_combo.GetWindowText(str); //save selection
+ m_port_selection2_combo.ResetContent();
+ for(size_t i = 0; i < m_existingList.size(); ++i)
+  m_port_selection2_combo.AddString(_ComposePortDescr(m_existingList[i]).c_str());
+
+ if (str.IsEmpty())
+ { //select m_port_number if there are no selection information
+  m_port_selection2_combo.SelectString(0,_GetForExistingCBItem((LPCTSTR)m_port_number).c_str());
+ }
+ else
+  m_port_selection2_combo.SelectString(0, str); //rescue selection
+}
+
+void CAppSettingsDlg::SetExistingPorts(bool i_exp)
+{
+ m_presports_button.SetCheck(i_exp ? BST_CHECKED : BST_UNCHECKED);
+}
+
+bool CAppSettingsDlg::GetExistingPorts(void) const
+{
+ return m_presports_button.GetCheck() == BST_CHECKED;
+}
+
+BOOL CAppSettingsDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
+{
+ if (DBT_DEVICEARRIVAL==nEventType)
+ {
+  if (DBT_DEVTYP_PORT==((DEV_BROADCAST_HDR*)dwData)->dbch_devicetype)
+  {
+   UpdateData(TRUE); //get
+
+   OnDropDownPortSel();
+   m_port_selection2_combo.EnableWindow(m_existingList.size() > 0); //disable if list of existing ports is empty
+  }
+ }
+ else if (DBT_DEVICEREMOVECOMPLETE==nEventType)
+ {
+  if (DBT_DEVTYP_PORT==((DEV_BROADCAST_HDR*)dwData)->dbch_devicetype)
+  {
+   UpdateData(TRUE); //get
+
+   OnDropDownPortSel();
+   m_port_selection2_combo.EnableWindow(m_existingList.size() > 0); //disable if list of existing ports is empty
+  }
+ }
+
+ return TRUE;
 }

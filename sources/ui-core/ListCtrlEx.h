@@ -19,34 +19,21 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ParamsIO.h
+/** \file CListCtrlEx.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
-#include "PlatformParamHolder.h"
-#include "iocore_api.h"
 
-namespace SECU3IO { struct params_t; }
-
-class PARAMSIO_API ParamsIO
+class AFX_EXT_CLASS CListCtrlEx : public CListCtrl
 {
-public:
- ParamsIO();
- virtual ~ParamsIO();
+ public:
+  CListCtrlEx();
+  virtual ~CListCtrlEx();
 
- //-----------------------------------------------------------------------
- virtual bool SetDefParamValues(BYTE i_descriptor, const void* ip_values);
- virtual bool GetDefParamValues(BYTE i_descriptor, void* op_values);
- //-----------------------------------------------------------------------
+ protected:
+  afx_msg void OnPaint();
+  DECLARE_MESSAGE_MAP()
 
- void SetNumPulsesPer1Km(int pp1km);
- void SetQuartzFrq(long frq);
-
-protected:
- virtual SECU3IO::params_t* GetParamsPtr(void) = 0;
- virtual EECUPlatform GetPlatformId(void) = 0;
-
- float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
- long m_quartz_frq;                    //MCU clock frequency
+ private:
 };

@@ -62,6 +62,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optChildCharts(_T("ChildCharts"))
 , m_optPortAutoReopen(_T("PortAutoReopen"))
 , m_optToggleMapWnd(_T("ToggleMapWnd"))
+, m_optExistingPorts(_T("ExistingPorts"))
 //fixtures
 , m_Name_Fixtures_Section("Fixtures")
 , m_optTachometerMax(_T("Tachometer_Max"))
@@ -345,6 +346,7 @@ bool CAppSettingsModel::ReadSettings(void)
  os.ReadInt(m_optChildCharts, _T("1"), 0, 1);
  os.ReadInt(m_optPortAutoReopen, _T("1"), 0, 1);
  os.ReadInt(m_optToggleMapWnd, _T("0"), 0, 1);
+ os.ReadInt(m_optExistingPorts, _T("1"), 0, 1);
 
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
@@ -551,6 +553,9 @@ bool CAppSettingsModel::WriteSettings(void)
  
  os.WriteComment(_T("Name of COM port or a device (e.g. /dev/ttyUSB0)"));
  os.WriteString(m_optPortName);
+
+ os.WriteComment(_T("Show only really existing ports in the COM port selection drop down list"));
+ os.WriteInt(m_optExistingPorts); 
  
  os.WriteComment(_T("COM port speed for firmware (baud)"));
  os.WriteDword(m_optBaudRateApplication);
@@ -1548,4 +1553,9 @@ int CAppSettingsModel::GetPaneFontSize(void) const
 int CAppSettingsModel::GetLabelFontSize(void) const
 {
  return m_optLabelFontSize.value;
+}
+
+bool CAppSettingsModel::GetExistingPorts(void) const
+{
+ return m_optExistingPorts.value;
 }

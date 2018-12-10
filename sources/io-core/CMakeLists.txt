@@ -11,6 +11,7 @@ ADD_DEFINITIONS(-DIOCORE_EXPORTS)
 ADD_DEFINITIONS(-DCRC_EXPORTS)
 ADD_DEFINITIONS(-DBITMASK_EXPORTS)
 ADD_DEFINITIONS(-DPARAMSIO_EXPORTS)
+ADD_DEFINITIONS(-DENUMPORTS_EXPORTS)
 
 set(CMAKE_MFC_FLAG 2)
 set(PROJECT io-core)
@@ -23,6 +24,8 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_DEBUG ../../binaries)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY_RELEASE ../../binaries)
 
 include_directories(../)
+set(LIBRARIES setupapi.lib)
+
 project(${PROJECT})
 
 set(HEADERS
@@ -35,6 +38,7 @@ set(HEADERS
   ControlAppAdapter.h
   CRC16.h
   EEPROMDataMediator.h
+  EnumPorts.h
   FirmwareDataMediator.h
   FirmwareMapsDataHolder.h
   iocore_api.h
@@ -62,6 +66,7 @@ set(SOURCES
   ControlAppAdapter.cpp
   CRC16.cpp
   EEPROMDataMediator.cpp
+  EnumPorts.cpp
   FirmwareDataMediator.cpp
   iocore.cpp
   LogReader.cpp
@@ -75,3 +80,5 @@ set(SOURCES
   )
 
 add_library(${PROJECT} SHARED ${HEADERS} ${SOURCES})
+target_link_libraries(${PROJECT} ${LIBRARIES})
+

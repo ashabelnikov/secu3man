@@ -62,6 +62,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optShowToolTips.value = m_pView->GetShowToolTips();
  m_pModel->m_optShowExFixtures.value = m_pView->GetShowExFixtures();
  m_pModel->m_optHexDataMode.value = m_pView->GetHexDataMode();
+ m_pModel->m_optExistingPorts.value = m_pView->GetExistingPorts();
 
  size_t index = m_pView->GetCSVSepSymbol();
  m_pModel->m_optCSVSepSymbol.value = m_pModel->m_AllowaleCSVSepSymbols[index].second;
@@ -102,6 +103,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetShowToolTips(m_pModel->m_optShowToolTips.value);
  m_pView->SetShowExFixtures(m_pModel->m_optShowExFixtures.value);
  m_pView->SetHexDataMode(m_pModel->m_optHexDataMode.value);
+ m_pView->SetExistingPorts(m_pModel->m_optExistingPorts.value);
 
  size_t count = m_pModel->m_AllowaleCSVSepSymbols.size();
  for(size_t i = 0; i < count; i++)

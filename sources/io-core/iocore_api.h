@@ -25,8 +25,32 @@
 
 #pragma once
 
-#if defined(IOCORE_EXPORTS)
+#ifdef IOCORE_EXPORTS
  #define IOCORE_API __declspec(dllexport)
 #else
  #define IOCORE_API __declspec(dllimport)
+#endif
+
+#ifdef ENUMPORTS_EXPORTS
+ #define ENUMPORTS_API __declspec(dllexport)
+#else
+ #define ENUMPORTS_API __declspec(dllimport)
+#endif
+
+#ifdef CRC_EXPORTS
+ #define CRC_API __declspec(dllexport)
+#else
+ #define CRC_API __declspec(dllimport)
+#endif
+
+#ifdef BITMASK_EXPORTS
+ #define BITMASK_API __declspec(dllexport)
+#else
+ #define BITMASK_API __declspec(dllimport)
+#endif
+
+#ifdef PARAMSIO_EXPORTS
+ #define PARAMSIO_API __declspec(dllexport)
+#else
+ #define PARAMSIO_API __declspec(dllimport)
 #endif

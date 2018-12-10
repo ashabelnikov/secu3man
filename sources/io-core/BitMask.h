@@ -23,11 +23,7 @@
  * \author Alexey A. Shabelnikov
  */
 
-#ifdef BITMASK_EXPORTS
-#define BITMASK_API __declspec(dllexport)
-#else
-#define BITMASK_API __declspec(dllimport)
-#endif
+#include "iocore_api.h"
 
 // Write specified bit into a 8-bit variable
 // variable - Variable

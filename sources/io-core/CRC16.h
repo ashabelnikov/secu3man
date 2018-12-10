@@ -23,11 +23,7 @@
  * \author Alexey A. Shabelnikov
  */
 
-#ifdef CRC_EXPORTS
-#define CRC_API __declspec(dllexport)
-#else
-#define CRC_API __declspec(dllimport)
-#endif
+#include "iocore_api.h"
 
 //Calculates CRC-16 function
 unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num);

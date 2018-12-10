@@ -7,7 +7,7 @@ CC      = cl
 # compiler flags
 CFLAGS  = /nologo /MD /GX /GR /O2 /Ob2 -I.. /D_AFXDLL /D_AFXEXT /D_WINDLL /DWIN32 /D_WINDOWS /Ycstdafx.h
 CFLAGS  = $(CFLAGS) -D_CRT_NON_CONFORMING_SWPRINTFS -D_CRT_SECURE_NO_WARNINGS -D_SCL_SECURE_NO_WARNINGS
-CFLAGS  = $(CFLAGS) -DIOCORE_EXPORTS -DCRC_EXPORTS -DBITMASK_EXPORTS
+CFLAGS  = $(CFLAGS) -DIOCORE_EXPORTS -DCRC_EXPORTS -DBITMASK_EXPORTS -DENUMPORTS_EXPORTS
 CFLAGS  = $(CFLAGS) /D NDEBUG
 CFLAGS  = $(CFLAGS) -D_WIN32_WINDOWS=0x0501 -DWINVER=0x0501
 # libraries
@@ -18,7 +18,7 @@ LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries
 SOURCES = StdAfx.cpp BootLoader.cpp BootLoaderAdapter.cpp ccomport.cpp ControlApp.cpp \
   ControlAppAdapter.cpp CRC16.cpp EEPROMDataMediator.cpp FirmwareDataMediator.cpp iocore.cpp \
   LogReader.cpp LogWriter.cpp NumericConv.cpp PlatformParamHolder.cpp PacketDataProxy.cpp \
-  BitMask.cpp ParamsIO.cpp
+  BitMask.cpp ParamsIO.cpp EnumPorts.cpp
 
 # DLL building
 all: iocore

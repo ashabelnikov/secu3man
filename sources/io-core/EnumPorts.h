@@ -19,34 +19,31 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ParamsIO.h
+/** \file EnumPorts.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
-#include "PlatformParamHolder.h"
+
+#include <utility>
+#include <vector>
+#include "common/UnicodeSupport.h"
 #include "iocore_api.h"
 
-namespace SECU3IO { struct params_t; }
-
-class PARAMSIO_API ParamsIO
+class ENUMPORTS_API CEnumPorts
 {
-public:
- ParamsIO();
- virtual ~ParamsIO();
+ public:
+ typedef std::pair<_TSTRING, _TSTRING> PortDescItem_t;
+ typedef std::vector<std::pair<_TSTRING, _TSTRING> > PortDescList_t;
+ 
+ CEnumPorts();
+~CEnumPorts();
 
- //-----------------------------------------------------------------------
- virtual bool SetDefParamValues(BYTE i_descriptor, const void* ip_values);
- virtual bool GetDefParamValues(BYTE i_descriptor, void* op_values);
- //-----------------------------------------------------------------------
+ bool Query(void);
 
- void SetNumPulsesPer1Km(int pp1km);
- void SetQuartzFrq(long frq);
+ void getPortsList(PortDescList_t& portList); 
 
-protected:
- virtual SECU3IO::params_t* GetParamsPtr(void) = 0;
- virtual EECUPlatform GetPlatformId(void) = 0;
-
- float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
- long m_quartz_frq;                    //MCU clock frequency
+ private:
+  bool _QueryPortList(const GUID& guid, DWORD flags);
+  PortDescList_t m_portList;
 };

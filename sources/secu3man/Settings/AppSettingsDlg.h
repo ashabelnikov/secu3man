@@ -30,6 +30,7 @@
 #include "ui-core/editex.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
+#include "io-core/EnumPorts.h"
 
 class CToolTipCtrlEx;
 
@@ -88,6 +89,9 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual bool GetAlwaysWriteLog(void) const;
   virtual size_t GetCSVSepSymbol(void);
 
+  virtual void SetExistingPorts(bool i_exp);
+  virtual bool GetExistingPorts(void) const;
+
   virtual void setFunctionOnOk(EventHandler OnOk);
   virtual void setFunctionOnCancel(EventHandler OnCancel);
   virtual void setFunctionOnActivate(EventHandler OnActivate);
@@ -105,16 +109,26 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   afx_msg void OnAppSettingsLogfolderButton();
   afx_msg void OnAppSettingsLogfolderUseappfolder();
   afx_msg void OnAppSettingsLogfolderUseDVFeatures();
+  afx_msg void OnAppSettingsPresentPorts();
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   afx_msg void OnSelendokRestartPerameters();
+  afx_msg void OnDropDownPortSel();
+  afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   DECLARE_MESSAGE_MAP()
 
  private:
+  void DDX_CBStringPort(CDataExchange* pDX, CComboBox* p_port_selection_combo, CString& value);
+  _TSTRING _GetForExistingCBItem(const _TSTRING& portName);
+  _TSTRING _GetForAllCBItem(const _TSTRING& portName);
+  void _ShowCB(void);
+
   EventHandler m_OnOk;
   EventHandler m_OnCancel;
   EventHandler m_OnActivate;
 
-  CComboBox m_port_selection_combo;
+  CComboBox m_port_selection1_combo;
+  CComboBox m_port_selection2_combo;
+  CComboBox* mp_port_selection_combo;
   CComboBox m_bl_baudrate_selection_combo;
   CComboBox m_app_baudrate_selection_combo;
   CComboBox m_log_csv_sepsymbol_combo;
@@ -127,6 +141,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
   CButton   m_hexdatamode_button;
+  CButton   m_presports_button;
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
   CEditEx   m_dv_update_period_edit;
@@ -162,4 +177,5 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_wheel_pulses;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  CEnumPorts::PortDescList_t m_existingList;
 };

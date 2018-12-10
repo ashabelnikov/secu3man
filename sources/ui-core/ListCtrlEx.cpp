@@ -19,34 +19,37 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file ParamsIO.h
+/** \file ListCtrlEx.cpp
  * \author Alexey A. Shabelnikov
  */
 
-#pragma once
-#include "PlatformParamHolder.h"
-#include "iocore_api.h"
+#include "StdAfx.h"
+#include "ListCtrlEx.h"
 
-namespace SECU3IO { struct params_t; }
+/////////////////////////////////////////////////////////////////////////////
+// CListCtrlEx
 
-class PARAMSIO_API ParamsIO
+CListCtrlEx::CListCtrlEx()
 {
-public:
- ParamsIO();
- virtual ~ParamsIO();
+ //empty
+}
 
- //-----------------------------------------------------------------------
- virtual bool SetDefParamValues(BYTE i_descriptor, const void* ip_values);
- virtual bool GetDefParamValues(BYTE i_descriptor, void* op_values);
- //-----------------------------------------------------------------------
+CListCtrlEx::~CListCtrlEx()
+{
+ //empty
+}
 
- void SetNumPulsesPer1Km(int pp1km);
- void SetQuartzFrq(long frq);
+BEGIN_MESSAGE_MAP(CListCtrlEx, CListCtrl)
+ ON_WM_PAINT()
+END_MESSAGE_MAP()
 
-protected:
- virtual SECU3IO::params_t* GetParamsPtr(void) = 0;
- virtual EECUPlatform GetPlatformId(void) = 0;
+void CListCtrlEx::OnPaint()
+{
+ //CPaintDC dc(this); // device context for painting
 
- float m_period_distance;              //distance of one period in meters (speed sensor), used in calculations
- long m_quartz_frq;                    //MCU clock frequency
-};
+ COLORREF newbkcolor = GetSysColor(COLOR_WINDOW);
+ if (GetBkColor() != newbkcolor)
+  SetBkColor(newbkcolor);
+
+  CListCtrl::OnPaint();
+}

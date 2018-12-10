@@ -60,6 +60,7 @@ class IAppSettingsDlg
   virtual void SetShowExFixtures(bool i_show) = 0;
   virtual void SetHexDataMode(bool i_hex) = 0;
   virtual void SetNumPulsesPer1Km(int i_pp1km) = 0;
+  virtual void SetExistingPorts(bool exp) = 0;
 
   //Get - obtain data from view
   virtual _TSTRING GetPortName(void) = 0;
@@ -79,6 +80,7 @@ class IAppSettingsDlg
   virtual bool GetShowExFixtures(void) const = 0;
   virtual bool GetHexDataMode(void) const = 0;
   virtual int GetNumPulsesPer1Km(void) const = 0;
+  virtual bool GetExistingPorts(void) const = 0;
 
   //set event handlers
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;
