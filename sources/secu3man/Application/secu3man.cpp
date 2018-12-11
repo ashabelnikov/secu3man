@@ -40,6 +40,7 @@
 #include "Settings/ISettingsData.h"
 #include "TablDesk/DLLLinkedFunctions.h"
 #include "ui-core/HotKeysManager.h"
+#include "RestartAPI.h"
 
 namespace {
 
@@ -217,6 +218,9 @@ CSecu3manApp theApp;
 
 BOOL CSecu3manApp::InitInstance()
 {
+ if (RA_CheckForRestartProcessStart())
+  RA_WaitForPreviousProcessFinish();
+
  AfxEnableControlContainer();
 
  CoInitialize(NULL);
@@ -301,6 +305,8 @@ int CSecu3manApp::ExitInstance()
 
  //finish working of communication manager
  m_pCommunicationManager->Terminate();
+
+ RA_DoRestartProcessFinish();
 
  return CWinApp::ExitInstance();
 }

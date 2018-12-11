@@ -77,3 +77,8 @@ CAppSettingsModel* CAppSettingsManager::GetModel(void) const
 {
  return m_pModel;
 }
+
+bool CAppSettingsManager::IsRestartRequired(void)
+{
+ return m_pDialog->IsRestartRequired();
+}

@@ -208,11 +208,16 @@ HBRUSH CAppSettingsDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 void CAppSettingsDlg::OnSelendokRestartPerameters()
 {
  UpdateData();
- bool program_restart_required = m_iface_lang_selection_orig != m_iface_lang_selection || 
-                                 m_ecu_platform_selection_orig != m_ecu_platform_selection;
+ bool program_restart_required = IsRestartRequired();
  
  m_info_text.SetWindowText(program_restart_required ? MLL::GetString(IDS_APP_SETTINGS_PRG_RESTART_REQ).c_str() : _T(""));
  m_info_text.ShowWindow(program_restart_required ? SW_SHOW : SW_HIDE); 
+}
+
+bool CAppSettingsDlg::IsRestartRequired(void)
+{
+ bool resreq = m_iface_lang_selection_orig != m_iface_lang_selection || m_ecu_platform_selection_orig != m_ecu_platform_selection;
+ return resreq;
 }
 
 BOOL CAppSettingsDlg::OnInitDialog()

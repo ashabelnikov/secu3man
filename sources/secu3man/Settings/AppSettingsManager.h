@@ -46,6 +46,9 @@ public:
  //Show settings dialog
  int ShowDialog(void) const;
 
+ //Call this function after showing of dialog to determine is program restart required
+ bool IsRestartRequired(void);
+
  //возвражает интерфейс к данным настроек программы для чтения/записи
  ISettingsData* GetSettings(void) const;
 

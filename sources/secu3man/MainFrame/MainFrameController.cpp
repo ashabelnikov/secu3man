@@ -43,6 +43,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ScrlMessageBox.h"
 #include "ui-core/ImageUtils.h"
+#include "Application/RestartAPI.h"
 
 using namespace fastdelegate;
 
@@ -167,6 +168,15 @@ void MainFrameController::OnAppSettings()
    OnAppBeginLog();
 
   mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
+
+  if (m_pAppSettingsManager->IsRestartRequired())
+  {
+   if (IDYES == AfxMessageBox(MLL::LoadString(IDS_APP_SETTINGS_APPRESTART_CONFIRM), MB_YESNO | MB_DEFBUTTON1))
+   {
+    if (RA_ActivateRestartProcess())
+     AfxGetMainWnd()->DestroyWindow();
+   }
+  }
  }
 }
 

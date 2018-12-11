@@ -99,6 +99,8 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual int ShowDialog(void);
  /////////////////////////////////////////////////////
 
+  bool IsRestartRequired(void);
+
  // Implementation
  protected:
 

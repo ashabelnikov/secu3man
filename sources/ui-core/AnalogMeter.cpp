@@ -331,7 +331,7 @@ void CAnalogMeter::DrawScale()
 
  // determine the size and location of the meter "pie"
  m_nRadiusPix     = m_rectGfx.Height()*50/100;
- m_nHalfBaseWidth = m_nRadiusPix/50;
+ m_nHalfBaseWidth = m_nRadiusPix/25;
  dTemp = m_nCXPix - m_nRadiusPix*sin(m_dLimitAngleRad);
  m_nLeftLimitXPix = MathHelpers::Round(dTemp);
  dTemp = m_nCYPix - m_nRadiusPix*cos(m_dLimitAngleRad);
@@ -702,7 +702,7 @@ void CAnalogMeter::DrawNeedle()
   m_dcNeedle.Polygon(pPoints, 4);
 
   // draw circle at the bottom
-  int r = (m_nRadiusPix/20);
+  int r = (m_nRadiusPix/15);
   m_dcNeedle.Ellipse (m_nCXPix-m_nHalfBaseWidth-r, m_nCYPix-m_nHalfBaseWidth-r,
   m_nCXPix+m_nHalfBaseWidth+1+r, m_nCYPix+m_nHalfBaseWidth+1+r);
  }

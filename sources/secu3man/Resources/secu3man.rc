@@ -488,6 +488,7 @@ BEGIN
     IDS_EXPORT_EXPORT_TO_SECU3       "Экспортировать таблицы в прошивку SECU-3"
     IDS_EXPORT_EXPORT_TO_S3F         "Экспортировать таблицы в S3F файл"
     IDS_APP_SETTINGS_PRG_RESTART_REQ "Внимание! Необходим перезапуск программы!"
+    IDS_APP_SETTINGS_APPRESTART_CONFIRM "Вы изменили настройки, которые вступят в силу только после перезапуска программы.\n Хотите перезапустить программу сейчас?"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1089,6 +1090,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_ECUERROR_DWELL_CONTROL       "Dwell control"
     IDS_APP_SETTINGS_PRG_RESTART_REQ "Warning! Program restart required!"
+    IDS_APP_SETTINGS_APPRESTART_CONFIRM "You changed settings, which require restarting of program.\n Do you want to restart now?"
 END
 
 STRINGTABLE DISCARDABLE 

@@ -39,6 +39,7 @@ set(HEADERS
   Application/secu3man.h
   Application/ISECU3man.h
   Application/CommunicationManager.h
+  Application/RestartAPI.h
   MainFrame/ChildView.h
   MainFrame/ChildViewManager.h
   MainFrame/MainFrame.h
@@ -96,6 +97,7 @@ set(SOURCES
   Application/secu3man.cpp
   Application/CommunicationManager.cpp
   Application/CommunicationManager.cpp
+  Application/RestartAPI.cpp
   MainFrame/ChildView.cpp
   MainFrame/ChildViewManager.cpp
   MainFrame/MainFrame.cpp
