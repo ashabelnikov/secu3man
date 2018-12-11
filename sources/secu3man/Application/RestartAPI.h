@@ -14,12 +14,12 @@
 
 // Command line switch for restarted application
 #ifndef RA_CMDLINE_RESTART_PROCESS
-	#define RA_CMDLINE_RESTART_PROCESS	TEXT("--Restart")
+ #define RA_CMDLINE_RESTART_PROCESS TEXT("--Restart")
 #endif
 
 // Mutex unique name
 #ifndef RA_MUTEX_OTHER_RESTARTING
-	#define RA_MUTEX_OTHER_RESTARTING	TEXT("SECU3-MUTEX_NAME")
+ #define RA_MUTEX_OTHER_RESTARTING TEXT("SECU3-MUTEX_NAME")
 #endif
 
 // Return TRUE if Process was restarted

@@ -351,7 +351,7 @@ bool CAppSettingsModel::ReadSettings(void)
  //fixtures
  IniIO fs(IniFileName, m_Name_Fixtures_Section);
 
- fs.ReadInt(m_optShowExFixtures, _T("1"), 0, 1);
+ fs.ReadInt(m_optShowExFixtures, _T("0"), 0, 1);
  fs.ReadInt(m_optRPMAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optVoltAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
@@ -482,34 +482,36 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColSysLocked,_T("00FF00"));
 
  //Meters
+ const TCHAR* metDef[2][24] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                               {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
-  mm.ReadInt(m_optMetRPM[i],_T("0"), 0, 32, true);
-  mm.ReadInt(m_optMetMAP[i],_T("1"), 0, 32, true);
-  mm.ReadInt(m_optMetVBat[i],_T("2"), 0, 32, true);
-  mm.ReadInt(m_optMetIgnTim[i],_T("3"), 0, 32, true);
-  mm.ReadInt(m_optMetTPS[i],_T("4"), 0, 32, true);
-  mm.ReadInt(m_optMetCLT[i],_T("5"), 0, 32, true);
-  mm.ReadInt(m_optMetAddI1[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetAddI2[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetInjPW[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetIAT[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetEGOCorr[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetAirFlow[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetVehicleSpeed[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetTPSDot[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetMAP2[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetMAPD[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetTmp2[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetFuelConsum[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetKnockRetard[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetKnockGraph[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetSensAFR[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetChokePos[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetGDPos[i],_T(""), 0, 32, true);
-  mm.ReadInt(m_optMetSynLoad[i],_T(""), 0, 32, true);
+  mm.ReadInt(m_optMetRPM[i],metDef[i][0], 0, 32, true);
+  mm.ReadInt(m_optMetMAP[i],metDef[i][1], 0, 32, true);
+  mm.ReadInt(m_optMetVBat[i],metDef[i][2], 0, 32, true);
+  mm.ReadInt(m_optMetIgnTim[i],metDef[i][3], 0, 32, true);
+  mm.ReadInt(m_optMetTPS[i],metDef[i][4], 0, 32, true);
+  mm.ReadInt(m_optMetCLT[i],metDef[i][5], 0, 32, true);
+  mm.ReadInt(m_optMetAddI1[i],metDef[i][6], 0, 32, true);
+  mm.ReadInt(m_optMetAddI2[i],metDef[i][7], 0, 32, true);
+  mm.ReadInt(m_optMetInjPW[i],metDef[i][8], 0, 32, true);
+  mm.ReadInt(m_optMetIAT[i],metDef[i][9], 0, 32, true);
+  mm.ReadInt(m_optMetEGOCorr[i],metDef[i][10], 0, 32, true);
+  mm.ReadInt(m_optMetAirFlow[i],metDef[i][11], 0, 32, true);
+  mm.ReadInt(m_optMetVehicleSpeed[i],metDef[i][12], 0, 32, true);
+  mm.ReadInt(m_optMetTPSDot[i],metDef[i][13], 0, 32, true);
+  mm.ReadInt(m_optMetMAP2[i],metDef[i][14], 0, 32, true);
+  mm.ReadInt(m_optMetMAPD[i],metDef[i][15], 0, 32, true);
+  mm.ReadInt(m_optMetTmp2[i],metDef[i][16], 0, 32, true);
+  mm.ReadInt(m_optMetFuelConsum[i],metDef[i][17], 0, 32, true);
+  mm.ReadInt(m_optMetKnockRetard[i],metDef[i][18], 0, 32, true);
+  mm.ReadInt(m_optMetKnockGraph[i],metDef[i][19], 0, 32, true);
+  mm.ReadInt(m_optMetSensAFR[i],metDef[i][20], 0, 32, true);
+  mm.ReadInt(m_optMetChokePos[i],metDef[i][21], 0, 32, true);
+  mm.ReadInt(m_optMetGDPos[i],metDef[i][22], 0, 32, true);
+  mm.ReadInt(m_optMetSynLoad[i],metDef[i][23], 0, 32, true);
  }
 
  //Auto tune
