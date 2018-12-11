@@ -307,14 +307,14 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
  m_rpmthrd_edit.SetLimitText(4);
  m_rpmthrd_edit.SetDecimalPlaces(5);
- m_rpmthrd_spin.SetRangeAndDelta(100, 15000, 50);
- m_rpmthrd_edit.SetRange(100, 15000);
+ m_rpmthrd_spin.SetRangeAndDelta(0, 15000, 50);
+ m_rpmthrd_edit.SetRange(0, 15000);
 
  m_activdelay_spin.SetBuddy(&m_activdelay_edit);
  m_activdelay_edit.SetLimitText(3);
  m_activdelay_edit.SetDecimalPlaces(3);
- m_activdelay_spin.SetRangeAndDelta(5, 255, 1);
- m_activdelay_edit.SetRange(5, 255);
+ m_activdelay_spin.SetRangeAndDelta(0, 255, 1);
+ m_activdelay_edit.SetRange(0, 255);
 
  m_deadband_spin.SetBuddy(&m_deadband_edit);
  m_deadband_edit.SetLimitText(4);
