@@ -114,6 +114,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   afx_msg void OnAppSettingsPresentPorts();
   afx_msg HBRUSH OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor);
   afx_msg void OnSelendokRestartPerameters();
+  afx_msg void OnSelendokPlatform();
   afx_msg void OnDropDownPortSel();
   afx_msg BOOL OnDeviceChange(UINT nEventType, DWORD_PTR dwData);
   DECLARE_MESSAGE_MAP()

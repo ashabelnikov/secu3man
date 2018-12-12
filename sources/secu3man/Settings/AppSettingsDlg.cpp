@@ -29,6 +29,7 @@
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/XBrowseForFolder.h"
 #include "io-core/EnumPorts.h"
+#include "io-core/PlatformParamHolder.h"  //only for EECUPlatform enum
 #include <dbt.h>
 
 const UINT CAppSettingsDlg::IDD = IDD_APP_SETTINGS;
@@ -189,7 +190,7 @@ BEGIN_MESSAGE_MAP(CAppSettingsDlg, CDialog)
  ON_BN_CLICKED(IDC_APP_SETTINGS_USEDEBUG_FEATURES, OnAppSettingsLogfolderUseDVFeatures)
  ON_BN_CLICKED(IDC_APP_SETTINGS_PRESPORTS, OnAppSettingsPresentPorts)
  ON_CBN_SELENDOK(IDC_APP_SETTINGS_LANG_SEL_COMBO, OnSelendokRestartPerameters)
- ON_CBN_SELENDOK(IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, OnSelendokRestartPerameters)
+ ON_CBN_SELENDOK(IDC_APP_SETTINGS_PLATFORM_SEL_COMBO, OnSelendokPlatform)
  ON_CBN_DROPDOWN(IDC_APP_SETTINGS_PORT_SELECTION2_COMBO, OnDropDownPortSel)
 END_MESSAGE_MAP()
 
@@ -212,6 +213,23 @@ void CAppSettingsDlg::OnSelendokRestartPerameters()
  
  m_info_text.SetWindowText(program_restart_required ? MLL::GetString(IDS_APP_SETTINGS_PRG_RESTART_REQ).c_str() : _T(""));
  m_info_text.ShowWindow(program_restart_required ? SW_SHOW : SW_HIDE); 
+}
+
+void CAppSettingsDlg::OnSelendokPlatform()
+{
+ OnSelendokRestartPerameters();
+
+ if (m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection_combo.GetCurSel()) == EP_ATMEGA644)
+ {
+  m_app_baudrate_selection_combo.SelectString(0,_T("57600"));
+  m_bl_baudrate_selection_combo.SelectString(0,_T("57600"));
+ }
+
+ if (m_ecu_platform_selection_combo.GetItemData(m_ecu_platform_selection_combo.GetCurSel()) == EP_ATMEGA1284)
+ {
+  m_app_baudrate_selection_combo.SelectString(0,_T("115200"));
+  m_bl_baudrate_selection_combo.SelectString(0,_T("115200"));
+ }
 }
 
 bool CAppSettingsDlg::IsRestartRequired(void)
@@ -290,13 +308,8 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
  LPCTSTR lpszInitial = m_log_files_folder.GetBuffer(MAX_PATH);
  BOOL bEditBox = TRUE;
 
- BOOL bRet = XBrowseForFolder(m_hWnd,
-                              lpszInitial,
-                              -1,
-                              MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
-                              szFolder,
-                              sizeof(szFolder)/sizeof(TCHAR)-2,
-                              bEditBox);
+ BOOL bRet = XBrowseForFolder(m_hWnd, lpszInitial, -1, MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
+                              szFolder, sizeof(szFolder) / sizeof(TCHAR) - 2, bEditBox);
 
  if (bRet)
  {
