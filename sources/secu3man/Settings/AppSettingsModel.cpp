@@ -550,342 +550,1054 @@ bool CAppSettingsModel::WriteSettings(void)
  bool status = true;
 
  IniIO os(IniFileName, m_Name_Options_Section);
- VERIFY(os.WriteComment(_T("*** General settings ***"), true, true)); //<-- empty file
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  VERIFY(os.WriteComment(_T("*** General settings ***"), true, true)); //<-- empty file
+ else
+  VERIFY(os.WriteComment(_T("*** Общие настройки ***"), true, true)); //<-- empty file
  os.CreateSection(); //create section
  
- os.WriteComment(_T("Name of COM port or a device (e.g. /dev/ttyUSB0)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Name of COM port or a device (e.g. /dev/ttyUSB0)"));
+ else
+  os.WriteComment(_T("Имя COM порта или устройства (e.g. /dev/ttyUSB0)"));
  os.WriteString(m_optPortName);
 
- os.WriteComment(_T("Show only really existing ports in the COM port selection drop down list"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Show only really existing ports in the COM port selection drop down list"));
+ else
+  os.WriteComment(_T("Показывать только существующие порты в выпадающем списке COM портов"));
  os.WriteInt(m_optExistingPorts); 
  
- os.WriteComment(_T("COM port speed for firmware (baud)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("COM port speed for firmware (baud)"));
+ else
+  os.WriteComment(_T("Скорость COM порта для связи с прошивкой (бод)"));
  os.WriteDword(m_optBaudRateApplication);
  
- os.WriteComment(_T("COM port speed for boot loader (baud)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("COM port speed for boot loader (baud)"));
+ else
+  os.WriteComment(_T("Скорость COM порта для связи с загрузчиком (бод)"));
  os.WriteDword(m_optBaudRateBootloader);
 
- os.WriteComment(_T("Full path to folder for writing CSV log files. UseAppFolder must be set to 0."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Full path to folder for writing CSV log files. UseAppFolder must be set to 0."));
+ else
+  os.WriteComment(_T("Полный путь к папке для записи CSV лог файлов. UseAppFolder должен быть установлен в 0, иначе этот параметр игнорируется"));
  os.WriteString(m_optLogFilesFolder);
 
- os.WriteComment(_T("If set to 1, then log files will be created in the folder containing application. Set to 0 if you want to use LogFilesFolder"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("If set to 1, then log files will be created in the folder containing application. Set to 0 if you want to use LogFilesFolder"));
+ else
+  os.WriteComment(_T("Если установлен в 1, то лог файлы будут создаваться в папке с исполняемым файлом. Установите в 0, если вы хотите использовать LogFilesFolder"));
  os.WriteInt(m_optUseAppFolder);
 
- os.WriteComment(_T("Automatically write log files. Set to 0 for disabling this feature."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Automatically write log files. Set to 0 for disabling this feature."));
+ else
+  os.WriteComment(_T("Автоматически записывать логи. Установите в 0 чтобы запретить эту функцию."));
  os.WriteInt(m_optAlwaysWriteLog);
 
- os.WriteComment(_T("Symbol used to separate fields in the CSV file."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Symbol used to separate fields in the CSV file."));
+ else
+  os.WriteComment(_T("Символ, используемый для разделения полей в CSV файле."));
  os.WriteInt(m_optCSVSepSymbol);
 
- os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Specifies how frequently virtual gauges and indicators will be updated (redraw). Value in the milliseconds"));
+ else
+  os.WriteComment(_T("Задает период обновления панели приборов и индикаторов (перерисовка). Значение в миллисекундах"));
+
  os.WriteInt(m_optMIDeskUpdatePeriod);
 
- os.WriteComment(_T("Interface language. Set to english for English and set to russian for Russian. Default is english."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Interface language. Set to english for English and set to russian for Russian. Default is english."));
+ else
+  os.WriteComment(_T("Язык интерфейса. Установите в english для Английского или в russian для Русского. По умолчанию english."));
  os.WriteEnum(m_optInterfaceLang, m_AllowableLanguages);
 
- os.WriteComment(_T("Specify model of processor of your SECU-3 unit. Supported values are: atmega64, atmega128, atmega644, atmega1284."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Specify model of processor of your SECU-3 unit. Supported values are: atmega64, atmega128, atmega644, atmega1284."));
+ else
+  os.WriteComment(_T("Укажите модель просессора вашего блока SECU-3. Поддерживаемые значения: atmega64, atmega128, atmega644, atmega1284."));
  os.WriteEnum(m_optECUPlatformType, m_AllowablePlatforms);
 
- os.WriteComment(_T("Use debug features (for developers). If set to 1, the small floating window will be displayed inside the main window. See also DVDeskUpdatePeriod."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Use debug features (for developers). If set to 1, the small floating window will be displayed inside the main window. See also DVDeskUpdatePeriod."));
+ else
+  os.WriteComment(_T("Использовать средства отладки (для разработчиков). Если установлено в 1, внутри главного окна будет отображаться небольшое плавающее окно. См. также DVDeskUpdatePeriod."));
  os.WriteInt(m_optUseDVFeatures);
 
- os.WriteComment(_T("Specifies how frequently debug floating window will be updated (redraw). Value in the milliseconds"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Specifies how frequently debug floating window will be updated (redraw). Value in the milliseconds"));
+ else
+  os.WriteComment(_T("Задает период обновления плавающего окна отладки (перерисовка). Значение в миллисекундах"));
  os.WriteInt(m_optDVDeskUpdatePeriod);
 
- os.WriteComment(_T("Controls displaying of tool tips (hints). Set to 0 if you want to disable showing of tool tips."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Controls displaying of tool tips (hints). Set to 0 if you want to disable showing of tool tips."));
+ else
+  os.WriteComment(_T("Управление отображением всплывающих подсказок. Установите в 0, если вы не хотите чтобы отображались всплывающие подсказки."));
  os.WriteInt(m_optShowToolTips); 
 
- os.WriteComment(_T("Specifies which format of data uses your SECU-3 firmware when sends and receives packets. Set to 0 for binary format (default)."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Specifies which format of data uses your SECU-3 firmware when sends and receives packets. Set to 0 for binary format (default)."));
+ else
+  os.WriteComment(_T("Указывает какой формат данных использует прошивка SECU-3 для приема и передачи данных. Установите в 0 для бинарного формата (исп. по умолчанию)."));
  os.WriteInt(m_optHexDataMode); 
 
- os.WriteComment(_T("Set to 0 if you don't want to be bothred by error messages related to COM port. Recommended only for experienced users."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Set to 0 if you don't want to be bothred by error messages related to COM port. Recommended only for experienced users."));
+ else
+  os.WriteComment(_T("Установите в 0, если вас раздражают сообщения об ошибках COM порта (не будут показываться). Рекомендуется только для опытных пользователей."));
  os.WriteInt(m_optCOMPortBother); 
 
- os.WriteComment(_T("Use or not to use hot keys. Set to 0 if you want to disable hot keys."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Use or not to use hot keys. Set to 0 if you want to disable hot keys."));
+ else
+  os.WriteComment(_T("Использовать горячие клавиши. Установите в 0, если вы хотите запретить горячие клавиши."));
  os.WriteInt(m_optUseHotKeys); 
 
- os.WriteComment(_T("Show welcome"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Show welcome"));
+ else
+  os.WriteComment(_T("Показывать приветствие"));
  m_optShowWelcome.value = 0; //<--Will be not shown next time
  os.WriteInt(m_optShowWelcome); 
 
- os.WriteComment(_T("Allow visual theme (appeared since Windows XP). Set to 0 if you want ot disable using of visual themes."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Allow visual theme (appeared since Windows XP). Set to 0 if you want ot disable using of visual themes."));
+ else
+  os.WriteComment(_T("Разрешить визуальные темы (появились в Windows XP). Установите в 0, если вы хотите запретить визуальные темы."));
  os.WriteInt(m_optAllowVisualTheme); 
 
- os.WriteComment(_T("Set ot 1 if you want to automatically enter diagnostic mode after opening of \"Diagnostics\" tab. For experienced users only."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Set to 1 if you want to automatically enter diagnostic mode after opening of \"Diagnostics\" tab. For experienced users only."));
+ else
+  os.WriteComment(_T("Установите в 1, если вы хотите, чтобы вход в режим диагностики производился автоматически при открытии вкладки \"Диагностика\". Только для опытных пользователей."));
  os.WriteInt(m_optAutoDiagEnter);
 
- os.WriteComment(_T("Set to 0 if you don't want to be bothered by warning messages related to saving of files."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Set to 0 if you don't want to be bothered by warning messages related to saving of files."));
+ else
+  os.WriteComment(_T("Установите в 0, если вас раздражают сообщения, предупреждающие о несохраненных файлах."));
  os.WriteInt(m_optSaveWarning); 
 
- os.WriteComment(_T("Set to 1 if you want to automatically read CE errors from firmware after opening of \"Check engine\" tab."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Set to 1 if you want to automatically read CE errors from firmware after opening of \"Check engine\" tab."));
+ else
+  os.WriteComment(_T("Установите в 1, если вы хотите, чтобы коды ошибок автоматически считывались при открытии вкладки \"Check Engine\"."));
  os.WriteInt(m_optAutoCERead); 
 
- os.WriteComment(_T("Enable/disable children windows of 2D and 3D chards. If set to 1, then mentioned windows will belong to main window (parent). Set to 0 and windows will belong to desktop."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Enable/disable children windows of 2D and 3D chards. If set to 1, then mentioned windows will belong to main window (parent). Set to 0 and windows will belong to desktop."));
+ else
+  os.WriteComment(_T("Разрешить/запретить дочерние окна 2D и 3D графиков таблиц. Установите в 0 и эти плавающие окна будут принадлежать рабочему столу, а не главному окну программы."));
  os.WriteInt(m_optChildCharts); 
 
- os.WriteComment(_T("Automatically reopen COM port after plugging of USB cable or Bluetooth. Set to 0 to disable this feature."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("Automatically reopen COM port after plugging of USB cable or Bluetooth. Set to 0 to disable this feature."));
+ else
+  os.WriteComment(_T("Автоматически переоткрывать COM порт после подключения по USB каделю или Bluetooth. Установите в 0 для запрещения этой функции."));
  os.WriteInt(m_optPortAutoReopen); 
 
- os.WriteComment(_T("When set to 1, only one 2D or 3D chart window will be displayed at a time (buttons will be toggled). By default is set to 0 (disabled)."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  os.WriteComment(_T("When set to 1, only one 2D or 3D chart window will be displayed at a time (buttons will be toggled). By default is set to 0 (disabled)."));
+ else
+  os.WriteComment(_T("Когда установлено в 1, только одно окно 2D или 3D графиков таблиц будет отображаться одновременно (кнопки будут переключаться). По умолчанию установленов в 0 (отключено)."));
  os.WriteInt(m_optToggleMapWnd); 
 
  IniIO fs(IniFileName, m_Name_Fixtures_Section); 
- fs.WriteComment(_T("*** General settings for virtual fixtures and indicators ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("*** General settings for virtual fixtures and indicators ***"), false, true);
+ else
+  fs.WriteComment(_T("*** Общие настройки для виртуальных приборов и индикаторов ***"), false, true);
  fs.CreateSection();
 
- fs.WriteComment(_T("Switch between two separately configured profiles of virtual gauges and indicators (See Meters and MetersEx sections, see also Indicators and IndicatorsEx). Allowed values: 0 and 1"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Switch between two separately configured profiles of virtual gauges and indicators (See Meters and MetersEx sections, see also Indicators and IndicatorsEx). Allowed values: 0 and 1"));
+ else
+  fs.WriteComment(_T("Переключение между двумя независимо конфигурируемыми профилями приборов и индикаторов (См. секции Meters и MetersEx, см. также Indicators и IndicatorsEx). Допустимые значения: 0 или 1"));
  fs.WriteInt(m_optShowExFixtures); 
 
- fs.WriteComment(_T("Size of the moving avarage filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving avarage filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений оборотов. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optRPMAverage); 
 
- fs.WriteComment(_T("Size of the moving avarage filter used for voltage values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving avarage filter used for voltage values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений напряжения борт.сети. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optVoltAverage); 
 
- fs.WriteComment(_T("Size of the moving avarage filter used for MAP values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving avarage filter used for MAP values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДАД. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optMAPAverage); 
 
- fs.WriteComment(_T("Size of the moving avarage filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving avarage filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ADD_I1. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optAI1Average); 
 
- fs.WriteComment(_T("Size of the moving avarage filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving avarage filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДПДЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optTPSAverage); 
 
- fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
+ else
+  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора оборотов (например 6000 мин-1)."));
  fs.WriteInt(m_optTachometerMax); 
 
- fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the MAP gauge (e.g. 100 kPa)."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the MAP gauge (e.g. 100 kPa)."));
+ else
+  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора абс.давления (например 100 кПа)."));
  fs.WriteInt(m_optPressureMax); 
 
- fs.WriteComment(_T("This value used in calculations of speed and distance using VSS. Number of pulses from VSS sensor per 1km of passed distance."));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("This value used in calculations of speed and distance using VSS. Number of pulses from VSS sensor per 1km of passed distance."));
+ else
+  fs.WriteComment(_T("Это значение используется в вычислениях скорости и пройденного расстояния. Число импульсов с датчика скорости на 1 км пройденного пути."));
  fs.WriteInt(m_optPulsesPer1Km); 
 
- fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Defines which unit should be used for displaying of vehicle speed and distance. Supported values are: kmh and mph"));
+ else
+  fs.WriteComment(_T("Указывает в каких единицах измерения должна отображаеться скорость и расстояние. Допустимые значения: kmh and mph"));
  fs.WriteEnum(m_optSpeedUnit, m_AllowableSpeedUnits);
 
- fs.WriteComment(_T("Size of font used for displaying of titles in virtual gauges. Default is 100% (normal traditional size)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of font used for displaying of titles in virtual gauges. Default is 100% (normal traditional size)"));
+ else
+  fs.WriteComment(_T("Размер шрифта, используемого для отображения заголовков виртуальных приборов. По умолчанию 100% (традиционный размер)"));
  fs.WriteInt(m_optTitleFontSize); 
 
- fs.WriteComment(_T("Size of font used for displaying of digital values at the bottom of virtual gauges. Default is 130%"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of font used for displaying of digital values at the bottom of virtual gauges. Default is 130%"));
+ else
+  fs.WriteComment(_T("Размер шрифта, используемого для отображения цифровых значений в виртуальных приборах. По умолчанию 100% (традиционный размер)"));
  fs.WriteInt(m_optValueFontSize); 
 
- fs.WriteComment(_T("Size of font used for displaying of digital values at the left-top and right-top corners of virtual gauges. Default is 100%"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of font used for displaying of digital values at the left-top and right-top corners of virtual gauges. Default is 100%"));
+ else
+  fs.WriteComment(_T("Размер шрифта, используемого для отображения цифровых значений в левом-верхнем и правом-верхнем углах приборов. По умолчанию 100% (традиционный размер)"));
  fs.WriteInt(m_optPaneFontSize); 
 
- fs.WriteComment(_T("Size of font used for displaying of grid labels and units in virtual gauges. Default is 100%"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of font used for displaying of grid labels and units in virtual gauges. Default is 100%"));
+ else
+  fs.WriteComment(_T("Размер шрифта, используемого для отображения надписей и единиц измерений в виртуальных приборах. По умолчанию 100% (традиционный размер)"));
  fs.WriteInt(m_optLabelFontSize); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
- ws.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Firmware data\" and \"EEPROM\" tabs), including position of the main window ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Firmware data\" and \"EEPROM\" tabs), including position of the main window ***"), false, true);
+ else
+  ws.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открывающихся с вкладок \"Данные прошивки\" и \"EEPROM\"), включая положение главного окна ***"), false, true);
  ws.CreateSection();
- ws.WriteWndPos(m_optMainFrmWnd, _T("Main window"));
- ws.WriteWndPos(m_optStrtMapWnd, _T("Cranking ignition timing map"));
- ws.WriteWndPos(m_optIdleMapWnd, _T("Idling ignition timing map"));
- ws.WriteWndPos(m_optWorkMapWnd, _T("Work ignition timing map"));
- ws.WriteWndPos(m_optTempMapWnd, _T("Ign. timing vs CLT correction map"));
- ws.WriteWndPos(m_optGridMapIgnWnd, _T("Grid editing window for ign.timing maps"));
- ws.WriteWndPos(m_optGridMapInjWnd, _T("Grid editing window for injection maps"));
- ws.WriteWndPos(m_optAttenMapWnd, _T("Attenuator's curve of amplification"));
- ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Dwell time map"));
- ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Coolant temperature sensor table"));
- ws.WriteWndPos(m_optVEMapWnd, _T("VE map"));
- ws.WriteWndPos(m_optAFRMapWnd, _T("AFR map"));
- ws.WriteWndPos(m_optCrnkMapWnd, _T("Injection PW on cranking"));
- ws.WriteWndPos(m_optWrmpMapWnd, _T("Warmup enrichment map"));
- ws.WriteWndPos(m_optDeadMapWnd, _T("Injector's lag map"));
- ws.WriteWndPos(m_optIdlrMapWnd, _T("IAC position (working)"));
- ws.WriteWndPos(m_optIdlcMapWnd, _T("IAC position (cranking)"));
- ws.WriteWndPos(m_optAETPSMapWnd, _T("Enrichment vs throttle speed map"));
- ws.WriteWndPos(m_optAERPMMapWnd, _T("Enrichment vs engine speed map"));
- ws.WriteWndPos(m_optAftstrMapWnd, _T("Afterstart enrichment map"));
- ws.WriteWndPos(m_optATSCurvMapWnd, _T("MAT sensor table"));
- ws.WriteWndPos(m_optATSCorrMapWnd, _T("Ign.timing correction vs MAT map"));
- ws.WriteWndPos(m_optGasdoseMapWnd, _T("Gas valve position vs RPM,TPS map"));
- ws.WriteWndPos(m_optITMapWnd, _T("Injection timing map"));
- ws.WriteWndPos(m_optITRPMMapWnd, _T("Target idling RPM"));
- ws.WriteWndPos(m_optRigidMapWnd, _T("Idling regulator's rigidity map"));
- ws.WriteWndPos(m_optEGOCrvMapWnd, _T("EGO sensor curve"));
- ws.WriteWndPos(m_optIACCMapWnd, _T("Mixture correction vs IAC pos"));
- ws.WriteWndPos(m_optIACCWMapWnd, _T("Weight of mixture correction vs IAC pos"));
- ws.WriteWndPos(m_optIATCLTMapWnd, _T("CLT to MAT influence factor"));
- ws.WriteWndPos(m_optBarocorrMapWnd, _T("Barometric correction map"));
- ws.WriteWndPos(m_optManIgntimMapWnd, _T("Manual ignition timing corr. map"));
- ws.WriteWndPos(m_optCESettingsWnd, _T("CE settings window"));
- ws.WriteWndPos(m_optTpsswtMapWnd, _T("TPS switch point map"));
- ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("TMP2 sensor table"));
- ws.WriteWndPos(m_optGtscMapWnd, _T("Gas temperature correction map"));
- ws.WriteWndPos(m_optGpscMapWnd, _T("Gas pressure correction map"));
- ws.WriteWndPos(m_optAtscMapWnd, _T("Air density correction map"));
- ws.WriteWndPos(m_optCrkTempMapWnd, _T("Ign.timing vs CLT correction on cranking"));
- ws.WriteWndPos(m_optEHPauseMapWnd, _T("EGO heater's pause map (for PWM)"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optMainFrmWnd, _T("Main window"));
+ else
+  ws.WriteWndPos(m_optMainFrmWnd, _T("Главное окно"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optStrtMapWnd, _T("Cranking ignition timing map"));
+ else
+  ws.WriteWndPos(m_optStrtMapWnd, _T("Таблица УОЗ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIdleMapWnd, _T("Idling ignition timing map"));
+ else
+  ws.WriteWndPos(m_optIdleMapWnd, _T("Таблица УОЗ на ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optWorkMapWnd, _T("Work ignition timing map"));
+ else
+  ws.WriteWndPos(m_optWorkMapWnd, _T("Рабочая карта УОЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optTempMapWnd, _T("Ign. timing vs CLT correction map"));
+ else
+  ws.WriteWndPos(m_optTempMapWnd, _T("Коррекция УОЗ по ДТОЖ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGridMapIgnWnd, _T("Grid editing window for ign.timing maps"));
+ else
+  ws.WriteWndPos(m_optGridMapIgnWnd, _T("Редактирование в виде таблиц (зажигание)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGridMapInjWnd, _T("Grid editing window for injection maps"));
+ else
+  ws.WriteWndPos(m_optGridMapInjWnd, _T("Редактирование в виде таблиц (впрыск)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAttenMapWnd, _T("Attenuator's curve of amplification"));
+ else
+  ws.WriteWndPos(m_optAttenMapWnd, _T("Таблица функции аттенюатора"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Dwell time map"));
+ else
+  ws.WriteWndPos(m_optDwellCntrlMapWnd, _T("Время накопления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Coolant temperature sensor table"));
+ else
+  ws.WriteWndPos(m_optCTSCurveMapWnd, _T("Кривая датчика температуры охлажд.житкости"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optVEMapWnd, _T("VE map"));
+ else
+  ws.WriteWndPos(m_optVEMapWnd, _T("Наполнение (объемный КПД)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAFRMapWnd, _T("AFR map"));
+ else
+  ws.WriteWndPos(m_optAFRMapWnd, _T("Соотношение Воздух/топливо"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCrnkMapWnd, _T("Injection PW on cranking"));
+ else
+  ws.WriteWndPos(m_optCrnkMapWnd, _T("Длительность впрыска на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optWrmpMapWnd, _T("Warmup enrichment map"));
+ else
+  ws.WriteWndPos(m_optWrmpMapWnd, _T("Обогащение при прогреве"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optDeadMapWnd, _T("Injector's lag map"));
+ else
+  ws.WriteWndPos(m_optDeadMapWnd, _T("Лаг форсунки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIdlrMapWnd, _T("IAC position (working)"));
+ else
+  ws.WriteWndPos(m_optIdlrMapWnd, _T("Положение РДВ (рабочее)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIdlcMapWnd, _T("IAC position (cranking)"));
+ else
+  ws.WriteWndPos(m_optIdlcMapWnd, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAETPSMapWnd, _T("Enrichment vs throttle speed map"));
+ else
+  ws.WriteWndPos(m_optAETPSMapWnd, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAERPMMapWnd, _T("Enrichment vs engine speed map"));
+ else
+  ws.WriteWndPos(m_optAERPMMapWnd, _T("Обогащение по оборотам"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAftstrMapWnd, _T("Afterstart enrichment map"));
+ else
+  ws.WriteWndPos(m_optAftstrMapWnd, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optATSCurvMapWnd, _T("MAT sensor table"));
+ else
+  ws.WriteWndPos(m_optATSCurvMapWnd, _T("Кривая датчика температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optATSCorrMapWnd, _T("Ign.timing correction vs MAT map"));
+ else
+  ws.WriteWndPos(m_optATSCorrMapWnd, _T("Коррекция УОЗ по температуре воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGasdoseMapWnd, _T("Gas valve position vs RPM,TPS map"));
+ else
+  ws.WriteWndPos(m_optGasdoseMapWnd, _T("Положение дозатора газа от оборотов и ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optITMapWnd, _T("Injection timing map"));
+ else
+  ws.WriteWndPos(m_optITMapWnd, _T("Фаза впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optITRPMMapWnd, _T("Target idling RPM"));
+ else
+  ws.WriteWndPos(m_optITRPMMapWnd, _T("Целевые обороты ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optRigidMapWnd, _T("Idling regulator's rigidity map"));
+ else
+  ws.WriteWndPos(m_optRigidMapWnd, _T("Жесткость РХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optEGOCrvMapWnd, _T("EGO sensor curve"));
+ else
+  ws.WriteWndPos(m_optEGOCrvMapWnd, _T("Кривая датчика кислорода"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIACCMapWnd, _T("Mixture correction vs IAC pos"));
+ else
+  ws.WriteWndPos(m_optIACCMapWnd, _T("Коррекция смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIACCWMapWnd, _T("Weight of mixture correction vs IAC pos"));
+ else
+  ws.WriteWndPos(m_optIACCWMapWnd, _T("Вес коррекции смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optIATCLTMapWnd, _T("CLT to MAT influence factor"));
+ else
+  ws.WriteWndPos(m_optIATCLTMapWnd, _T("Коэффициент влияния ТОЖ на ТВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optBarocorrMapWnd, _T("Barometric correction map"));
+ else
+  ws.WriteWndPos(m_optBarocorrMapWnd, _T("Барометрическая коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optManIgntimMapWnd, _T("Manual ignition timing corr. map"));
+ else
+  ws.WriteWndPos(m_optManIgntimMapWnd, _T("Ручная октан-коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCESettingsWnd, _T("CE settings window"));
+ else
+  ws.WriteWndPos(m_optCESettingsWnd, _T("Настройки СЕ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optTpsswtMapWnd, _T("TPS switch point map"));
+ else
+  ws.WriteWndPos(m_optTpsswtMapWnd, _T("Точка переключения по ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("TMP2 sensor table"));
+ else
+  ws.WriteWndPos(m_optTmp2CurveMapWnd, _T("Кривая датчика температуры на входе TMP2"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGtscMapWnd, _T("Gas temperature correction map"));
+ else
+  ws.WriteWndPos(m_optGtscMapWnd, _T("Коррекция смеси по температуре газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optGpscMapWnd, _T("Gas pressure correction map"));
+ else
+  ws.WriteWndPos(m_optGpscMapWnd, _T("Коррекция смеси по давлению газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optAtscMapWnd, _T("Air density correction map"));
+ else
+  ws.WriteWndPos(m_optAtscMapWnd, _T("Коррекция смеси по плотности воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCrkTempMapWnd, _T("Ign.timing vs CLT correction on cranking"));
+ else
+  ws.WriteWndPos(m_optCrkTempMapWnd, _T("Коррекция УОЗ по ДТОЖ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optEHPauseMapWnd, _T("EGO heater's pause map (for PWM)"));
+ else
+  ws.WriteWndPos(m_optEHPauseMapWnd, _T("Время паузы подогрева ДК (для ШИМ)"));
 
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
- ws1.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Parameters and monitor\" tab), including position of the main window ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteComment(_T("*** Remembered positions of floating windows on the screen (opened from the \"Parameters and monitor\" tab) ***"), false, true);
+ else
+  ws1.WriteComment(_T("*** Запомненные положения плавающих окон на экране (открываются с вкладки \"Параметры и монитор\") ***"), false, true);
  ws1.CreateSection();
 
- ws1.WriteWndPos(m_optStrtMapWnd1, _T("Cranking ignition timing map"));
- ws1.WriteWndPos(m_optIdleMapWnd1, _T("Idling ignition timing map"));
- ws1.WriteWndPos(m_optWorkMapWnd1, _T("Work ignition timing map"));
- ws1.WriteWndPos(m_optTempMapWnd1, _T("Ign. timing vs CLT correction map"));
- ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Grid editing window for ign.timing maps"));
- ws1.WriteWndPos(m_optGridMapInjWnd1, _T("Grid editing window for injection maps"));
- ws1.WriteWndPos(m_optVEMapWnd1, _T("VE map"));
- ws1.WriteWndPos(m_optAFRMapWnd1, _T("AFR map"));
- ws1.WriteWndPos(m_optCrnkMapWnd1, _T("Injection PW on cranking"));
- ws1.WriteWndPos(m_optWrmpMapWnd1, _T("Warmup enrichment map"));
- ws1.WriteWndPos(m_optDeadMapWnd1, _T("Injector's lag map"));
- ws1.WriteWndPos(m_optIdlrMapWnd1, _T("IAC position (working)"));
- ws1.WriteWndPos(m_optIdlcMapWnd1, _T("IAC position (cranking)"));
- ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Enrichment vs throttle speed map"));
- ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Enrichment vs engine speed"));
- ws1.WriteWndPos(m_optAftstrMapWnd1, _T("Afterstart enrichment map"));
- ws1.WriteWndPos(m_optITMapWnd1, _T("Injection timing map"));
- ws1.WriteWndPos(m_optITRPMMapWnd1, _T("Target idling RPM"));
- ws1.WriteWndPos(m_optRigidMapWnd1, _T("Idling regulator's rigidity map"));
- ws1.WriteWndPos(m_optEGOCrvMapWnd1, _T("EGO sensor curve"));
- ws1.WriteWndPos(m_optIACCMapWnd1, _T("Mixture correction vs IAC pos"));
- ws1.WriteWndPos(m_optIACCWMapWnd1, _T("Weight of mixture correction vs IAC pos"));
- ws1.WriteWndPos(m_optIATCLTMapWnd1, _T("CLT to MAT influence factor"));
- ws1.WriteWndPos(m_optTpsswtMapWnd1, _T("TPS switch point map"));
- ws1.WriteWndPos(m_optGtscMapWnd1, _T("Gas temperature correction map"));
- ws1.WriteWndPos(m_optGpscMapWnd1, _T("Gas pressure correction map"));
- ws1.WriteWndPos(m_optAtscMapWnd1, _T("Air density correction map"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optStrtMapWnd1, _T("Cranking ignition timing map"));
+ else
+  ws1.WriteWndPos(m_optStrtMapWnd1, _T("Таблица УОЗ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIdleMapWnd1, _T("Idling ignition timing map"));
+ else
+  ws1.WriteWndPos(m_optIdleMapWnd1, _T("Таблица УОЗ на ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optWorkMapWnd1, _T("Work ignition timing map"));
+ else
+  ws1.WriteWndPos(m_optWorkMapWnd1, _T("Рабочая карта УОЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optTempMapWnd1, _T("Ign. timing vs CLT correction map"));
+ else
+  ws1.WriteWndPos(m_optTempMapWnd1, _T("Коррекция УОЗ по ДТОЖ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Grid editing window for ign.timing maps"));
+ else
+  ws1.WriteWndPos(m_optGridMapIgnWnd1, _T("Редактирование в виде таблиц (зажигание)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optGridMapInjWnd1, _T("Grid editing window for injection maps"));
+ else
+  ws1.WriteWndPos(m_optGridMapInjWnd1, _T("Редактирование в виде таблиц (впрыск)"));
+ 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optVEMapWnd1, _T("VE map"));
+ else
+  ws1.WriteWndPos(m_optVEMapWnd1, _T("Наполнение (объемный КПД)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAFRMapWnd1, _T("AFR map"));
+ else
+  ws1.WriteWndPos(m_optAFRMapWnd1, _T("Соотношение Воздух/топливо"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optCrnkMapWnd1, _T("Injection PW on cranking"));
+ else
+  ws1.WriteWndPos(m_optCrnkMapWnd1, _T("Длительность впрыска на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optWrmpMapWnd1, _T("Warmup enrichment map"));
+ else
+  ws1.WriteWndPos(m_optWrmpMapWnd1, _T("Обогащение при прогреве"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optDeadMapWnd1, _T("Injector's lag map"));
+ else
+  ws1.WriteWndPos(m_optDeadMapWnd1, _T("Лаг форсунки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIdlrMapWnd1, _T("IAC position (working)"));
+ else
+  ws1.WriteWndPos(m_optIdlrMapWnd1, _T("Положение РДВ (рабочее)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIdlcMapWnd1, _T("IAC position (cranking)"));
+ else
+  ws1.WriteWndPos(m_optIdlcMapWnd1, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Enrichment vs throttle speed map"));
+ else
+  ws1.WriteWndPos(m_optAETPSMapWnd1, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Enrichment vs engine speed"));
+ else
+  ws1.WriteWndPos(m_optAERPMMapWnd1, _T("Обогащение по оборотам"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAftstrMapWnd1, _T("Afterstart enrichment map"));
+ else
+  ws1.WriteWndPos(m_optAftstrMapWnd1, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optITMapWnd1, _T("Injection timing map"));
+ else
+  ws1.WriteWndPos(m_optITMapWnd1, _T("Фаза впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optITRPMMapWnd1, _T("Target idling RPM"));
+ else
+  ws1.WriteWndPos(m_optITRPMMapWnd1, _T("Целевые обороты ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optRigidMapWnd1, _T("Idling regulator's rigidity map"));
+ else
+  ws1.WriteWndPos(m_optRigidMapWnd1, _T("Жесткость РХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optEGOCrvMapWnd1, _T("EGO sensor curve"));
+ else
+  ws1.WriteWndPos(m_optEGOCrvMapWnd1, _T("Кривая датчика кислорода"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIACCMapWnd1, _T("Mixture correction vs IAC pos"));
+ else
+  ws1.WriteWndPos(m_optIACCMapWnd1, _T("Коррекция смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIACCWMapWnd1, _T("Weight of mixture correction vs IAC pos"));
+ else
+  ws1.WriteWndPos(m_optIACCWMapWnd1, _T("Вес коррекции смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optIATCLTMapWnd1, _T("CLT to MAT influence factor"));
+ else
+  ws1.WriteWndPos(m_optIATCLTMapWnd1, _T("Коэффициент влияния ТОЖ на ТВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optTpsswtMapWnd1, _T("TPS switch point map"));
+ else
+  ws1.WriteWndPos(m_optTpsswtMapWnd1, _T("Точка переключения по ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optGtscMapWnd1, _T("Gas temperature correction map"));
+ else
+  ws1.WriteWndPos(m_optGtscMapWnd1, _T("Коррекция смеси по температуре газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optGpscMapWnd1, _T("Gas pressure correction map"));
+ else
+  ws1.WriteWndPos(m_optGpscMapWnd1, _T("Коррекция смеси по давлению газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws1.WriteWndPos(m_optAtscMapWnd1, _T("Air density correction map"));
+ else
+  ws1.WriteWndPos(m_optAtscMapWnd1, _T("Коррекция смеси по плотности воздуха"));
 
  //Sizes of windows
  IniIO sz(IniFileName, m_Name_WndSize_Section);
- sz.WriteComment(_T("*** Remembered sizes of windows ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteComment(_T("*** Remembered sizes of windows ***"), false, true);
+ else
+  sz.WriteComment(_T("*** Запомненные размеры окон ***"), false, true);
  sz.CreateSection();
 
- sz.WriteWndPos(m_optMainFrmWndSize, _T("Main window"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sz.WriteWndPos(m_optMainFrmWndSize, _T("Main window"));
+ else
+  sz.WriteWndPos(m_optMainFrmWndSize, _T("Главное окно"));
 
  //States of windows
  IniIO sw(IniFileName, m_Name_WndState_Section);
- sw.WriteComment(_T("*** Remembered states of windows ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sw.WriteComment(_T("*** Remembered states of windows ***"), false, true);
+ else
+  sw.WriteComment(_T("*** Запомненные состояние окон ***"), false, true);
  sw.CreateSection();
 
- sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("State of the main window. Allowed values are: minimized, normal and maximized"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("State of the main window. Allowed values are: minimized, normal and maximized"));
+ else
+  sw.WriteEnum(m_optMainFrmWndState, m_AllowableWndStates, _T("Состояние главного окна. Допустимые значения: minimized, normal and maximized"));
 
- _TSTRING ii_comment[2] = {_T("*** Configuration of virtual On\\Off indicators (1-st profile) ***\r\n; Use IndRows to specify number of rows will be used for grouping of virtual indicators\r\n; Set index number for each field (order). Indicator fileds will be displayed in direction from left-top to right-bottom according to set order."), _T("*** Configuration of virtual On\\Off indicators (2-nd profile) ***")};
+ TCHAR* ii_comment[2];
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+ {
+  ii_comment[0] = _T("*** Configuration of virtual On\\Off indicators (1-st profile) ***\r\n; Use IndRows to specify number of rows will be used for grouping of virtual indicators\r\n; Set index number for each field (order). Indicator fileds will be displayed in direction from left-top to right-bottom according to set order.");
+  ii_comment[1] = _T("*** Configuration of virtual On\\Off indicators (2-nd profile) ***");
+ }
+ else
+ {
+  ii_comment[0] = _T("*** Конфигурация виртуальных индикоторов (1-й профиль) ***\r\n; Используйте IndRows чтобы указать кол-во строк, используемых для группировки индикаторов.\r\n; Установите порядковый номер для каждой ячейки. Ячейки индикаторов будут отображаться в направлении с левого-верхнего до правого-нижнего углов в соответствии с установленным порядком.");
+  ii_comment[1] = _T("*** Конфигурация виртуальных индикоторов (2-й профиль) ***"); 
+ }
+
  //Indicators
  for(int i = 0; i < 2; ++i)
  {
   IniIO ii(IniFileName, m_Name_Indicators_Section[i]);
   ii.WriteComment(ii_comment[i], false, true);
   ii.CreateSection();
-  ii.WriteFlt(m_optIndHeightPercent[i], 2, _T("Percent of height which indicators' panel will occupy"));
-  ii.WriteInt(m_optIndRows[i], _T("Number of rows in the virtual indicators panel"));
-  ii.WriteInt(m_optIndGas_v[i], _T("GAS_V input"));
-  ii.WriteInt(m_optIndCarb[i], _T("CARB input"));
-  ii.WriteInt(m_optIndIdleValve[i], _T("Idle cutoff valve"));
-  ii.WriteInt(m_optIndPowerValve[i], _T("Power valve"));
-  ii.WriteInt(m_optIndStBlock[i], _T("Starter relay"));
-  ii.WriteInt(m_optIndAE[i], _T("Acceleration enrichment"));
-  ii.WriteInt(m_optIndCoolingFan[i], _T("Cooling fan"));
-  ii.WriteInt(m_optIndCE[i], _T("Check Engine"));
-  ii.WriteInt(m_optIndFCRevLim[i], _T("Rev. limitter"));
-  ii.WriteInt(m_optIndFloodClear[i], _T("Flood clear"));
-  ii.WriteInt(m_optIndSysLocked[i], _T("System locked"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteFlt(m_optIndHeightPercent[i], 2, _T("Percent of height which indicators' panel will occupy"));
+  else
+   ii.WriteFlt(m_optIndHeightPercent[i], 2, _T("Процент высоты, которую будет занимать панель индикаторов"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndRows[i], _T("Number of rows in the virtual indicators panel"));
+  else
+   ii.WriteInt(m_optIndRows[i], _T("Кол-во строк в панели виртуальных индикаторов"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndGas_v[i], _T("GAS_V input"));
+  else
+   ii.WriteInt(m_optIndGas_v[i], _T("Вход GAS_V"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndCarb[i], _T("CARB input"));
+  else
+   ii.WriteInt(m_optIndCarb[i], _T("Вход CARB"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndIdleValve[i], _T("Idle cutoff valve"));
+  else
+   ii.WriteInt(m_optIndIdleValve[i], _T("Клапан ЭПХХ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndPowerValve[i], _T("Power valve"));
+  else
+   ii.WriteInt(m_optIndPowerValve[i], _T("Клапан ЭМР"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndStBlock[i], _T("Starter relay"));
+  else
+   ii.WriteInt(m_optIndStBlock[i], _T("Реле блокировки стартера"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndAE[i], _T("Acceleration enrichment"));
+  else
+   ii.WriteInt(m_optIndAE[i], _T("Обогащение при ускорении"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndCoolingFan[i], _T("Cooling fan"));
+  else
+   ii.WriteInt(m_optIndCoolingFan[i], _T("Вентилятор охлаждения"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndCE[i], _T("Check Engine lamp"));
+  else
+   ii.WriteInt(m_optIndCE[i], _T("Лампа Check Engine"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndFCRevLim[i], _T("Rev. limitter"));
+  else
+   ii.WriteInt(m_optIndFCRevLim[i], _T("Ограничение оборотов"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndFloodClear[i], _T("Flood clear"));
+  else
+   ii.WriteInt(m_optIndFloodClear[i], _T("Режим продувки"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndSysLocked[i], _T("System locked"));
+  else
+   ii.WriteInt(m_optIndSysLocked[i], _T("Система заблокирована"));
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
- ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***\r\n; You can obtain any color by combining different values of R, G and B components. For example: FF0000 - red, 00FF00 - green, D3D350 - dim yellow. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
- ic.WriteColor(m_optColGas_v, _T("GAS_V input"));
- ic.WriteColor(m_optColCarb, _T("CARB input"));
- ic.WriteColor(m_optColIdleValve, _T("Idle cutoff valve"));
- ic.WriteColor(m_optColPowerValve, _T("Power valve"));
- ic.WriteColor(m_optColStBlock, _T("Starter relay"));
- ic.WriteColor(m_optColAE, _T("Acceleration enrichment"));
- ic.WriteColor(m_optColCoolingFan, _T("Cooling fan"));
- ic.WriteColor(m_optColCE, _T("Check Engine"));
- ic.WriteColor(m_optColFCRevLim, _T("Rev. limitter"));
- ic.WriteColor(m_optColFloodClear, _T("Flood clear"));
- ic.WriteColor(m_optColSysLocked, _T("System locked"));
 
- _TSTRING mm_comment[2] = {_T("*** Configuration of virtual gauges (1-st profile) ***\r\n; Use MetRows to specify number of rows will be used for grouping of virtual gauges\r\n; Set index number for each gauge (order). Gauges will be displayed in direction from left-top to right-bottom according to set order."), _T("*** Configuration of virtual gauges (2-nd profile) ***")};
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteComment(_T("*** Colors for indicators (colors of the \"On\" state). Values are RGB in hex format ***\r\n; You can obtain any color by combining different values of R, G and B components. For example: FF0000 - red, 00FF00 - green, D3D350 - dim yellow. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
+ else
+  ic.WriteComment(_T("*** Цвета индикаторов (цвет включенного состояния). RGB значения в hex формате ***\r\n; Вы можете получить любой цвет путем комбинирования значений R, G и B компонент. For example: FF0000 - красный, 00FF00 - зеленый, D3D350 - тусклый желтый. https://www.w3schools.com/colors/colors_picker.asp"), false, true);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColGas_v, _T("GAS_V input"));
+ else
+  ic.WriteColor(m_optColGas_v, _T("Вход GAS_V"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColCarb, _T("CARB input"));
+ else
+  ic.WriteColor(m_optColCarb, _T("Вход CARB"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColIdleValve, _T("Idle cutoff valve"));
+ else
+  ic.WriteColor(m_optColIdleValve, _T("Клапан ЭПХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColPowerValve, _T("Power valve"));
+ else
+  ic.WriteColor(m_optColPowerValve, _T("Клапан ЭМР"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColStBlock, _T("Starter relay"));
+ else
+  ic.WriteColor(m_optColStBlock, _T("Реле блокировки стартера"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColAE, _T("Acceleration enrichment"));
+ else
+  ic.WriteColor(m_optColAE, _T("Обогащение при ускорении"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColCoolingFan, _T("Cooling fan"));
+ else
+  ic.WriteColor(m_optColCoolingFan, _T("Вентилятор охлаждения"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColCE, _T("Check Engine"));
+ else
+  ic.WriteColor(m_optColCE, _T("Лампа Check Engine"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColFCRevLim, _T("Rev. limitter"));
+ else
+  ic.WriteColor(m_optColFCRevLim, _T("Ограничение оборотов"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColFloodClear, _T("Flood clear"));
+ else
+  ic.WriteColor(m_optColFloodClear, _T("Режим продувки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColSysLocked, _T("System locked"));
+ else
+  ic.WriteColor(m_optColSysLocked, _T("Система заблокирована"));
+
+ TCHAR* mm_comment[2];
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+ {
+  mm_comment[0] = _T("*** Configuration of virtual gauges (1-st profile) ***\r\n; Use MetRows to specify number of rows will be used for grouping of virtual gauges\r\n; Set index number for each gauge (order). Gauges will be displayed in direction from left-top to right-bottom according to set order.");
+  mm_comment[1] = _T("*** Configuration of virtual gauges (2-nd profile) ***");
+ }
+ else
+ {
+  mm_comment[0] = _T("*** Конфигурация виртуальных приборов (1-й профиль) ***\r\n; Используйте MetRows, чтобы задать число строк, которое будет использовано для группировки приборов\r\n; Установите порядковый номер для каждого прибора. Приборы будут отображаться в направлении с левого-верхнего до правого-нижнего углов в соответствии с установленным порядком.");
+  mm_comment[1] = _T("*** Конфигурация виртуальных приборов (2-й профиль) ***");
+ }
+
  //Meters
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.WriteComment(mm_comment[i], false, true);
   mm.CreateSection();
-  mm.WriteInt(m_optMetRows[i], _T("Number of rows in the virtual gauges panel"));
-  mm.WriteInt(m_optMetRPM[i], _T("RPM, speed, distance"));
-  mm.WriteInt(m_optMetMAP[i], _T("MAP sensor"));
-  mm.WriteInt(m_optMetVBat[i], _T("Board voltage"));
-  mm.WriteInt(m_optMetIgnTim[i], _T("Ignition timing"));
-  mm.WriteInt(m_optMetTPS[i], _T("TPS sensor"));
-  mm.WriteInt(m_optMetCLT[i], _T("CLT sensor"));
-  mm.WriteInt(m_optMetAddI1[i], _T("ADD_I1 input"));
-  mm.WriteInt(m_optMetAddI2[i], _T("ADD_I2 input"));
-  mm.WriteInt(m_optMetInjPW[i], _T("Injection pulse width"));
-  mm.WriteInt(m_optMetIAT[i], _T("MAT sensor"));
-  mm.WriteInt(m_optMetEGOCorr[i], _T("Lambda correction"));
-  mm.WriteInt(m_optMetAirFlow[i], _T("Air flow"));
-  mm.WriteInt(m_optMetVehicleSpeed[i], _T("Vehicle spped"));
-  mm.WriteInt(m_optMetTPSDot[i], _T("TPS speed"));
-  mm.WriteInt(m_optMetMAP2[i], _T("MAP2 sensor"));
-  mm.WriteInt(m_optMetMAPD[i], _T("Diff. pressure"));
-  mm.WriteInt(m_optMetTmp2[i], _T("TMP2 sensor"));
-  mm.WriteInt(m_optMetFuelConsum[i], _T("Fuel consumption"));
-  mm.WriteInt(m_optMetKnockRetard[i], _T("Knock retard"));
-  mm.WriteInt(m_optMetKnockGraph[i], _T("Knock graph"));
-  mm.WriteInt(m_optMetSensAFR[i], _T("AFR sensor"));
-  mm.WriteInt(m_optMetChokePos[i], _T("Choke/IAC position"));
-  mm.WriteInt(m_optMetGDPos[i], _T("Gas valve position"));
-  mm.WriteInt(m_optMetSynLoad[i], _T("Synthetic load"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetRows[i], _T("Number of rows in the virtual gauges panel"));
+  else
+   mm.WriteInt(m_optMetRows[i], _T("Кол-во строк в панели виртуальных приборов"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetRPM[i], _T("RPM, speed, distance"));
+  else
+   mm.WriteInt(m_optMetRPM[i], _T("Обороты, скорость, расстояние"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetMAP[i], _T("MAP sensor"));
+  else
+   mm.WriteInt(m_optMetMAP[i], _T("ДАД"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetVBat[i], _T("Board voltage"));
+  else
+   mm.WriteInt(m_optMetVBat[i], _T("Напряжение бортовой сети"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetIgnTim[i], _T("Ignition timing"));
+  else
+   mm.WriteInt(m_optMetIgnTim[i], _T("УОЗ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetTPS[i], _T("TPS sensor"));
+  else
+   mm.WriteInt(m_optMetTPS[i], _T("ДПДЗ, расход воздуха"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetCLT[i], _T("CLT sensor"));
+  else
+   mm.WriteInt(m_optMetCLT[i], _T("ДТОЖ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetAddI1[i], _T("ADD_I1 input"));
+  else
+   mm.WriteInt(m_optMetAddI1[i], _T("Вход ADD_I1"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetAddI2[i], _T("ADD_I2 input"));
+  else
+   mm.WriteInt(m_optMetAddI2[i], _T("Вход ADD_I2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetInjPW[i], _T("Injection pulse width"));
+  else
+   mm.WriteInt(m_optMetInjPW[i], _T("Длительность впрыска"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetIAT[i], _T("MAT sensor"));
+  else
+   mm.WriteInt(m_optMetIAT[i], _T("ДТВ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetEGOCorr[i], _T("Lambda correction"));
+  else
+   mm.WriteInt(m_optMetEGOCorr[i], _T("Лямбда коррекция"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetAirFlow[i], _T("Air flow"));
+  else
+   mm.WriteInt(m_optMetAirFlow[i], _T("Расход воздуха"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetVehicleSpeed[i], _T("Vehicle spped"));
+  else
+   mm.WriteInt(m_optMetVehicleSpeed[i], _T("Скорость авто."));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetTPSDot[i], _T("TPS speed"));
+  else
+   mm.WriteInt(m_optMetTPSDot[i], _T("Скорость ДПДЗ (d%/dt)"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetMAP2[i], _T("MAP2 sensor"));
+  else
+   mm.WriteInt(m_optMetMAP2[i], _T("Датчик MAP2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetMAPD[i], _T("Diff. pressure"));
+  else
+   mm.WriteInt(m_optMetMAPD[i], _T("Дифф. давление"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetTmp2[i], _T("TMP2 sensor"));
+  else
+   mm.WriteInt(m_optMetTmp2[i], _T("Датчик TMP2"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetFuelConsum[i], _T("Fuel consumption"));
+  else
+   mm.WriteInt(m_optMetFuelConsum[i], _T("Расход топлива"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetKnockRetard[i], _T("Knock retard"));
+  else
+   mm.WriteInt(m_optMetKnockRetard[i], _T("Коррекция УОЗ по ДД"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetKnockGraph[i], _T("Knock graph"));
+  else
+   mm.WriteInt(m_optMetKnockGraph[i], _T("График детонации"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetSensAFR[i], _T("AFR sensor"));
+  else
+   mm.WriteInt(m_optMetSensAFR[i], _T("Воздух/топливо с ДК"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetChokePos[i], _T("Choke/IAC position"));
+  else
+   mm.WriteInt(m_optMetChokePos[i], _T("Положение ВЗ/РДВ"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetGDPos[i], _T("Gas valve position"));
+  else
+   mm.WriteInt(m_optMetGDPos[i], _T("Положение дозатора газа"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetSynLoad[i], _T("Synthetic load"));
+  else
+   mm.WriteInt(m_optMetSynLoad[i], _T("Синтетическая нагрузка"));
  }
 
  IniIO at(IniFileName, m_Name_AutoTune_Section);
- at.WriteComment(_T("*** VE autotune settings ***"), false, true);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("*** VE autotune settings ***"), false, true);
+ else
+  at.WriteComment(_T("*** Параметры автонастройки VE ***"), false, true);
  at.CreateSection();
- at.WriteComment(_T("Lambda delay 3x3 map, packed in rows"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Lambda delay 3x3 map, packed in rows"));
+ else
+  at.WriteComment(_T("Таблица задержки лямбды 3x3, запакована построчно"));
  at.WriteVector(m_optLambdaDelay);
- at.WriteComment(_T("Load bins for lambda delay map"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Load bins for lambda delay map"));
+ else
+  at.WriteComment(_T("Ячейки по оси нагрузки в таблице задержки лямбды"));
  at.WriteVector(m_optLambdaDelayL);
- at.WriteComment(_T("RPM bins for lambda delay map"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("RPM bins for lambda delay map"));
+ else
+  at.WriteComment(_T("Ячейки по оси оборотов в таблице задержки лямбды"));
  at.WriteVector(m_optLambdaDelayR);
- at.WriteComment(_T("Target AFR error for autotune algothithm"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Target AFR error for autotune algothithm"));
+ else
+  at.WriteComment(_T("Целевое соотношение воздух/топливо для алгоритма атонастройки"));
  at.WriteFlt(m_optAFRError, 2);
- at.WriteComment(_T("List of blocked cells. Numbering starts from 0 (value at the left-bottom corner of table in the user's interface)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("List of blocked cells. Numbering starts from 0 (value at the left-bottom corner of table in the user's interface)"));
+ else
+  at.WriteComment(_T("Список заблокированных ячеек. Нумерация начинается с 0 (значение в левом-верхнем углу таблицы в окне автонастройки)"));
  at.WriteVector(m_optBlockedCells);
- at.WriteComment(_T("Number of sample points (statistics) per cell"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Number of sample points (statistics) per cell"));
+ else
+  at.WriteComment(_T("Число выборок на одну ячейку (статистика)"));
  at.WriteInt(m_optStatSize);
- at.WriteComment(_T("Cells will be automatically blocked if theirs weight is greater or equal to the specified value. Set to zero if you want to disable this feature. "));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Cells will be automatically blocked if theirs weight is greater or equal to the specified value. Set to zero if you want to disable this feature. "));
+ else
+  at.WriteComment(_T("Ячейки будут автоматически блокироваться, если их веса больше или равны указанному значению. Установите в 0, если вы хотите запретить эту функцию."));
  at.WriteInt(m_optAutoBlockThrd);
- at.WriteComment(_T("If set to 1, then statistics will be gathered inly when RPM is rising. Set to 0 for disabling of this feature."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("If set to 1, then statistics will be gathered inly when RPM is rising. Set to 0 for disabling of this feature."));
+ else
+  at.WriteComment(_T("Если установлено в 1, то статистика будет собираться только если обороты растут. Установите в 0 для запрещения этой функции."));
  at.WriteInt(m_optGrowingMode);
- at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if greater or equal to the specified value"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if greater or equal to the specified value"));
+ else
+  at.WriteComment(_T("Статистика будет собираться только если фактическое соотношение воздух/топливо больше или равно указанному значению"));
  at.WriteFlt(m_optMinAFR, 1);
- at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if less or equal to the specified value"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Sample points (statistics) will be gathered only if measured AFR if less or equal to the specified value"));
+ else
+  at.WriteComment(_T("Статистика будет собираться только если фактическое соотношение воздух/топливо меньше или равно указанному значению"));
  at.WriteFlt(m_optMaxAFR, 1);
- at.WriteComment(_T("Threshold for the number of matches between real and target AFR, after reaching which cell's statistics will updated only if the average distance of new statistics points is less than the existing ones."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Threshold for the number of matches between real and target AFR, after reaching which cell's statistics will updated only if the average distance of new statistics points is less than the existing ones."));
+ else
+  at.WriteComment(_T("Порог количества совпадений между фактическим и целевым соотношениями воздух/топливо, после достижения которого статистика ячейки будет обновляться если среднее расстояние новых точек статистики меньше чем то, которое уже имеет ячейка."));
  at.WriteInt(m_optMinDistThrd);
- at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if greater or equal to the specified value"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if greater or equal to the specified value"));
+ else
+  at.WriteComment(_T("Статистика будет собираться только если ДПДЗ больше или равно указанному значению"));
  at.WriteFlt(m_optMinTPS, 1);
- at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if less or equal to the specified value"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Sample points (statistics) will be gathered only if TPS if less or equal to the specified value"));
+ else
+  at.WriteComment(_T("Статистика будет собираться только если ДПДЗ меньше или равно указанному значению"));
  at.WriteFlt(m_optMaxTPS, 1);
- at.WriteComment(_T("Automatic tune will not start while CLT is less than following value."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  at.WriteComment(_T("Automatic tune will not start while CLT is less than following value."));
+ else
+  at.WriteComment(_T("Автонастройка не начнется пока ДТОЖ меньше чем указанное значение."));
  at.WriteFlt(m_optCLTThrd, 1);
 
  //Map editor
  IniIO me(IniFileName, m_Name_MapEditor_Section);
- me.WriteComment(_T("*** Grid map editors ***"), false, true);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("*** Grid map editors ***"), false, true);
+ else
+  me.WriteComment(_T("*** Редактирование в виде таблиц ***"), false, true);
  me.CreateSection();
- me.WriteComment(_T("Color saturation of gradient"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Color saturation of gradient"));
+ else
+  me.WriteComment(_T("Насыщенность цвета градиента"));
  me.WriteInt(m_optGradSaturation);
- me.WriteComment(_T("Brightness of gradient"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Brightness of gradient"));
+ else
+  me.WriteComment(_T("Яркость градиента"));
  me.WriteInt(m_optGradBrightness);
- me.WriteComment(_T("Use bold fonts. Set to 1 for bold fonts, set to 0 for normal fonts."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Use bold fonts. Set to 1 for bold fonts, set to 0 for normal fonts."));
+ else
+  me.WriteComment(_T("Использовать жирные щрифты. Установите в 1 для жирных шрифтов или в 0 для обычных"));
  me.WriteInt(m_optBoldFont);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
- sp.WriteComment(_T("*** Remembered positions of splitters ***"), false, true);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sp.WriteComment(_T("*** Remembered positions of splitters ***"), false, true);
+ else
+  sp.WriteComment(_T("*** Запомненные положения сплиттеров ***"), false, true);
  sp.CreateSection();
 
- sp.WriteComment(_T("Vertical splitter on the \"Parameters and monitor\" tab"));
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sp.WriteComment(_T("Vertical splitter on the \"Parameters and monitor\" tab"));
+ else
+  sp.WriteComment(_T("Вертикальный сплиттер на вкладке \"Параметры и монитор\""));
  sp.WriteInt(m_optParamMonVert);
 
  return status;
