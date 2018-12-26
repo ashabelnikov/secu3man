@@ -188,7 +188,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  if (m_OnOpenMapWnd)
   m_OnOpenMapWnd(this->m_hWnd, TYPE_MAP_GME_IGN_WND);
 
- SetIcon(::LoadIcon(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH)), TRUE);
+ SetIcon((HICON)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDI_GRAPH), IMAGE_ICON, 0, 0, LR_SHARED), TRUE);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);

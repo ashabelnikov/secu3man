@@ -89,7 +89,7 @@ void AboutStc(CWnd* i_pParent, HINSTANCE i_hInstance,LPCTSTR bmpName,LPCTSTR rgn
  wcex.cbWndExtra    = 0;
  wcex.hInstance     = i_hInstance;
  wcex.hIcon         = NULL;
- wcex.hCursor       = ::LoadCursor(NULL, IDC_CROSS);
+ wcex.hCursor       = (HCURSOR)LoadImage(NULL, IDC_CROSS, IMAGE_CURSOR, 0, 0, LR_SHARED);
  wcex.hbrBackground = CreatePatternBrush((HBITMAP)hWindowBitmap);
  wcex.lpszMenuName  = NULL;
  wcex.lpszClassName = szWindowClass;

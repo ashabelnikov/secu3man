@@ -65,7 +65,7 @@ CMainFrame* CMainFrameManager::GreateMainWindow(void)
  // create and load the frame with its resources
  m_pMainFrame->LoadFrame(IDR_MAINFRAME,WS_OVERLAPPEDWINDOW | FWS_ADDTOTITLE,NULL,NULL);
 
- HICON  hFrameIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
+ HICON hFrameIcon = (HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDR_MAINFRAME), IMAGE_ICON, 0, 0, LR_SHARED);
  m_pMainFrame->SetIcon(hFrameIcon,TRUE);
 
  return m_pMainFrame;

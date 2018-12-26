@@ -123,6 +123,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , mp_miTemperat(NULL)
 , m_leds(DLL::GetModuleHandle())
 , m_hMoveCursor(NULL)
+, m_defCursor(NULL)
 , m_draggingMet(false)
 , m_draggingInd(false)
 , mp_ctxMenuMgrMet(new CMetContextMenuManager())
@@ -134,12 +135,14 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
  mp_ctxMenuMgrInd->CreateContent();
 
  memset(&m_values, 0, sizeof(SECU3IO::SensorDat));
- m_hMoveCursor = LoadCursor(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND_MOVE));
+ m_hMoveCursor = (HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND_MOVE), IMAGE_CURSOR, 0, 0, 0);
+ VERIFY(m_hMoveCursor);
 }
 
 CMIDeskDlg::~CMIDeskDlg()
 {
  _MetCleanUp();
+ VERIFY(DestroyCursor(m_hMoveCursor));
 }
 
 void CMIDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -512,7 +515,7 @@ void CMIDeskDlg::OnLButtonDown(UINT nFlags, CPoint point)
   CRect rc = it->second->GetWindowRect();
   if (rc.PtInRect(point) && m_metDragNDrop)
   {
-   SetCursor(m_hMoveCursor);
+   m_defCursor = SetCursor(m_hMoveCursor);
    m_draggingMet = true;
    m_dragItemMet = it;
   }
@@ -527,12 +530,11 @@ void CMIDeskDlg::OnLButtonDown(UINT nFlags, CPoint point)
   m_leds.ClientToScreen(&rc);
   if (rc.PtInRect(ptscr) && m_indDragNDrop)
   {
-   SetCursor(m_hMoveCursor);
+   m_defCursor = SetCursor(m_hMoveCursor);
    m_draggingInd = true;
    m_dragItemInd = it;
   }
  }
-
 
  Super::OnLButtonDown(nFlags, point);
 }
@@ -600,13 +602,13 @@ void CMIDeskDlg::OnLButtonUp(UINT nFlags, CPoint point)
      if (m_OnMISettingsChanged)
       m_OnMISettingsChanged();
 
-     SetCursor(LoadCursor(NULL, IDC_ARROW));
      break;
     }
    }
   }
  }
-
+ if (m_defCursor)
+  SetCursor(m_defCursor);
  m_draggingMet = false;
  m_draggingInd = false;
  Super::OnLButtonUp(nFlags, point);

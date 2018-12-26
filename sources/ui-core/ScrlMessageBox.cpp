@@ -48,7 +48,7 @@ CScrlMessageBox::CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, cons
 , m_icon(icon)
 , m_initialized(false)
 {
- m_hIcon = LoadIcon(NULL, m_icon);
+ m_hIcon = (HICON)LoadImage(NULL, m_icon, IMAGE_ICON, 0, 0, LR_SHARED);
 }
 
 BOOL CScrlMessageBox::OnInitDialog()

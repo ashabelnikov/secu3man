@@ -230,6 +230,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   COLORREF m_COLOR_BTNFACE; //for detecting of system colors changing
 
   HCURSOR m_hMoveCursor;
+  HCURSOR m_defCursor;
   EventHandler m_OnMISettingsChanged;
 };
 

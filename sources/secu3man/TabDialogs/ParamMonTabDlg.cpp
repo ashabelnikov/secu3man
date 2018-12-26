@@ -132,7 +132,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  mp_secu3orgLink->SetLink(true);
  mp_secu3orgLink->SetTextColor(RGB(0, 0, 255));
  mp_secu3orgLink->SetFontUnderline(true);
- mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_secu3orgLink->SetLinkCursor((HCURSOR)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
  //=================================================================
  CString str;
@@ -270,7 +270,7 @@ void CParamMonTabDlg::OnMouseMove(UINT nFlags, CPoint point)
  CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
 
  if (captRect.PtInRect(point))
-  ::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
 
  if (m_moveSplitter)
  {
@@ -293,7 +293,7 @@ void CParamMonTabDlg::OnLButtonDown(UINT nFlags, CPoint point)
 
  if (captRect.PtInRect(point))
  {
-  ::SetCursor(::LoadCursor(NULL, IDC_SIZEWE));
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
   m_moveSplitter = true;
   m_moveStart = point;
   m_moveStrtWidthPD = pd_rc.Width();

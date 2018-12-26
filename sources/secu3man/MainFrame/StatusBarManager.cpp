@@ -75,10 +75,10 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
  }
 
  //подгружаем из ресурсов иконки и строки
- m_ConnIcons[0] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_CONNECTED));
- m_ConnIcons[1] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_DISCONNECTED));
- m_ConnIcons[2] = ::LoadIcon(AfxGetInstanceHandle(),MAKEINTRESOURCE(IDI_CONN_BOOTLOADER));
- m_LogWrIcon = ::LoadIcon(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE));
+ m_ConnIcons[0] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_CONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
+ m_ConnIcons[1] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_DISCONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
+ m_ConnIcons[2] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_BOOTLOADER), IMAGE_ICON, 0, 0, LR_SHARED);
+ m_LogWrIcon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE), IMAGE_ICON, 0, 0, LR_SHARED);
 
  m_ConnStrings[0].LoadString(IDS_CONN_CONNECTED);
  m_ConnStrings[1].LoadString(IDS_CONN_DISCONNECTED);

@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "WelcomeDlg.h"
 #include "ui-core/Label.h"
+#include "common/Dll.h"
 
 const UINT CWelcomeDlg::IDD = IDD_WELCOME;
 
@@ -77,17 +78,18 @@ BOOL CWelcomeDlg::OnInitDialog()
  mp_secu3orgLink->SetLink(true);
  mp_secu3orgLink->SetTextColor(RGB(0, 0, 255));
  mp_secu3orgLink->SetFontUnderline(true);
- mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+
+ mp_secu3orgLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
  mp_vkgLink->SetLink(true);
  mp_vkgLink->SetTextColor(RGB(0, 0, 255));
  mp_vkgLink->SetFontUnderline(true);
- mp_vkgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_vkgLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
  mp_fbgLink->SetLink(true);
  mp_fbgLink->SetTextColor(RGB(0, 0, 255));
  mp_fbgLink->SetFontUnderline(true);
- mp_fbgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_fbgLink->SetLinkCursor((HCURSOR)LoadImage(DLL::GetModuleHandle(), MAKEINTRESOURCE(IDC_CURSOR_HAND), IMAGE_CURSOR, 0, 0, LR_SHARED));
 
  m_secu3orgBmp.LoadBitmap(IDB_BITMAP0002);
 
