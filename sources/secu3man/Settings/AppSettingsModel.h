@@ -125,6 +125,17 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetPaneFontSize(void) const;
   virtual int GetLabelFontSize(void) const;
 
+  virtual void SetTitleFontSize(int size);
+  virtual void SetValueFontSize(int size);
+  virtual void SetPaneFontSize(int size);
+  virtual void SetLabelFontSize(int size);
+  
+  virtual bool GetMetersDragNDrop(void) const;
+  virtual void SetMetersDragNDrop(bool enable);
+
+  virtual bool GetIndicatorsDragNDrop(void) const;
+  virtual void SetIndicatorsDragNDrop(bool enable);
+
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
   virtual int GetDVDeskUpdatePeriod(void) const;
@@ -135,7 +146,9 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetNumPulsesPer1Km(void) const;
   ////////////////////////////////////////////////////
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
+  virtual void SetIndicatorsConfig(const IndicatorsCfg& i_cfg);
   virtual void GetMetersConfig(MetersCfg& o_cfg) const;
+  virtual void SetMetersConfig(const MetersCfg& i_cfg);
 
   virtual void SetLamDelMap(float* map, float* rb, float* lb);
   virtual void GetLamDelMap(float* map, float* rb, float* lb);
@@ -218,6 +231,8 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optValueFontSize;
   OptField_t<int> m_optPaneFontSize;
   OptField_t<int> m_optLabelFontSize;
+  OptField_t<bool> m_optMetersDragNDrop;
+  OptField_t<bool> m_optIndicatorsDragNDrop;
 
   //windows' positions
   OptField_t<POINT> m_optStrtMapWnd;

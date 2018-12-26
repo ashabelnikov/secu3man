@@ -33,6 +33,11 @@
 
 #include "ui-core/DialogWithAccelerators.h"
 #include "ui-core/MultiLEDCtrl.h"
+#include "common/fastdelegate.h"
+#include <map>
+
+class CMetContextMenuManager;
+class CIndContextMenuManager;
 
 /////////////////////////////////////////////////////////////////////////////
 // CMIDeskDlg dialog
@@ -40,6 +45,7 @@
 class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 {
   typedef CModelessDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
 
  public:
   CMIDeskDlg(CWnd* pParent = NULL);   // standard constructor
@@ -67,9 +73,6 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   void SetDistanceUnit(int i_unit); //0 - km, 1 - mi
 
-  //изменение размеров окна
-  void Resize(const CRect& i_rect);
-
   //Show/hide choke position indicator
   void ShowChokePos(bool i_show);
 
@@ -90,10 +93,26 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
                         IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked);
 
+  void GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
+                        IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked);
+
   void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                     int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot, int MetMAP2,
                     int MetMapD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph, int MetSensAFR, int MetChokePos,
                     int MetGDPos, int MetSynLoad, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+
+  void GetMetersCfg(int &MetRows, int &MetRPM, int &MetMAP, int &MetVBat, int &MetIgnTim, int &MetCLT, int &MetAddI1, int &MetAddI2,
+                    int &InjPW, int &MetIAT, int &MetEGOCorr, int &MetTPS, int &MetAirFlow, int &MetVehicleSpeed, int &MetTPSDot, int &MetMAP2,
+                    int &MetMapD, int &MetTmp2, int &MetFuelConsum, int &MetKnockRetard, int &MetKnockGraph, int &MetSensAFR, int &MetChokePos,
+                    int &MetGDPos, int &MetSynLoad, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+
+  void SetMetersDragNDrop(bool enable);
+  bool GetMetersDragNDrop(void) const;
+
+  void SetIndicatorsDragNDrop(bool enable);
+  bool GetIndicatorsDragNDrop(void) const;
+
+  void setOnMISettingsChanged(EventHandler i_Function);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -101,35 +120,93 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   afx_msg void OnDestroy();    //deactivate
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnPaint();
+  afx_msg void OnLButtonDown(UINT, CPoint);
+  afx_msg void OnMouseMove(UINT, CPoint);
+  afx_msg void OnLButtonUp(UINT, CPoint);
+  afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
+  afx_msg LRESULT OnMouseLeave(WPARAM wParam, LPARAM lParam);
+  afx_msg void OnContextMenu(CWnd* pWnd, CPoint point);
+  afx_msg void OnInitMenuPopup(CMenu* pPopupMenu, UINT nIndex, BOOL bSysMenu);
+  afx_msg void OnMetAddGauge(UINT nID);
+  afx_msg void OnMetDeleteGauge();
+  afx_msg void OnUpdateMetDelete(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateMetAddGauge(CCmdUI* pCmdUI);
+  afx_msg void OnMetNumOfRows(UINT nID);
+  afx_msg void OnUpdateMetNumOfRows(CCmdUI* pCmdUI);
+  afx_msg void OnMetTitleFont(UINT nID);
+  afx_msg void OnUpdateMetTitleFont(CCmdUI* pCmdUI);
+  afx_msg void OnMetValueFont(UINT nID);
+  afx_msg void OnUpdateMetValueFont(CCmdUI* pCmdUI);
+  afx_msg void OnMetPaneFont(UINT nID);
+  afx_msg void OnUpdateMetPaneFont(CCmdUI* pCmdUI);
+  afx_msg void OnMetLabelFont(UINT nID);
+  afx_msg void OnUpdateMetLabelFont(CCmdUI* pCmdUI);
+  afx_msg void OnMetEnDragNDrop();
+  afx_msg void OnUpdateMetEnDragNDrop(CCmdUI* pCmdUI);
+  afx_msg void OnIndNumOfRows(UINT nID);
+  afx_msg void OnUpdateIndNumOfRows(CCmdUI* pCmdUI);
+  afx_msg void OnIndPercHeight(UINT nID);
+  afx_msg void OnUpdateIndPercHeight(CCmdUI* pCmdUI);
+  afx_msg void OnIndEnDragNDrop();
+  afx_msg void OnUpdateIndEnDragNDrop(CCmdUI* pCmdUI);
+  afx_msg void OnIndDelete();
+  afx_msg void OnUpdateIndDelete(CCmdUI* pCmdUI);
+  afx_msg void OnIndAddIndicator(UINT nID);
+  afx_msg void OnUpdateIndAddIndicator(CCmdUI* pCmdUI);
+  afx_msg void OnIndSetColor();
+  afx_msg void OnUpdateIndSetColor(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void OnUpdateTimer(void);
 
   // Implementation
  private:
+  void _Resize(void);
   CRect _GetMetItemRect(int idx);
   void _MetCleanUp(void);
   void _MetRearrangeKeys(void);
-  typedef std::multimap<int, MeasInstrBase*> MetFields_t;
-  MetFields_t m_metFields;
-  int m_metRows;
-  
+  void _IndRearrangeKeys(void);
+  void _MetFactory(UINT uiID);
+  void _IndFactory(UINT uiID);
+  float _HeightCoeffFromID(UINT nID);
+  void _CreateLEDs(void);
+  CRect _GetGaugesRect(bool meters, bool screenCoord = false);
+
   struct IndFieldData
   {
-   IndFieldData(const _TSTRING& cap, COLORREF col, unsigned char* val) : caption(cap), p_value(val), color(col) {};
+   IndFieldData(const _TSTRING& cap, COLORREF col, unsigned char* val, UINT uiID) : caption(cap), p_value(val), color(col), m_uiID(uiID) {};
    _TSTRING caption;
    unsigned char *p_value;
    COLORREF color;
+   UINT m_uiID;
   };
 
+  typedef std::multimap<int, MeasInstrBase*> MetFields_t;
   typedef std::multimap<int, IndFieldData> IndFields_t;
+
+  MetFields_t m_metFields;
+  int m_metRows;
+  bool m_draggingMet;
+  MetFields_t::iterator m_dragItemMet;
+  std::map<UINT, int> m_metCfg;
+  bool m_metDragNDrop;
+  std::auto_ptr<CMetContextMenuManager> mp_ctxMenuMgrMet;
+  int m_TitleFontSize, m_ValueFontSize, m_PaneFontSize, m_LabelFontSize;
+  
   IndFields_t m_indFields;
   CMultiLEDCtrl m_leds;
   CFont m_font;
+  int m_indRows;
+  float m_IndHeightCoeff;
+  bool m_draggingInd;
+  IndFields_t::iterator m_dragItemInd;
+  std::map<UINT, IndCfg_t> m_indCfg;
+  bool m_indDragNDrop;
+  std::auto_ptr<CIndContextMenuManager> mp_ctxMenuMgrInd;
 
   SECU3IO::SensorDat m_values;
-  float m_air_flow; //todo: replace by direct value fron SensorDat
-  float m_tps_dot;  //todo: replace by direct value fron SensorDat
+  float m_air_flow; //todo: replace by direct value from SensorDat
+  float m_tps_dot;  //todo: replace by direct value from SensorDat
   CObjectTimer<CMIDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;
@@ -149,9 +226,11 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   int m_tachoMax;
   int m_pressMax;
   MeasInstrBase* mp_miTemperat;
-  float IndHeightCoeff;
 
   COLORREF m_COLOR_BTNFACE; //for detecting of system colors changing
+
+  HCURSOR m_hMoveCursor;
+  EventHandler m_OnMISettingsChanged;
 };
 
 /////////////////////////////////////////////////////////////////////////////

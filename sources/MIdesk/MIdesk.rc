@@ -187,6 +187,7 @@ BEGIN
     IDS_MI_CHOKEPOS_TITLE    "ВЗ/РДВ"
     IDS_MI_GDPOS_TITLE       "Дозатор газа"
     IDS_MI_LOAD_TITLE        "Синтет. нагрузка"
+    IDS_MI_KNOCKGRAPH_TITLE  "График детонации"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -203,6 +204,26 @@ BEGIN
     IDS_MI_IND_FLOODCLEAR   "Продувка двигателя"
     IDS_MI_IND_SYSLOCKED    "Система заблокир."
 END
+
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_MET_ADD_GAUGE     "Добавить"
+    IDS_MI_MET_NUMROWS       "Число строк"
+    IDS_MI_MET_TITLE_FONT    "Шрифт заголовков"
+    IDS_MI_MET_VALUE_FONT    "Шрифт значений"
+    IDS_MI_MET_PANE_FONT     "Шрифт углов. знач."
+    IDS_MI_MET_LABEL_FONT    "Шрифт надписей"
+    IDS_MI_MET_DEL_GAUGE     "Удалить"
+    IDS_MI_MET_ENDRAGNDROP   "Разрешить перетаскивание"
+    IDS_MI_IND_ADD_INDICATOR "Добавить"
+    IDS_MI_IND_DEL_INDICATOR "Удалить"
+    IDS_MI_IND_NUMROWS       "Число строк"
+    IDS_MI_IND_SET_COLOR     "Цвет"
+    IDS_MI_IND_PERCHEIGHT    "Высота"
+    IDS_MI_IND_ENDRAGNDROP   "Разрешить перетаскивание"
+END
+
 
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
@@ -386,6 +407,7 @@ BEGIN
     IDS_MI_CHOKEPOS_TITLE    "IAC valve"
     IDS_MI_GDPOS_TITLE       "Gas dispenser"
     IDS_MI_LOAD_TITLE        "Synthetic load"
+    IDS_MI_KNOCKGRAPH_TITLE  "Knock graph"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -403,11 +425,31 @@ BEGIN
     IDS_MI_IND_SYSLOCKED    "System locked"
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_MET_ADD_GAUGE     "Add gauge"
+    IDS_MI_MET_NUMROWS       "Number of rows"
+    IDS_MI_MET_TITLE_FONT    "Font of titles"
+    IDS_MI_MET_VALUE_FONT    "Font of values"
+    IDS_MI_MET_PANE_FONT     "Font of corn.panes"
+    IDS_MI_MET_LABEL_FONT    "Font of lables"
+    IDS_MI_MET_DEL_GAUGE     "Delete"
+    IDS_MI_MET_ENDRAGNDROP   "Enable drag and drop"
+    IDS_MI_IND_ADD_INDICATOR "Add indicator"
+    IDS_MI_IND_DEL_INDICATOR "Delete"
+    IDS_MI_IND_NUMROWS       "Number of rows"
+    IDS_MI_IND_SET_COLOR     "Set color"
+    IDS_MI_IND_PERCHEIGHT    "Height"
+    IDS_MI_IND_ENDRAGNDROP   "Enable drag and drop"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources
 
 LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 #pragma code_page(1252)
+
+IDC_CURSOR_HAND_MOVE    CURSOR     "move.cur"
 
 /////////////////////////////////////////////////////////////////////////////
 //Version information

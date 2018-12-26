@@ -42,6 +42,8 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
   void Clear(void);
   void AddItem(const CString& text, COLORREF color = RGB(0,255,0));
   void SetItemState(int idx, bool state, bool invalidate = true);
+  void SetItemColor(int idx, COLORREF color, bool invalidate = true);
+  CRect GetItemRect(int idx);
 
  protected:
   afx_msg void OnPaint();
@@ -49,11 +51,15 @@ class AFX_EXT_CLASS CMultiLEDCtrl : public CWnd
   afx_msg void OnEnable(BOOL bEnable);
   afx_msg LRESULT OnWMSetFont(WPARAM wParam, LPARAM lParam);
   afx_msg LRESULT OnWMGetFont(WPARAM wParam, LPARAM lParam);
+#if _MSC_VER >= 1400
+ afx_msg LRESULT OnNcHitTest(CPoint point);
+#else
+ afx_msg UINT OnNcHitTest(CPoint point);
+#endif 
   DECLARE_MESSAGE_MAP()
 
  private:
   bool _RegisterWindowClass(HMODULE hMod = NULL);
-  CRect _GetItemRect(int idx);
 
   struct LEDItem
   {

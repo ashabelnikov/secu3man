@@ -78,6 +78,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optValueFontSize(_T("ValueFontSize"))
 , m_optPaneFontSize(_T("PaneFontSize"))
 , m_optLabelFontSize(_T("LabelFontSize"))
+, m_optMetersDragNDrop(_T("MetersDragNDrop"))
+, m_optIndicatorsDragNDrop(_T("IndicatorsDragNDrop"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_optStrtMapWnd(_T("StrtMapWnd"))
@@ -365,6 +367,8 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optValueFontSize, _T("130"), 10, 200);
  fs.ReadInt(m_optPaneFontSize, _T("100"), 10, 200);
  fs.ReadInt(m_optLabelFontSize, _T("100"), 10, 200);
+ fs.ReadInt(m_optMetersDragNDrop, _T("1"), 0, 1);
+ fs.ReadInt(m_optIndicatorsDragNDrop, _T("1"), 0, 1);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -798,6 +802,18 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Размер шрифта, используемого для отображения надписей и единиц измерений в виртуальных приборах. По умолчанию 100% (традиционный размер)"));
  fs.WriteInt(m_optLabelFontSize); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Enable drag and drop of virtual gauges. Enabled by default, set to 0 if you want to disable this function."));
+ else
+  fs.WriteComment(_T("Разрешить перетаскивание виртуальных приборов. По умолчанию разрешено. Установите в 0, если хотите запретить."));
+ fs.WriteInt(m_optMetersDragNDrop); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Enable drag and drop of virtual indicators. Enabled by default, set to 0 if you want to disable this function."));
+ else
+  fs.WriteComment(_T("Разрешить перетаскивание виртуальных индикаторов. По умолчанию разрешено. Установите в 0, если хотите запретить."));
+ fs.WriteInt(m_optIndicatorsDragNDrop); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -2089,6 +2105,26 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
  }
 }
 
+void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
+{
+ for(int i = 0; i < 2; ++i)
+ {
+  m_optIndHeightPercent[i].value = i_cfg.m_optIndHeightPercent[i];
+  m_optIndRows[i].value = i_cfg.m_optIndRows[i];
+  m_optIndGas_v[i].value = i_cfg.m_optIndGas_v[i].first, m_optColGas_v.value = i_cfg.m_optIndGas_v[i].second;
+  m_optIndCarb[i].value = i_cfg.m_optIndCarb[i].first, m_optColCarb.value = i_cfg.m_optIndCarb[i].second;
+  m_optIndIdleValve[i].value = i_cfg.m_optIndIdleValve[i].first, m_optColIdleValve.value = i_cfg.m_optIndIdleValve[i].second;
+  m_optIndPowerValve[i].value = i_cfg.m_optIndPowerValve[i].first, m_optColPowerValve.value = i_cfg.m_optIndPowerValve[i].second;
+  m_optIndStBlock[i].value = i_cfg.m_optIndStBlock[i].first, m_optColStBlock.value = i_cfg.m_optIndStBlock[i].second;
+  m_optIndAE[i].value = i_cfg.m_optIndAE[i].first, m_optColAE.value = i_cfg.m_optIndAE[i].second;
+  m_optIndCoolingFan[i].value = i_cfg.m_optIndCoolingFan[i].first, m_optColCoolingFan.value = i_cfg.m_optIndCoolingFan[i].second;
+  m_optIndCE[i].value = i_cfg.m_optIndCE[i].first, m_optColCE.value = i_cfg.m_optIndCE[i].second;
+  m_optIndFCRevLim[i].value = i_cfg.m_optIndFCRevLim[i].first, m_optColFCRevLim.value = i_cfg.m_optIndFCRevLim[i].second;
+  m_optIndFloodClear[i].value = i_cfg.m_optIndFloodClear[i].first, m_optColFloodClear.value = i_cfg.m_optIndFloodClear[i].second;
+  m_optIndSysLocked[i].value = i_cfg.m_optIndSysLocked[i].first, m_optColSysLocked.value = i_cfg.m_optIndSysLocked[i].second;
+ }
+}
+
 void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
 {
  for(int i = 0; i < 2; ++i)
@@ -2118,6 +2154,38 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetChokePos[i] = m_optMetChokePos[i].value;
   o_cfg.m_optMetGDPos[i] = m_optMetGDPos[i].value;
   o_cfg.m_optMetSynLoad[i] = m_optMetSynLoad[i].value;
+ }
+}
+
+void CAppSettingsModel::SetMetersConfig(const MetersCfg& i_cfg)
+{
+ for(int i = 0; i < 2; ++i)
+ {
+  m_optMetRows[i].value = i_cfg.m_optMetRows[i];
+  m_optMetRPM[i].value = i_cfg.m_optMetRPM[i];
+  m_optMetMAP[i].value = i_cfg.m_optMetMAP[i];
+  m_optMetVBat[i].value = i_cfg.m_optMetVBat[i];
+  m_optMetIgnTim[i].value = i_cfg.m_optMetIgnTim[i];
+  m_optMetCLT[i].value = i_cfg.m_optMetCLT[i];
+  m_optMetAddI1[i].value = i_cfg.m_optMetAddI1[i];
+  m_optMetAddI2[i].value = i_cfg.m_optMetAddI2[i];
+  m_optMetInjPW[i].value = i_cfg.m_optInjPW[i];
+  m_optMetIAT[i].value = i_cfg.m_optMetIAT[i];
+  m_optMetEGOCorr[i].value = i_cfg.m_optMetEGOCorr[i];
+  m_optMetTPS[i].value = i_cfg.m_optMetTPS[i];
+  m_optMetAirFlow[i].value = i_cfg.m_optMetAirFlow[i];
+  m_optMetVehicleSpeed[i].value = i_cfg.m_optMetVehicleSpeed[i];
+  m_optMetTPSDot[i].value = i_cfg.m_optMetTPSDot[i];
+  m_optMetMAP2[i].value = i_cfg.m_optMetMAP2[i];
+  m_optMetMAPD[i].value = i_cfg.m_optMetMAPD[i];
+  m_optMetTmp2[i].value = i_cfg.m_optMetTmp2[i];
+  m_optMetFuelConsum[i].value = i_cfg.m_optMetFuelConsum[i];
+  m_optMetKnockRetard[i].value = i_cfg.m_optMetKnockRetard[i];
+  m_optMetKnockGraph[i].value = i_cfg.m_optMetKnockGraph[i];
+  m_optMetSensAFR[i].value = i_cfg.m_optMetSensAFR[i];
+  m_optMetChokePos[i].value = i_cfg.m_optMetChokePos[i];
+  m_optMetGDPos[i].value = i_cfg.m_optMetGDPos[i];
+  m_optMetSynLoad[i].value = i_cfg.m_optMetSynLoad[i];
  }
 }
 
@@ -2272,4 +2340,44 @@ int CAppSettingsModel::GetLabelFontSize(void) const
 bool CAppSettingsModel::GetExistingPorts(void) const
 {
  return m_optExistingPorts.value;
+}
+
+void CAppSettingsModel::SetTitleFontSize(int size)
+{
+ m_optTitleFontSize.value = size;
+}
+
+void CAppSettingsModel::SetValueFontSize(int size)
+{
+ m_optValueFontSize.value = size;
+}
+
+void CAppSettingsModel::SetPaneFontSize(int size)
+{
+ m_optPaneFontSize.value = size;
+}
+
+void CAppSettingsModel::SetLabelFontSize(int size)
+{
+ m_optLabelFontSize.value = size;
+}
+
+bool CAppSettingsModel::GetMetersDragNDrop(void) const
+{
+ return m_optMetersDragNDrop.value;
+}
+
+void CAppSettingsModel::SetMetersDragNDrop(bool enable)
+{
+ m_optMetersDragNDrop.value = enable;
+}
+
+bool CAppSettingsModel::GetIndicatorsDragNDrop(void) const
+{
+ return m_optIndicatorsDragNDrop.value;
+}
+
+void CAppSettingsModel::SetIndicatorsDragNDrop(bool enable)
+{
+ m_optIndicatorsDragNDrop.value = enable;
 }

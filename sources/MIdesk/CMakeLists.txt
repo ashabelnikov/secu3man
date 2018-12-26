@@ -23,6 +23,7 @@ project(${PROJECT})
 
 set(HEADERS
   CEDeskDlg.h
+  ContextMenuManager.h
   DVDeskDlg.h
   IDVView.h
   MeasInstrBase.h
@@ -61,6 +62,7 @@ set(HEADERS
 
 set (SOURCES
   CEDeskDlg.cpp
+  ContextMenuManager.cpp
   DVDeskDlg.cpp
   LMDeskDlg.cpp
   MIAirFlow.cpp

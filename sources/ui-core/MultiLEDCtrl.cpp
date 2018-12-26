@@ -52,6 +52,7 @@ BEGIN_MESSAGE_MAP(CMultiLEDCtrl, Super)
  ON_WM_ENABLE()
  ON_MESSAGE(WM_SETFONT, OnWMSetFont)
  ON_MESSAGE(WM_GETFONT, OnWMGetFont)
+ ON_WM_NCHITTEST()
 END_MESSAGE_MAP()
 
 BOOL CMultiLEDCtrl::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
@@ -113,7 +114,7 @@ void CMultiLEDCtrl::OnPaint()
  
  for (size_t i = 0; i < m_items.size(); ++i)
  {
-  CRect rc = _GetItemRect((int)i);
+  CRect rc = GetItemRect((int)i);
   if (m_items[i].m_state) //on
    dc.FillRect(rc, IsWindowEnabled() ? m_items[i].mp_brush : &m_bkBrush);
   else //off
@@ -127,7 +128,7 @@ void CMultiLEDCtrl::OnPaint()
  } 
 }
 
-CRect CMultiLEDCtrl::_GetItemRect(int idx)
+CRect CMultiLEDCtrl::GetItemRect(int idx)
 {
  int i = idx / m_cols;
  int j = idx % m_cols;
@@ -179,6 +180,9 @@ void CMultiLEDCtrl::OnEnable(BOOL bEnable)
 void CMultiLEDCtrl::SetNumRows(int rows)
 {
  m_rows = rows;
+
+ //calculate number of columns from number of items and rows
+ m_cols = ((int)m_items.size() / m_rows) + ((int)m_items.size() % m_rows ? 1 : 0);
 }
 
 void CMultiLEDCtrl::AddItem(const CString& text, COLORREF color /*=RGB(0,255,0)*/)
@@ -205,7 +209,7 @@ void CMultiLEDCtrl::SetItemState(int idx, bool state, bool invalidate /*= true*/
 
  m_items[idx].m_state = state;
  if (invalidate)
-  InvalidateRect(_GetItemRect(idx));  
+  InvalidateRect(GetItemRect(idx));  
 }
 
 void CMultiLEDCtrl::Clear(void)
@@ -213,4 +217,22 @@ void CMultiLEDCtrl::Clear(void)
  for(size_t i = 0; i < m_items.size(); ++i)
   delete m_items[i].mp_brush;
  m_items.clear();
+}
+
+#if _MSC_VER >= 1400
+LRESULT CMultiLEDCtrl::OnNcHitTest(CPoint point)
+#else
+UINT CMultiLEDCtrl::OnNcHitTest(CPoint point)
+#endif
+{
+ return HTTRANSPARENT;
+}
+
+void CMultiLEDCtrl::SetItemColor(int idx, COLORREF color, bool invalidate /*= true*/)
+{
+ m_items[idx].m_color = color;
+ delete m_items[idx].mp_brush;
+ m_items[idx].mp_brush = new CBrush(color);
+ if (invalidate)
+  InvalidateRect(GetItemRect(idx));  
 }

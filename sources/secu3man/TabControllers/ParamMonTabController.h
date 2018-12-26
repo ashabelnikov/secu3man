@@ -77,6 +77,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   void OnParametersChanged(const BYTE i_descriptor, const void* ip_packet);
 
   void ConfigureIndicators(void);
+  void OnMIDeskSettingsChanged(void);
 
  private:
   void _OnOneShotTimer(void);

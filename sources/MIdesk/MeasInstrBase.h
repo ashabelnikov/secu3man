@@ -31,7 +31,7 @@
 class MeasInstrBase
 {
  public:
-  MeasInstrBase() : m_metVal(NULL), m_tlpVal(NULL), m_trpVal(NULL), m_showTLP(false), m_showTRP(false) {};
+  MeasInstrBase() : m_metVal(NULL), m_tlpVal(NULL), m_trpVal(NULL), m_showTLP(false), m_showTRP(false), m_uiID(0) {};
   virtual ~MeasInstrBase()
   {
    m_meter.DestroyWindow();
@@ -170,6 +170,20 @@ class MeasInstrBase
    m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
    m_meter.Redraw();
   }
+
+  CRect GetWindowRect(bool screen = false)
+  {
+   if (screen)
+   {
+    CRect rc;
+    m_meter.GetWindowRect(&rc);
+    return rc;
+   }
+   else
+    return GDIHelpers::GetChildWndRect(&m_meter);
+  }
+ 
+  UINT m_uiID;
 
 protected:
   CAnalogMeterCtrl m_meter;

@@ -22,7 +22,7 @@ SOURCES = StdAfx.cpp CEDeskDlg.cpp DVDeskDlg.cpp MIAirFlow.cpp MIDeskDlg.cpp MID
   MITemperature.cpp MIThrottleGate.cpp MIVoltage.cpp MIVoltMeter.cpp RSDeskDlg.cpp LMDeskDlg.cpp \
   MIInjPW.cpp MIIAT.cpp MIEGOCorr.cpp MIVehicleSpeed.cpp MITPSDot.cpp MIMap2.cpp MIMapD.cpp \
   MITemp2.cpp MIFuelConsum.cpp MIKnockRetard.cpp MIKnockGraph.cpp MISensAFR.cpp MIChokePos.cpp \
-  MISynLoad.cpp
+  MISynLoad.cpp ContextMenuManager.cpp
 
 # DLL building
 all: midesk

@@ -42,6 +42,7 @@ CAnalogMeterCtrl::~CAnalogMeterCtrl()
 
 BEGIN_MESSAGE_MAP(CAnalogMeterCtrl, CStatic)
  ON_WM_PAINT()
+ ON_WM_NCHITTEST()
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -67,4 +68,13 @@ void CAnalogMeterCtrl::Redraw(void)
 {
  m_boolForceRedraw = true;
  Invalidate();
+}
+
+#if _MSC_VER >= 1400
+LRESULT CAnalogMeterCtrl::OnNcHitTest(CPoint point)
+#else
+UINT CAnalogMeterCtrl::OnNcHitTest(CPoint point)
+#endif
+{
+ return HTTRANSPARENT;
 }

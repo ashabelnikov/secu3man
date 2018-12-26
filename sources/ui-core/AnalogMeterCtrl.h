@@ -41,6 +41,13 @@ class AFX_EXT_CLASS CAnalogMeterCtrl : public CStatic, public CAnalogMeter
  protected:
   // Generated message map functions
   afx_msg void OnPaint();
+
+#if _MSC_VER >= 1400
+ afx_msg LRESULT OnNcHitTest(CPoint point);
+#else
+ afx_msg UINT OnNcHitTest(CPoint point);
+#endif 
+
   DECLARE_MESSAGE_MAP()
 };
 

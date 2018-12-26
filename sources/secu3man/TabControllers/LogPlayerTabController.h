@@ -72,6 +72,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //Drag and Drop event handler
   void OnDropFile(_TSTRING fileName);
 
+  void OnMIDeskSettingsChanged(void);
+
  private:
   //вспомогательные функции
   void _OpenFile(const _TSTRING& fileName);

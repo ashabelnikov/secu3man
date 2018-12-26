@@ -223,6 +223,17 @@ class ISettingsData
   virtual int GetValueFontSize(void) const = 0;
   virtual int GetPaneFontSize(void) const = 0;
   virtual int GetLabelFontSize(void) const = 0;
+
+  virtual void SetTitleFontSize(int size) = 0;
+  virtual void SetValueFontSize(int size) = 0;
+  virtual void SetPaneFontSize(int size) = 0;
+  virtual void SetLabelFontSize(int size) = 0;
+
+  virtual bool GetMetersDragNDrop(void) const = 0;
+  virtual void SetMetersDragNDrop(bool enable) = 0;
+
+  virtual bool GetIndicatorsDragNDrop(void) const = 0;
+  virtual void SetIndicatorsDragNDrop(bool enable) = 0;
   
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
@@ -244,8 +255,10 @@ class ISettingsData
 
   //Indicators
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;
+  virtual void SetIndicatorsConfig(const IndicatorsCfg& i_cfg) = 0;
   //Meters
   virtual void GetMetersConfig(MetersCfg& o_cfg) const = 0;
+  virtual void SetMetersConfig(const MetersCfg& i_cfg) = 0;
 
   virtual void SetWndSize(const WndSize& i_wndSize) = 0;
   virtual void GetWndSize(WndSize& o_wndSize) const = 0;
