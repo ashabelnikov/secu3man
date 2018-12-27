@@ -68,7 +68,7 @@ COScopeCtrl::COScopeCtrl()
 , m_strXUnitsString(_T("Samples"))  // See also SetXUnits
 , m_strYUnitsString(_T("Y units"))  // See also SetYUnits
 {
- //empty
+ m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
 }
 
 COScopeCtrl::~COScopeCtrl()
@@ -348,8 +348,9 @@ void COScopeCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 
 void COScopeCtrl::OnPaint()
 { 
- if (m_crBackColor != GetSysColor(COLOR_3DFACE) || m_crGridColor != GetSysColor(COLOR_GRAYTEXT))
+ if (m_COLOR_3DFACE != GetSysColor(COLOR_3DFACE))
  {
+  m_COLOR_3DFACE = GetSysColor(COLOR_3DFACE);
   _SetStateColors(IsWindowEnabled());
   InvalidateCtrl(false, false, false);
  }

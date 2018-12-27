@@ -67,7 +67,8 @@ void CAnalogMeterCtrl::Update(void)
 void CAnalogMeterCtrl::Redraw(void)
 {
  m_boolForceRedraw = true;
- Invalidate();
+ if (GetSafeHwnd())
+  Invalidate();
 }
 
 #if _MSC_VER >= 1400

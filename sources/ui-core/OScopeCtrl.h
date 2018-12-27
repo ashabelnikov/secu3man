@@ -77,6 +77,7 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   CString m_strXUnitsString;
   CString m_strYUnitsString;
 
+  COLORREF m_COLOR_3DFACE;     // for testing of changing of system colors
   COLORREF m_crBackColor;      // background color
   COLORREF m_crGridColor;      // grid color
   COLORREF m_crPlotColor;      // data color

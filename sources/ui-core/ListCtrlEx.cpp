@@ -45,11 +45,9 @@ END_MESSAGE_MAP()
 
 void CListCtrlEx::OnPaint()
 {
- //CPaintDC dc(this); // device context for painting
-
  COLORREF newbkcolor = GetSysColor(COLOR_WINDOW);
  if (GetBkColor() != newbkcolor)
   SetBkColor(newbkcolor);
 
-  CListCtrl::OnPaint();
+ CListCtrl::OnPaint();
 }
