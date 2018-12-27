@@ -109,17 +109,17 @@ CParamMonTabController::~CParamMonTabController()
 //изменились настройки программы!
 void CParamMonTabController::OnSettingsChanged(int action)
 {
+ if (action == 2)
+ {
+  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+  return;
+ }
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  if (action != 1)
  { //will be skipped if only ExFixtures check has been changed (see MainFrameController::OnAppSwitchDashboards() for more info)
   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
   mp_moncntr->OnSettingsChanged();
- }
-
- if (action == 2)
- {
-  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
-  return;
  }
 
  ConfigureIndicators();

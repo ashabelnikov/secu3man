@@ -117,6 +117,9 @@ CKnockChannelTabController::~CKnockChannelTabController()
 //изменились настройки программы!
 void CKnockChannelTabController::OnSettingsChanged(int action)
 {
+ if (action == 2) //child charts check in main menu
+  return;
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 }

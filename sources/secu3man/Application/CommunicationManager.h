@@ -43,7 +43,7 @@ class CCommunicationManager
   CCommunicationManager();
   virtual ~CCommunicationManager();
 
-  bool Init(void);
+  bool Init(bool startApp = false);
   bool Terminate(void);
   void setOnSettingsChanged(EventWithCode i_OnSettingsChanged);
 

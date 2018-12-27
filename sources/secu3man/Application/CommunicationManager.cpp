@@ -28,6 +28,7 @@
 #include "io-core/CComPort.h"
 #include "io-core/Bootloader.h"
 #include "io-core/LogWriter.h"
+#include "io-core/EnumPorts.h"
 #include "ISECU3Man.h"
 #include "Settings/AppSettingsManager.h"
 #include "Settings/ISettingsData.h"
@@ -73,7 +74,7 @@ bool CCommunicationManager::Terminate(void)
 }
 
 
-bool CCommunicationManager::Init(void)
+bool CCommunicationManager::Init(bool startApp /* = false*/)
 {
  ASSERT(m_pSettings);  //ты забыл меня инициализировать!
  ASSERT(m_pBootLoader);
@@ -111,10 +112,51 @@ bool CCommunicationManager::Init(void)
  }
  catch(CComPort::xInitialize e)
  {
-  //Say to user that we was not able to open specified COM-port
-  if (m_pSettings->GetCOMPortBother())
-   AfxMessageBox(e.GetDetailStr());
-  status = false;
+  if (startApp)
+  {
+   //try to select CP210x if COM port specified in settings can't be opened
+   CEnumPorts ep;
+   AfxGetMainWnd()->BeginWaitCursor();
+   VERIFY(ep.Query());
+   AfxGetMainWnd()->EndWaitCursor();
+   CEnumPorts::PortDescList_t pl;
+   ep.getPortsList(pl);
+   for(size_t i = 0; i < pl.size(); ++i)
+   {
+    if (_tcsstr(pl[i].second.c_str(), _T("Silicon Labs CP210x")))
+     break;
+   }
+   if (i < pl.size()) //found!
+   {
+    try
+    {
+     m_pComPort->Initialize(pl[i].first, 9600, NOPARITY, ONESTOPBIT, false, true);
+    }
+    catch(CComPort::xInitialize e)
+    {  
+     //Say to user that we was not able to open specified COM-port
+     if (m_pSettings->GetCOMPortBother())
+      AfxMessageBox(e.GetDetailStr());
+     status = false;
+    }
+    if (status) //update settings if opening was successful  
+     m_pSettings->SetPortName(pl[i].first);   
+   }
+   else
+   {
+    //Say to user that we was not able to open specified COM-port
+    if (m_pSettings->GetCOMPortBother())
+     AfxMessageBox(e.GetDetailStr());
+    status = false;
+   }
+  }
+  else
+  {
+   //Say to user that we was not able to open specified COM-port
+   if (m_pSettings->GetCOMPortBother())
+    AfxMessageBox(e.GetDetailStr());
+   status = false;
+  }
  }
 
  m_pComPort->Purge();

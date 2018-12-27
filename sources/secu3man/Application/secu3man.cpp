@@ -276,7 +276,7 @@ BOOL CSecu3manApp::InitInstance()
  m_pMainWnd = m_pMainFrameManager->GreateMainWindow();
 
  //initialize communication manager
- m_pCommunicationManager->Init();
+ m_pCommunicationManager->Init(true);
 
  //Initialize content of main window (child controls)
  m_pMainFrameManager->Init(m_pMainWnd);

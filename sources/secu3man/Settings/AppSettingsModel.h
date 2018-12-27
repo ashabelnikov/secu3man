@@ -68,6 +68,7 @@ class CAppSettingsModel : public ISettingsData
 
   //ISettingsData
   virtual const _TSTRING& GetPortName(void) const;
+  virtual void SetPortName(const _TSTRING& name);
   virtual DWORD GetBaudRateApplication(void) const;
   virtual DWORD GetBaudRateBootloader(void) const;
   virtual const _TSTRING& GetLogFilesFolder(void) const;

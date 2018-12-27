@@ -188,6 +188,7 @@ class ISettingsData
 {
  public:
   virtual const _TSTRING& GetPortName(void) const = 0;
+  virtual void SetPortName(const _TSTRING& name) = 0;
   virtual DWORD GetBaudRateApplication(void) const = 0;
   virtual DWORD GetBaudRateBootloader(void) const = 0;
   virtual const _TSTRING& GetLogFilesFolder(void) const = 0;

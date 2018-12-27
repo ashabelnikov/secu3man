@@ -1624,6 +1624,11 @@ const _TSTRING& CAppSettingsModel::GetPortName(void) const
  return m_optPortName.value;
 }
 
+void CAppSettingsModel::SetPortName(const _TSTRING& name)
+{
+ m_optPortName.value = name;
+}
+
 DWORD CAppSettingsModel::GetBaudRateApplication(void) const
 {
  return m_optBaudRateApplication.value;
