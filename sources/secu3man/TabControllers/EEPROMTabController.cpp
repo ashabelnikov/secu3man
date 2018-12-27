@@ -101,6 +101,12 @@ CEEPROMTabController::~CEEPROMTabController()
 //изменились настройки программы!
 void CEEPROMTabController::OnSettingsChanged(int action)
 {
+ if (action == 2)
+ {
+  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+  return;
+ }
+
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 
@@ -111,6 +117,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CEEPROMTabController::OnActivate(void)
 {
+ mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
@@ -137,6 +144,7 @@ void CEEPROMTabController::OnActivate(void)
 //from MainTabController
 void CEEPROMTabController::OnDeactivate(void)
 {
+ mp_view->mp_TablesPanel->ShowOpenedCharts(false);
  m_comm->m_pBootLoader->AbortOperation();
  m_comm->m_pBldAdapter->DetachEventHandler();
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);

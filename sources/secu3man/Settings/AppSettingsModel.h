@@ -87,6 +87,7 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetSaveWarning(void) const;
   virtual bool GetAutoCERead(void) const;
   virtual bool GetChildCharts(void) const;
+  virtual void SetChildCharts(bool child);
   virtual bool GetPortAutoReopen(void) const;
   virtual bool GetToggleMapWnd(void) const;
   virtual int GetParamMonVert(void) const;

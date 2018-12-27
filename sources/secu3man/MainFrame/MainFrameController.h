@@ -68,6 +68,7 @@ class MainFrameController : public IAPPEventHandler
   void OnAppSaveSettings();
   void OnActivate(bool i_state);
   void OnFullScreen(bool i_what);
+  void OnChildCharts();
   bool IsBeginLoggingAllowed(void);
   bool IsEndLoggingAllowed(void);
   bool OnClose(void);

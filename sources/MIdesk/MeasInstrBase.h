@@ -171,7 +171,7 @@ class MeasInstrBase
    m_meter.Redraw();
   }
 
-  CRect GetWindowRect(bool screen = false)
+  virtual CRect GetWindowRect(bool screen = false)
   {
    if (screen)
    {

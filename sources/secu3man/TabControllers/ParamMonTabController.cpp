@@ -116,6 +116,12 @@ void CParamMonTabController::OnSettingsChanged(int action)
   mp_moncntr->OnSettingsChanged();
  }
 
+ if (action == 2)
+ {
+  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+  return;
+ }
+
  ConfigureIndicators();
  mp_view->Invalidate();
 }

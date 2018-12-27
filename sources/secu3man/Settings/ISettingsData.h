@@ -204,6 +204,7 @@ class ISettingsData
   virtual bool GetSaveWarning(void) const = 0;
   virtual bool GetAutoCERead(void) const = 0;
   virtual bool GetChildCharts(void) const = 0;
+  virtual void SetChildCharts(bool child) = 0;
   virtual bool GetPortAutoReopen(void) const = 0;
   virtual bool GetToggleMapWnd(void) const = 0;
   virtual int GetParamMonVert(void) const = 0;

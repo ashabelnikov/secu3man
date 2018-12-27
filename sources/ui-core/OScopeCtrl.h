@@ -61,6 +61,11 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   afx_msg void OnPaint();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnEnable(BOOL bEnable);
+#if _MSC_VER >= 1400
+  afx_msg LRESULT OnNcHitTest(CPoint point);
+#else
+  afx_msg UINT OnNcHitTest(CPoint point);
+#endif 
   DECLARE_MESSAGE_MAP()
 
  private:

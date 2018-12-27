@@ -103,6 +103,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppSwitchDashboards(MakeDelegate(this, &MainFrameController::OnAppSwitchDashboards));
  mp_view->setOnAppSaveScreenshot(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot));
  mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
+ mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
 }
 
 MainFrameController::~MainFrameController()
@@ -323,6 +324,7 @@ void MainFrameController::OnCreate(void)
   mp_view->SetWindowPos(NULL, 0, 0, sz.m_MainFrmWnd_W, sz.m_MainFrmWnd_H, SWP_NOZORDER | SWP_NOMOVE);
 
  mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
+ mp_view->CheckOnChildCharts(settings->GetChildCharts());
 }
 
 bool MainFrameController::OnClose(void)
@@ -423,4 +425,12 @@ void MainFrameController::OnAppSaveSettings()
  m_pAppSettingsManager->WriteSettings();
  mp_view->EndWaitCursor();
  m_pStatusBarManager->SetInformationText(MLL::LoadString(IDS_SAVED_APP_SETTINGS));
+}
+
+void MainFrameController::OnChildCharts()
+{
+ bool cch = !m_pAppSettingsManager->GetSettings()->GetChildCharts();
+ mp_view->CheckOnChildCharts(cch);
+ m_pAppSettingsManager->GetSettings()->SetChildCharts(cch);
+ m_pCommunicationManager->NotifySettingsChanged(2); //only ChildCharts check changed
 }

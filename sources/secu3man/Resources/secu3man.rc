@@ -38,6 +38,7 @@ BEGIN
     BEGIN
         MENUITEM "Переключить панели приборов", ID_APP_SWITCH_DASHBOARD
         MENUITEM "Ночной режим", ID_APP_NIGHT_MODE
+        MENUITEM "Дочерние окна таблиц", ID_APP_CHILD_CHATRS
     END
     POPUP "&Help"
     BEGIN
@@ -639,6 +640,7 @@ BEGIN
     BEGIN
         MENUITEM "Switch dash boards", ID_APP_SWITCH_DASHBOARD
         MENUITEM "Night mode", ID_APP_NIGHT_MODE
+        MENUITEM "Child windows", ID_APP_CHILD_CHATRS
     END
     POPUP "&Help"
     BEGIN

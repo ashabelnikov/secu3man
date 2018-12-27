@@ -163,6 +163,12 @@ CFirmwareTabController::~CFirmwareTabController()
 //изменились настройки
 void CFirmwareTabController::OnSettingsChanged(int action)
 {
+ if (action == 2)
+ {
+  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
+  return;
+ }
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 
@@ -177,6 +183,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
 void CFirmwareTabController::OnActivate(void)
 {
+ mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
@@ -208,6 +215,7 @@ void CFirmwareTabController::OnActivate(void)
 
 void CFirmwareTabController::OnDeactivate(void)
 {
+ mp_view->mp_TablesPanel->ShowOpenedCharts(false);
  //отключаемся от потока данных
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));

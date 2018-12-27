@@ -42,6 +42,8 @@ class AFX_EXT_CLASS CMIKnockGraph : public MeasInstrBase
   virtual void Show(bool show);
   //---------------------------------------
 
+  virtual CRect GetWindowRect(bool screen = false);
+
 private:
   COScopeCtrl m_scope;
 };

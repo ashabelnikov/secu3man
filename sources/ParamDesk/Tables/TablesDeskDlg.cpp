@@ -224,21 +224,7 @@ void CTablesDeskDlg::ShowSaveButton(bool i_show)
 
 void CTablesDeskDlg::ShowOpenedCharts(bool i_show)
 {
- HWND hwnd;
- for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
- {
-  hwnd = mp_ButtonsPanel->GetMapWindow(i);
-  if (hwnd)
-   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
- }
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
-
- hwnd = mp_ButtonsPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND);
- if (hwnd)
-  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ mp_ButtonsPanel->ShowOpenedCharts(i_show);
 }
 
 void CTablesDeskDlg::UpdateOpenedCharts(void)

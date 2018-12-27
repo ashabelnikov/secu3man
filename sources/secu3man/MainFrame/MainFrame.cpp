@@ -73,6 +73,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_ACTIVATEAPP()
  ON_WM_DEVICECHANGE()
  ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
+ ON_COMMAND(ID_APP_CHILD_CHATRS, OnChildCharts)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -327,6 +328,11 @@ void CMainFrame::setOnAppSaveScreenshot(EventHandler i_OnFunction)
 void CMainFrame::setOnAppSaveSettings(EventHandler i_OnFunction)
 {
  m_OnSaveSettings = i_OnFunction;
+}
+
+void CMainFrame::setOnChildCharts(EventHandler i_OnFunction)
+{
+ m_OnChildCharts = i_OnFunction;
 }
 
 void CMainFrame::OnClose()
@@ -609,4 +615,15 @@ LRESULT CMainFrame::OnSysColorChange(WPARAM wParam, LPARAM lParam)
 {
  EnumChildWindows(GetSafeHwnd(), EnumChildProc, (LPARAM)GetSafeHwnd());
  return 0;
+}
+
+void CMainFrame::OnChildCharts()
+{
+ if (m_OnChildCharts)
+  m_OnChildCharts();
+}
+
+void CMainFrame::CheckOnChildCharts(bool checked)
+{
+ GetMenu()->CheckMenuItem(ID_APP_CHILD_CHATRS, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
 }

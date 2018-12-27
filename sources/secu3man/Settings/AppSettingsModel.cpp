@@ -1199,8 +1199,8 @@ bool CAppSettingsModel::WriteSettings(void)
  }
  else
  {
-  ii_comment[0] = _T("*** Конфигурация виртуальных индикоторов (1-й профиль) ***\r\n; Используйте IndRows чтобы указать кол-во строк, используемых для группировки индикаторов.\r\n; Установите порядковый номер для каждой ячейки. Ячейки индикаторов будут отображаться в направлении с левого-верхнего до правого-нижнего углов в соответствии с установленным порядком.");
-  ii_comment[1] = _T("*** Конфигурация виртуальных индикоторов (2-й профиль) ***"); 
+  ii_comment[0] = _T("*** Конфигурация виртуальных индикаторов (1-й профиль) ***\r\n; Используйте IndRows чтобы указать кол-во строк, используемых для группировки индикаторов.\r\n; Установите порядковый номер для каждой ячейки. Ячейки индикаторов будут отображаться в направлении с левого-верхнего до правого-нижнего углов в соответствии с установленным порядком.");
+  ii_comment[1] = _T("*** Конфигурация виртуальных индикаторов (2-й профиль) ***"); 
  }
 
  //Indicators
@@ -2083,6 +2083,11 @@ bool CAppSettingsModel::GetAutoCERead(void) const
 bool CAppSettingsModel::GetChildCharts(void) const
 {
  return m_optChildCharts.value;
+}
+
+void CAppSettingsModel::SetChildCharts(bool child)
+{
+ m_optChildCharts.value = child;
 }
 
 void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const

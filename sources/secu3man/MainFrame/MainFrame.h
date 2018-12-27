@@ -55,6 +55,7 @@ class CMainFrame : public CFrameWnd
 
   void SetView(CChildView* i_pChildView);
   void CheckOnAppSwitchDashboards(bool checked);
+  void CheckOnChildCharts(bool checked);
 
   //устанавливают обработчики событий
   void setOnGetInitialPos(EventHandler2 i_OnGetInitialPos);
@@ -80,6 +81,7 @@ class CMainFrame : public CFrameWnd
   void setOnAppSwitchDashboards(EventHandler i_OnFunction);
   void setOnAppSaveScreenshot(EventHandler i_OnFunction);
   void setOnAppSaveSettings(EventHandler i_OnFunction);
+  void setOnChildCharts(EventHandler i_OnFunction);
 
   bool CreateDVDesk(bool create);
   CDVDeskDlg* GetDVDesk(void);
@@ -115,6 +117,7 @@ protected:
   afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   afx_msg void OnSysCommand(UINT nID, LPARAM lParam);
   LRESULT OnSysColorChange(WPARAM wParam, LPARAM lParam);
+  afx_msg void OnChildCharts();
   DECLARE_MESSAGE_MAP()
 
 private:
@@ -143,6 +146,7 @@ private:
   EventHandler m_OnSwitchDashboards;
   EventHandler m_OnSaveScreenshot;
   EventHandler m_OnSaveSettings;
+  EventHandler m_OnChildCharts;
   std::auto_ptr<CDVDeskDlg> mp_DVDeskDlg;
   CChildView*  m_pwndView;
   BOOL m_bDoIdle;

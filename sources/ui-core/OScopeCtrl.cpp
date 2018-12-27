@@ -35,6 +35,7 @@ BEGIN_MESSAGE_MAP(COScopeCtrl, CWnd)
  ON_WM_PAINT()
  ON_WM_SIZE()
  ON_WM_ENABLE()
+ ON_WM_NCHITTEST()
 END_MESSAGE_MAP()
 
 // COScopeCtrl
@@ -512,4 +513,13 @@ void COScopeCtrl::_SetStateColors(bool state)
  m_brushBack.CreateSolidBrush(m_crBackColor);
  m_penPlot.DeleteObject();
  m_penPlot.CreatePen(PS_SOLID, 0, m_crPlotColor);
+}
+
+#if _MSC_VER >= 1400
+LRESULT COScopeCtrl::OnNcHitTest(CPoint point)
+#else
+UINT COScopeCtrl::OnNcHitTest(CPoint point)
+#endif
+{
+ return HTTRANSPARENT;
 }

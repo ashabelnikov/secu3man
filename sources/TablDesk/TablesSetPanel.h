@@ -78,6 +78,10 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   virtual void EnableGasdose(bool enable);
   void EnableTmp2Curve(bool enable);
 
+  virtual void CloseCharts(void);
+
+  virtual void ShowOpenedCharts(bool i_show);
+
  public: //set event handlers
   void setOnFunSetSelectionChanged(EventWithCode OnFunction);
   void setOnFunSetNamechanged(EventWithCodeAndString OnFunction);
@@ -148,8 +152,6 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   EventWithCodeAndFloat m_OnATSXAxisEditChanged;
   EventHandler m_OnRPMGridEditButton;
   EventHandler m_OnCESettingsButton;
-
-  void _DestroyCharts(void);
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);

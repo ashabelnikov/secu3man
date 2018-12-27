@@ -3525,3 +3525,36 @@ HWND CButtonsPanel::_ChartParentHwnd(void)
  return m_children_charts ? AfxGetMainWnd()->GetSafeHwnd() : NULL;
 }
 
+void CButtonsPanel::CloseCharts(void)
+{
+ HWND hwnd;
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = GetMapWindow(i);
+  if (hwnd)
+   ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+ }
+ hwnd = GetMapWindow(TYPE_MAP_GME_IGN_WND);
+ if (hwnd) ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+ hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND);
+ if (hwnd) ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+}
+
+void CButtonsPanel::ShowOpenedCharts(bool i_show)
+{
+ HWND hwnd;
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  hwnd = GetMapWindow(i);
+  if (hwnd)
+   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+ }
+
+ hwnd = GetMapWindow(TYPE_MAP_GME_IGN_WND);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+
+ hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND);
+ if (hwnd)
+  ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+}

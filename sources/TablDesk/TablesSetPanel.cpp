@@ -754,7 +754,6 @@ BOOL CTablesSetPanel::OnInitDialog()
 void CTablesSetPanel::OnDestroy()
 {
  Super::OnDestroy();
- _DestroyCharts();
 }
 
 void CTablesSetPanel::OnUpdateViewAttenuatorMap(CCmdUI* pCmdUI)
@@ -1570,12 +1569,22 @@ void CTablesSetPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 void CTablesSetPanel::setOnCESettingsButton(EventHandler OnFunction)
 {m_OnCESettingsButton = OnFunction;}
 
-void CTablesSetPanel::_DestroyCharts(void)
+void CTablesSetPanel::CloseCharts(void)
 {
  for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END; ++i)
  {
   HWND hwnd = GetMapWindow(i);
   if (hwnd)
-   ::DestroyWindow(hwnd);
+   ::SendMessage(hwnd, WM_CLOSE, 0, 0);
+ }
+}
+
+void CTablesSetPanel::ShowOpenedCharts(bool i_show)
+{
+ for(int i = TYPE_MAP_ALL_START; i <= TYPE_MAP_ALL_END; ++i)
+ {
+  HWND hwnd = GetMapWindow(i);
+  if (hwnd)
+   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
  }
 }

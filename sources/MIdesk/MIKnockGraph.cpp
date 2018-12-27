@@ -78,3 +78,15 @@ void CMIKnockGraph::Show(bool show)
 {
  m_scope.ShowWindow((show) ? SW_SHOW : SW_HIDE);
 }
+
+CRect CMIKnockGraph::GetWindowRect(bool screen /*= false*/)
+{
+ if (screen)
+ {
+  CRect rc;
+  m_scope.GetWindowRect(&rc);
+  return rc;
+ }
+ else
+  return GDIHelpers::GetChildWndRect(&m_scope);
+}
