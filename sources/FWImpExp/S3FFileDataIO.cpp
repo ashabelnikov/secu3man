@@ -41,7 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0108 //01.08
+#define CURRENT_VERSION 0x0109 //01.09
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -71,6 +71,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.07 - Added ability to store single set of maps and no separate maps. (23.10.2017)
 // 01.07 - Added TEMP2 curve map (28.12.2017)
 // 01.08 - Abandoned choke opening map (body of map left for compatibility reasons)
+// 01.09 - Added some maps which were not added yet (28.12.2018)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -117,8 +118,13 @@ struct S3FMapSetItem
  s3f_int32_t inj_iac_corr_w[INJ_IAC_CORR_W_SIZE+2];        // IAC correction weight lookup table
  s3f_int32_t inj_iac_corr[INJ_IAC_CORR_SIZE+2];            // IAC correction lookup table
  s3f_int32_t inj_iatclt_corr[INJ_IATCLT_CORR_SIZE+2];      // IAT/CLT correction vs air flow
+ //since v01.09
+ s3f_int32_t inj_tpsswt[INJ_TPSSWT_SIZE];                  // MAP/TPS switch point vs RPM
+ s3f_int32_t inj_gts_corr[INJ_GTS_CORR_SIZE];              // PW correction vs gas temperature
+ s3f_int32_t inj_gps_corr[INJ_GPS_CORR_SIZE+2];            // PW correction vs gas pressure
+ s3f_int32_t inj_ats_corr[INJ_ATS_CORR_SIZE];              // PW correction vs air temperature
 
- s3f_int32_t reserved[688]; //reserved bytes, = 0
+ s3f_int32_t reserved[629]; //reserved bytes, = 0
 };
 
 //Separate maps
@@ -135,7 +141,13 @@ struct S3FSepMaps
  s3f_int32_t ats_corr_table[ATS_CORR_LOOKUP_TABLE_SIZE];      //advance angle correction form intake air temperature look up table, since v01.03
  s3f_int32_t gasdose_pos_table[GASDOSE_POS_TPS_SIZE * GASDOSE_POS_RPM_SIZE]; //gas dose position map
  s3f_int32_t tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];      //TEMP2 temperature sensor look up table, since v01.07
- s3f_int32_t reserved[1774];       //reserved bytes, = 0
+ //since v01.09
+ s3f_int32_t barocorr_table[BAROCORR_SIZE+2]; //barometric correction
+ s3f_int32_t pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
+ s3f_int32_t ctscrk_corr[CTS_CRKCORR_SIZE];
+ s3f_int32_t eh_pause_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+
+ s3f_int32_t reserved[1699];       //reserved bytes, = 0
 };
 
 
@@ -303,6 +315,14 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
    p_setItem[s].inj_iac_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iac_corr[i] * INT_MULTIPLIER);
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
    p_setItem[s].inj_iatclt_corr[i] = MathHelpers::Round(m_data.maps[s].inj_iatclt_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
+   p_setItem[s].inj_tpsswt[i] = MathHelpers::Round(m_data.maps[s].inj_tpsswt[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
+   p_setItem[s].inj_gts_corr[i] = MathHelpers::Round(m_data.maps[s].inj_gts_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_GPS_CORR_SIZE+2; ++i)
+   p_setItem[s].inj_gps_corr[i] = MathHelpers::Round(m_data.maps[s].inj_gps_corr[i] * INT_MULTIPLIER);
+  for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
+   p_setItem[s].inj_ats_corr[i] = MathHelpers::Round(m_data.maps[s].inj_ats_corr[i] * INT_MULTIPLIER);
 
   //Convert name, string must be fixed length
   _TSTRING str = m_data.maps[s].name;
@@ -337,6 +357,14 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->gasdose_pos_table[i] = MathHelpers::Round(m_data.gasdose_pos_table[i] * INT_MULTIPLIER);
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   p_sepMaps->tmp2_curve[i] = MathHelpers::Round(m_data.tmp2_curve[i] * INT_MULTIPLIER);
+ for(i = 0; i < BAROCORR_SIZE+2; ++i)
+  p_sepMaps->barocorr_table[i] = MathHelpers::Round(m_data.barocorr_table[i] * INT_MULTIPLIER);
+ for(i = 0; i < PA4_LOOKUP_TABLE_SIZE; ++i)
+  p_sepMaps->pa4_igntim_corr[i] = MathHelpers::Round(m_data.pa4_igntim_corr[i] * INT_MULTIPLIER);
+ for(i = 0; i < CTS_CRKCORR_SIZE; ++i)
+  p_sepMaps->ctscrk_corr[i] = MathHelpers::Round(m_data.ctscrk_corr[i] * INT_MULTIPLIER);
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  p_sepMaps->eh_pause_table[i] = MathHelpers::Round(m_data.eh_pause_table[i] * INT_MULTIPLIER);
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
@@ -431,6 +459,14 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
    m_data.maps[s].inj_iac_corr[i] = p_setItem[s].inj_iac_corr[i] / INT_MULTIPLIER;
   for(i = 0; i < INJ_IATCLT_CORR_SIZE+2; ++i)
    m_data.maps[s].inj_iatclt_corr[i] = p_setItem[s].inj_iatclt_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_TPSSWT_SIZE; ++i)
+   m_data.maps[s].inj_tpsswt[i] = p_setItem[s].inj_tpsswt[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_GTS_CORR_SIZE; ++i)
+   m_data.maps[s].inj_gts_corr[i] = p_setItem[s].inj_gts_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_GPS_CORR_SIZE+2; ++i)
+   m_data.maps[s].inj_gps_corr[i] = p_setItem[s].inj_gps_corr[i] / INT_MULTIPLIER;
+  for(i = 0; i < INJ_ATS_CORR_SIZE; ++i)
+   m_data.maps[s].inj_ats_corr[i] = p_setItem[s].inj_ats_corr[i] / INT_MULTIPLIER;
 
   //convert name
   char raw_string[F_NAME_SIZE + 1];
@@ -462,6 +498,14 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.gasdose_pos_table[i] = p_sepMaps->gasdose_pos_table[i] / INT_MULTIPLIER;
  for(i = 0; i < THERMISTOR_LOOKUP_TABLE_SIZE+2; ++i)
   m_data.tmp2_curve[i] = p_sepMaps->tmp2_curve[i] / INT_MULTIPLIER;
+ for(i = 0; i < BAROCORR_SIZE+2; ++i)
+  m_data.barocorr_table[i] = p_sepMaps->barocorr_table[i] / INT_MULTIPLIER;
+ for(i = 0; i < PA4_LOOKUP_TABLE_SIZE; ++i)
+  m_data.pa4_igntim_corr[i] = p_sepMaps->pa4_igntim_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < CTS_CRKCORR_SIZE; ++i)
+  m_data.ctscrk_corr[i] = p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER;
+ for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
+  m_data.eh_pause_table[i] = p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER;
 
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)

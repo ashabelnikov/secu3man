@@ -119,6 +119,7 @@ class CMapImpExpDlg : public CDialog
   void SetFWDFlag(EFWDFlags i_flag_type, bool i_state);
   bool GetFWDFlag(EFWDFlags i_flag_type);
   void EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable);
+  bool IsEnabledFWDFlag(EFWDFlags i_flag_type);
   void SetExchangeButtonCaption(const _TSTRING& i_text);
 
     // Implementation

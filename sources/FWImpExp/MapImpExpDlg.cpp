@@ -357,6 +357,11 @@ bool CMapImpExpDlg::GetFWDFlag(EFWDFlags i_flag_type)
  return state;
 }
 
+bool CMapImpExpDlg::IsEnabledFWDFlag(EFWDFlags i_flag_type)
+{
+ return m_fwd_flags_buttons[i_flag_type].IsWindowEnabled();
+}
+
 void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
 {
  BOOL enable = i_enable ? TRUE : FALSE;
@@ -476,14 +481,20 @@ void CMapImpExpDlg::OnSetSetAllClick()
 {
  bool checked = (m_set_all.GetCheck() == BST_CHECKED);
  for(int i = FLAG_SET_START; i <= FLAG_SET_END; ++i)
-  SetFWDFlag((EFWDFlags)i, checked);
+ {
+  if (IsEnabledFWDFlag((EFWDFlags)i))
+   SetFWDFlag((EFWDFlags)i, checked);
+ }
 }
 
 void CMapImpExpDlg::OnSepSetAllClick()
 {
  bool checked = (m_sep_all.GetCheck() == BST_CHECKED);
  for(int i = FLAG_SEP_START; i <= FLAG_SEP_END; ++i)
-  SetFWDFlag((EFWDFlags)i, checked);
+ {
+  if (IsEnabledFWDFlag((EFWDFlags)i))
+   SetFWDFlag((EFWDFlags)i, checked);
+ }
 }
 
 void CMapImpExpDlg::_UpdateScrlViewSize(void)
