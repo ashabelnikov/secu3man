@@ -27,6 +27,7 @@
 #include "LogWriter.h"
 #include "ufcodes.h"
 #include "SECU3IO.h"
+#include "common/MathHelpers.h"
 
 using namespace SECU3IO;
 
@@ -104,7 +105,7 @@ void LogWriter::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* 
                         p_sensors->gasdose_pos,
                         p_sensors->speed,
                         p_sensors->distance,
-                        p_sensors->inj_ffd, 
+                        MathHelpers::RestrictValue(p_sensors->inj_ffd, .0f, 999.999f),
                         p_sensors->inj_fff,
                         p_sensors->add_i2_mode ? p_sensors->air_temp : 999.99f, //magic number indicates that IAT is not used
 
