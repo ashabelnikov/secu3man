@@ -236,6 +236,8 @@ class ISettingsData
 
   virtual bool GetIndicatorsDragNDrop(void) const = 0;
   virtual void SetIndicatorsDragNDrop(bool enable) = 0;
+
+  virtual int GetFFFConst(void) const = 0;
   
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;

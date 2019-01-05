@@ -80,6 +80,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLabelFontSize(_T("LabelFontSize"))
 , m_optMetersDragNDrop(_T("MetersDragNDrop"))
 , m_optIndicatorsDragNDrop(_T("IndicatorsDragNDrop"))
+, m_optFFFConst(_T("FFFConst"))
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_optStrtMapWnd(_T("StrtMapWnd"))
@@ -369,6 +370,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optLabelFontSize, _T("100"), 10, 200);
  fs.ReadInt(m_optMetersDragNDrop, _T("1"), 0, 1);
  fs.ReadInt(m_optIndicatorsDragNDrop, _T("1"), 0, 1);
+ fs.ReadInt(m_optFFFConst, _T("16000"), 1000, 32000);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -814,6 +816,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Разрешить перетаскивание виртуальных индикаторов. По умолчанию разрешено. Установите в 0, если хотите запретить."));
  fs.WriteInt(m_optIndicatorsDragNDrop); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Constant (num. of pulses per 1L of burnt fuel) for calculation of fuel consumption (L/100km) using value send by firmware."));
+ else
+  fs.WriteComment(_T("Константа (число импульсов на 1Л сгоревшего топлива), используемая при вычислении расхода топлива (Л/100км) на основе значения, передаваемого прошивкой."));
+ fs.WriteInt(m_optFFFConst); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -2390,4 +2398,9 @@ bool CAppSettingsModel::GetIndicatorsDragNDrop(void) const
 void CAppSettingsModel::SetIndicatorsDragNDrop(bool enable)
 {
  m_optIndicatorsDragNDrop.value = enable;
+}
+
+int CAppSettingsModel::GetFFFConst(void) const
+{
+ return m_optFFFConst.value;
 }

@@ -97,6 +97,8 @@ class IOCORE_API CControlApp
   void SetNumPulsesPer1Km(int pp1km);
 
   void SetSpeedUnit(int i_unit); // 0 - km/h, 1 - mi/h
+ 
+  void SetFFFConst(int fffConst);
 
   static DWORD WINAPI BackgroundProcess(LPVOID lpParameter);
 
@@ -119,6 +121,7 @@ class IOCORE_API CControlApp
   HANDLE       m_hSleepEvent;
 
   DWORD        m_uart_speed;
+  int          m_fffConst;
   DWORD        m_dat_packet_timeout;
   HANDLE       m_hTimer;
 

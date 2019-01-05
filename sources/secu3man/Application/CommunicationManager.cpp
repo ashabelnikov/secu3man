@@ -104,6 +104,8 @@ bool CCommunicationManager::Init(bool startApp /* = false*/)
  m_pControlApp->SetSpeedUnit(m_pSettings->GetSpeedUnit()); 
  //Set auto reopening of port
  m_pControlApp->SetPortAutoReopen(m_pSettings->GetPortAutoReopen());
+ //Set FFF const
+ m_pControlApp->SetFFFConst(m_pSettings->GetFFFConst()); 
 
  try
  {

@@ -119,6 +119,7 @@ CControlApp::CControlApp()
 , m_period_distance(0.166666f)   //for speed sensor calculations
 , m_quartz_frq(20000000)    //default clock is 20mHz
 , m_speedUnit(0) //km/h
+, m_fffConst(16000)
 , m_portAutoReopen(true)
 {
  m_pPackets = new Packets();
@@ -411,7 +412,7 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 
  //calculate value of fuel flow in L/100km
  if (m_SensorDat.speed > .0f) 
-  m_SensorDat.inj_ffd = (m_SensorDat.inj_fff / m_SensorDat.speed) * ((3600.0f * 100.0f) / 16000.0f);
+  m_SensorDat.inj_ffd = (m_SensorDat.inj_fff / m_SensorDat.speed) * ((3600.0f * 100.0f) / ((float)m_fffConst));
  else
   m_SensorDat.inj_ffd = .0f;
 
@@ -3489,6 +3490,12 @@ void CControlApp::SetNumPulsesPer1Km(int pp1km)
 void CControlApp::SetSpeedUnit(int i_unit)
 {
  m_speedUnit = i_unit;
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::SetFFFConst(int fffConst)
+{
+ m_fffConst = fffConst;
 }
 
 //-----------------------------------------------------------------------

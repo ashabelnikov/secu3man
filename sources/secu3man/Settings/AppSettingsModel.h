@@ -138,6 +138,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetIndicatorsDragNDrop(void) const;
   virtual void SetIndicatorsDragNDrop(bool enable);
 
+  virtual int GetFFFConst(void) const;
+
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
   virtual int GetDVDeskUpdatePeriod(void) const;
@@ -235,6 +237,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optLabelFontSize;
   OptField_t<bool> m_optMetersDragNDrop;
   OptField_t<bool> m_optIndicatorsDragNDrop;
+  OptField_t<int> m_optFFFConst;
 
   //windows' positions
   OptField_t<POINT> m_optStrtMapWnd;
