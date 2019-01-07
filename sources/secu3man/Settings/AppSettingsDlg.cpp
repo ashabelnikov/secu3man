@@ -101,6 +101,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_pressure_max_edit(CEditEx::MODE_INT)
 , m_wheel_pulses_edit(CEditEx::MODE_INT)
 , mp_port_selection_combo(&m_port_selection1_combo)
+, m_always_write_log(BST_UNCHECKED)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
