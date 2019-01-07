@@ -2417,13 +2417,17 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
    Sleep(100);
    if (p_capp->m_portAutoReopen)
    {
+    bool initialized = true;
     try
     {
      p_port->Initialize(p_capp->m_uart_speed, NOPARITY, ONESTOPBIT, false, true);
     }
     catch(CComPort::xInitialize e)
     {
+     initialized = false;
     }
+    if (initialized && p_port->IsInitialized())
+     p_capp->SetPacketsTimer(p_capp->m_dat_packet_timeout);  //reset timeout timer, so port will not be incidentally terminated
    }
    continue;
   }
@@ -2452,10 +2456,11 @@ DWORD WINAPI CControlApp::BackgroundProcess(LPVOID lpParameter)
 
   if (WaitForSingleObject(p_capp->m_hTimer,0)==WAIT_OBJECT_0) //сработал ли таймер (вышло отведенное время а ни одного пакета так и не было принято) ?
   {
+   if (p_capp->m_portAutoReopen && p_port->IsInitialized())
+    p_port->Terminate(); //termitate port only if auto reopen enabled and it has/had a valid handle
+
    if ((p_capp->m_online_state==true)||(p_capp->m_force_notify_about_connection)) //мы были в онлайне... надо известить пользователя о переходе в оффлайн...
    {
-    if (p_capp->m_online_state && p_capp->m_portAutoReopen)
-     p_port->Terminate();
     p_capp->m_online_state = false;
     pEventHandler->OnConnection(p_capp->m_online_state);
     p_capp->m_force_notify_about_connection = false;
@@ -2493,7 +2498,7 @@ BOOL CControlApp::SetPacketsTimer(int timeout)
  liDueTime.QuadPart*=-10000;        //в одной мс 10000 интервалов по 100нс
 
  return SetWaitableTimer(m_hTimer,     // handle to timer
-	                        &liDueTime,   // timer due time
+                         &liDueTime,   // timer due time
                          1,            // period (лишь бы не 0)
                          NULL,         // completion routine
                          NULL,         // completion routine parameter
@@ -2702,7 +2707,7 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
 
  if (!mp_pdp->isHex())
   Esc_Tx_Packet(m_outgoing_packet, 2, m_outgoing_packet.size() - 3); //byte stuffing
- 
+
  return m_p_port->SendBlock(&m_outgoing_packet[0], m_outgoing_packet.size());
 }
 

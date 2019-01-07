@@ -395,7 +395,7 @@ void MainFrameController::OnGetInitialPos(CPoint& o_point)
 void MainFrameController::OnPortDevArrived(const _TSTRING& devName)
 {
  const ISettingsData* settings = m_pAppSettingsManager->GetSettings();
- if (m_pAppSettingsManager->GetSettings()->GetPortName() == devName && false==settings->GetPortAutoReopen())
+ if (settings->GetPortName() == devName && false==settings->GetPortAutoReopen())
  {
   mp_view->BeginWaitCursor();
   m_pCommunicationManager->Init();
