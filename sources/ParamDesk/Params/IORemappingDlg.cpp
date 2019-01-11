@@ -360,7 +360,10 @@ void CIORemappingDlg::_SetTooltips(void)
  
  for(; cbObjId <= cbObjEnd; ++cbObjId, ++ttStrId)
   VERIFY(mp_ttc->AddWindow(GetDlgItem(cbObjId), MLL::GetString(ttStrId)));
- 
+
+ //set hints for some inversion checks 
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(m_enable_secu3t_features ? IDC_IO_REMAPPING_ECF_CHECKBOX : IDC_IO_REMAPPING3I_ECF_CHECKBOX), MLL::GetString(IDS_IO_REMAPPING_ECF_INV_TT)));
+
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 }

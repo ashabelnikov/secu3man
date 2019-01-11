@@ -1133,3 +1133,4 @@
 #define IDS_PD_LAMBDA_TEMPTHRD_EDIT_TT   1481
 #define IDS_UNIOUT_COND_AI3              1482
 #define IDS_UNIOUT_COND_AI4              1483
+#define IDS_IO_REMAPPING_ECF_INV_TT      1484

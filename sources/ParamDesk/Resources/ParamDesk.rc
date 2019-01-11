@@ -1290,6 +1290,7 @@ BEGIN
     IDS_IO_REMAPPING_REF_S_TT    "Вход ДНО"
     IDS_IO_REMAPPING_GAS_V_TT    "Вход газового клапана"
     IDS_IO_REMAPPING_CKPS_TT     "Вход ДПКВ"
+    IDS_IO_REMAPPING_ECF_INV_TT  "Инверсия не работает если выход ECF используется в режиме ШИМ"
 END
 
 STRINGTABLE
@@ -2845,6 +2846,7 @@ BEGIN
     IDS_IO_REMAPPING_REF_S_TT    "Referense sensor input (VR)"
     IDS_IO_REMAPPING_GAS_V_TT    "Gas valve input"
     IDS_IO_REMAPPING_CKPS_TT     "CKP sensor input"
+    IDS_IO_REMAPPING_ECF_INV_TT  "Inversion doesn't work if ECF output is used in PWM mode"
 END
 
 STRINGTABLE
