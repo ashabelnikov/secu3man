@@ -1291,6 +1291,8 @@ BEGIN
     IDS_IO_REMAPPING_GAS_V_TT    "Вход газового клапана"
     IDS_IO_REMAPPING_CKPS_TT     "Вход ДПКВ"
     IDS_IO_REMAPPING_ECF_INV_TT  "Инверсия не работает если выход ECF используется в режиме ШИМ"
+    IDS_IO_REMAPPING_CKPS_INV_TT "Инверсия данного входа производится на вкладке параметров 8:ДПКВ. Эта галочка игнорируется."
+    IDS_IO_REMAPPING_REF_S_INV_TT "Инверсия данного входа производится на вкладке параметров 8:ДПКВ и эта галочка игнорируется, если данный вход не переназначен или переназначен как PS, CKPS или SPD_SENS."
 END
 
 STRINGTABLE
@@ -2847,6 +2849,8 @@ BEGIN
     IDS_IO_REMAPPING_GAS_V_TT    "Gas valve input"
     IDS_IO_REMAPPING_CKPS_TT     "CKP sensor input"
     IDS_IO_REMAPPING_ECF_INV_TT  "Inversion doesn't work if ECF output is used in PWM mode"
+    IDS_IO_REMAPPING_CKPS_INV_TT "Inversion of this input performed on the 8:CKPS parameters tab. This check is ignored."
+    IDS_IO_REMAPPING_REF_S_INV_TT "Inversion of this input performed on the 8:CKPS parameters tab (this check ignored), if this input is not remapped or it is remapped to PS, CKPS or SPD_SENS."
 END
 
 STRINGTABLE
