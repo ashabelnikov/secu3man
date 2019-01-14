@@ -163,6 +163,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   bool m_bl_started_emergency;
   int  m_current_funset_index;
   CObjectTimer<CFirmwareTabController> m_modification_check_timer;
+  CObjectTimer<CFirmwareTabController> m_waiting_bl_timer;
 
   enum EReadFlashMode
   {
@@ -176,4 +177,5 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   int  m_lastSel;                  //хранит номер вкладки панели параметров которая была выбрана в последний раз
   bool m_clear_sbar_txt_on_conn;
   bool m_read_fw_sig_info_flag;
+  bool m_active;
 };

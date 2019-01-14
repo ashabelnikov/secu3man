@@ -109,8 +109,10 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   EEPROMDataMediator* m_eedm;
   PPEepromParam m_epp;
   CObjectTimer<CEEPROMTabController> m_modification_check_timer;
+  CObjectTimer<CEEPROMTabController> m_waiting_bl_timer;
   int m_lastSel;
 
   BYTE* m_bl_data;
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
+  bool m_active;
 };

@@ -605,6 +605,7 @@ BEGIN
     IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT "Выбор COM-порта для проводной или беспроводной связи с блоком SECU-3. Это может быть реальный физический COM-порт, USB виртуальный COM-порт или Bluetooth виртуальный COM-порт."
     IDS_SAVING_APP_SETTINGS "Сохранение настроек программы..."
     IDS_SAVED_APP_SETTINGS "Настройки сохранены."
+    IDS_FW_WAITING_BOOTLOADER "Ожидание запуска загрузчика..."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1244,6 +1245,7 @@ BEGIN
     IDS_APP_SETTINGS_PORT_SELECTION_COMBO_TT "Select COM-port for wired or wireless communication with SECU-3 unit. Can be either a phisical (real COM port), USB virtual COM-port or Bluetooth virtual COM-port."
     IDS_SAVING_APP_SETTINGS "Saving application settings..."
     IDS_SAVED_APP_SETTINGS "Settings have been saved."
+    IDS_FW_WAITING_BOOTLOADER "Waiting for starting of boot loader..."
 END
 
 /////////////////////////////////////////////////////////////////////////////

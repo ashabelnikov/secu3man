@@ -37,8 +37,8 @@ template<class T> class CObjectTimer
  public:
   typedef void (T::*msgHandlerType) (void);
 
-  CObjectTimer(T* ip, msgHandlerType i_function) : m_pDispatcher(ip), msgHandler(i_function), m_interval_ms(0), m_timer_id(0) {};
-  CObjectTimer() : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0) {};
+  CObjectTimer(T* ip, msgHandlerType i_function) : m_pDispatcher(ip), msgHandler(i_function), m_interval_ms(0), m_timer_id(0), m_oneShot(false) {};
+  CObjectTimer() : m_pDispatcher(NULL), msgHandler(NULL), m_interval_ms(0), m_timer_id(0), m_oneShot(false) {};
 
   //при удалении очередного объекта-таймера мапа становится меньше на один элемент
   virtual ~CObjectTimer()
@@ -47,17 +47,18 @@ template<class T> class CObjectTimer
   };
 
   //set all necessary paramaters and runs timer
-  void SetTimer(T* object, msgHandlerType i_function, int interval)
+  void SetTimer(T* object, msgHandlerType i_function, int interval, bool oneShot = false)
   {
    SetMsgHandler(i_function);
    m_pDispatcher = object;
    SetTimer(interval);
    m_interval_ms = interval;
+   m_oneShot = oneShot;
   };
 
   //запускать таймер этой функцией можно только если предварительно в конструктор был передан
   //указатель на объект и была вызвана функция SetMsgHandler() для установки обработчика
-  void SetTimer(int interval)
+  void SetTimer(int interval, bool oneShot = false)
   {
    ASSERT(m_timer_id == 0);
    if (m_timer_id != 0)
@@ -67,6 +68,7 @@ template<class T> class CObjectTimer
    ASSERT(m_timer_id); //failed to set timer!
    g_object_timer_instance_map[m_timer_id] = this;
    m_interval_ms = interval;
+   m_oneShot = oneShot;
   }
 
   //Kill timer using this function
@@ -78,7 +80,7 @@ template<class T> class CObjectTimer
     if (g_object_timer_instance_map.find(m_timer_id)!=g_object_timer_instance_map.end())
      g_object_timer_instance_map.erase(m_timer_id);
     else
-     ASSERT(m_timer_id == 0); //timer id is non-zero but we can not find it in map!
+     ASSERT(m_timer_id == 0); //timer id is non-zero but we can not find it in the map!
    }
    m_timer_id = 0; //indicate that we reset the timer
   }
@@ -102,6 +104,8 @@ template<class T> class CObjectTimer
    return m_interval_ms;
   }
 
+  bool isActive(void) { return m_timer_id != 0; }
+
  private:
 
   static inline VOID CALLBACK TimerProc(HWND hwnd,UINT uMsg,UINT_PTR idEvent,DWORD dwTime)
@@ -111,8 +115,10 @@ template<class T> class CObjectTimer
    ASSERT(p_this);
    if (!p_this)  return;
 
-   T *x = p_this->m_pDispatcher;
-   ASSERT(x);
+   if (p_this->m_oneShot)
+    p_this->KillTimer();
+
+   T *x = p_this->m_pDispatcher;   
    if (!x) return;
 
    //делегируем выполнение операции указанному методу класса T, только если хендлер проинициализирован
@@ -127,4 +133,5 @@ template<class T> class CObjectTimer
   T*   m_pDispatcher;
   UINT_PTR m_timer_id;
   int  m_interval_ms;
+  bool m_oneShot;
 };

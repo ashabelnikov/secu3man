@@ -59,6 +59,7 @@ using namespace fastdelegate;
 
 #define EHKEY _T("FirmwareCntr")
 #define DELAY_AFTER_BL_START 100
+#define WAITING_BL_START_TIMEOUT 8000
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -79,6 +80,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_read_fw_sig_info_flag(false)
 , m_blFinishOpCB(NULL)
 , MapWndScrPos(ip_settings)
+, m_active(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_fpp = holder.GetFlashParameters();
@@ -183,6 +185,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
 void CFirmwareTabController::OnActivate(void)
 {
+ m_active = true;
  mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
@@ -215,12 +218,14 @@ void CFirmwareTabController::OnActivate(void)
 
 void CFirmwareTabController::OnDeactivate(void)
 {
+ m_active = false;
  mp_view->mp_TablesPanel->ShowOpenedCharts(false);
  //отключаемся от потока данных
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));
  m_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
+ m_waiting_bl_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
  m_lastSel = mp_view->mp_ParamDeskDlg->GetCurSel();
 
@@ -268,6 +273,7 @@ void CFirmwareTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::
     {
      if (m_blFinishOpCB)
      {
+      m_waiting_bl_timer.KillTimer();
       Sleep(DELAY_AFTER_BL_START);
       (this->*(m_blFinishOpCB))();
       m_blFinishOpCB = NULL;
@@ -569,7 +575,12 @@ void CFirmwareTabController::OnBootLoaderInfo(void)
  StartBootLoader();
 
  if (!m_bl_started_emergency)
+ {
+  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+  m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
   m_blFinishOpCB = &CFirmwareTabController::finishOnBootLoaderInfo;
+ }
  else
   finishOnBootLoaderInfo();
 }
@@ -583,7 +594,12 @@ void CFirmwareTabController::OnReadEepromToFile(void)
  StartBootLoader();
 
  if (!m_bl_started_emergency)
+ {
+  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+  m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
   m_blFinishOpCB = &CFirmwareTabController::finishOnReadEepromToFile;
+ }
  else
   finishOnReadEepromToFile();
 }
@@ -603,7 +619,12 @@ void CFirmwareTabController::OnWriteEepromFromFile(void)
  StartBootLoader();
 
  if (!m_bl_started_emergency)
+ {  
+  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+  m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
   m_blFinishOpCB = &CFirmwareTabController::finishOnWriteEepromFromFile;
+ }
  else
   finishOnWriteEepromFromFile();
 }
@@ -631,7 +652,12 @@ void CFirmwareTabController::_OnReadFlashToFile(void)
  StartBootLoader();
 
  if (!m_bl_started_emergency)
+ {
+  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+  m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
   m_blFinishOpCB = &CFirmwareTabController::finish_OnReadFlashToFile;
+ }
  else
   finish_OnReadFlashToFile();
 }
@@ -693,7 +719,12 @@ void CFirmwareTabController::StartWritingOfFLASHFromBuff(void)
  StartBootLoader();
 
  if (!m_bl_started_emergency)
+ {
+  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+  m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
   m_blFinishOpCB = &CFirmwareTabController::finishStartWritingOfFLASHFromBuff;
+ }
  else
   finishStartWritingOfFLASHFromBuff();
 }
@@ -827,7 +858,7 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 
- if (!m_comm->m_pBootLoader->IsIdle())
+ if (m_active && (!m_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return false;
 
@@ -846,7 +877,7 @@ void CFirmwareTabController::OnFullScreen(bool i_what)
 
 bool CFirmwareTabController::OnAskChangeTab(void)
 {
- if (m_comm->m_pBootLoader->IsIdle())
+ if (m_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
   return true; //allows
  return ErrorMsg::AskUserAboutTabLeaving();
 }

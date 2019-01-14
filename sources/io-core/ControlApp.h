@@ -104,6 +104,8 @@ class IOCORE_API CControlApp
 
   class xThread {};
 
+  BOOL SetPacketsTimer(int timeout);
+
  private:
   typedef std::vector<std::vector<BYTE> > Packets;
 
@@ -151,7 +153,6 @@ class IOCORE_API CControlApp
   void SwitchOnThread(bool state);
   int  SplitPackets(BYTE*, size_t i_size);
   bool ParsePackets();
-  BOOL SetPacketsTimer(int timeout);
   bool IsValidDescriptor(const BYTE descriptor) const;
 
   SECU3IO::SECU3Packet& EndPendingPacket(void);

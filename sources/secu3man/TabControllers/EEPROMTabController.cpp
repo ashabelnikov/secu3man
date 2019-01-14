@@ -48,6 +48,7 @@ using namespace SECU3IO;
 
 #define EHKEY _T("EEPROMDataCntr")
 #define DELAY_AFTER_BL_START 100
+#define WAITING_BL_START_TIMEOUT 8000
 
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
@@ -62,6 +63,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 , mp_errors_ids(new CEErrorIdStr())
 , m_blFinishOpCB(NULL)
 , MapWndScrPos(ip_settings)
+, m_active(false)
 {
  PlatformParamHolder holder(ip_settings->GetECUPlatformType());
  m_epp = holder.GetEepromParameters();
@@ -117,6 +119,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CEEPROMTabController::OnActivate(void)
 {
+ m_active = true;
  mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
@@ -144,6 +147,7 @@ void CEEPROMTabController::OnActivate(void)
 //from MainTabController
 void CEEPROMTabController::OnDeactivate(void)
 {
+ m_active = false;
  mp_view->mp_TablesPanel->ShowOpenedCharts(false);
  m_comm->m_pBootLoader->AbortOperation();
  m_comm->m_pBldAdapter->DetachEventHandler();
@@ -151,6 +155,7 @@ void CEEPROMTabController::OnDeactivate(void)
  m_sbar->SetInformationText(_T(""));
  m_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
+ m_waiting_bl_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
  m_lastSel = mp_view->mp_ParamDeskDlg->GetCurSel();
 }
@@ -177,6 +182,7 @@ void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SE
     {
      if (m_blFinishOpCB)
      {
+      m_waiting_bl_timer.KillTimer();
       Sleep(DELAY_AFTER_BL_START);
       (this->*(m_blFinishOpCB))();
       m_blFinishOpCB = NULL;
@@ -221,7 +227,11 @@ void CEEPROMTabController::OnConnection(const bool i_online)
 //This method called when framework ask to close application
 bool CEEPROMTabController::OnClose(void)
 {
- return true;
+ if (m_active && (!m_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
+  if (!ErrorMsg::AskUserAboutTabLeaving())
+   return false;
+
+ return CheckChangesAskAndSaveEEPROM();
 }
 
 void CEEPROMTabController::OnCloseNotify(void)
@@ -236,7 +246,7 @@ void CEEPROMTabController::OnFullScreen(bool i_what)
 
 bool CEEPROMTabController::OnAskChangeTab(void)
 {
- if (m_comm->m_pBootLoader->IsIdle())
+ if (m_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
   return true; //allows
  return ErrorMsg::AskUserAboutTabLeaving();
 }
@@ -347,6 +357,9 @@ void CEEPROMTabController::OnReadEEPROMFromSECU(void)
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
+ m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+ m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+ m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
  m_blFinishOpCB = &CEEPROMTabController::finishOnReadEepromFromSECU;
 }
 
@@ -361,6 +374,9 @@ void CEEPROMTabController::OnWriteEEPROMToSECU(void)
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
+ m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+ m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+ m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
  m_blFinishOpCB = &CEEPROMTabController::finishOnWriteEepromToSECU;
 }
 
