@@ -1353,6 +1353,7 @@ BEGIN
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "Верхний порог оборотов ЭПХХ. Должен быть больше чем нижний порог. Чем меньше значения тем больше экономия топлива при ПХХ. Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
     IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа желтый индикатор 'ДПДЗ' на вкладке 'Параметры и монитор' был черного цвета, а при нажатии на педаль загорался желтым цветом."
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Ограничение максимального численного значения ошибки (ошибка определяется как разность между целевыми оборотами ХХ и текущими)."
+    IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Определяет сколько времени вентилятор будет работать при остановленном двигателе. Поставьте 0, если хотите чтобы вентилятор работал пока температура не упадет без ограничения по времени."
 END
 
 STRINGTABLE
@@ -2910,6 +2911,7 @@ BEGIN
     IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Limitation of RPM error (error calculated as difference between target and current RPMs)."
+    IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Determines how long cooling fan will work on stopped engine. Set to 0, if you want cooling fan to work while temperature is not fall (no time restrictions)."
 END
 
 STRINGTABLE

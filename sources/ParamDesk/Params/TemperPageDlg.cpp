@@ -250,6 +250,9 @@ BOOL CTemperPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_use_vent_pwm, MLL::GetString(IDS_PD_TEMPER_USE_VENT_PWM_TT)));
  VERIFY(mp_ttc->AddWindow(&m_use_temp_sensor,MLL::GetString(IDS_PD_TEMPER_USE_TEMP_SENSOR_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_vent_timer_edit,MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_vent_timer_spin,MLL::GetString(IDS_PD_TEMPER_VENTTIMER_EDIT_TT)));
+
  mp_ttc->SetMaxTipWidth(250); //Set text wrapping width
  mp_ttc->ActivateToolTips(true);
 
