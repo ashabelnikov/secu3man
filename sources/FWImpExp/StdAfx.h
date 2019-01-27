@@ -37,3 +37,4 @@
 #include <atlconv.h>
 #include "common\LangLayer.h"
 
+#pragma warning(disable: 4800) //warning C4800: 'int' : forcing value to bool 'true' or 'false' (performance warning)

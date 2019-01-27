@@ -359,7 +359,7 @@ bool CMapImpExpDlg::GetFWDFlag(EFWDFlags i_flag_type)
 
 bool CMapImpExpDlg::IsEnabledFWDFlag(EFWDFlags i_flag_type)
 {
- return (bool)m_fwd_flags_buttons[i_flag_type].IsWindowEnabled();
+ return m_fwd_flags_buttons[i_flag_type].IsWindowEnabled();
 }
 
 void CMapImpExpDlg::EnableFWDFlag(EFWDFlags i_flag_type, bool i_enable)
