@@ -456,6 +456,7 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_GD_STP, _T("GD_STP"));
   }
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_O2SH_O, _T("O2SH_O"));
+  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_CE, _T("CE"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IE, true);
   mp_view->EnableInversion(FWDM::IOS_IE, true);
@@ -491,6 +492,7 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_GD_STP, _T("GD_STP"));
   }
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_O2SH_O, _T("O2SH_O"));
+  mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_CE, _T("CE"));
   mp_view->AddItem(FWDM::IOS_FE, FWDM::IOP_FE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_FE, true); 
   mp_view->EnableInversion(FWDM::IOS_FE, true);
@@ -1267,6 +1269,8 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
     continue; //5
    if (((FWDM::IOSid)s == FWDM::IOS_ADD_IO2) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_ADD_IO2)))
     continue; //6
+   if (((FWDM::IOSid)s == FWDM::IOS_CE) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_CE)))
+    continue; //CE
 
    //hack which allows remap PS input to other input slots
    if (((FWDM::IOSid)s == FWDM::IOS_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_PS)))
@@ -1276,7 +1280,7 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
     continue; //CKPS
   }
   else
-  { //sECU-3i:
+  { //SECU-3i:
    if (((FWDM::IOSid)s == FWDM::IOS3I_IGN_O1) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_IGN_O1)))
     continue; //1
    if (((FWDM::IOSid)s == FWDM::IOS3I_IGN_O2) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP3I_IGN_O2)))
@@ -1528,6 +1532,7 @@ void CFWIORemappingController::_EnableInversionItems(void)
  std::map<FWDM::IOSid, bool> enableFlags;
  if (m_enable_secu3t_features)
  {
+  enableFlags.insert(std::make_pair(FWDM::IOS_CE, false)); //CE
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT1, false)); //1
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT2, false)); //2
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT3, false)); //3
