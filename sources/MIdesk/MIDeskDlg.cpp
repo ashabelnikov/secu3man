@@ -35,6 +35,7 @@
 #include "common/MathHelpers.h"
 #include "common/DPIAware.h"
 #include "ui-core/AnalogMeterCtrl.h"
+#include "ui-core/fnt_helpers.h"
 
 #include "MIAirFlow.h"
 #include "MIDwellAngle.h"
@@ -177,11 +178,13 @@ BOOL CMIDeskDlg::OnInitDialog()
 
  if (!m_font.GetSafeHandle())
  {
-  LOGFONT LogFont;
+/*LOGFONT LogFont;
   memset(&LogFont, 0x00, sizeof(LogFont));
   _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
-  LogFont.lfHeight = 8;
-  m_font.CreateFontIndirect(&LogFont);
+  DPIAware dpi;
+  LogFont.lfHeight = dpi.FontHeight(8);
+  m_font.CreateFontIndirect(&LogFont);*/
+  CloneWndFont(this, &m_font, -1, false);  
  }
 
  m_leds.SetFont(&m_font);

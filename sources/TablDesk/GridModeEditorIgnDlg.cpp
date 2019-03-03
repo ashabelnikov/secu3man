@@ -134,11 +134,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_ic_value.SetFont(&m_fieldFont);
  m_ac_value.SetFont(&m_fieldFont);
 
- LOGFONT LogFont;
- memset(&LogFont, 0x00, sizeof(LogFont));
- _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
- LogFont.lfHeight = 8;
- m_font.CreateFontIndirect(&LogFont);
+ CloneWndFont(this, &m_font, -1, false);
 
  //start
  m_start_map.setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnChangeStart));

@@ -27,6 +27,7 @@
 #include "resource.h"
 #include "GMEInjVEDlg.h"
 #include "common/fastdelegate.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CGMEInjVEDlg::IDD = IDD_GME_INJ_VE;
 
@@ -104,13 +105,7 @@ BOOL CGMEInjVEDlg::OnInitDialog()
  Super::OnInitDialog();
 
  if (!m_font.GetSafeHandle())
- {
-  LOGFONT LogFont;
-  memset(&LogFont, 0x00, sizeof(LogFont));
-  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
-  LogFont.lfHeight = 8;
-  m_font.CreateFontIndirect(&LogFont);
- }
+  CloneWndFont(this, &m_font, -1, false);
 
  m_ve_map.SetRange(.0f, 1.99f);
  m_ve_map.AttachMap(mp_VEMap);

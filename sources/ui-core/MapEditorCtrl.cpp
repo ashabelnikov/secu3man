@@ -47,7 +47,7 @@ class CEditExCustomKeys : public CEditEx
    CEditEx::OnChar(nChar, nRepCnt, nFlags);
    if (nChar==VK_RETURN)
     m_onChar(nChar, this);
-   
+
    else if (nChar==VK_TAB) //DLGC_WANTALLKEYS brake TABSTOP and we make it to work again
    {
     CWnd* pWnd = GetParent()->GetParent()->GetNextDlgTabItem(GetParent(), (GetKeyState(VK_SHIFT)&0x8000)?TRUE:FALSE);
@@ -62,7 +62,7 @@ class CEditExCustomKeys : public CEditEx
   }
 
   void IncrementEdit(float incVal)
-  {   
+  {
    float value = 0;
    if (GetValue(value))
    {   

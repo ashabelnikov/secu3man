@@ -28,6 +28,7 @@
 #include "GMEInjOtherDlg.h"
 #include "MapIds.h"
 #include "common/MathHelpers.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CGMEInjOtherDlg::IDD = IDD_GME_INJ_OTHER;
 
@@ -108,13 +109,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  Super::OnInitDialog();
 
  if (!m_font.GetSafeHandle())
- {
-  LOGFONT LogFont;
-  memset(&LogFont, 0x00, sizeof(LogFont));
-  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
-  LogFont.lfHeight = 8;
-  m_font.CreateFontIndirect(&LogFont);
- }
+  CloneWndFont(this, &m_font, -1, false);
 
  _UpdateDynamicGrids();
  

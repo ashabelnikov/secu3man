@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjAFRDlg.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CGMEInjAFRDlg::IDD = IDD_GME_INJ_AFR;
 
@@ -66,13 +67,7 @@ BOOL CGMEInjAFRDlg::OnInitDialog()
  Super::OnInitDialog();
 
  if (!m_font.GetSafeHandle())
- {
-  LOGFONT LogFont;
-  memset(&LogFont, 0x00, sizeof(LogFont));
-  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
-  LogFont.lfHeight = 8;
-  m_font.CreateFontIndirect(&LogFont);
- }
+  CloneWndFont(this, &m_font, -1, false);
 
  m_afr_map.SetRange(8.0f, 22.0f);
  m_afr_map.AttachMap(mp_AFRMap);

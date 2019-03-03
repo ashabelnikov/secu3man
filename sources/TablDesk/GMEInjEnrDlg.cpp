@@ -28,6 +28,7 @@
 #include "GMEInjEnrDlg.h"
 #include "MapIds.h"
 #include "common/MathHelpers.h"
+#include "ui-core/fnt_helpers.h"
 
 const UINT CGMEInjEnrDlg::IDD = IDD_GME_INJ_ENR;
 
@@ -83,13 +84,7 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  Super::OnInitDialog();
 
  if (!m_font.GetSafeHandle())
- {
-  LOGFONT LogFont;
-  memset(&LogFont, 0x00, sizeof(LogFont));
-  _tcsncpy(LogFont.lfFaceName, _T("MS Sans Serif"), LF_FACESIZE);
-  LogFont.lfHeight = 8;
-  m_font.CreateFontIndirect(&LogFont);
- }
+  CloneWndFont(this, &m_font, -1, false);
  
  m_aftstr_map.setOnChange(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnChangeAftstr));
  m_aftstr_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAftstr));
