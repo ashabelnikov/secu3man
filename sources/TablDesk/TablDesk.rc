@@ -334,7 +334,7 @@ BEGIN
     LTEXT           "Коррекция смеси по положению РДВ",IDC_STATIC,180,190,150,9
     CONTROL         "IACC",IDC_GME_INJ_IACC,"MFCMapEditorCtrl",WS_TABSTOP,5,200,510,25,WS_EX_STATICEDGE
 
-    LTEXT           "Вес коррекции смеси по положению РДВ",IDC_STATIC,180,235,150,9
+    LTEXT           "Коррекция смеси по ДПДЗ (вес корр. смеси по полож. РДВ)",IDC_STATIC,180,235,210,9
     CONTROL         "IACCW",IDC_GME_INJ_IACCW,"MFCMapEditorCtrl",WS_TABSTOP,5,245,510,25,WS_EX_STATICEDGE
 END
 
@@ -563,7 +563,7 @@ BEGIN
     IDS_TD_RPM_GRID_BUTTON_TT "Изменение сетки оборотов для таблиц УОЗ ХХ и рабочего режима."
     IDS_EGO_CURVE_MAP       "Зависимость AFR от напряжения на ДК (эмуляция ШДК)"
     IDS_IACC_CURVE_MAP      "Коррекция смеси по положению РДВ"
-    IDS_IACCW_CURVE_MAP     "Вес коррекции смеси по положению РДВ"
+    IDS_IACCW_CURVE_MAP     "Коррекция смеси по ДПДЗ (вес корр. смеси по полож. РДВ)"
     IDS_MAPS_IACPOS_UNIT    "Положение РДВ (%)"
     IDS_MAPS_TPSPOS_UNIT    "Положение дроссельной заслонки (%)"
     IDS_IATCLT_CORR_MAP     "Коэффициент влияния ТОЖ на ТВ на впуске"
@@ -924,7 +924,7 @@ BEGIN
     LTEXT           "Mixture correction vs IAC pos",IDC_STATIC,180,190,150,9
     CONTROL         "IACC",IDC_GME_INJ_IACC,"MFCMapEditorCtrl",WS_TABSTOP,5,200,510,25,WS_EX_STATICEDGE
 
-    LTEXT           "Weight of mixture correction vs IAC pos",IDC_STATIC,180,235,150,9
+    LTEXT           "Correction of mixture vs TPS (weight of mixt. corr. vs IAC pos)",IDC_STATIC,180,235,210,9
     CONTROL         "IACCW",IDC_GME_INJ_IACCW,"MFCMapEditorCtrl",WS_TABSTOP,5,245,510,25,WS_EX_STATICEDGE
 END
 
@@ -1169,7 +1169,7 @@ BEGIN
     IDS_TD_RPM_GRID_BUTTON_TT "Alter RPM grid for afvance angle maps of idle and work modes."
     IDS_EGO_CURVE_MAP       "AFR vs voltage on the EGO sensor (WBO emulation)"
     IDS_IACC_CURVE_MAP      "Mixture correction vs IAC pos"
-    IDS_IACCW_CURVE_MAP     "Weight of mixture correction vs IAC pos"
+    IDS_IACCW_CURVE_MAP     "Correction of mixture vs TPS (weight of mixt. corr. vs IAC pos)"
     IDS_MAPS_IACPOS_UNIT    "IAC valve position (%)"
     IDS_MAPS_TPSPOS_UNIT    "Throttle position (%)"
     IDS_IATCLT_CORR_MAP     "Influence factor of CLT to MAT"
