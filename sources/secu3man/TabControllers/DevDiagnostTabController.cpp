@@ -183,6 +183,9 @@ class TstMode2 : public ITstMode
  };
 }
 
+//We only save value of this pointer (we do not access members), so we can ignore warning.
+#pragma warning( disable : 4355 ) // : 'this' : used in base member initializer list
+
 CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : mp_view(ip_view)
 , mp_comm(ip_comm)
@@ -191,6 +194,7 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
 , mp_idccntr(new CPMInitDataCollector(ip_comm, ip_sbar))
 , m_comm_state(0) //for state machine
 , m_diagnost_mode_active(false) //indicates that we are currently in diagnostic mode
+, m_autoDiagTmr(this, &CDevDiagnostTabController::OnEnterButton)
 {
  //========================================================
  if (!CheckVersion())
@@ -349,7 +353,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     if (enableEnterBtn && mp_settings->GetAutoDiagEnter())
     { //automatic entering into a diagnostic mode
      mp_view->SetEnterButton(true);
-     OnEnterButton();
+     m_autoDiagTmr.SetTimer(100, true); //one shot timer
     }
    }
    break; 

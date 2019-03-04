@@ -88,6 +88,7 @@ class CDevDiagnostTabController : public ITabController, private IAPPEventHandle
   SECU3IO::DiagOutDat m_outputs;
   std::map<int, int*> m_outputs_map;
   CObjectTimer<CDevDiagnostTabController> m_tst_timer;
+  CObjectTimer<CDevDiagnostTabController> m_autoDiagTmr;
   std::vector<ITstMode*> m_tstModes;
   std::vector<ITstMode*>::iterator m_current_tst_mode;
 };
