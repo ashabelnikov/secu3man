@@ -47,6 +47,9 @@ const BYTE default_context = SENSOR_DAT;
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+//We only save value of this pointer (we do not access members), so we can ignore warning.
+#pragma warning( disable : 4355 ) // : 'this' : used in base member initializer list
+
 CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : m_view(NULL)
 , m_comm(NULL)
@@ -54,6 +57,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 , mp_settings(ip_settings)
 , m_real_time_errors_mode(false)
 , mp_errors_ids(new CEErrorIdStr())
+, m_autoCETmr(this, &CCheckEngineTabController::OnReadSavedErrors)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -118,7 +122,7 @@ void CCheckEngineTabController::OnActivate(void)
 
  //read CE error from SECU-3 after opening of tab if allowed
  if (mp_settings->GetAutoCERead())
-  OnReadSavedErrors();
+  m_autoCETmr.SetTimer(100, true); //one shot timer  
 }
 
 //from MainTabController
