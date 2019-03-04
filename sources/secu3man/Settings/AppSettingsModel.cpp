@@ -30,6 +30,7 @@
 
 #include <limits>
 #include <algorithm>
+#include <shlwapi.h>
 
 #undef max //avoid conflicts with C++
 
@@ -267,10 +268,12 @@ CAppSettingsModel::CAppSettingsModel()
  m_AllowablePorts.push_back(_T("/dev/ttyUSB0"));
  m_AllowablePorts.push_back(_T("/dev/ttyUSB1"));
 
+ //get path where resides executable file of this proces
+ HMODULE hModule = GetModuleHandle(NULL);
+ ASSERT(hModule);
  _tcscpy(m_current_directory,_T(""));
-
- //get current directory name
- GetCurrentDirectory(MAX_PATH, m_current_directory);
+ GetModuleFileName(hModule, m_current_directory, MAX_PATH);
+ VERIFY(PathRemoveFileSpec(m_current_directory));
 
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\",\"  comma")),     ','));
  m_AllowaleCSVSepSymbols.push_back(std::make_pair(_TSTRING(_T("\";\"  semicolon")), ';'));
