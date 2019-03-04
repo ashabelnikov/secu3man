@@ -268,10 +268,12 @@ void CDevDiagnostTabController::OnDeactivate(void)
  //This command will make SECU-3 to leave diagnostic mode
  if (true==m_diagnost_mode_active)
  {
+  Sleep(100);
   SECU3IO::OPCompNc packet_data;
   packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;
   packet_data.opdata = 0;
   mp_comm->m_pControlApp->SendPacket(OP_COMP_NC, &packet_data);
+  Sleep(10);
  }
 
  mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);

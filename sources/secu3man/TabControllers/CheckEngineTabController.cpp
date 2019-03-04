@@ -58,6 +58,7 @@ CCheckEngineTabController::CCheckEngineTabController(CCheckEngineTabDlg* i_view,
 , m_real_time_errors_mode(false)
 , mp_errors_ids(new CEErrorIdStr())
 , m_autoCETmr(this, &CCheckEngineTabController::OnReadSavedErrors)
+, m_pending_ce_autoreading(false)
 {
  //инициализируем указатели на вспомогательные объекты
  m_view = i_view;
@@ -122,7 +123,7 @@ void CCheckEngineTabController::OnActivate(void)
 
  //read CE error from SECU-3 after opening of tab if allowed
  if (mp_settings->GetAutoCERead())
-  m_autoCETmr.SetTimer(100, true); //one shot timer  
+  m_pending_ce_autoreading = true;
 }
 
 //from MainTabController
@@ -130,6 +131,7 @@ void CCheckEngineTabController::OnDeactivate(void)
 {
  m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  m_sbar->SetInformationText(_T(""));
+ m_pending_ce_autoreading = false;
 }
 
 void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -163,6 +165,12 @@ void CCheckEngineTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
   CEErrors* errors = reinterpret_cast<CEErrors*>(ip_packet);
   m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_READ_SUCCESSFULLY));
   _SetErrorsToList(errors);
+ }
+
+ if (i_descriptor == SENSOR_DAT && m_pending_ce_autoreading)
+ {
+  m_pending_ce_autoreading = false;
+  m_autoCETmr.SetTimer(100, true); //one shot timer
  }
 }
 

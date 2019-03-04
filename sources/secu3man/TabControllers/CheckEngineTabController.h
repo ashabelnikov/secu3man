@@ -78,6 +78,7 @@ class CCheckEngineTabController : public ITabController, private IAPPEventHandle
   ISettingsData* mp_settings;
 
   bool m_real_time_errors_mode;
+  bool m_pending_ce_autoreading;
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
 
   CObjectTimer<CCheckEngineTabController> m_autoCETmr;
