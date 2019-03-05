@@ -1702,8 +1702,14 @@ bool CControlApp::Parse_RPMGRD_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_DIAGINP_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::DiagInpDat& m_DiagInpDat = m_recepted_packet.m_DiagInpDat;
- if (size != (mp_pdp->isHex() ? 44 : 22))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 46 : 23))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
+
+ //flags variable
+ BYTE flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &flags))
+  return false;
+ m_DiagInpDat.f_secu3t = flags;
 
  //напряжение бортовой сети
  int voltage = 0;

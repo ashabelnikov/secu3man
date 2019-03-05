@@ -321,6 +321,7 @@ void CDevDiagnostTabController::OnPacketReceived(const BYTE i_descriptor, SECU3I
     mp_view->SetEnterButton(true);   //checked
     mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_LEAVE));
     mp_view->EnableEnterButton(true);//enabled
+    mp_view->EnableSECU3TFeatures(((const SECU3IO::DiagInpDat*)ip_packet)->f_secu3t);
     //Set correct states of outputs
     UpdateOutputs();
     break;

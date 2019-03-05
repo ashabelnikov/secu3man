@@ -368,6 +368,7 @@ namespace SECU3IO
 
  struct DiagInpDat
  {
+  bool f_secu3t;                        //SECU-3T flag
   float voltage;                        //board voltage
   float map;                            //MAP sensor
   float temp;                           //coolant temperature
