@@ -215,6 +215,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_ADD_IO2, _T("ADD_O2"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IE, _T("IE"));
+  mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_FE, _T("FE"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT2, FWDM::IOP_IGN_OUT2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IGN_OUT2, true);
   mp_view->EnableInversion(FWDM::IOS_IGN_OUT2, true);
@@ -1271,6 +1273,10 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
     continue; //6
    if (((FWDM::IOSid)s == FWDM::IOS_CE) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_CE)))
     continue; //CE
+   if (((FWDM::IOSid)s == FWDM::IOS_IE) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_IE)))
+    continue; //IE
+   if (((FWDM::IOSid)s == FWDM::IOS_FE) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_FE)))
+    continue; //FE
 
    //hack which allows remap PS input to other input slots
    if (((FWDM::IOSid)s == FWDM::IOS_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_PS)))
@@ -1532,6 +1538,8 @@ void CFWIORemappingController::_EnableInversionItems(void)
  std::map<FWDM::IOSid, bool> enableFlags;
  if (m_enable_secu3t_features)
  {
+  enableFlags.insert(std::make_pair(FWDM::IOS_IE, false)); //IE
+  enableFlags.insert(std::make_pair(FWDM::IOS_FE, false)); //FE
   enableFlags.insert(std::make_pair(FWDM::IOS_CE, false)); //CE
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT1, false)); //1
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT2, false)); //2
