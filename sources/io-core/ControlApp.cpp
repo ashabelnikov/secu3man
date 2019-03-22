@@ -1518,7 +1518,7 @@ bool CControlApp::Parse_EDITAB_PAR(const BYTE* raw_packet, size_t size)
    for(size_t i = 0; i < size / div; ++i)
    {
     int value;
-    if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+    if (false == mp_pdp->Hex16ToBin(raw_packet, &value, m_EditTabPar.tab_id == ETMT_DEAD_MAP)) //<--signed for dead map
      return false;
 
     if (m_EditTabPar.tab_id == ETMT_IATCLT_MAP)
