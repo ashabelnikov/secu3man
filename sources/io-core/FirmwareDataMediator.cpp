@@ -788,7 +788,7 @@ void CFirmwareDataMediator::SetDeadMap(int i_index, const float* ip_values)
 
  float discrete = PlatformParamHolder::GetQuartzFact(m_fpp->m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; i++)
-  p_fd->tables[i_index].inj_dead_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
+  p_fd->tables[i_index].inj_dead_time[i] = (_int)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
 
 void CFirmwareDataMediator::GetIdlrMap(int i_index,float* op_values, bool i_original /* = false */)

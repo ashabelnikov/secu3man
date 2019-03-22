@@ -339,7 +339,7 @@ void EEPROMDataMediator::SetDeadMap(int i_index, const float* ip_values)
 
  float discrete = PlatformParamHolder::GetQuartzFact(m_epp.m_platform_id); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
  for(size_t i = 0; i < INJ_DT_LOOKUP_TABLE_SIZE; i++)
-  p_maps[i_index].inj_dead_time[i] = (_uint)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
+  p_maps[i_index].inj_dead_time[i] = (_int)MathHelpers::Round((ip_values[i] * 1000.0) / discrete);
 }
 
 void EEPROMDataMediator::GetIdlrMap(int i_index,float* op_values, bool i_original /* = false */)
