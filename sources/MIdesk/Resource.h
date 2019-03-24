@@ -272,3 +272,9 @@
 #define IDM_MI_IND_FCREVLIM             2378
 #define IDM_MI_IND_FLOODCLEAR           2379
 #define IDM_MI_IND_SYSLOCKED            2380
+#define IDM_MI_IND_IGN_I                2381
+#define IDM_MI_IND_COND_I               2382
+#define IDM_MI_IND_EPAS_I               2383
+#define IDS_MI_IND_IGN_I                2384
+#define IDS_MI_IND_COND_I               2385
+#define IDS_MI_IND_EPAS_I               2386

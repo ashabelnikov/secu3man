@@ -52,6 +52,9 @@ namespace SECU3IO
   unsigned char fc_revlim;              // fuel cut rev.lim. flag
   unsigned char floodclear;             // flood clear mode flag   
   unsigned char sys_locked;             // system locked flag (immobilizer)
+  unsigned char ign_i;                  //IGN_I
+  unsigned char cond_i;                 //COND_I
+  unsigned char epas_i;                 //EPAS_I
 
   float knock_k;                        //уровень сигнала детонации (усредненный за время фазового окна)
   float knock_retard;                   //корректировка УОЗ при детонации

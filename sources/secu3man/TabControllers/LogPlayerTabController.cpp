@@ -591,7 +591,7 @@ void CLogPlayerTabController::ConfigureIndicators(void)
  int idx = (int)mp_settings->GetShowExFixtures();
  IndicatorsCfg cfg0;
  mp_settings->GetIndicatorsConfig(cfg0);
- mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg0.m_optIndHeightPercent[idx], cfg0.m_optIndRows[idx], cfg0.m_optIndGas_v[idx], cfg0.m_optIndCarb[idx], cfg0.m_optIndIdleValve[idx], cfg0.m_optIndPowerValve[idx], cfg0.m_optIndStBlock[idx], cfg0.m_optIndAE[idx], cfg0.m_optIndCoolingFan[idx], cfg0.m_optIndCE[idx], cfg0.m_optIndFCRevLim[idx], cfg0.m_optIndFloodClear[idx], cfg0.m_optIndSysLocked[idx]);
+ mp_view->mp_MIDeskDlg->SetIndicatorsCfg(cfg0.m_optIndHeightPercent[idx], cfg0.m_optIndRows[idx], cfg0.m_optIndGas_v[idx], cfg0.m_optIndCarb[idx], cfg0.m_optIndIdleValve[idx], cfg0.m_optIndPowerValve[idx], cfg0.m_optIndStBlock[idx], cfg0.m_optIndAE[idx], cfg0.m_optIndCoolingFan[idx], cfg0.m_optIndCE[idx], cfg0.m_optIndFCRevLim[idx], cfg0.m_optIndFloodClear[idx], cfg0.m_optIndSysLocked[idx], cfg0.m_optIndIgn_i[idx], cfg0.m_optIndCond_i[idx], cfg0.m_optIndEpas_i[idx]);
 
  mp_view->mp_MIDeskDlg->SetIndicatorsDragNDrop(mp_settings->GetIndicatorsDragNDrop());
 
@@ -615,14 +615,14 @@ void CLogPlayerTabController::OnMIDeskSettingsChanged(void)
  mp_settings->GetIndicatorsConfig(cfg0);
 
  float IndHeightPercent; int IndRows; CMIDeskDlg::IndCfg_t IndGas_v, IndCarb, IndIdleValve, IndPowerValve, IndStBlock, IndAE,
- IndCoolingFan, IndCE, IndFCRevLim, IndFloodClear, IndSysLocked;
+ IndCoolingFan, IndCE, IndFCRevLim, IndFloodClear, IndSysLocked, IndIgn_i, IndCond_i, IndEpas_i;
 
- mp_view->mp_MIDeskDlg->GetIndicatorsCfg(IndHeightPercent, IndRows, IndGas_v, IndCarb, IndIdleValve, IndPowerValve, IndStBlock, IndAE, IndCoolingFan, IndCE, IndFCRevLim, IndFloodClear, IndSysLocked);
+ mp_view->mp_MIDeskDlg->GetIndicatorsCfg(IndHeightPercent, IndRows, IndGas_v, IndCarb, IndIdleValve, IndPowerValve, IndStBlock, IndAE, IndCoolingFan, IndCE, IndFCRevLim, IndFloodClear, IndSysLocked, IndIgn_i, IndCond_i, IndEpas_i);
 
- cfg0.m_optIndHeightPercent[idx] = IndHeightPercent, cfg0.m_optIndRows[idx] = IndRows, cfg0.m_optIndGas_v[idx] = IndGas_v, cfg0.m_optIndCarb[idx] = IndCarb, cfg0.m_optIndIdleValve[idx] = IndIdleValve, cfg0.m_optIndPowerValve[idx] = IndPowerValve, cfg0.m_optIndStBlock[idx] = IndStBlock, cfg0.m_optIndAE[idx] = IndAE, cfg0.m_optIndCoolingFan[idx] = IndCoolingFan, cfg0.m_optIndCE[idx] = IndCE, cfg0.m_optIndFCRevLim[idx] = IndFCRevLim, cfg0.m_optIndFloodClear[idx] = IndFloodClear, cfg0.m_optIndSysLocked[idx] = IndSysLocked;
+ cfg0.m_optIndHeightPercent[idx] = IndHeightPercent, cfg0.m_optIndRows[idx] = IndRows, cfg0.m_optIndGas_v[idx] = IndGas_v, cfg0.m_optIndCarb[idx] = IndCarb, cfg0.m_optIndIdleValve[idx] = IndIdleValve, cfg0.m_optIndPowerValve[idx] = IndPowerValve, cfg0.m_optIndStBlock[idx] = IndStBlock, cfg0.m_optIndAE[idx] = IndAE, cfg0.m_optIndCoolingFan[idx] = IndCoolingFan, cfg0.m_optIndCE[idx] = IndCE, cfg0.m_optIndFCRevLim[idx] = IndFCRevLim, cfg0.m_optIndFloodClear[idx] = IndFloodClear, cfg0.m_optIndSysLocked[idx] = IndSysLocked, cfg0.m_optIndIgn_i[idx] = IndIgn_i, cfg0.m_optIndCond_i[idx] = IndCond_i, cfg0.m_optIndEpas_i[idx] = IndEpas_i;
 
  for (int ii = 0; ii < 2; ++ii) //copy colors, redundant because we have single color set in ini file
-  cfg0.m_optIndGas_v[ii].second = IndGas_v.second, cfg0.m_optIndCarb[ii].second = IndCarb.second, cfg0.m_optIndIdleValve[ii].second = IndIdleValve.second, cfg0.m_optIndPowerValve[ii].second = IndPowerValve.second, cfg0.m_optIndStBlock[ii].second = IndStBlock.second, cfg0.m_optIndAE[ii].second = IndAE.second, cfg0.m_optIndCoolingFan[ii].second = IndCoolingFan.second, cfg0.m_optIndCE[ii].second = IndCE.second, cfg0.m_optIndFCRevLim[ii].second = IndFCRevLim.second, cfg0.m_optIndFloodClear[ii].second = IndFloodClear.second, cfg0.m_optIndSysLocked[ii].second = IndSysLocked.second;
+  cfg0.m_optIndGas_v[ii].second = IndGas_v.second, cfg0.m_optIndCarb[ii].second = IndCarb.second, cfg0.m_optIndIdleValve[ii].second = IndIdleValve.second, cfg0.m_optIndPowerValve[ii].second = IndPowerValve.second, cfg0.m_optIndStBlock[ii].second = IndStBlock.second, cfg0.m_optIndAE[ii].second = IndAE.second, cfg0.m_optIndCoolingFan[ii].second = IndCoolingFan.second, cfg0.m_optIndCE[ii].second = IndCE.second, cfg0.m_optIndFCRevLim[ii].second = IndFCRevLim.second, cfg0.m_optIndFloodClear[ii].second = IndFloodClear.second, cfg0.m_optIndSysLocked[ii].second = IndSysLocked.second, cfg0.m_optIndIgn_i[ii].second = IndIgn_i.second, cfg0.m_optIndCond_i[ii].second = IndCond_i.second, cfg0.m_optIndEpas_i[ii].second = IndEpas_i.second;
 
  mp_settings->SetIndicatorsConfig(cfg0);
 

@@ -98,8 +98,8 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_ENDRAGNDROP, OnUpdateIndEnDragNDrop)
  ON_COMMAND(IDM_MI_IND_DEL_INDICATOR, OnIndDelete)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_DEL_INDICATOR, OnUpdateIndDelete)
- ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_SYSLOCKED, OnIndAddIndicator)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_SYSLOCKED, OnUpdateIndAddIndicator)
+ ON_COMMAND_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_EPAS_I, OnIndAddIndicator)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_IND_GAS_V, IDM_MI_IND_EPAS_I, OnUpdateIndAddIndicator)
  ON_COMMAND(IDM_MI_IND_SET_COLOR, OnIndSetColor)
  ON_UPDATE_COMMAND_UI(IDM_MI_IND_SET_COLOR, OnUpdateIndSetColor)
 END_MESSAGE_MAP()
@@ -367,7 +367,7 @@ void CMIDeskDlg::OnSize( UINT nType, int cx, int cy )
   _Resize();
 }
 
-void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked)
+void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE, IndCfg_t IndCoolingFan, IndCfg_t IndCE, IndCfg_t IndFCRevLim, IndCfg_t IndFloodClear, IndCfg_t IndSysLocked, IndCfg_t IndIgn_i, IndCfg_t IndCond_i, IndCfg_t IndEpas_i)
 {
  m_indCfg.clear();
  m_indCfg.insert(std::make_pair(IDM_MI_IND_GAS_V, IndGas_v));
@@ -381,6 +381,9 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
  m_indCfg.insert(std::make_pair(IDM_MI_IND_FCREVLIM, IndFCRevLim));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_FLOODCLEAR, IndFloodClear));
  m_indCfg.insert(std::make_pair(IDM_MI_IND_SYSLOCKED, IndSysLocked));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_IGN_I, IndIgn_i));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_COND_I, IndCond_i));
+ m_indCfg.insert(std::make_pair(IDM_MI_IND_EPAS_I, IndEpas_i));
 
  m_indRows = IndRows;
  m_IndHeightCoeff = IndHeingtPercent / 100.0f;
@@ -689,7 +692,7 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int &MetRPM, int &MetMAP, int &MetVB
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
-                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked)
+                      IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i)
 {
  IndHeingtPercent = m_IndHeightCoeff * 100.0f;
  IndRows = m_indRows;
@@ -705,6 +708,9 @@ void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_
  IndFCRevLim = m_indCfg[IDM_MI_IND_FCREVLIM];
  IndFloodClear = m_indCfg[IDM_MI_IND_FLOODCLEAR];
  IndSysLocked = m_indCfg[IDM_MI_IND_SYSLOCKED];
+ IndIgn_i = m_indCfg[IDM_MI_IND_IGN_I];
+ IndCond_i = m_indCfg[IDM_MI_IND_COND_I];
+ IndEpas_i = m_indCfg[IDM_MI_IND_EPAS_I];
 }
 
 void CMIDeskDlg::setOnMISettingsChanged(EventHandler i_Function)
@@ -1415,6 +1421,18 @@ void CMIDeskDlg::_IndFactory(UINT uiID)
   case IDM_MI_IND_SYSLOCKED:
    if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
     m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_SYSLOCKED), m_indCfg[uiID].second, &m_values.sys_locked, IDM_MI_IND_SYSLOCKED)));
+   break;
+  case IDM_MI_IND_IGN_I:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_IGN_I), m_indCfg[uiID].second, &m_values.ign_i, IDM_MI_IND_IGN_I)));
+   break;
+  case IDM_MI_IND_COND_I:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_COND_I), m_indCfg[uiID].second, &m_values.cond_i, IDM_MI_IND_COND_I)));
+   break;
+  case IDM_MI_IND_EPAS_I:
+   if (m_indCfg[uiID].first != std::numeric_limits<int>::max())
+    m_indFields.insert(std::make_pair(m_indCfg[uiID].first, IndFieldData(MLL::GetString(IDS_MI_IND_EPAS_I), m_indCfg[uiID].second, &m_values.epas_i, IDM_MI_IND_EPAS_I)));
    break;
  }
 }

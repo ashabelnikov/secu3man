@@ -203,6 +203,9 @@ BEGIN
     IDS_MI_IND_FCREVLIM     "Отсеч.топл.по обор."
     IDS_MI_IND_FLOODCLEAR   "Продувка двигателя"
     IDS_MI_IND_SYSLOCKED    "Система заблокир."
+    IDS_MI_IND_IGN_I        "Вход IGN_I"
+    IDS_MI_IND_COND_I       "Вход COND_I"
+    IDS_MI_IND_EPAS_I       "вход EPAS_I"
 END
 
 
@@ -423,6 +426,9 @@ BEGIN
     IDS_MI_IND_FCREVLIM     "Rev.lim.fuel cut"
     IDS_MI_IND_FLOODCLEAR   "Flood clear mode"
     IDS_MI_IND_SYSLOCKED    "System locked"
+    IDS_MI_IND_IGN_I        "IGN_I input"
+    IDS_MI_IND_COND_I       "COND_I input"
+    IDS_MI_IND_EPAS_I       "EPAS_I input"
 END
 
 STRINGTABLE DISCARDABLE 

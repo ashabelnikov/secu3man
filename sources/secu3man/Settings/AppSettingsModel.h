@@ -330,6 +330,10 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optIndFCRevLim[2];
   OptField_t<int> m_optIndFloodClear[2];
   OptField_t<int> m_optIndSysLocked[2];
+  OptField_t<int> m_optIndIgn_i[2];
+  OptField_t<int> m_optIndCond_i[2];
+  OptField_t<int> m_optIndEpas_i[2];
+
   //meters
   OptField_t<int> m_optMetRows[2];
   OptField_t<int> m_optMetRPM[2];
@@ -369,6 +373,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<COLORREF> m_optColFCRevLim;
   OptField_t<COLORREF> m_optColFloodClear;
   OptField_t<COLORREF> m_optColSysLocked;
+  OptField_t<COLORREF> m_optColIgn_i;
+  OptField_t<COLORREF> m_optColCond_i;
+  OptField_t<COLORREF> m_optColEpas_i;
 
   //AutoTune
   OptField_t<std::vector<int> > m_optLambdaDelay;

@@ -172,6 +172,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optColFCRevLim(_T("IndFCRevLim"))
 , m_optColFloodClear(_T("IndFloodClear"))
 , m_optColSysLocked(_T("IndSysLocked"))
+, m_optColIgn_i(_T("IndIgn_i"))
+, m_optColCond_i(_T("IndCond_i"))
+, m_optColEpas_i(_T("IndEpas_i"))
 //Autotune
 , m_Name_AutoTune_Section(_T("AutoTune"))
 , m_optLambdaDelay(_T("LambdaDelay"))
@@ -214,6 +217,9 @@ CAppSettingsModel::CAppSettingsModel()
   m_optIndFCRevLim[i].name = _T("IndFCRevLim");
   m_optIndFloodClear[i].name = _T("IndFloodClear");
   m_optIndSysLocked[i].name = _T("IndSysLocked");
+  m_optIndIgn_i[i].name = _T("IndIgn_i");
+  m_optIndCond_i[i].name = _T("IndCond_i");
+  m_optIndEpas_i[i].name = _T("IndEpas_i");
  }
 
  m_Name_Meters_Section[0] = _T("Meters");
@@ -475,6 +481,9 @@ bool CAppSettingsModel::ReadSettings(void)
   ii.ReadInt(m_optIndFCRevLim[i],_T("8"), 0, 32, true);
   ii.ReadInt(m_optIndFloodClear[i],_T("9"), 0, 32, true);
   ii.ReadInt(m_optIndSysLocked[i],_T("10"), 0, 32, true);
+  ii.ReadInt(m_optIndIgn_i[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndCond_i[i],_T(""), 0, 32, true);
+  ii.ReadInt(m_optIndEpas_i[i],_T(""), 0, 32, true);
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -489,6 +498,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColFCRevLim,_T("00FF00"));
  ic.ReadColor(m_optColFloodClear,_T("00FF00"));
  ic.ReadColor(m_optColSysLocked,_T("00FF00"));
+ ic.ReadColor(m_optColIgn_i,_T("00FF00"));
+ ic.ReadColor(m_optColCond_i,_T("00FF00"));
+ ic.ReadColor(m_optColEpas_i,_T("00FF00"));
 
  //Meters
  const TCHAR* metDef[2][24] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
@@ -1285,6 +1297,21 @@ bool CAppSettingsModel::WriteSettings(void)
    ii.WriteInt(m_optIndSysLocked[i], _T("System locked"));
   else
    ii.WriteInt(m_optIndSysLocked[i], _T("Система заблокирована"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndIgn_i[i], _T("IGN_I input"));
+  else
+   ii.WriteInt(m_optIndIgn_i[i], _T("Вход IGN_I"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndCond_i[i], _T("COND_I input"));
+  else
+   ii.WriteInt(m_optIndCond_i[i], _T("Вход COND_I"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   ii.WriteInt(m_optIndEpas_i[i], _T("EPAS_I input"));
+  else
+   ii.WriteInt(m_optIndEpas_i[i], _T("Вход EPAS_I"));
  }
 
  IniIO ic(IniFileName, m_Name_IndColors_Section);
@@ -1348,6 +1375,21 @@ bool CAppSettingsModel::WriteSettings(void)
   ic.WriteColor(m_optColSysLocked, _T("System locked"));
  else
   ic.WriteColor(m_optColSysLocked, _T("Система заблокирована"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColIgn_i, _T("IGN_I input"));
+ else
+  ic.WriteColor(m_optColIgn_i, _T("Вход IGN_I"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColCond_i, _T("COND_I input"));
+ else
+  ic.WriteColor(m_optColCond_i, _T("Вход COND_I"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ic.WriteColor(m_optColEpas_i, _T("EPAS_I input"));
+ else
+  ic.WriteColor(m_optColEpas_i, _T("Вход EPAS_I"));
 
  TCHAR* mm_comment[2];
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2123,6 +2165,9 @@ void CAppSettingsModel::GetIndicatorsConfig(IndicatorsCfg& o_cfg) const
   o_cfg.m_optIndFCRevLim[i] = std::make_pair(m_optIndFCRevLim[i].value, m_optColFCRevLim.value);
   o_cfg.m_optIndFloodClear[i] = std::make_pair(m_optIndFloodClear[i].value, m_optColFloodClear.value);
   o_cfg.m_optIndSysLocked[i] = std::make_pair(m_optIndSysLocked[i].value, m_optColSysLocked.value);
+  o_cfg.m_optIndIgn_i[i] = std::make_pair(m_optIndIgn_i[i].value, m_optColIgn_i.value);
+  o_cfg.m_optIndCond_i[i] = std::make_pair(m_optIndCond_i[i].value, m_optColCond_i.value);
+  o_cfg.m_optIndEpas_i[i] = std::make_pair(m_optIndEpas_i[i].value, m_optColEpas_i.value);
  }
 }
 
@@ -2143,6 +2188,9 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
   m_optIndFCRevLim[i].value = i_cfg.m_optIndFCRevLim[i].first, m_optColFCRevLim.value = i_cfg.m_optIndFCRevLim[i].second;
   m_optIndFloodClear[i].value = i_cfg.m_optIndFloodClear[i].first, m_optColFloodClear.value = i_cfg.m_optIndFloodClear[i].second;
   m_optIndSysLocked[i].value = i_cfg.m_optIndSysLocked[i].first, m_optColSysLocked.value = i_cfg.m_optIndSysLocked[i].second;
+  m_optIndIgn_i[i].value = i_cfg.m_optIndIgn_i[i].first, m_optColIgn_i.value = i_cfg.m_optIndIgn_i[i].second;
+  m_optIndCond_i[i].value = i_cfg.m_optIndCond_i[i].first, m_optColCond_i.value = i_cfg.m_optIndCond_i[i].second;
+  m_optIndEpas_i[i].value = i_cfg.m_optIndEpas_i[i].first, m_optColEpas_i.value = i_cfg.m_optIndEpas_i[i].second;
  }
 }
 

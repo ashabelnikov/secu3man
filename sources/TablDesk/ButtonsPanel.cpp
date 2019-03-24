@@ -1919,7 +1919,7 @@ void CButtonsPanel::OnViewDeadMap()
  if ((!m_dead_map_chart_state)&&(DLL::Chart2DCreate))
  {
   m_dead_map_chart_state = 1;
-  m_dead_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDeadMap(true), GetDeadMap(false), -1.0f, 16.0, SECU3IO::dwellcntrl_map_slots, 32,
+  m_dead_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDeadMap(true), GetDeadMap(false), -1.0f, 12.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
     MLL::GetString(IDS_DEAD_MAP).c_str(), false);

@@ -339,6 +339,9 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  m_SensorDat.fc_revlim    = CHECKBIT16(flags, 8);
  m_SensorDat.floodclear   = CHECKBIT16(flags, 9);
  m_SensorDat.sys_locked   = CHECKBIT16(flags, 10);
+ m_SensorDat.ign_i        = CHECKBIT16(flags, 11);
+ m_SensorDat.cond_i       = CHECKBIT16(flags, 12);
+ m_SensorDat.epas_i       = CHECKBIT16(flags, 13);
 
  //TPS sensor
  unsigned char tps = 0;

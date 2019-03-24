@@ -140,6 +140,9 @@ struct IndicatorsCfg
  std::pair<int, COLORREF> m_optIndFCRevLim[2];
  std::pair<int, COLORREF> m_optIndFloodClear[2];
  std::pair<int, COLORREF> m_optIndSysLocked[2];
+ std::pair<int, COLORREF> m_optIndIgn_i[2];
+ std::pair<int, COLORREF> m_optIndCond_i[2];
+ std::pair<int, COLORREF> m_optIndEpas_i[2];
 };
 
 struct MetersCfg
