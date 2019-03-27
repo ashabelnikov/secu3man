@@ -236,11 +236,11 @@ typedef struct params_t
  _uint  cond_pvt_on;
  _uint  cond_pvt_off;
 
- _uchar  inj_ae_decay_time; 
+ _uchar  inj_ae_decay_time;
 
  _uint  cond_min_rpm;
 
- _uchar inj_lambda_htgdet;
+ _uchar inj_lambda_flags;
 
  _uchar  gd_freq;
 

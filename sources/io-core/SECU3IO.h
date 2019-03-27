@@ -546,6 +546,7 @@ namespace SECU3IO
   int lam_activ_delay;                //Afterstart activation delay
   float lam_dead_band;                //Switch point dead band (in volts)
   bool lam_htgdet;                    //Determine heating by voltage
+  bool lam_idlcorr;                   //Use lambda correction on idling
   float lam_2stoichval;               //Stoichiometric value for 2-nd fuel
   //heating:
   float eh_heating_time[2];

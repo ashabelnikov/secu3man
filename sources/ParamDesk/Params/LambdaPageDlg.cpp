@@ -50,6 +50,7 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_LAMBDA_ACTIVDELAY_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_DEADBAND_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_LAMBDA_HTGDET_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_LAMBDA_IDLCORR_CHECK, OnChangeData)
  ON_EN_CHANGE(IDC_PD_LAMBDA_2STOICHAFR_EDIT, OnChangeData)
  //heating:
  ON_EN_CHANGE(IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, OnChangeData)
@@ -105,6 +106,7 @@ BEGIN_MESSAGE_MAP(CLambdaPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_DEADBAND_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_DEADBAND_UNIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_HTGDET_CHECK,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_IDLCORR_CHECK,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_EDIT,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_SPIN,OnUpdateFuelInjectionControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_LAMBDA_2STOICHAFR_CAPTION,OnUpdateFuelInjectionControls)
@@ -199,6 +201,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_EDIT, m_deadband_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_DEADBAND_SPIN, m_deadband_spin);
  DDX_Control(pDX,IDC_PD_LAMBDA_HTGDET_CHECK, m_htgdet_check);
+ DDX_Control(pDX,IDC_PD_LAMBDA_IDLCORR_CHECK, m_idlcorr_check);
  DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_2stoichval_edit);
  DDX_Control(pDX,IDC_PD_LAMBDA_2STOICHAFR_SPIN, m_2stoichval_spin);
  DDX_Control(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, m_eh_ht_cold_edit);
@@ -226,6 +229,7 @@ void CLambdaPageDlg::DoDataExchange(CDataExchange* pDX)
  m_deadband_edit.DDX_Value(pDX, IDC_PD_LAMBDA_DEADBAND_EDIT, m_params.lam_dead_band);
  m_2stoichval_edit.DDX_Value(pDX, IDC_PD_LAMBDA_2STOICHAFR_EDIT, m_params.lam_2stoichval);
  DDX_Check_bool(pDX, IDC_PD_LAMBDA_HTGDET_CHECK, m_params.lam_htgdet);
+ DDX_Check_bool(pDX, IDC_PD_LAMBDA_IDLCORR_CHECK, m_params.lam_idlcorr);
  //heating:
  m_eh_ht_cold_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_COLD_EDIT, m_params.eh_heating_time[0]);
  m_eh_ht_hot_edit.DDX_Value(pDX, IDC_PD_LAMBDA_EH_TIME_HOT_EDIT, m_params.eh_heating_time[1]);
