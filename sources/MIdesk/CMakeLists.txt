@@ -72,6 +72,7 @@ set (SOURCES
   MIEGOCorr.cpp
   MIIAT.cpp
   MIInjPW.cpp
+  MIInjTim.cpp
   MIPressure.cpp
   MITachometer.cpp
   MITemperature.cpp

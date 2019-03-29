@@ -273,7 +273,7 @@ int CControlApp::SplitPackets(BYTE* i_buff, size_t i_size)
 bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::SensorDat& m_SensorDat = m_recepted_packet.m_SensorDat;
- if (size != (mp_pdp->isHex() ? 130 : 65))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 134 : 67))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //частота вращения двигателя
@@ -535,6 +535,33 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &baro_press))
   return false;
  m_SensorDat.baro_press = ((float)baro_press) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+
+ //inj.timing with info
+ int iit = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &iit))
+  return false;
+ int mode = (iit >> 14) & 0x3;
+ float inj_timing = ((float)(iit & 0x3FFF)) / 16.0f; //inj.timing in crankshaft degrees
+ float inj_pw_degr = (((360.0f/(1000.0f*60.0f))* m_SensorDat.frequen) * m_SensorDat.inj_pw); //inj. PW in crankshaft degrees
+ if (mode == 0)
+ { //begin
+  m_SensorDat.inj_tim_begin = inj_timing;
+  m_SensorDat.inj_tim_end = inj_timing + inj_pw_degr;
+ }
+ else if (mode == 1)
+ { //middle
+  m_SensorDat.inj_tim_begin = inj_timing - (inj_pw_degr / 2);
+  m_SensorDat.inj_tim_end = inj_timing + (inj_pw_degr / 2);
+ }
+ else
+ {//end
+  m_SensorDat.inj_tim_begin = inj_timing - inj_pw_degr;
+  m_SensorDat.inj_tim_end = inj_timing; 
+ }
+ if (m_SensorDat.inj_tim_begin < 0)
+  m_SensorDat.inj_tim_begin = m_SensorDat.inj_tim_begin + 720.f;
+ if (m_SensorDat.inj_tim_end > 720.0f)
+  m_SensorDat.inj_tim_end = m_SensorDat.inj_tim_end - 720.0f;
 
  return true;
 }

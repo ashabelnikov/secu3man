@@ -59,6 +59,7 @@
 #include "MISensAFR.h"
 #include "MIChokePos.h"
 #include "MISynLoad.h"
+#include "MIInjTim.h"
 #include "ContextMenuManager.h"
 
 #undef max
@@ -76,8 +77,8 @@ BEGIN_MESSAGE_MAP(CMIDeskDlg, Super)
  ON_MESSAGE(WM_MOUSELEAVE, OnMouseLeave)
  ON_COMMAND(IDM_MI_MET_DEL_GAUGE, OnMetDeleteGauge)
  ON_UPDATE_COMMAND_UI(IDM_MI_MET_DEL_GAUGE, OnUpdateMetDelete)
- ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_SYNLOAD, OnMetAddGauge)
- ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_SYNLOAD, OnUpdateMetAddGauge)
+ ON_COMMAND_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_INJTIME, OnMetAddGauge)
+ ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_RPM, IDM_MI_MET_INJTIME, OnUpdateMetAddGauge)
  ON_COMMAND_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnMetNumOfRows)
  ON_UPDATE_COMMAND_UI_RANGE(IDM_MI_MET_ROWS1, IDM_MI_MET_ROWS4, OnUpdateMetNumOfRows)
  ON_COMMAND_RANGE(IDM_MI_MET_TITLE_FONT050, IDM_MI_MET_TITLE_FONT150, OnMetTitleFont)
@@ -400,7 +401,7 @@ void CMIDeskDlg::SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t 
 void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
                               int MetInjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot,
                               int MetMAP2, int MetMAPD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph,
-                              int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
+                              int MetSensAFR, int MetChokePos, int MetGDPos, int MetSynLoad, int MetInjTimB, int MetInjTimE, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize)
 {
  m_metCfg.clear();
  m_metCfg.insert(std::make_pair(IDM_MI_MET_RPM, MetRPM));
@@ -427,6 +428,8 @@ void CMIDeskDlg::SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, 
  m_metCfg.insert(std::make_pair(IDM_MI_MET_CHOKEPOS, MetChokePos));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_GDPOS, MetGDPos));
  m_metCfg.insert(std::make_pair(IDM_MI_MET_SYNLOAD, MetSynLoad));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIMB, MetInjTimB));
+ m_metCfg.insert(std::make_pair(IDM_MI_MET_INJTIME, MetInjTimE));
 
  m_metRows = MetRows;
  m_TitleFontSize = TitleFontSize;
@@ -659,7 +662,7 @@ LRESULT CMIDeskDlg::OnMouseLeave(WPARAM wParam, LPARAM lParam)
 void CMIDeskDlg::GetMetersCfg(int &MetRows, int &MetRPM, int &MetMAP, int &MetVBat, int &MetIgnTim, int &MetCLT, int &MetAddI1, int &MetAddI2,
                     int &MetInjPW, int &MetIAT, int &MetEGOCorr, int &MetTPS, int &MetAirFlow, int &MetVehicleSpeed, int &MetTPSDot, int &MetMAP2,
                     int &MetMapD, int &MetTmp2, int &MetFuelConsum, int &MetKnockRetard, int &MetKnockGraph, int &MetSensAFR, int &MetChokePos,
-                    int &MetGDPos, int &MetSynLoad, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize)
+                    int &MetGDPos, int &MetSynLoad, int &MetInjTimB, int &MetInjTimE, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize)
 {
 
  MetRows = m_metRows;
@@ -689,6 +692,8 @@ void CMIDeskDlg::GetMetersCfg(int &MetRows, int &MetRPM, int &MetMAP, int &MetVB
  MetChokePos = m_metCfg[IDM_MI_MET_CHOKEPOS];
  MetGDPos= m_metCfg[IDM_MI_MET_GDPOS];
  MetSynLoad = m_metCfg[IDM_MI_MET_SYNLOAD];
+ MetInjTimB = m_metCfg[IDM_MI_MET_INJTIMB];
+ MetInjTimE = m_metCfg[IDM_MI_MET_INJTIME];
 }
 
 void CMIDeskDlg::GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
@@ -1128,6 +1133,30 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_values.load, NULL, NULL);  
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   break;
+  }
+  case IDM_MI_MET_INJTIMB:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIInjTimB* widget = new CMIInjTimB();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->Create(this);
+   widget->BindVars(&m_values.inj_tim_begin, NULL, NULL);  
+   m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   break;
+  }
+  case IDM_MI_MET_INJTIME:
+  {
+   if (m_metCfg[uiID] == std::numeric_limits<int>::max())
+    break;
+   CMIInjTimE* widget = new CMIInjTimE();
+   widget->m_uiID = uiID;
+   widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
+   widget->Create(this);
+   widget->BindVars(&m_values.inj_tim_end, NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    break;
   }

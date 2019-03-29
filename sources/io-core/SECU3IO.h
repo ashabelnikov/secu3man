@@ -100,6 +100,9 @@ namespace SECU3IO
 
   float load;                           // Load value (MAP or TPS or synthetic MAP+TPS)
   float baro_press;                     // Baro pressure
+
+  float inj_tim_begin;                  //inj.timing of the beginning of pulse
+  float inj_tim_end;                    //inj.timing of the end of pulse
  };
 
  struct DbgvarDat

@@ -77,6 +77,8 @@ void CMetContextMenuManager::CreateContent(void)
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_CHOKEPOS, MLL::LoadString(IDS_MI_CHOKEPOS_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_GDPOS, MLL::LoadString(IDS_MI_GDPOS_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_SYNLOAD, MLL::LoadString(IDS_MI_LOAD_TITLE));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIMB, MLL::LoadString(IDS_MI_INJTIMB_TITLE));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIME, MLL::LoadString(IDS_MI_INJTIME_TITLE));
 
  //"Number of rows" submenu
  m_rowsMenu.CreatePopupMenu();
@@ -247,13 +249,6 @@ CMenu& CMetContextMenuManager::GetParentMenu(void)
 {
  return m_parentMenu;
 }
-
-
-
-
-
-
-
 
 
 //////////////////////////////////////////////////////////////////////

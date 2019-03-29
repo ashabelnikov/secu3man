@@ -252,6 +252,8 @@ CAppSettingsModel::CAppSettingsModel()
   m_optMetChokePos[i].name = _T("MetIACPos");
   m_optMetGDPos[i].name = _T("MetGDPos");
   m_optMetSynLoad[i].name = _T("MetSynLoad");
+  m_optMetInjTimB[i].name = _T("MetInjTimB");
+  m_optMetInjTimE[i].name = _T("MetInjTimE");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -503,8 +505,8 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][24] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                               {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][26] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                               {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
@@ -533,6 +535,8 @@ bool CAppSettingsModel::ReadSettings(void)
   mm.ReadInt(m_optMetChokePos[i],metDef[i][21], 0, 32, true);
   mm.ReadInt(m_optMetGDPos[i],metDef[i][22], 0, 32, true);
   mm.ReadInt(m_optMetSynLoad[i],metDef[i][23], 0, 32, true);
+  mm.ReadInt(m_optMetInjTimB[i],metDef[i][24], 0, 32, true);
+  mm.ReadInt(m_optMetInjTimE[i],metDef[i][25], 0, 32, true);
  }
 
  //Auto tune
@@ -1534,6 +1538,16 @@ bool CAppSettingsModel::WriteSettings(void)
    mm.WriteInt(m_optMetSynLoad[i], _T("Synthetic load"));
   else
    mm.WriteInt(m_optMetSynLoad[i], _T("Синтетическая нагрузка"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetInjTimB[i], _T("Begin phase of injection pulse"));
+  else
+   mm.WriteInt(m_optMetInjTimB[i], _T("Фаза начала впрыска"));
+
+  if (m_optInterfaceLang.value == IL_ENGLISH)
+   mm.WriteInt(m_optMetInjTimE[i], _T("End phase of injection pulse"));
+  else
+   mm.WriteInt(m_optMetInjTimE[i], _T("Фаза конца впрыска"));
  }
 
  IniIO at(IniFileName, m_Name_AutoTune_Section);
@@ -2223,6 +2237,8 @@ void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
   o_cfg.m_optMetChokePos[i] = m_optMetChokePos[i].value;
   o_cfg.m_optMetGDPos[i] = m_optMetGDPos[i].value;
   o_cfg.m_optMetSynLoad[i] = m_optMetSynLoad[i].value;
+  o_cfg.m_optMetInjTimB[i] = m_optMetInjTimB[i].value;
+  o_cfg.m_optMetInjTimE[i] = m_optMetInjTimE[i].value;
  }
 }
 
@@ -2255,6 +2271,8 @@ void CAppSettingsModel::SetMetersConfig(const MetersCfg& i_cfg)
   m_optMetChokePos[i].value = i_cfg.m_optMetChokePos[i];
   m_optMetGDPos[i].value = i_cfg.m_optMetGDPos[i];
   m_optMetSynLoad[i].value = i_cfg.m_optMetSynLoad[i];
+  m_optMetInjTimB[i].value = i_cfg.m_optMetInjTimB[i];
+  m_optMetInjTimE[i].value = i_cfg.m_optMetInjTimE[i];
  }
 }
 

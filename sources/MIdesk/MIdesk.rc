@@ -188,6 +188,8 @@ BEGIN
     IDS_MI_GDPOS_TITLE       "Дозатор газа"
     IDS_MI_LOAD_TITLE        "Синтет. нагрузка"
     IDS_MI_KNOCKGRAPH_TITLE  "График детонации"
+    IDS_MI_INJTIMB_TITLE     "Фаза нач. впрыска"
+    IDS_MI_INJTIME_TITLE     "Фаза конца впрыска"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -411,6 +413,8 @@ BEGIN
     IDS_MI_GDPOS_TITLE       "Gas dispenser"
     IDS_MI_LOAD_TITLE        "Synthetic load"
     IDS_MI_KNOCKGRAPH_TITLE  "Knock graph"
+    IDS_MI_INJTIMB_TITLE     "Begin inj. phase"
+    IDS_MI_INJTIME_TITLE     "End inj. phase"
 END
 
 STRINGTABLE DISCARDABLE 
