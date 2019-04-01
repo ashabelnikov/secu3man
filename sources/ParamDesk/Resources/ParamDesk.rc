@@ -341,15 +341,17 @@ BEGIN
     LTEXT           "Порог отсечки по ДТОЖ",IDC_PD_CARBUR_FC_CTS_THRD_CAPTION,0,191,94,10
     LTEXT           "°C",IDC_PD_CARBUR_FC_CTS_THRD_UNIT,143,191,30,10
 
-    EDITTEXT        IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT,95,210,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,210,13,17
-    LTEXT           "Нижн.порог отсеч.топл.",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_CAPTION,0,211,94,10
-    LTEXT           "мин-1",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_UNIT,140,211,30,10
+    LTEXT           "Защита двигателя:",IDC_PD_ENGPROTECT_GROUP,0,210,160,10
+    
+    EDITTEXT        IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT,95,222,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,222,13,17
+    LTEXT           "Нижн.порог отсеч.топл.",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_CAPTION,0,223,94,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_UNIT,140,223,30,10
 
-    EDITTEXT        IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT,95,230,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,230,13,17
-    LTEXT           "Верх.порог отсеч.топл.",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_CAPTION,0,231,94,10
-    LTEXT           "мин-1",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_UNIT,140,231,30,10
+    EDITTEXT        IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT,95,242,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,128,242,13,17
+    LTEXT           "Верх.порог отсеч.топл.",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_CAPTION,0,243,94,10
+    LTEXT           "мин-1",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_UNIT,140,243,30,10
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -1254,6 +1256,8 @@ BEGIN
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Порог включения клапана ЭМР (разряжение относительно т.н. верхнего давления). Клапан включается если давление превышает 'Верхн.знач.давл.' минус этот порог. В прошивке с впрыском этот параметр задает давление отсечки зажигания (если разрешена отсечка зажигания на вкладке 'Прочее')"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Порог переключения на режим ХХ по ДПДЗ. Положение дроссельной заслонки задается %. Поставьте 0, если используется концевик."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Задержка выключения клапана ЭПХХ (карб.) или задержка отсечки топлива при ПХХ (впрыск)"
+    IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT "Отсечка топлива при ПХХ включится только если давление опустится ниже этого значения."
+    IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT "Отсечка топлива при ПХХ включится только если температура двигателя превысит это значение."
     IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
     IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Задает насколько сместить кривую чтобы она проходила через 0"
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Позволяет проверить работу заслонки. Заслонка выставляется в начальное положение и затем начинает полностью открываться и закрываться (пока нажата кнопка)."
@@ -1330,8 +1334,8 @@ BEGIN
     IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Число отсутствующих зубьев на задающем диске. Для ДУИ+ДНО значение должно быть равно 0"
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Число зубьев, проходящих мимо ДПКВ (ДУИ) от метки на задающем диске до достижения ВМТ (в качестве метки выступают отсутствующие зубья (для ДПКВ) или штифт начала отсчета (для ДУИ+ДНО)."
     IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Смена фронта равноценна подключению проводов к датчику ДПКВ (ДУИ) в другом порядке"
-    IDC_PD_CKPS_HALL_WND_WIDTH_EDIT_TT              "Длительность импульса в гардусах по коленвалу. Если вы ее не знаете или импульс слишком короткий или угловая длительность не является постоянной, то поставьте 0."
-    IDC_PD_CKPS_DEGREES_BTDC_EDIT_TT                "Количество градусов от начала импульса (обычно спадающий фронт) до ВМТ. Значение данного параметра не может быть меньше максимального УОЗ."
+    IDS_PD_CKPS_HALL_WND_WIDTH_EDIT_TT              "Длительность импульса в гардусах по коленвалу. Если вы ее не знаете или импульс слишком короткий или угловая длительность не является постоянной, то поставьте 0."
+    IDS_PD_CKPS_DEGREES_BTDC_EDIT_TT                "Количество градусов от начала импульса (обычно спадающий фронт) до ВМТ. Значение данного параметра не может быть меньше максимального УОЗ."
     IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Смена фронта равноценна изменению порядка подключения проводов к датчику ДНО"
     IDS_PD_IDLREG_RESTRICTION_EDIT_TT               "Ограничение значения коррекции УОЗ формируемой регулятором ХХ. Правильно подобранное значение, позволит регулятору сохранять устойчивость."
     IDS_PD_IDLREG_DEAD_BAND_RPM_EDIT_TT             "Зона нечувствительности регулятора. Исключает чувствительность регулятора к небольшим изменениям оборотов."
@@ -1354,7 +1358,7 @@ BEGIN
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "Отсечка зажигания (используйте осторожно!). Выдача импульсов зажигания будет прекращена при превышении заданных оборотов."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "Нижний порог оборотов ЭПХХ. Должен быть меньше чем верхний порог. Чем меньше значение тем больше экономия топлива при ПХХ, Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "Верхний порог оборотов ЭПХХ. Должен быть больше чем нижний порог. Чем меньше значения тем больше экономия топлива при ПХХ. Опытным путем установите минималное значение при котором двигатель не захлебывается и не глохнет после сброса газа."
-    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа желтый индикатор 'ДПДЗ' на вкладке 'Параметры и монитор' был черного цвета, а при нажатии на педаль загорался желтым цветом."
+    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Установите галочку инверсии так, чтобы при отпущенной педали газа индикатор 'Дроссель' на вкладке 'Параметры и монитор' не был активен, а при нажатии на педаль индикатор активировался."
     IDS_PD_IDLREG_INTRPMLIM_EDIT_TT                 "Ограничение максимального численного значения ошибки (ошибка определяется как разность между целевыми оборотами ХХ и текущими)."
     IDS_PD_TEMPER_VENTTIMER_EDIT_TT                 "Определяет сколько времени вентилятор будет работать при остановленном двигателе. Поставьте 0, если хотите чтобы вентилятор работал пока температура не упадет без ограничения по времени."
 END
@@ -1871,15 +1875,17 @@ BEGIN
     LTEXT           "Fuel cut CTS threshold",IDC_PD_CARBUR_FC_CTS_THRD_CAPTION,1,191,94,10
     LTEXT           "°C",IDC_PD_CARBUR_FC_CTS_THRD_UNIT,144,191,30,10
 
-    EDITTEXT        IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT,96,210,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,210,13,17
-    LTEXT           "Rev.limitting lower threshold",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_CAPTION,1,211,94,10
-    LTEXT           "min-1",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_UNIT,143,211,30,10
+    LTEXT           "Protection of engine:",IDC_PD_ENGPROTECT_GROUP,0,210,160,10
 
-    EDITTEXT        IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT,96,230,30,16,ES_AUTOHSCROLL
-    CONTROL         "",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,230,13,17
-    LTEXT           "Rev.limitting upper threshold",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_CAPTION,1,231,94,10
-    LTEXT           "min-1",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_UNIT,143,231,30,10
+    EDITTEXT        IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_EDIT,96,222,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,222,13,17
+    LTEXT           "Rev.limitting lower threshold",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_CAPTION,1,223,94,10
+    LTEXT           "min-1",IDC_PD_CARBUR_REVLIM_LO_THRESHOLD_UNIT,143,223,30,10
+
+    EDITTEXT        IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_EDIT,96,242,30,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,130,242,13,17
+    LTEXT           "Rev.limitting upper threshold",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_CAPTION,1,243,94,10
+    LTEXT           "min-1",IDC_PD_CARBUR_REVLIM_HI_THRESHOLD_UNIT,143,243,30,10
 END
 
 IDD_PD_TEMPER_PAGE DIALOGEX 0, 0, 168, 158
@@ -2816,6 +2822,8 @@ BEGIN
     IDS_PD_CARBUR_EPM_ON_THRESHOLD_EDIT_TT "Power Valve Solenoid (Part-load enrichment) turn on threshold (by vacuum). In firmware with fuel injection support this parameter specifies absolute pressure for ignition cut off (if enabled on the '10:Misc.' tab)"
     IDS_PD_CARBUR_TPS_THRESHOLD_EDIT_TT "Threshold for switching between work and idle modes by TPS. Throttle position is defined in %. Set to zero if limit switch is used."
     IDS_PD_CARBUR_SHUTOFF_DELAY_EDIT_TT "Turn off delay of the Idle cut-off valve solenoid (carb.) or over-run fuel cut off delay (injection)"
+    IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT "Forced idle fuel cut off will be activated only if intake manifold pressure go below this threshold."
+    IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT "Forced idle fuel cut off will be activated only if engine temperature exceed this threshold."
     IDS_PD_FUNSET_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
     IDS_PD_FUNSET_TPS_CURVE_OFFSET_EDIT_TT "Specifies how to move the curve that it crosses zero"
     IDS_PD_CHOKE_SM_TEST_CHECK_TT "Allows to check working of choke. Choke is being set to initial position and after it is being opened and closed (while button is pressed)."
@@ -2889,8 +2897,8 @@ BEGIN
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Number of teeth moving past the CKP sensor from label on the wheel (missing teeth or rod ) and to the TDC mark."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "With set check, ignition pulses will be merged on the IGN_OUT1 output"
     IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Equal to the swapping of CKPS wires (can help to attack synchronization errors)"
-    IDC_PD_CKPS_HALL_WND_WIDTH_EDIT_TT              "Pulse width in degrees of crankshaft. If you don't know this value or pulse width is too low or angular width is not constant, then set this parameter to 0."
-    IDC_PD_CKPS_DEGREES_BTDC_EDIT_TT                "Number of degrees from the beginning of pulse (often falling edge) to the TDC. Value of this parameter can't be less than maximum advance angle."
+    IDS_PD_CKPS_HALL_WND_WIDTH_EDIT_TT              "Pulse width in degrees of crankshaft. If you don't know this value or pulse width is too low or angular width is not constant, then set this parameter to 0."
+    IDS_PD_CKPS_DEGREES_BTDC_EDIT_TT                "Number of degrees from the beginning of pulse (often falling edge) to the TDC. Value of this parameter can't be less than maximum advance angle."
     IDS_PD_REF_S_FRONT_GROUPBOX_TT                  "Equal to the swapping of REF_S wires (can help to attack synchronization errors)"
     IDS_PD_ANGLES_MIN_ANGLE_EDIT_TT                 "Bottom limit (minimum allowed value) of advance angle"
     IDS_PD_ANGLES_MAX_ANGLE_EDIT_TT                 "Top limit (maximum allowed value) of advance angle"
@@ -2912,7 +2920,7 @@ BEGIN
     IDS_PD_TEMPER_VENT_OFF_THRESHOLD_EDIT_TT        "When this temperature reached then cooling fan will be turned off"
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_LO_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the lower threshold should be lower than the upper threshold."
     IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT           "The lower the value the greater fuel economy in forced idling mode, but the higher probability of stalling when you release the gas pedal. Set empirically minimal value at which the engine does not stall when you release the gas. The value of the upper threshold should be greater than the lower threshold."
-    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Set so that when you press the gas pedal, yellow light in the TPS indicator light up"
+    IDS_PD_CARBUR_INVERSE_SWITCH_TT                 "Set so that when you press the gas pedal, light in the throttle indicator light up"
     IDS_PD_ADCCOMPEN_FACTOR_TT                      "If necessary, alter factors for matching of raw values and real value at the inputs on unit"
     IDS_PD_ADCCOMPEN_CORRECTION_TT                  "Use in minor cases. Usually you don't need to touch this"
     IDS_PD_MISC_IGNCUTOFF_CHECK_TT                  "When RPM exceeds this threshold, system turns off all ignition channels and thus restricts engine speed"

@@ -28,6 +28,7 @@
 #include "CarburPageDlg.h"
 #include "common/dpiaware.h"
 #include "ui-core/ddx_helpers.h"
+#include "ui-core/fnt_helpers.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/WndScroller.h"
 
@@ -315,10 +316,20 @@ BOOL CCarburPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_edit_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT)));
  VERIFY(mp_ttc->AddWindow(&m_shutoff_hi_threshold_spin_g, MLL::GetString(IDS_PD_CARBUR_SHUTOFF_THRESHOLD_HI_TT)));
 
+ VERIFY(mp_ttc->AddWindow(&m_fuelcut_map_thrd_edit, MLL::GetString(IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fuelcut_map_thrd_spin, MLL::GetString(IDS_PD_CARBUR_FC_MAP_THRD_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_fuelcut_cts_thrd_edit, MLL::GetString(IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_fuelcut_cts_thrd_spin, MLL::GetString(IDS_PD_CARBUR_FC_CTS_THRD_EDIT_TT)));
+
  VERIFY(mp_ttc->AddWindow(&m_inverse_throttle_switch, MLL::GetString(IDS_PD_CARBUR_INVERSE_SWITCH_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
+
+ //Set bold font
+ CloneWndFont(this, &m_boldDlgFont, -1, true);
+ GetDlgItem(IDC_PD_ENGPROTECT_GROUP)->SetFont(&m_boldDlgFont);
 
  UpdateDialogControls(this, TRUE);
  return TRUE;  // return TRUE unless you set the focus to a control

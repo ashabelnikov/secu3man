@@ -99,4 +99,6 @@ class CCarburPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   std::auto_ptr<CWndScroller> mp_scr;
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
+  CFont m_boldDlgFont;
 };

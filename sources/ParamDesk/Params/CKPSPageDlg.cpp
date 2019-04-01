@@ -290,11 +290,11 @@ BOOL CCKPSPageDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_merge_ign_outputs_check, MLL::GetString(IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_hall_wnd_width_edit, MLL::GetString(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_hall_wnd_width_spin, MLL::GetString(IDC_PD_CKPS_HALL_WND_WIDTH_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hall_wnd_width_edit, MLL::GetString(IDS_PD_CKPS_HALL_WND_WIDTH_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hall_wnd_width_spin, MLL::GetString(IDS_PD_CKPS_HALL_WND_WIDTH_EDIT_TT)));
 
- VERIFY(mp_ttc->AddWindow(&m_hall_degrees_btdc_edit, MLL::GetString(IDC_PD_CKPS_DEGREES_BTDC_EDIT_TT)));
- VERIFY(mp_ttc->AddWindow(&m_hall_degrees_btdc_spin, MLL::GetString(IDC_PD_CKPS_DEGREES_BTDC_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hall_degrees_btdc_edit, MLL::GetString(IDS_PD_CKPS_DEGREES_BTDC_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hall_degrees_btdc_spin, MLL::GetString(IDS_PD_CKPS_DEGREES_BTDC_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
