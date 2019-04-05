@@ -361,6 +361,10 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
 
     p_params->inj_anglespec = MAKEBYTE(p_in->inj_anglespec[1], p_in->inj_anglespec[0]);
     p_params->fff_const = MathHelpers::Round((p_in->fff_const / (1000.0f*60.0f))*65536.0f);
+
+    float discrete = PlatformParamHolder::GetQuartzFact(GetPlatformId()); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+    p_params->inj_min_pw[0] = MathHelpers::Round(((p_in->inj_min_pw[0] * 1000.0f) / discrete) / 8.0f);
+    p_params->inj_min_pw[1] = MathHelpers::Round(((p_in->inj_min_pw[1] * 1000.0f) / discrete) / 8.0f);
    }
    break;
   case LAMBDA_PAR:
@@ -751,6 +755,10 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->inj_anglespec[1] = GETHI4BITS(p_params->inj_anglespec);
 
     p_out->fff_const = ((float)p_params->fff_const/65536.0f)*(1000.0f*60.0f);
+
+    float discrete = PlatformParamHolder::GetQuartzFact(GetPlatformId()); //for ATMega644 discrete = 3.2uS, for others - 4.0uS
+    p_out->inj_min_pw[0] = ((float(p_params->inj_min_pw[0]) * discrete) / 1000.0f) * 8.0f;  //convert to ms
+    p_out->inj_min_pw[1] = ((float(p_params->inj_min_pw[1]) * discrete) / 1000.0f) * 8.0f;  //convert to ms
    }
    break;
   case LAMBDA_PAR:

@@ -51,6 +51,8 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PD_INJECTOR_FFFCONST_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_MINPW_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_PD_INJECTOR_MINPW_G_EDIT, OnChangeData)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, OnInjUseTimingMap)
  ON_BN_CLICKED(IDC_PD_INJECTOR_USEADDCORRS_CHECK,OnChangeData) 
@@ -70,6 +72,11 @@ BEGIN_MESSAGE_MAP(CInjectorPageDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_CAPTION,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_FLOWRATE_G_UNIT,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_G_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_MINPW_G_SPIN,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_EDIT,OnUpdateInjTiming)
  ON_UPDATE_COMMAND_UI(IDC_PD_INJECTOR_TIMING_SPIN,OnUpdateInjTiming)
@@ -138,6 +145,8 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_inj_timing_edit[i].SetOwnDDV(true);
   m_inj_timing_crk_edit[i].SetMode(CEditEx::MODE_FLOAT);
   m_inj_timing_crk_edit[i].SetOwnDDV(true);
+  m_min_pw_edit[i].SetMode(CEditEx::MODE_FLOAT);
+  m_min_pw_edit[i].SetOwnDDV(true);
   //params
   m_params.inj_usetimingmap[i] = 0;
   m_params.inj_config[i] = SECU3IO::INJCFG_SIMULTANEOUS;
@@ -147,6 +156,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
   m_params.inj_timing[i] = 0; 
   m_params.inj_timing_crk[i] = 0; 
   m_params.inj_anglespec[i] = 0;
+  m_params.inj_min_pw[i] = 1.0f; 
  }
 
  m_params.inj_cyl_disp = 0.375f;
@@ -207,6 +217,11 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_EDIT, m_fff_const_edit);
  DDX_Control(pDX,IDC_PD_INJECTOR_FFFCONST_SPIN, m_fff_const_spin);
 
+ DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_EDIT, m_min_pw_edit[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_SPIN, m_min_pw_spin[0]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_G_EDIT, m_min_pw_edit[1]);
+ DDX_Control(pDX,IDC_PD_INJECTOR_MINPW_G_SPIN, m_min_pw_spin[1]);
+
  float engdisp = m_params.inj_cyl_disp * m_params.cyl_num; //convert cyl.disp. to eng.disp
  m_cyldisp_edit.DDX_Value(pDX, IDC_PD_INJECTOR_CYLDISP_EDIT, engdisp);
  m_params.inj_cyl_disp = engdisp / m_params.cyl_num; //convert eng.disp to cyl.disp
@@ -227,6 +242,9 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USEDIFFPRESS_CHECK, m_params.inj_usediffpress);
 
  m_fff_const_edit.DDX_Value(pDX, IDC_PD_INJECTOR_FFFCONST_EDIT, m_params.fff_const);
+
+ m_min_pw_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_MINPW_EDIT, m_params.inj_min_pw[0]);
+ m_min_pw_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_MINPW_G_EDIT, m_params.inj_min_pw[1]);
 }
 
 void CInjectorPageDlg::OnUpdateControls(CCmdUI* pCmdUI)
@@ -281,6 +299,12 @@ BOOL CInjectorPageDlg::OnInitDialog()
   m_inj_timing_crk_edit[i].SetDecimalPlaces(0);
   m_inj_timing_crk_spin[i].SetRangeAndDelta(0.0f, 720.0f, 1.0);
   m_inj_timing_crk_edit[i].SetRange(0.0f, 720.0f);
+
+  m_min_pw_spin[i].SetBuddy(&m_min_pw_edit[i]);
+  m_min_pw_edit[i].SetLimitText(5);
+  m_min_pw_edit[i].SetDecimalPlaces(2);
+  m_min_pw_spin[i].SetRangeAndDelta(0.10f, 6.50f, 0.025f);
+  m_min_pw_edit[i].SetRange(0.10f, 6.50f);
  }
 
  m_fff_const_spin.SetBuddy(&m_fff_const_edit);
@@ -317,6 +341,7 @@ BOOL CInjectorPageDlg::OnInitDialog()
  //Set bold font
  CloneWndFont(this, &m_boldDlgFont, -1, true);
  GetDlgItem(IDC_PD_INJECTOR_SECONDFUEL_GROUP)->SetFont(&m_boldDlgFont);
+ GetDlgItem(IDC_PD_INJECTOR_GENERAL_GROUP)->SetFont(&m_boldDlgFont);
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -796,5 +821,5 @@ void CInjectorPageDlg::OnSize( UINT nType, int cx, int cy )
 
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(cx, da.ScaleY(660));
+  mp_scr->SetViewSize(cx, da.ScaleY(760));
 }

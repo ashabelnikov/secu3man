@@ -263,6 +263,8 @@ typedef struct params_t
  _uchar eh_heating_act;                 // During this time heater is on in PWM mode (see also pause lookup table)
  _uint  eh_aflow_thrd;                  // Air flow threshold above which heater will be turned off to prevent overheating
 
+ _uchar inj_min_pw[2];
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.

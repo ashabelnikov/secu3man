@@ -2051,7 +2051,7 @@ bool CControlApp::Parse_UNIOUT_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjctrPar& m_InjctrPar = m_recepted_packet.m_InjctrPar;
- if (size != (mp_pdp->isHex() ? 56 : 29))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 60 : 31))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  unsigned char inj_flags = 0;
@@ -2135,6 +2135,17 @@ bool CControlApp::Parse_INJCTR_PAR(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet, &fff))
   return false;
  m_InjctrPar.fff_const = ((float)fff / 65536.0f) * (1000.0f * 60.0f);
+
+ //min. injection PW
+ float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
+ unsigned char inj_min_pw = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_min_pw))
+  return false;
+ m_InjctrPar.inj_min_pw[1] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
+ inj_min_pw = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &inj_min_pw))
+  return false;
+ m_InjctrPar.inj_min_pw[0] = ((((float)inj_min_pw) * 8) * discrete) / 1000.0f; //convert to ms
 
  return true;
 }
@@ -3427,6 +3438,12 @@ void CControlApp::Build_INJCTR_PAR(InjctrPar* packet_data)
 
  int fff = MathHelpers::Round((packet_data->fff_const / (1000.0f*60.0f))*65536.0f);
  mp_pdp->Bin16ToHex(fff, m_outgoing_packet);
+
+ float discrete = (m_quartz_frq == 20000000 ? 3.2f : 4.0f);
+ unsigned char inj_min_pw = MathHelpers::Round(((packet_data->inj_min_pw[1] * 1000.0f) / discrete) / 8.0f);
+ mp_pdp->Bin8ToHex(inj_min_pw, m_outgoing_packet);
+ inj_min_pw = MathHelpers::Round(((packet_data->inj_min_pw[0] * 1000.0f) / discrete) / 8.0f);
+ mp_pdp->Bin8ToHex(inj_min_pw, m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

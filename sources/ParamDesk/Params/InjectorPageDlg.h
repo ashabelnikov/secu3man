@@ -110,6 +110,9 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_inj_useairden_check;
   CButton m_inj_usediffpress_check;
 
+  CSpinButtonCtrlEx m_min_pw_spin[2];
+  CEditEx m_min_pw_edit[2];
+
   float m_fuel_density[2];  //fuel density (g/cc)
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
