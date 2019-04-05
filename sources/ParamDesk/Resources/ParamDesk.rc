@@ -1342,7 +1342,7 @@ BEGIN
     IDS_PD_IDLREG_FACTOR_EDIT_TT                    "Коэффициент, определяющий величину и скорость реакции регулятора на отклонение оборотов от заданного значения. Слишком большое значение может приводить к колебаниям оборотов ХХ. Слишком малое значение не будет давать эффекта."
     IDS_PD_TEMPER_USE_CURVE_MAP_TT                  "Указывает что зависимость показаний от напряжения на датчике задается таблицей. При помощи таблицы систему можно настроить практически под любой датчик (как с линейной, так и с нелинейной зависимостью)."
     IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "Этот параметр используется только для обычных коммутаторов. Для BIP373, SECU-Igniters и катушек со встроенными драйверами неоходимо использовать прошивку управляющую временем накопления! (_dwell в названии файла прошивки)"
-    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Число зубьев на задающем диске, включая отсутствующие (если такие имеются)"
+    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Число зубьев на задающем диске, включая отсутствующие (если такие имеются). Число зубьев соответсвующее 720° должно без остатка делиться на число цилиндров, например (60*2) / 5 = 24."
     IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Число отсутствующих зубьев на задающем диске. Для ДУИ+ДНО значение должно быть равно 0"
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Число зубьев, проходящих мимо ДПКВ (ДУИ) от метки на задающем диске до достижения ВМТ (в качестве метки выступают отсутствующие зубья (для ДПКВ) или штифт начала отсчета (для ДУИ+ДНО)."
     IDS_PD_CKPS_FRONT_GROUPBOX_TT                   "Смена фронта равноценна подключению проводов к датчику ДПКВ (ДУИ) в другом порядке"
@@ -2916,7 +2916,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_CKPS_MISS_NUM_EDIT_TT                    "Missing teeth. Set to 0 if you use non-missing tooth wheel"
-    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Total number of crank wheel teeth, including missing teeth (if present)"
+    IDS_PD_CKPS_COGS_NUM_EDIT_TT                    "Total number of crank wheel teeth, including missing teeth (if present). Number of teeth which corresponds to 720° must be dividable by number of cylinders, for instance (60*2) / 5 = 24"
     IDS_PD_CKPS_IGNITION_COGS_UNIT_TT               "This value is used only for regular ignition modules. For BIP373, SECU-Igniters and coils with embedded drivers use firmware with dwell control! (_dwell)"
     IDS_PD_CKPS_COGS_BEFORE_TDC_COMBOBOX_TT         "Number of teeth moving past the CKP sensor from label on the wheel (missing teeth or rod ) and to the TDC mark."
     IDS_PD_CKPS_MERGE_IGN_OUTPUTS_TT                "With set check, ignition pulses will be merged on the IGN_OUT1 output"
