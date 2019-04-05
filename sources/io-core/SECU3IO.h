@@ -721,7 +721,7 @@ namespace SECU3IO
   _SD(3,  _T("COPT_ATMEGA128")),
   _SD(4,  _T("COPT_VPSEM")),
   _SD(5,  _T("COPT_TPIC8101")),
-  _SD(6,  _T("COPT_INVERSE_IGN_OUTPUTS")), /*Obsolete! Left for compatibility reasons*/
+  _SD(6,  _T("COPT_CAM_SYNC")),
   _SD(7,  _T("COPT_DWELL_CONTROL")),
   _SD(8,  _T("COPT_COOLINGFAN_PWM")),
   _SD(9,  _T("COPT_REALTIME_TABLES")),
@@ -756,7 +756,7 @@ namespace SECU3IO
  const int COPT_ATMEGA128 = 3;
  const int COPT_VPSEM = 4;
  const int COPT_TPIC8101 = 5;
- const int COPT_INVERSE_IGN_OUTPUTS = 6; /*Obsolete! Left for compatibility reasons*/
+ const int COPT_CAM_SYNC = 6;
  const int COPT_DWELL_CONTROL = 7;
  const int COPT_COOLINGFAN_PWM = 8;
  const int COPT_REALTIME_TABLES = 9;
