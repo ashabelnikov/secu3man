@@ -67,6 +67,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   afx_msg void OnUpdateControlsIgncutoff(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHOP(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsInjTurnoffOnGas(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsInjTurnoffOnPet(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsSECU3iInj(CCmdUI* pCmdUI);
   afx_msg void OnChangeData();
   afx_msg void OnChangeDataAfBegin();
@@ -115,6 +116,7 @@ class CMiscPageDlg : public CParamTabBaseDlg, public ParamPageEvents
 
   CButton m_flpmp_offongas_check;
   CButton m_inj_offongas_check;
+  CButton m_inj_offonpet_check;
 
   CSpinButtonCtrlEx m_evap_afbegin_spin;
   CEditEx m_evap_afbegin_edit;

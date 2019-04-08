@@ -321,6 +321,7 @@ namespace SECU3IO
   int hop_durat_cogs;                   //Выход ДХ: Длительность импульса в зубьях шкива
   bool flpmp_offongas;                  //Flag. Turn off or not fuel pump when fuel type is gas
   bool inj_offongas;                    //Turn off injector(s) on gas
+  bool inj_offonpet;                    //Turn off injector(s) on petrol
   float evap_afbegin;
   float evap_afslope;
   float fp_timeout_strt;                //Fuel pump timeout for cranking (sec.)

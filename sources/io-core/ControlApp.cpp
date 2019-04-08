@@ -1474,8 +1474,9 @@ bool CControlApp::Parse_MISCEL_PAR(const BYTE* raw_packet, size_t size)
  unsigned char flpmp_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &flpmp_flags))
   return false;
- m_MiscPar.flpmp_offongas = (flpmp_flags & 0x1) != 0;
- m_MiscPar.inj_offongas = (flpmp_flags & 0x2) != 0;
+ m_MiscPar.flpmp_offongas = CHECKBIT8(flpmp_flags, 0);
+ m_MiscPar.inj_offongas = CHECKBIT8(flpmp_flags, 1);
+ m_MiscPar.inj_offonpet = CHECKBIT8(flpmp_flags, 2);
 
  //Начальный порог расхода воздуха для EVAP
  int evap_afbegin = 0;
@@ -3092,7 +3093,11 @@ void CControlApp::Build_MISCEL_PAR(MiscelPar* packet_data)
  mp_pdp->Bin16ToHex(packet_data->ign_cutoff_thrd, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_start_cogs, m_outgoing_packet);
  mp_pdp->Bin8ToHex(packet_data->hop_durat_cogs, m_outgoing_packet);
- BYTE fpf_flags = ((packet_data->inj_offongas != 0) << 1) | ((packet_data->flpmp_offongas != 0) << 0);
+
+ unsigned char fpf_flags = 0;
+ WRITEBIT8(fpf_flags, 0, packet_data->flpmp_offongas);
+ WRITEBIT8(fpf_flags, 1, packet_data->inj_offongas);
+ WRITEBIT8(fpf_flags, 2, packet_data->inj_offonpet);
  mp_pdp->Bin8ToHex(fpf_flags, m_outgoing_packet);
 
  int evap_afbegin = MathHelpers::Round(packet_data->evap_afbegin / 32.0f);

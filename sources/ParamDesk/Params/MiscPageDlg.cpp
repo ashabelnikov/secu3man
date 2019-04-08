@@ -49,6 +49,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
  ON_BN_CLICKED(IDC_PD_MISC_IGNCUTOFF_CHECK, OnIgncutoffCheck)
  ON_BN_CLICKED(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnChangeData)
  ON_BN_CLICKED(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnChangeData)
+ ON_BN_CLICKED(IDC_PD_MISC_INJ_OFFONPET_CHECK, OnChangeData)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO_CAPTION, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_UART_SPEED_COMBO, OnUpdateControls)
@@ -73,6 +74,7 @@ BEGIN_MESSAGE_MAP(CMiscPageDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONGAS_CHECK, OnUpdateControlsInjTurnoffOnGas)
+ ON_UPDATE_COMMAND_UI(IDC_PD_MISC_INJ_OFFONPET_CHECK, OnUpdateControlsInjTurnoffOnPet)
 
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_EDIT, OnUpdateControlsSECU3iInj)
  ON_UPDATE_COMMAND_UI(IDC_PD_MISC_EVAP_AFBEGIN_CAPTION, OnUpdateControlsSECU3iInj)
@@ -162,6 +164,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX,IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_flpmp_offongas_check);
  DDX_Control(pDX,IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_inj_offongas_check);
+ DDX_Control(pDX,IDC_PD_MISC_INJ_OFFONPET_CHECK, m_inj_offonpet_check);
 
  DDX_Control(pDX,IDC_PD_MISC_EVAP_AFBEGIN_EDIT, m_evap_afbegin_edit);
  DDX_Control(pDX,IDC_PD_MISC_EVAP_AFBEGIN_SPIN, m_evap_afbegin_spin);
@@ -180,6 +183,7 @@ void CMiscPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_UCHAR(pDX, IDC_PD_MISC_IGNCUTOFF_CHECK, m_params.ign_cutoff);
  DDX_Check_bool(pDX, IDC_PD_MISC_FLPMP_OFFONGAS_CHECK, m_params.flpmp_offongas);
  DDX_Check_bool(pDX, IDC_PD_MISC_INJ_OFFONGAS_CHECK, m_params.inj_offongas);
+ DDX_Check_bool(pDX, IDC_PD_MISC_INJ_OFFONPET_CHECK, m_params.inj_offonpet);
 
  m_evap_afbegin_edit.DDX_Value(pDX, IDC_PD_MISC_EVAP_AFBEGIN_EDIT, m_params.evap_afbegin);
  float afend = _calcAfEnd(); //convert afslope to afend
@@ -204,6 +208,11 @@ void CMiscPageDlg::OnUpdateControlsHOP(CCmdUI* pCmdUI)
 }
 
 void CMiscPageDlg::OnUpdateControlsInjTurnoffOnGas(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enabled && m_inj_turnoff_enabled);
+}
+
+void CMiscPageDlg::OnUpdateControlsInjTurnoffOnPet(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enabled && m_inj_turnoff_enabled);
 }
