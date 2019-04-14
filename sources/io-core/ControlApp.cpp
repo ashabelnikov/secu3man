@@ -546,22 +546,22 @@ bool CControlApp::Parse_SENSOR_DAT(const BYTE* raw_packet, size_t size)
  if (mode == 0)
  { //begin
   m_SensorDat.inj_tim_begin = inj_timing;
-  m_SensorDat.inj_tim_end = inj_timing + inj_pw_degr;
+  m_SensorDat.inj_tim_end = inj_timing - inj_pw_degr;
  }
  else if (mode == 1)
  { //middle
-  m_SensorDat.inj_tim_begin = inj_timing - (inj_pw_degr / 2);
-  m_SensorDat.inj_tim_end = inj_timing + (inj_pw_degr / 2);
+  m_SensorDat.inj_tim_begin = inj_timing + (inj_pw_degr / 2);
+  m_SensorDat.inj_tim_end = inj_timing - (inj_pw_degr / 2);
  }
  else
  {//end
-  m_SensorDat.inj_tim_begin = inj_timing - inj_pw_degr;
+  m_SensorDat.inj_tim_begin = inj_timing + inj_pw_degr;
   m_SensorDat.inj_tim_end = inj_timing; 
  }
- if (m_SensorDat.inj_tim_begin < 0)
-  m_SensorDat.inj_tim_begin = m_SensorDat.inj_tim_begin + 720.f;
- if (m_SensorDat.inj_tim_end > 720.0f)
-  m_SensorDat.inj_tim_end = m_SensorDat.inj_tim_end - 720.0f;
+ if (m_SensorDat.inj_tim_begin > 720.0f)
+  m_SensorDat.inj_tim_begin = m_SensorDat.inj_tim_begin - 720.f;
+ if (m_SensorDat.inj_tim_end < 0)
+  m_SensorDat.inj_tim_end = m_SensorDat.inj_tim_end + 720.0f;
 
  return true;
 }

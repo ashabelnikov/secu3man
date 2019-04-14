@@ -96,7 +96,7 @@ void CScrlMessageBox::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.y = m_createSize.cy;
 
   lpMMI->ptMaxTrackSize.x = m_createSize.cx;
-  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.6f);
+  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.7f);
  }
 }
 
