@@ -18,6 +18,7 @@ project(${PROJECT})
 
 set(HEADERS
   readhex.h
+  writehex.h
   StdAfx.h
   )
 
@@ -25,6 +26,7 @@ set(SOURCES
   HexUtils.cpp
   hexutils.rc
   readhex.cpp
+  writehex.cpp
   StdAfx.cpp
   )
 

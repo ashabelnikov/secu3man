@@ -55,6 +55,7 @@ class CChildViewManager
   class CLogPlayerTabController* m_pLogPlayerTabController;
   class CDevDiagnostTabController* m_pDevDiagnostTabController;
   class CEEPROMTabController* m_pEEPROMTabController;
+  class CInjDriverTabController* m_pInjDriverTabController;
 
   //диалоги вкладок
   class CParamMonTabDlg* m_pParamMonTabDlg;
@@ -64,4 +65,5 @@ class CChildViewManager
   class CLogPlayerTabDlg* m_pLogPlayerTabDlg;
   class CDevDiagnostTabDlg* m_pDevDiagnostTabDlg;
   class CEEPROMTabDlg* m_pEEPROMTabDlg;
+  class CInjDriverTabDlg* m_pInjDriverTabDlg;
 };

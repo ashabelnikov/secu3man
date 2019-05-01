@@ -189,3 +189,8 @@ void CChildView::EnableTabControl(bool i_enable)
 {
  m_tab_control.EnableWindow(i_enable);
 }
+
+void CChildView::EnableTab(int idx, bool i_enable)
+{
+ m_tab_control.EnableItem(idx, i_enable);
+}

@@ -14,7 +14,7 @@ SYSLIBS = kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.l
 # linker flags and directives
 LFLAGS  = /nologo /MACHINE:x86 /STACK:10000000 /release /DLL /OUT:../../binaries/hexutils.dll /IMPLIB:../../libraries/hexutils.lib hexutils.res
 # source files
-SOURCES = stdafx.cpp hexutils.cpp readhex.cpp
+SOURCES = stdafx.cpp hexutils.cpp readhex.cpp writehex.cpp
 
 # DLL building
 all: hexutils

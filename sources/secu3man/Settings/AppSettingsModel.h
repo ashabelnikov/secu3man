@@ -173,6 +173,12 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetGradBrightness(void);
   virtual int GetBoldFont(void);
 
+  virtual bool GetInjDrvTabActive(void) const;
+  virtual COLORREF GetVoltLineColor(void) const;
+  virtual float GetPeakOnPtMovStep(void) const;
+  virtual float GetPeakDutyPtMovStep(void) const;
+  virtual float GetHoldDutyPtMovStep(void) const;
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -192,6 +198,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_AutoTune_Section;
   const CString m_Name_MapEditor_Section;
   const CString m_Name_Splitters_Section;
+  const CString m_Name_InjDrv_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -402,6 +409,13 @@ class CAppSettingsModel : public ISettingsData
 
   //Splitters
   OptField_t<int> m_optParamMonVert;
+
+  //Inj. Driver related tab settings
+  OptField_t<bool> m_optInjDrvTabActive;
+  OptField_t<COLORREF> m_optVoltLineColor;
+  OptField_t<float> m_optPeakOnPtMovStep;
+  OptField_t<float> m_optPeakDutyPtMovStep;
+  OptField_t<float> m_optHoldDutyPtMovStep;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

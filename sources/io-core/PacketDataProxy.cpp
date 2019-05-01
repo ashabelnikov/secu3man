@@ -26,10 +26,12 @@
 #include "stdafx.h"
 #include "NumericConv.h"
 #include "PacketDataProxy.h"
+#include "crc16.h"
 
 
 PacketDataProxy::PacketDataProxy()
 : m_mode(true) //default is Hex
+, m_crc(0xFFFF)
 {
  //empty
 }
@@ -53,19 +55,22 @@ bool PacketDataProxy::Hex4ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
 
 bool PacketDataProxy::Hex8ToBin(const BYTE*& ip_hex_number, BYTE* o_byte)
 {
+ bool result = false;
  if (m_mode)
  { //hex
-  bool result = CNumericConv::Hex8ToBin(ip_hex_number, o_byte);
+  result = CNumericConv::Hex8ToBin(ip_hex_number, o_byte);
   if (result)
    ip_hex_number+=2;
-  return result;
  }
  else
  { //bin
   *o_byte = *ip_hex_number;
   ip_hex_number+=1;
-  return true;
+  result = true;
  }
+
+ m_crc = crc16(m_crc, o_byte, 1);
+ return result;
 }
 
 bool PacketDataProxy::Hex8ToBin(const BYTE*& ip_hex_number, int* o_byte) //signed
@@ -87,12 +92,12 @@ bool PacketDataProxy::Hex8ToBin(const BYTE*& ip_hex_number, int* o_byte) //signe
 
 bool PacketDataProxy::Hex16ToBin(const BYTE*& ip_hex_number, int* o_word, bool i_signed /*= false*/)
 {
+ bool result = false;
  if (m_mode)
  { //hex
-  bool result = CNumericConv::Hex16ToBin(ip_hex_number, o_word, i_signed);
+  result = CNumericConv::Hex16ToBin(ip_hex_number, o_word, i_signed);
   if (result)
    ip_hex_number+=4;
-  return result;
  }
  else
  { //bin
@@ -100,8 +105,21 @@ bool PacketDataProxy::Hex16ToBin(const BYTE*& ip_hex_number, int* o_word, bool i
   //если число знаковое и отрицательное то делаем его отрицательным
   *o_word = i_signed ? (int)((signed short)word) : word;
   ip_hex_number+=2;
-  return true;
+  result = true;
  }
+
+ if (i_signed)
+ {
+  signed short value = *o_word;
+  m_crc = crc16(m_crc, (unsigned char*)&value, 2);
+ }
+ else
+ {
+  unsigned short value = *o_word;
+  m_crc = crc16(m_crc, (unsigned char*)&value, 2);  
+ }
+
+ return result;
 }
 
 bool PacketDataProxy::Hex32ToBin(const BYTE*& ip_hex_number, signed long *o_dword)
@@ -180,6 +198,7 @@ bool PacketDataProxy::Bin4ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_numb
 
 bool PacketDataProxy::Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_number)
 {
+ m_crc = crc16(m_crc, (unsigned char*)&i_byte, 1);
  if (m_mode)
  { //hex
   return CNumericConv::Bin8ToHex(i_byte, o_hex_number);
@@ -199,6 +218,7 @@ bool PacketDataProxy::Bin8ToHex(const BYTE i_byte, std::vector<BYTE>& o_hex_numb
 
 bool PacketDataProxy::Bin16ToHex(const int i_word, std::vector<BYTE>& o_hex_number)
 {
+ m_crc = crc16(m_crc, (unsigned char*)&i_word, 2);
  if (m_mode)
  { //hex
   return CNumericConv::Bin16ToHex(i_word, o_hex_number);
@@ -245,4 +265,14 @@ bool PacketDataProxy::isHex(void) const
 void PacketDataProxy::SetMode(bool i_mode)
 {
  m_mode = i_mode;
+}
+
+void PacketDataProxy::resetCRC(void)
+{
+ m_crc = 0xFFFF;
+}
+
+int PacketDataProxy::getCRC(void)
+{
+ return m_crc;
 }

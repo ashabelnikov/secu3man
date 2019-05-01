@@ -56,6 +56,7 @@ class CMainFrame : public CFrameWnd
   void SetView(CChildView* i_pChildView);
   void CheckOnAppSwitchDashboards(bool checked);
   void CheckOnChildCharts(bool checked);
+  void EnableTab(int idx, bool i_enable);
 
   //устанавливают обработчики событий
   void setOnGetInitialPos(EventHandler2 i_OnGetInitialPos);

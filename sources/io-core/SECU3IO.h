@@ -567,6 +567,46 @@ namespace SECU3IO
   int ae_decay_time;                  //Decay time in strokes
  };
 
+
+//Size of all look up tables
+static const int LUTABSIZE = 16;
+
+//data send and received to/from SECU-LZID driver
+struct InjDrvPar
+{
+ bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
+ bool set0_corrupted;   //from LZID only 
+ bool set1_corrupted;   //from LZID only 
+ float voltage;         //from LZID only 
+
+ int type;              //from LZID only
+ int version;           //from LZID only
+ int fw_opt;            //from LZID only
+
+ int set_idx;           //allowed values: 0, 1
+
+ bool direct_flags[8];
+ float m_pwm_period;
+ float m_peak_duty;
+ float m_hold_duty;
+ float m_peak_on_time;
+ float m_peak_pwm_time;
+ float m_pth_pause;
+ float m_reserved; //reserved and can be used for debug purposes
+
+ float m_peak_on_tab[LUTABSIZE];
+ float m_peak_duty_tab[LUTABSIZE];
+ float m_hold_duty_tab[LUTABSIZE];
+ //flags
+ bool m_peak_on_usetab;
+ bool m_peak_duty_usetab;
+ bool m_hold_duty_usetab;
+
+ bool m_tst_peak_pwm;
+ bool m_tst_hold_pwm;
+};
+
+
  //таблица перекодировки кода частоты ПФ в частоту
  const int GAIN_FREQUENCES_SIZE = 64;
  static float hip9011_gain_frequences[GAIN_FREQUENCES_SIZE] =
@@ -654,6 +694,7 @@ namespace SECU3IO
   SECU3IO::InjctrPar    m_InjctrPar;
   SECU3IO::LambdaPar    m_LambdaPar;
   SECU3IO::AccelPar     m_AccelPar;
+  SECU3IO::InjDrvPar    m_InjDrvPar;  //SECU-LZID
  };
 
  struct CESettingsData

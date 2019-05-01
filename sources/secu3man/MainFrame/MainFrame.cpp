@@ -627,3 +627,8 @@ void CMainFrame::CheckOnChildCharts(bool checked)
 {
  GetMenu()->CheckMenuItem(ID_APP_CHILD_CHATRS, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
 }
+
+void CMainFrame::EnableTab(int idx, bool i_enable)
+{
+ m_pwndView->EnableTab(idx, i_enable);
+}

@@ -27,3 +27,4 @@
 
 //Calculates CRC-16 function
 unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num);
+unsigned short CRC_API crc16(unsigned short crc, const unsigned char *buf, unsigned long num);

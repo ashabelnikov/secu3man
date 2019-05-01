@@ -57,6 +57,10 @@ class PacketDataProxy
   //true - Hex, false - Bin
   void SetMode(bool i_mode);
 
+  void resetCRC(void);
+  int getCRC(void);
+
  private:
   bool m_mode; //operation mode: false - binary, true - hex
+  unsigned short m_crc;
 };

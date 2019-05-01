@@ -191,6 +191,8 @@ void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SE
     return;
   }
  }
+ else if (i_descriptor == INJDRV_PAR)
+  m_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
 }
 
 void CEEPROMTabController::OnConnection(const bool i_online)

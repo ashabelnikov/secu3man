@@ -61,6 +61,8 @@ set(HEADERS
   TabControllers/FirmwareTabController.h
   TabControllers/FWIORemappingController.h
   TabControllers/FWRPMGridEditController.h
+  TabControllers/InjDriverTabController.h
+  TabControllers/InjDrvFileDataIO.h
   TabControllers/KnockChannelTabcontroller.h
   Tabcontrollers/LogPlayerTabController.h
   TabControllers/ParamMonTabController.h
@@ -81,6 +83,7 @@ set(HEADERS
   TabDialogs/DiagnostContextMenuManager.h
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
+  TabDialogs/InjDriverTabDlg.h
   TabDialogs/KnockChannelTabDlg.h
   TabDialogs/KnockContextMenuManager.h
   TabDialogs/KnockFrqCalcDlg.h
@@ -116,6 +119,8 @@ set(SOURCES
   TabControllers/FirmwareTabController.cpp
   TabControllers/FWIORemappingController.cpp
   TabControllers/FWRPMGridEditController.cpp
+  TabControllers/InjDriverTabController.cpp
+  TabControllers/InjDrvFileDataIO.cpp
   TabControllers/KnockChannelTabcontroller.cpp
   Tabcontrollers/LogPlayerTabController.cpp
   TabControllers/ParamMonTabController.cpp
@@ -135,6 +140,7 @@ set(SOURCES
   TabDialogs/DiagnostContextMenuManager.cpp
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp
+  TabDialogs/InjDriverTabDlg.cpp
   TabDialogs/KnockChannelTabDlg.cpp
   TabDialogs/KnockContextMenuManager.cpp
   TabDialogs/KnockFrqCalcDlg.cpp

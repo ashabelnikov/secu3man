@@ -47,3 +47,22 @@ unsigned short CRC_API crc16(const unsigned char *buf, unsigned long num)
  }
  return( crc );
 }
+
+unsigned short crc16(unsigned short crc, const unsigned char *buf, unsigned long num)
+{
+ unsigned int i;
+
+ while ( num-- )
+ {
+  crc ^= *buf++;
+  i = 8;
+  do
+  {
+   if ( crc & 1 )
+    crc = ( crc >> 1 ) ^ P_16;
+   else
+    crc >>= 1;
+  } while ( --i );
+ }
+ return crc;
+}

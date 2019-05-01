@@ -25,7 +25,7 @@
 
 #include "stdafx.h"
 #include "Chart2D.h"
-#include "math.h"
+#include <math.h>
 
 #define ROUND(x) (int)((x) + 0.5 - (double)((x) < 0))
 
@@ -37,6 +37,8 @@ CSerieData::CSerieData(UINT nPoint)
 , m_ptIndex(0)
 , m_ptCount(0)
 , m_visible(true)
+, m_handle(false)
+, m_curSel(0)
 {
  mp_valueX = new (std::nothrow) double[nPoint];
  mp_valueY = new (std::nothrow) double[nPoint];
@@ -69,6 +71,8 @@ CSerieData& CSerieData::operator=(const CSerieData& rhs)
  std::copy(rhs.mp_valueX, rhs.mp_valueX + m_ptCount, mp_valueX);
  std::copy(rhs.mp_valueY, rhs.mp_valueY + m_ptCount, mp_valueY);
  m_visible = rhs.m_visible;
+ m_handle = rhs.m_handle;
+ m_curSel = rhs.m_curSel;
  return *this;
 }
 
@@ -86,9 +90,17 @@ CChart2D::CChart2D()
 , mp_legendFontY(NULL)
 , mp_legendFontX(NULL)
 , mp_titleFont(NULL)
+, mp_titleFontB(NULL)
 , m_updateBackground(true)
 , m_updateBkBitmap(true)
 , m_axisFmtX("%5.1f")
+, m_axisFmtY("%5.1f")
+, m_ptHandleRadius(5)
+, m_setval(false)
+, m_val_idx(0)
+, m_ser_idx(0)
+, mp_tooltip(NULL)
+, m_ptMovStep(1.0)
 , mp_oldBkBitmap(NULL)
 {
  SetRange(-10, 10, -10, 10);
@@ -99,14 +111,23 @@ CChart2D::~CChart2D()
  if(memBkDC.GetSafeHdc() != NULL)
   memBkDC.SelectObject(mp_oldBkBitmap);
  delete mp_titleFont;
+ delete mp_titleFontB;
  delete mp_legendFontX;
  delete mp_legendFontY;
+ delete mp_tooltip;
 }
 
 BEGIN_MESSAGE_MAP(CChart2D, Super)
  ON_WM_PAINT()
  ON_WM_ENABLE()
  ON_WM_DESTROY()
+ ON_WM_LBUTTONDOWN()
+ ON_WM_LBUTTONUP()
+ ON_WM_MOUSEMOVE()
+ ON_WM_SETFOCUS()
+ ON_WM_KILLFOCUS()
+ ON_WM_KEYDOWN()
+ ON_WM_GETDLGCODE()
  ON_WM_SIZE()
 END_MESSAGE_MAP()
 
@@ -131,12 +152,22 @@ BOOL CChart2D::Create(DWORD dwStyle, CRect &rect, CWnd *pParent, UINT id)
  return result;
 }
 
+BOOL CChart2D::PreTranslateMessage (MSG * pMsg)
+{
+ if (mp_tooltip)
+  mp_tooltip->RelayEvent(pMsg);
+
+ return Super::PreTranslateMessage(pMsg);
+} 
+
 void CChart2D::OnDestroy()
 {
  delete mp_titleFont;
+ delete mp_titleFontB;
  delete mp_legendFontX;
  delete mp_legendFontY;
  mp_titleFont = NULL;
+ mp_titleFontB = NULL;
  mp_legendFontX = NULL;
  mp_legendFontY = NULL;
 }
@@ -149,7 +180,7 @@ void CChart2D::_CalcRect(void)
 
  //offset from left
  old = dc.SelectObject(mp_legendFontY);
- str.Format("5.2f", m_rangeY.second);
+ str.Format(m_axisFmtY, m_rangeY.second);
  CSize offset_left1 = dc.GetTextExtent(str);
  dc.SelectObject(old);
  CSize offset_left(0, 0);
@@ -175,8 +206,8 @@ void CChart2D::_CalcRect(void)
  offset_top = dc.GetTextExtent("1234");
  offset_top.cy/= 2; //half of text height
  dc.SelectObject(old);
- if (!m_chartTitle.IsEmpty()) {
-  old = dc.SelectObject(mp_titleFont);
+ if (!m_chartTitle.IsEmpty()) {  
+  old = dc.SelectObject(::GetFocus() == m_hWnd ? mp_titleFontB : mp_titleFont);
   offset_top = dc.GetTextExtent(m_chartTitle, m_chartTitle.GetLength());
   dc.SelectObject(old);
  }
@@ -229,6 +260,17 @@ CPoint CChart2D::_MapCoord(double x, double y)
  return retPt;
 }
 
+LPoint CChart2D::_UnMapCoord(CPoint pt)
+{
+ pt.x = pt.x - m_axisRect.left;
+ pt.y = (pt.y - m_axisRect.bottom);
+ //convert screen coordinates to logical coordinates
+ LPoint lp;
+ lp.x = m_rangeX.first + (pt.x * m_mapfX);
+ lp.y = m_rangeY.first - (pt.y * m_mapfY);
+ return lp;
+}
+
 void CChart2D::_PlotSeries(CDC *pDC)
 {
  for(size_t i = 0 ; i < m_serie.size() ; i++)
@@ -239,11 +281,32 @@ void CChart2D::_PlotSeries(CDC *pDC)
   CPen* old = pDC->SelectObject(&pen);
   CPoint pt = _MapCoord(m_serie[i].mp_valueX[0],m_serie[i].mp_valueY[0]);
   pDC->MoveTo(pt);
+  CBrush brushSel(RGB(50,50,255));
+  if (m_serie[i].m_handle)
+  {
+   pDC->Ellipse(pt.x-m_ptHandleRadius, pt.y-m_ptHandleRadius, pt.x+m_ptHandleRadius, pt.y+m_ptHandleRadius);
+   if (0 == m_serie[i].m_curSel && IsWindowEnabled())
+   {
+    CBrush* oldbr = pDC->SelectObject(&brushSel);
+    pDC->FloodFill(pt.x, pt.y, m_serie[i].m_plotColor);
+    pDC->SelectObject(oldbr);
+   }
+  }
   //Plot serie data
   for(int index = 1; index <= m_serie[i].m_ptIndex ; index++)
   {
    pt = _MapCoord(m_serie[i].mp_valueX[index], m_serie[i].mp_valueY[index]);
    pDC->LineTo(pt);
+   if (m_serie[i].m_handle)
+   {    
+    pDC->Ellipse(pt.x-m_ptHandleRadius, pt.y-m_ptHandleRadius, pt.x+m_ptHandleRadius, pt.y+m_ptHandleRadius);
+    if (index == m_serie[i].m_curSel && IsWindowEnabled())
+    {
+     CBrush* oldbr = pDC->SelectObject(&brushSel);
+     pDC->FloodFill(pt.x, pt.y, m_serie[i].m_plotColor);
+     pDC->SelectObject(oldbr);
+    }
+   }
   }
   pDC->SelectObject(old);
  }
@@ -254,7 +317,7 @@ void CChart2D::_DrawChartTitle(CDC *pDC)
  int x , y, oldbkmode;
  CFont *old;
 
- old = pDC->SelectObject(mp_titleFont);
+ old = pDC->SelectObject(::GetFocus() == m_hWnd ? mp_titleFontB : mp_titleFont);
  oldbkmode = pDC->SetBkMode(TRANSPARENT);
  COLORREF oldColor = pDC->SetTextColor(m_TextTitleColor);
 
@@ -345,7 +408,7 @@ void CChart2D::_CalcMapFactors(void)
 int CChart2D::AddSerie(int nPoints)
 {
  m_serie.push_back(CSerieData(nPoints));
- return m_serie.size()-1;
+ return (int)m_serie.size()-1;
 }
 
 bool CChart2D::SetXYValue(int serieIdx, double x, double y, int index)
@@ -363,6 +426,12 @@ bool CChart2D::SetXYValue(int serieIdx, double x, double y, int index)
 
  m_serie[serieIdx].m_ptIndex = index;
  return true;
+}
+
+const double* CChart2D::GetYValues(int serieIdx)
+{
+ ASSERT(serieIdx < (int)(m_serie.size()));
+ return m_serie[serieIdx].mp_valueY;
 }
 
 // Set chart title
@@ -400,9 +469,13 @@ void CChart2D::_CreateFont()
  mp_legendFontY->CreateFontIndirect(&d_lf);
 
  d_lf.lfHeight = -1 * MulDiv(12, cyPixels, 72);
- d_lf.lfWeight = FW_BOLD;
+ d_lf.lfWeight = FW_REGULAR;
  mp_titleFont = new CFont();
  mp_titleFont->CreateFontIndirect(&d_lf);
+
+ d_lf.lfWeight = FW_BOLD;
+ mp_titleFontB = new CFont();
+ mp_titleFontB->CreateFontIndirect(&d_lf);
 
  d_lf.lfWeight = 0 ;
  d_lf.lfOrientation = 900; // Rotate 90 degree for x axis
@@ -431,7 +504,7 @@ void CChart2D::_DrawGridLabel(CDC *pDC)
   double y = m_rangeY.first + (res * (double)i);
   cal_pt = _MapCoord(m_rangeX.first, y);
   CString str;
-  str.Format(_T("%5.2f"), y);
+  str.Format(m_axisFmtY, y);
 
   txtSize = pDC->GetTextExtent(str);
   cal_pt.x -= 2;
@@ -474,6 +547,9 @@ void CChart2D::_DrawGridLabel(CDC *pDC)
 
 void CChart2D::ClearChart(void)
 {
+ m_setval = false;
+ delete mp_tooltip;
+ mp_tooltip = NULL;
  for (size_t i = 0; i < m_serie.size(); ++i)
   m_serie[i].m_ptIndex = 0;
  InvalidateRect(m_ctlRect);
@@ -638,6 +714,11 @@ void CChart2D::SetXAxisValueFormat(CString fmt)
  m_axisFmtX = fmt;
 }
 
+void CChart2D::SetYAxisValueFormat(CString fmt)
+{
+ m_axisFmtY = fmt;
+}
+
 void CChart2D::SetSerieVisibility(int serieIdx, bool visible)
 {
  if (serieIdx > (int)m_serie.size() - 1) return;
@@ -659,4 +740,190 @@ void CChart2D::OnSize(UINT nType, int cx, int cy)
  m_updateBackground = true;
  m_updateBkBitmap = true;
  RedrawWindow();
+}
+
+void CChart2D::SetSerieHandle(int serieIdx, bool showHandle)
+{
+ if (serieIdx > (int)m_serie.size() - 1) return;
+ m_serie[serieIdx].m_handle = showHandle;
+
+if (::IsWindow(m_hWnd))
+ {
+  _SetStateColors(IsWindowEnabled());
+  Invalidate();
+ } 
+}
+
+static int EuclDist(CPoint pt1, CPoint pt2)
+{
+ int dx = pt1.x - pt2.x;
+ int dy = pt1.y - pt2.y;
+ return ROUND(sqrt((float)(dx*dx + dy*dy)));
+}
+
+void CChart2D::OnLButtonDown(UINT nFlags, CPoint point)
+{
+ SetFocus();
+ //find nearest points handle 
+ for(size_t i = 0 ; i < m_serie.size() ; i++)
+ {
+  if (!m_serie[i].m_visible || !m_serie[i].m_handle)
+   continue;
+  for(int index = 0; index <= m_serie[i].m_ptIndex ; index++)
+  {
+   CPoint pt = _MapCoord(m_serie[i].mp_valueX[index], m_serie[i].mp_valueY[index]);
+   if (EuclDist(pt, point) <= m_ptHandleRadius)
+   {
+    m_setval  = 1;
+    m_val_idx = index;
+    m_ser_idx = i;
+    m_serie[i].m_curSel = index;
+   }
+  }
+ }
+
+ Super::OnLButtonDown(nFlags, point);
+}
+
+void CChart2D::OnMouseMove(UINT nFlags, CPoint point)
+{
+ if (m_setval)
+ {
+  LPoint lp = _UnMapCoord(point);
+  _RestrictAndSetValue(m_ser_idx, m_val_idx, lp.y);
+  Invalidate();
+ }
+
+//find nearest points handle 
+ size_t val_idx = 0;
+ size_t ser_idx = 0;
+ bool found = false;
+ for(size_t i = 0 ; i < m_serie.size() ; i++)
+ {
+  if (!m_serie[i].m_visible || !m_serie[i].m_handle)
+   continue;
+  for(int index = 0; index <= m_serie[i].m_ptIndex ; index++)
+  {
+   CPoint pt = _MapCoord(m_serie[i].mp_valueX[index], m_serie[i].mp_valueY[index]);
+   if (EuclDist(pt, point) <= m_ptHandleRadius)
+   {
+    if (!mp_tooltip)
+    { //activate toolttip
+     mp_tooltip = new CToolTipCtrl ();
+     mp_tooltip->Create(this);
+     mp_tooltip->AddTool(this);
+     mp_tooltip->Activate(true);
+     mp_tooltip->SetDelayTime(10);
+     mp_tooltip->UpdateTipText(_T(""), this);
+    }
+    val_idx = index;
+    ser_idx = i;
+    found = true;
+    break;
+   }
+  }
+ }
+
+ if (!found && mp_tooltip && !m_setval)
+ { //deactivate tooltip
+  mp_tooltip ->Activate(false);
+  delete mp_tooltip;
+  mp_tooltip = NULL;
+ }
+
+ if (mp_tooltip)
+ {//get value and restrict it
+  if (!found)
+  {
+   val_idx = m_val_idx;
+   ser_idx = m_ser_idx;
+  }
+  double y_val = m_serie[ser_idx].mp_valueY[val_idx];
+  //display value
+  CString toolText;
+  toolText.Format(m_axisFmtY, y_val);
+  mp_tooltip ->UpdateTipText (toolText, this);
+ } 
+
+ Super::OnMouseMove(nFlags, point);
+}
+
+void CChart2D::_RestrictAndSetValue(size_t seridx, size_t index, double v)
+{
+ if (v > m_rangeY.second)
+  v = m_rangeY.second;
+ if (v < m_rangeY.first)
+  v = m_rangeY.first;
+ m_serie[seridx].mp_valueY[index] = v;
+}
+
+void CChart2D::OnLButtonUp(UINT nFlags, CPoint point)
+{ 
+ if ((m_onChangeCB) && (m_setval))
+  m_onChangeCB((int)m_ser_idx);
+ m_setval = 0;
+
+ Super::OnLButtonUp(nFlags, point);
+}
+
+void CChart2D::SetOnChange(const EventInt& OnChangeCB)
+{
+ m_onChangeCB = OnChangeCB;
+}
+
+void CChart2D::OnSetFocus(CWnd* wnd)
+{
+ m_updateBackground = true;
+ Invalidate();
+}
+
+void CChart2D::OnKillFocus(CWnd* wnd)
+{
+ m_updateBackground = true;
+ Invalidate();
+}
+
+UINT CChart2D::OnGetDlgCode()
+{
+ return Super::OnGetDlgCode() | DLGC_WANTARROWS;
+}
+
+void CChart2D::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
+{
+ switch(nChar)
+ {
+ case VK_UP:
+  {
+   int index = m_serie[m_ser_idx].m_curSel;
+   _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]+m_ptMovStep);
+   Invalidate();   
+   if (m_onChangeCB)
+    m_onChangeCB((int)m_ser_idx);
+   break;
+  }
+ case VK_DOWN:
+  {
+   int index = m_serie[m_ser_idx].m_curSel;
+   _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]-m_ptMovStep);
+   Invalidate();
+   if (m_onChangeCB)
+    m_onChangeCB((int)m_ser_idx);
+   break;
+  }
+  case VK_LEFT:
+   if (m_serie[m_ser_idx].m_curSel > 0)
+    m_serie[m_ser_idx].m_curSel--;
+   Invalidate();
+   break;
+  case VK_RIGHT:
+   if (m_serie[m_ser_idx].m_curSel < m_serie[m_ser_idx].m_ptIndex)
+    m_serie[m_ser_idx].m_curSel++;
+   Invalidate();
+   break;
+ }
+}
+
+void CChart2D::SetPtMovStep(double value)
+{
+ m_ptMovStep = value;
 }

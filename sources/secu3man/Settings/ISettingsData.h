@@ -293,4 +293,10 @@ class ISettingsData
   virtual int GetGradSaturation(void) = 0;
   virtual int GetGradBrightness(void) = 0;
   virtual int GetBoldFont(void) = 0;
+  //Inj.driver
+  virtual bool GetInjDrvTabActive(void) const = 0;
+  virtual COLORREF GetVoltLineColor(void) const = 0;
+  virtual float GetPeakOnPtMovStep(void) const = 0;
+  virtual float GetPeakDutyPtMovStep(void) const = 0;
+  virtual float GetHoldDutyPtMovStep(void) const = 0;
 };

@@ -40,6 +40,7 @@
 #include "TabControllers/LogPlayerTabController.h"
 #include "TabControllers/ParamMonTabController.h"
 #include "TabControllers/EEPROMTabController.h"
+#include "TabControllers/InjDriverTabController.h"
 
 #include "TabDialogs/CheckEngineTabDlg.h"
 #include "TabDialogs/DevDiagnostTabDlg.h"
@@ -48,8 +49,10 @@
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/ParamMonTabDlg.h"
 #include "TabDialogs/EEPROMTabDlg.h"
+#include "TabDialogs/InjDriverTabDlg.h"
 
 #include "Settings/AppSettingsManager.h"
+#include "Settings/ISettingsData.h"
 
 CChildViewManager::CChildViewManager()
 : mp_wndView(new CChildView)
@@ -61,6 +64,7 @@ CChildViewManager::CChildViewManager()
 , m_pLogPlayerTabController(NULL)
 , m_pDevDiagnostTabController(NULL)
 , m_pEEPROMTabController(NULL)
+, m_pInjDriverTabController(NULL)
 , m_pParamMonTabDlg(NULL)
 , m_pFirmwareTabDlg(NULL)
 , m_pCheckEngineTabDlg(NULL)
@@ -68,6 +72,7 @@ CChildViewManager::CChildViewManager()
 , m_pLogPlayerTabDlg(NULL)
 , m_pDevDiagnostTabDlg(NULL)
 , m_pEEPROMTabDlg(NULL)
+, m_pInjDriverTabDlg(NULL)
 {
  //empty
 }
@@ -81,6 +86,7 @@ CChildViewManager::~CChildViewManager()
  delete m_pLogPlayerTabController;
  delete m_pDevDiagnostTabController;
  delete m_pEEPROMTabController;
+ delete m_pInjDriverTabController;
 
  delete m_pParamMonTabDlg;
  delete m_pFirmwareTabDlg;
@@ -89,6 +95,7 @@ CChildViewManager::~CChildViewManager()
  delete m_pLogPlayerTabDlg;
  delete m_pDevDiagnostTabDlg;
  delete m_pEEPROMTabDlg;
+ delete m_pInjDriverTabDlg;
 }
 
 bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
@@ -153,6 +160,16 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
 
  mp_MainTabController->AddTabController(m_pDevDiagnostTabController);
  mp_wndView->AddView(MLL::GetString(IDS_TAB_DEV_DIAGNOSTICS), m_pDevDiagnostTabDlg, 5);
+
+ m_pInjDriverTabDlg = new CInjDriverTabDlg(); //view
+ m_pInjDriverTabController = new CInjDriverTabController(m_pInjDriverTabDlg, p_comm, p_sbar, p_settings);
+
+ mp_MainTabController->AddTabController(m_pInjDriverTabController);
+ mp_wndView->AddView(MLL::GetString(IDS_TAB_INJ_DRIVER), m_pInjDriverTabDlg, 7);
+
+ //Control state of the "Inj.driver" tab
+ if (!p_settings->GetInjDrvTabActive())
+  mp_wndView->EnableTab(7, false); 
 
  mp_wndView->SetCurSel(0);
  mp_wndView->SetFocus();

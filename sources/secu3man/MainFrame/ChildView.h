@@ -58,6 +58,9 @@ class CChildView : public CModelessDialog
   //Enable/Disable tab control (only tab control, not its content)
   void EnableTabControl(bool i_enable);
 
+  //Enable/disable tab by index
+  void EnableTab(int idx, bool i_enable);
+
   // Generated message map functions
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);// DDX/DDV support

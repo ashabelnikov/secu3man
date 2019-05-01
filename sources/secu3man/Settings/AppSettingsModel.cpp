@@ -198,6 +198,13 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optBoldFont(_T("BoldFont"))
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
+//Inj.driver
+, m_Name_InjDrv_Section(_T("InjDriver"))
+, m_optInjDrvTabActive(_T("InjDrvTabActive"))
+, m_optVoltLineColor(_T("VoltLineColor"))
+, m_optPeakOnPtMovStep(_T("PeakOnPtMovStep"))
+, m_optPeakDutyPtMovStep(_T("PeakDutyPtMovStep"))
+, m_optHoldDutyPtMovStep(_T("HoldDutyPtMovStep"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -565,6 +572,14 @@ bool CAppSettingsModel::ReadSettings(void)
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
  sp.ReadInt(m_optParamMonVert, _T("279"), 0, 10000, true);
+
+ //Inj. driver
+ IniIO dr(IniFileName, m_Name_InjDrv_Section);
+ dr.ReadInt(m_optInjDrvTabActive, _T("0"), 0, 1);
+ dr.ReadColor(m_optVoltLineColor, _T("FFFF00"));
+ dr.ReadFlt(m_optPeakOnPtMovStep, _T("1.0"), 1.0f, 10000.0f);
+ dr.ReadFlt(m_optPeakDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
+ dr.ReadFlt(m_optHoldDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
 
  return status;
 }
@@ -1683,6 +1698,39 @@ bool CAppSettingsModel::WriteSettings(void)
   sp.WriteComment(_T("Вертикальный сплиттер на вкладке \"Параметры и монитор\""));
  sp.WriteInt(m_optParamMonVert);
 
+ //Inj.driver
+ IniIO dr(IniFileName, m_Name_InjDrv_Section);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteComment(_T("*** Settings related to \"Injector Driver\" tab ***"));
+ else
+  dr.WriteComment(_T("*** Настройки для вкладки \"Драйвер форсунок\" ***"));
+ dr.CreateSection();
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteInt(m_optInjDrvTabActive, _T("Enable \"Inj. driver\" tab. Set to 1 if you want to enable mentioned tab, 0 - disable."));
+ else
+  dr.WriteInt(m_optInjDrvTabActive, _T("Разрешение вкладки \"Драйвер форсунок\". Поставьте 1 для разрешения вкладки, 0 - запрещение."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteColor(m_optVoltLineColor, _T("Color of the voltage line on graphs"));
+ else
+  dr.WriteColor(m_optVoltLineColor, _T("Цвет линии напряжения на графиках"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPeakOnPtMovStep, 0, _T("Points moving step for the \"Peak on time\" graph"));
+ else
+  dr.WriteFlt(m_optPeakOnPtMovStep, 0, _T("Шаг смещения точек для графика \"Время полного включения\""));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPeakDutyPtMovStep, 1, _T("Points moving step for the \"Peak PWM duty\" graph"));
+ else
+  dr.WriteFlt(m_optPeakDutyPtMovStep, 1, _T("Шаг смещения точек для графика \"Скважность полного включения\""));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optHoldDutyPtMovStep, 1, _T("Points moving step for the \"Hold PWM duty\" graph"));
+ else
+  dr.WriteFlt(m_optHoldDutyPtMovStep, 1, _T("Шаг смещения точек для графика \"Скважность удерживания\""));
+
  return status;
 }
 
@@ -2472,4 +2520,29 @@ void CAppSettingsModel::SetIndicatorsDragNDrop(bool enable)
 int CAppSettingsModel::GetFFFConst(void) const
 {
  return m_optFFFConst.value;
+}
+
+COLORREF CAppSettingsModel::GetVoltLineColor(void) const
+{
+ return m_optVoltLineColor.value;
+}
+
+float CAppSettingsModel::GetPeakOnPtMovStep(void) const
+{
+ return m_optPeakOnPtMovStep.value;
+}
+
+float CAppSettingsModel::GetPeakDutyPtMovStep(void) const
+{
+ return m_optPeakDutyPtMovStep.value;
+}
+
+float CAppSettingsModel::GetHoldDutyPtMovStep(void) const
+{
+ return m_optHoldDutyPtMovStep.value;
+}
+
+bool CAppSettingsModel::GetInjDrvTabActive(void) const
+{
+ return m_optInjDrvTabActive.value;
 }

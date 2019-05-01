@@ -26,6 +26,13 @@
 #pragma once
 
 #include <vector>
+#include "common/fastdelegate.h"
+
+struct LPoint
+{
+ double x;
+ double y;
+};
 
 //Represents state and data of one serie
 class CSerieData
@@ -44,6 +51,8 @@ class CSerieData
   double *mp_valueY;
   COLORREF m_plotColor;
   bool m_visible;  //visibility flag
+  bool m_handle;
+  int m_curSel;
 
   friend class CChart2D;
 };
@@ -53,6 +62,7 @@ class CSerieData
 class AFX_EXT_CLASS CChart2D : public CWnd
 {
   typedef CWnd Super;
+  typedef fastdelegate::FastDelegate1<int> EventInt;
 
  public:
   CChart2D();
@@ -79,6 +89,8 @@ class AFX_EXT_CLASS CChart2D : public CWnd
 
   //Set point to specified value
   bool SetXYValue(int SerieIdx, double x, double y, int index);
+
+  const double* GetYValues(int serieIdx);
 
   //Set color of specified serie
   void SetSerieColor(int serieIdx, COLORREF color);
@@ -107,14 +119,31 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   //Set values format for horizontal axis
   void SetXAxisValueFormat(CString fmt);
 
+  //Set values format for vertical axis
+  void SetYAxisValueFormat(CString fmt);
+
   //Set visibility of specified serie
   void SetSerieVisibility(int serieIdx, bool visible);
+
+  void SetSerieHandle(int serieIdx, bool showHandle);
+
+  void SetPtMovStep(double value);
+
+  void SetOnChange(const EventInt& OnChangeCB);
 
  protected:
   afx_msg void OnPaint();
   afx_msg void OnEnable(BOOL bEnable);
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
+  afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+  BOOL PreTranslateMessage (MSG * pMsg);
+  afx_msg void OnSetFocus(CWnd* pOldWnd);
+  afx_msg void OnKillFocus(CWnd* pNewWnd);
+  afx_msg void OnKeyDown(UINT, UINT, UINT);
+  afx_msg UINT OnGetDlgCode();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -129,7 +158,9 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   void _CalcRect(void);
   void _CalcMapFactors(void);
   CPoint _MapCoord(double x, double y);
+  LPoint _UnMapCoord(CPoint pt);
   void _SetStateColors(bool state);
+  void _RestrictAndSetValue(size_t seridx, size_t index, double v);
 
   std::vector<CSerieData> m_serie;
   CRect m_ctlRect;
@@ -152,10 +183,12 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   CDC memBkDC;
 
   CString m_axisFmtX;
+  CString m_axisFmtY;
   CString m_strLabelX;
   CString m_strLabelY;
   CString m_chartTitle;
   CFont *mp_titleFont;
+  CFont *mp_titleFontB;
   CFont *mp_legendFontY;
   CFont *mp_legendFontX;
   int m_grid_x;
@@ -166,4 +199,11 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   std::pair<double, double> m_rangeX; //min, max for horizontal axis
   bool m_updateBackground;
   bool m_updateBkBitmap;
+  int m_ptHandleRadius;
+  bool m_setval;
+  size_t m_val_idx;
+  size_t m_ser_idx;
+  EventInt m_onChangeCB;
+  CToolTipCtrl *mp_tooltip;
+  double m_ptMovStep;
 };

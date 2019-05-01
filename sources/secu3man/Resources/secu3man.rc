@@ -51,6 +51,21 @@ BEGIN
     END
 END
 
+IDR_INJDRV_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Экспортировать набор в файл",       ID_INJDRV_POPUP_EXPORTTOAFILE
+        MENUITEM "Импортировать набор из файла",      ID_INJDRV_POPUP_IMPORTFROMAFILE
+        MENUITEM SEPARATOR
+        MENUITEM "Сохранить наборы в прошивку",       ID_INJDRV_POPUP_SAVETOFIRMWARE
+        MENUITEM "Загрузить наборы из прошивки",      ID_INJDRV_POPUP_LOADFROMFIRMWARE
+        MENUITEM SEPARATOR
+        MENUITEM "Показать информацию о прошивке",    ID_INJDRV_POPUP_SHOWFIRMWAREINFO
+        MENUITEM SEPARATOR
+        MENUITEM "Оффлайн режим",                     ID_INJDRV_POPUP_OFFLINEMODE
+    END
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -344,6 +359,48 @@ BEGIN
 END
 
 
+IDD_INJ_DRIVER DIALOGEX 0, 0, 490, 218
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PWM_PERIOD_EDIT,115,16,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PWM_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,16,11,16
+    RTEXT           "Период ШИМ (мкс)",IDC_PWM_PERIOD_CAPTION,12,19,100,10
+    EDITTEXT        IDC_PEAK_DUTY_EDIT,115,37,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,37,11,16
+    RTEXT           "Скважн. ШИМ на включ. (%)",IDC_PEAK_DUTY_CAPTION,12,40,100,10
+    EDITTEXT        IDC_HOLD_DUTY_EDIT,115,58,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_HOLD_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,58,11,16
+    RTEXT           "Скважность ШИМ удерж. (%)",IDC_HOLD_DUTY_CAPTION,12,61,100,10
+    EDITTEXT        IDC_PEAK_ON_TIME_EDIT,115,79,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_ON_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,79,11,16
+    RTEXT           "Полное время включ. (мкс)",IDC_PEAK_ON_TIME_CAPTION,12,82,100,10
+    EDITTEXT        IDC_PEAK_PWM_TIME_EDIT,115,100,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_PWM_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,100,11,16
+    RTEXT           "Время Вкл.+Время ШИМ (мкс)",IDC_PEAK_PWM_TIME_CAPTION,9,103,103,10
+    EDITTEXT        IDC_PTH_PAUSE_EDIT,115,121,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PTH_PAUSE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,121,11,16
+    RTEXT           "Пауза включ.- удерж. (мкс)",IDC_PTH_PAUSE_CAPTION,12,124,100,10
+    CONTROL         "Табл.",IDC_PEAK_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,41,30,8
+    CONTROL         "Табл.",IDC_HOLD_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,62,30,8
+    CONTROL         "Табл.",IDC_PEAK_ON_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,83,30,8
+    CONTROL         "Тестиров. ШИМ включ.",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
+    CONTROL         "Тестиров. ШИМ удерж.",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    PUSHBUTTON      "Сохранить в EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
+    GROUPBOX        "Настройки драйвера",IDC_LZID_SETTINGS_GROUP,7,7,205,165
+    LTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN
+    RTEXT           "Напряжение (В)",IDC_VOLTAGE_CAPTION,49,181,60,10
+    CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
+    CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,275,40,60,15
+    CONTROL         "Скважн.Включ.",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,337,40,60,15
+    CONTROL         "Скважн.Удерж.",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,399,40,60,15
+    PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
+    PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
+    COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // String Table
@@ -570,6 +627,7 @@ BEGIN
     IDS_FW_LEAVE_TAB_WARNING      "Выполняется важная операция, если вы ее прервете, то данные блока SECU-3 могут стать некорректными.\nВы уверены что хотите продолжить?"
     IDS_CANT_CHECK_DLL_COMPAT     "Программе не удалось выполнить проверку совместимости библиотек. \nЕсли библиотеки несовместимы, то программа может работать некорректно."
     IDS_DLL_MAY_BE_INCOMPAT       "Обнаружена несовместимость используемых библиотек (возможно что вы используете библиотеки из разных релизов). \nЕсли библиотеки несовместимы, то программа может работать некорректно. Библиотеки: "
+    IDS_TAB_INJ_DRIVER            "Драйвер форсунок"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -606,6 +664,25 @@ BEGIN
     IDS_SAVING_APP_SETTINGS "Сохранение настроек программы..."
     IDS_SAVED_APP_SETTINGS "Настройки сохранены."
     IDS_FW_WAITING_BOOTLOADER "Ожидание запуска загрузчика..."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_INJDRV_PETROL_SET           "0 - бензин"
+    IDS_INJDRV_GAS_SET              "1 - газ"
+    IDS_PEAK_ON_TIME_TITLE          "Время полного включения от напряжения"
+    IDS_PEAK_DUTY_TITLE             "Скважность включения от напряжения"
+    IDS_HOLD_DUTY_TITLE             "Скважность удерживания от напряжения"
+    IDS_PEAK_ON_CHECK_TT            "Использовать таблицу для 'Полное время включ.'"
+    IDS_PEAK_DUTY_CHECK_TT          "Использовать таблицу для 'Скважн. ШИМ на включ.'"
+    IDS_HOLD_DUTY_CHECK_TT          "Использовать таблицу для 'Скважн. ШИМ удерж.'"
+    IDS_TST_PEAK_PWM_CHECK_TT       "Тестовый режим. На всех каналах появляется ШИМ включения. Входы игнорируются. Внимание! Длительное использование этого режима может спалить ваши форсунки!"
+    IDS_TST_HOLD_PWM_CHECK_TT       "Тестовый режим. На всех каналах появляется ШИМ удерживания. Входы игнорируются. Внимание! Длительное использование этого режима может спалить ваши форсунки!"
+    IDS_SET_OF_SETT_COMBO_TT        "Выберите набор настроек для редактирования. Доступны два набора настроек, таким образом, вы можете использовать две группы разных форсунок."
+    IDS_EEPROM_SAVE_BUTTON_TT       "Сохранение в EEPROM выбранного набора настроек. Будет сохранен только набор выбранный на данный момент!"
+    IDS_INJDRV_READING_SETTINGS     "Чтение настроек драйвера..."
+    IDS_INJDRV_SAVING_EEPROM        "Сохранение настроек в EEPROM..."
+    IDS_INJDRV_LOADED_FROM_FW       "Данные из файла прошивки успешно загружены"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -654,6 +731,21 @@ BEGIN
     END
 END
 
+IDR_INJDRV_POPUP_MENU MENU 
+BEGIN
+    POPUP "POPUP_MENU"
+    BEGIN
+        MENUITEM "Export set to a file",        ID_INJDRV_POPUP_EXPORTTOAFILE
+        MENUITEM "Import set from a file",      ID_INJDRV_POPUP_IMPORTFROMAFILE
+        MENUITEM SEPARATOR
+        MENUITEM "Save sets to firmware",       ID_INJDRV_POPUP_SAVETOFIRMWARE
+        MENUITEM "Load sets from firmware",     ID_INJDRV_POPUP_LOADFROMFIRMWARE
+        MENUITEM SEPARATOR
+        MENUITEM "Show firmware info",          ID_INJDRV_POPUP_SHOWFIRMWAREINFO
+        MENUITEM SEPARATOR
+        MENUITEM "Offline mode",                ID_INJDRV_POPUP_OFFLINEMODE
+    END
+END
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -947,6 +1039,48 @@ BEGIN
     CONTROL         "",IDC_KC_KNOCK_FRQ_CALC_BTN,"Button",BS_OWNERDRAW | BS_BITMAP | WS_TABSTOP,45,10,16,16
 END
 
+IDD_INJ_DRIVER DIALOGEX 0, 0, 490, 218
+STYLE DS_CONTROL | WS_CHILD
+EXSTYLE WS_EX_CONTROLPARENT
+FONT 8, "MS Sans Serif"
+BEGIN
+    EDITTEXT        IDC_PWM_PERIOD_EDIT,115,16,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PWM_PERIOD_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,16,11,16
+    RTEXT           "PWM period (us)",IDC_PWM_PERIOD_CAPTION,12,19,100,10
+    EDITTEXT        IDC_PEAK_DUTY_EDIT,115,37,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,37,11,16
+    RTEXT           "Peak PWM duty (%)",IDC_PEAK_DUTY_CAPTION,12,40,100,10
+    EDITTEXT        IDC_HOLD_DUTY_EDIT,115,58,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_HOLD_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,58,11,16
+    RTEXT           "Hold PWM duty (%)",IDC_HOLD_DUTY_CAPTION,12,61,100,10
+    EDITTEXT        IDC_PEAK_ON_TIME_EDIT,115,79,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_ON_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,79,11,16
+    RTEXT           "Peak full ON time (us)",IDC_PEAK_ON_TIME_CAPTION,12,82,100,10
+    EDITTEXT        IDC_PEAK_PWM_TIME_EDIT,115,100,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PEAK_PWM_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,100,11,16
+    RTEXT           "Peak ON + PWM  time (us)",IDC_PEAK_PWM_TIME_CAPTION,12,103,100,10
+    EDITTEXT        IDC_PTH_PAUSE_EDIT,115,121,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_PTH_PAUSE_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,121,11,16
+    RTEXT           "Peak-to-hold pause (us)",IDC_PTH_PAUSE_CAPTION,12,124,100,10
+    CONTROL         "Table",IDC_PEAK_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,41,30,8
+    CONTROL         "Table",IDC_HOLD_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,62,30,8
+    CONTROL         "Table",IDC_PEAK_ON_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,83,30,8
+    CONTROL         "Test peak PWM",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
+    CONTROL         "Test hold PWM",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    PUSHBUTTON      "Save to EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
+    GROUPBOX        "Driver's settings",IDC_LZID_SETTINGS_GROUP,7,7,205,165
+    LTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN
+    RTEXT           "Voltage (V)",IDC_VOLTAGE_CAPTION,49,181,60,10
+    CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
+    CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,275,40,60,15
+    CONTROL         "Peak duty",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,337,40,60,15
+    CONTROL         "Hold duty",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,399,40,60,15
+    PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
+    PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
+    COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
+END
+
 /////////////////////////////////////////////////////////////////////////////
 //
 // Icon
@@ -1203,6 +1337,7 @@ BEGIN
     IDS_FW_LEAVE_TAB_WARNING               "Important operation is in process, if you will interrupt it, then data in the SECU-3 unit may become invalid.\nAre you sure you want to proceed?"
     IDS_CANT_CHECK_DLL_COMPAT              "Program is not able to check library compatibility. \nIf libraries are incompatible, program may work incorrectly."
     IDS_DLL_MAY_BE_INCOMPAT                "Program has detected that some libraries are incompatible (guess you use libraries from different releases). \nIf libraries are incompatible, program may work incorrectly. Libraries: "
+    IDS_TAB_INJ_DRIVER                     "Injectors' driver"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -1248,6 +1383,25 @@ BEGIN
     IDS_FW_WAITING_BOOTLOADER "Waiting for starting of boot loader..."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_INJDRV_PETROL_SET           "0 - e.g., petrol"
+    IDS_INJDRV_GAS_SET              "1 - e.g., gas"
+    IDS_PEAK_ON_TIME_TITLE          "Peak full ON time vs board voltage"
+    IDS_PEAK_DUTY_TITLE             "Peak duty vs board voltage"
+    IDS_HOLD_DUTY_TITLE             "Hold duty vs board voltage"
+    IDS_PEAK_ON_CHECK_TT            "Use look up table for 'peak full ON time'"
+    IDS_PEAK_DUTY_CHECK_TT          "Use look up table for 'peak duty'"
+    IDS_HOLD_DUTY_CHECK_TT          "Use look up table for 'hold duty'"
+    IDS_TST_PEAK_PWM_CHECK_TT       "Test mode. Turn on peak PWM for all channels. Inputs will be ignored. Warning! Using this mode for a long time can burn out your injectors!"
+    IDS_TST_HOLD_PWM_CHECK_TT       "Test mode. Turn on hold PWM for all channels. Inputs will be ignored. Warning! Using this mode for a long time can burn out your injectors!"
+    IDS_SET_OF_SETT_COMBO_TT        "Select set of settings for editing. Two sets available, thus you can use two different sets of injectors."
+    IDS_EEPROM_SAVE_BUTTON_TT       "Save to EEPROM selected set os settings. Only selected set will be saved!"
+    IDS_INJDRV_READING_SETTINGS     "Reading driver's settings..."
+    IDS_INJDRV_SAVING_EEPROM        "Saving settings into EEPROM..."
+    IDS_INJDRV_LOADED_FROM_FW       "Data from firmware file loaded successfully"
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // Neutral resources
 
@@ -1264,6 +1418,17 @@ IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_DOWN_ARROW          ICON                    "res\\down_arrow.ico"
+IDI_UP_ARROW            ICON                    "res\\up_arrow.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //

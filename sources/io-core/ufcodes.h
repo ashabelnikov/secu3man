@@ -26,6 +26,8 @@
 #ifndef _UFCODES_H_
 #define _UFCODES_H_
 
+//reserved symbils are: '!', '@', '\r'
+
 #define   CHANGEMODE   'h'
 #define   BOOTLOADER   'i'
 
@@ -69,5 +71,8 @@
 #define   ACCEL_PAR    '|'
 
 #define   GASDOSE_PAR  '*'
+
+#define   SILENT       'S'
+#define   INJDRV_PAR   '+'
 
 #endif //_UFCODES_H_

@@ -188,6 +188,7 @@ class IOCORE_API CControlApp
   bool Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size);
   bool Parse_GASDOSE_PAR(const BYTE* raw_packet, size_t size);
+  bool Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size);
 
   //сборщики отдельных пакетов
   void Build_CARBUR_PAR(SECU3IO::CarburPar* packet_data);
@@ -211,6 +212,7 @@ class IOCORE_API CControlApp
   void Build_LAMBDA_PAR(SECU3IO::LambdaPar* packet_data);
   void Build_ACCEL_PAR(SECU3IO::AccelPar* packet_data);
   void Build_GASDOSE_PAR(SECU3IO::GasdosePar* packet_data);
+  void Build_INJDRV_PAR(SECU3IO::InjDrvPar* packet_data);
 };
 
 class CondEncoder

@@ -2284,6 +2284,134 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::InjDrvPar& m_recv = m_recepted_packet.m_InjDrvPar;
+ if (size != (mp_pdp->isHex() ? 242 : 121))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ mp_pdp->resetCRC();
+
+ //status info
+ unsigned char ee_status = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &ee_status))
+  return false;
+ m_recv.ee_status = CHECKBIT8(ee_status, 0);
+ m_recv.set0_corrupted = CHECKBIT8(ee_status, 1);
+ m_recv.set1_corrupted = CHECKBIT8(ee_status, 2);
+ m_recv.set_idx = CHECKBIT8(ee_status, 7);
+
+ unsigned char type = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &type))
+  return false;
+ m_recv.type = type;
+
+ unsigned char version = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &version))
+  return false;
+ m_recv.version = version;
+
+ unsigned char fw_opt = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &fw_opt))
+  return false;
+ m_recv.fw_opt = fw_opt;
+
+ int voltage = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &voltage))
+  return false;
+ m_recv.voltage = (float)(((double)voltage) * 0.004882812);
+
+ //settings
+ unsigned char direct_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &direct_flags))
+  return false;
+ for (int i = 0; i < 8; i++)
+  m_recv.direct_flags[i] = CHECKBIT8(direct_flags, i);
+
+ unsigned char lutabl_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &lutabl_flags))
+  return false;
+ m_recv.m_peak_on_usetab = CHECKBIT8(lutabl_flags, 0);
+ m_recv.m_peak_duty_usetab = CHECKBIT8(lutabl_flags, 1);
+ m_recv.m_hold_duty_usetab = CHECKBIT8(lutabl_flags, 2);
+
+ unsigned char gen_flags = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &gen_flags))
+  return false;
+ m_recv.m_tst_peak_pwm = CHECKBIT8(gen_flags, 0);
+ m_recv.m_tst_hold_pwm = CHECKBIT8(gen_flags, 1);
+
+ int pwm_period;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &pwm_period))
+  return false;
+ m_recv.m_pwm_period = ((float)pwm_period) / 20.0f;
+
+ int peak_duty;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_duty))
+  return false;
+ m_recv.m_peak_duty = (((float)peak_duty) / 4096.0f) * 100.0f;
+
+ int reserved;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &reserved))
+  return false;
+ m_recv.m_reserved = (float)reserved;
+
+ int hold_duty;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &hold_duty))
+  return false;
+ m_recv.m_hold_duty = (((float)hold_duty) / 4096.0f) * 100.0f;
+
+ int peak_on_time;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_on_time))
+  return false;
+ m_recv.m_peak_on_time = ((float)peak_on_time) / 2.5f;
+
+ int peak_pwm_time;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &peak_pwm_time))
+  return false;
+ m_recv.m_peak_pwm_time = ((float)peak_pwm_time) / 2.5f;
+
+ int pth_pause;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &pth_pause))
+  return false;
+ m_recv.m_pth_pause = ((float)pth_pause) / 2.5f;
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_peak_on_tab[i] = ((float)value) / 2.5f;
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_peak_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_hold_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
+ }
+
+ int calc_crc = mp_pdp->getCRC();
+
+ int packet_crc;
+ if (false == mp_pdp->Hex16ToBin(raw_packet, &packet_crc))
+  return false;
+ if (packet_crc != calc_crc)
+  return false; //packet corrupted
+
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -2419,6 +2547,10 @@ bool CControlApp::ParsePackets()
     continue;
    case ACCEL_PAR:
     if (Parse_ACCEL_PAR(p_start, p_size))
+     break;
+    continue;
+   case INJDRV_PAR:
+    if (Parse_INJDRV_PAR(p_start, p_size))
      break;
     continue;
 
@@ -2644,6 +2776,8 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case INJCTR_PAR:
   case LAMBDA_PAR:
   case ACCEL_PAR:
+  case INJDRV_PAR:
+  case SILENT:
    return true;
   default:
    return false;
@@ -2747,6 +2881,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case ACCEL_PAR:
    Build_ACCEL_PAR((AccelPar*)i_packet_data);
+   break;
+  case INJDRV_PAR:
+   Build_INJDRV_PAR((InjDrvPar*)i_packet_data);
    break;
 
   default:
@@ -3500,6 +3637,78 @@ void CControlApp::Build_ACCEL_PAR(AccelPar* packet_data)
 
  unsigned char ae_decay_time = packet_data->ae_decay_time;
  mp_pdp->Bin8ToHex(ae_decay_time, m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
+{
+ unsigned char command = packet_data->ee_status; //save command
+ WRITEBIT8(command, 7, packet_data->set_idx);
+
+ mp_pdp->resetCRC();
+
+ mp_pdp->Bin8ToHex(command, m_outgoing_packet);
+
+ unsigned char direct_flags = 0;
+ for(int i = 0; i < 8; ++i)
+ {
+  WRITEBIT8(direct_flags, i, packet_data->direct_flags);
+ }
+ mp_pdp->Bin8ToHex(direct_flags, m_outgoing_packet);
+
+ BYTE lutabl_flags = 0;
+ WRITEBIT8(lutabl_flags, 0, packet_data->m_peak_on_usetab);
+ WRITEBIT8(lutabl_flags, 1, packet_data->m_peak_duty_usetab);
+ WRITEBIT8(lutabl_flags, 2, packet_data->m_hold_duty_usetab);
+
+ mp_pdp->Bin8ToHex(lutabl_flags, m_outgoing_packet); //look up tables related flags
+
+ BYTE gen_flags = 0;
+ WRITEBIT8(gen_flags, 0, packet_data->m_tst_peak_pwm);
+ WRITEBIT8(gen_flags, 1, packet_data->m_tst_hold_pwm);
+ mp_pdp->Bin8ToHex(gen_flags, m_outgoing_packet); //general flags
+
+ int pwm_period = MathHelpers::Round(packet_data->m_pwm_period * 20.0f);
+ mp_pdp->Bin16ToHex(pwm_period, m_outgoing_packet);
+
+ int peak_duty = MathHelpers::Round((packet_data->m_peak_duty / 100.0f) * 4096.0f);
+ mp_pdp->Bin16ToHex(peak_duty, m_outgoing_packet);
+
+ int reserved = 0;
+ mp_pdp->Bin16ToHex(reserved, m_outgoing_packet);
+
+ int hold_duty = MathHelpers::Round((packet_data->m_hold_duty / 100.0f) * 4096.0f);
+ mp_pdp->Bin16ToHex(hold_duty, m_outgoing_packet);
+
+ int peak_on_time = MathHelpers::Round(packet_data->m_peak_on_time * 2.5f);
+ mp_pdp->Bin16ToHex(peak_on_time, m_outgoing_packet);
+
+ int peak_pwm_time = MathHelpers::Round(packet_data->m_peak_pwm_time * 2.5f);
+ mp_pdp->Bin16ToHex(peak_pwm_time, m_outgoing_packet);
+
+ int pth_pause = MathHelpers::Round(packet_data->m_pth_pause * 2.5f);
+ mp_pdp->Bin16ToHex(pth_pause, m_outgoing_packet);
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value = MathHelpers::Round(packet_data->m_peak_on_tab[i] * 2.5f);
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value = MathHelpers::Round((packet_data->m_peak_duty_tab[i] / 100.0f) * 4096.0f);
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value = MathHelpers::Round((packet_data->m_hold_duty_tab[i] / 100.0f) * 4096.0f);
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+ //--------------------------------------------------------------------
+
+ mp_pdp->Bin16ToHex(mp_pdp->getCRC(), m_outgoing_packet);
 }
 
 //-----------------------------------------------------------------------

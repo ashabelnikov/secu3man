@@ -178,6 +178,10 @@ void MainFrameController::OnAppSettings()
      AfxGetMainWnd()->DestroyWindow();
    }
   }
+
+  //Control state of the "Inj.driver" tab
+  if (IsWindow(mp_view->GetSafeHwnd()))
+   mp_view->EnableTab(7, settings->GetInjDrvTabActive()); 
  }
 }
 
