@@ -47,15 +47,15 @@ class CStatusBarManager
   void SetProgressPos(int nPos);
   void SetLoggerState(int i_state);
 
-  enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3 };
+  enum { STATE_ONLINE = 1, STATE_OFFLINE = 2, STATE_BOOTLOADER = 3, STATE_HANDSHAKE = 4 };
 
   enum { LOG_STATE_WRITING, LOG_STATE_STOPPED};
 
  protected:
   CWnd* m_pParentWnd;
   std::auto_ptr<CStatusBarEx> mp_wndStatusBar;
-  HICON   m_ConnIcons[3];
+  HICON   m_ConnIcons[4];
   HICON   m_LogWrIcon;
-  CString m_ConnStrings[3];
+  CString m_ConnStrings[4];
   int m_CurrentConnectionState;
 };

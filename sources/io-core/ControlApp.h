@@ -106,6 +106,8 @@ class IOCORE_API CControlApp
 
   BOOL SetPacketsTimer(int timeout);
 
+  void IgnoreNPackets(int n);
+
  private:
   typedef std::vector<std::vector<BYTE> > Packets;
 
@@ -142,6 +144,7 @@ class IOCORE_API CControlApp
   bool m_force_notify_about_connection; //установка этого флага заставит поток оповестить слушателя об текущем состоянии подключения
   bool m_work_state;                    //хранит состояние устанавливающееся после вызова SwitchOn();
   bool m_portAutoReopen;                //flag, makes thread to do auto reopening of COM port (each 100ms if port is not opened)
+  volatile LONG m_ignore_n_packets;
 
   PacketDataProxy* mp_pdp;
 

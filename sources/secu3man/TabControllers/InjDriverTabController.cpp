@@ -44,7 +44,6 @@ using namespace SECU3IO;
 #define EHKEY _T("InjDriverCntr")
 #define MCU_FLASH_SIZE 32768
 #define BOOTLDR_SIZE   1024
-#define SECU_FW_STARTUP 1800
 
 CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : mp_view(ip_view)
@@ -163,14 +162,11 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
   {
    m_recv_hs = true;
    m_lzidblhs_tmr.KillTimer(); //got answer!
+   Sleep(300);
    if (m_bl_op == 1) //deferred reading of flash
-   {
-    Sleep(SECU_FW_STARTUP);  //Ensure that SECU will receive SILENT command, wait for start up of the SECU firmware
-    mp_comm->m_pControlApp->ChangeContext(SILENT);
-    Sleep(100);    
+   {    
     //activate communication controller of the boot loader
     mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    Sleep(1200);
     mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
     //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, &m_bl_data[0], MCU_FLASH_SIZE);
@@ -179,13 +175,9 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
     return;
    }
    if (m_bl_op == 2) //deferred writing of flash
-   {
-    Sleep(SECU_FW_STARTUP);  //Ensure that SECU will receive SILENT command, wait for start up of the SECU firmware
-    mp_comm->m_pControlApp->ChangeContext(SILENT);
-    Sleep(100);
+   {    
     //activate communication controller of the boot loader
     mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    Sleep(1200);
     mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
     //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, &m_bl_data[0], MCU_FLASH_SIZE-BOOTLDR_SIZE);
@@ -491,7 +483,7 @@ void CInjDriverTabController::OnLzidBlHsTimer(void)
 bool CInjDriverTabController::StartBootLoader(int op)
 {
  if (mp_comm->m_pControlApp->GetOnlineStatus())
- {
+ { //start boot loader using special command
   SECU3IO::InjDrvPar params;
   memset(&params, 0, sizeof(SECU3IO::InjDrvPar));
   params.start_bldr = true; //command to start boot loader! 
@@ -500,11 +492,13 @@ bool CInjDriverTabController::StartBootLoader(int op)
   return true; //started immediately
  }
  else
- {
-  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER));    
+ { //start boot loader using "handshake" mechanism
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER));
+  mp_sbar->SetConnectionState(CStatusBarManager::STATE_HANDSHAKE);
   m_recv_hs = false;
   m_lzidblhs_tmr.SetTimer(10);
   m_bl_op = op;
+  mp_comm->m_pControlApp->IgnoreNPackets(3);
   return false; //deferred start (using a "handshake" mechanism)
  }
 }

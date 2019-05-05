@@ -34,6 +34,7 @@
 #include "Magnitude.h"
 #include "io-core/bitmask.h"
 #include "SECU3TablesDef.h"
+#include <winnt.h>
 
 using namespace SECU3IO;
 
@@ -121,6 +122,7 @@ CControlApp::CControlApp()
 , m_speedUnit(0) //km/h
 , m_fffConst(16000)
 , m_portAutoReopen(true)
+, m_ignore_n_packets(0)
 {
  m_pPackets = new Packets();
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
@@ -2580,8 +2582,14 @@ bool CControlApp::ParsePackets()
   ////////////////////////////////////////////////////////////////////////////
   //так как все возможные структуры данных пакетов собраны в union, то нам достаточно оперировать
   //только адресом union.
-  m_pEventHandler->OnPacketReceived((*it)[1], &EndPendingPacket());
-  status = true;
+
+  if (m_ignore_n_packets)
+   InterlockedDecrement(&m_ignore_n_packets);
+  else
+  {
+   m_pEventHandler->OnPacketReceived((*it)[1], &EndPendingPacket());
+   status = true;
+  }
  }//for
 
  return status;
@@ -3798,6 +3806,14 @@ void CControlApp::SetSpeedUnit(int i_unit)
 void CControlApp::SetFFFConst(int fffConst)
 {
  m_fffConst = fffConst;
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::IgnoreNPackets(int n)
+{
+ ASSERT(n > 0); //zero is not safe with current implementation
+ if (n > 0)
+  InterlockedExchange(&m_ignore_n_packets, n);
 }
 
 //-----------------------------------------------------------------------

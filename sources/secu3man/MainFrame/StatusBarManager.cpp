@@ -44,7 +44,7 @@ CStatusBarManager::CStatusBarManager()
 , m_LogWrIcon(NULL)
 , mp_wndStatusBar(new CStatusBarEx())
 {
- for(int i = 0; i < 3; i++)
+ for(int i = 0; i < 4; i++)
  {
   m_ConnIcons[i] = NULL;
   m_ConnStrings[i] = _T("");
@@ -78,11 +78,13 @@ bool CStatusBarManager::Create(CWnd* pParentWnd)
  m_ConnIcons[0] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_CONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
  m_ConnIcons[1] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_DISCONNECTED), IMAGE_ICON, 0, 0, LR_SHARED);
  m_ConnIcons[2] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_BOOTLOADER), IMAGE_ICON, 0, 0, LR_SHARED);
+ m_ConnIcons[3] = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_CONN_HANDSHAKE), IMAGE_ICON, 0, 0, LR_SHARED);
  m_LogWrIcon = (HICON)LoadImage(AfxGetInstanceHandle(), MAKEINTRESOURCE(IDI_LOGWR_WRITE), IMAGE_ICON, 0, 0, LR_SHARED);
 
  m_ConnStrings[0].LoadString(IDS_CONN_CONNECTED);
  m_ConnStrings[1].LoadString(IDS_CONN_DISCONNECTED);
  m_ConnStrings[2].LoadString(IDS_CONN_BOOTLOADER);
+ m_ConnStrings[3].LoadString(IDS_CONN_HANDSHAKE);
 
  return true;
 }
@@ -175,6 +177,11 @@ void CStatusBarManager::SetConnectionState(int i_State)
   case STATE_BOOTLOADER:
    status.SetIcon(idx_icon,m_ConnIcons[2]);
    mp_wndStatusBar->SetPaneText(idx_str,m_ConnStrings[2]);
+   m_CurrentConnectionState = i_State;
+   break;
+  case STATE_HANDSHAKE:
+   status.SetIcon(idx_icon,m_ConnIcons[3]);
+   mp_wndStatusBar->SetPaneText(idx_str,m_ConnStrings[3]);
    m_CurrentConnectionState = i_State;
    break;
  }

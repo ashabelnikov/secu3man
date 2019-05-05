@@ -532,6 +532,7 @@ BEGIN
     IDS_CONN_CONNECTED                 "connected"
     IDS_CONN_DISCONNECTED              "disconnected"
     IDS_CONN_BOOTLOADER                "boot loader"
+    IDS_CONN_HANDSHAKE                 "handshake"
     IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW "Импортировать данные из другой прошивки..."
 END
 
@@ -1093,43 +1094,6 @@ END
 
 /////////////////////////////////////////////////////////////////////////////
 //
-// Icon
-//
-
-// Icon with lowest ID value placed first to ensure application icon
-// remains consistent on all systems.
-IDR_MAINFRAME           ICON    DISCARDABLE     "res\\secu3man.ico"
-IDI_CONN_CONNECTED      ICON    DISCARDABLE     "res\\connected.ico"
-IDI_CONN_DISCONNECTED   ICON    DISCARDABLE     "res\\disconnected.ico"
-IDI_CONN_BOOTLOADER     ICON    DISCARDABLE     "res\\bootload.ico"
-IDI_LOGWR_WRITE         ICON    DISCARDABLE     "res\\logwriting.ico"
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Accelerator
-//
-
-IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
-BEGIN
-    "B",            ID_APP_BEGIN_LOG,       VIRTKEY, CONTROL, NOINVERT
-    "E",            ID_APP_END_LOG,         VIRTKEY, CONTROL, NOINVERT
-    "O",            IDM_OPEN_FLASH,         VIRTKEY, CONTROL, NOINVERT
-    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
-    "1",            ID_APP_LOG_MARK1,       VIRTKEY, CONTROL, NOINVERT
-    "2",            ID_APP_LOG_MARK2,       VIRTKEY, CONTROL, NOINVERT
-    "3",            ID_APP_LOG_MARK3,       VIRTKEY, CONTROL, NOINVERT
-END
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// Bitmap
-//
-
-IDB_MAIN_TAB_CTRL_BITMAPS BITMAP  DISCARDABLE  "res\\tab_ctrl_bitmaps.bmp"
-IDB_CE_LIST_ICONS BITMAP  DISCARDABLE          "res\\ce_list_icons.bmp"
-
-/////////////////////////////////////////////////////////////////////////////
-//
 // String Table
 //
 
@@ -1162,6 +1126,7 @@ BEGIN
     IDS_CONN_CONNECTED                  "connected"
     IDS_CONN_DISCONNECTED               "disconnected"
     IDS_CONN_BOOTLOADER                 "boot loader"
+    IDS_CONN_HANDSHAKE                  "handshake"
     IDS_IMPORT_FW_DATA_FROM_ANOTHER_FW  "Import data from another firmware..."
 END
 
@@ -1420,6 +1385,22 @@ LANGUAGE LANG_NEUTRAL, SUBLANG_NEUTRAL
 
 /////////////////////////////////////////////////////////////////////////////
 //
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS PRELOAD MOVEABLE PURE 
+BEGIN
+    "B",            ID_APP_BEGIN_LOG,       VIRTKEY, CONTROL, NOINVERT
+    "E",            ID_APP_END_LOG,         VIRTKEY, CONTROL, NOINVERT
+    "O",            IDM_OPEN_FLASH,         VIRTKEY, CONTROL, NOINVERT
+    "Q",            ID_APP_EXIT,            VIRTKEY, CONTROL, NOINVERT
+    "1",            ID_APP_LOG_MARK1,       VIRTKEY, CONTROL, NOINVERT
+    "2",            ID_APP_LOG_MARK2,       VIRTKEY, CONTROL, NOINVERT
+    "3",            ID_APP_LOG_MARK3,       VIRTKEY, CONTROL, NOINVERT
+END
+
+/////////////////////////////////////////////////////////////////////////////
+//
 // Bitmap
 //
 
@@ -1429,6 +1410,8 @@ IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 IDB_SECU3LOGO_BITMAP    BITMAP     "res\\secu3logo.bmp"
+IDB_MAIN_TAB_CTRL_BITMAPS BITMAP   "res\\tab_ctrl_bitmaps.bmp"
+IDB_CE_LIST_ICONS       BITMAP     "res\\ce_list_icons.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -1437,8 +1420,14 @@ IDB_SECU3LOGO_BITMAP    BITMAP     "res\\secu3logo.bmp"
 
 // Icon with lowest ID value placed first to ensure application icon
 // remains consistent on all systems.
-IDI_DOWN_ARROW          ICON                    "res\\down_arrow.ico"
-IDI_UP_ARROW            ICON                    "res\\up_arrow.ico"
+IDR_MAINFRAME           ICON    DISCARDABLE     "res\\secu3man.ico"
+IDI_CONN_CONNECTED      ICON    DISCARDABLE     "res\\connected.ico"
+IDI_CONN_DISCONNECTED   ICON    DISCARDABLE     "res\\disconnected.ico"
+IDI_CONN_BOOTLOADER     ICON    DISCARDABLE     "res\\bootload.ico"
+IDI_LOGWR_WRITE         ICON    DISCARDABLE     "res\\logwriting.ico"
+IDI_DOWN_ARROW          ICON    DISCARDABLE     "res\\down_arrow.ico"
+IDI_UP_ARROW            ICON    DISCARDABLE     "res\\up_arrow.ico"
+IDI_CONN_HANDSHAKE      ICON    DISCARDABLE     "res\\handshake.ico"
 
 /////////////////////////////////////////////////////////////////////////////
 //
