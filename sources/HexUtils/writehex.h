@@ -33,4 +33,4 @@
  #define HEXUTILS_API __declspec(dllimport)
 #endif
 
-HEXUTILS_API bool WriteHexFile(FILE* fout, std::vector<BYTE>& code);
+HEXUTILS_API bool WriteHexFile(FILE* fout, const std::vector<BYTE>& code);

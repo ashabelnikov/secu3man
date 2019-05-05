@@ -48,11 +48,11 @@ void insert02record(FILE* f, long segment_addr)
   fprintf(f, ":02000002%04X%02X\r\n", segment_addr, (int)chk);
 }
 
-// Places specified piece of data as hex-record (00) into file
+// Places specified piece of data as hex-record (00) into a file
 // data - pointer to data buffer
 // addr - start address (offset in data buffer)
 // count - number of bytes to convert 
-void hexstr(FILE* f, unsigned char *data, long addr, long count)
+void hexstr(FILE* f, const unsigned char *data, long addr, long count)
 {
   fprintf(f,":%02X%04X00", count, addr);
 
@@ -74,12 +74,12 @@ void hexstr(FILE* f, unsigned char *data, long addr, long count)
   fprintf(f,"%02X\r\n",(int)chk);
 }
 
-bool WriteHexFile(FILE* fout, std::vector<BYTE>& code)
+bool WriteHexFile(FILE* fout, const std::vector<BYTE>& code)
 {
  if (code.size() > MAX_CODE_SIZE)
   return false;
 
- unsigned char *p = &code[0];   //data
+ const unsigned char *p = &code[0];   //data
  unsigned long haddr = 0;  //address inside segment  
  unsigned long bsize = 16; //size of block
  unsigned long seg_addr = 0;

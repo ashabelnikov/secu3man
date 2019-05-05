@@ -132,6 +132,22 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    m_fp.m_platform_id = EP_ATMEGA1284;
    break;
 
+  case EP_ATMEGA328PB:
+   m_fp.m_page_size = 128; //in bytes
+   m_fp.m_total_size = 32768; //in bytes
+   m_fp.m_page_count = m_fp.m_total_size / m_fp.m_page_size;
+   m_fp.m_bl_section_size = 1024; //512 words
+   m_fp.m_app_section_size = m_fp.m_total_size - m_fp.m_bl_section_size;
+   //eeprom
+   m_ep.m_size = 1024; //bytes
+   m_ep.m_platform_id = EP_ATMEGA328PB;
+   //MCU clock frequency
+   m_fp.m_fcpu_hz = 20000000;
+   //Magic number
+   strncpy(m_fp.m_magic, "328 ", PLATFORM_MN_SIZE);
+   m_fp.m_platform_id = EP_ATMEGA328PB;
+   break;
+
   default:
    ASSERT(0);
    memset(&m_fp, 0, sizeof(PPFlashParam));

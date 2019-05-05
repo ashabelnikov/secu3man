@@ -2412,6 +2412,17 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 }
 
 //-----------------------------------------------------------------------
+bool CControlApp::Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size)
+{
+ SECU3IO::LzidBLHS& m_recv = m_recepted_packet.m_LzidBLHS;
+ if (size != (mp_pdp->isHex() ? 4 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+  return false;
+
+ strncpy(m_recv.data, (const char*)raw_packet, size); //text data
+ return true;
+}
+
+//-----------------------------------------------------------------------
 //Return: true - если хотя бы один пакет был получен
 bool CControlApp::ParsePackets()
 {
@@ -2551,6 +2562,10 @@ bool CControlApp::ParsePackets()
     continue;
    case INJDRV_PAR:
     if (Parse_INJDRV_PAR(p_start, p_size))
+     break;
+    continue;
+   case LZIDBL_HS:
+    if (Parse_LZIDBL_HS(p_start, p_size))
      break;
     continue;
 
@@ -2778,6 +2793,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case ACCEL_PAR:
   case INJDRV_PAR:
   case SILENT:
+  case LZIDBL_HS:
    return true;
   default:
    return false;
@@ -2884,6 +2900,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case INJDRV_PAR:
    Build_INJDRV_PAR((InjDrvPar*)i_packet_data);
+   break;
+  case LZIDBL_HS:
+   Build_LZIDBL_HS((LzidBLHS*)i_packet_data);
    break;
 
   default:
@@ -3644,6 +3663,7 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
 {
  unsigned char command = packet_data->ee_status; //save command
  WRITEBIT8(command, 7, packet_data->set_idx);
+ WRITEBIT8(command, 1, packet_data->start_bldr);
 
  mp_pdp->resetCRC();
 
@@ -3709,6 +3729,13 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  //--------------------------------------------------------------------
 
  mp_pdp->Bin16ToHex(mp_pdp->getCRC(), m_outgoing_packet);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_LZIDBL_HS(LzidBLHS* packet_data)
+{
+ for(size_t i = 0; i < 4; ++i)
+  m_outgoing_packet.push_back(packet_data->data[i]);
 }
 
 //-----------------------------------------------------------------------

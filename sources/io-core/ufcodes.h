@@ -74,5 +74,6 @@
 
 #define   SILENT       'S'
 #define   INJDRV_PAR   '+'
+#define   LZIDBL_HS    'H'
 
 #endif //_UFCODES_H_

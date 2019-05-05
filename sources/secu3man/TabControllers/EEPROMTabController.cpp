@@ -97,7 +97,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 CEEPROMTabController::~CEEPROMTabController()
 {
  delete m_eedm;
- delete m_bl_data;
+ delete[] m_bl_data;
 }
 
 //изменились настройки программы!

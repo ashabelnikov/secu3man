@@ -158,7 +158,7 @@ CFirmwareTabController::~CFirmwareTabController()
 {
  delete m_fwdm;
  delete m_edm;
- delete m_bl_data;
+ delete[] m_bl_data;
  delete m_code_for_merge_with_overhead;
 }
 
@@ -213,7 +213,7 @@ void CFirmwareTabController::OnActivate(void)
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
- OnConnection(online_status);
+ OnConnection(online_status); 
 }
 
 void CFirmwareTabController::OnDeactivate(void)
@@ -417,7 +417,7 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { //OK
-   	m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
+    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
     FirmwareFileUtils::SaveEEPROMToFile(m_bl_data, m_epp.m_size);
    }
    else

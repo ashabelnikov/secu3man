@@ -35,6 +35,8 @@
 
 class CChart2D;
 class CToolTipCtrlEx;
+class CClickableBmp;
+class CLabel;
 
 class CInjDriverTabDlg : public CTabDialog
 {
@@ -55,6 +57,7 @@ class CInjDriverTabDlg : public CTabDialog
   void EnableVoltage(bool enable);
   int GetCurrSetIdx(void);
   void SetOfflineCheck(void);
+  void EnableBLItems(bool enable);
 
   void setOnChange(EventHandler onCB);
   void setOnSaveButton(EventHandler onCB);
@@ -64,6 +67,8 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnLoadFromFirmware(EventHandler onCB);
   void setOnShowFirmwareInfo(EventHandler onCB);
   void setOnExitOfflineMode(EventHandler onCB);
+  void setOnWriteFirmwareFromFile(EventHandler onCB);  
+  void setOnReadFirmwareToFile(EventHandler onCB);  
 
  protected:
   virtual BOOL OnInitDialog();
@@ -88,7 +93,9 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnSaveToFirmware();
   afx_msg void OnLoadFromFirmware();
   afx_msg void OnShowFirmwareInfo();
-  afx_msg void OnOfflineModeExit();
+  afx_msg void OnOfflineModeExit(); 
+  afx_msg void OnWriteFirmwareFromFile(void);  
+  afx_msg void OnReadFirmwareToFile(void);  
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
@@ -97,11 +104,13 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnUpdateControlsEESave(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsVoltage(CCmdUI* pCmdUI);
   afx_msg void OnUpdateOfflineModeExit(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateBLItems(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   void OnChangeChart(int serieIdx);
   void UpdateChartValues(void);
   void SetChartVoltageValue(float voltage);
+  void OnLogoClick(void);
 
   CEditEx m_pwm_period_edit;
   CSpinButtonCtrlEx m_pwm_period_spin;
@@ -142,6 +151,8 @@ class CInjDriverTabDlg : public CTabDialog
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CChart2D> mp_chart;
+  std::auto_ptr<CClickableBmp> mp_secu3logo;
+  std::auto_ptr<CLabel> mp_secu3orgLink;
 
  private:
   EventHandler m_onChange;
@@ -152,6 +163,8 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onLoadFromFirmware;
   EventHandler m_onShowFirmwareInfo;
   EventHandler m_onExitOfflineMode;
+  EventHandler m_onWriteFirmwareFromFile;
+  EventHandler m_onReadFirmwareToFile;
 
   bool m_initialized;
   bool m_enable;
@@ -159,6 +172,7 @@ class CInjDriverTabDlg : public CTabDialog
   bool m_enable_voltage;
   bool m_offline;
   int m_set_of_sett_idx;
+  bool m_is_bl_items_available;
   SECU3IO::InjDrvPar m_params[2];
   float *mp_curr_curve;
   float m_y_axis_min;

@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <vector>
 #include "io-core/SECU3IO.h"
 
 class CInjDrvFileDataIO
@@ -38,4 +39,8 @@ class CInjDrvFileDataIO
  static bool LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set);
 
  static bool SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set);
+
+ static bool SaveFirmware(const std::vector<BYTE>& buffer);
+
+ static bool LoadFirmware(std::vector<BYTE>& buffer);
 };

@@ -34,7 +34,8 @@
 #include "ui-core/Chart2D.h"
 #include "ui-core/ToolTipCtrlEx.h"
 #include "ui-core/ddx_helpers.h"
-//#include "io-core/BitMask.h"
+#include "ui-core/Label.h"
+#include "ui-core/ClickableBmp.h"
 
 const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 
@@ -54,6 +55,8 @@ const float arrmv_offset[3] = {100.0f, 1.0f, 1.0f};
 CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDriverTabDlg::IDD, pParent)
 , mp_chart(new CChart2D())
+, mp_secu3orgLink(new CLabel)
+, mp_secu3logo(new CClickableBmp())
 , m_initialized(false)
 , m_enable(false)
 , m_enable_ee_save(false)
@@ -144,6 +147,9 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_SET_OF_SETT_COMBO, m_set_of_sett_combo);
 
+ DDX_Control(pDX,IDC_SECU3ORG_LINK, *mp_secu3orgLink);
+ DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
+
  m_pwm_period_edit.DDX_Value(pDX, IDC_PWM_PERIOD_EDIT, m_params[m_set_of_sett_idx].m_pwm_period);
  m_peak_duty_edit.DDX_Value(pDX, IDC_PEAK_DUTY_EDIT, m_params[m_set_of_sett_idx].m_peak_duty);
  m_hold_duty_edit.DDX_Value(pDX, IDC_HOLD_DUTY_EDIT, m_params[m_set_of_sett_idx].m_hold_duty);
@@ -199,6 +205,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_COMMAND(ID_INJDRV_POPUP_LOADFROMFIRMWARE, OnLoadFromFirmware)
  ON_COMMAND(ID_INJDRV_POPUP_SHOWFIRMWAREINFO, OnShowFirmwareInfo)
  ON_COMMAND(ID_INJDRV_POPUP_OFFLINEMODE, OnOfflineModeExit)
+ ON_COMMAND(ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE, OnWriteFirmwareFromFile)
+ ON_COMMAND(ID_INJDRV_POPUP_READFIRMWARETOFILE, OnReadFirmwareToFile)
 
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_EDIT,OnUpdateControlsPD)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_SPIN,OnUpdateControlsPD)
@@ -244,6 +252,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_SHOWFIRMWAREINFO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_OFFLINEMODE, OnUpdateOfflineModeExit)
 
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE, OnUpdateBLItems)
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READFIRMWARETOFILE, OnUpdateBLItems)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -252,6 +262,16 @@ END_MESSAGE_MAP()
 BOOL CInjDriverTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ //init HTTP link
+ mp_secu3orgLink->SetLink(true);
+ mp_secu3orgLink->SetTextColor(RGB(0, 0, 255));
+ mp_secu3orgLink->SetFontUnderline(true);
+ mp_secu3orgLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ CString str;
+ mp_secu3orgLink->GetWindowText(str);
+ if (str[0] != _T('h') || str[1] != _T('t') || str[2] != _T('t') || str[3] != _T('p') || str[4] != _T(':') || str[5] != _T('/') || str[6] != _T('/') || str[7] != _T('s') || str[8] != _T('e') || str[9] != _T('c') || str[10] != _T('u') || str[11] != _T('3') || str[12] != _T('.') || str[13] != _T('o') || str[14] != _T('r') || str[15] != _T('g'))
+  return FALSE;
 
  //init edit boxes and spin buttons
  m_pwm_period_spin.SetBuddy(&m_pwm_period_edit);
@@ -346,6 +366,10 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  mp_ttc->ActivateToolTips(true);
 
  m_initialized = true;
+
+ mp_secu3logo->SetBitmapID(IDB_SECU3LOGO_BITMAP);
+ mp_secu3logo->SetClickCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_secu3logo->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDriverTabDlg::OnLogoClick));
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -689,6 +713,16 @@ void CInjDriverTabDlg::setOnExitOfflineMode(EventHandler onCB)
  m_onExitOfflineMode = onCB;
 }
 
+void CInjDriverTabDlg::setOnWriteFirmwareFromFile(EventHandler onCB)
+{
+ m_onWriteFirmwareFromFile = onCB;
+}
+
+void CInjDriverTabDlg::setOnReadFirmwareToFile(EventHandler onCB)
+{
+ m_onReadFirmwareToFile = onCB;
+}
+
 void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only /*= false*/)
 {
  if (voltage_only)
@@ -839,6 +873,11 @@ void CInjDriverTabDlg::OnUpdateOfflineModeExit(CCmdUI* pCmdUI)
  pCmdUI->SetCheck(m_offline);
 }
 
+void CInjDriverTabDlg::OnUpdateBLItems(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_is_bl_items_available);
+}
+
 void CInjDriverTabDlg::EnableAll(bool enable)
 {
  m_enable = enable;
@@ -873,5 +912,28 @@ void CInjDriverTabDlg::OnOfflineModeExit()
 void CInjDriverTabDlg::SetOfflineCheck(void)
 {
  m_offline = true;
+ UpdateDialogControls(this, TRUE);
+}
+
+void CInjDriverTabDlg::OnLogoClick(void)
+{
+ ShellExecute(NULL, _T("open"), _T("http://secu3.org"), NULL, NULL, SW_SHOWNORMAL);
+}
+
+void CInjDriverTabDlg::OnWriteFirmwareFromFile(void)
+{
+ if (m_onWriteFirmwareFromFile)
+  m_onWriteFirmwareFromFile();
+}
+
+void CInjDriverTabDlg::OnReadFirmwareToFile(void)
+{
+ if (m_onReadFirmwareToFile)
+  m_onReadFirmwareToFile();
+}
+
+void CInjDriverTabDlg::EnableBLItems(bool enable)
+{
+ m_is_bl_items_available = enable;
  UpdateDialogControls(this, TRUE);
 }

@@ -130,6 +130,10 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const lzid_sett_t& fs, bool
  if (!ignoreCRC && fs.crc != crc16((BYTE*)&fs, sizeof(lzid_sett_t) - sizeof(WORD)))
   return false; //data corrupted
 
+ ms.ee_status = false;
+ ms.start_bldr = false;
+ ms.voltage = .0f;
+
  ms.type = fs.type;
  ms.version = fs.version;
  ms.fw_opt = fs.fw_opt;
@@ -392,4 +396,112 @@ bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
  }
  return true;
 }
+
+bool CInjDrvFileDataIO::SaveFirmware(const std::vector<BYTE>& buffer)
+{
+ static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|HEX Files (*.a90)|*.a90|All Files (*.*)|*.*||");
+ CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ save.m_ofn.lpstrDefExt = _T("BIN");
+ if (save.DoModal()==IDOK)
+ {
+  CStdioFile f;
+  CFileException ex;
+  TCHAR szError[1024];  
+  if(!f.Open(save.GetPathName(), CFile::modeCreate | CFile::modeReadWrite | CFile::typeBinary, &ex))
+  {
+   ex.GetErrorMessage(szError, 1024);
+   AfxMessageBox(szError);
+   return false;
+  }
+
+  f.Seek(0, CFile::begin);
+
+  //check, if selected file name is hex, then save it as hex
+  bool hex_file = save.GetFileExt()==_T("hex") || save.GetFileExt()==_T("a90");
+
+  if (hex_file)
+  {
+   f.SetLength(0);
+   if (!WriteHexFile(f.m_pStream, buffer))
+   {
+    f.Close();
+    return false;
+   }
+  }
+  else
+   f.Write(&buffer[0], (UINT)buffer.size());    
+
+  f.Close();
+ }
+ return true;
+}
+
+
+bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
+{
+ static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|HEX Files (*.a90)|*.a90|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+
+ if (open.DoModal()==IDOK)
+ {
+  CFile f;
+  CFileException ex;
+  TCHAR szError[1024];
+  if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
+  {
+   ex.GetErrorMessage(szError, 1024);
+   AfxMessageBox(szError);
+   return false;
+  }
+
+  ULONGLONG size = f.GetLength();
+  if (size > 1048576) //max. 1MB
+  {
+   f.Close();
+   return false; //file is too big
+  }
+  std::vector<BYTE> buff((size_t)size, 0);
+  f.Read(&buff[0], (UINT)size);
+  f.Close();
+
+  //check, if input file is hex, then convert it to raw bin
+  CString fileExt = open.GetFileExt();
+  if (fileExt==_T("hex") || fileExt==_T("a90"))
+  {
+   int max_size = 1048576;
+   std::vector<BYTE> hex_buff(max_size, 0);
+   size_t resulting_bin_size = 0;
+   EReadHexStatus status = HexUtils_ConvertHexToBin(&buff[0], (size_t)size, &hex_buff[0], resulting_bin_size, max_size);
+   switch(status)
+   {
+    case RH_INCORRECT_CHKSUM:
+     AfxMessageBox("Hex file CRC error! File corrupted!", MB_ICONSTOP);
+     return false;
+    default:
+     case RH_UNEXPECTED_SYMBOL:
+     AfxMessageBox("Hex file structure error!", MB_ICONSTOP);
+     return false;
+    case RH_ADDRESS_EXCEDED:
+     AfxMessageBox("Hex file is too big!", MB_ICONSTOP);
+     break;
+    case RH_SUCCESS:
+     break;
+   }
+   //save data
+   hex_buff.resize(resulting_bin_size);
+   if (resulting_bin_size != 32768)
+    return false;
+   buffer = hex_buff;
+  }
+  else
+  { //binary file
+   if (size != 32768)
+    return false;
+   buffer = buff;
+  }
+  return true;
+ }
+ return false; //canceled by user
+}
+
 

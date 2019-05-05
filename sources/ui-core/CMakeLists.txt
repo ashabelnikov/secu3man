@@ -29,6 +29,7 @@ set(HEADERS
   AnalogMeter.h
   AnalogMeterCtrl.h
   Chart2D.h
+  ClickableBmp.h
   ddx_helpers.h
   fnt_helpers.h
   DialogWithAccelerators.h
@@ -63,6 +64,7 @@ set(SOURCES
   AnalogMeter.cpp
   AnalogMeterCtrl.cpp
   Chart2D.cpp
+  ClickableBmp.cpp
   ddx_helpers.cpp
   fnt_helpers.cpp
   DialogWithAccelerators.cpp

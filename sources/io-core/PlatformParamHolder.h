@@ -38,7 +38,8 @@ typedef enum EECUPlatform
  EP_ATMEGA128,
  EP_ATMEGA644,            //redundant to EP_ATMEGA64 by firmware and EEPROM sizes
  EP_ATMEGA1284,           //redundant to EP_ATMEGA128 by firmware and EEPROM sizes
- EP_NR_OF_PLATFORMS       //must be last!
+ EP_NR_OF_PLATFORMS,      //must be last!
+ EP_ATMEGA328PB           //Inj. Driver
 };
 
 struct PPFlashParam

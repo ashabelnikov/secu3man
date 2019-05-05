@@ -64,6 +64,9 @@ BEGIN
         MENUITEM "Показать информацию о прошивке",    ID_INJDRV_POPUP_SHOWFIRMWAREINFO
         MENUITEM SEPARATOR
         MENUITEM "Оффлайн режим",                     ID_INJDRV_POPUP_OFFLINEMODE
+        MENUITEM SEPARATOR
+        MENUITEM "Записать прошивку из файла",        ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE
+        MENUITEM "Прочитать прошивку в файл",         ID_INJDRV_POPUP_READFIRMWARETOFILE
     END
 END
 
@@ -399,6 +402,8 @@ BEGIN
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
+    CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,493,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -744,6 +749,9 @@ BEGIN
         MENUITEM "Show firmware info",          ID_INJDRV_POPUP_SHOWFIRMWAREINFO
         MENUITEM SEPARATOR
         MENUITEM "Offline mode",                ID_INJDRV_POPUP_OFFLINEMODE
+        MENUITEM SEPARATOR
+        MENUITEM "Write firmware from a file",  ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE
+        MENUITEM "Read firmware to a file",     ID_INJDRV_POPUP_READFIRMWARETOFILE
     END
 END
 
@@ -1079,6 +1087,8 @@ BEGIN
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
+    CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,493,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1418,7 +1428,7 @@ IDB_CALC_DOWN           BITMAP     "res\\calc_down.bmp"
 IDB_CALC_FOCUSED        BITMAP     "res\\calc_focused.bmp"
 IDB_CALC_DISABLED       BITMAP     "res\\calc_disabled.bmp"
 IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
-
+IDB_SECU3LOGO_BITMAP    BITMAP     "res\\secu3logo.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

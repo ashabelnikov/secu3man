@@ -28,6 +28,7 @@
 #include "common/ObjectTimer.h"
 #include "common/unicodesupport.h"
 #include "io-core/ControlAppAdapter.h"
+#include "io-core/BootLoaderAdapter.h"
 #include "io-core/ufcodes.h"
 #include "TabsManagement/ITabController.h"
 
@@ -36,7 +37,7 @@ class CInjDriverTabDlg;
 class CStatusBarManager;
 class ISettingsData;
 
-class CInjDriverTabController : public ITabController, private IAPPEventHandler
+class CInjDriverTabController : public ITabController, private IAPPEventHandler, private IBLDEventHandler
 {
  public:
   CInjDriverTabController(CInjDriverTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
@@ -58,6 +59,12 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler
   virtual void OnCloseNotify(void);
   virtual void OnFullScreen(bool i_what);
   virtual bool OnAskChangeTab(void);
+  void OnLzidBlHsTimer(void);
+
+  //from IBLDEventHandler
+  virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);
+  virtual void OnBegin(const int opcode,const int status);
+  virtual void OnEnd(const int opcode,const int status);
 
   //events
   void OnChange(void);
@@ -68,6 +75,11 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler
   void OnLoadFromFirmware(void);
   void OnShowFirmwareInfo(void);
   void OnExitOfflineMode(void);
+  void OnWriteFirmwareFromFile(void);  
+  void OnReadFirmwareToFile(void);  
+
+  bool StartBootLoader(int op);
+  bool ExitBootLoader(void);
 
   CInjDriverTabDlg*  mp_view;
   CCommunicationManager* mp_comm;
@@ -76,9 +88,14 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler
   ISettingsData* mp_sett;
 
  private:
+  CObjectTimer<CInjDriverTabController> m_lzidblhs_tmr;
   bool m_initFlags[2];
   bool m_initialized;
   bool m_fw_loaded;
+  bool m_active;
+  bool m_recv_hs;
   SECU3IO::InjDrvPar m_fwdata[2];
   int m_saving_proc_state;
+  std::vector<BYTE> m_bl_data;
+  int   m_bl_op;
 };

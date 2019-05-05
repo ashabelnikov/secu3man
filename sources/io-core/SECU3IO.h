@@ -568,43 +568,49 @@ namespace SECU3IO
  };
 
 
-//Size of all look up tables
-static const int LUTABSIZE = 16;
+ //Size of all look up tables
+ static const int LUTABSIZE = 16;
 
-//data send and received to/from SECU-LZID driver
-struct InjDrvPar
-{
- bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
- bool set0_corrupted;   //from LZID only 
- bool set1_corrupted;   //from LZID only 
- float voltage;         //from LZID only 
+ //data send and received to/from SECU-LZID driver
+ struct InjDrvPar
+ {
+  bool start_bldr;       //to LZID: true - start boot loader
+  bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
+  bool set0_corrupted;   //from LZID only 
+  bool set1_corrupted;   //from LZID only 
+  float voltage;         //from LZID only 
 
- int type;              //from LZID only
- int version;           //from LZID only
- int fw_opt;            //from LZID only
+  int type;              //from LZID only
+  int version;           //from LZID only
+  int fw_opt;            //from LZID only
 
- int set_idx;           //allowed values: 0, 1
+  int set_idx;           //allowed values: 0, 1
 
- bool direct_flags[8];
- float m_pwm_period;
- float m_peak_duty;
- float m_hold_duty;
- float m_peak_on_time;
- float m_peak_pwm_time;
- float m_pth_pause;
- float m_reserved; //reserved and can be used for debug purposes
+  bool direct_flags[8];
+  float m_pwm_period;
+  float m_peak_duty;
+  float m_hold_duty;
+  float m_peak_on_time;
+  float m_peak_pwm_time;
+  float m_pth_pause;
+  float m_reserved; //reserved and can be used for debug purposes
 
- float m_peak_on_tab[LUTABSIZE];
- float m_peak_duty_tab[LUTABSIZE];
- float m_hold_duty_tab[LUTABSIZE];
- //flags
- bool m_peak_on_usetab;
- bool m_peak_duty_usetab;
- bool m_hold_duty_usetab;
+  float m_peak_on_tab[LUTABSIZE];
+  float m_peak_duty_tab[LUTABSIZE];
+  float m_hold_duty_tab[LUTABSIZE];
+  //flags
+  bool m_peak_on_usetab;
+  bool m_peak_duty_usetab;
+  bool m_hold_duty_usetab;
 
- bool m_tst_peak_pwm;
- bool m_tst_hold_pwm;
-};
+  bool m_tst_peak_pwm;
+  bool m_tst_hold_pwm;
+ };
+
+ struct LzidBLHS
+ {
+  char data[4];
+ };
 
 
  //таблица перекодировки кода частоты ПФ в частоту
@@ -695,6 +701,7 @@ struct InjDrvPar
   SECU3IO::LambdaPar    m_LambdaPar;
   SECU3IO::AccelPar     m_AccelPar;
   SECU3IO::InjDrvPar    m_InjDrvPar;  //SECU-LZID
+  SECU3IO::LzidBLHS     m_LzidBLHS;   //SECU-LZID  
  };
 
  struct CESettingsData
