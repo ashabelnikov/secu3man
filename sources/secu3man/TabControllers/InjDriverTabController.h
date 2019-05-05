@@ -77,6 +77,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   void OnExitOfflineMode(void);
   void OnWriteFirmwareFromFile(void);  
   void OnReadFirmwareToFile(void);  
+  void OnReadLzblInfo(void);
 
   bool StartBootLoader(int op);
   bool ExitBootLoader(void);

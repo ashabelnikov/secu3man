@@ -69,6 +69,7 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnExitOfflineMode(EventHandler onCB);
   void setOnWriteFirmwareFromFile(EventHandler onCB);  
   void setOnReadFirmwareToFile(EventHandler onCB);  
+  void setOnReadLzblInfo(EventHandler onCB);
 
  protected:
   virtual BOOL OnInitDialog();
@@ -96,6 +97,7 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnOfflineModeExit(); 
   afx_msg void OnWriteFirmwareFromFile(void);  
   afx_msg void OnReadFirmwareToFile(void);  
+  afx_msg void OnReadLzblInfo(void);
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
@@ -165,6 +167,7 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onExitOfflineMode;
   EventHandler m_onWriteFirmwareFromFile;
   EventHandler m_onReadFirmwareToFile;
+  EventHandler m_onReadLzblInfo;
 
   bool m_initialized;
   bool m_enable;

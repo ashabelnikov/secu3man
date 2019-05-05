@@ -72,6 +72,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnExitOfflineMode(MakeDelegate(this, &CInjDriverTabController::OnExitOfflineMode));
  mp_view->setOnWriteFirmwareFromFile(MakeDelegate(this, &CInjDriverTabController::OnWriteFirmwareFromFile));
  mp_view->setOnReadFirmwareToFile(MakeDelegate(this, &CInjDriverTabController::OnReadFirmwareToFile));
+ mp_view->setOnReadLzblInfo(MakeDelegate(this, &CInjDriverTabController::OnReadLzblInfo));
 }
 
 CInjDriverTabController::~CInjDriverTabController()
@@ -181,6 +182,17 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
     mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
     //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, &m_bl_data[0], MCU_FLASH_SIZE-BOOTLDR_SIZE);
+    mp_sbar->ShowProgressBar(true);
+    mp_sbar->SetProgressPos(0);
+    return;
+   }
+   if (m_bl_op == 3) //deferred reading of boot loader information
+   {    
+    //activate communication controller of the boot loader
+    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+    //operation does not block thread
+    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE, &m_bl_data[0], 0);
     mp_sbar->ShowProgressBar(true);
     mp_sbar->SetProgressPos(0);
     return;
@@ -470,6 +482,28 @@ void CInjDriverTabController::OnReadFirmwareToFile(void)
  }
 }
 
+void CInjDriverTabController::OnReadLzblInfo(void)
+{
+ if (!mp_comm->m_pBootLoader->IsIdle())
+  return;
+
+ mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(EP_ATMEGA328PB));
+
+ //запускаем бутлоадер по команде из приложени€
+ if (StartBootLoader(3))
+ {
+  //activate communication controller of the boot loader
+  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+
+  //operation does not block thread
+  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE, &m_bl_data[0], 0);
+
+  mp_sbar->ShowProgressBar(true);
+  mp_sbar->SetProgressPos(0);
+ }
+}
+
 void CInjDriverTabController::OnLzidBlHsTimer(void)
 {
  if (!m_recv_hs)
@@ -529,8 +563,10 @@ void CInjDriverTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data
  }
 }
 
-void CInjDriverTabController::OnBegin(const int opcode,const int status)
+void CInjDriverTabController::OnBegin(const int opcode, const int status)
 {
+ if (opcode == CBootLoader::BL_OP_READ_SIGNATURE)
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_SIGNATURE));
  if (opcode == CBootLoader::BL_OP_READ_FLASH)
   mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW));
  if (opcode == CBootLoader::BL_OP_WRITE_FLASH)
@@ -553,6 +589,30 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
    //activate application's communication controller again
    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
    m_recv_hs = false;
+   break;
+  }
+  //////////////////////////////////////////////////////////////////////
+  case CBootLoader::BL_OP_READ_SIGNATURE:
+  {
+   if (status==1)
+   {
+    m_bl_data[CBootLoader::BL_SIGNATURE_STR_LEN] = 0;
+    mp_sbar->SetInformationText(&m_bl_data[0]);
+    AfxMessageBox(CString(&m_bl_data[0]), MB_OK | MB_ICONINFORMATION);
+   }
+   else
+   {
+    mp_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(mp_comm));
+   }
+
+   //ждем пока не выполнитс€ предыдуща€ операци€
+   while(!mp_comm->m_pBootLoader->IsIdle());
+
+   //Achtung! ѕочти рекурси€
+   ExitBootLoader();
+
+   Sleep(250);
+   mp_sbar->ShowProgressBar(false);
    break;
   }
   //////////////////////////////////////////////////////////////////////
