@@ -730,6 +730,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_IGN_OUT6, _T("IGN_O6"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_IGN_OUT7, _T("IGN_O7"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_IGN_OUT8, _T("IGN_O8"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O2, FWDM::IOP3I_IGN_O2, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_O2, true);
   mp_view->EnableInversion(FWDM::IOS3I_IGN_O2, true);
@@ -753,6 +756,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_IGN_OUT6, _T("IGN_O6"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_IGN_OUT7, _T("IGN_O7"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_IGN_OUT8, _T("IGN_O8"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O3, FWDM::IOP3I_IGN_O3, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_O3, true);
   mp_view->EnableInversion(FWDM::IOS3I_IGN_O3, true);
@@ -776,6 +782,9 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_IGN_OUT6, _T("IGN_O6"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_IGN_OUT7, _T("IGN_O7"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_IGN_OUT8, _T("IGN_O8"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
+  mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
   mp_view->AddItem(FWDM::IOS3I_IGN_O4, FWDM::IOP3I_IGN_O4, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_IGN_O4, true);
   mp_view->EnableInversion(FWDM::IOS3I_IGN_O4, true);
