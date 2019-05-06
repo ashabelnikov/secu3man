@@ -117,6 +117,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
  m_show_tooltips = BST_CHECKED;
  m_exfixtures = BST_CHECKED;
  m_hexdatamode = BST_CHECKED;
+ m_injdrvtab_active = BST_UNCHECKED;
  m_wheel_pulses = 6000;   //Number of pulses per 1km
 }
 
@@ -180,6 +181,9 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_APP_SETTINGS_DBGPANEL_UPDATE_PERIOD_CAPTION, m_dv_update_period_caption);
  DDX_Control(pDX, IDC_APP_SETTINGS_INFO_TEXT, m_info_text);
+
+ DDX_Control(pDX, IDC_APP_SETTINGS_INJDRV_TAB, m_injdrvtab_button);
+ DDX_Check(pDX, IDC_APP_SETTINGS_INJDRV_TAB, m_injdrvtab_active);
 }
 
 
@@ -730,4 +734,14 @@ BOOL CAppSettingsDlg::OnDeviceChange(UINT nEventType, DWORD_PTR dwData)
  }
 
  return TRUE;
+}
+
+void CAppSettingsDlg::SetInjDrvTabActive(bool i_active)
+{
+ m_injdrvtab_active = i_active ? BST_CHECKED : BST_UNCHECKED;
+}
+
+bool CAppSettingsDlg::GetInjDrvTabActive(void) const
+{
+ return m_injdrvtab_active == BST_CHECKED;
 }

@@ -63,6 +63,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetShowExFixtures(bool i_show);
   virtual void SetHexDataMode(bool i_hex);
   virtual void SetNumPulsesPer1Km(int i_pp1km);
+  virtual void SetInjDrvTabActive(bool i_active);
 
   //"Get" methods (view => model data transfer)
   virtual _TSTRING GetPortName(void);
@@ -79,6 +80,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual bool GetShowExFixtures(void) const;
   virtual bool GetHexDataMode(void) const;
   virtual int GetNumPulsesPer1Km(void) const;
+  virtual bool GetInjDrvTabActive(void) const;
 
   //logs
   virtual void SetLogFilesFolder(const _TSTRING& i_folder);
@@ -145,6 +147,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_exfixtures_button;
   CButton   m_hexdatamode_button;
   CButton   m_presports_button;
+  CButton   m_injdrvtab_button;
   CEdit     m_log_files_folder_edit;
   CEditEx   m_midesk_update_period_edit;
   CEditEx   m_dv_update_period_edit;
@@ -178,6 +181,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   int m_tachometer_max;
   int m_pressure_max;
   int m_wheel_pulses;
+  int m_injdrvtab_active;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   CEnumPorts::PortDescList_t m_existingList;
