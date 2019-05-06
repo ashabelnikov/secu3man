@@ -208,6 +208,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_COMMAND(ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE, OnWriteFirmwareFromFile)
  ON_COMMAND(ID_INJDRV_POPUP_READFIRMWARETOFILE, OnReadFirmwareToFile)
  ON_COMMAND(ID_INJDRV_POPUP_READLZBLINFO, OnReadLzblInfo)
+ ON_COMMAND(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnWriteEEPROMFromFile)
+ ON_COMMAND(ID_INJDRV_POPUP_READEEPROMTOFILE, OnReadEEPROMToFile)
 
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_EDIT,OnUpdateControlsPD)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_SPIN,OnUpdateControlsPD)
@@ -256,6 +258,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READFIRMWARETOFILE, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READLZBLINFO, OnUpdateBLItems)
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnUpdateBLItems)
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READEEPROMTOFILE, OnUpdateBLItems)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -730,6 +734,16 @@ void CInjDriverTabDlg::setOnReadLzblInfo(EventHandler onCB)
  m_onReadLzblInfo = onCB;
 }
 
+void CInjDriverTabDlg::setOnWriteEEPROMFromFile(EventHandler onCB)
+{
+ m_onWriteEEPROMFromFile = onCB;
+}
+
+void CInjDriverTabDlg::setOnReadEEPROMToFile(EventHandler onCB)
+{
+ m_onReadEEPROMToFile = onCB;
+}
+
 void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only /*= false*/)
 {
  if (voltage_only)
@@ -837,6 +851,18 @@ void CInjDriverTabDlg::OnShowFirmwareInfo()
 {
  if (m_onShowFirmwareInfo)
   m_onShowFirmwareInfo();
+}
+
+void CInjDriverTabDlg::OnWriteEEPROMFromFile(void)
+{
+ if (m_onWriteEEPROMFromFile)
+  m_onWriteEEPROMFromFile();
+}
+
+void CInjDriverTabDlg::OnReadEEPROMToFile(void)
+{
+ if (m_onReadEEPROMToFile)
+  m_onReadEEPROMToFile();
 }
 
 void CInjDriverTabDlg::OnUpdateControlsPO(CCmdUI* pCmdUI)

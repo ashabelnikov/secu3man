@@ -70,6 +70,8 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnWriteFirmwareFromFile(EventHandler onCB);  
   void setOnReadFirmwareToFile(EventHandler onCB);  
   void setOnReadLzblInfo(EventHandler onCB);
+  void setOnWriteEEPROMFromFile(EventHandler onCB);  
+  void setOnReadEEPROMToFile(EventHandler onCB);  
 
  protected:
   virtual BOOL OnInitDialog();
@@ -98,6 +100,8 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnWriteFirmwareFromFile(void);  
   afx_msg void OnReadFirmwareToFile(void);  
   afx_msg void OnReadLzblInfo(void);
+  afx_msg void OnWriteEEPROMFromFile(void);  
+  afx_msg void OnReadEEPROMToFile(void);  
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
@@ -168,6 +172,8 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onWriteFirmwareFromFile;
   EventHandler m_onReadFirmwareToFile;
   EventHandler m_onReadLzblInfo;
+  EventHandler m_onWriteEEPROMFromFile;
+  EventHandler m_onReadEEPROMToFile;
 
   bool m_initialized;
   bool m_enable;

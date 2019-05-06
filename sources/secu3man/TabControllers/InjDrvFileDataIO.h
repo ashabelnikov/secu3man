@@ -43,4 +43,8 @@ class CInjDrvFileDataIO
  static bool SaveFirmware(const std::vector<BYTE>& buffer);
 
  static bool LoadFirmware(std::vector<BYTE>& buffer);
+
+ static bool SaveEEPROM(const std::vector<BYTE>& buffer, size_t size);
+
+ static bool LoadEEPROM(std::vector<BYTE>& buffer, size_t size);
 };

@@ -43,6 +43,7 @@ using namespace SECU3IO;
 
 #define EHKEY _T("InjDriverCntr")
 #define MCU_FLASH_SIZE 32768
+#define MCU_EEPROM_SIZE 1024
 #define BOOTLDR_SIZE   1024
 
 CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
@@ -73,6 +74,8 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnWriteFirmwareFromFile(MakeDelegate(this, &CInjDriverTabController::OnWriteFirmwareFromFile));
  mp_view->setOnReadFirmwareToFile(MakeDelegate(this, &CInjDriverTabController::OnReadFirmwareToFile));
  mp_view->setOnReadLzblInfo(MakeDelegate(this, &CInjDriverTabController::OnReadLzblInfo));
+ mp_view->setOnWriteEEPROMFromFile(MakeDelegate(this, &CInjDriverTabController::OnWriteEEPROMFromFile));
+ mp_view->setOnReadEEPROMToFile(MakeDelegate(this, &CInjDriverTabController::OnReadEEPROMToFile));
 }
 
 CInjDriverTabController::~CInjDriverTabController()
@@ -193,6 +196,28 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
     mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
     //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE, &m_bl_data[0], 0);
+    mp_sbar->ShowProgressBar(true);
+    mp_sbar->SetProgressPos(0);
+    return;
+   }
+   if (m_bl_op == 4) //deferred reading of the EEPROM
+   {    
+    //activate communication controller of the boot loader
+    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+    //operation does not block thread
+    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM, &m_bl_data[0], 0);
+    mp_sbar->ShowProgressBar(true);
+    mp_sbar->SetProgressPos(0);
+    return;
+   }
+   if (m_bl_op == 5) //deferred writing to the EEPROM
+   {    
+    //activate communication controller of the boot loader
+    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+    //operation does not block thread
+    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM, &m_bl_data[0], 0);
     mp_sbar->ShowProgressBar(true);
     mp_sbar->SetProgressPos(0);
     return;
@@ -504,6 +529,53 @@ void CInjDriverTabController::OnReadLzblInfo(void)
  }
 }
 
+void CInjDriverTabController::OnReadEEPROMToFile(void)
+{
+ if (!mp_comm->m_pBootLoader->IsIdle())
+  return;
+
+ mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(EP_ATMEGA328PB));
+
+ //запускаем бутлоадер по команде из приложени€
+ if (StartBootLoader(4))
+ {
+  //activate communication controller of the boot loader
+  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+
+  //operation does not block thread
+  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM, &m_bl_data[0], 0);
+
+  mp_sbar->ShowProgressBar(true);
+  mp_sbar->SetProgressPos(0);
+ }
+}
+
+void CInjDriverTabController::OnWriteEEPROMFromFile(void)
+{
+ if (!mp_comm->m_pBootLoader->IsIdle())
+  return;
+
+ if (!CInjDrvFileDataIO::LoadEEPROM(m_bl_data, MCU_EEPROM_SIZE))
+  return; //canceled by user or error
+
+ mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(EP_ATMEGA328PB));
+
+ //запускаем бутлоадер по команде из приложени€
+ if (StartBootLoader(5))
+ {
+  //activate communication controller of the boot loader
+  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+
+  //operation does not block thread
+  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM, &m_bl_data[0], 0);
+
+  mp_sbar->ShowProgressBar(true);
+  mp_sbar->SetProgressPos(0);
+ }
+}
+
 void CInjDriverTabController::OnLzidBlHsTimer(void)
 {
  if (!m_recv_hs)
@@ -571,6 +643,11 @@ void CInjDriverTabController::OnBegin(const int opcode, const int status)
   mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_FW));
  if (opcode == CBootLoader::BL_OP_WRITE_FLASH)
   mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_FW));
+ if (opcode == CBootLoader::BL_OP_READ_EEPROM)
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_EEPROM));
+ if (opcode == CBootLoader::BL_OP_WRITE_EEPROM)
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_EEPROM));
+
  if (opcode == CBootLoader::BL_OP_EXIT)
  {
   //Exiting from boot loader...
@@ -658,6 +735,50 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
    mp_sbar->ShowProgressBar(false);
    break;
   }
+
+  //////////////////////////////////////////////////////////////////////
+  case CBootLoader::BL_OP_READ_EEPROM:
+  {
+   if (status==1)
+   { //OK
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));
+    CInjDrvFileDataIO::SaveEEPROM(m_bl_data, MCU_EEPROM_SIZE);
+   }
+   else
+   {
+    mp_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(mp_comm));
+   }
+
+   //ждем пока не выполнитс€ предыдуща€ операци€
+   while(!mp_comm->m_pBootLoader->IsIdle());
+
+   //Achtung! ѕочти рекурси€
+   ExitBootLoader();
+
+   Sleep(250);
+   mp_sbar->ShowProgressBar(false);
+   break;
+  }
+
+  //////////////////////////////////////////////////////////////////////
+  case CBootLoader::BL_OP_WRITE_EEPROM:
+  {
+   if (status==1)
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
+   else
+    mp_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(mp_comm));
+
+   //ждем пока не выполнитс€ предыдуща€ операци€
+   while(!mp_comm->m_pBootLoader->IsIdle());
+
+   //Achtung! ѕочти рекурси€
+   ExitBootLoader();
+
+   Sleep(250);
+   mp_sbar->ShowProgressBar(false);
+   break;
+  }
+
   //////////////////////////////////////////////////////////////////////
  }//switch
  mp_view->EnableBLItems(true);

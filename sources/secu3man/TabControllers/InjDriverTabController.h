@@ -78,6 +78,8 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   void OnWriteFirmwareFromFile(void);  
   void OnReadFirmwareToFile(void);  
   void OnReadLzblInfo(void);
+  void OnWriteEEPROMFromFile(void);  
+  void OnReadEEPROMToFile(void);  
 
   bool StartBootLoader(int op);
   bool ExitBootLoader(void);

@@ -436,7 +436,6 @@ bool CInjDrvFileDataIO::SaveFirmware(const std::vector<BYTE>& buffer)
  return true;
 }
 
-
 bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
 {
  static TCHAR BASED_CODE szFilter[] = _T("Firmware Files (*.bin;*.hex;*.a90)|*.bin;*.hex;*.a90|BIN Files (*.bin)|*.bin|HEX Files (*.hex)|*.hex|HEX Files (*.a90)|*.a90|All Files (*.*)|*.*||");
@@ -504,4 +503,55 @@ bool CInjDrvFileDataIO::LoadFirmware(std::vector<BYTE>& buffer)
  return false; //canceled by user
 }
 
+bool CInjDrvFileDataIO::SaveEEPROM(const std::vector<BYTE>& buffer, size_t size)
+{
+ static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
+ CFileDialog save(FALSE,NULL,NULL,NULL,szFilter,NULL);
+ save.m_ofn.lpstrDefExt = _T("BIN");
+ if (save.DoModal()==IDOK)
+ {
+  CStdioFile f;
+  CFileException ex;
+  TCHAR szError[1024];  
+  if(!f.Open(save.GetPathName(), CFile::modeCreate | CFile::modeReadWrite | CFile::typeBinary, &ex))
+  {
+   ex.GetErrorMessage(szError, 1024);
+   AfxMessageBox(szError);
+   return false;
+  }
 
+  f.Seek(0, CFile::begin);
+  f.Write(&buffer[0], size);    
+  f.Close();
+ }
+ return true;
+}
+
+bool CInjDrvFileDataIO::LoadEEPROM(std::vector<BYTE>& buffer, size_t size)
+{
+ static TCHAR BASED_CODE szFilter[] = _T("BIN Files (*.bin)|*.bin|All Files (*.*)|*.*||");
+ CFileDialog open(TRUE,NULL,NULL,NULL,szFilter,NULL);
+
+ if (open.DoModal()==IDOK)
+ {
+  CFile f;
+  CFileException ex;
+  TCHAR szError[1024];
+  if(!f.Open(open.GetPathName(), CFile::modeRead, &ex))
+  {
+   ex.GetErrorMessage(szError, 1024);
+   AfxMessageBox(szError);
+   return false;
+  }
+
+  if (f.GetLength() != size) //wrong size
+  {
+   f.Close();
+   return false; //file is too big
+  }
+  f.Read(&buffer[0], (UINT)size);
+  f.Close();
+  return true;
+ }
+ return false; //canceled by user
+}

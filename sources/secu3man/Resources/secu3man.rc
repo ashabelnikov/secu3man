@@ -68,6 +68,8 @@ BEGIN
         MENUITEM "Записать прошивку из файла",        ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE
         MENUITEM "Прочитать прошивку в файл",         ID_INJDRV_POPUP_READFIRMWARETOFILE
         MENUITEM "Информация о загрузчике",           ID_INJDRV_POPUP_READLZBLINFO
+        MENUITEM "Записать EEPROM из файла",          ID_INJDRV_POPUP_WRITEEEPROMFROMFILE
+        MENUITEM "Прочитать EEPROM в файл",           ID_INJDRV_POPUP_READEEPROMTOFILE
     END
 END
 
@@ -755,6 +757,8 @@ BEGIN
         MENUITEM "Write firmware from a file",  ID_INJDRV_POPUP_WRITEFIRMWAREFROMFILE
         MENUITEM "Read firmware to a file",     ID_INJDRV_POPUP_READFIRMWARETOFILE
         MENUITEM "Boot loader information",     ID_INJDRV_POPUP_READLZBLINFO
+        MENUITEM "Write EEPROM from a file",    ID_INJDRV_POPUP_WRITEEEPROMFROMFILE
+        MENUITEM "Read EEPROM to a file",       ID_INJDRV_POPUP_READEEPROMTOFILE
     END
 END
 
