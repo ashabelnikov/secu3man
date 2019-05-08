@@ -813,7 +813,9 @@ void CChart2D::OnMouseMove(UINT nFlags, CPoint point)
      mp_tooltip->Create(this);
      mp_tooltip->AddTool(this);
      mp_tooltip->Activate(true);
-     mp_tooltip->SetDelayTime(10);
+     mp_tooltip->SetDelayTime(10, TTDT_INITIAL); // length of time the pointer must remain stationary within a tool's bounding rectangle before the tool tip window appears.
+     mp_tooltip->SetDelayTime(10, TTDT_AUTOPOP); // amount of time the tooltip window remains visible if the pointer is stationary within a tool's bounding rectangle
+     mp_tooltip->SetDelayTime(10, TTDT_RESHOW);  // amount of time it takes for subsequent tooltip windows to appear as the pointer moves from one tool to another.
      mp_tooltip->UpdateTipText(_T(""), this);
     }
     val_idx = index;
@@ -837,24 +839,20 @@ void CChart2D::OnMouseMove(UINT nFlags, CPoint point)
   {
    val_idx = m_val_idx;
    ser_idx = m_ser_idx;
-  }
-  double y_val = m_serie[ser_idx].mp_valueY[val_idx];
-  //display value
-  CString toolText;
-  toolText.Format(m_axisFmtY, y_val);
-  mp_tooltip ->UpdateTipText (toolText, this);
+  }  
+  _UpdateTipText(m_serie[ser_idx].mp_valueY[val_idx]); //Set text value
  } 
 
  Super::OnMouseMove(nFlags, point);
 }
 
-void CChart2D::_RestrictAndSetValue(size_t seridx, size_t index, double v)
+double CChart2D::_RestrictAndSetValue(size_t seridx, size_t index, double v)
 {
  if (v > m_rangeY.second)
   v = m_rangeY.second;
  if (v < m_rangeY.first)
   v = m_rangeY.first;
- m_serie[seridx].mp_valueY[index] = v;
+ return m_serie[seridx].mp_valueY[index] = v;
 }
 
 void CChart2D::OnLButtonUp(UINT nFlags, CPoint point)
@@ -895,19 +893,21 @@ void CChart2D::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
  case VK_UP:
   {
    int index = m_serie[m_ser_idx].m_curSel;
-   _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]+m_ptMovStep);
+   double new_val = _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]+m_ptMovStep);
    Invalidate();   
    if (m_onChangeCB)
     m_onChangeCB((int)m_ser_idx);
+  _UpdateTipText(new_val);
    break;
   }
  case VK_DOWN:
   {
    int index = m_serie[m_ser_idx].m_curSel;
-   _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]-m_ptMovStep);
+   double new_val = _RestrictAndSetValue(m_ser_idx, index, m_serie[m_ser_idx].mp_valueY[index]-m_ptMovStep);
    Invalidate();
    if (m_onChangeCB)
     m_onChangeCB((int)m_ser_idx);
+   _UpdateTipText(new_val);
    break;
   }
   case VK_LEFT:
@@ -926,4 +926,17 @@ void CChart2D::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
 void CChart2D::SetPtMovStep(double value)
 {
  m_ptMovStep = value;
+}
+
+void CChart2D::_UpdateTipText(double val)
+{
+ if (mp_tooltip)
+ {
+  CString toolText;
+  toolText.Format(m_axisFmtY, val);
+  CString str;
+  mp_tooltip->GetText(str,this);
+  if (str != toolText)
+   mp_tooltip->UpdateTipText (toolText, this);
+ }
 }

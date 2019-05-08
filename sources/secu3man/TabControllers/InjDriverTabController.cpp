@@ -124,6 +124,7 @@ void CInjDriverTabController::OnActivate(void)
  }
 
  mp_comm->m_pControlApp->ChangeContext(SILENT);
+ mp_view->EnableBLItems(true);
 }
 
 //from MainTabController
@@ -167,61 +168,22 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
    m_recv_hs = true;
    m_lzidblhs_tmr.KillTimer(); //got answer!
    Sleep(300);
+   //activate communication controller of the boot loader
+   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+   mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
    if (m_bl_op == 1) //deferred reading of flash
-   {    
-    //activate communication controller of the boot loader
-    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
-    //operation does not block thread
-    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, &m_bl_data[0], MCU_FLASH_SIZE);
-    mp_sbar->ShowProgressBar(true);
-    mp_sbar->SetProgressPos(0);
-    return;
-   }
+    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, &m_bl_data[0], MCU_FLASH_SIZE); //operation does not block thread
    if (m_bl_op == 2) //deferred writing of flash
-   {    
-    //activate communication controller of the boot loader
-    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
-    //operation does not block thread
-    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, &m_bl_data[0], MCU_FLASH_SIZE-BOOTLDR_SIZE);
-    mp_sbar->ShowProgressBar(true);
-    mp_sbar->SetProgressPos(0);
-    return;
-   }
+    mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, &m_bl_data[0], MCU_FLASH_SIZE-BOOTLDR_SIZE); //operation does not block thread
    if (m_bl_op == 3) //deferred reading of boot loader information
-   {    
-    //activate communication controller of the boot loader
-    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
-    //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_SIGNATURE, &m_bl_data[0], 0);
-    mp_sbar->ShowProgressBar(true);
-    mp_sbar->SetProgressPos(0);
-    return;
-   }
    if (m_bl_op == 4) //deferred reading of the EEPROM
-   {    
-    //activate communication controller of the boot loader
-    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
-    //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM, &m_bl_data[0], 0);
-    mp_sbar->ShowProgressBar(true);
-    mp_sbar->SetProgressPos(0);
-    return;
-   }
    if (m_bl_op == 5) //deferred writing to the EEPROM
-   {    
-    //activate communication controller of the boot loader
-    mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
-    mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
-    //operation does not block thread
     mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM, &m_bl_data[0], 0);
-    mp_sbar->ShowProgressBar(true);
-    mp_sbar->SetProgressPos(0);
-    return;
-   }
+   mp_sbar->ShowProgressBar(true);
+   mp_sbar->SetProgressPos(0);
+   return;
   }
  }
  

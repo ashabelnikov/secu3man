@@ -160,7 +160,8 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   CPoint _MapCoord(double x, double y);
   LPoint _UnMapCoord(CPoint pt);
   void _SetStateColors(bool state);
-  void _RestrictAndSetValue(size_t seridx, size_t index, double v);
+  double _RestrictAndSetValue(size_t seridx, size_t index, double v);
+  void _UpdateTipText(double val);
 
   std::vector<CSerieData> m_serie;
   CRect m_ctlRect;
