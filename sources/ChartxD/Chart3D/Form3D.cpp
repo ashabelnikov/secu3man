@@ -324,7 +324,7 @@ void __fastcall TForm3D::Chart1MouseMove(TObject *Sender, TShiftState Shift,
   }
   //Move all selected points
   v = Chart1->Series[m_air_flow_position + m_count_z]->YScreenToValue(Y);
-  ShiftPoints(v - Chart1->Series[m_air_flow_position + m_count_z]->YValue[m_val_n]);
+  ShiftPoints(v - GetChartValue(m_air_flow_position, m_val_n));
  }
 }
 
@@ -400,7 +400,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
  if (!CheckBox3d->Checked)
  { //2D
   for (int i = 0; i < 16; i++ )
-   RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] + m_pt_moving_step);
+   RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, i) + m_pt_moving_step);
  }
  else
  { //3D
@@ -419,7 +419,7 @@ void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
  if (!CheckBox3d->Checked)
  { //2D
   for (int i = 0; i < 16; i++ )
-   RestrictAndSetChartValue(i, Chart1->Series[m_air_flow_position + m_count_z]->YValue[i] - m_pt_moving_step);
+   RestrictAndSetChartValue(i, GetChartValue(m_air_flow_position, i) - m_pt_moving_step);
  }
  else
  {//3D
@@ -592,11 +592,11 @@ void TForm3D::FillChart(bool dir,int cm)
    as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
    if (cm)
    {
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,TColor(col[j]));
+    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,TColor(col[j])); //TODO: transform from firmware format to Chart format
    }
    else
    {
-    Chart1->Series[k]->Add(GetItem_o(j,i),as,clAqua);
+    Chart1->Series[k]->Add(GetItem_o(j,i),as,clAqua);                     //TODO: transform from firmware format to Chart format
     Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,clRed);
    }
   }
@@ -622,7 +622,7 @@ int __fastcall TForm3D::GetCurveSelIndex(void) const
 void __fastcall TForm3D::ShiftPoints(float i_value)
 {
  for(size_t i = 0; i < m_selpts.size(); ++i)
-  RestrictAndSetChartValue(m_selpts[i], Chart1->Series[GetCurveSelIndex() + m_count_z]->YValue[m_selpts[i]] + i_value);
+  RestrictAndSetChartValue(m_selpts[i], GetChartValue(GetCurveSelIndex(), m_selpts[i]) + i_value);
 }
 
 //---------------------------------------------------------------------------
@@ -646,7 +646,7 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(m_air_flow_position, index, v);
- Chart1->Series[GetCurveSelIndex() + m_count_z]->YValue[index] = v;
+ SetChartValue(GetCurveSelIndex(), index, v);
 }
 
 //---------------------------------------------------------------------------
@@ -654,7 +654,7 @@ void TForm3D::RestrictAndSetChartValue(int index_z, int index_x, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
  SetItem(index_z, index_x, v);
- Chart1->Series[(!CheckBoxBv->Checked ? m_count_z - 1 - index_z : index_z) + m_count_z]->YValue[index_x] = v;
+ SetChartValue((!CheckBoxBv->Checked ? m_count_z - 1 - index_z : index_z), index_x, v);
 }
 
 //---------------------------------------------------------------------------
@@ -663,7 +663,7 @@ void __fastcall TForm3D::CopyCurve(int fromIndex, int toIndex)
  for(int i = 0; i < m_count_x; ++i)
  { 
   SetChartValue(toIndex, i, GetChartValue(fromIndex, i));
-  SetItem(toIndex, i, Chart1->Series[fromIndex + m_count_z]->YValue[i]);
+  SetItem(toIndex, i, GetChartValue(fromIndex, i));
  }
 }
 
