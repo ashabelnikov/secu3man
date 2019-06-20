@@ -217,11 +217,14 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
  m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, m_gradSaturation, m_gradBrightness);
  for(int i = 0; i < (rows*cols); ++i)
   mp_itemColors[i] = 0;
+
+ mp_mapTr = new float[m_rows * m_cols];
 }
 
 CMapEditorCtrl::~CMapEditorCtrl()
 {
  delete[] mp_itemColors;
+ delete[] mp_mapTr;
 }
 
 BEGIN_MESSAGE_MAP(CMapEditorCtrl, Super)
@@ -287,7 +290,7 @@ void CMapEditorCtrl::OnPaint()
  {
   for(int j = 0; j < m_cols; ++j)
   {
-   float value = _GetItem<float>(mp_map, i,j);
+   float value = _GetItemTr(i,j);
    CRect rect = _GetItemRect(i, j);
    int index = _GetGradIndex(value);
    COLORREF customColor = _GetItem<COLORREF>(mp_itemColors, i, j);
@@ -384,8 +387,8 @@ void CMapEditorCtrl::OnLButtonDown(UINT nFlags, CPoint point)
      {
       if (m_OnChange)
       {
-       float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
-       _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
+       float previousValue = _GetItemTr(m_cur_i, m_cur_j);       
+       _SetItemTr(m_cur_i, m_cur_j, value); //save result
        if (previousValue != value)
        {
         m_OnChange();
@@ -452,8 +455,8 @@ void CMapEditorCtrl::OnEditChar(UINT nChar, CEditExCustomKeys* pSender)
 
  if (m_OnChange)
  {
-  float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
-  _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
+  float previousValue = _GetItemTr(m_cur_i, m_cur_j);
+  _SetItemTr(m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
   {
    m_OnChange();
@@ -532,8 +535,8 @@ void CMapEditorCtrl::OnEditKill(CEditExCustomKeys* pSender)
 
  if (m_OnChange)
  {
-  float previousValue = _GetItem<float>(mp_map, m_cur_i, m_cur_j);
-  _SetItem<float>(mp_map, m_cur_i, m_cur_j, value); //save result
+  float previousValue = _GetItemTr(m_cur_i, m_cur_j);
+  _SetItemTr(m_cur_i, m_cur_j, value); //save result
   if (previousValue != value)
   {
    m_OnChange();
@@ -580,7 +583,7 @@ void CMapEditorCtrl::_ActivateEdit(void)
  CRect rect = _GetItemRect(m_cur_i, m_cur_j);
  mp_edit->Create(WS_BORDER | WS_CHILD | WS_VISIBLE | ES_CENTER, rect, this, 0);
  mp_edit->SetDecimalPlaces(m_decPlaces);
- mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
+ mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
  mp_edit->SetFocus();
  mp_edit->SetSel(0, -1); //select all text
  mp_edit->SetFont(GetFont(), TRUE);
@@ -836,7 +839,7 @@ void CMapEditorCtrl::UpdateDisplay(int i /*=-1*/, int j /*=-1*/)
  if (mp_edit.get() && mp_edit->GetSafeHwnd())
  {
   if (upd_all || (m_cur_i == i && m_cur_j == j))
-   mp_edit->SetValue(_GetItem<float>(mp_map, m_cur_i, m_cur_j));
+   mp_edit->SetValue(_GetItemTr(m_cur_i, m_cur_j));
  }
 
  _UpdateMinMaxElems();
@@ -892,7 +895,38 @@ void CMapEditorCtrl::_UpdateMinMaxElems(void)
 {
  if (m_absGrad)
   return;
- m_vMinVal = *std::min_element(mp_map, mp_map + (m_rows* m_cols));
- m_vMaxVal = *std::max_element(mp_map, mp_map + (m_rows* m_cols));
+
+ float* ptr = mp_map;
+ size_t size = (m_rows * m_cols);
+
+ if (m_OnValueTransform)
+ {
+  ptr = mp_mapTr;
+  for(size_t i = 0; i < size; ++i)  
+   ptr[i] = m_OnValueTransform(mp_map[i], 0);
+ }
+
+ m_vMinVal = *std::min_element(ptr, ptr + size);
+ m_vMaxVal = *std::max_element(ptr, ptr + size);
 }
 
+void CMapEditorCtrl::setOnValueTransform(EventHandler3 OnCB)
+{
+ m_OnValueTransform = OnCB;
+}
+
+void CMapEditorCtrl::_SetItemTr(int i, int j, float value)
+{
+ if (m_OnValueTransform)
+  _SetItem<float>(mp_map, i, j, m_OnValueTransform(value, 1)); //from chart
+ else
+  _SetItem<float>(mp_map, i, j, value);
+}
+
+float CMapEditorCtrl::_GetItemTr(int i, int j)
+{
+ if (m_OnValueTransform)
+  return m_OnValueTransform(_GetItem<float>(mp_map, i,j), 0); //to chart
+ else
+  return _GetItem<float>(mp_map, i,j);
+}

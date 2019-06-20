@@ -43,6 +43,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
 
   typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate2<AbroadDir, int> EventHandler2;
+  typedef fastdelegate::FastDelegate2<float, int, float> EventHandler3; //param1, param2, retval
 
   CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder = false, HMODULE hMod = NULL, int minLabelWidthInChars = 0, bool readOnly = false, bool absGrad = false);
   virtual ~CMapEditorCtrl();
@@ -67,6 +68,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   void setOnAbroadMove(EventHandler2 OnCB);
   void setOnChange(EventHandler OnCB);
   void setOnSelChange(EventHandler OnCB);
+  void setOnValueTransform(EventHandler3 OnCB);
 
   static SetSettings(int gradSat, int gradBrt, bool boldFont);
 
@@ -101,6 +103,9 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   int _GetLabelHeight(void);
   void _DrawMarker(CDC* pDC, int i, int j);
 
+  void _SetItemTr(int i, int j, float value);
+  float _GetItemTr(int i, int j);
+
   template <class T>
   T _GetItem(T* p_array, int i, int j)
   {
@@ -126,6 +131,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   float m_vMinVal;
   float m_vMaxVal;
   float* mp_map; //array of data for editing
+  float* mp_mapTr;
   int m_decPlaces; // number for decimal places
   int m_decPlacesH;
   int m_decPlacesV;
@@ -134,6 +140,7 @@ class AFX_EXT_CLASS CMapEditorCtrl : public CWnd
   EventHandler2 m_OnAbroadMove;
   EventHandler m_OnChange;
   EventHandler m_OnSelChange;
+  EventHandler3 m_OnValueTransform;
   CFont m_cFont;
   float* mp_horizLabels;
   float* mp_vertLabels;

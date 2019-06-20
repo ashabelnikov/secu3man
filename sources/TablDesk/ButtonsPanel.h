@@ -41,6 +41,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   typedef CDialog Super;
 
  public:
+  typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
@@ -120,6 +121,9 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
 
   void SetMapEditorSettings(int gradSat, int gradBrt, bool bold);
 
+  void SetITEdMode(int mode);
+  int GetITEdMode(void) const;
+
   virtual void MakeChartsChildren(bool children);
 
   void EnableToggleMapWnd(bool toggle);
@@ -129,6 +133,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void ShowOpenedCharts(bool i_show);
 
  public: //установка обработчиков событий
+  void setOnChangeSettings(EventHandler OnCB);
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnCloseMapWnd(EventWithHWND OnFunction);
   void setOnOpenMapWnd(EventWithHWND OnFunction); 
@@ -204,6 +209,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   //may be overloaded to change behaviour
   virtual bool IsAllowed(void);
 
+  EventHandler  m_OnChangeSettings;
   EventWithCode m_OnMapChanged;
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
@@ -213,6 +219,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   int m_scrl_view;
  private:
   void _MakeWindowChild(HWND hwnd, bool child);
+  void _GetITModeRange(float& y1, float& y2);
 
   std::auto_ptr<CWndScroller> mp_scr;
 
@@ -248,6 +255,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   std::auto_ptr<CGridModeEditorInjDlg> mp_gridModeEditorInjDlg;
   std::auto_ptr<CAutoTuneController> mp_autoTuneCntr;
 
+  void OnChangeSettingsGME(void);
+
   static void __cdecl OnChangeStartMap(void* i_param);
   static void __cdecl OnCloseStartMap(void* i_param);
   static void __cdecl OnChangeIdleMap(void* i_param);
@@ -256,6 +265,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnCloseWorkMap(void* i_param);
   static void __cdecl OnChangeTempMap(void* i_param);
   static void __cdecl OnCloseTempMap(void* i_param);
+  static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
 protected:
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
 private:
@@ -470,4 +480,6 @@ protected:
 
   HWND m_openedChart;
   bool m_toggleMapWnd;
+  
+  int m_it_mode;
 };

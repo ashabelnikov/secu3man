@@ -49,6 +49,9 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step);
+ void  __declspec(dllexport)  __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max);
+ void  __declspec(dllexport)  __cdecl Chart3DSetOnValueTransform(HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle);
 }
 
 extern HINSTANCE hInst;
@@ -105,13 +108,17 @@ void __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_
  if (NULL==pForm)
   return;
 
- //delete old values and then fill series again
- for(int i = 0; i < pForm->Chart1->SeriesList->Count; i++)
-  for (;pForm->Chart1->Series[i]->Count() > 0;)
-   pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);
+ if (original_function && modified_function)
+ {
+  //delete old values and then fill series again
+  for(int i = 0; i < pForm->Chart1->SeriesList->Count; i++)
+   for (;pForm->Chart1->Series[i]->Count() > 0;)
+    pForm->Chart1->Series[i]->Delete(pForm->Chart1->Series[i]->Count()-1);
 
- pForm->mp_original_function = original_function;
- pForm->mp_modified_function = modified_function;
+  pForm->mp_original_function = original_function;
+  pForm->mp_modified_function = modified_function;
+ }
+
  pForm->DataPrepare();
 }
 
@@ -201,6 +208,42 @@ void __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step)
  if (NULL==pForm)
   return;
  pForm->m_pt_moving_step = step;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->m_fnc_min = fnc_min;
+ pForm->m_fnc_max = fnc_max;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetOnValueTransform(HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetOnValueTransform(i_pOnValueTransform, i_param);
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ switch(i_axis)
+ {
+  case 1: //Y
+   pForm->SetYAxisTitle(axisTitle);
+   break;
+  default:
+   MessageBox(hWnd, _T("Chart3DSetAxisTitle: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
+   break;
+ }
 }
 
 //---------------------------------------------------------------------------

@@ -196,6 +196,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optGradSaturation(_T("GradSaturation"))
 , m_optGradBrightness(_T("GradBrightness"))
 , m_optBoldFont(_T("BoldFont"))
+, m_optITEdMode(_T("InjTimEdMode"))
+//Splitters
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
 //Inj.driver
@@ -568,6 +570,7 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optGradSaturation, _T("120"), 0, 255);
  me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
  me.ReadInt(m_optBoldFont, _T("0"), 0, 1);
+ me.ReadInt(m_optITEdMode, _T("0"), 0, 2);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -1684,6 +1687,12 @@ bool CAppSettingsModel::WriteSettings(void)
   me.WriteComment(_T("Использовать жирные щрифты. Установите в 1 для жирных шрифтов или в 0 для обычных"));
  me.WriteInt(m_optBoldFont);
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  me.WriteComment(_T("Editing mode of the inj. timing map. 0 - [0...720 BTDC], 1 - [0...720 ATDC], 2 - [-360...+360 BTDC]"));
+ else
+  me.WriteComment(_T("Режим редактирования таблицы фазы впрыска. 0 - [0...720 до ВМТ], 1 - [0...720 после ВМТ], 2 - [-360...360 до ВМТ]"));
+ me.WriteInt(m_optITEdMode);
+
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2545,4 +2554,14 @@ float CAppSettingsModel::GetHoldDutyPtMovStep(void) const
 bool CAppSettingsModel::GetInjDrvTabActive(void) const
 {
  return m_optInjDrvTabActive.value;
+}
+
+int CAppSettingsModel::GetITEdMode(void) const
+{
+ return m_optITEdMode.value;
+}
+
+void CAppSettingsModel::SetITEdMode(int mode)
+{
+ m_optITEdMode.value = mode;
 }

@@ -139,6 +139,7 @@ class CInjDriverTabDlg : public CTabDialog
   CComboBox m_set_of_sett_combo;
 
   CStatic m_voltage_pane;
+  CStatic m_gas_v_pane;
 
   CButton m_eeprom_save_btn;
   CButton m_peak_on_tabsel_check;

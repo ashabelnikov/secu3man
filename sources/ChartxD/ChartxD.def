@@ -1,5 +1,5 @@
 EXPORTS
-  ; VC funcname             = BCB funcname
+  ; VC funcname              = BCB funcname
   Chart2DCreate              = _Chart2DCreate
   Chart2DUpdate              = _Chart2DUpdate
   Chart2DSetOnChange         = _Chart2DSetOnChange
@@ -16,18 +16,21 @@ EXPORTS
   Chart2DSetPtValuesFormat   = _Chart2DSetPtValuesFormat
   Chart2DSetPtMovingStep     = _Chart2DSetPtMovingStep
 
-  ; VC funcname             = BCB funcname
-  Chart3DCreate             = _Chart3DCreate
-  Chart3DUpdate             = _Chart3DUpdate
-  Chart3DSetOnChange        = _Chart3DSetOnChange
-  Chart3DSetOnClose         = _Chart3DSetOnClose
-  Chart3DSetOnGetAxisLabel  = _Chart3DSetOnGetAxisLabel
-  Chart3DShow               = _Chart3DShow
-  Chart3DSetOnWndActivation = _Chart3DSetOnWndActivation
-  Chart3DEnable             = _Chart3DEnable
-  Chart3DSetPtValuesFormat  = _Chart3DSetPtValuesFormat
-  Chart3DSetPtMovingStep    = _Chart3DSetPtMovingStep
+  ; VC funcname              = BCB funcname
+  Chart3DCreate              = _Chart3DCreate
+  Chart3DUpdate              = _Chart3DUpdate
+  Chart3DSetOnChange         = _Chart3DSetOnChange
+  Chart3DSetOnClose          = _Chart3DSetOnClose
+  Chart3DSetOnGetAxisLabel   = _Chart3DSetOnGetAxisLabel
+  Chart3DShow                = _Chart3DShow
+  Chart3DSetOnWndActivation  = _Chart3DSetOnWndActivation
+  Chart3DEnable              = _Chart3DEnable
+  Chart3DSetPtValuesFormat   = _Chart3DSetPtValuesFormat
+  Chart3DSetPtMovingStep     = _Chart3DSetPtMovingStep
+  Chart3DSetFncRange         = _Chart3DSetFncRange
+  Chart3DSetOnValueTransform = _Chart3DSetOnValueTransform
+  Chart3DSetAxisTitle        = _Chart3DSetAxisTitle
 
-  ; VC funcname             = BCB funcname
+  ; VC funcname              = BCB funcname
   ChartxDSetLanguage         = _ChartxDSetLanguage
   ChartxDShowHints           = _ChartxDShowHints

@@ -73,6 +73,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   void OnSettingsChanged(int action);
 
   //from view
+  void OnChangeSettingsMapEd(void);
   void OnOpenEEPROMFromFile(void);
   void OnSaveEEPROMToFile(void);
   void OnReadEEPROMFromSECU(void);

@@ -37,6 +37,7 @@ namespace DLL
  typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
  typedef void (__cdecl *OnWndActivation)(void* i_param, long i_cmd);
  typedef void (__cdecl *OnChangeValue)(void* i_param, int i_type, float i_value);
+ typedef float (__cdecl *OnValueTransform)(void* i_param, float sourceVal, int direction);
  //2D
  typedef HWND (__cdecl *Chart2DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int bins_mode);
  typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
@@ -65,6 +66,10 @@ namespace DLL
  typedef void (__cdecl *Chart3DEnable_Addr)(HWND hWnd, bool i_enable);
  typedef void (__cdecl *Chart3DSetPtValuesFormat_Addr) (HWND hWnd, LPCTSTR ptValFormat);
  typedef void (__cdecl *Chart3DSetPtMovingStep_Addr) (HWND hWnd, float step);
+ typedef void (__cdecl *Chart3DSetFncRange_Addr) (HWND hWnd, float fnc_min, float fnc_max);
+ typedef void (__cdecl *Chart3DSetOnValueTransform_Addr) (HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
+ typedef void (__cdecl *Chart3DSetAxisTitle_Addr) (HWND hWnd, int i_axis, LPCTSTR axisTitle);
+
  //common
  typedef void (__cdecl *ChartxDSetLanguage_Addr) (int i_language);
  typedef void (__cdecl *ChartxDShowHints_Addr) (int i_show);
@@ -96,6 +101,9 @@ namespace DLL
  extern Chart3DEnable_Addr              Chart3DEnable;
  extern Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat;
  extern Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep;
+ extern Chart3DSetFncRange_Addr         Chart3DSetFncRange; 
+ extern Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform;
+ extern Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle;
 
  extern ChartxDSetLanguage_Addr         ChartxDSetLanguage;
  extern ChartxDShowHints_Addr           ChartxDShowHints;

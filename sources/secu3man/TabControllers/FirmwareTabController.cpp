@@ -146,6 +146,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  mp_view->mp_TablesPanel->setOnRPMGridEditButton(MakeDelegate(this, &CFirmwareTabController::OnEditRPMGrid));
  mp_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
  mp_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
+ mp_view->mp_TablesPanel->setOnChangeSettings(MakeDelegate(this, &CFirmwareTabController::OnChangeSettingsMapEd));
 
  mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
  mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
@@ -181,6 +182,8 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 
  m_edm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_edm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
+
+ mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 }
 
 void CFirmwareTabController::OnActivate(void)
@@ -209,6 +212,8 @@ void CFirmwareTabController::OnActivate(void)
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+
+ mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -1720,4 +1725,9 @@ void CFirmwareTabController::OnCESettingsButton(void)
  ws.m_CESettingsWnd_X = wndPos.x; 
  ws.m_CESettingsWnd_Y = wndPos.y;
  mp_settings->SetWndSettings(ws); 
+}
+
+void CFirmwareTabController::OnChangeSettingsMapEd(void)
+{
+ mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
 }

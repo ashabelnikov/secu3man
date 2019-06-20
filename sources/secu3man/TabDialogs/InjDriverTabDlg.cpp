@@ -130,6 +130,7 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_EEPROM_SAVE_BUTTON, m_eeprom_save_btn);
 
  DDX_Control(pDX, IDC_VOLTAGE_PANE, m_voltage_pane);
+ DDX_Control(pDX, IDC_INJDRV_GAS_V_PANE, m_gas_v_pane);
 
  DDX_Control(pDX, IDC_PEAK_ON_TABSEL_CHECK, m_peak_on_tabsel_check);
  DDX_Control(pDX, IDC_PEAK_DUTY_TABSEL_CHECK, m_peak_duty_tabsel_check);
@@ -246,6 +247,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
 
  ON_UPDATE_COMMAND_UI(IDC_VOLTAGE_PANE,OnUpdateControlsVoltage)
  ON_UPDATE_COMMAND_UI(IDC_VOLTAGE_CAPTION,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_GAS_V_PANE,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_GAS_V_CAPTION,OnUpdateControlsVoltage)
 
  ON_UPDATE_COMMAND_UI(IDC_EEPROM_SAVE_BUTTON,OnUpdateControlsEESave)
 
@@ -751,6 +754,7 @@ void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only 
   CString str;
   str.Format("%5.2f", ip_data->voltage);
   m_voltage_pane.SetWindowText(str);
+  m_gas_v_pane.SetWindowText(ip_data->gas_v ? _T("1") : _T("0"));
   SetChartVoltageValue(ip_data->voltage);
   mp_chart->Invalidate(TRUE);
   return;
@@ -761,6 +765,7 @@ void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only 
  CString str;
  str.Format("%5.2f", ip_data->voltage);
  m_voltage_pane.SetWindowText(str);
+ m_gas_v_pane.SetWindowText(ip_data->gas_v ? _T("1") : _T("0"));
  SetChartVoltageValue(ip_data->voltage);
 
  if (set_idx == m_set_of_sett_idx)

@@ -42,6 +42,7 @@
 typedef void (__cdecl *EventHandler)(void* i_param);
 typedef void (__cdecl *OnWndActivation)(void* i_param, long cmd);
 typedef void (__cdecl *OnGetAxisLabel)(LPTSTR io_label_string, int index, void* i_param);
+typedef float (__cdecl *OnValueTransform)(void* i_param, float sourceVal, int direction);
 
 //---------------------------------------------------------------------------
 class TForm3D : public TForm
@@ -177,6 +178,8 @@ class TForm3D : public TForm
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
+  void SetOnValueTransform(OnValueTransform i_pOnValueTransform, void* i_param);
+  void SetYAxisTitle(const AnsiString& title);
 
   void Enable(bool enable);
   void InitPopupMenu(HINSTANCE hInstance);
@@ -237,6 +240,10 @@ class TForm3D : public TForm
   //адпес функции которая будет вызываться при рисовании надписей на оси X
   OnGetAxisLabel m_pOnGetXAxisLabel;
   void* m_param_on_get_x_axis_label;
+
+  //optional callback function which will be called for transforming of each value
+  OnValueTransform m_pOnValueTransform;
+  void* m_param_on_value_transform;
 
   int m_setval;
   int m_val_n;

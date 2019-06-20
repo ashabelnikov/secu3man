@@ -2301,6 +2301,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
  m_recv.ee_status = CHECKBIT8(ee_status, 0);
  m_recv.set0_corrupted = CHECKBIT8(ee_status, 1);
  m_recv.set1_corrupted = CHECKBIT8(ee_status, 2);
+ m_recv.gas_v = CHECKBIT8(ee_status, 3);
  m_recv.set_idx = CHECKBIT8(ee_status, 7);
 
  unsigned char type = 0;

@@ -57,6 +57,9 @@ namespace DLL
  Chart3DEnable_Addr              Chart3DEnable = NULL;
  Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat = NULL;
  Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep = NULL;
+ Chart3DSetFncRange_Addr         Chart3DSetFncRange = NULL; 
+ Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform = NULL;
+ Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle = NULL;
 
  ChartxDSetLanguage_Addr         ChartxDSetLanguage = NULL;
  ChartxDShowHints_Addr           ChartxDShowHints = NULL;
@@ -119,6 +122,9 @@ namespace DLL
    Chart3DEnable = NULL;
    Chart3DSetPtValuesFormat = NULL;
    Chart3DSetPtMovingStep = NULL;
+   Chart3DSetFncRange = NULL; 
+   Chart3DSetOnValueTransform = NULL;
+   Chart3DSetAxisTitle = NULL;
    //common
    ChartxDSetLanguage = NULL;
    ChartxDShowHints = NULL;
@@ -152,6 +158,9 @@ namespace DLL
    LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
    LoadFunction(hModule, Chart3DSetPtValuesFormat, "Chart3DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart3DSetPtMovingStep, "Chart3DSetPtMovingStep", status);
+   LoadFunction(hModule, Chart3DSetFncRange, "Chart3DSetFncRange", status);
+   LoadFunction(hModule, Chart3DSetOnValueTransform, "Chart3DSetOnValueTransform", status);
+   LoadFunction(hModule, Chart3DSetAxisTitle, "Chart3DSetAxisTitle", status);
    //common
    LoadFunction(hModule, ChartxDSetLanguage, "ChartxDSetLanguage", status);
    LoadFunction(hModule, ChartxDShowHints, "ChartxDShowHints", status);

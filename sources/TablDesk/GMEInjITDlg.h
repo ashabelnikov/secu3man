@@ -43,9 +43,14 @@ class CGMEInjITDlg : public CTabDialog
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
+  void setOnChangeSettings(EventHandler OnCB);
   void UpdateView(void);
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load);
+
+  // 0 - [0...720 BTDC], 1 - [0...720 ATDC], 2 - [-360...360 BTDC]
+  void SetITMode(int mode);
+  int GetITMode(void) const;
 
  public:
 
@@ -54,13 +59,21 @@ class CGMEInjITDlg : public CTabDialog
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnChangeITMode();
   DECLARE_MESSAGE_MAP()
 
   virtual LPCTSTR GetDialogID(void) const;
 
  private:
+  float OnValueTransform(float source, int direction);
+  void _GetITModeRange(float& y1, float& y2);
+
   CMapEditorCtrl m_it_map;
+  CComboBox m_it_mode;
   CFont m_font;
+
+  int m_it_mode_val;
+  EventHandler m_on_change_sett;
 
   float* mp_ITMap;
   float* mp_rpmGrid;

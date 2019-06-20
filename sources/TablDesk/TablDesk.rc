@@ -312,6 +312,7 @@ EXSTYLE WS_EX_CONTROLPARENT
 FONT 8, "MS Sans Serif"
 BEGIN
     CONTROL         "IT map",IDC_GME_INJ_IT,"MFCMapEditorCtrl",WS_TABSTOP,5,10,510,250,WS_EX_STATICEDGE
+    COMBOBOX        IDC_GME_IT_MODE_COMBO,400,270,100,40,CBS_DROPDOWNLIST | CBS_DISABLENOSCROLL | WS_VSCROLL | WS_TABSTOP
 END
 
 IDD_GME_INJ_IREG DIALOGEX 0, 0, 500, 300
@@ -525,6 +526,7 @@ BEGIN
     IDS_MAPS_AERPM_UNIT     "%"
     IDS_MAPS_ADVANGLE_UNIT  "УОЗ (град.)"
     IDS_MAPS_INJTIM_UNIT    "Фаза впрыска (град. до ВМТ)"
+    IDS_MAPS_INJTIM_UNIT1   "Фаза впрыска (град. после ВМТ)"
     IDS_MAPS_GDP_UNIT       "Полож. газ. дозатора (%)"
     IDS_MAPS_COEFF_UNIT     "Коэффициент"
     IDS_MAPS_COEFFP_UNIT    "Коэффициент (%)"
@@ -595,6 +597,13 @@ BEGIN
     IDS_GME_INJ_CELBLK      "Блокировать"
     IDS_GME_INJ_CELUNBLK    "Разблокировать"
     IDS_GME_INJ_STATUS_CLTTH "Двигатель не прогрет"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_GME_IT_MODE_720BTDC "0...720° до ВМТ"
+    IDS_GME_IT_MODE_720ATDC "0...720° после ВМТ"
+    IDS_GME_IT_MODE_M360360 "-360...360° (до ВМТ)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1131,6 +1140,7 @@ BEGIN
     IDS_MAPS_AERPM_UNIT     "%"
     IDS_MAPS_ADVANGLE_UNIT  "Angle (degr.)"
     IDS_MAPS_INJTIM_UNIT    "Injection timing (degr. BTDC)"
+    IDS_MAPS_INJTIM_UNIT1   "Injection timing (degr. ATDC)"
     IDS_MAPS_GDP_UNIT       "Gas dose pos. (%)"
     IDS_MAPS_COEFF_UNIT     "Coefficient"
     IDS_MAPS_COEFFP_UNIT     "Coefficient (%)"
@@ -1201,6 +1211,13 @@ BEGIN
     IDS_GME_INJ_CELBLK      "Block cell"
     IDS_GME_INJ_CELUNBLK    "Unblock cell"
     IDS_GME_INJ_STATUS_CLTTH "Engine is not warmed up"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_GME_IT_MODE_720BTDC "0...720° before TDC"
+    IDS_GME_IT_MODE_720ATDC "0...720° after TDC"
+    IDS_GME_IT_MODE_M360360 "-360...360° (BTDC)"
 END
 
 /////////////////////////////////////////////////////////////////////////////

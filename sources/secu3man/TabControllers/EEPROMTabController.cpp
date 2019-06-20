@@ -92,6 +92,8 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
  mp_view->mp_TablesPanel->setOnCloseMapWnd(MakeDelegate(this, &CEEPROMTabController::OnCloseMapWnd));
  mp_view->mp_TablesPanel->setOnOpenMapWnd(MakeDelegate(this, &CEEPROMTabController::OnOpenMapWnd));
  mp_view->mp_TablesPanel->setIsAllowed(MakeDelegate(this, &CEEPROMTabController::IsEEPROMOpened));
+
+ mp_view->mp_TablesPanel->setOnChangeSettings(MakeDelegate(this, &CEEPROMTabController::OnChangeSettingsMapEd));
 }
 
 CEEPROMTabController::~CEEPROMTabController()
@@ -111,6 +113,8 @@ void CEEPROMTabController::OnSettingsChanged(int action)
 
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
+
+ mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
@@ -137,6 +141,8 @@ void CEEPROMTabController::OnActivate(void)
 
  mp_view->EnableMakingChartsChildren(mp_settings->GetChildCharts());
  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+
+ mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -873,4 +879,9 @@ void CEEPROMTabController::finishOnWriteEepromToSECU(void)
 
  m_sbar->ShowProgressBar(true);
  m_sbar->SetProgressPos(0);
+}
+
+void CEEPROMTabController::OnChangeSettingsMapEd(void)
+{
+ mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
 }

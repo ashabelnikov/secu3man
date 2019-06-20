@@ -242,6 +242,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->setOnSaveTablesTo(MakeDelegate(this, &CPMTablesController::OnSaveTablesTo));
  mp_view->setOnImportFromS3F(MakeDelegate(this, &CPMTablesController::OnImportFromS3F));
  mp_view->setOnExportToS3F(MakeDelegate(this, &CPMTablesController::OnExportToS3F));
+ mp_view->mp_ButtonsPanel->setOnChangeSettings(MakeDelegate(this, &CPMTablesController::OnChangeSettings));
 
  //карты (текущие)
  m_maps = new SECU3FWMapsItem;
@@ -263,6 +264,7 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->mp_ButtonsPanel->SetMaxTPS(mp_settings->GetMaxTPS());
  mp_view->mp_ButtonsPanel->SetCLTThrd(mp_settings->GetCLTThrd());
  mp_view->mp_ButtonsPanel->SetMapEditorSettings(mp_settings->GetGradSaturation(), mp_settings->GetGradBrightness(), mp_settings->GetBoldFont());
+ mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
 }
 
 CPMTablesController::~CPMTablesController()
@@ -284,6 +286,8 @@ void CPMTablesController::OnActivate(void)
 
  //запускаем таймер по которому будет ограничиваться частота посылки данных в SECU-3
  m_td_changes_timer.SetTimer(this, &CPMTablesController::OnTableDeskChangesTimer, 250);
+
+ mp_view->mp_ButtonsPanel->SetITEdMode(mp_settings->GetITEdMode());
 }
 
 void CPMTablesController::OnDeactivate(void)
@@ -781,3 +785,7 @@ void CPMTablesController::OnFunSetChanged(const SECU3IO::FunSetPar* data)
  mp_view->mp_ButtonsPanel->SetLoadAxisCfg(data->map_lower_pressure, data->map_upper_pressure, data->load_src_cfg);
 }
 
+void CPMTablesController::OnChangeSettings(void)
+{
+ mp_settings->SetITEdMode(mp_view->mp_ButtonsPanel->GetITEdMode());
+}

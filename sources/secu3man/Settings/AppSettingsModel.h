@@ -172,6 +172,8 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetGradSaturation(void);
   virtual int GetGradBrightness(void);
   virtual int GetBoldFont(void);
+  virtual int GetITEdMode(void) const;
+  virtual void SetITEdMode(int mode);
 
   virtual bool GetInjDrvTabActive(void) const;
   virtual COLORREF GetVoltLineColor(void) const;
@@ -406,6 +408,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optGradSaturation;
   OptField_t<int> m_optGradBrightness;
   OptField_t<int> m_optBoldFont;
+  OptField_t<int> m_optITEdMode;
 
   //Splitters
   OptField_t<int> m_optParamMonVert;

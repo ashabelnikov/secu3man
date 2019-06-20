@@ -64,6 +64,8 @@ __fastcall TForm3D::TForm3D(HWND parent)
 , m_param_on_close(NULL)
 , m_param_on_wnd_activation(NULL)
 , m_param_on_get_x_axis_label(NULL)
+, m_pOnValueTransform(NULL)
+, m_param_on_value_transform(NULL)
 , m_setval(0)
 , m_val_n(0)
 , m_air_flow_position(0)
@@ -148,6 +150,13 @@ void TForm3D::SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param
 {
  m_pOnGetXAxisLabel = i_pOnGetAxisLabel;
  m_param_on_get_x_axis_label = i_param;
+}
+
+//---------------------------------------------------------------------------
+void TForm3D::SetOnValueTransform(OnValueTransform i_pOnValueTransform, void* i_param)
+{
+ m_pOnValueTransform = i_pOnValueTransform;
+ m_param_on_value_transform = i_param;
 }
 
 //---------------------------------------------------------------------------
@@ -406,7 +415,7 @@ void __fastcall TForm3D::ButtonAngleUpClick(TObject *Sender)
  { //3D
   for (int i = 0; i < m_count_z; i++ )
    for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j) + m_pt_moving_step);
+    RestrictAndSetChartValue(i, j, GetItem_m(i, j) + m_pt_moving_step);
  }
 
  if (m_pOnChange)
@@ -425,7 +434,7 @@ void __fastcall TForm3D::ButtonAngleDownClick(TObject *Sender)
  {//3D
   for (int i = 0; i < m_count_z; i++ )
    for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j) - m_pt_moving_step);
+    RestrictAndSetChartValue(i, j, GetItem_m(i, j) - m_pt_moving_step);
  }
 
  if (m_pOnChange)
@@ -439,11 +448,11 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
  { //2D
   float* p_source_function = new float[m_count_x];
   for (int i = 0; i < m_count_x; ++i)
-   p_source_function[i] = GetItem_m(m_air_flow_position, i);
+   p_source_function[i] = *GetItem_mp(m_air_flow_position, i);
   MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 3);
   delete[] p_source_function;
   for (int i = 0; i < m_count_x; i++ )
-   RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+   RestrictAndSetChartValue(i, GetItem_m(m_air_flow_position, i));
  }
  else
  {//3D
@@ -454,7 +463,7 @@ void __fastcall TForm3D::Smoothing3xClick(TObject *Sender)
   delete[] p_source_function;
   for (int i = 0; i < m_count_z; i++ )
    for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j));
+    RestrictAndSetChartValue(i, j, GetItem_m(i, j));
  }
 
  if (m_pOnChange)
@@ -468,11 +477,11 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
  { //2D
   float* p_source_function = new float[m_count_x];
   for (int i = 0; i < m_count_x; ++i)
-   p_source_function[i] = GetItem_m(m_air_flow_position, i);
+   p_source_function[i] = *GetItem_mp(m_air_flow_position, i);
   MathHelpers::Smooth1D(p_source_function, GetItem_mp(m_air_flow_position, 0), m_count_x, 5);
   delete[] p_source_function;
   for (int i = 0; i < m_count_x; i++ )
-   RestrictAndSetChartValue(i, *GetItem_mp(m_air_flow_position, i));
+   RestrictAndSetChartValue(i, GetItem_m(m_air_flow_position, i));
  }
  else
  { //3D
@@ -483,7 +492,7 @@ void __fastcall TForm3D::Smoothing5xClick(TObject *Sender)
   delete[] p_source_function;
   for (int i = 0; i < m_count_z; i++ )
    for (int j = 0; j < m_count_x; j++ )
-    RestrictAndSetChartValue(i, j, *GetItem_mp(i, j)); 
+    RestrictAndSetChartValue(i, j, GetItem_m(i, j)); 
  }
 
  if (m_pOnChange)
@@ -496,7 +505,10 @@ float TForm3D::GetItem_o(int z, int x) const
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0.0f;
  int i  = (m_count_z - 1) - z;
- return *(mp_original_function + ((i * m_count_x) + x));
+ if (m_pOnValueTransform)
+  return m_pOnValueTransform(m_param_on_value_transform, *(mp_original_function + ((i * m_count_x) + x)), 0); //get
+ else
+  return *(mp_original_function + ((i * m_count_x) + x));
 }
 
 //---------------------------------------------------------------------------
@@ -505,7 +517,10 @@ float TForm3D::GetItem_m(int z, int x) const
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0.0f;
  int i  = (m_count_z - 1) - z;
- return *(mp_modified_function + ((i * m_count_x) + x));
+ if (m_pOnValueTransform)
+  return m_pOnValueTransform(m_param_on_value_transform, *(mp_modified_function + ((i * m_count_x) + x)), 0); //get
+ else
+  return *(mp_modified_function + ((i * m_count_x) + x));
 }
 
 //---------------------------------------------------------------------------
@@ -522,7 +537,10 @@ int TForm3D::SetItem(int z, int x, float value)
 {
  if ((z >= m_count_z) || (x >= m_count_x)) return 0;
  int i  = (m_count_z - 1) - z;
- *(mp_modified_function + ((i * m_count_x) + x)) = value;
+ if (m_pOnValueTransform)
+  *(mp_modified_function + ((i * m_count_x) + x)) = m_pOnValueTransform(m_param_on_value_transform, value, 1); //set
+ else
+  *(mp_modified_function + ((i * m_count_x) + x)) = value;
  return 1;
 }
 
@@ -592,11 +610,11 @@ void TForm3D::FillChart(bool dir,int cm)
    as.sprintf(m_values_format_x.c_str(),m_u_slots[i]);
    if (cm)
    {
-    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,TColor(col[j])); //TODO: transform from firmware format to Chart format
+    Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,TColor(col[j]));
    }
    else
    {
-    Chart1->Series[k]->Add(GetItem_o(j,i),as,clAqua);                     //TODO: transform from firmware format to Chart format
+    Chart1->Series[k]->Add(GetItem_o(j,i),as,clAqua);
     Chart1->Series[k + m_count_z]->Add(GetItem_m(j,i),as,clRed);
    }
   }
@@ -642,6 +660,7 @@ void __fastcall TForm3D::UnmarkPoints(void)
 }
 
 //---------------------------------------------------------------------------
+// v - value in chart's format
 void TForm3D::RestrictAndSetChartValue(int index, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
@@ -650,6 +669,7 @@ void TForm3D::RestrictAndSetChartValue(int index, double v)
 }
 
 //---------------------------------------------------------------------------
+// v - value in chart's format
 void TForm3D::RestrictAndSetChartValue(int index_z, int index_x, double v)
 {
  v = MathHelpers::RestrictValue<double>(v, m_fnc_min, m_fnc_max);
@@ -1120,4 +1140,9 @@ void TForm3D::UpdateSystemColors(void)
  Chart1->LeftAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
  Chart1->BottomAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
  Chart1->DepthAxis->Axis->Color = TColor(~GetSysColor(COLOR_BTNFACE)&0xFFFFFF);
+}
+
+void TForm3D::SetYAxisTitle(const AnsiString& title)
+{
+ Chart1->LeftAxis->Title->Caption = title;
 }

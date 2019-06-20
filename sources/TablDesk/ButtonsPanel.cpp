@@ -1400,6 +1400,54 @@ void CButtonsPanel::OnGridMapClosedInj(HWND hwnd, int mapType)
 }
 
 //------------------------------------------------------------------------
+float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, int direction)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return source;
+ }
+
+ float value = 0;
+ if (direction)
+ { //from chart
+  switch(_this->m_it_mode)
+  {
+   case 0: //BTDC
+    value = source;
+    break;
+   case 1: //ATDC
+    value = 720.0f - source;
+    break;
+   case 2: //-360...360
+    value = 720.0f + source;
+    value = source;
+    break;
+  }
+ }
+ else
+ { //to chart
+  switch(_this->m_it_mode)
+  {
+   case 0: //BTDC
+    value = (source > 720.0f) ? source - 720.0f : source;
+    break;
+   case 1: //ATDC
+    value = 720.0f - (source > 720.0f) ? source - 720.0f : source;
+    break;
+   case 2: //-360...360
+    if (source > 720.0f)
+     value = source - 720.0f;
+    else
+     value = (source < 360.0f) ? source : -(720.0f - source);
+    break;
+  }
+ }
+ return value;
+}
+
+//------------------------------------------------------------------------
 
 //const UINT CButtonsPanel::IDD = IDD_TD_BUTTONS_PANEL; //WTF?
 
@@ -1474,6 +1522,7 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_children_charts(false)
 , m_openedChart(NULL)
 , m_toggleMapWnd(false)
+, m_it_mode(0)
 {
  memset(m_start_map_active, 0, 16 * sizeof(float));
  memset(m_start_map_original, 0, 16 * sizeof(float));
@@ -2121,16 +2170,19 @@ void CButtonsPanel::OnViewITMap()
  if ((!m_it_map_chart_state)&&(DLL::Chart3DCreate))
  {
   m_it_map_chart_state = 1;
-  m_it_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,0.0,720.0,
+  float y1, y2;
+  _GetITModeRange(y1, y2);
+  m_it_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,y1,y2,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
-    MLL::GetString(IDS_MAPS_INJTIM_UNIT).c_str(),
+    MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str(),
     MLL::GetString(IDS_IT_MAP).c_str());
   DLL::Chart3DSetPtMovingStep(m_it_map_wnd_handle, 1.0f);
   DLL::Chart3DSetOnWndActivation(m_it_map_wnd_handle, OnWndActivationITMap, this);
   DLL::Chart3DSetOnGetAxisLabel(m_it_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
   DLL::Chart3DSetOnChange(m_it_map_wnd_handle,OnChangeITMap,this);
   DLL::Chart3DSetOnClose(m_it_map_wnd_handle,OnCloseITMap,this);
-
+  DLL::Chart3DSetOnValueTransform(m_it_map_wnd_handle, OnValueTransformITMap, this);
+  DLL::Chart3DUpdate(m_it_map_wnd_handle, NULL, NULL); //<--actuate changes
   //let controller to know about opening of this window
   OnOpenMapWnd(m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
 
@@ -2550,8 +2602,10 @@ void CButtonsPanel::OnGridModeEditingInj()
   mp_gridModeEditorInjDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedInj));
   mp_gridModeEditorInjDlg->setOnCloseMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapClosedInj));
   mp_gridModeEditorInjDlg->setOnOpenMapWnd(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnOpenMapWnd));
+  mp_gridModeEditorInjDlg->setOnChangeSettings(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnChangeSettingsGME));
   VERIFY(mp_gridModeEditorInjDlg->Create(CGridModeEditorInjDlg::IDD, NULL));
   mp_gridModeEditorInjDlg->SetLoadAxisCfg(m_ldaxMinVal, (m_ldaxCfg == 1) ? std::numeric_limits<float>::max() : m_ldaxMaxVal);
+  mp_gridModeEditorInjDlg->SetITMode(m_it_mode);
   mp_gridModeEditorInjDlg->ShowWindow(SW_SHOW);
 
   if (mp_autoTuneCntr.get())
@@ -3557,4 +3611,53 @@ void CButtonsPanel::ShowOpenedCharts(bool i_show)
  hwnd = GetMapWindow(TYPE_MAP_GME_INJ_WND);
  if (hwnd)
   ::ShowWindow(hwnd, i_show ? SW_SHOW : SW_HIDE);
+}
+
+void CButtonsPanel::SetITEdMode(int mode)
+{
+ m_it_mode = mode;
+ if (mp_gridModeEditorInjDlg.get())
+  mp_gridModeEditorInjDlg->SetITMode(mode); 
+
+ float y1, y2;
+ _GetITModeRange(y1, y2);
+ if ((m_it_map_chart_state)&&(DLL::Chart3DCreate))
+ {
+  DLL::Chart3DSetFncRange(m_it_map_wnd_handle, y1, y2);
+  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
+  DLL::Chart3DSetAxisTitle(m_it_map_wnd_handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+ }
+}
+
+int CButtonsPanel::GetITEdMode(void) const
+{
+ return m_it_mode;
+}
+
+void CButtonsPanel::setOnChangeSettings(EventHandler OnCB)
+{
+ m_OnChangeSettings = OnCB;
+}
+
+void CButtonsPanel::OnChangeSettingsGME(void)
+{
+ m_it_mode = mp_gridModeEditorInjDlg->GetITMode();
+
+ float y1, y2;
+ _GetITModeRange(y1, y2);
+ if ((m_it_map_chart_state)&&(DLL::Chart3DCreate))
+ {
+  DLL::Chart3DSetFncRange(m_it_map_wnd_handle, y1, y2);
+  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
+  DLL::Chart3DSetAxisTitle(m_it_map_wnd_handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+ }
+
+ if (m_OnChangeSettings)
+  m_OnChangeSettings();
+}
+
+void CButtonsPanel::_GetITModeRange(float& y1, float& y2)
+{
+ y1 = (m_it_mode < 2) ? .0f : -360.0f;
+ y2 = (m_it_mode < 2) ? 720.0f : 360.0f;
 }

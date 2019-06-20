@@ -302,3 +302,18 @@ void CGridModeEditorInjDlg::SetLoadAxisCfg(float minVal, float maxVal)
  m_ldaxMin = minVal;
  m_ldaxMax = maxVal;
 }
+
+void CGridModeEditorInjDlg::SetITMode(int mode)
+{
+ m_pITPageDlg->SetITMode(mode);
+}
+
+int CGridModeEditorInjDlg::GetITMode(void) const
+{
+ return m_pITPageDlg->GetITMode();
+}
+
+void CGridModeEditorInjDlg::setOnChangeSettings(EventHandler OnCB)
+{
+ m_pITPageDlg->setOnChangeSettings(OnCB);
+}

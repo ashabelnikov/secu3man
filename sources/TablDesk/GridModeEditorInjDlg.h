@@ -41,6 +41,7 @@ class CGMEInjOtherDlg;
 class CGridModeEditorInjDlg : public CDialog
 {
   typedef CDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
   typedef fastdelegate::FastDelegate0<bool> EventResult;
   typedef fastdelegate::FastDelegate1<int> EventWithCode;
   typedef fastdelegate::FastDelegate2<HWND, int> EventWithHWND;
@@ -59,7 +60,11 @@ class CGridModeEditorInjDlg : public CDialog
 
   void SetLoadAxisCfg(float minVal, float maxVal);
 
+  void SetITMode(int mode);
+  int GetITMode(void) const;
+
  public:
+  void setOnChangeSettings(EventHandler OnCB);
   void setIsAllowed(EventResult IsFunction);
   void setOnMapChanged(EventWithCode OnFunction);
   void setOnOpenMapWnd(EventWithHWND OnFunction); 

@@ -135,6 +135,8 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   bool ExitBootLoader(void);
 
  private:
+  void OnChangeSettingsMapEd(void);
+
   //------------------------------------------------------------------------
   typedef void (CFirmwareTabController::*BLFinishOpType) (void);
   BLFinishOpType m_blFinishOpCB;

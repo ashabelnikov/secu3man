@@ -324,6 +324,10 @@ BOOL CInjectorPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_inj_timing_edit[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_inj_timing_spin[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_edit[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_spin[0], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_edit[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_inj_timing_crk_spin[1], MLL::GetString(IDS_PD_INJECTOR_TIMING_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

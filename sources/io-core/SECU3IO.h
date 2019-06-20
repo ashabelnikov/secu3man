@@ -583,6 +583,7 @@ namespace SECU3IO
   int type;              //from LZID only
   int version;           //from LZID only
   int fw_opt;            //from LZID only
+  bool gas_v;            //from LZID only
 
   int set_idx;           //allowed values: 0, 1
 

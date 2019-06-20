@@ -34,7 +34,9 @@ const UINT CGMEInjITDlg::IDD = IDD_GME_INJ_IT;
 // CGMEInjITDlg dialog
 
 BEGIN_MESSAGE_MAP(CGMEInjITDlg, Super)
+ ON_CBN_SELCHANGE(IDC_GME_IT_MODE_COMBO, OnChangeITMode)
  ON_UPDATE_COMMAND_UI(IDC_GME_INJ_IT, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_GME_IT_MODE_COMBO, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
@@ -43,8 +45,9 @@ CGMEInjITDlg::CGMEInjITDlg(CWnd* pParent /*=NULL*/)
 , mp_ITMap(NULL)
 , mp_rpmGrid(NULL)
 , mp_loadGrid(NULL)
+, m_it_mode_val(0)
 {
- //empty
+ m_it_map.setOnValueTransform(fastdelegate::MakeDelegate(this, &CGMEInjITDlg::OnValueTransform));
 }
 
 CGMEInjITDlg::~CGMEInjITDlg()
@@ -57,6 +60,7 @@ void CGMEInjITDlg::DoDataExchange(CDataExchange* pDX)
  Super::DoDataExchange(pDX);
 
  DDX_Control(pDX, IDC_GME_INJ_IT, m_it_map);
+ DDX_Control(pDX, IDC_GME_IT_MODE_COMBO, m_it_mode);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -77,6 +81,13 @@ BOOL CGMEInjITDlg::OnInitDialog()
  m_it_map.SetFont(&m_font);
  m_it_map.EnableAbroadMove(false, false);
  m_it_map.SetValueIncrement(1.0f);
+
+ //fill IT mode combo
+ m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_720BTDC));
+ m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_720ATDC));
+ m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_M360360));
+
+ SetITMode(m_it_mode_val);
 
  UpdateDialogControls(this, true);
  UpdateData(FALSE);
@@ -122,6 +133,11 @@ void CGMEInjITDlg::setOnChange(EventHandler OnCB)
  m_it_map.setOnChange(OnCB);
 }
 
+void CGMEInjITDlg::setOnChangeSettings(EventHandler OnCB)
+{
+ m_on_change_sett = OnCB;
+}
+
 void CGMEInjITDlg::UpdateView(void)
 {
  m_it_map.UpdateDisplay();
@@ -134,4 +150,78 @@ void CGMEInjITDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load
   m_it_map.ShowMarkers(!strt_use, false);
   m_it_map.SetArguments(load, (float)rpm);
  }
+}
+
+void CGMEInjITDlg::SetITMode(int mode)
+{
+ m_it_mode_val = mode;
+ if (mode <= 2 && ::IsWindow(m_hWnd))
+  m_it_mode.SetCurSel(mode);
+
+ float y1, y2;
+ _GetITModeRange(y1, y2);
+ m_it_map.SetRange(y1, y2);
+}
+
+int CGMEInjITDlg::GetITMode(void) const
+{
+ return m_it_mode_val;
+}
+
+void CGMEInjITDlg::OnChangeITMode()
+{
+ m_it_mode_val = m_it_mode.GetCurSel();
+ if (m_on_change_sett)
+  m_on_change_sett();
+
+ float y1, y2;
+ _GetITModeRange(y1, y2);
+ m_it_map.SetRange(y1, y2);
+
+ m_it_map.UpdateDisplay();
+}
+
+float CGMEInjITDlg::OnValueTransform(float source, int direction)
+{
+ float value = 0;
+ if (direction)
+ { //from chart
+  switch(m_it_mode_val)
+  {
+   case 0: //BTDC
+    value = source;
+    break;
+   case 1: //ATDC
+    value = 720.0f - source;
+    break;
+   case 2: //-360...360
+    value = 720.0f + source;    
+    break;
+  }
+ }
+ else
+ { //to chart
+  switch(m_it_mode_val)
+  {
+   case 0: //BTDC
+    value = (source > 720.0f) ? source - 720.0f : source;
+    break;
+   case 1: //ATDC
+    value = 720.0f - (source > 720.0f) ? source - 720.0f : source;
+    break;
+   case 2: //-360...360
+    if (source > 720.0f)
+     value = source - 720.0f;
+    else
+     value = (source < 360.0f) ? source : -(720.0f - source);
+    break;
+  }
+ }
+ return value;
+}
+
+void CGMEInjITDlg::_GetITModeRange(float& y1, float& y2)
+{
+ y1 = (m_it_mode_val < 2) ? .0f : -360.0f;
+ y2 = (m_it_mode_val < 2) ? 720.0f : 360.0f;
 }

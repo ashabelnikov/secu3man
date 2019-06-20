@@ -81,6 +81,7 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   void OnSaveTablesTo(int index);
   void OnImportFromS3F(void);
   void OnExportToS3F(void);
+  void OnChangeSettings(void);
 
  private:
   //helpful methods
