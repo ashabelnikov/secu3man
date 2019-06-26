@@ -72,5 +72,7 @@ enum EMapTypes
  TYPE_MAP_SET_START    = 1,
  TYPE_MAP_SET_END      = 25,
  TYPE_MAP_ALL_START    = 1,
- TYPE_MAP_ALL_END      = 38
+ TYPE_MAP_ALL_END      = 38,
+ TYPE_MAP_SEP_START    = 26,
+ TYPE_MAP_SEP_END      = 36
 };

@@ -51,12 +51,14 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_x_axis_title("")
 , m_y_axis_title("")
 , m_pOnChange(NULL)
+, m_pOnChangeSettings(NULL)
 , m_pOnClose(NULL)
 , m_pOnGetYAxisLabel(NULL)
 , m_pOnGetXAxisLabel(NULL)
 , m_pOnWndActivation(NULL)
 , m_pOnChangeXEditValue(NULL)
 , m_param_on_change(NULL)
+, m_param_on_change_sett(NULL)
 , m_param_on_close(NULL)
 , m_param_on_get_y_axis_label(NULL)
 , m_param_on_get_x_axis_label(NULL)
@@ -118,6 +120,13 @@ void TForm2D::SetOnChange(EventHandler i_pOnChange, void* i_param)
 {
  m_pOnChange = i_pOnChange;
  m_param_on_change = i_param;
+}
+
+//---------------------------------------------------------------------------
+void TForm2D::SetOnChangeSettings(EventHandler i_pOnChange, void* i_param)
+{
+ m_pOnChangeSettings = i_pOnChange;
+ m_param_on_change_sett = i_param;
 }
 
 //---------------------------------------------------------------------------
@@ -849,7 +858,11 @@ void __fastcall TForm2D::OnSetPtMovStep(TObject *Sender)
  Application->CreateForm(__classid(TPtMovStepDlg), &PtMovStepDlg);
  PtMovStepDlg->SetValue(m_pt_moving_step);
  if (PtMovStepDlg->ShowModal()==mrOk)
+ {
   m_pt_moving_step = PtMovStepDlg->GetValue();
+  if (m_pOnChangeSettings)
+   m_pOnChangeSettings(m_param_on_change_sett);
+ }
 }
 
 //---------------------------------------------------------------------------

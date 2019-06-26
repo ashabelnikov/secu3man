@@ -120,6 +120,7 @@ class TForm2D : public TForm
   void DataPrepare();
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
+  void SetOnChangeSettings(EventHandler i_pOnChange,void* i_param);
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnGetYAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
@@ -169,6 +170,9 @@ class TForm2D : public TForm
   //адрес функции которая будет вызываться после изменения данных
   EventHandler m_pOnChange;
   void* m_param_on_change;
+
+  EventHandler m_pOnChangeSettings;
+  void* m_param_on_change_sett;
 
   //адрес функции которая будет вызываться во время закрытия окна
   EventHandler m_pOnClose;

@@ -3,6 +3,7 @@ EXPORTS
   Chart2DCreate              = _Chart2DCreate
   Chart2DUpdate              = _Chart2DUpdate
   Chart2DSetOnChange         = _Chart2DSetOnChange
+  Chart2DSetOnChangeSettings = _Chart2DSetOnChangeSettings
   Chart2DSetOnClose          = _Chart2DSetOnClose
   Chart2DSetMarksVisible     = _Chart2DSetMarksVisible
   Chart2DSetAxisValuesFormat = _Chart2DSetAxisValuesFormat
@@ -15,11 +16,13 @@ EXPORTS
   Chart2DUpdateAxisEdits     = _Chart2DUpdateAxisEdits
   Chart2DSetPtValuesFormat   = _Chart2DSetPtValuesFormat
   Chart2DSetPtMovingStep     = _Chart2DSetPtMovingStep
+  Chart2DGetPtMovingStep     = _Chart2DGetPtMovingStep
 
   ; VC funcname              = BCB funcname
   Chart3DCreate              = _Chart3DCreate
   Chart3DUpdate              = _Chart3DUpdate
   Chart3DSetOnChange         = _Chart3DSetOnChange
+  Chart3DSetOnChangeSettings = _Chart3DSetOnChangeSettings
   Chart3DSetOnClose          = _Chart3DSetOnClose
   Chart3DSetOnGetAxisLabel   = _Chart3DSetOnGetAxisLabel
   Chart3DShow                = _Chart3DShow
@@ -30,6 +33,7 @@ EXPORTS
   Chart3DSetFncRange         = _Chart3DSetFncRange
   Chart3DSetOnValueTransform = _Chart3DSetOnValueTransform
   Chart3DSetAxisTitle        = _Chart3DSetAxisTitle
+  Chart3DGetPtMovingStep     = _Chart3DGetPtMovingStep
 
   ; VC funcname              = BCB funcname
   ChartxDSetLanguage         = _ChartxDSetLanguage

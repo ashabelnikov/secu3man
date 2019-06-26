@@ -42,6 +42,7 @@ namespace DLL
  typedef HWND (__cdecl *Chart2DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, float i_aai_min, float i_aai_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int bins_mode);
  typedef void (__cdecl *Chart2DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart2DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
+ typedef void (__cdecl *Chart2DSetOnChangeSettings_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart2DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
  typedef void (__cdecl *Chart2DSetMarksVisible_Addr) (HWND hWnd, int i_series_index, bool i_visible);
  typedef void (__cdecl *Chart2DSetAxisValuesFormat_Addr) (HWND hWnd, int i_axis, LPCTSTR i_format_string);
@@ -54,11 +55,13 @@ namespace DLL
  typedef void (__cdecl *Chart2DUpdateAxisEdits_Addr)(HWND hWnd, int i_axis, float i_begin, float i_end);
  typedef void (__cdecl *Chart2DSetPtValuesFormat_Addr) (HWND hWnd, LPCTSTR ptValFormat);
  typedef void (__cdecl *Chart2DSetPtMovingStep_Addr) (HWND hWnd, float step);
+ typedef float (__cdecl *Chart2DGetPtMovingStep_Addr) (HWND hWnd);
 
  //3D
  typedef HWND (__cdecl *Chart3DCreate_Addr) (HWND parent, const float *ip_original_function, float *iop_modified_function, const float *ip_x_axis_grid_values, int i_x_count_of_points, int i_z_count_of_points, float i_aai_min, float i_aai_max, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title);
  typedef void (__cdecl *Chart3DUpdate_Addr) (HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  typedef void (__cdecl *Chart3DSetOnChange_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
+ typedef void (__cdecl *Chart3DSetOnChangeSettings_Addr) (HWND hWnd, EventHandler i_pOnChange, void* i_param);
  typedef void (__cdecl *Chart3DSetOnClose_Addr) (HWND hWnd, EventHandler i_pOnClose, void* i_param);
  typedef void (__cdecl *Chart3DSetOnGetAxisLabel_Addr) (HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  typedef void (__cdecl *Chart3DShow_Addr) (HWND hWnd, int i_show);
@@ -66,6 +69,7 @@ namespace DLL
  typedef void (__cdecl *Chart3DEnable_Addr)(HWND hWnd, bool i_enable);
  typedef void (__cdecl *Chart3DSetPtValuesFormat_Addr) (HWND hWnd, LPCTSTR ptValFormat);
  typedef void (__cdecl *Chart3DSetPtMovingStep_Addr) (HWND hWnd, float step);
+ typedef float (__cdecl *Chart3DGetPtMovingStep_Addr) (HWND hWnd);
  typedef void (__cdecl *Chart3DSetFncRange_Addr) (HWND hWnd, float fnc_min, float fnc_max);
  typedef void (__cdecl *Chart3DSetOnValueTransform_Addr) (HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  typedef void (__cdecl *Chart3DSetAxisTitle_Addr) (HWND hWnd, int i_axis, LPCTSTR axisTitle);
@@ -78,6 +82,7 @@ namespace DLL
  extern Chart2DCreate_Addr              Chart2DCreate;
  extern Chart2DUpdate_Addr              Chart2DUpdate;
  extern Chart2DSetOnChange_Addr         Chart2DSetOnChange;
+ extern Chart2DSetOnChangeSettings_Addr Chart2DSetOnChangeSettings;
  extern Chart2DSetOnClose_Addr          Chart2DSetOnClose;
  extern Chart2DSetMarksVisible_Addr     Chart2DSetMarksVisible;
  extern Chart2DSetAxisValuesFormat_Addr Chart2DSetAxisValuesFormat;
@@ -90,10 +95,12 @@ namespace DLL
  extern Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits;
  extern Chart2DSetPtValuesFormat_Addr   Chart2DSetPtValuesFormat;
  extern Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep;
+ extern Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep;
 
  extern Chart3DCreate_Addr              Chart3DCreate;
  extern Chart3DUpdate_Addr              Chart3DUpdate;
  extern Chart3DSetOnChange_Addr         Chart3DSetOnChange;
+ extern Chart3DSetOnChangeSettings_Addr Chart3DSetOnChangeSettings;
  extern Chart3DSetOnClose_Addr          Chart3DSetOnClose;
  extern Chart3DSetOnGetAxisLabel_Addr   Chart3DSetOnGetAxisLabel;
  extern Chart3DShow_Addr                Chart3DShow;
@@ -101,6 +108,7 @@ namespace DLL
  extern Chart3DEnable_Addr              Chart3DEnable;
  extern Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat;
  extern Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep;
+ extern Chart3DGetPtMovingStep_Addr     Chart3DGetPtMovingStep;
  extern Chart3DSetFncRange_Addr         Chart3DSetFncRange; 
  extern Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform;
  extern Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle;

@@ -181,6 +181,8 @@ class CAppSettingsModel : public ISettingsData
   virtual float GetPeakDutyPtMovStep(void) const;
   virtual float GetHoldDutyPtMovStep(void) const;
 
+  virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep);
+  virtual void GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const;
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -201,6 +203,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_MapEditor_Section;
   const CString m_Name_Splitters_Section;
   const CString m_Name_InjDrv_Section;
+  const CString m_Name_MapPtMovStep_Section;  
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -419,6 +422,46 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPeakOnPtMovStep;
   OptField_t<float> m_optPeakDutyPtMovStep;
   OptField_t<float> m_optHoldDutyPtMovStep;
+
+  //Points's moving step in map editor windows
+  OptField_t<float> m_optPtMovStepWorkMap;
+  OptField_t<float> m_optPtMovStepTempMap;
+  OptField_t<float> m_optPtMovStepStartMap;
+  OptField_t<float> m_optPtMovStepIdleMap;
+  OptField_t<float> m_optPtMovStepVeMap;
+  OptField_t<float> m_optPtMovStepAfrMap;
+  OptField_t<float> m_optPtMovStepCrnkMap;
+  OptField_t<float> m_optPtMovStepWrmpMap;
+  OptField_t<float> m_optPtMovStepDeadMap;
+  OptField_t<float> m_optPtMovStepIdlrMap;
+  OptField_t<float> m_optPtMovStepIdlcMap;
+  OptField_t<float> m_optPtMovStepAetpsMap;
+  OptField_t<float> m_optPtMovStepAerpmMap;
+  OptField_t<float> m_optPtMovStepAftstrMap;
+  OptField_t<float> m_optPtMovStepItMap;
+  OptField_t<float> m_optPtMovStepItrpmMap;
+  OptField_t<float> m_optPtMovStepRigidMap;
+  OptField_t<float> m_optPtMovStepEgocrvMap;
+  OptField_t<float> m_optPtMovStepIaccMap;
+  OptField_t<float> m_optPtMovStepIaccwMap;
+  OptField_t<float> m_optPtMovStepIatcltMap;
+  OptField_t<float> m_optPtMovStepTpsswtMap;
+  OptField_t<float> m_optPtMovStepGtscMap;
+  OptField_t<float> m_optPtMovStepGpscMap;
+  OptField_t<float> m_optPtMovStepAtscMap;
+  //separate
+  OptField_t<float> m_optPtMovStepCrkTempMap;
+  OptField_t<float> m_optPtMovStepEHPauseMap;
+  OptField_t<float> m_optPtMovStepAttenMap;
+  OptField_t<float> m_optPtMovStepDwellCntrlMap;
+  OptField_t<float> m_optPtMovStepCTSCurveMap;
+  OptField_t<float> m_optPtMovStepBarocorrMap;
+  OptField_t<float> m_optPtMovStepManIgntimMap;
+  OptField_t<float> m_optPtMovStepATSCurvMap;
+  OptField_t<float> m_optPtMovStepATSCorrMap;
+  OptField_t<float> m_optPtMovStepGasdoseMap;
+  OptField_t<float> m_optPtMovStepTmp2CurveMap;
+
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

@@ -61,11 +61,11 @@ void __cdecl CButtonsPanel::OnCloseStartMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_start_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_DA_START].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_start_map_wnd_handle, TYPE_MAP_DA_START);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_DA_START].handle, TYPE_MAP_DA_START);
 }
 
 //------------------------------------------------------------------------
@@ -92,11 +92,11 @@ void __cdecl CButtonsPanel::OnCloseIdleMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_idle_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_DA_IDLE].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_DA_IDLE].handle, TYPE_MAP_DA_IDLE);
 }
 
 //------------------------------------------------------------------------
@@ -124,11 +124,11 @@ void __cdecl CButtonsPanel::OnCloseWorkMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_work_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_DA_WORK].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_DA_WORK].handle, TYPE_MAP_DA_WORK);
 }
 
 //------------------------------------------------------------------------
@@ -156,11 +156,11 @@ void __cdecl CButtonsPanel::OnCloseTempMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_temp_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_DA_TEMP_CORR].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_DA_TEMP_CORR].handle, TYPE_MAP_DA_TEMP_CORR);
 }
 
 //------------------------------------------------------------------------
@@ -186,7 +186,7 @@ void __cdecl CButtonsPanel::OnWndActivationStartMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_start_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_DA_START].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -200,7 +200,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdleMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_idle_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_DA_IDLE].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -214,7 +214,7 @@ void __cdecl CButtonsPanel::OnWndActivationWorkMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_work_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_DA_WORK].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -228,7 +228,7 @@ void __cdecl CButtonsPanel::OnWndActivationTempMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_temp_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_DA_TEMP_CORR].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -256,11 +256,11 @@ void __cdecl CButtonsPanel::OnCloseVEMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_ve_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_VE].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_VE].handle, TYPE_MAP_INJ_VE);
 }
 
 //------------------------------------------------------------------------
@@ -288,11 +288,11 @@ void __cdecl CButtonsPanel::OnCloseAFRMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_afr_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_AFR].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_AFR].handle, TYPE_MAP_INJ_AFR);
 }
 
 //------------------------------------------------------------------------
@@ -320,11 +320,11 @@ void __cdecl CButtonsPanel::OnCloseCrnkMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_crnk_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_CRNK].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_CRNK].handle, TYPE_MAP_INJ_CRNK);
 }
 
 //------------------------------------------------------------------------
@@ -352,11 +352,11 @@ void __cdecl CButtonsPanel::OnCloseWrmpMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_wrmp_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_WRMP].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_WRMP].handle, TYPE_MAP_INJ_WRMP);
 }
 
 //------------------------------------------------------------------------
@@ -384,11 +384,11 @@ void __cdecl CButtonsPanel::OnCloseDeadMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_dead_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_DEAD].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_DEAD].handle, TYPE_MAP_INJ_DEAD);
 }
 
 //------------------------------------------------------------------------
@@ -416,11 +416,11 @@ void __cdecl CButtonsPanel::OnCloseIdlrMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_idlr_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IDLR].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IDLR].handle, TYPE_MAP_INJ_IDLR);
 }
 
 //------------------------------------------------------------------------
@@ -448,11 +448,11 @@ void __cdecl CButtonsPanel::OnCloseIdlcMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_idlc_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IDLC].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IDLC].handle, TYPE_MAP_INJ_IDLC);
 }
 
 //------------------------------------------------------------------------
@@ -480,11 +480,11 @@ void __cdecl CButtonsPanel::OnCloseAETPSMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_aetps_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_AETPS].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_aetps_map_wnd_handle, TYPE_MAP_INJ_AETPS);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_AETPS].handle, TYPE_MAP_INJ_AETPS);
 }
 
 //------------------------------------------------------------------------
@@ -512,11 +512,11 @@ void __cdecl CButtonsPanel::OnCloseAERPMMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_aerpm_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_AERPM].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_aerpm_map_wnd_handle, TYPE_MAP_INJ_AERPM);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_AERPM].handle, TYPE_MAP_INJ_AERPM);
 }
 
 //------------------------------------------------------------------------
@@ -544,11 +544,11 @@ void __cdecl CButtonsPanel::OnCloseAftstrMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_aftstr_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_AFTSTR].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_aftstr_map_wnd_handle, TYPE_MAP_INJ_AFTSTR);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_AFTSTR].handle, TYPE_MAP_INJ_AFTSTR);
 }
 
 //------------------------------------------------------------------------
@@ -576,11 +576,11 @@ void __cdecl CButtonsPanel::OnCloseITMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_it_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IT].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IT].handle, TYPE_MAP_INJ_IT);
 }
 
 //------------------------------------------------------------------------
@@ -608,11 +608,11 @@ void __cdecl CButtonsPanel::OnCloseITRPMMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_itrpm_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_ITRPM].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_itrpm_map_wnd_handle, TYPE_MAP_INJ_ITRPM);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_ITRPM].handle, TYPE_MAP_INJ_ITRPM);
 }
 
 
@@ -641,11 +641,11 @@ void __cdecl CButtonsPanel::OnCloseRigidMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_rigid_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_RIGID].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_rigid_map_wnd_handle, TYPE_MAP_INJ_RIGID);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_RIGID].handle, TYPE_MAP_INJ_RIGID);
 }
 
 
@@ -674,11 +674,11 @@ void __cdecl CButtonsPanel::OnCloseEGOCrvMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_egocrv_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_EGOCRV].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_egocrv_map_wnd_handle, TYPE_MAP_INJ_EGOCRV);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_EGOCRV].handle, TYPE_MAP_INJ_EGOCRV);
 }
 
 //------------------------------------------------------------------------
@@ -729,11 +729,11 @@ void __cdecl CButtonsPanel::OnCloseIACCMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_iacc_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IACC].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_iacc_map_wnd_handle, TYPE_MAP_INJ_IACC);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IACC].handle, TYPE_MAP_INJ_IACC);
 }
 
 //------------------------------------------------------------------------
@@ -784,11 +784,11 @@ void __cdecl CButtonsPanel::OnCloseIACCWMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_iaccw_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IACCW].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_iaccw_map_wnd_handle, TYPE_MAP_INJ_IACCW);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IACCW].handle, TYPE_MAP_INJ_IACCW);
 }
 
 //------------------------------------------------------------------------
@@ -839,11 +839,11 @@ void __cdecl CButtonsPanel::OnCloseIATCLTMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_iatclt_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_IATCLT].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_iatclt_map_wnd_handle, TYPE_MAP_INJ_IATCLT);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_IATCLT].handle, TYPE_MAP_INJ_IATCLT);
 }
 
 //------------------------------------------------------------------------
@@ -894,11 +894,11 @@ void __cdecl CButtonsPanel::OnCloseTpsswtMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_tpsswt_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_TPSSWT].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_TPSSWT].handle, TYPE_MAP_INJ_TPSSWT);
 }
 
 //------------------------------------------------------------------------
@@ -926,11 +926,11 @@ void __cdecl CButtonsPanel::OnCloseGtscMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_gtsc_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_GTSC].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_gtsc_map_wnd_handle, TYPE_MAP_INJ_GTSC);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_GTSC].handle, TYPE_MAP_INJ_GTSC);
 }
 
 //------------------------------------------------------------------------
@@ -958,11 +958,11 @@ void __cdecl CButtonsPanel::OnCloseGpscMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_gpsc_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_GPSC].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_gpsc_map_wnd_handle, TYPE_MAP_INJ_GPSC);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_GPSC].handle, TYPE_MAP_INJ_GPSC);
 }
 
 //------------------------------------------------------------------------
@@ -1013,11 +1013,11 @@ void __cdecl CButtonsPanel::OnCloseAtscMap(void* i_param)
   ASSERT(0); //what the fuck?
   return;
  }
- _this->m_atsc_map_chart_state = 0;
+ _this->m_md[TYPE_MAP_INJ_ATSC].state = 0;
 
  //allow controller to detect closing of this window
  if (_this->m_OnCloseMapWnd)
-  _this->m_OnCloseMapWnd(_this->m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_INJ_ATSC].handle, TYPE_MAP_INJ_ATSC);
 }
 
 //------------------------------------------------------------------------
@@ -1031,7 +1031,7 @@ void __cdecl CButtonsPanel::OnWndActivationITMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_it_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IT].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1045,7 +1045,7 @@ void __cdecl CButtonsPanel::OnWndActivationVEMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_ve_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_VE].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1059,7 +1059,7 @@ void __cdecl CButtonsPanel::OnWndActivationAFRMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_afr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_AFR].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1073,7 +1073,7 @@ void __cdecl CButtonsPanel::OnWndActivationCrnkMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_crnk_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_CRNK].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1087,7 +1087,7 @@ void __cdecl CButtonsPanel::OnWndActivationWrmpMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_wrmp_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_WRMP].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1101,7 +1101,7 @@ void __cdecl CButtonsPanel::OnWndActivationDeadMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_dead_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_DEAD].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1115,7 +1115,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdlrMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_idlr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IDLR].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1129,7 +1129,7 @@ void __cdecl CButtonsPanel::OnWndActivationIdlcMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_idlc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IDLC].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1143,7 +1143,7 @@ void __cdecl CButtonsPanel::OnWndActivationAETPSMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_aetps_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_AETPS].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1157,7 +1157,7 @@ void __cdecl CButtonsPanel::OnWndActivationAERPMMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_aerpm_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_AERPM].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1171,7 +1171,7 @@ void __cdecl CButtonsPanel::OnWndActivationAftstrMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_aftstr_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_AFTSTR].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1185,7 +1185,7 @@ void __cdecl CButtonsPanel::OnWndActivationITRPMMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_itrpm_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_ITRPM].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1199,7 +1199,7 @@ void __cdecl CButtonsPanel::OnWndActivationRigidMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_rigid_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_RIGID].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1213,7 +1213,7 @@ void __cdecl CButtonsPanel::OnWndActivationEGOCrvMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_egocrv_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_EGOCRV].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1227,7 +1227,7 @@ void __cdecl CButtonsPanel::OnWndActivationIACCMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_iacc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IACC].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1241,7 +1241,7 @@ void __cdecl CButtonsPanel::OnWndActivationIACCWMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_iaccw_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IACCW].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1255,7 +1255,7 @@ void __cdecl CButtonsPanel::OnWndActivationIATCLTMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_iatclt_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_IATCLT].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1269,7 +1269,7 @@ void __cdecl CButtonsPanel::OnWndActivationTpsswtMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_tpsswt_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_TPSSWT].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1283,7 +1283,7 @@ void __cdecl CButtonsPanel::OnWndActivationGtscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_gtsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_GTSC].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1297,7 +1297,7 @@ void __cdecl CButtonsPanel::OnWndActivationGpscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_gpsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_GPSC].handle, cmd);
 }
 
 //------------------------------------------------------------------------
@@ -1311,20 +1311,20 @@ void __cdecl CButtonsPanel::OnWndActivationAtscMap(void* i_param, long cmd)
  }
 
  //allow controller to process event
- _this->OnWndActivation(_this->m_atsc_map_wnd_handle, cmd);
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_INJ_ATSC].handle, cmd);
 }
 
 //------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChangedIgn(int mapType)
 {
- if (m_start_map_chart_state && mapType == TYPE_MAP_DA_START)
-  DLL::Chart2DUpdate(m_start_map_wnd_handle, GetStartMap(true), GetStartMap(false));
- if (m_idle_map_chart_state && mapType == TYPE_MAP_DA_IDLE)
-  DLL::Chart2DUpdate(m_idle_map_wnd_handle, GetIdleMap(true), GetIdleMap(false));
- if (m_work_map_chart_state && mapType == TYPE_MAP_DA_WORK)
-  DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
- if (m_temp_map_chart_state && mapType == TYPE_MAP_DA_TEMP_CORR)
-  DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
+ if (m_md[TYPE_MAP_DA_START].state && mapType == TYPE_MAP_DA_START)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_START].handle, GetStartMap(true), GetStartMap(false));
+ if (m_md[TYPE_MAP_DA_IDLE].state && mapType == TYPE_MAP_DA_IDLE)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_IDLE].handle, GetIdleMap(true), GetIdleMap(false));
+ if (m_md[TYPE_MAP_DA_WORK].state && mapType == TYPE_MAP_DA_WORK)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_DA_WORK].handle, GetWorkMap(true), GetWorkMap(false));
+ if (m_md[TYPE_MAP_DA_TEMP_CORR].state && mapType == TYPE_MAP_DA_TEMP_CORR)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_TEMP_CORR].handle, GetTempMap(true), GetTempMap(false));
 
  if (m_OnMapChanged)
   m_OnMapChanged(mapType);
@@ -1341,48 +1341,48 @@ void CButtonsPanel::OnGridMapClosedIgn(HWND hwnd, int mapType)
 //------------------------------------------------------------------------
 void CButtonsPanel::OnGridMapChangedInj(int mapType)
 {
- if (m_ve_map_chart_state && mapType == TYPE_MAP_INJ_VE)
-  DLL::Chart3DUpdate(m_ve_map_wnd_handle, GetVEMap(true), GetVEMap(false));
- if (m_afr_map_chart_state && mapType == TYPE_MAP_INJ_AFR)
-  DLL::Chart3DUpdate(m_afr_map_wnd_handle, GetAFRMap(true), GetAFRMap(false));
- if (m_crnk_map_chart_state && mapType == TYPE_MAP_INJ_CRNK)
-  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, GetCrnkMap(true), GetCrnkMap(false));
- if (m_wrmp_map_chart_state && mapType == TYPE_MAP_INJ_WRMP)
-  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, GetWrmpMap(true), GetWrmpMap(false));
- if (m_dead_map_chart_state && mapType == TYPE_MAP_INJ_DEAD)
-  DLL::Chart2DUpdate(m_dead_map_wnd_handle, GetDeadMap(true), GetDeadMap(false));
- if (m_idlr_map_chart_state && mapType == TYPE_MAP_INJ_IDLR)
-  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, GetIdlrMap(true), GetIdlrMap(false));
- if (m_idlc_map_chart_state && mapType == TYPE_MAP_INJ_IDLC)
-  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, GetIdlcMap(true), GetIdlcMap(false));
- if (m_aetps_map_chart_state && mapType == TYPE_MAP_INJ_AETPS)
-  DLL::Chart2DUpdate(m_aetps_map_wnd_handle, GetAETPSMap(true), GetAETPSMap(false));
- if (m_aerpm_map_chart_state && mapType == TYPE_MAP_INJ_AERPM)
-  DLL::Chart2DUpdate(m_aerpm_map_wnd_handle, GetAERPMMap(true), GetAERPMMap(false));
- if (m_aftstr_map_chart_state && mapType == TYPE_MAP_INJ_AFTSTR)
-  DLL::Chart2DUpdate(m_aftstr_map_wnd_handle, GetAftstrMap(true), GetAftstrMap(false));
- if (m_it_map_chart_state && mapType == TYPE_MAP_INJ_IT)
-  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
- if (m_itrpm_map_chart_state && mapType == TYPE_MAP_INJ_ITRPM)
-  DLL::Chart2DUpdate(m_itrpm_map_wnd_handle, GetITRPMMap(true), GetITRPMMap(false));
- if (m_rigid_map_chart_state && mapType == TYPE_MAP_INJ_RIGID)
-  DLL::Chart2DUpdate(m_rigid_map_wnd_handle, GetRigidMap(true), GetRigidMap(false));
- if (m_egocrv_map_chart_state && mapType == TYPE_MAP_INJ_EGOCRV)
-  DLL::Chart2DUpdate(m_rigid_map_wnd_handle, GetEGOCurveMap(true), GetEGOCurveMap(false));
- if (m_iacc_map_chart_state && mapType == TYPE_MAP_INJ_IACC)
-  DLL::Chart2DUpdate(m_iacc_map_wnd_handle, GetIACCMap(true), GetIACCMap(false));
- if (m_iaccw_map_chart_state && mapType == TYPE_MAP_INJ_IACCW)
-  DLL::Chart2DUpdate(m_iaccw_map_wnd_handle, GetIACCWMap(true), GetIACCWMap(false));
- if (m_iatclt_map_chart_state && mapType == TYPE_MAP_INJ_IATCLT)
-  DLL::Chart2DUpdate(m_iatclt_map_wnd_handle, GetIATCLTMap(true), GetIATCLTMap(false));
- if (m_tpsswt_map_chart_state && mapType == TYPE_MAP_INJ_TPSSWT)
-  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, GetTpsswtMap(true), GetTpsswtMap(false));
- if (m_gtsc_map_chart_state && mapType == TYPE_MAP_INJ_GTSC)
-  DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, GetGtscMap(true), GetGtscMap(false));
- if (m_gpsc_map_chart_state && mapType == TYPE_MAP_INJ_GPSC)
-  DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, GetGpscMap(true), GetGpscMap(false));
- if (m_atsc_map_chart_state && mapType == TYPE_MAP_INJ_ATSC)
-  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, GetAtscMap(true), GetAtscMap(false));
+ if (m_md[TYPE_MAP_INJ_VE].state && mapType == TYPE_MAP_INJ_VE)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_VE].handle, GetVEMap(true), GetVEMap(false));
+ if (m_md[TYPE_MAP_INJ_AFR].state && mapType == TYPE_MAP_INJ_AFR)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_AFR].handle, GetAFRMap(true), GetAFRMap(false));
+ if (m_md[TYPE_MAP_INJ_CRNK].state && mapType == TYPE_MAP_INJ_CRNK)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_CRNK].handle, GetCrnkMap(true), GetCrnkMap(false));
+ if (m_md[TYPE_MAP_INJ_WRMP].state && mapType == TYPE_MAP_INJ_WRMP)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_WRMP].handle, GetWrmpMap(true), GetWrmpMap(false));
+ if (m_md[TYPE_MAP_INJ_DEAD].state && mapType == TYPE_MAP_INJ_DEAD)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_DEAD].handle, GetDeadMap(true), GetDeadMap(false));
+ if (m_md[TYPE_MAP_INJ_IDLR].state && mapType == TYPE_MAP_INJ_IDLR)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLR].handle, GetIdlrMap(true), GetIdlrMap(false));
+ if (m_md[TYPE_MAP_INJ_IDLC].state && mapType == TYPE_MAP_INJ_IDLC)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLC].handle, GetIdlcMap(true), GetIdlcMap(false));
+ if (m_md[TYPE_MAP_INJ_AETPS].state && mapType == TYPE_MAP_INJ_AETPS)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AETPS].handle, GetAETPSMap(true), GetAETPSMap(false));
+ if (m_md[TYPE_MAP_INJ_AERPM].state && mapType == TYPE_MAP_INJ_AERPM)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AERPM].handle, GetAERPMMap(true), GetAERPMMap(false));
+ if (m_md[TYPE_MAP_INJ_AFTSTR].state && mapType == TYPE_MAP_INJ_AFTSTR)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AFTSTR].handle, GetAftstrMap(true), GetAftstrMap(false));
+ if (m_md[TYPE_MAP_INJ_IT].state && mapType == TYPE_MAP_INJ_IT)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
+ if (m_md[TYPE_MAP_INJ_ITRPM].state && mapType == TYPE_MAP_INJ_ITRPM)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ITRPM].handle, GetITRPMMap(true), GetITRPMMap(false));
+ if (m_md[TYPE_MAP_INJ_RIGID].state && mapType == TYPE_MAP_INJ_RIGID)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_RIGID].handle, GetRigidMap(true), GetRigidMap(false));
+ if (m_md[TYPE_MAP_INJ_EGOCRV].state && mapType == TYPE_MAP_INJ_EGOCRV)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_EGOCRV].handle, GetEGOCurveMap(true), GetEGOCurveMap(false));
+ if (m_md[TYPE_MAP_INJ_IACC].state && mapType == TYPE_MAP_INJ_IACC)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACC].handle, GetIACCMap(true), GetIACCMap(false));
+ if (m_md[TYPE_MAP_INJ_IACCW].state && mapType == TYPE_MAP_INJ_IACCW)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACCW].handle, GetIACCWMap(true), GetIACCWMap(false));
+ if (m_md[TYPE_MAP_INJ_IATCLT].state && mapType == TYPE_MAP_INJ_IATCLT)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IATCLT].handle, GetIATCLTMap(true), GetIATCLTMap(false));
+ if (m_md[TYPE_MAP_INJ_TPSSWT].state && mapType == TYPE_MAP_INJ_TPSSWT)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_TPSSWT].handle, GetTpsswtMap(true), GetTpsswtMap(false));
+ if (m_md[TYPE_MAP_INJ_GTSC].state && mapType == TYPE_MAP_INJ_GTSC)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GTSC].handle, GetGtscMap(true), GetGtscMap(false));
+ if (m_md[TYPE_MAP_INJ_GPSC].state && mapType == TYPE_MAP_INJ_GPSC)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, GetGpscMap(true), GetGpscMap(false));
+ if (m_md[TYPE_MAP_INJ_ATSC].state && mapType == TYPE_MAP_INJ_ATSC)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ATSC].handle, GetAtscMap(true), GetAtscMap(false));
 
  if (m_OnMapChanged)
   m_OnMapChanged(mapType);
@@ -1456,58 +1456,8 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
 
 CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enableAutoTune /*=false*/)
 : Super(dialog_id, pParent)
-, m_work_map_chart_state(0)
-, m_temp_map_chart_state(0)
-, m_start_map_chart_state(0)
-, m_idle_map_chart_state(0)
-, m_ve_map_chart_state(0)
-, m_afr_map_chart_state(0)
-, m_crnk_map_chart_state(0)
-, m_wrmp_map_chart_state(0)
-, m_dead_map_chart_state(0)
-, m_idlr_map_chart_state(0)
-, m_idlc_map_chart_state(0)
-, m_aetps_map_chart_state(0)
-, m_aerpm_map_chart_state(0)
-, m_aftstr_map_chart_state(0)
-, m_it_map_chart_state(0)
-, m_itrpm_map_chart_state(0)
-, m_rigid_map_chart_state(0)
-, m_egocrv_map_chart_state(0)
-, m_iacc_map_chart_state(0)
-, m_iaccw_map_chart_state(0)
-, m_iatclt_map_chart_state(0)
-, m_tpsswt_map_chart_state(0)
-, m_gtsc_map_chart_state(0)
-, m_gpsc_map_chart_state(0)
-, m_atsc_map_chart_state(0)
 , m_grid_map_state_ign(0)
 , m_grid_map_state_inj(0)
-, m_start_map_wnd_handle(NULL)
-, m_idle_map_wnd_handle(NULL)
-, m_work_map_wnd_handle(NULL)
-, m_temp_map_wnd_handle(NULL)
-, m_ve_map_wnd_handle(NULL)
-, m_afr_map_wnd_handle(NULL)
-, m_crnk_map_wnd_handle(NULL)
-, m_wrmp_map_wnd_handle(NULL)
-, m_dead_map_wnd_handle(NULL)
-, m_idlr_map_wnd_handle(NULL)
-, m_idlc_map_wnd_handle(NULL)
-, m_aetps_map_wnd_handle(NULL)
-, m_aerpm_map_wnd_handle(NULL)
-, m_aftstr_map_wnd_handle(NULL)
-, m_it_map_wnd_handle(NULL)
-, m_itrpm_map_wnd_handle(NULL)
-, m_rigid_map_wnd_handle(NULL)
-, m_egocrv_map_wnd_handle(NULL)
-, m_iacc_map_wnd_handle(NULL)
-, m_iaccw_map_wnd_handle(NULL)
-, m_iatclt_map_wnd_handle(NULL)
-, m_tpsswt_map_wnd_handle(NULL)
-, m_gtsc_map_wnd_handle(NULL)
-, m_gpsc_map_wnd_handle(NULL)
-, m_atsc_map_wnd_handle(NULL)
 , m_charts_enabled(-1)
 , IDD(IDD_TD_BUTTONS_PANEL)
 , m_en_aa_indication(false)
@@ -1524,57 +1474,12 @@ CButtonsPanel::CButtonsPanel(UINT dialog_id, CWnd* pParent /*=NULL*/, bool enabl
 , m_toggleMapWnd(false)
 , m_it_mode(0)
 {
- memset(m_start_map_active, 0, 16 * sizeof(float));
- memset(m_start_map_original, 0, 16 * sizeof(float));
- memset(m_idle_map_active, 0, 16 * sizeof(float));
- memset(m_idle_map_original, 0, 16 * sizeof(float));
- memset(m_work_map_active, 0, 16 * 16 * sizeof(float));
- memset(m_work_map_original, 0, 16 * 16 * sizeof(float));
- memset(m_temp_map_active, 0, 16 * sizeof(float));
- memset(m_temp_map_original, 0, 16 * sizeof(float));
+ for(int i = TYPE_MAP_SET_START; i <= TYPE_MAP_SET_END; ++i)
+ {
+  MapData md;
+  m_md.insert(std::make_pair(i, md));
+ }
  memset(m_rpm_grid_values, 0, 16 * sizeof(float));
- memset(m_ve_map_active, 0, 16 * 16 * sizeof(float));
- memset(m_ve_map_original, 0, 16 * 16 * sizeof(float));
- memset(m_afr_map_active, 0, 16 * 16 * sizeof(float));
- memset(m_afr_map_original, 0, 16 * 16 * sizeof(float));
- memset(m_crnk_map_active, 0, 16 * sizeof(float));
- memset(m_crnk_map_original, 0, 16 * sizeof(float));
- memset(m_wrmp_map_active, 0, 16 * sizeof(float));
- memset(m_wrmp_map_original, 0, 16 * sizeof(float));
- memset(m_dead_map_active, 0, 32 * sizeof(float));
- memset(m_dead_map_original, 0, 32 * sizeof(float));
- memset(m_idlr_map_active, 0, 16 * sizeof(float));
- memset(m_idlr_map_original, 0, 16 * sizeof(float));
- memset(m_idlc_map_active, 0, 16 * sizeof(float));
- memset(m_idlc_map_original, 0, 16 * sizeof(float));
- memset(m_aetps_map_active, 0, 8 * sizeof(float));
- memset(m_aetps_map_original, 0, 8 * sizeof(float));
- memset(m_aerpm_map_active, 0, 8 * sizeof(float));
- memset(m_aerpm_map_original, 0, 8 * sizeof(float));
- memset(m_aftstr_map_active, 0, 16 * sizeof(float));
- memset(m_aftstr_map_original, 0, 16 * sizeof(float));
- memset(m_it_map_active, 0, 16 * 16 * sizeof(float));
- memset(m_it_map_original, 0, 16 * 16 * sizeof(float));
- memset(m_itrpm_map_active, 0, 16 * sizeof(float));
- memset(m_itrpm_map_original, 0, 16 * sizeof(float));
- memset(m_rigid_map_active, 0, 8 * sizeof(float));
- memset(m_rigid_map_original, 0, 8 * sizeof(float));
- memset(m_egocrv_map_active, 0, (16+2) * sizeof(float));
- memset(m_egocrv_map_original, 0, (16+2) * sizeof(float));
- memset(m_iacc_map_active, 0, (8+2) * sizeof(float));
- memset(m_iacc_map_original, 0, (8+2) * sizeof(float));
- memset(m_iaccw_map_active, 0, (16+2) * sizeof(float));
- memset(m_iaccw_map_original, 0, (16+2) * sizeof(float));
- memset(m_iatclt_map_active, 0, (8+2) * sizeof(float));
- memset(m_iatclt_map_original, 0, (8+2) * sizeof(float));
- memset(m_tpsswt_map_active, 0, 16 * sizeof(float));
- memset(m_tpsswt_map_original, 0, 16 * sizeof(float));
- memset(m_gtsc_map_active, 0, 16 * sizeof(float));
- memset(m_gtsc_map_original, 0, 16 * sizeof(float));
- memset(m_gpsc_map_active, 0, (9+2) * sizeof(float));
- memset(m_gpsc_map_original, 0, (9+2) * sizeof(float));
- memset(m_atsc_map_active, 0, 16 * sizeof(float));
- memset(m_atsc_map_original, 0, 16 * sizeof(float));
 }
 
 CButtonsPanel::~CButtonsPanel()
@@ -1697,30 +1602,32 @@ void CButtonsPanel::OnViewStartMap()
  //If button was released, then close editor's window
  if (m_view_start_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_start_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_DA_START].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_start_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_DA_START].state)&&(DLL::Chart2DCreate))
  {
-  m_start_map_chart_state = 1;
-  m_start_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
+  m_md[TYPE_MAP_DA_START].state = 1;
+  m_md[TYPE_MAP_DA_START].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetStartMap(true),GetStartMap(false),-15.0,55.0,SECU3IO::start_map_rpm_slots,16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_START_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_start_map_wnd_handle, OnWndActivationStartMap,this);
-  DLL::Chart2DSetOnChange(m_start_map_wnd_handle,OnChangeStartMap,this);
-  DLL::Chart2DSetOnClose(m_start_map_wnd_handle,OnCloseStartMap,this);
-  DLL::Chart2DUpdate(m_start_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_DA_START].handle, OnWndActivationStartMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_DA_START].handle,OnChangeStartMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_DA_START].handle,OnChangeSettingsCME,this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_DA_START].handle,OnCloseStartMap,this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_DA_START].handle, m_md[TYPE_MAP_DA_START].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_START].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_start_map_wnd_handle, TYPE_MAP_DA_START);
+  OnOpenMapWnd(m_md[TYPE_MAP_DA_START].handle, TYPE_MAP_DA_START);
 
-  DLL::Chart2DShow(m_start_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_DA_START].handle, true);
  }
  else
  {
-  ::SetFocus(m_start_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_DA_START].handle);
  }
 }
 
@@ -1730,31 +1637,33 @@ void CButtonsPanel::OnViewIdleMap()
  //If button was released, then close editor's window
  if (m_view_idle_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_idle_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_DA_IDLE].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_idle_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_DA_IDLE].state)&&(DLL::Chart2DCreate))
  {
-  m_idle_map_chart_state = 1;
-  m_idle_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
+  m_md[TYPE_MAP_DA_IDLE].state = 1;
+  m_md[TYPE_MAP_DA_IDLE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdleMap(true),GetIdleMap(false),-15.0,55.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_IDLE_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_idle_map_wnd_handle,OnWndActivationIdleMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(m_idle_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart2DSetOnChange(m_idle_map_wnd_handle,OnChangeIdleMap,this);
-  DLL::Chart2DSetOnClose(m_idle_map_wnd_handle,OnCloseIdleMap,this);
-  DLL::Chart2DUpdate(m_idle_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_DA_IDLE].handle,OnWndActivationIdleMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_DA_IDLE].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_DA_IDLE].handle,OnChangeIdleMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_DA_IDLE].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_DA_IDLE].handle,OnCloseIdleMap,this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_DA_IDLE].handle, m_md[TYPE_MAP_DA_IDLE].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_IDLE].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_idle_map_wnd_handle, TYPE_MAP_DA_IDLE);
+  OnOpenMapWnd(m_md[TYPE_MAP_DA_IDLE].handle, TYPE_MAP_DA_IDLE);
 
-  DLL::Chart2DShow(m_idle_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_DA_IDLE].handle, true);
  }
  else
  {
-  ::SetFocus(m_idle_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_DA_IDLE].handle);
  }
 }
 
@@ -1763,30 +1672,32 @@ void CButtonsPanel::OnViewWorkMap()
  //If button was released, then close editor's window
  if (m_view_work_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_work_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_DA_WORK].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_work_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((!m_md[TYPE_MAP_DA_WORK].state)&&(DLL::Chart3DCreate))
  {
-  m_work_map_chart_state = 1;
-  m_work_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
+  m_md[TYPE_MAP_DA_WORK].state = 1;
+  m_md[TYPE_MAP_DA_WORK].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetWorkMap(true),GetWorkMap(false),GetRPMGrid(),16,16,-15.0,55.0,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_WORK_MAP).c_str());
-  DLL::Chart3DSetOnWndActivation(m_work_map_wnd_handle, OnWndActivationWorkMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(m_work_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_work_map_wnd_handle,OnChangeWorkMap,this);
-  DLL::Chart3DSetOnClose(m_work_map_wnd_handle,OnCloseWorkMap,this);
+  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_DA_WORK].handle, OnWndActivationWorkMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_DA_WORK].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_DA_WORK].handle,OnChangeWorkMap,this);
+  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_DA_WORK].handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_DA_WORK].handle,OnCloseWorkMap,this);
+  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_DA_WORK].handle, m_md[TYPE_MAP_DA_WORK].ptMovStep);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_work_map_wnd_handle, TYPE_MAP_DA_WORK);
+  OnOpenMapWnd(m_md[TYPE_MAP_DA_WORK].handle, TYPE_MAP_DA_WORK);
 
-  DLL::Chart3DShow(m_work_map_wnd_handle, true);
+  DLL::Chart3DShow(m_md[TYPE_MAP_DA_WORK].handle, true);
  }
  else
  {
-  ::SetFocus(m_work_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_DA_WORK].handle);
  }
 }
 
@@ -1795,30 +1706,32 @@ void CButtonsPanel::OnViewTempMap()
  //If button was released, then close editor's window
  if (m_view_temp_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_temp_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_DA_TEMP_CORR].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_temp_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_DA_TEMP_CORR].state)&&(DLL::Chart2DCreate))
  {
-  m_temp_map_chart_state = 1;
-  m_temp_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_DA_TEMP_CORR].state = 1;
+  m_md[TYPE_MAP_DA_TEMP_CORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTempMap(true),GetTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_TEMPCORR_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_temp_map_wnd_handle,OnWndActivationTempMap,this);
-  DLL::Chart2DSetOnChange(m_temp_map_wnd_handle,OnChangeTempMap,this);
-  DLL::Chart2DSetOnClose(m_temp_map_wnd_handle,OnCloseTempMap,this);
-  DLL::Chart2DUpdate(m_temp_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_DA_TEMP_CORR].handle,OnWndActivationTempMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_DA_TEMP_CORR].handle,OnChangeTempMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_DA_TEMP_CORR].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_DA_TEMP_CORR].handle,OnCloseTempMap,this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_DA_TEMP_CORR].handle, m_md[TYPE_MAP_DA_TEMP_CORR].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_TEMP_CORR].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_temp_map_wnd_handle, TYPE_MAP_DA_TEMP_CORR);
+  OnOpenMapWnd(m_md[TYPE_MAP_DA_TEMP_CORR].handle, TYPE_MAP_DA_TEMP_CORR);
 
-  DLL::Chart2DShow(m_temp_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_DA_TEMP_CORR].handle, true);
  }
  else
  {
-  ::SetFocus(m_temp_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_DA_TEMP_CORR].handle);
  }
 }
 
@@ -1827,32 +1740,33 @@ void CButtonsPanel::OnViewVEMap()
  //If button was released, then close editor's window
  if (m_view_ve_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_ve_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_VE].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_ve_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((!m_md[TYPE_MAP_INJ_VE].state)&&(DLL::Chart3DCreate))
  {
-  m_ve_map_chart_state = 1;
-  m_ve_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetVEMap(true),GetVEMap(false),GetRPMGrid(),16,16,0.0f,1.99f,
+  m_md[TYPE_MAP_INJ_VE].state = 1;
+  m_md[TYPE_MAP_INJ_VE].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetVEMap(true),GetVEMap(false),GetRPMGrid(),16,16,0.0f,1.99f,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_VE_UNIT).c_str(),
     MLL::GetString(IDS_VE_MAP).c_str());
-  DLL::Chart3DSetPtValuesFormat(m_ve_map_wnd_handle, _T("#0.00"));
-  DLL::Chart3DSetPtMovingStep(m_ve_map_wnd_handle, 0.05f);
-  DLL::Chart3DSetOnWndActivation(m_ve_map_wnd_handle, OnWndActivationVEMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(m_ve_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_ve_map_wnd_handle,OnChangeVEMap,this);
-  DLL::Chart3DSetOnClose(m_ve_map_wnd_handle,OnCloseVEMap,this);
+  DLL::Chart3DSetPtValuesFormat(m_md[TYPE_MAP_INJ_VE].handle, _T("#0.00"));
+  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_INJ_VE].handle, m_md[TYPE_MAP_INJ_VE].ptMovStep);
+  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_INJ_VE].handle, OnWndActivationVEMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_VE].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_INJ_VE].handle,OnChangeVEMap,this);
+  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_INJ_VE].handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_INJ_VE].handle,OnCloseVEMap,this);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_ve_map_wnd_handle, TYPE_MAP_INJ_VE);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_VE].handle, TYPE_MAP_INJ_VE);
 
-  DLL::Chart3DShow(m_ve_map_wnd_handle, true);
+  DLL::Chart3DShow(m_md[TYPE_MAP_INJ_VE].handle, true);
  }
  else
  {
-  ::SetFocus(m_ve_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_VE].handle);
  }
 }
 
@@ -1861,32 +1775,33 @@ void CButtonsPanel::OnViewAFRMap()
  //If button was released, then close editor's window
  if (m_view_afr_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_afr_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_AFR].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_afr_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((!m_md[TYPE_MAP_INJ_AFR].state)&&(DLL::Chart3DCreate))
  {
-  m_afr_map_chart_state = 1;
-  m_afr_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.0f,22.0f,
+  m_md[TYPE_MAP_INJ_AFR].state = 1;
+  m_md[TYPE_MAP_INJ_AFR].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetAFRMap(true),GetAFRMap(false),GetRPMGrid(),16,16,8.0f,22.0f,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
     MLL::GetString(IDS_AFR_MAP).c_str());
-  DLL::Chart3DSetPtValuesFormat(m_afr_map_wnd_handle, _T("#00.0"));
-  DLL::Chart3DSetPtMovingStep(m_afr_map_wnd_handle, 0.1f);
-  DLL::Chart3DSetOnWndActivation(m_afr_map_wnd_handle, OnWndActivationAFRMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(m_afr_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_afr_map_wnd_handle,OnChangeAFRMap,this);
-  DLL::Chart3DSetOnClose(m_afr_map_wnd_handle,OnCloseAFRMap,this);
+  DLL::Chart3DSetPtValuesFormat(m_md[TYPE_MAP_INJ_AFR].handle, _T("#00.0"));
+  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_INJ_AFR].handle, m_md[TYPE_MAP_INJ_AFR].ptMovStep);
+  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_INJ_AFR].handle, OnWndActivationAFRMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_AFR].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_INJ_AFR].handle,OnChangeAFRMap,this);
+  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_INJ_AFR].handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_INJ_AFR].handle,OnCloseAFRMap,this);
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_afr_map_wnd_handle, TYPE_MAP_INJ_AFR);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_AFR].handle, TYPE_MAP_INJ_AFR);
 
-  DLL::Chart3DShow(m_afr_map_wnd_handle, true);
+  DLL::Chart3DShow(m_md[TYPE_MAP_INJ_AFR].handle, true);
  }
  else
  {
-  ::SetFocus(m_afr_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_AFR].handle);
  }
 }
 
@@ -1895,31 +1810,33 @@ void CButtonsPanel::OnViewCrnkMap()
  //If button was released, then close editor's window
  if (m_view_crnk_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_crnk_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_CRNK].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_crnk_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_CRNK].state)&&(DLL::Chart2DCreate))
  {
-  m_crnk_map_chart_state = 1;
-  m_crnk_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrnkMap(true), GetCrnkMap(false), 0.25f, 100.0, SECU3IO::temp_map_tmp_slots, 16,
+  m_md[TYPE_MAP_INJ_CRNK].state = 1;
+  m_md[TYPE_MAP_INJ_CRNK].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrnkMap(true), GetCrnkMap(false), 0.25f, 100.0, SECU3IO::temp_map_tmp_slots, 16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_INJPW_UNIT).c_str(),
     MLL::GetString(IDS_CRNK_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_crnk_map_wnd_handle,OnWndActivationCrnkMap,this);
-  DLL::Chart2DSetAxisValuesFormat(m_crnk_map_wnd_handle, 1, _T("%.01f"));
-  DLL::Chart2DSetOnChange(m_crnk_map_wnd_handle, OnChangeCrnkMap, this);
-  DLL::Chart2DSetOnClose(m_crnk_map_wnd_handle, OnCloseCrnkMap, this);
-  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_CRNK].handle,OnWndActivationCrnkMap,this);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_INJ_CRNK].handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_CRNK].handle, OnChangeCrnkMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_CRNK].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_CRNK].handle, OnCloseCrnkMap, this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_CRNK].handle, m_md[TYPE_MAP_INJ_CRNK].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_CRNK].handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
-  OnOpenMapWnd(m_crnk_map_wnd_handle, TYPE_MAP_INJ_CRNK);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_CRNK].handle, TYPE_MAP_INJ_CRNK);
 
-  DLL::Chart2DShow(m_crnk_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_CRNK].handle, true);
  }
  else
  {
-  ::SetFocus(m_crnk_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_CRNK].handle);
  }
 }
 
@@ -1928,31 +1845,32 @@ void CButtonsPanel::OnViewWrmpMap()
  //if button was released, then close editor's window
  if (m_view_wrmp_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_wrmp_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_WRMP].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_wrmp_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_WRMP].state)&&(DLL::Chart2DCreate))
  {
-  m_wrmp_map_chart_state = 1;
-  m_wrmp_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetWrmpMap(true),GetWrmpMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_WRMP].state = 1;
+  m_md[TYPE_MAP_INJ_WRMP].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetWrmpMap(true),GetWrmpMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_WRMP_UNIT).c_str(),
     MLL::GetString(IDS_WRMP_MAP).c_str(), false);
-  DLL::Chart2DSetPtMovingStep(m_wrmp_map_wnd_handle, 1.00f);
-  DLL::Chart2DSetOnWndActivation(m_wrmp_map_wnd_handle,OnWndActivationWrmpMap,this);
-  DLL::Chart2DSetOnChange(m_wrmp_map_wnd_handle,OnChangeWrmpMap,this);
-  DLL::Chart2DSetOnClose(m_wrmp_map_wnd_handle,OnCloseWrmpMap,this);
-  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_WRMP].handle, m_md[TYPE_MAP_INJ_WRMP].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_WRMP].handle,OnWndActivationWrmpMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_WRMP].handle,OnChangeWrmpMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_WRMP].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_WRMP].handle,OnCloseWrmpMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_WRMP].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_wrmp_map_wnd_handle, TYPE_MAP_INJ_WRMP);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_WRMP].handle, TYPE_MAP_INJ_WRMP);
 
-  DLL::Chart2DShow(m_wrmp_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_WRMP].handle, true);
  }
  else
  {
-  ::SetFocus(m_wrmp_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_WRMP].handle);
  }
 }
 
@@ -1961,33 +1879,34 @@ void CButtonsPanel::OnViewDeadMap()
  //if button was released, then close editor's window
  if (m_view_dead_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_dead_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_DEAD].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_dead_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_DEAD].state)&&(DLL::Chart2DCreate))
  {
-  m_dead_map_chart_state = 1;
-  m_dead_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDeadMap(true), GetDeadMap(false), -1.0f, 12.0, SECU3IO::dwellcntrl_map_slots, 32,
+  m_md[TYPE_MAP_INJ_DEAD].state = 1;
+  m_md[TYPE_MAP_INJ_DEAD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetDeadMap(true), GetDeadMap(false), -1.0f, 12.0, SECU3IO::dwellcntrl_map_slots, 32,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_DEAD_UNIT).c_str(),
     MLL::GetString(IDS_DEAD_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_dead_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_dead_map_wnd_handle, 0.1f);
-  DLL::Chart2DSetOnWndActivation(m_dead_map_wnd_handle,OnWndActivationDeadMap,this);
-  DLL::Chart2DSetAxisValuesFormat(m_dead_map_wnd_handle, 1, _T("%.01f"));
-  DLL::Chart2DSetOnChange(m_dead_map_wnd_handle, OnChangeDeadMap, this);
-  DLL::Chart2DSetOnClose(m_dead_map_wnd_handle, OnCloseDeadMap, this);
-  DLL::Chart2DUpdate(m_dead_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_DEAD].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_DEAD].handle, m_md[TYPE_MAP_INJ_DEAD].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_DEAD].handle,OnWndActivationDeadMap,this);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_INJ_DEAD].handle, 1, _T("%.01f"));
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_DEAD].handle, OnChangeDeadMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_DEAD].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_DEAD].handle, OnCloseDeadMap, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_DEAD].handle, NULL, NULL); //<--actuate changes
 
    //allow controller to detect closing of this window
-  OnOpenMapWnd(m_dead_map_wnd_handle, TYPE_MAP_INJ_DEAD);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_DEAD].handle, TYPE_MAP_INJ_DEAD);
 
-  DLL::Chart2DShow(m_dead_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_DEAD].handle, true);
  }
  else
  {
-  ::SetFocus(m_dead_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_DEAD].handle);
  }
 }
 
@@ -1996,31 +1915,32 @@ void CButtonsPanel::OnViewIdlrMap()
  //if button was released, then close editor's window
  if (m_view_idlr_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_idlr_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IDLR].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_idlr_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IDLR].state)&&(DLL::Chart2DCreate))
  {
-  m_idlr_map_chart_state = 1;
-  m_idlr_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_IDLR].state = 1;
+  m_md[TYPE_MAP_INJ_IDLR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlrMap(true),GetIdlrMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLR_MAP).c_str(), false);
-  DLL::Chart2DSetPtMovingStep(m_idlr_map_wnd_handle, 1.0f);
-  DLL::Chart2DSetOnWndActivation(m_idlr_map_wnd_handle,OnWndActivationIdlrMap,this);
-  DLL::Chart2DSetOnChange(m_idlr_map_wnd_handle,OnChangeIdlrMap,this);
-  DLL::Chart2DSetOnClose(m_idlr_map_wnd_handle,OnCloseIdlrMap,this);
-  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_IDLR].handle, m_md[TYPE_MAP_INJ_IDLR].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_IDLR].handle,OnWndActivationIdlrMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_IDLR].handle,OnChangeIdlrMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IDLR].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_IDLR].handle,OnCloseIdlrMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLR].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_idlr_map_wnd_handle, TYPE_MAP_INJ_IDLR);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IDLR].handle, TYPE_MAP_INJ_IDLR);
 
-  DLL::Chart2DShow(m_idlr_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_IDLR].handle, true);
  }
  else
  {
-  ::SetFocus(m_idlr_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IDLR].handle);
  }
 }
 
@@ -2029,31 +1949,32 @@ void CButtonsPanel::OnViewIdlcMap()
  //if button was released, then close editor's window
  if (m_view_idlc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_idlc_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IDLC].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_idlc_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IDLC].state)&&(DLL::Chart2DCreate))
  {
-  m_idlc_map_chart_state = 1;
-  m_idlc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_IDLC].state = 1;
+  m_md[TYPE_MAP_INJ_IDLC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIdlcMap(true),GetIdlcMap(false),0.0f,100.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_IAC_UNIT).c_str(),
     MLL::GetString(IDS_IDLC_MAP).c_str(), false);
-  DLL::Chart2DSetPtMovingStep(m_idlc_map_wnd_handle, 1.0f);
-  DLL::Chart2DSetOnWndActivation(m_idlc_map_wnd_handle,OnWndActivationIdlcMap,this);
-  DLL::Chart2DSetOnChange(m_idlc_map_wnd_handle,OnChangeIdlcMap,this);
-  DLL::Chart2DSetOnClose(m_idlc_map_wnd_handle,OnCloseIdlcMap,this);
-  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_IDLC].handle, m_md[TYPE_MAP_INJ_IDLC].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_IDLC].handle,OnWndActivationIdlcMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_IDLC].handle,OnChangeIdlcMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IDLC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_IDLC].handle,OnCloseIdlcMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLC].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_idlc_map_wnd_handle, TYPE_MAP_INJ_IDLC);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IDLC].handle, TYPE_MAP_INJ_IDLC);
 
-  DLL::Chart2DShow(m_idlc_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_IDLC].handle, true);
  }
  else
  {
-  ::SetFocus(m_idlc_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IDLC].handle);
  }
 }
 
@@ -2062,32 +1983,33 @@ void CButtonsPanel::OnViewAETPSMap()
  //if button was released, then close editor's window
  if (m_view_aetps_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_aetps_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_AETPS].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_aetps_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_AETPS].state)&&(DLL::Chart2DCreate))
  {
-  m_aetps_map_chart_state = 1;
+  m_md[TYPE_MAP_INJ_AETPS].state = 1;
   const float bins_lims[5] = {-1000.0f, 1000.0f, 1.0f, 0.0f, 10.0f}; //min -1000%, max 1000%, inc 1%, 0 dec places, min diff 10%
-  m_aetps_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAETPSMap(true),GetAETPSMap(false),-55.0f,199.0f,bins_lims,8,
+  m_md[TYPE_MAP_INJ_AETPS].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAETPSMap(true),GetAETPSMap(false),-55.0f,199.0f,bins_lims,8,
     MLL::GetString(IDS_MAPS_DPDT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AETPS_UNIT).c_str(),
     MLL::GetString(IDS_AETPS_MAP).c_str(), true); //<-- use horizontal axis bins
-  DLL::Chart2DSetPtMovingStep(m_aetps_map_wnd_handle, 1.0f);
-  DLL::Chart2DSetOnWndActivation(m_aetps_map_wnd_handle,OnWndActivationAETPSMap,this);
-  DLL::Chart2DSetOnChange(m_aetps_map_wnd_handle,OnChangeAETPSMap,this);
-  DLL::Chart2DSetOnClose(m_aetps_map_wnd_handle,OnCloseAETPSMap,this);
-  DLL::Chart2DUpdate(m_aetps_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_AETPS].handle, m_md[TYPE_MAP_INJ_AETPS].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_AETPS].handle,OnWndActivationAETPSMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_AETPS].handle,OnChangeAETPSMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_AETPS].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_AETPS].handle,OnCloseAETPSMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AETPS].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_aetps_map_wnd_handle, TYPE_MAP_INJ_AETPS);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_AETPS].handle, TYPE_MAP_INJ_AETPS);
 
-  DLL::Chart2DShow(m_aetps_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_AETPS].handle, true);
  }
  else
  {
-  ::SetFocus(m_aetps_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_AETPS].handle);
  }
 }
 
@@ -2096,32 +2018,33 @@ void CButtonsPanel::OnViewAERPMMap()
  //if button was released, then close editor's window
  if (m_view_aerpm_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_aerpm_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_AERPM].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_aerpm_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_AERPM].state)&&(DLL::Chart2DCreate))
  {
-  m_aerpm_map_chart_state = 1;
+  m_md[TYPE_MAP_INJ_AERPM].state = 1;
   const float bins_lims[5] = {0.0f, 25000.0f, 100.0f, 0.0f, 100.0f}; //min 0min-1, max 25000min-1, inc 100min-1, 0 dec places, min diff 100min-1
-  m_aerpm_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,4,
+  m_md[TYPE_MAP_INJ_AERPM].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAERPMMap(true),GetAERPMMap(false),0.0f,199.0f,bins_lims,4,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AERPM_UNIT).c_str(),
     MLL::GetString(IDS_AERPM_MAP).c_str(), true); //<--use horizontal axis bins
-  DLL::Chart2DSetPtMovingStep(m_aerpm_map_wnd_handle, 1.0f); //step is 1%
-  DLL::Chart2DSetOnWndActivation(m_aerpm_map_wnd_handle,OnWndActivationAERPMMap,this);
-  DLL::Chart2DSetOnChange(m_aerpm_map_wnd_handle,OnChangeAERPMMap,this);
-  DLL::Chart2DSetOnClose(m_aerpm_map_wnd_handle,OnCloseAERPMMap,this);
-  DLL::Chart2DUpdate(m_aerpm_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_AERPM].handle, m_md[TYPE_MAP_INJ_AERPM].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_AERPM].handle,OnWndActivationAERPMMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_AERPM].handle,OnChangeAERPMMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_AERPM].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_AERPM].handle,OnCloseAERPMMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AERPM].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_aerpm_map_wnd_handle, TYPE_MAP_INJ_AERPM);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_AERPM].handle, TYPE_MAP_INJ_AERPM);
 
-  DLL::Chart2DShow(m_aerpm_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_AERPM].handle, true);
  }
  else
  {
-  ::SetFocus(m_aerpm_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_AERPM].handle);
  }
 }
 
@@ -2130,31 +2053,32 @@ void CButtonsPanel::OnViewAftstrMap()
  //if button was released, then close editor's window
  if (m_view_aftstr_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_aftstr_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_AFTSTR].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_aftstr_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_AFTSTR].state)&&(DLL::Chart2DCreate))
  {
-  m_aftstr_map_chart_state = 1;
-  m_aftstr_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrMap(true),GetAftstrMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_AFTSTR].state = 1;
+  m_md[TYPE_MAP_INJ_AFTSTR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAftstrMap(true),GetAftstrMap(false),0.0f,199.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFTSTR_UNIT).c_str(),
     MLL::GetString(IDS_AFTSTR_MAP).c_str(), false);
-  DLL::Chart2DSetPtMovingStep(m_aftstr_map_wnd_handle, 1.0f);
-  DLL::Chart2DSetOnWndActivation(m_aftstr_map_wnd_handle,OnWndActivationAftstrMap,this);
-  DLL::Chart2DSetOnChange(m_aftstr_map_wnd_handle,OnChangeAftstrMap,this);
-  DLL::Chart2DSetOnClose(m_aftstr_map_wnd_handle,OnCloseAftstrMap,this);
-  DLL::Chart2DUpdate(m_aftstr_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_AFTSTR].handle, m_md[TYPE_MAP_INJ_AFTSTR].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_AFTSTR].handle,OnWndActivationAftstrMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_AFTSTR].handle,OnChangeAftstrMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_AFTSTR].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_AFTSTR].handle,OnCloseAftstrMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AFTSTR].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_aftstr_map_wnd_handle, TYPE_MAP_INJ_AFTSTR);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_AFTSTR].handle, TYPE_MAP_INJ_AFTSTR);
 
-  DLL::Chart2DShow(m_aftstr_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_AFTSTR].handle, true);
  }
  else
  {
-  ::SetFocus(m_aftstr_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_AFTSTR].handle);
  }
 }
 
@@ -2163,34 +2087,35 @@ void CButtonsPanel::OnViewITMap()
  //if button was released, then close editor's window
  if (m_view_it_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_it_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IT].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_it_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IT].state)&&(DLL::Chart3DCreate))
  {
-  m_it_map_chart_state = 1;
+  m_md[TYPE_MAP_INJ_IT].state = 1;
   float y1, y2;
   _GetITModeRange(y1, y2);
-  m_it_map_wnd_handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,y1,y2,
+  m_md[TYPE_MAP_INJ_IT].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,y1,y2,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str(),
     MLL::GetString(IDS_IT_MAP).c_str());
-  DLL::Chart3DSetPtMovingStep(m_it_map_wnd_handle, 1.0f);
-  DLL::Chart3DSetOnWndActivation(m_it_map_wnd_handle, OnWndActivationITMap, this);
-  DLL::Chart3DSetOnGetAxisLabel(m_it_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart3DSetOnChange(m_it_map_wnd_handle,OnChangeITMap,this);
-  DLL::Chart3DSetOnClose(m_it_map_wnd_handle,OnCloseITMap,this);
-  DLL::Chart3DSetOnValueTransform(m_it_map_wnd_handle, OnValueTransformITMap, this);
-  DLL::Chart3DUpdate(m_it_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_INJ_IT].handle, m_md[TYPE_MAP_INJ_IT].ptMovStep);
+  DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_INJ_IT].handle, OnWndActivationITMap, this);
+  DLL::Chart3DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_IT].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart3DSetOnChange(m_md[TYPE_MAP_INJ_IT].handle,OnChangeITMap,this);
+  DLL::Chart3DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IT].handle, OnChangeSettingsCME, this);
+  DLL::Chart3DSetOnClose(m_md[TYPE_MAP_INJ_IT].handle,OnCloseITMap,this);
+  DLL::Chart3DSetOnValueTransform(m_md[TYPE_MAP_INJ_IT].handle, OnValueTransformITMap, this);
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, NULL, NULL); //<--actuate changes
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_it_map_wnd_handle, TYPE_MAP_INJ_IT);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IT].handle, TYPE_MAP_INJ_IT);
 
-  DLL::Chart3DShow(m_it_map_wnd_handle, true);
+  DLL::Chart3DShow(m_md[TYPE_MAP_INJ_IT].handle, true);
  }
  else
  {
-  ::SetFocus(m_it_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IT].handle);
  }
 }
 
@@ -2199,32 +2124,33 @@ void CButtonsPanel::OnViewITRPMMap()
  //if button was released, then close editor's window
  if (m_view_itrpm_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_itrpm_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_ITRPM].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_itrpm_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_ITRPM].state)&&(DLL::Chart2DCreate))
  {
-  m_itrpm_map_chart_state = 1;
-  m_itrpm_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetITRPMMap(true),GetITRPMMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_ITRPM].state = 1;
+  m_md[TYPE_MAP_INJ_ITRPM].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetITRPMMap(true),GetITRPMMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_ITRPM_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_itrpm_map_wnd_handle, _T("#0"));
-  DLL::Chart2DSetPtMovingStep(m_itrpm_map_wnd_handle, 10.0f);
-  DLL::Chart2DSetOnWndActivation(m_itrpm_map_wnd_handle,OnWndActivationITRPMMap,this);
-  DLL::Chart2DSetOnChange(m_itrpm_map_wnd_handle,OnChangeITRPMMap,this);
-  DLL::Chart2DSetOnClose(m_itrpm_map_wnd_handle,OnCloseITRPMMap,this);
-  DLL::Chart2DUpdate(m_itrpm_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_ITRPM].handle, _T("#0"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_ITRPM].handle, m_md[TYPE_MAP_INJ_ITRPM].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_ITRPM].handle,OnWndActivationITRPMMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_ITRPM].handle,OnChangeITRPMMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_ITRPM].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_ITRPM].handle,OnCloseITRPMMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ITRPM].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_itrpm_map_wnd_handle, TYPE_MAP_INJ_ITRPM);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_ITRPM].handle, TYPE_MAP_INJ_ITRPM);
 
-  DLL::Chart2DShow(m_itrpm_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_ITRPM].handle, true);
  }
  else
  {
-  ::SetFocus(m_itrpm_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_ITRPM].handle);
  }
 }
 
@@ -2233,32 +2159,33 @@ void CButtonsPanel::OnViewRigidMap()
  //if button was released, then close editor's window
  if (m_view_rigid_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_rigid_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_RIGID].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_rigid_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_RIGID].state)&&(DLL::Chart2DCreate))
  {
-  m_rigid_map_chart_state = 1;
-  m_rigid_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetRigidMap(true),GetRigidMap(false),0.0f,5.0f,SECU3IO::rigid_map_slots,8,
+  m_md[TYPE_MAP_INJ_RIGID].state = 1;
+  m_md[TYPE_MAP_INJ_RIGID].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetRigidMap(true),GetRigidMap(false),0.0f,5.0f,SECU3IO::rigid_map_slots,8,
     MLL::GetString(IDS_MAPS_RIGID_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_RIGID_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_rigid_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_rigid_map_wnd_handle, 0.01f);
-  DLL::Chart2DSetOnWndActivation(m_rigid_map_wnd_handle,OnWndActivationRigidMap,this);
-  DLL::Chart2DSetOnChange(m_rigid_map_wnd_handle,OnChangeRigidMap,this);
-  DLL::Chart2DSetOnClose(m_rigid_map_wnd_handle,OnCloseRigidMap,this);
-  DLL::Chart2DUpdate(m_rigid_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_RIGID].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_RIGID].handle, m_md[TYPE_MAP_INJ_RIGID].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_RIGID].handle,OnWndActivationRigidMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_RIGID].handle,OnChangeRigidMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_RIGID].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_RIGID].handle,OnCloseRigidMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_RIGID].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_rigid_map_wnd_handle, TYPE_MAP_INJ_RIGID);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_RIGID].handle, TYPE_MAP_INJ_RIGID);
 
-  DLL::Chart2DShow(m_rigid_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_RIGID].handle, true);
  }
  else
  {
-  ::SetFocus(m_rigid_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_RIGID].handle);
  }
 }
 
@@ -2267,35 +2194,37 @@ void CButtonsPanel::OnViewEGOCrvMap()
  //If button was released, then close editor's window
  if (m_view_egocrv_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_egocrv_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_EGOCRV].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_egocrv_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_EGOCRV].state)&&(DLL::Chart2DCreate))
  {
-  m_egocrv_map_chart_state = 1;
-  m_egocrv_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEGOCurveMap(true), GetEGOCurveMap(false), 6.00, 24.00, NULL, 16,
+  m_md[TYPE_MAP_INJ_EGOCRV].state = 1;
+  m_md[TYPE_MAP_INJ_EGOCRV].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetEGOCurveMap(true), GetEGOCurveMap(false), 6.00, 24.00, NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_AFR_UNIT).c_str(),
     MLL::GetString(IDS_EGO_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_egocrv_map_wnd_handle,OnWndActivationEGOCrvMap, this);
-  DLL::Chart2DSetPtValuesFormat(m_egocrv_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetAxisValuesFormat(m_egocrv_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_egocrv_map_wnd_handle, 1, true, 0, 5.5f, 0, 5.5f, 0.01f, -1, -1, OnChangeEGOCrvXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_egocrv_map_wnd_handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_egocrv_map_wnd_handle, OnChangeEGOCrvMap, this);
-  DLL::Chart2DSetOnClose(m_egocrv_map_wnd_handle, OnCloseEGOCrvMap, this);
-  DLL::Chart2DUpdate(m_egocrv_map_wnd_handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_egocrv_map_wnd_handle, 1, GetEGOCurveMap(false)[16], GetEGOCurveMap(false)[16+1]);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_EGOCRV].handle,OnWndActivationEGOCrvMap, this);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_EGOCRV].handle, _T("#0.00"));
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_INJ_EGOCRV].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_INJ_EGOCRV].handle, 1, true, 0, 5.5f, 0, 5.5f, 0.01f, -1, -1, OnChangeEGOCrvXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_EGOCRV].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_EGOCRV].handle, OnChangeEGOCrvMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_EGOCRV].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_EGOCRV].handle, OnCloseEGOCrvMap, this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_EGOCRV].handle, m_md[TYPE_MAP_INJ_EGOCRV].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_EGOCRV].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_EGOCRV].handle, 1, GetEGOCurveMap(false)[16], GetEGOCurveMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_egocrv_map_wnd_handle, TYPE_MAP_INJ_EGOCRV);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_EGOCRV].handle, TYPE_MAP_INJ_EGOCRV);
 
-  DLL::Chart2DShow(m_egocrv_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_EGOCRV].handle, true);
  }
  else
  {
-  ::SetFocus(m_egocrv_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_EGOCRV].handle);
  }
 }
 
@@ -2304,36 +2233,37 @@ void CButtonsPanel::OnViewIACCMap()
  //If button was released, then close editor's window
  if (m_view_iacc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_iacc_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IACC].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_iacc_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IACC].state)&&(DLL::Chart2DCreate))
  {
-  m_iacc_map_chart_state = 1;
-  m_iacc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCMap(true), GetIACCMap(false), 0.00f, 1.99f, NULL, 8,
+  m_md[TYPE_MAP_INJ_IACC].state = 1;
+  m_md[TYPE_MAP_INJ_IACC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCMap(true), GetIACCMap(false), 0.00f, 1.99f, NULL, 8,
     MLL::GetString(IDS_MAPS_IACPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACC_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_iacc_map_wnd_handle,OnWndActivationIACCMap, this);
-  DLL::Chart2DSetPtValuesFormat(m_iacc_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_iacc_map_wnd_handle, 0.05f);
-  DLL::Chart2DSetAxisValuesFormat(m_iacc_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_iacc_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_iacc_map_wnd_handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_iacc_map_wnd_handle, OnChangeIACCMap, this);
-  DLL::Chart2DSetOnClose(m_iacc_map_wnd_handle, OnCloseIACCMap, this);
-  DLL::Chart2DUpdate(m_iacc_map_wnd_handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_iacc_map_wnd_handle, 1, GetIACCMap(false)[8], GetIACCMap(false)[8+1]);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_IACC].handle,OnWndActivationIACCMap, this);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_IACC].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_IACC].handle, m_md[TYPE_MAP_INJ_IACC].ptMovStep);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_INJ_IACC].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_INJ_IACC].handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_IACC].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_IACC].handle, OnChangeIACCMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IACC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_IACC].handle, OnCloseIACCMap, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACC].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IACC].handle, 1, GetIACCMap(false)[8], GetIACCMap(false)[8+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_iacc_map_wnd_handle, TYPE_MAP_INJ_IACC);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IACC].handle, TYPE_MAP_INJ_IACC);
 
-  DLL::Chart2DShow(m_iacc_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_IACC].handle, true);
  }
  else
  {
-  ::SetFocus(m_iacc_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IACC].handle);
  }
 }
 
@@ -2342,36 +2272,37 @@ void CButtonsPanel::OnViewIACCWMap()
  //If button was released, then close editor's window
  if (m_view_iaccw_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_iaccw_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IACCW].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_iaccw_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IACCW].state)&&(DLL::Chart2DCreate))
  {
-  m_iaccw_map_chart_state = 1;
-  m_iaccw_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCWMap(true), GetIACCWMap(false), 0.00, 1.00, NULL, 16,
+  m_md[TYPE_MAP_INJ_IACCW].state = 1;
+  m_md[TYPE_MAP_INJ_IACCW].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIACCWMap(true), GetIACCWMap(false), 0.00, 1.00, NULL, 16,
     MLL::GetString(IDS_MAPS_TPSPOS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IACCW_CURVE_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_iaccw_map_wnd_handle,OnWndActivationIACCWMap, this);
-  DLL::Chart2DSetPtValuesFormat(m_iaccw_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_iaccw_map_wnd_handle, 0.05f);
-  DLL::Chart2DSetAxisValuesFormat(m_iaccw_map_wnd_handle, 1, _T("%.02f"));
-  DLL::Chart2DSetAxisEdits(m_iaccw_map_wnd_handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCWXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_iaccw_map_wnd_handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_iaccw_map_wnd_handle, OnChangeIACCWMap, this);
-  DLL::Chart2DSetOnClose(m_iaccw_map_wnd_handle, OnCloseIACCWMap, this);
-  DLL::Chart2DUpdate(m_iaccw_map_wnd_handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_iaccw_map_wnd_handle, 1, GetIACCWMap(false)[16], GetIACCWMap(false)[16+1]);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_IACCW].handle,OnWndActivationIACCWMap, this);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_IACCW].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_IACCW].handle, m_md[TYPE_MAP_INJ_IACCW].ptMovStep);
+  DLL::Chart2DSetAxisValuesFormat(m_md[TYPE_MAP_INJ_IACCW].handle, 1, _T("%.02f"));
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_INJ_IACCW].handle, 1, true, 0, 100.0f, 0, 100.0f, 0.5f, -1, -1, OnChangeIACCWXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_IACCW].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_IACCW].handle, OnChangeIACCWMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IACCW].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_IACCW].handle, OnCloseIACCWMap, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACCW].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IACCW].handle, 1, GetIACCWMap(false)[16], GetIACCWMap(false)[16+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_iaccw_map_wnd_handle, TYPE_MAP_INJ_IACCW);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IACCW].handle, TYPE_MAP_INJ_IACCW);
 
-  DLL::Chart2DShow(m_iaccw_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_IACCW].handle, true);
  }
  else
  {
-  ::SetFocus(m_iaccw_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IACCW].handle);
  }
 }
 
@@ -2380,35 +2311,36 @@ void CButtonsPanel::OnViewIATCLTMap()
  //If button was released, then close editor's window
  if (m_view_iatclt_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_iatclt_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_IATCLT].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_iatclt_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_IATCLT].state)&&(DLL::Chart2DCreate))
  {
-  m_iatclt_map_chart_state = 1;
-  m_iatclt_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIATCLTMap(true), GetIATCLTMap(false), 0.00, 1.00, NULL, 8,
+  m_md[TYPE_MAP_INJ_IATCLT].state = 1;
+  m_md[TYPE_MAP_INJ_IATCLT].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetIATCLTMap(true), GetIATCLTMap(false), 0.00, 1.00, NULL, 8,
     MLL::GetString(IDS_MAPS_AIRFLOW_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_IATCLT_CORR_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_iatclt_map_wnd_handle,OnWndActivationIATCLTMap, this);
-  DLL::Chart2DSetPtValuesFormat(m_iatclt_map_wnd_handle, _T("#0.000"));
-  DLL::Chart2DSetPtMovingStep(m_iatclt_map_wnd_handle, 0.05f);
-  DLL::Chart2DSetAxisEdits(m_iatclt_map_wnd_handle, 1, true, 0, 2000000.0f, 0, 2000000.0f, 100.0f, 7, 0, OnChangeIATCLTXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_iatclt_map_wnd_handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_iatclt_map_wnd_handle, OnChangeIATCLTMap, this);
-  DLL::Chart2DSetOnClose(m_iatclt_map_wnd_handle, OnCloseIATCLTMap, this);
-  DLL::Chart2DUpdate(m_iatclt_map_wnd_handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_iatclt_map_wnd_handle, 1, GetIATCLTMap(false)[8], GetIATCLTMap(false)[8+1]);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_IATCLT].handle,OnWndActivationIATCLTMap, this);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_IATCLT].handle, _T("#0.000"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_IATCLT].handle, m_md[TYPE_MAP_INJ_IATCLT].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_INJ_IATCLT].handle, 1, true, 0, 2000000.0f, 0, 2000000.0f, 100.0f, 7, 0, OnChangeIATCLTXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_IATCLT].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_IATCLT].handle, OnChangeIATCLTMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_IATCLT].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_IATCLT].handle, OnCloseIATCLTMap, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IATCLT].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IATCLT].handle, 1, GetIATCLTMap(false)[8], GetIATCLTMap(false)[8+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_iatclt_map_wnd_handle, TYPE_MAP_INJ_IATCLT);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_IATCLT].handle, TYPE_MAP_INJ_IATCLT);
 
-  DLL::Chart2DShow(m_iatclt_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_IATCLT].handle, true);
  }
  else
  {
-  ::SetFocus(m_iatclt_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_IATCLT].handle);
  }
 }
 
@@ -2418,31 +2350,33 @@ void CButtonsPanel::OnViewTpsswtMap()
  //If button was released, then close editor's window
  if (m_view_tpsswt_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_tpsswt_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_TPSSWT].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_tpsswt_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_TPSSWT].state)&&(DLL::Chart2DCreate))
  {
-  m_tpsswt_map_chart_state = 1;
-  m_tpsswt_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTpsswtMap(true),GetTpsswtMap(false),0.0,100.0,GetRPMGrid(),16,
+  m_md[TYPE_MAP_INJ_TPSSWT].state = 1;
+  m_md[TYPE_MAP_INJ_TPSSWT].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetTpsswtMap(true),GetTpsswtMap(false),0.0,100.0,GetRPMGrid(),16,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TPSSWT_UNIT).c_str(),
     MLL::GetString(IDS_TPSSWT_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_tpsswt_map_wnd_handle,OnWndActivationTpsswtMap,this);
-  DLL::Chart2DSetOnGetAxisLabel(m_tpsswt_map_wnd_handle, 1, OnGetXAxisLabelRPM, this);
-  DLL::Chart2DSetOnChange(m_tpsswt_map_wnd_handle,OnChangeTpsswtMap,this);
-  DLL::Chart2DSetOnClose(m_tpsswt_map_wnd_handle,OnCloseTpsswtMap,this);
-  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_TPSSWT].handle,OnWndActivationTpsswtMap,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_TPSSWT].handle, 1, OnGetXAxisLabelRPM, this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_TPSSWT].handle,OnChangeTpsswtMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_TPSSWT].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_TPSSWT].handle,OnCloseTpsswtMap,this);
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_TPSSWT].handle, m_md[TYPE_MAP_INJ_TPSSWT].ptMovStep);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_TPSSWT].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_tpsswt_map_wnd_handle, TYPE_MAP_INJ_TPSSWT);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_TPSSWT].handle, TYPE_MAP_INJ_TPSSWT);
 
-  DLL::Chart2DShow(m_tpsswt_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_TPSSWT].handle, true);
  }
  else
  {
-  ::SetFocus(m_tpsswt_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_TPSSWT].handle);
  }
 }
 
@@ -2452,32 +2386,33 @@ void CButtonsPanel::OnViewGtscMap()
  //if button was released, then close editor's window
  if (m_view_gtsc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_gtsc_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_GTSC].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_gtsc_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_GTSC].state)&&(DLL::Chart2DCreate))
  {
-  m_gtsc_map_chart_state = 1;
-  m_gtsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGtscMap(true),GetGtscMap(false),0.01f,1.99f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_GTSC].state = 1;
+  m_md[TYPE_MAP_INJ_GTSC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGtscMap(true),GetGtscMap(false),0.01f,1.99f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_GTSC_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_gtsc_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_gtsc_map_wnd_handle, 0.01f);
-  DLL::Chart2DSetOnWndActivation(m_gtsc_map_wnd_handle,OnWndActivationGtscMap,this);
-  DLL::Chart2DSetOnChange(m_gtsc_map_wnd_handle,OnChangeGtscMap,this);
-  DLL::Chart2DSetOnClose(m_gtsc_map_wnd_handle,OnCloseGtscMap,this);
-  DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_GTSC].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_GTSC].handle, m_md[TYPE_MAP_INJ_GTSC].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_GTSC].handle,OnWndActivationGtscMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_GTSC].handle,OnChangeGtscMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_GTSC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_GTSC].handle,OnCloseGtscMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GTSC].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_gtsc_map_wnd_handle, TYPE_MAP_INJ_GTSC);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_GTSC].handle, TYPE_MAP_INJ_GTSC);
 
-  DLL::Chart2DShow(m_gtsc_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_GTSC].handle, true);
  }
  else
  {
-  ::SetFocus(m_gtsc_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_GTSC].handle);
  }
 }
 
@@ -2486,35 +2421,36 @@ void CButtonsPanel::OnViewGpscMap()
  //If button was released, then close editor's window
  if (m_view_gpsc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_gpsc_map_wnd_handle, WM_CLOSE, 0, 0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_GPSC].handle, WM_CLOSE, 0, 0);
   return;
  }
 
- if ((!m_gpsc_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_GPSC].state)&&(DLL::Chart2DCreate))
  {
-  m_gpsc_map_chart_state = 1;
-  m_gpsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 9,
+  m_md[TYPE_MAP_INJ_GPSC].state = 1;
+  m_md[TYPE_MAP_INJ_GPSC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetGpscMap(true), GetGpscMap(false), 0.00f, 1.99f, NULL, 9,
     MLL::GetString(IDS_MAPS_PRESS_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_GPSC_MAP).c_str(), false);
-  DLL::Chart2DSetOnWndActivation(m_gpsc_map_wnd_handle,OnWndActivationGpscMap, this);
-  DLL::Chart2DSetPtValuesFormat(m_gpsc_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_gpsc_map_wnd_handle, 0.01f);
-  DLL::Chart2DSetAxisEdits(m_gpsc_map_wnd_handle, 1, true, 50.0f, 500.0f, 100.0f, 500.0f, 2.0f, 3, 0, OnChangeGpscXAxisEdit, this);
-  DLL::Chart2DSetOnGetAxisLabel(m_gpsc_map_wnd_handle, 1, NULL, NULL);
-  DLL::Chart2DSetOnChange(m_gpsc_map_wnd_handle, OnChangeGpscMap, this);
-  DLL::Chart2DSetOnClose(m_gpsc_map_wnd_handle, OnCloseGpscMap, this);
-  DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, NULL, NULL); //<--actuate changes
-  DLL::Chart2DUpdateAxisEdits(m_gpsc_map_wnd_handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_GPSC].handle,OnWndActivationGpscMap, this);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_GPSC].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_GPSC].handle, m_md[TYPE_MAP_INJ_GPSC].ptMovStep);
+  DLL::Chart2DSetAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, true, 50.0f, 500.0f, 100.0f, 500.0f, 2.0f, 3, 0, OnChangeGpscXAxisEdit, this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_INJ_GPSC].handle, 1, NULL, NULL);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_GPSC].handle, OnChangeGpscMap, this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_GPSC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_GPSC].handle, OnCloseGpscMap, this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
 
   //allow controller to detect closing of this window
-  OnOpenMapWnd(m_gpsc_map_wnd_handle, TYPE_MAP_INJ_GPSC);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_GPSC].handle, TYPE_MAP_INJ_GPSC);
 
-  DLL::Chart2DShow(m_gpsc_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_GPSC].handle, true);
  }
  else
  {
-  ::SetFocus(m_gpsc_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_GPSC].handle);
  }
 }
 
@@ -2524,32 +2460,33 @@ void CButtonsPanel::OnViewAtscMap()
  //if button was released, then close editor's window
  if (m_view_atsc_map_btn.GetCheck()==BST_UNCHECKED)
  {
-  ::SendMessage(m_atsc_map_wnd_handle,WM_CLOSE,0,0);
+  ::SendMessage(m_md[TYPE_MAP_INJ_ATSC].handle,WM_CLOSE,0,0);
   return;
  }
 
- if ((!m_atsc_map_chart_state)&&(DLL::Chart2DCreate))
+ if ((!m_md[TYPE_MAP_INJ_ATSC].state)&&(DLL::Chart2DCreate))
  {
-  m_atsc_map_chart_state = 1;
-  m_atsc_map_wnd_handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAtscMap(true),GetAtscMap(false),0.5f,1.5f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_INJ_ATSC].state = 1;
+  m_md[TYPE_MAP_INJ_ATSC].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetAtscMap(true),GetAtscMap(false),0.5f,1.5f,SECU3IO::temp_map_tmp_slots,16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_COEFF_UNIT).c_str(),
     MLL::GetString(IDS_ATSC_MAP).c_str(), false);
-  DLL::Chart2DSetPtValuesFormat(m_atsc_map_wnd_handle, _T("#0.00"));
-  DLL::Chart2DSetPtMovingStep(m_atsc_map_wnd_handle, 0.01f);
-  DLL::Chart2DSetOnWndActivation(m_atsc_map_wnd_handle,OnWndActivationAtscMap,this);
-  DLL::Chart2DSetOnChange(m_atsc_map_wnd_handle,OnChangeAtscMap,this);
-  DLL::Chart2DSetOnClose(m_atsc_map_wnd_handle,OnCloseAtscMap,this);
-  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, NULL, NULL); //<--actuate changes
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_INJ_ATSC].handle, _T("#0.00"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_INJ_ATSC].handle, m_md[TYPE_MAP_INJ_ATSC].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_INJ_ATSC].handle,OnWndActivationAtscMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_INJ_ATSC].handle,OnChangeAtscMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_INJ_ATSC].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_INJ_ATSC].handle,OnCloseAtscMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ATSC].handle, NULL, NULL); //<--actuate changes
 
   //let controller to know about opening of this window
-  OnOpenMapWnd(m_atsc_map_wnd_handle, TYPE_MAP_INJ_ATSC);
+  OnOpenMapWnd(m_md[TYPE_MAP_INJ_ATSC].handle, TYPE_MAP_INJ_ATSC);
 
-  DLL::Chart2DShow(m_atsc_map_wnd_handle, true);
+  DLL::Chart2DShow(m_md[TYPE_MAP_INJ_ATSC].handle, true);
  }
  else
  {
-  ::SetFocus(m_atsc_map_wnd_handle);
+  ::SetFocus(m_md[TYPE_MAP_INJ_ATSC].handle);
  }
 }
 
@@ -2559,7 +2496,7 @@ void CButtonsPanel::OnGridModeEditingIgn()
  if (m_grid_mode_editing_ign_check.GetCheck()==BST_CHECKED)
  {
   mp_gridModeEditorIgnDlg.reset(new CGridModeEditorIgnDlg());
-  mp_gridModeEditorIgnDlg->BindMaps(m_start_map_active, m_idle_map_active, &m_work_map_active[0][0], m_temp_map_active);
+  mp_gridModeEditorIgnDlg->BindMaps(m_md[TYPE_MAP_DA_START].active, m_md[TYPE_MAP_DA_IDLE].active, m_md[TYPE_MAP_DA_WORK].active, m_md[TYPE_MAP_DA_TEMP_CORR].active);
   mp_gridModeEditorIgnDlg->BindRPMGrid(GetRPMGrid());
   mp_gridModeEditorIgnDlg->setIsAllowed(fastdelegate::MakeDelegate(this, &CButtonsPanel::IsAllowed));
   mp_gridModeEditorIgnDlg->setOnMapChanged(fastdelegate::MakeDelegate(this, &CButtonsPanel::OnGridMapChangedIgn));
@@ -2625,7 +2562,7 @@ void CButtonsPanel::OnUpdateViewStartMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_start_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_DA_START].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIdleMap(CCmdUI* pCmdUI)
@@ -2633,7 +2570,7 @@ void CButtonsPanel::OnUpdateViewIdleMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_idle_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_DA_IDLE].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewWorkMap(CCmdUI* pCmdUI)
@@ -2641,7 +2578,7 @@ void CButtonsPanel::OnUpdateViewWorkMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_work_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_DA_WORK].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewTempMap(CCmdUI* pCmdUI)
@@ -2649,7 +2586,7 @@ void CButtonsPanel::OnUpdateViewTempMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable);
- pCmdUI->SetCheck( (m_temp_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_DA_TEMP_CORR].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateGridModeEditingIgn(CCmdUI* pCmdUI)
@@ -2671,7 +2608,7 @@ void CButtonsPanel::OnUpdateViewVEMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_ve_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_VE].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
@@ -2679,7 +2616,7 @@ void CButtonsPanel::OnUpdateViewAFRMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_afr_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AFR].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
@@ -2687,7 +2624,7 @@ void CButtonsPanel::OnUpdateViewCrnkMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_crnk_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_CRNK].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewWrmpMap(CCmdUI* pCmdUI)
@@ -2695,7 +2632,7 @@ void CButtonsPanel::OnUpdateViewWrmpMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_wrmp_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_WRMP].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewDeadMap(CCmdUI* pCmdUI)
@@ -2703,7 +2640,7 @@ void CButtonsPanel::OnUpdateViewDeadMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection);
- pCmdUI->SetCheck( (m_dead_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_DEAD].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIdlrMap(CCmdUI* pCmdUI)
@@ -2711,7 +2648,7 @@ void CButtonsPanel::OnUpdateViewIdlrMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
- pCmdUI->SetCheck( (m_idlr_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IDLR].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIdlcMap(CCmdUI* pCmdUI)
@@ -2719,7 +2656,7 @@ void CButtonsPanel::OnUpdateViewIdlcMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
- pCmdUI->SetCheck( (m_idlc_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IDLC].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAETPSMap(CCmdUI* pCmdUI)
@@ -2727,7 +2664,7 @@ void CButtonsPanel::OnUpdateViewAETPSMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_aetps_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AETPS].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAERPMMap(CCmdUI* pCmdUI)
@@ -2735,7 +2672,7 @@ void CButtonsPanel::OnUpdateViewAERPMMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_aerpm_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AERPM].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAftstrMap(CCmdUI* pCmdUI)
@@ -2743,7 +2680,7 @@ void CButtonsPanel::OnUpdateViewAftstrMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_aftstr_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_AFTSTR].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewITMap(CCmdUI* pCmdUI)
@@ -2751,7 +2688,7 @@ void CButtonsPanel::OnUpdateViewITMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart3DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection);
- pCmdUI->SetCheck( (m_it_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IT].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewITRPMMap(CCmdUI* pCmdUI)
@@ -2759,7 +2696,7 @@ void CButtonsPanel::OnUpdateViewITRPMMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_choke_op_enabled));
- pCmdUI->SetCheck( (m_itrpm_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_ITRPM].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewRigidMap(CCmdUI* pCmdUI)
@@ -2767,7 +2704,7 @@ void CButtonsPanel::OnUpdateViewRigidMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection);
- pCmdUI->SetCheck( (m_rigid_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_RIGID].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewEGOCrvMap(CCmdUI* pCmdUI)
@@ -2775,7 +2712,7 @@ void CButtonsPanel::OnUpdateViewEGOCrvMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose || m_carb_afr));
- pCmdUI->SetCheck( (m_egocrv_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_EGOCRV].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIACCMap(CCmdUI* pCmdUI)
@@ -2783,7 +2720,7 @@ void CButtonsPanel::OnUpdateViewIACCMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection);
- pCmdUI->SetCheck( (m_iacc_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IACC].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIACCWMap(CCmdUI* pCmdUI)
@@ -2791,7 +2728,7 @@ void CButtonsPanel::OnUpdateViewIACCWMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && m_fuel_injection);
- pCmdUI->SetCheck( (m_iaccw_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IACCW].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewIATCLTMap(CCmdUI* pCmdUI)
@@ -2799,7 +2736,7 @@ void CButtonsPanel::OnUpdateViewIATCLTMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose));
- pCmdUI->SetCheck( (m_iatclt_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_IATCLT].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewTpsswtMap(CCmdUI* pCmdUI)
@@ -2807,7 +2744,7 @@ void CButtonsPanel::OnUpdateViewTpsswtMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable /*&& m_fuel_injection*/); //required by ignition and fuel injection
- pCmdUI->SetCheck( (m_tpsswt_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_TPSSWT].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewGtscMap(CCmdUI* pCmdUI)
@@ -2815,7 +2752,7 @@ void CButtonsPanel::OnUpdateViewGtscMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose) && m_en_gas_corr);
- pCmdUI->SetCheck( (m_gtsc_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_GTSC].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewGpscMap(CCmdUI* pCmdUI)
@@ -2823,7 +2760,7 @@ void CButtonsPanel::OnUpdateViewGpscMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose) && m_en_gas_corr);
- pCmdUI->SetCheck( (m_gpsc_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_GPSC].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnUpdateViewAtscMap(CCmdUI* pCmdUI)
@@ -2831,7 +2768,7 @@ void CButtonsPanel::OnUpdateViewAtscMap(CCmdUI* pCmdUI)
  bool allowed = IsAllowed();
  BOOL enable = (DLL::Chart2DCreate!=NULL) && allowed;
  pCmdUI->Enable(enable && (m_fuel_injection || m_gasdose || m_choke_op_enabled));
- pCmdUI->SetCheck( (m_atsc_map_chart_state) ? TRUE : FALSE );
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_INJ_ATSC].state) ? TRUE : FALSE );
 }
 
 void CButtonsPanel::OnTimer(UINT nIDEvent)
@@ -2851,56 +2788,56 @@ void CButtonsPanel::OnDestroy()
 
 void CButtonsPanel::UpdateOpenedCharts(void)
 {
- if (m_start_map_chart_state)
-  DLL::Chart2DUpdate(m_start_map_wnd_handle, GetStartMap(true), GetStartMap(false));
- if (m_idle_map_chart_state)
-  DLL::Chart2DUpdate(m_idle_map_wnd_handle, GetIdleMap(true), GetIdleMap(false));
- if (m_work_map_chart_state)
-  DLL::Chart3DUpdate(m_work_map_wnd_handle, GetWorkMap(true), GetWorkMap(false));
- if (m_temp_map_chart_state)
-  DLL::Chart2DUpdate(m_temp_map_wnd_handle, GetTempMap(true), GetTempMap(false));
- if (m_ve_map_chart_state)
-  DLL::Chart3DUpdate(m_ve_map_wnd_handle, GetVEMap(true), GetVEMap(false));
- if (m_afr_map_chart_state)
-  DLL::Chart3DUpdate(m_afr_map_wnd_handle, GetAFRMap(true), GetAFRMap(false));
- if (m_crnk_map_chart_state)
-  DLL::Chart2DUpdate(m_crnk_map_wnd_handle, GetCrnkMap(true), GetCrnkMap(false));
- if (m_wrmp_map_chart_state)
-  DLL::Chart2DUpdate(m_wrmp_map_wnd_handle, GetWrmpMap(true), GetWrmpMap(false));
- if (m_dead_map_chart_state)
-  DLL::Chart2DUpdate(m_dead_map_wnd_handle, GetDeadMap(true), GetDeadMap(false));
- if (m_idlr_map_chart_state)
-  DLL::Chart2DUpdate(m_idlr_map_wnd_handle, GetIdlrMap(true), GetIdlrMap(false));
- if (m_idlc_map_chart_state)
-  DLL::Chart2DUpdate(m_idlc_map_wnd_handle, GetIdlcMap(true), GetIdlcMap(false));
- if (m_aetps_map_chart_state)
-  DLL::Chart2DUpdate(m_aetps_map_wnd_handle, GetAETPSMap(true), GetAETPSMap(false));
- if (m_aerpm_map_chart_state)
-  DLL::Chart2DUpdate(m_aerpm_map_wnd_handle, GetAERPMMap(true), GetAERPMMap(false));
- if (m_aftstr_map_chart_state)
-  DLL::Chart2DUpdate(m_aftstr_map_wnd_handle, GetAftstrMap(true), GetAftstrMap(false));
- if (m_it_map_chart_state)
-  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
- if (m_itrpm_map_chart_state)
-  DLL::Chart2DUpdate(m_itrpm_map_wnd_handle, GetITRPMMap(true), GetITRPMMap(false));
- if (m_rigid_map_chart_state)
-  DLL::Chart2DUpdate(m_rigid_map_wnd_handle, GetRigidMap(true), GetRigidMap(false));
- if (m_egocrv_map_chart_state)
-  DLL::Chart2DUpdate(m_egocrv_map_wnd_handle, GetEGOCurveMap(true), GetEGOCurveMap(false));
- if (m_iacc_map_chart_state)
-  DLL::Chart2DUpdate(m_iacc_map_wnd_handle, GetIACCMap(true), GetIACCMap(false));
- if (m_iaccw_map_chart_state)
-  DLL::Chart2DUpdate(m_iaccw_map_wnd_handle, GetIACCWMap(true), GetIACCWMap(false));
- if (m_iatclt_map_chart_state)
-  DLL::Chart2DUpdate(m_iatclt_map_wnd_handle, GetIATCLTMap(true), GetIATCLTMap(false));
- if (m_tpsswt_map_chart_state)
-  DLL::Chart2DUpdate(m_tpsswt_map_wnd_handle, GetTpsswtMap(true), GetTpsswtMap(false));
- if (m_gtsc_map_chart_state)
-  DLL::Chart2DUpdate(m_gtsc_map_wnd_handle, GetGtscMap(true), GetGtscMap(false));
- if (m_gpsc_map_chart_state)
-  DLL::Chart2DUpdate(m_gpsc_map_wnd_handle, GetGpscMap(true), GetGpscMap(false));
- if (m_atsc_map_chart_state)
-  DLL::Chart2DUpdate(m_atsc_map_wnd_handle, GetAtscMap(true), GetAtscMap(false));
+ if (m_md[TYPE_MAP_DA_START].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_START].handle, GetStartMap(true), GetStartMap(false));
+ if (m_md[TYPE_MAP_DA_IDLE].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_IDLE].handle, GetIdleMap(true), GetIdleMap(false));
+ if (m_md[TYPE_MAP_DA_WORK].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_DA_WORK].handle, GetWorkMap(true), GetWorkMap(false));
+ if (m_md[TYPE_MAP_DA_TEMP_CORR].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_TEMP_CORR].handle, GetTempMap(true), GetTempMap(false));
+ if (m_md[TYPE_MAP_INJ_VE].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_VE].handle, GetVEMap(true), GetVEMap(false));
+ if (m_md[TYPE_MAP_INJ_AFR].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_AFR].handle, GetAFRMap(true), GetAFRMap(false));
+ if (m_md[TYPE_MAP_INJ_CRNK].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_CRNK].handle, GetCrnkMap(true), GetCrnkMap(false));
+ if (m_md[TYPE_MAP_INJ_WRMP].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_WRMP].handle, GetWrmpMap(true), GetWrmpMap(false));
+ if (m_md[TYPE_MAP_INJ_DEAD].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_DEAD].handle, GetDeadMap(true), GetDeadMap(false));
+ if (m_md[TYPE_MAP_INJ_IDLR].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLR].handle, GetIdlrMap(true), GetIdlrMap(false));
+ if (m_md[TYPE_MAP_INJ_IDLC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IDLC].handle, GetIdlcMap(true), GetIdlcMap(false));
+ if (m_md[TYPE_MAP_INJ_AETPS].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AETPS].handle, GetAETPSMap(true), GetAETPSMap(false));
+ if (m_md[TYPE_MAP_INJ_AERPM].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AERPM].handle, GetAERPMMap(true), GetAERPMMap(false));
+ if (m_md[TYPE_MAP_INJ_AFTSTR].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_AFTSTR].handle, GetAftstrMap(true), GetAftstrMap(false));
+ if (m_md[TYPE_MAP_INJ_IT].state)
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
+ if (m_md[TYPE_MAP_INJ_ITRPM].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ITRPM].handle, GetITRPMMap(true), GetITRPMMap(false));
+ if (m_md[TYPE_MAP_INJ_RIGID].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_RIGID].handle, GetRigidMap(true), GetRigidMap(false));
+ if (m_md[TYPE_MAP_INJ_EGOCRV].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_EGOCRV].handle, GetEGOCurveMap(true), GetEGOCurveMap(false));
+ if (m_md[TYPE_MAP_INJ_IACC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACC].handle, GetIACCMap(true), GetIACCMap(false));
+ if (m_md[TYPE_MAP_INJ_IACCW].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACCW].handle, GetIACCWMap(true), GetIACCWMap(false));
+ if (m_md[TYPE_MAP_INJ_IATCLT].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IATCLT].handle, GetIATCLTMap(true), GetIATCLTMap(false));
+ if (m_md[TYPE_MAP_INJ_TPSSWT].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_TPSSWT].handle, GetTpsswtMap(true), GetTpsswtMap(false));
+ if (m_md[TYPE_MAP_INJ_GTSC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GTSC].handle, GetGtscMap(true), GetGtscMap(false));
+ if (m_md[TYPE_MAP_INJ_GPSC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, GetGpscMap(true), GetGpscMap(false));
+ if (m_md[TYPE_MAP_INJ_ATSC].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ATSC].handle, GetAtscMap(true), GetAtscMap(false));
  if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign)
   mp_gridModeEditorIgnDlg->UpdateView();
  if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj)
@@ -2929,49 +2866,48 @@ void CButtonsPanel::EnableFuelInjection(bool i_enable)
  m_fuel_injection = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
- if (m_ve_map_chart_state && ::IsWindow(m_ve_map_wnd_handle))
-  DLL::Chart3DEnable(m_ve_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
-  DLL::Chart3DEnable(m_afr_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
-  DLL::Chart2DEnable(m_crnk_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
-  DLL::Chart2DEnable(m_wrmp_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
-  DLL::Chart2DEnable(m_dead_map_wnd_handle, i_enable && IsAllowed());
- if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlr_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
- if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlc_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
- if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
-  DLL::Chart2DEnable(m_aetps_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_aerpm_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
-  DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_it_map_chart_state && ::IsWindow(m_it_map_wnd_handle))
-  DLL::Chart3DEnable(m_it_map_wnd_handle, i_enable && IsAllowed());
- if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_itrpm_map_wnd_handle, (i_enable || m_choke_op_enabled) && IsAllowed());
- if (m_rigid_map_chart_state && ::IsWindow(m_rigid_map_wnd_handle))
-  DLL::Chart2DEnable(m_rigid_map_wnd_handle, i_enable && IsAllowed());
- if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_gasdose || m_carb_afr) && IsAllowed());
- if (m_iacc_map_chart_state && ::IsWindow(m_iacc_map_wnd_handle))
-  DLL::Chart2DEnable(m_iacc_map_wnd_handle, i_enable && IsAllowed());
- if (m_iaccw_map_chart_state && ::IsWindow(m_iaccw_map_wnd_handle))
-  DLL::Chart2DEnable(m_iaccw_map_wnd_handle, i_enable && IsAllowed());
- if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
-  DLL::Chart2DEnable(m_iatclt_map_wnd_handle, (i_enable || m_gasdose) && IsAllowed());
- if (m_tpsswt_map_chart_state && ::IsWindow(m_tpsswt_map_wnd_handle))
-  DLL::Chart2DEnable(m_tpsswt_map_wnd_handle, i_enable && IsAllowed());
- if (m_gtsc_map_chart_state && ::IsWindow(m_gtsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gtsc_map_wnd_handle, ((i_enable || m_gasdose) && m_en_gas_corr) && IsAllowed());
- if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gpsc_map_wnd_handle, ((i_enable || m_gasdose) && m_en_gas_corr) && IsAllowed());
-
- if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_gasdose || m_choke_op_enabled) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_VE].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_VE].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AFR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFR].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_AFR].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_CRNK].state && ::IsWindow(m_md[TYPE_MAP_INJ_CRNK].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CRNK].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_WRMP].state && ::IsWindow(m_md[TYPE_MAP_INJ_WRMP].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_WRMP].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_DEAD].state && ::IsWindow(m_md[TYPE_MAP_INJ_DEAD].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_DEAD].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IDLR].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLR].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLR].handle, (i_enable || m_choke_op_enabled) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IDLC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, (i_enable || m_choke_op_enabled) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AFTSTR].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IT].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_IT].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_ITRPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_ITRPM].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ITRPM].handle, (i_enable || m_choke_op_enabled) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_RIGID].state && ::IsWindow(m_md[TYPE_MAP_INJ_RIGID].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_RIGID].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_EGOCRV].state && ::IsWindow(m_md[TYPE_MAP_INJ_EGOCRV].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_EGOCRV].handle, (i_enable || m_gasdose || m_carb_afr) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IACC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACC].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IACCW].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACCW].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACCW].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IATCLT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IATCLT].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IATCLT].handle, (i_enable || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_TPSSWT].state && ::IsWindow(m_md[TYPE_MAP_INJ_TPSSWT].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_TPSSWT].handle, i_enable && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GTSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GTSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GTSC].handle, ((i_enable || m_gasdose) && m_en_gas_corr) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GPSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GPSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GPSC].handle, ((i_enable || m_gasdose) && m_en_gas_corr) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_ATSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_ATSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ATSC].handle, (i_enable || m_gasdose || m_choke_op_enabled) && IsAllowed());
 }
 
 void CButtonsPanel::EnableGasdose(bool i_enable)
@@ -2979,33 +2915,30 @@ void CButtonsPanel::EnableGasdose(bool i_enable)
  m_gasdose = i_enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
- if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
-  DLL::Chart2DEnable(m_aetps_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_aerpm_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
-
- if (m_ve_map_chart_state && ::IsWindow(m_ve_map_wnd_handle))
-  DLL::Chart3DEnable(m_ve_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
-  DLL::Chart3DEnable(m_afr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
-  DLL::Chart2DEnable(m_wrmp_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
-  DLL::Chart2DEnable(m_crnk_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
-  DLL::Chart2DEnable(m_aftstr_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
- if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (i_enable || m_fuel_injection || m_choke_op_enabled) && IsAllowed());
- if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
-  DLL::Chart2DEnable(m_iatclt_map_wnd_handle, (i_enable || m_fuel_injection) && IsAllowed());
-
- if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection || m_carb_afr) && IsAllowed());
-
- if (m_gtsc_map_chart_state && ::IsWindow(m_gtsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gtsc_map_wnd_handle, (m_en_gas_corr && (i_enable || m_fuel_injection)) && IsAllowed());
- if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gpsc_map_wnd_handle, (m_en_gas_corr && (i_enable || m_fuel_injection)) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_VE].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_VE].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AFR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFR].handle))
+  DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_AFR].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_WRMP].state && ::IsWindow(m_md[TYPE_MAP_INJ_WRMP].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_WRMP].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_CRNK].state && ::IsWindow(m_md[TYPE_MAP_INJ_CRNK].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CRNK].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AFTSTR].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_ATSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_ATSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ATSC].handle, (i_enable || m_fuel_injection || m_choke_op_enabled) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IATCLT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IATCLT].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IATCLT].handle, (i_enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_EGOCRV].state && ::IsWindow(m_md[TYPE_MAP_INJ_EGOCRV].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_EGOCRV].handle, (i_enable || m_fuel_injection || m_carb_afr) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GTSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GTSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GTSC].handle, (m_en_gas_corr && (i_enable || m_fuel_injection)) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GPSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GPSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GPSC].handle, (m_en_gas_corr && (i_enable || m_fuel_injection)) && IsAllowed());
 }
 
 void CButtonsPanel::EnableCarbAfr(bool i_enable)
@@ -3014,8 +2947,8 @@ void CButtonsPanel::EnableCarbAfr(bool i_enable)
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 
- if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-  DLL::Chart2DEnable(m_egocrv_map_wnd_handle, (i_enable || m_fuel_injection || m_gasdose) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_EGOCRV].state && ::IsWindow(m_md[TYPE_MAP_INJ_EGOCRV].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_EGOCRV].handle, (i_enable || m_fuel_injection || m_gasdose) && IsAllowed());
 }
 
 void CButtonsPanel::EnableGasCorr(bool i_enable)
@@ -3024,10 +2957,10 @@ void CButtonsPanel::EnableGasCorr(bool i_enable)
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
 
- if (m_gtsc_map_chart_state && ::IsWindow(m_gtsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gtsc_map_wnd_handle, (i_enable && (m_gasdose || m_fuel_injection)) && IsAllowed());
- if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_gpsc_map_wnd_handle, (i_enable && (m_gasdose || m_fuel_injection)) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GTSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GTSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GTSC].handle, (i_enable && (m_gasdose || m_fuel_injection)) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_GPSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GPSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GPSC].handle, (i_enable && (m_gasdose || m_fuel_injection)) && IsAllowed());
 }
 
 void CButtonsPanel::EnableChokeOp(bool enable)
@@ -3035,215 +2968,215 @@ void CButtonsPanel::EnableChokeOp(bool enable)
  m_choke_op_enabled = enable;
  if (::IsWindow(this->m_hWnd))
   UpdateDialogControls(this, TRUE);
- if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-  DLL::Chart2DEnable(m_atsc_map_wnd_handle, (enable || m_gasdose || m_fuel_injection) && IsAllowed());
- if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlr_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
- if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
-  DLL::Chart2DEnable(m_idlc_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
- if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
-  DLL::Chart2DEnable(m_itrpm_map_wnd_handle, (enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_ATSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_ATSC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ATSC].handle, (enable || m_gasdose || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IDLR].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLR].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLR].handle, (enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_IDLC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLC].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, (enable || m_fuel_injection) && IsAllowed());
+ if (m_md[TYPE_MAP_INJ_ITRPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_ITRPM].handle))
+  DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ITRPM].handle, (enable || m_fuel_injection) && IsAllowed());
 }
 
 
 float* CButtonsPanel::GetStartMap(bool i_original)
 {
  if (i_original)
-  return m_start_map_original;
+  return m_md[TYPE_MAP_DA_START].original;
  else
-  return m_start_map_active;
+  return m_md[TYPE_MAP_DA_START].active;
 }
 
 float* CButtonsPanel::GetIdleMap(bool i_original)
 {
  if (i_original)
-  return m_idle_map_original;
+  return m_md[TYPE_MAP_DA_IDLE].original;
  else
-  return m_idle_map_active;
+  return m_md[TYPE_MAP_DA_IDLE].active;
 }
 
 float* CButtonsPanel::GetWorkMap(bool i_original)
 {
  if (i_original)
-  return &m_work_map_original[0][0];
+  return m_md[TYPE_MAP_DA_WORK].original;
  else
-  return &m_work_map_active[0][0];
+  return m_md[TYPE_MAP_DA_WORK].active;
 }
 
 float* CButtonsPanel::GetTempMap(bool i_original)
 {
  if (i_original)
-  return m_temp_map_original;
+  return m_md[TYPE_MAP_DA_TEMP_CORR].original;
  else
-  return m_temp_map_active;
+  return m_md[TYPE_MAP_DA_TEMP_CORR].active;
 }
 
 float* CButtonsPanel::GetVEMap(bool i_original)
 {
  if (i_original)
-  return &m_ve_map_original[0][0];
+  return m_md[TYPE_MAP_INJ_VE].original;
  else
-  return &m_ve_map_active[0][0];
+  return m_md[TYPE_MAP_INJ_VE].active;
 }
 
 float* CButtonsPanel::GetAFRMap(bool i_original)
 {
  if (i_original)
-  return &m_afr_map_original[0][0];
+  return m_md[TYPE_MAP_INJ_AFR].original;
  else
-  return &m_afr_map_active[0][0];
+  return m_md[TYPE_MAP_INJ_AFR].active;
 }
 
 float* CButtonsPanel::GetCrnkMap(bool i_original)
 {
  if (i_original)
-  return m_crnk_map_original;
+  return m_md[TYPE_MAP_INJ_CRNK].original;
  else
-  return m_crnk_map_active;
+  return m_md[TYPE_MAP_INJ_CRNK].active;
 }
 
 float* CButtonsPanel::GetWrmpMap(bool i_original)
 {
  if (i_original)
-  return m_wrmp_map_original;
+  return m_md[TYPE_MAP_INJ_WRMP].original;
  else
-  return m_wrmp_map_active;
+  return m_md[TYPE_MAP_INJ_WRMP].active;
 }
 
 float* CButtonsPanel::GetDeadMap(bool i_original)
 {
  if (i_original)
-  return m_dead_map_original;
+  return m_md[TYPE_MAP_INJ_DEAD].original;
  else
-  return m_dead_map_active;
+  return m_md[TYPE_MAP_INJ_DEAD].active;
 }
 
 float* CButtonsPanel::GetIdlrMap(bool i_original)
 {
  if (i_original)
-  return m_idlr_map_original;
+  return m_md[TYPE_MAP_INJ_IDLR].original;
  else
-  return m_idlr_map_active;
+  return m_md[TYPE_MAP_INJ_IDLR].active;
 }
 
 float* CButtonsPanel::GetIdlcMap(bool i_original)
 {
  if (i_original)
-  return m_idlc_map_original;
+  return m_md[TYPE_MAP_INJ_IDLC].original;
  else
-  return m_idlc_map_active;
+  return m_md[TYPE_MAP_INJ_IDLC].active;
 }
 
 float* CButtonsPanel::GetAETPSMap(bool i_original)
 {
  if (i_original)
-  return m_aetps_map_original;
+  return m_md[TYPE_MAP_INJ_AETPS].original;
  else
-  return m_aetps_map_active;
+  return m_md[TYPE_MAP_INJ_AETPS].active;
 }
 
 float* CButtonsPanel::GetAERPMMap(bool i_original)
 {
  if (i_original)
-  return m_aerpm_map_original;
+  return m_md[TYPE_MAP_INJ_AERPM].original;
  else
-  return m_aerpm_map_active;
+  return m_md[TYPE_MAP_INJ_AERPM].active;
 }
 
 float* CButtonsPanel::GetAftstrMap(bool i_original)
 {
  if (i_original)
-  return m_aftstr_map_original;
+  return m_md[TYPE_MAP_INJ_AFTSTR].original;
  else
-  return m_aftstr_map_active;
+  return m_md[TYPE_MAP_INJ_AFTSTR].active;
 }
 
 float* CButtonsPanel::GetITMap(bool i_original)
 {
  if (i_original)
-  return &m_it_map_original[0][0];
+  return m_md[TYPE_MAP_INJ_IT].original;
  else
-  return &m_it_map_active[0][0];
+  return m_md[TYPE_MAP_INJ_IT].active;
 }
 
 float* CButtonsPanel::GetITRPMMap(bool i_original)
 {
  if (i_original)
-  return m_itrpm_map_original;
+  return m_md[TYPE_MAP_INJ_ITRPM].original;
  else
-  return m_itrpm_map_active;
+  return m_md[TYPE_MAP_INJ_ITRPM].active;
 }
 
 float* CButtonsPanel::GetRigidMap(bool i_original)
 {
  if (i_original)
-  return m_rigid_map_original;
+  return m_md[TYPE_MAP_INJ_RIGID].original;
  else
-  return m_rigid_map_active;
+  return m_md[TYPE_MAP_INJ_RIGID].active;
 }
 
 float* CButtonsPanel::GetEGOCurveMap(bool i_original)
 {
  if (i_original)
-  return m_egocrv_map_original;
+  return m_md[TYPE_MAP_INJ_EGOCRV].original;
  else
-  return m_egocrv_map_active;
+  return m_md[TYPE_MAP_INJ_EGOCRV].active;
 }
 
 float* CButtonsPanel::GetIACCMap(bool i_original)
 {
  if (i_original)
-  return m_iacc_map_original;
+  return m_md[TYPE_MAP_INJ_IACC].original;
  else
-  return m_iacc_map_active;
+  return m_md[TYPE_MAP_INJ_IACC].active;
 }
 
 float* CButtonsPanel::GetIACCWMap(bool i_original)
 {
  if (i_original)
-  return m_iaccw_map_original;
+  return m_md[TYPE_MAP_INJ_IACCW].original;
  else
-  return m_iaccw_map_active;
+  return m_md[TYPE_MAP_INJ_IACCW].active;
 }
 
 float* CButtonsPanel::GetIATCLTMap(bool i_original)
 {
  if (i_original)
-  return m_iatclt_map_original;
+  return m_md[TYPE_MAP_INJ_IATCLT].original;
  else
-  return m_iatclt_map_active;
+  return m_md[TYPE_MAP_INJ_IATCLT].active;
 }
 
 float* CButtonsPanel::GetTpsswtMap(bool i_original)
 {
  if (i_original)
-  return m_tpsswt_map_original;
+  return m_md[TYPE_MAP_INJ_TPSSWT].original;
  else
-  return m_tpsswt_map_active;
+  return m_md[TYPE_MAP_INJ_TPSSWT].active;
 }
 
 float* CButtonsPanel::GetGtscMap(bool i_original)
 {
  if (i_original)
-  return m_gtsc_map_original;
+  return m_md[TYPE_MAP_INJ_GTSC].original;
  else
-  return m_gtsc_map_active;
+  return m_md[TYPE_MAP_INJ_GTSC].active;
 }
 
 float* CButtonsPanel::GetAtscMap(bool i_original)
 {
  if (i_original)
-  return m_atsc_map_original;
+  return m_md[TYPE_MAP_INJ_ATSC].original;
  else
-  return m_atsc_map_active;
+  return m_md[TYPE_MAP_INJ_ATSC].active;
 }
 
 float* CButtonsPanel::GetGpscMap(bool i_original)
 {
  if (i_original)
-  return m_gpsc_map_original;
+  return m_md[TYPE_MAP_INJ_GPSC].original;
  else
-  return m_gpsc_map_active;
+  return m_md[TYPE_MAP_INJ_GPSC].active;
 }
 
 float* CButtonsPanel::GetRPMGrid(void)
@@ -3253,123 +3186,72 @@ float* CButtonsPanel::GetRPMGrid(void)
 
 HWND CButtonsPanel::GetMapWindow(int wndType)
 {
- switch(wndType)
- {
- case TYPE_MAP_DA_START:
-  return m_start_map_chart_state ? m_start_map_wnd_handle : NULL;
- case TYPE_MAP_DA_IDLE:
-  return m_idle_map_chart_state ? m_idle_map_wnd_handle : NULL;
- case TYPE_MAP_DA_WORK:
-  return m_work_map_chart_state ? m_work_map_wnd_handle : NULL;
- case TYPE_MAP_DA_TEMP_CORR:
-  return m_temp_map_chart_state ? m_temp_map_wnd_handle : NULL;
- //fuel injection maps
- case TYPE_MAP_INJ_VE:
-  return m_ve_map_chart_state ? m_ve_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_AFR:
-  return m_afr_map_chart_state ? m_afr_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_CRNK:
-  return m_crnk_map_chart_state ? m_crnk_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_WRMP:
-  return m_wrmp_map_chart_state ? m_wrmp_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_DEAD:
-  return m_dead_map_chart_state ? m_dead_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IDLR:
-  return m_idlr_map_chart_state ? m_idlr_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IDLC:
-  return m_idlc_map_chart_state ? m_idlc_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_AETPS:
-  return m_aetps_map_chart_state ? m_aetps_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_AERPM:
-  return m_aerpm_map_chart_state ? m_aerpm_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_AFTSTR:
-  return m_aftstr_map_chart_state ? m_aftstr_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IT:
-  return m_it_map_chart_state ? m_it_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_ITRPM:
-  return m_itrpm_map_chart_state ? m_itrpm_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_RIGID:
-  return m_rigid_map_chart_state ? m_rigid_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_EGOCRV:
-  return m_egocrv_map_chart_state ? m_egocrv_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IACC:
-  return m_iacc_map_chart_state ? m_iacc_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IACCW:
-  return m_iaccw_map_chart_state ? m_iaccw_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_IATCLT:
-  return m_iatclt_map_chart_state ? m_iatclt_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_TPSSWT:
-  return m_tpsswt_map_chart_state ? m_tpsswt_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_GTSC:
-  return m_gtsc_map_chart_state ? m_gtsc_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_GPSC:
-  return m_gpsc_map_chart_state ? m_gpsc_map_wnd_handle : NULL;
- case TYPE_MAP_INJ_ATSC:
-  return m_atsc_map_chart_state ? m_atsc_map_wnd_handle : NULL;
- case TYPE_MAP_GME_IGN_WND: //pseudo map
+if (wndType >= TYPE_MAP_SET_START && wndType <= TYPE_MAP_SET_END)
+  return m_md[wndType].state ? m_md[wndType].handle : NULL;
+else if (wndType == TYPE_MAP_GME_IGN_WND) //pseudo map
   return (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign) ? mp_gridModeEditorIgnDlg->m_hWnd : NULL; 
- case TYPE_MAP_GME_INJ_WND: //pseudo map
+else if (wndType == TYPE_MAP_GME_INJ_WND) //pseudo map
   return (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj) ? mp_gridModeEditorInjDlg->m_hWnd : NULL; 
- default:
+ else
   return NULL;
- }
 }
 
 void CButtonsPanel::_EnableCharts(bool enable)
 {
  if (m_charts_enabled != (int)enable)
  {//ignition
-  if (m_start_map_chart_state && ::IsWindow(m_start_map_wnd_handle))
-   DLL::Chart2DEnable(m_start_map_wnd_handle, enable && IsAllowed());
-  if (m_idle_map_chart_state && ::IsWindow(m_idle_map_wnd_handle))
-   DLL::Chart2DEnable(m_idle_map_wnd_handle, enable && IsAllowed());
-  if (m_work_map_chart_state && ::IsWindow(m_work_map_wnd_handle))
-   DLL::Chart3DEnable(m_work_map_wnd_handle, enable && IsAllowed());
-  if (m_temp_map_chart_state && ::IsWindow(m_temp_map_wnd_handle))
-   DLL::Chart2DEnable(m_temp_map_wnd_handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_DA_START].state && ::IsWindow(m_md[TYPE_MAP_DA_START].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_START].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_DA_IDLE].state && ::IsWindow(m_md[TYPE_MAP_DA_IDLE].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_IDLE].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_DA_WORK].state && ::IsWindow(m_md[TYPE_MAP_DA_WORK].handle))
+   DLL::Chart3DEnable(m_md[TYPE_MAP_DA_WORK].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_DA_TEMP_CORR].state && ::IsWindow(m_md[TYPE_MAP_DA_TEMP_CORR].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_DA_TEMP_CORR].handle, enable && IsAllowed());
+
   //fuel injection
-  if (m_ve_map_chart_state && ::IsWindow(m_ve_map_wnd_handle))
-   DLL::Chart3DEnable(m_ve_map_wnd_handle, enable && IsAllowed());
-  if (m_afr_map_chart_state && ::IsWindow(m_afr_map_wnd_handle))
-   DLL::Chart3DEnable(m_afr_map_wnd_handle, enable && IsAllowed());
-  if (m_crnk_map_chart_state && ::IsWindow(m_crnk_map_wnd_handle))
-   DLL::Chart2DEnable(m_crnk_map_wnd_handle, enable && IsAllowed());
-  if (m_wrmp_map_chart_state && ::IsWindow(m_wrmp_map_wnd_handle))
-   DLL::Chart2DEnable(m_wrmp_map_wnd_handle, enable && IsAllowed());
-  if (m_dead_map_chart_state && ::IsWindow(m_dead_map_wnd_handle))
-   DLL::Chart2DEnable(m_dead_map_wnd_handle, enable && IsAllowed());
-  if (m_idlr_map_chart_state && ::IsWindow(m_idlr_map_wnd_handle))
-   DLL::Chart2DEnable(m_idlr_map_wnd_handle, enable && IsAllowed());
-  if (m_idlc_map_chart_state && ::IsWindow(m_idlc_map_wnd_handle))
-   DLL::Chart2DEnable(m_idlc_map_wnd_handle, enable && IsAllowed());
-  if (m_aetps_map_chart_state && ::IsWindow(m_aetps_map_wnd_handle))
-   DLL::Chart2DEnable(m_aetps_map_wnd_handle, enable && IsAllowed());
-  if (m_aerpm_map_chart_state && ::IsWindow(m_aerpm_map_wnd_handle))
-   DLL::Chart2DEnable(m_aerpm_map_wnd_handle, enable && IsAllowed());
-  if (m_aftstr_map_chart_state && ::IsWindow(m_aftstr_map_wnd_handle))
-   DLL::Chart2DEnable(m_aftstr_map_wnd_handle, enable && IsAllowed());
-  if (m_it_map_chart_state && ::IsWindow(m_it_map_wnd_handle))
-   DLL::Chart3DEnable(m_it_map_wnd_handle, enable && IsAllowed());
-  if (m_itrpm_map_chart_state && ::IsWindow(m_itrpm_map_wnd_handle))
-   DLL::Chart2DEnable(m_itrpm_map_wnd_handle, enable && IsAllowed());
-  if (m_rigid_map_chart_state && ::IsWindow(m_rigid_map_wnd_handle))
-   DLL::Chart2DEnable(m_rigid_map_wnd_handle, enable && IsAllowed());
-  if (m_egocrv_map_chart_state && ::IsWindow(m_egocrv_map_wnd_handle))
-   DLL::Chart2DEnable(m_egocrv_map_wnd_handle, enable && IsAllowed());
-  if (m_iacc_map_chart_state && ::IsWindow(m_iacc_map_wnd_handle))
-   DLL::Chart2DEnable(m_iacc_map_wnd_handle, enable && IsAllowed());
-  if (m_iaccw_map_chart_state && ::IsWindow(m_iaccw_map_wnd_handle))
-   DLL::Chart2DEnable(m_iaccw_map_wnd_handle, enable && IsAllowed());
-  if (m_iatclt_map_chart_state && ::IsWindow(m_iatclt_map_wnd_handle))
-   DLL::Chart2DEnable(m_iatclt_map_wnd_handle, enable && IsAllowed());
-  if (m_tpsswt_map_chart_state && ::IsWindow(m_tpsswt_map_wnd_handle))
-   DLL::Chart2DEnable(m_tpsswt_map_wnd_handle, enable && IsAllowed());
-  if (m_gtsc_map_chart_state && ::IsWindow(m_gtsc_map_wnd_handle))
-   DLL::Chart2DEnable(m_gtsc_map_wnd_handle, enable && IsAllowed());
-  if (m_gpsc_map_chart_state && ::IsWindow(m_gpsc_map_wnd_handle))
-   DLL::Chart2DEnable(m_gpsc_map_wnd_handle, enable && IsAllowed());
-  if (m_atsc_map_chart_state && ::IsWindow(m_atsc_map_wnd_handle))
-   DLL::Chart2DEnable(m_atsc_map_wnd_handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_VE].state && ::IsWindow(m_md[TYPE_MAP_INJ_VE].handle))
+   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_VE].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_AFR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFR].handle))
+   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_AFR].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_CRNK].state && ::IsWindow(m_md[TYPE_MAP_INJ_CRNK].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_CRNK].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_WRMP].state && ::IsWindow(m_md[TYPE_MAP_INJ_WRMP].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_WRMP].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_DEAD].state && ::IsWindow(m_md[TYPE_MAP_INJ_DEAD].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_DEAD].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IDLR].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLR].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLR].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IDLC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IDLC].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IDLC].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_AETPS].state && ::IsWindow(m_md[TYPE_MAP_INJ_AETPS].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AETPS].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_AERPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_AERPM].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AERPM].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_AFTSTR].state && ::IsWindow(m_md[TYPE_MAP_INJ_AFTSTR].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_AFTSTR].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IT].handle))
+   DLL::Chart3DEnable(m_md[TYPE_MAP_INJ_IT].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_ITRPM].state && ::IsWindow(m_md[TYPE_MAP_INJ_ITRPM].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ITRPM].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_RIGID].state && ::IsWindow(m_md[TYPE_MAP_INJ_RIGID].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_RIGID].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_EGOCRV].state && ::IsWindow(m_md[TYPE_MAP_INJ_EGOCRV].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_EGOCRV].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IACC].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACC].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACC].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IACCW].state && ::IsWindow(m_md[TYPE_MAP_INJ_IACCW].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IACCW].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_IATCLT].state && ::IsWindow(m_md[TYPE_MAP_INJ_IATCLT].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_IATCLT].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_TPSSWT].state && ::IsWindow(m_md[TYPE_MAP_INJ_TPSSWT].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_TPSSWT].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_GTSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GTSC].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GTSC].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_GPSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_GPSC].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_GPSC].handle, enable && IsAllowed());
+  if (m_md[TYPE_MAP_INJ_ATSC].state && ::IsWindow(m_md[TYPE_MAP_INJ_ATSC].handle))
+   DLL::Chart2DEnable(m_md[TYPE_MAP_INJ_ATSC].handle, enable && IsAllowed());
   if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign && ::IsWindow(mp_gridModeEditorIgnDlg->m_hWnd))
    mp_gridModeEditorIgnDlg->UpdateDialogControls(mp_gridModeEditorIgnDlg.get(), TRUE);
   if (mp_gridModeEditorInjDlg.get() && m_grid_map_state_inj && ::IsWindow(mp_gridModeEditorInjDlg->m_hWnd))
@@ -3621,11 +3503,11 @@ void CButtonsPanel::SetITEdMode(int mode)
 
  float y1, y2;
  _GetITModeRange(y1, y2);
- if ((m_it_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((m_md[TYPE_MAP_INJ_IT].state)&&(DLL::Chart3DCreate))
  {
-  DLL::Chart3DSetFncRange(m_it_map_wnd_handle, y1, y2);
-  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
-  DLL::Chart3DSetAxisTitle(m_it_map_wnd_handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+  DLL::Chart3DSetFncRange(m_md[TYPE_MAP_INJ_IT].handle, y1, y2);
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
  }
 }
 
@@ -3645,19 +3527,60 @@ void CButtonsPanel::OnChangeSettingsGME(void)
 
  float y1, y2;
  _GetITModeRange(y1, y2);
- if ((m_it_map_chart_state)&&(DLL::Chart3DCreate))
+ if ((m_md[TYPE_MAP_INJ_IT].state)&&(DLL::Chart3DCreate))
  {
-  DLL::Chart3DSetFncRange(m_it_map_wnd_handle, y1, y2);
-  DLL::Chart3DUpdate(m_it_map_wnd_handle, GetITMap(true), GetITMap(false));
-  DLL::Chart3DSetAxisTitle(m_it_map_wnd_handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+  DLL::Chart3DSetFncRange(m_md[TYPE_MAP_INJ_IT].handle, y1, y2);
+  DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
  }
 
  if (m_OnChangeSettings)
   m_OnChangeSettings();
 }
 
+void __cdecl CButtonsPanel::OnChangeSettingsCME(void* i_param)
+{
+ CButtonsPanel* _this = static_cast<CButtonsPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ for(int i = TYPE_MAP_ALL_START; i < TYPE_MAP_ALL_END - 2; ++i)
+ {
+  if (_this->m_md[i].state)
+  {
+   if (i == TYPE_MAP_DA_WORK || i == TYPE_MAP_INJ_VE || i == TYPE_MAP_INJ_AFR || i == TYPE_MAP_INJ_IT)  
+    _this->m_md[i].ptMovStep = DLL::Chart3DGetPtMovingStep(_this->m_md[i].handle);
+   else
+    _this->m_md[i].ptMovStep = DLL::Chart2DGetPtMovingStep(_this->m_md[i].handle);
+  }
+ }
+
+ if (_this->m_OnChangeSettings)
+  _this->m_OnChangeSettings();
+}
+
 void CButtonsPanel::_GetITModeRange(float& y1, float& y2)
 {
  y1 = (m_it_mode < 2) ? .0f : -360.0f;
  y2 = (m_it_mode < 2) ? 720.0f : 360.0f;
+}
+
+float CButtonsPanel::GetPtMovStep(int wndType)
+{
+ return m_md[wndType].ptMovStep;
+}
+
+void  CButtonsPanel::SetPtMovStep(int wndType, float value)
+{
+ m_md[wndType].ptMovStep = value;
+ if (m_md[wndType].state)
+ {
+  if (wndType == TYPE_MAP_DA_WORK || wndType == TYPE_MAP_INJ_VE || wndType == TYPE_MAP_INJ_AFR || wndType == TYPE_MAP_INJ_IT)
+   DLL::Chart3DSetPtMovingStep(m_md[wndType].handle, value);
+  else
+   DLL::Chart2DSetPtMovingStep(m_md[wndType].handle, value); 
+ }
 }

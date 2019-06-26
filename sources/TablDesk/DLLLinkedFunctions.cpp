@@ -34,6 +34,7 @@ namespace DLL
  Chart2DCreate_Addr              Chart2DCreate = NULL;
  Chart2DUpdate_Addr              Chart2DUpdate = NULL;
  Chart2DSetOnChange_Addr         Chart2DSetOnChange = NULL;
+ Chart2DSetOnChangeSettings_Addr Chart2DSetOnChangeSettings = NULL;
  Chart2DSetOnClose_Addr          Chart2DSetOnClose = NULL;
  Chart2DSetMarksVisible_Addr     Chart2DSetMarksVisible = NULL;
  Chart2DSetAxisValuesFormat_Addr Chart2DSetAxisValuesFormat = NULL;
@@ -46,10 +47,12 @@ namespace DLL
  Chart2DUpdateAxisEdits_Addr     Chart2DUpdateAxisEdits = NULL;
  Chart2DSetPtValuesFormat_Addr   Chart2DSetPtValuesFormat = NULL;
  Chart2DSetPtMovingStep_Addr     Chart2DSetPtMovingStep = NULL;
+ Chart2DGetPtMovingStep_Addr     Chart2DGetPtMovingStep = NULL;
 
  Chart3DCreate_Addr              Chart3DCreate = NULL;
  Chart3DUpdate_Addr              Chart3DUpdate = NULL;
  Chart3DSetOnChange_Addr         Chart3DSetOnChange = NULL;
+ Chart3DSetOnChangeSettings_Addr Chart3DSetOnChangeSettings = NULL;
  Chart3DSetOnClose_Addr          Chart3DSetOnClose = NULL;
  Chart3DSetOnGetAxisLabel_Addr   Chart3DSetOnGetAxisLabel = NULL;
  Chart3DShow_Addr                Chart3DShow = NULL;
@@ -57,6 +60,7 @@ namespace DLL
  Chart3DEnable_Addr              Chart3DEnable = NULL;
  Chart3DSetPtValuesFormat_Addr   Chart3DSetPtValuesFormat = NULL;
  Chart3DSetPtMovingStep_Addr     Chart3DSetPtMovingStep = NULL;
+ Chart3DGetPtMovingStep_Addr     Chart3DGetPtMovingStep = NULL;
  Chart3DSetFncRange_Addr         Chart3DSetFncRange = NULL; 
  Chart3DSetOnValueTransform_Addr Chart3DSetOnValueTransform = NULL;
  Chart3DSetAxisTitle_Addr        Chart3DSetAxisTitle = NULL;
@@ -99,6 +103,7 @@ namespace DLL
    Chart2DCreate = NULL;
    Chart2DUpdate = NULL;
    Chart2DSetOnChange = NULL;
+   Chart2DSetOnChangeSettings = NULL;
    Chart2DSetOnClose = NULL;
    Chart2DSetMarksVisible = NULL;
    Chart2DSetAxisValuesFormat = NULL;
@@ -115,6 +120,7 @@ namespace DLL
    Chart3DCreate = NULL;
    Chart3DUpdate = NULL;
    Chart3DSetOnChange = NULL;
+   Chart3DSetOnChangeSettings = NULL;
    Chart3DSetOnClose = NULL;
    Chart3DSetOnGetAxisLabel = NULL;
    Chart3DShow = NULL;
@@ -135,6 +141,7 @@ namespace DLL
    LoadFunction(hModule, Chart2DCreate, "Chart2DCreate", status);
    LoadFunction(hModule, Chart2DUpdate, "Chart2DUpdate", status);
    LoadFunction(hModule, Chart2DSetOnChange, "Chart2DSetOnChange", status);
+   LoadFunction(hModule, Chart2DSetOnChangeSettings, "Chart2DSetOnChangeSettings", status);
    LoadFunction(hModule, Chart2DSetOnClose, "Chart2DSetOnClose", status);
    LoadFunction(hModule, Chart2DSetMarksVisible, "Chart2DSetMarksVisible", status);
    LoadFunction(hModule, Chart2DSetAxisValuesFormat, "Chart2DSetAxisValuesFormat", status);
@@ -147,10 +154,12 @@ namespace DLL
    LoadFunction(hModule, Chart2DUpdateAxisEdits, "Chart2DUpdateAxisEdits", status);
    LoadFunction(hModule, Chart2DSetPtValuesFormat, "Chart2DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart2DSetPtMovingStep, "Chart2DSetPtMovingStep", status);
+   LoadFunction(hModule, Chart2DGetPtMovingStep, "Chart2DGetPtMovingStep", status);
    //3D
    LoadFunction(hModule, Chart3DCreate, "Chart3DCreate", status);
    LoadFunction(hModule, Chart3DUpdate, "Chart3DUpdate", status);
    LoadFunction(hModule, Chart3DSetOnChange, "Chart3DSetOnChange", status);
+   LoadFunction(hModule, Chart3DSetOnChangeSettings, "Chart3DSetOnChangeSettings", status);
    LoadFunction(hModule, Chart3DSetOnClose, "Chart3DSetOnClose", status);
    LoadFunction(hModule, Chart3DSetOnGetAxisLabel, "Chart3DSetOnGetAxisLabel", status);
    LoadFunction(hModule, Chart3DShow, "Chart3DShow", status);
@@ -158,6 +167,7 @@ namespace DLL
    LoadFunction(hModule, Chart3DEnable, "Chart3DEnable", status);
    LoadFunction(hModule, Chart3DSetPtValuesFormat, "Chart3DSetPtValuesFormat", status);
    LoadFunction(hModule, Chart3DSetPtMovingStep, "Chart3DSetPtMovingStep", status);
+   LoadFunction(hModule, Chart3DGetPtMovingStep, "Chart3DGetPtMovingStep", status);
    LoadFunction(hModule, Chart3DSetFncRange, "Chart3DSetFncRange", status);
    LoadFunction(hModule, Chart3DSetOnValueTransform, "Chart3DSetOnValueTransform", status);
    LoadFunction(hModule, Chart3DSetAxisTitle, "Chart3DSetAxisTitle", status);

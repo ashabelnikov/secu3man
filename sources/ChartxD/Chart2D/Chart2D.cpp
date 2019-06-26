@@ -42,6 +42,7 @@ extern "C"
  HWND  __declspec(dllexport)  __cdecl Chart2DCreate(HWND parent, const float *ip_original_function, float *iop_modified_function, float i_fnc_min, float i_fnc_max, const float *ip_x_axis_grid_values, int i_count_of_points, LPCTSTR i_x_axis_title, LPCTSTR i_y_axis_title, LPCTSTR i_chart_title, int i_bins_mode);
  void  __declspec(dllexport)  __cdecl Chart2DUpdate(HWND hWnd, const float *ip_original_function, float *iop_modified_function);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart2DSetOnChangeSettings(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart2DSetMarksVisible(HWND hWnd, int i_series_index, bool i_visible);
  void  __declspec(dllexport)  __cdecl Chart2DSetAxisValuesFormat(HWND hWnd, int i_axis, LPCTSTR i_format_string);
@@ -54,6 +55,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DUpdateAxisEdits(HWND hWnd, int i_axis, float i_begin, float i_end);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
+ float __declspec(dllexport)  __cdecl Chart2DGetPtMovingStep(HWND hWnd);
 }
 
 extern HINSTANCE hInst;
@@ -312,6 +314,24 @@ void __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step)
  if (NULL==pForm)
   return;
  pForm->m_pt_moving_step = step;
+}
+
+//---------------------------------------------------------------------------
+float __cdecl Chart2DGetPtMovingStep(HWND hWnd)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return 0;
+ return pForm->m_pt_moving_step;
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DSetOnChangeSettings(HWND hWnd, EventHandler i_pOnChange, void* i_param)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetOnChangeSettings(i_pOnChange, i_param);
 }
 
 //---------------------------------------------------------------------------

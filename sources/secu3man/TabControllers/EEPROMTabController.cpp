@@ -144,6 +144,34 @@ void CEEPROMTabController::OnActivate(void)
 
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 
+ MapPtMovStep mptms;
+ mp_settings->GetMapPtMovStep(mptms);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_START, mptms.m_start_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_IDLE, mptms.m_idle_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_WORK, mptms.m_work_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_DA_TEMP_CORR, mptms.m_temp_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_VE, mptms.m_ve_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFR, mptms.m_afr_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_CRNK, mptms.m_crnk_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_WRMP, mptms.m_wrmp_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_DEAD, mptms.m_dead_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLR, mptms.m_idlr_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IDLC, mptms.m_idlc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AETPS, mptms.m_aetps_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AERPM, mptms.m_aerpm_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_AFTSTR, mptms.m_aftstr_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IT, mptms.m_it_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ITRPM, mptms.m_itrpm_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_RIGID, mptms.m_rigid_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_EGOCRV, mptms.m_egocrv_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACC, mptms.m_iacc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IACCW, mptms.m_iaccw_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_IATCLT, mptms.m_iatclt_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_TPSSWT, mptms.m_tpsswt_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GTSC, mptms.m_gtsc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_GPSC, mptms.m_gpsc_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_INJ_ATSC, mptms.m_atsc_map);
+
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
  bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
@@ -884,4 +912,33 @@ void CEEPROMTabController::finishOnWriteEepromToSECU(void)
 void CEEPROMTabController::OnChangeSettingsMapEd(void)
 {
  mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
+
+ MapPtMovStep mptms;
+ mp_settings->GetMapPtMovStep(mptms);
+ mptms.m_start_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_START);
+ mptms.m_idle_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_IDLE);
+ mptms.m_work_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_WORK);
+ mptms.m_temp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_DA_TEMP_CORR);
+ mptms.m_ve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_VE);
+ mptms.m_afr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFR);
+ mptms.m_crnk_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_CRNK);
+ mptms.m_wrmp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_WRMP);
+ mptms.m_dead_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_DEAD);
+ mptms.m_idlr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLR);
+ mptms.m_idlc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IDLC);
+ mptms.m_aetps_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AETPS);
+ mptms.m_aerpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AERPM);
+ mptms.m_aftstr_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_AFTSTR);
+ mptms.m_it_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IT);
+ mptms.m_itrpm_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ITRPM);
+ mptms.m_rigid_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_RIGID);
+ mptms.m_egocrv_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_EGOCRV);
+ mptms.m_iacc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACC);
+ mptms.m_iaccw_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IACCW);
+ mptms.m_iatclt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_IATCLT);
+ mptms.m_tpsswt_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_TPSSWT);
+ mptms.m_gtsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GTSC);
+ mptms.m_gpsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
+ mptms.m_atsc_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
+ mp_settings->SetMapPtMovStep(mptms);
 }

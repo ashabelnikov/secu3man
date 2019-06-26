@@ -207,6 +207,45 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPeakOnPtMovStep(_T("PeakOnPtMovStep"))
 , m_optPeakDutyPtMovStep(_T("PeakDutyPtMovStep"))
 , m_optHoldDutyPtMovStep(_T("HoldDutyPtMovStep"))
+//Points' moving step
+, m_Name_MapPtMovStep_Section(_T("MapPtMovStep"))
+, m_optPtMovStepWorkMap(_T("WorkMapWnd"))
+, m_optPtMovStepTempMap(_T("TempMapWnd"))
+, m_optPtMovStepStartMap(_T("StrtMapWnd"))
+, m_optPtMovStepIdleMap(_T("IdleMapWnd"))
+, m_optPtMovStepVeMap(_T("VEMapWnd"))
+, m_optPtMovStepAfrMap(_T("AFRMapWnd"))
+, m_optPtMovStepCrnkMap(_T("CrnkMapWnd"))
+, m_optPtMovStepWrmpMap(_T("WrmpMapWnd"))
+, m_optPtMovStepDeadMap(_T("DeadMapWnd"))
+, m_optPtMovStepIdlrMap(_T("IdlrMapWnd"))
+, m_optPtMovStepIdlcMap(_T("IdlcMapWnd"))
+, m_optPtMovStepAetpsMap(_T("AETPSMapWnd"))
+, m_optPtMovStepAerpmMap(_T("AERPMMapWnd"))
+, m_optPtMovStepAftstrMap(_T("AftstrMapWnd"))
+, m_optPtMovStepItMap(_T("ITMapWnd"))
+, m_optPtMovStepItrpmMap(_T("ITRPMMapWnd"))
+, m_optPtMovStepRigidMap(_T("RigidMapWnd"))
+, m_optPtMovStepEgocrvMap(_T("EGOCrvMapWnd"))
+, m_optPtMovStepIaccMap(_T("IACCMapWnd"))
+, m_optPtMovStepIaccwMap(_T("IACCWMapWnd"))
+, m_optPtMovStepIatcltMap(_T("IATCLTCorrMapWnd"))
+, m_optPtMovStepTpsswtMap(_T("TpsSwtMapWnd"))
+, m_optPtMovStepGtscMap(_T("GTSCMapWnd"))
+, m_optPtMovStepGpscMap(_T("GPSCMapWnd"))
+, m_optPtMovStepAtscMap(_T("AirDenMapWnd"))
+//separate
+, m_optPtMovStepCrkTempMap(_T("CrkTempMapWnd"))
+, m_optPtMovStepEHPauseMap(_T("EHPauseMapWnd"))
+, m_optPtMovStepAttenMap(_T("AttenMapWnd"))
+, m_optPtMovStepDwellCntrlMap(_T("DwellCntrlMapWnd"))
+, m_optPtMovStepCTSCurveMap(_T("CTSCurveMapWnd"))
+, m_optPtMovStepBarocorrMap(_T("BarocorrMapWnd"))
+, m_optPtMovStepManIgntimMap(_T("ManIgntimMapWnd"))
+, m_optPtMovStepATSCurvMap(_T("ATSCurvMapWnd"))
+, m_optPtMovStepATSCorrMap(_T("ATSCorrMapWnd"))
+, m_optPtMovStepGasdoseMap(_T("GasdoseMapWnd"))
+, m_optPtMovStepTmp2CurveMap(_T("Tmp2CurveMapWnd"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -583,6 +622,46 @@ bool CAppSettingsModel::ReadSettings(void)
  dr.ReadFlt(m_optPeakOnPtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadFlt(m_optPeakDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
  dr.ReadFlt(m_optHoldDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
+
+ //Moving step of points in maps' editing windows
+ IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
+ ms.ReadFlt(m_optPtMovStepWorkMap,  _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepTempMap,  _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepStartMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIdleMap,  _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepVeMap,   _T("0.05"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAfrMap, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepCrnkMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepWrmpMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepDeadMap, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIdlrMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIdlcMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAetpsMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAerpmMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAftstrMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepItMap, _T("1.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepItrpmMap, _T("10.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepRigidMap, _T("0.01"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepEgocrvMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIaccMap, _T("0.05"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIaccwMap, _T("0.05"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepIatcltMap, _T("0.05"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepTpsswtMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepGtscMap, _T("0.01"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepGpscMap, _T("0.01"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAtscMap, _T("0.01"), 0.0f, 10.0f);
+ //separate
+ ms.ReadFlt(m_optPtMovStepCrkTempMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepEHPauseMap, _T("0.01"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepAttenMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepDwellCntrlMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepCTSCurveMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepBarocorrMap, _T("0.1"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepManIgntimMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepATSCurvMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepATSCorrMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepGasdoseMap, _T("0.5"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepTmp2CurveMap, _T("0.25"), 0.0f, 10.0f);
 
  return status;
 }
@@ -1740,6 +1819,195 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   dr.WriteFlt(m_optHoldDutyPtMovStep, 1, _T("Шаг смещения точек для графика \"Скважность удерживания\""));
 
+ //Moving step of points in maps' editing windows
+ IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteComment(_T("*** Step of points' moving in map editor windows ***"), false, true);
+ else
+  ms.WriteComment(_T("*** Шаг смещения точек в окнах редактирования таблиц ***"), false, true);
+ ws.CreateSection();
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepWorkMap, 3, _T("Work ignition timing map"));
+ else
+  ms.WriteFlt(m_optPtMovStepWorkMap, 3, _T("Рабочая карта УОЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepTempMap, 3, _T("Ign. timing vs CLT correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepTempMap, 3, _T("Коррекция УОЗ по ДТОЖ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepStartMap, 3, _T("Cranking ignition timing map"));
+ else
+  ms.WriteFlt(m_optPtMovStepStartMap, 3, _T("Таблица УОЗ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIdleMap, 3, _T("Idling ignition timing map"));
+ else
+  ms.WriteFlt(m_optPtMovStepIdleMap, 3, _T("Таблица УОЗ на ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepVeMap, 3, _T("VE map"));
+ else
+  ms.WriteFlt(m_optPtMovStepVeMap, 3, _T("Наполнение (объемный КПД)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAfrMap, 3, _T("AFR map"));
+ else
+  ms.WriteFlt(m_optPtMovStepAfrMap, 3, _T("Соотношение Воздух/топливо"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCrnkMap, 3, _T("Injection PW on cranking"));
+ else
+  ms.WriteFlt(m_optPtMovStepCrnkMap, 3, _T("Длительность впрыска на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepWrmpMap, 3, _T("Warmup enrichment map"));
+ else
+  ms.WriteFlt(m_optPtMovStepWrmpMap, 3, _T("Обогащение при прогреве"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepDeadMap, 3, _T("Injector's lag map"));
+ else
+  ms.WriteFlt(m_optPtMovStepWrmpMap, 3, _T("Лаг форсунки"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIdlrMap, 3, _T("IAC position (working)"));
+ else
+  ms.WriteFlt(m_optPtMovStepIdlrMap, 3, _T("Положение РДВ (рабочее)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIdlcMap, 3, _T("IAC position (cranking)"));
+ else
+  ms.WriteFlt(m_optPtMovStepIdlcMap, 3, _T("Положение РДВ (на пуске)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAetpsMap, 3, _T("Enrichment vs throttle speed map"));
+ else
+  ms.WriteFlt(m_optPtMovStepAetpsMap, 3, _T("Обогащение по скорости ДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAerpmMap, 3, _T("Enrichment vs engine speed"));
+ else
+  ms.WriteFlt(m_optPtMovStepAerpmMap, 3, _T("Обогащение по оборотам"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAftstrMap, 3, _T("Afterstart enrichment map"));
+ else
+  ms.WriteFlt(m_optPtMovStepAftstrMap, 3, _T("Обогащение после пуска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepItMap, 3, _T("Injection timing map"));
+ else
+  ms.WriteFlt(m_optPtMovStepItMap, 3, _T("Фаза впрыска"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepItrpmMap, 3, _T("Target idling RPM"));
+ else
+  ms.WriteFlt(m_optPtMovStepItrpmMap, 3, _T("Целевые обороты ХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepRigidMap, 3, _T("Idling regulator's rigidity map"));
+ else
+  ms.WriteFlt(m_optPtMovStepRigidMap, 3, _T("Жесткость РХХ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepEgocrvMap, 3, _T("EGO sensor curve"));
+ else
+  ms.WriteFlt(m_optPtMovStepEgocrvMap, 3, _T("Кривая датчика кислорода"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIaccMap, 3, _T("Mixture correction vs IAC pos"));
+ else
+  ms.WriteFlt(m_optPtMovStepIaccMap, 3, _T("Коррекция смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIaccwMap, 3, _T("Weight of mixture correction vs IAC pos"));
+ else
+  ms.WriteFlt(m_optPtMovStepIaccwMap, 3, _T("Вес коррекции смеси по положению РДВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepIatcltMap, 3, _T("CLT to MAT influence factor"));
+ else
+  ms.WriteFlt(m_optPtMovStepIatcltMap, 3, _T("Коэффициент влияния ТОЖ на ТВ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepTpsswtMap, 3, _T("TPS switch point map"));
+ else
+  ms.WriteFlt(m_optPtMovStepTpsswtMap, 3, _T("Точка переключения по ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepGtscMap, 3, _T("Gas temperature correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepGtscMap, 3, _T("Коррекция смеси по температуре газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepGpscMap, 3, _T("Gas pressure correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepGpscMap, 3, _T("Коррекция смеси по давлению газа"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAtscMap, 3, _T("Air density correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepAtscMap, 3, _T("Коррекция смеси по плотности воздуха"));
+ //separate maps
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Ign.timing vs CLT correction on cranking"));
+ else
+  ms.WriteFlt(m_optPtMovStepCrkTempMap, 3, _T("Коррекция УОЗ по ДТОЖ на пуске"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepEHPauseMap, 3, _T("EGO heater's pause map (for PWM)"));
+ else
+  ms.WriteFlt(m_optPtMovStepEHPauseMap, 3, _T("Время паузы подогрева ДК (для ШИМ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepAttenMap, 3, _T("Attenuator's curve of amplification"));
+ else
+  ms.WriteFlt(m_optPtMovStepAttenMap, 3, _T("Таблица функции аттенюатора"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepDwellCntrlMap, 3, _T("Dwell time map"));
+ else
+  ms.WriteFlt(m_optPtMovStepDwellCntrlMap, 3, _T("Время накопления"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCTSCurveMap, 3, _T("Coolant temperature sensor table"));
+ else
+  ms.WriteFlt(m_optPtMovStepCTSCurveMap, 3, _T("Кривая датчика температуры охлажд.житкости"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepBarocorrMap, 3, _T("Barometric correction map"));
+ else
+  ms.WriteFlt(m_optPtMovStepBarocorrMap, 3, _T("Барометрическая коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepManIgntimMap, 3, _T("Manual ignition timing corr. map"));
+ else
+  ms.WriteFlt(m_optPtMovStepManIgntimMap, 3, _T("Ручная октан-коррекция"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepATSCurvMap, 3, _T("MAT sensor table"));
+ else
+  ms.WriteFlt(m_optPtMovStepATSCurvMap, 3, _T("Кривая датчика температуры воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepATSCorrMap, 3, _T("Ign.timing correction vs MAT map"));
+ else
+  ms.WriteFlt(m_optPtMovStepATSCorrMap, 3, _T("Коррекция УОЗ по температуре воздуха"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepGasdoseMap, 3, _T("Gas valve position vs RPM,TPS map"));
+ else
+  ms.WriteFlt(m_optPtMovStepGasdoseMap, 3, _T("Положение дозатора газа от оборотов и ДПДЗ"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("TMP2 sensor table"));
+ else
+  ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("Кривая датчика температуры на входе TMP2"));
+
  return status;
 }
 
@@ -2564,4 +2832,86 @@ int CAppSettingsModel::GetITEdMode(void) const
 void CAppSettingsModel::SetITEdMode(int mode)
 {
  m_optITEdMode.value = mode;
+}
+
+void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
+{
+ m_optPtMovStepWorkMap.value = i_ptMovStep.m_work_map;
+ m_optPtMovStepTempMap.value = i_ptMovStep.m_temp_map;
+ m_optPtMovStepStartMap.value = i_ptMovStep.m_start_map;
+ m_optPtMovStepIdleMap.value = i_ptMovStep.m_idle_map;
+ m_optPtMovStepVeMap.value = i_ptMovStep.m_ve_map;
+ m_optPtMovStepAfrMap.value = i_ptMovStep.m_afr_map;
+ m_optPtMovStepCrnkMap.value = i_ptMovStep.m_crnk_map;
+ m_optPtMovStepWrmpMap.value = i_ptMovStep.m_wrmp_map;
+ m_optPtMovStepDeadMap.value = i_ptMovStep.m_dead_map;
+ m_optPtMovStepIdlrMap.value = i_ptMovStep.m_idlr_map;
+ m_optPtMovStepIdlcMap.value = i_ptMovStep.m_idlc_map;
+ m_optPtMovStepAetpsMap.value = i_ptMovStep.m_aetps_map;
+ m_optPtMovStepAerpmMap.value = i_ptMovStep.m_aerpm_map;
+ m_optPtMovStepAftstrMap.value = i_ptMovStep.m_aftstr_map;
+ m_optPtMovStepItMap.value = i_ptMovStep.m_it_map;
+ m_optPtMovStepItrpmMap.value = i_ptMovStep.m_itrpm_map;
+ m_optPtMovStepRigidMap.value = i_ptMovStep.m_rigid_map;
+ m_optPtMovStepEgocrvMap.value = i_ptMovStep.m_egocrv_map;
+ m_optPtMovStepIaccMap.value = i_ptMovStep.m_iacc_map;
+ m_optPtMovStepIaccwMap.value = i_ptMovStep.m_iaccw_map;
+ m_optPtMovStepIatcltMap.value = i_ptMovStep.m_iatclt_map;
+ m_optPtMovStepTpsswtMap.value = i_ptMovStep.m_tpsswt_map;
+ m_optPtMovStepGtscMap.value = i_ptMovStep.m_gtsc_map;
+ m_optPtMovStepGpscMap.value = i_ptMovStep.m_gpsc_map;
+ m_optPtMovStepAtscMap.value = i_ptMovStep.m_atsc_map;
+ //separate
+ m_optPtMovStepAttenMap.value = i_ptMovStep.m_attenuator_map;
+ m_optPtMovStepDwellCntrlMap.value = i_ptMovStep.m_dwellcntrl_map;
+ m_optPtMovStepCTSCurveMap.value = i_ptMovStep.m_cts_curve_map;
+ m_optPtMovStepATSCurvMap.value = i_ptMovStep.m_ats_curve_map;
+ m_optPtMovStepATSCorrMap.value = i_ptMovStep.m_ats_aac_map;
+ m_optPtMovStepGasdoseMap.value = i_ptMovStep.m_gasdose_map;
+ m_optPtMovStepBarocorrMap.value = i_ptMovStep.m_barocorr_map;
+ m_optPtMovStepManIgntimMap.value = i_ptMovStep.m_manigntim_map;
+ m_optPtMovStepTmp2CurveMap.value = i_ptMovStep.m_tmp2_curve_map;
+ m_optPtMovStepCrkTempMap.value = i_ptMovStep.m_crktemp_map;
+ m_optPtMovStepEHPauseMap.value = i_ptMovStep.m_eh_pause_map;
+}
+
+void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
+{
+ o_ptMovStep.m_work_map = m_optPtMovStepWorkMap.value;
+ o_ptMovStep.m_temp_map = m_optPtMovStepTempMap.value;
+ o_ptMovStep.m_start_map = m_optPtMovStepStartMap.value;
+ o_ptMovStep.m_idle_map = m_optPtMovStepIdleMap.value;
+ o_ptMovStep.m_ve_map = m_optPtMovStepVeMap.value;
+ o_ptMovStep.m_afr_map = m_optPtMovStepAfrMap.value;
+ o_ptMovStep.m_crnk_map = m_optPtMovStepCrnkMap.value;
+ o_ptMovStep.m_wrmp_map = m_optPtMovStepWrmpMap.value;
+ o_ptMovStep.m_dead_map = m_optPtMovStepDeadMap.value;
+ o_ptMovStep.m_idlr_map = m_optPtMovStepIdlrMap.value;
+ o_ptMovStep.m_idlc_map = m_optPtMovStepIdlcMap.value;
+ o_ptMovStep.m_aetps_map = m_optPtMovStepAetpsMap.value;
+ o_ptMovStep.m_aerpm_map = m_optPtMovStepAerpmMap.value;
+ o_ptMovStep.m_aftstr_map = m_optPtMovStepAftstrMap.value;
+ o_ptMovStep.m_it_map = m_optPtMovStepItMap.value;
+ o_ptMovStep.m_itrpm_map = m_optPtMovStepItrpmMap.value;
+ o_ptMovStep.m_rigid_map = m_optPtMovStepRigidMap.value;
+ o_ptMovStep.m_egocrv_map = m_optPtMovStepEgocrvMap.value;
+ o_ptMovStep.m_iacc_map = m_optPtMovStepIaccMap.value;
+ o_ptMovStep.m_iaccw_map = m_optPtMovStepIaccwMap.value;
+ o_ptMovStep.m_iatclt_map = m_optPtMovStepIatcltMap.value;
+ o_ptMovStep.m_tpsswt_map = m_optPtMovStepTpsswtMap.value;
+ o_ptMovStep.m_gtsc_map = m_optPtMovStepGtscMap.value;
+ o_ptMovStep.m_gpsc_map = m_optPtMovStepGpscMap.value;
+ o_ptMovStep.m_atsc_map = m_optPtMovStepAtscMap.value;
+ //separate
+ o_ptMovStep.m_attenuator_map = m_optPtMovStepAttenMap.value;
+ o_ptMovStep.m_dwellcntrl_map = m_optPtMovStepDwellCntrlMap.value;
+ o_ptMovStep.m_cts_curve_map = m_optPtMovStepCTSCurveMap.value;
+ o_ptMovStep.m_ats_curve_map = m_optPtMovStepATSCurvMap.value;
+ o_ptMovStep.m_ats_aac_map = m_optPtMovStepATSCorrMap.value;
+ o_ptMovStep.m_gasdose_map = m_optPtMovStepGasdoseMap.value;
+ o_ptMovStep.m_barocorr_map = m_optPtMovStepBarocorrMap.value;
+ o_ptMovStep.m_manigntim_map = m_optPtMovStepManIgntimMap.value;
+ o_ptMovStep.m_tmp2_curve_map = m_optPtMovStepTmp2CurveMap.value;
+ o_ptMovStep.m_crktemp_map = m_optPtMovStepCrkTempMap.value;
+ o_ptMovStep.m_eh_pause_map = m_optPtMovStepEHPauseMap.value;
 }

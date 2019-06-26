@@ -175,6 +175,7 @@ class TForm3D : public TForm
   void DataPrepare();
 
   void SetOnChange(EventHandler i_pOnChange,void* i_param);
+  void SetOnChangeSettings(EventHandler i_pOnChange,void* i_param);
   void SetOnClose(EventHandler i_pOnClose,void* i_param);
   void SetOnWndActivation(OnWndActivation i_pOnWndActivation, void* i_param);
   void SetOnGetXAxisLabel(OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
@@ -230,6 +231,9 @@ class TForm3D : public TForm
   //адрес функции которая будет вызываться после изменения данных
   EventHandler m_pOnChange;
   void* m_param_on_change;
+
+  EventHandler m_pOnChangeSettings;
+  void* m_param_on_change_sett;
 
   EventHandler m_pOnClose;
   void* m_param_on_close;

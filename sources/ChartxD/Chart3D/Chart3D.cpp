@@ -43,12 +43,14 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart3DUpdate(HWND hWnd, float *original_function, float *modified_function);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnGetAxisLabel(HWND hWnd, int i_axis, OnGetAxisLabel i_pOnGetAxisLabel, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnChange(HWND hWnd, EventHandler i_pOnChange, void* i_param);
+ void  __declspec(dllexport)  __cdecl Chart3DSetOnChangeSettings(HWND hWnd, EventHandler i_pOnChange, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnClose(HWND hWnd, EventHandler i_pOnClose, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DShow(HWND hWnd, int i_show);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnWndActivation(HWND hWnd, OnWndActivation i_pOnWndActivation, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DEnable(HWND hWnd, bool enable);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step);
+ float __declspec(dllexport)  __cdecl Chart3DGetPtMovingStep(HWND hWnd);
  void  __declspec(dllexport)  __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max);
  void  __declspec(dllexport)  __cdecl Chart3DSetOnValueTransform(HWND hWnd, OnValueTransform i_pOnValueTransform, void* i_param);
  void  __declspec(dllexport)  __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle);
@@ -211,6 +213,15 @@ void __cdecl Chart3DSetPtMovingStep(HWND hWnd, float step)
 }
 
 //---------------------------------------------------------------------------
+float __cdecl Chart3DGetPtMovingStep(HWND hWnd)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return 0;
+ return pForm->m_pt_moving_step;
+}
+
+//---------------------------------------------------------------------------
 void __cdecl Chart3DSetFncRange(HWND hWnd, float fnc_min, float fnc_max)
 {
  TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
@@ -244,6 +255,15 @@ void __cdecl Chart3DSetAxisTitle(HWND hWnd, int i_axis, LPCTSTR axisTitle)
    MessageBox(hWnd, _T("Chart3DSetAxisTitle: Unsupported \"i_axis\" argument!"), _T("Error"), MB_OK);
    break;
  }
+}
+
+//---------------------------------------------------------------------------
+void __cdecl Chart3DSetOnChangeSettings(HWND hWnd, EventHandler i_pOnChange, void* i_param)
+{
+ TForm3D* pForm = static_cast<TForm3D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->SetOnChangeSettings(i_pOnChange, i_param);
 }
 
 //---------------------------------------------------------------------------

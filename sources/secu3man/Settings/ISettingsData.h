@@ -188,6 +188,48 @@ typedef enum ESpeedUnit
  SU_MPH
 };
 
+struct MapPtMovStep
+{
+ float m_work_map;
+ float m_temp_map;
+ float m_start_map;
+ float m_idle_map;
+ float m_ve_map;
+ float m_afr_map;
+ float m_crnk_map;
+ float m_wrmp_map;
+ float m_dead_map;
+ float m_idlr_map;
+ float m_idlc_map;
+ float m_aetps_map;
+ float m_aerpm_map;
+ float m_aftstr_map;
+ float m_it_map;
+ float m_itrpm_map;
+ float m_rigid_map;
+ float m_egocrv_map;
+ float m_iacc_map;
+ float m_iaccw_map;
+ float m_iatclt_map;
+ float m_tpsswt_map;
+ float m_gtsc_map;
+ float m_gpsc_map;
+ float m_atsc_map;
+ //separate
+ float m_attenuator_map;
+ float m_dwellcntrl_map;
+ float m_cts_curve_map;
+ float m_ats_curve_map;
+ float m_ats_aac_map;
+ float m_gasdose_map;
+ float m_cesettings;
+ float m_barocorr_map;
+ float m_manigntim_map;
+ float m_tmp2_curve_map;
+ float m_crktemp_map;
+ float m_eh_pause_map;
+};
+
 //Interface which should be used to access settings' data from usual places of program
 class ISettingsData
 {
@@ -302,4 +344,7 @@ class ISettingsData
   virtual float GetPeakOnPtMovStep(void) const = 0;
   virtual float GetPeakDutyPtMovStep(void) const = 0;
   virtual float GetHoldDutyPtMovStep(void) const = 0;
+
+  virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep) = 0;
+  virtual void GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const = 0;
 };

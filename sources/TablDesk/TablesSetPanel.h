@@ -208,68 +208,9 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   bool m_cts_curve_enabled;
   bool m_tmp2_curve_enabled;
 
-  int m_attenuator_map_chart_state;
-  int m_dwellcntrl_map_chart_state;
-  int m_cts_curve_map_chart_state;
-  int m_ats_curve_map_chart_state;
-  int m_ats_aac_map_chart_state;
-  int m_gasdose_map_chart_state;
-  int m_barocorr_map_chart_state;
-  int m_manigntim_map_chart_state;
-  int m_tmp2_curve_map_chart_state;
-  int m_crktemp_map_chart_state;
-  int m_eh_pause_map_chart_state;
-
-  HWND m_attenuator_map_wnd_handle;
-  HWND m_dwellcntrl_map_wnd_handle;
-  HWND m_cts_curve_map_wnd_handle;
-  HWND m_ats_curve_map_wnd_handle;
-  HWND m_ats_aac_map_wnd_handle;
-  HWND m_gasdose_map_wnd_handle;
-  HWND m_barocorr_map_wnd_handle;
-  HWND m_manigntim_map_wnd_handle;
-  HWND m_tmp2_curve_map_wnd_handle;
-  HWND m_crktemp_map_wnd_handle;
-  HWND m_eh_pause_map_wnd_handle;
-
   float m_attenuator_table_slots[128];
-
-  float m_attenuator_map_active[128];
-  float m_attenuator_map_original[128];
-
-  float m_dwellcntrl_map_active[32];
-  float m_dwellcntrl_map_original[32];
-
-  float m_cts_curve_map_active[16];
-  float m_cts_curve_map_original[16];
-
   float m_cts_curve_x_axis_limits[2];
-
-  float m_ats_curve_map_active[16];
-  float m_ats_curve_map_original[16];
-
   float m_ats_curve_x_axis_limits[2];
-
-  float m_ats_aac_map_active[16];
-  float m_ats_aac_map_original[16];
-
-  float m_gasdose_map_active[16][16];
-  float m_gasdose_map_original[16][16];
-
-  float m_barocorr_map_active[9+2];
-  float m_barocorr_map_original[9+2];
-
-  float m_manigntim_map_active[16];
-  float m_manigntim_map_original[16];
-
-  float m_tmp2_curve_map_active[16+2];
-  float m_tmp2_curve_map_original[16+2];
-
-  float m_crktemp_map_active[16];
-  float m_crktemp_map_original[16];
-
-  float m_eh_pause_map_active[32];
-  float m_eh_pause_map_original[32];
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
 };

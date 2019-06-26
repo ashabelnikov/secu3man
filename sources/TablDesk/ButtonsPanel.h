@@ -26,6 +26,7 @@
 #pragma once
 
 #include <memory>
+#include <map>
 #include "common/FastDelegate.h"
 #include "GridModeEditorIgnDlg.h"
 #include "GridModeEditorInjDlg.h"
@@ -131,6 +132,9 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   virtual void CloseCharts(void);
 
   virtual void ShowOpenedCharts(bool i_show);
+
+  float GetPtMovStep(int wndType);
+  void  SetPtMovStep(int wndType, float value);
 
  public: //установка обработчиков событий
   void setOnChangeSettings(EventHandler OnCB);
@@ -267,6 +271,20 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   static void __cdecl OnCloseTempMap(void* i_param);
   static float __cdecl OnValueTransformITMap(void* i_param, float source, int direction);
 protected:
+  struct MapData
+  {
+   MapData() : state(0), handle(NULL), ptMovStep(0.5f)
+   { std::fill(original, original + 256, .0f); std::fill(active, active + 256, .0f); }
+   float original[256];
+   float active[256];
+   int state;
+   HWND handle;
+   float ptMovStep;
+  };
+
+  std::map<int, MapData> m_md;
+
+  static void __cdecl OnChangeSettingsCME(void* i_param);
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
 private:
   static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
@@ -352,113 +370,9 @@ private:
 
   int m_charts_enabled;
   ///////////////////////////////////////////////////////
-  int m_work_map_chart_state;
-  int m_temp_map_chart_state;
-  int m_start_map_chart_state;
-  int m_idle_map_chart_state;
   int m_grid_map_state_ign;
   int m_grid_map_state_inj;
-  int m_ve_map_chart_state;
-  int m_afr_map_chart_state;
-  int m_crnk_map_chart_state;
-  int m_wrmp_map_chart_state;
-  int m_dead_map_chart_state;
-  int m_idlr_map_chart_state;
-  int m_idlc_map_chart_state;
-  int m_aetps_map_chart_state;
-  int m_aerpm_map_chart_state;
-  int m_aftstr_map_chart_state;
-  int m_it_map_chart_state;
-  int m_itrpm_map_chart_state;
-  int m_rigid_map_chart_state;
-  int m_egocrv_map_chart_state;
-  int m_iacc_map_chart_state;
-  int m_iaccw_map_chart_state;
-  int m_iatclt_map_chart_state;
-  int m_tpsswt_map_chart_state;
-  int m_gtsc_map_chart_state;
-  int m_gpsc_map_chart_state;
-  int m_atsc_map_chart_state;
-
-  HWND m_start_map_wnd_handle;
-  HWND m_idle_map_wnd_handle;
-  HWND m_work_map_wnd_handle;
-  HWND m_temp_map_wnd_handle;
-  HWND m_ve_map_wnd_handle;
-  HWND m_afr_map_wnd_handle;
-  HWND m_crnk_map_wnd_handle;
-  HWND m_wrmp_map_wnd_handle;
-  HWND m_dead_map_wnd_handle;
-  HWND m_idlr_map_wnd_handle;
-  HWND m_idlc_map_wnd_handle;
-  HWND m_aetps_map_wnd_handle;
-  HWND m_aerpm_map_wnd_handle;
-  HWND m_aftstr_map_wnd_handle;
-  HWND m_it_map_wnd_handle;
-  HWND m_itrpm_map_wnd_handle;
-  HWND m_rigid_map_wnd_handle;
-  HWND m_egocrv_map_wnd_handle;
-  HWND m_iacc_map_wnd_handle;
-  HWND m_iaccw_map_wnd_handle;
-  HWND m_iatclt_map_wnd_handle;
-  HWND m_tpsswt_map_wnd_handle;
-  HWND m_gtsc_map_wnd_handle;
-  HWND m_gpsc_map_wnd_handle;
-  HWND m_atsc_map_wnd_handle;
-
-  float m_start_map_active[16];
-  float m_start_map_original[16];
-  float m_idle_map_active[16];
-  float m_idle_map_original[16];
-  float m_work_map_active[16][16];
-  float m_work_map_original[16][16];
-  float m_temp_map_active[16];
-  float m_temp_map_original[16];
   float m_rpm_grid_values[16];
-
-  float m_ve_map_active[16][16];
-  float m_ve_map_original[16][16];
-  float m_afr_map_active[16][16];
-  float m_afr_map_original[16][16];
-  float m_crnk_map_active[16];
-  float m_crnk_map_original[16];
-  float m_wrmp_map_active[16];
-  float m_wrmp_map_original[16];
-  float m_dead_map_active[32];
-  float m_dead_map_original[32];
-  float m_idlr_map_active[16];
-  float m_idlr_map_original[16];
-  float m_idlc_map_active[16];
-  float m_idlc_map_original[16];
-  float m_aetps_map_active[16];
-  float m_aetps_map_original[16];
-  float m_aerpm_map_active[8];
-  float m_aerpm_map_original[8];
-  float m_aftstr_map_active[16];
-  float m_aftstr_map_original[16];
-  float m_it_map_active[16][16];
-  float m_it_map_original[16][16];
-  float m_itrpm_map_active[16];
-  float m_itrpm_map_original[16];
-  float m_rigid_map_active[8];
-  float m_rigid_map_original[8];
-  float m_egocrv_map_active[16+2];
-  float m_egocrv_map_original[16+2];
-  float m_iacc_map_active[8+2];
-  float m_iacc_map_original[8+2];
-  float m_iaccw_map_active[16+2];
-  float m_iaccw_map_original[16+2];
-  float m_iatclt_map_active[8+2];
-  float m_iatclt_map_original[8+2];
-  float m_tpsswt_map_active[16];
-  float m_tpsswt_map_original[16];
-  float m_gtsc_map_active[16];
-  float m_gtsc_map_original[16];
-  float m_gpsc_map_active[9+2];
-  float m_gpsc_map_original[9+2];
-  float m_atsc_map_active[16];
-  float m_atsc_map_original[16];
-
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
   bool m_carb_afr;
