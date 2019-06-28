@@ -1434,7 +1434,7 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
     value = (source > 720.0f) ? source - 720.0f : source;
     break;
    case 1: //ATDC
-    value = 720.0f - (source > 720.0f) ? source - 720.0f : source;
+    value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
     break;
    case 2: //-360...360
     if (source > 720.0f)
