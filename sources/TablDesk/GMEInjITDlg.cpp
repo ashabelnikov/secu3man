@@ -171,14 +171,13 @@ int CGMEInjITDlg::GetITMode(void) const
 void CGMEInjITDlg::OnChangeITMode()
 {
  m_it_mode_val = m_it_mode.GetCurSel();
- if (m_on_change_sett)
-  m_on_change_sett();
-
  float y1, y2;
  _GetITModeRange(y1, y2);
  m_it_map.SetRange(y1, y2);
-
+ _TransformValues(); //apply possible changes to map
  m_it_map.UpdateDisplay();
+if (m_on_change_sett)
+ m_on_change_sett();
 }
 
 float CGMEInjITDlg::OnValueTransform(float source, int direction)
@@ -224,4 +223,10 @@ void CGMEInjITDlg::_GetITModeRange(float& y1, float& y2)
 {
  y1 = (m_it_mode_val < 2) ? .0f : -360.0f;
  y2 = (m_it_mode_val < 2) ? 720.0f : 360.0f;
+}
+
+void CGMEInjITDlg::_TransformValues(void)
+{
+ for (int i = 0; i < 16*16; ++i)
+  mp_ITMap[i] = OnValueTransform(OnValueTransform(mp_ITMap[i], 0), 1);
 }

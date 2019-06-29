@@ -67,6 +67,7 @@ class CGMEInjITDlg : public CTabDialog
  private:
   float OnValueTransform(float source, int direction);
   void _GetITModeRange(float& y1, float& y2);
+  void _TransformValues(void);
 
   CMapEditorCtrl m_it_map;
   CComboBox m_it_mode;

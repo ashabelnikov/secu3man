@@ -20,8 +20,8 @@ stringtable
   IDS_PM_HIDE_OLDCURVE, "—пр€тать 'старую' кривую"
   IDS_TT_SMOOTHING_3_POINTS, "—глаживание по 3-м соседним точкам"
   IDS_TT_SMOOTHING_5_POINTS, "—глаживание по 5-ти соседним точкам"
-  IDS_TT_MOVE_FUNC_UP, "—местить функцию вверх на 0.5"
-  IDS_TT_MOVE_FUNC_DOWN, "—местить функцию вниз на 0.5"
+  IDS_TT_MOVE_FUNC_UP, "—местить функцию вверх на текущее значение 'Ўаг смещени€ точек'"
+  IDS_TT_MOVE_FUNC_DOWN, "—местить функцию вниз на текущее значение 'Ўаг смещени€ точек'"
   IDS_TT_H_AXIS_BEGIN_VAL, "«начение определ€ющее начало горизонтальной оси"
   IDS_TT_H_AXIS_END_VAL, "«начение определ€ющее конец горизонтальной оси"
 }
@@ -40,8 +40,8 @@ stringtable
   IDS_PM_HIDE_OLDCURVE, "Hide 'old' curve"
   IDS_TT_SMOOTHING_3_POINTS, "Smoothing uning 3 adjacent points"
   IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points"
-  IDS_TT_MOVE_FUNC_UP, "Move function up by 0.5"
-  IDS_TT_MOVE_FUNC_DOWN, "Move function down by 0.5"
+  IDS_TT_MOVE_FUNC_UP, "Move function up by current value of 'Points' moving step'"
+  IDS_TT_MOVE_FUNC_DOWN, "Move function down by current value of 'Points' moving step'"
   IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis"
   IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis"
 }

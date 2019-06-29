@@ -1421,8 +1421,7 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
     value = 720.0f - source;
     break;
    case 2: //-360...360
-    value = 720.0f + source;
-    value = source;
+    value = 720.0f + source;    
     break;
   }
  }
