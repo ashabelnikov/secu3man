@@ -74,7 +74,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   virtual void setOnMapChanged(EventWithCode OnFunction);
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction);
   virtual void setOnOpenMapWnd(EventWithHWND OnFunction);
-  virtual void setOnTabActivate(EventHandler OnFunction);
   virtual void setOnSaveButton(EventHandler OnFunction);
   virtual void setOnChangeTablesSetName(EventHandler OnFunction);
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction);
@@ -142,7 +141,6 @@ class AFX_EXT_CLASS CTablesDeskDlg : public CModelessUpdatableDialog, public ITa
   EventWithCode m_OnMapChanged;
   EventWithHWND m_OnCloseMapWnd;
   EventWithHWND m_OnOpenMapWnd;
-  EventHandler m_OnTabActivate;
   EventHandler m_OnSaveButton;
   EventHandler m_OnChangeTablesSetName;
   EventWithCode m_OnLoadTablesFrom;

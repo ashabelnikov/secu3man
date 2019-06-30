@@ -74,7 +74,6 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   void OnMapChanged(int i_mapType);
   virtual void OnCloseMapWnd(HWND i_hwnd, int i_mapType);
   virtual void OnOpenMapWnd(HWND i_hwnd, int i_mapType);
-  void OnTabActivate(void);
   void OnSaveButton(void);
   void OnChangeTablesSetName(void);
   void OnLoadTablesFrom(int index);

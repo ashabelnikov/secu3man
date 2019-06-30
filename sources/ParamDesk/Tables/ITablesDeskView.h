@@ -57,8 +57,7 @@ class ITablesDeskView
   //events
   virtual void setOnMapChanged(EventWithCode OnFunction) = 0;     //обработцик будет вызываться при изменении в любой из таблиц
   virtual void setOnCloseMapWnd(EventWithHWND OnFunction) = 0;    //обработцик будет вызываться при закрытии окна с таблицей
-  virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей
-  virtual void setOnTabActivate(EventHandler OnFunction) = 0;     //обработцик будет вызываться при появлении вкладки
+  virtual void setOnOpenMapWnd(EventWithHWND OnFunction) = 0;     //обработцик будет вызываться при открытии окна с таблицей  
   virtual void setOnSaveButton(EventHandler OnFunction) = 0;      //обработчик будет вызываться при нажатии кнопки "сохранить"
   virtual void setOnChangeTablesSetName(EventHandler OnFunction) = 0;//обработчик будет вызываться при нажатии кнопки "сохранить"
   virtual void setOnLoadTablesFrom(EventWithCode OnFunction) = 0; //обработчик будет вызываться при выборе п. меню для загрузки таблиц.

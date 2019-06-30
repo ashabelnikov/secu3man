@@ -235,7 +235,6 @@ CPMTablesController::CPMTablesController(VIEW* ip_view, CCommunicationManager* i
  mp_view->setOnMapChanged(MakeDelegate(this, &CPMTablesController::OnMapChanged));
  mp_view->setOnCloseMapWnd(MakeDelegate(this, &CPMTablesController::OnCloseMapWnd));
  mp_view->setOnOpenMapWnd(MakeDelegate(this, &CPMTablesController::OnOpenMapWnd));
- mp_view->setOnTabActivate(MakeDelegate(this, &CPMTablesController::OnTabActivate));
  mp_view->setOnSaveButton(MakeDelegate(this, &CPMTablesController::OnSaveButton));
  mp_view->setOnChangeTablesSetName(MakeDelegate(this, &CPMTablesController::OnChangeTablesSetName));
  mp_view->setOnLoadTablesFrom(MakeDelegate(this, &CPMTablesController::OnLoadTablesFrom));
@@ -650,16 +649,6 @@ void CPMTablesController::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
 void CPMTablesController::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
 {
  MapWndScrPos::OnOpenMapWnd(i_hwnd, i_mapType);
-}
-
-void CPMTablesController::OnTabActivate(void)
-{
- _MoveMapsToCharts(false);
- _MoveMapsToCharts(true);
- mp_view->UpdateOpenedCharts();
- _SetTablesSetName(m_maps->name);
- //update modification flag if any of maps changed
- mp_view->SetModificationFlag(_IsModificationMade());
 }
 
 void CPMTablesController::OnSaveButton(void)

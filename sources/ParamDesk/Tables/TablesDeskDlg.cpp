@@ -299,9 +299,6 @@ void CTablesDeskDlg::setOnCloseMapWnd(EventWithHWND OnFunction)
 void CTablesDeskDlg::setOnOpenMapWnd(EventWithHWND OnFunction)
 { m_OnOpenMapWnd = OnFunction; }
 
-void CTablesDeskDlg::setOnTabActivate(EventHandler OnFunction)
-{ m_OnTabActivate = OnFunction; }
-
 void CTablesDeskDlg::setOnSaveButton(EventHandler OnFunction)
 { m_OnSaveButton  = OnFunction; }
 

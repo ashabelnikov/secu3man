@@ -224,6 +224,7 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
  private:
   void _MakeWindowChild(HWND hwnd, bool child);
   void _GetITModeRange(float& y1, float& y2);
+  void _TransformValues(void);
 
   std::auto_ptr<CWndScroller> mp_scr;
 
