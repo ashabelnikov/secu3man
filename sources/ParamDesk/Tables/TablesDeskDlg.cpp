@@ -232,6 +232,11 @@ void CTablesDeskDlg::UpdateOpenedCharts(void)
  mp_ButtonsPanel->UpdateOpenedCharts();
 }
 
+void CTablesDeskDlg::TransformValues(void)
+{
+ mp_ButtonsPanel->TransformValues();
+}
+
 void CTablesDeskDlg::SetReadOnlyTablesSetName(bool readonly)
 {
  m_tsneb_readonly = readonly;

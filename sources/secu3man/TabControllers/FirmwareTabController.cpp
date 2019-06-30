@@ -1063,6 +1063,7 @@ void CFirmwareTabController::OnSaveFlashToFile(void)
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
+  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
   mp_view->SetFirmwareCRCs(m_fwdm->GetCRC16StoredInActiveFirmware(),m_fwdm->CalculateCRC16OfActiveFirmware());
@@ -1212,6 +1213,7 @@ void CFirmwareTabController::SetViewFirmwareValues(void)
  std::vector<_TSTRING> funset_names = m_fwdm->GetFunctionsSetNames();
  mp_view->mp_TablesPanel->SetFunSetListBox(funset_names);
 
+ mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
 
  //если было выделение в списке, то восстанавлваем его
@@ -1386,6 +1388,7 @@ void CFirmwareTabController::OnFunSetSelectionChanged(int i_selected_index)
  if (m_current_funset_index != -1)
  { //только если в списке выбрано
   SetViewChartsValues();
+  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }

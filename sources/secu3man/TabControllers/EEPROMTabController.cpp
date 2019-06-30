@@ -377,6 +377,7 @@ void CEEPROMTabController::OnSaveEEPROMToFile(void)
 
   //устанавливаем значения только в графики
   SetViewChartsValues();
+  mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }
@@ -578,6 +579,7 @@ void CEEPROMTabController::SetViewValues(void)
  std::vector<_TSTRING> str = m_eedm->GetFunctionsSetNames();
  mp_view->SetMapsetName(str[0].c_str());
  SetViewChartsValues();
+ mp_view->mp_TablesPanel->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->mp_TablesPanel->UpdateOpenedCharts();
  mp_view->SetEEFileName(m_eedm->GetEEFileName());
 

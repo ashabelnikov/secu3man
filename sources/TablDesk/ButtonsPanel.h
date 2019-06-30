@@ -90,6 +90,8 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   //updates all opened charts
   virtual void UpdateOpenedCharts(void);
 
+  virtual void TransformValues(void);
+
   //used for grid mode editing window
   void EnableAdvanceAngleIndication(bool i_enable);
 
@@ -224,7 +226,6 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
  private:
   void _MakeWindowChild(HWND hwnd, bool child);
   void _GetITModeRange(float& y1, float& y2);
-  void _TransformValues(void);
 
   std::auto_ptr<CWndScroller> mp_scr;
 

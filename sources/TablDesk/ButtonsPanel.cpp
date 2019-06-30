@@ -2787,7 +2787,6 @@ void CButtonsPanel::OnDestroy()
 
 void CButtonsPanel::UpdateOpenedCharts(void)
 {
- _TransformValues(); //transform values in some maps before they will be rendered for user
  if (m_md[TYPE_MAP_DA_START].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_DA_START].handle, GetStartMap(true), GetStartMap(false));
  if (m_md[TYPE_MAP_DA_IDLE].state)
@@ -3585,7 +3584,7 @@ void CButtonsPanel::SetPtMovStep(int wndType, float value)
  }
 }
 
-void CButtonsPanel::_TransformValues(void)
+void CButtonsPanel::TransformValues(void)
 {
  float* p_map = m_md[TYPE_MAP_INJ_IT].active;
  for (int i = 0; i < 16*16; ++i)

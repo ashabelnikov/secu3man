@@ -720,6 +720,8 @@ void CPMTablesController::OnImportFromS3F(void)
   //Send updated set name to SECU-3
   OnChangeTablesSetName();
 
+  mp_view->TransformValues(); //transform values in some maps before they will be rendered for user
+
   //send updated data to SECU-3
   //See TablDesk/MapIds.h for more information
   for(int id = TYPE_MAP_SET_START; id <= TYPE_MAP_SET_END; ++id)
@@ -781,6 +783,7 @@ void CPMTablesController::OnDataCollected(void)
  _MoveMapsToCharts(true);
  //Set RPM grid read out from SECU-3
  mp_view->SetRPMGrid(m_rpmGrid);
+ mp_view->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps->name);
 }
