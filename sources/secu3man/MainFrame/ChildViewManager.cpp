@@ -150,7 +150,7 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
  mp_wndView->AddView(MLL::GetString(IDS_TAB_KNOCK_SETTINGS),m_pKnockChannelTabDlg,3);
 
  m_pLogPlayerTabDlg = new CLogPlayerTabDlg(); //view
- m_pLogPlayerTabController = new CLogPlayerTabController(m_pLogPlayerTabDlg, p_comm, p_sbar, p_settings);
+ m_pLogPlayerTabController = new CLogPlayerTabController(m_pLogPlayerTabDlg, p_comm, p_sbar, p_settings, ISECU3Man::GetSECU3Man()->GetLogWriter());
 
  mp_MainTabController->AddTabController(m_pLogPlayerTabController);
  mp_wndView->AddView(MLL::GetString(IDS_TAB_LOG_PLAYER),m_pLogPlayerTabDlg,4);

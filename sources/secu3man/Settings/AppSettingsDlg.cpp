@@ -102,6 +102,7 @@ CAppSettingsDlg::CAppSettingsDlg(CWnd* pParent /*=NULL*/)
 , m_wheel_pulses_edit(CEditEx::MODE_INT)
 , mp_port_selection_combo(&m_port_selection1_combo)
 , m_always_write_log(BST_UNCHECKED)
+, m_write_log_fields(BST_UNCHECKED)
 {
  m_app_baudrate = -1;
  m_bl_baudrate = -1;
@@ -137,6 +138,8 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_BUTTON, m_log_files_folder_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_ALWAYS_WRITE_LOG, m_always_write_log_button);
+ DDX_Control(pDX, IDC_APP_SETTINGS_WRITE_LOG_TITLE, m_write_log_fields_button);
+
  DDX_Control(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_SHOW_TOOLTIPS, m_show_tooltips_button);
  DDX_Control(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures_button);
@@ -154,6 +157,7 @@ void CAppSettingsDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text(pDX, IDC_APP_SETTINGS_LOGFOLDER_EDITBOX, m_log_files_folder);
  DDX_Check(pDX, IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER, m_use_app_folder);
  DDX_Check(pDX, IDC_APP_SETTINGS_ALWAYS_WRITE_LOG, m_always_write_log);
+ DDX_Check(pDX, IDC_APP_SETTINGS_WRITE_LOG_TITLE, m_write_log_fields);
  DDX_Check(pDX, IDC_APP_SETTINGS_USEDEBUG_FEATURES, m_use_dv_features);
  DDX_Check(pDX, IDC_APP_SETTINGS_SHOW_TOOLTIPS, m_show_tooltips);
  DDX_Check(pDX, IDC_APP_SETTINGS_EXFIXTURES, m_exfixtures);
@@ -485,6 +489,16 @@ void CAppSettingsDlg::SetAlwaysWriteLog(bool i_always)
 bool CAppSettingsDlg::GetAlwaysWriteLog(void) const
 {
  return (m_always_write_log == BST_CHECKED) ? true : false;
+}
+
+void CAppSettingsDlg::SetWriteLogFields(bool i_always)
+{
+ m_write_log_fields = i_always ? BST_CHECKED : BST_UNCHECKED;
+}
+
+bool CAppSettingsDlg::GetWriteLogFields(void) const
+{
+ return (m_write_log_fields == BST_CHECKED) ? true : false;
 }
 
 size_t CAppSettingsDlg::GetCSVSepSymbol(void)

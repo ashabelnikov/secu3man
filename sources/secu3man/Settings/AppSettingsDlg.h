@@ -94,6 +94,9 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   virtual void SetExistingPorts(bool i_exp);
   virtual bool GetExistingPorts(void) const;
 
+  void SetWriteLogFields(bool i_always);
+  bool GetWriteLogFields(void) const;
+
   virtual void setFunctionOnOk(EventHandler OnOk);
   virtual void setFunctionOnCancel(EventHandler OnCancel);
   virtual void setFunctionOnActivate(EventHandler OnActivate);
@@ -142,6 +145,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CButton   m_log_files_folder_button;
   CButton   m_use_app_folder_button;
   CButton   m_always_write_log_button;
+  CButton   m_write_log_fields_button;
   CButton   m_use_dv_features_button;
   CButton   m_show_tooltips_button;
   CButton   m_exfixtures_button;
@@ -167,6 +171,7 @@ class CAppSettingsDlg : public CDialog, public IAppSettingsDlg
   CString m_log_files_folder;
   int m_use_app_folder;
   int m_always_write_log;
+  int m_write_log_fields;
   int m_use_dv_features;
   int m_show_tooltips;
   int m_exfixtures;

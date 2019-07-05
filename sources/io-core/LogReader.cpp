@@ -27,6 +27,7 @@
 #include "LogReader.h"
 
 #include <stdio.h>
+#include <io.h>
 #include <math.h>
 #include "SECU3IO.h"
 
@@ -55,6 +56,7 @@ LogReader::LogReader()
 , m_record_size(0)
 , m_current_record(0)
 , m_csv_separating_symbol(',')
+, m_fileOffset(0)
 {
  SetSeparatingSymbol(m_csv_separating_symbol);
 }
@@ -65,7 +67,7 @@ LogReader::~LogReader()
   fclose(m_file_handle);
 }
 
-bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error)
+bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle)
 {
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
  if (NULL == f_handle)
@@ -74,7 +76,40 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error)
   return false; //can not open file!
  }
 
+ if (pending_handle != NULL)
+ {
+  if (_CompareFileHandles(f_handle, pending_handle) > 0)
+  {
+   o_error = FE_PENDING;
+   return false; //trying to open file which is equal to pending_handle
+  }
+ }
+
  m_file_handle = f_handle;
+ m_current_record = 0;
+
+ //check content of the first line of file
+ SYSTEMTIME o_time;
+ SECU3IO::SensorDat o_data;
+ int o_marks;
+ bool result = GetRecord(o_time, o_data, o_marks);
+ if (result) 
+ {
+  fseek(m_file_handle, 0, SEEK_SET);
+  m_fileOffset = 0;
+ }
+ else
+ {//first line contains title, so we will just skip it
+  int n = 0, c = 0;
+  do 
+  {
+   c = fgetc(m_file_handle);
+   n++;
+   if (c == '\n')
+    break;
+  } while (c != EOF);
+  m_fileOffset = n;
+ }
 
  char string[MAX_REC_BUF + 1];
  //определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
@@ -94,7 +129,6 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error)
  //save record count
  m_record_count = count;
  m_record_size = lengh;
- m_current_record = 0;
  o_error = FE_NA;
  fseek(m_file_handle, 0, SEEK_SET);
  return true;
@@ -104,6 +138,7 @@ bool LogReader::CloseFile(void)
 {
  if (m_file_handle)
  {
+  m_fileOffset = 0;
   m_record_count = 0;
   m_record_size = 0;
   m_current_record = 0;
@@ -124,7 +159,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
 {
  char string[MAX_REC_BUF + 1];
 
- VERIFY(!fseek(m_file_handle, m_record_size*m_current_record, SEEK_SET));
+ VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
 
  size_t real_count = fread(string, sizeof(char), m_record_size, m_file_handle);
  if (real_count != m_record_size)
@@ -280,7 +315,6 @@ bool LogReader::Next(void)
  if (next >= m_record_count)
   return false;
  m_current_record = next;
- /*VERIFY(!fseek(m_file_handle, m_record_size, SEEK_CUR));*/
  return true;
 }
 
@@ -289,7 +323,6 @@ bool LogReader::Prev(void)
  if (m_current_record == 0)
   return false;
  --m_current_record;
- /*VERIFY(!fseek(m_file_handle, -((long)m_record_size), SEEK_CUR));*/
  return true;
 }
 
@@ -317,4 +350,21 @@ bool LogReader::IsPrevPossible(void) const
 unsigned long LogReader::GetCurPos(void) const
 {
  return m_current_record;
+}
+
+int LogReader::_CompareFileHandles(FILE* f1, FILE* f2)
+{
+ HANDLE hand1 = ((HANDLE)_get_osfhandle(fileno(f1)));
+ HANDLE hand2 = ((HANDLE)_get_osfhandle(fileno(f2)));
+ BY_HANDLE_FILE_INFORMATION info1;
+ BY_HANDLE_FILE_INFORMATION info2;
+ BOOL res1 = GetFileInformationByHandle(hand1, &info1);
+ BOOL res2 = GetFileInformationByHandle(hand2, &info2);
+
+ //from MSDN:
+ // The ReFS file system, introduced with Windows Server 2012, includes 128-bit file identifiers. 
+ // To retrieve the 128-bit file identifier use the GetFileInformationByHandleEx function with 
+ // FileIdInfo to retrieve the FILE_ID_INFO structure. The 64-bit identifier in this structure 
+ // is not guaranteed to be unique on ReFS.
+ return (info1.dwVolumeSerialNumber == info2.dwVolumeSerialNumber) && (info1.nFileIndexHigh == info2.nFileIndexHigh) && (info1.nFileIndexLow == info2.nFileIndexLow);
 }

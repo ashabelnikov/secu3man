@@ -230,6 +230,64 @@ struct MapPtMovStep
  float m_eh_pause_map;
 };
 
+//Log file's fileds
+struct LogFileFields
+{
+ _TSTRING m_fldTime;
+ _TSTRING m_fldRPM;
+ _TSTRING m_fldIgnTim;
+ _TSTRING m_fldMAP;
+ _TSTRING m_fldVBat;
+ _TSTRING m_fldCLT;
+ _TSTRING m_fldKnock;
+ _TSTRING m_fldKnockCorr;
+ _TSTRING m_fldLoadCurve;
+ _TSTRING m_fldCarb;
+ _TSTRING m_fldGas_v;
+ _TSTRING m_fldIdleValve;
+ _TSTRING m_fldPowerValve;
+ _TSTRING m_fldCoolingFan;
+ _TSTRING m_fldStBlock;
+ _TSTRING m_fldAE;
+ _TSTRING m_fldFCRevLim;
+ _TSTRING m_fldFloodClear;
+ _TSTRING m_fldSysLocked;
+ _TSTRING m_fldCE;
+ _TSTRING m_fldIgn_i;
+ _TSTRING m_fldCond_i;
+ _TSTRING m_fldEpas_i;
+ _TSTRING m_fldTPS;
+ _TSTRING m_fldAdd_i1;
+ _TSTRING m_fldAdd_i2;
+ _TSTRING m_fldChokePos;
+ _TSTRING m_fldGDPos;
+ _TSTRING m_fldVehSpeed;
+ _TSTRING m_fldPasDist;
+ _TSTRING m_fldFuelConsum;
+ _TSTRING m_fldFuelConsFreq;
+ _TSTRING m_fldIAT;
+ _TSTRING m_fldStrtIgnTim;
+ _TSTRING m_fldIdleIgnTim;
+ _TSTRING m_fldWorkIgnTim;
+ _TSTRING m_fldTempIgnTim;
+ _TSTRING m_fldIATIgnTim;
+ _TSTRING m_fldIdlRegIgnTim;
+ _TSTRING m_fldOctanCorr;
+ _TSTRING m_fldEGOCorr;
+ _TSTRING m_fldInjPW;
+ _TSTRING m_fldTPSdot;
+ _TSTRING m_fldMAP2;
+ _TSTRING m_fldTmp2;
+ _TSTRING m_fldDiffMAP;
+ _TSTRING m_fldAFR;
+ _TSTRING m_fldSynLoad;
+ _TSTRING m_fldBaroPress;
+ _TSTRING m_fldInjTimBeg;
+ _TSTRING m_fldInjTimEnd;
+ _TSTRING m_fldLogMarks;
+ _TSTRING m_fldCECodes;
+};
+
 //Interface which should be used to access settings' data from usual places of program
 class ISettingsData
 {
@@ -347,4 +405,10 @@ class ISettingsData
 
   virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep) = 0;
   virtual void GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const = 0;
+
+  virtual void SetLogFileFields(const LogFileFields& i_flds) = 0;
+  virtual void GetLogFileFields(LogFileFields& o_flds) const = 0;
+
+  virtual bool GetWriteLogFields(void) const = 0;
+  virtual void SetWriteLogFields(bool value) = 0;
 };

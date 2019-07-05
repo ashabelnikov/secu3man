@@ -183,6 +183,13 @@ class CAppSettingsModel : public ISettingsData
 
   virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep);
   virtual void GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const;
+
+  virtual void SetLogFileFields(const LogFileFields& i_flds);
+  virtual void GetLogFileFields(LogFileFields& o_flds) const;
+
+  virtual bool GetWriteLogFields(void) const;
+  virtual void SetWriteLogFields(bool value);
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -191,10 +198,10 @@ class CAppSettingsModel : public ISettingsData
   //data which stored in the INI-file:
   //Section names
   const CString m_Name_Options_Section;
-  const CString m_Name_WndSettings_Section;  
+  const CString m_Name_WndSettings_Section;
   const CString m_Name_WndSettings_Section1;  //online
-  const CString m_Name_WndSize_Section;  
-  const CString m_Name_WndState_Section;  
+  const CString m_Name_WndSize_Section;
+  const CString m_Name_WndState_Section;
   const CString m_Name_Fixtures_Section;
   CString m_Name_Indicators_Section[2];
   CString m_Name_Meters_Section[2];
@@ -203,7 +210,8 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_MapEditor_Section;
   const CString m_Name_Splitters_Section;
   const CString m_Name_InjDrv_Section;
-  const CString m_Name_MapPtMovStep_Section;  
+  const CString m_Name_MapPtMovStep_Section;
+  const CString m_Name_LogFileFields_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -462,6 +470,61 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepGasdoseMap;
   OptField_t<float> m_optPtMovStepTmp2CurveMap;
 
+  //Log file's fileds
+  OptField_t<bool> m_optWriteLogFields;
+  OptField_t<_TSTRING> m_optLogFieldTime;
+  OptField_t<_TSTRING> m_optLogFieldRPM;
+  OptField_t<_TSTRING> m_optLogFieldIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldMAP;
+  OptField_t<_TSTRING> m_optLogFieldVBat;
+  OptField_t<_TSTRING> m_optLogFieldCLT;
+  OptField_t<_TSTRING> m_optLogFieldKnock;
+  OptField_t<_TSTRING> m_optLogFieldKnockCorr;
+  OptField_t<_TSTRING> m_optLogFieldLoadCurve;
+  OptField_t<_TSTRING> m_optLogFieldCarb;
+  OptField_t<_TSTRING> m_optLogFieldGas_v;
+  OptField_t<_TSTRING> m_optLogFieldIdleValve;
+  OptField_t<_TSTRING> m_optLogFieldPowerValve;
+  OptField_t<_TSTRING> m_optLogFieldCoolingFan;
+  OptField_t<_TSTRING> m_optLogFieldStBlock;
+  OptField_t<_TSTRING> m_optLogFieldAE;
+  OptField_t<_TSTRING> m_optLogFieldFCRevLim;
+  OptField_t<_TSTRING> m_optLogFieldFloodClear;
+  OptField_t<_TSTRING> m_optLogFieldSysLocked;
+  OptField_t<_TSTRING> m_optLogFieldCE;
+  OptField_t<_TSTRING> m_optLogFieldIgn_i;
+  OptField_t<_TSTRING> m_optLogFieldCond_i;
+  OptField_t<_TSTRING> m_optLogFieldEpas_i;
+  OptField_t<_TSTRING> m_optLogFieldTPS;
+  OptField_t<_TSTRING> m_optLogFieldAdd_i1;
+  OptField_t<_TSTRING> m_optLogFieldAdd_i2;
+  OptField_t<_TSTRING> m_optLogFieldChokePos;
+  OptField_t<_TSTRING> m_optLogFieldGDPos;
+  OptField_t<_TSTRING> m_optLogFieldVehSpeed;
+  OptField_t<_TSTRING> m_optLogFieldPasDist;
+  OptField_t<_TSTRING> m_optLogFieldFuelConsum;
+  OptField_t<_TSTRING> m_optLogFieldFuelConsFreq;
+  OptField_t<_TSTRING> m_optLogFieldIAT;
+  OptField_t<_TSTRING> m_optLogFieldStrtIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldIdleIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldWorkIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldTempIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldIATIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldIdlRegIgnTim;
+  OptField_t<_TSTRING> m_optLogFieldOctanCorr;
+  OptField_t<_TSTRING> m_optLogFieldEGOCorr;
+  OptField_t<_TSTRING> m_optLogFieldInjPW;
+  OptField_t<_TSTRING> m_optLogFieldTPSdot;
+  OptField_t<_TSTRING> m_optLogFieldMAP2;
+  OptField_t<_TSTRING> m_optLogFieldTmp2;
+  OptField_t<_TSTRING> m_optLogFieldDiffMAP;
+  OptField_t<_TSTRING> m_optLogFieldAFR;
+  OptField_t<_TSTRING> m_optLogFieldSynLoad;
+  OptField_t<_TSTRING> m_optLogFieldBaroPress;
+  OptField_t<_TSTRING> m_optLogFieldInjTimBeg;
+  OptField_t<_TSTRING> m_optLogFieldInjTimEnd;
+  OptField_t<_TSTRING> m_optLogFieldLogMarks;
+  OptField_t<_TSTRING> m_optLogFieldCECodes;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

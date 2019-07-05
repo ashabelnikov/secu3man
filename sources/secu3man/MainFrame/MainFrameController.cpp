@@ -329,6 +329,65 @@ void MainFrameController::OnCreate(void)
 
  mp_view->CheckOnAppSwitchDashboards(settings->GetShowExFixtures());
  mp_view->CheckOnChildCharts(settings->GetChildCharts());
+
+ //Fill log file's fields
+ LogFileFields lff;
+ settings->GetLogFileFields(lff);
+ int i = 0;
+ m_pLogWriter->SetFieldName(i++, lff.m_fldTime);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldRPM);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldMAP);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldVBat);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCLT);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldKnock);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldKnockCorr);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldLoadCurve);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCarb);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldGas_v);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIdleValve);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldPowerValve);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCoolingFan);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldStBlock);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAE);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldFCRevLim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldFloodClear);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldSysLocked);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCE);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIgn_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCond_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldEpas_i);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldTPS);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAdd_i1);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAdd_i2);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldChokePos);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldGDPos);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldVehSpeed);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldPasDist);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldFuelConsum);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldFuelConsFreq);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIAT);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldStrtIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIdleIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldWorkIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldTempIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIATIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldIdlRegIgnTim);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldOctanCorr);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldEGOCorr);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldInjPW);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldTPSdot);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldMAP2);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldTmp2);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldDiffMAP);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldAFR);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldSynLoad);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldBaroPress);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldInjTimBeg);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldInjTimEnd);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldLogMarks);
+ m_pLogWriter->SetFieldName(i++, lff.m_fldCECodes);
+ m_pLogWriter->SetWriteFields(settings->GetWriteLogFields());
 }
 
 bool MainFrameController::OnClose(void)

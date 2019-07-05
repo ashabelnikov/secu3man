@@ -32,6 +32,7 @@
 #include "common/FastDelegate.h"
 #include "common/MathHelpers.h"
 #include "io-core/LogReader.h"
+#include "io-core/logWriter.h"
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "MIDesk/CEDeskDlg.h"
@@ -57,10 +58,11 @@ static unsigned long CalcPeriod(SYSTEMTIME &i_time1, SYSTEMTIME &i_time2)
  return (ms1 <= ms2) ? (ms2 - ms1) : (60000 - ms1) + ms2;
 }
 
-CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
+CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings, LogWriter* i_pLogWriter)
 : mp_view(ip_view)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
+, m_pLogWriter(i_pLogWriter)
 , mp_settings(ip_settings)
 , mp_log_reader(new LogReader)
 , m_now_tracking(false)
@@ -350,11 +352,13 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 
  LogReader::FileError error_id;
  _TSTRING file_path = fileName.empty() ? open.GetPathName().GetBuffer(0) : fileName;
- bool result = mp_log_reader->OpenFile(file_path, error_id);
+ bool result = mp_log_reader->OpenFile(file_path, error_id, m_pLogWriter->GetFileHandle());
  if (false==result)
  {
   if (error_id==LogReader::FE_OPEN)
    AfxMessageBox(MLL::LoadString(IDS_LP_CANT_OPEN_FILE));
+  else if (error_id==LogReader::FE_PENDING)
+   AfxMessageBox(MLL::LoadString(IDS_LP_OPEN_PENDING));
   else if (error_id==LogReader::FE_FORMAT)
   {
    AfxMessageBox(MLL::LoadString(IDS_LP_INCORRECT_FILE_FORMAT));

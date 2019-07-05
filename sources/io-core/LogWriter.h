@@ -25,6 +25,7 @@
 
 #pragma once
 
+#include <map>
 #include "ControlAppAdapter.h"
 #include "common/unicodesupport.h"
 #include "iocore_api.h"
@@ -55,6 +56,15 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   //Flushes file buffers
   void FlushFileBuffers(void);
 
+  //Set name of the specified field
+  void SetFieldName(int fieldId, const _TSTRING& value);
+
+  //enebale/disable writing of fields
+  void SetWriteFields(bool value);
+
+  //Get handle of file which is currently used for writing of data
+  FILE* GetFileHandle(void);
+
  public:
 
   //через эти обработчики данные поступают в механизм записи
@@ -62,6 +72,7 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   virtual void OnConnection(const bool i_online);
 
  private:
+  std::map<int, _TSTRING> m_lff;
 
   //хэндл файла в который идет запись
   FILE* m_out_handle;
@@ -73,4 +84,5 @@ class IOCORE_API LogWriter : public IAPPEventHandler
   char m_csv_data_template[1024];
 
   int m_pending_marks;
+  bool m_writeFields;
 };

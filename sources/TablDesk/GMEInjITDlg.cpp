@@ -86,6 +86,7 @@ BOOL CGMEInjITDlg::OnInitDialog()
  m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_720BTDC));
  m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_720ATDC));
  m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_M360360));
+ m_it_mode.AddString(MLL::LoadString(IDS_GME_IT_MODE_M360360A));
 
  SetITMode(m_it_mode_val);
 
@@ -155,7 +156,7 @@ void CGMEInjITDlg::SetArguments(int rpm, int air_flow, bool strt_use, float load
 void CGMEInjITDlg::SetITMode(int mode)
 {
  m_it_mode_val = mode;
- if (mode <= 2 && ::IsWindow(m_hWnd))
+ if (mode <= 3 && ::IsWindow(m_hWnd))
   m_it_mode.SetCurSel(mode);
 
  float y1, y2;
@@ -193,8 +194,11 @@ float CGMEInjITDlg::OnValueTransform(float source, int direction)
    case 1: //ATDC
     value = 720.0f - source;
     break;
-   case 2: //-360...360
+   case 2: //-360...360 BTDC
     value = 720.0f + source;    
+    break;
+   case 3: //-360...360 ATDC    
+    value = 720.0f + (-source);
     break;
   }
  }
@@ -208,11 +212,18 @@ float CGMEInjITDlg::OnValueTransform(float source, int direction)
    case 1: //ATDC
     value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
     break;
-   case 2: //-360...360
+   case 2: //-360...360 BTDC
     if (source > 720.0f)
      value = source - 720.0f;
     else
      value = (source < 360.0f) ? source : -(720.0f - source);
+    break;
+   case 3: //-360...360 ATDC
+    if (source > 720.0f)
+     value = source - 720.0f;
+    else
+     value = (source < 360.0f) ? source : -(720.0f - source);
+    value = -value;
     break;
   }
  }

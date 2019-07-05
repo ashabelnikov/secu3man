@@ -246,6 +246,62 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepATSCorrMap(_T("ATSCorrMapWnd"))
 , m_optPtMovStepGasdoseMap(_T("GasdoseMapWnd"))
 , m_optPtMovStepTmp2CurveMap(_T("Tmp2CurveMapWnd"))
+//Log file's fileds
+, m_Name_LogFileFields_Section(_T("LogFileFields"))
+, m_optWriteLogFields(_T("WriteFields"))
+, m_optLogFieldTime(_T("Time"))
+, m_optLogFieldRPM(_T("RPM"))
+, m_optLogFieldIgnTim(_T("IgnTim"))
+, m_optLogFieldMAP(_T("Map"))
+, m_optLogFieldVBat(_T("VBat"))
+, m_optLogFieldCLT(_T("CLT"))
+, m_optLogFieldKnock(_T("Knock"))
+, m_optLogFieldKnockCorr(_T("KnockCorr"))
+, m_optLogFieldLoadCurve(_T("LoadCurve"))
+, m_optLogFieldCarb(_T("CarbSw"))
+, m_optLogFieldGas_v(_T("Gas_V"))
+, m_optLogFieldIdleValve(_T("IdleValve"))
+, m_optLogFieldPowerValve(_T("PowerValve"))
+, m_optLogFieldCoolingFan(_T("CoolingFan"))
+, m_optLogFieldStBlock(_T("StBlock"))
+, m_optLogFieldAE(_T("AE"))
+, m_optLogFieldFCRevLim(_T("FCRevLim"))
+, m_optLogFieldFloodClear(_T("FloodClear"))
+, m_optLogFieldSysLocked(_T("SysLocked"))
+, m_optLogFieldCE(_T("CE"))
+, m_optLogFieldIgn_i(_T("Ign_i"))
+, m_optLogFieldCond_i(_T("Cond_i"))
+, m_optLogFieldEpas_i(_T("Epas_I"))
+, m_optLogFieldTPS(_T("TPS"))
+, m_optLogFieldAdd_i1(_T("Add_i1"))
+, m_optLogFieldAdd_i2(_T("Add_i2"))
+, m_optLogFieldChokePos(_T("ChokePos"))
+, m_optLogFieldGDPos(_T("GDPos"))
+, m_optLogFieldVehSpeed(_T("VehSpeed"))
+, m_optLogFieldPasDist(_T("PasDist"))
+, m_optLogFieldFuelConsum(_T("FuelConsum"))
+, m_optLogFieldFuelConsFreq(_T("FuelConsumF"))
+, m_optLogFieldIAT(_T("IAT"))
+, m_optLogFieldStrtIgnTim(_T("StrtIgnTim"))
+, m_optLogFieldIdleIgnTim(_T("IdleIgnTim"))
+, m_optLogFieldWorkIgnTim(_T("WorkIgnTim"))
+, m_optLogFieldTempIgnTim(_T("TempIgnTim"))
+, m_optLogFieldIATIgnTim(_T("IATIgnTim"))
+, m_optLogFieldIdlRegIgnTim(_T("IdlRegIgnTim"))
+, m_optLogFieldOctanCorr(_T("IgnTimCorr"))
+, m_optLogFieldEGOCorr(_T("EGOcorr"))
+, m_optLogFieldInjPW(_T("InjPW"))
+, m_optLogFieldTPSdot(_T("TPSdot"))
+, m_optLogFieldMAP2(_T("MAP2"))
+, m_optLogFieldTmp2(_T("Tmp2"))
+, m_optLogFieldDiffMAP(_T("DiffMAP"))
+, m_optLogFieldAFR(_T("AFR"))
+, m_optLogFieldSynLoad(_T("SynLoad"))
+, m_optLogFieldBaroPress(_T("BaroPress"))
+, m_optLogFieldInjTimBeg(_T("InjTimBeg"))
+, m_optLogFieldInjTimEnd(_T("InjTimEnd"))
+, m_optLogFieldLogMarks(_T("LogMarks"))
+, m_optLogFieldCECodes(_T("CECodes"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -609,7 +665,7 @@ bool CAppSettingsModel::ReadSettings(void)
  me.ReadInt(m_optGradSaturation, _T("120"), 0, 255);
  me.ReadInt(m_optGradBrightness, _T("255"), 0, 255);
  me.ReadInt(m_optBoldFont, _T("0"), 0, 1);
- me.ReadInt(m_optITEdMode, _T("0"), 0, 2);
+ me.ReadInt(m_optITEdMode, _T("0"), 0, 3);
 
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
@@ -662,6 +718,62 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepATSCorrMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepGasdoseMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepTmp2CurveMap, _T("0.25"), 0.0f, 10.0f);
+ //Log file's fileds
+ IniIO lf(IniFileName, m_Name_LogFileFields_Section);
+ lf.ReadInt(m_optWriteLogFields, _T("0"), 0, 1);
+ lf.ReadString(m_optLogFieldTime, _T("Time"));
+ lf.ReadString(m_optLogFieldRPM, _T("RPM"));
+ lf.ReadString(m_optLogFieldIgnTim, _T("IgnTim"));
+ lf.ReadString(m_optLogFieldMAP, _T("Map"));
+ lf.ReadString(m_optLogFieldVBat, _T("VBat"));
+ lf.ReadString(m_optLogFieldCLT, _T("CLT"));
+ lf.ReadString(m_optLogFieldKnock, _T("Knock"));
+ lf.ReadString(m_optLogFieldKnockCorr, _T("KnockCorr"));
+ lf.ReadString(m_optLogFieldLoadCurve, _T("LoadCurve"));
+ lf.ReadString(m_optLogFieldCarb, _T("CarbSw"));
+ lf.ReadString(m_optLogFieldGas_v, _T("Gas_V"));
+ lf.ReadString(m_optLogFieldIdleValve, _T("IdleValve"));
+ lf.ReadString(m_optLogFieldPowerValve, _T("PowerValve"));
+ lf.ReadString(m_optLogFieldCoolingFan, _T("CoolingFan"));
+ lf.ReadString(m_optLogFieldStBlock, _T("StBlock"));
+ lf.ReadString(m_optLogFieldAE, _T("AE"));
+ lf.ReadString(m_optLogFieldFCRevLim, _T("FCRevLim"));
+ lf.ReadString(m_optLogFieldFloodClear, _T("FloodClear"));
+ lf.ReadString(m_optLogFieldSysLocked, _T("SysLocked"));
+ lf.ReadString(m_optLogFieldCE, _T("CE"));
+ lf.ReadString(m_optLogFieldIgn_i, _T("Ign_i"));
+ lf.ReadString(m_optLogFieldCond_i, _T("Cond_i"));
+ lf.ReadString(m_optLogFieldEpas_i, _T("Epas_I"));
+ lf.ReadString(m_optLogFieldTPS, _T("TPS"));
+ lf.ReadString(m_optLogFieldAdd_i1, _T("Add_i1"));
+ lf.ReadString(m_optLogFieldAdd_i2, _T("Add_i2"));
+ lf.ReadString(m_optLogFieldChokePos, _T("ChokePos"));
+ lf.ReadString(m_optLogFieldGDPos, _T("GDPos"));
+ lf.ReadString(m_optLogFieldVehSpeed, _T("VehSpeed"));
+ lf.ReadString(m_optLogFieldPasDist, _T("PasDist"));
+ lf.ReadString(m_optLogFieldFuelConsum, _T("FuelConsum"));
+ lf.ReadString(m_optLogFieldFuelConsFreq, _T("FuelConsumF"));
+ lf.ReadString(m_optLogFieldIAT, _T("IAT"));
+ lf.ReadString(m_optLogFieldStrtIgnTim, _T("StrtIgnTim"));
+ lf.ReadString(m_optLogFieldIdleIgnTim, _T("IdleIgnTim"));
+ lf.ReadString(m_optLogFieldWorkIgnTim, _T("WorkIgnTim"));
+ lf.ReadString(m_optLogFieldTempIgnTim, _T("TempIgnTim"));
+ lf.ReadString(m_optLogFieldIATIgnTim, _T("IATIgnTim"));
+ lf.ReadString(m_optLogFieldIdlRegIgnTim, _T("IdlRegIgnTim"));
+ lf.ReadString(m_optLogFieldOctanCorr, _T("IgnTimCorr"));
+ lf.ReadString(m_optLogFieldEGOCorr, _T("EGOcorr"));
+ lf.ReadString(m_optLogFieldInjPW, _T("InjPW"));
+ lf.ReadString(m_optLogFieldTPSdot, _T("TPSdot"));
+ lf.ReadString(m_optLogFieldMAP2, _T("MAP2"));
+ lf.ReadString(m_optLogFieldTmp2, _T("Tmp2"));
+ lf.ReadString(m_optLogFieldDiffMAP, _T("DiffMAP"));
+ lf.ReadString(m_optLogFieldAFR, _T("AFR"));
+ lf.ReadString(m_optLogFieldSynLoad, _T("SynLoad"));
+ lf.ReadString(m_optLogFieldBaroPress, _T("BaroPress"));
+ lf.ReadString(m_optLogFieldInjTimBeg, _T("InjTimBeg"));
+ lf.ReadString(m_optLogFieldInjTimEnd, _T("InjTimEnd"));
+ lf.ReadString(m_optLogFieldLogMarks, _T("LogMarks"));
+ lf.ReadString(m_optLogFieldCECodes, _T("CECodes"));
 
  return status;
 }
@@ -1767,9 +1879,9 @@ bool CAppSettingsModel::WriteSettings(void)
  me.WriteInt(m_optBoldFont);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  me.WriteComment(_T("Editing mode of the inj. timing map. 0 - [0...720 BTDC], 1 - [0...720 ATDC], 2 - [-360...+360 BTDC]"));
+  me.WriteComment(_T("Editing mode of the inj. timing map. 0 - [0...720 BTDC], 1 - [0...720 ATDC], 2 - [-360...+360 BTDC], 3 - [-360...+360 ATDC]"));
  else
-  me.WriteComment(_T("Режим редактирования таблицы фазы впрыска. 0 - [0...720 до ВМТ], 1 - [0...720 после ВМТ], 2 - [-360...360 до ВМТ]"));
+  me.WriteComment(_T("Режим редактирования таблицы фазы впрыска. 0 - [0...720 до ВМТ], 1 - [0...720 после ВМТ], 2 - [-360...360 до ВМТ], 3 - [-360...360 после ВМТ]"));
  me.WriteInt(m_optITEdMode);
 
  //Splitters
@@ -1826,7 +1938,7 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteComment(_T("*** Step of points' moving in map editor windows ***"), false, true);
  else
   ms.WriteComment(_T("*** Шаг смещения точек в окнах редактирования таблиц ***"), false, true);
- ws.CreateSection();
+ ms.CreateSection();
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   ms.WriteFlt(m_optPtMovStepWorkMap, 3, _T("Work ignition timing map"));
@@ -2007,6 +2119,72 @@ bool CAppSettingsModel::WriteSettings(void)
   ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("TMP2 sensor table"));
  else
   ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("Кривая датчика температуры на входе TMP2"));
+
+ //Log file's fileds
+ IniIO lf(IniFileName, m_Name_LogFileFields_Section);
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  lf.WriteComment(_T("*** Titles of fileds of the log file, which are written into the first line ***"), false, true);
+ else
+  lf.WriteComment(_T("*** Названия полей в лог файле, которые пишутся в первую строку ***"), false, true);
+ lf.CreateSection();
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  lf.WriteInt(m_optWriteLogFields, _T("Write title into a first line of the log file. Set to 1 to enable this."));
+ else
+  lf.WriteInt(m_optWriteLogFields, _T("Записывать заголовок в первую строку лог файла. Установите в 1 для разрешения."));
+ lf.WriteString(m_optLogFieldTime);
+ lf.WriteString(m_optLogFieldRPM);
+ lf.WriteString(m_optLogFieldIgnTim);
+ lf.WriteString(m_optLogFieldMAP);
+ lf.WriteString(m_optLogFieldVBat);
+ lf.WriteString(m_optLogFieldCLT);
+ lf.WriteString(m_optLogFieldKnock);
+ lf.WriteString(m_optLogFieldKnockCorr);
+ lf.WriteString(m_optLogFieldLoadCurve);
+ lf.WriteString(m_optLogFieldCarb);
+ lf.WriteString(m_optLogFieldGas_v);
+ lf.WriteString(m_optLogFieldIdleValve);
+ lf.WriteString(m_optLogFieldPowerValve);
+ lf.WriteString(m_optLogFieldCoolingFan);
+ lf.WriteString(m_optLogFieldStBlock);
+ lf.WriteString(m_optLogFieldAE);
+ lf.WriteString(m_optLogFieldFCRevLim);
+ lf.WriteString(m_optLogFieldFloodClear);
+ lf.WriteString(m_optLogFieldSysLocked);
+ lf.WriteString(m_optLogFieldCE);
+ lf.WriteString(m_optLogFieldIgn_i);
+ lf.WriteString(m_optLogFieldCond_i);
+ lf.WriteString(m_optLogFieldEpas_i);
+ lf.WriteString(m_optLogFieldTPS);
+ lf.WriteString(m_optLogFieldAdd_i1);
+ lf.WriteString(m_optLogFieldAdd_i2);
+ lf.WriteString(m_optLogFieldChokePos);
+ lf.WriteString(m_optLogFieldGDPos);
+ lf.WriteString(m_optLogFieldVehSpeed);
+ lf.WriteString(m_optLogFieldPasDist);
+ lf.WriteString(m_optLogFieldFuelConsum);
+ lf.WriteString(m_optLogFieldFuelConsFreq);
+ lf.WriteString(m_optLogFieldIAT);
+ lf.WriteString(m_optLogFieldStrtIgnTim);
+ lf.WriteString(m_optLogFieldIdleIgnTim);
+ lf.WriteString(m_optLogFieldWorkIgnTim);
+ lf.WriteString(m_optLogFieldTempIgnTim);
+ lf.WriteString(m_optLogFieldIATIgnTim);
+ lf.WriteString(m_optLogFieldIdlRegIgnTim);
+ lf.WriteString(m_optLogFieldOctanCorr);
+ lf.WriteString(m_optLogFieldEGOCorr);
+ lf.WriteString(m_optLogFieldInjPW);
+ lf.WriteString(m_optLogFieldTPSdot);
+ lf.WriteString(m_optLogFieldMAP2);
+ lf.WriteString(m_optLogFieldTmp2);
+ lf.WriteString(m_optLogFieldDiffMAP);
+ lf.WriteString(m_optLogFieldAFR);
+ lf.WriteString(m_optLogFieldSynLoad);
+ lf.WriteString(m_optLogFieldBaroPress);
+ lf.WriteString(m_optLogFieldInjTimBeg);
+ lf.WriteString(m_optLogFieldInjTimEnd);
+ lf.WriteString(m_optLogFieldLogMarks);
+ lf.WriteString(m_optLogFieldCECodes);
 
  return status;
 }
@@ -2914,4 +3092,128 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_tmp2_curve_map = m_optPtMovStepTmp2CurveMap.value;
  o_ptMovStep.m_crktemp_map = m_optPtMovStepCrkTempMap.value;
  o_ptMovStep.m_eh_pause_map = m_optPtMovStepEHPauseMap.value;
+}
+
+void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)
+{
+ m_optLogFieldTime.value = i_flds.m_fldTime;
+ m_optLogFieldRPM.value = i_flds.m_fldRPM;
+ m_optLogFieldIgnTim.value = i_flds.m_fldIgnTim;
+ m_optLogFieldMAP.value = i_flds.m_fldMAP;
+ m_optLogFieldVBat.value = i_flds.m_fldVBat;
+ m_optLogFieldCLT.value = i_flds.m_fldCLT;
+ m_optLogFieldKnock.value = i_flds.m_fldKnock;
+ m_optLogFieldKnockCorr.value = i_flds.m_fldKnockCorr;
+ m_optLogFieldLoadCurve.value = i_flds.m_fldLoadCurve;
+ m_optLogFieldCarb.value = i_flds.m_fldCarb;
+ m_optLogFieldGas_v.value = i_flds.m_fldGas_v;
+ m_optLogFieldIdleValve.value = i_flds.m_fldIdleValve;
+ m_optLogFieldPowerValve.value = i_flds.m_fldPowerValve;
+ m_optLogFieldCoolingFan.value = i_flds.m_fldCoolingFan;
+ m_optLogFieldStBlock.value = i_flds.m_fldStBlock;
+ m_optLogFieldAE.value = i_flds.m_fldAE;
+ m_optLogFieldFCRevLim.value = i_flds.m_fldFCRevLim;
+ m_optLogFieldFloodClear.value = i_flds.m_fldFloodClear;
+ m_optLogFieldSysLocked.value = i_flds.m_fldSysLocked;
+ m_optLogFieldCE.value = i_flds.m_fldCE;
+ m_optLogFieldIgn_i.value = i_flds.m_fldIgn_i;
+ m_optLogFieldCond_i.value = i_flds.m_fldCond_i;
+ m_optLogFieldEpas_i.value = i_flds.m_fldEpas_i;
+ m_optLogFieldTPS.value = i_flds.m_fldTPS;
+ m_optLogFieldAdd_i1.value = i_flds.m_fldAdd_i1;
+ m_optLogFieldAdd_i2.value = i_flds.m_fldAdd_i2;
+ m_optLogFieldChokePos.value = i_flds.m_fldChokePos;
+ m_optLogFieldGDPos.value = i_flds.m_fldGDPos;
+ m_optLogFieldVehSpeed.value = i_flds.m_fldVehSpeed;
+ m_optLogFieldPasDist.value = i_flds.m_fldPasDist;
+ m_optLogFieldFuelConsum.value = i_flds.m_fldFuelConsum;
+ m_optLogFieldFuelConsFreq.value = i_flds.m_fldFuelConsFreq;
+ m_optLogFieldIAT.value = i_flds.m_fldIAT;
+ m_optLogFieldStrtIgnTim.value = i_flds.m_fldStrtIgnTim;
+ m_optLogFieldIdleIgnTim.value = i_flds.m_fldIdleIgnTim;
+ m_optLogFieldWorkIgnTim.value = i_flds.m_fldWorkIgnTim;
+ m_optLogFieldTempIgnTim.value = i_flds.m_fldTempIgnTim;
+ m_optLogFieldIATIgnTim.value = i_flds.m_fldIATIgnTim;
+ m_optLogFieldIdlRegIgnTim.value = i_flds.m_fldIdlRegIgnTim;
+ m_optLogFieldOctanCorr.value = i_flds.m_fldOctanCorr;
+ m_optLogFieldEGOCorr.value = i_flds.m_fldEGOCorr;
+ m_optLogFieldInjPW.value = i_flds.m_fldInjPW;
+ m_optLogFieldTPSdot.value = i_flds.m_fldTPSdot;
+ m_optLogFieldMAP2.value = i_flds.m_fldMAP2;
+ m_optLogFieldTmp2.value = i_flds.m_fldTmp2;
+ m_optLogFieldDiffMAP.value = i_flds.m_fldDiffMAP;
+ m_optLogFieldAFR.value = i_flds.m_fldAFR;
+ m_optLogFieldSynLoad.value = i_flds.m_fldSynLoad;
+ m_optLogFieldBaroPress.value = i_flds.m_fldBaroPress;
+ m_optLogFieldInjTimBeg.value = i_flds.m_fldInjTimBeg;
+ m_optLogFieldInjTimEnd.value = i_flds.m_fldInjTimEnd;
+ m_optLogFieldLogMarks.value = i_flds.m_fldLogMarks;
+ m_optLogFieldCECodes.value = i_flds.m_fldCECodes;
+}
+
+void CAppSettingsModel::GetLogFileFields(LogFileFields& o_flds) const
+{
+ o_flds.m_fldTime = m_optLogFieldTime.value;
+ o_flds.m_fldRPM = m_optLogFieldRPM.value;
+ o_flds.m_fldIgnTim = m_optLogFieldIgnTim.value;
+ o_flds.m_fldMAP = m_optLogFieldMAP.value;
+ o_flds.m_fldVBat = m_optLogFieldVBat.value;
+ o_flds.m_fldCLT = m_optLogFieldCLT.value;
+ o_flds.m_fldKnock = m_optLogFieldKnock.value;
+ o_flds.m_fldKnockCorr = m_optLogFieldKnockCorr.value;
+ o_flds.m_fldLoadCurve = m_optLogFieldLoadCurve.value;
+ o_flds.m_fldCarb = m_optLogFieldCarb.value;
+ o_flds.m_fldGas_v = m_optLogFieldGas_v.value;
+ o_flds.m_fldIdleValve = m_optLogFieldIdleValve.value;
+ o_flds.m_fldPowerValve = m_optLogFieldPowerValve.value;
+ o_flds.m_fldCoolingFan = m_optLogFieldCoolingFan.value;
+ o_flds.m_fldStBlock = m_optLogFieldStBlock.value;
+ o_flds.m_fldAE = m_optLogFieldAE.value;
+ o_flds.m_fldFCRevLim = m_optLogFieldFCRevLim.value;
+ o_flds.m_fldFloodClear = m_optLogFieldFloodClear.value;
+ o_flds.m_fldSysLocked = m_optLogFieldSysLocked.value;
+ o_flds.m_fldCE = m_optLogFieldCE.value;
+ o_flds.m_fldIgn_i = m_optLogFieldIgn_i.value;
+ o_flds.m_fldCond_i = m_optLogFieldCond_i.value;
+ o_flds.m_fldEpas_i = m_optLogFieldEpas_i.value;
+ o_flds.m_fldTPS = m_optLogFieldTPS.value;
+ o_flds.m_fldAdd_i1 = m_optLogFieldAdd_i1.value;
+ o_flds.m_fldAdd_i2 = m_optLogFieldAdd_i2.value;
+ o_flds.m_fldChokePos = m_optLogFieldChokePos.value;
+ o_flds.m_fldGDPos = m_optLogFieldGDPos.value;
+ o_flds.m_fldVehSpeed = m_optLogFieldVehSpeed.value;
+ o_flds.m_fldPasDist = m_optLogFieldPasDist.value;
+ o_flds.m_fldFuelConsum = m_optLogFieldFuelConsum.value;
+ o_flds.m_fldFuelConsFreq = m_optLogFieldFuelConsFreq.value;
+ o_flds.m_fldIAT = m_optLogFieldIAT.value;
+ o_flds.m_fldStrtIgnTim = m_optLogFieldStrtIgnTim.value;
+ o_flds.m_fldIdleIgnTim = m_optLogFieldIdleIgnTim.value;
+ o_flds.m_fldWorkIgnTim = m_optLogFieldWorkIgnTim.value;
+ o_flds.m_fldTempIgnTim = m_optLogFieldTempIgnTim.value;
+ o_flds.m_fldIATIgnTim = m_optLogFieldIATIgnTim.value;
+ o_flds.m_fldIdlRegIgnTim = m_optLogFieldIdlRegIgnTim.value;
+ o_flds.m_fldOctanCorr = m_optLogFieldOctanCorr.value;
+ o_flds.m_fldEGOCorr = m_optLogFieldEGOCorr.value;
+ o_flds.m_fldInjPW = m_optLogFieldInjPW.value;
+ o_flds.m_fldTPSdot = m_optLogFieldTPSdot.value;
+ o_flds.m_fldMAP2 = m_optLogFieldMAP2.value;
+ o_flds.m_fldTmp2 = m_optLogFieldTmp2.value;
+ o_flds.m_fldDiffMAP = m_optLogFieldDiffMAP.value;
+ o_flds.m_fldAFR = m_optLogFieldAFR.value;
+ o_flds.m_fldSynLoad = m_optLogFieldSynLoad.value;
+ o_flds.m_fldBaroPress = m_optLogFieldBaroPress.value;
+ o_flds.m_fldInjTimBeg = m_optLogFieldInjTimBeg.value;
+ o_flds.m_fldInjTimEnd = m_optLogFieldInjTimEnd.value;
+ o_flds.m_fldLogMarks = m_optLogFieldLogMarks.value;
+ o_flds.m_fldCECodes = m_optLogFieldCECodes.value;
+}
+
+bool CAppSettingsModel::GetWriteLogFields(void) const
+{
+ return m_optWriteLogFields.value;
+}
+
+void CAppSettingsModel::SetWriteLogFields(bool value)
+{
+ m_optWriteLogFields.value = value;
 }

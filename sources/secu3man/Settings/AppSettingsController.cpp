@@ -56,6 +56,7 @@ void CAppSettingsController::OnOk(void)
  m_pModel->m_optLogFilesFolder.value = m_pView->GetLogFilesFolder();
  m_pModel->m_optUseAppFolder.value = m_pView->GetUseAppFolder();
  m_pModel->m_optAlwaysWriteLog.value = m_pView->GetAlwaysWriteLog();
+ m_pModel->m_optWriteLogFields.value = m_pView->GetWriteLogFields();
  m_pModel->m_optMIDeskUpdatePeriod.value = m_pView->GetMIDeskUpdatePeriod();
  m_pModel->m_optUseDVFeatures.value = m_pView->GetUseDVFeatures();
  m_pModel->m_optDVDeskUpdatePeriod.value = m_pView->GetDVDeskUpdatePeriod();
@@ -98,6 +99,7 @@ void CAppSettingsController::OnActivate(void)
  m_pView->SetLogFilesFolder(m_pModel->m_optLogFilesFolder.value);
  m_pView->SetUseAppFolder(m_pModel->m_optUseAppFolder.value);
  m_pView->SetAlwaysWriteLog(m_pModel->m_optAlwaysWriteLog.value);
+ m_pView->SetWriteLogFields(m_pModel->m_optWriteLogFields.value);
  m_pView->SetMIDeskUpdatePeriod(m_pModel->m_optMIDeskUpdatePeriod.value);
  m_pView->SetUseDVFeatures(m_pModel->m_optUseDVFeatures.value);
  m_pView->SetDVDeskUpdatePeriod(m_pModel->m_optDVDeskUpdatePeriod.value);

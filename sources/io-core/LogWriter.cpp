@@ -49,6 +49,7 @@ LogWriter::LogWriter()
 , m_out_handle(NULL)
 , m_csv_separating_symbol(',')
 , m_pending_marks(0)
+, m_writeFields(false)
 {
  SetSeparatingSymbol(m_csv_separating_symbol);
 }
@@ -166,6 +167,18 @@ bool LogWriter::BeginLogging(const _TSTRING& i_folder, _TSTRING* o_full_file_nam
  if (NULL == m_out_handle)
   return false;
 
+ //Write title fields into a first line of file
+ if (m_writeFields)
+ {
+  for(size_t i = 0; i < m_lff.size(); ++i)
+  {
+   if (i == (m_lff.size()-1))
+    fprintf(m_out_handle, "%s\r\n", m_lff[i].c_str());
+   else
+    fprintf(m_out_handle, "%s%c", m_lff[i].c_str(), m_csv_separating_symbol);
+  }
+ }
+  
  m_is_busy = true;
  return true;
 }
@@ -207,4 +220,23 @@ void LogWriter::FlushFileBuffers(void)
 {
  if (m_out_handle)
   fflush(m_out_handle);
+}
+
+void LogWriter::SetFieldName(int fieldId, const _TSTRING& value)
+{
+ std::map<int, _TSTRING>::iterator it = m_lff.find(fieldId);
+ if (it == m_lff.end())
+  m_lff.insert(std::make_pair(fieldId, value));
+ else
+  m_lff[fieldId] = value;
+}
+
+void LogWriter::SetWriteFields(bool value)
+{
+ m_writeFields = value;
+}
+
+FILE* LogWriter::GetFileHandle(void)
+{
+ return m_out_handle;
 }

@@ -312,4 +312,5 @@
 #define IDS_GME_IT_MODE_720BTDC         5666
 #define IDS_GME_IT_MODE_720ATDC         5667
 #define IDS_GME_IT_MODE_M360360         5668
-#define IDS_MAPS_INJTIM_UNIT1           5669
+#define IDS_GME_IT_MODE_M360360A        5669
+#define IDS_MAPS_INJTIM_UNIT1           5670

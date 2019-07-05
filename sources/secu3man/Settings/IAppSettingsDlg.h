@@ -84,6 +84,9 @@ class IAppSettingsDlg
   virtual bool GetExistingPorts(void) const = 0;
   virtual bool GetInjDrvTabActive(void) const = 0;
 
+  virtual void SetWriteLogFields(bool i_always) = 0;
+  virtual bool GetWriteLogFields(void) const = 0;
+
   //set event handlers
   virtual void setFunctionOnOk(EventHandler OnOk) = 0;
   virtual void setFunctionOnCancel(EventHandler OnCancel) = 0;

@@ -36,11 +36,12 @@ class CLogPlayerTabDlg;
 class CStatusBarManager;
 class ISettingsData;
 class LogReader;
+class LogWriter;
 
 class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings);
+  CLogPlayerTabController(CLogPlayerTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings, LogWriter* i_pLogWriter);
   virtual ~CLogPlayerTabController();
 
  private:
@@ -116,6 +117,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   CCommunicationManager* mp_comm;
   CStatusBarManager*  mp_sbar;
   ISettingsData* mp_settings;
+  LogWriter*     m_pLogWriter;
 
   //<factor id, <name, value> >
   std::map<size_t, std::pair<_TSTRING, float> > m_time_factors;

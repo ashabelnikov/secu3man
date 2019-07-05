@@ -40,11 +40,12 @@ class IOCORE_API LogReader
   {
    FE_OPEN,
    FE_FORMAT,
+   FE_PENDING,
    FE_NA
   };
 
   //открывает файл
-  bool OpenFile(const _TSTRING& i_file_name, FileError& o_error);
+  bool OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle);
 
   //закрывает файл
   bool CloseFile(void);
@@ -77,6 +78,7 @@ class IOCORE_API LogReader
   unsigned long GetCurPos(void) const;
 
  private:
+  int _CompareFileHandles(FILE* f1, FILE* f2);
 
   _TSTRING m_file_name;         //имя открытого файла
   unsigned long m_record_count; //кол-во записей в файле
@@ -89,4 +91,5 @@ class IOCORE_API LogReader
 
   char m_csv_separating_symbol;
   char m_csv_data_template[1024];
+  unsigned long m_fileOffset;
 };

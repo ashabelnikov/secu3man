@@ -1420,8 +1420,11 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
    case 1: //ATDC
     value = 720.0f - source;
     break;
-   case 2: //-360...360
+   case 2: //-360...360 BTDC
     value = 720.0f + source;    
+    break;
+   case 3: //-360...360 ATDC
+    value = 720.0f + (-source);
     break;
   }
  }
@@ -1435,11 +1438,18 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
    case 1: //ATDC
     value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
     break;
-   case 2: //-360...360
+   case 2: //-360...360 BTDC
     if (source > 720.0f)
      value = source - 720.0f;
     else
      value = (source < 360.0f) ? source : -(720.0f - source);
+    break;
+   case 3: //-360...360 ATDC
+    if (source > 720.0f)
+     value = source - 720.0f;
+    else
+     value = (source < 360.0f) ? source : -(720.0f - source);
+    value = -value;
     break;
   }
  }

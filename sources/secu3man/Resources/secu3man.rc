@@ -148,7 +148,8 @@ BEGIN
     CONTROL         "Использовать каталог программы",IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,158,148,9
     LTEXT           "CSV сивол-разделитель",IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_CAPTION,87,177,97,10
     COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,14,175,67,52,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Записывать лог всегда",IDC_APP_SETTINGS_ALWAYS_WRITE_LOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,192,148,9
+    CONTROL         "Записывать лог всегда",IDC_APP_SETTINGS_ALWAYS_WRITE_LOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,192,80,9
+    CONTROL         "Заголовок",IDC_APP_SETTINGS_WRITE_LOG_TITLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,135,192,50,9
 
     GROUPBOX        "Прочее",IDC_STATIC,194,4,162,105
     LTEXT           "Платформа:",IDC_STATIC,204,14,70,9
@@ -482,6 +483,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TAB_LOG_PLAYER                 "Проигрыватель"
     IDS_LP_CANT_OPEN_FILE              "Не могу открыть указанный файл!"
+    IDS_LP_OPEN_PENDING                "Невозможно открыть файл, в который сейчас идет запись! Завершите запись или попробуйте открыть другой файл."
     IDS_CANT_SAVE_THIS_FILE            "Не получилось сохранить этот файл, извините!"
     IDS_TAB_DEV_DIAGNOSTICS            "Диагностика"
     IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER "Войти в диагн. режим"
@@ -843,7 +845,8 @@ BEGIN
     CONTROL         "Use program folder",IDC_APP_SETTINGS_LOGFOLDER_USEAPPFOLDER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,158,148,9
     LTEXT           "CSV separator-symbol",IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_CAPTION,87,177,97,10
     COMBOBOX        IDC_APP_SETTINGS_LOG_CSV_SEPSYMBOL_COMBO,14,175,67,52,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
-    CONTROL         "Always write log",IDC_APP_SETTINGS_ALWAYS_WRITE_LOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,192,148,9
+    CONTROL         "Always write log",IDC_APP_SETTINGS_ALWAYS_WRITE_LOG,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,39,192,80,9
+    CONTROL         "Title",IDC_APP_SETTINGS_WRITE_LOG_TITLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,135,192,50,9
 
     GROUPBOX        "Misc",IDC_STATIC,194,4,162,105
     LTEXT           "Platform:",IDC_STATIC,204,14,70,9
@@ -1302,6 +1305,7 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_TAB_LOG_PLAYER                 "Player"
     IDS_LP_CANT_OPEN_FILE              "Can't open specified file!"
+    IDS_LP_OPEN_PENDING                "Can't open file which is currently used for writing of log!"
     IDS_CANT_SAVE_THIS_FILE            "Can't save this file! Sorry."
     IDS_TAB_DEV_DIAGNOSTICS            "Diagnostics"
     IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER "Enter diagnostic mode"
