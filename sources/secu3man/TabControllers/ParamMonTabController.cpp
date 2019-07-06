@@ -99,6 +99,7 @@ CParamMonTabController::CParamMonTabController(CParamMonTabDlg* ip_view, CCommun
  mp_view->setOnEditTablesCheck(MakeDelegate(this, &CParamMonTabController::OnEditTablesCheckBox));
 
  mp_view->mp_MIDeskDlg->setOnMISettingsChanged(MakeDelegate(this, &CParamMonTabController::OnMIDeskSettingsChanged));
+ mp_tabcntr->setOnChangeSettings(MakeDelegate(this, &CParamMonTabController::_OnChangeSettings));
 }
 
 CParamMonTabController::~CParamMonTabController()
@@ -400,4 +401,9 @@ void CParamMonTabController::OnMIDeskSettingsChanged(void)
  mp_settings->SetLabelFontSize(LabelFontSize);
 
  mp_settings->SetMetersDragNDrop(mp_view->mp_MIDeskDlg->GetMetersDragNDrop());
+}
+
+void CParamMonTabController::_OnChangeSettings(void)
+{
+ mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 }

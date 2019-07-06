@@ -836,4 +836,12 @@ void CPMTablesController::OnChangeSettings(void)
  mptms.m_gpsc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_GPSC);
  mptms.m_atsc_map = mp_view->mp_ButtonsPanel->GetPtMovStep(TYPE_MAP_INJ_ATSC);
  mp_settings->SetMapPtMovStep(mptms);
+
+ if (m_OnChangeSettings)
+  m_OnChangeSettings();
+}
+
+void CPMTablesController::setOnChangeSettings(EventHandler OnCB)
+{
+ m_OnChangeSettings = OnCB;
 }

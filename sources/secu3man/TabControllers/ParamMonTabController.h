@@ -80,6 +80,7 @@ class CParamMonTabController : public ITabController, private IAPPEventHandler
   void OnMIDeskSettingsChanged(void);
 
  private:
+  void _OnChangeSettings(void);
   void _OnOneShotTimer(void);
 
   CParamMonTabDlg*  mp_view;

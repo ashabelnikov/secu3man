@@ -37,6 +37,7 @@ set(HEADERS
   MIEGOCorr.h
   MIIAT.h
   MIInjPW.h
+  MIInjTim.h
   MIPressure.h
   MITachometer.h
   MITemperature.h

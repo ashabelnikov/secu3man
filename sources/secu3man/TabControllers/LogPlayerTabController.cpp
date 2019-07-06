@@ -108,6 +108,7 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
  mp_view->mp_MIDeskDlg->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());
+ mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 
  //обновляем диапазоны приборов
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
@@ -136,6 +137,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 
  //////////////////////////////////////////////////////////////////
  //Подключаем контроллер к потоку данных от SECU-3

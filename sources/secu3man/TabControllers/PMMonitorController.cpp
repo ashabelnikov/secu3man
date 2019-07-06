@@ -89,6 +89,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->SetITMode(mp_settings->GetITEdMode());
 }
 
 void CPMMonitorController::OnDeactivate(void)

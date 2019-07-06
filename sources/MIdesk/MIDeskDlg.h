@@ -114,6 +114,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   void setOnMISettingsChanged(EventHandler i_Function);
 
+  void SetITMode(int mode);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -232,6 +234,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   HCURSOR m_hMoveCursor;
   HCURSOR m_defCursor;
   EventHandler m_OnMISettingsChanged;
+
+  int m_it_mode;
 };
 
 /////////////////////////////////////////////////////////////////////////////

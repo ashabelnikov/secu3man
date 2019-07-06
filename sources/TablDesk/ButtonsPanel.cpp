@@ -1409,51 +1409,7 @@ float __cdecl CButtonsPanel::OnValueTransformITMap(void* i_param, float source, 
   return source;
  }
 
- float value = 0;
- if (direction)
- { //from chart
-  switch(_this->m_it_mode)
-  {
-   case 0: //BTDC
-    value = source;
-    break;
-   case 1: //ATDC
-    value = 720.0f - source;
-    break;
-   case 2: //-360...360 BTDC
-    value = 720.0f + source;    
-    break;
-   case 3: //-360...360 ATDC
-    value = 720.0f + (-source);
-    break;
-  }
- }
- else
- { //to chart
-  switch(_this->m_it_mode)
-  {
-   case 0: //BTDC
-    value = (source > 720.0f) ? source - 720.0f : source;
-    break;
-   case 1: //ATDC
-    value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
-    break;
-   case 2: //-360...360 BTDC
-    if (source > 720.0f)
-     value = source - 720.0f;
-    else
-     value = (source < 360.0f) ? source : -(720.0f - source);
-    break;
-   case 3: //-360...360 ATDC
-    if (source > 720.0f)
-     value = source - 720.0f;
-    else
-     value = (source < 360.0f) ? source : -(720.0f - source);
-    value = -value;
-    break;
-  }
- }
- return value;
+ return MathHelpers::InjTimValueTransform(_this->m_it_mode, source, direction);
 }
 
 //------------------------------------------------------------------------

@@ -36,6 +36,10 @@ class AFX_EXT_CLASS CMIInjTim : public MeasInstrBase
   //-------interface-----------------------
   virtual void Create(CWnd* pParent, UINT id);
   //---------------------------------------
+
+  void SetITMode(int mode);
+ private:
+  void _GetITModeRange(int mode, float& y1, float& y2);
 };
 
 

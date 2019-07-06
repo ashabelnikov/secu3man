@@ -27,6 +27,7 @@
 
 #include <vector>
 #include "common/ObjectTimer.h"
+#include "common/fastdelegate.h"
 #include "PMControllerBase.h"
 #include "MapWndScrPos.h"
 
@@ -40,6 +41,7 @@ namespace SECU3IO {struct EditTabPar; struct FunSetPar;}
 class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public MapWndScrPos
 {
   typedef CPMControllerBase<VIEW> Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
  public:
   CPMTablesController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CPMTablesController();
@@ -68,6 +70,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   void ApplyFWOptions(DWORD opt);
 
   void OnFunSetChanged(const SECU3IO::FunSetPar* data);
+
+  void setOnChangeSettings(EventHandler OnCB);
 
  private:
   //Events from view
@@ -103,6 +107,8 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   void OnTableDeskChangesTimer(void);
 
  private:
+  EventHandler m_OnChangeSettings;
+
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
   ISettingsData* mp_settings;

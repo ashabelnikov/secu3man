@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "resource.h"
 #include "GMEInjITDlg.h"
+#include "common/MathHelpers.h"
 #include "ui-core/fnt_helpers.h"
 
 const UINT CGMEInjITDlg::IDD = IDD_GME_INJ_IT;
@@ -183,51 +184,7 @@ if (m_on_change_sett)
 
 float CGMEInjITDlg::OnValueTransform(float source, int direction)
 {
- float value = 0;
- if (direction)
- { //from chart
-  switch(m_it_mode_val)
-  {
-   case 0: //BTDC
-    value = source;
-    break;
-   case 1: //ATDC
-    value = 720.0f - source;
-    break;
-   case 2: //-360...360 BTDC
-    value = 720.0f + source;    
-    break;
-   case 3: //-360...360 ATDC    
-    value = 720.0f + (-source);
-    break;
-  }
- }
- else
- { //to chart
-  switch(m_it_mode_val)
-  {
-   case 0: //BTDC
-    value = (source > 720.0f) ? source - 720.0f : source;
-    break;
-   case 1: //ATDC
-    value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
-    break;
-   case 2: //-360...360 BTDC
-    if (source > 720.0f)
-     value = source - 720.0f;
-    else
-     value = (source < 360.0f) ? source : -(720.0f - source);
-    break;
-   case 3: //-360...360 ATDC
-    if (source > 720.0f)
-     value = source - 720.0f;
-    else
-     value = (source < 360.0f) ? source : -(720.0f - source);
-    value = -value;
-    break;
-  }
- }
- return value;
+ return MathHelpers::InjTimValueTransform(m_it_mode_val, source, direction);
 }
 
 void CGMEInjITDlg::_GetITModeRange(float& y1, float& y2)

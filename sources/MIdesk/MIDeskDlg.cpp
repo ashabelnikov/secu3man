@@ -132,6 +132,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , mp_ctxMenuMgrInd(new CIndContextMenuManager())
 , m_metDragNDrop(false)
 , m_indDragNDrop(false)
+, m_it_mode(0)
 {
  mp_ctxMenuMgrMet->CreateContent();
  mp_ctxMenuMgrInd->CreateContent();
@@ -235,6 +236,10 @@ using namespace SECU3IO;
 void CMIDeskDlg::SetValues(const SensorDat* i_values)
 {
  m_values = *i_values;
+ //Transform inj. tim. values:
+ m_values.inj_tim_begin = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_begin, 0);
+ m_values.inj_tim_end = MathHelpers::InjTimValueTransform(m_it_mode, m_values.inj_tim_end, 0);
+
  m_air_flow = (float)i_values->air_flow;
  m_tps_dot = (float)i_values->tpsdot;
 
@@ -1145,6 +1150,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_values.inj_tim_begin, NULL, NULL);  
+   widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    break;
   }
@@ -1157,6 +1163,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_values.inj_tim_end, NULL, NULL);  
+   widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    break;
   }
@@ -1508,3 +1515,15 @@ CRect CMIDeskDlg::_GetGaugesRect(bool meters, bool screenCoord /*= false*/)
   ClientToScreen(&rc);
  return rc;
 }
+
+void CMIDeskDlg::SetITMode(int mode)
+{
+ m_it_mode = mode;
+ for(MetFields_t::iterator it = m_metFields.begin(); it != m_metFields.end(); ++it)
+ {
+  if (it->second->m_uiID == IDM_MI_MET_INJTIMB || it->second->m_uiID == IDM_MI_MET_INJTIME)
+   (static_cast<CMIInjTim*>(it->second))->SetITMode(m_it_mode);
+ }
+ Invalidate();
+}
+

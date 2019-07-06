@@ -60,6 +60,21 @@ void CMIInjTim::Create(CWnd* pParent, UINT id)
  m_meter.SetMeterSize(145);
 }
 
+void CMIInjTim::SetITMode(int mode)
+{
+ float y1, y2;
+ _GetITModeRange(mode, y1, y2);
+ SetLimits(y1, y2);
+ m_meter.ResetAlertZones();
+ m_meter.AddAlertZone(y1, y2, RGB(250,250,250));
+ m_meter.Update();
+}
+
+void CMIInjTim::_GetITModeRange(int mode, float& y1, float& y2)
+{
+ y1 = (mode < 2) ? .0f : -360.0f;
+ y2 = (mode < 2) ? 720.0f : 360.0f;
+}
 
 void CMIInjTimB::Create(CWnd* pParent)
 {

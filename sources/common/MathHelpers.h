@@ -318,4 +318,53 @@ namespace MathHelpers
  {
   return sqrt(pow((x - x0), (T)2) + pow((y - y0), (T)2));
  }
+
+ static float InjTimValueTransform(int it_mode, float source, int direction)
+ {
+  float value = 0;
+  if (direction)
+  { //from chart
+   switch(it_mode)
+   {
+    case 0: //BTDC
+     value = source;
+     break;
+    case 1: //ATDC
+     value = 720.0f - source;
+     break;
+    case 2: //-360...360 BTDC
+     value = 720.0f + source;    
+     break;
+    case 3: //-360...360 ATDC    
+     value = 720.0f + (-source);
+     break;
+   }
+  }
+  else
+  { //to chart
+   switch(it_mode)
+   {
+    case 0: //BTDC
+     value = (source > 720.0f) ? source - 720.0f : source;
+     break;
+    case 1: //ATDC
+     value = 720.0f - ((source > 720.0f) ? source - 720.0f : source);
+     break;
+    case 2: //-360...360 BTDC
+     if (source > 720.0f)
+      value = source - 720.0f;
+     else
+      value = (source < 360.0f) ? source : -(720.0f - source);
+     break;
+    case 3: //-360...360 ATDC
+     if (source > 720.0f)
+      value = source - 720.0f;
+     else
+      value = (source < 360.0f) ? source : -(720.0f - source);
+     value = -value;
+     break;
+   }
+  }
+  return value;
+ }
 }
