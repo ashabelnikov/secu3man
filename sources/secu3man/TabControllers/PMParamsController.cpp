@@ -34,14 +34,16 @@
 #include "io-core/ufcodes.h"
 #include "MainFrame/StatusBarManager.h"
 #include "ParamDesk/Params/ParamDeskDlg.h"
+#include "Settings/IsettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
 
-CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged)
+CPMParamsController::CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged, ISettingsData* ip_settings)
 : Super(ip_view)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
+, mp_settings(ip_settings)
 , m_parameters_changed(false)
 , m_lastSel(0)
 , m_RequestDataCollection(RequestDataCollection)
@@ -144,19 +146,22 @@ void CPMParamsController::ApplyFWOptions(DWORD opt)
  //aslo if hall sensor synchronization is used
  mp_view->EnableOddCylinders(CHECKBIT32(opt, COPT_PHASED_IGNITION) || CHECKBIT32(opt, COPT_HALL_SYNC));
 
- mp_view->EnableChokeTesting(CHECKBIT32(opt, COPT_SM_CONTROL));
- mp_view->EnableChokeManPos(CHECKBIT32(opt, COPT_SM_CONTROL));
- mp_view->EnableGasdoseTesting(CHECKBIT32(opt, COPT_GD_CONTROL));
- mp_view->EnableGasdoseManPos(CHECKBIT32(opt, COPT_GD_CONTROL));
+ Functionality fnc;
+ mp_settings->GetFunctionality(fnc);
+
+ mp_view->EnableChokeTesting(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL));
+ mp_view->EnableChokeManPos(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL));
+ mp_view->EnableGasdoseTesting(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL));
+ mp_view->EnableGasdoseManPos(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL));
  mp_view->EnableCKPSItems(!CHECKBIT32(opt, COPT_HALL_SYNC) && !CHECKBIT32(opt, COPT_CKPS_NPLUS1));
  mp_view->EnableHallWndWidth(CHECKBIT32(opt, COPT_HALL_SYNC) || CHECKBIT32(opt, COPT_CKPS_NPLUS1));
  mp_view->EnableInputsMerging(!CHECKBIT32(opt, COPT_CKPS_2CHIGN));
  mp_view->EnableRisingSpark(CHECKBIT32(opt, COPT_DWELL_CONTROL) && !CHECKBIT32(opt, COPT_CKPS_2CHIGN));
  mp_view->EnableUseCamRef(CHECKBIT32(opt, SECU3IO::COPT_PHASE_SENSOR));
  mp_view->EnableFuelInjection(CHECKBIT32(opt, COPT_FUEL_INJECT)); 
- mp_view->EnableLambda(CHECKBIT32(opt, COPT_FUEL_INJECT) || CHECKBIT32(opt, COPT_CARB_AFR) || CHECKBIT32(opt, COPT_GD_CONTROL));
- mp_view->EnableGasdose(CHECKBIT32(opt, COPT_GD_CONTROL)); //GD
- mp_view->EnableChoke(CHECKBIT32(opt, COPT_SM_CONTROL)); 
+ mp_view->EnableLambda(CHECKBIT32(opt, COPT_FUEL_INJECT) || CHECKBIT32(opt, COPT_CARB_AFR) || (fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL)));
+ mp_view->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL)); //GD
+ mp_view->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL)); 
  mp_view->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
 }
 

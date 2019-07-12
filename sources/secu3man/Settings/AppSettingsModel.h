@@ -190,6 +190,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetWriteLogFields(void) const;
   virtual void SetWriteLogFields(bool value);
 
+  virtual void GetFunctionality(Functionality& o_fnc) const;
+
  private:
   //Возвращает полное имя INI-файла. INI-файл находится в каталоге из которого
   //запущена программа.
@@ -212,6 +214,7 @@ class CAppSettingsModel : public ISettingsData
   const CString m_Name_InjDrv_Section;
   const CString m_Name_MapPtMovStep_Section;
   const CString m_Name_LogFileFields_Section;
+  const CString m_Name_Functionality_Section;
 
   //Options
   OptField_t<_TSTRING> m_optPortName;
@@ -525,6 +528,10 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<_TSTRING> m_optLogFieldInjTimEnd;
   OptField_t<_TSTRING> m_optLogFieldLogMarks;
   OptField_t<_TSTRING> m_optLogFieldCECodes;
+
+  //Functionality Section
+  OptField_t<bool> m_optFuncSM_CONTROL;
+  OptField_t<bool> m_optFuncGD_CONTROL;
 
   //folder from which application has been started
   TCHAR m_current_directory[MAX_PATH+1];

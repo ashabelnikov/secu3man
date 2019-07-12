@@ -288,6 +288,13 @@ struct LogFileFields
  _TSTRING m_fldCECodes;
 };
 
+//Functionality
+struct Functionality
+{
+ bool SM_CONTROL;
+ bool GD_CONTROL;
+};
+
 //Interface which should be used to access settings' data from usual places of program
 class ISettingsData
 {
@@ -411,4 +418,6 @@ class ISettingsData
 
   virtual bool GetWriteLogFields(void) const = 0;
   virtual void SetWriteLogFields(bool value) = 0;
+
+  virtual void GetFunctionality(Functionality& o_fnc) const = 0;
 };

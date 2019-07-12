@@ -302,6 +302,10 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optLogFieldInjTimEnd(_T("InjTimEnd"))
 , m_optLogFieldLogMarks(_T("LogMarks"))
 , m_optLogFieldCECodes(_T("CECodes"))
+//Functionality section
+, m_Name_Functionality_Section(_T("Functionality"))
+, m_optFuncSM_CONTROL(_T("SM_CONTROL"))
+, m_optFuncGD_CONTROL(_T("GD_CONTROL"))
 {
  m_Name_Indicators_Section[0] = _T("Indicators");
  m_Name_Indicators_Section[1] = _T("IndicatorsEx");
@@ -774,6 +778,11 @@ bool CAppSettingsModel::ReadSettings(void)
  lf.ReadString(m_optLogFieldInjTimEnd, _T("InjTimEnd"));
  lf.ReadString(m_optLogFieldLogMarks, _T("LogMarks"));
  lf.ReadString(m_optLogFieldCECodes, _T("CECodes"));
+
+ //Functionality
+ IniIO fn(IniFileName, m_Name_Functionality_Section);
+ fn.ReadInt(m_optFuncSM_CONTROL, _T("1"), 0, 1);
+ fn.ReadInt(m_optFuncGD_CONTROL, _T("1"), 0, 1);
 
  return status;
 }
@@ -2186,6 +2195,24 @@ bool CAppSettingsModel::WriteSettings(void)
  lf.WriteString(m_optLogFieldLogMarks);
  lf.WriteString(m_optLogFieldCECodes);
 
+ //Functionality
+ IniIO fn(IniFileName, m_Name_Functionality_Section);
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteComment(_T("*** Control of functionality (overlapping of firmware options) ***"), false, true);
+ else
+  fn.WriteComment(_T("*** Управление функциональностью (дублируются опции прошивки) ***"), false, true);
+ fn.CreateSection();
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteInt(m_optFuncSM_CONTROL, _T("Enable automatic choke functionality. Set to 1 to enable (0 - for disabling)"));
+ else
+  fn.WriteInt(m_optFuncSM_CONTROL, _T("Разрешение функциональности воздушной заслонки. Установите в 1 для разрешения (0 для запрещения)."));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fn.WriteInt(m_optFuncGD_CONTROL, _T("Enable gas dispencer functionality. Set to 1 to enable (0 - for disabling)"));
+ else
+  fn.WriteInt(m_optFuncGD_CONTROL, _T("Разрешение функциональности дозатора газа. Установите в 1 для разрешения (0 для запрещения)."));
+
  return status;
 }
 
@@ -3216,4 +3243,10 @@ bool CAppSettingsModel::GetWriteLogFields(void) const
 void CAppSettingsModel::SetWriteLogFields(bool value)
 {
  m_optWriteLogFields.value = value;
+}
+
+void CAppSettingsModel::GetFunctionality(Functionality& o_fnc) const
+{
+ o_fnc.SM_CONTROL = m_optFuncSM_CONTROL.value;
+ o_fnc.GD_CONTROL = m_optFuncGD_CONTROL.value;
 }

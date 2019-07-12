@@ -945,47 +945,51 @@ void CFirmwareTabController::PrepareOnLoadFLASH(const BYTE* i_buff, const _TSTRI
   m_fwdm->SetFWFileName(_TSTRING(string));
  }
 
+ DWORD opt = m_fwdm->GetFWOptions();
+ Functionality fnc;
+ mp_settings->GetFunctionality(fnc);
+
  //Разрешаем или запрещаем определенные функции в зависимости от опций прошивки
- mp_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL));
- mp_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
- mp_view->mp_TablesPanel->EnableChokeOp(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
- mp_view->mp_TablesPanel->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
- mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR));
- mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
- mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T)); 
- bool en_for_gd = (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
- mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && en_for_gd);
- mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_COOLINGFAN_PWM));
- mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_THERMISTOR_CS));
- mp_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- mp_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
- mp_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101));
- if (CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T))
-  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+ mp_view->mp_TablesPanel->EnableDwellControl(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL));
+ mp_view->mp_TablesPanel->EnableCTSCurve(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_TablesPanel->EnableChokeOp(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_TablesPanel->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL));
+ mp_view->mp_TablesPanel->EnableCarbAfr(CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR));
+ mp_view->mp_TablesPanel->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_TablesPanel->EnableTmp2Curve(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T)); 
+ bool en_for_gd = (CHECKBIT32(opt, SECU3IO::COPT_ATMEGA1284) || CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT)); //TODO: remove this line after migration to M1284!
+ mp_view->mp_TablesPanel->EnableGasCorr(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && en_for_gd);
+ mp_view->mp_ParamDeskDlg->EnableIgnitionCogs(!CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseVentPwm(CHECKBIT32(opt, SECU3IO::COPT_COOLINGFAN_PWM));
+ mp_view->mp_ParamDeskDlg->EnableUseCTSCurveMap(CHECKBIT32(opt, SECU3IO::COPT_THERMISTOR_CS));
+ mp_view->mp_ParamDeskDlg->EnableHallOutputParams(CHECKBIT32(opt, SECU3IO::COPT_HALL_OUTPUT) && !CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableSECU3TItems(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ mp_view->mp_ParamDeskDlg->EnableExtraIO(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_TPIC8101));
+ if (CHECKBIT32(opt, SECU3IO::COPT_SECU3T))
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
  else //SECU-3i:
-  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
+  mp_view->mp_ParamDeskDlg->SetMaxCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) ? 8 : 8);
 
  //in full-sequential ignition mode odd cylinder number engines are also supported,
  //also if hall sensor synchronization is used
- mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC));
+ mp_view->mp_ParamDeskDlg->EnableOddCylinders(CHECKBIT32(opt, SECU3IO::COPT_PHASED_IGNITION) || CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC));
 
- this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));
- this->mp_iorCntr->EnableExtraIO(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T) && CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_TPIC8101)); 
+ this->mp_iorCntr->EnableSECU3TFeatures(CHECKBIT32(opt, SECU3IO::COPT_SECU3T));
+ this->mp_iorCntr->EnableExtraIO(!CHECKBIT32(opt, SECU3IO::COPT_SECU3T) && CHECKBIT32(opt, SECU3IO::COPT_TPIC8101)); 
  this->mp_iorCntr->Enable(true);
 
- mp_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- mp_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_NPLUS1));
- mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- mp_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CKPS_2CHIGN));
- mp_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_PHASE_SENSOR));
+ mp_view->mp_ParamDeskDlg->EnableCKPSItems(!CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableHallWndWidth(CHECKBIT32(opt, SECU3IO::COPT_HALL_SYNC) || CHECKBIT32(opt, SECU3IO::COPT_CKPS_NPLUS1));
+ mp_view->mp_ParamDeskDlg->EnableInputsMerging(!CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableRisingSpark(CHECKBIT32(opt, SECU3IO::COPT_DWELL_CONTROL) && !CHECKBIT32(opt, SECU3IO::COPT_CKPS_2CHIGN));
+ mp_view->mp_ParamDeskDlg->EnableUseCamRef(CHECKBIT32(opt, SECU3IO::COPT_PHASE_SENSOR));
 
- mp_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
- mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_CARB_AFR) || CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL));
- mp_view->mp_ParamDeskDlg->EnableGasdose(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_GD_CONTROL)); //GD
- mp_view->mp_ParamDeskDlg->EnableChoke(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SM_CONTROL));
+ mp_view->mp_ParamDeskDlg->EnableFuelInjection(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableLambda(CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT) || CHECKBIT32(opt, SECU3IO::COPT_CARB_AFR) || (fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)));
+ mp_view->mp_ParamDeskDlg->EnableGasdose(fnc.GD_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_GD_CONTROL)); //GD
+ mp_view->mp_ParamDeskDlg->EnableChoke(fnc.SM_CONTROL && CHECKBIT32(opt, SECU3IO::COPT_SM_CONTROL));
 
- mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_FUEL_INJECT));
+ mp_view->mp_ParamDeskDlg->EnableChokeCtrls(!CHECKBIT32(opt, SECU3IO::COPT_FUEL_INJECT));
 
  SetViewFirmwareValues();
 }

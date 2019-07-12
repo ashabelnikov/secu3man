@@ -33,6 +33,7 @@
 class CCommunicationManager;
 class CParamDeskDlg;
 class CStatusBarManager;
+class ISettingsData;
 
 class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 {
@@ -41,7 +42,7 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
   typedef fastdelegate::FastDelegate2<const BYTE, const void*> EventPacket;
 
  public:
-  CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged);
+  CPMParamsController(VIEW* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, EventHandler RequestDataCollection, EventPacket ParametersChanged, ISettingsData* ip_settings);
   virtual ~CPMParamsController();
 
   //начало работы контроллера
@@ -73,6 +74,7 @@ class CPMParamsController : public CPMControllerBase<CParamDeskDlg>
 
   CCommunicationManager* mp_comm;
   CStatusBarManager* mp_sbar;
+  ISettingsData* mp_settings;
 
   CObjectTimer<CPMParamsController> m_pd_changes_timer; 
   EventHandler m_RequestDataCollection;
