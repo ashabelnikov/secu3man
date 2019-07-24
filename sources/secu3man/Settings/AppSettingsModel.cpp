@@ -207,6 +207,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPeakOnPtMovStep(_T("PeakOnPtMovStep"))
 , m_optPeakDutyPtMovStep(_T("PeakDutyPtMovStep"))
 , m_optHoldDutyPtMovStep(_T("HoldDutyPtMovStep"))
+, m_optPeakFullPtMovStep(_T("PeakFullPtMovStep"))
+, m_optPthPausePtMovStep(_T("PthPausePtMovStep"))
 //Points' moving step
 , m_Name_MapPtMovStep_Section(_T("MapPtMovStep"))
 , m_optPtMovStepWorkMap(_T("WorkMapWnd"))
@@ -682,6 +684,8 @@ bool CAppSettingsModel::ReadSettings(void)
  dr.ReadFlt(m_optPeakOnPtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadFlt(m_optPeakDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
  dr.ReadFlt(m_optHoldDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
+ dr.ReadFlt(m_optPeakFullPtMovStep, _T("1.0"), 1.0f, 10000.0f);
+ dr.ReadFlt(m_optPthPausePtMovStep, _T("1.0"), 1.0f, 10000.0f);
 
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
@@ -1940,6 +1944,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   dr.WriteFlt(m_optHoldDutyPtMovStep, 1, _T("Шаг смещения точек для графика \"Скважность удерживания\""));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPeakFullPtMovStep, 0, _T("Points moving step for the \"Peak ON + PWM time\" graph"));
+ else
+  dr.WriteFlt(m_optPeakFullPtMovStep, 0, _T("Шаг смещения точек для графика \"Время Вкл + Время ШИМ\""));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPthPausePtMovStep, 0, _T("Points moving step for the \"Peak-to-hold pause\" graph"));
+ else
+  dr.WriteFlt(m_optPthPausePtMovStep, 0, _T("Шаг смещения точек для графика \"Пауза включ. - удерж.\""));
+
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
 
@@ -3022,6 +3036,16 @@ float CAppSettingsModel::GetPeakDutyPtMovStep(void) const
 float CAppSettingsModel::GetHoldDutyPtMovStep(void) const
 {
  return m_optHoldDutyPtMovStep.value;
+}
+
+float CAppSettingsModel::GetPeakFullPtMovStep(void) const
+{
+ return m_optPeakFullPtMovStep.value;
+}
+
+float CAppSettingsModel::GetPthPausePtMovStep(void) const
+{
+ return m_optPthPausePtMovStep.value;
 }
 
 bool CAppSettingsModel::GetInjDrvTabActive(void) const

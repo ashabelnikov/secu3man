@@ -511,3 +511,17 @@
 #define IDC_INJDRV_GAS_V_CAPTION        4531
 #define IDS_LP_OPEN_PENDING             4532
 #define IDC_APP_SETTINGS_WRITE_LOG_TITLE 4533
+#define IDC_PEAK_FULL_TABSEL_CHECK      4534
+#define IDC_PTH_PAUSE_TABSEL_CHECK      4535
+#define IDS_PEAK_FULL_TIME_TITLE        4536
+#define IDS_PTH_PAUSE_TITLE             4537
+#define IDC_PEAK_FULL_CHECK             4538
+#define IDC_PTH_PAUSE_CHECK             4539
+#define IDS_PWM_PERIOD_EDIT_TT          4540
+#define IDS_PEAK_DUTY_EDIT_TT           4541
+#define IDS_HOLD_DUTY_EDIT_TT           4542
+#define IDS_PEAK_ON_TIME_EDIT_TT        4543
+#define IDS_PEAK_PWM_TIME_EDIT_TT       4544
+#define IDS_PTH_PAUSE_EDIT_TT           4545
+#define IDS_PEAK_FULL_CHECK_TT          4546
+#define IDS_PTH_PAUSE_CHECK_TT          4547

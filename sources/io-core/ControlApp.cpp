@@ -2289,7 +2289,7 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& m_recv = m_recepted_packet.m_InjDrvPar;
- if (size != (mp_pdp->isHex() ? 242 : 121))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 370 : 185))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  mp_pdp->resetCRC();
@@ -2337,6 +2337,8 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
  m_recv.m_peak_on_usetab = CHECKBIT8(lutabl_flags, 0);
  m_recv.m_peak_duty_usetab = CHECKBIT8(lutabl_flags, 1);
  m_recv.m_hold_duty_usetab = CHECKBIT8(lutabl_flags, 2);
+ m_recv.m_peak_full_usetab = CHECKBIT8(lutabl_flags, 3);
+ m_recv.m_pth_pause_usetab = CHECKBIT8(lutabl_flags, 4);
 
  unsigned char gen_flags = 0;
  if (false == mp_pdp->Hex8ToBin(raw_packet, &gen_flags))
@@ -2401,6 +2403,22 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
   m_recv.m_hold_duty_tab[i] = (((float)value) / 4096.0f) * 100.0f;
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_peak_full_tab[i] = ((float)value) / 2.5f;
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_pth_pause_tab[i] = ((float)value) / 2.5f;
  }
 
  int calc_crc = mp_pdp->getCRC();
@@ -3689,6 +3707,8 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  WRITEBIT8(lutabl_flags, 0, packet_data->m_peak_on_usetab);
  WRITEBIT8(lutabl_flags, 1, packet_data->m_peak_duty_usetab);
  WRITEBIT8(lutabl_flags, 2, packet_data->m_hold_duty_usetab);
+ WRITEBIT8(lutabl_flags, 3, packet_data->m_peak_full_usetab);
+ WRITEBIT8(lutabl_flags, 4, packet_data->m_pth_pause_usetab);
 
  mp_pdp->Bin8ToHex(lutabl_flags, m_outgoing_packet); //look up tables related flags
 
@@ -3733,6 +3753,18 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  for (int i = 0; i < LUTABSIZE; ++i)
  {
   int value = MathHelpers::Round((packet_data->m_hold_duty_tab[i] / 100.0f) * 4096.0f);
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value = MathHelpers::Round(packet_data->m_peak_full_tab[i] * 2.5f);
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
+ for (int i = 0; i < LUTABSIZE; ++i)
+ {
+  int value = MathHelpers::Round(packet_data->m_pth_pause_tab[i] * 2.5f);
   mp_pdp->Bin16ToHex(value, m_outgoing_packet);
  }
  //--------------------------------------------------------------------

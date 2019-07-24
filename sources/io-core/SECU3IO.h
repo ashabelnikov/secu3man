@@ -599,10 +599,15 @@ namespace SECU3IO
   float m_peak_on_tab[LUTABSIZE];
   float m_peak_duty_tab[LUTABSIZE];
   float m_hold_duty_tab[LUTABSIZE];
+  float m_peak_full_tab[LUTABSIZE]; //since v2.0
+  float m_pth_pause_tab[LUTABSIZE]; //since v2.0
+
   //flags
   bool m_peak_on_usetab;
   bool m_peak_duty_usetab;
   bool m_hold_duty_usetab;
+  bool m_peak_full_usetab; //since v2.0
+  bool m_pth_pause_usetab; //since v2.0
 
   bool m_tst_peak_pwm;
   bool m_tst_hold_pwm;

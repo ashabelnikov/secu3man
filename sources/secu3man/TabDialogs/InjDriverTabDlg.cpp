@@ -44,13 +44,13 @@ const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 #define SERIE_PD 1
 #define SERIE_HD 2
 #define SERIE_VT 3
+#define SERIE_PF 4
+#define SERIE_PP 5
 
 const int x_axis_points = SECU3IO::LUTABSIZE;
 const float x_axis_min = 5.4f;
 const float x_axis_step = 0.8f;
 const float x_axis_max = x_axis_min + (x_axis_step * (x_axis_points-1));
-
-const float arrmv_offset[3] = {100.0f, 1.0f, 1.0f};
 
 CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDriverTabDlg::IDD, pParent)
@@ -62,9 +62,6 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , m_enable_ee_save(false)
 , mp_curr_curve(NULL)
 , m_set_of_sett_idx(0)
-, m_optPeakOnPtMovStep(1.0f)
-, m_optPeakDutyPtMovStep(0.1f)
-, m_optHoldDutyPtMovStep(0.1f)
 , m_y_axis_min(100.0f)
 , m_y_axis_max(10000.0f)
 , m_pwm_period_edit(CEditEx::MODE_FLOAT, true)
@@ -77,11 +74,18 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , m_enable_voltage(false)
 , m_offline(false)
 {
+ m_ptMovStep.insert(std::make_pair(SERIE_PO, 1.0f));
+ m_ptMovStep.insert(std::make_pair(SERIE_PD, 0.1f));
+ m_ptMovStep.insert(std::make_pair(SERIE_HD, 0.1f));
+ m_ptMovStep.insert(std::make_pair(SERIE_PF, 1.0f));
+ m_ptMovStep.insert(std::make_pair(SERIE_PP, 1.0f));
 
  mp_chart->AddSerie(16);       //peak on serie (see also defines)
  mp_chart->AddSerie(16);       //peak duty serie
  mp_chart->AddSerie(16);       //hold duty serie
  mp_chart->AddSerie(2);        //voltage serie (vert. line)
+ mp_chart->AddSerie(16);       //peak full time
+ mp_chart->AddSerie(16);       //peak-to-hold pause
 
  for (int i = 0; i < 2; ++i)
  {
@@ -96,9 +100,13 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
   std::fill(m_params[i].m_peak_on_tab, m_params[i].m_peak_on_tab + SECU3IO::LUTABSIZE, .0f);
   std::fill(m_params[i].m_peak_duty_tab, m_params[i].m_peak_duty_tab + SECU3IO::LUTABSIZE, .0f);
   std::fill(m_params[i].m_hold_duty_tab, m_params[i].m_hold_duty_tab + SECU3IO::LUTABSIZE, .0f);
+  std::fill(m_params[i].m_peak_full_tab, m_params[i].m_peak_full_tab + SECU3IO::LUTABSIZE, .0f);
+  std::fill(m_params[i].m_pth_pause_tab, m_params[i].m_pth_pause_tab + SECU3IO::LUTABSIZE, .0f);
   m_params[i].m_peak_on_usetab = false;
   m_params[i].m_peak_duty_usetab = false;
   m_params[i].m_hold_duty_usetab = false;
+  m_params[i].m_peak_full_usetab = false;
+  m_params[i].m_pth_pause_usetab = false;
   m_params[i].m_tst_peak_pwm = false;
   m_params[i].m_tst_hold_pwm = false;
  }
@@ -135,10 +143,14 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PEAK_ON_TABSEL_CHECK, m_peak_on_tabsel_check);
  DDX_Control(pDX, IDC_PEAK_DUTY_TABSEL_CHECK, m_peak_duty_tabsel_check);
  DDX_Control(pDX, IDC_HOLD_DUTY_TABSEL_CHECK, m_hold_duty_tabsel_check);
+ DDX_Control(pDX, IDC_PEAK_FULL_TABSEL_CHECK, m_peak_full_tabsel_check);
+ DDX_Control(pDX, IDC_PTH_PAUSE_TABSEL_CHECK, m_pth_pause_tabsel_check);
 
  DDX_Control(pDX, IDC_PEAK_ON_CHECK, m_peak_on_check);
  DDX_Control(pDX, IDC_PEAK_DUTY_CHECK, m_peak_duty_check);
  DDX_Control(pDX, IDC_HOLD_DUTY_CHECK, m_hold_duty_check);
+ DDX_Control(pDX, IDC_PEAK_FULL_CHECK, m_peak_full_check);
+ DDX_Control(pDX, IDC_PTH_PAUSE_CHECK, m_pth_pause_check);
 
  DDX_Control(pDX, IDC_CURVE_UP_BUTTON, m_up_arrow);
  DDX_Control(pDX, IDC_CURVE_DOWN_BUTTON, m_down_arrow);
@@ -161,6 +173,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Check_bool(pDX, IDC_PEAK_ON_CHECK, m_params[m_set_of_sett_idx].m_peak_on_usetab);
  DDX_Check_bool(pDX, IDC_PEAK_DUTY_CHECK, m_params[m_set_of_sett_idx].m_peak_duty_usetab);
  DDX_Check_bool(pDX, IDC_HOLD_DUTY_CHECK, m_params[m_set_of_sett_idx].m_hold_duty_usetab);
+ DDX_Check_bool(pDX, IDC_PEAK_FULL_CHECK, m_params[m_set_of_sett_idx].m_peak_full_usetab);
+ DDX_Check_bool(pDX, IDC_PTH_PAUSE_CHECK, m_params[m_set_of_sett_idx].m_pth_pause_usetab);
 
  DDX_Check_bool(pDX, IDC_TST_PEAK_PWM_CHECK, m_params[m_set_of_sett_idx].m_tst_peak_pwm);
  DDX_Check_bool(pDX, IDC_TST_HOLD_PWM_CHECK, m_params[m_set_of_sett_idx].m_tst_hold_pwm);
@@ -183,11 +197,15 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_BN_CLICKED(IDC_PEAK_ON_TABSEL_CHECK, OnPeakOnTabSelCheck)
  ON_BN_CLICKED(IDC_PEAK_DUTY_TABSEL_CHECK, OnPeakDutyTabSelCheck)
  ON_BN_CLICKED(IDC_HOLD_DUTY_TABSEL_CHECK, OnHoldDutyTabSelCheck)
+ ON_BN_CLICKED(IDC_PEAK_FULL_TABSEL_CHECK, OnPeakFullTabSelCheck)
+ ON_BN_CLICKED(IDC_PTH_PAUSE_TABSEL_CHECK, OnPthPauseTabSelCheck)
  ON_BN_CLICKED(IDC_CURVE_UP_BUTTON, OnUpArrowButton)
  ON_BN_CLICKED(IDC_CURVE_DOWN_BUTTON, OnDownArrowButton)
  ON_BN_CLICKED(IDC_PEAK_ON_CHECK, OnChangeDataChecks)
  ON_BN_CLICKED(IDC_PEAK_DUTY_CHECK, OnChangeDataChecks)
  ON_BN_CLICKED(IDC_HOLD_DUTY_CHECK, OnChangeDataChecks)
+ ON_BN_CLICKED(IDC_PEAK_FULL_CHECK, OnChangeDataChecks)
+ ON_BN_CLICKED(IDC_PTH_PAUSE_CHECK, OnChangeDataChecks)
  ON_BN_CLICKED(IDC_TST_PEAK_PWM_CHECK, OnChangeDataTstPeakPwm)
  ON_BN_CLICKED(IDC_TST_HOLD_PWM_CHECK, OnChangeDataTstHoldPwm)
 
@@ -230,16 +248,22 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PWM_PERIOD_EDIT,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PWM_PERIOD_SPIN,OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PWM_PERIOD_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_CAPTION,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_EDIT,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_SPIN,OnUpdateControls)
- ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_EDIT,OnUpdateControlsPF)
+ ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_SPIN,OnUpdateControlsPF)
+ ON_UPDATE_COMMAND_UI(IDC_PEAK_PWM_TIME_CAPTION,OnUpdateControlsPF)
+
+ ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_EDIT,OnUpdateControlsPP)
+ ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_SPIN,OnUpdateControlsPP)
+ ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_CAPTION,OnUpdateControlsPP)
+
  ON_UPDATE_COMMAND_UI(IDC_VCURVES_CHART, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_ON_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_HOLD_DUTY_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PEAK_FULL_CHECK, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_CHECK, OnUpdateControls)
+
  ON_UPDATE_COMMAND_UI(IDC_TST_PEAK_PWM_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TST_HOLD_PWM_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_SET_OF_SETT_COMBO, OnUpdateControls)
@@ -340,12 +364,18 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  mp_chart->SetSerieColor(SERIE_PO, RGB(80, 80, 200));
  mp_chart->SetSerieColor(SERIE_PD, RGB(80, 80, 200));
  mp_chart->SetSerieColor(SERIE_HD, RGB(80, 80, 200));
+ mp_chart->SetSerieColor(SERIE_PF, RGB(80, 80, 200));
+ mp_chart->SetSerieColor(SERIE_PP, RGB(80, 80, 200));
  mp_chart->SetSerieHandle(SERIE_PO, true);
  mp_chart->SetSerieHandle(SERIE_PD, true);
  mp_chart->SetSerieHandle(SERIE_HD, true);
+ mp_chart->SetSerieHandle(SERIE_PF, true);
+ mp_chart->SetSerieHandle(SERIE_PP, true);
  mp_chart->SetSerieVisibility(SERIE_PD, false);
  mp_chart->SetSerieVisibility(SERIE_HD, false);
- mp_chart->SetPtMovStep(static_cast<double>(m_optPeakOnPtMovStep));
+ mp_chart->SetSerieVisibility(SERIE_PF, false);
+ mp_chart->SetSerieVisibility(SERIE_PP, false);
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
 
  mp_chart->SetXYValue(SERIE_VT, x_axis_min, m_y_axis_min, 0);
  mp_chart->SetXYValue(SERIE_VT, x_axis_min, m_y_axis_max, 1);
@@ -370,6 +400,21 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tst_hold_pwm_check, MLL::GetString(IDS_TST_HOLD_PWM_CHECK_TT)));
  VERIFY(mp_ttc->AddWindow(&m_set_of_sett_combo, MLL::GetString(IDS_SET_OF_SETT_COMBO_TT)));
  VERIFY(mp_ttc->AddWindow(&m_eeprom_save_btn, MLL::GetString(IDS_EEPROM_SAVE_BUTTON_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_full_check, MLL::GetString(IDS_PEAK_FULL_CHECK_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pth_pause_check, MLL::GetString(IDS_PTH_PAUSE_CHECK_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_pwm_period_edit, MLL::GetString(IDS_PWM_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pwm_period_spin, MLL::GetString(IDS_PWM_PERIOD_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_duty_edit, MLL::GetString(IDS_PEAK_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_duty_spin, MLL::GetString(IDS_PEAK_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hold_duty_edit, MLL::GetString(IDS_HOLD_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_hold_duty_spin, MLL::GetString(IDS_HOLD_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_on_time_edit, MLL::GetString(IDS_PEAK_ON_TIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_on_time_spin, MLL::GetString(IDS_PEAK_ON_TIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_pwm_time_edit, MLL::GetString(IDS_PEAK_PWM_TIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_peak_pwm_time_spin, MLL::GetString(IDS_PEAK_PWM_TIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pth_pause_edit, MLL::GetString(IDS_PTH_PAUSE_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_pth_pause_spin, MLL::GetString(IDS_PTH_PAUSE_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -506,18 +551,26 @@ void CInjDriverTabDlg::SetVoltLineColor(DWORD color)
  mp_chart->SetSerieColor(SERIE_VT, color);
 }
 
-void CInjDriverTabDlg::SetPtMovStep(float peakOn, float peakDuty, float holdDuty)
+void CInjDriverTabDlg::SetPtMovStep(float peakOn, float peakDuty, float holdDuty, float peakFull, float pthPause)
 {
- m_optPeakOnPtMovStep = peakOn;
- m_optPeakDutyPtMovStep = peakDuty;
- m_optHoldDutyPtMovStep = holdDuty;
+ //update internally stored values
+ m_ptMovStep[SERIE_PO] = peakOn;
+ m_ptMovStep[SERIE_PD] = peakDuty;
+ m_ptMovStep[SERIE_HD] = holdDuty;
+ m_ptMovStep[SERIE_PF] = peakFull;
+ m_ptMovStep[SERIE_PP] = pthPause;
+
  //update chart
  if (m_peak_on_tabsel_check.GetCheck() == BST_CHECKED)  
-  mp_chart->SetPtMovStep(static_cast<double>(m_optPeakOnPtMovStep));
+  mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
  else if (m_peak_duty_tabsel_check.GetCheck() == BST_CHECKED)
-  mp_chart->SetPtMovStep(static_cast<double>(m_optPeakDutyPtMovStep));
+  mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
  else if (m_hold_duty_tabsel_check.GetCheck() == BST_CHECKED)
-  mp_chart->SetPtMovStep(static_cast<double>(m_optHoldDutyPtMovStep));
+  mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
+ else if (m_peak_full_tabsel_check.GetCheck() == BST_CHECKED)
+  mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
+ else if (m_pth_pause_tabsel_check.GetCheck() == BST_CHECKED)
+  mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
 }
 
 void CInjDriverTabDlg::OnChangeChart(int serieIdx)
@@ -538,6 +591,16 @@ void CInjDriverTabDlg::OnChangeChart(int serieIdx)
   for(int i = 0; i < x_axis_points; ++i)
    m_params[m_set_of_sett_idx].m_hold_duty_tab[i] = (float)x[i];
  }
+ else if (serieIdx == SERIE_PF)
+ {
+  for(int i = 0; i < x_axis_points; ++i)
+   m_params[m_set_of_sett_idx].m_peak_full_tab[i] = (float)x[i];
+ }
+ else if (serieIdx == SERIE_PP)
+ {
+  for(int i = 0; i < x_axis_points; ++i)
+   m_params[m_set_of_sett_idx].m_pth_pause_tab[i] = (float)x[i];
+ }
  else
   return; //error
 
@@ -552,6 +615,8 @@ void CInjDriverTabDlg::UpdateChartValues(void)
   mp_chart->SetXYValue(SERIE_PO, x_axis_min + (x_axis_step * i), m_params[m_set_of_sett_idx].m_peak_on_tab[i], i);
   mp_chart->SetXYValue(SERIE_PD, x_axis_min + (x_axis_step * i), m_params[m_set_of_sett_idx].m_peak_duty_tab[i], i);
   mp_chart->SetXYValue(SERIE_HD, x_axis_min + (x_axis_step * i), m_params[m_set_of_sett_idx].m_hold_duty_tab[i], i);
+  mp_chart->SetXYValue(SERIE_PF, x_axis_min + (x_axis_step * i), m_params[m_set_of_sett_idx].m_peak_full_tab[i], i);
+  mp_chart->SetXYValue(SERIE_PP, x_axis_min + (x_axis_step * i), m_params[m_set_of_sett_idx].m_pth_pause_tab[i], i);
  }
 }
 
@@ -565,19 +630,23 @@ void CInjDriverTabDlg::OnPeakOnTabSelCheck()
 {
  m_peak_duty_tabsel_check.SetCheck(BST_UNCHECKED);
  m_hold_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_full_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_pth_pause_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_curve_idx = SERIE_PO;
 
  mp_chart->ClearChart();
  mp_chart->SetSerieVisibility(SERIE_PO, true);
  mp_chart->SetSerieVisibility(SERIE_PD, false);
  mp_chart->SetSerieVisibility(SERIE_HD, false);
+ mp_chart->SetSerieVisibility(SERIE_PF, false);
+ mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_ON_TIME_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
- mp_chart->SetPtMovStep(static_cast<double>(m_optPeakOnPtMovStep));
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
 
  m_y_axis_min = 100.0f;
  m_y_axis_max = 10000.0f;
  mp_curr_curve = m_params[m_set_of_sett_idx].m_peak_on_tab;
- m_curve_idx = SERIE_PO;
  mp_chart->SetRange(x_axis_min, x_axis_max, m_y_axis_min, m_y_axis_max);
  mp_chart->SetGridXYNumber(x_axis_points-1, 9);
 
@@ -589,19 +658,23 @@ void CInjDriverTabDlg::OnPeakDutyTabSelCheck()
 {
  m_peak_on_tabsel_check.SetCheck(BST_UNCHECKED);
  m_hold_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_full_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_pth_pause_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_curve_idx = SERIE_PD;
 
  mp_chart->ClearChart();
  mp_chart->SetSerieVisibility(SERIE_PO, false);
  mp_chart->SetSerieVisibility(SERIE_PD, true);
  mp_chart->SetSerieVisibility(SERIE_HD, false);
+ mp_chart->SetSerieVisibility(SERIE_PF, false);
+ mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_DUTY_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.01f")); //fractional
- mp_chart->SetPtMovStep(static_cast<double>(m_optPeakDutyPtMovStep));
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
 
  m_y_axis_min = 0.0f;
  m_y_axis_max = 100.0f;
  mp_curr_curve = m_params[m_set_of_sett_idx].m_peak_duty_tab;
- m_curve_idx = SERIE_PD;
  mp_chart->SetRange(x_axis_min, x_axis_max, m_y_axis_min, m_y_axis_max);
  mp_chart->SetGridXYNumber(x_axis_points-1, 10);
 
@@ -613,19 +686,79 @@ void CInjDriverTabDlg::OnHoldDutyTabSelCheck()
 {
  m_peak_on_tabsel_check.SetCheck(BST_UNCHECKED);
  m_peak_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_full_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_pth_pause_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_curve_idx = SERIE_HD;
 
  mp_chart->ClearChart();
  mp_chart->SetSerieVisibility(SERIE_PO, false);
  mp_chart->SetSerieVisibility(SERIE_PD, false);
  mp_chart->SetSerieVisibility(SERIE_HD, true);
+ mp_chart->SetSerieVisibility(SERIE_PF, false);
+ mp_chart->SetSerieVisibility(SERIE_PP, false);
  mp_chart->SetChartTitle(MLL::LoadString(IDS_HOLD_DUTY_TITLE));
  mp_chart->SetYAxisValueFormat(_T("%.01f")); //fractional
- mp_chart->SetPtMovStep(static_cast<double>(m_optHoldDutyPtMovStep));
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
 
  m_y_axis_min = 0.0f;
  m_y_axis_max = 100.0f;
- mp_curr_curve = m_params[m_set_of_sett_idx].m_hold_duty_tab;
- m_curve_idx = SERIE_HD;
+ mp_curr_curve = m_params[m_set_of_sett_idx].m_hold_duty_tab; 
+ mp_chart->SetRange(x_axis_min, x_axis_max, m_y_axis_min, m_y_axis_max);
+ mp_chart->SetGridXYNumber(x_axis_points-1, 10);
+
+ UpdateChartValues();
+ mp_chart->Invalidate(TRUE);
+}
+
+void CInjDriverTabDlg::OnPeakFullTabSelCheck()
+{
+ m_peak_on_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_hold_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_pth_pause_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_curve_idx = SERIE_PF;
+
+ mp_chart->ClearChart();
+ mp_chart->SetSerieVisibility(SERIE_PO, false);
+ mp_chart->SetSerieVisibility(SERIE_PD, false);
+ mp_chart->SetSerieVisibility(SERIE_HD, false);
+ mp_chart->SetSerieVisibility(SERIE_PF, true);
+ mp_chart->SetSerieVisibility(SERIE_PP, false);
+ mp_chart->SetChartTitle(MLL::LoadString(IDS_PEAK_FULL_TIME_TITLE));
+ mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
+
+ m_y_axis_min = 100.0f;
+ m_y_axis_max = 10000.0f;
+ mp_curr_curve = m_params[m_set_of_sett_idx].m_peak_full_tab; 
+ mp_chart->SetRange(x_axis_min, x_axis_max, m_y_axis_min, m_y_axis_max);
+ mp_chart->SetGridXYNumber(x_axis_points-1, 9);
+
+ UpdateChartValues();
+ mp_chart->Invalidate(TRUE);
+}
+
+void CInjDriverTabDlg::OnPthPauseTabSelCheck()
+{
+ m_peak_on_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_hold_duty_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_peak_full_tabsel_check.SetCheck(BST_UNCHECKED);
+ m_curve_idx = SERIE_PP;
+
+ mp_chart->ClearChart();
+ mp_chart->SetSerieVisibility(SERIE_PO, false);
+ mp_chart->SetSerieVisibility(SERIE_PD, false);
+ mp_chart->SetSerieVisibility(SERIE_HD, false);
+ mp_chart->SetSerieVisibility(SERIE_PF, false);
+ mp_chart->SetSerieVisibility(SERIE_PP, true);
+ mp_chart->SetChartTitle(MLL::LoadString(IDS_PTH_PAUSE_TITLE));
+ mp_chart->SetYAxisValueFormat(_T("%.0f")); //integer
+ mp_chart->SetPtMovStep(static_cast<double>(m_ptMovStep[m_curve_idx]));
+
+ m_y_axis_min = 1.0f;
+ m_y_axis_max = 1000.0f;
+ mp_curr_curve = m_params[m_set_of_sett_idx].m_pth_pause_tab;
  mp_chart->SetRange(x_axis_min, x_axis_max, m_y_axis_min, m_y_axis_max);
  mp_chart->SetGridXYNumber(x_axis_points-1, 10);
 
@@ -639,7 +772,7 @@ void CInjDriverTabDlg::OnUpArrowButton()
   return;
  for (int i = 0; i < x_axis_points; ++i)
  {
-  mp_curr_curve[i]+=arrmv_offset[m_curve_idx];
+  mp_curr_curve[i]+=m_ptMovStep[m_curve_idx];
   if (mp_curr_curve[i] > m_y_axis_max)
    mp_curr_curve[i] = m_y_axis_max;
   mp_chart->SetXYValue(m_curve_idx, x_axis_min + (x_axis_step * i), mp_curr_curve[i], i);
@@ -656,7 +789,7 @@ void CInjDriverTabDlg::OnDownArrowButton()
   return;
  for (int i = 0; i < x_axis_points; ++i)
  {
-  mp_curr_curve[i]-=arrmv_offset[m_curve_idx];
+  mp_curr_curve[i]-=m_ptMovStep[m_curve_idx];
   if (mp_curr_curve[i] < m_y_axis_min)
    mp_curr_curve[i] = m_y_axis_min;
   mp_chart->SetXYValue(m_curve_idx, x_axis_min + (x_axis_step * i), mp_curr_curve[i], i);
@@ -677,6 +810,10 @@ void CInjDriverTabDlg::OnSelendokSetOfSett()
   OnPeakDutyTabSelCheck();
  else if (m_curve_idx == SERIE_HD)
   OnHoldDutyTabSelCheck();
+ else if (m_curve_idx == SERIE_PF)
+  OnPeakFullTabSelCheck();
+ else if (m_curve_idx == SERIE_PP)
+  OnPthPauseTabSelCheck();
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
@@ -883,6 +1020,16 @@ void CInjDriverTabDlg::OnUpdateControlsPD(CCmdUI* pCmdUI)
 void CInjDriverTabDlg::OnUpdateControlsHD(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(m_enable && m_hold_duty_check.GetCheck() == BST_UNCHECKED);
+}
+
+void CInjDriverTabDlg::OnUpdateControlsPF(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enable && m_peak_full_check.GetCheck() == BST_UNCHECKED);
+}
+
+void CInjDriverTabDlg::OnUpdateControlsPP(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_enable && m_pth_pause_check.GetCheck() == BST_UNCHECKED);
 }
 
 void CInjDriverTabDlg::OnUpdateControlsEESave(CCmdUI* pCmdUI)

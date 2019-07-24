@@ -386,7 +386,7 @@ BEGIN
     RTEXT           "Скважность ШИМ удерж. (%)",IDC_HOLD_DUTY_CAPTION,12,61,100,10
     EDITTEXT        IDC_PEAK_ON_TIME_EDIT,115,79,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PEAK_ON_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,79,11,16
-    RTEXT           "Полное время включ. (мкс)",IDC_PEAK_ON_TIME_CAPTION,12,82,100,10
+    RTEXT           "Время полного включ. (мкс)",IDC_PEAK_ON_TIME_CAPTION,12,82,100,10
     EDITTEXT        IDC_PEAK_PWM_TIME_EDIT,115,100,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_PEAK_PWM_TIME_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,100,11,16
     RTEXT           "Время Вкл.+Время ШИМ (мкс)",IDC_PEAK_PWM_TIME_CAPTION,9,103,103,10
@@ -396,6 +396,8 @@ BEGIN
     CONTROL         "Табл.",IDC_PEAK_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,41,30,8
     CONTROL         "Табл.",IDC_HOLD_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,62,30,8
     CONTROL         "Табл.",IDC_PEAK_ON_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,83,30,8
+    CONTROL         "Табл.",IDC_PEAK_FULL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,104,30,8
+    CONTROL         "Табл.",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Тестиров. ШИМ включ.",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Тестиров. ШИМ удерж.",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
     PUSHBUTTON      "Сохранить в EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
@@ -405,15 +407,17 @@ BEGIN
     CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
-    CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,275,40,60,15
-    CONTROL         "Скважн.Включ.",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,337,40,60,15
-    CONTROL         "Скважн.Удерж.",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,399,40,60,15
+    CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
+    CONTROL         "Скважн.Включ.",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
+    CONTROL         "Скважн.Удерж.",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,351,40,60,15
+    CONTROL         "ВВ+ВШ.",IDC_PEAK_FULL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,413,40,60,15
+    CONTROL         "Пауза В-У",IDC_PTH_PAUSE_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,475,40,60,15
     PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
-    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,493,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -690,9 +694,13 @@ BEGIN
     IDS_PEAK_ON_TIME_TITLE          "Время полного включения от напряжения"
     IDS_PEAK_DUTY_TITLE             "Скважность включения от напряжения"
     IDS_HOLD_DUTY_TITLE             "Скважность удерживания от напряжения"
+    IDS_PEAK_FULL_TIME_TITLE        "Время Вкл.+Время ШИМ (мкс)"
+    IDS_PTH_PAUSE_TITLE             "Пауза включ.- удерж. (мкс)"
     IDS_PEAK_ON_CHECK_TT            "Использовать таблицу для 'Полное время включ.'"
     IDS_PEAK_DUTY_CHECK_TT          "Использовать таблицу для 'Скважн. ШИМ на включ.'"
     IDS_HOLD_DUTY_CHECK_TT          "Использовать таблицу для 'Скважн. ШИМ удерж.'"
+    IDS_PEAK_FULL_CHECK_TT          "Использовать таблицу для 'Время Вкл. + Время ШИМ'"
+    IDS_PTH_PAUSE_CHECK_TT          "Использовать таблицу для 'Пауза включ. - удерж.'"
     IDS_TST_PEAK_PWM_CHECK_TT       "Тестовый режим. На всех каналах появляется ШИМ включения. Входы игнорируются. Внимание! Длительное использование этого режима может спалить ваши форсунки!"
     IDS_TST_HOLD_PWM_CHECK_TT       "Тестовый режим. На всех каналах появляется ШИМ удерживания. Входы игнорируются. Внимание! Длительное использование этого режима может спалить ваши форсунки!"
     IDS_SET_OF_SETT_COMBO_TT        "Выберите набор настроек для редактирования. Доступны два набора настроек, таким образом, вы можете использовать две группы разных форсунок."
@@ -700,6 +708,12 @@ BEGIN
     IDS_INJDRV_READING_SETTINGS     "Чтение настроек драйвера..."
     IDS_INJDRV_SAVING_EEPROM        "Сохранение настроек в EEPROM..."
     IDS_INJDRV_LOADED_FROM_FW       "Данные из файла прошивки успешно загружены"
+    IDS_PWM_PERIOD_EDIT_TT          "Определяет частоту ШИМ используемого для ограничения тока через форсунку при включении (peak) и при удерживании (hold)"
+    IDS_PEAK_DUTY_EDIT_TT           "Скважность ШИМ используемого для ограничения тока при включении форсунки"
+    IDS_HOLD_DUTY_EDIT_TT           "Скважность ШИМ используемого для ограничения тока при удерживании включенной форсунки"
+    IDS_PEAK_ON_TIME_EDIT_TT        "Время полного включения. После сигнала начала впрыска и в течение этого времени к форсунке будет прикладываться полное напряжение (без ШИМ). После истечения этого времени к форсунке будет прикладываться ШИМ."
+    IDS_PEAK_PWM_TIME_EDIT_TT       "Время полного включения плюс Время ШИМ при включении. 'Время ШИМ при включении' определяет сколько времени к форсунке будет прикладываться ШИМ после истечения 'Времени полного включения'. "
+    IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1093,6 +1107,8 @@ BEGIN
     CONTROL         "Table",IDC_PEAK_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,41,30,8
     CONTROL         "Table",IDC_HOLD_DUTY_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,62,30,8
     CONTROL         "Table",IDC_PEAK_ON_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,83,30,8
+    CONTROL         "Table",IDC_PEAK_FULL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,104,30,8
+    CONTROL         "Table",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Test peak PWM",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Test hold PWM",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
     PUSHBUTTON      "Save to EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
@@ -1102,15 +1118,17 @@ BEGIN
     CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
-    CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,275,40,60,15
-    CONTROL         "Peak duty",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,337,40,60,15
-    CONTROL         "Hold duty",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,399,40,60,15
+    CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
+    CONTROL         "Peak duty",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
+    CONTROL         "Hold duty",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,351,40,60,15
+    CONTROL         "PO+PWM.",IDC_PEAK_FULL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,413,40,60,15
+    CONTROL         "PtH pause",IDC_PTH_PAUSE_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,475,40,60,15
     PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
-    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,493,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1387,9 +1405,13 @@ BEGIN
     IDS_PEAK_ON_TIME_TITLE          "Peak full ON time vs board voltage"
     IDS_PEAK_DUTY_TITLE             "Peak duty vs board voltage"
     IDS_HOLD_DUTY_TITLE             "Hold duty vs board voltage"
+    IDS_PEAK_FULL_TIME_TITLE        "Peak ON + PWM  time (us)"
+    IDS_PTH_PAUSE_TITLE             "Peak-to-hold pause (us)"
     IDS_PEAK_ON_CHECK_TT            "Use look up table for 'peak full ON time'"
     IDS_PEAK_DUTY_CHECK_TT          "Use look up table for 'peak duty'"
     IDS_HOLD_DUTY_CHECK_TT          "Use look up table for 'hold duty'"
+    IDS_PEAK_FULL_CHECK_TT          "Use look up table for 'Peak ON + PWM time'"
+    IDS_PTH_PAUSE_CHECK_TT          "Use look up table for 'Peak-to-hold pause'"
     IDS_TST_PEAK_PWM_CHECK_TT       "Test mode. Turn on peak PWM for all channels. Inputs will be ignored. Warning! Using this mode for a long time can burn out your injectors!"
     IDS_TST_HOLD_PWM_CHECK_TT       "Test mode. Turn on hold PWM for all channels. Inputs will be ignored. Warning! Using this mode for a long time can burn out your injectors!"
     IDS_SET_OF_SETT_COMBO_TT        "Select set of settings for editing. Two sets available, thus you can use two different sets of injectors."
@@ -1397,6 +1419,12 @@ BEGIN
     IDS_INJDRV_READING_SETTINGS     "Reading driver's settings..."
     IDS_INJDRV_SAVING_EEPROM        "Saving settings into EEPROM..."
     IDS_INJDRV_LOADED_FROM_FW       "Data from firmware file loaded successfully"
+    IDS_PWM_PERIOD_EDIT_TT          "Определяет частоту ШИМ используемого для ограничения тока через форсунку при включении (peak) и при удерживании (hold)"
+    IDS_PEAK_DUTY_EDIT_TT           "Скважность ШИМ используемого для ограничения тока при включении форсунки"
+    IDS_HOLD_DUTY_EDIT_TT           "Скважность ШИМ используемого для ограничения тока при удерживании включенной форсунки"
+    IDS_PEAK_ON_TIME_EDIT_TT        "Время полного включения. После сигнала начала впрыска и в течение этого времени к форсунке будет прикладываться полное напряжение (без ШИМ). После истечения этого времени к форсунке будет прикладываться ШИМ."
+    IDS_PEAK_PWM_TIME_EDIT_TT       "Время полного включения плюс Время ШИМ при включении. 'Время ШИМ при включении' определяет сколько времени к форсунке будет прикладываться ШИМ после истечения 'Времени полного включения'. "
+    IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
 END
 
 /////////////////////////////////////////////////////////////////////////////

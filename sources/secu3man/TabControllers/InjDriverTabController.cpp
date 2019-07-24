@@ -90,7 +90,7 @@ void CInjDriverTabController::OnSettingsChanged(int action)
   return;
 
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());
- mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep());
+ mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
@@ -113,7 +113,7 @@ void CInjDriverTabController::OnActivate(void)
  OnConnection(online_status);
 
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());
- mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep());
+ mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep());
 
  if (m_fw_loaded)
  { //offline mode

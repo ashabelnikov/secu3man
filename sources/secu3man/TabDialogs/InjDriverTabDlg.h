@@ -27,6 +27,7 @@
 
 #include <memory>
 #include <vector>
+#include <map>
 #include "common/fastdelegate.h"
 #include "ui-core/TabDialog.h"
 #include "ui-core/EditEx.h"
@@ -49,7 +50,7 @@ class CInjDriverTabDlg : public CTabDialog
   virtual LPCTSTR GetDialogID(void) const;
 
   void SetVoltLineColor(DWORD color);
-  void SetPtMovStep(float peakOn, float peakDuty, float holdDuty);
+  void SetPtMovStep(float peakOn, float peakDuty, float holdDuty, float peakFull, float pthPause);
   void SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only = false);
   void GetValues(SECU3IO::InjDrvPar* op_data);
   void EnableAll(bool enable);
@@ -84,6 +85,8 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnPeakOnTabSelCheck();
   afx_msg void OnPeakDutyTabSelCheck();
   afx_msg void OnHoldDutyTabSelCheck();
+  afx_msg void OnPeakFullTabSelCheck();
+  afx_msg void OnPthPauseTabSelCheck();
   afx_msg void OnSelendokSetOfSett();
   afx_msg void OnUpArrowButton();
   afx_msg void OnDownArrowButton();
@@ -105,6 +108,8 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsPF(CCmdUI* pCmdUI);
+  afx_msg void OnUpdateControlsPP(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsArrowBtns(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsEESave(CCmdUI* pCmdUI);
@@ -145,10 +150,14 @@ class CInjDriverTabDlg : public CTabDialog
   CButton m_peak_on_tabsel_check;
   CButton m_peak_duty_tabsel_check;
   CButton m_hold_duty_tabsel_check;
+  CButton m_peak_full_tabsel_check;
+  CButton m_pth_pause_tabsel_check;
 
   CButton m_peak_on_check;
   CButton m_peak_duty_check;
   CButton m_hold_duty_check;
+  CButton m_peak_full_check;
+  CButton m_pth_pause_check;
 
   CButton m_up_arrow;
   CButton m_down_arrow;
@@ -189,7 +198,5 @@ class CInjDriverTabDlg : public CTabDialog
   float m_y_axis_max;
   int m_curve_idx;
 
-  float m_optPeakOnPtMovStep;
-  float m_optPeakDutyPtMovStep;
-  float m_optHoldDutyPtMovStep;
+  std::map<int, float> m_ptMovStep;
 };
