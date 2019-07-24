@@ -400,11 +400,12 @@ BEGIN
     CONTROL         "Табл.",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Тестиров. ШИМ включ.",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Тестиров. ШИМ удерж.",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    LTEXT           "Что это?",IDC_INJDRV_TIP_LINK,160,156,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     PUSHBUTTON      "Сохранить в EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
     GROUPBOX        "Настройки драйвера",IDC_LZID_SETTINGS_GROUP,7,7,205,165
-    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN
+    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "Напряжение (В)",IDC_VOLTAGE_CAPTION,49,181,60,10
-    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN
+    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
@@ -418,6 +419,14 @@ BEGIN
     RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+END
+
+IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Пояснение параметров драйвера"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_INJDRV_TIP_PIC,"Static", SS_BITMAP | WS_VISIBLE, 5,5,310,230
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -714,6 +723,8 @@ BEGIN
     IDS_PEAK_ON_TIME_EDIT_TT        "Время полного включения. После сигнала начала впрыска и в течение этого времени к форсунке будет прикладываться полное напряжение (без ШИМ). После истечения этого времени к форсунке будет прикладываться ШИМ."
     IDS_PEAK_PWM_TIME_EDIT_TT       "Время полного включения плюс Время ШИМ при включении. 'Время ШИМ при включении' определяет сколько времени к форсунке будет прикладываться ШИМ после истечения 'Времени полного включения'. "
     IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
+    IDS_VOLTAGE_PANE_TT             "Напряжение на форсунках (измеряется собственным контроллером драйвера)"
+    IDS_INJDRV_GAS_V_PANE_TT        "Состояние входа GAS_V драйвера (0 - нет напряжения, 1 - есть напряжение)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1111,11 +1122,12 @@ BEGIN
     CONTROL         "Table",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Test peak PWM",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Test hold PWM",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    LTEXT           "What is this?",IDC_INJDRV_TIP_LINK,160,156,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     PUSHBUTTON      "Save to EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
     GROUPBOX        "Driver's settings",IDC_LZID_SETTINGS_GROUP,7,7,205,165
-    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN
+    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "Voltage (V)",IDC_VOLTAGE_CAPTION,49,181,60,10
-    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN
+    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
@@ -1129,6 +1141,14 @@ BEGIN
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+END
+
+IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Explanation of inj. driver's settings"
+FONT 8, "MS Sans Serif"
+BEGIN
+    CONTROL         "",IDC_INJDRV_TIP_PIC,"Static", SS_BITMAP | WS_VISIBLE, 5,5,310,230
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1425,6 +1445,8 @@ BEGIN
     IDS_PEAK_ON_TIME_EDIT_TT        "Время полного включения. После сигнала начала впрыска и в течение этого времени к форсунке будет прикладываться полное напряжение (без ШИМ). После истечения этого времени к форсунке будет прикладываться ШИМ."
     IDS_PEAK_PWM_TIME_EDIT_TT       "Время полного включения плюс Время ШИМ при включении. 'Время ШИМ при включении' определяет сколько времени к форсунке будет прикладываться ШИМ после истечения 'Времени полного включения'. "
     IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
+    IDS_VOLTAGE_PANE_TT             "Voltage at the injectors (being measured by own driver's controller)"
+    IDS_INJDRV_GAS_V_PANE_TT        "State of the GAS_V input (0 - voltage is absent, 1 - voltage is present)"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1462,6 +1484,7 @@ IDC_CURSOR_HAND         CURSOR     "res\\hand.cur"
 IDB_SECU3LOGO_BITMAP    BITMAP     "res\\secu3logo.bmp"
 IDB_MAIN_TAB_CTRL_BITMAPS BITMAP   "res\\tab_ctrl_bitmaps.bmp"
 IDB_CE_LIST_ICONS       BITMAP     "res\\ce_list_icons.bmp"
+IDB_INJDRV_TIP_PIC      JPG        "res\\injdrvtips.jpg"
 
 /////////////////////////////////////////////////////////////////////////////
 //

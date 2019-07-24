@@ -36,6 +36,7 @@
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/Label.h"
 #include "ui-core/ClickableBmp.h"
+#include "InjDriverTipDlg.h"
 
 const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 
@@ -56,6 +57,7 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CInjDriverTabDlg::IDD, pParent)
 , mp_chart(new CChart2D())
 , mp_secu3orgLink(new CLabel)
+, mp_TipLink(new CLabel)
 , mp_secu3logo(new CClickableBmp())
 , m_initialized(false)
 , m_enable(false)
@@ -162,6 +164,7 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX,IDC_SECU3ORG_LINK, *mp_secu3orgLink);
  DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
+ DDX_Control(pDX, IDC_INJDRV_TIP_LINK, *mp_TipLink);
 
  m_pwm_period_edit.DDX_Value(pDX, IDC_PWM_PERIOD_EDIT, m_params[m_set_of_sett_idx].m_pwm_period);
  m_peak_duty_edit.DDX_Value(pDX, IDC_PEAK_DUTY_EDIT, m_params[m_set_of_sett_idx].m_peak_duty);
@@ -306,6 +309,13 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  if (str[0] != _T('h') || str[1] != _T('t') || str[2] != _T('t') || str[3] != _T('p') || str[4] != _T(':') || str[5] != _T('/') || str[6] != _T('/') || str[7] != _T('s') || str[8] != _T('e') || str[9] != _T('c') || str[10] != _T('u') || str[11] != _T('3') || str[12] != _T('.') || str[13] != _T('o') || str[14] != _T('r') || str[15] != _T('g'))
   return FALSE;
 
+ //init tip link
+ mp_TipLink->SetLink(true);
+ mp_TipLink->SetTextColor(RGB(0, 0, 255));
+ mp_TipLink->SetFontUnderline(true);
+ mp_TipLink->SetLinkCursor(AfxGetApp()->LoadCursor(IDC_CURSOR_HAND));
+ mp_TipLink->SetOnClick(fastdelegate::MakeDelegate(this, &CInjDriverTabDlg::OnTipLinkClick));
+
  //init edit boxes and spin buttons
  m_pwm_period_spin.SetBuddy(&m_pwm_period_edit);
  m_pwm_period_edit.SetLimitText(6);
@@ -415,6 +425,9 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_peak_pwm_time_spin, MLL::GetString(IDS_PEAK_PWM_TIME_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_pth_pause_edit, MLL::GetString(IDS_PTH_PAUSE_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_pth_pause_spin, MLL::GetString(IDS_PTH_PAUSE_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_voltage_pane, MLL::GetString(IDS_VOLTAGE_PANE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_gas_v_pane, MLL::GetString(IDS_INJDRV_GAS_V_PANE_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -1127,4 +1140,10 @@ void CInjDriverTabDlg::EnableBLItems(bool enable)
 {
  m_is_bl_items_available = enable;
  UpdateDialogControls(this, TRUE);
+}
+
+void CInjDriverTabDlg::OnTipLinkClick(void)
+{
+ CInjDriverTipDlg tipDlg;
+ tipDlg.DoModal();
 }

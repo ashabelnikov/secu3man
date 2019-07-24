@@ -19,44 +19,24 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file Label.h
+/** \file InjDriverTipDlg.h
  * \author Alexey A. Shabelnikov
  */
 
 #pragma once
 
-#include "common/unicodesupport.h"
-#include "common/fastdelegate.h"
-
-class AFX_EXT_CLASS CLabel : public CStatic
+class CInjDriverTipDlg : public CDialog
 {
-  typedef CStatic Super;
-  typedef fastdelegate::FastDelegate0<void> EventHandler;
- public:
-  CLabel();
-  virtual ~CLabel();
+  typedef CDialog Super;
 
-  void SetTextColor(COLORREF crText);
-  void SetText(const _TSTRING& strText);
-  void SetFontUnderline(bool bSet);
-  void SetLink(bool bLink);
-  void SetLinkCursor(HCURSOR hCursor);
-  void SetOnClick(const EventHandler& onClickCB);
+ public:
+  CInjDriverTipDlg(CWnd* pParent = NULL);   // standard constructor
 
  protected:
-  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
-  afx_msg BOOL OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message);
-  afx_msg HBRUSH CtlColor(CDC* pDC, UINT nCtlColor);
+  virtual BOOL OnInitDialog();
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   DECLARE_MESSAGE_MAP()
 
  private:
-  void _ReconstructFont(void);
-
-  COLORREF m_brushColor;
-  COLORREF m_crText;
-  HBRUSH  m_hBrush;
-  HCURSOR m_hCursor;
-  LOGFONT m_lf;
-  CFont  m_font;
-  EventHandler m_onClickCB;
+  CStatic m_tipPic;  
 };

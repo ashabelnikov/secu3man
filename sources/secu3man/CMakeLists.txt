@@ -84,6 +84,7 @@ set(HEADERS
   TabDialogs/FirmwareContextMenuManager.h
   TabDialogs/FirmwareTabDlg.h
   TabDialogs/InjDriverTabDlg.h
+  TabDialogs/InjDriverTipDlg.h
   TabDialogs/KnockChannelTabDlg.h
   TabDialogs/KnockContextMenuManager.h
   TabDialogs/KnockFrqCalcDlg.h
@@ -141,6 +142,7 @@ set(SOURCES
   TabDialogs/FirmwareContextMenuManager.cpp
   TabDialogs/FirmwareTabDlg.cpp
   TabDialogs/InjDriverTabDlg.cpp
+  TabDialogs/InjDriverTipDlg.cpp
   TabDialogs/KnockChannelTabDlg.cpp
   TabDialogs/KnockContextMenuManager.cpp
   TabDialogs/KnockFrqCalcDlg.cpp

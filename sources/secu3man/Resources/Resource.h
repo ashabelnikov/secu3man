@@ -525,3 +525,9 @@
 #define IDS_PTH_PAUSE_EDIT_TT           4545
 #define IDS_PEAK_FULL_CHECK_TT          4546
 #define IDS_PTH_PAUSE_CHECK_TT          4547
+#define IDC_INJDRV_TIP_LINK             4548
+#define IDD_INJDRV_TIP_PICTURE          4549
+#define IDC_INJDRV_TIP_PIC              4550
+#define IDB_INJDRV_TIP_PIC              4551
+#define IDS_VOLTAGE_PANE_TT             4552
+#define IDS_INJDRV_GAS_V_PANE_TT        4553

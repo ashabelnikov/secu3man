@@ -122,6 +122,7 @@ class CInjDriverTabDlg : public CTabDialog
   void UpdateChartValues(void);
   void SetChartVoltageValue(float voltage);
   void OnLogoClick(void);
+  void OnTipLinkClick(void);
 
   CEditEx m_pwm_period_edit;
   CSpinButtonCtrlEx m_pwm_period_spin;
@@ -169,6 +170,7 @@ class CInjDriverTabDlg : public CTabDialog
   std::auto_ptr<CChart2D> mp_chart;
   std::auto_ptr<CClickableBmp> mp_secu3logo;
   std::auto_ptr<CLabel> mp_secu3orgLink;
+  std::auto_ptr<CLabel> mp_TipLink;
 
  private:
   EventHandler m_onChange;

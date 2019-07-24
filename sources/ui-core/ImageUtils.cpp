@@ -64,3 +64,44 @@ bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile)
  }
  return true;
 }
+
+bool LoadImageFromRes(HINSTANCE hinstance, LPCTSTR lpszResourceName, LPCTSTR resType, CImage* pImage)
+{
+ HRSRC hRib = ::FindResource(hinstance, lpszResourceName, resType);
+ if (hRib == NULL)
+  return false;
+
+ HGLOBAL hGlobal = LoadResource(hinstance, hRib);
+ if (hGlobal == NULL)
+  return false;
+
+ LPBYTE lpBuffer = (LPBYTE) ::LockResource(hGlobal);
+ if (lpBuffer == NULL)
+ {
+  FreeResource(hGlobal);
+  return false;
+ }
+
+ UINT resSize = ::SizeofResource(hinstance, hRib);
+ HGLOBAL hRes = ::GlobalAlloc(GMEM_MOVEABLE, resSize);
+ if (hRes != NULL)
+ {
+  IStream* pStream = NULL;
+  LPVOID lpResBuffer = ::GlobalLock(hRes);
+  ASSERT (lpResBuffer != NULL);
+  memcpy(lpResBuffer, lpBuffer, resSize);
+  HRESULT hResult = ::CreateStreamOnHGlobal(hRes, TRUE, &pStream);
+  if (S_OK == hResult)
+  {
+   pImage->Load(pStream);
+   pStream->Release();
+   UnlockResource(hGlobal);
+   FreeResource(hGlobal);
+   return true;
+  }
+ }
+
+ UnlockResource(hGlobal);
+ FreeResource(hGlobal);
+ return false;
+}

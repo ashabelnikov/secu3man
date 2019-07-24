@@ -84,12 +84,18 @@ void CLabel::SetLink(bool bLink)
 
 void CLabel::OnLButtonDown(UINT nFlags, CPoint point) 
 {
- CString strLink;
+ if (m_onClickCB)
+ {
+  m_onClickCB();
+  Super::OnLButtonDown(nFlags, point);
+  return; //override default behaviour if CB function is set
+ }
 
+ CString strLink;
  GetWindowText(strLink);
  ShellExecute(NULL, _T("open"), strLink, NULL, NULL, SW_SHOWNORMAL);
 		
- CStatic::OnLButtonDown(nFlags, point);
+ Super::OnLButtonDown(nFlags, point);
 }
 
 BOOL CLabel::OnSetCursor(CWnd* pWnd, UINT nHitTest, UINT message) 
@@ -124,4 +130,9 @@ void CLabel::SetFontUnderline(bool bSet)
 void CLabel::SetLinkCursor(HCURSOR hCursor)
 {
  m_hCursor = hCursor;
+}
+
+void CLabel::SetOnClick(const EventHandler& onClickCB)
+{
+ m_onClickCB = onClickCB;
 }

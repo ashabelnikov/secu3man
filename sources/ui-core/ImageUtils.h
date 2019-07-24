@@ -26,6 +26,8 @@
 #pragma once
 
 #include "common/Unicodesupport.h"
+#include <atlimage.h>
+
 
 #ifdef IMAGE_UTILS_EXPORTS
  #define IMAGE_UTILS_API __declspec(dllexport)
@@ -34,3 +36,6 @@
 #endif
 
 bool IMAGE_UTILS_API SaveScreenshot(CWnd* pWnd, bool selectFile);
+
+bool IMAGE_UTILS_API LoadImageFromRes(HINSTANCE hinstance, LPCTSTR lpszResourceName, LPCTSTR resType, CImage* pImage);
+
