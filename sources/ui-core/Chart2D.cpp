@@ -38,6 +38,7 @@ CSerieData::CSerieData(UINT nPoint)
 , m_ptCount(0)
 , m_visible(true)
 , m_handle(false)
+, m_labels(false)
 , m_curSel(0)
 {
  mp_valueX = new (std::nothrow) double[nPoint];
@@ -72,6 +73,7 @@ CSerieData& CSerieData::operator=(const CSerieData& rhs)
  std::copy(rhs.mp_valueY, rhs.mp_valueY + m_ptCount, mp_valueY);
  m_visible = rhs.m_visible;
  m_handle = rhs.m_handle;
+ m_labels = rhs.m_labels;
  m_curSel = rhs.m_curSel;
  return *this;
 }
@@ -280,6 +282,19 @@ void CChart2D::_PlotSeries(CDC *pDC)
   CPen pen(PS_SOLID, 0, m_serie[i].m_plotColor);
   CPen* old = pDC->SelectObject(&pen);
   CPoint pt = _MapCoord(m_serie[i].mp_valueX[0],m_serie[i].mp_valueY[0]);
+
+  if (m_serie[i].m_labels)
+  {
+   COLORREF oldColor = pDC->SetTextColor(m_TextLabelColor);
+   HGDIOBJ oldfont = pDC->SelectObject(mp_legendFontX);
+   CString str;
+   str.Format(m_axisFmtY, m_serie[i].mp_valueY[0]);
+   CSize ss = pDC->GetTextExtent(str);
+   pDC->TextOut(pt.x - (ss.cx / 2), pt.y - ss.cy - (m_serie[i].m_handle ? m_ptHandleRadius : 0), str);
+   pDC->SelectObject(oldfont);
+   pDC->SetTextColor(oldColor);
+  }
+
   pDC->MoveTo(pt);
   CBrush brushSel(RGB(50,50,255));
   if (m_serie[i].m_handle)
@@ -296,6 +311,19 @@ void CChart2D::_PlotSeries(CDC *pDC)
   for(int index = 1; index <= m_serie[i].m_ptIndex ; index++)
   {
    pt = _MapCoord(m_serie[i].mp_valueX[index], m_serie[i].mp_valueY[index]);
+   
+   if (m_serie[i].m_labels)
+   {
+    COLORREF oldColor = pDC->SetTextColor(m_TextLabelColor);
+    HGDIOBJ oldfont = pDC->SelectObject(mp_legendFontX);
+    CString str;
+    str.Format(m_axisFmtY, m_serie[i].mp_valueY[index]);
+    CSize ss = pDC->GetTextExtent(str);
+    pDC->TextOut(pt.x - (ss.cx / 2), pt.y - ss.cy - (m_serie[i].m_handle ? m_ptHandleRadius : 0), str);
+    pDC->SelectObject(oldfont);
+    pDC->SetTextColor(oldColor);
+   }
+
    pDC->LineTo(pt);
    if (m_serie[i].m_handle)
    {    
@@ -747,7 +775,19 @@ void CChart2D::SetSerieHandle(int serieIdx, bool showHandle)
  if (serieIdx > (int)m_serie.size() - 1) return;
  m_serie[serieIdx].m_handle = showHandle;
 
-if (::IsWindow(m_hWnd))
+ if (::IsWindow(m_hWnd))
+ {
+  _SetStateColors(IsWindowEnabled());
+  Invalidate();
+ } 
+}
+
+void CChart2D::SetSerieLabels(int serieIdx, bool showLabels, bool redraw /*=true*/)
+{
+ if (serieIdx > (int)m_serie.size() - 1) return;
+ m_serie[serieIdx].m_labels = showLabels;
+
+ if (redraw && ::IsWindow(m_hWnd))
  {
   _SetStateColors(IsWindowEnabled());
   Invalidate();

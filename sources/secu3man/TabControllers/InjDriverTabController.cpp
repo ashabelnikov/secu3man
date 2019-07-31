@@ -115,6 +115,8 @@ void CInjDriverTabController::OnActivate(void)
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());
  mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep());
 
+ mp_view->SetShowGraphLabels(mp_sett->GetShowGraphLabels());
+
  if (m_fw_loaded)
  { //offline mode
   mp_view->SetOfflineCheck();

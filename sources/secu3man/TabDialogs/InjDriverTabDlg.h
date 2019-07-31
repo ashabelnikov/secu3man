@@ -59,6 +59,7 @@ class CInjDriverTabDlg : public CTabDialog
   int GetCurrSetIdx(void);
   void SetOfflineCheck(void);
   void EnableBLItems(bool enable);
+  void SetShowGraphLabels(bool show);
 
   void setOnChange(EventHandler onCB);
   void setOnSaveButton(EventHandler onCB);

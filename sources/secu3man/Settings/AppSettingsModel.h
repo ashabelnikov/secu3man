@@ -182,6 +182,7 @@ class CAppSettingsModel : public ISettingsData
   virtual float GetHoldDutyPtMovStep(void) const;
   virtual float GetPeakFullPtMovStep(void) const;
   virtual float GetPthPausePtMovStep(void) const;
+  virtual bool GetShowGraphLabels(void) const;
 
   virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep);
   virtual void GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const;
@@ -437,6 +438,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optHoldDutyPtMovStep;
   OptField_t<float> m_optPeakFullPtMovStep;
   OptField_t<float> m_optPthPausePtMovStep;
+  OptField_t<bool> m_optShowGraphLabels;
 
   //Points's moving step in map editor windows
   OptField_t<float> m_optPtMovStepWorkMap;

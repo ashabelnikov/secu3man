@@ -1147,3 +1147,12 @@ void CInjDriverTabDlg::OnTipLinkClick(void)
  CInjDriverTipDlg tipDlg;
  tipDlg.DoModal();
 }
+
+void CInjDriverTabDlg::SetShowGraphLabels(bool show)
+{
+ mp_chart->SetSerieLabels(SERIE_PO, show, false);
+ mp_chart->SetSerieLabels(SERIE_PD, show, false);
+ mp_chart->SetSerieLabels(SERIE_HD, show, false);
+ mp_chart->SetSerieLabels(SERIE_PF, show, false);
+ mp_chart->SetSerieLabels(SERIE_PP, show, true); //<--redraw
+}

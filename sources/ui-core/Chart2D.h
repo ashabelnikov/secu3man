@@ -52,6 +52,7 @@ class CSerieData
   COLORREF m_plotColor;
   bool m_visible;  //visibility flag
   bool m_handle;
+  bool m_labels;
   int m_curSel;
 
   friend class CChart2D;
@@ -126,6 +127,8 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   void SetSerieVisibility(int serieIdx, bool visible);
 
   void SetSerieHandle(int serieIdx, bool showHandle);
+
+  void SetSerieLabels(int serieIdx, bool showLabels, bool redraw = true);
 
   void SetPtMovStep(double value);
 

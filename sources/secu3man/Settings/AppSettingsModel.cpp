@@ -209,6 +209,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optHoldDutyPtMovStep(_T("HoldDutyPtMovStep"))
 , m_optPeakFullPtMovStep(_T("PeakFullPtMovStep"))
 , m_optPthPausePtMovStep(_T("PthPausePtMovStep"))
+, m_optShowGraphLabels(_T("ShowGraphLabels"))
 //Points' moving step
 , m_Name_MapPtMovStep_Section(_T("MapPtMovStep"))
 , m_optPtMovStepWorkMap(_T("WorkMapWnd"))
@@ -686,7 +687,8 @@ bool CAppSettingsModel::ReadSettings(void)
  dr.ReadFlt(m_optHoldDutyPtMovStep, _T("0.1"), 0.1f, 10.0f);
  dr.ReadFlt(m_optPeakFullPtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadFlt(m_optPthPausePtMovStep, _T("1.0"), 1.0f, 10000.0f);
-
+ dr.ReadInt(m_optShowGraphLabels, _T("0"), 0, 1);
+ 
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
  ms.ReadFlt(m_optPtMovStepWorkMap,  _T("0.5"), 0.0f, 10.0f);
@@ -1953,6 +1955,11 @@ bool CAppSettingsModel::WriteSettings(void)
   dr.WriteFlt(m_optPthPausePtMovStep, 0, _T("Points moving step for the \"Peak-to-hold pause\" graph"));
  else
   dr.WriteFlt(m_optPthPausePtMovStep, 0, _T("Шаг смещения точек для графика \"Пауза включ. - удерж.\""));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteInt(m_optShowGraphLabels, _T("Show labels over handles on graphs. 1 - show, 0 - don't show."));
+ else
+  dr.WriteInt(m_optShowGraphLabels, _T("Показывать надписи над узловыми точками графиков. 1 - показывать, 0 - не показывать."));
 
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
@@ -3273,4 +3280,9 @@ void CAppSettingsModel::GetFunctionality(Functionality& o_fnc) const
 {
  o_fnc.SM_CONTROL = m_optFuncSM_CONTROL.value;
  o_fnc.GD_CONTROL = m_optFuncGD_CONTROL.value;
+}
+
+bool CAppSettingsModel::GetShowGraphLabels(void) const
+{
+ return m_optShowGraphLabels.value;
 }

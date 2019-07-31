@@ -285,8 +285,8 @@ BOOL CInjectorPageDlg::OnInitDialog()
   m_flowrate_spin[i].SetBuddy(&m_flowrate_edit[i]);
   m_flowrate_edit[i].SetLimitText(6);
   m_flowrate_edit[i].SetDecimalPlaces(2);
-  m_flowrate_spin[i].SetRangeAndDelta(50.00f, 1000.00f, 0.02f);
-  m_flowrate_edit[i].SetRange(50.00f, 1000.00f);
+  m_flowrate_spin[i].SetRangeAndDelta(50.00f, 1023.00f, 0.02f);
+  m_flowrate_edit[i].SetRange(50.00f, 1023.00f);
 
   m_inj_timing_spin[i].SetBuddy(&m_inj_timing_edit[i]);
   m_inj_timing_edit[i].SetLimitText(4);
