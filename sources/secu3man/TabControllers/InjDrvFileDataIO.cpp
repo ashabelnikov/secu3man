@@ -77,7 +77,9 @@ struct lzid_sett_t
  uint16_t peak_full_tab[SECU3IO::LUTABSIZE];//!< full peak time (ON+PWM) vs board voltage
  uint16_t pth_pause_tab[SECU3IO::LUTABSIZE];//!< peak-to-hold pause vs board voltage
 
- uint8_t reserved_bytes[192];     //!< reserved bytes
+ uint8_t testch_sel;
+
+ uint8_t reserved_bytes[191];     //!< reserved bytes
 
  uint16_t crc;                    //!< CRC16 of this structure (excluding last two bytes)
 };
@@ -117,6 +119,8 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
  fs.gen_flags = 0;
  WRITEBIT8(fs.gen_flags, 0, ms.m_tst_peak_pwm);
  WRITEBIT8(fs.gen_flags, 1, ms.m_tst_hold_pwm);
+
+ fs.testch_sel = ms.m_testch_sel;
 
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   fs.peak_on_tab[i] = MathHelpers::Round(ms.m_peak_on_tab[i] * 2.5f);
@@ -165,6 +169,8 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const lzid_sett_t& fs, bool
 
  ms.m_tst_peak_pwm = CHECKBIT8(fs.gen_flags, 0);
  ms.m_tst_hold_pwm = CHECKBIT8(fs.gen_flags, 1);
+
+ ms.m_testch_sel = fs.testch_sel;
 
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   ms.m_peak_on_tab[i] = ((float)fs.peak_on_tab[i]) / 2.5f;

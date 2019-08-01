@@ -531,3 +531,6 @@
 #define IDB_INJDRV_TIP_PIC              4551
 #define IDS_VOLTAGE_PANE_TT             4552
 #define IDS_INJDRV_GAS_V_PANE_TT        4553
+#define IDC_INJDRV_TESTCH_COMBO         4554
+#define IDC_INJDRV_TESTCH_CAPTION       4555
+#define IDS_INJDRV_TESTCH_COMBO_TT      4556

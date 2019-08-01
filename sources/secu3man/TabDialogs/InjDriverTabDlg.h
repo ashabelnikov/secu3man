@@ -89,6 +89,7 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnPeakFullTabSelCheck();
   afx_msg void OnPthPauseTabSelCheck();
   afx_msg void OnSelendokSetOfSett();
+  afx_msg void OnSelendokTestCh();
   afx_msg void OnUpArrowButton();
   afx_msg void OnDownArrowButton();
   afx_msg void OnChangeData();
@@ -144,6 +145,7 @@ class CInjDriverTabDlg : public CTabDialog
   CSpinButtonCtrlEx m_pth_pause_spin;
 
   CComboBox m_set_of_sett_combo;
+  CComboBox m_testch_combo;
 
   CStatic m_voltage_pane;
   CStatic m_gas_v_pane;

@@ -586,6 +586,7 @@ namespace SECU3IO
   bool gas_v;            //from LZID only
 
   int set_idx;           //allowed values: 0, 1
+  int m_testch_sel;      //0 - turned off, channel selection: 1,2,3,4,5
 
   bool direct_flags[8];
   float m_pwm_period;

@@ -111,6 +111,7 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
   m_params[i].m_pth_pause_usetab = false;
   m_params[i].m_tst_peak_pwm = false;
   m_params[i].m_tst_hold_pwm = false;
+  m_params[i].m_testch_sel = 0;
  }
  mp_curr_curve = m_params[m_set_of_sett_idx].m_peak_on_tab;
 }
@@ -118,6 +119,8 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 {
  DDX_CBIndex(pDX, IDC_SET_OF_SETT_COMBO, m_set_of_sett_idx); //must be first!
+
+ DDX_CBIndex(pDX, IDC_INJDRV_TESTCH_COMBO, m_params[m_set_of_sett_idx].m_testch_sel);
 
  DDX_Control(pDX, IDC_PWM_PERIOD_EDIT, m_pwm_period_edit);
  DDX_Control(pDX, IDC_PWM_PERIOD_SPIN, m_pwm_period_spin);
@@ -161,6 +164,7 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TST_HOLD_PWM_CHECK, m_tst_hold_pwm_check);
 
  DDX_Control(pDX, IDC_SET_OF_SETT_COMBO, m_set_of_sett_combo);
+ DDX_Control(pDX, IDC_INJDRV_TESTCH_COMBO, m_testch_combo);
 
  DDX_Control(pDX,IDC_SECU3ORG_LINK, *mp_secu3orgLink);
  DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
@@ -213,6 +217,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_BN_CLICKED(IDC_TST_HOLD_PWM_CHECK, OnChangeDataTstHoldPwm)
 
  ON_CBN_SELENDOK(IDC_SET_OF_SETT_COMBO, OnSelendokSetOfSett)
+ ON_CBN_SELENDOK(IDC_INJDRV_TESTCH_COMBO, OnSelendokTestCh)
 
  ON_EN_CHANGE(IDC_PWM_PERIOD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PEAK_DUTY_EDIT, OnChangeData)
@@ -271,6 +276,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_TST_HOLD_PWM_CHECK, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_SET_OF_SETT_COMBO, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_SET_OF_SETT_CAPTION, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_COMBO, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_CAPTION, OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_VOLTAGE_PANE,OnUpdateControlsVoltage)
  ON_UPDATE_COMMAND_UI(IDC_VOLTAGE_CAPTION,OnUpdateControlsVoltage)
@@ -357,6 +364,13 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  m_set_of_sett_combo.AddString(MLL::LoadString(IDS_INJDRV_PETROL_SET));
  m_set_of_sett_combo.AddString(MLL::LoadString(IDS_INJDRV_GAS_SET));
 
+ m_testch_combo.AddString(_T(" OFF"));
+ m_testch_combo.AddString(_T(" 1"));
+ m_testch_combo.AddString(_T(" 2"));
+ m_testch_combo.AddString(_T(" 3"));
+ m_testch_combo.AddString(_T(" 4"));
+ m_testch_combo.AddString(_T(" 5"));
+
  //init chart
  CRect rect;
  GetDlgItem(IDC_VCURVES_CHART_FRAME)->GetWindowRect(rect);
@@ -428,6 +442,8 @@ BOOL CInjDriverTabDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_voltage_pane, MLL::GetString(IDS_VOLTAGE_PANE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_gas_v_pane, MLL::GetString(IDS_INJDRV_GAS_V_PANE_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_testch_combo, MLL::GetString(IDS_INJDRV_TESTCH_COMBO_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -830,6 +846,12 @@ void CInjDriverTabDlg::OnSelendokSetOfSett()
 
  UpdateData(FALSE);
  UpdateDialogControls(this, TRUE);
+}
+
+void CInjDriverTabDlg::OnSelendokTestCh()
+{
+ if (m_onChange)
+  m_onChange();
 }
 
 void CInjDriverTabDlg::setOnChange(EventHandler onCB)

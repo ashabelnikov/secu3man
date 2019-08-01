@@ -2289,7 +2289,7 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& m_recv = m_recepted_packet.m_InjDrvPar;
- if (size != (mp_pdp->isHex() ? 370 : 185))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 372 : 186))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  mp_pdp->resetCRC();
@@ -2345,6 +2345,11 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_recv.m_tst_peak_pwm = CHECKBIT8(gen_flags, 0);
  m_recv.m_tst_hold_pwm = CHECKBIT8(gen_flags, 1);
+
+ unsigned char testch_sel = 0;
+ if (false == mp_pdp->Hex8ToBin(raw_packet, &testch_sel))
+  return false;
+ m_recv.m_testch_sel = testch_sel;
 
  int pwm_period;
  if (false == mp_pdp->Hex16ToBin(raw_packet, &pwm_period))
@@ -3716,6 +3721,9 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  WRITEBIT8(gen_flags, 0, packet_data->m_tst_peak_pwm);
  WRITEBIT8(gen_flags, 1, packet_data->m_tst_hold_pwm);
  mp_pdp->Bin8ToHex(gen_flags, m_outgoing_packet); //general flags
+
+ BYTE testch_sel = packet_data->m_testch_sel;
+ mp_pdp->Bin8ToHex(testch_sel, m_outgoing_packet); //select channel for testing
 
  int pwm_period = MathHelpers::Round(packet_data->m_pwm_period * 20.0f);
  mp_pdp->Bin16ToHex(pwm_period, m_outgoing_packet);

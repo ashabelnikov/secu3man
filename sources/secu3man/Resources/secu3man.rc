@@ -400,13 +400,15 @@ BEGIN
     CONTROL         "Табл.",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Тестиров. ШИМ включ.",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Тестиров. ШИМ удерж.",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    COMBOBOX        IDC_INJDRV_TESTCH_COMBO,115,172,81,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Генер. импульсы на входе:",IDC_INJDRV_TESTCH_CAPTION,12,172,100,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     LTEXT           "Что это?",IDC_INJDRV_TIP_LINK,160,156,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     PUSHBUTTON      "Сохранить в EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
-    GROUPBOX        "Настройки драйвера",IDC_LZID_SETTINGS_GROUP,7,7,205,165
-    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN | SS_NOTIFY
-    RTEXT           "Напряжение (В)",IDC_VOLTAGE_CAPTION,49,181,60,10
-    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
-    RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
+    GROUPBOX        "Настройки драйвера",IDC_LZID_SETTINGS_GROUP,7,7,205,185
+    CTEXT           "0",IDC_VOLTAGE_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "Напряжение (В)",IDC_VOLTAGE_CAPTION,49,201,60,10
+    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,220,32,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,221,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
     CONTROL         "Скважн.Включ.",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
@@ -725,6 +727,7 @@ BEGIN
     IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
     IDS_VOLTAGE_PANE_TT             "Напряжение на форсунках (измеряется собственным контроллером драйвера)"
     IDS_INJDRV_GAS_V_PANE_TT        "Состояние входа GAS_V драйвера (0 - нет напряжения, 1 - есть напряжение)"
+    IDS_INJDRV_TESTCH_COMBO_TT      "На выбранном входе драйвера будут сгенерированы импульсы частотой 30Гц и длительностью 10мс."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1122,13 +1125,15 @@ BEGIN
     CONTROL         "Table",IDC_PTH_PAUSE_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,125,30,8
     CONTROL         "Test peak PWM",IDC_TST_PEAK_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,143,105,10
     CONTROL         "Test hold PWM",IDC_TST_HOLD_PWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,33,156,105,10
+    COMBOBOX        IDC_INJDRV_TESTCH_COMBO,115,172,81,50,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Generate pulses at input:",IDC_INJDRV_TESTCH_CAPTION,12,172,100,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     LTEXT           "What is this?",IDC_INJDRV_TIP_LINK,160,156,60,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     PUSHBUTTON      "Save to EEPROM",IDC_EEPROM_SAVE_BUTTON,227,9,81,23,BS_MULTILINE
-    GROUPBOX        "Driver's settings",IDC_LZID_SETTINGS_GROUP,7,7,205,165
-    CTEXT           "0",IDC_VOLTAGE_PANE,116,180,32,15,SS_SUNKEN | SS_NOTIFY
-    RTEXT           "Voltage (V)",IDC_VOLTAGE_CAPTION,49,181,60,10
-    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
-    RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,201,60,10
+    GROUPBOX        "Driver's settings",IDC_LZID_SETTINGS_GROUP,7,7,205,185
+    CTEXT           "0",IDC_VOLTAGE_PANE,116,200,32,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "Voltage (V)",IDC_VOLTAGE_CAPTION,49,201,60,10
+    CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,220,32,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,221,60,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
     CONTROL         "Peak duty",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
@@ -1447,6 +1452,7 @@ BEGIN
     IDS_PTH_PAUSE_EDIT_TT           "Время паузы между окончанием включения форсунки и переходом в режим удерживания. Необходимо для сброса лишней энергии, которая накопилась магнитным полем катушки."
     IDS_VOLTAGE_PANE_TT             "Voltage at the injectors (being measured by own driver's controller)"
     IDS_INJDRV_GAS_V_PANE_TT        "State of the GAS_V input (0 - voltage is absent, 1 - voltage is present)"
+    IDS_INJDRV_TESTCH_COMBO_TT      "At the selected input will be generated pulses with 30Hz frequency and 10ms duration."
 END
 
 /////////////////////////////////////////////////////////////////////////////
