@@ -144,6 +144,12 @@ class CInjDriverTabDlg : public CTabDialog
   CEditEx m_pth_pause_edit;
   CSpinButtonCtrlEx m_pth_pause_spin;
 
+  CEditEx m_testch_frq_edit;
+  CSpinButtonCtrlEx m_testch_frq_spin;
+
+  CEditEx m_testch_duty_edit;
+  CSpinButtonCtrlEx m_testch_duty_spin;
+
   CComboBox m_set_of_sett_combo;
   CComboBox m_testch_combo;
 

@@ -72,6 +72,8 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , m_peak_on_time_edit(CEditEx::MODE_FLOAT, true)
 , m_peak_pwm_time_edit(CEditEx::MODE_FLOAT, true)
 , m_pth_pause_edit(CEditEx::MODE_FLOAT, true)
+, m_testch_frq_edit(CEditEx::MODE_FLOAT, true)
+, m_testch_duty_edit(CEditEx::MODE_FLOAT, true)
 , m_curve_idx(SERIE_PO)
 , m_enable_voltage(false)
 , m_offline(false)
@@ -112,6 +114,8 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
   m_params[i].m_tst_peak_pwm = false;
   m_params[i].m_tst_hold_pwm = false;
   m_params[i].m_testch_sel = 0;
+  m_params[i].m_testch_frq = 30.0f;
+  m_params[i].m_testch_duty = 33.0f;
  }
  mp_curr_curve = m_params[m_set_of_sett_idx].m_peak_on_tab;
 }
@@ -139,6 +143,12 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_PTH_PAUSE_EDIT, m_pth_pause_edit);
  DDX_Control(pDX, IDC_PTH_PAUSE_SPIN, m_pth_pause_spin);
+
+ DDX_Control(pDX, IDC_INJDRV_TESTCH_FRQ_EDIT, m_testch_frq_edit);
+ DDX_Control(pDX, IDC_INJDRV_TESTCH_FRQ_SPIN, m_testch_frq_spin);
+
+ DDX_Control(pDX, IDC_INJDRV_TESTCH_DUTY_EDIT, m_testch_duty_edit);
+ DDX_Control(pDX, IDC_INJDRV_TESTCH_DUTY_SPIN, m_testch_duty_spin);
 
  DDX_Control(pDX, IDC_EEPROM_SAVE_BUTTON, m_eeprom_save_btn);
 
@@ -176,6 +186,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  m_peak_on_time_edit.DDX_Value(pDX, IDC_PEAK_ON_TIME_EDIT, m_params[m_set_of_sett_idx].m_peak_on_time);
  m_peak_pwm_time_edit.DDX_Value(pDX, IDC_PEAK_PWM_TIME_EDIT, m_params[m_set_of_sett_idx].m_peak_pwm_time);
  m_pth_pause_edit.DDX_Value(pDX, IDC_PTH_PAUSE_EDIT, m_params[m_set_of_sett_idx].m_pth_pause);
+ m_testch_frq_edit.DDX_Value(pDX, IDC_INJDRV_TESTCH_FRQ_EDIT, m_params[m_set_of_sett_idx].m_testch_frq);
+ m_testch_duty_edit.DDX_Value(pDX, IDC_INJDRV_TESTCH_DUTY_EDIT, m_params[m_set_of_sett_idx].m_testch_duty);
 
  DDX_Check_bool(pDX, IDC_PEAK_ON_CHECK, m_params[m_set_of_sett_idx].m_peak_on_usetab);
  DDX_Check_bool(pDX, IDC_PEAK_DUTY_CHECK, m_params[m_set_of_sett_idx].m_peak_duty_usetab);
@@ -225,6 +237,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_EN_CHANGE(IDC_PEAK_ON_TIME_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PEAK_PWM_TIME_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PTH_PAUSE_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_INJDRV_TESTCH_FRQ_EDIT, OnChangeData)
+ ON_EN_CHANGE(IDC_INJDRV_TESTCH_DUTY_EDIT, OnChangeData)
 
  ON_COMMAND(ID_INJDRV_POPUP_EXPORTTOAFILE, OnExportToAFile)
  ON_COMMAND(ID_INJDRV_POPUP_IMPORTFROMAFILE, OnImportFromAFile)
@@ -264,6 +278,14 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_EDIT,OnUpdateControlsPP)
  ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_SPIN,OnUpdateControlsPP)
  ON_UPDATE_COMMAND_UI(IDC_PTH_PAUSE_CAPTION,OnUpdateControlsPP)
+
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_FRQ_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_FRQ_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_FRQ_CAPTION,OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_DUTY_EDIT,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_DUTY_SPIN,OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_INJDRV_TESTCH_DUTY_CAPTION,OnUpdateControls)
 
  ON_UPDATE_COMMAND_UI(IDC_VCURVES_CHART, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_ON_CHECK, OnUpdateControls)
@@ -360,6 +382,18 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  m_pth_pause_spin.SetRangeAndDelta(1.0f, 1000.0f, 1.0f);
  m_pth_pause_edit.SetRange(1.0f, 1000.0f);
 
+ m_testch_frq_spin.SetBuddy(&m_testch_frq_edit);
+ m_testch_frq_edit.SetLimitText(6);
+ m_testch_frq_edit.SetDecimalPlaces(1);
+ m_testch_frq_spin.SetRangeAndDelta(2.5f, 200.0f, 0.1f);
+ m_testch_frq_edit.SetRange(2.5f, 200.0f);
+
+ m_testch_duty_spin.SetBuddy(&m_testch_duty_edit);
+ m_testch_duty_edit.SetLimitText(6);
+ m_testch_duty_edit.SetDecimalPlaces(1);
+ m_testch_duty_spin.SetRangeAndDelta(0.0f, 100.0f, 0.5f);
+ m_testch_duty_edit.SetRange(0.0f, 100.0f);
+
  //Init "set of settings" combo
  m_set_of_sett_combo.AddString(MLL::LoadString(IDS_INJDRV_PETROL_SET));
  m_set_of_sett_combo.AddString(MLL::LoadString(IDS_INJDRV_GAS_SET));
@@ -444,6 +478,11 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_gas_v_pane, MLL::GetString(IDS_INJDRV_GAS_V_PANE_TT)));
 
  VERIFY(mp_ttc->AddWindow(&m_testch_combo, MLL::GetString(IDS_INJDRV_TESTCH_COMBO_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_testch_frq_edit, MLL::GetString(IDS_INJDRV_TESTCH_FRQ_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_frq_spin, MLL::GetString(IDS_INJDRV_TESTCH_FRQ_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_duty_edit, MLL::GetString(IDS_INJDRV_TESTCH_DUTY_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_testch_duty_spin, MLL::GetString(IDS_INJDRV_TESTCH_DUTY_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

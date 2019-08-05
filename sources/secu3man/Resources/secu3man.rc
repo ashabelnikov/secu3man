@@ -421,6 +421,13 @@ BEGIN
     RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+
+    EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_INJDRV_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,240,11,16
+    RTEXT           "Частота тест. сигнала (Гц)",IDC_INJDRV_TESTCH_FRQ_CAPTION,12,243,100,10
+    EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
+    RTEXT           "Скважн. тест. сигнала (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -728,6 +735,8 @@ BEGIN
     IDS_VOLTAGE_PANE_TT             "Напряжение на форсунках (измеряется собственным контроллером драйвера)"
     IDS_INJDRV_GAS_V_PANE_TT        "Состояние входа GAS_V драйвера (0 - нет напряжения, 1 - есть напряжение)"
     IDS_INJDRV_TESTCH_COMBO_TT      "На выбранном входе драйвера будут сгенерированы импульсы частотой 30Гц и длительностью 10мс."
+    IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Частота тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
+    IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Скважность тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1146,6 +1155,13 @@ BEGIN
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+
+    EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_INJDRV_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,240,11,16
+    RTEXT           "Test signal frequency (Hz)",IDC_INJDRV_TESTCH_FRQ_CAPTION,12,243,100,10
+    EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
+    CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
+    RTEXT           "Test signal duty (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -1453,6 +1469,8 @@ BEGIN
     IDS_VOLTAGE_PANE_TT             "Voltage at the injectors (being measured by own driver's controller)"
     IDS_INJDRV_GAS_V_PANE_TT        "State of the GAS_V input (0 - voltage is absent, 1 - voltage is present)"
     IDS_INJDRV_TESTCH_COMBO_TT      "At the selected input will be generated pulses with 30Hz frequency and 10ms duration."
+    IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Frequency of the test signal used for testing of channels (see dropdown list 'Generate pulses at input')"
+    IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Duty of the test signal used for testing of channels  (see dropdown list 'Generate pulses at input')"
 END
 
 /////////////////////////////////////////////////////////////////////////////
