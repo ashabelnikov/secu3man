@@ -74,6 +74,7 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnReadLzblInfo(EventHandler onCB);
   void setOnWriteEEPROMFromFile(EventHandler onCB);  
   void setOnReadEEPROMToFile(EventHandler onCB);  
+  void setOnResetEEPROM(EventHandler onCB);  
 
  protected:
   virtual BOOL OnInitDialog();
@@ -107,6 +108,7 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnReadLzblInfo(void);
   afx_msg void OnWriteEEPROMFromFile(void);  
   afx_msg void OnReadEEPROMToFile(void);  
+  afx_msg void OnResetEEPROM();
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
@@ -155,6 +157,8 @@ class CInjDriverTabDlg : public CTabDialog
 
   CStatic m_voltage_pane;
   CStatic m_gas_v_pane;
+  CStatic m_crc0_pane;
+  CStatic m_crc1_pane;
 
   CButton m_eeprom_save_btn;
   CButton m_peak_on_tabsel_check;
@@ -195,6 +199,7 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onReadLzblInfo;
   EventHandler m_onWriteEEPROMFromFile;
   EventHandler m_onReadEEPROMToFile;
+  EventHandler m_onResetEEPROM;;
 
   bool m_initialized;
   bool m_enable;

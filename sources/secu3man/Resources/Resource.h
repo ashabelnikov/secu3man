@@ -542,3 +542,11 @@
 #define IDC_INJDRV_TESTCH_DUTY_CAPTION  4562
 #define IDS_INJDRV_TESTCH_FRQ_EDIT_TT   4563
 #define IDS_INJDRV_TESTCH_DUTY_EDIT_TT  4564
+#define ID_INJDRV_POPUP_RESETEEPROM     4565
+#define IDC_CRC0_PANE                   4566
+#define IDC_CRC0_CAPTION                4567
+#define IDC_CRC1_PANE                   4568
+#define IDC_CRC1_CAPTION                4569
+#define IDS_CRC0_PANE_TT                4570
+#define IDS_CRC1_PANE_TT                4571
+

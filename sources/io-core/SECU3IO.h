@@ -574,6 +574,7 @@ namespace SECU3IO
  //data send and received to/from SECU-LZID driver
  struct InjDrvPar
  {
+  bool reset_eeprom;     //to LZID: true - reset EEPROM (load sets from a flash)
   bool start_bldr;       //to LZID: true - start boot loader
   bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
   bool set0_corrupted;   //from LZID only 

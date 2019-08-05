@@ -76,6 +76,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnReadLzblInfo(MakeDelegate(this, &CInjDriverTabController::OnReadLzblInfo));
  mp_view->setOnWriteEEPROMFromFile(MakeDelegate(this, &CInjDriverTabController::OnWriteEEPROMFromFile));
  mp_view->setOnReadEEPROMToFile(MakeDelegate(this, &CInjDriverTabController::OnReadEEPROMToFile));
+ mp_view->setOnResetEEPROM(MakeDelegate(this, &CInjDriverTabController::OnResetEEPROM));
 }
 
 CInjDriverTabController::~CInjDriverTabController()
@@ -306,6 +307,7 @@ void CInjDriverTabController::OnChange(void)
  mp_view->GetValues(&params);
  params.ee_status = false; //no command
  params.start_bldr = false;
+ params.reset_eeprom = false;
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -319,6 +321,7 @@ void CInjDriverTabController::OnSaveParameters(void)
  mp_view->GetValues(&params);
  params.ee_status = true; //this will say firmware to save data int EEPROM
  params.start_bldr = false;
+ params.reset_eeprom = false;
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -341,6 +344,7 @@ void CInjDriverTabController::OnImportFromAFile(void)
  mp_view->SetValues(&params);
  params.ee_status = false; //no command
  params.start_bldr = false;
+ params.reset_eeprom = false;
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -746,4 +750,25 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
   //////////////////////////////////////////////////////////////////////
  }//switch
  mp_view->EnableBLItems(true);
+}
+
+void CInjDriverTabController::OnResetEEPROM(void)
+{
+ if (IDYES==AfxMessageBox(MLL::GetString(IDS_RESET_EEPROM_COMFIRMATION).c_str(), MB_YESNO|MB_DEFBUTTON2|MB_ICONEXCLAMATION))
+ {
+  m_saving_proc_state = 1;
+  mp_view->EnableSaveBtn(false);
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_RESET_EEPROM_STARTED));
+
+  SECU3IO::InjDrvPar params;
+  memset(&params, 0, sizeof(SECU3IO::InjDrvPar));
+  params.ee_status = false; //no command
+  params.start_bldr = false; //no command
+  params.reset_eeprom = true; //reset eeprom command
+  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
+  mp_view->RedrawWindow();
+  AfxGetMainWnd()->BeginWaitCursor();
+  Sleep(300);
+  AfxGetMainWnd()->EndWaitCursor();
+ }
 }

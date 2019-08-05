@@ -148,6 +148,7 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const lzid_sett_t& fs, bool
 
  ms.ee_status = false;
  ms.start_bldr = false;
+ ms.reset_eeprom = false;
  ms.voltage = .0f;
 
  ms.type = fs.type;

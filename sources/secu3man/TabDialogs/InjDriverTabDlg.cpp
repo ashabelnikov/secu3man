@@ -154,6 +154,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Control(pDX, IDC_VOLTAGE_PANE, m_voltage_pane);
  DDX_Control(pDX, IDC_INJDRV_GAS_V_PANE, m_gas_v_pane);
+ DDX_Control(pDX, IDC_CRC0_PANE, m_crc0_pane);
+ DDX_Control(pDX, IDC_CRC1_PANE, m_crc1_pane);
 
  DDX_Control(pDX, IDC_PEAK_ON_TABSEL_CHECK, m_peak_on_tabsel_check);
  DDX_Control(pDX, IDC_PEAK_DUTY_TABSEL_CHECK, m_peak_duty_tabsel_check);
@@ -251,6 +253,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_COMMAND(ID_INJDRV_POPUP_READLZBLINFO, OnReadLzblInfo)
  ON_COMMAND(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnWriteEEPROMFromFile)
  ON_COMMAND(ID_INJDRV_POPUP_READEEPROMTOFILE, OnReadEEPROMToFile)
+ ON_COMMAND(ID_INJDRV_POPUP_RESETEEPROM, OnResetEEPROM)
 
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_EDIT,OnUpdateControlsPD)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_SPIN,OnUpdateControlsPD)
@@ -305,6 +308,10 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_VOLTAGE_CAPTION,OnUpdateControlsVoltage)
  ON_UPDATE_COMMAND_UI(IDC_INJDRV_GAS_V_PANE,OnUpdateControlsVoltage)
  ON_UPDATE_COMMAND_UI(IDC_INJDRV_GAS_V_CAPTION,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_CRC0_PANE,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_CRC0_CAPTION,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_CRC1_PANE,OnUpdateControlsVoltage)
+ ON_UPDATE_COMMAND_UI(IDC_CRC1_CAPTION,OnUpdateControlsVoltage)
 
  ON_UPDATE_COMMAND_UI(IDC_EEPROM_SAVE_BUTTON,OnUpdateControlsEESave)
 
@@ -319,6 +326,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READLZBLINFO, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READEEPROMTOFILE, OnUpdateBLItems)
+
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_RESETEEPROM, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -483,6 +492,9 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_testch_frq_spin, MLL::GetString(IDS_INJDRV_TESTCH_FRQ_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_testch_duty_edit, MLL::GetString(IDS_INJDRV_TESTCH_DUTY_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_testch_duty_spin, MLL::GetString(IDS_INJDRV_TESTCH_DUTY_EDIT_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_crc0_pane, MLL::GetString(IDS_CRC0_PANE_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_crc1_pane, MLL::GetString(IDS_CRC1_PANE_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
@@ -958,6 +970,11 @@ void CInjDriverTabDlg::setOnReadEEPROMToFile(EventHandler onCB)
  m_onReadEEPROMToFile = onCB;
 }
 
+void CInjDriverTabDlg::setOnResetEEPROM(EventHandler onCB)
+{
+ m_onResetEEPROM = onCB;
+}
+
 void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only /*= false*/)
 {
  if (voltage_only)
@@ -978,6 +995,10 @@ void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only 
  m_voltage_pane.SetWindowText(str);
  m_gas_v_pane.SetWindowText(ip_data->gas_v ? _T("1") : _T("0"));
  SetChartVoltageValue(ip_data->voltage);
+
+ //update CRC panes
+ m_crc0_pane.SetWindowText(ip_data->set0_corrupted ? _T("NOK") : _T("OK"));
+ m_crc1_pane.SetWindowText(ip_data->set1_corrupted ? _T("NOK") : _T("OK"));
 
  if (set_idx == m_set_of_sett_idx)
  {
@@ -1216,4 +1237,10 @@ void CInjDriverTabDlg::SetShowGraphLabels(bool show)
  mp_chart->SetSerieLabels(SERIE_HD, show, false);
  mp_chart->SetSerieLabels(SERIE_PF, show, false);
  mp_chart->SetSerieLabels(SERIE_PP, show, true); //<--redraw
+}
+
+void CInjDriverTabDlg::OnResetEEPROM()
+{
+ if (m_onResetEEPROM)
+  m_onResetEEPROM();
 }

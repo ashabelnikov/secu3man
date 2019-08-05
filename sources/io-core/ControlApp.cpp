@@ -3706,6 +3706,7 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  unsigned char command = packet_data->ee_status; //save command
  WRITEBIT8(command, 7, packet_data->set_idx);
  WRITEBIT8(command, 1, packet_data->start_bldr);
+ WRITEBIT8(command, 2, packet_data->reset_eeprom);
 
  mp_pdp->resetCRC();
 

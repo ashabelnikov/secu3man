@@ -70,6 +70,8 @@ BEGIN
         MENUITEM "Информация о загрузчике",           ID_INJDRV_POPUP_READLZBLINFO
         MENUITEM "Записать EEPROM из файла",          ID_INJDRV_POPUP_WRITEEEPROMFROMFILE
         MENUITEM "Прочитать EEPROM в файл",           ID_INJDRV_POPUP_READEEPROMTOFILE
+        MENUITEM SEPARATOR
+        MENUITEM "Сброс EEPROM",                      ID_INJDRV_POPUP_RESETEEPROM
     END
 END
 
@@ -409,6 +411,10 @@ BEGIN
     RTEXT           "Напряжение (В)",IDC_VOLTAGE_CAPTION,49,201,60,10
     CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,220,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,221,60,10
+    CTEXT           "OK",IDC_CRC0_PANE,183,200,29,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "CRC0",IDC_CRC0_CAPTION,149,201,30,10
+    CTEXT           "OK",IDC_CRC1_PANE,183,220,29,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "CRC1",IDC_CRC1_CAPTION,149,221,30,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Время Включ.",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
     CONTROL         "Скважн.Включ.",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
@@ -737,6 +743,8 @@ BEGIN
     IDS_INJDRV_TESTCH_COMBO_TT      "На выбранном входе драйвера будут сгенерированы импульсы частотой 30Гц и длительностью 10мс."
     IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Частота тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Скважность тестового сигнала используемого для тестирования каналов драйвера (см. выпадающий список 'Генер. импульсы на входе')"
+    IDS_CRC0_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные первого набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
+    IDS_CRC1_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные второго набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -804,6 +812,8 @@ BEGIN
         MENUITEM "Boot loader information",     ID_INJDRV_POPUP_READLZBLINFO
         MENUITEM "Write EEPROM from a file",    ID_INJDRV_POPUP_WRITEEEPROMFROMFILE
         MENUITEM "Read EEPROM to a file",       ID_INJDRV_POPUP_READEEPROMTOFILE
+        MENUITEM SEPARATOR
+        MENUITEM "Reset EEPROM",                ID_INJDRV_POPUP_RESETEEPROM
     END
 END
 
@@ -1143,6 +1153,10 @@ BEGIN
     RTEXT           "Voltage (V)",IDC_VOLTAGE_CAPTION,49,201,60,10
     CTEXT           "0",IDC_INJDRV_GAS_V_PANE,116,220,32,15,SS_SUNKEN | SS_NOTIFY
     RTEXT           "GAS_V",IDC_INJDRV_GAS_V_CAPTION,49,221,60,10
+    CTEXT           "OK",IDC_CRC0_PANE,183,200,29,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "CRC0",IDC_CRC0_CAPTION,149,201,30,10
+    CTEXT           "OK",IDC_CRC1_PANE,183,220,29,15,SS_SUNKEN | SS_NOTIFY
+    RTEXT           "CRC1",IDC_CRC1_CAPTION,149,221,30,10
     CONTROL         "",IDC_VCURVES_CHART_FRAME,"Static",SS_BLACKFRAME | NOT WS_VISIBLE,222,60,240,176
     CONTROL         "Peak ON",IDC_PEAK_ON_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,227,40,60,15
     CONTROL         "Peak duty",IDC_PEAK_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,289,40,60,15
@@ -1155,7 +1169,6 @@ BEGIN
     RTEXT           "Set of settings:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
     LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
-
     EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,240,11,16
     RTEXT           "Test signal frequency (Hz)",IDC_INJDRV_TESTCH_FRQ_CAPTION,12,243,100,10
@@ -1471,6 +1484,8 @@ BEGIN
     IDS_INJDRV_TESTCH_COMBO_TT      "At the selected input will be generated pulses with 30Hz frequency and 10ms duration."
     IDS_INJDRV_TESTCH_FRQ_EDIT_TT   "Frequency of the test signal used for testing of channels (see dropdown list 'Generate pulses at input')"
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Duty of the test signal used for testing of channels  (see dropdown list 'Generate pulses at input')"
+    IDS_CRC0_PANE_TT                "OK - check sum is right. NOK - First set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
+    IDS_CRC1_PANE_TT                "OK - check sum is right. NOK - Second set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
 END
 
 /////////////////////////////////////////////////////////////////////////////
