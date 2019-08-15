@@ -54,6 +54,8 @@ class CDevDiagOutsDlg : public CDialog
 
   void EnableBLDETesting(bool i_enable);
 
+  void EnableTACHOTesting(bool i_enable);
+
   //note: use wnd_insert_after parameter to fix tab order!
   void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
 
@@ -74,5 +76,6 @@ class CDevDiagOutsDlg : public CDialog
   bool m_enable_diag_controls;
   bool m_enable_secu3t_features;
   bool m_enable_blde_testing;
+  bool m_enable_tacho_testing;
   std::auto_ptr<CWndScroller> mp_scr;
 };

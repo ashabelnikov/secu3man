@@ -53,6 +53,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   void setOnStartOutAutoTesting(EventHandler OnFunction);
   void setOnStopOutAutoTesting(EventHandler OnFunction);
   void setOnEnableBLDETesting(EventFlag OnFunction);
+  void setOnEnableTACHOTesting(EventFlag OnFunction);
 
   //Set values of inputs (digital and analog)
   void SetInputValues(const SECU3IO::DiagInpDat* i_values);
@@ -65,7 +66,9 @@ class CDevDiagnostTabDlg : public CTabDialog
   void EnableSECU3TFeatures(bool i_enable);
   void EnableExtraIO(bool i_enable);
   void EnableBLDETesting(bool i_enable);
+  void EnableTACHOTesting(bool i_enable);
   bool IsBLDETestingEnabled(void);
+  bool IsTACHOTestingEnabled(void);
 
   void EnableStartAutoTstMenuItem(bool i_enable);
   void EnableStopAutoTstMenuItem(bool i_enable);
@@ -126,8 +129,10 @@ class CDevDiagnostTabDlg : public CTabDialog
 
    OID_ADD_O2 = 20,
 
+   OID_TACH_O = 21,   //special
+
    OID_SECU3T_NUM = 13,
-   OID_SECU3i_NUM = 21
+   OID_SECU3i_NUM = 22
   };
 
  protected:
@@ -144,6 +149,7 @@ class CDevDiagnostTabDlg : public CTabDialog
   afx_msg void OnStartOutputsAutoTesting();
   afx_msg void OnStopOutputsAutoTesting();
   afx_msg void OnEnableBLDETesting();
+  afx_msg void OnEnableTACHOTesting();
   DECLARE_MESSAGE_MAP()
 
  private:
@@ -166,10 +172,12 @@ class CDevDiagnostTabDlg : public CTabDialog
   EventHandler m_on_start_outauto_tst;
   EventHandler m_on_stop_outauto_tst;
   EventFlag m_on_enable_blde_tst;
+  EventFlag m_on_enable_tacho_tst;
 
   bool m_enable_diag_controls;
   bool m_enable_enter_button;
   bool m_enable_blde_testing;
+  bool m_enable_tacho_testing;
   bool m_start_autotst_enabled;
   bool m_stop_autotst_enabled;
   

@@ -123,6 +123,7 @@ class TstMode1 : public ITstMode
     m_items.push_back(CDevDiagnostTabDlg::OID_PWRR_O);
     m_items.push_back(CDevDiagnostTabDlg::OID_BL);
     m_items.push_back(CDevDiagnostTabDlg::OID_DE);
+    m_items.push_back(CDevDiagnostTabDlg::OID_TACH_O);
     ASSERT(m_items.size()==CDevDiagnostTabDlg::OID_SECU3i_NUM);
    }
    else
@@ -207,6 +208,7 @@ CDevDiagnostTabController::CDevDiagnostTabController(CDevDiagnostTabDlg* ip_view
  mp_view->setOnStartOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStartOutputsAutoTesting));
  mp_view->setOnStopOutAutoTesting(MakeDelegate(this,&CDevDiagnostTabController::OnStopOutputsAutoTesting));
  mp_view->setOnEnableBLDETesting(MakeDelegate(this,&CDevDiagnostTabController::OnEnableBLDETesting));
+ mp_view->setOnEnableTACHOTesting(MakeDelegate(this,&CDevDiagnostTabController::OnEnableTACHOTesting));
 
  m_tst_timer.SetMsgHandler(this, &CDevDiagnostTabController::OnTstTimer);
 
@@ -241,6 +243,7 @@ void CDevDiagnostTabController::OnActivate(void)
  mp_view->EnableEnterButton(false);
  mp_view->EnableDiagControls(false);
  mp_view->EnableBLDETesting(false);
+ mp_view->EnableTACHOTesting(false);
  mp_view->SetEnterButtonCaption(MLL::GetString(IDS_DEV_DIAG_ENTRCHK_CAPTION_ENTER));
  mp_view->EnableStartAutoTstMenuItem(true);
  mp_view->EnableStopAutoTstMenuItem(false);
@@ -495,6 +498,12 @@ void CDevDiagnostTabController::OnEnableBLDETesting(bool enable)
  UpdateOutputs();
 }
 
+void CDevDiagnostTabController::OnEnableTACHOTesting(bool enable)
+{
+ SetOutputValue(CDevDiagnostTabDlg::OID_TACH_O, false);
+ UpdateOutputs();
+}
+
 void CDevDiagnostTabController::OnTstTimer(void)
 {
  if (!(*m_current_tst_mode)->Next())
@@ -535,6 +544,8 @@ void CDevDiagnostTabController::_SetOuptutMapItem(int id, bool state)
   
  if (CDevDiagnostTabDlg::OID_BL==id || CDevDiagnostTabDlg::OID_DE==id)
   *m_outputs_map[id] = mp_view->IsBLDETestingEnabled() ? ((int)state)+1 : 0; //logic level or HiZ
+ else if (CDevDiagnostTabDlg::OID_TACH_O==id)
+  *m_outputs_map[id] = mp_view->IsTACHOTestingEnabled() ? ((int)state)+1 : 0; //special case
  else
   *m_outputs_map[id] = state;
 }

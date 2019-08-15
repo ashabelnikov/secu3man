@@ -41,7 +41,7 @@ const UINT CDevDiagOutsDlg::IDD = IDD_DEVDIAG_OUTPUTS;
 const UINT OutputsCheckStart = IDC_DEV_DIAG_IGN_OUT1_CHECK;
 const UINT OutputsCheckEnd = IDC_DEV_DIAG_DE_CHECK;
 const UINT OutputsCheckStart1 = IDC_DEV_DIAG_IGN_O1_CHECK;     //secu-3i
-const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_ADD_O2_CHECK1;      //secu-3i
+const UINT OutputsCheckEnd1 = IDC_DEV_DIAG_TACH_O_CHECK;      //secu-3i
 
 BEGIN_MESSAGE_MAP(CDevDiagOutsDlg, Super)
  ON_WM_DESTROY()
@@ -58,6 +58,7 @@ CDevDiagOutsDlg::CDevDiagOutsDlg(CWnd* pParent /*=NULL*/)
 , m_enable_diag_controls(false)
 , m_enable_secu3t_features(false)
 , m_enable_blde_testing(false)
+, m_enable_tacho_testing(false)
 , mp_scr(new CWndScroller)
 {
  //empty
@@ -99,6 +100,11 @@ void CDevDiagOutsDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
   case IDC_DEV_DIAG_DE_CHECK:
    pCmdUI->Enable(m_enable_diag_controls && m_enable_blde_testing);  
    break;
+
+  case IDC_DEV_DIAG_TACH_O_CHECK: //secu-3i
+   pCmdUI->Enable(m_enable_diag_controls && m_enable_tacho_testing);  
+   break;
+
   default:
    pCmdUI->Enable(m_enable_diag_controls);
  };
@@ -155,6 +161,12 @@ void CDevDiagOutsDlg::EnableBLDETesting(bool i_enable)
  UpdateDialogControls(this,TRUE);
 }
 
+void CDevDiagOutsDlg::EnableTACHOTesting(bool i_enable)
+{
+ m_enable_tacho_testing = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
 void CDevDiagOutsDlg::setOnOutputToggle(EventOutputToggle OnFunction)
 {
  m_on_output_check = OnFunction;
@@ -175,7 +187,7 @@ void CDevDiagOutsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(300) : da.ScaleY(550));
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(300) : da.ScaleY(580));
 }
 
 void CDevDiagOutsDlg::OnSize( UINT nType, int cx, int cy )

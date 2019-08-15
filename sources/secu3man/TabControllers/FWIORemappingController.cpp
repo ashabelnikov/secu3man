@@ -685,6 +685,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_IGN_I, FWDM::IOP3I_IGN_I));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_COND_I, FWDM::IOP3I_COND_I));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_EPAS_I));
+  m_defValMap.insert(std::make_pair(FWDM::IOS3I_TACH_O, FWDM::IOP3I_TACH_O));
 
   //Fill view with values
   mp_view->ResetContent();
@@ -1252,6 +1253,39 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_EPAS_I, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS3I_EPAS_I, true); 
   mp_view->EnableInversion(FWDM::IOS3I_EPAS_I, true);
+
+  //TACH_O
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_UNI_OUT0, _T("UNI_OUT1"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_UNI_OUT1, _T("UNI_OUT2"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_UNI_OUT2, _T("UNI_OUT3"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_SM_DIR, _T("SM_DIR"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_SM_STP, _T("SM_STP"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_GD_DIR, _T("GD_DIR"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_GD_STP, _T("GD_STP"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_STROBE, _T("STROBE"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INTK_HEAT, _T("INTK_HEAT"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_HALL_OUT, _T("HALL_OUT"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O1, _T("INJ_O1"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O2, _T("INJ_O2"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O3, _T("INJ_O3"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O4, _T("INJ_O4"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O5, _T("INJ_O5"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O6, _T("INJ_O6"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O7, _T("INJ_O7"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_INJ_O8, _T("INJ_O8"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_O1, _T("IGN_O1"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_O2, _T("IGN_O2"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_O3, _T("IGN_O3"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_O4, _T("IGN_O4"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_O5, _T("IGN_O5"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_OUT6, _T("IGN_O6"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_OUT7, _T("IGN_O7"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_IGN_OUT8, _T("IGN_O8"));
+  mp_view->AddItem(FWDM::IOS3I_TACH_O, FWDM::IOP3I_TACH_O, _T("NONE"));
+  mp_view->EnableItem(FWDM::IOS3I_TACH_O, true);
+  mp_view->EnableInversion(FWDM::IOS3I_TACH_O, true);
+
  }
 }
 

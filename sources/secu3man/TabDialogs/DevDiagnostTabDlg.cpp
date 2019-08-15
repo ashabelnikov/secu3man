@@ -53,6 +53,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_COMMAND(IDM_DEV_DIAG_START_OUTAUTO_TST, OnStartOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnStopOutputsAutoTesting)
  ON_COMMAND(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnEnableBLDETesting)
+ ON_COMMAND(IDM_DEV_DIAG_ENABLE_TACH_O_TST, OnEnableTACHOTesting)
  ON_BN_CLICKED(IDC_DEV_DIAG_ENTER_CHECK, OnEnterButton)
 
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_OUTPUTS_GROUP, OnUpdateDiagControls)
@@ -60,6 +61,7 @@ BEGIN_MESSAGE_MAP(CDevDiagnostTabDlg, Super)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_START_OUTAUTO_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_STOP_OUTAUTO_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_ENABLE_BLDE_TST, OnUpdateDiagControls)
+ ON_UPDATE_COMMAND_UI(IDM_DEV_DIAG_ENABLE_TACH_O_TST, OnUpdateDiagControls)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_ENTER_CHECK, OnUpdateEnterButton)
  ON_UPDATE_COMMAND_UI(IDC_DEV_DIAG_WARNING_TEXT, OnUpdateEnterButton)
 
@@ -75,6 +77,7 @@ CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
 , m_enable_blde_testing(false)
+, m_enable_tacho_testing(false)
 , mp_inpsDlg(new CDevDiagInpsDlg(NULL))
 , mp_outsDlg(new CDevDiagOutsDlg(NULL))
 , m_start_autotst_enabled(false)
@@ -147,6 +150,11 @@ void CDevDiagnostTabDlg::OnUpdateDiagControls(CCmdUI* pCmdUI)
  {
   case IDM_DEV_DIAG_ENABLE_BLDE_TST:
    pCmdUI->SetCheck(m_enable_blde_testing);  
+   pCmdUI->Enable(m_enable_diag_controls);  
+   break;
+
+  case IDM_DEV_DIAG_ENABLE_TACH_O_TST:
+   pCmdUI->SetCheck(m_enable_tacho_testing);  
    pCmdUI->Enable(m_enable_diag_controls);  
    break;
 
@@ -226,6 +234,16 @@ void CDevDiagnostTabDlg::OnEnableBLDETesting()
  mp_outsDlg->EnableBLDETesting(m_enable_blde_testing);
 }
 
+void CDevDiagnostTabDlg::OnEnableTACHOTesting()
+{
+ UINT state = mp_ContextMenuManager->GetParentMenu().GetMenuState(IDM_DEV_DIAG_ENABLE_TACH_O_TST, MF_BYCOMMAND);
+ ASSERT(state != 0xFFFFFFFF);
+ m_enable_tacho_testing = (state & MF_CHECKED) ? false : true; //toggle
+ if (m_on_enable_tacho_tst)
+  m_on_enable_tacho_tst(m_enable_tacho_testing);
+ mp_outsDlg->EnableTACHOTesting(m_enable_tacho_testing);
+}
+
 void CDevDiagnostTabDlg::EnableDiagControls(bool i_enable)
 {
  m_enable_diag_controls = i_enable;
@@ -261,9 +279,20 @@ void CDevDiagnostTabDlg::EnableBLDETesting(bool i_enable)
  UpdateDialogControls(this,TRUE);
 }
 
+void CDevDiagnostTabDlg::EnableTACHOTesting(bool i_enable)
+{
+ m_enable_tacho_testing = i_enable;
+ UpdateDialogControls(this,TRUE);
+}
+
 bool CDevDiagnostTabDlg::IsBLDETestingEnabled(void)
 {
  return m_enable_blde_testing;
+}
+
+bool CDevDiagnostTabDlg::IsTACHOTestingEnabled(void)
+{
+ return m_enable_tacho_testing;
 }
 
 void CDevDiagnostTabDlg::setOnOutputToggle(EventOutputToggle OnFunction)
@@ -289,6 +318,11 @@ void CDevDiagnostTabDlg::setOnStopOutAutoTesting(EventHandler OnFunction)
 void CDevDiagnostTabDlg::setOnEnableBLDETesting(EventFlag OnFunction)
 {
  m_on_enable_blde_tst = OnFunction;
+}
+
+void CDevDiagnostTabDlg::setOnEnableTACHOTesting(EventFlag OnFunction)
+{
+ m_on_enable_tacho_tst = OnFunction;
 }
 
 void CDevDiagnostTabDlg::SetInputValues(const SECU3IO::DiagInpDat* i_values)

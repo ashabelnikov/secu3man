@@ -227,9 +227,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_COND_I     =  29,     // COND_I      (input)
    IOP3I_EPAS_I     =  30,     // EPAS_I      (input)
    IOP3I_ADD_I4     =  31,     // ADD_I4      (input)
-   IOP3I_OILP_I     =  32,     // OILP_I      (input)
-   IOP3I_GENS_I     =  33,     // GENS_I      (input)
-   IOP3I_RESERVED4  =  34,     // Reserved    ()
+   IOP3I_TACH_O     =  32,     // TACH_O      (output)
+   IOP3I_OILP_I     =  33,     // OILP_I      (input)
+   IOP3I_GENS_I     =  34,     // GENS_I      (input)
    IOP3I_RESERVED5  =  35,     // Reserved    ()
    IOP3I_RESERVED6  =  36,     // Reserved    ()
    IOP3I_IGN_OUT6   =  37,     // IGN_O6    (output)
@@ -375,12 +375,12 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_COND_I     =  29,     // COND_I      (input)
    IOS3I_EPAS_I     =  30,     // EPAS_I      (input)
    IOS3I_ADD_I4     =  31,     // ADD_I4      (input)
-   IOS3I_OILP_I     =  32,     // OILP_I      (input)
-   IOS3I_GENS_I     =  33,     // GENS_I      (input)
-// IOS3I_RESERVED4  =  34,     // Reserved    ()
+   IOS3I_TACH_O     =  32,     // TACH_O      (output)
+   IOS3I_OILP_I     =  33,     // OILP_I      (input)
+   IOS3I_GENS_I     =  34,     // GENS_I      (input)
 // IOS3I_RESERVED5  =  35,     // Reserved    ()
 // IOS3I_RESERVED6  =  36,     // Reserved    ()
-   IOS3I_COUNT      =  32,
+   IOS3I_COUNT      =  33,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2
@@ -431,7 +431,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V24 = 0x24,           //V2.4  CKPS remapping added, gas dose outputs
    IOV_V25 = 0x25,           //V2.5  GD_PWM plug added
    IOV_V26 = 0x26,           //V2.6  Support of SECU-3i added
-   IOV_V27 = 0x27            //V2.7  additional injection channels were added (5,6 for SECU-3T and 6,7,8 for SECU-3i)
+   IOV_V27 = 0x27,           //V2.7  additional injection channels were added (5,6 for SECU-3T and 6,7,8 for SECU-3i)
+   IOV_V28 = 0x28            //V2.8  TACH_O output added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

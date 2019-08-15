@@ -3476,11 +3476,11 @@ void CControlApp::Build_EDITAB_PAR(EditTabPar* packet_data)
 void CControlApp::Build_DIAGOUT_DAT(DiagOutDat* packet_data)
 {
  DWORD bits = 0;
- int bitNum = packet_data->mode ? 21 : 13;
+ int bitNum = packet_data->mode ? 22 : 13;
  int bitIdx = 0;
  for(int i = 0; i < bitNum; ++i)
  {
-  if (i==11 || i==12) //BL or DE (special cases)
+  if (i==11 || i==12 || i==21) //BL or DE (special cases), TACH_O also (see DevDiagnostTabDlg.h for more information about enum's constants)
   {
    if (packet_data->out[i]!=0) {
     WRITEBIT32(bits, bitIdx++, (packet_data->out[i]==2)); //output state: 0 or 1
