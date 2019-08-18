@@ -33,6 +33,7 @@ set(HEADERS
   ddx_helpers.h
   fnt_helpers.h
   DialogWithAccelerators.h
+  DynFieldsDialog.h
   EditEx.h
   HeaderCtrlEx.h
   HotKeysManager.h
@@ -68,6 +69,7 @@ set(SOURCES
   ddx_helpers.cpp
   fnt_helpers.cpp
   DialogWithAccelerators.cpp
+  DynFieldsDialog.cpp
   EditEx.cpp
   HeaderCtrlEx.cpp
   HotKeysManager.cpp

@@ -314,3 +314,8 @@
 #define IDS_GME_IT_MODE_M360360         5668
 #define IDS_GME_IT_MODE_M360360A        5669
 #define IDS_MAPS_INJTIM_UNIT1           5670
+#define IDB_CONST_UP                    5671
+#define IDB_CONST_DOWN                  5672
+#define IDB_CONST_FOCUSED               5673
+#define IDB_CONST_DISABLED              5674
+#define IDC_TD_FW_CONSTS_BUTTON         5675

@@ -663,6 +663,7 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_ATS_MAP, m_view_ats_aac_map_btn);
  DDX_Control(pDX, IDC_TD_DWELL_CALC_BUTTON, m_calc_dwell_btn);
  DDX_Control(pDX, IDC_TD_RPM_GRID_BUTTON, m_rpm_grid_btn);
+ DDX_Control(pDX, IDC_TD_FW_CONSTS_BUTTON, m_fw_consts_btn);
  DDX_Control(pDX, IDC_TD_VIEW_GDP_MAP, m_view_gasdose_map_btn);
  DDX_Control(pDX, IDC_TD_EDIT_CEPAR, m_edit_cesettings_btn);
  DDX_Control(pDX, IDC_TD_VIEW_BAROCORR_MAP, m_view_barocorr_map_btn);
@@ -678,6 +679,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_CTS_CURVE, OnViewCTSCurveMap)
  ON_BN_CLICKED(IDC_TD_DWELL_CALC_BUTTON, OnDwellCalcButton)
  ON_BN_CLICKED(IDC_TD_RPM_GRID_BUTTON, OnRPMGridButton)
+ ON_BN_CLICKED(IDC_TD_FW_CONSTS_BUTTON, OnFwConstsButton)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_CURVE, OnViewATSCurveMap)
  ON_BN_CLICKED(IDC_TD_VIEW_ATS_MAP, OnViewATSAACMap)
  ON_BN_CLICKED(IDC_TD_VIEW_GDP_MAP, OnViewGasdosePosMap)
@@ -694,6 +696,7 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATS_MAP, OnUpdateViewATSAACMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_DWELL_CALC_BUTTON, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_RPM_GRID_BUTTON, OnUpdateControls)
+ ON_UPDATE_COMMAND_UI(IDC_TD_FW_CONSTS_BUTTON, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_FUNSET_LIST, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_MAP_GROUPBOX, OnUpdateControls)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_GDP_MAP, OnUpdateViewGasdosePosMap)
@@ -719,6 +722,8 @@ BOOL CTablesSetPanel::OnInitDialog()
                               MAKEINTRESOURCE(IDB_CALC_FOCUSED), MAKEINTRESOURCE(IDB_CALC_DISABLED));
  m_rpm_grid_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_GRID_UP), MAKEINTRESOURCE(IDB_GRID_DOWN), 
                               MAKEINTRESOURCE(IDB_GRID_FOCUSED), MAKEINTRESOURCE(IDB_GRID_DISABLED));
+ m_fw_consts_btn.LoadBitmaps(MAKEINTRESOURCE(IDB_CONST_UP), MAKEINTRESOURCE(IDB_CONST_DOWN), 
+                              MAKEINTRESOURCE(IDB_CONST_FOCUSED), MAKEINTRESOURCE(IDB_CONST_DISABLED));
 
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
@@ -1403,6 +1408,12 @@ void CTablesSetPanel::OnRPMGridButton()
   m_OnRPMGridEditButton();
 }
 
+void CTablesSetPanel::OnFwConstsButton()
+{
+ if (m_OnFwConstsButton)
+  m_OnFwConstsButton();
+}
+
 void CTablesSetPanel::OnCESettingsButton()
 {
  if (m_OnCESettingsButton)
@@ -1541,6 +1552,9 @@ void CTablesSetPanel::setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction)
 
 void CTablesSetPanel::setOnRPMGridEditButton(EventHandler OnFunction)
 {m_OnRPMGridEditButton = OnFunction;}
+
+void CTablesSetPanel::setOnFwConstsButton(EventHandler OnFunction)
+{m_OnFwConstsButton = OnFunction;}
 
 void CTablesSetPanel::setOnCESettingsButton(EventHandler OnFunction)
 {m_OnCESettingsButton = OnFunction;}

@@ -31,6 +31,7 @@
 #include "ParamsIO.h"
 
 namespace SECU3IO { struct CESettingsData; }
+namespace SECU3IO { struct FwConstsData; }
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке
 //(памяти программ микроконтроллера), а также для хранения этих данных.
@@ -182,6 +183,9 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
 
   void GetEHPauseMap(float* op_values, bool i_original = false);
   void SetEHPauseMap(const float* i_values);
+
+  void GetFwConstsData(SECU3IO::FwConstsData& o_data) const;
+  void SetFwConstsData(const SECU3IO::FwConstsData& i_data);
 
   //Types of slots/plugs
   enum IOXtype

@@ -195,10 +195,17 @@ typedef struct
  //pause curve for EGO heater control
  _uchar eh_pause[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
+ //firmware constants:
+ _uchar gc_sign[4];
+ _uchar fi_enter_strokes;
+ _uchar fi_leave_strokes;
+ _uchar iac_cond_add;
+ _uint inj_max_pw;
+
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[24];
+ _uchar reserved[15];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2019,4 +2026,24 @@ void CFirmwareDataMediator::SetCESettingsData(const CESettingsData& i_data)
  p_fd->exdata.cesd.add_i4_v_max = MathHelpers::Round((i_data.add_i4_v_max / ADC_DISCRETE));
  p_fd->exdata.cesd.add_i4_v_em  = MathHelpers::Round((i_data.add_i4_v_em / ADC_DISCRETE));
  WRITEBIT8(p_fd->exdata.cesd.add_i4_v_flg, 0, i_data.add_i4_v_useem);
+}
+
+void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
+{
+ const fw_ex_data_t& exd = ((const fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]))->exdata;
+ //convert data
+ o_data.fi_enter_strokes = exd.fi_enter_strokes;
+ o_data.fi_leave_strokes = exd.fi_leave_strokes;
+ o_data.iac_cond_add = (exd.iac_cond_add / 2.0f);
+ o_data.inj_max_pw = (exd.inj_max_pw * 3.2f) / 1000.0f; //from 3.2 us units to ms
+}
+
+void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
+{
+ fw_ex_data_t& exd = ((fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]))->exdata;
+ //convert data
+ exd.fi_enter_strokes = i_data.fi_enter_strokes;
+ exd.fi_leave_strokes = i_data.fi_leave_strokes;
+ exd.iac_cond_add = MathHelpers::Round(i_data.iac_cond_add * 2.0f);
+ exd.inj_max_pw = MathHelpers::Round((i_data.inj_max_pw * 1000.0f) / 3.2f); //from ms to 3.2us units
 }

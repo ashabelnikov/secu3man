@@ -176,8 +176,8 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const lzid_sett_t& fs, bool
  ms.m_tst_hold_pwm = CHECKBIT8(fs.gen_flags, 1);
 
  ms.m_testch_sel = fs.testch_sel;  
- ms.m_testch_frq = 1.0/(((double)fs.testch_frq) / 131072.0);
- ms.m_testch_duty = (((double)fs.testch_duty) / 255.0) * 100.0f;
+ ms.m_testch_frq = (float)(1.0/(((double)fs.testch_frq) / 131072.0));
+ ms.m_testch_duty = (float)((((double)fs.testch_duty) / 255.0) * 100.0f);
 
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   ms.m_peak_on_tab[i] = ((float)fs.peak_on_tab[i]) / 2.5f;

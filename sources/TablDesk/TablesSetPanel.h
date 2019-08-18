@@ -89,6 +89,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   void setOnATSXAxisEditChanged(EventWithCodeAndFloat OnFunction);
   void setOnRPMGridEditButton(EventHandler OnFunction);
   void setOnCESettingsButton(EventHandler OnFunction);
+  void setOnFwConstsButton(EventHandler OnFunction);
 
 // Implementation
  protected:
@@ -102,6 +103,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   afx_msg void OnViewATSCurveMap();
   afx_msg void OnViewATSAACMap();
   afx_msg void OnRPMGridButton();
+  afx_msg void OnFwConstsButton();
   afx_msg void OnCESettingsButton();
   afx_msg void OnViewGasdosePosMap();
   afx_msg void OnViewBarocorrMap();
@@ -144,6 +146,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CButton   m_view_eh_pause_map_btn;
   CBitmapButton m_calc_dwell_btn;
   CBitmapButton m_rpm_grid_btn;
+  CBitmapButton m_fw_consts_btn;
 
  private:
   EventWithCode m_OnFunSetSelectionChanged;
@@ -152,6 +155,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   EventWithCodeAndFloat m_OnATSXAxisEditChanged;
   EventHandler m_OnRPMGridEditButton;
   EventHandler m_OnCESettingsButton;
+  EventHandler m_OnFwConstsButton;
 
   static void __cdecl OnChangeAttenuatorTable(void* i_param);
   static void __cdecl OnCloseAttenuatorTable(void* i_param);

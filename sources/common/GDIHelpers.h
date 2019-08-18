@@ -150,6 +150,15 @@ struct GDIHelpers
   return colors;
  }
 
+ static CSize GetNonClientSize(CWnd* p_wnd)
+ {
+  ASSERT(p_wnd);
+  CRect wr, cr;
+  p_wnd->GetWindowRect(&wr);
+  p_wnd->GetClientRect(&cr);
+  return CSize(wr.Width() - cr.Width(), wr.Height() - cr.Height());
+ }
+
  static COLORREF InvRGB(BYTE r, BYTE g, BYTE b) { return (~RGB(r,g,b)) & 0xFFFFFF; }
  static COLORREF InvColor(COLORREF color) { return (~color) & 0xFFFFFF; }
  static COLORREF swapRB(DWORD rgb) { return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)); }

@@ -54,6 +54,7 @@
 #include "TablDesk/TablesSetPanel.h"
 #include "TablDesk/CESettingsDlg.h"
 #include "ErrorMsg.h"
+#include "ui-core/DynFieldsDialog.h"
 
 using namespace fastdelegate;
 
@@ -147,6 +148,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  mp_view->mp_TablesPanel->setOnCESettingsButton(MakeDelegate(this, &CFirmwareTabController::OnCESettingsButton));
  mp_view->mp_TablesPanel->EnableAdvanceAngleIndication(false);
  mp_view->mp_TablesPanel->setOnChangeSettings(MakeDelegate(this, &CFirmwareTabController::OnChangeSettingsMapEd));
+ mp_view->mp_TablesPanel->setOnFwConstsButton(MakeDelegate(this, &CFirmwareTabController::OnEditFwConsts));
 
  mp_view->mp_ParamDeskDlg->SetOnTabActivate(MakeDelegate(this, &CFirmwareTabController::OnParamDeskTabActivate));
  mp_view->mp_ParamDeskDlg->SetOnChangeInTab(MakeDelegate(this, &CFirmwareTabController::OnParamDeskChangeInTab));
@@ -1601,6 +1603,39 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  {
   m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
+ }
+}
+
+void CFirmwareTabController::OnEditFwConsts(void)
+{
+ CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 300);
+
+ SECU3IO::FwConstsData d;
+ m_fwdm->GetFwConstsData(d);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длит. плавного входа в ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_enter_strokes);
+ else
+  dfd.AppendItem(_T("Smoothing of forced idle entering"), _T("str"), 0, 255, 1, 1, &d.fi_enter_strokes);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Длит. плавного выхода из ПХХ"), _T("такт"), 0, 255, 1, 1, &d.fi_leave_strokes);
+ else
+  dfd.AppendItem(_T("Smoothing of forced idle leaving"), _T("str"), 0, 255, 1, 1, &d.fi_leave_strokes);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Добавка к РДВ при вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add);
+ else
+  dfd.AppendItem(_T("Add. to IAC pos on turn on of air cond. "), _T("%"), 0.0f, 100.0f, 0.5, 1, &d.iac_cond_add);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Максимальная длительность впрыска"), _T("мс"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw);
+ else
+  dfd.AppendItem(_T("Max. injection pulse width"), _T("ms"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw);
+
+ if (dfd.DoModal()==IDOK)
+ {
+  m_fwdm->SetFwConstsData(d);
  }
 }
 
