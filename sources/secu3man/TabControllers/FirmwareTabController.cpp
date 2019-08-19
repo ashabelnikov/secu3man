@@ -1633,6 +1633,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Max. injection pulse width"), _T("ms"), 0.0f, 100.0f, 0.1f, 1, &d.inj_max_pw);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ вкл. кондиционера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt);
+ else
+  dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДПДЗ вкл. кондиционера"), _T("%"), 0.0f, 120.0f, 0.5f, 1, &d.aircond_tps);
+ else
+  dfd.AppendItem(_T("TPS threshold for turn on of air cond."), _T("%"), 0.0f, 120.0f, 0.5f, 1, &d.aircond_tps);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
