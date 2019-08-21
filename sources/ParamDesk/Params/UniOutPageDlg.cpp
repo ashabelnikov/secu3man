@@ -131,6 +131,7 @@ CUniOutPageDlg::CUniOutPageDlg(CWnd* pParent /*=NULL*/)
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_IPW, CondFmt(6, 2, 0.01f, 200.0f, 0.01f, 20.0f, 19.90f, MLL::GetString(IDS_UNIOUT_COND_IPW), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_CE, CondFmt(1, 0, .0f, 1.0f, 1.0f, .0f, 1.0f, MLL::GetString(IDS_UNIOUT_COND_CE), false)));
  m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_OFTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, .0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_OFTMR), false)));
+ m_condFmt.insert(std::make_pair(SECU3IO::UNIOUT_COND_LPTMR, CondFmt(5, 1, .0f, 600.0f, 0.1f, 1.0f, 5.0f, MLL::GetString(IDS_UNIOUT_COND_LPTMR), false)));
 }
 
 LPCTSTR CUniOutPageDlg::GetDialogID(void) const
@@ -376,7 +377,7 @@ void CUniOutPageDlg::_FillConditionComboBoxes(void)
   std::map<int, CondFmt>::const_iterator it = m_condFmt.begin();
   for(int index; it != m_condFmt.end(); ++it)
   {
-   if (it->first != SECU3IO::UNIOUT_COND_TMR)
+   if (it->first != SECU3IO::UNIOUT_COND_TMR && it->first != SECU3IO::UNIOUT_COND_LPTMR)
    {
     index = m_out[i].cond1_combo.AddString(it->second.condstr.c_str());
     if (index==CB_ERR)

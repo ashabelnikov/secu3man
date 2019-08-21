@@ -1425,6 +1425,7 @@ BEGIN
     IDS_UNIOUT_COND_IPW    "Длит.впрыска (мс)"
     IDS_UNIOUT_COND_CE     "Состояние CE"
     IDS_UNIOUT_COND_OFTMR  "Таймер по вкл./выкл. 1 усл. (сек)"
+    IDS_UNIOUT_COND_LPTMR  "Зацикл.таймер 1 усл. (сек)"
 
     IDS_UNIOUT_LF_OR       "ИЛИ"
     IDS_UNIOUT_LF_AND      "И"
@@ -3008,6 +3009,7 @@ BEGIN
     IDS_UNIOUT_COND_IPW    "Injector PW (ms)"
     IDS_UNIOUT_COND_CE     "CE state"
     IDS_UNIOUT_COND_OFTMR  "Timer on/off 1 cond. (sec.)"
+    IDS_UNIOUT_COND_LPTMR  "Looped tmr. 1 cond. (sec.)"
 
     IDS_UNIOUT_LF_OR       "OR"
     IDS_UNIOUT_LF_AND      "AND"

@@ -3914,6 +3914,7 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_IPW: return MathHelpers::Round((val * 1000.0f) / 3.2);
   case UNIOUT_COND_CE: return MathHelpers::Round(val);
   case UNIOUT_COND_OFTMR: return MathHelpers::Round(val * 100.0f);
+  case UNIOUT_COND_LPTMR: return MathHelpers::Round(val * 100.0f);
  }
  return 0;
 }
@@ -3951,6 +3952,7 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_IPW: return (val * 3.2f) / 1000.0f;
   case UNIOUT_COND_CE: return (float)val;
   case UNIOUT_COND_OFTMR: return ((float)val) / 100.0f;
+  case UNIOUT_COND_LPTMR: return ((float)val) / 100.0f;
  }
  return .0f;
 }
