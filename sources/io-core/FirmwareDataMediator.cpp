@@ -196,7 +196,9 @@ typedef struct
  _uchar eh_pause[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
  //firmware constants:
- _uchar gc_sign[4];
+ _int evap_clt;
+ _uchar evap_tps_lo;
+ _uchar evap_tps_hi;
  _uchar fi_enter_strokes;
  _uchar fi_leave_strokes;
  _uchar iac_cond_add;
@@ -2042,6 +2044,9 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.aircond_clt = ((float)exd.aircond_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.aircond_tps = ((float)exd.aircond_tps) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.idl_ve = ((float)exd.idl_ve) / VE_MAPS_M_FACTOR;
+ o_data.evap_clt = ((float)exd.evap_clt) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.evap_tps_lo = ((float)exd.evap_tps_lo) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.evap_tps_hi = ((float)exd.evap_tps_hi) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2055,4 +2060,7 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.aircond_clt = MathHelpers::Round(i_data.aircond_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.aircond_tps = MathHelpers::Round(i_data.aircond_tps * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.idl_ve = MathHelpers::Round(i_data.idl_ve * VE_MAPS_M_FACTOR);
+ exd.evap_clt = MathHelpers::Round(i_data.evap_clt * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.evap_tps_lo = MathHelpers::Round(i_data.evap_tps_lo * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.evap_tps_hi = MathHelpers::Round(i_data.evap_tps_hi * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }

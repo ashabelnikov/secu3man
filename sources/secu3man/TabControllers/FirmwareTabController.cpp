@@ -1608,7 +1608,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
 
 void CFirmwareTabController::OnEditFwConsts(void)
 {
- CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 300);
+ CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 380);
 
  SECU3IO::FwConstsData d;
  m_fwdm->GetFwConstsData(d);
@@ -1639,14 +1639,29 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("CLT threshold for turn on of air cond."), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.aircond_clt);
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Порог ДПДЗ вкл. кондиционера"), _T("%"), 0.0f, 120.0f, 0.5f, 1, &d.aircond_tps);
+  dfd.AppendItem(_T("Порог ДПДЗ вкл. кондиционера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps);
  else
-  dfd.AppendItem(_T("TPS threshold for turn on of air cond."), _T("%"), 0.0f, 120.0f, 0.5f, 1, &d.aircond_tps);
+  dfd.AppendItem(_T("TPS threshold for turn on of air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps);
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Наполнение на ХХ (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
  else
   dfd.AppendItem(_T("VE on idling (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог ДТОЖ вкл. продувки адсорбера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt);
+ else
+  dfd.AppendItem(_T("CLT threshold for turning on of the canister purge valve"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижн. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo);
+ else
+  dfd.AppendItem(_T("Low TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_lo);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi);
+ else
+  dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi);
 
  if (dfd.DoModal()==IDOK)
  {

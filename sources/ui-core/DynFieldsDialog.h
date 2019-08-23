@@ -103,7 +103,7 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CDialog
     //NOTE: values are in dialog units (not screen pixels)
     int leftOffset = 5;
     int topOffset = 5;
-    int groupHeight = 15;
+    int groupHeight = 16;
     int captWidth = 125;
     int editWidth = 38;
     int spinWidth = 13;
