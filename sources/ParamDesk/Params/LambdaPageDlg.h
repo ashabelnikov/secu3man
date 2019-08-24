@@ -97,6 +97,7 @@ class CLambdaPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_2stoichval_edit;
   CButton m_htgdet_check;
   CButton m_idlcorr_check;
+  CButton m_crkheat_check;
   //heating
   CSpinButtonCtrlEx m_eh_ht_cold_spin;
   CEditEx m_eh_ht_cold_edit;

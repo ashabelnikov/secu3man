@@ -553,6 +553,7 @@ namespace SECU3IO
   float lam_dead_band;                //Switch point dead band (in volts)
   bool lam_htgdet;                    //Determine heating by voltage
   bool lam_idlcorr;                   //Use lambda correction on idling
+  bool  lam_crkheat;
   float lam_2stoichval;               //Stoichiometric value for 2-nd fuel
   //heating:
   float eh_heating_time[2];

@@ -2225,6 +2225,7 @@ bool CControlApp::Parse_LAMBDA_PAR(const BYTE* raw_packet, size_t size)
   return false;
  m_LambdaPar.lam_htgdet = CHECKBIT8(lam_flags, 0);
  m_LambdaPar.lam_idlcorr = CHECKBIT8(lam_flags, 1);
+ m_LambdaPar.lam_crkheat = CHECKBIT8(lam_flags, 2);
 
  //Stoichiometric value for second fuel
  int lam_2stoichval = 0;
@@ -3674,6 +3675,7 @@ void CControlApp::Build_LAMBDA_PAR(LambdaPar* packet_data)
  unsigned char lam_flags = 0;
  WRITEBIT8(lam_flags, 0, packet_data->lam_htgdet);
  WRITEBIT8(lam_flags, 1, packet_data->lam_idlcorr);
+ WRITEBIT8(lam_flags, 2, packet_data->lam_crkheat);
  mp_pdp->Bin8ToHex(lam_flags, m_outgoing_packet);
  int lam_2stoichval = MathHelpers::Round(packet_data->lam_2stoichval * 128.0f);
  mp_pdp->Bin16ToHex(lam_2stoichval, m_outgoing_packet);

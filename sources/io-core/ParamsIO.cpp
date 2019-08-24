@@ -385,6 +385,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     p_params->inj_lambda_ms_per_stp = p_in->lam_ms_per_stp / 10;
     WRITEBIT8(p_params->inj_lambda_flags, 0, p_in->lam_htgdet);
     WRITEBIT8(p_params->inj_lambda_flags, 1, p_in->lam_idlcorr);
+    WRITEBIT8(p_params->inj_lambda_flags, 2, p_in->lam_crkheat);
     p_params->gd_lambda_stoichval = MathHelpers::Round(p_in->lam_2stoichval * 128.0f);
     //heating:
     p_params->eh_heating_time[0] = MathHelpers::Round(p_in->eh_heating_time[0]);
@@ -780,6 +781,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->lam_ms_per_stp = p_params->inj_lambda_ms_per_stp * 10;
     p_out->lam_htgdet = CHECKBIT8(p_params->inj_lambda_flags, 0);
     p_out->lam_idlcorr = CHECKBIT8(p_params->inj_lambda_flags, 1);
+    p_out->lam_crkheat = CHECKBIT8(p_params->inj_lambda_flags, 2);
     p_out->lam_2stoichval = ((float)p_params->gd_lambda_stoichval) / 128.0f;
     //heating:
     p_out->eh_heating_time[0] = (float)p_params->eh_heating_time[0];
