@@ -686,6 +686,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_COND_I, FWDM::IOP3I_COND_I));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_EPAS_I, FWDM::IOP3I_EPAS_I));
   m_defValMap.insert(std::make_pair(FWDM::IOS3I_TACH_O, FWDM::IOP3I_TACH_O));
+  m_defValMap.insert(std::make_pair(FWDM::IOS3I_KSP_CS, FWDM::IOP3I_KSP_CS));
 
   //Fill view with values
   mp_view->ResetContent();
@@ -1286,6 +1287,11 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->EnableItem(FWDM::IOS3I_TACH_O, true);
   mp_view->EnableInversion(FWDM::IOS3I_TACH_O, true);
 
+  //KSP_CS
+  mp_view->AddItem(FWDM::IOS3I_KSP_CS, FWDM::IOP3I_CAN_CS, _T("CAN_CS"));
+  mp_view->AddItem(FWDM::IOS3I_KSP_CS, FWDM::IOP3I_KSP_CS, _T("NONE"));
+  mp_view->EnableItem(FWDM::IOS3I_KSP_CS, true);
+  mp_view->EnableInversion(FWDM::IOS3I_KSP_CS, true);
  }
 }
 

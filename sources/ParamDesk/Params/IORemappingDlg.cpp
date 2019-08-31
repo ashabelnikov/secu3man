@@ -45,22 +45,22 @@ const UINT CIORemappingDlg::IDD = IDD_IO_REMAPPING;
 const UINT IOCaptionStart = IDC_IO_REMAPPING_IGN_OUT1_CAPTION;
 const UINT IOCaptionEnd = IDC_IO_REMAPPING_CKPS_CAPTION;
 const UINT IOCaptionStart3I = IDC_IO_REMAPPING3I_IGN_O1_CAPTION;
-const UINT IOCaptionEnd3I = IDC_IO_REMAPPING3I_TACH_O_CAPTION;
+const UINT IOCaptionEnd3I = IDC_IO_REMAPPING3I_KSP_CS_CAPTION;
 
 const UINT IOComboboxStart = IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX;
 const UINT IOComboboxEnd = IDC_IO_REMAPPING_CKPS_COMBOBOX;
 const UINT IOComboboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_COMBOBOX;
-const UINT IOComboboxEnd3I = IDC_IO_REMAPPING3I_TACH_O_COMBOBOX;
+const UINT IOComboboxEnd3I = IDC_IO_REMAPPING3I_KSP_CS_COMBOBOX;
 
 const UINT IOCheckboxStart = IDC_IO_REMAPPING_IGN_OUT1_CHECKBOX;
 const UINT IOCheckboxEnd = IDC_IO_REMAPPING_CKPS_CHECKBOX;
 const UINT IOCheckboxStart3I = IDC_IO_REMAPPING3I_IGN_O1_CHECKBOX;
-const UINT IOCheckboxEnd3I = IDC_IO_REMAPPING3I_TACH_O_CHECKBOX;
+const UINT IOCheckboxEnd3I = IDC_IO_REMAPPING3I_KSP_CS_CHECKBOX;
 
 const UINT IOTTStrStart = IDS_IO_REMAPPING_IGN_OUT1_TT;
 const UINT IOTTStrEnd = IDS_IO_REMAPPING_CKPS_TT;
 const UINT IOTTStrStart3I = IDS_IO_REMAPPING3I_IGN_O1_TT;
-const UINT IOTTStrEnd3I = IDS_IO_REMAPPING3I_TACH_O_TT;
+const UINT IOTTStrEnd3I = IDS_IO_REMAPPING3I_KSP_CS_TT;
 
 BEGIN_MESSAGE_MAP(CIORemappingDlg, CModelessDialog)
  ON_CONTROL_RANGE(CBN_SELCHANGE, IOComboboxStart, IOComboboxEnd, OnChangeSelection)
@@ -392,7 +392,7 @@ void CIORemappingDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(450) : da.ScaleY(730));
+  mp_scr->SetViewSize(0, m_enable_secu3t_features ? da.ScaleY(450) : da.ScaleY(750));
 }
 
 void CIORemappingDlg::OnSize( UINT nType, int cx, int cy )
