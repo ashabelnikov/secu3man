@@ -49,7 +49,8 @@ typedef unsigned short uint16_t;
 #pragma pack( push, enter_LzidSettingsDef )
 #pragma pack(1) //<--LZID
 
-struct lzid_sett_t
+//old implementation (v2.3 and older)
+struct lzid_sett_t_v23
 {
  char sign[LZIDSIGSIZE];          //!< text signature, thus this structure can be found in the raw code
 
@@ -82,6 +83,44 @@ struct lzid_sett_t
  uint8_t testch_duty;
 
  uint8_t reserved_bytes[188];     //!< reserved bytes
+
+ uint16_t crc;                    //!< CRC16 of this structure (excluding last two bytes)
+};
+
+//v2.4+ implementations:
+struct lzid_sett_t
+{
+ char sign[LZIDSIGSIZE];          //!< text signature, thus this structure can be found in the raw code
+
+ uint8_t type;                    //!< type of driver (model ID), 0 - Unknown; 1 - LZID4, mega1284;
+ uint8_t version;                 //!< version of this structure/system
+ uint8_t fw_opt;                  //!< Firmware compilation options
+
+ uint16_t pwm_period;             //!< value in 0.05us units
+ uint16_t peak_duty;              //!< coefficient in range 0...1.0, value * 4096
+
+ uint16_t reserved;               //!< reserved for future use (peak PWM period)
+ uint16_t hold_duty;              //!< coefficient in range 0...1.0, value * 4096
+
+ uint16_t peak_on_time;           //!< peak time withput PWM (full on), value in 0.4us units
+ uint16_t peak_full_time;         //!< full peak time (ON+PWM), value in 0.4us units
+ uint16_t pth_pause;              //!< peak-to-hold pause, value in 0.4us units
+
+ uint8_t direct_flags;            //!< flags, enabling direct input-to-output control (one bit per channel)
+ uint8_t lutabl_flags;            //!< look up tables related flags
+ uint8_t gen_flags;               //!< general flags
+
+ uint16_t peak_on_tab[SECU3IO::LUTABSIZE]; //!< peak full on time vs board voltage
+ uint16_t peak_duty_tab[SECU3IO::LUTABSIZE];//!< peak duty vs board voltage
+ uint16_t hold_duty_tab[SECU3IO::LUTABSIZE];//!< hold duty vs board voltage
+ uint16_t peak_full_tab[SECU3IO::LUTABSIZE];//!< full peak time (ON+PWM) vs board voltage
+ uint16_t pth_pause_tab[SECU3IO::LUTABSIZE];//!< peak-to-hold pause vs board voltage
+
+ uint8_t testch_sel;
+ uint16_t testch_frq;
+ uint8_t testch_duty;
+
+ uint8_t reserved_bytes[38];     //!< reserved bytes
 
  uint16_t crc;                    //!< CRC16 of this structure (excluding last two bytes)
 };
@@ -141,9 +180,10 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
  fs.crc = crc16((BYTE*)&fs, sizeof(lzid_sett_t) - sizeof(WORD));
 }
 
-bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const lzid_sett_t& fs, bool ignoreCRC = false)
+template <class T>
+bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC = false)
 {
- if (!ignoreCRC && fs.crc != crc16((BYTE*)&fs, sizeof(lzid_sett_t) - sizeof(WORD)))
+ if (!ignoreCRC && fs.crc != crc16((BYTE*)&fs, sizeof(T) - sizeof(WORD)))
   return false; //data corrupted
 
  ms.ee_status = false;
@@ -231,11 +271,33 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
    AfxMessageBox("Error opening file for read!", MB_ICONSTOP);
    return false;
   }
-  lzid_sett_t fwd;
+
+  fseek(fin, 0L, SEEK_END);
+  long int fsize = ftell(fin);
+  fseek(fin, 0L, SEEK_SET);
+
   char buff[32];
   fread(buff, sizeof(char), strlen(strHeader), fin);
-  fread(&fwd, sizeof(BYTE), sizeof(lzid_sett_t), fin);
-  if (!ConvertFromFirmwareData(*op_set, fwd) || 0 != strncmp(buff, strHeader, strlen(strHeader)))
+
+  bool result = false;
+  if (fsize == (sizeof(lzid_sett_t) + strlen(strHeader)))
+  {
+   lzid_sett_t fwd;
+   fread(&fwd, sizeof(BYTE), sizeof(lzid_sett_t), fin);
+   result = ConvertFromFirmwareData<lzid_sett_t>(*op_set, fwd);
+  }
+  else if (fsize == (sizeof(lzid_sett_t_v23) + strlen(strHeader)))
+  { //old
+   lzid_sett_t_v23 fwd;
+   fread(&fwd, sizeof(BYTE), sizeof(lzid_sett_t_v23), fin);
+   result = ConvertFromFirmwareData<lzid_sett_t_v23>(*op_set, fwd);
+  }
+  else
+  {
+   ASSERT(0);
+  }
+
+  if (!result || 0 != strncmp(buff, strHeader, strlen(strHeader)))
   { //data corrupted
    AfxMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
    fclose(fin);
@@ -247,17 +309,18 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
  return false; //canceled by user
 }
 
-bool getSettAddresses(std::vector<BYTE>& buff, lzid_sett_t** op_set)
+template <class T>
+bool getSettAddresses(std::vector<BYTE>& buff, T** op_set)
 {
  std::vector<BYTE>::iterator it;
  it = std::search(buff.begin(), buff.end(), strSettSign, strSettSign + LZIDSIGSIZE);
  if (it == buff.end() || (size_t)((it + LZIDSIGSIZE) - buff.begin()) >= buff.size())
   return false;
- lzid_sett_t* p_set0 = (lzid_sett_t*)&buff[it - buff.begin()];
+ T* p_set0 = (T*)&buff[it - buff.begin()];
  it = std::search(it + LZIDSIGSIZE, buff.end(), strSettSign, strSettSign + LZIDSIGSIZE);
  if (it == buff.end())
   return false;
- lzid_sett_t* p_set1 = (lzid_sett_t*)&buff[it - buff.begin()];
+ T* p_set1 = (T*)&buff[it - buff.begin()];
 
  op_set[0] = p_set0;
  op_set[1] = p_set1;
@@ -322,11 +385,21 @@ bool CInjDrvFileDataIO::LoadSetsFromFirmware(SECU3IO::InjDrvPar* op_set)
 
   //find signature and calculate addresses
   lzid_sett_t* p_set[2];
-  if (!getSettAddresses(buff, p_set))
+  if (!getSettAddresses<lzid_sett_t>(buff, p_set))
    return false;
 
+  bool result1 = false, result2 = false;
+  if (p_set[0]->version >= 0x24)
+   result1 = ConvertFromFirmwareData<lzid_sett_t>(op_set[0], *p_set[0], true);
+  else
+   result1 = ConvertFromFirmwareData<lzid_sett_t_v23>(op_set[0], *((lzid_sett_t_v23*)p_set[0]), true);
+  if (p_set[1]->version >= 0x24)
+   result2 = ConvertFromFirmwareData<lzid_sett_t>(op_set[1], *p_set[1], true);
+  else
+   result2 = ConvertFromFirmwareData<lzid_sett_t_v23>(op_set[1], *((lzid_sett_t_v23*)p_set[1]), true);
+
   //For now we ignore check sum, because it is not calculated in the firmware
-  if (!ConvertFromFirmwareData(op_set[0], *p_set[0], true) || !ConvertFromFirmwareData(op_set[1], *p_set[1], true))
+  if (!result1 || !result2)
   { //data corrupted
    AfxMessageBox("Error! Input file corrupted!", MB_ICONSTOP);
    return false;
