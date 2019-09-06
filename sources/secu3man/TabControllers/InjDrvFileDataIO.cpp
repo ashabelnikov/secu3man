@@ -190,6 +190,8 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC
  ms.start_bldr = false;
  ms.reset_eeprom = false;
  ms.voltage = .0f;
+ ms.set0_corrupted = false;
+ ms.set1_corrupted = false;
 
  ms.type = fs.type;
  ms.version = fs.version;
