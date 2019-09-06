@@ -1608,7 +1608,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
 
 void CFirmwareTabController::OnEditFwConsts(void)
 {
- CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 380);
+ CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 408);
 
  SECU3IO::FwConstsData d;
  m_fwdm->GetFwConstsData(d);
@@ -1662,6 +1662,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("Верх. порог ДПДЗ продувки адсорбера"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi);
  else
   dfd.AppendItem(_T("Hi TPS threshold for the canister purge valve"), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.evap_tps_hi);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Абсол. давление в топливной рампе"), _T("кПа"), 0.0f, 1000.0f, 0.1f, 1, &d.frap);
+ else
+  dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap);
 
  if (dfd.DoModal()==IDOK)
  {
