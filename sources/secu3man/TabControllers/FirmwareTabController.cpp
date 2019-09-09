@@ -1644,9 +1644,14 @@ void CFirmwareTabController::OnEditFwConsts(void)
   dfd.AppendItem(_T("TPS threshold for turn on of air cond."), _T("%"), 0.0f, 100.0f, 0.5f, 1, &d.aircond_tps);
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
-  dfd.AppendItem(_T("Наполнение на ХХ (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
+  dfd.AppendItem(_T("Наполнение на ХХ для бенз. (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
  else
-  dfd.AppendItem(_T("VE on idling (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
+  dfd.AppendItem(_T("VE on idling for petrol (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Наполнение на ХХ для газа (=0 - игнор.)"), _T("коэф"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g);
+ else
+  dfd.AppendItem(_T("VE on idling for gas (=0 - ignore)"), _T("coef"), 0.0f, 1.99f, 0.01f, 2, &d.idl_ve_g);
 
  if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
   dfd.AppendItem(_T("Порог ДТОЖ вкл. продувки адсорбера"), _T("°C"), 0.0f, 120.0f, 0.25f, 2, &d.evap_clt);

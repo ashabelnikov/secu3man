@@ -777,6 +777,7 @@ namespace SECU3IO
   float evap_tps_lo;
   float evap_tps_hi;
   float frap;
+  float idl_ve_g;
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

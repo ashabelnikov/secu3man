@@ -207,11 +207,12 @@ typedef struct
  _uchar aircond_tps;
  _int  idl_ve;
  _uint frap;
+ _int  idl_ve_g;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[8];
+ _uchar reserved[6];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2049,6 +2050,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.evap_tps_lo = ((float)exd.evap_tps_lo) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.evap_tps_hi = ((float)exd.evap_tps_hi) / TPS_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.frap = ((float)exd.frap) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.idl_ve_g = ((float)exd.idl_ve_g) / VE_MAPS_M_FACTOR;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2066,4 +2068,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.evap_tps_lo = MathHelpers::Round(i_data.evap_tps_lo * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.evap_tps_hi = MathHelpers::Round(i_data.evap_tps_hi * TPS_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.frap = MathHelpers::Round(i_data.frap * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.idl_ve_g = MathHelpers::Round(i_data.idl_ve_g * VE_MAPS_M_FACTOR);
 }
