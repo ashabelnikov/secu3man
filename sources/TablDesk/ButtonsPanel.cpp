@@ -2063,7 +2063,7 @@ void CButtonsPanel::OnViewITMap()
   _GetITModeRange(y1, y2);
   m_md[TYPE_MAP_INJ_IT].handle = DLL::Chart3DCreate(_ChartParentHwnd(), GetITMap(true),GetITMap(false),GetRPMGrid(),16,16,y1,y2,
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
-    MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str(),
+    MLL::GetString((m_it_mode == 1 || m_it_mode == 3) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str(),
     MLL::GetString(IDS_IT_MAP).c_str());
   DLL::Chart3DSetPtMovingStep(m_md[TYPE_MAP_INJ_IT].handle, m_md[TYPE_MAP_INJ_IT].ptMovStep);
   DLL::Chart3DSetOnWndActivation(m_md[TYPE_MAP_INJ_IT].handle, OnWndActivationITMap, this);
@@ -3472,7 +3472,7 @@ void CButtonsPanel::SetITEdMode(int mode)
  {
   DLL::Chart3DSetFncRange(m_md[TYPE_MAP_INJ_IT].handle, y1, y2);
   DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
-  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1 || m_it_mode == 3) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
  }
 }
 
@@ -3496,7 +3496,7 @@ void CButtonsPanel::OnChangeSettingsGME(void)
  {
   DLL::Chart3DSetFncRange(m_md[TYPE_MAP_INJ_IT].handle, y1, y2);
   DLL::Chart3DUpdate(m_md[TYPE_MAP_INJ_IT].handle, GetITMap(true), GetITMap(false));
-  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
+  DLL::Chart3DSetAxisTitle(m_md[TYPE_MAP_INJ_IT].handle, 1, MLL::GetString((m_it_mode == 1 || m_it_mode == 3) ? IDS_MAPS_INJTIM_UNIT1 : IDS_MAPS_INJTIM_UNIT).c_str());
  }
 
  if (m_OnChangeSettings)
