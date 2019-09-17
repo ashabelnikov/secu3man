@@ -314,7 +314,7 @@ BOOL CLambdaPageDlg::OnInitDialog()
  m_tempthrd_edit.SetRange(0.00f, 200.00f);
 
  m_rpmthrd_spin.SetBuddy(&m_rpmthrd_edit);
- m_rpmthrd_edit.SetLimitText(4);
+ m_rpmthrd_edit.SetLimitText(5);
  m_rpmthrd_edit.SetDecimalPlaces(5);
  m_rpmthrd_spin.SetRangeAndDelta(0, 15000, 50);
  m_rpmthrd_edit.SetRange(0, 15000);
