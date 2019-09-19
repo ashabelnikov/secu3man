@@ -1673,6 +1673,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Absolute pressure in the fuel rail"), _T("kPa"), 0.0f, 1000.0f, 0.1f, 1, &d.frap);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Таймер блокировки стартера"), _T("такт"), 0, 255, 1, 1, &d.stbl_str_cnt);
+ else
+  dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
