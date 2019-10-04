@@ -1486,7 +1486,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Порог включения обогащения по ДПДЗ. Чем выше значение, тем резче нужно нажать на педаль газа для активации обогащения."
-    IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ (в градусах до ВМТ) система должна начинать впрыск. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
+    IDS_PD_INJECTOR_TIMING_EDIT_TT "Указывает при каком угле поворота КВ система должна начинать впрыск. Режим редактирования фазы задается в настройках. Данный параметр будет иметь эффект только при синхронизации от ДПКВ"
     IDS_PD_LOAD_OPT_TPS            "ДПДЗ"
     IDS_PD_LOAD_OPT_MAP            "ДАД"
     IDS_PD_LOAD_OPT_MAPBARO        "ДАД(баро)"        
@@ -3077,7 +3077,7 @@ END
 STRINGTABLE
 BEGIN
     IDS_PD_ACCELENR_TPSTHRD_EDIT_TT "Accel.enrichment activation threshold (by TPS). The higher the value, the quickly you need to press the gas pedal to activate enrichment."
-    IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft (BTDC) when system should start injection. This parameter will take effect only with synchronization from CKP sensor."
+    IDS_PD_INJECTOR_TIMING_EDIT_TT "Specifies in degrees of crankshaft (mode is defined in settings) when system should start injection. This parameter will take effect only with synchronization from CKP sensor."
     IDS_PD_LOAD_OPT_TPS            "TPS"
     IDS_PD_LOAD_OPT_MAP            "MAP"
     IDS_PD_LOAD_OPT_MAPBARO        "MAP(baro)"        

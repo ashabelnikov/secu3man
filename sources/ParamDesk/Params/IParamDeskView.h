@@ -79,4 +79,6 @@ class IParamDeskView : public IDeskView
   //call only for active panel
   virtual bool SetCurSel(int sel) = 0;
   virtual int GetCurSel(void) = 0;
+
+  virtual void SetITEdMode(int mode) = 0;
 };

@@ -191,6 +191,7 @@ void CFirmwareTabController::OnSettingsChanged(int action)
 void CFirmwareTabController::OnActivate(void)
 {
  m_active = true;
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
  mp_view->mp_TablesPanel->ShowOpenedCharts(true);
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
@@ -1857,6 +1858,7 @@ void CFirmwareTabController::OnCESettingsButton(void)
 void CFirmwareTabController::OnChangeSettingsMapEd(void)
 {
  mp_settings->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_view->mp_TablesPanel->GetITEdMode());
 
  MapPtMovStep mptms;
  mp_settings->GetMapPtMovStep(mptms);

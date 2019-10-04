@@ -61,6 +61,8 @@ CPMParamsController::~CPMParamsController()
 
 void CPMParamsController::OnActivate(void)
 {
+ mp_view->SetITEdMode(mp_settings->GetITEdMode());
+
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->SetCurSel(m_lastSel);
 

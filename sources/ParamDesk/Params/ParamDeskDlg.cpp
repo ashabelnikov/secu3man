@@ -872,3 +872,7 @@ void CParamDeskDlg::OnSize( UINT nType, int cx, int cy )
  }
 }
 
+void CParamDeskDlg::SetITEdMode(int mode)
+{
+ m_pInjectorPageDlg->SetITEdMode(mode);
+}

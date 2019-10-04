@@ -54,6 +54,8 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   void GetValues(SECU3IO::InjctrPar* o_values);
   void SetValues(const SECU3IO::InjctrPar* i_values);
 
+  void SetITEdMode(int mode);
+
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX); // DDX/DDV support
@@ -85,6 +87,8 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   int  _GetAngleSpecsComboBoxSelection(int fi);
   void _SetAngleSpecsComboBoxSelection(int i_sel, int fi);
   std::vector<std::pair<int, _TSTRING> > m_anglespecs;
+
+  void _GetITModeRange(float& y1, float& y2);
 
  private:
   SECU3IO::InjctrPar m_params;
@@ -120,4 +124,5 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   bool m_ovf_msgbox;
 
   CFont m_boldDlgFont;
+  int m_itmode;
 };

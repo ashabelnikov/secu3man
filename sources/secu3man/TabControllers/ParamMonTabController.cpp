@@ -39,6 +39,7 @@
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/RSDeskDlg.h"
 #include "ParamDesk/Tables/TablesDeskDlg.h"
+#include "ParamDesk/Params/ParamDeskDlg.h"
 #include "PMInitDataCollector.h"
 #include "PMMonitorController.h"
 #include "PMParamsController.h"
@@ -406,4 +407,5 @@ void CParamMonTabController::OnMIDeskSettingsChanged(void)
 void CParamMonTabController::_OnChangeSettings(void)
 {
  mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
+ mp_view->mp_ParamDeskDlg->SetITEdMode(mp_settings->GetITEdMode());
 }

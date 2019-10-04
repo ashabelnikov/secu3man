@@ -100,6 +100,8 @@ class AFX_EXT_CLASS CParamDeskDlg : public CModelessUpdatableDialog, public IPar
   //Get/Set current selection
   virtual bool SetCurSel(int sel);
   virtual int GetCurSel(void);
+
+  void SetITEdMode(int mode);
   //-------------------------------------------------------------
 
  // Implementation

@@ -26,6 +26,7 @@
 #include "stdafx.h"
 #include "Resources/resource.h"
 #include "common/dpiaware.h"
+#include "common/mathhelpers.h"
 #include "InjectorPageDlg.h"
 #include "ui-core/ddx_helpers.h"
 #include "ui-core/fnt_helpers.h"
@@ -132,6 +133,7 @@ CInjectorPageDlg::CInjectorPageDlg(CWnd* pParent /*=NULL*/)
 , m_fff_const_edit(CEditEx::MODE_FLOAT, true)
 , m_ovf_msgbox(false)
 , mp_scr(new CWndScroller)
+, m_itmode(0)
 {
  m_fuel_density[0] = 0.710f; //petrol density (0.710 g/cc)
  m_fuel_density[1] = 0.536f; //LPG density (0.536 g/cc)
@@ -229,11 +231,21 @@ void CInjectorPageDlg::DoDataExchange(CDataExchange* pDX)
  m_flowrate_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_EDIT, m_params.inj_flow_rate[0]);
  m_flowrate_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_FLOWRATE_G_EDIT, m_params.inj_flow_rate[1]);
 
- m_inj_timing_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, m_params.inj_timing[0]);
- m_inj_timing_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_G_EDIT, m_params.inj_timing[1]);
+ float inj_timing = MathHelpers::InjTimValueTransform(m_itmode, m_params.inj_timing[0], 0);
+ m_inj_timing_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_EDIT, inj_timing);
+ m_params.inj_timing[0] = MathHelpers::InjTimValueTransform(m_itmode, inj_timing, 1);
 
- m_inj_timing_crk_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, m_params.inj_timing_crk[0]);
- m_inj_timing_crk_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, m_params.inj_timing_crk[1]);
+ inj_timing = MathHelpers::InjTimValueTransform(m_itmode, m_params.inj_timing[1], 0);
+ m_inj_timing_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_G_EDIT, inj_timing);
+ m_params.inj_timing[1] = MathHelpers::InjTimValueTransform(m_itmode, inj_timing, 1);
+
+ inj_timing = MathHelpers::InjTimValueTransform(m_itmode, m_params.inj_timing_crk[0], 0);
+ m_inj_timing_crk_edit[0].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_EDIT, inj_timing);
+ m_params.inj_timing_crk[0] = MathHelpers::InjTimValueTransform(m_itmode, inj_timing, 1);
+
+ inj_timing = MathHelpers::InjTimValueTransform(m_itmode, m_params.inj_timing_crk[1], 0);
+ m_inj_timing_crk_edit[1].DDX_Value(pDX, IDC_PD_INJECTOR_TIMING_CRK_G_EDIT, inj_timing);
+ m_params.inj_timing_crk[1] = MathHelpers::InjTimValueTransform(m_itmode, inj_timing, 1);
 
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_CHECK, m_params.inj_usetimingmap[0]);
  DDX_Check_bool(pDX, IDC_PD_INJECTOR_USETIMINGMAP_G_CHECK, m_params.inj_usetimingmap[1]);
@@ -280,6 +292,9 @@ BOOL CInjectorPageDlg::OnInitDialog()
  m_cyldisp_spin.SetRangeAndDelta(0.05f, 8.0000f, 0.0001);
  m_cyldisp_edit.SetRange(0.05f, 8.0000f);
 
+ float mi, ma;
+ _GetITModeRange(mi, ma);
+
  for (int i = 0; i < 2; ++i)
  {
   m_flowrate_spin[i].SetBuddy(&m_flowrate_edit[i]);
@@ -291,14 +306,14 @@ BOOL CInjectorPageDlg::OnInitDialog()
   m_inj_timing_spin[i].SetBuddy(&m_inj_timing_edit[i]);
   m_inj_timing_edit[i].SetLimitText(4);
   m_inj_timing_edit[i].SetDecimalPlaces(0);
-  m_inj_timing_spin[i].SetRangeAndDelta(0.0f, 720.0f, 1.0);
-  m_inj_timing_edit[i].SetRange(0.0f, 720.0f);
+  m_inj_timing_spin[i].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_edit[i].SetRange(mi, ma);
 
   m_inj_timing_crk_spin[i].SetBuddy(&m_inj_timing_crk_edit[i]);
   m_inj_timing_crk_edit[i].SetLimitText(4);
   m_inj_timing_crk_edit[i].SetDecimalPlaces(0);
-  m_inj_timing_crk_spin[i].SetRangeAndDelta(0.0f, 720.0f, 1.0);
-  m_inj_timing_crk_edit[i].SetRange(0.0f, 720.0f);
+  m_inj_timing_crk_spin[i].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_crk_edit[i].SetRange(mi, ma);
 
   m_min_pw_spin[i].SetBuddy(&m_min_pw_edit[i]);
   m_min_pw_edit[i].SetLimitText(5);
@@ -819,11 +834,45 @@ void CInjectorPageDlg::_SetSqrNumComboBoxSelection(int i_sel, int fi)
  m_sqrnum_combo[fi].SetCurSel(count/2);
 }
 
-void CInjectorPageDlg::OnSize( UINT nType, int cx, int cy )
+void CInjectorPageDlg::OnSize(UINT nType, int cx, int cy)
 {
  Super::OnSize(nType, cx, cy);
 
  DPIAware da;
  if (mp_scr.get())
   mp_scr->SetViewSize(cx, da.ScaleY(760));
+}
+
+void CInjectorPageDlg::SetITEdMode(int mode)
+{
+ m_itmode = mode;
+
+ float mi, ma;
+ _GetITModeRange(mi, ma);
+
+ if (GetSafeHwnd())
+ { 
+  m_inj_timing_edit[0].SetLimitText(4);
+  m_inj_timing_spin[0].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_edit[0].SetRange(mi, ma);
+
+  m_inj_timing_edit[1].SetLimitText(4);
+  m_inj_timing_spin[1].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_edit[1].SetRange(mi, ma);
+
+  m_inj_timing_crk_edit[0].SetLimitText(4);
+  m_inj_timing_crk_spin[0].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_crk_edit[0].SetRange(mi, ma);
+
+  m_inj_timing_crk_edit[1].SetLimitText(4);
+  m_inj_timing_crk_spin[1].SetRangeAndDelta(mi, ma, 1.0);
+  m_inj_timing_crk_edit[1].SetRange(mi, ma);
+  UpdateData(FALSE);
+ }
+}
+
+void CInjectorPageDlg::_GetITModeRange(float& y1, float& y2)
+{
+ y1 = (m_itmode < 2) ? .0f : -360.0f;
+ y2 = (m_itmode < 2) ? 720.0f : 360.0f;
 }
