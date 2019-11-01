@@ -168,9 +168,9 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   fs.peak_on_tab[i] = MathHelpers::Round(ms.m_peak_on_tab[i] * 2.5f);
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
-  fs.peak_duty_tab[i] = MathHelpers::Round(ms.m_peak_duty_tab[i] * 2.5f);
+  fs.peak_duty_tab[i] = MathHelpers::Round((ms.m_peak_duty_tab[i] / 100.0f) * 4096.0f);
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
-  fs.hold_duty_tab[i] = MathHelpers::Round(ms.m_hold_duty_tab[i] * 2.5f);
+  fs.hold_duty_tab[i] = MathHelpers::Round((ms.m_hold_duty_tab[i] / 100.0f) * 4096.0f);
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   fs.peak_full_tab[i] = MathHelpers::Round(ms.m_peak_full_tab[i] * 2.5f);
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
@@ -224,9 +224,9 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   ms.m_peak_on_tab[i] = ((float)fs.peak_on_tab[i]) / 2.5f;
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
-  ms.m_peak_duty_tab[i] = ((float)fs.peak_duty_tab[i]) / 2.5f;
+  ms.m_peak_duty_tab[i] = (((float)fs.peak_duty_tab[i]) / 4096.0f) * 100.0f;
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
-  ms.m_hold_duty_tab[i] = ((float)fs.hold_duty_tab[i]) / 2.5f;
+  ms.m_hold_duty_tab[i] = (((float)fs.hold_duty_tab[i]) / 4096.0f) * 100.0f;
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   ms.m_peak_full_tab[i] = ((float)fs.peak_full_tab[i]) / 2.5f;
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
