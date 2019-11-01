@@ -581,6 +581,7 @@ namespace SECU3IO
   bool ee_status;        //from LZID: true - idle, false - busy. To LZID: true - says to save settings into the EEPROM
   bool set0_corrupted;   //from LZID only 
   bool set1_corrupted;   //from LZID only 
+  bool dev_address;      //to/from LZID
   float voltage;         //from LZID only 
 
   int type;              //from LZID only
@@ -621,7 +622,12 @@ namespace SECU3IO
 
  struct LzidBLHS
  {
-  char data[4];
+  char data[5];
+ };
+
+ struct InjDrvAdr
+ {
+  int dev_address;
  };
 
 

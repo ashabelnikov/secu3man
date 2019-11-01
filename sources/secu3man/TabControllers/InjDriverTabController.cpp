@@ -55,6 +55,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
 , m_saving_proc_state(0)
 , m_fw_loaded(false)
 , m_lzidblhs_tmr(this, &CInjDriverTabController::OnLzidBlHsTimer)
+, m_address_tmr(this, &CInjDriverTabController::OnAddressTimer)
 , m_bl_op(0)
 , m_active(false)
 , m_recv_hs(false)
@@ -77,6 +78,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnWriteEEPROMFromFile(MakeDelegate(this, &CInjDriverTabController::OnWriteEEPROMFromFile));
  mp_view->setOnReadEEPROMToFile(MakeDelegate(this, &CInjDriverTabController::OnReadEEPROMToFile));
  mp_view->setOnResetEEPROM(MakeDelegate(this, &CInjDriverTabController::OnResetEEPROM));
+ mp_view->setOnSelInjDrv(MakeDelegate(this, &CInjDriverTabController::OnSelInjDrv));
 }
 
 CInjDriverTabController::~CInjDriverTabController()
@@ -100,6 +102,7 @@ void CInjDriverTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CInjDriverTabController::OnActivate(void)
 {
+ m_bl_op = 0;
  m_active = true;
  mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  mp_comm->m_pBldAdapter->SetEventHandler(this);
@@ -128,6 +131,11 @@ void CInjDriverTabController::OnActivate(void)
 
  mp_comm->m_pControlApp->ChangeContext(SILENT);
  mp_view->EnableBLItems(true);
+
+ //select device depending on the drop down list
+ SECU3IO::InjDrvAdr adr;
+ adr.dev_address = mp_view->GetInjDrvSel();
+ mp_comm->m_pControlApp->SendPacket(INJDRV_ADR, &adr);
 }
 
 //from MainTabController
@@ -140,7 +148,9 @@ void CInjDriverTabController::OnDeactivate(void)
  mp_sbar->SetInformationText(_T(""));
  mp_sbar->ShowProgressBar(false);
  m_lzidblhs_tmr.KillTimer();
+ m_address_tmr.KillTimer();
  mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(mp_sett->GetECUPlatformType()));
+ m_bl_op = 0;
 }
 
 void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SECU3Packet* ip_packet)
@@ -215,7 +225,8 @@ void CInjDriverTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO:
  {
   SECU3IO::InjDrvPar* data = (SECU3IO::InjDrvPar*)ip_packet;
   mp_view->SetValues(data);
-  m_initFlags[data->set_idx] = true;
+  if ((int)data->dev_address == mp_view->GetInjDrvSel())
+   m_initFlags[data->set_idx] = true;
   if (m_initFlags[0] == true && m_initFlags[1] == true)
   { //has collected all necessary data!
    mp_view->EnableAll(true);
@@ -243,12 +254,14 @@ void CInjDriverTabController::OnConnection(const bool i_online)
   state = CStatusBarManager::STATE_ONLINE;
   std::fill(m_initFlags, m_initFlags + 2, false);
   m_initialized = false;
+  m_address_tmr.KillTimer();
  }
  else
  {
   state = CStatusBarManager::STATE_OFFLINE;
   std::fill(m_initFlags, m_initFlags + 2, false);
   m_initialized = false;
+  m_address_tmr.SetTimer(250);
  }
 
  if (i_online==false)
@@ -308,6 +321,7 @@ void CInjDriverTabController::OnChange(void)
  params.ee_status = false; //no command
  params.start_bldr = false;
  params.reset_eeprom = false;
+ params.dev_address = mp_view->GetInjDrvSel();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -322,6 +336,7 @@ void CInjDriverTabController::OnSaveParameters(void)
  params.ee_status = true; //this will say firmware to save data int EEPROM
  params.start_bldr = false;
  params.reset_eeprom = false;
+ params.dev_address = mp_view->GetInjDrvSel();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -345,6 +360,7 @@ void CInjDriverTabController::OnImportFromAFile(void)
  params.ee_status = false; //no command
  params.start_bldr = false;
  params.reset_eeprom = false;
+ params.dev_address = mp_view->GetInjDrvSel();
  mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
 }
 
@@ -364,7 +380,9 @@ void CInjDriverTabController::OnLoadFromFirmware(void)
  if (!CInjDrvFileDataIO::LoadSetsFromFirmware(params))
   return;
  params[0].set_idx = 0;
+ params[0].dev_address = mp_view->GetInjDrvSel();
  params[1].set_idx = 1;
+ params[1].dev_address = mp_view->GetInjDrvSel();
 
  if (mp_comm->m_pControlApp->GetOnlineStatus())
  {
@@ -549,7 +567,7 @@ void CInjDriverTabController::OnLzidBlHsTimer(void)
  if (!m_recv_hs)
  {
   SECU3IO::LzidBLHS packet;
-  strncpy(packet.data, "3MAN", 4);
+  strncpy(packet.data, (mp_view->GetInjDrvSel() ? "3MAN1" : "3MAN0"), 5);
   mp_comm->m_pControlApp->SendPacket(LZIDBL_HS, &packet);
  }
 }
@@ -561,7 +579,9 @@ bool CInjDriverTabController::StartBootLoader(int op)
   SECU3IO::InjDrvPar params;
   memset(&params, 0, sizeof(SECU3IO::InjDrvPar));
   params.start_bldr = true; //command to start boot loader! 
+  params.dev_address = mp_view->GetInjDrvSel();
   mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
+  m_bl_op = op;
   Sleep(100);
   return true; //started immediately
  }
@@ -750,6 +770,7 @@ void CInjDriverTabController::OnEnd(const int opcode,const int status)
   //////////////////////////////////////////////////////////////////////
  }//switch
  mp_view->EnableBLItems(true);
+ m_bl_op = 0;
 }
 
 void CInjDriverTabController::OnResetEEPROM(void)
@@ -765,10 +786,32 @@ void CInjDriverTabController::OnResetEEPROM(void)
   params.ee_status = false; //no command
   params.start_bldr = false; //no command
   params.reset_eeprom = true; //reset eeprom command
+  params.dev_address = mp_view->GetInjDrvSel();
   mp_comm->m_pControlApp->SendPacket(INJDRV_PAR, &params);
   mp_view->RedrawWindow();
   AfxGetMainWnd()->BeginWaitCursor();
   Sleep(300);
   AfxGetMainWnd()->EndWaitCursor();
  }
+}
+
+void CInjDriverTabController::OnSelInjDrv(void)
+{
+ //select device depending on the drop down list
+ SECU3IO::InjDrvAdr adr;
+ adr.dev_address = mp_view->GetInjDrvSel();
+ mp_comm->m_pControlApp->SendPacket(INJDRV_ADR, &adr);
+ Sleep(10);
+ std::fill(m_initFlags, m_initFlags + 2, false);
+ m_initialized = false;
+}
+
+void CInjDriverTabController::OnAddressTimer(void)
+{
+ if (!mp_comm->m_pBootLoader->IsIdle() || m_recv_hs || 0!=m_bl_op)
+  return; //do not do any operations if boot loader is active
+ //select device depending on the drop down list
+ SECU3IO::InjDrvAdr adr;
+ adr.dev_address = mp_view->GetInjDrvSel();
+ mp_comm->m_pControlApp->SendPacket(INJDRV_ADR, &adr);
 }

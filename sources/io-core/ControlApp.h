@@ -218,6 +218,7 @@ class IOCORE_API CControlApp
   void Build_GASDOSE_PAR(SECU3IO::GasdosePar* packet_data);
   void Build_INJDRV_PAR(SECU3IO::InjDrvPar* packet_data);
   void Build_LZIDBL_HS(SECU3IO::LzidBLHS* packet_data);
+  void Build_INJDRV_ADR(SECU3IO::InjDrvAdr* packet_data);
 };
 
 class CondEncoder

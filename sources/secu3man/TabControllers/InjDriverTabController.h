@@ -60,6 +60,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   virtual void OnFullScreen(bool i_what);
   virtual bool OnAskChangeTab(void);
   void OnLzidBlHsTimer(void);
+  void OnAddressTimer(void);
 
   //from IBLDEventHandler
   virtual void OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data);
@@ -81,6 +82,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   void OnWriteEEPROMFromFile(void);
   void OnReadEEPROMToFile(void);
   void OnResetEEPROM(void);
+  void OnSelInjDrv(void);
 
   bool StartBootLoader(int op);
   bool ExitBootLoader(void);
@@ -93,6 +95,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
 
  private:
   CObjectTimer<CInjDriverTabController> m_lzidblhs_tmr;
+  CObjectTimer<CInjDriverTabController> m_address_tmr;
   bool m_initFlags[2];
   bool m_initialized;
   bool m_fw_loaded;

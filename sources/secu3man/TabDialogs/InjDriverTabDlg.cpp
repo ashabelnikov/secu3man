@@ -178,6 +178,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_SET_OF_SETT_COMBO, m_set_of_sett_combo);
  DDX_Control(pDX, IDC_INJDRV_TESTCH_COMBO, m_testch_combo);
 
+ DDX_Control(pDX, IDC_INJDRV_COMBO, m_injdrv_combo);
+
  DDX_Control(pDX,IDC_SECU3ORG_LINK, *mp_secu3orgLink);
  DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
  DDX_Control(pDX, IDC_INJDRV_TIP_LINK, *mp_TipLink);
@@ -232,6 +234,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
 
  ON_CBN_SELENDOK(IDC_SET_OF_SETT_COMBO, OnSelendokSetOfSett)
  ON_CBN_SELENDOK(IDC_INJDRV_TESTCH_COMBO, OnSelendokTestCh)
+ ON_CBN_SELENDOK(IDC_INJDRV_COMBO, OnSelendokInjDrv)
 
  ON_EN_CHANGE(IDC_PWM_PERIOD_EDIT, OnChangeData)
  ON_EN_CHANGE(IDC_PEAK_DUTY_EDIT, OnChangeData)
@@ -336,6 +339,10 @@ END_MESSAGE_MAP()
 BOOL CInjDriverTabDlg::OnInitDialog()
 {
  Super::OnInitDialog();
+
+ m_injdrv_combo.AddString(_T("1"));
+ m_injdrv_combo.AddString(_T("2"));
+ m_injdrv_combo.SetCurSel(0);
 
  //init HTTP link
  mp_secu3orgLink->SetLink(true);
@@ -905,6 +912,12 @@ void CInjDriverTabDlg::OnSelendokTestCh()
   m_onChange();
 }
 
+void CInjDriverTabDlg::OnSelendokInjDrv()
+{
+ if (m_onSelInjDrv)
+  m_onSelInjDrv();
+}
+
 void CInjDriverTabDlg::setOnChange(EventHandler onCB)
 {
  m_onChange = onCB;
@@ -973,6 +986,11 @@ void CInjDriverTabDlg::setOnReadEEPROMToFile(EventHandler onCB)
 void CInjDriverTabDlg::setOnResetEEPROM(EventHandler onCB)
 {
  m_onResetEEPROM = onCB;
+}
+
+void CInjDriverTabDlg::setOnSelInjDrv(EventHandler onCB)
+{
+ m_onSelInjDrv = onCB;
 }
 
 void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only /*= false*/)
@@ -1243,4 +1261,11 @@ void CInjDriverTabDlg::OnResetEEPROM()
 {
  if (m_onResetEEPROM)
   m_onResetEEPROM();
+}
+
+int CInjDriverTabDlg::GetInjDrvSel(void)
+{
+ int sel = m_injdrv_combo.GetCurSel();
+ ASSERT(sel != CB_ERR);
+ return sel;
 }

@@ -2303,6 +2303,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
  m_recv.set0_corrupted = CHECKBIT8(ee_status, 1);
  m_recv.set1_corrupted = CHECKBIT8(ee_status, 2);
  m_recv.gas_v = CHECKBIT8(ee_status, 3);
+ m_recv.dev_address = CHECKBIT8(ee_status, 4);
  m_recv.set_idx = CHECKBIT8(ee_status, 7);
 
  unsigned char type = 0;
@@ -2452,7 +2453,7 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_LZIDBL_HS(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::LzidBLHS& m_recv = m_recepted_packet.m_LzidBLHS;
- if (size != (mp_pdp->isHex() ? 4 : 4))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 5 : 5))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  strncpy(m_recv.data, (const char*)raw_packet, size); //text data
@@ -2837,6 +2838,7 @@ bool CControlApp::IsValidDescriptor(const BYTE descriptor) const
   case INJDRV_PAR:
   case SILENT:
   case LZIDBL_HS:
+  case INJDRV_ADR:
    return true;
   default:
    return false;
@@ -2946,6 +2948,9 @@ bool CControlApp::SendPacket(const BYTE i_descriptor, const void* i_packet_data)
    break;
   case LZIDBL_HS:
    Build_LZIDBL_HS((LzidBLHS*)i_packet_data);
+   break;
+  case INJDRV_ADR:
+   Build_INJDRV_ADR((InjDrvAdr*)i_packet_data);
    break;
 
   default:
@@ -3709,6 +3714,7 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
  WRITEBIT8(command, 7, packet_data->set_idx);
  WRITEBIT8(command, 1, packet_data->start_bldr);
  WRITEBIT8(command, 2, packet_data->reset_eeprom);
+ WRITEBIT8(command, 3, packet_data->dev_address);
 
  mp_pdp->resetCRC();
 
@@ -3805,8 +3811,17 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
 //-----------------------------------------------------------------------
 void CControlApp::Build_LZIDBL_HS(LzidBLHS* packet_data)
 {
- for(size_t i = 0; i < 4; ++i)
+ for(size_t i = 0; i < 5; ++i)
   m_outgoing_packet.push_back(packet_data->data[i]);
+}
+
+//-----------------------------------------------------------------------
+void CControlApp::Build_INJDRV_ADR(InjDrvAdr* packet_data)
+{
+ BYTE dev_address = packet_data->dev_address;
+ mp_pdp->resetCRC();
+ mp_pdp->Bin8ToHex(dev_address, m_outgoing_packet);
+ mp_pdp->Bin16ToHex(mp_pdp->getCRC(), m_outgoing_packet); //put CRC
 }
 
 //-----------------------------------------------------------------------

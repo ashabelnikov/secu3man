@@ -60,6 +60,7 @@ class CInjDriverTabDlg : public CTabDialog
   void SetOfflineCheck(void);
   void EnableBLItems(bool enable);
   void SetShowGraphLabels(bool show);
+  int GetInjDrvSel(void);
 
   void setOnChange(EventHandler onCB);
   void setOnSaveButton(EventHandler onCB);
@@ -75,6 +76,7 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnWriteEEPROMFromFile(EventHandler onCB);  
   void setOnReadEEPROMToFile(EventHandler onCB);  
   void setOnResetEEPROM(EventHandler onCB);  
+  void setOnSelInjDrv(EventHandler onCB);
 
  protected:
   virtual BOOL OnInitDialog();
@@ -91,6 +93,7 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnPthPauseTabSelCheck();
   afx_msg void OnSelendokSetOfSett();
   afx_msg void OnSelendokTestCh();
+  afx_msg void OnSelendokInjDrv();
   afx_msg void OnUpArrowButton();
   afx_msg void OnDownArrowButton();
   afx_msg void OnChangeData();
@@ -154,6 +157,7 @@ class CInjDriverTabDlg : public CTabDialog
 
   CComboBox m_set_of_sett_combo;
   CComboBox m_testch_combo;
+  CComboBox m_injdrv_combo;
 
   CStatic m_voltage_pane;
   CStatic m_gas_v_pane;
@@ -199,7 +203,8 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onReadLzblInfo;
   EventHandler m_onWriteEEPROMFromFile;
   EventHandler m_onReadEEPROMToFile;
-  EventHandler m_onResetEEPROM;;
+  EventHandler m_onResetEEPROM;
+  EventHandler m_onSelInjDrv;
 
   bool m_initialized;
   bool m_enable;

@@ -552,3 +552,5 @@
 #define IDS_CRC1_PANE_TT                4572
 #define IDM_DEV_DIAG_ENABLE_TACH_O_TST  4573
 #define IDS_DEV_DIAG_ENABLE_TACH_O_TST  4574
+#define IDC_INJDRV_COMBO                4575
+#define IDC_INJDRV_CAPTION              4576
