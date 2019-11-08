@@ -37,6 +37,12 @@ void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value)
  variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
 }
 
+void BITMASK_API WRITEBIT8(int& variable, int bitNum, bool value)
+{
+ ASSERT(bitNum < 8);
+ variable = (variable & (~(1 << bitNum))) | ((value?1:0) << bitNum);
+}
+
 void BITMASK_API WRITEBIT32(DWORD& variable, int bitNum, bool value)
 {
  ASSERT(bitNum < 32);

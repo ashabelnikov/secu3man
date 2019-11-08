@@ -183,6 +183,8 @@ class CInjDriverTabDlg : public CTabDialog
   CButton m_tst_peak_pwm_check;
   CButton m_tst_hold_pwm_check;
 
+  CButton m_load_flash_check;
+
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   std::auto_ptr<CChart2D> mp_chart;
   std::auto_ptr<CClickableBmp> mp_secu3logo;

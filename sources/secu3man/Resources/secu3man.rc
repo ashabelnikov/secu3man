@@ -436,6 +436,7 @@ BEGIN
     EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "—кважн. тест. сигнала (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
+    CONTROL         "«агружать из flash",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,287,100,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -748,6 +749,7 @@ BEGIN
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "—кважность тестового сигнала используемого дл€ тестировани€ каналов драйвера (см. выпадающий список '√енер. импульсы на входе')"
     IDS_CRC0_PANE_TT                "OK - контрольна€ сумма совпадает. NOK - данные первого набора настроек в EEPROM повреждены. ѕроверка осуществл€етс€ в момент старта прошивки, если данные повреждены, то загружаетс€ копи€ из flash."
     IDS_CRC1_PANE_TT                "OK - контрольна€ сумма совпадает. NOK - данные второго набора настроек в EEPROM повреждены. ѕроверка осуществл€етс€ в момент старта прошивки, если данные повреждены, то загружаетс€ копи€ из flash."
+    IDS_LOAD_FLASH_CHECK_TT         "≈сли вы хотите чтобы данные всегда загружались только из flash, то поставьте эту галочку перед тем как сохран€ть настройки в прошивку или записывать прошивку в устройство."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1181,6 +1183,7 @@ BEGIN
     EDITTEXT        IDC_INJDRV_TESTCH_DUTY_EDIT,115,261,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_DUTY_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,261,11,16
     RTEXT           "Test signal duty (%)",IDC_INJDRV_TESTCH_DUTY_CAPTION,12,264,100,10
+    CONTROL         "Load from flash",IDC_LOAD_FLASH_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,12,287,100,10
 END
 
 IDD_INJDRV_TIP_PICTURE DIALOGEX 0, 0, 320, 240
@@ -1493,6 +1496,7 @@ BEGIN
     IDS_INJDRV_TESTCH_DUTY_EDIT_TT  "Duty of the test signal used for testing of channels  (see dropdown list 'Generate pulses at input')"
     IDS_CRC0_PANE_TT                "OK - check sum is right. NOK - First set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
     IDS_CRC1_PANE_TT                "OK - check sum is right. NOK - Second set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
+    IDS_LOAD_FLASH_CHECK_TT         "If you want settings to be loaded always from flash, then set this check before writing of firmware to a file or to device."
 END
 
 /////////////////////////////////////////////////////////////////////////////

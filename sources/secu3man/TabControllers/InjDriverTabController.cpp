@@ -434,7 +434,8 @@ void CInjDriverTabController::OnShowFirmwareInfo(void)
  char* cur_cut = CHECKBIT8(params.fw_opt, 2) ? "Yes" : "No"; 
  char* inv_inp = CHECKBIT8(params.fw_opt, 3) ? "Yes" : "No"; 
  char* five_ch = CHECKBIT8(params.fw_opt, 4) ? "Yes" : "No"; 
- str.Format("Firmware version: v%d.%d\nDriver type: %s\nInv. PWM outputs: %s\nInv. FLB outputs: %s\nInv. inputs: %s\nCurrent cut off: %s\nFive channels: %s\n", ver_maj, ver_min, strDrvType, inv_pwm, inv_flb, inv_inp, cur_cut, five_ch);
+ char* ld_flash = CHECKBIT8(params.fw_opt, 5) ? "Yes" : "No"; 
+ str.Format("Firmware version: v%d.%d\nDriver type: %s\nInv. PWM outputs: %s\nInv. FLB outputs: %s\nInv. inputs: %s\nCurrent cut off: %s\nFive channels: %s\nLoad from flash: %s\n", ver_maj, ver_min, strDrvType, inv_pwm, inv_flb, inv_inp, cur_cut, five_ch, ld_flash);
  AfxMessageBox(str, MB_ICONINFORMATION);
 }
 

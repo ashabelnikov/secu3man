@@ -37,6 +37,7 @@
 #include "ui-core/Label.h"
 #include "ui-core/ClickableBmp.h"
 #include "InjDriverTipDlg.h"
+#include "io-core/Bitmask.h"
 
 const UINT CInjDriverTabDlg::IDD = IDD_INJ_DRIVER;
 
@@ -184,6 +185,8 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_SECU3LOGO_BITMAP, *mp_secu3logo);
  DDX_Control(pDX, IDC_INJDRV_TIP_LINK, *mp_TipLink);
 
+ DDX_Control(pDX, IDC_LOAD_FLASH_CHECK, m_load_flash_check);
+
  m_pwm_period_edit.DDX_Value(pDX, IDC_PWM_PERIOD_EDIT, m_params[m_set_of_sett_idx].m_pwm_period);
  m_peak_duty_edit.DDX_Value(pDX, IDC_PEAK_DUTY_EDIT, m_params[m_set_of_sett_idx].m_peak_duty);
  m_hold_duty_edit.DDX_Value(pDX, IDC_HOLD_DUTY_EDIT, m_params[m_set_of_sett_idx].m_hold_duty);
@@ -201,6 +204,10 @@ void CInjDriverTabDlg::DoDataExchange(CDataExchange* pDX)
 
  DDX_Check_bool(pDX, IDC_TST_PEAK_PWM_CHECK, m_params[m_set_of_sett_idx].m_tst_peak_pwm);
  DDX_Check_bool(pDX, IDC_TST_HOLD_PWM_CHECK, m_params[m_set_of_sett_idx].m_tst_hold_pwm);
+
+ bool fw_opt = CHECKBIT8(m_params[m_set_of_sett_idx].fw_opt, 5);
+ DDX_Check_bool(pDX, IDC_LOAD_FLASH_CHECK, fw_opt);
+ WRITEBIT8(m_params[m_set_of_sett_idx].fw_opt, 5, fw_opt);
 
  Super::DoDataExchange(pDX);
 }
@@ -331,6 +338,8 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READEEPROMTOFILE, OnUpdateBLItems)
 
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_RESETEEPROM, OnUpdateControls)
+
+ ON_UPDATE_COMMAND_UI(IDC_LOAD_FLASH_CHECK, OnUpdateControls)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -502,6 +511,8 @@ BOOL CInjDriverTabDlg::OnInitDialog()
 
  VERIFY(mp_ttc->AddWindow(&m_crc0_pane, MLL::GetString(IDS_CRC0_PANE_TT)));
  VERIFY(mp_ttc->AddWindow(&m_crc1_pane, MLL::GetString(IDS_CRC1_PANE_TT)));
+
+ VERIFY(mp_ttc->AddWindow(&m_load_flash_check, MLL::GetString(IDS_LOAD_FLASH_CHECK_TT)));
 
  mp_ttc->SetMaxTipWidth(120); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

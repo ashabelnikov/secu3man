@@ -554,3 +554,5 @@
 #define IDS_DEV_DIAG_ENABLE_TACH_O_TST  4574
 #define IDC_INJDRV_COMBO                4575
 #define IDC_INJDRV_CAPTION              4576
+#define IDC_LOAD_FLASH_CHECK            4577
+#define IDS_LOAD_FLASH_CHECK_TT         4578

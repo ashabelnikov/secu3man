@@ -30,6 +30,7 @@
 // bitNum - Number of bit for writing in
 // value - value of bit
 void BITMASK_API WRITEBIT8(BYTE& variable, int bitNum, bool value);
+void BITMASK_API WRITEBIT8(int& variable, int bitNum, bool value);
 
 void BITMASK_API WRITEBIT16(WORD& variable, int bitNum, bool value);
 
