@@ -1679,6 +1679,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Starter's blocking timer"), _T("str"), 0, 255, 1, 1, &d.stbl_str_cnt);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог контроля детонации"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd);
+ else
+  dfd.AppendItem(_T("Knock control threshold"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);

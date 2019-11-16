@@ -209,11 +209,12 @@ typedef struct
  _uint frap;
  _int  idl_ve_g;
  _uchar stbl_str_cnt;
+ _int  knkclt_thrd;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[5];
+ _uchar reserved[3];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2053,6 +2054,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.frap = ((float)exd.frap) / MAP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.idl_ve_g = ((float)exd.idl_ve_g) / VE_MAPS_M_FACTOR;
  o_data.stbl_str_cnt = exd.stbl_str_cnt;
+ o_data.knkclt_thrd = ((float)exd.knkclt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2072,4 +2074,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.frap = MathHelpers::Round(i_data.frap * MAP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.idl_ve_g = MathHelpers::Round(i_data.idl_ve_g * VE_MAPS_M_FACTOR);
  exd.stbl_str_cnt = i_data.stbl_str_cnt;
+ exd.knkclt_thrd = MathHelpers::Round(i_data.knkclt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
 }
