@@ -210,11 +210,13 @@ typedef struct
  _int  idl_ve_g;
  _uchar stbl_str_cnt;
  _int  knkclt_thrd;
+ _int  heating_t_off;
+ _uchar heating_time;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[3];
+/* _uchar reserved[0];*/
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2055,6 +2057,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.idl_ve_g = ((float)exd.idl_ve_g) / VE_MAPS_M_FACTOR;
  o_data.stbl_str_cnt = exd.stbl_str_cnt;
  o_data.knkclt_thrd = ((float)exd.knkclt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.heating_t_off = ((float)exd.heating_t_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+ o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2075,4 +2079,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.idl_ve_g = MathHelpers::Round(i_data.idl_ve_g * VE_MAPS_M_FACTOR);
  exd.stbl_str_cnt = i_data.stbl_str_cnt;
  exd.knkclt_thrd = MathHelpers::Round(i_data.knkclt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.heating_t_off = MathHelpers::Round(i_data.heating_t_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+ exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
 }

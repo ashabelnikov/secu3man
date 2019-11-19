@@ -1684,6 +1684,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Knock control threshold"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.knkclt_thrd);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Порог выключения подогрева коллектора"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off);
+ else
+  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("°C"), -40.0f, 120.0f, 0.25f, 2, &d.heating_t_off);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Макс. время работы подогрева коллектора"), _T("мин"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time);
+ else
+  dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("min"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
