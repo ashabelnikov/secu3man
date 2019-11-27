@@ -22,8 +22,8 @@ stringtable
   IDS_TT_SMOOTHING_5_POINTS, "—глаживание по 5-ти соседним точкам"
   IDS_TT_MOVE_FUNC_UP, "—местить функцию вверх на текущее значение 'Ўаг смещени€ точек'"
   IDS_TT_MOVE_FUNC_DOWN, "—местить функцию вниз на текущее значение 'Ўаг смещени€ точек'"
-  IDS_TT_H_AXIS_BEGIN_VAL, "«начение определ€ющее начало горизонтальной оси"
-  IDS_TT_H_AXIS_END_VAL, "«начение определ€ющее конец горизонтальной оси"
+  IDS_TT_H_AXIS_BEGIN_VAL, "«начение определ€ющее начало горизонтальной оси. ƒолжно быть меньше конечного значени€!"
+  IDS_TT_H_AXIS_END_VAL, "«начение определ€ющее конец горизонтальной оси. ƒолжно быть больше начального значени€!"
 }
 
 LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
@@ -42,6 +42,6 @@ stringtable
   IDS_TT_SMOOTHING_5_POINTS, "Smoothing using 5 adjacent points"
   IDS_TT_MOVE_FUNC_UP, "Move function up by current value of 'Points' moving step'"
   IDS_TT_MOVE_FUNC_DOWN, "Move function down by current value of 'Points' moving step'"
-  IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis"
-  IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis"
+  IDS_TT_H_AXIS_BEGIN_VAL, "This value defines beginning of the horizontal axis. Must be less than end value!"
+  IDS_TT_H_AXIS_END_VAL, "This value defines ending of the horizontal axis. Must be greater than begin value!"
 }
