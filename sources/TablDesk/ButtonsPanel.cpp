@@ -2788,19 +2788,34 @@ void CButtonsPanel::UpdateOpenedCharts(void)
  if (m_md[TYPE_MAP_INJ_RIGID].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_RIGID].handle, GetRigidMap(true), GetRigidMap(false));
  if (m_md[TYPE_MAP_INJ_EGOCRV].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_EGOCRV].handle, GetEGOCurveMap(true), GetEGOCurveMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_EGOCRV].handle, 1, GetEGOCurveMap(false)[16], GetEGOCurveMap(false)[16+1]);
+ }
  if (m_md[TYPE_MAP_INJ_IACC].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACC].handle, GetIACCMap(true), GetIACCMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IACC].handle, 1, GetIACCMap(false)[8], GetIACCMap(false)[8+1]);
+ }
  if (m_md[TYPE_MAP_INJ_IACCW].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IACCW].handle, GetIACCWMap(true), GetIACCWMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IACCW].handle, 1, GetIACCWMap(false)[16], GetIACCWMap(false)[16+1]);
+ }
  if (m_md[TYPE_MAP_INJ_IATCLT].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_IATCLT].handle, GetIATCLTMap(true), GetIATCLTMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_IATCLT].handle, 1, GetIATCLTMap(false)[8], GetIATCLTMap(false)[8+1]);
+ }
  if (m_md[TYPE_MAP_INJ_TPSSWT].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_TPSSWT].handle, GetTpsswtMap(true), GetTpsswtMap(false));
  if (m_md[TYPE_MAP_INJ_GTSC].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GTSC].handle, GetGtscMap(true), GetGtscMap(false));
  if (m_md[TYPE_MAP_INJ_GPSC].state)
+ {
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_GPSC].handle, GetGpscMap(true), GetGpscMap(false));
+  DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_INJ_GPSC].handle, 1, GetGpscMap(false)[9], GetGpscMap(false)[9+1]);
+ }
  if (m_md[TYPE_MAP_INJ_ATSC].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_INJ_ATSC].handle, GetAtscMap(true), GetAtscMap(false));
  if (mp_gridModeEditorIgnDlg.get() && m_grid_map_state_ign)
