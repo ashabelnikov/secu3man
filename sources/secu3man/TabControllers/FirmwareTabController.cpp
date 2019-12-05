@@ -38,6 +38,7 @@
 #include "FWImpExp/SECUImpExpController.h"
 #include "FWImpExp/S3FImpExpController.h"
 #include "FWImpExp/EEPROMImpExpController.h"
+#include "FWImpExp/FirmwareMasterCntr.h"
 #include "FWIORemappingController.h"
 #include "FWRPMGridEditController.h"
 #include "io-core/EEPROMDataMediator.h"
@@ -135,6 +136,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
  mp_view->setIsViewFWOptionsAvailable(MakeDelegate(this, &CFirmwareTabController::IsViewFWOptionsAvailable)); 
  mp_view->setIsIORemappingAvailable(MakeDelegate(this, &CFirmwareTabController::IsIORemappingAvailable)); 
  mp_view->setOnDropFile(MakeDelegate(this, &CFirmwareTabController::OnDropFile));
+ mp_view->setOnFirmwareMaster(MakeDelegate(this, &CFirmwareTabController::OnFirmwareMaster));
 
  mp_view->mp_TablesPanel->setOnMapChanged(MakeDelegate(this, &CFirmwareTabController::OnMapChanged));
  mp_view->mp_TablesPanel->setOnFunSetSelectionChanged(MakeDelegate(this, &CFirmwareTabController::OnFunSetSelectionChanged));
@@ -1915,4 +1917,29 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_crktemp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRKCLT_CORR);
  mptms.m_eh_pause_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EH_PAUSE);
  mp_settings->SetMapPtMovStep(mptms);
+}
+
+void CFirmwareTabController::OnFirmwareMaster(void)
+{
+ bool is_continue = CheckChangesAskAndSaveFirmware();
+ if (!is_continue)
+  return;  //user has decided to cancel
+
+ FirmwareMasterCntr cntr;
+ _TSTRING name;
+ std::vector<BYTE> buff(m_fpp.m_total_size, 0);
+
+ EECUPlatform ep = mp_settings->GetECUPlatformType();
+ if (ep != EP_ATMEGA644 && ep != EP_ATMEGA1284)
+  return; //error: unsupported platform
+
+ int result = cntr.DoLoad(m_fpp.m_flAnnex, &buff[0], m_fpp.m_total_size, &name);
+ if (result == IDOK && cntr.GetStatus())
+ {
+  if (_CheckFirmwareCompatibilityAndAskUser(&buff[0]) && _CheckQuartzCompatibilityAndAskUser(&buff[0])) //user OK?
+  {
+   if (FirmwareFileUtils::CheckFirmwareIntegrity(&buff[0], m_fpp.m_total_size))
+    PrepareOnLoadFLASH(&buff[0], _TSTRING(name));
+  }
+ }
 }

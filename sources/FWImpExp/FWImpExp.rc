@@ -15,6 +15,26 @@ LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
 //
 // Dialog
 //
+IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Мастер прошивок"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Ваш блок SECU3:",IDC_FWM_SECU3_UNIT_CAPTION,17,19,60,10
+    COMBOBOX        IDC_FWM_SECU3_UNIT_COMBO,85,17,80,37,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Синхронизация:",IDC_FWM_SYNCHRO_CAPTION,17,42,60,10
+    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Управление накоплением КЗ",IDC_FWM_DWELL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
+    CONTROL         "Фазированное зажигание",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
+    CONTROL         "Впрыск топлива",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
+    CONTROL         "Поддержка TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
+    CONTROL         "Управ. вентилятором c ШИМ",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
+    CONTROL         "Двухканальный коммутатор",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
+    CONTROL         "Поддержка OBD (мод. MCP2515)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,120,10
+    CONTROL         "Управ. сост. смеси на карбюр.",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
+    DEFPUSHBUTTON   "Загрузить",IDOK,84,159,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
+END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
@@ -109,6 +129,27 @@ BEGIN
     IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Поставьте галочки напротив таблиц, которые нужно перенести. Содержимое этих таблиц скопируется при нажатии на кнопку ОК."
 END
 
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FWM_SYNC_CKPS       "Зубчатый диск с или без отсут.зубьев, коленвал"
+    IDS_FWM_SYNC_CAMS       "Зубчатый диск с или без отсут.зубьев, распредвал"
+    IDS_FWM_SYNC_HALL       "Трамблер с ДХ / Инд.датчиком, Nзуб=Nцил"
+    IDS_FWM_SYNC_CKPNP1     "Зубчатый диск N+1, коленвал, Nзуб=Nцил"
+    IDS_FWM_SECU3_UNIT_COMBO_TT "Выбор блока SECU3, для которого нужна прошивка. Для блоков SECU-3T, SECU-3 Lite и SECU-3 Micro загружается одинаковая прошивка."
+    IDS_FWM_SYNCHRO_COMBO_TT "Выбор метода синхронизации."
+    IDS_FWM_DWELL_CHECK_TT  "COPT_DWELL_CONTROL"
+    IDS_FWM_PHIGN_CHECK_TT  "COPT_PHASED_IGNITION. Данная опция не совместима с COPT_CKPS_2CHIGN"       
+    IDS_FWM_INJ_CHECK_TT    "COPT_FUEL_INJECTION. Данная опция не совместима с COPT_CARB_AFR"
+    IDS_FWM_TPIC_CHECK_TT   "COPT_TPIC8101. Только в блоках SECU-3i"
+    IDS_FWM_FPWM_CHECK_TT   "COPT_COOLINGFAN_PWM"
+    IDS_FWM_2CHIG_CHECK_TT  "COPT_CKPS_2CHIGN. Данная опция не совместима с COPT_PHASED_IGNITION"
+    IDS_FWM_OBD_CHECK_TT    "COPT_OBD_SUPPORT"
+    IDS_FWM_CAFR_CHECK_TT   "COPT_CARB_AFR. Данная опция не совместима с COPT_FUEL_INJECTION"
+    IDS_FWM_HEX_FILE_CRC_ERROR "Ошибка в контрольной сумме HEX-файла. Операция прервана."
+    IDS_FWM_HEX_FILE_STRUCTURE_ERROR "Неожиданный символ или структура HEX-файла нарушена. Операция прервана."
+    IDS_FWM_WRONG_FW_FILE_SIZE "Неправильный размер файла прошивки. Размер должен быть %s байт."
+END
+
 /////////////////////////////////////////////////////////////////////////////
 // English (U.S.) resources
 
@@ -119,6 +160,28 @@ LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
 //
 // Dialog
 //
+
+IDD_FIRMWARE_MASTER DIALOGEX 0, 0, 288, 182
+STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Firmware master"
+FONT 8, "MS Sans Serif"
+BEGIN
+    RTEXT           "Your SECU3 unit:",IDC_FWM_SECU3_UNIT_CAPTION,17,19,60,10
+    COMBOBOX        IDC_FWM_SECU3_UNIT_COMBO,85,17,80,37,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    RTEXT           "Synchronization:",IDC_FWM_SYNCHRO_CAPTION,17,42,60,10
+    COMBOBOX        IDC_FWM_SYNCHRO_COMBO,85,40,182,36,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Dwell control",IDC_FWM_DWELL_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,70,120,10
+    CONTROL         "Phased ignition",IDC_FWM_PHIGN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,90,120,10
+    CONTROL         "Fuel injection",IDC_FWM_INJ_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,110,120,10
+    CONTROL         "Support of TPIC8101",IDC_FWM_TPIC_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,130,120,10
+    CONTROL         "PWM for cooling fan",IDC_FWM_FPWM_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,70,120,10
+    CONTROL         "Two-channel igniter",IDC_FWM_2CHIG_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,90,120,10
+    CONTROL         "OBD support (MCP2515 required)",IDC_FWM_OBD_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,110,120,10
+    CONTROL         "AFR control on the carburetor",IDC_FWM_CAFR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,152,130,120,10
+    DEFPUSHBUTTON   "Load",IDOK,84,159,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
+END
+
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
@@ -209,6 +272,27 @@ STRINGTABLE DISCARDABLE
 BEGIN
     IDS_MAP_IMPEXP_STARTMAP_FLAG_TT "Mark necessary tables and press button with arrow"
     IDS_MAP_IMPEXP_DWELLCNTRL_FLAG_TT "Select necessary maps for moving. Button with arrow doesn't affect them, they will be copied on pressing of OK button."
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_FWM_SYNC_CKPS       "Missing or non-missing tooth trigger wheel, crankshaft"
+    IDS_FWM_SYNC_CAMS       "Missing or non-missing tooth trigger wheel, camshaft"
+    IDS_FWM_SYNC_HALL       "Distributor with hall/VR sensor, Nrods = Ncyl"
+    IDS_FWM_SYNC_CKPNP1     "N+1 trigger wheel, crankshaft, Nrods = Ncyl"
+    IDS_FWM_SECU3_UNIT_COMBO_TT "Select SECU3 unit for which you need firmware. For SECU-3T, SECU-3 Lite and SECU-3 Micro units same firmware is loaded."
+    IDS_FWM_SYNCHRO_COMBO_TT "Select synchronization method."
+    IDS_FWM_DWELL_CHECK_TT  "COPT_DWELL_CONTROL"
+    IDS_FWM_PHIGN_CHECK_TT  "COPT_PHASED_IGNITION. This option is not compatible with COPT_CKPS_2CHIGN"       
+    IDS_FWM_INJ_CHECK_TT    "COPT_FUEL_INJECTION. This option is not compatible with COPT_CARB_AFR"
+    IDS_FWM_TPIC_CHECK_TT   "COPT_TPIC8101. Only in SECU-3i units"
+    IDS_FWM_FPWM_CHECK_TT   "COPT_COOLINGFAN_PWM"
+    IDS_FWM_2CHIG_CHECK_TT  "COPT_CKPS_2CHIGN. This option is not compatible with COPT_PHASED_IGNITION"
+    IDS_FWM_OBD_CHECK_TT    "COPT_OBD_SUPPORT"
+    IDS_FWM_CAFR_CHECK_TT   "COPT_CARB_AFR. This option is not compatible with COPT_FUEL_INJECTION"
+    IDS_FWM_HEX_FILE_CRC_ERROR "Error in check sum of HEX-file. Operation aborted."
+    IDS_FWM_HEX_FILE_STRUCTURE_ERROR "Unexpected symbol or structure of HEX-file is damaged. Operation aborted."
+    IDS_FWM_WRONG_FW_FILE_SIZE "Wrong size of firmware file. Size must be %s bytes."
 END
 
 /////////////////////////////////////////////////////////////////////////////

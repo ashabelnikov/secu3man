@@ -52,6 +52,7 @@ struct PPFlashParam
  size_t m_fcpu_hz;         //MCU clock frequency (e.g. 16000000)
  char   m_magic[PLATFORM_MN_SIZE]; //Magic number identifying platform (holds last 4 bytes in FLASH)
  EECUPlatform m_platform_id;//platform ID
+ TCHAR m_flAnnex[8];       //filename annex (e.g. "m644", "m1284" etc)
 };
 
 struct PPEepromParam

@@ -49,6 +49,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "16  ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA16;
+   _tcscpy(m_fp.m_flAnnex, _T("m16"));
    break;
 
   case EP_ATMEGA32:
@@ -65,6 +66,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "32  ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA32;
+   _tcscpy(m_fp.m_flAnnex, _T("m32"));
    break;
 
    //ATmega644 and ATmega64 have same FLASH and EEPROM parameters
@@ -82,6 +84,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "644 ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA644;
+   _tcscpy(m_fp.m_flAnnex, _T("m644"));
    break;
 
   case EP_ATMEGA64:
@@ -98,6 +101,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "64  ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA64;
+   _tcscpy(m_fp.m_flAnnex, _T("m64"));
    break;
 
   case EP_ATMEGA128:
@@ -114,6 +118,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "128 ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA128;
+   _tcscpy(m_fp.m_flAnnex, _T("m128"));
    break;
 
   case EP_ATMEGA1284:
@@ -130,6 +135,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "1284", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA1284;
+   _tcscpy(m_fp.m_flAnnex, _T("m1284"));
    break;
 
   case EP_ATMEGA328PB:
@@ -146,6 +152,7 @@ PlatformParamHolder::PlatformParamHolder(EECUPlatform i_platform)
    //Magic number
    strncpy(m_fp.m_magic, "328 ", PLATFORM_MN_SIZE);
    m_fp.m_platform_id = EP_ATMEGA328PB;
+   _tcscpy(m_fp.m_flAnnex, _T("m328"));
    break;
 
   default:

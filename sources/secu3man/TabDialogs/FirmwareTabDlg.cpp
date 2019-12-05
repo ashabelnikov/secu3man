@@ -110,6 +110,7 @@ BEGIN_MESSAGE_MAP(CFirmwareTabDlg, Super)
  ON_COMMAND(IDM_READ_EEPROM_TO_FILE, OnReadEepromToFile)
  ON_COMMAND(IDM_WRITE_EEPROM_FROM_FILE, OnWriteEepromFromFile)
  ON_COMMAND(IDM_RESET_EEPROM, OnResetEeprom)
+ ON_COMMAND(IDM_FIRMWARE_MASTER, OnFirmwareMaster)
  ON_UPDATE_COMMAND_UI(IDM_RESET_EEPROM, OnUpdatePopupMenu_app)
  ON_COMMAND(IDM_READ_FLASH_TO_FILE, OnReadFlashToFile)
  ON_COMMAND(IDM_WRITE_FLASH_FROM_FILE, OnWriteFlashFromFile)
@@ -379,6 +380,19 @@ void CFirmwareTabDlg::OnResetEeprom()
 
  if (m_OnResetEeprom)
   m_OnResetEeprom();
+}
+
+void CFirmwareTabDlg::OnFirmwareMaster()
+{
+ //=================================================================
+ if (!CheckAppTitle(AfxGetMainWnd()))
+  return;
+ if (!CheckAppLogo())
+  return;
+ //=================================================================
+
+ if (m_OnFirmwareMaster)
+  m_OnFirmwareMaster();
 }
 
 void CFirmwareTabDlg::OnReadFlashToFile()
@@ -770,6 +784,9 @@ void CFirmwareTabDlg::setOnBLStartedEmergency(EventHandler OnFunction)
 
 void CFirmwareTabDlg::setOnDropFile(EventString OnFunction)
 {m_OnDropFile = OnFunction;}
+
+void CFirmwareTabDlg::setOnFirmwareMaster(EventHandler OnFunction)
+{m_OnFirmwareMaster = OnFunction;}
 
 void CFirmwareTabDlg::OnSize( UINT nType, int cx, int cy )
 {

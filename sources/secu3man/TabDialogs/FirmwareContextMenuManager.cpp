@@ -109,6 +109,10 @@ void CFirmwareModeContextMenuManager::CreateContent(void)
 
  m_ParentMenu.AppendMenu(MF_STRING,IDM_READ_FW_SIGNATURE_INFO,MLL::LoadString(IDS_READ_FW_SIGNATURE_INFO));
  m_app_menu_items_IDs.push_back(IDM_READ_FW_SIGNATURE_INFO);
+
+ m_ParentMenu.AppendMenu(MF_SEPARATOR);
+
+ m_ParentMenu.AppendMenu(MF_STRING,IDM_FIRMWARE_MASTER,MLL::LoadString(IDS_FIRMWARE_MASTER));
 }
 
 //показывает контекстное меню

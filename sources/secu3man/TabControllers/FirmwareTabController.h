@@ -113,6 +113,7 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   void OnViewFWOptions(void);
   void OnEditRPMGrid(void);
   void OnEditFwConsts(void);
+  void OnFirmwareMaster(void);
   
   void OnFWInformationTextChanged(void);
   void OnMapChanged(int i_type);
