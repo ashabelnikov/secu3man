@@ -58,6 +58,8 @@ void __fastcall TPtMovStepDlg::FormCreate(TObject *Sender)
  AnsiString as;
  as.sprintf(m_valFmt.c_str(), m_value);
  EditStep->Text = as;
+
+ SpinStep->FloatMax = 100.0f; //TODO:
 }
 
 //---------------------------------------------------------------------------

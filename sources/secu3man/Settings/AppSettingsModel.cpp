@@ -124,6 +124,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optAtscMapWnd(_T("AirDenMapWnd"))
 , m_optCrkTempMapWnd(_T("CrkTempMapWnd"))
 , m_optEHPauseMapWnd(_T("EHPauseMapWnd"))
+, m_optCrankingThrdMapWnd(_T("CrankingThrdMapWnd"))
+, m_optCrankingTimeMapWnd(_T("CrankingTimeMapWnd"))
+, m_optSmapabanThrdMapWnd(_T("SmapabanThrdMapWnd"))
 //positions of windows (online tables)
 , m_Name_WndSettings_Section1(_T("WndSettingsOnline"))
 , m_optStrtMapWnd1(_T("StrtMapWnd"))
@@ -249,6 +252,9 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPtMovStepATSCorrMap(_T("ATSCorrMapWnd"))
 , m_optPtMovStepGasdoseMap(_T("GasdoseMapWnd"))
 , m_optPtMovStepTmp2CurveMap(_T("Tmp2CurveMapWnd"))
+, m_optPtMovStepCrankingThrdMap(_T("CrankingThrdMapWnd"))
+, m_optPtMovStepCrankingTimeMap(_T("CrankingTimeMapWnd"))
+, m_optPtMovStepSmapabanThrdMap(_T("SmapabanThrdMapWnd"))
 //Log file's fileds
 , m_Name_LogFileFields_Section(_T("LogFileFields"))
 , m_optWriteLogFields(_T("WriteFields"))
@@ -537,6 +543,9 @@ bool CAppSettingsModel::ReadSettings(void)
  ws.ReadWndPos(m_optAtscMapWnd);
  ws.ReadWndPos(m_optCrkTempMapWnd);
  ws.ReadWndPos(m_optEHPauseMapWnd);
+ ws.ReadWndPos(m_optCrankingThrdMapWnd);
+ ws.ReadWndPos(m_optCrankingTimeMapWnd);
+ ws.ReadWndPos(m_optSmapabanThrdMapWnd);
 
  //Positions of windows (online tables)
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -728,6 +737,10 @@ bool CAppSettingsModel::ReadSettings(void)
  ms.ReadFlt(m_optPtMovStepATSCorrMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepGasdoseMap, _T("0.5"), 0.0f, 10.0f);
  ms.ReadFlt(m_optPtMovStepTmp2CurveMap, _T("0.25"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepCrankingThrdMap, _T("100.0"), 0.0f, 100.0f);
+ ms.ReadFlt(m_optPtMovStepCrankingTimeMap, _T("10.0"), 0.0f, 10.0f);
+ ms.ReadFlt(m_optPtMovStepSmapabanThrdMap, _T("100.0"), 0.0f, 100.0f);
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
  lf.ReadInt(m_optWriteLogFields, _T("0"), 0, 1);
@@ -1272,6 +1285,21 @@ bool CAppSettingsModel::WriteSettings(void)
   ws.WriteWndPos(m_optEHPauseMapWnd, _T("EGO heater's pause map (for PWM)"));
  else
   ws.WriteWndPos(m_optEHPauseMapWnd, _T("Время паузы подогрева ДК (для ШИМ)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCrankingThrdMapWnd, _T("Starter's blocking RPM"));
+ else
+  ws.WriteWndPos(m_optCrankingThrdMapWnd, _T("Обороты блокировки стартера"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optCrankingTimeMapWnd, _T("Starter's blocking delay (strokes)"));
+ else
+  ws.WriteWndPos(m_optCrankingTimeMapWnd, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ws.WriteWndPos(m_optSmapabanThrdMapWnd, _T("RPM threshold for abandon from start map"));
+ else
+  ws.WriteWndPos(m_optSmapabanThrdMapWnd, _T("Обороты перехода с пусковой карты"));
 
  //Positions of windows
  IniIO ws1(IniFileName, m_Name_WndSettings_Section1);
@@ -2150,6 +2178,21 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   ms.WriteFlt(m_optPtMovStepTmp2CurveMap, 3, _T("Кривая датчика температуры на входе TMP2"));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCrankingThrdMap, 3, _T("Starter's bloking RPM"));
+ else
+  ms.WriteFlt(m_optPtMovStepCrankingThrdMap, 3, _T("Обороты блокировки стартера"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepCrankingTimeMap, 3, _T("Starter's blocking delay (strokes)"));
+ else
+  ms.WriteFlt(m_optPtMovStepCrankingTimeMap, 3, _T("Время до блокировки стартера после превышения порога оборотов (такты)"));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, _T("RPM threshold for abandon from start map"));
+ else
+  ms.WriteFlt(m_optPtMovStepSmapabanThrdMap, 3, _T("Обороты перехода с пусковой карты"));
+
  //Log file's fileds
  IniIO lf(IniFileName, m_Name_LogFileFields_Section);
 
@@ -2364,6 +2407,12 @@ void CAppSettingsModel::SetWndSettings(const WndSettings& i_wndSettings)
  m_optCrkTempMapWnd.value.y = i_wndSettings.m_CrkTempMapWnd_Y;
  m_optEHPauseMapWnd.value.x = i_wndSettings.m_EHPauseMapWnd_X;
  m_optEHPauseMapWnd.value.y = i_wndSettings.m_EHPauseMapWnd_Y;
+ m_optCrankingThrdMapWnd.value.x = i_wndSettings.m_CrankingThrdMapWnd_X;
+ m_optCrankingThrdMapWnd.value.y = i_wndSettings.m_CrankingThrdMapWnd_Y;
+ m_optCrankingTimeMapWnd.value.x = i_wndSettings.m_CrankingTimeMapWnd_X;
+ m_optCrankingTimeMapWnd.value.y = i_wndSettings.m_CrankingTimeMapWnd_Y;
+ m_optSmapabanThrdMapWnd.value.x = i_wndSettings.m_SmapabanThrdMapWnd_X;
+ m_optSmapabanThrdMapWnd.value.y = i_wndSettings.m_SmapabanThrdMapWnd_Y;
 }
 
 void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
@@ -2448,6 +2497,12 @@ void CAppSettingsModel::GetWndSettings(WndSettings& o_wndSettings) const
  o_wndSettings.m_CrkTempMapWnd_Y = m_optCrkTempMapWnd.value.y;
  o_wndSettings.m_EHPauseMapWnd_X = m_optEHPauseMapWnd.value.x;
  o_wndSettings.m_EHPauseMapWnd_Y = m_optEHPauseMapWnd.value.y;
+ o_wndSettings.m_CrankingThrdMapWnd_X = m_optCrankingThrdMapWnd.value.x;
+ o_wndSettings.m_CrankingThrdMapWnd_Y = m_optCrankingThrdMapWnd.value.y;
+ o_wndSettings.m_CrankingTimeMapWnd_X = m_optCrankingTimeMapWnd.value.x;
+ o_wndSettings.m_CrankingTimeMapWnd_Y = m_optCrankingTimeMapWnd.value.y;
+ o_wndSettings.m_SmapabanThrdMapWnd_X = m_optSmapabanThrdMapWnd.value.x;
+ o_wndSettings.m_SmapabanThrdMapWnd_Y = m_optSmapabanThrdMapWnd.value.y;
 }
 
 void CAppSettingsModel::SetWndSettings1(const WndSettings& i_wndSettings)
@@ -3109,6 +3164,9 @@ void CAppSettingsModel::SetMapPtMovStep(const MapPtMovStep& i_ptMovStep)
  m_optPtMovStepTmp2CurveMap.value = i_ptMovStep.m_tmp2_curve_map;
  m_optPtMovStepCrkTempMap.value = i_ptMovStep.m_crktemp_map;
  m_optPtMovStepEHPauseMap.value = i_ptMovStep.m_eh_pause_map;
+ m_optPtMovStepCrankingThrdMap.value = i_ptMovStep.m_cranking_thrd_map;
+ m_optPtMovStepCrankingTimeMap.value = i_ptMovStep.m_cranking_time_map;
+ m_optPtMovStepSmapabanThrdMap.value = i_ptMovStep.m_smapaban_thrd_map;
 }
 
 void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
@@ -3150,6 +3208,9 @@ void CAppSettingsModel::GetMapPtMovStep(MapPtMovStep& o_ptMovStep) const
  o_ptMovStep.m_tmp2_curve_map = m_optPtMovStepTmp2CurveMap.value;
  o_ptMovStep.m_crktemp_map = m_optPtMovStepCrkTempMap.value;
  o_ptMovStep.m_eh_pause_map = m_optPtMovStepEHPauseMap.value;
+ o_ptMovStep.m_cranking_thrd_map = m_optPtMovStepCrankingThrdMap.value;
+ o_ptMovStep.m_cranking_time_map = m_optPtMovStepCrankingTimeMap.value;
+ o_ptMovStep.m_smapaban_thrd_map = m_optPtMovStepSmapabanThrdMap.value;
 }
 
 void CAppSettingsModel::SetLogFileFields(const LogFileFields& i_flds)

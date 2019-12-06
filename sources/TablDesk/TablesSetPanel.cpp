@@ -622,6 +622,138 @@ void __cdecl CTablesSetPanel::OnWndActivationEHPauseTable(void* i_param, long cm
  _this->OnWndActivation(_this->m_md[TYPE_MAP_EH_PAUSE].handle, cmd);
 }
 
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeCrankingThrdMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_CRANKING_THRD);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseCrankingThrdMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_CRANKING_THRD].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_CRANKING_THRD].handle, TYPE_MAP_CRANKING_THRD);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationCrankingThrdMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_CRANKING_THRD].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeCrankingTimeMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_CRANKING_TIME);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseCrankingTimeMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_CRANKING_TIME].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_CRANKING_TIME].handle, TYPE_MAP_CRANKING_TIME);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationCrankingTimeMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_CRANKING_TIME].handle, cmd);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnChangeSmapabanThrdMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ if (_this->m_OnMapChanged)
+   _this->m_OnMapChanged(TYPE_MAP_SMAPABAN_THRD);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnCloseSmapabanThrdMap(void* i_param)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+ _this->m_md[TYPE_MAP_SMAPABAN_THRD].state = 0;
+
+ //allow controller to detect closing of this window
+ if (_this->m_OnCloseMapWnd)
+  _this->m_OnCloseMapWnd(_this->m_md[TYPE_MAP_SMAPABAN_THRD].handle, TYPE_MAP_SMAPABAN_THRD);
+}
+
+//------------------------------------------------------------------------
+void __cdecl CTablesSetPanel::OnWndActivationSmapabanThrdMap(void* i_param, long cmd)
+{
+ CTablesSetPanel* _this = static_cast<CTablesSetPanel*>(i_param);
+ if (!_this)
+ {
+  ASSERT(0); //what the fuck?
+  return;
+ }
+
+ //allow controller to process event
+ _this->OnWndActivation(_this->m_md[TYPE_MAP_SMAPABAN_THRD].handle, cmd);
+}
+
 const UINT CTablesSetPanel::IDD = IDD_TD_ALLTABLES_PANEL;
 
 /////////////////////////////////////////////////////////////////////////////
@@ -633,7 +765,7 @@ CTablesSetPanel::CTablesSetPanel(CWnd* pParent /*= NULL*/)
 , m_cts_curve_enabled(false)
 , m_tmp2_curve_enabled(false)
 {
- m_scrl_view = 860;
+ m_scrl_view = 815;
 
  for(int i = TYPE_MAP_SEP_START; i <= TYPE_MAP_SEP_END; ++i)
  {
@@ -671,6 +803,9 @@ void CTablesSetPanel::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_TD_VIEW_TMP2_CURVE, m_view_tmp2_curve_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_CRKTEMP_MAP, m_view_crktemp_map_btn);
  DDX_Control(pDX, IDC_TD_VIEW_EH_PAUSE_MAP, m_view_eh_pause_map_btn);
+ DDX_Control(pDX, IDC_TD_CRANKING_THRD_MAP, m_view_cranking_thrd_map_btn);
+ DDX_Control(pDX, IDC_TD_CRANKING_TIME_MAP, m_view_cranking_time_map_btn);
+ DDX_Control(pDX, IDC_TD_SMAPABAN_THRD_MAP, m_view_smapaban_thrd_map_btn);
 }
 
 BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
@@ -689,6 +824,10 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_BN_CLICKED(IDC_TD_VIEW_TMP2_CURVE, OnViewTmp2CurveMap)
  ON_BN_CLICKED(IDC_TD_VIEW_CRKTEMP_MAP, OnViewCrkTempMap)
  ON_BN_CLICKED(IDC_TD_VIEW_EH_PAUSE_MAP, OnViewEHPauseMap)
+ ON_BN_CLICKED(IDC_TD_CRANKING_THRD_MAP, OnViewCrankingThrdMap)
+ ON_BN_CLICKED(IDC_TD_CRANKING_TIME_MAP, OnViewCrankingTimeMap)
+ ON_BN_CLICKED(IDC_TD_SMAPABAN_THRD_MAP, OnViewSmapabanThrdMap)
+
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_ATTENUATOR_MAP, OnUpdateViewAttenuatorMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_DWELL_CONTROL, OnUpdateViewDwellCntrlMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CTS_CURVE, OnUpdateViewCTSCurveMap)
@@ -706,6 +845,9 @@ BEGIN_MESSAGE_MAP(CTablesSetPanel, Super)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_TMP2_CURVE, OnUpdateViewTmp2CurveMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_CRKTEMP_MAP, OnUpdateViewCrkTempMap)
  ON_UPDATE_COMMAND_UI(IDC_TD_VIEW_EH_PAUSE_MAP, OnUpdateViewEHPauseMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_THRD_MAP, OnUpdateViewCrankingThrdMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_CRANKING_TIME_MAP, OnUpdateViewCrankingTimeMap)
+ ON_UPDATE_COMMAND_UI(IDC_TD_SMAPABAN_THRD_MAP, OnUpdateViewSmapabanThrdMap)
  ON_NOTIFY(LVN_ITEMCHANGED, IDC_TD_FUNSET_LIST, OnChangeFunsetList)
  ON_NOTIFY(LVN_ENDLABELEDIT, IDC_TD_FUNSET_LIST, OnEndLabelEditFunsetList)
  ON_WM_DESTROY()
@@ -837,6 +979,30 @@ void CTablesSetPanel::OnUpdateViewEHPauseMap(CCmdUI* pCmdUI)
  pCmdUI->SetCheck( (m_md[TYPE_MAP_EH_PAUSE].state) ? TRUE : FALSE );
 }
 
+void CTablesSetPanel::OnUpdateViewCrankingThrdMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_CRANKING_THRD].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewCrankingTimeMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_CRANKING_TIME].state) ? TRUE : FALSE );
+}
+
+void CTablesSetPanel::OnUpdateViewSmapabanThrdMap(CCmdUI* pCmdUI)
+{
+ bool opened = m_IsAllowed ? m_IsAllowed() : false;
+ BOOL enable = (DLL::Chart2DCreate!=NULL) && opened;
+ pCmdUI->Enable(enable);
+ pCmdUI->SetCheck( (m_md[TYPE_MAP_SMAPABAN_THRD].state) ? TRUE : FALSE );
+}
+
 //Updates controls which state depends on whether or not data is
 void CTablesSetPanel::OnUpdateControls(CCmdUI* pCmdUI)
 {
@@ -878,6 +1044,15 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
 
  if (m_md[TYPE_MAP_EH_PAUSE].state)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_EH_PAUSE].handle, GetEHPauseMap(true), GetEHPauseMap(false));
+
+ if (m_md[TYPE_MAP_CRANKING_THRD].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_THRD].handle, GetCrankingThrdMap(true), GetCrankingThrdMap(false));
+
+ if (m_md[TYPE_MAP_CRANKING_TIME].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_TIME].handle, GetCrankingTimeMap(true), GetCrankingTimeMap(false));
+
+ if (m_md[TYPE_MAP_SMAPABAN_THRD].state)
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_SMAPABAN_THRD].handle, GetSmapabanThrdMap(true), GetSmapabanThrdMap(false));
 }
 
 void CTablesSetPanel::EnableDwellControl(bool enable)
@@ -1384,6 +1559,111 @@ void CTablesSetPanel::OnViewEHPauseMap()
  }
 }
 
+void CTablesSetPanel::OnViewCrankingThrdMap()
+{
+ //if button was released, then close editor's window
+ if (m_view_cranking_thrd_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_CRANKING_THRD].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_CRANKING_THRD].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_CRANKING_THRD].state = 1;
+  m_md[TYPE_MAP_CRANKING_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingThrdMap(true),GetCrankingThrdMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_CRANKING_THRD_MAP).c_str(), false);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_THRD].handle, _T("#0"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_THRD].handle, m_md[TYPE_MAP_CRANKING_THRD].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_THRD].handle,OnWndActivationCrankingThrdMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_THRD].handle,OnChangeCrankingThrdMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRANKING_THRD].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRANKING_THRD].handle,OnCloseCrankingThrdMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_THRD].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_CRANKING_THRD].handle, TYPE_MAP_CRANKING_THRD);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_CRANKING_THRD].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_CRANKING_THRD].handle);
+ }
+}
+
+void CTablesSetPanel::OnViewCrankingTimeMap()
+{
+ //if button was released, then close editor's window
+ if (m_view_cranking_time_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_CRANKING_TIME].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_CRANKING_TIME].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_CRANKING_TIME].state = 1;
+  m_md[TYPE_MAP_CRANKING_TIME].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingTimeMap(true),GetCrankingTimeMap(false),0.0f,255.0f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),
+    MLL::GetString(IDS_CRANKING_TIME_MAP).c_str(), false);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_TIME].handle, _T("#0"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_TIME].handle, m_md[TYPE_MAP_CRANKING_TIME].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_TIME].handle,OnWndActivationCrankingTimeMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_TIME].handle,OnChangeCrankingTimeMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRANKING_TIME].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRANKING_TIME].handle,OnCloseCrankingTimeMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_CRANKING_TIME].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_CRANKING_TIME].handle, TYPE_MAP_CRANKING_TIME);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_CRANKING_TIME].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_CRANKING_TIME].handle);
+ }
+}
+
+void CTablesSetPanel::OnViewSmapabanThrdMap()
+{
+ //if button was released, then close editor's window
+ if (m_view_smapaban_thrd_map_btn.GetCheck()==BST_UNCHECKED)
+ {
+  ::SendMessage(m_md[TYPE_MAP_SMAPABAN_THRD].handle,WM_CLOSE,0,0);
+  return;
+ }
+
+ if ((!m_md[TYPE_MAP_SMAPABAN_THRD].state)&&(DLL::Chart2DCreate))
+ {
+  m_md[TYPE_MAP_SMAPABAN_THRD].state = 1;
+  m_md[TYPE_MAP_SMAPABAN_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetSmapabanThrdMap(true),GetSmapabanThrdMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+    MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
+    MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
+    MLL::GetString(IDS_SMAPABAN_THRD_MAP).c_str(), false);
+  DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_SMAPABAN_THRD].handle, _T("#0"));
+  DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_SMAPABAN_THRD].handle, m_md[TYPE_MAP_SMAPABAN_THRD].ptMovStep);
+  DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnWndActivationSmapabanThrdMap,this);
+  DLL::Chart2DSetOnChange(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnChangeSmapabanThrdMap,this);
+  DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_SMAPABAN_THRD].handle, OnChangeSettingsCME, this);
+  DLL::Chart2DSetOnClose(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnCloseSmapabanThrdMap,this);
+  DLL::Chart2DUpdate(m_md[TYPE_MAP_SMAPABAN_THRD].handle, NULL, NULL); //<--actuate changes
+
+  //let controller to know about opening of this window
+  OnOpenMapWnd(m_md[TYPE_MAP_SMAPABAN_THRD].handle, TYPE_MAP_SMAPABAN_THRD);
+
+  DLL::Chart2DShow(m_md[TYPE_MAP_SMAPABAN_THRD].handle, true);
+ }
+ else
+ {
+  ::SetFocus(m_md[TYPE_MAP_SMAPABAN_THRD].handle);
+ }
+}
+
 void CTablesSetPanel::OnDwellCalcButton()
 {
  CDwellCalcDlg dialog;
@@ -1519,6 +1799,30 @@ float* CTablesSetPanel::GetEHPauseMap(bool i_original)
   return m_md[TYPE_MAP_EH_PAUSE].original;
  else
   return m_md[TYPE_MAP_EH_PAUSE].active;
+}
+
+float* CTablesSetPanel::GetCrankingThrdMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_CRANKING_THRD].original;
+ else
+  return m_md[TYPE_MAP_CRANKING_THRD].active;
+}
+
+float* CTablesSetPanel::GetCrankingTimeMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_CRANKING_TIME].original;
+ else
+  return m_md[TYPE_MAP_CRANKING_TIME].active;
+}
+
+float* CTablesSetPanel::GetSmapabanThrdMap(bool i_original)
+{
+ if (i_original)
+  return m_md[TYPE_MAP_SMAPABAN_THRD].original;
+ else
+  return m_md[TYPE_MAP_SMAPABAN_THRD].active;
 }
 
 HWND CTablesSetPanel::GetMapWindow(int wndType)

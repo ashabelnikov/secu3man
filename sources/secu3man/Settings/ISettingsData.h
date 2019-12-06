@@ -110,6 +110,12 @@ struct WndSettings
  int m_CrkTempMapWnd_Y;
  int m_EHPauseMapWnd_X;
  int m_EHPauseMapWnd_Y;
+ int m_CrankingThrdMapWnd_X;
+ int m_CrankingThrdMapWnd_Y;
+ int m_CrankingTimeMapWnd_X;
+ int m_CrankingTimeMapWnd_Y;
+ int m_SmapabanThrdMapWnd_X;
+ int m_SmapabanThrdMapWnd_Y;
 };
 
 //Holds windows's size data
@@ -228,6 +234,9 @@ struct MapPtMovStep
  float m_tmp2_curve_map;
  float m_crktemp_map;
  float m_eh_pause_map;
+ float m_cranking_thrd_map;
+ float m_cranking_time_map;
+ float m_smapaban_thrd_map;
 };
 
 //Log file's fileds

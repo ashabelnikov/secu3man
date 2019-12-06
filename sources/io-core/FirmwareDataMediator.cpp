@@ -54,6 +54,9 @@ using namespace SECU3IO::SECU3Types;
 #define BAROCORR_SIZE                    9
 #define PA4_LOOKUP_TABLE_SIZE            16
 #define CTS_CRKCORR_SIZE                 16
+#define CRANK_THRD_SIZE                  16
+#define CRANK_TIME_SIZE                  16
+#define SMAPABAN_THRD_SIZE               16
 
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
@@ -195,6 +198,15 @@ typedef struct
  //pause curve for EGO heater control
  _uchar eh_pause[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
 
+ //Value of RPM (in 10 min-1 units) vs coolant temperature
+ _uchar cranking_thrd[CRANK_THRD_SIZE];
+
+ //Number of strokes vs coolant temperature
+ _uchar cranking_time[CRANK_TIME_SIZE];
+
+ //Value of RPM (in 10 min-1 units) vs coolant temperature
+ _uchar smapaban_thrd[SMAPABAN_THRD_SIZE];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -216,7 +228,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
-/* _uchar reserved[0];*/
+ _uchar reserved[16];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1309,6 +1321,9 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetTmp2CurveMap(op_fwd->tmp2_curve);
  GetCrkTempMap(op_fwd->ctscrk_corr);
  GetEHPauseMap(op_fwd->eh_pause_table);
+ GetCrankingThrdMap(op_fwd->cranking_thrd);
+ GetCrankingTimeMap(op_fwd->cranking_time);
+ GetSmapabanThrdMap(op_fwd->smapaban_thrd);
 
  // опируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1366,6 +1381,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetTmp2CurveMap(ip_fwd->tmp2_curve);
  SetCrkTempMap(ip_fwd->ctscrk_corr);
  SetEHPauseMap(ip_fwd->eh_pause_table);
+ SetCrankingThrdMap(ip_fwd->cranking_thrd);
+ SetCrankingTimeMap(ip_fwd->cranking_time);
+ SetSmapabanThrdMap(ip_fwd->smapaban_thrd);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
@@ -1767,6 +1785,60 @@ void CFirmwareDataMediator::SetEHPauseMap(const float* ip_values)
 
  for(size_t i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; i++)
   p_fd->exdata.eh_pause[i] = (_uchar)MathHelpers::Round(ip_values[i] * 100.0f);
+}
+
+void CFirmwareDataMediator::GetCrankingThrdMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CRANK_THRD_SIZE; i++)
+  op_values[i] = (p_fd->exdata.cranking_thrd[i] * 10.0f);
+}
+
+void CFirmwareDataMediator::SetCrankingThrdMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CRANK_THRD_SIZE; i++)
+  p_fd->exdata.cranking_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
+}
+
+void CFirmwareDataMediator::GetCrankingTimeMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CRANK_TIME_SIZE; i++)
+  op_values[i] = (p_fd->exdata.cranking_time[i]);
+}
+
+void CFirmwareDataMediator::SetCrankingTimeMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CRANK_TIME_SIZE; i++)
+  p_fd->exdata.cranking_time[i] = MathHelpers::Round(ip_values[i]);
+}
+
+void CFirmwareDataMediator::GetSmapabanThrdMap(float* op_values, bool i_original /* = false */)
+{
+ ASSERT(op_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes(i_original)[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < SMAPABAN_THRD_SIZE; i++)
+  op_values[i] = (p_fd->exdata.smapaban_thrd[i] * 10.0f);
+}
+
+void CFirmwareDataMediator::SetSmapabanThrdMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ fw_data_t* p_fd = (fw_data_t*)(&getBytes()[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < SMAPABAN_THRD_SIZE; i++)
+  p_fd->exdata.smapaban_thrd[i] = MathHelpers::Round(ip_values[i] / 10.0f);
 }
 
 DWORD CFirmwareDataMediator::GetIOPlug(IOXtype type, IOPid id)

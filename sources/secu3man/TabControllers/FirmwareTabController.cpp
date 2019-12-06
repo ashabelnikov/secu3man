@@ -259,6 +259,9 @@ void CFirmwareTabController::OnActivate(void)
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_TMP2_CURVE, mptms.m_tmp2_curve_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRKCLT_CORR, mptms.m_crktemp_map);
  mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_EH_PAUSE, mptms.m_eh_pause_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_THRD, mptms.m_cranking_thrd_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_CRANKING_TIME, mptms.m_cranking_time_map);
+ mp_view->mp_TablesPanel->SetPtMovStep(TYPE_MAP_SMAPABAN_THRD, mptms.m_smapaban_thrd_map);
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
@@ -907,6 +910,9 @@ bool CFirmwareTabController::OnClose(void)
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_TMP2_CURVE), TYPE_MAP_TMP2_CURVE);
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRKCLT_CORR), TYPE_MAP_CRKCLT_CORR);
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_EH_PAUSE), TYPE_MAP_EH_PAUSE);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRANKING_THRD), TYPE_MAP_CRANKING_THRD);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_CRANKING_TIME), TYPE_MAP_CRANKING_TIME);
+ OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_SMAPABAN_THRD), TYPE_MAP_SMAPABAN_THRD);
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_IGN_WND), TYPE_MAP_GME_IGN_WND);
  OnCloseMapWnd(mp_view->mp_TablesPanel->GetMapWindow(TYPE_MAP_GME_INJ_WND), TYPE_MAP_GME_INJ_WND);
 
@@ -1127,6 +1133,15 @@ void CFirmwareTabController::SetViewChartsValues(void)
 
  m_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false),false);
  m_fwdm->GetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(true),true);
+
+ m_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(false),false);
+ m_fwdm->GetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(true),true);
+
+ m_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(false),false);
+ m_fwdm->GetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(true),true);
+
+ m_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false),false);
+ m_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(true),true);
  
  m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
 
@@ -1384,6 +1399,15 @@ void CFirmwareTabController::OnMapChanged(int i_type)
    break;
   case TYPE_MAP_EH_PAUSE:
    m_fwdm->SetEHPauseMap(mp_view->mp_TablesPanel->GetEHPauseMap(false));
+   break;
+  case TYPE_MAP_CRANKING_THRD:
+   m_fwdm->SetCrankingThrdMap(mp_view->mp_TablesPanel->GetCrankingThrdMap(false));
+   break;
+  case TYPE_MAP_CRANKING_TIME:
+   m_fwdm->SetCrankingTimeMap(mp_view->mp_TablesPanel->GetCrankingTimeMap(false));
+   break;
+  case TYPE_MAP_SMAPABAN_THRD:
+   m_fwdm->SetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(false));
    break;
  }
 }
@@ -1916,6 +1940,9 @@ void CFirmwareTabController::OnChangeSettingsMapEd(void)
  mptms.m_tmp2_curve_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_TMP2_CURVE);
  mptms.m_crktemp_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRKCLT_CORR);
  mptms.m_eh_pause_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_EH_PAUSE);
+ mptms.m_cranking_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_THRD);
+ mptms.m_cranking_time_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_CRANKING_TIME);
+ mptms.m_smapaban_thrd_map = mp_view->mp_TablesPanel->GetPtMovStep(TYPE_MAP_SMAPABAN_THRD);
  mp_settings->SetMapPtMovStep(mptms);
 }
 

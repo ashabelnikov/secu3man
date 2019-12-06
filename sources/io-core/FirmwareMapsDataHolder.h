@@ -45,6 +45,9 @@
 #define BAROCORR_SIZE          9
 #define PA4_LOOKUP_TABLE_SIZE  16
 #define CTS_CRKCORR_SIZE       16
+#define CRANK_THRD_SIZE        16
+#define CRANK_TIME_SIZE        16
+#define SMAPABAN_THRD_SIZE     16
 
 #define INJ_VE_POINTS_L        16
 #define INJ_VE_POINTS_F        16
@@ -121,6 +124,9 @@ struct FWMapsDataHolder
  float tmp2_curve[THERMISTOR_LOOKUP_TABLE_SIZE+2];
  float ctscrk_corr[CTS_CRKCORR_SIZE];
  float eh_pause_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ float cranking_thrd[CRANK_THRD_SIZE];
+ float cranking_time[CRANK_TIME_SIZE];
+ float smapaban_thrd[SMAPABAN_THRD_SIZE];
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)
@@ -141,6 +147,9 @@ struct FWMapsDataHolder
   std::fill(tmp2_curve, tmp2_curve + THERMISTOR_LOOKUP_TABLE_SIZE + 2, .0f);
   std::fill(ctscrk_corr, ctscrk_corr + CTS_CRKCORR_SIZE, .0f);
   std::fill(eh_pause_table, eh_pause_table + COIL_ON_TIME_LOOKUP_TABLE_SIZE, .0f);
+  std::fill(cranking_thrd, cranking_thrd + CRANK_THRD_SIZE, .0f);
+  std::fill(cranking_time, cranking_time + CRANK_TIME_SIZE, .0f);
+  std::fill(smapaban_thrd, smapaban_thrd + SMAPABAN_THRD_SIZE, .0f);
  }
  //get composed list of names
  std::vector<_TSTRING> GetListOfNames(void) const

@@ -187,6 +187,13 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetFwConstsData(SECU3IO::FwConstsData& o_data) const;
   void SetFwConstsData(const SECU3IO::FwConstsData& i_data);
 
+  void GetCrankingThrdMap(float* op_values, bool i_original = false);
+  void SetCrankingThrdMap(const float* ip_values);
+  void GetCrankingTimeMap(float* op_values, bool i_original = false);
+  void SetCrankingTimeMap(const float* ip_values);
+  void GetSmapabanThrdMap(float* op_values, bool i_original = false);
+  void SetSmapabanThrdMap(const float* ip_values);
+
   //Types of slots/plugs
   enum IOXtype
   {

@@ -306,6 +306,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<POINT> m_optAtscMapWnd;
   OptField_t<POINT> m_optCrkTempMapWnd;
   OptField_t<POINT> m_optEHPauseMapWnd;
+  OptField_t<POINT> m_optCrankingThrdMapWnd;
+  OptField_t<POINT> m_optCrankingTimeMapWnd;
+  OptField_t<POINT> m_optSmapabanThrdMapWnd;
 
   //windows' positions (online tables)
   OptField_t<POINT> m_optStrtMapWnd1;
@@ -478,6 +481,9 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<float> m_optPtMovStepATSCorrMap;
   OptField_t<float> m_optPtMovStepGasdoseMap;
   OptField_t<float> m_optPtMovStepTmp2CurveMap;
+  OptField_t<float> m_optPtMovStepCrankingThrdMap;
+  OptField_t<float> m_optPtMovStepCrankingTimeMap;
+  OptField_t<float> m_optPtMovStepSmapabanThrdMap;
 
   //Log file's fileds
   OptField_t<bool> m_optWriteLogFields;

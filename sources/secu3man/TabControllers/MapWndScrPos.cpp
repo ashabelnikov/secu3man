@@ -200,6 +200,18 @@ void MapWndScrPos::OnCloseMapWnd(HWND i_hwnd, int i_mapType)
    ws.m_EHPauseMapWnd_X = rc.left;
    ws.m_EHPauseMapWnd_Y = rc.top;
    break;
+  case TYPE_MAP_CRANKING_THRD:
+   ws.m_CrankingThrdMapWnd_X = rc.left;
+   ws.m_CrankingThrdMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_CRANKING_TIME:
+   ws.m_CrankingTimeMapWnd_X = rc.left;
+   ws.m_CrankingTimeMapWnd_Y = rc.top;
+   break;
+  case TYPE_MAP_SMAPABAN_THRD:
+   ws.m_SmapabanThrdMapWnd_X = rc.left;
+   ws.m_SmapabanThrdMapWnd_Y = rc.top;
+   break;
   case TYPE_MAP_GME_IGN_WND: //pseudo map
    ws.m_GridMapIgnWnd_X = rc.left;
    ws.m_GridMapIgnWnd_Y = rc.top;
@@ -339,6 +351,15 @@ void MapWndScrPos::OnOpenMapWnd(HWND i_hwnd, int i_mapType)
    break;
   case TYPE_MAP_EH_PAUSE:
    X = ws.m_EHPauseMapWnd_X, Y = ws.m_EHPauseMapWnd_Y;
+   break;
+  case TYPE_MAP_CRANKING_THRD:
+   X = ws.m_CrankingThrdMapWnd_X, Y = ws.m_CrankingThrdMapWnd_Y;
+   break;
+  case TYPE_MAP_CRANKING_TIME:
+   X = ws.m_CrankingTimeMapWnd_X, Y = ws.m_CrankingTimeMapWnd_Y;
+   break;
+  case TYPE_MAP_SMAPABAN_THRD:
+   X = ws.m_SmapabanThrdMapWnd_X, Y = ws.m_SmapabanThrdMapWnd_Y;
    break;
   case TYPE_MAP_GME_IGN_WND:
    X = ws.m_GridMapIgnWnd_X, Y = ws.m_GridMapIgnWnd_Y;

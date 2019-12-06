@@ -319,3 +319,10 @@
 #define IDB_CONST_FOCUSED               5673
 #define IDB_CONST_DISABLED              5674
 #define IDC_TD_FW_CONSTS_BUTTON         5675
+#define IDC_TD_CRANKING_THRD_MAP        5676
+#define IDC_TD_CRANKING_TIME_MAP        5677
+#define IDC_TD_SMAPABAN_THRD_MAP        5678
+#define IDS_CRANKING_THRD_MAP           5679
+#define IDS_CRANKING_TIME_MAP           5680
+#define IDS_SMAPABAN_THRD_MAP           5681
+#define IDS_MAPS_STROKE_UNIT            5682
