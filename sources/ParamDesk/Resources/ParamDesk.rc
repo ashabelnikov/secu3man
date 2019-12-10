@@ -855,6 +855,8 @@ BEGIN
     CONTROL         "Использ.табл.корр.плотн.воздуха",IDC_PD_INJECTOR_USEAIRDEN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,425,138,10
 
     CONTROL         "Дифф.давление для корр.по ДДГ",IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,440,138,10
+
+    CONTROL         "Переключать ряды форсунок",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,455,138,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -1551,6 +1553,7 @@ BEGIN
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Расход воздуха, при котором клапан продувки адсорбера полностью включен (коэфф.заполнения ШИМ = 100%). Если расход воздуха больше или равен этому значению, то клапан полностью включен. Расход воздуха определяется как Обороты * Нагрузка."
     IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Назрузка на ХХ, которая вместе с оборотами определяет режимную точку. Если в качестве нагрузки выбран ДАД, то значение в кПа, иначе значение в %. Если вы используете в качестве нагрузки ДПДЗ или хотите чтобы режимная точка определялась только оборотами, то поставьте 0."
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Время, на которое включится бензонасос после включения зажигания"
+    IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "Если разрешено, то когда GAS_V=0 будут работать выходы впрыска 1-4, а когда GAS_V=1 будут работать выходы впрыска 5-8"
 END
 
 
@@ -2435,6 +2438,8 @@ BEGIN
     CONTROL         "Use air density correction map",IDC_PD_INJECTOR_USEAIRDEN_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,425,138,10
 
     CONTROL         "Diff.press.for PW corr.from GPS",IDC_PD_INJECTOR_USEDIFFPRESS_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,440,138,10
+
+    CONTROL         "Switch beetwen injectors' rows",IDC_PD_INJECTOR_SECINJROWSWT_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP | BS_LEFTTEXT,0,455,138,10
 END
 
 IDD_PD_LAMBDA_PAGE DIALOGEX 0, 0, 155, 158
@@ -3141,6 +3146,7 @@ BEGIN
     IDS_PD_MISC_EVAP_AFEND_EDIT_TT "Air flow at which canister purge valve is fully opened (PWM duty = 100%). If air flow is above or equal to this value, than valve will be fully opened. Air flow is determined as RPM * Load"
     IDC_PD_IDLREG_MAPVALUE_EDIT_TT "Value of load on idling, which together with rpm defines target operation conditions. If MAP is selected as load source, then this value is in kPa, otherwise, this value is in %. If you selected TPS as load source or you want target oparation contions to be defined with rpm only, then set this value to zero."
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Fuel pump will work during this time after turning on of ignition"
+    IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "If enabled, when GAS_V=0 inj.outputs 1-4 will work, and when GAS_V=1 inj.outputs 5-8 will work."
 END
 
 STRINGTABLE

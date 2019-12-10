@@ -113,6 +113,7 @@ class CInjectorPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CButton m_inj_useaddcorrs_check;
   CButton m_inj_useairden_check;
   CButton m_inj_usediffpress_check;
+  CButton m_inj_secinjrowswt_check;
 
   CSpinButtonCtrlEx m_min_pw_spin[2];
   CEditEx m_min_pw_edit[2];

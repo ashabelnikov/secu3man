@@ -524,6 +524,7 @@ namespace SECU3IO
   bool inj_useaddcorrs;               //Use additional corrections (gas.eq.)
   bool inj_useairden;                 //Use air density correction map
   bool inj_usediffpress;              //Use diff.pressure for PW correction from GPS
+  bool inj_secinjrowswt;              //Switch between inj. rows
   int inj_config[2];                  //Injection configuration (throttle-body, simultaneous, semi-sequential, fullsequential)
   int inj_squirt_num[2];              //Number of squirts per cycle
   float inj_flow_rate[2];             //Injector flow rate

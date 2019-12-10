@@ -342,6 +342,7 @@ bool ParamsIO::SetDefParamValues(BYTE i_descriptor, const void* ip_values)
     WRITEBIT8(p_params->inj_flags, 2, p_in->inj_useaddcorrs);
     WRITEBIT8(p_params->inj_flags, 3, p_in->inj_useairden);
     WRITEBIT8(p_params->inj_flags, 4, p_in->inj_usediffpress);
+    WRITEBIT8(p_params->inj_flags, 5, p_in->inj_secinjrowswt);
 
     p_params->inj_config[0] = MAKEBYTE(p_in->inj_config[0], p_in->inj_squirt_num[0]);
     p_params->inj_config[1] = MAKEBYTE(p_in->inj_config[1], p_in->inj_squirt_num[1]);
@@ -731,6 +732,7 @@ bool ParamsIO::GetDefParamValues(BYTE i_descriptor, void* op_values)
     p_out->inj_useaddcorrs = CHECKBIT8(p_params->inj_flags, 2);
     p_out->inj_useairden = CHECKBIT8(p_params->inj_flags, 3);
     p_out->inj_usediffpress = CHECKBIT8(p_params->inj_flags, 4);
+    p_out->inj_secinjrowswt = CHECKBIT8(p_params->inj_flags, 5);
 
     p_out->inj_config[0] = GETHI4BITS(p_params->inj_config[0]);      //fuel injection configuration
     p_out->inj_squirt_num[0] = GETLO4BITS(p_params->inj_config[0]);  //number of squirts per cycle
