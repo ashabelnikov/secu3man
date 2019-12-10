@@ -1720,6 +1720,17 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Turn off threshold of intake manifold heating"), _T("min"), 0.1f, 10.9f, 0.1f, 1, &d.heating_time);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг уменьшения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en);
+ else
+  dfd.AppendItem(_T("Decrease step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_en);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Шаг увеличения добавки после выхода РХХ"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le);
+ else
+  dfd.AppendItem(_T("Increase step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le);
+
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);

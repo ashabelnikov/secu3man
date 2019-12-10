@@ -224,11 +224,13 @@ typedef struct
  _int  knkclt_thrd;
  _int  heating_t_off;
  _uchar heating_time;
+ _uchar idltorun_stp_en;
+ _uchar idltorun_stp_le;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[16];
+ _uchar reserved[14];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2131,6 +2133,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.knkclt_thrd = ((float)exd.knkclt_thrd) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_t_off = ((float)exd.heating_t_off) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
  o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
+ o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
+ o_data.idltorun_stp_le = ((float)exd.idltorun_stp_le) / 32.0f; //convert to %
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2153,4 +2157,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.knkclt_thrd = MathHelpers::Round(i_data.knkclt_thrd * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_t_off = MathHelpers::Round(i_data.heating_t_off * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
  exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
+ exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
+ exd.idltorun_stp_le = MathHelpers::Round(i_data.idltorun_stp_le * 32.0f);
 }
