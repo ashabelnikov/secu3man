@@ -1,6 +1,5 @@
 /* SECU-3  - An open source, free engine control unit
    Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
-   Original code written by Mark C. Malburg, USA, http://digitalmetrology.com
 
    This program is free software: you can redistribute it and/or modify
    it under the terms of the GNU General Public License as published by
@@ -20,47 +19,47 @@
               email: shabelnikov@secu-3.org
 */
 
-/** \file OScopeCtrl.h
+/** \file OscillCtrl.h
  */
 
 #pragma once
 
 #include <algorithm>
 #include <deque>
+#include "common/unicodesupport.h"
 
-class AFX_EXT_CLASS COScopeCtrl : public CWnd
+class AFX_EXT_CLASS COscillCtrl : public CWnd
 {
  public:
-  COScopeCtrl();
-  virtual ~COScopeCtrl();
+  COscillCtrl();
+  virtual ~COscillCtrl();
 
+  //create control's window
   virtual BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID = 0);
 
   //Use for adding of a new point
-  //dNewPoint - value of new point
+  //value - value of a new point
   //i_reverse - if true, then point will be added from the left side (reverse)
-  void AppendPoint(double dNewPoint, bool i_reverse = false);
+  void AppendPoint(double value, bool i_reverse = false);
 
-  void SetRange(double dLower, double dUpper, int nDecimalPlaces=1);
-  void SetXUnits(CString string);
-  void SetYUnits(CString string);
-  void SetYGridNumber(int ny); 
-  void SetXGridSize(int sx);
-  void SetGridColor(COLORREF color);
+  void ReserveCharsY(int num);
+  void SetGridNumberY(int ny); 
+  void SetGridSizeX(int sx);
+  void SetRange(double low, double upp, int decimalPlaces = 1);
   void SetPlotColor(COLORREF color);
+  void SetGridColor(COLORREF color);
   void SetBackgroundColor(COLORREF color);
+  void SetUnitX(const _TSTRING& str);
+  void SetUnitY(const _TSTRING& str);
   void InvalidateCtrl(bool recreateBmpGrid = false, bool recreateBmpPlot = false, bool invalidate = true);
-  void DrawPoint(bool i_reverse);
   void Reset();
+  void ShowCursor(bool show);
 
  //Implementation
  protected:
-  size_t _GetPtCount(void);
-  void _SetStateColors(bool state);
-  // Generated message map functions
   afx_msg void OnPaint();
-  afx_msg void OnSize(UINT nType, int cx, int cy);
   afx_msg void OnEnable(BOOL bEnable);
+  afx_msg void OnSize(UINT nType, int cx, int cy);
 #if _MSC_VER >= 1400
   afx_msg LRESULT OnNcHitTest(CPoint point);
 #else
@@ -69,46 +68,47 @@ class AFX_EXT_CLASS COScopeCtrl : public CWnd
   DECLARE_MESSAGE_MAP()
 
  private:
-  const int m_nShiftPixels;    // amount to shift with each new point
-  int m_nYDecimals;
-  int m_gridNumY;
-  int m_gridSizeX;
+  size_t _GetPtCount(void);
+  void _SetStateColors(bool state);
+  int _MapYValue(double);
+  void _DrawPoint(bool i_reverse, int ptidx = -1);
+  void _DrawCursor(bool i_invalidate = true);
 
-  CString m_strXUnitsString;
-  CString m_strYUnitsString;
+  CDC     m_dcGrid;
+  CDC     m_dcPlot;
+  CBitmap *m_pBmpOldGrid;
+  CBitmap *m_pBmpOldPlot;
+  CBitmap m_bmpGrid;
+  CBitmap m_bmpPlot;
+  CPen   m_penPlot;
+  CBrush m_brushBack;          //background brush
+  CBrush m_BlackBrush;         //black brush
+  CBrush m_cursBrush;          //brush used for drawing of cursor
 
   COLORREF m_COLOR_3DFACE;     // for testing of changing of system colors
   COLORREF m_crBackColor;      // background color
   COLORREF m_crGridColor;      // grid color
   COLORREF m_crPlotColor;      // data color
-
   COLORREF m_normalBackColor;
   COLORREF m_normalGridColor;
   COLORREF m_normalPlotColor;
 
-  double m_dCurrentPosition;   // current position
-  double m_dPreviousPosition;  // previous position
+  CRect  m_rcClient;
+  CRect  m_rcPlot;
+  CString m_strUnitX;
+  CString m_strUnitY;
 
-  double m_dLowerLimit;        // lower bounds
-  double m_dUpperLimit;        // upper bounds
-  double m_dRange;
-  double m_dVerticalFactor;
+  const int m_shtPixels;       //number of pixels bitmap will be shifted to for each point
+  int m_decimalPlaces;         //number of decimal places
+  int m_gridNumY;
+  int m_gridSizeX;
 
-  CRect  m_rectClient;
-  CRect  m_rectPlot;
-  CPen   m_penPlot;
-  CBrush m_brushBack;         //background brush
-  CBrush m_BlackBrush;        //black brush
-
-  CDC     m_dcGrid;
-  CDC     m_dcPlot;
-  CBitmap *m_pbitmapOldGrid;
-  CBitmap *m_pbitmapOldPlot;
-  CBitmap m_bitmapGrid;
-  CBitmap m_bitmapPlot;
-
-  //stores values of all points
-  std::deque<double> m_points;
-  //stores point position, used for correct scrolling
-  size_t m_point_position;
+  std::deque<double> m_points; //stores values of all points  
+  size_t m_point_position;     //stores point position, used for correct scrolling
+  double m_lowLimit;           //min
+  double m_uppLimit;           //max
+  double m_range;
+  double m_vertFactor;  
+  int m_num_y_chars;
+  bool m_show_cursor;
 };

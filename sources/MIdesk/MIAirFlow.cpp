@@ -74,3 +74,34 @@ void CMIAirFlow::Create(CWnd* pParent)
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
 }
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMIAirFlowGraph::CMIAirFlowGraph()
+{
+ //empty
+}
+
+CMIAirFlowGraph::~CMIAirFlowGraph()
+{
+ //empty
+}
+
+void CMIAirFlowGraph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_AIR_FLOWGRAPH));
+
+ // customize the control
+ m_scope.SetRange(0, 16, 0);
+ m_scope.SetGridNumberY(16);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_AIR_FLOWGRAPH_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}

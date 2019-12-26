@@ -57,7 +57,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //--------interface implementation---------------
   virtual void Show(bool show);
   virtual void Enable(bool enable);
-  virtual void SetValues(const SECU3IO::SensorDat* i_values);
+  virtual void SetValues(const SECU3IO::SensorDat* i_values, bool i_revdir = false);
+  virtual void Reset(void);
   //-----------------------------------------------
 
   //установка периода обновления в миллисекундах
@@ -87,7 +88,29 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void SetMAPAverageNum(int avnum);
   void SetAI1AverageNum(int avnum);
   void SetTPSAverageNum(int avnum);
-  
+  void SetKnockAverageNum(int avnum);
+  void SetIgnTimAverageNum(int avnum);
+
+  void SetCLTAverageNum(int avnum);
+  void SetAddI2AverageNum(int avnum);  
+  void SetInjPWAverageNum(int avnum);
+  void SetIATAverageNum(int avnum);
+  void SetEGOCorrAverageNum(int avnum);
+  void SetAirFlowAverageNum(int avnum);
+  void SetVehicleSpeedAverageNum(int avnum);
+  void SetTPSDotAverageNum(int avnum);
+  void SetMAP2AverageNum(int avnum);
+  void SetMAPDAverageNum(int avnum);
+  void SetTmp2AverageNum(int avnum);
+  void SetFuelConsumAverageNum(int avnum);
+  void SetKnockRetardAverageNum(int avnum);
+  void SetSensAFRAverageNum(int avnum);
+  void SetChokePosAverageNum(int avnum);
+  void SetGDPosAverageNum(int avnum);
+  void SetSynLoadAverageNum(int avnum);
+  void SetInjTimBAverageNum(int avnum);
+  void SetInjTimEAverageNum(int avnum);
+
   typedef std::pair<int, COLORREF> IndCfg_t;
 
   void SetIndicatorsCfg(float IndHeingtPercent, int IndRows, IndCfg_t IndGas_v, IndCfg_t IndCarb, IndCfg_t IndIdleValve, IndCfg_t IndPowerValve, IndCfg_t IndStBlock, IndCfg_t IndAE,
@@ -96,15 +119,15 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void GetIndicatorsCfg(float &IndHeingtPercent, int &IndRows, IndCfg_t &IndGas_v, IndCfg_t &IndCarb, IndCfg_t &IndIdleValve, IndCfg_t &IndPowerValve, IndCfg_t &IndStBlock, IndCfg_t &IndAE,
                         IndCfg_t &IndCoolingFan, IndCfg_t &IndCE, IndCfg_t &IndFCRevLim, IndCfg_t &IndFloodClear, IndCfg_t &IndSysLocked, IndCfg_t &IndIgn_i, IndCfg_t &IndCond_i, IndCfg_t &IndEpas_i);
 
-  void SetMetersCfg(int MetRows, int MetRPM, int MetMAP, int MetVBat, int MetIgnTim, int MetCLT, int MetAddI1, int MetAddI2,
-                    int InjPW, int MetIAT, int MetEGOCorr, int MetTPS, int MetAirFlow, int MetVehicleSpeed, int MetTPSDot, int MetMAP2,
-                    int MetMapD, int MetTmp2, int MetFuelConsum, int MetKnockRetard, int MetKnockGraph, int MetSensAFR, int MetChokePos,
-                    int MetGDPos, int MetSynLoad, int MetInjTimB, int MetInjTimE, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
+  void SetMetersCfg(int MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
+                    int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
+                    int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
+                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int TitleFontSize, int ValueFontSize, int PaneFontSize, int LabelFontSize);
 
-  void GetMetersCfg(int &MetRows, int &MetRPM, int &MetMAP, int &MetVBat, int &MetIgnTim, int &MetCLT, int &MetAddI1, int &MetAddI2,
-                    int &InjPW, int &MetIAT, int &MetEGOCorr, int &MetTPS, int &MetAirFlow, int &MetVehicleSpeed, int &MetTPSDot, int &MetMAP2,
-                    int &MetMapD, int &MetTmp2, int &MetFuelConsum, int &MetKnockRetard, int &MetKnockGraph, int &MetSensAFR, int &MetChokePos,
-                    int &MetGDPos, int &MetSynLoad, int &MetInjTimB, int &MetInjTimE, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
+  void GetMetersCfg(int &MetRows, int *MetRPM, int *MetMAP, int *MetVBat, int *MetIgnTim, int *MetCLT, int *MetAddI1, int *MetAddI2,
+                    int *InjPW, int *MetIAT, int *MetEGOCorr, int *MetTPS, int *MetAirFlow, int *MetVehicleSpeed, int *MetTPSDot, int *MetMAP2,
+                    int *MetMapD, int *MetTmp2, int *MetFuelConsum, int *MetKnockRetard, int *MetKnockGraph, int *MetSensAFR, int *MetChokePos,
+                    int *MetGDPos, int *MetSynLoad, int *MetInjTimB, int *MetInjTimE, int &TitleFontSize, int &ValueFontSize, int &PaneFontSize, int &LabelFontSize);
 
   void SetMetersDragNDrop(bool enable);
   bool GetMetersDragNDrop(void) const;
@@ -115,6 +138,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void setOnMISettingsChanged(EventHandler i_Function);
 
   void SetITMode(int mode);
+
+  void ShowGraphCursor(bool show);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
@@ -194,7 +219,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   bool m_metDragNDrop;
   std::auto_ptr<CMetContextMenuManager> mp_ctxMenuMgrMet;
   int m_TitleFontSize, m_ValueFontSize, m_PaneFontSize, m_LabelFontSize;
-  
+
   IndFields_t m_indFields;
   CMultiLEDCtrl m_leds;
   CFont m_font;
@@ -207,18 +232,10 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   std::auto_ptr<CIndContextMenuManager> mp_ctxMenuMgrInd;
 
   SECU3IO::SensorDat m_values;
-  float m_air_flow; //todo: replace by direct value from SensorDat
-  float m_tps_dot;  //todo: replace by direct value from SensorDat
   CObjectTimer<CMIDeskDlg> m_update_timer;
   unsigned int m_update_period;
   bool m_was_initialized;
   int m_enabled;
-
-  RingBuffItem m_ringRPM;
-  RingBuffItem m_ringVBat;
-  RingBuffItem m_ringMAP;
-  RingBuffItem m_ringAddI1;
-  RingBuffItem m_ringTPS;
 
   bool m_showSpeedAndDistance;
   bool m_showChokePos;
@@ -236,6 +253,62 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   EventHandler m_OnMISettingsChanged;
 
   int m_it_mode;
+  bool m_show_graph_cursor;
+
+  RingBuffItem m_ringRPM;
+  RingBuffItem m_ringKnock;
+  RingBuffItem m_ringVBat;
+  RingBuffItem m_ringMAP;
+  RingBuffItem m_ringAddI1;
+  RingBuffItem m_ringTPS;
+  RingBuffItem m_ringIgnTim;
+  RingBuffItem m_ringCLT;
+  RingBuffItem m_ringAddI2;
+  RingBuffItem m_ringInjPW;
+  RingBuffItem m_ringIAT;
+  RingBuffItem m_ringEGOCorr;
+  RingBuffItem m_ringAirFlow;
+  RingBuffItem m_ringVehicleSpeed;
+  RingBuffItem m_ringTPSDot;
+  RingBuffItem m_ringMAP2;
+  RingBuffItem m_ringMAPD;
+  RingBuffItem m_ringTmp2;
+  RingBuffItem m_ringFuelConsum;
+  RingBuffItem m_ringKnockRetard;
+  RingBuffItem m_ringSensAFR;
+  RingBuffItem m_ringChokePos;
+  RingBuffItem m_ringGDPos;
+  RingBuffItem m_ringSynLoad;
+  RingBuffItem m_ringInjTimB;
+  RingBuffItem m_ringInjTimE;
+
+  GraphVal_t m_rpmQVal[2];
+  GraphVal_t m_knockQVal[2];
+  GraphVal_t m_vbatQVal[2];
+  GraphVal_t m_mapQVal[2];
+  GraphVal_t m_ai1QVal[2];
+  GraphVal_t m_tpsQVal[2];
+  GraphVal_t m_igntimQVal[2];
+  GraphVal_t m_cltQVal[2];
+  GraphVal_t m_ai2QVal[2];
+  GraphVal_t m_injpwQVal[2];
+  GraphVal_t m_iatQVal[2];
+  GraphVal_t m_egocQVal[2];
+  GraphVal_t m_airflQVal[2];
+  GraphVal_t m_vssQVal[2];
+  GraphVal_t m_tpsdotQVal[2];
+  GraphVal_t m_map2QVal[2];
+  GraphVal_t m_mapdQVal[2];
+  GraphVal_t m_tmp2QVal[2];
+  GraphVal_t m_fuelcQVal[2];
+  GraphVal_t m_knkretQVal[2];
+  GraphVal_t m_senafrQVal[2];
+  GraphVal_t m_chposQVal[2];
+  GraphVal_t m_gdposQVal[2];
+  GraphVal_t m_synldQVal[2];
+  GraphVal_t m_itbQVal[2];
+  GraphVal_t m_iteQVal[2];
+  GraphVal_t m_distQVal;
 };
 
 /////////////////////////////////////////////////////////////////////////////

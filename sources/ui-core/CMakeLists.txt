@@ -44,7 +44,7 @@ set(HEADERS
   LEDIndicator.h
   MapEditorCtrl.h
   MultiLEDCtrl.h
-  OScopeCtrl.h
+  OscillCtrl.h
   ProgressCtrlEx.h
   SpinButtonctrlEx.h
   StatusBarEx.h
@@ -80,7 +80,7 @@ set(SOURCES
   LEDIndicator.cpp
   MapEditorCtrl.cpp
   MultiLEDCtrl.cpp
-  OScopeCtrl.cpp
+  OscillCtrl.cpp
   ProgressCtrlEx.cpp
   SpinButtonctrlEx.cpp
   StatusBarEx.cpp

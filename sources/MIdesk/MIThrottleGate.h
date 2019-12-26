@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIThrottleGate : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIThrottleGateGraph : public MeasInstrBase
+{
+ public:
+  CMIThrottleGateGraph();
+  virtual ~CMIThrottleGateGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

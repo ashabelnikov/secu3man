@@ -26,6 +26,7 @@
 #pragma once
 
 #include "MeasInstrBase.h"
+#include "ui-core/OscillCtrl.h"
 
 class AFX_EXT_CLASS CMITachometer : public MeasInstrBase
 {
@@ -38,4 +39,16 @@ class AFX_EXT_CLASS CMITachometer : public MeasInstrBase
   virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 
+};
+
+class AFX_EXT_CLASS CMITachometerGraph : public MeasInstrBase
+{
+ public:
+  CMITachometerGraph();
+  virtual ~CMITachometerGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
+  //---------------------------------------
 };

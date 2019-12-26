@@ -81,3 +81,65 @@ void CMIAddI2::Create(CWnd* pParent)
  m_meter.SetTitle(MLL::GetString(IDS_MI_ADD_I2_TITLE).c_str());
  VERIFY(mp_ttc->AddWindow(&m_meter, MLL::GetString(IDS_MI_ADD_I2_TT)));
 }
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMIAddI1Graph::CMIAddI1Graph()
+{
+ //empty
+}
+
+CMIAddI1Graph::~CMIAddI1Graph()
+{
+ //empty
+}
+
+void CMIAddI1Graph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_ADD_I1GRAPH));
+
+ // customize the control
+ m_scope.SetRange(0, 5, 1);
+ m_scope.SetGridNumberY(10);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_ADD_I1_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMIAddI2Graph::CMIAddI2Graph()
+{
+ //empty
+}
+
+CMIAddI2Graph::~CMIAddI2Graph()
+{
+ //empty
+}
+
+void CMIAddI2Graph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_ADD_I2GRAPH));
+
+ // customize the control
+ m_scope.SetRange(0, 5, 1);
+ m_scope.SetGridNumberY(10);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_ADD_I2_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}

@@ -36,5 +36,6 @@ class IMIView
  public:
   virtual void Show(bool show) = 0;         //show/hide content of view
   virtual void Enable(bool enable) = 0;                            //enable/disable view
-  virtual void SetValues(const SECU3IO::SensorDat* i_values) = 0;  //set view values
+  virtual void SetValues(const SECU3IO::SensorDat* i_values, bool i_dir) = 0;  //set view values
+  virtual void Reset(void) = 0;
 };

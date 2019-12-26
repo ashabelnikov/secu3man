@@ -44,6 +44,7 @@ class CMetContextMenuManager
   CWnd* m_pWnd;        //Identifies the window that owns the pop-up menu
   CMenu m_parentMenu;  //Top level menu
   CMenu m_addMenu;     //Add gauge menu
+  CMenu m_addGraphMenu; //Add gauge menu
   CMenu m_rowsMenu;    //Number of rows menu
   CMenu m_titleFontMenu;
   CMenu m_valueFontMenu;

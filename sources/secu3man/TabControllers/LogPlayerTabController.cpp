@@ -41,7 +41,7 @@
 #include "Settings/ISettingsData.h"
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/LPControlPanelDlg.h"
-#include "ui-core/OScopeCtrl.h"
+#include "ui-core/OscillCtrl.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -95,6 +95,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
  m_timer.SetMsgHandler(this, &CLogPlayerTabController::OnTimer);
 
  mp_view->mp_MIDeskDlg->setOnMISettingsChanged(MakeDelegate(this, &CLogPlayerTabController::OnMIDeskSettingsChanged));
+ mp_view->mp_MIDeskDlg->ShowGraphCursor(mp_settings->GetShowGraphsCursor());
 }
 
 CLogPlayerTabController::~CLogPlayerTabController()
@@ -115,11 +116,33 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
+
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
  mp_view->mp_MIDeskDlg->SetVoltAverageNum(mp_settings->GetVoltAverage());
  mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->mp_MIDeskDlg->SetKnockAverageNum(mp_settings->GetKnockAverage());
+ mp_view->mp_MIDeskDlg->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
+ mp_view->mp_MIDeskDlg->SetCLTAverageNum(mp_settings->GetCLTAverage());
+ mp_view->mp_MIDeskDlg->SetAddI2AverageNum(mp_settings->GetAddI2Average());
+ mp_view->mp_MIDeskDlg->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
+ mp_view->mp_MIDeskDlg->SetIATAverageNum(mp_settings->GetIATAverage());
+ mp_view->mp_MIDeskDlg->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
+ mp_view->mp_MIDeskDlg->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
+ mp_view->mp_MIDeskDlg->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
+ mp_view->mp_MIDeskDlg->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
+ mp_view->mp_MIDeskDlg->SetMAP2AverageNum(mp_settings->GetMAP2Average());
+ mp_view->mp_MIDeskDlg->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
+ mp_view->mp_MIDeskDlg->SetTmp2AverageNum(mp_settings->GetTmp2Average());
+ mp_view->mp_MIDeskDlg->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->mp_MIDeskDlg->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
+ mp_view->mp_MIDeskDlg->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
+ mp_view->mp_MIDeskDlg->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
+ mp_view->mp_MIDeskDlg->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
+ mp_view->mp_MIDeskDlg->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
+ mp_view->mp_MIDeskDlg->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
+ mp_view->mp_MIDeskDlg->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
 
  ConfigureIndicators();
  mp_view->Invalidate();
@@ -137,6 +160,27 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->mp_MIDeskDlg->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->mp_MIDeskDlg->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->mp_MIDeskDlg->SetKnockAverageNum(mp_settings->GetKnockAverage());
+ mp_view->mp_MIDeskDlg->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
+ mp_view->mp_MIDeskDlg->SetCLTAverageNum(mp_settings->GetCLTAverage());
+ mp_view->mp_MIDeskDlg->SetAddI2AverageNum(mp_settings->GetAddI2Average());
+ mp_view->mp_MIDeskDlg->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
+ mp_view->mp_MIDeskDlg->SetIATAverageNum(mp_settings->GetIATAverage());
+ mp_view->mp_MIDeskDlg->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
+ mp_view->mp_MIDeskDlg->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
+ mp_view->mp_MIDeskDlg->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
+ mp_view->mp_MIDeskDlg->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
+ mp_view->mp_MIDeskDlg->SetMAP2AverageNum(mp_settings->GetMAP2Average());
+ mp_view->mp_MIDeskDlg->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
+ mp_view->mp_MIDeskDlg->SetTmp2AverageNum(mp_settings->GetTmp2Average());
+ mp_view->mp_MIDeskDlg->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->mp_MIDeskDlg->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
+ mp_view->mp_MIDeskDlg->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
+ mp_view->mp_MIDeskDlg->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
+ mp_view->mp_MIDeskDlg->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
+ mp_view->mp_MIDeskDlg->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
+ mp_view->mp_MIDeskDlg->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
+ mp_view->mp_MIDeskDlg->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
  mp_view->mp_MIDeskDlg->SetITMode(mp_settings->GetITEdMode());
 
  //////////////////////////////////////////////////////////////////
@@ -388,7 +432,8 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  mp_view->mp_CEDeskDlg->Enable(true);
  mp_view->mp_LMDeskDlg->Enable(true);
  mp_view->mp_LPPanelDlg->EnableAll(true);
- mp_view->mp_OScopeCtrl->EnableWindow(true);
+ mp_view->EnableAll(true);
+
 
  //инициализируем логику плеера и начинаем сразу проигрывать
  if (mp_log_reader->GetCount() > 0)
@@ -548,18 +593,18 @@ void CLogPlayerTabController::_ClosePlayer(void)
  mp_view->mp_CEDeskDlg->Enable(false);
  mp_view->mp_LMDeskDlg->Enable(false);
  mp_view->mp_LPPanelDlg->EnableAll(false);
- mp_view->mp_OScopeCtrl->EnableWindow(false);
+ mp_view->EnableAll(false);
  m_timer.KillTimer();
  mp_log_reader->CloseFile();
  mp_view->mp_LPPanelDlg->SetPositionIndicator(_T(""));
- mp_view->ResetKnockOscilloscope();
+ mp_view->mp_MIDeskDlg->Reset();
  mp_view->mp_LMDeskDlg->SetValues(false, false, false);
 }
 
 void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
 {
  //обновл€ем приборы, а также обновл€ем позицию слайдера, если нужно
- mp_view->mp_MIDeskDlg->SetValues(&m_curr_record.second);
+ mp_view->mp_MIDeskDlg->SetValues(&m_curr_record.second, i_direction == DIR_PREV);
 
  //обновл€ем ошибки
  mp_view->mp_CEDeskDlg->SetValues(m_curr_record.second.ce_errors);
@@ -576,9 +621,6 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
      m_curr_record.first.wSecond,
      m_curr_record.first.wMilliseconds / 10);
  mp_view->mp_LPPanelDlg->SetPositionIndicator(string.GetBuffer(0));
-
- //выводим сигнал ƒƒ
- mp_view->AppendKnockValue(m_curr_record.second.knock_k, i_direction == DIR_PREV);
 }
 
 void CLogPlayerTabController::_UpdateButtons(void)
@@ -602,11 +644,11 @@ void CLogPlayerTabController::ConfigureIndicators(void)
  mp_view->mp_MIDeskDlg->SetIndicatorsDragNDrop(mp_settings->GetIndicatorsDragNDrop());
 
  //meters
- MetersCfg cfg1;
+ MetersCfg cfg1[2];
  mp_settings->GetMetersConfig(cfg1);
- mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1.m_optMetRows[idx], cfg1.m_optMetRPM[idx], cfg1.m_optMetMAP[idx], cfg1.m_optMetVBat[idx], cfg1.m_optMetIgnTim[idx], cfg1.m_optMetCLT[idx], cfg1.m_optMetAddI1[idx], cfg1.m_optMetAddI2[idx],
-  cfg1.m_optInjPW[idx], cfg1.m_optMetIAT[idx], cfg1.m_optMetEGOCorr[idx], cfg1.m_optMetTPS[idx], cfg1.m_optMetAirFlow[idx], cfg1.m_optMetVehicleSpeed[idx], cfg1.m_optMetTPSDot[idx], cfg1.m_optMetMAP2[idx], cfg1.m_optMetMAPD[idx],
-  cfg1.m_optMetTmp2[idx], cfg1.m_optMetFuelConsum[idx], cfg1.m_optMetKnockRetard[idx], cfg1.m_optMetKnockGraph[idx], cfg1.m_optMetSensAFR[idx], cfg1.m_optMetChokePos[idx], cfg1.m_optMetGDPos[idx], cfg1.m_optMetSynLoad[idx], cfg1.m_optMetInjTimB[idx], cfg1.m_optMetInjTimE[idx],
+ mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1[idx].m_optMetRows, cfg1[idx].m_optMetRPM, cfg1[idx].m_optMetMAP, cfg1[idx].m_optMetVBat, cfg1[idx].m_optMetIgnTim, cfg1[idx].m_optMetCLT, cfg1[idx].m_optMetAddI1, cfg1[idx].m_optMetAddI2,
+  cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2, cfg1[idx].m_optMetMAPD,
+  cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos, cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad, cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE,
   mp_settings->GetTitleFontSize(), mp_settings->GetValueFontSize(), mp_settings->GetPaneFontSize(), mp_settings->GetLabelFontSize());
 
  mp_view->mp_MIDeskDlg->SetMetersDragNDrop(mp_settings->GetMetersDragNDrop());
@@ -635,24 +677,15 @@ void CLogPlayerTabController::OnMIDeskSettingsChanged(void)
  mp_settings->SetIndicatorsDragNDrop(mp_view->mp_MIDeskDlg->GetIndicatorsDragNDrop());
 
  //meters
- MetersCfg cfg1;
+ MetersCfg cfg1[2];
  mp_settings->GetMetersConfig(cfg1);
 
- int MetRows, MetRPM, MetMAP, MetVBat, MetIgnTim, MetCLT, MetAddI1, MetAddI2,
-  MetInjPW, MetIAT, MetEGOCorr, MetTPS, MetAirFlow, MetVehicleSpeed, MetTPSDot, MetMAP2,
-  MetMapD, MetTmp2, MetFuelConsum, MetKnockRetard, MetKnockGraph, MetSensAFR, MetChokePos,
-  MetGDPos, MetSynLoad, MetInjTimB, MetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
+ int  TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
 
- mp_view->mp_MIDeskDlg->GetMetersCfg(MetRows, MetRPM, MetMAP, MetVBat, MetIgnTim, MetCLT, MetAddI1, MetAddI2,
-  MetInjPW, MetIAT, MetEGOCorr, MetTPS, MetAirFlow, MetVehicleSpeed, MetTPSDot, MetMAP2,
-  MetMapD, MetTmp2, MetFuelConsum, MetKnockRetard, MetKnockGraph, MetSensAFR, MetChokePos,
-  MetGDPos, MetSynLoad, MetInjTimB, MetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
-
- cfg1.m_optMetRows[idx] = MetRows;
- cfg1.m_optMetRPM[idx] = MetRPM, cfg1.m_optMetMAP[idx] = MetMAP, cfg1.m_optMetVBat[idx] = MetVBat, cfg1.m_optMetIgnTim[idx] = MetIgnTim, cfg1.m_optMetCLT[idx] = MetCLT, cfg1.m_optMetAddI1[idx] = MetAddI1, cfg1.m_optMetAddI2[idx] = MetAddI2,
- cfg1.m_optInjPW[idx] = MetInjPW, cfg1.m_optMetIAT[idx] = MetIAT, cfg1.m_optMetEGOCorr[idx] = MetEGOCorr, cfg1.m_optMetTPS[idx] = MetTPS, cfg1.m_optMetAirFlow[idx] = MetAirFlow, cfg1.m_optMetVehicleSpeed[idx] = MetVehicleSpeed, cfg1.m_optMetTPSDot[idx] = MetTPSDot, cfg1.m_optMetMAP2[idx] = MetMAP2, cfg1.m_optMetMAPD[idx] = MetMapD,
- cfg1.m_optMetTmp2[idx] = MetTmp2, cfg1.m_optMetFuelConsum[idx] = MetFuelConsum, cfg1.m_optMetKnockRetard[idx] = MetKnockRetard, cfg1.m_optMetKnockGraph[idx] = MetKnockGraph, cfg1.m_optMetSensAFR[idx] = MetSensAFR, cfg1.m_optMetChokePos[idx] = MetChokePos, cfg1.m_optMetGDPos[idx] = MetGDPos, cfg1.m_optMetSynLoad[idx] = MetSynLoad,
- cfg1.m_optMetInjTimB[idx] = MetInjTimB, cfg1.m_optMetInjTimE[idx] = MetInjTimE;
+ mp_view->mp_MIDeskDlg->GetMetersCfg(cfg1[idx].m_optMetRows, cfg1[idx].m_optMetRPM, cfg1[idx].m_optMetMAP, cfg1[idx].m_optMetVBat, cfg1[idx].m_optMetIgnTim, cfg1[idx].m_optMetCLT, cfg1[idx].m_optMetAddI1, cfg1[idx].m_optMetAddI2,
+  cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2,
+  cfg1[idx].m_optMetMAPD, cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos,
+  cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad, cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
 
  mp_settings->SetMetersConfig(cfg1);
  mp_settings->SetTitleFontSize(TitleFontSize);

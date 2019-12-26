@@ -180,17 +180,46 @@ BEGIN
     IDS_MI_FUELCONSUM_TITLE "Расход топлива"
     IDS_MI_FUELCONSUM_UNIT  "Л/100км"
     IDS_MI_KNOCKRETARD_TITLE "Корр. УОЗ от ДД"
-    IDS_MI_KNOCKGRAPH_V_UNIT "В"
-    IDS_MI_KNOCKGRAPH_H_UNIT "Выборки"
     IDS_MI_SENSAFR_TITLE     "Воздух/топливо ШДК"
     IDS_MI_SENSAFR_UNIT      "в/т"
     IDS_MI_CHOKEPOS_TITLE    "ВЗ/РДВ"
     IDS_MI_GDPOS_TITLE       "Дозатор газа"
     IDS_MI_LOAD_TITLE        "Синтет. нагрузка"
-    IDS_MI_KNOCKGRAPH_TITLE  "График детонации"
+    IDS_MI_KNOCK_TITLE       "Сигнал детонации"
     IDS_MI_INJTIMB_TITLE     "Фаза нач. впрыска"
     IDS_MI_INJTIME_TITLE     "Фаза конца впрыска"
 END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_KNOCKGRAPH_H_UNIT "Выборки"
+    IDS_MI_TACHOMETER_V_UNIT "Обороты,мин-1"
+    IDS_MI_KNOCKGRAPH_V_UNIT "Детонация,В"
+    IDS_MI_PRESSURE_V_UNIT   "ДАД,кПа"
+    IDS_MI_DWELLANGLE_V_UNIT "УОЗ,°КВ"
+    IDS_MI_THROTTLEGATE_V_UNIT "ДПДЗ,%"
+    IDS_MI_VOLTMETER_V_UNIT  "Напряжение,В"
+    IDS_MI_ADD_I1_V_UNIT     "ADD_I1,В"
+    IDS_MI_ADD_I2_V_UNIT     "ADD_I2,В"
+    IDS_MI_INJTIMBGRAPH_V_UNIT "Фаз.нач,°КВ"
+    IDS_MI_INJTIMEGRAPH_V_UNIT "Фаз.кон,°КВ"
+    IDS_MI_IATGRAPH_V_UNIT    "ДТВ,°C"
+    IDS_MI_AIR_FLOWGRAPH_V_UNIT "Расх.возд."
+    IDS_MI_INJ_PW_V_UNIT      "Длит.впр,мс"
+    IDS_MI_CHOKEPOSGRAPH_V_UNIT "ВЗ,%"
+    IDS_MI_GDPOSGRAPH_V_UNIT    "ГД,%"
+    IDS_MI_EGO_CORRGRAPH_V_UNIT "Лямбда,%"
+    IDS_MI_TEMPERATUREGRAPH_V_UNIT "ДТОЖ,°C"
+    IDS_MI_LOADGRAPH_V_UNIT  "Нагрузка"
+    IDS_MI_SENSAFRGRAPH_V_UNIT "Возд/топл"
+    IDS_MI_FUELCONSUMGRAPH_V_UNIT "Л/100км"
+    IDS_MI_KNOCKRETARDGRAPH_V_UNIT "Дет.корр,°КВ"
+    IDS_MI_MAP2GRAPH_V_UNIT   "ДАД2,кПа"
+    IDS_MI_MAPDGRAPH_V_UNIT   "Дифф.дав,кПа"
+    IDS_MI_TMP2GRAPH_V_UNIT   "ДТВ2,°C"
+    IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
+    IDS_MI_TPSDOTGRAPH_V_UNIT "Скор.ДЗ,%/сек"
+END                                        
 
 STRINGTABLE DISCARDABLE 
 BEGIN
@@ -213,7 +242,8 @@ END
 
 STRINGTABLE DISCARDABLE 
 BEGIN
-    IDS_MI_MET_ADD_GAUGE     "Добавить"
+    IDS_MI_MET_ADD_GAUGE     "Добавить прибор"
+    IDS_MI_GRH_ADD_GAUGE     "Добавить график"
     IDS_MI_MET_NUMROWS       "Число строк"
     IDS_MI_MET_TITLE_FONT    "Шрифт заголовков"
     IDS_MI_MET_VALUE_FONT    "Шрифт значений"
@@ -405,16 +435,45 @@ BEGIN
     IDS_MI_FUELCONSUM_TITLE "Fuel consumption"
     IDS_MI_FUELCONSUM_UNIT  "L/100km"
     IDS_MI_KNOCKRETARD_TITLE "Knock retard"
-    IDS_MI_KNOCKGRAPH_V_UNIT "V"
-    IDS_MI_KNOCKGRAPH_H_UNIT "Samples"
     IDS_MI_SENSAFR_TITLE     "WBO AFR"
     IDS_MI_SENSAFR_UNIT      "a/f"
     IDS_MI_CHOKEPOS_TITLE    "IAC valve"
     IDS_MI_GDPOS_TITLE       "Gas dispenser"
     IDS_MI_LOAD_TITLE        "Synthetic load"
-    IDS_MI_KNOCKGRAPH_TITLE  "Knock graph"
+    IDS_MI_KNOCK_TITLE       "Knock signal"
     IDS_MI_INJTIMB_TITLE     "Begin inj. phase"
     IDS_MI_INJTIME_TITLE     "End inj. phase"
+END
+
+STRINGTABLE DISCARDABLE 
+BEGIN
+    IDS_MI_KNOCKGRAPH_H_UNIT "Samples"
+    IDS_MI_TACHOMETER_V_UNIT "RPM,min-1"
+    IDS_MI_KNOCKGRAPH_V_UNIT "Knock,V"
+    IDS_MI_PRESSURE_V_UNIT   "MAP,kPa"
+    IDS_MI_DWELLANGLE_V_UNIT "Ign.tim,°CS"
+    IDS_MI_THROTTLEGATE_V_UNIT "TPS,%"
+    IDS_MI_VOLTMETER_V_UNIT  "Voltage,V"
+    IDS_MI_ADD_I1_V_UNIT     "ADD_I1,V"
+    IDS_MI_ADD_I2_V_UNIT     "ADD_I2,V"
+    IDS_MI_INJTIMBGRAPH_V_UNIT "Beg.inj,°CS"
+    IDS_MI_INJTIMEGRAPH_V_UNIT "End.inj,°CS"
+    IDS_MI_IATGRAPH_V_UNIT    "IAT,°C"
+    IDS_MI_AIR_FLOWGRAPH_V_UNIT "Air flow"
+    IDS_MI_INJ_PW_V_UNIT      "Inj.PW,ms"
+    IDS_MI_CHOKEPOSGRAPH_V_UNIT "Choke,%"
+    IDS_MI_GDPOSGRAPH_V_UNIT    "Gas dis,%"
+    IDS_MI_EGO_CORRGRAPH_V_UNIT "EGO corr,%"
+    IDS_MI_TEMPERATUREGRAPH_V_UNIT "CLT,°C"
+    IDS_MI_LOADGRAPH_V_UNIT  "Load"
+    IDS_MI_SENSAFRGRAPH_V_UNIT "AFR"
+    IDS_MI_FUELCONSUMGRAPH_V_UNIT "L/100km"
+    IDS_MI_KNOCKRETARDGRAPH_V_UNIT "Kn.retard,°CS"
+    IDS_MI_MAP2GRAPH_V_UNIT   "MAP2,kPa"
+    IDS_MI_MAPDGRAPH_V_UNIT   "Diff.pres,kPa"
+    IDS_MI_TMP2GRAPH_V_UNIT   "IAT2,°C"
+    IDS_MI_VSSGRAPH_V_UNIT    "км/ч"
+    IDS_MI_TPSDOTGRAPH_V_UNIT "TPSdot,%/sec"
 END
 
 STRINGTABLE DISCARDABLE 
@@ -438,6 +497,7 @@ END
 STRINGTABLE DISCARDABLE 
 BEGIN
     IDS_MI_MET_ADD_GAUGE     "Add gauge"
+    IDS_MI_GRH_ADD_GAUGE     "Add graph"
     IDS_MI_MET_NUMROWS       "Number of rows"
     IDS_MI_MET_TITLE_FONT    "Font of titles"
     IDS_MI_MET_VALUE_FONT    "Font of values"

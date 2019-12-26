@@ -38,3 +38,14 @@ class AFX_EXT_CLASS CMIDwellAngle : public MeasInstrBase
   //---------------------------------------
 
 };
+
+class AFX_EXT_CLASS CMIDwellAngleGraph : public MeasInstrBase
+{
+ public:
+  CMIDwellAngleGraph();
+  virtual ~CMIDwellAngleGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

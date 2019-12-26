@@ -33,8 +33,8 @@
 
 using namespace SECU3IO;
 
-//максимальный размер буфера необходимого для хранения строки одной записи
-#define MAX_REC_BUF 400
+//maximum length of record including possible text header
+#define MAX_REC_BUF 4096
 
 //кол-во переменных в поле времени
 #define CSV_COUNT_TIME_VAL 4
@@ -58,6 +58,7 @@ LogReader::LogReader()
 , m_csv_separating_symbol(',')
 , m_fileOffset(0)
 {
+ mp_recBuff = new char[MAX_REC_BUF + 1];
  SetSeparatingSymbol(m_csv_separating_symbol);
 }
 
@@ -65,6 +66,7 @@ LogReader::~LogReader()
 {
  if (m_file_handle)
   fclose(m_file_handle);
+ delete[] mp_recBuff;
 }
 
 bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle)
@@ -100,6 +102,7 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
  }
  else
  {//first line contains title, so we will just skip it
+  fseek(m_file_handle, 0, SEEK_SET);
   int n = 0, c = 0;
   do 
   {
@@ -157,19 +160,26 @@ bool LogReader::IsOpened(void) const
 
 bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks)
 {
- char string[MAX_REC_BUF + 1];
-
  VERIFY(!fseek(m_file_handle, m_fileOffset + (m_record_size*m_current_record), SEEK_SET));
 
- size_t real_count = fread(string, sizeof(char), m_record_size, m_file_handle);
- if (real_count != m_record_size)
-  return false;
+ if (m_record_size == 0)
+ {
+  if (fgets(mp_recBuff, MAX_REC_BUF, m_file_handle) == NULL)
+   return false;
+ }
+ else
+ {
+  size_t real_count = fread(mp_recBuff, sizeof(char), m_record_size, m_file_handle);
+  if (real_count != m_record_size)
+   return false;
+  mp_recBuff[m_record_size] = 0; //terminate string
+ }
 
  int result;
  //use ASCII version, file must not be in unicode
  int wHour, wMinute, wSecond, wMilliseconds;
 
- result = sscanf(string, cCSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
+ result = sscanf(mp_recBuff, cCSVTimeTemplateString, &wHour, &wMinute, &wSecond, &wMilliseconds);
  if (result != CSV_COUNT_TIME_VAL)
   return false;
 
@@ -185,7 +195,7 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  float speed, distance, inj_ffd, inj_fff, air_temp, inj_pw, lambda_corr, map2, tmp2, mapd, afr, load, baro_press, inj_tim_begin, inj_tim_end;
  char ce_errors[20] = {0};
 
- result = sscanf(string + CSV_TIME_PANE_LEN, m_csv_data_template,
+ result = sscanf(mp_recBuff + CSV_TIME_PANE_LEN, m_csv_data_template,
                 &frequen,
                 &adv_angle,
                 &pressure,

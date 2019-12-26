@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIMapD : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIMapDGraph : public MeasInstrBase
+{
+ public:
+  CMIMapDGraph();
+  virtual ~CMIMapDGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

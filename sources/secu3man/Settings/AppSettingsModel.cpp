@@ -75,6 +75,28 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMAPAverage(_T("MAPAverage"))
 , m_optAI1Average(_T("AI1Average"))
 , m_optTPSAverage(_T("TPSAverage"))
+, m_optKnockAverage(_T("KnockAverage"))
+, m_optIgnTimAverage(_T("IgnTimAverage"))
+, m_optCLTAverage(_T("CLTAverage"))
+, m_optAddI2Average(_T("AddI2Average"))
+, m_optInjPWAverage(_T("InjPWAverage"))
+, m_optIATAverage(_T("IATAverage"))
+, m_optEGOCorrAverage(_T("EGOCorrAverage"))
+, m_optAirFlowAverage(_T("AirFlowAverage"))
+, m_optVehicleSpeedAverage(_T("VehicleSpeedAverage"))
+, m_optTPSDotAverage(_T("TPSDotAverage"))
+, m_optMAP2Average(_T("MAP2Average"))
+, m_optMAPDAverage(_T("MAPDAverage"))
+, m_optTmp2Average(_T("Tmp2Average"))
+, m_optFuelConsumAverage(_T("FuelConsumAverage"))
+, m_optKnockRetardAverage(_T("KnockRetardAverage"))
+, m_optSensAFRAverage(_T("SensAFRAverage"))
+, m_optChokePosAverage(_T("ChokePosAverage"))
+, m_optGDPosAverage(_T("GDPosAverage"))
+, m_optSynLoadAverage(_T("SynLoadAverage"))
+, m_optInjTimBAverage(_T("InjTimBAverage"))
+, m_optInjTimEAverage(_T("InjTimEAverage"))
+
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
 , m_optPaneFontSize(_T("PaneFontSize"))
@@ -82,6 +104,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optMetersDragNDrop(_T("MetersDragNDrop"))
 , m_optIndicatorsDragNDrop(_T("IndicatorsDragNDrop"))
 , m_optFFFConst(_T("FFFConst"))
+, m_optShowGraphCursor(_T("ShowGraphCursor"))
+
 //positions of windows
 , m_Name_WndSettings_Section(_T("WndSettings"))
 , m_optStrtMapWnd(_T("StrtMapWnd"))
@@ -345,32 +369,58 @@ CAppSettingsModel::CAppSettingsModel()
  for(int i = 0; i < 2; ++i)
  {
   m_optMetRows[i].name = _T("MetRows");
-  m_optMetRPM[i].name = _T("MetRPM");
-  m_optMetMAP[i].name = _T("MetMAP");
-  m_optMetVBat[i].name = _T("MetVBat");
-  m_optMetIgnTim[i].name = _T("MetIgnTim");
-  m_optMetCLT[i].name = _T("MetCLT");
-  m_optMetAddI1[i].name = _T("MetAddI1");
-  m_optMetAddI2[i].name = _T("MetAddI2");
-  m_optMetInjPW[i].name = _T("MetInjPW");
-  m_optMetIAT[i].name = _T("MetIAT");
-  m_optMetEGOCorr[i].name = _T("MetEGOCorr");
-  m_optMetTPS[i].name = _T("MetTPS");
-  m_optMetAirFlow[i].name = _T("MetAirFlow");
-  m_optMetVehicleSpeed[i].name = _T("MetVehicleSpeed");
-  m_optMetTPSDot[i].name = _T("MetTPSDot");
-  m_optMetMAP2[i].name = _T("MetMAP2");
-  m_optMetMAPD[i].name = _T("MetMAPD");
-  m_optMetTmp2[i].name = _T("MetTmp2");
-  m_optMetFuelConsum[i].name = _T("MetFuelConsum");
-  m_optMetKnockRetard[i].name = _T("MetKnockRetard");
-  m_optMetKnockGraph[i].name = _T("MetKnockGraph");
-  m_optMetSensAFR[i].name = _T("MetSensAFR");
-  m_optMetChokePos[i].name = _T("MetIACPos");
-  m_optMetGDPos[i].name = _T("MetGDPos");
-  m_optMetSynLoad[i].name = _T("MetSynLoad");
-  m_optMetInjTimB[i].name = _T("MetInjTimB");
-  m_optMetInjTimE[i].name = _T("MetInjTimE");
+  m_optMetRPM[i][0].name = _T("MetRPM");
+  m_optMetRPM[i][1].name = _T("GrhRPM");
+  m_optMetMAP[i][0].name = _T("MetMAP");
+  m_optMetMAP[i][1].name = _T("GrhMAP");
+  m_optMetVBat[i][0].name = _T("MetVBat");
+  m_optMetVBat[i][1].name = _T("GrhVBat");
+  m_optMetIgnTim[i][0].name = _T("MetIgnTim");
+  m_optMetIgnTim[i][1].name = _T("GrhIgnTim");
+  m_optMetCLT[i][0].name = _T("MetCLT");
+  m_optMetCLT[i][1].name = _T("GrhCLT");
+  m_optMetAddI1[i][0].name = _T("MetAddI1");
+  m_optMetAddI1[i][1].name = _T("GrhAddI1");
+  m_optMetAddI2[i][0].name = _T("MetAddI2");
+  m_optMetAddI2[i][1].name = _T("GrhAddI2");
+  m_optMetInjPW[i][0].name = _T("MetInjPW");
+  m_optMetInjPW[i][1].name = _T("GrhInjPW");
+  m_optMetIAT[i][0].name = _T("MetIAT");
+  m_optMetIAT[i][1].name = _T("GrhIAT");
+  m_optMetEGOCorr[i][0].name = _T("MetEGOCorr");
+  m_optMetEGOCorr[i][1].name = _T("GrhEGOCorr");
+  m_optMetTPS[i][0].name = _T("MetTPS");
+  m_optMetTPS[i][1].name = _T("GrhTPS");
+  m_optMetAirFlow[i][0].name = _T("MetAirFlow");
+  m_optMetAirFlow[i][1].name = _T("GrhAirFlow");
+  m_optMetVehicleSpeed[i][0].name = _T("MetVehicleSpeed");
+  m_optMetVehicleSpeed[i][1].name = _T("GrhVehicleSpeed");
+  m_optMetTPSDot[i][0].name = _T("MetTPSDot");
+  m_optMetTPSDot[i][1].name = _T("GrhTPSDot");
+  m_optMetMAP2[i][0].name = _T("MetMAP2");
+  m_optMetMAP2[i][1].name = _T("GrhMAP2");
+  m_optMetMAPD[i][0].name = _T("MetMAPD");
+  m_optMetMAPD[i][1].name = _T("GrhMAPD");
+  m_optMetTmp2[i][0].name = _T("MetTmp2");
+  m_optMetTmp2[i][1].name = _T("GrhTmp2");
+  m_optMetFuelConsum[i][0].name = _T("MetFuelConsum");
+  m_optMetFuelConsum[i][1].name = _T("GrhFuelConsum");
+  m_optMetKnockRetard[i][0].name = _T("MetKnockRetard");
+  m_optMetKnockRetard[i][1].name = _T("GrhKnockRetard");
+  m_optMetKnockGraph[i][0].name = _T("MetKnockGraph");
+  m_optMetKnockGraph[i][1].name = _T("GrhKnockGraph");
+  m_optMetSensAFR[i][0].name = _T("MetSensAFR");
+  m_optMetSensAFR[i][1].name = _T("GrhSensAFR");
+  m_optMetChokePos[i][0].name = _T("MetIACPos");
+  m_optMetChokePos[i][1].name = _T("GrhIACPos");
+  m_optMetGDPos[i][0].name = _T("MetGDPos");
+  m_optMetGDPos[i][1].name = _T("GrhGDPos");
+  m_optMetSynLoad[i][0].name = _T("MetSynLoad");
+  m_optMetSynLoad[i][1].name = _T("GrhSynLoad");
+  m_optMetInjTimB[i][0].name = _T("MetInjTimB");
+  m_optMetInjTimB[i][1].name = _T("GrhInjTimB");
+  m_optMetInjTimE[i][0].name = _T("MetInjTimE");
+  m_optMetInjTimE[i][1].name = _T("GrhInjTimE");
  }
 
  //заполняем базу данных допустимых скоростей для COM-порта
@@ -488,6 +538,28 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optMAPAverage, _T("4"), 0, 16);
  fs.ReadInt(m_optAI1Average, _T("4"), 0, 16);
  fs.ReadInt(m_optTPSAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optKnockAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optIgnTimAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optCLTAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optAddI2Average, _T("4"), 0, 16);
+ fs.ReadInt(m_optInjPWAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optIATAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optEGOCorrAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optAirFlowAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optVehicleSpeedAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optTPSDotAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optMAP2Average, _T("4"), 0, 16);
+ fs.ReadInt(m_optMAPDAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optTmp2Average, _T("4"), 0, 16);
+ fs.ReadInt(m_optFuelConsumAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optKnockRetardAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optSensAFRAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optChokePosAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optGDPosAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optSynLoadAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optInjTimBAverage, _T("4"), 0, 16);
+ fs.ReadInt(m_optInjTimEAverage, _T("4"), 0, 16);
+
  fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
  fs.ReadInt(m_optPulsesPer1Km, _T("6000"), 0, 60000);
@@ -499,6 +571,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optMetersDragNDrop, _T("1"), 0, 1);
  fs.ReadInt(m_optIndicatorsDragNDrop, _T("1"), 0, 1);
  fs.ReadInt(m_optFFFConst, _T("16000"), 1000, 32000);
+ fs.ReadInt(m_optShowGraphCursor, _T("1"), 0, 1);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -625,38 +698,41 @@ bool CAppSettingsModel::ReadSettings(void)
  ic.ReadColor(m_optColEpas_i,_T("00FF00"));
 
  //Meters
- const TCHAR* metDef[2][26] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
-                               {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
+ const TCHAR* metDef[2][26*2] = {{_T("0"),_T("1"),_T("2"),_T("3"),_T("4"),_T("5"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")},
+                                 {_T("0"),_T("1"),_T("2"),_T("5"),_T("6"),_T("7"),_T("3"),_T(""),_T("4"),_T("8"),_T("9"),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T(""),_T("")}};
  for(int i = 0; i < 2; ++i)
  {
   IniIO mm(IniFileName, m_Name_Meters_Section[i]);
   mm.ReadInt(m_optMetRows[i],_T("2"), 1, 10);
-  mm.ReadInt(m_optMetRPM[i],metDef[i][0], 0, 32, true);
-  mm.ReadInt(m_optMetMAP[i],metDef[i][1], 0, 32, true);
-  mm.ReadInt(m_optMetVBat[i],metDef[i][2], 0, 32, true);
-  mm.ReadInt(m_optMetIgnTim[i],metDef[i][3], 0, 32, true);
-  mm.ReadInt(m_optMetTPS[i],metDef[i][4], 0, 32, true);
-  mm.ReadInt(m_optMetCLT[i],metDef[i][5], 0, 32, true);
-  mm.ReadInt(m_optMetAddI1[i],metDef[i][6], 0, 32, true);
-  mm.ReadInt(m_optMetAddI2[i],metDef[i][7], 0, 32, true);
-  mm.ReadInt(m_optMetInjPW[i],metDef[i][8], 0, 32, true);
-  mm.ReadInt(m_optMetIAT[i],metDef[i][9], 0, 32, true);
-  mm.ReadInt(m_optMetEGOCorr[i],metDef[i][10], 0, 32, true);
-  mm.ReadInt(m_optMetAirFlow[i],metDef[i][11], 0, 32, true);
-  mm.ReadInt(m_optMetVehicleSpeed[i],metDef[i][12], 0, 32, true);
-  mm.ReadInt(m_optMetTPSDot[i],metDef[i][13], 0, 32, true);
-  mm.ReadInt(m_optMetMAP2[i],metDef[i][14], 0, 32, true);
-  mm.ReadInt(m_optMetMAPD[i],metDef[i][15], 0, 32, true);
-  mm.ReadInt(m_optMetTmp2[i],metDef[i][16], 0, 32, true);
-  mm.ReadInt(m_optMetFuelConsum[i],metDef[i][17], 0, 32, true);
-  mm.ReadInt(m_optMetKnockRetard[i],metDef[i][18], 0, 32, true);
-  mm.ReadInt(m_optMetKnockGraph[i],metDef[i][19], 0, 32, true);
-  mm.ReadInt(m_optMetSensAFR[i],metDef[i][20], 0, 32, true);
-  mm.ReadInt(m_optMetChokePos[i],metDef[i][21], 0, 32, true);
-  mm.ReadInt(m_optMetGDPos[i],metDef[i][22], 0, 32, true);
-  mm.ReadInt(m_optMetSynLoad[i],metDef[i][23], 0, 32, true);
-  mm.ReadInt(m_optMetInjTimB[i],metDef[i][24], 0, 32, true);
-  mm.ReadInt(m_optMetInjTimE[i],metDef[i][25], 0, 32, true);
+  for (int g = 0, d = 0; g < 2; ++g)
+  {
+   mm.ReadInt(m_optMetRPM[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetMAP[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetVBat[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetIgnTim[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetTPS[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetCLT[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetAddI1[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetAddI2[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetInjPW[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetIAT[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetEGOCorr[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetAirFlow[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetVehicleSpeed[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetTPSDot[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetMAP2[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetMAPD[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetTmp2[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetFuelConsum[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetKnockRetard[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetKnockGraph[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetSensAFR[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetChokePos[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetGDPos[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetSynLoad[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetInjTimB[i][g],metDef[i][d++], 0, 32, true);
+   mm.ReadInt(m_optMetInjTimE[i][g],metDef[i][d++], 0, 32, true);
+  }
  }
 
  //Auto tune
@@ -984,34 +1060,160 @@ bool CAppSettingsModel::WriteSettings(void)
  fs.WriteInt(m_optShowExFixtures); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving avarage filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for RPM values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений оборотов. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optRPMAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving avarage filter used for voltage values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for voltage values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений напряжения борт.сети. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optVoltAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving avarage filter used for MAP values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for MAP values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДАД. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optMAPAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving avarage filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for ADD_I1 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ADD_I1. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optAI1Average); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
-  fs.WriteComment(_T("Size of the moving avarage filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+  fs.WriteComment(_T("Size of the moving average filter used for TPS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
  else
   fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДПДЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
  fs.WriteInt(m_optTPSAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for knock values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений сигнала детонации. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optKnockAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for ignition timing values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений УОЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optIgnTimAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for CLT values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТОЖ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optCLTAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for ADD_I2 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ADD_I2. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optAddI2Average); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for inj. PW values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений длит. впрыска. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optInjPWAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for IAT values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТВ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optIATAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for lambda correction values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений коррекции по ДК. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optEGOCorrAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for air flow values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений расхода воздуха. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optAirFlowAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for VSS values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений скорости автомобиля. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optVehicleSpeedAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for TPS dot values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений скорости изменения положения ДЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optTPSDotAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for MAP2 values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДАД2. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optMAP2Average); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for diff. pressure values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений дифф. давления. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optMAPDAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for gas temperature values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений ДТГ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optTmp2Average); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for fuel consumption values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений расхода топлива. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optFuelConsumAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for knock retard values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений коррекции УОЗ по детонации. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optKnockRetardAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for AFR values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений состава смеси. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optSensAFRAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for choke position values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений положения ВЗ. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optChokePosAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for gas dispenser position values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений положения газового дозатора. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optGDPosAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for synthetic load values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений синтетической нагрузки. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optSynLoadAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for begin inj. timing values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений фазы начала впрыска. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optInjTimBAverage); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Size of the moving average filter used for end inj. timing values. Set to non-zero value if you want avaraging to be performed in the SECU-3 Manager."));
+ else
+  fs.WriteComment(_T("Размер ядра фильтра \"скользящее среднее\" используемого для усреднения значений фазы конца впрыска. Установите значение больше 0, если вы хотите, чтобы усреднение производилось в SECU-3 Manager."));
+ fs.WriteInt(m_optInjTimEAverage); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the RPM gauge (e.g. 6000 min-1)."));
@@ -1078,6 +1280,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Константа (число импульсов на 1Л сгоревшего топлива), используемая при вычислении расхода топлива (Л/100км) на основе значения, передаваемого прошивкой."));
  fs.WriteInt(m_optFFFConst); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Display cursor on graphics in the log player. 0 - don't display, 1 - display"));
+ else
+  fs.WriteComment(_T("Отображать курсор на графиках в проигрывателе. 0 - не отображать, 1 - отображать"));
+ fs.WriteInt(m_optShowGraphCursor); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -1671,135 +1879,138 @@ bool CAppSettingsModel::WriteSettings(void)
   else
    mm.WriteInt(m_optMetRows[i], _T("Кол-во строк в панели виртуальных приборов"));
 
+  for(int g = 0; g < 2; ++g)
+  {
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetRPM[i], _T("RPM, speed, distance"));
+   mm.WriteInt(m_optMetRPM[i][g], _T("RPM, speed, distance"));
   else
-   mm.WriteInt(m_optMetRPM[i], _T("Обороты, скорость, расстояние"));
+   mm.WriteInt(m_optMetRPM[i][g], _T("Обороты, скорость, расстояние"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAP[i], _T("MAP sensor"));
+   mm.WriteInt(m_optMetMAP[i][g], _T("MAP sensor"));
   else
-   mm.WriteInt(m_optMetMAP[i], _T("ДАД"));
+   mm.WriteInt(m_optMetMAP[i][g], _T("ДАД"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetVBat[i], _T("Board voltage"));
+   mm.WriteInt(m_optMetVBat[i][g], _T("Board voltage"));
   else
-   mm.WriteInt(m_optMetVBat[i], _T("Напряжение бортовой сети"));
+   mm.WriteInt(m_optMetVBat[i][g], _T("Напряжение бортовой сети"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetIgnTim[i], _T("Ignition timing"));
+   mm.WriteInt(m_optMetIgnTim[i][g], _T("Ignition timing"));
   else
-   mm.WriteInt(m_optMetIgnTim[i], _T("УОЗ"));
+   mm.WriteInt(m_optMetIgnTim[i][g], _T("УОЗ"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTPS[i], _T("TPS sensor"));
+   mm.WriteInt(m_optMetTPS[i][g], _T("TPS sensor"));
   else
-   mm.WriteInt(m_optMetTPS[i], _T("ДПДЗ, расход воздуха"));
+   mm.WriteInt(m_optMetTPS[i][g], _T("ДПДЗ, расход воздуха"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetCLT[i], _T("CLT sensor"));
+   mm.WriteInt(m_optMetCLT[i][g], _T("CLT sensor"));
   else
-   mm.WriteInt(m_optMetCLT[i], _T("ДТОЖ"));
+   mm.WriteInt(m_optMetCLT[i][g], _T("ДТОЖ"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAddI1[i], _T("ADD_I1 input"));
+   mm.WriteInt(m_optMetAddI1[i][g], _T("ADD_I1 input"));
   else
-   mm.WriteInt(m_optMetAddI1[i], _T("Вход ADD_I1"));
+   mm.WriteInt(m_optMetAddI1[i][g], _T("Вход ADD_I1"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAddI2[i], _T("ADD_I2 input"));
+   mm.WriteInt(m_optMetAddI2[i][g], _T("ADD_I2 input"));
   else
-   mm.WriteInt(m_optMetAddI2[i], _T("Вход ADD_I2"));
+   mm.WriteInt(m_optMetAddI2[i][g], _T("Вход ADD_I2"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjPW[i], _T("Injection pulse width"));
+   mm.WriteInt(m_optMetInjPW[i][g], _T("Injection pulse width"));
   else
-   mm.WriteInt(m_optMetInjPW[i], _T("Длительность впрыска"));
+   mm.WriteInt(m_optMetInjPW[i][g], _T("Длительность впрыска"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetIAT[i], _T("MAT sensor"));
+   mm.WriteInt(m_optMetIAT[i][g], _T("MAT sensor"));
   else
-   mm.WriteInt(m_optMetIAT[i], _T("ДТВ"));
+   mm.WriteInt(m_optMetIAT[i][g], _T("ДТВ"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetEGOCorr[i], _T("Lambda correction"));
+   mm.WriteInt(m_optMetEGOCorr[i][g], _T("Lambda correction"));
   else
-   mm.WriteInt(m_optMetEGOCorr[i], _T("Лямбда коррекция"));
+   mm.WriteInt(m_optMetEGOCorr[i][g], _T("Лямбда коррекция"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetAirFlow[i], _T("Air flow"));
+   mm.WriteInt(m_optMetAirFlow[i][g], _T("Air flow"));
   else
-   mm.WriteInt(m_optMetAirFlow[i], _T("Расход воздуха"));
+   mm.WriteInt(m_optMetAirFlow[i][g], _T("Расход воздуха"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetVehicleSpeed[i], _T("Vehicle spped"));
+   mm.WriteInt(m_optMetVehicleSpeed[i][g], _T("Vehicle spped"));
   else
-   mm.WriteInt(m_optMetVehicleSpeed[i], _T("Скорость авто."));
+   mm.WriteInt(m_optMetVehicleSpeed[i][g], _T("Скорость авто."));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTPSDot[i], _T("TPS speed"));
+   mm.WriteInt(m_optMetTPSDot[i][g], _T("TPS speed"));
   else
-   mm.WriteInt(m_optMetTPSDot[i], _T("Скорость ДПДЗ (d%/dt)"));
+   mm.WriteInt(m_optMetTPSDot[i][g], _T("Скорость ДПДЗ (d%/dt)"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAP2[i], _T("MAP2 sensor"));
+   mm.WriteInt(m_optMetMAP2[i][g], _T("MAP2 sensor"));
   else
-   mm.WriteInt(m_optMetMAP2[i], _T("Датчик MAP2"));
+   mm.WriteInt(m_optMetMAP2[i][g], _T("Датчик MAP2"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetMAPD[i], _T("Diff. pressure"));
+   mm.WriteInt(m_optMetMAPD[i][g], _T("Diff. pressure"));
   else
-   mm.WriteInt(m_optMetMAPD[i], _T("Дифф. давление"));
+   mm.WriteInt(m_optMetMAPD[i][g], _T("Дифф. давление"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetTmp2[i], _T("TMP2 sensor"));
+   mm.WriteInt(m_optMetTmp2[i][g], _T("TMP2 sensor"));
   else
-   mm.WriteInt(m_optMetTmp2[i], _T("Датчик TMP2"));
+   mm.WriteInt(m_optMetTmp2[i][g], _T("Датчик TMP2"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetFuelConsum[i], _T("Fuel consumption"));
+   mm.WriteInt(m_optMetFuelConsum[i][g], _T("Fuel consumption"));
   else
-   mm.WriteInt(m_optMetFuelConsum[i], _T("Расход топлива"));
+   mm.WriteInt(m_optMetFuelConsum[i][g], _T("Расход топлива"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetKnockRetard[i], _T("Knock retard"));
+   mm.WriteInt(m_optMetKnockRetard[i][g], _T("Knock retard"));
   else
-   mm.WriteInt(m_optMetKnockRetard[i], _T("Коррекция УОЗ по ДД"));
+   mm.WriteInt(m_optMetKnockRetard[i][g], _T("Коррекция УОЗ по ДД"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetKnockGraph[i], _T("Knock graph"));
+   mm.WriteInt(m_optMetKnockGraph[i][g], _T("Knock signal"));
   else
-   mm.WriteInt(m_optMetKnockGraph[i], _T("График детонации"));
+   mm.WriteInt(m_optMetKnockGraph[i][g], _T("Сигнал детонации"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetSensAFR[i], _T("AFR sensor"));
+   mm.WriteInt(m_optMetSensAFR[i][g], _T("AFR sensor"));
   else
-   mm.WriteInt(m_optMetSensAFR[i], _T("Воздух/топливо с ДК"));
+   mm.WriteInt(m_optMetSensAFR[i][g], _T("Воздух/топливо с ДК"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetChokePos[i], _T("Choke/IAC position"));
+   mm.WriteInt(m_optMetChokePos[i][g], _T("Choke/IAC position"));
   else
-   mm.WriteInt(m_optMetChokePos[i], _T("Положение ВЗ/РДВ"));
+   mm.WriteInt(m_optMetChokePos[i][g], _T("Положение ВЗ/РДВ"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetGDPos[i], _T("Gas valve position"));
+   mm.WriteInt(m_optMetGDPos[i][g], _T("Gas valve position"));
   else
-   mm.WriteInt(m_optMetGDPos[i], _T("Положение дозатора газа"));
+   mm.WriteInt(m_optMetGDPos[i][g], _T("Положение дозатора газа"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetSynLoad[i], _T("Synthetic load"));
+   mm.WriteInt(m_optMetSynLoad[i][g], _T("Synthetic load"));
   else
-   mm.WriteInt(m_optMetSynLoad[i], _T("Синтетическая нагрузка"));
+   mm.WriteInt(m_optMetSynLoad[i][g], _T("Синтетическая нагрузка"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjTimB[i], _T("Begin phase of injection pulse"));
+   mm.WriteInt(m_optMetInjTimB[i][g], _T("Begin phase of injection pulse"));
   else
-   mm.WriteInt(m_optMetInjTimB[i], _T("Фаза начала впрыска"));
+   mm.WriteInt(m_optMetInjTimB[i][g], _T("Фаза начала впрыска"));
 
   if (m_optInterfaceLang.value == IL_ENGLISH)
-   mm.WriteInt(m_optMetInjTimE[i], _T("End phase of injection pulse"));
+   mm.WriteInt(m_optMetInjTimE[i][g], _T("End phase of injection pulse"));
   else
-   mm.WriteInt(m_optMetInjTimE[i], _T("Фаза конца впрыска"));
+   mm.WriteInt(m_optMetInjTimE[i][g], _T("Фаза конца впрыска"));
+  }
  }
 
  IniIO at(IniFileName, m_Name_AutoTune_Section);
@@ -2738,6 +2949,111 @@ int CAppSettingsModel::GetTPSAverage(void) const
  return m_optTPSAverage.value;
 }
 
+int CAppSettingsModel::GetKnockAverage(void) const
+{
+ return m_optKnockAverage.value;
+}
+
+int CAppSettingsModel::GetIgnTimAverage(void) const
+{
+ return m_optIgnTimAverage.value;
+}
+
+int CAppSettingsModel::GetCLTAverage(void) const
+{
+ return m_optCLTAverage.value;
+}
+
+int CAppSettingsModel::GetAddI2Average(void) const
+{
+ return m_optAddI2Average.value;
+}
+
+int CAppSettingsModel::GetInjPWAverage(void) const
+{
+ return m_optInjPWAverage.value;
+}
+
+int CAppSettingsModel::GetIATAverage(void) const
+{
+ return m_optIATAverage.value;
+}
+
+int CAppSettingsModel::GetEGOCorrAverage(void) const
+{
+ return m_optEGOCorrAverage.value;
+}
+
+int CAppSettingsModel::GetAirFlowAverage(void) const
+{
+ return m_optAirFlowAverage.value;
+}
+
+int CAppSettingsModel::GetVehicleSpeedAverage(void) const
+{
+ return m_optVehicleSpeedAverage.value;
+}
+
+int CAppSettingsModel::GetTPSDotAverage(void) const
+{
+ return m_optTPSDotAverage.value;
+}
+
+int CAppSettingsModel::GetMAP2Average(void) const
+{
+ return m_optMAP2Average.value;
+}
+
+int CAppSettingsModel::GetMAPDAverage(void) const
+{
+ return m_optMAPDAverage.value;
+}
+
+int CAppSettingsModel::GetTmp2Average(void) const
+{
+ return m_optTmp2Average.value;
+}
+
+int CAppSettingsModel::GetFuelConsumAverage(void) const
+{
+ return m_optFuelConsumAverage.value;
+}
+
+int CAppSettingsModel::GetKnockRetardAverage(void) const
+{
+ return m_optKnockRetardAverage.value;
+}
+
+int CAppSettingsModel::GetSensAFRAverage(void) const
+{
+ return m_optSensAFRAverage.value;
+}
+
+int CAppSettingsModel::GetChokePosAverage(void) const
+{
+ return m_optChokePosAverage.value;
+}
+
+int CAppSettingsModel::GetGDPosAverage(void) const
+{
+ return m_optGDPosAverage.value;
+}
+
+int CAppSettingsModel::GetSynLoadAverage(void) const
+{
+ return m_optSynLoadAverage.value;
+}
+
+int CAppSettingsModel::GetInjTimBAverage(void) const
+{
+ return m_optInjTimBAverage.value;
+}
+
+int CAppSettingsModel::GetInjTimEAverage(void) const
+{
+ return m_optInjTimEAverage.value;
+}
+
 bool CAppSettingsModel::GetAllowVisualTheme(void) const
 {
  return m_optAllowVisualTheme.value;
@@ -2814,71 +3130,80 @@ void CAppSettingsModel::SetIndicatorsConfig(const IndicatorsCfg& i_cfg)
  }
 }
 
-void CAppSettingsModel::GetMetersConfig(MetersCfg& o_cfg) const
+static void _cpyMetersConfig(int* opt, const OptField_t<int>* mbr)
+{
+ for(int g = 0; g < 2; ++g) opt[g] = mbr[g].value;
+}
+static void _cpyMetersConfig(const int* opt, OptField_t<int>* mbr)
+{
+ for(int g = 0; g < 2; ++g) mbr[g].value = opt[g];
+}
+
+void CAppSettingsModel::GetMetersConfig(MetersCfg* o_cfg) const
 {
  for(int i = 0; i < 2; ++i)
  {
-  o_cfg.m_optMetRows[i] = m_optMetRows[i].value; 
-  o_cfg.m_optMetRPM[i] = m_optMetRPM[i].value;
-  o_cfg.m_optMetMAP[i] = m_optMetMAP[i].value;
-  o_cfg.m_optMetVBat[i] = m_optMetVBat[i].value;
-  o_cfg.m_optMetIgnTim[i] = m_optMetIgnTim[i].value;
-  o_cfg.m_optMetCLT[i] = m_optMetCLT[i].value;
-  o_cfg.m_optMetAddI1[i] = m_optMetAddI1[i].value;
-  o_cfg.m_optMetAddI2[i] = m_optMetAddI2[i].value;
-  o_cfg.m_optInjPW[i] = m_optMetInjPW[i].value;
-  o_cfg.m_optMetIAT[i] = m_optMetIAT[i].value;
-  o_cfg.m_optMetEGOCorr[i] = m_optMetEGOCorr[i].value;
-  o_cfg.m_optMetTPS[i] = m_optMetTPS[i].value;
-  o_cfg.m_optMetAirFlow[i] = m_optMetAirFlow[i].value;
-  o_cfg.m_optMetVehicleSpeed[i] = m_optMetVehicleSpeed[i].value;
-  o_cfg.m_optMetTPSDot[i] = m_optMetTPSDot[i].value;
-  o_cfg.m_optMetMAP2[i] = m_optMetMAP2[i].value;
-  o_cfg.m_optMetMAPD[i] = m_optMetMAPD[i].value;
-  o_cfg.m_optMetTmp2[i] = m_optMetTmp2[i].value;
-  o_cfg.m_optMetFuelConsum[i] = m_optMetFuelConsum[i].value;
-  o_cfg.m_optMetKnockRetard[i] = m_optMetKnockRetard[i].value;
-  o_cfg.m_optMetKnockGraph[i] = m_optMetKnockGraph[i].value;
-  o_cfg.m_optMetSensAFR[i] = m_optMetSensAFR[i].value;
-  o_cfg.m_optMetChokePos[i] = m_optMetChokePos[i].value;
-  o_cfg.m_optMetGDPos[i] = m_optMetGDPos[i].value;
-  o_cfg.m_optMetSynLoad[i] = m_optMetSynLoad[i].value;
-  o_cfg.m_optMetInjTimB[i] = m_optMetInjTimB[i].value;
-  o_cfg.m_optMetInjTimE[i] = m_optMetInjTimE[i].value;
+  o_cfg[i].m_optMetRows = m_optMetRows[i].value;
+  _cpyMetersConfig(o_cfg[i].m_optMetRPM, &m_optMetRPM[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAP, &m_optMetMAP[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVBat, &m_optMetVBat[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetCLT, &m_optMetCLT[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetIAT, &m_optMetIAT[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTPS, &m_optMetTPS[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
+  _cpyMetersConfig(o_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
  }
 }
 
-void CAppSettingsModel::SetMetersConfig(const MetersCfg& i_cfg)
+void CAppSettingsModel::SetMetersConfig(const MetersCfg* i_cfg)
 {
  for(int i = 0; i < 2; ++i)
  {
-  m_optMetRows[i].value = i_cfg.m_optMetRows[i];
-  m_optMetRPM[i].value = i_cfg.m_optMetRPM[i];
-  m_optMetMAP[i].value = i_cfg.m_optMetMAP[i];
-  m_optMetVBat[i].value = i_cfg.m_optMetVBat[i];
-  m_optMetIgnTim[i].value = i_cfg.m_optMetIgnTim[i];
-  m_optMetCLT[i].value = i_cfg.m_optMetCLT[i];
-  m_optMetAddI1[i].value = i_cfg.m_optMetAddI1[i];
-  m_optMetAddI2[i].value = i_cfg.m_optMetAddI2[i];
-  m_optMetInjPW[i].value = i_cfg.m_optInjPW[i];
-  m_optMetIAT[i].value = i_cfg.m_optMetIAT[i];
-  m_optMetEGOCorr[i].value = i_cfg.m_optMetEGOCorr[i];
-  m_optMetTPS[i].value = i_cfg.m_optMetTPS[i];
-  m_optMetAirFlow[i].value = i_cfg.m_optMetAirFlow[i];
-  m_optMetVehicleSpeed[i].value = i_cfg.m_optMetVehicleSpeed[i];
-  m_optMetTPSDot[i].value = i_cfg.m_optMetTPSDot[i];
-  m_optMetMAP2[i].value = i_cfg.m_optMetMAP2[i];
-  m_optMetMAPD[i].value = i_cfg.m_optMetMAPD[i];
-  m_optMetTmp2[i].value = i_cfg.m_optMetTmp2[i];
-  m_optMetFuelConsum[i].value = i_cfg.m_optMetFuelConsum[i];
-  m_optMetKnockRetard[i].value = i_cfg.m_optMetKnockRetard[i];
-  m_optMetKnockGraph[i].value = i_cfg.m_optMetKnockGraph[i];
-  m_optMetSensAFR[i].value = i_cfg.m_optMetSensAFR[i];
-  m_optMetChokePos[i].value = i_cfg.m_optMetChokePos[i];
-  m_optMetGDPos[i].value = i_cfg.m_optMetGDPos[i];
-  m_optMetSynLoad[i].value = i_cfg.m_optMetSynLoad[i];
-  m_optMetInjTimB[i].value = i_cfg.m_optMetInjTimB[i];
-  m_optMetInjTimE[i].value = i_cfg.m_optMetInjTimE[i];
+  m_optMetRows[i].value = i_cfg[i].m_optMetRows;
+  _cpyMetersConfig(i_cfg[i].m_optMetRPM, &m_optMetRPM[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAP, &m_optMetMAP[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVBat, &m_optMetVBat[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetIgnTim, &m_optMetIgnTim[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetCLT, &m_optMetCLT[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAddI1, &m_optMetAddI1[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAddI2, &m_optMetAddI2[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjPW, &m_optMetInjPW[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetIAT, &m_optMetIAT[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetEGOCorr, &m_optMetEGOCorr[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTPS, &m_optMetTPS[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetAirFlow, &m_optMetAirFlow[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetVehicleSpeed, &m_optMetVehicleSpeed[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTPSDot, &m_optMetTPSDot[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAP2, &m_optMetMAP2[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetMAPD, &m_optMetMAPD[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetTmp2, &m_optMetTmp2[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetFuelConsum, &m_optMetFuelConsum[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetKnockRetard, &m_optMetKnockRetard[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetKnockGraph, &m_optMetKnockGraph[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSensAFR, &m_optMetSensAFR[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetChokePos, &m_optMetChokePos[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetGDPos, &m_optMetGDPos[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetSynLoad, &m_optMetSynLoad[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimB, &m_optMetInjTimB[i][0]);
+  _cpyMetersConfig(i_cfg[i].m_optMetInjTimE, &m_optMetInjTimE[i][0]);
  }
 }
 
@@ -3346,4 +3671,9 @@ void CAppSettingsModel::GetFunctionality(Functionality& o_fnc) const
 bool CAppSettingsModel::GetShowGraphLabels(void) const
 {
  return m_optShowGraphLabels.value;
+}
+
+bool CAppSettingsModel::GetShowGraphsCursor(void)
+{
+ return m_optShowGraphCursor.value;
 }

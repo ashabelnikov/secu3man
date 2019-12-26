@@ -25,11 +25,26 @@
 
 #pragma once
 
+#include <vector>
+#include <utility>
 #include "common/GDIHelpers.h"
 #include "ui-core/AnalogMeterCtrl.h"
+#include "ui-core/OscillCtrl.h"
+
+
+typedef std::vector<std::pair<float, bool> > GraphVal_t;
 
 class MeasInstrBase
 {
+ float _averageVector(GraphVal_t* values)
+ {
+  ASSERT(values);
+  float sum = 0;
+  for (size_t i = 0; i < values->size(); ++i)    
+   sum+=(*values)[i].first;
+  return sum / values->size();
+ }
+
  public:
   MeasInstrBase() : m_metVal(NULL), m_tlpVal(NULL), m_trpVal(NULL), m_showTLP(false), m_showTRP(false), m_uiID(0) {};
   virtual ~MeasInstrBase()
@@ -56,33 +71,45 @@ class MeasInstrBase
   {
    if (m_meter.GetSafeHwnd())
     m_meter.MoveWindow(rect, redraw);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.MoveWindow(rect, redraw);
   }
 
   virtual void SetValues(void)
   {
    if (m_metVal)
-    m_meter.SetNeedleValue((double)(*m_metVal));
-
-   if (m_tlpVal)
-   {
-    CString str;
-    _TSTRING template_str = m_tlpFmt + m_tlpUnit;
-    str.Format(template_str.c_str(), *m_tlpVal);
-    m_meter.SetTLPane(str);
+   {    
+    if (m_meter.GetSafeHwnd())
+    { //meter mode
+     if (m_metVal->size())
+     {
+      m_meter.SetNeedleValue((double)_averageVector(m_metVal));    
+     }
+     if (m_tlpVal && m_tlpVal->size())
+     {
+      CString str;
+      _TSTRING template_str = m_tlpFmt + m_tlpUnit;
+      str.Format(template_str.c_str(), _averageVector(m_tlpVal));
+      m_meter.SetTLPane(str);
+     }
+     if (m_trpVal && m_trpVal->size())
+     {
+      CString str;
+      _TSTRING template_str = m_trpFmt + m_trpUnit;
+      str.Format(template_str.c_str(), _averageVector(m_trpVal));
+      m_meter.SetTRPane(str);
+     }
+     m_meter.Update();
+    }
+    else if (m_scope.GetSafeHwnd())
+    { //oscilloscope mode
+     for (size_t i = 0; i < m_metVal->size(); ++i) 
+      m_scope.AppendPoint((*m_metVal)[i].first, (*m_metVal)[i].second);
+    }
    }
-
-   if (m_trpVal)
-   {
-    CString str;
-    _TSTRING template_str = m_trpFmt + m_trpUnit;
-    str.Format(template_str.c_str(), *m_trpVal);
-    m_meter.SetTRPane(str);
-   }
-
-   m_meter.Update();
   }
 
-  virtual void BindVars(float* meter, float* tlpane, float* trpane)
+  virtual void BindVars(GraphVal_t* meter, GraphVal_t* tlpane, GraphVal_t* trpane)
   {
    m_metVal = meter, m_tlpVal = tlpane, m_trpVal = trpane;
   }
@@ -90,25 +117,33 @@ class MeasInstrBase
   //скрытие/отображение прибора
   virtual void Show(bool show)
   {
-   m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
+   if (m_meter.GetSafeHwnd())
+    m_meter.ShowWindow((show) ? SW_SHOW : SW_HIDE);
+   else if (m_scope.GetSafeHwnd())
+    m_scope.ShowWindow((show) ? SW_SHOW : SW_HIDE);
   }
 
   //разрешение/запрещение прибора
   virtual void Enable(bool enable, bool redraw = true)
   {
-   m_meter.SetState(meter_needle, enable);
-   m_meter.SetState(meter_value, enable);
-   m_meter.SetState(meter_grid, enable);
-   m_meter.SetState(meter_labels, enable);
-   m_meter.SetState(meter_unit, enable);
-   m_meter.SetState(meter_tlpane, enable && m_showTLP);
-   m_meter.SetState(meter_trpane, enable && m_showTRP);
-   COLORREF bk_color;
-   m_meter.GetColor(meter_bground, &bk_color);
-   m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
+   if (m_meter.GetSafeHwnd())
+   {
+    m_meter.SetState(meter_needle, enable);
+    m_meter.SetState(meter_value, enable);
+    m_meter.SetState(meter_grid, enable);
+    m_meter.SetState(meter_labels, enable);
+    m_meter.SetState(meter_unit, enable);
+    m_meter.SetState(meter_tlpane, enable && m_showTLP);
+    m_meter.SetState(meter_trpane, enable && m_showTRP);
+    COLORREF bk_color;
+    m_meter.GetColor(meter_bground, &bk_color);
+    m_meter.SetColor(meter_bground, enable ? bk_color : ::GetSysColor(COLOR_BTNFACE));
 
-   if (redraw)
-    m_meter.Redraw();
+    if (redraw)
+     m_meter.Redraw();
+   }
+   else if (m_scope.GetSafeHwnd())
+    m_scope.EnableWindow(enable); 
   }
 
   //прибор видим или скрыт ?
@@ -162,6 +197,8 @@ class MeasInstrBase
   virtual void SetMeterUnit(const _TSTRING& metUnit)
   {
    m_meter.SetUnit(metUnit.c_str());
+   if (m_scope.GetSafeHwnd())
+    m_scope.SetUnitY(metUnit.c_str());
   }
 
   virtual void UpdateColors(void)
@@ -173,28 +210,54 @@ class MeasInstrBase
 
   virtual CRect GetWindowRect(bool screen = false)
   {
-   if (screen)
+   CRect rc;
+   if (m_meter.GetSafeHwnd())
    {
-    CRect rc;
-    m_meter.GetWindowRect(&rc);
-    return rc;
+    if (screen)
+    {
+     m_meter.GetWindowRect(&rc);
+     return rc;
+    }
+    else
+     return GDIHelpers::GetChildWndRect(&m_meter);
    }
-   else
-    return GDIHelpers::GetChildWndRect(&m_meter);
+   else if (m_scope.GetSafeHwnd())
+   {
+    if (screen)
+    {
+     m_scope.GetWindowRect(&rc);
+     return rc;
+    }
+    else
+     return GDIHelpers::GetChildWndRect(&m_scope);
+   }
+   return rc;
+  }
+
+  virtual void Reset(void)
+  {
+   if (m_scope.GetSafeHwnd())
+    m_scope.Reset();
+  }
+
+  virtual ShowCursor(bool show)
+  {
+   m_scope.ShowCursor(show);
   }
  
   UINT m_uiID;
 
 protected:
   CAnalogMeterCtrl m_meter;
+  COscillCtrl m_scope;
   _TSTRING m_tlpFmt;
   _TSTRING m_trpFmt;
   _TSTRING m_tlpUnit;
   _TSTRING m_trpUnit;
 
-  float* m_metVal;
-  float* m_tlpVal;
-  float* m_trpVal;
+  GraphVal_t* m_metVal;
+  GraphVal_t* m_tlpVal;
+  GraphVal_t* m_trpVal;
 
   bool m_showTLP;
   bool m_showTRP;

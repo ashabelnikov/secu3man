@@ -46,10 +46,10 @@ void CMIVoltmeter::Create(CWnd* pParent)
 {
  MeasInstrBase::Create(pParent, IDC_MI_VOLTMETER); //create window
 
- m_meter.SetRange (2.0, 18.0) ;
- m_meter.SetLabelsDecimals(1) ;
- m_meter.SetValueDecimals(2) ;
- m_meter.SetTitle(MLL::LoadString(IDS_MI_VOLTAGE_TITLE)) ;
+ m_meter.SetRange (2.0, 18.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(2);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_VOLTAGE_TITLE));
  m_meter.SetColor(meter_value,RGB(10,80,255));
  m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
  m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
@@ -61,4 +61,35 @@ void CMIVoltmeter::Create(CWnd* pParent)
  m_meter.SetNeedleValue(0.0);
  m_meter.Update();
  m_meter.SetMeterSize(130);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMIVoltmeterGraph::CMIVoltmeterGraph()
+{
+ //empty
+}
+
+CMIVoltmeterGraph::~CMIVoltmeterGraph()
+{
+ //empty
+}
+
+void CMIVoltmeterGraph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_VOLTMETERGRAPH));
+
+ // customize the control
+ m_scope.SetRange(2.0, 18, 1);
+ m_scope.SetGridNumberY(8);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_VOLTMETER_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
 }

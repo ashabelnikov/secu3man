@@ -38,8 +38,6 @@ class AFX_EXT_CLASS CMIInjTim : public MeasInstrBase
   //---------------------------------------
 
   void SetITMode(int mode);
- private:
-  void _GetITModeRange(int mode, float& y1, float& y2);
 };
 
 
@@ -57,6 +55,39 @@ class AFX_EXT_CLASS CMIInjTimE : public CMIInjTim
  public:
   CMIInjTimE() {}
   virtual ~CMIInjTimE() {}
+
+  virtual void Create(CWnd* pParent);
+};
+
+//-------------------------------------------------------------
+
+class AFX_EXT_CLASS CMIInjTimGraph : public MeasInstrBase
+{
+ public:
+  CMIInjTimGraph();
+  virtual ~CMIInjTimGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent, UINT id);
+  //---------------------------------------
+
+  void SetITMode(int mode);
+};
+
+class AFX_EXT_CLASS CMIInjTimBGraph : public CMIInjTimGraph
+{
+ public:
+  CMIInjTimBGraph() {}
+  virtual ~CMIInjTimBGraph() {}
+
+  virtual void Create(CWnd* pParent);
+};
+
+class AFX_EXT_CLASS CMIInjTimEGraph : public CMIInjTimGraph
+{
+ public:
+  CMIInjTimEGraph() {}
+  virtual ~CMIInjTimEGraph() {}
 
   virtual void Create(CWnd* pParent);
 };

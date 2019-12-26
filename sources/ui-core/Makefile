@@ -17,7 +17,7 @@ LFLAGS  = /nologo /machine:X86 /STACK:10000000 /release /dll /OUT:../../binaries
 # source files
 SOURCES = StdAfx.cpp AnalogMeter.cpp AnalogMeterCtrl.cpp ddx_helpers.cpp fnt_helpers.cpp \
   DialogWithAccelerators.cpp EditEx.cpp HeaderCtrlEx.cpp HotKeysManager.cpp HotKeysToCmdRouter.cpp \
-  ITabControllerEvent.cpp Label.cpp LEDIndicator.cpp TextPane.cpp StatusBarEx.cpp OScopeCtrl.cpp \
+  ITabControllerEvent.cpp Label.cpp LEDIndicator.cpp TextPane.cpp StatusBarEx.cpp OscillCtrl.cpp \
   ProgressCtrlEx.cpp SpinButtonctrlEx.cpp TabController.cpp TabDialog.cpp ToolTipCtrlEx.cpp \
   UpdatableDialog.cpp WindowSubClasser.cpp XBrowseForFolder.cpp uicore.cpp WndScroller.cpp \
   Chart2D.cpp MapEditorCtrl.cpp MultiLEDCtrl.cpp ScrlMessageBox.cpp ListCtrlEx.cpp ClickableBmp.cpp \

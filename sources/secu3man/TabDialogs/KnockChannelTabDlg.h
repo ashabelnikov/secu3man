@@ -35,7 +35,7 @@ class CChart2D;
 class CKnockContextMenuManager;
 class CKnockFrqCalcDlg;
 class CKnockPageDlg;
-class COScopeCtrl;
+class COscillCtrl;
 
 class CKnockChannelTabDlg : public CTabDialog
 {
@@ -119,7 +119,7 @@ class CKnockChannelTabDlg : public CTabDialog
   CButton  m_param_save_button;
   std::auto_ptr<CChart2D> mp_RTChart;
   CListCtrlEx m_RTList;
-  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
+  std::auto_ptr<COscillCtrl> mp_OScopeCtrl;
   std::auto_ptr<CKnockFrqCalcDlg> mp_knock_frq_calc_dlg;
   std::auto_ptr<CKnockContextMenuManager> mp_ContextMenuManager;
   CButton m_copy_to_attenuator_table_button;

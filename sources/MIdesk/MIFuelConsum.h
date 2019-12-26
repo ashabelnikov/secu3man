@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIFuelConsum : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIFuelConsumGraph : public MeasInstrBase
+{
+ public:
+  CMIFuelConsumGraph();
+  virtual ~CMIFuelConsumGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

@@ -32,6 +32,48 @@
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
 
+CMIKnock::CMIKnock()
+{
+ //empty
+}
+
+CMIKnock::~CMIKnock()
+{
+ //empty
+}
+
+void CMIKnock::Create(CWnd* pParent)
+{
+ MeasInstrBase::Create(pParent, IDC_MI_KNOCK); //create window
+
+ m_meter.SetRange (0.0, 5.0);
+ m_meter.SetLabelsDecimals(1);
+ m_meter.SetValueDecimals(3);
+ m_meter.SetTitle(MLL::LoadString(IDS_MI_KNOCK_TITLE));
+ m_meter.SetColor(meter_value,RGB(10,80,255));
+ m_meter.SetColor(meter_bground, GetSysColor(COLOR_BTNFACE));
+ m_meter.SetColor(meter_labels, GDIHelpers::InvColor(GetSysColor(COLOR_BTNFACE)));
+ m_meter.SetUnit(MLL::LoadString(IDS_MI_VOLTAGE_UNIT));
+ m_meter.SetTickNumber(21);
+ m_meter.AddAlertZone(0.0,0.5,RGB(40 , 80,220));
+ m_meter.AddAlertZone(0.5,1.0,RGB(60 ,100,180));
+ m_meter.AddAlertZone(1.0,1.5,RGB(80 ,120,160));
+ m_meter.AddAlertZone(1.5,2.0,RGB(100,140,140));
+ m_meter.AddAlertZone(2.0,2.5,RGB(120,160,120));
+ m_meter.AddAlertZone(2.5,3.0,RGB(140,180,100));
+ m_meter.AddAlertZone(3.0,3.5,RGB(160,160,100));
+ m_meter.AddAlertZone(3.5,4.0,RGB(180,140,100));
+ m_meter.AddAlertZone(4.0,4.5,RGB(200,120,100));
+ m_meter.AddAlertZone(4.5,5.0,RGB(230,100,100));
+ m_meter.SetNeedleValue(0.0);
+ m_meter.Update();
+ m_meter.SetMeterSize(130);
+}
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
 CMIKnockGraph::CMIKnockGraph()
 {
  //empty
@@ -50,43 +92,10 @@ void CMIKnockGraph::Create(CWnd* pParent)
 
  // customize the control
  m_scope.SetRange(0, 5.0, 1);
- m_scope.SetYUnits(MLL::LoadString(IDS_MI_KNOCKGRAPH_V_UNIT));
- m_scope.SetXUnits(MLL::LoadString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_KNOCKGRAPH_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
-}
-
-void CMIKnockGraph::SetValues(void)
-{
- if (m_metVal)
-  m_scope.AppendPoint(*m_metVal);
-}
-
- void CMIKnockGraph::Enable(bool enable, bool redraw /*= true*/)
- {
-  m_scope.EnableWindow(enable);
- }
-
-void CMIKnockGraph::Resize(const CRect& rect, bool redraw /*= true*/)
-{
- if (m_scope.GetSafeHwnd())
-  m_scope.MoveWindow(rect, redraw);
-}
-
-void CMIKnockGraph::Show(bool show)
-{
- m_scope.ShowWindow((show) ? SW_SHOW : SW_HIDE);
-}
-
-CRect CMIKnockGraph::GetWindowRect(bool screen /*= false*/)
-{
- if (screen)
- {
-  CRect rc;
-  m_scope.GetWindowRect(&rc);
-  return rc;
- }
- else
-  return GDIHelpers::GetChildWndRect(&m_scope);
 }

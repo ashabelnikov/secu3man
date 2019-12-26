@@ -31,7 +31,7 @@
 #include "ui-core/TabDialog.h"
 
 class CDiagnostContextMenuManager;
-class COScopeCtrl;
+class COscillCtrl;
 class CDevDiagInpsDlg;
 class CDevDiagOutsDlg;
 
@@ -157,8 +157,8 @@ class CDevDiagnostTabDlg : public CTabDialog
 
   void _InitializeOscilloscopeControls(void);
 
-  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl1;
-  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl2;
+  std::auto_ptr<COscillCtrl> mp_OScopeCtrl1;
+  std::auto_ptr<COscillCtrl> mp_OScopeCtrl2;
   std::auto_ptr<CDiagnostContextMenuManager> mp_ContextMenuManager;
   std::auto_ptr<CDevDiagInpsDlg> mp_inpsDlg;
   std::auto_ptr<CDevDiagOutsDlg> mp_outsDlg;

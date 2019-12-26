@@ -42,7 +42,7 @@ struct RingBuffItem
  void Append(float value) //update ring buffer
  {
   if (m_avnum > 0)
-  {     
+  {
    m_buff[m_idx++] = value;
    if (m_idx >= m_avnum)
     m_idx = 0;

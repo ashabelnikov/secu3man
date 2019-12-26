@@ -66,3 +66,34 @@ void CMISensAFR::Create(CWnd* pParent)
  m_meter.Update();
  m_meter.SetMeterSize(130);
 }
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMISensAFRGraph::CMISensAFRGraph()
+{
+ //empty
+}
+
+CMISensAFRGraph::~CMISensAFRGraph()
+{
+ //empty
+}
+
+void CMISensAFRGraph::Create(CWnd* pParent)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, IDC_MI_SENSAFRGRAPH));
+
+ // customize the control
+ m_scope.SetRange(6, 24, 0);
+ m_scope.SetGridNumberY(9);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_SENSAFRGRAPH_V_UNIT));
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}

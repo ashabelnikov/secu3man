@@ -38,3 +38,14 @@ class AFX_EXT_CLASS CMIInjPW : public MeasInstrBase
   virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIInjPWGraph : public MeasInstrBase
+{
+ public:
+  CMIInjPWGraph();
+  virtual ~CMIInjPWGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

@@ -36,7 +36,7 @@
 #include "MIDesk/LMDeskDlg.h"
 #include "MIDesk/MIDeskDlg.h"
 #include "MIDesk/CEDeskDlg.h"
-#include "ui-core/OScopeCtrl.h"
+#include "ui-core/OscillCtrl.h"
 #include "ui-core/ToolTipCtrlEx.h"
 
 using namespace std;
@@ -48,6 +48,7 @@ BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
  ON_WM_DROPFILES()
  ON_WM_SIZE()
  ON_WM_DESTROY()
+ ON_UPDATE_COMMAND_UI(IDC_LP_LOG_MARKS_DESK_CAPTION, OnUpdateControls)
 END_MESSAGE_MAP()
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
@@ -56,8 +57,8 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , mp_LMDeskDlg(new CLMDeskDlg())
 , mp_MIDeskDlg(new CMIDeskDlg())
 , mp_LPPanelDlg(new CLPControlPanelDlg)
-, mp_OScopeCtrl(new COScopeCtrl())
 , m_initialized(false)
+, m_all_enabled(false)
 {
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu())
@@ -111,13 +112,9 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  mp_LMDeskDlg->SetWindowPos(NULL,rect.TopLeft().x,rect.TopLeft().y,0,0,SWP_NOSIZE | SWP_NOZORDER | SWP_SHOWWINDOW);
  mp_LMDeskDlg->Show(true);
 
- //инициализируем осциллограф
- _InitializeOscilloscopeControl();
-
  //create a tooltip control and assign tooltips
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
- VERIFY(mp_ttc->AddWindow(mp_OScopeCtrl.get(), MLL::GetString(IDS_LP_SIGNAL_OSCILLOSCOPE_TT)));
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -133,35 +130,6 @@ void CLogPlayerTabDlg::OnDestroy()
 {
  Super::OnDestroy();
  m_initialized = false;
-}
-
-//инициализация осциллографа для сигнала ДД
-void CLogPlayerTabDlg::_InitializeOscilloscopeControl(void)
-{
- CRect rect;
- GetDlgItem(IDC_LP_SIGNAL_OSCILLOSCOPE_HOLDER)->GetWindowRect(rect);
- ScreenToClient(rect);
-
- // create the control
- mp_OScopeCtrl->Create(WS_VISIBLE | WS_CHILD | WS_DISABLED, rect, this);
-
- // customize the control
- mp_OScopeCtrl->SetRange(0.0, 5.0, 1);
- mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
- mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
- mp_OScopeCtrl->SetBackgroundColor(RGB(0, 64, 0));
- mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255));
- mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));
-}
-
-void CLogPlayerTabDlg::AppendKnockValue(double i_value, bool i_reverse)
-{
- mp_OScopeCtrl->AppendPoint(i_value, i_reverse);
-}
-
-void CLogPlayerTabDlg::ResetKnockOscilloscope(void)
-{
- mp_OScopeCtrl->Reset();
 }
 
 void CLogPlayerTabDlg::setOnDropFile(EventString OnFunction)
@@ -184,4 +152,15 @@ void CLogPlayerTabDlg::OnSize( UINT nType, int cx, int cy )
  }
 
  Super::OnSize(nType, cx, cy);
+}
+
+void CLogPlayerTabDlg::OnUpdateControls(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(m_all_enabled);
+}
+
+void CLogPlayerTabDlg::EnableAll(bool i_enable)
+{
+ m_all_enabled = i_enable;
+ UpdateDialogControls(this,TRUE);
 }

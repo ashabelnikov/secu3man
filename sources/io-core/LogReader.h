@@ -92,4 +92,5 @@ class IOCORE_API LogReader
   char m_csv_separating_symbol;
   char m_csv_data_template[1024];
   unsigned long m_fileOffset;
+  char *mp_recBuff;
 };

@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMISensAFR : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMISensAFRGraph : public MeasInstrBase
+{
+ public:
+  CMISensAFRGraph();
+  virtual ~CMISensAFRGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

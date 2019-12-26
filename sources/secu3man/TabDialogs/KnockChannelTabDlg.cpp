@@ -38,7 +38,7 @@
 #include "KnockContextMenuManager.h"
 #include "ParamDesk/Params/KnockPageDlg.h"
 #include "ui-core/Chart2D.h"
-#include "ui-core/OScopeCtrl.h"
+#include "ui-core/OScillCtrl.h"
 
 using namespace std;
 using namespace fastdelegate;
@@ -57,7 +57,7 @@ CKnockChannelTabDlg::CKnockChannelTabDlg(CWnd* pParent /*=NULL*/)
 , mp_RTChart(new CChart2D())
 , mp_knock_parameters_dlg(new CKnockPageDlg())
 , mp_knock_frq_calc_dlg(new CKnockFrqCalcDlg())
-, mp_OScopeCtrl(new COScopeCtrl())
+, mp_OScopeCtrl(new COscillCtrl())
 , mp_ContextMenuManager(new CKnockContextMenuManager())
 , m_all_enabled(true)
 , m_copy_to_attenuator_table_button_state(true)
@@ -342,8 +342,8 @@ void CKnockChannelTabDlg::_InitializeOscilloscopeControl(void)
 
  // customize the control
  mp_OScopeCtrl->SetRange(K_SIG_MIN, K_SIG_MAX, 1);
- mp_OScopeCtrl->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
- mp_OScopeCtrl->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl->SetUnitY(MLL::GetString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl->SetUnitX(MLL::GetString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl->SetBackgroundColor(RGB(0, 64, 0));
  mp_OScopeCtrl->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl->SetPlotColor(RGB(255, 255, 255));

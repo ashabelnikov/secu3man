@@ -37,3 +37,15 @@ class AFX_EXT_CLASS CMITPSDot : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMITPSDotGraph : public MeasInstrBase
+{
+ public:
+  CMITPSDotGraph();
+  virtual ~CMITPSDotGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+

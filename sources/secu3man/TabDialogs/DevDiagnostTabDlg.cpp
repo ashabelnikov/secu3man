@@ -33,7 +33,7 @@
 #include "common/DPIAware.h"
 #include "DiagnostContextMenuManager.h"
 #include "ui-core/ddx_helpers.h"
-#include "ui-core/OScopeCtrl.h"
+#include "ui-core/OScillCtrl.h"
 #include "DevDiagInpsDlg.h"
 #include "DevDiagOutsDlg.h"
 
@@ -71,8 +71,8 @@ END_MESSAGE_MAP()
 
 CDevDiagnostTabDlg::CDevDiagnostTabDlg(CWnd* pParent /*=NULL*/)
 : Super(CDevDiagnostTabDlg::IDD, pParent)
-, mp_OScopeCtrl1(new COScopeCtrl())
-, mp_OScopeCtrl2(new COScopeCtrl())
+, mp_OScopeCtrl1(new COscillCtrl())
+, mp_OScopeCtrl2(new COscillCtrl())
 , mp_ContextMenuManager(new CDiagnostContextMenuManager())
 , m_enable_diag_controls(false)
 , m_enable_enter_button(false)
@@ -361,8 +361,8 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
 
  // customize the control
  mp_OScopeCtrl1->SetRange(0.0, 5.0, 1);
- mp_OScopeCtrl1->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
- mp_OScopeCtrl1->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl1->SetUnitY(MLL::GetString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl1->SetUnitX(MLL::GetString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl1->SetBackgroundColor(RGB(0, 64, 0));
  mp_OScopeCtrl1->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl1->SetPlotColor(RGB(255, 255, 255));
@@ -375,8 +375,8 @@ void CDevDiagnostTabDlg::_InitializeOscilloscopeControls(void)
 
  // customize the control
  mp_OScopeCtrl2->SetRange(0.0, 5.0, 1);
- mp_OScopeCtrl2->SetYUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_V_UNIT));
- mp_OScopeCtrl2->SetXUnits(MLL::LoadString(IDS_KC_OSCILLOSCOPE_H_UNIT));
+ mp_OScopeCtrl2->SetUnitY(MLL::GetString(IDS_KC_OSCILLOSCOPE_V_UNIT));
+ mp_OScopeCtrl2->SetUnitX(MLL::GetString(IDS_KC_OSCILLOSCOPE_H_UNIT));
  mp_OScopeCtrl2->SetBackgroundColor(RGB(0, 64, 0));
  mp_OScopeCtrl2->SetGridColor(RGB(192, 192, 255));
  mp_OScopeCtrl2->SetPlotColor(RGB(255, 255, 255));

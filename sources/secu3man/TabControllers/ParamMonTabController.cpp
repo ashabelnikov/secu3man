@@ -343,11 +343,11 @@ void CParamMonTabController::ConfigureIndicators(void)
  mp_view->mp_MIDeskDlg->SetIndicatorsDragNDrop(mp_settings->GetIndicatorsDragNDrop());
 
  //meters
- MetersCfg cfg1;
+ MetersCfg cfg1[2];
  mp_settings->GetMetersConfig(cfg1);
- mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1.m_optMetRows[idx], cfg1.m_optMetRPM[idx], cfg1.m_optMetMAP[idx], cfg1.m_optMetVBat[idx], cfg1.m_optMetIgnTim[idx], cfg1.m_optMetCLT[idx], cfg1.m_optMetAddI1[idx], cfg1.m_optMetAddI2[idx],
-  cfg1.m_optInjPW[idx], cfg1.m_optMetIAT[idx], cfg1.m_optMetEGOCorr[idx], cfg1.m_optMetTPS[idx], cfg1.m_optMetAirFlow[idx], cfg1.m_optMetVehicleSpeed[idx], cfg1.m_optMetTPSDot[idx], cfg1.m_optMetMAP2[idx], cfg1.m_optMetMAPD[idx],
-  cfg1.m_optMetTmp2[idx], cfg1.m_optMetFuelConsum[idx], cfg1.m_optMetKnockRetard[idx], cfg1.m_optMetKnockGraph[idx], cfg1.m_optMetSensAFR[idx], cfg1.m_optMetChokePos[idx], cfg1.m_optMetGDPos[idx], cfg1.m_optMetSynLoad[idx], cfg1.m_optMetInjTimB[idx], cfg1.m_optMetInjTimE[idx],
+ mp_view->mp_MIDeskDlg->SetMetersCfg(cfg1[idx].m_optMetRows, cfg1[idx].m_optMetRPM, cfg1[idx].m_optMetMAP, cfg1[idx].m_optMetVBat, cfg1[idx].m_optMetIgnTim, cfg1[idx].m_optMetCLT, cfg1[idx].m_optMetAddI1, cfg1[idx].m_optMetAddI2,
+  cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2, cfg1[idx].m_optMetMAPD,
+  cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos, cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad, cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE,
   mp_settings->GetTitleFontSize(), mp_settings->GetValueFontSize(), mp_settings->GetPaneFontSize(), mp_settings->GetLabelFontSize());
 
  mp_view->mp_MIDeskDlg->SetMetersDragNDrop(mp_settings->GetMetersDragNDrop());
@@ -376,24 +376,15 @@ void CParamMonTabController::OnMIDeskSettingsChanged(void)
  mp_settings->SetIndicatorsDragNDrop(mp_view->mp_MIDeskDlg->GetIndicatorsDragNDrop());
 
  //meters
- MetersCfg cfg1;
+ MetersCfg cfg1[2];
  mp_settings->GetMetersConfig(cfg1);
 
- int MetRows, MetRPM, MetMAP, MetVBat, MetIgnTim, MetCLT, MetAddI1, MetAddI2,
-  MetInjPW, MetIAT, MetEGOCorr, MetTPS, MetAirFlow, MetVehicleSpeed, MetTPSDot, MetMAP2,
-  MetMapD, MetTmp2, MetFuelConsum, MetKnockRetard, MetKnockGraph, MetSensAFR, MetChokePos,
-  MetGDPos, MetSynLoad, MetInjTimB, MetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
+ int  TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize;
 
- mp_view->mp_MIDeskDlg->GetMetersCfg(MetRows, MetRPM, MetMAP, MetVBat, MetIgnTim, MetCLT, MetAddI1, MetAddI2,
-  MetInjPW, MetIAT, MetEGOCorr, MetTPS, MetAirFlow, MetVehicleSpeed, MetTPSDot, MetMAP2,
-  MetMapD, MetTmp2, MetFuelConsum, MetKnockRetard, MetKnockGraph, MetSensAFR, MetChokePos,
-  MetGDPos, MetSynLoad, MetInjTimB, MetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
-
- cfg1.m_optMetRows[idx] = MetRows;
- cfg1.m_optMetRPM[idx] = MetRPM, cfg1.m_optMetMAP[idx] = MetMAP, cfg1.m_optMetVBat[idx] = MetVBat, cfg1.m_optMetIgnTim[idx] = MetIgnTim, cfg1.m_optMetCLT[idx] = MetCLT, cfg1.m_optMetAddI1[idx] = MetAddI1, cfg1.m_optMetAddI2[idx] = MetAddI2,
- cfg1.m_optInjPW[idx] = MetInjPW, cfg1.m_optMetIAT[idx] = MetIAT, cfg1.m_optMetEGOCorr[idx] = MetEGOCorr, cfg1.m_optMetTPS[idx] = MetTPS, cfg1.m_optMetAirFlow[idx] = MetAirFlow, cfg1.m_optMetVehicleSpeed[idx] = MetVehicleSpeed, cfg1.m_optMetTPSDot[idx] = MetTPSDot, cfg1.m_optMetMAP2[idx] = MetMAP2, cfg1.m_optMetMAPD[idx] = MetMapD,
- cfg1.m_optMetTmp2[idx] = MetTmp2, cfg1.m_optMetFuelConsum[idx] = MetFuelConsum, cfg1.m_optMetKnockRetard[idx] = MetKnockRetard, cfg1.m_optMetKnockGraph[idx] = MetKnockGraph, cfg1.m_optMetSensAFR[idx] = MetSensAFR, cfg1.m_optMetChokePos[idx] = MetChokePos, cfg1.m_optMetGDPos[idx] = MetGDPos, cfg1.m_optMetSynLoad[idx] = MetSynLoad,
- cfg1.m_optMetInjTimB[idx] = MetInjTimB, cfg1.m_optMetInjTimE[idx] = MetInjTimE;
+ mp_view->mp_MIDeskDlg->GetMetersCfg(cfg1[idx].m_optMetRows, cfg1[idx].m_optMetRPM, cfg1[idx].m_optMetMAP, cfg1[idx].m_optMetVBat, cfg1[idx].m_optMetIgnTim, cfg1[idx].m_optMetCLT, cfg1[idx].m_optMetAddI1, cfg1[idx].m_optMetAddI2,
+  cfg1[idx].m_optMetInjPW, cfg1[idx].m_optMetIAT, cfg1[idx].m_optMetEGOCorr, cfg1[idx].m_optMetTPS, cfg1[idx].m_optMetAirFlow, cfg1[idx].m_optMetVehicleSpeed, cfg1[idx].m_optMetTPSDot, cfg1[idx].m_optMetMAP2,
+  cfg1[idx].m_optMetMAPD, cfg1[idx].m_optMetTmp2, cfg1[idx].m_optMetFuelConsum, cfg1[idx].m_optMetKnockRetard, cfg1[idx].m_optMetKnockGraph, cfg1[idx].m_optMetSensAFR, cfg1[idx].m_optMetChokePos,
+  cfg1[idx].m_optMetGDPos, cfg1[idx].m_optMetSynLoad, cfg1[idx].m_optMetInjTimB, cfg1[idx].m_optMetInjTimE, TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
 
  mp_settings->SetMetersConfig(cfg1);
  mp_settings->SetTitleFontSize(TitleFontSize);

@@ -117,11 +117,34 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
   virtual ESpeedUnit GetSpeedUnit(void) const;
+
   virtual int GetRPMAverage(void) const;
   virtual int GetVoltAverage(void) const;
   virtual int GetMAPAverage(void) const;
   virtual int GetAI1Average(void) const;
   virtual int GetTPSAverage(void) const;
+  virtual int GetKnockAverage(void) const;
+  virtual int GetIgnTimAverage(void) const;
+  virtual int GetCLTAverage(void) const;
+  virtual int GetAddI2Average(void) const;
+  virtual int GetInjPWAverage(void) const;
+  virtual int GetIATAverage(void) const;
+  virtual int GetEGOCorrAverage(void) const;
+  virtual int GetAirFlowAverage(void) const;
+  virtual int GetVehicleSpeedAverage(void) const;
+  virtual int GetTPSDotAverage(void) const;
+  virtual int GetMAP2Average(void) const;
+  virtual int GetMAPDAverage(void) const;
+  virtual int GetTmp2Average(void) const;
+  virtual int GetFuelConsumAverage(void) const;
+  virtual int GetKnockRetardAverage(void) const;
+  virtual int GetSensAFRAverage(void) const;
+  virtual int GetChokePosAverage(void) const;
+  virtual int GetGDPosAverage(void) const;
+  virtual int GetSynLoadAverage(void) const;
+  virtual int GetInjTimBAverage(void) const;
+  virtual int GetInjTimEAverage(void) const;
+
   virtual int GetTitleFontSize(void) const;
   virtual int GetValueFontSize(void) const;
   virtual int GetPaneFontSize(void) const;
@@ -140,6 +163,8 @@ class CAppSettingsModel : public ISettingsData
 
   virtual int GetFFFConst(void) const;
 
+  virtual bool GetShowGraphsCursor(void);
+
   //Debug features
   virtual bool GetUseDVFeatures(void) const;
   virtual int GetDVDeskUpdatePeriod(void) const;
@@ -151,8 +176,8 @@ class CAppSettingsModel : public ISettingsData
   ////////////////////////////////////////////////////
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const;
   virtual void SetIndicatorsConfig(const IndicatorsCfg& i_cfg);
-  virtual void GetMetersConfig(MetersCfg& o_cfg) const;
-  virtual void SetMetersConfig(const MetersCfg& i_cfg);
+  virtual void GetMetersConfig(MetersCfg* o_cfg) const;
+  virtual void SetMetersConfig(const MetersCfg* i_cfg);
 
   virtual void SetLamDelMap(float* map, float* rb, float* lb);
   virtual void GetLamDelMap(float* map, float* rb, float* lb);
@@ -252,11 +277,34 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optShowToolTips;
   OptField_t<bool> m_optShowExFixtures;
   OptField_t<bool> m_optHexDataMode;
+
   OptField_t<int>  m_optRPMAverage;
   OptField_t<int>  m_optVoltAverage;
   OptField_t<int>  m_optMAPAverage;
   OptField_t<int>  m_optAI1Average;
   OptField_t<int>  m_optTPSAverage;
+  OptField_t<int>  m_optKnockAverage;
+  OptField_t<int>  m_optIgnTimAverage;
+  OptField_t<int>  m_optCLTAverage;
+  OptField_t<int>  m_optAddI2Average;
+  OptField_t<int>  m_optInjPWAverage;
+  OptField_t<int>  m_optIATAverage;
+  OptField_t<int>  m_optEGOCorrAverage;
+  OptField_t<int>  m_optAirFlowAverage;
+  OptField_t<int>  m_optVehicleSpeedAverage;
+  OptField_t<int>  m_optTPSDotAverage;
+  OptField_t<int>  m_optMAP2Average;
+  OptField_t<int>  m_optMAPDAverage;
+  OptField_t<int>  m_optTmp2Average;
+  OptField_t<int>  m_optFuelConsumAverage;
+  OptField_t<int>  m_optKnockRetardAverage;
+  OptField_t<int>  m_optSensAFRAverage;
+  OptField_t<int>  m_optChokePosAverage;
+  OptField_t<int>  m_optGDPosAverage;
+  OptField_t<int>  m_optSynLoadAverage;
+  OptField_t<int>  m_optInjTimBAverage;
+  OptField_t<int>  m_optInjTimEAverage;
+
   OptField_t<int> m_optTitleFontSize;
   OptField_t<int> m_optValueFontSize;
   OptField_t<int> m_optPaneFontSize;
@@ -264,6 +312,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<bool> m_optMetersDragNDrop;
   OptField_t<bool> m_optIndicatorsDragNDrop;
   OptField_t<int> m_optFFFConst;
+  OptField_t<bool> m_optShowGraphCursor;
 
   //windows' positions
   OptField_t<POINT> m_optStrtMapWnd;
@@ -365,32 +414,32 @@ class CAppSettingsModel : public ISettingsData
 
   //meters
   OptField_t<int> m_optMetRows[2];
-  OptField_t<int> m_optMetRPM[2];
-  OptField_t<int> m_optMetMAP[2];
-  OptField_t<int> m_optMetVBat[2];
-  OptField_t<int> m_optMetIgnTim[2];
-  OptField_t<int> m_optMetCLT[2];
-  OptField_t<int> m_optMetAddI1[2];
-  OptField_t<int> m_optMetAddI2[2];
-  OptField_t<int> m_optMetInjPW[2];
-  OptField_t<int> m_optMetIAT[2];
-  OptField_t<int> m_optMetEGOCorr[2];
-  OptField_t<int> m_optMetTPS[2];
-  OptField_t<int> m_optMetAirFlow[2];
-  OptField_t<int> m_optMetVehicleSpeed[2];
-  OptField_t<int> m_optMetTPSDot[2];
-  OptField_t<int> m_optMetMAP2[2];
-  OptField_t<int> m_optMetMAPD[2];
-  OptField_t<int> m_optMetTmp2[2];
-  OptField_t<int> m_optMetFuelConsum[2];
-  OptField_t<int> m_optMetKnockRetard[2];
-  OptField_t<int> m_optMetKnockGraph[2];
-  OptField_t<int> m_optMetSensAFR[2];
-  OptField_t<int> m_optMetChokePos[2];
-  OptField_t<int> m_optMetGDPos[2];
-  OptField_t<int> m_optMetSynLoad[2];
-  OptField_t<int> m_optMetInjTimB[2];
-  OptField_t<int> m_optMetInjTimE[2];
+  OptField_t<int> m_optMetRPM[2][2];
+  OptField_t<int> m_optMetMAP[2][2];
+  OptField_t<int> m_optMetVBat[2][2];
+  OptField_t<int> m_optMetIgnTim[2][2];
+  OptField_t<int> m_optMetCLT[2][2];
+  OptField_t<int> m_optMetAddI1[2][2];
+  OptField_t<int> m_optMetAddI2[2][2];
+  OptField_t<int> m_optMetInjPW[2][2];
+  OptField_t<int> m_optMetIAT[2][2];
+  OptField_t<int> m_optMetEGOCorr[2][2];
+  OptField_t<int> m_optMetTPS[2][2];
+  OptField_t<int> m_optMetAirFlow[2][2];
+  OptField_t<int> m_optMetVehicleSpeed[2][2];
+  OptField_t<int> m_optMetTPSDot[2][2];
+  OptField_t<int> m_optMetMAP2[2][2];
+  OptField_t<int> m_optMetMAPD[2][2];
+  OptField_t<int> m_optMetTmp2[2][2];
+  OptField_t<int> m_optMetFuelConsum[2][2];
+  OptField_t<int> m_optMetKnockRetard[2][2];
+  OptField_t<int> m_optMetKnockGraph[2][2];
+  OptField_t<int> m_optMetSensAFR[2][2];
+  OptField_t<int> m_optMetChokePos[2][2];
+  OptField_t<int> m_optMetGDPos[2][2];
+  OptField_t<int> m_optMetSynLoad[2][2];
+  OptField_t<int> m_optMetInjTimB[2][2];
+  OptField_t<int> m_optMetInjTimE[2][2];
 
   //colors of indicators
   OptField_t<COLORREF> m_optColGas_v;

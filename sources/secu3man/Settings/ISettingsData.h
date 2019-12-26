@@ -153,7 +153,7 @@ struct IndicatorsCfg
 
 struct MetersCfg
 {
- int m_optMetRows[2];
+ int m_optMetRows;
  int m_optMetRPM[2];
  int m_optMetMAP[2];
  int m_optMetVBat[2];
@@ -161,7 +161,7 @@ struct MetersCfg
  int m_optMetCLT[2];
  int m_optMetAddI1[2];
  int m_optMetAddI2[2];
- int m_optInjPW[2];
+ int m_optMetInjPW[2];
  int m_optMetIAT[2];
  int m_optMetEGOCorr[2];
  int m_optMetTPS[2];
@@ -342,6 +342,28 @@ class ISettingsData
   virtual int GetMAPAverage(void) const = 0;
   virtual int GetAI1Average(void) const = 0;
   virtual int GetTPSAverage(void) const = 0;
+  virtual int GetKnockAverage(void) const = 0;
+  virtual int GetIgnTimAverage(void) const = 0;
+  virtual int GetCLTAverage(void) const = 0;
+  virtual int GetAddI2Average(void) const = 0;
+  virtual int GetInjPWAverage(void) const = 0;
+  virtual int GetIATAverage(void) const = 0;
+  virtual int GetEGOCorrAverage(void) const = 0;
+  virtual int GetAirFlowAverage(void) const = 0;
+  virtual int GetVehicleSpeedAverage(void) const = 0;
+  virtual int GetTPSDotAverage(void) const = 0;
+  virtual int GetMAP2Average(void) const = 0;
+  virtual int GetMAPDAverage(void) const = 0;
+  virtual int GetTmp2Average(void) const = 0;
+  virtual int GetFuelConsumAverage(void) const = 0;
+  virtual int GetKnockRetardAverage(void) const = 0;
+  virtual int GetSensAFRAverage(void) const = 0;
+  virtual int GetChokePosAverage(void) const = 0;
+  virtual int GetGDPosAverage(void) const = 0;
+  virtual int GetSynLoadAverage(void) const = 0;
+  virtual int GetInjTimBAverage(void) const = 0;
+  virtual int GetInjTimEAverage(void) const = 0;
+
   virtual int GetTitleFontSize(void) const = 0;
   virtual int GetValueFontSize(void) const = 0;
   virtual int GetPaneFontSize(void) const = 0;
@@ -359,6 +381,7 @@ class ISettingsData
   virtual void SetIndicatorsDragNDrop(bool enable) = 0;
 
   virtual int GetFFFConst(void) const = 0;
+  virtual bool GetShowGraphsCursor(void) = 0;
   
   //windows' positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings) = 0;
@@ -382,8 +405,8 @@ class ISettingsData
   virtual void GetIndicatorsConfig(IndicatorsCfg& o_cfg) const = 0;
   virtual void SetIndicatorsConfig(const IndicatorsCfg& i_cfg) = 0;
   //Meters
-  virtual void GetMetersConfig(MetersCfg& o_cfg) const = 0;
-  virtual void SetMetersConfig(const MetersCfg& i_cfg) = 0;
+  virtual void GetMetersConfig(MetersCfg* o_cfg) const = 0;
+  virtual void SetMetersConfig(const MetersCfg* i_cfg) = 0;
 
   virtual void SetWndSize(const WndSize& i_wndSize) = 0;
   virtual void GetWndSize(WndSize& o_wndSize) const = 0;

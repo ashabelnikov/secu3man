@@ -36,5 +36,16 @@ class AFX_EXT_CLASS CMISynLoad : public MeasInstrBase
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
   //---------------------------------------
+};
 
+
+class AFX_EXT_CLASS CMISynLoadGraph : public MeasInstrBase
+{
+ public:
+  CMISynLoadGraph();
+  virtual ~CMISynLoadGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
 };

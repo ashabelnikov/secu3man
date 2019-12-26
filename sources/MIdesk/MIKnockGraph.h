@@ -26,7 +26,21 @@
 #pragma once
 
 #include "MeasInstrBase.h"
-#include "ui-core/OScopeCtrl.h"
+#include "ui-core/OscillCtrl.h"
+
+
+class AFX_EXT_CLASS CMIKnock : public MeasInstrBase
+{
+ public:
+  CMIKnock();
+  virtual ~CMIKnock();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+
+
 
 class AFX_EXT_CLASS CMIKnockGraph : public MeasInstrBase
 {
@@ -36,14 +50,5 @@ class AFX_EXT_CLASS CMIKnockGraph : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
-  virtual void SetValues(void);
-  virtual void Enable(bool enable, bool redraw = true);
-  virtual void Resize(const CRect& rect, bool redraw = true);
-  virtual void Show(bool show);
   //---------------------------------------
-
-  virtual CRect GetWindowRect(bool screen = false);
-
-private:
-  COScopeCtrl m_scope;
 };

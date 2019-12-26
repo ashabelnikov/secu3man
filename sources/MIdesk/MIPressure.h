@@ -39,3 +39,15 @@ class AFX_EXT_CLASS CMIPressure : public MeasInstrBase
   //---------------------------------------
 
 };
+
+class AFX_EXT_CLASS CMIPressureGraph : public MeasInstrBase
+{
+ public:
+  CMIPressureGraph();
+  virtual ~CMIPressureGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
+  //---------------------------------------
+};

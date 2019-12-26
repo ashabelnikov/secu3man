@@ -50,3 +50,28 @@ class AFX_EXT_CLASS CMIGDPos : public CMIChokePosBase
  public:
   virtual void Create(CWnd* pParent);
 };
+
+//-------------------------------------------------------------
+
+class AFX_EXT_CLASS CMIChokePosBaseGraph : public MeasInstrBase
+{
+ public:
+  CMIChokePosBaseGraph();
+  virtual ~CMIChokePosBaseGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent, UINT id);
+  //---------------------------------------
+};
+
+class AFX_EXT_CLASS CMIChokePosGraph : public CMIChokePosBaseGraph
+{
+ public:
+  virtual void Create(CWnd* pParent);
+};
+
+class AFX_EXT_CLASS CMIGDPosGraph : public CMIChokePosBaseGraph
+{
+ public:
+  virtual void Create(CWnd* pParent);
+};

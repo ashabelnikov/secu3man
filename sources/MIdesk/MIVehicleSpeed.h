@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIVehicleSpeed : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIVehicleSpeedGraph : public MeasInstrBase
+{
+ public:
+  CMIVehicleSpeedGraph();
+  virtual ~CMIVehicleSpeedGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

@@ -28,6 +28,12 @@
 #include "MIInjTim.h"
 #include "common/GDIHelpers.h"
 
+static void _GetITModeRange(int mode, float& y1, float& y2)
+{
+ y1 = (mode < 2) ? .0f : -360.0f;
+ y2 = (mode < 2) ? 720.0f : 360.0f;
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -70,12 +76,6 @@ void CMIInjTim::SetITMode(int mode)
  m_meter.Update();
 }
 
-void CMIInjTim::_GetITModeRange(int mode, float& y1, float& y2)
-{
- y1 = (mode < 2) ? .0f : -360.0f;
- y2 = (mode < 2) ? 720.0f : 360.0f;
-}
-
 void CMIInjTimB::Create(CWnd* pParent)
 {
  CMIInjTim::Create(pParent, IDC_MI_INJTIMB);
@@ -86,4 +86,53 @@ void CMIInjTimE::Create(CWnd* pParent)
 {
  CMIInjTim::Create(pParent, IDC_MI_INJTIME);
  m_meter.SetTitle(MLL::GetString(IDS_MI_INJTIME_TITLE).c_str());
+}
+
+//////////////////////////////////////////////////////////////////////
+// Construction/Destruction
+//////////////////////////////////////////////////////////////////////
+
+CMIInjTimGraph::CMIInjTimGraph()
+{
+ //empty
+}
+
+CMIInjTimGraph::~CMIInjTimGraph()
+{
+ //empty
+}
+
+void CMIInjTimGraph::Create(CWnd* pParent, UINT id)
+{
+ // create the window of control
+ CRect rect(0,0, 100,100);
+ VERIFY(m_scope.Create(WS_VISIBLE | WS_CHILD, rect, pParent, id));
+
+ // customize the control
+ m_scope.SetRange(0, 720, 0);
+ m_scope.SetGridNumberY(10);
+ m_scope.ReserveCharsY(5);
+ m_scope.SetUnitX(MLL::GetString(IDS_MI_KNOCKGRAPH_H_UNIT));
+ m_scope.SetBackgroundColor(RGB(0, 64, 0));
+ m_scope.SetGridColor(RGB(192, 192, 255));
+ m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIInjTimGraph::SetITMode(int mode)
+{
+ float y1, y2;
+ _GetITModeRange(mode, y1, y2);
+ m_scope.SetRange(y1, y2, 0);
+}
+
+void CMIInjTimBGraph::Create(CWnd* pParent)
+{
+ CMIInjTimGraph::Create(pParent, IDC_MI_INJTIMBGRAPH);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_INJTIMBGRAPH_V_UNIT));
+}
+
+void CMIInjTimEGraph::Create(CWnd* pParent)
+{
+ CMIInjTimGraph::Create(pParent, IDC_MI_INJTIMEGRAPH);
+ m_scope.SetUnitY(MLL::GetString(IDS_MI_INJTIMEGRAPH_V_UNIT));
 }

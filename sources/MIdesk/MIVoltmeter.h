@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIVoltmeter : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIVoltmeterGraph : public MeasInstrBase
+{
+ public:
+  CMIVoltmeterGraph();
+  virtual ~CMIVoltmeterGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

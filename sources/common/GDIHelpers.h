@@ -162,4 +162,13 @@ struct GDIHelpers
  static COLORREF InvRGB(BYTE r, BYTE g, BYTE b) { return (~RGB(r,g,b)) & 0xFFFFFF; }
  static COLORREF InvColor(COLORREF color) { return (~color) & 0xFFFFFF; }
  static COLORREF swapRB(DWORD rgb) { return RGB(GetBValue(rgb), GetGValue(rgb), GetRValue(rgb)); }
+
+ static DrawEmptyRectangle(CDC& dc, CRect& rc)
+ {
+  dc.MoveTo(rc.left, rc.top);
+  dc.LineTo(rc.right, rc.top);
+  dc.LineTo(rc.right, rc.bottom);
+  dc.LineTo(rc.left, rc.bottom);
+  dc.LineTo(rc.left, rc.top);
+ }
 };

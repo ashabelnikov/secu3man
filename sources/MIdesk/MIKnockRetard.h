@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIKnockRetard : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIKnockRetardGraph : public MeasInstrBase
+{
+ public:
+  CMIKnockRetardGraph();
+  virtual ~CMIKnockRetardGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

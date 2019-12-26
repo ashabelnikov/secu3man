@@ -74,6 +74,27 @@ void CPMMonitorController::OnSettingsChanged(void)
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->SetKnockAverageNum(mp_settings->GetKnockAverage());
+ mp_view->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
+ mp_view->SetCLTAverageNum(mp_settings->GetCLTAverage());
+ mp_view->SetAddI2AverageNum(mp_settings->GetAddI2Average());
+ mp_view->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
+ mp_view->SetIATAverageNum(mp_settings->GetIATAverage());
+ mp_view->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
+ mp_view->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
+ mp_view->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
+ mp_view->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
+ mp_view->SetMAP2AverageNum(mp_settings->GetMAP2Average());
+ mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
+ mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
+ mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
+ mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
+ mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
+ mp_view->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
+ mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
+ mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
+ mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
 }
 
 void CPMMonitorController::OnActivate(void)
@@ -89,6 +110,27 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetMAPAverageNum(mp_settings->GetMAPAverage());
  mp_view->SetAI1AverageNum(mp_settings->GetAI1Average());
  mp_view->SetTPSAverageNum(mp_settings->GetTPSAverage());
+ mp_view->SetKnockAverageNum(mp_settings->GetKnockAverage());
+ mp_view->SetIgnTimAverageNum(mp_settings->GetIgnTimAverage());
+ mp_view->SetCLTAverageNum(mp_settings->GetCLTAverage());
+ mp_view->SetAddI2AverageNum(mp_settings->GetAddI2Average());
+ mp_view->SetInjPWAverageNum(mp_settings->GetInjPWAverage());
+ mp_view->SetIATAverageNum(mp_settings->GetIATAverage());
+ mp_view->SetEGOCorrAverageNum(mp_settings->GetEGOCorrAverage());
+ mp_view->SetAirFlowAverageNum(mp_settings->GetAirFlowAverage());
+ mp_view->SetVehicleSpeedAverageNum(mp_settings->GetVehicleSpeedAverage());
+ mp_view->SetTPSDotAverageNum(mp_settings->GetTPSDotAverage());
+ mp_view->SetMAP2AverageNum(mp_settings->GetMAP2Average());
+ mp_view->SetMAPDAverageNum(mp_settings->GetMAPDAverage());
+ mp_view->SetTmp2AverageNum(mp_settings->GetTmp2Average());
+ mp_view->SetFuelConsumAverageNum(mp_settings->GetFuelConsumAverage());
+ mp_view->SetKnockRetardAverageNum(mp_settings->GetKnockRetardAverage());
+ mp_view->SetSensAFRAverageNum(mp_settings->GetSensAFRAverage());
+ mp_view->SetChokePosAverageNum(mp_settings->GetChokePosAverage());
+ mp_view->SetGDPosAverageNum(mp_settings->GetGDPosAverage());
+ mp_view->SetSynLoadAverageNum(mp_settings->GetSynLoadAverage());
+ mp_view->SetInjTimBAverageNum(mp_settings->GetInjTimBAverage());
+ mp_view->SetInjTimEAverageNum(mp_settings->GetInjTimEAverage());
  mp_view->SetITMode(mp_settings->GetITEdMode());
 }
 

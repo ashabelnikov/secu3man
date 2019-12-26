@@ -34,7 +34,7 @@ class CCEDeskDlg;
 class CLMDeskDlg;
 class CLPControlPanelDlg;
 class CMIDeskDlg;
-class COScopeCtrl;
+class COscillCtrl;
 class CToolTipCtrlEx;
 
 class CLogPlayerTabDlg : public CTabDialog
@@ -47,11 +47,10 @@ class CLogPlayerTabDlg : public CTabDialog
   static const UINT IDD;
   virtual LPCTSTR GetDialogID(void) const;
 
-  void AppendKnockValue(double i_value, bool i_reverse);
-  void ResetKnockOscilloscope(void);
-
   //Drag and Drop event handler
   void setOnDropFile(EventString OnFunction);
+
+  void EnableAll(bool i_enable);
 
  public:
   std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
@@ -59,18 +58,15 @@ class CLogPlayerTabDlg : public CTabDialog
   std::auto_ptr<CMIDeskDlg> mp_MIDeskDlg;
   std::auto_ptr<CLPControlPanelDlg> mp_LPPanelDlg;
 
-  //additional: for displaying of knock
-  std::auto_ptr<COScopeCtrl> mp_OScopeCtrl;
-
  protected:
   void _ResizeRect(const CRect& i_external, CRect& io_victim);
-  void _InitializeOscilloscopeControl(void);
 
   virtual BOOL OnInitDialog();
   afx_msg void OnSize(UINT nType, int cx, int cy);
   virtual void DoDataExchange(CDataExchange* pDX);
   afx_msg void OnDropFiles(HDROP hDropInfo);
   afx_msg void OnDestroy();
+  afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
 
   EventString m_OnDropFile;
@@ -80,4 +76,5 @@ class CLogPlayerTabDlg : public CTabDialog
   bool m_initialized;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  bool m_all_enabled;
 };

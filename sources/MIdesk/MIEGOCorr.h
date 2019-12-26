@@ -36,5 +36,15 @@ class AFX_EXT_CLASS CMIEGOCorr : public MeasInstrBase
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
   //---------------------------------------
+};
 
+class AFX_EXT_CLASS CMIEGOCorrGraph : public MeasInstrBase
+{
+ public:
+  CMIEGOCorrGraph();
+  virtual ~CMIEGOCorrGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
 };

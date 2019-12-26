@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMITemperature : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMITemperatureGraph : public MeasInstrBase
+{
+ public:
+  CMITemperatureGraph();
+  virtual ~CMITemperatureGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

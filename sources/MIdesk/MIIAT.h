@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIIAT : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIIATGraph : public MeasInstrBase
+{
+ public:
+  CMIIATGraph();
+  virtual ~CMIIATGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

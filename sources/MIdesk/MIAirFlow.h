@@ -37,3 +37,14 @@ class AFX_EXT_CLASS CMIAirFlow : public MeasInstrBase
   virtual void Create(CWnd* pParent);
   //---------------------------------------
 };
+
+class AFX_EXT_CLASS CMIAirFlowGraph : public MeasInstrBase
+{
+ public:
+  CMIAirFlowGraph();
+  virtual ~CMIAirFlowGraph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};

@@ -72,13 +72,42 @@ void CMetContextMenuManager::CreateContent(void)
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_TMP2, MLL::LoadString(IDS_MI_TMP2_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_FUELCONSUM, MLL::LoadString(IDS_MI_FUELCONSUM_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_KNOCKRETARD, MLL::LoadString(IDS_MI_KNOCKRETARD_TITLE));
- m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_KNOCKGRAPH, MLL::LoadString(IDS_MI_KNOCKGRAPH_TITLE));
+ m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_KNOCKGRAPH, MLL::LoadString(IDS_MI_KNOCK_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_SENSAFR, MLL::LoadString(IDS_MI_SENSAFR_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_CHOKEPOS, MLL::LoadString(IDS_MI_CHOKEPOS_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_GDPOS, MLL::LoadString(IDS_MI_GDPOS_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_SYNLOAD, MLL::LoadString(IDS_MI_LOAD_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIMB, MLL::LoadString(IDS_MI_INJTIMB_TITLE));
  m_addMenu.AppendMenu(MF_STRING, IDM_MI_MET_INJTIME, MLL::LoadString(IDS_MI_INJTIME_TITLE));
+
+ //"Add graph" submenu
+ m_addGraphMenu.CreatePopupMenu();
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_RPM, MLL::LoadString(IDS_MI_TACHOMETER_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_MAP, MLL::LoadString(IDS_MI_PRESSURE_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_VBAT, MLL::LoadString(IDS_MI_VOLTAGE_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_IGNTIM, MLL::LoadString(IDS_MI_ADVANGLE_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_CLT, MLL::LoadString(IDS_MI_TEMPERATURE_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_ADDI1, MLL::LoadString(IDS_MI_ADD_I1_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_ADDI2, MLL::LoadString(IDS_MI_ADD_I2_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_INJPW, MLL::LoadString(IDS_MI_INJ_PW_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_IAT, MLL::LoadString(IDS_MI_IAT_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_EGOCORR, MLL::LoadString(IDS_MI_EGO_CORR_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_TPS, MLL::LoadString(IDS_MI_THROTTLE_GATE_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_AIRFLOW, MLL::LoadString(IDS_MI_AIR_FLOW_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_VEHSPD, MLL::LoadString(IDS_MI_VSS_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_TPSDOT, MLL::LoadString(IDS_MI_TPSDOT_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_MAP2, MLL::LoadString(IDS_MI_MAP2_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_MAPD, MLL::LoadString(IDS_MI_MAPD_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_TMP2, MLL::LoadString(IDS_MI_TMP2_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_FUELCONSUM, MLL::LoadString(IDS_MI_FUELCONSUM_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_KNOCKRETARD, MLL::LoadString(IDS_MI_KNOCKRETARD_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_KNOCKGRAPH, MLL::LoadString(IDS_MI_KNOCK_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_SENSAFR, MLL::LoadString(IDS_MI_SENSAFR_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_CHOKEPOS, MLL::LoadString(IDS_MI_CHOKEPOS_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_GDPOS, MLL::LoadString(IDS_MI_GDPOS_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_SYNLOAD, MLL::LoadString(IDS_MI_LOAD_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_INJTIMB, MLL::LoadString(IDS_MI_INJTIMB_TITLE));
+ m_addGraphMenu.AppendMenu(MF_STRING, IDM_MI_GRH_INJTIME, MLL::LoadString(IDS_MI_INJTIME_TITLE));
 
  //"Number of rows" submenu
  m_rowsMenu.CreatePopupMenu();
@@ -146,6 +175,7 @@ void CMetContextMenuManager::CreateContent(void)
  //top level menu
  m_parentMenu.CreatePopupMenu();
  m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_addMenu.m_hMenu, MLL::LoadString(IDS_MI_MET_ADD_GAUGE));
+ m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_addGraphMenu.m_hMenu, MLL::LoadString(IDS_MI_GRH_ADD_GAUGE));
  m_parentMenu.AppendMenu(MF_STRING, IDM_MI_MET_DEL_GAUGE, MLL::LoadString(IDS_MI_MET_DEL_GAUGE));
  m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_rowsMenu.m_hMenu, MLL::LoadString(IDS_MI_MET_NUMROWS));
  m_parentMenu.AppendMenu(MF_POPUP | MF_STRING, (UINT)m_titleFontMenu.m_hMenu, MLL::LoadString(IDS_MI_MET_TITLE_FONT));

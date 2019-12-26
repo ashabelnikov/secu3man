@@ -53,6 +53,17 @@ class AFX_EXT_CLASS CMIAddI1 : public CMIVoltage
   virtual void Create(CWnd* pParent);
 };
 
+class AFX_EXT_CLASS CMIAddI1Graph : public MeasInstrBase
+{
+ public:
+  CMIAddI1Graph();
+  virtual ~CMIAddI1Graph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
+};
+
 class AFX_EXT_CLASS CMIAddI2 : public CMIVoltage
 {
  public:
@@ -60,4 +71,15 @@ class AFX_EXT_CLASS CMIAddI2 : public CMIVoltage
   virtual ~CMIAddI2() {}
 
   virtual void Create(CWnd* pParent);
+};
+
+class AFX_EXT_CLASS CMIAddI2Graph : public MeasInstrBase
+{
+ public:
+  CMIAddI2Graph();
+  virtual ~CMIAddI2Graph();
+
+  //-------interface-----------------------
+  virtual void Create(CWnd* pParent);
+  //---------------------------------------
 };
