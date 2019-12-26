@@ -70,6 +70,9 @@ CGMEInjOtherDlg::CGMEInjOtherDlg(CWnd* pParent /*=NULL*/)
 , mp_deadGrid(NULL)
 , mp_rpmGrid(NULL)
 {
+ m_egocrvGrid.reserve(32);
+ m_iatcltGrid.reserve(32);
+ m_gpscGrid.reserve(32);
  m_crnk_map.SetDecimalPlaces(1, 0, 0);
  m_dead0_map.SetDecimalPlaces(2, 1, 0);
  m_dead1_map.SetDecimalPlaces(2, 1, 0);

@@ -125,6 +125,12 @@ CControlApp::CControlApp()
 , m_ignore_n_packets(0)
 {
  m_pPackets = new Packets();
+ m_pPackets->reserve(256);
+ for (size_t i = 0; i < m_pPackets->size(); ++i)
+  (*m_pPackets)[i].reserve(256);
+ m_ingoing_packet.reserve(256);
+ m_outgoing_packet.reserve(256);
+
  memset(&m_recepted_packet,0,sizeof(SECU3Packet));
  memset(&m_pending_packets,0,sizeof(SECU3Packet) * PENDING_PACKETS_QUEUE_SIZE);
 

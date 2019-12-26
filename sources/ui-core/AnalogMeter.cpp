@@ -99,6 +99,7 @@ CAnalogMeter::CAnalogMeter()
  // false if we are printing
 , m_boolUseBitmaps(true)
 {
+ m_AlertZones.reserve(16);
  // set pen/brush colors
  ActuateColors();
 }

@@ -35,7 +35,7 @@
 
 CEnumPorts::CEnumPorts()
 {
- //empty
+ m_portList.reserve(16);
 }
 
 CEnumPorts::~CEnumPorts()

@@ -276,6 +276,7 @@ namespace MathHelpers
  std::vector<T> BuildGridFromRange(T begin, T end, size_t num)
  {
   std::vector<T> grid;
+  grid.reserve(num);
    for (size_t i = 0; i < num; ++i)
     grid.push_back(begin + ((end - begin) * i) / (num - 1));
   return grid; 

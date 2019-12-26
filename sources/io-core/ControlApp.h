@@ -133,7 +133,7 @@ class IOCORE_API CControlApp
 
   volatile bool m_is_thread_must_exit;
 
-  Packets*     m_pPackets;              //хранит списик выделенных пакетов
+  Packets*     m_pPackets;              //хранит список выделенных пакетов
   std::vector<BYTE>  m_ingoing_packet;  //используется для выделения одного пакета
   std::vector<BYTE>  m_outgoing_packet; //используется для формирования пакетов
   int          m_packets_parse_state;   //хранит состояние конечного автомата используемого для отделения пакетов

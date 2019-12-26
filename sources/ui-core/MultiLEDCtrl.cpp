@@ -36,6 +36,7 @@ CMultiLEDCtrl::CMultiLEDCtrl(HMODULE hMod /*= NULL*/)
 , m_cols(0)
 , m_bkBrushColor(GetSysColor(COLOR_3DFACE))
 {
+ m_items.reserve(32);
  _RegisterWindowClass(hMod);
  m_bkBrush.CreateSolidBrush(m_bkBrushColor);
 }

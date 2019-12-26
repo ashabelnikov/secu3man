@@ -105,6 +105,7 @@ CChart2D::CChart2D()
 , m_ptMovStep(1.0)
 , mp_oldBkBitmap(NULL)
 {
+ m_serie.reserve(16);
  SetRange(-10, 10, -10, 10);
 }
 

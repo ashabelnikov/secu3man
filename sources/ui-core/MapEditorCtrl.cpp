@@ -213,6 +213,11 @@ CMapEditorCtrl::CMapEditorCtrl(int rows, int cols, bool invDataRowsOrder /*= fal
 , mp_itemColors(new DWORD[rows*cols])
 , m_absGrad(absGrad)
 {
+ m_horizLabels.reserve(16);
+ m_vertLabels.reserve(16);
+ m_markedItems.reserve(256);
+ m_gradColor.reserve(256);
+
  _RegisterWindowClass(hMod);
  m_gradColor = GDIHelpers::GenerateGradientList(0, 511, 256, m_gradSaturation, m_gradBrightness);
  for(int i = 0; i < (rows*cols); ++i)

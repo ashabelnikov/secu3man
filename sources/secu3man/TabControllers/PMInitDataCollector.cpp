@@ -40,7 +40,7 @@ CPMInitDataCollector::CPMInitDataCollector(CCommunicationManager* ip_comm, CStat
 : mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
 {
- //empty
+ fn_names.reserve(16);
 }
 
 CPMInitDataCollector::~CPMInitDataCollector()

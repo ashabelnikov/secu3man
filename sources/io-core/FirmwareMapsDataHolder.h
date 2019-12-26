@@ -155,6 +155,7 @@ struct FWMapsDataHolder
  std::vector<_TSTRING> GetListOfNames(void) const
  {
   std::vector<_TSTRING> list;
+  list.reserve(16);
   for (size_t i = 0; i < maps.size(); i++)
    list.push_back(maps[i].name);
   return list;

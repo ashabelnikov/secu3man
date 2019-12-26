@@ -62,6 +62,8 @@ CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
 , mp_IACCWMap(NULL)
 , mp_temperGrid(NULL)
 {
+ m_tpsGrid.reserve(32);
+ m_iacGrid.reserve(32);
  m_idlc_map.SetDecimalPlaces(1, 0, 0);
  m_idlr_map.SetDecimalPlaces(1, 0, 0);
  m_itrpm_map.SetDecimalPlaces(0, 0, 0);

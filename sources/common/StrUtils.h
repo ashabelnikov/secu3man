@@ -35,6 +35,7 @@ class StrUtils
   static std::vector<_TSTRING> TokenizeStr(const TCHAR *s, TCHAR c = _T(' '))
   {
    std::vector<_TSTRING> result;
+   result.reserve(8);
    if (0 == *s)
     return result;
    do

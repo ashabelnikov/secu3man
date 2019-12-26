@@ -57,6 +57,7 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
 , m_ldaxNeedsUpdate(false)
 , m_baro_press(101.3f) //sea level atmospheric pressure by default
 {
+ work_map_load_slots.reserve(32);
  work_map_load_slots = MathHelpers::BuildGridFromRange(1.0f, 16.0f, 16);
 
  m_pVEPageDlg.reset(new CGMEInjVEDlg());

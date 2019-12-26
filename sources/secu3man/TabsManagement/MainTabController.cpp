@@ -35,7 +35,7 @@
 CMainTabController::CMainTabController(CChildView* ip_view)
 : mp_view(ip_view)
 {
- //empty
+ m_controllers_list.reserve(16);
 }
 
 CMainTabController::~CMainTabController()

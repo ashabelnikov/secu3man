@@ -198,6 +198,7 @@ void CLogPlayerTabController::OnActivate(void)
  OnConnection(online_status);
 
  std::vector<_TSTRING> tf_content;
+ tf_content.reserve(16);
  for(size_t i = 0; i < m_time_factors.size(); ++i)
   tf_content.push_back(m_time_factors[i].first.c_str());
  mp_view->mp_LPPanelDlg->FillTimeFactorCombo(tf_content);

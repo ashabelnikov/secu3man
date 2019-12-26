@@ -53,6 +53,9 @@ CRPMGridEditDlg::CRPMGridEditDlg(CWnd* pParent /*=NULL*/)
 : Super(CRPMGridEditDlg::IDD, pParent)
 , m_redBrush(itemErrColor)
 {
+ m_values.reserve(32);
+ m_edits.reserve(32);
+ m_errflags.reserve(32);
  for(size_t i = 0; i < 16; ++i)
  {
   m_edits.push_back(new CEditEx(CEditEx::MODE_INT));

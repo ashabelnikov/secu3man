@@ -48,7 +48,7 @@ class AFX_EXT_CLASS CTablesSetPanel : public CButtonsPanel
   CTablesSetPanel(CWnd* pParent = NULL);   // standard constructor
   static const UINT IDD;
 
-  void SetFunSetListBox(std::vector<_TSTRING> i_list_of_names);
+  void SetFunSetListBox(const std::vector<_TSTRING>& i_list_of_names);
   void SetFunSetListBoxSelection(int i_selected_index);
 
   //Access content of maps

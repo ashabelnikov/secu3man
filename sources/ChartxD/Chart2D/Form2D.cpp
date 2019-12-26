@@ -70,6 +70,7 @@ __fastcall TForm2D::TForm2D(HWND parent)
 , m_pt_moving_step(0.5f)
 , m_visibleMarkIdx(-1)
 {
+ m_errors.reserve(32);
  memset(m_horizontal_axis_grid_values, 0, sizeof(float) * 256);
  m_selpts.push_back(0);
  memset(m_binsEdit, NULL, sizeof(NULL) * 8);

@@ -1141,7 +1141,7 @@ void CTablesSetPanel::OnEndLabelEditFunsetList(NMHDR* pNMHDR, LRESULT* pResult)
  }
 }
 
-void CTablesSetPanel::SetFunSetListBox(std::vector<_TSTRING> i_list_of_names)
+void CTablesSetPanel::SetFunSetListBox(const std::vector<_TSTRING>& i_list_of_names)
 {
  m_funset_listbox.DeleteAllItems();
  for (size_t i = 0; i < i_list_of_names.size(); i++)

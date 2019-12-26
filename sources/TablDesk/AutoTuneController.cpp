@@ -74,6 +74,7 @@ CAutoTuneController::CAutoTuneController()
    m_avdists[l][r] = std::numeric_limits<float>::max();
    m_afrhits[l][r] = 0;
    m_lastchg[l][r] = 0;
+   m_scatter[l][r].reserve(32);
   }}
 
 }
