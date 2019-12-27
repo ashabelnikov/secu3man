@@ -554,3 +554,4 @@
 #define IDS_LOAD_FLASH_CHECK_TT         4578
 #define IDM_FIRMWARE_MASTER             4579
 #define IDS_FIRMWARE_MASTER             4580
+#define IDS_LOADING_LOG_FILE            4581

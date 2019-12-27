@@ -406,7 +406,11 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 
  LogReader::FileError error_id;
  _TSTRING file_path = fileName.empty() ? open.GetPathName().GetBuffer(0) : fileName;
+ AfxGetMainWnd()->BeginWaitCursor();
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_LOADING_LOG_FILE));
  bool result = mp_log_reader->OpenFile(file_path, error_id, m_pLogWriter->GetFileHandle());
+ AfxGetMainWnd()->EndWaitCursor();
+ mp_sbar->SetInformationText(_T(""));
  if (false==result)
  {
   if (error_id==LogReader::FE_OPEN)
