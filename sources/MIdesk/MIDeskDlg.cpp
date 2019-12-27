@@ -320,8 +320,8 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_ringChokePos.Append(i_values->choke_pos);
  m_ringGDPos.Append(i_values->gasdose_pos);
  m_ringSynLoad.Append(i_values->load);
- m_ringInjTimB.Append(i_values->inj_tim_begin);
- m_ringInjTimE.Append(i_values->inj_tim_end);
+ m_ringInjTimB.Append(m_values.inj_tim_begin); //use transformed value
+ m_ringInjTimE.Append(m_values.inj_tim_end);   //use transformed value
 
  m_ringRPM.Calculate();
  m_ringKnock.Calculate();
