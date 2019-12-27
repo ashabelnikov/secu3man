@@ -331,6 +331,8 @@ class ISettingsData
   virtual bool GetToggleMapWnd(void) const = 0;
   virtual int GetParamMonVert(void) const = 0;
   virtual void SetParamMonVert(int pos) = 0;
+  virtual int GetLogPlayerVert(void) const = 0;
+  virtual void SetLogPlayerVert(int pos) = 0;
   virtual bool GetExistingPorts(void) const = 0;
 
   //Fixtures's customization settings

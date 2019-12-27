@@ -102,6 +102,7 @@ void CLMDeskDlg::Enable(bool enable)
  m_enabled = enable;
  for(int i = 0; i < KEY_COUNT; ++i)
   m_key_text[i].EnableWindow(enable);
+ GetDlgItem(IDC_LP_LOG_MARKS_DESK_CAPTION)->EnableWindow(enable);
 }
 
 void CLMDeskDlg::Show(bool show)

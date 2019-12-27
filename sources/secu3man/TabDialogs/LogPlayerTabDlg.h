@@ -52,6 +52,9 @@ class CLogPlayerTabDlg : public CTabDialog
 
   void EnableAll(bool i_enable);
 
+  void SetSplitterPos(int pos);
+  int GetSplitterPos(void) const;
+
  public:
   std::auto_ptr<CCEDeskDlg> mp_CEDeskDlg;
   std::auto_ptr<CLMDeskDlg> mp_LMDeskDlg;
@@ -60,6 +63,7 @@ class CLogPlayerTabDlg : public CTabDialog
 
  protected:
   void _ResizeRect(const CRect& i_external, CRect& io_victim);
+  void _MoveSplitter(int x, int start_x);
 
   virtual BOOL OnInitDialog();
   afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -67,14 +71,22 @@ class CLogPlayerTabDlg : public CTabDialog
   afx_msg void OnDropFiles(HDROP hDropInfo);
   afx_msg void OnDestroy();
   afx_msg void OnUpdateControls(CCmdUI* pCmdUI);
+  afx_msg void OnMouseMove(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+  afx_msg void OnLButtonUp(UINT nFlags, CPoint point);
   DECLARE_MESSAGE_MAP()
 
   EventString m_OnDropFile;
 
-  CRect m_original_mi_rect;
-  CRect m_original_ce_rect;
-  bool m_initialized;
-
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
   bool m_all_enabled;
+  bool m_initialized;
+
+  //splitter:
+  int m_splitterPos;
+  bool m_moveSplitter;
+  CPoint m_moveStart;
+  int m_moveStrtWidthPD;
+  CRect m_moveStrtRectMI;
+  int m_miMargin;
 };

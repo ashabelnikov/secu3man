@@ -25,6 +25,7 @@
 
 #include "stdafx.h"
 #include <shlwapi.h>
+#include <limits>
 #include "Resources/resource.h"
 #include "LogPlayerTabController.h"
 
@@ -42,6 +43,8 @@
 #include "TabDialogs/LogPlayerTabDlg.h"
 #include "TabDialogs/LPControlPanelDlg.h"
 #include "ui-core/OscillCtrl.h"
+
+#undef max
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -211,14 +214,18 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->ShowSpeedAndDistance(true);
 
  ConfigureIndicators();
+
+ m_one_shot_timer.SetTimer(this, &CLogPlayerTabController::_OnOneShotTimer, 0);
 }
 
 //from MainTabController
 void CLogPlayerTabController::OnDeactivate(void)
 {
+ m_one_shot_timer.KillTimer();
  mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
  mp_sbar->SetInformationText(_T(""));
  _ClosePlayer();
+ mp_settings->SetLogPlayerVert(mp_view->GetSplitterPos());
 }
 
 //hurrah!!! получен пакет от SECU-3
@@ -695,4 +702,11 @@ void CLogPlayerTabController::OnMIDeskSettingsChanged(void)
  mp_settings->SetLabelFontSize(LabelFontSize);
 
  mp_settings->SetMetersDragNDrop(mp_view->mp_MIDeskDlg->GetMetersDragNDrop());
+}
+
+void CLogPlayerTabController::_OnOneShotTimer(void)
+{
+ m_one_shot_timer.KillTimer();
+ if (mp_settings->GetLogPlayerVert() != std::numeric_limits<int>::max())
+  mp_view->SetSplitterPos(mp_settings->GetLogPlayerVert());
 }

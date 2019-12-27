@@ -93,6 +93,8 @@ class CAppSettingsModel : public ISettingsData
   virtual bool GetToggleMapWnd(void) const;
   virtual int GetParamMonVert(void) const;
   virtual void SetParamMonVert(int pos);
+  virtual int GetLogPlayerVert(void) const;
+  virtual void SetLogPlayerVert(int pos);
   virtual bool GetExistingPorts(void) const;
 
   //windows positions
@@ -481,6 +483,7 @@ class CAppSettingsModel : public ISettingsData
 
   //Splitters
   OptField_t<int> m_optParamMonVert;
+  OptField_t<int> m_optLogPlayerVert;
 
   //Inj. Driver related tab settings
   OptField_t<bool> m_optInjDrvTabActive;

@@ -48,7 +48,9 @@ BEGIN_MESSAGE_MAP(CLogPlayerTabDlg, Super)
  ON_WM_DROPFILES()
  ON_WM_SIZE()
  ON_WM_DESTROY()
- ON_UPDATE_COMMAND_UI(IDC_LP_LOG_MARKS_DESK_CAPTION, OnUpdateControls)
+ ON_WM_MOUSEMOVE()
+ ON_WM_LBUTTONDOWN()
+ ON_WM_LBUTTONUP()
 END_MESSAGE_MAP()
 
 CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
@@ -59,6 +61,8 @@ CLogPlayerTabDlg::CLogPlayerTabDlg(CWnd* pParent /*=NULL*/)
 , mp_LPPanelDlg(new CLPControlPanelDlg)
 , m_initialized(false)
 , m_all_enabled(false)
+, m_splitterPos(243)
+, m_moveSplitter(false)
 {
  //=================================================================
  if (!CheckBitmaps() || !CheckAppMenu())
@@ -121,6 +125,13 @@ BOOL CLogPlayerTabDlg::OnInitDialog()
  //Enable drap & drop functionality
  DragAcceptFiles(true);
 
+ ///////////////////////////////////////////////
+ CRect rcMI, rc;
+ mp_MIDeskDlg->GetWindowRect(&rcMI);
+ mp_CEDeskDlg->GetWindowRect(&rc);
+ m_miMargin = rc.top - rcMI.bottom;
+ ///////////////////////////////////////////////
+
  UpdateDialogControls(this,TRUE);
  m_initialized = true;
  return TRUE;
@@ -163,4 +174,99 @@ void CLogPlayerTabDlg::EnableAll(bool i_enable)
 {
  m_all_enabled = i_enable;
  UpdateDialogControls(this,TRUE);
+}
+
+void CLogPlayerTabDlg::OnMouseMove(UINT nFlags, CPoint point)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_LPPanelDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
+
+ if (captRect.PtInRect(point))
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
+
+ if (m_moveSplitter)
+ {
+  _MoveSplitter(point.x, m_moveStart.x);
+  
+  //Update saved position 
+  pd_rc = GDIHelpers::GetChildWndRect(mp_LPPanelDlg.get());
+  ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+  m_splitterPos = (pd_rc.right + ce_rc.left) / 2;
+ }
+
+ Super::OnMouseMove(nFlags, point);
+}
+
+void CLogPlayerTabDlg::OnLButtonDown(UINT nFlags, CPoint point)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_LPPanelDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ CRect captRect(pd_rc.right, pd_rc.top, ce_rc.left, ce_rc.bottom);
+
+ if (captRect.PtInRect(point))
+ {
+  ::SetCursor((HCURSOR)LoadImage(NULL, IDC_SIZEWE, IMAGE_CURSOR, 0, 0, LR_SHARED));
+  m_moveSplitter = true;
+  m_moveStart = point;
+  m_moveStrtWidthPD = pd_rc.Width();
+  m_moveStrtRectMI = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+  SetCapture();
+ }
+
+ return Super::OnLButtonDown(nFlags, point);
+}
+
+void CLogPlayerTabDlg::OnLButtonUp(UINT nFlags, CPoint point)
+{
+ Super::OnLButtonUp(nFlags, point);
+ m_moveSplitter = false;
+ ReleaseCapture();
+}
+
+void CLogPlayerTabDlg::SetSplitterPos(int pos)
+{
+ DPIAware da;
+ m_splitterPos = da.ScaleX(pos);
+
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_LPPanelDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+ m_moveStrtRectMI = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+ m_moveStrtWidthPD = pd_rc.Width();
+
+ _MoveSplitter(m_splitterPos, (pd_rc.right + ce_rc.left) / 2);
+}
+
+int CLogPlayerTabDlg::GetSplitterPos(void) const
+{
+ DPIAware da;
+ return da.UnScaleX(m_splitterPos);
+}
+
+void CLogPlayerTabDlg::_MoveSplitter(int x, int start_x)
+{
+ CRect pd_rc = GDIHelpers::GetChildWndRect(mp_LPPanelDlg.get());
+ CRect ce_rc = GDIHelpers::GetChildWndRect(mp_CEDeskDlg.get());
+
+ DPIAware da;
+ CRect rc;
+ GetClientRect(&rc);
+
+ //restrict splitter position
+ if (x < da.ScaleX(5))
+  x = da.ScaleX(5);
+ if (x > rc.right - m_miMargin - da.ScaleX(5))
+  x = rc.right - m_miMargin - da.ScaleX(5);
+
+ int dx = x - start_x;
+
+ mp_LPPanelDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, pd_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+ CRect lm_rc = GDIHelpers::GetChildWndRect(mp_LMDeskDlg.get());
+ mp_LMDeskDlg->SetWindowPos(NULL, 0, 0, m_moveStrtWidthPD + dx, lm_rc.Height(), SWP_NOMOVE | SWP_NOZORDER);
+
+ rc = GDIHelpers::GetChildWndRect(mp_MIDeskDlg.get());
+ mp_MIDeskDlg->MoveWindow(m_moveStrtRectMI.left + dx, rc.top, m_moveStrtRectMI.Width() - dx, rc.Height());
+
+ mp_CEDeskDlg->SetWindowPos(NULL, m_moveStrtRectMI.left + dx, ce_rc.top, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }

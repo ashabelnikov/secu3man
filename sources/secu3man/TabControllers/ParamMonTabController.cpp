@@ -168,6 +168,7 @@ void CParamMonTabController::_OnOneShotTimer(void)
 //from MainTabController
 void CParamMonTabController::OnDeactivate(void)
 {
+ m_one_shot_timer.KillTimer();
  mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
 
  //deactivate children controllers

@@ -227,6 +227,7 @@ CAppSettingsModel::CAppSettingsModel()
 //Splitters
 , m_Name_Splitters_Section(_T("Splitters"))
 , m_optParamMonVert(_T("ParamMonVert"))
+, m_optLogPlayerVert(_T("LogPlayerVert"))
 //Inj.driver
 , m_Name_InjDrv_Section(_T("InjDriver"))
 , m_optInjDrvTabActive(_T("InjDrvTabActive"))
@@ -762,6 +763,7 @@ bool CAppSettingsModel::ReadSettings(void)
  //Splitters
  IniIO sp(IniFileName, m_Name_Splitters_Section);
  sp.ReadInt(m_optParamMonVert, _T("279"), 0, 10000, true);
+ sp.ReadInt(m_optLogPlayerVert, _T("243"), 0, 10000, true);
 
  //Inj. driver
  IniIO dr(IniFileName, m_Name_InjDrv_Section);
@@ -2152,6 +2154,12 @@ bool CAppSettingsModel::WriteSettings(void)
   sp.WriteComment(_T("Вертикальный сплиттер на вкладке \"Параметры и монитор\""));
  sp.WriteInt(m_optParamMonVert);
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  sp.WriteComment(_T("Vertical splitter on the \"Player\" tab"));
+ else
+  sp.WriteComment(_T("Вертикальный сплиттер на вкладке \"Проигрыватель\""));
+ sp.WriteInt(m_optLogPlayerVert);
+
  //Inj.driver
  IniIO dr(IniFileName, m_Name_InjDrv_Section);
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -3333,6 +3341,16 @@ int CAppSettingsModel::GetParamMonVert(void) const
 void CAppSettingsModel::SetParamMonVert(int pos)
 {
  m_optParamMonVert.value = pos;
+}
+
+int CAppSettingsModel::GetLogPlayerVert(void) const
+{
+ return m_optLogPlayerVert.value;
+}
+
+void CAppSettingsModel::SetLogPlayerVert(int pos)
+{
+ m_optLogPlayerVert.value = pos;
 }
 
 int CAppSettingsModel::GetTitleFontSize(void) const

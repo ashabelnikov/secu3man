@@ -362,3 +362,4 @@
 #define IDC_MI_VSSGRAPH                 2468
 #define IDS_MI_TPSDOTGRAPH_V_UNIT       2469
 #define IDC_MI_TPSDOTGRAPH              2470
+#define IDC_LP_LOG_MARKS_DESK_CAPTION   2471

@@ -332,9 +332,7 @@
 #define IDS_RGE_ERROR_RPM_VAL_ORDER     4354
 #define IDS_ASK_USER_ABOUT_VREF_COMP    4355
 #define IDC_PM_CEDESK_FRAME             4356
-#define IDC_PM_MIDESK_FRAME_F           4357
 #define IDC_APP_SETTINGS_EXFIXTURES     4358
-#define IDC_LP_MIDESK_FRAME_F           4359
 #define IDM_RESET_EEPROM                4360
 #define IDS_RESET_EEPROM                4361
 #define IDS_RESET_EEPROM_COMFIRMATION   4362
@@ -556,4 +554,3 @@
 #define IDS_LOAD_FLASH_CHECK_TT         4578
 #define IDM_FIRMWARE_MASTER             4579
 #define IDS_FIRMWARE_MASTER             4580
-#define IDC_LP_LOG_MARKS_DESK_CAPTION   4581

@@ -112,6 +112,8 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   void ConfigureIndicators(void);
 
+  void _OnOneShotTimer(void);
+
  private:
   CLogPlayerTabDlg*  mp_view;
   CCommunicationManager* mp_comm;
@@ -147,4 +149,6 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
   size_t m_current_time_factor;
+
+  CObjectTimer<CLogPlayerTabController> m_one_shot_timer;
 };
