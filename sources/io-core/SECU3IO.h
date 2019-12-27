@@ -771,6 +771,8 @@ namespace SECU3IO
   bool  add_i4_v_useem;
  };
 
+const int INPAVNUM = 10;
+
  struct FwConstsData
  {  
   int fi_enter_strokes;
@@ -791,6 +793,7 @@ namespace SECU3IO
   float heating_time;
   float idltorun_stp_en;
   float idltorun_stp_le;
+  int inpavnum[INPAVNUM];
  };
 
  const float start_map_rpm_slots[16] = {200,240,280,320,360,400,440,480,520,560,600,640,680,720,760,800};

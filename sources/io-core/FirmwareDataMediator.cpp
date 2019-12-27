@@ -226,11 +226,12 @@ typedef struct
  _uchar heating_time;
  _uchar idltorun_stp_en;
  _uchar idltorun_stp_le;
+ _uchar inpavnum[INPAVNUM];
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[14];
+ _uchar reserved[4];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2135,6 +2136,7 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.heating_time = ((float)exd.heating_time) / 10.0f; //convert from 6 sec units to minutes
  o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
  o_data.idltorun_stp_le = ((float)exd.idltorun_stp_le) / 32.0f; //convert to %
+ for(int i = 0; i < INPAVNUM; i++) o_data.inpavnum[i] = exd.inpavnum[i]; 
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2159,4 +2161,5 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.heating_time = MathHelpers::Round(i_data.heating_time * 10.0f);
  exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
  exd.idltorun_stp_le = MathHelpers::Round(i_data.idltorun_stp_le * 32.0f);
+ for(int i = 0; i < INPAVNUM; i++) exd.inpavnum[i] = i_data.inpavnum[i]; 
 }

@@ -1730,6 +1730,56 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Increase step of the IAC idle to run additive"), _T("%"), 0.025f, 7.5f, 0.025f, 3, &d.idltorun_stp_le);
 
+ //Sizes of averaging circular buffers
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения оборотов"), _T(""), 1, 8, 1, 0, &d.inpavnum[0]);
+ else
+  dfd.AppendItem(_T("Size of averaging buffer for RPM"), _T(""), 1, 8, 1, 0, &d.inpavnum[0]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ДАД"), _T(""), 1, 8, 1, 0, &d.inpavnum[1]);
+ else
+  dfd.AppendItem(_T("Size of averaging buffer for MAP"), _T(""), 1, 8, 1, 0, &d.inpavnum[1]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения напряжения бортовой сети"), _T(""), 1, 8, 1, 0, &d.inpavnum[2]);
+ else
+  dfd.AppendItem(_T("Size of averaging buffer for board voltage"), _T(""), 1, 8, 1, 0, &d.inpavnum[2]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ДТОЖ"), _T(""), 1, 8, 1, 0, &d.inpavnum[3]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for CLT"), _T(""), 1, 8, 1, 0, &d.inpavnum[3]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ДПДЗ"), _T(""), 1, 8, 1, 0, &d.inpavnum[4]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for TPS"), _T(""), 1, 8, 1, 0, &d.inpavnum[4]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I1"), _T(""), 1, 8, 1, 0, &d.inpavnum[5]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I1"), _T(""), 1, 8, 1, 0, &d.inpavnum[5]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I2"), _T(""), 1, 8, 1, 0, &d.inpavnum[6]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I2"), _T(""), 1, 8, 1, 0, &d.inpavnum[6]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения скорости"), _T(""), 1, 8, 1, 0, &d.inpavnum[7]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for VSS"), _T(""), 1, 8, 1, 0, &d.inpavnum[7]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I3"), _T(""), 1, 8, 1, 0, &d.inpavnum[8]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I3"), _T(""), 1, 8, 1, 0, &d.inpavnum[8]);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Размер буфера усреднения ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9]);
+ else
+  dfd.AppendItem(_T("size of averaging buffer for ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9]);
 
  if (dfd.DoModal()==IDOK)
  {
