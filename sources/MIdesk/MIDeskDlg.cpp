@@ -424,10 +424,10 @@ void CMIDeskDlg::SetValues(const SensorDat* i_values, bool i_revdir /* = false*/
  m_synldQVal[1].push_back(std::make_pair(i_values->load, i_revdir));
 
  m_itbQVal[0].push_back(std::make_pair(m_ringInjTimB.m_result, i_revdir));
- m_itbQVal[1].push_back(std::make_pair(i_values->inj_tim_begin, i_revdir));
+ m_itbQVal[1].push_back(std::make_pair(m_values.inj_tim_begin, i_revdir)); //use transformed value
 
  m_iteQVal[0].push_back(std::make_pair(m_ringInjTimE.m_result, i_revdir));
- m_iteQVal[1].push_back(std::make_pair(i_values->inj_tim_end, i_revdir));
+ m_iteQVal[1].push_back(std::make_pair(m_values.inj_tim_end, i_revdir));   //use transformed value
 
  m_distQVal[0].first = i_values->distance; //passed distance
 }

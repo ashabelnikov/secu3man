@@ -151,6 +151,16 @@ void FirmwareMasterCntr::OnChangeUnit(void)
  {
   mp_view->EnableFwmFlag(FWM_TPIC, true);
  }
+
+ if (mp_view->GetUnitCombo() == UNIT_SECU3TR6)
+ { //OBD is not supported in SECU-3t rev.6
+  mp_view->EnableFwmFlag(FWM_OBD, false);
+  mp_view->SetFwmFlag(FWM_OBD, false);
+ }
+ else
+ {
+  mp_view->EnableFwmFlag(FWM_OBD, true);
+ }
 }
 
 void FirmwareMasterCntr::OnChangeSync(void)
