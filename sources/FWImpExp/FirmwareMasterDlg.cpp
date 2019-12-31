@@ -50,7 +50,7 @@ CFirmwareMasterDlg::CFirmwareMasterDlg(CWnd* pParent /*=NULL*/)
 , m_sync_idx(0)
 {
  for (int i = 0; i < FWM_NR_OF_FLAGS; ++i)
-  m_fwm_flags[FWM_NR_OF_FLAGS] = false;
+  m_fwm_flags[i] = false;
 }
 
 void CFirmwareMasterDlg::DoDataExchange(CDataExchange* pDX)
