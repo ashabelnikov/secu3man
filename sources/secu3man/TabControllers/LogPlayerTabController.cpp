@@ -416,7 +416,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  _TSTRING file_path = fileName.empty() ? ((LPCTSTR)open.GetPathName()) : fileName;
  AfxGetMainWnd()->BeginWaitCursor();
  mp_sbar->SetInformationText(MLL::LoadString(IDS_LOADING_LOG_FILE));
- bool result = mp_log_reader->OpenFile(file_path, error_id, m_pLogWriter->GetFileHandle());
+ bool result = mp_log_reader->OpenFile(file_path, error_id, m_pLogWriter->GetFileHandle(), false); //do not fully check file
  AfxGetMainWnd()->EndWaitCursor();
  mp_sbar->SetInformationText(_T(""));
  if (false==result)

@@ -45,7 +45,7 @@ class IOCORE_API LogReader
   };
 
   //открывает файл
-  bool OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle);
+  bool OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check = false);
 
   //закрывает файл
   bool CloseFile(void);

@@ -69,7 +69,7 @@ LogReader::~LogReader()
  delete[] mp_recBuff;
 }
 
-bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle)
+bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* pending_handle, bool i_check /* = false*/)
 {
  FILE* f_handle = _tfopen(i_file_name.c_str(), _T("rb"));
  if (NULL == f_handle)
@@ -83,6 +83,7 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
   if (_CompareFileHandles(f_handle, pending_handle) > 0)
   {
    o_error = FE_PENDING;
+   fclose(f_handle);
    return false; //trying to open file which is equal to pending_handle
   }
  }
@@ -116,22 +117,45 @@ bool LogReader::OpenFile(const _TSTRING& i_file_name, FileError& o_error, FILE* 
 
  char string[MAX_REC_BUF + 1];
  //определяем кол-во строк в файле и проверяем чтобы они были одинаковой длины
- int prev_lengh = -1, lengh = 0;
+ int prev_length = -1, length = 0;
  unsigned long count = 0;
  while(fgets(string, MAX_REC_BUF, f_handle) != NULL)
  {
-  lengh = strlen(string);
-  if (prev_lengh != -1 && lengh != prev_lengh)
+  length = strlen(string);
+  if (prev_length != -1 && length != prev_length)
   {
    o_error = FE_FORMAT;
+   fclose(f_handle);
+   m_file_handle = NULL;
    return false;
   }
-  prev_lengh = lengh;
+  prev_length = length;
   ++count;
+  if (!i_check && count > 1000) //check only first 1000 records if checking is not specified
+   break;
  }
+
+ fseek(f_handle, 0L, SEEK_END);
+ long int fsize = ftell(f_handle);
+ fseek(f_handle, 0L, SEEK_SET);
+
  //save record count
- m_record_count = count;
- m_record_size = lengh;
+ if (i_check)
+ {
+  m_record_count = (fsize - m_fileOffset) / (length);
+  if (count != m_record_count)
+  {
+   o_error = FE_FORMAT;
+   fclose(f_handle);
+   m_file_handle = NULL;
+   return false;
+  }
+ }
+ else
+ {
+  m_record_count = (fsize - m_fileOffset) / (length);
+ }
+ m_record_size = length;
  o_error = FE_NA;
  fseek(m_file_handle, 0, SEEK_SET);
  return true;
