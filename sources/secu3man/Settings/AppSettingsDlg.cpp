@@ -314,10 +314,9 @@ void CAppSettingsDlg::OnAppSettingsLogfolderButton()
 {
  UpdateData();
  TCHAR szFolder[MAX_PATH*2] = { _T('\0') };
- LPCTSTR lpszInitial = m_log_files_folder.GetBuffer(MAX_PATH);
  BOOL bEditBox = TRUE;
 
- BOOL bRet = XBrowseForFolder(m_hWnd, lpszInitial, -1, MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
+ BOOL bRet = XBrowseForFolder(m_hWnd, (LPCTSTR)m_log_files_folder, -1, MLL::LoadString(IDS_SELECT_FOLDER_FOR_LOG_FILES),
                               szFolder, sizeof(szFolder) / sizeof(TCHAR) - 2, bEditBox);
 
  if (bRet)

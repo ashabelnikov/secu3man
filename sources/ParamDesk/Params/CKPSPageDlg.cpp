@@ -556,7 +556,7 @@ void CCKPSPageDlg::_FillCKPSTeethBTDCComboBox(void)
  {
   CString str;
   str.Format(_T("%d"), tn);
-  m_cogs_numbers.push_back(std::make_pair(tn, str.GetBuffer(0)));
+  m_cogs_numbers.push_back(std::make_pair(tn, (LPCTSTR)str));
  }
 
  m_teeth_before_tdc_combo.ResetContent();

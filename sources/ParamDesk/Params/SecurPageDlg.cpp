@@ -106,10 +106,10 @@ void CSecurPageDlg::DoDataExchange(CDataExchange* pDX)
 
  CString name = m_bt_name.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_NAME_EDIT, name);
- m_bt_name = name.GetBuffer(0);
+ m_bt_name = (LPCTSTR)name;
  CString pass = m_bt_pass.c_str();
  DDX_Text(pDX, IDC_PD_SECUR_BT_PASS_EDIT, pass);
- m_bt_pass = pass.GetBuffer(0);
+ m_bt_pass = (LPCTSTR)pass;
 
  DDX_Check_bool(pDX, IDC_PD_SECUR_BT_USE_CHECK, m_params.use_bt);
  DDX_Check_bool(pDX, IDC_PD_SECUR_IMM_USE_CHECK, m_params.use_imm);
@@ -191,9 +191,9 @@ void CSecurPageDlg::OnChangeDataIbtnKeys()
  int result1, result2;
  unsigned long long value1, value2;
  m_ibtn_key1_edit.GetWindowText(str);
- result1 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value1);
+ result1 = _stscanf((LPCTSTR)str, _T("%I64X"), &value1);
  m_ibtn_key2_edit.GetWindowText(str);
- result2 = _stscanf(str.GetBuffer(0), _T("%I64X"), &value2);
+ result2 = _stscanf((LPCTSTR)str, _T("%I64X"), &value2);
 
  if (1==result1 && 1==result2)
  {

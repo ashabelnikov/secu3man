@@ -335,7 +335,7 @@ _TSTRING CTablesDeskDlg::GetTablesSetName(void) const
 {
  CString str;
  m_names_edit.GetWindowText(str);
- return str.GetBuffer(128);
+ return (LPCTSTR)str;
 }
 
 float* CTablesDeskDlg::GetMap(int i_mapType, bool i_original)

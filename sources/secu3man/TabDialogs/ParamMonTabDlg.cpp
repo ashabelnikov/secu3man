@@ -137,7 +137,7 @@ BOOL CParamMonTabDlg::OnInitDialog()
  //=================================================================
  CString str;
  mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl(str.GetBuffer(100)))
+ if (!CheckAppUrl((LPCTSTR)str))
   DestroyWindow();
  //=================================================================
 
@@ -164,7 +164,7 @@ void CParamMonTabDlg::OnPmShowRawSensors()
  //=================================================================
  CString str;
  mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl(str.GetBuffer(100)))
+ if (!CheckAppUrl((LPCTSTR)str))
   return;
  //=================================================================
 
@@ -178,7 +178,7 @@ void CParamMonTabDlg::OnPmEditTables()
  //=================================================================
  CString str;
  mp_secu3orgLink->GetWindowText(str);
- if (!CheckAppUrl(str.GetBuffer(100)))
+ if (!CheckAppUrl((LPCTSTR)str))
   return;
  //=================================================================
 

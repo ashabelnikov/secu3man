@@ -285,7 +285,7 @@ void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)
 
 void EEPROMImportController::OnOtherListNameChanged(int item, CString text)
 {
- m_eedm->SetFunctionsSetName(item, text.GetBuffer(1000));
+ m_eedm->SetFunctionsSetName(item, (LPCTSTR)text);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////

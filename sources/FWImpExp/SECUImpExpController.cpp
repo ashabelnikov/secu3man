@@ -315,7 +315,7 @@ void SECU3ImportController::OnCurrentListNameChanged(int item, CString text)
 
 void SECU3ImportController::OnOtherListNameChanged(int item, CString text)
 {
- m_fwdm->SetFunctionsSetName(item, text.GetBuffer(1000));
+ m_fwdm->SetFunctionsSetName(item, (LPCTSTR)text);
 }
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -612,5 +612,5 @@ void SECU3ExportController::OnCurrentListNameChanged(int item, CString text)
 
 void SECU3ExportController::OnOtherListNameChanged(int item, CString text)
 {
- m_fwdm->SetFunctionsSetName(item, text.GetBuffer(1000));
+ m_fwdm->SetFunctionsSetName(item, (LPCTSTR)text);
 }

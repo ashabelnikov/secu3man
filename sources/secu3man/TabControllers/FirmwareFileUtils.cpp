@@ -161,7 +161,7 @@ bool LoadEEPROMFromFile(BYTE* p_data, const std::vector<int>& sizes, int* o_sele
   CFileException ex;
   TCHAR szError[1024];
   //obtain file name either from full path (if supplied) or open file dialog
-  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetPathName().GetBuffer(256);
+  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : (LPCTSTR)open.GetPathName();
   if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
@@ -231,7 +231,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
   CFileException ex;
   TCHAR szError[1024];
   //obtain file name either from full path (if supplied) or open file dialog
-  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : open.GetPathName().GetBuffer(256);
+  _TSTRING fileName = (o_file_path && !o_file_path->empty()) ? (*o_file_path) : (LPCTSTR)open.GetPathName();
   if(!f.Open(fileName.c_str(), CFile::modeRead, &ex))
   {
    ex.GetErrorMessage(szError, 1024);
@@ -250,7 +250,7 @@ bool LoadFLASHFromFile(BYTE* p_data, const std::vector<int>& sizes, _TSTRING* i_
     fileExt.erase(0, 1);  //Remove dot
   }
   else //obtain extension from open file dialog
-   fileExt = open.GetFileExt().GetBuffer(256);
+   fileExt = (LPCTSTR)open.GetFileExt();
   if (fileExt==_T("hex") || fileExt==_T("a90"))
   {
    ULONGLONG ulonglong_size = f.GetLength();
