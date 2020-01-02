@@ -319,20 +319,24 @@ bool LogReader::GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o
  return true;
 }
 
-bool LogReader::Next(void)
+bool LogReader::Next(unsigned long num /*= 1*/)
 {
- unsigned long next = m_current_record + 1;
- if (next >= m_record_count)
+ if (0==m_record_count || m_current_record >= (m_record_count-1))
   return false;
- m_current_record = next;
+ m_current_record+=num;
+ if (m_current_record >= m_record_count)
+  m_current_record = m_record_count-1;
  return true;
 }
 
-bool LogReader::Prev(void)
+bool LogReader::Prev(unsigned long num /*= 1*/)
 {
- if (m_current_record == 0)
+ if (0==m_record_count || m_current_record == 0)
   return false;
- --m_current_record;
+ if (num > m_current_record)
+  m_current_record = 0;
+ else
+  m_current_record-=num;
  return true;
 }
 

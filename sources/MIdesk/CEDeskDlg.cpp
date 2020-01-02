@@ -46,7 +46,12 @@ CCEDeskDlg::CCEDeskDlg(CWnd* pParent /*=NULL*/)
 : Super(CCEDeskDlg::IDD, pParent)
 , m_enabled(-1)
 {
- //empty
+ //precalculate strings containing related codes
+ for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
+ {
+  _stprintf(&m_cashstr[i][0], _T("%d"), secu3_ce_error_codes[i].second);
+  m_cashval[i] = false;
+ }
 }
 
 void CCEDeskDlg::DoDataExchange(CDataExchange* pDX)
@@ -101,14 +106,15 @@ void CCEDeskDlg::SetValues(WORD i_errors)
 {
  for(size_t i = 0; i < SECU3_CE_ERRCODES_COUNT; ++i)
  {
-  if (CHECKBIT16(i_errors, secu3_ce_error_codes[i].first))
+  bool status = (CHECKBIT16(i_errors, secu3_ce_error_codes[i].first) != 0);
+  if (m_cashval[i] != status)
   {
-   TCHAR buff[10] = {0};
-   _stprintf(buff, _T("%d"), secu3_ce_error_codes[i].second);
-   m_CEErrors[i].SetWindowText(buff);
+   m_cashval[i] = status;
+   if (status)
+    m_CEErrors[i].SetWindowText(m_cashstr[i]);
+   else
+    m_CEErrors[i].SetWindowText(_T(""));
   }
-  else
-   m_CEErrors[i].SetWindowText(_T(""));
  }
 }
 

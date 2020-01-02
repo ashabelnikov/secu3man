@@ -54,6 +54,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void InvalidateCtrl(bool recreateBmpGrid = false, bool recreateBmpPlot = false, bool invalidate = true);
   void Reset();
   void ShowCursor(bool show);
+  size_t GetMaxPtCount(void);
 
  //Implementation
  protected:
@@ -68,7 +69,6 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   DECLARE_MESSAGE_MAP()
 
  private:
-  size_t _GetPtCount(void);
   void _SetStateColors(bool state);
   int _MapYValue(double);
   void _DrawPoint(bool i_reverse, int ptidx = -1);

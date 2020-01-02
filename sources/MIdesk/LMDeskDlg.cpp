@@ -113,12 +113,17 @@ void CLMDeskDlg::Show(bool show)
 
 void CLMDeskDlg::SetValues(bool k1, bool k2, bool k3)
 {
- m_key_flags[0] = k1; m_key_flags[1] = k2; m_key_flags[2] = k3;
- TCHAR buff[16] = {0};
+ bool new_flags[KEY_COUNT] = {k1, k2, k3};
  for(int i = 0; i < KEY_COUNT; ++i)
  {
-  _stprintf(buff, _T("%s"), m_key_flags[i] ? m_key_str[i].c_str() : _T(""));
-  m_key_text[i].SetWindowText(buff);
+  if (m_key_flags[i] != new_flags[i])
+  {
+   m_key_flags[i] = new_flags[i];
+   if (m_key_flags[i])
+    m_key_text[i].SetWindowText(m_key_str[i].c_str());
+   else
+    m_key_text[i].SetWindowText(_T(""));
+  }
  }
 }
 

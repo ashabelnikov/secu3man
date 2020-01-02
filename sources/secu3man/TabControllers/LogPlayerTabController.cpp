@@ -72,6 +72,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 , m_period_before_tracking(0)
 , m_playing(false)
 , m_current_time_factor(5) //1:1
+, m_lastdir(DIR_NEXT)
 {
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
@@ -334,8 +335,10 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
    {
    _END_TRACKING();
    long count = ((long)mp_view->mp_LPPanelDlg->GetSliderPosition()) - (long)mp_log_reader->GetCurPos();
-   for(long i = 0; i < abs(count); ++i)
-    _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
+   EDirection dir = (count > 0) ? DIR_NEXT : DIR_PREV;
+   count = _SkipRecords(dir, abs(count));
+   for(long i = 0; i < count; ++i)
+    _ProcessOneRecord(false, dir, false);
    }
    break;
 
@@ -344,8 +347,10 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
    {
     _END_TRACKING();
     unsigned long count = mp_view->mp_LPPanelDlg->GetSliderPageSize();
+    EDirection dir = (i_nSBCode==TB_PAGEDOWN) ? DIR_NEXT : DIR_PREV;
+    count = _SkipRecords(dir, count);
     for(unsigned long i = 0; i < count; ++i)
-     _ProcessOneRecord(false, i_nSBCode==TB_PAGEDOWN ? DIR_NEXT : DIR_PREV, false);
+     _ProcessOneRecord(false, dir, false);
    }
    break;
 
@@ -354,8 +359,10 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
    {
     _END_TRACKING();
     unsigned long count = mp_view->mp_LPPanelDlg->GetSliderLineSize();
+    EDirection dir = (i_nSBCode==TB_LINEDOWN) ? DIR_NEXT : DIR_PREV;
+    count = _SkipRecords(dir, count);
     for(unsigned long i = 0; i < count; ++i)
-     _ProcessOneRecord(false, i_nSBCode==TB_LINEDOWN ? DIR_NEXT : DIR_PREV, false);
+     _ProcessOneRecord(false, dir, false);
    }
    break;
 
@@ -363,9 +370,10 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_THUMBTRACK:
    _END_TRACKING();
    long count = (int)i_nPos - (int)mp_log_reader->GetCurPos();
-   for(long i = 0; i < abs(count); ++i)
-    _ProcessOneRecord(false, (count > 0) ? DIR_NEXT : DIR_PREV, false);
-
+   EDirection dir = (count > 0) ? DIR_NEXT : DIR_PREV;
+   count = _SkipRecords(dir, abs(count));
+   for(long i = 0; i < count; ++i)
+    _ProcessOneRecord(false, dir, false);
    break;
  }
 #undef _END_TRACKING
@@ -405,7 +413,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
  mp_log_reader->SetSeparatingSymbol(mp_settings->GetCSVSepSymbol());
 
  LogReader::FileError error_id;
- _TSTRING file_path = fileName.empty() ? open.GetPathName().GetBuffer(0) : fileName;
+ _TSTRING file_path = fileName.empty() ? ((LPCTSTR)open.GetPathName()) : fileName;
  AfxGetMainWnd()->BeginWaitCursor();
  mp_sbar->SetInformationText(MLL::LoadString(IDS_LOADING_LOG_FILE));
  bool result = mp_log_reader->OpenFile(file_path, error_id, m_pLogWriter->GetFileHandle());
@@ -428,6 +436,8 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
   return; //не можем продолжать, так как произошла ошибка
  }
 
+ mp_view->mp_LPPanelDlg->SetSliderPageSize(mp_log_reader->GetCount()/10); //10 pages
+
  ////////////////////////////////////////////////////////////////
  mp_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_CLOSE_FILE));
 
@@ -438,7 +448,7 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
 
  CString string;
  string.Format(MLL::LoadString(IDS_LP_FILE_INFO_FMT_STRING), stripped_name, mp_log_reader->GetCount());
- mp_view->mp_LPPanelDlg->SetFileIndicator(string.GetBuffer(0));
+ mp_view->mp_LPPanelDlg->SetFileIndicator((LPCTSTR)string);
 
  mp_view->mp_MIDeskDlg->Enable(true);
  mp_view->mp_CEDeskDlg->Enable(true);
@@ -507,8 +517,44 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
   return 0; //нет выборок
 }
 
+unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsigned long count)
+{
+ unsigned long space, mincnt = (mp_view->mp_MIDeskDlg->GetGraphSamplesNum() * (m_lastdir != i_direction ? 2 : 1)) + 1;
+
+ if (i_direction == DIR_NEXT)
+  space = (mp_log_reader->GetCount() - 1) - mp_log_reader->GetCurPos();
+ else if (i_direction == DIR_PREV)
+  space = mp_log_reader->GetCurPos();
+ else
+ {
+  ASSERT(0);
+ }
+ 
+ if (count > space)
+  count = space;
+
+ if (count <= mincnt)
+ {
+  return count; //nothing ot skip
+ }
+ else
+ {
+  int skip = (count - mincnt);
+  if (i_direction == DIR_NEXT)
+  {
+   mp_log_reader->Next(skip);
+  }
+  else if (i_direction == DIR_PREV)
+  {
+   mp_log_reader->Prev(skip);
+  }
+  return mincnt;
+ }
+}
+
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
+ m_lastdir = i_direction;
  if (i_direction == DIR_NEXT)
  {
   if (mp_log_reader->IsNextPossible())
@@ -632,7 +678,7 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
      m_curr_record.first.wMinute,
      m_curr_record.first.wSecond,
      m_curr_record.first.wMilliseconds / 10);
- mp_view->mp_LPPanelDlg->SetPositionIndicator(string.GetBuffer(0));
+ mp_view->mp_LPPanelDlg->SetPositionIndicator((LPCTSTR)string);
 }
 
 void CLogPlayerTabController::_UpdateButtons(void)

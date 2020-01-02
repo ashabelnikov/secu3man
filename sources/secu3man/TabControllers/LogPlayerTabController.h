@@ -90,6 +90,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
    DIR_NA
   };
 
+  unsigned long _SkipRecords(EDirection i_direction, unsigned long count);
   void _ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider = true);
 
   //начало/остановка проигрывания
@@ -146,6 +147,9 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   //true - если в данный момент происходит проигрывание, false - если пауза
   bool m_playing;
+
+  //stores last used direction
+  EDirection m_lastdir;
 
   //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
   size_t m_current_time_factor;

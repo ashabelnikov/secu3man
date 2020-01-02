@@ -2272,3 +2272,18 @@ void CMIDeskDlg::ShowGraphCursor(bool show)
 {
  m_show_graph_cursor = show;
 }
+
+int CMIDeskDlg::GetGraphSamplesNum(void)
+{
+ int samples = 0;
+ for(MetFields_t::iterator it = m_metFields.begin(); it != m_metFields.end(); ++it)
+ { //find a maximum value
+  if (it->second->isGraph())
+  {
+   size_t ptcnt = it->second->GetMaxPtCount();
+   if (ptcnt > samples)
+    samples = ptcnt;
+  }
+ }
+ return samples;
+}

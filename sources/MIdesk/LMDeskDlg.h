@@ -64,6 +64,7 @@ class AFX_EXT_CLASS CLMDeskDlg : public CModelessDialog
   bool m_key_flags[KEY_COUNT];      //state flags
   COLORREF m_key_colors[KEY_COUNT]; //colors
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+  bool m_cashval[KEY_COUNT];
 };
 
 /////////////////////////////////////////////////////////////////////////////

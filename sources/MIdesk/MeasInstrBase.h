@@ -244,6 +244,16 @@ class MeasInstrBase
   {
    m_scope.ShowCursor(show);
   }
+
+  bool isGraph(void)
+  {
+   return (m_scope.GetSafeHwnd() != NULL);
+  }
+
+  int GetMaxPtCount(void)
+  {
+   return m_scope.GetMaxPtCount();
+  }
  
   UINT m_uiID;
 

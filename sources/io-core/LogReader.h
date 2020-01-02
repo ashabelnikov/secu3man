@@ -56,13 +56,13 @@ class IOCORE_API LogReader
   //получает данные из текущей записи
   bool GetRecord(SYSTEMTIME& o_time, SECU3IO::SensorDat& o_data, int& o_marks);
 
-  //Перемещение к следующей записи
-  //возвращает false если достигнут конец записей
-  bool Next(void);
+  //Move num records next
+  //returns false if end is reached
+  bool Next(unsigned long num = 1);
 
-  //Перемещение к предыдущей записи
-  //возвращает false если достигнуто начало записей
-  bool Prev(void);
+  //Move num records previous
+  //returns false if begin is reached
+  bool Prev(unsigned long num = 1);
 
   //возвращает кол-во записей в файле
   unsigned long GetCount(void) const;

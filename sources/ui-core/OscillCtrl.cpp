@@ -195,7 +195,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
  m_rcPlot.left = m_rcClient.left + (6 * nCharacters);
 
  //correct plot width according to a number of points
- m_rcPlot.right = m_rcPlot.left + (_GetPtCount() * m_shtPixels);
+ m_rcPlot.right = m_rcPlot.left + (GetMaxPtCount() * m_shtPixels);
 
  //draw plot rectangle
  oldPen = m_dcGrid.SelectObject(&solidPen);
@@ -233,7 +233,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
 
  //x max
  m_dcGrid.SetTextAlign (TA_RIGHT|TA_TOP);
- strTemp.Format (_T("%d"), _GetPtCount());
+ strTemp.Format (_T("%d"), GetMaxPtCount());
  m_dcGrid.TextOut (m_rcPlot.right, m_rcPlot.bottom + 4, strTemp);
 
  //x units
@@ -269,7 +269,7 @@ void COscillCtrl::InvalidateCtrl(bool recreateBmpGrid /*=false*/, bool recreateB
  m_dcPlot.FillRect(m_rcClient, &m_BlackBrush);
 
  //delete points from left or right sides depending on the position of cursor
- size_t ptCount = _GetPtCount();
+ size_t ptCount = GetMaxPtCount();
  if (m_points.size() > ptCount)
  {
   size_t i = 0, n = m_points.size() - ptCount;
@@ -365,9 +365,9 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 {
  if (!IsWindowEnabled())
   return; //do not try to add new points when control is disabled
- if (_GetPtCount()==0)
+ if (GetMaxPtCount()==0)
   return;
- size_t MaxPointIndex = _GetPtCount() - 1;
+ size_t MaxPointIndex = GetMaxPtCount() - 1;
 
  //select default direction
  if (m_points.empty())
@@ -383,7 +383,7 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
   }
   m_points.push_back(dNewPoint);
   //restrict size of queue
-  if (m_points.size() > _GetPtCount())
+  if (m_points.size() > GetMaxPtCount())
    m_points.pop_front();
  }
  else
@@ -402,7 +402,7 @@ void COscillCtrl::AppendPoint(double dNewPoint, bool i_reverse/* = false*/)
 
   m_points.push_front(dNewPoint);
   //restrict size of queue
-  if (m_points.size() > _GetPtCount())
+  if (m_points.size() > GetMaxPtCount())
    m_points.pop_back();
  }
 
@@ -418,7 +418,7 @@ void COscillCtrl::Reset()
  InvalidateCtrl(); //clear all data
 }
 
-size_t COscillCtrl::_GetPtCount(void)
+size_t COscillCtrl::GetMaxPtCount(void)
 {
  return (m_rcPlot.Width() / m_shtPixels);
 }
