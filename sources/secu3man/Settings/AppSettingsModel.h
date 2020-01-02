@@ -96,6 +96,7 @@ class CAppSettingsModel : public ISettingsData
   virtual int GetLogPlayerVert(void) const;
   virtual void SetLogPlayerVert(int pos);
   virtual bool GetExistingPorts(void) const;
+  virtual void SetToggleMapWnd(bool toggle);
 
   //windows positions
   virtual void SetWndSettings(const WndSettings& i_wndSettings);

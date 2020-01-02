@@ -74,6 +74,7 @@ BEGIN_MESSAGE_MAP(CMainFrame, CFrameWnd)
  ON_WM_DEVICECHANGE()
  ON_MESSAGE(WM_SYSCOLORCHANGE, OnSysColorChange)
  ON_COMMAND(ID_APP_CHILD_CHATRS, OnChildCharts)
+ ON_COMMAND(ID_APP_TOGGLE_MAPWND, OnToggleMapWnd)
 END_MESSAGE_MAP()
 
 /////////////////////////////////////////////////////////////////////////////
@@ -333,6 +334,11 @@ void CMainFrame::setOnAppSaveSettings(EventHandler i_OnFunction)
 void CMainFrame::setOnChildCharts(EventHandler i_OnFunction)
 {
  m_OnChildCharts = i_OnFunction;
+}
+
+void CMainFrame::setOnToggleMapWnd(EventHandler i_OnFunction)
+{
+ m_OnToggleMapWnd = i_OnFunction;
 }
 
 void CMainFrame::OnClose()
@@ -623,9 +629,20 @@ void CMainFrame::OnChildCharts()
   m_OnChildCharts();
 }
 
+void CMainFrame::OnToggleMapWnd()
+{
+ if (m_OnToggleMapWnd)
+  m_OnToggleMapWnd();
+}
+
 void CMainFrame::CheckOnChildCharts(bool checked)
 {
  GetMenu()->CheckMenuItem(ID_APP_CHILD_CHATRS, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
+}
+
+void CMainFrame::CheckOnToggleMapWnd(bool checked)
+{
+ GetMenu()->CheckMenuItem(ID_APP_TOGGLE_MAPWND, (checked ? MF_CHECKED : MF_UNCHECKED) | MF_BYCOMMAND);
 }
 
 void CMainFrame::EnableTab(int idx, bool i_enable)

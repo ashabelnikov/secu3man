@@ -329,6 +329,7 @@ class ISettingsData
   virtual void SetChildCharts(bool child) = 0;
   virtual bool GetPortAutoReopen(void) const = 0;
   virtual bool GetToggleMapWnd(void) const = 0;
+  virtual void SetToggleMapWnd(bool toggle) = 0;
   virtual int GetParamMonVert(void) const = 0;
   virtual void SetParamMonVert(int pos) = 0;
   virtual int GetLogPlayerVert(void) const = 0;

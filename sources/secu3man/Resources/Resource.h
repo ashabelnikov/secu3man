@@ -555,3 +555,4 @@
 #define IDM_FIRMWARE_MASTER             4579
 #define IDS_FIRMWARE_MASTER             4580
 #define IDS_LOADING_LOG_FILE            4581
+#define ID_APP_TOGGLE_MAPWND            4582

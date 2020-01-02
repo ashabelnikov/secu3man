@@ -176,6 +176,12 @@ void CFirmwareTabController::OnSettingsChanged(int action)
   return;
  }
 
+ if (action == 3)
+ {
+  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+  return;
+ }
+
  //включаем необходимый для данного контекста коммуникационный контроллер
  m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 

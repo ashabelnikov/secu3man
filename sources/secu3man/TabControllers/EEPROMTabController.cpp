@@ -111,6 +111,12 @@ void CEEPROMTabController::OnSettingsChanged(int action)
   return;
  }
 
+ if (action == 3)
+ {
+  mp_view->EnableToggleMapWnd(mp_settings->GetToggleMapWnd());
+  return;
+ }
+
  m_eedm->SetNumPulsesPer1Km(mp_settings->GetNumPulsesPer1Km());
  m_eedm->SetQuartzFrq(PlatformParamHolder::GetQuartzFreq(mp_settings->GetECUPlatformType()));
 

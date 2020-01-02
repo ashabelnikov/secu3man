@@ -3333,6 +3333,11 @@ bool CAppSettingsModel::GetToggleMapWnd(void) const
  return m_optToggleMapWnd.value;
 }
 
+void CAppSettingsModel::SetToggleMapWnd(bool toggle)
+{
+ m_optToggleMapWnd.value = toggle;
+}
+
 int CAppSettingsModel::GetParamMonVert(void) const
 {
  return m_optParamMonVert.value;

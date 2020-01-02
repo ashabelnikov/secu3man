@@ -104,6 +104,7 @@ void MainFrameController::_SetDelegates(void)
  mp_view->setOnAppSaveScreenshot(MakeDelegate(this, &MainFrameController::OnAppSaveScreenshot));
  mp_view->setOnAppSaveSettings(MakeDelegate(this, &MainFrameController::OnAppSaveSettings));
  mp_view->setOnChildCharts(MakeDelegate(this, &MainFrameController::OnChildCharts));
+ mp_view->setOnToggleMapWnd(MakeDelegate(this, &MainFrameController::OnToggleMapWnd));
 }
 
 MainFrameController::~MainFrameController()
@@ -496,4 +497,12 @@ void MainFrameController::OnChildCharts()
  mp_view->CheckOnChildCharts(cch);
  m_pAppSettingsManager->GetSettings()->SetChildCharts(cch);
  m_pCommunicationManager->NotifySettingsChanged(2); //only ChildCharts check changed
+}
+
+void MainFrameController::OnToggleMapWnd()
+{
+ bool tmw = !m_pAppSettingsManager->GetSettings()->GetToggleMapWnd();
+ mp_view->CheckOnToggleMapWnd(tmw);
+ m_pAppSettingsManager->GetSettings()->SetToggleMapWnd(tmw);
+ m_pCommunicationManager->NotifySettingsChanged(3); //only Toggle map windows check changed
 }
