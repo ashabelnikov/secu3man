@@ -237,8 +237,9 @@ void CLPControlPanelDlg::OnHScroll(UINT nSBCode, UINT nPos, CScrollBar* pScrollB
 {
  if (pScrollBar) //process messages from controls only
  {
+  //use GetPos() instead of nPos, because nPos is limited to 32767!
   if (m_on_slider_moved)
-   m_on_slider_moved(nSBCode, nPos);
+   m_on_slider_moved(nSBCode, /*nPos*/m_slider.GetPos());
  }
  Super::OnHScroll(nSBCode, nPos, pScrollBar);
 }
