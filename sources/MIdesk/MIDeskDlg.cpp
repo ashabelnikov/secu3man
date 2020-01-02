@@ -1200,7 +1200,9 @@ void CMIDeskDlg::OnMetAddGauge(UINT nID)
  else
   m_metCfg[nID] = m_dragItemMet->first;
 
- _MetFactory(nID);
+ MeasInstrBase *widget = _MetFactory(nID);
+ if (widget)
+  widget->Enable(m_enabled);
 
  _MetRearrangeKeys();
 
@@ -1218,7 +1220,7 @@ void CMIDeskDlg::OnUpdateMetAddGauge(CCmdUI* pCmdUI)
  pCmdUI->SetCheck(already_add);
 }
 
-void CMIDeskDlg::_MetFactory(UINT uiID)
+MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
 {
  DPIAware da;
  int TitleFontSize = da.UnScaleY(m_TitleFontSize);
@@ -1226,6 +1228,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
  int PaneFontSize = da.UnScaleY(m_PaneFontSize);
  int LabelFontSize = da.UnScaleY(m_LabelFontSize);
 
+ MeasInstrBase* new_widget = NULL;
  switch(uiID)
  {
   case IDM_MI_MET_RPM:
@@ -1242,6 +1245,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetPaneUnit(m_speedUnit, m_distanceUnit);
    widget->SetLimits(0, (float)m_tachoMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_RPM:
@@ -1256,6 +1260,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_rpmQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_tachoMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAP:
@@ -1269,6 +1274,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_mapQVal[0], NULL, NULL);
    widget->SetLimits(10, (float)m_pressMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAP:
@@ -1283,6 +1289,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_mapQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_pressMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_VBAT:
@@ -1295,6 +1302,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_VBAT:
@@ -1308,6 +1316,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_IGNTIM:
@@ -1320,6 +1329,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_IGNTIM:
@@ -1333,6 +1343,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_CLT:
@@ -1351,6 +1362,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowTRP(m_showChokePos);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    mp_miTemperat = widget;
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_CLT:
@@ -1364,6 +1376,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_cltQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_ADDI1:
@@ -1376,6 +1389,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_ADDI1:
@@ -1389,6 +1403,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_ADDI2:
@@ -1401,6 +1416,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_ADDI2:
@@ -1414,6 +1430,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJPW:
@@ -1426,6 +1443,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJPW:
@@ -1439,6 +1457,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_IAT:
@@ -1451,6 +1470,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iatQVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_IAT:
@@ -1464,6 +1484,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iatQVal[1], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_EGOCORR:
@@ -1476,6 +1497,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_egocQVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_EGOCORR:
@@ -1489,6 +1511,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_egocQVal[1], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_TPS:
@@ -1502,6 +1525,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_tpsQVal[0], &m_airflQVal[0], NULL);
    widget->ShowTLP(true);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TPS:
@@ -1515,6 +1539,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tpsQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_AIRFLOW:
@@ -1527,6 +1552,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_airflQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_AIRFLOW:
@@ -1540,6 +1566,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_airflQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_VEHSPD:
@@ -1553,6 +1580,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_vssQVal[0], NULL, NULL);
    widget->SetMeterUnit(m_speedUnit);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_VEHSPD:
@@ -1567,6 +1595,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_vssQVal[1], NULL, NULL);
    widget->SetMeterUnit(m_speedUnit);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_TPSDOT:
@@ -1579,6 +1608,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TPSDOT:
@@ -1592,6 +1622,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAP2:
@@ -1604,6 +1635,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_map2QVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAP2:
@@ -1617,6 +1649,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_map2QVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_MAPD:
@@ -1629,6 +1662,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_MAPD:
@@ -1642,6 +1676,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_TMP2:
@@ -1654,6 +1689,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_TMP2:
@@ -1667,6 +1703,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_FUELCONSUM:
@@ -1679,6 +1716,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_fuelcQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_FUELCONSUM:
@@ -1692,6 +1730,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_fuelcQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_KNOCKRETARD:
@@ -1704,6 +1743,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_KNOCKRETARD:
@@ -1717,6 +1757,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_KNOCKGRAPH:
@@ -1729,6 +1770,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_knockQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_KNOCKGRAPH:
@@ -1742,6 +1784,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_knockQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_SENSAFR:
@@ -1754,6 +1797,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_SENSAFR:
@@ -1767,6 +1811,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_CHOKEPOS:
@@ -1779,6 +1824,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_chposQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_CHOKEPOS:
@@ -1792,6 +1838,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_chposQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_GDPOS:
@@ -1804,6 +1851,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[0], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_GDPOS:
@@ -1817,6 +1865,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_SYNLOAD:
@@ -1829,6 +1878,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_synldQVal[0], NULL, NULL);  
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_SYNLOAD:
@@ -1842,6 +1892,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_synldQVal[1], NULL, NULL);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJTIMB:
@@ -1855,6 +1906,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_itbQVal[0], NULL, NULL);  
    widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJTIMB:
@@ -1869,6 +1921,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_itbQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_MET_INJTIME:
@@ -1882,6 +1935,7 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_iteQVal[0], NULL, NULL);  
    widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
   case IDM_MI_GRH_INJTIME:
@@ -1896,9 +1950,11 @@ void CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_iteQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
+   new_widget = widget;
    break;
   }
  }
+ return new_widget;
 }
 
 void CMIDeskDlg::OnMetNumOfRows(UINT nID)
@@ -2275,7 +2331,7 @@ void CMIDeskDlg::ShowGraphCursor(bool show)
 
 int CMIDeskDlg::GetGraphSamplesNum(void)
 {
- int samples = 0;
+ size_t samples = 0;
  for(MetFields_t::iterator it = m_metFields.begin(); it != m_metFields.end(); ++it)
  { //find a maximum value
   if (it->second->isGraph())

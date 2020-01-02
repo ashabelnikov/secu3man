@@ -195,7 +195,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   void _MetCleanUp(void);
   void _MetRearrangeKeys(void);
   void _IndRearrangeKeys(void);
-  void _MetFactory(UINT uiID);
+  MeasInstrBase* _MetFactory(UINT uiID);
   void _IndFactory(UINT uiID);
   float _HeightCoeffFromID(UINT nID);
   void _CreateLEDs(void);
