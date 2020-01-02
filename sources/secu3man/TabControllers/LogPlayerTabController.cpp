@@ -519,7 +519,10 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 
 unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsigned long count)
 {
- unsigned long space, mincnt = (mp_view->mp_MIDeskDlg->GetGraphSamplesNum() * (m_lastdir != i_direction ? 2 : 1)) + 1;
+ unsigned long m = (m_lastdir != i_direction) ? 2 : 1;
+ unsigned long space, mincnt = (mp_view->mp_MIDeskDlg->GetGraphSamplesNum() * m) + 1;
+
+ m_lastdir = i_direction;
 
  if (i_direction == DIR_NEXT)
   space = (mp_log_reader->GetCount() - 1) - mp_log_reader->GetCurPos();
@@ -554,7 +557,6 @@ unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsi
 
 void CLogPlayerTabController::_ProcessOneRecord(bool i_set_timer, EDirection i_direction, bool i_set_slider /*= true*/)
 {
- m_lastdir = i_direction;
  if (i_direction == DIR_NEXT)
  {
   if (mp_log_reader->IsNextPossible())
