@@ -1641,7 +1641,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
 
 void CFirmwareTabController::OnEditFwConsts(void)
 {
- CDynFieldsDialog dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 408);
+ CDynFieldsContainer dfd(mp_view, (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN) ? _T("Редактирование констант прошивки") : _T("Editing constants of firmware"), 408);
 
  SECU3IO::FwConstsData d;
  m_fwdm->GetFwConstsData(d);

@@ -28,37 +28,38 @@
 #include <list>
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/UpdatableDialog.h"
 
 class CWndScroller;
 
-class AFX_EXT_CLASS CDynFieldsDialog : public CDialog
+//This class is used indirectly through CDynFieldsContainer class
+class AFX_EXT_CLASS CDynFieldsDialog : public CModelessUpdatableDialog
 {
- typedef CDialog Super;
+ typedef CModelessUpdatableDialog Super;
 
  public:
-  CDynFieldsDialog(CWnd* pParentWnd, const _TSTRING& caption, int height);
+  CDynFieldsDialog(CWnd* pParentWnd = NULL);
  ~CDynFieldsDialog();
 
+ protected:
+  friend class CDynFieldsContainer;
+  void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value);
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value);
+  void Apply(void);
+  int GetContentHeight(void);
 
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
-  virtual void OnOK();
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
-  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
   afx_msg void OnChangeData(UINT nID);
   DECLARE_MESSAGE_MAP()
 
   void _UpdateScrlViewSize(int cx, int cy);
 
  private:
-  const _TSTRING m_caption;
-  bool m_initialized;
-  CSize m_createSize;
-
   struct ItemData
   {
    ItemData()
@@ -187,6 +188,36 @@ class AFX_EXT_CLASS CDynFieldsDialog : public CDialog
   std::list<ItemData> m_fl;
   std::auto_ptr<CWndScroller> mp_scr;
 
+  int m_contentHeight;
+  bool m_initialized;
+};
+
+//Modal dialog container
+class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
+{
+ typedef CDialog Super;
+
+ public:
+  CDynFieldsContainer(CWnd* pParentWnd, const _TSTRING& caption, int height);
+ ~CDynFieldsContainer();
+
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, int vMin, int vMax, int vStp, int decPls, int* p_value);
+  bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value);
+
+ protected:
+  virtual BOOL OnInitDialog();
+  virtual void OnOK();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  DECLARE_MESSAGE_MAP()
+
+  void _UpdateControlsPosition(int cx, int cy);
+
+ private:
+  CDynFieldsDialog m_dlg;
+  const _TSTRING m_caption;
+  CSize m_createSize;
   int m_height;
+  bool m_initialized;
   int m_contentHeight;
 };
