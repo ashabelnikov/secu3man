@@ -31,14 +31,15 @@
 #include "common/UnicodeSupport.h"
 #include "ui-core/EditEx.h"
 #include "ui-core/SpinButtonCtrlEx.h"
+#include "ui-core/UpdatableDialog.h"
 
 class CWndScroller;
 
 namespace SECU3IO { struct CESettingsData; }
 
-class AFX_EXT_CLASS CCESettingsDlg : public CDialog
+class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
 {
-  typedef CDialog Super;
+  typedef CModelessUpdatableDialog Super;
 
  public:
   CCESettingsDlg(CWnd* pParent = NULL);   // standard constructor
@@ -51,18 +52,14 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   void EnableExtraIO(bool i_enable);
   void SetWndPosition(int x, int y);
   const CPoint& GetWndPosition(void);
+  void SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after = NULL);
 
  // Implementation
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-  virtual void OnOK();
-  virtual void OnCancel();
   virtual BOOL OnInitDialog();
   afx_msg void OnDestroy();
   afx_msg void OnSize(UINT nType, int cx, int cy);
-  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
-  afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
-  afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
   afx_msg void OnUpdateSECU3i(CCmdUI* pCmdUI);
   afx_msg void OnUpdateSECU3iEx(CCmdUI* pCmdUI);
   DECLARE_MESSAGE_MAP()
@@ -145,7 +142,41 @@ class AFX_EXT_CLASS CCESettingsDlg : public CDialog
   CEditEx m_add_i4_v_em_edit;
   CSpinButtonCtrlEx m_add_i4_v_em_spin;
   CButton m_add_i4_v_useem_check;
+};
 
+
+
+class AFX_EXT_CLASS CCESettingsCntr : public CDialog
+{
+  typedef CDialog Super;
+
+ public:
+  CCESettingsCntr(CWnd* pParent = NULL);   // standard constructor
+ ~CCESettingsCntr();
+  static const UINT IDD;
+
+  void SetValues(const SECU3IO::CESettingsData& i_data);
+  void GetValues(SECU3IO::CESettingsData& o_data);
+  void EnableSECU3TItems(bool i_enable);
+  void EnableExtraIO(bool i_enable);
+  void SetWndPosition(int x, int y);
+  const CPoint& GetWndPosition(void);
+
+ // Implementation
+ protected:
+  virtual void OnOK();
+  virtual void OnCancel();
+  virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
+  afx_msg void OnSize(UINT nType, int cx, int cy);
+  afx_msg void OnGetMinMaxInfo(MINMAXINFO* lpMMI);
+  afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
+  afx_msg void OnUpdateOkButton(CCmdUI* pCmdUI);
+  DECLARE_MESSAGE_MAP()
+
+ private:
+  void _UpdateControlsPosition(int cx, int cy);
+  CCESettingsDlg m_dlg;
   CPoint m_wndPos;
   CSize m_createSize;
   bool m_initialized;

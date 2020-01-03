@@ -326,3 +326,4 @@
 #define IDS_CRANKING_TIME_MAP           5680
 #define IDS_SMAPABAN_THRD_MAP           5681
 #define IDS_MAPS_STROKE_UNIT            5682
+#define IDD_CESETTINGS_CONTAINER        5683

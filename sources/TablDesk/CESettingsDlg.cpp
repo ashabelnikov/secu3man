@@ -28,6 +28,7 @@
 #include <afxpriv.h>
 #include "resource.h"
 #include "common/dpiaware.h"
+#include "common/GDIHelpers.h"
 #include "CESettingsDlg.h"
 #include "ui-core/EditEx.h"
 #include "io-core/SECU3IO.h"
@@ -36,17 +37,14 @@
 
 #undef max   //avoid conflicts with C++
 
-const UINT CCESettingsDlg::IDD = IDD_CESETTINGS_EDITOR;
-
 /////////////////////////////////////////////////////////////////////////////
 // CCESettingsDlg dialog
+
+const UINT CCESettingsDlg::IDD = IDD_CESETTINGS_EDITOR;
 
 BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_WM_DESTROY()
  ON_WM_SIZE()
- ON_WM_GETMINMAXINFO()
- ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
-
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_EDIT, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MIN_SPIN, OnUpdateSECU3i)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I3_V_MAX_EDIT, OnUpdateSECU3i)
@@ -70,8 +68,6 @@ BEGIN_MESSAGE_MAP(CCESettingsDlg, Super)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_MAX_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_EM_CAPTION, OnUpdateSECU3iEx)
  ON_UPDATE_COMMAND_UI(IDC_CESETT_ADD_I4_V_USEEM_CHECK, OnUpdateSECU3iEx)
-
- ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
 END_MESSAGE_MAP()
 
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
@@ -107,8 +103,6 @@ CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 , m_add_i4_v_min_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_max_edit(CEditEx::MODE_FLOAT)
 , m_add_i4_v_em_edit(CEditEx::MODE_FLOAT)
-, m_wndPos(0, 0)
-, m_initialized(false)
 {
  //empty
 }
@@ -271,25 +265,6 @@ void CCESettingsDlg::DoDataExchange(CDataExchange* pDX)
 /////////////////////////////////////////////////////////////////////////////
 // CCESettingsDlg message handlers
 
-void CCESettingsDlg::OnOK()
-{
- bool valid = UpdateData(true);
- if (!valid)
-  return;
-
- Super::OnOK();
-}
-
-void CCESettingsDlg::OnCancel()
-{
- Super::OnCancel();
-}
-
-void CCESettingsDlg::OnUpdateOkButton(CCmdUI* pCmdUI)
-{
- pCmdUI->Enable(true);
-}
-
 void CCESettingsDlg::OnUpdateSECU3i(CCmdUI* pCmdUI)
 {
  pCmdUI->Enable(!m_enable_secu3t_features);
@@ -421,18 +396,9 @@ BOOL CCESettingsDlg::OnInitDialog()
  m_add_i4_v_em_edit.SetLimitText(6);
  m_add_i4_v_em_edit.SetDecimalPlaces(3);
 
- if (m_wndPos.x != std::numeric_limits<int>::max() && m_wndPos.y != std::numeric_limits<int>::max())
- SetWindowPos(NULL, m_wndPos.x, m_wndPos.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
-
  //initialize window scroller
  mp_scr->Init(this);
  _UpdateScrlViewSize();
-
- CRect rc;
- GetWindowRect(&rc);
- m_createSize = rc.Size();
-
- m_initialized = true;
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -440,19 +406,8 @@ BOOL CCESettingsDlg::OnInitDialog()
 
 void CCESettingsDlg::OnDestroy()
 {
- RECT rc;
- GetWindowRect(&rc);
- m_wndPos.x = rc.left;
- m_wndPos.y = rc.top;
-
  Super::OnDestroy();
  mp_scr->Close();
-}
-
-LRESULT CCESettingsDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
-{
- UpdateDialogControls(this, true);
- return FALSE;
 }
 
 void CCESettingsDlg::SetValues(const SECU3IO::CESettingsData& i_data)
@@ -477,21 +432,11 @@ void CCESettingsDlg::EnableExtraIO(bool i_enable)
  m_enable_extraio = i_enable;
 }
 
-void CCESettingsDlg::SetWndPosition(int x, int y)
-{
- m_wndPos = CPoint(x, y);
-}
-
-const CPoint& CCESettingsDlg::GetWndPosition(void)
-{
- return m_wndPos;
-}
-
 void CCESettingsDlg::_UpdateScrlViewSize(void)
 {
  DPIAware da;
  if (mp_scr.get())
-  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(590));
+  mp_scr->SetViewSize(da.ScaleX(475), da.ScaleY(550));
 }
 
 void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)
@@ -500,7 +445,140 @@ void CCESettingsDlg::OnSize(UINT nType, int cx, int cy)
  _UpdateScrlViewSize();
 }
 
-void CCESettingsDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
+void CCESettingsDlg::SetPosition(int x_pos, int y_pos, CWnd* wnd_insert_after /*=NULL*/)
+{
+ SetWindowPos(wnd_insert_after,x_pos,y_pos,0,0, (wnd_insert_after ? 0 : SWP_NOZORDER) | SWP_NOSIZE);
+}
+
+
+/////////////////////////////////////////////////////////////////////////////
+// CCESettingsCntr dialog
+
+const UINT CCESettingsCntr::IDD = IDD_CESETTINGS_CONTAINER;
+
+BEGIN_MESSAGE_MAP(CCESettingsCntr, Super)
+ ON_WM_DESTROY()
+ ON_WM_SIZE()
+ ON_WM_GETMINMAXINFO()
+ ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
+ ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
+END_MESSAGE_MAP()
+
+CCESettingsCntr::CCESettingsCntr(CWnd* pParent /*=NULL*/)
+: Super(CCESettingsCntr::IDD, pParent)
+, m_wndPos(0, 0)
+, m_initialized(false)
+{
+ //empty
+}
+
+CCESettingsCntr::~CCESettingsCntr()
+{
+ //empty
+}
+
+/////////////////////////////////////////////////////////////////////////////
+// CCESettingsCntr message handlers
+
+void CCESettingsCntr::OnOK()
+{
+ bool valid = m_dlg.UpdateData(true);
+ if (!valid)
+  return;
+
+ Super::OnOK();
+}
+
+void CCESettingsCntr::OnCancel()
+{
+ Super::OnCancel();
+}
+
+void CCESettingsCntr::OnUpdateOkButton(CCmdUI* pCmdUI)
+{
+ pCmdUI->Enable(true);
+}
+
+BOOL CCESettingsCntr::OnInitDialog()
+{
+ Super::OnInitDialog();
+ //create child dialog
+ m_dlg.Create(CCESettingsDlg::IDD, this);
+ m_dlg.SetPosition(0,0);
+ m_dlg.ShowWindow(SW_SHOW);
+
+ if (m_wndPos.x != std::numeric_limits<int>::max() && m_wndPos.y != std::numeric_limits<int>::max())
+ SetWindowPos(NULL, m_wndPos.x, m_wndPos.y, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
+
+ CRect rc;
+ GetWindowRect(&rc);
+ m_createSize = rc.Size();
+
+ m_initialized = true;
+
+ GetClientRect(&rc);
+ _UpdateControlsPosition(rc.Width(), rc.Height());
+
+ UpdateData(FALSE);
+ return TRUE;  // return TRUE unless you set the focus to a control
+}
+
+void CCESettingsCntr::OnDestroy()
+{
+ RECT rc;
+ GetWindowRect(&rc);
+ m_wndPos.x = rc.left;
+ m_wndPos.y = rc.top;
+
+ Super::OnDestroy();
+}
+
+LRESULT CCESettingsCntr::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
+{
+ m_dlg.UpdateDialogControls(this, true);
+ return FALSE;
+}
+
+void CCESettingsCntr::SetValues(const SECU3IO::CESettingsData& i_data)
+{
+ m_dlg.SetValues(i_data);
+}
+
+void CCESettingsCntr::GetValues(SECU3IO::CESettingsData& o_data)
+{
+ m_dlg.GetValues(o_data);
+}
+
+void CCESettingsCntr::EnableSECU3TItems(bool i_enable)
+{
+ m_dlg.EnableSECU3TItems(i_enable);
+}
+
+void CCESettingsCntr::EnableExtraIO(bool i_enable)
+{
+ m_dlg.EnableExtraIO(i_enable);
+}
+
+void CCESettingsCntr::SetWndPosition(int x, int y)
+{
+ m_wndPos = CPoint(x, y);
+}
+
+const CPoint& CCESettingsCntr::GetWndPosition(void)
+{
+ return m_wndPos;
+}
+
+void CCESettingsCntr::OnSize(UINT nType, int cx, int cy)
+{
+ Super::OnSize(nType, cx, cy);
+
+ if (!m_initialized)
+  return;
+ _UpdateControlsPosition(cx, cy);
+}
+
+void CCESettingsCntr::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
 {
  if (m_initialized)
  {
@@ -508,6 +586,25 @@ void CCESettingsDlg::OnGetMinMaxInfo(MINMAXINFO* lpMMI)
   lpMMI->ptMinTrackSize.y = m_createSize.cy;
 
   lpMMI->ptMaxTrackSize.x = m_createSize.cx;
-  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.35f);
+  lpMMI->ptMaxTrackSize.y = (LONG)(m_createSize.cy * 1.33f);
  }
+}
+
+void CCESettingsCntr::_UpdateControlsPosition(int cx, int cy)
+{
+ DPIAware dpi;
+ //move OK button
+ CRect rcok = GDIHelpers::GetChildWndRect(GetDlgItem(IDOK));
+ rcok.MoveToY(cy - dpi.ScaleY(8) - rcok.Height());
+ GetDlgItem(IDOK)->MoveWindow(rcok);
+
+ //move CANCEL button
+ CRect rccn = GDIHelpers::GetChildWndRect(GetDlgItem(IDCANCEL));
+ rccn.MoveToY(cy - dpi.ScaleY(8) - rccn.Height());
+ GetDlgItem(IDCANCEL)->MoveWindow(rccn);
+
+ //resize child dialog
+ CRect rcdl = GDIHelpers::GetChildWndRect(&m_dlg);
+ rcdl.bottom = rcok.top - dpi.ScaleY(8);
+ m_dlg.MoveWindow(&rcdl);
 }

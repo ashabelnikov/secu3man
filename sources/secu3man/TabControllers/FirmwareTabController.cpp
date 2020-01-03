@@ -1941,7 +1941,7 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
 
 void CFirmwareTabController::OnCESettingsButton(void)
 {
- CCESettingsDlg dialog;
+ CCESettingsCntr dialog;
  SECU3IO::CESettingsData data;
  m_fwdm->GetCESettingsData(data);
  dialog.SetValues(data);
