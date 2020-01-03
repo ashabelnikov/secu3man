@@ -148,9 +148,6 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
   //true - если в данный момент происходит проигрывание, false - если пауза
   bool m_playing;
 
-  //stores last used direction
-  EDirection m_lastdir;
-
   //хранит код текущего фактора времени (ключ для контейнера m_time_factors)
   size_t m_current_time_factor;
 

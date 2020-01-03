@@ -61,6 +61,20 @@ static unsigned long CalcPeriod(SYSTEMTIME &i_time1, SYSTEMTIME &i_time2)
  return (ms1 <= ms2) ? (ms2 - ms1) : (60000 - ms1) + ms2;
 }
 
+//lokup table used to speed up time to string conversion
+static const TCHAR lutDigits100[100][3] = 
+    {_T("00"),_T("01"),_T("02"),_T("03"),_T("04"),_T("05"),_T("06"),_T("07"),_T("08"),_T("09"),
+     _T("10"),_T("11"),_T("12"),_T("13"),_T("14"),_T("15"),_T("16"),_T("17"),_T("18"),_T("19"),
+     _T("20"),_T("21"),_T("22"),_T("23"),_T("24"),_T("25"),_T("26"),_T("27"),_T("28"),_T("29"),
+     _T("30"),_T("31"),_T("32"),_T("33"),_T("34"),_T("35"),_T("36"),_T("37"),_T("38"),_T("39"),
+     _T("40"),_T("41"),_T("42"),_T("43"),_T("44"),_T("45"),_T("46"),_T("47"),_T("48"),_T("49"),
+     _T("50"),_T("51"),_T("52"),_T("53"),_T("54"),_T("55"),_T("56"),_T("57"),_T("58"),_T("59"),
+     _T("60"),_T("61"),_T("62"),_T("63"),_T("64"),_T("65"),_T("66"),_T("67"),_T("68"),_T("69"),
+     _T("70"),_T("71"),_T("72"),_T("73"),_T("74"),_T("75"),_T("76"),_T("77"),_T("78"),_T("79"),
+     _T("80"),_T("81"),_T("82"),_T("83"),_T("84"),_T("85"),_T("86"),_T("87"),_T("88"),_T("89"),
+     _T("90"),_T("91"),_T("92"),_T("93"),_T("94"),_T("95"),_T("96"),_T("97"),_T("98"),_T("99")
+    };
+
 CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings, LogWriter* i_pLogWriter)
 : mp_view(ip_view)
 , mp_comm(ip_comm)
@@ -72,7 +86,6 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 , m_period_before_tracking(0)
 , m_playing(false)
 , m_current_time_factor(5) //1:1
-, m_lastdir(DIR_NEXT)
 {
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
@@ -436,8 +449,6 @@ void CLogPlayerTabController::_OpenFile(const _TSTRING& fileName)
   return; //не можем продолжать, так как произошла ошибка
  }
 
- mp_view->mp_LPPanelDlg->SetSliderPageSize(mp_log_reader->GetCount()/10); //10 pages
-
  ////////////////////////////////////////////////////////////////
  mp_view->mp_LPPanelDlg->SetOpenFileButtonText(MLL::GetString(IDS_LP_CLOSE_FILE));
 
@@ -519,10 +530,8 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 
 unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsigned long count)
 {
- unsigned long m = 2; //(m_lastdir != i_direction) ? 2 : 1; //commented expression is faster but cases a bug, TODO: fix bug and improve speed
+ unsigned long m = 2;//(m_lastdir != i_direction) ? 2 : 1; //commented expression is faster but cases a bug, TODO: fix bug and improve speed
  unsigned long space, mincnt = (mp_view->mp_MIDeskDlg->GetGraphSamplesNum() * m) + 1;
-
- m_lastdir = i_direction; //?
 
  if (i_direction == DIR_NEXT)
   space = (mp_log_reader->GetCount() - 1) - mp_log_reader->GetCurPos();
@@ -638,6 +647,7 @@ void CLogPlayerTabController::_InitPlayer(void)
  mp_view->mp_LPPanelDlg->EnableSlider(mp_log_reader->GetCount() > 1);
  mp_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount());
  mp_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
+ mp_view->mp_LPPanelDlg->SetSliderPageSize(mp_log_reader->GetCount()/10); //10 pages
  _GetRecord();
  _DisplayCurrentRecord(DIR_NEXT);
  _UpdateButtons();
@@ -673,14 +683,39 @@ void CLogPlayerTabController::_DisplayCurrentRecord(EDirection i_direction)
  mp_view->mp_LMDeskDlg->SetValues(m_curr_marks & 0x1, m_curr_marks & 0x2, m_curr_marks & 0x4);
 
  //выводим время записи
- CString string;
- string.Format(_T("%05d    %02d:%02d:%02d.%02d"),
+/* CString str;
+ str.Format(_T("%05d    %02d:%02d:%02d.%02d"),
      mp_log_reader->GetCurPos() + 1,
      m_curr_record.first.wHour,
      m_curr_record.first.wMinute,
      m_curr_record.first.wSecond,
-     m_curr_record.first.wMilliseconds / 10);
- mp_view->mp_LPPanelDlg->SetPositionIndicator((LPCTSTR)string);
+     m_curr_record.first.wMilliseconds / 10);*/
+
+ TCHAR str[23] = "000000    HH:MM:SS.mm";
+ //current position
+ unsigned long curpos = mp_log_reader->GetCurPos() + 1;
+ str[0] = (TCHAR)((curpos / 1000000) % 10 + _T('0'));
+ str[1] = (TCHAR)((curpos / 100000) % 10 + _T('0'));
+ str[2] = (TCHAR)((curpos / 10000) % 10 + _T('0'));
+ str[3] = (TCHAR)((curpos / 1000) % 10 + _T('0'));
+ str[4] = (TCHAR)((curpos / 100) % 10 + _T('0'));
+ str[5] = (TCHAR)((curpos / 10) % 10 + _T('0'));
+ str[6] = (TCHAR)((curpos) % 10 + _T('0'));
+ //HH
+ str[10] = lutDigits100[m_curr_record.first.wHour][0];
+ str[11] = lutDigits100[m_curr_record.first.wHour][1];
+ //MM
+ str[13] = lutDigits100[m_curr_record.first.wMinute][0];
+ str[14] = lutDigits100[m_curr_record.first.wMinute][1];
+ //SS
+ str[16] = lutDigits100[m_curr_record.first.wSecond][0];
+ str[17] = lutDigits100[m_curr_record.first.wSecond][1];
+ //mm
+ int msd = m_curr_record.first.wMilliseconds / 10;
+ str[19] = lutDigits100[msd][0];
+ str[20] = lutDigits100[msd][1];
+
+ mp_view->mp_LPPanelDlg->SetPositionIndicator((LPCTSTR)str);
 }
 
 void CLogPlayerTabController::_UpdateButtons(void)
