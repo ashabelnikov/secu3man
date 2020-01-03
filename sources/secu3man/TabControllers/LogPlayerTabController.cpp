@@ -519,10 +519,10 @@ unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 
 unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsigned long count)
 {
- unsigned long m = (m_lastdir != i_direction) ? 2 : 1;
+ unsigned long m = 2; //(m_lastdir != i_direction) ? 2 : 1; //commented expression is faster but cases a bug, TODO: fix bug and improve speed
  unsigned long space, mincnt = (mp_view->mp_MIDeskDlg->GetGraphSamplesNum() * m) + 1;
 
- m_lastdir = i_direction;
+ m_lastdir = i_direction; //?
 
  if (i_direction == DIR_NEXT)
   space = (mp_log_reader->GetCount() - 1) - mp_log_reader->GetCurPos();
