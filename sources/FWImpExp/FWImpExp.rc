@@ -92,6 +92,10 @@ BEGIN
     CONTROL         "Табл. кривой ДТГ",IDC_MAP_IMPEXP_TMP2CURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,280,90,8
     CONTROL         "Темп.корр.УОЗ пуск",IDC_MAP_IMPEXP_CRKTEMP_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,294,90,8
     CONTROL         "Пауза прогрева ДК",IDC_MAP_IMPEXP_EHPAUSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,308,90,8
+    CONTROL         "Обор.блок.старт.",IDC_MAP_IMPEXP_CRNKTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,168,90,8
+    CONTROL         "Время.блок.старт.",IDC_MAP_IMPEXP_CRNKTIME_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,182,90,8
+    CONTROL         "Обор.перех.старт.",IDC_MAP_IMPEXP_ABANTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,196,90,8
+
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 
     CONTROL         "Установить/сбросить все",IDC_MAP_IMPEXP_SEP_SETALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,190,351,110,8
@@ -238,9 +242,13 @@ BEGIN
     CONTROL         "GTS curve",IDC_MAP_IMPEXP_TMP2CURVE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,280,90,8
     CONTROL         "Crank.ign.tim.CLT corr.",IDC_MAP_IMPEXP_CRKTEMP_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,294,90,8
     CONTROL         "EGO heating pause",IDC_MAP_IMPEXP_EHPAUSE_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,184,308,90,8
+    CONTROL         "Start.block.RPM",IDC_MAP_IMPEXP_CRNKTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,168,90,8
+    CONTROL         "Start.block.time",IDC_MAP_IMPEXP_CRNKTIME_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,182,90,8
+    CONTROL         "Crank.map.abandon",IDC_MAP_IMPEXP_ABANTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,196,90,8
+
     LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 
-    CONTROL         "Set/reset все",IDC_MAP_IMPEXP_SEP_SETALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,190,351,110,8
+    CONTROL         "Set/reset all",IDC_MAP_IMPEXP_SEP_SETALL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,190,351,110,8
 END
 
 /////////////////////////////////////////////////////////////////////////////

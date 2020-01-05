@@ -155,6 +155,15 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_EHPAUSE_MAP))
   memcpy(mp_fwd->eh_pause_table, mp_s3f_io->GetData().eh_pause_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_CRNKTHRD_MAP))
+  memcpy(mp_fwd->cranking_thrd, mp_s3f_io->GetData().cranking_thrd, sizeof(float) * CRANK_THRD_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNKTIME_MAP))
+  memcpy(mp_fwd->cranking_time, mp_s3f_io->GetData().cranking_time, sizeof(float) * CRANK_TIME_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
+  memcpy(mp_fwd->smapaban_thrd, mp_s3f_io->GetData().smapaban_thrd, sizeof(float) * SMAPABAN_THRD_SIZE);
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
 }
@@ -293,6 +302,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0106 = (mp_s3f_io->GetVersion() > 0x0105);
  bool sv0107 = (mp_s3f_io->GetVersion() > 0x0106);
  bool sv0109 = (mp_s3f_io->GetVersion() > 0x0108);
+ bool sv0110 = (mp_s3f_io->GetVersion() > 0x0109);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps();
 
@@ -362,6 +372,9 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_MANIT_MAP, sv0109 && sepmap);    //since v01.09
  mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, sv0109 && sepmap);  //since v01.09
  mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, sv0109 && sepmap);  //since v01.09
+ mp_view->EnableFWDFlag(FLAG_CRNKTHRD_MAP, sv0110 && sepmap);  //since v01.10
+ mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, sv0110 && sepmap);  //since v01.10
+ mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, sv0110 && sepmap);  //since v01.10
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -491,6 +504,15 @@ void S3FExportController::OnOkPressed(void)
 
  if (mp_view->GetFWDFlag(FLAG_EHPAUSE_MAP))
   memcpy(mp_s3f_io->GetDataLeft().eh_pause_table, mp_fwd->eh_pause_table, sizeof(float) * COIL_ON_TIME_LOOKUP_TABLE_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNKTHRD_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().cranking_thrd, mp_fwd->cranking_thrd, sizeof(float) * CRANK_THRD_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_CRNKTIME_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().cranking_time, mp_fwd->cranking_time, sizeof(float) * CRANK_TIME_SIZE);
+
+ if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
+  memcpy(mp_s3f_io->GetDataLeft().smapaban_thrd, mp_fwd->smapaban_thrd, sizeof(float) * SMAPABAN_THRD_SIZE);
 
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
@@ -648,6 +670,9 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_CRKTEMP_MAP, false);
  mp_view->SetFWDFlag(FLAG_EHPAUSE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

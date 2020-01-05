@@ -65,18 +65,21 @@ enum EFWDFlags
  FLAG_ATS_MAP       = 28,    //separate
  FLAG_ATSAAC_MAP    = 29,    //separate
  FLAG_GASDOSE_MAP   = 30,    //separate
- FLAG_BAROCORR_MAP  = 31,    //separate 
- FLAG_MANIT_MAP     = 32,    //separate 
- FLAG_TMP2CURVE_MAP = 33,    //separate 
- FLAG_CRKTEMP_MAP   = 34,    //separate 
- FLAG_EHPAUSE_MAP   = 35,    //separate 
+ FLAG_BAROCORR_MAP  = 31,    //separate
+ FLAG_MANIT_MAP     = 32,    //separate
+ FLAG_TMP2CURVE_MAP = 33,    //separate
+ FLAG_CRKTEMP_MAP   = 34,    //separate
+ FLAG_EHPAUSE_MAP   = 35,    //separate
+ FLAG_CRNKTHRD_MAP  = 36,    //separate
+ FLAG_CRNKTIME_MAP  = 37,    //separate
+ FLAG_ABANTHRD_MAP  = 38,    //separate
 
- FLAG_NR_OF_FLAGS   = 36,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 39,    //total number of flags
 
  FLAG_SET_START     = 0,
  FLAG_SET_END       = 24,
  FLAG_SEP_START     = 25,
- FLAG_SEP_END       = 35,
+ FLAG_SEP_END       = 38,
 };
 
 class CToolTipCtrlEx;

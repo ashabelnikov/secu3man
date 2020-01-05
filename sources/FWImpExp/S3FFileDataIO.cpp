@@ -41,7 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0109 //01.09
+#define CURRENT_VERSION 0x0110 //01.10
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -146,8 +146,12 @@ struct S3FSepMaps
  s3f_int32_t pa4_igntim_corr[PA4_LOOKUP_TABLE_SIZE];
  s3f_int32_t ctscrk_corr[CTS_CRKCORR_SIZE];
  s3f_int32_t eh_pause_table[COIL_ON_TIME_LOOKUP_TABLE_SIZE];
+ //since v01.10
+ s3f_int32_t cranking_thrd[CRANK_THRD_SIZE];
+ s3f_int32_t cranking_time[CRANK_TIME_SIZE];
+ s3f_int32_t smapaban_thrd[SMAPABAN_THRD_SIZE];
 
- s3f_int32_t reserved[1699];       //reserved bytes, = 0
+ s3f_int32_t reserved[1651];       //reserved bytes, = 0
 };
 
 
@@ -365,7 +369,12 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
   p_sepMaps->ctscrk_corr[i] = MathHelpers::Round(m_data.ctscrk_corr[i] * INT_MULTIPLIER);
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   p_sepMaps->eh_pause_table[i] = MathHelpers::Round(m_data.eh_pause_table[i] * INT_MULTIPLIER);
-
+ for(i = 0; i < CRANK_THRD_SIZE; ++i)
+  p_sepMaps->cranking_thrd[i] = MathHelpers::Round(m_data.cranking_thrd[i] * INT_MULTIPLIER);
+ for(i = 0; i < CRANK_TIME_SIZE; ++i)
+  p_sepMaps->cranking_time[i] = MathHelpers::Round(m_data.cranking_time[i] * INT_MULTIPLIER);
+ for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
+  p_sepMaps->smapaban_thrd[i] = MathHelpers::Round(m_data.smapaban_thrd[i] * INT_MULTIPLIER);
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
@@ -506,7 +515,12 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
   m_data.ctscrk_corr[i] = p_sepMaps->ctscrk_corr[i] / INT_MULTIPLIER;
  for(i = 0; i < COIL_ON_TIME_LOOKUP_TABLE_SIZE; ++i)
   m_data.eh_pause_table[i] = p_sepMaps->eh_pause_table[i] / INT_MULTIPLIER;
-
+ for(i = 0; i < CRANK_THRD_SIZE; ++i)
+  m_data.cranking_thrd[i] = p_sepMaps->cranking_thrd[i] / INT_MULTIPLIER;
+ for(i = 0; i < CRANK_TIME_SIZE; ++i)
+  m_data.cranking_time[i] = p_sepMaps->cranking_time[i] / INT_MULTIPLIER;
+ for(i = 0; i < SMAPABAN_THRD_SIZE; ++i)
+  m_data.smapaban_thrd[i] = p_sepMaps->smapaban_thrd[i] / INT_MULTIPLIER;
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;

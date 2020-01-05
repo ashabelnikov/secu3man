@@ -276,6 +276,12 @@ void EEPROMImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CRKTEMP_MAP, false);
  mp_view->SetFWDFlag(FLAG_EHPAUSE_MAP, false);
  mp_view->EnableFWDFlag(FLAG_EHPAUSE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTHRD_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CRNKTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
+ mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, false);
 }
 
 void EEPROMImportController::OnCurrentListNameChanged(int item, CString text)
