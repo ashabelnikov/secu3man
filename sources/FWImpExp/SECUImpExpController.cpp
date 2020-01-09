@@ -154,7 +154,7 @@ void SECU3ImportController::OnOkPressed(void)
   m_fwdm->GetCrankingTimeMap(mp_fwd->cranking_time);
 
  if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
-  m_fwdm->GetSmapabanMap(mp_fwd->smapaban_thrd);
+  m_fwdm->GetSmapabanThrdMap(mp_fwd->smapaban_thrd);
 
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
