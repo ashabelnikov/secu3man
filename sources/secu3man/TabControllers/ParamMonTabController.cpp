@@ -273,6 +273,8 @@ void CParamMonTabController::OnConnection(const bool i_online)
   state = CStatusBarManager::STATE_OFFLINE;
  }
 
+ mp_moncntr->OnConnection(i_online);
+
  //здесь мы можем только запрещать панели, а разрешать их будем только тогда, когда прочитана конфигурация
  if (i_online==false) 
  {

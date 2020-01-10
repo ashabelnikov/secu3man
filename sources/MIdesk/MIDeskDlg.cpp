@@ -134,6 +134,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_indDragNDrop(false)
 , m_it_mode(0)
 , m_show_graph_cursor(false)
+, m_graphShtPixels(2)
 {
  mp_ctxMenuMgrMet->CreateContent();
  mp_ctxMenuMgrInd->CreateContent();
@@ -1259,6 +1260,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_rpmQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_tachoMax);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1288,6 +1290,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_mapQVal[1], NULL, NULL);
    widget->SetLimits(0, (float)m_pressMax);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1315,6 +1318,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_vbatQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1342,6 +1346,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_igntimQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1375,6 +1380,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_cltQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1402,6 +1408,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_ai1QVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1429,6 +1436,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_ai2QVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1456,6 +1464,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1483,6 +1492,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_iatQVal[1], NULL, NULL);  
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1510,6 +1520,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_egocQVal[1], NULL, NULL);  
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1538,6 +1549,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_tpsQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1565,6 +1577,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_airflQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1594,6 +1607,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_vssQVal[1], NULL, NULL);
    widget->SetMeterUnit(m_speedUnit);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1621,6 +1635,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_tpsdotQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1648,6 +1663,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_map2QVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1675,6 +1691,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_mapdQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1702,6 +1719,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1729,6 +1747,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_fuelcQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1756,6 +1775,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_knkretQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1783,6 +1803,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_knockQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1810,6 +1831,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_senafrQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1837,6 +1859,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_chposQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1864,6 +1887,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_gdposQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1891,6 +1915,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_synldQVal[1], NULL, NULL);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1920,6 +1945,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_itbQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1949,6 +1975,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iteQVal[1], NULL, NULL);
    widget->SetITMode(m_it_mode);
+   widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -2342,4 +2369,9 @@ int CMIDeskDlg::GetGraphSamplesNum(void)
   }
  }
  return samples;
+}
+
+void CMIDeskDlg::SetGraphShtPixels(int n)
+{
+ m_graphShtPixels = n;
 }

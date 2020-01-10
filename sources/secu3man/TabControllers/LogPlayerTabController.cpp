@@ -168,6 +168,7 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CLogPlayerTabController::OnActivate(void)
 {
+ mp_view->mp_MIDeskDlg->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());

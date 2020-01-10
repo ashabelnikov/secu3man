@@ -99,6 +99,7 @@ void CPMMonitorController::OnSettingsChanged(void)
 
 void CPMMonitorController::OnActivate(void)
 {
+ mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
@@ -253,4 +254,10 @@ void CPMMonitorController::ApplyFWOptions(DWORD opt)
  mp_rsdview->EnableExtraIO(CHECKBIT32(opt, COPT_TPIC8101) && !CHECKBIT32(opt, COPT_SECU3T));
  mp_view->ShowChokePos(fnc.SM_CONTROL && CHECKBIT32(opt, COPT_SM_CONTROL));
  mp_view->ShowGDPos(fnc.GD_CONTROL && CHECKBIT32(opt, COPT_GD_CONTROL));
+}
+
+void CPMMonitorController::OnConnection(bool i_online)
+{
+ if (!i_online)
+  mp_view->Reset();
 }

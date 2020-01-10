@@ -531,3 +531,8 @@ void COscillCtrl::ShowCursor(bool show)
 {
  m_show_cursor = show;
 }
+
+void COscillCtrl::SetShtPixels(int n)
+{
+ m_shtPixels = n;
+}

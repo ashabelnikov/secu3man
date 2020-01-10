@@ -34,11 +34,12 @@
 class CCommunicationManager;
 class CKnockChannelTabDlg;
 class CStatusBarManager;
+class ISettingsData;
 
 class CKnockChannelTabController : public ITabController, private IAPPEventHandler
 {
  public:
-  CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar);
+  CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings);
   virtual ~CKnockChannelTabController();
 
  private:
@@ -94,6 +95,7 @@ class CKnockChannelTabController : public ITabController, private IAPPEventHandl
   CCommunicationManager* mp_comm;
   CStatusBarManager*  mp_sbar;
   CControlAppAdapter* mp_pAdapter;
+  ISettingsData* mp_settings;
 
  private:
   int  m_packet_processing_state;  //хранит код текущей операции, если никаких других операций не выполняется то должна выполнятся PPS_READ_MONITOR_DATA

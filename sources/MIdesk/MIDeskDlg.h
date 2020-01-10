@@ -143,6 +143,8 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   int GetGraphSamplesNum(void);
 
+  void SetGraphShtPixels(int n);
+
  protected:
   virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog(); //activate
@@ -256,6 +258,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
 
   int m_it_mode;
   bool m_show_graph_cursor;
+  int m_graphShtPixels;
 
   RingBuffItem m_ringRPM;
   RingBuffItem m_ringKnock;

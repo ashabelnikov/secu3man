@@ -38,6 +38,7 @@
 #include "ParamDesk/Params/KnockPageDlg.h"
 #include "TabControllersCommunicator.h"
 #include "TabDialogs/KnockChannelTabDlg.h"
+#include "Settings/ISettingsData.h"
 
 using namespace fastdelegate;
 using namespace SECU3IO;
@@ -82,10 +83,11 @@ void FindMinMaxWithBackTransformation(const std::vector<float>& array, std::vect
 }
 }
 
-CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar)
+CKnockChannelTabController::CKnockChannelTabController(CKnockChannelTabDlg* ip_view, CCommunicationManager* ip_comm, CStatusBarManager* ip_sbar, ISettingsData* ip_settings)
 : mp_view(ip_view)
 , mp_comm(ip_comm)
 , mp_sbar(ip_sbar)
+, mp_settings(ip_settings)
 , m_operation_state(-1)
 , m_packet_processing_state(PPS_READ_MONITOR_DATA)
 , m_parameters_changed(false)
@@ -127,6 +129,8 @@ void CKnockChannelTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CKnockChannelTabController::OnActivate(void)
 {
+ mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
+ mp_view->ResetOscilloscope();
  mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
  mp_comm->setOnSettingsChanged(MakeDelegate(this,&CKnockChannelTabController::OnSettingsChanged));
 
@@ -236,6 +240,7 @@ void CKnockChannelTabController::OnConnection(const bool i_online)
  if (i_online==false)
  { //здесь только запрещаем, разрешим в другом месте после выполнения подготовительных операций
   mp_view->mp_knock_parameters_dlg->Enable(i_online);
+  mp_view->ResetOscilloscope();
   mp_view->EnableAll(i_online);
  }
 

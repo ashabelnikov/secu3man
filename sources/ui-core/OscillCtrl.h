@@ -55,6 +55,7 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   void Reset();
   void ShowCursor(bool show);
   size_t GetMaxPtCount(void);
+  void SetShtPixels(int n); //n > 2
 
  //Implementation
  protected:
@@ -98,17 +99,17 @@ class AFX_EXT_CLASS COscillCtrl : public CWnd
   CString m_strUnitX;
   CString m_strUnitY;
 
-  const int m_shtPixels;       //number of pixels bitmap will be shifted to for each point
+  int m_shtPixels;             //number of pixels bitmap will be shifted to for each point
   int m_decimalPlaces;         //number of decimal places
   int m_gridNumY;
   int m_gridSizeX;
 
-  std::deque<double> m_points; //stores values of all points  
+  std::deque<double> m_points; //stores values of all points
   size_t m_point_position;     //stores point position, used for correct scrolling
   double m_lowLimit;           //min
   double m_uppLimit;           //max
   double m_range;
-  double m_vertFactor;  
+  double m_vertFactor;
   int m_num_y_chars;
   bool m_show_cursor;
 };

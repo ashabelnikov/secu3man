@@ -255,6 +255,12 @@ class MeasInstrBase
    return m_scope.GetMaxPtCount();
   }
  
+  void SetShtPixels(int n)
+  {
+   if (m_scope.GetSafeHwnd())
+    m_scope.SetShtPixels(n);
+  }
+
   UINT m_uiID;
 
 protected:

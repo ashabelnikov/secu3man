@@ -438,3 +438,15 @@ void CDevDiagnostTabDlg::OnSize( UINT nType, int cx, int cy )
 
  Super::OnSize(nType, cx, cy);
 }
+
+void CDevDiagnostTabDlg::ResetOscilloscopes(void)
+{
+ mp_OScopeCtrl1->Reset();
+ mp_OScopeCtrl2->Reset();
+}
+
+void CDevDiagnostTabDlg::SetGraphShtPixels(int n)
+{
+ mp_OScopeCtrl1->SetShtPixels(n);
+ mp_OScopeCtrl2->SetShtPixels(n);
+}

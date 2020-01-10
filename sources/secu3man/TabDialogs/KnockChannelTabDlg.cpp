@@ -591,3 +591,13 @@ void CKnockChannelTabDlg::OnSize( UINT nType, int cx, int cy )
 
  Super::OnSize(nType, cx, cy);
 }
+
+void CKnockChannelTabDlg::ResetOscilloscope(void)
+{
+ mp_OScopeCtrl->Reset();
+}
+
+void CKnockChannelTabDlg::SetGraphShtPixels(int n)
+{
+ mp_OScopeCtrl->SetShtPixels(n);
+}

@@ -67,6 +67,8 @@ class CPMMonitorController : public CPMControllerBase<CMIDeskDlg>
 
   void ApplyFWOptions(DWORD opt);
 
+  void OnConnection(bool i_online);
+
  private:
   CRSDeskDlg* mp_rsdview;
   CCEDeskDlg* mp_cedview;

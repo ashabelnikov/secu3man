@@ -144,7 +144,7 @@ bool CChildViewManager::Init(CMainFrame* i_pMainFrame)
  mp_wndView->AddView(MLL::GetString(IDS_TAB_CHECK_ENGINE),m_pCheckEngineTabDlg,2);
 
  m_pKnockChannelTabDlg = new CKnockChannelTabDlg(); //view
- m_pKnockChannelTabController = new CKnockChannelTabController(m_pKnockChannelTabDlg, p_comm, p_sbar);
+ m_pKnockChannelTabController = new CKnockChannelTabController(m_pKnockChannelTabDlg, p_comm, p_sbar, p_settings);
 
  mp_MainTabController->AddTabController(m_pKnockChannelTabController);
  mp_wndView->AddView(MLL::GetString(IDS_TAB_KNOCK_SETTINGS),m_pKnockChannelTabDlg,3);

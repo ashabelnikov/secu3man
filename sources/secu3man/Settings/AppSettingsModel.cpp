@@ -96,6 +96,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optSynLoadAverage(_T("SynLoadAverage"))
 , m_optInjTimBAverage(_T("InjTimBAverage"))
 , m_optInjTimEAverage(_T("InjTimEAverage"))
+, m_optGraphShtPixels(_T("GraphShtPixels"))
 
 , m_optTitleFontSize(_T("TitleFontSize"))
 , m_optValueFontSize(_T("ValueFontSize"))
@@ -573,6 +574,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optIndicatorsDragNDrop, _T("1"), 0, 1);
  fs.ReadInt(m_optFFFConst, _T("16000"), 1000, 32000);
  fs.ReadInt(m_optShowGraphCursor, _T("1"), 0, 1);
+ fs.ReadInt(m_optGraphShtPixels, _T("2"), 2, 10);
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -1288,6 +1290,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("ќтображать курсор на графиках в проигрывателе. 0 - не отображать, 1 - отображать"));
  fs.WriteInt(m_optShowGraphCursor); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Number of pixels which graphs shifted for when adding each new sample"));
+ else
+  fs.WriteComment(_T(" ол-во пикселей, на которое сдвигаютс€ графики при добавлени новой выборки"));
+ fs.WriteInt(m_optGraphShtPixels); 
 
  //Positions of windows
  IniIO ws(IniFileName, m_Name_WndSettings_Section);
@@ -3699,4 +3707,9 @@ bool CAppSettingsModel::GetShowGraphLabels(void) const
 bool CAppSettingsModel::GetShowGraphsCursor(void)
 {
  return m_optShowGraphCursor.value;
+}
+
+int CAppSettingsModel::GetGraphShtPixels(void)
+{
+ return m_optGraphShtPixels.value;
 }

@@ -237,6 +237,8 @@ void CDevDiagnostTabController::OnSettingsChanged(int action)
 //from MainTabController
 void CDevDiagnostTabController::OnActivate(void)
 {
+ mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
+ mp_view->ResetOscilloscopes();
  memset(&m_outputs, 0, sizeof(SECU3IO::DiagOutDat)); //Outputs = 0, 3-state outputs = HiZ
  m_comm_state = 0;
  m_diagnost_mode_active = false;
@@ -453,6 +455,7 @@ void CDevDiagnostTabController::OnEnterButton(void)
 
  if (m_diagnost_mode_active)
  {
+  mp_view->ResetOscilloscopes();
   //This command will make SECU-3 to leave diagnostic mode
   SECU3IO::OPCompNc packet_data;
   packet_data.opcode = SECU3IO::OPCODE_DIAGNOST_LEAVE;

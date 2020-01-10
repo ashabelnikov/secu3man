@@ -73,6 +73,9 @@ class CDevDiagnostTabDlg : public CTabDialog
   void EnableStartAutoTstMenuItem(bool i_enable);
   void EnableStopAutoTstMenuItem(bool i_enable);
 
+  void ResetOscilloscopes(void);
+  void SetGraphShtPixels(int n);
+
   //IDs for outputs (SECU-3T and SECU-3i)
   enum 
   {
