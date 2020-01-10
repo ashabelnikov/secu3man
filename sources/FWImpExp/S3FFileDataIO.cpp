@@ -72,6 +72,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.07 - Added TEMP2 curve map (28.12.2017)
 // 01.08 - Abandoned choke opening map (body of map left for compatibility reasons)
 // 01.09 - Added some maps which were not added yet (28.12.2018)
+// 01.10 - Added 3 new separate tables which were not added yet
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0

@@ -35,6 +35,7 @@
 #include "Settings/ISettingsData.h"
 #include "InjDrvFileDataIO.h"
 #include "ErrorMsg.h"
+#include "FWImpExp/InjDrvFWMCntr.h"
 
 #pragma warning(disable : 4355)  
 
@@ -79,6 +80,7 @@ CInjDriverTabController::CInjDriverTabController(CInjDriverTabDlg* ip_view, CCom
  mp_view->setOnReadEEPROMToFile(MakeDelegate(this, &CInjDriverTabController::OnReadEEPROMToFile));
  mp_view->setOnResetEEPROM(MakeDelegate(this, &CInjDriverTabController::OnResetEEPROM));
  mp_view->setOnSelInjDrv(MakeDelegate(this, &CInjDriverTabController::OnSelInjDrv));
+ mp_view->setOnFirmwareMaster(MakeDelegate(this, &CInjDriverTabController::OnFirmwareMaster));
 }
 
 CInjDriverTabController::~CInjDriverTabController()
@@ -815,4 +817,32 @@ void CInjDriverTabController::OnAddressTimer(void)
  SECU3IO::InjDrvAdr adr;
  adr.dev_address = mp_view->GetInjDrvSel();
  mp_comm->m_pControlApp->SendPacket(INJDRV_ADR, &adr);
+}
+
+void CInjDriverTabController::OnFirmwareMaster()
+{
+ if (!mp_comm->m_pBootLoader->IsIdle())
+  return;
+
+ InjDrvFWMCntr cntr;
+
+ int result = cntr.DoLoad(&m_bl_data[0], MCU_FLASH_SIZE);
+ if (result != IDOK || !cntr.GetStatus())
+  return; //canceled by user or error
+ 
+ mp_comm->m_pBootLoader->SetPlatformParameters(PlatformParamHolder(EP_ATMEGA328PB));
+
+ //запускаем бутлоадер по команде из приложени€
+ if (StartBootLoader(2))
+ {
+  //activate communication controller of the boot loader
+  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+  mp_sbar->SetConnectionState(CStatusBarManager::STATE_BOOTLOADER);
+
+  //operation does not block thread
+  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, &m_bl_data[0], MCU_FLASH_SIZE-BOOTLDR_SIZE);
+
+  mp_sbar->ShowProgressBar(true);
+  mp_sbar->SetProgressPos(0);
+ }
 }

@@ -73,6 +73,7 @@ BEGIN
         MENUITEM "Прочитать EEPROM в файл",           ID_INJDRV_POPUP_READEEPROMTOFILE
         MENUITEM SEPARATOR
         MENUITEM "Сброс EEPROM",                      ID_INJDRV_POPUP_RESETEEPROM
+        MENUITEM "Мастер прошивок",                   ID_INJDRV_POPUP_FIRMWAREMASTER
     END
 END
 
@@ -814,6 +815,7 @@ BEGIN
         MENUITEM "Read EEPROM to a file",       ID_INJDRV_POPUP_READEEPROMTOFILE
         MENUITEM SEPARATOR
         MENUITEM "Reset EEPROM",                ID_INJDRV_POPUP_RESETEEPROM
+        MENUITEM "Firmware master",             ID_INJDRV_POPUP_FIRMWAREMASTER
     END
 END
 

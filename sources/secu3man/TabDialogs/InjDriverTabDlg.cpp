@@ -265,6 +265,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_COMMAND(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnWriteEEPROMFromFile)
  ON_COMMAND(ID_INJDRV_POPUP_READEEPROMTOFILE, OnReadEEPROMToFile)
  ON_COMMAND(ID_INJDRV_POPUP_RESETEEPROM, OnResetEEPROM)
+ ON_COMMAND(ID_INJDRV_POPUP_FIRMWAREMASTER, OnFirmwareMaster)
 
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_EDIT,OnUpdateControlsPD)
  ON_UPDATE_COMMAND_UI(IDC_PEAK_DUTY_SPIN,OnUpdateControlsPD)
@@ -337,6 +338,7 @@ BEGIN_MESSAGE_MAP(CInjDriverTabDlg, Super)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READLZBLINFO, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_WRITEEEPROMFROMFILE, OnUpdateBLItems)
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_READEEPROMTOFILE, OnUpdateBLItems)
+ ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_FIRMWAREMASTER, OnUpdateBLItems)
 
  ON_UPDATE_COMMAND_UI(ID_INJDRV_POPUP_RESETEEPROM, OnUpdateControls)
 
@@ -1000,6 +1002,11 @@ void CInjDriverTabDlg::setOnResetEEPROM(EventHandler onCB)
  m_onResetEEPROM = onCB;
 }
 
+void CInjDriverTabDlg::setOnFirmwareMaster(EventHandler onCB)
+{
+ m_onFirmwareMaster = onCB;
+}
+
 void CInjDriverTabDlg::setOnSelInjDrv(EventHandler onCB)
 {
  m_onSelInjDrv = onCB;
@@ -1280,4 +1287,10 @@ int CInjDriverTabDlg::GetInjDrvSel(void)
  int sel = m_injdrv_combo.GetCurSel();
  ASSERT(sel != CB_ERR);
  return sel;
+}
+
+void CInjDriverTabDlg::OnFirmwareMaster()
+{
+ if (m_onFirmwareMaster)
+  m_onFirmwareMaster();
 }

@@ -96,3 +96,10 @@
 #define IDC_MAP_IMPEXP_CRNKTHRD_FLAG    6095
 #define IDC_MAP_IMPEXP_CRNKTIME_FLAG    6096
 #define IDC_MAP_IMPEXP_ABANTHRD_FLAG    6097
+#define IDD_INJDRV_FWM                  6098
+#define IDC_FWM_INPINV_CHECK            6099
+#define IDC_FWM_FLBINV_CHECK            6100
+#define IDC_FWM_PWMINV_CHECK            6101
+#define IDS_FWM_INPINV_CHECK_TT         6102
+#define IDS_FWM_FLBINV_CHECK_TT         6103
+#define IDS_FWM_PWMINV_CHECK_TT         6104

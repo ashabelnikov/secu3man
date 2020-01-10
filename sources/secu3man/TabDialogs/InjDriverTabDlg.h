@@ -77,6 +77,7 @@ class CInjDriverTabDlg : public CTabDialog
   void setOnReadEEPROMToFile(EventHandler onCB);  
   void setOnResetEEPROM(EventHandler onCB);  
   void setOnSelInjDrv(EventHandler onCB);
+  void setOnFirmwareMaster(EventHandler onCB);  
 
  protected:
   virtual BOOL OnInitDialog();
@@ -112,6 +113,7 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnWriteEEPROMFromFile(void);  
   afx_msg void OnReadEEPROMToFile(void);  
   afx_msg void OnResetEEPROM();
+  afx_msg void OnFirmwareMaster();
   afx_msg void OnUpdateControlsPO(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsPD(CCmdUI* pCmdUI);
   afx_msg void OnUpdateControlsHD(CCmdUI* pCmdUI);
@@ -207,6 +209,7 @@ class CInjDriverTabDlg : public CTabDialog
   EventHandler m_onReadEEPROMToFile;
   EventHandler m_onResetEEPROM;
   EventHandler m_onSelInjDrv;
+  EventHandler m_onFirmwareMaster;
 
   bool m_initialized;
   bool m_enable;

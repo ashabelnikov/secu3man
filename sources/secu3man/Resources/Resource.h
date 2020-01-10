@@ -556,3 +556,4 @@
 #define IDS_FIRMWARE_MASTER             4580
 #define IDS_LOADING_LOG_FILE            4581
 #define ID_APP_TOGGLE_MAPWND            4582
+#define ID_INJDRV_POPUP_FIRMWAREMASTER  4583

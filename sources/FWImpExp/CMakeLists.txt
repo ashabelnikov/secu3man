@@ -33,6 +33,8 @@ set(HEADERS
   FirmwareMasterDlg.h
   FirmwareMasterCntr.h
   StdAfx.h
+  InjDrvFWMDlg.h
+  InjDrvFWMCntr.h
   )
 
 set(SOURCES
@@ -65,6 +67,8 @@ set(SOURCES
   7z/Bra.c
   7z/Bra86.c
   7z/BraIA64.c
+  InjDrvFWMDlg.cpp
+  InjDrvFWMCntr.cpp
   )
 
 add_library (${PROJECT} SHARED ${HEADERS} ${SOURCES})

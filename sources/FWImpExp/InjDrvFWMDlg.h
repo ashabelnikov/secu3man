@@ -1,0 +1,84 @@
+/* SECU-3  - An open source, free engine control unit
+   Copyright (C) 2007 Alexey A. Shabelnikov. Ukraine, Kiev
+
+   This program is free software: you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation, either version 3 of the License, or
+   (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+   contacts:
+              http://secu-3.org
+              email: shabelnikov@secu-3.org
+*/
+
+/** \file InjDrvFWMDlg.h
+ * \author Alexey A. Shabelnikov
+ */
+
+#pragma once
+
+#include <vector>
+#include "common/FastDelegate.h"
+#include "common/UnicodeSupport.h"
+
+class CToolTipCtrlEx;
+
+//constants for check boxes
+enum FwmFlag
+{
+ FWM_INPINV = 0,
+ FWM_FLBINV = 1,
+ FWM_PWMINV = 2,
+ FWM_NR_OF_FLAGS = 3
+};
+
+//view
+class CInjDrvFWMDlg : public CDialog
+{
+  typedef CDialog Super;
+  typedef fastdelegate::FastDelegate0<> EventHandler;
+  typedef fastdelegate::FastDelegate1<int> EventWithCode;
+
+ public:
+  CInjDrvFWMDlg(CWnd* pParent = NULL);   // standard constructor
+  static const UINT IDD;
+
+  void setOnOkButton(EventHandler OnFunction) {m_OnOkButton = OnFunction;};
+  void setOnCancelButton(EventHandler OnFunction) {m_OnCancelButton = OnFunction;};
+  void setOnActivate(EventHandler OnActivate) {m_OnActivate = OnActivate;};
+  void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
+
+  void SetFwmFlag(FwmFlag i_flag_type, bool i_state);
+  bool GetFwmFlag(FwmFlag i_flag_type);
+  void EnableFwmFlag(FwmFlag i_flag_type, bool i_enable);
+
+    // Implementation
+ protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+  virtual void OnOK();
+  virtual void OnCancel();
+  virtual BOOL OnInitDialog();
+  afx_msg void OnDestroy();
+  afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
+  afx_msg void OnFwmCheck(UINT);
+  DECLARE_MESSAGE_MAP()
+
+ private:
+  EventHandler m_OnOkButton;
+  EventHandler m_OnCancelButton;
+  EventHandler m_OnActivate;
+  EventWithCode m_OnChangeFwmCheck;
+
+  CButton m_fwm_checks[FWM_NR_OF_FLAGS];
+  std::auto_ptr<CToolTipCtrlEx> mp_ttc;
+
+  bool m_fwm_flags[FWM_NR_OF_FLAGS];
+};

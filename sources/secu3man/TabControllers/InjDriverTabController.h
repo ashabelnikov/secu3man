@@ -83,6 +83,7 @@ class CInjDriverTabController : public ITabController, private IAPPEventHandler,
   void OnReadEEPROMToFile(void);
   void OnResetEEPROM(void);
   void OnSelInjDrv(void);
+  void OnFirmwareMaster(void);
 
   bool StartBootLoader(int op);
   bool ExitBootLoader(void);
