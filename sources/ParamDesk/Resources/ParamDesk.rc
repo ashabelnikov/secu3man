@@ -1124,6 +1124,10 @@ BEGIN
     COMBOBOX        IDC_IO_REMAPPING3I_KSP_CS_COMBOBOX,53,439,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Инверсия",IDC_IO_REMAPPING3I_KSP_CS_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,439,48,12
 
+    RTEXT           "ADD_I5",IDC_IO_REMAPPING3I_ADD_I5_CAPTION,0,453,50,13
+    COMBOBOX        IDC_IO_REMAPPING3I_ADD_I5_COMBOBOX,53,452,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Инверсия",IDC_IO_REMAPPING3I_ADD_I5_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,452,48,12
+
     //SECU-3T:
     RTEXT           "IGN_OUT1",IDC_IO_REMAPPING_IGN_OUT1_CAPTION,0,11,50,13
     COMBOBOX        IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX,53,10,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
@@ -1446,6 +1450,11 @@ BEGIN
     IDS_PD_UNIOUT_COND_TMR_OFF_EDIT_TT "Время выключения. Поставьте максимальное значение если хотите чтобы выключение не производилось"
     IDS_PD_UNIOUT_LOGFUN_COMBO_TT "Логическая функция. Связывает между собой два условия для получения состояния соответствующего выхода"
     IDS_PD_UNIOUT_12_LOGFUN_COMBO_TT "Логическая функция. Позволяет связать между собой 1-й и 2-й выходы (таким образом можно получить до 4-х условий). Значение устанавливается на первом выходе. Если функция не выбрана, то 1 и 2 выходы работают в обычном режиме."
+
+    IDS_UNIOUT_COND_AI5    "Аналогов.вход 5(В)"
+    IDS_UNIOUT_COND_AI6    "Аналогов.вход 6(В)"
+    IDS_UNIOUT_COND_AI7    "Аналогов.вход 7(В)"
+    IDS_UNIOUT_COND_AI8    "Аналогов.вход 8(В)"
 END
 
 STRINGTABLE
@@ -1545,6 +1554,7 @@ BEGIN
     IDS_IO_REMAPPING3I_EPAS_I_TT  "Вход запроса усилителя руля"
     IDS_IO_REMAPPING3I_TACH_O_TT  "Выход для тахометра. Если переназначен на другую функцию, то контроль детонации невозможен и должен быть отключен. Галочка инверсии не работает для 'NONE'."
     IDS_IO_REMAPPING3I_KSP_CS_TT  "Вывод процессора PB4, который используется как сигнал CS для TPIC8101. Если переназначен на другую функцию, то контроль детонации невозможен и должен быть отключен. Галочка инверсии не работает для 'NONE'."
+    IDS_IO_REMAPPING3I_ADD_I5_TT  "Аналоговый вход 5. Доступен только в прошивках с поддержкой MCP3204"
 END
 
 STRINGTABLE
@@ -2708,6 +2718,10 @@ BEGIN
     COMBOBOX        IDC_IO_REMAPPING3I_KSP_CS_COMBOBOX,53,439,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
     CONTROL         "Invert",IDC_IO_REMAPPING3I_KSP_CS_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,439,48,12
 
+    RTEXT           "ADD_I5",IDC_IO_REMAPPING3I_ADD_I5_CAPTION,0,453,50,13
+    COMBOBOX        IDC_IO_REMAPPING3I_ADD_I5_COMBOBOX,53,452,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Invert",IDC_IO_REMAPPING3I_ADD_I5_CHECKBOX,"Button",BS_AUTOCHECKBOX | BS_RIGHTBUTTON | BS_RIGHT | WS_TABSTOP,123,452,48,12
+
     //SECU-3T
     RTEXT           "IGN_OUT1",IDC_IO_REMAPPING_IGN_OUT1_CAPTION,0,11,50,13
     COMBOBOX        IDC_IO_REMAPPING_IGN_OUT1_COMBOBOX,53,10,55,100,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
@@ -3040,6 +3054,11 @@ BEGIN
     IDS_PD_UNIOUT_COND_TMR_OFF_EDIT_TT "Off time. Set maximum value if you want to disable turn off"
     IDS_PD_UNIOUT_LOGFUN_COMBO_TT "Logic function. Links two conditions together to produce corresponding output state"
     IDS_PD_UNIOUT_12_LOGFUN_COMBO_TT "Logic function. Allows to link two outputs together (thus we can obtain up to 4 conditions). Function value set on 1st output. If function is not selected, then outputs work in normal mode."
+
+    IDS_UNIOUT_COND_AI5    "Analog input 5(V)"
+    IDS_UNIOUT_COND_AI6    "Analog input 6(V)"
+    IDS_UNIOUT_COND_AI7    "Analog input 7(V)"
+    IDS_UNIOUT_COND_AI8    "Analog input 8(V)"
 END
 
 STRINGTABLE
@@ -3138,6 +3157,7 @@ BEGIN
     IDS_IO_REMAPPING3I_EPAS_I_TT  "Power steering request input"
     IDS_IO_REMAPPING3I_TACH_O_TT  "Output for a tachometer. If remmapoed to other function, then knock control will not be available and must be disabled. 'Invert' check doesn't work for 'NONE'."
     IDS_IO_REMAPPING3I_KSP_CS_TT  "Processor port's line PB4, which is used as CS signal for TPIC8101. If remmapoed to other function, then knock control will not be available and must be disabled. 'Invert' check doesn't work for 'NONE'."
+    IDS_IO_REMAPPING3I_ADD_I5_TT  "Analog input 5. Awailable only in firmware with MCP3204 support"
 END
 
 STRINGTABLE

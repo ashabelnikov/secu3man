@@ -240,9 +240,10 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOP3I_ADD_I4     =  31,     // ADD_I4      (input)
    IOP3I_TACH_O     =  32,     // TACH_O      (output)
    IOP3I_KSP_CS     =  33,     // KSP_CS      (output)
-   IOP3I_OILP_I     =  34,     // OILP_I      (input)
-   IOP3I_GENS_I     =  35,     // GENS_I      (input)
-   IOP3I_RESERVED6  =  36,     // Reserved    ()
+   IOP3I_ADD_I5     =  34,     // ADD_I5      (input)
+   IOP3I_OILP_I     =  35,     // OILP_I      (input)
+   IOP3I_GENS_I     =  36,     // GENS_I      (input)
+   //reserved slots are here
    IOP3I_IGN_OUT6   =  37,     // IGN_O6    (output)
    IOP3I_IGN_OUT7   =  38,     // IGN_O7    (output)
    IOP3I_IGN_OUT8   =  39,     // IGN_O8    (output)
@@ -388,10 +389,11 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOS3I_ADD_I4     =  31,     // ADD_I4      (input)
    IOS3I_TACH_O     =  32,     // TACH_O      (output)
    IOS3I_KSP_CS     =  33,     // KSP_CS      (output)
-   IOS3I_OILP_I     =  34,     // OILP_I      (input)
-   IOS3I_GENS_I     =  35,     // GENS_I      (input)
-// IOS3I_RESERVED6  =  36,     // Reserved    ()
-   IOS3I_COUNT      =  34,
+   IOS3I_ADD_I5     =  34,     // ADD_I5      (input)
+   IOS3I_OILP_I     =  35,     // OILP_I      (input)
+   IOS3I_GENS_I     =  36,     // GENS_I      (input)
+   //reserved slots are here
+   IOS3I_COUNT      =  35,
    //SECU-3T:   
    IOS_IGN_OUT1     =   0,     // IGN_OUT1
    IOS_IGN_OUT2     =   1,     // IGN_OUT2
@@ -443,7 +445,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
    IOV_V25 = 0x25,           //V2.5  GD_PWM plug added
    IOV_V26 = 0x26,           //V2.6  Support of SECU-3i added
    IOV_V27 = 0x27,           //V2.7  additional injection channels were added (5,6 for SECU-3T and 6,7,8 for SECU-3i)
-   IOV_V28 = 0x28            //V2.8  TACH_O and KSP_CS outputs were added
+   IOV_V28 = 0x28,           //V2.8  TACH_O and KSP_CS outputs were added
+   IOV_V29 = 0x29            //V2.9  ADD_I5 input has been added
   };
 
   DWORD GetIOPlug(IOXtype type, IOPid id);

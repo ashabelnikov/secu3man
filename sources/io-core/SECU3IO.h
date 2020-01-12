@@ -249,6 +249,10 @@ namespace SECU3IO
   float add_i2_value;
   float add_i3_value;   //secu-3i only
   float add_i4_value;   //secu-3i only and TPIC8101 option used
+  float add_i5_value;   //secu-3i only and MCP3204 option used
+  float add_i6_value;   //secu-3i only and MCP3204 option used
+  float add_i7_value;   //secu-3i only and MCP3204 option used
+  float add_i8_value;   //secu-3i only and MCP3204 option used
  };
 
  struct CKPSPar
@@ -505,6 +509,10 @@ namespace SECU3IO
  const int UNIOUT_COND_AI3 = 21;      //analog input 3
  const int UNIOUT_COND_AI4 = 22;      //analog input 4
  const int UNIOUT_COND_LPTMR = 23;    //looped timer
+ const int UNIOUT_COND_AI5 = 24;      //analog input 5
+ const int UNIOUT_COND_AI6 = 25;      //analog input 6
+ const int UNIOUT_COND_AI7 = 26;      //analog input 7
+ const int UNIOUT_COND_AI8 = 27;      //analog input 8
 
  //define allowed fuel injection configurations
  const int INJCFG_THROTTLEBODY  = 0;  //single injector for N cylinders

@@ -363,3 +363,15 @@
 #define IDS_MI_TPSDOTGRAPH_V_UNIT       2469
 #define IDC_MI_TPSDOTGRAPH              2470
 #define IDC_LP_LOG_MARKS_DESK_CAPTION   2471
+#define IDC_RS_ADD_I5_VALUE             2472
+#define IDC_RS_ADD_I5_CAPTION           2473
+#define IDC_RS_ADD_I5_UNIT              2474
+#define IDC_RS_ADD_I6_VALUE             2475
+#define IDC_RS_ADD_I6_CAPTION           2476
+#define IDC_RS_ADD_I6_UNIT              2477
+#define IDC_RS_ADD_I7_VALUE             2478
+#define IDC_RS_ADD_I7_CAPTION           2479
+#define IDC_RS_ADD_I7_UNIT              2480
+#define IDC_RS_ADD_I8_VALUE             2481
+#define IDC_RS_ADD_I8_CAPTION           2482
+#define IDC_RS_ADD_I8_UNIT              2483

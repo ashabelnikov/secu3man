@@ -1071,7 +1071,7 @@ bool CControlApp::Parse_TEMPER_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::RawSensDat& m_RawSensDat = m_recepted_packet.m_RawSensDat;
- if (size != (mp_pdp->isHex() ? 36 : 18))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 52 : 26))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  //MAP sensor
@@ -1127,6 +1127,30 @@ bool CControlApp::Parse_ADCRAW_DAT(const BYTE* raw_packet, size_t size)
  if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i4,true))
   return false;
  m_RawSensDat.add_i4_value = add_i4 * m_adc_discrete;
+
+ //ADD_I5 input
+ signed int add_i5 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i5,true))
+  return false;
+ m_RawSensDat.add_i5_value = add_i5 * m_adc_discrete;
+
+ //ADD_I6 input
+ signed int add_i6 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i6,true))
+  return false;
+ m_RawSensDat.add_i6_value = add_i6 * m_adc_discrete;
+
+ //ADD_I7 input
+ signed int add_i7 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i7,true))
+  return false;
+ m_RawSensDat.add_i7_value = add_i7 * m_adc_discrete;
+
+ //ADD_I8 input
+ signed int add_i8 = 0;
+ if (false == mp_pdp->Hex16ToBin(raw_packet,&add_i8,true))
+  return false;
+ m_RawSensDat.add_i8_value = add_i8 * m_adc_discrete;
 
  return true;
 }
@@ -3935,6 +3959,10 @@ int CondEncoder::UniOutEncodeCondVal(float val, int cond)
   case UNIOUT_COND_AI2: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_AI3: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_AI4: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI5: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI6: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI7: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
+  case UNIOUT_COND_AI8: return MathHelpers::Round(val * (1.0 / ADC_DISCRETE));
   case UNIOUT_COND_GASV: return MathHelpers::Round(val);
   case UNIOUT_COND_IPW: return MathHelpers::Round((val * 1000.0f) / 3.2);
   case UNIOUT_COND_CE: return MathHelpers::Round(val);
@@ -3973,6 +4001,10 @@ float CondEncoder::UniOutDecodeCondVal(int val, int cond)
   case UNIOUT_COND_AI2: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_AI3: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_AI4: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI5: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI6: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI7: return ((float)val) / (1.0f / ADC_DISCRETE);
+  case UNIOUT_COND_AI8: return ((float)val) / (1.0f / ADC_DISCRETE);
   case UNIOUT_COND_GASV: return (float)val;
   case UNIOUT_COND_IPW: return (val * 3.2f) / 1000.0f;
   case UNIOUT_COND_CE: return (float)val;

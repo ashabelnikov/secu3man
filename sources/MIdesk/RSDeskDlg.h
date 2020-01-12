@@ -50,6 +50,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   virtual void GetValues(SECU3IO::RawSensDat* o_values);
   virtual void EnableSECU3TItems(bool i_enable);
   virtual void EnableExtraIO(bool i_enable);
+  virtual void EnableSpiAdc(bool i_enable);
   //-----------------------------------------------
 
   //изменение размеров окна
@@ -69,6 +70,7 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   int  m_enabled;
   bool m_enable_secu3t_features;
   bool m_enable_extraio;
+  bool m_enable_spiadc;
   bool m_was_initialized;
 
   struct Input
@@ -90,6 +92,11 @@ class AFX_EXT_CLASS CRSDeskDlg : public CModelessDialog, public IRSView
   Input m_add_i2_inp;
   Input m_add_i3_inp;
   Input m_add_i4_inp;
+  //from MCP3204
+  Input m_add_i5_inp;
+  Input m_add_i6_inp;
+  Input m_add_i7_inp;
+  Input m_add_i8_inp;
 
   CFont m_fieldFont;
   CRect m_origRect;

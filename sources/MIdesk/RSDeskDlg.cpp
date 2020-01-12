@@ -65,6 +65,7 @@ CRSDeskDlg::CRSDeskDlg(CWnd* pParent /*=NULL*/)
 , m_enabled(-1)
 , m_enable_secu3t_features(false)
 , m_enable_extraio(false)
+, m_enable_spiadc(false)
 , m_was_initialized(false)
 , mp_scr(new CWndScroller)
 {
@@ -90,6 +91,10 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_ADD_I2_VALUE, m_add_i2_inp.ctrl[0]);
  DDX_Control(pDX, IDC_RS_ADD_I3_VALUE, m_add_i3_inp.ctrl[0]);
  DDX_Control(pDX, IDC_RS_ADD_I4_VALUE, m_add_i4_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I5_VALUE, m_add_i5_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I6_VALUE, m_add_i6_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I7_VALUE, m_add_i7_inp.ctrl[0]);
+ DDX_Control(pDX, IDC_RS_ADD_I8_VALUE, m_add_i8_inp.ctrl[0]);
 
  //caption
  DDX_Control(pDX, IDC_RS_MAP_CAPTION, m_map_inp.ctrl[1]);
@@ -101,6 +106,10 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_ADD_I2_CAPTION, m_add_i2_inp.ctrl[1]);
  DDX_Control(pDX, IDC_RS_ADD_I3_CAPTION, m_add_i3_inp.ctrl[1]);
  DDX_Control(pDX, IDC_RS_ADD_I4_CAPTION, m_add_i4_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I5_CAPTION, m_add_i5_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I6_CAPTION, m_add_i6_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I7_CAPTION, m_add_i7_inp.ctrl[1]);
+ DDX_Control(pDX, IDC_RS_ADD_I8_CAPTION, m_add_i8_inp.ctrl[1]);
 
  //unit
  DDX_Control(pDX, IDC_RS_MAP_UNIT, m_map_inp.ctrl[2]);
@@ -112,6 +121,10 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_RS_ADD_I2_UNIT, m_add_i2_inp.ctrl[2]);
  DDX_Control(pDX, IDC_RS_ADD_I3_UNIT, m_add_i3_inp.ctrl[2]);
  DDX_Control(pDX, IDC_RS_ADD_I4_UNIT, m_add_i4_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I5_UNIT, m_add_i5_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I6_UNIT, m_add_i6_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I7_UNIT, m_add_i7_inp.ctrl[2]);
+ DDX_Control(pDX, IDC_RS_ADD_I8_UNIT, m_add_i8_inp.ctrl[2]);
 
  DDX_Text_Fmt(pDX,IDC_RS_MAP_VALUE, m_map_inp.value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_UBAT_VALUE, m_ubat_inp.value, _T("%.3f"));
@@ -122,6 +135,10 @@ void CRSDeskDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Text_Fmt(pDX,IDC_RS_ADD_I2_VALUE, m_add_i2_inp.value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_ADD_I3_VALUE, m_add_i3_inp.value, _T("%.3f"));
  DDX_Text_Fmt(pDX,IDC_RS_ADD_I4_VALUE, m_add_i4_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I5_VALUE, m_add_i5_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I6_VALUE, m_add_i6_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I7_VALUE, m_add_i7_inp.value, _T("%.3f"));
+ DDX_Text_Fmt(pDX,IDC_RS_ADD_I8_VALUE, m_add_i8_inp.value, _T("%.3f"));
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -143,6 +160,10 @@ BOOL CRSDeskDlg::OnInitDialog()
  m_add_i2_inp.ctrl[0].SetFont(&m_fieldFont);
  m_add_i3_inp.ctrl[0].SetFont(&m_fieldFont);
  m_add_i4_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i5_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i6_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i7_inp.ctrl[0].SetFont(&m_fieldFont);
+ m_add_i8_inp.ctrl[0].SetFont(&m_fieldFont);
 
  //initialize window scroller
  mp_scr->Init(this);
@@ -160,6 +181,10 @@ BOOL CRSDeskDlg::OnInitDialog()
  m_add_i2_inp.StoreRects();
  m_add_i3_inp.StoreRects();
  m_add_i4_inp.StoreRects();
+ m_add_i5_inp.StoreRects();
+ m_add_i6_inp.StoreRects();
+ m_add_i7_inp.StoreRects();
+ m_add_i8_inp.StoreRects();
 
  GetClientRect(m_origRect);
 
@@ -195,6 +220,10 @@ void CRSDeskDlg::Enable(bool enable)
   m_add_i2_inp.ctrl[i].EnableWindow(enable);
   m_add_i3_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features);
   m_add_i4_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_extraio);
+  m_add_i5_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+  m_add_i6_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+  m_add_i7_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
+  m_add_i8_inp.ctrl[i].EnableWindow(enable && !m_enable_secu3t_features && m_enable_spiadc);
  }
 }
 
@@ -214,6 +243,10 @@ void CRSDeskDlg::Show(bool show)
   m_add_i2_inp.ctrl[i].ShowWindow(sw);
   m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
   m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i5_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i6_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i7_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i8_inp.ctrl[i].ShowWindow(sw3i);
  }
 }
 
@@ -230,6 +263,10 @@ void CRSDeskDlg::SetValues(const RawSensDat* i_values)
  m_add_i2_inp.value = i_values->add_i2_value;
  m_add_i3_inp.value = i_values->add_i3_value;
  m_add_i4_inp.value = i_values->add_i4_value;
+ m_add_i5_inp.value = i_values->add_i5_value;
+ m_add_i6_inp.value = i_values->add_i6_value;
+ m_add_i7_inp.value = i_values->add_i7_value;
+ m_add_i8_inp.value = i_values->add_i8_value;
  UpdateData(FALSE);
 }
 
@@ -245,6 +282,10 @@ void CRSDeskDlg::GetValues(RawSensDat* o_values)
  o_values->add_i2_value = m_add_i2_inp.value;
  o_values->add_i3_value = m_add_i3_inp.value;
  o_values->add_i4_value = m_add_i4_inp.value;
+ o_values->add_i5_value = m_add_i5_inp.value;
+ o_values->add_i6_value = m_add_i6_inp.value;
+ o_values->add_i7_value = m_add_i7_inp.value;
+ o_values->add_i8_value = m_add_i8_inp.value;
 }
 
 void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
@@ -260,9 +301,17 @@ void CRSDeskDlg::EnableSECU3TItems(bool i_enable)
  {
   m_add_i3_inp.ctrl[i].EnableWindow(m_enabled && !i_enable);
   m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_extraio);
-  int sw3i = ((i_enable && !m_enable_secu3t_features) ? SW_SHOW : SW_HIDE);
+  m_add_i5_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+  m_add_i6_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+  m_add_i7_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+  m_add_i8_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && m_enable_spiadc);
+  int sw3i = ((!i_enable) ? SW_SHOW : SW_HIDE);
   m_add_i3_inp.ctrl[i].ShowWindow(sw3i);
   m_add_i4_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i5_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i6_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i7_inp.ctrl[i].ShowWindow(sw3i);
+  m_add_i8_inp.ctrl[i].ShowWindow(sw3i);
  }
 }
 
@@ -273,7 +322,22 @@ void CRSDeskDlg::EnableExtraIO(bool i_enable)
  m_enable_extraio = i_enable;
  //in the SECU-3i only
  for (int i = 0; i < 3; ++i)
-  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && !i_enable && !m_enable_secu3t_features);
+  m_add_i4_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+}
+
+void CRSDeskDlg::EnableSpiAdc(bool i_enable)
+{
+ if (i_enable == m_enable_spiadc)
+  return; //already has needed state
+ m_enable_spiadc = i_enable;
+ //in the SECU-3i units with m1284 processor only
+ for (int i = 0; i < 3; ++i)
+ {
+  m_add_i5_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+  m_add_i6_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+  m_add_i7_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+  m_add_i8_inp.ctrl[i].EnableWindow(m_enabled && i_enable && !m_enable_secu3t_features);
+ }
 }
 
 void CRSDeskDlg::Resize(const CRect& i_rect)
@@ -292,13 +356,17 @@ void CRSDeskDlg::Resize(const CRect& i_rect)
  m_add_i2_inp.Scale(Xf, Yf);
  m_add_i3_inp.Scale(Xf, Yf);
  m_add_i4_inp.Scale(Xf, Yf); 
+ m_add_i5_inp.Scale(Xf, Yf);
+ m_add_i6_inp.Scale(Xf, Yf);
+ m_add_i7_inp.Scale(Xf, Yf);
+ m_add_i8_inp.Scale(Xf, Yf); 
 
  RedrawWindow();
 }
 
 void CRSDeskDlg::updateScrollerSize(void)
 {
- mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.25f);
+ mp_scr->SetViewSizeF(.0f, m_enable_secu3t_features ? 1.0f : 1.62f);
 }
 
 void CRSDeskDlg::OnSize( UINT nType, int cx, int cy )
