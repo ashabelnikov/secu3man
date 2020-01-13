@@ -101,6 +101,8 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_tps_curve_gradient_edit;
   CBitmapButton m_calc_map_btn;
   CBitmapButton m_calc_map2_btn;
+  CStatic m_lolo_unit;
+  CStatic m_hilo_unit;
 
   CSpinButtonCtrlEx m_map2_curve_offset_spin;
   CEditEx m_map2_curve_offset_edit;
@@ -108,5 +110,5 @@ class CFunSetPageDlg : public CParamTabBaseDlg, public ParamPageEvents
   CEditEx m_map2_curve_gradient_edit;
 
   std::auto_ptr<CToolTipCtrlEx> mp_ttc;
-  std::auto_ptr<CWndScroller> mp_scr;
+  std::auto_ptr<CWndScroller> mp_scr;  
 };

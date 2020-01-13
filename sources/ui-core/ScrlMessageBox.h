@@ -51,4 +51,5 @@ class AFX_EXT_CLASS CScrlMessageBox : public CDialog
   HICON m_hIcon;
   bool m_initialized;
   CSize m_createSize;
+  CButton m_ok_btn;
 };

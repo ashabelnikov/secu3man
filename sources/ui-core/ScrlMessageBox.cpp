@@ -39,6 +39,7 @@ void CScrlMessageBox::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
  DDX_Control(pDX, IDC_SCRLMSGBOX_EDIT, m_edit);
+ DDX_Control(pDX, IDOK, m_ok_btn);
 }
 
 CScrlMessageBox::CScrlMessageBox(CWnd* pParentWnd, const _TSTRING& caption, const _TSTRING& text, LPCSTR icon)
@@ -104,9 +105,9 @@ void CScrlMessageBox::_AlignControls(int cx, int cy)
 {
  DPIAware dpi;
 
- CRect rcok = GDIHelpers::GetChildWndRect(GetDlgItem(IDOK));
+ CRect rcok = GDIHelpers::GetChildWndRect(&m_ok_btn);
  rcok.MoveToY(cy - rcok.Height() - dpi.ScaleY(3));
- GetDlgItem(IDOK)->MoveWindow(rcok);
+ m_ok_btn.MoveWindow(rcok);
 
  CRect rced = GDIHelpers::GetChildWndRect(&m_edit);
  rced.bottom = rcok.top - dpi.ScaleY(3);

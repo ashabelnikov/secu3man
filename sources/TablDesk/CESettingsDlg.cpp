@@ -477,6 +477,13 @@ CCESettingsCntr::~CCESettingsCntr()
  //empty
 }
 
+void CCESettingsCntr::DoDataExchange(CDataExchange* pDX)
+{
+ Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDOK, m_ok_btn);
+ DDX_Control(pDX, IDCANCEL, m_cancel_btn);
+}
+
 /////////////////////////////////////////////////////////////////////////////
 // CCESettingsCntr message handlers
 
@@ -594,14 +601,14 @@ void CCESettingsCntr::_UpdateControlsPosition(int cx, int cy)
 {
  DPIAware dpi;
  //move OK button
- CRect rcok = GDIHelpers::GetChildWndRect(GetDlgItem(IDOK));
+ CRect rcok = GDIHelpers::GetChildWndRect(&m_ok_btn);
  rcok.MoveToY(cy - dpi.ScaleY(8) - rcok.Height());
- GetDlgItem(IDOK)->MoveWindow(rcok);
+ m_ok_btn.MoveWindow(rcok);
 
  //move CANCEL button
- CRect rccn = GDIHelpers::GetChildWndRect(GetDlgItem(IDCANCEL));
+ CRect rccn = GDIHelpers::GetChildWndRect(&m_cancel_btn);
  rccn.MoveToY(cy - dpi.ScaleY(8) - rccn.Height());
- GetDlgItem(IDCANCEL)->MoveWindow(rccn);
+ m_cancel_btn.MoveWindow(rccn);
 
  //resize child dialog
  CRect rcdl = GDIHelpers::GetChildWndRect(&m_dlg);

@@ -191,6 +191,12 @@ CDynFieldsContainer::~CDynFieldsContainer()
  //empty
 }
 
+void CDynFieldsContainer::DoDataExchange(CDataExchange* pDX)
+{
+ Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDOK, m_ok_btn);
+}
+
 BOOL CDynFieldsContainer::OnInitDialog()
 {
  Super::OnInitDialog();
@@ -203,7 +209,7 @@ BOOL CDynFieldsContainer::OnInitDialog()
  m_dlg.ShowWindow(SW_SHOW);
 
  //calculate height of the required client area
- CRect rcok = GDIHelpers::GetChildWndRect(GetDlgItem(IDOK));
+ CRect rcok = GDIHelpers::GetChildWndRect(&m_ok_btn);
  DPIAware dpi;
  m_contentHeight = m_dlg.GetContentHeight() + dpi.ScaleY(8) + rcok.Height() + dpi.ScaleY(8);
 
@@ -282,9 +288,9 @@ void CDynFieldsContainer::_UpdateControlsPosition(int cx, int cy)
 {
  DPIAware dpi;
  //move OK button
- CRect rcok = GDIHelpers::GetChildWndRect(GetDlgItem(IDOK));
+ CRect rcok = GDIHelpers::GetChildWndRect(&m_ok_btn);
  rcok.MoveToY(cy - dpi.ScaleY(8) - rcok.Height());
- GetDlgItem(IDOK)->MoveWindow(rcok);
+ m_ok_btn.MoveWindow(rcok);
 
  //resize child dialog
  CRect rcdl = GDIHelpers::GetChildWndRect(&m_dlg);

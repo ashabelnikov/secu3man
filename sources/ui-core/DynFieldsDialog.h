@@ -205,6 +205,7 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
   bool AppendItem(const _TSTRING& caption, const _TSTRING& unit, float vMin, float vMax, float vStp, int decPls, float* p_value);
 
  protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual BOOL OnInitDialog();
   virtual void OnOK();
   afx_msg void OnSize(UINT nType, int cx, int cy);
@@ -220,4 +221,5 @@ class AFX_EXT_CLASS CDynFieldsContainer : public CDialog
   int m_height;
   bool m_initialized;
   int m_contentHeight;
+  CButton m_ok_btn;
 };

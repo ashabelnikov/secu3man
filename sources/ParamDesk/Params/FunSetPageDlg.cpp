@@ -182,6 +182,8 @@ void CFunSetPageDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_PD_FUNSET_TPS_CURVE_GRADIENT_SPIN, m_tps_curve_gradient_spin);
  DDX_Control(pDX, IDC_PD_MAP_CALC_BUTTON, m_calc_map_btn);
  DDX_Control(pDX, IDC_PD_MAP_CALC2_BUTTON, m_calc_map2_btn);
+ DDX_Control(pDX, IDC_PD_FUNSET_MAP_GRAD_UNIT, m_lolo_unit);
+ DDX_Control(pDX, IDC_PD_FUNSET_PRESS_SWING_UNIT, m_hilo_unit);
 
  m_map_grad_edit.DDX_Value(pDX, IDC_PD_FUNSET_MAP_GRAD_EDIT, m_params.map_lower_pressure);
  m_press_swing_edit.DDX_Value(pDX, IDC_PD_FUNSET_PRESS_SWING_EDIT, m_params.map_upper_pressure);
@@ -349,8 +351,8 @@ void CFunSetPageDlg::OnChangeData()
 void CFunSetPageDlg::UpdateLoadAxisUnits(void)
 {
  int ids = (m_params.load_src_cfg < 2) ? IDS_KPA_UNIT : IDS_PERCENT_UNIT;
- GetDlgItem(IDC_PD_FUNSET_MAP_GRAD_UNIT)->SetWindowText(MLL::LoadString(ids));
- GetDlgItem(IDC_PD_FUNSET_PRESS_SWING_UNIT)->SetWindowText(MLL::LoadString(ids));
+ m_lolo_unit.SetWindowText(MLL::LoadString(ids));
+ m_hilo_unit.SetWindowText(MLL::LoadString(ids));
 }
 
 void CFunSetPageDlg::OnChangeDataLoadSrc()

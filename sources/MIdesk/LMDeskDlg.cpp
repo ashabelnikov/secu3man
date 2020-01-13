@@ -54,6 +54,8 @@ CLMDeskDlg::CLMDeskDlg(CWnd* pParent /*=NULL*/)
 void CLMDeskDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
+ DDX_Control(pDX, IDC_LP_LOG_MARKS_DESK_CAPTION, m_caption);
+
  for(int i = 0; i < KEY_COUNT; ++i)
   DDX_Control(pDX, IDC_LOG_MARKS_K1+i, m_key_text[i]);
 }
@@ -102,7 +104,7 @@ void CLMDeskDlg::Enable(bool enable)
  m_enabled = enable;
  for(int i = 0; i < KEY_COUNT; ++i)
   m_key_text[i].EnableWindow(enable);
- GetDlgItem(IDC_LP_LOG_MARKS_DESK_CAPTION)->EnableWindow(enable);
+ m_caption.EnableWindow(enable);
 }
 
 void CLMDeskDlg::Show(bool show)

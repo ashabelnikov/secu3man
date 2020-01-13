@@ -164,6 +164,7 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
 
  // Implementation
  protected:
+  virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
   virtual void OnOK();
   virtual void OnCancel();
   virtual BOOL OnInitDialog();
@@ -180,4 +181,6 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
   CPoint m_wndPos;
   CSize m_createSize;
   bool m_initialized;
+  CButton m_ok_btn;
+  CButton m_cancel_btn;
 };
