@@ -217,6 +217,7 @@ BOOL CKnockPageDlg::OnInitDialog()
  m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_NO));
  m_use_knock_channel_combo.AddString(MLL::LoadString(IDS_PD_YES));
  //-----------------------------------------------------------------
+ m_bpf_frequency_combo.SetRedraw(false);
  size_t i;
  for (i = 0; i < SECU3IO::GAIN_FREQUENCES_SIZE; i++) //fill combobox containing BPF frequencies
  {
@@ -224,13 +225,16 @@ BOOL CKnockPageDlg::OnInitDialog()
   string.Format(_T("%.2f"),SECU3IO::hip9011_gain_frequences[i]);
   m_bpf_frequency_combo.AddString(string);
  }
+ m_bpf_frequency_combo.SetRedraw(true);
  //-----------------------------------------------------------------
+ m_integrator_const_combo.SetRedraw(false);
  for (i = 0; i < SECU3IO::INTEGRATOR_LEVELS_SIZE; i++) //Fill combobox containing integration time constants
  {
   CString string;
   string.Format(_T("%d"), (int)SECU3IO::hip9011_integrator_const[i]);
   m_integrator_const_combo.AddString(string);
  }
+ m_integrator_const_combo.SetRedraw(true);
  //-----------------------------------------------------------------
  m_wnd_begin_angle_edit.SetLimitText(6);
  m_wnd_begin_angle_edit.SetDecimalPlaces(2);

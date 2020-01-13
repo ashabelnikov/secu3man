@@ -106,6 +106,10 @@ BOOL CIORemappingDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
+ std::map<UINT, int>::const_iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+  ((CComboBox*)GetDlgItem(it->first))->InitStorage(64, 32);
+
  //create a tooltip control and assign tooltips
  _SetTooltips(); 
 
@@ -399,4 +403,11 @@ void CIORemappingDlg::OnSize( UINT nType, int cx, int cy )
 {
  Super::OnSize(nType, cx, cy);
  _UpdateScrlViewSize();
+}
+
+void CIORemappingDlg::SetRedraw(bool redraw)
+{
+ std::map<UINT, int>::const_iterator it;
+ for(it = m_iorcb.begin(); it != m_iorcb.end(); ++it)
+  ((CComboBox*)GetDlgItem(it->first))->SetRedraw(redraw);
 }

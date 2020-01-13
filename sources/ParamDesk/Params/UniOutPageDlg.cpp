@@ -378,6 +378,8 @@ void CUniOutPageDlg::_FillConditionComboBoxes(void)
 {
  for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {
+  m_out[i].cond1_combo.SetRedraw(false);
+  m_out[i].cond2_combo.SetRedraw(false);
   std::map<int, CondFmt>::const_iterator it = m_condFmt.begin();
   for(int index; it != m_condFmt.end(); ++it)
   {
@@ -400,13 +402,16 @@ void CUniOutPageDlg::_FillConditionComboBoxes(void)
    }
    m_out[i].cond2_combo.SetItemData(index, it->first);
   }
+  m_out[i].cond1_combo.SetRedraw(true);
+  m_out[i].cond2_combo.SetRedraw(true);
  }
 }
 
 void CUniOutPageDlg::_FillLogicFuncComboBoxes(void)
 {
-for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
+ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
  {
+  m_out[i].lf_combo.SetRedraw(false);
   std::map<int, _TSTRING>::const_iterator it = m_lf_str.begin();
   for(; it != m_lf_str.end(); ++it)
   {
@@ -418,12 +423,14 @@ for(int i = 0; i < SECU3IO::UNI_OUTPUT_NUM; ++i)
    }
    m_out[i].lf_combo.SetItemData(index, it->first);
   }
+  m_out[i].lf_combo.SetRedraw(true);
  }
 }
 
 void CUniOutPageDlg::_FillLogicFunc12ComboBox(void)
 {
  std::map<int, _TSTRING>::const_iterator it = m_lf_str.begin();
+ lf12_combo.SetRedraw(false);
  for(; it != m_lf_str.end(); ++it)
  {
   int index = lf12_combo.AddString(it->second.c_str());
@@ -434,6 +441,7 @@ void CUniOutPageDlg::_FillLogicFunc12ComboBox(void)
   }
   lf12_combo.SetItemData(index, it->first);
  }
+ lf12_combo.SetRedraw(true);
 }
 
 void CUniOutPageDlg::_SetCondInputFormat(int outIndex, bool cond, bool setdefval /*= true*/)

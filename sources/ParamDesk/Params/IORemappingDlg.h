@@ -64,6 +64,8 @@ class AFX_EXT_CLASS CIORemappingDlg : public CModelessDialog, public IRemapDeskV
   virtual void setOnItemInverted(EventItemInv OnFunction);
   //-------------------------------------------------------------
 
+  void SetRedraw(bool redraw);
+
   // Implementation
  protected:
   virtual BOOL OnInitDialog();

@@ -148,6 +148,8 @@ void CFWIORemappingController::_PrepareLogic(void)
 
  FWDM::IORemVer iov = mp_fwdm->GetIORemVersion();
 
+ mp_view->SetRedraw(false); //lock redraw to speed up adding of strings to combo boxes
+
  if (m_enable_secu3t_features)
  { //SECU-3T:
   m_defValMap.clear();
@@ -1321,6 +1323,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->EnableItem(FWDM::IOS3I_ADD_I5, m_enable_spiadc); 
   mp_view->EnableInversion(FWDM::IOS3I_ADD_I5, m_enable_spiadc);
  }
+ mp_view->SetRedraw(true);
 }
 
 //Note that this function uses default inversion values from m_invFlags map.
