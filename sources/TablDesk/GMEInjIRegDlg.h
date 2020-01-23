@@ -44,7 +44,7 @@ class CGMEInjIRegDlg : public CTabDialog
   void setOnChange(EventWithCode OnCB);
   void UpdateView(void);
 
-  void SetArguments(bool strt_use, float clt, float tps, float iac_pos);
+  void SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use);
 
  public:
 

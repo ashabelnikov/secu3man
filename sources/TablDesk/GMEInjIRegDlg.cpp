@@ -224,7 +224,7 @@ void CGMEInjIRegDlg::UpdateView(void)
  m_iaccw_map.UpdateDisplay();
 }
 
-void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac_pos)
+void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use)
 {
  if (m_idlc_map.GetSafeHwnd())
  {
@@ -248,6 +248,18 @@ void CGMEInjIRegDlg::SetArguments(bool strt_use, float clt, float tps, float iac
  {
   m_iaccw_map.ShowMarkers(!strt_use, false);
   m_iaccw_map.SetArguments(0, tps);
+ }
+
+ if (m_rigid_map.GetSafeHwnd())
+ {
+  m_rigid_map.ShowMarkers(rigid_use, false);
+  m_rigid_map.SetArguments(0, rigid_arg);
+ }
+
+ if (m_itrpm_map.GetSafeHwnd())
+ {
+  m_itrpm_map.ShowMarkers(rigid_use, false);
+  m_itrpm_map.SetArguments(0, clt);
  }
 }
 

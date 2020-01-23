@@ -66,5 +66,8 @@ namespace TablDesk
   bool ie; //fuel cut if = 0
 
   float air_temp; //IAT
+
+  float rigid_arg; //idling regulator rigidity's argument
+  bool rigid_use;
  };
 }

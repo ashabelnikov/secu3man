@@ -103,6 +103,9 @@ namespace SECU3IO
 
   float inj_tim_begin;                  //inj.timing of the beginning of pulse
   float inj_tim_end;                    //inj.timing of the end of pulse
+
+  float rigid_arg;                      //idling regulator rigidity's argument
+  bool  rigid_use;
  };
 
  struct DbgvarDat
