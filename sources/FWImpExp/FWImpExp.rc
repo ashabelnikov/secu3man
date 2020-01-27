@@ -36,7 +36,7 @@ BEGIN
     PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 116
+IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 136
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
@@ -44,8 +44,9 @@ BEGIN
     CONTROL         "Инверсия входов",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,20,120,10
     CONTROL         "Инверсия выходов рекуперации",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
     CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
-    DEFPUSHBUTTON   "Загрузить",IDOK,30,90,50,16
-    PUSHBUTTON      "Отмена",IDCANCEL,90,90,50,16
+    CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
+    DEFPUSHBUTTON   "Загрузить",IDOK,30,110,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,90,110,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -168,6 +169,7 @@ BEGIN
     IDS_FWM_INPINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией входов драйвера"
     IDS_FWM_FLBINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов рекуперации"       
     IDS_FWM_PWMINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов ШИМ"
+    IDS_FWM_PWCORR_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с коррекциями длит. впрыска"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -202,7 +204,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 116
+IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 136
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
@@ -210,8 +212,9 @@ BEGIN
     CONTROL         "Inversion of inputs",IDC_FWM_INPINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,20,120,10
     CONTROL         "Inversion of flyback outputs",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
     CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
-    DEFPUSHBUTTON   "Load",IDOK,30,90,50,16
-    PUSHBUTTON      "Cancel",IDCANCEL,90,90,50,16
+    CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
+    DEFPUSHBUTTON   "Load",IDOK,30,110,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,90,110,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -332,6 +335,7 @@ BEGIN
     IDS_FWM_INPINV_CHECK_TT  "Set this check if you need firmware with inverted inputs"
     IDS_FWM_FLBINV_CHECK_TT  "Set this check if you need firmware with inverted flyback outputs"       
     IDS_FWM_PWMINV_CHECK_TT  "Set this check if you need firmware with inverted PWM outputs"
+    IDS_FWM_PWCORR_CHECK_TT  "Set this check if you need firmware with corrections of inj. PW"
 END
 
 /////////////////////////////////////////////////////////////////////////////

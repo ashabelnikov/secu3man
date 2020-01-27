@@ -447,6 +447,8 @@ class ISettingsData
   virtual float GetHoldDutyPtMovStep(void) const = 0;
   virtual float GetPeakFullPtMovStep(void) const = 0;
   virtual float GetPthPausePtMovStep(void) const = 0;
+  virtual float GetPWMulPtMovStep(void) const = 0;
+  virtual float GetPWAddPtMovStep(void) const = 0;
   virtual bool GetShowGraphLabels(void) const = 0;
 
   virtual void SetMapPtMovStep(const MapPtMovStep& i_ptMovStep) = 0;

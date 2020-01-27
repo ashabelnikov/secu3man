@@ -82,7 +82,10 @@ struct lzid_sett_t_v23
  uint16_t testch_frq;
  uint8_t testch_duty;
 
- uint8_t reserved_bytes[188];     //!< reserved bytes
+ uint16_t pwmul_tab[SECU3IO::PWCORSIZE]; //!< PW multiplication
+ uint16_t pwadd_tab[SECU3IO::PWCORSIZE]; //!< PW addition
+
+ uint8_t reserved_bytes[168];     //!< reserved bytes
 
  uint16_t crc;                    //!< CRC16 of this structure (excluding last two bytes)
 };
@@ -120,7 +123,10 @@ struct lzid_sett_t
  uint16_t testch_frq;
  uint8_t testch_duty;
 
- uint8_t reserved_bytes[38];     //!< reserved bytes
+ uint16_t pwmul_tab[SECU3IO::PWCORSIZE]; //!< PW multiplication
+ uint16_t pwadd_tab[SECU3IO::PWCORSIZE]; //!< PW addition
+
+ uint8_t reserved_bytes[18];     //!< reserved bytes
 
  uint16_t crc;                    //!< CRC16 of this structure (excluding last two bytes)
 };
@@ -175,6 +181,10 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
   fs.peak_full_tab[i] = MathHelpers::Round(ms.m_peak_full_tab[i] * 2.5f);
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   fs.pth_pause_tab[i] = MathHelpers::Round(ms.m_pth_pause_tab[i] * 2.5f);
+ for (int i = 0; i < SECU3IO::PWCORSIZE; ++i)
+  fs.pwmul_tab[i] = MathHelpers::Round(ms.m_pwmul_tab[i] * (65536.f/100.0f));
+ for (int i = 0; i < SECU3IO::PWCORSIZE; ++i)
+  fs.pwadd_tab[i] = MathHelpers::Round(ms.m_pwadd_tab[i] * 2.5f);
 
  //finally, calculate and store CRC
  fs.crc = crc16((BYTE*)&fs, sizeof(lzid_sett_t) - sizeof(WORD));
@@ -231,6 +241,10 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC
   ms.m_peak_full_tab[i] = ((float)fs.peak_full_tab[i]) / 2.5f;
  for (int i = 0; i < SECU3IO::LUTABSIZE; ++i)
   ms.m_pth_pause_tab[i] = ((float)fs.pth_pause_tab[i]) / 2.5f;
+ for (int i = 0; i < SECU3IO::PWCORSIZE; ++i)
+  ms.m_pwmul_tab[i] = ((float)fs.pwmul_tab[i]) / (65536.0f/100.0f);
+ for (int i = 0; i < SECU3IO::PWCORSIZE; ++i)
+  ms.m_pwadd_tab[i] = ((float)fs.pwadd_tab[i]) / 2.5f;
 
  return true; //ok
 }

@@ -37,7 +37,8 @@ enum FwmFlag
  FWM_INPINV = 0,
  FWM_FLBINV = 1,
  FWM_PWMINV = 2,
- FWM_NR_OF_FLAGS = 3
+ FWM_PWCORR = 3,
+ FWM_NR_OF_FLAGS = 4
 };
 
 //view

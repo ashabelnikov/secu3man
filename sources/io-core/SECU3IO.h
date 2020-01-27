@@ -584,6 +584,7 @@ namespace SECU3IO
 
  //Size of all look up tables
  static const int LUTABSIZE = 16;
+ static const int PWCORSIZE = 5;
 
  //data send and received to/from SECU-LZID driver
  struct InjDrvPar
@@ -620,6 +621,8 @@ namespace SECU3IO
   float m_hold_duty_tab[LUTABSIZE];
   float m_peak_full_tab[LUTABSIZE]; //since v2.0
   float m_pth_pause_tab[LUTABSIZE]; //since v2.0
+  float m_pwmul_tab[PWCORSIZE]; //since v2.6
+  float m_pwadd_tab[PWCORSIZE]; //since v2.6
 
   //flags
   bool m_peak_on_usetab;

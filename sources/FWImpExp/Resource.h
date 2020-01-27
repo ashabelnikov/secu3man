@@ -100,6 +100,8 @@
 #define IDC_FWM_INPINV_CHECK            6099
 #define IDC_FWM_FLBINV_CHECK            6100
 #define IDC_FWM_PWMINV_CHECK            6101
-#define IDS_FWM_INPINV_CHECK_TT         6102
-#define IDS_FWM_FLBINV_CHECK_TT         6103
-#define IDS_FWM_PWMINV_CHECK_TT         6104
+#define IDC_FWM_PWCORR_CHECK            6102
+#define IDS_FWM_INPINV_CHECK_TT         6103
+#define IDS_FWM_FLBINV_CHECK_TT         6104
+#define IDS_FWM_PWMINV_CHECK_TT         6105
+#define IDS_FWM_PWCORR_CHECK_TT         6106

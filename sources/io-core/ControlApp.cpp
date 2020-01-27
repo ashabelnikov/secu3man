@@ -2328,7 +2328,7 @@ bool CControlApp::Parse_ACCEL_PAR(const BYTE* raw_packet, size_t size)
 bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
 {
  SECU3IO::InjDrvPar& m_recv = m_recepted_packet.m_InjDrvPar;
- if (size != (mp_pdp->isHex() ? 378 : 189))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
+ if (size != (mp_pdp->isHex() ? 418 : 209))  //размер пакета без сигнального символа, дескриптора и символа-конца пакета
   return false;
 
  mp_pdp->resetCRC();
@@ -2474,6 +2474,22 @@ bool CControlApp::Parse_INJDRV_PAR(const BYTE* raw_packet, size_t size)
   if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
    return false;
   m_recv.m_pth_pause_tab[i] = ((float)value) / 2.5f;
+ }
+
+ for (int i = 0; i < PWCORSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_pwmul_tab[i] = ((float)value) / (65536.0f / 100.0f); //convert to %
+ }
+
+ for (int i = 0; i < PWCORSIZE; ++i)
+ {
+  int value;
+  if (false == mp_pdp->Hex16ToBin(raw_packet, &value))
+   return false;
+  m_recv.m_pwadd_tab[i] = ((float)value) / 2.5f;        //convert to us
  }
 
  int calc_crc = mp_pdp->getCRC();
@@ -3842,6 +3858,19 @@ void CControlApp::Build_INJDRV_PAR(InjDrvPar* packet_data)
   int value = MathHelpers::Round(packet_data->m_pth_pause_tab[i] * 2.5f);
   mp_pdp->Bin16ToHex(value, m_outgoing_packet);
  }
+
+ for (int i = 0; i < PWCORSIZE; ++i)
+ {
+  int value = MathHelpers::Round(packet_data->m_pwmul_tab[i] * (65536.0f / 100.0f));  //convert from %
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
+ for (int i = 0; i < PWCORSIZE; ++i)
+ {
+  int value = MathHelpers::Round(packet_data->m_pwadd_tab[i] * (2.5f));  //convert from us
+  mp_pdp->Bin16ToHex(value, m_outgoing_packet);
+ }
+
  //--------------------------------------------------------------------
 
  mp_pdp->Bin16ToHex(mp_pdp->getCRC(), m_outgoing_packet);

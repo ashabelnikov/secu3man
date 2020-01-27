@@ -239,6 +239,8 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optPeakFullPtMovStep(_T("PeakFullPtMovStep"))
 , m_optPthPausePtMovStep(_T("PthPausePtMovStep"))
 , m_optShowGraphLabels(_T("ShowGraphLabels"))
+, m_optPWMulPtMovStep(_T("PWMulPtMovStep"))
+, m_optPWAddPtMovStep(_T("PWAddPtMovStep"))
 //Points' moving step
 , m_Name_MapPtMovStep_Section(_T("MapPtMovStep"))
 , m_optPtMovStepWorkMap(_T("WorkMapWnd"))
@@ -777,6 +779,8 @@ bool CAppSettingsModel::ReadSettings(void)
  dr.ReadFlt(m_optPeakFullPtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadFlt(m_optPthPausePtMovStep, _T("1.0"), 1.0f, 10000.0f);
  dr.ReadInt(m_optShowGraphLabels, _T("0"), 0, 1);
+ dr.ReadFlt(m_optPWMulPtMovStep, _T("0.1"), 0.0f, 5.0f); //%
+ dr.ReadFlt(m_optPWAddPtMovStep, _T("10"), 0.0f, 2500.0f); //us
  
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
@@ -2216,6 +2220,16 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   dr.WriteInt(m_optShowGraphLabels, _T("Показывать надписи над узловыми точками графиков. 1 - показывать, 0 - не показывать."));
 
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPWMulPtMovStep, 2, _T("Points moving step for the \"PW mul\" graph"));
+ else
+  dr.WriteFlt(m_optPWMulPtMovStep, 2, _T("Шаг смещения точек для графика \"Множитель\""));
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  dr.WriteFlt(m_optPWAddPtMovStep, 1, _T("Points moving step for the \"PW add\" graph"));
+ else
+  dr.WriteFlt(m_optPWAddPtMovStep, 1, _T("Шаг смещения точек для графика \"Добавка\""));
+
  //Moving step of points in maps' editing windows
  IniIO ms(IniFileName, m_Name_MapPtMovStep_Section);
 
@@ -3469,6 +3483,16 @@ float CAppSettingsModel::GetPthPausePtMovStep(void) const
 bool CAppSettingsModel::GetInjDrvTabActive(void) const
 {
  return m_optInjDrvTabActive.value;
+}
+
+float CAppSettingsModel::GetPWMulPtMovStep(void) const
+{
+ return m_optPWMulPtMovStep.value;
+}
+
+float CAppSettingsModel::GetPWAddPtMovStep(void) const
+{
+ return m_optPWAddPtMovStep.value;
 }
 
 int CAppSettingsModel::GetITEdMode(void) const

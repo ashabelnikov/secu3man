@@ -748,10 +748,13 @@ void CChart2D::SetYAxisValueFormat(CString fmt)
  m_axisFmtY = fmt;
 }
 
-void CChart2D::SetSerieVisibility(int serieIdx, bool visible)
+void CChart2D::SetSerieVisibility(int serieIdx, bool visible, bool makeCurrent /*=false*/)
 {
  if (serieIdx > (int)m_serie.size() - 1) return;
  m_serie[serieIdx].m_visible = visible;
+
+ if (makeCurrent)
+  m_ser_idx = serieIdx;
 
  if (::IsWindow(m_hWnd))
  {

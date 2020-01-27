@@ -94,6 +94,7 @@ void InjDrvFWMCntr::OnViewActivate(void)
  mp_view->SetFwmFlag(FWM_INPINV, false);
  mp_view->SetFwmFlag(FWM_FLBINV, false);
  mp_view->SetFwmFlag(FWM_PWMINV, false);
+ mp_view->SetFwmFlag(FWM_PWCORR, false);
 }
 
 void InjDrvFWMCntr::OnChangeFwmCheck(int id)
@@ -109,6 +110,8 @@ void InjDrvFWMCntr::OnChangeFwmCheck(int id)
    break;
   case FWM_PWMINV:
    break;
+  case FWM_PWCORR:
+   break;
  }
 }
 
@@ -120,6 +123,7 @@ void InjDrvFWMCntr::_BuildOptList(std::set<_TSTRING> &opts)
  m_allopts.insert(_T("inpinv"));
  m_allopts.insert(_T("flbinv"));
  m_allopts.insert(_T("pwminv"));
+ m_allopts.insert(_T("pwcorr"));
 
  //fill list, which will contain only options selected by user:
  opts.clear();
@@ -131,6 +135,8 @@ void InjDrvFWMCntr::_BuildOptList(std::set<_TSTRING> &opts)
   opts.insert(_T("flbinv"));
  if (mp_view->GetFwmFlag(FWM_PWMINV))
   opts.insert(_T("pwminv"));
+ if (mp_view->GetFwmFlag(FWM_PWCORR))
+  opts.insert(_T("pwcorr"));
 }
 
 

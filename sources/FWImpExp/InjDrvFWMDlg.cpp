@@ -56,10 +56,12 @@ void CInjDrvFWMDlg::DoDataExchange(CDataExchange* pDX)
  DDX_Control(pDX, IDC_FWM_INPINV_CHECK, m_fwm_checks[FWM_INPINV]);
  DDX_Control(pDX, IDC_FWM_FLBINV_CHECK, m_fwm_checks[FWM_FLBINV]);
  DDX_Control(pDX, IDC_FWM_PWMINV_CHECK, m_fwm_checks[FWM_PWMINV]);
+ DDX_Control(pDX, IDC_FWM_PWCORR_CHECK, m_fwm_checks[FWM_PWCORR]);
 
  DDX_Check_bool(pDX, IDC_FWM_INPINV_CHECK, m_fwm_flags[FWM_INPINV]);
  DDX_Check_bool(pDX, IDC_FWM_FLBINV_CHECK, m_fwm_flags[FWM_FLBINV]);
  DDX_Check_bool(pDX, IDC_FWM_PWMINV_CHECK, m_fwm_flags[FWM_PWMINV]);
+ DDX_Check_bool(pDX, IDC_FWM_PWCORR_CHECK, m_fwm_flags[FWM_PWCORR]);
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -100,7 +102,7 @@ BOOL CInjDrvFWMDlg::OnInitDialog()
  mp_ttc.reset(new CToolTipCtrlEx());
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  int idc = IDC_FWM_INPINV_CHECK;
- for (UINT ids = IDS_FWM_INPINV_CHECK_TT; ids <= IDS_FWM_PWMINV_CHECK_TT; ids++, idc++)
+ for (UINT ids = IDS_FWM_INPINV_CHECK_TT; ids <= IDS_FWM_PWCORR_CHECK_TT; ids++, idc++)
  VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);

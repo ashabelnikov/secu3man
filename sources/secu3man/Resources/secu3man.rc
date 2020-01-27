@@ -416,12 +416,14 @@ BEGIN
     CONTROL         "Скважн.Удерж.",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,351,40,60,15
     CONTROL         "ВВ+ВШ.",IDC_PEAK_FULL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,413,40,60,15
     CONTROL         "Пауза В-У",IDC_PTH_PAUSE_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,475,40,60,15
+    CONTROL         "Множитель",IDC_PWMUL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,537,40,60,15
+    CONTROL         "Добавка",IDC_PWADD_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,599,40,60,15
     PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     RTEXT           "Набор настроек:",IDC_SET_OF_SETT_CAPTION,310,13,70,8
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
-    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,20,305,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     RTEXT           "Драйвер:",IDC_INJDRV_CAPTION,568,13,40,8
     COMBOBOX        IDC_INJDRV_COMBO,613,12,30,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
@@ -745,6 +747,10 @@ BEGIN
     IDS_CRC0_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные первого набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
     IDS_CRC1_PANE_TT                "OK - контрольная сумма совпадает. NOK - данные второго набора настроек в EEPROM повреждены. Проверка осуществляется в момент старта прошивки, если данные повреждены, то загружается копия из flash."
     IDS_LOAD_FLASH_CHECK_TT         "Если вы хотите чтобы данные всегда загружались только из flash, то поставьте эту галочку перед тем как сохранять настройки в файл прошивки."
+    IDS_INJDRV_PWMUL_TITLE          "Множитель длительности впрыска по каналам (%)"
+    IDS_INJDRV_PWADD_TITLE          "Добавка к длительности впрыска по каналам (мкс)"
+    IDS_PWMUL_TABSEL_CHECK_TT       "Таблица, в которой задано сколько % добавить к длительности впрыска для каждого канала. Вначале происходит умножение на %, а потом прибавляется добавка в мкс."
+    IDS_PWADD_TABSEL_CHECK_TT       "Таблица, в которой задано сколько мкс добавить к длительности впрыска для каждого канала. Добавка в мкс применяется после умножения на %."
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -1158,6 +1164,8 @@ BEGIN
     CONTROL         "Hold duty",IDC_HOLD_DUTY_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,351,40,60,15
     CONTROL         "PO+PWM.",IDC_PEAK_FULL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,413,40,60,15
     CONTROL         "PtH pause",IDC_PTH_PAUSE_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,475,40,60,15
+    CONTROL         "PW mul",IDC_PWMUL_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,537,40,60,15
+    CONTROL         "PW add",IDC_PWADD_TABSEL_CHECK,"Button",BS_AUTOCHECKBOX | BS_PUSHLIKE | WS_TABSTOP,599,40,60,15
     PUSHBUTTON      "",IDC_CURVE_UP_BUTTON,466,108,16,20,BS_ICON
     PUSHBUTTON      "",IDC_CURVE_DOWN_BUTTON,466,155,16,20,BS_ICON
     COMBOBOX        IDC_SET_OF_SETT_COMBO,386,12,81,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
@@ -1165,7 +1173,7 @@ BEGIN
     RTEXT           "Driver:",IDC_INJDRV_CAPTION,568,13,40,8
     COMBOBOX        IDC_INJDRV_COMBO,613,12,30,50,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
     CONTROL         "",IDC_SECU3LOGO_BITMAP,"Static",SS_BITMAP,490,13,81,21
-    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,550,40,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
+    LTEXT           "http://secu3.org",IDC_SECU3ORG_LINK,20,305,80,8,SS_CENTERIMAGE | WS_CLIPSIBLINGS
     EDITTEXT        IDC_INJDRV_TESTCH_FRQ_EDIT,115,240,40,16,ES_AUTOHSCROLL
     CONTROL         "",IDC_INJDRV_TESTCH_FRQ_SPIN,"msctls_updown32",UDS_ARROWKEYS | UDS_HOTTRACK,157,240,11,16
     RTEXT           "Test signal frequency (Hz)",IDC_INJDRV_TESTCH_FRQ_CAPTION,12,243,100,10
@@ -1487,6 +1495,10 @@ BEGIN
     IDS_CRC0_PANE_TT                "OK - check sum is right. NOK - First set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
     IDS_CRC1_PANE_TT                "OK - check sum is right. NOK - Second set of settings in the EEPROM is corrupted. Checking is performed at the start of execution of firmware, if data is corrupted, then loaded a copy from a flash."
     IDS_LOAD_FLASH_CHECK_TT         "If you want settings to be loaded always from flash, then set this check before writing of settings into a firmware file."
+    IDS_INJDRV_PWMUL_TITLE          "PW multiplier per channel (%)"
+    IDS_INJDRV_PWADD_TITLE          "PW addition per channel (us)"
+    IDS_PWMUL_TABSEL_CHECK_TT       "Table which specify how many % should be added to injection PW for each channel. At the beginning, multiplication by % occurs, and then the additive value in us is added."
+    IDS_PWADD_TABSEL_CHECK_TT       "Table which specify how many us should be added to injection PW for each channel. Addition is applied after multiplication by %."
 END
 
 /////////////////////////////////////////////////////////////////////////////

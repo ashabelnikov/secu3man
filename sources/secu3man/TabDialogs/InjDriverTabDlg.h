@@ -50,7 +50,7 @@ class CInjDriverTabDlg : public CTabDialog
   virtual LPCTSTR GetDialogID(void) const;
 
   void SetVoltLineColor(DWORD color);
-  void SetPtMovStep(float peakOn, float peakDuty, float holdDuty, float peakFull, float pthPause);
+  void SetPtMovStep(float peakOn, float peakDuty, float holdDuty, float peakFull, float pthPause, float pwMul, float pwAdd);
   void SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only = false);
   void GetValues(SECU3IO::InjDrvPar* op_data);
   void EnableAll(bool enable);
@@ -92,6 +92,8 @@ class CInjDriverTabDlg : public CTabDialog
   afx_msg void OnHoldDutyTabSelCheck();
   afx_msg void OnPeakFullTabSelCheck();
   afx_msg void OnPthPauseTabSelCheck();
+  afx_msg void OnPWMulTabSelCheck();
+  afx_msg void OnPWAddTabSelCheck();
   afx_msg void OnSelendokSetOfSett();
   afx_msg void OnSelendokTestCh();
   afx_msg void OnSelendokInjDrv();
@@ -172,6 +174,8 @@ class CInjDriverTabDlg : public CTabDialog
   CButton m_hold_duty_tabsel_check;
   CButton m_peak_full_tabsel_check;
   CButton m_pth_pause_tabsel_check;
+  CButton m_pwmul_tabsel_check;
+  CButton m_pwadd_tabsel_check;
 
   CButton m_peak_on_check;
   CButton m_peak_duty_check;
@@ -220,6 +224,9 @@ class CInjDriverTabDlg : public CTabDialog
   bool m_is_bl_items_available;
   SECU3IO::InjDrvPar m_params[2];
   float *mp_curr_curve;
+  float m_x_axis_min;
+  float m_x_axis_max;
+  float m_x_axis_step;
   float m_y_axis_min;
   float m_y_axis_max;
   int m_curve_idx;

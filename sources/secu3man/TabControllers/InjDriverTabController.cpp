@@ -95,7 +95,7 @@ void CInjDriverTabController::OnSettingsChanged(int action)
   return;
 
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());
- mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep());
+ mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep(), mp_sett->GetPWMulPtMovStep(), mp_sett->GetPWAddPtMovStep());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
  mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
@@ -119,7 +119,7 @@ void CInjDriverTabController::OnActivate(void)
  OnConnection(online_status);
 
  mp_view->SetVoltLineColor(mp_sett->GetVoltLineColor());
- mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep());
+ mp_view->SetPtMovStep(mp_sett->GetPeakOnPtMovStep(), mp_sett->GetPeakDutyPtMovStep(), mp_sett->GetHoldDutyPtMovStep(), mp_sett->GetPeakFullPtMovStep(), mp_sett->GetPthPausePtMovStep(), mp_sett->GetPWMulPtMovStep(), mp_sett->GetPWAddPtMovStep());
 
  mp_view->SetShowGraphLabels(mp_sett->GetShowGraphLabels());
 
@@ -437,7 +437,8 @@ void CInjDriverTabController::OnShowFirmwareInfo(void)
  char* inv_inp = CHECKBIT8(params.fw_opt, 3) ? "Yes" : "No"; 
  char* five_ch = CHECKBIT8(params.fw_opt, 4) ? "Yes" : "No"; 
  char* ld_flash = CHECKBIT8(params.fw_opt, 5) ? "Yes" : "No"; 
- str.Format("Firmware version: v%d.%d\nDriver type: %s\nInv. PWM outputs: %s\nInv. FLB outputs: %s\nInv. inputs: %s\nCurrent cut off: %s\nFive channels: %s\nLoad from flash: %s\n", ver_maj, ver_min, strDrvType, inv_pwm, inv_flb, inv_inp, cur_cut, five_ch, ld_flash);
+ char* pwcorr = CHECKBIT8(params.fw_opt, 6) ? "Yes" : "No";
+ str.Format("Firmware version: v%d.%d\nDriver type: %s\nInv. PWM outputs: %s\nInv. FLB outputs: %s\nInv. inputs: %s\nCurrent cut off: %s\nFive channels: %s\nLoad from flash: %s\nPW corrections: %s\n", ver_maj, ver_min, strDrvType, inv_pwm, inv_flb, inv_inp, cur_cut, five_ch, ld_flash, pwcorr);
  AfxMessageBox(str, MB_ICONINFORMATION);
 }
 

@@ -124,7 +124,7 @@ class AFX_EXT_CLASS CChart2D : public CWnd
   void SetYAxisValueFormat(CString fmt);
 
   //Set visibility of specified serie
-  void SetSerieVisibility(int serieIdx, bool visible);
+  void SetSerieVisibility(int serieIdx, bool visible, bool makeCurrent = false);
 
   void SetSerieHandle(int serieIdx, bool showHandle);
 
