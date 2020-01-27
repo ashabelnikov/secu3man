@@ -1788,6 +1788,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("size of averaging buffer for ADD_I4"), _T(""), 1, 8, 1, 0, &d.inpavnum[9]);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Задержка включения вентилятора"), _T("сек"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay);
+ else
+  dfd.AppendItem(_T("Cooling fan's turn on delay"), _T("sec"), 0.00f, 2.5f, 0.01f, 2, &d.vent_delay);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Смещение РХХ при включении вентилятора"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff);
+ else
+  dfd.AppendItem(_T("Displacement of IAC on turn on of cooling fan"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);

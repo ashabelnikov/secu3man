@@ -227,11 +227,13 @@ typedef struct
  _uchar idltorun_stp_en;
  _uchar idltorun_stp_le;
  _uchar inpavnum[INPAVNUM];
+ _uchar vent_delay;
+ _uchar vent_iacoff;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[4];
+ _uchar reserved[2];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2137,6 +2139,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.idltorun_stp_en = ((float)exd.idltorun_stp_en) / 32.0f; //convert to %
  o_data.idltorun_stp_le = ((float)exd.idltorun_stp_le) / 32.0f; //convert to %
  for(int i = 0; i < INPAVNUM; i++) o_data.inpavnum[i] = exd.inpavnum[i]; 
+ o_data.vent_delay = ((float)exd.vent_delay) / 100.0f; //convert to sec
+ o_data.vent_iacoff = ((float)exd.vent_iacoff) / 2.0f; //convert to %
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2162,4 +2166,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.idltorun_stp_en = MathHelpers::Round(i_data.idltorun_stp_en * 32.0f);
  exd.idltorun_stp_le = MathHelpers::Round(i_data.idltorun_stp_le * 32.0f);
  for(int i = 0; i < INPAVNUM; i++) exd.inpavnum[i] = i_data.inpavnum[i]; 
+ exd.vent_delay = MathHelpers::Round(i_data.vent_delay * 100.0f);
+ exd.vent_iacoff = MathHelpers::Round(i_data.vent_iacoff * 2.0f);
 }
