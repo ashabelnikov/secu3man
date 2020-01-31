@@ -105,3 +105,7 @@
 #define IDS_FWM_FLBINV_CHECK_TT         6104
 #define IDS_FWM_PWMINV_CHECK_TT         6105
 #define IDS_FWM_PWCORR_CHECK_TT         6106
+#define IDC_FWM_SAVE_BTN                6107
+#define IDS_FWM_SAVE_BTN_TT             6108
+#define IDS_FWM_LOAD_BTN_TT             6109
+#define IDS_FWM_SELECT_FOLDER_FOR_FW    6110

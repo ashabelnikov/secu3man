@@ -38,6 +38,7 @@ class AFX_EXT_CLASS InjDrvFWMCntr
   int  DoLoad(BYTE* p_data, size_t size);
 
   void OnOkPressed(void);
+  void OnSavePressed(void);
   void OnCancelPressed(void);
   void OnViewActivate(void);
   void OnChangeFwmCheck(int id);
@@ -46,9 +47,9 @@ class AFX_EXT_CLASS InjDrvFWMCntr
 
  private:
   void _BuildOptList(std::set<_TSTRING> &opts);
-  bool _LoadFirmware(const std::set<_TSTRING>& opts);
+  bool _LoadFirmware(const std::set<_TSTRING>& opts, bool save);
   bool _FindMatchForOpts(const _TSTRING& name, const std::set<_TSTRING>& opts);
-  bool _StoreResult(const _TSTRING& name, BYTE* buff, size_t size);
+  bool _StoreResult(const _TSTRING& name, BYTE* buff, size_t size, bool save);
 
   CInjDrvFWMDlg* mp_view;
   BYTE* mp_data;

@@ -36,7 +36,7 @@ BEGIN
     PUSHBUTTON      "Отмена",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 136
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 136
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Мастер прошивок"
 FONT 8, "MS Sans Serif"
@@ -45,8 +45,9 @@ BEGIN
     CONTROL         "Инверсия выходов рекуперации",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
     CONTROL         "Инверсия выходов ШИМ",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
     CONTROL         "Коррекции длительн. впрыска",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
-    DEFPUSHBUTTON   "Загрузить",IDOK,30,110,50,16
-    PUSHBUTTON      "Отмена",IDCANCEL,90,110,50,16
+    PUSHBUTTON      "Сохранить",IDC_FWM_SAVE_BTN,20,110,50,16
+    DEFPUSHBUTTON   "Загрузить",IDOK,80,110,50,16
+    PUSHBUTTON      "Отмена",IDCANCEL,140,110,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -170,6 +171,9 @@ BEGIN
     IDS_FWM_FLBINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов рекуперации"       
     IDS_FWM_PWMINV_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с инверсией выходов ШИМ"
     IDS_FWM_PWCORR_CHECK_TT  "Установите эту галочку, если вам нужна прошивка с коррекциями длит. впрыска"
+    IDS_FWM_SAVE_BTN_TT      "Сохранить на диск"
+    IDS_FWM_LOAD_BTN_TT      "Прошить процессор"
+    IDS_FWM_SELECT_FOLDER_FOR_FW "Выберите куда сохранить прошивку"
 END
 
 /////////////////////////////////////////////////////////////////////////////
@@ -204,7 +208,7 @@ BEGIN
     PUSHBUTTON      "Cancel",IDCANCEL,157,159,50,16
 END
 
-IDD_INJDRV_FWM DIALOGEX 0, 0, 165, 136
+IDD_INJDRV_FWM DIALOGEX 0, 0, 200, 136
 STYLE DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
 CAPTION "Firmware master"
 FONT 8, "MS Sans Serif"
@@ -213,8 +217,9 @@ BEGIN
     CONTROL         "Inversion of flyback outputs",IDC_FWM_FLBINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,40,120,10
     CONTROL         "Inversion of PWM outputs",IDC_FWM_PWMINV_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,60,120,10
     CONTROL         "Corrections of inj. PW",IDC_FWM_PWCORR_CHECK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,23,80,120,10
-    DEFPUSHBUTTON   "Load",IDOK,30,110,50,16
-    PUSHBUTTON      "Cancel",IDCANCEL,90,110,50,16
+    PUSHBUTTON      "Save",IDC_FWM_SAVE_BTN,20,110,50,16
+    DEFPUSHBUTTON   "Load",IDOK,80,110,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,140,110,50,16
 END
 
 IDD_MAP_IMPEXP DIALOGEX 0, 0, 390, 300
@@ -336,6 +341,10 @@ BEGIN
     IDS_FWM_FLBINV_CHECK_TT  "Set this check if you need firmware with inverted flyback outputs"       
     IDS_FWM_PWMINV_CHECK_TT  "Set this check if you need firmware with inverted PWM outputs"
     IDS_FWM_PWCORR_CHECK_TT  "Set this check if you need firmware with corrections of inj. PW"
+
+    IDS_FWM_SAVE_BTN_TT      "Save firmware on disk"
+    IDS_FWM_LOAD_BTN_TT      "Load firmware to driver"
+    IDS_FWM_SELECT_FOLDER_FOR_FW "Select where to store firmware"
 END
 
 /////////////////////////////////////////////////////////////////////////////

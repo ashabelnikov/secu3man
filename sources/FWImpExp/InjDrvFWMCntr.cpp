@@ -33,6 +33,7 @@
 #include "InjDrvFWMDlg.h"
 #include "InjDrvFWMCntr.h"
 #include "hexutils/readhex.h"
+#include "ui-core/XBrowseForFolder.h"
 //LZMA SDK:
 #include "7z/CpuArch.h"
 #include "7z/7z.h"
@@ -52,6 +53,7 @@ InjDrvFWMCntr::InjDrvFWMCntr()
 
  //set event handlers to catch events from view
  mp_view->setOnOkButton(MakeDelegate(this,&InjDrvFWMCntr::OnOkPressed));
+ mp_view->setOnSaveButton(MakeDelegate(this,&InjDrvFWMCntr::OnSavePressed));
  mp_view->setOnCancelButton(MakeDelegate(this,&InjDrvFWMCntr::OnCancelPressed));
  mp_view->setOnActivate(MakeDelegate(this,&InjDrvFWMCntr::OnViewActivate));
  mp_view->setOnChangeFwmCheck(MakeDelegate(this,&InjDrvFWMCntr::OnChangeFwmCheck));
@@ -79,8 +81,16 @@ void InjDrvFWMCntr::OnOkPressed(void)
  std::set<_TSTRING> opts;
  _BuildOptList(opts);
  AfxGetMainWnd()->BeginWaitCursor();
- m_status = _LoadFirmware(opts); //load and store result
+ m_status = _LoadFirmware(opts, false); //load and store result
  AfxGetMainWnd()->EndWaitCursor();
+}
+
+void InjDrvFWMCntr::OnSavePressed(void)
+{
+ std::set<_TSTRING> opts;
+ _BuildOptList(opts);
+ mp_view->EndDialog(IDCANCEL); //close window
+ m_status = _LoadFirmware(opts, true); //load and save result on disk
 }
 
 void InjDrvFWMCntr::OnCancelPressed(void)
@@ -176,7 +186,7 @@ static SRes Utf16_To_Char(CBuf *buf, const UInt16 *s, UINT codePage)
  }
 }
 
-bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
+bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts, bool save)
 {
  ISzAlloc allocImp;
  ISzAlloc allocTempImp;
@@ -279,7 +289,7 @@ bool InjDrvFWMCntr::_LoadFirmware(const std::set<_TSTRING>& opts)
      break;
     }
     match = true;
-    store_data = _StoreResult((const TCHAR*)buf.data, outBuffer + offset, outSizeProcessed);
+    store_data = _StoreResult((const TCHAR*)buf.data, outBuffer + offset, outSizeProcessed, save);
     Buf_Free(&buf, &g_Alloc);
     break;
    }
@@ -341,8 +351,31 @@ bool InjDrvFWMCntr::_FindMatchForOpts(const _TSTRING& name, const std::set<_TSTR
  return true;
 }
 
-bool InjDrvFWMCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_t sizeHex)
+bool InjDrvFWMCntr::_StoreResult(const _TSTRING& name, BYTE* buffHex, size_t sizeHex, bool save)
 {
+ if (save)
+ {
+  TCHAR szFolder[MAX_PATH*2] = { _T('\0') };
+  BOOL bRet = XBrowseForFolder(AfxGetMainWnd()->m_hWnd, (LPCTSTR)NULL, -1, MLL::LoadString(IDS_FWM_SELECT_FOLDER_FOR_FW),
+                              szFolder, sizeof(szFolder) / sizeof(TCHAR) - 2, TRUE);
+  if (bRet)
+  {
+   _TSTRING path = _TSTRING(szFolder) + _T("\\") + name;
+   CFile f;
+   CFileException ex;
+   TCHAR szError[1024];
+   if(!f.Open(path.c_str(), CFile::modeWrite | CFile::modeCreate, &ex))
+   {
+    ex.GetErrorMessage(szError, 1024);
+    AfxMessageBox(szError);
+    return false;
+   }  
+   f.Write(buffHex, sizeHex);
+   f.Close();
+  }
+  return true;
+ }
+
  size_t bin_size = 0;
  EReadHexStatus status = HexUtils_ConvertHexToBin(buffHex, sizeHex, mp_data, bin_size, m_size);
 

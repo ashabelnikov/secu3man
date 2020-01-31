@@ -40,6 +40,7 @@ BEGIN_MESSAGE_MAP(CInjDrvFWMDlg, Super)
  ON_WM_DESTROY()
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
  ON_COMMAND_RANGE(IDC_FWM_INPINV_CHECK, IDC_FWM_PWMINV_CHECK, OnFwmCheck)
+ ON_BN_CLICKED(IDC_FWM_SAVE_BTN, OnSave)
 END_MESSAGE_MAP()
 
 CInjDrvFWMDlg::CInjDrvFWMDlg(CWnd* pParent /*=NULL*/)
@@ -103,7 +104,10 @@ BOOL CInjDrvFWMDlg::OnInitDialog()
  VERIFY(mp_ttc->Create(this, WS_POPUP | TTS_ALWAYSTIP | TTS_BALLOON));
  int idc = IDC_FWM_INPINV_CHECK;
  for (UINT ids = IDS_FWM_INPINV_CHECK_TT; ids <= IDS_FWM_PWCORR_CHECK_TT; ids++, idc++)
- VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
+  VERIFY(mp_ttc->AddWindow(GetDlgItem(idc), MLL::GetString(ids)));
+
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDC_FWM_SAVE_BTN), MLL::GetString(IDS_FWM_SAVE_BTN_TT)));
+ VERIFY(mp_ttc->AddWindow(GetDlgItem(IDOK), MLL::GetString(IDS_FWM_LOAD_BTN_TT)));
  mp_ttc->SetMaxTipWidth(250); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
 
@@ -119,6 +123,12 @@ void CInjDrvFWMDlg::OnFwmCheck(UINT nID)
 {
  if (m_OnChangeFwmCheck)
   m_OnChangeFwmCheck(nID - IDC_FWM_INPINV_CHECK);
+}
+
+void CInjDrvFWMDlg::OnSave()
+{
+ if (m_OnSaveButton)
+  m_OnSaveButton();
 }
 
 void CInjDrvFWMDlg::SetFwmFlag(FwmFlag i_flag_type, bool i_state)

@@ -56,6 +56,7 @@ class CInjDrvFWMDlg : public CDialog
   void setOnCancelButton(EventHandler OnFunction) {m_OnCancelButton = OnFunction;};
   void setOnActivate(EventHandler OnActivate) {m_OnActivate = OnActivate;};
   void setOnChangeFwmCheck(EventWithCode OnChange) {m_OnChangeFwmCheck = OnChange;};
+  void setOnSaveButton(EventHandler OnFunction) {m_OnSaveButton = OnFunction;};
 
   void SetFwmFlag(FwmFlag i_flag_type, bool i_state);
   bool GetFwmFlag(FwmFlag i_flag_type);
@@ -70,10 +71,12 @@ class CInjDrvFWMDlg : public CDialog
   afx_msg void OnDestroy();
   afx_msg LRESULT OnKickIdle(WPARAM, LPARAM);
   afx_msg void OnFwmCheck(UINT);
+  afx_msg void OnSave();
   DECLARE_MESSAGE_MAP()
 
  private:
   EventHandler m_OnOkButton;
+  EventHandler m_OnSaveButton;
   EventHandler m_OnCancelButton;
   EventHandler m_OnActivate;
   EventWithCode m_OnChangeFwmCheck;
