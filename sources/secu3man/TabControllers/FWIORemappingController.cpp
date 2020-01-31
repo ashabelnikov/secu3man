@@ -192,6 +192,8 @@ void CFWIORemappingController::_PrepareLogic(void)
   mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_ADD_IO2, _T("ADD_O2"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT7, _T("IGN_OUT7"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT8, _T("IGN_OUT8"));
+  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_SM_DIR, _T("SM_DIR"));
+  mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_SM_STP, _T("SM_STP"));
   mp_view->AddItem(FWDM::IOS_IGN_OUT1, FWDM::IOP_IGN_OUT1, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IGN_OUT1, true);
   mp_view->EnableInversion(FWDM::IOS_IGN_OUT1, true);
