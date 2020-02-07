@@ -349,7 +349,7 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
    break;
 
   case 1: //Read out RPM grid
-   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMRGD));
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_RPMGRD));
    if (i_descriptor != RPMGRD_PAR)
     mp_comm->m_pControlApp->ChangeContext(RPMGRD_PAR);
    else
@@ -359,8 +359,19 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     m_operation_state = 2;
    }
    break;
+  case 2: //Read out CLT grid
+   mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_CLTGRD));
+   if (i_descriptor != CLTGRD_PAR)
+    mp_comm->m_pControlApp->ChangeContext(CLTGRD_PAR);
+   else
+   {//save CLT grid
+    const SepTabPar* data = (const SepTabPar*)i_packet_data;
+    memcpy(m_cltGrid, data->table_data, F_TMP_SLOTS*sizeof(float)); //save CLT grid
+    m_operation_state = 3;
+   }
+   break;
 
-  case 2:
+  case 3:
    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_READING_TABLES));
    if (i_descriptor != EDITAB_PAR)
     mp_comm->m_pControlApp->ChangeContext(EDITAB_PAR);
@@ -369,15 +380,15 @@ bool CPMTablesController::CollectData(const BYTE i_descriptor, const void* i_pac
     _ClearAcquisitionFlags();
     const EditTabPar* data = (const EditTabPar*)i_packet_data;
     _UpdateCache(data);
-    m_operation_state = 3;
+    m_operation_state = 4;
    }
    break;
 
-  case 3:
+  case 4:
    {
     if (i_descriptor != EDITAB_PAR)
     {
-     m_operation_state = 2;
+     m_operation_state = 3;
      break;
     }
 
@@ -708,6 +719,7 @@ void CPMTablesController::OnImportFromS3F(void)
  FWMapsDataHolder data(1); //1 set
  data.maps[0] = *m_maps; 
  std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, data.rpm_slots);
+ std::copy(m_cltGrid, m_cltGrid + F_TMP_SLOTS, data.clt_slots);
 
  S3FImportController import(&data);
 
@@ -718,6 +730,7 @@ void CPMTablesController::OnImportFromS3F(void)
   _MoveMapsToCharts(false, &data.maps[0]); //current
   _MoveMapsToCharts(true, &data.maps[0]);  //original
    mp_view->SetRPMGrid(m_rpmGrid);         //RPM grid
+   mp_view->SetCLTGrid(m_cltGrid);         //CLT grid
   _SetTablesSetName(data.maps[0].name);    //name
   
   //Send updated set name to SECU-3
@@ -736,6 +749,7 @@ void CPMTablesController::OnImportFromS3F(void)
   *m_maps = data.maps[0];  //current
   *m_omaps = data.maps[0]; //original
   std::copy(data.rpm_slots, data.rpm_slots + F_RPM_SLOTS, m_rpmGrid);
+  std::copy(data.clt_slots, data.clt_slots + F_TMP_SLOTS, m_cltGrid);
 
   //update view and update modification flag if any of maps changed
   mp_view->UpdateOpenedCharts();
@@ -768,6 +782,7 @@ void CPMTablesController::OnExportToS3F(void)
  s3f_io.GetDataLeft() = FWMapsDataHolder(1); //resize to 1 set
  s3f_io.GetDataLeft().maps[0] = *m_maps; 
  std::copy(m_rpmGrid, m_rpmGrid + F_RPM_SLOTS, s3f_io.GetDataLeft().rpm_slots);
+ std::copy(m_cltGrid, m_cltGrid + F_TMP_SLOTS, s3f_io.GetDataLeft().clt_slots);
 
  //saveto file
  if (save.DoModal()==IDOK)
@@ -786,6 +801,8 @@ void CPMTablesController::OnDataCollected(void)
  _MoveMapsToCharts(true);
  //Set RPM grid read out from SECU-3
  mp_view->SetRPMGrid(m_rpmGrid);
+ //Set CLT grid read out from SECU-3
+ mp_view->SetCLTGrid(m_cltGrid);
  mp_view->TransformValues(); //transform values in some maps before they will be rendered for user
  mp_view->UpdateOpenedCharts();
  _SetTablesSetName(m_maps->name);

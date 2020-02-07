@@ -69,7 +69,8 @@ class CGridModeEditorIgnDlg : public CDialog
 
   void BindMaps(float* pStart, float* pIdle, float* pWork, float* pTemp);
   void BindRPMGrid(float* pGrid);
-  void UpdateView(void);
+  void BindCLTGrid(float* pGrid);
+  void UpdateView(bool axisLabels = false);
 
   void EnableAdvanceAngleIndication(bool i_enable);
 
@@ -129,6 +130,7 @@ class CGridModeEditorIgnDlg : public CDialog
   float* mp_workMap;
   float* mp_tempMap;
   float* mp_rpmGrid;
+  float* mp_cltGrid;
   bool m_en_aa_indication;
   CFont m_font;
   CFont m_fieldFont;

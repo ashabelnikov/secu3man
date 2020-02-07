@@ -40,9 +40,9 @@ class CGMEInjEnrDlg : public CTabDialog
   static const UINT IDD;
 
   void BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM);
-  void BindTemperGrid(float* pGrid);
+  void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
-  void UpdateView(void);
+  void UpdateView(bool axisLabels = false);
 
   void SetArguments(bool strt_use, float clt, int tpsdot, int rpm);
 
@@ -78,7 +78,7 @@ class CGMEInjEnrDlg : public CTabDialog
   float* mp_AETPSMap;
   float* mp_AERPMMap;
 
-  float* mp_temperGrid;
+  float* mp_cltGrid;
 
   CFont m_font;
   EventWithCode m_OnChange;

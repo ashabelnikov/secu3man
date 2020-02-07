@@ -76,6 +76,7 @@ CGridModeEditorIgnDlg::CGridModeEditorIgnDlg(CWnd* pParent /*=NULL*/)
 , mp_workMap(NULL)
 , mp_tempMap(NULL)
 , mp_rpmGrid(NULL)
+, mp_cltGrid(NULL)
 , m_en_aa_indication(false)
 , m_start_map(1, 16, false, DLL::GetModuleHandle())
 , m_idle_map(1, 16, false, DLL::GetModuleHandle())
@@ -164,7 +165,7 @@ BOOL CGridModeEditorIgnDlg::OnInitDialog()
  m_temp_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGridModeEditorIgnDlg::OnAbroadMoveTemp));
  m_temp_map.SetRange(-15.0f, 25.0f);
  m_temp_map.AttachMap(mp_tempMap);
- m_temp_map.AttachLabels(SECU3IO::temp_map_tmp_slots, NULL);
+ m_temp_map.AttachLabels(mp_cltGrid, NULL);
  m_temp_map.ShowLabels(true, false);
  m_temp_map.SetFont(&m_font);
  m_temp_map.EnableAbroadMove(true, true);
@@ -241,10 +242,21 @@ void CGridModeEditorIgnDlg::BindRPMGrid(float* pGrid)
  mp_rpmGrid = pGrid;
 }
 
-void CGridModeEditorIgnDlg::UpdateView(void)
+void CGridModeEditorIgnDlg::BindCLTGrid(float* pGrid)
+{
+ mp_cltGrid = pGrid;
+}
+
+void CGridModeEditorIgnDlg::UpdateView(bool axisLabels /*= false*/)
 {
  if (::IsWindow(this->m_hWnd))
  {
+  if (axisLabels)
+  {
+   m_idle_map.AttachLabels(mp_rpmGrid, &work_map_load_slots[0]);
+   m_work_map.AttachLabels(mp_rpmGrid, &work_map_load_slots[0]);
+   m_temp_map.AttachLabels(mp_cltGrid, NULL);
+  }
   m_start_map.UpdateDisplay();
   m_idle_map.UpdateDisplay();
   m_work_map.UpdateDisplay();

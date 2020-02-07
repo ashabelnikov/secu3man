@@ -76,5 +76,6 @@
 #define   INJDRV_PAR   '+'
 #define   LZIDBL_HS    'H'
 #define   INJDRV_ADR   'G'
+#define   CLTGRD_PAR   '('
 
 #endif //_UFCODES_H_

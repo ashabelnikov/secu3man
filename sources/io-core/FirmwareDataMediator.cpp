@@ -49,6 +49,7 @@ using namespace SECU3IO::SECU3Types;
 #define THERMISTOR_LOOKUP_TABLE_SIZE     16
 #define ATS_CORR_LOOKUP_TABLE_SIZE       16
 #define RPM_GRID_SIZE                    16
+#define CLT_GRID_SIZE                    16
 #define GASDOSE_POS_RPM_SIZE             16
 #define GASDOSE_POS_TPS_SIZE             16
 #define BAROCORR_SIZE                    9
@@ -207,6 +208,11 @@ typedef struct
  //Value of RPM (in 10 min-1 units) vs coolant temperature
  _uchar smapaban_thrd[SMAPABAN_THRD_SIZE];
 
+ //Points of the CLT grid
+ _int clt_grid_points[CLT_GRID_SIZE];
+ //Sizes of cells in CLT grid (so, we don't need to calculate them at the runtime)
+ _int clt_grid_sizes[CLT_GRID_SIZE-1];
+
  //firmware constants:
  _int evap_clt;
  _uchar evap_tps_lo;
@@ -233,7 +239,7 @@ typedef struct
  //Ёти зарезервированные байты необходимы дл€ сохранени€ бинарной совместимости
  //новых версий прошивок с более старыми верси€ми. ѕри добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[2];
+ _uchar reserved[20];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -1334,6 +1340,11 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
  for(i = 0; i < F_RPM_SLOTS; ++i)
   op_fwd->rpm_slots[i] = slots[i];
+
+ // опируем таблицу с сеткой “ќ∆ (Copy table with CLT grid)
+ float slots1[F_TMP_SLOTS]; GetCLTGridMap(slots1);
+ for(i = 0; i < F_TMP_SLOTS; ++i)
+  op_fwd->clt_slots[i] = slots1[i];
 }
 
 void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
@@ -1393,6 +1404,9 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))
   SetRPMGridMap(ip_fwd->rpm_slots);
+ //Check CLT grids compatibility and set CLT grid
+ if (CheckCLTGridsCompatibility(ip_fwd->clt_slots))
+  SetCLTGridMap(ip_fwd->clt_slots);
 }
 
 bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
@@ -1404,6 +1418,18 @@ bool CFirmwareDataMediator::CheckRPMGridsCompatibility(const float* rpmGrid)
    match = false;
  if (!match)
   return (IDYES==AfxMessageBox(_T("RPM grids from firmware and source are not equal!\n Please inspect idle, work, VE, AFR and inj.timing maps if you accept new RPM grid.\n Accept new RPM grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
+ return true;
+}
+
+bool CFirmwareDataMediator::CheckCLTGridsCompatibility(const float* cltGrid)
+{
+ bool match = true;
+ float slots[F_TMP_SLOTS]; GetCLTGridMap(slots);
+ for(int i = 0; i < F_TMP_SLOTS; ++i)
+  if (cltGrid[i] != slots[i])
+   match = false;
+ if (!match)
+  return (IDYES==AfxMessageBox(_T("CLT grids from firmware and source are not equal!\n Please inspect corresponding maps if you accept new CLT grid.\n Accept new CLT grid (Y) or keep old one (N)?"), MB_YESNO|MB_ICONWARNING));
  return true;
 }
 
@@ -1606,6 +1632,37 @@ void CFirmwareDataMediator::SetRPMGridMap(const float* ip_values)
  //calculate sizes
  for(size_t i = 0; i < RPM_GRID_SIZE-1; i++)
   p_fd->exdata.rpm_grid_sizes[i] = p_fd->exdata.rpm_grid_points[i+1] - p_fd->exdata.rpm_grid_points[i];
+}
+
+void CFirmwareDataMediator::GetCLTGridMap(float* op_values)
+{
+ ASSERT(op_values);
+ if (!op_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ for(size_t i = 0; i < CLT_GRID_SIZE; i++)
+  op_values[i] = ((float)p_fd->exdata.clt_grid_points[i]) / TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER;
+}
+
+void CFirmwareDataMediator::SetCLTGridMap(const float* ip_values)
+{
+ ASSERT(ip_values);
+ if (!ip_values)
+  return;
+
+ //получаем адрес структуры дополнительных данных
+ fw_data_t* p_fd = (fw_data_t*)(&mp_bytes_active[m_lip->FIRMWARE_DATA_START]);
+
+ //store grid points
+ for(size_t i = 0; i < CLT_GRID_SIZE; i++)
+  p_fd->exdata.clt_grid_points[i] = MathHelpers::Round(ip_values[i] * TEMP_PHYSICAL_MAGNITUDE_MULTIPLIER);
+
+ //calculate sizes
+ for(size_t i = 0; i < CLT_GRID_SIZE-1; i++)
+  p_fd->exdata.clt_grid_sizes[i] = p_fd->exdata.clt_grid_points[i+1] - p_fd->exdata.clt_grid_points[i];
 }
 
 void CFirmwareDataMediator::GetATSAACMap(float* op_values, bool i_original /* = false */)

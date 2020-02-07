@@ -1151,6 +1151,7 @@ void CFirmwareTabController::SetViewChartsValues(void)
  m_fwdm->GetSmapabanThrdMap(mp_view->mp_TablesPanel->GetSmapabanThrdMap(true),true);
  
  m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
+ m_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
 
  if (m_current_funset_index==-1)
   return;
@@ -1636,6 +1637,7 @@ void CFirmwareTabController::OnEditRPMGrid(void)
  if (IDOK == cntr.Edit())
  {
   m_fwdm->GetRPMGridMap(mp_view->mp_TablesPanel->GetRPMGrid());
+  m_fwdm->GetCLTGridMap(mp_view->mp_TablesPanel->GetCLTGrid());
   mp_view->mp_TablesPanel->UpdateOpenedCharts();
  }
 }

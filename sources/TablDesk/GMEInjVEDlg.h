@@ -44,7 +44,7 @@ class CGMEInjVEDlg : public CTabDialog
   void BindRPMGrid(float* pGrid);
   void BindLoadGrid(float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
-  void UpdateView(void);
+  void UpdateView(bool axisLabels = false);
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load);
 

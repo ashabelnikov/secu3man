@@ -123,4 +123,5 @@ class CPMTablesController : public CPMControllerBase<CTablesDeskDlg>, public Map
   CObjectTimer<CPMTablesController> m_td_changes_timer;
 
   float m_rpmGrid[32];
+  float m_cltGrid[32];
 };

@@ -375,7 +375,7 @@
 #define IDS_KC_LIST_SIGMA_FILTER        4399
 #define IDM_KC_LIST_SIGMA_FILTER        4400
 #define IDS_KC_PLEASE_COLLECT_MORE_STAT 4401
-#define IDS_PM_READING_RPMRGD           4402
+#define IDS_PM_READING_RPMGRD           4402
 #define ID_APP_LOG_FORMAT               4403
 #define IDS_LOG_FORMAT_DESC             4404
 #define ID_APP_VK                       4405
@@ -563,3 +563,4 @@
 #define IDS_INJDRV_PWADD_TITLE          4687
 #define IDS_PWMUL_TABSEL_CHECK_TT       4688
 #define IDS_PWADD_TABSEL_CHECK_TT       4689
+#define IDS_PM_READING_CLTGRD           4690

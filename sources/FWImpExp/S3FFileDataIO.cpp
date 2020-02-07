@@ -41,7 +41,7 @@
 #define MIN_OPTDATA_SIZE 1024
 #define MIN_NOFSETS TABLES_NUMBER
 #define MAX_NOFSETS 64
-#define CURRENT_VERSION 0x0110 //01.10
+#define CURRENT_VERSION 0x0111 //01.11
 
 //define our own types
 typedef unsigned short s3f_uint16_t;
@@ -73,6 +73,7 @@ typedef unsigned char s3f_uint8_t;
 // 01.08 - Abandoned choke opening map (body of map left for compatibility reasons)
 // 01.09 - Added some maps which were not added yet (28.12.2018)
 // 01.10 - Added 3 new separate tables which were not added yet
+// 01.11 - CLT grid has been added (02.02.2020)
 
 //Numbers of flag bits
 #define S3FF_NOSEPMAPS 0
@@ -151,8 +152,10 @@ struct S3FSepMaps
  s3f_int32_t cranking_thrd[CRANK_THRD_SIZE];
  s3f_int32_t cranking_time[CRANK_TIME_SIZE];
  s3f_int32_t smapaban_thrd[SMAPABAN_THRD_SIZE];
+ //since v01.11
+ s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
 
- s3f_int32_t reserved[1651];       //reserved bytes, = 0
+ s3f_int32_t reserved[1635];       //reserved bytes, = 0
 };
 
 
@@ -379,6 +382,9 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  //convert RPM grid
  for(i = 0; i < F_RPM_SLOTS; ++i)
   p_sepMaps->rpm_slots[i] = MathHelpers::Round(m_data.rpm_slots[i] * INT_MULTIPLIER);
+ //convert CLT grid
+ for(i = 0; i < F_TMP_SLOTS; ++i)
+  p_sepMaps->clt_slots[i] = MathHelpers::Round(m_data.clt_slots[i] * INT_MULTIPLIER);
 
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
@@ -526,6 +532,18 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
  for(i = 0; i < F_RPM_SLOTS; ++i)
   m_data.rpm_slots[i] = p_sepMaps->rpm_slots[i] / INT_MULTIPLIER;
 
+ //convert CLT grid
+ bool empty = true;
+ for(i = 0; i < F_TMP_SLOTS; ++i)
+ {
+  if (0 != p_sepMaps->clt_slots[i])
+   empty = false;
+  m_data.clt_slots[i] = p_sepMaps->clt_slots[i] / INT_MULTIPLIER;
+ }
+
+ if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
+  std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
  return true;
 }
 
@@ -583,6 +601,9 @@ bool S3FFileDataIO::_ReadData_v0102(const BYTE* rawdata, const S3FFileHdr* p_fil
 
  if (empty || (p_fileHdr->version < 0x0102)) //copy standard RPM grid if old version of S3F is being loaded
   std::copy(SECU3IO::work_map_rpm_slots, SECU3IO::work_map_rpm_slots + F_RPM_SLOTS, m_data.rpm_slots);
+
+ //copy standard CLT grid when loading old format
+ std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
 
  return true;
 }

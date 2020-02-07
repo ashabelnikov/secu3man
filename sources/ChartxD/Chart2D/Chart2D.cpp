@@ -56,6 +56,7 @@ extern "C"
  void  __declspec(dllexport)  __cdecl Chart2DSetPtValuesFormat(HWND hWnd, LPCTSTR ptValFormat);
  void  __declspec(dllexport)  __cdecl Chart2DSetPtMovingStep(HWND hWnd, float step);
  float __declspec(dllexport)  __cdecl Chart2DGetPtMovingStep(HWND hWnd);
+ void  __declspec(dllexport)  __cdecl Chart2DUpdateYRange(HWND parent, float i_fnc_min, float i_fnc_max);
 }
 
 extern HINSTANCE hInst;
@@ -345,3 +346,15 @@ static volatile BYTE info[116] = {0x53,0x45,0x43,0x55,0x2d,0x33,0x20,0x4d,0x61,0
                                   0x33,0x2e,0x6f,0x72,0x67,0x2c,0x20,0x65,0x6d,0x61,0x69,0x6c,0x3a,0x20,0x73,0x68,
                                   0x61,0x62,0x65,0x6c,0x6e,0x69,0x6b,0x6f,0x76,0x40,0x73,0x65,0x63,0x75,0x2d,0x33,
                                   0x2e,0x6f,0x72,0x67};
+
+//---------------------------------------------------------------------------
+void __cdecl Chart2DUpdateYRange(HWND hWnd, float i_fnc_min, float i_fnc_max)
+{
+ TForm2D* pForm = static_cast<TForm2D*>(GetInstanceByHWND(hWnd));
+ if (NULL==pForm)
+  return;
+ pForm->m_fnc_min = i_fnc_min;
+ pForm->m_fnc_max = i_fnc_max;
+}
+
+//---------------------------------------------------------------------------

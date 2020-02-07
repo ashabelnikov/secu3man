@@ -69,6 +69,7 @@ CGMEInjOtherDlg::CGMEInjOtherDlg(CWnd* pParent /*=NULL*/)
 , mp_temperGrid(NULL)
 , mp_deadGrid(NULL)
 , mp_rpmGrid(NULL)
+, mp_cltGrid(NULL)
 {
  m_egocrvGrid.reserve(32);
  m_iatcltGrid.reserve(32);
@@ -120,7 +121,7 @@ BOOL CGMEInjOtherDlg::OnInitDialog()
  m_crnk_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjOtherDlg::OnAbroadMoveCrnk));
  m_crnk_map.SetRange(0.3f, 26.0f);
  m_crnk_map.AttachMap(mp_CrnkMap);
- m_crnk_map.AttachLabels(mp_temperGrid, NULL);
+ m_crnk_map.AttachLabels(mp_cltGrid, NULL);
  m_crnk_map.ShowLabels(true, false);
  m_crnk_map.SetFont(&m_font);
  m_crnk_map.EnableAbroadMove(false, true);
@@ -268,14 +269,26 @@ void CGMEInjOtherDlg::BindRPMGrid(float* pGrid)
  ASSERT(pGrid);
 }
 
+void CGMEInjOtherDlg::BindCLTGrid(float* pGrid)
+{
+ mp_cltGrid = pGrid;
+ ASSERT(pGrid);
+}
+
 void CGMEInjOtherDlg::setOnChange(EventWithCode OnCB)
 {
  m_OnChange = OnCB;
 }
 
-void CGMEInjOtherDlg::UpdateView(void)
+void CGMEInjOtherDlg::UpdateView(bool axisLabels /*= false*/)
 {
  _UpdateDynamicGrids();
+
+ if (axisLabels)
+ {
+  m_crnk_map.AttachLabels(mp_cltGrid, NULL);  //update axis labels
+ }
+
  m_egocrv_map.AttachLabels(&m_egocrvGrid[0], NULL);
  m_iatclt_map.AttachLabels(&m_iatcltGrid[0], NULL);
  m_gpsc_map.AttachLabels(&m_gpscGrid[0], NULL);

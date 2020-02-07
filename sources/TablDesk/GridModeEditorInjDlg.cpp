@@ -73,11 +73,9 @@ CGridModeEditorInjDlg::CGridModeEditorInjDlg(CWnd* pParent /*=NULL*/)
  m_pITPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIT));
 
  m_pIRegPageDlg.reset(new CGMEInjIRegDlg());
- m_pIRegPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
  m_pIRegPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeIReg));
 
  m_pEnrPageDlg.reset(new CGMEInjEnrDlg());
- m_pEnrPageDlg->BindTemperGrid(const_cast<float*>(SECU3IO::temp_map_tmp_slots));
  m_pEnrPageDlg->setOnChange(fastdelegate::MakeDelegate(this, CGridModeEditorInjDlg::OnChangeEnr));
 
  m_pOtherPageDlg.reset(new CGMEInjOtherDlg());
@@ -204,22 +202,29 @@ void CGridModeEditorInjDlg::BindRPMGrid(float* pGrid)
  m_pOtherPageDlg->BindRPMGrid(pGrid);
 }
 
-void CGridModeEditorInjDlg::UpdateView(void)
+void CGridModeEditorInjDlg::BindCLTGrid(float* pGrid)
+{
+ m_pIRegPageDlg->BindCLTGrid(pGrid);
+ m_pEnrPageDlg->BindCLTGrid(pGrid);
+ m_pOtherPageDlg->BindCLTGrid(pGrid);
+}
+
+void CGridModeEditorInjDlg::UpdateView(bool axisLabels /*= fasle*/)
 {
  if (::IsWindow(this->m_hWnd))
  {
   if (::IsWindow(m_pVEPageDlg->m_hWnd))
-   m_pVEPageDlg->UpdateView(); 
+   m_pVEPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pAFRPageDlg->m_hWnd))
-   m_pAFRPageDlg->UpdateView(); 
+   m_pAFRPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pITPageDlg->m_hWnd))
-   m_pITPageDlg->UpdateView(); 
+   m_pITPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pIRegPageDlg->m_hWnd))
-   m_pIRegPageDlg->UpdateView(); 
+   m_pIRegPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pEnrPageDlg->m_hWnd))
-   m_pEnrPageDlg->UpdateView(); 
+   m_pEnrPageDlg->UpdateView(axisLabels); 
   if (::IsWindow(m_pOtherPageDlg->m_hWnd))
-   m_pOtherPageDlg->UpdateView(); 
+   m_pOtherPageDlg->UpdateView(axisLabels); 
  } 
 }
 

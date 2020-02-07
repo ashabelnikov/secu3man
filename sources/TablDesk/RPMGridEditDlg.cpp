@@ -33,17 +33,22 @@
 
 const UINT CRPMGridEditDlg::IDD = IDD_RPM_GRID_EDITOR;
 
-static const int editStart = IDC_RGE_EDIT_0;
-static const int editEnd = IDC_RGE_EDIT_15;
+static const int editStart[2] = {IDC_RGE_EDIT_0, IDC_CGE_EDIT_0};
+static const int editEnd[2] = {IDC_RGE_EDIT_15, IDC_CGE_EDIT_15};
+
 static const COLORREF itemErrColor = RGB(255,120,120);
 static const COLORREF errorMsgColor = RGB(255, 0, 0);
+
+static const int numGrids = 2;
 
 /////////////////////////////////////////////////////////////////////////////
 // CRPMGridEditDlg dialog
 
 BEGIN_MESSAGE_MAP(CRPMGridEditDlg, Super)
- ON_CONTROL_RANGE(EN_CHANGE, editStart, editEnd, OnChangeEdit)
+ ON_CONTROL_RANGE(EN_CHANGE, editStart[0], editEnd[0], OnChangeEdit)
+ ON_CONTROL_RANGE(EN_CHANGE, editStart[1], editEnd[1], OnChangeEdit1)
  ON_BN_CLICKED(IDC_RGE_LOAD_DEF_VAL, OnLoadDefValBtn)
+ ON_BN_CLICKED(IDC_CGE_LOAD_DEF_VAL, OnLoadDefValBtn1)
  ON_UPDATE_COMMAND_UI(IDOK, OnUpdateOkButton)
  ON_WM_CTLCOLOR()
  ON_MESSAGE(WM_KICKIDLE, OnKickIdle)
@@ -52,32 +57,49 @@ END_MESSAGE_MAP()
 CRPMGridEditDlg::CRPMGridEditDlg(CWnd* pParent /*=NULL*/)
 : Super(CRPMGridEditDlg::IDD, pParent)
 , m_redBrush(itemErrColor)
-{
- m_values.reserve(32);
- m_edits.reserve(32);
- m_errflags.reserve(32);
+{//RPM:
+ m_values[0].reserve(32);
+ m_edits[0].reserve(32);
+ m_errflags[0].reserve(32);
  for(size_t i = 0; i < 16; ++i)
  {
-  m_edits.push_back(new CEditEx(CEditEx::MODE_INT));
-  m_values.push_back(0);
-  m_errflags.push_back(false);
+  m_edits[0].push_back(new CEditEx(CEditEx::MODE_INT));
+  m_values[0].push_back(0);
+  m_errflags[0].push_back(false);
+ }
+ //CLT:
+ m_values[1].reserve(32);
+ m_edits[1].reserve(32);
+ m_errflags[1].reserve(32);
+ for(size_t i = 0; i < 16; ++i)
+ {
+  m_edits[1].push_back(new CEditEx(CEditEx::MODE_INT | CEditEx::MODE_SIGNED));
+  m_edits[1].back()->SetDecimalPlaces(3);
+  m_values[1].push_back(0);
+  m_errflags[1].push_back(false);
  }
 }
 
 CRPMGridEditDlg::~CRPMGridEditDlg()
 {
- for(size_t i = 0; i < m_edits.size(); ++i)
-  delete m_edits[i];
+ for(size_t j = 0; j < numGrids; ++j)
+  for(size_t i = 0; i < m_edits[j].size(); ++i)
+   delete m_edits[j][i];
 }
 
 void CRPMGridEditDlg::DoDataExchange(CDataExchange* pDX)
 {
  Super::DoDataExchange(pDX);
- DDX_Control(pDX, IDC_RGE_ERROR_MSG_TEXT, m_errMsg);
- for(size_t i = 0; i < m_edits.size(); ++i)
+ DDX_Control(pDX, IDC_RGE_ERROR_MSG_TEXT, m_errMsg[0]);
+ DDX_Control(pDX, IDC_CGE_ERROR_MSG_TEXT, m_errMsg[1]);
+
+ for (size_t j = 0; j < numGrids; ++j)
  {
-  DDX_Control(pDX, editStart + i, *(m_edits[i]));
-  m_edits[i]->DDX_Value(pDX, editStart + i, m_values[i]);
+  for(size_t i = 0; i < m_edits[j].size(); ++i)
+  {
+   DDX_Control(pDX, editStart[j] + i, *(m_edits[j][i]));
+   m_edits[j][i]->DDX_Value(pDX, editStart[j] + i, m_values[j][i]);
+  }
  }
 }
 
@@ -103,8 +125,11 @@ BOOL CRPMGridEditDlg::OnInitDialog()
 {
  Super::OnInitDialog();
 
- for(size_t i = 0; i < m_edits.size(); ++i)
-  m_edits[i]->SetLimitText(5);
+ for(size_t i = 0; i < m_edits[0].size(); ++i)
+  m_edits[0][i]->SetLimitText(5);
+
+ for(size_t i = 0; i < m_edits[1].size(); ++i)
+  m_edits[1][i]->SetLimitText(5);
 
  UpdateData(FALSE);
  return TRUE;  // return TRUE unless you set the focus to a control
@@ -119,7 +144,7 @@ LRESULT CRPMGridEditDlg::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
 HBRUSH CRPMGridEditDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
 {
  HBRUSH hbr = CDialog::OnCtlColor(pDC, pWnd, nCtlColor);
- if (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg.m_hWnd)
+ if ((nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[0].m_hWnd) || (nCtlColor == CTLCOLOR_STATIC && pWnd->m_hWnd == m_errMsg[1].m_hWnd))
  {
   pDC->SetTextColor(errorMsgColor);
   pDC->SetBkMode(TRANSPARENT);
@@ -127,12 +152,17 @@ HBRUSH CRPMGridEditDlg::OnCtlColor(CDC* pDC, CWnd *pWnd, UINT nCtlColor)
  }
  else if (nCtlColor == CTLCOLOR_EDIT)
  {
-  for(size_t i = 0; i < m_edits.size(); ++i)
-   if (pWnd->m_hWnd == m_edits[i]->m_hWnd && true==m_errflags[i])
-   { 
-    pDC->SetBkColor(itemErrColor);
-    hbr = m_redBrush;
+  for(size_t j = 0; j < numGrids; ++j)
+  {
+   for(size_t i = 0; i < m_edits[j].size(); ++i)
+   {
+    if (pWnd->m_hWnd == m_edits[j][i]->m_hWnd && true==m_errflags[j][i])
+    { 
+     pDC->SetBkColor(itemErrColor);
+     hbr = m_redBrush;
+    }
    }
+  }
  }
  return hbr;
 }
@@ -141,40 +171,58 @@ void CRPMGridEditDlg::OnChangeEdit(UINT nID)
 {
  UpdateData();
  //notify event receiver about change of view content
- size_t index = (nID - editStart);
- if (m_onChange && index < m_edits.size())
-  m_onChange(index, m_values[index]);
+ size_t index = (nID - editStart[0]);
+ if (m_onChange && index < m_edits[0].size())
+  m_onChange(0, index, m_values[0][index]); //RPM
+}
+
+void CRPMGridEditDlg::OnChangeEdit1(UINT nID)
+{
+ UpdateData();
+ //notify event receiver about change of view content
+ size_t index = (nID - editStart[1]);
+ if (m_onChange && index < m_edits[1].size())
+  m_onChange(1, index, m_values[1][index]); //CLT
 }
 
 void CRPMGridEditDlg::OnLoadDefValBtn()
 {
  if (m_onLoadDefVal)
-  m_onLoadDefVal();
+  m_onLoadDefVal(0);
 }
 
-void CRPMGridEditDlg::SetValues(const float* ip_values)
+void CRPMGridEditDlg::OnLoadDefValBtn1()
 {
+ if (m_onLoadDefVal)
+  m_onLoadDefVal(1);
+}
+
+void CRPMGridEditDlg::SetValues(int mode, const float* ip_values)
+{
+ ASSERT(mode >= 0 && mode < numGrids);
  if (!ip_values)
   return;
- m_values = std::vector<float>(ip_values, ip_values + m_values.size());
+ m_values[mode] = std::vector<float>(ip_values, ip_values + m_values[mode].size());
  if (::IsWindow(m_hWnd))
   UpdateData(FALSE);
 }
 
-void CRPMGridEditDlg::GetValues(float* op_values)
+void CRPMGridEditDlg::GetValues(int mode, float* op_values)
 {
+ ASSERT(mode >= 0 && mode < numGrids);
  if (!op_values)
   return;
- for(size_t i = 0; i < m_values.size(); ++i)
-  op_values[i] = m_values[i];
+ for(size_t i = 0; i < m_values[mode].size(); ++i)
+  op_values[i] = m_values[mode][i];
 }
 
-float CRPMGridEditDlg::GetValue(size_t index)
+float CRPMGridEditDlg::GetValue(int mode, size_t index)
 {
- if (index >= m_edits.size())
+ ASSERT(mode >= 0 && mode < numGrids);
+ if (index >= m_edits[mode].size())
   return 0;
  UpdateData();
- return m_values[index];
+ return m_values[mode][index];
 }
 
 void CRPMGridEditDlg::setOnChange(EventOnChange onFunction)
@@ -192,17 +240,19 @@ void CRPMGridEditDlg::setIsOkEnabled(EventResult OnFunction)
  m_isOkEnabled = OnFunction;
 }
 
-void CRPMGridEditDlg::SetErrMessage(const _TSTRING& str)
+void CRPMGridEditDlg::SetErrMessage(int mode, const _TSTRING& str)
 {
- m_errMsg.SetWindowText(str.c_str());
- m_errMsg.ShowWindow(str.size() ? SW_SHOW : SW_HIDE);
+ ASSERT(mode >= 0 && mode < numGrids);
+ m_errMsg[mode].SetWindowText(str.c_str());
+ m_errMsg[mode].ShowWindow(str.size() ? SW_SHOW : SW_HIDE);
 }
 
-void CRPMGridEditDlg::SetItemError(size_t index, bool i_error)
+void CRPMGridEditDlg::SetItemError(int mode, size_t index, bool i_error)
 {
- if (index >= m_errflags.size())
+ ASSERT(mode >= 0 && mode < numGrids);
+ if (index >= m_errflags[mode].size())
   return;
- m_errflags[index] = i_error;
+ m_errflags[mode][index] = i_error;
  //Update cprresponding control
- m_edits[index]->Invalidate();
+ m_edits[mode][index]->Invalidate();
 }

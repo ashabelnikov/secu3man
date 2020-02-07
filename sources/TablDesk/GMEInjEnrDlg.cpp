@@ -48,12 +48,11 @@ CGMEInjEnrDlg::CGMEInjEnrDlg(CWnd* pParent /*=NULL*/)
 , m_wrmp_map(1, 16)
 , m_aetps_map(1, 8)
 , m_aerpm_map(1, 4)
-
 , mp_AftstrMap(NULL)
 , mp_WrmpMap(NULL)
 , mp_AETPSMap(NULL)
 , mp_AERPMMap(NULL)
-, mp_temperGrid(NULL)
+, mp_cltGrid(NULL)
 {
  m_aftstr_map.SetDecimalPlaces(1, 0, 0);
  m_wrmp_map.SetDecimalPlaces(1, 0, 0);
@@ -90,7 +89,7 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_aftstr_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveAftstr));
  m_aftstr_map.SetRange(.0f, 199.0f);
  m_aftstr_map.AttachMap(mp_AftstrMap);
- m_aftstr_map.AttachLabels(mp_temperGrid, NULL);
+ m_aftstr_map.AttachLabels(mp_cltGrid, NULL);
  m_aftstr_map.ShowLabels(true, false);
  m_aftstr_map.SetFont(&m_font);
  m_aftstr_map.EnableAbroadMove(false, true);
@@ -100,7 +99,7 @@ BOOL CGMEInjEnrDlg::OnInitDialog()
  m_wrmp_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjEnrDlg::OnAbroadMoveWrmp));
  m_wrmp_map.SetRange(.0f, 199.0f);
  m_wrmp_map.AttachMap(mp_WrmpMap);
- m_wrmp_map.AttachLabels(mp_temperGrid, NULL);
+ m_wrmp_map.AttachLabels(mp_cltGrid, NULL);
  m_wrmp_map.ShowLabels(true, false);
  m_wrmp_map.SetFont(&m_font);
  m_wrmp_map.EnableAbroadMove(true, true);
@@ -156,9 +155,9 @@ void CGMEInjEnrDlg::BindMaps(float* pAftstr, float* pWrmp, float* pAETPS, float*
  mp_AERPMMap = pAERPM;
 }
 
-void CGMEInjEnrDlg::BindTemperGrid(float* pGrid)
+void CGMEInjEnrDlg::BindCLTGrid(float* pGrid)
 {
- mp_temperGrid = pGrid;
+ mp_cltGrid = pGrid;
  ASSERT(pGrid);
 }
 
@@ -167,8 +166,14 @@ void CGMEInjEnrDlg::setOnChange(EventWithCode OnCB)
  m_OnChange = OnCB;
 }
 
-void CGMEInjEnrDlg::UpdateView(void)
+void CGMEInjEnrDlg::UpdateView(bool axisLabels /*= false*/)
 {
+ if (axisLabels)
+ {
+  m_aftstr_map.AttachLabels(mp_cltGrid, NULL); //update axis labels
+  m_wrmp_map.AttachLabels(mp_cltGrid, NULL); //update axis labels
+ }
+
  m_aetps_map.AttachLabels(mp_AETPSMap + 8, NULL);
  m_aerpm_map.AttachLabels(mp_AERPMMap + 4, NULL);
 

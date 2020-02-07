@@ -214,7 +214,7 @@ void CGMEInjVEDlg::setOnChange(EventHandler OnCB)
  m_ve_map.setOnChange(OnCB);
 }
 
-void CGMEInjVEDlg::UpdateView(void)
+void CGMEInjVEDlg::UpdateView(bool axisLabels /*= false*/)
 {
  if (mp_CelBlkMap)
  {
@@ -222,6 +222,9 @@ void CGMEInjVEDlg::UpdateView(void)
    for (int r = 0; r < 16; ++r)
     m_ve_map.SetItemColor(l, r, mp_CelBlkMap[(l * 16) + r] ? RGB(100, 100, 100) : 0);
  }
+
+ if (axisLabels)
+  m_ve_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
 
  m_ve_map.UpdateDisplay();
 }

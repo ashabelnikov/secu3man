@@ -48,13 +48,13 @@ class CFWRPMGridEditController
 
  private:
   //Event handlers
-  void OnItemChange(size_t itemIndex, float value);
-  void OnLoadDefVal(void);
+  void OnItemChange(int mode, size_t itemIndex, float value);
+  void OnLoadDefVal(int mode);
   bool IsOkEnabled(void);
   //Error checker
-  bool _CheckItemForErrors(size_t itemIndex, float value, bool i_check_only = false);
+  bool _CheckItemForErrors(int mode, size_t itemIndex, float value, bool i_check_only = false);
   //Variables
   CFirmwareDataMediator* mp_fwdm;
   std::auto_ptr<CRPMGridEditDlg> mp_view;
-  std::list<std::pair<size_t, _TSTRING> > m_errors;
+  std::list<std::pair<size_t, _TSTRING> > m_errors[2];
 };

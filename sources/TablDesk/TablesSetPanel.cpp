@@ -1019,6 +1019,7 @@ void CTablesSetPanel::UpdateOpenedCharts(void)
   DLL::Chart2DUpdate(m_md[TYPE_MAP_DWELLCNTRL].handle, GetDwellCntrlMap(true), GetDwellCntrlMap(false));
  if (m_md[TYPE_MAP_CTS_CURVE].state)
  {
+  DLL::Chart2DUpdateYRange(m_md[TYPE_MAP_CTS_CURVE].handle, GetCLTGrid()[0], GetCLTGrid()[15]);
   DLL::Chart2DUpdate(m_md[TYPE_MAP_CTS_CURVE].handle, GetCTSCurveMap(true), GetCTSCurveMap(false));
   DLL::Chart2DUpdateAxisEdits(m_md[TYPE_MAP_CTS_CURVE].handle, 1, m_cts_curve_x_axis_limits[0], m_cts_curve_x_axis_limits[1]);
  }
@@ -1243,7 +1244,7 @@ void CTablesSetPanel::OnViewCTSCurveMap()
  if ((!m_md[TYPE_MAP_CTS_CURVE].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_CTS_CURVE].state = 1;
-  m_md[TYPE_MAP_CTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCTSCurveMap(true), GetCTSCurveMap(false), -40.0, 120.0, NULL, 16,
+  m_md[TYPE_MAP_CTS_CURVE].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCTSCurveMap(true), GetCTSCurveMap(false), GetCLTGrid()[0], GetCLTGrid()[15], NULL, 16,
     MLL::GetString(IDS_MAPS_VOLT_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_CTS_CURVE_MAP).c_str(), false);
@@ -1501,11 +1502,12 @@ void CTablesSetPanel::OnViewCrkTempMap()
  if ((!m_md[TYPE_MAP_CRKCLT_CORR].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_CRKCLT_CORR].state = 1;
-  m_md[TYPE_MAP_CRKCLT_CORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_CRKCLT_CORR].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrkTempMap(true),GetCrkTempMap(false),-15.0,25.0, GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_ADVANGLE_UNIT).c_str(),
     MLL::GetString(IDS_CRKTEMP_MAP).c_str(), false);
   DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRKCLT_CORR].handle,OnChangeCrkTempTable,this);
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRKCLT_CORR].handle, 1, OnGetXAxisLabelCLT, this);
   DLL::Chart2DSetOnChangeSettings(m_md[TYPE_MAP_CRKCLT_CORR].handle, OnChangeSettingsCME, this);
   DLL::Chart2DSetOnClose(m_md[TYPE_MAP_CRKCLT_CORR].handle,OnCloseCrkTempTable,this);
   DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRKCLT_CORR].handle, OnWndActivationCrkTempTable, this);
@@ -1571,11 +1573,12 @@ void CTablesSetPanel::OnViewCrankingThrdMap()
  if ((!m_md[TYPE_MAP_CRANKING_THRD].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_CRANKING_THRD].state = 1;
-  m_md[TYPE_MAP_CRANKING_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingThrdMap(true),GetCrankingThrdMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_CRANKING_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingThrdMap(true),GetCrankingThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_CRANKING_THRD_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_THRD].handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRANKING_THRD].handle, 1, OnGetXAxisLabelCLT, this);
   DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_THRD].handle, m_md[TYPE_MAP_CRANKING_THRD].ptMovStep);
   DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_THRD].handle,OnWndActivationCrankingThrdMap,this);
   DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_THRD].handle,OnChangeCrankingThrdMap,this);
@@ -1606,11 +1609,12 @@ void CTablesSetPanel::OnViewCrankingTimeMap()
  if ((!m_md[TYPE_MAP_CRANKING_TIME].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_CRANKING_TIME].state = 1;
-  m_md[TYPE_MAP_CRANKING_TIME].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingTimeMap(true),GetCrankingTimeMap(false),0.0f,255.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_CRANKING_TIME].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetCrankingTimeMap(true),GetCrankingTimeMap(false),0.0f,255.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_STROKE_UNIT).c_str(),
     MLL::GetString(IDS_CRANKING_TIME_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_CRANKING_TIME].handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_CRANKING_TIME].handle, 1, OnGetXAxisLabelCLT, this);
   DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_CRANKING_TIME].handle, m_md[TYPE_MAP_CRANKING_TIME].ptMovStep);
   DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_CRANKING_TIME].handle,OnWndActivationCrankingTimeMap,this);
   DLL::Chart2DSetOnChange(m_md[TYPE_MAP_CRANKING_TIME].handle,OnChangeCrankingTimeMap,this);
@@ -1641,11 +1645,12 @@ void CTablesSetPanel::OnViewSmapabanThrdMap()
  if ((!m_md[TYPE_MAP_SMAPABAN_THRD].state)&&(DLL::Chart2DCreate))
  {
   m_md[TYPE_MAP_SMAPABAN_THRD].state = 1;
-  m_md[TYPE_MAP_SMAPABAN_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetSmapabanThrdMap(true),GetSmapabanThrdMap(false),0.0f,2500.0f,SECU3IO::temp_map_tmp_slots,16,
+  m_md[TYPE_MAP_SMAPABAN_THRD].handle = DLL::Chart2DCreate(_ChartParentHwnd(), GetSmapabanThrdMap(true),GetSmapabanThrdMap(false),0.0f,2500.0f,GetCLTGrid(),16,
     MLL::GetString(IDS_MAPS_TEMPERATURE_UNIT).c_str(),
     MLL::GetString(IDS_MAPS_RPM_UNIT).c_str(),
     MLL::GetString(IDS_SMAPABAN_THRD_MAP).c_str(), false);
   DLL::Chart2DSetPtValuesFormat(m_md[TYPE_MAP_SMAPABAN_THRD].handle, _T("#0"));
+  DLL::Chart2DSetOnGetAxisLabel(m_md[TYPE_MAP_SMAPABAN_THRD].handle, 1, OnGetXAxisLabelCLT, this);
   DLL::Chart2DSetPtMovingStep(m_md[TYPE_MAP_SMAPABAN_THRD].handle, m_md[TYPE_MAP_SMAPABAN_THRD].ptMovStep);
   DLL::Chart2DSetOnWndActivation(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnWndActivationSmapabanThrdMap,this);
   DLL::Chart2DSetOnChange(m_md[TYPE_MAP_SMAPABAN_THRD].handle,OnChangeSmapabanThrdMap,this);

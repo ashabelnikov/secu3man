@@ -60,7 +60,7 @@ CGMEInjIRegDlg::CGMEInjIRegDlg(CWnd* pParent /*=NULL*/)
 , mp_RigidMap(NULL)
 , mp_IACCMap(NULL)
 , mp_IACCWMap(NULL)
-, mp_temperGrid(NULL)
+, mp_cltGrid(NULL)
 {
  m_tpsGrid.reserve(32);
  m_iacGrid.reserve(32);
@@ -104,7 +104,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_idlc_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIdlc));
  m_idlc_map.SetRange(.0f, 100.0f);
  m_idlc_map.AttachMap(mp_IdlcMap);
- m_idlc_map.AttachLabels(mp_temperGrid, NULL);
+ m_idlc_map.AttachLabels(mp_cltGrid, NULL);
  m_idlc_map.ShowLabels(true, false);
  m_idlc_map.SetFont(&m_font);
  m_idlc_map.EnableAbroadMove(false, true);
@@ -114,7 +114,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_idlr_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveIdlr));
  m_idlr_map.SetRange(.0f, 100.0f);
  m_idlr_map.AttachMap(mp_IdlrMap);
- m_idlr_map.AttachLabels(mp_temperGrid, NULL);
+ m_idlr_map.AttachLabels(mp_cltGrid, NULL);
  m_idlr_map.ShowLabels(true, false);
  m_idlr_map.SetFont(&m_font);
  m_idlr_map.EnableAbroadMove(true, true);
@@ -124,7 +124,7 @@ BOOL CGMEInjIRegDlg::OnInitDialog()
  m_itrpm_map.setOnAbroadMove(fastdelegate::MakeDelegate(this, CGMEInjIRegDlg::OnAbroadMoveITRPM));
  m_itrpm_map.SetRange(.0f, 2500.0f);
  m_itrpm_map.AttachMap(mp_ITRPMMap);
- m_itrpm_map.AttachLabels(mp_temperGrid, NULL);
+ m_itrpm_map.AttachLabels(mp_cltGrid, NULL);
  m_itrpm_map.ShowLabels(true, false);
  m_itrpm_map.SetFont(&m_font);
  m_itrpm_map.EnableAbroadMove(true, true);
@@ -199,9 +199,9 @@ void CGMEInjIRegDlg::BindMaps(float* pIdlc, float* pIdlr, float* pITRPM, float* 
  _UpdateDynamicGrids();
 }
 
-void CGMEInjIRegDlg::BindTemperGrid(float* pGrid)
+void CGMEInjIRegDlg::BindCLTGrid(float* pGrid)
 {
- mp_temperGrid = pGrid;
+ mp_cltGrid = pGrid;
  ASSERT(pGrid);
 }
 
@@ -210,9 +210,17 @@ void CGMEInjIRegDlg::setOnChange(EventWithCode OnCB)
  m_OnChange = OnCB;
 }
 
-void CGMEInjIRegDlg::UpdateView(void)
+void CGMEInjIRegDlg::UpdateView(bool axisLabels /*= false*/)
 {
  _UpdateDynamicGrids();
+
+ if (axisLabels)
+ {
+  m_idlc_map.AttachLabels(mp_cltGrid, NULL);  //update axis labels
+  m_idlr_map.AttachLabels(mp_cltGrid, NULL);  //update axis labels
+  m_itrpm_map.AttachLabels(mp_cltGrid, NULL); //update axis labels
+ }
+
  m_iacc_map.AttachLabels(&m_tpsGrid[0], NULL);
  m_iaccw_map.AttachLabels(&m_iacGrid[0], NULL);
 

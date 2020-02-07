@@ -44,7 +44,7 @@ class CGMEInjITDlg : public CTabDialog
   void BindLoadGrid(float* pGrid, bool updateLabels = false);
   void setOnChange(EventHandler OnCB);
   void setOnChangeSettings(EventHandler OnCB);
-  void UpdateView(void);
+  void UpdateView(bool axisLabels = false);
 
   void SetArguments(int rpm, int air_flow, bool strt_use, float load);
 

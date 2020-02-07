@@ -53,7 +53,8 @@ class CGridModeEditorInjDlg : public CDialog
 
   void BindMaps(float* pVE, float* pAFR, float* pIT, float* pIdlc, float* pIdlr, float* pITRPM, float* pRigid, float* pIACC, float* pIACCW, float* pAftstr, float* pWrmp, float* pAETPS, float* pAERPM, float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc);
   void BindRPMGrid(float* pGrid);
-  void UpdateView(void);
+  void BindCLTGrid(float* pGrid);
+  void UpdateView(bool axisLabels = false);
   void UpdateDialogControls(void);
 
   void SetDynamicValues(const TablDesk::DynVal& dv);

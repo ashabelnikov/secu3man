@@ -278,6 +278,12 @@ void CTablesDeskDlg::SetRPMGrid(const float* values)
   std::copy(values, values + 16, mp_ButtonsPanel->GetRPMGrid());
 }
 
+void CTablesDeskDlg::SetCLTGrid(const float* values)
+{
+ if (mp_ButtonsPanel.get())
+  std::copy(values, values + 16, mp_ButtonsPanel->GetCLTGrid());
+}
+
 void CTablesDeskDlg::CloseAllCharts(void)
 {
  HWND hwnd;

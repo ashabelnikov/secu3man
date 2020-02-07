@@ -86,9 +86,10 @@ class AFX_EXT_CLASS CButtonsPanel : public CDialog
   float* GetAtscMap(bool i_original);
 
   float* GetRPMGrid(void);
+  float* GetCLTGrid(void);
 
   //updates all opened charts
-  virtual void UpdateOpenedCharts(void);
+  virtual void UpdateOpenedCharts(void);  
 
   virtual void TransformValues(void);
 
@@ -288,6 +289,7 @@ protected:
 
   static void __cdecl OnChangeSettingsCME(void* i_param);
   static void __cdecl OnGetXAxisLabelRPM(LPTSTR io_label_string, int index, void* i_param);
+  static void __cdecl OnGetXAxisLabelCLT(LPTSTR io_label_string, int index, void* i_param);
 private:
   static void __cdecl OnWndActivationStartMap(void* i_param, long cmd);
   static void __cdecl OnWndActivationIdleMap(void* i_param, long cmd);
@@ -375,6 +377,7 @@ private:
   int m_grid_map_state_ign;
   int m_grid_map_state_inj;
   float m_rpm_grid_values[16];
+  float m_clt_grid_values[16];
   ///////////////////////////////////////////////////////
   bool m_en_aa_indication;
   bool m_carb_afr;

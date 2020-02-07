@@ -38,10 +38,11 @@
 
 using namespace fastdelegate;
 
-static const size_t itemNumber = 16;
-static const float gridMinStep = 100;
-static const float gridMinValue = 300;
-static const float gridMaxValue = 15000;
+static const size_t itemNumberRPM = 16;
+static const size_t itemNumberCLT = 16;
+static const float gridMinStep[2] = {100, 5};
+static const float gridMinValue[2] = {300, -40};
+static const float gridMaxValue[2] = {20000, 250};
 
 CFWRPMGridEditController::CFWRPMGridEditController()
 {
@@ -65,58 +66,65 @@ int CFWRPMGridEditController::Edit(void)
  mp_view->setOnChange(MakeDelegate(this, &CFWRPMGridEditController::OnItemChange));
  mp_view->setOnLoadDefVal(MakeDelegate(this, &CFWRPMGridEditController::OnLoadDefVal));
  mp_view->setIsOkEnabled(MakeDelegate(this, &CFWRPMGridEditController::IsOkEnabled));
- float values[itemNumber] = {0};
- mp_fwdm->GetRPMGridMap(values);
- mp_view->SetValues(values);
+ float valuesRPM[itemNumberRPM] = {0};
+ mp_fwdm->GetRPMGridMap(valuesRPM);
+ mp_view->SetValues(0, valuesRPM);
+ float valuesCLT[itemNumberCLT] = {0};
+ mp_fwdm->GetCLTGridMap(valuesCLT);
+ mp_view->SetValues(1, valuesCLT);
+
  int result = mp_view->DoModal();
  if (result==IDOK)
  {
-  mp_view->GetValues(values);
-  mp_fwdm->SetRPMGridMap(values);
+  mp_view->GetValues(0, valuesRPM);
+  mp_fwdm->SetRPMGridMap(valuesRPM);
+  mp_view->GetValues(1, valuesCLT);
+  mp_fwdm->SetCLTGridMap(valuesCLT);
  }
  mp_view.reset();
  return result;
 }
 
-bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value, bool i_check_only /*= false*/)
+bool CFWRPMGridEditController::_CheckItemForErrors(int mode, size_t itemIndex, float value, bool i_check_only /*= false*/)
 {
  bool error = true;
- if (value < gridMinValue)
+ size_t itemNumber = mode==0 ? itemNumberRPM : itemNumberCLT; 
+ if (value < gridMinValue[mode])
  {
   if (!i_check_only)
   {
    _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_LESS_MIN);
-   s << gridMinValue;
-   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+   s << gridMinValue[mode];
+   m_errors[mode].push_back(std::make_pair(itemIndex, s.str().c_str()));
   }
  }
- else if (value > gridMaxValue)
+ else if (value > gridMaxValue[mode])
  {
   if (!i_check_only)
   {
    _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_ABOVE_MAX);
-   s << gridMaxValue;
-   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+   s << gridMaxValue[mode];
+   m_errors[mode].push_back(std::make_pair(itemIndex, s.str().c_str()));
   }
  }
- else if (((itemIndex < itemNumber-1) ? (gridMinStep > fabs(value - mp_view->GetValue(itemIndex+1))) : 0) ||
-          ((itemIndex >  0) ? (gridMinStep > fabs(value - mp_view->GetValue(itemIndex-1))) : 0))
+ else if (((itemIndex < itemNumber-1) ? (gridMinStep[mode] > fabs(value - mp_view->GetValue(mode, itemIndex+1))) : 0) ||
+          ((itemIndex >  0) ? (gridMinStep[mode] > fabs(value - mp_view->GetValue(mode, itemIndex-1))) : 0))
  {
   if (!i_check_only)
   {
    _TSSTREAM s;
    s << MLL::GetString(IDS_RGE_ERROR_RPM_STEP_LESS_MIN);
-   s << gridMinStep;
-   m_errors.push_back(std::make_pair(itemIndex, s.str().c_str()));
+   s << gridMinStep[mode];
+   m_errors[mode].push_back(std::make_pair(itemIndex, s.str().c_str()));
   }
  }
- else if (((itemIndex < itemNumber-1) ? (value > mp_view->GetValue(itemIndex+1)) : 0) ||
-          ((itemIndex >  0) ? (value < mp_view->GetValue(itemIndex-1)) : 0))
+ else if (((itemIndex < itemNumber-1) ? (value > mp_view->GetValue(mode, itemIndex+1)) : 0) ||
+          ((itemIndex >  0) ? (value < mp_view->GetValue(mode, itemIndex-1)) : 0))
  {
   if (!i_check_only)
-   m_errors.push_back(std::make_pair(itemIndex, MLL::GetString(IDS_RGE_ERROR_RPM_VAL_ORDER).c_str()));
+   m_errors[mode].push_back(std::make_pair(itemIndex, MLL::GetString(IDS_RGE_ERROR_RPM_VAL_ORDER).c_str()));
  }
  else
   error = false; //Ok
@@ -124,47 +132,54 @@ bool CFWRPMGridEditController::_CheckItemForErrors(size_t itemIndex, float value
  return error;
 }
 
-void CFWRPMGridEditController::OnItemChange(size_t itemIndex, float value)
+void CFWRPMGridEditController::OnItemChange(int mode, size_t itemIndex, float value)
 {
  if (!mp_view.get())
   return;
 
  //Check changed item for errors
- _CheckItemForErrors(itemIndex, value);
+ _CheckItemForErrors(mode, itemIndex, value);
 
  //Recheck all present errors and remove items which are OK
- std::list<std::pair<size_t, _TSTRING> >::iterator it = m_errors.begin();
- while(it!=m_errors.end())
+ std::list<std::pair<size_t, _TSTRING> >::iterator it = m_errors[mode].begin();
+ while(it!=m_errors[mode].end())
  {
-  if (!_CheckItemForErrors(it->first, mp_view->GetValue(it->first), true)) //only check
+  if (!_CheckItemForErrors(mode, it->first, mp_view->GetValue(mode, it->first), true)) //only check
   {//OK
-   mp_view->SetItemError(it->first, false);  
-   it = m_errors.erase(it);
+   mp_view->SetItemError(mode, it->first, false);  
+   it = m_errors[mode].erase(it);
   }
   else //next error
    ++it;
  }
-
+ 
  //Update view
- for(it = m_errors.begin(); it != m_errors.end(); ++it)
-  mp_view->SetItemError(it->first, true);
- mp_view->SetErrMessage(_T("")); //erase message
- if (m_errors.size())
-  mp_view->SetErrMessage(m_errors.rbegin()->second);
+ for(it = m_errors[mode].begin(); it != m_errors[mode].end(); ++it)
+  mp_view->SetItemError(mode, it->first, true);
+
+ mp_view->SetErrMessage(mode, _T("")); //erase message
+ if (m_errors[mode].size())
+  mp_view->SetErrMessage(mode, m_errors[mode].rbegin()->second);
 }
 
-void CFWRPMGridEditController::OnLoadDefVal(void)
+void CFWRPMGridEditController::OnLoadDefVal(int mode)
 {
+ size_t itemNumber = mode==0 ? itemNumberRPM : itemNumberCLT; 
  if (!mp_view.get())
   return;
- mp_view->SetValues(SECU3IO::work_map_rpm_slots);
- mp_view->SetErrMessage(_T(""));
+ mp_view->SetValues(mode, mode==0 ? SECU3IO::work_map_rpm_slots : SECU3IO::temp_map_tmp_slots);
+ mp_view->SetErrMessage(mode, _T(""));
  for(size_t i = 0; i < itemNumber; i++)
-  mp_view->SetItemError(i, false);
- m_errors.clear(); //reset errors
+  mp_view->SetItemError(mode, i, false);
+ m_errors[mode].clear(); //reset errors
 }
 
 bool CFWRPMGridEditController::IsOkEnabled(void)
 {
- return 0==m_errors.size(); //Ok button will be enabled if errors' stack is empty
+ for(size_t j = 0; j < 2; ++j)
+ {
+  if (m_errors[j].size())
+   return false; //Ok button will be enabled if errors' stack is empty
+ }
+ return true; //no errors
 }

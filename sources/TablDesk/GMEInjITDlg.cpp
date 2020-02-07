@@ -140,8 +140,10 @@ void CGMEInjITDlg::setOnChangeSettings(EventHandler OnCB)
  m_on_change_sett = OnCB;
 }
 
-void CGMEInjITDlg::UpdateView(void)
+void CGMEInjITDlg::UpdateView(bool axisLabels /*= false*/)
 {
+ if (axisLabels)
+  m_it_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
  m_it_map.UpdateDisplay();
 }
 

@@ -40,11 +40,12 @@ class CGMEInjOtherDlg : public CTabDialog
   static const UINT IDD;
 
   void BindMaps(float* pCrnk, float* pDead, float* pEGOCrv, float* pIATCLT, float* pTpsswt, float* pAtsc, float* pGtsc, float* pGpsc);
-  void BindTemperGrid(float* pGrid);
+  void BindTemperGrid(float* pGrid); //rest temperature
+  void BindCLTGrid(float* pGrid); //CLT grid
   void BindDeadGrid(float* pGrid);
   void BindRPMGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
-  void UpdateView(void);
+  void UpdateView(bool axisLabels = false);
 
   void SetArguments(bool strt_use, float clt, float voltage, float add_i1, int rpm, float tmp2, float iat);
 
@@ -103,6 +104,7 @@ class CGMEInjOtherDlg : public CTabDialog
   float* mp_temperGrid;
   float* mp_deadGrid;
   float* mp_rpmGrid;
+  float* mp_cltGrid;
   std::vector<float> m_egocrvGrid;
   std::vector<float> m_iatcltGrid;
   std::vector<float> m_gpscGrid;

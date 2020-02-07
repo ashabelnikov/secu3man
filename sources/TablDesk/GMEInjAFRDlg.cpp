@@ -122,8 +122,10 @@ void CGMEInjAFRDlg::setOnChange(EventHandler OnCB)
  m_afr_map.setOnChange(OnCB);
 }
 
-void CGMEInjAFRDlg::UpdateView(void)
+void CGMEInjAFRDlg::UpdateView(bool axisLabels /*= false*/)
 {
+ if (axisLabels)
+  m_afr_map.AttachLabels(mp_rpmGrid, mp_loadGrid); //update axis labels
  m_afr_map.UpdateDisplay();
 }
 

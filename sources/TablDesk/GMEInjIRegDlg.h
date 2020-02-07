@@ -40,9 +40,9 @@ class CGMEInjIRegDlg : public CTabDialog
   static const UINT IDD;
 
   void BindMaps(float* pIdlc, float* pIdlr, float* pITPRM, float* pRigid, float* pIACC, float* pIACCW);
-  void BindTemperGrid(float* pGrid);
+  void BindCLTGrid(float* pGrid);
   void setOnChange(EventWithCode OnCB);
-  void UpdateView(void);
+  void UpdateView(bool axisLabels = false);
 
   void SetArguments(bool strt_use, float clt, float tps, float iac_pos, float rigid_arg, bool rigid_use);
 
@@ -88,7 +88,7 @@ class CGMEInjIRegDlg : public CTabDialog
   float* mp_IACCMap;
   float* mp_IACCWMap;
 
-  float* mp_temperGrid;
+  float* mp_cltGrid;
   std::vector<float> m_tpsGrid;
   std::vector<float> m_iacGrid;
 

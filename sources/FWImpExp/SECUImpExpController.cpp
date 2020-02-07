@@ -158,6 +158,9 @@ void SECU3ImportController::OnOkPressed(void)
 
  //копируем таблицу сетки оборотов
  m_fwdm->GetRPMGridMap(mp_fwd->rpm_slots);
+
+ //copy CLT grid table
+ m_fwdm->GetCLTGridMap(mp_fwd->clt_slots);
 }
 
 void SECU3ImportController::OnCancelPressed(void)
@@ -458,6 +461,10 @@ void SECU3ExportController::OnOkPressed(void)
  //проверяем совместимость и копируем таблицу сетки оборотов
  if (m_fwdm->CheckRPMGridsCompatibility(mp_fwd->rpm_slots))
   m_fwdm->SetRPMGridMap(mp_fwd->rpm_slots);
+
+ //проверяем совместимость и копируем таблицу сетки температуры
+ if (m_fwdm->CheckCLTGridsCompatibility(mp_fwd->clt_slots))
+  m_fwdm->SetCLTGridMap(mp_fwd->clt_slots);
 
  //allocate memory
  std::vector<BYTE> buffer(m_fwdm->GetPlatformParams().m_total_size);
