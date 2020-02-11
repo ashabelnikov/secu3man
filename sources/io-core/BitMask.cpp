@@ -75,6 +75,12 @@ bool BITMASK_API CHECKBIT16(const int& variable, int bitNum)
  return (variable & (1 << bitNum)) != 0;
 }
 
+bool BITMASK_API CHECKBIT8(const int& variable, int bitNum)
+{
+ ASSERT(bitNum < 8);
+ return (variable & (1 << bitNum)) != 0;
+}
+
 bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum)
 {
  ASSERT(bitNum < 8);

@@ -1955,7 +1955,7 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
 void CFirmwareTabController::OnCESettingsButton(void)
 {
  CCESettingsCntr dialog;
- SECU3IO::CESettingsData data;
+ CESettingsData data;
  m_fwdm->GetCESettingsData(data);
  dialog.SetValues(data);
  dialog.EnableSECU3TItems(CHECKBIT32(m_fwdm->GetFWOptions(), SECU3IO::COPT_SECU3T));

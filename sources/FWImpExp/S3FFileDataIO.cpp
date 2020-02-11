@@ -129,6 +129,59 @@ struct S3FMapSetItem
  s3f_int32_t reserved[629]; //reserved bytes, = 0
 };
 
+
+//CE settings
+typedef struct
+{
+ s3f_int32_t map_v_min;                //minimum correct value
+ s3f_int32_t map_v_max;                //maximum correct value
+ s3f_int32_t map_v_em;                 //emergency value, used in case of error
+ s3f_int32_t map_v_flg;
+
+ s3f_int32_t vbat_v_min;
+ s3f_int32_t vbat_v_max;
+ s3f_int32_t vbat_v_em;
+ s3f_int32_t vbat_v_flg;
+
+ s3f_int32_t cts_v_min;
+ s3f_int32_t cts_v_max;
+ s3f_int32_t cts_v_em;
+ s3f_int32_t cts_v_flg;
+
+ s3f_int32_t ks_v_min;
+ s3f_int32_t ks_v_max;
+ s3f_int32_t ks_v_em;
+ s3f_int32_t ks_v_flg;
+
+ s3f_int32_t tps_v_min;
+ s3f_int32_t tps_v_max;
+ s3f_int32_t tps_v_em;
+ s3f_int32_t tps_v_flg;
+
+ s3f_int32_t add_i1_v_min;
+ s3f_int32_t add_i1_v_max;
+ s3f_int32_t add_i1_v_em;
+ s3f_int32_t add_i1_v_flg;
+
+ s3f_int32_t add_i2_v_min;
+ s3f_int32_t add_i2_v_max;
+ s3f_int32_t add_i2_v_em;
+ s3f_int32_t add_i2_v_flg;
+
+ s3f_int32_t add_i3_v_min;
+ s3f_int32_t add_i3_v_max;
+ s3f_int32_t add_i3_v_em;
+ s3f_int32_t add_i3_v_flg;
+
+ s3f_int32_t add_i4_v_min;
+ s3f_int32_t add_i4_v_max;
+ s3f_int32_t add_i4_v_em;
+ s3f_int32_t add_i4_v_flg;
+
+ s3f_int32_t reserved[512];
+}s3f_ce_sett_t;
+
+
 //Separate maps
 struct S3FSepMaps
 {
@@ -154,8 +207,9 @@ struct S3FSepMaps
  s3f_int32_t smapaban_thrd[SMAPABAN_THRD_SIZE];
  //since v01.11
  s3f_int32_t clt_slots[F_TMP_SLOTS]; //CLT grid (appeared in version 01.11, reserved bytes were utilized)
+ s3f_ce_sett_t cesd; //CE settings' data
 
- s3f_int32_t reserved[1635];       //reserved bytes, = 0
+ s3f_int32_t reserved[1087];       //reserved bytes, = 0
 };
 
 
@@ -386,6 +440,52 @@ bool S3FFileDataIO::Save(const _TSTRING i_file_name)
  for(i = 0; i < F_TMP_SLOTS; ++i)
   p_sepMaps->clt_slots[i] = MathHelpers::Round(m_data.clt_slots[i] * INT_MULTIPLIER);
 
+ //CE settings
+ p_sepMaps->cesd.map_v_min = MathHelpers::Round(m_data.cesd.map_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.map_v_max = MathHelpers::Round(m_data.cesd.map_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.map_v_em = MathHelpers::Round(m_data.cesd.map_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.map_v_flg, 0, m_data.cesd.map_v_useem);
+
+ p_sepMaps->cesd.vbat_v_min = MathHelpers::Round(m_data.cesd.vbat_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.vbat_v_max = MathHelpers::Round(m_data.cesd.vbat_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.vbat_v_em = MathHelpers::Round(m_data.cesd.vbat_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.vbat_v_flg, 0, m_data.cesd.vbat_v_useem);
+
+ p_sepMaps->cesd.cts_v_min = MathHelpers::Round(m_data.cesd.cts_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.cts_v_max = MathHelpers::Round(m_data.cesd.cts_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.cts_v_em = MathHelpers::Round(m_data.cesd.cts_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.cts_v_flg, 0, m_data.cesd.cts_v_useem);
+
+ p_sepMaps->cesd.ks_v_min = MathHelpers::Round(m_data.cesd.ks_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.ks_v_max = MathHelpers::Round(m_data.cesd.ks_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.ks_v_em = MathHelpers::Round(m_data.cesd.ks_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.ks_v_flg, 0, m_data.cesd.ks_v_useem);
+
+ p_sepMaps->cesd.tps_v_min = MathHelpers::Round(m_data.cesd.tps_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.tps_v_max = MathHelpers::Round(m_data.cesd.tps_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.tps_v_em = MathHelpers::Round(m_data.cesd.tps_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.tps_v_flg, 0, m_data.cesd.tps_v_useem);
+
+ p_sepMaps->cesd.add_i1_v_min = MathHelpers::Round(m_data.cesd.add_i1_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i1_v_max = MathHelpers::Round(m_data.cesd.add_i1_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i1_v_em = MathHelpers::Round(m_data.cesd.add_i1_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i1_v_flg, 0, m_data.cesd.add_i1_v_useem);
+
+ p_sepMaps->cesd.add_i2_v_min = MathHelpers::Round(m_data.cesd.add_i2_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i2_v_max = MathHelpers::Round(m_data.cesd.add_i2_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i2_v_em = MathHelpers::Round(m_data.cesd.add_i2_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i2_v_flg, 0, m_data.cesd.add_i2_v_useem);
+
+ p_sepMaps->cesd.add_i3_v_min = MathHelpers::Round(m_data.cesd.add_i3_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i3_v_max = MathHelpers::Round(m_data.cesd.add_i3_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i3_v_em = MathHelpers::Round(m_data.cesd.add_i3_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i3_v_flg, 0, m_data.cesd.add_i3_v_useem);
+
+ p_sepMaps->cesd.add_i4_v_min = MathHelpers::Round(m_data.cesd.add_i4_v_min * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i4_v_max = MathHelpers::Round(m_data.cesd.add_i4_v_max * INT_MULTIPLIER);
+ p_sepMaps->cesd.add_i4_v_em = MathHelpers::Round(m_data.cesd.add_i4_v_em * INT_MULTIPLIER);
+ WRITEBIT8(p_sepMaps->cesd.add_i4_v_flg, 0, m_data.cesd.add_i4_v_useem);
+
  //Finally. Update file CRC and write the file
  p_fileHdr->crc16 = crc16(&rawdata[5], size - 5);
  file.Write(&rawdata[0], size);
@@ -543,6 +643,55 @@ bool S3FFileDataIO::_ReadData(const BYTE* rawdata, const S3FFileHdr* p_fileHdr)
 
  if (empty || (p_fileHdr->version < 0x0111)) //copy standard CLT grid if old version of S3F is being loaded
   std::copy(SECU3IO::temp_map_tmp_slots, SECU3IO::temp_map_tmp_slots + F_TMP_SLOTS, m_data.clt_slots);
+
+ if (p_fileHdr->version >= 0x0111) //CE settings appeared since v01.11
+ {
+  //CE settings
+  m_data.cesd.map_v_min = p_sepMaps->cesd.map_v_min / INT_MULTIPLIER;
+  m_data.cesd.map_v_max = p_sepMaps->cesd.map_v_max / INT_MULTIPLIER;
+  m_data.cesd.map_v_em = p_sepMaps->cesd.map_v_em / INT_MULTIPLIER;
+  m_data.cesd.map_v_useem = CHECKBIT8(p_sepMaps->cesd.map_v_flg, 0);
+
+  m_data.cesd.vbat_v_min = p_sepMaps->cesd.vbat_v_min / INT_MULTIPLIER;
+  m_data.cesd.vbat_v_max = p_sepMaps->cesd.vbat_v_max / INT_MULTIPLIER;
+  m_data.cesd.vbat_v_em = p_sepMaps->cesd.vbat_v_em / INT_MULTIPLIER;
+  m_data.cesd.vbat_v_useem = CHECKBIT8(p_sepMaps->cesd.vbat_v_flg, 0);
+
+  m_data.cesd.cts_v_min = p_sepMaps->cesd.cts_v_min / INT_MULTIPLIER;
+  m_data.cesd.cts_v_max = p_sepMaps->cesd.cts_v_max / INT_MULTIPLIER;
+  m_data.cesd.cts_v_em = p_sepMaps->cesd.cts_v_em / INT_MULTIPLIER;
+  m_data.cesd.cts_v_useem = CHECKBIT8(p_sepMaps->cesd.cts_v_flg, 0);
+
+  m_data.cesd.ks_v_min = p_sepMaps->cesd.ks_v_min / INT_MULTIPLIER;
+  m_data.cesd.ks_v_max = p_sepMaps->cesd.ks_v_max / INT_MULTIPLIER;
+  m_data.cesd.ks_v_em = p_sepMaps->cesd.ks_v_em / INT_MULTIPLIER;
+  m_data.cesd.ks_v_useem = CHECKBIT8(p_sepMaps->cesd.ks_v_flg, 0);
+
+  m_data.cesd.tps_v_min = p_sepMaps->cesd.tps_v_min / INT_MULTIPLIER;
+  m_data.cesd.tps_v_max = p_sepMaps->cesd.tps_v_max / INT_MULTIPLIER;
+  m_data.cesd.tps_v_em = p_sepMaps->cesd.tps_v_em / INT_MULTIPLIER;
+  m_data.cesd.tps_v_useem = CHECKBIT8(p_sepMaps->cesd.tps_v_flg, 0);
+
+  m_data.cesd.add_i1_v_min = p_sepMaps->cesd.add_i1_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i1_v_max = p_sepMaps->cesd.add_i1_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i1_v_em = p_sepMaps->cesd.add_i1_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i1_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i1_v_flg, 0);
+
+  m_data.cesd.add_i2_v_min = p_sepMaps->cesd.add_i2_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i2_v_max = p_sepMaps->cesd.add_i2_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i2_v_em = p_sepMaps->cesd.add_i2_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i2_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i2_v_flg, 0);
+
+  m_data.cesd.add_i3_v_min = p_sepMaps->cesd.add_i3_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i3_v_max = p_sepMaps->cesd.add_i3_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i3_v_em = p_sepMaps->cesd.add_i3_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i3_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i3_v_flg, 0);
+
+  m_data.cesd.add_i4_v_min = p_sepMaps->cesd.add_i4_v_min / INT_MULTIPLIER;
+  m_data.cesd.add_i4_v_max = p_sepMaps->cesd.add_i4_v_max / INT_MULTIPLIER;
+  m_data.cesd.add_i4_v_em = p_sepMaps->cesd.add_i4_v_em / INT_MULTIPLIER;
+  m_data.cesd.add_i4_v_useem = CHECKBIT8(p_sepMaps->cesd.add_i4_v_flg, 0);
+ }
 
  return true;
 }

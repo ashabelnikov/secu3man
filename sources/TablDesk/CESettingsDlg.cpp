@@ -30,8 +30,8 @@
 #include "common/dpiaware.h"
 #include "common/GDIHelpers.h"
 #include "CESettingsDlg.h"
+#include "io-core/FirmwareMapsDataHolder.h"
 #include "ui-core/EditEx.h"
-#include "io-core/SECU3IO.h"
 #include "ui-core/WndScroller.h"
 #include "ui-core/ddx_helpers.h"
 
@@ -73,7 +73,7 @@ END_MESSAGE_MAP()
 CCESettingsDlg::CCESettingsDlg(CWnd* pParent /*=NULL*/)
 : Super(CCESettingsDlg::IDD, pParent)
 , mp_scr(new CWndScroller)
-, mp_data(new SECU3IO::CESettingsData())
+, mp_data(new CESettingsData())
 , m_enable_secu3t_features(false)
 , m_enable_extraio(false)
 , m_map_v_min_edit(CEditEx::MODE_FLOAT)
@@ -410,13 +410,13 @@ void CCESettingsDlg::OnDestroy()
  mp_scr->Close();
 }
 
-void CCESettingsDlg::SetValues(const SECU3IO::CESettingsData& i_data)
+void CCESettingsDlg::SetValues(const CESettingsData& i_data)
 {
  if (mp_data)
   *mp_data = i_data;
 }
 
-void CCESettingsDlg::GetValues(SECU3IO::CESettingsData& o_data)
+void CCESettingsDlg::GetValues(CESettingsData& o_data)
 {
  if (mp_data)
   o_data = *mp_data;
@@ -546,12 +546,12 @@ LRESULT CCESettingsCntr::OnKickIdle(WPARAM /*wParam*/, LPARAM /*lParam*/)
  return FALSE;
 }
 
-void CCESettingsCntr::SetValues(const SECU3IO::CESettingsData& i_data)
+void CCESettingsCntr::SetValues(const CESettingsData& i_data)
 {
  m_dlg.SetValues(i_data);
 }
 
-void CCESettingsCntr::GetValues(SECU3IO::CESettingsData& o_data)
+void CCESettingsCntr::GetValues(CESettingsData& o_data)
 {
  m_dlg.GetValues(o_data);
 }

@@ -75,6 +75,66 @@
 //количество наборов характеристик хранимых в EEPROM
 #define TUNABLE_TABLES_NUMBER  1
 
+struct CESettingsData
+{  
+ CESettingsData()
+ : map_v_min(.0f), map_v_max(.0f), map_v_em(.0f), map_v_useem(false)
+ , vbat_v_min(.0f), vbat_v_max(.0f), vbat_v_em(.0f), vbat_v_useem(false)
+ , cts_v_min(.0f), cts_v_max(.0f), cts_v_em(.0f), cts_v_useem(false)
+ , ks_v_min(.0f), ks_v_max(.0f), ks_v_em(.0f), ks_v_useem(false)
+ , tps_v_min(.0f), tps_v_max(.0f), tps_v_em(.0f), tps_v_useem(false)
+ , add_i1_v_min(.0f), add_i1_v_max(.0f), add_i1_v_em(.0f), add_i1_v_useem(false)
+ , add_i2_v_min(.0f), add_i2_v_max(.0f), add_i2_v_em(.0f), add_i2_v_useem(false)
+ , add_i3_v_min(.0f), add_i3_v_max(.0f), add_i3_v_em(.0f), add_i3_v_useem(false)
+ , add_i4_v_min(.0f), add_i4_v_max(.0f), add_i4_v_em(.0f), add_i4_v_useem(false)
+ {}
+
+ float map_v_min;
+ float map_v_max;
+ float map_v_em;
+ bool  map_v_useem;
+
+ float vbat_v_min;
+ float vbat_v_max;
+ float vbat_v_em;
+ bool  vbat_v_useem;
+
+ float cts_v_min;
+ float cts_v_max;
+ float cts_v_em;
+ bool  cts_v_useem;
+
+ float ks_v_min;
+ float ks_v_max;
+ float ks_v_em;
+ bool  ks_v_useem;
+
+ float tps_v_min;
+ float tps_v_max;
+ float tps_v_em;
+ bool  tps_v_useem;
+
+ float add_i1_v_min;
+ float add_i1_v_max;
+ float add_i1_v_em;
+ bool  add_i1_v_useem;
+
+ float add_i2_v_min;
+ float add_i2_v_max;
+ float add_i2_v_em;
+ bool  add_i2_v_useem;
+
+ float add_i3_v_min;
+ float add_i3_v_max;
+ float add_i3_v_em;
+ bool  add_i3_v_useem;
+
+ float add_i4_v_min;
+ float add_i4_v_max;
+ float add_i4_v_em;
+ bool  add_i4_v_useem;
+};
+
 struct SECU3FWMapsItem
 {
  _TSTRING name;                // имя набора характеристик
@@ -129,6 +189,7 @@ struct FWMapsDataHolder
  float cranking_thrd[CRANK_THRD_SIZE];
  float cranking_time[CRANK_TIME_SIZE];
  float smapaban_thrd[SMAPABAN_THRD_SIZE];
+ CESettingsData cesd;
 
  //default constructor
  FWMapsDataHolder(size_t setNum = TABLES_NUMBER)

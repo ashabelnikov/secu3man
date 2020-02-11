@@ -49,6 +49,7 @@ bool BITMASK_API CHECKBIT32(const DWORD& variable, int bitNum);
 bool BITMASK_API CHECKBIT16(const WORD& variable, int bitNum);
 bool BITMASK_API CHECKBIT16(const int& variable, int bitNum);
 
+bool BITMASK_API CHECKBIT8(const int& variable, int bitNum);
 bool BITMASK_API CHECKBIT8(const BYTE& variable, int bitNum);
 
 //Makes byte from two 4-bit values

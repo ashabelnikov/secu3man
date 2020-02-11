@@ -164,8 +164,13 @@ void S3FImportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
   memcpy(mp_fwd->smapaban_thrd, mp_s3f_io->GetData().smapaban_thrd, sizeof(float) * SMAPABAN_THRD_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
+  memcpy(&mp_fwd->cesd, &mp_s3f_io->GetData().cesd, sizeof(CESettingsData));
+
  //copy RPM grid
  memcpy(mp_fwd->rpm_slots, mp_s3f_io->GetData().rpm_slots, sizeof(float) * F_RPM_SLOTS);
+ //copy CLT grid
+ memcpy(mp_fwd->clt_slots, mp_s3f_io->GetData().clt_slots, sizeof(float) * F_TMP_SLOTS);
 }
 
 void S3FImportController::OnCancelPressed(void)
@@ -303,6 +308,7 @@ void S3FImportController::OnViewActivate(void)
  bool sv0107 = (mp_s3f_io->GetVersion() > 0x0106);
  bool sv0109 = (mp_s3f_io->GetVersion() > 0x0108);
  bool sv0110 = (mp_s3f_io->GetVersion() > 0x0109);
+ bool sv0111 = (mp_s3f_io->GetVersion() > 0x0110);
 
  bool sepmap = mp_s3f_io->HasSeparateMaps();
 
@@ -361,6 +367,10 @@ void S3FImportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_TMP2CURVE_MAP, false);
  mp_view->SetFWDFlag(FLAG_CRKTEMP_MAP, false);
  mp_view->SetFWDFlag(FLAG_EHPAUSE_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
+ mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
  mp_view->EnableFWDFlag(FLAG_DWLCNTR_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_ATTEN_MAP, sepmap);
  mp_view->EnableFWDFlag(FLAG_CTS_MAP, sepmap);
@@ -375,6 +385,7 @@ void S3FImportController::OnViewActivate(void)
  mp_view->EnableFWDFlag(FLAG_CRNKTHRD_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_CRNKTIME_MAP, sv0110 && sepmap);  //since v01.10
  mp_view->EnableFWDFlag(FLAG_ABANTHRD_MAP, sv0110 && sepmap);  //since v01.10
+ mp_view->EnableFWDFlag(FLAG_CESETT_DAT, sv0111 && sepmap);  //since v01.11
 }
 
 void S3FImportController::OnCurrentListNameChanged(int item, CString text)
@@ -514,12 +525,17 @@ void S3FExportController::OnOkPressed(void)
  if (mp_view->GetFWDFlag(FLAG_ABANTHRD_MAP))
   memcpy(mp_s3f_io->GetDataLeft().smapaban_thrd, mp_fwd->smapaban_thrd, sizeof(float) * SMAPABAN_THRD_SIZE);
 
+ if (mp_view->GetFWDFlag(FLAG_CESETT_DAT))
+  memcpy(&mp_s3f_io->GetDataLeft().cesd, &mp_fwd->cesd, sizeof(CESettingsData));
+
  //empty strings must be replaced with some default names
  for(size_t i = 0; i < mp_s3f_io->GetData().maps.size(); ++i)
   GenArtificialName(mp_s3f_io->GetDataLeft().maps[i].name, i+1);
 
  //copy RPM grid
  memcpy(mp_s3f_io->GetDataLeft().rpm_slots, mp_fwd->rpm_slots, sizeof(float) * F_RPM_SLOTS);
+ //copy CLT grid
+ memcpy(mp_s3f_io->GetDataLeft().clt_slots, mp_fwd->clt_slots, sizeof(float) * F_TMP_SLOTS);
 }
 
 void S3FExportController::OnCancelPressed(void)
@@ -673,6 +689,7 @@ void S3FExportController::OnViewActivate(void)
  mp_view->SetFWDFlag(FLAG_CRNKTHRD_MAP, false);
  mp_view->SetFWDFlag(FLAG_CRNKTIME_MAP, false);
  mp_view->SetFWDFlag(FLAG_ABANTHRD_MAP, false);
+ mp_view->SetFWDFlag(FLAG_CESETT_DAT, false);
 }
 
 void S3FExportController::OnCurrentListNameChanged(int item, CString text)

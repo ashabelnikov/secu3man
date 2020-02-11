@@ -1335,6 +1335,7 @@ void CFirmwareDataMediator::GetMapsData(FWMapsDataHolder* op_fwd)
  GetCrankingThrdMap(op_fwd->cranking_thrd);
  GetCrankingTimeMap(op_fwd->cranking_time);
  GetSmapabanThrdMap(op_fwd->smapaban_thrd);
+ GetCESettingsData(op_fwd->cesd);
 
  //Копируем таблицу с сеткой оборотов (Copy table with RPM grid)
  float slots[F_RPM_SLOTS]; GetRPMGridMap(slots);
@@ -1400,6 +1401,7 @@ void CFirmwareDataMediator::SetMapsData(const FWMapsDataHolder* ip_fwd)
  SetCrankingThrdMap(ip_fwd->cranking_thrd);
  SetCrankingTimeMap(ip_fwd->cranking_time);
  SetSmapabanThrdMap(ip_fwd->smapaban_thrd);
+ SetCESettingsData(ip_fwd->cesd);
 
  //Check RPM grids compatibility and set RPM grid
  if (CheckRPMGridsCompatibility(ip_fwd->rpm_slots))

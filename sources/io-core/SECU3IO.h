@@ -737,54 +737,6 @@ namespace SECU3IO
   SECU3IO::LzidBLHS     m_LzidBLHS;   //SECU-LZID  
  };
 
- struct CESettingsData
- {  
-  float map_v_min;
-  float map_v_max;
-  float map_v_em;
-  bool  map_v_useem;
-
-  float vbat_v_min;
-  float vbat_v_max;
-  float vbat_v_em;
-  bool  vbat_v_useem;
-
-  float cts_v_min;
-  float cts_v_max;
-  float cts_v_em;
-  bool  cts_v_useem;
-
-  float ks_v_min;
-  float ks_v_max;
-  float ks_v_em;
-  bool  ks_v_useem;
-
-  float tps_v_min;
-  float tps_v_max;
-  float tps_v_em;
-  bool  tps_v_useem;
-
-  float add_i1_v_min;
-  float add_i1_v_max;
-  float add_i1_v_em;
-  bool  add_i1_v_useem;
-
-  float add_i2_v_min;
-  float add_i2_v_max;
-  float add_i2_v_em;
-  bool  add_i2_v_useem;
-
-  float add_i3_v_min;
-  float add_i3_v_max;
-  float add_i3_v_em;
-  bool  add_i3_v_useem;
-
-  float add_i4_v_min;
-  float add_i4_v_max;
-  float add_i4_v_em;
-  bool  add_i4_v_useem;
- };
-
 const int INPAVNUM = 10;
 
  struct FwConstsData

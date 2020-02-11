@@ -35,7 +35,7 @@
 
 class CWndScroller;
 
-namespace SECU3IO { struct CESettingsData; }
+struct CESettingsData;
 
 class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
 {
@@ -46,8 +46,8 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
  ~CCESettingsDlg();
   static const UINT IDD;
 
-  void SetValues(const SECU3IO::CESettingsData& i_data);
-  void GetValues(SECU3IO::CESettingsData& o_data);
+  void SetValues(const CESettingsData& i_data);
+  void GetValues(CESettingsData& o_data);
   void EnableSECU3TItems(bool i_enable);
   void EnableExtraIO(bool i_enable);
   void SetWndPosition(int x, int y);
@@ -66,7 +66,7 @@ class AFX_EXT_CLASS CCESettingsDlg : public CModelessUpdatableDialog
 
  private:
   void _UpdateScrlViewSize(void);
-  SECU3IO::CESettingsData* mp_data;
+  CESettingsData* mp_data;
   std::auto_ptr<CWndScroller> mp_scr;
   bool m_enable_secu3t_features;
   bool m_enable_extraio;
@@ -155,8 +155,8 @@ class AFX_EXT_CLASS CCESettingsCntr : public CDialog
  ~CCESettingsCntr();
   static const UINT IDD;
 
-  void SetValues(const SECU3IO::CESettingsData& i_data);
-  void GetValues(SECU3IO::CESettingsData& o_data);
+  void SetValues(const CESettingsData& i_data);
+  void GetValues(CESettingsData& o_data);
   void EnableSECU3TItems(bool i_enable);
   void EnableExtraIO(bool i_enable);
   void SetWndPosition(int x, int y);

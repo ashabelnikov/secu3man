@@ -109,6 +109,7 @@ BEGIN
     CONTROL         "Обор.блок.старт.",IDC_MAP_IMPEXP_CRNKTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,168,90,8
     CONTROL         "Время.блок.старт.",IDC_MAP_IMPEXP_CRNKTIME_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,182,90,8
     CONTROL         "Обор.перех.старт.",IDC_MAP_IMPEXP_ABANTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,196,90,8
+    CONTROL         "Параметры CE",IDC_MAP_IMPEXP_CESETT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,210,90,8
 
     LTEXT           "Выберите по одному элементу в каждом из списков и нажмите кнопку расположенную между ними",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 
@@ -280,6 +281,7 @@ BEGIN
     CONTROL         "Start.block.RPM",IDC_MAP_IMPEXP_CRNKTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,168,90,8
     CONTROL         "Start.block.time",IDC_MAP_IMPEXP_CRNKTIME_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,182,90,8
     CONTROL         "Crank.map.abandon",IDC_MAP_IMPEXP_ABANTHRD_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,196,90,8
+    CONTROL         "CE settings",IDC_MAP_IMPEXP_CESETT_FLAG,"Button",BS_AUTOCHECKBOX | BS_MULTILINE | WS_TABSTOP,280,210,90,8
 
     LTEXT           "\nSelect one item in each list and click button located between them",IDC_MAP_IMPEXP_HOWTO_TEXT,317,87,60,64
 

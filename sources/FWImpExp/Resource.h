@@ -109,3 +109,4 @@
 #define IDS_FWM_SAVE_BTN_TT             6108
 #define IDS_FWM_LOAD_BTN_TT             6109
 #define IDS_FWM_SELECT_FOLDER_FOR_FW    6110
+#define IDC_MAP_IMPEXP_CESETT_FLAG      6111

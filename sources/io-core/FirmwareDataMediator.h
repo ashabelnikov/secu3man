@@ -30,7 +30,7 @@
 #include <vector>
 #include "ParamsIO.h"
 
-namespace SECU3IO { struct CESettingsData; }
+struct CESettingsData;
 namespace SECU3IO { struct FwConstsData; }
 
 //Этот класс необходим для абстракции над форматом хранения данных в прошивке
@@ -170,8 +170,8 @@ class IOCORE_API CFirmwareDataMediator : public ParamsIO
   void GetGasdosePosMap(float* op_values, bool i_original = false);
   void SetGasdosePosMap(const float* i_values);
 
-  void GetCESettingsData(SECU3IO::CESettingsData& o_data) const;
-  void SetCESettingsData(const SECU3IO::CESettingsData& i_data);
+  void GetCESettingsData(CESettingsData& o_data) const;
+  void SetCESettingsData(const CESettingsData& i_data);
 
   void GetBarocorrMap(float* op_values, bool i_original = false);
   void SetBarocorrMap(const float* i_values);

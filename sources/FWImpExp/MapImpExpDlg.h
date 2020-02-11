@@ -73,13 +73,14 @@ enum EFWDFlags
  FLAG_CRNKTHRD_MAP  = 36,    //separate
  FLAG_CRNKTIME_MAP  = 37,    //separate
  FLAG_ABANTHRD_MAP  = 38,    //separate
+ FLAG_CESETT_DAT    = 39,    //separate (pseudomap)
 
- FLAG_NR_OF_FLAGS   = 39,    //total number of flags
+ FLAG_NR_OF_FLAGS   = 40,    //total number of flags
 
  FLAG_SET_START     = 0,
  FLAG_SET_END       = 24,
  FLAG_SEP_START     = 25,
- FLAG_SEP_END       = 38,
+ FLAG_SEP_END       = 39,
 };
 
 class CToolTipCtrlEx;
