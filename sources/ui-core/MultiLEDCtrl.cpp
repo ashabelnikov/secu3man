@@ -124,7 +124,7 @@ void CMultiLEDCtrl::OnPaint()
   dc.SetBkMode(TRANSPARENT);
   dc.SetTextColor(IsWindowEnabled() ? text_color : gray_color);
   CFont* oldFont = dc.SelectObject(&m_cFont);
-  dc.DrawText(m_items[i].m_text, &rc, DT_CENTER | DT_END_ELLIPSIS);
+  dc.DrawText(m_items[i].m_text, &rc, DT_SINGLELINE | DT_VCENTER | DT_CENTER | DT_END_ELLIPSIS);
   dc.SelectObject(oldFont);
  } 
 }
