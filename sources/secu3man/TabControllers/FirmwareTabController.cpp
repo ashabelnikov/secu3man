@@ -1800,6 +1800,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Displacement of IAC on turn on of cooling fan"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.vent_iacoff);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Смещение РХХ при включении усилителя руля"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff);
+ else
+  dfd.AppendItem(_T("Displacement of IAC on turn on of EPAS"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
