@@ -130,7 +130,7 @@ CFunSetPageDlg::CFunSetPageDlg(CWnd* pParent /*=NULL*/)
 , m_map_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , m_map2_curve_offset_edit(CEditEx::MODE_FLOAT, true)
 , m_map2_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
-, m_tps_curve_offset_edit(CEditEx::MODE_FLOAT, true)
+, m_tps_curve_offset_edit(CEditEx::MODE_FLOAT | CEditEx::MODE_SIGNED, true)
 , m_tps_curve_gradient_edit(CEditEx::MODE_FLOAT, true)
 , mp_scr(new CWndScroller)
 {
@@ -267,7 +267,7 @@ BOOL CFunSetPageDlg::OnInitDialog()
  m_map2_curve_gradient_edit.SetRange(-150.0f,150.0f);
 
  m_tps_curve_offset_spin.SetBuddy(&m_tps_curve_offset_edit);
- m_tps_curve_offset_edit.SetLimitText(5);
+ m_tps_curve_offset_edit.SetLimitText(6);
  m_tps_curve_offset_edit.SetDecimalPlaces(3);
  m_tps_curve_offset_spin.SetRangeAndDelta(-5.0f, 5.0f, 0.0025f);
  m_tps_curve_offset_edit.SetRange(-5.0f, 5.0f);
