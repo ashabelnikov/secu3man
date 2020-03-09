@@ -130,7 +130,7 @@ class CLogPlayerTabController : public ITabController, private IAPPEventHandler
 
   CObjectTimer<CLogPlayerTabController> m_timer;
 
-  //хранит последние периоды ежду записями для усреднения
+  //хранит последние периоды между записями для усреднения
   std::deque<unsigned long> m_last_perionds;
 
   //хранят предыдушую и текушую записи

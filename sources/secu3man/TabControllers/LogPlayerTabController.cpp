@@ -86,7 +86,7 @@ CLogPlayerTabController::CLogPlayerTabController(CLogPlayerTabDlg* ip_view, CCom
 , m_period_before_tracking(0)
 , m_playing(false)
 , m_current_time_factor(5) //1:1
-{
+{ 
 #define _IV(id, name, value) (std::make_pair((id), std::make_pair(_TSTRING(name), (value))))
  m_time_factors.insert(_IV(0, _T("16 : 1"),0.0625f));
  m_time_factors.insert(_IV(1, _T(" 8 : 1"), 0.125f));
@@ -332,7 +332,7 @@ void CLogPlayerTabController::OnTimeFactorCombo(size_t i_factor_code)
 
 void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos)
 {
-#define _END_TRACKING() m_now_tracking = true; \
+#define _START_TRACKING() m_now_tracking = true; \
     m_period_before_tracking = m_timer.GetPeriod();\
     m_timer.KillTimer();
 
@@ -347,7 +347,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_BOTTOM:
   case TB_TOP:
    {
-   _END_TRACKING();
+   _START_TRACKING();
    long count = ((long)mp_view->mp_LPPanelDlg->GetSliderPosition()) - (long)mp_log_reader->GetCurPos();
    EDirection dir = (count > 0) ? DIR_NEXT : DIR_PREV;
    count = _SkipRecords(dir, abs(count));
@@ -359,7 +359,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_PAGEDOWN:
   case TB_PAGEUP:
    {
-    _END_TRACKING();
+    _START_TRACKING();
     unsigned long count = mp_view->mp_LPPanelDlg->GetSliderPageSize();
     EDirection dir = (i_nSBCode==TB_PAGEDOWN) ? DIR_NEXT : DIR_PREV;
     count = _SkipRecords(dir, count);
@@ -371,7 +371,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
   case TB_LINEDOWN:
   case TB_LINEUP:
    {
-    _END_TRACKING();
+    _START_TRACKING();
     unsigned long count = mp_view->mp_LPPanelDlg->GetSliderLineSize();
     EDirection dir = (i_nSBCode==TB_LINEDOWN) ? DIR_NEXT : DIR_PREV;
     count = _SkipRecords(dir, count);
@@ -382,7 +382,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
 
   case TB_THUMBPOSITION:
   case TB_THUMBTRACK:
-   _END_TRACKING();
+   _START_TRACKING();
    long count = (int)i_nPos - (int)mp_log_reader->GetCurPos();
    EDirection dir = (count > 0) ? DIR_NEXT : DIR_PREV;
    count = _SkipRecords(dir, abs(count));
@@ -390,7 +390,7 @@ void CLogPlayerTabController::OnSliderMoved(UINT i_nSBCode, unsigned long i_nPos
     _ProcessOneRecord(false, dir, false);
    break;
  }
-#undef _END_TRACKING
+#undef _START_TRACKING
 }
 
 void CLogPlayerTabController::OnTimer(void)
@@ -517,16 +517,12 @@ void CLogPlayerTabController::_GetRecord(void)
 unsigned long CLogPlayerTabController::_GetAveragedPeriod(void)
 {
  unsigned long sum = 0;
-
- //находим среднее по последним выборкам
- size_t count = m_last_perionds.size();
- for(size_t i = 0; i < count; ++i)
-  sum+=m_last_perionds[i];
-
+ //find average using last N of samples
+ sum = std::accumulate(m_last_perionds.begin(), m_last_perionds.end(), 0);
  if (m_last_perionds.size()!=0)
   return sum / m_last_perionds.size();
  else
-  return 0; //нет выборок
+  return 10; //not samples, use default value 10ms
 }
 
 unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsigned long count)
@@ -561,6 +557,8 @@ unsigned long CLogPlayerTabController::_SkipRecords(EDirection i_direction, unsi
   {
    mp_log_reader->Prev(skip);
   }
+  int marks;
+  mp_log_reader->GetRecord(m_prev_record.first, m_prev_record.second, marks); //init previous record, otherwise bug with incorrect period will appear because we skip records
   return mincnt;
  }
 }
@@ -645,6 +643,7 @@ void CLogPlayerTabController::_Play(bool i_play)
 
 void CLogPlayerTabController::_InitPlayer(void)
 {
+ m_last_perionds.clear();
  mp_view->mp_LPPanelDlg->EnableSlider(mp_log_reader->GetCount() > 1);
  mp_view->mp_LPPanelDlg->SetSliderRange(0, mp_log_reader->GetCount());
  mp_view->mp_LPPanelDlg->SetSliderPosition(mp_log_reader->GetCurPos());
