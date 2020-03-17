@@ -236,11 +236,13 @@ typedef struct
  _uchar vent_delay;
  _uchar vent_iacoff;
  _uchar epas_iacoff;
+ _uchar vent_pwmsteps;
+ _uchar vent_minband;
 
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[19];
+ _uchar reserved[17];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -2202,6 +2204,8 @@ void CFirmwareDataMediator::GetFwConstsData(SECU3IO::FwConstsData& o_data) const
  o_data.vent_delay = ((float)exd.vent_delay) / 100.0f; //convert to sec
  o_data.vent_iacoff = ((float)exd.vent_iacoff) / 2.0f; //convert to %
  o_data.epas_iacoff = ((float)exd.epas_iacoff) / 2.0f; //convert to %
+ o_data.vent_pwmsteps = exd.vent_pwmsteps;
+ o_data.vent_minband = exd.vent_minband;
 }
 
 void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
@@ -2230,4 +2234,6 @@ void CFirmwareDataMediator::SetFwConstsData(const SECU3IO::FwConstsData& i_data)
  exd.vent_delay = MathHelpers::Round(i_data.vent_delay * 100.0f);
  exd.vent_iacoff = MathHelpers::Round(i_data.vent_iacoff * 2.0f);
  exd.epas_iacoff = MathHelpers::Round(i_data.epas_iacoff * 2.0f);
+ exd.vent_pwmsteps = i_data.vent_pwmsteps;
+ exd.vent_minband = i_data.vent_minband;
 }

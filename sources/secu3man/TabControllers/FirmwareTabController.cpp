@@ -1805,6 +1805,16 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Displacement of IAC on turn on of EPAS"), _T("%"), 0.00f, 50.0f, 0.5f, 1, &d.epas_iacoff);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Число дискрет ШИМ вентилятора"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps);
+ else
+  dfd.AppendItem(_T("Number of cooling fan's PWM discretes"), _T("N"), 4, 64, 1, 1, &d.vent_pwmsteps);
+
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Нижняя мертвая зона ШИМ вентилятора"), _T("N"), 0, 60, 1, 1, &d.vent_minband);
+ else
+  dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
