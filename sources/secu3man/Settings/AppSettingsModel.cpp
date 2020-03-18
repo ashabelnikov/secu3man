@@ -2056,7 +2056,7 @@ bool CAppSettingsModel::WriteSettings(void)
  if (m_optInterfaceLang.value == IL_ENGLISH)
   at.WriteComment(_T("Target AFR error for autotune algothithm"));
  else
-  at.WriteComment(_T("Целевое соотношение воздух/топливо для алгоритма атонастройки"));
+  at.WriteComment(_T("Целевое соотношение ошибки воздух/топливо для алгоритма атонастройки"));
  at.WriteFlt(m_optAFRError, 2);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
@@ -2143,7 +2143,7 @@ bool CAppSettingsModel::WriteSettings(void)
  if (m_optInterfaceLang.value == IL_ENGLISH)
   me.WriteComment(_T("Use bold fonts. Set to 1 for bold fonts, set to 0 for normal fonts."));
  else
-  me.WriteComment(_T("Использовать жирные щрифты. Установите в 1 для жирных шрифтов или в 0 для обычных"));
+  me.WriteComment(_T("Использовать жирные шрифты. Установите в 1 для жирных шрифтов или в 0 для обычных"));
  me.WriteInt(m_optBoldFont);
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
