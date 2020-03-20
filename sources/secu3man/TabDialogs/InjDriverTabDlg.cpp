@@ -367,6 +367,12 @@ END_MESSAGE_MAP()
 
 BOOL CInjDriverTabDlg::OnInitDialog()
 {
+ m_x_axis_min = x_axis_min;
+ m_x_axis_max = x_axis_max;
+ m_x_axis_step = x_axis_step;
+ m_y_axis_min = 100.0f;
+ m_y_axis_max = 10000.0f;
+
  Super::OnInitDialog();
 
  m_injdrv_combo.AddString(_T("1"));
