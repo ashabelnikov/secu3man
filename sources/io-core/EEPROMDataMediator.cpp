@@ -46,7 +46,7 @@ using namespace SECU3IO::SECU3Types;
 #define EEPROM_ECUERRORS_START (EEPROM_PARAM_START + (sizeof(params_t)))
 
 //Address of tables which can be edited in real time
-#define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 3)
+#define EEPROM_REALTIME_TABLES_START (EEPROM_ECUERRORS_START + 8)
 
 EEPROMDataMediator::EEPROMDataMediator(const PPEepromParam& i_epp)
 : m_epp(i_epp)

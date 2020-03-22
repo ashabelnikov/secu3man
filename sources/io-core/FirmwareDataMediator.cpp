@@ -62,8 +62,8 @@ using namespace SECU3IO::SECU3Types;
 #define IOREM_MAJ_VER(v) (((v) >> 4) & 0xf)
 
 //--------------------------------------------------------------------------
-#define IOREM_SLOTS 37           // Number of slots used for I/O remapping
-#define IOREM_PLUGS 68           // Number of plugs used in I/O remapping
+#define IOREM_SLOTS 49           // Number of slots used for I/O remapping
+#define IOREM_PLUGS 92           // Number of plugs used in I/O remapping
 
 //Describes all data related to I/O remapping
 typedef struct iorem_slots_t
@@ -242,7 +242,7 @@ typedef struct
  //Эти зарезервированные байты необходимы для сохранения бинарной совместимости
  //новых версий прошивок с более старыми версиями. При добавлении новых данных
  //в структуру, необходимо расходовать эти байты.
- _uchar reserved[17];
+ _uchar reserved[4102];
 }fw_ex_data_t;
 
 //Describes all data residing in the firmware
@@ -381,8 +381,8 @@ bool CFirmwareDataMediator::CheckCompatibility(const BYTE* ip_data, const PPFlas
 
  if ((sizeof(fw_data_t)) != p_fd->fw_data_size ||
   (sizeofcd != sizeof(cd_data_t)) || (p_cd->iorem.size != sizeof(iorem_slots_t)) ||
-  //supported major versions: 2
-  ((IOREM_MAJ_VER(p_cd->iorem.version) != 2)))
+  //supported major versions: 3
+  ((IOREM_MAJ_VER(p_cd->iorem.version) != 3)))
   compatible = false;
 
  return compatible;
