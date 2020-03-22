@@ -6,7 +6,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //Version information
 VS_VERSION_INFO     VERSIONINFO
-  PRODUCTVERSION    4,8,0,0
+  PRODUCTVERSION    4,9,0,0
 BEGIN
   BLOCK "StringFileInfo"
   BEGIN
