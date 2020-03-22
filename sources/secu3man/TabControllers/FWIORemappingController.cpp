@@ -433,6 +433,7 @@ void CFWIORemappingController::_PrepareLogic(void)
    mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_GD_STP, _T("GD_STP"));
   }
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_O2SH_O, _T("O2SH_O"));
+  mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS_ST_BLOCK, FWDM::IOP_ST_BLOCK, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_ST_BLOCK, true);
   mp_view->EnableInversion(FWDM::IOS_ST_BLOCK, true);
@@ -469,6 +470,7 @@ void CFWIORemappingController::_PrepareLogic(void)
   }
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_O2SH_O, _T("O2SH_O"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_CE, _T("CE"));
+  mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_ECF, _T("ECF"));
   mp_view->AddItem(FWDM::IOS_IE, FWDM::IOP_IE, _T("NONE"));
   mp_view->EnableItem(FWDM::IOS_IE, true);
   mp_view->EnableInversion(FWDM::IOS_IE, true);
@@ -1360,6 +1362,9 @@ void CFWIORemappingController::_AttachFreeSlotsToDefaultPlugs(void)
    if (((FWDM::IOSid)s == FWDM::IOS_FE) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_FE)))
     continue; //FE
 
+   //hack which allows remap ECF output to other output slots
+   if (((FWDM::IOSid)s == FWDM::IOS_ECF) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_ECF)))
+    continue; //ECF
    //hack which allows remap PS input to other input slots
    if (((FWDM::IOSid)s == FWDM::IOS_PS) && (mp_fwdm->GetSStub() != mp_fwdm->GetIOPlug(FWDM::IOX_INIT, FWDM::IOP_PS)))
     continue; //PS
@@ -1629,6 +1634,7 @@ void CFWIORemappingController::_EnableInversionItems(void)
   enableFlags.insert(std::make_pair(FWDM::IOS_IGN_OUT4, false)); //4
   enableFlags.insert(std::make_pair(FWDM::IOS_ADD_IO1, false));  //5
   enableFlags.insert(std::make_pair(FWDM::IOS_ADD_IO2, false));  //6
+  enableFlags.insert(std::make_pair(FWDM::IOS_ECF, false));
   enableFlags.insert(std::make_pair(FWDM::IOS_PS, false));
   enableFlags.insert(std::make_pair(FWDM::IOS_CKPS, false));
  }
