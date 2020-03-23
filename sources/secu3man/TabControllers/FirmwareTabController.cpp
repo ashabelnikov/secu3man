@@ -1815,6 +1815,11 @@ void CFirmwareTabController::OnEditFwConsts(void)
  else
   dfd.AppendItem(_T("Low dead band for cooling fan's PWM"), _T("N"), 0, 60, 1, 1, &d.vent_minband);
 
+ if (mp_settings->GetInterfaceLanguage() == IL_RUSSIAN)
+  dfd.AppendItem(_T("Alpha-N: умножать время впрыска на ДПДЗ"), _T(""), 0, 1, 1, 0, &d.an_tps_mul);
+ else
+  dfd.AppendItem(_T("Alpha-N: multiply inj.PW by TPS"), _T(""), 0, 1, 1, 0, &d.an_tps_mul);
+
  if (dfd.DoModal()==IDOK)
  {
   m_fwdm->SetFwConstsData(d);
