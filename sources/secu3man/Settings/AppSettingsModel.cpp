@@ -508,15 +508,15 @@ bool CAppSettingsModel::ReadSettings(void)
  IniIO os(IniFileName, m_Name_Options_Section);
 
  os.ReadString(m_optPortName, _T("COM1"));
- os.ReadDword(m_optBaudRateApplication, _T("57600"), m_AllowableBaudRates);
- os.ReadDword(m_optBaudRateBootloader, _T("57600"), m_AllowableBaudRates);
+ os.ReadDword(m_optBaudRateApplication, _T("115200"), m_AllowableBaudRates);
+ os.ReadDword(m_optBaudRateBootloader, _T("115200"), m_AllowableBaudRates);
  os.ReadString(m_optLogFilesFolder, m_current_directory);
  os.ReadInt(m_optCSVSepSymbol, _T("44"), m_AllowaleCSVSepSymbols);
  os.ReadInt(m_optUseAppFolder, _T("1"), 0, 1);
  os.ReadInt(m_optAlwaysWriteLog, _T("1"), 0, 1);
  os.ReadInt(m_optMIDeskUpdatePeriod, _T("40"), 0, 1000); 
  os.ReadEnum(m_optInterfaceLang, 0, m_AllowableLanguages);
- os.ReadEnum(m_optECUPlatformType, 1, m_AllowablePlatforms); //644
+ os.ReadEnum(m_optECUPlatformType, 3, m_AllowablePlatforms); //1284
  os.ReadInt(m_optDVDeskUpdatePeriod, _T("40"), 0, 1000);
  os.ReadInt(m_optUseDVFeatures, _T("0"), 0, 1);
  os.ReadInt(m_optShowToolTips, _T("1"), 0, 1);
