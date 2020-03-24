@@ -353,10 +353,12 @@ void CInjDriverTabController::OnExportToAFile(void)
 
 void CInjDriverTabController::OnImportFromAFile(void)
 {
+ int set_idx = mp_view->GetCurrSetIdx();
  SECU3IO::InjDrvPar params;
+ params.set_idx = set_idx; //specify desired set to obtain
+ mp_view->GetValues(&params);
  if (!CInjDrvFileDataIO::ImportSet(&params))
   return;
- int set_idx = mp_view->GetCurrSetIdx();
  params.set_idx = set_idx;
  mp_view->SetValues(&params);
  params.ee_status = false; //no command

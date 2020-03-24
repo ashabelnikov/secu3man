@@ -135,14 +135,28 @@ struct lzid_sett_t
 
 
 
-void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
+void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs, bool preserve_fw_info)
 {
+ uint8_t fw_type = fs.type;
+ uint8_t fw_version = fs.version;
+ uint8_t fw_opt = fs.fw_opt;
+
  memset(&fs, 0, sizeof(lzid_sett_t));
 
  strncpy(fs.sign, strSettSign, LZIDSIGSIZE);
- fs.type = ms.type;
- fs.version = ms.version;
- fs.fw_opt = ms.fw_opt;
+
+ if (preserve_fw_info)
+ { //copy original
+  fs.type = fw_type;
+  fs.version = fw_version;
+  fs.fw_opt = fw_opt;
+ }
+ else
+ { //copy new
+  fs.type = ms.type;
+  fs.version = ms.version;
+  fs.fw_opt = ms.fw_opt;
+ }
 
  fs.pwm_period = MathHelpers::Round(ms.m_pwm_period * 20.0f);
  fs.peak_duty = MathHelpers::Round((ms.m_peak_duty / 100.0f) * 4096.0f);
@@ -191,7 +205,7 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs)
 }
 
 template <class T>
-bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC = false)
+bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC = false, bool preserve_fw_info = false)
 {
  if (!ignoreCRC && fs.crc != crc16((BYTE*)&fs, sizeof(T) - sizeof(WORD)))
   return false; //data corrupted
@@ -203,9 +217,12 @@ bool ConvertFromFirmwareData(SECU3IO::InjDrvPar& ms, const T& fs, bool ignoreCRC
  ms.set0_corrupted = false;
  ms.set1_corrupted = false;
 
- ms.type = fs.type;
- ms.version = fs.version;
- ms.fw_opt = fs.fw_opt;
+ if (!preserve_fw_info)
+ { //overwrite (do not preserve)
+  ms.type = fs.type;
+  ms.version = fs.version;
+  ms.fw_opt = fs.fw_opt;
+ }
 
  ms.m_pwm_period = ((float)fs.pwm_period) / 20.0f;
  ms.m_peak_duty = (((float)fs.peak_duty) / 4096.0f) * 100.0f;
@@ -265,7 +282,7 @@ bool CInjDrvFileDataIO::ExportSet(SECU3IO::InjDrvPar* ip_set)
    return false;
   }
   lzid_sett_t fwd;  
-  ConvertToFirmwareData(*ip_set, fwd);
+  ConvertToFirmwareData(*ip_set, fwd, false); //overwriting of firmware information is turned on
   fwrite(strHeader, sizeof(char), strlen(strHeader), fout);
   fwrite(&fwd, sizeof(BYTE), sizeof(lzid_sett_t), fout);
   fclose(fout);
@@ -300,13 +317,13 @@ bool CInjDrvFileDataIO::ImportSet(SECU3IO::InjDrvPar* op_set)
   {
    lzid_sett_t fwd;
    fread(&fwd, sizeof(BYTE), sizeof(lzid_sett_t), fin);
-   result = ConvertFromFirmwareData<lzid_sett_t>(*op_set, fwd);
+   result = ConvertFromFirmwareData<lzid_sett_t>(*op_set, fwd, false, true); //preserve firmware information
   }
   else if (fsize == (sizeof(lzid_sett_t_v23) + strlen(strHeader)))
   { //old
    lzid_sett_t_v23 fwd;
    fread(&fwd, sizeof(BYTE), sizeof(lzid_sett_t_v23), fin);
-   result = ConvertFromFirmwareData<lzid_sett_t_v23>(*op_set, fwd);
+   result = ConvertFromFirmwareData<lzid_sett_t_v23>(*op_set, fwd, false, true); //preserve firmware information
   }
   else
   {
@@ -490,8 +507,8 @@ bool CInjDrvFileDataIO::SaveSetsToFirmware(SECU3IO::InjDrvPar* ip_set)
    return false;
   }
   //save modified data
-  ConvertToFirmwareData(ip_set[0], *p_set[0]);
-  ConvertToFirmwareData(ip_set[1], *p_set[1]);
+  ConvertToFirmwareData(ip_set[0], *p_set[0], true);  //overwriting of firmware information is turned off (original information will be preserved)
+  ConvertToFirmwareData(ip_set[1], *p_set[1], true);  //...
 
   f.Seek(0, CFile::begin);
 
