@@ -231,5 +231,8 @@ class CInjDriverTabDlg : public CTabDialog
   float m_y_axis_max;
   int m_curve_idx;
 
+  bool m_crc0_pane_f;
+  bool m_crc1_pane_f;
+
   std::map<int, float> m_ptMovStep;
 };

@@ -84,6 +84,8 @@ CInjDriverTabDlg::CInjDriverTabDlg(CWnd* pParent /*=NULL*/)
 , m_curve_idx(SERIE_PO)
 , m_enable_voltage(false)
 , m_offline(false)
+, m_crc0_pane_f(false) //Ok
+, m_crc1_pane_f(false) //Ok
 {
  m_ptMovStep.insert(std::make_pair(SERIE_PO, 1.0f));
  m_ptMovStep.insert(std::make_pair(SERIE_PD, 0.1f));
@@ -374,6 +376,10 @@ BOOL CInjDriverTabDlg::OnInitDialog()
  m_y_axis_max = 10000.0f;
 
  Super::OnInitDialog();
+
+ m_crc0_pane_f = m_crc1_pane_f = false; //Ok, not corrupted
+ m_crc0_pane.SetWindowText(_T("OK"));
+ m_crc1_pane.SetWindowText(_T("OK"));
 
  m_injdrv_combo.AddString(_T("1"));
  m_injdrv_combo.AddString(_T("2"));
@@ -1191,6 +1197,18 @@ void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only 
   m_gas_v_pane.SetWindowText(ip_data->gas_v ? _T("1") : _T("0"));
   SetChartVoltageValue(ip_data->voltage);
   mp_chart->Invalidate(TRUE);
+
+  //update CRC panes
+  if (ip_data->set0_corrupted != m_crc0_pane_f)
+  {
+   m_crc0_pane.SetWindowText(ip_data->set0_corrupted ? _T("NOK") : _T("OK"));
+   m_crc0_pane_f = ip_data->set0_corrupted;
+  }
+  if (ip_data->set1_corrupted != m_crc1_pane_f)
+  {
+   m_crc1_pane.SetWindowText(ip_data->set1_corrupted ? _T("NOK") : _T("OK"));
+   m_crc1_pane_f = ip_data->set1_corrupted;
+  }
   return;
  }
  int set_idx = ip_data->set_idx;
@@ -1203,8 +1221,16 @@ void CInjDriverTabDlg::SetValues(SECU3IO::InjDrvPar* ip_data, bool voltage_only 
  SetChartVoltageValue(ip_data->voltage);
 
  //update CRC panes
- m_crc0_pane.SetWindowText(ip_data->set0_corrupted ? _T("NOK") : _T("OK"));
- m_crc1_pane.SetWindowText(ip_data->set1_corrupted ? _T("NOK") : _T("OK"));
+ if (ip_data->set0_corrupted != m_crc0_pane_f)
+ {
+  m_crc0_pane.SetWindowText(ip_data->set0_corrupted ? _T("NOK") : _T("OK"));
+  m_crc0_pane_f = ip_data->set0_corrupted;
+ }
+ if (ip_data->set1_corrupted != m_crc1_pane_f)
+ {
+  m_crc1_pane.SetWindowText(ip_data->set1_corrupted ? _T("NOK") : _T("OK"));
+  m_crc1_pane_f = ip_data->set1_corrupted;
+ }
 
  if (set_idx == m_set_of_sett_idx)
  {
