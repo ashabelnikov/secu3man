@@ -150,6 +150,7 @@ void ConvertToFirmwareData(const SECU3IO::InjDrvPar& ms, lzid_sett_t& fs, bool p
   fs.type = fw_type;
   fs.version = fw_version;
   fs.fw_opt = fw_opt;
+  WRITEBIT8(fs.fw_opt, 5, CHECKBIT8(ms.fw_opt, 5)); //copy "Load from flash" bit regardless of preserve_fw_info value
  }
  else
  { //copy new
