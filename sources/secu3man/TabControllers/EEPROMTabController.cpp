@@ -56,8 +56,8 @@ using namespace SECU3IO;
 
 CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunicationManager* i_comm, CStatusBarManager* i_sbar, ISettingsData* ip_settings)
 : mp_view(i_view)
-, m_comm(i_comm)
-, m_sbar(i_sbar)
+, mp_comm(i_comm)
+, mp_sbar(i_sbar)
 , mp_settings(ip_settings)
 , m_lastSel(0)
 , mp_errors_ids(new CEErrorIdStr())
@@ -73,8 +73,8 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 
  ASSERT(m_eedm);
 
- m_bl_data = new BYTE[m_epp.m_size + 1];
- ASSERT(m_bl_data);
+ mp_bl_data = new BYTE[m_epp.m_size + 1];
+ ASSERT(mp_bl_data);
 
  mp_view->setOnReadEEPROMFromSECU(MakeDelegate(this, &CEEPROMTabController::OnReadEEPROMFromSECU));
  mp_view->setOnWriteEEPROMToSECU(MakeDelegate(this, &CEEPROMTabController::OnWriteEEPROMToSECU));
@@ -99,7 +99,7 @@ CEEPROMTabController::CEEPROMTabController(CEEPROMTabDlg* i_view, CCommunication
 CEEPROMTabController::~CEEPROMTabController()
 {
  delete m_eedm;
- delete[] m_bl_data;
+ delete[] mp_bl_data;
 }
 
 //изменились настройки программы!
@@ -123,7 +123,7 @@ void CEEPROMTabController::OnSettingsChanged(int action)
  mp_view->mp_TablesPanel->SetITEdMode(mp_settings->GetITEdMode());
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION, true);
 }
 
 //from MainTabController
@@ -134,12 +134,12 @@ void CEEPROMTabController::OnActivate(void)
  //выбираем ранее выбранную вкладку на панели параметров
  bool result = mp_view->mp_ParamDeskDlg->SetCurSel(m_lastSel);
 
- m_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
- m_comm->m_pBldAdapter->SetEventHandler(this);
- m_comm->setOnSettingsChanged(MakeDelegate(this,&CEEPROMTabController::OnSettingsChanged));
+ mp_comm->m_pAppAdapter->AddEventHandler(this,EHKEY);
+ mp_comm->m_pBldAdapter->SetEventHandler(this);
+ mp_comm->setOnSettingsChanged(MakeDelegate(this,&CEEPROMTabController::OnSettingsChanged));
 
  //включаем необходимый для данного контекста коммуникационный контроллер
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
 
  m_modification_check_timer.SetTimer(this, &CEEPROMTabController::OnModificationCheckTimer, 250);
 
@@ -180,7 +180,7 @@ void CEEPROMTabController::OnActivate(void)
 
  //симулируем изменение состояния для обновления контроллов, так как OnConnection вызывается только если
  //сбрывается или разрывается принудительно (путем деактивации коммуникационного контроллера)
- bool online_status = m_comm->m_pControlApp->GetOnlineStatus();
+ bool online_status = mp_comm->m_pControlApp->GetOnlineStatus();
  OnConnection(online_status);
 }
 
@@ -189,11 +189,11 @@ void CEEPROMTabController::OnDeactivate(void)
 {
  m_active = false;
  mp_view->mp_TablesPanel->ShowOpenedCharts(false);
- m_comm->m_pBootLoader->AbortOperation();
- m_comm->m_pBldAdapter->DetachEventHandler();
- m_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
- m_sbar->SetInformationText(_T(""));
- m_sbar->ShowProgressBar(false);
+ mp_comm->m_pBootLoader->AbortOperation();
+ mp_comm->m_pBldAdapter->DetachEventHandler();
+ mp_comm->m_pAppAdapter->RemoveEventHandler(EHKEY);
+ mp_sbar->SetInformationText(_T(""));
+ mp_sbar->ShowProgressBar(false);
  m_modification_check_timer.KillTimer();
  m_waiting_bl_timer.KillTimer();
  //запоминаем номер последней выбранной вкладки на панели параметров
@@ -209,13 +209,13 @@ void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SE
   switch(p_ndata->opcode)
   {
    case OPCODE_CE_SAVE_ERRORS: //Посланные ранее коды ошибок были сохранены в EEPROM
-    m_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_SAVED_SUCCESSFULLY));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_ERROR_CODES_SAVED_SUCCESSFULLY));
     return;
    case OPCODE_EEPROM_PARAM_SAVE: //параметры были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_PARAMS_HAS_BEEN_SAVED));
     return;
    case OPCODE_SAVE_TABLSET: //таблицы были сохранены
-    m_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_PM_TABLSET_HAS_BEEN_SAVED));    
     return;
    case SECU3IO::OPCODE_BL_CONFIRM: //confirmation that firmware is going to start boot loader
     if (p_ndata->opdata == 0xBC)
@@ -232,13 +232,13 @@ void CEEPROMTabController::OnPacketReceived(const BYTE i_descriptor, SECU3IO::SE
   }
  }
  else if (i_descriptor == INJDRV_PAR)
-  m_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
+  mp_comm->m_pControlApp->ChangeContext(SENSOR_DAT);
 }
 
 void CEEPROMTabController::OnConnection(const bool i_online)
 {
  int state;
- ASSERT(m_sbar);
+ ASSERT(mp_sbar);
 
  if (i_online) //перешли в онлайн
  {
@@ -260,16 +260,16 @@ void CEEPROMTabController::OnConnection(const bool i_online)
 
  //если бутлоадер активен (выполняется выбранная из меню операция), то будем отображать именно
  //иконку бутлоадера
- if (m_comm->m_pBootLoader->GetWorkState())
+ if (mp_comm->m_pBootLoader->GetWorkState())
   state = CStatusBarManager::STATE_BOOTLOADER;
 
- m_sbar->SetConnectionState(state);
+ mp_sbar->SetConnectionState(state);
 }
 
 //This method called when framework ask to close application
 bool CEEPROMTabController::OnClose(void)
 {
- if (m_active && (!m_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
+ if (m_active && (!mp_comm->m_pBootLoader->IsIdle() || m_waiting_bl_timer.isActive()))
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return false;
 
@@ -288,7 +288,7 @@ void CEEPROMTabController::OnFullScreen(bool i_what)
 
 bool CEEPROMTabController::OnAskChangeTab(void)
 {
- if (m_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
+ if (mp_comm->m_pBootLoader->IsIdle() && !m_waiting_bl_timer.isActive())
   return true; //allows
  return ErrorMsg::AskUserAboutTabLeaving();
 }
@@ -300,7 +300,7 @@ void CEEPROMTabController::OnOpenEEPROMFromFile(void)
  BYTE *buff = &buff_container[0];
  _TSTRING opened_file_name = _T("");
  
- if (!m_comm->m_pBootLoader->IsIdle())
+ if (!mp_comm->m_pBootLoader->IsIdle())
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return;
   
@@ -332,7 +332,7 @@ void CEEPROMTabController::OnDropFile(_TSTRING fileName)
  BYTE *buff = &buff_container[0];
  _TSTRING opened_file_name = _T("");
  
- if (!m_comm->m_pBootLoader->IsIdle())
+ if (!mp_comm->m_pBootLoader->IsIdle())
   if (!ErrorMsg::AskUserAboutTabLeaving())
    return;
   
@@ -394,31 +394,31 @@ void CEEPROMTabController::OnReadEEPROMFromSECU(void)
  if (!is_continue)
   return;  //пользователь передумал
 
- if (!m_comm->m_pBootLoader->IsIdle())
+ if (!mp_comm->m_pBootLoader->IsIdle())
   return;
 
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
- m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
- m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+ mp_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
  m_blFinishOpCB = &CEEPROMTabController::finishOnReadEepromFromSECU;
 }
 
 void CEEPROMTabController::OnWriteEEPROMToSECU(void)
 {
- m_eedm->StoreBytes(m_bl_data); //fill m_bl_date with bytes of EEPROM 
+ m_eedm->StoreBytes(mp_bl_data); //fill m_bl_date with bytes of EEPROM 
 
- m_eedm->CalculateAndPlaceParamsCRC(m_bl_data); //update CRC before sending data to SECU-3
+ m_eedm->CalculateAndPlaceParamsCRC(mp_bl_data); //update CRC before sending data to SECU-3
 
- ASSERT(m_comm);
+ ASSERT(mp_comm);
 
  //запускаем бутлоадер по команде из приложения
  StartBootLoader();
 
- m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
- m_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
+ mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WAITING_BOOTLOADER)); 
+ mp_comm->m_pControlApp->SetPacketsTimer(WAITING_BL_START_TIMEOUT);
  m_waiting_bl_timer.SetTimer(WAITING_BL_START_TIMEOUT, true); //one shot
  m_blFinishOpCB = &CEEPROMTabController::finishOnWriteEepromToSECU;
 }
@@ -773,16 +773,16 @@ void CEEPROMTabController::OnShowCEErrors()
 
 bool CEEPROMTabController::StartBootLoader(void)
 {
- ASSERT(m_comm);
- bool result = m_comm->m_pControlApp->StartBootLoader();
+ ASSERT(mp_comm);
+ bool result = mp_comm->m_pControlApp->StartBootLoader();
  Sleep(DELAY_AFTER_BL_START); //обязательно нужно подождать не менее 50 мс, иначе будут вылазить посторонние символы при приеме данных от загрузчика
  return result;
 }
 
 bool CEEPROMTabController::ExitBootLoader(void)
 {
- ASSERT(m_comm);
- return m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_EXIT,NULL,0);
+ ASSERT(mp_comm);
+ return mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_EXIT,NULL,0);
 }
 
 /////////////////////////////////////////////////////////////////////////////////
@@ -793,24 +793,24 @@ void CEEPROMTabController::OnUpdateUI(IBLDEventHandler::poolUpdateUI* ip_data)
 
  /////////////////////////////////////////////////////////////
  //эксклюзивный доступ
- m_comm->m_pBootLoader->EnterCriticalSection();
+ mp_comm->m_pBootLoader->EnterCriticalSection();
  data = *ip_data;
- m_comm->m_pBootLoader->LeaveCriticalSection();
+ mp_comm->m_pBootLoader->LeaveCriticalSection();
  /////////////////////////////////////////////////////////////
 
  if (data.opcode!=CBootLoader::BL_OP_EXIT) //для операции выхода из бутлоадера не показываем никакого прогресс бара
  {
-  m_sbar->SetProgressRange(0, data.total);
-  m_sbar->SetProgressPos(data.current);
+  mp_sbar->SetProgressRange(0, data.total);
+  mp_sbar->SetProgressPos(data.current);
  }
 }
 
 void CEEPROMTabController::OnBegin(const int opcode,const int status)
 {
  if (opcode == CBootLoader::BL_OP_READ_EEPROM)
-  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_EEPROM));
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_READING_EEPROM));
  if (opcode == CBootLoader::BL_OP_WRITE_EEPROM)
-  m_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_EEPROM));
+  mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_WRITING_EEPROM));
  if (opcode == CBootLoader::BL_OP_EXIT)
  {
   //Exiting from boot loader...
@@ -827,7 +827,7 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_EXIT: //не используется когда бутлоадер запущен аварийно
   {
    //вновь активируем коммуникационный контроллер приложения
-   m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
+   mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_APPLICATION);
    break;
   }
 
@@ -836,35 +836,35 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
   {
    if (status==1)
    { //OK
-    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));   
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_READ_SUCCESSFULLY));   
 
     //-----------------------------------------------------------------------------------
     //проверка контрольной суммы загружаемых параметров и вывод предупреждения
     bool chk_sum_status = true;
-    if (!m_eedm->VerifyParamsCheckSum(m_bl_data))
+    if (!m_eedm->VerifyParamsCheckSum(mp_bl_data))
     {
      if (IDCANCEL==AfxMessageBox(IDS_FW_EEPROM_DEF_PARAMS_CRC_INVALID, MB_OKCANCEL))
       chk_sum_status = false; //user canceled
     }
 
     if (chk_sum_status)
-     PrepareOnLoadEEPROM(m_bl_data, _T(""));
+     PrepareOnLoadEEPROM(mp_bl_data, _T(""));
     //-----------------------------------------------------------------------------------
 
    }
    else
    {
-    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
+    mp_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(mp_comm));
    }
 
    //ждем пока не выполнится предыдущая операция
-   while(!m_comm->m_pBootLoader->IsIdle());
+   while(!mp_comm->m_pBootLoader->IsIdle());
 
    //Achtung! Почти рекурсия
    ExitBootLoader();
 
    Sleep(250);
-   m_sbar->ShowProgressBar(false);
+   mp_sbar->ShowProgressBar(false);
    break;
   }
 
@@ -872,20 +872,20 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
   case CBootLoader::BL_OP_WRITE_EEPROM:
   {
    if (status==1)
-    m_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
+    mp_sbar->SetInformationText(MLL::LoadString(IDS_FW_EEPROM_WRITTEN_SUCCESSFULLY));
    else
    {
-    m_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(m_comm));
+    mp_sbar->SetInformationText(ErrorMsg::GenerateErrorStr(mp_comm));
    }
 
    //ждем пока не выполнится предыдущая операция
-   while(!m_comm->m_pBootLoader->IsIdle());
+   while(!mp_comm->m_pBootLoader->IsIdle());
 
    //Achtung! Почти рекурсия
    ExitBootLoader();
 
    Sleep(250);
-   m_sbar->ShowProgressBar(false);
+   mp_sbar->ShowProgressBar(false);
    break;
   }
 
@@ -896,25 +896,25 @@ void CEEPROMTabController::OnEnd(const int opcode,const int status)
 void CEEPROMTabController::finishOnReadEepromFromSECU(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM,m_bl_data,0);
+ mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_EEPROM, mp_bl_data, 0);
 
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ mp_sbar->ShowProgressBar(true);
+ mp_sbar->SetProgressPos(0);
 }
 
 void CEEPROMTabController::finishOnWriteEepromToSECU(void)
 {
  //активируем коммуникационный контроллер бутлоадера
- m_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
+ mp_comm->SwitchOn(CCommunicationManager::OP_ACTIVATE_BOOTLOADER);
 
  //операция не блокирует поток - стековые переменные ей передавать нельзя!
- m_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM,m_bl_data,0);
+ mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_EEPROM, mp_bl_data, 0);
 
- m_sbar->ShowProgressBar(true);
- m_sbar->SetProgressPos(0);
+ mp_sbar->ShowProgressBar(true);
+ mp_sbar->SetProgressPos(0);
 }
 
 void CEEPROMTabController::OnChangeSettingsMapEd(void)

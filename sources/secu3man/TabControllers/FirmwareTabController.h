@@ -153,15 +153,15 @@ class CFirmwareTabController : public ITabController, private IAPPEventHandler, 
   PPEepromParam m_epp;
 
   CFirmwareTabDlg*  mp_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
-  CFirmwareDataMediator* m_fwdm;
-  EEPROMDataMediator* m_edm;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
+  CFirmwareDataMediator* mp_fwdm;
+  EEPROMDataMediator* mp_edm;
   ISettingsData* mp_settings;
   std::auto_ptr<CFWIORemappingController> mp_iorCntr;
 
-  BYTE* m_bl_data;
-  BYTE* m_code_for_merge_with_overhead;
+  BYTE* mp_bl_data;
+  BYTE* mp_code_for_merge_with_overhead;
   size_t m_code_for_merge_size;
   size_t m_moreSize;
   bool m_bl_started_emergency;
