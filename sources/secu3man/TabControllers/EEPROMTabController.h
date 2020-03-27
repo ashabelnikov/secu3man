@@ -102,8 +102,8 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
 
   //data
   CEEPROMTabDlg*  mp_view;
-  CCommunicationManager* m_comm;
-  CStatusBarManager*  m_sbar;
+  CCommunicationManager* mp_comm;
+  CStatusBarManager*  mp_sbar;
   CControlAppAdapter* m_pAdapter;
   ISettingsData* mp_settings;
 
@@ -113,7 +113,7 @@ class CEEPROMTabController : public ITabController, private IAPPEventHandler, pr
   CObjectTimer<CEEPROMTabController> m_waiting_bl_timer;
   int m_lastSel;
 
-  BYTE* m_bl_data;
+  BYTE* mp_bl_data;
   std::auto_ptr<CEErrorIdStr> mp_errors_ids;
   bool m_active;
 };
