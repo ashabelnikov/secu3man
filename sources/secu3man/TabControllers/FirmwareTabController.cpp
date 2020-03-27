@@ -77,7 +77,7 @@ CFirmwareTabController::CFirmwareTabController(CFirmwareTabDlg* i_view, CCommuni
 , m_lastSel(0)
 , m_bl_started_emergency(false)
 , mp_iorCntr(new CFWIORemappingController(i_view->mp_IORemappingDlg.get()))
-, m_moreSize(0)
+, m_moreSize(0x400) //1024
 , m_clear_sbar_txt_on_conn(false)
 , m_read_fw_sig_info_flag(false)
 , m_blFinishOpCB(NULL)
@@ -544,20 +544,16 @@ void CFirmwareTabController::OnEnd(const int opcode,const int status)
     }
     else if (m_bl_read_flash_mode == MODE_RD_FLASH_TO_BUFF_MERGE_DATA)
     {
-     //ждем пока не выполнится предыдущая операция
+     //wait for completion of previous operation
      while(!mp_comm->m_pBootLoader->IsIdle());
 
-     //закончилось чтение данных. Теперь необходимо объединить прочитанные данные с данными для записи,
-     //обновить контрольную сумму и запустить процесс программирования FLASH.
+     //transfer old code data (logically, do not copy bits directly)
+     size_t srcSize = (m_fpp.m_app_section_size - (m_code_for_merge_size - m_moreSize));
+     mp_fwdm->LoadCodeData(mp_bl_data, srcSize, mp_code_for_merge_with_overhead);
+
+     //transfer old data
      size_t dataSize = m_fpp.m_app_section_size - m_code_for_merge_size;
      BYTE* dataPtr = mp_code_for_merge_with_overhead + m_code_for_merge_size;
-     //Так как мы программируем только код, а он содержит некоторые данные, то мы должны
-     //"подтянуть" эти данные из фрагмента старого кода. mp_code_for_merge_with_overhead хранит еще данные пришедшие
-     //с новым кодом.
-     size_t srcSize = (m_fpp.m_app_section_size - m_code_for_merge_size) + m_moreSize;
-     mp_fwdm->LoadCodeData(mp_bl_data, srcSize, mp_code_for_merge_with_overhead);
-     //переносим старые данные
-     memset(dataPtr, 0, dataSize);
      memcpy(dataPtr, mp_bl_data + m_moreSize, dataSize);
      //Высчитываем и записываем контрольную сумму всей прошивки
      mp_fwdm->CalculateAndPlaceFirmwareCRC(mp_code_for_merge_with_overhead);
@@ -1948,16 +1944,16 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
  //Если установлен режим прошивки только кода (без данных), то все несколько сложнее
  if (mp_view->IsProgrammeOnlyCode())
  {
-  //Мы программируем только код, одако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
+  //Мы программируем только код, однако контрольная сумма останется посчитаной для старых данных. Поэтому нам необходимо
   //прочитать данные, обединить их с новым кодом, обновить контрольную сумму и только потом программировать.
   m_bl_read_flash_mode = MODE_RD_FLASH_TO_BUFF_MERGE_DATA;
 
   //сохраняем данные для того, чтобы позже объединить их с прочитанными "верхними" данными
-  m_code_for_merge_size = mp_fwdm->GetOnlyCodeSize(mp_bl_data);
+  m_code_for_merge_size = mp_fwdm->GetOnlyCodeSize(mp_bl_data); //code + code data
   memcpy(mp_code_for_merge_with_overhead, mp_bl_data, m_fpp.m_app_section_size);
 
   //Читаем немного больше байт, для того, чтобы гарантировано прочитать данные находящиеся в коде
-  size_t reducedSize = m_code_for_merge_size - 0x400; //1024 bytes more
+  size_t reducedSize = m_code_for_merge_size - m_moreSize; // + some number of bytes more
   //операция не блокирует поток - стековые переменные ей передавать нельзя!
   mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_READ_FLASH, mp_bl_data,
   m_fpp.m_app_section_size - reducedSize, //размер данных сверху над кодом программы
@@ -1965,7 +1961,7 @@ void CFirmwareTabController::finishStartWritingOfFLASHFromBuff(void)
  }
  else
  {//все очень просто
-  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH,mp_bl_data, m_fpp.m_app_section_size);
+  mp_comm->m_pBootLoader->StartOperation(CBootLoader::BL_OP_WRITE_FLASH, mp_bl_data, m_fpp.m_app_section_size);
  }
 
  mp_sbar->ShowProgressBar(true);

@@ -2013,6 +2013,7 @@ cd_data_t* CFirmwareDataMediator::_FindCodeData(const BYTE* ip_bytes /*= NULL*/,
   return p_cd;
 }
 
+//note; value returned by this function includes also size of cd_data_t
 size_t CFirmwareDataMediator::GetOnlyCodeSize(const BYTE* ip_bytes) const
 {
  ASSERT(ip_bytes);
