@@ -84,7 +84,7 @@ void CDwellCalcDlg::OnOK()
   double R = m_r, L = m_l, I = m_i;
   for(size_t i = 0; i < m_size; ++i)
   {
-   double U = mp_v_values[i] - 1.2; //compensate voltage drop on the transistor
+   double U = mp_v_values[i] - 1.5; //compensate voltage drop on the transistor + drop on wires
    if (U < 1.0) U = 1.0;        //prevent div. by zero case
    if (R < 0.01) R = 0.01;      //prevent div. by zero case
    double x = 1.0 - (R * I / U);
