@@ -84,12 +84,30 @@ void CDwellCalcDlg::OnOK()
   double R = m_r, L = m_l, I = m_i;
   for(size_t i = 0; i < m_size; ++i)
   {
+   /*
    double U = mp_v_values[i] - 1.5; //compensate voltage drop on the transistor + drop on wires
-   if (U < 1.0) U = 1.0;        //prevent div. by zero case
-   if (R < 0.01) R = 0.01;      //prevent div. by zero case
+   if (U < 1.0) U = 1.0;            //prevent div. by zero case
+   if (R < 0.01) R = 0.01;          //prevent div. by zero case
    double x = 1.0 - (R * I / U);
-   if (x <= 0) x = DBL_EPSILON; //prevent U/R <= I case
+   if (x <= 0) x = DBL_EPSILON;     //prevent U/R <= I case
    mp_t_values[i] = static_cast<float>((-L / R) * log(x));
+   */
+
+   /*
+   if (R < 0.01) R = 0.01;          //prevent div. by zero case
+   double U = mp_v_values[i] - 1.5; //compensate voltage drop on the transistor + drop on wires
+   if (U < 0.01) U = 0.01;          //prevent div. by zero case
+   double x = 1.0 - (R * I / U);
+   if (x <= 0) x = DBL_EPSILON;     //prevent floating point error
+   mp_t_values[i] = (float)((L / R) * log(1.0 / x));
+   */
+
+   //basic equation: U = L * (dI / dt);
+   if (R < 0.01) R = 0.01;          //prevent div. by zero case
+   double U = mp_v_values[i] - (1.5 + (R * I)); //compensate voltage drop on the transistor + drop on wires + drop on the active resistance of coil
+   if (U < 0.01) U = 0.01;          //prevent div. by zero case
+   mp_t_values[i] = (float)((I * L) / U);   
+
    //restrict values
    if (mp_t_values[i] > m_t_hi_limit)
     mp_t_values[i] = m_t_hi_limit;
