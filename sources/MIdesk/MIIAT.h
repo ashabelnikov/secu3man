@@ -35,6 +35,7 @@ class AFX_EXT_CLASS CMIIAT : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };
 
@@ -46,5 +47,6 @@ class AFX_EXT_CLASS CMIIATGraph : public MeasInstrBase
 
   //-------interface-----------------------
   virtual void Create(CWnd* pParent);
+  virtual void SetLimits(float loLimit, float upLimit);
   //---------------------------------------
 };

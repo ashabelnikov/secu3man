@@ -131,6 +131,7 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
  //обновляем диапазоны приборов
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetTemperatureMax(mp_settings->GetTemperatureMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
 
@@ -171,6 +172,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->mp_MIDeskDlg->SetTemperatureMax(mp_settings->GetTemperatureMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());
