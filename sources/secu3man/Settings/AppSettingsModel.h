@@ -119,6 +119,7 @@ class CAppSettingsModel : public ISettingsData
   //fixtures's customization
   virtual int GetTachometerMax(void) const;
   virtual int GetPressureMax(void) const;
+  virtual int GetTemperatureMax(void) const;
   virtual ESpeedUnit GetSpeedUnit(void) const;
 
   virtual int GetRPMAverage(void) const;
@@ -263,6 +264,7 @@ class CAppSettingsModel : public ISettingsData
   OptField_t<int> m_optMIDeskUpdatePeriod;
   OptField_t<int> m_optTachometerMax;
   OptField_t<int> m_optPressureMax;
+  OptField_t<int> m_optTemperatureMax;
   OptField_t<int> m_optPulsesPer1Km;
   OptField_t<int> m_optSpeedUnit;
   OptField_t<bool> m_optCOMPortBother;

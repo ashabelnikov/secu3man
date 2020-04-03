@@ -135,6 +135,9 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_it_mode(0)
 , m_show_graph_cursor(false)
 , m_graphShtPixels(2)
+, m_tachoMax(8000)
+, m_pressMax(110)
+, m_tempMax(120)
 {
  mp_ctxMenuMgrMet->CreateContent();
  mp_ctxMenuMgrInd->CreateContent();
@@ -521,6 +524,11 @@ void CMIDeskDlg::SetTachometerMax(int i_max)
 void CMIDeskDlg::SetPressureMax(int i_max)
 {
  m_pressMax = i_max;
+}
+
+void CMIDeskDlg::SetTemperatureMax(int i_max)
+{
+ m_tempMax = i_max;
 }
 
 void CMIDeskDlg::SetSpeedUnit(int i_unit)
@@ -1365,6 +1373,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->BindVars(&m_cltQVal[0], &m_gdposQVal[0], &m_chposQVal[0]);  
    widget->ShowTLP(m_showGDPos);
    widget->ShowTRP(m_showChokePos);
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    mp_miTemperat = widget;
    new_widget = widget;
@@ -1381,6 +1390,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_cltQVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1478,6 +1488,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_iatQVal[0], NULL, NULL);  
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1493,6 +1504,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_iatQVal[1], NULL, NULL);  
    widget->SetShtPixels(m_graphShtPixels);
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1705,6 +1717,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[0], NULL, NULL);
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1720,6 +1733,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->Create(this);
    widget->BindVars(&m_tmp2QVal[1], NULL, NULL);
    widget->SetShtPixels(m_graphShtPixels);
+   widget->SetLimits(-40.0, (float)m_tempMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;

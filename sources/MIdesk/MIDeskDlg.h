@@ -70,6 +70,9 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   //Set maximum value of pressure meter displayed on the fixture
   void SetPressureMax(int i_max);
 
+  //Set maximum value of temperature displayed on the fixture
+  void SetTemperatureMax(int i_max);
+
   void SetSpeedUnit(int i_unit); //0 - km/h, 1 - mi/h
 
   void SetDistanceUnit(int i_unit); //0 - km, 1 - mi
@@ -248,6 +251,7 @@ class AFX_EXT_CLASS CMIDeskDlg : public CModelessDialog, public IMIView
   _TSTRING m_distanceUnit;
   int m_tachoMax;
   int m_pressMax;
+  int m_tempMax;
   MeasInstrBase* mp_miTemperat;
 
   COLORREF m_COLOR_BTNFACE; //for detecting of system colors changing

@@ -66,6 +66,7 @@ void CPMMonitorController::OnSettingsChanged(void)
  //обновляем диапазоны приборов
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->SetTemperatureMax(mp_settings->GetTemperatureMax());
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->ShowSpeedAndDistance(mp_settings->GetNumPulsesPer1Km() > 0); //disabled if pulses = 0
@@ -102,6 +103,7 @@ void CPMMonitorController::OnActivate(void)
  mp_view->SetGraphShtPixels(mp_settings->GetGraphShtPixels());
  mp_view->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->SetPressureMax(mp_settings->GetPressureMax());
+ mp_view->SetTemperatureMax(mp_settings->GetTemperatureMax());
  mp_view->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->SetDistanceUnit(mp_settings->GetSpeedUnit()); //same option for distance
  mp_view->SetUpdatePeriod(mp_settings->GetMIDeskUpdatePeriod());

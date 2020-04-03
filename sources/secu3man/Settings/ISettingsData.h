@@ -338,6 +338,7 @@ class ISettingsData
 
   //Fixtures's customization settings
   virtual int GetTachometerMax(void) const = 0;
+  virtual int GetTemperatureMax(void) const = 0;
   virtual int GetPressureMax(void) const = 0;
   virtual ESpeedUnit GetSpeedUnit(void) const = 0;
   virtual int GetRPMAverage(void) const = 0;

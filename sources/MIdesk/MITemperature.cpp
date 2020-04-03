@@ -70,6 +70,15 @@ void CMITemperature::Create(CWnd* pParent)
  m_meter.Update();
 }
 
+void CMITemperature::SetLimits(float loLimit, float upLimit)
+{
+ m_meter.ResetAlertZones();
+ m_meter.AddAlertZone(loLimit, upLimit * 0.42, RGB(130,130,180));
+ m_meter.AddAlertZone(upLimit * 0.42, upLimit * 0.83, RGB(120,120,120));
+ m_meter.AddAlertZone(upLimit * 0.83, upLimit, RGB(230,130,130));
+ m_meter.SetRange(loLimit, upLimit);
+}
+
 //////////////////////////////////////////////////////////////////////
 // Construction/Destruction
 //////////////////////////////////////////////////////////////////////
@@ -99,4 +108,10 @@ void CMITemperatureGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMITemperatureGraph::SetLimits(float loLimit, float upLimit)
+{
+ m_scope.SetGridNumberY(8);
+ m_scope.SetRange(loLimit, upLimit, 0);
 }
