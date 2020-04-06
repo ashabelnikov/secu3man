@@ -138,6 +138,7 @@ CMIDeskDlg::CMIDeskDlg(CWnd* pParent /*=NULL*/)
 , m_tachoMax(8000)
 , m_pressMax(110)
 , m_tempMax(120)
+, m_injpwMax(24)
 {
  mp_ctxMenuMgrMet->CreateContent();
  mp_ctxMenuMgrInd->CreateContent();
@@ -529,6 +530,11 @@ void CMIDeskDlg::SetPressureMax(int i_max)
 void CMIDeskDlg::SetTemperatureMax(int i_max)
 {
  m_tempMax = i_max;
+}
+
+void CMIDeskDlg::SetInjPWMax(int i_max)
+{
+ m_injpwMax = i_max;
 }
 
 void CMIDeskDlg::SetSpeedUnit(int i_unit)
@@ -1460,6 +1466,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->SetFontSize(TitleFontSize, ValueFontSize, PaneFontSize, LabelFontSize);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[0], NULL, NULL);  
+   widget->SetLimits(0, (float)m_injpwMax);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;
    break;
@@ -1474,6 +1481,7 @@ MeasInstrBase* CMIDeskDlg::_MetFactory(UINT uiID)
    widget->ShowCursor(m_show_graph_cursor);
    widget->Create(this);
    widget->BindVars(&m_injpwQVal[1], NULL, NULL);  
+   widget->SetLimits(0, (float)m_injpwMax);
    widget->SetShtPixels(m_graphShtPixels);
    m_metFields.insert(std::make_pair(m_metCfg[uiID], widget));
    new_widget = widget;

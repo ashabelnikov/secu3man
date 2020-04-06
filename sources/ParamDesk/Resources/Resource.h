@@ -1174,3 +1174,4 @@
 #define IDS_UNIOUT_COND_AI6              1512
 #define IDS_UNIOUT_COND_AI7              1513
 #define IDS_UNIOUT_COND_AI8              1514
+#define IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT 1515

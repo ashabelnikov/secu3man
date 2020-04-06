@@ -69,6 +69,7 @@ CAppSettingsModel::CAppSettingsModel()
 , m_optTachometerMax(_T("Tachometer_Max"))
 , m_optPressureMax(_T("Pressure_Max"))
 , m_optTemperatureMax(_T("Temperature_Max"))
+, m_optInjPWMax(_T("InjPW_Max"))
 , m_optPulsesPer1Km(_T("PulsesPer1Km"))
 , m_optSpeedUnit(_T("SpeedUnit"))
 , m_optRPMAverage(_T("RPMAverage"))
@@ -568,6 +569,7 @@ bool CAppSettingsModel::ReadSettings(void)
  fs.ReadInt(m_optTachometerMax, _T("8000"), 0, 15000);
  fs.ReadInt(m_optPressureMax, _T("110"), 0, 500);
  fs.ReadInt(m_optTemperatureMax, _T("120"), 0, 300);
+ fs.ReadInt(m_optInjPWMax, _T("24"), 5, 100);
  fs.ReadInt(m_optPulsesPer1Km, _T("6000"), 0, 60000);
  fs.ReadEnum(m_optSpeedUnit, 0, m_AllowableSpeedUnits);
  fs.ReadInt(m_optTitleFontSize, _T("100"), 10, 200);
@@ -1242,6 +1244,12 @@ bool CAppSettingsModel::WriteSettings(void)
  else
   fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора температуры (например 120°C)."));
  fs.WriteInt(m_optTemperatureMax); 
+
+ if (m_optInterfaceLang.value == IL_ENGLISH)
+  fs.WriteComment(_T("Here is specified maximum value displayed on the grid of the inj. PW gauge (e.g. 24 ms)."));
+ else
+  fs.WriteComment(_T("Тут указывается максимальное значение для шкалы прибора длит. впрыска (например 24 мс)."));
+ fs.WriteInt(m_optInjPWMax); 
 
  if (m_optInterfaceLang.value == IL_ENGLISH)
   fs.WriteComment(_T("This value used in calculations of speed and distance using VSS. Number of pulses from VSS sensor per 1km of passed distance."));
@@ -2915,6 +2923,11 @@ int CAppSettingsModel::GetPressureMax(void) const
 int CAppSettingsModel::GetTemperatureMax(void) const
 {
  return m_optTemperatureMax.value;
+}
+
+int CAppSettingsModel::GetInjPWMax(void) const
+{
+ return m_optInjPWMax.value;
 }
 
 ESpeedUnit CAppSettingsModel::GetSpeedUnit(void) const
