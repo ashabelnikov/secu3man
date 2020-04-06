@@ -132,6 +132,7 @@ void CLogPlayerTabController::OnSettingsChanged(int action)
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetTemperatureMax(mp_settings->GetTemperatureMax());
+ mp_view->mp_MIDeskDlg->SetInjPWMax(mp_settings->GetInjPWMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
 
@@ -173,6 +174,7 @@ void CLogPlayerTabController::OnActivate(void)
  mp_view->mp_MIDeskDlg->SetTachometerMax(mp_settings->GetTachometerMax());
  mp_view->mp_MIDeskDlg->SetPressureMax(mp_settings->GetPressureMax());
  mp_view->mp_MIDeskDlg->SetTemperatureMax(mp_settings->GetTemperatureMax());
+ mp_view->mp_MIDeskDlg->SetInjPWMax(mp_settings->GetInjPWMax());
  mp_view->mp_MIDeskDlg->SetSpeedUnit(mp_settings->GetSpeedUnit());
  mp_view->mp_MIDeskDlg->SetDistanceUnit(mp_settings->GetSpeedUnit()); //use same option for distance
  mp_view->mp_MIDeskDlg->SetRPMAverageNum(mp_settings->GetRPMAverage());

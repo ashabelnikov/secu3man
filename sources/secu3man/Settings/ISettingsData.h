@@ -340,6 +340,7 @@ class ISettingsData
   virtual int GetTachometerMax(void) const = 0;
   virtual int GetTemperatureMax(void) const = 0;
   virtual int GetPressureMax(void) const = 0;
+  virtual int GetInjPWMax(void) const = 0;
   virtual ESpeedUnit GetSpeedUnit(void) const = 0;
   virtual int GetRPMAverage(void) const = 0;
   virtual int GetVoltAverage(void) const = 0;

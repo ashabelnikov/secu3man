@@ -65,10 +65,9 @@ void CMIInjPW::Create(CWnd* pParent)
 void CMIInjPW::SetLimits(float loLimit, float upLimit)
 {
  m_meter.ResetAlertZones();
- m_meter.AddAlertZone(loLimit, upLimit * 0.5, RGB(100,255,100));
- m_meter.AddAlertZone(upLimit * 0.5, upLimit * 0.75, RGB(255,255,100));
- m_meter.AddAlertZone(upLimit * 0.75, upLimit, RGB(255,100,100));
-
+ m_meter.AddAlertZone(loLimit, upLimit * (1.0/24), RGB(255,100,100));
+ m_meter.AddAlertZone(upLimit * (1.0/24), upLimit * (10.0/24), RGB(100,255,100));
+ m_meter.AddAlertZone(upLimit * (10.0/24), upLimit, RGB(150,150,250));
  m_meter.SetRange(loLimit, upLimit);
 }
 
@@ -101,4 +100,10 @@ void CMIInjPWGraph::Create(CWnd* pParent)
  m_scope.SetBackgroundColor(RGB(0, 64, 0));
  m_scope.SetGridColor(RGB(192, 192, 255));
  m_scope.SetPlotColor(RGB(255, 255, 255));
+}
+
+void CMIInjPWGraph::SetLimits(float loLimit, float upLimit)
+{
+ m_scope.SetGridNumberY(8);
+ m_scope.SetRange(loLimit, upLimit, 0);
 }
