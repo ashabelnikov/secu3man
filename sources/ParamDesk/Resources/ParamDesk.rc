@@ -1565,6 +1565,7 @@ BEGIN
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Время, на которое включится бензонасос после включения зажигания"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "Если разрешено, то когда GAS_V=0 будут работать выходы впрыска 1-4, а когда GAS_V=1 будут работать выходы впрыска 5-8"
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Коэффициент коррекции обогащения при ускорении по температуре двигателя. Полное значение при температуре -30°С, плавно убывает до температуры 70°С. 100% соответствует коэффициенту 1.0."
+    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Время затухания в тактах. Затухание начинается когда скорость ДЗ опускается до порога (стартует от значения обогащения соответствующего порогу и заканчивается 0)."
 END
 
 
@@ -3169,6 +3170,7 @@ BEGIN
     IDS_PD_MISC_FLPMP_TIMEOUT_EDIT_TT "Fuel pump will work during this time after turning on of ignition"
     IDS_PD_INJECTOR_SECINJROWSWT_CHECK_TT "If enabled, when GAS_V=0 inj.outputs 1-4 will work, and when GAS_V=1 inj.outputs 5-8 will work."
     IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT "Correction coefficient of acceleration enrichment vs coolant temperature. Full value at -30°C, smoothly decreases till 70°C. 100% corresponds to coefficient = 1.0."
+    IDS_PD_ACCELENR_DECAYTIME_EDIT_TT "Decay time in engine strokes. Decay begin when TPS speed drops to threshold (starts from the AE value corresponding to set threshold and ends with 0)."
 END
 
 STRINGTABLE

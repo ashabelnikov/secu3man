@@ -127,6 +127,8 @@ BOOL CAccelEnrPageDlg::OnInitDialog()
  VERIFY(mp_ttc->AddWindow(&m_tpsdot_thrd_spin, MLL::GetString(IDS_PD_ACCELENR_TPSTHRD_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_coldacc_mult_edit, MLL::GetString(IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT)));
  VERIFY(mp_ttc->AddWindow(&m_coldacc_mult_spin, MLL::GetString(IDS_PD_ACCELENR_MULTCOLDENR_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_decaytime_edit, MLL::GetString(IDS_PD_ACCELENR_DECAYTIME_EDIT_TT)));
+ VERIFY(mp_ttc->AddWindow(&m_decaytime_spin, MLL::GetString(IDS_PD_ACCELENR_DECAYTIME_EDIT_TT)));
 
  mp_ttc->SetMaxTipWidth(100); //Enable text wrapping
  mp_ttc->ActivateToolTips(true);
