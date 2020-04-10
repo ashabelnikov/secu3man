@@ -355,9 +355,9 @@ void COscillCtrl::_DrawPoint(bool i_reverse, int ptidx /*= -1*/)
 
   //vertical clipping
   if ((prevY <= m_rcPlot.top) || (currY <= m_rcPlot.top))
-   m_dcPlot.FillRect(CRect(prevX, m_rcClient.top, currX , m_rcPlot.top ), &m_brushBack);
+   m_dcPlot.FillRect(CRect(prevX + (i_reverse ? -shtPixelsH : 0), m_rcClient.top, currX + (i_reverse ? 0 : shtPixelsH), m_rcPlot.top), &m_brushBack);
   if ((prevY >= m_rcPlot.bottom) || (currY >= m_rcPlot.bottom))
-   m_dcPlot.FillRect(CRect(prevX, m_rcPlot.bottom , currX , m_rcClient.bottom ), &m_brushBack);
+   m_dcPlot.FillRect(CRect(prevX + (i_reverse ? -shtPixelsH : 0), m_rcPlot.bottom , currX + (i_reverse ? 0 : shtPixelsH), m_rcClient.bottom), &m_brushBack);
  }
 }
 
